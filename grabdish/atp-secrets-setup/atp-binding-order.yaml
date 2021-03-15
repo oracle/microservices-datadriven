@@ -1,0 +1,18 @@
+
+##
+## Copyright (c) 2021 Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+apiVersion: v1
+data:
+  README: ${orderpdb_README}
+  cwallet.sso: ${orderpdb_cwallet_sso}
+  ewallet.p12: ${orderpdb_ewallet_p12}
+  keystore.jks: ${orderpdb_keystore_jks}
+  ojdbc.properties: ${orderpdb_ojdbc_properties}
+  sqlnet.ora: ${orderpdb_sqlnet_ora}
+  tnsnames.ora: ${orderpdb_tnsnames_ora}
+  truststore.jks: ${orderpdb_truststore_jks}
+  user_name: QURNSU4=
+kind: Secret
+metadata:
+  name: atp-demo-binding-order

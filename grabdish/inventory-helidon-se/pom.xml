@@ -1,0 +1,243 @@
+<!--
+
+
+##
+## Copyright (c) 2021 Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.helidon.se</groupId>
+    <artifactId>inventory-helidon-se</artifactId>
+    <version>0.1</version>
+    <description>
+        common
+    </description>
+
+    <properties>
+        <!-- system props -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.targetEncoding>UTF-8</project.build.targetEncoding>
+        <jar.main.class>com.helidon.se.Main</jar.main.class>
+        <java.version>1.8</java.version>
+        <skipTests>true</skipTests>
+        <!--suppress UnresolvedMavenProperty -->
+        <docker.image.prefix>${env.DOCKER_REGISTRY}</docker.image.prefix>
+        <!--suppress UnresolvedMavenProperty -->
+        <docker.image.name>${env.IMAGE_NAME}</docker.image.name>
+        <!--suppress UnresolvedMavenProperty -->
+        <docker.image.version>${env.IMAGE_VERSION}</docker.image.version>
+        <!-- /system props -->
+
+        <compiler-plugin.version>3.8.1</compiler-plugin.version>
+        <jar-plugin.version>3.2.0</jar-plugin.version>
+        <shade-plugin.version>3.2.1</shade-plugin.version>
+
+        <logback.version>1.2.3</logback.version>
+        <jul-to-slf4j.version>1.7.30</jul-to-slf4j.version>
+        <junit.version>4.13.1</junit.version>
+        <jackson.version>2.10.2</jackson.version>
+        <lombok.version>1.18.2</lombok.version>
+        <ojdbc10.version>19.3.0.0</ojdbc10.version>
+        <helidon.version>1.4.3</helidon.version>
+
+    </properties>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <defaultGoal>install</defaultGoal>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${compiler-plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <!-- packing jar, adding main class link to jar -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${jar-plugin.version}</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>${jar.main.class}</mainClass>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <!-- add all dependencies to jar -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>${shade-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <finalName>${project.artifactId}</finalName>
+                            <keepDependenciesWithProvidedScope>true</keepDependenciesWithProvidedScope>
+                            <createDependencyReducedPom>true</createDependencyReducedPom>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.DSA</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>1.2.2</version>
+                <configuration>
+                    <imageName>${docker.image.prefix}/${docker.image.name}</imageName>
+                    <baseImage>openjdk:8</baseImage>
+                    <entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                        </resource>
+                    </resources>
+                    <imageTags>
+                        <imageTag>${docker.image.version}</imageTag>
+                    </imageTags>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+        <!-- logging -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jul-to-slf4j</artifactId>
+            <version>${jul-to-slf4j.version}</version>
+        </dependency>
+        <!-- /logging -->
+
+        <!-- testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- /testing -->
+
+        <!-- utils -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.json.bind</groupId>
+            <artifactId>javax.json.bind-api</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <!-- /utils -->
+
+        <!-- db -->
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc8</artifactId>
+            <version>${ojdbc10.version}</version>
+        </dependency>
+        <!-- Optional depth for AQMessage -->
+        <dependency>
+            <groupId>com.oracle.database.xml</groupId>
+            <artifactId>xdb</artifactId>
+            <version>${ojdbc10.version}</version>
+        </dependency>
+        <!-- Depth for Oracle JMS -->
+        <dependency>
+            <groupId>com.oracle.database.messaging</groupId>
+            <artifactId>aqapi</artifactId>
+            <version>${ojdbc10.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.transaction</groupId>
+            <artifactId>jta</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <!-- /db -->
+
+        <!-- http client server -->
+        <dependency>
+            <groupId>io.helidon.webserver</groupId>
+            <artifactId>helidon-webserver</artifactId>
+            <version>${helidon.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.helidon.config</groupId>
+            <artifactId>helidon-config-yaml</artifactId>
+            <version>${helidon.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.helidon.metrics</groupId>
+            <artifactId>helidon-metrics</artifactId>
+            <version>${helidon.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.helidon.health</groupId>
+            <artifactId>helidon-health-checks</artifactId>
+            <version>${helidon.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.oci.sdk</groupId>
+            <artifactId>oci-java-sdk-vault</artifactId>
+            <version>1.32.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.oci.sdk</groupId>
+            <artifactId>oci-java-sdk-common</artifactId>
+            <version>1.32.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.oci.sdk</groupId>
+            <artifactId>oci-java-sdk-secrets</artifactId>
+            <version>1.32.2</version>
+        </dependency>
+    </dependencies>
+</project>
