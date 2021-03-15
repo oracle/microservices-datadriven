@@ -1,0 +1,14 @@
+config:
+  target: 'https://{{ $processEnvironment.LB }}:443'
+  http:
+    pool: 10
+  processor: "gen.js"
+  phases:
+    - duration: 30 
+      arrivalRate:  10
+scenarios:
+  - name: "placeorder"
+    flow:
+      - function: "generateOrderID"
+      - get:
+          url: "/placeOrder?orderid={{ orderid }}&itemid=34&deliverylocation=London"
