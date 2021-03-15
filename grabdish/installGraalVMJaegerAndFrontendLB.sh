@@ -14,16 +14,7 @@ echo ~/graalvm-ce-java11-20.1.0 > $WORKINGDIR/msdataworkshopgraalvmhome.txt
 echo install GraalVM native-image...
 ~/graalvm-ce-java11-20.1.0/bin/gu install native-image
 
-
-echo install jaeger...
-kubectl create -f https://tinyurl.com/yc52x6q5 -n msdataworkshop
-
 umask 077
-
-echo "Creating ssl certificate secret"
-mkdir tls
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls/tls.key -out tls/tls.crt -subj "/CN=convergeddb/O=convergeddb"
-kubectl create secret tls ssl-certificate-secret --key tls/tls.key --cert tls/tls.crt -n msdataworkshop
 
 if [ ! -d tls ]; then
   umask 077
@@ -33,7 +24,8 @@ if [ ! -d tls ]; then
   kubectl create secret tls ssl-certificate-secret --key tls/tls.key --cert tls/tls.crt -n msdataworkshop
 fi
 
-echo creating frontend loadbalancer service
+echo install jaeger...
+kubectl create -f https://tinyurl.com/yc52x6q5 -n msdataworkshop
 
-echo create frontend LB...
+echo creating frontend loadbalancer service...
 kubectl create -f frontend-helidon/frontend-service.yaml -n msdataworkshop
