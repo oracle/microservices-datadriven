@@ -1,0 +1,18 @@
+
+##
+## Copyright (c) 2021 Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+apiVersion: v1
+data:
+  README: ${inventorypdb_README}
+  cwallet.sso: ${inventorypdb_cwallet_sso}
+  ewallet.p12: ${inventorypdb_ewallet_p12}
+  keystore.jks: ${inventorypdb_keystore_jks}
+  ojdbc.properties: ${inventorypdb_ojdbc_properties}
+  sqlnet.ora: ${inventorypdb_sqlnet_ora}
+  tnsnames.ora: ${inventorypdb_tnsnames_ora}
+  truststore.jks: ${inventorypdb_truststore_jks}
+  user_name: QURNSU4=
+kind: Secret
+metadata:
+  name: atp-demo-binding-inventory

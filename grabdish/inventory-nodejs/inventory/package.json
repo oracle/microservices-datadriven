@@ -1,0 +1,27 @@
+/*
+
+ **
+ ** Copyright (c) 2021 Oracle and/or its affiliates.
+ ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+ {
+  "name": "inventory",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://curtis.dinkel%40oracle.com@maadeveloper-maacloud.developer.ocp.oraclecloud.com/maadeveloper-maacloud/s/maadeveloper-maacloud_inventory_15623/scm/inventory.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-validator": "^6.4.0",
+    "morgan": "^1.9.1",
+    "oracledb": "^4.2.0"
+  }
+}
