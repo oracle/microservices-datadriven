@@ -28,7 +28,6 @@ kms_vault_client = oci.key_management.KmsVaultClient()
 kms_vault_client_composite = oci.key_management.KmsVaultClientCompositeOperations(
     kms_vault_client)
 db_password = get_secret(vaults_management_client_composite, region_id, vault_secret_ocid).data
-print("Secret ID is {}.".format(db_password))
 
 readyfile = ""
 logger = None
