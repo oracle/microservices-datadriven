@@ -11,6 +11,7 @@ import oracle.jms.*;
 
 import javax.jms.*;
 import javax.sql.DataSource;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -31,12 +32,12 @@ class PropagationSetup {
             "END;";
 
     String CREATE_CREDENTIAL_SQL = " BEGIN" +
-            "             DBMS_CLOUD.CREATE_CREDENTIAL(" +
-            "             credential_name => 'INVENTORYPDB_CRED'," +
-            "             username => ?," +
-            "             password => ?" +
-            "             );" +
-            "            END;";
+            "  DBMS_CLOUD.CREATE_CREDENTIAL(" +
+            "  credential_name => ?," +
+            "  username => ?," +
+            "  password => ?" +
+            "  );" +
+            " END;";
 
     String CREATE_DBLINK_SQL = "BEGIN " +
             "DBMS_CLOUD_ADMIN.CREATE_DATABASE_LINK(" +
@@ -54,7 +55,11 @@ class PropagationSetup {
         String returnValue = "createInventoryTable and add items... ";
         try (Connection connection = inventorypdbDataSource.getConnection(inventoryuser, inventorypw)) {
             connection.createStatement().execute("drop table inventory");
-            returnValue += " inventory table dropped, about to create inventory table...";
+        } catch (SQLException ex) {
+            System.out.println("PropagationSetup.createInventoryTable inventory table was not dropped. This is expected during initial setup as it doesn't exist yet.");
+        }
+        try (Connection connection = inventorypdbDataSource.getConnection(inventoryuser, inventorypw)) {
+            returnValue += " inventory table dropped (if it existed), about to create inventory table...";
             connection.createStatement().execute(
                     "create table inventory (inventoryid varchar(16) PRIMARY KEY NOT NULL, inventorylocation varchar(32), inventorycount integer CONSTRAINT positive_inventory CHECK (inventorycount >= 0) )");
             returnValue += " inventory table created, about to insert into inventory...";
@@ -88,21 +93,28 @@ class PropagationSetup {
 
     Object createAQUser(DataSource ds, String queueOwner, String queueOwnerPW) throws SQLException {
         String outputString = "createAQUser queueOwner = [" + queueOwner + "]";
-        System.out.println(outputString + "queueOwnerPW = [" + queueOwnerPW + "]");
+        System.out.println("PropagationSetup.createAQUser queueOwner = [" + queueOwner + "]");
         try (Connection connection = ds.getConnection()) {
-            PreparedStatement pstmt = connection.prepareStatement("grant pdb_dba to ? identified by ?");
-            pstmt.setString(1, queueOwner);
-            pstmt.setString(2, queueOwnerPW);
+            connection.prepareStatement("CREATE OR REPLACE PROCEDURE CREATEDATAAPPUSER (userNam NVARCHAR2, userPw NVARCHAR2)" +
+                    " IS" +
+                    " v_sql  VARCHAR2 (32767);" +
+                    " BEGIN" +
+                    " v_sql := 'CREATE USER \"' || userNam || '\" IDENTIFIED BY \"' || userPw || '\"';" +
+                    " EXECUTE IMMEDIATE v_sql;" +
+                    " END CREATEDATAAPPUSER;" ).execute();
+            CallableStatement pstmt = connection.prepareCall("{call CREATEDATAAPPUSER(?,?)}");
+            pstmt.setNString(1, queueOwner.trim());
+            pstmt.setNString(2, queueOwnerPW.trim());
+            pstmt.execute();
+            connection.createStatement().execute("GRANT pdb_dba TO " + queueOwner);
             connection.createStatement().execute("GRANT EXECUTE ON DBMS_CLOUD_ADMIN TO " + queueOwner);
             connection.createStatement().execute("GRANT EXECUTE ON DBMS_CLOUD TO " + queueOwner);
             connection.createStatement().execute("GRANT CREATE DATABASE LINK TO " + queueOwner);
-            connection.createStatement().execute("grant unlimited tablespace to " + queueOwner);
-            connection.createStatement().execute("grant connect, resource TO " + queueOwner);
-            connection.createStatement().execute("grant aq_user_role TO " + queueOwner);
+            connection.createStatement().execute("GRANT unlimited tablespace to " + queueOwner);
+            connection.createStatement().execute("GRANT connect, resource TO " + queueOwner);
+            connection.createStatement().execute("GRANT aq_user_role TO " + queueOwner);
             connection.createStatement().execute("GRANT EXECUTE ON sys.dbms_aqadm TO " + queueOwner);
             connection.createStatement().execute("GRANT EXECUTE ON sys.dbms_aq TO " + queueOwner);
-            connection.createStatement().execute("GRANT EXECUTE ON sys.dbms_aq TO " + queueOwner);
-            //    sysDBAConnection.createStatement().execute("create table tracking (state number)");
         }
         return outputString + " successful";
     }
@@ -122,36 +134,37 @@ class PropagationSetup {
         return "DBLinks created and verified successfully";
     }
 
-    private void createDBLink(Connection connection, String getobject, String dropcred, String createlink, String linkname) throws SQLException {
+    private void createDBLink(Connection connection, String getobject, String credName, String createlink, String linkname) throws SQLException {
         boolean isOrderToInventory = createlink.equals("ordertoinventory"); // if it's not OrderToInventory it's InventoryToOrder
-        System.out.println(" creating link:" + linkname);
-        System.out.println("\n about to " + getobject);
+        System.out.println(" creating link:" + linkname + " about to " + getobject);
         PreparedStatement preparedStatement2 = connection.prepareStatement(GET_OBJECT_CWALLETSSO_DATA_PUMP_DIR);
         preparedStatement2.setString(1, cwalletobjecturi);
         preparedStatement2.execute();
         try {
-            System.out.println("\n GET_OBJECT cwalletobjecturi successful, about to (if exists_" + dropcred);
+            System.out.println("About to drop credential (if exists) " + credName);
             PreparedStatement preparedStatement = connection.prepareStatement(DROP_CREDENTIAL_SQL);
-            preparedStatement.setString(1, dropcred);
+            preparedStatement.setString(1, credName);
             preparedStatement.execute();
         } catch (SQLException ex) {
-            System.out.println("SQLException from DROP_CREDENTIAL_INVENTORYPDB_CRED_SQL (likely expected) :" + ex);
+            System.out.println("Drop credential failed as expected (if this is initial setup)");
         }
-        System.out.println("\n  GET_OBJECT cwalletobjecturi successful, about to create credential");
+        System.out.println("GET_OBJECT cwalletobjecturi successful, about to create credential");
         PreparedStatement preparedStatement1 = connection.prepareStatement(CREATE_CREDENTIAL_SQL);
-        preparedStatement1.setString(1, isOrderToInventory?inventoryuser:orderuser);
-        preparedStatement1.setString(1, isOrderToInventory?inventorypw.trim():orderpw.trim());
+        preparedStatement1.setString(1, credName);
+        preparedStatement1.setString(2, isOrderToInventory?inventoryuser:orderuser);
+        preparedStatement1.setString(3, isOrderToInventory?inventorypw.trim():orderpw.trim());
         preparedStatement1.execute();
-        System.out.println("\n CREATE_CREDENTIAL INVENTORYPDB_CRED successful, about to " + createlink);
-        connection.createStatement().execute(createlink);
+        System.out.println("CREATE_CREDENTIAL successful, about to create link" + createlink);
         PreparedStatement preparedStatement = connection.prepareStatement(CREATE_DBLINK_SQL);
         preparedStatement.setString(1, isOrderToInventory ? orderToInventoryLinkName : inventoryToOrderLinkName);
         preparedStatement.setString(2, isOrderToInventory ? inventoryhostname : orderhostname);
         preparedStatement.setInt(3, Integer.valueOf(isOrderToInventory ? inventoryport : orderport));
         preparedStatement.setString(4, isOrderToInventory ? inventoryservice_name : orderservice_name);
         preparedStatement.setString(5, isOrderToInventory ? inventoryssl_server_cert_dn : orderssl_server_cert_dn);
+        preparedStatement.setString(6, credName);
+        preparedStatement.setString(7, "DATA_PUMP_DIR");
         preparedStatement.execute();
-        System.out.println("\n CREATE_DATABASE_LINK " + linkname + " successful,");
+        System.out.println(" CREATE_DATABASE_LINK " + linkname + " successful,");
     }
 
     String verifyDBLinks(DataSource orderpdbDataSource, DataSource inventorypdbDataSource) throws SQLException {
@@ -388,7 +401,7 @@ class PropagationSetup {
     private static void receiveMessages(QueueSession qsess, AQjmsConsumer[] subs) throws JMSException {
         System.out.println("Receive test messages...");
         for (int i = 0; i < subs.length; i++) {
-            System.out.println("\n\nMessages for subscriber : " + i);
+            System.out.println("Messages for subscriber : " + i);
             if (subs[i].getMessageSelector() != null) {
                 System.out.println("  with selector: " + subs[i].getMessageSelector());
             }
