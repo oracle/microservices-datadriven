@@ -88,11 +88,11 @@ class PropagationSetup {
 
     Object createAQUser(DataSource ds, String queueOwner, String queueOwnerPW) throws SQLException {
         String outputString = "createAQUser queueOwner = [" + queueOwner + "]";
-        System.out.println(outputString + "queueOwnerPW = [" + queueOwnerPW + "]");
         try (Connection connection = ds.getConnection()) {
             PreparedStatement pstmt = connection.prepareStatement("grant pdb_dba to ? identified by ?");
             pstmt.setString(1, queueOwner);
             pstmt.setString(2, queueOwnerPW);
+            pstmt.execute();
             connection.createStatement().execute("GRANT EXECUTE ON DBMS_CLOUD_ADMIN TO " + queueOwner);
             connection.createStatement().execute("GRANT EXECUTE ON DBMS_CLOUD TO " + queueOwner);
             connection.createStatement().execute("GRANT CREATE DATABASE LINK TO " + queueOwner);
