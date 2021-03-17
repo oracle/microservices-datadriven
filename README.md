@@ -6,22 +6,25 @@ Microservices are loosely-coupled service-oriented architectures with a bounded 
 
 The code and the associated Oracle LiveLabs which use this code demonstrate how to build end-to-end microservices applications that are simpler, by using the Oracle Gen2 cloud (OCI) services and the converged Oracle Database platform. This repository will be organized as following and may add or change categories in the future as more sample applications are added to illustrate other features for specific industries or application types.
 
-| Repo/Folder name | Description |
-| ------ | ------ |
-| grabdish | mobile food delivery application sample code |
+ Sample | Description |
+| :----- | :---------- |
+| [`grabdish`](./grabdish) | Mobile food delivery application sample code |
 
-**Reference Material**
+## Resources
 
-To explore the industry leading features in the converged Oracle database visit [Oracle Autonomous Database](https://docs.oracle.com/en/cloud/paas/autonomous-database/index.html)
+* [Oracle LiveLabs][LiveLabs]
+  * [Workshops on Microservices][Workshops]
+* [Oracle Developer Resource Center][DRC]
+* [Helidon][Helidon]
 
-**Developer Resources**
-
-Visit the [Oracle Developer Resource Center](http://developer.oracle.com) to view developer related content 
-
-**LiveLabs Platform**
-
-Get live hands-on experience with Oracle LiveLabs [Workshops on Microservices](https://apexapps.oracle.com/pls/apex/dbpm/r/livelabs/livelabs-workshop-cards?p100_role=12&p100_focus_area=35&me=126)
+## License
 
 Copyright (c) 2021 Oracle and/or its affiliates.
-Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
+Licensed under the Universal Permissive License v 1.0 as shown at <https://oss.oracle.com/licenses/upl>.
+
+[ATP]: https://docs.oracle.com/en/cloud/paas/autonomous-database/index.html
+[LiveLabs]: https://apexapps.oracle.com/pls/apex/f?p=133:1
+[Workshops]: https://apexapps.oracle.com/pls/apex/dbpm/r/livelabs/livelabs-workshop-cards?p100_role=12&p100_focus_area=35&me=126
+[DRC]: https://developer.oracle.com
+[Helidon]: https://helidon.io
