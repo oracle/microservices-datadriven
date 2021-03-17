@@ -5,6 +5,5 @@
 # we put a placeholder msdataworkshopjaegeraddress.txt as we wont have the Jaeger LB address until later/setJaegerAddress.sh step
 touch workingdir/msdataworkshopjaegeraddress.txt
 echo "export MSDATAWORKSHOP_LOCATION=~/microservices-datadriven/grabdish/" >> ~/.bashrc
-echo "source $MSDATAWORKSHOP_LOCATION/msdataworkshop.properties" >> ~/.bashrc
+echo 'source $MSDATAWORKSHOP_LOCATION/msdataworkshop.properties' >> ~/.bashrc
 source ~/.bashrc
-
