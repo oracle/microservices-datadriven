@@ -40,6 +40,10 @@ oci db autonomous-database create --compartment-id $MSDATAWORKSHOP_COMPARTMENT_I
 echo create inventory PDB...
 oci db autonomous-database create --compartment-id $MSDATAWORKSHOP_COMPARTMENT_ID --cpu-core-count 1 --data-storage-size-in-tbs 1 --db-name INVENTORYDB --display-name INVENTORYDB --from-json file://pw | jq --raw-output '.data | .["id"] '> $WORKINGDIR/msdataworkshopinventorydbid.txt
 rm pw
+
+echo create msdataworkshop namespace
+kubectl create namespace msdataworkshop
+
 echo create frontendadmin auth secret...
 AUTHPASSWORD=`oci secrets secret-bundle get --secret-id $2 --query "data.\"secret-bundle-content\".content" --raw-output`
 kubectl create -n msdataworkshop -f - <<!
