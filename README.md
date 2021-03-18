@@ -1,12 +1,19 @@
-# Simplify Microservices Architecture with Oracle Converged Database - Sample Code
+# Simplify microservices architecture with Oracle Converged Database
 
-This directory contains sample code for simplifying Microservices architectures by building solution examples for data-driven Microservices. Our first example here is Grabdish - a mobile food ordering application, (similar to the likes of UberEats and DoorDash), and walks you through the creation of a open platform technology stack with converged Oracle database (Relational, JSON/text, spatial, graph data) using polyglot languages (Java, Python, node.js) and Helidon MP and SE.
+This repository contains sample code for simplifying microservices architectures
+by building solution examples for data-driven microservices that walk you through
+the creation of a open platform technology stack with the converged
+[Oracle Autonomous Database][ATP] including relational, JSON, text, spatial and
+graph data and using polyglot languages including Java and the Helidon MP and SE
+frameworks, Python and JavaScript via Node.js
 
-Microservices are loosely-coupled service-oriented architectures with a bounded context. Microservices are increasingly used for application modernization to deliver agile application development practices. However, the data-driven nature of enterprise applications has made building, deploying, and maintaining microservices complex.  
+Microservices are loosely-coupled service-oriented architectures with a bounded
+context. Microservices are increasingly used for application modernization to
+deliver agile application development practices. However, the data-driven nature
+of enterprise applications has made building, deploying, and maintaining
+microservices complex.
 
-The code and the associated Oracle LiveLabs which use this code demonstrate how to build end-to-end microservices applications that are simpler, by using the Oracle Gen2 cloud (OCI) services and the converged Oracle Database platform. This repository will be organized as following and may add or change categories in the future as more sample applications are added to illustrate other features for specific industries or application types.
-
- Sample | Description |
+| Sample | Description |
 | :----- | :---------- |
 | [`grabdish`](./grabdish) | Mobile food delivery application sample code |
 
