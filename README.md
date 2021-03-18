@@ -2,7 +2,7 @@
 
 This repository contains sample code for simplifying microservices architectures
 by building solution examples for data-driven microservices that walk you through
-the creation of a open platform technology stack with the converged
+the creation of an open platform technology stack with the converged
 [Oracle Autonomous Database][ATP] including relational, JSON, text, spatial and
 graph data and using polyglot languages including Java and the Helidon MP and SE
 frameworks, Python and JavaScript via Node.js
