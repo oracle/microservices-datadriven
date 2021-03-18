@@ -22,7 +22,7 @@ class PropagationSetup {
     String GET_OBJECT_CWALLETSSO_DATA_PUMP_DIR = "BEGIN " +
             "DBMS_CLOUD.GET_OBJECT(" +
             "object_uri => ?, " +
-            "directory_name => 'DATA_PUMP_DIR'); " +
+            "directory_name => ?); " +
             "END;";
 
     String DROP_CREDENTIAL_SQL = "BEGIN " +
@@ -49,6 +49,8 @@ class PropagationSetup {
             "credential_name => ?," +
             "directory_name => ?);" +
             "END;";
+
+    String DATA_PUMP_DIR = "DATA_PUMP_DIR"
 
     String createInventoryTable(DataSource inventorypdbDataSource) throws SQLException {
         System.out.println("createInventoryTable and add items");
@@ -123,22 +125,21 @@ class PropagationSetup {
         System.out.println("createDBLinks...");
         try (Connection connection = orderpdbDataSource.getConnection(orderuser, orderpw)) {
             // create link from order to inventory...
-            createDBLink(connection,
-                    GET_OBJECT_CWALLETSSO_DATA_PUMP_DIR, "INVENTORYPDB_CRED", "ordertoinventory", orderToInventoryLinkName);
+            createDBLink(connection,"INVENTORYPDB_CRED", "ordertoinventory", orderToInventoryLinkName);
         }
         try (Connection connection = inventorypdbDataSource.getConnection(inventoryuser, inventorypw)) {
-            createDBLink(connection,
-                    GET_OBJECT_CWALLETSSO_DATA_PUMP_DIR, "ORDERPDB_CRED", "inventorytoorder", inventoryToOrderLinkName);
+            createDBLink(connection, "ORDERPDB_CRED", "inventorytoorder", inventoryToOrderLinkName);
         }
         verifyDBLinks(orderpdbDataSource, inventorypdbDataSource);
         return "DBLinks created and verified successfully";
     }
 
-    private void createDBLink(Connection connection, String getobject, String credName, String createlink, String linkname) throws SQLException {
+    private void createDBLink(Connection connection, String credName, String createlink, String linkname) throws SQLException {
         boolean isOrderToInventory = createlink.equals("ordertoinventory"); // if it's not OrderToInventory it's InventoryToOrder
         System.out.println(" creating link:" + linkname + " about to " + getobject);
         PreparedStatement preparedStatement2 = connection.prepareStatement(GET_OBJECT_CWALLETSSO_DATA_PUMP_DIR);
         preparedStatement2.setString(1, cwalletobjecturi);
+        preparedStatement2.setString(2, DATA_PUMP_DIR);
         preparedStatement2.execute();
         try {
             System.out.println("About to drop credential (if exists) " + credName);
@@ -162,7 +163,7 @@ class PropagationSetup {
         preparedStatement.setString(4, isOrderToInventory ? inventoryservice_name : orderservice_name);
         preparedStatement.setString(5, isOrderToInventory ? inventoryssl_server_cert_dn : orderssl_server_cert_dn);
         preparedStatement.setString(6, credName);
-        preparedStatement.setString(7, "DATA_PUMP_DIR");
+        preparedStatement.setString(7, DATA_PUMP_DIR);
         preparedStatement.execute();
         System.out.println(" CREATE_DATABASE_LINK " + linkname + " successful,");
     }
