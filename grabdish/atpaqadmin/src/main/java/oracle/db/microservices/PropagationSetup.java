@@ -50,7 +50,7 @@ class PropagationSetup {
             "directory_name => ?);" +
             "END;";
 
-    String DATA_PUMP_DIR = "DATA_PUMP_DIR"
+    String DATA_PUMP_DIR = "DATA_PUMP_DIR";
 
     String createInventoryTable(DataSource inventorypdbDataSource) throws SQLException {
         System.out.println("createInventoryTable and add items");
@@ -136,7 +136,7 @@ class PropagationSetup {
 
     private void createDBLink(Connection connection, String credName, String createlink, String linkname) throws SQLException {
         boolean isOrderToInventory = createlink.equals("ordertoinventory"); // if it's not OrderToInventory it's InventoryToOrder
-        System.out.println(" creating link:" + linkname + " about to " + getobject);
+        System.out.println(" creating link:" + linkname);
         PreparedStatement preparedStatement2 = connection.prepareStatement(GET_OBJECT_CWALLETSSO_DATA_PUMP_DIR);
         preparedStatement2.setString(1, cwalletobjecturi);
         preparedStatement2.setString(2, DATA_PUMP_DIR);
