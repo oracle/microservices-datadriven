@@ -1,8 +1,7 @@
-
+#!/bin/bash
 ##
 ## Copyright (c) 2021 Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
-export VUS="$1"
 
 set -e
 
@@ -17,17 +16,8 @@ if [ ! -f "$NEXT_RUN_FILE" ]; then
     echo 0 > $NEXT_RUN_FILE
 fi
 
-#export RUN=`cat $NEXT_RUN_FILE`
-#RUN=$((RUN+1))
-#echo $RUN > $NEXT_RUN_FILE
-
-#echo Warming up for 30 seconds
-#./k6 run --vus $VUS --duration "20s" --address localhost:6566 placeorder.js > /dev/null
-
-#sleep 10
-
 export RUN=`cat $NEXT_RUN_FILE`
 RUN=$((RUN+1))
 echo $RUN > $NEXT_RUN_FILE
 
-./k6 run --vus 20 --duration "30s" --address localhost:6566 --insecure-skip-tls-verify true placeorder.js
+./k6 run --vus 20 --duration "30s" --address localhost:6566 --insecure-skip-tls-verify placeorder.js

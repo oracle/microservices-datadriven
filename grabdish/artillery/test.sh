@@ -1,4 +1,7 @@
 #!/bin/bash
+##
+## Copyright (c) 2021 Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 set -e
 
@@ -17,9 +20,9 @@ export RUN=`cat $NEXT_RUN_FILE`
 RUN=$((RUN+1))
 echo $RUN > $NEXT_RUN_FILE
 
-for i in {1..1}
+for i in {1..20}
 do
     export VU=$i
-    ./node_modules/artillery/bin/artillery run art-placeorder.yaml &
+    ./node_modules/artillery/bin/artillery run --insecure art-placeorder.yaml &
 done
 wait
