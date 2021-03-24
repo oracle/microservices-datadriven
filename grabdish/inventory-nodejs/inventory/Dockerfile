@@ -1,6 +1,3 @@
-# Copyright (c) 2021 Oracle and/or its affiliates.
-# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
-
 FROM oraclelinux:7-slim
 
 ARG release=19
@@ -23,6 +20,7 @@ RUN npm install
 RUN npm install oci-common
 RUN npm install oci-secrets
 RUN npm install oci-vault
+RUN npm install oci-identity
 # If you are building your code for production
 # RUN npm ci --only=production
 

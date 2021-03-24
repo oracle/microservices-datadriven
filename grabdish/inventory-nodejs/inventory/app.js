@@ -4,12 +4,10 @@
 
 const oracledb = require('oracledb');
 const express = require('express');
-const common = require("oci-common”);
-const vault = require("oci-vault");
-const secrets = require("oci-secrets");
+const identity = require("oci-identity");
+const common = require('oci-common');
+const secrets = require('oci-secrets');
 
-const oracledb = require('oracledb');
-const express = require('express');
 const {param, validationResult} = require('express-validator');
 const morgan = require('morgan'); 
 const drainDelay = 10;
@@ -17,26 +15,38 @@ const fs = require('fs');
 const readyFile = '/tmp/njsInvReady';
 let statsStream;
 let server = {};
+let pwDecoded = "";
 
-const regionid = process.env.REGION_ID.trim()
-const vaultsecretocid = process.env.VAULT_SECRET_OCID.trim()
-const provider = new common.InstanceAuthenticationDetailsProvider();
-const secretsclient = new secrets.SecretsClient({
-    authenticationDetailsProvider: provider
-});
-const getSecretRequest = {
-    region: regionid,
-    secretocid: vaultsecretocid
-};
-
-const secretPW = await client.getSecret(getSecretRequest);
-console.log("Create Bucket executed successfully" + createBucketResponse);
+async function getSecret() {
+  const provider = await new common.InstancePrincipalsAuthenticationDetailsProviderBuilder().build();
+  try {
+      const secretConfig = {
+       secretInfo: {
+         regionid: process.env.OCI_REGION,
+         vaultsecretocid: process.env.VAULT_SECRET_OCID
+       }
+      };
+      console.log("regionid: ", secretConfig.secretInfo.regionid);
+      console.log("vaultsecretocid: ", secretConfig.secretInfo.vaultsecretocid);
+      const client =  new secrets.SecretsClient({
+          authenticationDetailsProvider: provider
+      });
+      const getSecretBundleRequest = {
+            secretId: secretConfig.secretInfo.vaultsecretocid
+          };
+      const getSecretBundleResponse = await client.getSecretBundle(getSecretBundleRequest);
+      const pw = getSecretBundleResponse.secretBundle.secretBundleContent.content;
+      let buff = new Buffer(pw, 'base64');
+      pwDecoded = buff.toString('ascii');
+  } catch (e) {
+    throw Error(`Failed with error: ${e}`);
+  }
+}
 
 const dbConfig = {
   inventoryPool: {
     user: process.env.DB_USER.trim(),
-//    password: process.env.DB_PASSWORD.trim(),
-    password: secretPW,
+    password: pwDecoded,
     connectString: process.env.DB_CONNECT_STRING,
     poolMin: Number(process.env.DB_CONNECTION_COUNT) || 10,
     poolMax: Number(process.env.DB_CONNECTION_COUNT) || 10,
@@ -304,6 +314,9 @@ app.get('/inventory/:inventoryid', getParamValidations(), getInventory);
 
 async function initDB() {
  // console.log(`Creating database connection pool with configuration ${JSON.stringify(dbConfig.inventoryPool)}`);
+  await getSecret();
+  dbConfig.inventoryPool.password = pwDecoded;
+//  console.log('dbConfig.inventoryPool.password:' + dbConfig.inventoryPool.password);
   const pool = await oracledb.createPool(dbConfig.inventoryPool);
   console.log('Database connection pool created');
   
