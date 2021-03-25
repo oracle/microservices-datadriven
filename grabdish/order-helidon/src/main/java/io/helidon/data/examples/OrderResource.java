@@ -183,7 +183,7 @@ public class OrderResource {
     @Path("/showorder")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response showordernocache(
+    public Response showorder(
             @Parameter(description = "The order ID for the order",
                     required = true,
                     example = "1",
@@ -193,7 +193,7 @@ public class OrderResource {
         try {
             Order order = orderServiceEventProducer.getOrderViaSODA(atpOrderPdb, orderId);
             String returnJSON = JsonUtils.writeValueAsString(order);
-            System.out.println("OrderResource.showordernocache returnJSON:" + returnJSON);
+            System.out.println("OrderResource.showorder returnJSON:" + returnJSON);
             return Response.ok()
                     .entity(returnJSON)
                     .build();

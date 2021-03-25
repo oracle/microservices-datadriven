@@ -262,6 +262,24 @@ public class FrontEndResource {
         }
     }
 
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    @Traced(operationName = "FrontEnd.openAPI")
+    @Path("/openAPI")
+    public String openAPI(Command command) {
+        String urlString = "http://" + command.serviceName + ".msdataworkshop:8080/" + command.commandName;
+        System.out.println("FrontEndResource.openAPI url:" + urlString);
+        try {
+            String response = makeRequest(urlString);
+            System.out.println("FrontEndResource.openAPI url:" + urlString + "  returnString:" + response);
+            return response;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return asJSONMessage(e);
+        }
+    }
+
     private String asJSONMessage(Object e) {
         FrontEndResponse frontEndResponse = new FrontEndResponse();
         frontEndResponse.message = e.toString();
