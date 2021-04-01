@@ -51,7 +51,6 @@ public class InventoryResource {
         atpInventoryPDB.setUser(inventoryuser);
         atpInventoryPDB.setPassword(pw);
         inventoryuser = atpInventoryPDB.getUser();
-        System.out.println("InventoryResource.init inventoryuser:" + inventoryuser + " inventorypw:" + inventorypw);
         try (Connection connection  = atpInventoryPDB.getConnection()) { //fail if connection is not successful rather than go into listening loop
             System.out.println("InventoryResource.init connection:" + connection);
         }
