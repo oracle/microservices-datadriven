@@ -29,9 +29,13 @@ then
   exit
 fi
 
-
 echo "" > $WORKINGDIR/msdataworkshopvaultsecretocid.txt
-# todo if(!greenbutton) echo $1 > $WORKINGDIR/msdataworkshopvaultsecretocid.txt
+
+if [[ $3 == "true" || $3 == "TRUE" ]]
+then
+  echo DB secret will be retried by microservices directly from OCI Vault
+  echo $1 > $WORKINGDIR/msdataworkshopvaultsecretocid.txt
+fi
 
 PASSWORDENCODED=`oci secrets secret-bundle get --secret-id $1 --query "data.\"secret-bundle-content\".content" --raw-output`
 PASSWORD=`echo -n Welcome12345 | base64`
