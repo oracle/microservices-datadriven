@@ -23,6 +23,7 @@ public class SupplierService implements Service {
     private final PoolDataSource pool;
     static String regionId = System.getenv("OCI_REGION").trim();
     static String pwSecretOcid = System.getenv("VAULT_SECRET_OCID").trim();
+    static String pwSecretFromK8s = System.getenv("dbpassword").trim();
 
     public SupplierService(Config config) throws SQLException {
 
@@ -32,9 +33,14 @@ public class SupplierService implements Service {
         System.out.printf("Using url: %s%n", url);
         pool = PoolDataSourceFactory.getPoolDataSource();
         pool.setURL(url);
-        String secreteFromVault = OCISDKUtility.getSecreteFromVault(true, regionId, pwSecretOcid);
+        String pw;
+        if(!pwSecretOcid.trim().equals("")) {
+            pw = OCISDKUtility.getSecreteFromVault(true, regionId, pwSecretOcid);
+        } else {
+            pw = pwSecretFromK8s;
+        }
         pool.setUser("INVENTORYUSER");
-        pool.setPassword(secreteFromVault);
+        pool.setPassword(pw);
         pool.setInactiveConnectionTimeout(60);
         pool.setConnectionFactoryClassName("oracle.jdbc.pool.OracleDataSource");
     }

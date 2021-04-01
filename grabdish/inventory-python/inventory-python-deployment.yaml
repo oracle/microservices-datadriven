@@ -61,6 +61,12 @@ spec:
             value: "%OCI_REGION%"
           - name: VAULT_SECRET_OCID
             value: "%VAULT_SECRET_OCID%"
+          - name: dbpassword
+            valueFrom:
+              secretKeyRef:
+                name: dbuser
+                key: dbpassword
+                optional: true #not needed/used if using VAULT_SECRET_OCID exists
         readinessProbe:
           exec:
             command:

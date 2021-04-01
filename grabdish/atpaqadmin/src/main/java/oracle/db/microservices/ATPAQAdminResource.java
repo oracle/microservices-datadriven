@@ -27,6 +27,7 @@ public class ATPAQAdminResource {
   PropagationSetup propagationSetup;
   static String regionId = System.getenv("OCI_REGION").trim();
   static String pwSecretOcid = System.getenv("VAULT_SECRET_OCID").trim();
+  static String pwSecretFromK8s = System.getenv("dbpassword").trim();
   static String orderuser = "ORDERUSER";
   static String orderpw;
   static String inventoryuser = "INVENTORYUSER";
@@ -62,7 +63,13 @@ public class ATPAQAdminResource {
 
   public void init(@Observes @Initialized(ApplicationScoped.class) Object init) throws SQLException {
     System.out.println("ATPAQAdminResource.init " + init);
-    orderpw = inventorypw = OCISDKUtility.getSecreteFromVault(true, regionId, pwSecretOcid);
+    String pw;
+    if(!pwSecretOcid.trim().equals("")) {
+      pw = OCISDKUtility.getSecreteFromVault(true, regionId, pwSecretOcid);
+    } else {
+      pw = pwSecretFromK8s;
+    }
+    orderpw = inventorypw = pw;
     orderpdbDataSource.setUser("ADMIN");
     orderpdbDataSource.setPassword(orderpw);
     inventorypdbDataSource.setUser("ADMIN");
