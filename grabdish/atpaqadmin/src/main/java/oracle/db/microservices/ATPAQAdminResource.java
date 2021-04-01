@@ -15,7 +15,6 @@ import javax.enterprise.context.Initialized;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.sql.DataSource;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -27,6 +26,7 @@ public class ATPAQAdminResource {
   PropagationSetup propagationSetup;
   static String regionId = System.getenv("OCI_REGION").trim();
   static String pwSecretOcid = System.getenv("VAULT_SECRET_OCID").trim();
+  static String pwSecretFromK8s = System.getenv("dbpassword");
   static String orderuser = "ORDERUSER";
   static String orderpw;
   static String inventoryuser = "INVENTORYUSER";
@@ -61,8 +61,14 @@ public class ATPAQAdminResource {
   private PoolDataSource inventorypdbDataSource;
 
   public void init(@Observes @Initialized(ApplicationScoped.class) Object init) throws SQLException {
-    System.out.println("ATPAQAdminResource.init " + init);
-    orderpw = inventorypw = OCISDKUtility.getSecreteFromVault(true, regionId, pwSecretOcid);
+    String pw;
+    if(!"".equals(pwSecretOcid.trim())) {
+      System.out.println("Using OCI Vault secret");
+      pw = OCISDKUtility.getSecreteFromVault(true, regionId, pwSecretOcid);
+    } else {
+      pw = pwSecretFromK8s;
+    }
+    orderpw = inventorypw = pw;
     orderpdbDataSource.setUser("ADMIN");
     orderpdbDataSource.setPassword(orderpw);
     inventorypdbDataSource.setUser("ADMIN");

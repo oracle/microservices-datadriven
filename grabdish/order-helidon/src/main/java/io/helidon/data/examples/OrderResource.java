@@ -53,6 +53,7 @@ public class OrderResource {
     OrderServiceEventProducer orderServiceEventProducer = new OrderServiceEventProducer();
     static String regionId = System.getenv("OCI_REGION").trim();
     static String pwSecretOcid = System.getenv("VAULT_SECRET_OCID").trim();
+    static String pwSecretFromK8s = System.getenv("dbpassword").trim();
     static final String orderQueueOwner = "ORDERUSER";
     static final String orderQueueName = "orderqueue";
     static final String inventoryQueueName = "inventoryqueue";
@@ -83,7 +84,13 @@ public class OrderResource {
     public void init(@Observes @Initialized(ApplicationScoped.class) Object init) throws SQLException {
         System.out.println("OrderResource.init " + init);
         atpOrderPdb.setUser(orderQueueOwner);
-        atpOrderPdb.setPassword(OCISDKUtility.getSecreteFromVault(true, regionId, pwSecretOcid));
+        String pw;
+        if(!pwSecretOcid.trim().equals("")) {
+            pw = OCISDKUtility.getSecreteFromVault(true, regionId, pwSecretOcid);
+        } else {
+            pw = pwSecretFromK8s;
+        }
+        atpOrderPdb.setPassword(pw);
         Connection connection = atpOrderPdb.getConnection();
         System.out.println("OrderResource.init atpOrderPdb.getConnection():" + connection);
         connection.close();

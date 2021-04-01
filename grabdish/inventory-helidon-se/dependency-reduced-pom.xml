@@ -1,12 +1,3 @@
-<!--
-
-
-##
-## Copyright (c) 2021 Oracle and/or its affiliates.
-## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
-
-
--->
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
@@ -113,7 +104,7 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.13</version>
+      <version>4.13.1</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -125,7 +116,7 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.10.2</version>
+      <version>2.10.5.1</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -188,13 +179,31 @@
       <version>1.4.3</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>com.oracle.oci.sdk</groupId>
+      <artifactId>oci-java-sdk-vault</artifactId>
+      <version>1.32.2</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.oci.sdk</groupId>
+      <artifactId>oci-java-sdk-common</artifactId>
+      <version>1.32.2</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.oracle.oci.sdk</groupId>
+      <artifactId>oci-java-sdk-secrets</artifactId>
+      <version>1.32.2</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
   <properties>
     <project.build.targetEncoding>UTF-8</project.build.targetEncoding>
     <java.version>1.8</java.version>
     <docker.image.prefix>${env.DOCKER_REGISTRY}</docker.image.prefix>
     <docker.image.version>${env.IMAGE_VERSION}</docker.image.version>
-    <jackson.version>2.10.2</jackson.version>
+    <jackson.version>2.10.5.1</jackson.version>
     <compiler-plugin.version>3.8.1</compiler-plugin.version>
     <jar-plugin.version>3.2.0</jar-plugin.version>
     <lombok.version>1.18.2</lombok.version>
@@ -202,7 +211,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <jar.main.class>com.helidon.se.Main</jar.main.class>
     <skipTests>true</skipTests>
-    <junit.version>4.13</junit.version>
+    <junit.version>4.13.1</junit.version>
     <ojdbc10.version>19.3.0.0</ojdbc10.version>
     <helidon.version>1.4.3</helidon.version>
     <shade-plugin.version>3.2.1</shade-plugin.version>
