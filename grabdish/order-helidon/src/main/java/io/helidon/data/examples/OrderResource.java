@@ -59,17 +59,9 @@ public class OrderResource {
     static final String inventoryQueueName = "inventoryqueue";
     static boolean liveliness = true;
     static boolean readiness = true;
-    private static final String lastContainerStartTime;
+    private static String lastContainerStartTime;
     private OrderServiceCPUStress orderServiceCPUStress = new OrderServiceCPUStress();
     Map<String, OrderDetail> cachedOrders = new HashMap<>();
-
-    static {
-        lastContainerStartTime = new java.util.Date().toString();
-        System.out.println("____________________________________________________");
-        System.out.println("----------->OrderResource (container) starting at: " + lastContainerStartTime);
-        System.out.println("____________________________________________________");
-        System.setProperty("oracle.jdbc.fanEnabled", "false");
-    }
 
     @Path("/lastContainerStartTime")
     @GET
@@ -95,6 +87,11 @@ public class OrderResource {
         System.out.println("OrderResource.init atpOrderPdb.getConnection():" + connection);
         connection.close();
         startEventConsumer();
+        lastContainerStartTime = new java.util.Date().toString();
+        System.out.println("____________________________________________________");
+        System.out.println("----------->OrderResource (container) starting at: " + lastContainerStartTime);
+        System.out.println("____________________________________________________");
+        System.setProperty("oracle.jdbc.fanEnabled", "false");
     }
 
     private void startEventConsumer() {

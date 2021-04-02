@@ -4,7 +4,7 @@
 
 SCRIPT_DIR=$(dirname $0)
 
-IMAGE_NAME=helidonatp
+IMAGE_NAME=admin-helidon
 IMAGE_VERSION=0.1
 
 if [ -z "DOCKER_REGISTRY" ]; then

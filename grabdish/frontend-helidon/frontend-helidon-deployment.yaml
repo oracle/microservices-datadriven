@@ -27,5 +27,10 @@ spec:
               secretKeyRef:
                 name: frontendadmin
                 key: password
+          - name: JAEGER_QUERY_ADDRESS
+            valueFrom:
+              configMapKeyRef:
+                name: jaegerqueryaddress
+                key: address
         ports:
         - containerPort: 8080
