@@ -23,21 +23,26 @@ async function getSecret() {
       const secretConfig = {
        secretInfo: {
          regionid: process.env.OCI_REGION,
-         vaultsecretocid: process.env.VAULT_SECRET_OCID
+         vaultsecretocid: process.env.VAULT_SECRET_OCID,
+         k8ssecretdbpassword: process.env.dbpassword
        }
       };
-      console.log("regionid: ", secretConfig.secretInfo.regionid);
-      console.log("vaultsecretocid: ", secretConfig.secretInfo.vaultsecretocid);
-      const client =  new secrets.SecretsClient({
-          authenticationDetailsProvider: provider
-      });
-      const getSecretBundleRequest = {
-            secretId: secretConfig.secretInfo.vaultsecretocid
-          };
-      const getSecretBundleResponse = await client.getSecretBundle(getSecretBundleRequest);
-      const pw = getSecretBundleResponse.secretBundle.secretBundleContent.content;
-      let buff = new Buffer(pw, 'base64');
-      pwDecoded = buff.toString('ascii');
+      if  (secretConfig.secretInfo.vaultsecretocid == "") {
+        pwDecoded = process.env.dbpassword;
+      } else {
+        console.log("regionid: ", secretConfig.secretInfo.regionid);
+        console.log("vaultsecretocid: ", secretConfig.secretInfo.vaultsecretocid);
+        const client =  new secrets.SecretsClient({
+            authenticationDetailsProvider: provider
+        });
+        const getSecretBundleRequest = {
+                secretId: secretConfig.secretInfo.vaultsecretocid
+            };
+        const getSecretBundleResponse = await client.getSecretBundle(getSecretBundleRequest);
+        const pw = getSecretBundleResponse.secretBundle.secretBundleContent.content;
+        let buff = new Buffer(pw, 'base64');
+        pwDecoded = buff.toString('ascii');
+      }
   } catch (e) {
     throw Error(`Failed with error: ${e}`);
   }
