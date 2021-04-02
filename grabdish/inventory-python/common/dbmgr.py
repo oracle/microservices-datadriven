@@ -16,10 +16,9 @@ db_connection_count = int(env.get("DB_CONNECTION_COUNT", "1"))
 db_user =             env.get('DB_USER').strip()
 region_id =             env.get('OCI_REGION').strip()
 vault_secret_ocid =             env.get('VAULT_SECRET_OCID').strip()
-# db_password =         env.get('DB_PASSWORD').strip()
+k8s_secret_dbpassword =         env.get('dbpassword').strip()
 db_connect_string =   env.get('DB_CONNECT_STRING')
 region_id =             env.get('OCI_REGION').strip()
-vault_secret_ocid =             env.get('VAULT_SECRET_OCID').strip()
 
 readyfile = ""
 logger = None
@@ -78,13 +77,21 @@ def run():
 
         logger.debug("Create Connection Pool Started")
         try:
-            signer = oci.auth.signers.InstancePrincipalsSecurityTokenSigner()
-            secrets_client = oci.secrets.SecretsClient(config={'region': region_id}, signer=signer)
-            secret_bundle = secrets_client.get_secret_bundle(secret_id = vault_secret_ocid)
-            logger.debug(secret_bundle)
-            base64_bytes = secret_bundle.data.secret_bundle_content.content.encode('ascii')
-            message_bytes = base64.b64decode(base64_bytes)
-            db_password = message_bytes.decode('ascii')
+
+            db_password = ""
+
+            if vault_secret_ocid != "":
+                reportDown(error.code)
+                signer = oci.auth.signers.InstancePrincipalsSecurityTokenSigner()
+                secrets_client = oci.secrets.SecretsClient(config={'region': region_id}, signer=signer)
+                secret_bundle = secrets_client.get_secret_bundle(secret_id = vault_secret_ocid)
+                logger.debug(secret_bundle)
+                base64_bytes = secret_bundle.data.secret_bundle_content.content.encode('ascii')
+                message_bytes = base64.b64decode(base64_bytes)
+                db_password = message_bytes.decode('ascii')
+            else:
+                db_password = k8s_secret_dbpassword
+
             pool = cx_Oracle.SessionPool(
                 db_user,
                 db_password,

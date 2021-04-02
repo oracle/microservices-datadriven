@@ -3,7 +3,7 @@
 ## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 SCRIPT_DIR=$(dirname $0)
-echo create atpaqadmin deployment and service...
+echo create supplier-helidon-se deployment and service...
 export CURRENTTIME=$( date '+%F_%H:%M:%S' )
 echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated deployment yaml
 
