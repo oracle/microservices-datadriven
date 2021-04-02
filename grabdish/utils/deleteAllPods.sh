@@ -8,7 +8,7 @@ echo ________________________________________
 deletepod frontend
 
 echo ________________________________________
-echo deleting pod atpaqadmin...
+echo deleting pod admin-helidon...
 echo ________________________________________
 deletepod admin
 

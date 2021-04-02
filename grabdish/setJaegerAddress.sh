@@ -21,3 +21,16 @@ fi
 export JAEGER_QUERY_ADDRESS=https://$MSDATAWORKSHOP_JAEGER_IP
 echo JAEGER_QUERY_ADDRESS = $JAEGER_QUERY_ADDRESS
 echo $JAEGER_QUERY_ADDRESS > $WORKINGDIR/msdataworkshopjaegeraddress.txt
+echo Creating configmap with JAEGER_QUERY_ADDRESS for use by FrontEnd service
+kubectl create -n msdataworkshop -f - <<!
+{
+   "apiVersion": "v1",
+   "kind": "ConfigMap",
+   "metadata": {
+      "name": "jaegerqueryaddress"
+   },
+   "data": {
+      "address": "${JAEGER_QUERY_ADDRESS}"
+   }
+}
+!

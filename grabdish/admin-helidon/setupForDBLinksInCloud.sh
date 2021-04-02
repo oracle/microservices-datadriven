@@ -23,12 +23,12 @@ echo create link to cwallet.sso in objectstorage, save, export, and echo value..
 oci os preauth-request create --access-type ObjectRead --bucket-name msdataworkshop --name msdataworkshopwallet --time-expires 2021-12-21 --object-name cwallet.sso | jq --raw-output '.data | .["access-uri"] ' > preauthlink.txt
 export cwalletobjecturi=$(cat preauthlink.txt)
 export cwalletobjecturi=https://objectstorage.${OCI_REGION}.oraclecloud.com${cwalletobjecturi}
-echo updating atpaqadmin-deployment-${CURRENTTIME}.yaml with cwalletobjecturi $cwalletobjecturi
-sed -i "s|%cwalletobjecturi%|${cwalletobjecturi}|g" atpaqadmin-deployment-${CURRENTTIME}.yaml
+echo updating admin-helidon-deployment-${CURRENTTIME}.yaml with cwalletobjecturi $cwalletobjecturi
+sed -i "s|%cwalletobjecturi%|${cwalletobjecturi}|g" admin-helidon-deployment-${CURRENTTIME}.yaml
 
 
-echo cwalletobjecturi is created and added to atpaqadmin-deployment-${CURRENTTIME}.yaml
-echo adding other values in atpaqadmin-deployment-${CURRENTTIME}.yaml as parsed from tnsnames.ora s
+echo cwalletobjecturi is created and added to admin-helidon-deployment-${CURRENTTIME}.yaml
+echo adding other values in admin-helidon-deployment-${CURRENTTIME}.yaml as parsed from tnsnames.ora s
 
 #echo ____________________________________________________
 export orderdb_tptnsentry=$(grep -i "^${ORDER_PDB_NAME}_tp " $MSDATAWORKSHOP_LOCATION/atp-secrets-setup/wallet/tnsnames.ora)
@@ -115,15 +115,15 @@ echo $inventoryssl_server_cert_dn
 
 
 
-echo setting values in atpaqadmin-deployment-${CURRENTTIME}.yaml ...
+echo setting values in admin-helidon-deployment-${CURRENTTIME}.yaml ...
 
-sed -i "s|%orderhostname%|${orderhostname}|g" atpaqadmin-deployment-${CURRENTTIME}.yaml
-sed -i "s|%orderport%|${orderport}|g" atpaqadmin-deployment-${CURRENTTIME}.yaml
-sed -i "s|%orderservice_name%|${orderservice_name}|g" atpaqadmin-deployment-${CURRENTTIME}.yaml
-sed -i "s|%orderssl_server_cert_dn%|${orderssl_server_cert_dn}|g" atpaqadmin-deployment-${CURRENTTIME}.yaml
+sed -i "s|%orderhostname%|${orderhostname}|g" admin-helidon-deployment-${CURRENTTIME}.yaml
+sed -i "s|%orderport%|${orderport}|g" admin-helidon-deployment-${CURRENTTIME}.yaml
+sed -i "s|%orderservice_name%|${orderservice_name}|g" admin-helidon-deployment-${CURRENTTIME}.yaml
+sed -i "s|%orderssl_server_cert_dn%|${orderssl_server_cert_dn}|g" admin-helidon-deployment-${CURRENTTIME}.yaml
 
-sed -i "s|%inventoryhostname%|${inventoryhostname}|g" atpaqadmin-deployment-${CURRENTTIME}.yaml
-sed -i "s|%inventoryport%|${inventoryport}|g" atpaqadmin-deployment-${CURRENTTIME}.yaml
-sed -i "s|%inventoryservice_name%|${inventoryservice_name}|g" atpaqadmin-deployment-${CURRENTTIME}.yaml
-sed -i "s|%inventoryssl_server_cert_dn%|${inventoryssl_server_cert_dn}|g" atpaqadmin-deployment-${CURRENTTIME}.yaml
+sed -i "s|%inventoryhostname%|${inventoryhostname}|g" admin-helidon-deployment-${CURRENTTIME}.yaml
+sed -i "s|%inventoryport%|${inventoryport}|g" admin-helidon-deployment-${CURRENTTIME}.yaml
+sed -i "s|%inventoryservice_name%|${inventoryservice_name}|g" admin-helidon-deployment-${CURRENTTIME}.yaml
+sed -i "s|%inventoryssl_server_cert_dn%|${inventoryssl_server_cert_dn}|g" admin-helidon-deployment-${CURRENTTIME}.yaml
 

@@ -23,4 +23,4 @@ if [ -z "$1" ]; then
 else
     kubectl apply -f <(istioctl kube-inject -f $SCRIPT_DIR/supplier-helidon-se-deployment-$CURRENTTIME.yaml ) -n msdataworkshop
 fi
-kubectl create -f $SCRIPT_DIR/supplier-helidon-se-service.yaml  -n msdataworkshop
+kubectl apply -f $SCRIPT_DIR/supplier-helidon-se-service.yaml  -n msdataworkshop

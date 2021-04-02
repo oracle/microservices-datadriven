@@ -23,4 +23,4 @@ else
     kubectl apply -f <(istioctl kube-inject -f $SCRIPT_DIR/order-helidon-deployment-$CURRENTTIME.yaml) -n msdataworkshop
 fi
 
-kubectl create -f $SCRIPT_DIR/order-service.yaml -n msdataworkshop
+kubectl apply -f $SCRIPT_DIR/order-service.yaml -n msdataworkshop

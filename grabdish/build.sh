@@ -16,9 +16,9 @@ mvn install:install-file -Dfile=orajsoda-1.1.0.jar -DgroupId=com.oracle \
 cd ../
 
 echo ________________________________________
-echo building and pushing atpaqadmin...
+echo building and pushing admin-helidon...
 echo ________________________________________
-cd atpaqadmin
+cd admin-helidon
 ./build.sh
 cd ../
 
