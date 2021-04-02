@@ -11,9 +11,9 @@
 
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>helidonatp</artifactId>
+    <artifactId>admin-helidon</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>helidonatp</name>
+    <name>admin-helidon</name>
     <description>ATP OSB UCP Helidon Microprofile Microservices Demo</description>
 
     <parent>

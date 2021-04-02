@@ -4,16 +4,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: atpaqadmin
+  name: admin-helidon
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: atpaqadmin
+      app: admin
   template:
     metadata:
       labels:
-        app: atpaqadmin
+        app: admin
         version: helidon
     spec:
       initContainers:
@@ -42,8 +42,8 @@ spec:
         - name: creds-inventory
           mountPath: /creds-inventory
       containers:
-      - name: helidonatp
-        image: %DOCKER_REGISTRY%/helidonatp:0.1
+      - name: admin-helidon
+        image: %DOCKER_REGISTRY%/admin-helidon:0.1
         imagePullPolicy: Always
         env:
         - name: oracle.ucp.jdbc.PoolDataSource.orderpdb.URL

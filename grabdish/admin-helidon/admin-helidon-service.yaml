@@ -4,13 +4,13 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: atpaqadmin
+  name: admin
   labels:
-    app: atpaqadmin
+    app: admin
 spec:
   type: NodePort
   ports:
   - port: 8080
     name: http
   selector:
-    app: atpaqadmin
+    app: admin

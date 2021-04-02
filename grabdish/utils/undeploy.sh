@@ -10,9 +10,9 @@ cd frontend-helidon
 cd ../
 
 echo ________________________________________
-echo undeploying atpaqadmin...
+echo undeploying admin-helidon...
 echo ________________________________________
-cd atpaqadmin
+cd admin-helidon
 ./undeploy.sh
 cd ../
 
