@@ -38,7 +38,7 @@ then
 fi
 
 PASSWORDENCODED=`oci secrets secret-bundle get --secret-id $1 --query "data.\"secret-bundle-content\".content" --raw-output`
-PASSWORD=`echo -n Welcome12345 | base64`
+PASSWORD=`echo $PASSWORDENCODED | base64 --decode`
 umask 177
 cat >pw <<!
 { "adminPassword": "$PASSWORD" }
