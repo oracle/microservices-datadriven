@@ -12,17 +12,17 @@ source utils/state-functions.sh "state"
 source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
 
 # Delete Object Store
-oci os preauth-request delete --namespace 'wallet'  --bucket-name "$(state_get RUN_NAME)" --name 'grabdish'
-oci os object delete --bucket-name "$(state_get RUN_NAME)" --name "wallet"
-oci os bucket delete --compartment-id "$(cat state/COMPARTMENT_OCID)" --name "$(state_get RUN_NAME)"
+# oci os preauth-request delete --namespace 'wallet'  --bucket-name "$(state_get RUN_NAME)" --name 'grabdish'
+# oci os object delete --bucket-name "$(state_get RUN_NAME)" --name "wallet"
+# oci os bucket delete --force --name "$(state_get RUN_NAME)"
 
 # Delete Vault
 
 # Delete Repos
-BUILDS="frontend-helidon helidonatp order-helidon supplier-helidon-se inventory-helidon inventory-python inventory-nodejs inventory-helidon-se"
-for b in $BUILDS; do 
-  oci artifacts container repository delete --display-name "$(state_get RUN_NAME)/$b"
-done
+#REPO_IDS=`oci artifacts container repository list --compartment-id "$(state_get COMPARTMENT_OCID)" --query "join(' ', data.items[*].id)" --raw-output`
+#for b in $REPO_IDS; do 
+#  oci artifacts container repository delete --repository-id "$REPO_IDS"
+#done
 
 # Terraform Destroy
 cd $GRABDISH_HOME/terraform
@@ -34,4 +34,4 @@ export TF_VAR_runName="$(state_get RUN_NAME)"
 terraform destroy
 
 # Delete Compartment
-oci iam compartment delete --compartment-id "$(state_get COMPARTMENT_OCID)"
+# oci iam compartment delete --compartment-id "$(state_get COMPARTMENT_OCID)"

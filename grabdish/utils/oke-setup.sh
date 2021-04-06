@@ -8,6 +8,19 @@ set -e
 # Source the state functions
 source utils/state_functions.sh
 
+# Wait for provisioning
+while ! state_done PROVISIONING_DONE; do
+  echo "`date`: Waiting for terraform provisioning"
+  sleep 10
+done
+
+
+# Get OKE OCID
+while ! state_done OKE_OCID; do
+  OKE_OCID=`oci ce cluster list --compartment-id "$(state_get COMPARTMENT_OCID)" --query "join(' ',data[?name=='msdataworkshopcluster'].id)" --raw-output`
+  state_set OKE_OCID "$OKE_OCID"
+done
+
 
 # Setup Cluster Access
 while ! state_done KUBECTL_DONE; do

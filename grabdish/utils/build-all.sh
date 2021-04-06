@@ -58,7 +58,7 @@ export DOCKER_REGISTRY=$(state_get DOCKER_REGISTRY) # Export for builds
 while ! state_done "BUILDS_DONE"; do
   BUILDS="admin-helidon order-helidon supplier-helidon-se inventory-helidon inventory-python inventory-nodejs inventory-helidon-se"
   for b in $BUILDS; do 
-    cd $GRUBDASH_HOME/$b
+    cd $GRABDISH_HOME/$b
     ./build.sh
   done
   state_set_done "BUILDS_DONE" 

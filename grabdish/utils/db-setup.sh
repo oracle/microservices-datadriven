@@ -9,7 +9,7 @@ set -e
 source utils/state_functions.sh
 
 
-# Create Object Store Bucket (Should be replaced by terraform on day)
+# Create Object Store Bucket (Should be replaced by terraform one day)
 while ! state_done OBJECT_STORE_BUCKET; do
   oci os bucket create --compartment-id "$(cat state/COMPARTMENT_OCID)" --name "$(state_get RUN_NAME)"
   state_set_done OBJECT_STORE_BUCKET

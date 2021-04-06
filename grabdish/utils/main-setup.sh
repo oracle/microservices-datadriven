@@ -5,8 +5,21 @@
 # Fail on error
 set -e
 
+# Check home is set
+it test -z "$GRABDISH_HOME"; then
+  echo "ERROR: This script requires GRABDISH_HOME to be set"
+  exit
+fi
+
+#Create log and state directories
+export LOG_LOC=$GRABDISH_HOME/logs
+mkdir -p $LOG_LOC
+export STATE_LOC=$GRABDISH_HOME/state
+mkdir -p $STATE_LOC
+
 # Source the state functions
-source utils/state-functions.sh "state"
+source utils/state-functions.sh
+
 
 # Get Run Name from directory name
 while ! state_done RUN_NAME; do
@@ -56,8 +69,13 @@ while ! state_done TENANCY_OCID; do
 done
 
 
-# Double check the region TODO
+# Double check and then set the region
 while ! state_done REGION; do
+  HOME_REGION=`oci iam region-subscription list --query 'data[?"is-home-region"]."region-name" | join('\'' '\'', @)' --raw-output`
+  if test "$OCI_REGION" != "$HOME_REGION"; then
+    echo "This script only works in the home OCI region.  Please switch to the $HOME_REGION and retry."
+    exit
+  fi
   state_set REGION "$OCI_REGION" # Set in cloud shell env
 done
 
@@ -74,12 +92,20 @@ done
 echo "Compartment: $(state_get RUN_NAME) with OCID: $(state_get COMPARTMENT_OCID)"
 
 
-# Run the build-all.sh in the background (no push)
-$GRABDISH_HOME/utils/build-all.sh &>> $GRABDISH_HOME/logs/build-all.log &
+# Run the build-all.sh in the background
+$GRABDISH_HOME/utils/build-all.sh &>> $LOG_LOC/build-all.log &
 
 
 # Switch to SSH Key auth for the oci cli (workaround to perm issue awaiting fix)
 source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
+
+
+# Run the terraform.sh in the background
+$GRABDISH_HOME/utils/terraform.sh &>> $LOG_LOC/terraform.log &
+
+
+# Run the vault-setup.sh in the background
+$GRABDISH_HOME/utils/vault-setup.sh &>> $LOG_LOC/vault-setup.log &
 
 
 # Get Namespace
@@ -108,33 +134,10 @@ while ! state_done DOCKER_REGISTRY; do
 done
 
 
-# Provision Cluster, DBs, etc with terraform (and wait)
-if ! state_done PROVISIONING_DONE; then
-  cd $GRABDISH_HOME/terraform
-  export TF_VAR_ociTenancyOcid="$(state_get TENANCY_OCID)"
-  export TF_VAR_ociUserOcid="$(state_get USER_OCID)"
-  export TF_VAR_ociCompartmentOcid="$(state_get COMPARTMENT_OCID)"
-  export TF_VAR_ociRegionIdentifier="$(state_get REGION)"
-  export TF_VAR_runName="$(state_get RUN_NAME)"
-  #export TF_VAR_resUserPublicKey="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDELqTJTX8DHJXY3y4CiQwwJdf12fjM4MAaWRj4vRmc8A5/Jb/KABig7zz59kjhGXsspOWjIuufXMTFsO1+/MkFYp3tzNtmgyX+McuF18V8SS1TjwuRovAJcgEI4JMBWBLkI7v1G97omGDxBL0HCdkd1xQj8eqJqO96lFvGZd91T1UX0+nccFs0Fp2IyWgibzzc2hT8K8yyBIDsHMJ/Z8NE309Me+b+JkLeTL+WyUA45xIsCb+mphJKMM9ihPVRjKWsnBw2ylpnhYPTr67f7/i525cGwHDKOap7GvfaNuj7nB7efyoBCuybjyHeXxGd1kvMC5HSo6MYTPGWjoQRk+9n rexley@rexley-mac"
-  #export TF_VAR_resId="$(state_get RUN_NAME)"
-  if ! terraform init; then
-    echo 'ERROR: terraform init failed!'
-    exit
-  fi
-  if ! terraform apply -auto-approve; then
-    echo 'ERROR: terraform apply failed!'
-    exit
-  fi
-  cd $GRABDISH_HOME
-  state_set_done PROVISIONING_DONE
-fi
-
-
-# Get OKE OCID
-while ! state_done OKE_OCID; do
-  OKE_OCID=`oci ce cluster list --compartment-id "$(state_get COMPARTMENT_OCID)" --query "join(' ',data[?name=='msdataworkshopcluster'].id)" --raw-output`
-  state_set OKE_OCID "$OKE_OCID"
+# Wait for provisioning
+while ! state_done PROVISIONING_DONE; do
+  echo "`date`: Waiting for terraform provisioning"
+  sleep 10
 done
 
 
@@ -147,7 +150,7 @@ done
 
 # Get Inventory DB OCID
 while ! state_done INVENTORY_DB_OCID; do
-  INVENTORY_DB_OCID=`oci db autonomous-database list --compartment-id "$(cat state/COMPARTMENT_OCID)" --query 'join('"' '"',data[?"db-name"=='"'INVENTORYRDB'"'].id)' --raw-output`
+  INVENTORY_DB_OCID=`oci db autonomous-database list --compartment-id "$(cat state/COMPARTMENT_OCID)" --query 'join('"' '"',data[?"db-name"=='"'INVENTORYDB'"'].id)' --raw-output`
   state_set INVENTORY_DB_OCID "$INVENTORY_DB_OCID"
 done
 
@@ -167,11 +170,11 @@ done
 
 
 # run oke-setup.sh in background
-$GRABDISH_HOME/utils/oke-setup.sh &>>$GRABDISH_HOME/logs/oke-setup.log &
+$GRABDISH_HOME/utils/oke-setup.sh &>>$LOG_LOC/oke-setup.log &
 
 
 # run db-setup.sh in background
-$GRABDISH_HOME/utils/db-setup.sh &>>$GRABDISH_HOME/logs/db-setup.log &
+$GRABDISH_HOME/utils/db-setup.sh &>>$LOG_LOC/db-setup.log &
 
 
 # Collect DB password and create secret
@@ -179,16 +182,18 @@ while ! state_done DB_PASSWORD_DONE; do
   echo 'Database passwords must be 12 to 30 characters and contain at least one uppercase letter,'
   echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
   echo 'character or the word "admin".'
-  read -p "Enter the password to be used for the order and inventory databases." DB_PASSWORD
+  read -p "Enter the password to be used for the order and inventory databases: " DB_PASSWORD
   # todo.  Set password in vault
-  state_set_done DB_PASSWORD_DONE 
+  umask 177 
+  echo '{"adminPassword": "'"${DB_PASSWORD}"'"}' >$GRABDISH_HOME/DB_PASSWORD
+  # state_set_done DB_PASSWORD_DONE 
 done
 
 
 # Set admin password in inventory database
 while ! state_done INVENTORY_DB_PASSWORD_SET; do
   # todo.  Get password from vault
-  echo '"{'"${DB_PASSWORD}"'}"' | oci db autonomous-database update --autonomous-database-id "$(state_get INVENTORY_DB_OCID)"
+  oci db autonomous-database update --autonomous-database-id "$(state_get INVENTORY_DB_OCID)" --from-json "file://$GRABDISH_HOME/DB_PASSWORD"
   state_set_done INVENTORY_DB_PASSWORD_SET
 done
 
@@ -196,10 +201,11 @@ done
 # Set admin password in order database
 while ! state_done ORDER_DB_PASSWORD_SET; do
   # todo.  Get password from vault
-  echo '"{'"${DB_PASSWORD}"'}"' | oci db autonomous-database update --autonomous-database-id "$(state_get ORDER_DB_OCID)"
+  oci db autonomous-database update --autonomous-database-id "$(state_get ORDER_DB_OCID)" --from-json "file://$GRABDISH_HOME/DB_PASSWORD"
   state_set_done ORDER_DB_PASSWORD_SET
 done
 
+state_set_done DB_PASSWORD_DONE # Fix once we have vault
 
 # Collect UI password and create secret
 while ! state_done UI_PASSWORD_DONE; do
@@ -215,6 +221,19 @@ done
 # Wait for backgrounds
 wait
 
-# Verify Setup
 
-SETUP_VERIFIED
+# Verify Setup
+while ! state_done SETUP_VERIFIED
+  if state_done BUILD_ALL_DONE && state_done OKE_SETUP_DONE && state_done DB_SETUP_DONE; then
+    state_set_done SETUP_VERIFIED
+  else
+    if ! state_done BUILD_ALL_DONE; then
+      echo "ERROR: build-all.sh failed"
+    fi
+    if ! state_done OKE_SETUP_DONE; then
+      echo "ERROR: oke-setup.sh failed"
+    fi
+    if ! state_done DB_SETUP_DONE; then
+      echo "ERROR: db-setup.sh failed"
+    fi
+done
