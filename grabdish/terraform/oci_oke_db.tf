@@ -4,11 +4,63 @@ variable "ociCompartmentOcid" {}
 //variable "ociUserPassword" {}
 variable "ociRegionIdentifier" {}
 //variable "resUserPublicKey" {}
-//variable "resId" {}
+variable "runName" {}
 // Set the oci provider
 provider "oci" {
   region           = "${var.ociRegionIdentifier}"
 }
+//------- Create repos End  ------------------------------------------
+/*
+resource "oci_artifacts_container_repository" "frontend_helidon_container_repository" {
+  #Required
+  compartment_id = "${var.ociCompartmentOcid}"
+  display_name = "${var.runName}/frontend-helidon"
+  is_public = true
+}
+resource "oci_artifacts_container_repository" "helidonatp_container_repository" {
+  #Required
+  compartment_id = "${var.ociCompartmentOcid}"
+  display_name = "${var.runName}/admin-helidon"
+  is_public = true
+}
+resource "oci_artifacts_container_repository" "order-helidon_container_repository" {
+  #Required
+  compartment_id = "${var.ociCompartmentOcid}"
+  display_name = "${var.runName}/order-helidon"
+  is_public = true
+}
+resource "oci_artifacts_container_repository" "supplier-helidon-se_container_repository" {
+  #Required
+  compartment_id = "${var.ociCompartmentOcid}"
+  display_name = "${var.runName}/supplier-helidon-se"
+  is_public = true
+}
+resource "oci_artifacts_container_repository" "inventory-helidon_container_repository" {
+  #Required
+  compartment_id = "${var.ociCompartmentOcid}"
+  display_name = "${var.runName}/inventory-helidon"
+  is_public = true
+}
+resource "oci_artifacts_container_repository" "inventory-python_container_repository" {
+  #Required
+  compartment_id = "${var.ociCompartmentOcid}"
+  display_name = "${var.runName}/inventory-python"
+  is_public = true
+}
+resource "oci_artifacts_container_repository" "nodejs_container_repository" {
+  #Required
+  compartment_id = "${var.ociCompartmentOcid}"
+  display_name = "${var.runName}/inventory-nodejs"
+  is_public = true
+}
+resource "oci_artifacts_container_repository" "inventory-helidon-se_container_repository" {
+  #Required
+  compartment_id = "${var.ociCompartmentOcid}"
+  display_name = "${var.runName}/inventory-helidon-se"
+  is_public = true
+}
+*/
+
 data "oci_identity_availability_domain" "ad1" {
   //compartment_id = var.tenancy_ocid
   compartment_id = "${var.ociTenancyOcid}"
@@ -163,7 +215,7 @@ resource "oci_containerengine_node_pool" "okell_flex_shape_node_pool" {
   }
   quantity_per_subnet = 2
   //ssh_public_key      = var.node_pool_ssh_public_key
-  ssh_public_key = var.resUserPublicKey
+  //ssh_public_key = var.resUserPublicKey
 }
 data "oci_containerengine_cluster_option" "okell_cluster_option" {
   cluster_option_id = "all"
@@ -257,7 +309,7 @@ data "oci_database_autonomous_databases" "autonomous_databases_atp" {
   compartment_id = "${var.ociCompartmentOcid}"
   #Optional
   //display_name = "ORDERDB${random_string.upper.result}"
-  display_name =  "ORDERDB${var.resId}"
+  display_name =  "ORDERDB"
   db_workload  = "${var.autonomous_database_db_workload}"
 }
 data "oci_database_autonomous_databases" "autonomous_databases_atp2" {
@@ -265,7 +317,7 @@ data "oci_database_autonomous_databases" "autonomous_databases_atp2" {
   compartment_id = "${var.ociCompartmentOcid}"
   #Optional
   // display_name = "INVENTORYDB${random_string.upper.result}"
-  display_name = "INVENTORY${var.resId}"
+  display_name = "INVENTORYDB"
   db_workload  = "${var.autonomous_database_db_workload}"
 }
 //======= Name space details ------------------------------------------------------
@@ -292,12 +344,4 @@ output "ns_objectstorage_namespace" {
 }
 output "autonomous_database_admin_password" {
   value =  [ "Welcome12345" ]
-}
-output "autonomous_databases_atp" {
- // value = [ "ORDERDB${random_string.upper.result}" ]
-  value = [ "ORDERDB${var.resId}" ]
-}
-output "autonomous_databases_atp2" {
-  // value = [ "INVENTORYDB${random_string.upper.result}" ]
-  value = [  "INVENTORY${var.resId}" ]
 }

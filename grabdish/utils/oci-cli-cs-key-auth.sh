@@ -3,15 +3,11 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Make sure this is run via source or .
-function source_check()
-{
-    if [[ ${FUNCNAME[-1]} != "source" ]]
-    then
-        printf "Failure.  Usage: source %s <STATE_LOC>\n" "$0"
-        exit 1
-    fi
-}
-source_check
+if ! (return 0 2>/dev/null); then
+  echo "ERROR: Usage: 'source oci-cli-cs-key-auth.sh"
+  echo "              'source state-functions.sh' if the environment variable STATE_LOC is defined"
+  exit
+fi
 
 # Create Keys
 if ! test -f ~/.oci/oci_api_key.pem; then

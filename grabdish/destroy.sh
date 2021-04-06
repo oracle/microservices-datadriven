@@ -10,7 +10,7 @@ if (return 0 2>/dev/null); then
 
   export JAVA_HOME=~/graalvm-ce-java11-20.1.0
 
-  $GRABDISH_HOME/utils/main-setup.sh
+  $GRABDISH_HOME/utils/main-destroy.sh
 else
   echo "ERROR: Usage source $0"
 fi

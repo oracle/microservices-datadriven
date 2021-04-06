@@ -6,7 +6,18 @@
 set -e
 
 # Source the state functions
-source $GRABDISH_HOME/utils/state_functions.sh
+source $GRABDISH_HOME/utils/state-functions.sh
+
+
+# Provision Repos
+while ! state_done REPOS; do
+  BUILDS="frontend-helidon helidonatp order-helidon supplier-helidon-se inventory-helidon inventory-python inventory-nodejs inventory-helidon-se"
+  for b in $BUILDS; do 
+    oci artifacts container repository create --compartment-id "$(state_get COMPARTMENT_OCID)" --display-name "$(state_get RUN_NAME)/$b" --is-public true
+  done
+  state_set_done REPOS
+done
+
 
 # Install Graal
 while ! state_done "GRAAL_DONE"; do
@@ -35,6 +46,14 @@ while ! state_done "SODA_DONE"; do
 done
 
 
+# Wait for docker login
+while ! state_done DOCKER_REGISTRY; do
+  echo "Waiting for Docker Registry"
+  sleep 5
+done
+export DOCKER_REGISTRY=$(state_get DOCKER_REGISTRY) # Export for builds
+
+
 # Build all the images (no push) except frontend-helidon (requires Jaegar)
 while ! state_done "BUILDS_DONE"; do
   BUILDS="admin-helidon order-helidon supplier-helidon-se inventory-helidon inventory-python inventory-nodejs inventory-helidon-se"
@@ -61,22 +80,15 @@ while ! state_done "FRONTEND_BUILD_DONE"; do
 done
 
 
-# Wait for docker login
-while ! state_done "DOCKER_LOGIN_DONE"; do
-  echo "Waiting for Docker Login"
-  sleep 5
-done
-
-
 # Push all
-while ! state_done "PUSH_DONE"; do
-  BUILDS="frontend-helidon admin-helidon order-helidon supplier-helidon-se inventory-helidon inventory-python inventory-nodejs inventory-helidon-se"
-  for b in $BUILDS; do 
-    cd $GRUBDASH_HOME/$b
-    ./push.sh
-  done
-  state_set_done "PUSH_DONE" 
-done
+#while ! state_done "PUSH_DONE"; do
+#  BUILDS="frontend-helidon admin-helidon order-helidon supplier-helidon-se inventory-helidon inventory-python inventory-nodejs inventory-helidon-se"
+#  for b in $BUILDS; do 
+#    cd $GRUBDASH_HOME/$b
+#   ./push.sh
+#  done
+#  state_set_done "PUSH_DONE" 
+#done
 
 
 # Build All Done
