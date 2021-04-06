@@ -18,7 +18,7 @@ export STATE_LOC=$GRABDISH_HOME/state
 mkdir -p $STATE_LOC
 export STATE_LOG=$LOG_LOC/state.log
 echo "!!! Starting main-setup.sh\n" >>$STATE_LOG
-tail -f $STATE_LOG
+tail -f $STATE_LOG &
 
 # Source the state functions
 source utils/state-functions.sh
@@ -84,7 +84,8 @@ done
 # Create the compartment
 while ! state_done COMPARTMENT_OCID; do
   COMPARTMENT_OCID=`oci iam compartment create --compartment-id "$(state_get TENANCY_OCID)" --name "$(state_get RUN_NAME)" --description "GribDish Workshop" --query 'data.id' --raw-output`
-  while `oci iam compartment get --compartment-id "ocid1.compartment.oc1..aaaaaaaa56eeenfyfddjjdmv5licvcovbnuxnbo7pqzb3rphyatnkcvbfkia" --query 'data."lifecycle-state"' --raw-output` != 'ACTIVE'; do
+  while `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output` != 'ACTIVE'; do
+    echo "Waiting for the compartment to become ACTIVE"
     sleep 2
   done
   state_set COMPARTMENT_OCID "$COMPARTMENT_OCID"
@@ -154,7 +155,7 @@ while ! state_done DB_PASSWORD_OCID; do
   BASE64_DB_PASSWORD=`echo -n "$DB_PASSWORD" | base64`
 
   umask 177 
-  cat temp_params <<!
+  cat >temp_params <<!
 {
   "compartmentId": "$(state_get COMPARTMENT_OCID)",
   "description": "DB Password",
@@ -171,7 +172,36 @@ while ! state_done DB_PASSWORD_OCID; do
   DB_PWD_OCID=`oci vault secret create-base64 -d --from-json "file://temp_params" --query 'data.id' --raw-output`
   rm temp_params
   umask 177 
-  state_set_done DB_PASSWORD_OCID "$DB_PWD_OCID" 
+  state_set DB_PASSWORD_OCID "$DB_PWD_OCID" 
+done
+
+
+# Collect UI password and create secret
+while ! state_done UI_PASSWORD_OCID; do
+  read -p "Enter the password to be used for the user interface: " UI_PASSWORD
+
+  #Set password in vault
+  BASE64_UI_PASSWORD=`echo -n "$UI_PASSWORD" | base64`
+
+  umask 177 
+  cat >temp_params <<!
+{
+  "compartmentId": "$(state_get COMPARTMENT_OCID)",
+  "description": "UI Password",
+  "keyId": "$(state_get VAULT_KEY_OCID)",
+  "secretContentContent": "$BASE64_UI_PASSWORD",
+  "secretContentName": "uipassword",
+  "secretContentStage": "CURRENT",
+  "secretName": "uipassword",
+  "vaultId": "$(state_get VAULT_OCID)"
+}
+!
+
+  # Create a secret
+  UI_PWD_OCID=`oci vault secret create-base64 -d --from-json "file://temp_params" --query 'data.id' --raw-output`
+  rm temp_params
+  umask 177 
+  state_set UI_PASSWORD_OCID "$UI_PWD_OCID" 
 done
 
 
@@ -206,34 +236,28 @@ $GRABDISH_HOME/utils/oke-setup.sh &>>$LOG_LOC/oke-setup.log &
 $GRABDISH_HOME/utils/db-setup.sh &>>$LOG_LOC/db-setup.log &
 
 
-
-
-
 # Set admin password in inventory database
 while ! state_done INVENTORY_DB_PASSWORD_SET; do
-  # todo.  Get password from vault
+  # get password from vault secret
+  DB_PASSWORD=`oci secrets secret-bundle get --secret-id "$(state_get DB_PASSWORD_OCID)" --query 'data."secret-bundle-content"' -raw-output | base64 --decode`
+  umask 177
+  echo '{"adminPassword": "'"$DB_PASSWORD"'"}' > temp_params
   oci db autonomous-database update --autonomous-database-id "$(state_get INVENTORY_DB_OCID)" --from-json "file://$GRABDISH_HOME/DB_PASSWORD"
+  rm temp_params
   state_set_done INVENTORY_DB_PASSWORD_SET
 done
 
 
 # Set admin password in order database
 while ! state_done ORDER_DB_PASSWORD_SET; do
-  # todo.  Get password from vault
-  oci db autonomous-database update --autonomous-database-id "$(state_get ORDER_DB_OCID)" --from-json "file://$GRABDISH_HOME/DB_PASSWORD"
+  # get password from vault secret
+  DB_PASSWORD=`oci secrets secret-bundle get --secret-id "$(state_get DB_PASSWORD_OCID)" --query 'data."secret-bundle-content"' -raw-output | base64 --decode`
+  umask 177
+  echo '{"adminPassword": "'"$DB_PASSWORD"'"}' > temp_params
+  oci db autonomous-database update --autonomous-database-id "$(state_get ORDER_DB_OCID)" --from-json "file://temp_params"
+  rm temp_params
   state_set_done ORDER_DB_PASSWORD_SET
 done
-
-# Collect UI password and create secret
-if ! state_done UI_PASSWORD_DONE; then
-  echo 'Database passwords must be 12 to 30 characters and contain at least one uppercase letter,'
-  echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
-  echo 'character or the word "admin".'
-  read -p "Enter the password to be used for the user interface: " UI_PASSWORD
-  # todo.  Set password in vault
-  state_set_done UI_PASSWORD_DONE 
-fi
-
 
 # Wait for backgrounds
 wait
