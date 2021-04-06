@@ -16,8 +16,9 @@ export LOG_LOC=$GRABDISH_HOME/logs
 mkdir -p $LOG_LOC
 export STATE_LOC=$GRABDISH_HOME/state
 mkdir -p $STATE_LOC
-touch $LOG_LOC/state.log
-tail -f $LOG_LOC/state.log
+export STATE_LOG=$LOG_LOC/state.log
+echo "!!! Starting main-setup.sh\n" >>$STATE_LOG
+tail -f $STATE_LOG
 
 # Source the state functions
 source utils/state-functions.sh
@@ -82,12 +83,11 @@ done
 
 # Create the compartment
 while ! state_done COMPARTMENT_OCID; do
-  if COMPARTMENT_OCID=`oci iam compartment create --compartment-id "$(state_get TENANCY_OCID)" --name "$(state_get RUN_NAME)" --description "GribDish Workshop" --query 'data.id' --raw-output`; then
-    state_set COMPARTMENT_OCID "$COMPARTMENT_OCID"
-  else
-    echo "ERROR creating compartment named $(state_get RUN_NAME)"
-    exit
-  fi
+  COMPARTMENT_OCID=`oci iam compartment create --compartment-id "$(state_get TENANCY_OCID)" --name "$(state_get RUN_NAME)" --description "GribDish Workshop" --query 'data.id' --raw-output`
+  while `oci iam compartment get --compartment-id "ocid1.compartment.oc1..aaaaaaaa56eeenfyfddjjdmv5licvcovbnuxnbo7pqzb3rphyatnkcvbfkia" --query 'data."lifecycle-state"' --raw-output` != 'ACTIVE'; do
+    sleep 2
+  done
+  state_set COMPARTMENT_OCID "$COMPARTMENT_OCID"
 done
 echo "Compartment: $(state_get RUN_NAME) with OCID: $(state_get COMPARTMENT_OCID)"
 
@@ -136,8 +136,8 @@ done
 
 # Wait for vault
 if ! state_done VAULT_SETUP_DONE; then
-  echo "`date`: Waiting for terraform provisioning"
-  while ! state_done PROVISIONING_DONE; do
+  echo "`date`: Waiting for vault"
+  while ! state_done VAULT_SETUP_DONE; do
     sleep 1
   done
 fi
