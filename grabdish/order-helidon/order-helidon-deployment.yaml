@@ -63,7 +63,7 @@ spec:
           httpGet: #alternatives include exec with command, etc.
             path: /health/live
             port: 8080
-          initialDelaySeconds: 20
+          initialDelaySeconds: 220
           periodSeconds: 3
         readinessProbe:
           httpGet:
