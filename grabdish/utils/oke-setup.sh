@@ -6,7 +6,7 @@
 set -e
 
 # Source the state functions
-source utils/state_functions.sh
+source utils/state-functions.sh
 
 # Wait for provisioning
 while ! state_done PROVISIONING_DONE; do
@@ -34,6 +34,13 @@ while ! state_done SSL_DONE; do
   mkdir -p $GRABDISH_HOME/tls
   openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $GRABDISH_HOME/tls/tls.key -out $GRABDISH_HOME/tls/tls.crt -subj "/CN=convergeddb/O=convergeddb"
   state_set_done SSL_DONE
+done
+
+
+# Create SSL Secret
+while ! state_done "OKE_NAMESPACE_DONE"; do
+  kubectl create ns msdataworkshop
+  state_set_done "OKE_NAMESPACE_DONE"
 done
 
 

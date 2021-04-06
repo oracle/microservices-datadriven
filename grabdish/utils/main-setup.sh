@@ -6,7 +6,7 @@
 set -e
 
 # Check home is set
-it test -z "$GRABDISH_HOME"; then
+if test -z "$GRABDISH_HOME"; then
   echo "ERROR: This script requires GRABDISH_HOME to be set"
   exit
 fi
@@ -16,6 +16,8 @@ export LOG_LOC=$GRABDISH_HOME/logs
 mkdir -p $LOG_LOC
 export STATE_LOC=$GRABDISH_HOME/state
 mkdir -p $STATE_LOC
+touch $LOG_LOC/state.log
+tail -f $LOG_LOC/state.log
 
 # Source the state functions
 source utils/state-functions.sh
@@ -28,7 +30,6 @@ while ! state_done RUN_NAME; do
   state_set RUN_NAME `basename "$PWD"`
   cd $GRABDISH_HOME
 done
-echo RUN_NAME: "$(state_get RUN_NAME)"
 
 
 # Identify Run Type
@@ -48,7 +49,6 @@ while ! state_done RUN_TYPE; do
     esac
   done
 done
-echo RUN_TYPE: "$(state_get RUN_TYPE)"
 
 
 # Get the User OCID
@@ -110,7 +110,7 @@ $GRABDISH_HOME/utils/vault-setup.sh &>> $LOG_LOC/vault-setup.log &
 
 # Get Namespace
 while ! state_done NAMESPACE; do
-  NAMESPACE=`oci os ns get --compartment-id "$(cat state/COMPARTMENT_OCID)" --query "data" --raw-output`
+  NAMESPACE=`oci os ns get --compartment-id "$(state_get COMPARTMENT_OCID)" --query "data" --raw-output`
   state_set NAMESPACE "$NAMESPACE"
 done
 
@@ -134,11 +134,54 @@ while ! state_done DOCKER_REGISTRY; do
 done
 
 
-# Wait for provisioning
-while ! state_done PROVISIONING_DONE; do
+# Wait for vault
+if ! state_done VAULT_SETUP_DONE; then
   echo "`date`: Waiting for terraform provisioning"
-  sleep 10
+  while ! state_done PROVISIONING_DONE; do
+    sleep 1
+  done
+fi
+
+
+# Collect DB password and create secret
+while ! state_done DB_PASSWORD_OCID; do
+  echo 'Database passwords must be 12 to 30 characters and contain at least one uppercase letter,'
+  echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
+  echo 'character or the word "admin".'
+  read -p "Enter the password to be used for the order and inventory databases: " DB_PASSWORD
+
+  #Set password in vault
+  BASE64_DB_PASSWORD=`echo -n "$DB_PASSWORD" | base64`
+
+  umask 177 
+  cat temp_params <<!
+{
+  "compartmentId": "$(state_get COMPARTMENT_OCID)",
+  "description": "DB Password",
+  "keyId": "$(state_get VAULT_KEY_OCID)",
+  "secretContentContent": "$BASE64_DB_PASSWORD",
+  "secretContentName": "dbpassword",
+  "secretContentStage": "CURRENT",
+  "secretName": "dbpassword",
+  "vaultId": "$(state_get VAULT_OCID)"
+}
+!
+
+  # Create a secret
+  DB_PWD_OCID=`oci vault secret create-base64 -d --from-json "file://temp_params" --query 'data.id' --raw-output`
+  rm temp_params
+  umask 177 
+  state_set_done DB_PASSWORD_OCID "$DB_PWD_OCID" 
 done
+
+
+# Wait for provisioning
+if ! state_done PROVISIONING_DONE; then
+  echo "`date`: Waiting for terraform provisioning"
+  while ! state_done PROVISIONING_DONE; do
+    sleep 1
+  done
+fi
 
 
 # Get Order DB OCID
@@ -155,20 +198,6 @@ while ! state_done INVENTORY_DB_OCID; do
 done
 
 
-# Get Object Store OCID
-#while ! state_done "OBJECT_STORE_OCID"; do
-#  OBJECT_STORE_OCID=`exit`
-#  state_set "OBJECT_STORE_OCID", "$OBJECT_STORE_OCID"
-#done
-
-
-# Get Vault OCID
-#while ! state_done "VAULT_OCID"; do
-#  VAULT_OCID=`exit`
-#  state_set "VAULT_OCID", "$VAULT_OCID"
-#done
-
-
 # run oke-setup.sh in background
 $GRABDISH_HOME/utils/oke-setup.sh &>>$LOG_LOC/oke-setup.log &
 
@@ -177,17 +206,7 @@ $GRABDISH_HOME/utils/oke-setup.sh &>>$LOG_LOC/oke-setup.log &
 $GRABDISH_HOME/utils/db-setup.sh &>>$LOG_LOC/db-setup.log &
 
 
-# Collect DB password and create secret
-while ! state_done DB_PASSWORD_DONE; do
-  echo 'Database passwords must be 12 to 30 characters and contain at least one uppercase letter,'
-  echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
-  echo 'character or the word "admin".'
-  read -p "Enter the password to be used for the order and inventory databases: " DB_PASSWORD
-  # todo.  Set password in vault
-  umask 177 
-  echo '{"adminPassword": "'"${DB_PASSWORD}"'"}' >$GRABDISH_HOME/DB_PASSWORD
-  # state_set_done DB_PASSWORD_DONE 
-done
+
 
 
 # Set admin password in inventory database
@@ -205,17 +224,15 @@ while ! state_done ORDER_DB_PASSWORD_SET; do
   state_set_done ORDER_DB_PASSWORD_SET
 done
 
-state_set_done DB_PASSWORD_DONE # Fix once we have vault
-
 # Collect UI password and create secret
-while ! state_done UI_PASSWORD_DONE; do
+if ! state_done UI_PASSWORD_DONE; then
   echo 'Database passwords must be 12 to 30 characters and contain at least one uppercase letter,'
   echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
   echo 'character or the word "admin".'
   read -p "Enter the password to be used for the user interface: " UI_PASSWORD
   # todo.  Set password in vault
   state_set_done UI_PASSWORD_DONE 
-done
+fi
 
 
 # Wait for backgrounds
@@ -223,8 +240,8 @@ wait
 
 
 # Verify Setup
-while ! state_done SETUP_VERIFIED
-  if state_done BUILD_ALL_DONE && state_done OKE_SETUP_DONE && state_done DB_SETUP_DONE; then
+if ! state_done SETUP_VERIFIED; then
+  if state_done BUILD_ALL_DONE && state_done OKE_SETUP_DONE && state_done DB_SETUP_DONE && state_done PROVISIONING_DONE && state_done VAULT_SETUP_DONE; then
     state_set_done SETUP_VERIFIED
   else
     if ! state_done BUILD_ALL_DONE; then
@@ -236,4 +253,11 @@ while ! state_done SETUP_VERIFIED
     if ! state_done DB_SETUP_DONE; then
       echo "ERROR: db-setup.sh failed"
     fi
-done
+    if ! state_done PROVISIONING_DONE; then
+      echo "ERROR: terraform.sh failed"
+    fi
+    if ! state_done VAULT_SETUP_DONE; then
+      echo "ERROR: vault-setup.sh failed"
+    fi
+  fi
+fi
