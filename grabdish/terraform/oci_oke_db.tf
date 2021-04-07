@@ -146,7 +146,7 @@ resource "oci_containerengine_cluster" "okell_cluster" {
   #Required
   //compartment_id     = var.compartment_ocid
   compartment_id = "${var.ociCompartmentOcid}"
-  kubernetes_version = data.oci_containerengine_cluster_option.okell_cluster_option.kubernetes_versions[0]
+  kubernetes_version = "1.19.7"
   name               = "msdataworkshopcluster"
   vcn_id             = oci_core_vcn.okell_vcn.id
   #Optional
@@ -191,10 +191,11 @@ resource "oci_containerengine_node_pool" "okell_node_pool" {
     #Optional
     boot_volume_size_in_gbs = "60"
   }
-  quantity_per_subnet = 2
+  quantity_per_subnet = 1
   //ssh_public_key      = var.node_pool_ssh_public_key
   //ssh_public_key =  var.resUserPublicKey
 }
+/*
 resource "oci_containerengine_node_pool" "okell_flex_shape_node_pool" {
   #Required
   cluster_id         = oci_containerengine_cluster.okell_cluster.id
@@ -217,6 +218,7 @@ resource "oci_containerengine_node_pool" "okell_flex_shape_node_pool" {
   //ssh_public_key      = var.node_pool_ssh_public_key
   //ssh_public_key = var.resUserPublicKey
 }
+*/
 data "oci_containerengine_cluster_option" "okell_cluster_option" {
   cluster_option_id = "all"
 }
@@ -270,9 +272,16 @@ resource "random_string" "autonomous_database_wallet_password" {
   length  = 16
   special = true
 }
+resource "random_password" "database_admin_password" {
+  length  = 16
+  upper   = true
+  lower   = true
+  number  = true
+  special = false
+}
 resource "oci_database_autonomous_database" "autonomous_database_atp" {
   #Required
-  admin_password           = "Welcome12345"
+  admin_password           = random_password.database_admin_password.id
   compartment_id           = "${var.ociCompartmentOcid}"
   cpu_core_count           = "1"
   data_storage_size_in_tbs = "1"
@@ -290,7 +299,7 @@ resource "oci_database_autonomous_database" "autonomous_database_atp" {
 //================= create ATP Instance 2 =======================================
 resource "oci_database_autonomous_database" "autonomous_database_atp2" {
   #Required
-  admin_password           = "Welcome12345"
+  admin_password           = random_password.database_admin_password.id
   compartment_id           = "${var.ociCompartmentOcid}"
   cpu_core_count           = "1"
   data_storage_size_in_tbs = "1"

@@ -33,12 +33,14 @@ function state_done() {
 function state_set_done() {
   touch $STATE_LOC/"$1"
   echo "`date`: $1" >>$STATE_LOG
+  echo "`date`: $1 completed"
 }
 
 # Set the state to done and it's value
 function state_set() {
   echo "$2" > $STATE_LOC/"$1"
   echo "`date`: $1: $2" >>$STATE_LOG
+  echo "`date`: $1: $2" 
 }
 
 # Reset the state - not done and no value

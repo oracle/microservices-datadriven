@@ -18,7 +18,7 @@ export STATE_LOC=$GRABDISH_HOME/state
 mkdir -p $STATE_LOC
 export STATE_LOG=$LOG_LOC/state.log
 echo "!!! Starting main-setup.sh\n" >>$STATE_LOG
-tail -f $STATE_LOG &
+#tail -f $STATE_LOG &
 
 # Source the state functions
 source utils/state-functions.sh
@@ -84,7 +84,7 @@ done
 # Create the compartment
 while ! state_done COMPARTMENT_OCID; do
   COMPARTMENT_OCID=`oci iam compartment create --compartment-id "$(state_get TENANCY_OCID)" --name "$(state_get RUN_NAME)" --description "GribDish Workshop" --query 'data.id' --raw-output`
-  while `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output` != 'ACTIVE'; do
+  while test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output` != 'ACTIVE'; do
     echo "Waiting for the compartment to become ACTIVE"
     sleep 2
   done
@@ -94,6 +94,7 @@ echo "Compartment: $(state_get RUN_NAME) with OCID: $(state_get COMPARTMENT_OCID
 
 
 # Run the build-all.sh in the background
+echo "Executing build-all.sh in the background"
 $GRABDISH_HOME/utils/build-all.sh &>> $LOG_LOC/build-all.log &
 
 
@@ -102,10 +103,12 @@ source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
 
 
 # Run the terraform.sh in the background
+echo "Executing terraform.sh in the background"
 $GRABDISH_HOME/utils/terraform.sh &>> $LOG_LOC/terraform.log &
 
 
 # Run the vault-setup.sh in the background
+echo "Executing vault-setup.sh in the background"
 $GRABDISH_HOME/utils/vault-setup.sh &>> $LOG_LOC/vault-setup.log &
 
 
@@ -229,17 +232,19 @@ done
 
 
 # run oke-setup.sh in background
+echo "Executing oke-setup.sh in the background"
 $GRABDISH_HOME/utils/oke-setup.sh &>>$LOG_LOC/oke-setup.log &
 
 
 # run db-setup.sh in background
+echo "Executing db-setup.sh in the background"
 $GRABDISH_HOME/utils/db-setup.sh &>>$LOG_LOC/db-setup.log &
 
 
 # Set admin password in inventory database
 while ! state_done INVENTORY_DB_PASSWORD_SET; do
   # get password from vault secret
-  DB_PASSWORD=`oci secrets secret-bundle get --secret-id "$(state_get DB_PASSWORD_OCID)" --query 'data."secret-bundle-content"' --raw-output | base64 --decode`
+  DB_PASSWORD=`oci secrets secret-bundle get --secret-id "$(state_get DB_PASSWORD_OCID)" --query 'data."secret-bundle-content".content' --raw-output | base64 --decode`
   umask 177
   echo '{"adminPassword": "'"$DB_PASSWORD"'"}' > temp_params
   oci db autonomous-database update --autonomous-database-id "$(state_get INVENTORY_DB_OCID)" --from-json "file://temp_params"
@@ -251,7 +256,7 @@ done
 # Set admin password in order database
 while ! state_done ORDER_DB_PASSWORD_SET; do
   # get password from vault secret
-  DB_PASSWORD=`oci secrets secret-bundle get --secret-id "$(state_get DB_PASSWORD_OCID)" --query 'data."secret-bundle-content"' -raw-output | base64 --decode`
+  DB_PASSWORD=`oci secrets secret-bundle get --secret-id "$(state_get DB_PASSWORD_OCID)" --query 'data."secret-bundle-content".content' -raw-output | base64 --decode`
   umask 177
   echo '{"adminPassword": "'"$DB_PASSWORD"'"}' > temp_params
   oci db autonomous-database update --autonomous-database-id "$(state_get ORDER_DB_OCID)" --from-json "file://temp_params"
@@ -260,6 +265,7 @@ while ! state_done ORDER_DB_PASSWORD_SET; do
 done
 
 # Wait for backgrounds
+echo "Waiting for background processes to complete"
 wait
 
 
