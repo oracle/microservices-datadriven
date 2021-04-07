@@ -98,7 +98,7 @@ resource "oci_core_route_table" "okell_route_table" {
 }
 resource "oci_core_subnet" "clusterSubnet_1" {
   #Required
-  availability_domain = data.oci_identity_availability_domain.ad1.name
+  #availability_domain = data.oci_identity_availability_domain.ad1.name
   cidr_block          = "10.0.20.0/24"
   // compartment_id      = var.compartment_ocid
   compartment_id = "${var.ociCompartmentOcid}"
@@ -124,7 +124,7 @@ resource "oci_core_subnet" "clusterSubnet_2" {
 */
 resource "oci_core_subnet" "nodePool_Subnet_1" {
   #Required
-  availability_domain = data.oci_identity_availability_domain.ad1.name
+  #availability_domain = data.oci_identity_availability_domain.ad1.name
   cidr_block          = "10.0.22.0/24"
   // compartment_id      = var.compartment_ocid
   compartment_id = "${var.ociCompartmentOcid}"
