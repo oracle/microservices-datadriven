@@ -93,7 +93,6 @@ echo $COMPARTMENT_OCID
   state_set COMPARTMENT_OCID "$COMPARTMENT_OCID"
 done
 
-exit
 
 # Run the build-all.sh in the background
 echo "Executing build-all.sh in the background"
