@@ -185,21 +185,23 @@ resource "oci_containerengine_node_pool" "okell_node_pool" {
   name               = "Pool"
   node_shape         = "VM.Standard2.1"
   #subnet_ids         = [oci_core_subnet.nodePool_Subnet_1.id, oci_core_subnet.nodePool_Subnet_2.id]
-  subnet_ids         = [oci_core_subnet.nodePool_Subnet_1.id]
+  #subnet_ids         = [oci_core_subnet.nodePool_Subnet_1.id]
   #Optional
-  initial_node_labels {
-    #Optional
-    key   = "key"
-    value = "value"
+  node_config_details {
+    placement_configs {
+      availability_domain = data.oci_identity_availability_domain.ad1.name
+      subnet_id           = oci_core_subnet.nodePool_Subnet_1.id
+    }
+    size = "3"
   }
   node_source_details {
     #Required
     image_id    = local.oracle_linux_images.0
     source_type = "IMAGE"
     #Optional
-    boot_volume_size_in_gbs = "60"
+    #boot_volume_size_in_gbs = "60"
   }
-  quantity_per_subnet = 1
+  //quantity_per_subnet = 1
   //ssh_public_key      = var.node_pool_ssh_public_key
   //ssh_public_key =  var.resUserPublicKey
 }
@@ -222,7 +224,7 @@ resource "oci_containerengine_node_pool" "okell_flex_shape_node_pool" {
     ocpus = 2
     memory_in_gbs = 40
   }
-  quantity_per_subnet = 2
+  //quantity_per_subnet = 2
   //ssh_public_key      = var.node_pool_ssh_public_key
   //ssh_public_key = var.resUserPublicKey
 }

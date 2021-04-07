@@ -56,7 +56,7 @@ done
 while ! state_done USER_OCID; do
   read -p "Please enter your OCI user's OCID: " USER_OCID
   # Validate
-  if test `oci iam user get --user-id "$USER_OCID" --query 'data."lifecycle-state"' --raw-output` == 'ACTIVE'; then
+  if test '"'`oci iam user get --user-id "$USER_OCID" --query 'data."lifecycle-state"' --raw-output`'"' == 'ACTIVE'; then
     state_set USER_OCID "$USER_OCID"
   else
     echo "That user could not be validated"
@@ -97,20 +97,17 @@ done
 source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
 
 
-# Run the build-all.sh in the background
-echo "Executing build-all.sh in the background"
-$GRABDISH_HOME/utils/build-all.sh &>> $LOG_LOC/build-all.log &
-
-
 # Run the terraform.sh in the background
-echo "Executing terraform.sh in the background"
-$GRABDISH_HOME/utils/terraform.sh &>> $LOG_LOC/terraform.log &
-
+if ! state_get PROVISIONING_DONE; then
+  echo "Executing terraform.sh in the background"
+  $GRABDISH_HOME/utils/terraform.sh &>> $LOG_LOC/terraform.log &
+fi
 
 # Run the vault-setup.sh in the background
-echo "Executing vault-setup.sh in the background"
-$GRABDISH_HOME/utils/vault-setup.sh &>> $LOG_LOC/vault-setup.log &
-
+if ! state_get VAULT_SETUP_DONE; then
+  echo "Executing vault-setup.sh in the background"
+  $GRABDISH_HOME/utils/vault-setup.sh &>> $LOG_LOC/vault-setup.log &
+fi
 
 # Get Namespace
 while ! state_done NAMESPACE; do
@@ -136,6 +133,13 @@ while ! state_done DOCKER_REGISTRY; do
     state_set DOCKER_REGISTRY "$(state_get REGION).ocir.io/$(state_get NAMESPACE)/$(state_get RUN_NAME)"
   fi
 done
+
+
+# Run the build-all.sh in the background
+if ! state_get BUILD_ALL_DONE; then
+  echo "Executing build-all.sh in the background"
+  $GRABDISH_HOME/utils/build-all.sh &>> $LOG_LOC/build-all.log &
+fi
 
 
 # Wait for vault
@@ -212,7 +216,8 @@ done
 if ! state_done PROVISIONING_DONE; then
   echo "`date`: Waiting for terraform provisioning"
   while ! state_done PROVISIONING_DONE; do
-    sleep 1
+    echo -e "\r`tail -1 $LOG_LOC/terraform.log`            "
+    sleep 10
   done
 fi
 
@@ -232,13 +237,17 @@ done
 
 
 # run oke-setup.sh in background
-echo "Executing oke-setup.sh in the background"
-$GRABDISH_HOME/utils/oke-setup.sh &>>$LOG_LOC/oke-setup.log &
+if ! state_get OKE_SETUP_DONE; then
+  echo "Executing oke-setup.sh in the background"
+  $GRABDISH_HOME/utils/oke-setup.sh &>>$LOG_LOC/oke-setup.log &
+fi
 
 
 # run db-setup.sh in background
-echo "Executing db-setup.sh in the background"
-$GRABDISH_HOME/utils/db-setup.sh &>>$LOG_LOC/db-setup.log &
+if ! state_get DB_SETUP_DONE; then
+  echo "Executing db-setup.sh in the background"
+  $GRABDISH_HOME/utils/db-setup.sh &>>$LOG_LOC/db-setup.log &
+fi
 
 
 # Set admin password in inventory database
@@ -267,30 +276,27 @@ while ! state_done ORDER_DB_PASSWORD_SET; do
   state_set_done ORDER_DB_PASSWORD_SET
 done
 
+
 # Wait for backgrounds
 echo "Waiting for background processes to complete"
+jobs
 wait
 
 
 # Verify Setup
 if ! state_done SETUP_VERIFIED; then
-  if state_done BUILD_ALL_DONE && state_done OKE_SETUP_DONE && state_done DB_SETUP_DONE && state_done PROVISIONING_DONE && state_done VAULT_SETUP_DONE; then
-    state_set_done SETUP_VERIFIED
+  FAILURES=0
+  for bg in "BUILD_ALL_DONE OKE_SETUP_DONE DB_SETUP_DONE PROVISIONING_DONE VAULT_SETUP_DONE"; do
+    if state_done $bg; then
+      echo "$bg completed"
+    else
+      echo "ERROR: $bg failed"
+      FAILURES=$((FAILURES+1))
+    fi
+  done
+  if test FAULURES -gt 0; then
+    echo "Log files are located in $LOG_LOC"
   else
-    if ! state_done BUILD_ALL_DONE; then
-      echo "ERROR: build-all.sh failed"
-    fi
-    if ! state_done OKE_SETUP_DONE; then
-      echo "ERROR: oke-setup.sh failed"
-    fi
-    if ! state_done DB_SETUP_DONE; then
-      echo "ERROR: db-setup.sh failed"
-    fi
-    if ! state_done PROVISIONING_DONE; then
-      echo "ERROR: terraform.sh failed"
-    fi
-    if ! state_done VAULT_SETUP_DONE; then
-      echo "ERROR: vault-setup.sh failed"
-    fi
+    state_set_done SETUP_VERIFIED
   fi
 fi
