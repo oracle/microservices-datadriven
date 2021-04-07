@@ -171,11 +171,11 @@ while ! state_done DB_PASSWORD_OCID; do
   "vaultId": "$(state_get VAULT_OCID)"
 }
 !
+  umask 22
 
   # Create a secret
   DB_PWD_OCID=`oci vault secret create-base64 --from-json "file://temp_params" --query 'data.id' --raw-output`
   rm temp_params
-  umask 177 
   state_set DB_PASSWORD_OCID "$DB_PWD_OCID" 
 done
 
@@ -200,11 +200,11 @@ while ! state_done UI_PASSWORD_OCID; do
   "vaultId": "$(state_get VAULT_OCID)"
 }
 !
+  umask 22 
 
   # Create a secret
   UI_PWD_OCID=`oci vault secret create-base64 --from-json "file://temp_params" --query 'data.id' --raw-output`
   rm temp_params
-  umask 177 
   state_set UI_PASSWORD_OCID "$UI_PWD_OCID" 
 done
 
@@ -248,6 +248,8 @@ while ! state_done INVENTORY_DB_PASSWORD_SET; do
   DB_PASSWORD=`oci secrets secret-bundle get --secret-id "$(state_get DB_PASSWORD_OCID)" --query 'data."secret-bundle-content".content' --raw-output | base64 --decode`
   umask 177
   echo '{"adminPassword": "'"$DB_PASSWORD"'"}' > temp_params
+  umask 22 
+
   oci db autonomous-database update --autonomous-database-id "$(state_get INVENTORY_DB_OCID)" --from-json "file://temp_params"
   rm temp_params
   state_set_done INVENTORY_DB_PASSWORD_SET
@@ -260,6 +262,7 @@ while ! state_done ORDER_DB_PASSWORD_SET; do
   DB_PASSWORD=`oci secrets secret-bundle get --secret-id "$(state_get DB_PASSWORD_OCID)" --query 'data."secret-bundle-content".content' -raw-output | base64 --decode`
   umask 177
   echo '{"adminPassword": "'"$DB_PASSWORD"'"}' > temp_params
+  umask 22
   oci db autonomous-database update --autonomous-database-id "$(state_get ORDER_DB_OCID)" --from-json "file://temp_params"
   rm temp_params
   state_set_done ORDER_DB_PASSWORD_SET

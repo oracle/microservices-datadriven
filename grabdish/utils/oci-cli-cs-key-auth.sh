@@ -37,6 +37,7 @@ key_file=~/.oci/oci_api_key.pem
 tenancy=${OCI_TENANCY}
 region=${OCI_REGION}
 !
+umask 22
 
 # unset OCI_CLI variables
 unset OCI_CLI_CONFIG_FILE
