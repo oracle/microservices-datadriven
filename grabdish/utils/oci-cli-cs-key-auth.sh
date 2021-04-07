@@ -28,6 +28,7 @@ done
 FINGERPRINT=`openssl rsa -pubout -outform DER -in ~/.oci/oci_api_key.pem | openssl md5 -c | awk '{print $2}'`
 
 # Create config file
+umask 177
 cat >~/.oci/config <<!
 [DEFAULT]
 user=$(state_get USER_OCID)
