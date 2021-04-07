@@ -85,7 +85,6 @@ done
 while ! state_done COMPARTMENT_OCID; do
   echo "Resources will be created in compartment: $(state_get RUN_NAME)"
   COMPARTMENT_OCID=`oci iam compartment create --compartment-id "$(state_get TENANCY_OCID)" --name "$(state_get RUN_NAME)" --description "GribDish Workshop" --query 'data.id' --raw-output`
-echo $COMPARTMENT_OCID
   while ! test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output` == 'ACTIVE'; do
     echo "Waiting for the compartment to become ACTIVE"
     sleep 2
@@ -259,7 +258,7 @@ done
 # Set admin password in order database
 while ! state_done ORDER_DB_PASSWORD_SET; do
   # get password from vault secret
-  DB_PASSWORD=`oci secrets secret-bundle get --secret-id "$(state_get DB_PASSWORD_OCID)" --query 'data."secret-bundle-content".content' -raw-output | base64 --decode`
+  DB_PASSWORD=`oci secrets secret-bundle get --secret-id "$(state_get DB_PASSWORD_OCID)" --query 'data."secret-bundle-content".content' --raw-output | base64 --decode`
   umask 177
   echo '{"adminPassword": "'"$DB_PASSWORD"'"}' > temp_params
   umask 22

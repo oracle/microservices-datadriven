@@ -66,11 +66,13 @@ data "oci_identity_availability_domain" "ad1" {
   compartment_id = "${var.ociTenancyOcid}"
   ad_number      = 1
 }
+/*
 data "oci_identity_availability_domain" "ad2" {
   // compartment_id = var.tenancy_ocid
   compartment_id = "${var.ociTenancyOcid}"
   ad_number      = 2
 }
+*/
 resource "oci_core_vcn" "okell_vcn" {
   cidr_block     = "10.0.0.0/16"
   //compartment_id = var.compartment_ocid
@@ -106,6 +108,7 @@ resource "oci_core_subnet" "clusterSubnet_1" {
   display_name      = "SubNet1ForClusters"
   route_table_id    = oci_core_route_table.okell_route_table.id
 }
+/*
 resource "oci_core_subnet" "clusterSubnet_2" {
   #Required
   availability_domain = data.oci_identity_availability_domain.ad2.name
@@ -118,6 +121,7 @@ resource "oci_core_subnet" "clusterSubnet_2" {
   security_list_ids = [oci_core_vcn.okell_vcn.default_security_list_id]
   route_table_id    = oci_core_route_table.okell_route_table.id
 }
+*/
 resource "oci_core_subnet" "nodePool_Subnet_1" {
   #Required
   availability_domain = data.oci_identity_availability_domain.ad1.name
@@ -130,6 +134,7 @@ resource "oci_core_subnet" "nodePool_Subnet_1" {
   display_name      = "SubNet1ForNodePool"
   route_table_id    = oci_core_route_table.okell_route_table.id
 }
+/*
 resource "oci_core_subnet" "nodePool_Subnet_2" {
   #Required
   availability_domain = data.oci_identity_availability_domain.ad2.name
@@ -142,16 +147,18 @@ resource "oci_core_subnet" "nodePool_Subnet_2" {
   display_name      = "SubNet2ForNodePool"
   route_table_id    = oci_core_route_table.okell_route_table.id
 }
+*/
 resource "oci_containerengine_cluster" "okell_cluster" {
   #Required
   //compartment_id     = var.compartment_ocid
   compartment_id = "${var.ociCompartmentOcid}"
-  kubernetes_version = "1.19.7"
+  kubernetes_version = "v1.19.7"
   name               = "msdataworkshopcluster"
   vcn_id             = oci_core_vcn.okell_vcn.id
   #Optional
   options {
-    service_lb_subnet_ids = [oci_core_subnet.clusterSubnet_1.id, oci_core_subnet.clusterSubnet_2.id]
+    #service_lb_subnet_ids = [oci_core_subnet.clusterSubnet_1.id, oci_core_subnet.clusterSubnet_2.id]
+    service_lb_subnet_ids = [oci_core_subnet.clusterSubnet_1.id]
     #Optional
     add_ons {
       #Optional
@@ -174,10 +181,11 @@ resource "oci_containerengine_node_pool" "okell_node_pool" {
   cluster_id         = oci_containerengine_cluster.okell_cluster.id
   //compartment_id     = var.compartment_ocid
   compartment_id = "${var.ociCompartmentOcid}"
-  kubernetes_version = data.oci_containerengine_node_pool_option.okell_node_pool_option.kubernetes_versions[0]
+  kubernetes_version = "v1.19.7"
   name               = "Pool"
   node_shape         = "VM.Standard2.1"
-  subnet_ids         = [oci_core_subnet.nodePool_Subnet_1.id, oci_core_subnet.nodePool_Subnet_2.id]
+  #subnet_ids         = [oci_core_subnet.nodePool_Subnet_1.id, oci_core_subnet.nodePool_Subnet_2.id]
+  subnet_ids         = [oci_core_subnet.nodePool_Subnet_1.id]
   #Optional
   initial_node_labels {
     #Optional
@@ -273,7 +281,7 @@ resource "random_string" "autonomous_database_wallet_password" {
   special = true
 }
 resource "random_password" "database_admin_password" {
-  length  = 16
+  length  = 12
   upper   = true
   lower   = true
   number  = true
@@ -281,7 +289,7 @@ resource "random_password" "database_admin_password" {
 }
 resource "oci_database_autonomous_database" "autonomous_database_atp" {
   #Required
-  admin_password           = random_password.database_admin_password.id
+  admin_password           = random_password.database_admin_password.result
   compartment_id           = "${var.ociCompartmentOcid}"
   cpu_core_count           = "1"
   data_storage_size_in_tbs = "1"
@@ -299,7 +307,7 @@ resource "oci_database_autonomous_database" "autonomous_database_atp" {
 //================= create ATP Instance 2 =======================================
 resource "oci_database_autonomous_database" "autonomous_database_atp2" {
   #Required
-  admin_password           = random_password.database_admin_password.id
+  admin_password           = random_password.database_admin_password.result
   compartment_id           = "${var.ociCompartmentOcid}"
   cpu_core_count           = "1"
   data_storage_size_in_tbs = "1"
