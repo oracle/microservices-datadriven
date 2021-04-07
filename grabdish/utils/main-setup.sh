@@ -83,15 +83,16 @@ done
 
 # Create the compartment
 while ! state_done COMPARTMENT_OCID; do
+  echo "Resources will be created in compartment: $(state_get RUN_NAME)"
   COMPARTMENT_OCID=`oci iam compartment create --compartment-id "$(state_get TENANCY_OCID)" --name "$(state_get RUN_NAME)" --description "GribDish Workshop" --query 'data.id' --raw-output`
-  while test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output` != 'ACTIVE'; do
+  while ! test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output` == 'ACTIVE' ]]; do
     echo "Waiting for the compartment to become ACTIVE"
     sleep 2
   done
   state_set COMPARTMENT_OCID "$COMPARTMENT_OCID"
 done
-echo "Compartment: $(state_get RUN_NAME) with OCID: $(state_get COMPARTMENT_OCID)"
 
+exit
 
 # Run the build-all.sh in the background
 echo "Executing build-all.sh in the background"
