@@ -93,13 +93,13 @@ while ! state_done COMPARTMENT_OCID; do
 done
 
 
+# Switch to SSH Key auth for the oci cli (workaround to perm issue awaiting fix)
+source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
+
+
 # Run the build-all.sh in the background
 echo "Executing build-all.sh in the background"
 $GRABDISH_HOME/utils/build-all.sh &>> $LOG_LOC/build-all.log &
-
-
-# Switch to SSH Key auth for the oci cli (workaround to perm issue awaiting fix)
-source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
 
 
 # Run the terraform.sh in the background
