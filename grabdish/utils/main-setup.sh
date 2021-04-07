@@ -169,7 +169,7 @@ while ! state_done DB_PASSWORD_OCID; do
 !
 
   # Create a secret
-  DB_PWD_OCID=`oci vault secret create-base64 -d --from-json "file://temp_params" --query 'data.id' --raw-output`
+  DB_PWD_OCID=`oci vault secret create-base64 --from-json "file://temp_params" --query 'data.id' --raw-output`
   rm temp_params
   umask 177 
   state_set DB_PASSWORD_OCID "$DB_PWD_OCID" 
@@ -198,7 +198,7 @@ while ! state_done UI_PASSWORD_OCID; do
 !
 
   # Create a secret
-  UI_PWD_OCID=`oci vault secret create-base64 -d --from-json "file://temp_params" --query 'data.id' --raw-output`
+  UI_PWD_OCID=`oci vault secret create-base64 --from-json "file://temp_params" --query 'data.id' --raw-output`
   rm temp_params
   umask 177 
   state_set UI_PASSWORD_OCID "$UI_PWD_OCID" 
@@ -239,10 +239,10 @@ $GRABDISH_HOME/utils/db-setup.sh &>>$LOG_LOC/db-setup.log &
 # Set admin password in inventory database
 while ! state_done INVENTORY_DB_PASSWORD_SET; do
   # get password from vault secret
-  DB_PASSWORD=`oci secrets secret-bundle get --secret-id "$(state_get DB_PASSWORD_OCID)" --query 'data."secret-bundle-content"' -raw-output | base64 --decode`
+  DB_PASSWORD=`oci secrets secret-bundle get --secret-id "$(state_get DB_PASSWORD_OCID)" --query 'data."secret-bundle-content"' --raw-output | base64 --decode`
   umask 177
   echo '{"adminPassword": "'"$DB_PASSWORD"'"}' > temp_params
-  oci db autonomous-database update --autonomous-database-id "$(state_get INVENTORY_DB_OCID)" --from-json "file://$GRABDISH_HOME/DB_PASSWORD"
+  oci db autonomous-database update --autonomous-database-id "$(state_get INVENTORY_DB_OCID)" --from-json "file://temp_params"
   rm temp_params
   state_set_done INVENTORY_DB_PASSWORD_SET
 done
