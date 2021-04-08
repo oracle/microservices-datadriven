@@ -5,9 +5,6 @@
 # Fail on error
 set -e
 
-# Source the state functions
-source $GRABDISH_HOME/utils/state-functions.sh
-
 
 # Vault
 while ! state_done VAULT_OCID; do

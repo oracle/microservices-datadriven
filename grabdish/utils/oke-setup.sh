@@ -5,8 +5,6 @@
 # Fail on error
 set -e
 
-# Source the state functions
-source utils/state-functions.sh
 
 # Wait for provisioning
 while ! state_done PROVISIONING_DONE; do
@@ -17,7 +15,7 @@ done
 
 # Get OKE OCID
 while ! state_done OKE_OCID; do
-  OKE_OCID=`oci ce cluster list --compartment-id "$(state_get COMPARTMENT_OCID)" --query "join(' ',data[?name=='msdataworkshopcluster'].id)" --raw-output`
+  OKE_OCID=`oci ce cluster list --compartment-id "$(state_get COMPARTMENT_OCID)" --query "join(' ',data[*].id)" --raw-output`
   state_set OKE_OCID "$OKE_OCID"
 done
 

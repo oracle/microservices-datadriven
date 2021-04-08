@@ -8,11 +8,4 @@ if ! (return 0 2>/dev/null); then
   exit
 fi
 
-# Set GRABDISH_HOME
-export GRABDISH_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-cd $GRABDISH_HOME
-echo "GRABDISH_HOME: $GRABDISH_HOME"
-
-export JAVA_HOME=~/graalvm-ce-java11-20.1.0
-
 $GRABDISH_HOME/utils/main-setup.sh

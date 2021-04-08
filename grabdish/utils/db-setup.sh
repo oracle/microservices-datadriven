@@ -5,9 +5,6 @@
 # Fail on error
 set -e
 
-# Source the state functions
-source utils/state-functions.sh
-
 
 # Create Object Store Bucket (Should be replaced by terraform one day)
 while ! state_done OBJECT_STORE_BUCKET; do

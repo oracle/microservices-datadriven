@@ -4,48 +4,38 @@
 
 # Make sure this is run via source or .
 if ! (return 0 2>/dev/null); then
-  echo "ERROR: Usage: 'source state-functions.sh <STATE_LOC>' or, "
-  echo "              'source state-functions.sh' if the environment variable STATE_LOC is defined"
+  echo "ERROR: Usage: 'source state-functions.sh"
   exit
 fi
 
-# Validate State Location
-if test $# -gt 0; then
-  STATE_LOC="$1"
+if test -z "$GRABDISH_HOME"; then
+  echo "ERROR: The grabdish home folder was not set"
+else
+  mkdir -p $GRABDISH_HOME/state
 fi
-
-if test -z "$STATE_LOC"; then
-  echo "ERROR: State folder was not specified"
-fi
-
-if ! test -d $STATE_LOC; then
-  echo "ERROR: State folder $STATE_LOC does not exist"
-fi
-
-export STATE_LOC=`readlink -m $STATE_LOC`
 
 # Test if the state is done (file exists) 
 function state_done() {
-  test -f $STATE_LOC/"$1"
+  test -f $GRABDISH_HOME/state/"$1"
 }
 
 # Set the state to done
 function state_set_done() {
-  touch $STATE_LOC/"$1"
-  echo "`date`: $1" >>$STATE_LOG
-  echo "`date`: $1 completed"
+  touch $GRABDISH_HOME/state/"$1"
+  echo "`date`: $1" >>$GRABDISH_LOG/state.log
+  echo "$1 completed"
 }
 
 # Set the state to done and it's value
 function state_set() {
-  echo "$2" > $STATE_LOC/"$1"
-  echo "`date`: $1: $2" >>$STATE_LOG
-  echo "`date`: $1: $2" 
+  echo "$2" > $GRABDISH_HOME/state/"$1"
+  echo "`date`: $1: $2" >>$GRABDISH_LOG/state.log
+  echo "$1: $2" 
 }
 
 # Reset the state - not done and no value
 function state_reset() {
-  rm -f $STATE_LOC/"$1"
+  rm -f $GRABDISH_HOME/state/"$1"
 }
 
 # Get state value
@@ -53,5 +43,12 @@ function state_get() {
     if ! state_done "$1"; then
         return 1
     fi
-    cat $STATE_LOC/"$1"
+    cat $GRABDISH_HOME/state/"$1"
 }
+
+# Export the functions so that they are available to subshells
+export -f state_done
+export -f state_set_done
+export -f state_set
+export -f state_reset
+export -f state_get

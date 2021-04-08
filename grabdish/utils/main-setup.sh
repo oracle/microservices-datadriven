@@ -11,18 +11,6 @@ if test -z "$GRABDISH_HOME"; then
   exit
 fi
 
-#Create log and state directories
-export LOG_LOC=$GRABDISH_HOME/logs
-mkdir -p $LOG_LOC
-export STATE_LOC=$GRABDISH_HOME/state
-mkdir -p $STATE_LOC
-export STATE_LOG=$LOG_LOC/state.log
-echo "!!! Starting main-setup.sh\n" >>$STATE_LOG
-#tail -f $STATE_LOG &
-
-# Source the state functions
-source utils/state-functions.sh
-
 
 # Get Run Name from directory name
 while ! state_done RUN_NAME; do
@@ -100,13 +88,13 @@ source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
 # Run the terraform.sh in the background
 if ! state_get PROVISIONING_DONE; then
   echo "Executing terraform.sh in the background"
-  $GRABDISH_HOME/utils/terraform.sh &>> $LOG_LOC/terraform.log &
+  $GRABDISH_HOME/utils/terraform.sh &>> $GRABDISH_LOG/terraform.log &
 fi
 
 # Run the vault-setup.sh in the background
 if ! state_get VAULT_SETUP_DONE; then
   echo "Executing vault-setup.sh in the background"
-  $GRABDISH_HOME/utils/vault-setup.sh &>> $LOG_LOC/vault-setup.log &
+  $GRABDISH_HOME/utils/vault-setup.sh &>> $GRABDISH_LOG/vault-setup.log &
 fi
 
 # Get Namespace
@@ -138,7 +126,7 @@ done
 # Run the build-all.sh in the background
 if ! state_get BUILD_ALL_DONE; then
   echo "Executing build-all.sh in the background"
-  $GRABDISH_HOME/utils/build-all.sh &>> $LOG_LOC/build-all.log &
+  $GRABDISH_HOME/utils/build-all.sh &>> $GRABDISH_LOG/build-all.log &
 fi
 
 
@@ -156,7 +144,7 @@ while ! state_done DB_PASSWORD_OCID; do
   echo 'Database passwords must be 12 to 30 characters and contain at least one uppercase letter,'
   echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
   echo 'character or the word "admin".'
-  read -p "Enter the password to be used for the order and inventory databases: " DB_PASSWORD
+  read -s -r -p "Enter the password to be used for the order and inventory databases: " DB_PASSWORD
 
   #Set password in vault
   BASE64_DB_PASSWORD=`echo -n "$DB_PASSWORD" | base64`
@@ -185,7 +173,7 @@ done
 
 # Collect UI password and create secret
 while ! state_done UI_PASSWORD_OCID; do
-  read -p "Enter the password to be used for the user interface: " UI_PASSWORD
+  read -s -r -p "Enter the password to be used for the user interface: " UI_PASSWORD
 
   #Set password in vault
   BASE64_UI_PASSWORD=`echo -n "$UI_PASSWORD" | base64`
@@ -216,7 +204,7 @@ done
 if ! state_done PROVISIONING_DONE; then
   echo "`date`: Waiting for terraform provisioning"
   while ! state_done PROVISIONING_DONE; do
-    echo -ne "\r`tail -1 $LOG_LOC/terraform.log`            "
+    echo -ne "\r`tail -1 $GRABDISH_LOG/terraform.log`            "
     sleep 10
   done
 fi
@@ -239,14 +227,14 @@ done
 # run oke-setup.sh in background
 if ! state_get OKE_SETUP_DONE; then
   echo "Executing oke-setup.sh in the background"
-  $GRABDISH_HOME/utils/oke-setup.sh &>>$LOG_LOC/oke-setup.log &
+  $GRABDISH_HOME/utils/oke-setup.sh &>>$GRABDISH_LOG/oke-setup.log &
 fi
 
 
 # run db-setup.sh in background
 if ! state_get DB_SETUP_DONE; then
   echo "Executing db-setup.sh in the background"
-  $GRABDISH_HOME/utils/db-setup.sh &>>$LOG_LOC/db-setup.log &
+  $GRABDISH_HOME/utils/db-setup.sh &>>$GRABDISH_LOG/db-setup.log &
 fi
 
 
@@ -286,7 +274,7 @@ wait
 # Verify Setup
 if ! state_done SETUP_VERIFIED; then
   FAILURES=0
-  for bg in "BUILD_ALL_DONE OKE_SETUP_DONE DB_SETUP_DONE PROVISIONING_DONE VAULT_SETUP_DONE"; do
+  for bg in BUILD_ALL_DONE OKE_SETUP_DONE DB_SETUP_DONE PROVISIONING_DONE VAULT_SETUP_DONE; do
     if state_done $bg; then
       echo "$bg completed"
     else
@@ -294,8 +282,8 @@ if ! state_done SETUP_VERIFIED; then
       FAILURES=$(($FAILURES+1))
     fi
   done
-  if test FAULURES -gt 0; then
-    echo "Log files are located in $LOG_LOC"
+  if test $FAILURES -gt 0; then
+    echo "Log files are located in $GRABDISH_LOG"
   else
     state_set_done SETUP_VERIFIED
   fi

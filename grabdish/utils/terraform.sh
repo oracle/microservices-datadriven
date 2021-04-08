@@ -5,9 +5,6 @@
 # Fail on error
 set -e
 
-# Source the state functions
-source $GRABDISH_HOME/utils/state-functions.sh
-
 
 # Provision Cluster, DBs, etc with terraform (and wait)
 if ! state_done PROVISIONING_DONE; then

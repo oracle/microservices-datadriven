@@ -5,8 +5,6 @@
 # Fail on error
 set -e
 
-# Source the state functions
-source utils/state-functions.sh "state"
 
 # Switch to SSH Key auth for the oci cli (workaround to perm issue awaiting fix)
 source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh

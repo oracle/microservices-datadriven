@@ -5,7 +5,6 @@
 # Make sure this is run via source or .
 if ! (return 0 2>/dev/null); then
   echo "ERROR: Usage: 'source oci-cli-cs-key-auth.sh"
-  echo "              'source state-functions.sh' if the environment variable STATE_LOC is defined"
   exit
 fi
 
@@ -16,8 +15,8 @@ fi
 
 # Push Public Key to OCI
 while ! state_done PUSH_OCI_CLI_KEY; do
-  if ! oci iam user api-key upload --user-id $(state_get USER_OCID) --key-file ~/.oci/oci_api_key_public.pem 2>$LOG_LOC/err; then
-    if grep KeyAlreadyExists $LOG_LOC/err; then 
+  if ! oci iam user api-key upload --user-id $(state_get USER_OCID) --key-file ~/.oci/oci_api_key_public.pem 2>$GRABDISH_LOG/err; then
+    if grep KeyAlreadyExists $GRABDISH_LOG/err >/dev/null; then 
       # The key already exists
       state_set_done PUSH_OCI_CLI_KEY
     else
