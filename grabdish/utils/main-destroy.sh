@@ -16,11 +16,17 @@ source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
 
 # Delete Vault
 
+# Delete images
+IIDS=`oci artifacts container image list --compartment-id "$(state_get COMPARTMENT_OCID)" --query "join(' ',data.items[*].id)" --raw-output`
+for i in $IIDS; do
+  oci artifacts container image delete --image-id "$i" --force
+done
+
 # Delete Repos
-#REPO_IDS=`oci artifacts container repository list --compartment-id "$(state_get COMPARTMENT_OCID)" --query "join(' ', data.items[*].id)" --raw-output`
-#for b in $REPO_IDS; do 
-#  oci artifacts container repository delete --repository-id "$REPO_IDS"
-#done
+REPO_IDS=`oci artifacts container repository list --compartment-id "$(state_get COMPARTMENT_OCID)" --query "join(' ', data.items[*].id)" --raw-output`
+for r in $REPO_IDS; do 
+  oci artifacts container repository delete --repository-id "$r" --force
+done
 
 # Terraform Destroy
 cd $GRABDISH_HOME/terraform
