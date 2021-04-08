@@ -239,7 +239,7 @@ resource "oci_database_autonomous_database" "autonomous_database_atp2" {
   compartment_id           = var.ociCompartmentOcid
   cpu_core_count           = "1"
   data_storage_size_in_tbs = "1"
-  db_name                  = "${var.runName}-2"
+  db_name                  = "${var.runName}-2" 
   is_free_tier             = false
   db_workload                                    = var.autonomous_database_db_workload
   // Autonomous Database name cannot be longer than 14 characters.

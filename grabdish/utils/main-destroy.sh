@@ -10,9 +10,18 @@ set -e
 source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
 
 # Delete Object Store
-# oci os preauth-request delete --namespace 'wallet'  --bucket-name "$(state_get RUN_NAME)" --name 'grabdish'
-# oci os object delete --bucket-name "$(state_get RUN_NAME)" --name "wallet"
-# oci os bucket delete --force --name "$(state_get RUN_NAME)"
+echo "Deleting Object Store"
+# Per-auth
+PARIDS=`oci os preauth-request list --bucket-name "$(state_get RUN_NAME)" --query "join(' ',data.id" --raw-output`
+for id in $PARIDS; do
+  oci os preauth-request delete --par-id "$id" --bucket-name "$(state_get RUN_NAME)" --force
+done
+
+# Object
+oci os object delete --object-name "wallet" --bucket-name "$(state_get RUN_NAME)" --force
+
+# Bucket
+oci os bucket delete --force --bucket-name "$(state_get RUN_NAME)" --force
 
 # Delete Vault
 
