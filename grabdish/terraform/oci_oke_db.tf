@@ -7,7 +7,7 @@ variable "ociRegionIdentifier" {}
 variable "runName" {}
 // Set the oci provider
 provider "oci" {
-  region           = "${var.ociRegionIdentifier}"
+  region           = var.ociRegionIdentifier
 }
 //------- Create repos End  ------------------------------------------
 /*

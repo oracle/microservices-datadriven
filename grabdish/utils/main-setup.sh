@@ -92,10 +92,10 @@ if ! state_get PROVISIONING_DONE; then
 fi
 
 # Run the vault-setup.sh in the background
-if ! state_get VAULT_SETUP_DONE; then
-  echo "Executing vault-setup.sh in the background"
-  $GRABDISH_HOME/utils/vault-setup.sh &>> $GRABDISH_LOG/vault-setup.log &
-fi
+#if ! state_get VAULT_SETUP_DONE; then
+#  echo "Executing vault-setup.sh in the background"
+#  $GRABDISH_HOME/utils/vault-setup.sh &>> $GRABDISH_LOG/vault-setup.log &
+#fi
 
 # Get Namespace
 while ! state_done NAMESPACE; do
@@ -110,17 +110,13 @@ while ! state_done USER_NAME; do
   state_set USER_NAME "$USER_NAME"
 done
 
-  if ! oci iam user api-key upload --user-id $(state_get USER_OCID) --key-file ~/.oci/oci_api_key_public.pem 2>$GRABDISH_LOG/err; then
-    if grep KeyAlreadyExists $GRABDISH_LOG/err >/dev/null; then 
-      # The key already exists
-      state_set_done PUSH_OCI_CLI_KEY
 
 # login to docker
 while ! state_done DOCKER_REGISTRY; do
   if ! TOKEN=`oci iam auth-token create  --user-id "$(state_get USER_OCID)" --description 'grabdish docker login' --query 'data.token' --raw-output 2>$GRABDISH_LOG/docker_registry_err`; then
     if grep UserCapacityExceeded $GRABDISH_LOG/docker_registry_err >/dev/null; then 
       # The key already exists
-      'ERROR: Failed to create auth token.  Please delete an old token from the OCI Console (Profile -> User Settings -> Auth Tokens).'
+      echo 'ERROR: Failed to create auth token.  Please delete an old token from the OCI Console (Profile -> User Settings -> Auth Tokens).'
       read -p "Hit return when you are ready to retry?"
     else
       echo "ERROR: Creating auth token had failed:"
@@ -128,6 +124,7 @@ while ! state_done DOCKER_REGISTRY; do
       exit
     fi
   else
+    sleep 5 # Need to wait a few for the auth token to become available
     echo "$TOKEN" | docker login -u "$(state_get NAMESPACE)/$(state_get USER_NAME)" --password-stdin "$(state_get REGION).ocir.io"
     state_set DOCKER_REGISTRY "$(state_get REGION).ocir.io/$(state_get NAMESPACE)/$(state_get RUN_NAME)"
   fi
@@ -142,93 +139,13 @@ fi
 
 
 # Wait for vault
-if ! state_done VAULT_SETUP_DONE; then
-  echo "`date`: Waiting for vault"
-  while ! state_done VAULT_SETUP_DONE; do
-    echo -ne "\r`tail -1 $GRABDISH_LOG/state.log`            "
-    sleep 1
-  done
-fi
-
-
-# Collect DB password and create secret
-while ! state_done DB_PASSWORD_OCID; do
-  echo '/nDatabase passwords must be 12 to 30 characters and contain at least one uppercase letter,'
-  echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
-  echo 'character or the word "admin"./n'
-
-  while true; do
-    read -s -r -p "Enter the password to be used for the order and inventory databases: " PW
-      if [[ ${#PW} -ge 12 && ${#PW} -le 30 && "$PW" =~ [A-Z] && "$PW" =~ [a-z] && "$PW" =~ [0-9] && "$PW" != *admin* && "$PW" != *'"'* ]]; then
-      break
-    else
-      echo "Invalid Password, please retry"
-    fi
-  done
-
-  #Set password in vault
-  BASE64_DB_PASSWORD=`echo -n "$PW" | base64`
-  
-  umask 177 
-  cat >temp_params <<!
-{
-  "compartmentId": "$(state_get COMPARTMENT_OCID)",
-  "description": "DB Password",
-  "keyId": "$(state_get VAULT_KEY_OCID)",
-  "secretContentContent": "$BASE64_DB_PASSWORD",
-  "secretContentName": "dbpassword",
-  "secretContentStage": "CURRENT",
-  "secretName": "dbpassword",
-  "vaultId": "$(state_get VAULT_OCID)"
-}
-!
-  umask 22
-
-  # Create a secret
-  DB_PWD_OCID=`oci vault secret create-base64 --from-json "file://temp_params" --query 'data.id' --raw-output`
-  rm temp_params
-  state_set DB_PASSWORD_OCID "$DB_PWD_OCID" 
-done
-
-
-# Collect UI password and create secret
-while ! state_done UI_PASSWORD_OCID; do
-  echo '/nUI passwords must be 8 to 30 characters/n'
-
-  while true; do
-    read -s -r -p "Enter the password to be used for the order and inventory databases: " PW
-      if [[ ${#PW} -ge 8 && ${#PW} -le 30 ]]; then
-      break
-    else
-      echo "Invalid Password, please retry"
-    fi
-  done
-
-read -s -r -p "/nEnter the password to be used for the user interface: " UI_PASSWORD
-
-  #Set password in vault
-  BASE64_UI_PASSWORD=`echo -n "$UI_PASSWORD" | base64`
-
-  umask 177 
-  cat >temp_params <<!
-{
-  "compartmentId": "$(state_get COMPARTMENT_OCID)",
-  "description": "UI Password",
-  "keyId": "$(state_get VAULT_KEY_OCID)",
-  "secretContentContent": "$BASE64_UI_PASSWORD",
-  "secretContentName": "uipassword",
-  "secretContentStage": "CURRENT",
-  "secretName": "uipassword",
-  "vaultId": "$(state_get VAULT_OCID)"
-}
-!
-  umask 22 
-
-  # Create a secret
-  UI_PWD_OCID=`oci vault secret create-base64 --from-json "file://temp_params" --query 'data.id' --raw-output`
-  rm temp_params
-  state_set UI_PASSWORD_OCID "$UI_PWD_OCID" 
-done
+#if ! state_done VAULT_SETUP_DONE; then
+#  echo "`date`: Waiting for vault"
+#  while ! state_done VAULT_SETUP_DONE; do
+#    echo -ne "\r`tail -1 $GRABDISH_LOG/state.log`            "
+#    sleep 1
+#  done
+#fi
 
 
 # Wait for provisioning
@@ -269,10 +186,87 @@ if ! state_get DB_SETUP_DONE; then
 fi
 
 
+# Wait for kubectl Setup
+if ! state_done KUBECTL_DONE; then
+  echo "`date`: Waiting for vault"
+  while ! state_done KUBECTL_DONE; do
+    echo -ne "\r`tail -1 $GRABDISH_LOG/state.log`            "
+    sleep 1
+  done
+fi
+
+
+# Collect DB password and create secret
+while ! state_done DB_PASSWORD_OCID; do
+  echo '/nDatabase passwords must be 12 to 30 characters and contain at least one uppercase letter,'
+  echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
+  echo 'character or the word "admin"./n'
+
+  while true; do
+    read -s -r -p "Enter the password to be used for the order and inventory databases: " PW
+      if [[ ${#PW} -ge 12 && ${#PW} -le 30 && "$PW" =~ [A-Z] && "$PW" =~ [a-z] && "$PW" =~ [0-9] && "$PW" != *admin* && "$PW" != *'"'* ]]; then
+      break
+    else
+      echo "Invalid Password, please retry"
+    fi
+  done
+
+  #Set password in vault
+  BASE64_DB_PASSWORD=`echo -n "$PW" | base64`
+  
+  kubectl create -n msdataworkshop -f - <<!
+{
+   "apiVersion": "v1",
+   "kind": "Secret",
+   "metadata": {
+      "name": "dbuser"
+   },
+   "data": {
+      "dbpassword": "${BASE64_DB_PASSWORD}"
+   }
+}
+!
+
+  state_set DB_PASSWORD_OCID "$DB_PWD_OCID" 
+done
+
+
+# Collect UI password and create secret
+while ! state_done UI_PASSWORD_OCID; do
+  echo '/nUI passwords must be 8 to 30 characters/n'
+
+  while true; do
+    read -s -r -p "Enter the password to be used for the order and inventory databases: " PW
+      if [[ ${#PW} -ge 8 && ${#PW} -le 30 ]]; then
+      break
+    else
+      echo "Invalid Password, please retry"
+    fi
+  done
+
+  #Set password in vault
+  BASE64_UI_PASSWORD=`echo -n "$UI_PASSWORD" | base64`
+
+  kubectl create -n msdataworkshop -f - <<!
+{
+   "apiVersion": "v1",
+   "kind": "Secret",
+   "metadata": {
+      "name": "frontendadmin"
+   },
+   "data": {
+      "password": "${BASE64_UI_PASSWORD}"
+   }
+}
+!
+  state_set UI_PASSWORD_OCID "$UI_PWD_OCID" 
+done
+
+
 # Set admin password in inventory database
 while ! state_done INVENTORY_DB_PASSWORD_SET; do
   # get password from vault secret
-  DB_PASSWORD=`oci secrets secret-bundle get --secret-id "$(state_get DB_PASSWORD_OCID)" --query 'data."secret-bundle-content".content' --raw-output | base64 --decode`
+  DB_PASSWORD=`kubectl get secrets db-user --template={{.data.password}} | base64 -D`
   umask 177
   echo '{"adminPassword": "'"$DB_PASSWORD"'"}' > temp_params
   umask 22 
@@ -286,7 +280,7 @@ done
 # Set admin password in order database
 while ! state_done ORDER_DB_PASSWORD_SET; do
   # get password from vault secret
-  DB_PASSWORD=`oci secrets secret-bundle get --secret-id "$(state_get DB_PASSWORD_OCID)" --query 'data."secret-bundle-content".content' --raw-output | base64 --decode`
+  DB_PASSWORD=`kubectl get secrets db-user --template={{.data.password}} | base64 -D`
   umask 177
   echo '{"adminPassword": "'"$DB_PASSWORD"'"}' > temp_params
   umask 22
@@ -305,7 +299,7 @@ wait
 # Verify Setup
 if ! state_done SETUP_VERIFIED; then
   FAILURES=0
-  for bg in BUILD_ALL_DONE OKE_SETUP_DONE DB_SETUP_DONE PROVISIONING_DONE VAULT_SETUP_DONE; do
+  for bg in BUILD_ALL_DONE OKE_SETUP_DONE DB_SETUP_DONE PROVISIONING_DONE; do
     if state_done $bg; then
       echo "$bg completed"
     else
