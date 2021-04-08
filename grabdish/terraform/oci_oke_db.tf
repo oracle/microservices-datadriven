@@ -62,7 +62,7 @@ resource "oci_artifacts_container_repository" "inventory-helidon-se_container_re
 */
 
 data "oci_identity_availability_domain" "ad1" {
-  compartment_id = "${var.ociTenancyOcid}"
+  compartment_id = var.ociTenancyOcid
   ad_number      = 1
 }
 resource "oci_core_vcn" "okell_vcn" {
@@ -167,7 +167,7 @@ data "oci_containerengine_node_pool_option" "okell_node_pool_option" {
   node_pool_option_id = "all"
 }
 locals {
-  all_sources = "${data.oci_containerengine_node_pool_option.okell_node_pool_option.sources}"
+  all_sources = data.oci_containerengine_node_pool_option.okell_node_pool_option.sources
   oracle_linux_images = [for source in local.all_sources : source.image_id if length(regexall("Oracle-Linux-[0-9]*.[0-9]*-20[0-9]*",source.source_name)) > 0]
 }
 output "cluster_kubernetes_versions" {
@@ -188,7 +188,7 @@ resource "local_file" "okell_cluster_kube_config_file" {
 }
 data "oci_identity_availability_domains" "okell_availability_domains" {
   //compartment_id = var.tenancy_ocid
-  compartment_id = "${var.ociTenancyOcid}"
+  compartment_id = var.ociTenancyOcid
 }
 variable "InstanceImageOCID" {
   type = map(string)

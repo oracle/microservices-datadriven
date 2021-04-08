@@ -188,7 +188,7 @@ fi
 
 # Wait for kubectl Setup
 if ! state_done KUBECTL_DONE; then
-  echo "`date`: Waiting for vault"
+  echo "`date`: Waiting for kubectl configuration"
   while ! state_done KUBECTL_DONE; do
     echo -ne "\r`tail -1 $GRABDISH_LOG/state.log`            "
     sleep 1
@@ -197,7 +197,7 @@ fi
 
 
 # Collect DB password and create secret
-while ! state_done DB_PASSWORD_OCID; do
+while ! state_done DB_PASSWORD; do
   echo '/nDatabase passwords must be 12 to 30 characters and contain at least one uppercase letter,'
   echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
   echo 'character or the word "admin"./n'
@@ -227,12 +227,12 @@ while ! state_done DB_PASSWORD_OCID; do
 }
 !
 
-  state_set DB_PASSWORD_OCID "$DB_PWD_OCID" 
+  state_set DB_PASSWORD 
 done
 
 
 # Collect UI password and create secret
-while ! state_done UI_PASSWORD_OCID; do
+while ! state_done UI_PASSWORD; do
   echo '/nUI passwords must be 8 to 30 characters/n'
 
   while true; do
@@ -259,14 +259,14 @@ while ! state_done UI_PASSWORD_OCID; do
    }
 }
 !
-  state_set UI_PASSWORD_OCID "$UI_PWD_OCID" 
+  state_set UI_PASSWORD 
 done
 
 
 # Set admin password in inventory database
 while ! state_done INVENTORY_DB_PASSWORD_SET; do
   # get password from vault secret
-  DB_PASSWORD=`kubectl get secrets db-user --template={{.data.password}} | base64 -D`
+  DB_PASSWORD=`kubectl get secrets dbuser --template={{.data.password}} | base64 --decode`
   umask 177
   echo '{"adminPassword": "'"$DB_PASSWORD"'"}' > temp_params
   umask 22 
@@ -280,7 +280,7 @@ done
 # Set admin password in order database
 while ! state_done ORDER_DB_PASSWORD_SET; do
   # get password from vault secret
-  DB_PASSWORD=`kubectl get secrets db-user --template={{.data.password}} | base64 -D`
+  DB_PASSWORD=`kubectl get secrets dbuser --template={{.data.password}} | base64 --decode`
   umask 177
   echo '{"adminPassword": "'"$DB_PASSWORD"'"}' > temp_params
   umask 22
