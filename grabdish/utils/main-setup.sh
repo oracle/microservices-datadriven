@@ -110,12 +110,23 @@ while ! state_done USER_NAME; do
   state_set USER_NAME "$USER_NAME"
 done
 
+  if ! oci iam user api-key upload --user-id $(state_get USER_OCID) --key-file ~/.oci/oci_api_key_public.pem 2>$GRABDISH_LOG/err; then
+    if grep KeyAlreadyExists $GRABDISH_LOG/err >/dev/null; then 
+      # The key already exists
+      state_set_done PUSH_OCI_CLI_KEY
 
 # login to docker
 while ! state_done DOCKER_REGISTRY; do
-  if ! TOKEN=`oci iam auth-token create  --user-id "$(state_get USER_OCID)" --description 'grabdish docker login'`; then
-    echo 'ERROR: Failed to create auth token.  Please delete an old token and I will try again in 10 seconds'
-    sleep 10
+  if ! TOKEN=`oci iam auth-token create  --user-id "$(state_get USER_OCID)" --description 'grabdish docker login' --query 'data.token' --raw-output 2>$GRABDISH_LOG/docker_registry_err`; then
+    if grep UserCapacityExceeded $GRABDISH_LOG/docker_registry_err >/dev/null; then 
+      # The key already exists
+      'ERROR: Failed to create auth token.  Please delete an old token from the OCI Console (Profile -> User Settings -> Auth Tokens).'
+      read -p "Hit return when you are ready to retry?"
+    else
+      echo "ERROR: Creating auth token had failed:"
+      cat $GRABDISH_LOG/docker_registry_err
+      exit
+    fi
   else
     echo "$TOKEN" | docker login -u "$(state_get NAMESPACE)/$(state_get USER_NAME)" --password-stdin "$(state_get REGION).ocir.io"
     state_set DOCKER_REGISTRY "$(state_get REGION).ocir.io/$(state_get NAMESPACE)/$(state_get RUN_NAME)"
@@ -134,6 +145,7 @@ fi
 if ! state_done VAULT_SETUP_DONE; then
   echo "`date`: Waiting for vault"
   while ! state_done VAULT_SETUP_DONE; do
+    echo -ne "\r`tail -1 $GRABDISH_LOG/state.log`            "
     sleep 1
   done
 fi
@@ -141,14 +153,22 @@ fi
 
 # Collect DB password and create secret
 while ! state_done DB_PASSWORD_OCID; do
-  echo 'Database passwords must be 12 to 30 characters and contain at least one uppercase letter,'
+  echo '/nDatabase passwords must be 12 to 30 characters and contain at least one uppercase letter,'
   echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
-  echo 'character or the word "admin".'
-  read -s -r -p "Enter the password to be used for the order and inventory databases: " DB_PASSWORD
+  echo 'character or the word "admin"./n'
+
+  while true; do
+    read -s -r -p "Enter the password to be used for the order and inventory databases: " PW
+      if [[ ${#PW} -ge 12 && ${#PW} -le 30 && "$PW" =~ [A-Z] && "$PW" =~ [a-z] && "$PW" =~ [0-9] && "$PW" != *admin* && "$PW" != *'"'* ]]; then
+      break
+    else
+      echo "Invalid Password, please retry"
+    fi
+  done
 
   #Set password in vault
-  BASE64_DB_PASSWORD=`echo -n "$DB_PASSWORD" | base64`
-
+  BASE64_DB_PASSWORD=`echo -n "$PW" | base64`
+  
   umask 177 
   cat >temp_params <<!
 {
@@ -173,7 +193,18 @@ done
 
 # Collect UI password and create secret
 while ! state_done UI_PASSWORD_OCID; do
-  read -s -r -p "Enter the password to be used for the user interface: " UI_PASSWORD
+  echo '/nUI passwords must be 8 to 30 characters/n'
+
+  while true; do
+    read -s -r -p "Enter the password to be used for the order and inventory databases: " PW
+      if [[ ${#PW} -ge 8 && ${#PW} -le 30 ]]; then
+      break
+    else
+      echo "Invalid Password, please retry"
+    fi
+  done
+
+read -s -r -p "/nEnter the password to be used for the user interface: " UI_PASSWORD
 
   #Set password in vault
   BASE64_UI_PASSWORD=`echo -n "$UI_PASSWORD" | base64`
