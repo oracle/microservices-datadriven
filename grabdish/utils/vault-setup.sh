@@ -13,7 +13,7 @@ source $GRABDISH_HOME/utils/state-functions.sh
 while ! state_done VAULT_OCID; do
   # Create a vault
   VAULT_OCID=`oci kms management vault create --compartment-id $(state_get COMPARTMENT_OCID) --display-name 'grabdish' --vault-type DEFAULT --query 'data.id' --raw-output`
-  while test '"'`oci kms management vault get --vault-id "$VAULT_OCID" --query 'data."lifecycle-state"' --raw-output`'"' != 'ACTIVE'; do
+  while test ""`oci kms management vault get --vault-id "$VAULT_OCID" --query 'data."lifecycle-state"' --raw-output` != 'ACTIVE'; do
     sleep 2
   done
   state_set VAULT_OCID "$VAULT_OCID"

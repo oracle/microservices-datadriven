@@ -25,7 +25,7 @@ done
 
 # Create Authenticated Link to Wallet
 while ! state_done WALLET_AUTH_URL; do
-  ACCESS_URI=`oci os preauth-request create --object-name 'wallet' --access-type 'ObjectRead' --bucket-name "$(state_get RUN_NAME)" --name 'grabdish' --time-expires `date '+%Y-%m-%d' --date '+7 days'` --query 'data."access-uri"' --raw-output`
+  ACCESS_URI=`oci os preauth-request create --object-name 'wallet' --access-type 'ObjectRead' --bucket-name "$(state_get RUN_NAME)" --name 'grabdish' --time-expires $(date '+%Y-%m-%d' --date '+7 days') --query 'data."access-uri"' --raw-output`
   state_set WALLET_AUTH_URL "https://objectstorage.$(state_get REGION).oraclecloud.com${ACCESS_URI}"
 done
 

@@ -56,7 +56,7 @@ done
 while ! state_done USER_OCID; do
   read -p "Please enter your OCI user's OCID: " USER_OCID
   # Validate
-  if test '"'`oci iam user get --user-id "$USER_OCID" --query 'data."lifecycle-state"' --raw-output`'"' == 'ACTIVE'; then
+  if test ""`oci iam user get --user-id "$USER_OCID" --query 'data."lifecycle-state"' --raw-output` == 'ACTIVE'; then
     state_set USER_OCID "$USER_OCID"
   else
     echo "That user could not be validated"
@@ -216,7 +216,7 @@ done
 if ! state_done PROVISIONING_DONE; then
   echo "`date`: Waiting for terraform provisioning"
   while ! state_done PROVISIONING_DONE; do
-    echo -e "\r`tail -1 $LOG_LOC/terraform.log`            "
+    echo -ne "\r`tail -1 $LOG_LOC/terraform.log`            "
     sleep 10
   done
 fi
@@ -291,7 +291,7 @@ if ! state_done SETUP_VERIFIED; then
       echo "$bg completed"
     else
       echo "ERROR: $bg failed"
-      FAILURES=$((FAILURES+1))
+      FAILURES=$(($FAILURES+1))
     fi
   done
   if test FAULURES -gt 0; then

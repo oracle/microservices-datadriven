@@ -1,9 +1,7 @@
 variable "ociTenancyOcid" {}
 variable "ociUserOcid" {}
 variable "ociCompartmentOcid" {}
-//variable "ociUserPassword" {}
 variable "ociRegionIdentifier" {}
-//variable "resUserPublicKey" {}
 variable "runName" {}
 // Set the oci provider
 provider "oci" {
@@ -62,32 +60,21 @@ resource "oci_artifacts_container_repository" "inventory-helidon-se_container_re
 */
 
 data "oci_identity_availability_domain" "ad1" {
-  //compartment_id = var.tenancy_ocid
   compartment_id = "${var.ociTenancyOcid}"
   ad_number      = 1
 }
-/*
-data "oci_identity_availability_domain" "ad2" {
-  // compartment_id = var.tenancy_ocid
-  compartment_id = "${var.ociTenancyOcid}"
-  ad_number      = 2
-}
-*/
 resource "oci_core_vcn" "okell_vcn" {
   cidr_block     = "10.0.0.0/16"
-  //compartment_id = var.compartment_ocid
-  compartment_id = "${var.ociCompartmentOcid}"
+  compartment_id = var.compartment_ocid
   display_name   = "VcnForClusters"
 }
 resource "oci_core_internet_gateway" "okell_ig" {
-  // compartment_id = var.compartment_ocid
-  compartment_id = "${var.ociCompartmentOcid}"
-  display_name   = "ClusterInternetGateway"
+   compartment_id = var.compartment_ocid
+   display_name   = "ClusterInternetGateway"
   vcn_id         = oci_core_vcn.okell_vcn.id
 }
 resource "oci_core_route_table" "okell_route_table" {
-  // compartment_id = var.compartment_ocid
-  compartment_id = "${var.ociCompartmentOcid}"
+  compartment_id = var.compartment_ocid
   vcn_id         = oci_core_vcn.okell_vcn.id
   display_name   = "ClustersRouteTable"
   route_rules {
@@ -100,74 +87,42 @@ resource "oci_core_subnet" "clusterSubnet_1" {
   #Required
   #availability_domain = data.oci_identity_availability_domain.ad1.name
   cidr_block          = "10.0.20.0/24"
-  // compartment_id      = var.compartment_ocid
-  compartment_id = "${var.ociCompartmentOcid}"
-  vcn_id              = oci_core_vcn.okell_vcn.id
+  compartment_id      = var.compartment_ocid
+   vcn_id              = oci_core_vcn.okell_vcn.id
   # Provider code tries to maintain compatibility with old versions.
   security_list_ids = [oci_core_vcn.okell_vcn.default_security_list_id]
   display_name      = "SubNet1ForClusters"
   route_table_id    = oci_core_route_table.okell_route_table.id
 }
-/*
-resource "oci_core_subnet" "clusterSubnet_2" {
-  #Required
-  availability_domain = data.oci_identity_availability_domain.ad2.name
-  cidr_block          = "10.0.21.0/24"
-  //compartment_id      = var.compartment_ocid
-  compartment_id = "${var.ociCompartmentOcid}"
-  vcn_id              = oci_core_vcn.okell_vcn.id
-  display_name        = "SubNet2ForClusters"
-  # Provider code tries to maintain compatibility with old versions.
-  security_list_ids = [oci_core_vcn.okell_vcn.default_security_list_id]
-  route_table_id    = oci_core_route_table.okell_route_table.id
-}
-*/
 resource "oci_core_subnet" "nodePool_Subnet_1" {
   #Required
   #availability_domain = data.oci_identity_availability_domain.ad1.name
   cidr_block          = "10.0.22.0/24"
-  // compartment_id      = var.compartment_ocid
-  compartment_id = "${var.ociCompartmentOcid}"
+  compartment_id      = var.compartment_ocid
   vcn_id              = oci_core_vcn.okell_vcn.id
   # Provider code tries to maintain compatibility with old versions.
   security_list_ids = [oci_core_vcn.okell_vcn.default_security_list_id]
   display_name      = "SubNet1ForNodePool"
   route_table_id    = oci_core_route_table.okell_route_table.id
 }
-/*
-resource "oci_core_subnet" "nodePool_Subnet_2" {
-  #Required
-  availability_domain = data.oci_identity_availability_domain.ad2.name
-  cidr_block          = "10.0.23.0/24"
-  //compartment_id      = var.compartment_ocid
-  compartment_id = "${var.ociCompartmentOcid}"
-  vcn_id              = oci_core_vcn.okell_vcn.id
-  # Provider code tries to maintain compatibility with old versions.
-  security_list_ids = [oci_core_vcn.okell_vcn.default_security_list_id]
-  display_name      = "SubNet2ForNodePool"
-  route_table_id    = oci_core_route_table.okell_route_table.id
-}
-*/
 resource "oci_containerengine_cluster" "okell_cluster" {
   #Required
-  //compartment_id     = var.compartment_ocid
-  compartment_id = "${var.ociCompartmentOcid}"
+  compartment_id     = var.compartment_ocid
   kubernetes_version = "v1.19.7"
-  name               = "msdataworkshopcluster"
+  name               = "grabdish"
   vcn_id             = oci_core_vcn.okell_vcn.id
   #Optional
   options {
-    #service_lb_subnet_ids = [oci_core_subnet.clusterSubnet_1.id, oci_core_subnet.clusterSubnet_2.id]
     service_lb_subnet_ids = [oci_core_subnet.clusterSubnet_1.id]
     #Optional
     add_ons {
       #Optional
-      is_kubernetes_dashboard_enabled = "true"
-      is_tiller_enabled               = "true"
+      is_kubernetes_dashboard_enabled = "false"
+      is_tiller_enabled               = "false"
     }
     admission_controller_options {
       #Optional
-      is_pod_security_policy_enabled = true
+      is_pod_security_policy_enabled = "false"
     }
     kubernetes_network_config {
       #Optional
@@ -179,12 +134,10 @@ resource "oci_containerengine_cluster" "okell_cluster" {
 resource "oci_containerengine_node_pool" "okell_node_pool" {
   #Required
   cluster_id         = oci_containerengine_cluster.okell_cluster.id
-  //compartment_id     = var.compartment_ocid
-  compartment_id = "${var.ociCompartmentOcid}"
+  compartment_id     = var.compartment_ocid
   kubernetes_version = "v1.19.7"
   name               = "Pool"
   node_shape         = "VM.Standard2.1"
-  #subnet_ids         = [oci_core_subnet.nodePool_Subnet_1.id, oci_core_subnet.nodePool_Subnet_2.id]
   #subnet_ids         = [oci_core_subnet.nodePool_Subnet_1.id]
   #Optional
   node_config_details {
@@ -205,31 +158,7 @@ resource "oci_containerengine_node_pool" "okell_node_pool" {
   //ssh_public_key      = var.node_pool_ssh_public_key
   //ssh_public_key =  var.resUserPublicKey
 }
-/*
-resource "oci_containerengine_node_pool" "okell_flex_shape_node_pool" {
-  #Required
-  cluster_id         = oci_containerengine_cluster.okell_cluster.id
-  //compartment_id     = var.compartment_ocid
-  compartment_id = "${var.ociCompartmentOcid}"
-  kubernetes_version = data.oci_containerengine_node_pool_option.okell_node_pool_option.kubernetes_versions[0]
-  name               = "flexShapePool"
-  node_shape         = "VM.Standard.E3.Flex"
-  subnet_ids         = [oci_core_subnet.nodePool_Subnet_1.id, oci_core_subnet.nodePool_Subnet_2.id]
-  node_source_details {
-    #Required
-    image_id    = data.oci_containerengine_node_pool_option.okell_node_pool_option.sources[0].image_id
-    source_type = data.oci_containerengine_node_pool_option.okell_node_pool_option.sources[0].source_type
-  }
-  node_shape_config {
-    ocpus = 2
-    memory_in_gbs = 40
-  }
-  //quantity_per_subnet = 2
-  //ssh_public_key      = var.node_pool_ssh_public_key
-  //ssh_public_key = var.resUserPublicKey
-}
-*/
-data "oci_containerengine_cluster_option" "okell_cluster_option" {
+/data "oci_containerengine_cluster_option" "okell_cluster_option" {
   cluster_option_id = "all"
 }
 data "oci_containerengine_node_pool_option" "okell_node_pool_option" {
@@ -239,14 +168,12 @@ locals {
   all_sources = "${data.oci_containerengine_node_pool_option.okell_node_pool_option.sources}"
   oracle_linux_images = [for source in local.all_sources : source.image_id if length(regexall("Oracle-Linux-[0-9]*.[0-9]*-20[0-9]*",source.source_name)) > 0]
 }
-/*
 output "cluster_kubernetes_versions" {
   value = [data.oci_containerengine_cluster_option.okell_cluster_option.kubernetes_versions]
 }
 output "node_pool_kubernetes_version" {
   value = [data.oci_containerengine_node_pool_option.okell_node_pool_option.kubernetes_versions]
 }
-*/
 data "oci_containerengine_cluster_kube_config" "okell_cluster_kube_config" {
   #Required
   cluster_id = oci_containerengine_cluster.okell_cluster.id
@@ -272,7 +199,6 @@ variable "InstanceImageOCID" {
     uk-london-1    = "ocid1.image.oc1.uk-london-1.aaaaaaaajwtut4l7fo3cvyraate6erdkyf2wdk5vpk6fp6ycng3dv2y3ymvq"
   }
 }
-//9:12
 //================= create ATP Instance =======================================
 variable "autonomous_database_db_workload" { default = "OLTP" }
 variable "autonomous_database_defined_tags_value" { default = "value" }
@@ -292,7 +218,7 @@ resource "random_password" "database_admin_password" {
 resource "oci_database_autonomous_database" "autonomous_database_atp" {
   #Required
   admin_password           = random_password.database_admin_password.result
-  compartment_id           = "${var.ociCompartmentOcid}"
+  compartment_id           = var.ociCompartmentOcid
   cpu_core_count           = "1"
   data_storage_size_in_tbs = "1"
   //db_name = "ORDERDB${random_string.upper.result}"
@@ -300,7 +226,7 @@ resource "oci_database_autonomous_database" "autonomous_database_atp" {
   # is_free_tier = true , if there exists sufficient service limit
   is_free_tier             = false
   #Optional #db_workload = "${var.autonomous_database_db_workload}"
-  db_workload                                    = "${var.autonomous_database_db_workload}"
+  db_workload                                    = var.autonomous_database_db_workload
   //display_name                                   = "ORDERDB${random_string.upper.result}"
   display_name ="ORDERDB"
   is_auto_scaling_enabled                        = "false"
@@ -310,13 +236,13 @@ resource "oci_database_autonomous_database" "autonomous_database_atp" {
 resource "oci_database_autonomous_database" "autonomous_database_atp2" {
   #Required
   admin_password           = random_password.database_admin_password.result
-  compartment_id           = "${var.ociCompartmentOcid}"
+  compartment_id           = var.ociCompartmentOcid
   cpu_core_count           = "1"
   data_storage_size_in_tbs = "1"
   //db_name = "INVENTORYDB${random_string.upper.result}"
   db_name = "INVENTORYDB"
   is_free_tier             = false
-  db_workload                                    = "${var.autonomous_database_db_workload}"
+  db_workload                                    = var.autonomous_database_db_workload
   // Autonomous Database name cannot be longer than 14 characters.
   //display_name                                   = "INVENTORYDB${random_string.upper.result}"
   display_name = "INVENTORYDB"
@@ -325,38 +251,24 @@ resource "oci_database_autonomous_database" "autonomous_database_atp2" {
 }
 data "oci_database_autonomous_databases" "autonomous_databases_atp" {
   #Required
-  compartment_id = "${var.ociCompartmentOcid}"
+  compartment_id = var.ociCompartmentOcid
   #Optional
-  //display_name = "ORDERDB${random_string.upper.result}"
   display_name =  "ORDERDB"
-  db_workload  = "${var.autonomous_database_db_workload}"
+  db_workload  = var.autonomous_database_db_workload
 }
 data "oci_database_autonomous_databases" "autonomous_databases_atp2" {
   #Required
-  compartment_id = "${var.ociCompartmentOcid}"
+  compartment_id = var.ociCompartmentOcid
   #Optional
   // display_name = "INVENTORYDB${random_string.upper.result}"
   display_name = "INVENTORYDB"
-  db_workload  = "${var.autonomous_database_db_workload}"
+  db_workload  = var.autonomous_database_db_workload
 }
 //======= Name space details ------------------------------------------------------
 data "oci_objectstorage_namespace" "test_namespace" {
   #Optional
   compartment_id = var.ociCompartmentOcid
 }
-/*
-//======= Random Stuff ------------------------------------------------------
-resource "random_string" "default" {
-  length = 3
-}
-resource "random_string" "upper" {
-  length  = 3
-  upper   = true
-  lower   = false
-  number  = false
-  special = false
-}
-*/
 //========= Outputs ===========================
 output "ns_objectstorage_namespace" { 
   value =  [ data.oci_objectstorage_namespace.test_namespace.namespace ]
