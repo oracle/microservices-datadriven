@@ -15,12 +15,17 @@ if ! test -f ~/.oci/oci_api_key.pem; then
 fi
 
 # Push Public Key to OCI
-while ! state_done "PUSH_OCI_CLI_KEY"; do
-  if ! oci iam user api-key upload --user-id $(state_get USER_OCID) --key-file ~/.oci/oci_api_key_public.pem; then
-    echo 'ERROR: Failed to upload key.  Please delete old keys and I will try again in 10 seconds'
-    sleep 10
+while ! state_done PUSH_OCI_CLI_KEY; do
+  if ! oci iam user api-key upload --user-id $(state_get USER_OCID) --key-file ~/.oci/oci_api_key_public.pem 2>$LOG_LOC/err; then
+    if grep KeyAlreadyExists $LOG_LOC/err; then 
+      # The key already exists
+      state_set_done PUSH_OCI_CLI_KEY
+    else
+      echo 'ERROR: Failed to upload key.  Please delete old keys to make way for the new key and I will try again in 10 seconds'
+      sleep 10
+    fi
   else
-    state_set_done "PUSH_OCI_CLI_KEY"
+    state_set_done PUSH_OCI_CLI_KEY
   fi
 done
 
@@ -46,3 +51,6 @@ unset OCI_AUTH
 unset OCI_CLI_CLOUD_SHELL
 unset OCI_CLI_AUTH
 unset OCI_CONFIG_PROFILE
+unset OCI_CONFIG_FILE
+unset OCI_AUTH_TYPE
+unset OCI_DELEGATION_TOKEN_FILE

@@ -65,16 +65,16 @@ data "oci_identity_availability_domain" "ad1" {
 }
 resource "oci_core_vcn" "okell_vcn" {
   cidr_block     = "10.0.0.0/16"
-  compartment_id = var.compartment_ocid
+  compartment_id = var.ociCompartmentOcid
   display_name   = "VcnForClusters"
 }
 resource "oci_core_internet_gateway" "okell_ig" {
-   compartment_id = var.compartment_ocid
+   compartment_id = var.ociCompartmentOcid
    display_name   = "ClusterInternetGateway"
   vcn_id         = oci_core_vcn.okell_vcn.id
 }
 resource "oci_core_route_table" "okell_route_table" {
-  compartment_id = var.compartment_ocid
+  compartment_id = var.ociCompartmentOcid
   vcn_id         = oci_core_vcn.okell_vcn.id
   display_name   = "ClustersRouteTable"
   route_rules {
@@ -87,7 +87,7 @@ resource "oci_core_subnet" "clusterSubnet_1" {
   #Required
   #availability_domain = data.oci_identity_availability_domain.ad1.name
   cidr_block          = "10.0.20.0/24"
-  compartment_id      = var.compartment_ocid
+  compartment_id      = var.ociCompartmentOcid
    vcn_id              = oci_core_vcn.okell_vcn.id
   # Provider code tries to maintain compatibility with old versions.
   security_list_ids = [oci_core_vcn.okell_vcn.default_security_list_id]
@@ -98,7 +98,7 @@ resource "oci_core_subnet" "nodePool_Subnet_1" {
   #Required
   #availability_domain = data.oci_identity_availability_domain.ad1.name
   cidr_block          = "10.0.22.0/24"
-  compartment_id      = var.compartment_ocid
+  compartment_id      = var.ociCompartmentOcid
   vcn_id              = oci_core_vcn.okell_vcn.id
   # Provider code tries to maintain compatibility with old versions.
   security_list_ids = [oci_core_vcn.okell_vcn.default_security_list_id]
@@ -107,7 +107,7 @@ resource "oci_core_subnet" "nodePool_Subnet_1" {
 }
 resource "oci_containerengine_cluster" "okell_cluster" {
   #Required
-  compartment_id     = var.compartment_ocid
+  compartment_id     = var.ociCompartmentOcid
   kubernetes_version = "v1.19.7"
   name               = "grabdish"
   vcn_id             = oci_core_vcn.okell_vcn.id
@@ -134,7 +134,7 @@ resource "oci_containerengine_cluster" "okell_cluster" {
 resource "oci_containerengine_node_pool" "okell_node_pool" {
   #Required
   cluster_id         = oci_containerengine_cluster.okell_cluster.id
-  compartment_id     = var.compartment_ocid
+  compartment_id     = var.ociCompartmentOcid
   kubernetes_version = "v1.19.7"
   name               = "Pool"
   node_shape         = "VM.Standard2.1"
@@ -158,7 +158,7 @@ resource "oci_containerengine_node_pool" "okell_node_pool" {
   //ssh_public_key      = var.node_pool_ssh_public_key
   //ssh_public_key =  var.resUserPublicKey
 }
-/data "oci_containerengine_cluster_option" "okell_cluster_option" {
+data "oci_containerengine_cluster_option" "okell_cluster_option" {
   cluster_option_id = "all"
 }
 data "oci_containerengine_node_pool_option" "okell_node_pool_option" {
