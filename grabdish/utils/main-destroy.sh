@@ -16,19 +16,29 @@ source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
 
 # Delete Vault
 
-# Delete images
+# Delete Images
+echo "Deleting Images"
 IIDS=`oci artifacts container image list --compartment-id "$(state_get COMPARTMENT_OCID)" --query "join(' ',data.items[*].id)" --raw-output`
 for i in $IIDS; do
   oci artifacts container image delete --image-id "$i" --force
 done
 
 # Delete Repos
+echo "Deleting Repositories"
 REPO_IDS=`oci artifacts container repository list --compartment-id "$(state_get COMPARTMENT_OCID)" --query "join(' ', data.items[*].id)" --raw-output`
 for r in $REPO_IDS; do 
   oci artifacts container repository delete --repository-id "$r" --force
 done
 
+# Delete LBs
+echo "Deleting Load Balancers"
+LBIDS=`oci lb load-balancer list --compartment-id "$(state_get COMPARTMENT_OCID) --query "join(' ',data.items[*].id)" --raw-output`
+for l in $LBIDS; do
+  oci lb load-balancer delete --load-balancer-id "$lb" --force
+done
+
 # Terraform Destroy
+echo "Running terraform destroy"
 cd $GRABDISH_HOME/terraform
 export TF_VAR_ociTenancyOcid="$(state_get TENANCY_OCID)"
 export TF_VAR_ociUserOcid="$(state_get USER_OCID)"

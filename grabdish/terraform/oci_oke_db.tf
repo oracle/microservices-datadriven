@@ -223,13 +223,11 @@ resource "oci_database_autonomous_database" "autonomous_database_atp" {
   compartment_id           = var.ociCompartmentOcid
   cpu_core_count           = "1"
   data_storage_size_in_tbs = "1"
-  //db_name = "ORDERDB${random_string.upper.result}"
-  db_name = "ORDERDB"
+  db_name                  = "${var.runName}-1"
   # is_free_tier = true , if there exists sufficient service limit
   is_free_tier             = false
   #Optional #db_workload = "${var.autonomous_database_db_workload}"
   db_workload                                    = var.autonomous_database_db_workload
-  //display_name                                   = "ORDERDB${random_string.upper.result}"
   display_name ="ORDERDB"
   is_auto_scaling_enabled                        = "false"
   is_preview_version_with_service_terms_accepted = "false"
@@ -241,12 +239,10 @@ resource "oci_database_autonomous_database" "autonomous_database_atp2" {
   compartment_id           = var.ociCompartmentOcid
   cpu_core_count           = "1"
   data_storage_size_in_tbs = "1"
-  //db_name = "INVENTORYDB${random_string.upper.result}"
-  db_name = "INVENTORYDB"
+  db_name                  = "${var.runName}-2"
   is_free_tier             = false
   db_workload                                    = var.autonomous_database_db_workload
   // Autonomous Database name cannot be longer than 14 characters.
-  //display_name                                   = "INVENTORYDB${random_string.upper.result}"
   display_name = "INVENTORYDB"
   is_auto_scaling_enabled                        = "false"
   is_preview_version_with_service_terms_accepted = "false"
@@ -262,7 +258,6 @@ data "oci_database_autonomous_databases" "autonomous_databases_atp2" {
   #Required
   compartment_id = var.ociCompartmentOcid
   #Optional
-  // display_name = "INVENTORYDB${random_string.upper.result}"
   display_name = "INVENTORYDB"
   db_workload  = var.autonomous_database_db_workload
 }

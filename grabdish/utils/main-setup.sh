@@ -16,6 +16,8 @@ fi
 while ! state_done RUN_NAME; do
   cd $GRABDISH_HOME
   cd ../..
+  # TODO validate a folder was creared i.e. $PWD != ~
+  # TODO validate run name.  Must be max 12 characters, only letters or numbers, starting with letter
   state_set RUN_NAME `basename "$PWD"`
   cd $GRABDISH_HOME
 done
@@ -161,14 +163,14 @@ fi
 
 # Get Order DB OCID
 while ! state_done ORDER_DB_OCID; do
-  ORDER_DB_OCID=`oci db autonomous-database list --compartment-id "$(cat state/COMPARTMENT_OCID)" --query 'join('"' '"',data[?"db-name"=='"'ORDERDB'"'].id)' --raw-output`
+  ORDER_DB_OCID=`oci db autonomous-database list --compartment-id "$(cat state/COMPARTMENT_OCID)" --query 'join('"' '"',data[?"display-name"=='"$(state-get RUN_NAME)-1"'].id)' --raw-output`
   state_set ORDER_DB_OCID "$ORDER_DB_OCID"
 done
 
 
 # Get Inventory DB OCID
 while ! state_done INVENTORY_DB_OCID; do
-  INVENTORY_DB_OCID=`oci db autonomous-database list --compartment-id "$(cat state/COMPARTMENT_OCID)" --query 'join('"' '"',data[?"db-name"=='"'INVENTORYDB'"'].id)' --raw-output`
+  INVENTORY_DB_OCID=`oci db autonomous-database list --compartment-id "$(cat state/COMPARTMENT_OCID)" --query 'join('"' '"',data[?"db-name"=='"$(state-get RUN_NAME)-2"'].id)' --raw-output`
   state_set INVENTORY_DB_OCID "$INVENTORY_DB_OCID"
 done
 
