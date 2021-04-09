@@ -261,7 +261,7 @@ done
 # Collect UI password and create secret
 while ! state_done UI_PASSWORD; do
   echo
-  echo '\nUI passwords must be 8 to 30 characters\n'
+  echo 'UI passwords must be 8 to 30 characters'
   echo
 
   while true; do
