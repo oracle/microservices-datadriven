@@ -6,7 +6,9 @@
 IMAGE_NAME=inventory-helidon
 IMAGE_VERSION=0.1
 
-if [ -z "DOCKER_REGISTRY" ]; then
+export DOCKER_REGISTRY=$(state_get DOCKER_REGISTRY)
+
+if [ -z "$DOCKER_REGISTRY" ]; then
     echo "Error: DOCKER_REGISTRY env variable needs to be set!"
     exit 1
 fi

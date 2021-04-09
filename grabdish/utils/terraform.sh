@@ -16,7 +16,7 @@ if ! state_done PROVISIONING_DONE; then
   export TF_VAR_runName="$(state_get RUN_NAME)"
   #export TF_VAR_resUserPublicKey="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDELqTJTX8DHJXY3y4CiQwwJdf12fjM4MAaWRj4vRmc8A5/Jb/KABig7zz59kjhGXsspOWjIuufXMTFsO1+/MkFYp3tzNtmgyX+McuF18V8SS1TjwuRovAJcgEI4JMBWBLkI7v1G97omGDxBL0HCdkd1xQj8eqJqO96lFvGZd91T1UX0+nccFs0Fp2IyWgibzzc2hT8K8yyBIDsHMJ/Z8NE309Me+b+JkLeTL+WyUA45xIsCb+mphJKMM9ihPVRjKWsnBw2ylpnhYPTr67f7/i525cGwHDKOap7GvfaNuj7nB7efyoBCuybjyHeXxGd1kvMC5HSo6MYTPGWjoQRk+9n rexley@rexley-mac"
   #export TF_VAR_resId="$(state_get RUN_NAME)"
-  if ! terraform init; then
+   if ! terraform init; then
     echo 'ERROR: terraform init failed!'
     exit
   fi

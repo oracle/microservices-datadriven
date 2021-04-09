@@ -48,7 +48,6 @@ while ! state_done DOCKER_REGISTRY; do
   echo "Waiting for Docker Registry"
   sleep 5
 done
-export DOCKER_REGISTRY=$(state_get DOCKER_REGISTRY) # Export for builds
 
 
 # Build all the images (no push) except frontend-helidon (requires Jaegar)
@@ -64,10 +63,11 @@ done
 
 # Build frontend-helidon (requires Jaegar)
 while ! state_done FRONTEND_BUILD_DONE; do
-  while ! state_done JAEGAR_DONE; do
-    echo "Waiting got Jaegar"
+  while ! state_done JAEGAR_QUERY_ADDRESS; do
+    echo "Waiting for JAEGAR_QUERY_ADDRESS"
     sleep 5
   done
+  export 
   BUILDS="frontend-helidon"
   for b in $BUILDS; do 
     cd $GRABDISH_HOME/$b

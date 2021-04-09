@@ -10,7 +10,7 @@ then
   exit
 fi
 
-source ../msdataworkshop.properties
+#source ../msdataworkshop.properties
 export SCRIPT_DIR=$(dirname $0)
 export CURRENTTIME=$( date '+%F_%H:%M:%S' )
 echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated yamls

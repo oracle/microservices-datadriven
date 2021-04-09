@@ -7,6 +7,11 @@ echo create supplier-helidon-se deployment and service...
 export CURRENTTIME=$( date '+%F_%H:%M:%S' )
 echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated deployment yaml
 
+export DOCKER_REGISTRY="$(state_get DOCKER_REGISTRY)"
+export INVENTORY_PDB_NAME="$(state_get RUN_NAME)X2"
+export OCI_REGION="$(state_get OCI_REGION)"
+export VAULT_SECRET_OCID=""
+
 #eval "cat <<'EOF'
 #$(<$SCRIPT_DIR/supplier-helidon-se-deployment.yaml)
 #EOF" > supplier-helidon-se-deployment-${CURRENTTIME}.yaml

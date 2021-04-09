@@ -254,7 +254,7 @@ while ! state_done DB_PASSWORD; do
 }
 !
 
-  state_set DB_PASSWORD 
+  state_set_done DB_PASSWORD 
 done
 
 
@@ -289,7 +289,7 @@ while ! state_done UI_PASSWORD; do
    }
 }
 !
-  state_set UI_PASSWORD 
+  state_set_done UI_PASSWORD 
 done
 
 

@@ -4,6 +4,7 @@
 
 
 SCRIPT_DIR=$(dirname $0)
+export DOCKER_REGISTRY=$(state_get DOCKER_REGISTRY)
 
 echo create frontend deployment and service...
 export CURRENTTIME=$( date '+%F_%H:%M:%S' )
