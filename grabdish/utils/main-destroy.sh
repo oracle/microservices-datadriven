@@ -12,16 +12,24 @@ source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
 # Delete Object Store
 echo "Deleting Object Store"
 # Per-auth
-PARIDS=`oci os preauth-request list --bucket-name "$(state_get RUN_NAME)" --query "join(' ',data.id" --raw-output`
-for id in $PARIDS; do
-  oci os preauth-request delete --par-id "$id" --bucket-name "$(state_get RUN_NAME)" --force
-done
+if state_done WALLET_AUTH_URL; then
+  PARIDS=`oci os preauth-request list --bucket-name "$(state_get RUN_NAME)" --query "join(' ',data.id" --raw-output`
+  for id in $PARIDS; do
+    oci os preauth-request delete --par-id "$id" --bucket-name "$(state_get RUN_NAME)" --force
+  done
+  state_reset WALLET_AUTH_URL
+fi
 
 # Object
-oci os object delete --object-name "wallet" --bucket-name "$(state_get RUN_NAME)" --force
-
+if state_done WALLET_OBJECT_DONE; then
+  oci os object delete --object-name "wallet" --bucket-name "$(state_get RUN_NAME)" --force
+  state_reset WALLET_OBJECT_DONE
+fi
 # Bucket
-oci os bucket delete --force --bucket-name "$(state_get RUN_NAME)" --force
+if state_done OBJECT_STORE_BUCKET; then
+   oci os bucket delete --force --bucket-name "$(state_get RUN_NAME)" --force
+ state_reset OBJECT_STORE_BUCKET
+fi
 
 # Delete Vault
 
@@ -41,7 +49,7 @@ done
 
 # Delete LBs
 echo "Deleting Load Balancers"
-LBIDS=`oci lb load-balancer list --compartment-id "$(state_get COMPARTMENT_OCID) --query "join(' ',data.items[*].id)" --raw-output`
+LBIDS=`oci lb load-balancer list --compartment-id "$(state_get COMPARTMENT_OCID)" --query "join(' ',data.items[*].id)" --raw-output`
 for l in $LBIDS; do
   oci lb load-balancer delete --load-balancer-id "$lb" --force
 done

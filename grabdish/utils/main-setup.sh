@@ -16,9 +16,19 @@ fi
 while ! state_done RUN_NAME; do
   cd $GRABDISH_HOME
   cd ../..
-  # TODO validate a folder was creared i.e. $PWD != ~
-  # TODO validate run name.  Must be max 12 characters, only letters or numbers, starting with letter
-  state_set RUN_NAME `basename "$PWD"`
+  # Validate that a folder was creared
+  if test "$PWD" == ~; then 
+    echo "ERROR: The workshop is not installed in a separate folder."
+    exit
+  fi
+  RN=`basename "$PWD"`
+  # Validate run name.  Must be between 1 and 12 characters, only letters or numbers, starting with letter
+  if [[ "$RN" =~ [a-zA-Z][a-zA-Z0-9]{0,11}$ ]]; then
+    state_set RUN_NAME "$RN"
+  else
+    echo "Invalid folder name $RN"
+    exit
+  fi
   cd $GRABDISH_HOME
 done
 
@@ -73,7 +83,7 @@ done
 
 # Create the compartment
 while ! state_done COMPARTMENT_OCID; do
-  echo "Resources will be created in compartment: $(state_get RUN_NAME)"
+  echo "Resources will be created in a new compartment named $(state_get RUN_NAME)"
   COMPARTMENT_OCID=`oci iam compartment create --compartment-id "$(state_get TENANCY_OCID)" --name "$(state_get RUN_NAME)" --description "GribDish Workshop" --query 'data.id' --raw-output`
   while ! test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output` == 'ACTIVE'; do
     echo "Waiting for the compartment to become ACTIVE"
@@ -163,14 +173,14 @@ fi
 
 # Get Order DB OCID
 while ! state_done ORDER_DB_OCID; do
-  ORDER_DB_OCID=`oci db autonomous-database list --compartment-id "$(cat state/COMPARTMENT_OCID)" --query 'join('"' '"',data[?"display-name"=='"$(state-get RUN_NAME)-1"'].id)' --raw-output`
+  ORDER_DB_OCID=`oci db autonomous-database list --compartment-id "$(cat state/COMPARTMENT_OCID)" --query 'join('"' '"',data[?"display-name"=='"$(state-get RUN_NAME)X1"'].id)' --raw-output`
   state_set ORDER_DB_OCID "$ORDER_DB_OCID"
 done
 
 
 # Get Inventory DB OCID
 while ! state_done INVENTORY_DB_OCID; do
-  INVENTORY_DB_OCID=`oci db autonomous-database list --compartment-id "$(cat state/COMPARTMENT_OCID)" --query 'join('"' '"',data[?"db-name"=='"$(state-get RUN_NAME)-2"'].id)' --raw-output`
+  INVENTORY_DB_OCID=`oci db autonomous-database list --compartment-id "$(cat state/COMPARTMENT_OCID)" --query 'join('"' '"',data[?"db-name"=='"$(state-get RUN_NAME)X2"'].id)' --raw-output`
   state_set INVENTORY_DB_OCID "$INVENTORY_DB_OCID"
 done
 
