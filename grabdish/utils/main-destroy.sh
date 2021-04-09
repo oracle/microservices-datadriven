@@ -13,7 +13,7 @@ source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
 echo "Deleting Object Store"
 # Per-auth
 if state_done WALLET_AUTH_URL; then
-  PARIDS=`oci os preauth-request list --bucket-name "$(state_get RUN_NAME)" --query "join(' ',data.id" --raw-output`
+  PARIDS=`oci os preauth-request list --bucket-name "$(state_get RUN_NAME)" --query "join(' ',data[*].id)" --raw-output`
   for id in $PARIDS; do
     oci os preauth-request delete --par-id "$id" --bucket-name "$(state_get RUN_NAME)" --force
   done

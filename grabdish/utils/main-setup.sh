@@ -173,15 +173,25 @@ fi
 
 # Get Order DB OCID
 while ! state_done ORDER_DB_OCID; do
-  ORDER_DB_OCID=`oci db autonomous-database list --compartment-id "$(cat state/COMPARTMENT_OCID)" --query 'join('"' '"',data[?"display-name"=='"$(state-get RUN_NAME)X1"'].id)' --raw-output`
-  state_set ORDER_DB_OCID "$ORDER_DB_OCID"
+  ORDER_DB_OCID=`oci db autonomous-database list --compartment-id "$(cat state/COMPARTMENT_OCID)" --query 'join('"' '"',data[?"display-name"=='"'ORDERDB'"'].id)' --raw-output`
+  if [[ "$ORDER_DB_OCID" =~ ocid1.autonomousdatabase* ]]; then
+    state_set ORDER_DB_OCID "$ORDER_DB_OCID"
+  else
+    echo "ERROR: Incorrect Order DB OCID: $ORDER_DB_OCID"
+    exit
+  fi
 done
 
 
 # Get Inventory DB OCID
 while ! state_done INVENTORY_DB_OCID; do
-  INVENTORY_DB_OCID=`oci db autonomous-database list --compartment-id "$(cat state/COMPARTMENT_OCID)" --query 'join('"' '"',data[?"db-name"=='"$(state-get RUN_NAME)X2"'].id)' --raw-output`
-  state_set INVENTORY_DB_OCID "$INVENTORY_DB_OCID"
+  INVENTORY_DB_OCID=`oci db autonomous-database list --compartment-id "$(cat state/COMPARTMENT_OCID)" --query 'join('"' '"',data[?"display-name"=='"'INVENTORYDB'"'].id)' --raw-output`
+  if [[ "$INVENTORY_DB_OCID" =~ ocid1.autonomousdatabase* ]]; then
+    state_set INVENTORY_DB_OCID "$INVENTORY_DB_OCID"
+  else
+    echo "ERROR: Incorrect Inventory DB OCID: $INVENTORY_DB_OCID"
+    exit
+  fi
 done
 
 
@@ -212,13 +222,16 @@ fi
 
 # Collect DB password and create secret
 while ! state_done DB_PASSWORD; do
-  echo '\nDatabase passwords must be 12 to 30 characters and contain at least one uppercase letter,'
+  echo
+  echo 'Database passwords must be 12 to 30 characters and contain at least one uppercase letter,'
   echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
-  echo 'character or the word "admin".\n'
+  echo 'character or the word "admin".'
+  echo
 
   while true; do
     read -s -r -p "Enter the password to be used for the order and inventory databases: " PW
       if [[ ${#PW} -ge 12 && ${#PW} -le 30 && "$PW" =~ [A-Z] && "$PW" =~ [a-z] && "$PW" =~ [0-9] && "$PW" != *admin* && "$PW" != *'"'* ]]; then
+      echo
       break
     else
       echo "Invalid Password, please retry"
@@ -247,11 +260,14 @@ done
 
 # Collect UI password and create secret
 while ! state_done UI_PASSWORD; do
+  echo
   echo '\nUI passwords must be 8 to 30 characters\n'
+  echo
 
   while true; do
     read -s -r -p "Enter the password to be used for accessing the UI: " PW
       if [[ ${#PW} -ge 8 && ${#PW} -le 30 ]]; then
+      echo
       break
     else
       echo "Invalid Password, please retry"
@@ -259,7 +275,7 @@ while ! state_done UI_PASSWORD; do
   done
 
   #Set password in vault
-  BASE64_UI_PASSWORD=`echo -n "$UI_PASSWORD" | base64`
+  BASE64_UI_PASSWORD=`echo -n "$PW" | base64`
 
   kubectl create -n msdataworkshop -f - <<!
 {
