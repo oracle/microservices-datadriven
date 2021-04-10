@@ -42,7 +42,7 @@ resource oci_core_service_gateway sg {
   }
   #route_table_id = <<Optional value not found in discovery>>
   services {
-    service_id = data.oci_core_services.services.services.0.id
+    service_id = data.oci_core_services.services.services.1.id
   }
   vcn_id = oci_core_vcn.okell_vcn.id
 }
@@ -59,7 +59,7 @@ resource oci_core_route_table private {
   }
   route_rules {
     description       = "traffic to OCI services"
-    destination       = data.oci_core_services.services.services.0.name
+    destination       = data.oci_core_services.services.services.1.cidr_block
     destination_type  = "SERVICE_CIDR_BLOCK"
     network_entity_id = oci_core_service_gateway.sg.id
   }
@@ -168,7 +168,7 @@ resource oci_core_security_list nodePool {
   }
   egress_security_rules {
     description      = "Allow nodes to communicate with OKE to ensure correct start-up and continued functioning"
-    destination      = data.oci_core_services.services.services.0.name
+    destination      = data.oci_core_services.services.services.1.cidr_block
     destination_type = "SERVICE_CIDR_BLOCK"
     #icmp_options = <<Optional value not found in discovery>>
     protocol  = "6"
