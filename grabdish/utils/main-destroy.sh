@@ -62,7 +62,7 @@ export TF_VAR_ociUserOcid="$(state_get USER_OCID)"
 export TF_VAR_ociCompartmentOcid="$(state_get COMPARTMENT_OCID)"
 export TF_VAR_ociRegionIdentifier="$(state_get REGION)"
 export TF_VAR_runName="$(state_get RUN_NAME)"
-terraform destroy
+terraform destroy -auto-approve
 
 # Delete Compartment
 # oci iam compartment delete --compartment-id "$(state_get COMPARTMENT_OCID)"
