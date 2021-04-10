@@ -8,6 +8,7 @@ resource "oci_core_internet_gateway" "ig" {
    display_name   = "ClusterInternetGateway"
   vcn_id         = oci_core_vcn.okell_vcn.id
 }
+/*
 resource oci_core_private_ip prip {
   display_name = "Service VNIC for cluster"
   freeform_tags = {
@@ -22,7 +23,7 @@ data "oci_core_vnic_attachments" "vnic_attachments" {
     compartment_id = var.ociCompartmentOcid
 
     #Optional
-    availability_domain = oci_identity_availability_domain.ad1.name
+    availability_domain = data.oci_identity_availability_domain.ad1.name
     #instance_id = oci_core_instance.test_instance.id
     #vnic_id = oci_core_vnic.test_vnic.id
 }
@@ -35,13 +36,14 @@ resource oci_core_public_ip puip {
   private_ip_id = oci_core_private_ip.prip.id
   #public_ip_pool_id = <<Optional value not found in discovery>>
 }
+*/
 resource oci_core_nat_gateway ngw {
   block_traffic  = "false"
   compartment_id = var.ociCompartmentOcid
   display_name = "ngw"
   freeform_tags = {
   }
-  public_ip_id = oci_core_public_ip.puip.id
+  #public_ip_id = oci_core_public_ip.puip.id
   vcn_id       = oci_core_vcn.okell_vcn.id
 }
 resource oci_core_service_gateway sg {
@@ -132,7 +134,6 @@ resource oci_core_security_list nodePool {
     #tcp_options = <<Optional value not found in discovery>>
     #udp_options = <<Optional value not found in discovery>>
   }
-/*
   egress_security_rules {
     description      = "Access to Kubernetes API Endpoint"
     destination      = "10.0.0.0/28"
@@ -161,7 +162,6 @@ resource oci_core_security_list nodePool {
     }
     #udp_options = <<Optional value not found in discovery>>
   }
-*/
   egress_security_rules {
     description      = "Path discovery"
     destination      = "10.0.0.0/28"
@@ -261,6 +261,7 @@ resource oci_core_security_list nodePool {
     }
     #udp_options = <<Optional value not found in discovery>>
   }
+/*
   ingress_security_rules {
     #description = <<Optional value not found in discovery>>
     #icmp_options = <<Optional value not found in discovery>>
@@ -289,6 +290,7 @@ resource oci_core_security_list nodePool {
     }
     #udp_options = <<Optional value not found in discovery>>
   }
+*/
   vcn_id = oci_core_vcn.okell_vcn.id
 }
 
