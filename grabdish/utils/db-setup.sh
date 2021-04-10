@@ -28,8 +28,9 @@ done
 
 
 # Create ATP Bindings
-while ! ATP_BINDINGS_DONE; do
+while ! state_done ATP_BINDINGS_DONE; do
   cd $GRABDISH_HOME/atp-secrets-setup
+  ./deleteAll.sh
   ./createAll.sh "$(state_get WALLET_AUTH_URL)"
   state_set_done ATP_BINDINGS_DONE
 done
