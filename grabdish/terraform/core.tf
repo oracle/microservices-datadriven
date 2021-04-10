@@ -17,6 +17,15 @@ resource oci_core_private_ip prip {
   #vlan_id = <<Optional value not found in discovery>>
   #vnic_id = oci_core_public_ip.puip.id
 }
+data "oci_core_vnic_attachments" "vnic_attachments" {
+    #Required
+    compartment_id = var.ociCompartmentOcid
+
+    #Optional
+    availability_domain = oci_identity_availability_domain.ad1.name
+    #instance_id = oci_core_instance.test_instance.id
+    #vnic_id = oci_core_vnic.test_vnic.id
+}
 resource oci_core_public_ip puip {
   compartment_id = var.ociCompartmentOcid
   display_name = "Floating Public IP for cluster"
@@ -32,7 +41,7 @@ resource oci_core_nat_gateway ngw {
   display_name = "ngw"
   freeform_tags = {
   }
-  public_ip_id = "oci_core_public_ip.puip.id"
+  public_ip_id = oci_core_public_ip.puip.id
   vcn_id       = oci_core_vcn.okell_vcn.id
 }
 resource oci_core_service_gateway sg {
