@@ -93,7 +93,7 @@ resource "oci_core_subnet" "endpoint_Subnet" {
   #availability_domain = data.oci_identity_availability_domain.ad1.name
   cidr_block          = "10.0.0.0/28"
   compartment_id      = var.ociCompartmentOcid
-   vcn_id              = oci_core_vcn.okell_vcn.id
+  vcn_id              = oci_core_vcn.okell_vcn.id
   # Provider code tries to maintain compatibility with old versions.
   security_list_ids = [oci_core_security_list.endpoint.id]
   display_name      = "SubNet1ForEndpoint"
@@ -120,6 +120,8 @@ resource "oci_core_subnet" "svclb_Subnet" {
   security_list_ids = [oci_core_default_security_list.svcLB.id]
   display_name      = "SubNet1ForSvcLB"
   route_table_id    = oci_core_vcn.okell_vcn.default_route_table_id
+  dhcp_options_id = oci_core_vcn.okell_vcn.default_dhcp_options_id
+  prohibit_public_ip_on_vnic = "false"
 }
 resource oci_core_security_list nodePool {
   compartment_id = var.ociCompartmentOcid

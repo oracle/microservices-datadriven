@@ -301,7 +301,7 @@ while ! state_done INVENTORY_DB_PASSWORD_SET; do
   echo '{"adminPassword": "'"$DB_PASSWORD"'"}' > temp_params
   umask 22 
 
-  oci db autonomous-database update --autonomous-database-id "$(state_get INVENTORY_DB_OCID)" --from-json "file://temp_params"
+  oci db autonomous-database update --autonomous-database-id "$(state_get INVENTORY_DB_OCID)" --from-json "file://temp_params" >/dev/null
   rm temp_params
   state_set_done INVENTORY_DB_PASSWORD_SET
 done
@@ -314,7 +314,7 @@ while ! state_done ORDER_DB_PASSWORD_SET; do
   umask 177
   echo '{"adminPassword": "'"$DB_PASSWORD"'"}' > temp_params
   umask 22
-  oci db autonomous-database update --autonomous-database-id "$(state_get ORDER_DB_OCID)" --from-json "file://temp_params"
+  oci db autonomous-database update --autonomous-database-id "$(state_get ORDER_DB_OCID)" --from-json "file://temp_params" >/dev/null
   rm temp_params
   state_set_done ORDER_DB_PASSWORD_SET
 done
