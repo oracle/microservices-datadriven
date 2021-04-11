@@ -97,6 +97,7 @@ resource "oci_core_subnet" "endpoint_Subnet" {
   # Provider code tries to maintain compatibility with old versions.
   security_list_ids = [oci_core_security_list.endpoint.id]
   display_name      = "SubNet1ForEndpoint"
+  prohibit_public_ip_on_vnic = "false"
   route_table_id    = oci_core_vcn.okell_vcn.default_route_table_id
 }
 resource "oci_core_subnet" "nodePool_Subnet" {
@@ -108,6 +109,7 @@ resource "oci_core_subnet" "nodePool_Subnet" {
   # Provider code tries to maintain compatibility with old versions.
   security_list_ids = [oci_core_security_list.nodePool.id]
   display_name      = "SubNet1ForNodePool"
+  prohibit_public_ip_on_vnic = "true"
   route_table_id    = oci_core_route_table.private.id
 }
 resource "oci_core_subnet" "svclb_Subnet" {
