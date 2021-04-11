@@ -11,7 +11,7 @@ IMAGE_NAME=frontend-helidon
 IMAGE_VERSION=0.1
 
 export DOCKER_REGISTRY=$(state_get DOCKER_REGISTRY)
-export JAEGER_QUERY_ADDRESS=${state_get JAEGER_QUERY_ADDRESS}
+export JAEGER_QUERY_ADDRESS=$(state_get JAEGER_QUERY_ADDRESS)
 
 if [ -z "DOCKER_REGISTRY" ]; then
     echo "Error: DOCKER_REGISTRY env variable needs to be set!"

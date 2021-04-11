@@ -301,9 +301,9 @@ resource oci_core_security_list nodePool {
 resource oci_core_security_list endpoint {
   compartment_id = var.ociCompartmentOcid
   display_name = "endpoint"
-/*  egress_security_rules {
+  egress_security_rules {
     description      = "Allow Kubernetes Control Plane to communicate with OKE"
-    destination      = "all-sjc-services-in-oracle-services-network"
+    destination      = data.oci_core_services.services.services.1.cidr_block
     destination_type = "SERVICE_CIDR_BLOCK"
     #icmp_options = <<Optional value not found in discovery>>
     protocol  = "6"
@@ -315,7 +315,6 @@ resource oci_core_security_list endpoint {
     }
     #udp_options = <<Optional value not found in discovery>>
   }
-*/
   egress_security_rules {
     description      = "All traffic to worker nodes"
     destination      = "10.0.10.0/24"

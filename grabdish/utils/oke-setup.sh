@@ -49,10 +49,10 @@ while ! state_done SSL_SECRET_DONE; do
 done
 
 
-# Install Jaegar
-while ! state_done JAEGAR_DONE; do
+# Install Jaeger
+while ! state_done JAEGER_DONE; do
   kubectl create -f https://tinyurl.com/yc52x6q5 -n msdataworkshop
-  state_set_done JAEGAR_DONE
+  state_set_done JAEGER_DONE
 done
 
 
@@ -69,7 +69,7 @@ while ! state_done JAEGER_QUERY_ADDRESS; do
   if [[ "$JAEGER_IP" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
     state_set JAEGER_QUERY_ADDRESS "https://$JAEGER_IP"
   else
-    echo "Waiting for jaegar IP to be assigned"
+    echo "Waiting for jaeger IP to be assigned"
     sleep 10
   fi
 done

@@ -50,7 +50,7 @@ while ! state_done DOCKER_REGISTRY; do
 done
 
 
-# Build all the images (no push) except frontend-helidon (requires Jaegar)
+# Build all the images (no push) except frontend-helidon (requires Jaeger)
 while ! state_done BUILDS_DONE; do
   BUILDS="admin-helidon order-helidon supplier-helidon-se inventory-helidon inventory-python inventory-nodejs inventory-helidon-se"
   for b in $BUILDS; do 
@@ -61,10 +61,10 @@ while ! state_done BUILDS_DONE; do
 done
 
 
-# Build frontend-helidon (requires Jaegar)
+# Build frontend-helidon (requires Jaeger)
 while ! state_done FRONTEND_BUILD_DONE; do
-  while ! state_done JAEGAR_QUERY_ADDRESS; do
-    echo "Waiting for JAEGAR_QUERY_ADDRESS"
+  while ! state_done JAEGER_QUERY_ADDRESS; do
+    echo "Waiting for JAEGER_QUERY_ADDRESS"
     sleep 5
   done
   export 
