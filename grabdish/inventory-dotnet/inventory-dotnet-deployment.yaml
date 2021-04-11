@@ -32,7 +32,7 @@ spec:
           mountPath: /creds
       containers:
       - name: inventory
-        image: %DOCKER_REGISTRY%/inventory-dotnet:latest
+        image: %DOCKER_REGISTRY%/inventory-dotnet:0.1
         imagePullPolicy: Always
         env:
         - name: user

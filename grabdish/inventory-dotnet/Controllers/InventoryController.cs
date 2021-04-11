@@ -9,6 +9,7 @@ using System.Data;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Oracle.ManagedDataAccess.Client;
 
 namespace inventory_dotnet.Controllers
@@ -30,15 +31,23 @@ namespace inventory_dotnet.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Inventory> Get()
+        // public IEnumerable<Inventory> Get()
+        public String Get()
         {
-            using (OracleConnection objConn = new OracleConnection("User Id=INVENTORYUSER;Password=Welcome12345;Data Source=inventorydb_tp;"))
-            {
-                Console.WriteLine("objConn:" + objConn);
+            using (OracleConnection connection = 
+                new OracleConnection("User Id=INVENTORYUSER;Password=" + Environment.GetEnvironmentVariable("dbpassword") + ";Data Source=inventorydb_tp;"))
+            { 
+                OracleConfiguration.WalletLocation = Environment.GetEnvironmentVariable("TNS_ADMIN"); // "/Users/pparkins/Downloads/Wallet_INVENTORYDB";
+                Console.WriteLine("OracleConfiguration.WalletLocation:" + OracleConfiguration.WalletLocation);
+                Console.WriteLine("connection:" + connection);
                 OracleCommand objCmd = new OracleCommand();
-                objCmd.Connection = objConn;
+                objCmd.Connection = connection;
                 objCmd.CommandText = "deqOrdMsg";
                 objCmd.CommandType = CommandType.StoredProcedure;
+                OracleParameter p_orderInfoParam = new OracleParameter("p_orderInfo", OracleDbType.Varchar2);
+                p_orderInfoParam.Direction = ParameterDirection.Output;
+                objCmd.Parameters.Add(p_orderInfoParam);
+/**
                 OracleParameter p_actionParam = new OracleParameter("p_action", OracleDbType.Varchar2);
                 p_actionParam.Direction = ParameterDirection.Output;
                 //   p_actionParam.Value           = myArrayDeptNo;
@@ -46,27 +55,23 @@ namespace inventory_dotnet.Controllers
                 OracleParameter p_orderidParam = new OracleParameter("p_orderid", OracleDbType.Varchar2);
                 p_orderidParam.Direction = ParameterDirection.Output;
                 objCmd.Parameters.Add(p_orderidParam);
+*/
                 try
                 {
-                    objConn.Open();
+                    connection.Open();
                     objCmd.ExecuteNonQuery();
-                    System.Console.WriteLine("p_orderid {0}", objCmd.Parameters["p_orderid"].Value);
+                    System.Console.WriteLine("p_orderInfo {0}", objCmd.Parameters["p_orderInfo"].Value);
+                    Order order = JsonConvert.DeserializeObject<Order>("{}");
                 }
                 catch (Exception ex)
                 {
                     System.Console.WriteLine("Exception: {0}", ex.ToString());
+                    return "fail:" + ex;
                 }
-                objConn.Close();
+                connection.Close();
             }
             var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new Inventory
-            {
-                Date = DateTime.Now.AddDays(index),
-                ItemId = 66 + index,
-                // rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
+            return "complete";
         }
 
     }

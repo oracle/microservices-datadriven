@@ -4,8 +4,7 @@
 
 
 IMAGE_NAME=inventory-dotnet
-IMAGE_VERSION=latest
-#IMAGE_VERSION=0.1
+IMAGE_VERSION=0.1
 
 if [ -z "DOCKER_REGISTRY" ]; then
     echo "Error: DOCKER_REGISTRY env variable needs to be set!"
@@ -14,7 +13,7 @@ fi
 
 export IMAGE=${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_VERSION}
 
-docker build -t inventory-dotnet .
+docker build -t $IMAGE .
 
 if [ $DOCKERBUILD_RETCODE -ne 0 ]; then
     exit 1
