@@ -181,6 +181,20 @@ resource oci_core_security_list nodePool {
   }
   egress_security_rules {
     description      = "Allow nodes to communicate with OKE to ensure correct start-up and continued functioning"
+    destination      = data.oci_core_services.services.services.0.cidr_block
+    destination_type = "SERVICE_CIDR_BLOCK"
+    #icmp_options = <<Optional value not found in discovery>>
+    protocol  = "6"
+    stateless = "false"
+    tcp_options {
+      max = "443"
+      min = "443"
+      #source_port_range = <<Optional value not found in discovery>>
+    }
+    #udp_options = <<Optional value not found in discovery>>
+  }
+  egress_security_rules {
+    description      = "Allow nodes to communicate with OKE to ensure correct start-up and continued functioning"
     destination      = data.oci_core_services.services.services.1.cidr_block
     destination_type = "SERVICE_CIDR_BLOCK"
     #icmp_options = <<Optional value not found in discovery>>
@@ -304,6 +318,20 @@ resource oci_core_security_list endpoint {
   egress_security_rules {
     description      = "Allow Kubernetes Control Plane to communicate with OKE"
     destination      = data.oci_core_services.services.services.1.cidr_block
+    destination_type = "SERVICE_CIDR_BLOCK"
+    #icmp_options = <<Optional value not found in discovery>>
+    protocol  = "6"
+    stateless = "false"
+    tcp_options {
+      max = "443"
+      min = "443"
+      #source_port_range = <<Optional value not found in discovery>>
+    }
+    #udp_options = <<Optional value not found in discovery>>
+  }
+  egress_security_rules {
+    description      = "Allow Kubernetes Control Plane to communicate with OKE"
+    destination      = data.oci_core_services.services.services.0.cidr_block
     destination_type = "SERVICE_CIDR_BLOCK"
     #icmp_options = <<Optional value not found in discovery>>
     protocol  = "6"

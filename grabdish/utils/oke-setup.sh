@@ -30,7 +30,7 @@ done
 # Create SSL Certs
 while ! state_done SSL_DONE; do
   mkdir -p $GRABDISH_HOME/tls
-  openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $GRABDISH_HOME/tls/tls.key -out $GRABDISH_HOME/tls/tls.crt -subj "/CN=convergeddb/O=convergeddb"
+  openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $GRABDISH_HOME/tls/tls.key -out $GRABDISH_HOME/tls/tls.crt -subj "/CN=grabdish/O=grabdish"
   state_set_done SSL_DONE
 done
 
@@ -65,7 +65,8 @@ done
 
 # Get JAEGER_QUERY_ADDRESS
 while ! state_done JAEGER_QUERY_ADDRESS; do
-  JAEGER_IP=`kubectl get services jaeger-query -n msdataworkshop --template='{{(index .status.loadBalancer.ingress 0).ip}}'`
+  # JAEGER_IP=`kubectl get services jaeger-query -n msdataworkshop --template='{{(index .status.loadBalancer.ingress 0).ip}}'`
+  JAEGER_IP=`kubectl get service jaeger-query -n msdataworkshop | awk '/jaeger-query/ {print $4}'`
   if [[ "$JAEGER_IP" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
     state_set JAEGER_QUERY_ADDRESS "https://$JAEGER_IP"
   else
