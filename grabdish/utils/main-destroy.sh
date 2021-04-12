@@ -21,9 +21,9 @@ if state_done WALLET_AUTH_URL; then
 fi
 
 # Object
-if state_done WALLET_OBJECT_DONE; then
+if state_done WALLET_OBJECT; then
   oci os object delete --object-name "wallet" --bucket-name "$(state_get RUN_NAME)" --force
-  state_reset WALLET_OBJECT_DONE
+  state_reset WALLET_OBJECT
 fi
 # Bucket
 if state_done OBJECT_STORE_BUCKET; then

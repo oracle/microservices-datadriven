@@ -7,7 +7,7 @@ set -e
 
 
 # Wait for provisioning
-while ! state_done PROVISIONING_DONE; do
+while ! state_done PROVISIONING; do
   echo "`date`: Waiting for terraform provisioning"
   sleep 10
 done
@@ -21,45 +21,45 @@ done
 
 
 # Setup Cluster Access
-while ! state_done KUBECTL_DONE; do
+while ! state_done KUBECTL; do
   oci ce cluster create-kubeconfig --cluster-id "$(state_get OKE_OCID)"
-  state_set_done KUBECTL_DONE
+  state_set_done KUBECTL
 done
 
 
 # Create SSL Certs
-while ! state_done SSL_DONE; do
+while ! state_done SSL; do
   mkdir -p $GRABDISH_HOME/tls
   openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $GRABDISH_HOME/tls/tls.key -out $GRABDISH_HOME/tls/tls.crt -subj "/CN=grabdish/O=grabdish"
-  state_set_done SSL_DONE
+  state_set_done SSL
 done
 
 
 # Create SSL Secret
-while ! state_done OKE_NAMESPACE_DONE; do
+while ! state_done OKE_NAMESPACE; do
   kubectl create ns msdataworkshop
-  state_set_done OKE_NAMESPACE_DONE
+  state_set_done OKE_NAMESPACE
 done
 
 
 # Create SSL Secret
-while ! state_done SSL_SECRET_DONE; do
+while ! state_done SSL_SECRET; do
   kubectl create secret tls ssl-certificate-secret --key $GRABDISH_HOME/tls/tls.key --cert $GRABDISH_HOME/tls/tls.crt -n msdataworkshop
-  state_set_done SSL_SECRET_DONE
+  state_set_done SSL_SECRET
 done
 
 
 # Install Jaeger
-while ! state_done JAEGER_DONE; do
+while ! state_done JAEGER; do
   kubectl create -f https://tinyurl.com/yc52x6q5 -n msdataworkshop
-  state_set_done JAEGER_DONE
+  state_set_done JAEGER
 done
 
 
 # Provision Load Balancer
-while ! state_done LB_DONE; do
+while ! state_done LB; do
   kubectl create -f $GRABDISH_HOME/frontend-helidon/frontend-service.yaml -n msdataworkshop
-  state_set_done LB_DONE
+  state_set_done LB
 done
 
 
@@ -94,4 +94,4 @@ while ! state_done JAEGER_CONFIG_MAP; do
 done
 
 
-state_set_done OKE_SETUP_DONE
+state_set_done OKE_SETUP

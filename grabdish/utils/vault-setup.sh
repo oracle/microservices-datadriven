@@ -44,4 +44,4 @@ while ! state_done VAULT_POLICY_OCID; do
   state_set VAULT_POLICY_OCID "$POLICY_OCID"
 done
 
-state_set_done VAULT_SETUP_DONE
+state_set_done VAULT_SETUP

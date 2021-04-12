@@ -98,13 +98,13 @@ source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
 
 
 # Run the terraform.sh in the background
-if ! state_get PROVISIONING_DONE; then
+if ! state_get PROVISIONING; then
   echo "Executing terraform.sh in the background"
   $GRABDISH_HOME/utils/terraform.sh &>> $GRABDISH_LOG/terraform.log &
 fi
 
 # Run the vault-setup.sh in the background
-#if ! state_get VAULT_SETUP_DONE; then
+#if ! state_get VAULT_SETUP; then
 #  echo "Executing vault-setup.sh in the background"
 #  $GRABDISH_HOME/utils/vault-setup.sh &>> $GRABDISH_LOG/vault-setup.log &
 #fi
@@ -144,16 +144,16 @@ done
 
 
 # Run the build-all.sh in the background
-if ! state_get BUILD_ALL_DONE; then
+if ! state_get BUILD_ALL; then
   echo "Executing build-all.sh in the background"
   $GRABDISH_HOME/utils/build-all.sh &>> $GRABDISH_LOG/build-all.log &
 fi
 
 
 # Wait for vault
-#if ! state_done VAULT_SETUP_DONE; then
+#if ! state_done VAULT_SETUP; then
 #  echo "`date`: Waiting for vault"
-#  while ! state_done VAULT_SETUP_DONE; do
+#  while ! state_done VAULT_SETUP; do
 #    echo -ne "\r`tail -1 $GRABDISH_LOG/state.log`            "
 #    sleep 1
 #  done
@@ -161,9 +161,9 @@ fi
 
 
 # Wait for provisioning
-if ! state_done PROVISIONING_DONE; then
+if ! state_done PROVISIONING; then
   echo "`date`: Waiting for terraform provisioning"
-  while ! state_done PROVISIONING_DONE; do
+  while ! state_done PROVISIONING; do
     echo -ne "\r`tail -1 $GRABDISH_LOG/terraform.log`            "
     sleep 2
   done
@@ -196,23 +196,23 @@ done
 
 
 # run oke-setup.sh in background
-if ! state_get OKE_SETUP_DONE; then
+if ! state_get OKE_SETUP; then
   echo "Executing oke-setup.sh in the background"
   $GRABDISH_HOME/utils/oke-setup.sh &>>$GRABDISH_LOG/oke-setup.log &
 fi
 
 
 # run db-setup.sh in background
-if ! state_get DB_SETUP_DONE; then
+if ! state_get DB_SETUP; then
   echo "Executing db-setup.sh in the background"
   $GRABDISH_HOME/utils/db-setup.sh &>>$GRABDISH_LOG/db-setup.log &
 fi
 
 
 # Wait for kubectl Setup
-if ! state_done KUBECTL_DONE; then
+if ! state_done KUBECTL; then
   echo "`date`: Waiting for kubectl configuration"
-  while ! state_done KUBECTL_DONE; do
+  while ! state_done KUBECTL; do
     echo -ne "\r`tail -1 $GRABDISH_LOG/state.log`            "
     sleep 2
   done
@@ -329,7 +329,7 @@ wait
 # Verify Setup
 if ! state_done SETUP_VERIFIED; then
   FAILURES=0
-  for bg in BUILD_ALL_DONE OKE_SETUP_DONE DB_SETUP_DONE PROVISIONING_DONE; do
+  for bg in BUILD_ALL OKE_SETUP DB_SETUP PROVISIONING; do
     if state_done $bg; then
       echo "$bg completed"
     else
