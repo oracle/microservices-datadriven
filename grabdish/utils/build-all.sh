@@ -82,7 +82,7 @@ while ! state_done FRONTEND_BUILD; do
   BUILDS="frontend-helidon"
   for b in $BUILDS; do 
     cd $GRABDISH_HOME/$b
-    ./build.sh
+    time ./build.sh
   done
   state_set_done FRONTEND_BUILD
 done
