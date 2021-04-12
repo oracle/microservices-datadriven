@@ -4,7 +4,7 @@
 
 # Make sure this is run via source or .
 if ! (return 0 2>/dev/null); then
-  echo "ERROR: Usage: 'source oci-cli-cs-key-auth.sh"
+  echo "ERROR: Usage: 'source utils/oci-cli-cs-key-auth.sh"
   exit
 fi
 
@@ -21,6 +21,7 @@ unset OCI_DELEGATION_TOKEN_FILE
 
 # Create Keys
 if ! test -f ~/.oci/oci_api_key.pem; then
+  echo "If asked for a passphrase, hit return.  DO NOT ENTER A PASSPHRASE!"
   oci setup keys --overwrite --passphrase "" 
 fi
 
