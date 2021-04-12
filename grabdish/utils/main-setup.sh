@@ -85,7 +85,7 @@ done
 while ! state_done COMPARTMENT_OCID; do
   echo "Resources will be created in a new compartment named $(state_get RUN_NAME)"
   COMPARTMENT_OCID=`oci iam compartment create --compartment-id "$(state_get TENANCY_OCID)" --name "$(state_get RUN_NAME)" --description "GribDish Workshop" --query 'data.id' --raw-output`
-  while ! test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output` == 'ACTIVE'; do
+  while ! test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output`"" == 'ACTIVE'; do
     echo "Waiting for the compartment to become ACTIVE"
     sleep 2
   done
@@ -210,9 +210,9 @@ fi
 
 
 # Wait for kubectl Setup
-if ! state_done KUBECTL; then
-  echo "`date`: Waiting for kubectl configuration"
-  while ! state_done KUBECTL; do
+if ! state_done OKE_NAMESPACE; then
+  echo "`date`: Waiting for kubectl configuration and msdataworkshop namespace"
+  while ! state_done OKE_NAMESPACE; do
     echo -ne "\r`tail -1 $GRABDISH_LOG/state.log`            "
     sleep 2
   done
