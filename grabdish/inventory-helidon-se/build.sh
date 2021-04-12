@@ -15,8 +15,9 @@ fi
 
 export IMAGE=${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_VERSION}
 
-mvn install
-mvn package docker:build
+# mvn install
+# mvn package docker:build
+mvn package
 
 docker push "$IMAGE"
 if [  $? -eq 0 ]; then

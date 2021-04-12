@@ -99,8 +99,12 @@ source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
 
 # Run the terraform.sh in the background
 if ! state_get PROVISIONING; then
-  echo "Executing terraform.sh in the background"
-  $GRABDISH_HOME/utils/terraform.sh &>> $GRABDISH_LOG/terraform.log &
+  if ps -ef | grep "$GRABDISH_HOME/utils/terraform.sh" | grep -v grep; then
+    echo "$GRABDISH_HOME/utils/terraform.sh is already running"
+  else
+    echo "Executing terraform.sh in the background"
+    nohup $GRABDISH_HOME/utils/terraform.sh &>> $GRABDISH_LOG/terraform.log &
+  fi
 fi
 
 # Run the vault-setup.sh in the background
@@ -145,8 +149,12 @@ done
 
 # Run the build-all.sh in the background
 if ! state_get BUILD_ALL; then
-  echo "Executing build-all.sh in the background"
-  $GRABDISH_HOME/utils/build-all.sh &>> $GRABDISH_LOG/build-all.log &
+  if ps -ef | grep "$GRABDISH_HOME/utils/build-all.sh" | grep -v grep; then
+    echo "$GRABDISH_HOME/utils/build-all.sh is already running"
+  else
+    echo "Executing build-all.sh in the background"
+    nohup $GRABDISH_HOME/utils/build-all.sh &>> $GRABDISH_LOG/build-all.log &
+  fi
 fi
 
 
@@ -197,15 +205,23 @@ done
 
 # run oke-setup.sh in background
 if ! state_get OKE_SETUP; then
-  echo "Executing oke-setup.sh in the background"
-  $GRABDISH_HOME/utils/oke-setup.sh &>>$GRABDISH_LOG/oke-setup.log &
+  if ps -ef | grep "$GRABDISH_HOME/utils/oke-setup.sh" | grep -v grep; then
+    echo "$GRABDISH_HOME/utils/oke-setup.sh is already running"
+  else
+    echo "Executing oke-setup.sh in the background"
+    nohup $GRABDISH_HOME/utils/oke-setup.sh &>>$GRABDISH_LOG/oke-setup.log &
+  fi
 fi
 
 
 # run db-setup.sh in background
 if ! state_get DB_SETUP; then
-  echo "Executing db-setup.sh in the background"
-  $GRABDISH_HOME/utils/db-setup.sh &>>$GRABDISH_LOG/db-setup.log &
+  if ps -ef | grep "$GRABDISH_HOME/utils/db-setup.sh" | grep -v grep; then
+    echo "$GRABDISH_HOME/utils/db-setup.sh is already running"
+  else
+    echo "Executing db-setup.sh in the background"
+    nohup $GRABDISH_HOME/utils/db-setup.sh &>>$GRABDISH_LOG/db-setup.log &
+  fi
 fi
 
 
@@ -221,7 +237,7 @@ fi
 
 
 # Collect DB password and create secret
-while ! state_done DB_PASSWORD; do
+while ! state_done ; do
   echo
   echo 'Database passwords must be 12 to 30 characters and contain at least one uppercase letter,'
   echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'

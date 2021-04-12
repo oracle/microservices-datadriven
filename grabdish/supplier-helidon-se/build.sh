@@ -16,8 +16,9 @@ fi
 
 export IMAGE=${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_VERSION}
 
-mvn install
-mvn package docker:build
+# mvn install
+# mvn package docker:build
+mvn package
 
 if [ $DOCKERBUILD_RETCODE -ne 0 ]; then
     exit 1

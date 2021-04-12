@@ -23,8 +23,9 @@ export IMAGE=${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_VERSION}
 cp src/main/resources/web/index.html-template src/main/resources/web/index.html
 sed -i "s|%JAEGER_QUERY_ADDRESS%|${JAEGER_QUERY_ADDRESS}|g" src/main/resources/web/index.html
 
-mvn install
-mvn package docker:build
+# mvn install
+# mvn package docker:build
+mvn package
 
 if [ $DOCKERBUILD_RETCODE -ne 0 ]; then
     exit 1
