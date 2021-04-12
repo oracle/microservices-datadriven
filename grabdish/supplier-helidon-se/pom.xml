@@ -174,7 +174,6 @@
             <type>pom</type>
         </dependency>
         <dependency>
-        <dependency>
             <groupId>com.oracle.oci.sdk</groupId>
             <artifactId>oci-java-sdk-vault</artifactId>
             <version>1.32.2</version>

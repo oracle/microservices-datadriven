@@ -146,9 +146,9 @@ while ! state_done DOCKER_REGISTRY; do
         state_set DOCKER_REGISTRY "$(state_get REGION).ocir.io/$(state_get NAMESPACE)/$(state_get RUN_NAME)"
         break
       else
-        RETRIES=$(($RETRIES+1))
-        sleep 10
         echo "Docker login failed.  Retrying"
+        RETRIES=$((RETRIES+1))
+        sleep 5
       fi
     done
   fi
