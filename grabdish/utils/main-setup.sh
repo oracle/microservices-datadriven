@@ -237,7 +237,7 @@ fi
 
 
 # Collect DB password and create secret
-while ! state_done ; do
+while ! state_done DB_PASSWORD; do
   echo
   echo 'Database passwords must be 12 to 30 characters and contain at least one uppercase letter,'
   echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
