@@ -20,9 +20,6 @@ export IMAGE=${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_VERSION}
 # mvn package docker:build
 mvn package
 
-if [ $DOCKERBUILD_RETCODE -ne 0 ]; then
-    exit 1
-fi
 docker push $IMAGE
 if [  $? -eq 0 ]; then
     docker rmi ${IMAGE}
