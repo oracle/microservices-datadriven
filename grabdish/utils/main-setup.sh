@@ -140,6 +140,7 @@ while ! state_done DOCKER_REGISTRY; do
       exit
     fi
   else
+    sleep 5 # Allow time for the auth token to come into effect
     RETRIES=0
     while test $RETRIES -le 10; do
       if echo "$TOKEN" | docker login -u "$(state_get NAMESPACE)/$(state_get USER_NAME)" --password-stdin "$(state_get REGION).ocir.io"; then
