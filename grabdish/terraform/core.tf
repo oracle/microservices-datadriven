@@ -4,11 +4,13 @@ resource "oci_core_vcn" "okell_vcn" {
   display_name   = "grabdish"
   dns_label    = "grabdish"
 }
+/*
 resource "oci_core_internet_gateway" "ig" {
    compartment_id = var.ociCompartmentOcid
    display_name   = "ClusterInternetGateway"
    vcn_id         = oci_core_vcn.okell_vcn.id
 }
+*/
 resource "oci_core_dhcp_options" "grabdish" {
     #Required
     compartment_id = var.ociCompartmentOcid
@@ -90,12 +92,14 @@ resource oci_core_route_table private {
     destination_type  = "SERVICE_CIDR_BLOCK"
     network_entity_id = oci_core_service_gateway.sg.id
   }
+  /*
   route_rules {
     description       = "traffic to OCI services"
     destination       = data.oci_core_services.services.services.1.cidr_block
     destination_type  = "SERVICE_CIDR_BLOCK"
     network_entity_id = oci_core_service_gateway.sg.id
   }
+  */
   vcn_id = oci_core_vcn.okell_vcn.id
 }
 resource oci_core_default_route_table public {
@@ -121,7 +125,7 @@ resource "oci_core_subnet" "endpoint_Subnet" {
   display_name        = "SubNet1ForEndpoint"
   prohibit_public_ip_on_vnic = "false"
   route_table_id      = oci_core_vcn.okell_vcn.default_route_table_id
-  #dns_label           = "endpoint"
+  dns_label           = "endpoint"
 }
 resource "oci_core_subnet" "nodePool_Subnet" {
   #Required
@@ -134,7 +138,7 @@ resource "oci_core_subnet" "nodePool_Subnet" {
   display_name      = "SubNet1ForNodePool"
   prohibit_public_ip_on_vnic = "true"
   route_table_id    = oci_core_route_table.private.id
-  #dns_label           = "nodepool"
+  dns_label           = "nodepool"
 }
 resource "oci_core_subnet" "svclb_Subnet" {
   #Required
@@ -148,7 +152,7 @@ resource "oci_core_subnet" "svclb_Subnet" {
   route_table_id    = oci_core_vcn.okell_vcn.default_route_table_id
   dhcp_options_id = oci_core_vcn.okell_vcn.default_dhcp_options_id
   prohibit_public_ip_on_vnic = "false"
-  #dns_label           = "svclb"
+  dns_label           = "svclb"
 }
 resource oci_core_security_list nodePool {
   compartment_id = var.ociCompartmentOcid
@@ -205,7 +209,7 @@ resource oci_core_security_list nodePool {
     #udp_options = <<Optional value not found in discovery>>
   }
   egress_security_rules {
-    description      = "Allow nodes to communicate with OKE to ensure correct start-up and continued functioning"
+    description      = "Allow nodes to communicate with OKE to ensure correct start-up and continued functioning (0)"
     destination      = data.oci_core_services.services.services.0.cidr_block
     destination_type = "SERVICE_CIDR_BLOCK"
     #icmp_options = <<Optional value not found in discovery>>
@@ -219,7 +223,7 @@ resource oci_core_security_list nodePool {
     #udp_options = <<Optional value not found in discovery>>
   }
   egress_security_rules {
-    description      = "Allow nodes to communicate with OKE to ensure correct start-up and continued functioning"
+    description      = "Allow nodes to communicate with OKE to ensure correct start-up and continued functioning (1)"
     destination      = data.oci_core_services.services.services.1.cidr_block
     destination_type = "SERVICE_CIDR_BLOCK"
     #icmp_options = <<Optional value not found in discovery>>
