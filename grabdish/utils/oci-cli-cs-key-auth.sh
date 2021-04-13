@@ -8,17 +8,6 @@ if ! (return 0 2>/dev/null); then
   exit
 fi
 
-# unset OCI_CLI variables
-unset OCI_CLI_CONFIG_FILE
-unset OCI_CLI_PROFILE
-unset OCI_AUTH
-unset OCI_CLI_CLOUD_SHELL
-unset OCI_CLI_AUTH
-unset OCI_CONFIG_PROFILE
-unset OCI_CONFIG_FILE
-unset OCI_AUTH_TYPE
-unset OCI_DELEGATION_TOKEN_FILE
-
 # Create Keys
 if ! test -f ~/.oci/oci_api_key.pem; then
   echo "If asked for a passphrase, hit return.  DO NOT ENTER A PASSPHRASE!"
@@ -55,3 +44,13 @@ region=${OCI_REGION}
 !
 umask 22
 
+# unset OCI_CLI variables
+unset OCI_CLI_CONFIG_FILE
+unset OCI_CLI_PROFILE
+unset OCI_AUTH
+unset OCI_CLI_CLOUD_SHELL
+unset OCI_CLI_AUTH
+unset OCI_CONFIG_PROFILE
+unset OCI_CONFIG_FILE
+unset OCI_AUTH_TYPE
+unset OCI_DELEGATION_TOKEN_FILE
