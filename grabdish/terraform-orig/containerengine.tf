@@ -45,14 +45,6 @@ resource "oci_containerengine_node_pool" "okell_node_pool" {
       availability_domain = data.oci_identity_availability_domain.ad1.name
       subnet_id           = oci_core_subnet.nodePool_Subnet.id
     }
-    placement_configs {
-      availability_domain = data.oci_identity_availability_domain.ad2.name
-      subnet_id           = oci_core_subnet.nodePool_Subnet.id
-    }
-    placement_configs {
-      availability_domain = data.oci_identity_availability_domain.ad3.name
-      subnet_id           = oci_core_subnet.nodePool_Subnet.id
-    }
     size = "3"
   }
   node_source_details {
@@ -76,13 +68,13 @@ locals {
   all_sources = data.oci_containerengine_node_pool_option.okell_node_pool_option.sources
   oracle_linux_images = [for source in local.all_sources : source.image_id if length(regexall("Oracle-Linux-[0-9]*.[0-9]*-20[0-9]*",source.source_name)) > 0]
 }
-/*
 output "cluster_kubernetes_versions" {
   value = [data.oci_containerengine_cluster_option.okell_cluster_option.kubernetes_versions]
 }
 output "node_pool_kubernetes_version" {
   value = [data.oci_containerengine_node_pool_option.okell_node_pool_option.kubernetes_versions]
 }
+/*
 data "oci_containerengine_cluster_kube_config" "okell_cluster_kube_config" {
   #Required
   cluster_id = oci_containerengine_cluster.okell_cluster.id
