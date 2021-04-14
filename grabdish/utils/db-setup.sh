@@ -15,14 +15,14 @@ done
 
 # Get DB Connection Wallet and to Object Store
 while ! state_done WALLET_OBJECT; do
-  oci db autonomous-database generate-wallet --autonomous-database-id "$(state_get ORDER_DB_OCID)" --file '-' --password 'Welcome1' --generate-type 'ALL' | oci os object put --bucket-name "$(state_get RUN_NAME)" --name "cwallet.sso" --file '-'
+  oci db autonomous-database generate-wallet --autonomous-database-id "$(state_get ORDER_DB_OCID)" --file '-' --password 'Welcome1' --generate-type 'ALL' | oci os object put --bucket-name "$(state_get RUN_NAME)" --name "wallet.zip" --file '-'
   state_set_done WALLET_OBJECT
 done
 
 
 # Create Authenticated Link to Wallet
 while ! state_done WALLET_AUTH_URL; do
-  ACCESS_URI=`oci os preauth-request create --object-name 'wallet' --access-type 'ObjectRead' --bucket-name "$(state_get RUN_NAME)" --name 'grabdish' --time-expires $(date '+%Y-%m-%d' --date '+7 days') --query 'data."access-uri"' --raw-output`
+  ACCESS_URI=`oci os preauth-request create --object-name 'wallet.zip' --access-type 'ObjectRead' --bucket-name "$(state_get RUN_NAME)" --name 'grabdish' --time-expires $(date '+%Y-%m-%d' --date '+7 days') --query 'data."access-uri"' --raw-output`
   state_set WALLET_AUTH_URL "https://objectstorage.$(state_get REGION).oraclecloud.com${ACCESS_URI}"
 done
 

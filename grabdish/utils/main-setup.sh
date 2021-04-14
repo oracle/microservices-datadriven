@@ -181,7 +181,8 @@ fi
 if ! state_done PROVISIONING; then
   echo "`date`: Waiting for terraform provisioning"
   while ! state_done PROVISIONING; do
-    echo -ne "\r`tail -1 $GRABDISH_LOG/terraform.log`            "
+    LOGLINE=`tail -1 $GRABDISH_LOG/terraform.log`
+    echo -ne "\r${LOGLINE:0:60}"
     sleep 2
   done
   echo
@@ -346,7 +347,7 @@ done
 
 
 # Wait for backgrounds
-echo "Waiting for background processes to complete"
+# echo "Waiting for background processes to complete"
 jobs
 wait
 
