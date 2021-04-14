@@ -46,7 +46,8 @@ show errors
 
 
 
-CREATE OR REPLACE PROCEDURE enqueueInventoryMessage(p_action IN VARCHAR2, p_orderid IN NUMBER)
+-- CREATE OR REPLACE PROCEDURE enqueueInventoryMessage(p_action IN VARCHAR2, p_orderid IN NUMBER)
+CREATE OR REPLACE PROCEDURE enqueueInventoryMessage(p_inventoryInfo IN VARCHAR2)
 IS
    enqueue_options     DBMS_AQ.enqueue_options_t;
    message_properties  DBMS_AQ.message_properties_t;
@@ -56,8 +57,9 @@ IS
 BEGIN
 
   message := SYS.AQ$_JMS_TEXT_MESSAGE.construct;
-  message.set_string_property('action', p_action);
-  message.set_int_property('orderid', p_orderid);
+  message.text_vc := p_inventoryInfo;
+  -- message.set_string_property('action', p_action);
+  -- message.set_int_property('orderid', p_orderid);
 
   DBMS_AQ.ENQUEUE(queue_name => 'INVENTORYQUEUE',
            enqueue_options    => enqueue_options,
