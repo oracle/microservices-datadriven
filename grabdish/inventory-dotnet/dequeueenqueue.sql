@@ -13,7 +13,7 @@ IS
           
 BEGIN
 
-  dequeue_options.wait := -1; -- wait 60 seconds
+  dequeue_options.wait := -1; 
   dequeue_options.navigation := dbms_aq.FIRST_MESSAGE;
 
   DBMS_AQ.DEQUEUE(

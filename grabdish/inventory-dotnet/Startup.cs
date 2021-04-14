@@ -68,13 +68,15 @@ namespace inventory_dotnet
         }
 
         public String ListenForMessages()
-        {
+        { 
             //Other options include...
             //   using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, TimeSpan.MaxValue))
             //   DbProviderFactory factory = DbProviderFactories.GetFactory("Oracle.ManagedDataAccess.Client"); DbCommand oracleCommand = factory.CreateCommand();
             OracleConfiguration.WalletLocation = Environment.GetEnvironmentVariable("TNS_ADMIN"); 
             using (OracleConnection connection = 
-                new OracleConnection("User Id=INVENTORYUSER;Password=" + Environment.GetEnvironmentVariable("dbpassword") + ";Data Source=inventorydb_tp;"))
+                new OracleConnection("User Id=INVENTORYUSER;Password=" + 
+                Environment.GetEnvironmentVariable("dbpassword") + 
+                ";Data Source=" + Environment.GetEnvironmentVariable("INVENTORY_PDB_NAME") + "";"))
             { 
 
 
