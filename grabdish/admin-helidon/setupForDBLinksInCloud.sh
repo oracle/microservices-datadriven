@@ -28,7 +28,7 @@ export ORDER_PDB_NAME="$(state_get RUN_NAME)X1"
 export INVENTORY_PDB_NAME="$(state_get RUN_NAME)X2"
 
 
-export cwalletobjecturi=$(state_get WALLET_AUTH_URL)
+export cwalletobjecturi=$(state_get CWALLET_SSO_AUTH_URL)
 echo updating admin-helidon-deployment-${CURRENTTIME}.yaml with cwalletobjecturi $cwalletobjecturi
 sed -i "s|%cwalletobjecturi%|${cwalletobjecturi}|g" admin-helidon-deployment-${CURRENTTIME}.yaml
 
