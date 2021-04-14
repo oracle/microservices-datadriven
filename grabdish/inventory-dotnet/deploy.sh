@@ -10,11 +10,10 @@ export CURRENTTIME=$( date '+%F_%H:%M:%S' )
 echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated deployment yaml
 cp inventory-dotnet-deployment.yaml inventory-dotnet-deployment-$CURRENTTIME.yaml
 
-#may hit sed incompat issue with mac
-sed -i "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" inventory-helidon-deployment-$CURRENTTIME.yaml
-sed -i "s|%INVENTORY_PDB_NAME%|${INVENTORY_PDB_NAME}|g" inventory-helidon-deployment-$CURRENTTIME.yaml
-sed -i "s|%OCI_REGION%|${OCI_REGION}|g" inventory-helidon-deployment-${CURRENTTIME}.yaml
-sed -i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" inventory-helidon-deployment-${CURRENTTIME}.yaml
+sed -i "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" inventory-dotnet-deployment-$CURRENTTIME.yaml
+sed -i "s|%INVENTORY_PDB_NAME%|${INVENTORY_PDB_NAME}|g" inventory-dotnet-deployment-$CURRENTTIME.yaml
+sed -i "s|%OCI_REGION%|${OCI_REGION}|g" inventory-dotnet-deployment-${CURRENTTIME}.yaml
+sed -i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" inventory-dotnet-deployment-${CURRENTTIME}.yaml
 
 if [ -z "$1" ]; then
     kubectl apply -f $SCRIPT_DIR/inventory-dotnet-deployment-$CURRENTTIME.yaml -n msdataworkshop

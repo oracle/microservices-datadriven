@@ -12,6 +12,16 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
+
+using System.Text;
+using System.Data.OracleClient;
+using System.Data;
+using Newtonsoft.Json;
+using Oracle.ManagedDataAccess.Client;
+
+using System.Data.Common;
+using System.Transactions;
+
 namespace inventory_dotnet
 {
     public class Startup
@@ -32,6 +42,7 @@ namespace inventory_dotnet
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "inventory_dotnet", Version = "v1" });
             });
+            ListenForMessages();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,5 +66,44 @@ namespace inventory_dotnet
                 endpoints.MapControllers();
             });
         }
+
+        public String ListenForMessages()
+        {
+            //Other options include...
+            //   using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, TimeSpan.MaxValue))
+            //   DbProviderFactory factory = DbProviderFactories.GetFactory("Oracle.ManagedDataAccess.Client"); DbCommand oracleCommand = factory.CreateCommand();
+            OracleConfiguration.WalletLocation = Environment.GetEnvironmentVariable("TNS_ADMIN"); 
+            using (OracleConnection connection = 
+                new OracleConnection("User Id=INVENTORYUSER;Password=" + Environment.GetEnvironmentVariable("dbpassword") + ";Data Source=inventorydb_tp;"))
+            { 
+                Console.WriteLine("OracleConfiguration.WalletLocation:" + OracleConfiguration.WalletLocation);
+                Console.WriteLine("connection:" + connection);
+                OracleCommand oracleCommand = new OracleCommand();
+                oracleCommand.Connection = connection;
+                oracleCommand.CommandText = "deqOrdMsg";
+                oracleCommand.CommandType = CommandType.StoredProcedure;
+                OracleParameter p_orderInfoParam = new OracleParameter("p_orderInfo", OracleDbType.Varchar2, 32767);
+                p_orderInfoParam.Direction = ParameterDirection.Output;
+                oracleCommand.Parameters.Add(p_orderInfoParam);
+                try
+                {
+                    connection.Open();
+                    int i = oracleCommand.ExecuteNonQuery();
+                    if (i != -1 ) {
+                        System.Console.WriteLine("p_orderInfo {0}", oracleCommand.Parameters["p_orderInfo"].Value);
+                        Order order = JsonConvert.DeserializeObject<Order>("" + oracleCommand.Parameters["p_orderInfo"].Value);
+                        System.Console.WriteLine("order.itemid {0}", order.itemid);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Console.WriteLine("Exception: {0}", ex.ToString());
+                    return "fail:" + ex;
+                }
+                connection.Close();
+            }
+            return "complete";
+        }
+
     }
 }
