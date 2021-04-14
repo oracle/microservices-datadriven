@@ -15,7 +15,7 @@ done
 
 # Get DB Connection Wallet and to Object Store
 while ! state_done WALLET_OBJECT; do
-  oci db autonomous-database generate-wallet --autonomous-database-id "$(state_get ORDER_DB_OCID)" --file '-' --password 'Welcome1' --generate-type 'ALL' | oci os object put --bucket-name "$(state_get RUN_NAME)" --name "wallet" --file '-'
+  oci db autonomous-database generate-wallet --autonomous-database-id "$(state_get ORDER_DB_OCID)" --file '-' --password 'Welcome1' --generate-type 'ALL' | oci os object put --bucket-name "$(state_get RUN_NAME)" --name "cwallet.sso" --file '-'
   state_set_done WALLET_OBJECT
 done
 

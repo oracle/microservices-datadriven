@@ -45,7 +45,7 @@ resource "oci_containerengine_node_pool" "okell_node_pool" {
       availability_domain = data.oci_identity_availability_domain.ad1.name
       subnet_id           = oci_core_subnet.nodePool_Subnet.id
     }
-    placement_configs {
+/*    placement_configs {
       availability_domain = data.oci_identity_availability_domain.ad2.name
       subnet_id           = oci_core_subnet.nodePool_Subnet.id
     }
@@ -53,6 +53,7 @@ resource "oci_containerengine_node_pool" "okell_node_pool" {
       availability_domain = data.oci_identity_availability_domain.ad3.name
       subnet_id           = oci_core_subnet.nodePool_Subnet.id
     }
+*/
     size = "3"
   }
   node_source_details {

@@ -26,7 +26,6 @@ while ! state_done OKE_OCID; do
   OKE_OCID=`oci ce cluster list --compartment-id "$(state_get COMPARTMENT_OCID)" --query "join(' ',data[*].id)" --raw-output`
   state_set OKE_OCID "$OKE_OCID"
   # Wait for OKE to warm up
-  sleep 60
 done
 
 
@@ -37,7 +36,19 @@ while ! state_done KUBECTL; do
 done
 
 
-# Create SSL Secret
+# Wait for OKE nodes to become redy
+while true; do
+  READY_NODES=`kubectl get nodes | grep Ready | wc -l` || echo 'Ignoring any Error'
+  if test "$READY_NODES" -eq 3; then
+    echo "3 OKE nodes are ready"
+    break
+  fi
+  echo "Waiting for OKE nodes to become ready"
+  sleep 10
+done
+
+
+# Create OKE Namespace
 while ! state_done OKE_NAMESPACE; do
   kubectl create ns msdataworkshop
   state_set_done OKE_NAMESPACE
