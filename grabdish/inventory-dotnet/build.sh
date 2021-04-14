@@ -15,7 +15,7 @@ export IMAGE=${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_VERSION}
 
 docker build -t $IMAGE .
 
-if [ $DOCKERBUILD_RETCODE -ne 0 ]; then
+if [ $DOCKERBUILD_RETCODE  ]; then
     exit 1
 fi
 docker push $IMAGE

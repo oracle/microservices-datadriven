@@ -76,11 +76,10 @@ namespace inventory_dotnet
             using (OracleConnection connection = 
                 new OracleConnection("User Id=INVENTORYUSER;Password=" + Environment.GetEnvironmentVariable("dbpassword") + ";Data Source=inventorydb_tp;"))
             { 
-                Console.WriteLine("OracleConfiguration.WalletLocation:" + OracleConfiguration.WalletLocation);
                 Console.WriteLine("connection:" + connection);
                 OracleCommand oracleCommand = new OracleCommand();
                 oracleCommand.Connection = connection;
-                oracleCommand.CommandText = "deqOrdMsg";
+                oracleCommand.CommandText = "dequeueOrderMessage";
                 oracleCommand.CommandType = CommandType.StoredProcedure;
                 OracleParameter p_orderInfoParam = new OracleParameter("p_orderInfo", OracleDbType.Varchar2, 32767);
                 p_orderInfoParam.Direction = ParameterDirection.Output;
@@ -88,14 +87,15 @@ namespace inventory_dotnet
                 try
                 {
                     connection.Open();
-                    int i = oracleCommand.ExecuteNonQuery();
-                    if (i != -1 ) {
-                        System.Console.WriteLine("p_orderInfo {0}", oracleCommand.Parameters["p_orderInfo"].Value);
+                    while(true) {
+                        oracleCommand.ExecuteNonQuery();
+                        if (!oracleCommand.Parameters["p_orderInfo"].Value.ToString().Equals("null") ) {
                         Order order = JsonConvert.DeserializeObject<Order>("" + oracleCommand.Parameters["p_orderInfo"].Value);
                         System.Console.WriteLine("order.itemid {0}", order.itemid);
                     }
+                    }
                 }
-                catch (Exception ex)
+                catch (NullReferenceException ex)
                 {
                     System.Console.WriteLine("Exception: {0}", ex.ToString());
                     return "fail:" + ex;

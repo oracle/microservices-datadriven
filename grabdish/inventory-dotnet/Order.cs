@@ -6,12 +6,12 @@ namespace inventory_dotnet
     public class Order
     {
 
-        public int orderid { get; set; }
-        public int itemid { get; set; }
-        public int deliverylocation { get; set; }
-        public int status { get; set; }
-        public int inventoryLocation { get; set; }
-        public int suggestiveSale { get; set; }
+        public string orderid { get; set; }
+        public string itemid { get; set; }
+        public string deliverylocation { get; set; }
+        public string status { get; set; }
+        public string inventoryLocation { get; set; }
+        public string suggestiveSale { get; set; }
 
         public string Summary { get; set; }
     }

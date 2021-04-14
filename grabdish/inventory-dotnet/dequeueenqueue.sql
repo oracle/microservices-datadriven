@@ -1,7 +1,7 @@
 set echo on
 
---CREATE OR REPLACE PROCEDURE deqOrdMsg(p_action OUT varchar2, p_orderid OUT integer)
-CREATE OR REPLACE PROCEDURE deqOrdMsg(p_orderInfo OUT varchar2)
+--CREATE OR REPLACE PROCEDURE dequeueOrderMessage(p_action OUT varchar2, p_orderid OUT integer)
+CREATE OR REPLACE PROCEDURE dequeueOrderMessage(p_orderInfo OUT varchar2)
 IS
 
   dequeue_options       dbms_aq.dequeue_options_t;
@@ -10,12 +10,10 @@ IS
   message               SYS.AQ$_JMS_TEXT_MESSAGE;
   no_messages           EXCEPTION;
   pragma                exception_init(no_messages, -25228);
-
+          
 BEGIN
 
---  dequeue_options.wait := 0; -- don't wait if there is currently no message
---  dequeue_options.wait := -1; -- wait forever
-  dequeue_options.wait := 60; -- wait 60 seconds
+  dequeue_options.wait := -1; -- wait 60 seconds
   dequeue_options.navigation := dbms_aq.FIRST_MESSAGE;
 
   DBMS_AQ.DEQUEUE(
@@ -25,10 +23,11 @@ BEGIN
     payload => message,
     msgid => message_handle);
     COMMIT;
-
+          
 --  p_action := message.get_string_property('action');
---  p_orderid := message.get_int_property('orderid');
-  p_orderInfo := message.text_vc;
+--  p_orderid := message.get_int_property('orderid');  
+    p_orderInfo := message.text_vc;
+--  message.get_text(p_orderInfo);
 
   EXCEPTION
     WHEN no_messages THEN
@@ -43,8 +42,11 @@ END;
 /
 show errors
 
+ 
 
-CREATE OR REPLACE PROCEDURE enqInvMsg(p_action IN VARCHAR2, p_orderid IN NUMBER)
+
+
+CREATE OR REPLACE PROCEDURE enqueueInventoryMessage(p_action IN VARCHAR2, p_orderid IN NUMBER)
 IS
    enqueue_options     DBMS_AQ.enqueue_options_t;
    message_properties  DBMS_AQ.message_properties_t;
