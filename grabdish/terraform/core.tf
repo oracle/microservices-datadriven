@@ -4,14 +4,12 @@ resource "oci_core_vcn" "okell_vcn" {
   display_name   = "grabdish"
   dns_label    = "grabdish"
 }
-/*
 resource "oci_core_internet_gateway" "ig" {
    compartment_id = var.ociCompartmentOcid
    display_name   = "ClusterInternetGateway"
    vcn_id         = oci_core_vcn.okell_vcn.id
 }
-*/
-resource "oci_core_dhcp_options" "grabdish" {
+/*resource "oci_core_dhcp_options" "grabdish" {
     #Required
     compartment_id = var.ociCompartmentOcid
     options {
@@ -26,6 +24,7 @@ resource "oci_core_dhcp_options" "grabdish" {
 
     vcn_id = oci_core_vcn.okell_vcn.id
 }
+*/
 /*
 resource oci_core_private_ip prip {
   display_name = "Service VNIC for cluster"
@@ -88,7 +87,7 @@ resource oci_core_route_table private {
   }
   route_rules {
     description       = "traffic to OCI services"
-    destination       = data.oci_core_services.services.services.0.cidr_block
+    destination       = data.oci_core_services.services.services.1.cidr_block
     destination_type  = "SERVICE_CIDR_BLOCK"
     network_entity_id = oci_core_service_gateway.sg.id
   }
@@ -457,52 +456,6 @@ resource oci_core_security_list endpoint {
 
 resource oci_core_default_security_list svcLB {
   display_name = "svcLB"
-/*
-  egress_security_rules {
-    #description = <<Optional value not found in discovery>>
-    destination      = "10.0.10.0/24"
-    destination_type = "CIDR_BLOCK"
-    #icmp_options = <<Optional value not found in discovery>>
-    protocol  = "6"
-    stateless = "false"
-    tcp_options {
-      max = "31750"
-      min = "31750"
-      #source_port_range = <<Optional value not found in discovery>>
-    }
-    #udp_options = <<Optional value not found in discovery>>
-  }
-  egress_security_rules {
-    #description = <<Optional value not found in discovery>>
-    destination      = "10.0.10.0/24"
-    destination_type = "CIDR_BLOCK"
-    #icmp_options = <<Optional value not found in discovery>>
-    protocol  = "6"
-    stateless = "false"
-    tcp_options {
-      max = "10256"
-      min = "10256"
-      #source_port_range = <<Optional value not found in discovery>>
-    }
-    #udp_options = <<Optional value not found in discovery>>
-  }
-  freeform_tags = {
-  }
-  ingress_security_rules {
-    #description = <<Optional value not found in discovery>>
-    #icmp_options = <<Optional value not found in discovery>>
-    protocol    = "6"
-    source      = "0.0.0.0/0"
-    source_type = "CIDR_BLOCK"
-    stateless   = "false"
-    tcp_options {
-      max = "443"
-      min = "443"
-      #source_port_range = <<Optional value not found in discovery>>
-    }
-    #udp_options = <<Optional value not found in discovery>>
-  }
-*/
   manage_default_resource_id = oci_core_vcn.okell_vcn.default_security_list_id
 }
 data "oci_core_services" "services" {

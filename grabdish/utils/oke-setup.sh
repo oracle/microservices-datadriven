@@ -6,6 +6,14 @@
 set -e
 
 
+# Create SSL Certs
+while ! state_done SSL; do
+  mkdir -p $GRABDISH_HOME/tls
+  openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $GRABDISH_HOME/tls/tls.key -out $GRABDISH_HOME/tls/tls.crt -subj "/CN=grabdish/O=grabdish"
+  state_set_done SSL
+done
+
+
 # Wait for provisioning
 while ! state_done PROVISIONING; do
   echo "`date`: Waiting for terraform provisioning"
@@ -17,6 +25,8 @@ done
 while ! state_done OKE_OCID; do
   OKE_OCID=`oci ce cluster list --compartment-id "$(state_get COMPARTMENT_OCID)" --query "join(' ',data[*].id)" --raw-output`
   state_set OKE_OCID "$OKE_OCID"
+  # Wait for OKE to warm up
+  sleep 60
 done
 
 
@@ -24,14 +34,6 @@ done
 while ! state_done KUBECTL; do
   oci ce cluster create-kubeconfig --cluster-id "$(state_get OKE_OCID)"
   state_set_done KUBECTL
-done
-
-
-# Create SSL Certs
-while ! state_done SSL; do
-  mkdir -p $GRABDISH_HOME/tls
-  openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $GRABDISH_HOME/tls/tls.key -out $GRABDISH_HOME/tls/tls.crt -subj "/CN=grabdish/O=grabdish"
-  state_set_done SSL
 done
 
 
