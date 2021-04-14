@@ -76,6 +76,12 @@ namespace inventory_dotnet
             using (OracleConnection connection = 
                 new OracleConnection("User Id=INVENTORYUSER;Password=" + Environment.GetEnvironmentVariable("dbpassword") + ";Data Source=inventorydb_tp;"))
             { 
+
+
+                try
+                {
+                    connection.Open();
+                    while(true) {
                 Console.WriteLine("connection:" + connection);
                 OracleCommand oracleCommand = new OracleCommand();
                 oracleCommand.Connection = connection;
@@ -84,12 +90,6 @@ namespace inventory_dotnet
                 OracleParameter p_orderInfoParam = new OracleParameter("p_orderInfo", OracleDbType.Varchar2, 32767);
                 p_orderInfoParam.Direction = ParameterDirection.Output;
                 oracleCommand.Parameters.Add(p_orderInfoParam);
-
-
-                try
-                {
-                    connection.Open();
-                    while(true) {
                         oracleCommand.ExecuteNonQuery();
                         Order order = JsonConvert.DeserializeObject<Order>("" + oracleCommand.Parameters["p_orderInfo"].Value); 
                      

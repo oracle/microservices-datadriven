@@ -57,7 +57,8 @@ IS
 BEGIN
 
   message := SYS.AQ$_JMS_TEXT_MESSAGE.construct;
-  message.text_vc := p_inventoryInfo;
+  -- message.text_vc := p_inventoryInfo;
+  message.set_text(p_inventoryInfo);
   -- message.set_string_property('action', p_action);
   -- message.set_int_property('orderid', p_orderid);
 

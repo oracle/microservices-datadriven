@@ -131,7 +131,7 @@ class PropagationSetup {
             createDBLink(connection, "ORDERPDB_CRED", "inventorytoorder", inventoryToOrderLinkName);
         }
         verifyDBLinks(orderpdbDataSource, inventorypdbDataSource);
-        return "DBLinks created and verified successfully";
+        return "DBLinks created. Verification:" + verifyDBLinks(orderpdbDataSource, inventorypdbDataSource);
     }
 
     private void createDBLink(Connection connection, String credName, String createlink, String linkname) throws SQLException {
@@ -168,35 +168,51 @@ class PropagationSetup {
         System.out.println(" CREATE_DATABASE_LINK " + linkname + " successful,");
     }
 
-    String verifyDBLinks(DataSource orderpdbDataSource, DataSource inventorypdbDataSource) throws SQLException {
+    String verifyDBLinks(DataSource orderpdbDataSource, DataSource inventorypdbDataSource)  {
+        try (Connection inventoryconnection = inventorypdbDataSource.getConnection(inventoryuser, inventorypw)) {
+            System.out.println("Create templinktest table on inventorydb...");
+            inventoryconnection.createStatement().execute("create table templinktabledoninventorydb (id varchar(32))");
+            System.out.println("Create templinktest table on inventorydb success");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        try (Connection orderconnection = orderpdbDataSource.getConnection(orderuser, orderpw)) {
+            System.out.println("Create templinktest table on orderdb...");
+            orderconnection.createStatement().execute("create table templinktableonorderdb (id varchar(32))");
+            System.out.println("Create templinktest table on orderdb success");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
         String returnString = "";
         returnString += "orderuser select on inventorypdb using link...";
         try (Connection orderconnection = orderpdbDataSource.getConnection(orderuser, orderpw)) {
-            System.out.println("verifyDBLinks orderconnection:" + orderconnection);
-            orderconnection.createStatement().execute("create table templinktest (id varchar(32))");
-            System.out.println("verifyDBLinks temp table created on order");
+            System.out.println("verifyDBLinks orderconnection to inventorydb:" + orderToInventoryLinkName);
+//            orderconnection.createStatement().execute("create table templinktest (id varchar(32))");
+//            System.out.println("verifyDBLinks temp table created on order");
             // verify orderuser select on inventorypdb using link...
-            orderconnection.createStatement().execute("select count(*) from inventoryuser.templinktest@" + orderToInventoryLinkName);
+            orderconnection.createStatement().execute("select count(*) from inventoryuser.templinktabledoninventorydb@" + orderToInventoryLinkName);
             System.out.println("verifyDBLinks select on inventoryuser.templinktest");
-            orderconnection.createStatement().execute("drop table templinktest");
+//            orderconnection.createStatement().execute("drop table templinktest");
             returnString += "success";
         } catch (SQLException ex) {
             returnString += ex;
         }
         returnString += "inventoryuser select on orderpdb using link...";
         try (Connection inventoryconnection = inventorypdbDataSource.getConnection(inventoryuser, inventorypw)) {
-            System.out.println("verifyDBLinks inventoryconnection:" + inventoryconnection);
-            inventoryconnection.createStatement().execute("create table templinktest (id varchar(32))");
-            System.out.println("verifyDBLinks temp table created on inventory");
+            System.out.println("verifyDBLinks inventoryconnection to orderdb:" + inventoryToOrderLinkName);
+//            inventoryconnection.createStatement().execute("create table templinktest (id varchar(32))");
+//            System.out.println("verifyDBLinks temp table created on inventory");
             // verify inventoryuser select on orderpdb using link  ...
-            inventoryconnection.createStatement().execute("select count(*) from orderuser.templinktest@" + inventoryToOrderLinkName);
-            System.out.println("verifyDBLinks select on orderuser.templinktest");
-            inventoryconnection.createStatement().execute("drop table templinktest");
+            inventoryconnection.createStatement().execute("select count(*) from orderuser.templinktableonorderdb@" + inventoryToOrderLinkName);
+            System.out.println("verifyDBLinks select on orderuser.templinktableonorderdb");
+//            inventoryconnection.createStatement().execute("drop table templinktest");
             returnString += "success";
         } catch (SQLException ex) {
             returnString += ex;
         }
         return returnString;
+        //todo drop templinktabledoninventorydb and templinktableonorderdb to cleanup
     }
 
     public String setupTablesQueuesAndPropagation(DataSource orderpdbDataSource, DataSource inventorypdbDataSource,
@@ -245,10 +261,10 @@ class PropagationSetup {
             String linkName, boolean isTest) {
         String returnString = "sourcepdbDataSource = [" + sourcepdbDataSource + "], " +
                 "targetpdbDataSource = [" + targetpdbDataSource + "], " +
-                "sourcename = [" + sourcename + "], sourcepw = [" + sourcepw + "], " +
+                "sourcename = [" + sourcename + "], " +
                 "sourcequeuename = [" + sourcequeuename + "], " +
                 "sourcequeuetable = [" + sourcequeuetable + "], targetuser = [" + targetuser + "], " +
-                "targetpw = [" + targetpw + "], linkName = [" + linkName + "] isTest = " + isTest;
+                "linkName = [" + linkName + "] isTest = " + isTest;
         System.out.println(returnString);
         try {
             TopicConnectionFactory tcfact = AQjmsFactory.getTopicConnectionFactory(sourcepdbDataSource);
