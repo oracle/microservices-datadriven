@@ -347,7 +347,7 @@ while ! state_done ORDER_DB_PASSWORD_SET; do
 done
 
 
-ps -ef | grep "$GRABDISH_HOME/utils" | grep -v
+ps -ef | grep "$GRABDISH_HOME/utils" | grep -v grep
 
 
 # Verify Setup
@@ -366,4 +366,4 @@ while ! state_done SETUP_VERIFIED; do
   else
     state_set_done SETUP_VERIFIED
   fi
-fi
+done

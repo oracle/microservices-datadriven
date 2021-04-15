@@ -22,6 +22,11 @@ WORKDIR /app
 COPY package*.json ./
 
 RUN npm install
+RUN npm install oci-common
+RUN npm install oci-secrets
+RUN npm install oci-vault
+RUN npm install oci-identity
+
 # If you are building your code for production
 # RUN npm ci --only=production
 
