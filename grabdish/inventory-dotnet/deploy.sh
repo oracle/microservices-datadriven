@@ -6,7 +6,7 @@
 SCRIPT_DIR=$(dirname $0)
 
 export DOCKER_REGISTRY="$(state_get DOCKER_REGISTRY)"
-export INVENTORY_PDB_NAME="$(state_get RUN_NAME)X1"
+export INVENTORY_PDB_NAME="$(state_get RUN_NAME)X2"
 export OCI_REGION="$(state_get OCI_REGION)"
 export VAULT_SECRET_OCID=""
 
@@ -22,7 +22,7 @@ cp inventory-dotnet-deployment.yaml inventory-dotnet-deployment-$CURRENTTIME.yam
 
 
 sed -i "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" inventory-dotnet-deployment-$CURRENTTIME.yaml
-sed -i "s|%INVENTORY_PDB_NAME%|${ORDER_PDB_NAME}|g" inventory-dotnet-deployment-${CURRENTTIME}.yaml
+sed -i "s|%INVENTORY_PDB_NAME%|${INVENTORY_PDB_NAME}|g" inventory-dotnet-deployment-${CURRENTTIME}.yaml
 sed -i "s|%OCI_REGION%|${OCI_REGION}|g" inventory-dotnet-deployment-${CURRENTTIME}.yaml
 sed -i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" inventory-dotnet-deployment-${CURRENTTIME}.yaml
 

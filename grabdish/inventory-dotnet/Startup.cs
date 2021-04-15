@@ -72,22 +72,24 @@ namespace inventory_dotnet
             //Other options include...
             //   using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, TimeSpan.MaxValue))
             //   DbProviderFactory factory = DbProviderFactories.GetFactory("Oracle.ManagedDataAccess.Client"); DbCommand oracleCommand = factory.CreateCommand();
-            OracleConfiguration.WalletLocation = Environment.GetEnvironmentVariable("TNS_ADMIN"); 
-            using (OracleConnection connection = 
-                new OracleConnection("User Id=INVENTORYUSER;Password=" + Environment.GetEnvironmentVariable("dbpassword") + 
-                ";Data Source=" + Environment.GetEnvironmentVariable("INVENTORY_PDB_NAME") + ";"))
+            String tnsAdmin = Environment.GetEnvironmentVariable("TNS_ADMIN"); 
+            OracleConfiguration.WalletLocation = tnsAdmin;
+            string connString = "User Id=INVENTORYUSER;Password=" + Environment.GetEnvironmentVariable("dbpassword") + 
+                ";Data Source=" + Environment.GetEnvironmentVariable("INVENTORY_PDB_NAME") + ";";
+            Console.WriteLine("tnsAdmin:" + tnsAdmin + " connString:" + connString);
+            using (OracleConnection connection =   new OracleConnection(connString))
 {                try
                 {
                     connection.Open();
                     while(true) {
-                Console.WriteLine("connection:" + connection);
-                OracleCommand oracleCommand = new OracleCommand();
-                oracleCommand.Connection = connection;
-                oracleCommand.CommandText = "dequeueOrderMessage";
-                oracleCommand.CommandType = CommandType.StoredProcedure;
-                OracleParameter p_orderInfoParam = new OracleParameter("p_orderInfo", OracleDbType.Varchar2, 32767);
-                p_orderInfoParam.Direction = ParameterDirection.Output;
-                oracleCommand.Parameters.Add(p_orderInfoParam);
+                        Console.WriteLine("connection:" + connection);
+                        OracleCommand oracleCommand = new OracleCommand();
+                        oracleCommand.Connection = connection;
+                        oracleCommand.CommandText = "dequeueOrderMessage";
+                        oracleCommand.CommandType = CommandType.StoredProcedure;
+                        OracleParameter p_orderInfoParam = new OracleParameter("p_orderInfo", OracleDbType.Varchar2, 32767);
+                        p_orderInfoParam.Direction = ParameterDirection.Output;
+                        oracleCommand.Parameters.Add(p_orderInfoParam);
                         oracleCommand.ExecuteNonQuery();
                         Order order = JsonConvert.DeserializeObject<Order>("" + oracleCommand.Parameters["p_orderInfo"].Value); 
                      
@@ -107,18 +109,14 @@ namespace inventory_dotnet
                         string inventoryJSON = JsonConvert.SerializeObject(inventory);
                         System.Console.WriteLine("order.itemid inventoryJSON {0}", inventoryJSON);
 
-
                         OracleCommand inventorySendMessageCommand = new OracleCommand();
                         inventorySendMessageCommand.Connection = connection;
                         inventorySendMessageCommand.CommandText = "enqueueInventoryMessage";
                         inventorySendMessageCommand.CommandType = CommandType.StoredProcedure;
                         OracleParameter p_inventoryInfoParam = new OracleParameter("p_inventoryInfo", OracleDbType.Varchar2, 32767);
                         p_inventoryInfoParam.Direction = ParameterDirection.Input;
-
                         p_inventoryInfoParam.Value = inventoryJSON;
-
                         inventorySendMessageCommand.Parameters.Add(p_inventoryInfoParam);
-
                         inventorySendMessageCommand.ExecuteNonQuery();
                     }
                 }

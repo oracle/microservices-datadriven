@@ -40,7 +40,7 @@ spec:
         - name: TNS_ADMIN
           value: "/msdataworkshop/creds"
         - name: INVENTORY_PDB_NAME
-          value: "%INVENTORY_PDB_NAME%"
+          value: "%INVENTORY_PDB_NAME%_tp"
         - name: OCI_REGION
           value: "%OCI_REGION%"
         - name: OCI_REGION
