@@ -48,6 +48,10 @@ done
 
 # Create ATP Bindings
 while ! state_done ATP_BINDINGS; do
+  while ! state_done OKE_NAMESPACE; do
+    echo "Waiting for OKE_NAMESPACE"
+    sleep 5
+  done
   cd $GRABDISH_HOME/atp-secrets-setup
   ./deleteAll.sh
   ./createAll.sh "$(state_get WALLET_ZIP_AUTH_URL)"

@@ -182,7 +182,7 @@ if ! state_done PROVISIONING; then
   echo "`date`: Waiting for terraform provisioning"
   while ! state_done PROVISIONING; do
     LOGLINE=`tail -1 $GRABDISH_LOG/terraform.log`
-    echo -ne "\r${LOGLINE:0:60}"
+    echo -ne r"\033[2K\r${LOGLINE:0:120}"
     sleep 2
   done
   echo
@@ -239,7 +239,8 @@ fi
 if ! state_done OKE_NAMESPACE; then
   echo "`date`: Waiting for kubectl configuration and msdataworkshop namespace"
   while ! state_done OKE_NAMESPACE; do
-    echo -ne "\r`tail -1 $GRABDISH_LOG/state.log`            "
+    LOGLINE=`tail -1 $GRABDISH_LOG/state.log`
+    echo -ne r"\033[2K\r${LOGLINE:0:120}"
     sleep 2
   done
   echo
@@ -346,24 +347,21 @@ while ! state_done ORDER_DB_PASSWORD_SET; do
 done
 
 
-# Wait for backgrounds
-# echo "Waiting for background processes to complete"
-jobs
-wait
+ps -ef | grep "$GRABDISH_HOME/utils" | grep -v
 
 
 # Verify Setup
-if ! state_done SETUP_VERIFIED; then
-  FAILURES=0
-  for bg in BUILD_ALL OKE_SETUP DB_SETUP PROVISIONING; do
+while ! state_done SETUP_VERIFIED; do
+  NOT_DONE=0
+  for bg in BUILD_ALL JAVA_BUILDS NON_JAVA_BUILDS OKE_SETUP DB_SETUP PROVISIONING; do
     if state_done $bg; then
       echo "$bg completed"
     else
-      echo "ERROR: $bg failed"
-      FAILURES=$(($FAILURES+1))
+      echo "$bg has not completed"
+      NOT_DONE=$((NOT_DONE+1))
     fi
   done
-  if test $FAILURES -gt 0; then
+  if test "$NOT_DONE" -gt 0; then
     echo "Log files are located in $GRABDISH_LOG"
   else
     state_set_done SETUP_VERIFIED
