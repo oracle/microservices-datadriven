@@ -10,7 +10,7 @@ fi
 
 # Create Keys
 if ! test -f ~/.oci/oci_api_key.pem; then
-  echo "If asked for a passphrase, hit return.  DO NOT ENTER A PASSPHRASE!"
+  echo "When asked for a passphrase, hit return (empty passphrase).  DO NOT ENTER A PASSPHRASE!"
   oci setup keys --overwrite --passphrase "" 
 fi
 
@@ -30,7 +30,7 @@ while ! state_done PUSH_OCI_CLI_KEY; do
 done
 
 # Get fingerprint
-FINGERPRINT=`openssl rsa -pubout -outform DER -in ~/.oci/oci_api_key.pem | openssl md5 -c | awk '{print $2}'`
+FINGERPRINT=`openssl rsa -pubout -outform DER -in ~/.oci/oci_api_key.pem 2>/dev/null | openssl md5 -c | awk '{print $2}'`
 
 # Create config file
 umask 177
