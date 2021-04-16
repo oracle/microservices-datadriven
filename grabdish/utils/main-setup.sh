@@ -36,30 +36,31 @@ done
 # Identify Run Type
 # Hopefully can identify shared loaned Oracle tenancy(ies)
 # Ask user whether they want OCI Service or Compute based workshop
-while ! state_done RUN_TYPE; do
-  PS3='Please choose how you would like to provision resources to run this workshop: '
-  options=("OCI Services" "Green Button" "On Prem")
-  select opt in "${options[@]}"
-  do
-    case "$REPLY" in
-      1|2|3)
-        state_set RUN_TYPE "$REPLY"
-        break
-        ;;
-      *) echo "invalid option";;
-    esac
-  done
-done
+#while ! state_done RUN_TYPE; do
+# PS3='Please choose how you would like to provision resources to run this workshop: '
+# options=("OCI Services" "Green Button" "On Prem")
+# select opt in "${options[@]}"
+#  do
+#    case "$REPLY" in
+#      1|2|3)
+#        state_set RUN_TYPE "$REPLY"
+#        break
+#        ;;
+#      *) echo "invalid option";;
+#    esac
+#  done
+#done
 
 
 # Get the User OCID
 while ! state_done USER_OCID; do
   read -p "Please enter your OCI user's OCID: " USER_OCID
   # Validate
-  if test ""`oci iam user get --user-id "$USER_OCID" --query 'data."lifecycle-state"' --raw-output` == 'ACTIVE'; then
+  if test ""`oci iam user get --user-id "$USER_OCID" --query 'data."lifecycle-state"' --raw-output 2>$GRABDISH_LOG/user_ocid_err` == 'ACTIVE'; then
     state_set USER_OCID "$USER_OCID"
   else
-    echo "That user could not be validated"
+    echo "That user OCID could not be validated"
+    cat $GRABDISH_LOG/user_ocid_err
   fi
 done
 
@@ -163,6 +164,28 @@ if ! state_get BUILD_ALL; then
   else
     echo "Executing build-all.sh in the background"
     nohup $GRABDISH_HOME/utils/build-all.sh &>> $GRABDISH_LOG/build-all.log &
+  fi
+fi
+
+
+## Run the java-builds.sh in the background
+if ! state_get JAVA_BUILDS; then
+  if ps -ef | grep "$GRABDISH_HOME/utils/java-builds.sh" | grep -v grep; then
+    echo "$GRABDISH_HOME/utils/java-builds.sh is already running"
+  else
+    echo "Executing java-builds.sh in the background"
+    nohup $GRABDISH_HOME/utils/java-builds.sh &>> $GRABDISH_LOG/java-builds.log &
+  fi
+fi
+
+
+# Run the non-java-builds.sh in the background
+if ! state_get NON_JAVA_BUILDS; then
+  if ps -ef | grep "$GRABDISH_HOME/utils/non-java-builds.sh" | grep -v grep; then
+    echo "$GRABDISH_HOME/utils/non-java-builds.sh is already running"
+  else
+    echo "Executing non-java-builds.sh in the background"
+    nohup $GRABDISH_HOME/utils/non-java-builds.sh &>> $GRABDISH_LOG/non-java-builds.log &
   fi
 fi
 

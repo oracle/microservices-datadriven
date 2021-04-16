@@ -50,28 +50,6 @@ while ! state_done DOCKER_REGISTRY; do
 done
 
 
-## Run the java-builds.sh in the background
-if ! state_get JAVA_BUILDS; then
-  if ps -ef | grep "$GRABDISH_HOME/utils/java-builds.sh" | grep -v grep; then
-    echo "$GRABDISH_HOME/utils/java-builds.sh is already running"
-  else
-    echo "Executing java-builds.sh in the background"
-    nohup $GRABDISH_HOME/utils/java-builds.sh &>> $GRABDISH_LOG/java-builds.log &
-  fi
-fi
-
-
-# Run the non-java-builds.sh in the background
-if ! state_get NON_JAVA_BUILDS; then
-  if ps -ef | grep "$GRABDISH_HOME/utils/non-java-builds.sh" | grep -v grep; then
-    echo "$GRABDISH_HOME/utils/non-java-builds.sh is already running"
-  else
-    echo "Executing non-java-builds.sh in the background"
-    nohup $GRABDISH_HOME/utils/non-java-builds.sh &>> $GRABDISH_LOG/non-java-builds.log &
-  fi
-fi
-
-
 # Build frontend-helidon (requires Jaeger)
 while ! state_done FRONTEND_BUILD; do
   while ! state_done JAEGER_QUERY_ADDRESS; do

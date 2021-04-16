@@ -6,6 +6,20 @@
 set -e
 
 
+# Wait for docker login
+while ! state_done DOCKER_REGISTRY; do
+  echo "Waiting for Docker Registry"
+  sleep 5
+done
+
+
+# Wait for docker login
+while ! state_done REPOS; do
+  echo "Waiting for Docker Registry"
+  sleep 5
+done
+
+
 # Build all the images (no push) except frontend-helidon (requires Jaeger)
 while ! state_done NON_JAVA_BUILDS; do
   BUILDS="inventory-python inventory-nodejs"

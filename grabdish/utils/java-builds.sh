@@ -6,6 +6,20 @@
 set -e
 
 
+# Wait for docker login
+while ! state_done DOCKER_REGISTRY; do
+  echo "Waiting for Docker Registry"
+  sleep 5
+done
+
+
+# Wait for docker login
+while ! state_done SODA; do
+  echo "Waiting for Docker Registry"
+  sleep 5
+done
+
+
 # Build all the images (no push) except frontend-helidon (requires Jaeger)
 while ! state_done JAVA_BUILDS; do
   BUILDS="admin-helidon order-helidon supplier-helidon-se inventory-helidon inventory-helidon-se"
