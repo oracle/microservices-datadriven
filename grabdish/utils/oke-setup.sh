@@ -50,8 +50,12 @@ done
 
 # Create OKE Namespace
 while ! state_done OKE_NAMESPACE; do
-  kubectl create ns msdataworkshop
-  state_set_done OKE_NAMESPACE
+  if kubectl create ns msdataworkshop; then
+    state_set_done OKE_NAMESPACE
+  else
+    echo "Failed to create namespace.  Retrying..."
+    sleep 10
+  fi
 done
 
 
@@ -64,15 +68,24 @@ done
 
 # Install Jaeger
 while ! state_done JAEGER; do
-  kubectl create -f https://tinyurl.com/yc52x6q5 -n msdataworkshop
-  state_set_done JAEGER
+  if kubectl create -f https://tinyurl.com/yc52x6q5 -n msdataworkshop 2>$GRABDISH_LOG/jaeger_err; then
+    state_set_done JAEGER
+  else
+    echo "Jaeger installation failed.  Retrying..."
+    cat $GRABDISH_LOG/jaeger_err
+    sleep 10
+  fi
 done
 
 
 # Provision Load Balancer
 while ! state_done LB; do
-  kubectl create -f $GRABDISH_HOME/frontend-helidon/frontend-service.yaml -n msdataworkshop
-  state_set_done LB
+  if kubectl create -f $GRABDISH_HOME/frontend-helidon/frontend-service.yaml -n msdataworkshop; then
+    state_set_done LB
+  else
+    echo "Load Balancer creation failed.  Retrying..."
+    sleep 10
+  fi
 done
 
 
