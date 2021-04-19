@@ -96,9 +96,9 @@ done
 # Get JAEGER_QUERY_ADDRESS
 while ! state_done JAEGER_QUERY_ADDRESS; do
   # JAEGER_IP=`kubectl get services jaeger-query -n msdataworkshop --template='{{(index .status.loadBalancer.ingress 0).ip}}'`
-  JAEGER_IP=`kubectl get service jaeger-query -n msdataworkshop | awk '/jaeger-query/ {print $4}'`
-  if [[ "$JAEGER_IP" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
-    state_set JAEGER_QUERY_ADDRESS "https://$JAEGER_IP"
+  if JAEGER_IP=`kubectl get service jaeger-query -n msdataworkshop | awk '/jaeger-query/ {print $4}'` && \
+    [[ "$JAEGER_IP" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+      state_set JAEGER_QUERY_ADDRESS "https://$JAEGER_IP"
   else
     echo "Waiting for jaeger IP to be assigned"
     sleep 10
@@ -108,7 +108,12 @@ done
 
 # Create Jaeger ConfigMap
 while ! state_done JAEGER_CONFIG_MAP; do
-  kubectl create -n msdataworkshop -f - <<!
+  if kubectl create -n msdataworkshop -f -; then
+    state_set_done JAEGER_CONFIG_MAP
+  else
+    echo "Error: Jaeger Config Map creation failed.  Retrying..."
+    sleep 5
+  fi <<!
 {
    "apiVersion": "v1",
    "kind": "ConfigMap",
@@ -120,7 +125,6 @@ while ! state_done JAEGER_CONFIG_MAP; do
    }
 }
 !
-  state_set_done JAEGER_CONFIG_MAP
 done
 
 
