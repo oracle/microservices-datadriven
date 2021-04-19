@@ -292,7 +292,13 @@ while ! state_done DB_PASSWORD; do
   BASE64_DB_PASSWORD=`echo -n "$PW" | base64`
   
   while true; do
-    if kubectl create -n msdataworkshop -f - <<!
+    if kubectl create -n msdataworkshop -f -; then
+      state_set_done DB_PASSWORD
+      break
+    else
+      echo 'Error: Creating DB Password Secret Failed.  Retrying...'
+      sleep 10
+    fi <<!
 {
    "apiVersion": "v1",
    "kind": "Secret",
@@ -305,7 +311,6 @@ while ! state_done DB_PASSWORD; do
 }
 !
   done
-  state_set_done DB_PASSWORD 
 done
 
 
@@ -328,7 +333,14 @@ while ! state_done UI_PASSWORD; do
   #Set password in vault
   BASE64_UI_PASSWORD=`echo -n "$PW" | base64`
 
-  kubectl create -n msdataworkshop -f - <<!
+  while true; do
+    if kubectl create -n msdataworkshop -f -; then
+      state_set_done UI_PASSWORD
+      break
+    else
+      echo 'Error: Creating UI Password Secret Failed.  Retrying...'
+      sleep 10
+    fi <<!
 {
    "apiVersion": "v1",
    "kind": "Secret",
@@ -340,7 +352,7 @@ while ! state_done UI_PASSWORD; do
    }
 }
 !
-  state_set_done UI_PASSWORD 
+  done
 done
 
 
