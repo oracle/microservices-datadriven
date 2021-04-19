@@ -377,7 +377,7 @@ ps -ef | grep "$GRABDISH_HOME/utils" | grep -v grep
 bgs="BUILD_ALL JAVA_BUILDS NON_JAVA_BUILDS OKE_SETUP DB_SETUP PROVISIONING"
 while ! state_done SETUP_VERIFIED; do
   NOT_DONE=0
-  bg_not_done=""
+  bg_not_done=
   for bg in $bgs; do
     if state_done $bg; then
       echo "$bg completed"

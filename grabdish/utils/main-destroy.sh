@@ -9,54 +9,33 @@ set -e
 # Switch to SSH Key auth for the oci cli (workaround to perm issue awaiting fix)
 source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
 
-# Delete Object Store
-echo "Deleting Object Store"
-# Per-auth
-PARIDS=`oci os preauth-request list --bucket-name "$(state_get RUN_NAME)" --query "join(' ',data[*].id)" --raw-output`
-for id in $PARIDS; do
-    oci os preauth-request delete --par-id "$id" --bucket-name "$(state_get RUN_NAME)" --force
-done
- 
-# Object
-if state_done WALLET_ZIP_OBJECT; then
-  oci os object delete --object-name "wallet.zip" --bucket-name "$(state_get RUN_NAME)" --force
-  state_reset WALLET_ZIP_OBJECT
+
+# Run the os-destroy.sh in the background
+if ps -ef | grep "$GRABDISH_HOME/utils/os-destroy.sh" | grep -v grep; then
+  echo "$GRABDISH_HOME/utils/os-destroy.sh is already running"
+else
+  echo "Executing os-destroy.sh in the background"
+  nohup $GRABDISH_HOME/utils/os-destroy.sh &>> $GRABDISH_LOG/os-destroy.log &
 fi
 
-# Object
-if state_done CWALLET_SSO_OBJECT; then
-  oci os object delete --object-name "cwallet.sso" --bucket-name "$(state_get RUN_NAME)" --force
-  state_reset CWALLET_SSO_OBJECT
+
+# Run the repo-destroy.sh in the background
+if ps -ef | grep "$GRABDISH_HOME/utils/repo-destroy.sh" | grep -v grep; then
+  echo "$GRABDISH_HOME/utils/repo-destroy.sh is already running"
+else
+  echo "Executing repo-destroy.sh in the background"
+  nohup $GRABDISH_HOME/utils/repo-destroy.sh &>> $GRABDISH_LOG/repo-destroy.log &
 fi
 
-# Bucket
-if state_done OBJECT_STORE_BUCKET; then
-   oci os bucket delete --force --bucket-name "$(state_get RUN_NAME)" --force
- state_reset OBJECT_STORE_BUCKET
+
+# Run the lb-destroy.sh in the background
+if ps -ef | grep "$GRABDISH_HOME/utils/lb-destroy.sh" | grep -v grep; then
+  echo "$GRABDISH_HOME/utils/lb-destroy.sh is already running"
+else
+  echo "Executing lb-destroy.sh in the background"
+  nohup $GRABDISH_HOME/utils/lb-destroy.sh &>> $GRABDISH_LOG/lb-destroy.log &
 fi
 
-# Delete Vault
-
-# Delete Images
-echo "Deleting Images"
-IIDS=`oci artifacts container image list --compartment-id "$(state_get COMPARTMENT_OCID)" --query "join(' ',data.items[*].id)" --raw-output`
-for i in $IIDS; do
-  oci artifacts container image delete --image-id "$i" --force
-done
-
-# Delete Repos
-echo "Deleting Repositories"
-REPO_IDS=`oci artifacts container repository list --compartment-id "$(state_get COMPARTMENT_OCID)" --query "join(' ', data.items[*].id)" --raw-output`
-for r in $REPO_IDS; do 
-  oci artifacts container repository delete --repository-id "$r" --force
-done
-
-# Delete LBs
-echo "Deleting Load Balancers"
-LBIDS=`oci lb load-balancer list --compartment-id "$(state_get COMPARTMENT_OCID)" --query "join(' ',data[*].id)" --raw-output`
-for lb in $LBIDS; do
-  oci lb load-balancer delete --load-balancer-id "$lb" --force
-done
 
 # Terraform Destroy
 echo "Running terraform destroy"
@@ -67,6 +46,3 @@ export TF_VAR_ociCompartmentOcid="$(state_get COMPARTMENT_OCID)"
 export TF_VAR_ociRegionIdentifier="$(state_get REGION)"
 export TF_VAR_runName="$(state_get RUN_NAME)"
 terraform destroy -auto-approve
-
-# Delete Compartment
-# oci iam compartment delete --compartment-id "$(state_get COMPARTMENT_OCID)"
