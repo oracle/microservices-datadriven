@@ -288,7 +288,7 @@ while ! state_done DB_PASSWORD; do
     fi
   done
 
-  #Set password in vault
+  #Set password in OKE secret
   BASE64_DB_PASSWORD=`echo -n "$PW" | base64`
   
   while true; do
@@ -330,7 +330,7 @@ while ! state_done UI_PASSWORD; do
     fi
   done
 
-  #Set password in vault
+  #Set password in OKE secret
   BASE64_UI_PASSWORD=`echo -n "$PW" | base64`
 
   while true; do
