@@ -291,7 +291,8 @@ while ! state_done DB_PASSWORD; do
   #Set password in vault
   BASE64_DB_PASSWORD=`echo -n "$PW" | base64`
   
-  kubectl create -n msdataworkshop -f - <<!
+  while true; do
+    if kubectl create -n msdataworkshop -f - <<!
 {
    "apiVersion": "v1",
    "kind": "Secret",
@@ -303,7 +304,7 @@ while ! state_done DB_PASSWORD; do
    }
 }
 !
-
+  done
   state_set_done DB_PASSWORD 
 done
 
