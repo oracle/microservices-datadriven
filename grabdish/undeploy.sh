@@ -5,10 +5,10 @@
 MS="frontend-helidon admin-helidon order-helidon supplier-helidon-se inventory-helidon"
 for s in $MS; do 
     echo ________________________________________
-    echo "Deploying $s..."
+    echo "Undeploying $s..."
     echo ________________________________________
     cd $GRABDISH_HOME/$s
-    ./deploy.sh
+        ./undeploy.sh
     cd $GRABDISH_HOME
 done
 

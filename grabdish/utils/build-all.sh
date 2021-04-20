@@ -33,16 +33,6 @@ while ! state_done GRAAL_IMAGE; do
 done
 
 
-# Install the Soda jar
-while ! state_done SODA; do
-  cd $GRABDISH_HOME/lib
-  mvn install:install-file -Dfile=orajsoda-1.1.0.jar -DgroupId=com.oracle \
-    -DartifactId=orajsoda -Dversion=1.1.0 -Dpackaging=jar
-  cd $GRABDISH_HOME/
-  state_set_done SODA
-done
-
-
 # Wait for docker login
 while ! state_done DOCKER_REGISTRY; do
   echo "Waiting for Docker Registry"
