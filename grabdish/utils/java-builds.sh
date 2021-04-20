@@ -15,7 +15,7 @@ done
 
 # Wait for docker login
 while ! state_done SODA; do
-  echo "Waiting for Docker Registry"
+  echo "Waiting for SODA library"
   sleep 5
 done
 
