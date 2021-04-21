@@ -379,7 +379,7 @@
                 this.menuTasks.set('lab8', { label: 'Setup (and Tear Down) Data and Messaging', title: 'Setup (and Tear Down) Data and Messaging', description: 'This lab sets up data and messaging in the database' });
                 this.menuTasks.set('lab9', { label: 'Transactional', title: 'Transactional', description: 'JSON and relational data types, AQ transactional event-driven communication, saga, event sourcing, and CQRS' });
                 this.menuTasks.set('lab9_1', { label: 'Spatial', title: 'Spatial', description: 'Spatial Data' });
-                this.menuTasks.set('lab10', { label: 'Tracing, Metrics, and Health', title: 'Tracing, Metrics, and Health', description: 'Use Helidon features to provide tracing, metrics, and health checks' });
+                this.menuTasks.set('lab10', { label: 'Metrics, and Health', title: 'Metrics, and Health', description: 'Use Helidon features to provide tracing, metrics, and health checks' });
 
                 //Drives the navigation list itself
                 this.tasks = new ArrayDataProvider(Array.from(this.menuTasks.entries()).map(entry => { entry[1].id = entry[0]; return entry[1]; }), { keyAttributes: 'id' });
