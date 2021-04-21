@@ -11,7 +11,6 @@ IMAGE_NAME=frontend-helidon
 IMAGE_VERSION=0.1
 
 export DOCKER_REGISTRY=$(state_get DOCKER_REGISTRY)
-export JAEGER_QUERY_ADDRESS=$(state_get JAEGER_QUERY_ADDRESS)
 
 if [ -z "DOCKER_REGISTRY" ]; then
     echo "Error: DOCKER_REGISTRY env variable needs to be set!"
@@ -19,9 +18,6 @@ if [ -z "DOCKER_REGISTRY" ]; then
 fi
 
 export IMAGE=${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_VERSION}
-# this is not ideal but makes it convenient to access Jaeger UI from app page...
-cp src/main/resources/web/index.html-template src/main/resources/web/index.html
-sed -i "s|%JAEGER_QUERY_ADDRESS%|${JAEGER_QUERY_ADDRESS}|g" src/main/resources/web/index.html
 
 # mvn install
 # mvn package docker:build

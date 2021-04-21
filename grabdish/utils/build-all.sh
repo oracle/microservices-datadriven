@@ -40,32 +40,5 @@ while ! state_done DOCKER_REGISTRY; do
 done
 
 
-# Build frontend-helidon (requires Jaeger)
-while ! state_done FRONTEND_BUILD; do
-  while ! state_done JAEGER_QUERY_ADDRESS; do
-    echo "Waiting for JAEGER_QUERY_ADDRESS"
-    sleep 5
-  done
-  export 
-  BUILDS="frontend-helidon"
-  for b in $BUILDS; do 
-    cd $GRABDISH_HOME/$b
-    time ./build.sh
-  done
-  state_set_done FRONTEND_BUILD
-done
-
-
-# Push all
-#while ! state_done "PUSH"; do
-#  BUILDS="frontend-helidon admin-helidon order-helidon supplier-helidon-se inventory-helidon inventory-python inventory-nodejs inventory-helidon-se"
-#  for b in $BUILDS; do 
-#    cd $GRUBDASH_HOME/$b
-#   ./push.sh
-#  done
-#  state_set_done "PUSH" 
-#done
-
-
 # Build All Done
 state_set_done BUILD_ALL

@@ -155,9 +155,6 @@
                   <oj-button disabled="[[inProgress]]" on-oj-action="[[lab10ordersetlivenesstofalseAction]]">Set Liveness to False</oj-button>
                   <oj-button disabled="[[inProgress]]" on-oj-action="[[lab10lastContainerStartTimeAction]]">Get Last Container Start Time</oj-button>
                   <br><br>
-                  <form id="jaegerLink" action="%JAEGER_QUERY_ADDRESS%" method="get" target="_blank">
-                    <input class="button button1" type="submit" value="Show Tracing" />
-                  </form>
                 </div>
               </oj-switcher>
             </div>
@@ -201,9 +198,6 @@
   <script src="https://static.oracle.com/cdn/jet/9.0.0/3rdparty/require/require.js"></script>
   <script type="text/javascript" src="https://static.oracle.com/cdn/jet/9.0.0/default/js/bundles-config.js"></script>
   <script>
-
-<!--          var jaegerQuery = 'localhost:80';-->
-<!--          document.getElementById('jaegerLink').action = 'http://' + jaegerQuery;-->
 
     (function () {
       requirejs.config({

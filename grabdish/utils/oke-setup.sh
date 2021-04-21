@@ -70,18 +70,6 @@ while ! state_done SSL_SECRET; do
 done
 
 
-# Install Jaeger
-while ! state_done JAEGER; do
-  if kubectl create -f https://tinyurl.com/yc52x6q5 -n msdataworkshop 2>$GRABDISH_LOG/jaeger_err; then
-    state_set_done JAEGER
-  else
-    echo "Jaeger installation failed.  Retrying..."
-    cat $GRABDISH_LOG/jaeger_err
-    sleep 10
-  fi
-done
-
-
 # Provision Load Balancer
 while ! state_done LB; do
   if kubectl create -f $GRABDISH_HOME/frontend-helidon/frontend-service.yaml -n msdataworkshop; then
@@ -93,38 +81,15 @@ while ! state_done LB; do
 done
 
 
-# Get JAEGER_QUERY_ADDRESS
-while ! state_done JAEGER_QUERY_ADDRESS; do
-  # JAEGER_IP=`kubectl get services jaeger-query -n msdataworkshop --template='{{(index .status.loadBalancer.ingress 0).ip}}'`
-  if JAEGER_IP=`kubectl get service jaeger-query -n msdataworkshop | awk '/jaeger-query/ {print $4}'` && \
-    [[ "$JAEGER_IP" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
-      state_set JAEGER_QUERY_ADDRESS "https://$JAEGER_IP"
+# Install Jaeger
+while ! state_done JAEGER; do
+  if kubectl create -f https://tinyurl.com/yc52x6q5 -n msdataworkshop 2>$GRABDISH_LOG/jaeger_err; then
+    state_set_done JAEGER
   else
-    echo "Waiting for jaeger IP to be assigned"
+    echo "Jaeger installation failed.  Retrying..."
+    cat $GRABDISH_LOG/jaeger_err
     sleep 10
   fi
-done
-
-
-# Create Jaeger ConfigMap
-while ! state_done JAEGER_CONFIG_MAP; do
-  if kubectl create -n msdataworkshop -f -; then
-    state_set_done JAEGER_CONFIG_MAP
-  else
-    echo "Error: Jaeger Config Map creation failed.  Retrying..."
-    sleep 5
-  fi <<!
-{
-   "apiVersion": "v1",
-   "kind": "ConfigMap",
-   "metadata": {
-      "name": "jaegerqueryaddress"
-   },
-   "data": {
-      "address": "${JAEGER_QUERY_ADDRESS}"
-   }
-}
-!
 done
 
 

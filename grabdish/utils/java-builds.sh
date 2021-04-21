@@ -15,7 +15,7 @@ done
 
 # Build all the images (no push) except frontend-helidon (requires Jaeger)
 while ! state_done JAVA_BUILDS; do
-  BUILDS="admin-helidon order-helidon supplier-helidon-se inventory-helidon inventory-helidon-se"
+  BUILDS="frontend-helidon admin-helidon order-helidon supplier-helidon-se inventory-helidon inventory-helidon-se"
   for b in $BUILDS; do 
     cd $GRABDISH_HOME/$b
     time ./build.sh
