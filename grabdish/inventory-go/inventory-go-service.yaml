@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: inventory-go
+  labels:
+    app: inventory
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 5000
+      name: http
+  selector:
+    app: inventory
