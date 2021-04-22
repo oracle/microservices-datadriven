@@ -88,7 +88,8 @@ INVENTORY_LINK=INVENTORYTOORDERLINK
 ORDER_QUEUE=ORDERQUEUE
 INVENTORY_QUEUE=INVENTORYQUEUE
 
-# Wait for Inventory DB Password
+
+# Wait for DB Password
 while ! state_done DB_PASSWORD; do
   echo "`date`: Waiting for DB_PASSWORD"
   sleep 2
@@ -104,6 +105,13 @@ while true; do
   fi
   echo "Error: Failed to get DB password.  Retrying..."
   sleep 5
+done
+
+
+# Wait for DB Password to be set in Order DB
+while ! state_done ORDER_DB_PASSWORD_SET; do
+  echo "`date`: Waiting for ORDER_DB_PASSWORD_SET"
+  sleep 2
 done
 
 
@@ -160,6 +168,13 @@ END;
 /
 !
   state_set_done ORDER_USER
+done
+
+
+# Wait for DB Password to be set in Inventory DB
+while ! state_done INVENTORY_DB_PASSWORD_SET; do
+  echo "`date`: Waiting for INVENTORY_DB_PASSWORD_SET"
+  sleep 2
 done
 
 
@@ -302,6 +317,7 @@ while ! state_done ORDER_PROPAGATION; do
   LINK=$ORDER_LINK
   Q=$ORDER_QUEUE
   sqlplus /nolog <<!
+WHENEVER SQLERROR EXIT 1
 connect $U/$DB_PASSWORD@$SVC
 BEGIN
 DBMS_AQADM.add_subscriber(
@@ -328,13 +344,14 @@ done
 
 # Inventory Queues and Propagation
 while ! state_done INVENTORY_PROPAGATION; do
-  U=$OINVENTORY_USER
+  U=$INVENTORY_USER
   SVC=$INVENTORY_DB_SVC
   TU=$ORDER_USER
   TSVC=$ORDER_DB_SVC
   LINK=$INVENTORY_LINK
   Q=$INVENTORY_QUEUE
   sqlplus /nolog <<!
+WHENEVER SQLERROR EXIT 1
 connect $U/$DB_PASSWORD@$SVC
 BEGIN
 DBMS_AQADM.add_subscriber(

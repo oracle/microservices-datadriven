@@ -12,6 +12,37 @@ if test -z "$GRABDISH_HOME"; then
 fi
 
 
+# Get the User OCID
+while ! state_done USER_OCID; do
+  read -p "Please enter your OCI user's OCID: " USER_OCID
+  # Validate
+  if test ""`oci iam user get --user-id "$USER_OCID" --query 'data."lifecycle-state"' --raw-output 2>$GRABDISH_LOG/user_ocid_err` == 'ACTIVE'; then
+    state_set USER_OCID "$USER_OCID"
+  else
+    echo "That user OCID could not be validated"
+    cat $GRABDISH_LOG/user_ocid_err
+  fi
+done
+
+
+# Get User Name
+while ! state_done USER_NAME; do
+  USER_NAME=`oci iam user get --user-id "$(state_get USER_OCID)" --query "data.name" --raw-output`
+  state_set USER_NAME "$USER_NAME"
+done
+
+
+# Identify Run Type
+while ! state_done RUN_TYPE; do
+  if [[ "$USERNAME" =~ LL[0-9]{4,4}-USER$ ]]; then
+    # Green Button
+    state_set RUN_TYPE "3"
+  else
+    state_set RUN_TYPE "1" 
+  fi
+done
+
+
 # Get Run Name from directory name
 while ! state_done RUN_NAME; do
   cd $GRABDISH_HOME
@@ -32,38 +63,6 @@ while ! state_done RUN_NAME; do
     exit
   fi
   cd $GRABDISH_HOME
-done
-
-
-# Identify Run Type
-# Hopefully can identify shared loaned Oracle tenancy(ies)
-# Ask user whether they want OCI Service or Compute based workshop
-#while ! state_done RUN_TYPE; do
-# PS3='Please choose how you would like to provision resources to run this workshop: '
-# options=("OCI Services" "Green Button" "On Prem")
-# select opt in "${options[@]}"
-#  do
-#    case "$REPLY" in
-#      1|2|3)
-#        state_set RUN_TYPE "$REPLY"
-#        break
-#        ;;
-#      *) echo "invalid option";;
-#    esac
-#  done
-#done
-
-
-# Get the User OCID
-while ! state_done USER_OCID; do
-  read -p "Please enter your OCI user's OCID: " USER_OCID
-  # Validate
-  if test ""`oci iam user get --user-id "$USER_OCID" --query 'data."lifecycle-state"' --raw-output 2>$GRABDISH_LOG/user_ocid_err` == 'ACTIVE'; then
-    state_set USER_OCID "$USER_OCID"
-  else
-    echo "That user OCID could not be validated"
-    cat $GRABDISH_LOG/user_ocid_err
-  fi
 done
 
 
@@ -115,13 +114,6 @@ fi
 while ! state_done NAMESPACE; do
   NAMESPACE=`oci os ns get --compartment-id "$(state_get COMPARTMENT_OCID)" --query "data" --raw-output`
   state_set NAMESPACE "$NAMESPACE"
-done
-
-
-# Get User Name
-while ! state_done USER_NAME; do
-  USER_NAME=`oci iam user get --user-id "$(state_get USER_OCID)" --query "data.name" --raw-output`
-  state_set USER_NAME "$USER_NAME"
 done
 
 
@@ -343,6 +335,19 @@ while ! state_done UI_PASSWORD; do
 done
 
 
+# Set admin password in order database
+while ! state_done ORDER_DB_PASSWORD_SET; do
+  # get password from vault secret
+  DB_PASSWORD=`kubectl get secret dbuser -n msdataworkshop --template={{.data.dbpassword}} | base64 --decode`
+  umask 177
+  echo '{"adminPassword": "'"$DB_PASSWORD"'"}' > temp_params
+  umask 22
+  oci db autonomous-database update --autonomous-database-id "$(state_get ORDER_DB_OCID)" --from-json "file://temp_params" >/dev/null
+  rm temp_params
+  state_set_done ORDER_DB_PASSWORD_SET
+done
+
+
 # Set admin password in inventory database
 while ! state_done INVENTORY_DB_PASSWORD_SET; do
   # get password from vault secret
@@ -354,19 +359,6 @@ while ! state_done INVENTORY_DB_PASSWORD_SET; do
   oci db autonomous-database update --autonomous-database-id "$(state_get INVENTORY_DB_OCID)" --from-json "file://temp_params" >/dev/null
   rm temp_params
   state_set_done INVENTORY_DB_PASSWORD_SET
-done
-
-
-# Set admin password in order database
-while ! state_done ORDER_DB_PASSWORD_SET; do
-  # get password from vault secret
-  DB_PASSWORD=`kubectl get secret dbuser -n msdataworkshop --template={{.data.dbpassword}} | base64 --decode`
-  umask 177
-  echo '{"adminPassword": "'"$DB_PASSWORD"'"}' > temp_params
-  umask 22
-  oci db autonomous-database update --autonomous-database-id "$(state_get ORDER_DB_OCID)" --from-json "file://temp_params" >/dev/null
-  rm temp_params
-  state_set_done ORDER_DB_PASSWORD_SET
 done
 
 
