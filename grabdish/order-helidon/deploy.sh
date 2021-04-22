@@ -6,7 +6,7 @@
 SCRIPT_DIR=$(dirname $0)
 
 export DOCKER_REGISTRY="$(state_get DOCKER_REGISTRY)"
-export ORDER_PDB_NAME="$(state_get RUN_NAME)X1"
+export ORDER_PDB_NAME="$(state_get ORDER_DB_NAME)"
 export OCI_REGION="$(state_get OCI_REGION)"
 export VAULT_SECRET_OCID=""
 

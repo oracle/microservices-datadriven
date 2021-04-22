@@ -24,8 +24,8 @@
 #export cwalletobjecturi=$(cat preauthlink.txt)
 
 export DOCKER_REGISTRY="$(state_get DOCKER_REGISTRY)"
-export ORDER_PDB_NAME="$(state_get RUN_NAME)X1"
-export INVENTORY_PDB_NAME="$(state_get RUN_NAME)X2"
+export ORDER_PDB_NAME="$(state_get ORDER_DB_NAME)"
+export INVENTORY_PDB_NAME="$(state_get INVENTORY_DB_NAME)"
 
 
 export cwalletobjecturi=$(state_get CWALLET_SSO_AUTH_URL)

@@ -34,13 +34,18 @@ done
 
 # Identify Run Type
 while ! state_done RUN_TYPE; do
-  if [[ "$USERNAME" =~ LL[0-9]{4,4}-USER$ ]]; then
+  if [[ "$USERNAME" =~ LL[0-9]{1,5}-USER$ ]]; then
     # Green Button
     state_set RUN_TYPE "3"
   else
     state_set RUN_TYPE "1" 
   fi
 done
+
+
+if test "$(state_get RUN_TYPE)" == '3'; then
+  state_set RESERVATION_ID `grep -oP '(?<=LL).*?(?=-USER)' <<<"$(state_get USER_NAME)"`
+fi
 
 
 # Get Run Name from directory name
