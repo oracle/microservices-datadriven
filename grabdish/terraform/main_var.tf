@@ -5,3 +5,5 @@ variable "ociUserOcid" {}
 variable "ociCompartmentOcid" {}
 variable "ociRegionIdentifier" {}
 variable "runName" {}
+variable "orderDbName" {}
+variable "inventoryDbName" {}

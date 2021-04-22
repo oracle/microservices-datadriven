@@ -25,6 +25,8 @@ while ! state_done RUN_NAME; do
   # Validate run name.  Must be between 1 and 12 characters, only letters or numbers, starting with letter
   if [[ "$RN" =~ [a-zA-Z][a-zA-Z0-9]{0,11}$ ]]; then
     state_set RUN_NAME "$RN"
+    state_set ORDER_DB_NAME "${RN}o"
+    state_set INVENTORY_DB_NAME "${RN}i"
   else
     echo "Invalid folder name $RN"
     exit
@@ -108,11 +110,6 @@ if ! state_get PROVISIONING; then
   fi
 fi
 
-# Run the vault-setup.sh in the background
-#if ! state_get VAULT_SETUP; then
-#  echo "Executing vault-setup.sh in the background"
-#  $GRABDISH_HOME/utils/vault-setup.sh &>> $GRABDISH_LOG/vault-setup.log &
-#fi
 
 # Get Namespace
 while ! state_done NAMESPACE; do
@@ -190,14 +187,26 @@ if ! state_get NON_JAVA_BUILDS; then
 fi
 
 
-# Wait for vault
-#if ! state_done VAULT_SETUP; then
-#  echo "`date`: Waiting for vault"
-#  while ! state_done VAULT_SETUP; do
-#    echo -ne "\r`tail -1 $GRABDISH_LOG/state.log`            "
-#    sleep 1
-#  done
-#fi
+# run oke-setup.sh in background
+if ! state_get OKE_SETUP; then
+  if ps -ef | grep "$GRABDISH_HOME/utils/oke-setup.sh" | grep -v grep; then
+    echo "$GRABDISH_HOME/utils/oke-setup.sh is already running"
+  else
+    echo "Executing oke-setup.sh in the background"
+    nohup $GRABDISH_HOME/utils/oke-setup.sh &>>$GRABDISH_LOG/oke-setup.log &
+  fi
+fi
+
+
+# run db-setup.sh in background
+if ! state_get DB_SETUP; then
+  if ps -ef | grep "$GRABDISH_HOME/utils/db-setup.sh" | grep -v grep; then
+    echo "$GRABDISH_HOME/utils/db-setup.sh is already running"
+  else
+    echo "Executing db-setup.sh in the background"
+    nohup $GRABDISH_HOME/utils/db-setup.sh &>>$GRABDISH_LOG/db-setup.log &
+  fi
+fi
 
 
 # Wait for provisioning
@@ -234,28 +243,6 @@ while ! state_done INVENTORY_DB_OCID; do
     exit
   fi
 done
-
-
-# run oke-setup.sh in background
-if ! state_get OKE_SETUP; then
-  if ps -ef | grep "$GRABDISH_HOME/utils/oke-setup.sh" | grep -v grep; then
-    echo "$GRABDISH_HOME/utils/oke-setup.sh is already running"
-  else
-    echo "Executing oke-setup.sh in the background"
-    nohup $GRABDISH_HOME/utils/oke-setup.sh &>>$GRABDISH_LOG/oke-setup.log &
-  fi
-fi
-
-
-# run db-setup.sh in background
-if ! state_get DB_SETUP; then
-  if ps -ef | grep "$GRABDISH_HOME/utils/db-setup.sh" | grep -v grep; then
-    echo "$GRABDISH_HOME/utils/db-setup.sh is already running"
-  else
-    echo "Executing db-setup.sh in the background"
-    nohup $GRABDISH_HOME/utils/db-setup.sh &>>$GRABDISH_LOG/db-setup.log &
-  fi
-fi
 
 
 # Wait for kubectl Setup
