@@ -230,6 +230,11 @@ create table inventory (
   inventoryid varchar(16) PRIMARY KEY NOT NULL, 
   inventorylocation varchar(32), 
   inventorycount integer CONSTRAINT positive_inventory CHECK (inventorycount >= 0) );
+
+insert into inventory values ('sushi', '1468 WEBSTER ST,San Francisco,CA', 0);
+insert into inventory values ('pizza', '1469 WEBSTER ST,San Francisco,CA', 0);
+insert into inventory values ('burger', '1470 WEBSTER ST,San Francisco,CA', 0);
+commit;
 !
   state_set_done INVENTORY_USER
 done
@@ -261,7 +266,7 @@ BEGIN
     hostname => '`grep -oP '(?<=host=).*?(?=\))' <<<"$TTNS"`',
     port => '`grep -oP '(?<=port=).*?(?=\))' <<<"$TTNS"`',
     service_name => '`grep -oP '(?<=service_name=).*?(?=\))' <<<"$TTNS"`',
-    ssl_server_cert_dn => '`grep -oP '(?<=ssl_server_cert_dn=).*?(?=\))' <<<"$TTNS"`',
+    ssl_server_cert_dn => '`grep -oP '(?<=ssl_server_cert_dn=\").*?(?=\"\))' <<<"$TTNS"`',
     credential_name => 'CRED',
     directory_name => 'DATA_PUMP_DIR');
 END;
@@ -296,7 +301,7 @@ BEGIN
     hostname => '`grep -oP '(?<=host=).*?(?=\))' <<<"$TTNS"`',
     port => '`grep -oP '(?<=port=).*?(?=\))' <<<"$TTNS"`',
     service_name => '`grep -oP '(?<=service_name=).*?(?=\))' <<<"$TTNS"`',
-    ssl_server_cert_dn => '`grep -oP '(?<=ssl_server_cert_dn=).*?(?=\))' <<<"$TTNS"`',
+    ssl_server_cert_dn => '`grep -oP '(?<=ssl_server_cert_dn=\").*?(?=\"\))' <<<"$TTNS"`',
     credential_name => 'CRED',
     directory_name => 'DATA_PUMP_DIR');
 END;
