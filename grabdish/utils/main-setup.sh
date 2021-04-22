@@ -33,6 +33,36 @@ while ! state_done RUN_NAME; do
 done
 
 
+# Get the User OCID
+while ! state_done USER_OCID; do
+  read -p "Please enter your OCI user's OCID: " USER_OCID
+  # Validate
+  if test ""`oci iam user get --user-id "$USER_OCID" --query 'data."lifecycle-state"' --raw-output 2>$GRABDISH_LOG/user_ocid_err` == 'ACTIVE'; then
+    state_set USER_OCID "$USER_OCID"
+  else
+    echo "That user OCID could not be validated"
+    cat $GRABDISH_LOG/user_ocid_err
+  fi
+done
+
+
+# Get User Name
+while ! state_done USER_NAME; do
+  USER_NAME=`oci iam user get --user-id "$(state_get USER_OCID)" --query "data.name" --raw-output`
+  state_set USER_NAME "$USER_NAME"
+done
+
+# Identify Run Type
+while ! state_done RUN_TYPE; do
+# Validate
+if [[ $(state_get USER_NAME) ==  “LL”????“-USER”]]; then 
+echo "User Name patterned matched GB env"
+state_set RUN_TYPE "3"
+else
+echo "Based on user name info OCI resource will be created by terraform"
+fi
+done
+
 # Identify Run Type
 # Hopefully can identify shared loaned Oracle tenancy(ies)
 # Ask user whether they want OCI Service or Compute based workshop
@@ -51,61 +81,57 @@ done
 #  done
 #done
 
-
-# Get the User OCID
-while ! state_done USER_OCID; do
-  read -p "Please enter your OCI user's OCID: " USER_OCID
-  # Validate
-  if test ""`oci iam user get --user-id "$USER_OCID" --query 'data."lifecycle-state"' --raw-output 2>$GRABDISH_LOG/user_ocid_err` == 'ACTIVE'; then
-    state_set USER_OCID "$USER_OCID"
-  else
-    echo "That user OCID could not be validated"
-    cat $GRABDISH_LOG/user_ocid_err
-  fi
-done
-
-
 # Get the tenancy OCID
 while ! state_done TENANCY_OCID; do
   state_set TENANCY_OCID "$OCI_TENANCY" # Set in cloud shell env
 done
 
-
 # Double check and then set the region
 while ! state_done REGION; do
+  if [[ $(state_get RUN_TIME) != 3 ]]; then
+  echo "Run Time value is $(state_get RUN_TIME)"
   HOME_REGION=`oci iam region-subscription list --query 'data[?"is-home-region"]."region-name" | join('\'' '\'', @)' --raw-output`
   if test "$OCI_REGION" != "$HOME_REGION"; then
-    echo "This script only works in the home OCI region.  Please switch to the $HOME_REGION and retry."
+    echo "This script only works in the home OCI region. Please switch to the $HOME_REGION and retry."
     exit
   fi
   state_set REGION "$OCI_REGION" # Set in cloud shell env
+  else
+  set CLI_HOME_PROFILE=`oci iam region-subscription list --query 'data[?"is-home-region"]."region-name" | join('\'' '\'', @)' --raw-output`
+  fi
 done
 
 
 # Create the compartment
 while ! state_done COMPARTMENT_OCID; do
+if [[ $(state_get RUN_TIME) != 3 ]]; then
   echo "Resources will be created in a new compartment named $(state_get RUN_NAME)"
   COMPARTMENT_OCID=`oci iam compartment create --compartment-id "$(state_get TENANCY_OCID)" --name "$(state_get RUN_NAME)" --description "GribDish Workshop" --query 'data.id' --raw-output`
   while ! test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output`"" == 'ACTIVE'; do
     echo "Waiting for the compartment to become ACTIVE"
     sleep 2
-  done
-  state_set COMPARTMENT_OCID "$COMPARTMENT_OCID"
+else
+ read -p "Please enter your OCI compartments's OCID: " COMPARTMENT_OCID
+fi    
+ state_set COMPARTMENT_OCID "$COMPARTMENT_OCID"
 done
 
 
 # Switch to SSH Key auth for the oci cli (workaround to perm issue awaiting fix)
 source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
 
-
 # Run the terraform.sh in the background
 if ! state_get PROVISIONING; then
+ if [[ $(state_get RUN_TIME) != 3 ]]; then
   if ps -ef | grep "$GRABDISH_HOME/utils/terraform.sh" | grep -v grep; then
     echo "$GRABDISH_HOME/utils/terraform.sh is already running"
   else
     echo "Executing terraform.sh in the background"
     nohup $GRABDISH_HOME/utils/terraform.sh &>> $GRABDISH_LOG/terraform.log &
   fi
+ else
+  echo "This is a GB environment and OCI resources have been already created."
+ fi
 fi
 
 # Run the vault-setup.sh in the background
@@ -120,17 +146,9 @@ while ! state_done NAMESPACE; do
   state_set NAMESPACE "$NAMESPACE"
 done
 
-
-# Get User Name
-while ! state_done USER_NAME; do
-  USER_NAME=`oci iam user get --user-id "$(state_get USER_OCID)" --query "data.name" --raw-output`
-  state_set USER_NAME "$USER_NAME"
-done
-
-
 # login to docker
 while ! state_done DOCKER_REGISTRY; do
-  if ! TOKEN=`oci iam auth-token create  --user-id "$(state_get USER_OCID)" --description 'grabdish docker login' --query 'data.token' --raw-output 2>$GRABDISH_LOG/docker_registry_err`; then
+  if ! TOKEN=`oci iam auth-token create  --user-id c --description 'grabdish docker login' --query 'data.token' --raw-output 2>$GRABDISH_LOG/docker_registry_err`; then
     if grep UserCapacityExceeded $GRABDISH_LOG/docker_registry_err >/dev/null; then 
       # The key already exists
       echo 'ERROR: Failed to create auth token.  Please delete an old token from the OCI Console (Profile -> User Settings -> Auth Tokens).'
