@@ -2,13 +2,8 @@ FROM golang:alpine AS builder
 RUN apk update && apk add --no-cache git build-base
 WORKDIR /src
 
-# ENV TNS_ADMIN /Users/pparkins/Downloads/Wallet_grabdish4X2
-# RUN echo TNS_ADMIN: $TNS_ADMIN
-
 COPY . .
 RUN go get -d -v
-# ENV TNS_ADMIN /Users/pparkins/Downloads/Wallet_grabdish4X2
-# RUN echo TNS_ADMIN: $TNS_ADMIN
 RUN go build -o /go/bin/inventory-go
 
 FROM alpine:latest

@@ -8,7 +8,7 @@ import (
 )
 
 func main(){
-        os.Setenv("TNS_ADMIN", "/Users/pparkins/Downloads/Wallet_grabdish4X2");
+//         os.Setenv("TNS_ADMIN", "/Users/pparkins/Downloads/Wallet_grabdish4X2");
         fmt.Println("concat os.Getenv(TNS_ADMIN):" + os.Getenv("TNS_ADMIN"));
     fmt.Printf("os.Getenv(TNS_ADMIN): %s\n", os.Getenv("TNS_ADMIN"))
         fmt.Println("About to get connection...")
@@ -34,6 +34,7 @@ func main(){
 
         rows.Scan(&thedate)
     }
+    fmt.Printf("The db is: %s\n", db)
     fmt.Printf("The date is: %s\n", thedate)
 }
 

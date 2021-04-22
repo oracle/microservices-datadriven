@@ -92,15 +92,19 @@ namespace inventory_dotnet
                         oracleCommand.Parameters.Add(p_orderInfoParam);
                         oracleCommand.ExecuteNonQuery();
                         Order order = JsonConvert.DeserializeObject<Order>("" + oracleCommand.Parameters["p_orderInfo"].Value); 
-                     
-                        // DbCommand  checkInventoryCommand = new DbCommand();
-                        // checkInventoryCommand.Connection = connection;
-                        // checkInventoryCommand.CommandText = 
-                        // @"update inventory set inventorycount = inventorycount - 1 where inventoryid = ? and inventorycount > 0 returning inventorylocation into ?";
-                        // int retVal = checkInventoryCommand.ExecuteNonQuery();
-                        // Console.WriteLine("Rows to be affected by checkInventoryCommand: {0}", retVal);
-                     
                         System.Console.WriteLine("order.itemid inventorychecked sendmessage for {0}", order.orderid);
+                     
+                        OracleCommand checkInventoryCommand = new OracleCommand();
+                        checkInventoryCommand.Connection = connection;
+                        checkInventoryCommand.CommandText = 
+                        @"update inventory set inventorycount = inventorycount - 1 where inventoryid = " + order.itemid + 
+                                            " and inventorycount > 0 returning inventorylocation into ?";
+                        OracleParameter p_inventoryCheckParam = new OracleParameter("p_orderInfo", OracleDbType.Varchar2, 32767);
+                        p_inventoryCheckParam.Direction = ParameterDirection.Output;
+                        oracleCommand.Parameters.Add(p_orderInfoParam);
+                        int retVal = checkInventoryCommand.ExecuteNonQuery();
+                        Console.WriteLine("Rows to be affected by checkInventoryCommand: {0}", retVal);
+                     
                         Inventory inventory = new Inventory();
                         inventory.inventorylocation = "Philly";
                         inventory.itemid = order.itemid;
