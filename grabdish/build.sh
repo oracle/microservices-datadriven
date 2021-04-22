@@ -65,5 +65,12 @@ cd inventory-helidon-se
 cd ../
 
 echo ________________________________________
+echo building and pushing inventory-dotnet...
+echo ________________________________________
+cd inventory-dotnet
+./build.sh
+cd ../
+
+echo ________________________________________
 echo ...finished
 echo ________________________________________
