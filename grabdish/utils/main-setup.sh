@@ -146,7 +146,7 @@ while ! state_done DOCKER_REGISTRY; do
       fi
     done
   fi
-  export OCI_CLI_PROFILE=$(state_get REGION)
+  unset OCI_CLI_PROFILE
 done
 
 

@@ -28,7 +28,7 @@ while ! state_done PUSH_OCI_CLI_KEY; do
   else
     state_set_done PUSH_OCI_CLI_KEY
   fi
-  export OCI_CLI_PROFILE=$(state_get REGION)
+  unset OCI_CLI_PROFILE
 done
 
 # Get fingerprint
@@ -38,12 +38,6 @@ FINGERPRINT=`openssl rsa -pubout -outform DER -in ~/.oci/oci_api_key.pem 2>/dev/
 umask 177
 cat >~/.oci/config <<!
 [DEFAULT]
-user=$(state_get USER_OCID)
-fingerprint=$FINGERPRINT
-key_file=~/.oci/oci_api_key.pem
-tenancy=${OCI_TENANCY}
-region=${OCI_REGION}
-[${OCI_REGION}]
 user=$(state_get USER_OCID)
 fingerprint=$FINGERPRINT
 key_file=~/.oci/oci_api_key.pem
@@ -59,6 +53,7 @@ region=${HOME_REGION}
 umask 22
 
 # unset OCI_CLI variables
+unset OCI_CLI_PROFILE
 unset OCI_CLI_CONFIG_FILE
 unset OCI_AUTH
 unset OCI_CLI_CLOUD_SHELL
