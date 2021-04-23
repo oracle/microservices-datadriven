@@ -139,13 +139,14 @@ connect $U/"$DB_PASSWORD"@$SVC
 
 BEGIN
 DBMS_AQADM.CREATE_QUEUE_TABLE (
-queue_table          => '$ORDER_QUEUE',
+queue_table          => 'ORDERQUEUETABLE',
 queue_payload_type   => 'SYS.AQ\$_JMS_TEXT_MESSAGE',
-multiple_consumers   => true);
+multiple_consumers   => true,
+compatible           => '8.1');
 
 DBMS_AQADM.CREATE_QUEUE (
 queue_name          => '$ORDER_QUEUE',
-queue_table         => '$ORDER_QUEUE');
+queue_table         => 'ORDERQUEUETABLE');
 
 DBMS_AQADM.START_QUEUE (
 queue_name          => '$ORDER_QUEUE');
@@ -154,12 +155,13 @@ END;
 
 BEGIN
 DBMS_AQADM.CREATE_QUEUE_TABLE (
-queue_table          => '$INVENTORY_QUEUE',
-queue_payload_type   => 'SYS.AQ\$_JMS_TEXT_MESSAGE');
+queue_table          => 'INVENTORYQUEUETABLE',
+queue_payload_type   => 'SYS.AQ\$_JMS_TEXT_MESSAGE',
+compatible           => '8.1');
 
 DBMS_AQADM.CREATE_QUEUE (
 queue_name          => '$INVENTORY_QUEUE',
-queue_table         => '$INVENTORY_QUEUE');
+queue_table         => 'INVENTORYQUEUETABLE');
 
 DBMS_AQADM.START_QUEUE (
 queue_name          => '$INVENTORY_QUEUE');
@@ -199,12 +201,13 @@ connect $U/"$DB_PASSWORD"@$SVC
 
 BEGIN
 DBMS_AQADM.CREATE_QUEUE_TABLE (
-queue_table          => '$ORDER_QUEUE',
-queue_payload_type   => 'SYS.AQ\$_JMS_TEXT_MESSAGE');
+queue_table          => 'ORDERQUEUETABLE',
+queue_payload_type   => 'SYS.AQ\$_JMS_TEXT_MESSAGE',
+compatible           => '8.1');
 
 DBMS_AQADM.CREATE_QUEUE (
 queue_name          => '$ORDER_QUEUE',
-queue_table         => '$ORDER_QUEUE');
+queue_table         => 'ORDERQUEUETABLE');
 
 DBMS_AQADM.START_QUEUE (
 queue_name          => '$ORDER_QUEUE');
@@ -213,13 +216,14 @@ END;
 
 BEGIN
 DBMS_AQADM.CREATE_QUEUE_TABLE (
-queue_table          => '$INVENTORY_QUEUE',
+queue_table          => 'INVENTORYQUEUETABLE',
 queue_payload_type   => 'SYS.AQ\$_JMS_TEXT_MESSAGE',
-multiple_consumers   => true);
+multiple_consumers   => true,
+compatible           => '8.1');
 
 DBMS_AQADM.CREATE_QUEUE (
 queue_name          => '$INVENTORY_QUEUE',
-queue_table         => '$INVENTORY_QUEUE');
+queue_table         => 'INVENTORYQUEUETABLE');
 
 DBMS_AQADM.START_QUEUE (
 queue_name          => '$INVENTORY_QUEUE');
@@ -325,15 +329,15 @@ connect $U/$DB_PASSWORD@$SVC
 BEGIN
 DBMS_AQADM.add_subscriber(
    queue_name=>'$Q',
-   subscriber=>sys.aq\$_agent(null,'$Q@$LINK',0),
+   subscriber=>sys.aq\$_agent(null,'$TU.$Q@$LINK',0),
    queue_to_queue => true);
 END;
 /
 
 BEGIN
 dbms_aqadm.schedule_propagation
-      (queue_name        => '$Q'
-      ,destination_queue => '$Q'
+      (queue_name        => '$U.$Q'
+      ,destination_queue => '$TU.$Q'
       ,destination       => '$LINK'
       ,start_time        => sysdate --immediately
       ,duration          => null    --until stopped
@@ -359,15 +363,15 @@ connect $U/$DB_PASSWORD@$SVC
 BEGIN
 DBMS_AQADM.add_subscriber(
    queue_name=>'$Q',
-   subscriber=>sys.aq\$_agent(null,'$Q@$LINK',0),
+   subscriber=>sys.aq\$_agent(null,'$TU.$Q@$LINK',0),
    queue_to_queue => true);
 END;
 /
 
 BEGIN
 dbms_aqadm.schedule_propagation
-      (queue_name        => '$Q'
-      ,destination_queue => '$Q'
+      (queue_name        => '$U.$Q'
+      ,destination_queue => '$TU.$Q'
       ,destination       => '$LINK'
       ,start_time        => sysdate --immediately
       ,duration          => null    --until stopped
