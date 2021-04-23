@@ -80,11 +80,8 @@ done
 # Double check and then set the region
 while ! state_done REGION; do
   HOME_REGION=`oci iam region-subscription list --query 'data[?"is-home-region"]."region-name" | join('\'' '\'', @)' --raw-output`
-  if test "$OCI_REGION" != "$HOME_REGION"; then
-    echo "This script only works in the home OCI region.  Please switch to the $HOME_REGION and retry."
-    exit
-  fi
   state_set REGION "$OCI_REGION" # Set in cloud shell env
+  state_set HOME_REGION "$HOME_REGION"
 done
 
 
@@ -124,6 +121,7 @@ done
 
 # login to docker
 while ! state_done DOCKER_REGISTRY; do
+  export OCI_CLI_PROFILE=$(state_get HOME_REGION)
   if ! TOKEN=`oci iam auth-token create  --user-id "$(state_get USER_OCID)" --description 'grabdish docker login' --query 'data.token' --raw-output 2>$GRABDISH_LOG/docker_registry_err`; then
     if grep UserCapacityExceeded $GRABDISH_LOG/docker_registry_err >/dev/null; then 
       # The key already exists
@@ -148,6 +146,7 @@ while ! state_done DOCKER_REGISTRY; do
       fi
     done
   fi
+  export OCI_CLI_PROFILE=$(state_get REGION)
 done
 
 

@@ -16,6 +16,7 @@ fi
 
 # Push Public Key to OCI
 while ! state_done PUSH_OCI_CLI_KEY; do
+  export OCI_CLI_PROFILE=$(state_get HOME_REGION)
   if ! oci iam user api-key upload --user-id $(state_get USER_OCID) --key-file ~/.oci/oci_api_key_public.pem 2>$GRABDISH_LOG/err; then
     if grep KeyAlreadyExists $GRABDISH_LOG/err >/dev/null; then 
       # The key already exists
@@ -27,6 +28,7 @@ while ! state_done PUSH_OCI_CLI_KEY; do
   else
     state_set_done PUSH_OCI_CLI_KEY
   fi
+  export OCI_CLI_PROFILE=$(state_get REGION)
 done
 
 # Get fingerprint
@@ -41,12 +43,23 @@ fingerprint=$FINGERPRINT
 key_file=~/.oci/oci_api_key.pem
 tenancy=${OCI_TENANCY}
 region=${OCI_REGION}
+[${OCI_REGION}]
+user=$(state_get USER_OCID)
+fingerprint=$FINGERPRINT
+key_file=~/.oci/oci_api_key.pem
+tenancy=${OCI_TENANCY}
+region=${OCI_REGION}
+[${HOME_REGION}]
+user=$(state_get USER_OCID)
+fingerprint=$FINGERPRINT
+key_file=~/.oci/oci_api_key.pem
+tenancy=${OCI_TENANCY}
+region=${HOME_REGION}
 !
 umask 22
 
 # unset OCI_CLI variables
 unset OCI_CLI_CONFIG_FILE
-unset OCI_CLI_PROFILE
 unset OCI_AUTH
 unset OCI_CLI_CLOUD_SHELL
 unset OCI_CLI_AUTH
