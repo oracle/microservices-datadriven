@@ -7,22 +7,28 @@
 #echo list existing buckets...
 #oci os bucket list --compartment-id $OCI_COMPARTMENT_ID
 
-echo create msdataworkshop bucket ...ignore BucketAlreadyExists exception if this is not the first time running the script...
-oci os bucket create --name msdataworkshop --compartment-id $OCI_COMPARTMENT_ID
+#cho create msdataworkshop bucket ...ignore BucketAlreadyExists exception if this is not the first time running the script...
+#oci os bucket create --name msdataworkshop --compartment-id $OCI_COMPARTMENT_ID
 
 #echo list existing buckets again...
 #oci os bucket list --compartment-id $OCI_COMPARTMENT_ID
 
-echo delete cwallet.sso in bucket ...ignore ObjectNotFound exception if this is the first time running the script...
+#echo delete cwallet.sso in bucket ...ignore ObjectNotFound exception if this is the first time running the script...
 # Will be prompted "Are you sure you want to delete this resource? [y/N]"
 
-echo put cwallet.sso in bucket ...select "y" when asked to overwrite
-oci os object put --bucket-name msdataworkshop --file $MSDATAWORKSHOP_LOCATION/atp-secrets-setup/wallet/cwallet.sso
+#echo put cwallet.sso in bucket ...select "y" when asked to overwrite
+#oci os object put --bucket-name msdataworkshop --file $MSDATAWORKSHOP_LOCATION/atp-secrets-setup/wallet/cwallet.sso
 
-echo create link to cwallet.sso in objectstorage, save, export, and echo value..
-oci os preauth-request create --access-type ObjectRead --bucket-name msdataworkshop --name msdataworkshopwallet --time-expires 2021-12-21 --object-name cwallet.sso | jq --raw-output '.data | .["access-uri"] ' > preauthlink.txt
-export cwalletobjecturi=$(cat preauthlink.txt)
-export cwalletobjecturi=https://objectstorage.${OCI_REGION}.oraclecloud.com${cwalletobjecturi}
+#echo create link to cwallet.sso in objectstorage, save, export, and echo value..
+#oci os preauth-request create --access-type ObjectRead --bucket-name msdataworkshop --name msdataworkshopwallet --time-expires 2021-12-21 --object-name cwallet.sso | jq --raw-output '.data | .["access-uri"] ' > preauthlink.txt
+#export cwalletobjecturi=$(cat preauthlink.txt)
+
+export DOCKER_REGISTRY="$(state_get DOCKER_REGISTRY)"
+export ORDER_PDB_NAME="$(state_get ORDER_DB_NAME)"
+export INVENTORY_PDB_NAME="$(state_get INVENTORY_DB_NAME)"
+
+
+export cwalletobjecturi=$(state_get CWALLET_SSO_AUTH_URL)
 echo updating admin-helidon-deployment-${CURRENTTIME}.yaml with cwalletobjecturi $cwalletobjecturi
 sed -i "s|%cwalletobjecturi%|${cwalletobjecturi}|g" admin-helidon-deployment-${CURRENTTIME}.yaml
 
@@ -31,7 +37,7 @@ echo cwalletobjecturi is created and added to admin-helidon-deployment-${CURRENT
 echo adding other values in admin-helidon-deployment-${CURRENTTIME}.yaml as parsed from tnsnames.ora s
 
 #echo ____________________________________________________
-export orderdb_tptnsentry=$(grep -i "^${ORDER_PDB_NAME}_tp " $MSDATAWORKSHOP_LOCATION/atp-secrets-setup/wallet/tnsnames.ora)
+export orderdb_tptnsentry=$(grep -i "^${ORDER_PDB_NAME}_tp " $GRABDISH_HOME/atp-secrets-setup/wallet/tnsnames.ora)
 #echo $ORDER_PDB_NAME tp entry... $orderdb_tptnsentry
 echo ____________________________________________________
 # for each variable, string off begin (based on identifier)
@@ -73,7 +79,7 @@ echo $orderssl_server_cert_dn
 
 
 #echo ____________________________________________________
-export inventorydb_tptnsentry=$(grep -i "^${INVENTORY_PDB_NAME}_tp " $MSDATAWORKSHOP_LOCATION/atp-secrets-setup/wallet/tnsnames.ora)
+export inventorydb_tptnsentry=$(grep -i "^${INVENTORY_PDB_NAME}_tp " $GRABDISH_HOME/atp-secrets-setup/wallet/tnsnames.ora)
 #echo $INVENTORY_PDB_NAME tp entry... $inventorydb_tptnsentry
 echo ____________________________________________________
 # for each variable, string off begin (based on identifier)

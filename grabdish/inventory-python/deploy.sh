@@ -5,6 +5,11 @@
 
 SCRIPT_DIR=$(dirname $0)
 
+export DOCKER_REGISTRY="$(state_get DOCKER_REGISTRY)"
+export INVENTORY_PDB_NAME="$(state_get INVENTORY_DB_NAME)"
+export OCI_REGION="$(state_get OCI_REGION)"
+export VAULT_SECRET_OCID=""
+
 echo create inventory-python-deployment deployment and service...
 export CURRENTTIME=$( date '+%F_%H:%M:%S' )
 echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated deployment yaml

@@ -10,7 +10,7 @@ then
   exit
 fi
 
-source ../msdataworkshop.properties
+#source ../msdataworkshop.properties
 export SCRIPT_DIR=$(dirname $0)
 export CURRENTTIME=$( date '+%F_%H:%M:%S' )
 echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated yamls
@@ -38,7 +38,7 @@ export inventorypdb_README=$(cat README | base64 | tr -d '\n\r' | base64 | tr -d
 export inventorypdb_sqlnet_ora=$(cat sqlnet.ora | base64 | tr -d '\n\r' | base64 | tr -d '\n\r')
 export inventorypdb_tnsnames_ora=$(cat tnsnames.ora | base64 | tr -d '\n\r' | base64 | tr -d '\n\r')
 export inventorypdb_truststore_jks=$(cat truststore.jks | base64 | tr -d '\n\r' | base64 | tr -d '\n\r')
-
+rm -rf wallet
 cd ../
 echo "replace values in order yaml files (files are suffixed with ${CURRENTTIME})..."
 eval "cat <<EOF
