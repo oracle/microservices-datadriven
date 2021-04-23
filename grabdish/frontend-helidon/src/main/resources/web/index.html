@@ -99,7 +99,7 @@
               <!-- Each Lab's UI is defined by a section in the switcher here
                  This in turn is controlled by the selected task in the navigation  -->
               <oj-switcher value="[[selectedTask]]">
-                <!-- lab7 -->
+                <!-- 
                 <div slot="lab7">
                   <oj-button disabled="[[inProgress]]" on-oj-action="[[lab7TestDatasourcesAction]]">Test Data Sources</oj-button>
                 </div>
@@ -115,6 +115,7 @@
                   <oj-button disabled="[[inProgress]]" on-oj-action="[[lab8UnschedulePropagationAction]]">Unschedule Propagation</oj-button>
                   <oj-button disabled="[[inProgress]]" on-oj-action="[[lab8DeleteUsersAction]]">Delete Users</oj-button>
                 </div>
+                -->
                 <!-- lab9 -->
                 <div slot="lab9">
                   <oj-form-layout>
@@ -155,9 +156,6 @@
                   <oj-button disabled="[[inProgress]]" on-oj-action="[[lab10ordersetlivenesstofalseAction]]">Set Liveness to False</oj-button>
                   <oj-button disabled="[[inProgress]]" on-oj-action="[[lab10lastContainerStartTimeAction]]">Get Last Container Start Time</oj-button>
                   <br><br>
-                  <form id="jaegerLink" action="%JAEGER_QUERY_ADDRESS%" method="get" target="_blank">
-                    <input class="button button1" type="submit" value="Show Tracing" />
-                  </form>
                 </div>
               </oj-switcher>
             </div>
@@ -201,9 +199,6 @@
   <script src="https://static.oracle.com/cdn/jet/9.0.0/3rdparty/require/require.js"></script>
   <script type="text/javascript" src="https://static.oracle.com/cdn/jet/9.0.0/default/js/bundles-config.js"></script>
   <script>
-
-<!--          var jaegerQuery = 'localhost:80';-->
-<!--          document.getElementById('jaegerLink').action = 'http://' + jaegerQuery;-->
 
     (function () {
       requirejs.config({
@@ -273,10 +268,10 @@
           // Key for the map matches the slot name used in the switcher
           this.menuTasks = new Map();
           this.menuTasks.set('about', { label: 'About', title: 'About the GrabDish Explorer', description: 'The GrabDish Explorer screen allows you to test the results of each lab.  Simply click the tab on the left that corresponds to the lab that you want to test out and follow the on-screen instructions.' });
-          this.menuTasks.set('lab7', { label: 'Datasources', title: 'Datasources', description: 'Verify that the Datasources are all working' });
-          this.menuTasks.set('lab8', { label: 'Setup (and Tear Down) Data and Messaging', title: 'Setup (and Tear Down) Data and Messaging', description: 'This lab sets up data and messaging in the database' });
+//          this.menuTasks.set('lab7', { label: 'Datasources', title: 'Datasources', description: 'Verify that the Datasources are all working' });
+//          this.menuTasks.set('lab8', { label: 'Setup (and Tear Down) Data and Messaging', title: 'Setup (and Tear Down) Data and Messaging', description: 'This lab sets up data and messaging in the database' });
           this.menuTasks.set('lab9', { label: 'Transactional', title: 'Transactional', description: 'JSON and relational data types, AQ transactional event-driven communication, saga, event sourcing, and CQRS' });
-          this.menuTasks.set('lab10', { label: 'OpenAPI, Tracing, Metrics, and Health', title: 'OpenAPI, Tracing, Metrics, and Health', description: 'Use Helidon features to provide OpenAPI, tracing, metrics, and health checks' });
+          this.menuTasks.set('lab10', { label: 'OpenAPI, Metrics, and Health', title: 'OpenAPI, Metrics, and Health', description: 'Use Helidon features to provide OpenAPI, tracing, metrics, and health checks' });
 
           //Drives the navigation list itself
           this.tasks = new ArrayDataProvider(Array.from(this.menuTasks.entries()).map(entry => { entry[1].id = entry[0]; return entry[1]; }), { keyAttributes: 'id' });

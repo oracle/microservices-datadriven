@@ -24,6 +24,7 @@
         <groupId>io.helidon.applications</groupId>
         <artifactId>helidon-mp</artifactId>
         <version>2.2.0</version>
+        <relativePath/>
     </parent>
 
     <properties>
@@ -46,21 +47,22 @@
 
             <plugin>
                 <groupId>com.spotify</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>1.2.2</version>
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.13</version>
+                <executions>
+                    <execution>
+                        <id>default</id>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
-                    <imageName>${docker.image.prefix}/${project.artifactId}</imageName>
-                    <baseImage>openjdk:11</baseImage>
-                    <entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
-                    <resources>
-                        <resource>
-                            <targetPath>/</targetPath>
-                            <directory>${project.build.directory}</directory>
-                        </resource>
-                    </resources>
-                    <imageTags>
-                        <imageTag>0.1</imageTag>
-                    </imageTags>
+                    <repository>${env.DOCKER_REGISTRY}/${project.artifactId}</repository>
+                    <tag>0.1</tag>
+                    <buildArgs>
+                        <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
                 </configuration>
             </plugin>
 
@@ -113,9 +115,6 @@
                                 <resource>
                                     <directory>src/main/docker</directory>
                                     <filtering>true</filtering>
-                                    <includes>
-                                        <include>Dockerfile</include>
-                                    </includes>
                                 </resource>
                             </resources>
                         </configuration>
