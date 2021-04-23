@@ -8,7 +8,7 @@ set -e
 
 # Provision Repos
 while ! state_done REPOS; do
-  BUILDS="frontend-helidon admin-helidon order-helidon supplier-helidon-se inventory-helidon inventory-python inventory-nodejs inventory-helidon-se"
+  BUILDS="frontend-helidon admin-helidon order-helidon supplier-helidon-se inventory-helidon inventory-python inventory-nodejs inventory-helidon-se inventory-dotnet inventory-go"
   for b in $BUILDS; do 
     oci artifacts container repository create --compartment-id "$(state_get COMPARTMENT_OCID)" --display-name "$(state_get RUN_NAME)/$b" --is-public true
   done

@@ -384,7 +384,7 @@ done
 
 
 # .net Inventory DB Proc
-while ! state_done DOC_NET_INVENTORY_DB_PROC; do
+while ! state_done DOT_NET_INVENTORY_DB_PROC; do
   U=$INVENTORY_USER
   SVC=$INVENTORY_DB_SVC
   sqlplus /nolog <<!
@@ -392,7 +392,7 @@ WHENEVER SQLERROR EXIT 1
 connect $U/$DB_PASSWORD@$SVC
 @$GRABDISH_HOME/inventory-dotnet/dequeueenqueue.sql
 !
-  state_set_done DOC_NET_INVENTORY_DB_PROC
+  state_set_done DOT_NET_INVENTORY_DB_PROC
 done
 
 
