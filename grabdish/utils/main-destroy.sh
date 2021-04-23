@@ -48,3 +48,6 @@ export TF_VAR_runName="$(state_get RUN_NAME)"
 export TF_VAR_orderDbName="$(state_get ORDER_DB_NAME)"
 export TF_VAR_inventoryDbName="$(state_get INVENTORY_DB_NAME)"
 terraform destroy -auto-approve
+
+# Remove from .bashrc
+sed -i.bak '/grabdish/d' ~/.bashrc
