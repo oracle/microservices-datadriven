@@ -22,7 +22,7 @@ done
 
 # Build all the images (no push) except frontend-helidon (requires Jaeger)
 while ! state_done NON_JAVA_BUILDS; do
-  BUILDS="inventory-python inventory-nodejs"
+  BUILDS="inventory-python inventory-nodejs inventory-dotnet inventory-go"
   for b in $BUILDS; do 
     cd $GRABDISH_HOME/$b
     time ./build.sh

@@ -383,5 +383,31 @@ END;
 done
 
 
+## .net Order DB Proc
+while ! state_done DOC_NET_ORDER_DB_PROC; do
+  U=$ORDER_USER
+  SVC=$ORDER_DB_SVC
+  sqlplus /nolog <<!
+WHENEVER SQLERROR EXIT 1
+connect $U/$DB_PASSWORD@$SVC
+@$GRABDISH_HOME/inventory-dotnet/dequeueenqueue.sql
+!
+  state_set_done DOC_NET_ORDER_DB_PROC
+done
+
+
+# .net Inventory DB Proc
+while ! state_done DOC_NET_INVENTORY_DB_PROC; do
+  U=$INVENTORY_USER
+  SVC=$INVENTORY_DB_SVC
+  sqlplus /nolog <<!
+WHENEVER SQLERROR EXIT 1
+connect $U/$DB_PASSWORD@$SVC
+@$GRABDISH_HOME/inventory-dotnet/dequeueenqueue.sql
+!
+  state_set_done DOC_NET_INVENTORY_DB_PROC
+done
+
+
 # DB Setup Done
 state_set_done "DB_SETUP"
