@@ -43,9 +43,7 @@ END;
 show errors
 
  
-
--- CREATE OR REPLACE PROCEDURE enqueueInventoryMessage(p_action IN VARCHAR2, p_orderid IN NUMBER)
-CREATE OR REPLACE PROCEDURE checkInventoryReturnLocation(p_inventoryId IN VARCHAR2)
+CREATE OR REPLACE PROCEDURE checkInventoryReturnLocation(p_inventoryId IN VARCHAR2, p_inventorylocation OUT varchar2)
 IS
    enqueue_options     DBMS_AQ.enqueue_options_t;
    message_properties  DBMS_AQ.message_properties_t;
@@ -64,17 +62,13 @@ BEGIN
   DBMS_OUTPUT.put_line('ID=' || l_id);
 END;
 
-  message := SYS.AQ$_JMS_TEXT_MESSAGE.construct;
-  -- message.text_vc := p_inventoryInfo;
-  message.set_text(p_inventoryInfo);
-  -- message.set_string_property('action', p_action);
-  -- message.set_int_property('orderid', p_orderid);
+  -- message := SYS.AQ$_JMS_TEXT_MESSAGE.construct;
 
-  DBMS_AQ.ENQUEUE(queue_name => 'INVENTORYQUEUE',
-           enqueue_options    => enqueue_options,
-           message_properties => message_properties,
-           payload            => message,
-           msgid              => message_handle);
+  -- DBMS_AQ.ENQUEUE(queue_name => 'INVENTORYQUEUE',
+  --          enqueue_options    => enqueue_options,
+  --          message_properties => message_properties,
+  --          payload            => message,
+  --          msgid              => message_handle);
 
   update inventory set inventorycount = inventorycount - 1 where inventoryid = ? and inventorycount > 0 returning inventorylocation into ?
 
