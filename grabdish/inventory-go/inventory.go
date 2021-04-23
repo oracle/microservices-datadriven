@@ -16,9 +16,22 @@ func main(){
     fmt.Println("os.Getenv(user): %s", user)
     fmt.Println("os.Getenv(INVENTORY_PDB_NAME): %s", inventoryPDBName)
     fmt.Println("os.Getenv(dbpassword): %s", dbpassword)
-    fmt.Println("About to get connection..." + "godror", user + "/" + dbpassword + "@" + inventoryPDBName walletLocation=" + tnsAdmin)
-//     db, err := sql.Open("godror", "INVENTORYUSER/Welcome12345@grabdish4x2_tp?TNS_ADMIN=/Users/pparkins/Downloads/Wallet_grabdish4X2")
-    db, err := sql.Open("godror", user + "/" + dbpassword + "@" + inventoryPDBName walletLocation=" + tnsAdmin)
+
+    // connectionString := user + "/" + dbpassword + "@" + inventoryPDBName
+     //+ " walletLocation=" + tnsAdmin
+    fmt.Println("About to get connection... connectionString: %s", connectionString )
+    // db, err := sql.Open("godror", connectionString + " walletLocation=" + tnsAdmin)
+
+
+    var P godror.ConnectionParams
+    P.Username, P.Password = user, dbpassword
+    P.ConnectString = inventoryPDBName
+    P.SessionTimeout = 42 * time.Second 
+    P.SetSessionParamOnInit("NLS_NUMERIC_CHARACTERS", ",.")
+    P.SetSessionParamOnInit("WALLET_LOCATION", tnsAdmin)
+    fmt.Println(P.StringWithPassword())
+    db := sql.OpenDB(godror.NewConnector(P))
+
     if err != nil {
         fmt.Println(err)
         return
