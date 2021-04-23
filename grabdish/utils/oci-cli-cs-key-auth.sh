@@ -17,7 +17,7 @@ fi
 # Push Public Key to OCI
 while ! state_done PUSH_OCI_CLI_KEY; do
   export OCI_CLI_PROFILE=$(state_get HOME_REGION)
-  if ! oci iam user api-key upload --user-id $(state_get USER_OCID) --key-file ~/.oci/oci_api_key_public.pem 2>$GRABDISH_LOG/err; then
+  if ! oci iam user api-key upload --user-id $(state_get USER_OCID) --key-file ~/.oci/oci_api_key_public.pem &>$GRABDISH_LOG/err; then
     if grep KeyAlreadyExists $GRABDISH_LOG/err >/dev/null; then 
       # The key already exists
       state_set_done PUSH_OCI_CLI_KEY
