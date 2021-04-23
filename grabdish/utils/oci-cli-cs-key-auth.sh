@@ -43,12 +43,12 @@ fingerprint=$FINGERPRINT
 key_file=~/.oci/oci_api_key.pem
 tenancy=${OCI_TENANCY}
 region=${OCI_REGION}
-[${HOME_REGION}]
+[$(state_get HOME_REGION)]
 user=$(state_get USER_OCID)
 fingerprint=$FINGERPRINT
 key_file=~/.oci/oci_api_key.pem
 tenancy=${OCI_TENANCY}
-region=${HOME_REGION}
+region=$(state_get HOME_REGION)
 !
 umask 22
 
