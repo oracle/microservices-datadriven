@@ -10,6 +10,10 @@ set -e
 source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
 
 
+# Remove from .bashrc
+sed -i.bak '/grabdish/d' ~/.bashrc
+
+
 # Run the os-destroy.sh in the background
 if ps -ef | grep "$GRABDISH_HOME/utils/os-destroy.sh" | grep -v grep; then
   echo "$GRABDISH_HOME/utils/os-destroy.sh is already running"
@@ -48,6 +52,3 @@ export TF_VAR_runName="$(state_get RUN_NAME)"
 export TF_VAR_orderDbName="$(state_get ORDER_DB_NAME)"
 export TF_VAR_inventoryDbName="$(state_get INVENTORY_DB_NAME)"
 terraform destroy -auto-approve
-
-# Remove from .bashrc
-sed -i.bak '/grabdish/d' ~/.bashrc
