@@ -167,11 +167,11 @@ namespace inventory_dotnet
 
                         //inventory status object creation (using inventory location deteremined from query above)
                         Inventory inventory = new Inventory();
-                        // inventory.inventorylocation = "Philly";
-                        inventory.inventorylocation = "" + checkInventoryReturnLocationCommand.Parameters["p_inventorylocation"].Value;
+                        var inventoryLocation = "" + checkInventoryReturnLocationCommand.Parameters["p_inventorylocation"].Value;
+                        inventory.inventorylocation = inventoryLocation.Equals("null") ? "inventorydoesnotexist" : inventoryLocation;
                         inventory.itemid = order.itemid;
                         inventory.orderid = order.orderid;
-                        inventory.suggestiveSale = "beer";
+                        inventory.suggestiveSale = inventoryLocation.Equals("null") ? "" : "beer";
                         string inventoryJSON =
                             JsonConvert.SerializeObject(inventory);
                         System
