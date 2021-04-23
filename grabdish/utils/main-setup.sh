@@ -86,7 +86,7 @@ done
 
 # Double check and then set the region
 while ! state_done REGION; do
-  if [[ $(state_get RUN_TIME) != 3 ]]; then
+  if [[ $(state_get RUN_TYPE) != 3 ]]; then
   echo "Run Time value is $(state_get RUN_TIME)"
   HOME_REGION=`oci iam region-subscription list --query 'data[?"is-home-region"]."region-name" | join('\'' '\'', @)' --raw-output`
   state_set REGION "$OCI_REGION" # Set in cloud shell env
@@ -96,7 +96,7 @@ done
 
 # Create the compartment
 while ! state_done COMPARTMENT_OCID; do
-if [[ $(state_get RUN_TIME) != 3 ]]; then
+if [[ $(state_get RUN_TYPE) != 3 ]]; then
   echo "Resources will be created in a new compartment named $(state_get RUN_NAME)"
   export OCI_CLI_PROFILE=$(state_get HOME_REGION)
   COMPARTMENT_OCID=`oci iam compartment create --compartment-id "$(state_get TENANCY_OCID)" --name "$(state_get RUN_NAME)" --description "GribDish Workshop" --query 'data.id' --raw-output`
@@ -116,7 +116,7 @@ source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
 
 # Run the terraform.sh in the background
 if ! state_get PROVISIONING; then
- if [[ $(state_get RUN_TIME) != 3 ]]; then
+ if [[ $(state_get RUN_TYPE) != 3 ]]; then
   if ps -ef | grep "$GRABDISH_HOME/utils/terraform.sh" | grep -v grep; then
     echo "$GRABDISH_HOME/utils/terraform.sh is already running"
   else
@@ -124,7 +124,7 @@ if ! state_get PROVISIONING; then
     nohup $GRABDISH_HOME/utils/terraform.sh &>> $GRABDISH_LOG/terraform.log &
   fi
  else
-  echo "This is a GB environment and OCI resources have been already created."
+  echo "OCI resources have been already created."
  fi
 fi
 
