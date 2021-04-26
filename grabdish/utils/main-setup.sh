@@ -195,6 +195,46 @@ if ! state_get DB_SETUP; then
 fi
 
 
+# Collect DB password
+while ! state_done DB_PASSWORD; do
+  echo
+  echo 'Database passwords must be 12 to 30 characters and contain at least one uppercase letter,'
+  echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
+  echo 'character or the word "admin".'
+  echo
+
+  while true; do
+    read -s -r -p "Enter the password to be used for the order and inventory databases: " PW
+      if [[ ${#PW} -ge 12 && ${#PW} -le 30 && "$PW" =~ [A-Z] && "$PW" =~ [a-z] && "$PW" =~ [0-9] && "$PW" != *admin* && "$PW" != *'"'* ]]; then
+      echo
+      break
+    else
+      echo "Invalid Password, please retry"
+    fi
+  done
+  BASE64_DB_PASSWORD=`echo -n "$PW" | base64`
+done
+
+
+# Collect UI password and create secret
+while ! state_done UI_PASSWORD; do
+  echo
+  echo 'UI passwords must be 8 to 30 characters'
+  echo
+
+  while true; do
+    read -s -r -p "Enter the password to be used for accessing the UI: " PW
+      if [[ ${#PW} -ge 8 && ${#PW} -le 30 ]]; then
+      echo
+      break
+    else
+      echo "Invalid Password, please retry"
+    fi
+  done
+  BASE64_UI_PASSWORD=`echo -n "$PW" | base64`
+done
+
+
 # Wait for provisioning
 if ! state_done PROVISIONING; then
   echo "`date`: Waiting for terraform provisioning"
@@ -245,25 +285,6 @@ fi
 
 # Collect DB password and create secret
 while ! state_done DB_PASSWORD; do
-  echo
-  echo 'Database passwords must be 12 to 30 characters and contain at least one uppercase letter,'
-  echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
-  echo 'character or the word "admin".'
-  echo
-
-  while true; do
-    read -s -r -p "Enter the password to be used for the order and inventory databases: " PW
-      if [[ ${#PW} -ge 12 && ${#PW} -le 30 && "$PW" =~ [A-Z] && "$PW" =~ [a-z] && "$PW" =~ [0-9] && "$PW" != *admin* && "$PW" != *'"'* ]]; then
-      echo
-      break
-    else
-      echo "Invalid Password, please retry"
-    fi
-  done
-
-  #Set password in OKE secret
-  BASE64_DB_PASSWORD=`echo -n "$PW" | base64`
-  
   while true; do
     if kubectl create -n msdataworkshop -f -; then
       state_set_done DB_PASSWORD
@@ -280,48 +301,6 @@ while ! state_done DB_PASSWORD; do
    },
    "data": {
       "dbpassword": "${BASE64_DB_PASSWORD}"
-   }
-}
-!
-  done
-done
-
-
-# Collect UI password and create secret
-while ! state_done UI_PASSWORD; do
-  echo
-  echo 'UI passwords must be 8 to 30 characters'
-  echo
-
-  while true; do
-    read -s -r -p "Enter the password to be used for accessing the UI: " PW
-      if [[ ${#PW} -ge 8 && ${#PW} -le 30 ]]; then
-      echo
-      break
-    else
-      echo "Invalid Password, please retry"
-    fi
-  done
-
-  #Set password in OKE secret
-  BASE64_UI_PASSWORD=`echo -n "$PW" | base64`
-
-  while true; do
-    if kubectl create -n msdataworkshop -f -; then
-      state_set_done UI_PASSWORD
-      break
-    else
-      echo 'Error: Creating UI Password Secret Failed.  Retrying...'
-      sleep 10
-    fi <<!
-{
-   "apiVersion": "v1",
-   "kind": "Secret",
-   "metadata": {
-      "name": "frontendadmin"
-   },
-   "data": {
-      "password": "${BASE64_UI_PASSWORD}"
    }
 }
 !
@@ -353,6 +332,31 @@ while ! state_done INVENTORY_DB_PASSWORD_SET; do
   oci db autonomous-database update --autonomous-database-id "$(state_get INVENTORY_DB_OCID)" --from-json "file://temp_params" >/dev/null
   rm temp_params
   state_set_done INVENTORY_DB_PASSWORD_SET
+done
+
+
+# Collect UI password and create secret
+while ! state_done UI_PASSWORD; do
+  while true; do
+    if kubectl create -n msdataworkshop -f -; then
+      state_set_done UI_PASSWORD
+      break
+    else
+      echo 'Error: Creating UI Password Secret Failed.  Retrying...'
+      sleep 10
+    fi <<!
+{
+   "apiVersion": "v1",
+   "kind": "Secret",
+   "metadata": {
+      "name": "frontendadmin"
+   },
+   "data": {
+      "password": "${BASE64_UI_PASSWORD}"
+   }
+}
+!
+  done
 done
 
 
