@@ -27,9 +27,23 @@ while ! state_done INVENTORY_DB_OCID; do
 done
 
 
-# Get DB Connection Wallet and to Object Store
+# Get Wallet
+while ! state_done WALLET_GET; do
+  cd $GRABDISH_HOME
+  mkdir wallet
+  cd wallet
+  oci db autonomous-database generate-wallet --autonomous-database-id "$(state_get ORDER_DB_OCID)" --file 'wallet.zip' --password 'Welcome1' --generate-type 'ALL'
+  unzip wallet.zip
+  cd $GRABDISH_HOME
+  state_set_done WALLET_GET
+done
+
+
+# Create Wallet in Object Store
 while ! state_done WALLET_ZIP_OBJECT; do
-  oci db autonomous-database generate-wallet --autonomous-database-id "$(state_get ORDER_DB_OCID)" --file '-' --password 'Welcome1' --generate-type 'ALL' | oci os object put --bucket-name "$(state_get RUN_NAME)" --name "wallet.zip" --file '-'
+  cd $GRABDISH_HOME/wallet
+  oci os object put --bucket-name "$(state_get RUN_NAME)" --name "wallet.zip" --file 'wallet.zip'
+  cd $GRABDISH_HOME
   state_set_done WALLET_ZIP_OBJECT
 done
 
@@ -43,12 +57,9 @@ done
 
 # Get DB Connection Wallet and to Object Store
 while ! state_done CWALLET_SSO_OBJECT; do
+  cd $GRABDISH_HOME/wallet
+  oci os object put --bucket-name "$(state_get RUN_NAME)" --name "cwallet.sso" --file 'cwallet.sso'
   cd $GRABDISH_HOME
-  mkdir wallet
-  cd wallet
-  curl -sL "$(state_get WALLET_ZIP_AUTH_URL)" --output wallet.zip ; unzip wallet.zip ; rm wallet.zip
-  cat cwallet.sso | oci os object put --bucket-name "$(state_get RUN_NAME)" --name "cwallet.sso" --file '-'
-  rm -rf wallet
   state_set_done CWALLET_SSO_OBJECT
 done
 
@@ -60,16 +71,49 @@ while ! state_done CWALLET_SSO_AUTH_URL; do
 done
 
 
+while ! state_done OKE_NAMESPACE; do
+  echo "Waiting for OKE_NAMESPACE"
+  sleep 5
+done
+
+
 # Create ATP Bindings
 while ! state_done ATP_BINDINGS; do
-  while ! state_done OKE_NAMESPACE; do
-    echo "Waiting for OKE_NAMESPACE"
-    sleep 5
-  done
   cd $GRABDISH_HOME/atp-secrets-setup
   ./deleteAll.sh
   ./createAll.sh "$(state_get WALLET_ZIP_AUTH_URL)"
   state_set_done ATP_BINDINGS
+done
+
+
+# Create Inventory ATP Bindings
+while ! state_done INVENTORY_WALLET_SECRET; do
+  cd $GRABDISH_HOME/wallet
+  cat - >sqlnet.ora <<!
+WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="/creds/sqlnet.ora")))
+SSL_SERVER_DN_MATCH=yes
+!
+  if kubectl create -f - -n msdataworkshop; then
+    state_set_done INVENTORY_WALLET_SECRET
+  else
+    echo "Error: Failure to create inventory_wallet_secret.  Retrying..."
+    sleep 5
+  fi <<!
+apiVersion: v1
+data:
+  README: $(base64 -w0 README)
+  cwallet.sso: $(base64 -w0 cwallet.sso)
+  ewallet.p12: $(base64 -w0 ewallet.p12)
+  keystore.jks: $(base64 -w0 keystore.jks)
+  ojdbc.properties: $(base64 -w0 ojdbc.properties)
+  sqlnet.ora: $(base64 -w0 sqlnet.ora)
+  tnsnames.ora: $(base64 -w0 tnsnames.ora)
+  truststore.jks: $(base64 -w0 truststore.jks)
+kind: Secret
+metadata:
+  name: inventory_wallet_secret
+!
+  cd $GRABDISH_HOME
 done
 
 
