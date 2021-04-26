@@ -113,6 +113,28 @@ if ! state_get PROVISIONING; then
 fi
 
 
+## Run the java-builds.sh in the background
+if ! state_get JAVA_BUILDS; then
+  if ps -ef | grep "$GRABDISH_HOME/utils/java-builds.sh" | grep -v grep; then
+    echo "$GRABDISH_HOME/utils/java-builds.sh is already running"
+  else
+    echo "Executing java-builds.sh in the background"
+    nohup $GRABDISH_HOME/utils/java-builds.sh &>> $GRABDISH_LOG/java-builds.log &
+  fi
+fi
+
+
+# Run the non-java-builds.sh in the background
+if ! state_get NON_JAVA_BUILDS; then
+  if ps -ef | grep "$GRABDISH_HOME/utils/non-java-builds.sh" | grep -v grep; then
+    echo "$GRABDISH_HOME/utils/non-java-builds.sh is already running"
+  else
+    echo "Executing non-java-builds.sh in the background"
+    nohup $GRABDISH_HOME/utils/non-java-builds.sh &>> $GRABDISH_LOG/non-java-builds.log &
+  fi
+fi
+
+
 # Get Namespace
 while ! state_done NAMESPACE; do
   NAMESPACE=`oci os ns get --compartment-id "$(state_get COMPARTMENT_OCID)" --query "data" --raw-output`
@@ -149,39 +171,6 @@ while ! state_done DOCKER_REGISTRY; do
   fi
   unset OCI_CLI_PROFILE
 done
-
-
-# Run the build-all.sh in the background
-if ! state_get BUILD_ALL; then
-  if ps -ef | grep "$GRABDISH_HOME/utils/build-all.sh" | grep -v grep; then
-    echo "$GRABDISH_HOME/utils/build-all.sh is already running"
-  else
-    echo "Executing build-all.sh in the background"
-    nohup $GRABDISH_HOME/utils/build-all.sh &>> $GRABDISH_LOG/build-all.log &
-  fi
-fi
-
-
-## Run the java-builds.sh in the background
-if ! state_get JAVA_BUILDS; then
-  if ps -ef | grep "$GRABDISH_HOME/utils/java-builds.sh" | grep -v grep; then
-    echo "$GRABDISH_HOME/utils/java-builds.sh is already running"
-  else
-    echo "Executing java-builds.sh in the background"
-    nohup $GRABDISH_HOME/utils/java-builds.sh &>> $GRABDISH_LOG/java-builds.log &
-  fi
-fi
-
-
-# Run the non-java-builds.sh in the background
-if ! state_get NON_JAVA_BUILDS; then
-  if ps -ef | grep "$GRABDISH_HOME/utils/non-java-builds.sh" | grep -v grep; then
-    echo "$GRABDISH_HOME/utils/non-java-builds.sh is already running"
-  else
-    echo "Executing non-java-builds.sh in the background"
-    nohup $GRABDISH_HOME/utils/non-java-builds.sh &>> $GRABDISH_LOG/non-java-builds.log &
-  fi
-fi
 
 
 # run oke-setup.sh in background
