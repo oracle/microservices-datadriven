@@ -58,8 +58,8 @@ while ! state_done RUN_NAME; do
     exit
   fi
   RN=`basename "$PWD"`
-  # Validate run name.  Must be between 1 and 12 characters, only letters or numbers, starting with letter
-  if [[ "$RN" =~ [a-zA-Z][a-zA-Z0-9]{0,11}$ ]]; then
+  # Validate run name.  Must be between 1 and 13 characters, only letters or numbers, starting with letter
+  if [[ "$RN" =~ ^[a-zA-Z][a-zA-Z0-9]{0,12}$ ]]; then
     state_set RUN_NAME "$RN"
     state_set ORDER_DB_NAME "${RN}o"
     state_set INVENTORY_DB_NAME "${RN}i"
