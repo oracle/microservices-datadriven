@@ -89,7 +89,9 @@ done
 # Create the compartment
 while ! state_done COMPARTMENT_OCID; do
   echo "Resources will be created in a new compartment named $(state_get RUN_NAME)"
+  export OCI_CLI_PROFILE=$(state_get HOME_REGION)
   COMPARTMENT_OCID=`oci iam compartment create --compartment-id "$(state_get TENANCY_OCID)" --name "$(state_get RUN_NAME)" --description "GribDish Workshop" --query 'data.id' --raw-output`
+  unset OCI_CLI_PROFILE
   while ! test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output`"" == 'ACTIVE'; do
     echo "Waiting for the compartment to become ACTIVE"
     sleep 2
@@ -137,7 +139,9 @@ fi
 
 # Get Namespace
 while ! state_done NAMESPACE; do
+  export OCI_CLI_PROFILE=$(state_get HOME_REGION)
   NAMESPACE=`oci os ns get --compartment-id "$(state_get COMPARTMENT_OCID)" --query "data" --raw-output`
+  unset OCI_CLI_PROFILE
   state_set NAMESPACE "$NAMESPACE"
 done
 
@@ -196,7 +200,7 @@ fi
 
 
 # Collect DB password
-while ! state_done DB_PASSWORD; do
+if ! state_done DB_PASSWORD; then
   echo
   echo 'Database passwords must be 12 to 30 characters and contain at least one uppercase letter,'
   echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
@@ -213,11 +217,11 @@ while ! state_done DB_PASSWORD; do
     fi
   done
   BASE64_DB_PASSWORD=`echo -n "$PW" | base64`
-done
+fi
 
 
 # Collect UI password and create secret
-while ! state_done UI_PASSWORD; do
+if ! state_done UI_PASSWORD; then
   echo
   echo 'UI passwords must be 8 to 30 characters'
   echo
@@ -232,7 +236,7 @@ while ! state_done UI_PASSWORD; do
     fi
   done
   BASE64_UI_PASSWORD=`echo -n "$PW" | base64`
-done
+fi
 
 
 # Wait for provisioning
