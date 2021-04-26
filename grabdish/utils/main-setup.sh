@@ -64,7 +64,8 @@ while ! state_done RUN_NAME; do
     state_set ORDER_DB_NAME "${RN}o"
     state_set INVENTORY_DB_NAME "${RN}i"
   else
-    echo "Invalid folder name $RN"
+    echo "Error: Invalid directory name $RN.  The directory name must be between 1 and 13 characters,"
+    echo "containing only letters or numbers, starting with a letter.  Please restart the workshop with a valid directory name."
     exit
   fi
   cd $GRABDISH_HOME
