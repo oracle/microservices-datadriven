@@ -7,12 +7,12 @@ set -e
 
 
 # Provision Repos
-while ! state_done REPOS; do
+while ! state_done NON_JAVA_REPOS; do
   BUILDS="inventory-python inventory-nodejs inventory-dotnet inventory-go"
   for b in $BUILDS; do 
     oci artifacts container repository create --compartment-id "$(state_get COMPARTMENT_OCID)" --display-name "$(state_get RUN_NAME)/$b" --is-public true
   done
-  state_set_done REPOS
+  state_set_done NON_JAVA_REPOS
 done
 
 

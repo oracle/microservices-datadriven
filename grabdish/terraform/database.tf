@@ -23,7 +23,7 @@ resource "oci_database_autonomous_database" "autonomous_database_atp" {
   compartment_id           = var.ociCompartmentOcid
   cpu_core_count           = "1"
   data_storage_size_in_tbs = "1"
-  db_name                  = "${var.orderDbName}"
+  db_name                  = var.orderDbName
   # is_free_tier = true , if there exists sufficient service limit
   is_free_tier             = false
   #Optional #db_workload = "${var.autonomous_database_db_workload}"
@@ -38,7 +38,7 @@ resource "oci_database_autonomous_database" "autonomous_database_atp2" {
   compartment_id           = var.ociCompartmentOcid
   cpu_core_count           = "1"
   data_storage_size_in_tbs = "1"
-  db_name                  = "${var.inventoryDbName}" 
+  db_name                  = var.inventoryDbName
   is_free_tier             = false
   db_workload                                    = var.autonomous_database_db_workload
   // Autonomous Database name cannot be longer than 14 characters.
