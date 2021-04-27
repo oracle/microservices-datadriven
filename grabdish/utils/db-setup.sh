@@ -90,13 +90,13 @@ done
 while ! state_done INVENTORY_WALLET_SECRET; do
   cd $GRABDISH_HOME/wallet
   cat - >sqlnet.ora <<!
-WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="/creds/sqlnet.ora")))
+WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="/msdataworkshop/creds/sqlnet.ora")))
 SSL_SERVER_DN_MATCH=yes
 !
   if kubectl create -f - -n msdataworkshop; then
     state_set_done INVENTORY_WALLET_SECRET
   else
-    echo "Error: Failure to create inventory_wallet_secret.  Retrying..."
+    echo "Error: Failure to create inventory-wallet-secret.  Retrying..."
     sleep 5
   fi <<!
 apiVersion: v1
@@ -111,14 +111,14 @@ data:
   truststore.jks: $(base64 -w0 truststore.jks)
 kind: Secret
 metadata:
-  name: inventory_wallet_secret
+  name: inventory-wallet-secret
 !
   cd $GRABDISH_HOME
 done
 
 
 # DB Connection Setup
-export TNS_ADMIN=$GRABDISH_HOME/atp-secrets-setup/wallet
+export TNS_ADMIN=$GRABDISH_HOME/wallet
 cat - >$TNS_ADMIN/sqlnet.ora <<!
 WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$TNS_ADMIN")))
 SSL_SERVER_DN_MATCH=yes
