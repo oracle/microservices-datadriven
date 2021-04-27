@@ -19,19 +19,6 @@ spec:
         app: inventory
         version: helidon-se
     spec:
-      initContainers:
-        - name: decode-creds
-          command:
-            - bash
-            - -c
-            - "for i in `ls -1 /tmp/creds | grep -v user_name`; do cat /tmp/creds/$i  | base64 --decode > /creds/$i; done; ls -l /creds/*;"
-          image: oraclelinux:7.5
-          volumeMounts:
-            - name: creds-raw
-              mountPath: /tmp/creds
-              readOnly: false
-            - name: creds
-              mountPath: /creds
       containers:
         - name: inventory
           imagePullPolicy: Always
@@ -84,8 +71,6 @@ spec:
                   optional: true #not needed/used if using VAULT_SECRET_OCID exists
       restartPolicy: Always
       volumes:
-        - name: creds-raw
-          secret:
-            secretName: atp-demo-binding-inventory
-        - name: creds
-          emptyDir: {}
+      - name: creds
+        secret:
+          secretName: db-wallet-secret

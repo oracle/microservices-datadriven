@@ -77,26 +77,17 @@ while ! state_done OKE_NAMESPACE; do
 done
 
 
-# Create ATP Bindings
-while ! state_done ATP_BINDINGS; do
-  cd $GRABDISH_HOME/atp-secrets-setup
-  ./deleteAll.sh
-  ./createAll.sh "$(state_get WALLET_ZIP_AUTH_URL)"
-  state_set_done ATP_BINDINGS
-done
-
-
 # Create Inventory ATP Bindings
-while ! state_done INVENTORY_WALLET_SECRET; do
+while ! state_done DB_WALLET_SECRET; do
   cd $GRABDISH_HOME/wallet
   cat - >sqlnet.ora <<!
-WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="/msdataworkshop/creds/sqlnet.ora")))
+WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="/msdataworkshop/creds")))
 SSL_SERVER_DN_MATCH=yes
 !
   if kubectl create -f - -n msdataworkshop; then
-    state_set_done INVENTORY_WALLET_SECRET
+    state_set_done DB_WALLET_SECRET
   else
-    echo "Error: Failure to create inventory-wallet-secret.  Retrying..."
+    echo "Error: Failure to create db-wallet-secret.  Retrying..."
     sleep 5
   fi <<!
 apiVersion: v1
@@ -111,7 +102,7 @@ data:
   truststore.jks: $(base64 -w0 truststore.jks)
 kind: Secret
 metadata:
-  name: inventory-wallet-secret
+  name: db-wallet-secret
 !
   cd $GRABDISH_HOME
 done

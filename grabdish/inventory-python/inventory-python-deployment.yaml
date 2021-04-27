@@ -71,4 +71,4 @@ spec:
       volumes:
       - name: creds
         secret:
-          secretName: inventory-wallet-secret
+          secretName: db-wallet-secret
