@@ -41,16 +41,16 @@ done
 
 # Identify Run Type
 while ! state_done RUN_TYPE; do
-  if [[ "$USERNAME" =~ LL[0-9]{1,5}-USER$ ]]; then
+  if [[ "$USERNAME" == “LL”????“-USER” ]]; then
     # Green Button
-    state_set RUN_TYPE "3"
+    state_set RUN_TYPE "1"
   else
-    state_set RUN_TYPE "1" 
+    state_set RUN_TYPE "3" 
   fi
 done
 
 
-if test "$(state_get RUN_TYPE)" == '3'; then
+if [[ $(state_get RUN_TYPE) != 3 ]]; then
   state_set RESERVATION_ID `grep -oP '(?<=LL).*?(?=-USER)' <<<"$(state_get USER_NAME)"`
 fi
 
@@ -66,6 +66,7 @@ while ! state_done RUN_NAME; do
   fi
   RN=`basename "$PWD"`
   # Validate run name.  Must be between 1 and 13 characters, only letters or numbers, starting with letter
+  if [[ $(state_get RUN_TYPE) != 3 ]]; then
   if [[ "$RN" =~ ^[a-zA-Z][a-zA-Z0-9]{0,12}$ ]]; then
     state_set RUN_NAME "$RN"
     state_set ORDER_DB_NAME "${RN}o"
@@ -74,6 +75,16 @@ while ! state_done RUN_NAME; do
     echo "Error: Invalid directory name $RN.  The directory name must be between 1 and 13 characters,"
     echo "containing only letters or numbers, starting with a letter.  Please restart the workshop with a valid directory name."
     exit
+  fi
+  else
+  if [[ "$RN" =~ [a-zA-Z][a-zA-Z0-9]{0,11}$ ]]; then
+    state_set RUN_NAME "$RN"
+    state_set ORDER_DB_NAME "ORDERDB$(state_get RESERVATION_ID)"
+    state_set INVENTORY_DB_NAME "INVENTORYDB$(state_get RESERVATION_ID)"
+   else
+    echo "Invalid folder name $RN"
+    exit
+  fi
   fi
   cd $GRABDISH_HOME
 done
@@ -254,6 +265,7 @@ fi
 
 
 # Wait for provisioning
+if [[ $(state_get RUN_TYPE) != 3 ]]; then
 if ! state_done PROVISIONING; then
   echo "`date`: Waiting for terraform provisioning"
   while ! state_done PROVISIONING; do
@@ -262,6 +274,7 @@ if ! state_done PROVISIONING; then
     sleep 2
   done
   echo
+fi
 fi
 
 
