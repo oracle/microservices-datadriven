@@ -12,6 +12,13 @@ if test -z "$GRABDISH_HOME"; then
 fi
 
 
+# Exit if we are already done
+if state_done SETUP_VERIFIED; then
+  echo "SETUP_VERIFIED completed"
+  exit
+fi
+
+
 # Get the User OCID
 while ! state_done USER_OCID; do
   read -p "Please enter your OCI user's OCID: " USER_OCID
