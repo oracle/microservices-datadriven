@@ -8,7 +8,7 @@ set -e
 
 # Create Object Store Bucket (Should be replaced by terraform one day)
 while ! state_done OBJECT_STORE_BUCKET; do
-if [[ $(state_get RUN_TYPE) != 3 ]]; then
+if test "$(state_get RUN_TYPE)" == '3'; then
   oci os bucket create --compartment-id "$(state_get COMPARTMENT_OCID)" --name "$(state_get RUN_NAME)"
   state_set_done OBJECT_STORE_BUCKET
 else
