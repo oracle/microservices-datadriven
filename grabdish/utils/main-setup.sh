@@ -76,7 +76,6 @@ while ! state_done RUN_NAME; do
     echo "containing only letters or numbers, starting with a letter.  Please restart the workshop with a valid directory name."
     exit
   fi
-<<<<<<< HEAD
   else
   if [[ "$RN" =~ [a-zA-Z][a-zA-Z0-9]{0,11}$ ]]; then
     state_set RUN_NAME "$RN"
@@ -91,60 +90,6 @@ while ! state_done RUN_NAME; do
 done
 
 
-=======
-  cd $GRABDISH_HOME
-done
-
-
-# Get the User OCID
-while ! state_done USER_OCID; do
-  read -p "Please enter your OCI user's OCID: " USER_OCID
-  # Validate
-  if test ""`oci iam user get --user-id "$USER_OCID" --query 'data."lifecycle-state"' --raw-output 2>$GRABDISH_LOG/user_ocid_err` == 'ACTIVE'; then
-    state_set USER_OCID "$USER_OCID"
-  else
-    echo "That user OCID could not be validated"
-    cat $GRABDISH_LOG/user_ocid_err
-  fi
-done
-
-
-# Get User Name
-while ! state_done USER_NAME; do
-  USER_NAME=`oci iam user get --user-id "$(state_get USER_OCID)" --query "data.name" --raw-output`
-  state_set USER_NAME "$USER_NAME"
-done
-
-# Identify Run Type
-while ! state_done RUN_TYPE; do
-# Validate
-if [[ $(state_get USER_NAME) ==  “LL”????“-USER”]]; then 
-echo "User Name patterned matched GB env"
-state_set RUN_TYPE "3"
-else
-echo "Based on user name info OCI resource will be created by terraform"
-fi
-done
-
-# Identify Run Type
-# Hopefully can identify shared loaned Oracle tenancy(ies)
-# Ask user whether they want OCI Service or Compute based workshop
-#while ! state_done RUN_TYPE; do
-# PS3='Please choose how you would like to provision resources to run this workshop: '
-# options=("OCI Services" "Green Button" "On Prem")
-# select opt in "${options[@]}"
-#  do
-#    case "$REPLY" in
-#      1|2|3)
-#        state_set RUN_TYPE "$REPLY"
-#        break
-#        ;;
-#      *) echo "invalid option";;
-#    esac
-#  done
-#done
-
->>>>>>> 39482057512fc977d09b48f58aaf19e87be6814b
 # Get the tenancy OCID
 while ! state_done TENANCY_OCID; do
   state_set TENANCY_OCID "$OCI_TENANCY" # Set in cloud shell env
@@ -155,19 +100,8 @@ while ! state_done REGION; do
   if [[ $(state_get RUN_TYPE) != 3 ]]; then
   echo "Run Time value is $(state_get RUN_TIME)"
   HOME_REGION=`oci iam region-subscription list --query 'data[?"is-home-region"]."region-name" | join('\'' '\'', @)' --raw-output`
-<<<<<<< HEAD
   state_set REGION "$OCI_REGION" # Set in cloud shell env
   state_set HOME_REGION "$HOME_REGION"
-=======
-  if test "$OCI_REGION" != "$HOME_REGION"; then
-    echo "This script only works in the home OCI region. Please switch to the $HOME_REGION and retry."
-    exit
-  fi
-  state_set REGION "$OCI_REGION" # Set in cloud shell env
-  else
-  set CLI_HOME_PROFILE=`oci iam region-subscription list --query 'data[?"is-home-region"]."region-name" | join('\'' '\'', @)' --raw-output`
-  fi
->>>>>>> 39482057512fc977d09b48f58aaf19e87be6814b
 done
 
 
@@ -203,7 +137,6 @@ if ! state_get PROVISIONING; then
  else
   echo "OCI resources have been already created."
  fi
-<<<<<<< HEAD
 fi
 
 
@@ -226,8 +159,6 @@ if ! state_get NON_JAVA_BUILDS; then
     echo "Executing non-java-builds.sh in the background"
     nohup $GRABDISH_HOME/utils/non-java-builds.sh &>> $GRABDISH_LOG/non-java-builds.log &
   fi
-=======
->>>>>>> 39482057512fc977d09b48f58aaf19e87be6814b
 fi
 
 
@@ -239,17 +170,11 @@ while ! state_done NAMESPACE; do
   state_set NAMESPACE "$NAMESPACE"
 done
 
-<<<<<<< HEAD
 
 # login to docker
 while ! state_done DOCKER_REGISTRY; do
   export OCI_CLI_PROFILE=$(state_get HOME_REGION)
   if ! TOKEN=`oci iam auth-token create  --user-id "$(state_get USER_OCID)" --description 'grabdish docker login' --query 'data.token' --raw-output 2>$GRABDISH_LOG/docker_registry_err`; then
-=======
-# login to docker
-while ! state_done DOCKER_REGISTRY; do
-  if ! TOKEN=`oci iam auth-token create  --user-id c --description 'grabdish docker login' --query 'data.token' --raw-output 2>$GRABDISH_LOG/docker_registry_err`; then
->>>>>>> 39482057512fc977d09b48f58aaf19e87be6814b
     if grep UserCapacityExceeded $GRABDISH_LOG/docker_registry_err >/dev/null; then 
       # The key already exists
       echo 'ERROR: Failed to create auth token.  Please delete an old token from the OCI Console (Profile -> User Settings -> Auth Tokens).'
