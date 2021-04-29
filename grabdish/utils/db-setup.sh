@@ -62,24 +62,41 @@ done
 
 # Create Authenticated Link to Wallet
 while ! state_done WALLET_ZIP_AUTH_URL; do
+if [[ $(state_get RUN_TYPE) != 3 ]]; then
   ACCESS_URI=`oci os preauth-request create --object-name 'wallet.zip' --access-type 'ObjectRead' --bucket-name "$(state_get RUN_NAME)" --name 'grabdish' --time-expires $(date '+%Y-%m-%d' --date '+7 days') --query 'data."access-uri"' --raw-output`
   state_set WALLET_ZIP_AUTH_URL "https://objectstorage.$(state_get REGION).oraclecloud.com${ACCESS_URI}"
+else
+  ACCESS_URI=`oci os preauth-request create --object-name 'wallet.zip' --access-type 'ObjectRead' --bucket-name "$(state_get RUN_NAME)$(state_get RESERVATION_ID)" --name 'grabdish' --time-expires $(date '+%Y-%m-%d' --date '+7 days') --query 'data."access-uri"' --raw-output`
+  state_set WALLET_ZIP_AUTH_URL "https://objectstorage.$(state_get REGION).oraclecloud.com${ACCESS_URI}"
+fi
 done
 
 
 # Get DB Connection Wallet and to Object Store
 while ! state_done CWALLET_SSO_OBJECT; do
+if [[ $(state_get RUN_TYPE) != 3 ]]; then
   cd $GRABDISH_HOME/wallet
   oci os object put --bucket-name "$(state_get RUN_NAME)" --name "cwallet.sso" --file 'cwallet.sso'
   cd $GRABDISH_HOME
   state_set_done CWALLET_SSO_OBJECT
+ else
+  cd $GRABDISH_HOME/wallet
+  oci os object put --bucket-name "$(state_get RUN_NAME)$(state_get RESERVATION_ID)" --name "cwallet.sso" --file 'cwallet.sso'
+  cd $GRABDISH_HOME
+  state_set_done CWALLET_SSO_OBJECT
+ fi 
 done
 
 
 # Create Authenticated Link to Wallet
 while ! state_done CWALLET_SSO_AUTH_URL; do
+if [[ $(state_get RUN_TYPE) != 3 ]]; then
   ACCESS_URI=`oci os preauth-request create --object-name 'cwallet.sso' --access-type 'ObjectRead' --bucket-name "$(state_get RUN_NAME)" --name 'grabdish' --time-expires $(date '+%Y-%m-%d' --date '+7 days') --query 'data."access-uri"' --raw-output`
   state_set CWALLET_SSO_AUTH_URL "https://objectstorage.$(state_get REGION).oraclecloud.com${ACCESS_URI}"
+else
+  ACCESS_URI=`oci os preauth-request create --object-name 'cwallet.sso' --access-type 'ObjectRead' --bucket-name "$(state_get RUN_NAME)$(state_get RESERVATION_ID)" --name 'grabdish' --time-expires $(date '+%Y-%m-%d' --date '+7 days') --query 'data."access-uri"' --raw-output`
+  state_set CWALLET_SSO_AUTH_URL "https://objectstorage.$(state_get REGION).oraclecloud.com${ACCESS_URI}"
+fi
 done
 
 
