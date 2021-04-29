@@ -35,6 +35,6 @@ alias secrets='kubectl get secrets --all-namespaces'
 alias ingresssecret='kubectl get secrets --all-namespaces | grep istio-ingressgateway-certs'
 alias virtualservices='kubectl get virtualservices --all-namespaces'
 alias deployments='kubectl get deployments --all-namespaces'
-alias msdataworkshop='echo deployments... ; deployments|grep msdataworkshop ; echo pods... ; pods|grep msdataworkshop ; echo services... ; services | grep msdataworkshop ; echo secrets... ; secrets|grep msdataworkshop ; echo "other shortcut commands... most can take partial podname as argument, such as [logpod front] or [deletepod order]...  pods  services secrets deployments " ; ls $MSDATAWORKSHOP_LOCATION/utils/'
+alias msdataworkshop='echo deployments... ; deployments|grep msdataworkshop ; echo pods... ; pods|grep msdataworkshop ; echo services... ; services | grep msdataworkshop ; echo secrets... ; secrets|grep msdataworkshop ; echo "other shortcut commands... most can take partial podname as argument, such as [logpod front] or [deletepod order]...  pods  services secrets deployments "'
 
 export PATH=$PATH:$GRABDISH_HOME/utils/

@@ -17,19 +17,6 @@ spec:
         app: inventory
         version: python
     spec:
-      initContainers:
-      - name: decode-creds
-        command:
-        - bash
-        - -c
-        - "for i in `ls -1 /tmp/creds | grep -v user_name`; do cat /tmp/creds/$i  | base64 --decode > /creds/$i; done; ls -l /creds/*; sed -i 's|?/network/admin|/msdataworkshop/creds|g' /creds/sqlnet.ora"
-        image: oraclelinux:7.5
-        volumeMounts:
-        - name: creds-raw
-          mountPath: /tmp/creds
-          readOnly: false
-        - name: creds
-          mountPath: /creds
       containers:
       - name: inventory
         image: %DOCKER_REGISTRY%/inventory-python:0.1
@@ -82,8 +69,6 @@ spec:
           mountPath: /msdataworkshop/creds
       restartPolicy: Always
       volumes:
-      - name: creds-raw
-        secret:
-          secretName: atp-demo-binding-inventory
       - name: creds
-        emptyDir: {}
+        secret:
+          secretName: db-wallet-secret

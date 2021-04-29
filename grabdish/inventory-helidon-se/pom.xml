@@ -18,25 +18,25 @@
     <parent>
         <groupId>io.helidon.applications</groupId>
         <artifactId>helidon-se</artifactId>
-        <version>2.2.0</version>
+        <version>1.4.3</version>
         <relativePath/>
     </parent>
+
      <properties>
-        <helidon.version>1.4.0</helidon.version>
         <mainClass>com.helidon.se.Main</mainClass>
         <libs.classpath.prefix>libs</libs.classpath.prefix>
         <copied.libs.dir>${project.build.directory}/${libs.classpath.prefix}</copied.libs.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <argLine>-Dfile.encoding=UTF-8</argLine>
-        <docker.image.prefix>${env.DOCKER_REGISTRY}</docker.image.prefix>
+        <helidon.version>${project.parent.version}</helidon.version>
         <logback.version>1.2.3</logback.version>
         <jul-to-slf4j.version>1.7.30</jul-to-slf4j.version>
         <junit.version>4.13.1</junit.version>
         <jackson.version>2.10.5.1</jackson.version>
         <lombok.version>1.18.2</lombok.version>
-        <ojdbc10.version>19.3.0.0</ojdbc10.version>
-        <helidon.version>1.4.3</helidon.version>
+        <ojdbc.version>19.8.0.0</ojdbc.version>
+        <ocisdk.version>1.32.2</ocisdk.version>
     </properties>
 
     <build>
@@ -188,18 +188,18 @@
         <dependency>
             <groupId>com.oracle.database.jdbc</groupId>
             <artifactId>ojdbc8-production</artifactId>
-            <version>19.8.0.0</version>
+            <version>${ojdbc.version}</version>
             <type>pom</type>
         </dependency>
         <dependency>
             <groupId>com.oracle.database.xml</groupId>
             <artifactId>xdb</artifactId>
-            <version>${ojdbc10.version}</version>
+            <version>${ojdbc.version}</version>
         </dependency>
         <dependency>
             <groupId>com.oracle.database.messaging</groupId>
             <artifactId>aqapi</artifactId>
-            <version>${ojdbc10.version}</version>
+            <version>19.3.0.0</version>
         </dependency>
         <dependency>
             <groupId>javax.transaction</groupId>
@@ -227,19 +227,23 @@
             <version>${helidon.version}</version>
         </dependency>
         <dependency>
+            <groupId>io.helidon.media.jsonp</groupId>
+            <artifactId>helidon-media-jsonp-server</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.oracle.oci.sdk</groupId>
             <artifactId>oci-java-sdk-vault</artifactId>
-            <version>1.32.2</version>
+            <version>${ocisdk.version}</version>
         </dependency>
         <dependency>
             <groupId>com.oracle.oci.sdk</groupId>
             <artifactId>oci-java-sdk-common</artifactId>
-            <version>1.32.2</version>
+            <version>${ocisdk.version}</version>
         </dependency>
         <dependency>
             <groupId>com.oracle.oci.sdk</groupId>
             <artifactId>oci-java-sdk-secrets</artifactId>
-            <version>1.32.2</version>
+            <version>${ocisdk.version}</version>
         </dependency>
     </dependencies>
 </project>

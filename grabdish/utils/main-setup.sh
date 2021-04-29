@@ -12,6 +12,13 @@ if test -z "$GRABDISH_HOME"; then
 fi
 
 
+# Exit if we are already done
+if state_done SETUP_VERIFIED; then
+  echo "SETUP_VERIFIED completed"
+  exit
+fi
+
+
 # Get the User OCID
 while ! state_done USER_OCID; do
   read -p "Please enter your OCI user's OCID: " USER_OCID
@@ -89,7 +96,9 @@ done
 # Create the compartment
 while ! state_done COMPARTMENT_OCID; do
   echo "Resources will be created in a new compartment named $(state_get RUN_NAME)"
+  export OCI_CLI_PROFILE=$(state_get HOME_REGION)
   COMPARTMENT_OCID=`oci iam compartment create --compartment-id "$(state_get TENANCY_OCID)" --name "$(state_get RUN_NAME)" --description "GribDish Workshop" --query 'data.id' --raw-output`
+  unset OCI_CLI_PROFILE
   while ! test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output`"" == 'ACTIVE'; do
     echo "Waiting for the compartment to become ACTIVE"
     sleep 2
@@ -113,9 +122,33 @@ if ! state_get PROVISIONING; then
 fi
 
 
+## Run the java-builds.sh in the background
+if ! state_get JAVA_BUILDS; then
+  if ps -ef | grep "$GRABDISH_HOME/utils/java-builds.sh" | grep -v grep; then
+    echo "$GRABDISH_HOME/utils/java-builds.sh is already running"
+  else
+    echo "Executing java-builds.sh in the background"
+    nohup $GRABDISH_HOME/utils/java-builds.sh &>> $GRABDISH_LOG/java-builds.log &
+  fi
+fi
+
+
+# Run the non-java-builds.sh in the background
+if ! state_get NON_JAVA_BUILDS; then
+  if ps -ef | grep "$GRABDISH_HOME/utils/non-java-builds.sh" | grep -v grep; then
+    echo "$GRABDISH_HOME/utils/non-java-builds.sh is already running"
+  else
+    echo "Executing non-java-builds.sh in the background"
+    nohup $GRABDISH_HOME/utils/non-java-builds.sh &>> $GRABDISH_LOG/non-java-builds.log &
+  fi
+fi
+
+
 # Get Namespace
 while ! state_done NAMESPACE; do
+  export OCI_CLI_PROFILE=$(state_get HOME_REGION)
   NAMESPACE=`oci os ns get --compartment-id "$(state_get COMPARTMENT_OCID)" --query "data" --raw-output`
+  unset OCI_CLI_PROFILE
   state_set NAMESPACE "$NAMESPACE"
 done
 
@@ -151,39 +184,6 @@ while ! state_done DOCKER_REGISTRY; do
 done
 
 
-# Run the build-all.sh in the background
-if ! state_get BUILD_ALL; then
-  if ps -ef | grep "$GRABDISH_HOME/utils/build-all.sh" | grep -v grep; then
-    echo "$GRABDISH_HOME/utils/build-all.sh is already running"
-  else
-    echo "Executing build-all.sh in the background"
-    nohup $GRABDISH_HOME/utils/build-all.sh &>> $GRABDISH_LOG/build-all.log &
-  fi
-fi
-
-
-## Run the java-builds.sh in the background
-if ! state_get JAVA_BUILDS; then
-  if ps -ef | grep "$GRABDISH_HOME/utils/java-builds.sh" | grep -v grep; then
-    echo "$GRABDISH_HOME/utils/java-builds.sh is already running"
-  else
-    echo "Executing java-builds.sh in the background"
-    nohup $GRABDISH_HOME/utils/java-builds.sh &>> $GRABDISH_LOG/java-builds.log &
-  fi
-fi
-
-
-# Run the non-java-builds.sh in the background
-if ! state_get NON_JAVA_BUILDS; then
-  if ps -ef | grep "$GRABDISH_HOME/utils/non-java-builds.sh" | grep -v grep; then
-    echo "$GRABDISH_HOME/utils/non-java-builds.sh is already running"
-  else
-    echo "Executing non-java-builds.sh in the background"
-    nohup $GRABDISH_HOME/utils/non-java-builds.sh &>> $GRABDISH_LOG/non-java-builds.log &
-  fi
-fi
-
-
 # run oke-setup.sh in background
 if ! state_get OKE_SETUP; then
   if ps -ef | grep "$GRABDISH_HOME/utils/oke-setup.sh" | grep -v grep; then
@@ -203,6 +203,46 @@ if ! state_get DB_SETUP; then
     echo "Executing db-setup.sh in the background"
     nohup $GRABDISH_HOME/utils/db-setup.sh &>>$GRABDISH_LOG/db-setup.log &
   fi
+fi
+
+
+# Collect DB password
+if ! state_done DB_PASSWORD; then
+  echo
+  echo 'Database passwords must be 12 to 30 characters and contain at least one uppercase letter,'
+  echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
+  echo 'character or the word "admin".'
+  echo
+
+  while true; do
+    read -s -r -p "Enter the password to be used for the order and inventory databases: " PW
+      if [[ ${#PW} -ge 12 && ${#PW} -le 30 && "$PW" =~ [A-Z] && "$PW" =~ [a-z] && "$PW" =~ [0-9] && "$PW" != *admin* && "$PW" != *'"'* ]]; then
+      echo
+      break
+    else
+      echo "Invalid Password, please retry"
+    fi
+  done
+  BASE64_DB_PASSWORD=`echo -n "$PW" | base64`
+fi
+
+
+# Collect UI password and create secret
+if ! state_done UI_PASSWORD; then
+  echo
+  echo 'UI passwords must be 8 to 30 characters'
+  echo
+
+  while true; do
+    read -s -r -p "Enter the password to be used for accessing the UI: " PW
+      if [[ ${#PW} -ge 8 && ${#PW} -le 30 ]]; then
+      echo
+      break
+    else
+      echo "Invalid Password, please retry"
+    fi
+  done
+  BASE64_UI_PASSWORD=`echo -n "$PW" | base64`
 fi
 
 
@@ -256,25 +296,6 @@ fi
 
 # Collect DB password and create secret
 while ! state_done DB_PASSWORD; do
-  echo
-  echo 'Database passwords must be 12 to 30 characters and contain at least one uppercase letter,'
-  echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
-  echo 'character or the word "admin".'
-  echo
-
-  while true; do
-    read -s -r -p "Enter the password to be used for the order and inventory databases: " PW
-      if [[ ${#PW} -ge 12 && ${#PW} -le 30 && "$PW" =~ [A-Z] && "$PW" =~ [a-z] && "$PW" =~ [0-9] && "$PW" != *admin* && "$PW" != *'"'* ]]; then
-      echo
-      break
-    else
-      echo "Invalid Password, please retry"
-    fi
-  done
-
-  #Set password in OKE secret
-  BASE64_DB_PASSWORD=`echo -n "$PW" | base64`
-  
   while true; do
     if kubectl create -n msdataworkshop -f -; then
       state_set_done DB_PASSWORD
@@ -291,48 +312,6 @@ while ! state_done DB_PASSWORD; do
    },
    "data": {
       "dbpassword": "${BASE64_DB_PASSWORD}"
-   }
-}
-!
-  done
-done
-
-
-# Collect UI password and create secret
-while ! state_done UI_PASSWORD; do
-  echo
-  echo 'UI passwords must be 8 to 30 characters'
-  echo
-
-  while true; do
-    read -s -r -p "Enter the password to be used for accessing the UI: " PW
-      if [[ ${#PW} -ge 8 && ${#PW} -le 30 ]]; then
-      echo
-      break
-    else
-      echo "Invalid Password, please retry"
-    fi
-  done
-
-  #Set password in OKE secret
-  BASE64_UI_PASSWORD=`echo -n "$PW" | base64`
-
-  while true; do
-    if kubectl create -n msdataworkshop -f -; then
-      state_set_done UI_PASSWORD
-      break
-    else
-      echo 'Error: Creating UI Password Secret Failed.  Retrying...'
-      sleep 10
-    fi <<!
-{
-   "apiVersion": "v1",
-   "kind": "Secret",
-   "metadata": {
-      "name": "frontendadmin"
-   },
-   "data": {
-      "password": "${BASE64_UI_PASSWORD}"
    }
 }
 !
@@ -367,12 +346,37 @@ while ! state_done INVENTORY_DB_PASSWORD_SET; do
 done
 
 
+# Collect UI password and create secret
+while ! state_done UI_PASSWORD; do
+  while true; do
+    if kubectl create -n msdataworkshop -f -; then
+      state_set_done UI_PASSWORD
+      break
+    else
+      echo 'Error: Creating UI Password Secret Failed.  Retrying...'
+      sleep 10
+    fi <<!
+{
+   "apiVersion": "v1",
+   "kind": "Secret",
+   "metadata": {
+      "name": "frontendadmin"
+   },
+   "data": {
+      "password": "${BASE64_UI_PASSWORD}"
+   }
+}
+!
+  done
+done
+
+
 ps -ef | grep "$GRABDISH_HOME/utils" | grep -v grep
 
 
 # Verify Setup
 # bgs="BUILD_ALL JAVA_BUILDS NON_JAVA_BUILDS OKE_SETUP DB_SETUP PROVISIONING"
-bgs="BUILD_ALL JAVA_BUILDS OKE_SETUP DB_SETUP PROVISIONING"
+bgs="JAVA_BUILDS OKE_SETUP DB_SETUP PROVISIONING"
 while ! state_done SETUP_VERIFIED; do
   NOT_DONE=0
   bg_not_done=
