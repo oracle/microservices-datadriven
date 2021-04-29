@@ -43,7 +43,7 @@ done
 # Wait for OKE nodes to become redy
 while true; do
   READY_NODES=`kubectl get nodes | grep Ready | wc -l` || echo 'Ignoring any Error'
-  if test "$READY_NODES" -eq 3; then
+  if test "$READY_NODES" -ge 3; then
     echo "3 OKE nodes are ready"
     break
   fi
