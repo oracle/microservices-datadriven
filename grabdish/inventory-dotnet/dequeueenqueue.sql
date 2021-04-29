@@ -42,36 +42,14 @@ END;
 /
 show errors
 
- 
+
 CREATE OR REPLACE PROCEDURE checkInventoryReturnLocation(p_inventoryId IN VARCHAR2, p_inventorylocation OUT varchar2)
 IS
-   enqueue_options     DBMS_AQ.enqueue_options_t;
-   message_properties  DBMS_AQ.message_properties_t;
-   message_handle      RAW(16);
-   message             SYS.AQ$_JMS_TEXT_MESSAGE;
 
 BEGIN
-
-DECLARE
-  l_id t1.id%TYPE;
-BEGIN
-  INSERT INTO t1 VALUES (t1_seq.nextval, 'FOUR')
-  RETURNING id INTO l_id;
-  COMMIT;
-
-  DBMS_OUTPUT.put_line('ID=' || l_id);
-END;
-
-  -- message := SYS.AQ$_JMS_TEXT_MESSAGE.construct;
-
-  -- DBMS_AQ.ENQUEUE(queue_name => 'INVENTORYQUEUE',
-  --          enqueue_options    => enqueue_options,
-  --          message_properties => message_properties,
-  --          payload            => message,
-  --          msgid              => message_handle);
-
-  update inventory set inventorycount = inventorycount - 1 where inventoryid = ? and inventorycount > 0 returning inventorylocation into ?
-
+  update inventory set inventorycount = inventorycount - 1 where inventoryid = p_inventoryId and inventorycount > 0 returning inventorylocation into p_inventorylocation;
+  dbms_output.put_line('p_inventorylocation');
+  dbms_output.put_line(p_inventorylocation);
 END;
 /
 show errors
