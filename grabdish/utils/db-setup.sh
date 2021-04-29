@@ -46,10 +46,17 @@ done
 
 # Create Wallet in Object Store
 while ! state_done WALLET_ZIP_OBJECT; do
+if [[ $(state_get RUN_TYPE) != 3 ]]; then
   cd $GRABDISH_HOME/wallet
   oci os object put --bucket-name "$(state_get RUN_NAME)" --name "wallet.zip" --file 'wallet.zip'
   cd $GRABDISH_HOME
   state_set_done WALLET_ZIP_OBJECT
+else
+  cd $GRABDISH_HOME/wallet
+  oci os object put --bucket-name "$(state_get RUN_NAME)$(state_get RESERVATION_ID)" --name "wallet.zip" --file 'wallet.zip'
+  cd $GRABDISH_HOME
+  state_set_done WALLET_ZIP_OBJECT
+fi  
 done
 
 
