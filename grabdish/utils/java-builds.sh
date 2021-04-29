@@ -8,7 +8,6 @@ set -e
 
 # Provision Repos
 while ! state_done JAVA_REPOS; do
-export OCI_CLI_PROFILE=$(state_get HOME_REGION)
 if [[ $(state_get RUN_TYPE) != 3 ]]; then
   BUILDS="frontend-helidon order-helidon supplier-helidon-se inventory-helidon inventory-helidon-se"
   for b in $BUILDS; do 
@@ -19,7 +18,6 @@ else
   for b in $BUILDS; do 
     oci artifacts container repository create --compartment-id "$(state_get COMPARTMENT_OCID)" --display-name "LL$(state_get RESERVATION_ID)/$b" --is-public true
   done
-  unset OCI_CLI_PROFILE
   state_set_done JAVA_REPOS
 fi
 done
