@@ -102,6 +102,7 @@ while ! state_done REGION; do
   HOME_REGION=`oci iam region-subscription list --query 'data[?"is-home-region"]."region-name" | join('\'' '\'', @)' --raw-output`
   state_set REGION "$OCI_REGION" # Set in cloud shell env
   state_set HOME_REGION "$HOME_REGION"
+  fi
 done
 
 
