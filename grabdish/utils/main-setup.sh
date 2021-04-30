@@ -102,7 +102,6 @@ while ! state_done COMPARTMENT_OCID; do
     export OCI_CLI_PROFILE=$(state_get REGION)
   else
     read -p "Please enter your OCI compartments's OCID: " COMPARTMENT_OCID
-    # Need to validate here
   fi
   while ! test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output`"" == 'ACTIVE'; do
     echo "Waiting for the compartment to become ACTIVE"
