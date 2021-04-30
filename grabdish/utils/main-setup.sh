@@ -43,16 +43,16 @@ done
 while ! state_done RUN_TYPE; do
   if [[ "$USERNAME" == “LL”????“-USER” ]]; then
     # Green Button
-    state_set RUN_TYPE "1"
+    state_set RUN_TYPE "3"
+    state_set RESERVATION_ID `grep -oP '(?<=LL).*?(?=-USER)' <<<"$(state_get USER_NAME)"`
+    state_set_done PROVISIONING
+    state_set RUN_NAME "grabdish$(state_get RESERVATION_ID)"
+    state_set ORDER_DB_NAME "ORDERDB$(state_get RESERVATION_ID)"
+    state_set INVENTORY_DB_NAME "INVENTORYDB$(state_get RESERVATION_ID)" 
   else
-    state_set RUN_TYPE "3" 
+    state_set RUN_TYPE "1" 
   fi
 done
-
-
-if test "$(state_get RUN_TYPE)" == '3'; then
-  state_set RESERVATION_ID `grep -oP '(?<=LL).*?(?=-USER)' <<<"$(state_get USER_NAME)"`
-fi
 
 
 # Get Run Name from directory name
@@ -66,7 +66,6 @@ while ! state_done RUN_NAME; do
   fi
   RN=`basename "$PWD"`
   # Validate run name.  Must be between 1 and 13 characters, only letters or numbers, starting with letter
-  if [[ $(state_get RUN_TYPE) != 3 ]]; then
   if [[ "$RN" =~ ^[a-zA-Z][a-zA-Z0-9]{0,12}$ ]]; then
     state_set RUN_NAME "$RN"
     state_set ORDER_DB_NAME "${RN}o"
@@ -76,16 +75,6 @@ while ! state_done RUN_NAME; do
     echo "containing only letters or numbers, starting with a letter.  Please restart the workshop with a valid directory name."
     exit
   fi
-  else
-  if [[ "$RN" =~ [a-zA-Z][a-zA-Z0-9]{0,11}$ ]]; then
-    state_set RUN_NAME "$RN"
-    state_set ORDER_DB_NAME "ORDERDB$(state_get RESERVATION_ID)"
-    state_set INVENTORY_DB_NAME "INVENTORYDB$(state_get RESERVATION_ID)"
-   else
-    echo "Invalid folder name $RN"
-    exit
-  fi
-  fi
   cd $GRABDISH_HOME
 done
 
@@ -94,6 +83,7 @@ done
 while ! state_done TENANCY_OCID; do
   state_set TENANCY_OCID "$OCI_TENANCY" # Set in cloud shell env
 done
+
 
 # Double check and then set the region
 while ! state_done REGION; do
@@ -105,37 +95,35 @@ done
 
 # Create the compartment
 while ! state_done COMPARTMENT_OCID; do
-if [[ $(state_get RUN_TYPE) != 3 ]]; then
-  echo "Resources will be created in a new compartment named $(state_get RUN_NAME)"
-  export OCI_CLI_PROFILE=$(state_get HOME_REGION)
-  COMPARTMENT_OCID=`oci iam compartment create --compartment-id "$(state_get TENANCY_OCID)" --name "$(state_get RUN_NAME)" --description "GribDish Workshop" --query 'data.id' --raw-output`
-  unset OCI_CLI_PROFILE
-  while ! test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output`"" == 'ACTIVE'; do
-    echo "Waiting for the compartment to become ACTIVE"
-    sleep 2
-  done
-else
- read -p "Please enter your OCI compartments's OCID: " COMPARTMENT_OCID
-fi    
- state_set COMPARTMENT_OCID "$COMPARTMENT_OCID"
+  if [[ $(state_get RUN_TYPE) != 3 ]]; then
+    echo "Resources will be created in a new compartment named $(state_get RUN_NAME)"
+    export OCI_CLI_PROFILE=$(state_get HOME_REGION)
+    COMPARTMENT_OCID=`oci iam compartment create --compartment-id "$(state_get TENANCY_OCID)" --name "$(state_get RUN_NAME)" --description "GribDish Workshop" --query 'data.id' --raw-output`
+    unset OCI_CLI_PROFILE
+    while ! test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output`"" == 'ACTIVE'; do
+      echo "Waiting for the compartment to become ACTIVE"
+      sleep 2
+    done
+  else
+    read -p "Please enter your OCI compartments's OCID: " COMPARTMENT_OCID
+    # Need to validate here
+  fi    
+  state_set COMPARTMENT_OCID "$COMPARTMENT_OCID"
 done
 
 
 # Switch to SSH Key auth for the oci cli (workaround to perm issue awaiting fix)
 source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
 
+
 # Run the terraform.sh in the background
 if ! state_get PROVISIONING; then
- if [[ $(state_get RUN_TYPE) != 3 ]]; then
   if ps -ef | grep "$GRABDISH_HOME/utils/terraform.sh" | grep -v grep; then
     echo "$GRABDISH_HOME/utils/terraform.sh is already running"
   else
     echo "Executing terraform.sh in the background"
     nohup $GRABDISH_HOME/utils/terraform.sh &>> $GRABDISH_LOG/terraform.log &
   fi
- else
-  echo "OCI resources have been already created."
- fi
 fi
 
 
@@ -264,7 +252,6 @@ fi
 
 
 # Wait for provisioning
-if [[ $(state_get RUN_TYPE) != 3 ]]; then
 if ! state_done PROVISIONING; then
   echo "`date`: Waiting for terraform provisioning"
   while ! state_done PROVISIONING; do
@@ -273,7 +260,6 @@ if ! state_done PROVISIONING; then
     sleep 2
   done
   echo
-fi
 fi
 
 

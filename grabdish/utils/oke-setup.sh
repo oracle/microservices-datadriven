@@ -15,14 +15,10 @@ done
 
 
 # Wait for provisioning
-if [[ $(state_get RUN_TYPE) != 3 ]]; then
 while ! state_done PROVISIONING; do
   echo "`date`: Waiting for terraform provisioning"
   sleep 10
 done 
-else
-echo "`date`: OCI resources have been already created."
-fi
 
 
 # Get OKE OCID

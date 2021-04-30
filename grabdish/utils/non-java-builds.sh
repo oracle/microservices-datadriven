@@ -8,18 +8,11 @@ set -e
 
 # Provision Repos
 while ! state_done NON_JAVA_REPOS; do
-if [[ $(state_get RUN_TYPE) != 3 ]]; then
   BUILDS="inventory-python inventory-nodejs inventory-dotnet inventory-go"
   for b in $BUILDS; do 
     oci artifacts container repository create --compartment-id "$(state_get COMPARTMENT_OCID)" --display-name "$(state_get RUN_NAME)/$b" --is-public true
   done
-else
-  BUILDS="inventory-python inventory-nodejs inventory-dotnet inventory-go"
-  for b in $BUILDS; do 
-    oci artifacts container repository create --compartment-id "$(state_get COMPARTMENT_OCID)" --display-name "ll$(state_get RESERVATION_ID)/$b" --is-public true
-  done
   state_set_done NON_JAVA_REPOS
-fi 
 done
 
 
