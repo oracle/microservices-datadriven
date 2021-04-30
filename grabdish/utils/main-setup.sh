@@ -99,7 +99,7 @@ while ! state_done COMPARTMENT_OCID; do
     echo "Resources will be created in a new compartment named $(state_get RUN_NAME)"
     export OCI_CLI_PROFILE=$(state_get HOME_REGION)
     COMPARTMENT_OCID=`oci iam compartment create --compartment-id "$(state_get TENANCY_OCID)" --name "$(state_get RUN_NAME)" --description "GribDish Workshop" --query 'data.id' --raw-output`
-    unset OCI_CLI_PROFILE
+    export OCI_CLI_PROFILE=$(state_get REGION)
   else
     read -p "Please enter your OCI compartments's OCID: " COMPARTMENT_OCID
     # Need to validate here
@@ -113,7 +113,7 @@ done
 
 
 # Switch to SSH Key auth for the oci cli (workaround to perm issue awaiting fix)
-source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
+# source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
 
 
 # Run the terraform.sh in the background
@@ -153,7 +153,7 @@ fi
 while ! state_done NAMESPACE; do
   export OCI_CLI_PROFILE=$(state_get HOME_REGION)
   NAMESPACE=`oci os ns get --compartment-id "$(state_get COMPARTMENT_OCID)" --query "data" --raw-output`
-  unset OCI_CLI_PROFILE
+  export OCI_CLI_PROFILE=$(state_get REGION)
   state_set NAMESPACE "$NAMESPACE"
 done
 
@@ -185,7 +185,7 @@ while ! state_done DOCKER_REGISTRY; do
       fi
     done
   fi
-  unset OCI_CLI_PROFILE
+  export OCI_CLI_PROFILE=$(state_get REGION)
 done
 
 
