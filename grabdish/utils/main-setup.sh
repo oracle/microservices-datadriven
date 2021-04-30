@@ -64,12 +64,12 @@ while ! state_done RUN_NAME; do
     echo "ERROR: The workshop is not installed in a separate folder."
     exit
   fi
-  RN=`basename "$PWD"`
+  DN=`basename "$PWD"`
   # Validate run name.  Must be between 1 and 13 characters, only letters or numbers, starting with letter
-  if [[ "$RN" =~ ^[a-zA-Z][a-zA-Z0-9]{0,12}$ ]]; then
-    state_set RUN_NAME "$RN"
-    state_set ORDER_DB_NAME "${RN}o"
-    state_set INVENTORY_DB_NAME "${RN}i"
+  if [[ "$DN" =~ ^[a-zA-Z][a-zA-Z0-9]{0,12}$ ]]; then
+    state_set RUN_NAME `echo "$DN" | awk '{print tolower($0)}'`
+    state_set ORDER_DB_NAME "$(state_get RUN_NAME)o"
+    state_set INVENTORY_DB_NAME "$(state_get RUN_NAME)i"
   else
     echo "Error: Invalid directory name $RN.  The directory name must be between 1 and 13 characters,"
     echo "containing only letters or numbers, starting with a letter.  Please restart the workshop with a valid directory name."
