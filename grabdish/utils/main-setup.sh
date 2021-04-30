@@ -41,7 +41,7 @@ done
 
 # Identify Run Type
 while ! state_done RUN_TYPE; do
-  if [[ "$USERNAME" == “LL”????“-USER” ]]; then
+  if [[ "$USERNAME" =~ LL[0-9]{1,5}-USER$ ]]; then
     # Green Button
     state_set RUN_TYPE "3"
     state_set RESERVATION_ID `grep -oP '(?<=LL).*?(?=-USER)' <<<"$(state_get USER_NAME)"`
