@@ -47,10 +47,10 @@ while ! state_done RUN_TYPE; do
     state_set RESERVATION_ID `grep -oP '(?<=LL).*?(?=-USER)' <<<"$(state_get USER_NAME)"`
     state_set_done PROVISIONING
     state_set RUN_NAME "grabdish$(state_get RESERVATION_ID)"
-    state_set ORDER_DB_NAME "ORDERDB$(state_get RESERVATION_ID)"
-    state_set INVENTORY_DB_NAME "INVENTORYDB$(state_get RESERVATION_ID)" 
+    state_set ORDER_DB_NAME "ORDER$(state_get RESERVATION_ID)"
+    state_set INVENTORY_DB_NAME "INVENTORY$(state_get RESERVATION_ID)"
   else
-    state_set RUN_TYPE "1" 
+    state_set RUN_TYPE "1"
   fi
 done
 
@@ -60,7 +60,7 @@ while ! state_done RUN_NAME; do
   cd $GRABDISH_HOME
   cd ../..
   # Validate that a folder was creared
-  if test "$PWD" == ~; then 
+  if test "$PWD" == ~; then
     echo "ERROR: The workshop is not installed in a separate folder."
     exit
   fi
@@ -95,19 +95,19 @@ done
 
 # Create the compartment
 while ! state_done COMPARTMENT_OCID; do
-  if [[ $(state_get RUN_TYPE) != 3 ]]; then
+  if test $(state_get RUN_TYPE) -ne 3; then
     echo "Resources will be created in a new compartment named $(state_get RUN_NAME)"
     export OCI_CLI_PROFILE=$(state_get HOME_REGION)
     COMPARTMENT_OCID=`oci iam compartment create --compartment-id "$(state_get TENANCY_OCID)" --name "$(state_get RUN_NAME)" --description "GribDish Workshop" --query 'data.id' --raw-output`
     unset OCI_CLI_PROFILE
-    while ! test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output`"" == 'ACTIVE'; do
-      echo "Waiting for the compartment to become ACTIVE"
-      sleep 2
-    done
   else
     read -p "Please enter your OCI compartments's OCID: " COMPARTMENT_OCID
     # Need to validate here
-  fi    
+  fi
+  while ! test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output`"" == 'ACTIVE'; do
+    echo "Waiting for the compartment to become ACTIVE"
+    sleep 2
+  done
   state_set COMPARTMENT_OCID "$COMPARTMENT_OCID"
 done
 
@@ -162,7 +162,7 @@ done
 while ! state_done DOCKER_REGISTRY; do
   export OCI_CLI_PROFILE=$(state_get HOME_REGION)
   if ! TOKEN=`oci iam auth-token create  --user-id "$(state_get USER_OCID)" --description 'grabdish docker login' --query 'data.token' --raw-output 2>$GRABDISH_LOG/docker_registry_err`; then
-    if grep UserCapacityExceeded $GRABDISH_LOG/docker_registry_err >/dev/null; then 
+    if grep UserCapacityExceeded $GRABDISH_LOG/docker_registry_err >/dev/null; then
       # The key already exists
       echo 'ERROR: Failed to create auth token.  Please delete an old token from the OCI Console (Profile -> User Settings -> Auth Tokens).'
       read -p "Hit return when you are ready to retry?"
@@ -343,7 +343,7 @@ while ! state_done INVENTORY_DB_PASSWORD_SET; do
   DB_PASSWORD=`kubectl get secret dbuser -n msdataworkshop --template={{.data.dbpassword}} | base64 --decode`
   umask 177
   echo '{"adminPassword": "'"$DB_PASSWORD"'"}' > temp_params
-  umask 22 
+  umask 22
 
   oci db autonomous-database update --autonomous-database-id "$(state_get INVENTORY_DB_OCID)" --from-json "file://temp_params" >/dev/null
   rm temp_params
