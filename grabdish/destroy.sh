@@ -9,3 +9,5 @@ if ! (return 0 2>/dev/null); then
 fi
 
 $GRABDISH_HOME/utils/main-destroy.sh
+
+cd
