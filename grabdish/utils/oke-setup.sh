@@ -18,7 +18,7 @@ done
 while ! state_done PROVISIONING; do
   echo "`date`: Waiting for terraform provisioning"
   sleep 10
-done
+done 
 
 
 # Get OKE OCID

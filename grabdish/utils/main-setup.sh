@@ -41,18 +41,18 @@ done
 
 # Identify Run Type
 while ! state_done RUN_TYPE; do
-  if [[ "$USERNAME" =~ LL[0-9]{1,5}-USER$ ]]; then
+  if [[ "$(state_get USER_NAME)" =~ LL[0-9]{1,5}-USER$ ]]; then
     # Green Button
     state_set RUN_TYPE "3"
+    state_set RESERVATION_ID `grep -oP '(?<=LL).*?(?=-USER)' <<<"$(state_get USER_NAME)"`
+    state_set_done PROVISIONING
+    state_set RUN_NAME "grabdish$(state_get RESERVATION_ID)"
+    state_set ORDER_DB_NAME "ORDERDB$(state_get RESERVATION_ID)"
+    state_set INVENTORY_DB_NAME "INVENTORY$(state_get RESERVATION_ID)"
   else
-    state_set RUN_TYPE "1" 
+    state_set RUN_TYPE "1"
   fi
 done
-
-
-if test "$(state_get RUN_TYPE)" == '3'; then
-  state_set RESERVATION_ID `grep -oP '(?<=LL).*?(?=-USER)' <<<"$(state_get USER_NAME)"`
-fi
 
 
 # Get Run Name from directory name
@@ -60,16 +60,16 @@ while ! state_done RUN_NAME; do
   cd $GRABDISH_HOME
   cd ../..
   # Validate that a folder was creared
-  if test "$PWD" == ~; then 
+  if test "$PWD" == ~; then
     echo "ERROR: The workshop is not installed in a separate folder."
     exit
   fi
-  RN=`basename "$PWD"`
+  DN=`basename "$PWD"`
   # Validate run name.  Must be between 1 and 13 characters, only letters or numbers, starting with letter
-  if [[ "$RN" =~ ^[a-zA-Z][a-zA-Z0-9]{0,12}$ ]]; then
-    state_set RUN_NAME "$RN"
-    state_set ORDER_DB_NAME "${RN}o"
-    state_set INVENTORY_DB_NAME "${RN}i"
+  if [[ "$DN" =~ ^[a-zA-Z][a-zA-Z0-9]{0,12}$ ]]; then
+    state_set RUN_NAME `echo "$DN" | awk '{print tolower($0)}'`
+    state_set ORDER_DB_NAME "$(state_get RUN_NAME)o"
+    state_set INVENTORY_DB_NAME "$(state_get RUN_NAME)i"
   else
     echo "Error: Invalid directory name $RN.  The directory name must be between 1 and 13 characters,"
     echo "containing only letters or numbers, starting with a letter.  Please restart the workshop with a valid directory name."
@@ -95,10 +95,14 @@ done
 
 # Create the compartment
 while ! state_done COMPARTMENT_OCID; do
-  echo "Resources will be created in a new compartment named $(state_get RUN_NAME)"
-  export OCI_CLI_PROFILE=$(state_get HOME_REGION)
-  COMPARTMENT_OCID=`oci iam compartment create --compartment-id "$(state_get TENANCY_OCID)" --name "$(state_get RUN_NAME)" --description "GribDish Workshop" --query 'data.id' --raw-output`
-  unset OCI_CLI_PROFILE
+  if test $(state_get RUN_TYPE) -ne 3; then
+    echo "Resources will be created in a new compartment named $(state_get RUN_NAME)"
+    export OCI_CLI_PROFILE=$(state_get HOME_REGION)
+    COMPARTMENT_OCID=`oci iam compartment create --compartment-id "$(state_get TENANCY_OCID)" --name "$(state_get RUN_NAME)" --description "GribDish Workshop" --query 'data.id' --raw-output`
+    export OCI_CLI_PROFILE=$(state_get REGION)
+  else
+    read -p "Please enter your OCI compartments's OCID: " COMPARTMENT_OCID
+  fi
   while ! test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output`"" == 'ACTIVE'; do
     echo "Waiting for the compartment to become ACTIVE"
     sleep 2
@@ -108,7 +112,7 @@ done
 
 
 # Switch to SSH Key auth for the oci cli (workaround to perm issue awaiting fix)
-source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
+# source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
 
 
 # Run the terraform.sh in the background
@@ -148,7 +152,7 @@ fi
 while ! state_done NAMESPACE; do
   export OCI_CLI_PROFILE=$(state_get HOME_REGION)
   NAMESPACE=`oci os ns get --compartment-id "$(state_get COMPARTMENT_OCID)" --query "data" --raw-output`
-  unset OCI_CLI_PROFILE
+  export OCI_CLI_PROFILE=$(state_get REGION)
   state_set NAMESPACE "$NAMESPACE"
 done
 
@@ -157,7 +161,7 @@ done
 while ! state_done DOCKER_REGISTRY; do
   export OCI_CLI_PROFILE=$(state_get HOME_REGION)
   if ! TOKEN=`oci iam auth-token create  --user-id "$(state_get USER_OCID)" --description 'grabdish docker login' --query 'data.token' --raw-output 2>$GRABDISH_LOG/docker_registry_err`; then
-    if grep UserCapacityExceeded $GRABDISH_LOG/docker_registry_err >/dev/null; then 
+    if grep UserCapacityExceeded $GRABDISH_LOG/docker_registry_err >/dev/null; then
       # The key already exists
       echo 'ERROR: Failed to create auth token.  Please delete an old token from the OCI Console (Profile -> User Settings -> Auth Tokens).'
       read -p "Hit return when you are ready to retry?"
@@ -180,7 +184,7 @@ while ! state_done DOCKER_REGISTRY; do
       fi
     done
   fi
-  unset OCI_CLI_PROFILE
+  export OCI_CLI_PROFILE=$(state_get REGION)
 done
 
 
@@ -338,7 +342,7 @@ while ! state_done INVENTORY_DB_PASSWORD_SET; do
   DB_PASSWORD=`kubectl get secret dbuser -n msdataworkshop --template={{.data.dbpassword}} | base64 --decode`
   umask 177
   echo '{"adminPassword": "'"$DB_PASSWORD"'"}' > temp_params
-  umask 22 
+  umask 22
 
   oci db autonomous-database update --autonomous-database-id "$(state_get INVENTORY_DB_OCID)" --from-json "file://temp_params" >/dev/null
   rm temp_params
