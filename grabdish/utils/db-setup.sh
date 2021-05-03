@@ -266,8 +266,8 @@ END;
 /
 
 create table inventory (
-  inventoryid varchar(16) PRIMARY KEY NOT NULL, 
-  inventorylocation varchar(32), 
+  inventoryid varchar(16) PRIMARY KEY NOT NULL,
+  inventorylocation varchar(32),
   inventorycount integer CONSTRAINT positive_inventory CHECK (inventorycount >= 0) );
 
 insert into inventory values ('sushi', '1468 WEBSTER ST,San Francisco,CA', 0);
@@ -360,7 +360,7 @@ while ! state_done ORDER_PROPAGATION; do
   Q=$ORDER_QUEUE
   sqlplus /nolog <<!
 WHENEVER SQLERROR EXIT 1
-connect $U/$DB_PASSWORD@$SVC
+connect $U/"$DB_PASSWORD"@$SVC
 BEGIN
 DBMS_AQADM.add_subscriber(
    queue_name=>'$Q',
@@ -394,7 +394,7 @@ while ! state_done INVENTORY_PROPAGATION; do
   Q=$INVENTORY_QUEUE
   sqlplus /nolog <<!
 WHENEVER SQLERROR EXIT 1
-connect $U/$DB_PASSWORD@$SVC
+connect $U/"$DB_PASSWORD"@$SVC
 BEGIN
 DBMS_AQADM.add_subscriber(
    queue_name=>'$Q',
@@ -424,7 +424,7 @@ while ! state_done DOT_NET_INVENTORY_DB_PROC; do
   SVC=$INVENTORY_DB_SVC
   sqlplus /nolog <<!
 WHENEVER SQLERROR EXIT 1
-connect $U/$DB_PASSWORD@$SVC
+connect $U/"$DB_PASSWORD"@$SVC
 @$GRABDISH_HOME/inventory-dotnet/dequeueenqueue.sql
 !
   state_set_done DOT_NET_INVENTORY_DB_PROC
@@ -432,4 +432,4 @@ done
 
 
 # DB Setup Done
-state_set_done "DB_SETUP"
+state_set_done DB_SETUP
