@@ -22,19 +22,17 @@ spec:
         image: %DOCKER_REGISTRY%/inventory-dotnet:0.1
         imagePullPolicy: Always
         env:
-        - name: user
+        - name: DB_USER
           value: "inventoryuser"
         - name: TNS_ADMIN
           value: "/msdataworkshop/creds"
-        - name: INVENTORY_PDB_NAME
+        - name: DB_CONNECT_STRING
           value: "%INVENTORY_PDB_NAME%_tp"
-        - name: OCI_REGION
-          value: "%OCI_REGION%"
         - name: OCI_REGION
           value: "%OCI_REGION%"
         - name: VAULT_SECRET_OCID
           value: "%VAULT_SECRET_OCID%"
-        - name: dbpassword
+        - name: DB_PASSWORD
           valueFrom:
             secretKeyRef:
               name: dbuser
