@@ -12,9 +12,10 @@ IS
   pragma                exception_init(no_messages, -25228);
           
 BEGIN
-
-  dequeue_options.wait := -1; 
+  dequeue_options.wait := dbms_aq.NO_WAIT;  
+  -- dequeue_options.wait := dbms_aq.FOREVER;  
   -- dequeue_options.navigation := dbms_aq.FIRST_MESSAGE;
+  -- dequeue_options.dequeue_mode := dbms_aq.LOCKED;
 
   DBMS_AQ.DEQUEUE(
     queue_name => 'ORDERQUEUE',
@@ -22,7 +23,7 @@ BEGIN
     message_properties => message_properties,
     payload => message,
     msgid => message_handle);
-    COMMIT;
+    -- COMMIT;
           
 --  p_action := message.get_string_property('action');
 --  p_orderid := message.get_int_property('orderid');  
@@ -47,7 +48,7 @@ CREATE OR REPLACE PROCEDURE checkInventoryReturnLocation(p_inventoryId IN VARCHA
 IS
 
 BEGIN
-  update inventory set inventorycount = inventorycount - 1 where inventoryid = p_inventoryId and inventorycount > 0 returning inventorylocation into p_inventorylocation;
+  update INVENTORYUSER.INVENTORY set inventorycount = inventorycount - 1 where inventoryid = p_inventoryId and inventorycount > 0 returning inventorylocation into p_inventorylocation;
   dbms_output.put_line('p_inventorylocation');
   dbms_output.put_line(p_inventorylocation);
 END;

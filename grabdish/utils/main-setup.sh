@@ -49,8 +49,50 @@ while ! state_done RUN_TYPE; do
     state_set RUN_NAME "grabdish$(state_get RESERVATION_ID)"
     state_set ORDER_DB_NAME "ORDERDB$(state_get RESERVATION_ID)"
     state_set INVENTORY_DB_NAME "INVENTORY$(state_get RESERVATION_ID)"
+    state_set_done OKE_LIMIT_CHECK
+    state_set_done ATP_LIMIT_CHECK
   else
     state_set RUN_TYPE "1"
+  fi
+done
+
+
+# Check OKE Limits
+if ! state_done OKE_LIMIT_CHECK; then
+  # Cluster Service Limit
+  OKE_LIMIT=`oci limits value list --compartment-id "$OCI_TENANCY" --service-name "container-engine" --query 'sum(data[?"name"=='"'cluster-count'"'].value)'`
+  if test "$OKE_LIMIT" -lt 1; then
+    echo 'The service limit for the "Container Engine" "Cluster Count" is insufficent to run this workshop.  At least 1 is required.'
+    exit
+  elif test "$OKE_LIMIT" -eq 1; then
+    echo 'You are limited to only one OKE cluster in this tenancy.  This workshop will create one additional OKE cluster and so any other OKE clusters must be terminated.'
+    read -p "Please confirm that no other un-terminated OKE clusters exist in this tenancy and then hit [RETURN]? " DUMMY
+  fi
+  state_set_done OKE_LIMIT_CHECK
+fi
+
+
+# Check ATP resource availability
+while ! state_done ATP_LIMIT_CHECK; do
+  CHECK=1
+  # ATP OCPU availability
+  if test $(oci limits resource-availability get --compartment-id="$OCI_TENANCY" --service-name "database" --limit-name "atp-ocpu-count" --query 'to_string(min([data."fractional-availability",`4.0`]))' --raw-output) != '4.0'; then
+    echo 'The "Autonomous Transaction Processing OCPU Count" resource availability is insufficent to run this workshop.'
+    echo '4 OCPUs are required.  Terminate some existing ATP databases and try again.'
+    CHECK=0
+  fi
+
+  # ATP storage availability
+  if test $(oci limits resource-availability get --compartment-id="$OCI_TENANCY" --service-name "database" --limit-name "atp-total-storage-tb" --query 'to_string(min([data."fractional-availability",`2.0`]))' --raw-output) != '2.0'; then
+    echo 'The "Autonomous Transaction Processing Total Storage (TB)" resource availability is insufficent to run this workshop.'
+    echo '2 TB are required.  Terminate some existing ATP databases and try again.'
+    CHECK=0
+  fi
+
+  if test $CHECK -eq 1; then
+    state_set_done ATP_LIMIT_CHECK
+  else
+    read -p "Hit [RETURN] when you are ready to retry? " DUMMY
   fi
 done
 

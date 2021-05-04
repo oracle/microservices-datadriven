@@ -91,19 +91,15 @@ namespace inventory_dotnet
                 ";";
             Console
                 .WriteLine("tnsAdmin:" +
-                tnsAdmin +
-                " connString:" +
-                connString);
-            using (
+                tnsAdmin);
+        using (
                 OracleConnection connection = new OracleConnection(connString)
             )
             {
-                try
-                {
-                    connection.Open();
-                    while (true)
+                connection.Open();
+                while (true) {
+                    try
                     {
-                        Console.WriteLine("connection:" + connection);
                         //dequeue from order queues (out param)
                         OracleCommand orderReceiveMessageCommand = new OracleCommand();
                         orderReceiveMessageCommand.Connection = connection;
@@ -116,10 +112,23 @@ namespace inventory_dotnet
                         p_orderInfoParam.Direction = ParameterDirection.Output;
                         orderReceiveMessageCommand.Parameters.Add (p_orderInfoParam);
                         orderReceiveMessageCommand.ExecuteNonQuery();
-                        Order order =
+                        // Console.WriteLine("orderReceiveMessageCommand.Parameters[p_orderInfo].Value:" + orderReceiveMessageCommand.Parameters["p_orderInfo"].Value);
+                        if (orderReceiveMessageCommand.Parameters["p_orderInfo"] is null || orderReceiveMessageCommand.Parameters["p_orderInfo"].Value is null) {
+                            Console.WriteLine("message was null");
+                            System.Threading.Thread.Sleep(1000);
+                            continue;
+                        }
+                        Order order;
+                        try {
+                            order =
                             JsonConvert
                                 .DeserializeObject<Order>("" +
                                 orderReceiveMessageCommand.Parameters["p_orderInfo"].Value);
+                        } catch (System.NullReferenceException ex)  {
+                            Console.WriteLine("message was null" + ex);
+                            System.Threading.Thread.Sleep(1000);
+                            continue;
+                        } 
                         System
                             .Console
                             .WriteLine("order.itemid inventorychecked sendmessage for {0}",
@@ -200,15 +209,11 @@ namespace inventory_dotnet
                         );
                         inventorySendMessageCommand.ExecuteNonQuery();
                     }
+                    catch (NullReferenceException ex) {
+                        if(ex != null) System.Threading.Thread.Sleep(1000);
+                    } 
                 }
-                catch (NullReferenceException ex)
-                {
-                    System.Console.WriteLine("Exception: {0}", ex.ToString());
-                    return "fail:" + ex;
-                }
-                connection.Close();
             }
-            return "complete";
         }
     }
 }
