@@ -39,22 +39,6 @@ while ! state_done WALLET_GET; do
 done
 
 
-# Create Wallet in Object Store
-while ! state_done WALLET_ZIP_OBJECT; do
-  cd $GRABDISH_HOME/wallet
-  oci os object put --bucket-name "$(state_get RUN_NAME)" --name "wallet.zip" --file 'wallet.zip'
-  cd $GRABDISH_HOME
-  state_set_done WALLET_ZIP_OBJECT
-done
-
-
-# Create Authenticated Link to Wallet
-while ! state_done WALLET_ZIP_AUTH_URL; do
-  ACCESS_URI=`oci os preauth-request create --object-name 'wallet.zip' --access-type 'ObjectRead' --bucket-name "$(state_get RUN_NAME)" --name 'grabdish' --time-expires $(date '+%Y-%m-%d' --date '+7 days') --query 'data."access-uri"' --raw-output`
-  state_set WALLET_ZIP_AUTH_URL "https://objectstorage.$(state_get REGION).oraclecloud.com${ACCESS_URI}"
-done
-
-
 # Get DB Connection Wallet and to Object Store
 while ! state_done CWALLET_SSO_OBJECT; do
   cd $GRABDISH_HOME/wallet
