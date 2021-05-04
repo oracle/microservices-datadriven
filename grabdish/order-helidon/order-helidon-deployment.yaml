@@ -17,19 +17,6 @@ spec:
         app: order
         version: helidon-mp
     spec:
-      initContainers:
-      - name: decode-creds
-        command:
-        - bash
-        - -c
-        - "for i in `ls -1 /tmp/creds | grep -v user_name`; do cat /tmp/creds/$i  | base64 --decode > /creds/$i; done; ls -l /creds/*;"
-        image: oraclelinux:7.5
-        volumeMounts:
-        - name: creds-raw
-          mountPath: /tmp/creds
-          readOnly: false
-        - name: creds
-          mountPath: /creds
       containers:
       - name: order
         image: %DOCKER_REGISTRY%/order-helidon:0.1
@@ -58,7 +45,6 @@ spec:
           mountPath: /msdataworkshop/creds
         ports:
         - containerPort: 8080
-# Helidon/OKE health liveness/readiness
         livenessProbe:
           httpGet: #alternatives include exec with command, etc.
             path: /health/live
@@ -73,8 +59,6 @@ spec:
           periodSeconds: 3
       restartPolicy: Always
       volumes:
-      - name: creds-raw
-        secret:
-          secretName: atp-demo-binding-order
       - name: creds
-        emptyDir: {}
+        secret:
+          secretName: db-wallet-secret

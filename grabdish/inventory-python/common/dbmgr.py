@@ -16,9 +16,8 @@ db_connection_count = int(env.get("DB_CONNECTION_COUNT", "1"))
 db_user =             env.get('DB_USER').strip()
 region_id =             env.get('OCI_REGION').strip()
 vault_secret_ocid =             env.get('VAULT_SECRET_OCID').strip()
-k8s_secret_dbpassword =         env.get('dbpassword').strip()
+k8s_secret_dbpassword =         env.get('DB_PASSWORD').strip()
 db_connect_string =   env.get('DB_CONNECT_STRING')
-region_id =             env.get('OCI_REGION').strip()
 
 readyfile = ""
 logger = None
@@ -138,4 +137,3 @@ def reportUp():
 class DatabaseDown(Exception):
     def __init__(self):
         pass
-

@@ -82,10 +82,12 @@ namespace inventory_dotnet
             String tnsAdmin = Environment.GetEnvironmentVariable("TNS_ADMIN");
             OracleConfiguration.WalletLocation = tnsAdmin;
             string connString =
-                "User Id=INVENTORYUSER;Password=" +
-                Environment.GetEnvironmentVariable("dbpassword") +
+                "User Id=" +
+                Environment.GetEnvironmentVariable("DB_USER") +
+                ";Password=" +
+                Environment.GetEnvironmentVariable("DB_PASSWORD") +
                 ";Data Source=" +
-                Environment.GetEnvironmentVariable("INVENTORY_PDB_NAME") +
+                Environment.GetEnvironmentVariable("DB_CONNECT_STRING") +
                 ";";
             Console
                 .WriteLine("tnsAdmin:" +

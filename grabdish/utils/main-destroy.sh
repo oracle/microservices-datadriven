@@ -7,7 +7,7 @@ set -e
 
 
 # Switch to SSH Key auth for the oci cli (workaround to perm issue awaiting fix)
-source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
+# source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
 
 
 # Remove from .bashrc

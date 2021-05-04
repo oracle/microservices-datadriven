@@ -27,9 +27,23 @@ while ! state_done INVENTORY_DB_OCID; do
 done
 
 
-# Get DB Connection Wallet and to Object Store
+# Get Wallet
+while ! state_done WALLET_GET; do
+  cd $GRABDISH_HOME
+  mkdir wallet
+  cd wallet
+  oci db autonomous-database generate-wallet --autonomous-database-id "$(state_get ORDER_DB_OCID)" --file 'wallet.zip' --password 'Welcome1' --generate-type 'ALL'
+  unzip wallet.zip
+  cd $GRABDISH_HOME
+  state_set_done WALLET_GET
+done
+
+
+# Create Wallet in Object Store
 while ! state_done WALLET_ZIP_OBJECT; do
-  oci db autonomous-database generate-wallet --autonomous-database-id "$(state_get ORDER_DB_OCID)" --file '-' --password 'Welcome1' --generate-type 'ALL' | oci os object put --bucket-name "$(state_get RUN_NAME)" --name "wallet.zip" --file '-'
+  cd $GRABDISH_HOME/wallet
+  oci os object put --bucket-name "$(state_get RUN_NAME)" --name "wallet.zip" --file 'wallet.zip'
+  cd $GRABDISH_HOME
   state_set_done WALLET_ZIP_OBJECT
 done
 
@@ -43,12 +57,9 @@ done
 
 # Get DB Connection Wallet and to Object Store
 while ! state_done CWALLET_SSO_OBJECT; do
+  cd $GRABDISH_HOME/wallet
+  oci os object put --bucket-name "$(state_get RUN_NAME)" --name "cwallet.sso" --file 'cwallet.sso'
   cd $GRABDISH_HOME
-  mkdir wallet
-  cd wallet
-  curl -sL "$(state_get WALLET_ZIP_AUTH_URL)" --output wallet.zip ; unzip wallet.zip ; rm wallet.zip
-  cat cwallet.sso | oci os object put --bucket-name "$(state_get RUN_NAME)" --name "cwallet.sso" --file '-'
-  rm -rf wallet
   state_set_done CWALLET_SSO_OBJECT
 done
 
@@ -60,21 +71,45 @@ while ! state_done CWALLET_SSO_AUTH_URL; do
 done
 
 
-# Create ATP Bindings
-while ! state_done ATP_BINDINGS; do
-  while ! state_done OKE_NAMESPACE; do
-    echo "Waiting for OKE_NAMESPACE"
+while ! state_done OKE_NAMESPACE; do
+  echo "Waiting for OKE_NAMESPACE"
+  sleep 5
+done
+
+
+# Create Inventory ATP Bindings
+while ! state_done DB_WALLET_SECRET; do
+  cd $GRABDISH_HOME/wallet
+  cat - >sqlnet.ora <<!
+WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="/msdataworkshop/creds")))
+SSL_SERVER_DN_MATCH=yes
+!
+  if kubectl create -f - -n msdataworkshop; then
+    state_set_done DB_WALLET_SECRET
+  else
+    echo "Error: Failure to create db-wallet-secret.  Retrying..."
     sleep 5
-  done
-  cd $GRABDISH_HOME/atp-secrets-setup
-  ./deleteAll.sh
-  ./createAll.sh "$(state_get WALLET_ZIP_AUTH_URL)"
-  state_set_done ATP_BINDINGS
+  fi <<!
+apiVersion: v1
+data:
+  README: $(base64 -w0 README)
+  cwallet.sso: $(base64 -w0 cwallet.sso)
+  ewallet.p12: $(base64 -w0 ewallet.p12)
+  keystore.jks: $(base64 -w0 keystore.jks)
+  ojdbc.properties: $(base64 -w0 ojdbc.properties)
+  sqlnet.ora: $(base64 -w0 sqlnet.ora)
+  tnsnames.ora: $(base64 -w0 tnsnames.ora)
+  truststore.jks: $(base64 -w0 truststore.jks)
+kind: Secret
+metadata:
+  name: db-wallet-secret
+!
+  cd $GRABDISH_HOME
 done
 
 
 # DB Connection Setup
-export TNS_ADMIN=$GRABDISH_HOME/atp-secrets-setup/wallet
+export TNS_ADMIN=$GRABDISH_HOME/wallet
 cat - >$TNS_ADMIN/sqlnet.ora <<!
 WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$TNS_ADMIN")))
 SSL_SERVER_DN_MATCH=yes
@@ -231,8 +266,8 @@ END;
 /
 
 create table inventory (
-  inventoryid varchar(16) PRIMARY KEY NOT NULL, 
-  inventorylocation varchar(32), 
+  inventoryid varchar(16) PRIMARY KEY NOT NULL,
+  inventorylocation varchar(32),
   inventorycount integer CONSTRAINT positive_inventory CHECK (inventorycount >= 0) );
 
 insert into inventory values ('sushi', '1468 WEBSTER ST,San Francisco,CA', 0);
@@ -325,7 +360,7 @@ while ! state_done ORDER_PROPAGATION; do
   Q=$ORDER_QUEUE
   sqlplus /nolog <<!
 WHENEVER SQLERROR EXIT 1
-connect $U/$DB_PASSWORD@$SVC
+connect $U/"$DB_PASSWORD"@$SVC
 BEGIN
 DBMS_AQADM.add_subscriber(
    queue_name=>'$Q',
@@ -359,7 +394,7 @@ while ! state_done INVENTORY_PROPAGATION; do
   Q=$INVENTORY_QUEUE
   sqlplus /nolog <<!
 WHENEVER SQLERROR EXIT 1
-connect $U/$DB_PASSWORD@$SVC
+connect $U/"$DB_PASSWORD"@$SVC
 BEGIN
 DBMS_AQADM.add_subscriber(
    queue_name=>'$Q',
@@ -389,7 +424,7 @@ while ! state_done DOT_NET_INVENTORY_DB_PROC; do
   SVC=$INVENTORY_DB_SVC
   sqlplus /nolog <<!
 WHENEVER SQLERROR EXIT 1
-connect $U/$DB_PASSWORD@$SVC
+connect $U/"$DB_PASSWORD"@$SVC
 @$GRABDISH_HOME/inventory-dotnet/dequeueenqueue.sql
 !
   state_set_done DOT_NET_INVENTORY_DB_PROC
@@ -397,4 +432,4 @@ done
 
 
 # DB Setup Done
-state_set_done "DB_SETUP"
+state_set_done DB_SETUP

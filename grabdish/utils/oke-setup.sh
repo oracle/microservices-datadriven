@@ -18,7 +18,7 @@ done
 while ! state_done PROVISIONING; do
   echo "`date`: Waiting for terraform provisioning"
   sleep 10
-done
+done 
 
 
 # Get OKE OCID
@@ -39,7 +39,7 @@ done
 # Wait for OKE nodes to become redy
 while true; do
   READY_NODES=`kubectl get nodes | grep Ready | wc -l` || echo 'Ignoring any Error'
-  if test "$READY_NODES" -eq 3; then
+  if test "$READY_NODES" -ge 3; then
     echo "3 OKE nodes are ready"
     break
   fi

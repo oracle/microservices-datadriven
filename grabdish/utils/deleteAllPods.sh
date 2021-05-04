@@ -8,11 +8,6 @@ echo ________________________________________
 deletepod frontend
 
 echo ________________________________________
-echo deleting pod admin-helidon...
-echo ________________________________________
-deletepod admin
-
-echo ________________________________________
 echo deleting pod order-helidon...
 echo ________________________________________
 deletepod order
