@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/godror/godror"
 )
@@ -48,85 +49,90 @@ func main() {
 	}
 	fmt.Printf("Listening for messages... start time: %s\n", thedate)
 	ctx := context.Background()
-	for {
-		listenForMessages(ctx, db)
-	}
+	listenForMessages(ctx, db)
 }
 
 func listenForMessages(ctx context.Context, db *sql.DB) {
 
-	tx, err := db.BeginTx(ctx, nil)
-	fmt.Println("__________________________________________")
-	//receive order...
-	var orderJSON string
-	dequeueOrderMessageSproc := `BEGIN dequeueOrderMessage(:1); END;`
-	if _, err := db.ExecContext(ctx, dequeueOrderMessageSproc, sql.Out{Dest: &orderJSON}); err != nil {
-		log.Printf("Error running %q: %+v", dequeueOrderMessageSproc, err)
-		return
+	for {
+		tx, err := db.BeginTx(ctx, nil)
+		// fmt.Println("__________________________________________")
+		//receive order...
+		var orderJSON string
+		dequeueOrderMessageSproc := `BEGIN dequeueOrderMessage(:1); END;`
+		if _, err := db.ExecContext(ctx, dequeueOrderMessageSproc, sql.Out{Dest: &orderJSON}); err != nil {
+			log.Printf("Error running %q: %+v", dequeueOrderMessageSproc, err)
+			return
+		}
+		// fmt.Println("orderJSON:" + orderJSON)
+		type Order struct {
+			Orderid           string
+			Itemid            string
+			Deliverylocation  string
+			Status            string
+			Inventorylocation string
+			SuggestiveSale    string
+		}
+		var order Order
+		jsonerr := json.Unmarshal([]byte(orderJSON), &order)
+		if jsonerr != nil {
+			tx.Commit()
+			continue
+			// fmt.Printf("Order Unmarshal fmt.Sprint(data) err = %s", jsonerr)
+		}
+		if jsonerr == nil {
+			fmt.Printf("order.orderid: %s", order.Orderid)
+		}
+		// fmt.Println("__________________________________________")
+		//check inventory...
+		var inventorylocation string
+		sqlString := "update INVENTORY set INVENTORYCOUNT = INVENTORYCOUNT - 1 where INVENTORYID = :inventoryid and INVENTORYCOUNT > 0 returning inventorylocation into :inventorylocation"
+		_, errFromInventoryCheck := db.Exec(sqlString, sql.Named("inventoryid", order.Itemid), sql.Named("inventorylocation", sql.Out{Dest: &inventorylocation}))
+		if err != nil {
+			fmt.Println("errFromInventoryCheck: %s", errFromInventoryCheck)
+		}
+		// numRows, err := res.RowsAffected()
+		// if err != nil {
+		// 	fmt.Println(errFromInventoryCheck)
+		// }
+		// fmt.Println("numRows:" + string(numRows))
+		if inventorylocation == "" {
+			inventorylocation = "inventorydoesnotexist"
+		}
+		fmt.Println("inventorylocation:" + inventorylocation)
+		// fmt.Println("__________________________________________")
+		//create inventory reply message...
+		type Inventory struct {
+			Orderid           string `json:"orderid"`
+			Itemid            string `json:"itemid"`
+			Inventorylocation string `json:"inventorylocation"`
+			SuggestiveSale    string `json:"suggestiveSale"`
+		}
+		inventory := &Inventory{
+			Orderid:           order.Orderid,
+			Itemid:            order.Itemid,
+			Inventorylocation: inventorylocation,
+			SuggestiveSale:    "beer",
+		}
+		inventoryJsonData, err := json.Marshal(inventory)
+		if err != nil {
+			fmt.Println(err)
+		}
+		inventoryJsonString := string(inventoryJsonData)
+		fmt.Println("inventoryJsonData:" + inventoryJsonString) // :inventoryid
+		messageSendSproc := `BEGIN enqueueInventoryMessage(:1); END;`
+		if _, err := db.ExecContext(ctx, messageSendSproc, inventoryJsonString); err != nil {
+			log.Printf("Error running %q: %+v", messageSendSproc, err)
+			return
+		}
+		fmt.Println("inventory status message sent:" + inventoryJsonString)
+		commiterr := tx.Commit()
+		if commiterr != nil {
+			fmt.Println("commiterr:", commiterr)
+		}
+		fmt.Println("commit complete for message sent:" + inventoryJsonString)
+		time.Sleep(1 * time.Second)
 	}
-	fmt.Println("orderJSON:" + orderJSON)
-	type Order struct {
-		Orderid           string
-		Itemid            string
-		Deliverylocation  string
-		Status            string
-		Inventorylocation string
-		SuggestiveSale    string
-	}
-	var order Order
-	jsonerr := json.Unmarshal([]byte(orderJSON), &order)
-	if jsonerr != nil {
-		fmt.Printf("Order Unmarshal fmt.Sprint(data) err = %s", jsonerr)
-	}
-	fmt.Printf("order.orderid: %s", order.Orderid)
-	fmt.Println("__________________________________________")
-	//check inventory...
-	var inventorylocation string
-	sqlString := "update INVENTORY set INVENTORYCOUNT = INVENTORYCOUNT - 1 where INVENTORYID = :inventoryid and INVENTORYCOUNT > 0 returning inventorylocation into :inventorylocation"
-	_, errFromInventoryCheck := db.Exec(sqlString, sql.Named("inventoryid", order.Itemid), sql.Named("inventorylocation", sql.Out{Dest: &inventorylocation}))
-	if err != nil {
-		fmt.Println("errFromInventoryCheck: %s", errFromInventoryCheck)
-	}
-	// numRows, err := res.RowsAffected()
-	// if err != nil {
-	// 	fmt.Println(errFromInventoryCheck)
-	// }
-	// fmt.Println("numRows:" + string(numRows))
-	if inventorylocation == "" {
-		inventorylocation = "inventorydoesnotexist"
-	}
-	fmt.Println("inventorylocation:" + inventorylocation)
-	fmt.Println("__________________________________________")
-	//create inventory reply message...
-	type Inventory struct {
-		Orderid           string `json:"orderid"`
-		Itemid            string `json:"itemid"`
-		Inventorylocation string `json:"inventorylocation"`
-		SuggestiveSale    string `json:"suggestiveSale"`
-	}
-	inventory := &Inventory{
-		Orderid:           order.Orderid,
-		Itemid:            order.Itemid,
-		Inventorylocation: inventorylocation,
-		SuggestiveSale:    "beer",
-	}
-	inventoryJsonData, err := json.Marshal(inventory)
-	if err != nil {
-		fmt.Println(err)
-	}
-	inventoryJsonString := string(inventoryJsonData)
-	fmt.Println("inventoryJsonData:" + inventoryJsonString) // :inventoryid
-	messageSendSproc := `BEGIN enqueueInventoryMessage(:1); END;`
-	if _, err := db.ExecContext(ctx, messageSendSproc, inventoryJsonString); err != nil {
-		log.Printf("Error running %q: %+v", messageSendSproc, err)
-		return
-	}
-	fmt.Println("inventory status message sent:" + inventoryJsonString)
-	commiterr := tx.Commit()
-	if commiterr != nil {
-		fmt.Println("commiterr:", commiterr)
-	}
-	fmt.Println("commit complete for message sent:" + inventoryJsonString)
 }
 
 func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete - using PL/SQL above
