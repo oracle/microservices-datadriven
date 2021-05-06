@@ -201,6 +201,7 @@ done
 
 # login to docker
 while ! state_done DOCKER_REGISTRY; do
+ if test $(state_get RUN_TYPE) -ne 3; then
   export OCI_CLI_PROFILE=$(state_get HOME_REGION)
   if ! TOKEN=`oci iam auth-token create  --user-id "$(state_get USER_OCID)" --description 'grabdish docker login' --query 'data.token' --raw-output 2>$GRABDISH_LOG/docker_registry_err`; then
     if grep UserCapacityExceeded $GRABDISH_LOG/docker_registry_err >/dev/null; then
