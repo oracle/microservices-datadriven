@@ -47,7 +47,7 @@ while ! state_done RUN_TYPE; do
     state_set RESERVATION_ID `grep -oP '(?<=LL).*?(?=-USER)' <<<"$(state_get USER_NAME)"`
     state_set_done PROVISIONING
     state_set RUN_NAME "grabdish$(state_get RESERVATION_ID)"
-    state_set ORDER_DB_NAME "ORDERDB$(state_get RESERVATION_ID)"
+    state_set ORDER_DB_NAME "ORDER$(state_get RESERVATION_ID)"
     state_set INVENTORY_DB_NAME "INVENTORY$(state_get RESERVATION_ID)"
     state_set_done OKE_LIMIT_CHECK
     state_set_done ATP_LIMIT_CHECK
