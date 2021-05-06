@@ -226,7 +226,22 @@ while ! state_done DOCKER_REGISTRY; do
       fi
     done
   fi
+  else
+  #GB environment
+  read -p "Please enter your AUTH TOKEN value: " TOKEN
+  RETRIES=0
+    while test $RETRIES -le 10; do
+      if echo "$TOKEN" | docker login -u "$(state_get NAMESPACE)/$(state_get USER_NAME)" --password-stdin "$(state_get REGION).ocir.io"; then
+        state_set DOCKER_REGISTRY "$(state_get REGION).ocir.io/$(state_get NAMESPACE)/$(state_get RUN_NAME)"
+        break
+      else
+        echo "Docker login failed.  Retrying"
+        RETRIES=$((RETRIES+1))
+        sleep 5
+      fi
+    done
   export OCI_CLI_PROFILE=$(state_get REGION)
+ fi
 done
 
 
