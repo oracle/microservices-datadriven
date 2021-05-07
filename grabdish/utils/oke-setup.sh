@@ -18,12 +18,12 @@ done
 while ! state_done PROVISIONING; do
   echo "`date`: Waiting for terraform provisioning"
   sleep 10
-done 
+done
 
 
 # Get OKE OCID
 while ! state_done OKE_OCID; do
-  OKE_OCID=`oci ce cluster list --compartment-id "$(state_get COMPARTMENT_OCID)" --query "join(' ',data[*].id)" --raw-output`
+  OKE_OCID=`oci ce cluster list --compartment-id "$(state_get COMPARTMENT_OCID)" --query "join(' ',data[?"'"lifecycle-state"'"=='ACTIVE'].id)" --raw-output`
   state_set OKE_OCID "$OKE_OCID"
   # Wait for OKE to warm up
 done

@@ -298,7 +298,7 @@ while ! state_done INVENTORY_DB_LINK; do
   SVC=$INVENTORY_DB_SVC
   TU=$ORDER_USER
   TSVC=$ORDER_DB_SVC
-  TTNS=`grep -i s"^$TSVC " $TNS_ADMIN/tnsnames.ora`
+  TTNS=`grep -i "^$TSVC " $TNS_ADMIN/tnsnames.ora`
   LINK=$INVENTORY_LINK
   sqlplus /nolog <<!
 WHENEVER SQLERROR EXIT 1
