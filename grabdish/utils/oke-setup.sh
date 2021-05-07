@@ -18,7 +18,7 @@ done
 while ! state_done PROVISIONING; do
   echo "`date`: Waiting for terraform provisioning"
   sleep 10
-done 
+done
 
 
 # Get OKE OCID
@@ -56,6 +56,13 @@ while ! state_done OKE_NAMESPACE; do
     echo "Failed to create namespace.  Retrying..."
     sleep 10
   fi
+done
+
+
+# Give DB_PASSWORD priority
+while ! state_done DB_PASSWORD; do
+  echo "Waiting for DB_PASSWORD"
+  sleep 5
 done
 
 
