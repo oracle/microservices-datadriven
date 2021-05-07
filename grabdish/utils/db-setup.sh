@@ -55,9 +55,10 @@ while ! state_done CWALLET_SSO_AUTH_URL; do
 done
 
 
-while ! state_done OKE_NAMESPACE; do
-  echo "Waiting for OKE_NAMESPACE"
-  sleep 5
+# Wait for DB Password
+while ! state_done DB_PASSWORD; do
+  echo "`date`: Waiting for DB_PASSWORD"
+  sleep 2
 done
 
 
@@ -106,13 +107,6 @@ ORDER_LINK=ORDERTOINVENTORYLINK
 INVENTORY_LINK=INVENTORYTOORDERLINK
 ORDER_QUEUE=ORDERQUEUE
 INVENTORY_QUEUE=INVENTORYQUEUE
-
-
-# Wait for DB Password
-while ! state_done DB_PASSWORD; do
-  echo "`date`: Waiting for DB_PASSWORD"
-  sleep 2
-done
 
 
 # Get DB Password
@@ -263,13 +257,13 @@ commit;
 done
 
 
-# Order DB Link"
+# Order DB Link
 while ! state_done ORDER_DB_LINK; do
   U=$ORDER_USER
   SVC=$ORDER_DB_SVC
   TU=$INVENTORY_USER
   TSVC=$INVENTORY_DB_SVC
-  TTNS=`grep "^$TSVC " $TNS_ADMIN/tnsnames.ora`
+  TTNS=`grep -i "^$TSVC " $TNS_ADMIN/tnsnames.ora`
   LINK=$ORDER_LINK
   sqlplus /nolog <<!
 WHENEVER SQLERROR EXIT 1
@@ -304,7 +298,7 @@ while ! state_done INVENTORY_DB_LINK; do
   SVC=$INVENTORY_DB_SVC
   TU=$ORDER_USER
   TSVC=$ORDER_DB_SVC
-  TTNS=`grep "^$TSVC " $TNS_ADMIN/tnsnames.ora`
+  TTNS=`grep -i s"^$TSVC " $TNS_ADMIN/tnsnames.ora`
   LINK=$INVENTORY_LINK
   sqlplus /nolog <<!
 WHENEVER SQLERROR EXIT 1
