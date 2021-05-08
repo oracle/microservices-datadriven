@@ -59,9 +59,9 @@ while ! state_done OKE_NAMESPACE; do
 done
 
 
-# Wait for DB Password
-while ! state_done ORDER_DB_PASSWORD_SET; do
-  echo "`date`: Waiting for ORDER_DB_PASSWORD_SET"
+# Wait for Order User (avoid concurrent kubectl)
+while ! state_done ORDER_USER; do
+  echo "`date`: Waiting for ORDER_USER"
   sleep 2
 done
 

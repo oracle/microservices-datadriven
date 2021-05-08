@@ -406,6 +406,13 @@ while ! state_done INVENTORY_DB_PASSWORD_SET; do
 done
 
 
+# Wait for OKE Setup
+while ! state_done OKE_SETUP; do
+  # echo "`date`: Waiting for OKE_SETUP"
+  sleep 2
+done
+
+
 # Collect UI password and create secret
 while ! state_done UI_PASSWORD; do
   while true; do
