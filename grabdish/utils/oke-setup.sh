@@ -59,6 +59,13 @@ while ! state_done OKE_NAMESPACE; do
 done
 
 
+# Wait for DB Password
+while ! state_done ORDER_DB_PASSWORD_SET; do
+  echo "`date`: Waiting for ORDER_DB_PASSWORD_SET"
+  sleep 2
+done
+
+
 # Create SSL Secret
 while ! state_done SSL_SECRET; do
   if kubectl create secret tls ssl-certificate-secret --key $GRABDISH_HOME/tls/tls.key --cert $GRABDISH_HOME/tls/tls.crt -n msdataworkshop; then
