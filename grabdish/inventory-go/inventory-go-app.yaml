@@ -3,14 +3,14 @@
 apiVersion: core.oam.dev/v1alpha2
 kind: ApplicationConfiguration
 metadata:
-  name: order-helidon-appconf
+  name: inventory-go-appconf
   namespace: msdataworkshop
   annotations:
     version: v1.0.0
-    description: "Order Helidon application"
+    description: "Inventory Go application"
 spec:
   components:
-    - componentName: order-helidon-component
+    - componentName: inventory-go-component
       traits:
         - trait:
             apiVersion: oam.verrazzano.io/v1alpha1
@@ -21,7 +21,7 @@ spec:
 #            apiVersion: oam.verrazzano.io/v1alpha1
 #            kind: IngressTrait
 #            metadata:
-#              name: order-helidon-ingress
+#              name: inventory-go-ingress
 #            spec:
 #              rules:
 #                - paths:

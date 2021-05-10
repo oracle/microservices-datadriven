@@ -3,27 +3,27 @@
 apiVersion: core.oam.dev/v1alpha2
 kind: ApplicationConfiguration
 metadata:
-  name: order-helidon-appconf
+  name: frontend-helidon-appconf
   namespace: msdataworkshop
   annotations:
     version: v1.0.0
-    description: "Order Helidon application"
+    description: "FrontEnd Helidon application"
 spec:
   components:
-    - componentName: order-helidon-component
+    - componentName: frontend-helidon-component
       traits:
         - trait:
             apiVersion: oam.verrazzano.io/v1alpha1
             kind: MetricsTrait
             spec:
               scraper: verrazzano-system/vmi-system-prometheus-0
-#        - trait:
-#            apiVersion: oam.verrazzano.io/v1alpha1
-#            kind: IngressTrait
-#            metadata:
-#              name: order-helidon-ingress
-#            spec:
-#              rules:
-#                - paths:
-#                    - path: "/command"
-#                      pathType: Prefix
+        - trait:
+            apiVersion: oam.verrazzano.io/v1alpha1
+            kind: IngressTrait
+            metadata:
+              name: frontend-helidon-ingress
+            spec:
+              rules:
+                - paths:
+                    - path: "/"
+                      pathType: Prefix

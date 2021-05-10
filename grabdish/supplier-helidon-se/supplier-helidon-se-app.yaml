@@ -3,14 +3,14 @@
 apiVersion: core.oam.dev/v1alpha2
 kind: ApplicationConfiguration
 metadata:
-  name: order-helidon-appconf
+  name: supplier-helidon-se-appconf
   namespace: msdataworkshop
   annotations:
     version: v1.0.0
-    description: "Order Helidon application"
+    description: "Supplier Helidon SE application"
 spec:
   components:
-    - componentName: order-helidon-component
+    - componentName: supplier-helidon-se-component
       traits:
         - trait:
             apiVersion: oam.verrazzano.io/v1alpha1
@@ -21,7 +21,7 @@ spec:
 #            apiVersion: oam.verrazzano.io/v1alpha1
 #            kind: IngressTrait
 #            metadata:
-#              name: order-helidon-ingress
+#              name: supplier-helidon-se-ingress
 #            spec:
 #              rules:
 #                - paths:
