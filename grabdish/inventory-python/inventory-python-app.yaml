@@ -3,14 +3,14 @@
 apiVersion: core.oam.dev/v1alpha2
 kind: ApplicationConfiguration
 metadata:
-  name: order-helidon-appconf
+  name: inventory-python-appconf
   namespace: msdataworkshop
   annotations:
     version: v1.0.0
-    description: "Order Helidon application"
+    description: "Inventory Python application"
 spec:
   components:
-    - componentName: order-helidon-component
+    - componentName: inventory-python-component
       traits:
         - trait:
             apiVersion: oam.verrazzano.io/v1alpha1
@@ -25,5 +25,5 @@ spec:
 #            spec:
 #              rules:
 #                - paths:
-#                    - path: "/command"
+#                    - path: "/"
 #                      pathType: Prefix
