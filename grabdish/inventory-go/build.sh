@@ -13,7 +13,6 @@ fi
 export IMAGE=${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_VERSION}
 
 echo IMAGE is $IMAGE
-echo TNS_ADMIN is $TNS_ADMIN
 docker build -t $IMAGE .
 
 if [ $DOCKERBUILD_RETCODE  ]; then
@@ -23,6 +22,4 @@ docker push $IMAGE
 if [  $? -eq 0 ]; then
     docker rmi ${IMAGE}
 fi
-
-#docker run us-phoenix-1.ocir.io/stevengreenberginc/paul.parkinson/msdataworkshop/inventory-go:0.1
 
