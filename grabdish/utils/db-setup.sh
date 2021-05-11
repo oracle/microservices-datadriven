@@ -61,6 +61,13 @@ while ! state_done OKE_NAMESPACE; do
 done
 
 
+# Give DB_PASSWORD priority
+while ! state_done DB_PASSWORD; do
+  echo "Waiting for DB_PASSWORD"
+  sleep 5
+done
+
+
 # Create Inventory ATP Bindings
 while ! state_done DB_WALLET_SECRET; do
   cd $GRABDISH_HOME/wallet

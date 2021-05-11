@@ -1,0 +1,32 @@
+# Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+apiVersion: core.oam.dev/v1alpha2
+kind: Component
+metadata:
+  name: inventory-helidon-component
+  namespace: inventory-helidon
+spec:
+  workload:
+    apiVersion: oam.verrazzano.io/v1alpha1
+    kind: VerrazzanoHelidonWorkload
+    metadata:
+      name: inventory-helidon-workload
+      labels:
+        app: inventory-helidon
+    spec:
+      deploymentTemplate:
+        metadata:
+          name: inventory-helidon-deployment
+        podSpec:
+          containers:
+            - name: frontend
+              image: %DOCKER_REGISTRY%/frontend-helidon:0.1
+              imagePullPolicy: Always
+              env:
+                - name: SECRETS_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: frontendadmin
+                      key: password
+              ports:
+                - containerPort: 8080
