@@ -10,7 +10,7 @@ export ORDER_PDB_NAME="$(state_get ORDER_DB_NAME)"
 export OCI_REGION="$(state_get OCI_REGION)"
 export VAULT_SECRET_OCID=""
 
-echo create inventory-go deployment and service...
+echo create inventory-go OAM Component and ApplicationConfiguration
 export CURRENTTIME=$( date '+%F_%H:%M:%S' )
 echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated deployment yaml
 

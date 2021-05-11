@@ -54,7 +54,7 @@ kubectl wait --for=condition=Ready pods --all -n msdataworkshop --timeout=300s
 
 echo Saving the host name of the load balancer exposing the Frontend service endpoints...
 #HOST=$(kubectl get gateway hello-helidon-hello-helidon-appconf-gw -n hello-helidon -o jsonpath='{.spec.servers[0].hosts[0]}')
-HOST=$(kubectl get gateway frontend-helidon-frontend-helidon-appconf-gw -n hello-helidon -o jsonpath='{.spec.servers[0].hosts[0]}')
+HOST=$(kubectl get gateway frontend-helidon-component -n hello-helidon -o jsonpath='{.spec.servers[0].hosts[0]}') # convention is namespace + appconf name + gw
 echo HOST is ${HOST}
 
 ingresses

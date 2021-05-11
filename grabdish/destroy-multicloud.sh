@@ -7,10 +7,5 @@
 echo Deleting the Verrazzano custom resource....
 kubectl delete verrazzano example-verrazzano
 
-#(Optional) View the uninstall logs.
-#kubectl logs -f \
-#    $( \
-#      kubectl get pod  \
-#          -l job-name=verrazzano-uninstall-example-verrazzano \
-#          -o jsonpath="{.items[0].metadata.name}" \
-#    )
+echo Viewing the uninstall logs...
+kubectl logs -f $(kubectl get pod -l job-name=uninstall-example-verrazzano -o jsonpath="{.items[0].metadata.name}")
