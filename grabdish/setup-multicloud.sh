@@ -57,13 +57,4 @@ echo Saving the host name of the load balancer exposing the Frontend service end
 HOST=$(kubectl get gateway frontend-helidon-frontend-helidon-appconf-gw -n hello-helidon -o jsonpath='{.spec.servers[0].hosts[0]}')
 echo HOST is ${HOST}
 
-# From https://verrazzano.io/docs/operations/  (see this link to change passwords as well)
-# Display information to access various consoles... todo don't display passwords
-echo Verrazzano installs several consoles. The ingress for the consoles is the following:
-kubectl get ingress -A
-echo The Username for Grafana, Prometheus, Kibana, and Elasticsearch consoles is verrazzano and the password is...
-kubectl get secret --namespace verrazzano-system verrazzano -o jsonpath={.data.password} | base64 --decode; echo
-echo The Username for KeyCloak console is keycloakadmin and the password is...
-kubectl get secret --namespace keycloak keycloak-http -o jsonpath={.data.password} | base64 --decode; echo
-echo The Username for Rancher console is admin and the password is...
-kubectl get secret --namespace cattle-system rancher-admin-secret -o jsonpath={.data.password} | base64 --decode; echo
+ingresses

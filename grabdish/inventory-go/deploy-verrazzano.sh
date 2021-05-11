@@ -24,9 +24,8 @@ sed -i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" inventory-go-comp-${CURREN
 
 if [ -z "$1" ]; then
     kubectl apply -f $SCRIPT_DIR/inventory-go-comp-$CURRENTTIME.yaml
-#    kubectl apply -f $SCRIPT_DIR/inventory-go-app.yaml
+    kubectl apply -f $SCRIPT_DIR/inventory-go-app.yaml
 else
     kubectl apply -f <(istioctl kube-inject -f $SCRIPT_DIR/inventory-go-comp-$CURRENTTIME.yaml) -n msdataworkshop
 fi
 
-#kubectl apply -f $SCRIPT_DIR/order-service.yaml -n msdataworkshop

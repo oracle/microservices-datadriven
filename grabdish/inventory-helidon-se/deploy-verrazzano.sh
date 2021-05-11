@@ -24,9 +24,8 @@ sed -i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" inventory-helidon-se-comp-
 
 if [ -z "$1" ]; then
     kubectl apply -f $SCRIPT_DIR/inventory-helidon-se-comp-$CURRENTTIME.yaml
-#    kubectl apply -f $SCRIPT_DIR/inventory-helidon-se-app.yaml
+    kubectl apply -f $SCRIPT_DIR/inventory-helidon-se-app.yaml
 else
     kubectl apply -f <(istioctl kube-inject -f $SCRIPT_DIR/inventory-helidon-se-comp-$CURRENTTIME.yaml) -n msdataworkshop
 fi
 
-#kubectl apply -f $SCRIPT_DIR/order-service.yaml -n msdataworkshop

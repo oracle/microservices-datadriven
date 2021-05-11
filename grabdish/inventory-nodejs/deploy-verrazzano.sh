@@ -24,9 +24,8 @@ sed -i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" inventory-nodejs-comp-${CU
 
 if [ -z "$1" ]; then
     kubectl apply -f $SCRIPT_DIR/inventory-nodejs-comp-$CURRENTTIME.yaml
-#    kubectl apply -f $SCRIPT_DIR/inventory-nodejs-app.yaml
+    kubectl apply -f $SCRIPT_DIR/inventory-nodejs-app.yaml
 else
     kubectl apply -f <(istioctl kube-inject -f $SCRIPT_DIR/inventory-nodejs-comp-$CURRENTTIME.yaml) -n msdataworkshop
 fi
 
-#kubectl apply -f $SCRIPT_DIR/order-service.yaml -n msdataworkshop

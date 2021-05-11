@@ -24,7 +24,7 @@ sed -i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" inventory-python-comp-${CU
 
 if [ -z "$1" ]; then
     kubectl apply -f $SCRIPT_DIR/inventory-python-comp-$CURRENTTIME.yaml
-#    kubectl apply -f $SCRIPT_DIR/inventory-python-app.yaml
+    kubectl apply -f $SCRIPT_DIR/inventory-python-app.yaml
 else
     kubectl apply -f <(istioctl kube-inject -f $SCRIPT_DIR/inventory-python-comp-$CURRENTTIME.yaml) -n msdataworkshop
 fi
