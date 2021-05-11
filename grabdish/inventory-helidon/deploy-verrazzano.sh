@@ -18,15 +18,14 @@ cp inventory-helidon-comp.yaml inventory-helidon-comp-$CURRENTTIME.yaml
 
 #may hit sed incompat issue with mac
 sed -i "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" inventory-helidon-comp-$CURRENTTIME.yaml
-sed -i "s|%ORDER_PDB_NAME%|${ORDER_PDB_NAME}|g" inventory-helidon-comp-${CURRENTTIME}.yaml
+sed -i "s|%INVENTORY_PDB_NAME%|${ORDER_PDB_NAME}|g" inventory-helidon-comp-${CURRENTTIME}.yaml
 sed -i "s|%OCI_REGION%|${OCI_REGION}|g" inventory-helidon-comp-${CURRENTTIME}.yaml
 sed -i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" inventory-helidon-comp-${CURRENTTIME}.yaml
 
 if [ -z "$1" ]; then
     kubectl apply -f $SCRIPT_DIR/inventory-helidon-comp-$CURRENTTIME.yaml
-#    kubectl apply -f $SCRIPT_DIR/inventory-helidon-app.yaml
+    kubectl apply -f $SCRIPT_DIR/inventory-helidon-app.yaml
 else
     kubectl apply -f <(istioctl kube-inject -f $SCRIPT_DIR/inventory-helidon-comp-$CURRENTTIME.yaml) -n msdataworkshop
 fi
 
-#kubectl apply -f $SCRIPT_DIR/order-service.yaml -n msdataworkshop
