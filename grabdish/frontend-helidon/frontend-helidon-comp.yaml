@@ -4,7 +4,7 @@ apiVersion: core.oam.dev/v1alpha2
 kind: Component
 metadata:
   name: frontend-helidon-component
-  namespace: frontend-helidon
+  namespace: msdataworkshop
 spec:
   workload:
     apiVersion: oam.verrazzano.io/v1alpha1
