@@ -3,20 +3,20 @@
 apiVersion: core.oam.dev/v1alpha2
 kind: Component
 metadata:
-  name: inventory-helidon-component
-  namespace: inventory-helidon
+  name: frontend-helidon-component
+  namespace: frontend-helidon
 spec:
   workload:
     apiVersion: oam.verrazzano.io/v1alpha1
     kind: VerrazzanoHelidonWorkload
     metadata:
-      name: inventory-helidon-workload
+      name: frontend-helidon-workload
       labels:
-        app: inventory-helidon
+        app: frontend-helidon
     spec:
       deploymentTemplate:
         metadata:
-          name: inventory-helidon-deployment
+          name: frontend
         podSpec:
           containers:
             - name: frontend
