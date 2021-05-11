@@ -33,6 +33,33 @@ done
 while ! state_done KUBECTL; do
   oci ce cluster create-kubeconfig --cluster-id "$(state_get OKE_OCID)" --file $HOME/.kube/config --region "$(state_get REGION)" --token-version 2.0.0
 
+  cat >~/.kube/token_helper.sh <<'!'
+#!/bin/bash
+
+TOKEN_FILE=~/.kube/TOKEN
+
+if ! test -f "$TOKEN_FILE" || test $(( `date +%s` - `stat -L --format %Y $TOKEN_FILE` )) -gt 240; then
+  umask 177
+  oci ce cluster generate-token --cluster-id "$5" --region "$7" >$TOKEN_FILE
+fi
+
+cat $TOKEN_FILE
+!
+
+  chmod 755 ~/.kube/token_helper.sh
+
+  export PATH=$PATH:~/.kube
+
+  cluster_id="$(state_get OKE_OCID)"
+  kubectl config set-credentials "user-${cluster_id:(-11)}" --exec-command="./token_helper.sh" \
+  --exec-arg="ce" \
+  --exec-arg="cluster" \
+  --exec-arg="generate-token" \
+  --exec-arg="--cluster-id" \
+  --exec-arg="${cluster_id}" \
+  --exec-arg="--region" \
+  --exec-arg="$(state_get REGION)"
+
   state_set_done KUBECTL
 done
 
