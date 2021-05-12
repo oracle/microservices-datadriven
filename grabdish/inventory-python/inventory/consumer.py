@@ -32,17 +32,13 @@ def run():
     while True: # retry if it fails
         try:
             conn = dbmgr.acquireConn()
-
-            # Get the two queues
-#            orderQueue = conn.queue(queue_owner + ".orderqueue")
-#            inventoryQueue = conn.queue(queue_owner + ".inventoryqueue")
             orderQueue = conn.queue(queue_owner + ".orderqueue", conn.gettype("SYS.AQ$_JMS_TEXT_MESSAGE"))
             inventoryQueue = conn.queue(queue_owner + ".inventoryqueue", conn.gettype("SYS.AQ$_JMS_TEXT_MESSAGE"))
             cursor = conn.cursor()
-
             # Loop requesting inventory requests from the order queue
             while True:
                 # Dequeue the next event from the order queue
+                conn.begin()
                 payload =orderQueue.deqOne().payload
                 logger.debug(payload.TEXT_VC)
                 orderInfo = simplejson.loads(payload.TEXT_VC)
@@ -60,8 +56,6 @@ def run():
                      'suggestiveSale': "beer"})
                 payload.TEXT_LEN = len(payload.TEXT_VC)
                 inventoryQueue.enqOne(conn.msgproperties(payload = payload))
-
-                # Commit
                 conn.commit()
 
         except dbmgr.DatabaseDown as e:

@@ -10,7 +10,7 @@ export ORDER_PDB_NAME="$(state_get ORDER_DB_NAME)"
 export OCI_REGION="$(state_get OCI_REGION)"
 export VAULT_SECRET_OCID=""
 
-echo create order-helidon deployment and service...
+echo create order-helidon OAM Component and ApplicationConfiguration
 export CURRENTTIME=$( date '+%F_%H:%M:%S' )
 echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated deployment yaml
 
@@ -24,9 +24,8 @@ sed -i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" order-helidon-comp-${CURRE
 
 if [ -z "$1" ]; then
     kubectl apply -f $SCRIPT_DIR/order-helidon-comp-$CURRENTTIME.yaml
-#    kubectl apply -f $SCRIPT_DIR/order-helidon-app.yaml
+    kubectl apply -f $SCRIPT_DIR/order-helidon-app.yaml
 else
     kubectl apply -f <(istioctl kube-inject -f $SCRIPT_DIR/order-helidon-comp-$CURRENTTIME.yaml) -n msdataworkshop
 fi
 
-#kubectl apply -f $SCRIPT_DIR/order-service.yaml -n msdataworkshop

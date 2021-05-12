@@ -12,7 +12,7 @@ spec:
     metadata:
       name: order-helidon-workload
       labels:
-        app: order-helidon
+        app: order
     spec:
       deploymentTemplate:
         metadata:

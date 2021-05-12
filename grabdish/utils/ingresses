@@ -1,0 +1,14 @@
+#!/bin/bash
+## Copyright (c) 2021 Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+# From https://verrazzano.io/docs/operations/  (see this link to change passwords as well)
+# Display information to access various consoles... todo don't display passwords
+echo Verrazzano installs several consoles. The following is the ingress information for the consoles...
+kubectl get ingress -A
+echo The Username for Grafana, Prometheus, Kibana, and Elasticsearch consoles is verrazzano and the password is...
+kubectl get secret --namespace verrazzano-system verrazzano -o jsonpath={.data.password} | base64 --decode; echo
+echo The Username for KeyCloak console is keycloakadmin and the password is...
+kubectl get secret --namespace keycloak keycloak-http -o jsonpath={.data.password} | base64 --decode; echo
+echo The Username for Rancher console is admin and the password is...
+kubectl get secret --namespace cattle-system rancher-admin-secret -o jsonpath={.data.password} | base64 --decode; echo
