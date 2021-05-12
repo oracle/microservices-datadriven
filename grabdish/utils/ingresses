@@ -4,7 +4,7 @@
 
 # From https://verrazzano.io/docs/operations/  (see this link to change passwords as well)
 # Display information to access various consoles... todo don't display passwords
-echo Verrazzano installs several consoles. The ingress for the consoles is the following:
+echo Verrazzano installs several consoles. The following is the ingress information for the consoles...
 kubectl get ingress -A
 echo The Username for Grafana, Prometheus, Kibana, and Elasticsearch consoles is verrazzano and the password is...
 kubectl get secret --namespace verrazzano-system verrazzano -o jsonpath={.data.password} | base64 --decode; echo

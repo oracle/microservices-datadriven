@@ -5,5 +5,5 @@
 
 echo delete frontend OAM Component and ApplicationConfiguration
 
-kubectl delete applicationconfiguration frontend-helidon-appconf -n msdataworkshop
-kubectl delete component frontend-helidon-component -n msdataworkshop
+kubectl delete applicationconfiguration inventory-go-appconf -n msdataworkshop
+kubectl delete component inventory-go-component -n msdataworkshop

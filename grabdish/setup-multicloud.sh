@@ -49,12 +49,14 @@ kubectl label namespace msdataworkshop verrazzano-managed=true istio-injection=e
 echo deploy microservices using Verrazzano Open Application Model...
 ./deploy-multicloud.sh
 
-echo Wait for the application to be ready...
+echo Wait for the application to be ready... # msdataworkshop-frontend-helidon-appconf-gw and msdataworkshop-order-helidon-appconf-gw
 kubectl wait --for=condition=Ready pods --all -n msdataworkshop --timeout=300s
 
+echo Display all gateways in msdataworkshop...
+kubectl get gateway -n msdataworkshop
+
 echo Saving the host name of the load balancer exposing the Frontend service endpoints...
-#HOST=$(kubectl get gateway hello-helidon-hello-helidon-appconf-gw -n hello-helidon -o jsonpath='{.spec.servers[0].hosts[0]}')
-HOST=$(kubectl get gateway frontend-helidon-component -n hello-helidon -o jsonpath='{.spec.servers[0].hosts[0]}') # convention is namespace + appconf name + gw
+HOST=$(kubectl get gateway msdataworkshop-frontend-helidon-appconf-gw -n msdataworkshop -o jsonpath='{.spec.servers[0].hosts[0]}') # convention is namespace + appconf name + gw
 echo HOST is ${HOST}
 
 ingresses
