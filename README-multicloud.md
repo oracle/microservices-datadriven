@@ -3,7 +3,7 @@
 
 0. Starting from http://bit.ly/simplifymicroservices
 
-1. Do `Lab 1: Setup` (takes ~20 to 25 minutes)
+1. Do `Lab 1: Setup` (takes ~20 minutes)
     - This will clone the workshop src from https://github.com/oracle/microservices-datadriven,  
       provision and configure the following, and build and push the workshop microservice docker images
         - OKE cluster

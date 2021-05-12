@@ -43,27 +43,36 @@ kubectl wait \
 echo Adding labels identifying the msdataworkshop namespace as managed by Verrazzano and enabled for Istio...
 kubectl label namespace msdataworkshop verrazzano-managed=true istio-injection=enabled
 
+echo Adding VerrazzanoProject
+#export CLUSTERS_NAME="$(state_get OCI_REGION)"
+export CLUSTERS_NAME="$(state_get CLUSTER_NAME)" # notice the plural/CLUSTERS_NAME and singular/CLUSTER_NAME
+export CURRENTTIME=$( date '+%F_%H:%M:%S' )
+echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated verrazzano-project yaml for CLUSTERS_NAME ${CLUSTERS_NAME}
+cp verrazzano-project.yaml verrazzano-project-$CURRENTTIME.yaml
+sed -i "s|%CLUSTERS_NAME%|${CLUSTERS_NAME}|g" verrazzano-project-$CURRENTTIME.yaml
+kubectl apply -f verrazzano-project-$CURRENTTIME.yaml
+
+# without the above it is necessary to
+#kubectl edit authorizationpolicy supplier-helidon-se-appconf -n msdataworkshop
+#and
+#kubectl edit authorizationpolicy order-helidon-appconf -n msdataworkshop
+#adding the following under rules: from: source: principals:
+#- cluster.local/ns/msdataworkshop/sa/frontend-helidon-appconf
+
 #echo undeploy any previously deployed microservices... this is not needed unless another workshop using graddish/msdataworkshop was previously deployed
 #./undeploy.sh
 
 echo deploy microservices using Verrazzano Open Application Model...
 ./deploy-multicloud.sh
 
-echo Wait for the application to be ready...
+echo Wait for the application to be ready... # msdataworkshop-frontend-helidon-appconf-gw and msdataworkshop-order-helidon-appconf-gw
 kubectl wait --for=condition=Ready pods --all -n msdataworkshop --timeout=300s
 
+echo Display istio resources in msdataworkshop...
+getistio
+
 echo Saving the host name of the load balancer exposing the Frontend service endpoints...
-#HOST=$(kubectl get gateway hello-helidon-hello-helidon-appconf-gw -n hello-helidon -o jsonpath='{.spec.servers[0].hosts[0]}')
-HOST=$(kubectl get gateway frontend-helidon-frontend-helidon-appconf-gw -n hello-helidon -o jsonpath='{.spec.servers[0].hosts[0]}')
+HOST=$(kubectl get gateway msdataworkshop-frontend-helidon-appconf-gw -n msdataworkshop -o jsonpath='{.spec.servers[0].hosts[0]}') # convention is namespace + appconf name + gw
 echo HOST is ${HOST}
 
-# From https://verrazzano.io/docs/operations/  (see this link to change passwords as well)
-# Display information to access various consoles... todo don't display passwords
-echo Verrazzano installs several consoles. The ingress for the consoles is the following:
-kubectl get ingress -A
-echo The Username for Grafana, Prometheus, Kibana, and Elasticsearch consoles is verrazzano and the password is...
-kubectl get secret --namespace verrazzano-system verrazzano -o jsonpath={.data.password} | base64 --decode; echo
-echo The Username for KeyCloak console is keycloakadmin and the password is...
-kubectl get secret --namespace keycloak keycloak-http -o jsonpath={.data.password} | base64 --decode; echo
-echo The Username for Rancher console is admin and the password is...
-kubectl get secret --namespace cattle-system rancher-admin-secret -o jsonpath={.data.password} | base64 --decode; echo
+ingresses
