@@ -43,7 +43,8 @@
     - Optionally do `Lab 3: Polyglot Microservices` to test with other languages such as Python, JS, .NET, and Go
         - Again, instead of running `cd $GRABDISH_HOME;./deploy.sh` run `cd $GRABDISH_HOME;./deploy-multicloud.sh`
     - Optionally do `Lab 4: Scaling` to show how the application can be scaled at the application and database tiers to maintain optimal performance.
-        - Can be run without modification
+        - The creation of the LB in Step 1 is not necessary as the gateway can be used.
+        - Instead of running `export LB=[LB_IPADDRESS]` run `export LB=$(kubectl get gateway msdataworkshop-order-helidon-appconf-gw -n msdataworkshop -o jsonpath='{.spec.servers[0].hosts[0]}'`
     - Optionally do `Lab 5: Tracing Using Jaeger` to show microservice activity using OpenTracing and Jaeger.
         - Can be run without modification
     
@@ -52,10 +53,12 @@
 5. Teardown by running 
     - `./undeploy-multicloud.sh` (to remove workshop microservices, etc.) 
     - `./destroy-multicloud.sh` (to remove Verrazzano)
-    
 
 TODOs
- - one open issue to configure RBAC source access (currently this done by changing the authorizationpolicy after the fact) 
+ - one open issue: RBAC source access (currently this done by manually changing the authorizationpolicy after the fact) 
+    and the appropriate way is (if all ms are not in the same app) is to use a project. Doc refs...
+    - https://verrazzano.io/docs/concepts/verrazzanomulticluster/#the-verrazzanoproject-resource 
+    - https://verrazzano.io/docs/reference/api/multicluster/verrazzanoproject/
  - ./setup-multicloud.sh should take a password to override those auto-generated and password(s) should not be displayed
  - add walkthrough of consoles...
  - reduce the number of required LBs while also keeping the current workshop and multi-cloud workshop independent
