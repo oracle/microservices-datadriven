@@ -6,7 +6,7 @@
 SCRIPT_DIR=$(dirname $0)
 
 export DOCKER_REGISTRY="$(state_get DOCKER_REGISTRY)"
-export ORDER_PDB_NAME="$(state_get ORDER_DB_NAME)"
+export INVENTORY_PDB_NAME="$(state_get INVENTORY_DB_NAME)"
 export OCI_REGION="$(state_get OCI_REGION)"
 export VAULT_SECRET_OCID=""
 
@@ -18,7 +18,7 @@ cp inventory-dotnet-comp.yaml inventory-dotnet-comp-$CURRENTTIME.yaml
 
 #may hit sed incompat issue with mac
 sed -i "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" inventory-dotnet-comp-$CURRENTTIME.yaml
-sed -i "s|%ORDER_PDB_NAME%|${ORDER_PDB_NAME}|g" inventory-dotnet-comp-${CURRENTTIME}.yaml
+sed -i "s|%INVENTORY_PDB_NAME%|${INVENTORY_PDB_NAME}|g" inventory-dotnet-comp-${CURRENTTIME}.yaml
 sed -i "s|%OCI_REGION%|${OCI_REGION}|g" inventory-dotnet-comp-${CURRENTTIME}.yaml
 sed -i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" inventory-dotnet-comp-${CURRENTTIME}.yaml
 
