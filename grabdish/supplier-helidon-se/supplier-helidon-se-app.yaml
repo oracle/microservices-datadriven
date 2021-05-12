@@ -27,3 +27,4 @@ spec:
                 - paths:
                     - path: "/"
                       pathType: Prefix
+

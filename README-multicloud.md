@@ -33,6 +33,7 @@
         verrazzano-system   vmi-system-kibana          <none>   kibana.vmi.system.default.158.101.26.111.nip.io          158.101.26.111   80, 443   37h
         verrazzano-system   vmi-system-prometheus      <none>   prometheus.vmi.system.default.158.101.26.111.nip.io      158.101.26.111   80, 443   37h
         verrazzano-system   vmi-system-prometheus-gw   <none>   prometheus-gw.vmi.system.default.158.101.26.111.nip.io   158.101.26.111   80, 443   37h
+
         
 3. Do `Lab 2: Data-centric microservices walkthrough with Helidon MP` to test the app, etc.
     - REPLACE STEP 1 INSTRUCTION IN LAB
@@ -66,5 +67,6 @@ TODOs
     - the scaling lab uses an additional 1 LB for requests as they go directly to the order service. 
     - Verrazzano uses 2 LBs (one for consoles and one for apps)
  - possibly add Kiali
+
 
 Future: Running on other clouds starting with Azure (using interconnect, etc.)...
