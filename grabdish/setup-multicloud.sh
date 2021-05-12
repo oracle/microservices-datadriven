@@ -49,21 +49,14 @@ kubectl label namespace msdataworkshop verrazzano-managed=true istio-injection=e
 echo deploy microservices using Verrazzano Open Application Model...
 ./deploy-multicloud.sh
 
-echo Wait for the application to be ready...
+echo Wait for the application to be ready... # msdataworkshop-frontend-helidon-appconf-gw and msdataworkshop-order-helidon-appconf-gw
 kubectl wait --for=condition=Ready pods --all -n msdataworkshop --timeout=300s
 
+echo Display all gateways in msdataworkshop...
+kubectl get gateway -n msdataworkshop
+
 echo Saving the host name of the load balancer exposing the Frontend service endpoints...
-#HOST=$(kubectl get gateway hello-helidon-hello-helidon-appconf-gw -n hello-helidon -o jsonpath='{.spec.servers[0].hosts[0]}')
-HOST=$(kubectl get gateway frontend-helidon-frontend-helidon-appconf-gw -n hello-helidon -o jsonpath='{.spec.servers[0].hosts[0]}')
+HOST=$(kubectl get gateway msdataworkshop-frontend-helidon-appconf-gw -n msdataworkshop -o jsonpath='{.spec.servers[0].hosts[0]}') # convention is namespace + appconf name + gw
 echo HOST is ${HOST}
 
-# From https://verrazzano.io/docs/operations/  (see this link to change passwords as well)
-# Display information to access various consoles... todo don't display passwords
-echo Verrazzano installs several consoles. The ingress for the consoles is the following:
-kubectl get ingress -A
-echo The Username for Grafana, Prometheus, Kibana, and Elasticsearch consoles is verrazzano and the password is...
-kubectl get secret --namespace verrazzano-system verrazzano -o jsonpath={.data.password} | base64 --decode; echo
-echo The Username for KeyCloak console is keycloakadmin and the password is...
-kubectl get secret --namespace keycloak keycloak-http -o jsonpath={.data.password} | base64 --decode; echo
-echo The Username for Rancher console is admin and the password is...
-kubectl get secret --namespace cattle-system rancher-admin-secret -o jsonpath={.data.password} | base64 --decode; echo
+ingresses

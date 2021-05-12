@@ -17,13 +17,14 @@ spec:
             kind: MetricsTrait
             spec:
               scraper: verrazzano-system/vmi-system-prometheus-0
-#        - trait:
-#            apiVersion: oam.verrazzano.io/v1alpha1
-#            kind: IngressTrait
-#            metadata:
-#              name: supplier-helidon-se-ingress
-#            spec:
-#              rules:
-#                - paths:
-#                    - path: "/command"
-#                      pathType: Prefix
+        - trait:
+            apiVersion: oam.verrazzano.io/v1alpha1
+            kind: IngressTrait
+            metadata:
+              name: supplier-helidon-se-ingress
+            spec:
+              rules:
+                - paths:
+                    - path: "/"
+                      pathType: Prefix
+
