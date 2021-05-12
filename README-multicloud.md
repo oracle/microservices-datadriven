@@ -1,9 +1,9 @@
 # Mutli-cloud, Verrazzano version of workshop 
-#Simplify microservices architecture with Oracle Converged Database
+# Simplify microservices architecture with Oracle Converged Database
 
 0. Starting from http://bit.ly/simplifymicroservices
 
-1. Do `Lab 1: Setup` (takes ~20 to 25 minutes)
+1. Do `Lab 1: Setup` (takes ~20 minutes)
     - This will clone the workshop src from https://github.com/oracle/microservices-datadriven,  
       provision and configure the following, and build and push the workshop microservice docker images
         - OKE cluster
@@ -61,6 +61,7 @@ TODOs
     - https://verrazzano.io/docs/concepts/verrazzanomulticluster/#the-verrazzanoproject-resource 
     - https://verrazzano.io/docs/reference/api/multicluster/verrazzanoproject/
  - ./setup-multicloud.sh should take a password to override those auto-generated and password(s) should not be displayed
+ - test Jaeger functionality
  - add walkthrough of consoles...
  - reduce the number of required LBs while also keeping the current workshop and multi-cloud workshop independent
     - the workshop uses 2 LBs (one for the app and one for Jaeger)
