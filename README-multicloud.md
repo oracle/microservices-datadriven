@@ -49,10 +49,19 @@
     
 4. Use https URLs and login from output in step 2 to view various dashboards deployed by Verrazzano and Jaeger.
 
+5. Teardown by running 
+    - `./undeploy-multicloud.sh` (to remove workshop microservices, etc.) 
+    - `./destroy-multicloud.sh` (to remove Verrazzano)
+    
+
 TODOs
  - one open issue to configure RBAC source access (currently this done by changing the authorizationpolicy after the fact) 
  - ./setup-multicloud.sh should take a password to override those auto-generated and password(s) should not be displayed
  - add walkthrough of consoles...
+ - reduce the number of required LBs while also keeping the current workshop and multi-cloud workshop independent
+    - the workshop uses 2 LBs (one for the app and one for Jaeger)
+    - the scaling lab uses an additional 1 LB for requests as they go directly to the order service. 
+    - Verrazzano uses 2 LBs (one for consoles and one for apps)
  - possibly add Kiali
 
 Future: Running on other clouds starting with Azure (using interconnect, etc.)...
