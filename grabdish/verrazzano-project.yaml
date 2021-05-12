@@ -2,7 +2,7 @@ apiVersion: clusters.verrazzano.io/v1alpha1
 kind: VerrazzanoProject
 metadata:
   name: msdataworkshop
-  namespace: msdataworkshop
+  namespace: verrazzano-mc
 spec:
   template:
     namespaces:

@@ -45,7 +45,7 @@ kubectl label namespace msdataworkshop verrazzano-managed=true istio-injection=e
 
 echo Adding VerrazzanoProject
 #export CLUSTERS_NAME="$(state_get OCI_REGION)"
-export CLUSTERS_NAME="$(state_get CLUSTER_NAME)" # notice the plural/CLUSTERS_NAME and singular/CLUSTER_NAME
+export CLUSTERS_NAME="$(state_get CLUSTER_NAME)" # eg cluster-cyxypetwerq, also notice the plural/CLUSTERS_NAME and singular/CLUSTER_NAME
 export CURRENTTIME=$( date '+%F_%H:%M:%S' )
 echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated verrazzano-project yaml for CLUSTERS_NAME ${CLUSTERS_NAME}
 cp verrazzano-project.yaml verrazzano-project-$CURRENTTIME.yaml
