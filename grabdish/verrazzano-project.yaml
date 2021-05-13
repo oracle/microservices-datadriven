@@ -1,0 +1,13 @@
+apiVersion: clusters.verrazzano.io/v1alpha1
+kind: VerrazzanoProject
+metadata:
+  name: msdataworkshop
+  namespace: verrazzano-mc
+spec:
+  template:
+    namespaces:
+      - metadata:
+          name: msdataworkshop
+  placement:
+    clusters:
+      - name: %CLUSTERS_NAME%

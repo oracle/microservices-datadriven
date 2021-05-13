@@ -165,23 +165,14 @@ async function processOrder() {
   let opStart = process.hrtime.bigint();
 
   try {
+    oracledb.autoCommit = false;
     connection = await oracledb.getConnection();
     const orderQueue = await connection.getQueue(queueConfig.orderQueue, queueOptions);
-    logStats(opName, opStart, process.hrtime.bigint()); 
-
+    logStats(opName, opStart, process.hrtime.bigint());
     const orderMsg = await orderQueue.deqOne();
     opName = 'Inventory:ordQConsumer';
-    opStart = process.hrtime.bigint(); 
-   // TODO - Validate message
+    opStart = process.hrtime.bigint();
     const orderMsgContent = JSON.parse(orderMsg.payload.TEXT_VC);
-    
-    //console.log(`orderMsgContent = ${JSON.stringify(orderMsgContent)}`);
-    
-    // TODO - Update logic to handle multiple records with the same inventory count
-    //        May have to check the locations that have at least one row of inventory and then
-    //        try to decrement whichever one we can (may have to loop or perform some other
-    //        process)
-    
     const updateSQL = 
 `update inventory
    set inventorycount = inventorycount - 1
@@ -224,12 +215,9 @@ async function processOrder() {
       TEXT_VC: inventoryMsgText,
       TEXT_LEN: inventoryMsgText.length
     });
-    
-    //console.log(`Enqueuing message ${JSON.stringify(inventoryMsgContent)} into inventoryQueue ${queueConfig.inventoryQueue}`);
 
+    //console.log(`Enqueuing message ${JSON.stringify(inventoryMsgContent)} into inventoryQueue ${queueConfig.inventoryQueue}`);
     const inventoryMsg = await inventoryQueue.enqOne({payload: inventoryMsgContent, priority: 2});
-  
-    // TODO - See if there is a way to commit on the enqueue without having to use an additional roundtrip
     await connection.commit();
     
     logStats(opName, opStart, process.hrtime.bigint());  
