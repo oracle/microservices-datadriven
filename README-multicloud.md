@@ -14,6 +14,7 @@
         
 2. Run `./setup-multicloud.sh` (takes ~20 minutes)
     - Step 1 will have put you in the appropriate `.../microservices-datadriven/grabdish` dir.
+    - Takes CLUSTER_NAME as an argument 
     - This will install verrazzano, deploy workshop microservices, and provide URLs for 
         - Grafana
         - Prometheus
