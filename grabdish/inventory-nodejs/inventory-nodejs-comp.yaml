@@ -3,20 +3,20 @@
 apiVersion: core.oam.dev/v1alpha2
 kind: Component
 metadata:
-  name: inventory-helidon-component
+  name: inventory-nodejs-component
   namespace: msdataworkshop
 spec:
   workload:
     apiVersion: oam.verrazzano.io/v1alpha1
     kind: VerrazzanoHelidonWorkload
     metadata:
-      name: inventory-helidon-workload
+      name: inventory-nodejs-workload
       labels:
-        app: inventory-helidon
+        app: inventory-nodejs
     spec:
       deploymentTemplate:
         metadata:
-          name: inventory-helidon-deployment
+          name: inventory-nodejs-deployment
         podSpec:
           containers:
             - name: inventory
