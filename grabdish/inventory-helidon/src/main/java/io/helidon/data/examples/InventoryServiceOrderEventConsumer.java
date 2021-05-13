@@ -11,10 +11,8 @@ import oracle.jms.*;
 
 import javax.jms.*;
 import java.lang.IllegalStateException;
+import java.sql.*;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Types;
 
 public class InventoryServiceOrderEventConsumer implements Runnable {
 
@@ -38,6 +36,26 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
     }
 
     public void listenForOrderEvents() throws Exception {
+        Connection connection = inventoryResource.atpInventoryPDB.getConnection();
+        while (true) {
+            System.out.println("InventoryServiceOrderEventConsumer.listenForOrderEvents with sproc");
+            CallableStatement cstmt = null;
+            String SQL = "{call dequeueOrderMessage (?)}";
+            cstmt = connection.prepareCall(SQL);
+            cstmt.registerOutParameter(1, Types.VARCHAR);
+//            cstmt.registerOutParameter("p_orderInfo", Types.VARCHAR);
+            boolean hadResults = cstmt.execute();
+            System.out.println("InventoryServiceOrderEventConsumer.listenForOrderEvents hadResults:" + hadResults);
+            while (hadResults) {
+                ResultSet rs = cstmt.getResultSet();
+                hadResults = cstmt.getMoreResults();
+            }
+            String outputValue = cstmt.getString(1); // index-based
+            System.out.println("InventoryServiceOrderEventConsumer.listenForOrderEvents outputValue:" + outputValue);
+        }
+    }
+
+    public void listenForOrderEventsAQAPI() throws Exception {
         QueueConnectionFactory qcfact = AQjmsFactory.getQueueConnectionFactory(inventoryResource.atpInventoryPDB);
         QueueSession qsess = null;
         QueueConnection qconn = null;
