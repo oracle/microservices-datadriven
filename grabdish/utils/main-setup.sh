@@ -21,7 +21,11 @@ fi
 
 # Get the User OCID
 while ! state_done USER_OCID; do
-  read -p "Please enter your OCI user's OCID: " USER_OCID
+  if test -z "$TEST_USER_OCID"; then
+    read -p "Please enter your OCI user's OCID: " USER_OCID
+  else
+    USER_OCID=$TEST_USER_OCID
+  fi
   # Validate
   if test ""`oci iam user get --user-id "$USER_OCID" --query 'data."lifecycle-state"' --raw-output 2>$GRABDISH_LOG/user_ocid_err` == 'ACTIVE'; then
     state_set USER_OCID "$USER_OCID"
@@ -47,52 +51,12 @@ while ! state_done RUN_TYPE; do
     state_set RESERVATION_ID `grep -oP '(?<=LL).*?(?=-USER)' <<<"$(state_get USER_NAME)"`
     state_set_done PROVISIONING
     state_set RUN_NAME "grabdish$(state_get RESERVATION_ID)"
-    state_set ORDER_DB_NAME "ORDERDB$(state_get RESERVATION_ID)"
+    state_set ORDER_DB_NAME "ORDER$(state_get RESERVATION_ID)"
     state_set INVENTORY_DB_NAME "INVENTORY$(state_get RESERVATION_ID)"
     state_set_done OKE_LIMIT_CHECK
     state_set_done ATP_LIMIT_CHECK
   else
     state_set RUN_TYPE "1"
-  fi
-done
-
-
-# Check OKE Limits
-if ! state_done OKE_LIMIT_CHECK; then
-  # Cluster Service Limit
-  OKE_LIMIT=`oci limits value list --compartment-id "$OCI_TENANCY" --service-name "container-engine" --query 'sum(data[?"name"=='"'cluster-count'"'].value)'`
-  if test "$OKE_LIMIT" -lt 1; then
-    echo 'The service limit for the "Container Engine" "Cluster Count" is insufficent to run this workshop.  At least 1 is required.'
-    exit
-  elif test "$OKE_LIMIT" -eq 1; then
-    echo 'You are limited to only one OKE cluster in this tenancy.  This workshop will create one additional OKE cluster and so any other OKE clusters must be terminated.'
-    read -p "Please confirm that no other un-terminated OKE clusters exist in this tenancy and then hit [RETURN]? " DUMMY
-  fi
-  state_set_done OKE_LIMIT_CHECK
-fi
-
-
-# Check ATP resource availability
-while ! state_done ATP_LIMIT_CHECK; do
-  CHECK=1
-  # ATP OCPU availability
-  if test $(oci limits resource-availability get --compartment-id="$OCI_TENANCY" --service-name "database" --limit-name "atp-ocpu-count" --query 'to_string(min([data."fractional-availability",`4.0`]))' --raw-output) != '4.0'; then
-    echo 'The "Autonomous Transaction Processing OCPU Count" resource availability is insufficent to run this workshop.'
-    echo '4 OCPUs are required.  Terminate some existing ATP databases and try again.'
-    CHECK=0
-  fi
-
-  # ATP storage availability
-  if test $(oci limits resource-availability get --compartment-id="$OCI_TENANCY" --service-name "database" --limit-name "atp-total-storage-tb" --query 'to_string(min([data."fractional-availability",`2.0`]))' --raw-output) != '2.0'; then
-    echo 'The "Autonomous Transaction Processing Total Storage (TB)" resource availability is insufficent to run this workshop.'
-    echo '2 TB are required.  Terminate some existing ATP databases and try again.'
-    CHECK=0
-  fi
-
-  if test $CHECK -eq 1; then
-    state_set_done ATP_LIMIT_CHECK
-  else
-    read -p "Hit [RETURN] when you are ready to retry? " DUMMY
   fi
 done
 
@@ -145,27 +109,12 @@ while ! state_done COMPARTMENT_OCID; do
   else
     read -p "Please enter your OCI compartments's OCID: " COMPARTMENT_OCID
   fi
-  while ! test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output`"" == 'ACTIVE'; do
+  while ! test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output`"" == 'ACTIVE' 2>/dev/null; do
     echo "Waiting for the compartment to become ACTIVE"
     sleep 2
   done
   state_set COMPARTMENT_OCID "$COMPARTMENT_OCID"
 done
-
-
-# Switch to SSH Key auth for the oci cli (workaround to perm issue awaiting fix)
-# source $GRABDISH_HOME/utils/oci-cli-cs-key-auth.sh
-
-
-# Run the terraform.sh in the background
-if ! state_get PROVISIONING; then
-  if ps -ef | grep "$GRABDISH_HOME/utils/terraform.sh" | grep -v grep; then
-    echo "$GRABDISH_HOME/utils/terraform.sh is already running"
-  else
-    echo "Executing terraform.sh in the background"
-    nohup $GRABDISH_HOME/utils/terraform.sh &>> $GRABDISH_LOG/terraform.log &
-  fi
-fi
 
 
 ## Run the java-builds.sh in the background
@@ -190,6 +139,59 @@ if ! state_get NON_JAVA_BUILDS; then
 fi
 
 
+# Check OKE Limits
+if ! state_done OKE_LIMIT_CHECK; then
+  # Cluster Service Limit
+  OKE_LIMIT=`oci limits value list --compartment-id "$OCI_TENANCY" --service-name "container-engine" --query 'sum(data[?"name"=='"'cluster-count'"'].value)'`
+  if test "$OKE_LIMIT" -lt 1; then
+    echo 'The service limit for the "Container Engine" "Cluster Count" is insufficent to run this workshop.  At least 1 is required.'
+    exit
+  elif test "$OKE_LIMIT" -eq 1; then
+    echo 'You are limited to only one OKE cluster in this tenancy.  This workshop will create one additional OKE cluster and so any other OKE clusters must be terminated.'
+    if test -z "$TEST_USER_OCID"; then
+      read -p "Please confirm that no other un-terminated OKE clusters exist in this tenancy and then hit [RETURN]? " DUMMY
+    fi
+  fi
+  state_set_done OKE_LIMIT_CHECK
+fi
+
+
+# Check ATP resource availability
+while ! state_done ATP_LIMIT_CHECK; do
+  CHECK=1
+  # ATP OCPU availability
+  if test $(oci limits resource-availability get --compartment-id="$OCI_TENANCY" --service-name "database" --limit-name "atp-ocpu-count" --query 'to_string(min([data."fractional-availability",`4.0`]))' --raw-output) != '4.0'; then
+    echo 'The "Autonomous Transaction Processing OCPU Count" resource availability is insufficent to run this workshop.'
+    echo '4 OCPUs are required.  Terminate some existing ATP databases and try again.'
+    CHECK=0
+  fi
+
+  # ATP storage availability
+  if test $(oci limits resource-availability get --compartment-id="$OCI_TENANCY" --service-name "database" --limit-name "atp-total-storage-tb" --query 'to_string(min([data."fractional-availability",`2.0`]))' --raw-output) != '2.0'; then
+    echo 'The "Autonomous Transaction Processing Total Storage (TB)" resource availability is insufficent to run this workshop.'
+    echo '2 TB are required.  Terminate some existing ATP databases and try again.'
+    CHECK=0
+  fi
+
+  if test $CHECK -eq 1; then
+    state_set_done ATP_LIMIT_CHECK
+  else
+    read -p "Hit [RETURN] when you are ready to retry? " DUMMY
+  fi
+done
+
+
+## Run the terraform.sh in the background
+if ! state_get PROVISIONING; then
+  if ps -ef | grep "$GRABDISH_HOME/utils/terraform.sh" | grep -v grep; then
+    echo "$GRABDISH_HOME/utils/terraform.sh is already running"
+  else
+    echo "Executing terraform.sh in the background"
+    nohup $GRABDISH_HOME/utils/terraform.sh &>> $GRABDISH_LOG/terraform.log &
+  fi
+fi
+
+
 # Get Namespace
 while ! state_done NAMESPACE; do
   export OCI_CLI_PROFILE=$(state_get HOME_REGION)
@@ -201,32 +203,36 @@ done
 
 # login to docker
 while ! state_done DOCKER_REGISTRY; do
-  export OCI_CLI_PROFILE=$(state_get HOME_REGION)
-  if ! TOKEN=`oci iam auth-token create  --user-id "$(state_get USER_OCID)" --description 'grabdish docker login' --query 'data.token' --raw-output 2>$GRABDISH_LOG/docker_registry_err`; then
-    if grep UserCapacityExceeded $GRABDISH_LOG/docker_registry_err >/dev/null; then
-      # The key already exists
-      echo 'ERROR: Failed to create auth token.  Please delete an old token from the OCI Console (Profile -> User Settings -> Auth Tokens).'
-      read -p "Hit return when you are ready to retry?"
-    else
-      echo "ERROR: Creating auth token had failed:"
-      cat $GRABDISH_LOG/docker_registry_err
-      exit
+  if test $(state_get RUN_TYPE) -ne 3; then
+    export OCI_CLI_PROFILE=$(state_get HOME_REGION)
+    if ! TOKEN=`oci iam auth-token create  --user-id "$(state_get USER_OCID)" --description 'grabdish docker login' --query 'data.token' --raw-output 2>$GRABDISH_LOG/docker_registry_err`; then
+      if grep UserCapacityExceeded $GRABDISH_LOG/docker_registry_err >/dev/null; then
+        # The key already exists
+        echo 'ERROR: Failed to create auth token.  Please delete an old token from the OCI Console (Profile -> User Settings -> Auth Tokens).'
+        read -p "Hit return when you are ready to retry?"
+        continue
+      else
+        echo "ERROR: Creating auth token had failed:"
+        cat $GRABDISH_LOG/docker_registry_err
+        exit
+      fi
     fi
   else
-    sleep 5 # Allow time for the auth token to come into effect
-    RETRIES=0
-    while test $RETRIES -le 10; do
-      if echo "$TOKEN" | docker login -u "$(state_get NAMESPACE)/$(state_get USER_NAME)" --password-stdin "$(state_get REGION).ocir.io"; then
-        state_set DOCKER_REGISTRY "$(state_get REGION).ocir.io/$(state_get NAMESPACE)/$(state_get RUN_NAME)"
-        break
-      else
-        echo "Docker login failed.  Retrying"
-        RETRIES=$((RETRIES+1))
-        sleep 5
-      fi
-    done
+    read -p "Please generate an Auth Token and enter the value: " TOKEN
   fi
-  export OCI_CLI_PROFILE=$(state_get REGION)
+
+  RETRIES=0
+  while test $RETRIES -le 30; do
+    if echo "$TOKEN" | docker login -u "$(state_get NAMESPACE)/$(state_get USER_NAME)" --password-stdin "$(state_get REGION).ocir.io" &>/dev/null; then
+      state_set DOCKER_REGISTRY "$(state_get REGION).ocir.io/$(state_get NAMESPACE)/$(state_get RUN_NAME)"
+      export OCI_CLI_PROFILE=$(state_get REGION)
+      break
+    else
+      # echo "Docker login failed.  Retrying"
+      RETRIES=$((RETRIES+1))
+      sleep 5
+    fi
+  done
 done
 
 
@@ -261,8 +267,12 @@ if ! state_done DB_PASSWORD; then
   echo
 
   while true; do
-    read -s -r -p "Enter the password to be used for the order and inventory databases: " PW
-      if [[ ${#PW} -ge 12 && ${#PW} -le 30 && "$PW" =~ [A-Z] && "$PW" =~ [a-z] && "$PW" =~ [0-9] && "$PW" != *admin* && "$PW" != *'"'* ]]; then
+    if test -z "$TEST_DB_PASSWORD"; then
+      read -s -r -p "Enter the password to be used for the order and inventory databases: " PW
+    else
+      PW="$TEST_DB_PASSWORD"
+    fi
+    if [[ ${#PW} -ge 12 && ${#PW} -le 30 && "$PW" =~ [A-Z] && "$PW" =~ [a-z] && "$PW" =~ [0-9] && "$PW" != *admin* && "$PW" != *'"'* ]]; then
       echo
       break
     else
@@ -280,8 +290,12 @@ if ! state_done UI_PASSWORD; then
   echo
 
   while true; do
-    read -s -r -p "Enter the password to be used for accessing the UI: " PW
-      if [[ ${#PW} -ge 8 && ${#PW} -le 30 ]]; then
+    if test -z "$TEST_UI_PASSWORD"; then
+      read -s -r -p "Enter the password to be used for accessing the UI: " PW
+    else
+      PW="$TEST_UI_PASSWORD"
+    fi
+    if [[ ${#PW} -ge 8 && ${#PW} -le 30 ]]; then
       echo
       break
     else
@@ -392,6 +406,13 @@ while ! state_done INVENTORY_DB_PASSWORD_SET; do
 done
 
 
+# Wait for OKE Setup
+while ! state_done OKE_SETUP; do
+  # echo "`date`: Waiting for OKE_SETUP"
+  sleep 2
+done
+
+
 # Collect UI password and create secret
 while ! state_done UI_PASSWORD; do
   while true; do
@@ -428,16 +449,17 @@ while ! state_done SETUP_VERIFIED; do
   bg_not_done=
   for bg in $bgs; do
     if state_done $bg; then
-      echo "$bg completed"
+      echo "$bg has completed"
     else
-      echo "$bg has not completed"
+      # echo "$bg is running"
       NOT_DONE=$((NOT_DONE+1))
       bg_not_done="$bg_not_done $bg"
     fi
   done
   if test "$NOT_DONE" -gt 0; then
-    echo "Log files are located in $GRABDISH_LOG"
+    # echo "Log files are located in $GRABDISH_LOG"
     bgs=$bg_not_done
+    echo -ne r"\033[2K\r$bgs still running "
     sleep 10
   else
     state_set_done SETUP_VERIFIED
