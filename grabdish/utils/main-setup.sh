@@ -449,16 +449,17 @@ while ! state_done SETUP_VERIFIED; do
   bg_not_done=
   for bg in $bgs; do
     if state_done $bg; then
-      echo "$bg completed"
+      echo "$bg has completed"
     else
-      echo "$bg has not completed"
+      # echo "$bg is running"
       NOT_DONE=$((NOT_DONE+1))
       bg_not_done="$bg_not_done $bg"
     fi
   done
   if test "$NOT_DONE" -gt 0; then
-    echo "Log files are located in $GRABDISH_LOG"
+    # echo "Log files are located in $GRABDISH_LOG"
     bgs=$bg_not_done
+    echo -ne r"\033[2K\r$bgs still running"
     sleep 10
   else
     state_set_done SETUP_VERIFIED
