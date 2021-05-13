@@ -52,13 +52,6 @@ cp verrazzano-project.yaml verrazzano-project-$CURRENTTIME.yaml
 sed -i "s|%CLUSTERS_NAME%|${CLUSTERS_NAME}|g" verrazzano-project-$CURRENTTIME.yaml
 kubectl apply -f verrazzano-project-$CURRENTTIME.yaml
 
-# without the above it is necessary to
-#kubectl edit authorizationpolicy supplier-helidon-se-appconf -n msdataworkshop
-#and
-#kubectl edit authorizationpolicy order-helidon-appconf -n msdataworkshop
-#adding the following under rules: from: source: principals:
-#- cluster.local/ns/msdataworkshop/sa/frontend-helidon-appconf
-
 #echo undeploy any previously deployed microservices... this is not needed unless another workshop using graddish/msdataworkshop was previously deployed
 #./undeploy.sh
 

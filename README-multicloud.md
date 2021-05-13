@@ -56,14 +56,10 @@
     - `./destroy-multicloud.sh` (to remove Verrazzano)
 
 TODOs
- - one open issue: RBAC source access (currently this done by manually changing the authorizationpolicy after the fact) 
-    and the appropriate way is (if all ms are not in the same app) is to use a project. Doc refs...
-    - https://verrazzano.io/docs/concepts/verrazzanomulticluster/#the-verrazzanoproject-resource 
-    - https://verrazzano.io/docs/reference/api/multicluster/verrazzanoproject/
  - ./setup-multicloud.sh should take a password to override those auto-generated and password(s) should not be displayed
  - test Jaeger functionality
  - add walkthrough of consoles...
- - reduce the number of required LBs while also keeping the current workshop and multi-cloud workshop independent
+ - possibly reduce the number of required LBs while also keeping the current workshop and multi-cloud workshop independent
     - the workshop uses 2 LBs (one for the app and one for Jaeger)
     - the scaling lab uses an additional 1 LB for requests as they go directly to the order service. 
     - Verrazzano uses 2 LBs (one for consoles and one for apps)
