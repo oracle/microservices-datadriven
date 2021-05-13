@@ -73,6 +73,6 @@ getistio
 
 echo Saving the host name of the load balancer exposing the Frontend service endpoints...
 HOST=$(kubectl get gateway msdataworkshop-frontend-helidon-appconf-gw -n msdataworkshop -o jsonpath='{.spec.servers[0].hosts[0]}') # convention is namespace + appconf name + gw
-echo HOST is ${HOST}
+echo FrontEnd HOST is ${HOST}
 
 ingresses
