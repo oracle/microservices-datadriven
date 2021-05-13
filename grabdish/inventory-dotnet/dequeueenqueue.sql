@@ -12,8 +12,8 @@ IS
   pragma                exception_init(no_messages, -25228);
           
 BEGIN
-  -- dequeue_options.wait := dbms_aq.NO_WAIT;
-  -- dequeue_options.wait := dbms_aq.FOREVER;  
+  dequeue_options.wait := dbms_aq.NO_WAIT;
+  -- dequeue_options.wait := dbms_aq.FOREVER;
   -- dequeue_options.navigation := dbms_aq.FIRST_MESSAGE;
   -- dequeue_options.dequeue_mode := dbms_aq.LOCKED;
 
@@ -23,9 +23,10 @@ BEGIN
     message_properties => message_properties,
     payload => message,
     msgid => message_handle);
-          
+    -- COMMIT;
+
 --  p_action := message.get_string_property('action');
---  p_orderid := message.get_int_property('orderid');  
+--  p_orderid := message.get_int_property('orderid');
     p_orderInfo := message.text_vc;
 --  message.get_text(p_orderInfo);
 
@@ -81,31 +82,3 @@ BEGIN
 END;
 /
 show errors
-
-select t1.sid, t1.serial#, t2.sql_fulltext
-from gv$session t1, gv$sql t2
-where t1.sql_id = t2.sql_id
-
-DECLARE
-p_orderInfo  varchar2(30);
-BEGIN
- dequeueOrderMessage(p_orderInfo);
-  EXCEPTION
-  when others then
-  dbms_output.put_line(SQLERRM);
-  END;
-  /
-
-  DECLARE
-  BEGIN
-   enqueueInventoryMessage('asdf');
-    EXCEPTION
-    when others then
-    dbms_output.put_line(SQLERRM);
-    END;
-    /
-    commit;
-
-select QUEUE_NAME, ENQUEUED_MSGS, DEQUEUED_MSGS from  v$persistent_queues
-select  SES_ADDR from  v$transaction
-  xterm to atp to get pstack
