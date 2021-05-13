@@ -12,8 +12,8 @@ IS
   pragma                exception_init(no_messages, -25228);
           
 BEGIN
-  dequeue_options.wait := dbms_aq.NO_WAIT;  
-  -- dequeue_options.wait := dbms_aq.FOREVER;  
+  dequeue_options.wait := dbms_aq.NO_WAIT;
+  -- dequeue_options.wait := dbms_aq.FOREVER;
   -- dequeue_options.navigation := dbms_aq.FIRST_MESSAGE;
   -- dequeue_options.dequeue_mode := dbms_aq.LOCKED;
 
@@ -24,9 +24,9 @@ BEGIN
     payload => message,
     msgid => message_handle);
     -- COMMIT;
-          
+
 --  p_action := message.get_string_property('action');
---  p_orderid := message.get_int_property('orderid');  
+--  p_orderid := message.get_int_property('orderid');
     p_orderInfo := message.text_vc;
 --  message.get_text(p_orderInfo);
 

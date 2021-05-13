@@ -8,7 +8,7 @@ for s in $MS; do
     echo "Deploying $s..."
     echo ________________________________________
     cd $GRABDISH_HOME/$s
-    ./undeploy-verrazzano.sh
+    ./deploy-verrazzano.sh
     cd $GRABDISH_HOME
 done
 
