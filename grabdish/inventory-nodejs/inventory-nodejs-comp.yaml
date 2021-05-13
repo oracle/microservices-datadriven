@@ -70,4 +70,4 @@ spec:
           volumes:
             - name: creds
               secret:
-                secretName: db-wallet-secret-secret
+                secretName: db-wallet-secret
