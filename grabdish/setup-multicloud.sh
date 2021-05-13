@@ -3,6 +3,13 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # The following setup and install of Verrazzano is taken directly from https://verrazzano.io/docs/setup/quickstart/
+if [[ $1 == "" ]]
+then
+  echo CLUSTER_NAME argument not provided
+  echo This can be found in the ~./kube/config file
+  echo Usage example : ./setup-multicloud.sh cluster-cyxypetwerq
+  exit
+fi
 
 echo Setting up Verrazzano...
 echo Deploying the Verrazzano platform operator...
@@ -44,8 +51,8 @@ echo Adding labels identifying the msdataworkshop namespace as managed by Verraz
 kubectl label namespace msdataworkshop verrazzano-managed=true istio-injection=enabled
 
 echo Adding VerrazzanoProject
-#export CLUSTERS_NAME="$(state_get OCI_REGION)"
-export CLUSTERS_NAME="$(state_get CLUSTER_NAME)" # eg cluster-cyxypetwerq, also notice the plural/CLUSTERS_NAME and singular/CLUSTER_NAME
+#export CLUSTERS_NAME="$(state_get CLUSTER_NAME)" # eg cluster-cyxypetwerq, also notice the plural/CLUSTERS_NAME and singular/CLUSTER_NAME
+export CLUSTERS_NAME=$1
 export CURRENTTIME=$( date '+%F_%H:%M:%S' )
 echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated verrazzano-project yaml for CLUSTERS_NAME ${CLUSTERS_NAME}
 cp verrazzano-project.yaml verrazzano-project-$CURRENTTIME.yaml
