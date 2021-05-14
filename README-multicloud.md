@@ -43,6 +43,7 @@
         - Step 2 (`./setup-multicloud.sh`) in this readme will have made the `./deploy-multicloud.sh` call which in turn
          deploys the GrabDish microservices in the Verrazzano/OAM framework and so there is no need to explicitly deploy.
     - Proceed with all other steps. Step 1 is the only difference.
+    - Use the `logpodistio` shortcut command instead of the `logpod` shortcut command to view microservice logs
     
 4. Optionally, do labs 3, 4, and 5
     - Optionally do `Lab 3: Polyglot Microservices` to test with other languages such as Python, JS, .NET, and Go
