@@ -2,8 +2,9 @@
 ## Copyright (c) 2021 Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
-echo displaying gateways, virtualservices, destinationrules, and authorizationpolicies...
+echo displaying gateways, virtualservices, destinationrules, authorizationpolicies, and frontend gw host...
 kubectl get gateway -n msdataworkshop
 kubectl get virtualservice -n msdataworkshop
 kubectl get destinationrules -n msdataworkshop #canaray circuit breakers etc.
 kubectl get authorizationpolicy --all-namespaces
+kubectl get gateway msdataworkshop-order-helidon-appconf-gw -n msdataworkshop -o jsonpath='{.spec.servers[0].hosts[0]}'

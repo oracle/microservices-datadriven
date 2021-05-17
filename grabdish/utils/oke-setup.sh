@@ -23,7 +23,7 @@ done
 
 # Get OKE OCID
 while ! state_done OKE_OCID; do
-  OKE_OCID=`oci ce cluster list --compartment-id "$(state_get COMPARTMENT_OCID)" --query "join(' ',data[*].id)" --raw-output`
+  OKE_OCID=`oci ce cluster list --compartment-id "$(state_get COMPARTMENT_OCID)" --query "join(' ',data[?"'"lifecycle-state"'"=='ACTIVE'].id)" --raw-output`
   state_set OKE_OCID "$OKE_OCID"
   # Wait for OKE to warm up
 done
@@ -31,7 +31,18 @@ done
 
 # Setup Cluster Access
 while ! state_done KUBECTL; do
-  oci ce cluster create-kubeconfig --cluster-id "$(state_get OKE_OCID)"
+  oci ce cluster create-kubeconfig --cluster-id "$(state_get OKE_OCID)" --file $HOME/.kube/config --region "$(state_get REGION)" --token-version 2.0.0
+
+  cluster_id="$(state_get OKE_OCID)"
+  kubectl config set-credentials "user-${cluster_id:(-11)}" --exec-command="kube_token_cache.sh" \
+  --exec-arg="ce" \
+  --exec-arg="cluster" \
+  --exec-arg="generate-token" \
+  --exec-arg="--cluster-id" \
+  --exec-arg="${cluster_id}" \
+  --exec-arg="--region" \
+  --exec-arg="$(state_get REGION)"
+
   state_set_done KUBECTL
 done
 
@@ -59,10 +70,10 @@ while ! state_done OKE_NAMESPACE; do
 done
 
 
-# Give DB_PASSWORD priority
-while ! state_done DB_PASSWORD; do
-  echo "Waiting for DB_PASSWORD"
-  sleep 5
+# Wait for Order User (avoid concurrent kubectl)
+while ! state_done ORDER_USER; do
+  echo "`date`: Waiting for ORDER_USER"
+  sleep 2
 done
 
 

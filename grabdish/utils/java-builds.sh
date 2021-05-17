@@ -6,9 +6,10 @@
 set -e
 
 
+BUILDS="frontend-helidon order-helidon supplier-helidon-se inventory-helidon"
+
 # Provision Repos
 while ! state_done JAVA_REPOS; do
-  BUILDS="frontend-helidon order-helidon supplier-helidon-se inventory-helidon inventory-helidon-se"
   for b in $BUILDS; do 
     oci artifacts container repository create --compartment-id "$(state_get COMPARTMENT_OCID)" --display-name "$(state_get RUN_NAME)/$b" --is-public true
   done
@@ -42,7 +43,6 @@ done
 
 # Build all the images (no push) except frontend-helidon (requires Jaeger)
 while ! state_done JAVA_BUILDS; do
-  BUILDS="frontend-helidon order-helidon supplier-helidon-se inventory-helidon inventory-helidon-se"
   for b in $BUILDS; do 
     cd $GRABDISH_HOME/$b
     time ./build.sh
