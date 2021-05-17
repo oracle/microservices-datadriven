@@ -50,6 +50,9 @@ kubectl wait \
 echo Adding labels identifying the msdataworkshop namespace as managed by Verrazzano and enabled for Istio...
 kubectl label namespace msdataworkshop verrazzano-managed=true istio-injection=enabled
 
+echo Creating msdataworkshop namespace... If the namespace already exists there will be an error to that effect that can safely be ignored.
+kubectl create namespace msdataworkshop
+
 echo Adding VerrazzanoProject
 #export CLUSTERS_NAME="$(state_get CLUSTER_NAME)" # eg cluster-cyxypetwerq, also notice the plural/CLUSTERS_NAME and singular/CLUSTER_NAME
 export CLUSTERS_NAME=$1
