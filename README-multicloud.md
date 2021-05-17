@@ -43,13 +43,14 @@
         - Step 2 (`./setup-multicloud.sh`) in this readme will have made the `./deploy-multicloud.sh` call which in turn
          deploys the GrabDish microservices in the Verrazzano/OAM framework and so there is no need to explicitly deploy.
     - Proceed with all other steps. Step 1 is the only difference.
+    - Use the `logpodistio` shortcut command instead of the `logpod` shortcut command to view microservice logs
     
 4. Optionally, do labs 3, 4, and 5
     - Optionally do `Lab 3: Polyglot Microservices` to test with other languages such as Python, JS, .NET, and Go
         - Instead of running `cd $GRABDISH_HOME;./deploy.sh` run `cd $GRABDISH_HOME;./deploy-multicloud.sh`
     - Optionally do `Lab 4: Scaling` to show how the application can be scaled at the application and database tiers to maintain optimal performance.
         - The creation of the LB in Step 1 is not necessary as the gateway can be used.
-        - Instead of running `export LB=[LB_IPADDRESS]` run `export LB=$(kubectl get gateway msdataworkshop-order-helidon-appconf-gw -n msdataworkshop -o jsonpath='{.spec.servers[0].hosts[0]}'`
+        - Instead of running `export LB=[LB_IPADDRESS]` run `export LB=$(kubectl get gateway msdataworkshop-order-helidon-appconf-gw -n msdataworkshop -o jsonpath='{.spec.servers[0].hosts[0]}')`
     - Optionally do `Lab 5: Tracing Using Jaeger` to show microservice activity using OpenTracing and Jaeger.
         - Can be run without modification
     
