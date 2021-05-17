@@ -4,4 +4,4 @@
 
 echo displaying VerrazzanoProjects...
 
-k get VerrazzanoProjects --all-namespaces
+kubectl get VerrazzanoProjects --all-namespaces

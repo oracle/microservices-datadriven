@@ -207,6 +207,11 @@
             <artifactId>jackson-databind</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>3.12.8</version>
+        </dependency>
+        <dependency>
             <groupId>com.oracle.oci.sdk</groupId>
             <artifactId>oci-java-sdk-vault</artifactId>
             <version>1.32.2</version>
@@ -221,6 +226,7 @@
             <artifactId>oci-java-sdk-secrets</artifactId>
             <version>1.32.2</version>
         </dependency>
+
     </dependencies>
 
 </project>

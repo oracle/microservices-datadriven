@@ -3,6 +3,13 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # The following setup and install of Verrazzano is taken directly from https://verrazzano.io/docs/setup/quickstart/
+if [[ $1 == "" ]]
+then
+  echo CLUSTER_NAME argument not provided
+  echo This can be found in the ~./kube/config file
+  echo Usage example : ./setup-multicloud.sh cluster-cyxypetwerq
+  exit
+fi
 
 echo Setting up Verrazzano...
 echo Deploying the Verrazzano platform operator...
@@ -43,9 +50,12 @@ kubectl wait \
 echo Adding labels identifying the msdataworkshop namespace as managed by Verrazzano and enabled for Istio...
 kubectl label namespace msdataworkshop verrazzano-managed=true istio-injection=enabled
 
+echo Creating msdataworkshop namespace... If the namespace already exists there will be an error to that effect that can safely be ignored.
+kubectl create namespace msdataworkshop
+
 echo Adding VerrazzanoProject
-#export CLUSTERS_NAME="$(state_get OCI_REGION)"
-export CLUSTERS_NAME="$(state_get CLUSTER_NAME)" # eg cluster-cyxypetwerq, also notice the plural/CLUSTERS_NAME and singular/CLUSTER_NAME
+#export CLUSTERS_NAME="$(state_get CLUSTER_NAME)" # eg cluster-cyxypetwerq, also notice the plural/CLUSTERS_NAME and singular/CLUSTER_NAME
+export CLUSTERS_NAME=$1
 export CURRENTTIME=$( date '+%F_%H:%M:%S' )
 echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated verrazzano-project yaml for CLUSTERS_NAME ${CLUSTERS_NAME}
 cp verrazzano-project.yaml verrazzano-project-$CURRENTTIME.yaml
@@ -66,6 +76,6 @@ getistio
 
 echo Saving the host name of the load balancer exposing the Frontend service endpoints...
 HOST=$(kubectl get gateway msdataworkshop-frontend-helidon-appconf-gw -n msdataworkshop -o jsonpath='{.spec.servers[0].hosts[0]}') # convention is namespace + appconf name + gw
-echo HOST is ${HOST}
+echo FrontEnd HOST is ${HOST}
 
 ingresses

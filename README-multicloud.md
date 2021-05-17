@@ -14,7 +14,8 @@
         
 2. Run `./setup-multicloud.sh` (takes ~20 minutes)
     - Step 1 will have put you in the appropriate `.../microservices-datadriven/grabdish` dir.
-    - This will install verrazzano, deploy workshop microservices, and provide URLs for 
+    - Takes CLUSTER_NAME as an argument 
+    - This will install verrazzano, deploy workshop microservices, and provide URLs for the Frontend microservice and the consoles...
         - Grafana
         - Prometheus
         - Kibana
@@ -23,29 +24,33 @@
         - KeyCloak
     - Example output...
     
-    `    NAMESPACE         NAME                       CLASS    HOSTS                                                    ADDRESS          PORTS     AGE`
-
-        cattle-system       rancher                    <none>   rancher.default.158.101.26.111.nip.io                    158.101.26.111   80, 443   37h
-        keycloak            keycloak                   <none>   keycloak.default.158.101.26.111.nip.io                   158.101.26.111   80, 443   37h
-        verrazzano-system   verrazzano-ingress         <none>   verrazzano.default.158.101.26.111.nip.io                 158.101.26.111   80, 443   37h
-        verrazzano-system   vmi-system-es-ingest       <none>   elasticsearch.vmi.system.default.158.101.26.111.nip.io   158.101.26.111   80, 443   37h
-        verrazzano-system   vmi-system-grafana         <none>   grafana.vmi.system.default.158.101.26.111.nip.io         158.101.26.111   80, 443   37h
-        verrazzano-system   vmi-system-kibana          <none>   kibana.vmi.system.default.158.101.26.111.nip.io          158.101.26.111   80, 443   37h
-        verrazzano-system   vmi-system-prometheus      <none>   prometheus.vmi.system.default.158.101.26.111.nip.io      158.101.26.111   80, 443   37h
-        verrazzano-system   vmi-system-prometheus-gw   <none>   prometheus-gw.vmi.system.default.158.101.26.111.nip.io   158.101.26.111   80, 443   37h
+        `FrontEnd HOST is frontend-helidon-appconf.msdataworkshop.129.146.227.229.nip.io`
+        
+        `    NAMESPACE         NAME                       CLASS    HOSTS                                                    ADDRESS          PORTS     AGE`
+    
+            cattle-system       rancher                    <none>   rancher.default.158.101.26.111.nip.io                    158.101.26.111   80, 443   37h
+            keycloak            keycloak                   <none>   keycloak.default.158.101.26.111.nip.io                   158.101.26.111   80, 443   37h
+            verrazzano-system   verrazzano-ingress         <none>   verrazzano.default.158.101.26.111.nip.io                 158.101.26.111   80, 443   37h
+            verrazzano-system   vmi-system-es-ingest       <none>   elasticsearch.vmi.system.default.158.101.26.111.nip.io   158.101.26.111   80, 443   37h
+            verrazzano-system   vmi-system-grafana         <none>   grafana.vmi.system.default.158.101.26.111.nip.io         158.101.26.111   80, 443   37h
+            verrazzano-system   vmi-system-kibana          <none>   kibana.vmi.system.default.158.101.26.111.nip.io          158.101.26.111   80, 443   37h
+            verrazzano-system   vmi-system-prometheus      <none>   prometheus.vmi.system.default.158.101.26.111.nip.io      158.101.26.111   80, 443   37h
+            verrazzano-system   vmi-system-prometheus-gw   <none>   prometheus-gw.vmi.system.default.158.101.26.111.nip.io   158.101.26.111   80, 443   37h
 
         
 3. Do `Lab 2: Data-centric microservices walkthrough with Helidon MP` to test the app, etc.
-    - REPLACE STEP 1 INSTRUCTION IN LAB
-        - Instead of running `cd $GRABDISH_HOME;./deploy.sh` run `cd $GRABDISH_HOME;./deploy-multicloud.sh`
+    - SKIP STEP 1 INSTRUCTION IN THE LAB
+        - Step 2 (`./setup-multicloud.sh`) in this readme will have made the `./deploy-multicloud.sh` call which in turn
+         deploys the GrabDish microservices in the Verrazzano/OAM framework and so there is no need to explicitly deploy.
     - Proceed with all other steps. Step 1 is the only difference.
+    - Use the `logpodistio` shortcut command instead of the `logpod` shortcut command to view microservice logs
     
 4. Optionally, do labs 3, 4, and 5
     - Optionally do `Lab 3: Polyglot Microservices` to test with other languages such as Python, JS, .NET, and Go
-        - Again, instead of running `cd $GRABDISH_HOME;./deploy.sh` run `cd $GRABDISH_HOME;./deploy-multicloud.sh`
+        - Instead of running `cd $GRABDISH_HOME;./deploy.sh` run `cd $GRABDISH_HOME;./deploy-multicloud.sh`
     - Optionally do `Lab 4: Scaling` to show how the application can be scaled at the application and database tiers to maintain optimal performance.
         - The creation of the LB in Step 1 is not necessary as the gateway can be used.
-        - Instead of running `export LB=[LB_IPADDRESS]` run `export LB=$(kubectl get gateway msdataworkshop-order-helidon-appconf-gw -n msdataworkshop -o jsonpath='{.spec.servers[0].hosts[0]}'`
+        - Instead of running `export LB=[LB_IPADDRESS]` run `export LB=$(kubectl get gateway msdataworkshop-order-helidon-appconf-gw -n msdataworkshop -o jsonpath='{.spec.servers[0].hosts[0]}')`
     - Optionally do `Lab 5: Tracing Using Jaeger` to show microservice activity using OpenTracing and Jaeger.
         - Can be run without modification
     
