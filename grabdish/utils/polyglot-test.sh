@@ -18,7 +18,7 @@ for s in $SERVICES; do
   ./deploy.sh
   sleep 60
   cd $GRABDISH_HOME
-  ORDER_ID=(($ORDER_ID + 100))
+  ORDER_ID=$(($ORDER_ID + 100))
   utils/func-test.sh $ORDER_ID
   PREV_SERVICE=$s
 done

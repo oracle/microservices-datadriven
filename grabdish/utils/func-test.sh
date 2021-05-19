@@ -18,7 +18,7 @@ function inventory() {
 function placeOrderTest() {
   # Place order
   if wget --http-user grabdish --http-password "$TEST_UI_PASSWORD" --no-check-certificate --post-data "$(order "$1" 'placeOrder')" \
-    --header='Content-Type: application/json' "$FRONTEND_URL/placeorder"; then
+    --header='Content-Type: application/json' "$(state_get FRONTEND_URL)/placeorder"; then
     echo "placeOrder $1 failed"
     return 1
   fi
@@ -27,7 +27,7 @@ function placeOrderTest() {
 function showOrderTest() {
   # Place order 
   if wget --http-user grabdish --http-password "$TEST_UI_PASSWORD" --no-check-certificate --post-data "$(order "$1" 'showorder')" \
-    --header='Content-Type: application/json' "$FRONTEND_URL/command" > $GRUBDASH_LOG/order; then
+    --header='Content-Type: application/json' "$(state_get FRONTEND_URL)/command" > $GRUBDASH_LOG/order; then
     echo "showOrder $1 failed"
     return 1
   fi
@@ -35,11 +35,10 @@ function showOrderTest() {
   echo $GRUBDASH_LOG/order
 }
 
-
 function addInventoryTest() {
   # Place order 
   if wget --http-user grabdish --http-password "$TEST_UI_PASSWORD" --no-check-certificate --post-data "$(inventory "$1" 'addInventory')" \
-    --header='Content-Type: application/json' "$FRONTEND_URL/command"; then
+    --header='Content-Type: application/json' "$(state_get FRONTEND_URL)/command"; then
     echo "showOrder $1 failed"
     return 1
   fi
@@ -59,7 +58,7 @@ addInventoryTest "sushi"
 
 
 # Place second order 
-ORDER_ID=(($ORDER_ID + 1))
+ORDER_ID=$(($ORDER_ID + 1))
 
 placeOrderTest "$ORDER_ID"
 

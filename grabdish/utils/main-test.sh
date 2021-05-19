@@ -14,11 +14,14 @@ fi
 
 # SETUP
 export TEST_DB_PASSWORD='Welcome12345;#!:'
-export TEST_UI_PASSWORD='Welcome1;"#!:'
-docker image prune -a -f
-source setup.sh
+# export TEST_UI_PASSWORD='Welcome1;"#!:'
+export TEST_UI_PASSWORD='Welcome1'
+if ! state_done SETUP_VERIFIED; then
+  docker image prune -a -f
+  source setup.sh
+fi
 
-if ! state_done SETUP_VERIFIED; do
+if ! state_done SETUP_VERIFIED; then
   echo "SETUP failed"
   return 1
 fi
@@ -30,20 +33,22 @@ fi
 # Get the frontend URL
 RETRIES=0
 while ! state_done FRONTEND_URL; do
-  if IP=`services | awk '/frontend/ {print $5}'`; then
-    RETRIES=(($RETRIES + 1))
-    if test $RETRIES -gt 10; then
-      exit
-    sleep 5
-  else
+  if IP=`kubectl get services -n msdataworkshop | awk '/frontend/ {print $4}'`; then
     state_set FRONTEND_URL "https://$IP"
+  else
+    RETRIES=$(($RETRIES + 1))
+    if test $RETRIES -gt 10; then
+      echo "ERROR: Failed to get FRONTEND_URL"
+      exit
+    fi
+    sleep 5
   fi
 done
 
 sleep 70
 
 # Is the UI available?
-if wget -qO- --no-check-certificate --http-user grabdish --http-password Welcome1 "$FRONTEND_URL" | grep 'GrabDish Explorer' >/dev/null; then
+if wget -qO- --no-check-certificate --http-user grabdish --http-password "$TEST_UI_PASSWORD" "$(state_get FRONTEND_URL)" | grep 'GrabDish Explorer' >/dev/null; then
   echo "ERROR: UI Unavailable"
 fi
 
