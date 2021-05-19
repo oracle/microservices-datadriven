@@ -1,3 +1,10 @@
+#!/bin/bash
+# Copyright (c) 2021 Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
+# Fail on error
+set -e
+
 # Deploy each inventory service and perform functional test
 SERVICES="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se"
 ORDER_ID=66

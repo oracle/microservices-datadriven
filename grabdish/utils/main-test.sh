@@ -1,6 +1,21 @@
+#!/bin/bash
+# Copyright (c) 2021 Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
+# Fail on error
+set -e
+
+# Check home is set
+if test -z "$GRABDISH_HOME"; then
+  echo "ERROR: This script requires GRABDISH_HOME to be set"
+  exit
+fi
+
+
 # SETUP
 export TEST_DB_PASSWORD='Welcome12345;#!:'
 export TEST_UI_PASSWORD='Welcome1;"#!:'
+docker image prune -a -f
 source setup.sh
 
 if ! state_done SETUP_VERIFIED; do
