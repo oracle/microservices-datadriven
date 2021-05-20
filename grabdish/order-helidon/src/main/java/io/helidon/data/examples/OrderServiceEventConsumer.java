@@ -58,10 +58,11 @@ public class OrderServiceEventConsumer implements Runnable {
                 String inventorylocation = inventory.getInventorylocation();
                 System.out.println("Lookup orderid:" + orderid + "(itemid:" + itemid + ")");
                 Order order = orderResource.orderServiceEventProducer.getOrderViaSODA(orderResource.atpOrderPdb, orderid);
-                if (order == null)
-                    throw new JMSException("Rollingback message as no orderDetail found for orderid:" + orderid +
-                                ". It may have been started by another server (eg if horizontally scaling) or " +
-                                " this server started the order but crashed. ");
+                if (order == null) {
+                    System.out.println("No orderDetail found for orderid:" + orderid);
+                    qsess.commit();
+                    continue;
+                }
                 boolean isSuccessfulInventoryCheck = !(inventorylocation == null || inventorylocation.equals("")
                         || inventorylocation.equals("inventorydoesnotexist")
                         || inventorylocation.equals("none"));

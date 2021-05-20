@@ -3,8 +3,6 @@
 ## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 
-echo delete frontend deployment and service...
+echo delete inventory-springboot deployment...
 
-kubectl delete deployment frontend-helidon -n msdataworkshop
-
-kubectl delete service frontend -n msdataworkshop
+kubectl delete deployment inventory-springboot -n msdataworkshop
