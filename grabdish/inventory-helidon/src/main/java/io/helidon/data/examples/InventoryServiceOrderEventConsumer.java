@@ -35,7 +35,7 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         }
     }
 
-    public void listenForOrderEvents() throws Exception {
+    public void listenForOrderEventsPLSQL() throws Exception {
         Connection connection = inventoryResource.atpInventoryPDB.getConnection();
         while (true) {
             System.out.println("InventoryServiceOrderEventConsumer.listenForOrderEvents with sproc");
@@ -51,11 +51,12 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
                 hadResults = cstmt.getMoreResults();
             }
             String outputValue = cstmt.getString(1); // index-based
+            connection.rollback();
             System.out.println("InventoryServiceOrderEventConsumer.listenForOrderEvents outputValue:" + outputValue);
         }
     }
 
-    public void listenForOrderEventsAQAPI() throws Exception {
+    public void listenForOrderEvents() throws Exception {
         QueueConnectionFactory qcfact = AQjmsFactory.getQueueConnectionFactory(inventoryResource.atpInventoryPDB);
         QueueSession qsess = null;
         QueueConnection qconn = null;
