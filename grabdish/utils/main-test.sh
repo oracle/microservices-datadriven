@@ -30,6 +30,8 @@ fi
 # Deploy the java services
 ./deploy.sh
 
+sleep 60
+
 # Get the frontend URL
 RETRIES=0
 while ! state_done FRONTEND_URL; do
@@ -44,8 +46,6 @@ while ! state_done FRONTEND_URL; do
     sleep 5
   fi
 done
-
-sleep 70
 
 # Is the UI available?
 if wget -qO- --no-check-certificate --http-user grabdish --http-password "$TEST_UI_PASSWORD" "$(state_get FRONTEND_URL)" | grep 'GrabDish Explorer' >/dev/null; then
