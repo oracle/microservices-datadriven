@@ -12,17 +12,12 @@ if test -z "$GRABDISH_HOME"; then
 fi
 
 
-# SETUP
-export TEST_DB_PASSWORD='Welcome12345;#!:'
-# export TEST_UI_PASSWORD='Welcome1;"#!:'
-export TEST_UI_PASSWORD='Welcome1'
 if ! state_done SETUP_VERIFIED; then
-  docker image prune -a -f
   source setup.sh
 fi
 
 if ! state_done SETUP_VERIFIED; then
-  echo "SETUP failed"
+  echo "SETUP is incomplete"
   return 1
 fi
 
@@ -49,11 +44,14 @@ done
 
 # Is the UI available?
 if wget -qO- --no-check-certificate --http-user grabdish --http-password "$TEST_UI_PASSWORD" "$(state_get FRONTEND_URL)" | grep 'GrabDish Explorer' >/dev/null; then
-  echo "ERROR: UI Unavailable"
+  echo "TEST_LOG: Frontend UI Available"
+else
+  echo "TEST_LOG_FAILED: UI Unavailable"
+  exit
 fi
 
 # Functional test on order 66/67
-utils/func-test.sh 66
+utils/func-test.sh Walkthrough 66
 
 
 # POLYGLOT
@@ -73,4 +71,6 @@ utils/polyglot-test.sh
 
 
 # TEARDOWN
-source destroy.sh
+# source destroy.sh
+echo '#####################################'
+grep TEST_LOG $GRABDISH_LOG/main-test.log

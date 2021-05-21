@@ -19,6 +19,6 @@ for s in $SERVICES; do
   sleep 60
   cd $GRABDISH_HOME
   ORDER_ID=$(($ORDER_ID + 100))
-  utils/func-test.sh $ORDER_ID
+  utils/func-test.sh "Polyglot $s" $ORDER_ID
   PREV_SERVICE=$s
 done

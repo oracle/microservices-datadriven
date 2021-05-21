@@ -5,42 +5,53 @@
 # Fail on error
 set -e
 
-ORDER_ID="$1"
+TEST_STEP="$1"
+ORDER_ID="$2"
 
 function order() {
   echo '{"serviceName": "order", "commandName": "'"$2"'", "orderId": '"$1"', "orderItem": "sushi", "deliverTo": "780 PANORAMA DR, San francisco, CA"}'
 }
 
 function inventory() {
-  echo '{"serviceName": "supplier", "commandName": "'"$2"'", "orderId": "-1", "orderItem": '"$1"', "deliverTo": ""}'
+  echo '{"serviceName": "supplier", "commandName": "'"$2"'", "orderId": -1, "orderItem": "'"$1"'", "deliverTo": ""}'
 }
 
 function placeOrderTest() {
   # Place order
-  if wget --http-user grabdish --http-password "$TEST_UI_PASSWORD" --no-check-certificate --post-data "$(order "$1" 'placeOrder')" \
-    --header='Content-Type: application/json' "$(state_get FRONTEND_URL)/placeorder"; then
-    echo "placeOrder $1 failed"
-    return 1
+  local ORDER_ID="$1"
+  if wget --http-user grabdish --http-password "$TEST_UI_PASSWORD" --no-check-certificate --post-data "$(order "$ORDER_ID" 'placeOrder')" \
+    --header='Content-Type: application/json' "$(state_get FRONTEND_URL)/placeorder" -O $GRABDISH_LOG/order; then
+    echo "TEST_LOG: $TEST_STEP placeOrder $ORDER_ID succeeded"
+  else
+    echo "TEST_LOG_FAILED: $TEST_STEP placeOrder $ORDER_ID failed"
   fi
 }
 
 function showOrderTest() {
-  # Place order 
-  if wget --http-user grabdish --http-password "$TEST_UI_PASSWORD" --no-check-certificate --post-data "$(order "$1" 'showorder')" \
-    --header='Content-Type: application/json' "$(state_get FRONTEND_URL)/command" > $GRUBDASH_LOG/order; then
-    echo "showOrder $1 failed"
-    return 1
+  # Show order 
+  local ORDER_ID="$1"
+  local SEARCH_FOR="$2"
+  if wget --http-user grabdish --http-password "$TEST_UI_PASSWORD" --no-check-certificate --post-data "$(order "$ORDER_ID" 'showorder')" \
+    --header='Content-Type: application/json' "$(state_get FRONTEND_URL)/command" -O $GRABDISH_LOG/order; then
+    echo "TEST_LOG: $TEST_STEP showOrder request $1 succeeded"
+    if grep "$SEARCH_FOR" $GRABDISH_LOG/order >/dev/null; then
+      echo "TEST_LOG: $TEST_STEP showOrder $ORDER_ID matched"
+    else
+      echo "TEST_LOG_FAILED: $TEST_STEP showOrder $ORDER_ID nomatch"
+    fi
+  else
+    echo "TEST_LOG_FAILED: $TEST_STEP showOrder request $1 failed"
   fi
-
-  echo $GRUBDASH_LOG/order
 }
 
 function addInventoryTest() {
-  # Place order 
-  if wget --http-user grabdish --http-password "$TEST_UI_PASSWORD" --no-check-certificate --post-data "$(inventory "$1" 'addInventory')" \
-    --header='Content-Type: application/json' "$(state_get FRONTEND_URL)/command"; then
-    echo "showOrder $1 failed"
-    return 1
+  # Add inventory 
+  local ITEM_ID="$1"
+  if wget --http-user grabdish --http-password "$TEST_UI_PASSWORD" --no-check-certificate --post-data "$(inventory "$ITEM_ID" 'addInventory')" \
+    --header='Content-Type: application/json' "$(state_get FRONTEND_URL)/command" -O $GRABDISH_LOG/inventory; then
+    echo "TEST_LOG: $TEST_STEP addInventory $ITEM_ID succeeded"
+  else
+    echo "TEST_LOG_FAILED: $TEST_STEP addInventory $ITEM_ID request failed"
   fi
 }
 
@@ -50,7 +61,7 @@ placeOrderTest $ORDER_ID
 
 sleep 5
 
-showOrderTest $ORDER_ID 'no inventory'
+showOrderTest $ORDER_ID 'failed inventory does not exist'
 
 
 # Add inventory
@@ -64,4 +75,4 @@ placeOrderTest "$ORDER_ID"
 
 sleep 5
 
-showOrderTest "$ORDER_ID" 'inventory exists'
+showOrderTest "$ORDER_ID" 'success inventory exists'
