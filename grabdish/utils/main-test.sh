@@ -11,10 +11,8 @@ if test -z "$GRABDISH_HOME"; then
   exit
 fi
 
-
-if ! state_done SETUP_VERIFIED; then
-  source setup.sh
-fi
+# Check TEST_UI_PASSWORD is set
+TEST_UI_PASSWORD=`kubectl get secret frontendadmin -n msdataworkshop --template={{.data.password}} | base64 --decode`
 
 if ! state_done SETUP_VERIFIED; then
   echo "SETUP is incomplete"
