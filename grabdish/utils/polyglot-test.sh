@@ -17,7 +17,7 @@ for s in $SERVICES; do
   cd $GRABDISH_HOME/$s
   ./deploy.sh
 
-  while test 1 -gt `pods | grep "${s}" | grep "1/1" | wc -l`; do
+  while test 1 -gt `kubectl get pods -n msdataworkshop | grep "${s}" | grep "1/1" | wc -l`; do
     echo "Waiting for pod to start..."
     sleep 5
   done
