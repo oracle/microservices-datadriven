@@ -30,7 +30,8 @@ sleep 60
 # Get the frontend URL
 RETRIES=0
 while ! state_done FRONTEND_URL; do
-  if IP=`kubectl get services -n msdataworkshop | awk '/frontend/ {print $4}'`; then
+  IP=`kubectl get services -n msdataworkshop | awk '/frontend/ {print $4}'`
+  if [[ "$IP" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
     state_set FRONTEND_URL "https://$IP"
   else
     RETRIES=$(($RETRIES + 1))
@@ -42,11 +43,12 @@ while ! state_done FRONTEND_URL; do
   fi
 done
 
+
 # Is the UI available?
 if wget -qO- --no-check-certificate --http-user grabdish --http-password "$TEST_UI_PASSWORD" "$(state_get FRONTEND_URL)" | grep 'GrabDish Explorer' >/dev/null; then
   echo "TEST_LOG: Frontend UI Available"
 else
-  echo "TEST_LOG_FAILED: UI Unavailable"
+  echo "TEST_LOG_FAILED: Frontend UI Unavailable"
   exit
 fi
 
@@ -56,15 +58,20 @@ utils/func-test.sh Walkthrough 66
 
 # POLYGLOT
 # Deploy each inventory service and perform functional test
+while ! $(state_get NON_JAVA_BUILDS); do
+  sleep 10
+  echo "TEST_LOG: Waiting for NON_JAVA_BUILDS"
+done
+
 utils/polyglot-test.sh
 
 
 # SCALING
-# utils/scaling-test.sh
+utils/scaling-test.sh
 
 
 # TRACING
-# TODO
+utils/tracing-test.sh
 
 # APEX
 # TODO
