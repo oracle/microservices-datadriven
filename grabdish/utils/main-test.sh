@@ -58,7 +58,7 @@ utils/func-test.sh Walkthrough 66
 # Deploy each inventory service and perform functional test
 while ! $(state_get NON_JAVA_BUILDS); do
   sleep 10
-  echo "TEST_LOG: Waiting for NON_JAVA_BUILDS"
+  echo "Waiting for NON_JAVA_BUILDS"
 done
 
 utils/polyglot-test.sh
