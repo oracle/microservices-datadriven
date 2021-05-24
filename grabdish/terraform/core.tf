@@ -70,7 +70,7 @@ resource oci_core_service_gateway sg {
   }
   #route_table_id = <<Optional value not found in discovery>>
   services {
-    service_id = data.oci_core_services.services.services.1.id
+    service_id = data.oci_core_services.services.services.0.id
   }
   vcn_id = oci_core_vcn.okell_vcn.id
 }
@@ -87,7 +87,7 @@ resource oci_core_route_table private {
   }
   route_rules {
     description       = "traffic to OCI services"
-    destination       = data.oci_core_services.services.services.1.cidr_block
+    destination       = data.oci_core_services.services.services.0.cidr_block
     destination_type  = "SERVICE_CIDR_BLOCK"
     network_entity_id = oci_core_service_gateway.sg.id
   }
@@ -221,6 +221,7 @@ resource oci_core_security_list nodePool {
     }
     #udp_options = <<Optional value not found in discovery>>
   }
+/*
   egress_security_rules {
     description      = "Allow nodes to communicate with OKE to ensure correct start-up and continued functioning (1)"
     destination      = data.oci_core_services.services.services.1.cidr_block
@@ -235,6 +236,7 @@ resource oci_core_security_list nodePool {
     }
     #udp_options = <<Optional value not found in discovery>>
   }
+*/
   egress_security_rules {
     description      = "ICMP Access from Kubernetes Control Plane"
     destination      = "0.0.0.0/0"
@@ -345,20 +347,6 @@ resource oci_core_security_list endpoint {
   display_name = "endpoint"
   egress_security_rules {
     description      = "Allow Kubernetes Control Plane to communicate with OKE"
-    destination      = data.oci_core_services.services.services.1.cidr_block
-    destination_type = "SERVICE_CIDR_BLOCK"
-    #icmp_options = <<Optional value not found in discovery>>
-    protocol  = "6"
-    stateless = "false"
-    tcp_options {
-      max = "443"
-      min = "443"
-      #source_port_range = <<Optional value not found in discovery>>
-    }
-    #udp_options = <<Optional value not found in discovery>>
-  }
-  egress_security_rules {
-    description      = "Allow Kubernetes Control Plane to communicate with OKE"
     destination      = data.oci_core_services.services.services.0.cidr_block
     destination_type = "SERVICE_CIDR_BLOCK"
     #icmp_options = <<Optional value not found in discovery>>
@@ -459,4 +447,9 @@ resource oci_core_default_security_list svcLB {
   manage_default_resource_id = oci_core_vcn.okell_vcn.default_security_list_id
 }
 data "oci_core_services" "services" {
+  filter {
+    name   = "name"
+    values = ["All .* Services In Oracle Services Network"]
+    regex  = true
+  }
 }

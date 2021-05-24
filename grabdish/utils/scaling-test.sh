@@ -7,13 +7,15 @@ set -e
 
 # Deploy the external load balancer
 cd $GRABDISH_HOME/order-helidon; 
-kubectl create -f ext-order-service.yaml -n msdataworkshop
+kubectl apply -f ext-order-service.yaml -n msdataworkshop
 
 # Install k6
 cd $GRABDISH_HOME/k6; 
-wget https://github.com/loadimpact/k6/releases/download/v0.27.0/k6-v0.27.0-linux64.tar.gz; 
-tar -xzf k6-v0.27.0-linux64.tar.gz; 
-ln k6-v0.27.0-linux64/k6 k6
+if ! test -f k6; then
+  wget https://github.com/loadimpact/k6/releases/download/v0.27.0/k6-v0.27.0-linux64.tar.gz; 
+  tar -xzf k6-v0.27.0-linux64.tar.gz; 
+  ln k6-v0.27.0-linux64/k6 k6
+fi
 
 # Get LB (may have to retry)
 RETRIES=0
@@ -23,7 +25,8 @@ while ! state_done EXT_ORDER_IP; do
     state_set EXT_ORDER_IP "$IP"
   else
     RETRIES=$(($RETRIES + 1))
-    if test $RETRIES -gt 10; then
+    echo "Waiting for EXT_ORDER IP"
+    if test $RETRIES -gt 24; then
       echo "ERROR: Failed to get EXT_ORDER_IP"
       exit
     fi
