@@ -9,16 +9,26 @@ set -e
 SERVICES="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se"
 ORDER_ID=66
 
-PREV_SERVICE="inventory-helidon"
+cd $GRABDISH_HOME/inventory-helidon
+./undeploy.sh
+
 for s in $SERVICES; do
   echo "Testing $s"
-  cd $GRABDISH_HOME/"$PREV_SERVICE"
-  ./undeploy.sh
   cd $GRABDISH_HOME/$s
   ./deploy.sh
-  sleep 60
+
+  while test 1 -gt `pods | grep "${s}" | grep "1/1" | wc -l`; do
+    echo "Waiting for pod to start..."
+    sleep 5
+  done
+
   cd $GRABDISH_HOME
   ORDER_ID=$(($ORDER_ID + 100))
   utils/func-test.sh "Polyglot $s" $ORDER_ID
-  PREV_SERVICE=$s
+  
+  cd $GRABDISH_HOME/$s
+  ./undeploy.sh
 done
+
+cd $GRABDISH_HOME/inventory-helidon
+./deploy.sh
