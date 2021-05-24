@@ -11,19 +11,26 @@ if test -z "$GRABDISH_HOME"; then
   exit
 fi
 
-# Check TEST_UI_PASSWORD is set
-TEST_UI_PASSWORD=`kubectl get secret frontendadmin -n msdataworkshop --template={{.data.password}} | base64 --decode`
-
 if ! state_done SETUP_VERIFIED; then
   echo "SETUP is incomplete"
   return 1
 fi
 
+# Check TEST_UI_PASSWORD is set
+export TEST_UI_PASSWORD=`kubectl get secret frontendadmin -n msdataworkshop --template={{.data.password}} | base64 --decode`
+
+
+echo 'TEST_LOG: #####################################'
+
 # WALKTHROUGH
 # Deploy the java services
+echo "TEST_LOG: #### Testing Lab2: Walkthrough"
 ./deploy.sh
 
-sleep 60
+while test 4 -gt `pods | egrep 'frontend-helidon|inventory-helidon|order-helidon|supplier-helidon-se' | grep "1/1" | wc -l`; do
+  echo "Waiting for pods to start..."
+  sleep 10
+done
 
 # Get the frontend URL
 RETRIES=0
@@ -55,6 +62,8 @@ utils/func-test.sh Walkthrough 66
 
 
 # POLYGLOT
+echo "TEST_LOG: #### Testing Lab3: Polyglot"
+
 # Deploy each inventory service and perform functional test
 while ! $(state_get NON_JAVA_BUILDS); do
   sleep 10
@@ -65,11 +74,14 @@ utils/polyglot-test.sh
 
 
 # SCALING
+echo "TEST_LOG: #### Testing Lab4: Scaling"
 utils/scaling-test.sh
 
 
 # TRACING
+echo "TEST_LOG: #### Testing Lab5: Tracing"
 utils/tracing-test.sh
+
 
 # APEX
 # TODO
@@ -77,5 +89,4 @@ utils/tracing-test.sh
 
 # TEARDOWN
 # source destroy.sh
-echo '#####################################'
 grep TEST_LOG $GRABDISH_LOG/main-test.log
