@@ -89,4 +89,3 @@ utils/tracing-test.sh
 
 # TEARDOWN
 # source destroy.sh
-grep TEST_LOG $GRABDISH_LOG/main-test.log
