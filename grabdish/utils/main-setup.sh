@@ -19,6 +19,26 @@ if state_done SETUP_VERIFIED; then
 fi
 
 
+# Identify Run Type
+while ! state_done RUN_TYPE; do
+  if [[ "$HOME" =~ /home/ll[0-9]{1,4}_use$ ]]; then
+    # Green Button
+    state_set RUN_TYPE "3"
+    state_set RESERVATION_ID `grep -oP '(?<=/home/ll).*?(?=_use)' <<<"$HOME"`
+    state_set USER_OCID 'NA'
+    state_set USER_NAME "LL$(state_get RESERVATION_ID)-USER"
+    state_set_done PROVISIONING
+    state_set RUN_NAME "grabdish$(state_get RESERVATION_ID)"
+    state_set ORDER_DB_NAME "ORDER$(state_get RESERVATION_ID)"
+    state_set INVENTORY_DB_NAME "INVENTORY$(state_get RESERVATION_ID)"
+    state_set_done OKE_LIMIT_CHECK
+    state_set_done ATP_LIMIT_CHECK
+  else
+    state_set RUN_TYPE "1"
+  fi
+done
+
+
 # Get the User OCID
 while ! state_done USER_OCID; do
   if test -z "$TEST_USER_OCID"; then
@@ -40,24 +60,6 @@ done
 while ! state_done USER_NAME; do
   USER_NAME=`oci iam user get --user-id "$(state_get USER_OCID)" --query "data.name" --raw-output`
   state_set USER_NAME "$USER_NAME"
-done
-
-
-# Identify Run Type
-while ! state_done RUN_TYPE; do
-  if [[ "$(state_get USER_NAME)" =~ LL[0-9]{1,5}-USER$ ]]; then
-    # Green Button
-    state_set RUN_TYPE "3"
-    state_set RESERVATION_ID `grep -oP '(?<=LL).*?(?=-USER)' <<<"$(state_get USER_NAME)"`
-    state_set_done PROVISIONING
-    state_set RUN_NAME "grabdish$(state_get RESERVATION_ID)"
-    state_set ORDER_DB_NAME "ORDER$(state_get RESERVATION_ID)"
-    state_set INVENTORY_DB_NAME "INVENTORY$(state_get RESERVATION_ID)"
-    state_set_done OKE_LIMIT_CHECK
-    state_set_done ATP_LIMIT_CHECK
-  else
-    state_set RUN_TYPE "1"
-  fi
 done
 
 
@@ -93,9 +95,11 @@ done
 
 # Double check and then set the region
 while ! state_done REGION; do
-  HOME_REGION=`oci iam region-subscription list --query 'data[?"is-home-region"]."region-name" | join('\'' '\'', @)' --raw-output`
+  if test $(state_get RUN_TYPE) -eq 1; then
+    HOME_REGION=`oci iam region-subscription list --query 'data[?"is-home-region"]."region-name" | join('\'' '\'', @)' --raw-output`
+    state_set HOME_REGION "$HOME_REGION"
+  fi
   state_set REGION "$OCI_REGION" # Set in cloud shell env
-  state_set HOME_REGION "$HOME_REGION"
 done
 
 
@@ -194,9 +198,7 @@ fi
 
 # Get Namespace
 while ! state_done NAMESPACE; do
-  export OCI_CLI_PROFILE=$(state_get HOME_REGION)
   NAMESPACE=`oci os ns get --compartment-id "$(state_get COMPARTMENT_OCID)" --query "data" --raw-output`
-  export OCI_CLI_PROFILE=$(state_get REGION)
   state_set NAMESPACE "$NAMESPACE"
 done
 
@@ -218,7 +220,7 @@ while ! state_done DOCKER_REGISTRY; do
       fi
     fi
   else
-    read -p "Please generate an Auth Token and enter the value: " TOKEN
+    read -s -r -p "Please generate an Auth Token and enter the value: " TOKEN
   fi
 
   RETRIES=0
