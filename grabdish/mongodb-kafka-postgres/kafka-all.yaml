@@ -62,6 +62,9 @@ kind: Deployment
 metadata:
   name: kafka-broker0
 spec:
+  selector:
+    matchLabels:
+      app: kafka
   template:
     metadata:
       labels:
@@ -90,6 +93,9 @@ kind: Deployment
 metadata:
   name: kafka-cat
 spec:
+  selector:
+    matchLabels:
+      app: kafka-cat
   template:
     metadata:
       labels:
