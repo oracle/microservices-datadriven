@@ -113,7 +113,7 @@ while ! state_done COMPARTMENT_OCID; do
   else
     read -p "Please enter your OCI compartments's OCID: " COMPARTMENT_OCID
   fi
-  while ! test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output`"" == 'ACTIVE' 2>/dev/null; do
+  while ! test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output 2>/dev/null`"" == 'ACTIVE'; do
     echo "Waiting for the compartment to become ACTIVE"
     sleep 2
   done
