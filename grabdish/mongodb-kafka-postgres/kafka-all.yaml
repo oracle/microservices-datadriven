@@ -40,7 +40,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      name: kafka
+      name: zookeeper-deployment-1
   template:
     metadata:
       labels:
