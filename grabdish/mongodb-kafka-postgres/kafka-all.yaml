@@ -33,11 +33,14 @@ spec:
     app: kafka
     id: "0"
 ---
+apiVersion: apps/v1
 kind: Deployment
-apiVersion: extensions/v1beta1
 metadata:
   name: zookeeper-deployment-1
 spec:
+  selector:
+    matchLabels:
+      name: kafka
   template:
     metadata:
       labels:
@@ -54,8 +57,8 @@ spec:
             - name: ZOOKEEPER_SERVER_1
               value: zoo1
 ---
+apiVersion: apps/v1
 kind: Deployment
-apiVersion: extensions/v1beta1
 metadata:
   name: kafka-broker0
 spec:
@@ -82,8 +85,8 @@ spec:
             - name: KAFKA_CREATE_TOPICS
               value: sample.topic:1:1
 ---
+apiVersion: apps/v1
 kind: Deployment
-apiVersion: extensions/v1beta1
 metadata:
   name: kafka-cat
 spec:
