@@ -8,9 +8,9 @@ import java.sql.Statement;
 
 public class KafkaPostgresOrderEventConsumer {
 
-    String url = "jdbc:postgresql://localhost:5432/testdb";
-    String user = "user12";
-    String password = "34klq*";
+    String url = "jdbc:postgresql://postgres.msdataworkshop:5432/postgresdb";
+    String user = "postgresadmin";
+    String password = "admin123";
 
     public void testConnection() {
         try (
@@ -19,6 +19,8 @@ public class KafkaPostgresOrderEventConsumer {
                 ResultSet rs = st.executeQuery("SELECT VERSION()")) {
 
             if (rs.next()) {
+
+                System.out.println("KafkaPostgresOrderEventConsumer  testConnection() con:" + con);
                 System.out.println(rs.getString(1));
             }
 
