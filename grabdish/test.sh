@@ -4,9 +4,10 @@
 
 # Make sure this is run via source or .
 if ! (return 0 2>/dev/null); then
-  echo "ERROR: Usage 'source test.sh $USER_OCID'"
+  echo "ERROR: Usage 'source test.sh'"
   exit
 fi
 
-TEST_SCRIPT="$GRABDISH_HOME/utils/main-test.sh"
-$TEST_SCRIPT 2>&1 | tee -ai $GRABDISH_LOG/main-test.log
+$GRABDISH_HOME/utils/main-test.sh 2>&1 | tee -ai $GRABDISH_LOG/main-test.log
+
+$GRABDISH_HOME/utils/test-summary.sh
