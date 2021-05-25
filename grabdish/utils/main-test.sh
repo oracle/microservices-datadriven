@@ -7,13 +7,13 @@ set -e
 
 # Check home is set
 if test -z "$GRABDISH_HOME"; then
-  echo "ERROR: This script requires GRABDISH_HOME to be set"
+  echo "TEST_LOG_FAILED: This script requires GRABDISH_HOME to be set"
   exit
 fi
 
 if ! state_done SETUP_VERIFIED; then
-  echo "SETUP is incomplete"
-  return 1
+  echo "TEST_LOG_FAILED: Setup is incomplete"
+  exit
 fi
 
 # Check TEST_UI_PASSWORD is set

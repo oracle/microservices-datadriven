@@ -221,6 +221,7 @@ while ! state_done DOCKER_REGISTRY; do
     fi
   else
     read -s -r -p "Please generate an Auth Token and enter the value: " TOKEN
+    echo
     echo "Auth Token entry accepted.  Attempting docker login."
   fi
 
