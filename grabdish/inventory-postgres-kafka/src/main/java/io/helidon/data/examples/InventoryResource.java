@@ -6,56 +6,27 @@
  */
 package io.helidon.data.examples;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Initialized;
 import javax.enterprise.event.Observes;
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import oracle.ucp.jdbc.PoolDataSource;
 
 @Path("/")
 @ApplicationScoped
 public class InventoryResource {
 
-    @Inject
-    @Named("inventorypdb")
-    PoolDataSource atpInventoryPDB;
-    static String regionId = System.getenv("OCI_REGION").trim();
-    static String pwSecretOcid = System.getenv("VAULT_SECRET_OCID").trim();
     static String pwSecretFromK8s = System.getenv("dbpassword").trim();
     static String inventoryuser = "INVENTORYUSER";
     static String inventorypw;
     static String inventoryQueueName = "inventoryqueue";
     static String orderQueueName = "orderqueue";
 
-    static {
-        System.setProperty("oracle.jdbc.fanEnabled", "false");
-    }
-
     public void init(@Observes @Initialized(ApplicationScoped.class) Object init) throws SQLException {
         System.out.println("InventoryResource.init KafkaPostgresOrderEventConsumer().testConnection() " + init);
-        new KafkaPostgresOrderEventConsumer().testConnection();
-        System.out.println("InventoryResource.init " + init);
-        String pw;
-        if(!pwSecretOcid.trim().equals("")) {
-            pw = OCISDKUtility.getSecreteFromVault(true, regionId, pwSecretOcid);
-        } else {
-            pw = pwSecretFromK8s;
-        }
-        inventorypw = pw;
-        atpInventoryPDB.setUser(inventoryuser);
-        atpInventoryPDB.setPassword(pw);
-        inventoryuser = atpInventoryPDB.getUser();
-        try (Connection connection  = atpInventoryPDB.getConnection()) { //fail if connection is not successful rather than go into listening loop
-            System.out.println("InventoryResource.init connection:" + connection);
-        }
         listenForMessages();
     }
 
@@ -63,7 +34,7 @@ public class InventoryResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     public Response listenForMessages()  {
-        new Thread(new InventoryServiceOrderEventConsumer(this)).start();
+        new Thread(new KafkaPostgresOrderEventConsumer(this)).start();
         final Response returnValue = Response.ok()
                 .entity("now listening for messages...")
                 .build();

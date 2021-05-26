@@ -36,6 +36,7 @@ public class KafkaPostgresOrderEventConsumer {
     }
 
     public void placeOrder() {
+        System.out.println("KafkaPostgresOrderEventConsumer  about to listen for messages...");
 //            String topicName = "sample.topic:1:1";
         String topicName = "sample.topic";
         Properties props = new Properties();
@@ -45,26 +46,18 @@ public class KafkaPostgresOrderEventConsumer {
         props.put("auto.commit.interval.ms", "1000");
         props.put("session.timeout.ms", "30000");
         props.put("key.deserializer",
-                "org.apache.kafka.common.serializa-tion.StringDeserializer");
+                "org.apache.kafka.common.serialization.StringDeserializer");
         props.put("value.deserializer",
-                "org.apache.kafka.common.serializa-tion.StringDeserializer");
+                "org.apache.kafka.common.serialization.StringDeserializer");
         KafkaConsumer<String, String> consumer = new KafkaConsumer
                 <String, String>(props);
         System.out.println("KafkaPostgresOrderEventConsumer  consumer:" + consumer);
-
-        //Kafka Consumer subscribes list of topics here.
         consumer.subscribe(Arrays.asList(topicName));
-
-        //print the topic name
         System.out.println("Subscribed to topic " + topicName);
-        int i = 0;
-
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(100);
             for (ConsumerRecord<String, String> record : records)
-
-                // print the offset,key and value for the consumer records.
-                System.out.printf("offset = %d, key = %s, value = %s\n",
+                System.out.printf("message offset = %d, key = %s, value = %s\n",
                         record.offset(), record.key(), record.value());
         }
     }
