@@ -23,7 +23,13 @@ cd $GRABDISH_HOME
 echo "GRABDISH_HOME: $GRABDISH_HOME"
 
 # Java Home
-export JAVA_HOME=~/graalvm-ce-java11-20.1.0
+if test -d ~/graalvm-ce-java11-20.1.0/Contents/Home/bin; then
+  # We are on Mac doing local dev
+  export JAVA_HOME=~/graalvm-ce-java11-20.1.0/Contents/Home;
+else
+  # Assume linux
+  export JAVA_HOME=~/graalvm-ce-java11-20.1.0
+fi
 export PATH=$JAVA_HOME/bin:$PATH
 
 # State directory

@@ -19,18 +19,19 @@ These tests have been tested on MacOS
 3. Install GraalVM
 ```
 cd ~
-curl -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.1.0/graalvm-ce-java11-linux-amd64-20.1.0.tar.gz | tar xz
+curl -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.1.0/graalvm-ce-java11-darwin-amd64-20.1.0.tar.gz | tar -xz
 ```
 
 4. Install Maven
 
   https://maven.apache.org/install.html
-
 ```
 cd ~
 curl -sL https://downloads.apache.org/maven/maven-3/3.8.1/binaries/apache-maven-3.8.1-bin.tar.gz | tar xz
 export PATH=~/apache-maven-3.8.1/bin:$PATH
 ```
+
+  Also, add ~/apache-maven-3.8.1/bin to your /etc/paths
 
 5. Install Docker
 
