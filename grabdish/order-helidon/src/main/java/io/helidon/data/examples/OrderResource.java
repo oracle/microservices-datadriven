@@ -6,6 +6,7 @@
  */
 package io.helidon.data.examples;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -71,7 +72,7 @@ public class OrderResource {
                 .build();
     }
 
-    public void init(@Observes @Initialized(ApplicationScoped.class) Object init) throws Exception {
+    public void init(@Observes @Initialized(ApplicationScoped.class) Object init) throws SQLException {
         System.out.println("OrderResource.init " + init);
         atpOrderPdb.setUser(orderQueueOwner);
         String pw;
@@ -88,7 +89,6 @@ public class OrderResource {
         lastContainerStartTime = new java.util.Date().toString();
         System.out.println("____________________________________________________");
         System.out.println("----------->OrderResource (container) starting at: " + lastContainerStartTime);
-        System.out.println("_______KakfaMongoDBOrderProducer.sendInsertAndSendOrderMessage:" + new KakfaMongoDBOrderProducer().sendInsertAndSendOrderMessage());
         System.out.println("____________________________________________________");
         System.setProperty("oracle.jdbc.fanEnabled", "false");
     }

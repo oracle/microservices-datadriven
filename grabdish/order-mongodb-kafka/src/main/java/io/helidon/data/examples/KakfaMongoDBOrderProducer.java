@@ -20,7 +20,10 @@ import javax.sql.DataSource;
 public class KakfaMongoDBOrderProducer {
 
     public String updateDataAndSendEvent(String orderid, String itemid, String deliverylocation) throws Exception{
-        System.out.println("sendInsertAndSendOrderMessage.........");
+        System.out.println("updateDataAndSendEvent orderid = " + orderid + ", itemid = " + itemid + ", deliverylocation = " + deliverylocation);
+        System.out.println("insert order into mongodb.........");
+        testMongodbConnection();
+        System.out.println("send message to kafka.........");
         String topicName = "sample.topic";
         Properties props = new Properties();
         props.put("bootstrap.servers", "kafka-service:9092");
@@ -35,14 +38,13 @@ public class KakfaMongoDBOrderProducer {
                 "org.apache.kafka.common.serialization.StringSerializer");
         Producer<String, String> producer = new KafkaProducer
                 <String, String>(props);
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < 1; i++) {
             producer.send(new ProducerRecord<String, String>(topicName,
                     Integer.toString(i), Integer.toString(i)));
             System.out.println(i +":Message sent successfully");
         }
         producer.close();
         System.out.println("Finished message send - now testMongodbConnection()");
-        testMongodbConnection();
         return "end send messages";
     }
 
@@ -67,8 +69,8 @@ public class KakfaMongoDBOrderProducer {
             );
 
             // Standard URI format: mongodb://[dbuser:dbpassword@]host:port/dbname
-//            MongoClientURI uri  = new MongoClientURI("mongodb://orderuser:Welcome12345@mongodb:27017/orderdb");
-            MongoClientURI uri  = new MongoClientURI("mongodb://mongodb:27017");
+            MongoClientURI uri  = new MongoClientURI("mongodb://orderuser:Welcome12345@mongodb:27017/orderdb");
+//            MongoClientURI uri  = new MongoClientURI("mongodb://mongodb:27017");
             MongoClient client = new MongoClient(uri);
             MongoDatabase db = client.getDatabase(uri.getDatabase());
         System.out.println("testMongodbConnection() db:" + db);
