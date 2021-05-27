@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: supplier-helidon-se
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: supplier
+  template:
+    metadata:
+      labels:
+        app: supplier
+        version: helidon-se
+    spec:
+      containers:
+      - name: supplier
+        image: us-sanjose-1.ocir.io/ax1bdbres4qz/gd478345/supplier-helidon-se:0.1
+        imagePullPolicy: Always
+        env:
+        - name: database.user
+          value: "INVENTORYUSER"
+        - name: database.url
+          value: "jdbc:oracle:thin:@gd478345i_tp?TNS_ADMIN=/msdataworkshop/creds"
+        - name: inventoryqueuename
+          value: "inventoryqueue"
+        - name: OCI_REGION
+          value: ""
+        - name: VAULT_SECRET_OCID
+          value: ""
+        - name: dbpassword
+          valueFrom:
+            secretKeyRef:
+              name: dbuser
+              key: dbpassword
+              optional: true #not needed/used if using VAULT_SECRET_OCID exists
+        volumeMounts:
+        - name: creds
+          mountPath: /msdataworkshop/creds
+        ports:
+        - containerPort: 8080
+      restartPolicy: Always
+      volumes:
+      - name: creds
+        secret:
+          secretName: db-wallet-secret

@@ -1,0 +1,50 @@
+
+##
+## Copyright (c) 2021 Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-helidon
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory
+  template:
+    metadata:
+      labels:
+        app: inventory
+        version: helidon
+    spec:
+      containers:
+      - name: inventory
+        image: us-sanjose-1.ocir.io/ax1bdbres4qz/gd478345/inventory-helidon:0.1
+        imagePullPolicy: Always
+        env:
+        - name: oracle.ucp.jdbc.PoolDataSource.inventorypdb.user
+          value: "inventoryuser"
+        - name: oracle.ucp.jdbc.PoolDataSource.inventorypdb.URL
+          value: "jdbc:oracle:thin:@gd478345i_tp?TNS_ADMIN=/msdataworkshop/creds"
+        - name: inventoryqueuename
+          value: "inventoryqueue"
+        - name: OCI_REGION
+          value: ""
+        - name: VAULT_SECRET_OCID
+          value: ""
+        - name: dbpassword
+          valueFrom:
+            secretKeyRef:
+              name: dbuser
+              key: dbpassword
+              optional: true #not needed/used if using VAULT_SECRET_OCID exists
+        volumeMounts:
+        - name: creds
+          mountPath: /msdataworkshop/creds
+        ports:
+        - containerPort: 8080
+      restartPolicy: Always
+      volumes:
+      - name: creds
+        secret:
+          secretName: db-wallet-secret

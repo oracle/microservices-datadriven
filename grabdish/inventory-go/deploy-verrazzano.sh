@@ -17,10 +17,10 @@ echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated deployme
 cp inventory-go-comp.yaml inventory-go-comp-$CURRENTTIME.yaml
 
 #may hit sed incompat issue with mac
-sed -i "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" inventory-go-comp-$CURRENTTIME.yaml
-sed -i "s|%ORDER_PDB_NAME%|${ORDER_PDB_NAME}|g" inventory-go-comp-${CURRENTTIME}.yaml
-sed -i "s|%OCI_REGION%|${OCI_REGION}|g" inventory-go-comp-${CURRENTTIME}.yaml
-sed -i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" inventory-go-comp-${CURRENTTIME}.yaml
+sed_i "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" inventory-go-comp-$CURRENTTIME.yaml
+sed_i "s|%ORDER_PDB_NAME%|${ORDER_PDB_NAME}|g" inventory-go-comp-${CURRENTTIME}.yaml
+sed_i "s|%OCI_REGION%|${OCI_REGION}|g" inventory-go-comp-${CURRENTTIME}.yaml
+sed_i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" inventory-go-comp-${CURRENTTIME}.yaml
 
 if [ -z "$1" ]; then
     kubectl apply -f $SCRIPT_DIR/inventory-go-comp-$CURRENTTIME.yaml
