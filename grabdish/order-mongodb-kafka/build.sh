@@ -5,7 +5,7 @@
 
 SCRIPT_DIR=$(dirname $0)
 
-IMAGE_NAME=order-helidon
+IMAGE_NAME=order-mongodb-kafka
 IMAGE_VERSION=0.1
 
 export DOCKER_REGISTRY=$(state_get DOCKER_REGISTRY)

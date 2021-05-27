@@ -23,7 +23,7 @@ public class OrderServiceReadinessHealthCheck implements HealthCheck {
 
     @Override
     public HealthCheckResponse call() {
-        if (!OrderResource.readiness) {
+        if (!KafkaMongoOrderResource.readiness) {
             return HealthCheckResponse.named("OrderServerReadinessDown")
                     .down()
                     .withData("data-initialized", "not ready") //data initialized via eventsourcing, view query, etc.

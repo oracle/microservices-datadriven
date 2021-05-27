@@ -1,5 +1,5 @@
 /*
- 
+
  **
  ** Copyright (c) 2021 Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
@@ -20,7 +20,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import oracle.ucp.jdbc.PoolDataSource;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
@@ -39,16 +38,12 @@ import io.opentracing.Span;
 @Path("/")
 @ApplicationScoped
 @Traced
-public class OrderResource {
-
-    @Inject
-    @Named("orderpdb")
-    PoolDataSource atpOrderPdb;
+public class KafkaMongoOrderResource {
 
     @Inject
     private Tracer tracer;
 
-    OrderServiceEventProducer orderServiceEventProducer = new OrderServiceEventProducer();
+    KakfaMongoDBOrderProducer orderServiceEventProducer = new KakfaMongoDBOrderProducer();
     static String regionId = System.getenv("OCI_REGION").trim();
     static String pwSecretOcid = System.getenv("VAULT_SECRET_OCID").trim();
     static String pwSecretFromK8s = System.getenv("dbpassword").trim();
@@ -72,30 +67,17 @@ public class OrderResource {
     }
 
     public void init(@Observes @Initialized(ApplicationScoped.class) Object init) throws Exception {
-        System.out.println("OrderResource.init " + init);
-        atpOrderPdb.setUser(orderQueueOwner);
-        String pw;
-        if(!pwSecretOcid.trim().equals("")) {
-            pw = OCISDKUtility.getSecreteFromVault(true, regionId, pwSecretOcid);
-        } else {
-            pw = pwSecretFromK8s;
-        }
-        atpOrderPdb.setPassword(pw);
-        Connection connection = atpOrderPdb.getConnection();
-        System.out.println("OrderResource.init atpOrderPdb.getConnection():" + connection);
-        connection.close();
+        System.out.println("KafkaMongoOrderResource.init " + init);
         startEventConsumer();
         lastContainerStartTime = new java.util.Date().toString();
         System.out.println("____________________________________________________");
-        System.out.println("----------->OrderResource (container) starting at: " + lastContainerStartTime);
-        System.out.println("_______KakfaMongoDBOrderProducer.sendInsertAndSendOrderMessage:" + new KakfaMongoDBOrderProducer().sendInsertAndSendOrderMessage());
+        System.out.println("----------->KafkaMongoOrderResource (container) starting at: " + lastContainerStartTime);
         System.out.println("____________________________________________________");
-        System.setProperty("oracle.jdbc.fanEnabled", "false");
     }
 
     private void startEventConsumer() {
         System.out.println("OrderResource.startEventConsumerIfNotStarted startEventConsumer...");
-        OrderServiceEventConsumer orderServiceEventConsumer = new OrderServiceEventConsumer(this);
+        KafkaMongoOrderEventConsumer orderServiceEventConsumer = new KafkaMongoOrderEventConsumer();
         new Thread(orderServiceEventConsumer).start();
     }
 
@@ -149,13 +131,13 @@ public class OrderResource {
         activeSpan.log("begin placing order"); // logs are for a specific moment or event within the span (in contrast to tags which should apply to the span regardless of time).
         activeSpan.setTag("orderid", orderid); //tags are annotations of spans in order to query, filter, and comprehend trace data
         activeSpan.setTag("itemid", itemid);
-        activeSpan.setTag("db.user", atpOrderPdb.getUser()); // https://github.com/opentracing/specification/blob/master/semantic_conventions.md
+        activeSpan.setTag("db.user", "mongodb"); // https://github.com/opentracing/specification/blob/master/semantic_conventions.md
         activeSpan.setBaggageItem("sagaid", "testsagaid" + orderid); //baggage is part of SpanContext and carries data across process boundaries for access throughout the trace
         activeSpan.setBaggageItem("orderid", orderid);
 
         try {
             System.out.println("--->insertOrderAndSendEvent..." +
-                    orderServiceEventProducer.updateDataAndSendEvent(atpOrderPdb, orderid, itemid, deliverylocation));
+                    orderServiceEventProducer.updateDataAndSendEvent(orderid, itemid, deliverylocation));
         } catch (Exception e) {
             e.printStackTrace();
             return Response.serverError()
@@ -194,7 +176,7 @@ public class OrderResource {
             @QueryParam("orderid") String orderId) {
         System.out.println("--->showorder (via JSON/SODA query) for orderId:" + orderId);
         try {
-            Order order = orderServiceEventProducer.getOrderViaSODA(atpOrderPdb, orderId);
+            Order order = orderServiceEventProducer.getOrderViaSODA(orderId);
             String returnJSON = JsonUtils.writeValueAsString(order);
             System.out.println("OrderResource.showorder returnJSON:" + returnJSON);
             return Response.ok()
@@ -231,7 +213,7 @@ public class OrderResource {
         System.out.println("--->deleteorder for orderId:" + orderId);
         String returnString = "orderId = " + orderId + "<br>";
         try {
-            returnString += orderServiceEventProducer.deleteOrderViaSODA(atpOrderPdb, orderId);
+            returnString += orderServiceEventProducer.deleteOrderViaSODA(orderId);
             return Response.ok()
                     .entity(returnString)
                     .build();
@@ -259,7 +241,7 @@ public class OrderResource {
         System.out.println("--->deleteallorders");
         try {
             return Response.ok()
-                    .entity(orderServiceEventProducer.dropOrderViaSODA(atpOrderPdb))
+                    .entity(orderServiceEventProducer.dropOrderViaSODA())
                     .build();
         } catch (Exception e) {
             e.printStackTrace();

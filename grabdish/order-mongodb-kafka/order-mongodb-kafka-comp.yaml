@@ -3,14 +3,14 @@
 apiVersion: core.oam.dev/v1alpha2
 kind: Component
 metadata:
-  name: order-helidon-component
+  name: order-mongodb-kafka-component
   namespace: msdataworkshop
 spec:
   workload:
     apiVersion: oam.verrazzano.io/v1alpha1
     kind: VerrazzanoHelidonWorkload
     metadata:
-      name: order-helidon-workload
+      name: order-mongodb-kafka-workload
       labels:
         app: order
     spec:
@@ -28,7 +28,7 @@ spec:
 #        spec:
           containers:
             - name: order
-              image: %DOCKER_REGISTRY%/order-helidon:0.1
+              image: %DOCKER_REGISTRY%/order-mongodb-kafka:0.1
               imagePullPolicy: Always
               env:
                 - name: oracle.ucp.jdbc.PoolDataSource.orderpdb.user

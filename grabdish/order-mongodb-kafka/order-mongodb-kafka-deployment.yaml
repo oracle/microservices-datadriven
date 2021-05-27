@@ -5,7 +5,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: order-helidon
+  name: order-mongodb-kafka
 spec:
   replicas: 1
   selector:
@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: order
-        image: %DOCKER_REGISTRY%/order-helidon:0.1
+        image: %DOCKER_REGISTRY%/order-mongodb-kafka:0.1
         imagePullPolicy: Always
         env:
         - name: oracle.ucp.jdbc.PoolDataSource.orderpdb.user

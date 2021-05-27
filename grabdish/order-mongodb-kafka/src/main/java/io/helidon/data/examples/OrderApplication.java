@@ -26,7 +26,7 @@ public class OrderApplication extends Application {
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> s = new HashSet<Class<?>>();
-        s.add(OrderResource.class);
+        s.add(KafkaMongoOrderResource.class);
         return s;
     }
 

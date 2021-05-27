@@ -5,5 +5,5 @@
 
 echo delete frontend OAM Component and ApplicationConfiguration
 
-kubectl delete applicationconfiguration order-helidon-appconf -n msdataworkshop
-kubectl delete component order-helidon-component -n msdataworkshop
+kubectl delete applicationconfiguration order-mongodb-kafka-appconf -n msdataworkshop
+kubectl delete component order-mongodb-kafka-component -n msdataworkshop

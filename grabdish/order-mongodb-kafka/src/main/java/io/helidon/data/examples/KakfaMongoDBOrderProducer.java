@@ -1,5 +1,6 @@
 package io.helidon.data.examples;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -14,9 +15,11 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.bson.Document;
 
+import javax.sql.DataSource;
+
 public class KakfaMongoDBOrderProducer {
 
-    public String sendInsertAndSendOrderMessage() throws Exception{
+    public String updateDataAndSendEvent(String orderid, String itemid, String deliverylocation) throws Exception{
         System.out.println("sendInsertAndSendOrderMessage.........");
         String topicName = "sample.topic";
         Properties props = new Properties();
@@ -92,5 +95,19 @@ public class KakfaMongoDBOrderProducer {
             }
             songs.drop();
             client.close();
+    }
+
+
+
+    public Order getOrderViaSODA(String orderId) {
+        return null;
+    }
+
+    public String deleteOrderViaSODA(String orderId) {
+        return null;
+    }
+
+    public Object dropOrderViaSODA() {
+        return null;
     }
 }

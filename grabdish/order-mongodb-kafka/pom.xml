@@ -15,7 +15,7 @@
 
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>order-helidon</artifactId>
+    <artifactId>order-mongodb-kafka</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <description>stateful microservices demo</description>
@@ -165,39 +165,6 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>javax.jms</groupId>
-            <artifactId>javax.jms-api</artifactId>
-            <version>2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.transaction</groupId>
-            <artifactId>javax.transaction-api</artifactId>
-            <version>1.2</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc8-production</artifactId>
-            <version>19.8.0.0</version>
-            <type>pom</type>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.database.messaging</groupId>
-            <artifactId>aqapi</artifactId>
-            <version>19.3.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.database.soda</groupId>
-            <artifactId>orajsoda</artifactId>
-            <version>1.1.7.1</version>
-            <exclusions>
-                <exclusion>
-                <groupId>com.oracle.database.jdbc</groupId>
-                <artifactId>ojdbc8</artifactId>
-                </exclusion>
-            </exclusions> 
-        </dependency>
-        <dependency>
             <groupId>javax.json.bind</groupId>
             <artifactId>javax.json.bind-api</artifactId>
             <version>1.0</version>
@@ -205,21 +172,6 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.oci.sdk</groupId>
-            <artifactId>oci-java-sdk-vault</artifactId>
-            <version>1.32.2</version>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.oci.sdk</groupId>
-            <artifactId>oci-java-sdk-common</artifactId>
-            <version>1.32.2</version>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.oci.sdk</groupId>
-            <artifactId>oci-java-sdk-secrets</artifactId>
-            <version>1.32.2</version>
         </dependency>
         <dependency>
             <groupId>org.mongodb</groupId>

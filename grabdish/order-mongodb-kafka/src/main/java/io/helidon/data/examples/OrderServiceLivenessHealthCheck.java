@@ -23,7 +23,7 @@ public class OrderServiceLivenessHealthCheck implements HealthCheck {
 
     @Override
     public HealthCheckResponse call() {
-        if (!OrderResource.liveliness) {
+        if (!KafkaMongoOrderResource.liveliness) {
             return HealthCheckResponse.named("OrderServerLivenessDown")
                     .down()
                     .withData("databaseconnections", "not live")
