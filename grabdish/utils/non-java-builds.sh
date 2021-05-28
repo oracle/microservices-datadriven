@@ -36,5 +36,6 @@ while ! state_done NON_JAVA_BUILDS; do
     cd $GRABDISH_HOME/$b
     time ./build.sh &
   done
+  wait
   state_set_done NON_JAVA_BUILDS
 done
