@@ -21,10 +21,10 @@ cp inventory-go-deployment.yaml inventory-go-deployment-$CURRENTTIME.yaml
 #EOF" > inventory-go-deployment-$CURRENTTIME.yaml
 
 
-sed -i "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" inventory-go-deployment-$CURRENTTIME.yaml
-sed -i "s|%INVENTORY_PDB_NAME%|${INVENTORY_PDB_NAME}|g" inventory-go-deployment-${CURRENTTIME}.yaml
-sed -i "s|%OCI_REGION%|${OCI_REGION}|g" inventory-go-deployment-${CURRENTTIME}.yaml
-sed -i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" inventory-go-deployment-${CURRENTTIME}.yaml
+sed_i "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" inventory-go-deployment-$CURRENTTIME.yaml
+sed_i "s|%INVENTORY_PDB_NAME%|${INVENTORY_PDB_NAME}|g" inventory-go-deployment-${CURRENTTIME}.yaml
+sed_i "s|%OCI_REGION%|${OCI_REGION}|g" inventory-go-deployment-${CURRENTTIME}.yaml
+sed_i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" inventory-go-deployment-${CURRENTTIME}.yaml
 
 if [ -z "$1" ]; then
     kubectl apply -f $SCRIPT_DIR/inventory-go-deployment-$CURRENTTIME.yaml -n msdataworkshop

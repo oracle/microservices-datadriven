@@ -470,3 +470,8 @@ while ! state_done SETUP_VERIFIED; do
     state_set_done SETUP_VERIFIED
   fi
 done
+
+# Export state file for local development
+cd $GRABDISH_HOME
+rm ~/grabdish-state.tgz
+tar -czf ~/grabdish-state.tgz state
