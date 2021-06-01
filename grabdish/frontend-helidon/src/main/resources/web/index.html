@@ -145,20 +145,15 @@
                   <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9RemoveInventoryAction]]">Remove Inventory</oj-button>
                   <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9GetInventoryAction]]">Get Inventory</oj-button>
                   <br><br>
-                  <br>Crash/Recovery Test Admin...
+                  <br>Transactional Exactly-Once Message Delivery Tests...
                   <br>
 <!--                  <oj-form-layout>-->
 <!--                    <oj-input-text label-hint="Failure" value="{{lab11Item}}"></oj-input-text>-->
 <!--                  </oj-form-layout>-->
-                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterInsertAction]]">Crash order service after order is inserted (before order message is sent to inventory service)</oj-button>
-                  <br><oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterOrderMessageReceivedAction]]">Crash inventory service after order message is received (before inventory is checked)</oj-button>
-                  <br><oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterOrderMessageProcessedAction]]">Crash inventory service after order inventory is checked (before inventory message reply is sent)</oj-button>
-                  <oj-radioset id="crashaction" class='oj-choice-direction-row'>
-                    <oj-option value="option 1">option 1</oj-option>
-                    <oj-option value="option 2">option 2</oj-option>
-                    <oj-option value="option 3">option 3</oj-option>
-                  </oj-radioset>
-                  <br><oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterOrderMessageProcessedAction]]">Crash inventory service after order inventory is checked (before Inventory message reply is sent)</oj-button>
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterInsertAction]]">Crash order service after Order is inserted (before Order message is sent to Inventory service)</oj-button>
+                  <br><oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterOrderMessageReceivedAction]]">Crash Inventory service after Order message is received (before inventory for order is checked)</oj-button>
+                  <br><oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterOrderMessageProcessedAction]]">Crash Inventory service after inventory for order is checked (before Inventory status message is sent)</oj-button>
+                  <br><oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterOrderMessageProcessedAction]]">Crash Inventory service after inventory for order is checked (before Inventory status message is sent)</oj-button>
                 </div>
                 <!-- lab10 -->
                 <div slot="lab10">
