@@ -158,12 +158,6 @@
             <groupId>io.helidon.tracing</groupId>
             <artifactId>helidon-tracing-jaeger</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>io.helidon.integrations.cdi</groupId>
-            <artifactId>helidon-integrations-cdi-datasource-ucp</artifactId>
-            <scope>runtime</scope>
-        </dependency>
         <dependency>
             <groupId>javax.json.bind</groupId>
             <artifactId>javax.json.bind-api</artifactId>

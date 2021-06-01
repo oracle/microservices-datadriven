@@ -19,7 +19,7 @@ public class InventoryApplication extends Application {
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> s = new HashSet<Class<?>>();
-        s.add(InventoryResource.class);
+        s.add(KafkaPostgressInventoryResource.class);
         return s;
     }
 

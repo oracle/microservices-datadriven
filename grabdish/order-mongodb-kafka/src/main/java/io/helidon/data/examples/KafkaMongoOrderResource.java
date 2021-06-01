@@ -6,8 +6,6 @@
  */
 package io.helidon.data.examples;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,17 +13,14 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Initialized;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Timed;
-import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
-import org.eclipse.microprofile.openapi.annotations.info.Info;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
@@ -43,17 +38,13 @@ public class KafkaMongoOrderResource {
     @Inject
     private Tracer tracer;
 
-    KakfaMongoDBOrderProducer orderServiceEventProducer = new KakfaMongoDBOrderProducer();
-    static String regionId = System.getenv("OCI_REGION").trim();
-    static String pwSecretOcid = System.getenv("VAULT_SECRET_OCID").trim();
-    static String pwSecretFromK8s = System.getenv("dbpassword").trim();
-    static final String orderQueueOwner = "ORDERUSER";
-    static final String orderQueueName = "orderqueue";
-    static final String inventoryQueueName = "inventoryqueue";
+    KafkaMongoDBOrderProducer orderServiceEventProducer = new KafkaMongoDBOrderProducer();
+    final static String orderTopicName = "order.topic";
+    final static String inventoryTopicName = "inventory.topic";
     static boolean liveliness = true;
+    static boolean crashAfterInsert = false;
     static boolean readiness = true;
     private static String lastContainerStartTime;
-    private OrderServiceCPUStress orderServiceCPUStress = new OrderServiceCPUStress();
     Map<String, OrderDetail> cachedOrders = new HashMap<>();
 
     @Path("/lastContainerStartTime")
@@ -147,7 +138,6 @@ public class KafkaMongoOrderResource {
             activeSpan.log("end placing order");
             activeSpan.finish();
         }
-
         return Response.ok()
                 .entity("orderid = " + orderid + " orderstatus = " + orderDetail.getOrderStatus() + " order placed")
                 .build();
@@ -176,7 +166,7 @@ public class KafkaMongoOrderResource {
             @QueryParam("orderid") String orderId) {
         System.out.println("--->showorder (via JSON/SODA query) for orderId:" + orderId);
         try {
-            Order order = orderServiceEventProducer.getOrderViaSODA(orderId);
+            Order order = orderServiceEventProducer.getOrderFromMongoDB(orderId);
             String returnJSON = JsonUtils.writeValueAsString(order);
             System.out.println("OrderResource.showorder returnJSON:" + returnJSON);
             return Response.ok()
@@ -213,7 +203,7 @@ public class KafkaMongoOrderResource {
         System.out.println("--->deleteorder for orderId:" + orderId);
         String returnString = "orderId = " + orderId + "<br>";
         try {
-            returnString += orderServiceEventProducer.deleteOrderViaSODA(orderId);
+            returnString += orderServiceEventProducer.deleteOrderFromMongoDB(orderId);
             return Response.ok()
                     .entity(returnString)
                     .build();
@@ -241,7 +231,7 @@ public class KafkaMongoOrderResource {
         System.out.println("--->deleteallorders");
         try {
             return Response.ok()
-                    .entity(orderServiceEventProducer.dropOrderViaSODA())
+                    .entity(orderServiceEventProducer.dropOrderFromMongoDB())
                     .build();
         } catch (Exception e) {
             e.printStackTrace();
@@ -251,6 +241,16 @@ public class KafkaMongoOrderResource {
         }
     }
 
+
+    @Path("/crashAfterInsert")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response crashAfterInsert() {
+        crashAfterInsert = true;
+        return Response.ok()
+                .entity("order crashAfterInsert set")
+                .build();
+    }
 
     @Path("/ordersetlivenesstofalse")
     @GET
@@ -272,26 +272,5 @@ public class KafkaMongoOrderResource {
                 .build();
     }
 
-    @Path("/startCPUStress")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response startCPUStress() {
-        System.out.println("--->startCPUStress...");
-        orderServiceCPUStress.start();
-        return Response.ok()
-                .entity("CPU stress started")
-                .build();
-    }
-
-    @Path("/stopCPUStress")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response stopCPUStress() {
-        System.out.println("--->stopCPUStress...");
-        orderServiceCPUStress.stop();
-        return Response.ok()
-                .entity("CPU stress stopped")
-                .build();
-    }
 
 }

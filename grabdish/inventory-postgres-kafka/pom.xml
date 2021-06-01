@@ -166,7 +166,7 @@
         </dependency>
         <dependency>
             <groupId>io.helidon.integrations.cdi</groupId>
-            <artifactId>helidon-integrations-cdi-datasource-ucp</artifactId>
+            <artifactId>helidon-integrations-cdi-datasource-hikaricp</artifactId>
             <scope>runtime</scope>
         </dependency>
         <dependency>

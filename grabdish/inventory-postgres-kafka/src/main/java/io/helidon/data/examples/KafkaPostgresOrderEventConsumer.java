@@ -10,36 +10,24 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 
-import java.lang.IllegalStateException;
 import java.sql.*;
-import java.sql.Connection;
-import java.util.Arrays;
-import java.util.Properties;
-
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 
 import java.util.Properties;
 import java.util.Arrays;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
+
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
 public class KafkaPostgresOrderEventConsumer implements Runnable {
 
-    private static final String DECREMENT_BY_ID =
-            "update inventory set inventorycount = inventorycount - 1 where inventoryid = ? and inventorycount > 0 returning inventorylocation into ?";
-    InventoryResource inventoryResource;
 
-    public KafkaPostgresOrderEventConsumer(InventoryResource inventoryResource) {
+    final static String orderTopicName = "order.topic";
+    final static String inventoryTopicName = "inventory.topic";
+    KafkaPostgressInventoryResource inventoryResource;
+
+    public KafkaPostgresOrderEventConsumer(KafkaPostgressInventoryResource inventoryResource) {
         this.inventoryResource = inventoryResource;
     }
 
@@ -53,10 +41,8 @@ public class KafkaPostgresOrderEventConsumer implements Runnable {
         }
     }
 
-    public void listenForOrderEvents() throws Exception {
-        System.out.println("KafkaPostgresOrderEventConsumer  about to listen for messages...");
-//            String topicName = "sample.topic:1:1";
-        String topicName = "sample.topic";
+    public void listenForOrderEvents()  {
+        String topicName = orderTopicName;
         Properties props = new Properties();
         props.put("bootstrap.servers", "kafka-service:9092");
         props.put("group.id", "test");
@@ -67,46 +53,40 @@ public class KafkaPostgresOrderEventConsumer implements Runnable {
                 "org.apache.kafka.common.serialization.StringDeserializer");
         props.put("value.deserializer",
                 "org.apache.kafka.common.serialization.StringDeserializer");
-        KafkaConsumer<String, String> consumer = new KafkaConsumer
-                <String, String>(props);
+        System.out.println("KafkaPostgresOrderEventConsumer  about to listen for messages...");
+        KafkaConsumer<String, String> consumer = new KafkaConsumer  <String, String>(props);
         System.out.println("KafkaPostgresOrderEventConsumer  consumer:" + consumer);
         consumer.subscribe(Arrays.asList(topicName));
         System.out.println("Subscribed to topic " + topicName);
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(100);
             for (ConsumerRecord<String, String> record : records) {
-                System.out.printf("message offset = %d, key = %s, value = %s\n",
-                        record.offset(), record.key(), record.value());  String txt = record.value();
-                System.out.println("txt " + txt);
-                Order order = JsonUtils.read(txt, Order.class);
-                System.out.print(" orderid:" + order.getOrderid());
-                System.out.print(" itemid:" + order.getItemid());
-                updateDataAndSendEventOnInventory(order.getOrderid(), order.getItemid());
+                System.out.printf("KafkaPostgresOrderEventConsumer message offset = %d, key = %s, value = %s\n",
+                        record.offset(), record.key(), record.value());
+                String txt = record.value();
+                System.out.println("KafkaPostgresOrderEventConsumer txt " + txt);
+                if (txt.indexOf("{") > -1) try {
+                    Order order = JsonUtils.read(txt, Order.class);
+                    System.out.print(" orderid:" + order.getOrderid());
+                    System.out.print(" itemid:" + order.getItemid());
+                    if (inventoryResource.crashAfterOrderMessageReceived) System.exit(-1);
+                    updateDataAndSendEventOnInventory(order.getOrderid(), order.getItemid());
+                    if (inventoryResource.crashAfterOrderMessageProcessed) System.exit(-1);
+                } catch (Exception ex) {
+                    System.out.printf("message did not contain order");
+                    ex.printStackTrace();
+                }
             }
         }
     }
-
-
 
     private void updateDataAndSendEventOnInventory( String orderid, String itemid) throws Exception {
         String inventorylocation = evaluateInventory(itemid);
         Inventory inventory = new Inventory(orderid, itemid, inventorylocation, "beer"); //static suggestiveSale - represents an additional service/event
         String jsonString = JsonUtils.writeValueAsString(inventory);
         System.out.println("send inventory status message... jsonString:" + jsonString );
-    /**
-        Topic inventoryTopic = session.getTopic(InventoryResource.inventoryuser, InventoryResource.inventoryQueueName);
-        System.out.println("send inventory status message... jsonString:" + jsonString + " inventoryTopic:" + inventoryTopic);
-        TextMessage objmsg = session.createTextMessage();
-        TopicPublisher publisher = session.createPublisher(inventoryTopic);
-        objmsg.setIntProperty("Id", 1);
-        objmsg.setIntProperty("Priority", 2);
-        objmsg.setText(jsonString);
-        objmsg.setJMSCorrelationID("" + 2);
-        objmsg.setJMSPriority(2);
-        publisher.publish(inventoryTopic, objmsg, DeliveryMode.PERSISTENT, 2, AQjmsConstants.EXPIRATION_NEVER);
-     */
         System.out.println("sendInsertAndSendOrderMessage.........");
-        String topicName = "sample.topic";
+        String topicName = inventoryTopicName;
         Properties props = new Properties();
         props.put("bootstrap.servers", "kafka-service:9092");
         props.put("acks", "all");
@@ -120,50 +100,52 @@ public class KafkaPostgresOrderEventConsumer implements Runnable {
                 "org.apache.kafka.common.serialization.StringSerializer");
         Producer<String, String> producer = new KafkaProducer
                 <String, String>(props);
-        for(int i = 0; i < 1; i++) {
             producer.send(new ProducerRecord<String, String>(topicName,
-                    Integer.toString(i), Integer.toString(i)));
-            System.out.println(i +":Message sent successfully");
-        }
+                    "inventory", jsonString));
+        System.out.println("KafkaPostgresOrderEventConsumer.Message sent successfully:" + jsonString);
         producer.close();
-        System.out.println("Finished message send ");
     }
 
-    private String evaluateInventory(String id) throws SQLException {
-        String url = "jdbc:postgresql://postgres.msdataworkshop:5432/postgresdb";
-        String user = "postgresadmin";
-        String password = "admin123";
-        try (
-                Connection con = DriverManager.getConnection(url, user, password);
-                Statement st = con.createStatement();
-                ResultSet rs = st.executeQuery("SELECT VERSION()")) {
-            if (rs.next()) {
-                System.out.println("KafkaPostgresOrderEventConsumer  testConnection() con:" + con);
-                System.out.println(rs.getString(1));
+    private String evaluateInventory(String id) {
+        System.out.println("KafkaPostgresOrderEventConsumer postgresDataSource:" + inventoryResource.postgresDataSource);
+        System.out.println("KafkaPostgresOrderEventConsumer evaluateInventory for inventoryid:" + id);
+        String DECREMENT_BY_ID =
+                "update inventory set inventorycount = inventorycount - 1 where inventoryid = ? and inventorycount > 0 returning inventorylocation into ?";
+//        try (CallableStatement st =   inventoryResource.postgresDataSource.getConnection().prepareCall(DECREMENT_BY_ID)) {
+        try (PreparedStatement st =   inventoryResource.postgresDataSource.getConnection().prepareStatement(
+                "select inventorycount, inventorylocation from inventory where inventoryid = ?"
+        )) {
+            st.setString(1, id);
+//            st.re.registerOutParameter(2, Types.VARCHAR);
+            ResultSet rs = st.executeQuery();
+            rs.next();
+            int inventoryCount = rs.getInt(1);
+            String inventorylocation = rs.getString(2);
+            rs.close();
+            System.out.println("InventoryServiceOrderEventConsumer.updateDataAndSendEventOnInventory id {" + id + "} location {" + inventorylocation + "} inventoryCount:" + inventoryCount);
+            if (inventoryCount > 0) {
+                return inventorylocation;
+            } else {
+                return "inventorydoesnotexist";
             }
-        System.out.println("-------------->evaluateInventory for inventoryid:" + id);
-//        try (OraclePreparedStatement st = (OraclePreparedStatement) dbConnection.prepareStatement(DECREMENT_BY_ID)) {
-//            st.setString(1, id);
-//            st.registerReturnParameter(2, Types.VARCHAR);
-//            int i = st.executeUpdate();
-//            ResultSet res = st.getReturnResultSet();
-//            if (i > 0 && res.next()) {
-//                String location = res.getString(1);
-//                System.out.println("InventoryServiceOrderEventConsumer.updateDataAndSendEventOnInventory id {" + id + "} location {" + location + "}");
-//                return location;
-//            } else {
-//                System.out.println("InventoryServiceOrderEventConsumer.updateDataAndSendEventOnInventory id {" + id + "} inventorydoesnotexist");
-//                return "inventorydoesnotexist";
-//            }
-//        }
-
-        } catch (
-                SQLException ex) {
-            ex.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
-        return "in philly";
+        return "unable to find inventory status";
     }
 
+    private void createInventoryTable(Connection connection) throws SQLException {
+        System.out.println("KafkaPostgresOrderEventConsumer  createInventoryTable");
+        connection.prepareStatement(
+        "create table inventory ( inventoryid varchar(16) PRIMARY KEY NOT NULL, inventorylocation varchar(32), inventorycount integer CONSTRAINT positive_inventory CHECK (inventorycount >= 0) )").execute();
+    }
+
+    private void populateInventoryTable(Connection connection) throws SQLException {
+        System.out.println("KafkaPostgresOrderEventConsumer  populateInventoryTable");
+        connection.prepareStatement("insert into inventory values ('sushi', '1468 WEBSTER ST,San Francisco,CA', 0)").execute();
+        connection.prepareStatement("insert into inventory values ('pizza', '1469 WEBSTER ST,San Francisco,CA', 0)").execute();
+        connection.prepareStatement("insert into inventory values ('burger', '1470 WEBSTER ST,San Francisco,CA', 0)").execute();
+    }
 
 
 }

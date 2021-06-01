@@ -6,3 +6,5 @@
 echo delete inventory-helidon deployment...
 
 kubectl delete deployment inventory-helidon -n msdataworkshop
+
+kubectl delete service inventory -n msdataworkshop

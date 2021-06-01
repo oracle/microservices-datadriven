@@ -40,8 +40,6 @@ public class InventoryResource {
     }
 
     public void init(@Observes @Initialized(ApplicationScoped.class) Object init) throws SQLException {
-        System.out.println("InventoryResource.init KafkaPostgresOrderEventConsumer().testConnection() " + init);
-        new KafkaPostgresOrderEventConsumer().testConnection();
         System.out.println("InventoryResource.init " + init);
         String pw;
         if(!pwSecretOcid.trim().equals("")) {
