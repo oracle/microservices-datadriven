@@ -21,10 +21,10 @@ cp inventory-dotnet-deployment.yaml inventory-dotnet-deployment-$CURRENTTIME.yam
 #EOF" > inventory-dotnet-deployment-$CURRENTTIME.yaml
 
 
-sed -i "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" inventory-dotnet-deployment-$CURRENTTIME.yaml
-sed -i "s|%INVENTORY_PDB_NAME%|${INVENTORY_PDB_NAME}|g" inventory-dotnet-deployment-${CURRENTTIME}.yaml
-sed -i "s|%OCI_REGION%|${OCI_REGION}|g" inventory-dotnet-deployment-${CURRENTTIME}.yaml
-sed -i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" inventory-dotnet-deployment-${CURRENTTIME}.yaml
+sed_i "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" inventory-dotnet-deployment-$CURRENTTIME.yaml
+sed_i "s|%INVENTORY_PDB_NAME%|${INVENTORY_PDB_NAME}|g" inventory-dotnet-deployment-${CURRENTTIME}.yaml
+sed_i "s|%OCI_REGION%|${OCI_REGION}|g" inventory-dotnet-deployment-${CURRENTTIME}.yaml
+sed_i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" inventory-dotnet-deployment-${CURRENTTIME}.yaml
 
 if [ -z "$1" ]; then
     kubectl apply -f $SCRIPT_DIR/inventory-dotnet-deployment-$CURRENTTIME.yaml -n msdataworkshop

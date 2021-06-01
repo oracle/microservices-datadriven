@@ -8,17 +8,39 @@ if ! (return 0 2>/dev/null); then
   exit
 fi
 
+# POSIX compliant find and replace
+function sed_i(){
+  local OP="$1"
+  local FILE="$2"
+  sed -e "$OP" "$FILE" >"/tmp/$FILE"
+  mv -- "/tmp/$FILE" "$FILE"
+}
+export -f sed_i
+
 # Set GRABDISH_HOME
 export GRABDISH_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 cd $GRABDISH_HOME
 echo "GRABDISH_HOME: $GRABDISH_HOME"
 
 # Java Home
-export JAVA_HOME=~/graalvm-ce-java11-20.1.0
+if test -d ~/graalvm-ce-java11-20.1.0/Contents/Home/bin; then
+  # We are on Mac doing local dev
+  export JAVA_HOME=~/graalvm-ce-java11-20.1.0/Contents/Home;
+else
+  # Assume linux
+  export JAVA_HOME=~/graalvm-ce-java11-20.1.0
+fi
 export PATH=$JAVA_HOME/bin:$PATH
 
+# State directory
+if test -d ~/grabdish-state; then
+  export GRABDISH_STATE_HOME=~/grabdish-state
+else
+  export GRABDISH_STATE_HOME=$GRABDISH_HOME
+fi
+
 # Log directory
-export GRABDISH_LOG=$GRABDISH_HOME/log
+export GRABDISH_LOG=$GRABDISH_STATE_HOME/log
 mkdir -p $GRABDISH_LOG
 
 # Source the state functions

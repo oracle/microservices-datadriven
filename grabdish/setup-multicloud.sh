@@ -60,7 +60,7 @@ export CLUSTERS_NAME=$1
 export CURRENTTIME=$( date '+%F_%H:%M:%S' )
 echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated verrazzano-project yaml for CLUSTERS_NAME ${CLUSTERS_NAME}
 cp verrazzano-project.yaml verrazzano-project-$CURRENTTIME.yaml
-sed -i "s|%CLUSTERS_NAME%|${CLUSTERS_NAME}|g" verrazzano-project-$CURRENTTIME.yaml
+sed_i "s|%CLUSTERS_NAME%|${CLUSTERS_NAME}|g" verrazzano-project-$CURRENTTIME.yaml
 kubectl apply -f verrazzano-project-$CURRENTTIME.yaml
 
 #echo undeploy any previously deployed microservices... this is not needed unless another workshop using graddish/msdataworkshop was previously deployed

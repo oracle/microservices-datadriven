@@ -55,13 +55,6 @@ while ! state_done CWALLET_SSO_AUTH_URL; do
 done
 
 
-# Wait for DB Password
-while ! state_done DB_PASSWORD; do
-  echo "`date`: Waiting for DB_PASSWORD"
-  sleep 2
-done
-
-
 # Give DB_PASSWORD priority
 while ! state_done DB_PASSWORD; do
   echo "Waiting for DB_PASSWORD"

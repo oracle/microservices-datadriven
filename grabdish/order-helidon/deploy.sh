@@ -17,10 +17,10 @@ echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated deployme
 cp order-helidon-deployment.yaml order-helidon-deployment-$CURRENTTIME.yaml
 
 #may hit sed incompat issue with mac
-sed -i "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" order-helidon-deployment-$CURRENTTIME.yaml
-sed -i "s|%ORDER_PDB_NAME%|${ORDER_PDB_NAME}|g" order-helidon-deployment-${CURRENTTIME}.yaml
-sed -i "s|%OCI_REGION%|${OCI_REGION}|g" order-helidon-deployment-${CURRENTTIME}.yaml
-sed -i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" order-helidon-deployment-${CURRENTTIME}.yaml
+sed_i "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" order-helidon-deployment-$CURRENTTIME.yaml
+sed_i "s|%ORDER_PDB_NAME%|${ORDER_PDB_NAME}|g" order-helidon-deployment-${CURRENTTIME}.yaml
+sed_i "s|%OCI_REGION%|${OCI_REGION}|g" order-helidon-deployment-${CURRENTTIME}.yaml
+sed_i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" order-helidon-deployment-${CURRENTTIME}.yaml
 
 if [ -z "$1" ]; then
     kubectl apply -f $SCRIPT_DIR/order-helidon-deployment-$CURRENTTIME.yaml -n msdataworkshop

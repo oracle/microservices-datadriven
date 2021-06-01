@@ -20,10 +20,10 @@ IMAGE_NAME=inventory-nodejs
 IMAGE_VERSION=0.1
 
 #may hit sed incompat issue with mac
-sed -i "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" inventory-nodejs-deployment-$CURRENTTIME.yaml
-sed -i "s|%INVENTORY_PDB_NAME%|${INVENTORY_PDB_NAME}|g" inventory-nodejs-deployment-$CURRENTTIME.yaml
-sed -i "s|%OCI_REGION%|${OCI_REGION}|g" inventory-nodejs-deployment-${CURRENTTIME}.yaml
-sed -i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" inventory-nodejs-deployment-${CURRENTTIME}.yaml
+sed_i "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" inventory-nodejs-deployment-$CURRENTTIME.yaml
+sed_i "s|%INVENTORY_PDB_NAME%|${INVENTORY_PDB_NAME}|g" inventory-nodejs-deployment-$CURRENTTIME.yaml
+sed_i "s|%OCI_REGION%|${OCI_REGION}|g" inventory-nodejs-deployment-${CURRENTTIME}.yaml
+sed_i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" inventory-nodejs-deployment-${CURRENTTIME}.yaml
 
 export IMAGE=${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_VERSION}
 
