@@ -147,9 +147,6 @@
                   <br><br>
                   <br>Transactional Exactly-Once Message Delivery Tests...
                   <br>
-<!--                  <oj-form-layout>-->
-<!--                    <oj-input-text label-hint="Failure" value="{{lab11Item}}"></oj-input-text>-->
-<!--                  </oj-form-layout>-->
                   <oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterInsertAction]]">Crash order service after Order is inserted (before Order message is sent to Inventory service)</oj-button>
                   <br><oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterOrderMessageReceivedAction]]">Crash Inventory service after Order message is received (before inventory for order is checked)</oj-button>
                   <br><oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterOrderMessageProcessedAction]]">Crash Inventory service after inventory for order is checked (before Inventory status message is sent)</oj-button>
