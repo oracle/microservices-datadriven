@@ -20,3 +20,10 @@ ADD common .
 RUN echo 'done!'
 
 CMD ["gunicorn", "app:app", "--config=config.py"]
+
+
+
+docker run --name pythonquery \
+        --env-file ~/docker/pythonquery/envfile.txt \
+        -v /OracleCloud/wallet:/usr/lib/oracle/19.5/client64/lib/network/admin:Z,ro \
+        cjones/pythonquery
