@@ -3,8 +3,6 @@
 ## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 
-echo delete inventory-helidon deployment...
+echo delete inventory-postgres-kafka deployment...
 
-kubectl delete deployment inventory-helidon -n msdataworkshop
-
-kubectl delete service inventory -n msdataworkshop
+kubectl delete deployment inventory-postgres-kafka -n msdataworkshop

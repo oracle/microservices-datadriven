@@ -1,14 +1,11 @@
 /*
- 
+
  **
  ** Copyright (c) 2021 Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
 package io.helidon.data.examples;
 
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,18 +13,14 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Initialized;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import oracle.ucp.jdbc.PoolDataSource;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Timed;
-import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
-import org.eclipse.microprofile.openapi.annotations.info.Info;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
@@ -40,26 +33,18 @@ import io.opentracing.Span;
 @Path("/")
 @ApplicationScoped
 @Traced
-public class OrderResource {
-
-    @Inject
-    @Named("orderpdb")
-    PoolDataSource atpOrderPdb;
+public class KafkaMongoOrderResource {
 
     @Inject
     private Tracer tracer;
 
-    OrderServiceEventProducer orderServiceEventProducer = new OrderServiceEventProducer();
-    static String regionId = System.getenv("OCI_REGION").trim();
-    static String pwSecretOcid = System.getenv("VAULT_SECRET_OCID").trim();
-    static String pwSecretFromK8s = System.getenv("dbpassword").trim();
-    static final String orderQueueOwner = "ORDERUSER";
-    static final String orderQueueName = "orderqueue";
-    static final String inventoryQueueName = "inventoryqueue";
+    KafkaMongoDBOrderProducer orderServiceEventProducer = new KafkaMongoDBOrderProducer();
+    final static String orderTopicName = "order.topic";
+    final static String inventoryTopicName = "inventory.topic";
     static boolean liveliness = true;
+    static boolean crashAfterInsert = false;
     static boolean readiness = true;
     private static String lastContainerStartTime;
-    private OrderServiceCPUStress orderServiceCPUStress = new OrderServiceCPUStress();
     Map<String, OrderDetail> cachedOrders = new HashMap<>();
 
     @Path("/lastContainerStartTime")
@@ -72,30 +57,18 @@ public class OrderResource {
                 .build();
     }
 
-    public void init(@Observes @Initialized(ApplicationScoped.class) Object init) throws SQLException {
-        System.out.println("OrderResource.init " + init);
-        atpOrderPdb.setUser(orderQueueOwner);
-        String pw;
-        if(!pwSecretOcid.trim().equals("")) {
-            pw = OCISDKUtility.getSecreteFromVault(true, regionId, pwSecretOcid);
-        } else {
-            pw = pwSecretFromK8s;
-        }
-        atpOrderPdb.setPassword(pw);
-        Connection connection = atpOrderPdb.getConnection();
-        System.out.println("OrderResource.init atpOrderPdb.getConnection():" + connection);
-        connection.close();
+    public void init(@Observes @Initialized(ApplicationScoped.class) Object init) throws Exception {
+        System.out.println("KafkaMongoOrderResource.init " + init);
         startEventConsumer();
         lastContainerStartTime = new java.util.Date().toString();
         System.out.println("____________________________________________________");
-        System.out.println("----------->OrderResource (container) starting at: " + lastContainerStartTime);
+        System.out.println("----------->KafkaMongoOrderResource (container) starting at: " + lastContainerStartTime);
         System.out.println("____________________________________________________");
-        System.setProperty("oracle.jdbc.fanEnabled", "false");
     }
 
     private void startEventConsumer() {
         System.out.println("OrderResource.startEventConsumerIfNotStarted startEventConsumer...");
-        OrderServiceEventConsumer orderServiceEventConsumer = new OrderServiceEventConsumer(this);
+        KafkaMongoOrderEventConsumer orderServiceEventConsumer = new KafkaMongoOrderEventConsumer();
         new Thread(orderServiceEventConsumer).start();
     }
 
@@ -149,13 +122,13 @@ public class OrderResource {
         activeSpan.log("begin placing order"); // logs are for a specific moment or event within the span (in contrast to tags which should apply to the span regardless of time).
         activeSpan.setTag("orderid", orderid); //tags are annotations of spans in order to query, filter, and comprehend trace data
         activeSpan.setTag("itemid", itemid);
-        activeSpan.setTag("db.user", atpOrderPdb.getUser()); // https://github.com/opentracing/specification/blob/master/semantic_conventions.md
+        activeSpan.setTag("db.user", "mongodb"); // https://github.com/opentracing/specification/blob/master/semantic_conventions.md
         activeSpan.setBaggageItem("sagaid", "testsagaid" + orderid); //baggage is part of SpanContext and carries data across process boundaries for access throughout the trace
         activeSpan.setBaggageItem("orderid", orderid);
 
         try {
             System.out.println("--->insertOrderAndSendEvent..." +
-                    orderServiceEventProducer.updateDataAndSendEvent(atpOrderPdb, orderid, itemid, deliverylocation));
+                    orderServiceEventProducer.updateDataAndSendEvent(orderid, itemid, deliverylocation));
         } catch (Exception e) {
             e.printStackTrace();
             return Response.serverError()
@@ -165,7 +138,6 @@ public class OrderResource {
             activeSpan.log("end placing order");
             activeSpan.finish();
         }
-
         return Response.ok()
                 .entity("orderid = " + orderid + " orderstatus = " + orderDetail.getOrderStatus() + " order placed")
                 .build();
@@ -194,7 +166,7 @@ public class OrderResource {
             @QueryParam("orderid") String orderId) {
         System.out.println("--->showorder (via JSON/SODA query) for orderId:" + orderId);
         try {
-            Order order = orderServiceEventProducer.getOrderViaSODA(atpOrderPdb, orderId);
+            Order order = orderServiceEventProducer.getOrderFromMongoDB(orderId);
             String returnJSON = JsonUtils.writeValueAsString(order);
             System.out.println("OrderResource.showorder returnJSON:" + returnJSON);
             return Response.ok()
@@ -231,7 +203,7 @@ public class OrderResource {
         System.out.println("--->deleteorder for orderId:" + orderId);
         String returnString = "orderId = " + orderId + "<br>";
         try {
-            returnString += orderServiceEventProducer.deleteOrderViaSODA(atpOrderPdb, orderId);
+            returnString += orderServiceEventProducer.deleteOrderFromMongoDB(orderId);
             return Response.ok()
                     .entity(returnString)
                     .build();
@@ -259,7 +231,7 @@ public class OrderResource {
         System.out.println("--->deleteallorders");
         try {
             return Response.ok()
-                    .entity(orderServiceEventProducer.dropOrderViaSODA(atpOrderPdb))
+                    .entity(orderServiceEventProducer.dropOrderFromMongoDB())
                     .build();
         } catch (Exception e) {
             e.printStackTrace();
@@ -269,6 +241,16 @@ public class OrderResource {
         }
     }
 
+
+    @Path("/crashAfterInsert")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response crashAfterInsert() {
+        crashAfterInsert = true;
+        return Response.ok()
+                .entity("order crashAfterInsert set")
+                .build();
+    }
 
     @Path("/ordersetlivenesstofalse")
     @GET
@@ -290,26 +272,5 @@ public class OrderResource {
                 .build();
     }
 
-    @Path("/startCPUStress")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response startCPUStress() {
-        System.out.println("--->startCPUStress...");
-        orderServiceCPUStress.start();
-        return Response.ok()
-                .entity("CPU stress started")
-                .build();
-    }
-
-    @Path("/stopCPUStress")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response stopCPUStress() {
-        System.out.println("--->stopCPUStress...");
-        orderServiceCPUStress.stop();
-        return Response.ok()
-                .entity("CPU stress stopped")
-                .build();
-    }
 
 }

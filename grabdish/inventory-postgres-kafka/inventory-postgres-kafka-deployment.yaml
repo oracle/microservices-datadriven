@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: inventory-helidon
+  name: inventory-postgres-kafka
 spec:
   replicas: 1
   selector:
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: inventory
-        image: %DOCKER_REGISTRY%/inventory-helidon:0.1
+        image: %DOCKER_REGISTRY%/inventory-postgres-kafka:0.1
         imagePullPolicy: Always
         env:
         - name: oracle.ucp.jdbc.PoolDataSource.inventorypdb.user

@@ -144,6 +144,13 @@
                   <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9AddInventoryAction]]">Add Inventory</oj-button>
                   <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9RemoveInventoryAction]]">Remove Inventory</oj-button>
                   <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9GetInventoryAction]]">Get Inventory</oj-button>
+                  <br><br>
+                  <br>Transactional Exactly-Once Message Delivery Tests...
+                  <br>
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterInsertAction]]">Crash order service after Order is inserted (before Order message is sent to Inventory service)</oj-button>
+                  <br><oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterOrderMessageReceivedAction]]">Crash Inventory service after Order message is received (before inventory for order is checked)</oj-button>
+                  <br><oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterOrderMessageProcessedAction]]">Crash Inventory service after inventory for order is checked (before Inventory status message is sent)</oj-button>
+                  <br><oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterOrderMessageProcessedAction]]">Crash Inventory service after inventory for order is checked (before Inventory status message is sent)</oj-button>
                 </div>
                 <!-- lab10 -->
                 <div slot="lab10">
@@ -793,6 +800,82 @@
               vm.httpCode(fetchResult.status);
               fetchResult.json().then(payload => {
                 vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          };
+
+
+          // Lab 11. ---------Transaction crash tests including MongoDB, Kafka, Postgres version---- //
+
+
+          this.lab11CrashAfterInsertAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'order',
+              commandName: 'crashAfterInsert',
+              orderId: -1,
+              orderItem: '',
+              deliverTo: ''
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.text().then(payload => {
+                vm.labResult(payload);
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          this.lab11CrashAfterOrderMessageReceivedAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'inventory',
+              commandName: 'crashAfterOrderMessageReceived',
+              orderId: -1,
+              orderItem: '',
+              deliverTo: ''
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.text().then(payload => {
+                vm.labResult(payload);
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          this.lab11CrashAfterOrderMessageProcessedAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'inventory',
+              commandName: 'crashAfterOrderMessageProcessed',
+              orderId: -1,
+              orderItem: '',
+              deliverTo: ''
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.text().then(payload => {
+                vm.labResult(payload);
                 vm.inProgress(false);
               });
             });
