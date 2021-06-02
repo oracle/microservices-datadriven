@@ -87,5 +87,9 @@ utils/tracing-test.sh
 # TODO
 
 
+# CRASH RECOVERY
+echo "TEST_LOG: #### Testing LabX: Crash Recovery"
+utils/crashrecovery-test.sh
+
 # TEARDOWN
 # source destroy.sh

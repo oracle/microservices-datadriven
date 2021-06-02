@@ -65,10 +65,10 @@ done
 # Create Inventory ATP Bindings
 while ! state_done DB_WALLET_SECRET; do
   cd $GRABDISH_HOME/wallet
-  cat - >sqlnet.ora <<!
-WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="/msdataworkshop/creds")))
-SSL_SERVER_DN_MATCH=yes
-!
+#  cat - >sqlnet.ora <<!
+#WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="/msdataworkshop/creds")))
+#SSL_SERVER_DN_MATCH=yes
+#!
   if kubectl create -f - -n msdataworkshop; then
     state_set_done DB_WALLET_SECRET
   else
