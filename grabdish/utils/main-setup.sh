@@ -113,7 +113,7 @@ while ! state_done COMPARTMENT_OCID; do
   else
     read -p "Please enter your OCI compartments's OCID: " COMPARTMENT_OCID
   fi
-  while ! test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output`"" == 'ACTIVE' 2>/dev/null; do
+  while ! test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output 2>/dev/null`"" == 'ACTIVE'; do
     echo "Waiting for the compartment to become ACTIVE"
     sleep 2
   done
@@ -221,11 +221,14 @@ while ! state_done DOCKER_REGISTRY; do
     fi
   else
     read -s -r -p "Please generate an Auth Token and enter the value: " TOKEN
+    echo
+    echo "Auth Token entry accepted.  Attempting docker login."
   fi
 
   RETRIES=0
   while test $RETRIES -le 30; do
     if echo "$TOKEN" | docker login -u "$(state_get NAMESPACE)/$(state_get USER_NAME)" --password-stdin "$(state_get REGION).ocir.io" &>/dev/null; then
+      echo "Docker login completed"
       state_set DOCKER_REGISTRY "$(state_get REGION).ocir.io/$(state_get NAMESPACE)/$(state_get RUN_NAME)"
       export OCI_CLI_PROFILE=$(state_get REGION)
       break
@@ -467,3 +470,8 @@ while ! state_done SETUP_VERIFIED; do
     state_set_done SETUP_VERIFIED
   fi
 done
+
+# Export state file for local development
+cd $GRABDISH_HOME
+rm ~/grabdish-state.tgz
+tar -czf ~/grabdish-state.tgz state

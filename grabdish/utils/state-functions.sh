@@ -8,34 +8,34 @@ if ! (return 0 2>/dev/null); then
   exit
 fi
 
-if test -z "$GRABDISH_HOME"; then
-  echo "ERROR: The grabdish home folder was not set"
+if test -z "$GRABDISH_STATE_HOME"; then
+  echo "ERROR: The grabdish state home folder was not set"
 else
-  mkdir -p $GRABDISH_HOME/state
+  mkdir -p $GRABDISH_STATE_HOME/state
 fi
 
-# Test if the state is done (file exists) 
+# Test if the state is done (file exists)
 function state_done() {
-  test -f $GRABDISH_HOME/state/"$1"
+  test -f $GRABDISH_STATE_HOME/state/"$1"
 }
 
 # Set the state to done
 function state_set_done() {
-  touch $GRABDISH_HOME/state/"$1"
+  touch $GRABDISH_STATE_HOME/state/"$1"
   echo "`date`: $1" >>$GRABDISH_LOG/state.log
   echo "$1 completed"
 }
 
 # Set the state to done and it's value
 function state_set() {
-  echo "$2" > $GRABDISH_HOME/state/"$1"
+  echo "$2" > $GRABDISH_STATE_HOME/state/"$1"
   echo "`date`: $1: $2" >>$GRABDISH_LOG/state.log
-  echo "$1: $2" 
+  echo "$1: $2"
 }
 
 # Reset the state - not done and no value
 function state_reset() {
-  rm -f $GRABDISH_HOME/state/"$1"
+  rm -f $GRABDISH_STATE_HOME/state/"$1"
 }
 
 # Get state value
@@ -43,7 +43,7 @@ function state_get() {
     if ! state_done "$1"; then
         return 1
     fi
-    cat $GRABDISH_HOME/state/"$1"
+    cat $GRABDISH_STATE_HOME/state/"$1"
 }
 
 # Export the functions so that they are available to subshells

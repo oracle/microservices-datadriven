@@ -47,11 +47,12 @@ kubectl wait \
 #          -o jsonpath="{.items[0].metadata.name}" \
 #    )
 
-echo Adding labels identifying the msdataworkshop namespace as managed by Verrazzano and enabled for Istio...
-kubectl label namespace msdataworkshop verrazzano-managed=true istio-injection=enabled
-
 echo Creating msdataworkshop namespace... If the namespace already exists there will be an error to that effect that can safely be ignored.
 kubectl create namespace msdataworkshop
+
+echo Adding labels identifying the msdataworkshop namespace as managed by Verrazzano and enabled for Istio...
+kubectl label namespace msdataworkshop verrazzano-managed=true istio-injection=enabled --overwrite
+
 
 echo Adding VerrazzanoProject
 #export CLUSTERS_NAME="$(state_get CLUSTER_NAME)" # eg cluster-cyxypetwerq, also notice the plural/CLUSTERS_NAME and singular/CLUSTER_NAME
@@ -59,7 +60,7 @@ export CLUSTERS_NAME=$1
 export CURRENTTIME=$( date '+%F_%H:%M:%S' )
 echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated verrazzano-project yaml for CLUSTERS_NAME ${CLUSTERS_NAME}
 cp verrazzano-project.yaml verrazzano-project-$CURRENTTIME.yaml
-sed -i "s|%CLUSTERS_NAME%|${CLUSTERS_NAME}|g" verrazzano-project-$CURRENTTIME.yaml
+sed_i "s|%CLUSTERS_NAME%|${CLUSTERS_NAME}|g" verrazzano-project-$CURRENTTIME.yaml
 kubectl apply -f verrazzano-project-$CURRENTTIME.yaml
 
 #echo undeploy any previously deployed microservices... this is not needed unless another workshop using graddish/msdataworkshop was previously deployed
