@@ -14,8 +14,7 @@ WORKDIR /app
 COPY --from=build /app .
 ENTRYPOINT ["dotnet", "inventory-dotnet.dll"]
 
-FROM mcr.microsoft.com/dotnet/aspnet:5.0
-WORKDIR /app
-COPY /app /app
-#COPY /InventoryApp/Release /app .
-ENTRYPOINT ["dotnet", "inventory-dotnet.dll"]
+#FROM mcr.microsoft.com/dotnet/aspnet:5.0
+#WORKDIR /app
+#COPY /app /app
+#ENTRYPOINT ["dotnet", "inventory-dotnet.dll"]
