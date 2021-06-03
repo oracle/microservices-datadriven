@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Data.OracleClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -84,8 +83,9 @@ namespace inventory_dotnet
             string connString =
                 "User Id=" +
                 Environment.GetEnvironmentVariable("DB_USER") +
-                ";Password=" + // Welcome12345;#!: is an issue
-                Environment.GetEnvironmentVariable("DB_PASSWORD") +
+                ";Password=Welcome12345;#!:" +
+      //          ";Password=" + // Welcome12345;#!: is an issue
+    //            Environment.GetEnvironmentVariable("DB_PASSWORD") +
                 ";Data Source=" +
                 Environment.GetEnvironmentVariable("DB_CONNECT_STRING") +
                 ";";
