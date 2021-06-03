@@ -89,14 +89,12 @@ namespace inventory_dotnet
                 ";Data Source=" +
                 Environment.GetEnvironmentVariable("DB_CONNECT_STRING") +
                 ";";
-            Console
-                .WriteLine("tnsAdmin:" +
-                tnsAdmin);
         using (
                 OracleConnection connection = new OracleConnection(connString)
             )
             {
                 connection.Open();
+                Console.WriteLine("connection:" + connection);
                 while (true) {
                     try
                     {
