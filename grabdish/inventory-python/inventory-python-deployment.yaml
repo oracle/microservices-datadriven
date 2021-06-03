@@ -67,8 +67,8 @@ spec:
           failureThreshold: 1
         volumeMounts:
         - name: creds
-          mountPath: /usr/lib/oracle/19.5/client64/lib/network/admin
-#            mountPath: /OracleCloud/wallet:/usr/lib/oracle/19.5/client64/lib/network/admin:Z,ro
+          mountPath: /usr/lib/oracle/19.9/client64/lib/network/admin
+#            mountPath: /OracleCloud/wallet:/usr/lib/oracle/19.9/client64/lib/network/admin:Z,ro
 #          mountPath: /msdataworkshop/creds
       restartPolicy: Always
       volumes:
