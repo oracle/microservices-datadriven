@@ -47,6 +47,5 @@ while ! state_done JAVA_BUILDS; do
     cd $GRABDISH_HOME/$b
     time ./build.sh &>> $GRABDISH_LOG/build-$b.log
   done
-  wait
   state_set_done JAVA_BUILDS
 done

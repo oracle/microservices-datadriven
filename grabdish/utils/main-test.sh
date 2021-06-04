@@ -23,8 +23,25 @@ export TEST_UI_PASSWORD=`kubectl get secret frontendadmin -n msdataworkshop --te
 echo 'TEST_LOG: #####################################'
 
 # WALKTHROUGH
+echo "TEST_LOG: #### Testing Lab2: Walkthrough"
+
+# Undeploy to make it rerunable
+./undeploy.sh
+SERVICES="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se"
+for s in $SERVICES; do
+  cd $GRABDISH_HOME/$s
+  ./undeploy.sh || true
+done
+
+# Wait for Pods to stop
+while test 0 -lt `kubectl get pods -n msdataworkshop | egrep 'frontend-helidon|inventory-|order-helidon|supplier-helidon-se' | wc -l`; do
+  echo "Waiting for pods to stop..."
+  sleep 10
+done
+
 # Deploy the java services
 echo "TEST_LOG: #### Testing Lab2: Walkthrough"
+cd $GRABDISH_HOME
 ./deploy.sh
 
 while test 4 -gt `kubectl get pods -n msdataworkshop | egrep 'frontend-helidon|inventory-helidon|order-helidon|supplier-helidon-se' | grep "1/1" | wc -l`; do
@@ -56,6 +73,20 @@ else
   echo "TEST_LOG_FAILED: Frontend UI Unavailable"
   exit
 fi
+
+
+# Delete all order (to make it rerunable)
+function deleteallorders() {
+  echo '{"serviceName": "order", "commandName": "deleteallorders", "orderId": -1, "orderItem": "", "deliverTo": ""}'
+}
+
+if wget --http-user grabdish --http-password "$TEST_UI_PASSWORD" --no-check-certificate --post-data "$(deleteallorders)" \
+  --header='Content-Type: application/json' "$(state_get FRONTEND_URL)/placeorder" -O $GRABDISH_LOG/order; then
+  echo "TEST_LOG: $TEST_STEP deleteallorders succeeded"
+else
+  echo "TEST_LOG_FAILED: $TEST_STEP deleteallorders failed"
+fi
+
 
 # Functional test on order 66/67
 utils/func-test.sh Walkthrough 66
