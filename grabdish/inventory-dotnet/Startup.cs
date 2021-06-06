@@ -80,12 +80,13 @@ namespace inventory_dotnet
             //   DbProviderFactory factory = DbProviderFactories.GetFactory("Oracle.ManagedDataAccess.Client"); DbCommand oracleCommand = factory.CreateCommand();
             String tnsAdmin = Environment.GetEnvironmentVariable("TNS_ADMIN");
             OracleConfiguration.WalletLocation = tnsAdmin;
+            String pw = Environment.GetEnvironmentVariable("DB_PASSWORD");
             string connString =
                 "User Id=" +
                 Environment.GetEnvironmentVariable("DB_USER") +
       //          ";Password=Welcome12345;#!:" +
                 ";Password=" + // Welcome12345;#!: is an issue
-                Environment.GetEnvironmentVariable("DB_PASSWORD") +
+                pw.Replace(';', '\';\'') +
                 ";Data Source=" +
                 Environment.GetEnvironmentVariable("DB_CONNECT_STRING") +
                 ";";
