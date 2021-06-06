@@ -85,8 +85,9 @@ namespace inventory_dotnet
                 "User Id=" +
                 Environment.GetEnvironmentVariable("DB_USER") +
       //          ";Password=Welcome12345;#!:" +
-                ";Password=" + // Welcome12345;#!: is an issue
-                pw.Replace(";", "';'") +
+                ";Password=" + 
+                pw +// Welcome12345;#!: is an issue
+    //            pw.Replace(";", "';'") +
                 ";Data Source=" +
                 Environment.GetEnvironmentVariable("DB_CONNECT_STRING") +
                 ";";
