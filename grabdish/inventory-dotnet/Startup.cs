@@ -91,7 +91,7 @@ namespace inventory_dotnet
                 ";Data Source=" +
                 Environment.GetEnvironmentVariable("DB_CONNECT_STRING") +
                 ";";
-            Console.WriteLine("connString:" + connString);
+     //       Console.WriteLine("connString:" + connString);
             using (
                 OracleConnection connection = new OracleConnection(connString)
             )
