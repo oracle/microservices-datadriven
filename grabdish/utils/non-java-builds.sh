@@ -9,7 +9,7 @@ BUILDS="inventory-python inventory-nodejs inventory-dotnet inventory-go inventor
 
 # Provision Repos
 while ! state_done NON_JAVA_REPOS; do
-  for b in $BUILDS; do 
+  for b in $BUILDS; do
     oci artifacts container repository create --compartment-id "$(state_get COMPARTMENT_OCID)" --display-name "$(state_get RUN_NAME)/$b" --is-public true
   done
   state_set_done NON_JAVA_REPOS
@@ -32,9 +32,10 @@ done
 
 # Build all the images (no push) except frontend-helidon (requires Jaeger)
 while ! state_done NON_JAVA_BUILDS; do
-  for b in $BUILDS; do 
+  for b in $BUILDS; do
     cd $GRABDISH_HOME/$b
-    time ./build.sh
+    time ./build.sh &>> $GRABDISH_LOG/build-$b.log &
   done
+  wait
   state_set_done NON_JAVA_BUILDS
 done
