@@ -7,11 +7,12 @@ COPY . .
 RUN go get -d -v
 RUN go build -o /go/bin/inventory-go
 
-ARG release=19
-ARG update=9
 
 FROM alpine:latest
 ENV LD_LIBRARY_PATH=/lib
+
+ARG release=19
+ARG update=9
 RUN wget https://download.oracle.com/otn_software/linux/instantclient/${release}${update}000/instantclient-basic-linux.x64-${release}.${update}.0.0.0dbru.zip && \
     unzip instantclient-basic-linux.x64-${release}.${update}.0.0.0dbru.zip && \
     cp -r instantclient_${release}_${update}/* /lib && \
