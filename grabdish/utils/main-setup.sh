@@ -473,5 +473,5 @@ done
 
 # Export state file for local development
 cd $GRABDISH_HOME
-rm ~/grabdish-state.tgz
+rm -f ~/grabdish-state.tgz
 tar -czf ~/grabdish-state.tgz state

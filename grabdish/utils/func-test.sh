@@ -59,7 +59,7 @@ function addInventoryTest() {
 # Show order and wait for status "no inventory"
 placeOrderTest $ORDER_ID
 
-sleep 5
+sleep 10
 
 showOrderTest $ORDER_ID 'failed inventory does not exist'
 
@@ -73,6 +73,6 @@ ORDER_ID=$(($ORDER_ID + 1))
 
 placeOrderTest "$ORDER_ID"
 
-sleep 5
+sleep 10
 
 showOrderTest "$ORDER_ID" 'success inventory exists'
