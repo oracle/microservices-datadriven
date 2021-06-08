@@ -84,17 +84,13 @@ namespace inventory_dotnet
             string connString =
                 "User Id=" +
                 Environment.GetEnvironmentVariable("DB_USER") +
-      //          ";Password=Welcome12345;#!:" +
                 ";Password=" + 
-                pw +// Welcome12345;#!: is an issue
-    //            pw.Replace(";", "';'") +
+                "\"" + pw + "\"" +
                 ";Data Source=" +
                 Environment.GetEnvironmentVariable("DB_CONNECT_STRING") +
                 ";";
      //       Console.WriteLine("connString:" + connString);
-            using (
-                OracleConnection connection = new OracleConnection(connString)
-            )
+            using ( OracleConnection connection = new OracleConnection(connString) )
             {
                 connection.Open();
                 Console.WriteLine("connection:" + connection);

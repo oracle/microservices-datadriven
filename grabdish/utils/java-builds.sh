@@ -6,7 +6,7 @@
 set -e
 
 
-BUILDS="frontend-helidon order-helidon supplier-helidon-se inventory-helidon"
+BUILDS="frontend-helidon order-helidon supplier-helidon-se inventory-helidon order-mongodb-kafka inventory-postgres-kafka"
 
 # Provision Repos
 while ! state_done JAVA_REPOS; do

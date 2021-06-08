@@ -5,4 +5,4 @@
 kubectl create -f mongodata-persistentvolumeclaim.yaml -n msdataworkshop
 kubectl create -f mongodb-deployment.yaml -n msdataworkshop
 kubectl create -f mongodb-service.yaml -n msdataworkshop
-kubectl expose deployment mongodb --type=LoadBalancer -n msdataworkshop
+#kubectl expose deployment mongodb --type=LoadBalancer -n msdataworkshop # remove as we have service
