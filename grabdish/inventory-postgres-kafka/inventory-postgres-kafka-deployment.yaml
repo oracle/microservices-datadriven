@@ -26,11 +26,11 @@ spec:
           value: "jdbc:postgresql://postgres.msdataworkshop:5432/postgresdb"
         - name: javax.sql.DataSource.postgresDataSource.dataSource.password
           value: "admin123"
-        - name: javax.sql.DataSource.postgresDataSource.dataSource.password.usethis
-          valueFrom:
-            secretKeyRef:
-              name: dbuser
-              key: dbpassword
+#        - name: javax.sql.DataSource.postgresDataSource.dataSource.password.usethis
+#          valueFrom:
+#            secretKeyRef:
+#              name: dbuser
+#              key: dbpassword
         volumeMounts:
         - name: creds
           mountPath: /msdataworkshop/creds
