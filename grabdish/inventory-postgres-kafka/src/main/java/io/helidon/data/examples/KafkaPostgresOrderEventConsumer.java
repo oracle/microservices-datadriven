@@ -124,6 +124,11 @@ public class KafkaPostgresOrderEventConsumer implements Runnable {
             rs.close();
             System.out.println("InventoryServiceOrderEventConsumer.updateDataAndSendEventOnInventory id {" + id + "} location {" + inventorylocation + "} inventoryCount:" + inventoryCount);
             if (inventoryCount > 0) {
+                PreparedStatement decrementPS = inventoryResource.postgresDataSource.getConnection().prepareStatement(
+                        "set inventorycount = ? where  inventoryid = ?");
+                decrementPS.setInt(1, inventoryCount - 1);
+                decrementPS.setString(2, id);
+                System.out.println("InventoryServiceOrderEventConsumer.updateDataAndSendEventOnInventory reduced inventory count to:" + (inventoryCount - 1));
                 return inventorylocation;
             } else {
                 return "inventorydoesnotexist";
