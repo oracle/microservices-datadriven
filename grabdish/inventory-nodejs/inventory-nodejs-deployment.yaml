@@ -25,7 +25,8 @@ spec:
           - containerPort: 8080
         env:
           - name: TNS_ADMIN
-            value: "/usr/lib/oracle/19.9/client64/lib/network/admin"
+            value: "/msdataworkshop/creds"
+#            value: "/usr/lib/oracle/19.9/client64/lib/network/admin"
           - name: DB_CONNECT_STRING
             value: "%INVENTORY_PDB_NAME%_tp"
           - name: DB_USER
