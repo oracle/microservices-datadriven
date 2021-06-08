@@ -27,8 +27,8 @@ for s in $SERVICES; do
   ORDER_ID=$(($ORDER_ID + 100))
   utils/func-test.sh "Polyglot $s" $ORDER_ID
   
-#  cd $GRABDISH_HOME/$s
-#  ./undeploy.sh
+  cd $GRABDISH_HOME/$s
+  ./undeploy.sh
 done
 
 #cd $GRABDISH_HOME/inventory-helidon
