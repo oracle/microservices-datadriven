@@ -3,7 +3,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: inventory # note that this is called supplier service as the inventory implementation services as inventory and supplier
+  name: inventory # for various including setting of failures and eventually inventory adjustment calls, etc.
   labels:
     app: inventory
 spec:
