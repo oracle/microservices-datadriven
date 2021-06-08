@@ -26,3 +26,5 @@ if [ -z "$1" ]; then
 else
     kubectl apply -f <(istioctl kube-inject -f $SCRIPT_DIR/inventory-postgres-kafka-deployment-$CURRENTTIME.yaml) -n msdataworkshop
 fi
+kubectl delete service supplier  -n msdataworkshop
+kubectl apply -f $SCRIPT_DIR/inventory-service.yaml  -n msdataworkshop
