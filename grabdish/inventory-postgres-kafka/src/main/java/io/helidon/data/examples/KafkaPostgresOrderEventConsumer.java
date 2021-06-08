@@ -109,14 +109,10 @@ public class KafkaPostgresOrderEventConsumer implements Runnable {
     private String evaluateInventory(String id) {
         System.out.println("KafkaPostgresOrderEventConsumer postgresDataSource:" + inventoryResource.postgresDataSource);
         System.out.println("KafkaPostgresOrderEventConsumer evaluateInventory for inventoryid:" + id);
-        String DECREMENT_BY_ID =
-                "update inventory set inventorycount = inventorycount - 1 where inventoryid = ? and inventorycount > 0 returning inventorylocation into ?";
-//        try (CallableStatement st =   inventoryResource.postgresDataSource.getConnection().prepareCall(DECREMENT_BY_ID)) {
         try (PreparedStatement st =   inventoryResource.postgresDataSource.getConnection().prepareStatement(
                 "select inventorycount, inventorylocation from inventory where inventoryid = ?"
         )) {
             st.setString(1, id);
-//            st.re.registerOutParameter(2, Types.VARCHAR);
             ResultSet rs = st.executeQuery();
             rs.next();
             int inventoryCount = rs.getInt(1);
@@ -125,9 +121,10 @@ public class KafkaPostgresOrderEventConsumer implements Runnable {
             System.out.println("InventoryServiceOrderEventConsumer.updateDataAndSendEventOnInventory id {" + id + "} location {" + inventorylocation + "} inventoryCount:" + inventoryCount);
             if (inventoryCount > 0) {
                 PreparedStatement decrementPS = inventoryResource.postgresDataSource.getConnection().prepareStatement(
-                        "set inventorycount = ? where  inventoryid = ?");
+                        "update inventory set inventorycount = ? where inventoryid = ?");
                 decrementPS.setInt(1, inventoryCount - 1);
                 decrementPS.setString(2, id);
+                decrementPS.execute();
                 System.out.println("InventoryServiceOrderEventConsumer.updateDataAndSendEventOnInventory reduced inventory count to:" + (inventoryCount - 1));
                 return inventorylocation;
             } else {
