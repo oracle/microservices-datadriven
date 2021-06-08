@@ -27,4 +27,5 @@ else
     kubectl apply -f <(istioctl kube-inject -f $SCRIPT_DIR/inventory-postgres-kafka-deployment-$CURRENTTIME.yaml) -n msdataworkshop
 fi
 kubectl delete service supplier  -n msdataworkshop
-kubectl apply -f $SCRIPT_DIR/inventory-service.yaml  -n msdataworkshop
+kubectl apply -f $SCRIPT_DIR/supplier-service.yaml  -n msdataworkshop # temporarily for inventory adjustment, will use inventory service
+kubectl apply -f $SCRIPT_DIR/inventory-service.yaml  -n msdataworkshop # for various including setting of failures and eventually inventory adjustment calls, etc.
