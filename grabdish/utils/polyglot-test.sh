@@ -6,7 +6,7 @@
 set -e
 
 # Deploy each inventory service and perform functional test
-SERVICES="inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se"
+SERVICES="inventory-python inventory-dotnet inventory-go inventory-helidon-se"
 #SERVICES="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se"
 ORDER_ID=66
 
@@ -31,5 +31,5 @@ for s in $SERVICES; do
   ./undeploy.sh
 done
 
-#cd $GRABDISH_HOME/inventory-helidon
-#./deploy.sh
+cd $GRABDISH_HOME/inventory-helidon
+./deploy.sh
