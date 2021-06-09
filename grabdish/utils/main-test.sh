@@ -105,13 +105,13 @@ utils/polyglot-test.sh
 
 
 # SCALING
-echo "TEST_LOG: #### Testing Lab4: Scaling"
-utils/scaling-test.sh
+#echo "TEST_LOG: #### Testing Lab4: Scaling"
+#utils/scaling-test.sh
 
 
 # TRACING
-echo "TEST_LOG: #### Testing Lab5: Tracing"
-utils/tracing-test.sh
+#echo "TEST_LOG: #### Testing Lab5: Tracing"
+#utils/tracing-test.sh
 
 
 # APEX
@@ -119,7 +119,7 @@ utils/tracing-test.sh
 
 
 # CRASH RECOVERY
-echo "TEST_LOG: #### Testing LabX: Crash Recovery"
+echo "TEST_LOG: #### Testing Lab7: Crash Recovery"
 utils/crashrecovery-test.sh
 
 # TEARDOWN
