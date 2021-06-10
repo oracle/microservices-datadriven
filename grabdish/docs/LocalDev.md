@@ -53,7 +53,7 @@ mkdir ~/grabdish_state
 cd ~/grabdish_state
 ```
 
-2. Using the download feature of cloud shell (hamburger menu about cloud shell window), download the ~/grabdish_state.tgz file to your machine.  This file is generated when the workshop setup completes.  
+2. Using the download feature of cloud shell (hamburger menu about cloud shell window), download the ./grabdish_state.tgz file to your machine.  This file is generated when the workshop setup completes.  
 
 3. Copy the _grabdish_state.tgz_ file to the _~/grabdish_state_ folder.
 

@@ -165,7 +165,7 @@ async function processOrder() {
   let opStart = process.hrtime.bigint();
 
   try {
-//    oracledb.autoCommit = false;
+    oracledb.autoCommit = false;
     connection = await oracledb.getConnection();
     const orderQueue = await connection.getQueue(queueConfig.orderQueue, queueOptions);
     logStats(opName, opStart, process.hrtime.bigint());

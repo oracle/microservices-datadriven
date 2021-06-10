@@ -34,8 +34,6 @@ public class InventoryResource {
     static String inventorypw;
     static String inventoryQueueName = "inventoryqueue";
     static String orderQueueName = "orderqueue";
-    static boolean crashAfterOrderMessageReceived;
-    static boolean crashAfterOrderMessageProcessed;
 
     static {
         System.setProperty("oracle.jdbc.fanEnabled", "false");
@@ -68,26 +66,6 @@ public class InventoryResource {
                 .entity("now listening for messages...")
                 .build();
         return returnValue;
-    }
-
-    @Path("/crashAfterOrderMessageReceived")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response crashAfterOrderMessageReceived() {
-        crashAfterOrderMessageReceived = true;
-        return Response.ok()
-                .entity("inventory crashAfterOrderMessageReceived set")
-                .build();
-    }
-
-    @Path("/crashAfterOrderMessageProcessed")
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response crashAfterOrderMessageProcessed() {
-        crashAfterOrderMessageProcessed = true;
-        return Response.ok()
-                .entity("inventory crashAfterOrderMessageProcessed set")
-                .build();
     }
 
 }

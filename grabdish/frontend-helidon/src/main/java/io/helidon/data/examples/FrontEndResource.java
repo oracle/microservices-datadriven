@@ -151,6 +151,7 @@ public class FrontEndResource {
     @GET
     @Produces("image/svg+xml")
     public Response burger() {
+        System.out.println("Getting Burger...");
         try {
             return Response.ok(Resource.create("web/images/burger.svg").stream()).build();
         } catch (Exception e) {

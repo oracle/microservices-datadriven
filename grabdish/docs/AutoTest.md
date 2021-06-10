@@ -4,7 +4,7 @@ _Copyright (c) 2019, 2020, 2021 Oracle and/or its affiliates The Universal Permi
 
 Here is how to run an automated test in your free tier tenancy or with a Live Labs reserved tenancy.
 
-1. (Free Tier Only) Clean up your existing tenancy so that you have disk space and the docker cache is empty:
+1. (Free Tier Only) Clean up your existing tenancy so thet you have disk space and the docker cache is empty:
 ```
 docker image prune -a -f
 csreset -a
@@ -25,17 +25,17 @@ cd $TEST_DIRECTORY
 export TEST_USER_OCID='ocid1.user.oc1..xxxxx'
 ```
 
-5. Export the fork/GITHUB_USER (and branch/GITHUB_BRANCH if necessary) you wish to test and the passwords to be used:
+5. Register which branch you wish to test and the passwords to be used:
 ```
-export GITHUB_BRANCH='main'
-export GITHUB_USER='myghuser'
+export GITHUB_BRANCH='1.4'
+export GITHUB_USER='oracle'
 export TEST_DB_PASSWORD='Welcome12345;#!:'
 export TEST_UI_PASSWORD='Welcome1;#!"'
 ```
 
 6. Clone the code
 ```
-git clone -b "$GITHUB_BRANCH" --single-branch "https://github.com/${GITHUB_USER}/microservices-datadriven.git"
+git clone -b "$BRANCH" --single-branch "https://github.com/${GITHUB_USER}/microservices-datadriven.git"
 ```
 
 7. Execute the setup.  Note in the Live Labs case, the setup will prompt for the compartment OCID and an auth token.

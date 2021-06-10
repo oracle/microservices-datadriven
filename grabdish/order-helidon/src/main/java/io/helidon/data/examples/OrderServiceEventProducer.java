@@ -32,7 +32,6 @@ class OrderServiceEventProducer {
             Connection jdbcConnection = ((AQjmsSession) session).getDBConnection();
             System.out.println("updateDataAndSendEvent jdbcConnection:" + jdbcConnection + " about to insertOrderViaSODA...");
             Order insertedOrder = insertOrderViaSODA(orderid, itemid, deliverylocation, jdbcConnection);
-            if (OrderResource.crashAfterInsert) System.exit(-1);
             System.out.println("updateDataAndSendEvent insertOrderViaSODA complete about to send order message...");
             Topic topic = ((AQjmsSession) session).getTopic(OrderResource.orderQueueOwner, OrderResource.orderQueueName);
             System.out.println("updateDataAndSendEvent topic:" + topic);

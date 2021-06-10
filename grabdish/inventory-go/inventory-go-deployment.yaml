@@ -26,7 +26,6 @@ spec:
           value: "inventoryuser"
         - name: TNS_ADMIN
           value: "/msdataworkshop/creds"
-#          value: "/lib/oracle/instantclient_19_3/client64/lib/network/admin"
         - name: INVENTORY_PDB_NAME
           value: "%INVENTORY_PDB_NAME%_tp"
         - name: OCI_REGION
@@ -44,7 +43,6 @@ spec:
         volumeMounts:
         - name: creds
           mountPath: /msdataworkshop/creds
-#          mountPath: /lib/oracle/instantclient_19_3/client64/lib/network/admin # 19.10
         ports:
         - containerPort: 8080
       restartPolicy: Always
