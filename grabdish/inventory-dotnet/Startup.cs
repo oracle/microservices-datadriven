@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
+using System.Data.OracleClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -84,16 +85,17 @@ namespace inventory_dotnet
             string connString =
                 "User Id=" +
                 Environment.GetEnvironmentVariable("DB_USER") +
-                ";Password=" + 
+                ";Password=" +
                 "\"" + pw + "\"" +
                 ";Data Source=" +
                 Environment.GetEnvironmentVariable("DB_CONNECT_STRING") +
                 ";";
-     //       Console.WriteLine("connString:" + connString);
-            using ( OracleConnection connection = new OracleConnection(connString) )
+        using (
+                OracleConnection connection = new OracleConnection(connString)
+            )
             {
                 connection.Open();
-                Console.WriteLine("connection:" + connection);
+                Console.WriteLine("listening for messages...");
                 while (true) {
                     try
                     {
