@@ -81,22 +81,21 @@ namespace inventory_dotnet
             //   DbProviderFactory factory = DbProviderFactories.GetFactory("Oracle.ManagedDataAccess.Client"); DbCommand oracleCommand = factory.CreateCommand();
             String tnsAdmin = Environment.GetEnvironmentVariable("TNS_ADMIN");
             OracleConfiguration.WalletLocation = tnsAdmin;
+            String pw = Environment.GetEnvironmentVariable("DB_PASSWORD");
             string connString =
                 "User Id=" +
                 Environment.GetEnvironmentVariable("DB_USER") +
                 ";Password=" +
-                Environment.GetEnvironmentVariable("DB_PASSWORD") +
+                "\"" + pw + "\"" +
                 ";Data Source=" +
                 Environment.GetEnvironmentVariable("DB_CONNECT_STRING") +
                 ";";
-            Console
-                .WriteLine("tnsAdmin:" +
-                tnsAdmin);
         using (
                 OracleConnection connection = new OracleConnection(connString)
             )
             {
                 connection.Open();
+                Console.WriteLine("listening for messages...");
                 while (true) {
                     try
                     {
