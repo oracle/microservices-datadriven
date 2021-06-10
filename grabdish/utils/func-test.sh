@@ -76,7 +76,3 @@ placeOrderTest "$ORDER_ID"
 sleep 10
 
 showOrderTest "$ORDER_ID" 'success inventory exists'
-
-#echo collect logs and put them in $GRABDISH_LOG
-#logpod order > $GRABDISH_LOG/order
-logpod $TEST_STEP > $GRABDISH_LOG/testlog-$TEST_STEP
