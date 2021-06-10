@@ -2,8 +2,6 @@ package io.helidon.data.examples;
 
 import java.util.Properties;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -15,11 +13,9 @@ import org.bson.Document;
 
 import static io.helidon.data.examples.KafkaMongoOrderResource.crashAfterInsert;
 
-
 public class KafkaMongoDBOrderProducer {
 
-
-    public String updateDataAndSendEvent(String orderid, String itemid, String deliverylocation) throws Exception {
+    public String updateDataAndSendEvent(String orderid, String itemid, String deliverylocation) {
         System.out.println("KafkaMongoDBOrderProducer.updateDataAndSendEvent orderid = " + orderid + ", itemid = " + itemid + ", deliverylocation = " + deliverylocation);
         System.out.println("KafkaMongoDBOrderProducer.insert order into mongodb.........");
         Order insertedOrder = insertOrderInMongoDB(orderid, itemid, deliverylocation);

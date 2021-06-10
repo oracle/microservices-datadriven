@@ -20,22 +20,17 @@ spec:
         image: %DOCKER_REGISTRY%/inventory-postgres-kafka:0.1
         imagePullPolicy: Always
         env:
-        - name: oracle.ucp.jdbc.PoolDataSource.inventorypdb.user
-          value: "inventoryuser"
-        - name: oracle.ucp.jdbc.PoolDataSource.inventorypdb.URL
-          value: "jdbc:oracle:thin:@%INVENTORY_PDB_NAME%_tp?TNS_ADMIN=/msdataworkshop/creds"
-        - name: inventoryqueuename
-          value: "inventoryqueue"
-        - name: OCI_REGION
-          value: "%OCI_REGION%"
-        - name: VAULT_SECRET_OCID
-          value: "%VAULT_SECRET_OCID%"
-        - name: dbpassword
-          valueFrom:
-            secretKeyRef:
-              name: dbuser
-              key: dbpassword
-              optional: true #not needed/used if using VAULT_SECRET_OCID exists
+        - name: javax.sql.DataSource.postgresDataSource.dataSource.user
+          value: "postgresadmin"
+        - name: javax.sql.DataSource.postgresDataSource.dataSource.URL
+          value: "jdbc:postgresql://postgres.msdataworkshop:5432/postgresdb"
+        - name: javax.sql.DataSource.postgresDataSource.dataSource.password
+          value: "admin123"
+#        - name: javax.sql.DataSource.postgresDataSource.dataSource.password.usethis
+#          valueFrom:
+#            secretKeyRef:
+#              name: dbuser
+#              key: dbpassword
         volumeMounts:
         - name: creds
           mountPath: /msdataworkshop/creds

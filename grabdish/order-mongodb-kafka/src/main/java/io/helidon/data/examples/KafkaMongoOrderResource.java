@@ -241,7 +241,6 @@ public class KafkaMongoOrderResource {
         }
     }
 
-
     @Path("/crashAfterInsert")
     @GET
     @Produces(MediaType.TEXT_PLAIN)

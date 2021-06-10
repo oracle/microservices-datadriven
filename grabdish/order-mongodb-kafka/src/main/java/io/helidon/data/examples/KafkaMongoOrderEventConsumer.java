@@ -1,10 +1,8 @@
 package io.helidon.data.examples;
 
-
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -13,8 +11,6 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.bson.Document;
 
-import javax.inject.Inject;
-import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,9 +18,8 @@ import java.util.Properties;
 
 public class KafkaMongoOrderEventConsumer implements Runnable {
 
-
     Properties props = new Properties();
-    static MongoClientURI uri = new MongoClientURI("mongodb://orderuser:Welcome12345@mongodb:27017/orderdb");
+    static MongoClientURI uri = new MongoClientURI("mongodb://mongodb:27017/mongodata");
 
     static MongoClient getMongoClient() {
         return new MongoClient(KafkaMongoOrderEventConsumer.uri);
@@ -37,9 +32,6 @@ public class KafkaMongoOrderEventConsumer implements Runnable {
 
     @Override
     public void run() {
-        // Standard URI format: mongodb://[dbuser:dbpassword@]host:port/dbname
-//            MongoClientURI uri  = new MongoClientURI("mongodb://mongodb:27017");
-        uri = new MongoClientURI("mongodb://orderuser:Welcome12345@mongodb:27017/orderdb");
         props.put("bootstrap.servers", "kafka-service:9092");
         props.put("group.id", "test");
         props.put("enable.auto.commit", "true");
@@ -49,9 +41,9 @@ public class KafkaMongoOrderEventConsumer implements Runnable {
                 "org.apache.kafka.common.serialization.StringDeserializer");
         props.put("value.deserializer",
                 "org.apache.kafka.common.serialization.StringDeserializer");
-        //todo potentially gate this for init
-//        createTopic(KafkaMongoOrderResource.orderTopicName);
-//        createTopic(KafkaMongoOrderResource.inventoryTopicName);
+        //todo  gate these
+        createTopic(KafkaMongoOrderResource.orderTopicName);
+        createTopic(KafkaMongoOrderResource.inventoryTopicName);
         dolistenForMessages();
     }
 
@@ -92,10 +84,10 @@ public class KafkaMongoOrderEventConsumer implements Runnable {
                     Document updateQuery = new Document().append("orderid", orderid);
                     if (isSuccessfulInventoryCheck) {
                         orders.updateOne(updateQuery, new Document("$set", new Document("inventorylocation", inventorylocation)));
-//                        order.setStatus("success inventory exists");
-//                        order.setSuggestiveSale(inventory.getSuggestiveSale());
+                        orders.updateOne(updateQuery, new Document("$set", new Document("status", "success inventory exists")));
+                        orders.updateOne(updateQuery, new Document("$set", new Document("suggestiveSale", inventory.getSuggestiveSale())));
                     } else {
-                        orders.updateOne(updateQuery, new Document("$set", new Document("inventorylocation", "failed inventory does not exist")));
+                        orders.updateOne(updateQuery, new Document("$set", new Document("status", "failed inventory does not exist")));
                     }
 
                 }

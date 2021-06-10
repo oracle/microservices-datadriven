@@ -37,7 +37,7 @@ public class KafkaPostgressInventoryResource {
         listenForMessages();
     }
 
-    public Response listenForMessages()  {
+    public Response listenForMessages() throws SQLException {
         new Thread(new KafkaPostgresOrderEventConsumer(this)).start();
         final Response returnValue = Response.ok()
                 .entity("now listening for messages...")
