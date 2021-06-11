@@ -105,22 +105,22 @@ utils/polyglot-test.sh
 
 
 # SCALING
-#echo "TEST_LOG: #### Testing Lab4: Scaling"
-#utils/scaling-test.sh
+echo "TEST_LOG: #### Testing Lab4: Scaling"
+utils/scaling-test.sh
 
 
 # TRACING
-#echo "TEST_LOG: #### Testing Lab5: Tracing"
-#utils/tracing-test.sh
+echo "TEST_LOG: #### Testing Lab5: Tracing"
+utils/tracing-test.sh
 
 
 # APEX
 # TODO
 
 
-# CRASH RECOVERY
-echo "TEST_LOG: #### Testing Lab7: Crash Recovery"
-utils/crashrecovery-test.sh
+# TRACING
+echo "TEST_LOG: #### Testing Lab7: Transactional Tests: Compare MongoDB, Postgres, and Kafka to Oracle DB with TEQ/AQ"
+utils/tracing-test.sh
 
 # TEARDOWN
 # source destroy.sh

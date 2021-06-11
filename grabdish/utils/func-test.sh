@@ -7,6 +7,7 @@ set -e
 
 TEST_STEP="$1"
 ORDER_ID="$2"
+TEST_SERVICE="$3"
 
 function order() {
   echo '{"serviceName": "order", "commandName": "'"$2"'", "orderId": '"$1"', "orderItem": "sushi", "deliverTo": "780 PANORAMA DR, San francisco, CA"}'
@@ -77,6 +78,8 @@ sleep 10
 
 showOrderTest "$ORDER_ID" 'success inventory exists'
 
-#echo collect logs and put them in $GRABDISH_LOG
-#logpod order > $GRABDISH_LOG/order
-logpod $TEST_STEP > $GRABDISH_LOG/testlog-$TEST_STEP
+if [[ $TEST_SERVICE != "" ]]
+then
+  echo writing service log to $GRABDISH_LOG/testlog-$TEST_SERVICE-$ORDER_ID
+  logpod $TEST_SERVICE > $GRABDISH_LOG/testlog-$TEST_SERVICE-$ORDER_ID
+fi

@@ -24,7 +24,7 @@ for s in $SERVICES; do
 
   cd $GRABDISH_HOME
   ORDER_ID=$(($ORDER_ID + 100))
-  utils/func-test.sh "Polyglot $s" $ORDER_ID
+  utils/func-test.sh "Polyglot $s" $ORDER_ID $s
   
   cd $GRABDISH_HOME/$s
   ./undeploy.sh
