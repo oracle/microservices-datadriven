@@ -6,5 +6,5 @@ export k8s_pod=$1
 for line in $(kubectl get pods -n msdataworkshop | \
   grep $k8s_pod | awk '{print $2}'); do
     echo "kubectl logs -f $line -n msdataworkshop"
-    kubectl logs -f $line -n msdataworkshop
+    kubectl logs $line -n msdataworkshop
 done
