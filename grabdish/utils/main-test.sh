@@ -118,5 +118,9 @@ utils/tracing-test.sh
 # TODO
 
 
+# TRACING
+echo "TEST_LOG: #### Testing Lab7: Transactional Tests: Compare MongoDB, Postgres, and Kafka to Oracle DB with TEQ/AQ"
+utils/tracing-test.sh
+
 # TEARDOWN
 # source destroy.sh

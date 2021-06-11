@@ -96,11 +96,14 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
     }
 
     private void updateDataAndSendEventOnInventory(AQjmsSession session, String orderid, String itemid) throws Exception {
+
+        if (inventoryResource.crashAfterOrderMessageReceived) System.exit(-1);
         String inventorylocation = evaluateInventory(session, itemid);
         Inventory inventory = new Inventory(orderid, itemid, inventorylocation, "beer"); //static suggestiveSale - represents an additional service/event
         String jsonString = JsonUtils.writeValueAsString(inventory);
         Topic inventoryTopic = session.getTopic(InventoryResource.inventoryuser, InventoryResource.inventoryQueueName);
         System.out.println("send inventory status message... jsonString:" + jsonString + " inventoryTopic:" + inventoryTopic);
+        if (inventoryResource.crashAfterOrderMessageProcessed) System.exit(-1);
         TextMessage objmsg = session.createTextMessage();
         TopicPublisher publisher = session.createPublisher(inventoryTopic);
         objmsg.setIntProperty("Id", 1);

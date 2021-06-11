@@ -26,6 +26,7 @@ spec:
         env:
           - name: TNS_ADMIN
             value: "/msdataworkshop/creds"
+#            value: "/usr/lib/oracle/19.9/client64/lib/network/admin"
           - name: DB_CONNECT_STRING
             value: "%INVENTORY_PDB_NAME%_tp"
           - name: DB_USER
@@ -65,6 +66,7 @@ spec:
         volumeMounts:
         - name: creds
           mountPath: /msdataworkshop/creds
+#          mountPath: /usr/lib/oracle/19.9/client64/lib/network/admin
       restartPolicy: Always
       volumes:
       - name: creds

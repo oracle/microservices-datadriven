@@ -59,6 +59,7 @@ public class OrderResource {
     static boolean liveliness = true;
     static boolean readiness = true;
     private static String lastContainerStartTime;
+    static boolean crashAfterInsert;
     private OrderServiceCPUStress orderServiceCPUStress = new OrderServiceCPUStress();
     Map<String, OrderDetail> cachedOrders = new HashMap<>();
 
@@ -312,4 +313,14 @@ public class OrderResource {
                 .build();
     }
 
+
+    @Path("/crashAfterInsert")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response crashAfterInsert() {
+        crashAfterInsert = true;
+        return Response.ok()
+                .entity("order crashAfterInsert set")
+                .build();
+    }
 }
