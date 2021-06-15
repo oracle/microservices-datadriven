@@ -2,11 +2,14 @@
 # Copyright (c) 2021 Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
+# Fail on error
+set -e
+
 # The following setup and install of Verrazzano is taken directly from https://verrazzano.io/docs/setup/quickstart/
 if [[ $1 == "" ]]
 then
   echo CLUSTER_NAME argument not provided
-  echo This can be found in the ~./kube/config file
+  echo This can be found in the ~/.kube/config file
   echo Usage example : ./setup-multicloud.sh cluster-cyxypetwerq
   exit
 fi

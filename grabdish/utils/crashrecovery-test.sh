@@ -5,4 +5,64 @@
 # Fail on error
 set -e
 
-# todo...
+#Install MongoDB, Postgres, and Kafka
+cd $GRABDISH_HOME/mongodb-kafka-postgres;./install-all.sh
+
+SERVICES="kafka-broker kafka-cat mongodb postgres"
+
+for s in $SERVICES; do
+  echo "Verify $s pod running..."
+  while test 1 -gt `kubectl get pods -n msdataworkshop | grep "${s}" | grep "1/1" | wc -l`; do
+    echo "Waiting for pod to start..."
+    sleep 5
+  done
+done
+
+
+#Undeploy any existing Order, Inventory, and Supplier Services and deploy the MongoDB, Postgres, and Kafka backed Order and Inventory implementations
+for i in order-helidon inventory-helidon inventory-helidon-se inventory-python inventory-nodejs inventory-dotnet inventory-go supplier-helidon-se; do cd $GRABDISH_HOME/$i; ./undeploy.sh; done
+cd $GRABDISH_HOME/order-mongodb-kafka ; ./deploy.sh
+cd $GRABDISH_HOME/inventory-postgres-kafka ; ./deploy.sh
+cd $GRABDISH_HOME
+
+SERVICES="order-mongodb-kafka inventory-postgres-kafka"
+for s in $SERVICES; do
+  echo "Verify $s pod running..."
+  while test 1 -gt `kubectl get pods -n msdataworkshop | grep "${s}" | grep "1/1" | wc -l`; do
+    echo "Waiting for pod to start..."
+    sleep 5
+  done
+done
+
+#Run tests against order-mongodb-kafka inventory-postgres-kafka implementations
+SERVICES="mongodb-postgres-kafka"
+ORDER_ID=65
+
+for s in $SERVICES; do
+  echo "Testing $s"
+  cd $GRABDISH_HOME
+  ORDER_ID=$(($ORDER_ID + 1000))
+  utils/func-test.sh "Crash test (success runs) $s" $ORDER_ID $s
+done
+
+#Undeploy MongoDB, Postgres, and Kafka backed Order and Inventory implementations and deploy the Oracle + TEQ/AQ backed Order and Inventory implementations by copying and running the following commands.
+for i in order-mongodb-kafka inventory-postgres-kafka; do cd $GRABDISH_HOME/$i; ./undeploy.sh; done
+cd $GRABDISH_HOME/order-helidon ; ./deploy.sh
+cd $GRABDISH_HOME/inventory-helidon ; ./deploy.sh
+cd $GRABDISH_HOME/supplier-helidon-se ; ./deploy.sh
+cd $GRABDISH_HOME
+
+#Un-install MongoDB, Postgres, and Kafka
+cd $GRABDISH_HOME/mongodb-kafka-postgres;./uninstall-all.sh
+
+#Run tests against Oracle DB + AQ implementations
+SERVICES="Oracle-TEQ"
+ORDER_ID=65
+
+for s in $SERVICES; do
+  echo "Testing $s"
+  cd $GRABDISH_HOME
+  ORDER_ID=$(($ORDER_ID + 1100))
+  utils/func-test.sh "Crash test (success runs) $s" $ORDER_ID $s
+done
+
