@@ -6,7 +6,7 @@
 set -e
 
 # Deploy each inventory service and perform functional test
-SERVICES="inventory-helidon-se"
+SERVICES="inventory-go inventory-helidon-se"
 #SERVICES="inventory-dotnet inventory-go inventory-helidon-se"
 #SERVICES="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se"
 ORDER_ID=66
