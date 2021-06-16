@@ -29,7 +29,8 @@ function placeOrderTest() {
 }
 
 function showOrderTest() {
-  sleep 10
+  echo "TEST_LOG: sleep for 20"
+  sleep 20
   # Show order 
   local ORDER_ID="$1"
   local SEARCH_FOR="$2"
@@ -39,9 +40,9 @@ function showOrderTest() {
     if grep "$SEARCH_FOR" $GRABDISH_LOG/order >/dev/null; then
       echo "TEST_LOG: $TEST_STEP showOrder $ORDER_ID matched $SEARCH_FOR"
     elif grep "success inventory exists" $GRABDISH_LOG/order >/dev/null; then
-      echo "TEST_LOG_FAILED: $TEST_STEP showOrder $ORDER_ID got 'success inventory exists' expected $TEST_STEP "
+      echo "TEST_LOG_FAILED: $TEST_STEP showOrder $ORDER_ID got 'success inventory exists' expected $SEARCH_FOR "
     elif grep "pending" $GRABDISH_LOG/order >/dev/null; then
-      echo "TEST_LOG_FAILED: $TEST_STEP showOrder $ORDER_ID got 'pending' expected $TEST_STEP "
+      echo "TEST_LOG_FAILED: $TEST_STEP showOrder $ORDER_ID got 'pending' expected $SEARCH_FOR "
     else
       echo "TEST_LOG_FAILED: $TEST_STEP showOrder $ORDER_ID nomatch for $SEARCH_FOR"
     fi
