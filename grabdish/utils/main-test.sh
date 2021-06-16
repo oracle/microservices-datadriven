@@ -23,7 +23,7 @@ export TEST_UI_PASSWORD=`kubectl get secret frontendadmin -n msdataworkshop --te
 echo 'TEST_LOG: #####################################'
 
 # WALKTHROUGH
-echo "TEST_LOG: #### Testing Lab2: Walkthrough"
+echo "TEST_LOG: #### Testing Lab2: Walkthrough Undeploy..."
 
 # Undeploy to make it rerunable
 ./undeploy.sh
@@ -40,7 +40,7 @@ while test 0 -lt `kubectl get pods -n msdataworkshop | egrep 'frontend-helidon|i
 done
 
 # Deploy the java services
-echo "TEST_LOG: #### Testing Lab2: Walkthrough"
+echo "TEST_LOG: #### Testing Lab2: Walkthrough Deploy..."
 cd $GRABDISH_HOME
 ./deploy.sh
 
@@ -93,25 +93,24 @@ utils/func-test.sh Walkthrough 66
 
 
 # POLYGLOT
-echo "TEST_LOG: #### Testing Lab3: Polyglot"
-
-# Deploy each inventory service and perform functional test
-while ! $(state_get NON_JAVA_BUILDS); do
-  sleep 10
-  echo "Waiting for NON_JAVA_BUILDS"
-done
-
-utils/polyglot-test.sh
-
-
-# SCALING
-echo "TEST_LOG: #### Testing Lab4: Scaling"
-utils/scaling-test.sh
+#echo "TEST_LOG: #### Testing Lab3: Polyglot"
+## Deploy each inventory service and perform functional test
+#while ! $(state_get NON_JAVA_BUILDS); do
+#  sleep 10
+#  echo "Waiting for NON_JAVA_BUILDS"
+#done
+#
+#utils/polyglot-test.sh
 
 
-# TRACING
-echo "TEST_LOG: #### Testing Lab5: Tracing"
-utils/tracing-test.sh
+## SCALING
+#echo "TEST_LOG: #### Testing Lab4: Scaling"
+#utils/scaling-test.sh
+#
+#
+## TRACING
+#echo "TEST_LOG: #### Testing Lab5: Tracing"
+#utils/tracing-test.sh
 
 
 # APEX
@@ -120,7 +119,7 @@ utils/tracing-test.sh
 
 # TRACING
 echo "TEST_LOG: #### Testing Lab7: Transactional Tests: Compare MongoDB, Postgres, and Kafka to Oracle DB with TEQ/AQ"
-utils/tracing-test.sh
+utils/crashrecovery-test.sh
 
 # TEARDOWN
 # source destroy.sh
