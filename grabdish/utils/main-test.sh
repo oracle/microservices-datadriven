@@ -90,6 +90,10 @@ fi
 
 # Functional test on order 66/67
 utils/func-test.sh Walkthrough 66
+logpodnotail frontend > $GRABDISH_LOG/testlog-frontend-from-Walkthrough
+logpodnotail supplier > $GRABDISH_LOG/testlog-supplier-from-Walkthrough
+logpodnotail order > $GRABDISH_LOG/testlog-order-from-Walkthrough
+logpodnotail inventory > $GRABDISH_LOG/testlog-inventory-from-Walkthrough
 
 
 # POLYGLOT
@@ -103,6 +107,8 @@ done
 utils/polyglot-test.sh
 echo writing log to $GRABDISH_LOG/testlog-frontend-from-polyglot
 logpodnotail frontend > $GRABDISH_LOG/testlog-frontend-from-polyglot
+logpodnotail supplier > $GRABDISH_LOG/testlog-supplier-from-polyglot
+logpodnotail order > $GRABDISH_LOG/testlog-order-from-polyglot
 
 ## SCALING
 #echo "TEST_LOG: #### Testing Lab4: Scaling"

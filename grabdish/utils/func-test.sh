@@ -58,8 +58,8 @@ function verifyInventoryCountTest() {
     if grep "$SEARCH_FOR" $GRABDISH_LOG/inventory >/dev/null; then
       echo "TEST_LOG: $TEST_STEP verifyInventoryCountTest $ITEM_ID after ORDER_ID $ORDER_ID expected inventory count: '$SEARCH_FOR'"
     else
-      echo "TEST_LOG_FAILED: $TEST_STEP verifyInventoryCountTest $ITEM_ID after ORDER_ID $ORDER_ID unexpected inventory count, not '$SEARCH_FOR'"
-      echo "TEST_LOG_FAILED:" | tr '\n' ' ' ; cat $GRABDISH_LOG/inventory
+      echo "TEST_LOG_FAILED: $TEST_STEP verifyInventoryCountTest $ITEM_ID after ORDER_ID $ORDER_ID unexpected inventory count, not '$SEARCH_FOR'" | tr '\n' ' ' ; cat $GRABDISH_LOG/inventory
+      echo ...
     fi
   else
     echo "TEST_LOG_FAILED: $TEST_STEP verifyInventoryCountTest $ITEM_ID after ORDER_ID $ORDER_ID request $1 failed"
