@@ -37,8 +37,8 @@ function showOrderTest() {
     echo "TEST_LOG: $TEST_STEP showOrder request $1 succeeded"
     if grep "$SEARCH_FOR" $GRABDISH_LOG/order >/dev/null; then
       echo "TEST_LOG: $TEST_STEP showOrder $ORDER_ID matched $SEARCH_FOR"
-    if grep "failed inventory does not exist" $GRABDISH_LOG/order >/dev/null; then
-      echo "TEST_LOG: $TEST_STEP showOrder $ORDER_ID matched 'failed inventory does not exist'"
+    elif grep "success inventory exists" $GRABDISH_LOG/order >/dev/null; then
+      echo "TEST_LOG: $TEST_STEP showOrder $ORDER_ID matched 'success inventory exists' - not the original assertion"
     else
       echo "TEST_LOG_FAILED: $TEST_STEP showOrder $ORDER_ID nomatch for $SEARCH_FOR"
     fi
