@@ -36,9 +36,9 @@ function showOrderTest() {
     --header='Content-Type: application/json' "$(state_get FRONTEND_URL)/command" -O $GRABDISH_LOG/order; then
     echo "TEST_LOG: $TEST_STEP showOrder request $1 succeeded"
     if grep "$SEARCH_FOR" $GRABDISH_LOG/order >/dev/null; then
-      echo "TEST_LOG: $TEST_STEP showOrder $ORDER_ID matched"
+      echo "TEST_LOG: $TEST_STEP showOrder $ORDER_ID matched $SEARCH_FOR"
     else
-      echo "TEST_LOG_FAILED: $TEST_STEP showOrder $ORDER_ID nomatch"
+      echo "TEST_LOG_FAILED: $TEST_STEP showOrder $ORDER_ID nomatch for $SEARCH_FOR"
     fi
   else
     echo "TEST_LOG_FAILED: $TEST_STEP showOrder request $1 failed"
