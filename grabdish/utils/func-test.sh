@@ -39,12 +39,9 @@ function showOrderTest() {
     echo "TEST_LOG: $TEST_STEP showOrder request $1 succeeded"
     if grep "$SEARCH_FOR" $GRABDISH_LOG/order >/dev/null; then
       echo "TEST_LOG: $TEST_STEP showOrder $ORDER_ID matched '$SEARCH_FOR'"
-    elif grep "success inventory exists" $GRABDISH_LOG/order >/dev/null; then
-      echo "TEST_LOG_FAILED: $TEST_STEP showOrder $ORDER_ID got 'success inventory exists' expected '$SEARCH_FOR' "
-    elif grep "pending" $GRABDISH_LOG/order >/dev/null; then
-      echo "TEST_LOG_FAILED: $TEST_STEP showOrder $ORDER_ID got 'pending' expected '$SEARCH_FOR' "
     else
-      echo "TEST_LOG_FAILED: $TEST_STEP showOrder $ORDER_ID nomatch for '$SEARCH_FOR'"
+      echo "TEST_LOG_FAILED: $TEST_STEP showOrder $ORDER_ID expected '$SEARCH_FOR'"
+      echo "TEST_LOG_FAILED: but got... " | tr '\n' ' ' ;cat $GRABDISH_LOG/order
     fi
   else
     echo "TEST_LOG_FAILED: $TEST_STEP showOrder request $1 failed"
@@ -62,6 +59,7 @@ function verifyInventoryCountTest() {
       echo "TEST_LOG: $TEST_STEP verifyInventoryCountTest $ITEM_ID after ORDER_ID $ORDER_ID expected inventory count: '$SEARCH_FOR'"
     else
       echo "TEST_LOG_FAILED: $TEST_STEP verifyInventoryCountTest $ITEM_ID after ORDER_ID $ORDER_ID unexpected inventory count, not '$SEARCH_FOR'"
+      echo "TEST_LOG_FAILED:" | tr '\n' ' ' ;cat $GRABDISH_LOG/inventory
     fi
   else
     echo "TEST_LOG_FAILED: $TEST_STEP verifyInventoryCountTest $ITEM_ID after ORDER_ID $ORDER_ID request $1 failed"
