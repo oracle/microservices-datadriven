@@ -39,6 +39,8 @@ function showOrderTest() {
       echo "TEST_LOG: $TEST_STEP showOrder $ORDER_ID matched $SEARCH_FOR"
     elif grep "success inventory exists" $GRABDISH_LOG/order >/dev/null; then
       echo "TEST_LOG: $TEST_STEP showOrder $ORDER_ID matched 'success inventory exists' - not the original assertion"
+    elif grep "pending" $GRABDISH_LOG/order >/dev/null; then
+      echo "TEST_LOG: $TEST_STEP showOrder $ORDER_ID matched 'pending' - not the original assertion"
     else
       echo "TEST_LOG_FAILED: $TEST_STEP showOrder $ORDER_ID nomatch for $SEARCH_FOR"
     fi
@@ -80,7 +82,6 @@ sleep 10
 
 showOrderTest "$ORDER_ID" 'success inventory exists'
 
-#if [[ $TEST_SERVICE == "dotnet" ]]
 if [[ $TEST_SERVICE != "" ]]
 then
   echo writing service log to $GRABDISH_LOG/testlog-$TEST_SERVICE-$ORDER_ID

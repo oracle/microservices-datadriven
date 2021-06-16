@@ -44,14 +44,17 @@ sed -i.bak '/grabdish/d' ~/.bashrc
 echo "source $PWD/microservices-datadriven/grabdish/env.sh" >>~/.bashrc
 source microservices-datadriven/grabdish/env.sh
 source setup.sh
+
 ```
 
 8. Execute the test
 ```
 source test.sh
+
 ```
 
 9. Clean up
 ```
 source destroy.sh
+
 ```

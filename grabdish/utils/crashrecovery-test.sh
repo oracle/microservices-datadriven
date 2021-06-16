@@ -3,8 +3,9 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Fail on error
-set -e
+#set -e
 
+echo "TEST_LOG: Crash Recovery Install MongoDB, Postgres, and Kafka..."
 #Install MongoDB, Postgres, and Kafka
 cd $GRABDISH_HOME/mongodb-kafka-postgres;./install-all.sh
 echo "TEST_LOG: Crash Recovery waiting for kafka-broker kafka-cat mongodb postgres to start..."
@@ -20,8 +21,8 @@ done
 
 echo "TEST_LOG: Crash Recovery kafka-broker kafka-cat mongodb postgres started"
 
-#Undeploy any existing Order, Inventory, and Supplier Services and deploy the MongoDB, Postgres, and Kafka backed Order and Inventory implementations
-for i in order-helidon inventory-helidon inventory-helidon-se inventory-python inventory-nodejs inventory-dotnet inventory-go supplier-helidon-se; do cd $GRABDISH_HOME/$i; ./undeploy.sh; done
+#Undeploy Order, Inventory, and Supplier Services and deploy the MongoDB, Postgres, and Kafka backed Order and Inventory implementations
+for i in order-helidon inventory-helidon supplier-helidon-se; do cd $GRABDISH_HOME/$i; ./undeploy.sh; done
 cd $GRABDISH_HOME/order-mongodb-kafka ; ./deploy.sh
 cd $GRABDISH_HOME/inventory-postgres-kafka ; ./deploy.sh
 cd $GRABDISH_HOME
