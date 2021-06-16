@@ -8,6 +8,9 @@ if ! (return 0 2>/dev/null); then
   exit
 fi
 
+echo Deleting any previous $GRABDISH_LOG/main-test.log
+rm $GRABDISH_LOG/main-test.log
+
 $GRABDISH_HOME/utils/main-test.sh 2>&1 | tee -ai $GRABDISH_LOG/main-test.log
 
 $GRABDISH_HOME/utils/test-summary.sh
