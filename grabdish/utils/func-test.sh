@@ -40,8 +40,7 @@ function showOrderTest() {
     if grep "$SEARCH_FOR" $GRABDISH_LOG/order >/dev/null; then
       echo "TEST_LOG: $TEST_STEP showOrder $ORDER_ID matched '$SEARCH_FOR'"
     else
-      echo "TEST_LOG_FAILED: $TEST_STEP showOrder $ORDER_ID expected '$SEARCH_FOR'"
-      echo "TEST_LOG_FAILED: but got... " | tr '\n' ' ' ;cat $GRABDISH_LOG/order
+      echo "TEST_LOG_FAILED: $TEST_STEP showOrder $ORDER_ID expected '$SEARCH_FOR' but got... " | tr '\n' ' ' ;cat $GRABDISH_LOG/order
     fi
   else
     echo "TEST_LOG_FAILED: $TEST_STEP showOrder request $1 failed"
@@ -58,7 +57,7 @@ function verifyInventoryCountTest() {
     if grep "$SEARCH_FOR" $GRABDISH_LOG/inventory >/dev/null; then
       echo "TEST_LOG: $TEST_STEP verifyInventoryCountTest $ITEM_ID after ORDER_ID $ORDER_ID expected inventory count: '$SEARCH_FOR'"
     else
-      echo "TEST_LOG_FAILED: $TEST_STEP verifyInventoryCountTest $ITEM_ID after ORDER_ID $ORDER_ID unexpected inventory count, not '$SEARCH_FOR'" | tr '\n' ' ' ; cat $GRABDISH_LOG/inventory
+      echo "TEST_LOG: $TEST_STEP verifyInventoryCountTest $ITEM_ID after ORDER_ID $ORDER_ID unexpected inventory count, not '$SEARCH_FOR'" | tr '\n' ' ' ; cat $GRABDISH_LOG/inventory
       echo ...
     fi
   else
@@ -79,6 +78,9 @@ function addInventoryTest() {
 
 
 # Show order and wait for status "no inventory"
+
+verifyInventoryCountTest "sushi" 0 "$ORDER_ID (before placing order)"
+
 placeOrderTest $ORDER_ID
 
 sleep 10
