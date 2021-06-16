@@ -62,6 +62,8 @@ cd $GRABDISH_HOME
 #Un-install MongoDB, Postgres, and Kafka
 cd $GRABDISH_HOME/mongodb-kafka-postgres;./uninstall-all.sh
 
+echo "TEST_LOG: Crash Recovery undeployed mongodb and postgres "
+
 #Run tests against Oracle DB + AQ implementations
 SERVICES="Oracle-TEQ"
 ORDER_ID=65
@@ -73,3 +75,4 @@ for s in $SERVICES; do
   utils/func-test.sh "Crash test (success runs) $s" $ORDER_ID $s
 done
 
+echo "TEST_LOG: Crash Recovery Oracle TEQ/AQ tests complete "
