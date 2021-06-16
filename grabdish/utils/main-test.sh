@@ -101,7 +101,8 @@ while ! $(state_get NON_JAVA_BUILDS); do
 done
 
 utils/polyglot-test.sh
-
+echo writing log to $GRABDISH_LOG/testlog-frontend-from-polyglot
+logpodnotail frontend > $GRABDISH_LOG/testlog-frontend-from-polyglot
 
 ## SCALING
 #echo "TEST_LOG: #### Testing Lab4: Scaling"

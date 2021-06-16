@@ -84,6 +84,6 @@ showOrderTest "$ORDER_ID" 'success inventory exists'
 
 if [[ $TEST_SERVICE != "" ]]
 then
-  echo writing service log to $GRABDISH_LOG/testlog-$TEST_SERVICE-$ORDER_ID
+  echo writing log to $GRABDISH_LOG/testlog-$TEST_SERVICE-$ORDER_ID
   logpodnotail $TEST_SERVICE > $GRABDISH_LOG/testlog-$TEST_SERVICE-$ORDER_ID
 fi
