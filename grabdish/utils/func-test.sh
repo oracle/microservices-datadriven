@@ -20,7 +20,7 @@ function inventory() {
 function placeOrderTest() {
   # Place order
   local ORDER_ID="$1"
-  if wget --http-user grabdish --http-password "$TEST_UI_PASSWORD" --no-check-certificate --post-data "$(order "$ORDER_ID" 'placeOrder')" \
+  if wget -q --http-user grabdish --http-password "$TEST_UI_PASSWORD" --no-check-certificate --post-data "$(order "$ORDER_ID" 'placeOrder')" \
     --header='Content-Type: application/json' "$(state_get FRONTEND_URL)/placeorder" -O $GRABDISH_LOG/order; then
     echo "TEST_LOG: $TEST_STEP placeOrder $ORDER_ID succeeded"
   else
@@ -34,7 +34,7 @@ function showOrderTest() {
   # Show order 
   local ORDER_ID="$1"
   local SEARCH_FOR="$2"
-  if wget --http-user grabdish --http-password "$TEST_UI_PASSWORD" --no-check-certificate --post-data "$(order "$ORDER_ID" 'showorder')" \
+  if wget -q --http-user grabdish --http-password "$TEST_UI_PASSWORD" --no-check-certificate --post-data "$(order "$ORDER_ID" 'showorder')" \
     --header='Content-Type: application/json' "$(state_get FRONTEND_URL)/command" -O $GRABDISH_LOG/order; then
     echo "TEST_LOG: $TEST_STEP showOrder request $1 succeeded"
     if grep "$SEARCH_FOR" $GRABDISH_LOG/order >/dev/null; then
@@ -59,7 +59,7 @@ function verifyInventoryCountTest() {
       echo "TEST_LOG: $TEST_STEP verifyInventoryCountTest $ITEM_ID after ORDER_ID $ORDER_ID expected inventory count: '$SEARCH_FOR'"
     else
       echo "TEST_LOG_FAILED: $TEST_STEP verifyInventoryCountTest $ITEM_ID after ORDER_ID $ORDER_ID unexpected inventory count, not '$SEARCH_FOR'"
-      echo "TEST_LOG_FAILED:" | tr '\n' ' ' ;cat $GRABDISH_LOG/inventory
+      echo "TEST_LOG_FAILED:" | tr '\n' ' ' ; cat $GRABDISH_LOG/inventory
     fi
   else
     echo "TEST_LOG_FAILED: $TEST_STEP verifyInventoryCountTest $ITEM_ID after ORDER_ID $ORDER_ID request $1 failed"
