@@ -9,7 +9,8 @@ set -e
 #SERVICES="inventory-go inventory-helidon-se"
 #SERVICES="inventory-dotnet inventory-go inventory-helidon-se"
 #SERVICES="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se"
-SERVICES="inventory-python inventory-dotnet inventory-go inventory-helidon-se"
+#SERVICES="inventory-python inventory-dotnet inventory-go inventory-helidon-se" # this results in inventory-go failing
+SERVICES="inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se"
 ORDER_ID=66
 
 cd $GRABDISH_HOME/inventory-helidon
