@@ -105,6 +105,6 @@ verifyInventoryCountTest "sushi" 0 "$ORDER_ID"
 
 if [[ $TEST_SERVICE != "" ]]
 then
-  echo writing log to $GRABDISH_LOG/testlog-$TEST_SERVICE-$ORDER_ID
-  logpodnotail $TEST_SERVICE > $GRABDISH_LOG/testlog-$TEST_SERVICE-$ORDER_ID
+  echo writing log to $GRABDISH_LOG/testlog-$TEST_SERVICE
+  logpodnotail $TEST_SERVICE > $GRABDISH_LOG/testlog-$TEST_SERVICE
 fi
