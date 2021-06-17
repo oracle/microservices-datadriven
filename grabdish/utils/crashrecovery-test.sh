@@ -3,7 +3,7 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Fail on error
-#set -e
+set -e
 
 echo "TEST_LOG: Crash Recovery Install MongoDB, Postgres, and Kafka..."
 #Install MongoDB, Postgres, and Kafka
