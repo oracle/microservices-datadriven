@@ -9,7 +9,8 @@ set -e
 #SERVICES="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se"
 #SERVICES="inventory-go inventory-helidon-se"
 #SERVICES="inventory-dotnet inventory-go inventory-helidon-se"
-SERVICES="inventory-nodejs inventory-helidon-se inventory-python"
+SERVICES="inventory-dotnet inventory-go inventory-python inventory-nodejs inventory-helidon-se"
+#SERVICES="inventory-nodejs inventory-helidon-se inventory-python"  # this results in inventory-python failing
 #SERVICES="inventory-dotnet inventory-go inventory-helidon-se" # this results in inventory-helidon-se failing
 #SERVICES="inventory-python inventory-dotnet inventory-go inventory-helidon-se" # this results in inventory-go failing
 #SERVICES="inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se" # this results in inventory-go failing
