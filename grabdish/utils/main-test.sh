@@ -111,13 +111,13 @@ logpodnotail supplier > $GRABDISH_LOG/testlog-supplier-from-polyglot
 logpodnotail order > $GRABDISH_LOG/testlog-order-from-polyglot
 
 ## SCALING
-#echo "TEST_LOG: #### Testing Lab4: Scaling"
-#utils/scaling-test.sh
+echo "TEST_LOG: #### Testing Lab4: Scaling"
+utils/scaling-test.sh
 #
 #
 ## TRACING
-#echo "TEST_LOG: #### Testing Lab5: Tracing"
-#utils/tracing-test.sh
+echo "TEST_LOG: #### Testing Lab5: Tracing"
+utils/tracing-test.sh
 
 
 # APEX
