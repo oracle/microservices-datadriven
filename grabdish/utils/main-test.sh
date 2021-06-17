@@ -23,7 +23,7 @@ export TEST_UI_PASSWORD=`kubectl get secret frontendadmin -n msdataworkshop --te
 echo 'TEST_LOG: #####################################'
 
 # WALKTHROUGH
-echo "TEST_LOG: #### Testing Lab2: Walkthrough"
+echo "TEST_LOG: #### Testing Lab2: Walkthrough Undeploy..."
 
 # Undeploy to make it rerunable
 ./undeploy.sh
@@ -40,7 +40,7 @@ while test 0 -lt `kubectl get pods -n msdataworkshop | egrep 'frontend-helidon|i
 done
 
 # Deploy the java services
-echo "TEST_LOG: #### Testing Lab2: Walkthrough"
+echo "TEST_LOG: #### Testing Lab2: Walkthrough Deploy..."
 cd $GRABDISH_HOME
 ./deploy.sh
 
@@ -90,11 +90,14 @@ fi
 
 # Functional test on order 66/67
 utils/func-test.sh Walkthrough 66
+logpodnotail frontend > $GRABDISH_LOG/testlog-frontend-from-Walkthrough
+logpodnotail supplier > $GRABDISH_LOG/testlog-supplier-from-Walkthrough
+logpodnotail order > $GRABDISH_LOG/testlog-order-from-Walkthrough
+logpodnotail inventory > $GRABDISH_LOG/testlog-inventory-from-Walkthrough
 
 
 # POLYGLOT
 echo "TEST_LOG: #### Testing Lab3: Polyglot"
-
 # Deploy each inventory service and perform functional test
 while ! $(state_get NON_JAVA_BUILDS); do
   sleep 10
@@ -102,14 +105,17 @@ while ! $(state_get NON_JAVA_BUILDS); do
 done
 
 utils/polyglot-test.sh
+echo writing log to $GRABDISH_LOG/testlog-frontend-from-polyglot
+logpodnotail frontend > $GRABDISH_LOG/testlog-frontend-from-polyglot
+logpodnotail supplier > $GRABDISH_LOG/testlog-supplier-from-polyglot
+logpodnotail order > $GRABDISH_LOG/testlog-order-from-polyglot
 
-
-# SCALING
+## SCALING
 echo "TEST_LOG: #### Testing Lab4: Scaling"
 utils/scaling-test.sh
-
-
-# TRACING
+#
+#
+## TRACING
 echo "TEST_LOG: #### Testing Lab5: Tracing"
 utils/tracing-test.sh
 
@@ -120,7 +126,7 @@ utils/tracing-test.sh
 
 # TRACING
 echo "TEST_LOG: #### Testing Lab7: Transactional Tests: Compare MongoDB, Postgres, and Kafka to Oracle DB with TEQ/AQ"
-utils/tracing-test.sh
+utils/crashrecovery-test.sh
 
 # TEARDOWN
 # source destroy.sh
