@@ -40,8 +40,7 @@ function showOrderTest() {
     if grep "$SEARCH_FOR" $GRABDISH_LOG/order >/dev/null; then
       echo "TEST_LOG: $TEST_STEP showOrder $ORDER_ID matched '$SEARCH_FOR'"
     else
-#      echo "TEST_LOG_FAILED: $TEST_STEP showOrder $ORDER_ID expected '$SEARCH_FOR' but got... " | tr '\n' ' ' ;cat $GRABDISH_LOG/order
-      echo "TEST_LOG: $TEST_STEP showOrder $ORDER_ID expected '$SEARCH_FOR' but got... " | tr '\n' ' ' ;cat $GRABDISH_LOG/order
+      echo "TEST_LOG_FAILED: $TEST_STEP showOrder $ORDER_ID expected '$SEARCH_FOR' but got... " | tr '\n' ' ' ;cat $GRABDISH_LOG/order
     fi
   else
     echo "TEST_LOG_FAILED: $TEST_STEP showOrder request $1 failed"
