@@ -36,11 +36,23 @@ spec:
         domain: nip.io
 EOF
 
+kubectl apply -f - <<EOF
+apiVersion: install.verrazzano.io/v1alpha1
+kind: Verrazzano
+metadata:
+  name: example-verrazzano
+spec:
+  profile: dev
+EOF
+
 echo Waiting for the installation to complete...
 kubectl wait \
     --timeout=20m \
     --for=condition=InstallComplete \
     verrazzano/example-verrazzano
+
+echo verrazzano resource description.....
+kubectl describe vz
 
 #(Optional) View the installation logs...
 #kubectl logs -f \

@@ -206,6 +206,11 @@
             <artifactId>oci-java-sdk-secrets</artifactId>
             <version>1.32.2</version>
         </dependency>
+        <dependency>
+            <groupId>io.opentracing.contrib</groupId>
+            <artifactId>opentracing-jms-1</artifactId>
+            <version>0.1.11</version>
+        </dependency>
     </dependencies>
 
 </project>

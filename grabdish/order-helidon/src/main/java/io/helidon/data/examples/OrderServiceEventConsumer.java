@@ -6,6 +6,7 @@
  */
 package io.helidon.data.examples;
 
+import io.opentracing.contrib.jms.common.TracingMessageConsumer;
 import oracle.jms.AQjmsConsumer;
 import oracle.jms.AQjmsFactory;
 import oracle.jms.AQjmsSession;
@@ -37,6 +38,7 @@ public class OrderServiceEventConsumer implements Runnable {
         QueueSession qsess = null;
         QueueConnection qconn = null;
         AQjmsConsumer consumer = null;
+        TracingMessageConsumer tracingMessageConsumer = null;;
         boolean done = false;
         while (!done) {
             try {
@@ -46,8 +48,10 @@ public class OrderServiceEventConsumer implements Runnable {
                     qconn.start();
                     Queue queue = ((AQjmsSession) qsess).getQueue(OrderResource.orderQueueOwner, OrderResource.inventoryQueueName);
                     consumer = (AQjmsConsumer) qsess.createConsumer(queue);
+                    tracingMessageConsumer = new TracingMessageConsumer(consumer, orderResource.getTracer());
                 }
                 if (consumer == null || qsess == null) continue;
+//                TextMessage textMessage = (TextMessage) tracingMessageConsumer.receive(-1);
                 TextMessage textMessage = (TextMessage) consumer.receive(-1);
                 String messageText = textMessage.getText();
                 System.out.println("messageText " + messageText);

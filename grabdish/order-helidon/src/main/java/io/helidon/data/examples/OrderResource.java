@@ -49,7 +49,7 @@ public class OrderResource {
     @Inject
     private Tracer tracer;
 
-    OrderServiceEventProducer orderServiceEventProducer = new OrderServiceEventProducer();
+    OrderServiceEventProducer orderServiceEventProducer = new OrderServiceEventProducer(this);
     static String regionId = System.getenv("OCI_REGION").trim();
     static String pwSecretOcid = System.getenv("VAULT_SECRET_OCID").trim();
     static String pwSecretFromK8s = System.getenv("dbpassword").trim();
@@ -98,6 +98,10 @@ public class OrderResource {
         System.out.println("OrderResource.startEventConsumerIfNotStarted startEventConsumer...");
         OrderServiceEventConsumer orderServiceEventConsumer = new OrderServiceEventConsumer(this);
         new Thread(orderServiceEventConsumer).start();
+    }
+
+    Tracer getTracer() {
+        return tracer;
     }
 
     @Operation(summary = "Places a new order",

@@ -157,7 +157,8 @@ queue_payload_type   => 'SYS.AQ\$_JMS_TEXT_MESSAGE',
 multiple_consumers   => true,
 compatible           => '8.1');
 
-DBMS_AQADM.CREATE_QUEUE (
+#DBMS_AQADM.CREATE_QUEUE (
+DBMS_AQADM.CREATE_SHARDED_QUEUE (
 queue_name          => '$ORDER_QUEUE',
 queue_table         => 'ORDERQUEUETABLE');
 
@@ -172,7 +173,8 @@ queue_table          => 'INVENTORYQUEUETABLE',
 queue_payload_type   => 'SYS.AQ\$_JMS_TEXT_MESSAGE',
 compatible           => '8.1');
 
-DBMS_AQADM.CREATE_QUEUE (
+#DBMS_AQADM.CREATE_QUEUE (
+DBMS_AQADM.CREATE_SHARDED_QUEUE (
 queue_name          => '$INVENTORY_QUEUE',
 queue_table         => 'INVENTORYQUEUETABLE');
 
