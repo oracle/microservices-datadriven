@@ -158,9 +158,19 @@ multiple_consumers   => true,
 compatible           => '8.1');
 
 #DBMS_AQADM.CREATE_QUEUE (
+#queue_name          => '$ORDER_QUEUE',
+#queue_table         => 'ORDERQUEUETABLE');
+
+#PROCEDURE CREATE_SHARDED_QUEUE (
+#    queue_name             IN VARCHAR2,
+#    storage_clause         IN VARCHAR2       DEFAULT NULL,
+#    multiple_consumers     IN BOOLEAN        DEFAULT FALSE,
+#    max_retries            IN NUMBER         DEFAULT NULL,
+#    comment                IN VARCHAR2       DEFAULT NULL);
+
 DBMS_AQADM.CREATE_SHARDED_QUEUE (
 queue_name          => '$ORDER_QUEUE',
-queue_table         => 'ORDERQUEUETABLE');
+multiple_consumers  => true);
 
 DBMS_AQADM.START_QUEUE (
 queue_name          => '$ORDER_QUEUE');
@@ -174,9 +184,19 @@ queue_payload_type   => 'SYS.AQ\$_JMS_TEXT_MESSAGE',
 compatible           => '8.1');
 
 #DBMS_AQADM.CREATE_QUEUE (
+#queue_name          => '$INVENTORY_QUEUE',
+#queue_table         => 'INVENTORYQUEUETABLE');
+
 DBMS_AQADM.CREATE_SHARDED_QUEUE (
 queue_name          => '$INVENTORY_QUEUE',
-queue_table         => 'INVENTORYQUEUETABLE');
+multiple_consumers  => true);
+
+DBMS_AQADM.START_QUEUE (
+queue_name          => '$INVENTORY_QUEUE');
+END;
+/
+!
+
 
 DBMS_AQADM.START_QUEUE (
 queue_name          => '$INVENTORY_QUEUE');
