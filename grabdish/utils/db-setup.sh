@@ -202,13 +202,6 @@ queue_name          => '$INVENTORY_QUEUE');
 END;
 /
 !
-
-
-DBMS_AQADM.START_QUEUE (
-queue_name          => '$INVENTORY_QUEUE');
-END;
-/
-!
   state_set_done ORDER_USER
 done
 
