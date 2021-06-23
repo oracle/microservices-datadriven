@@ -1,0 +1,27 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: prometheus-order
+  labels:
+    app: order
+spec:
+  endpoints:
+    - interval: 30s
+      port: http
+  selector:
+    matchLabels:
+      app: order
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: prometheus-inventory
+  labels:
+    app: inventory
+spec:
+  endpoints:
+    - interval: 30s
+      port: http
+  selector:
+    matchLabels:
+      app: inventory

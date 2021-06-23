@@ -10,6 +10,7 @@ kubectl apply -f prom_svc.yaml
 kubectl get service
 #kubectl port-forward svc/prometheus 9090
 kubectl apply -f prometheus_servicemonitor.yaml
+kubectl apply -f prom_msdataworkshop_servicemonitors.yaml
 
 kubectl create secret generic kubepromsecret \
   --from-literal=username=<your_grafana_cloud_prometheus_username>\
