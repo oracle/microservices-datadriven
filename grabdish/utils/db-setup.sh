@@ -170,7 +170,10 @@ compatible           => '8.1');
 
 DBMS_AQADM.CREATE_SHARDED_QUEUE (
 queue_name          => '$ORDER_QUEUE',
-multiple_consumers  => true);
+storage_clause      => null,
+multiple_consumers  => true,
+max_retries         => null,
+comment             => null);
 
 DBMS_AQADM.START_QUEUE (
 queue_name          => '$ORDER_QUEUE');
@@ -189,7 +192,10 @@ compatible           => '8.1');
 
 DBMS_AQADM.CREATE_SHARDED_QUEUE (
 queue_name          => '$INVENTORY_QUEUE',
-multiple_consumers  => true);
+storage_clause      => null,
+multiple_consumers  => true,
+max_retries         => null,
+comment             => null);
 
 DBMS_AQADM.START_QUEUE (
 queue_name          => '$INVENTORY_QUEUE');
