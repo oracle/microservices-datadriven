@@ -1,6 +1,6 @@
-Flask_restful
-gunicorn
-cx_Oracle
-simplejson
-oci
-
+###### Requirements without Version Specifiers ######`
+Flask_restful               # req for app.py
+gunicorn                    # req for config.py
+cx_Oracle                   # req for app.py, consumer.py
+simplejson                  # req for app.py, consumer.py
+oci                         # req for vaultsecret.py 
