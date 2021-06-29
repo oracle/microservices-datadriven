@@ -6,6 +6,8 @@
  */
 package io.helidon.data.examples;
 
+import io.opentracing.contrib.jms.TracingMessageProducer;
+import io.opentracing.contrib.jms.common.TracingMessageConsumer;
 import oracle.jdbc.internal.OraclePreparedStatement;
 import oracle.jms.*;
 
@@ -60,7 +62,7 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         QueueConnectionFactory qcfact = AQjmsFactory.getQueueConnectionFactory(inventoryResource.atpInventoryPDB);
         QueueSession qsess = null;
         QueueConnection qconn = null;
-        AQjmsConsumer consumer = null;
+        TracingMessageConsumer tracingMessageConsumer = null;;
 
         boolean done = false;
         while (!done) {
@@ -70,10 +72,11 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
                     qsess = qconn.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
                     qconn.start();
                     Queue queue = ((AQjmsSession) qsess).getQueue(inventoryResource.inventoryuser, inventoryResource.orderQueueName);
-                    consumer = (AQjmsConsumer) qsess.createConsumer(queue);
+                    AQjmsConsumer consumer = (AQjmsConsumer) qsess.createConsumer(queue);
+                    tracingMessageConsumer = new TracingMessageConsumer(consumer, inventoryResource.getTracer());
                 }
-                if (consumer == null) continue;
-                TextMessage orderMessage = (TextMessage) (consumer.receive(-1));  //todo address JMS-257: receive(long timeout) of javax.jms.MessageConsumer took more time than the network timeout configured at the java.sql.Connection.
+                if (tracingMessageConsumer == null) continue;
+                TextMessage orderMessage = (TextMessage) (tracingMessageConsumer.receive(-1));
                 String txt = orderMessage.getText();
                 System.out.println("txt " + txt);
                 System.out.print("JMSPriority: " + orderMessage.getJMSPriority());
@@ -105,13 +108,15 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         System.out.println("send inventory status message... jsonString:" + jsonString + " inventoryTopic:" + inventoryTopic);
         if (inventoryResource.crashAfterOrderMessageProcessed) System.exit(-1);
         TextMessage objmsg = session.createTextMessage();
-        TopicPublisher publisher = session.createPublisher(inventoryTopic);
+//        TopicPublisher publisher = session.createPublisher(inventoryTopic);
+        TracingMessageProducer producer = new TracingMessageProducer(session.createPublisher(inventoryTopic), inventoryResource.getTracer());
         objmsg.setIntProperty("Id", 1);
         objmsg.setIntProperty("Priority", 2);
         objmsg.setText(jsonString);
         objmsg.setJMSCorrelationID("" + 2);
         objmsg.setJMSPriority(2);
-        publisher.publish(inventoryTopic, objmsg, DeliveryMode.PERSISTENT, 2, AQjmsConstants.EXPIRATION_NEVER);
+//        publisher.publish(inventoryTopic, objmsg, DeliveryMode.PERSISTENT, 2, AQjmsConstants.EXPIRATION_NEVER);
+        producer.send(inventoryTopic, objmsg, DeliveryMode.PERSISTENT, 2, AQjmsConstants.EXPIRATION_NEVER);
     }
 
     private String evaluateInventory(AQjmsSession session, String id) throws JMSException, SQLException {

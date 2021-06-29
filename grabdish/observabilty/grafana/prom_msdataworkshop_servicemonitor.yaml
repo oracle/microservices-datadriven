@@ -3,11 +3,13 @@ kind: ServiceMonitor
 metadata:
   name: prometheus-order
   labels:
+    serviceMonitorSelector: prometheus
     app: order
+    release: stable
 spec:
   endpoints:
     - interval: 30s
-      port: http
+      port: metrics
   selector:
     matchLabels:
       app: order
@@ -17,11 +19,13 @@ kind: ServiceMonitor
 metadata:
   name: prometheus-inventory
   labels:
+    serviceMonitorSelector: prometheus
     app: inventory
+    release: stable
 spec:
   endpoints:
     - interval: 30s
-      port: http
+      port: metrics
   selector:
     matchLabels:
       app: inventory

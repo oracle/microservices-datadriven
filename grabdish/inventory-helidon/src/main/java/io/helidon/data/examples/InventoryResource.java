@@ -18,6 +18,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import io.opentracing.Tracer;
 import oracle.ucp.jdbc.PoolDataSource;
 
 @Path("/")
@@ -41,6 +42,9 @@ public class InventoryResource {
         System.setProperty("oracle.jdbc.fanEnabled", "false");
     }
 
+    @Inject
+    private Tracer tracer;
+
     public void init(@Observes @Initialized(ApplicationScoped.class) Object init) throws SQLException {
         System.out.println("InventoryResource.init " + init);
         String pw;
@@ -57,6 +61,10 @@ public class InventoryResource {
             System.out.println("InventoryResource.init connection:" + connection);
         }
         listenForMessages();
+    }
+
+    Tracer getTracer() {
+        return tracer;
     }
 
     @Path("/listenForMessages")

@@ -45,8 +45,7 @@ class OrderServiceEventProducer {
             Topic topic = ((AQjmsSession) session).getTopic(OrderResource.orderQueueOwner, OrderResource.orderQueueName);
             System.out.println("updateDataAndSendEvent topic:" + topic);
             TextMessage objmsg = session.createTextMessage();
-            TopicPublisher publisher = session.createPublisher(topic);
-            TracingMessageProducer producer = new TracingMessageProducer(publisher, orderResource.getTracer());
+            TracingMessageProducer producer = new TracingMessageProducer(session.createPublisher(topic), orderResource.getTracer());
             objmsg.setIntProperty("Id", 1);
             objmsg.setIntProperty("Priority", 2);
             String jsonString = JsonUtils.writeValueAsString(insertedOrder);

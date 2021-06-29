@@ -37,7 +37,6 @@ public class OrderServiceEventConsumer implements Runnable {
         QueueConnectionFactory q_cf = AQjmsFactory.getQueueConnectionFactory(orderResource.atpOrderPdb);
         QueueSession qsess = null;
         QueueConnection qconn = null;
-        AQjmsConsumer consumer = null;
         TracingMessageConsumer tracingMessageConsumer = null;;
         boolean done = false;
         while (!done) {
@@ -47,12 +46,11 @@ public class OrderServiceEventConsumer implements Runnable {
                     qsess = qconn.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
                     qconn.start();
                     Queue queue = ((AQjmsSession) qsess).getQueue(OrderResource.orderQueueOwner, OrderResource.inventoryQueueName);
-                    consumer = (AQjmsConsumer) qsess.createConsumer(queue);
+                    AQjmsConsumer consumer = (AQjmsConsumer) qsess.createConsumer(queue);
                     tracingMessageConsumer = new TracingMessageConsumer(consumer, orderResource.getTracer());
                 }
-                if (consumer == null || qsess == null) continue;
-//                TextMessage textMessage = (TextMessage) tracingMessageConsumer.receive(-1);
-                TextMessage textMessage = (TextMessage) consumer.receive(-1);
+                if (tracingMessageConsumer == null || qsess == null) continue;
+                TextMessage textMessage = (TextMessage) tracingMessageConsumer.receive(-1);
                 String messageText = textMessage.getText();
                 System.out.println("messageText " + messageText);
                 System.out.print(" Pri: " + textMessage.getJMSPriority());
