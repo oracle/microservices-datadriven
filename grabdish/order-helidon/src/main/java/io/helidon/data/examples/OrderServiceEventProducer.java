@@ -50,7 +50,7 @@ class OrderServiceEventProducer {
             objmsg.setIntProperty("Priority", 2);
             String jsonString = JsonUtils.writeValueAsString(insertedOrder);
             objmsg.setText(jsonString);
-            objmsg.setJMSCorrelationID("" + 1);
+//            objmsg.setJMSCorrelationID("" + 1);
             objmsg.setJMSPriority(2);
             producer.send(topic, objmsg, DeliveryMode.PERSISTENT, 2, AQjmsConstants.EXPIRATION_NEVER);
 //            publisher.publish(topic, objmsg, DeliveryMode.PERSISTENT,2, AQjmsConstants.EXPIRATION_NEVER);

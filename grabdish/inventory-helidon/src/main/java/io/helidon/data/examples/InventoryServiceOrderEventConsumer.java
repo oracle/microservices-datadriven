@@ -122,7 +122,7 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         objmsg.setIntProperty("Id", 1);
         objmsg.setIntProperty("Priority", 2);
         objmsg.setText(jsonString);
-        objmsg.setJMSCorrelationID("" + 2);
+//        objmsg.setJMSCorrelationID("" + 2);
         objmsg.setJMSPriority(2);
 //        publisher.publish(inventoryTopic, objmsg, DeliveryMode.PERSISTENT, 2, AQjmsConstants.EXPIRATION_NEVER);
         producer.send(inventoryTopic, objmsg, DeliveryMode.PERSISTENT, 2, AQjmsConstants.EXPIRATION_NEVER);
