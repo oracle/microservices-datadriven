@@ -22,11 +22,12 @@ helm install stable/prometheus-operator --generate-name
 #latest...
 kubectl apply -f prom_rbac.yaml -n msdataworkshop
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm install stable prometheus-community/kube-prometheus-stack
+helm install stable prometheus-community/kube-prometheus-stack --namespace=msdataworkshop
+kubectl --namespace msdataworkshop get pods -l "release=stable"
 kubectl get pods
 kubectl get svc
-kubectl edit svc stable-kube-prometheus-sta-prometheus
-kubectl edit svc stable-grafana
+kubectl edit svc stable-kube-prometheus-sta-prometheus -n msdataworkshop
+kubectl edit svc stable-grafana -n msdataworkshop
 # admin/prom-operator
 #MicroProfile https://grafana.com/grafana/dashboards/12853
 #Fault Tolerance https://grafana.com/grafana/dashboards/8022
