@@ -15,7 +15,7 @@ spec:
         app: db-teq-exporter
     spec:
       containers:
-        - name: inventory
+        - name: db-teq-exporter
           image: iamseth/oracledb_exporter:latest
           imagePullPolicy: Always
           env:
@@ -32,8 +32,8 @@ spec:
               value: "%OCI_REGION%"
             - name: VAULT_SECRET_OCID
               value: "%VAULT_SECRET_OCID%"
-#            - name: CUSTOM_METRICS
-#              value: /default-metrics.toml todo mount this from file
+            - name: CUSTOM_METRICS
+              value: /msdataworkshop/observability/db-teq-exporter-metrics.toml
             - name: DATA_SOURCE_NAME
               value: "admin/Welcome12345;#!:@gdpaulobi_tp"
 #              value: "admin/Welcome12345;#!:@%INVENTORY_PDB_NAME%_tp"
@@ -47,6 +47,9 @@ spec:
             - name: creds
               mountPath: /msdataworkshop/creds
           #          mountPath: /lib/oracle/instantclient_19_3/client64/lib/network/admin # 19.10
+            - name: config-volume
+              mountPath: /msdataworkshop/observability/db-teq-exporter-metrics.toml
+#              subPath: db-teq-exporter-metrics.toml
           ports:
             - containerPort: 8080
       restartPolicy: Always
@@ -54,3 +57,6 @@ spec:
         - name: creds
           secret:
             secretName: db-wallet-secret
+        - name: config-volume
+          configMap:
+            name: db-teq-exporter-config
