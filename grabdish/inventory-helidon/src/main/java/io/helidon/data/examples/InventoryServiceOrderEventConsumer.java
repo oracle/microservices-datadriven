@@ -63,8 +63,7 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         QueueConnectionFactory qcfact = AQjmsFactory.getQueueConnectionFactory(inventoryResource.atpInventoryPDB);
         QueueSession qsess = null;
         QueueConnection qconn = null;
-        TracingMessageConsumer tracingMessageConsumer = null;;
-
+        TracingMessageConsumer tracingMessageConsumer = null;
         boolean done = false;
         while (!done) {
             try {
@@ -100,7 +99,6 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
     }
 
     private void updateDataAndSendEventOnInventory(AQjmsSession session, String orderid, String itemid) throws Exception {
-
         if (inventoryResource.crashAfterOrderMessageReceived) System.exit(-1);
         String inventorylocation = evaluateInventory(session, itemid);
         Inventory inventory = new Inventory(orderid, itemid, inventorylocation, "beer"); //static suggestiveSale - represents an additional service/event
@@ -109,6 +107,7 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         activeSpan.setTag("orderid", orderid); //tags are annotations of spans in order to query, filter, and comprehend trace data
         activeSpan.setTag("itemid", itemid);
         activeSpan.setTag("inventorylocation", inventorylocation); // https://github.com/opentracing/specification/blob/master/semantic_conventions.md
+        activeSpan.setTag("dbConnection.getMetaData()", dbConnection.getMetaData().toString()); // https://github.com/opentracing/specification/blob/master/semantic_conventions.md
         activeSpan.setBaggageItem("sagaid", "testsagaid" + orderid); //baggage is part of SpanContext and carries data across process boundaries for access throughout the trace
         activeSpan.setBaggageItem("orderid", orderid);
         activeSpan.setBaggageItem("inventorylocation", inventorylocation);

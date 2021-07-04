@@ -1,0 +1,56 @@
+## Copyright (c) 2021 Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-teq-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-teq-exporter
+  template:
+    metadata:
+      labels:
+        app: db-teq-exporter
+    spec:
+      containers:
+        - name: inventory
+          image: iamseth/oracledb_exporter:latest
+          imagePullPolicy: Always
+          env:
+            - name: user
+              value: "admin"
+            - name: TNS_ADMIN
+              value: "/msdataworkshop/creds"
+            #          value: "/lib/oracle/instantclient_19_3/client64/lib/network/admin"
+            - name: INVENTORY_PDB_NAME
+              value: "%INVENTORY_PDB_NAME%_tp"
+            - name: OCI_REGION
+              value: "%OCI_REGION%"
+            - name: OCI_REGION
+              value: "%OCI_REGION%"
+            - name: VAULT_SECRET_OCID
+              value: "%VAULT_SECRET_OCID%"
+#            - name: CUSTOM_METRICS
+#              value: /default-metrics.toml todo mount this from file
+            - name: DATA_SOURCE_NAME
+              value: "admin/Welcome12345;#!:@gdpaulobi_tp"
+#              value: "admin/Welcome12345;#!:@%INVENTORY_PDB_NAME%_tp"
+            - name: dbpassword
+              valueFrom:
+                secretKeyRef:
+                  name: dbuser
+                  key: dbpassword
+                  optional: true #not needed/used if using VAULT_SECRET_OCID exists
+          volumeMounts:
+            - name: creds
+              mountPath: /msdataworkshop/creds
+          #          mountPath: /lib/oracle/instantclient_19_3/client64/lib/network/admin # 19.10
+          ports:
+            - containerPort: 8080
+      restartPolicy: Always
+      volumes:
+        - name: creds
+          secret:
+            secretName: db-wallet-secret

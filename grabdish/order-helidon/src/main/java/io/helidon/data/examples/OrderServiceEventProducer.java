@@ -34,8 +34,6 @@ class OrderServiceEventProducer {
         try {
             TopicConnectionFactory q_cf = AQjmsFactory.getTopicConnectionFactory(dataSource);
             TopicConnection q_conn = q_cf.createTopicConnection();
-
-
             session = q_conn.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
             Connection jdbcConnection = ((AQjmsSession) session).getDBConnection();
             System.out.println("updateDataAndSendEvent jdbcConnection:" + jdbcConnection + " about to insertOrderViaSODA...");
