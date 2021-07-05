@@ -60,11 +60,6 @@ labels = ["inst_id", "name"]
 metricsdesc = { value = "Generic counter metric from gv$sysstat view in Oracle." }
 request = "select inst_id, name, value from gv$sysstat where name IN ('parse count (total)', 'execute count', 'user commits', 'user rollbacks')"
 
-[[metric]]
-context = "process"
-labels = ["inst_id"]
-metricsdesc = { count = "Gauge metric with count of processes." }
-request = "select inst_id, count(*) as count from gv$process group by inst_id"
 
 [[metric]]
 context = "wait_class"
