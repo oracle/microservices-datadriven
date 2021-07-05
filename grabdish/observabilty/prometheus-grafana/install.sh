@@ -13,7 +13,7 @@ kubectl apply -f prom_msdataworkshop_servicemonitor.yaml -n msdataworkshop
 kubectl create configmap db-teq-exporter-config --from-file=./db-teq-exporter-metrics.toml -n msdataworkshop
 kubectl describe configmap db-teq-exporter-config -n msdataworkshop
 kubectl get configmap db-teq-exporter-config  -n msdataworkshop -o yaml
-#kubectl delete configmap db-teq-exporter-config  -n msdataworkshop -o yaml
+#kubectl delete configmap db-teq-exporter-config  -n msdataworkshop
 kubectl apply -f db-teq-exporter-deployment.yaml -n msdataworkshop
 kubectl apply -f db-teq-exporter-service.yaml -n msdataworkshop
 
