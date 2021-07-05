@@ -13,7 +13,9 @@ kubectl apply -f prom_msdataworkshop_servicemonitor.yaml -n msdataworkshop
 # admin/prom-operator
 #MicroProfile https://grafana.com/grafana/dashboards/12853
 #Fault Tolerance https://grafana.com/grafana/dashboards/8022
-kubectl create configmap db-teq-exporter-config --from-file=./db-teq-exporter-metrics.toml
+kubectl create configmap db-teq-exporter-config --from-file=CUSTOM_METRICS=./db-teq-exporter-metrics.toml -n msdataworkshop
+kubectl create configmap db-teq-exporter-config ./db-teq-exporter-metrics.toml -n msdataworkshop
+kubectl get configmap db-teq-exporter-config  -n msdataworkshop -o yaml
 kubectl apply -f db-teq-exporter-deployment.yaml -n msdataworkshop
 kubectl apply -f db-teq-exporter-service.yaml -n msdataworkshop
 
