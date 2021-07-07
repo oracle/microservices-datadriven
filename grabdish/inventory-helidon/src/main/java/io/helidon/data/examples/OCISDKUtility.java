@@ -16,7 +16,7 @@ import org.apache.commons.codec.binary.Base64;
 public class OCISDKUtility {
 
     static String getSecreteFromVault(boolean isInstancePrincipal, String regionIdString, String secretOcid)  {
-        System.out.println("ATPAQAdminResource.getSecretFromVault isInstancePrincipal:" + isInstancePrincipal);
+        System.out.println("OCISDKUtility.getSecretFromVault isInstancePrincipal:" + isInstancePrincipal);
         SecretsClient secretsClient = new SecretsClient(InstancePrincipalsAuthenticationDetailsProvider.builder().build());
         secretsClient.setRegion(regionIdString);
         GetSecretBundleRequest getSecretBundleRequest = GetSecretBundleRequest
