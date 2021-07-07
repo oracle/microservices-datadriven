@@ -55,14 +55,20 @@ func main() {
 func listenForMessages(ctx context.Context, db *sql.DB) {
 
 	for {
-	    fmt.Printf("Listening for messages...")
 
 		tx, err := db.BeginTx(ctx, nil)
+		if err != nil {
+//         		t.Fatal(err)
+	            fmt.Printf("Error during db.BeginTx(ctx, nil): %s\n", err)
+        }
+	    defer tx.Rollback()
+	    fmt.Printf("Listening for messages...tx: %s\n", tx)
 		// fmt.Println("__________________________________________")
 		//receive order...
 		var orderJSON string
 		dequeueOrderMessageSproc := `BEGIN dequeueOrderMessage(:1); END;`
-		if _, err := db.ExecContext(ctx, dequeueOrderMessageSproc, sql.Out{Dest: &orderJSON}); err != nil {
+// 		if _, err := db.ExecContext(ctx, dequeueOrderMessageSproc, sql.Out{Dest: &orderJSON}); err != nil {
+		if _, err := tx.ExecContext(ctx,  dequeueOrderMessageSproc, sql.Out{Dest: &orderJSON}); err != nil {
 			log.Printf("Error running %q: %+v", dequeueOrderMessageSproc, err)
 			return
 		}
@@ -89,7 +95,8 @@ func listenForMessages(ctx context.Context, db *sql.DB) {
 		//check inventory...
 		var inventorylocation string
 		sqlString := "update INVENTORY set INVENTORYCOUNT = INVENTORYCOUNT - 1 where INVENTORYID = :inventoryid and INVENTORYCOUNT > 0 returning inventorylocation into :inventorylocation"
-		_, errFromInventoryCheck := db.Exec(sqlString, sql.Named("inventoryid", order.Itemid), sql.Named("inventorylocation", sql.Out{Dest: &inventorylocation}))
+// 		_, errFromInventoryCheck := db.Exec(sqlString, sql.Named("inventoryid", order.Itemid), sql.Named("inventorylocation", sql.Out{Dest: &inventorylocation}))
+		_, errFromInventoryCheck := tx.ExecContext(ctx, sqlString, sql.Named("inventoryid", order.Itemid), sql.Named("inventorylocation", sql.Out{Dest: &inventorylocation}))
 		if err != nil {
 			fmt.Println("errFromInventoryCheck: %s", errFromInventoryCheck)
 		}
@@ -123,7 +130,8 @@ func listenForMessages(ctx context.Context, db *sql.DB) {
 		inventoryJsonString := string(inventoryJsonData)
 		fmt.Println("inventoryJsonData:" + inventoryJsonString) // :inventoryid
 		messageSendSproc := `BEGIN enqueueInventoryMessage(:1); END;`
-		if _, err := db.ExecContext(ctx, messageSendSproc, inventoryJsonString); err != nil {
+// 		if _, err := db.ExecContext(ctx, messageSendSproc, inventoryJsonString); err != nil {
+		if _, err := tx.ExecContext(ctx, messageSendSproc, inventoryJsonString); err != nil {
 			log.Printf("Error running %q: %+v", messageSendSproc, err)
 			return
 		}
