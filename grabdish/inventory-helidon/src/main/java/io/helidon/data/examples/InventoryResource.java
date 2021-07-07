@@ -28,9 +28,9 @@ public class InventoryResource {
     @Inject
     @Named("inventorypdb")
     PoolDataSource atpInventoryPDB;
-    static String regionId = System.getenv("OCI_REGION").trim();
-    static String pwSecretOcid = System.getenv("VAULT_SECRET_OCID").trim();
-    static String pwSecretFromK8s = System.getenv("dbpassword").trim();
+    static String regionId = System.getenv("OCI_REGION");
+    static String pwSecretOcid = System.getenv("VAULT_SECRET_OCID");
+    static String pwSecretFromK8s = System.getenv("dbpassword");
     static String inventoryuser = "INVENTORYUSER";
     static String inventorypw;
     static String inventoryQueueName = "inventoryqueue";
@@ -48,7 +48,7 @@ public class InventoryResource {
     public void init(@Observes @Initialized(ApplicationScoped.class) Object init) throws SQLException {
         System.out.println("InventoryResource.init " + init);
         String pw;
-        if(!pwSecretOcid.trim().equals("")) {
+        if(pwSecretOcid != null && !pwSecretOcid.equals("")) {
             pw = OCISDKUtility.getSecreteFromVault(true, regionId, pwSecretOcid);
         } else {
             pw = pwSecretFromK8s;

@@ -95,10 +95,10 @@ namespace inventory_dotnet
             )
             {
                 connection.Open();
-                Console.WriteLine("listening for messages...");
                 while (true) {
                     try
                     {
+                        Console.WriteLine("listening for messages...");
                         OracleTransaction tx = connection.BeginTransaction();
                         //dequeue from order queues (out param)
                         OracleCommand orderReceiveMessageCommand = new OracleCommand();
