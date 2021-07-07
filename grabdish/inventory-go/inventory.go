@@ -55,6 +55,8 @@ func main() {
 func listenForMessages(ctx context.Context, db *sql.DB) {
 
 	for {
+	    fmt.Printf("Listening for messages...")
+
 		tx, err := db.BeginTx(ctx, nil)
 		// fmt.Println("__________________________________________")
 		//receive order...
