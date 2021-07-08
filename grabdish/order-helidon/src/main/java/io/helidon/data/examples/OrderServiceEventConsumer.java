@@ -38,7 +38,10 @@ public class OrderServiceEventConsumer implements Runnable {
         QueueSession qsess = null;
         QueueConnection qconn = null;
         MessageConsumer consumer = null;
-//        TracingMessageConsumer tracingMessageConsumer = null; //python (and perhaps nodejs) message causes javax.jms.MessageFormatException: JMS-117: Conversion failed - invalid property type
+        //python (and likely nodejs) message causes javax.jms.MessageFormatException: JMS-117: Conversion failed - invalid property type
+        //due to message.getObjectProperty(key) here...
+        // https://github.com/opentracing-contrib/java-jms/blob/c9c445c374159cd8eadcbc9af0994a788baf0c5c/opentracing-jms-common/src/main/java/io/opentracing/contrib/jms/common/JmsTextMapExtractAdapter.java#L41
+//        TracingMessageConsumer tracingMessageConsumer = null;
         boolean done = false;
         while (!done) {
             try {
