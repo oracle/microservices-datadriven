@@ -95,10 +95,11 @@ namespace inventory_dotnet
             )
             {
                 connection.Open();
-                Console.WriteLine("listening for messages...");
                 while (true) {
                     try
                     {
+                        Console.WriteLine("listening for messages...");
+                        OracleTransaction tx = connection.BeginTransaction();
                         //dequeue from order queues (out param)
                         OracleCommand orderReceiveMessageCommand = new OracleCommand();
                         orderReceiveMessageCommand.Connection = connection;
@@ -119,10 +120,8 @@ namespace inventory_dotnet
                         }
                         Order order;
                         try {
-                            order =
-                            JsonConvert
-                                .DeserializeObject<Order>("" +
-                                orderReceiveMessageCommand.Parameters["p_orderInfo"].Value);
+                            order = JsonConvert.DeserializeObject<Order>(
+                                "" + orderReceiveMessageCommand.Parameters["p_orderInfo"].Value);
                         } catch (System.NullReferenceException ex)  {
                             Console.WriteLine("message was null" + ex);
                             System.Threading.Thread.Sleep(1000);
@@ -207,6 +206,7 @@ namespace inventory_dotnet
                             p_inventoryInfoParam
                         );
                         inventorySendMessageCommand.ExecuteNonQuery();
+                        tx.Commit();
                     }
                     catch (NullReferenceException ex) {
                         if(ex != null) System.Threading.Thread.Sleep(1000);

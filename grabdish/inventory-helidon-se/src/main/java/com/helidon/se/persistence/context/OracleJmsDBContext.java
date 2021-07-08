@@ -82,12 +82,10 @@ public class OracleJmsDBContext extends DBContext {
         Topic topic = ((AQjmsSession) session).getTopic(owner, queueName);
         TopicPublisher publisher = session.createPublisher(topic);
         TextMessage jmsMessage = session.createTextMessage(JsonUtils.writeValueAsString(message));
-        // <stub for msdataworkshop>
         jmsMessage.setIntProperty("Id", 1);
         jmsMessage.setIntProperty("Priority", 2);
-        jmsMessage.setJMSCorrelationID("" + 2);
+//        jmsMessage.setJMSCorrelationID("" + 2);
         jmsMessage.setJMSPriority(2);
-        // </stub for msdataworkshop>
         publisher.publish(topic, jmsMessage, DeliveryMode.PERSISTENT,2, AQjmsConstants.EXPIRATION_NEVER);
         session.commit();
         String id = jmsMessage.getJMSMessageID();
@@ -100,8 +98,6 @@ public class OracleJmsDBContext extends DBContext {
         getConnection(); // using for init connections if needed
         Queue queue = ((AQjmsSession) session).getQueue(owner, queueName);
         MessageConsumer consumer = session.createConsumer(queue);
-
-        // -1 means wait forever
         TextMessage message = (TextMessage) consumer.receive(-1);
         if (message != null) {
             String id = message.getJMSMessageID();

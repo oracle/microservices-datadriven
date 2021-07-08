@@ -12,8 +12,8 @@ IS
   pragma                exception_init(no_messages, -25228);
           
 BEGIN
-  dequeue_options.wait := dbms_aq.NO_WAIT;
-  -- dequeue_options.wait := dbms_aq.FOREVER;
+--  dequeue_options.wait := dbms_aq.NO_WAIT;
+   dequeue_options.wait := dbms_aq.FOREVER;
   -- dequeue_options.navigation := dbms_aq.FIRST_MESSAGE;
   -- dequeue_options.dequeue_mode := dbms_aq.LOCKED;
 
@@ -34,8 +34,6 @@ BEGIN
     WHEN no_messages THEN
     BEGIN
       p_orderInfo := '';
---      p_action := '';
---      p_orderid := 0;
     END;
     WHEN OTHERS THEN
      RAISE;

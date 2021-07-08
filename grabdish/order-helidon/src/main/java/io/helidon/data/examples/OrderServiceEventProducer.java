@@ -6,6 +6,7 @@
  */
 package io.helidon.data.examples;
 
+import io.opentracing.contrib.jms.TracingMessageProducer;
 import oracle.jms.AQjmsConstants;
 import oracle.jms.AQjmsFactory;
 import oracle.jms.AQjmsSession;
@@ -18,8 +19,13 @@ import oracle.soda.OracleException;
 
 class OrderServiceEventProducer {
 
+    OrderResource orderResource;
 
-     String updateDataAndSendEvent(
+    public OrderServiceEventProducer(OrderResource orderResource) {
+        this.orderResource = orderResource;
+    }
+
+    String updateDataAndSendEvent(
             DataSource dataSource, String orderid, String itemid, String deliverylocation) throws Exception {
         System.out.println("updateDataAndSendEvent enter dataSource:" + dataSource +
                 ", itemid:" + itemid + ", orderid:" + orderid +
@@ -37,14 +43,15 @@ class OrderServiceEventProducer {
             Topic topic = ((AQjmsSession) session).getTopic(OrderResource.orderQueueOwner, OrderResource.orderQueueName);
             System.out.println("updateDataAndSendEvent topic:" + topic);
             TextMessage objmsg = session.createTextMessage();
-            TopicPublisher publisher = session.createPublisher(topic);
+            TracingMessageProducer producer = new TracingMessageProducer(session.createPublisher(topic), orderResource.getTracer());
             objmsg.setIntProperty("Id", 1);
             objmsg.setIntProperty("Priority", 2);
             String jsonString = JsonUtils.writeValueAsString(insertedOrder);
             objmsg.setText(jsonString);
-            objmsg.setJMSCorrelationID("" + 1);
+//            objmsg.setJMSCorrelationID("" + 1);
             objmsg.setJMSPriority(2);
-            publisher.publish(topic, objmsg, DeliveryMode.PERSISTENT,2, AQjmsConstants.EXPIRATION_NEVER);
+            producer.send(topic, objmsg, DeliveryMode.PERSISTENT, 2, AQjmsConstants.EXPIRATION_NEVER);
+//            publisher.publish(topic, objmsg, DeliveryMode.PERSISTENT,2, AQjmsConstants.EXPIRATION_NEVER);
             session.commit();
             System.out.println("updateDataAndSendEvent committed JSON order in database and sent message in the same tx with payload:" + jsonString);
             return topic.toString();

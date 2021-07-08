@@ -1,0 +1,47 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: prometheus-order
+  labels:
+    serviceMonitorSelector: prometheus
+    app: order
+    release: stable
+spec:
+  endpoints:
+    - interval: 30s
+      port: metrics
+  selector:
+    matchLabels:
+      app: order
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: prometheus-inventory
+  labels:
+    serviceMonitorSelector: prometheus
+    app: inventory
+    release: stable
+spec:
+  endpoints:
+    - interval: 30s
+      port: metrics
+  selector:
+    matchLabels:
+      app: inventory
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: prometheus-db-teq-exporter
+  labels:
+    serviceMonitorSelector: prometheus
+    app: db-teq-exporter
+    release: stable
+spec:
+  endpoints:
+    - interval: 30s
+      port: metrics
+  selector:
+    matchLabels:
+      app: db-teq-exporter

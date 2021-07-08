@@ -22,27 +22,14 @@ kubectl -n verrazzano-install rollout status deployment/verrazzano-platform-oper
 echo Confirming that the operator pod is correctly defined and running...
 kubectl -n verrazzano-install get pods
 
-echo Installing Verrazzano with its dev profile... this will take approximately 20 minutes...
+echo Installing Verrazzano with its managed-cluster profile... this will take approximately 20 minutes...
 kubectl apply -f - <<EOF
 apiVersion: install.verrazzano.io/v1alpha1
 kind: Verrazzano
 metadata:
   name: example-verrazzano
 spec:
-  profile: dev
-  components:
-    dns:
-      wildcard:
-        domain: nip.io
-EOF
-
-kubectl apply -f - <<EOF
-apiVersion: install.verrazzano.io/v1alpha1
-kind: Verrazzano
-metadata:
-  name: example-verrazzano
-spec:
-  profile: dev
+  profile: managed-cluster
 EOF
 
 echo Waiting for the installation to complete...
@@ -50,9 +37,6 @@ kubectl wait \
     --timeout=20m \
     --for=condition=InstallComplete \
     verrazzano/example-verrazzano
-
-echo verrazzano resource description.....
-kubectl describe vz
 
 #(Optional) View the installation logs...
 #kubectl logs -f \

@@ -49,10 +49,10 @@ public class OrderResource {
     @Inject
     private Tracer tracer;
 
-    OrderServiceEventProducer orderServiceEventProducer = new OrderServiceEventProducer();
-    static String regionId = System.getenv("OCI_REGION").trim();
-    static String pwSecretOcid = System.getenv("VAULT_SECRET_OCID").trim();
-    static String pwSecretFromK8s = System.getenv("dbpassword").trim();
+    OrderServiceEventProducer orderServiceEventProducer = new OrderServiceEventProducer(this);
+    static String regionId = System.getenv("OCI_REGION");
+    static String pwSecretOcid = System.getenv("VAULT_SECRET_OCID");
+    static String pwSecretFromK8s = System.getenv("dbpassword");
     static final String orderQueueOwner = "ORDERUSER";
     static final String orderQueueName = "orderqueue";
     static final String inventoryQueueName = "inventoryqueue";
@@ -77,7 +77,7 @@ public class OrderResource {
         System.out.println("OrderResource.init " + init);
         atpOrderPdb.setUser(orderQueueOwner);
         String pw;
-        if(!pwSecretOcid.trim().equals("")) {
+        if(pwSecretOcid != null && !pwSecretOcid.trim().equals("")) {
             pw = OCISDKUtility.getSecreteFromVault(true, regionId, pwSecretOcid);
         } else {
             pw = pwSecretFromK8s;
@@ -98,6 +98,10 @@ public class OrderResource {
         System.out.println("OrderResource.startEventConsumerIfNotStarted startEventConsumer...");
         OrderServiceEventConsumer orderServiceEventConsumer = new OrderServiceEventConsumer(this);
         new Thread(orderServiceEventConsumer).start();
+    }
+
+    Tracer getTracer() {
+        return tracer;
     }
 
     @Operation(summary = "Places a new order",

@@ -6,6 +6,9 @@
  */
 package io.helidon.data.examples;
 
+import io.opentracing.Span;
+import io.opentracing.contrib.jms.TracingMessageProducer;
+import io.opentracing.contrib.jms.common.TracingMessageConsumer;
 import oracle.jdbc.internal.OraclePreparedStatement;
 import oracle.jms.*;
 
@@ -27,16 +30,23 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Receive messages...");
+        boolean isPLSQL = Boolean.valueOf(System.getProperty("isPLSQL", "false"));
+        boolean isRollback = Boolean.valueOf(System.getProperty("isRollback", "false"));
+        boolean isAutoCommit = Boolean.valueOf(System.getProperty("isAutoCommit", "false"));
+        System.out.println("Receive messages... isPLSQL:" + isPLSQL);
+        System.out.println("... isRollback:" + isRollback);
+        System.out.println("... isAutoCommit:" + isAutoCommit);
         try {
-            listenForOrderEvents();
+            if (isPLSQL)listenForOrderEventsPLSQL(isRollback, isAutoCommit);
+            else listenForOrderEvents();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void listenForOrderEventsPLSQL() throws Exception {
+    public void listenForOrderEventsPLSQL(boolean isRollback, boolean isAutoCommit) throws Exception {
         Connection connection = inventoryResource.atpInventoryPDB.getConnection();
+    if(!isAutoCommit)    connection.setAutoCommit(false);
         while (true) {
             System.out.println("InventoryServiceOrderEventConsumer.listenForOrderEvents with sproc");
             CallableStatement cstmt = null;
@@ -50,8 +60,11 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
                 ResultSet rs = cstmt.getResultSet();
                 hadResults = cstmt.getMoreResults();
             }
-            String outputValue = cstmt.getString(1); // index-based
-            connection.rollback();
+            String outputValue = cstmt.getString(1);
+            if (!isAutoCommit) {
+                if (isRollback) connection.rollback();
+                else connection.commit();
+            }
             System.out.println("InventoryServiceOrderEventConsumer.listenForOrderEvents outputValue:" + outputValue);
         }
     }
@@ -60,8 +73,7 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         QueueConnectionFactory qcfact = AQjmsFactory.getQueueConnectionFactory(inventoryResource.atpInventoryPDB);
         QueueSession qsess = null;
         QueueConnection qconn = null;
-        AQjmsConsumer consumer = null;
-
+        TracingMessageConsumer tracingMessageConsumer = null;
         boolean done = false;
         while (!done) {
             try {
@@ -70,10 +82,11 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
                     qsess = qconn.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
                     qconn.start();
                     Queue queue = ((AQjmsSession) qsess).getQueue(inventoryResource.inventoryuser, inventoryResource.orderQueueName);
-                    consumer = (AQjmsConsumer) qsess.createConsumer(queue);
+                    AQjmsConsumer consumer = (AQjmsConsumer) qsess.createConsumer(queue);
+                    tracingMessageConsumer = new TracingMessageConsumer(consumer, inventoryResource.getTracer());
                 }
-                if (consumer == null) continue;
-                TextMessage orderMessage = (TextMessage) (consumer.receive(-1));  //todo address JMS-257: receive(long timeout) of javax.jms.MessageConsumer took more time than the network timeout configured at the java.sql.Connection.
+                if (tracingMessageConsumer == null) continue;
+                TextMessage orderMessage = (TextMessage) (tracingMessageConsumer.receive(-1));
                 String txt = orderMessage.getText();
                 System.out.println("txt " + txt);
                 System.out.print("JMSPriority: " + orderMessage.getJMSPriority());
@@ -96,22 +109,32 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
     }
 
     private void updateDataAndSendEventOnInventory(AQjmsSession session, String orderid, String itemid) throws Exception {
-
         if (inventoryResource.crashAfterOrderMessageReceived) System.exit(-1);
         String inventorylocation = evaluateInventory(session, itemid);
         Inventory inventory = new Inventory(orderid, itemid, inventorylocation, "beer"); //static suggestiveSale - represents an additional service/event
+        Span activeSpan = inventoryResource.getTracer().buildSpan("inventorylocation").asChildOf(inventoryResource.getTracer().activeSpan()).start();
+        activeSpan.log("begin placing order"); // logs are for a specific moment or event within the span (in contrast to tags which should apply to the span regardless of time).
+        activeSpan.setTag("orderid", orderid); //tags are annotations of spans in order to query, filter, and comprehend trace data
+        activeSpan.setTag("itemid", itemid);
+        activeSpan.setTag("inventorylocation", inventorylocation); // https://github.com/opentracing/specification/blob/master/semantic_conventions.md
+        activeSpan.setTag("dbConnection.getMetaData()", dbConnection.getMetaData().toString()); // https://github.com/opentracing/specification/blob/master/semantic_conventions.md
+        activeSpan.setBaggageItem("sagaid", "testsagaid" + orderid); //baggage is part of SpanContext and carries data across process boundaries for access throughout the trace
+        activeSpan.setBaggageItem("orderid", orderid);
+        activeSpan.setBaggageItem("inventorylocation", inventorylocation);
         String jsonString = JsonUtils.writeValueAsString(inventory);
         Topic inventoryTopic = session.getTopic(InventoryResource.inventoryuser, InventoryResource.inventoryQueueName);
         System.out.println("send inventory status message... jsonString:" + jsonString + " inventoryTopic:" + inventoryTopic);
         if (inventoryResource.crashAfterOrderMessageProcessed) System.exit(-1);
         TextMessage objmsg = session.createTextMessage();
-        TopicPublisher publisher = session.createPublisher(inventoryTopic);
+//        TopicPublisher publisher = session.createPublisher(inventoryTopic);
+        TracingMessageProducer producer = new TracingMessageProducer(session.createPublisher(inventoryTopic), inventoryResource.getTracer());
         objmsg.setIntProperty("Id", 1);
         objmsg.setIntProperty("Priority", 2);
         objmsg.setText(jsonString);
-        objmsg.setJMSCorrelationID("" + 2);
+//        objmsg.setJMSCorrelationID("" + 2);
         objmsg.setJMSPriority(2);
-        publisher.publish(inventoryTopic, objmsg, DeliveryMode.PERSISTENT, 2, AQjmsConstants.EXPIRATION_NEVER);
+//        publisher.publish(inventoryTopic, objmsg, DeliveryMode.PERSISTENT, 2, AQjmsConstants.EXPIRATION_NEVER);
+        producer.send(inventoryTopic, objmsg, DeliveryMode.PERSISTENT, 2, AQjmsConstants.EXPIRATION_NEVER);
     }
 
     private String evaluateInventory(AQjmsSession session, String id) throws JMSException, SQLException {

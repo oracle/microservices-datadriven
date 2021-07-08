@@ -18,6 +18,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import io.opentracing.Tracer;
 import oracle.ucp.jdbc.PoolDataSource;
 
 @Path("/")
@@ -27,9 +28,9 @@ public class InventoryResource {
     @Inject
     @Named("inventorypdb")
     PoolDataSource atpInventoryPDB;
-    static String regionId = System.getenv("OCI_REGION").trim();
-    static String pwSecretOcid = System.getenv("VAULT_SECRET_OCID").trim();
-    static String pwSecretFromK8s = System.getenv("dbpassword").trim();
+    static String regionId = System.getenv("OCI_REGION");
+    static String pwSecretOcid = System.getenv("VAULT_SECRET_OCID");
+    static String pwSecretFromK8s = System.getenv("dbpassword");
     static String inventoryuser = "INVENTORYUSER";
     static String inventorypw;
     static String inventoryQueueName = "inventoryqueue";
@@ -41,10 +42,13 @@ public class InventoryResource {
         System.setProperty("oracle.jdbc.fanEnabled", "false");
     }
 
+    @Inject
+    private Tracer tracer;
+
     public void init(@Observes @Initialized(ApplicationScoped.class) Object init) throws SQLException {
         System.out.println("InventoryResource.init " + init);
         String pw;
-        if(!pwSecretOcid.trim().equals("")) {
+        if(pwSecretOcid != null && !pwSecretOcid.equals("")) {
             pw = OCISDKUtility.getSecreteFromVault(true, regionId, pwSecretOcid);
         } else {
             pw = pwSecretFromK8s;
@@ -57,6 +61,10 @@ public class InventoryResource {
             System.out.println("InventoryResource.init connection:" + connection);
         }
         listenForMessages();
+    }
+
+    Tracer getTracer() {
+        return tracer;
     }
 
     @Path("/listenForMessages")

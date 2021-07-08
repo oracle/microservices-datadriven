@@ -6,6 +6,7 @@
  */
 package io.helidon.data.examples;
 
+import io.opentracing.contrib.jms.common.TracingMessageConsumer;
 import oracle.jms.AQjmsConsumer;
 import oracle.jms.AQjmsFactory;
 import oracle.jms.AQjmsSession;
@@ -36,7 +37,11 @@ public class OrderServiceEventConsumer implements Runnable {
         QueueConnectionFactory q_cf = AQjmsFactory.getQueueConnectionFactory(orderResource.atpOrderPdb);
         QueueSession qsess = null;
         QueueConnection qconn = null;
-        AQjmsConsumer consumer = null;
+        MessageConsumer consumer = null;
+        //python (and likely nodejs) message causes javax.jms.MessageFormatException: JMS-117: Conversion failed - invalid property type
+        //due to message.getObjectProperty(key) here...
+        // https://github.com/opentracing-contrib/java-jms/blob/c9c445c374159cd8eadcbc9af0994a788baf0c5c/opentracing-jms-common/src/main/java/io/opentracing/contrib/jms/common/JmsTextMapExtractAdapter.java#L41
+//        TracingMessageConsumer tracingMessageConsumer = null;
         boolean done = false;
         while (!done) {
             try {
@@ -46,8 +51,11 @@ public class OrderServiceEventConsumer implements Runnable {
                     qconn.start();
                     Queue queue = ((AQjmsSession) qsess).getQueue(OrderResource.orderQueueOwner, OrderResource.inventoryQueueName);
                     consumer = (AQjmsConsumer) qsess.createConsumer(queue);
+//                    tracingMessageConsumer = new TracingMessageConsumer(consumer, orderResource.getTracer());
                 }
+//                if (tracingMessageConsumer == null || qsess == null) continue;
                 if (consumer == null || qsess == null) continue;
+//                TextMessage textMessage = (TextMessage) tracingMessageConsumer.receive(-1);
                 TextMessage textMessage = (TextMessage) consumer.receive(-1);
                 String messageText = textMessage.getText();
                 System.out.println("messageText " + messageText);
