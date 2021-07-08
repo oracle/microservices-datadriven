@@ -30,16 +30,23 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("Receive messages...");
+        boolean isPLSQL = Boolean.valueOf(System.getProperty("isPLSQL", "false"));
+        boolean isRollback = Boolean.valueOf(System.getProperty("isRollback", "false"));
+        boolean isAutoCommit = Boolean.valueOf(System.getProperty("isAutoCommit", "false"));
+        System.out.println("Receive messages... isPLSQL:" + isPLSQL);
+        System.out.println("... isRollback:" + isRollback);
+        System.out.println("... isAutoCommit:" + isAutoCommit);
         try {
-            listenForOrderEvents();
+            if (isPLSQL)listenForOrderEventsPLSQL(isRollback, isAutoCommit);
+            else listenForOrderEvents();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void listenForOrderEventsPLSQL() throws Exception {
+    public void listenForOrderEventsPLSQL(boolean isRollback, boolean isAutoCommit) throws Exception {
         Connection connection = inventoryResource.atpInventoryPDB.getConnection();
+    if(!isAutoCommit)    connection.setAutoCommit(false);
         while (true) {
             System.out.println("InventoryServiceOrderEventConsumer.listenForOrderEvents with sproc");
             CallableStatement cstmt = null;
@@ -53,8 +60,11 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
                 ResultSet rs = cstmt.getResultSet();
                 hadResults = cstmt.getMoreResults();
             }
-            String outputValue = cstmt.getString(1); // index-based
-            connection.rollback();
+            String outputValue = cstmt.getString(1);
+            if (!isAutoCommit) {
+                if (isRollback) connection.rollback();
+                else connection.commit();
+            }
             System.out.println("InventoryServiceOrderEventConsumer.listenForOrderEvents outputValue:" + outputValue);
         }
     }
