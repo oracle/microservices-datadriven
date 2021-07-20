@@ -161,7 +161,21 @@ BEGIN
 #queue_name          => '$ORDER_QUEUE',
 #queue_table         => 'ORDERQUEUETABLE');
 
-EXECUTE DBMS_AQADM.CREATE_SHARDED_QUEUE ('$ORDER_QUEUE',NULL,FALSE,NULL,NULL);
+#PROCEDURE CREATE_SHARDED_QUEUE (
+#    queue_name             IN VARCHAR2,
+#    storage_clause         IN VARCHAR2       DEFAULT NULL,
+#    multiple_consumers     IN BOOLEAN        DEFAULT FALSE,
+#    max_retries            IN NUMBER         DEFAULT NULL,
+#    comment                IN VARCHAR2       DEFAULT NULL);
+
+DBMS_AQADM.CREATE_SHARDED_QUEUE (
+    queue_name             => '$ORDER_QUEUE',
+    storage_clause         => NULL,
+    multiple_consumers     => FALSE,
+    max_retries            => NULL,
+    comment                => NULL);
+
+#EXECUTE DBMS_AQADM.CREATE_SHARDED_QUEUE ('$ORDER_QUEUE',NULL,FALSE,NULL,NULL);
 #EXECUTE DBMS_AQADM.CREATE_SHARDED_QUEUE ('inventoryshardedq1',NULL,FALSE,NULL,NULL);
 
 DBMS_AQADM.START_QUEUE (
@@ -179,7 +193,12 @@ BEGIN
 #queue_name          => '$INVENTORY_QUEUE',
 #queue_table         => 'INVENTORYQUEUETABLE');
 
-EXECUTE DBMS_AQADM.CREATE_SHARDED_QUEUE ('$INVENTORY_QUEUE',NULL,FALSE,NULL,NULL);
+DBMS_AQADM.CREATE_SHARDED_QUEUE (
+    queue_name             => '$INVENTORY_QUEUE',
+    storage_clause         => NULL,
+    multiple_consumers     => FALSE,
+    max_retries            => NULL,
+    comment                => NULL);
 
 DBMS_AQADM.START_QUEUE (
 queue_name          => '$INVENTORY_QUEUE');
@@ -227,7 +246,12 @@ BEGIN
 #queue_name          => '$ORDER_QUEUE',
 #queue_table         => 'ORDERQUEUETABLE');
 
-EXECUTE DBMS_AQADM.CREATE_SHARDED_QUEUE ('$ORDER_QUEUE',NULL,FALSE,NULL,NULL);
+DBMS_AQADM.CREATE_SHARDED_QUEUE (
+    queue_name             => '$ORDER_QUEUE',
+    storage_clause         => NULL,
+    multiple_consumers     => FALSE,
+    max_retries            => NULL,
+    comment                => NULL);
 
 DBMS_AQADM.START_QUEUE (
 queue_name          => '$ORDER_QUEUE');
@@ -245,7 +269,13 @@ BEGIN
 #queue_name          => '$INVENTORY_QUEUE',
 #queue_table         => 'INVENTORYQUEUETABLE');
 
-EXECUTE DBMS_AQADM.CREATE_SHARDED_QUEUE ('$INVENTORY_QUEUE',NULL,FALSE,NULL,NULL);
+
+DBMS_AQADM.CREATE_SHARDED_QUEUE (
+    queue_name             => '$INVENTORY_QUEUE',
+    storage_clause         => NULL,
+    multiple_consumers     => FALSE,
+    max_retries            => NULL,
+    comment                => NULL);
 
 DBMS_AQADM.START_QUEUE (
 queue_name          => '$INVENTORY_QUEUE');
