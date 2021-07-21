@@ -154,12 +154,9 @@ BEGIN
 DBMS_AQADM.CREATE_SHARDED_QUEUE (
     queue_name             => '$ORDER_QUEUE',
     storage_clause         => NULL,
-    multiple_consumers     => FALSE,
+    multiple_consumers     => TRUE,
     max_retries            => NULL,
     comment                => NULL);
-
-#EXECUTE DBMS_AQADM.CREATE_SHARDED_QUEUE ('$ORDER_QUEUE',NULL,FALSE,NULL,NULL);
-#EXECUTE DBMS_AQADM.CREATE_SHARDED_QUEUE ('inventoryshardedq1',NULL,FALSE,NULL,NULL);
 
 DBMS_AQADM.START_QUEUE (
 queue_name          => '$ORDER_QUEUE');
@@ -170,7 +167,7 @@ BEGIN
 DBMS_AQADM.CREATE_SHARDED_QUEUE (
     queue_name             => '$INVENTORY_QUEUE',
     storage_clause         => NULL,
-    multiple_consumers     => FALSE,
+    multiple_consumers     => TRUE,
     max_retries            => NULL,
     comment                => NULL);
 
@@ -214,7 +211,7 @@ BEGIN
 DBMS_AQADM.CREATE_SHARDED_QUEUE (
     queue_name             => '$ORDER_QUEUE',
     storage_clause         => NULL,
-    multiple_consumers     => FALSE,
+    multiple_consumers     => TRUE,
     max_retries            => NULL,
     comment                => NULL);
 
@@ -227,7 +224,7 @@ BEGIN
 DBMS_AQADM.CREATE_SHARDED_QUEUE (
     queue_name             => '$INVENTORY_QUEUE',
     storage_clause         => NULL,
-    multiple_consumers     => FALSE,
+    multiple_consumers     => TRUE,
     max_retries            => NULL,
     comment                => NULL);
 
