@@ -40,7 +40,10 @@ BEGIN
     job_action         =>  'inventory_plsql',
     repeat_interval    =>  'FREQ=SECONDLY;INTERVAL=10');
 
-  DBMS_SCHEDULER.RUN_JOB(
+    DBMS_SCHEDULER.SET_ATTRIBUTE (
+    'inventory_plsql_service', 'logging_level', DBMS_SCHEDULER.LOGGING_FULL);
+     
+    DBMS_SCHEDULER.RUN_JOB(
     JOB_NAME            => 'inventory_plsql_service',
     USE_CURRENT_SESSION => FALSE);
 END;

@@ -7,7 +7,7 @@ set -e
 
 # Deploy each inventory service and perform functional test
 #SERVICES="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se"
-SERVICES="inventory-dotnet inventory-go inventory-python inventory-nodejs inventory-helidon-se"
+SERVICES="inventory-dotnet inventory-go inventory-python inventory-nodejs inventory-helidon-se inventory-plsql"
 ORDER_ID=66
 
 cd $GRABDISH_HOME/inventory-helidon
@@ -18,10 +18,12 @@ for s in $SERVICES; do
   cd $GRABDISH_HOME/$s
   ./deploy.sh
 
-  while test 1 -gt `kubectl get pods -n msdataworkshop | grep "${s}" | grep "1/1" | wc -l`; do
-    echo "Waiting for pod to start..."
-    sleep 5
-  done
+  if test "$s" -ne 'inventory-plsql'; then # PL/SQL service is not deployed in k8s and starts immediately
+    while test 1 -gt `kubectl get pods -n msdataworkshop | grep "${s}" | grep "1/1" | wc -l`; do
+      echo "Waiting for pod to start..."
+      sleep 5
+    done
+  fi
 
   cd $GRABDISH_HOME
   ORDER_ID=$(($ORDER_ID + 100))

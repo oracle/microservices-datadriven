@@ -15,5 +15,11 @@ sqlplus /nolog <<!
 
 connect $U/"$DB_PASSWORD"@$SVC
 
-select state from USER_SCHEDULER_JOBS;
+select state, logging_level from USER_SCHEDULER_JOBS;
+SELECT to_char(log_date, 'DD-MON-YY HH24:MI:SS') TIMESTAMP, job_name,
+  job_class, operation, status FROM USER_SCHEDULER_JOB_LOG
+  WHERE job_name = 'JOB2' ORDER BY log_date;
+SELECT to_char(log_date, 'DD-MON-YY HH24:MI:SS') TIMESTAMP, job_name, status,
+   SUBSTR(additional_info, 1, 40) ADDITIONAL_INFO
+   FROM user_scheduler_job_run_details ORDER BY log_date;
 !
