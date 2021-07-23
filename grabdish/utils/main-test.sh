@@ -27,7 +27,7 @@ echo "TEST_LOG: #### Testing Lab2: Walkthrough Undeploy..."
 
 # Undeploy to make it rerunable
 ./undeploy.sh
-SERVICES="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se"
+SERVICES="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se inventory-plsql"
 for s in $SERVICES; do
   cd $GRABDISH_HOME/$s
   ./undeploy.sh || true
@@ -81,10 +81,11 @@ function deleteallorders() {
 }
 
 if wget --http-user grabdish --http-password "$TEST_UI_PASSWORD" --no-check-certificate --post-data "$(deleteallorders)" \
-  --header='Content-Type: application/json' "$(state_get FRONTEND_URL)/placeorder" -O $GRABDISH_LOG/order; then
+  --header='Content-Type: application/json' "$(state_get FRONTEND_URL)/command" -O $GRABDISH_LOG/order; then
   echo "TEST_LOG: $TEST_STEP deleteallorders succeeded"
 else
-  echo "TEST_LOG_FAILED: $TEST_STEP deleteallorders failed"
+  echo "TEST_LOG_FAILED_FATAL: $TEST_STEP deleteallorders failed"
+  exit
 fi
 
 
