@@ -18,7 +18,7 @@ for s in $SERVICES; do
   cd $GRABDISH_HOME/$s
   ./deploy.sh
 
-  if test "$s" -ne 'inventory-plsql'; then # PL/SQL service is not deployed in k8s and starts immediately
+  if test "$s" != 'inventory-plsql'; then # PL/SQL service is not deployed in k8s and starts immediately
     while test 1 -gt `kubectl get pods -n msdataworkshop | grep "${s}" | grep "1/1" | wc -l`; do
       echo "Waiting for pod to start..."
       sleep 5
