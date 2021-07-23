@@ -13,6 +13,12 @@ ORDER_ID=66
 cd $GRABDISH_HOME/inventory-helidon
 ./undeploy.sh
 
+# Wait for Pod to stop
+while test 0 -lt `kubectl get pods -n msdataworkshop | egrep 'inventory-' | wc -l`; do
+  echo "Waiting for pod to stop..."
+  sleep 5
+done
+
 for s in $SERVICES; do
   echo "Testing $s"
   cd $GRABDISH_HOME/$s
@@ -31,6 +37,13 @@ for s in $SERVICES; do
   
   cd $GRABDISH_HOME/$s
   ./undeploy.sh
+
+  # Wait for Pod to stop
+  while test 0 -lt `kubectl get pods -n msdataworkshop | egrep 'inventory-' | wc -l`; do
+    echo "Waiting for pod to stop..."
+    sleep 5
+  done
+
 done
 
 cd $GRABDISH_HOME/inventory-helidon
