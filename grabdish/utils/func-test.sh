@@ -29,9 +29,7 @@ function placeOrderTest() {
 }
 
 function showOrderTest() {
-  echo "TEST_LOG: sleep for 20"
-  sleep 20
-  # Show order 
+   # Show order 
   local ORDER_ID="$1"
   local SEARCH_FOR="$2"
   if wget -q --http-user grabdish --http-password "$TEST_UI_PASSWORD" --no-check-certificate --post-data "$(order "$ORDER_ID" 'showorder')" \
@@ -57,7 +55,7 @@ function verifyInventoryCountTest() {
     if grep "$SEARCH_FOR" $GRABDISH_LOG/inventory >/dev/null; then
       echo "TEST_LOG: $TEST_STEP verifyInventoryCountTest $ITEM_ID after ORDER_ID $ORDER_ID expected inventory count: '$SEARCH_FOR'"
     else
-      echo "TEST_LOG: $TEST_STEP verifyInventoryCountTest $ITEM_ID after ORDER_ID $ORDER_ID unexpected inventory count, not '$SEARCH_FOR'" | tr '\n' ' ' ; cat $GRABDISH_LOG/inventory
+      echo "TEST_LOG_FAILED: $TEST_STEP verifyInventoryCountTest $ITEM_ID after ORDER_ID $ORDER_ID unexpected inventory count, not '$SEARCH_FOR'" | tr '\n' ' ' ; cat $GRABDISH_LOG/inventory
       echo ...
     fi
   else
@@ -83,6 +81,7 @@ verifyInventoryCountTest "sushi" 0 "$ORDER_ID (before placing order)"
 
 placeOrderTest $ORDER_ID
 
+echo "TEST_LOG: sleep for 10"
 sleep 10
 
 showOrderTest $ORDER_ID 'failed inventory does not exist'
@@ -96,6 +95,7 @@ ORDER_ID=$(($ORDER_ID + 1))
 
 placeOrderTest "$ORDER_ID"
 
+echo "TEST_LOG: sleep for 10"
 sleep 10
 
 showOrderTest "$ORDER_ID" 'success inventory exists'

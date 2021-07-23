@@ -38,7 +38,7 @@ spec:
           - name: DB_CP_QUEUE_TIMEOUT
             value: "10000"
           - name: DB_M_FAN_EVENTS
-            value: "true"
+            value: "false"
           - name: AQ_ORDERS_QUEUE_NAME
             value: "inventoryuser.orderqueue"
           - name: AQ_INVENTORY_QUEUE_NAME
