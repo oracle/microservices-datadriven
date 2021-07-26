@@ -1,18 +1,25 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: prometheus-fronted
+  name: prometheus-frontend
   labels:
     serviceMonitorSelector: prometheus
-    app: fronted
+    app: frontend
     release: stable
 spec:
   endpoints:
     - interval: 30s
       port: metrics
+#      basicAuth:
+#        password:
+#          name: basic-auth
+#          key: password
+#        username:
+#          name: basic-auth
+#          key: user
   selector:
     matchLabels:
-      app: fronted
+      app: frontend
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor

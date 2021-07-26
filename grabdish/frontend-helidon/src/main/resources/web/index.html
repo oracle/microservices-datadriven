@@ -147,9 +147,10 @@
                   <br><br>
                   <br>Transactional Exactly-Once Message Delivery Tests...
                   <br>
-                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterInsertAction]]">Crash order service after Order is inserted (before Order message is sent to Inventory service)</oj-button>
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterInsertAction]]">Crash Order service after Order is inserted (before Order message is sent to Inventory service)</oj-button>
                   <br><oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterOrderMessageReceivedAction]]">Crash Inventory service after Order message is received (before inventory for order is checked)</oj-button>
                   <br><oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterOrderMessageProcessedAction]]">Crash Inventory service after inventory for order is checked (before Inventory status message is sent)</oj-button>
+                  <br><oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterInventoryMessageReceivedAction]]">Crash Order service after Inventory message is received (before Order status is updated)</oj-button>
                 </div>
                 <!-- lab10 -->
                 <div slot="lab10">
@@ -861,6 +862,30 @@
             var order = {
               serviceName: 'inventory',
               commandName: 'crashAfterOrderMessageProcessed',
+              orderId: -1,
+              orderItem: '',
+              deliverTo: ''
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.text().then(payload => {
+                vm.labResult(payload);
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          this.lab11CrashAfterInventoryMessageReceivedAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'order',
+              commandName: 'crashAfterInventoryMessageReceived',
               orderId: -1,
               orderItem: '',
               deliverTo: ''

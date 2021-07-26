@@ -16,6 +16,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
+import static io.helidon.data.examples.KafkaMongoOrderResource.crashAfterInsert;
+import static io.helidon.data.examples.KafkaMongoOrderResource.crashAfterInventoryMessageReceived;
+
 public class KafkaMongoOrderEventConsumer implements Runnable {
 
     Properties props = new Properties();
@@ -79,6 +82,7 @@ public class KafkaMongoOrderEventConsumer implements Runnable {
                             || inventorylocation.equals("inventorydoesnotexist")
                             || inventorylocation.equals("none"));
                     System.out.println("Update orderid:" + orderid + "(itemid:" + itemid + ") in MongoDB isSuccessfulInventoryCheck:" + isSuccessfulInventoryCheck);
+                    if (crashAfterInventoryMessageReceived) System.exit(-1);
                     MongoClient mongoClient = getMongoClient();
                     MongoCollection<Document> orders = getDocumentMongoCollection(mongoClient);
                     Document updateQuery = new Document().append("orderid", orderid);

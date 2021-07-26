@@ -60,6 +60,7 @@ public class OrderResource {
     static boolean readiness = true;
     private static String lastContainerStartTime;
     static boolean crashAfterInsert;
+    static boolean crashAfterInventoryMessageReceived;
     private OrderServiceCPUStress orderServiceCPUStress = new OrderServiceCPUStress();
     Map<String, OrderDetail> cachedOrders = new HashMap<>();
 
@@ -201,7 +202,7 @@ public class OrderResource {
             @QueryParam("orderid") String orderId) {
         System.out.println("--->showorder (via JSON/SODA query) for orderId:" + orderId);
         try {
-            Order order = orderServiceEventProducer.getOrderViaSODA(atpOrderPdb, orderId);
+            Order order = orderServiceEventProducer.getOrderViaSODA(atpOrderPdb.getConnection(), orderId);
             String returnJSON = JsonUtils.writeValueAsString(order);
             System.out.println("OrderResource.showorder returnJSON:" + returnJSON);
             return Response.ok()
@@ -327,6 +328,16 @@ public class OrderResource {
         crashAfterInsert = true;
         return Response.ok()
                 .entity("order crashAfterInsert set")
+                .build();
+    }
+
+    @Path("/crashAfterInventoryMessageReceived")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response crashAfterInventoryMessageReceived() {
+        crashAfterInventoryMessageReceived = true;
+        return Response.ok()
+                .entity("order crashAfterInventoryMessageReceived set")
                 .build();
     }
 }
