@@ -34,8 +34,6 @@ request = '''
 	) group by inst_id
 	select count (*) from AQ$ORDERQUEUETABLE
       where queue = 'ORDERQUEUE';
-    select queue, count (*) as message_count from from AQ$ORDERQUEUETABLE
-      where queue = 'ORDERQUEUE';
 '''
 ignorezeroresult = true
 

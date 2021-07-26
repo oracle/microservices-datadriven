@@ -73,22 +73,22 @@ public class OrderServiceEventConsumer implements Runnable {
                 boolean isSuccessfulInventoryCheck = !(inventorylocation == null || inventorylocation.equals("")
                         || inventorylocation.equals("inventorydoesnotexist")
                         || inventorylocation.equals("none"));
-                Enumeration enumeration = textMessage.getPropertyNames();
-                if (enumeration != null) {
-                    while (enumeration.hasMoreElements()) {
-                        String key = (String) enumeration.nextElement();
-                        System.out.println("Inventory message property key:" + key + "(itemid:" + textMessage.getStringProperty(key) + ")");
-                    }
-                }
-                Tracer tracer = orderResource.getTracer();
-                Span activeSpan = tracer.buildSpan("inventoryDetailForOrder").asChildOf(tracer.activeSpan()).start();
-                activeSpan.log("received inventory status");
-                activeSpan.setTag("orderid", orderid);
-                activeSpan.setTag("itemid", itemid);
-                activeSpan.setTag("inventorylocation", inventorylocation);
-                activeSpan.setBaggageItem("sagaid", "testsagaid" + orderid);
-                activeSpan.setBaggageItem("orderid", orderid);
-                activeSpan.setBaggageItem("inventorylocation", inventorylocation);
+//                Enumeration enumeration = textMessage.getPropertyNames();
+//                if (enumeration != null) {
+//                    while (enumeration.hasMoreElements()) {
+//                        String key = (String) enumeration.nextElement();
+//                        System.out.println("Inventory message property key:" + key + "(itemid:" + textMessage.getStringProperty(key) + ")");
+//                    }
+//                }
+//                Tracer tracer = orderResource.getTracer();
+//                Span activeSpan = tracer.buildSpan("inventoryDetailForOrder").asChildOf(tracer.activeSpan()).start();
+//                activeSpan.log("received inventory status");
+//                activeSpan.setTag("orderid", orderid);
+//                activeSpan.setTag("itemid", itemid);
+//                activeSpan.setTag("inventorylocation", inventorylocation);
+//                activeSpan.setBaggageItem("sagaid", "testsagaid" + orderid);
+//                activeSpan.setBaggageItem("orderid", orderid);
+//                activeSpan.setBaggageItem("inventorylocation", inventorylocation);
                 if (crashAfterInventoryMessageReceived) System.exit(-1);
                 dbConnection = ((AQjmsSession) qsess).getDBConnection();
                 System.out.println("((AQjmsSession) qsess).getDBConnection(): " + dbConnection);
@@ -108,7 +108,12 @@ public class OrderServiceEventConsumer implements Runnable {
                 }
                 orderResource.orderServiceEventProducer.updateOrderViaSODA(order, dbConnection);
                 qsess.commit();
-            } catch (Exception e) {
+            } catch (NullPointerException npe) {
+                npe.printStackTrace();
+                System.out.println("Exception in receiveMessages: " + npe);
+                if(qsess != null) qsess.rollback();
+                done = true;
+            }catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("Exception in receiveMessages: " + e);
                 if(qsess != null) qsess.rollback();

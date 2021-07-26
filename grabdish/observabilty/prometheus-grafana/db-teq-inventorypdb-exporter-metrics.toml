@@ -33,9 +33,7 @@ request = '''
 	    join gv$persistent_queues t2 on t1.queue_id = t2.queue_id
 	) group by inst_id
 	select count (*) from AQ$INVENTORYQUEUETABLE
-      where queue = 'INVENTORYQUEUE';
-    select queue, count (*) as message_count from from AQ$INVENTORYQUEUETABLE
-      where queue = 'INVENTORYQUEUE';
+      where queue = 'INVENTORYQUEUE'
 '''
 ignorezeroresult = true
 
