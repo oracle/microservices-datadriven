@@ -73,15 +73,16 @@ public class OrderServiceEventConsumer implements Runnable {
                 boolean isSuccessfulInventoryCheck = !(inventorylocation == null || inventorylocation.equals("")
                         || inventorylocation.equals("inventorydoesnotexist")
                         || inventorylocation.equals("none"));
-                Enumeration enumeration = textMessage.getPropertyNames();
-                if (enumeration != null) {
-                    while (enumeration.hasMoreElements()) {
-                        String key = (String) enumeration.nextElement();
-                        System.out.println("Inventory message property key:" + key + "(itemid:" + textMessage.getStringProperty(key) + ")");
-                    }
-                }
+//                Enumeration enumeration = textMessage.getPropertyNames();
+//                if (enumeration != null) {
+//                    while (enumeration.hasMoreElements()) {
+//                        String key = (String) enumeration.nextElement();
+//                        System.out.println("Inventory message property key:" + key + "(itemid:" + textMessage.getStringProperty(key) + ")");
+//                    }
+//                }
                 Tracer tracer = orderResource.getTracer();
                 Span activeSpan = tracer.buildSpan("inventoryDetailForOrder").asChildOf(tracer.activeSpan()).start();
+                System.out.println("Inventory activeSpan:" + activeSpan);
                 activeSpan.log("received inventory status");
                 activeSpan.setTag("orderid", orderid);
                 activeSpan.setTag("itemid", itemid);
@@ -89,6 +90,8 @@ public class OrderServiceEventConsumer implements Runnable {
                 activeSpan.setBaggageItem("sagaid", "testsagaid" + orderid);
                 activeSpan.setBaggageItem("orderid", orderid);
                 activeSpan.setBaggageItem("inventorylocation", inventorylocation);
+                activeSpan.log("end received inventory status");
+                activeSpan.finish();
                 if (crashAfterInventoryMessageReceived) System.exit(-1);
                 dbConnection = ((AQjmsSession) qsess).getDBConnection();
                 System.out.println("((AQjmsSession) qsess).getDBConnection(): " + dbConnection);
