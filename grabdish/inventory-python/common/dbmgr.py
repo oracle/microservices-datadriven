@@ -101,7 +101,7 @@ def run():
                 max=db_connection_count,
                 increment=0,
                 threaded=True,
-                events=True,
+                events=False,
                 getmode=cx_Oracle.SPOOL_ATTRVAL_TIMEDWAIT,
                 waitTimeout=10000)
 
