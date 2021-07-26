@@ -49,6 +49,7 @@ public class OrderServiceEventConsumer implements Runnable {
         // https://github.com/opentracing-contrib/java-jms/blob/c9c445c374159cd8eadcbc9af0994a788baf0c5c/opentracing-jms-common/src/main/java/io/opentracing/contrib/jms/common/JmsTextMapExtractAdapter.java#L41
 //        TracingMessageConsumer tracingMessageConsumer = null;
         boolean done = false;
+        Tracer tracer = orderResource.getTracer();
         while (!done) {
             try {
                 if (qconn == null || qsess == null || dbConnection == null || dbConnection.isClosed()) {
@@ -57,10 +58,11 @@ public class OrderServiceEventConsumer implements Runnable {
                     qconn.start();
                     Queue queue = ((AQjmsSession) qsess).getQueue(OrderResource.orderQueueOwner, OrderResource.inventoryQueueName);
 //                    consumer = (AQjmsConsumer) qsess.createConsumer(queue);
-                    consumer = new TracingMessageConsumer(qsess.createConsumer(queue), orderResource.getTracer());
+                    consumer = new TracingMessageConsumer(qsess.createConsumer(queue), tracer);
                 }
 //                if (tracingMessageConsumer == null || qsess == null) continue;
                 if (consumer == null || qsess == null) continue;
+                System.out.println("Inventory before receive tracer.activeSpan():" + tracer.activeSpan());
                 TextMessage textMessage = (TextMessage) consumer.receive(-1);
 //                TextMessage textMessage = (TextMessage) consumer.receive(-1);
                 String messageText = textMessage.getText();
@@ -73,16 +75,8 @@ public class OrderServiceEventConsumer implements Runnable {
                 boolean isSuccessfulInventoryCheck = !(inventorylocation == null || inventorylocation.equals("")
                         || inventorylocation.equals("inventorydoesnotexist")
                         || inventorylocation.equals("none"));
-//                Enumeration enumeration = textMessage.getPropertyNames();
-//                if (enumeration != null) {
-//                    while (enumeration.hasMoreElements()) {
-//                        String key = (String) enumeration.nextElement();
-//                        System.out.println("Inventory message property key:" + key + "(itemid:" + textMessage.getStringProperty(key) + ")");
-//                    }
-//                }
-                Tracer tracer = orderResource.getTracer();
+                System.out.println("Inventory after receive tracer.activeSpan():" + tracer.activeSpan());
                 Span activeSpan = tracer.buildSpan("inventoryDetailForOrder").asChildOf(tracer.activeSpan()).start();
-                System.out.println("Inventory activeSpan:" + activeSpan);
                 activeSpan.log("received inventory status");
                 activeSpan.setTag("orderid", orderid);
                 activeSpan.setTag("itemid", itemid);
