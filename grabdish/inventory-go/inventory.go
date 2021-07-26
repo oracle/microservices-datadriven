@@ -7,8 +7,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"time"
-
 	"github.com/godror/godror"
 )
 
@@ -141,7 +139,6 @@ func listenForMessages(ctx context.Context, db *sql.DB) {
 			fmt.Println("commiterr:", commiterr)
 		}
 		fmt.Println("commit complete for message sent:" + inventoryJsonString)
-		time.Sleep(1 * time.Second)
 	}
 }
 
