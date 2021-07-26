@@ -1,4 +1,13 @@
 [[metric]]
+context = "resource"
+labels = [ "resource_name" ]
+metricsdesc = { current_utilization= "Generic counter metric from v$resource_limit view in Oracle (current value).", limit_value="Generic counter metric from v$resource_limit view in Oracle (UNLIMITED: -1)." }
+request = '''
+    SELECT resource_name,current_utilization,CASE WHEN TRIM(limit_value) LIKE 'UNLIMITED' THEN '-1' ELSE TRIM(limit_value) END as limit_value FROM v$resource_limit
+'''
+ignorezeroresult = true
+
+[[metric]]
 context = "teq"
 labels = ["inst_id"]
 metricsdesc = { total_queues = "Total number of queues"}
@@ -10,6 +19,25 @@ request = '''
 	    join gv$persistent_queues t2 on t1.queue_id = t2.queue_id
 	) group by inst_id
 '''
+ignorezeroresult = true
+
+[[metric]]
+context = "orderqueue"
+labels = ["queue"]
+metricsdesc = { message_count = "Total number of messages on orderqueue"}
+request = '''
+	select queue, count(*) as message_count from
+	(
+	    select distinct t1.inst_id, t2.queue_name
+	    from gv$aq_sharded_subscriber_stat t1
+	    join gv$persistent_queues t2 on t1.queue_id = t2.queue_id
+	) group by inst_id
+	select count (*) from AQ$ORDERQUEUETABLE
+      where queue = 'ORDERQUEUE';
+    select queue, count (*) as message_count from from AQ$ORDERQUEUETABLE
+      where queue = 'ORDERQUEUE';
+'''
+ignorezeroresult = true
 
 [[metric]]
 context = "teq"
@@ -22,6 +50,7 @@ request = '''
 	    from gv$aq_sharded_subscriber_stat
 	) group by inst_id
 '''
+ignorezeroresult = true
 
 [[metric]]
 context = "teq"
@@ -38,3 +67,11 @@ request = '''
 	) t1
 	join gv$persistent_queues t2 on t1.queue_id = t2.queue_id
 '''
+ignorezeroresult = true
+
+[[metric]]
+context = "sessions"
+labels = [ "status", "type" ]
+metricsdesc = { value= "Gauge metric with count of sessions by status and type." }
+request = "SELECT status, type, COUNT(*) as value FROM v$session GROUP BY status, type"
+

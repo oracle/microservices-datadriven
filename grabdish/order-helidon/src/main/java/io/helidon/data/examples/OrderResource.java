@@ -122,8 +122,8 @@ public class OrderResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Traced(operationName = "OrderResource.placeOrder")
-    @Timed(name = "placeOrder_timed") //length of time of an object
-    @Counted(name = "placeOrder_counted") //amount of invocations
+    @Timed(name = "order_placeOrder_timed") //length of time of an object
+    @Counted(name = "order_placeOrder_counted") //amount of invocations
     public Response placeOrder(
             @Parameter(description = "The order ID for the order",
                     required = true,
@@ -191,6 +191,8 @@ public class OrderResource {
     @Path("/showorder")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Timed(name = "order_showOrder_timed") //length of time of an object
+    @Counted(name = "order_showOrder_counted") //amount of invocations
     public Response showorder(
             @Parameter(description = "The order ID for the order",
                     required = true,

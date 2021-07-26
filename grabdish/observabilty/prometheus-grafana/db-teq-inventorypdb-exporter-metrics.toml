@@ -1,0 +1,91 @@
+[[metric]]
+context = "resource"
+labels = [ "resource_name" ]
+metricsdesc = { current_utilization= "Generic counter metric from v$resource_limit view in Oracle (current value).", limit_value="Generic counter metric from v$resource_limit view in Oracle (UNLIMITED: -1)." }
+request = '''
+    SELECT resource_name,current_utilization,CASE WHEN TRIM(limit_value) LIKE 'UNLIMITED' THEN '-1' ELSE TRIM(limit_value) END as limit_value FROM v$resource_limit
+'''
+ignorezeroresult = true
+
+[[metric]]
+context = "teq"
+labels = ["inst_id"]
+metricsdesc = { total_queues = "Total number of queues"}
+request = '''
+	select inst_id, count(*) as total_queues from
+	(
+	    select distinct t1.inst_id, t2.queue_name
+	    from gv$aq_sharded_subscriber_stat t1
+	    join gv$persistent_queues t2 on t1.queue_id = t2.queue_id
+	) group by inst_id
+'''
+ignorezeroresult = true
+
+[[metric]]
+context = "inventoryqueue"
+labels = ["queue"]
+metricsdesc = { message_count = "Total number of messages on inventoryqueue"}
+request = '''
+	select queue, count(*) as message_count from
+	(
+	    select distinct t1.inst_id, t2.queue_name
+	    from gv$aq_sharded_subscriber_stat t1
+	    join gv$persistent_queues t2 on t1.queue_id = t2.queue_id
+	) group by inst_id
+	select count (*) from AQ$INVENTORYQUEUETABLE
+      where queue = 'INVENTORYQUEUE';
+    select queue, count (*) as message_count from from AQ$INVENTORYQUEUETABLE
+      where queue = 'INVENTORYQUEUE';
+'''
+ignorezeroresult = true
+
+[[metric]]
+context = "teq"
+labels = ["inst_id"]
+metricsdesc = { total_subscribers = "Total number of subscribers"}
+request = '''
+	select inst_id, count(*) as total_subscribers from
+	(
+	    select distinct inst_id, subscriber_id
+	    from gv$aq_sharded_subscriber_stat
+	) group by inst_id
+'''
+ignorezeroresult = true
+
+[[metric]]
+context = "teq"
+labels = ["inst_id", "queue_name", "subscriber_name"]
+metricsdesc = { enqueued_msgs = "Total enqueued messages.", dequeued_msgs = "Total dequeued messages.", remained_msgs = "Total remained messages.", time_since_last_dequeue = "Time since last dequeue.", estd_time_to_drain_no_enq = "Estimated time to drain if no enqueue.", message_latency_1 = "Message latency for last 5 mins.", message_latency_2 = "Message latency for last 1 hour.", message_latency_3 = "Message latency for last 5 hours."}
+request = '''
+	select distinct t1.inst_id, t1.queue_id, t2.queue_name, t1.subscriber_id as subscriber_name, t1.enqueued_msgs, t1.dequeued_msgs, t1.remained_msgs, t1.time_since_last_dequeue, t1.estd_time_to_drain_no_enq, t1.message_latency_1, t1.message_latency_2, t1.message_latency_3
+	from
+	(
+	    select inst_id, queue_id, subscriber_id, sum(enqueued_msgs) as enqueued_msgs, sum(dequeued_msgs) as dequeued_msgs, sum(enqueued_msgs - dequeued_msgs) as remained_msgs,
+	    min(time_since_last_dequeue) as time_since_last_dequeue, max(estd_time_to_drain_no_enq) as estd_time_to_drain_no_enq, avg(10) as message_latency_1, avg(20) as message_latency_2, avg(30) as message_latency_3
+	    from gv$aq_sharded_subscriber_stat
+	    group by queue_id, subscriber_id, inst_id
+	) t1
+	join gv$persistent_queues t2 on t1.queue_id = t2.queue_id
+'''
+ignorezeroresult = true
+
+[[metric]]
+context = "grabdish"
+labels = ["inventoryid"]
+metricsdesc = { sushi_count = "Total number of sushi inventory"}
+request = '''
+	select inventoryid, inventorycount as sushi_count from
+	(
+	    select inventoryid, inventorycount
+	    from inventoryuser.inventory
+	    where inventory.inventoryid = 'sushi'
+	)
+'''
+ignorezeroresult = true
+
+[[metric]]
+context = "sessions"
+labels = [ "status", "type" ]
+metricsdesc = { value= "Gauge metric with count of sessions by status and type." }
+request = "SELECT status, type, COUNT(*) as value FROM v$session GROUP BY status, type"
+

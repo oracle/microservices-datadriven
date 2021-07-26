@@ -674,7 +674,7 @@
               body: JSON.stringify(order)
             };
 
-            fetch('/metrics', fetchOptions).then(fetchResult => {
+            fetch('/getmetrics', fetchOptions).then(fetchResult => {
               vm.httpCode(fetchResult.status);
               fetchResult.text().then(payload => {
                 vm.labResult(payload);
