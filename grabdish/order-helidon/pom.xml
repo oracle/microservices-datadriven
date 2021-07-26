@@ -165,11 +165,11 @@
             <artifactId>helidon-integrations-cdi-datasource-ucp</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <dependency>
-            <groupId>javax.jms</groupId>
-            <artifactId>javax.jms-api</artifactId>
-            <version>2.0</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>javax.jms</groupId>-->
+<!--            <artifactId>javax.jms-api</artifactId>-->
+<!--            <version>2.0</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>javax.transaction</groupId>
             <artifactId>javax.transaction-api</artifactId>
@@ -224,7 +224,7 @@
         </dependency>
         <dependency>
             <groupId>io.opentracing.contrib</groupId>
-            <artifactId>opentracing-jms-1</artifactId>
+            <artifactId>opentracing-jms-2</artifactId>
             <version>0.1.11</version>
         </dependency>
 

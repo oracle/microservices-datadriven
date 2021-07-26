@@ -70,7 +70,19 @@ request = '''
 ignorezeroresult = true
 
 [[metric]]
-context = "sessions"
+context = "grabdish"
+labels = ["orderid"]
+metricsdesc = { pending_orders = "Total number of pending orders"}
+request = '''
+	select orderid, count(*) as pending_orders from
+	(
+	    select orderid from orderscollection where JSON_VALUE(JSON_DOCUMENT ,'$.status') = 'pending'
+	)
+'''
+ignorezeroresult = true
+
+[[metric]]
+context = "orderpdbsessions"
 labels = [ "status", "type" ]
 metricsdesc = { value= "Gauge metric with count of sessions by status and type." }
 request = "SELECT status, type, COUNT(*) as value FROM v$session GROUP BY status, type"

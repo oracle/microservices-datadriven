@@ -6,7 +6,7 @@
  */
 package io.helidon.data.examples;
 
-import io.opentracing.contrib.jms.TracingMessageProducer;
+import io.opentracing.contrib.jms2.TracingMessageProducer;
 import oracle.jms.AQjmsConstants;
 import oracle.jms.AQjmsFactory;
 import oracle.jms.AQjmsSession;

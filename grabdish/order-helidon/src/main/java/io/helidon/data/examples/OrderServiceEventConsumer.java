@@ -84,8 +84,10 @@ public class OrderServiceEventConsumer implements Runnable {
                 activeSpan.log("received inventory status");
                 activeSpan.setTag("orderid", orderid);
                 activeSpan.setTag("itemid", itemid);
+                activeSpan.setTag("inventorylocation", inventorylocation);
                 activeSpan.setBaggageItem("sagaid", "testsagaid" + orderid);
                 activeSpan.setBaggageItem("orderid", orderid);
+                activeSpan.setBaggageItem("inventorylocation", inventorylocation);
                 if (crashAfterInventoryMessageReceived) System.exit(-1);
                 dbConnection = ((AQjmsSession) qsess).getDBConnection();
                 System.out.println("((AQjmsSession) qsess).getDBConnection(): " + dbConnection);
