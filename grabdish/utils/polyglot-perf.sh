@@ -44,6 +44,35 @@ function addInventoryTest() {
   fi
 }
 
+# Create the ext-order service
+cd $GRABDISH_HOME/order-helidon; 
+kubectl apply -f ext-order-service.yaml -n msdataworkshop
+
+# Install k6
+cd $GRABDISH_HOME/k6; 
+if ! test -f k6; then
+  wget https://github.com/loadimpact/k6/releases/download/v0.27.0/k6-v0.27.0-linux64.tar.gz; 
+  tar -xzf k6-v0.27.0-linux64.tar.gz; 
+  ln k6-v0.27.0-linux64/k6 k6
+fi
+
+# Get LB (may have to retry)
+RETRIES=0
+while ! state_done EXT_ORDER_IP; do
+  IP=`kubectl get services -n msdataworkshop | awk '/ext-order/ {print $4}'`
+  if [[ "$IP" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+    state_set EXT_ORDER_IP "$IP"
+  else
+    RETRIES=$(($RETRIES + 1))
+    echo "Waiting for EXT_ORDER IP"
+    if test $RETRIES -gt 24; then
+      echo "ERROR: Failed to get EXT_ORDER_IP"
+      exit
+    fi
+    sleep 5
+  fi
+done
+
 
 for s in $SERVICES; do
   echo "PERF_LOG: Testing $s"
@@ -59,13 +88,24 @@ for s in $SERVICES; do
   fi
 
 
-  # Create a large number of orders and inventory
-  echo "PERF_LOG: $s adding $ORDER_COUNT orders and inventory"
-  for ((ORDER_ID=1; ORDER_ID<=$ORDER_COUNT; ORDER_ID++)) 
-  do
-    placeOrderTest "$ORDER_ID"
-    addInventoryTest "sushi"
-  done
+  # Create a large number of orders
+  cd $GRABDISH_HOME/k6; 
+  export LB=$(state_get EXT_ORDER_IP)
+  ./test-perf.sh $ORDER_COUNT
+
+  # Add the inventory
+  export TNS_ADMIN=$GRABDISH_HOME/wallet
+  INVENTORY_DB_SVC="$(state_get INVENTORY_DB_NAME)_tp"
+  INVENTORY_USER=INVENTORYUSER
+  DB_PASSWORD=`kubectl get secret dbuser -n msdataworkshop --template={{.data.dbpassword}} | base64 --decode`
+  U=$INVENTORY_USER
+  SVC=$INVENTORY_DB_SVC
+  sqlplus /nolog <<!
+
+connect $U/"$DB_PASSWORD"@$SVC
+update inventory set inventorycount=$ORDER_COUNT;
+commit;
+!
 
 
   # Deploy the test subject
@@ -102,7 +142,7 @@ for s in $SERVICES; do
   END_TIME=`date`
   END_SECONDS="$(date -u +%s)"
   echo "PERF_LOG: $s Processing completed at $END_TIME"
-  echo "PERF_LOG: $s Processed $ORDER_COUNT orders in $(($END_SECONDS-$START_SECONDS)) seconds"
+  echo "PERF_LOG_STAT: $s Processed $ORDER_COUNT orders in $(($END_SECONDS-$START_SECONDS)) seconds"
 
   logpodnotail inventory > $GRABDISH_LOG/perflog-$s
 
