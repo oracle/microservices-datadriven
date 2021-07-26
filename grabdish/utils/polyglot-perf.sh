@@ -6,7 +6,7 @@
 set -e
 
 # Deploy each inventory service and perform perf test
-SERVICES="inventory-dotnet inventory-go inventory-python inventory-nodejs inventory-helidon-se inventory-plsql"
+SERVICES="inventory-helidon inventory-dotnet inventory-go inventory-python inventory-nodejs inventory-helidon-se inventory-plsql"
 ORDER_COUNT=1000
 
 # Delete all orders payload
@@ -25,9 +25,9 @@ function inventory() {
 function placeOrderTest() {
   # Place order
   local ORDER_ID="$1"
-  if wget -q --http-user grabdish --http-password "$TEST_UI_PASSWORD" --no-check-certificate --post-data "$(order "$ORDER_ID" 'placeOrder')" \
-    --header='Content-Type: application/json' "$(state_get FRONTEND_URL)/placeorder" -O $GRABDISH_LOG/order; then
-  else
+  if ! wget -q --http-user grabdish --http-password "$TEST_UI_PASSWORD" --no-check-certificate --post-data "$(order "$ORDER_ID" 'placeOrder')" \
+    --header='Content-Type: application/json' "$(state_get FRONTEND_URL)/placeorder" -O $GRABDISH_LOG/order &>/dev/null;
+  then
     echo "PERF_LOG_FAILED_FATAL: placeOrder $ORDER_ID failed"
     exit
   fi
@@ -36,23 +36,13 @@ function placeOrderTest() {
 function addInventoryTest() {
   # Add inventory 
   local ITEM_ID="$1"
-  if wget --http-user grabdish --http-password "$TEST_UI_PASSWORD" --no-check-certificate --post-data "$(inventory "$ITEM_ID" 'addInventory')" \
-    --header='Content-Type: application/json' "$(state_get FRONTEND_URL)/command" -O $GRABDISH_LOG/inventory; then
-  else
+  if ! wget --http-user grabdish --http-password "$TEST_UI_PASSWORD" --no-check-certificate --post-data "$(inventory "$ITEM_ID" 'addInventory')" \
+    --header='Content-Type: application/json' "$(state_get FRONTEND_URL)/command" -O $GRABDISH_LOG/inventory &>/dev/null; 
+  then
     echo "PERF_LOG_FAILED_FATAL: addInventory $ITEM_ID request failed"
     exit
   fi
 }
-
-
-cd $GRABDISH_HOME/inventory-helidon
-./undeploy.sh
-
-# Wait for Pod to stop
-while test 0 -lt `kubectl get pods -n msdataworkshop | egrep 'inventory-' | wc -l`; do
-  echo "Waiting for pod to stop..."
-  sleep 5
-done
 
 
 for s in $SERVICES; do
@@ -60,7 +50,8 @@ for s in $SERVICES; do
 
   # Delete all order (to refresh)
   if wget --http-user grabdish --http-password "$TEST_UI_PASSWORD" --no-check-certificate --post-data "$(deleteallorders)" \
-  --header='Content-Type: application/json' "$(state_get FRONTEND_URL)/command" -O $GRABDISH_LOG/order; then
+  --header='Content-Type: application/json' "$(state_get FRONTEND_URL)/command" -O $GRABDISH_LOG/order &>/dev/null; 
+  then
     echo "PERF_LOG: $s deleteallorders succeeded"
   else
     echo "PERF_LOG_FAILED_FATAL: $s deleteallorders failed"
@@ -69,6 +60,7 @@ for s in $SERVICES; do
 
 
   # Create a large number of orders and inventory
+  echo "PERF_LOG: $s adding $ORDER_COUNT orders and inventory"
   for ((ORDER_ID=1; ORDER_ID<=$ORDER_COUNT; ORDER_ID++)) 
   do
     placeOrderTest "$ORDER_ID"
@@ -95,7 +87,8 @@ for s in $SERVICES; do
   while true;
   do
     if wget --http-user grabdish --http-password "$TEST_UI_PASSWORD" --no-check-certificate --post-data "$(inventory sushi 'getInventory')" \
-    --header='Content-Type: application/json' "$(state_get FRONTEND_URL)/command" -O $GRABDISH_LOG/inventory; then
+    --header='Content-Type: application/json' "$(state_get FRONTEND_URL)/command" -O $GRABDISH_LOG/inventory &>/dev/null; 
+    then
       if grep "inventorycount for sushi is now 0" $GRABDISH_LOG/inventory >/dev/null; then
         break
       fi
@@ -124,6 +117,3 @@ for s in $SERVICES; do
   done
 
 done
-
-cd $GRABDISH_HOME/inventory-helidon
-./deploy.sh

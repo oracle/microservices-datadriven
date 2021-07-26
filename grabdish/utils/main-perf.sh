@@ -37,10 +37,13 @@ while test 0 -lt `kubectl get pods -n msdataworkshop | egrep 'frontend-helidon|i
 done
 
 # Deploy the java services
-cd $GRABDISH_HOME
-./deploy.sh
+SERVICES="frontend-helidon order-helidon supplier-helidon-se"
+for s in $SERVICES; do
+  cd $GRABDISH_HOME/$s
+  ./deploy.sh || true
+done
 
-while test 4 -gt `kubectl get pods -n msdataworkshop | egrep 'frontend-helidon|inventory-helidon|order-helidon|supplier-helidon-se' | grep "1/1" | wc -l`; do
+while test 4 -gt `kubectl get pods -n msdataworkshop | egrep 'frontend-helidon||order-helidon|supplier-helidon-se' | grep "1/1" | wc -l`; do
   echo "Waiting for pods to start..."
   sleep 10
 done
@@ -80,8 +83,8 @@ while ! $(state_get NON_JAVA_BUILDS); do
   echo "Waiting for NON_JAVA_BUILDS"
 done
 
+cd $GRABDISH_HOME
 utils/polyglot-perf.sh
 logpodnotail frontend > $GRABDISH_LOG/perflog-frontend-from-polyglot
 logpodnotail supplier > $GRABDISH_LOG/perflog-supplier-from-polyglot
 logpodnotail order > $GRABDISH_LOG/perflog-order-from-polyglot
-
