@@ -41,7 +41,8 @@ public class OrderServiceEventConsumer implements Runnable {
         QueueConnectionFactory q_cf = AQjmsFactory.getQueueConnectionFactory(orderResource.atpOrderPdb);
         QueueSession qsess = null;
         QueueConnection qconn = null;
-        MessageConsumer consumer = null;
+//        MessageConsumer consumer = null;
+        TracingMessageConsumer consumer = null;
         Connection dbConnection = null;
         //python (and likely nodejs) message causes javax.jms.MessageFormatException: JMS-117: Conversion failed - invalid property type
         //due to message.getObjectProperty(key) here...
@@ -55,13 +56,13 @@ public class OrderServiceEventConsumer implements Runnable {
                     qsess = qconn.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
                     qconn.start();
                     Queue queue = ((AQjmsSession) qsess).getQueue(OrderResource.orderQueueOwner, OrderResource.inventoryQueueName);
-                    consumer = (AQjmsConsumer) qsess.createConsumer(queue);
-//                    tracingMessageConsumer = new TracingMessageConsumer(consumer, orderResource.getTracer());
+//                    consumer = (AQjmsConsumer) qsess.createConsumer(queue);
+                    consumer = new TracingMessageConsumer(consumer, orderResource.getTracer());
                 }
 //                if (tracingMessageConsumer == null || qsess == null) continue;
                 if (consumer == null || qsess == null) continue;
-//                TextMessage textMessage = (TextMessage) tracingMessageConsumer.receive(-1);
                 TextMessage textMessage = (TextMessage) consumer.receive(-1);
+//                TextMessage textMessage = (TextMessage) consumer.receive(-1);
                 String messageText = textMessage.getText();
                 System.out.println("messageText " + messageText);
                 Inventory inventory = JsonUtils.read(messageText, Inventory.class);
