@@ -308,7 +308,6 @@ if ! state_done UI_PASSWORD; then
     fi
   done
   BASE64_UI_PASSWORD=`echo -n "$PW" | base64`
-  BASE64_UI_USER=`echo -n "grabdish" | base64`
 fi
 
 
@@ -436,7 +435,7 @@ while ! state_done UI_PASSWORD; do
       "name": "frontendadmin"
    },
    "data": {
-      "user": "${BASE64_UI_USER}"
+      "user": "Z3JhYmRpc2g="
       "password": "${BASE64_UI_PASSWORD}"
    }
 }
