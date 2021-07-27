@@ -150,30 +150,22 @@ GRANT SODA_APP to $U;
 
 connect $U/"$DB_PASSWORD"@$SVC
 
-BEGIN
-DBMS_AQADM.CREATE_SHARDED_QUEUE (
-    queue_name             => '$ORDER_QUEUE',
-    storage_clause         => NULL,
-    multiple_consumers     => TRUE,
-    max_retries            => NULL,
-    comment                => NULL);
-
-DBMS_AQADM.START_QUEUE (
-queue_name          => '$ORDER_QUEUE');
-END;
+begin
+    dbms_aqadm.create_sharded_queue(queue_name=> '$ORDER_QUEUE', multiple_consumers => TRUE);
+    dbms_aqadm.set_queue_parameter('$ORDER_QUEUE', 'SHARD_NUM', 1);
+    dbms_aqadm.set_queue_parameter('$ORDER_QUEUE', 'STICKY_DEQUEUE', 1);
+    dbms_aqadm.set_queue_parameter('$ORDER_QUEUE', 'KEY_BASED_ENQUEUE', 1);
+    dbms_aqadm.start_queue('$ORDER_QUEUE');
+end;
 /
 
-BEGIN
-DBMS_AQADM.CREATE_SHARDED_QUEUE (
-    queue_name             => '$INVENTORY_QUEUE',
-    storage_clause         => NULL,
-    multiple_consumers     => TRUE,
-    max_retries            => NULL,
-    comment                => NULL);
-
-DBMS_AQADM.START_QUEUE (
-queue_name          => '$INVENTORY_QUEUE');
-END;
+begin
+    dbms_aqadm.create_sharded_queue(queue_name=> '$INVENTORY_QUEUE', multiple_consumers => FALSE);
+    dbms_aqadm.set_queue_parameter('$INVENTORY_QUEUE', 'SHARD_NUM', 1);
+    dbms_aqadm.set_queue_parameter('$INVENTORY_QUEUE', 'STICKY_DEQUEUE', 1);
+    dbms_aqadm.set_queue_parameter('$INVENTORY_QUEUE', 'KEY_BASED_ENQUEUE', 1);
+    dbms_aqadm.start_queue('$INVENTORY_QUEUE');
+end;
 /
 !
   state_set_done ORDER_USER
@@ -207,30 +199,22 @@ GRANT EXECUTE ON sys.dbms_aq TO $U;
 
 connect $U/"$DB_PASSWORD"@$SVC
 
-BEGIN
-DBMS_AQADM.CREATE_SHARDED_QUEUE (
-    queue_name             => '$ORDER_QUEUE',
-    storage_clause         => NULL,
-    multiple_consumers     => TRUE,
-    max_retries            => NULL,
-    comment                => NULL);
-
-DBMS_AQADM.START_QUEUE (
-queue_name          => '$ORDER_QUEUE');
-END;
+begin
+    dbms_aqadm.create_sharded_queue(queue_name=> '$ORDER_QUEUE', multiple_consumers => FALSE);
+    dbms_aqadm.set_queue_parameter('$ORDER_QUEUE', 'SHARD_NUM', 1);
+    dbms_aqadm.set_queue_parameter('$ORDER_QUEUE', 'STICKY_DEQUEUE', 1);
+    dbms_aqadm.set_queue_parameter('$ORDER_QUEUE', 'KEY_BASED_ENQUEUE', 1);
+    dbms_aqadm.start_queue('$ORDER_QUEUE');
+end;
 /
 
-BEGIN
-DBMS_AQADM.CREATE_SHARDED_QUEUE (
-    queue_name             => '$INVENTORY_QUEUE',
-    storage_clause         => NULL,
-    multiple_consumers     => TRUE,
-    max_retries            => NULL,
-    comment                => NULL);
-
-DBMS_AQADM.START_QUEUE (
-queue_name          => '$INVENTORY_QUEUE');
-END;
+begin
+    dbms_aqadm.create_sharded_queue(queue_name=> '$INVENTORY_QUEUE', multiple_consumers => TRUE);
+    dbms_aqadm.set_queue_parameter('$INVENTORY_QUEUE', 'SHARD_NUM', 1);
+    dbms_aqadm.set_queue_parameter('$INVENTORY_QUEUE', 'STICKY_DEQUEUE', 1);
+    dbms_aqadm.set_queue_parameter('$INVENTORY_QUEUE', 'KEY_BASED_ENQUEUE', 1);
+    dbms_aqadm.start_queue('$INVENTORY_QUEUE');
+end;
 /
 
 create table inventory (
