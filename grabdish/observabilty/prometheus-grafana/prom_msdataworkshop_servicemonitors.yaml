@@ -1,57 +1,62 @@
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: prometheus-frontend
-  labels:
-    serviceMonitorSelector: prometheus
-    app: frontend
-    release: stable
-spec:
-  endpoints:
-    - interval: 30s
-      port: metrics
-#      basicAuth:
-#        password:
-#          name: basic-auth
-#          key: password
-#        username:
-#          name: basic-auth
-#          key: user
-  selector:
-    matchLabels:
-      app: frontend
----
+#apiVersion: monitoring.coreos.com/v1
+#kind: ServiceMonitor
+#metadata:
+#  name: prometheus-frontend
+#  labels:
+#    serviceMonitorSelector: prometheus
+#    app: frontend
+#    release: stable
+#spec:
+#  endpoints:
+#    - interval: 30s
+#      port: metrics
+##      basicAuth:
+##        password:
+##          name: basic-auth
+##          key: password
+##        username:
+##          name: basic-auth
+##          key: user
+#  selector:
+#    matchLabels:
+#      app: frontend
+#---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: prometheus-order
   labels:
-    serviceMonitorSelector: prometheus
-    app: order
+#    app.kubernetes.io/instance=myapp-gar-api-svc-live
+#    app.kubernetes.io/managed-by=Tiller
+#    app.kubernetes.io/name=myapp-api-svc-live
+#    app.selector=myapp-api-svc-live
+#    serviceMonitorSelector: prometheus
+#    app: prometheus
+#    app: order
     release: stable
 spec:
   endpoints:
-    - interval: 30s
+    - interval: 3s
       port: metrics
   selector:
     matchLabels:
       app: order
----
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: prometheus-inventory
-  labels:
-    serviceMonitorSelector: prometheus
-    app: inventory
-    release: stable
-spec:
-  endpoints:
-    - interval: 30s
-      port: metrics
-  selector:
-    matchLabels:
-      app: inventory
+#---
+#apiVersion: monitoring.coreos.com/v1
+#kind: ServiceMonitor
+#metadata:
+#  name: prometheus-inventory
+#  labels:
+#    serviceMonitorSelector: prometheus
+#    app: inventory
+#    release: stable
+#spec:
+#  endpoints:
+#    - interval: 30s
+#      port: metrics
+#  selector:
+#    matchLabels:
+#      app: inventory
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor

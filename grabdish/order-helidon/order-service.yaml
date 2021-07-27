@@ -7,7 +7,7 @@ metadata:
   labels:
     app: order
 #    operated-prometheus: true
-    release: stable
+#    release: stable
 spec:
   type: NodePort
   ports:

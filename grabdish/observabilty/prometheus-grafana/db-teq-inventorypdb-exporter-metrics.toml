@@ -1,13 +1,4 @@
 [[metric]]
-context = "resource"
-labels = [ "resource_name" ]
-metricsdesc = { current_utilization= "Generic counter metric from v$resource_limit view in Oracle (current value).", limit_value="Generic counter metric from v$resource_limit view in Oracle (UNLIMITED: -1)." }
-request = '''
-    SELECT resource_name,current_utilization,CASE WHEN TRIM(limit_value) LIKE 'UNLIMITED' THEN '-1' ELSE TRIM(limit_value) END as limit_value FROM v$resource_limit
-'''
-ignorezeroresult = true
-
-[[metric]]
 context = "teq"
 labels = ["inst_id"]
 metricsdesc = { total_queues = "Total number of queues"}
@@ -18,22 +9,6 @@ request = '''
 	    from gv$aq_sharded_subscriber_stat t1
 	    join gv$persistent_queues t2 on t1.queue_id = t2.queue_id
 	) group by inst_id
-'''
-ignorezeroresult = true
-
-[[metric]]
-context = "inventoryqueue"
-labels = ["queue"]
-metricsdesc = { message_count = "Total number of messages on inventoryqueue"}
-request = '''
-	select queue, count(*) as message_count from
-	(
-	    select distinct t1.inst_id, t2.queue_name
-	    from gv$aq_sharded_subscriber_stat t1
-	    join gv$persistent_queues t2 on t1.queue_id = t2.queue_id
-	) group by inst_id
-	select count (*) from AQ$INVENTORYQUEUETABLE
-      where queue = 'INVENTORYQUEUE'
 '''
 ignorezeroresult = true
 
@@ -68,6 +43,61 @@ request = '''
 ignorezeroresult = true
 
 [[metric]]
+context = "sessions"
+labels = ["inst_id", "status", "type"]
+metricsdesc = { value = "Gauge metric with count of sessions by status and type." }
+request = "select inst_id, status, type, count(*) as value from gv$session group by status, type, inst_id"
+
+
+[[metric]]
+context = "asm_diskgroup"
+labels = ["inst_id", "name"]
+metricsdesc = { total = "Total size of ASM disk group.", free = "Free space available on ASM disk group." }
+request = "select inst_id, name, total_mb*1024*1024 as total, free_mb*1024*1024 as free from gv$asm_diskgroup"
+ignorezeroresult = true
+
+
+[[metric]]
+context = "activity"
+labels = ["inst_id", "name"]
+metricsdesc = { value = "Generic counter metric from gv$sysstat view in Oracle." }
+request = "select inst_id, name, value from gv$sysstat where name IN ('parse count (total)', 'execute count', 'user commits', 'user rollbacks')"
+
+[[metric]]
+context = "process"
+labels = ["inst_id"]
+metricsdesc = { count = "Gauge metric with count of processes." }
+request = "select inst_id, count(*) as count from gv$process group by inst_id"
+
+[[metric]]
+context = "wait_class"
+labels = ["inst_id", "wait_class"]
+metricsdesc = { total_waits = "Number of times waits of the class occurred", time_waited = "Amount of time spent in the wait by all sessions in the instance" }
+request = "select inst_id, wait_class, total_waits, time_waited from gv$system_wait_class"
+ignorezeroresult = true
+
+[[metric]]
+context = "system"
+labels = ["inst_id", "stat_name"]
+metricsdesc = { value = "os metric from gv$osstat view in Oracle." }
+request = "select inst_id, stat_name, value from gv$osstat where upper(stat_name) in ('NUM_CPUS', 'LOAD', 'IDLE_TIME', 'BUSY_TIME', 'USER_TIME', 'PHYSICAL_MEMORY_BYTES', 'FREE_MEMORY_BYTES')"
+ignorezeroresult = true
+
+[[metric]]
+context = "system_network"
+labels = ["inst_id"]
+metricsdesc = { received_from_client = "Bytes received from client.", sent_to_client = "Bytes sent to client." }
+request = '''
+	select t1.inst_id as inst_id, t1.received_from_client as received_from_client, t2.sent_to_client as sent_to_client
+	from
+    	(select inst_id, value as received_from_client from gv$sysstat where lower(name) like '%received via sql*net from client%' order by value desc) t1
+	left join
+    	(select inst_id, value as sent_to_client from gv$sysstat where lower(name) like '%sent via sql*net to client%' order by value desc) t2
+	on t1.inst_id = t2.inst_id
+'''
+
+
+[[metric]]
 context = "grabdish"
 labels = ["inventoryid"]
 metricsdesc = { sushi_count = "Total number of sushi inventory"}
@@ -81,9 +111,4 @@ request = '''
 '''
 ignorezeroresult = true
 
-[[metric]]
-context = "sessions"
-labels = [ "status", "type" ]
-metricsdesc = { value= "Gauge metric with count of sessions by status and type." }
-request = "SELECT status, type, COUNT(*) as value FROM v$session GROUP BY status, type"
 
