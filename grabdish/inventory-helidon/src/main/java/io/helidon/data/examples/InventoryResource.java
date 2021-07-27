@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 
 import io.opentracing.Tracer;
 import oracle.ucp.jdbc.PoolDataSource;
+import org.eclipse.microprofile.metrics.MetricRegistry;
 
 @Path("/")
 @ApplicationScoped
@@ -45,6 +46,9 @@ public class InventoryResource {
     @Inject
     private Tracer tracer;
 
+    @Inject
+    private MetricRegistry metricRegistry;
+
     public void init(@Observes @Initialized(ApplicationScoped.class) Object init) throws SQLException {
         System.out.println("InventoryResource.init " + init);
         String pw;
@@ -65,6 +69,10 @@ public class InventoryResource {
 
     Tracer getTracer() {
         return tracer;
+    }
+
+    MetricRegistry getMetricRegistry() {
+        return metricRegistry;
     }
 
     @Path("/listenForMessages")

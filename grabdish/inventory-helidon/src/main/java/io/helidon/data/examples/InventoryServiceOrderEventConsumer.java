@@ -7,7 +7,7 @@
 package io.helidon.data.examples;
 
 import io.opentracing.Span;
-import io.opentracing.contrib.jms2.TracingMessageProducer;
+import io.opentracing.contrib.jms.TracingMessageProducer;
 import io.opentracing.contrib.jms.common.TracingMessageConsumer;
 import oracle.jdbc.internal.OraclePreparedStatement;
 import oracle.jms.*;
@@ -89,8 +89,6 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
                 TextMessage orderMessage = (TextMessage) (tracingMessageConsumer.receive(-1));
                 String txt = orderMessage.getText();
                 System.out.println("txt " + txt);
-                System.out.print("JMSPriority: " + orderMessage.getJMSPriority());
-                System.out.println("Priority: " + orderMessage.getIntProperty("Priority"));
                 System.out.print(" Message: " + orderMessage.getIntProperty("Id"));
                 Order order = JsonUtils.read(txt, Order.class);
                 System.out.print(" orderid:" + order.getOrderid());
@@ -121,6 +119,7 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         activeSpan.setBaggageItem("sagaid", "testsagaid" + orderid); //baggage is part of SpanContext and carries data across process boundaries for access throughout the trace
         activeSpan.setBaggageItem("orderid", orderid);
         activeSpan.setBaggageItem("inventorylocation", inventorylocation);
+        inventoryResource.getMetricRegistry().counter("orderplaced").inc();
         String jsonString = JsonUtils.writeValueAsString(inventory);
         Topic inventoryTopic = session.getTopic(InventoryResource.inventoryuser, InventoryResource.inventoryQueueName);
         System.out.println("send inventory status message... jsonString:" + jsonString + " inventoryTopic:" + inventoryTopic);

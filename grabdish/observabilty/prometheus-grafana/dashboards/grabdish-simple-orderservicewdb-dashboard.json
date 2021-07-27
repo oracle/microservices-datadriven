@@ -18,7 +18,7 @@
   "gnetId": 12853,
   "graphTooltip": 0,
   "id": 27,
-  "iteration": 1627399987502,
+  "iteration": 1627403586744,
   "links": [],
   "panels": [
     {
@@ -152,32 +152,7 @@
             ]
           }
         },
-        "overrides": [
-          {
-            "__systemRef": "hideSeriesFrom",
-            "matcher": {
-              "id": "byNames",
-              "options": {
-                "mode": "exclude",
-                "names": [
-                  "oracledb_sessions_value{endpoint=\"metrics\", instance=\"10.244.0.141:9161\", job=\"db-teq-exporter\", namespace=\"msdataworkshop\", pod=\"db-teq-exporter-886d857dd-kjv92\", service=\"db-teq-exporter\", status=\"ACTIVE\", type=\"USER\"}"
-                ],
-                "prefix": "All except:",
-                "readOnly": true
-              }
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": true
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 8,
@@ -199,13 +174,13 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "oracledb_sessions_value",
+          "expr": "oracledb_orderpdb_sessions_value",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Inventory PDB sessions",
+      "title": "Order PDB sessions",
       "type": "timeseries"
     },
     {
@@ -900,7 +875,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "order",
           "value": "order"
         },
@@ -929,9 +904,9 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
-          "text": "10.244.0.24:8080",
-          "value": "10.244.0.24:8080"
+          "selected": true,
+          "text": "10.244.0.212:8080",
+          "value": "10.244.0.212:8080"
         },
         "datasource": "Prometheus",
         "definition": "label_values(vendor_requests_count_total{job=\"$serviceID\"}, instance)",
@@ -990,5 +965,5 @@
   "timezone": "",
   "title": "Simple GrabDish Monitoring",
   "uid": "H0LfoYZ7k",
-  "version": 2
+  "version": 3
 }
