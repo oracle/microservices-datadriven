@@ -154,7 +154,6 @@
         <dependency>
             <groupId>io.helidon.microprofile.tracing</groupId>
             <artifactId>helidon-microprofile-tracing</artifactId>
-            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>io.helidon.tracing</groupId>
