@@ -21,3 +21,4 @@ kubectl apply -f db-teq-exporter-orderpdb-deployment.yaml -n msdataworkshop
 kubectl apply -f db-teq-exporter-orderpdb-service.yaml -n msdataworkshop
 kubectl apply -f db-teq-exporter-inventorypdb-deployment.yaml -n msdataworkshop
 kubectl apply -f db-teq-exporter-inventorypdb-service.yaml -n msdataworkshop
+

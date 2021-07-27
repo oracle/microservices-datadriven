@@ -1,38 +1,29 @@
-#apiVersion: monitoring.coreos.com/v1
-#kind: ServiceMonitor
-#metadata:
-#  name: prometheus-frontend
-#  labels:
-#    serviceMonitorSelector: prometheus
-#    app: frontend
-#    release: stable
-#spec:
-#  endpoints:
-#    - interval: 30s
-#      port: metrics
-##      basicAuth:
-##        password:
-##          name: basic-auth
-##          key: password
-##        username:
-##          name: basic-auth
-##          key: user
-#  selector:
-#    matchLabels:
-#      app: frontend
-#---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: prometheus-frontend
+  labels:
+    release: stable
+spec:
+  endpoints:
+    - interval: 30s
+      port: metrics
+#      basicAuth:
+#        password:
+#          name: basic-auth
+#          key: password
+#        username:
+#          name: basic-auth
+#          key: user
+  selector:
+    matchLabels:
+      app: frontend
+---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: prometheus-order
   labels:
-#    app.kubernetes.io/instance=myapp-gar-api-svc-live
-#    app.kubernetes.io/managed-by=Tiller
-#    app.kubernetes.io/name=myapp-api-svc-live
-#    app.selector=myapp-api-svc-live
-#    serviceMonitorSelector: prometheus
-#    app: prometheus
-#    app: order
     release: stable
 spec:
   endpoints:
@@ -41,29 +32,26 @@ spec:
   selector:
     matchLabels:
       app: order
-#---
-#apiVersion: monitoring.coreos.com/v1
-#kind: ServiceMonitor
-#metadata:
-#  name: prometheus-inventory
-#  labels:
-#    serviceMonitorSelector: prometheus
-#    app: inventory
-#    release: stable
-#spec:
-#  endpoints:
-#    - interval: 30s
-#      port: metrics
-#  selector:
-#    matchLabels:
-#      app: inventory
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: prometheus-inventory
+  labels:
+    release: stable
+spec:
+  endpoints:
+    - interval: 30s
+      port: metrics
+  selector:
+    matchLabels:
+      app: inventory
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: prometheus-db-teq-exporter-order
   labels:
-    serviceMonitorSelector: prometheus
     app: db-teq-exporter-order
     release: stable
 spec:
@@ -79,7 +67,6 @@ kind: ServiceMonitor
 metadata:
   name: prometheus-db-teq-exporter-inventory
   labels:
-    serviceMonitorSelector: prometheus
     app: db-teq-exporter-inventory
     release: stable
 spec:
