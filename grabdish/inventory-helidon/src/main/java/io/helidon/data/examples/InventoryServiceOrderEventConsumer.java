@@ -123,7 +123,7 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         activeSpan.setBaggageItem("sagaid", "testsagaid" + orderid); //baggage is part of SpanContext and carries data across process boundaries for access throughout the trace
         activeSpan.setBaggageItem("orderid", orderid);
         activeSpan.setBaggageItem("inventorylocation", inventorylocation);
-        if (inventory.equals(INVENTORYDOESNOTEXIST)) {
+        if (inventorylocation.equals(INVENTORYDOESNOTEXIST)) {
             System.out.println("InventoryServiceOrderEventConsumer.updateDataAndSendEventOnInventory increment INVENTORYDOESNOTEXIST metric");
             Metadata metadata = Metadata.builder()
                     .withName(INVENTORYDOESNOTEXIST + "Count")
