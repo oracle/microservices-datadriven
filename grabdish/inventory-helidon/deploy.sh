@@ -27,4 +27,4 @@ else
     kubectl apply -f <(istioctl kube-inject -f $SCRIPT_DIR/inventory-helidon-deployment-$CURRENTTIME.yaml) -n msdataworkshop
 fi
 
-# kubectl create -f inventory-service.yaml -n msdataworkshop
+kubectl create -f inventory-service.yaml -n msdataworkshop

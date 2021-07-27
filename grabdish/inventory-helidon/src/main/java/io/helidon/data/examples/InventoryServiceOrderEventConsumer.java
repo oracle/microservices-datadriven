@@ -124,6 +124,7 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         activeSpan.setBaggageItem("orderid", orderid);
         activeSpan.setBaggageItem("inventorylocation", inventorylocation);
         if (inventory.equals(INVENTORYDOESNOTEXIST)) {
+            System.out.println("InventoryServiceOrderEventConsumer.updateDataAndSendEventOnInventory increment INVENTORYDOESNOTEXIST metric");
             Metadata metadata = Metadata.builder()
                     .withName(INVENTORYDOESNOTEXIST + "Count")
                     .withType(MetricType.COUNTER)
@@ -138,10 +139,7 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         TextMessage objmsg = session.createTextMessage();
 //        TopicPublisher publisher = session.createPublisher(inventoryTopic);
         TracingMessageProducer producer = new TracingMessageProducer(session.createPublisher(inventoryTopic), inventoryResource.getTracer());
-//        objmsg.setIntProperty("Id", 1);
-//        objmsg.setIntProperty("Priority", 2);
         objmsg.setText(jsonString);
-//        objmsg.setJMSPriority(2);
 //        publisher.publish(inventoryTopic, objmsg, DeliveryMode.PERSISTENT, 2, AQjmsConstants.EXPIRATION_NEVER);
         producer.send(inventoryTopic, objmsg, DeliveryMode.PERSISTENT, 2, AQjmsConstants.EXPIRATION_NEVER);
     }

@@ -6,17 +6,11 @@ metadata:
   name: order
   labels:
     app: order
-#    operated-prometheus: true
-#    release: stable
 spec:
   type: NodePort
   ports:
   - port: 8080
     name: metrics
-#    name: http
     targetPort: 8080
-#  - port: 9090
-#    name: metrics
-#    targetPort: 9090
   selector:
     app: order

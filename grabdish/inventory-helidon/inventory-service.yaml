@@ -10,6 +10,7 @@ spec:
   type: NodePort
   ports:
     - port: 8080
-      name: http
+      name: metrics
+      targetPort: 8080
   selector:
     app: inventory
