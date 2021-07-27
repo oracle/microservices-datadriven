@@ -24,6 +24,7 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
 
     private static final String DECREMENT_BY_ID =
             "update inventory set inventorycount = inventorycount - 1 where inventoryid = ? and inventorycount > 0 returning inventorylocation into ?";
+    public static final String INVENTORYDOESNOTEXIST = "inventorydoesnotexist";
     InventoryResource inventoryResource;
     Connection dbConnection;
 
@@ -122,12 +123,14 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         activeSpan.setBaggageItem("sagaid", "testsagaid" + orderid); //baggage is part of SpanContext and carries data across process boundaries for access throughout the trace
         activeSpan.setBaggageItem("orderid", orderid);
         activeSpan.setBaggageItem("inventorylocation", inventorylocation);
-        Metadata metadata = Metadata.builder()
-                .withName("orderPlacedMessageReceived")
-                .withType(MetricType.COUNTER)
-                .build();
-        Counter metric = inventoryResource.getMetricRegistry().counter(metadata);
-        metric.inc(1);
+        if (inventory.equals(INVENTORYDOESNOTEXIST)) {
+            Metadata metadata = Metadata.builder()
+                    .withName(INVENTORYDOESNOTEXIST + "Count")
+                    .withType(MetricType.COUNTER)
+                    .build();
+            Counter metric = inventoryResource.getMetricRegistry().counter(metadata);
+            metric.inc(1);
+        }
         String jsonString = JsonUtils.writeValueAsString(inventory);
         Topic inventoryTopic = session.getTopic(InventoryResource.inventoryuser, InventoryResource.inventoryQueueName);
         System.out.println("send inventory status message... jsonString:" + jsonString + " inventoryTopic:" + inventoryTopic);
@@ -135,10 +138,10 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         TextMessage objmsg = session.createTextMessage();
 //        TopicPublisher publisher = session.createPublisher(inventoryTopic);
         TracingMessageProducer producer = new TracingMessageProducer(session.createPublisher(inventoryTopic), inventoryResource.getTracer());
-        objmsg.setIntProperty("Id", 1);
-        objmsg.setIntProperty("Priority", 2);
+//        objmsg.setIntProperty("Id", 1);
+//        objmsg.setIntProperty("Priority", 2);
         objmsg.setText(jsonString);
-        objmsg.setJMSPriority(2);
+//        objmsg.setJMSPriority(2);
 //        publisher.publish(inventoryTopic, objmsg, DeliveryMode.PERSISTENT, 2, AQjmsConstants.EXPIRATION_NEVER);
         producer.send(inventoryTopic, objmsg, DeliveryMode.PERSISTENT, 2, AQjmsConstants.EXPIRATION_NEVER);
     }
@@ -158,7 +161,7 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
                 return location;
             } else {
                 System.out.println("InventoryServiceOrderEventConsumer.updateDataAndSendEventOnInventory id {" + id + "} inventorydoesnotexist");
-                return "inventorydoesnotexist";
+                return INVENTORYDOESNOTEXIST;
             }
         }
     }
