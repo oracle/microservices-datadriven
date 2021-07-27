@@ -7,7 +7,7 @@
 package io.helidon.data.examples;
 
 import io.opentracing.Span;
-import io.opentracing.contrib.jms.TracingMessageProducer;
+import io.opentracing.contrib.jms2.TracingMessageProducer;
 import io.opentracing.contrib.jms.common.TracingMessageConsumer;
 import oracle.jdbc.internal.OraclePreparedStatement;
 import oracle.jms.*;
