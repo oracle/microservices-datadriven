@@ -11,6 +11,9 @@ import io.opentracing.contrib.jms.TracingMessageProducer;
 import io.opentracing.contrib.jms.common.TracingMessageConsumer;
 import oracle.jdbc.internal.OraclePreparedStatement;
 import oracle.jms.*;
+import org.eclipse.microprofile.metrics.Counter;
+import org.eclipse.microprofile.metrics.Metadata;
+import org.eclipse.microprofile.metrics.MetricType;
 
 import javax.jms.*;
 import java.lang.IllegalStateException;
@@ -119,7 +122,12 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         activeSpan.setBaggageItem("sagaid", "testsagaid" + orderid); //baggage is part of SpanContext and carries data across process boundaries for access throughout the trace
         activeSpan.setBaggageItem("orderid", orderid);
         activeSpan.setBaggageItem("inventorylocation", inventorylocation);
-        inventoryResource.getMetricRegistry().counter("orderplaced").inc();
+        Metadata metadata = Metadata.builder()
+                .withName("orderPlacedMessageReceived")
+                .withType(MetricType.COUNTER)
+                .build();
+        Counter metric = inventoryResource.getMetricRegistry().counter(metadata);
+        metric.inc(1);
         String jsonString = JsonUtils.writeValueAsString(inventory);
         Topic inventoryTopic = session.getTopic(InventoryResource.inventoryuser, InventoryResource.inventoryQueueName);
         System.out.println("send inventory status message... jsonString:" + jsonString + " inventoryTopic:" + inventoryTopic);
