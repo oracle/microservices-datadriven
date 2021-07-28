@@ -154,7 +154,6 @@ begin
     dbms_aqadm.create_sharded_queue(queue_name=> '$ORDER_QUEUE', multiple_consumers => TRUE);
     dbms_aqadm.set_queue_parameter('$ORDER_QUEUE', 'SHARD_NUM', 1);
     dbms_aqadm.set_queue_parameter('$ORDER_QUEUE', 'STICKY_DEQUEUE', 1);
-    dbms_aqadm.set_queue_parameter('$ORDER_QUEUE', 'KEY_BASED_ENQUEUE', 1);
     dbms_aqadm.start_queue('$ORDER_QUEUE');
 end;
 /
@@ -163,7 +162,6 @@ begin
     dbms_aqadm.create_sharded_queue(queue_name=> '$INVENTORY_QUEUE', multiple_consumers => FALSE);
     dbms_aqadm.set_queue_parameter('$INVENTORY_QUEUE', 'SHARD_NUM', 1);
     dbms_aqadm.set_queue_parameter('$INVENTORY_QUEUE', 'STICKY_DEQUEUE', 1);
-    dbms_aqadm.set_queue_parameter('$INVENTORY_QUEUE', 'KEY_BASED_ENQUEUE', 1);
     dbms_aqadm.start_queue('$INVENTORY_QUEUE');
 end;
 /
@@ -203,7 +201,6 @@ begin
     dbms_aqadm.create_sharded_queue(queue_name=> '$ORDER_QUEUE', multiple_consumers => FALSE);
     dbms_aqadm.set_queue_parameter('$ORDER_QUEUE', 'SHARD_NUM', 1);
     dbms_aqadm.set_queue_parameter('$ORDER_QUEUE', 'STICKY_DEQUEUE', 1);
-    dbms_aqadm.set_queue_parameter('$ORDER_QUEUE', 'KEY_BASED_ENQUEUE', 1);
     dbms_aqadm.start_queue('$ORDER_QUEUE');
 end;
 /
@@ -212,7 +209,6 @@ begin
     dbms_aqadm.create_sharded_queue(queue_name=> '$INVENTORY_QUEUE', multiple_consumers => TRUE);
     dbms_aqadm.set_queue_parameter('$INVENTORY_QUEUE', 'SHARD_NUM', 1);
     dbms_aqadm.set_queue_parameter('$INVENTORY_QUEUE', 'STICKY_DEQUEUE', 1);
-    dbms_aqadm.set_queue_parameter('$INVENTORY_QUEUE', 'KEY_BASED_ENQUEUE', 1);
     dbms_aqadm.start_queue('$INVENTORY_QUEUE');
 end;
 /
