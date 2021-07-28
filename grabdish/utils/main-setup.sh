@@ -435,7 +435,6 @@ while ! state_done UI_PASSWORD; do
       "name": "frontendadmin"
    },
    "data": {
-      "user": "Z3JhYmRpc2g="
       "password": "${BASE64_UI_PASSWORD}"
    }
 }
