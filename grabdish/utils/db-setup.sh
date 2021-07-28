@@ -316,7 +316,7 @@ connect $U/"$DB_PASSWORD"@$SVC
 BEGIN
 DBMS_AQADM.add_subscriber(
    queue_name=>'$Q',
-   subscriber=>sys.aq\$_agent(null,'$TU.$Q@$LINK',0),
+   subscriber=>sys.aq\$_agent(null,'$Q@$LINK',0),
    queue_to_queue => true);
 END;
 /
@@ -350,7 +350,7 @@ connect $U/"$DB_PASSWORD"@$SVC
 BEGIN
 DBMS_AQADM.add_subscriber(
    queue_name=>'$Q',
-   subscriber=>sys.aq\$_agent(null,'$TU.$Q@$LINK',0),
+   subscriber=>sys.aq\$_agent(null,'$Q@$LINK',0),
    queue_to_queue => true);
 END;
 /
