@@ -107,3 +107,19 @@ request = '''
     	)
 '''
 
+
+[[metric]]
+context = "grabdish"
+labels = ["orderid"]
+metricsdesc = { pending_orders = "Total number of pending orders"}
+request = '''
+	select s.ECID , s.SID, s.ACTION, s.MODULE, s.TERMINAL, s.client_info, s.PLSQL_SUBPROGRAM_ID,s.PROGRAM
+    , ( SELECT max( substr( sql_text , 1, 40 )) FROM v$sql sq WHERE sq.sql_id = s.sql_id ) AS sql_text
+    ,      ( SELECT object_name    FROM dba_procedures WHERE object_id = plsql_entry_object_id AND subprogram_id = 0) AS plsql_entry_object
+    ,      ( SELECT procedure_name FROM dba_procedures WHERE object_id = plsql_entry_object_id AND subprogram_id = plsql_entry_subprogram_id) AS plsql_entry_subprogram
+    ,      ( SELECT object_name    FROM dba_procedures WHERE object_id = plsql_object_id       AND subprogram_id = 0) AS plsql_entry_object
+    ,      ( SELECT procedure_name FROM dba_procedures WHERE object_id = plsql_object_id       AND subprogram_id = PLSQL_SUBPROGRAM_ID) AS plsql_entry_subprogram
+    from v$session s    [  V$ACTIVE_SESSION_HISTORY   ]
+    where s.ecid = ‘5292e5f8-6db1-49b1-9d98-d8fdd4ed2533-000122e1’
+'''
+

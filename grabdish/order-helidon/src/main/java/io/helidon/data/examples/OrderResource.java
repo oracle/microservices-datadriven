@@ -155,9 +155,11 @@ public class OrderResource {
         activeSpan.log("begin placing order"); // logs are for a specific moment or event within the span (in contrast to tags which should apply to the span regardless of time).
         activeSpan.setTag("orderid", orderid); //tags are annotations of spans in order to query, filter, and comprehend trace data
         activeSpan.setTag("itemid", itemid);
+        activeSpan.setTag("ecid", "5292e5f8-6db1-49b1-9d98-d8fdd4ed2533-000122e1");
         activeSpan.setTag("db.user", atpOrderPdb.getUser()); // https://github.com/opentracing/specification/blob/master/semantic_conventions.md
         activeSpan.setBaggageItem("sagaid", "testsagaid" + orderid); //baggage is part of SpanContext and carries data across process boundaries for access throughout the trace
         activeSpan.setBaggageItem("orderid", orderid);
+        activeSpan.setBaggageItem("ecid", "5292e5f8-6db1-49b1-9d98-d8fdd4ed2533-000122e1");
 
         try {
             System.out.println("--->insertOrderAndSendEvent..." +
