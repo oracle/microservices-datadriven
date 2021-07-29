@@ -18,7 +18,7 @@
   "gnetId": 12853,
   "graphTooltip": 0,
   "id": 27,
-  "iteration": 1627516874151,
+  "iteration": 1627519917136,
   "links": [],
   "panels": [
     {
@@ -105,7 +105,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "up{job=\"$serviceID\", instance=\"$instance\"}",
+          "expr": "up{job=\"frontend\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -181,7 +181,10 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "base_jvm_uptime_seconds{instance=\"$instance\", job=\"$serviceID\"}",
+          "exemplar": true,
+          "expr": "base_jvm_uptime_seconds{job=\"frontend\"}",
+          "interval": "",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -422,7 +425,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "base_thread_count{instance=\"$instance\",job=\"$serviceID\"}",
+          "exemplar": true,
+          "expr": "base_thread_count{job=\"frontend\"}",
+          "interval": "",
           "intervalFactor": 2,
           "legendFormat": "Thread Count",
           "refId": "A"
@@ -522,19 +527,25 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "base_memory_usedHeap_bytes{instance=\"$instance\",job=\"$serviceID\"}",
+          "exemplar": true,
+          "expr": "base_memory_usedHeap_bytes{job=\"frontend\"}",
+          "interval": "",
           "intervalFactor": 2,
           "legendFormat": "Used Heap",
           "refId": "A"
         },
         {
-          "expr": "base_memory_committedHeap_bytes{instance=\"$instance\", job=\"$serviceID\"}",
+          "exemplar": true,
+          "expr": "base_memory_committedHeap_bytes{job=\"frontend\"}",
+          "interval": "",
           "intervalFactor": 2,
           "legendFormat": "Commited Heap",
           "refId": "C"
         },
         {
-          "expr": "base_memory_maxHeap_bytes{instance=\"$instance\", job=\"$serviceID\"}",
+          "exemplar": true,
+          "expr": "base_memory_maxHeap_bytes{job=\"frontend\"}",
+          "interval": "",
           "intervalFactor": 2,
           "legendFormat": "Max Heap",
           "refId": "B"
@@ -665,7 +676,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "up{job=\"$serviceID\", instance=\"$instance\"}",
+          "expr": "up{job=\"order\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -741,7 +752,10 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "base_jvm_uptime_seconds{instance=\"$instance\", job=\"$serviceID\"}",
+          "exemplar": true,
+          "expr": "base_jvm_uptime_seconds{job=\"order\"}",
+          "interval": "",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -820,7 +834,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "up{job=\"$serviceID\", instance=\"$instance\"}",
+          "expr": "up{job=\"order\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -970,7 +984,7 @@
               "options": {
                 "mode": "exclude",
                 "names": [
-                  "oracledb_orderpdb_sessions_value{endpoint=\"metrics\", inst_id=\"5\", instance=\"10.244.0.27:9161\", job=\"db-teq-exporter-order\", namespace=\"msdataworkshop\", pod=\"db-teq-exporter-order-5dc5f4bdc9-ks5ml\", service=\"db-teq-exporter-order\", status=\"ACTIVE\", type=\"USER\"}"
+                  "oracledb_orderpdb_sessions_value{endpoint=\"metrics\", inst_id=\"5\", instance=\"10.244.0.35:9161\", job=\"db-teq-exporter-order\", namespace=\"msdataworkshop\", pod=\"db-teq-exporter-order-5dc5f4bdc9-ks5ml\", service=\"db-teq-exporter-order\", status=\"ACTIVE\", type=\"USER\"}"
                 ],
                 "prefix": "All except:",
                 "readOnly": true
@@ -1169,7 +1183,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "base_thread_count{instance=\"$instance\",job=\"$serviceID\"}",
+          "exemplar": true,
+          "expr": "base_thread_count{job=\"order\"}",
+          "interval": "",
           "intervalFactor": 2,
           "legendFormat": "Thread Count",
           "refId": "A"
@@ -1274,7 +1290,7 @@
               "options": {
                 "mode": "exclude",
                 "names": [
-                  "oracledb_orderpdb_sessions_value{endpoint=\"metrics\", inst_id=\"5\", instance=\"10.244.0.27:9161\", job=\"db-teq-exporter-order\", namespace=\"msdataworkshop\", pod=\"db-teq-exporter-order-5dc5f4bdc9-ks5ml\", service=\"db-teq-exporter-order\", status=\"ACTIVE\", type=\"USER\"}"
+                  "oracledb_grabdish_pending_orders{endpoint=\"metrics\", instance=\"10.244.0.35:9161\", job=\"db-teq-exporter-order\", namespace=\"msdataworkshop\", pod=\"db-teq-exporter-order-5dc5f4bdc9-ks5ml\", service=\"db-teq-exporter-order\"}"
                 ],
                 "prefix": "All except:",
                 "readOnly": true
@@ -1375,19 +1391,25 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "base_memory_usedHeap_bytes{instance=\"$instance\",job=\"$serviceID\"}",
+          "exemplar": true,
+          "expr": "base_memory_usedHeap_bytes{job=\"order\"}",
+          "interval": "",
           "intervalFactor": 2,
           "legendFormat": "Used Heap",
           "refId": "A"
         },
         {
-          "expr": "base_memory_committedHeap_bytes{instance=\"$instance\", job=\"$serviceID\"}",
+          "exemplar": true,
+          "expr": "base_memory_committedHeap_bytes{job=\"order\"}",
+          "interval": "",
           "intervalFactor": 2,
           "legendFormat": "Commited Heap",
           "refId": "C"
         },
         {
-          "expr": "base_memory_maxHeap_bytes{instance=\"$instance\", job=\"$serviceID\"}",
+          "exemplar": true,
+          "expr": "base_memory_maxHeap_bytes{job=\"order\"}",
+          "interval": "",
           "intervalFactor": 2,
           "legendFormat": "Max Heap",
           "refId": "B"
@@ -1599,7 +1621,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "up{job=\"$serviceID\", instance=\"$instance\"}",
+          "expr": "up{job=\"order\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -1675,7 +1697,10 @@
       "pluginVersion": "8.0.3",
       "targets": [
         {
-          "expr": "base_jvm_uptime_seconds{instance=\"$instance\", job=\"$serviceID\"}",
+          "exemplar": true,
+          "expr": "base_jvm_uptime_seconds{job=\"inventory\"}",
+          "interval": "",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -1754,7 +1779,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "up{job=\"$serviceID\", instance=\"$instance\"}",
+          "expr": "up{job=\"inventory\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -1904,7 +1929,7 @@
               "options": {
                 "mode": "exclude",
                 "names": [
-                  "oracledb_inventorypdb_sessions_value{endpoint=\"metrics\", inst_id=\"5\", instance=\"10.244.0.30:9161\", job=\"db-teq-exporter-inventory\", namespace=\"msdataworkshop\", pod=\"db-teq-exporter-inventory-7cf4c55d97-zn5hc\", service=\"db-teq-exporter-inventory\", status=\"ACTIVE\", type=\"USER\"}"
+                  "oracledb_inventorypdb_sessions_value{endpoint=\"metrics\", inst_id=\"5\", instance=\"10.244.0.36:9161\", job=\"db-teq-exporter-inventory\", namespace=\"msdataworkshop\", pod=\"db-teq-exporter-inventory-7cf4c55d97-zn5hc\", service=\"db-teq-exporter-inventory\", status=\"ACTIVE\", type=\"USER\"}"
                 ],
                 "prefix": "All except:",
                 "readOnly": true
@@ -2103,7 +2128,9 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "base_thread_count{instance=\"$instance\",job=\"$serviceID\"}",
+          "exemplar": true,
+          "expr": "base_thread_count{job=\"inventory\"}",
+          "interval": "",
           "intervalFactor": 2,
           "legendFormat": "Thread Count",
           "refId": "A"
@@ -2208,7 +2235,7 @@
               "options": {
                 "mode": "exclude",
                 "names": [
-                  "oracledb_inventorypdb_sessions_value{endpoint=\"metrics\", inst_id=\"5\", instance=\"10.244.0.30:9161\", job=\"db-teq-exporter-inventory\", namespace=\"msdataworkshop\", pod=\"db-teq-exporter-inventory-7cf4c55d97-zn5hc\", service=\"db-teq-exporter-inventory\", status=\"ACTIVE\", type=\"USER\"}"
+                  "oracledb_grabdish_pending_orders{endpoint=\"metrics\", instance=\"10.244.0.35:9161\", job=\"db-teq-exporter-order\", namespace=\"msdataworkshop\", pod=\"db-teq-exporter-order-5dc5f4bdc9-ks5ml\", service=\"db-teq-exporter-order\"}"
                 ],
                 "prefix": "All except:",
                 "readOnly": true
@@ -2309,19 +2336,25 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "base_memory_usedHeap_bytes{instance=\"$instance\",job=\"$serviceID\"}",
+          "exemplar": true,
+          "expr": "base_memory_usedHeap_bytes{job=\"inventory\"}",
+          "interval": "",
           "intervalFactor": 2,
           "legendFormat": "Used Heap",
           "refId": "A"
         },
         {
-          "expr": "base_memory_committedHeap_bytes{instance=\"$instance\", job=\"$serviceID\"}",
+          "exemplar": true,
+          "expr": "base_memory_committedHeap_bytes{job=\"inventory\"}",
+          "interval": "",
           "intervalFactor": 2,
           "legendFormat": "Commited Heap",
           "refId": "C"
         },
         {
-          "expr": "base_memory_maxHeap_bytes{instance=\"$instance\", job=\"$serviceID\"}",
+          "exemplar": true,
+          "expr": "base_memory_maxHeap_bytes{job=\"inventory\"}",
+          "interval": "",
           "intervalFactor": 2,
           "legendFormat": "Max Heap",
           "refId": "B"
@@ -2452,7 +2485,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "up{job=\"$serviceID\", instance=\"$instance\"}",
+          "expr": "up{job=\"frontend\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -2533,7 +2566,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "up{job=\"$serviceID\", instance=\"$instance\"}",
+          "expr": "up{job=\"inventory\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -2695,7 +2728,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "up{job=\"$serviceID\", instance=\"$instance\"}",
+          "expr": "up{job=\"order\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -2776,7 +2809,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "up{job=\"$serviceID\", instance=\"$instance\"}",
+          "expr": "up{job=\"inventory\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -2793,70 +2826,10 @@
   "style": "dark",
   "tags": [],
   "templating": {
-    "list": [
-      {
-        "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "order",
-          "value": "order"
-        },
-        "datasource": "Prometheus",
-        "definition": "label_values(vendor_requests_count_total, job)",
-        "description": null,
-        "error": null,
-        "hide": 0,
-        "includeAll": false,
-        "label": "serviceID",
-        "multi": false,
-        "name": "serviceID",
-        "options": [],
-        "query": {
-          "query": "label_values(vendor_requests_count_total, job)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 1,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query"
-      },
-      {
-        "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "10.244.0.216:8080",
-          "value": "10.244.0.216:8080"
-        },
-        "datasource": "Prometheus",
-        "definition": "label_values(vendor_requests_count_total{job=\"$serviceID\"}, instance)",
-        "description": null,
-        "error": null,
-        "hide": 0,
-        "includeAll": false,
-        "label": null,
-        "multi": false,
-        "name": "instance",
-        "options": [],
-        "query": {
-          "query": "label_values(vendor_requests_count_total{job=\"$serviceID\"}, instance)",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
-      }
-    ]
+    "list": []
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {
@@ -2887,5 +2860,5 @@
   "timezone": "",
   "title": "GrabDish Dash",
   "uid": "H0LfoYZ7k",
-  "version": 13
+  "version": 19
 }
