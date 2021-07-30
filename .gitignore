@@ -481,4 +481,5 @@ $RECYCLE.BIN/
 #!.vscode/launch.json
 #!.vscode/extensions.json
 
-observability/
+efk/
+jaeger-test/
