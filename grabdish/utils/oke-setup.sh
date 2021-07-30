@@ -76,10 +76,20 @@ while ! state_done ORDER_USER; do
   sleep 2
 done
 
+# Provision Ingress Controller
+while ! state_done INGRESSCTLR; do
+  if kubectl create -f $GRABDISH_HOME/ingresscontrollers/nginx/nginx-ingress-controller.yaml 2>$GRABDISH_LOG/nginx_ingress_err; then
+    state_set_done INGRESSCTLR
+  else
+    echo "Ingress Controller installation failed.  Retrying..."
+    cat $GRABDISH_LOG/nginx_ingress_err
+    sleep 10
+  fi
+done
 
 # Create SSL Secret
 while ! state_done SSL_SECRET; do
-  if kubectl create secret tls ssl-certificate-secret --key $GRABDISH_HOME/tls/tls.key --cert $GRABDISH_HOME/tls/tls.crt -n msdataworkshop; then
+  if kubectl create secret tls ssl-certificate-secret --key $GRABDISH_HOME/tls/tls.key --cert $GRABDISH_HOME/tls/tls.crt -n ingress-nginx; then
     state_set_done SSL_SECRET
   else
     echo "SSL Secret creation failed.  Retrying..."
@@ -87,13 +97,24 @@ while ! state_done SSL_SECRET; do
   fi
 done
 
+# Provision Frontend Ingress
+while ! state_done FRONTEND_INGRESS; do
+  if kubectl create -f $GRABDISH_HOME/ingresscontrollers/nginx/grabdish-frontend-ingress.yaml -n msdataworkshop; then
+    state_set_done FRONTEND_INGRESS
+  else
+    echo "Frontend Ingress creation failed.  Retrying..."
+    sleep 10
+  fi
+done
 
-# Provision Load Balancer
+
+
+# Provision Frontend Service
 while ! state_done LB; do
   if kubectl create -f $GRABDISH_HOME/frontend-helidon/frontend-service.yaml -n msdataworkshop; then
     state_set_done LB
   else
-    echo "Load Balancer creation failed.  Retrying..."
+    echo "Frontend Service creation failed.  Retrying..."
     sleep 10
   fi
 done
@@ -101,11 +122,21 @@ done
 
 # Install Jaeger
 while ! state_done JAEGER; do
-  if kubectl create -f https://tinyurl.com/yc52x6q5 -n msdataworkshop 2>$GRABDISH_LOG/jaeger_err; then
+  if kubectl create -f $GRABDISH_HOME/observability/jaeger/jaeger-all-in-one-template.yml -n msdataworkshop 2>$GRABDISH_LOG/jaeger_err; then
     state_set_done JAEGER
   else
     echo "Jaeger installation failed.  Retrying..."
     cat $GRABDISH_LOG/jaeger_err
+    sleep 10
+  fi
+done
+
+# Provision Jaeger Ingress
+while ! state_done JAEGER_INGRESS; do
+  if kubectl create -f $GRABDISH_HOME/ingresscontrollers/nginx/grabdish-jaeger-ingress.yaml -n msdataworkshop; then
+    state_set_done JAEGER_INGRESS
+  else
+    echo "Jaeger Ingress creation failed.  Retrying..."
     sleep 10
   fi
 done
