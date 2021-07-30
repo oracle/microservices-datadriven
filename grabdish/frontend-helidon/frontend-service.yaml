@@ -12,7 +12,8 @@ metadata:
     service.beta.kubernetes.io/oci-load-balancer-ssl-ports: "443"
     service.beta.kubernetes.io/oci-load-balancer-tls-secret: ssl-certificate-secret
 spec:
-  type: LoadBalancer
+  #type: LoadBalancer
+  type: ClusterIP
   ports:
   - port: 443
     name: https
