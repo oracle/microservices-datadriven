@@ -101,7 +101,7 @@ done
 
 # Provision Ingress Controller
 while ! state_done INGRESSCTLR; do
-  if kubectl create -f $GRABDISH_HOME/ingresscontrollers/nginx/nginx-ingress-controller.yaml 2>$GRABDISH_LOG/nginx_ingress_err; then
+  if kubectl create -f $GRABDISH_HOME/ingresscontrollers/nginx/ingress-nginx-controller.yaml 2>$GRABDISH_LOG/nginx_ingress_err; then
     state_set_done INGRESSCTLR
   else
     echo "Ingress Controller installation failed.  Retrying..."
