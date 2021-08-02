@@ -76,6 +76,29 @@ while ! state_done ORDER_USER; do
   sleep 2
 done
 
+
+# Create Ingress NGINX Namespace
+while ! state_done NGINX_NAMESPACE; do
+  if kubectl create -f $GRABDISH_HOME/ingresscontrollers/nginx/ingress-nginx-namespace.yaml 2>$GRABDISH_LOG/nginx_ingress_ns_err; then
+    state_set_done NGINX_NAMESPACE
+  else
+    echo "Failed to create Ingress NGINX namespace.  Retrying..."
+    sleep 10
+  fi
+done
+
+
+# Create SSL Secret
+while ! state_done SSL_SECRET; do
+  if kubectl create secret tls ssl-certificate-secret --key $GRABDISH_HOME/tls/tls.key --cert $GRABDISH_HOME/tls/tls.crt -n ingress-nginx; then
+    state_set_done SSL_SECRET
+  else
+    echo "SSL Secret creation failed.  Retrying..."
+    sleep 10
+  fi
+done
+
+
 # Provision Ingress Controller
 while ! state_done INGRESSCTLR; do
   if kubectl create -f $GRABDISH_HOME/ingresscontrollers/nginx/nginx-ingress-controller.yaml 2>$GRABDISH_LOG/nginx_ingress_err; then
@@ -87,15 +110,6 @@ while ! state_done INGRESSCTLR; do
   fi
 done
 
-# Create SSL Secret
-while ! state_done SSL_SECRET; do
-  if kubectl create secret tls ssl-certificate-secret --key $GRABDISH_HOME/tls/tls.key --cert $GRABDISH_HOME/tls/tls.crt -n ingress-nginx; then
-    state_set_done SSL_SECRET
-  else
-    echo "SSL Secret creation failed.  Retrying..."
-    sleep 10
-  fi
-done
 
 # Provision Frontend Ingress
 while ! state_done FRONTEND_INGRESS; do
