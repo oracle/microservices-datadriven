@@ -89,8 +89,17 @@ done
 
 
 # Create SSL Secret
-while ! state_done SSL_SECRET; do
+while ! state_done SSL_SECRET_INGRESS; do
   if kubectl create secret tls ssl-certificate-secret --key $GRABDISH_HOME/tls/tls.key --cert $GRABDISH_HOME/tls/tls.crt -n ingress-nginx; then
+    state_set_done SSL_SECRET_INGRESS
+  else
+    echo "Ingress SSL Secret creation failed.  Retrying..."
+    sleep 10
+  fi
+done
+# Create SSL Secret
+while ! state_done SSL_SECRET; do
+  if kubectl create secret tls ssl-certificate-secret --key $GRABDISH_HOME/tls/tls.key --cert $GRABDISH_HOME/tls/tls.crt -n msdataworkshop; then
     state_set_done SSL_SECRET
   else
     echo "SSL Secret creation failed.  Retrying..."
