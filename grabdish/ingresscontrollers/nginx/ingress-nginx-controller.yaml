@@ -257,8 +257,8 @@ metadata:
     service.beta.kubernetes.io/oci-load-balancer-tls-secret: ssl-certificate-secret
     #service.beta.kubernetes.io/oci-load-balancer-shape: 100Mbps
     service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
-    service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10Mbps"
-    service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "100Mbps"
+    service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
+    service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "100"
   labels:
     helm.sh/chart: ingress-nginx-3.23.0
     app.kubernetes.io/name: ingress-nginx
