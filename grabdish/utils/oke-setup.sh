@@ -119,6 +119,8 @@ while ! state_done INGRESSCTLR; do
   fi
 done
 
+echo "Waiting for ingress controller creation to complete"
+sleep 90
 
 # Provision Frontend Ingress
 while ! state_done FRONTEND_INGRESS; do
