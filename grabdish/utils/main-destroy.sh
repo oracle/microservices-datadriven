@@ -14,6 +14,13 @@ set -e
 sed -i.bak '/grabdish/d' ~/.bashrc
 
 
+# No destroy necessary for Live Labs
+if test "$(state_get RUN_TYPE)" == "3"; then
+  echo "No teardown required for Live Labs"
+  exit
+fi
+
+
 # Run the os-destroy.sh in the background
 if ps -ef | grep "$GRABDISH_HOME/utils/os-destroy.sh" | grep -v grep; then
   echo "$GRABDISH_HOME/utils/os-destroy.sh is already running"
@@ -51,4 +58,11 @@ export TF_VAR_ociRegionIdentifier="$(state_get REGION)"
 export TF_VAR_runName="$(state_get RUN_NAME)"
 export TF_VAR_orderDbName="$(state_get ORDER_DB_NAME)"
 export TF_VAR_inventoryDbName="$(state_get INVENTORY_DB_NAME)"
+terraform init
 terraform destroy -auto-approve
+
+
+# If BYO K8s then delete the msdataworkshop namespace in k8s
+if state_done BYO_K8S; then
+  kubectl delete ns msdataworkshop
+fi
