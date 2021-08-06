@@ -28,6 +28,7 @@ while ! state_done RUN_TYPE; do
     state_set USER_OCID 'NA'
     state_set USER_NAME "LL$(state_get RESERVATION_ID)-USER"
     state_set_done PROVISIONING
+    state_set_done K8S_PROVISIONING
     state_set RUN_NAME "grabdish$(state_get RESERVATION_ID)"
     state_set ORDER_DB_NAME "ORDER$(state_get RESERVATION_ID)"
     state_set INVENTORY_DB_NAME "INVENTORY$(state_get RESERVATION_ID)"
