@@ -19,6 +19,7 @@ spec:
           image: iamseth/oracledb_exporter:latest
           imagePullPolicy: Always
           env:
+            #              https://stackoverflow.com/questions/40889743/string-operation-on-env-variables-on-kubernetes
             - name: DEFAULT_METRICS
               value: /msdataworkshop/observability/db-teq-inventorypdb-exporter-metrics.toml
 #            - name: CUSTOM_METRICS
