@@ -15,8 +15,8 @@ done
 
 
 # Wait for provisioning
-while ! state_done PROVISIONING; do
-  echo "`date`: Waiting for terraform provisioning"
+while ! state_done K8S_PROVISIONING; do
+  echo "`date`: Waiting for k8s provisioning"
   sleep 10
 done
 
@@ -48,7 +48,7 @@ done
 
 
 # Wait for OKE nodes to become redy
-while true; do
+while ! state_done BYO_K8S; do
   READY_NODES=`kubectl get nodes | grep Ready | wc -l` || echo 'Ignoring any Error'
   if test "$READY_NODES" -ge 3; then
     echo "3 OKE nodes are ready"
@@ -67,13 +67,6 @@ while ! state_done OKE_NAMESPACE; do
     echo "Failed to create namespace.  Retrying..."
     sleep 10
   fi
-done
-
-
-# Wait for Order User (avoid concurrent kubectl)
-while ! state_done ORDER_USER; do
-  echo "`date`: Waiting for ORDER_USER"
-  sleep 2
 done
 
 

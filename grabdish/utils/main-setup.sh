@@ -28,6 +28,7 @@ while ! state_done RUN_TYPE; do
     state_set USER_OCID 'NA'
     state_set USER_NAME "LL$(state_get RESERVATION_ID)-USER"
     state_set_done PROVISIONING
+    state_set_done K8S_PROVISIONING
     state_set RUN_NAME "grabdish$(state_get RESERVATION_ID)"
     state_set ORDER_DB_NAME "ORDER$(state_get RESERVATION_ID)"
     state_set INVENTORY_DB_NAME "INVENTORY$(state_get RESERVATION_ID)"
@@ -35,6 +36,14 @@ while ! state_done RUN_TYPE; do
     state_set_done ATP_LIMIT_CHECK
   else
     state_set RUN_TYPE "1"
+    # BYO K8s
+    if test ${BYO_K8S:-UNSET} != 'UNSET'; then
+      state_set_done BYO_K8S
+      state_set_done K8S_PROVISIONING
+      state_set OKE_OCID 'NA'
+      state_set_done KUBECTL
+      state_set_done OKE_LIMIT_CHECK
+    fi
   fi
 done
 
@@ -111,7 +120,7 @@ while ! state_done COMPARTMENT_OCID; do
     COMPARTMENT_OCID=`oci iam compartment create --compartment-id "$(state_get TENANCY_OCID)" --name "$(state_get RUN_NAME)" --description "GrabDish Workshop" --query 'data.id' --raw-output`
     export OCI_CLI_PROFILE=$(state_get REGION)
   else
-    read -p "Please enter your OCI compartments's OCID: " COMPARTMENT_OCID
+    read -p "Please enter your OCI compartment's OCID: " COMPARTMENT_OCID
   fi
   while ! test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output 2>/dev/null`"" == 'ACTIVE'; do
     echo "Waiting for the compartment to become ACTIVE"
@@ -411,14 +420,7 @@ while ! state_done INVENTORY_DB_PASSWORD_SET; do
 done
 
 
-# Wait for OKE Setup
-while ! state_done OKE_SETUP; do
-  # echo "`date`: Waiting for OKE_SETUP"
-  sleep 2
-done
-
-
-# Collect UI password and create secret
+# Create UI password secret
 while ! state_done UI_PASSWORD; do
   while true; do
     if kubectl create -n msdataworkshop -f -; then

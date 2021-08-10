@@ -16,15 +16,23 @@ if ! state_done PROVISIONING; then
   export TF_VAR_runName="$(state_get RUN_NAME)"
   export TF_VAR_orderDbName="$(state_get ORDER_DB_NAME)"
   export TF_VAR_inventoryDbName="$(state_get INVENTORY_DB_NAME)"
-   if ! terraform init; then
+
+  if state_done K8S_PROVISIONING; then
+    rm -f containerengine.tf core.tf 
+  fi
+
+  if ! terraform init; then
     echo 'ERROR: terraform init failed!'
     exit
   fi
+
   if ! terraform apply -auto-approve; then
     echo 'ERROR: terraform apply failed!'
     exit
   fi
+  
   cd $GRABDISH_HOME
+  state_set_done K8S_PROVISIONING
   state_set_done PROVISIONING
 fi
 
