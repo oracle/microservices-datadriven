@@ -1,3 +1,5 @@
+--- orderuser...
+
 declare
   qprops       sys.dbms_aqadm.QUEUE_PROPS_T;
 BEGIN
@@ -23,4 +25,23 @@ begin
                                   destination       => 'ORDERTOINVENTORYLINK',
                                   latency           => 0 );
 end;
+/
+
+begin
+  dbms_aqadm.schedule_propagation(queue_name        => 'ORDERTEQ',
+                                  destination_queue => 'INVENTORYUSER.ORDERTEQ',
+                                  destination       => 'ORDERTOINVENTORYLINK',
+                                  latency           => 0 );
+end;
+/
+
+--- inventoryuser...
+
+declare
+  qprops       sys.dbms_aqadm.QUEUE_PROPS_T;
+BEGIN
+    dbms_aqadm.create_sharded_queue (queue_name => 'ORDERTEQ',
+                     multiple_consumers => FALSE,
+                     queue_properties => qprops);
+END;
 /

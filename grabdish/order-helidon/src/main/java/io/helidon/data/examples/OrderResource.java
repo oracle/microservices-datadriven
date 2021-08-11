@@ -53,9 +53,9 @@ public class OrderResource {
     static String regionId = System.getenv("OCI_REGION");
     static String pwSecretOcid = System.getenv("VAULT_SECRET_OCID");
     static String pwSecretFromK8s = System.getenv("dbpassword");
-    static final String orderQueueOwner =  "ORDERUSER"; // System.getenv("oracle.ucp.jdbc.PoolDataSource.orderpdb.user"); //
-    static final String orderQueueName =  "ORDERTEQ"; // System.getenv("orderqueuename"); //
-    static final String inventoryQueueName =  "inventoryqueue"; // System.getenv("inventoryQueueName");  //
+    static final String orderQueueOwner =  System.getenv("oracle.ucp.jdbc.PoolDataSource.orderpdb.user"); //"ORDERUSER"; //
+    static final String orderQueueName =   System.getenv("orderqueuename"); //"ORDERTEQ"; //
+    static final String inventoryQueueName =  System.getenv("inventoryqueuename");  //"inventoryqueue"; //
     static boolean liveliness = true;
     static boolean readiness = true;
     private static String lastContainerStartTime;
@@ -75,7 +75,7 @@ public class OrderResource {
     }
 
     public void init(@Observes @Initialized(ApplicationScoped.class) Object init) throws SQLException {
-        System.out.println("OrderResource.init user:" +  System.getenv("oracle.ucp.jdbc.PoolDataSource.orderpdb.user"));
+        System.out.println("OrderResource.init System.getenv(\"oracle.ucp.jdbc.PoolDataSource.orderpdb.user\"):" +  System.getenv("oracle.ucp.jdbc.PoolDataSource.orderpdb.user"));
         System.out.println("OrderResource. System.getenv(\"orderqueuename\") " +  System.getenv("orderqueuename"));
         System.out.println("OrderResource.System.getenv(\"inventoryQueueName\"); " + System.getenv("inventoryQueueName"));
         atpOrderPdb.setUser(orderQueueOwner);

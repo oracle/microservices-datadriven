@@ -52,7 +52,7 @@ class OrderServiceEventProducer {
             metric[OracleConnection.END_TO_END_CLIENTID_INDEX] = "ClientIdMetrics";
             metric[OracleConnection.END_TO_END_ECID_INDEX] = "ECIDMetrics";
             conn.setEndToEndMetrics(metric,seqnum);
-            conn.setClientInfo();
+//            conn.setClientInfo();
 
             try {
                 Statement stmt = conn.createStatement();
@@ -62,7 +62,7 @@ class OrderServiceEventProducer {
                 while (rs.next()) {
                     System.out.println("*** Action = " + rs.getString(1));
                     System.out.println("*** Module = " + rs.getString(2));
-                    System.out.println("*** Client_identifier = " + rs.getString(3));
+                    System.out.println("*** Client_identifier = " +  rs.getString(3));
                 }
 
                 stmt.close();
