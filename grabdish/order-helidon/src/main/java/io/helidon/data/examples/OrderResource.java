@@ -53,9 +53,9 @@ public class OrderResource {
     static String regionId = System.getenv("OCI_REGION");
     static String pwSecretOcid = System.getenv("VAULT_SECRET_OCID");
     static String pwSecretFromK8s = System.getenv("dbpassword");
-    static final String orderQueueOwner = System.getenv("oracle.ucp.jdbc.PoolDataSource.orderpdb.user"); // "ORDERUSER";
-    static final String orderQueueName = System.getenv("orderqueuename"); // "orderqueue";
-    static final String inventoryQueueName = System.getenv("inventoryQueueName");  // "inventoryqueue";
+    static final String orderQueueOwner =  "ORDERUSER"; // System.getenv("oracle.ucp.jdbc.PoolDataSource.orderpdb.user"); //
+    static final String orderQueueName =  "ORDERTEQ"; // System.getenv("orderqueuename"); //
+    static final String inventoryQueueName =  "inventoryqueue"; // System.getenv("inventoryQueueName");  //
     static boolean liveliness = true;
     static boolean readiness = true;
     private static String lastContainerStartTime;

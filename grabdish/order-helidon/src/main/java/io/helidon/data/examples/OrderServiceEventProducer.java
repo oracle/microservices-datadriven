@@ -29,6 +29,8 @@ class OrderServiceEventProducer {
         this.orderResource = orderResource;
     }
 
+
+
     String updateDataAndSendEvent(
             DataSource dataSource, String orderid, String itemid, String deliverylocation) throws Exception {
         System.out.println("updateDataAndSendEvent enter dataSource:" + dataSource +
@@ -50,12 +52,12 @@ class OrderServiceEventProducer {
             metric[OracleConnection.END_TO_END_CLIENTID_INDEX] = "ClientIdMetrics";
             metric[OracleConnection.END_TO_END_ECID_INDEX] = "ECIDMetrics";
             conn.setEndToEndMetrics(metric,seqnum);
-//            conn.setClientInfo();
+            conn.setClientInfo();
 
             try {
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery
-                        ("select ACTION,MODULE,CLIENT_IDENTIFIER from V$SESSION where USERNAME=\'SYSTEM\'");
+                        ("select ACTION,MODULE,CLIENT_IDENTIFIER from V$SESSION where USERNAME=\'orderuser\'");
                 seqnum =  ((OracleConnection)conn).getEndToEndECIDSequenceNumber();
                 while (rs.next()) {
                     System.out.println("*** Action = " + rs.getString(1));
