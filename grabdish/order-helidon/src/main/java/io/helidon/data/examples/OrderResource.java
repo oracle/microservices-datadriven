@@ -77,7 +77,7 @@ public class OrderResource {
     public void init(@Observes @Initialized(ApplicationScoped.class) Object init) throws SQLException {
         System.out.println("OrderResource.init System.getenv(\"oracle.ucp.jdbc.PoolDataSource.orderpdb.user\"):" +  System.getenv("oracle.ucp.jdbc.PoolDataSource.orderpdb.user"));
         System.out.println("OrderResource. System.getenv(\"orderqueuename\") " +  System.getenv("orderqueuename"));
-        System.out.println("OrderResource.System.getenv(\"inventoryQueueName\"); " + System.getenv("inventoryQueueName"));
+        System.out.println("OrderResource.System.getenv(\"inventoryqueuename\"); " + System.getenv("inventoryqueuename"));
         atpOrderPdb.setUser(orderQueueOwner);
         String pw;
         if(pwSecretOcid != null && !pwSecretOcid.trim().equals("")) {
