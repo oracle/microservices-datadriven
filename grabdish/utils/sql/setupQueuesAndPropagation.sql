@@ -1,37 +1,46 @@
---- orderuser...
+connect orderuser/orderuserPW@orderpdb_tp
 
 declare
   qprops       sys.dbms_aqadm.QUEUE_PROPS_T;
 BEGIN
-    dbms_aqadm.create_sharded_queue (queue_name => 'OQUEUE',
+    dbms_aqadm.create_sharded_queue (queue_name => 'ORDERQUEUE',
                      multiple_consumers => TRUE,
                      queue_properties => qprops);
 END;
 /
 
+connect inventoryuser/inventoryuserPW@inventorypdb_tp
+
+declare
+  qprops       sys.dbms_aqadm.QUEUE_PROPS_T;
 BEGIN
-    dbms_aqadm.add_subscriber(queue_name => 'ORDERUSER.OQUEUE',
+    dbms_aqadm.create_sharded_queue (queue_name => 'ORDERQUEUE',
+                     multiple_consumers => FALSE,
+                     queue_properties => qprops);
+END;
+/
+
+connect orderuser/orderuserPW@orderpdb_tp
+
+BEGIN
+    dbms_aqadm.add_subscriber(queue_name => 'ORDERUSER.ORDERQUEUE',
                                    subscriber =>  sys.aq$_agent('sub', NULL, NULL));
 END;
 /
 
--- Set the total number of shards to 1, this should be executed before
--- executing the start_queue
-exec dbms_aqadm.set_queue_parameter('ORDERUSER.OQUEUE', 'SHARD_NUM',1) ;
+exec dbms_aqadm.set_queue_parameter('ORDERUSER.ORDERQUEUE', 'SHARD_NUM',1) ;
 
-exec dbms_aqadm.start_queue('OQUEUE');
+exec dbms_aqadm.start_queue('ORDERQUEUE');
 
-begin
-  dbms_aqadm.schedule_propagation(queue_name        => 'ORDERTEQ',
-                                  destination_queue => 'ORDERTEQ',
-                                  destination       => 'ORDERTOINVENTORYLINK',
-                                  latency           => 0 );
-end;
-/
+connect inventoryuser/inventoryuserPW@inventorypdb_tp
+
+exec dbms_aqadm.start_queue('ORDERQUEUE');
+
+connect orderuser/orderuserPW@orderpdb_tp
 
 begin
-  dbms_aqadm.schedule_propagation(queue_name        => 'OQUEUE',
-                                  destination_queue => 'INVENTORYUSER.OQUEUE',
+  dbms_aqadm.schedule_propagation(queue_name        => 'ORDERQUEUE',
+                                  destination_queue => 'INVENTORYUSER.ORDERQUEUE',
                                   destination       => 'ORDERTOINVENTORYLINK',
                                   latency           => 0 );
 end;
@@ -42,13 +51,13 @@ end;
 declare
   qprops       sys.dbms_aqadm.QUEUE_PROPS_T;
 BEGIN
-    dbms_aqadm.create_sharded_queue (queue_name => 'OQUEUE',
+    dbms_aqadm.create_sharded_queue (queue_name => 'ORDERQUEUE',
                      multiple_consumers => FALSE,
                      queue_properties => qprops);
 END;
 /
 
-exec dbms_aqadm.start_queue('ORDERTEQ');
+exec dbms_aqadm.start_queue('ORDERQUEUE');
 
 
 
@@ -157,3 +166,16 @@ select msgid from INVENTORYQ order by seq_num;
 
 SET ECHO OFF
 SET SERVEROUTPUT OFF
+
+
+
+
+--DROP QUEUE
+BEGIN
+  DBMS_AQADM.STOP_QUEUE(queue_name => 'ORDERQUEUE');
+  DBMS_AQADM.DROP_QUEUE(queue_name => 'ORDERQUEUE');
+  DBMS_AQADM.DROP_QUEUE_TABLE(queue_table => 'ORDERQUEUETABLE');
+END;
+
+
+
