@@ -81,14 +81,14 @@ items:
     #  service.beta.kubernetes.io/oci-load-balancer-tls-secret: ssl-certificate-secret
   spec:
     ports:
-#      - name: query-http
-#        port: 80
-#        protocol: TCP
-#        targetPort: 16686
-      - port: 443
-        name: query-http
-        targetPort: 16686
+      - name: query-http
+        port: 8086
         protocol: TCP
+        targetPort: 16686
+    #  - port: 443
+    #    name: query-http
+    #    targetPort: 16686
+    #    protocol: TCP
     selector:
       app.kubernetes.io/name: jaeger
       app.kubernetes.io/component: all-in-one

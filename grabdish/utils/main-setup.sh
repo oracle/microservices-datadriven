@@ -417,6 +417,31 @@ while ! state_done OKE_SETUP; do
   sleep 2
 done
 
+# run ingress-nginx-setup.sh in background
+if ! state_get NGINX_INGRESS_SETUP; then
+  if ps -ef | grep "$GRABDISH_HOME/ingress/nginx/ingress-nginx-setup.sh" | grep -v grep; then
+    echo "$GRABDISH_HOME/ingress/nginx/ingress-nginx-setup.sh is already running"
+  else
+    echo "Executing ingress-nginx-setup.sh in the background"
+    nohup $GRABDISH_HOME/ingress/nginx/ingress-nginx-setup.sh &>>$GRABDISH_LOG/ingress-nginx-setup.log &
+  fi
+fi
+
+# Wait for Ingress Controller Setup
+while ! state_done NGINX_INGRESS_SETUP; do
+  # echo "`date`: Waiting for NGINX_INGRESS_SETUP"
+  sleep 2
+done
+
+# run jaeger-setup.sh in background
+if ! state_get JAEGER_SETUP; then
+  if ps -ef | grep "$GRABDISH_HOME/observability/jaeger/jaeger-setup.sh" | grep -v grep; then
+    echo "$GRABDISH_HOME/observability/jaeger/jaeger-setup.sh is already running"
+  else
+    echo "Executing jaeger-setup.sh in the background"
+    nohup $GRABDISH_HOME/observability/jaeger/jaeger-setup.sh &>>$GRABDISH_LOG/jaeger-setup.log &
+  fi
+fi
 
 # Collect UI password and create secret
 while ! state_done UI_PASSWORD; do
