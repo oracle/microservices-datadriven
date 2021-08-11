@@ -19,7 +19,7 @@ done
 
 # Create Ingress NGINX Namespace
 while ! state_done NGINX_NAMESPACE; do
-  if kubectl create -f $GRABDISH_HOME/ingresscontrollers/nginx/ingress-nginx-namespace.yaml 2>$GRABDISH_LOG/nginx_ingress_ns_err; then
+  if kubectl create -f $GRABDISH_HOME/ingress/nginx/ingress-nginx-namespace.yaml 2>$GRABDISH_LOG/nginx_ingress_ns_err; then
     state_set_done NGINX_NAMESPACE
   else
     echo "Failed to create Ingress NGINX namespace.  Retrying..."
@@ -49,16 +49,16 @@ while ! state_done NGINX_INGRESS_SETUP; do
 done
 
 
-# Wait for NGINX LB to become ready
-while true; do  
+# Get LB ENDPOINT
+ip_pattern='^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$'
+while ! state_done NGINX_LB_ENDPOINT; do
   NGINX_LB_ENDPOINT=$(kubectl -n ingress-nginx get svc ingress-nginx-controller -o "go-template={{range .status.loadBalancer.ingress}}{{or .ip .hostname}}{{end}}")
-  if ! state_done NGINX_LB_ENDPOINT; then
-    echo "NGINX Ingress LB ready"
-    echo $NGINX_LB_ENDPOINT
-    break
+  if [[ ! $NGINX_LB_ENDPOINT == $ip_pattern ]]
+    state_set NGINX_LB_ENDPOINT "$NGINX_LB_ENDPOINT"
+  else
+    echo "Invalid IP [$NGINX_LB_ENDPOINT]"    
+    exit
   fi
-  echo "Waiting for ingress controller creation to complete"
-  sleep 5
 done
 
-state_set_done NGINX_INGRESS_SETUP
+state_set_done NGINX_INGRESS_SETUP_DONE
