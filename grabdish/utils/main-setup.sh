@@ -418,7 +418,7 @@ while ! state_done OKE_SETUP; do
 done
 
 # run ingress-nginx-setup.sh in background
-if ! state_get NGINX_INGRESS_SETUP; then
+if ! state_get NGINX_INGRESS_SETUP_DONE; then
   if ps -ef | grep "$GRABDISH_HOME/ingress/nginx/ingress-nginx-setup.sh" | grep -v grep; then
     echo "$GRABDISH_HOME/ingress/nginx/ingress-nginx-setup.sh is already running"
   else
