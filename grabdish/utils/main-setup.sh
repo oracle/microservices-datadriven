@@ -413,7 +413,7 @@ done
 
 # Wait for OKE Setup
 while ! state_done OKE_SETUP; do
-  # echo "`date`: Waiting for OKE_SETUP"
+  echo "`date`: Waiting for OKE_SETUP"
   sleep 2
 done
 
