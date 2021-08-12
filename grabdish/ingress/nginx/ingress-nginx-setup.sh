@@ -50,15 +50,15 @@ done
 
 
 # Get LB ENDPOINT
-ip_pattern='^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$'
-while ! state_done NGINX_LB_ENDPOINT; do
-  NGINX_LB_ENDPOINT=$(kubectl -n ingress-nginx get svc ingress-nginx-controller -o "go-template={{range .status.loadBalancer.ingress}}{{or .ip .hostname}}{{end}}")
-  if [[ ! $NGINX_LB_ENDPOINT == $ip_pattern ]]
-    state_set NGINX_LB_ENDPOINT "$NGINX_LB_ENDPOINT"
-  else
-    echo "Invalid IP [$NGINX_LB_ENDPOINT]"    
-    exit
-  fi
-done
+#ip_pattern='^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$'
+#while ! state_done NGINX_LB_ENDPOINT; do
+#  NGINX_LB_ENDPOINT=$(kubectl -n ingress-nginx get svc ingress-nginx-controller -o "go-template={{range .status.loadBalancer.ingress}}{{or .ip .hostname}}{{end}}")
+#  if [[ ! $NGINX_LB_ENDPOINT == $ip_pattern ]]
+#    state_set NGINX_LB_ENDPOINT "$NGINX_LB_ENDPOINT"
+#  else
+#    echo "Invalid IP [$NGINX_LB_ENDPOINT]"    
+#    exit
+#  fi
+#done
 
 state_set_done NGINX_INGRESS_SETUP_DONE
