@@ -18,7 +18,7 @@ done
 
 # Provision Jaeger Ingress
 while ! state_done JAEGER_INGRESS; do
-  if kubectl create -f $GRABDISH_HOME/observability/jaeger/jaeger-ingress.yaml -n msdataworkshop; then
+  if kubectl create -f $GRABDISH_HOME/observability/jaeger/jaeger-ingress.yaml -n msdataworkshop 2>$GRABDISH_LOG/jaeger_ing_err; then
     state_set_done JAEGER_INGRESS
   else
     echo "Jaeger Ingress creation failed.  Retrying..."
