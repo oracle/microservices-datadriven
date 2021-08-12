@@ -429,7 +429,7 @@ fi
 
 # Wait for Ingress Controller Setup
 while ! state_done NGINX_INGRESS_SETUP_DONE; do
-  # echo "`date`: Waiting for NGINX_INGRESS_SETUP"
+  echo "`date`: Waiting for NGINX_INGRESS_SETUP"
   sleep 2
 done
 
