@@ -26,4 +26,4 @@ while ! state_done JAEGER_INGRESS; do
   fi
 done
 
-state_set_done JAEGER_SETUP
+state_set_done JAEGER_SETUP_DONE

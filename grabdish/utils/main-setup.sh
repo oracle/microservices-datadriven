@@ -434,7 +434,7 @@ while ! state_done NGINX_INGRESS_SETUP_DONE; do
 done
 
 # run jaeger-setup.sh in background
-if ! state_get JAEGER_SETUP; then
+if ! state_get JAEGER_SETUP_DONE; then
   if ps -ef | grep "$GRABDISH_HOME/observability/jaeger/jaeger-setup.sh" | grep -v grep; then
     echo "$GRABDISH_HOME/observability/jaeger/jaeger-setup.sh is already running"
   else
