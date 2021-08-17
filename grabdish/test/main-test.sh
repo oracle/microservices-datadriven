@@ -26,6 +26,7 @@ echo 'TEST_LOG: #####################################'
 echo "TEST_LOG: #### Testing Lab2: Walkthrough Undeploy..."
 
 # Undeploy to make it rerunable
+cd $GRABDISH_HOME
 ./undeploy.sh
 SERVICES="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se inventory-plsql"
 for s in $SERVICES; do
@@ -49,18 +50,6 @@ while test 4 -gt `kubectl get pods -n msdataworkshop | egrep 'frontend-helidon|i
   sleep 10
 done
 
-
-# Get LB ENDPOINT
-#ip_pattern='^([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)$'
-#while ! state_done NGINX_LB_ENDPOINT; do
-#  NGINX_LB_ENDPOINT=$(kubectl -n ingress-nginx get svc ingress-nginx-controller -o "go-template={{range .status.loadBalancer.ingress}}{{or .ip .hostname}}{{end}}")
-#  if [[ ! $NGINX_LB_ENDPOINT == $ip_pattern ]]
-#    state_set NGINX_LB_ENDPOINT "$NGINX_LB_ENDPOINT"
-#  else
-#    echo "Invalid IP [$NGINX_LB_ENDPOINT]"    
-#    exit
-#  fi
-#done
 
 # Get the frontend URL
 RETRIES=0
@@ -104,7 +93,8 @@ fi
 
 
 # Functional test on order 66/67
-utils/func-test.sh Walkthrough 66
+cd $GRABDISH_HOME
+test/func-test.sh Walkthrough 66
 logpodnotail frontend > $GRABDISH_LOG/testlog-frontend-from-Walkthrough
 logpodnotail supplier > $GRABDISH_LOG/testlog-supplier-from-Walkthrough
 logpodnotail order > $GRABDISH_LOG/testlog-order-from-Walkthrough
@@ -126,13 +116,15 @@ logpodnotail supplier > $GRABDISH_LOG/testlog-supplier-from-polyglot
 logpodnotail order > $GRABDISH_LOG/testlog-order-from-polyglot
 
 ## SCALING
+cd $GRABDISH_HOME
 echo "TEST_LOG: #### Testing Lab4: Scaling"
-utils/scaling-test.sh
+test/scaling-test.sh
 #
 #
 ## TRACING
+cd $GRABDISH_HOME
 echo "TEST_LOG: #### Testing Lab5: Tracing"
-utils/tracing-test.sh
+test/tracing-test.sh
 
 
 # APEX
@@ -140,8 +132,9 @@ utils/tracing-test.sh
 
 
 # TRACING
+cd $GRABDISH_HOME
 echo "TEST_LOG: #### Testing Lab7: Transactional Tests: Compare MongoDB, Postgres, and Kafka to Oracle DB with TEQ/AQ"
-utils/crashrecovery-test.sh
+test/crashrecovery-test.sh
 
 # TEARDOWN
 # source destroy.sh

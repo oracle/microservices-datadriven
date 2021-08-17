@@ -7,10 +7,10 @@ set -e
 
 # Deploy the external load balancer
 cd $GRABDISH_HOME/order-helidon; 
-kubectl apply -f ext-order-service.yaml -n msdataworkshop
+kubectl apply -f ext-order-ingress.yaml -n msdataworkshop
 
 # Install k6
-cd $GRABDISH_HOME/k6; 
+cd $GRABDISH_HOME/test/k6; 
 if ! test -f k6; then
   wget https://github.com/loadimpact/k6/releases/download/v0.27.0/k6-v0.27.0-linux64.tar.gz; 
   tar -xzf k6-v0.27.0-linux64.tar.gz; 
@@ -20,7 +20,8 @@ fi
 # Get LB (may have to retry)
 RETRIES=0
 while ! state_done EXT_ORDER_IP; do
-  IP=`kubectl get services -n msdataworkshop | awk '/ext-order/ {print $4}'`
+  #IP=`kubectl get services -n msdataworkshop | awk '/ext-order/ {print $4}'`
+  IP=$(kubectl -n ingress-nginx get svc ingress-nginx-controller -o "go-template={{range .status.loadBalancer.ingress}}{{or .ip .hostname}}{{end}}")
   if [[ "$IP" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
     state_set EXT_ORDER_IP "$IP"
   else
@@ -49,7 +50,7 @@ for app_scale in {1..3}; do
     fi
 
     # Execute load test
-    cd $GRABDISH_HOME/k6; 
+    cd $GRABDISH_HOME/test/k6; 
     export LB=$(state_get EXT_ORDER_IP)
     echo "Starting Load test scale App $app_scale DB 1"
     echo "TEST_LOG: Scale App $app_scale DB 1: `./test.sh | grep http_reqs | awk '{print $3}'`"
@@ -63,7 +64,7 @@ echo "Waiting for scaling to complete"
 sleep 90
 
 # Execute 3/2 Load Test
-cd $GRABDISH_HOME/k6; 
+cd $GRABDISH_HOME/test/k6; 
 export LB=$(state_get EXT_ORDER_IP)
 echo "Starting Load test scale App 3 DB 2"
 echo "TEST_LOG: Scale App 3 DB 2: `./test.sh | grep http_reqs | awk '{print $3}'`"
