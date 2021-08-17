@@ -5,7 +5,7 @@
 # Fail on error
 set -e
 
-BUILDS="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se order-mongodb-kafka inventory-postgres-kafka"
+BUILDS="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se order-mongodb-kafka inventory-postgres-kafka inventory-springboot"
 
 # Provision Repos
 while ! state_done NON_JAVA_REPOS; do
