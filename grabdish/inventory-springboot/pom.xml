@@ -126,8 +126,12 @@
 			<artifactId>aqapi</artifactId>
 			<version>19.3.0.0</version>
 		</dependency>
-		<!-- Java8 <dependency> <groupId>com.oracle</groupId> <artifactId>ojdbc8</artifactId> 
-			<version>18.4</version> </dependency> -->
+		<!-- Java8
+	        <dependency>
+			<groupId>com.oracle</groupId> 
+			<artifactId>ojdbc8</artifactId> 
+			<version>18.4</version> 
+		</dependency> -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
@@ -183,6 +187,7 @@
 			<artifactId>xmlparserv2</artifactId>
 			<version>${version.lib.ojdbc}</version>
 		</dependency>
+		<!--
 		<dependency>
 			<groupId>com.oracle.database.jdbc.debug</groupId>
 			<artifactId>ojdbc11_g</artifactId>
@@ -197,7 +202,7 @@
 			<groupId>com.oracle.database.observability</groupId>
 			<artifactId>dms</artifactId>
 			<version>${version.lib.ojdbc}</version>
-		</dependency>
+		</dependency> 
 		<dependency>
 			<groupId>com.oracle.database.observability</groupId>
 			<artifactId>ojdbc11dms</artifactId>
@@ -226,7 +231,7 @@
 			<artifactId>ojdbc11-observability-debug</artifactId>
 			<version>${version.lib.ojdbc}</version>
 			<type>pom</type>
-		</dependency>
+		</dependency> -->
 
 
 		<dependency>
