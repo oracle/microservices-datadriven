@@ -4,5 +4,6 @@ COPY src /tmp/src/
 WORKDIR /tmp/
 FROM openjdk
 EXPOSE 8080
-CMD java -jar /data/inventory-springboot-0.1.0.jar
-COPY --from=maven_build /tmp/target/inventory-springboot-0.1.0.jar /data/inventory-springboot-0.1.0.jar
+ARG JAR_FILE=target/*.jar
+COPY ${JAR_FILE} app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
