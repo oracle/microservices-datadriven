@@ -39,7 +39,7 @@ done
 
 # Provision Ingress Controller
 while ! state_done NGINX_INGRESS_SETUP; do
-  if helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --values $GRABDISH_HOME/ingress/nginx/ingress-nginx-helm-values.yaml 2>$GRABDISH_LOG/nginx_ingress_err; then
+  if helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --values $GRABDISH_HOME/ingress/nginx/ingress-nginx-helm-values4oci.yaml 2>$GRABDISH_LOG/nginx_ingress_err; then
     state_set_done NGINX_INGRESS_SETUP
   else
     echo "Ingress Controller installation failed.  Retrying..."
