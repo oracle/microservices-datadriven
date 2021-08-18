@@ -1,0 +1,16 @@
+## Copyright (c) 2021 Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+apiVersion: v1
+kind: Service
+metadata:
+  name: alert-log
+  labels:
+    app: alert-log
+spec:
+  type: NodePort
+  ports:
+    - port: 9080
+      name: metrics
+      targetPort: 9080
+  selector:
+    app: alert-log

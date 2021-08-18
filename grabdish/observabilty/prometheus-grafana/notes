@@ -1,0 +1,26 @@
+
+not desc X$DBGALERTEXT  instead ...
+select EXECUTION_CONTEXT_ID                         from V$diag_alert_ext;
+
+
+
+
+can we make a virtual directory that a odbfs directory directly maps to. ie, no file to sql to file translation.
+
+
+
+Location of alert file
+SQL> show parameter BACKGROUND_DUMP_DEST
+
+NAME                                 TYPE        VALUE
+------------------------------------ ----------- ------------------------------------------
+background_dump_dest                 string      /app/oracle/diag/rdbms/o11gr1/o11gr1/trace
+
+
+ -- Write message to alert.log
+ exec dbms_system.ksdwrt(2, 'Look Ma, I can write to the alert.log file!');
+ PL/SQL procedure successfully completed.
+
+ -- Flush the buffer
+ exec dbms_system.ksdfls;
+ PL/SQL procedure successfully completed.

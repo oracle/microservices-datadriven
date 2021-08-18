@@ -1,0 +1,65 @@
+server:
+  http_listen_address: 127.0.0.1
+  http_listen_port: 9080
+  log_level: debug
+
+clients:
+  - url: http://loki-stack.loki-stack:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: local
+    pipeline_stages:
+#      - match:
+#        selector: '{job="promtailTest"}'
+#        stages:
+#          - regex:
+#            expression: '^(?P<timestamp>\\d{2}:\\d{2}:\\d{2}\\.\\d{3})\\s\\-\\s(?P<logLevel>[A-Z]{4,5})\\s\\-\\s(?P<logMessage>.*)$'
+#          - labels:
+#            logLevel:
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+#          job: promtailTest
+#          app: promtailTest
+          host: LOCAL-ALERT
+          __path__: /var/log/alert.log
+  - job_name: local2
+    pipeline_stages:
+#      - match:
+#        selector: '{job="promtailTest"}'
+#        stages:
+#          - regex:
+#            expression: '^(?P<timestamp>\\d{2}:\\d{2}:\\d{2}\\.\\d{3})\\s\\-\\s(?P<logLevel>[A-Z]{4,5})\\s\\-\\s(?P<logMessage>.*)$'
+#          - labels:
+#            logLevel:
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+#          job: promtailTest
+#          app: promtailTest
+          host: LOCAL
+          __path__: /var/log/alert2.log
+
+#scrape_configs:
+#    - job_name: local
+#      static_configs:
+#      - targets:
+#         - localhost
+#        labels:
+#         __path__: /var/log/alert.log
+
+# https://forge.tedomum.net/tedomum/loki/blob/3bd38ececa4e6087868bc0034ab1b08b50caccb1/docs/promtail-setup.md
+# https://grafana.com/docs/loki/latest/clients/promtail/installation/
+# https://grafana.com/docs/loki/latest/clients/promtail/configuration/
+# https://grafana.com/docs/loki/latest/clients/promtail/
+# https://grafana.com/go/webinar/getting-started-shipping-logs-to-grafana-loki/
+# https://grafana.com/docs/loki/latest/clients/promtail/scraping/
+# https://github.com/jafernandez73/grafana-loki/blob/master/docs/promtail-setup.md
+# https://www.giantswarm.io/blog/grafana-logging-using-loki
+
+# https://grafana.com/docs/grafana/latest/explore/trace-integration/
+
+# https://grafana.com/docs/loki/latest/clients/fluentd/
+# https://medium.com/@Oskarr3/feeding-loki-with-fluentd-4e9647d23ab9

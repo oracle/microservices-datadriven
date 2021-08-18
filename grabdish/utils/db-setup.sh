@@ -128,12 +128,134 @@ while ! state_done ORDER_DB_PASSWORD_SET; do
 done
 
 
+# Order DB User, Objects
+while ! state_done ORDER_USER; do
+  U=$ORDER_USER
+  SVC=$ORDER_DB_SVC
+  sqlplus /nolog <<!
+WHENEVER SQLERROR EXIT 1
+connect admin/"$DB_PASSWORD"@$SVC
+CREATE USER $U IDENTIFIED BY "$DB_PASSWORD";
+GRANT pdb_dba TO $U;
+GRANT EXECUTE ON DBMS_CLOUD_ADMIN TO $U;
+GRANT EXECUTE ON DBMS_CLOUD TO $U;
+GRANT CREATE DATABASE LINK TO $U;
+GRANT unlimited tablespace to $U;
+GRANT connect, resource TO $U;
+GRANT aq_user_role TO $U;
+GRANT EXECUTE ON sys.dbms_aqadm TO $U;
+GRANT EXECUTE ON sys.dbms_aq TO $U;
+
+GRANT SODA_APP to $U;
+
+connect $U/"$DB_PASSWORD"@$SVC
+
+BEGIN
+DBMS_AQADM.CREATE_QUEUE_TABLE (
+queue_table          => 'ORDERQUEUETABLE',
+queue_payload_type   => 'SYS.AQ\$_JMS_TEXT_MESSAGE',
+multiple_consumers   => true,
+compatible           => '8.1');
+
+DBMS_AQADM.CREATE_QUEUE (
+queue_name          => '$ORDER_QUEUE',
+queue_table         => 'ORDERQUEUETABLE');
+
+DBMS_AQADM.START_QUEUE (
+queue_name          => '$ORDER_QUEUE');
+END;
+/
+
+BEGIN
+DBMS_AQADM.CREATE_QUEUE_TABLE (
+queue_table          => 'INVENTORYQUEUETABLE',
+queue_payload_type   => 'SYS.AQ\$_JMS_TEXT_MESSAGE',
+compatible           => '8.1');
+
+DBMS_AQADM.CREATE_QUEUE (
+queue_name          => '$INVENTORY_QUEUE',
+queue_table         => 'INVENTORYQUEUETABLE');
+
+DBMS_AQADM.START_QUEUE (
+queue_name          => '$INVENTORY_QUEUE');
+END;
+/
+!
+  state_set_done ORDER_USER
+done
+
 
 # Wait for DB Password to be set in Inventory DB
 while ! state_done INVENTORY_DB_PASSWORD_SET; do
   echo "`date`: Waiting for INVENTORY_DB_PASSWORD_SET"
   sleep 2
 done
+
+
+# Inventory DB User, Objects
+while ! state_done INVENTORY_USER; do
+  U=$INVENTORY_USER
+  SVC=$INVENTORY_DB_SVC
+  sqlplus /nolog <<!
+WHENEVER SQLERROR EXIT 1
+connect admin/"$DB_PASSWORD"@$SVC
+CREATE USER $U IDENTIFIED BY "$DB_PASSWORD";
+GRANT pdb_dba TO $U;
+GRANT EXECUTE ON DBMS_CLOUD_ADMIN TO $U;
+GRANT EXECUTE ON DBMS_CLOUD TO $U;
+GRANT CREATE DATABASE LINK TO $U;
+GRANT unlimited tablespace to $U;
+GRANT connect, resource TO $U;
+GRANT aq_user_role TO $U;
+GRANT EXECUTE ON sys.dbms_aqadm TO $U;
+GRANT EXECUTE ON sys.dbms_aq TO $U;
+
+connect $U/"$DB_PASSWORD"@$SVC
+
+BEGIN
+DBMS_AQADM.CREATE_QUEUE_TABLE (
+queue_table          => 'ORDERQUEUETABLE',
+queue_payload_type   => 'SYS.AQ\$_JMS_TEXT_MESSAGE',
+compatible           => '8.1');
+
+DBMS_AQADM.CREATE_QUEUE (
+queue_name          => '$ORDER_QUEUE',
+queue_table         => 'ORDERQUEUETABLE');
+
+DBMS_AQADM.START_QUEUE (
+queue_name          => '$ORDER_QUEUE');
+END;
+/
+
+BEGIN
+DBMS_AQADM.CREATE_QUEUE_TABLE (
+queue_table          => 'INVENTORYQUEUETABLE',
+queue_payload_type   => 'SYS.AQ\$_JMS_TEXT_MESSAGE',
+multiple_consumers   => true,
+compatible           => '8.1');
+
+DBMS_AQADM.CREATE_QUEUE (
+queue_name          => '$INVENTORY_QUEUE',
+queue_table         => 'INVENTORYQUEUETABLE');
+
+DBMS_AQADM.START_QUEUE (
+queue_name          => '$INVENTORY_QUEUE');
+END;
+/
+
+create table inventory (
+  inventoryid varchar(16) PRIMARY KEY NOT NULL,
+  inventorylocation varchar(32),
+  inventorycount integer CONSTRAINT positive_inventory CHECK (inventorycount >= 0) );
+
+insert into inventory values ('sushi', '1468 WEBSTER ST,San Francisco,CA', 0);
+insert into inventory values ('pizza', '1469 WEBSTER ST,San Francisco,CA', 0);
+insert into inventory values ('burger', '1470 WEBSTER ST,San Francisco,CA', 0);
+commit;
+!
+  state_set_done INVENTORY_USER
+done
+
 
 # Order DB Link
 while ! state_done ORDER_DB_LINK; do
@@ -206,125 +328,72 @@ END;
 done
 
 
-
-# Order DB User, Objects
-while ! state_done ORDER_USER; do
+# Order Queues and Propagation
+while ! state_done ORDER_PROPAGATION; do
   U=$ORDER_USER
   SVC=$ORDER_DB_SVC
+  TU=$INVENTORY_USER
+  TSVC=$INVENTORY_DB_SVC
+  LINK=$ORDER_LINK
+  Q=$ORDER_QUEUE
   sqlplus /nolog <<!
 WHENEVER SQLERROR EXIT 1
-connect admin/"$DB_PASSWORD"@$SVC
-CREATE USER $U IDENTIFIED BY "$DB_PASSWORD";
-GRANT pdb_dba TO $U;
-GRANT EXECUTE ON DBMS_CLOUD_ADMIN TO $U;
-GRANT EXECUTE ON DBMS_CLOUD TO $U;
-GRANT CREATE DATABASE LINK TO $U;
-GRANT unlimited tablespace to $U;
-GRANT connect, resource TO $U;
-GRANT aq_user_role TO $U;
-GRANT EXECUTE ON sys.dbms_aqadm TO $U;
-GRANT EXECUTE ON sys.dbms_aq TO $U;
-GRANT EXECUTE ON sys.dbms_aqin TO $U;
-GRANT EXECUTE ON sys.dbms_aqjms TO $U;
-GRANT SODA_APP to $U;
-
 connect $U/"$DB_PASSWORD"@$SVC
-
-declare
-  qprops       dbms_aqadm.QUEUE_PROPS_T;
 BEGIN
-    dbms_aqadm.create_sharded_queue (queue_name => '$ORDER_QUEUE',
-                     queue_payload_type => 'SYS.AQ\$_JMS_TEXT_MESSAGE',
-                     multiple_consumers => TRUE,
-                     queue_properties => qprops);
-    dbms_aqadm.add_subscriber(queue_name => '$U.$ORDER_QUEUE',
-                                   subscriber =>  sys.aq$_agent('sub', NULL, NULL));
-  dbms_aqadm.schedule_propagation(queue_name        => '$ORDER_QUEUE',
-                                  destination_queue => '$ORDER_QUEUE',
-                                  destination       => '$ORDER_LINK',
-                                  latency           => 0 );
+DBMS_AQADM.add_subscriber(
+   queue_name=>'$Q',
+   subscriber=>sys.aq\$_agent(null,'$TU.$Q@$LINK',0),
+   queue_to_queue => true);
 END;
 /
 
-exec dbms_aqadm.set_queue_parameter('$U.$ORDER_QUEUE', 'SHARD_NUM',1) ;
-
-exec dbms_aqadm.start_queue('$ORDER_QUEUE');
-
-begin
-  dbms_aqadm.schedule_propagation(queue_name        => '$ORDER_QUEUE',
-                                  destination_queue => '$ORDER_QUEUE');
-end;
+BEGIN
+dbms_aqadm.schedule_propagation
+      (queue_name        => '$U.$Q'
+      ,destination_queue => '$TU.$Q'
+      ,destination       => '$LINK'
+      ,start_time        => sysdate --immediately
+      ,duration          => null    --until stopped
+      ,latency           => 0);     --No gap before propagating
+END;
 /
-
 !
-  state_set_done ORDER_USER
   state_set_done ORDER_PROPAGATION
 done
 
 
-
-# Inventory DB User, Objects
-while ! state_done INVENTORY_USER; do
+# Inventory Queues and Propagation
+while ! state_done INVENTORY_PROPAGATION; do
   U=$INVENTORY_USER
   SVC=$INVENTORY_DB_SVC
+  TU=$ORDER_USER
+  TSVC=$ORDER_DB_SVC
+  LINK=$INVENTORY_LINK
+  Q=$INVENTORY_QUEUE
   sqlplus /nolog <<!
 WHENEVER SQLERROR EXIT 1
-connect admin/"$DB_PASSWORD"@$SVC
-CREATE USER $U IDENTIFIED BY "$DB_PASSWORD";
-GRANT pdb_dba TO $U;
-GRANT EXECUTE ON DBMS_CLOUD_ADMIN TO $U;
-GRANT EXECUTE ON DBMS_CLOUD TO $U;
-GRANT CREATE DATABASE LINK TO $U;
-GRANT unlimited tablespace to $U;
-GRANT connect, resource TO $U;
-GRANT aq_user_role TO $U;
-GRANT EXECUTE ON sys.dbms_aqadm TO $U;
-GRANT EXECUTE ON sys.dbms_aq TO $U;
-GRANT EXECUTE ON sys.dbms_aqin TO $U;
-GRANT EXECUTE ON sys.dbms_aqjms TO $U;
-
 connect $U/"$DB_PASSWORD"@$SVC
-
-declare
-  qprops       dbms_aqadm.QUEUE_PROPS_T;
 BEGIN
-    dbms_aqadm.create_sharded_queue (queue_name => '$INVENTORY_QUEUE',
-                     queue_payload_type => 'SYS.AQ\$_JMS_TEXT_MESSAGE',
-                     multiple_consumers => TRUE,
-                     queue_properties => qprops);
-    dbms_aqadm.add_subscriber(queue_name => '$U.$INVENTORY_QUEUE',
-                                   subscriber =>  sys.aq$_agent('sub', NULL, NULL));
-  dbms_aqadm.schedule_propagation(queue_name        => '$INVENTORY_QUEUE',
-                                  destination_queue => '$INVENTORY_QUEUE',
-                                  destination       => '$INVENTORY_LINK',
-                                  latency           => 0 );
+DBMS_AQADM.add_subscriber(
+   queue_name=>'$Q',
+   subscriber=>sys.aq\$_agent(null,'$TU.$Q@$LINK',0),
+   queue_to_queue => true);
 END;
 /
 
-exec dbms_aqadm.set_queue_parameter('$U.$INVENTORY_QUEUE', 'SHARD_NUM',1) ;
-
-exec dbms_aqadm.start_queue('$INVENTORY_QUEUE');
-
-begin
-  dbms_aqadm.schedule_propagation(queue_name        => '$INVENTORY_QUEUE',
-                                  destination_queue => '$INVENTORY_QUEUE');
-end;
+BEGIN
+dbms_aqadm.schedule_propagation
+      (queue_name        => '$U.$Q'
+      ,destination_queue => '$TU.$Q'
+      ,destination       => '$LINK'
+      ,start_time        => sysdate --immediately
+      ,duration          => null    --until stopped
+      ,latency           => 0);     --No gap before propagating
+END;
 /
-
-create table inventory (
-  inventoryid varchar(16) PRIMARY KEY NOT NULL,
-  inventorylocation varchar(32),
-  inventorycount integer CONSTRAINT positive_inventory CHECK (inventorycount >= 0) );
-
-insert into inventory values ('sushi', '1468 WEBSTER ST,San Francisco,CA', 0);
-insert into inventory values ('pizza', '1469 WEBSTER ST,San Francisco,CA', 0);
-insert into inventory values ('burger', '1470 WEBSTER ST,San Francisco,CA', 0);
-commit;
 !
-  state_set_done INVENTORY_USER
   state_set_done INVENTORY_PROPAGATION
 done
-
 
 
 # .net Inventory DB Proc
