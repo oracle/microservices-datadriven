@@ -1,0 +1,67 @@
+# Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+inventoryQueueName: inventoryqueue;
+inventoryuser: INVENTORYUSER;
+oracle:
+  jdbc:
+    fanEnabled: false
+  ucp:
+    jdbc:
+      PoolDataSource:
+        inventorypdb:
+          URL: jdbc:oracle:thin:@inventorydb_high?TNS_ADMIN=/Users/pparkins/Downloads/Wallet_INVENTORYDB
+          connectionFactoryClassName: oracle.jdbc.pool.OracleDataSource
+          password: WelcomeInventory123
+          user: admin
+orderQueueName: orderqueue;
+server:
+  host: 0.0.0.0
+  port: 8080
+spring:
+  datasource:
+    driver-class-name: oracle.jdbc.pool.OracleDataSource
+    password: WelcomeInventory123
+    url: jdbc:oracle:thin:@inventorydb_high?TNS_ADMIN=/Users/pparkins/Downloads/Wallet_INVENTORYDB
+    username: admin
+  jpa:
+    database: ORACLE
+    database-platform: org.hibernate.dialect.Oracle10gDialect
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+tracing:
+  host: jaeger-collector.msdataworkshop
+  log-spans: true
+  path: /api/traces
+  port: 14268
+  propagation: b3
+  protocol: http
+  sampler-param: 1
+  service: inventory.msdataworkshop
+apiVersion: core.oam.dev/v1alpha2
+kind: ApplicationConfiguration
+metadata:
+  name: inventory-springboot-appconf
+  namespace: msdataworkshop
+  annotations:
+    version: v1.0.0
+    description: "Inventory Springboot application"
+spec:
+  components:
+    - componentName: inventory-springboot-component
+      traits:
+        - trait:
+            apiVersion: oam.verrazzano.io/v1alpha1
+            kind: MetricsTrait
+            spec:
+              scraper: verrazzano-system/vmi-system-prometheus-0
+#        - trait:
+#            apiVersion: oam.verrazzano.io/v1alpha1
+#            kind: IngressTrait
+#            metadata:
+#              name: inventory-springboot-ingress
+#            spec:
+#              rules:
+#                - paths:
+#                    - path: "/"
+#                      pathType: Prefix

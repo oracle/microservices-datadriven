@@ -27,14 +27,14 @@ echo "TEST_LOG: #### Testing Lab2: Walkthrough Undeploy..."
 
 # Undeploy to make it rerunable
 ./undeploy.sh
-SERVICES="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se inventory-plsql"
+SERVICES="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se inventory-plsql inventory-springboot"
 for s in $SERVICES; do
   cd $GRABDISH_HOME/$s
   ./undeploy.sh || true
 done
 
 # Wait for Pods to stop
-while test 0 -lt `kubectl get pods -n msdataworkshop | egrep 'frontend-helidon|inventory-|order-helidon|supplier-helidon-se' | wc -l`; do
+while test 0 -lt `kubectl get pods -n msdataworkshop | egrep 'frontend-helidon|inventory-|order-helidon|supplier-helidon-se|inventory-springboot' | wc -l`; do
   echo "Waiting for pods to stop..."
   sleep 10
 done
@@ -44,7 +44,7 @@ echo "TEST_LOG: #### Testing Lab2: Walkthrough Deploy..."
 cd $GRABDISH_HOME
 ./deploy.sh
 
-while test 4 -gt `kubectl get pods -n msdataworkshop | egrep 'frontend-helidon|inventory-helidon|order-helidon|supplier-helidon-se' | grep "1/1" | wc -l`; do
+while test 4 -gt `kubectl get pods -n msdataworkshop | egrep 'frontend-helidon|inventory-helidon|order-helidon|supplier-helidon-se|inventory-springboot' | grep "1/1" | wc -l`; do
   echo "Waiting for pods to start..."
   sleep 10
 done
