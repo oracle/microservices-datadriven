@@ -109,7 +109,7 @@ while ! $(state_get NON_JAVA_BUILDS); do
   echo "Waiting for NON_JAVA_BUILDS"
 done
 
-utils/polyglot-test.sh
+test/polyglot-test.sh
 echo writing log to $GRABDISH_LOG/testlog-frontend-from-polyglot
 logpodnotail frontend > $GRABDISH_LOG/testlog-frontend-from-polyglot
 logpodnotail supplier > $GRABDISH_LOG/testlog-supplier-from-polyglot
