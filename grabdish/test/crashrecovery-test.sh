@@ -48,7 +48,7 @@ for s in $SERVICES; do
   echo "Testing $s"
   cd $GRABDISH_HOME
   ORDER_ID=$(($ORDER_ID + 1000))
-  utils/func-test.sh "Crash test (success runs) $s" $ORDER_ID $s
+  test/func-test.sh "Crash test (success runs) $s" $ORDER_ID $s
 done
 
 echo "TEST_LOG: Crash Recovery mongodb and postgres tests complete "
@@ -74,7 +74,7 @@ ORDER_ID=65
 #  echo "Testing $s"
 #  cd $GRABDISH_HOME
 #  ORDER_ID=$(($ORDER_ID + 1100))
-#  utils/func-test.sh "Crash test (success runs) $s" $ORDER_ID $s
+#  test/func-test.sh "Crash test (success runs) $s" $ORDER_ID $s
 #done
 
 echo "TEST_LOG: Crash Recovery Oracle TEQ/AQ tests complete "
