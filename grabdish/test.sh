@@ -12,6 +12,6 @@ echo Deleting any previous $GRABDISH_LOG/main-test.log
 rm $GRABDISH_LOG/main-test.log
 rm $GRABDISH_LOG/testlog-*
 
-$GRABDISH_HOME/utils/main-test.sh 2>&1 | tee -ai $GRABDISH_LOG/main-test.log
+$GRABDISH_HOME/test/main-test.sh 2>&1 | tee -ai $GRABDISH_LOG/main-test.log
 
-$GRABDISH_HOME/utils/test-summary.sh
+$GRABDISH_HOME/test/test-summary.sh
