@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: jaeger
+    labels:
+      app: jaeger
+      app.kubernetes.io/name: jaeger
+      app.kubernetes.io/component: all-in-one
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: jaeger
+    strategy:
+      type: Recreate
+    template:
+      metadata:
+        labels:
+          app: jaeger
+          app.kubernetes.io/name: jaeger
+          app.kubernetes.io/component: all-in-one
+        annotations:
+          prometheus.io/scrape: "true"
+          prometheus.io/port: "16686"
+      spec:
+        containers:
+          - args:
+              - --log-level=debug
+              - --memory.max-traces=100000
+              - --query.base-path=/jaeger
+            env:
+              - name: COLLECTOR_ZIPKIN_HTTP_PORT
+                value: "9411"

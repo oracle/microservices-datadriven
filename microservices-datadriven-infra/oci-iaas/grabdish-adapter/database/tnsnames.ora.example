@@ -1,0 +1,38 @@
+LISTENER_ORCL =
+  (ADDRESS = (PROTOCOL = TCP)(HOST = %DB_HOSTNAME%)(PORT = 1521))
+
+ORCL =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = %DB_HOSTNAME%)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = ORCL)
+    )
+  )
+
+orclpdb =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = %DB_HOSTNAME%)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = orclpdb)
+    )
+  )
+
+orders_tp =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = %DB_HOSTNAME%)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = orders)
+    )
+  )
+
+inventory_tp =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = %DB_HOSTNAME%)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = inventory)
+    )
+  )
