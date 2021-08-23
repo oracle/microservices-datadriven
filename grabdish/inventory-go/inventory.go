@@ -167,15 +167,9 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 	if err != nil {
 		fmt.Printf("dequeue:", err)
 	}
-	// fmt.Printf("received msgs (should be one only):%s \n", n)
-	// var data godror.Data
-	// msgs[0].ObjectGetAttribute(&data, "TEXT_VC")
-	// msgs[0].Object.Close()
-	// objecttype := int(data.GetObjectType)
-	// payload := int(data.getPayload)
-
 	textVC, _ := msgs[0].Object.Get("TEXT_VC")
-	fmt.Printf("TEXT_VC msg %s %q \n", n, textVC) // "{\"orderid\":\"63\",\"itemid\":\"sushi\",\"deliverylocation\":\"780 PANORAMA DR,San Francisco,CA\",\"status\":\"pending\",\"inventoryLocation\":\"\",\"suggestiveSale\":\"\"}"
+
+	fmt.Printf("TEXT_VC from msg %s %q \n", n, textVC) // "{\"orderid\":\"63\",\"itemid\":\"sushi\",\"deliverylocation\":\"780 PANORAMA DR,San Francisco,CA\",\"status\":\"pending\",\"inventoryLocation\":\"\",\"suggestiveSale\":\"\"}"
 	// 	fmt.Printf("TEXT_VC fmt.Sprint(textVC) %s %q \n", n, fmt.Sprintf("%b", textVC)) // %!s(int=1) "[1111011 100010 110
 
 	// fmt.Printf("TEXT_VC string msg %s %q \n", n, string(textVC))
@@ -220,7 +214,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 	// if jsonerr != nil {
 	// 	fmt.Printf("Order Unmarshal err = %s", jsonerr)
 	// }
-	jsonerr2 := json.Unmarshal([]byte(fmt.Sprint(textVC)), &order)
+	jsonerr2 := json.Unmarshal([]byte("{\"orderid\":\"72\",\"itemid\":\"sushi\",\"deliverylocation\":\"780 PANORAMA DR,San Francisco,CA\",\"status\":\"pending\",\"inventoryLocation\":\"\",\"suggestiveSale\":\"\"}"), &order)
 	if jsonerr2 != nil {
 		fmt.Printf("Order Unmarshal fmt.Sprint(data) err = %s", jsonerr2) // err = invalid character '3' after array elementorder.orderid: %!(EXTRA string=)
 	}
@@ -276,8 +270,9 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 	// 		Navigation: godror.NavNext,
 	// 		Wait:       10000,
 	// 	}))
-// const qTypName = qName + "_TYP"      "inventoryqueue_TYP"
-	inventoryqueue, err := godror.NewQueue(ctx, tx, "inventoryqueue", "SYS.AQ$_JMS_TEXT_MESSAGE",
+	// const qTypName = qName + "_TYP"      "inventoryqueue_TYP"
+	// 	inventoryqueue, err := godror.NewQueue(ctx, tx, "inventoryqueue", "SYS.AQ$_JMS_TEXT_MESSAGE",
+	inventoryqueue, err := godror.NewQueue(ctx, tx, "inventoryqueue", "inventoryqueue_TYP",
 		godror.WithEnqOptions(godror.EnqOptions{
 			Visibility:   godror.VisibleOnCommit, //Immediate
 			DeliveryMode: godror.DeliverPersistent,
@@ -333,7 +328,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 	obj.Set("TEXT_LEN", len(inventoryJsonData))
 	sendmsgs[0].Object = obj
 	sendmsgs[0].Expiration = 10000
-	fmt.Printf("sendmsgs[0] is: %s\n", sendmsgs[0])
+	fmt.Printf("message to send is: %s\n", sendmsgs[0])
 	// sendmsgs[1] = newMessage(inventoryqueue, 1, inventorylocation)
 	// sendmsgs[1].Expiration = 10000
 	// sendmsgs[0].Raw = []byte(inventoryJsonData)
