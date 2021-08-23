@@ -5,9 +5,9 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"github.com/godror/godror"
 	"log"
 	"os"
-	"github.com/godror/godror"
 )
 
 func main() {
@@ -56,17 +56,17 @@ func listenForMessages(ctx context.Context, db *sql.DB) {
 
 		tx, err := db.BeginTx(ctx, nil)
 		if err != nil {
-//         		t.Fatal(err)
-	            fmt.Printf("Error during db.BeginTx(ctx, nil): %s\n", err)
-        }
-	    defer tx.Rollback()
-	    fmt.Printf("Listening for messages...tx: %s\n", tx)
+			//         		t.Fatal(err)
+			fmt.Printf("Error during db.BeginTx(ctx, nil): %s\n", err)
+		}
+		defer tx.Rollback()
+		fmt.Printf("Listening for messages...tx: %s\n", tx)
 		// fmt.Println("__________________________________________")
 		//receive order...
 		var orderJSON string
 		dequeueOrderMessageSproc := `BEGIN dequeueOrderMessage(:1); END;`
-// 		if _, err := db.ExecContext(ctx, dequeueOrderMessageSproc, sql.Out{Dest: &orderJSON}); err != nil {
-		if _, err := tx.ExecContext(ctx,  dequeueOrderMessageSproc, sql.Out{Dest: &orderJSON}); err != nil {
+		// 		if _, err := db.ExecContext(ctx, dequeueOrderMessageSproc, sql.Out{Dest: &orderJSON}); err != nil {
+		if _, err := tx.ExecContext(ctx, dequeueOrderMessageSproc, sql.Out{Dest: &orderJSON}); err != nil {
 			log.Printf("Error running %q: %+v", dequeueOrderMessageSproc, err)
 			return
 		}
@@ -93,7 +93,7 @@ func listenForMessages(ctx context.Context, db *sql.DB) {
 		//check inventory...
 		var inventorylocation string
 		sqlString := "update INVENTORY set INVENTORYCOUNT = INVENTORYCOUNT - 1 where INVENTORYID = :inventoryid and INVENTORYCOUNT > 0 returning inventorylocation into :inventorylocation"
-// 		_, errFromInventoryCheck := db.Exec(sqlString, sql.Named("inventoryid", order.Itemid), sql.Named("inventorylocation", sql.Out{Dest: &inventorylocation}))
+		// 		_, errFromInventoryCheck := db.Exec(sqlString, sql.Named("inventoryid", order.Itemid), sql.Named("inventorylocation", sql.Out{Dest: &inventorylocation}))
 		_, errFromInventoryCheck := tx.ExecContext(ctx, sqlString, sql.Named("inventoryid", order.Itemid), sql.Named("inventorylocation", sql.Out{Dest: &inventorylocation}))
 		if err != nil {
 			fmt.Println("errFromInventoryCheck: %s", errFromInventoryCheck)
@@ -128,7 +128,7 @@ func listenForMessages(ctx context.Context, db *sql.DB) {
 		inventoryJsonString := string(inventoryJsonData)
 		fmt.Println("inventoryJsonData:" + inventoryJsonString) // :inventoryid
 		messageSendSproc := `BEGIN enqueueInventoryMessage(:1); END;`
-// 		if _, err := db.ExecContext(ctx, messageSendSproc, inventoryJsonString); err != nil {
+		// 		if _, err := db.ExecContext(ctx, messageSendSproc, inventoryJsonString); err != nil {
 		if _, err := tx.ExecContext(ctx, messageSendSproc, inventoryJsonString); err != nil {
 			log.Printf("Error running %q: %+v", messageSendSproc, err)
 			return
@@ -176,7 +176,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 
 	textVC, _ := msgs[0].Object.Get("TEXT_VC")
 	fmt.Printf("TEXT_VC msg %s %q \n", n, textVC) // "{\"orderid\":\"63\",\"itemid\":\"sushi\",\"deliverylocation\":\"780 PANORAMA DR,San Francisco,CA\",\"status\":\"pending\",\"inventoryLocation\":\"\",\"suggestiveSale\":\"\"}"
-// 	fmt.Printf("TEXT_VC fmt.Sprint(textVC) %s %q \n", n, fmt.Sprintf("%b", textVC)) // %!s(int=1) "[1111011 100010 110
+	// 	fmt.Printf("TEXT_VC fmt.Sprint(textVC) %s %q \n", n, fmt.Sprintf("%b", textVC)) // %!s(int=1) "[1111011 100010 110
 
 	// fmt.Printf("TEXT_VC string msg %s %q \n", n, string(textVC))
 	// if err = tx.Commit(); err != nil {
@@ -276,7 +276,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 	// 		Navigation: godror.NavNext,
 	// 		Wait:       10000,
 	// 	}))
-
+// const qTypName = qName + "_TYP"      "inventoryqueue_TYP"
 	inventoryqueue, err := godror.NewQueue(ctx, tx, "inventoryqueue", "SYS.AQ$_JMS_TEXT_MESSAGE",
 		godror.WithEnqOptions(godror.EnqOptions{
 			Visibility:   godror.VisibleOnCommit, //Immediate
@@ -330,7 +330,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 	// godror.Message{Object: obj}
 
 	obj.Set("TEXT_VC", inventoryJsonData)
-	obj.Set("TEXT_LEN", inventoryJsonData)
+	obj.Set("TEXT_LEN", len(inventoryJsonData))
 	sendmsgs[0].Object = obj
 	sendmsgs[0].Expiration = 10000
 	fmt.Printf("sendmsgs[0] is: %s\n", sendmsgs[0])
