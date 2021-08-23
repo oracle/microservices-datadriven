@@ -266,7 +266,6 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 		fmt.Println(err)
 	}
 	fmt.Printf("inventoryJsonData: %s ", inventoryJsonData)
-	fmt.Printf("::::::::::::::::::::::::SENDING EMPTY JSON BRACKET::::::::::::::::::::::::::::::::::::: ")
 	fmt.Printf("string(inventoryJsonData): %s ", string(inventoryJsonData))
 
 	//send inventory reply message...
