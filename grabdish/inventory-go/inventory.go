@@ -47,7 +47,7 @@ func main() {
 	}
 	fmt.Printf("Listening for messages... start time: %s\n", thedate)
 	ctx := context.Background()
-	listenForMessages(ctx, db)
+	listenForMessagesAQAPI(ctx, db)
 }
 
 func listenForMessages(ctx context.Context, db *sql.DB) {
@@ -265,7 +265,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Printf("string(inventoryJsonData): %s ", inventoryJsonData)
+	fmt.Printf("inventoryJsonData: %s ", inventoryJsonData)
 	fmt.Printf("string(inventoryJsonData): %s ", string(inventoryJsonData))
 
 	//send inventory reply message...
@@ -277,7 +277,9 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 	// 		Wait:       10000,
 	// 	}))
 
-	inventoryqueue, err := godror.NewQueue(ctx, tx, "inventoryqueue", "SYS.AQ$_JMS_TEXT_MESSAGE",
+// 	inventoryqueue, err := godror.NewQueue(ctx, tx, "inventoryqueue", "SYS.AQ$_JMS_TEXT_MESSAGE",
+// 	inventoryqueue, err := godror.NewQueue(ctx, tx, textVC, "SYS.AQ$_JMS_TEXT_MESSAGE",
+	inventoryqueue, err := godror.NewQueue(ctx, tx, inventoryJsonData, "SYS.AQ$_JMS_TEXT_MESSAGE",
 		godror.WithEnqOptions(godror.EnqOptions{
 			Visibility:   godror.VisibleOnCommit, //Immediate
 			DeliveryMode: godror.DeliverPersistent,
