@@ -175,8 +175,8 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 	// payload := int(data.getPayload)
 
 	textVC, _ := msgs[0].Object.Get("TEXT_VC")
-	fmt.Printf("TEXT_VC msg %s %q \n", n, textVC)
-	fmt.Printf("TEXT_VC fmt.Sprint(textVC) %s %q \n", n, fmt.Sprintf("%b", textVC))
+	fmt.Printf("TEXT_VC msg %s %q \n", n, textVC) // "{\"orderid\":\"63\",\"itemid\":\"sushi\",\"deliverylocation\":\"780 PANORAMA DR,San Francisco,CA\",\"status\":\"pending\",\"inventoryLocation\":\"\",\"suggestiveSale\":\"\"}"
+// 	fmt.Printf("TEXT_VC fmt.Sprint(textVC) %s %q \n", n, fmt.Sprintf("%b", textVC)) // %!s(int=1) "[1111011 100010 110
 
 	// fmt.Printf("TEXT_VC string msg %s %q \n", n, string(textVC))
 	// if err = tx.Commit(); err != nil {
@@ -222,7 +222,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 	// }
 	jsonerr2 := json.Unmarshal([]byte(fmt.Sprint(textVC)), &order)
 	if jsonerr2 != nil {
-		fmt.Printf("Order Unmarshal fmt.Sprint(data) err = %s", jsonerr2)
+		fmt.Printf("Order Unmarshal fmt.Sprint(data) err = %s", jsonerr2) // err = invalid character '3' after array elementorder.orderid: %!(EXTRA string=)
 	}
 	fmt.Printf("order.orderid: ", order.Orderid)
 	order.Orderid = "sushi"
@@ -266,6 +266,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 		fmt.Println(err)
 	}
 	fmt.Printf("inventoryJsonData: %s ", inventoryJsonData)
+	fmt.Printf(": ")
 	fmt.Printf("string(inventoryJsonData): %s ", string(inventoryJsonData))
 
 	//send inventory reply message...
@@ -279,7 +280,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 
 // 	inventoryqueue, err := godror.NewQueue(ctx, tx, "inventoryqueue", "SYS.AQ$_JMS_TEXT_MESSAGE",
 // 	inventoryqueue, err := godror.NewQueue(ctx, tx, textVC, "SYS.AQ$_JMS_TEXT_MESSAGE",
-	inventoryqueue, err := godror.NewQueue(ctx, tx, inventoryJsonData, "SYS.AQ$_JMS_TEXT_MESSAGE",
+	inventoryqueue, err := godror.NewQueue(ctx, tx, string(inventoryJsonData), "SYS.AQ$_JMS_TEXT_MESSAGE",
 		godror.WithEnqOptions(godror.EnqOptions{
 			Visibility:   godror.VisibleOnCommit, //Immediate
 			DeliveryMode: godror.DeliverPersistent,
