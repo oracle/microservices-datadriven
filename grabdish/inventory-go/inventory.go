@@ -266,7 +266,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 		fmt.Println(err)
 	}
 	fmt.Printf("inventoryJsonData: %s ", inventoryJsonData)
-	fmt.Printf(": ")
+	fmt.Printf("::::::::::::::::::::::::SENDING EMPTY JSON BRACKET::::::::::::::::::::::::::::::::::::: ")
 	fmt.Printf("string(inventoryJsonData): %s ", string(inventoryJsonData))
 
 	//send inventory reply message...
@@ -280,7 +280,8 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 
 // 	inventoryqueue, err := godror.NewQueue(ctx, tx, "inventoryqueue", "SYS.AQ$_JMS_TEXT_MESSAGE",
 // 	inventoryqueue, err := godror.NewQueue(ctx, tx, textVC, "SYS.AQ$_JMS_TEXT_MESSAGE",
-	inventoryqueue, err := godror.NewQueue(ctx, tx, inventoryJsonData, "SYS.AQ$_JMS_TEXT_MESSAGE",
+// 	inventoryqueue, err := godror.NewQueue(ctx, tx, inventoryJsonData, "SYS.AQ$_JMS_TEXT_MESSAGE",
+	inventoryqueue, err := godror.NewQueue(ctx, tx, "{}", "SYS.AQ$_JMS_TEXT_MESSAGE",
 		godror.WithEnqOptions(godror.EnqOptions{
 			Visibility:   godror.VisibleOnCommit, //Immediate
 			DeliveryMode: godror.DeliverPersistent,
