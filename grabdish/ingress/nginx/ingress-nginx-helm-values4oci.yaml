@@ -2,6 +2,13 @@
 ## Ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/index.md
 ##
 controller:
+  # https://github.com/kubernetes/ingress-nginx
+  # https://github.com/kubernetes/ingress-nginx/blob/main/stable.txt
+  # Adopting the last stable version : controller-v0.49.0
+  image:
+    tag: "v0.49.0"
+    pullPolicy: Always
+
   metrics: 
     enabled: true
 
