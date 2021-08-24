@@ -271,8 +271,8 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 	// 		Wait:       10000,
 	// 	}))
 	// const qTypName = qName + "_TYP"      "inventoryqueue_TYP"
-	// 	inventoryqueue, err := godror.NewQueue(ctx, tx, "inventoryqueue", "SYS.AQ$_JMS_TEXT_MESSAGE",
-	inventoryqueue, err := godror.NewQueue(ctx, tx, "inventoryqueue", "inventoryqueue_TYP",
+		inventoryqueue, err := godror.NewQueue(ctx, tx, "inventoryqueue", "SYS.AQ$_JMS_TEXT_MESSAGE",
+// 	inventoryqueue, err := godror.NewQueue(ctx, tx, "inventoryqueue", "inventoryqueue_TYP",
 		godror.WithEnqOptions(godror.EnqOptions{
 			Visibility:   godror.VisibleOnCommit, //Immediate
 			DeliveryMode: godror.DeliverPersistent,
