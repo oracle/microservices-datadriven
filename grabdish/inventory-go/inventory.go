@@ -143,7 +143,6 @@ func listenForMessages(ctx context.Context, db *sql.DB) {
 }
 
 func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
-
 	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {
 		fmt.Println(err)
@@ -157,11 +156,11 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
 			Wait:       10000,
 			// Consumer:   "inventoryuser", for topic/multiconsumer
 		}))
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// defer q.Close()
-	//t.Logf("name=%q q=%#v", q.Name(), q)
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer orderqueue.Close()
+	t.Logf("name=%q q=%#v", orderqueue.Name(), orderqueue)
 	msgs := make([]godror.Message, 1)
 	n, err := orderqueue.Dequeue(msgs)
 	if err != nil {
@@ -178,25 +177,18 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
 		SuggestiveSale    string
 		// Id      int64  `json:"ref"`
 	}
-
 	var order Order
-	// err := json.Unmarshal(jsonData, &basket)
-	// jsonData := []byte(msgs[0])
-	// textVCstring := make([]string, len(textVC))
-	// for i, v := range textVC {
-	// 	textVCstring[i] = fmt.Sprint(v)
-	// }
-	// jsonerr := json.Unmarshal([]byte(textVC), &order)
-	// if jsonerr != nil {
-	// 	fmt.Printf("Order Unmarshal err = %s", jsonerr)
-	// }
+	jsonerr := json.Unmarshal([]byte(textVC), &orderFromJSON)
+	if jsonerr != nil {
+		fmt.Printf("Order Unmarshal err = %s", jsonerr)
+	}
+	//todo why does the above fail but the following does not (seems to be same content)
 	jsonerr2 := json.Unmarshal([]byte("{\"orderid\":\"72\",\"itemid\":\"sushi\",\"deliverylocation\":\"780 PANORAMA DR,San Francisco,CA\",\"status\":\"pending\",\"inventoryLocation\":\"\",\"suggestiveSale\":\"\"}"), &order)
 	if jsonerr2 != nil {
 		fmt.Printf("Order Unmarshal fmt.Sprint(data) err = %s", jsonerr2) // err = invalid character '3' after array elementorder.orderid: %!(EXTRA string=)
 	}
 	fmt.Printf("order.orderid: %s", order.Orderid)
 	order.Orderid = "sushi"
-
 	fmt.Println("__________________________________________")
 	//check inventory...
 	var inventorylocation string
@@ -214,9 +206,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
 		inventorylocation = "inventorydoesnotexist"
 	}
 	fmt.Println("inventorylocation:" + inventorylocation)
-
 	fmt.Println("__________________________________________")
-
 	//create inventory reply message...
 	type Inventory struct {
 		Orderid           string
@@ -236,78 +226,32 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
 		fmt.Println(err)
 	}
 	fmt.Printf("inventoryJsonData: %s ", inventoryJsonData)
+	fmt.Println("__________________________________________")
 	fmt.Printf("string(inventoryJsonData): %s ", string(inventoryJsonData))
 
-		// 	inventoryqueue, err := godror.NewQueue(ctx, tx, "inventoryqueue", "inventoryqueue_TYP",
 	inventoryqueue, err := godror.NewQueue(ctx, tx, "inventoryqueue", "SYS.AQ$_JMS_TEXT_MESSAGE",
 		godror.WithEnqOptions(godror.EnqOptions{
 			Visibility:   godror.VisibleOnCommit, //Immediate
 			DeliveryMode: godror.DeliverPersistent,
 		}))
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// defer inventoryq.Close()
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer inventoryqueue.Close()
 
 	fmt.Printf("inventoryqueue is: %s\n", inventoryqueue)
 	fmt.Println("__________________________________________")
-
-	// outgoingmsgs := make([]godror.Message, 1)
-	// msgs[j], s = newMessage(q, i)
-//	sendmsgs := make([]godror.Message, 1)
-	// for i := 0; i < msgCount; {
-	// for j := range msgs {
-	// var s string
-	// sendmsgs[0], s = newMessage(q, 0)
-	// sendmsgs[0], s = newMessage(q, 0)
-	// s := fmt.Sprintf("%03d. árvíztűrő tükörfúrógép", 1)
-
-	// sendmsgs[0], s = godror.Message{Raw: []byte(s)}, s
 	obj, err := inventoryqueue.PayloadObjectType.NewObject()
-
 	sendmsg:= godror.Message{Object: obj}
-	//any sendmsg was sendmsgs[0]
-	fmt.Printf("sendmsg is: %s\n", sendmsg)
-	// sendmsgs[0] = godror.Message{}
-
-	// sendmsgs[0] = newMessage(inventoryqueue, 1, inventorylocation)
 	sendmsg.Expiration = 10000
-	// sendmsgs[0].Raw = []byte(inventoryJsonData)
-
-	//from python...
-	// payload =orderQueue.deqOne().payload
-	// logger.debug(payload.TEXT_VC)
-	// orderInfo = simplejson.loads(payload.TEXT_VC)
-
-	// # Update the inventory for this order.  If no row is updated there is no inventory.
-	// ilvar = cursor.var(str)
-	// cursor.execute(sql, [orderInfo["itemid"], ilvar])
-
-	// # Enqueue the response on the inventory queue
-	// payload = conn.gettype("SYS.AQ$_JMS_TEXT_MESSAGE").newobject()
-	// payload.TEXT_VC = simplejson.dumps(
-	//     {'orderid': orderInfo["orderid"],
-	//      'itemid': orderInfo["itemid"],
-	//      'inventorylocation': ilvar.getvalue(0)[0] if cursor.rowcount == 1 else "inventorydoesnotexist",
-	//      'suggestiveSale': "beer"})
-	// payload.TEXT_LEN = len(payload.TEXT_VC)
-	// inventoryQueue.enqOne(conn.msgproperties(payload = payload))
-
-	// obj, _ := inventoryqueue.PayloadObjectType.NewObject()
-	// godror.Message{Object: obj}
-
+	fmt.Printf("sendmsg is: %s\n", sendmsg)
 	obj.Set("TEXT_VC", inventoryJsonData)
 	obj.Set("TEXT_LOB", inventoryJsonData)
 	obj.Set("TEXT_LEN", len(inventoryJsonData))
-// 	sendmsgs[0].Object = obj
 	sendmsg.Expiration = 10000
 	fmt.Printf("message to send is: %s\n", sendmsg)
-
-	// want = append(want, s)
-	// i++
-	// }
-// 	if err = inventoryqueue.Enqueue(sendmsgs[0]); err != nil {
-	if err = inventoryqueue.EnqueueOne(sendmsg); err != nil {
+	sendmsgs[0] = send
+	if err = inventoryqueue.Enqueue(sendmsgs[0]); err != nil {
 		// var ec interface {
 		// 	Code() int
 		// }
@@ -318,20 +262,10 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
 		fmt.Printf("\nenqueue error:", err)
 	}
 	fmt.Printf("\nenqueue complete: %s", sendmsg)
-	// if objName != "" {
-	// 	for _, m := range msgs {
-	// 		if m.Object != nil {
-	// 			m.Object.Close()
-	// 		}
-	// 	}
-	// }
-
 	fmt.Println("about to commit...")
 	if err := tx.Commit(); err != nil {
 		fmt.Printf("commit:", err)
 	}
 	fmt.Println("commit done...")
 	fmt.Printf("commit complete %d message", sendmsg)
-	// fmt.Printf("commmit complete %d message", string(inventoryJsonData))
-
 }
