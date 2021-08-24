@@ -262,17 +262,8 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 	fmt.Printf("inventoryJsonData: %s ", inventoryJsonData)
 	fmt.Printf("string(inventoryJsonData): %s ", string(inventoryJsonData))
 
-	//send inventory reply message...
-	// inventoryq, err := godror.NewQueue(ctx, tx, "inventoryqueue", "SYS.AQ$_JMS_TEXT_MESSAGE",
-	// 	godror.WithDeqOptions(godror.DeqOptions{
-	// 		Mode:       godror.DeqRemove,
-	// 		Visibility: godror.VisibleOnCommit,
-	// 		Navigation: godror.NavNext,
-	// 		Wait:       10000,
-	// 	}))
-	// const qTypName = qName + "_TYP"      "inventoryqueue_TYP"
-		inventoryqueue, err := godror.NewQueue(ctx, tx, "inventoryqueue", "SYS.AQ$_JMS_TEXT_MESSAGE",
-// 	inventoryqueue, err := godror.NewQueue(ctx, tx, "inventoryqueue", "inventoryqueue_TYP",
+	inventoryqueue, err := godror.NewQueue(ctx, tx, "inventoryqueue", "SYS.AQ$_JMS_TEXT_MESSAGE",
+		// 	inventoryqueue, err := godror.NewQueue(ctx, tx, "inventoryqueue", "inventoryqueue_TYP",
 		godror.WithEnqOptions(godror.EnqOptions{
 			Visibility:   godror.VisibleOnCommit, //Immediate
 			DeliveryMode: godror.DeliverPersistent,
@@ -297,7 +288,12 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 
 	// sendmsgs[0], s = godror.Message{Raw: []byte(s)}, s
 	obj, err := inventoryqueue.PayloadObjectType.NewObject()
-	sendmsgs[0] = godror.Message{}
+
+	sendmsg:= godror.Message{Object: obj}
+	fmt.Printf("sendmsg is: %s\n", sendmsg)
+	sendmsgs[0] = godror.Message{Object: obj}
+	// sendmsgs[0] = godror.Message{}
+
 	// sendmsgs[0] = newMessage(inventoryqueue, 1, inventorylocation)
 	sendmsgs[0].Expiration = 10000
 	// sendmsgs[0].Raw = []byte(inventoryJsonData)
@@ -327,7 +323,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 	obj.Set("TEXT_VC", inventoryJsonData)
 	obj.Set("TEXT_LOB", inventoryJsonData)
 	obj.Set("TEXT_LEN", len(inventoryJsonData))
-	sendmsgs[0].Object = obj
+// 	sendmsgs[0].Object = obj
 	sendmsgs[0].Expiration = 10000
 	fmt.Printf("message to send is: %s\n", sendmsgs[0])
 	// sendmsgs[1] = newMessage(inventoryqueue, 1, inventorylocation)
@@ -354,7 +350,6 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 		fmt.Printf("\nenqueue error:", err)
 	}
 	fmt.Printf("\nenqueue complete0: %s", sendmsgs[0])
-	// fmt.Printf("\nenqueue complete1: %s", sendmsgs[1])
 	// if objName != "" {
 	// 	for _, m := range msgs {
 	// 		if m.Object != nil {
@@ -363,12 +358,6 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 	// 	}
 	// }
 
-	// Let's test enqOne
-	// if i > msgCount/3 {
-	// msgs = msgs[:1]
-	// }
-	// }
-	// fmt.Printf("enqueued %d messages", sendmsgs[0])
 	fmt.Println("about to commit...")
 	if err := tx.Commit(); err != nil {
 		fmt.Printf("commit:", err)
