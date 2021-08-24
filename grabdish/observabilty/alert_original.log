@@ -1,0 +1,28 @@
+12-JUL-06 Error stack returned to user:
+12-JUL-06 ORA-02049: timeout: distributed transaction waiting for lock
+16-JUL-06 Errors in file /usr/local/opt/oracle/admin/P2BL36A/udump/p2bl36a_ora_
+18-JUL-06 ORACLE Instance P2BL36A - Can not allocate log, archival required
+18-JUL-06 Thread 1 cannot allocate new log, sequence 265396
+18-JUL-06 All online logs needed archiving
+18-JUL-06 ORACLE Instance P2BL36A - Can not allocate log, archival required
+18-JUL-06 Thread 1 cannot allocate new log, sequence 265397
+18-JUL-06 All online logs needed archiving
+18-JUL-06 ORACLE Instance P2BL36A - Can not allocate log, archival required
+18-JUL-06 Thread 1 cannot allocate new log, sequence 265398
+18-JUL-06 All online logs needed archiving
+23-JUL-06 Errors in file /usr/local/opt/oracle/admin/P2BL36A/udump/p2bl36a_ora_
+25-JUL-06 Errors in file /usr/local/opt/oracle/admin/P2BL36A/bdump/p2bl36a_s001
+25-JUL-06 ORA-07445: exception encountered: core dump [kpnrls()+148] [SIGBUS] [
+25-JUL-06 ORA-03113: end-of-file on communication channel
+25-JUL-06 ORA-02063: preceding line from FRD01
+25-JUL-06 found dead shared server 'S001', pid = (21, 1)
+27-JUL-06 alter tablespace TBS01
+27-JUL-06 add datafile '/ora106/ORACLE/P2BL36A/dbf/tbs01P2BL36A_32.dbf' size 20
+27-JUL-06 ORA-1119 signalled during: alter tablespace TBS01
+27-JUL-06 add datafile '/ora106/ORACL...
+27-JUL-06 alter tablespace TBS01
+27-JUL-06 add datafile '/ora106/ORACLE/P2BL36A/dbf/tbs01P2BL36A_32.dbf' size 20
+27-JUL-06 Completed: alter tablespace TBS01
+27-JUL-06 add datafile '/ora106/ORACL
+28-JUL-06 ORA-01555 caused by SQL statement below (Query Duration=59968 sec, SC
+28-JUL-06 SELECT /*+ ORDERED NO_EXPAND USE_NL(A2) INDEX(A2 "FC_REQUEST_HISTORY_
