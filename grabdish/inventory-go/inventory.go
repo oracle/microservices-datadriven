@@ -160,7 +160,6 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
 		fmt.Println(err)
 	}
 	defer orderqueue.Close()
-
 	msgs := make([]godror.Message, 1)
 	n, err := orderqueue.Dequeue(msgs)
 	if err != nil {
@@ -184,7 +183,6 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
 		fmt.Printf("Order Unmarshal fmt.Sprint(data) err = %s", jsonerr2) // err = invalid character '3' after array elementorder.orderid: %!(EXTRA string=)
 	}
 	fmt.Printf("order.orderid: %s", order.Orderid)
-	order.Orderid = "sushi"
 	fmt.Println("__________________________________________")
 	//check inventory...
 	var inventorylocation string
@@ -211,12 +209,11 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
 		SuggestiveSale    string
 	}
 	inventory := &Inventory{
-		Orderid:           "66",
-		Itemid:            "sushi",
+		Orderid:           order.Orderid,
+		Itemid:            order.Itemid,
 		Inventorylocation: inventorylocation,
 		SuggestiveSale:    "beer",
 	}
-
 	inventoryJsonData, err := json.Marshal(inventory)
 	if err != nil {
 		fmt.Println(err)
@@ -224,7 +221,6 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
 	fmt.Printf("inventoryJsonData: %s ", inventoryJsonData)
 	fmt.Println("__________________________________________")
 	fmt.Printf("string(inventoryJsonData): %s ", string(inventoryJsonData))
-
 	inventoryqueue, err := godror.NewQueue(ctx, tx, "inventoryqueue", "SYS.AQ$_JMS_TEXT_MESSAGE",
 		godror.WithEnqOptions(godror.EnqOptions{
 			Visibility:   godror.VisibleOnCommit, //Immediate
@@ -237,7 +233,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
 	fmt.Printf("inventoryqueue is: %s\n", inventoryqueue)
 	fmt.Println("__________________________________________")
 	obj, err := inventoryqueue.PayloadObjectType.NewObject()
-	sendmsg:= godror.Message{Object: obj}
+	sendmsg := godror.Message{Object: obj}
 	sendmsg.Expiration = 10000
 	fmt.Printf("sendmsg is: %s\n", sendmsg)
 	obj.Set("TEXT_VC", inventoryJsonData)
@@ -248,13 +244,6 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
 	sendmsgs := make([]godror.Message, 1)
 	sendmsgs[0] = sendmsg
 	if err = inventoryqueue.Enqueue(sendmsgs); err != nil {
-		// var ec interface {
-		// 	Code() int
-		// }
-		// if errors.As(err, &ec) && ec.Code() == 24444 {
-		// t.Skip(err)
-		// fmt.Printf("24444 during enqueue:", err)
-		// }
 		fmt.Printf("\nenqueue error:", err)
 	}
 	fmt.Printf("\nenqueue complete: %s", sendmsg)
