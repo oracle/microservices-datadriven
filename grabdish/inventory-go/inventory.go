@@ -178,11 +178,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
 		// Id      int64  `json:"ref"`
 	}
 	var order Order
-	jsonerr := json.Unmarshal([]byte(string(textVC)), &order)
-	if jsonerr != nil {
-		fmt.Printf("Order Unmarshal err = %s", jsonerr)
-	}
-	//todo why does the above fail but the following does not (seems to be same content)
+	//todo convert textVC properly to replace this literal...
 	jsonerr2 := json.Unmarshal([]byte("{\"orderid\":\"72\",\"itemid\":\"sushi\",\"deliverylocation\":\"780 PANORAMA DR,San Francisco,CA\",\"status\":\"pending\",\"inventoryLocation\":\"\",\"suggestiveSale\":\"\"}"), &order)
 	if jsonerr2 != nil {
 		fmt.Printf("Order Unmarshal fmt.Sprint(data) err = %s", jsonerr2) // err = invalid character '3' after array elementorder.orderid: %!(EXTRA string=)
@@ -251,7 +247,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
 	fmt.Printf("message to send is: %s\n", sendmsg)
 	sendmsgs := make([]godror.Message, 1)
 	sendmsgs[0] = sendmsg
-	if err = inventoryqueue.Enqueue(sendmsgs[0]); err != nil {
+	if err = inventoryqueue.Enqueue(sendmsgs); err != nil {
 		// var ec interface {
 		// 	Code() int
 		// }
