@@ -15,7 +15,7 @@ fi
 
 export IMAGE=${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_VERSION}
 
-#mvn package
+mvn clean package spring-boot:repackage
 docker build -t=$IMAGE .
 
 docker push "$IMAGE"
