@@ -142,13 +142,13 @@ func listenForMessages(ctx context.Context, db *sql.DB) {
 	}
 }
 
-func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete - using PL/SQL above
+func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
 
 	tx, err := db.BeginTx(ctx, nil)
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// defer tx.Rollback()
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer tx.Rollback()
 	orderqueue, err := godror.NewQueue(ctx, tx, "orderqueue", "SYS.AQ$_JMS_TEXT_MESSAGE",
 		godror.WithDeqOptions(godror.DeqOptions{
 			Mode:       godror.DeqRemove,
@@ -168,18 +168,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 		fmt.Printf("dequeue:", err)
 	}
 	textVC, _ := msgs[0].Object.Get("TEXT_VC")
-
 	fmt.Printf("TEXT_VC from msg %s %q \n", n, textVC) // "{\"orderid\":\"63\",\"itemid\":\"sushi\",\"deliverylocation\":\"780 PANORAMA DR,San Francisco,CA\",\"status\":\"pending\",\"inventoryLocation\":\"\",\"suggestiveSale\":\"\"}"
-	// 	fmt.Printf("TEXT_VC fmt.Sprint(textVC) %s %q \n", n, fmt.Sprintf("%b", textVC)) // %!s(int=1) "[1111011 100010 110
-
-	// fmt.Printf("TEXT_VC string msg %s %q \n", n, string(textVC))
-	// if err = tx.Commit(); err != nil {
-	// 	fmt.Printf("commit:", err)
-	// }
-
-	// fmt.Printf("\nstrconv.Itoa(s) %q \n", strconv.Itoa(msgs[0].Object))
-
-	//get order request message
 	type Order struct {
 		Orderid           string
 		Itemid            string
@@ -189,19 +178,6 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 		SuggestiveSale    string
 		// Id      int64  `json:"ref"`
 	}
-
-	// type Message struct {
-	// 	Enqueued                time.Time
-	// 	Object                  *Object
-	// 	Correlation, ExceptionQ string
-	// 	Raw                     []byte
-	// 	Delay, Expiration       time.Duration
-	// 	DeliveryMode            DeliveryMode
-	// 	State                   MessageState
-	// 	Priority, NumAttempts   int32
-	// 	MsgID, OriginalMsgID    [16]byte
-	// }
-	// getPayload
 
 	var order Order
 	// err := json.Unmarshal(jsonData, &basket)
@@ -218,7 +194,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 	if jsonerr2 != nil {
 		fmt.Printf("Order Unmarshal fmt.Sprint(data) err = %s", jsonerr2) // err = invalid character '3' after array elementorder.orderid: %!(EXTRA string=)
 	}
-	fmt.Printf("order.orderid: ", order.Orderid)
+	fmt.Printf("order.orderid: %s", order.Orderid)
 	order.Orderid = "sushi"
 
 	fmt.Println("__________________________________________")
@@ -262,8 +238,8 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 	fmt.Printf("inventoryJsonData: %s ", inventoryJsonData)
 	fmt.Printf("string(inventoryJsonData): %s ", string(inventoryJsonData))
 
-	inventoryqueue, err := godror.NewQueue(ctx, tx, "inventoryqueue", "SYS.AQ$_JMS_TEXT_MESSAGE",
 		// 	inventoryqueue, err := godror.NewQueue(ctx, tx, "inventoryqueue", "inventoryqueue_TYP",
+	inventoryqueue, err := godror.NewQueue(ctx, tx, "inventoryqueue", "SYS.AQ$_JMS_TEXT_MESSAGE",
 		godror.WithEnqOptions(godror.EnqOptions{
 			Visibility:   godror.VisibleOnCommit, //Immediate
 			DeliveryMode: godror.DeliverPersistent,
@@ -278,7 +254,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 
 	// outgoingmsgs := make([]godror.Message, 1)
 	// msgs[j], s = newMessage(q, i)
-	sendmsgs := make([]godror.Message, 1)
+//	sendmsgs := make([]godror.Message, 1)
 	// for i := 0; i < msgCount; {
 	// for j := range msgs {
 	// var s string
@@ -290,12 +266,12 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 	obj, err := inventoryqueue.PayloadObjectType.NewObject()
 
 	sendmsg:= godror.Message{Object: obj}
+	//any sendmsg was sendmsgs[0]
 	fmt.Printf("sendmsg is: %s\n", sendmsg)
-	sendmsgs[0] = godror.Message{Object: obj}
 	// sendmsgs[0] = godror.Message{}
 
 	// sendmsgs[0] = newMessage(inventoryqueue, 1, inventorylocation)
-	sendmsgs[0].Expiration = 10000
+	sendmsg.Expiration = 10000
 	// sendmsgs[0].Raw = []byte(inventoryJsonData)
 
 	//from python...
@@ -324,22 +300,13 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 	obj.Set("TEXT_LOB", inventoryJsonData)
 	obj.Set("TEXT_LEN", len(inventoryJsonData))
 // 	sendmsgs[0].Object = obj
-	sendmsgs[0].Expiration = 10000
-	fmt.Printf("message to send is: %s\n", sendmsgs[0])
-	// sendmsgs[1] = newMessage(inventoryqueue, 1, inventorylocation)
-	// sendmsgs[1].Expiration = 10000
-	// sendmsgs[0].Raw = []byte(inventoryJsonData)
-	// fmt.Printf("sendmsgs[1] is: %s\n", sendmsgs[1])
-
-	// sendmsgs[1] = godror.Message{Raw: []byte(s)}
-	// sendmsgs[1] = godror.Message{Raw: inventoryJsonData}
-	// sendmsgs[1].Expiration = 10000
-	// fmt.Printf("sendmsgs[1] is: %s\n", sendmsgs[1])
+	sendmsg.Expiration = 10000
+	fmt.Printf("message to send is: %s\n", sendmsg)
 
 	// want = append(want, s)
 	// i++
 	// }
-	if err = inventoryqueue.Enqueue(sendmsgs); err != nil {
+	if err = inventoryqueue.Enqueue(sendmsg); err != nil {
 		// var ec interface {
 		// 	Code() int
 		// }
@@ -349,7 +316,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 		// }
 		fmt.Printf("\nenqueue error:", err)
 	}
-	fmt.Printf("\nenqueue complete0: %s", sendmsgs[0])
+	fmt.Printf("\nenqueue complete: %s", sendmsg)
 	// if objName != "" {
 	// 	for _, m := range msgs {
 	// 		if m.Object != nil {
@@ -363,7 +330,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 		fmt.Printf("commit:", err)
 	}
 	fmt.Println("commit done...")
-	fmt.Printf("commmit complete %d message", sendmsgs[0])
+	fmt.Printf("commit complete %d message", sendmsg)
 	// fmt.Printf("commmit complete %d message", string(inventoryJsonData))
 
 }
