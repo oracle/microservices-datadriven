@@ -325,6 +325,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) { //todo incomplete
 	// godror.Message{Object: obj}
 
 	obj.Set("TEXT_VC", inventoryJsonData)
+	obj.Set("TEXT_LOB", inventoryJsonData)
 	obj.Set("TEXT_LEN", len(inventoryJsonData))
 	sendmsgs[0].Object = obj
 	sendmsgs[0].Expiration = 10000
