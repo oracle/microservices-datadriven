@@ -306,7 +306,8 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
 	// want = append(want, s)
 	// i++
 	// }
-	if err = inventoryqueue.Enqueue(sendmsg); err != nil {
+// 	if err = inventoryqueue.Enqueue(sendmsgs[0]); err != nil {
+	if err = inventoryqueue.EnqOne(sendmsg); err != nil {
 		// var ec interface {
 		// 	Code() int
 		// }
