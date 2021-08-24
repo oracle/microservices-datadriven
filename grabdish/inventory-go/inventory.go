@@ -160,7 +160,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
 		fmt.Println(err)
 	}
 	defer orderqueue.Close()
-	t.Logf("name=%q q=%#v", orderqueue.Name(), orderqueue)
+
 	msgs := make([]godror.Message, 1)
 	n, err := orderqueue.Dequeue(msgs)
 	if err != nil {
@@ -178,7 +178,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
 		// Id      int64  `json:"ref"`
 	}
 	var order Order
-	jsonerr := json.Unmarshal([]byte(textVC), &orderFromJSON)
+	jsonerr := json.Unmarshal([]byte(string(textVC)), &order)
 	if jsonerr != nil {
 		fmt.Printf("Order Unmarshal err = %s", jsonerr)
 	}
@@ -238,7 +238,6 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
 		fmt.Println(err)
 	}
 	defer inventoryqueue.Close()
-
 	fmt.Printf("inventoryqueue is: %s\n", inventoryqueue)
 	fmt.Println("__________________________________________")
 	obj, err := inventoryqueue.PayloadObjectType.NewObject()
@@ -250,7 +249,8 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
 	obj.Set("TEXT_LEN", len(inventoryJsonData))
 	sendmsg.Expiration = 10000
 	fmt.Printf("message to send is: %s\n", sendmsg)
-	sendmsgs[0] = send
+	sendmsgs := make([]godror.Message, 1)
+	sendmsgs[0] = sendmsg
 	if err = inventoryqueue.Enqueue(sendmsgs[0]); err != nil {
 		// var ec interface {
 		// 	Code() int
