@@ -18,6 +18,20 @@ spec:
         version: helidon-mp
     spec:
       containers:
+      - name: promtail-container
+        image: grafana/promtail
+        args:
+          - -log.level=debug
+            #            - --stdin
+            #            - --dry-run
+            #            - --inspect
+          - -config.file=/etc/promtail/promtail.yaml
+#        volumeMounts:
+#          - name: logs
+#            mountPath: /var/log/alert.log
+#            subPath: alert.log
+#          - name: promtail-config
+#            mountPath: /etc/promtail
       - name: order
         image: %DOCKER_REGISTRY%/order-helidon:0.1
         imagePullPolicy: Always

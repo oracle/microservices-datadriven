@@ -23,7 +23,7 @@ execute dbms_aqadm.grant_system_privilege('ENQUEUE_ANY','inventoryuser',FALSE);
 execute dbms_aqadm.grant_system_privilege('DEQUEUE_ANY','inventoryuser',FALSE);
 
 
-
+--pre existing grants ...
 GRANT pdb_dba TO $U;
 GRANT EXECUTE ON DBMS_CLOUD_ADMIN TO $U;
 GRANT EXECUTE ON DBMS_CLOUD TO $U;
@@ -35,7 +35,7 @@ GRANT EXECUTE ON sys.dbms_aqadm TO $U;
 GRANT EXECUTE ON sys.dbms_aq TO $U;
 
 
-
+--failures from new grants...
 Grant succeeded.
 
 
