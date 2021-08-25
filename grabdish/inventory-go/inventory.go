@@ -238,7 +238,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
 	fmt.Printf("sendmsg is: %s\n", sendmsg)
 	fmt.Printf("len(inventoryJsonData) is: %s\n", len(inventoryJsonData))
 	obj.Set("TEXT_VC", inventoryJsonData)
-	obj.Set("TEXT_LOB", inventoryJsonData)
+// 	obj.Set("TEXT_LOB", inventoryJsonData)
 	obj.Set("TEXT_LEN", len(inventoryJsonData))
 	sendmsg.Expiration = 10000
 	fmt.Printf("message to send is: %s\n", sendmsg)
