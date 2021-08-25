@@ -11,7 +11,15 @@ kubectl delete deployment db-teq-exporter-inventory  -n msdataworkshop
 kubectl apply -f db-teq-exporter-orderpdb-deployment.yaml -n msdataworkshop
 kubectl apply -f db-teq-exporter-inventorypdb-deployment.yaml -n msdataworkshop
 
+
+
+
+
+
+
+
 kubectl create configmap alert-log-config --from-file=./alert.log -n msdataworkshop
+
 
 kubectl delete configmap promtail-config  -n msdataworkshop
 kubectl create configmap promtail-config --from-file=promtail.yaml -n msdataworkshop
