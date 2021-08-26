@@ -26,45 +26,36 @@ import oracle.ucp.jdbc.PoolDataSource;
 public class AlertLogExporterResource {
 
     @Inject
-    @Named("orderpdb")
-    PoolDataSource atpOrderPdb;
-
-    @Inject
-    @Named("inventorypdb")
-    PoolDataSource atpInventoryPdb;
+    @Named("alertlogpdb")
+    PoolDataSource alertlogpdbPdb;
+    
+    static String querySQL = System.getenv("QUERY_SQL");
 
     public void init(@Observes @Initialized(ApplicationScoped.class) Object init) throws Exception {
-        System.out.println("AlertLogExporterResource atpOrderPdb:" + atpOrderPdb);
-        System.out.println("AlertLogExporterResource inventorypdb:" + atpInventoryPdb);
-        File fout = new File("alert.log");
-        FileOutputStream fos = new FileOutputStream(fout);
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
-        logFromDataSourceToFile(bw, atpOrderPdb, "atpOrderPdb");
-        logFromDataSourceToFile(bw, atpInventoryPdb, "atpInventoryPdb");
-    }
-
-    private void logFromDataSourceToFile(BufferedWriter bw, PoolDataSource poolDataSource, String datasourceName) throws SQLException, IOException {
-        try (Connection conn = poolDataSource.getConnection()) {
-            System.out.println("AlertLogExporterResource " + datasourceName + " connection:" + conn);
-            PreparedStatement statement =
-                    conn.prepareStatement("select ORIGINATING_TIMESTAMP, MODULE_ID, EXECUTION_CONTEXT_ID, MESSAGE_TEXT from V$diag_alert_ext");
+        System.out.println("AlertLogExporterResource alertlogpdbPdb:" + alertlogpdbPdb);
+        try (Connection conn = alertlogpdbPdb.getConnection()) {
+            if(querySQL == null || querySQL.trim().equals("")) {
+                querySQL = "select ORIGINATING_TIMESTAMP, MODULE_ID, EXECUTION_CONTEXT_ID, MESSAGE_TEXT from V$diag_alert_ext";
+                System.out.println("AlertLogExporterResource no QUERY_SQL set in environment, using default");
+            }
+            System.out.println("AlertLogExporterResource querySQL:" + querySQL);
+            PreparedStatement statement = conn.prepareStatement(querySQL);
             ResultSet rs = statement.executeQuery();
-            while (rs.next()) {
+            while (rs.next()) { //todo make dynamic for other SQL queries...
                 LocalDateTime localDateTime = rs.getObject("ORIGINATING_TIMESTAMP", LocalDateTime.class);
                 String moduleId = rs.getString("MODULE_ID");
                 String ecid = rs.getString("EXECUTION_CONTEXT_ID");
                 String messageText = rs.getString("MESSAGE_TEXT");
-                String recordToWriteToFile = localDateTime + " " + moduleId + " " + "ecid=" + ecid + " " + messageText;
-                System.out.println("AlertLogExporterResource about to write recordToWriteToFile:" + recordToWriteToFile);
-                bw.write(recordToWriteToFile);
-                bw.newLine();
+                String recordToWrite = localDateTime + " moduleId=" + moduleId + " " + "ecid=" + ecid + " " + messageText;
+                System.out.println(recordToWrite);
             }
-            bw.close();
         }
     }
 
 
     /**
+     * desc V$diag_alert_ext...
+     *
      * Name                       Null? Type
      * -------------------------- ----- ---------------------------
      * ORIGINATING_TIMESTAMP            TIMESTAMP(9) WITH TIME ZONE

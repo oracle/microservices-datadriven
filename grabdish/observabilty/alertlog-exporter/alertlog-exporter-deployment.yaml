@@ -20,26 +20,19 @@ spec:
         image: %DOCKER_REGISTRY%/alertlog-exporter:0.1
         imagePullPolicy: Always
         env:
-        - name: oracle.ucp.jdbc.PoolDataSource.orderpdb.user
-          value: "ORDERUSER"
-        - name: oracle.ucp.jdbc.PoolDataSource.orderpdb.URL
-          value: "jdbc:oracle:thin:@%ORDER_PDB_NAME%_tp?TNS_ADMIN=/msdataworkshop/creds"
-        - name: oracle.ucp.jdbc.PoolDataSource.orderpdb.password
+        - name: oracle.ucp.jdbc.PoolDataSource.alertlogpdb.user
+          value: "%USER%"
+        - name: oracle.ucp.jdbc.PoolDataSource.alertlogpdb.URL
+          value: "jdbc:oracle:thin:@%PDB_NAME%_tp?TNS_ADMIN=/msdataworkshop/creds"
+        - name: oracle.ucp.jdbc.PoolDataSource.alertlogpdb.password
           valueFrom:
             secretKeyRef:
               name: dbuser
               key: dbpassword
               optional: true
-        - name: oracle.ucp.jdbc.PoolDataSource.inventorypdb.user
-          value: "inventoryuser"
-        - name: oracle.ucp.jdbc.PoolDataSource.inventorypdb.URL
-          value: "jdbc:oracle:thin:@%INVENTORY_PDB_NAME%_tp?TNS_ADMIN=/msdataworkshop/creds"
-        - name: oracle.ucp.jdbc.PoolDataSource.inventorypdb.password
-          valueFrom:
-            secretKeyRef:
-              name: dbuser
-              key: dbpassword
-              optional: true
+#       The following QUERY_SQL can be any query but must contain EXECUTION_CONTEXT_ID
+        - name: QUERY_SQL
+          value: "select ORIGINATING_TIMESTAMP, MODULE_ID, EXECUTION_CONTEXT_ID, MESSAGE_TEXT from V$diag_alert_ext"
         - name: OCI_REGION
           value: "%OCI_REGION%"
         - name: VAULT_SECRET_OCID

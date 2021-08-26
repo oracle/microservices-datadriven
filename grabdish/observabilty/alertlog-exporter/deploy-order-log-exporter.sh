@@ -18,8 +18,8 @@ cp alertlog-exporter-deployment.yaml alertlog-exporter-deployment-$CURRENTTIME.y
 
 #may hit sed incompat issue with mac
 sed_i "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" alertlog-exporter-deployment-$CURRENTTIME.yaml
-sed_i "s|%ORDER_PDB_NAME%|${ORDER_PDB_NAME}|g" alertlog-exporter-deployment-${CURRENTTIME}.yaml
-sed_i "s|%INVENTORY_PDB_NAME%|${ORDER_PDB_NAME}|g" alertlog-exporter-deployment-${CURRENTTIME}.yaml
+sed_i "s|%PDB_NAME%|${ORDER_PDB_NAME}|g" alertlog-exporter-deployment-${CURRENTTIME}.yaml
+sed_i "s|%USER%|ORDERUSER|g" alertlog-exporter-deployment-${CURRENTTIME}.yaml
 sed_i "s|%OCI_REGION%|${OCI_REGION}|g" alertlog-exporter-deployment-${CURRENTTIME}.yaml
 sed_i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" alertlog-exporter-deployment-${CURRENTTIME}.yaml
 
