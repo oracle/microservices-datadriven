@@ -21,3 +21,9 @@ if [ -z "$1" ]; then
 else
     kubectl apply -f <(istioctl kube-inject -f $SCRIPT_DIR/frontend-helidon-deployment-$CURRENTTIME.yaml) -n msdataworkshop
 fi
+
+# Provision Frontend Service
+kubectl create -f $SCRIPT_DIR/frontend-service.yaml -n msdataworkshop
+
+# Provision Frontend Ingress
+kubectl create -f $SCRIPT_DIR/frontend-ingress.yaml -n msdataworkshop
