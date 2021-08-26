@@ -236,11 +236,12 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
 	sendmsg := godror.Message{Object: obj}
 	sendmsg.Expiration = 10000
 	fmt.Printf("sendmsg is: %s\n", sendmsg)
-	fmt.Printf("string(inventoryJsonData) is: %s\n", string(inventoryJsonData))
+	inventoryJsonDatastr := string(inventoryJsonData)
+	fmt.Printf("inventoryJsonDatastr is: %s\n", inventoryJsonDatastr)
 	fmt.Printf("len(inventoryJsonData) is: %s\n", len(inventoryJsonData))
-	obj.Set("TEXT_VC",  string(inventoryJsonData))
+	obj.Set("TEXT_VC",  inventoryJsonDatastr)
 // 	obj.Set("TEXT_LOB", inventoryJsonData)
-	obj.Set("TEXT_LEN", len( string(inventoryJsonData)))
+//	obj.Set("TEXT_LEN", len(inventoryJsonDatastr)
 	sendmsg.Expiration = 10000
 	fmt.Printf("message to send is: %s\n", sendmsg)
 	sendmsgs := make([]godror.Message, 1)
