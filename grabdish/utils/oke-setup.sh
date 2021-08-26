@@ -69,39 +69,10 @@ while ! state_done OKE_NAMESPACE; do
   fi
 done
 
-
-# Create SSL Secret
-while ! state_done SSL_SECRET; do
-  if kubectl create secret tls ssl-certificate-secret --key $GRABDISH_HOME/tls/tls.key --cert $GRABDISH_HOME/tls/tls.crt -n msdataworkshop; then
-    state_set_done SSL_SECRET
-  else
-    echo "SSL Secret creation failed.  Retrying..."
-    sleep 10
-  fi
+# Wait for Order User (avoid concurrent kubectl)
+while ! state_done ORDER_USER; do
+  echo "`date`: Waiting for ORDER_USER"
+  sleep 2
 done
-
-
-# Provision Load Balancer
-while ! state_done LB; do
-  if kubectl create -f $GRABDISH_HOME/frontend-helidon/frontend-service.yaml -n msdataworkshop; then
-    state_set_done LB
-  else
-    echo "Load Balancer creation failed.  Retrying..."
-    sleep 10
-  fi
-done
-
-
-# Install Jaeger
-while ! state_done JAEGER; do
-  if kubectl create -f https://tinyurl.com/yc52x6q5 -n msdataworkshop 2>$GRABDISH_LOG/jaeger_err; then
-    state_set_done JAEGER
-  else
-    echo "Jaeger installation failed.  Retrying..."
-    cat $GRABDISH_LOG/jaeger_err
-    sleep 10
-  fi
-done
-
 
 state_set_done OKE_SETUP

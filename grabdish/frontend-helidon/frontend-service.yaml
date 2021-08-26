@@ -8,14 +8,15 @@ metadata:
   name: frontend
   labels:
     app: frontend
-  annotations:
-    service.beta.kubernetes.io/oci-load-balancer-ssl-ports: "443"
-    service.beta.kubernetes.io/oci-load-balancer-tls-secret: ssl-certificate-secret
+  #annotations:
+  #  service.beta.kubernetes.io/oci-load-balancer-ssl-ports: "443"
+  #  service.beta.kubernetes.io/oci-load-balancer-tls-secret: ssl-certificate-secret
 spec:
-  type: LoadBalancer
+  #type: LoadBalancer
+  type: ClusterIP
   ports:
-  - port: 443
-    name: https
+  - port: 80
+    name: http
     targetPort: 8080
   selector:
     app: frontend
