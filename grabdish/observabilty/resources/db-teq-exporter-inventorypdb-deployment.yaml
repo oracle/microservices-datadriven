@@ -3,48 +3,56 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: db-teq-exporter-order
+  name: db-teq-exporter-inventory
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: db-teq-exporter-order
+      app: db-teq-exporter-inventory
   template:
     metadata:
       labels:
-        app: db-teq-exporter-order
+        app: db-teq-exporter-inventory
     spec:
       containers:
         - name: db-teq-exporter
           image: iamseth/oracledb_exporter:latest
           imagePullPolicy: Always
           env:
-#              https://stackoverflow.com/questions/40889743/string-operation-on-env-variables-on-kubernetes
+            #              https://stackoverflow.com/questions/40889743/string-operation-on-env-variables-on-kubernetes
             - name: DEFAULT_METRICS
-              value: /msdataworkshop/observability/db-teq-orderpdb-exporter-metrics.toml
+              value: /msdataworkshop/observability/db-teq-inventorypdb-exporter-metrics.toml
 #            - name: CUSTOM_METRICS
-#              value: /msdataworkshop/observability/ddb-teq-orderpdb-exporter-metrics.toml
+#              value: /msdataworkshop/observability/db-teq-inventorypdb-exporter-metrics.toml
             - name: TNS_ADMIN
               value: "/msdataworkshop/creds"
+#          value: "/lib/oracle/instantclient_19_3/client64/lib/network/admin"
             - name: DATA_SOURCE_NAME
-              value: "/@gdpaulob2o_tp"
+              value: "inventoryuser/Welcome12345;#!:@gdpaulob2i_tp"
+#              value: "inventoryuser/Welcome12345;#!:@%INVENTORY_PDB_NAME%_tp"
+            - name: dbpassword
+              valueFrom:
+                secretKeyRef:
+                  name: dbuser
+                  key: dbpassword
+                  optional: true #not needed/used if using VAULT_SECRET_OCID exists
           volumeMounts:
             - name: creds
               mountPath: /msdataworkshop/creds
           #          mountPath: /lib/oracle/instantclient_19_3/client64/lib/network/admin # 19.10
             - name: config-volume
-              mountPath: /msdataworkshop/observability/db-teq-orderpdb-exporter-metrics.toml
-              subPath: db-teq-orderpdb-exporter-metrics.toml
+              mountPath: /msdataworkshop/observability/db-teq-inventorypdb-exporter-metrics.toml
+              subPath: db-teq-inventorypdb-exporter-metrics.toml
           ports:
             - containerPort: 8080
       restartPolicy: Always
       volumes:
         - name: creds
           secret:
-            secretName: db-wallet-withpw-secret
+            secretName: db-wallet-secret
         - name: config-volume
           configMap:
-            name: db-teq-orderpdb-exporter-config
+            name: db-teq-inventorypdb-exporter-config
 #        - name: config-default-volume
 #          configMap:
 #            name: default-metrics-exporter-config

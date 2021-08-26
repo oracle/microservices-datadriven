@@ -3,7 +3,7 @@
 ## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 # install serviceaccount, clusterrole, and clusterrole binding needed for prometheus (default pw is admin/prom-operator)
-kubectl apply -f install/prom_rbac.yaml -n msdataworkshop
+kubectl apply -f prom_rbac.yaml -n msdataworkshop
 # install prometheus...
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm install stable prometheus-community/kube-prometheus-stack --namespace=msdataworkshop
