@@ -53,7 +53,10 @@ class OrderServiceEventProducer {
             metric[OracleConnection.END_TO_END_ECID_INDEX] = "ECIDMetrics";
             conn.setEndToEndMetrics(metric,seqnum);
 //            conn.setClientInfo();
-
+            System.out.println("OrderServiceEventProducer.updateDataAndSendEvent orderResource.getTracer().scopeManager():" + orderResource.getTracer().scopeManager());
+            System.out.println("OrderServiceEventProducer.updateDataAndSendEvent orderResource.getTracer().scopeManager().activeSpan():" +
+                    orderResource.getTracer().scopeManager()==null?"scopemanager null":orderResource.getTracer().scopeManager().activeSpan());
+            System.out.println("OrderServiceEventProducer.updateDataAndSendEvent orderResource.getTracer().scopeManager():" + orderResource.getTracer().activeSpan());
             try {
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery
