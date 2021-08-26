@@ -4,6 +4,7 @@
 
 echo delete order deployment and service...
 
-kubectl delete deployment alertlog-exporter -n msdataworkshop
+kubectl delete deployment orderpdb-alertlog-exporter -n msdataworkshop
+kubectl delete deployment inventorypdb-alertlog-exporter -n msdataworkshop
 
 kubectl delete service order -n msdataworkshop
