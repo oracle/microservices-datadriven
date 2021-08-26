@@ -47,12 +47,11 @@ func main() {
 	}
 	fmt.Printf("Listening for messages... start time: %s\n", thedate)
 	ctx := context.Background()
-	for {
-	    listenForMessagesAQAPI(ctx, db)
-	}
+	listenForMessagesAQAPI(ctx, db)
 }
 
 func listenForMessages(ctx context.Context, db *sql.DB) {
+	for {
 		tx, err := db.BeginTx(ctx, nil)
 		if err != nil {
 			//         		t.Fatal(err)
@@ -141,6 +140,7 @@ func listenForMessages(ctx context.Context, db *sql.DB) {
 }
 
 func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
+ for {
 	tx, err := db.BeginTx(ctx, nil)
 	if err != nil {
 		fmt.Println(err)
@@ -255,5 +255,6 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
 	}
 	fmt.Println("commit done...")
 	fmt.Printf("commit complete %d message", sendmsg)
+  }
 }
 
