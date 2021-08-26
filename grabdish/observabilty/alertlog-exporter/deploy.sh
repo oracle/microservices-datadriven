@@ -29,4 +29,4 @@ else
     kubectl apply -f <(istioctl kube-inject -f $SCRIPT_DIR/alertlog-exporter-deployment-$CURRENTTIME.yaml) -n msdataworkshop
 fi
 
-kubectl apply -f $SCRIPT_DIR/order-service.yaml -n msdataworkshop
+kubectl apply -f $SCRIPT_DIR/alertlog-exporter-service.yaml -n msdataworkshop
