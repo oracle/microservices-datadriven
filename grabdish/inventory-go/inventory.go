@@ -137,6 +137,7 @@ func listenForMessages(ctx context.Context, db *sql.DB) {
 			fmt.Println("commiterr:", commiterr)
 		}
 		fmt.Println("commit complete for message sent:" + inventoryJsonString)
+	}
 }
 
 func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
