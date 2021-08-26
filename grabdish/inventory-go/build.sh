@@ -4,7 +4,7 @@
 
 IMAGE_NAME=inventory-go
 IMAGE_VERSION=0.1
-export DOCKER_REGISTRY=$(state_get DOCKER_REGISTRY)
+
 if [ -z "DOCKER_REGISTRY" ]; then
     echo "Error: DOCKER_REGISTRY env variable needs to be set!"
     exit 1
