@@ -62,7 +62,7 @@ export DCMS_WORKSHOP_LOG=$MY_HOME/log
 
 # Setup state store
 mkdir -p $MY_HOME/infra/state_store
-source $MSDD_CODE_HOME/infra/state_store/setup.env $MY_HOME/infra/state_store $DCMS_WORKSHOP_LOG
+source $MSDD_CODE_HOME/infra/state_store/setup.env $MY_HOME/infra/state_store $DCMS_WORKSHOP_LOG/state.log
 
 
 # Setup secret vault
