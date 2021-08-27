@@ -12,11 +12,11 @@
 #
 #   $1/input.env
 #     COMPARTMENT_OCID
-#     RUN_NAME
-#     DOCKER_REGISTRY
+#     REGION
 #     
 # OUTPUTS:
-#   $1/output.env (empty to signify done)
+#   $1/output.env
+#     OKE_OCID
 
 
 # Fail on error
@@ -72,7 +72,6 @@ fi
 
 #Setup kukbctl
 OKE_OCID=`terraform output oke_ocid`
-REGION=`terraform variable ociRegion`
 oci ce cluster create-kubeconfig --cluster-id "$OKE_OCID" --file $HOME/.kube/config --region "$REGION" --token-version 2.0.0
 
 
@@ -88,4 +87,6 @@ while true; do
 done
 
 
-touch $MY_HOME/output.env
+cat >$MY_HOME/output.env <<!
+OKE_OCID='$OKE_OCID'
+!

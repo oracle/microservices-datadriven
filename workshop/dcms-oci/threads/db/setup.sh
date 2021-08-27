@@ -22,10 +22,19 @@ fi
 
 
 # Check if we are already done
-if test -f $MY_HOME/output.env; then
-  echo "$MY_HOME has been completed"
+if state_done DB_THREAD; then
   exit
 fi
+
+
+# Prevent parallel execution
+PID_FILE=$MY_HOME/PID
+if test -f $PID_FILE; then
+    echo "The script is already running."
+    echo "If you want to restart it, kill process $(cat $PID_FILE), delete the file $PID_FILE, and then retry"
+fi
+trap "rm -f -- '$PID_FILE'" EXIT
+echo $$ > "$PID_FILE"
 
 
 # Wait for dependencies
@@ -114,4 +123,4 @@ PASSWORD_SECRET=DB_PASSWORD
 done
 
 
-touch $MY_HOME/output.env
+set_state_done DB_THREAD

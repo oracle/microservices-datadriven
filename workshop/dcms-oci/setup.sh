@@ -11,6 +11,7 @@
 # Fail on error
 set -e
 
+
 # Check the code home is set
 if test -z "$MSDD_CODE_HOME"; then
   echo "ERROR: This script requires MSDD_CODE_HOME environment variable to be set"
@@ -33,16 +34,18 @@ if test -f $MY_HOME/output.env; then
 fi
 
 
+# Prevent parallel execution
+PID_FILE=$MY_HOME/PID
+if test -f $PID_FILE; then
+    echo "The script is already running."
+    echo "If you want to restart it, kill process $(cat $PID_FILE), delete the file $PID_FILE, and then retry"
+fi
+trap "rm -f -- '$PID_FILE'" EXIT
+echo $$ > "$PID_FILE"
+
+
 # Locate my code
 MY_CODE=$MSDD_CODE_HOME/workshop/dcms-oci
-
-
-# Check if we are already running
-SETUP_SCRIPT="$MY_CODE/setup.sh"
-if ps -ef | grep "$SETUP_SCRIPT" | grep -v grep; then
-  echo "The $SETUP_SCRIPT is already running.  If you want to restart it then kill it and then rerun."
-  exit
-fi
 
 
 # Create infra, workshop and app folders
@@ -72,10 +75,7 @@ THREADS="db builds k8s grabdish"
 for t in $THREADS; do
   mkdir -p $DCMS_THREAD_HOME/$t
   SETUP_SCRIPT="$MY_CODE/threads/$t/setup.sh"
-  if ! ps -ef | grep "$SETUP_SCRIPT" | grep -v grep; then
-    # Not already running
-    nohup $SETUP_SCRIPT $DCMS_THREAD_HOME/$t &>> $DCMS_WORKSHOP_LOG/$t-thread.log &
-  fi
+  nohup $SETUP_SCRIPT $DCMS_THREAD_HOME/$t &>> $DCMS_WORKSHOP_LOG/$t-thread.log &
 done
 
 
