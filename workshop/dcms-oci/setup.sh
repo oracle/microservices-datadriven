@@ -284,7 +284,7 @@ done
 
 
 # Collect DB password
-if ! is_set_secret DB_PASSWORD; then
+if ! is_secret_set DB_PASSWORD; then
   echo
   echo 'Database passwords must be 12 to 30 characters and contain at least one uppercase letter,'
   echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
@@ -309,7 +309,7 @@ fi
 
 
 # Collect UI password and create secret
-if ! is_set_secret UI_PASSWORD; then
+if ! is_secret_set UI_PASSWORD; then
   echo
   echo 'UI passwords must be 8 to 30 characters'
   echo

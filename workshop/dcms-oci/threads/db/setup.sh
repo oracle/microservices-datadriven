@@ -65,7 +65,7 @@ REGION=$(state_get REGION)
 DB_NAME=$(state_get $db_NAME)
 DISPLAY_NAME='$db_upper'
 !
-    $MSDD_CODE_HOME/infra/database/atp/setup.sh $DB_HOME
+    $MSDD_CODE_HOME/infra/db/atp/setup.sh $DB_HOME
     if ! test -f $DB_HOME/output.env; then
       echo "ERROR: $db provisioning failed"
       exit
@@ -85,7 +85,7 @@ for db in $DBS; do
   db_upper=`echo $db | tr '[:lower:]' '[:upper:]'`
   DB_HOME=$DCMS_INFRA_HOME/db/$db
   mkdir -p $DB_HOME
-  $MSDD_CODE_HOME/infra/database/atp/get_wallet.sh $DB_HOME
+  $MSDD_CODE_HOME/infra/db/atp/get_wallet.sh $DB_HOME
   (
   source $DB_HOME/output.env
   set_state ${db_upper}_TNS_ADMIN $TNS_ADMIN
@@ -118,7 +118,7 @@ for db in $DBS; do
   cat >$DB_HOME/input.env <<!
 PASSWORD_SECRET=DB_PASSWORD
 !
-  $MSDD_CODE_HOME/infra/database/atp/set_password.sh $DB_HOME
+  $MSDD_CODE_HOME/infra/db/atp/set_password.sh $DB_HOME
   set_state ${db_upper}_PASSWORD_SET
 done
 

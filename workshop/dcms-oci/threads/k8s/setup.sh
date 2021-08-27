@@ -55,7 +55,7 @@ done
 K8S_HOME=$DCMS_INFRA_HOME/k8s
 mkdir -p $K8S_HOME
 if ! test -f $K8S_HOME/output.env; then
-  cat >$DB_HOME/input.env <<!
+  cat >$K8S_HOME/input.env <<!
 COMPARTMENT_OCID=$(state_get COMPARTMENT_OCID)
 REGION=$(state_get REGION)
 DB_NAME=$(state_get $db_NAME)
