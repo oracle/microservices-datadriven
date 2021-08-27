@@ -74,7 +74,7 @@ DISPLAY_NAME=${db_upper}
 
   (
   source $DB_HOME/output.env
-  set_state ${db_upper}_OCID "$DB_OCID"
+  state_set ${db_upper}_OCID "$DB_OCID"
   )
 done
 
@@ -88,8 +88,8 @@ for db in $DBS; do
   $MSDD_CODE_HOME/infra/db/atp/get_wallet.sh $DB_HOME
   (
   source $DB_HOME/output.env
-  set_state ${db_upper}_TNS_ADMIN $TNS_ADMIN
-  set_state ${db_upper}_ALIAS "$DB_ALIAS"
+  state_set ${db_upper}_TNS_ADMIN $TNS_ADMIN
+  state_set ${db_upper}_ALIAS "$DB_ALIAS"
   )
 done
 
@@ -119,8 +119,8 @@ for db in $DBS; do
 PASSWORD_SECRET=DB_PASSWORD
 !
   $MSDD_CODE_HOME/infra/db/atp/set_password.sh $DB_HOME
-  set_state ${db_upper}_PASSWORD_SET
+  state_set ${db_upper}_PASSWORD_SET
 done
 
 
-set_state_done DB_THREAD
+state_set_done DB_THREAD

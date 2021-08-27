@@ -29,36 +29,36 @@ set -e
 MY_HOME="$1"
 if ! test -d "$MY_HOME"; then
   echo "ERROR: The home folder does not exist"
-  exit
+  exit 1
 fi
 
 
 # Check home is set
 if test -z "$GRABDISH_HOME"; then
   echo "ERROR: This script requires GRABDISH_HOME to be set"
-  exit
+  exit 1
 fi
 
 
 # Check home is set
 if test -z "$GRABDISH_LOG"; then
   echo "ERROR: This script requires GRABDISH_LOG to be set"
-  exit
+  exit 1
 fi
 
 
 # Check if we are already done
 if test -f $MY_HOME/output.env; then
-  exit
+  exit 1
 fi
 
 
 # Source input.env
-if test -f $MY_HOME/output.env; then
+if test -f $MY_HOME/input.env; then
   source "$MY_HOME"/input.env
 else
   echo "ERROR: input.env is required"
-  exit
+  exit 1
 fi
 
 

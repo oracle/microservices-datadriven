@@ -65,7 +65,7 @@ RUN_NAME='$(state_get RUN_NAME)'
 DOCKER_REGISTRY='$(state_get DOCKER_REGISTRY)'
 !
 $GRABDISH_HOME/config/base-builds/setup.sh $SCRIPT_HOME
-set_state_done BASE_BUILDS
+state_set_done BASE_BUILDS
 
 
 # Run polyglot builds
@@ -77,7 +77,7 @@ RUN_NAME='$(state_get RUN_NAME)'
 DOCKER_REGISTRY='$(state_get DOCKER_REGISTRY)'
 !
 $GRABDISH_HOME/config/polyglot-builds/setup.sh $SCRIPT_HOME
-set_state_done POLYGLOT_BUILDS
+state_set_done POLYGLOT_BUILDS
 
 
-set_state_done BUILDS_THREAD
+state_set_done BUILDS_THREAD

@@ -12,6 +12,7 @@
 #
 #   $1/input.env
 #     COMPARTMENT_OCID
+#     TENANCY_OCID
 #     REGION
 #     
 # OUTPUTS:
@@ -59,6 +60,7 @@ cd $MY_HOME/terraform
 
 export TF_VAR_ociCompartmentOcid="$COMPARTMENT_OCID"
 export TF_VAR_ociRegionIdentifier="$REGION"
+export TF_VAR_ociTenancyOcid="$TENANCY_OCID"
 
 if ! terraform init; then
     echo 'ERROR: terraform init failed!'

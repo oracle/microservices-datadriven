@@ -43,6 +43,15 @@ if test -f $MY_HOME/output.env; then
 fi
 
 
+# Source input.env
+if test -f $MY_HOME/input.env; then
+  source "$MY_HOME"/input.env
+else
+  echo "ERROR: input.env is required"
+  exit 1
+fi
+
+
 # Create db-wallet-secret
 cd $ORDERDB_TNS_ADMIN
 cat - >sqlnet.ora <<!
