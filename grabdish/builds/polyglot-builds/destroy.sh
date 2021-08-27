@@ -12,7 +12,7 @@
 #   Parameters:
 #     $1  Home directory (to store state, inputs and outputs)
 #
-#   $1/input.env
+#   $1/input.env or in environment
 #     COMPARTMENT_OCID
 #     RUN_NAME
 #     DOCKER_REGISTRY
@@ -20,7 +20,7 @@
 # OUTPUTS:
 #   $1/output.env (empty to signify done)
 
-
+exit # For now
 # Fail on error
 set -e
 
@@ -62,7 +62,7 @@ else
 fi
 
 
-BUILDS="frontend-helidon order-helidon supplier-helidon-se inventory-helidon"
+BUILDS="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se order-mongodb-kafka inventory-postgres-kafka inventory-springboot"
 
 
 # Provision Repos
@@ -71,21 +71,12 @@ for b in $BUILDS; do
 done
 
 
-# Install Graal
-if ! test -d ~/graalvm-ce-java11-20.1.0; then
-  cd $MY_HOME
-  curl -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.1.0/graalvm-ce-java11-linux-amd64-20.1.0.tar.gz | tar xz
-  mv graalvm-ce-java11-20.1.0 ~/
-  ~/graalvm-ce-java11-20.1.0/bin/gu install native-image
-fi
-
-
-# Build all the images (no push) except frontend-helidon (requires Jaeger)
+# Build all the images
 for b in $BUILDS; do
-  echo "$GRABDISH_HOME/$b $GRABDISH_LOG/build-$b.log"
   cd $GRABDISH_HOME/$b
-  time ./build.sh &>> $GRABDISH_LOG/build-$b.log
+  time ./build.sh &>> $GRABDISH_LOG/build-$b.log &
 done
+wait
 
 
 touch $MY_HOME/output.env

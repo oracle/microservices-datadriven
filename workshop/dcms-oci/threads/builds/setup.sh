@@ -64,7 +64,7 @@ COMPARTMENT_OCID='$(state_get COMPARTMENT_OCID)'
 RUN_NAME='$(state_get RUN_NAME)'
 DOCKER_REGISTRY='$(state_get DOCKER_REGISTRY)'
 !
-$GRABDISH_HOME/config/base-builds/setup.sh $SCRIPT_HOME
+$GRABDISH_HOME/builds/base-builds/setup.sh $SCRIPT_HOME
 state_set_done BASE_BUILDS
 
 
@@ -76,7 +76,7 @@ COMPARTMENT_OCID='$$(state_get COMPARTMENT_OCID)'
 RUN_NAME='$(state_get RUN_NAME)'
 DOCKER_REGISTRY='$(state_get DOCKER_REGISTRY)'
 !
-$GRABDISH_HOME/config/polyglot-builds/setup.sh $SCRIPT_HOME
+$GRABDISH_HOME/builds/polyglot-builds/setup.sh $SCRIPT_HOME
 state_set_done POLYGLOT_BUILDS
 
 

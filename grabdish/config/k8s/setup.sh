@@ -70,5 +70,37 @@ kubectl create -f $GRABDISH_HOME/frontend-helidon/frontend-service.yaml -n msdat
 kubectl create -f https://tinyurl.com/yc52x6q5 -n msdataworkshop; then
 
 
+# Create UI password secret
+BASE64_UI_PASSWORD=`echo -n "$(get_secret UI_PASSWORD)" | base64`
+kubectl create -n msdataworkshop -f - <<!
+{
+   "apiVersion": "v1",
+   "kind": "Secret",
+   "metadata": {
+      "name": "frontendadmin"
+   },
+   "data": {
+      "password": "${BASE64_UI_PASSWORD}"
+   }
+}
+!
+
+
+# Collect DB password and create secret
+BASE64_UI_PASSWORD=`echo -n "$(get_secret DB_PASSWORD)" | base64`
+kubectl create -n msdataworkshop -f - <<!
+{
+   "apiVersion": "v1",
+   "kind": "Secret",
+   "metadata": {
+      "name": "dbuser"
+   },
+   "data": {
+      "dbpassword": "${BASE64_DB_PASSWORD}"
+   }
+}
+!
+
+
 # Done
 touch $MY_HOME/output.env

@@ -13,6 +13,7 @@
 # OUTPUTS:
 #   output.env removed
 
+exit # for now
 # Fail on error
 set -e
 

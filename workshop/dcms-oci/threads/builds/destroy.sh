@@ -39,7 +39,7 @@ trap "rm -f -- '$PID_FILE'" EXIT
 echo $$ > "$PID_FILE"
 
 # Wait for database and k8s threads
-DEPENDENCIES='COMPARTMENT_OCID RUN_NAME DOCKER_REGISTRY'
+DEPENDENCIES=''
 while ! test -z "$DEPENDENCIES"; do
   echo "Waiting for $DEPENDENCIES"
   WAITING_FOR=""
@@ -62,11 +62,9 @@ SCRIPT_HOME=$DCMS_APP_HOME/base-builds
 mkdir $SCRIPT_HOME
 cat >$SCRIPT_HOME/input.env <<!
 COMPARTMENT_OCID='$(state_get COMPARTMENT_OCID)'
-RUN_NAME='$(state_get RUN_NAME)'
-DOCKER_REGISTRY='$(state_get DOCKER_REGISTRY)'
 !
-$GRABDISH_HOME/config/base-builds/setup.sh $SCRIPT_HOME
-state_set_done BASE_BUILDS
+$GRABDISH_HOME/builds/base-builds/destroy.sh $SCRIPT_HOME
+state_reset BASE_BUILDS
 
 
 # Run polyglot builds
@@ -74,11 +72,9 @@ SCRIPT_HOME=$DCMS_APP_HOME/polyglot-builds
 mkdir $SCRIPT_HOME
 cat >$SCRIPT_HOME/input.env <<!
 COMPARTMENT_OCID='$$(state_get COMPARTMENT_OCID)'
-RUN_NAME='$(state_get RUN_NAME)'
-DOCKER_REGISTRY='$(state_get DOCKER_REGISTRY)'
 !
-$GRABDISH_HOME/config/polyglot-builds/setup.sh $SCRIPT_HOME
-state_set_done POLYGLOT_BUILDS
+$GRABDISH_HOME/builds/polyglot-builds/destroy.sh $SCRIPT_HOME
+state_reset POLYGLOT_BUILDS
 
 
-state_set_done BUILDS_THREAD
+state_set_done BUILDS_DESTROY_THREAD
