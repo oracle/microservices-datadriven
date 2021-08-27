@@ -52,15 +52,12 @@ class OrderServiceEventProducer {
             metric[OracleConnection.END_TO_END_CLIENTID_INDEX] = "ClientIdMetrics";
             metric[OracleConnection.END_TO_END_ECID_INDEX] = "ECIDMetrics";
             conn.setEndToEndMetrics(metric,seqnum);
-//            conn.setClientInfo();
-            System.out.println("OrderServiceEventProducer.updateDataAndSendEvent orderResource.getTracer().scopeManager():" + orderResource.getTracer().scopeManager());
-            System.out.println("OrderServiceEventProducer.updateDataAndSendEvent orderResource.getTracer().scopeManager().activeSpan():" +
-                    orderResource.getTracer().scopeManager()==null?"scopemanager null":orderResource.getTracer().scopeManager().activeSpan());
-            System.out.println("OrderServiceEventProducer.updateDataAndSendEvent orderResource.getTracer().scopeManager():" + orderResource.getTracer().activeSpan());
+//  todo instead use          conn.setClientInfo();
+            System.out.println("OrderServiceEventProducer.updateDataAndSendEvent activespan:" + orderResource.getTracer().activeSpan());
             try {
                 Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery
-                        ("select ACTION,MODULE,CLIENT_IDENTIFIER from V$SESSION where USERNAME=\'orderuser\'");
+                ResultSet rs = stmt.executeQuery // select ECID,ACTION,MODULE,CLIENT_IDENTIFIER from V$SESSION where USERNAME='ORDERUSER'
+                        ("select ACTION,MODULE,CLIENT_IDENTIFIER from V$SESSION where USERNAME=\'ORDERUSER\'");
                 seqnum =  ((OracleConnection)conn).getEndToEndECIDSequenceNumber();
                 while (rs.next()) {
                     System.out.println("*** Action = " + rs.getString(1));
