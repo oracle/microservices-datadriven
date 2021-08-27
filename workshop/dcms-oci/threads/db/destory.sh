@@ -22,7 +22,7 @@ fi
 
 
 # Check if we are already done
-if state_done GRABDISH_THREAD; then
+if state_done DB_THREAD; then
   exit
 fi
 
@@ -37,8 +37,8 @@ trap "rm -f -- '$PID_FILE'" EXIT
 echo $$ > "$PID_FILE"
 
 
-# Wait for database and k8s threads
-DEPENDENCIES='DATABASE_THREAD K8S_THREAD'
+# Wait for dependencies
+DEPENDENCIES=''
 while ! test -z "$DEPENDENCIES"; do
   echo "Waiting for $DEPENDENCIES"
   WAITING_FOR=""
@@ -52,19 +52,14 @@ while ! test -z "$DEPENDENCIES"; do
 done
 
 
-# Run the grabdish app setup
-export GRABDISH_HOME=$MSDD_CODE_HOME/grabdish
-export GRABDISH_LOG=$DCMS_WORKSHOP_LOG
-cat >$DCMS_APP_HOME/input.env <<!
-COMPARTMENT_OCID='$$(state_get COMPARTMENT_OCID)'
-ORDERDB_TNS_ADMIN='$(state_get ORDERDB_TNS_ADMIN)'
-ORDERDB_ALIAS='$(state_get ORDERDB_ALIAS)'
-INVENTORYDB_ALIAS='$(state_get INVENTORYDB_ALIAS)'
-REGION='$(state_get REGION)'
-RUN_NAME='$(state_get RUN_NAME)'
-DOCKER_REGISTRY='$(state_get DOCKER_REGISTRY)'
-!
-$GRABDISH_HOME/config/setup.sh $DCMS_APP_HOME
+# Destory Order and Inventory DB
+DBS="orderdb inventorydb"
+for db in $DBS; do
+  db_upper=`echo $db | tr '[:lower:]' '[:upper:]'`
+  DB_HOME=$DCMS_INFRA_HOME/db/$db
+  mkdir -p $DB_HOME
+  $MSDD_CODE_HOME/infra/db/atp/destroy.sh $DB_HOME
+done
 
 
-set_state_done GRABDISH_THREAD
+state_set_done DB_DESTROY_THREAD

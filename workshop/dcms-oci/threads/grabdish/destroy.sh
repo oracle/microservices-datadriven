@@ -22,7 +22,7 @@ fi
 
 
 # Check if we are already done
-if state_done K8S_THREAD; then
+if state_done GRABDISH_THREAD; then
   exit
 fi
 
@@ -37,8 +37,8 @@ trap "rm -f -- '$PID_FILE'" EXIT
 echo $$ > "$PID_FILE"
 
 
-# Wait for dependencies
-DEPENDENCIES='COMPARTMENT_OCID REGION OKE_LIMIT_CHECK'
+# Wait for database and k8s threads
+DEPENDENCIES=''
 while ! test -z "$DEPENDENCIES"; do
   echo "Waiting for $DEPENDENCIES"
   WAITING_FOR=""
@@ -52,27 +52,11 @@ while ! test -z "$DEPENDENCIES"; do
 done
 
 
-K8S_HOME=$DCMS_INFRA_HOME/k8s
-mkdir -p $K8S_HOME
-if ! test -f $K8S_HOME/output.env; then
-  cat >$K8S_HOME/input.env <<!
-COMPARTMENT_OCID=$(state_get COMPARTMENT_OCID)
-REGION=$(state_get REGION)
-TENANCY_OCID=$(state_get TENANCY_OCID)
+# Run the grabdish app setup
+export GRABDISH_HOME=$MSDD_CODE_HOME/grabdish
+export GRABDISH_LOG=$DCMS_WORKSHOP_LOG
 !
-  $MSDD_CODE_HOME/infra/k8s/oke/setup.sh $K8S_HOME
-fi
-
-if ! test -f $K8S_HOME/output.env; then
-  echo "ERROR: k8s provisioning failed"
-  exit
-fi
-
- 
-(
-source $OKE_HOME/output.env
-set_state OKE_OCID "$OKE_OCID"
-)
+$GRABDISH_HOME/config/destroy.sh $DCMS_APP_HOME
 
 
-set_state_done K8S_THREAD
+set_state_done GRABDISH_DESTROY_THREAD

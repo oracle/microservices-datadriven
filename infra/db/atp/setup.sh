@@ -71,7 +71,7 @@ fi
 
 
 # Get the DB_OCID
-DB_OCID=`terraform output db_ocid`
+DB_OCID=`terraform output -raw db_ocid`
 
 
 cat >$MY_HOME/output.env <<!

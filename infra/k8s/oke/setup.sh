@@ -73,7 +73,7 @@ if ! terraform apply -auto-approve; then
 fi
 
 #Setup kukbctl
-OKE_OCID=`terraform output oke_ocid`
+OKE_OCID=`terraform output -raw oke_ocid`
 oci ce cluster create-kubeconfig --cluster-id "$OKE_OCID" --file $HOME/.kube/config --region "$REGION" --token-version 2.0.0
 
 

@@ -22,7 +22,7 @@ fi
 
 
 # Check if we are already done
-if state_done BUILDS_THREAD; then
+if state_done K8S_DESTROY_THREAD; then
   exit
 fi
 
@@ -37,8 +37,8 @@ trap "rm -f -- '$PID_FILE'" EXIT
 echo $$ > "$PID_FILE"
 
 
-# Wait for database and k8s threads
-DEPENDENCIES='COMPARTMENT_OCID RUN_NAME DOCKER_REGISTRY'
+# Wait for dependencies
+DEPENDENCIES=''
 while ! test -z "$DEPENDENCIES"; do
   echo "Waiting for $DEPENDENCIES"
   WAITING_FOR=""
@@ -52,32 +52,8 @@ while ! test -z "$DEPENDENCIES"; do
 done
 
 
-export GRABDISH_HOME=$MSDD_CODE_HOME/grabdish
-export GRABDISH_LOG=$DCMS_WORKSHOP_LOG
+K8S_HOME=$DCMS_INFRA_HOME/k8s
+$MSDD_CODE_HOME/infra/k8s/oke/destroy.sh $K8S_HOME
 
 
-# Run base builds
-SCRIPT_HOME=$DCMS_APP_HOME/base-builds
-mkdir $SCRIPT_HOME
-cat >$SCRIPT_HOME/input.env <<!
-COMPARTMENT_OCID='$(state_get COMPARTMENT_OCID)'
-RUN_NAME='$(state_get RUN_NAME)'
-DOCKER_REGISTRY='$(state_get DOCKER_REGISTRY)'
-!
-$GRABDISH_HOME/config/base-builds/setup.sh $SCRIPT_HOME
-state_set_done BASE_BUILDS
-
-
-# Run polyglot builds
-SCRIPT_HOME=$DCMS_APP_HOME/polyglot-builds
-mkdir $SCRIPT_HOME
-cat >$SCRIPT_HOME/input.env <<!
-COMPARTMENT_OCID='$$(state_get COMPARTMENT_OCID)'
-RUN_NAME='$(state_get RUN_NAME)'
-DOCKER_REGISTRY='$(state_get DOCKER_REGISTRY)'
-!
-$GRABDISH_HOME/config/polyglot-builds/setup.sh $SCRIPT_HOME
-state_set_done POLYGLOT_BUILDS
-
-
-state_set_done BUILDS_THREAD
+set_state_done K8S_DESTROY_THREAD

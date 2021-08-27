@@ -82,6 +82,7 @@ fi
 
 # Build all the images (no push) except frontend-helidon (requires Jaeger)
 for b in $BUILDS; do
+  echo "$GRABDISH_HOME/$b $GRABDISH_LOG/build-$b.log"
   cd $GRABDISH_HOME/$b
   time ./build.sh &>> $GRABDISH_LOG/build-$b.log
 done
