@@ -70,7 +70,7 @@ fi
 
  
 (
-source $OKE_HOME/output.env
+source $K8S_HOME/output.env
 set_state OKE_OCID "$OKE_OCID"
 )
 

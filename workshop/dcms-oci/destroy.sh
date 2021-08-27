@@ -41,6 +41,12 @@ echo $$ > "$PID_FILE"
 MY_CODE=$MSDD_CODE_HOME/workshop/dcms-oci
 
 
+# Locate homes
+export DCMS_INFRA_HOME=$MY_HOME/infra
+export DCMS_APP_HOME=$MY_HOME/grabdish
+export DCMS_THREAD_HOME=$MY_HOME/threads
+
+
 # Export log folder
 export DCMS_WORKSHOP_LOG=$MY_HOME/log
 

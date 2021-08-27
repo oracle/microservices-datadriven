@@ -94,17 +94,8 @@ for db in $DBS; do
 done
 
 
-# Wait for dependencies
-DEPENDENCIES='DB_PASSWORD'
-while ! test -z "$DEPENDENCIES"; do
-  echo "Waiting for $DEPENDENCIES"
-  WAITING_FOR=""
-  for d in $DEPENDENCIES; do
-    if ! state_done $d; then
-      WAITING_FOR="$WAITING_FOR $d"
-    fi
-  done
-  DEPENDENCIES="$WAITING_FOR"
+while ! is_secret_set DB_PASSWORD; do
+  echo "Waiting for DB_PASSWORD"
   sleep 1
 done
 
