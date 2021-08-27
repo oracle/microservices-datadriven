@@ -49,7 +49,7 @@ SCRIPTS="db k8s db-k8s"
 for scr in $SCRIPTS; do
   SCRIPT_HOME=$MY_HOME/$scr
   mkdir -p $SCRIPT_HOME
-  $GRABDISH_HOME/config/destroy.sh $SCRIPT_HOME
+  $GRABDISH_HOME/config/$scr/destroy.sh $SCRIPT_HOME
 done
 
 
