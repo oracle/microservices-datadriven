@@ -56,4 +56,4 @@ K8S_HOME=$DCMS_INFRA_HOME/k8s
 $MSDD_CODE_HOME/infra/k8s/oke/destroy.sh $K8S_HOME
 
 
-set_state_done K8S_DESTROY_THREAD
+state_set_done K8S_DESTROY_THREAD

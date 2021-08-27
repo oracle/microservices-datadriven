@@ -52,7 +52,7 @@ while ! test -z "$DEPENDENCIES"; do
 done
 
 
-# Run the grabdish app setup
+# Run the grabdish app destroy
 export GRABDISH_HOME=$MSDD_CODE_HOME/grabdish
 export GRABDISH_LOG=$DCMS_WORKSHOP_LOG
 !
