@@ -22,7 +22,7 @@ fi
 
 
 # Check if we are already done
-if state_done DB_THREAD; then
+if state_done DB_DESTROY_THREAD; then
   exit
 fi
 

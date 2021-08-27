@@ -3,7 +3,6 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # INPUTS:
-# input.env
 #
 #
 # OUTPUTS:
@@ -32,15 +31,6 @@ MY_CODE=$MSDD_CODE_HOME/infra/db/atp
 # Check if we are already done
 if ! test -f $MY_HOME/output.env; then
   exit
-fi
-
-
-# Source input.env
-if test -f $MY_HOME/input.env; then
-  source "$MY_HOME"/input.env
-else
-  echo "ERROR: input.env is required"
-  exit 1
 fi
 
 

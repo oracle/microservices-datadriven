@@ -92,5 +92,5 @@ if state_done DOCKER_REGISTRY; do
 fi
 
 
-# Create infra, workshop and app folders
-rm -rf $MY_HOME
+# Delete infra, workshop and app folders
+# rm -rf $MY_HOME
