@@ -53,4 +53,4 @@ for scr in $SCRIPTS; do
 done
 
 
-rm $MY_HOME/output.env
+rm -f $MY_HOME/output.env

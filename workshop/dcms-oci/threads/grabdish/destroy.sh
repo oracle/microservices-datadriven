@@ -22,7 +22,7 @@ fi
 
 
 # Check if we are already done
-if state_done GRABDISH_THREAD; then
+if state_done GRABDISH_DESTROY_THREAD; then
   exit
 fi
 
@@ -32,6 +32,7 @@ PID_FILE=$MY_HOME/PID
 if test -f $PID_FILE; then
     echo "The script is already running."
     echo "If you want to restart it, kill process $(cat $PID_FILE), delete the file $PID_FILE, and then retry"
+    exit
 fi
 trap "rm -f -- '$PID_FILE'" EXIT
 echo $$ > "$PID_FILE"

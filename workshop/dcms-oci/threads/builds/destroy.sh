@@ -34,9 +34,11 @@ PID_FILE=$MY_HOME/PID
 if test -f $PID_FILE; then
     echo "The script is already running."
     echo "If you want to restart it, kill process $(cat $PID_FILE), delete the file $PID_FILE, and then retry"
+    exit
 fi
 trap "rm -f -- '$PID_FILE'" EXIT
 echo $$ > "$PID_FILE"
+
 
 # Wait for database and k8s threads
 DEPENDENCIES=''
