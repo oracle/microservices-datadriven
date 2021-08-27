@@ -36,17 +36,14 @@ fi
 MY_CODE=$MSDD_CODE_HOME/infra/k8s/oke
 
 
-# Check if we are already done
+# Check if there is anything to do
 if ! test -f $MY_HOME/output.env; then
-  exit 1
+  exit
 fi
 
 
 cd $MY_HOME/terraform
-
-# export TF_VAR_ociCompartmentOcid="$COMPARTMENT_OCID"
-# export TF_VAR_ociRegionIdentifier="$REGION"
-# export TF_VAR_ociTenancyOcid="$TENANCY_OCID"
+source $MY_HOME/state.env
 
 if ! terraform init; then
     echo 'ERROR: terraform init failed!'
@@ -54,7 +51,7 @@ if ! terraform init; then
 fi
 
 if ! terraform destroy -auto-approve; then
-    echo 'ERROR: terraform apply failed!'
+    echo 'ERROR: terraform destroy failed!'
     exit 1
 fi
 

@@ -45,6 +45,15 @@ if test -z "$GRABDISH_LOG"; then
 fi
 
 
+# Source input.env
+if test -f $MY_HOME/input.env; then
+  source "$MY_HOME"/input.env
+else
+  echo "ERROR: input.env is required"
+  exit 1
+fi
+
+
 # Delete Images
 echo "Deleting Images"
 IIDS=`oci artifacts container image list --compartment-id "$COMPARTMENT_OCID" --query "join(' ',data.items[*].id)" --raw-output`

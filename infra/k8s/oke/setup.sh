@@ -49,6 +49,7 @@ fi
 # Source input.env
 if test -f $MY_HOME/input.env; then
   source "$MY_HOME"/input.env
+  rm "$MY_HOME"/input.env
 else
   echo "ERROR: input.env is required"
   exit
@@ -58,9 +59,12 @@ fi
 cp -rf $MY_CODE/terraform $MY_HOME
 cd $MY_HOME/terraform
 
+cat >$MY_HOME/state.env <<!
 export TF_VAR_ociCompartmentOcid="$COMPARTMENT_OCID"
 export TF_VAR_ociRegionIdentifier="$REGION"
 export TF_VAR_ociTenancyOcid="$TENANCY_OCID"
+!
+source $MY_HOME/state.env
 
 if ! terraform init; then
     echo 'ERROR: terraform init failed!'

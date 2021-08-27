@@ -21,13 +21,12 @@ fi
 
 
 # Source output.env
-if test -f $MY_HOME/output.env; then
-  source "$MY_HOME"/output.env
-else
+if ! test -f $MY_HOME/output.env; then
   echo "ERROR: Cannot get wallet as setup has not completed"
   exit 1
 fi
 
+source "$MY_HOME"/state.env
 
 # Get the wallet and other TNS info
 TNS_ADMIN=$MY_HOME/tns_admin
@@ -39,12 +38,15 @@ oci db autonomous-database generate-wallet --autonomous-database-id "$DB_OCID" -
 unzip wallet.zip
 
 DB_ALIAS=${DB_NAME}_tp
+cat >>$MY_HOME/state.env <<!
+DB_ALIAS=$DB_ALIAS
+!
 
 
 cat >$MY_HOME/output.env <<!
-  DB_OCID='$DB_OCID'
-  DB_NAME=$DB_NAME
-  DISPLAY_NAME=$DISPLAY_NAME
-  DB_ALIAS=$DB_ALIAS
-  TNS_ADMIN=$TNS_ADMIN
+DB_OCID='$DB_OCID'
+DB_NAME=$DB_NAME
+DISPLAY_NAME=$DISPLAY_NAME
+DB_ALIAS=$DB_ALIAS
+TNS_ADMIN=$TNS_ADMIN
 !

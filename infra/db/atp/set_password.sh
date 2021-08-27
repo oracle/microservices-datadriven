@@ -18,27 +18,27 @@ set -e
 MY_HOME="$1"
 if ! test -d "$MY_HOME"; then
   echo "ERROR: The home folder does not exist"
-  exit
+  exit 1
 fi
 
 
 # Source input.env
 if test -f $MY_HOME/input.env; then
   source "$MY_HOME"/input.env
+  rm "$MY_HOME"/input.env
 else
   echo "ERROR: input.env is required"
-  exit
+  exit 1
 fi
 
 
 # Source output.env
-if test -f $MY_HOME/output.env; then
-  source "$MY_HOME"/output.env
-else
+if ! test -f $MY_HOME/output.env; then
   echo "ERROR: Cannot set password as setup has not completed"
-  exit
+  exit 1
 fi
 
+source "$MY_HOME"/state.env
 
 cd $MY_HOME
 DB_PASSWORD=$(get_secret $PASSWORD_SECRET)

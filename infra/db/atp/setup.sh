@@ -24,14 +24,14 @@ set -e
 MY_HOME="$1"
 if ! test -d "$MY_HOME"; then
   echo "ERROR: The home folder does not exist"
-  exit
+  exit 1
 fi
 
 
 # Check code home is set
 if test -z "$MSDD_CODE_HOME"; then
   echo "ERROR: This script requires MSDD_CODE_HOME to be set"
-  exit
+  exit 1
 fi
 MY_CODE=$MSDD_CODE_HOME/infra/db/atp
 
@@ -45,34 +45,43 @@ fi
 # Source input.env
 if test -f $MY_HOME/input.env; then
   source "$MY_HOME"/input.env
+  rm "$MY_HOME"/input.env
 else
   echo "ERROR: input.env is required"
-  exit
+  exit 1
 fi
 
 
 # Execute terraform
 cp -rf $MY_CODE/terraform $MY_HOME
 cd $MY_HOME/terraform
+cat >$MY_HOME/state.env <<!
 export TF_VAR_ociCompartmentOcid="$COMPARTMENT_OCID"
 export TF_VAR_ociRegionIdentifier="$REGION"
 export TF_VAR_dbName="$DB_NAME"
 export TF_VAR_displayName="$DISPLAY_NAME"
+DB_NAME=$DB_NAME
+DISPLAY_NAME=$DISPLAY_NAME
+!
+source $MY_HOME/state.env
 
 if ! terraform init; then
     echo 'ERROR: terraform init failed!'
-    exit
+    exit 1
 fi
 
 if ! terraform apply -auto-approve; then
     echo 'ERROR: terraform apply failed!'
-    exit
+    exit 1
 fi
 
 
 # Get the DB_OCID
 DB_OCID=`terraform output -raw db_ocid`
 
+cat >>$MY_HOME/state.env <<!
+DB_OCID='$DB_OCID'
+!
 
 cat >$MY_HOME/output.env <<!
   DB_OCID='$DB_OCID'

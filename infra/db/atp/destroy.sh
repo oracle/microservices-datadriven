@@ -4,17 +4,10 @@
 
 # INPUTS:
 # input.env
-#   COMPARTMENT_OCID
-#   REGION
-#   DB_NAME
-#   DISPLAY_NAME
 #
 #
 # OUTPUTS:
-# output.env
-#   DB_OCID
-#   DB_ALIAS
-#   TNS_ADMIN
+# output.env removed
 
 # Fail on error
 set -e
@@ -53,10 +46,7 @@ fi
 
 # Execute terraform
 cd $MY_HOME/terraform
-export TF_VAR_ociCompartmentOcid="$COMPARTMENT_OCID"
-export TF_VAR_ociRegionIdentifier="$REGION"
-export TF_VAR_dbName="$DB_NAME"
-export TF_VAR_displayName="$DISPLAY_NAME"
+source $MY_HOME/state.env
 
 if ! terraform init; then
     echo 'ERROR: terraform init failed!'
