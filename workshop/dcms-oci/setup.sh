@@ -57,7 +57,7 @@ export DCMS_THREAD_HOME=$MY_HOME/threads
 
 
 # Export log folder
-export DCMS_WORKSHOP_LOG=$DCMS_WORKSHOP_HOME/log
+export DCMS_WORKSHOP_LOG=$MY_HOME/log
 
 
 # Setup state store
