@@ -62,8 +62,8 @@ for db in $DBS; do
     cat >$DB_HOME/input.env <<!
 COMPARTMENT_OCID=$(state_get COMPARTMENT_OCID)
 REGION=$(state_get REGION)
-DB_NAME=$(state_get $db_NAME)
-DISPLAY_NAME='$db_upper'
+DB_NAME=$(state_get ${db_upper}_NAME)
+DISPLAY_NAME=${db_upper}
 !
     $MSDD_CODE_HOME/infra/db/atp/setup.sh $DB_HOME
     if ! test -f $DB_HOME/output.env; then

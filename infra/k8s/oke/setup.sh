@@ -57,8 +57,8 @@ fi
 cp -rf $MY_CODE/terraform $MY_HOME
 cd $MY_HOME/terraform
 
-export TF_VAR_ociCompartmentOcid="$(state_get COMPARTMENT_OCID)"
-export TF_VAR_ociRegionIdentifier="$(state_get REGION)"
+export TF_VAR_ociCompartmentOcid="$COMPARTMENT_OCID"
+export TF_VAR_ociRegionIdentifier="$REGION"
 
 if ! terraform init; then
     echo 'ERROR: terraform init failed!'

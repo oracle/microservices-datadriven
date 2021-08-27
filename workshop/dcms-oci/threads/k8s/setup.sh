@@ -38,7 +38,7 @@ echo $$ > "$PID_FILE"
 
 
 # Wait for dependencies
-DEPENDENCIES='COMPARTMENT_OCID REGION ATP_LIMIT_CHECK'
+DEPENDENCIES='COMPARTMENT_OCID REGION OKE_LIMIT_CHECK'
 while ! test -z "$DEPENDENCIES"; do
   echo "Waiting for $DEPENDENCIES"
   WAITING_FOR=""
@@ -58,8 +58,6 @@ if ! test -f $K8S_HOME/output.env; then
   cat >$K8S_HOME/input.env <<!
 COMPARTMENT_OCID=$(state_get COMPARTMENT_OCID)
 REGION=$(state_get REGION)
-DB_NAME=$(state_get $db_NAME)
-DISPLAY_NAME='$db_upper'
 !
   $MSDD_CODE_HOME/infra/k8s/oke/setup.sh $K8S_HOME
 fi

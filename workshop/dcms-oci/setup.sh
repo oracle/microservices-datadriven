@@ -208,13 +208,6 @@ if ! state_done OKE_LIMIT_CHECK; then
 fi
 
 
-# Get Namespace
-while ! state_done NAMESPACE; do
-  NAMESPACE=`oci os ns get --compartment-id "$(state_get COMPARTMENT_OCID)" --query "data" --raw-output`
-  state_set NAMESPACE "$NAMESPACE"
-done
-
-
 # Check ATP resource availability
 while ! state_done ATP_LIMIT_CHECK; do
   CHECK=1
@@ -237,6 +230,13 @@ while ! state_done ATP_LIMIT_CHECK; do
   else
     read -p "Hit [RETURN] when you are ready to retry? " DUMMY
   fi
+done
+
+
+# Get Namespace
+while ! state_done NAMESPACE; do
+  NAMESPACE=`oci os ns get --compartment-id "$(state_get COMPARTMENT_OCID)" --query "data" --raw-output`
+  state_set NAMESPACE "$NAMESPACE"
 done
 
 
