@@ -16,16 +16,7 @@ set -e
 MY_HOME="$1"
 if ! test -d "$MY_HOME"; then
   echo "ERROR: The home folder does not exist"
-  exit
-fi
-
-
-# Source input.env
-if test -f $MY_HOME/input.env; then
-  source "$MY_HOME"/input.env
-else
-  echo "ERROR: input.env is required"
-  exit
+  exit 1
 fi
 
 
@@ -34,7 +25,7 @@ if test -f $MY_HOME/output.env; then
   source "$MY_HOME"/output.env
 else
   echo "ERROR: Cannot get wallet as setup has not completed"
-  exit
+  exit 1
 fi
 
 
@@ -43,6 +34,7 @@ TNS_ADMIN=$MY_HOME/tns_admin
 mkdir -p $TNS_ADMIN
 rm -rf $TNS_ADMIN/*
 cd $TNS_ADMIN
+echo "DB OCID is $DB_OCID"
 oci db autonomous-database generate-wallet --autonomous-database-id "$DB_OCID" --file 'wallet.zip' --password 'Welcome1' --generate-type 'ALL'
 unzip wallet.zip
 

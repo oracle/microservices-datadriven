@@ -58,6 +58,7 @@ if ! test -f $K8S_HOME/output.env; then
   cat >$K8S_HOME/input.env <<!
 COMPARTMENT_OCID=$(state_get COMPARTMENT_OCID)
 REGION=$(state_get REGION)
+TENANCY_OCID=$(state_get TENANCY_OCID)
 !
   $MSDD_CODE_HOME/infra/k8s/oke/setup.sh $K8S_HOME
 fi
