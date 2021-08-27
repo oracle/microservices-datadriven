@@ -88,7 +88,7 @@ done
 
 
 # Logout of docker
-if state_done DOCKER_REGISTRY; do
+if state_done DOCKER_REGISTRY; then
    docker logout "$(state_get REGION).ocir.io" 
 fi
 

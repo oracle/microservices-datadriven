@@ -73,7 +73,7 @@ state_set_done BASE_BUILDS
 SCRIPT_HOME=$DCMS_APP_HOME/polyglot-builds
 mkdir $SCRIPT_HOME
 cat >$SCRIPT_HOME/input.env <<!
-COMPARTMENT_OCID='$$(state_get COMPARTMENT_OCID)'
+COMPARTMENT_OCID='$(state_get COMPARTMENT_OCID)'
 RUN_NAME='$(state_get RUN_NAME)'
 DOCKER_REGISTRY='$(state_get DOCKER_REGISTRY)'
 !

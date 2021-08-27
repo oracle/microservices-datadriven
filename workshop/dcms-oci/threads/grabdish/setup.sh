@@ -39,7 +39,7 @@ echo $$ > "$PID_FILE"
 
 
 # Wait for database and k8s threads
-DEPENDENCIES='DATABASE_THREAD K8S_THREAD'
+DEPENDENCIES='DB_THREAD K8S_THREAD'
 while ! test -z "$DEPENDENCIES"; do
   echo "Waiting for $DEPENDENCIES"
   WAITING_FOR=""

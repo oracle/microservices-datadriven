@@ -82,7 +82,7 @@ REGION='$REGION'
 RUN_NAME='$RUN_NAME'
 DOCKER_REGISTRY='$DOCKER_REGISTRY'
 !
-  $GRABDISH_HOME/utils/$scr-setup.sh $SCRIPT_HOME
+  $GRABDISH_HOME/config/$scr/setup.sh $SCRIPT_HOME
 done
 
 

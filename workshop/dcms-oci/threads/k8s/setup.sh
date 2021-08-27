@@ -76,4 +76,4 @@ state_set OKE_OCID "$OKE_OCID"
 )
 
 
-set_state_done K8S_THREAD
+state_set_done K8S_THREAD

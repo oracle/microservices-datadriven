@@ -5,8 +5,6 @@
 # Fail on error
 set -e
 
-state_set_done BUILDS_DESTROY_THREAD
-exit # FOR NOW
 
 # Check the code home is set
 if test -z "$MSDD_CODE_HOME"; then
