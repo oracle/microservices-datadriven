@@ -59,7 +59,7 @@ export GRABDISH_LOG=$DCMS_WORKSHOP_LOG
 
 # Run base builds
 SCRIPT_HOME=$DCMS_APP_HOME/base-builds
-mkdir $SCRIPT_HOME
+mkdir -p $SCRIPT_HOME
 cat >$SCRIPT_HOME/input.env <<!
 COMPARTMENT_OCID='$(state_get COMPARTMENT_OCID)'
 !
@@ -69,7 +69,7 @@ state_reset BASE_BUILDS
 
 # Run polyglot builds
 SCRIPT_HOME=$DCMS_APP_HOME/polyglot-builds
-mkdir $SCRIPT_HOME
+mkdir -p $SCRIPT_HOME
 cat >$SCRIPT_HOME/input.env <<!
 COMPARTMENT_OCID='$$(state_get COMPARTMENT_OCID)'
 !
