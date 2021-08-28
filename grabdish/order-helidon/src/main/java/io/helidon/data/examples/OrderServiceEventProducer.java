@@ -6,6 +6,7 @@
  */
 package io.helidon.data.examples;
 
+import io.opentracing.Span;
 import io.opentracing.contrib.jms2.TracingMessageProducer;
 import oracle.jdbc.OracleConnection;
 import oracle.jms.AQjmsConstants;
@@ -41,37 +42,37 @@ class OrderServiceEventProducer {
             TopicConnectionFactory q_cf = AQjmsFactory.getTopicConnectionFactory(dataSource);
             TopicConnection q_conn = q_cf.createTopicConnection();
             session = q_conn.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
-            Connection jdbcConnection = ((AQjmsSession) session).getDBConnection();
-
-            OracleConnection conn = ((OracleConnection)jdbcConnection);
+            OracleConnection jdbcConnection = ((OracleConnection)((AQjmsSession) session).getDBConnection());
+            Span activeSpan = orderResource.getTracer().activeSpan();
+            System.out.println("OrderServiceEventProducer.updateDataAndSendEvent activespan ecid=" + activeSpan);
+//            OracleConnection conn = ((OracleConnection)jdbcConnection);
             short seqnum = 20;
-            String[] metric = new
-                    String[OracleConnection.END_TO_END_STATE_INDEX_MAX];
+            String[] metric = new String[OracleConnection.END_TO_END_STATE_INDEX_MAX];
             metric[OracleConnection.END_TO_END_ACTION_INDEX] = "ActionMetrics";
             metric[OracleConnection.END_TO_END_MODULE_INDEX] = "ModuleMetrics";
             metric[OracleConnection.END_TO_END_CLIENTID_INDEX] = "ClientIdMetrics";
-            metric[OracleConnection.END_TO_END_ECID_INDEX] = "ECIDMetrics";
-            conn.setEndToEndMetrics(metric,seqnum);
+            //todo null check
+            metric[OracleConnection.END_TO_END_ECID_INDEX] = activeSpan.toString().substring(0, activeSpan.toString().indexOf(":"));
+            jdbcConnection.setEndToEndMetrics(metric,seqnum);
 //  todo instead use          conn.setClientInfo();
-            System.out.println("OrderServiceEventProducer.updateDataAndSendEvent activespan:" + orderResource.getTracer().activeSpan());
-            try {
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery // select ECID,ACTION,MODULE,CLIENT_IDENTIFIER from V$SESSION where USERNAME='ORDERUSER'
-                        ("select ACTION,MODULE,CLIENT_IDENTIFIER from V$SESSION where USERNAME=\'ORDERUSER\'");
-                seqnum =  ((OracleConnection)conn).getEndToEndECIDSequenceNumber();
-                while (rs.next()) {
-                    System.out.println("*** Action = " + rs.getString(1));
-                    System.out.println("*** Module = " + rs.getString(2));
-                    System.out.println("*** Client_identifier = " +  rs.getString(3));
-                }
-
-                stmt.close();
-                String[] metrics = ((OracleConnection)conn).getEndToEndMetrics();
-                System.out.println("*** End-to-end Metrics: "+metrics[0]+", "+metrics[1]+
-                        ", "+metrics[2]+", "+metrics[3]);
-            } catch (SQLException sqle) {
-                sqle.printStackTrace();
-            }
+//            try {
+//                Statement stmt = conn.createStatement();
+//                ResultSet rs = stmt.executeQuery // select ECID,ACTION,MODULE,CLIENT_IDENTIFIER from V$SESSION where USERNAME='ORDERUSER'
+//                        ("select ACTION,MODULE,CLIENT_IDENTIFIER from V$SESSION where USERNAME=\'ORDERUSER\'");
+//                seqnum =  ((OracleConnection)conn).getEndToEndECIDSequenceNumber();
+//                while (rs.next()) {
+//                    System.out.println("*** Action = " + rs.getString(1));
+//                    System.out.println("*** Module = " + rs.getString(2));
+//                    System.out.println("*** Client_identifier = " +  rs.getString(3));
+//                }
+//
+//                stmt.close();
+//                String[] metrics = ((OracleConnection)conn).getEndToEndMetrics();
+//                System.out.println("*** End-to-end Metrics: "+metrics[0]+", "+metrics[1]+
+//                        ", "+metrics[2]+", "+metrics[3]);
+//            } catch (SQLException sqle) {
+//                sqle.printStackTrace();
+//            }
 
             System.out.println("updateDataAndSendEvent jdbcConnection:" + jdbcConnection + " about to insertOrderViaSODA...");
             Order insertedOrder = insertOrderViaSODA(orderid, itemid, deliverylocation, jdbcConnection);

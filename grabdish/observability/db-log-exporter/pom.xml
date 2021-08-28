@@ -15,7 +15,7 @@
 
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>alertlog-exporter</artifactId>
+    <artifactId>db-log-exporter</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>${project.artifactId}</name>
     <description>stateful microservices demo</description>

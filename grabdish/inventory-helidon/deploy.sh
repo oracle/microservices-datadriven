@@ -15,11 +15,12 @@ export CURRENTTIME=$( date '+%F_%H:%M:%S' )
 echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated deployment yaml
 cp inventory-helidon-deployment.yaml inventory-helidon-deployment-$CURRENTTIME.yaml
 
-#may hit sed incompat issue with mac
+sed -e "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" inventory-helidon-deployment-$CURRENTTIME.yaml > /tmp/inventory-helidon-deployment-$CURRENTTIME.yaml
 sed_i "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" inventory-helidon-deployment-$CURRENTTIME.yaml
 sed_i "s|%INVENTORY_PDB_NAME%|${INVENTORY_PDB_NAME}|g" inventory-helidon-deployment-$CURRENTTIME.yaml
 sed_i "s|%OCI_REGION%|${OCI_REGION}|g" inventory-helidon-deployment-${CURRENTTIME}.yaml
 sed_i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" inventory-helidon-deployment-${CURRENTTIME}.yaml
+mv -- /tmp/inventory-helidon-deployment-$CURRENTTIME.yaml inventory-helidon-deployment-$CURRENTTIME.yaml
 
 if [ -z "$1" ]; then
     kubectl apply -f $SCRIPT_DIR/inventory-helidon-deployment-$CURRENTTIME.yaml -n msdataworkshop

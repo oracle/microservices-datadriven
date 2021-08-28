@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: db-teq-exporter-order
+  name: db-metrics-exporter-order
   labels:
-    app: db-teq-exporter-order
+    app: db-metrics-exporter-order
     release: stable
 spec:
   type: LoadBalancer
@@ -11,4 +11,4 @@ spec:
     - port: 9161
       name: metrics
   selector:
-    app: db-teq-exporter-order
+    app: db-metrics-exporter-order

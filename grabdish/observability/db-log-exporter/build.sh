@@ -5,7 +5,7 @@
 
 SCRIPT_DIR=$(dirname $0)
 
-IMAGE_NAME=alertlog-exporter
+IMAGE_NAME=db-log-exporter
 IMAGE_VERSION=0.1
 
 echo DOCKER_REGISTRY is $DOCKER_REGISTRY
@@ -22,8 +22,6 @@ fi
 
 export IMAGE=${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_VERSION}
 
-# mvn install
-# mvn package docker:build
 mvn package
 
 docker push $IMAGE
