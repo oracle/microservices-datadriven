@@ -32,7 +32,7 @@ PID_FILE=$MY_HOME/PID
 if test -f $PID_FILE; then
     echo "The script is already running."
     echo "If you want to restart it, kill process $(cat $PID_FILE), delete the file $PID_FILE, and then retry"
-    exit
+    exit 
 fi
 trap "rm -f -- '$PID_FILE'" EXIT
 echo $$ > "$PID_FILE"
@@ -92,6 +92,3 @@ if state_done DOCKER_REGISTRY; then
    docker logout "$(state_get REGION).ocir.io" 
 fi
 
-
-# Delete infra, workshop and app folders
-# rm -rf $MY_HOME
