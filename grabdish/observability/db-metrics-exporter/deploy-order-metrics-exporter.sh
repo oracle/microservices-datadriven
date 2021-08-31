@@ -24,7 +24,9 @@ if [ -z "$ORDER_PDB_NAME" ]; then
     exit 1
 fi
 
-
+echo create configmap for db-metrics-orderpdb-exporter...
+kubectl create configmap db-metrics-orderpdb-exporter-config --from-file=./db-metrics-exporter/db-metrics-orderpdb-exporter-metrics.toml -n msdataworkshop
+echo
 echo create db-metrics-exporter deployment and service...
 export CURRENTTIME=$( date '+%F_%H:%M:%S' )
 echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated deployment yaml

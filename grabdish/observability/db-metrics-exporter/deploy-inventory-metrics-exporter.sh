@@ -24,7 +24,9 @@ if [ -z "$INVENTORY_PDB_NAME" ]; then
     exit 1
 fi
 
-
+echo create configmap for db-metrics-inventorypdb-exporter...
+kubectl create configmap db-metrics-inventorypdb-exporter-config --from-file=./db-metrics-exporter/db-metrics-inventorypdb-exporter-metrics.toml -n msdataworkshop
+echo
 echo create db-metrics-exporter deployment and service...
 export CURRENTTIME=$( date '+%F_%H:%M:%S' )
 echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated deployment yaml
