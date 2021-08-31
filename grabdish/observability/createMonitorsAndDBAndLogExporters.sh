@@ -4,8 +4,13 @@
 
 
 echo create servicemonitors for microservices and pdbs...
-# todo perhaps move these out to the services and exporters (eg move the yaml to the services but apply/create them from here/observability lab
-kubectl apply -f install/prom_msdataworkshop_servicemonitors.yaml -n msdataworkshop
+
+kubectl apply -f ../frontend-helidon/frontend-service-monitor.yaml -n msdataworkshop
+kubectl apply -f ../order-helidon/order-service-monitor.yaml -n msdataworkshop
+kubectl apply -f ../inventory-helidon/inventory-service-monitor.yaml -n msdataworkshop
+kubectl apply -f db-metrics-exporter/db-metrics-orderpdb-service-monitor.yaml -n msdataworkshop
+kubectl apply -f db-metrics-exporter/db-metrics-inventorypdb-service-monitor.yaml -n msdataworkshop
+
 kubectl get ServiceMonitor --all-namespaces
 echo
 echo create configmaps for db metrics exporters...
