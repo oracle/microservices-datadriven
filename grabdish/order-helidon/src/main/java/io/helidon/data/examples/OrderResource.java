@@ -156,9 +156,8 @@ public class OrderResource {
         activeSpan.setTag("itemid", itemid);
         activeSpan.setTag("ecid", "5292e5f8-6db1-49b1-9d98-d8fdd4ed2533-000122e1");
         activeSpan.setTag("db.user", atpOrderPdb.getUser()); // https://github.com/opentracing/specification/blob/master/semantic_conventions.md
-        activeSpan.setBaggageItem("sagaid", "testsagaid" + orderid); //baggage is part of SpanContext and carries data across process boundaries for access throughout the trace
+        activeSpan.setBaggageItem("sagaid", "sagaid" + orderid); //baggage is part of SpanContext and carries data across process boundaries for access throughout the trace
         activeSpan.setBaggageItem("orderid", orderid);
-        activeSpan.setBaggageItem("ecid", "5292e5f8-6db1-49b1-9d98-d8fdd4ed2533-000122e1");
 
         try {
             System.out.println("--->insertOrderAndSendEvent..." +

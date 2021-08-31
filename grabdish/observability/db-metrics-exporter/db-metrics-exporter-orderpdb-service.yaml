@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: db-metrics-exporter-order
   labels:
-    app: db-metrics-exporter-order
+    app: db-metrics-exporter-orderpdb
     release: stable
 spec:
   type: LoadBalancer
@@ -11,4 +11,4 @@ spec:
     - port: 9161
       name: metrics
   selector:
-    app: db-metrics-exporter-order
+    app: db-metrics-exporter-orderpdb

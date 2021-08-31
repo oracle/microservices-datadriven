@@ -29,6 +29,7 @@ export CURRENTTIME=$( date '+%F_%H:%M:%S' )
 echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated deployment yaml
 
 cp order-helidon-deployment.yaml order-helidon-deployment-$CURRENTTIME.yaml
+
 sed -e "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" order-helidon-deployment-${CURRENTTIME}.yaml > /tmp/order-helidon-deployment-${CURRENTTIME}.yaml
 mv -- /tmp/order-helidon-deployment-$CURRENTTIME.yaml order-helidon-deployment-$CURRENTTIME.yaml
 sed -e "s|%ORDER_PDB_NAME%|${ORDER_PDB_NAME}|g" order-helidon-deployment-${CURRENTTIME}.yaml > /tmp/order-helidon-deployment-${CURRENTTIME}.yaml

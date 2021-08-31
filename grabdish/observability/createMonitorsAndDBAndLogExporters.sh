@@ -4,6 +4,7 @@
 
 
 echo create servicemonitors for microservices and pdbs...
+# todo perhaps move these out to the services and exporters (eg move the yaml to the services but apply/create them from here/observability lab
 kubectl apply -f install/prom_msdataworkshop_servicemonitors.yaml -n msdataworkshop
 kubectl get ServiceMonitor --all-namespaces
 echo
@@ -19,6 +20,11 @@ kubectl apply -f db-metrics-exporter/db-metrics-exporter-orderpdb-deployment.yam
 kubectl apply -f db-metrics-exporter/db-metrics-exporter-orderpdb-service.yaml -n msdataworkshop
 kubectl apply -f db-metrics-exporter/db-metrics-exporter-inventorypdb-deployment.yaml -n msdataworkshop
 kubectl apply -f db-metrics-exporter/db-metrics-exporter-inventorypdb-service.yaml -n msdataworkshop
+echo
+echo create deployments and services for db metrics exporters...
+cd db-metrics-exporter
+./deploy.sh
+cd ../
 echo
 echo create deployments and services for db log exporters...
 cd db-log-exporter

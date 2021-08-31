@@ -55,7 +55,7 @@ kind: ServiceMonitor
 metadata:
   name: prometheus-db-metrics-exporter-order
   labels:
-    app: db-metrics-exporter-order
+    app: db-metrics-exporter-orderpdb
     release: stable
 spec:
   endpoints:
@@ -63,14 +63,14 @@ spec:
       port: metrics
   selector:
     matchLabels:
-      app: db-metrics-exporter-order
+      app: db-metrics-exporter-orderpdb
 ---
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: prometheus-db-metrics-exporter-inventory
   labels:
-    app: db-metrics-exporter-inventory
+    app: db-metrics-exporter-inventorypdb
     release: stable
 spec:
   endpoints:
@@ -78,4 +78,4 @@ spec:
       port: metrics
   selector:
     matchLabels:
-      app: db-metrics-exporter-inventory
+      app: db-metrics-exporter-inventorypdb
