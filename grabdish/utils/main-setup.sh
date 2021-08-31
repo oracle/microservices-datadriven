@@ -441,16 +441,6 @@ while ! state_done NGINX_INGRESS_SETUP_DONE; do
   sleep 2
 done
 
-# run jaeger-setup.sh in background
-if ! state_get JAEGER_SETUP_DONE; then
-  if ps -ef | grep "$GRABDISH_HOME/observability/jaeger/jaeger-setup.sh" | grep -v grep; then
-    echo "$GRABDISH_HOME/observability/jaeger/jaeger-setup.sh is already running"
-  else
-    echo "Executing jaeger-setup.sh in the background"
-    nohup $GRABDISH_HOME/observability/jaeger/jaeger-setup.sh &>>$GRABDISH_LOG/jaeger-setup.log &
-  fi
-fi
-
 # Create UI password secret
 while ! state_done UI_PASSWORD; do
   while true; do
