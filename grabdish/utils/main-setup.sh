@@ -441,6 +441,7 @@ while ! state_done NGINX_INGRESS_SETUP_DONE; do
   sleep 2
 done
 
+
 # Create UI password secret
 while ! state_done UI_PASSWORD; do
   while true; do
