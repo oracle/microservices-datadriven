@@ -39,10 +39,9 @@ spec:
             - name: TNS_ADMIN
               value: "/msdataworkshop/creds"
 #          value: "/lib/oracle/instantclient_19_3/client64/lib/network/admin"
-            - name: dbpassword
-              value: "Welcome12345;#!"
-#              value: "Welcome12345;#!:"
             - name: dbpassword0
+              value: ""
+            - name: dbpassword
               valueFrom:
                 secretKeyRef:
                   name: dbuser
