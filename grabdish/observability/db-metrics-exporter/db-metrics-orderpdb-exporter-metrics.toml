@@ -109,17 +109,18 @@ request = '''
 
 
 [[metric]]
-context = "grabdish"
-labels = ["orderid"]
-metricsdesc = { pending_orders = "Total number of pending orders"}
+context = "teq"
+labels = ["inst_id", "queue_name", "subscriber_name"]
+metricsdesc = { enqueued_msgs = "Total enqueued messages.", dequeued_msgs = "Total dequeued messages.", remained_msgs = "Total remained messages.", time_since_last_dequeue = "Time since last dequeue.", estd_time_to_drain_no_enq = "Estimated time to drain if no enqueue.", message_latency_1 = "Message latency for last 5 mins.", message_latency_2 = "Message latency for last 1 hour.", message_latency_3 = "Message latency for last 5 hours."}
 request = '''
-	select s.ECID , s.SID, s.ACTION, s.MODULE, s.TERMINAL, s.client_info, s.PLSQL_SUBPROGRAM_ID,s.PROGRAM
-    , ( SELECT max( substr( sql_text , 1, 40 )) FROM v$sql sq WHERE sq.sql_id = s.sql_id ) AS sql_text
-    ,      ( SELECT object_name    FROM dba_procedures WHERE object_id = plsql_entry_object_id AND subprogram_id = 0) AS plsql_entry_object
-    ,      ( SELECT procedure_name FROM dba_procedures WHERE object_id = plsql_entry_object_id AND subprogram_id = plsql_entry_subprogram_id) AS plsql_entry_subprogram
-    ,      ( SELECT object_name    FROM dba_procedures WHERE object_id = plsql_object_id       AND subprogram_id = 0) AS plsql_entry_object
-    ,      ( SELECT procedure_name FROM dba_procedures WHERE object_id = plsql_object_id       AND subprogram_id = PLSQL_SUBPROGRAM_ID) AS plsql_entry_subprogram
-    from v$session s    [  V$ACTIVE_SESSION_HISTORY   ]
-    where s.ecid = ‘5292e5f8-6db1-49b1-9d98-d8fdd4ed2533-000122e1’
+	select distinct t1.inst_id, t1.queue_id, t2.queue_name, t1.subscriber_id as subscriber_name, t1.enqueued_msgs, t1.dequeued_msgs, t1.remained_msgs, t1.time_since_last_dequeue, t1.estd_time_to_drain_no_enq, t1.message_latency_1, t1.message_latency_2, t1.message_latency_3
+	from
+	(
+	    select inst_id, queue_id, subscriber_id, sum(enqueued_msgs) as enqueued_msgs, sum(dequeued_msgs) as dequeued_msgs, sum(enqueued_msgs - dequeued_msgs) as remained_msgs,
+	    min(time_since_last_dequeue) as time_since_last_dequeue, max(estd_time_to_drain_no_enq) as estd_time_to_drain_no_enq, avg(10) as message_latency_1, avg(20) as message_latency_2, avg(30) as message_latency_3
+	    from gv$aq_sharded_subscriber_stat
+	    group by queue_id, subscriber_id, inst_id
+	) t1
+	join gv$persistent_queues t2 on t1.queue_id = t2.queue_id
 '''
-
+ignorezeroresult = true

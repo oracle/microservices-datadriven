@@ -16,7 +16,7 @@ fi
 
 if [ -z "$INVENTORY_PDB_NAME" ]; then
     echo "INVENTORY_PDB_NAME not set. Will get it with state_get"
-  export INVENTORY_PDB_NAME=$(state_get INVENTORY_PDB_NAME)
+  export INVENTORY_PDB_NAME=$(state_get INVENTORY_DB_NAME)
 fi
 
 if [ -z "$INVENTORY_PDB_NAME" ]; then
