@@ -5,7 +5,7 @@
 # Fail on error
 set -e
 
-BUILDS="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se order-mongodb-kafka inventory-postgres-kafka inventory-springboot"
+BUILDS="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se order-mongodb-kafka inventory-postgres-kafka inventory-springboot db-log-exporter"
 
 # Provision Repos
 while ! state_done NON_JAVA_REPOS; do
@@ -30,10 +30,14 @@ while ! state_done JAVA_BUILDS; do
 done
 
 
-# Build all the images (no push) except frontend-helidon (requires Jaeger)
+# Build all the images
 while ! state_done NON_JAVA_BUILDS; do
   for b in $BUILDS; do
-    cd $GRABDISH_HOME/$b
+    if "$b" -eq "db-log-exporter"; then
+      cd $GRABDISH_HOME/observability/db-log-exporter
+    else
+      cd $GRABDISH_HOME/$b
+    fi
     time ./build.sh &>> $GRABDISH_LOG/build-$b.log &
   done
   wait

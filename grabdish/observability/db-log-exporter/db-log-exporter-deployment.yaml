@@ -8,15 +8,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: alertlog
+      app: db-log-exporter-%EXPORTER_NAME%
   template:
     metadata:
       labels:
-        app: alertlog
+        app: db-log-exporter-%EXPORTER_NAME%
         version: helidon-mp
     spec:
       containers:
-      - name: alertlog
+      - name: db-log-exporter
         image: %DOCKER_REGISTRY%/db-log-exporter:0.1
         imagePullPolicy: Always
         env:

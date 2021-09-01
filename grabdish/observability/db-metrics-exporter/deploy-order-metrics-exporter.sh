@@ -33,7 +33,6 @@ echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated deployme
 
 cp db-metrics-exporter-deployment.yaml db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 
-#may hit sed incompat issue with mac
 sed -e  "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml > /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 sed -e  "s|%EXPORTER_NAME%|orderpdb|g" db-metrics-exporter-orderpdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
