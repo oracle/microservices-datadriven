@@ -6,7 +6,7 @@ metadata:
     app: db-metrics-exporter-orderpdb
     release: stable
 spec:
-  type: LoadBalancer
+  type: NodePort
   ports:
     - port: 9161
       name: metrics
