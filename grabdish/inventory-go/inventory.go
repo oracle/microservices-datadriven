@@ -47,7 +47,7 @@ func main() {
 	}
 	fmt.Printf("Listening for messages... start time: %s\n", thedate)
 	ctx := context.Background()
-	listenForMessagesAQAPI(ctx, db)
+	listenForMessages(ctx, db)
 }
 
 func listenForMessages(ctx context.Context, db *sql.DB) {
