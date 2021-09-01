@@ -39,7 +39,7 @@ echo $$ > "$PID_FILE"
 
 
 # Wait for dependencies
-DEPENDENCIES=''
+DEPENDENCIES='GRABDISH_DESTROY_THREAD'
 while ! test -z "$DEPENDENCIES"; do
   echo "Waiting for $DEPENDENCIES"
   WAITING_FOR=""

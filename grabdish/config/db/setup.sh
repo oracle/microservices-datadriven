@@ -17,6 +17,7 @@
 #   ORDERDB_ALIAS
 #   INVENTORYDB_ALIAS
 #   REGION
+#   RUN_NAME
 #
 # OUTPUTS:
 # output.env
@@ -51,13 +52,15 @@ fi
 # Source input.env
 if test -f $MY_HOME/input.env; then
   source "$MY_HOME"/input.env
+  cp "$MY_HOME"/input.env "$MY_HOME"/state.env
+  rm "$MY_HOME"/input.env
 else
   echo "ERROR: input.env is required"
   exit 1
 fi
 
 
-BUCKET_NAME=grabdish-cwallet
+BUCKET_NAME=$RUN_NAME
 # Create Object Store Bucket (Should be replaced by terraform one day)
 oci os bucket create --compartment-id "$COMPARTMENT_OCID" --name $BUCKET_NAME
 
@@ -330,8 +333,7 @@ dbms_aqadm.schedule_propagation
 END;
 /
 !
-  state_set_done INVENTORY_PROPAGATION
-done
+state_set_done INVENTORY_PROPAGATION
 
 
 # .net Inventory DB Proc
