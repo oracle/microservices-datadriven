@@ -1,4 +1,7 @@
-
+export TNS_ADMIN=./wallet
+state_get ORDER_DB_NAME
+sqlplus orderuser@gdpaulob2o_tp
+select systimestamp from dual@ORDERTOINVENTORYLINK;
 
 select SCHEDULE_DISABLED , SCHEMA, QNAME, DESTINATION, FAILURES, LAST_ERROR_DATE, TOTAL_NUMBER,NEXT_RUN_DATE, NEXT_RUN_TIME  from DBA_QUEUE_SCHEDULES;
 

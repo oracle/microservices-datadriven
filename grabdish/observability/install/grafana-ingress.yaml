@@ -13,13 +13,14 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-send-timeout: "100"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "100"
     nginx.ingress.kubernetes.io/proxy-buffering: "on"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   tls:
     - secretName: ssl-certificate-secret
   rules:
     - http:
         paths:
-          - path: /grafana
+          - path: /grafana(/|$)(.*)
             pathType: ImplementationSpecific
             backend:
               service:

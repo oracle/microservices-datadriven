@@ -25,7 +25,7 @@ spec:
         - name: oracle.ucp.jdbc.PoolDataSource.inventorypdb.URL
           value: "jdbc:oracle:thin:@%INVENTORY_PDB_NAME%_tp?TNS_ADMIN=/msdataworkshop/creds"
         - name: orderqueuename
-          value: "ORDERQ"
+          value: "ORDERQUEUE"
         - name: inventoryqueuename
           value: "inventoryqueue"
         - name: OCI_REGION
