@@ -23,6 +23,6 @@ spec:
             pathType: ImplementationSpecific
             backend:
               service:
-                name: jaeger-query #todo
+                name: grafana
                 port:
-                  number: 8086
+                  number: 3000
