@@ -44,7 +44,7 @@ echo "TEST_LOG: #### Testing Lab2: Walkthrough Deploy..."
 cd $GRABDISH_HOME
 ./deploy.sh
 
-while test 4 -gt `kubectl get pods -n msdataworkshop | egrep 'frontend-helidon|inventory-helidon|order-helidon|supplier-helidon-se|inventory-springboot' | grep "1/1" | wc -l`; do
+while test 4 -gt `kubectl get pods -n msdataworkshop | egrep 'frontend-helidon|inventory-helidon|order-helidon|supplier-helidon-se' | grep "1/1" | wc -l`; do
   echo "Waiting for pods to start..."
   sleep 10
 done

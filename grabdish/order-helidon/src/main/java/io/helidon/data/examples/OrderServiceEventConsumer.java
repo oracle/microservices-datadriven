@@ -6,18 +6,22 @@
  */
 package io.helidon.data.examples;
 
-import io.opentracing.contrib.jms.common.TracingMessageConsumer;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
+//import io.opentracing.contrib.jms.common.TracingMessageConsumer;
 import oracle.jms.AQjmsConsumer;
 import oracle.jms.AQjmsFactory;
 import oracle.jms.AQjmsSession;
 
 import javax.jms.*;
 import java.sql.Connection;
+import java.util.Enumeration;
+
+import static io.helidon.data.examples.OrderResource.crashAfterInventoryMessageReceived;
 
 public class OrderServiceEventConsumer implements Runnable {
 
     OrderResource orderResource;
-    Connection dbConnection;
 
     public OrderServiceEventConsumer(OrderResource orderResource) {
         this.orderResource = orderResource;
@@ -38,11 +42,14 @@ public class OrderServiceEventConsumer implements Runnable {
         QueueSession qsess = null;
         QueueConnection qconn = null;
         MessageConsumer consumer = null;
+//        TracingMessageConsumer consumer = null;
+        Connection dbConnection = null;
         //python (and likely nodejs) message causes javax.jms.MessageFormatException: JMS-117: Conversion failed - invalid property type
         //due to message.getObjectProperty(key) here...
         // https://github.com/opentracing-contrib/java-jms/blob/c9c445c374159cd8eadcbc9af0994a788baf0c5c/opentracing-jms-common/src/main/java/io/opentracing/contrib/jms/common/JmsTextMapExtractAdapter.java#L41
 //        TracingMessageConsumer tracingMessageConsumer = null;
         boolean done = false;
+        Tracer tracer = orderResource.getTracer();
         while (!done) {
             try {
                 if (qconn == null || qsess == null || dbConnection == null || dbConnection.isClosed()) {
@@ -51,29 +58,44 @@ public class OrderServiceEventConsumer implements Runnable {
                     qconn.start();
                     Queue queue = ((AQjmsSession) qsess).getQueue(OrderResource.orderQueueOwner, OrderResource.inventoryQueueName);
                     consumer = (AQjmsConsumer) qsess.createConsumer(queue);
-//                    tracingMessageConsumer = new TracingMessageConsumer(consumer, orderResource.getTracer());
+//                    consumer = new TracingMessageConsumer(qsess.createConsumer(queue), tracer);
                 }
 //                if (tracingMessageConsumer == null || qsess == null) continue;
                 if (consumer == null || qsess == null) continue;
-//                TextMessage textMessage = (TextMessage) tracingMessageConsumer.receive(-1);
+                System.out.println("Inventory before receive tracer.activeSpan():" + tracer.activeSpan());
                 TextMessage textMessage = (TextMessage) consumer.receive(-1);
+//                TextMessage textMessage = (TextMessage) consumer.receive(-1);
                 String messageText = textMessage.getText();
                 System.out.println("messageText " + messageText);
-                System.out.print(" Pri: " + textMessage.getJMSPriority());
                 Inventory inventory = JsonUtils.read(messageText, Inventory.class);
                 String orderid = inventory.getOrderid();
                 String itemid = inventory.getItemid();
                 String inventorylocation = inventory.getInventorylocation();
-                System.out.println("Lookup orderid:" + orderid + "(itemid:" + itemid + ")");
-                Order order = orderResource.orderServiceEventProducer.getOrderViaSODA(orderResource.atpOrderPdb, orderid);
+                System.out.println("Update orderid:" + orderid + "(itemid:" + itemid + ")");
+                boolean isSuccessfulInventoryCheck = !(inventorylocation == null || inventorylocation.equals("")
+                        || inventorylocation.equals("inventorydoesnotexist")
+                        || inventorylocation.equals("none"));
+                System.out.println("Inventory after receive tracer.activeSpan():" + tracer.activeSpan());
+                Span activeSpan = tracer.buildSpan("inventoryDetailForOrder").asChildOf(tracer.activeSpan()).start();
+                activeSpan.log("received inventory status");
+                activeSpan.setTag("orderid", orderid);
+                activeSpan.setTag("itemid", itemid);
+                activeSpan.setTag("inventorylocation", inventorylocation);
+                activeSpan.setBaggageItem("sagaid", "testsagaid" + orderid);
+                activeSpan.setBaggageItem("orderid", orderid);
+                activeSpan.setBaggageItem("inventorylocation", inventorylocation);
+                activeSpan.log("end received inventory status");
+                activeSpan.finish();
+                if (crashAfterInventoryMessageReceived) System.exit(-1);
+                dbConnection = ((AQjmsSession) qsess).getDBConnection();
+                System.out.println("((AQjmsSession) qsess).getDBConnection(): " + dbConnection);
+                //todo remove this check on the order as it should be part of update...
+                Order order = orderResource.orderServiceEventProducer.getOrderViaSODA(dbConnection, orderid);
                 if (order == null) {
                     System.out.println("No orderDetail found for orderid:" + orderid);
                     qsess.commit();
                     continue;
                 }
-                boolean isSuccessfulInventoryCheck = !(inventorylocation == null || inventorylocation.equals("")
-                        || inventorylocation.equals("inventorydoesnotexist")
-                        || inventorylocation.equals("none"));
                 if (isSuccessfulInventoryCheck) {
                     order.setStatus("success inventory exists");
                     order.setInventoryLocation(inventorylocation);
@@ -81,9 +103,7 @@ public class OrderServiceEventConsumer implements Runnable {
                 } else {
                     order.setStatus("failed inventory does not exist");
                 }
-                dbConnection = ((AQjmsSession) qsess).getDBConnection();
                 orderResource.orderServiceEventProducer.updateOrderViaSODA(order, dbConnection);
-                System.out.println("((AQjmsSession) qsess).getDBConnection(): " + ((AQjmsSession) qsess).getDBConnection());
                 qsess.commit();
             } catch (Exception e) {
                 e.printStackTrace();

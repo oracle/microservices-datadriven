@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-metrics-exporter-inventory
+  labels:
+    app: db-metrics-exporter-inventorypdb
+    release: stable
+spec:
+  type: NodePort
+  ports:
+    - port: 9161
+      name: metrics
+  selector:
+    app: db-metrics-exporter-inventorypdb

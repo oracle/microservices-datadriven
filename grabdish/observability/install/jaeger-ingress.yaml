@@ -1,0 +1,34 @@
+## Copyright (c) 2021 Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grabdish-jaeger-ingress
+  namespace: msdataworkshop
+  annotations:
+    kubernetes.io/ingress.class: "nginx"    
+    nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
+    #nginx.ingress.kubernetes.io/x-forwarded-prefix: "/jaeger"
+    #nginx.ingress.kubernetes.io/use-regex: "true"
+    #nginx.ingress.kubernetes.io/app-root: "/jaeger"
+    nginx.ingress.kubernetes.io/proxy-body-size: 10m
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "100"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "100"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "100"
+    nginx.ingress.kubernetes.io/proxy-buffering: "on"
+    #nginx.ingress.kubernetes.io/backend-protocol: "https"
+    #nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    #nginx.ingress.kubernetes.io/add-base-url: "true"
+spec:
+  tls:
+  - secretName: ssl-certificate-secret
+  rules:
+  - http:
+      paths:
+      - path: /jaeger #/jaeger(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: jaeger-query
+            port:
+              number: 8086        

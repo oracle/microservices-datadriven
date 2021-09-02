@@ -1,14 +1,22 @@
 package io.helidon.data.examples;
 
+import java.time.Duration;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.Future;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
-import org.apache.kafka.clients.producer.Producer;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.consumer.ConsumerGroupMetadata;
+import org.apache.kafka.clients.producer.*;
+import org.apache.kafka.common.Metric;
+import org.apache.kafka.common.MetricName;
+import org.apache.kafka.common.PartitionInfo;
+import org.apache.kafka.common.errors.ProducerFencedException;
+import org.apache.kafka.common.serialization.Serializer;
 import org.bson.Document;
 
 import static io.helidon.data.examples.KafkaMongoOrderResource.crashAfterInsert;
@@ -88,4 +96,5 @@ public class KafkaMongoDBOrderProducer {
         orders.drop();
         return "orders collection dropped";
     }
+
 }

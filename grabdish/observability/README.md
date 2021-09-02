@@ -1,0 +1,1 @@
+See https://paulparkinson.github.io/learning-library/developer-library/microservices-with-converged-db/workshops/freetier/

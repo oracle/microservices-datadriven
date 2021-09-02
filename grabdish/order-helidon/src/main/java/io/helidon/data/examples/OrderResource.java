@@ -6,7 +6,6 @@
  */
 package io.helidon.data.examples;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -24,10 +23,8 @@ import javax.ws.rs.core.Response;
 import oracle.ucp.jdbc.PoolDataSource;
 import org.eclipse.microprofile.metrics.annotation.Counted;
 import org.eclipse.microprofile.metrics.annotation.Timed;
-import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.enums.SchemaType;
-import org.eclipse.microprofile.openapi.annotations.info.Info;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
@@ -53,13 +50,14 @@ public class OrderResource {
     static String regionId = System.getenv("OCI_REGION");
     static String pwSecretOcid = System.getenv("VAULT_SECRET_OCID");
     static String pwSecretFromK8s = System.getenv("dbpassword");
-    static final String orderQueueOwner = "ORDERUSER";
-    static final String orderQueueName = "orderqueue";
-    static final String inventoryQueueName = "inventoryqueue";
+    static final String orderQueueOwner =  System.getenv("oracle.ucp.jdbc.PoolDataSource.orderpdb.user"); //"ORDERUSER";
+    static final String orderQueueName =   System.getenv("orderqueuename"); // "orderqueue";
+    static final String inventoryQueueName = System.getenv("inventoryqueuename"); //  "inventoryqueue";
     static boolean liveliness = true;
     static boolean readiness = true;
     private static String lastContainerStartTime;
     static boolean crashAfterInsert;
+    static boolean crashAfterInventoryMessageReceived;
     private OrderServiceCPUStress orderServiceCPUStress = new OrderServiceCPUStress();
     Map<String, OrderDetail> cachedOrders = new HashMap<>();
 
@@ -74,7 +72,9 @@ public class OrderResource {
     }
 
     public void init(@Observes @Initialized(ApplicationScoped.class) Object init) throws SQLException {
-        System.out.println("OrderResource.init " + init);
+        System.out.println("OrderResource.init System.getenv(\"oracle.ucp.jdbc.PoolDataSource.orderpdb.user\"):" +  System.getenv("oracle.ucp.jdbc.PoolDataSource.orderpdb.user"));
+        System.out.println("OrderResource. System.getenv(\"orderqueuename\") " +  System.getenv("orderqueuename"));
+        System.out.println("OrderResource.System.getenv(\"inventoryqueuename\"); " + System.getenv("inventoryqueuename"));
         atpOrderPdb.setUser(orderQueueOwner);
         String pw;
         if(pwSecretOcid != null && !pwSecretOcid.trim().equals("")) {
@@ -122,8 +122,8 @@ public class OrderResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Traced(operationName = "OrderResource.placeOrder")
-    @Timed(name = "placeOrder_timed") //length of time of an object
-    @Counted(name = "placeOrder_counted") //amount of invocations
+    @Timed(name = "order_placeOrder_timed") //length of time of an object
+    @Counted(name = "order_placeOrder_counted") //amount of invocations
     public Response placeOrder(
             @Parameter(description = "The order ID for the order",
                     required = true,
@@ -154,8 +154,9 @@ public class OrderResource {
         activeSpan.log("begin placing order"); // logs are for a specific moment or event within the span (in contrast to tags which should apply to the span regardless of time).
         activeSpan.setTag("orderid", orderid); //tags are annotations of spans in order to query, filter, and comprehend trace data
         activeSpan.setTag("itemid", itemid);
+        activeSpan.setTag("ecid", "5292e5f8-6db1-49b1-9d98-d8fdd4ed2533-000122e1");
         activeSpan.setTag("db.user", atpOrderPdb.getUser()); // https://github.com/opentracing/specification/blob/master/semantic_conventions.md
-        activeSpan.setBaggageItem("sagaid", "testsagaid" + orderid); //baggage is part of SpanContext and carries data across process boundaries for access throughout the trace
+        activeSpan.setBaggageItem("sagaid", "sagaid" + orderid); //baggage is part of SpanContext and carries data across process boundaries for access throughout the trace
         activeSpan.setBaggageItem("orderid", orderid);
 
         try {
@@ -191,6 +192,8 @@ public class OrderResource {
     @Path("/showorder")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Timed(name = "order_showOrder_timed") //length of time of an object
+    @Counted(name = "order_showOrder_counted") //amount of invocations
     public Response showorder(
             @Parameter(description = "The order ID for the order",
                     required = true,
@@ -199,7 +202,7 @@ public class OrderResource {
             @QueryParam("orderid") String orderId) {
         System.out.println("--->showorder (via JSON/SODA query) for orderId:" + orderId);
         try {
-            Order order = orderServiceEventProducer.getOrderViaSODA(atpOrderPdb, orderId);
+            Order order = orderServiceEventProducer.getOrderViaSODA(atpOrderPdb.getConnection(), orderId);
             String returnJSON = JsonUtils.writeValueAsString(order);
             System.out.println("OrderResource.showorder returnJSON:" + returnJSON);
             return Response.ok()
@@ -325,6 +328,16 @@ public class OrderResource {
         crashAfterInsert = true;
         return Response.ok()
                 .entity("order crashAfterInsert set")
+                .build();
+    }
+
+    @Path("/crashAfterInventoryMessageReceived")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response crashAfterInventoryMessageReceived() {
+        crashAfterInventoryMessageReceived = true;
+        return Response.ok()
+                .entity("order crashAfterInventoryMessageReceived set")
                 .build();
     }
 }

@@ -6,10 +6,12 @@
 set -e
 
 BUILDS="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se order-mongodb-kafka inventory-postgres-kafka inventory-springboot"
+# we provision a repos for db-log-exporter but don't build it yet/currently
+REPOS="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se order-mongodb-kafka inventory-postgres-kafka inventory-springboot db-log-exporter"
 
 # Provision Repos
 while ! state_done NON_JAVA_REPOS; do
-  for b in $BUILDS; do
+  for b in REPOS; do
     oci artifacts container repository create --compartment-id "$(state_get COMPARTMENT_OCID)" --display-name "$(state_get RUN_NAME)/$b" --is-public true
   done
   state_set_done NON_JAVA_REPOS
@@ -30,7 +32,7 @@ while ! state_done JAVA_BUILDS; do
 done
 
 
-# Build all the images (no push) except frontend-helidon (requires Jaeger)
+# Build  the images
 while ! state_done NON_JAVA_BUILDS; do
   for b in $BUILDS; do
     cd $GRABDISH_HOME/$b

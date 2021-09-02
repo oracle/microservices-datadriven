@@ -1,0 +1,20 @@
+     ADR_HOME             VARCHAR2(444)
+     TRACE_FILENAME       VARCHAR2(68)
+     RECORD_LEVEL         NUMBER
+     PARENT_LEVEL         NUMBER
+     RECORD_TYPE          NUMBER
+     TIMESTAMP            TIMESTAMP(3) WITH TIME ZONE
+     PAYLOAD              VARCHAR2(4000)
+     SECTION_ID           NUMBER
+     SECTION_NAME         VARCHAR2(64)
+     COMPONENT_NAME       VARCHAR2(64)
+     OPERATION_NAME       VARCHAR2(64)
+     FILE_NAME            VARCHAR2(64)
+     FUNCTION_NAME        VARCHAR2(64)
+     LINE_NUMBER          NUMBER
+     THREAD_ID            VARCHAR2(64)
+     SESSION_ID           NUMBER
+     SERIAL#              NUMBER
+     CON_UID              NUMBER
+     CONTAINER_NAME       VARCHAR2(64)
+     CON_ID               NUMBER

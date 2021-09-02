@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 
 import io.opentracing.Tracer;
 import oracle.ucp.jdbc.PoolDataSource;
+import org.eclipse.microprofile.metrics.MetricRegistry;
 
 @Path("/")
 @ApplicationScoped
@@ -33,8 +34,8 @@ public class InventoryResource {
     static String pwSecretFromK8s = System.getenv("dbpassword");
     static String inventoryuser = "INVENTORYUSER";
     static String inventorypw;
-    static String inventoryQueueName = "inventoryqueue";
-    static String orderQueueName = "orderqueue";
+    static final String orderQueueName =   System.getenv("orderqueuename");
+    static final String inventoryQueueName =  System.getenv("inventoryqueuename");
     static boolean crashAfterOrderMessageReceived;
     static boolean crashAfterOrderMessageProcessed;
 
@@ -44,6 +45,9 @@ public class InventoryResource {
 
     @Inject
     private Tracer tracer;
+
+    @Inject
+    private MetricRegistry metricRegistry;
 
     public void init(@Observes @Initialized(ApplicationScoped.class) Object init) throws SQLException {
         System.out.println("InventoryResource.init " + init);
@@ -65,6 +69,10 @@ public class InventoryResource {
 
     Tracer getTracer() {
         return tracer;
+    }
+
+    MetricRegistry getMetricRegistry() {
+        return metricRegistry;
     }
 
     @Path("/listenForMessages")

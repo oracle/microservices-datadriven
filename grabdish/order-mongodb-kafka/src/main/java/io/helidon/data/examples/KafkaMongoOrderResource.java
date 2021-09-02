@@ -43,6 +43,7 @@ public class KafkaMongoOrderResource {
     final static String inventoryTopicName = "inventory.topic";
     static boolean liveliness = true;
     static boolean crashAfterInsert = false;
+    static boolean crashAfterInventoryMessageReceived = false;
     static boolean readiness = true;
     private static String lastContainerStartTime;
     Map<String, OrderDetail> cachedOrders = new HashMap<>();
@@ -248,6 +249,16 @@ public class KafkaMongoOrderResource {
         crashAfterInsert = true;
         return Response.ok()
                 .entity("order crashAfterInsert set")
+                .build();
+    }
+
+    @Path("/crashAfterInventoryMessageReceived")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response crashAfterInventoryMessageReceived() {
+        crashAfterInventoryMessageReceived = true;
+        return Response.ok()
+                .entity("order crashAfterInventoryMessageReceived set")
                 .build();
     }
 

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-metrics-exporter-order
+  labels:
+    app: db-metrics-exporter-orderpdb
+    release: stable
+spec:
+  type: NodePort
+  ports:
+    - port: 9161
+      name: metrics
+  selector:
+    app: db-metrics-exporter-orderpdb
