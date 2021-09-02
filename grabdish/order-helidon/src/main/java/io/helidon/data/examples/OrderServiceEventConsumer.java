@@ -41,8 +41,8 @@ public class OrderServiceEventConsumer implements Runnable {
         QueueConnectionFactory q_cf = AQjmsFactory.getQueueConnectionFactory(orderResource.atpOrderPdb);
         QueueSession qsess = null;
         QueueConnection qconn = null;
-//        MessageConsumer consumer = null;
-        TracingMessageConsumer consumer = null;
+        MessageConsumer consumer = null;
+//        TracingMessageConsumer consumer = null;
         Connection dbConnection = null;
         //python (and likely nodejs) message causes javax.jms.MessageFormatException: JMS-117: Conversion failed - invalid property type
         //due to message.getObjectProperty(key) here...
