@@ -8,7 +8,7 @@ package io.helidon.data.examples;
 
 import io.opentracing.Span;
 import io.opentracing.Tracer;
-import io.opentracing.contrib.jms.common.TracingMessageConsumer;
+//import io.opentracing.contrib.jms.common.TracingMessageConsumer;
 import oracle.jms.AQjmsConsumer;
 import oracle.jms.AQjmsFactory;
 import oracle.jms.AQjmsSession;
@@ -57,8 +57,8 @@ public class OrderServiceEventConsumer implements Runnable {
                     qsess = qconn.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
                     qconn.start();
                     Queue queue = ((AQjmsSession) qsess).getQueue(OrderResource.orderQueueOwner, OrderResource.inventoryQueueName);
-//                    consumer = (AQjmsConsumer) qsess.createConsumer(queue);
-                    consumer = new TracingMessageConsumer(qsess.createConsumer(queue), tracer);
+                    consumer = (AQjmsConsumer) qsess.createConsumer(queue);
+//                    consumer = new TracingMessageConsumer(qsess.createConsumer(queue), tracer);
                 }
 //                if (tracingMessageConsumer == null || qsess == null) continue;
                 if (consumer == null || qsess == null) continue;

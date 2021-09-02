@@ -83,7 +83,7 @@ public class AlertLogExporterResource {
     private void logKeyValue(ResultSet rs, String keys[]) throws SQLException {
         String logString = null;
         for (int i=0; i<keys.length; i++)
-            logString+= keys[i] + "=" + rs.getString(keys[i]);
+            logString+= keys[i] + "=" + rs.getString(keys[i]) + " ";
         System.out.println(logString);
     }
 
