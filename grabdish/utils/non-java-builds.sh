@@ -5,11 +5,13 @@
 # Fail on error
 set -e
 
-BUILDS="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se order-mongodb-kafka inventory-postgres-kafka inventory-springboot db-log-exporter"
+BUILDS="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se order-mongodb-kafka inventory-postgres-kafka inventory-springboot"
+# we provision a repos for db-log-exporter but don't build it yet/currently
+REPOS="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se order-mongodb-kafka inventory-postgres-kafka inventory-springboot db-log-exporter"
 
 # Provision Repos
 while ! state_done NON_JAVA_REPOS; do
-  for b in $BUILDS; do
+  for b in REPOS; do
     oci artifacts container repository create --compartment-id "$(state_get COMPARTMENT_OCID)" --display-name "$(state_get RUN_NAME)/$b" --is-public true
   done
   state_set_done NON_JAVA_REPOS
@@ -30,14 +32,10 @@ while ! state_done JAVA_BUILDS; do
 done
 
 
-# Build all the images
+# Build  the images
 while ! state_done NON_JAVA_BUILDS; do
   for b in $BUILDS; do
-    if "$b" -eq "db-log-exporter"; then
-      cd $GRABDISH_HOME/observability/db-log-exporter
-    else
-      cd $GRABDISH_HOME/$b
-    fi
+    cd $GRABDISH_HOME/$b
     time ./build.sh &>> $GRABDISH_LOG/build-$b.log &
   done
   wait

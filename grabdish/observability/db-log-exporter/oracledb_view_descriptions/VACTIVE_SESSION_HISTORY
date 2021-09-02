@@ -1,4 +1,4 @@
-
+v$active_session_history
      SAMPLE_ID                         NUMBER
      SAMPLE_TIME                       TIMESTAMP(3)
      SAMPLE_TIME_UTC                   TIMESTAMP(3)
