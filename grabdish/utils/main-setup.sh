@@ -297,7 +297,7 @@ if ! state_done DB_PASSWORD; then
 
   TEMP_URL="orderuser/${PW}:@${ORDER_DB_NAME}_tp"
   BASE64_METRIC_EXPORTER_ORDERDB_URL=`echo -n "$TEMP_URL" | base64`
-  TEMP_URL="inventoryuser/${PW}:@${ORDER_DB_NAME}_tp"
+  TEMP_URL="inventoryuser/${PW}:@${INVENTORY_DB_NAME}_tp"
   BASE64_METRIC_EXPORTER_INVENTORYDB_URL=`echo -n "$TEMP_URL" | base64`
 fi
 
