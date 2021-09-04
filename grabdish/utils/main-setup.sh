@@ -295,11 +295,55 @@ if ! state_done DB_PASSWORD; then
   done
   BASE64_DB_PASSWORD=`echo -n "$PW" | base64`
 
+  state_set ORDER_DB_NAME "$(state_get RUN_NAME)o"
+  state_set INVENTORY_DB_NAME "$(state_get RUN_NAME)i"
+  echo ORDER_DB_NAME... ${ORDER_DB_NAME}
+  echo INVENTORY_DB_NAME... ${INVENTORY_DB_NAME}
+
   TEMP_URL="orderuser/${PW}:@${ORDER_DB_NAME}_tp"
   BASE64_METRIC_EXPORTER_ORDERDB_URL=`echo -n "$TEMP_URL" | base64`
   TEMP_URL="inventoryuser/${PW}:@${INVENTORY_DB_NAME}_tp"
   BASE64_METRIC_EXPORTER_INVENTORYDB_URL=`echo -n "$TEMP_URL" | base64`
 fi
+
+# TEMP TEST DELETE THIS
+  echo
+  echo 'temptest   Database passwords must be 12 to 30 characters and contain at least one uppercase letter,'
+  echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
+  echo 'character or the word "admin".'
+  echo
+
+  while true; do
+    if test -z "$TEST_DB_PASSWORD"; then
+      read -s -r -p "Enter the password to be used for the order and inventory databases: " PW
+    else
+      PW="$TEST_DB_PASSWORD"
+    fi
+    if [[ ${#PW} -ge 12 && ${#PW} -le 30 && "$PW" =~ [A-Z] && "$PW" =~ [a-z] && "$PW" =~ [0-9] && "$PW" != *admin* && "$PW" != *'"'* ]]; then
+      echo
+      break
+    else
+      echo "Invalid Password, please retry"
+    fi
+  done
+  BASE64_DB_PASSWORD=`echo -n "$PW" | base64`
+
+  state_set ORDER_DB_NAME "$(state_get RUN_NAME)o"
+  state_set INVENTORY_DB_NAME "$(state_get RUN_NAME)i"
+  echo ORDER_DB_NAME... ${ORDER_DB_NAME}
+  echo INVENTORY_DB_NAME... ${INVENTORY_DB_NAME}
+  echo PW... ${PW}
+
+  TEMP_URL="orderuser/${PW}:@${ORDER_DB_NAME}_tp"
+  echo ORDER_DB_NAME TEMP_URL... ${TEMP_URL}
+  BASE64_METRIC_EXPORTER_ORDERDB_URL=`echo -n "$TEMP_URL" | base64`
+  TEMP_URL="inventoryuser/${PW}:@${INVENTORY_DB_NAME}_tp"
+  echo INVENTORY_DB_NAME TEMP_URL... ${TEMP_URL}
+  BASE64_METRIC_EXPORTER_INVENTORYDB_URL=`echo -n "$TEMP_URL" | base64`
+
+  echo INVENTORY_DB_NAME... ${INVENTORY_DB_NAME}
+
+# TEMP TEST DELETE THIS END
 
 
 # Collect UI password and create secret
