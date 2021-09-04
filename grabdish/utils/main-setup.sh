@@ -294,16 +294,6 @@ if ! state_done DB_PASSWORD; then
     fi
   done
   BASE64_DB_PASSWORD=`echo -n "$PW" | base64`
-
-  ORDER_DB_NAME="$(state_get RUN_NAME)o"
-  INVENTORY_DB_NAME="$(state_get RUN_NAME)i"
-  echo ORDER_DB_NAME... ${ORDER_DB_NAME}
-  echo INVENTORY_DB_NAME... ${INVENTORY_DB_NAME}
-
-  TEMP_URL="orderuser/${PW}:@${ORDER_DB_NAME}_tp"
-  BASE64_METRIC_EXPORTER_ORDERDB_URL=`echo -n "$TEMP_URL" | base64`
-  TEMP_URL="inventoryuser/${PW}:@${INVENTORY_DB_NAME}_tp"
-  BASE64_METRIC_EXPORTER_INVENTORYDB_URL=`echo -n "$TEMP_URL" | base64`
 fi
 
 # TEMP TEST DELETE THIS
@@ -328,20 +318,20 @@ fi
   done
   BASE64_DB_PASSWORD=`echo -n "$PW" | base64`
 
-  ORDER_DB_NAME "$(state_get RUN_NAME)o"
-  state_set INVENTORY_DB_NAME "$(state_get RUN_NAME)i"
+
+  ORDER_DB_NAME="$(state_get RUN_NAME)o"
+  INVENTORY_DB_NAME="$(state_get RUN_NAME)i"
   echo ORDER_DB_NAME... ${ORDER_DB_NAME}
   echo INVENTORY_DB_NAME... ${INVENTORY_DB_NAME}
   echo PW... ${PW}
 
   TEMP_URL="orderuser/${PW}:@${ORDER_DB_NAME}_tp"
-  echo ORDER_DB_NAME TEMP_URL... ${TEMP_URL}
   BASE64_METRIC_EXPORTER_ORDERDB_URL=`echo -n "$TEMP_URL" | base64`
+  echo ORDER_DB_NAME TEMP_URL... ${TEMP_URL}
   TEMP_URL="inventoryuser/${PW}:@${INVENTORY_DB_NAME}_tp"
   echo INVENTORY_DB_NAME TEMP_URL... ${TEMP_URL}
   BASE64_METRIC_EXPORTER_INVENTORYDB_URL=`echo -n "$TEMP_URL" | base64`
 
-  echo INVENTORY_DB_NAME... ${INVENTORY_DB_NAME}
 
 # TEMP TEST DELETE THIS END
 
