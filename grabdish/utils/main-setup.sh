@@ -399,6 +399,7 @@ done
 
 # Collect DB password and create secret
 while ! state_done DB_METRICS_URL_SECRET; do
+  echo BASE64_METRIC_EXPORTER_ORDERDB_URL ${BASE64_METRIC_EXPORTER_ORDERDB_URL}
   while true; do
     if kubectl create -n msdataworkshop -f -; then
       state_set_done DB_METRICS_URL_SECRET
