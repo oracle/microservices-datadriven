@@ -295,8 +295,8 @@ if ! state_done DB_PASSWORD; then
   done
   BASE64_DB_PASSWORD=`echo -n "$PW" | base64`
 
-  state_set ORDER_DB_NAME "$(state_get RUN_NAME)o"
-  state_set INVENTORY_DB_NAME "$(state_get RUN_NAME)i"
+  ORDER_DB_NAME="$(state_get RUN_NAME)o"
+  INVENTORY_DB_NAME="$(state_get RUN_NAME)i"
   echo ORDER_DB_NAME... ${ORDER_DB_NAME}
   echo INVENTORY_DB_NAME... ${INVENTORY_DB_NAME}
 
@@ -328,7 +328,7 @@ fi
   done
   BASE64_DB_PASSWORD=`echo -n "$PW" | base64`
 
-  state_set ORDER_DB_NAME "$(state_get RUN_NAME)o"
+  ORDER_DB_NAME "$(state_get RUN_NAME)o"
   state_set INVENTORY_DB_NAME "$(state_get RUN_NAME)i"
   echo ORDER_DB_NAME... ${ORDER_DB_NAME}
   echo INVENTORY_DB_NAME... ${INVENTORY_DB_NAME}
@@ -452,17 +452,13 @@ while ! state_done DB_METRICS_URL_SECRET; do
       echo 'Error: Creating DB Metrics URL Secret Failed.  Retrying...'
       sleep 10
     fi <<!
-{
-   "apiVersion": "v1",
-   "kind": "Secret",
-   "metadata": {
-      "name": "dbmetricsurl"
-   },
-   "data": {
-      "orderurl": "${BASE64_METRIC_EXPORTER_ORDERDB_URL}"
-      "inventoryurl": "${BASE64_METRIC_EXPORTER_INVENTORYDB_URL}"
-   }
-}
+apiVersion: v1
+data:
+  orderurl: ${BASE64_METRIC_EXPORTER_ORDERDB_URL}
+  inventoryurl: ${BASE64_METRIC_EXPORTER_INVENTORYDB_URL}
+kind: Secret
+metadata:
+  name: dbmetricsurl
 !
   done
 done
