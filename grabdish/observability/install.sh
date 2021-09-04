@@ -2,6 +2,9 @@
 ## Copyright (c) 2021 Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
+# Fail on error
+set -e
+
 echo Installing Jaeger...
 #./jaeger/jaeger-setup.sh
 kubectl create -f install/jaeger-all-in-one-template.yml -n msdataworkshop
@@ -19,7 +22,7 @@ echo
 echo Installing Grafana...
 kubectl apply -f install/grafana.yaml -n msdataworkshop
 # todo remove need to change NP to LB and use ingress instead
-kubectl patch svc stable-grafana -p '{"spec": {"type": "LoadBalancer"}}' -n msdataworkshop
+#kubectl patch svc stable-grafana -p '{"spec": {"type": "LoadBalancer"}}' -n msdataworkshop
 echo
 
 echo Installing loki-stack with Promtail...

@@ -45,6 +45,8 @@ sed -e  "s|%OCI_REGION%|${OCI_REGION}|g" db-metrics-exporter-inventorypdb-deploy
 mv -- /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
 sed -e  "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" db-metrics-exporter-inventorypdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
+sed -e  "s|%DATA_SOURCE_NAME_URL%|inventoryurl|g" db-metrics-exporter-inventorypdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
+mv -- /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
 
 if [ -z "$1" ]; then
     kubectl apply -f $SCRIPT_DIR/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml -n msdataworkshop

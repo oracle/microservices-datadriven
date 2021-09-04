@@ -14,22 +14,9 @@ spec:
       labels:
         app: db-metrics-exporter-%EXPORTER_NAME%
     spec:
-#      initContainers:
-#      - name: createDATA_SOURCE_NAME
-#        command:
-#          - bash
-#          - -c
-#          - "echo createDATA_SOURCE_NAME"
-#        image: oraclelinux:7.5
-#        volumeMounts:
-#        - name: creds-raw
-#          mountPath: /tmp/creds
-#          readOnly: false
-#        - name: creds
-#          mountPath: /creds
       containers:
         - name: db-metrics-exporter-%EXPORTER_NAME%
-          image: iamseth/oracledb_exporter:latest
+          image: iamseth/oracledb_exporter:latest #todo never a good idea to use "latest"
           imagePullPolicy: Always
           env:
             - name: DEFAULT_METRICS
@@ -48,7 +35,13 @@ spec:
                   key: dbpassword
                   optional: true #not needed/used if using VAULT_SECRET_OCID exists
             - name: DATA_SOURCE_NAME
-              value: "%USER%/$(dbpassword):@%PDB_NAME%_tp"
+              valueFrom:
+                secretKeyRef:
+                  name: dbmetricsurl
+                  key: %DATA_SOURCE_NAME_URL%
+#            - name: DATA_SOURCE_NAME
+#              value: "%USER%/$(dbpassword):@%PDB_NAME%_tp"
+#              value: "%USER%/$(dbpassword):@%PDB_NAME%_tp" unfortunately this doesnt work if dbpassword is not a literal and is instead from a secret (presumably because secret is processed afterward and/or base64)
           volumeMounts:
             - name: creds
               mountPath: /msdataworkshop/creds

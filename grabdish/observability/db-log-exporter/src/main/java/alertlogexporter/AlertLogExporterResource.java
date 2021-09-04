@@ -33,11 +33,13 @@ public class AlertLogExporterResource {
     
     static String querySQL = System.getenv("QUERY_SQL");
     private boolean enabled = true;
+    private int vashQueryLastSampleId = -1;
 
     public void init(@Observes @Initialized(ApplicationScoped.class) Object init) throws Exception {
-        // todo for each config entry write to different logger and file...
+        // todo for each config entry write to different logger, eg...
         if (false) {
             final Logger LOGGER = Logger.getLogger(AlertLogExporterResource.class.getName());
+            //add perhaps devoted file option as well...
             FileHandler handler = new FileHandler("logexporterN-log.%u.%g.txt",
                     1024 * 1024, 10, true);
         }
@@ -56,6 +58,11 @@ public class AlertLogExporterResource {
     }
 
     private void executeAlertLogQuery(Connection conn) throws SQLException {
+        //todo  get from last NORMALIZED_TIMESTAMP inclusive
+        /**
+         * ORIGINATING_TIMESTAMP            TIMESTAMP(9) WITH TIME ZONE
+         * NORMALIZED_TIMESTAMP             TIMESTAMP(9) WITH TIME ZONE
+         */
         System.out.println("AlertLogExporterResource querySQL:" + querySQL);
         PreparedStatement statement = conn.prepareStatement(querySQL);
         ResultSet rs = statement.executeQuery();
@@ -70,10 +77,19 @@ public class AlertLogExporterResource {
     }
 
     private void executeVASHQuery(Connection conn) throws SQLException {
-        String vashQuery = "select SAMPLE_ID, SAMPLE_TIME, SQL_ID, SQL_OPNAME, PROGRAM, MODULE, ACTION, CLIENT_ID, MACHINE, ECID from TABLE(GV$(CURSOR(select * from v$active_session_history))) where ecid is not null";
+        //todo  get from last sample_ID inclusive
+        /**
+         *      SAMPLE_ID                         NUMBER
+         *      SAMPLE_TIME                       TIMESTAMP(3)
+         *      SAMPLE_TIME_UTC                   TIMESTAMP(3)
+         */
+        String vashQuery = "select SAMPLE_ID, SAMPLE_TIME, SQL_ID, SQL_OPNAME, PROGRAM, MODULE, ACTION, CLIENT_ID, MACHINE, ECID " +
+                "from TABLE(GV$(CURSOR(select * from v$active_session_history))) where ecid is not null";
         System.out.println("AlertLogExporterResource querySQL:" + vashQuery);
         PreparedStatement statement = conn.prepareStatement(vashQuery);
         ResultSet rs = statement.executeQuery();
+        vashQueryLastSampleId =  rs.getInt("SAMPLE_ID");
+        System.out.println("AlertLogExporterResource vashQueryLastSampleId:" + vashQueryLastSampleId);
         while (rs.next()) {
             String keys[] = {"SAMPLE_ID", "SAMPLE_TIME", "SQL_ID", "SQL_OPNAME", "PROGRAM", "MODULE", "ACTION", "CLIENT_ID", "MACHINE", "ECID"};
             logKeyValue(rs, keys);

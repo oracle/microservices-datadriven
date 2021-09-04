@@ -294,6 +294,11 @@ if ! state_done DB_PASSWORD; then
     fi
   done
   BASE64_DB_PASSWORD=`echo -n "$PW" | base64`
+
+  TEMP_URL="orderuser/${PW}:@${ORDER_DB_NAME}_tp"
+  BASE64_METRIC_EXPORTER_ORDERDB_URL=`echo -n "$TEMP_URL" | base64`
+  TEMP_URL="inventoryuser/${PW}:@${ORDER_DB_NAME}_tp"
+  BASE64_METRIC_EXPORTER_INVENTORYDB_URL=`echo -n "$TEMP_URL" | base64`
 fi
 
 
@@ -386,6 +391,31 @@ while ! state_done DB_PASSWORD; do
    },
    "data": {
       "dbpassword": "${BASE64_DB_PASSWORD}"
+   }
+}
+!
+  done
+done
+
+# Collect DB password and create secret
+while ! state_done DB_METRICS_URL_SECRET; do
+  while true; do
+    if kubectl create -n msdataworkshop -f -; then
+      state_set_done DB_METRICS_URL_SECRET
+      break
+    else
+      echo 'Error: Creating DB Metrics URL Secret Failed.  Retrying...'
+      sleep 10
+    fi <<!
+{
+   "apiVersion": "v1",
+   "kind": "Secret",
+   "metadata": {
+      "name": "dbmetricsurl"
+   },
+   "data": {
+      "orderurl": "${BASE64_METRIC_EXPORTER_ORDERDB_URL}"
+      "inventoryurl": "${BASE64_METRIC_EXPORTER_INVENTORYDB_URL}"
    }
 }
 !
