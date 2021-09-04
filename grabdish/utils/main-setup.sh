@@ -296,45 +296,6 @@ if ! state_done DB_PASSWORD; then
   BASE64_DB_PASSWORD=`echo -n "$PW" | base64`
 fi
 
-# TEMP TEST DELETE THIS
-  echo
-  echo 'temptest   Database passwords must be 12 to 30 characters and contain at least one uppercase letter,'
-  echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
-  echo 'character or the word "admin".'
-  echo
-
-  while true; do
-    if test -z "$TEST_DB_PASSWORD"; then
-      read -s -r -p "Enter the password to be used for the order and inventory databases: " PW
-    else
-      PW="$TEST_DB_PASSWORD"
-    fi
-    if [[ ${#PW} -ge 12 && ${#PW} -le 30 && "$PW" =~ [A-Z] && "$PW" =~ [a-z] && "$PW" =~ [0-9] && "$PW" != *admin* && "$PW" != *'"'* ]]; then
-      echo
-      break
-    else
-      echo "Invalid Password, please retry"
-    fi
-  done
-  BASE64_DB_PASSWORD=`echo -n "$PW" | base64`
-
-
-  ORDER_DB_NAME="$(state_get RUN_NAME)o"
-  INVENTORY_DB_NAME="$(state_get RUN_NAME)i"
-  echo ORDER_DB_NAME... ${ORDER_DB_NAME}
-  echo INVENTORY_DB_NAME... ${INVENTORY_DB_NAME}
-  echo PW... ${PW}
-
-  TEMP_URL="orderuser/${PW}:@${ORDER_DB_NAME}_tp"
-  BASE64_METRIC_EXPORTER_ORDERDB_URL=`echo -n "$TEMP_URL" | base64`
-  echo ORDER_DB_NAME TEMP_URL... ${TEMP_URL}
-  TEMP_URL="inventoryuser/${PW}:@${INVENTORY_DB_NAME}_tp"
-  echo INVENTORY_DB_NAME TEMP_URL... ${TEMP_URL}
-  BASE64_METRIC_EXPORTER_INVENTORYDB_URL=`echo -n "$TEMP_URL" | base64`
-
-
-# TEMP TEST DELETE THIS END
-
 
 # Collect UI password and create secret
 if ! state_done UI_PASSWORD; then
@@ -427,28 +388,6 @@ while ! state_done DB_PASSWORD; do
       "dbpassword": "${BASE64_DB_PASSWORD}"
    }
 }
-!
-  done
-done
-
-# Collect DB password and create secret
-while ! state_done DB_METRICS_URL_SECRET; do
-  echo BASE64_METRIC_EXPORTER_ORDERDB_URL ${BASE64_METRIC_EXPORTER_ORDERDB_URL}
-  while true; do
-    if kubectl create -n msdataworkshop -f -; then
-      state_set_done DB_METRICS_URL_SECRET
-      break
-    else
-      echo 'Error: Creating DB Metrics URL Secret Failed.  Retrying...'
-      sleep 10
-    fi <<!
-apiVersion: v1
-data:
-  orderurl: ${BASE64_METRIC_EXPORTER_ORDERDB_URL}
-  inventoryurl: ${BASE64_METRIC_EXPORTER_INVENTORYDB_URL}
-kind: Secret
-metadata:
-  name: dbmetricsurl
 !
   done
 done
