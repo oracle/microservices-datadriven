@@ -59,7 +59,6 @@ public class OrderResource {
     static boolean crashAfterInsert;
     static boolean crashAfterInventoryMessageReceived;
     private OrderServiceCPUStress orderServiceCPUStress = new OrderServiceCPUStress();
-    Map<String, OrderDetail> cachedOrders = new HashMap<>();
 
     @Path("/lastContainerStartTime")
     @GET
@@ -143,25 +142,18 @@ public class OrderResource {
                     schema = @Schema(type = SchemaType.STRING))
             @QueryParam("deliverylocation") String deliverylocation) {
         System.out.println("--->placeOrder... orderid:" + orderid + " itemid:" + itemid);
-        OrderDetail orderDetail = new OrderDetail();
-        orderDetail.setOrderId(orderid);
-        orderDetail.setItemId(itemid);
-        orderDetail.setOrderStatus("pending");
-        orderDetail.setDeliveryLocation(deliverylocation);
-        cachedOrders.put(orderid, orderDetail);
-
         Span activeSpan = tracer.buildSpan("orderDetail").asChildOf(tracer.activeSpan()).start();
+        String traceid = activeSpan.toString().substring(0, activeSpan.toString().indexOf(":"));
         activeSpan.log("begin placing order"); // logs are for a specific moment or event within the span (in contrast to tags which should apply to the span regardless of time).
         activeSpan.setTag("orderid", orderid); //tags are annotations of spans in order to query, filter, and comprehend trace data
         activeSpan.setTag("itemid", itemid);
-        activeSpan.setTag("ecid", "5292e5f8-6db1-49b1-9d98-d8fdd4ed2533-000122e1");
+        activeSpan.setTag("ecid", traceid);
         activeSpan.setTag("db.user", atpOrderPdb.getUser()); // https://github.com/opentracing/specification/blob/master/semantic_conventions.md
         activeSpan.setBaggageItem("sagaid", "sagaid" + orderid); //baggage is part of SpanContext and carries data across process boundaries for access throughout the trace
         activeSpan.setBaggageItem("orderid", orderid);
-
         try {
             System.out.println("--->insertOrderAndSendEvent..." +
-                    orderServiceEventProducer.updateDataAndSendEvent(atpOrderPdb, orderid, itemid, deliverylocation));
+                    orderServiceEventProducer.updateDataAndSendEvent(atpOrderPdb, orderid, itemid, deliverylocation, activeSpan, traceid));
         } catch (Exception e) {
             e.printStackTrace();
             return Response.serverError()
@@ -171,9 +163,8 @@ public class OrderResource {
             activeSpan.log("end placing order");
             activeSpan.finish();
         }
-
         return Response.ok()
-                .entity("orderid = " + orderid + " orderstatus = " + orderDetail.getOrderStatus() + " order placed")
+                .entity("orderid = " + orderid + " orderstatus = pending order placed")
                 .build();
     }
 

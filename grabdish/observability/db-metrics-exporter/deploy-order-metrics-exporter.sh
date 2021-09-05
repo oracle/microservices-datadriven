@@ -25,6 +25,7 @@ if [ -z "$ORDER_PDB_NAME" ]; then
 fi
 
 echo create configmap for db-metrics-orderpdb-exporter...
+kubectl delete configmap db-metrics-orderpdb-exporter-config -n msdataworkshop
 kubectl create configmap db-metrics-orderpdb-exporter-config --from-file=db-metrics-orderpdb-exporter-metrics.toml -n msdataworkshop
 echo
 echo create db-metrics-exporter deployment and service...

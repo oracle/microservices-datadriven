@@ -1,48 +1,4 @@
 [[metric]]
-context = "teq"
-labels = ["inst_id"]
-metricsdesc = { total_queues = "Total number of queues"}
-request = '''
-	select inst_id, count(*) as total_queues from
-	(
-	    select distinct t1.inst_id, t2.queue_name
-	    from gv$aq_sharded_subscriber_stat t1
-	    join gv$persistent_queues t2 on t1.queue_id = t2.queue_id
-	) group by inst_id
-'''
-ignorezeroresult = true
-
-[[metric]]
-context = "teq"
-labels = ["inst_id"]
-metricsdesc = { total_subscribers = "Total number of subscribers"}
-request = '''
-	select inst_id, count(*) as total_subscribers from
-	(
-	    select distinct inst_id, subscriber_id
-	    from gv$aq_sharded_subscriber_stat
-	) group by inst_id
-'''
-ignorezeroresult = true
-
-[[metric]]
-context = "teq"
-labels = ["inst_id", "queue_name", "subscriber_name"]
-metricsdesc = { enqueued_msgs = "Total enqueued messages.", dequeued_msgs = "Total dequeued messages.", remained_msgs = "Total remained messages.", time_since_last_dequeue = "Time since last dequeue.", estd_time_to_drain_no_enq = "Estimated time to drain if no enqueue.", message_latency_1 = "Message latency for last 5 mins.", message_latency_2 = "Message latency for last 1 hour.", message_latency_3 = "Message latency for last 5 hours."}
-request = '''
-	select distinct t1.inst_id, t1.queue_id, t2.queue_name, t1.subscriber_id as subscriber_name, t1.enqueued_msgs, t1.dequeued_msgs, t1.remained_msgs, t1.time_since_last_dequeue, t1.estd_time_to_drain_no_enq, t1.message_latency_1, t1.message_latency_2, t1.message_latency_3
-	from
-	(
-	    select inst_id, queue_id, subscriber_id, sum(enqueued_msgs) as enqueued_msgs, sum(dequeued_msgs) as dequeued_msgs, sum(enqueued_msgs - dequeued_msgs) as remained_msgs,
-	    min(time_since_last_dequeue) as time_since_last_dequeue, max(estd_time_to_drain_no_enq) as estd_time_to_drain_no_enq, avg(10) as message_latency_1, avg(20) as message_latency_2, avg(30) as message_latency_3
-	    from gv$aq_sharded_subscriber_stat
-	    group by queue_id, subscriber_id, inst_id
-	) t1
-	join gv$persistent_queues t2 on t1.queue_id = t2.queue_id
-'''
-ignorezeroresult = true
-
-[[metric]]
 context = "orderpdb_sessions"
 labels = ["inst_id", "status", "type"]
 metricsdesc = { value = "Gauge metric with count of orderpdb sessions by status and type." }
@@ -50,77 +6,8 @@ request = "select inst_id, status, type, count(*) as value from gv$session group
 
 
 [[metric]]
-context = "asm_diskgroup"
-labels = ["inst_id", "name"]
-metricsdesc = { total = "Total size of ASM disk group.", free = "Free space available on ASM disk group." }
-request = "select inst_id, name, total_mb*1024*1024 as total, free_mb*1024*1024 as free from gv$asm_diskgroup"
-ignorezeroresult = true
+context = "orderpdb_orders_by_status"
+labels = ["status"]
+metricsdesc = { value = "Total number of orders by status"}
+request = "select JSON_VALUE(JSON_DOCUMENT ,'$.status') as status,   count(*) as value from orderscollection group by JSON_VALUE(JSON_DOCUMENT ,'$.status')"
 
-
-[[metric]]
-context = "activity"
-labels = ["inst_id", "name"]
-metricsdesc = { value = "Generic counter metric from gv$sysstat view in Oracle." }
-request = "select inst_id, name, value from gv$sysstat where name IN ('parse count (total)', 'execute count', 'user commits', 'user rollbacks')"
-
-[[metric]]
-context = "process"
-labels = ["inst_id"]
-metricsdesc = { count = "Gauge metric with count of processes." }
-request = "select inst_id, count(*) as count from gv$process group by inst_id"
-
-[[metric]]
-context = "wait_class"
-labels = ["inst_id", "wait_class"]
-metricsdesc = { total_waits = "Number of times waits of the class occurred", time_waited = "Amount of time spent in the wait by all sessions in the instance" }
-request = "select inst_id, wait_class, total_waits, time_waited from gv$system_wait_class"
-ignorezeroresult = true
-
-[[metric]]
-context = "system"
-labels = ["inst_id", "stat_name"]
-metricsdesc = { value = "os metric from gv$osstat view in Oracle." }
-request = "select inst_id, stat_name, value from gv$osstat where upper(stat_name) in ('NUM_CPUS', 'LOAD', 'IDLE_TIME', 'BUSY_TIME', 'USER_TIME', 'PHYSICAL_MEMORY_BYTES', 'FREE_MEMORY_BYTES')"
-ignorezeroresult = true
-
-[[metric]]
-context = "system_network"
-labels = ["inst_id"]
-metricsdesc = { received_from_client = "Bytes received from client.", sent_to_client = "Bytes sent to client." }
-request = '''
-	select t1.inst_id as inst_id, t1.received_from_client as received_from_client, t2.sent_to_client as sent_to_client
-	from
-    	(select inst_id, value as received_from_client from gv$sysstat where lower(name) like '%received via sql*net from client%' order by value desc) t1
-	left join
-    	(select inst_id, value as sent_to_client from gv$sysstat where lower(name) like '%sent via sql*net to client%' order by value desc) t2
-	on t1.inst_id = t2.inst_id
-'''
-
-[[metric]]
-context = "grabdish"
-labels = ["orderid"]
-metricsdesc = { pending_orders = "Total number of pending orders"}
-request = '''
-	select count(*) as pending_orders from
-    	(
-    	    select JSON_VALUE(JSON_DOCUMENT ,'$.orderid') from orderscollection where JSON_VALUE(JSON_DOCUMENT ,'$.status') = 'pending'
-    	)
-'''
-
-
-[[metric]]
-context = "teq"
-labels = ["inst_id", "queue_name", "subscriber_name"]
-metricsdesc = { enqueued_msgs = "Total enqueued messages.", dequeued_msgs = "Total dequeued messages.", remained_msgs = "Total remained messages.", time_since_last_dequeue = "Time since last dequeue.", estd_time_to_drain_no_enq = "Estimated time to drain if no enqueue.", message_latency_1 = "Message latency for last 5 mins.", message_latency_2 = "Message latency for last 1 hour.", message_latency_3 = "Message latency for last 5 hours."}
-request = '''
-	select distinct t1.inst_id, t1.queue_id, t2.queue_name, t1.subscriber_id as subscriber_name, t1.enqueued_msgs, t1.dequeued_msgs, t1.remained_msgs, t1.time_since_last_dequeue, t1.estd_time_to_drain_no_enq, t1.message_latency_1, t1.message_latency_2, t1.message_latency_3
-	from
-	(
-	    select inst_id, queue_id, subscriber_id, sum(enqueued_msgs) as enqueued_msgs, sum(dequeued_msgs) as dequeued_msgs, sum(enqueued_msgs - dequeued_msgs) as remained_msgs,
-	    min(time_since_last_dequeue) as time_since_last_dequeue, max(estd_time_to_drain_no_enq) as estd_time_to_drain_no_enq, avg(10) as message_latency_1, avg(20) as message_latency_2, avg(30) as message_latency_3
-	    from gv$aq_sharded_subscriber_stat
-	    group by queue_id, subscriber_id, inst_id
-	) t1
-	join gv$persistent_queues t2 on t1.queue_id = t2.queue_id
-'''
-ignorezeroresult = true

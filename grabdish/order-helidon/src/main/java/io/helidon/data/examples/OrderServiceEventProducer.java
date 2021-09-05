@@ -28,7 +28,7 @@ class OrderServiceEventProducer {
     }
 
     String updateDataAndSendEvent(
-            DataSource dataSource, String orderid, String itemid, String deliverylocation) throws Exception {
+            DataSource dataSource, String orderid, String itemid, String deliverylocation, Span activeSpan, String spanIdForECID) throws Exception {
         System.out.println("updateDataAndSendEvent enter dataSource:" + dataSource +
                 ", itemid:" + itemid + ", orderid:" + orderid +
                 ",queueOwner:" + OrderResource.orderQueueOwner + "queueName:" + OrderResource.orderQueueName);
@@ -38,18 +38,14 @@ class OrderServiceEventProducer {
             TopicConnection q_conn = q_cf.createTopicConnection();
             session = q_conn.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
             OracleConnection jdbcConnection = ((OracleConnection)((AQjmsSession) session).getDBConnection());
-            Span activeSpan = orderResource.getTracer().activeSpan();
             System.out.println("OrderServiceEventProducer.updateDataAndSendEvent activespan ecid=" + activeSpan);
             short seqnum = 20;
             String[] metric = new String[OracleConnection.END_TO_END_STATE_INDEX_MAX];
             metric[OracleConnection.END_TO_END_ACTION_INDEX] = "orderservice_action_placeOrder";
             metric[OracleConnection.END_TO_END_MODULE_INDEX] = "orderservice_module";
             metric[OracleConnection.END_TO_END_CLIENTID_INDEX] = "orderservice_clientid";
-            if (activeSpan != null) {
-                String traceid = activeSpan.toString().substring(0, activeSpan.toString().indexOf(":"));
-                metric[OracleConnection.END_TO_END_ECID_INDEX] = traceid; //for log to trace
-                activeSpan.setBaggageItem("ecid", traceid); //for trace to log
-            }
+            metric[OracleConnection.END_TO_END_ECID_INDEX] = spanIdForECID; //for log to trace
+            activeSpan.setBaggageItem("ecid", spanIdForECID); //for trace to log
             jdbcConnection.setEndToEndMetrics(metric,seqnum);//  todo instead use  conn.setClientInfo();
             System.out.println("updateDataAndSendEvent jdbcConnection:" + jdbcConnection + " activeSpan:" + activeSpan + " about to insertOrderViaSODA...");
             Order insertedOrder = insertOrderViaSODA(orderid, itemid, deliverylocation, jdbcConnection);
