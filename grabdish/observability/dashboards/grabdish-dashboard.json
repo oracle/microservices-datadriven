@@ -833,7 +833,8 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "up{job=\"order\"}",
+          "expr": "oracledb_up{job=\"db-metrics-exporter-order\"}",
+          "hide": false,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -975,32 +976,7 @@
             ]
           }
         },
-        "overrides": [
-          {
-            "__systemRef": "hideSeriesFrom",
-            "matcher": {
-              "id": "byNames",
-              "options": {
-                "mode": "exclude",
-                "names": [
-                  "oracledb_orderpdb_sessions_value{endpoint=\"metrics\", inst_id=\"4\", instance=\"10.244.1.200:9161\", job=\"db-metrics-exporter-order\", namespace=\"msdataworkshop\", pod=\"db-metrics-exporter-orderpdb-6478f97764-j9wl2\", service=\"db-metrics-exporter-order\", status=\"ACTIVE\", type=\"USER\"}"
-                ],
-                "prefix": "All except:",
-                "readOnly": true
-              }
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": true
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 8,
@@ -1304,7 +1280,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "oracledb_grabdish_value",
+          "expr": "oracledb_orderpdb_orders_by_status_value",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -1779,7 +1755,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "up{job=\"inventory\"}",
+          "expr": "oracledb_up{job=\"db-metrics-exporter-inventory\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -2860,5 +2836,5 @@
   "timezone": "",
   "title": "GrabDish Dash",
   "uid": "kmgGniV7k",
-  "version": 4
+  "version": 6
 }
