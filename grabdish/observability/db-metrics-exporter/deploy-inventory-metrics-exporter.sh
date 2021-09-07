@@ -25,6 +25,7 @@ if [ -z "$INVENTORY_PDB_NAME" ]; then
 fi
 
 echo create configmap for db-metrics-inventorypdb-exporter...
+kubectl delete configmap db-metrics-inventorypdb-exporter-config -n msdataworkshop
 kubectl create configmap db-metrics-inventorypdb-exporter-config --from-file=db-metrics-inventorypdb-exporter-metrics.toml -n msdataworkshop
 echo
 echo create db-metrics-exporter deployment and service...

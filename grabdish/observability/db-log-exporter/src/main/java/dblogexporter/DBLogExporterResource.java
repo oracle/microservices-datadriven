@@ -31,7 +31,7 @@ public class DBLogExporterResource {
     
     static boolean isFirstCall = true;
     static String querySQL = System.getenv("QUERY_SQL");
-    static String queryRetryIntervalString = System.getenv("QUERY_SQL");
+    static String queryRetryIntervalString = System.getenv("QUERY_INTERVAL");
     static int DEFAULT_RETRY_INTERVAL = 30; // in seconds
     private boolean enabled = true;
     //currently logs are read from the beginning during startup.
@@ -58,9 +58,9 @@ public class DBLogExporterResource {
             while (enabled) {
                 executeAlertLogQuery(conn);
                 executeVASHQuery(conn);
-                int queryRetryInterval = DBLogExporterResource.queryRetryIntervalString == null ||
-                                DBLogExporterResource.queryRetryIntervalString.trim().equals("") ?
-                                DEFAULT_RETRY_INTERVAL : Integer.parseInt(DBLogExporterResource.queryRetryIntervalString.trim());
+                int queryRetryInterval = queryRetryIntervalString == null ||
+                                queryRetryIntervalString.trim().equals("") ?
+                                DEFAULT_RETRY_INTERVAL : Integer.parseInt(queryRetryIntervalString.trim());
                 Thread.sleep(1000 * queryRetryInterval);
             }
         }
@@ -75,7 +75,7 @@ public class DBLogExporterResource {
         if(querySQL == null || querySQL.trim().equals("")) {
             querySQL = alertLogDefaultQuery;
         }
-        System.out.println("AlertLogExporterResource querySQL:" + querySQL + " alertLogQueryLastLocalDateTime:" + alertLogQueryLastLocalDateTime);
+//        System.out.println("AlertLogExporterResource querySQL:" + querySQL + " alertLogQueryLastLocalDateTime:" + alertLogQueryLastLocalDateTime);
         PreparedStatement statement = conn.prepareStatement(isFirstCall ? querySQL : querySQL + " WHERE ORIGINATING_TIMESTAMP > ?");
         if (!isFirstCall) statement.setTimestamp(1, alertLogQueryLastLocalDateTime);
         ResultSet rs = statement.executeQuery();

@@ -4,6 +4,11 @@ labels = ["inst_id", "status", "type"]
 metricsdesc = { value = "Gauge metric with count of orderpdb sessions by status and type." }
 request = "select inst_id, status, type, count(*) as value from gv$session group by status, type, inst_id"
 
+[[metric]]
+context = "orderqueue_messages_by_state"
+labels = ["state"]
+metricsdesc = { value = "Total number of messages in order queue by state"}
+request = "select state, count(*) as value from orderqueuetable group by state"
 
 [[metric]]
 context = "orderpdb_orders_by_status"

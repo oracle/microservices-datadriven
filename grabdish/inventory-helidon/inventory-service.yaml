@@ -9,8 +9,8 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 8080
-      name: metrics
-      targetPort: 8080
+  - port: 8080
+    name: metrics
+    targetPort: 8080
   selector:
     app: inventory
