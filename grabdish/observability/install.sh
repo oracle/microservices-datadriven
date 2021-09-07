@@ -7,7 +7,7 @@ set -e
 
 echo Installing Jaeger...
 kubectl create -f install/jaeger-all-in-one-template.yml -n msdataworkshop
-kubectl create -f install/jaeger-ingress.yml -n msdataworkshop
+kubectl create -f install/jaeger-ingress.yaml -n msdataworkshop
 echo
 
 echo Installing ServiceAccount, ClusterRole, and ClusterRole binding needed for Prometheus
