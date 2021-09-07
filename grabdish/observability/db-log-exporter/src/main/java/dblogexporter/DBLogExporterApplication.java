@@ -4,7 +4,7 @@
  ** Copyright (c) 2021 Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
-package alertlogexporter;
+package dblogexporter;
 
 
 import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
@@ -21,12 +21,12 @@ import java.util.Set;
 @OpenAPIDefinition(
         info = @Info(title = "GrabDish", description = "Order processing for GrabDish", version = "0.0.1")
 )
-public class AlertLogExporterApplication extends Application {
+public class DBLogExporterApplication extends Application {
 
     @Override
     public Set<Class<?>> getClasses() {
         Set<Class<?>> s = new HashSet<Class<?>>();
-        s.add(AlertLogExporterResource.class);
+        s.add(DBLogExporterResource.class);
         return s;
     }
 

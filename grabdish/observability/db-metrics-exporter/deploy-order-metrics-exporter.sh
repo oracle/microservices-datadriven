@@ -25,7 +25,8 @@ if [ -z "$ORDER_PDB_NAME" ]; then
 fi
 
 echo create configmap for db-metrics-orderpdb-exporter...
-kubectl create configmap db-metrics-orderpdb-exporter-config --from-file=./db-metrics-exporter/db-metrics-orderpdb-exporter-metrics.toml -n msdataworkshop
+kubectl delete configmap db-metrics-orderpdb-exporter-config -n msdataworkshop
+kubectl create configmap db-metrics-orderpdb-exporter-config --from-file=db-metrics-orderpdb-exporter-metrics.toml -n msdataworkshop
 echo
 echo create db-metrics-exporter deployment and service...
 export CURRENTTIME=$( date '+%F_%H:%M:%S' )
@@ -44,6 +45,8 @@ mv -- /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml db-metrics-
 sed -e  "s|%OCI_REGION%|${OCI_REGION}|g" db-metrics-exporter-orderpdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 sed -e  "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" db-metrics-exporter-orderpdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
+mv -- /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
+sed -e  "s|%DATA_SOURCE_NAME_URL%|orderurl|g" db-metrics-exporter-orderpdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 
 if [ -z "$1" ]; then

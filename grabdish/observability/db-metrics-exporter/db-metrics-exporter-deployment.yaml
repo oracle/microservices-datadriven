@@ -14,22 +14,9 @@ spec:
       labels:
         app: db-metrics-exporter-%EXPORTER_NAME%
     spec:
-#      initContainers:
-#      - name: createDATA_SOURCE_NAME
-#        command:
-#          - bash
-#          - -c
-#          - "echo createDATA_SOURCE_NAME"
-#        image: oraclelinux:7.5
-#        volumeMounts:
-#        - name: creds-raw
-#          mountPath: /tmp/creds
-#          readOnly: false
-#        - name: creds
-#          mountPath: /creds
       containers:
         - name: db-metrics-exporter-%EXPORTER_NAME%
-          image: iamseth/oracledb_exporter:latest
+          image: iamseth/oracledb_exporter:latest #todo never a good idea to use "latest"
           imagePullPolicy: Always
           env:
             - name: DEFAULT_METRICS
@@ -39,16 +26,14 @@ spec:
             - name: TNS_ADMIN
               value: "/msdataworkshop/creds"
 #          value: "/lib/oracle/instantclient_19_3/client64/lib/network/admin"
-            - name: dbpassword0
-              value: ""
             - name: dbpassword
               valueFrom:
                 secretKeyRef:
                   name: dbuser
                   key: dbpassword
-                  optional: true #not needed/used if using VAULT_SECRET_OCID exists
+                  optional: true
             - name: DATA_SOURCE_NAME
-              value: "%USER%/$(dbpassword):@%PDB_NAME%_tp"
+              value: "%USER%/$(dbpassword)@%PDB_NAME%_tp"
           volumeMounts:
             - name: creds
               mountPath: /msdataworkshop/creds

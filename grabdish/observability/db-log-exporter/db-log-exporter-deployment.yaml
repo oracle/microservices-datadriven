@@ -42,18 +42,6 @@ spec:
           mountPath: /msdataworkshop/creds
         ports:
         - containerPort: 8080
-        livenessProbe:
-          httpGet: #alternatives include exec with command, etc.
-            path: /health/live
-            port: 8080
-          initialDelaySeconds: 220
-          periodSeconds: 3
-        readinessProbe:
-          httpGet:
-            path: /health/ready
-            port: 8080
-          initialDelaySeconds: 40
-          periodSeconds: 3
       restartPolicy: Always
       volumes:
       - name: creds
