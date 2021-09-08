@@ -20,7 +20,8 @@ helm install stable prometheus-community/kube-prometheus-stack --namespace=msdat
 echo
 
 echo Installing Grafana...
-kubectl apply -f install/grafana.yaml -n ingress-nginx
+kubectl apply -f install/grafana.yaml -n msdataworkshop
+kubectl apply -f install/grafana-service.yaml -n ingress-nginx
 echo
 
 echo Installing loki-stack with Promtail...
