@@ -17,7 +17,7 @@ source $MY_CODE/source.env
 
 # Setup state store - I know we are in destroy, but we need the state store to know coordinate.
 mkdir -p $MY_HOME/infra/state_store
-source $MSDD_INFRA_CODE/state_store/setup.env $MY_HOME/infra/state_store $DCMS_WORKSHOP_LOG/state.log
+source $MSDD_INFRA_CODE/state_store/setup.env $MY_HOME/infra/state_store $DCMS_LOG_DIR/state.log
 
 
 # Start the background destroy threads
@@ -26,7 +26,7 @@ for t in $THREADS; do
   THREAD_STATE=$DCMS_THREAD_STATE/$t
   mkdir -p $THREAD_STATE
   cd $THREAD_STATE
-  (provisioning-destroy "$MY_CODE/threads/$t" &>> $DCMS_WORKSHOP_LOG/$t-destroy-thread.log) &
+  (provisioning-destroy "$MY_CODE/threads/$t" &>> $DCMS_LOG_DIR/$t-destroy-thread.log) &
 done
 
 
