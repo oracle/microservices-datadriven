@@ -65,22 +65,3 @@ spec:
         - name: grafana-pv
           persistentVolumeClaim:
             claimName: grafana-pvc
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: grafana
-  annotations:
-    service.beta.kubernetes.io/oci-load-balancer-ssl-ports: "443"
-    service.beta.kubernetes.io/oci-load-balancer-tls-secret: ssl-certificate-secret
-spec:
-  tls:
-    - secretName: ssl-certificate-secret
-  ports:
-    - port: 443
-      protocol: TCP
-      targetPort: http-grafana
-  selector:
-    app: grafana
-  sessionAffinity: None
-  type: LoadBalancer
