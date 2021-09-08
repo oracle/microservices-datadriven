@@ -20,9 +20,7 @@ helm install stable prometheus-community/kube-prometheus-stack --namespace=msdat
 echo
 
 echo Installing Grafana...
-kubectl apply -f install/grafana.yaml -n msdataworkshop
-# todo remove need to change NP to LB and use ingress instead
-#kubectl patch svc stable-grafana -p '{"spec": {"type": "LoadBalancer"}}' -n msdataworkshop
+kubectl apply -f install/grafana.yaml -n ingress-nginx
 echo
 
 echo Installing loki-stack with Promtail...
