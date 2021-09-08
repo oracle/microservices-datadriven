@@ -65,11 +65,11 @@ while ! state_done USER_OCID; do
     USER_OCID=$TEST_USER_OCID
   fi
   # Validate
-  if test ""`oci iam user get --user-id "$USER_OCID" --query 'data."lifecycle-state"' --raw-output 2>$DCMS_LOG_DIR_DIR/user_ocid_err` == 'ACTIVE'; then
+  if test ""`oci iam user get --user-id "$USER_OCID" --query 'data."lifecycle-state"' --raw-output 2>$DCMS_LOG_DIR/user_ocid_err` == 'ACTIVE'; then
     state_set USER_OCID "$USER_OCID"
   else
     echo "That user OCID could not be validated"
-    cat $DCMS_LOG_DIR_DIR/user_ocid_err
+    cat $DCMS_LOG_DIR/user_ocid_err
   fi
 done
 
@@ -192,14 +192,14 @@ while ! is_secret_set DOCKER_AUTH_TOKEN; do
   if test $(state_get RUN_TYPE) -ne 3; then
     export OCI_CLI_PROFILE=$(state_get HOME_REGION)
     if ! TOKEN=`oci iam auth-token create  --user-id "$(state_get USER_OCID)" --description 'grabdish docker login' --query 'data.token' --raw-output 2>$DCMS_LOG_DIR/docker_auth_token`; then
-      if grep UserCapacityExceeded $DCMS_LOG_DIR_DIR/docker_auth_token >/dev/null; then
+      if grep UserCapacityExceeded $DCMS_LOG_DIR/docker_auth_token >/dev/null; then
         # The key already exists
         echo 'ERROR: Failed to create auth token.  Please delete an old token from the OCI Console (Profile -> User Settings -> Auth Tokens).'
         read -p "Hit return when you are ready to retry?"
         continue
       else
         echo "ERROR: Creating auth token has failed:"
-        cat $DCMS_LOG_DIR_DIR/docker_auth_token
+        cat $DCMS_LOG_DIR/docker_auth_token
         exit
       fi
     fi
