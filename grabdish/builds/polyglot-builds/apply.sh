@@ -17,8 +17,9 @@ export GRABDISH_LOG
 
 
 # Build all the images
-source $MY_CODE/../builds.env
+source $MY_CODE/../source.env
 BUILDS="$POLYGLOT_BUILDS"
+export JAVA_HOME
 export PATH=$JAVA_HOME/bin:$PATH
 export DOCKER_REGISTRY
 for b in $BUILDS; do

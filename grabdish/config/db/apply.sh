@@ -179,14 +179,14 @@ if ! test -f $MY_STATE/order_db_link; then
   SVC=$ORDER_DB_SVC
   TU=$INVENTORY_USER
   TSVC=$INVENTORY_DB_SVC
-  TTNS=`grep -i "^$TSVC " $TNS_ADMIN/tnsnames.ora`
+  TTNS=`grep -i "^$TSVC " $INVENTORYDB_TNS_ADMIN/tnsnames.ora`
   LINK=$ORDER_LINK
   sqlplus /nolog <<!
 WHENEVER SQLERROR EXIT 1
 connect $U/"$DB_PASSWORD"@$SVC
 BEGIN
   DBMS_CLOUD.GET_OBJECT(
-    object_uri => '$CWALLET_SSO_AUTH_URL',
+    object_uri => '$INVENTORYDB_CWALLET_SSO_AUTH_URL',
     directory_name => 'DATA_PUMP_DIR');
 
   DBMS_CLOUD.CREATE_CREDENTIAL(
@@ -216,14 +216,14 @@ if ! test -f $MY_STATE/inventory_db_link; then
   SVC=$INVENTORY_DB_SVC
   TU=$ORDER_USER
   TSVC=$ORDER_DB_SVC
-  TTNS=`grep -i "^$TSVC " $TNS_ADMIN/tnsnames.ora`
+  TTNS=`grep -i "^$TSVC " $ORDERDB_TNS_ADMIN/tnsnames.ora`
   LINK=$INVENTORY_LINK
   sqlplus /nolog <<!
 WHENEVER SQLERROR EXIT 1
 connect $U/"$DB_PASSWORD"@$SVC
 BEGIN
   DBMS_CLOUD.GET_OBJECT(
-    object_uri => '$CWALLET_SSO_AUTH_URL',
+    object_uri => '$ORDERDB_CWALLET_SSO_AUTH_URL',
     directory_name => 'DATA_PUMP_DIR');
 
   DBMS_CLOUD.CREATE_CREDENTIAL(
