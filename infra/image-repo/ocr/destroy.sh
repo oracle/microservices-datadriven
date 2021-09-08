@@ -11,6 +11,11 @@ if ! provisioning-helper-pre-destroy-sh; then
 fi
 
 
-# Nothing to destroy
+# Delete Repos
+echo "Deleting Repositories"
+for r in $REPO_OCIDS; do 
+  oci artifacts container repository delete --repository-id "$r" --force
+done
 
-rm $MY_HOME/output.env
+
+rm -f $OUTPUT_FILE

@@ -11,6 +11,9 @@ if ! provisioning-helper-pre-destroy-sh; then
 fi
 
 
-# Nothing to destroy
+# Destroy polyglot builds
+cd $DCMS_APP_STATE/config
+provisioning-destroy
 
-rm $MY_HOME/output.env
+rm -rf $OUTPUT_FILE
+state_reset_done GRABDISH_THREAD

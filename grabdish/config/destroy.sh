@@ -2,54 +2,25 @@
 # Copyright (c) 2021 Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
-# Dependencies:
-#   OCI CLI (configured)
-#   sqlplus
-#   kubectl (configured)
-#   GRABDISH_HOME (set)
-#   GRABDISH_LOG (set)
-#
-# INPUTS:
-#   Parameters:
-#     $1  Home directory (to store state, inputs and outputs)
-#
-#
-# OUTPUTS:
-# output.env removed
-
-
 # Fail on error
 set -e
 
 
-# Check the home folder
-MY_HOME="$1"
-if ! test -d "$MY_HOME"; then
-  echo "ERROR: The home folder does not exist"
-  exit
+if ! provisioning-helper-pre-destroy-sh; then
+  exit 1
 fi
 
 
-# Check home is set
-if test -z "$GRABDISH_HOME"; then
-  echo "ERROR: This script requires GRABDISH_HOME to be set"
-  exit
-fi
+cd $MY_CODE/..
+export GRABDISH_HOME=$PWD
 
 
-# Check home is set
-if test -z "$GRABDISH_LOG"; then
-  echo "ERROR: This script requires GRABDISH_LOG to be set"
-  exit
-fi
-
-
-# Run grabdish setup scripts
-SCRIPTS="db k8s db-k8s"
-for scr in $SCRIPTS; do
-  SCRIPT_HOME=$MY_HOME/$scr
-  mkdir -p $SCRIPT_HOME
-  $GRABDISH_HOME/config/$scr/destroy.sh $SCRIPT_HOME
+# Run grabdish destroy for each config in order
+CONFIGS="db-k8s k8s db"
+for c in $SCRIPTS; do
+  CONFIG_STATE=$MY_STATE/$c
+  cd $CONFIG_STATE
+  provisioning-destroy
 done
 
 

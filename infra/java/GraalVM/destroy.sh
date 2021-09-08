@@ -11,6 +11,9 @@ if ! provisioning-helper-pre-destroy-sh; then
 fi
 
 
-# Nothing to destroy
+# Install Graal
+if ! test -d ~/graalvm-ce-java11-20.1.0; then
+  rm -rf ~/graalvm-ce-java11-20.1.0
+fi
 
-rm $MY_HOME/output.env
+rm -rf $OUTPUT_FILE
