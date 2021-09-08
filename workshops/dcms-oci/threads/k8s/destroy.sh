@@ -31,5 +31,6 @@ provisioning-destroy
 state_reset OKE_OCID
 
 
-rm -rf $OUTPUT_FILE
+# Delete output
+rm -f $OUTPUT_FILE
 state_reset_done K8S_THREAD

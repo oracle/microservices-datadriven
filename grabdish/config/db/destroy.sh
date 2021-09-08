@@ -55,4 +55,4 @@ if test -f $MY_STATE/orderdb_tns_admin; then
 fi
 
 
-rm -rf $OUTPUT_FILE
+rm -f $OUTPUT_FILE

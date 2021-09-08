@@ -39,5 +39,6 @@ provisioning-destroy
 state_reset IMAGE_REPOS
 
 
-rm -rf $OUTPUT_FILE
+# Delete output
+rm -f $OUTPUT_FILE
 state_reset BUILDS_THREAD

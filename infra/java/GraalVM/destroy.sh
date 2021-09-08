@@ -16,4 +16,5 @@ if ! test -d ~/graalvm-ce-java11-20.1.0; then
   rm -rf ~/graalvm-ce-java11-20.1.0
 fi
 
-rm -rf $OUTPUT_FILE
+# Delete output
+rm -f $OUTPUT_FILE

@@ -32,4 +32,4 @@ done
 wait
 
 
-rm -f $OUTPUT_FILE
+touch $OUTPUT_FILE

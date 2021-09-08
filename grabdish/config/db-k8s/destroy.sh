@@ -16,5 +16,5 @@ export GRABDISH_HOME=$PWD
 export GRABDISH_LOG
 
 
-# Delete SSL Certs and anything else
-rm -rf $MY_STATE/*
+# Delete output
+rm -f $OUTPUT_FILE

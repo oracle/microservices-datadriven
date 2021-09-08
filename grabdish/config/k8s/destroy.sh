@@ -20,5 +20,5 @@ export GRABDISH_LOG
 kubectl delete ns msdataworkshop
 
 
-# Delete SSL Certs and anything else
-rm -rf $MY_STATE/*
+# Delete output
+rm -f $OUTPUT_FILE

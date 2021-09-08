@@ -15,5 +15,6 @@ fi
 cd $DCMS_APP_STATE/config
 provisioning-destroy
 
-rm -rf $OUTPUT_FILE
+# Delete output
+rm -f $OUTPUT_FILE
 state_reset_done GRABDISH_THREAD
