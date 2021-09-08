@@ -6,7 +6,7 @@
 set -e
 
 BUILDS="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se order-mongodb-kafka inventory-postgres-kafka inventory-springboot"
-# we provision a repos for db-log-exporter but don't build it yet/currently
+# we provision a repos for db-log-exporter but it's in nested observability/db-log-exporter dir so not reusing BUILDS list to build (see below)
 REPOS="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se order-mongodb-kafka inventory-postgres-kafka inventory-springboot db-log-exporter"
 
 # Provision Repos
@@ -40,4 +40,12 @@ while ! state_done NON_JAVA_BUILDS; do
   done
   wait
   state_set_done NON_JAVA_BUILDS
+done
+
+# Build the db-log-exporter image
+while ! state_done DB_LOG_EXPORTER_BUILD; do
+  cd $GRABDISH_HOME/observability/db-log-exporter
+  time ./build.sh &>> $GRABDISH_LOG/build-db-log-exporter.log &
+  wait
+  state_set_done DB_LOG_EXPORTER_BUILD
 done
