@@ -6,7 +6,7 @@
 set -e
 
 BUILDS="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se order-mongodb-kafka inventory-postgres-kafka inventory-springboot"
-# we provision a repos for db-log-exporter but it's in nested observability/db-log-exporter dir so not reusing BUILDS list to build (see below)
+# we provision a repos for db-log-exporter but it's in nested observability/db-log-exporter dir so not reusing BUILDS list to build (see DB_LOG_EXPORTER_BUILD below)
 REPOS="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se order-mongodb-kafka inventory-postgres-kafka inventory-springboot db-log-exporter"
 
 # Provision Repos
