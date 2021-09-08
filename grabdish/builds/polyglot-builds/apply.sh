@@ -22,11 +22,13 @@ BUILDS="$POLYGLOT_BUILDS"
 export PATH=$JAVA_HOME/bin:$PATH
 export DOCKER_REGISTRY
 for b in $BUILDS; do
-  cd $GRABDISH_HOME/$b
+  MS_CODE=$GRABDISH_HOME/$b
+  echo "Building $MS_CODE"
+  cd $MS_CODE
   # Run in parallel
   ./build.sh &>> $GRABDISH_LOG/build-$b.log &
 done
 wait
 
 
-touch $MY_HOME/output.env
+rm -f $OUTPUT_FILE

@@ -24,4 +24,4 @@ for c in $SCRIPTS; do
 done
 
 
-rm -f $MY_HOME/output.env
+rm -f $OUTPUT_FILE

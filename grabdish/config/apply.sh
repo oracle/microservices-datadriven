@@ -17,7 +17,7 @@ export GRABDISH_HOME=$PWD
 
 # Run grabdish apply for each config in order
 CONFIGS="db k8s db-k8s"
-for c in $SCRIPTS; do
+for c in $CONFIGS; do
   CONFIG_CODE=$MY_CODE/$c
   CONFIG_STATE=$MY_STATE/$c
   mkdir -p $CONFIG_STATE
@@ -36,4 +36,4 @@ GRABDISH_LOG=$GRABDISH_LOG
 done
 
 
-touch $MY_HOME/output.env
+touch $OUTPUT_FILE

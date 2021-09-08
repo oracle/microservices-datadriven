@@ -27,9 +27,10 @@ done
 
 
 # Provision OKE
-STATE=$DCMS_INFRA_HOME/k8s
+STATE=$DCMS_INFRA_STATE/k8s
 mkdir -p $STATE
-at >$STATE/input.env <<!
+cd $STATE
+cat >$STATE/input.env <<!
 COMPARTMENT_OCID=$(state_get COMPARTMENT_OCID)
 REGION=$(state_get REGION)
 TENANCY_OCID=$(state_get TENANCY_OCID)
@@ -38,7 +39,7 @@ provisioning-apply $MSDD_INFRA_CODE/k8s/oke
 
  
 (
-source $K8S_HOME/output.env
+source $STATE/output.env
 state_set OKE_OCID "$OKE_OCID"
 )
 

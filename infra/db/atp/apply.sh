@@ -79,7 +79,7 @@ fi
 
 # Put DB Connection Wallet in the bucket in Object Store
 if ! test -f $MY_STATE/state_cwallet_put; then
-  cd $ORDERDB_TNS_ADMIN
+  cd $TNS_ADMIN
   oci os object put --bucket-name $BUCKET_NAME --name "cwallet.sso" --file 'cwallet.sso'
   touch $MY_STATE/state_cwallet_put
 fi

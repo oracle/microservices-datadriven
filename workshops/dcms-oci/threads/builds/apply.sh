@@ -18,8 +18,9 @@ fi
 
 # Install GtaalVM
 STATE=$DCMS_INFRA_STATE/java
+mkdir -p $STATE
 cd $STATE
-provisioning-apply $MSDD_INFRA_STATE/java/GraalVM
+provisioning-apply $MSDD_INFRA_CODE/java/GraalVM
 (
   source $STATE/output.env
   state_set JAVA_HOME $JAVA_HOME
@@ -42,9 +43,9 @@ done
 
 # Create Image Repos
 STATE=$DCMS_INFRA_STATE/image-repo
-# Get build names
-source $MSDD_APPS_CODE/$DCMS_APP/builds/builds.env
 mkdir -p $STATE
+# Get build names
+source $MSDD_APPS_CODE/$DCMS_APP/builds/source.env
 cat >$STATE/input.env <<!
 COMPARTMENT_OCID=$(state_get COMPARTMENT_OCID)
 RUN_NAME=$(state_get RUN_NAME)
@@ -74,7 +75,7 @@ done
 STATE=$DCMS_APP_STATE/builds/base_builds
 mkdir -p $STATE
 cat >$STATE/input.env <<!
-GRABDISH_LOG=$GRABDISH_LOG
+GRABDISH_LOG=$DCMS_LOG_DIR
 JAVA_HOME=$(state_get JAVA_HOME)
 DOCKER_REGISTRY='$(state_get DOCKER_REGISTRY)'
 !
@@ -86,8 +87,8 @@ state_set_done BASE_BUILDS
 # Run polyglot builds
 STATE=$DCMS_APP_STATE/builds/polyglot_builds
 mkdir -p $STATE
-cat >$SCRIPT_HOME/input.env <<!
-GRABDISH_LOG=$GRABDISH_LOG
+cat >$STATE/input.env <<!
+GRABDISH_LOG=$DCMS_LOG_DIR
 JAVA_HOME=$(state_get JAVA_HOME)
 DOCKER_REGISTRY='$(state_get DOCKER_REGISTRY)'
 !

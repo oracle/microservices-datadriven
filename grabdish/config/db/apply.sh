@@ -330,4 +330,4 @@ connect $U/"$DB_PASSWORD"@$SVC
 fi
 
 
-touch $MY_HOME/output.env
+rm -f $OUTPUT_FILE

@@ -13,4 +13,4 @@ fi
 
 # Nothing to destroy
 
-rm $MY_HOME/output.env
+rm -f $OUTPUT_FILE

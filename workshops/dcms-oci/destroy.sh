@@ -15,9 +15,9 @@ export DCMS_STATE=$MY_STATE
 source $MY_CODE/source.env
 
 
-# Setup state store - I know we are in destroy, but we need the state store to know coordinate.
-mkdir -p $MY_HOME/infra/state_store
-source $MSDD_INFRA_CODE/state_store/setup.env $MY_HOME/infra/state_store $DCMS_LOG_DIR/state.log
+# Setup state store - I know we are in destroy, but we need the state store to know how to coordinate.
+cd $MY_STATE/infra/state_store
+provisioning-apply
 
 
 # Start the background destroy threads
@@ -33,7 +33,7 @@ done
 # Wait for the threads to undo the setup
 DEPENDENCIES='DB_THREAD K8S_THREAD BUILDS_THREAD GRABDISH_THREAD'
 while ! test -z "$DEPENDENCIES"; do
-  echo "Waiting for $DEPENDENCIES tp be undone"
+  echo "Waiting for $DEPENDENCIES to be undone"
   WAITING_FOR=""
   for d in $DEPENDENCIES; do
     if state_done $d; then

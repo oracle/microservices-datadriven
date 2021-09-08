@@ -282,7 +282,7 @@ fi
 
 # Wait for the threads and base builds to complete
 # Wait for database and k8s threads
-DEPENDENCIES='DB_SETUP_THREAD K8S_SETUP_THREAD BASE_BUILDS GRABDISH_SETUP_THREAD'
+DEPENDENCIES='DB_THREAD K8S_THREAD BASE_BUILDS GRABDISH_THREAD'
 while ! test -z "$DEPENDENCIES"; do
   echo "Waiting for $DEPENDENCIES"
   WAITING_FOR=""
@@ -297,7 +297,7 @@ while ! test -z "$DEPENDENCIES"; do
 done
 
 
-# Write the output.env
+# Write the output
 cat >$OUTPUT_FILE <<!
 export DOCKER_REGISTRY='$(get_state DOCKER_REGISTRY)'
 export PATH=$(get_state JAVA_HOME)/bin:$PATH

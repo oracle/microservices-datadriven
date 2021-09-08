@@ -24,6 +24,7 @@ export DOCKER_REGISTRY
 for b in $BUILDS; do
   MS_CODE=$GRABDISH_HOME/$b
   echo "Building $MS_CODE"
+  cd $MS_CODE
   # Tried running in parallel and found to be unstable, so run serially.  Assume maven thread safety issue.
   time ./build.sh &>> $GRABDISH_LOG/build-$b.log
 done
