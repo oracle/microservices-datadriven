@@ -330,4 +330,4 @@ connect $U/"$DB_PASSWORD"@$SVC
 fi
 
 
-rm -f $OUTPUT_FILE
+touch $OUTPUT_FILE

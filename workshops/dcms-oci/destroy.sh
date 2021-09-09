@@ -17,7 +17,7 @@ source $MY_CODE/source.env
 
 # Setup state store - I know we are in destroy, but we need the state store to know how to coordinate.
 cd $MY_STATE/infra/state_store
-provisioning-apply
+provisioning-apply || true
 
 
 # Start the background destroy threads

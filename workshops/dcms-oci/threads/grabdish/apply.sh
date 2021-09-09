@@ -50,4 +50,4 @@ provisioning-apply $MSDD_APPS_CODE/$DCMS_APP/config
 
 
 touch $OUTPUT_FILE
-set_state_done GRABDISH_THREAD
+state_set_done GRABDISH_THREAD

@@ -299,6 +299,6 @@ done
 
 # Write the output
 cat >$OUTPUT_FILE <<!
-export DOCKER_REGISTRY='$(get_state DOCKER_REGISTRY)'
-export PATH=$(get_state JAVA_HOME)/bin:$PATH
+export DOCKER_REGISTRY='$(state_get DOCKER_REGISTRY)'
+export PATH=$(state_get JAVA_HOME)/bin:$PATH
 !

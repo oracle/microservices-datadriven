@@ -17,4 +17,4 @@ provisioning-destroy
 
 # Delete output
 rm -f $OUTPUT_FILE
-state_reset_done GRABDISH_THREAD
+state_reset GRABDISH_THREAD

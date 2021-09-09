@@ -41,14 +41,14 @@ fi
 
 # Create frontend load balancer
 if ! test -f $MY_STATE/frontend_lb; then
-  kubectl create -f $GRABDISH_HOME/frontend-helidon/frontend-service.yaml -n msdataworkshop; then
+  kubectl create -f $GRABDISH_HOME/frontend-helidon/frontend-service.yaml -n msdataworkshop
   touch $MY_STATE/frontend_lb
 fi
 
 
 # Install Jaeger
 if ! test -f $MY_STATE/jaeger; then
-  kubectl create -f https://tinyurl.com/yc52x6q5 -n msdataworkshop; then
+  kubectl create -f https://tinyurl.com/yc52x6q5 -n msdataworkshop
   touch $MY_STATE/jaeger
 fi
 

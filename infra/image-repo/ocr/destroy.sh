@@ -4,7 +4,7 @@
 
 # Fail on error
 set -e
-
+set -x
 
 if ! provisioning-helper-pre-destroy-sh; then
   exit 1
@@ -14,7 +14,7 @@ fi
 # Delete Repos
 echo "Deleting Repositories"
 for r in $REPO_OCIDS; do 
-  oci artifacts container repository delete --repository-id "$r" --force
+  oci artifacts container repository delete --repository-id "$r" --force || true
 done
 
 

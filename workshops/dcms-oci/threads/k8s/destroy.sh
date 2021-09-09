@@ -33,4 +33,4 @@ state_reset OKE_OCID
 
 # Delete output
 rm -f $OUTPUT_FILE
-state_reset_done K8S_THREAD
+state_reset K8S_THREAD
