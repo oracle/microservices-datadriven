@@ -56,7 +56,8 @@ RUN_NAME=$(state_get RUN_NAME)
   state_set ${db_upper}_CWALLET_SSO_AUTH_URL "$CWALLET_SSO_AUTH_URL"
   )
 done
-
+state_set ORDER_DB_NAME $(state_get ORDERDB_NAME)
+state_set INVENTORY_DB_NAME $(state_get INVENTORY_DB_NAME)
 
 touch $OUTPUT_FILE
 state_set_done DB_THREAD
