@@ -20,7 +20,12 @@ import javax.ws.rs.core.Response;
 
 import io.opentracing.Tracer;
 import oracle.ucp.jdbc.PoolDataSource;
+import org.eclipse.microprofile.metrics.Counter;
+import org.eclipse.microprofile.metrics.Metadata;
 import org.eclipse.microprofile.metrics.MetricRegistry;
+import org.eclipse.microprofile.metrics.MetricType;
+
+import static io.helidon.data.examples.InventoryServiceOrderEventConsumer.INVENTORYDOESNOTEXIST;
 
 @Path("/")
 @ApplicationScoped

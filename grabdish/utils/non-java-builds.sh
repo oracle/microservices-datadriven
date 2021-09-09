@@ -46,6 +46,5 @@ done
 while ! state_done DB_LOG_EXPORTER_BUILD; do
   cd $GRABDISH_HOME/observability/db-log-exporter
   time ./build.sh &>> $GRABDISH_LOG/build-db-log-exporter.log &
-  wait
   state_set_done DB_LOG_EXPORTER_BUILD
 done

@@ -30,5 +30,3 @@ echo Installing loki-stack with Promtail...
 helm repo add grafana https://grafana.github.io/helm-charts
 helm install loki-stack grafana/loki-stack --create-namespace --namespace loki-stack --set promtail.enabled=true,loki.persistence.enabled=true,loki.persistence.size=100Gi
 echo
-
-kubectl create -f install/grafana-ingress.yaml -n msdataworkshop
