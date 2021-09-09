@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.beta.kubernetes.io/oci-load-balancer-ssl-ports: "443"
+    service.beta.kubernetes.io/oci-load-balancer-tls-secret: ssl-certificate-secret
+    meta.helm.sh/release-name: stable
+    meta.helm.sh/release-namespace: msdataworkshop
+  finalizers:
+    - service.kubernetes.io/load-balancer-cleanup
+  labels:
+    app.kubernetes.io/instance: stable
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: grafana
+    app.kubernetes.io/version: 8.1.0
+    helm.sh/chart: grafana-6.15.0
+  name: grafana
+  namespace: msdataworkshop
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+    - name: service
+      port: 443
+      protocol: TCP
+      targetPort: 3000
+  selector:
+    app.kubernetes.io/instance: stable
+    app.kubernetes.io/name: grafana
+  sessionAffinity: None
+  type: LoadBalancer

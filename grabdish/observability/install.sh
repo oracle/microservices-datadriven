@@ -21,13 +21,12 @@ echo
 
 echo Installing Grafana...
 kubectl apply -f install/grafana.yaml -n msdataworkshop
-# todo remove need to change NP to LB and use ingress instead
-#kubectl patch svc stable-grafana -p '{"spec": {"type": "LoadBalancer"}}' -n msdataworkshop
+#todo instead of LB... kubectl apply -f install/grafana-ingress.yaml -n ingress-nginx
+kubectl create secret tls ssl-certificate-secret --key $GRABDISH_HOME/tls/tls.key --cert $GRABDISH_HOME/tls/tls.crt -n msdataworkshop
+kubectl apply -f install/grafana-service.yaml -n msdataworkshop
 echo
 
 echo Installing loki-stack with Promtail...
 helm repo add grafana https://grafana.github.io/helm-charts
 helm install loki-stack grafana/loki-stack --create-namespace --namespace loki-stack --set promtail.enabled=true,loki.persistence.enabled=true,loki.persistence.size=100Gi
 echo
-
-kubectl create -f install/grafana-ingress.yaml -n msdataworkshop
