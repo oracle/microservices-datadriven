@@ -21,7 +21,9 @@ echo
 
 echo Installing Grafana...
 kubectl apply -f install/grafana.yaml -n msdataworkshop
-kubectl apply -f install/grafana-service.yaml -n ingress-nginx
+#todo instead of LB... kubectl apply -f install/grafana-ingress.yaml -n ingress-nginx
+kubectl create secret tls ssl-certificate-secret --key $GRABDISH_HOME/tls/tls.key --cert $GRABDISH_HOME/tls/tls.crt -n msdataworkshop
+kubectl apply -f install/grafana-service.yaml -n msdataworkshop
 echo
 
 echo Installing loki-stack with Promtail...

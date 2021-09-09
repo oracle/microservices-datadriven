@@ -20,10 +20,10 @@ spec:
   rules:
     - http:
         paths:
-          - path: /grafana(/|$)(.*)
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: grafana
-                port:
-                  number: 3000
+        - path: /grafana(/|$)(.*)
+          pathType: ImplementationSpecific
+          backend:
+            service:
+              name: grafana
+              port:
+                number: 3000
