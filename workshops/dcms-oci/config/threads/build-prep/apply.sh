@@ -45,7 +45,8 @@ done
 STATE=$DCMS_INFRA_STATE/image-repo
 mkdir -p $STATE
 # Get build names
-source $MSDD_APPS_CODE/$DCMS_APP/builds/source.env
+source $MSDD_APPS_CODE/$DCMS_APP/build-utils/source.env
+
 cat >$STATE/input.env <<!
 COMPARTMENT_OCID=$(state_get COMPARTMENT_OCID)
 RUN_NAME=$(state_get RUN_NAME)

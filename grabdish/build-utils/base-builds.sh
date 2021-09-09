@@ -15,11 +15,13 @@ GRABDISH_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." &> /dev/null && pwd )
 
 if test -z "$1"; then
   echo "ERROR: no log directory specified"
+  exit 1
 fi
-
+LOG_DIR="$1"
 
 if ! test -d $LOG_DIR; then
   echo "ERROR: Log directory $LOG_DIR does not exits"
+  exit 1
 fi
 
 

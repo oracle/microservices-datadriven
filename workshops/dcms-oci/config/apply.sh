@@ -28,7 +28,8 @@ done
 
 
 # Start background builds
-$MY_CODE/background-builds.sh &>> $DCMS_LOG_DIR/background-builds.log &
+mkdir -p "$MY_STATE/background-builds"
+$MY_CODE/background-builds.sh "$MY_STATE/background-builds" &>> $DCMS_LOG_DIR/background-builds.log &
 
 
 # Identify Run Type
@@ -288,7 +289,6 @@ fi
 # Wait for database and k8s threads
 DEPENDENCIES='DB_THREAD K8S_THREAD BASE_BUILDS GRABDISH_THREAD'
 while ! test -z "$DEPENDENCIES"; do
-  echo "Waiting for $DEPENDENCIES"
   WAITING_FOR=""
   for d in $DEPENDENCIES; do
     if ! state_done $d; then
