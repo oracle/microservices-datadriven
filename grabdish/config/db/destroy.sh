@@ -16,7 +16,15 @@ export GRABDISH_HOME=$PWD
 export GRABDISH_LOG
 
 
-# Inventory User, Objects
+# Useful variables
+ORDER_DB_SVC="$ORDERDB_ALIAS"
+INVENTORY_DB_SVC="$INVENTORYDB_ALIAS"
+ORDER_USER=ORDERUSER
+INVENTORY_USER=INVENTORYUSER
+DB_PASSWORD=$(get_secret $DB_PASSWORD_SECRET)
+
+
+# Inventory User
 if test -f $MY_STATE/inventory_user; then
   export TNS_ADMIN=$INVENTORYDB_TNS_ADMIN
   U=$INVENTORY_USER
@@ -30,6 +38,7 @@ DELETE USER $U CASCADE;
 fi
 
 
+# Order User
 if test -f $MY_STATE/order_user; then
   export TNS_ADMIN=$ORDERDB_TNS_ADMIN
   U=$ORDER_USER
