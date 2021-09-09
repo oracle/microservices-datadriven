@@ -12,7 +12,7 @@ fi
 
 
 # Destroy polyglot builds
-cd $DCMS_APP_STATE/config
+cd $DCMS_APP_STATE
 provisioning-destroy
 
 # Delete output

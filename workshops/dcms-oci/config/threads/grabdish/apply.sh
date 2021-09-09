@@ -32,7 +32,7 @@ done
 
 
 # Run the grabdish app apply
-STATE=$DCMS_APP_STATE/config
+STATE=$DCMS_APP_STATE
 mkdir -p $STATE
 cat >$STATE/input.env <<!
 DB_PASSWORD_SECRET=$(state_get DB_PASSWORD_SECRET)

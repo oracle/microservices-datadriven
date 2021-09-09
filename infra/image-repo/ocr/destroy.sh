@@ -4,7 +4,6 @@
 
 # Fail on error
 set -e
-set -x
 
 if ! provisioning-helper-pre-destroy-sh; then
   exit 1

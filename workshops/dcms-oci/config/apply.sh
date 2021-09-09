@@ -17,7 +17,7 @@ source $MY_CODE/source.env
 
 
 # Start the background threads
-THREADS="db builds k8s grabdish"
+THREADS="db build-prep k8s grabdish"
 for t in $THREADS; do
   THREAD_STATE=$DCMS_THREAD_STATE/$t
   mkdir -p $THREAD_STATE
@@ -25,6 +25,10 @@ for t in $THREADS; do
   THREAD_CODE="$MY_CODE/threads/$t"
   (provisioning-apply $THREAD_CODE &>> $DCMS_LOG_DIR/$t-apply-thread.log) &
 done
+
+
+# Start background builds
+$MY_CODE/background-builds.sh &>> $DCMS_LOG_DIR/background-builds.log &
 
 
 # Identify Run Type

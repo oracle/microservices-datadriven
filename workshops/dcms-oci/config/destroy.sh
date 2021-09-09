@@ -15,11 +15,6 @@ export DCMS_STATE=$MY_STATE
 source $MY_CODE/source.env
 
 
-# Setup state store - I know we are in destroy, but we need the state store to know how to coordinate.
-cd $MY_STATE/infra/state_store
-provisioning-apply || true
-
-
 # Start the background destroy threads
 THREADS="db builds k8s grabdish"
 for t in $THREADS; do
@@ -31,7 +26,7 @@ done
 
 
 # Wait for the threads to undo the setup
-DEPENDENCIES='DB_THREAD K8S_THREAD BUILDS_THREAD GRABDISH_THREAD'
+DEPENDENCIES='DB_THREAD K8S_THREAD BUILD_PREP_THREAD GRABDISH_THREAD'
 while ! test -z "$DEPENDENCIES"; do
   echo "Waiting for $DEPENDENCIES to be undone"
   WAITING_FOR=""

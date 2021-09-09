@@ -11,20 +11,6 @@ if ! provisioning-helper-pre-destroy-sh; then
 fi
 
 
-# Destroy polyglot builds
-STATE=$DCMS_APP_STATE/builds/polyglot_builds
-cd $STATE
-provisioning-destroy
-state_reset POLYGLOT_BUILDS
-
-
-# Destroy base builds
-STATE=$DCMS_APP_STATE/builds/base_builds
-cd $STATE
-provisioning-destroy
-state_reset BASE_BUILDS
-
-
 # Destroy java home
 STATE=$DCMS_INFRA_STATE/java
 cd $STATE
@@ -41,4 +27,4 @@ state_reset IMAGE_REPOS
 
 # Delete output
 rm -f $OUTPUT_FILE
-state_reset BUILDS_THREAD
+state_reset BUILD_PREP_THREAD
