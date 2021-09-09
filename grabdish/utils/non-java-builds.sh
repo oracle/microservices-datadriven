@@ -11,7 +11,7 @@ REPOS="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory
 
 # Provision Repos
 while ! state_done NON_JAVA_REPOS; do
-  for b in REPOS; do
+  for b in $REPOS; do
     oci artifacts container repository create --compartment-id "$(state_get COMPARTMENT_OCID)" --display-name "$(state_get RUN_NAME)/$b" --is-public true
   done
   state_set_done NON_JAVA_REPOS
