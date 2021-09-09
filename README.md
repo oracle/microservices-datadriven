@@ -1,4 +1,4 @@
-# Simplify microservices architecture with Oracle Converged Database
+# Simplify microservices architecture with Converged Oracle Database
 
 This repository contains sample code for simplifying microservices architectures
 by building solution examples for data-driven microservices that walk you through
