@@ -17,6 +17,7 @@ GRABDISH_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." &> /dev/null && pwd )
 if test -z "$1"; then
   echo "ERROR: no log directory specified"
 fi
+LOG_DIR="$1"
 
 
 if ! test -d $LOG_DIR; then

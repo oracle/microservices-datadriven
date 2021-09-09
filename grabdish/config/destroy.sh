@@ -17,7 +17,7 @@ export GRABDISH_HOME=$PWD
 
 # Run grabdish destroy for each config in order
 CONFIGS="db-k8s k8s db"
-for c in $SCRIPTS; do
+for c in $CONFIGS; do
   CONFIG_STATE=$MY_STATE/$c
   cd $CONFIG_STATE
   provisioning-destroy
