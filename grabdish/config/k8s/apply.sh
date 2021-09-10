@@ -74,8 +74,8 @@ fi
 
 # Collect DB password and create secret
 if ! test -f $MY_STATE/db_password_k8s_secret; then
-   BASE64_DB_PASSWORD=`echo -n "$(get_secret DB_PASSWORD_SECRET)" | base64`
-   kubectl create -n msdataworkshop -f - <<!
+   BASE64_DB_PASSWORD=`echo -n "$(get_secret $DB_PASSWORD_SECRET)" | base64`
+   kubectl apply -n msdataworkshop -f - <<!
    {
       "apiVersion": "v1",
       "kind": "Secret",
