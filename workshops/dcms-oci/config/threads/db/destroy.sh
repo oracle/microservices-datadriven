@@ -11,11 +11,6 @@ if ! provisioning-helper-pre-destroy; then
 fi
 
 
-if ! state_done DB_THREAD; then
-  exit
-fi
-
-
 # Wait for dependencies to be undone
 DEPENDENCIES='GRABDISH_THREAD'
 while ! test -z "$DEPENDENCIES"; do
@@ -32,7 +27,7 @@ done
 
 
 # Destroy Order and Inventory DBs
-DBS="orderdb inventorydb"
+DBS="order_db inventory_db"
 for db in $DBS; do
   db_upper=`echo $db | tr '[:lower:]' '[:upper:]'`
   DB_STATE=$DCMS_INFRA_STATE/db/$db

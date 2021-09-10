@@ -12,4 +12,4 @@ if test -d $VAULT_FOLDER; then
   rm -rf $VAULT_FOLDER
 fi
 
-rm $OUTPUT_FILE
+rm -f $STATE_FILE

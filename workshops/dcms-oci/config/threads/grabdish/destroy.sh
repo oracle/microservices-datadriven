@@ -11,11 +11,6 @@ if ! provisioning-helper-pre-destroy; then
 fi
 
 
-if ! state_done GRABDISH_THREAD; then
-  exit
-fi
-
-
 # Destroy app state
 cd $DCMS_APP_STATE
 provisioning-destroy

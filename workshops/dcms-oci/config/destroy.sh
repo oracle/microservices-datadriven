@@ -14,6 +14,13 @@ fi
 source $MY_CODE/source.env
 
 
+# Source the vault
+VAULT=$DCMS_INFRA_STATE/vault
+if test -f $VAULT/output.env; then
+  source $VAULT/output.env
+fi
+
+
 # Start the background destroy threads
 THREADS="db build-prep k8s grabdish"
 for t in $THREADS; do

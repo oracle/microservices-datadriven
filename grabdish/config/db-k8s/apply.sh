@@ -16,7 +16,7 @@ export GRABDISH_LOG
 
 
 # Create db-wallet-secret
-cd $ORDER_DB_TNS_ADMIN
+cd $INVENTORY_DB_TNS_ADMIN
 cat - >sqlnet.ora <<!
 WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="/msdataworkshop/creds")))
 SSL_SERVER_DN_MATCH=yes
