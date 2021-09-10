@@ -6,7 +6,7 @@
 set -e
 
 
-if ! provisioning-helper-pre-destroy-sh; then
+if ! provisioning-helper-pre-destroy; then
   exit 1
 fi
 
@@ -31,6 +31,6 @@ provisioning-destroy
 state_reset OKE_OCID
 
 
-# Delete output
-rm -f $OUTPUT_FILE
+# Delete state file
+rm -f $STATE_FILE
 state_reset K8S_THREAD

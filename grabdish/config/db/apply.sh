@@ -6,7 +6,7 @@
 set -e
 
 
-if ! provisioning-helper-pre-apply-sh; then
+if ! provisioning-helper-pre-apply; then
   exit 1
 fi
 
@@ -18,8 +18,8 @@ export GRABDISH_LOG
 
 # Order DB Connection Setup
 if ! test -f $MY_STATE/orderdb_tns_admin; then
-  cat - >$ORDERDB_TNS_ADMIN/sqlnet.ora <<!
-WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$ORDERDB_TNS_ADMIN")))
+  cat - >$ORDER_DB_TNS_ADMIN/sqlnet.ora <<!
+WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$ORDER_DB_TNS_ADMIN")))
 SSL_SERVER_DN_MATCH=yes
 !
   touch $MY_STATE/orderdb_tns_admin
@@ -28,8 +28,8 @@ fi
 
 # Inventory DB Connection Setup
 if ! test -f $MY_STATE/inventorydb_tns_admin; then
-  cat - >$INVENTORYDB_TNS_ADMIN/sqlnet.ora <<!
-WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$INVENTORYDB_TNS_ADMIN")))
+  cat - >$INVENTORY_DB_TNS_ADMIN/sqlnet.ora <<!
+WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$INVENTORY_DB_TNS_ADMIN")))
 SSL_SERVER_DN_MATCH=yes
 !
   touch $MY_STATE/inventorydb_tns_admin
@@ -37,8 +37,8 @@ fi
 
 
 # Useful variables
-ORDER_DB_SVC="$ORDERDB_ALIAS"
-INVENTORY_DB_SVC="$INVENTORYDB_ALIAS"
+ORDER_DB_SVC="$ORDER_DB_ALIAS"
+INVENTORY_DB_SVC="$INVENTORY_DB_ALIAS"
 ORDER_USER=ORDERUSER
 INVENTORY_USER=INVENTORYUSER
 ORDER_LINK=ORDERTOINVENTORYLINK
@@ -50,7 +50,7 @@ DB_PASSWORD=$(get_secret $DB_PASSWORD_SECRET)
 
 # Order User
 if ! test -f $MY_STATE/order_user; then
-  export TNS_ADMIN=$ORDERDB_TNS_ADMIN
+  export TNS_ADMIN=$ORDER_DB_TNS_ADMIN
   U=$ORDER_USER
   SVC=$ORDER_DB_SVC
   sqlplus /nolog <<!
@@ -108,7 +108,7 @@ fi
 
 # Inventory User, Objects
 if ! test -f $MY_STATE/inventory_user; then
-  export TNS_ADMIN=$INVENTORYDB_TNS_ADMIN
+  export TNS_ADMIN=$INVENTORY_DB_TNS_ADMIN
   U=$INVENTORY_USER
   SVC=$INVENTORY_DB_SVC
   sqlplus /nolog <<!
@@ -174,19 +174,19 @@ fi
 
 # Order DB Link
 if ! test -f $MY_STATE/order_db_link; then
-  export TNS_ADMIN=$ORDERDB_TNS_ADMIN
+  export TNS_ADMIN=$ORDER_DB_TNS_ADMIN
   U=$ORDER_USER
   SVC=$ORDER_DB_SVC
   TU=$INVENTORY_USER
   TSVC=$INVENTORY_DB_SVC
-  TTNS=`grep -i "^$TSVC " $INVENTORYDB_TNS_ADMIN/tnsnames.ora`
+  TTNS=`grep -i "^$TSVC " $INVENTORY_DB_TNS_ADMIN/tnsnames.ora`
   LINK=$ORDER_LINK
   sqlplus /nolog <<!
 WHENEVER SQLERROR EXIT 1
 connect $U/"$DB_PASSWORD"@$SVC
 BEGIN
   DBMS_CLOUD.GET_OBJECT(
-    object_uri => '$INVENTORYDB_CWALLET_SSO_AUTH_URL',
+    object_uri => '$INVENTORY_DB_CWALLET_SSO_AUTH_URL',
     directory_name => 'DATA_PUMP_DIR');
 
   DBMS_CLOUD.CREATE_CREDENTIAL(
@@ -211,19 +211,19 @@ fi
 
 # Inventory DB Link
 if ! test -f $MY_STATE/inventory_db_link; then
-  export TNS_ADMIN=$INVENTORYDB_TNS_ADMIN
+  export TNS_ADMIN=$INVENTORY_DB_TNS_ADMIN
   U=$INVENTORY_USER
   SVC=$INVENTORY_DB_SVC
   TU=$ORDER_USER
   TSVC=$ORDER_DB_SVC
-  TTNS=`grep -i "^$TSVC " $ORDERDB_TNS_ADMIN/tnsnames.ora`
+  TTNS=`grep -i "^$TSVC " $ORDER_DB_TNS_ADMIN/tnsnames.ora`
   LINK=$INVENTORY_LINK
   sqlplus /nolog <<!
 WHENEVER SQLERROR EXIT 1
 connect $U/"$DB_PASSWORD"@$SVC
 BEGIN
   DBMS_CLOUD.GET_OBJECT(
-    object_uri => '$ORDERDB_CWALLET_SSO_AUTH_URL',
+    object_uri => '$ORDER_DB_CWALLET_SSO_AUTH_URL',
     directory_name => 'DATA_PUMP_DIR');
 
   DBMS_CLOUD.CREATE_CREDENTIAL(
@@ -248,7 +248,7 @@ fi
 
 # Order Propagation
 if ! test -f $MY_STATE/order_prop; then
-  export TNS_ADMIN=$ORDERDB_TNS_ADMIN
+  export TNS_ADMIN=$ORDER_DB_TNS_ADMIN
 U=$ORDER_USER
 SVC=$ORDER_DB_SVC
 TU=$INVENTORY_USER
@@ -283,7 +283,7 @@ fi
 
 # Inventory Propagation
 if ! test -f $MY_STATE/inventory_prop; then
-  export TNS_ADMIN=$INVENTORYDB_TNS_ADMIN
+  export TNS_ADMIN=$INVENTORY_DB_TNS_ADMIN
   U=$INVENTORY_USER
   SVC=$INVENTORY_DB_SVC
   TU=$ORDER_USER
@@ -318,7 +318,7 @@ fi
 
 # .net Inventory DB Proc
 if ! test -f $MY_STATE/inventory_plsql_proc; then
-  export TNS_ADMIN=$INVENTORYDB_TNS_ADMIN
+  export TNS_ADMIN=$INVENTORY_DB_TNS_ADMIN
   U=$INVENTORY_USER
   SVC=$INVENTORY_DB_SVC
   sqlplus /nolog <<!

@@ -6,7 +6,7 @@
 set -e
 
 
-if ! provisioning-helper-pre-destroy-sh; then
+if ! provisioning-helper-pre-destroy; then
   exit 1
 fi
 
@@ -16,5 +16,5 @@ if ! test -d ~/graalvm-ce-java11-20.1.0; then
   rm -rf ~/graalvm-ce-java11-20.1.0
 fi
 
-# Delete output
-rm -f $OUTPUT_FILE
+
+rm -f $STATE_FILE

@@ -5,7 +5,7 @@
 # Fail on error
 set -e
 
-if ! provisioning-helper-pre-destroy-sh; then
+if ! provisioning-helper-pre-destroy; then
   exit 1
 fi
 
@@ -17,4 +17,4 @@ for r in $REPO_OCIDS; do
 done
 
 
-rm -f $OUTPUT_FILE
+rm -f $STATE_FILE

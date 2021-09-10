@@ -6,7 +6,7 @@
 set -e
 
 
-if ! provisioning-helper-pre-destroy-sh; then
+if ! provisioning-helper-pre-destroy; then
   exit 1
 fi
 
@@ -17,8 +17,8 @@ export GRABDISH_LOG
 
 
 # Delete OKE Namespace
-kubectl delete ns msdataworkshop
+kubectl delete ns msdataworkshop --ignore-not-found=true
 
 
 # Delete output
-rm -f $OUTPUT_FILE
+rm -f $STATE_FILE

@@ -6,7 +6,7 @@
 set -e
 
 
-if ! provisioning-helper-pre-apply-sh; then
+if ! provisioning-helper-pre-apply; then
   exit 1
 fi
 

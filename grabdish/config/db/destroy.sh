@@ -6,7 +6,7 @@
 set -e
 
 
-if ! provisioning-helper-pre-destroy-sh; then
+if ! provisioning-helper-pre-destroy; then
   exit 1
 fi
 
@@ -17,8 +17,8 @@ export GRABDISH_LOG
 
 
 # Useful variables
-ORDER_DB_SVC="$ORDERDB_ALIAS"
-INVENTORY_DB_SVC="$INVENTORYDB_ALIAS"
+ORDER_DB_SVC="$ORDER_DB_ALIAS"
+INVENTORY_DB_SVC="$INVENTORY_DB_ALIAS"
 ORDER_USER=ORDERUSER
 INVENTORY_USER=INVENTORYUSER
 DB_PASSWORD=$(get_secret $DB_PASSWORD_SECRET)
@@ -26,13 +26,13 @@ DB_PASSWORD=$(get_secret $DB_PASSWORD_SECRET)
 
 # Inventory User
 if test -f $MY_STATE/inventory_user; then
-  export TNS_ADMIN=$INVENTORYDB_TNS_ADMIN
+  export TNS_ADMIN=$INVENTORY_DB_TNS_ADMIN
   U=$INVENTORY_USER
   SVC=$INVENTORY_DB_SVC
   sqlplus /nolog <<!
 WHENEVER SQLERROR EXIT 1
 connect admin/"$DB_PASSWORD"@$SVC
-DELETE USER $U CASCADE;
+DROP USER $U CASCADE;
 !
   rm -f $MY_STATE/inventory_plsql_proc $MY_STATE/inventory_prop $MY_STATE/inventory_db_link rm $MY_STATE/inventory_user
 fi
@@ -40,13 +40,13 @@ fi
 
 # Order User
 if test -f $MY_STATE/order_user; then
-  export TNS_ADMIN=$ORDERDB_TNS_ADMIN
+  export TNS_ADMIN=$ORDER_DB_TNS_ADMIN
   U=$ORDER_USER
   SVC=$ORDER_DB_SVC
   sqlplus /nolog <<!
 WHENEVER SQLERROR EXIT 1
 connect admin/"$DB_PASSWORD"@$SVC
-DELETE USER $U CASCADE;
+DROP USER $U CASCADE;
 !
   rm -f $MY_STATE/order_prop $MY_STATE/order_db_link $MY_STATE/order_user
 fi
@@ -64,4 +64,4 @@ if test -f $MY_STATE/orderdb_tns_admin; then
 fi
 
 
-rm -f $OUTPUT_FILE
+rm -f $STATE_FILE

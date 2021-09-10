@@ -6,8 +6,13 @@
 set -e
 
 
-if ! provisioning-helper-pre-destroy-sh; then
+if ! provisioning-helper-pre-destroy; then
   exit 1
+fi
+
+
+if ! state_done DB_THREAD; then
+  exit
 fi
 
 
@@ -40,6 +45,6 @@ for db in $DBS; do
 done
 
 
-# Delete output
-rm -f $OUTPUT_FILE
+# Delete state file
+rm -f $STATE_FILE
 state_reset DB_THREAD

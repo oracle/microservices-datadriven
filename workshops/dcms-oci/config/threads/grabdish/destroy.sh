@@ -6,15 +6,21 @@
 set -e
 
 
-if ! provisioning-helper-pre-destroy-sh; then
+if ! provisioning-helper-pre-destroy; then
   exit 1
 fi
 
 
-# Destroy polyglot builds
+if ! state_done GRABDISH_THREAD; then
+  exit
+fi
+
+
+# Destroy app state
 cd $DCMS_APP_STATE
 provisioning-destroy
 
-# Delete output
-rm -f $OUTPUT_FILE
+
+# Delete state file
+rm -f $STATE_FILE
 state_reset GRABDISH_THREAD

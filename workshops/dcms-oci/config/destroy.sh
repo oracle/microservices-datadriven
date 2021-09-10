@@ -6,12 +6,11 @@
 set -e
 
 
-if ! provisioning-helper-pre-destroy-sh; then
+if ! provisioning-helper-pre-destroy; then
   exit 1
 fi
 
 
-export DCMS_STATE=$MY_STATE
 source $MY_CODE/source.env
 
 
@@ -43,7 +42,23 @@ done
 # Logout of docker
 if state_done DOCKER_REGISTRY; then
    docker logout "$(state_get REGION).ocir.io" 
+   state_reset DOCKER_REGISTRY
 fi
 
 
-# Unset all the other state variable TBD
+# Destroy the vault
+VAULT=$DCMS_INFRA_STATE/vault
+if test -d $VAULT; then
+  cd $VAULT
+  provisioning-destroy
+fi
+
+
+# Destroy the state store.  This unsets all the other state variables.
+STATE_STORE=$DCMS_INFRA_STATE/state_store
+if test -d $STATE_STORE; then
+  cd $STATE_STORE
+  provisioning-destroy
+fi
+
+rm -f $STATE_FILE

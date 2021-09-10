@@ -6,7 +6,7 @@
 set -e
 
 
-if ! provisioning-helper-pre-apply-sh; then
+if ! provisioning-helper-pre-apply; then
   exit 1
 fi
 
@@ -17,7 +17,7 @@ fi
 
 
 # Wait for dependencies
-DEPENDENCIES='COMPARTMENT_OCID REGION ORDERDB_NAME INVENTORYDB_NAME DB_PASSWORD_SECRET RUN_NAME ATP_LIMIT_CHECK'
+DEPENDENCIES='COMPARTMENT_OCID REGION ORDER_DB_NAME INVENTORY_DB_NAME DB_PASSWORD_SECRET RUN_NAME ATP_LIMIT_CHECK'
 while ! test -z "$DEPENDENCIES"; do
   echo "Waiting for $DEPENDENCIES"
   WAITING_FOR=""
@@ -32,7 +32,7 @@ done
 
 
 # Provision Order and Inventory DB
-DBS="orderdb inventorydb"
+DBS="order_db inventory_db"
 for db in $DBS; do
   db_upper=`echo $db | tr '[:lower:]' '[:upper:]'`
   DB_STATE=$DCMS_INFRA_STATE/db/$db
@@ -56,8 +56,6 @@ RUN_NAME=$(state_get RUN_NAME)
   state_set ${db_upper}_CWALLET_SSO_AUTH_URL "$CWALLET_SSO_AUTH_URL"
   )
 done
-state_set ORDER_DB_NAME $(state_get ORDERDB_NAME)
-state_set INVENTORY_DB_NAME $(state_get INVENTORY_DB_NAME)
 
 touch $OUTPUT_FILE
 state_set_done DB_THREAD

@@ -6,7 +6,7 @@
 set -e
 
 
-if ! provisioning-helper-pre-destroy-sh; then
+if ! provisioning-helper-pre-destroy; then
   exit 1
 fi
 
@@ -26,4 +26,4 @@ if ! terraform destroy -auto-approve; then
     exit
 fi
 
-rm -f $OUTPUT_FILE
+rm -f $STATE_FILE

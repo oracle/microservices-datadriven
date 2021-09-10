@@ -6,7 +6,7 @@
 set -e
 
 
-if ! provisioning-helper-pre-destroy-sh; then
+if ! provisioning-helper-pre-destroy; then
   exit 1
 fi
 
@@ -70,4 +70,4 @@ if test -f $MY_STATE/state_terraform_done; then
 fi
 
 
-rm -f $OUTPUT_FILE
+rm -f $STATE_FILE

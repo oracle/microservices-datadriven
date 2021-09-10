@@ -4,7 +4,7 @@
 
 # Make sure this is run via source or .
 
-if ! provisioning-helper-pre-apply-env; then
+if ! provisioning-helper-pre-apply; then
   return 1
 fi
 

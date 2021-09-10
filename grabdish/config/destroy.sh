@@ -6,7 +6,7 @@
 set -e
 
 
-if ! provisioning-helper-pre-destroy-sh; then
+if ! provisioning-helper-pre-destroy; then
   exit 1
 fi
 
@@ -24,4 +24,4 @@ for c in $CONFIGS; do
 done
 
 
-rm -f $OUTPUT_FILE
+rm -f $STATE_FILE

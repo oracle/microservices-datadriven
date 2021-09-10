@@ -4,14 +4,14 @@
 
 # Make sure this is run via source or .
 
-if ! provisioning-helper-pre-destroy-env; then
+if ! provisioning-helper-pre-destroy; then
   return 1
 fi
 
-STATE_STORE=$MY_STATE/state
+STATE_STORE_STATE=$MY_STATE/state
 
-if test -d $STATE_STORE; then
-  rm -rf $STATE_STORE
+if test -d $STATE_STORE_STATE; then
+  rm -rf $STATE_STORE_STATE
 fi
 
-rm -f $OUTPUT_FILE
+rm -f $STATE_FILE

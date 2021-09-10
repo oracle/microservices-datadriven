@@ -6,7 +6,7 @@
 set -e
 
 
-if ! provisioning-helper-pre-apply-sh; then
+if ! provisioning-helper-pre-apply; then
   exit 1
 fi
 
@@ -16,7 +16,7 @@ export GRABDISH_LOG
 
 
 # Create db-wallet-secret
-cd $ORDERDB_TNS_ADMIN
+cd $ORDER_DB_TNS_ADMIN
 cat - >sqlnet.ora <<!
 WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="/msdataworkshop/creds")))
 SSL_SERVER_DN_MATCH=yes
