@@ -1,0 +1,1 @@
+select * from TABLE(GV$(CURSOR(select * from v$diag_alert_ext)))

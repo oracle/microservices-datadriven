@@ -1,0 +1,16 @@
+## Copyright (c) 2021 Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-log-exporter-order
+  labels:
+    app: db-log-exporter-orderpdb
+spec:
+  type: NodePort
+  ports:
+  - port: 8080
+    name: http
+    targetPort: 8080
+  selector:
+    app: b-log-exporter-orderpdb

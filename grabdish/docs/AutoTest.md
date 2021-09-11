@@ -30,7 +30,7 @@ export TEST_USER_OCID='ocid1.user.oc1..xxxxx'
 export GITHUB_BRANCH='main'
 export GITHUB_USER='myghuser'
 export TEST_DB_PASSWORD='Welcome12345;#!:'
-export TEST_UI_PASSWORD='Welcome1;#!"'
+export TEST_UI_PASSWORD='Welcome1;#!:"'
 ```
 
 6. Clone the code

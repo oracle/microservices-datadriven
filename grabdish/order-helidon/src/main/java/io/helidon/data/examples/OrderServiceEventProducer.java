@@ -6,7 +6,9 @@
  */
 package io.helidon.data.examples;
 
-import io.opentracing.contrib.jms.TracingMessageProducer;
+import io.opentracing.Span;
+import io.opentracing.contrib.jms2.TracingMessageProducer;
+import oracle.jdbc.OracleConnection;
 import oracle.jms.AQjmsConstants;
 import oracle.jms.AQjmsFactory;
 import oracle.jms.AQjmsSession;
@@ -26,7 +28,7 @@ class OrderServiceEventProducer {
     }
 
     String updateDataAndSendEvent(
-            DataSource dataSource, String orderid, String itemid, String deliverylocation) throws Exception {
+            DataSource dataSource, String orderid, String itemid, String deliverylocation, Span activeSpan, String spanIdForECID) throws Exception {
         System.out.println("updateDataAndSendEvent enter dataSource:" + dataSource +
                 ", itemid:" + itemid + ", orderid:" + orderid +
                 ",queueOwner:" + OrderResource.orderQueueOwner + "queueName:" + OrderResource.orderQueueName);
@@ -35,8 +37,17 @@ class OrderServiceEventProducer {
             TopicConnectionFactory q_cf = AQjmsFactory.getTopicConnectionFactory(dataSource);
             TopicConnection q_conn = q_cf.createTopicConnection();
             session = q_conn.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
-            Connection jdbcConnection = ((AQjmsSession) session).getDBConnection();
-            System.out.println("updateDataAndSendEvent jdbcConnection:" + jdbcConnection + " about to insertOrderViaSODA...");
+            OracleConnection jdbcConnection = ((OracleConnection)((AQjmsSession) session).getDBConnection());
+            System.out.println("OrderServiceEventProducer.updateDataAndSendEvent activespan ecid=" + activeSpan);
+            short seqnum = 20;
+            String[] metric = new String[OracleConnection.END_TO_END_STATE_INDEX_MAX];
+            metric[OracleConnection.END_TO_END_ACTION_INDEX] = "orderservice_action_placeOrder";
+            metric[OracleConnection.END_TO_END_MODULE_INDEX] = "orderservice_module";
+            metric[OracleConnection.END_TO_END_CLIENTID_INDEX] = "orderservice_clientid";
+            metric[OracleConnection.END_TO_END_ECID_INDEX] = spanIdForECID; //for log to trace
+            activeSpan.setBaggageItem("ecid", spanIdForECID); //for trace to log
+            jdbcConnection.setEndToEndMetrics(metric,seqnum);//  todo instead use  conn.setClientInfo();
+            System.out.println("updateDataAndSendEvent jdbcConnection:" + jdbcConnection + " activeSpan:" + activeSpan + " about to insertOrderViaSODA...");
             Order insertedOrder = insertOrderViaSODA(orderid, itemid, deliverylocation, jdbcConnection);
             if (OrderResource.crashAfterInsert) System.exit(-1);
             System.out.println("updateDataAndSendEvent insertOrderViaSODA complete about to send order message...");
@@ -48,7 +59,6 @@ class OrderServiceEventProducer {
             objmsg.setIntProperty("Priority", 2);
             String jsonString = JsonUtils.writeValueAsString(insertedOrder);
             objmsg.setText(jsonString);
-//            objmsg.setJMSCorrelationID("" + 1);
             objmsg.setJMSPriority(2);
             producer.send(topic, objmsg, DeliveryMode.PERSISTENT, 2, AQjmsConstants.EXPIRATION_NEVER);
 //            publisher.publish(topic, objmsg, DeliveryMode.PERSISTENT,2, AQjmsConstants.EXPIRATION_NEVER);
@@ -73,18 +83,15 @@ class OrderServiceEventProducer {
     }
 
     private Order insertOrderViaSODA(String orderid, String itemid, String deliverylocation,
-                                    Connection jdbcConnection)
-            throws OracleException {
+                                    Connection jdbcConnection)  throws OracleException {
         Order order = new Order(orderid, itemid, deliverylocation, "pending", "", "");
         new OrderDAO().create(jdbcConnection, order);
         return order;
     }
 
-    void updateOrderViaSODA(Order order, Connection jdbcConnection)
-            throws OracleException {
+    void updateOrderViaSODA(Order order, Connection jdbcConnection) throws OracleException {
         new OrderDAO().update(jdbcConnection, order);
     }
-
 
     String deleteOrderViaSODA( DataSource dataSource, String orderid) throws Exception {
         try (Connection jdbcConnection = dataSource.getConnection()) {
@@ -93,17 +100,13 @@ class OrderServiceEventProducer {
         }
     }
 
-
     String dropOrderViaSODA( DataSource dataSource) throws Exception {
         try (Connection jdbcConnection = dataSource.getConnection()) {
             return new OrderDAO().drop(jdbcConnection);
         }
     }
 
-    Order getOrderViaSODA( DataSource dataSource, String orderid) throws Exception {
-        try (Connection jdbcConnection = dataSource.getConnection()) {
+    Order getOrderViaSODA( Connection jdbcConnection, String orderid) throws Exception {
             return new OrderDAO().get(jdbcConnection, orderid);
-        }
     }
-
 }

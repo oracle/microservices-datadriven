@@ -1,0 +1,8 @@
+#!/bin/bash
+# Copyright (c) 2021 Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
+#curl -k --user "grabdish:mypassword" http://frontend.msdataworkshop:443/metrics
+
+kubectl run curlpod --image=radial/busyboxplus:curl   -n msdataworkshop  --command -- /bin/sh -c "while true; do echo curled; sleep 10; done"
+podshell curlpod

@@ -1,0 +1,39 @@
+Name                       Null? Type
+-------------------------- ----- ---------------------------
+ORIGINATING_TIMESTAMP            TIMESTAMP(9) WITH TIME ZONE
+NORMALIZED_TIMESTAMP             TIMESTAMP(9) WITH TIME ZONE
+ORGANIZATION_ID                  VARCHAR2(67)
+COMPONENT_ID                     VARCHAR2(67)
+HOST_ID                          VARCHAR2(67)
+HOST_ADDRESS                     VARCHAR2(49)
+MESSAGE_TYPE                     NUMBER
+MESSAGE_LEVEL                    NUMBER
+MESSAGE_ID                       VARCHAR2(67)
+MESSAGE_GROUP                    VARCHAR2(67)
+CLIENT_ID                        VARCHAR2(67)
+MODULE_ID                        VARCHAR2(67)
+PROCESS_ID                       VARCHAR2(35)
+THREAD_ID                        VARCHAR2(67)
+USER_ID                          VARCHAR2(131)
+INSTANCE_ID                      VARCHAR2(67)
+DETAILED_LOCATION                VARCHAR2(163)
+UPSTREAM_COMP_ID                 VARCHAR2(103)
+DOWNSTREAM_COMP_ID               VARCHAR2(103)
+EXECUTION_CONTEXT_ID             VARCHAR2(103)
+EXECUTION_CONTEXT_SEQUENCE       NUMBER
+ERROR_INSTANCE_ID                NUMBER
+ERROR_INSTANCE_SEQUENCE          NUMBER
+MESSAGE_TEXT                     VARCHAR2(2051)
+MESSAGE_ARGUMENTS                VARCHAR2(515)
+SUPPLEMENTAL_ATTRIBUTES          VARCHAR2(515)
+SUPPLEMENTAL_DETAILS             VARCHAR2(515)
+PARTITION                        NUMBER
+RECORD_ID                        NUMBER
+FILENAME                         VARCHAR2(515)
+LOG_NAME                         VARCHAR2(67)
+PROBLEM_KEY                      VARCHAR2(553)
+VERSION                          NUMBER
+CON_UID                          NUMBER
+CONTAINER_ID                     NUMBER
+CONTAINER_NAME                   VARCHAR2(67)
+CON_ID                           NUMBER
