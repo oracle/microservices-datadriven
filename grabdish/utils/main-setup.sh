@@ -454,7 +454,7 @@ fi
 # Create UI password secret
 while ! state_done UI_PASSWORD; do
   while true; do
-    if kubectl create -n msdataworkshop -f -; then`
+    if kubectl create -n msdataworkshop -f -; then
       state_set_done UI_PASSWORD
       break
     else
