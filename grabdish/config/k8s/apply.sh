@@ -33,24 +33,60 @@ fi
 
 
 # Create SSL Secret
-if ! test -f $MY_STATE/ssl_secret; then
-  kubectl create secret tls ssl-certificate-secret --key $MY_STATE/tls/tls.key --cert $MY_STATE/tls/tls.crt -n msdataworkshop
-  touch $MY_STATE/ssl_secret
-fi
+#if ! test -f $MY_STATE/ssl_secret; then
+#  kubectl create secret tls ssl-certificate-secret --key $MY_STATE/tls/tls.key --cert $MY_STATE/tls/tls.crt -n msdataworkshop
+#  touch $MY_STATE/ssl_secret
+#fi
+
+
+# Add NGINX Ingress Controller Repo to Helm
+while ! test -f $MY_STATE/nginx_helm_repo; do
+  if helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx 2>$GRABDISH_LOG/nginx_repo_err; then
+    helm repo update
+    touch $MY_STATE/nginx_helm_repo
+  else
+    echo "Add NGINX to Helm Repo failed"
+    cat $GRABDISH_LOG/nginx_repo_err
+    exit 1
+  fi
+done
+
+
+# Create SSL Secret
+while ! test -f $MY_STATE/ssl_secret_ingress; do
+  if kubectl create secret tls ssl-certificate-secret --key $MY_STATE/tls/tls.key --cert $MY_STATE/tls/tls.crt -n msdataworkshop; then
+    touch $MY_STATE/ssl_secret_ingress
+  else
+    echo "Ingress SSL Secret creation failed"
+    exit 1
+  fi
+done
+
+
+# Provision Ingress Controller
+while ! test -f $MY_STATE/nginx_ingress_setup; do
+  if helm install ingress-nginx ingress-nginx/ingress-nginx --namespace msdataworkshop --values $GRABDISH_HOME/ingress/nginx/ingress-nginx-helm-values4oci.yaml 2>$GRABDISH_LOG/nginx_ingress_err; then
+    touch $MY_STATE/nginx_ingress_setup
+  else
+    echo "Ingress Controller installation failed."
+    cat $GRABDISH_LOG/nginx_ingress_err
+    exit 1
+  fi
+done
 
 
 # Create frontend load balancer
-if ! test -f $MY_STATE/frontend_lb; then
-  kubectl create -f $GRABDISH_HOME/frontend-helidon/frontend-service.yaml -n msdataworkshop
-  touch $MY_STATE/frontend_lb
-fi
+#if ! test -f $MY_STATE/frontend_lb; then
+#  kubectl create -f $GRABDISH_HOME/frontend-helidon/frontend-service.yaml -n msdataworkshop
+#  touch $MY_STATE/frontend_lb
+#fi
 
 
 # Install Jaeger
-if ! test -f $MY_STATE/jaeger; then
-  kubectl create -f https://tinyurl.com/yc52x6q5 -n msdataworkshop
-  touch $MY_STATE/jaeger
-fi
+#if ! test -f $MY_STATE/jaeger; then
+#  kubectl create -f https://tinyurl.com/yc52x6q5 -n msdataworkshop
+#  touch $MY_STATE/jaeger
+#fi
 
 
 # Create UI password secret

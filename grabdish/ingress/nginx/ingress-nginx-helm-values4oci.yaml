@@ -28,9 +28,10 @@ controller:
     annotations:
       service.beta.kubernetes.io/oci-load-balancer-ssl-ports: "443"
       service.beta.kubernetes.io/oci-load-balancer-tls-secret: ssl-certificate-secret
-      service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
-      service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
-      service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "100"
+      service.beta.kubernetes.io/oci-load-balancer-shape: "100Mbps"
+#      service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
+#      service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
+#      service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "100"
 
 #    enableHttp: false
 #    enableHttps: true
