@@ -20,5 +20,5 @@ export RUN=`cat $NEXT_RUN_FILE`
 RUN=$((RUN+1))
 echo $RUN > $NEXT_RUN_FILE
 
-k6 run --vus 20 --duration "30s" --address localhost:6566 --insecure-skip-tls-verify placeorder.js
-#./k6 run --vus 20 --duration "30s" --address localhost:6566 --insecure-skip-tls-verify placeorder.js
+#k6 run --vus 20 --duration "30s" --address localhost:6566 --insecure-skip-tls-verify placeorder.js
+./k6 run --vus 20 --duration "30s" --address localhost:6566 --insecure-skip-tls-verify placeorder.js
