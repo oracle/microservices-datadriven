@@ -49,6 +49,7 @@ export DOCKER_REGISTRY="$(state_get DOCKER_REGISTRY)"
 if ! state_done BASE_BUILDS; then
   $MSDD_APPS_CODE/$DCMS_APP/build-utils/base-builds.sh "$DCMS_LOG_DIR"
   state_set_done BASE_BUILDS
+  state_set_done JAVA_BUILDS # Legacy
 fi
 
 
@@ -56,4 +57,5 @@ fi
 if ! state_done POLYGLOT_BUILDS; then
   $MSDD_APPS_CODE/$DCMS_APP/build-utils/polyglot-builds.sh "$DCMS_LOG_DIR"
   state_set_done POLYGLOT_BUILDS
+  state_set_done NON_JAVA_BUILDS # Legacy
 fi
