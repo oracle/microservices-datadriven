@@ -16,26 +16,6 @@ export GRABDISH_HOME=$PWD
 export GRABDISH_LOG
 
 
-# Order DB Connection Setup
-if ! test -f $MY_STATE/orderdb_tns_admin; then
-  cat - >$ORDER_DB_TNS_ADMIN/sqlnet.ora <<!
-WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$ORDER_DB_TNS_ADMIN")))
-SSL_SERVER_DN_MATCH=yes
-!
-  touch $MY_STATE/orderdb_tns_admin
-fi
-
-
-# Inventory DB Connection Setup
-if ! test -f $MY_STATE/inventorydb_tns_admin; then
-  cat - >$INVENTORY_DB_TNS_ADMIN/sqlnet.ora <<!
-WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$INVENTORY_DB_TNS_ADMIN")))
-SSL_SERVER_DN_MATCH=yes
-!
-  touch $MY_STATE/inventorydb_tns_admin
-fi
-
-
 # Useful variables
 ORDER_DB_SVC="$ORDER_DB_ALIAS"
 INVENTORY_DB_SVC="$INVENTORY_DB_ALIAS"

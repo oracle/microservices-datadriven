@@ -61,6 +61,11 @@ if ! test -f $MY_STATE/state_wallet_downloaded; then
   oci db autonomous-database generate-wallet --autonomous-database-id "$DB_OCID" --file 'wallet.zip' --password 'Welcome1' --generate-type 'ALL'
   unzip wallet.zip
 
+  cat - >sqlnet.ora <<!
+WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$TNS_ADMIN")))
+SSL_SERVER_DN_MATCH=yes
+!
+
   DB_ALIAS=${DB_NAME}_tp
   echo "DB_ALIAS='$DB_ALIAS'" >>$STATE_FILE
   echo "TNS_ADMIN='$TNS_ADMIN'" >>$STATE_FILE

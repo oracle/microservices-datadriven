@@ -146,6 +146,7 @@ while ! state_done REGION; do
     state_set HOME_REGION "$HOME_REGION"
   fi
   state_set REGION "$OCI_REGION" # Set in cloud shell env
+  state_set OCI_REGION "$OCI_REGION"
 done
 
 
@@ -331,8 +332,12 @@ export DOCKER_REGISTRY='$(state_get DOCKER_REGISTRY)'
 export JAVA_HOME=$(state_get JAVA_HOME)
 export PATH=$(state_get JAVA_HOME)/bin:$PATH
 export ORDER_DB_NAME="$(state_get ORDER_DB_NAME)"
-export INVENTORY_DB_NAME="$(state_get ORDER_DB_NAME)"
-export OCI_REGION="$(state_get OCI_REGION)"
+export ORDER_DB_TNS_ADMIN="$(state_get ORDER_DB_TNS_ADMIN)"
+export ORDER_DB_ALIAS="$(state_get ORDER_DB_ALIAS)"
+export INVENTORY_DB_NAME="$(state_get INVENTORY_DB_NAME)"
+export INVENTORY_DB_TNS_ADMIN="$(state_get INVENTORY_DB_TNS_ADMIN)"
+export INVENTORY_DB_ALIAS="$(state_get INVENTORY_DB_ALIAS)"
+export REGION="$(state_get OCI_REGION)"
 export VAULT_SECRET_OCID=""
 !
 
