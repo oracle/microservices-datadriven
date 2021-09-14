@@ -117,15 +117,15 @@ utils/scaling-test.sh
 #
 #
 ## TRACING
-echo "TEST_LOG: #### Testing Lab5: Tracing"
-utils/tracing-test.sh
+#echo "TEST_LOG: #### Testing Lab5: Tracing"
+#utils/tracing-test.sh
 
 
 # APEX
 # TODO
 
 
-# TRACING
+# TRANSACTIONAL
 echo "TEST_LOG: #### Testing Lab7: Transactional Tests: Compare MongoDB, Postgres, and Kafka to Oracle DB with TEQ/AQ"
 utils/crashrecovery-test.sh
 
