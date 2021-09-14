@@ -310,9 +310,16 @@ if ! is_secret_set UI_PASSWORD; then
 fi
 
 
+# Explain what is running and give status as the setup proceeds
+echo "Thank you for entering your information and preferences.  The setup is now running with four background threads:"
+echo "DB_THREAD:       Provisions the order and inventory databases, and sets their passwords - approx 3 minutes"
+echo "K8S_THREAD:      Provisions the Oracle Kubernetes Engine (OKE) - approx 15 minutes"
+echo "BASE_BUILDS:     Builds the microservices for Lab 2 to save you time later - approx 5 minutes"
+echo "GRABDISH_THREAD: Configures the grabdish application once the database and OKE are provisioned - approx 2 minutes"
+echo
+
 # Wait for the threads and base builds to complete
-# Wait for database and k8s threads
-DEPENDENCIES='DB_THREAD K8S_THREAD BASE_BUILDS GRABDISH_THREAD'
+DEPENDENCIES=' DB_THREAD K8S_THREAD BASE_BUILDS GRABDISH_THREAD'
 while ! test -z "$DEPENDENCIES"; do
   WAITING_FOR=""
   for d in $DEPENDENCIES; do
@@ -321,7 +328,7 @@ while ! test -z "$DEPENDENCIES"; do
     fi
   done
   DEPENDENCIES="$WAITING_FOR"
-  echo "Waiting for $DEPENDENCIES"
+  echo "Waiting for $DEPENDENCIES" -ne r"\033[2K\rWaiting for:$DEPENDENCIES to complete"
   sleep 5
 done
 
@@ -341,4 +348,4 @@ export REGION="$(state_get OCI_REGION)"
 export VAULT_SECRET_OCID=""
 !
 
-state_set_done SETUP_VERIFIED
+state_set_done SETUP_VERIFIED # Legacy

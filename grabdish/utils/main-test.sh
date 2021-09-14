@@ -117,8 +117,8 @@ utils/scaling-test.sh
 #
 #
 ## TRACING
-echo "TEST_LOG: #### Testing Lab5: Tracing"
-utils/tracing-test.sh
+#echo "TEST_LOG: #### Testing Lab5: Tracing"
+#utils/tracing-test.sh
 
 
 # APEX

@@ -60,7 +60,7 @@ fi
 RETRIES=0
 while ! state_done EXT_ORDER_IP; do
   #IP=`kubectl get services -n msdataworkshop | awk '/ext-order/ {print $4}'`
-  IP=$(kubectl -n ingress-nginx get svc ingress-nginx-controller -o "go-template={{range .status.loadBalancer.ingress}}{{or .ip .hostname}}{{end}}")
+  IP=$(kubectl -n msdataworkshop get svc ingress-nginx-controller -o "go-template={{range .status.loadBalancer.ingress}}{{or .ip .hostname}}{{end}}")
   if [[ "$IP" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
     state_set EXT_ORDER_IP "$IP"
   else
