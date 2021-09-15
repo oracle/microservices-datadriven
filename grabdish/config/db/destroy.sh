@@ -25,31 +25,39 @@ DB_PASSWORD=$(get_secret $DB_PASSWORD_SECRET)
 
 
 # Inventory User
-if test -f $MY_STATE/inventory_user; then
+while test -f $MY_STATE/inventory_user; do
   export TNS_ADMIN=$INVENTORY_DB_TNS_ADMIN
   U=$INVENTORY_USER
   SVC=$INVENTORY_DB_SVC
-  sqlplus /nolog <<!
+  if sqlplus /nolog; then
+    rm -f $MY_STATE/inventory_plsql_proc $MY_STATE/inventory_prop $MY_STATE/inventory_db_link rm $MY_STATE/inventory_user
+  else
+    echo "Failed to remove inventory schema.  Retrying..."
+    sleep 10
+  fi <<!
 WHENEVER SQLERROR EXIT 1
 connect admin/"$DB_PASSWORD"@$SVC
 DROP USER $U CASCADE;
 !
-  rm -f $MY_STATE/inventory_plsql_proc $MY_STATE/inventory_prop $MY_STATE/inventory_db_link rm $MY_STATE/inventory_user
 fi
 
 
 # Order User
-if test -f $MY_STATE/order_user; then
+while test -f $MY_STATE/order_user; do
   export TNS_ADMIN=$ORDER_DB_TNS_ADMIN
   U=$ORDER_USER
   SVC=$ORDER_DB_SVC
-  sqlplus /nolog <<!
+  if sqlplus /nolog; then
+    rm -f $MY_STATE/order_prop $MY_STATE/order_db_link $MY_STATE/order_user
+  else
+    echo "Failed to remove order schema.  Retrying..."
+    sleep 10
+  fi <<!
 WHENEVER SQLERROR EXIT 1
 connect admin/"$DB_PASSWORD"@$SVC
 DROP USER $U CASCADE;
 !
-  rm -f $MY_STATE/order_prop $MY_STATE/order_db_link $MY_STATE/order_user
-fi
+done
 
 
 # Inventory DB Connection Setup

@@ -11,9 +11,6 @@ if ! provisioning-helper-pre-destroy; then
 fi
 
 
-source $MY_CODE/source.env
-
-
 # Source the vault
 VAULT=$DCMS_INFRA_STATE/vault
 if test -f $VAULT/output.env; then

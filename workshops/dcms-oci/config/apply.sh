@@ -12,9 +12,6 @@ if ! provisioning-helper-pre-apply; then
 fi
 
 
-source $MY_CODE/source.env
-
-
 # Make sure folders are created
 mkdir -p $DCMS_LOG_DIR $DCMS_INFRA_STATE $DCMS_APP_STATE $DCMS_THREAD_STATE 
 
@@ -328,7 +325,7 @@ while ! test -z "$DEPENDENCIES"; do
     fi
   done
   DEPENDENCIES="$WAITING_FOR"
-  echo "Waiting for $DEPENDENCIES" -ne r"\033[2K\rWaiting for:$DEPENDENCIES to complete"
+  echo -ne r"\033[2K\rWaiting for:$DEPENDENCIES to complete"
   sleep 5
 done
 
