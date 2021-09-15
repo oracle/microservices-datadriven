@@ -125,7 +125,7 @@ utils/scaling-test.sh
 # TODO
 
 
-# TRACING
+# TRANSACTIONAL
 echo "TEST_LOG: #### Testing Lab7: Transactional Tests: Compare MongoDB, Postgres, and Kafka to Oracle DB with TEQ/AQ"
 utils/crashrecovery-test.sh
 
