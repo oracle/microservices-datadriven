@@ -20,7 +20,8 @@ INVENTORY_QUEUE=INVENTORYQUEUE
 
 # Get DB Password
 DB_PASSWORD="$(curl -L http://169.254.169.254/opc/v1/instance/metadata | jq --raw-output  '.grabdish_database_password')"
-DB_SEED_PASSWORD=Welcome123
+#DB_SEED_PASSWORD=Welcome123
+DB_SEED_PASSWORD-$DB_PASSWORD
 
 # Create Orders PDB
 U=$ORDER_USER
