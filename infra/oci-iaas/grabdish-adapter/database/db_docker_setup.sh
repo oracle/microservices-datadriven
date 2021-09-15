@@ -223,7 +223,7 @@ echo "##########   Creating DB Links for Orders  ###########"
 WHENEVER SQLERROR EXIT 1
 connect $U/"$DB_PASSWORD"@${SVC}_tp
 
-create database link $LINK connect to $TU  identified by "$DB_PASSWORD" using '$TSVC';
+create database link $LINK connect to $TU  identified by "$DB_PASSWORD" using '${TSVC}_tp';
 
 !
 
@@ -242,7 +242,7 @@ WHENEVER SQLERROR EXIT 1
 
 connect $U/"$DB_PASSWORD"@${SVC}_tp
 
-create database link $LINK connect to $TU  identified by "$DB_PASSWORD" using '$TSVC';
+create database link $LINK connect to $TU  identified by "$DB_PASSWORD" using '${TSVC}_tp';
 
 !
 
