@@ -65,12 +65,22 @@ variable "grabdish_application_password" {
 
 }
 
+
+variable "iaas_app_public_repo" {
+  description = "Repository URI to execute infrastructure and application setup scripts"
+  type        = string
+  default     = "git clone -b main  --single-branch https://github.com/vishalmmehra/microservices-datadriven"
+  #default = ""
+}
+
+/*
 variable "iaas_public_repo" {
-  description = "Repository URI to execute post provisioning infrastructure setup scripts"
+  description = "Repository URI to execute infrastructure setup scripts"
   type        = string
   default     = "git clone -b master  --single-branch https://github.com/vishalmmehra/microservices-datadriven-infra/"
  #default = ""
 }
+
 
 variable "app_public_repo" {
   description = "Repository URI to execute post provisioning Application setup scripts"
@@ -79,5 +89,5 @@ variable "app_public_repo" {
   #default = ""
 }
 
-
+*/
 

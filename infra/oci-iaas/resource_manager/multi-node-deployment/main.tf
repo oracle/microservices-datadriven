@@ -47,7 +47,8 @@ module "compute" {
   common_tags              = local.common_tags
   grabdish_database_password = var.generate_app_db_passwords ? random_string.grabdish_database_password.result : var.grabdish_database_password
   grabdish_application_password = var.generate_app_db_passwords ? random_string.grabdish_application_password.result : var.grabdish_application_password
-  iaas_public_repo = var.iaas_public_repo
-  app_public_repo = var.app_public_repo
+  #iaas_public_repo = var.iaas_public_repo
+  #app_public_repo = var.app_public_repo
+  iaas_app_public_repo = var.iaas_app_public_repo
   dbaas_FQDN = join(".", [module.compute.dbaas_display_name,module.network.subnet_domain_name])
 }

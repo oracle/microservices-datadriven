@@ -56,6 +56,7 @@ cat >.${APP_CONFIG_FILE} <<EOF
     grabdish_database_password = $(oci-metadata -g grabdish_database_password --value-only)
     app_public_repo = $(oci-metadata -g app_public_repo --value-only)
     iaas_public_repo = $(oci-metadata -g iaas_public_repo --value-only)
+    iaas_app_public_repo = $(oci-metadata -g iaas_app_public_repo --value-only)
     dbaas_FQDN =  $(oci-metadata -g dbaas_FQDN --value-only)
     }
 EOF

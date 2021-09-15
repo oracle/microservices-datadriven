@@ -127,13 +127,17 @@ echo "Required Packages Installed." | tee -a ${INSTALL_LOG_FILE}
 # Sending all stdout and stderr to log file
 exec >> ${INSTALL_LOG_FILE}
 exec 2>&1
+"
 
-echo "Creating sshd banner"
+print_header "Creating sshd banner"
 sudo touch ${SSHD_BANNER_FILE}
-sudo echo "${INSTALLATION_IN_PROGRESS}" > ${SSHD_BANNER_FILE}
-sudo echo "${USAGE_INFO}" >> ${SSHD_BANNER_FILE}
-sudo echo "Banner ${SSHD_BANNER_FILE}" >> ${SSHD_CONFIG_FILE}
-sudo systemctl restart sshd.service
+sudo bash -c "echo "${INSTALLATION_IN_PROGRESS}" >${SSHD_BANNER_FILE}"
+sudo bash -c "echo "${USAGE_INFO}" >>${SSHD_BANNER_FILE}"
+sudo bash -c "echo "Banner ${SSHD_BANNER_FILE}" >>${SSHD_CONFIG_FILE}"
+print_subheader "SSHD Banner created"
+sudo systemctl restart sshd.service |
+print_subheader "Restarted SSHD Service"
+
 
 ####### Adding environment variables #########
 echo "Adding environment variable so terraform can be AuthN using instance principal"

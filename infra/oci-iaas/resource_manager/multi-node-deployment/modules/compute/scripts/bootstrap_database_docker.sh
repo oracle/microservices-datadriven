@@ -13,10 +13,10 @@ INSTALL_LOG_FILE_NAME=${APP_NAME}-install.log
 INSTALL_LOG_FILE=${USER_HOME}/${INSTALL_LOG_FILE_NAME}
 APP_CONFIG_FILE=${USER_HOME}/${APP_CONFIG_FILE_NAME}
 
-INSTALL_ROOT=/microservices
+INSTALL_ROOT=${USER_HOME}
 APP_INSTALL_DIR=$INSTALL_ROOT/microservices-datadriven
-INFRA_INSTALL_DIR=${INSTALL_ROOT}/microservices-datadriven-infra
-INFRA_HOME=${INSTALL_ROOT}/microservices-datadriven-infra
+INFRA_INSTALL_DIR=${INSTALL_ROOT}/microservices-datadriven/infra
+INFRA_HOME=${INSTALL_ROOT}/microservices-datadriven/infra
 TNS_ADMIN_DIR=${INFRA_HOME}/oci-iaas/grabdish-adapter/database/TNS_ADMIN
 
 SSHD_BANNER_FILE=/etc/ssh/sshd-banner
@@ -80,7 +80,7 @@ sudo -u ${USER_NAME} chmod +w ${INSTALL_LOG_FILE}
 
 
 # Sending all stdout and stderr to log file
-exec >> ${INSTALL_LOG_FILE}
+exec > ${INSTALL_LOG_FILE}
 exec 2>&1
 
 print_header "Starting Microservices Data-driven Infrastructure installation process at $(date)"
@@ -130,10 +130,13 @@ print_subheader "Required Packages Installed."
 
 print_header "Creating sshd banner"
 sudo touch ${SSHD_BANNER_FILE}
-sudo echo "${INSTALLATION_IN_PROGRESS}" > ${SSHD_BANNER_FILE}
-sudo echo "${USAGE_INFO}" >> ${SSHD_BANNER_FILE}
-sudo echo "Banner ${SSHD_BANNER_FILE}" >> ${SSHD_CONFIG_FILE}
-sudo systemctl restart sshd.service
+sudo bash -c "echo "${INSTALLATION_IN_PROGRESS}" >${SSHD_BANNER_FILE}"
+sudo bash -c "echo "${USAGE_INFO}" >>${SSHD_BANNER_FILE}"
+sudo bash -c "echo "Banner ${SSHD_BANNER_FILE}" >>${SSHD_CONFIG_FILE}"
+print_subheader "SSHD Banner created"
+sudo systemctl restart sshd.service |
+print_subheader "Restarted SSHD Service"
+
 
 ####### Adding environment variables #########
 
@@ -147,7 +150,7 @@ print_subheader "Adding environment variable so oci-cli can be AuthN using insta
 sudo -u ${USER_NAME} echo 'export OCI_CLI_AUTH=instance_principal' >> ${USER_HOME}/.bashrc
 
 print_subheader "Adding environment variable so oci-cli can be AuthN using instance principal"
-sudo echo 'export OCI_CLI_AUTH=instance_principal' >> /etc/bashrc
+sudo bash -c  "echo 'export OCI_CLI_AUTH=instance_principal' >> /etc/bashrc"
 
 #sudo -u ${USER_NAME} echo 'export ORACLE_HOME=/u01/app/oracle/product/19c/dbhome_1' >> ${USER_HOME}/.bashrc
 sudo -u ${USER_NAME} echo 'export ORACLE_HOME=/u01/app/oracle/product/19c/dbhome_1' >> ${USER_HOME}/.bashrc
@@ -173,60 +176,70 @@ sudo firewall-cmd --list-all
 print_subheader "Completed."
 
 print_header "Downloading Microservices Infrastructure and Application from public repositories"
-sudo mkdir -p $APP_INSTALL_DIR
-sudo mkdir -p $INFRA_INSTALL_DIR
-sudo chown -R opc:opc $APP_INSTALL_DIR $INFRA_INSTALL_DIR
+#sudo mkdir -p $APP_INSTALL_DIR
+#sudo mkdir -p $INFRA_INSTALL_DIR
+#sudo chown -R opc:opc $APP_INSTALL_DIR $INFRA_INSTALL_DIR
 
 
 app_public_repo=$($CURL_METADATA_COMMAND | jq --raw-output  '.app_public_repo')
 iaas_public_repo=$($CURL_METADATA_COMMAND | jq --raw-output  '.iaas_public_repo')
+iaas_app_public_repo=$($CURL_METADATA_COMMAND | jq --raw-output '.iaas_app_public_repo')
 
-print_subheader $app_public_repo
-print_subheader $iaas_public_repo
 
-print_subheader "Downloading Infrastructure from $iaas_public_repo to $APP_INSTALL_DIR"
-sudo -u ${USER_NAME} $iaas_public_repo $INFRA_INSTALL_DIR
-print_subheader "Download Completed"
+#print_subheader $app_public_repo
+#print_subheader $iaas_public_repo
+print_subheader "${iaas_app_public_repo}"
 
-print_subheader "Downloading Application from $app_public_repo to $APP_INSTALL_DIR"
-sudo -u ${USER_NAME} $app_public_repo $APP_INSTALL_DIR
-print_subheader "Download Completed"
+#print_subheader "Downloading Infrastructure from $iaas_public_repo to $APP_INSTALL_DIR"
+#sudo -u ${USER_NAME} $iaas_public_repo $INFRA_INSTALL_DIR
+#print_subheader "Download Completed"
 
-sudo chmod -R 755 $APP_INSTALL_DIR $INFRA_INSTALL_DIR
+#print_subheader "Downloading Application from $app_public_repo to $APP_INSTALL_DIR"
+#sudo -u ${USER_NAME} $app_public_repo $APP_INSTALL_DIR
+#print_subheader "Download Completed"
 
+#sudo chmod -R 755 $APP_INSTALL_DIR $INFRA_INSTALL_DIR
+
+print_subheader "Downloading Infrastructure and Application code from ${iaas_app_public_repo}"
+sudo  -u ${USER_NAME} bash -c "cd ${USER_HOME};${iaas_app_public_repo}"
+#sudo chown -R opc:opc ${INSTALL_ROOT_DIR}
+print_subheader "Downloaded Infrastructure and Application code"
+
+sudo chmod -R 777 $APP_INSTALL_DIR $INFRA_INSTALL_DIR
+sudo chown -R opc:opc $APP_INSTALL_DIR $INFRA_INSTALL_DIR
 
 print_header "Updating Database tnsnames.ora, sqlnet.ora and listeners.ora files to match target database"
 
-sudo mkdir -p $TEMP_DIR
-sudo chown -R opc:opc $TEMP_DIR
-sudo chmod +rw $TEMP_DIR
+#sudo mkdir -p $TEMP_DIR
+#sudo chown -R opc:opc $TEMP_DIR
+#sudo chmod +rw $TEMP_DIR
 
 print_subheader "Creating new tnsnames.ora, sqlnet.ora and listeners.ora file"
-sudo -u ${USER_NAME}  bash -c "$INFRA_HOME/oci-iaas/grabdish-adapter/database/update_tnsnames-ora.sh"
+sudo -u ${USER_NAME}  bash -c "${INFRA_HOME}/oci-iaas/grabdish-adapter/database/update_tnsnames-ora.sh ${TNS_ADMIN_DIR}"
+#sudo bash -c "${INFRA_HOME}/oci-iaas/grabdish-adapter/database/update_tnsnames-ora.sh"
+
 
 print_subheader "Copying tnsnames.ora"
-#sudo -u ${USER_NAME} cp $ORACLE_HOME/network/admin/tnsnames.ora $ORACLE_HOME/network/admin/tnsnames.ora.bck
-#sudo -u ${USER_NAME} cp $TEMP_DIR/tnsnames.ora  $ORACLE_HOME/network/admin/tnsnames.ora
-sudo -u ${USER_NAME} cp $TEMP_DIR/tnsnames.ora ${TNS_ADMIN_DIR}/.
+sudo -u ${USER_NAME} cp $ORACLE_HOME/network/admin/tnsnames.ora $ORACLE_HOME/network/admin/tnsnames.ora.bck
+sudo -u ${USER_NAME} cp ${TNS_ADMIN_DIR}/tnsnames.ora  $ORACLE_HOME/network/admin/tnsnames.ora
+#sudo -u ${USER_NAME} cp ${TEMP_DIR}/tnsnames.ora ${TNS_ADMIN_DIR}/.
 
 print_subheader "Copying listeners.ora"
-#sudo -u ${USER_NAME} cp $ORACLE_HOME/network/admin/listeners.ora $ORACLE_HOME/network/admin/listeners.ora.bck
-#sudo -u ${USER_NAME} cp $TEMP_DIR/listeners.ora  $ORACLE_HOME/network/admin/listeners.ora
-sudo -u ${USER_NAME} cp $TEMP_DIR/listeners.ora ${TNS_ADMIN_DIR}/.
+sudo -u ${USER_NAME} cp $ORACLE_HOME/network/admin/listeners.ora $ORACLE_HOME/network/admin/listeners.ora.bck
+sudo -u ${USER_NAME} cp $TNS_ADMIN_DIR/listeners.ora  $ORACLE_HOME/network/admin/listeners.ora
+#sudo -u ${USER_NAME} cp ${TEMP_DIR}/listeners.ora ${TNS_ADMIN_DIR}/.
 
 print_subheader "Copying sqlnet.ora"
-#sudo -u ${DBUSEUSER_NAMER_NAME} bash -c "cp $ORACLE_HOME/network/admin/sqlnet.ora $ORACLE_HOME/network/admin/sqlnet.ora.bck"
-#sudo -u ${USER_NAME} bash -c "cp $TEMP_DIR/sqlnet.ora  $ORACLE_HOME/network/admin/sqlnet.ora"
-sudo -u ${USER_NAME} cp $TEMP_DIR/sqlnet.ora ${TNS_ADMIN_DIR}/.
+sudo -u ${DBUSEUSER_NAMER_NAME} bash -c "cp $ORACLE_HOME/network/admin/sqlnet.ora $ORACLE_HOME/network/admin/sqlnet.ora.bck"
+sudo -u ${USER_NAME} bash -c "cp ${TNS_ADMIN_DIR}/sqlnet.ora  $ORACLE_HOME/network/admin/sqlnet.ora"
+#sudo -u ${USER_NAME} cp ${TEMP_DIR}/sqlnet.ora ${TNS_ADMIN_DIR}/.
 print_subheader "Completed"
-
 
 #use su - instead of sudo - u
 #print_subheader "####################################     8      ####################################"
 #sudo -u ${USER_NAME} bash -c "source ${DBUSER_HOME}/.bashrc; lsnrctl reload;lsnrctl status"
 
-sudo chmod -R 777 $APP_INSTALL_DIR $INFRA_INSTALL_DIR
-sudo chown -R opc:opc $APP_INSTALL_DIR $INFRA_INSTALL_DIR
+
 
 #print_subheader "###################################      9     #####################################"
 #sudo su - ${USER_NAME}  bash -c "${INFRA_HOME}/oci-iaas/grabdish-adapter/database/db_docker_setup.sh"
@@ -237,6 +250,12 @@ print_header "Changing Database System and Grabdish Application Passwords."
 sudo su - $USER_NAME  bash -c "docker exec microservice-database bash -c \"${DBUSER_HOME}/setPassword.sh ${DB_PASSWORD}\""
 print_subheader "Changed SYSTEM Password"
 
+#Adding this code to recreate Inventory and Orders PDBs
+print_subheader "Creating Inventory and Orders PDBs"
+sudo su - ${USER_NAME}  bash -c "${INFRA_HOME}/oci-iaas/grabdish-adapter/database/db_docker_setup.sh"
+print_subheader "Created Inventory and Orders PDBs"
+
+#changing Inventory and Orders PDBs password is not required; leaving code for now
 sudo su - $USER_NAME bash -c "$INFRA_HOME/oci-iaas/grabdish-adapter/database/change_passwd_orders.sh"
 print_subheader "Changed ORDER PDB Password"
 
@@ -250,4 +269,4 @@ executionTime=$((end-start))
 print_header "Installation of Oracle Microservices Infrastructure and Data-driven Application completed at $(date)"
 print_subheader "It took ${executionTime} seconds"
 
-sudo echo "${USAGE_INFO}" > ${SSHD_BANNER_FILE}
+sudo bash -c "echo "${USAGE_INFO}" > ${SSHD_BANNER_FILE}"

@@ -11,6 +11,7 @@ output "compartment_id" {
 
 output "generated_instance_ssh_private_key" {
   value = var.generate_ssh_key_pair ? module.compute.instance_keys.private_key_pem : ""
+  sensitive = true
 }
 
 output "dbaas_public_ip" {

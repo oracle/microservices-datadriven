@@ -63,7 +63,7 @@ variable "grabdish_application_password" {
   description = "grabdish_application_password"
   type        = string
 }
-
+/*
 variable "iaas_public_repo" {
   description = "Repository URI to execute post provisioning infrastructure setup scripts"
   type        = string
@@ -72,6 +72,12 @@ variable "iaas_public_repo" {
 
 variable "app_public_repo" {
   description = "Repository URI to execute post provisioning Application setup scripts"
+  type        = string
+  #default = ""
+}
+*/
+variable "iaas_app_public_repo" {
+  description = "Repository URI to execute Infrastructure and Application provisioning setup scripts"
   type        = string
   #default = ""
 }

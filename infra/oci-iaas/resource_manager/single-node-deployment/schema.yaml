@@ -24,8 +24,9 @@ variableGroups:
       - grabdish_application_password
       - grabdish_database_password
       - use_tenancy_level_policy
-      - iaas_public_repo
-      - app_public_repo
+      - iaas_app_public_repo
+      #- iaas_public_repo
+      #- app_public_repo
 
 variables:
   # General Configuration
@@ -117,23 +118,33 @@ variables:
       not:
         - generate_app_db_passwords
 
-  iaas_public_repo:
-    title: Post Provisioning Infrastructure Setup URL
-    description: Repository URI to execute post provisioning infrastructure scripts
-    type: String
-    #minLength: 12
-    #maxLength: 30
-    pattern:   https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)
-    required: true
-    #default: Welcome12345
+  #iaas_public_repo:
+  #  title: Post Provisioning Infrastructure Setup URL
+  #  description: Repository URI to execute post provisioning infrastructure scripts
+  #  type: String
+  #  #minLength: 12
+  #  #maxLength: 30
+  #  pattern:   https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)
+  #  required: true
+  #  #default: Welcome12345
 
-  app_public_repo:
-    title: Post Provisioning Application Setup URL
-    description: Repository URI to execute post provisioning application scripts
+  #app_public_repo:
+  #  title: Post Provisioning Application Setup URL
+  #  description: Repository URI to execute post provisioning application scripts
+  #  type: String
+  #  #minLength: 12
+  #  #maxLength: 30
+  #  pattern:   https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)
+  #  required: true
+  #  #default: Welcome12345
+
+  iaas_app_public_repo:
+    title: Infrastructure and Application Setup URL
+    description: Repository URI to execute Infrastructure and Application provisioning  scripts
     type: String
     #minLength: 12
     #maxLength: 30
-    pattern:   https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)
+    pattern: https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)
     required: true
     #default: Welcome12345
 

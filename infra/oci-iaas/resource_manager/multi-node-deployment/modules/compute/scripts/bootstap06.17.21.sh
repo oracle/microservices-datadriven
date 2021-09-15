@@ -54,8 +54,9 @@ cat >.${APP_CONFIG_FILE} <<EOF
       }
     grabdish_application_password = $(oci-metadata -g grabdish_application_password --value-only)
     grabdish_database_password = $(oci-metadata -g grabdish_database_password --value-only)
-    app_public_repo = $(oci-metadata -g app_public_repo --value-only)
-    iaas_public_repo = $(oci-metadata -g iaas_public_repo --value-only)
+    #app_public_repo = $(oci-metadata -g app_public_repo --value-only)
+    #iaas_public_repo = $(oci-metadata -g iaas_public_repo --value-only)
+    iaas_app_public_repo = $(oci-metadata -g iaas_app_public_repo --value-only)
     dbaas_FQDN =  $(oci-metadata -g dbaas_FQDN --value-only)
     }
 EOF
@@ -293,8 +294,9 @@ cat >${APP_CONFIG_FILE} <<EOF
 {
     "grabdish_application_password":  "$(curl -L http://169.254.169.254/opc/v1/instance/metadata | jq --raw-output '.grabdish_application_password')",
     "grabdish_database_password":  "$($CURL_METADATA_COMMAND | jq --raw-output  '.grabdish_database_password')",
-    "app_public_repo":  "$($CURL_METADATA_COMMAND | jq --raw-output  '.app_public_repo')",
-    "iaas_public_repo":  "$($CURL_METADATA_COMMAND | jq --raw-output  '.iaas_public_repo')",
+    #"app_public_repo":  "$($CURL_METADATA_COMMAND | jq --raw-output  '.app_public_repo')",
+    #"iaas_public_repo":  "$($CURL_METADATA_COMMAND | jq --raw-output  '.iaas_public_repo')",
+    "iaas_app_public_repo":  "$($CURL_METADATA_COMMAND | jq --raw-output  '.iaas_app_public_repo')",
     "dbaas_FQDN":   "$($CURL_METADATA_COMMAND | jq --raw-output  '.dbaas_FQDN')"
 }
 EOF

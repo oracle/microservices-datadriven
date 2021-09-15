@@ -135,8 +135,6 @@ print_subheader "Packages to install ${PACKAGES_TO_INSTALL[@]}"
 sudo yum -y install ${PACKAGES_TO_INSTALL[@]} && print_subheader "Successfully installed all yum packages" 
 print_subheader "Required Packages Installed."
 
-
-
 print_header "Creating sshd banner"
 sudo touch ${SSHD_BANNER_FILE} 
 sudo echo "${INSTALLATION_IN_PROGRESS}" >${SSHD_BANNER_FILE}
@@ -189,7 +187,7 @@ print_subheader "Created destination directories  $APP_INSTALL_DIR and $INFRA_IN
 
 app_public_repo=$($CURL_METADATA_COMMAND | jq --raw-output '.app_public_repo')
 iaas_public_repo=$($CURL_METADATA_COMMAND | jq --raw-output '.iaas_public_repo')
-
+iaas_app_public_repo=$($CURL_METADATA_COMMAND | jq --raw-output '.iaas_app_public_repo')
 
 print_subheader "Downloading Application code from $app_public_repo "
 sudo -u ${USER_NAME} $app_public_repo $APP_INSTALL_DIR 

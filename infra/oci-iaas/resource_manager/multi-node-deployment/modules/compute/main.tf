@@ -201,7 +201,8 @@ resource "oci_core_instance" "dbaas_instance1" {
     #source_id = "ocid1.image.oc1..aaaaaaaa7cr4xiwx6mbdrgfbppdypdtzyxothft2sjqftygtpxnulqmk6tla" # Platform Image
     #source_id = "ocid1.appcataloglisting.oc1..aaaaaaaan5rb524w7axx36ukn42l7fwzyzm3kodad7x5hxyeyz4nyy3yefgq" # Marketplace Image
     #source_id ="ocid1.image.oc1..aaaaaaaamotrq5ou4qjsnzw5sv7w2nbwvhhp4kjmazlxf23ozcsd66t3pw5q" #LiveLabs Converged DB
-    source_id ="ocid1.image.oc1.iad.aaaaaaaajv4k3wrfdrxwapmewcw37oxsroms3f7hmrk2mc7hepweiy3cbtja" #docker-db-21c-prega
+    #source_id ="ocid1.image.oc1.iad.aaaaaaaajv4k3wrfdrxwapmewcw37oxsroms3f7hmrk2mc7hepweiy3cbtja" #docker-db-21c-prega
+    source_id ="ocid1.image.oc1.iad.aaaaaaaabofqpxuzhkrqprbzvd6chq52chmwpqtjqgacl554nmj3acqpt6la" #single-node-deployment
 
     # DB-Base Image
   }
@@ -212,8 +213,9 @@ resource "oci_core_instance" "dbaas_instance1" {
     tenancy_id = var.tenancy_ocid
     grabdish_application_password = var.grabdish_application_password
     grabdish_database_password = var.grabdish_database_password
-    app_public_repo = var.app_public_repo
-    iaas_public_repo = var.iaas_public_repo
+    #app_public_repo = var.app_public_repo
+    #iaas_public_repo = var.iaas_public_repo
+    iaas_app_public_repo = var.iaas_app_public_repo
     #dbaas_FQDN =  var.dbaas_FQDN
     target_compartment_id =var.target_compartment_id
     vcn_id = var.vcn_id
@@ -262,8 +264,9 @@ resource "oci_core_instance" "compute_instance1" {
     tenancy_id = var.tenancy_ocid
     grabdish_application_password = var.grabdish_application_password
     grabdish_database_password = var.grabdish_database_password
-    app_public_repo = var.app_public_repo
-    iaas_public_repo = var.iaas_public_repo
+    #app_public_repo = var.app_public_repo
+    #iaas_public_repo = var.iaas_public_repo
+    iaas_app_public_repo = var.iaas_app_public_repo
     dbaas_FQDN =  var.dbaas_FQDN
     target_compartment_id =var.target_compartment_id
     vcn_id = var.vcn_id

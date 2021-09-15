@@ -21,3 +21,4 @@ output "dbaas_compute_id" {
 output "dbaas_display_name" {
   value = oci_core_instance.dbaas_instance1.display_name
 }
+

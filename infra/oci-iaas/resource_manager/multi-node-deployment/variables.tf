@@ -39,6 +39,7 @@ variable "ssh_public_key" {
   description = "ssh public key used to connect to the compute instance"
   default     = "" # This value has to be defaulted to blank, otherwise terraform apply would request for one.
   type        = string
+  sensitive   = true
 }
 
 variable "use_tenancy_level_policy" {
@@ -64,7 +65,7 @@ variable "grabdish_application_password" {
   default = "Welcome12345"
 
 }
-
+/*
 variable "iaas_public_repo" {
   description = "Repository URI to execute post provisioning infrastructure setup scripts"
   type        = string
@@ -78,6 +79,13 @@ variable "app_public_repo" {
   default     = "git clone -b 21.6.1 --single-branch https://github.com/oracle/microservices-datadriven.git"
   #default = ""
 }
+*/
 
+variable "iaas_app_public_repo" {
+  description = "Repository URI to execute infrastructure and application setup scripts"
+  type        = string
+  default     = "git clone -b main  --single-branch https://github.com/vishalmmehra/microservices-datadriven"
+  #default = ""
+}
 
 

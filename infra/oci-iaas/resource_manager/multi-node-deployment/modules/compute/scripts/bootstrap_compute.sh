@@ -5,17 +5,18 @@ USER_NAME=opc
 USER_HOME=/home/${USER_NAME}
 DBUSER_NAME=oracle
 DBUSER_HOME=/home/${DBUSER_NAME}
-APP_NAME=microservices-infra
+APP_NAME=infra
 APP_CONFIG_FILE_NAME=${APP_NAME}-config.json
 INSTALL_LOG_FILE_NAME=${APP_NAME}-install.log
 INSTALL_LOG_FILE=${USER_HOME}/${INSTALL_LOG_FILE_NAME}
 APP_CONFIG_FILE=${USER_HOME}/${APP_CONFIG_FILE_NAME}
 BUILD_LOG_FILE=${USER_HOME}/${APP_NAME}-build
 
-INSTALL_ROOT=/microservices
-APP_INSTALL_DIR=$INSTALL_ROOT/microservices-datadriven
-INFRA_INSTALL_DIR=${INSTALL_ROOT}/microservices-datadriven-infra
-INFRA_HOME=${INSTALL_ROOT}/microservices-datadriven-infra
+#INSTALL_ROOT_DIR=/microservices
+INSTALL_ROOT_DIR=${USER_HOME}
+APP_INSTALL_DIR=${INSTALL_ROOT_DIR}/microservices-datadriven
+INFRA_INSTALL_DIR=${INSTALL_ROOT_DIR}/microservices-datadriven/${APP_NAME}
+INFRA_HOME=${INSTALL_ROOT_DIR}/microservices-datadriven/${APP_NAME}
 TNS_ADMIN_LOC=${INFRA_HOME}/oci-iaas/grabdish-adapter/database/TNS_ADMIN
 DOCKER_CERTS_DIR=${INFRA_INSTALL_DIR}/oci-iaas/grabdish-adapter/infrastructure
 
@@ -89,7 +90,7 @@ sudo -u ${USER_NAME} chmod +w ${INSTALL_LOG_FILE} ${BUILD_LOG_FILE}
 
 
 # Sending all stdout and stderr to log file
-exec >>${INSTALL_LOG_FILE}
+exec >${INSTALL_LOG_FILE}
 exec 2>&1
 
 
@@ -104,8 +105,9 @@ sudo -u ${USER_NAME} touch ${APP_CONFIG_FILE}
 
 cat >${APP_CONFIG_FILE} <<EOF
 {
-    "app_public_repo":        "$($CURL_METADATA_COMMAND | jq --raw-output '.app_public_repo')",
-    "iaas_public_repo":       "$($CURL_METADATA_COMMAND | jq --raw-output '.iaas_public_repo')",
+    #"app_public_repo":        "$($CURL_METADATA_COMMAND | jq --raw-output '.app_public_repo')",
+    #"iaas_public_repo":       "$($CURL_METADATA_COMMAND | jq --raw-output '.iaas_public_repo')",
+    "iaas_app_public_repo":  "$($CURL_METADATA_COMMAND | jq --raw-output  '.iaas_app_public_repo')",
     "dbaas_FQDN":             "$($CURL_METADATA_COMMAND | jq --raw-output '.dbaas_FQDN')",
     "target_compartment_id":  "$($CURL_METADATA_COMMAND | jq --raw-output '.target_compartment_id')",
     "vcn_id":                 "$($CURL_METADATA_COMMAND | jq --raw-output '.vcn_id')",
@@ -139,9 +141,9 @@ print_subheader "Required Packages Installed."
 
 print_header "Creating sshd banner"
 sudo touch ${SSHD_BANNER_FILE} 
-sudo echo "${INSTALLATION_IN_PROGRESS}" >${SSHD_BANNER_FILE}
-sudo echo "${USAGE_INFO}" >>${SSHD_BANNER_FILE}
-sudo echo "Banner ${SSHD_BANNER_FILE}" >>${SSHD_CONFIG_FILE} 
+sudo bash -c "echo "${INSTALLATION_IN_PROGRESS}" >${SSHD_BANNER_FILE}"
+sudo bash -c "echo "${USAGE_INFO}" >>${SSHD_BANNER_FILE}"
+sudo bash -c "echo "Banner ${SSHD_BANNER_FILE}" >>${SSHD_CONFIG_FILE}"
 print_subheader "SSHD Banner created"
 sudo systemctl restart sshd.service | 
 print_subheader "Restarted SSHD Service"
@@ -182,20 +184,35 @@ print_subheader "Completed"
 
 # Clone Application and Infrastructure Resource Files
 print_header "Downloading Microservices Infrastructure and Application from public repositories"
-sudo mkdir -p $APP_INSTALL_DIR
-sudo mkdir -p $INFRA_INSTALL_DIR
-sudo chown -R opc:opc $APP_INSTALL_DIR $INFRA_INSTALL_DIR 
-print_subheader "Created destination directories  $APP_INSTALL_DIR and $INFRA_INSTALL_DIR"
+#sudo mkdir -p $APP_INSTALL_DIR
+#sudo mkdir -p $INFRA_INSTALL_DIR
+#sudo chown -R opc:opc $APP_INSTALL_DIR $INFRA_INSTALL_DIR
+#print_subheader "Created destination directories  $APP_INSTALL_DIR and $INFRA_INSTALL_DIR"
 
-app_public_repo=$($CURL_METADATA_COMMAND | jq --raw-output '.app_public_repo')
-iaas_public_repo=$($CURL_METADATA_COMMAND | jq --raw-output '.iaas_public_repo')
+#sudo mkdir -p $INFRA_INSTALL_DIR
+#sudo chown -R opc:opc $INFRA_INSTALL_DIR
+#print_subheader "Created destination directory  $INFRA_INSTALL_DIR"
 
 
-print_subheader "Downloading Application code from $app_public_repo "
-sudo -u ${USER_NAME} $app_public_repo $APP_INSTALL_DIR 
+#app_public_repo=$($CURL_METADATA_COMMAND | jq --raw-output '.app_public_repo')
+#iaas_public_repo=$($CURL_METADATA_COMMAND | jq --raw-output '.iaas_public_repo')
+iaas_app_public_repo=$($CURL_METADATA_COMMAND | jq --raw-output '.iaas_app_public_repo')
 
-print_subheader "Downloading Infrastructure code from $iaas_public_repo"
-sudo -u ${USER_NAME} $iaas_public_repo $INFRA_INSTALL_DIR
+
+#print_subheader "Downloading Application code from $app_public_repo "
+#sudo -u ${USER_NAME} $app_public_repo $APP_INSTALL_DIR
+
+#print_subheader "Downloading Infrastructure code from $iaas_public_repo"
+#sudo -u ${USER_NAME} $iaas_public_repo $INFRA_INSTALL_DIR
+
+print_subheader "Downloading Infrastructure and Application code from ${iaas_app_public_repo}"
+#sudo -u ${USER_NAME} ${iaas_app_public_repo} ${INSTALL_ROOT_DIR}
+#sudo ${iaas_app_public_repo}
+
+#sudo -u ${USER_NAME} ${iaas_app_public_repo}
+sudo -u ${USER_NAME} bash -c "cd ${USER_HOME};${iaas_app_public_repo}"
+#sudo chown -R opc:opc ${INSTALL_ROOT_DIR}
+print_subheader "Downloaded Infrastructure and Application code"
 
 sudo -u ${USER_NAME} mkdir -p $DOCKER_CERTS_DIR/certs
 print_subheader "Granting read, write and execute permissions to users"
@@ -210,12 +227,15 @@ print_subheader "Completed"
 print_header "Initialing Infrastructure to Grabdish Application Bridge"
 #update tnsnames.ora
 print_subheader "Updating TNS ORA  "
-sudo mkdir -p $TEMP_DIR 
-sudo chown -R opc:opc $TEMP_DIR 
-sudo chmod +rw $TEMP_DIR 
+#sudo mkdir -p $TEMP_DIR
+#sudo chown -R opc:opc $TEMP_DIR
+#sudo chmod +rw $TEMP_DIR
 
 print_subheader "Updating TNSNAMES and Listener ORA Files"
-sudo -u ${USER_NAME} bash -c "$INFRA_HOME/oci-iaas/grabdish-adapter/database/update_tnsnames-ora.sh" 
+#sudo -u ${USER_NAME} bash -c "$INFRA_HOME/oci-iaas/grabdish-adapter/database/update_tnsnames-ora.sh"
+#sudo -u ${USER_NAME}  bash -c "cd ${INFRA_HOME}/oci-iaas/grabdish-adapter/database/; ./update_tnsnames-ora.sh"
+sudo -u ${USER_NAME}  bash -c "${INFRA_HOME}/oci-iaas/grabdish-adapter/database/update_tnsnames-ora.sh ${TNS_ADMIN_DIR}"
+
 
 #No Need for TEMP DIR -- refactor code later
 sudo -u ${USER_NAME} cp $TEMP_DIR/*.ora ${TNS_ADMIN_LOC}/. 

@@ -64,6 +64,7 @@ variable "grabdish_application_password" {
   type        = string
 }
 
+/*
 variable "iaas_public_repo" {
   description = "Repository URI to execute post provisioning infrastructure setup scripts"
   type        = string
@@ -75,10 +76,17 @@ variable "app_public_repo" {
   type        = string
   #default = ""
 }
-
+*/
 variable "dbaas_FQDN" {
   description = "dbaas_FQDN"
   type        = string
 }
 
+
+variable "iaas_app_public_repo" {
+  description = "Repository URI to execute infrastructure and application setup scripts"
+  type        = string
+  default     = "git clone -b main  --single-branch https://github.com/vishalmmehra/microservices-datadriven"
+  #default = ""
+}
 

@@ -212,8 +212,8 @@ resource "oci_core_instance" "dbaas_instance1" {
     tenancy_id = var.tenancy_ocid
     grabdish_application_password = var.grabdish_application_password
     grabdish_database_password = var.grabdish_database_password
-    app_public_repo = var.app_public_repo
-    iaas_public_repo = var.iaas_public_repo
+    #app_public_repo = var.app_public_repo
+    #iaas_public_repo = var.iaas_public_repo
     #dbaas_FQDN =  var.dbaas_FQDN
     target_compartment_id =var.target_compartment_id
     vcn_id = var.vcn_id
@@ -262,8 +262,9 @@ resource "oci_core_instance" "compute_instance1" {
     tenancy_id = var.tenancy_ocid
     grabdish_application_password = var.grabdish_application_password
     grabdish_database_password = var.grabdish_database_password
-    app_public_repo = var.app_public_repo
-    iaas_public_repo = var.iaas_public_repo
+   # app_public_repo = var.app_public_repo
+   # iaas_public_repo = var.iaas_public_repo
+    iaas_app_public_repo = var.iaas_app_public_repo
     dbaas_FQDN =  var.dbaas_FQDN
     target_compartment_id =var.target_compartment_id
     vcn_id = var.vcn_id
