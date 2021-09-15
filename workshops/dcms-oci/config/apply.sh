@@ -58,10 +58,10 @@ $MY_CODE/background-builds.sh "$MY_STATE/background-builds" &>> $DCMS_LOG_DIR/ba
 
 # Identify Run Type
 while ! state_done RUN_TYPE; do
-  if [[ "$HOME" =~ /home/ll[0-9]{1,4}_use$ ]]; then
+  if [[ "$HOME" =~ /home/ll[0-9]{1,5}_us ]]; then
     # Green Button (hosted by Live Labs)
     state_set RUN_TYPE "3"
-    state_set RESERVATION_ID `grep -oP '(?<=/home/ll).*?(?=_use)' <<<"$HOME"`
+    state_set RESERVATION_ID `grep -oP '(?<=/home/ll).*?(?=_us)' <<<"$HOME"`
     state_set USER_OCID 'NA'
     state_set USER_NAME "LL$(state_get RESERVATION_ID)-USER"
     state_set_done PROVISIONING
