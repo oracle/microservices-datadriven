@@ -353,7 +353,7 @@ print_header "Provisioning Completed at $(date)"
 print_header "Installation of Oracle Microservices Infrastructure and Data-driven Application is complete. Took ${executionTime} seconds"
 
 
-sudo echo "${USAGE_INFO}" >${SSHD_BANNER_FILE}
+#sudo echo "${USAGE_INFO}" >${SSHD_BANNER_FILE}
 
 
 
