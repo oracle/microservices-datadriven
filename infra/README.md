@@ -2,7 +2,7 @@
 
 This workshop will help you understand the technical capabilities inside and outside the Oracle converged database to support a scalable data and event-driven microservices architecture.
 
-You will create an application with Helidon microservices and a Javascript front-end, deployed to an OCI Kubernetes cluster, using REST and messaging for communication and accessing pluggable Oracle Autonomous Transaction Processing databases.
+You will create an application with Helidon microservices and a Javascript front-end, deployed to a minikube kubernetes cluster, using REST and messaging for communication and accessing pluggable Oracle databases. Oracle Database is hosted on a docker container.
 
 ![img_64.png](images/img_64.png)
 
@@ -289,7 +289,7 @@ Click Get Last Container Start Time. It will take a minute or two for the probe 
 Eventually you will see the container restart and note the new/later container startup time reflecting that the pod was restarted.
 ![img_63.png](images/img_63.png)
 </details>
-
+</details>
 
 <details>
 
@@ -648,6 +648,6 @@ OLD VERSION FOR TESTING ONLY
 
 
 
-NET VERSION FOR TESTING ONLY
+NEW VERSION FOR TESTING ONLY
 
 [![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/vishalmmehra/microservices-datadriven/raw/main/infra/multi-node-deployment2.zip)
