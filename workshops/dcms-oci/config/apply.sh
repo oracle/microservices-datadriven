@@ -346,3 +346,5 @@ export VAULT_SECRET_OCID=""
 !
 
 state_set_done SETUP_VERIFIED # Legacy
+echo -ne r"\033[2K\rSetup completed"
+echo

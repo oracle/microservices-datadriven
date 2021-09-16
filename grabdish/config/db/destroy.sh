@@ -39,7 +39,7 @@ WHENEVER SQLERROR EXIT 1
 connect admin/"$DB_PASSWORD"@$SVC
 DROP USER $U CASCADE;
 !
-fi
+done
 
 
 # Order User
