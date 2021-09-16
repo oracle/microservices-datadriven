@@ -45,17 +45,15 @@ Deploy an alternate implementation of the Inventory microservice and test the ap
 This lab assumes you have already completed the previous labs.
 
 <details>
-<summary>**Task 1: Undeploy the Java Helidon MP Inventory Microservice**
-</summary> 
+<summary>Task 1: Undeploy the Java Helidon MP Inventory Microservice</summary> 
 
 To undeploy the Inventory Helidon MP service, open the Cloud Shell and go to the inventory-helidon folder, using the following command.
 
 `$GRABDISH_HOME/inventory-helidon ; ./undeploy.sh`
 </details>
 
-
-
-**Task 2: Deploy an alternate implementation of the Inventory Microservice**
+<details>
+<summary>Task 2: Deploy an alternate implementation of the Inventory Microservice</summary>
 
 In this step you can choose between six different implementations of the Inventory Microservice: PL/SQL, Python, NodeJS, .NET, Go, or Java Helidon SE.
 
@@ -86,8 +84,10 @@ If you selected Spring Boot, deploy this service:
 If you selected Java Helidon SE, deploy this service:
 
 `cd $GRABDISH_HOME/inventory-helidon-se; ./deploy.sh`
+</details>
 
-Task 3: Verify application functionality
+<details>
+<summary>Task 3: Verify application functionality</summary>
 
 Repeat Lab 2: Step 3 to verify that the functionality of the GrabDish store remains the same while using the new implementation. You will need to use different order ID's, for example 166 and 167.
 Task 4: Re-deploy the Java Helidon MP Inventory Microservice
@@ -97,6 +97,7 @@ To undeploy any other inventory services and then deploy the Inventory Helidon M
 cd $GRABDISH_HOME/inventory-helidon ; ./deploy.sh
 cd $GRABDISH_HOME`
 
+</details>
 
 </details>
 
@@ -105,10 +106,14 @@ cd $GRABDISH_HOME`
    Lab 4: Observability (Metrics, Tracing, and Logs)
    </summary>
 
-Task 1: Install and configure observability software as well as metrics and log exporters
+<details>
+<summary> Task 1: Install and configure observability software as well as metrics and log exporters</summary>
+
+
 Run the install script to install Jaeger, Prometheus, Loki, Promtail, Grafana and an SSL secured LoadBalancer for Grafana
 
-Copycd $GRABDISH_HOME/observability;./install.sh
+`cd $GRABDISH_HOME/observability;./install.sh`
+
 Run the /createMonitorsAndDBAndLogExporters.sh script. This will do the following…
 
 Create Prometheus ServiceMonitors to scrape the Frontend, Order, and Inventory microservices.
@@ -119,11 +124,16 @@ Create configmpas, deployments, and services for PDB metrics exporters.
 
 Create configmaps, deployments, and services for PDB log exporters.
 
-Copycd $GRABDISH_HOME/observability;./createMonitorsAndDBAndLogExporters.sh
-Task 2: Configure Grafana
+`cd $GRABDISH_HOME/observability;./createMonitorsAndDBAndLogExporters.sh`
+
+</details>
+
+<details>
+
+<summary>Task 2: Configure Grafana </summary>
 Identify the EXTERNAL-IP address of the Grafana LoadBalancer by executing the following command:
 
-Copyservices
+`services`
 
 
 Note that it will generally take a few minutes for the LoadBalancer to provision during which time it will be in a pending state
@@ -241,7 +251,12 @@ Confirm upload and click Import button.
 
 ![img_21.png](images/img_21.png)
 
-Task 3: Open and study the main GrabDish Grafana Dashboard screen and metrics
+</details>
+
+<details>
+
+<summary> Task 3: Open and study the main GrabDish Grafana Dashboard screen and metrics</summary>
+
 Select the four squares icon on the left-hand side and select 'Dashboards'
 
 ![img_22.png](images/img_22.png)
@@ -290,7 +305,11 @@ Select the 'Explore' option from the drop-down menu of any panel to show that me
 
 ![img_31.png](images/img_31.png)
 
-Task 4: Use Grafana to drill down on metrics, tracing, and logs correlation and logs to trace feature
+</details>
+
+<details>
+<summary>Task 4: Use Grafana to drill down on metrics, tracing, and logs correlation and logs to trace feature<summary>Task 4: Use Grafana to drill down on metrics, tracing, and logs correlation and logs to trace feature<summary>Task 4: Use Grafana to drill down on metrics, tracing, and logs correlation and logs to trace feature</summary>
+
 Click the Split button on the Explore screen.
 
 ![img_32.png](images/img_32.png)
@@ -323,7 +342,8 @@ Click the Jaeger to view the corresponding trace information and drill down into
 
 ![img_39.png](images/img_39.png)
 
-Acknowledgements
+</details>
+
 </details>
 
 <details>
