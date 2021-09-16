@@ -44,12 +44,16 @@ Deploy an alternate implementation of the Inventory microservice and test the ap
 
 This lab assumes you have already completed the previous labs.
 
-**Task 1: Undeploy the Java Helidon MP Inventory Microservice**
-
+<details>
+<summary>**Task 1: Undeploy the Java Helidon MP Inventory Microservice**
+</summary> 
 
 To undeploy the Inventory Helidon MP service, open the Cloud Shell and go to the inventory-helidon folder, using the following command.
 
 `$GRABDISH_HOME/inventory-helidon ; ./undeploy.sh`
+</details>
+
+
 
 **Task 2: Deploy an alternate implementation of the Inventory Microservice**
 
@@ -76,16 +80,14 @@ If you selected .NET, deploy this service:
 If you selected Go, deploy this service:
 
 `cd $GRABDISH_HOME/inventory-go; ./deploy.sh`
-
 If you selected Spring Boot, deploy this service:
 
 `cd $GRABDISH_HOME/inventory-springboot; ./deploy.sh`
-
 If you selected Java Helidon SE, deploy this service:
 
 `cd $GRABDISH_HOME/inventory-helidon-se; ./deploy.sh`
 
-**Task 3: Verify application functionality**
+Task 3: Verify application functionality
 
 Repeat Lab 2: Step 3 to verify that the functionality of the GrabDish store remains the same while using the new implementation. You will need to use different order ID's, for example 166 and 167.
 Task 4: Re-deploy the Java Helidon MP Inventory Microservice
