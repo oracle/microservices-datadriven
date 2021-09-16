@@ -1,6 +1,10 @@
 # Building Microservices with Oracle Converged Database On-Premises Workshop
 
-Describe the application here,...
+This workshop will help you understand the technical capabilities inside and outside the Oracle converged database to support a scalable data and event-driven microservices architecture.
+
+You will create an application with Helidon microservices and a Javascript front-end, deployed to an OCI Kubernetes cluster, using REST and messaging for communication and accessing pluggable Oracle Autonomous Transaction Processing databases.
+
+![img_64.png](images/img_64.png)
 
     For additional details regarding Microservices Data-driven applications on Oracle Converged Database check,
 
@@ -8,16 +12,284 @@ Describe the application here,...
 
 
 
-[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/vishalmmehra/microservices-datadriven/raw/main/infra/multi-node-deployment.zip)
+[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/vishalmmehra/microservices-datadriven/raw/main/infra/multi-node-deployment2.zip)
 
 <details>
+<summary>Lab 1:Setup</summary>
 
-<summary> 
-   Lab 2:
-   </summary>
+1. Click on [![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/vishalmmehra/microservices-datadriven/raw/main/infra/multi-node-deployment2.zip)
 
-Complete the Setup Instructions
+2. Login to your Cloud Account 
+
+3. Accept the Oracle Terms of Use
+
+![img_65.png](images/img_65.png)
+
+
+4. Select the compartment in which you want to deploy this application
+
+![img_66.png](images/img_66.png)
+
+
+5. Click on Next (Left Bottom Screen)
+
+![img_67.png](images/img_67.png)
+
+
+6. Pick the Compute (FrontEnd) and Oracle Database Instance Shape 
+
+
+ Shape VM.Standard.E2.2 or higher is strongly recommended 
+
+![img_69.png](images/img_69.png)
+
+
+7. (optional) Upload SSH Keys if you have already crated SSH Keys
+
+
+8. (optional) Provide Database and/or Application Passwords - auto-generated Passwords are strongly recommended
+
+
+9. Ensure "Infrastructure and Application Setup URL" is correct (will change post GA)
+
+
+10. Click on Next (Left Bottom Screen)
+
+![img_68.png](images/img_68.png)
+
+11. Verify your configuration (ensure Run Apply checkbox is selected)
+
+![img_70.png](images/img_70.png)
+
+12. Click on Create Button (Left Bottom Screen)
+
+![img_71.png](images/img_71.png)
+
+13. Check if your Job has been accepted (Job takes around 5 minutes to create the infrastructure)
+
+![img_72.png](images/img_72.png)
+
+![img_73.png](images/img_73.png)
+
+14. Wait for this job to complete (Job takes around 5 minutes to create the infrastructure)
+
+![img_74.png](images/img_74.png)
+
+![img_75.png](images/img_75.png)
+
+15. Confirm the output (Click on Logs and Outputs under Resources Section)
+
+![img_76.png](images/img_76.png)
+
+![img_77.png](images/img_77.png)
+
+![img_78.png](images/img_78.png)
+
+**Key Points**
+
+<li> Make a note of variable dbaas_public_ip - this is your Database instance public IP address </li>
+![img_83.png](img_83.png)
+
+<li>Make a note of variable compute_instance_public_ip - this is your Application (FrontEnd) instance public IP address </li>
+![img_84.png](img_84.png)
+
+<li> Make a note of variable Grabdish_Application_Password - this is your Application (FrontEnd) password </li>
+![img_85.png](img_85.png)
+
+<li> Make a note of variable Login_Instructions - using these you can login to the Grabdish FrontEnd Application </li>
+
+
+<li> Access generated SSH Keys - Click on unblock to display generated_instance_ssh_private_key</li>
+
+![img_79.png](images/img_79.png)
+
+<li> Copy the generated key and safe it to a filename (like grabdish-on-premises.key) of your choice
+
+![img_81.png](images/img_81.png)
+
+16. Tail Database Logs (optional)
+
+`ssh -i grabdish-on-premises.key opc@150.136.61.46`
+
+`cd; tail -f microservices-infra-install.log`
+
+check if the Database Provisioning including generation of PDBs has been completed
+
+![img_86.png](images/img_86.png)
+
+17. Tail Application Server Logs (optional)
+
+`ssh -i grabdish-on-premises.key opc@158.101.98.17`
+
+![img_87.png](images/img_87.png)
+
+`cd; tail -f infra-install.log`
+
+![img_88.png](images/img_88.png)
+
+
+
 </details>
+
+<details>
+<summary>Lab 2: Data-centric microservices walkthrough with Helidon MP</summary>
+
+<details>
+<summary>Task 1: Access the FrontEnd UI</summary>
+
+You are ready to access the frontend page. Open a new browser tab and enter the external IP URL:
+
+https://<EXTERNAL-IP>
+
+Note that for convenience a self-signed certificate is used to secure this https address and so it is likely you will be prompted by the browser to allow access.
+
+You will then be prompted to authenticate to access the Front End microservices. The user is grabdish and the password is the one you entered in Lab 1.
+![img.png](images/img40.png)
+
+
+You should then see the Front End home page. You've now accessed your first microservice of the lab!
+
+![img_41.png](images/img_41.png)
+
+We created a self-signed certificate to protect the frontend-helidon service. This certificate will not be recognized by your browser and so a warning will be displayed. It will be necessary to instruct the browser to trust this site in order to display the frontend. In a production implementation a certificate that is officially signed by a certificate authority should be used.
+</details>
+<details>
+<summary>Task 2: Verify the Order and Inventory Functionality of GrabDish store</summary>
+
+Click Transactional under Labs.
+
+![img_42.png](images/img_42.png)
+
+Check the inventory of a given item such as sushi, by typing sushi in the food field and clicking Get Inventory. You should see the inventory count result 0.
+
+![img_43.png](images/img_43.png)
+
+(Optional) If for any reason you see a different count, click Remove Inventory to bring back the count to 0.
+
+Let’s try to place an order for sushi by clicking Place Order.
+
+![img_44.png](images/img_44.png)
+
+
+To check the status of the order, click Show Order. You should see a failed order status.
+
+![img_45.png](images/img_45.png)
+
+This is expected, because the inventory count for sushi was 0.
+
+Click Add Inventory to add the sushi in the inventory. You should see the outcome being an incremental increase by 1.
+
+![img_46.png](images/img_46.png)
+
+
+Go ahead and place another order by increasing the order ID by 1 (67) and then clicking Place Order. Next click Show Order to check the order status.
+
+![img_47.png](images/img_47.png)
+
+![img_48.png](images/img_48.png)
+
+The order should have been successfully placed, which is demonstrated with the order status showing success.
+
+Although this might look like a basic transactional mechanic, the difference in the microservices environment is that it’s not using a two-phase XA commit, and therefore not using distributed locks. In a microservices environment with potential latency in the network, service failures during the communication phase or delays in long running activities, an application shouldn’t have locking across the services. Instead, the pattern that is used is called the saga pattern, which instead of defining commits and rollbacks, allows each service to perform its own local transaction and publish an event. The other services listen to that event and perform the next local transaction.
+
+In this architecture, there is a frontend service which mimics some mobile app requests for placing orders. The frontend service is communicating with the order service to place an order. The order service is then inserting the order into the order database, while also sending a message describing that order. This approach is called the event sourcing pattern, which due to its decoupled non-locking nature is prominently used in microservices. The event sourcing pattern entails sending an event message for every work or any data manipulation that was conducted. In this example, while the order was inserted in the order database, an event message was also created in the Advanced Queue of the Oracle database.
+
+Implementing the messaging queue inside the Oracle database provides a unique capability of performing the event sourcing actions (manipulating data and sending an event message) atomically within the same transaction. The benefit of this approach is that it provides a guaranteed once delivery, and it doesn’t require writing additional application logic to handle possible duplicate message deliveries, as it would be the case with solutions using separate datastores and event messaging platforms.
+
+In this example, once the order was inserted into the Oracle database, an event message was also sent to the interested parties, which in this case is the inventory service. The inventory service receives the message and checks the inventory database, modifies the inventory if necessary, and sends back a message if the inventory exists or not. The inventory message is picked up by the order service which based on the outcome message, sends back to the frontend a successful or failed order status.
+
+This approach fits the microservices model, because the inventory service doesn’t have any REST endpoints, and instead it purely uses messaging. The services do not talk directly to each other, as each service is isolated and accesses its datastore, while the only communication path is through the messaging queue.
+
+This architecture is tied with the Command Query Responsibility Segregation (CQRS) pattern, meaning that the command and query operations use different methods. In our example the command was to insert an order into the database, while the query on the order is receiving events from different interested parties and putting them together (from suggestive sales, inventory, etc). Instead of actually going to suggestive sales service or inventory service to get the necessary information, the service is receiving events.
+
+Let’s look at the Java source code to understand how Advanced Queuing and Oracle database work together.
+
+
+
+What is unique to Oracle and Advanced Queuing is that a JDBC connection can be invoked from an AQ JMS session. Therefore we are using this JMS session to send and receive messages, while the JDBC connection is used to manipulate the datastore. This mechanism allows for both the JMS session and JDBC connection to exist within same atomic local transaction.
+
+</details>
+
+<details>
+<summary>Task 3: Verify Spatial Functionality </summary>
+
+Click Spatial on the Transactional tab
+
+![img_49.png](images/img_49.png)
+
+Check Show me the Fusion menu to make your choices for the Fusion Cuisine
+
+![img_50.png](images/img_50.png)
+
+Click the plus sign to add Makizushi, Miso Soup, Yakitori and Tempura to your order and click Ready to Order.
+
+![img_51.png](images/img_51.png)
+
+
+Click Deliver here to deliver your order to the address provided on the screen
+
+![img_52.png](images/img_52.png)
+
+Your order is being fulfilled and will be delivered via the fastest route.
+
+![img_53.png](images/img_53.png)
+
+Go to the other tab on your browser to view the Transactional screen.
+
+![img_54.png](images/img_54.png)
+
+This demo demonstrates how geocoding (the set of latitude and longitude coordinates of a physical address) can be used to derive coordinates from addresses and how routing information can be plotted between those coordinates. Oracle JET web component provides access to mapping from an Oracle Maps Cloud Service and it is being used in this demo for initializing a map canvas object (an instance of the Mapbox GL JS API's Map class). The map canvas automatically displays a map background (aka "basemap") served from the Oracle Maps Cloud Service. This web component allows mapping to be integrated simply into Oracle JET and Oracle Visual Builder applications, backed by the full power of Oracle Maps Cloud Service including geocoding, route-finding and multiple layer capabilities for data overlay. The Oracle Maps Cloud Service (maps.oracle.com or eLocation) is a full Location Based Portal. It provides mapping, geocoding and routing capabilities similar to those provided by many popular commercial online mapping services.
+
+</details>
+
+<details><summary>Task 4: Show Metrics</summary>
+
+Notice @Timed and @Counted annotations on placeOrder method of $GRABDISH_HOME/order-helidon/src/main/java/io/helidon/data/examples/OrderResource.java
+
+![img_55.png](images/img_55.png)
+
+Click Tracing, Metrics, and Health
+
+![img_56.png](images/img_56.png)
+
+Click Show Metrics and notice the long string of metrics (including those from placeOrder timed and counted) in prometheus format.
+
+![img_57.png](images/img_57.png)
+
+</details>
+
+<details>
+<summary>Task 5: Verify Health</summary>
+
+Oracle Cloud Infrastructure Container Engine for Kubernetes (OKE) provides health probes which check a given container for its liveness (checking if the pod is up or down) and readiness (checking if the pod is ready to take requests or not). In this STEP you will see how the probes pick up the health that the Helidon microservice advertises. Click Tracing, Metrics, and Health and click Show Health: Liveness
+
+![img_58.png](images/img_58.png)
+
+Notice health check class at $GRABDISH_HOME/order-helidon/src/main/java/io/helidon/data/examples/OrderServiceLivenessHealthCheck.java and how the liveness method is being calculated.
+
+![img_59.png](images/img_59.png)
+
+
+Notice liveness probe specified in $GRABDISH_HOME/order-helidon/order-helidon-deployment.yaml The livenessProbe can be set up with different criteria, such as reading from a file or an HTTP GET request. In this example the OKE health probe will use HTTP GET to check the /health/live and /health/ready addresses every 3 seconds, to see the liveness and readiness of the service.
+
+![img_60.png](images/img_60.png)
+
+In order to observe how OKE will manage the pods, the microservice has been created with the possibility to set up the liveliness to “false”. Click Get Last Container Start Time and note the time the container started.
+
+
+
+Click Set Liveness to False . This will cause the Helidon Health Check to report false for liveness which will result in OKE restarting the pod/microservice
+
+![img_61.png](images/img_61.png)
+
+Click Get Last Container Start Time. It will take a minute or two for the probe to notice the failed state and conduct the restart and as it does you may see a connection refused exception.
+
+![img_62.png](images/img_62.png)
+
+Eventually you will see the container restart and note the new/later container startup time reflecting that the pod was restarted.
+![img_63.png](images/img_63.png)
+</details>
+
 
 <details>
 
@@ -354,10 +626,28 @@ Click the Jaeger to view the corresponding trace information and drill down into
 
 **Introduction**
 In this lab, we will tear down the resources created in your tenancy and the directory in the Oracle cloud shell.
-Objectives
-Clone the setup and microservices code
-Execute the setup
-Prerequisites
-Have successfully completed the previous labs
+
+Click on Stack Details (Under Resource Manager)
+
+![img_89.png](images/img_89.png)
+
+Click the Destroy (Red Color) Button
+
+![img_90.png](images/img_90.png)
+
+Chick Destroy Again
+
+![img_91.png](images/img_91.png)
+
+
 </details>
 
+OLD VERSION FOR TESTING ONLY
+
+[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/vishalmmehra/microservices-datadriven/raw/main/infra/multi-node-deployment.zip)
+
+
+
+NET VERSION FOR TESTING ONLY
+
+[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/vishalmmehra/microservices-datadriven/raw/main/infra/multi-node-deployment2.zip)
