@@ -49,12 +49,11 @@ Task 1: Undeploy the Java Helidon MP Inventory Microservice
 
 This lab assumes you have already completed the previous labs.
 
-Collapse All Tasks
 Task 1: Undeploy the Java Helidon MP Inventory Microservice
 To undeploy the Inventory Helidon MP service, open the Cloud Shell and go to the inventory-helidon folder, using the following command.
 
-Copycd $GRABDISH_HOME/inventory-helidon ; ./undeploy.sh
-
+`$GRABDISH_HOME/inventory-helidon ; ./undeploy.sh
+`
 
 Task 2: Deploy an alternate implementation of the Inventory Microservice
 In this step you can choose between six different implementations of the Inventory Microservice: PL/SQL, Python, NodeJS, .NET, Go, or Java Helidon SE.
@@ -63,33 +62,36 @@ Select one of the alternate implementations and deploy the service for the selec
 
 If you selected PL/SQL, deploy this service:
 
-Copycd $GRABDISH_HOME/inventory-plsql; ./deploy.sh
+`cd $GRABDISH_HOME/inventory-plsql; ./deploy.sh
+`
 If you selected Python, deploy this service:
 
-Copycd $GRABDISH_HOME/inventory-python; ./deploy.sh
-If you selected Node.js, deploy this service:
+`cd $GRABDISH_HOME/inventory-python; ./deploy.sh
+`If you selected Node.js, deploy this service:
 
-Copycd $GRABDISH_HOME/inventory-nodejs; ./deploy.sh
-If you selected .NET, deploy this service:
+`cd $GRABDISH_HOME/inventory-nodejs; ./deploy.sh
+`If you selected .NET, deploy this service:
 
-Copycd $GRABDISH_HOME/inventory-dotnet; ./deploy.sh
+`cd $GRABDISH_HOME/inventory-dotnet; ./deploy.sh`
 If you selected Go, deploy this service:
 
-Copycd $GRABDISH_HOME/inventory-go; ./deploy.sh
+`cd $GRABDISH_HOME/inventory-go; ./deploy.sh`
 If you selected Spring Boot, deploy this service:
 
-Copycd $GRABDISH_HOME/inventory-springboot; ./deploy.sh
+`cd $GRABDISH_HOME/inventory-springboot; ./deploy.sh`
 If you selected Java Helidon SE, deploy this service:
 
-Copycd $GRABDISH_HOME/inventory-helidon-se; ./deploy.sh
+`cd $GRABDISH_HOME/inventory-helidon-se; ./deploy.sh`
+
 Task 3: Verify application functionality
+
 Repeat Lab 2: Step 3 to verify that the functionality of the GrabDish store remains the same while using the new implementation. You will need to use different order ID's, for example 166 and 167.
 Task 4: Re-deploy the Java Helidon MP Inventory Microservice
 To undeploy any other inventory services and then deploy the Inventory Helidon MP service, issue the following commands.
 
-Copyfor i in inventory-plsql inventory-helidon-se inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-springboot; do cd $GRABDISH_HOME/$i; ./undeploy.sh; done
+`for i in inventory-plsql inventory-helidon-se inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-springboot; do cd $GRABDISH_HOME/$i; ./undeploy.sh; done
 cd $GRABDISH_HOME/inventory-helidon ; ./deploy.sh
-cd $GRABDISH_HOME
+cd $GRABDISH_HOME`
 
 
 </details>
