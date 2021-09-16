@@ -88,13 +88,16 @@ You will create an application with Helidon microservices and a Javascript front
 **Key Points**
 
 <li> Make a note of variable dbaas_public_ip - this is your Database instance public IP address </li>
-![img_83.png](img_83.png)
+
+![img_83.png](images/img_83.png)
 
 <li>Make a note of variable compute_instance_public_ip - this is your Application (FrontEnd) instance public IP address </li>
-![img_84.png](img_84.png)
+
+![img_84.png](images/img_84.png)
 
 <li> Make a note of variable Grabdish_Application_Password - this is your Application (FrontEnd) password </li>
-![img_85.png](img_85.png)
+
+![img_85.png](images/img_85.png)
 
 <li> Make a note of variable Login_Instructions - using these you can login to the Grabdish FrontEnd Application </li>
 
