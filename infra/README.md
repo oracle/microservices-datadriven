@@ -308,7 +308,7 @@ Select the 'Explore' option from the drop-down menu of any panel to show that me
 </details>
 
 <details>
-<summary>Task 4: Use Grafana to drill down on metrics, tracing, and logs correlation and logs to trace feature<summary>Task 4: Use Grafana to drill down on metrics, tracing, and logs correlation and logs to trace feature<summary>Task 4: Use Grafana to drill down on metrics, tracing, and logs correlation and logs to trace feature</summary>
+<summary>Task 4: Use Grafana to drill down on metrics, tracing, and logs correlation and logs to trace feature</summary>
 
 Click the Split button on the Explore screen.
 
@@ -333,7 +333,6 @@ Select the order (microservice) and db-log-exporter-orderpdb values under "2. Fi
 ![img_37.png](images/img_37.png)
 
 
-
 Select one of the green info log entries to expand it. Notice the Jaeger button next to the trace id.
 
 ![img_38.png](images/img_38.png)
@@ -341,6 +340,8 @@ Select one of the green info log entries to expand it. Notice the Jaeger button 
 Click the Jaeger to view the corresponding trace information and drill down into detail.
 
 ![img_39.png](images/img_39.png)
+
+
 
 </details>
 
