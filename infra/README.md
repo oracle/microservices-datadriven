@@ -1,4 +1,4 @@
-# Building Microservices with Oracle Converged Database On-Premises Workshop
+# Building Microservices with Converged Oracle Database On-Premises Workshop
 
 This workshop will help you understand the technical capabilities inside and outside the Oracle converged database to support a scalable data and event-driven microservices architecture.
 
