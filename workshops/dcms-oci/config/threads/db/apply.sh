@@ -37,7 +37,19 @@ for db in $DBS; do
   db_upper=`echo $db | tr '[:lower:]' '[:upper:]'`
   DB_STATE=$DCMS_INFRA_STATE/db/$db
   mkdir -p $DB_STATE
+
+  if ! state_done ${db_upper}_BYO_DB_OCID; then
+    if test $(state_get RUN_TYPE) == "LL"; then
+      # DB is already provisioned.  Just need to get the DB OCID
+      DB_OCID=`oci db autonomous-database list --compartment-id "$(state_get COMPARTMENT_OCID)" --query 'join('"' '"',data[?"display-name"=='"'${db_upper}'"'].id)' --raw-output`
+      state_set ${DB_upper}_BYO_DB_OCID "$DB_OCID"
+    else
+      state_set ${DB_upper}_BYO_DB_OCID "NA"
+    fi
+  fi
+
   cat >$DB_STATE/input.env <<!
+BYO_DB_OCID=$(state_get ${db_upper}_BYO_DB_OCID)
 COMPARTMENT_OCID=$(state_get COMPARTMENT_OCID)
 REGION=$(state_get REGION)
 DB_NAME=$(state_get ${db_upper}_NAME)

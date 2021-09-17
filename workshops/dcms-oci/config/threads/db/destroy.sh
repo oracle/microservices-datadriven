@@ -37,6 +37,7 @@ for db in $DBS; do
   state_reset ${db_upper}_TNS_ADMIN
   state_reset ${db_upper}_ALIAS
   state_reset ${db_upper}_CWALLET_SSO_AUTH_URL
+  state_reset ${DB_upper}_BYO_DB_OCID
 done
 
 

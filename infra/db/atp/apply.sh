@@ -11,32 +11,35 @@ if ! provisioning-helper-pre-apply; then
 fi
 
 
-# Execute terraform
-if ! test -f $MY_STATE/state_terraform_done; then
-  cp -rf $MY_CODE/terraform $MY_STATE
-  cd $MY_STATE/terraform
-  export TF_VAR_ociCompartmentOcid="$COMPARTMENT_OCID"
-  export TF_VAR_ociRegionIdentifier="$REGION"
-  export TF_VAR_dbName="$DB_NAME"
-  export TF_VAR_displayName="$DISPLAY_NAME"
+if ! test -f $MY_STATE/state_provisioning_done; then
+  if test "$BYO_DB_OCID" =~ ^ocid1\.autonomousdatabase; then
+    # ATP DB has been provisioned already
+    DB_OCID=$BYO_DB_OCID
+  else
+    # Execute terraform
+    cp -rf $MY_CODE/terraform $MY_STATE
+    cd $MY_STATE/terraform
+    export TF_VAR_ociCompartmentOcid="$COMPARTMENT_OCID"
+    export TF_VAR_ociRegionIdentifier="$REGION"
+    export TF_VAR_dbName="$DB_NAME"
+    export TF_VAR_displayName="$DISPLAY_NAME"
 
-  if ! terraform init; then
-      echo 'ERROR: terraform init failed!'
-      exit 1
+    if ! terraform init; then
+        echo 'ERROR: terraform init failed!'
+        exit 1
+    fi
+
+    if ! terraform apply -auto-approve; then
+        echo 'ERROR: terraform apply failed!'
+        exit 1
+    fi
+
+    # Get the DB_OCID
+    DB_OCID=`terraform output -raw db_ocid`
   fi
-
-  if ! terraform apply -auto-approve; then
-      echo 'ERROR: terraform apply failed!'
-      exit 1
-  fi
-
-  # Get the DB_OCID
-  DB_OCID=`terraform output -raw db_ocid`
-
   echo "DB_OCID='$DB_OCID'" >>$STATE_FILE
-  touch $MY_STATE/state_terraform_done
+  touch $MY_STATE/state_provisioning_done
 fi
-
 
 # Set DB Password
 if ! test -f $MY_STATE/state_password_set; then

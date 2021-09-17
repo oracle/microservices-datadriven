@@ -50,23 +50,27 @@ fi
 
 
 # Execute terraform destroy
-if test -f $MY_STATE/state_terraform_done; then
-  cd $MY_STATE/terraform
-  export TF_VAR_ociCompartmentOcid="$COMPARTMENT_OCID"
-  export TF_VAR_ociRegionIdentifier="$REGION"
-  export TF_VAR_dbName="$DB_NAME"
-  export TF_VAR_displayName="$DISPLAY_NAME"
+if test -f $MY_STATE/state_provisioning_done; then
+  if test "$BYO_DB_OCID" =~ ^ocid1\.autonomousdatabase; then
+    # BYO so do not destroy
+  else
+    cd $MY_STATE/terraform
+    export TF_VAR_ociCompartmentOcid="$COMPARTMENT_OCID"
+    export TF_VAR_ociRegionIdentifier="$REGION"
+    export TF_VAR_dbName="$DB_NAME"
+    export TF_VAR_displayName="$DISPLAY_NAME"
 
-  if ! terraform init; then
-      echo 'ERROR: terraform init failed!'
-      exit 1
-  fi
+    if ! terraform init; then
+        echo 'ERROR: terraform init failed!'
+        exit 1
+    fi
 
-  if ! terraform destroy -auto-approve; then
-      echo 'ERROR: terraform destroy failed!'
-      exit 1
+    if ! terraform destroy -auto-approve; then
+        echo 'ERROR: terraform destroy failed!'
+        exit 1
+    fi
   fi
-  rm $MY_STATE/state_terraform_done
+  rm $MY_STATE/state_provisioning_done
 fi
 
 

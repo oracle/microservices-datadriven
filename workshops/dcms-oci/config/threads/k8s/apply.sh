@@ -26,11 +26,23 @@ while ! test -z "$DEPENDENCIES"; do
 done
 
 
+if ! state_done BYO_OKE_OCID; then
+  if test $(state_get RUN_TYPE) == "LL"; then
+    # OKE is already provisioned.  Just need to get the OKE OCID
+    BYO_OKE_OCID=`oci ce cluster list --compartment-id "$(state_get COMPARTMENT_OCID)" --query "join(' ',data[?"'"lifecycle-state"'"=='ACTIVE'].id)" --raw-output`
+    state_set BYO_OKE_OCID "$BYO_OKE_OCID"
+  else
+    state_set BYO_OKE_OCID "NA"
+  fi
+fi
+
+
 # Provision OKE
 STATE=$DCMS_INFRA_STATE/k8s
 mkdir -p $STATE
 cd $STATE
 cat >$STATE/input.env <<!
+BYO_OKE_OCID=$(state_get BYO_OKE_OCID)
 COMPARTMENT_OCID=$(state_get COMPARTMENT_OCID)
 REGION=$(state_get REGION)
 TENANCY_OCID=$(state_get TENANCY_OCID)

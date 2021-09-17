@@ -57,12 +57,10 @@ $MY_CODE/background-builds.sh "$MY_STATE/background-builds" &>> $DCMS_LOG_DIR/ba
 while ! state_done RUN_TYPE; do
   if [[ "$HOME" =~ /home/ll[0-9]{1,5}_us ]]; then
     # Green Button (hosted by Live Labs)
-    state_set RUN_TYPE "3"
+    state_set RUN_TYPE "LL"
     state_set RESERVATION_ID `grep -oP '(?<=/home/ll).*?(?=_us)' <<<"$HOME"`
     state_set USER_OCID 'NA'
     state_set USER_NAME "LL$(state_get RESERVATION_ID)-USER"
-    state_set_done PROVISIONING
-    state_set_done K8S_PROVISIONING
     state_set RUN_NAME "grabdish$(state_get RESERVATION_ID)"
     state_set ORDER_DB_NAME "ORDER$(state_get RESERVATION_ID)"
     state_set INVENTORY_DB_NAME "INVENTORY$(state_get RESERVATION_ID)"
@@ -70,15 +68,7 @@ while ! state_done RUN_TYPE; do
     state_set_done ATP_LIMIT_CHECK
   else
     # Run in your own tenancy
-    state_set RUN_TYPE "1"
-    # BYO K8s
-    if test ${BYO_K8S:-UNSET} != 'UNSET'; then
-      state_set_done BYO_K8S
-      state_set_done K8S_PROVISIONING
-      state_set OKE_OCID 'NA'
-      state_set_done KUBECTL
-      state_set_done OKE_LIMIT_CHECK
-    fi
+    state_set RUN_TYPE "OT"
   fi
 done
 
@@ -308,11 +298,16 @@ fi
 
 
 # Explain what is running and give status as the setup proceeds
-echo "Thank you for entering your information and preferences.  The setup is now running with four background threads:"
-echo "DB_THREAD:       Provisions the order and inventory databases, and sets their passwords - approx 3 minutes"
-echo "K8S_THREAD:      Provisions the Oracle Kubernetes Engine (OKE) - approx 15 minutes"
+if test $(state_get RUN_TYPE) == "LL"; then
+  echo "Thank you for entering your information and preferences.  The setup is now running with three background threads:"
+  echo "DB_THREAD:       Sets the password of the order and inventory databases - approx 1 minutes"
+else
+  echo "Thank you for entering your information and preferences.  The setup is now running with four background threads:"
+  echo "DB_THREAD:       Provisions the order and inventory databases, and sets their passwords - approx 3 minutes"
+  echo "K8S_THREAD:      Provisions the Oracle Kubernetes Engine (OKE) - approx 15 minutes"
+fi
 echo "BASE_BUILDS:     Builds the microservices for Lab 2 to save you time later - approx 5 minutes"
-echo "GRABDISH_THREAD: Configures the grabdish application once the database and OKE are provisioned - approx 2 minutes"
+echo "GRABDISH_THREAD: Configures the grabdish application once the database and OKE are provisioned - approx 1 minutes"
 echo
 
 # Wait for the threads and base builds to complete
