@@ -128,7 +128,7 @@ done
 
 # Double check and then set the region and home region
 while ! state_done REGION; do
-  if test $(state_get RUN_TYPE) -eq 1; then
+  if test $(state_get RUN_TYPE) != "LL"; then
     HOME_REGION=`oci iam region-subscription list --query 'data[?"is-home-region"]."region-name" | join('\'' '\'', @)' --raw-output`
     state_set HOME_REGION "$HOME_REGION"
   fi
@@ -139,7 +139,7 @@ done
 
 # Create the compartment
 while ! state_done COMPARTMENT_OCID; do
-  if test $(state_get RUN_TYPE) -ne 3; then
+  if test $(state_get RUN_TYPE) != "LL"; then
     echo "Resources will be created in a new compartment named $(state_get RUN_NAME)"
     export OCI_CLI_PROFILE=$(state_get HOME_REGION)
     COMPARTMENT_OCID=`oci iam compartment create --compartment-id "$(state_get TENANCY_OCID)" --name "$(state_get RUN_NAME)" --description "GrabDish Workshop" --query 'data.id' --raw-output`
@@ -206,7 +206,7 @@ done
 
 # Get the docker auth token
 while ! is_secret_set DOCKER_AUTH_TOKEN; do
-  if test $(state_get RUN_TYPE) -ne 3; then
+  if test $(state_get RUN_TYPE) != "LL"; then
     export OCI_CLI_PROFILE=$(state_get HOME_REGION)
     if ! TOKEN=`oci iam auth-token create  --user-id "$(state_get USER_OCID)" --description 'grabdish docker login' --query 'data.token' --raw-output 2>$DCMS_LOG_DIR/docker_auth_token`; then
       if grep UserCapacityExceeded $DCMS_LOG_DIR/docker_auth_token >/dev/null; then
