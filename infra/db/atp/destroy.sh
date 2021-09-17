@@ -51,9 +51,7 @@ fi
 
 # Execute terraform destroy
 if test -f $MY_STATE/state_provisioning_done; then
-  if test "$BYO_DB_OCID" =~ ^ocid1\.autonomousdatabase; then
-    # BYO so do not destroy
-  else
+  if ! test "$BYO_DB_OCID" =~ ^ocid1\.autonomousdatabase; then
     cd $MY_STATE/terraform
     export TF_VAR_ociCompartmentOcid="$COMPARTMENT_OCID"
     export TF_VAR_ociRegionIdentifier="$REGION"

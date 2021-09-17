@@ -8,10 +8,10 @@ if ! provisioning-helper-pre-apply; then
   return 1
 fi
 
-STATE_STORE=$MY_STATE/state
-mkdir -p $STATE_STORE
+STATE_STORE_STATE_DIR=$MY_STATE/state
+mkdir -p $STATE_STORE_STATE_DIR
 cat >$OUTPUT_FILE <<!
-export STATE_STORE=$STATE_STORE
+export STATE_STORE_STATE_DIR=$STATE_STORE_STATE_DIR
 export STATE_LOG=$STATE_LOG
 !
 cat $MY_CODE/state-functions.env >>$OUTPUT_FILE

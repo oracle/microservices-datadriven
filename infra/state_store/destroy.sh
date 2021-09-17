@@ -8,10 +8,10 @@ if ! provisioning-helper-pre-destroy; then
   return 1
 fi
 
-STATE_STORE_STATE=$MY_STATE/state
+STATE_STORE_STATE_DIR=$MY_STATE/state
 
-if test -d $STATE_STORE_STATE; then
-  rm -rf $STATE_STORE_STATE
+if test -d $STATE_STORE_STATE_DIR; then
+  rm -rf $STATE_STORE_STATE_DIR
 fi
 
 rm -f $STATE_FILE

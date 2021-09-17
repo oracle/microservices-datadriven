@@ -42,9 +42,9 @@ for db in $DBS; do
     if test $(state_get RUN_TYPE) == "LL"; then
       # DB is already provisioned.  Just need to get the DB OCID
       DB_OCID=`oci db autonomous-database list --compartment-id "$(state_get COMPARTMENT_OCID)" --query 'join('"' '"',data[?"display-name"=='"'${db_upper}'"'].id)' --raw-output`
-      state_set ${DB_upper}_BYO_DB_OCID "$DB_OCID"
+      state_set ${db_upper}_BYO_DB_OCID "$DB_OCID"
     else
-      state_set ${DB_upper}_BYO_DB_OCID "NA"
+      state_set ${db_upper}_BYO_DB_OCID "NA"
     fi
   fi
 
