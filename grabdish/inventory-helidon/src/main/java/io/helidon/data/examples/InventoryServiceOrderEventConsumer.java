@@ -113,6 +113,8 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
     private void updateDataAndSendEventOnInventory(AQjmsSession session, String orderid, String itemid) throws Exception {
         if (inventoryResource.crashAfterOrderMessageReceived) System.exit(-1);
         String inventorylocation = evaluateInventory(session, itemid);
+        System.out.println("In Praveen's updateDataAndSendEventOnInventory()");
+        System.out.println("itemid : " + itemid);
         Inventory inventory = new Inventory(orderid, itemid, inventorylocation, "beer"); //static suggestiveSale - represents an additional service/event
         Span activeSpan = inventoryResource.getTracer().buildSpan("inventorylocation").asChildOf(inventoryResource.getTracer().activeSpan()).start();
         activeSpan.log("begin placing order"); // logs are for a specific moment or event within the span (in contrast to tags which should apply to the span regardless of time).
