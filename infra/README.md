@@ -4,7 +4,7 @@ This workshop will help you understand the technical capabilities inside and out
 
 You will create an application with Helidon microservices and a Javascript front-end, deployed to a minikube kubernetes cluster, using REST and messaging for communication and accessing pluggable Oracle databases. Oracle Database is hosted on a docker container.
 
-![img_64.png](images/img_64.png)
+![img_64.png](images/img_92.png)
 
     For additional details regarding Microservices Data-driven applications on Oracle Converged Database check,
 
@@ -644,13 +644,3 @@ Chick Destroy Again
 
 
 </details>
-
-OLD VERSION FOR TESTING ONLY
-
-[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/vishalmmehra/microservices-datadriven/raw/main/infra/multi-node-deployment.zip)
-
-
-
-NEW VERSION FOR TESTING ONLY
-
-[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/vishalmmehra/microservices-datadriven/raw/main/infra/multi-node-deployment2.zip)
