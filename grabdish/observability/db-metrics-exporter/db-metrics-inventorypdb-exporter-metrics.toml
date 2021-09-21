@@ -1,0 +1,17 @@
+[[metric]]
+context = "inventorypdb_sessions"
+labels = ["inst_id", "status", "type"]
+metricsdesc = { value = "Gauge metric with count of inventorypdb sessions by status and type." }
+request = "select inst_id, status, type, count(*) as value from gv$session group by status, type, inst_id"
+
+[[metric]]
+context = "inventoryqueue_messages_by_state"
+labels = ["state"]
+metricsdesc = { value = "Total number of messages in inventory queue by state"}
+request = "select state, count(*) as value from inventoryqueuetable group by state"
+
+[[metric]]
+context = "inventorypdb_inventory_by_inventoryid"
+labels = ["inventoryid"]
+metricsdesc = { value = "Total number of inventory by inventoryid"}
+request = "select inventoryid, inventorycount as value from inventory"

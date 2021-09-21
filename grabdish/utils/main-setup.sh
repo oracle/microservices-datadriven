@@ -21,10 +21,10 @@ fi
 
 # Identify Run Type
 while ! state_done RUN_TYPE; do
-  if [[ "$HOME" =~ /home/ll[0-9]{1,4}_use$ ]]; then
-    # Green Button
+  if [[ "$HOME" =~ /home/ll[0-9]{1,5}_us ]]; then
+    # Green Button (hosted by Live Labs)
     state_set RUN_TYPE "3"
-    state_set RESERVATION_ID `grep -oP '(?<=/home/ll).*?(?=_use)' <<<"$HOME"`
+    state_set RESERVATION_ID `grep -oP '(?<=/home/ll).*?(?=_us)' <<<"$HOME"`
     state_set USER_OCID 'NA'
     state_set USER_NAME "LL$(state_get RESERVATION_ID)-USER"
     state_set_done PROVISIONING
@@ -417,6 +417,28 @@ while ! state_done INVENTORY_DB_PASSWORD_SET; do
   oci db autonomous-database update --autonomous-database-id "$(state_get INVENTORY_DB_OCID)" --from-json "file://temp_params" >/dev/null
   rm temp_params
   state_set_done INVENTORY_DB_PASSWORD_SET
+done
+
+# Wait for OKE Setup
+while ! state_done OKE_SETUP; do
+  echo "`date`: Waiting for OKE_SETUP"
+  sleep 2
+done
+
+# run ingress-nginx-setup.sh in background
+if ! state_get NGINX_INGRESS_SETUP_DONE; then
+  if ps -ef | grep "$GRABDISH_HOME/ingress/nginx/ingress-nginx-setup.sh" | grep -v grep; then
+    echo "$GRABDISH_HOME/ingress/nginx/ingress-nginx-setup.sh is already running"
+  else
+    echo "Executing ingress-nginx-setup.sh in the background"
+    nohup $GRABDISH_HOME/ingress/nginx/ingress-nginx-setup.sh &>>$GRABDISH_LOG/ingress-nginx-setup.log &
+  fi
+fi
+
+# Wait for Ingress Controller Setup
+while ! state_done NGINX_INGRESS_SETUP_DONE; do
+  echo "`date`: Waiting for NGINX_INGRESS_SETUP"
+  sleep 2
 done
 
 

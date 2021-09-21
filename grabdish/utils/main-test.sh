@@ -44,7 +44,7 @@ echo "TEST_LOG: #### Testing Lab2: Walkthrough Deploy..."
 cd $GRABDISH_HOME
 ./deploy.sh
 
-while test 4 -gt `kubectl get pods -n msdataworkshop | egrep 'frontend-helidon|inventory-helidon|order-helidon|supplier-helidon-se|inventory-springboot' | grep "1/1" | wc -l`; do
+while test 4 -gt `kubectl get pods -n msdataworkshop | egrep 'frontend-helidon|inventory-helidon|order-helidon|supplier-helidon-se' | grep "1/1" | wc -l`; do
   echo "Waiting for pods to start..."
   sleep 10
 done
@@ -52,7 +52,7 @@ done
 # Get the frontend URL
 RETRIES=0
 while ! state_done FRONTEND_URL; do
-  IP=`kubectl get services -n msdataworkshop | awk '/frontend/ {print $4}'`
+  IP=$(kubectl -n ingress-nginx get svc ingress-nginx-controller -o "go-template={{range .status.loadBalancer.ingress}}{{or .ip .hostname}}{{end}}")
   if [[ "$IP" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
     state_set FRONTEND_URL "https://$IP"
   else
@@ -117,15 +117,15 @@ utils/scaling-test.sh
 #
 #
 ## TRACING
-echo "TEST_LOG: #### Testing Lab5: Tracing"
-utils/tracing-test.sh
+#echo "TEST_LOG: #### Testing Lab5: Tracing"
+#utils/tracing-test.sh
 
 
 # APEX
 # TODO
 
 
-# TRACING
+# TRANSACTIONAL
 echo "TEST_LOG: #### Testing Lab7: Transactional Tests: Compare MongoDB, Postgres, and Kafka to Oracle DB with TEQ/AQ"
 utils/crashrecovery-test.sh
 

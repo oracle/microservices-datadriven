@@ -52,7 +52,8 @@ done
 # Get the frontend URL
 RETRIES=0
 while ! state_done FRONTEND_URL; do
-  IP=`kubectl get services -n msdataworkshop | awk '/frontend/ {print $4}'`
+  #IP=`kubectl get services -n msdataworkshop | awk '/frontend/ {print $4}'`
+  IP=$(kubectl -n ingress-nginx get svc ingress-nginx-controller -o "go-template={{range .status.loadBalancer.ingress}}{{or .ip .hostname}}{{end}}")
   if [[ "$IP" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
     state_set FRONTEND_URL "https://$IP"
   else

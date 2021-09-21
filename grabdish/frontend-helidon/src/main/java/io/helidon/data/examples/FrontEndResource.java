@@ -15,6 +15,8 @@ import io.opentracing.Span;
 import io.opentracing.Tracer;
 import org.eclipse.microprofile.auth.LoginConfig;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.metrics.annotation.Counted;
+import org.eclipse.microprofile.metrics.annotation.Timed;
 import org.eclipse.microprofile.opentracing.Traced;
 
 import javax.annotation.security.DeclareRoles;
@@ -188,8 +190,10 @@ public class FrontEndResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Traced(operationName = "Frontend.placeOrder")
     @Path("/placeorder")
+    @Traced(operationName = "Frontend.placeOrder")
+    @Timed(name = "frontend_placeOrder_timed") //length of time of an object
+    @Counted(name = "frontend_placeOrder_counted") //amount of invocations
     public String placeorder(Command command) {
         try {
             System.out.println("FrontEndResource.serviceName " + command.serviceName);
@@ -247,7 +251,9 @@ public class FrontEndResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
     @Traced(operationName = "FrontEnd.getmetrics")
-    @Path("/metrics")
+    @Path("/getmetrics")
+    //not to be confused with the /metrics of this frontend service,
+    // this is a call through to a service (can be any service but the frontend only calls order service) to get and display it's metrics
     public String getMetrics(Command command) {
         String urlString = "http://" + command.serviceName + ".msdataworkshop:8080/" + command.commandName;
         System.out.println("FrontEndResource.getMetrics url:" + urlString);

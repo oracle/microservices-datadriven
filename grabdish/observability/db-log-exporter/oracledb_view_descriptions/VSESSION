@@ -1,0 +1,106 @@
+
+    SADDR                               RAW(8 BYTE)
+    SID                                 NUMBER
+    SERIAL#                             NUMBER
+    AUDSID                              NUMBER
+    PADDR                               RAW(8 BYTE)
+    USER#                               NUMBER
+    USERNAME                            VARCHAR2(128)
+    COMMAND                             NUMBER
+    OWNERID                             NUMBER
+    TADDR                               VARCHAR2(16)
+    LOCKWAIT                            VARCHAR2(16)
+    STATUS                              VARCHAR2(8)
+    SERVER                              VARCHAR2(9)
+    SCHEMA#                             NUMBER
+    SCHEMANAME                          VARCHAR2(128)
+    OSUSER                              VARCHAR2(128)
+    PROCESS                             VARCHAR2(24)
+    MACHINE                             VARCHAR2(64)
+    PORT                                NUMBER
+    TERMINAL                            VARCHAR2(30)
+    PROGRAM                             VARCHAR2(48)
+    TYPE                                VARCHAR2(10)
+    SQL_ADDRESS                         RAW(8 BYTE)
+    SQL_HASH_VALUE                      NUMBER
+    SQL_ID                              VARCHAR2(13)
+    SQL_CHILD_NUMBER                    NUMBER
+    SQL_EXEC_START                      DATE
+    SQL_EXEC_ID                         NUMBER
+    PREV_SQL_ADDR                       RAW(8 BYTE)
+    PREV_HASH_VALUE                     NUMBER
+    PREV_SQL_ID                         VARCHAR2(13)
+    PREV_CHILD_NUMBER                   NUMBER
+    PREV_EXEC_START                     DATE
+    PREV_EXEC_ID                        NUMBER
+    PLSQL_ENTRY_OBJECT_ID               NUMBER
+    PLSQL_ENTRY_SUBPROGRAM_ID           NUMBER
+    PLSQL_OBJECT_ID                     NUMBER
+    PLSQL_SUBPROGRAM_ID                 NUMBER
+    MODULE                              VARCHAR2(64)
+    MODULE_HASH                         NUMBER
+    ACTION                              VARCHAR2(64)
+    ACTION_HASH                         NUMBER
+    CLIENT_INFO                         VARCHAR2(64)
+    FIXED_TABLE_SEQUENCE                NUMBER
+    ROW_WAIT_OBJ#                       NUMBER
+    ROW_WAIT_FILE#                      NUMBER
+    ROW_WAIT_BLOCK#                     NUMBER
+    ROW_WAIT_ROW#                       NUMBER
+    TOP_LEVEL_CALL#                     NUMBER
+    LOGON_TIME                          DATE
+    LAST_CALL_ET                        NUMBER
+    PDML_ENABLED                        VARCHAR2(3)
+    FAILOVER_TYPE                       VARCHAR2(13)
+    FAILOVER_METHOD                     VARCHAR2(10)
+    FAILED_OVER                         VARCHAR2(3)
+    RESOURCE_CONSUMER_GROUP             VARCHAR2(32)
+    PDML_STATUS                         VARCHAR2(8)
+    PDDL_STATUS                         VARCHAR2(8)
+    PQ_STATUS                           VARCHAR2(8)
+    CURRENT_QUEUE_DURATION              NUMBER
+    CLIENT_IDENTIFIER                   VARCHAR2(64)
+    BLOCKING_SESSION_STATUS             VARCHAR2(11)
+    BLOCKING_INSTANCE                   NUMBER
+    BLOCKING_SESSION                    NUMBER
+    FINAL_BLOCKING_SESSION_STATUS       VARCHAR2(11)
+    FINAL_BLOCKING_INSTANCE             NUMBER
+    FINAL_BLOCKING_SESSION              NUMBER
+    SEQ#                                NUMBER
+    EVENT#                              NUMBER
+    EVENT                               VARCHAR2(64)
+    P1TEXT                              VARCHAR2(64)
+    P1                                  NUMBER
+    P1RAW                               RAW(8 BYTE)
+    P2TEXT                              VARCHAR2(64)
+    P2                                  NUMBER
+    P2RAW                               RAW(8 BYTE)
+    P3TEXT                              VARCHAR2(64)
+    P3                                  NUMBER
+    P3RAW                               RAW(8 BYTE)
+    WAIT_CLASS_ID                       NUMBER
+    WAIT_CLASS#                         NUMBER
+    WAIT_CLASS                          VARCHAR2(64)
+    WAIT_TIME                           NUMBER
+    SECONDS_IN_WAIT                     NUMBER
+    STATE                               VARCHAR2(19)
+    WAIT_TIME_MICRO                     NUMBER
+    TIME_REMAINING_MICRO                NUMBER
+    TOTAL_TIME_WAITED_MICRO             NUMBER
+    HEUR_TIME_WAITED_MICRO              NUMBER
+    TIME_SINCE_LAST_WAIT_MICRO          NUMBER
+    SERVICE_NAME                        VARCHAR2(64)
+    SQL_TRACE                           VARCHAR2(8)
+    SQL_TRACE_WAITS                     VARCHAR2(5)
+    SQL_TRACE_BINDS                     VARCHAR2(5)
+    SQL_TRACE_PLAN_STATS                VARCHAR2(10)
+    SESSION_EDITION_ID                  NUMBER
+    CREATOR_ADDR                        RAW(8 BYTE)
+    CREATOR_SERIAL#                     NUMBER
+    ECID                                VARCHAR2(64)
+    SQL_TRANSLATION_PROFILE_ID          NUMBER
+    PGA_TUNABLE_MEM                     NUMBER
+    SHARD_DDL_STATUS                    VARCHAR2(8)
+    CON_ID                              NUMBER
+    EXTERNAL_NAME                       VARCHAR2(1024)
+    PLSQL_DEBUGGER_CONNECTED            VARCHAR2(5)
