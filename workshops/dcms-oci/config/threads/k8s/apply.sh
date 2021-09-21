@@ -26,23 +26,24 @@ while ! test -z "$DEPENDENCIES"; do
 done
 
 
-if ! state_done VNC_OCID; then
+if ! state_done VCN_OCID; then
   if test $(state_get RUN_TYPE) != "LL"; then
     # Need to provision network
     STATE=$DCMS_INFRA_STATE/network
     mkdir -p $STATE
+    cd $STATE
     cat >$STATE/input.env <<!
 COMPARTMENT_OCID=$(state_get COMPARTMENT_OCID)
 REGION=$(state_get REGION)
-VNC_DNS_LABEL=$DCMS_WORKSHOP
+VCN_DNS_LABEL=dcmsoci
 !
     provisioning-apply $MSDD_INFRA_CODE/network/oci
     (
       source $STATE/output.env
-      state_set VNC_OCID "$VNC_OCID"
+      state_set VCN_OCID "$VCN_OCID"
     )
   else
-    state_set VNC_OCID "NA"
+    state_set VCN_OCID "NA"
   fi
 fi
 
@@ -67,7 +68,7 @@ BYO_OKE_OCID=$(state_get BYO_OKE_OCID)
 COMPARTMENT_OCID=$(state_get COMPARTMENT_OCID)
 REGION=$(state_get REGION)
 TENANCY_OCID=$(state_get TENANCY_OCID)
-VNC_OCID=$(state_get VNC_OCID)
+VCN_OCID=$(state_get VCN_OCID)
 !
 provisioning-apply $MSDD_INFRA_CODE/k8s/oke_new
 

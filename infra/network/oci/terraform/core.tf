@@ -1,8 +1,8 @@
 resource "oci_core_vcn" "vcn" {
   cidr_block     = "10.0.0.0/16"
   compartment_id = var.ociCompartmentOcid
-  display_name   = var.vcnDnsName
-  dns_label    = var.vcnDnsName
+  display_name   = var.vcnDnsLabel
+  dns_label    = var.vcnDnsLabel
 }
 
 resource "oci_core_internet_gateway" "ig" {
@@ -20,26 +20,6 @@ resource oci_core_service_gateway sg {
   compartment_id = var.ociCompartmentOcid
   services {
     service_id = data.oci_core_services.services.services.0.id
-  }
-  vcn_id = oci_core_vcn.vcn.id
-}
-
-resource oci_core_route_table private {
-  compartment_id = var.ociCompartmentOcid
-  display_name = "private"
-  freeform_tags = {
-  }
-  route_rules {
-    description       = "traffic to the internet"
-    destination       = "0.0.0.0/0"
-    destination_type  = "CIDR_BLOCK"
-    network_entity_id = oci_core_nat_gateway.ngw.id
-  }
-  route_rules {
-    description       = "traffic to OCI services"
-    destination       = data.oci_core_services.services.services.0.cidr_block
-    destination_type  = "SERVICE_CIDR_BLOCK"
-    network_entity_id = oci_core_service_gateway.sg.id
   }
   vcn_id = oci_core_vcn.vcn.id
 }
