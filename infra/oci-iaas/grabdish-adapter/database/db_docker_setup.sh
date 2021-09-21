@@ -20,7 +20,10 @@ INVENTORY_QUEUE=INVENTORYQUEUE
 
 # Get DB Password
 DB_PASSWORD="$(curl -L http://169.254.169.254/opc/v1/instance/metadata | jq --raw-output  '.grabdish_database_password')"
-DB_SEED_PASSWORD=Welcome123
+
+#DB_SEED_PASSWORD=Welcome123
+DB_SEED_PASSWORD=$DB_PASSWORD
+
 
 # Create Orders PDB
 U=$ORDER_USER
@@ -222,7 +225,9 @@ echo "##########   Creating DB Links for Orders  ###########"
 WHENEVER SQLERROR EXIT 1
 connect $U/"$DB_PASSWORD"@${SVC}_tp
 
-create database link $LINK connect to $TU  identified by "$DB_PASSWORD" using '$TSVC';
+
+create database link $LINK connect to $TU  identified by "$DB_PASSWORD" using '${TSVC}_tp';
+
 
 !
 
@@ -241,7 +246,8 @@ WHENEVER SQLERROR EXIT 1
 
 connect $U/"$DB_PASSWORD"@${SVC}_tp
 
-create database link $LINK connect to $TU  identified by "$DB_PASSWORD" using '$TSVC';
+create database link $LINK connect to $TU  identified by "$DB_PASSWORD" using '${TSVC}_tp';
+
 
 !
 

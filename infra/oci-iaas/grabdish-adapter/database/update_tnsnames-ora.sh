@@ -4,6 +4,7 @@
 CWD=$(dirname "$0")
 TARGET_DIR=${CWD}/TNS_ADMIN
 
+
 #sudo mkdir -p $ TARGET_DIR
 #sudo chown -R opc:opc $ TARGET_DIR
 #sudo chmod +rwx  $ TARGET_DIR
