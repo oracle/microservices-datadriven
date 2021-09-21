@@ -1,3 +1,6 @@
+//Copyright (c) 2021 Oracle and/or its affiliates.
+//Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
 resource "oci_core_vcn" "okell_vcn" {
   cidr_block     = "10.0.0.0/16"
   compartment_id = var.ociCompartmentOcid

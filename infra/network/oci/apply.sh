@@ -16,7 +16,7 @@ cp -rf $MY_CODE/terraform $MY_STATE
 cd $MY_STATE/terraform
 export TF_VAR_ociCompartmentOcid="$COMPARTMENT_OCID"
 export TF_VAR_ociRegionIdentifier="$REGION"
-export TF_VAR_vcnDnsName="$VCN_DNS_LABEL"
+export TF_VAR_vcnDnsLabel="$VCN_DNS_LABEL"
 
 if ! terraform init; then
     echo 'ERROR: terraform init failed!'
