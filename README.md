@@ -35,4 +35,4 @@ Licensed under the Universal Permissive License v 1.0 as shown at <https://oss.o
 [DRC]: https://developer.oracle.com
 [Helidon]: https://helidon.io
 [On-Premises-Workshop]: https://github.com/oracle/microservices-datadriven/tree/main/infra
-[Workshop]: https://github.com/oracle/microservices-datadriven/tree/main/infra
+[Workshop]: https://bit.ly/simplifymicroservices
