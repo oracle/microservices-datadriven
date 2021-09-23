@@ -24,7 +24,7 @@ if ! state_done PROVISIONING; then
   cat >~/.terraformrc <<!
 provider_installation {
   filesystem_mirror {
-    path    = "/usr/share/terraform/providers"
+    path    = "/usr/share/terraform/plugins"
   }
   direct {
   }
