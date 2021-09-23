@@ -21,6 +21,16 @@ if ! state_done PROVISIONING; then
     rm -f containerengine.tf core.tf 
   fi
 
+  cat >~/.terraformrc <<!
+provider_installation {
+  filesystem_mirror {
+    path    = "/usr/share/terraform/providers"
+  }
+  direct {
+  }
+}
+!
+
   if ! terraform init; then
     echo 'ERROR: terraform init failed!'
     exit
