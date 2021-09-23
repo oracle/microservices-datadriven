@@ -1,8 +1,8 @@
-terraform {  
+terraform {
   required_providers {
     oci = {
-      source  = "hashicorp/oci"
-      version = "= 4.42.0"
+      source = "hashicorp/oci"
+      version = "4.42.0"
     }
   }
 }
