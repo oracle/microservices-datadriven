@@ -19,11 +19,9 @@ microservices complex.
 
 ## Resources
 
-* [Oracle LiveLabs][LiveLabs]
-  * [Workshops on Microservices][Workshops]
+* [Building Microservices with Oracle Converged Database Workshop][Workshop]
 * [On-Premises: Building Microservices with Oracle Converged Database Workshop][On-Premises-Workshop]
-* [Oracle Developer Resource Center][DRC]
-* [Helidon][Helidon]
+
 
 ## License
 
@@ -37,3 +35,4 @@ Licensed under the Universal Permissive License v 1.0 as shown at <https://oss.o
 [DRC]: https://developer.oracle.com
 [Helidon]: https://helidon.io
 [On-Premises-Workshop]: https://github.com/oracle/microservices-datadriven/tree/main/infra
+[Workshop]: https://github.com/oracle/microservices-datadriven/tree/main/infra
