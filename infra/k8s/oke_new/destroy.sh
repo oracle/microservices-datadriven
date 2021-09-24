@@ -11,7 +11,7 @@ if ! provisioning-helper-pre-destroy; then
 fi
 
 
-if ! test "$BYO_OKE_OCID" =~ ^ocid1\.cluster; then
+if [[ ! "$BYO_OKE_OCID" =~ ^ocid1\.cluster ]]; then
   cd $MY_STATE/terraform
   export TF_VAR_ociCompartmentOcid="$COMPARTMENT_OCID"
   export TF_VAR_ociRegionIdentifier="$REGION"

@@ -40,8 +40,14 @@ for db in $DBS; do
 
   if ! state_done ${db_upper}_BYO_DB_OCID; then
     if test $(state_get RUN_TYPE) == "LL"; then
+      # Legacy - until we change LL terraform to create ORDER_DB and INVENTORY_DB
+      if test "DBS" == "order_db"; then
+        DB_DIS_NAME="ORDERDB"
+      else
+        DB_DIS_NAME="INVENTORYDB"
+      fi
       # DB is already provisioned.  Just need to get the DB OCID
-      DB_OCID=`oci db autonomous-database list --compartment-id "$(state_get COMPARTMENT_OCID)" --query 'join('"' '"',data[?"display-name"=='"'${db_upper}'"'].id)' --raw-output`
+      DB_OCID=`oci db autonomous-database list --compartment-id "$(state_get COMPARTMENT_OCID)" --query 'join('"' '"',data[?"display-name"=='"'${DB_DIS_NAME}'"'].id)' --raw-output`
       state_set ${db_upper}_BYO_DB_OCID "$DB_OCID"
     else
       state_set ${db_upper}_BYO_DB_OCID "NA"

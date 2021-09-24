@@ -11,7 +11,7 @@ if ! provisioning-helper-pre-apply; then
 fi
 
 
-if test "$BYO_OKE_OCID" =~ ^ocid1\.cluster; then
+if [[ "$BYO_OKE_OCID" =~ ^ocid1\.cluster ]]; then
   # OKE has been provisioned already
   OKE_OCID=$BYO_OKE_OCID
 else
