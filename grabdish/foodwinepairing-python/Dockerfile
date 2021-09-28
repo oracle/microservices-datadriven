@@ -11,11 +11,13 @@ RUN  yum -y install oracle-release-el7 && \
 WORKDIR /app
 COPY inventory/requirements.txt .
 RUN yum install -y tar && \
-    yum install -y python36 \
-    yum install -y python36-oci-sdk && \
+    yum install -y python37 \
+    yum install -y python37-oci-sdk && \
     rm -rf /var/cache/yum && \
-    python3.6 -m pip install -U gensim && \
-    python3.6 -m pip install -r requirements.txt
+    python3.7 -m pip install -U gensim && \
+	python3.7 -m pip install -U scikit-learn && \
+    python3.7 -m pip install -r requirements.txt
+	
 
 ADD common .
 ADD foodwinepairing .
