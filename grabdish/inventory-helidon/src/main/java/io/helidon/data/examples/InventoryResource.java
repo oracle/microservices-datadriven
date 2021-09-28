@@ -6,6 +6,7 @@
  */
 package io.helidon.data.examples;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -15,6 +16,7 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.ws.rs.*;
+import javax.ws.rs.client.Client;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -24,6 +26,7 @@ import org.eclipse.microprofile.metrics.Counter;
 import org.eclipse.microprofile.metrics.Metadata;
 import org.eclipse.microprofile.metrics.MetricRegistry;
 import org.eclipse.microprofile.metrics.MetricType;
+import org.eclipse.microprofile.opentracing.Traced;
 
 import static io.helidon.data.examples.InventoryServiceOrderEventConsumer.INVENTORYDOESNOTEXIST;
 
@@ -43,6 +46,7 @@ public class InventoryResource {
     static final String inventoryQueueName =  System.getenv("inventoryqueuename");
     static boolean crashAfterOrderMessageReceived;
     static boolean crashAfterOrderMessageProcessed;
+    private Client client;
 
     static {
         System.setProperty("oracle.jdbc.fanEnabled", "false");
@@ -109,6 +113,16 @@ public class InventoryResource {
         return Response.ok()
                 .entity("inventory crashAfterOrderMessageProcessed set")
                 .build();
+    }
+    
+    public String foodWinePairingService(String itemid) throws IOException {
+    	String url = "http://foodwinepairing.msdataworkshop:8080/foodwinepairing/"+itemid;
+        System.out.println("Food Wine Pairing Request url : " + url);
+        Response response = client.target(url).request().get();
+        System.out.println("Food Wine Pairing Response.toString : " + response.toString());
+        String entity = response.readEntity(String.class);
+        System.out.println("Recommended Wines from FoodWinePairing Python Service : " + entity);
+        return entity;
     }
 
 }

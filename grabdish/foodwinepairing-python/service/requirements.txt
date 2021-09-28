@@ -1,0 +1,3 @@
+###### Requirements without Version Specifiers ######`
+Flask_restful               # req for app.py
+simplejson                  # req for app.py
