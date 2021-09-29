@@ -9,7 +9,7 @@ RUN  yum -y install oracle-release-el7 && \
      yum install -y oracle-epel-release-el7
 
 WORKDIR /app
-COPY inventory/requirements.txt .
+COPY foodwinepairing/requirements.txt .
 RUN yum install -y tar && \
     yum install -y python37 \
     yum install -y python37-oci-sdk && \
@@ -21,7 +21,6 @@ RUN yum install -y tar && \
 
 ADD common .
 ADD foodwinepairing .
-ADD service .
 RUN echo 'Adding foodwinepairing done in DockerFile!'
 
 CMD ["gunicorn", "app:app", "--config=config.py"]

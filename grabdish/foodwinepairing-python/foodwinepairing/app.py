@@ -6,13 +6,6 @@ from os import environ as env
 import cx_Oracle
 import simplejson
 
-# Dict Factory for Rows
-def makeDictFactory(cursor):
-    columnNames = [d[0] for d in cursor.description]
-    def createRow(*args):
-        return dict(zip(columnNames, args))
-    return createRow
-
 # Parameters
 debug_mode =          env.get("DEBUG_MODE", "1")
 
