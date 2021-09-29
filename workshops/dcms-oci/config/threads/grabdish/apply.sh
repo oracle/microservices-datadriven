@@ -17,7 +17,7 @@ fi
 
 
 # Wait for database and k8s threads
-DEPENDENCIES='DB_THREAD K8S_THREAD'
+DEPENDENCIES='DB_THREAD K8S_THREAD DB_DEPLOYMENT DB_TYPE'
 while ! test -z "$DEPENDENCIES"; do
   echo "Waiting for $DEPENDENCIES"
   WAITING_FOR=""
@@ -35,6 +35,8 @@ done
 STATE=$DCMS_APP_STATE
 mkdir -p $STATE
 cat >$STATE/input.env <<!
+DB_DEPLOYMENT="$(state_get DB_DEPLOYMENT)"
+DB_TYPE="$(state_get DB_TYPE)"
 DB_PASSWORD_SECRET=$(state_get DB_PASSWORD_SECRET)
 UI_PASSWORD_SECRET=$(state_get UI_PASSWORD_SECRET)
 ORDER_DB_TNS_ADMIN=$(state_get ORDER_DB_TNS_ADMIN)

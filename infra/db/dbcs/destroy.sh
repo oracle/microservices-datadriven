@@ -57,6 +57,8 @@ if test -f $MY_STATE/state_provisioning_done; then
     export TF_VAR_ociRegionIdentifier="$REGION"
     export TF_VAR_dbName="$DB_NAME"
     export TF_VAR_displayName="$DISPLAY_NAME"
+    export TF_VAR_publicRsaKey="$(<$DB_PUBLIC_RSA_KEY_FILE)"
+    export TF_VAR_vcnOcid="$VCN_OCID"
 
     if ! terraform init; then
         echo 'ERROR: terraform init failed!'

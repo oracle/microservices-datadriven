@@ -1,3 +1,6 @@
+//Copyright (c) 2021 Oracle and/or its affiliates.
+//Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
 resource "random_password" "database_admin_password" {
   length  = 12
   upper   = true
@@ -8,6 +11,7 @@ resource "random_password" "database_admin_password" {
   min_upper = "1"
   min_numeric = "1"
 }
+
 resource "oci_database_autonomous_database" "autonomous_database" {
   #Required
   admin_password           = random_password.database_admin_password.result
@@ -21,6 +25,7 @@ resource "oci_database_autonomous_database" "autonomous_database" {
   is_auto_scaling_enabled  = "false"
   is_preview_version_with_service_terms_accepted = "false"
 }
+
 output "db_ocid" {
   value = oci_database_autonomous_database.autonomous_database.id
 }

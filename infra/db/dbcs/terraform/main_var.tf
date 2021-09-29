@@ -4,3 +4,5 @@ variable "ociCompartmentOcid" {}
 variable "ociRegionIdentifier" {}
 variable "dbName" {}
 variable "displayName" {}
+variable "publicRsaKey" {}
+variable "vcnOcid" {}

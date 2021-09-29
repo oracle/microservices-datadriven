@@ -11,6 +11,14 @@ if ! provisioning-helper-pre-apply; then
 fi
 
 
+if ! test -f $MY_STATE/state_rsa_key; then
+  mkdir -p $MY_STATE/ssh
+  ssh-keygen -t rsa -N "" -b 2048 -C "db" -f $MY_STATE/ssh/db
+  echo "DB_PUBLIC_RSA_KEY_FILE='$MY_STATE/ssh/db-pub.rsa'" >>$STATE_FILE
+  touch $MY_STATE/state_rsa_key
+fi
+
+
 if ! test -f $MY_STATE/state_provisioning_done; then
   if test "$BYO_DB_OCID" =~ ^ocid1\.autonomousdatabase; then
     # ATP DB has been provisioned already
@@ -23,6 +31,8 @@ if ! test -f $MY_STATE/state_provisioning_done; then
     export TF_VAR_ociRegionIdentifier="$REGION"
     export TF_VAR_dbName="$DB_NAME"
     export TF_VAR_displayName="$DISPLAY_NAME"
+    export TF_VAR_publicRsaKey="$(<$DB_PUBLIC_RSA_KEY_FILE)"
+    export TF_VAR_vcnOcid="$VCN_OCID"
 
     if ! terraform init; then
         echo 'ERROR: terraform init failed!'

@@ -30,7 +30,8 @@ BEGIN
 
     -- Check the inventory
     update INVENTORYUSER.INVENTORY set inventorycount = inventorycount - 1 
-      where inventoryid = order_inv_id and inventorycount > 0 returning inventorylocation into order_inv_loc;
+      where inventoryid = order_inv_id and inventorycount > 0 returning inventorylocation 
+      into order_inv_loc;
     if sql%rowcount = 0 then
       order_inv_loc := 'inventorydoesnotexist';
     end if;

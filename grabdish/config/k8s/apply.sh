@@ -11,8 +11,6 @@ if ! provisioning-helper-pre-apply; then
 fi
 
 
-cd $MY_CODE/../..
-export GRABDISH_HOME=$PWD
 export GRABDISH_LOG
 
 

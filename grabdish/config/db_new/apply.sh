@@ -14,6 +14,118 @@ fi
 export GRABDISH_LOG
 
 
+# In the new model, we have a separate queue owner.  AQ propagation is only required when the there are separate PDBs.
+#
+
+# Useful variables
+ADMIN_USER=ADMIN
+ORDER_USER=ORDERUSER
+INVENTORY_USER=INVENTORYUSER
+AQ_USER=AQ
+ORDER_LINK=ORDERTOINVENTORYLINK
+INVENTORY_LINK=INVENTORYTOORDERLINK
+ORDER_QUEUE=ORDERQUEUE
+INVENTORY_QUEUE=INVENTORYQUEUE
+DB_PASSWORD=$(get_secret $DB_PASSWORD_SECRET)
+
+
+# Create the order schema
+if ! test -f $MY_STATE/order_user; then
+  export TNS_ADMIN=$ORDER_DB_TNS_ADMIN
+  sqlplus /nolog <<!
+WHENEVER SQLERROR EXIT 1
+connect $ADMIN_USER/"$DB_PASSWORD"@$ORDER_DB_ALIAS
+CREATE USER $ORDER_USER IDENTIFIED BY "$DB_PASSWORD";
+GRANT unlimited tablespace, connect, resource, aq_user_role, soda_app to $ORDER_USER;
+!
+  touch $MY_STATE/order_user
+fi
+
+
+# Create the inventory schema
+if ! test -f $MY_STATE/inventory_user; then
+  export TNS_ADMIN=$INVENTORY_DB_TNS_ADMIN
+  sqlplus /nolog <<!
+WHENEVER SQLERROR EXIT 1
+
+connect $ADMIN_USER/"$DB_PASSWORD"@$INVENTORY_DB_ALIAS
+CREATE USER $INVENTORY_USER IDENTIFIED BY "$DB_PASSWORD";
+GRANT unlimited tablespace, connect, resource, aq_user_role TO $INVENTORY_USER;
+
+connect $INVENTORY_USER/"$DB_PASSWORD"@$INVENTORY_DB_ALIAS
+create table inventory (
+  inventoryid varchar(16) PRIMARY KEY NOT NULL,
+  inventorylocation varchar(32),
+  inventorycount integer CONSTRAINT positive_inventory CHECK (inventorycount >= 0) );
+insert into inventory values ('sushi', '1468 WEBSTER ST,San Francisco,CA', 0);
+insert into inventory values ('pizza', '1469 WEBSTER ST,San Francisco,CA', 0);
+insert into inventory values ('burger', '1470 WEBSTER ST,San Francisco,CA', 0);
+commit;
+
+@$GRABDISH_HOME/inventory-dotnet/dequeueenqueue.sql
+!
+  touch $MY_STATE/inventory_user
+fi
+
+
+case $DB_DEPLOYMENT in
+  SHARED_PDB)
+    # Create one AQ schema
+    if ! test -f $MY_STATE/shared_aq_schema; then
+      export TNS_ADMIN=$INVENTORY_DB_TNS_ADMIN
+      U=AQ
+      ALIAS=$INVENTORY_DB_ALIAS
+  sqlplus /nolog <<!
+WHENEVER SQLERROR EXIT 1
+
+connect $ADMIN_USER/"$DB_PASSWORD"@$INVENTORY_DB_ALIAS
+CREATE USER $AQ_USER IDENTIFIED BY "$DB_PASSWORD";
+GRANT CREATE DATABASE LINK, unlimited tablespace, connect, resource, aq_user_role TO $U;
+GRANT EXECUTE ON sys.dbms_aqadm TO $U;
+GRANT EXECUTE ON sys.dbms_aq TO $U;
+connect $U/"$DB_PASSWORD"@$SVC
+
+BEGIN
+DBMS_AQADM.CREATE_QUEUE_TABLE (
+queue_table          => 'ORDERQUEUETABLE',
+queue_payload_type   => 'SYS.AQ\$_JMS_TEXT_MESSAGE',
+multiple_consumers   => true,
+compatible           => '8.1');
+
+DBMS_AQADM.CREATE_QUEUE (
+queue_name          => '$ORDER_QUEUE',
+queue_table         => 'ORDERQUEUETABLE');
+
+DBMS_AQADM.START_QUEUE (
+queue_name          => '$ORDER_QUEUE');
+END;
+/
+
+BEGIN
+DBMS_AQADM.CREATE_QUEUE_TABLE (
+queue_table          => 'INVENTORYQUEUETABLE',
+queue_payload_type   => 'SYS.AQ\$_JMS_TEXT_MESSAGE',
+compatible           => '8.1');
+
+DBMS_AQADM.CREATE_QUEUE (
+queue_name          => '$INVENTORY_QUEUE',
+queue_table         => 'INVENTORYQUEUETABLE');
+
+DBMS_AQADM.START_QUEUE (
+queue_name          => '$INVENTORY_QUEUE');
+END;
+/
+!
+
+    ;;
+  SEPARATE_PDB)
+    # Create an AQ schema in each PDB
+    # Create DB links between AQ schemas
+    # Configure and start propagation
+    ;;
+  *)
+    # Error
+esac
 
 # Useful variables
 ORDER_DB_SVC="$ORDER_DB_ALIAS"
