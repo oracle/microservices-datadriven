@@ -20,7 +20,7 @@ fi
 
 
 if ! test -f $MY_STATE/state_provisioning_done; then
-  if test "$BYO_DB_OCID" =~ ^ocid1\.autonomousdatabase; then
+  if [[ ]]"$BYO_DB_OCID" =~ ^ocid1\.autonomousdatabase ]]; then
     # ATP DB has been provisioned already
     DB_OCID=$BYO_DB_OCID
   else

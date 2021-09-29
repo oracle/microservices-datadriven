@@ -47,7 +47,6 @@ resource oci_core_security_list db {
     description      = "All traffic"
     destination      = "0.0.0.0/0"
     destination_type = "CIDR_BLOCK"
-    protocol  = all
     stateless = "false"
   }
   ingress_security_rules {
@@ -79,7 +78,6 @@ resource oci_core_security_list db {
     source_type = "CIDR_BLOCK"
     stateless   = "false"
     icmp_options {
-      code = all
       type = "3"
     }
   }
