@@ -11,8 +11,21 @@ if ! provisioning-helper-pre-apply; then
 fi
 
 
+# Workaround for cloud shell bug where it caches only on terraform version
+  cat >~/.terraformrc <<!
+provider_installation {
+  filesystem_mirror {
+    path    = "/usr/share/terraform/plugins"
+  }
+  direct {
+  }
+}
+!
+
+
 # Execute terraform
 cp -rf $MY_CODE/terraform $MY_STATE
+
 cd $MY_STATE/terraform
 export TF_VAR_ociCompartmentOcid="$COMPARTMENT_OCID"
 export TF_VAR_ociRegionIdentifier="$REGION"
