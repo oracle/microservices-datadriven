@@ -4,7 +4,7 @@
 
 SCRIPT_DIR=$(dirname $0)
 
-IMAGE_NAME=inventory-python
+IMAGE_NAME=foodwinepairing-python
 IMAGE_VERSION=0.1
 
 
