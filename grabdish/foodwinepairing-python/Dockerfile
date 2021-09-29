@@ -11,8 +11,7 @@ RUN  yum -y install oracle-release-el7 && \
 WORKDIR /app
 COPY foodwinepairing/requirements.txt .
 RUN yum install -y tar && \
-	sudo apt install python3.7
-    rm -rf /var/cache/yum && \
+	sudo apt install python3.7 && \
     python3.7 -m pip install -U gensim && \
 	python3.7 -m pip install -U scikit-learn && \
     python3.7 -m pip install -r requirements.txt
