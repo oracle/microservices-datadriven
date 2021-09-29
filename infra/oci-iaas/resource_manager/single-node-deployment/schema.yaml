@@ -1,0 +1,187 @@
+title: Grabdish - Microservices Data-driven application on Oracle Converged Database
+description: Grabdish - Microservices Data-driven application on Oracle Converged Database
+stackDescription: Grabdish - Microservices Data-driven application on Oracle Converged Database
+informationalText: Grabdish - Microservices Data-driven application on Oracle Converged Database
+schemaVersion: 1.1.0
+version: "20200822"
+locale: "en"
+
+variableGroups:
+  - title: General Configuration
+    visible: false
+    variables:
+      - compartment_ocid
+      - tenancy_ocid
+      - region
+
+  - title: Required Configuration for Microservices Datadriven Application Grabdish
+    visible:  true
+    variables:
+      - instance_shape
+      - generate_ssh_key_pair
+      - ssh_public_key
+      - generate_app_db_passwords
+      - grabdish_application_password
+      - grabdish_database_password
+      - use_tenancy_level_policy
+      - iaas_app_public_repo
+      #- iaas_public_repo
+      #- app_public_repo
+
+variables:
+  # General Configuration
+  tenancy_ocid:
+    title: Tenancy ID
+    description: The Oracle Cloud Identifier (OCID) for your tenancy
+    type: string
+    required: true
+    visible: false
+
+  region:
+    title: Region To Provision the Compute and Database Resources
+    description: Region To Provision the Compute and Database Resources
+    type: oci:identity:region:name
+    required: true
+    visible: false
+
+  compartment_ocid:
+    title: Compartment OCID
+    description: Compartment OCID
+    type: oci:identity:compartment:id
+    required: true
+    visibile: false
+
+  # Required
+  instance_shape:
+    title: Instance Shape
+    description: Instance Shape
+    type: oci:core:instanceshape:name
+    default: VM.Standard.E2.1.Micro
+    required: true
+    dependsOn:
+      compartmentId: ${compartment_ocid}
+
+  generate_ssh_key_pair:
+    title: ${Messages.solutionsHub.solutions.ociDevTools.variables.generate_ssh_key_pair.title()}
+    description: ${Messages.solutionsHub.solutions.ociDevTools.variables.generate_ssh_key_pair.description()}
+    type: boolean
+    default: true
+    required: true
+
+  generate_app_db_passwords:
+    title: Auto-generate Grabdish Application and Database Passwords
+    description: Automatically generate Grabdish Application and Database Passwords
+    type: boolean
+    default: true
+    required: true
+
+  ssh_public_key:
+    title: ${Messages.solutionsHub.solutions.ociDevTools.variables.ssh_public_key.title()}
+    description: ${Messages.solutionsHub.solutions.ociDevTools.variables.ssh_public_key.description()}
+    type: oci:core:ssh:publickey
+    required: false
+    additionalProps:
+      allowMultiple: true
+    pattern: "((^(ssh-rsa AAAAB3NzaC1yc2|ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNT|ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzOD|ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1Mj|ssh-ed25519 AAAAC3NzaC1lZDI1NTE5|ssh-dss AAAAB3NzaC1kc3)[0-9A-Za-z+\/]+[=]{0,3})( [^,]*)?)(,((ssh-rsa AAAAB3NzaC1yc2|ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNT|ecdsa-sha2-nistp384 AAAAE2VjZHNhLXNoYTItbmlzdHAzODQAAAAIbmlzdHAzOD|ecdsa-sha2-nistp521 AAAAE2VjZHNhLXNoYTItbmlzdHA1MjEAAAAIbmlzdHA1Mj|ssh-ed25519 AAAAC3NzaC1lZDI1NTE5|ssh-dss AAAAB3NzaC1kc3)[0-9A-Za-z+\/]+[=]{0,3})( [^,]*)?)*$"
+    visible:
+      not:
+        - generate_ssh_key_pair
+
+  use_tenancy_level_policy:
+    title: ${Messages.solutionsHub.solutions.ociDevTools.variables.use_tenancy_level_policy.title()}
+    description: ${Messages.solutionsHub.solutions.ociDevTools.variables.use_tenancy_level_policy.description()}
+    type: boolean
+    default: true
+    required: true
+
+  grabdish_database_password:
+    description: Provide database password. it will be used for creating admin, order_user, inventory_user for Order and Inventory PDBs. (Must be a minimum 12 characters, contain at least one uppercase letter, one lowercase letter, one number , no special characters allowed). This password will be made available to you as an output variable.
+    type: password
+    minLength: 12
+    maxLength: 30
+    pattern: ^[A-Za-z][A-Za-z0-9]+$
+    required: true
+    #default: OraDB4U12345
+    visible:
+      not:
+        - generate_app_db_passwords
+
+  grabdish_application_password:
+    description: Provide database password. it will be used for admin, wallet and application , cannot have the word "usage" in the passowrd, (Must be a minimum 12 characters, contain at least one uppercase letter, one lowercase letter, one number , no special characters allowed).
+    type: password
+    minLength: 12
+    maxLength: 30
+    pattern: ^[A-Za-z][A-Za-z0-9]+$
+    required: true
+    #default: Welcome12345
+    visible:
+      not:
+        - generate_app_db_passwords
+
+  #iaas_public_repo:
+  #  title: Post Provisioning Infrastructure Setup URL
+  #  description: Repository URI to execute post provisioning infrastructure scripts
+  #  type: String
+  #  #minLength: 12
+  #  #maxLength: 30
+  #  pattern:   https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)
+  #  required: true
+  #  #default: Welcome12345
+
+  #app_public_repo:
+  #  title: Post Provisioning Application Setup URL
+  #  description: Repository URI to execute post provisioning application scripts
+  #  type: String
+  #  #minLength: 12
+  #  #maxLength: 30
+  #  pattern:   https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)
+  #  required: true
+  #  #default: Welcome12345
+
+  iaas_app_public_repo:
+    title: Infrastructure and Application Setup URL
+    description: Repository URI to execute Infrastructure and Application provisioning  scripts
+    type: String
+    #minLength: 12
+    #maxLength: 30
+    pattern: https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)
+    required: true
+    #default: Welcome12345
+
+outputGroups:
+  - title: outputGroups
+    outputs:
+      - compute_instance_public_ip
+      - compartment_id
+      - generated_instance_ssh_private_key
+  - title: On Premise Database details
+    outputs:
+      - dbaas_instance_public_ip
+      - generated_instance_ssh_private_key
+
+outputs:
+  compute_instance_public_ip:
+    title: compute_instance_public_ip
+    displayText: compute_instance_public_ip
+    type: copyableString
+    visible: true
+
+  compartment_id:
+    title: compartment_id
+    displayText: compartment_id
+    type: string
+    visible: true
+
+  generated_instance_ssh_private_key:
+    title: generated_instance_ssh_private_key
+    displayText: generated_instance_ssh_private_key
+    type: string
+    visible: true
+
+  dbaas_instance_public_ip:
+    title: Database Public IP Address
+    displayText: module.compute.dbaas_public_ip
+    type: copyableString
+    visible: true
+
+
