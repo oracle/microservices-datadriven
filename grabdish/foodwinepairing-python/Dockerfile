@@ -11,10 +11,29 @@ RUN  yum -y install oracle-release-el7 && \
 WORKDIR /app
 COPY foodwinepairing/requirements.txt .
 RUN yum install -y tar
-RUN yum install -y python36
-RUN python3 -m pip install -U gensim
-RUN python3 -m pip install -U scikit-learn
-RUN python3 -m pip install -r requirements.txt
+
+# Update apt packages
+RUN apt update
+RUN apt upgrade -y
+
+# Install python 3.7
+RUN apt install software-properties-common -y
+RUN add-apt-repository ppa:deadsnakes/ppa
+RUN apt install python3.7 -y
+
+# Make python 3.7 the default
+RUN echo "alias python=python3.7" >> ~/.bashrc
+RUN export PATH=${PATH}:/usr/bin/python3.7
+RUN /bin/bash -c "source ~/.bashrc"
+
+# Install pip
+RUN apt install python3-pip -y
+RUN python -m pip install --upgrade pip
+
+#wine-pairing dependencies
+RUN python -m pip install -U gensim
+RUN python -m pip install -U scikit-learn
+RUN python -m pip install -r requirements.txt
 
 ADD common .
 ADD foodwinepairing .
