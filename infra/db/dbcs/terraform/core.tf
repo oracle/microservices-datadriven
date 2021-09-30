@@ -2,7 +2,7 @@
 //Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 locals {
-    db_cidr_block = "10.0.30.0/28"
+    db_cidr_block = "10.0.30.0/24"
 }
 
 data "oci_core_vcn" "vcn" {
