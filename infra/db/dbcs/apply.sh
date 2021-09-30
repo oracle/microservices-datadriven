@@ -14,7 +14,8 @@ fi
 if ! test -f $MY_STATE/state_rsa_key; then
   mkdir -p $MY_STATE/ssh
   ssh-keygen -t rsa -N "" -b 2048 -C "db" -f $MY_STATE/ssh/db
-  echo "DB_PUBLIC_RSA_KEY_FILE='$MY_STATE/ssh/db-pub.rsa'" >>$STATE_FILE
+  DB_PUBLIC_RSA_KEY_FILE="$MY_STATE/ssh/db.pub"
+  echo "DB_PUBLIC_RSA_KEY_FILE='$DB_PUBLIC_RSA_KEY_FILE'" >>$STATE_FILE
   touch $MY_STATE/state_rsa_key
 fi
 
