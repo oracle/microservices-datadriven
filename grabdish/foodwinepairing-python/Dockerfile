@@ -20,6 +20,12 @@ RUN echo "alias python=python3.7" >> ~/.bashrc
 RUN export PATH=${PATH}:/usr/bin/python3.7
 RUN /bin/bash -c "source ~/.bashrc"
 
+# Add 3.7 to the available alternatives
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.7 1
+
+# Set python3.7 as the default python
+RUN update-alternatives --set python /usr/bin/python3.7
+
 # Install pip
 RUN apt install python3-pip -y
 RUN python -m pip install --upgrade pip
