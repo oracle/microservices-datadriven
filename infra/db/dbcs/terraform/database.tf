@@ -6,10 +6,11 @@ resource "random_password" "database_admin_password" {
   upper   = true
   lower   = true
   number  = true
-  special = false
-  min_lower = "1"
-  min_upper = "1"
-  min_numeric = "1"
+  special = true
+  min_lower = "2"
+  min_upper = "2"
+  min_numeric = "2"
+  min_special = "2"
 }
 
 resource "oci_database_db_system" "dbs" {
