@@ -1,16 +1,10 @@
-FROM oraclelinux:7-slim
+FROM ubuntu:18.04
 
 ARG release=19
 ARG update=9
 
-RUN  yum -y install oracle-release-el7 && \
-     yum-config-manager --enable ol7_oracle_instantclient && \
-     yum -y install oracle-instantclient${release}.${update}-basiclite && \
-     yum install -y oracle-epel-release-el7
-
 WORKDIR /app
 COPY foodwinepairing/requirements.txt .
-RUN yum install -y tar
 
 # Update apt packages
 RUN apt update
