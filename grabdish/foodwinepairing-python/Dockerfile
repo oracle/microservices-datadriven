@@ -12,10 +12,9 @@ WORKDIR /app
 COPY foodwinepairing/requirements.txt .
 RUN yum install -y tar
 RUN yum install -y python36
-RUN yum install -y python36-oci-sdk
-RUN python3.6 -m pip install -U gensim
-RUN python3.6 -m pip install -U scikit-learn
-RUN python3.6 -m pip install -r requirements.txt
+RUN python3 -m pip install -U gensim
+RUN python3 -m pip install -U scikit-learn
+RUN python3 -m pip install -r requirements.txt
 
 ADD common .
 ADD foodwinepairing .
