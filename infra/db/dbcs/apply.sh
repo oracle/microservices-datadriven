@@ -27,6 +27,7 @@ if ! test -f $MY_STATE/state_provisioning_done; then
     # Execute terraform
     cp -rf $MY_CODE/terraform $MY_STATE
     cd $MY_STATE/terraform
+    export TF_VAR_ociTenancyOcid="$TENANCY_OCID"
     export TF_VAR_ociCompartmentOcid="$COMPARTMENT_OCID"
     export TF_VAR_ociRegionIdentifier="$REGION"
     export TF_VAR_dbName="$DB_NAME"

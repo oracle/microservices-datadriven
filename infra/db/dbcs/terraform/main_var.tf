@@ -6,3 +6,4 @@ variable "dbName" {}
 variable "displayName" {}
 variable "publicRsaKey" {}
 variable "vcnOcid" {}
+variable "ociTenancyOcid" {}

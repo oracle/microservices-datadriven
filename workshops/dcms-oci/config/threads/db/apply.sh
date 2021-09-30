@@ -42,6 +42,7 @@ case $(state_get DB_DEPLOYMENT) in
     DB_STATE=$DCMS_INFRA_STATE/db
     mkdir -p $DB_STATE
     cat >$DB_STATE/input.env <<!
+TENANCY_OCID='$(state_get TENANCY_OCID)'
 BYO_DB_OCID='NA'
 COMPARTMENT_OCID=$(state_get COMPARTMENT_OCID)
 REGION=$(state_get REGION)
@@ -91,6 +92,7 @@ VCN_OCID=$(state_get VCN_OCID)
       fi
 
       cat >$DB_STATE/input.env <<!
+TENANCY_OCID='$(state_get TENANCY_OCID)'
 BYO_DB_OCID=$(state_get ${db_upper}_BYO_DB_OCID)
 COMPARTMENT_OCID=$(state_get COMPARTMENT_OCID)
 REGION=$(state_get REGION)

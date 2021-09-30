@@ -36,7 +36,7 @@ resource "oci_core_subnet" "db" {
   security_list_ids = [oci_core_security_list.db.id]
   display_name      = "DB"
   prohibit_public_ip_on_vnic = "true"
-  route_table_id    = oci_core_route_table.db_ocid.id
+  route_table_id    = oci_core_route_table.db.id
   dns_label           = "db"
 }
 
@@ -47,6 +47,7 @@ resource oci_core_security_list db {
     description      = "All traffic"
     destination      = "0.0.0.0/0"
     destination_type = "CIDR_BLOCK"
+    protocol = "all"
     stateless = "false"
   }
   ingress_security_rules {
