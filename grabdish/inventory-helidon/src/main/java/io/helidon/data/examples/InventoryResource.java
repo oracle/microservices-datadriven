@@ -127,6 +127,7 @@ public class InventoryResource {
     	} catch (Exception e) {
     		e.printStackTrace();
     	}
+    	return "No Wines Suggested";
     }
 
 }
