@@ -116,13 +116,17 @@ public class InventoryResource {
     }
     
     public String foodWinePairingService(String itemid) throws IOException {
-    	String url = "http://foodwinepairing.msdataworkshop:8080/foodwinepairing/"+itemid;
-        System.out.println("Food Wine Pairing Request url : " + url);
-        Response response = client.target(url).request().get();
-        System.out.println("Food Wine Pairing Response.toString : " + response.toString());
-        String entity = response.readEntity(String.class);
-        System.out.println("Recommended Wines from FoodWinePairing Python Service : " + entity);
-        return entity;
+    	try {
+    		String url = "http://foodwinepairing.msdataworkshop:8080/foodwinepairing/"+itemid;
+    		System.out.println("Food Wine Pairing Request url : " + url);
+    		Response response = client.target(url).request().get();
+    		System.out.println("Food Wine Pairing Response.toString : " + response.toString());
+    		String entity = response.readEntity(String.class);
+    		System.out.println("Recommended Wines from FoodWinePairing Python Service : " + entity);
+    		return entity;
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    	}
     }
 
 }
