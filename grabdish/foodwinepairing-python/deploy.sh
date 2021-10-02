@@ -29,3 +29,5 @@ if [ -z "$1" ]; then
 else
     kubectl apply -f <(istioctl kube-inject -f $SCRIPT_DIR/foodwinepairing-python-deployment-$CURRENTTIME.yaml) -n msdataworkshop
 fi
+
+kubectl apply -f foodwinepairing-service.yaml -n msdataworkshop
