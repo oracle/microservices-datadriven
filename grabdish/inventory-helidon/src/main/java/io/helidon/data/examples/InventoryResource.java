@@ -123,7 +123,7 @@ public class InventoryResource {
     
     public String foodWinePairingService(String itemid) throws IOException {
     	try {
-    		String url = "http://localhost:8080/foodwinepairing/"+itemid;
+    		String url = "http://foodwinepairing.msdataworkshop:8080/foodwinepairing/"+itemid;
     		System.out.println("Food Wine Pairing Request url : " + url);
     		Response response = client.target(url).request().get();
     		System.out.println("Food Wine Pairing Response.toString : " + response.toString());
