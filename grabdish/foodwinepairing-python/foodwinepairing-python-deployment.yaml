@@ -29,23 +29,6 @@ spec:
           - name: PORT
             value: "8080"
           - name: DEBUG_MODE
-            value: "1"
-          - name: AQ_CONSUMER_THREADS
-            value: "1"
-          - name: QUEUE_OWNER
-            value: "inventoryuser"
-          - name: OCI_REGION
-            value: "%OCI_REGION%"
-          
-        readinessProbe:
-          exec:
-            command:
-            - cat
-            - /tmp/FoodWinePairingReady
-          initialDelaySeconds: 0
-          periodSeconds: 1
-          timeoutSeconds: 1
-          successThreshold: 1
-          failureThreshold: 1
+            value: "1"  
       restartPolicy: Always
       
