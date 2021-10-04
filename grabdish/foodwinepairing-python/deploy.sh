@@ -30,4 +30,4 @@ else
     kubectl apply -f <(istioctl kube-inject -f $SCRIPT_DIR/foodwinepairing-python-deployment-$CURRENTTIME.yaml) -n msdataworkshop
 fi
 
-kubectl apply -f foodwinepairing-service.yaml -n msdataworkshop
+kubectl apply -f  $SCRIPT_DIR/foodwinepairing-service.yaml -n msdataworkshop
