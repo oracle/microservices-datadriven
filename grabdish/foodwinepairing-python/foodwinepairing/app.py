@@ -5,6 +5,7 @@ from flask import Flask, request
 from os import environ as env
 import cx_Oracle
 import simplejson
+import WineFoodPairings
 
 # Parameters
 debug_mode =          env.get("DEBUG_MODE", "1")
