@@ -530,7 +530,8 @@ aroma_embedding = ''
 def getRecommendedWines(itemid):
 
     #test_food = ['hotdog', 'mustard', 'tomato', 'onion', 'pepperoncini', 'gherkin', 'celery', 'relish']
-    test_food = argList[1]
+    #test_food = argList[1]
+    test_food = itemid
     print("Input Food : ", test_food)
 #    appetizer = ['trout', 'dill', 'cucumber', 'sour_cream']
 #    entree = ['roast_chicken', 'tarragon', 'sage']
