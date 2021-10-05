@@ -35,6 +35,9 @@ RUN python -m pip install -U gensim
 RUN python -m pip install -U scikit-learn
 RUN python -m pip install -r requirements.txt
 
+#to locate if/where gunicorn is
+RUN find / -name "gunicorn"
+
 ADD common .
 ADD foodwinepairing .
 RUN echo 'Adding foodwinepairing done in DockerFile!'
