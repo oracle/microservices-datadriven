@@ -36,6 +36,7 @@ RUN python -m pip install -U scikit-learn
 RUN python -m pip install -U pandas
 RUN python -m pip install -U numpy
 RUN python -m pip install -U nltk
+RUN python -m pip install -U matplotlib
 RUN python -m pip install -r requirements.txt
 
 #to locate if/where gunicorn is
