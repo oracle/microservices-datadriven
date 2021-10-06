@@ -111,7 +111,7 @@ while true; do
   sleep 5
 done
 
-CONFIG_HOME=$GRABDISH_HOME/config/db/shared_pdb
+CONFIG_HOME=$GRABDISH_HOME/config/db/shared-pdb
 ORDER_DB_ALIAS="$(state_get ORDER_DB_NAME)_tp"
 state_set INVENTORY_DB_NAME "$(state_get ORDER_DB_NAME)"
 source $CONFIG_HOME/params.env
@@ -123,22 +123,22 @@ while ! state_done ORDER_DB_PASSWORD_SET; do
 done
 
 eval "sqlplus /nolog <<!
-$($CONFIG_HOME/01-admin.sql)
+$(<$CONFIG_HOME/01-admin.sql)
 !
 "
 
 eval "sqlplus /nolog <<!
-$($CONFIG_HOME/02-order.sql)
+$(<$CONFIG_HOME/02-order.sql)
 !
 "
 
 eval "sqlplus /nolog <<!
-$($CONFIG_HOME/03-inventory.sql)
+$(<$CONFIG_HOME/03-inventory.sql)
 !
 "
 
 eval "sqlplus /nolog <<!
-$($CONFIG_HOME/04-aq.sql)
+$(<$CONFIG_HOME/04-aq.sql)
 !
 "
 

@@ -36,7 +36,7 @@ compatible           => '8.1');
 
 DBMS_AQADM.CREATE_QUEUE (
 queue_name          => '$INVENTORY_QUEUE',
-queue_table         => '${INVENTORY_QUEUE}TABLEE');
+queue_table         => '${INVENTORY_QUEUE}TABLE');
 
 DBMS_AQADM.grant_queue_privilege (
    privilege     =>     'ENQUEUE',
