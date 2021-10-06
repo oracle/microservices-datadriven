@@ -18,7 +18,7 @@ BEGIN
   -- dequeue_options.dequeue_mode := dbms_aq.LOCKED;
 
   DBMS_AQ.DEQUEUE(
-    queue_name => 'ORDERQUEUE',
+    queue_name => 'AQ.ORDERQUEUE',
     dequeue_options => dequeue_options,
     message_properties => message_properties,
     payload => message,
@@ -71,7 +71,7 @@ BEGIN
   -- message.set_string_property('action', p_action);
   -- message.set_int_property('orderid', p_orderid);
 
-  DBMS_AQ.ENQUEUE(queue_name => 'INVENTORYQUEUE',
+  DBMS_AQ.ENQUEUE(queue_name => 'AQ.INVENTORYQUEUE',
            enqueue_options    => enqueue_options,
            message_properties => message_properties,
            payload            => message,

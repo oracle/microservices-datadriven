@@ -18,7 +18,7 @@ BEGIN
     -- Wait for and dequeue the next order message
     dequeue_options.wait := dbms_aq.FOREVER;
     DBMS_AQ.DEQUEUE(
-      queue_name => 'ORDERQUEUE',
+      queue_name => 'AQ.ORDERQUEUE',
       dequeue_options => dequeue_options,
       message_properties => message_properties,
       payload => message,
@@ -45,7 +45,7 @@ BEGIN
     -- Send the inventory message
     message := SYS.AQ$_JMS_TEXT_MESSAGE.construct;
     message.set_text(inventory_json.to_string());
-    DBMS_AQ.ENQUEUE(queue_name => 'INVENTORYQUEUE',
+    DBMS_AQ.ENQUEUE(queue_name => 'AQ.INVENTORYQUEUE',
       enqueue_options    => enqueue_options,
       message_properties => message_properties,
       payload            => message,

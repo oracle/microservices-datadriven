@@ -99,6 +99,15 @@ cat - >$TNS_ADMIN/sqlnet.ora <<!
 WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$TNS_ADMIN")))
 SSL_SERVER_DN_MATCH=yes
 !
+ORDER_DB_SVC="$(state_get ORDER_DB_NAME)_tp"
+INVENTORY_DB_SVC="$(state_get INVENTORY_DB_NAME)_tp"
+ORDER_USER=ORDERUSER
+INVENTORY_USER=INVENTORYUSER
+ORDER_LINK=ORDERTOINVENTORYLINK
+INVENTORY_LINK=INVENTORYTOORDERLINK
+ORDER_QUEUE=ORDERQUEUE
+INVENTORY_QUEUE=INVENTORYQUEUE
+
 
 # Get DB Password
 while true; do
@@ -111,39 +120,12 @@ while true; do
   sleep 5
 done
 
-CONFIG_HOME=$GRABDISH_HOME/config/db/shared_pdb
-ORDER_DB_ALIAS="$(state_get ORDER_DB_NAME)_tp"
-state_set INVENTORY_DB_NAME "$(state_get ORDER_DB_NAME)"
-source $CONFIG_HOME/params.env
 
 # Wait for DB Password to be set in Order DB
 while ! state_done ORDER_DB_PASSWORD_SET; do
   echo "`date`: Waiting for ORDER_DB_PASSWORD_SET"
   sleep 2
 done
-
-eval "sqlplus /nolog <<!
-$($CONFIG_HOME/01-admin.sql)
-!
-"
-
-eval "sqlplus /nolog <<!
-$($CONFIG_HOME/02-order.sql)
-!
-"
-
-eval "sqlplus /nolog <<!
-$($CONFIG_HOME/03-inventory.sql)
-!
-"
-
-eval "sqlplus /nolog <<!
-$($CONFIG_HOME/04-aq.sql)
-!
-"
-
-# DB Setup Done
-state_set_done DB_SETUP
 
 
 # Order DB User, Objects
