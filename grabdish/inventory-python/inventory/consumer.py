@@ -38,7 +38,7 @@ def run():
             # Loop requesting inventory requests from the order queue
             while True:
                 # Dequeue the next event from the order queue
-                conn.begin()
+                conn.autocommit = False
                 payload =orderQueue.deqOne().payload
                 logger.debug(payload.TEXT_VC)
                 orderInfo = simplejson.loads(payload.TEXT_VC)
