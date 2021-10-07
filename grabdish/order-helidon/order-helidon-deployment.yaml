@@ -24,10 +24,12 @@ spec:
           value: "ORDERUSER"
         - name: oracle.ucp.jdbc.PoolDataSource.orderpdb.URL
           value: "jdbc:oracle:thin:@%ORDER_PDB_NAME%_tp?TNS_ADMIN=/msdataworkshop/creds"
+        - name: queueowner
+          value: "AQ"
         - name: orderqueuename
-          value: "AQ.ORDERQUEUE"
+          value: "ORDERQUEUE"
         - name: inventoryqueuename
-          value: "AQ.inventoryqueue"
+          value: "inventoryqueue"
         - name: OCI_REGION
           value: "%OCI_REGION%"
         - name: VAULT_SECRET_OCID

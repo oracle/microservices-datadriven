@@ -50,7 +50,8 @@ public class OrderResource {
     static String regionId = System.getenv("OCI_REGION");
     static String pwSecretOcid = System.getenv("VAULT_SECRET_OCID");
     static String pwSecretFromK8s = System.getenv("dbpassword");
-    static final String orderQueueOwner =  System.getenv("oracle.ucp.jdbc.PoolDataSource.orderpdb.user"); //"ORDERUSER";
+    static final String orderUser =  System.getenv("oracle.ucp.jdbc.PoolDataSource.orderpdb.user"); //"ORDERUSER";
+    static final String queueOwner =  System.getenv("queueowner"); //"AQ";
     static final String orderQueueName =   System.getenv("orderqueuename"); // "orderqueue";
     static final String inventoryQueueName = System.getenv("inventoryqueuename"); //  "inventoryqueue";
     static boolean liveliness = true;
@@ -74,7 +75,7 @@ public class OrderResource {
         System.out.println("OrderResource.init System.getenv(\"oracle.ucp.jdbc.PoolDataSource.orderpdb.user\"):" +  System.getenv("oracle.ucp.jdbc.PoolDataSource.orderpdb.user"));
         System.out.println("OrderResource. System.getenv(\"orderqueuename\") " +  System.getenv("orderqueuename"));
         System.out.println("OrderResource.System.getenv(\"inventoryqueuename\"); " + System.getenv("inventoryqueuename"));
-        atpOrderPdb.setUser(orderQueueOwner);
+        atpOrderPdb.setUser(orderUser);
         String pw;
         if(pwSecretOcid != null && !pwSecretOcid.trim().equals("")) {
             pw = OCISDKUtility.getSecreteFromVault(true, regionId, pwSecretOcid);

@@ -56,7 +56,7 @@ public class OrderServiceEventConsumer implements Runnable {
                     qconn = q_cf.createQueueConnection();
                     qsess = qconn.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
                     qconn.start();
-                    Queue queue = ((AQjmsSession) qsess).getQueue(OrderResource.orderQueueOwner, OrderResource.inventoryQueueName);
+                    Queue queue = ((AQjmsSession) qsess).getQueue(OrderResource.queueOwner, OrderResource.inventoryQueueName);
                     consumer = (AQjmsConsumer) qsess.createConsumer(queue);
 //                    consumer = new TracingMessageConsumer(qsess.createConsumer(queue), tracer);
                 }

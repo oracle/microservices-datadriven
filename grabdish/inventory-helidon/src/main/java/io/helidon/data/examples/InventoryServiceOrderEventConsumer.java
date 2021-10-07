@@ -85,7 +85,7 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
                     qconn = qcfact.createQueueConnection(inventoryResource.inventoryuser, inventoryResource.inventorypw);
                     qsess = qconn.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
                     qconn.start();
-                    Queue queue = ((AQjmsSession) qsess).getQueue(inventoryResource.inventoryuser, inventoryResource.orderQueueName);
+                    Queue queue = ((AQjmsSession) qsess).getQueue(inventoryResource.queueOwner, inventoryResource.orderQueueName);
                     AQjmsConsumer consumer = (AQjmsConsumer) qsess.createConsumer(queue);
                     tracingMessageConsumer = new TracingMessageConsumer(consumer, inventoryResource.getTracer());
                 }
@@ -133,7 +133,7 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
             metric.inc(1);
         }
         String jsonString = JsonUtils.writeValueAsString(inventory);
-        Topic inventoryTopic = session.getTopic(InventoryResource.inventoryuser, InventoryResource.inventoryQueueName);
+        Topic inventoryTopic = session.getTopic(InventoryResource.queueOwner, InventoryResource.inventoryQueueName);
         System.out.println("send inventory status message... jsonString:" + jsonString + " inventoryTopic:" + inventoryTopic);
         if (inventoryResource.crashAfterOrderMessageProcessed) System.exit(-1);
         TextMessage objmsg = session.createTextMessage();
