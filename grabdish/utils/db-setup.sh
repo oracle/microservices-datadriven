@@ -142,6 +142,11 @@ $(<$CONFIG_HOME/04-aq.sql)
 !
 "
 
+eval "sqlplus /nolog <<!
+$(<$CONFIG_HOME/05-inventory.sql)
+!
+"
+
 # DB Setup Done
 state_set_done DB_SETUP
 

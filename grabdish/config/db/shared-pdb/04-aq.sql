@@ -14,13 +14,13 @@ queue_table         => '${ORDER_QUEUE}TABLE');
 
 DBMS_AQADM.grant_queue_privilege (
    privilege     =>     'ENQUEUE',
-   queue_name    =>     '$ORDERQUEUE',
+   queue_name    =>     '$ORDER_QUEUE',
    grantee       =>     '$ORDER_USER',
    grant_option  =>      FALSE);
 
 DBMS_AQADM.grant_queue_privilege (
    privilege     =>     'DEQUEUE',
-   queue_name    =>     '$ORDERQUEUE',
+   queue_name    =>     '$ORDER_QUEUE',
    grantee       =>     '$INVENTORY_USER',
    grant_option  =>      FALSE);
 
