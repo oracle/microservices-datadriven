@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
-import javax.jms.QueueConnectionFactory;
+import javax.jms.TopicConnectionFactory;
 import javax.sql.DataSource;
 
 import org.slf4j.Logger;
@@ -44,13 +44,13 @@ public class OracleAQConfiguration {
     }
 
     @Bean
-    public QueueConnectionFactory connectionFactory(DataSource dataSource) throws JMSException, SQLException {
+    public TopicConnectionFactory connectionFactory(DataSource dataSource) throws JMSException, SQLException {
         logger.info("OracleAQConfiguration-->AQ factory success");
-        return AQjmsFactory.getQueueConnectionFactory(dataSource);
+        return AQjmsFactory.getTopicConnectionFactory(dataSource);
     }
 
     @Bean
-    public JmsTemplate jmsTemplate(ConnectionFactory conFactory) throws Exception{
+    public JmsTemplate jmsTemplate(TopicConnectionFactory conFactory) throws Exception{
         JmsTemplate jmsTemplate = new JmsTemplate();
         jmsTemplate.setDefaultDestinationName("inventoryqueue");
         jmsTemplate.setSessionTransacted(true);
