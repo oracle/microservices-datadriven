@@ -24,61 +24,63 @@ import oracle.jms.AQjmsFactory;
 
 @Configuration
 public class OracleAQConfiguration {
-    Logger logger = LoggerFactory.getLogger(OracleAQConfiguration.class);
-  
-    @Autowired
-    private Environment environment;
-    
-    @Bean
-    public DataSource dataSource() throws SQLException {
-        OracleDataSource ds = new OracleDataSource();
-       
-        ds.setUser(environment.getProperty("db_user"));
-        logger.info("USER: "+ environment.getProperty("db_user"));
-        
-        ds.setPassword(environment.getProperty("db_password"));
-        logger.info("Password: "+ environment.getProperty("db_password"));
-        
-        ds.setURL(environment.getProperty("db_url"));
-        logger.info("URL: "+ environment.getProperty("db_url"));
-        
-        logger.info("OracleAQConfiguration: dataSource success"+ds);
-        return ds;
-    }
+	Logger logger = LoggerFactory.getLogger(OracleAQConfiguration.class);
 
-    @Bean
-    public QueueConnectionFactory connectionFactory(DataSource dataSource) throws JMSException, SQLException {
-        logger.info("OracleAQConfiguration: connectionFactory success");        
-        return AQjmsFactory.getQueueConnectionFactory(dataSource);
-    }
+	@Autowired
+	private Environment environment;
 
-    @Bean
-    public JmsListenerContainerFactory<?> queueConnectionFactory(QueueConnectionFactory connectionFactory,
-                                                                 DefaultJmsListenerContainerFactoryConfigurer configurer) {
-        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-        configurer.configure(factory, connectionFactory);
-        factory.setPubSubDomain(true);
-        return factory;
-    }
+	@Bean
+	public DataSource dataSource() throws SQLException {
+		OracleDataSource ds = new OracleDataSource();
 
-    @Bean
-    public JmsListenerContainerFactory<?> topicConnectionFactory(QueueConnectionFactory connectionFactory,
-                                                                 DefaultJmsListenerContainerFactoryConfigurer configurer) {
-        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-        configurer.configure(factory, connectionFactory);
-        factory.setPubSubDomain(true);
-        return factory;
-    }
-    
-    @Bean
-    public DynamicDestinationResolver destinationResolver() {
-        return new DynamicDestinationResolver() {
-            @Override
-            public Destination resolveDestinationName(Session session, String destinationName, boolean pubSubDomain) throws JMSException {
-                    pubSubDomain = true;
-               
-                return super.resolveDestinationName(session, destinationName, pubSubDomain);
-            }
-        };
-    }
+		ds.setUser(environment.getProperty("db_user"));
+		logger.info("USER: " + environment.getProperty("db_user"));
+
+		ds.setPassword(environment.getProperty("db_password"));
+		logger.info("Password: " + environment.getProperty("db_password"));
+
+		ds.setURL(environment.getProperty("db_url"));
+		logger.info("URL: " + environment.getProperty("db_url"));
+
+		logger.info("OracleAQConfiguration: dataSource success" + ds);
+		return ds;
+	}
+
+	@Bean
+	public QueueConnectionFactory connectionFactory(DataSource dataSource) throws JMSException, SQLException {
+		logger.info("OracleAQConfiguration: connectionFactory success");
+		return AQjmsFactory.getQueueConnectionFactory(dataSource);
+	}
+
+	@Bean
+	public JmsListenerContainerFactory<?> queueConnectionFactory(QueueConnectionFactory connectionFactory,
+			DefaultJmsListenerContainerFactoryConfigurer configurer) {
+		DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+		configurer.configure(factory, connectionFactory);
+		factory.setPubSubDomain(false);
+		return factory;
+	}
+
+	@Bean
+	public JmsListenerContainerFactory<?> topicConnectionFactory(QueueConnectionFactory connectionFactory,
+			DefaultJmsListenerContainerFactoryConfigurer configurer) {
+		DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+		configurer.configure(factory, connectionFactory);
+		factory.setPubSubDomain(true);
+		return factory;
+	}
+
+	@Bean
+	public DynamicDestinationResolver destinationResolver() {
+		return new DynamicDestinationResolver() {
+			@Override
+			public Destination resolveDestinationName(Session session, String destinationName, boolean pubSubDomain)
+					throws JMSException {
+				if (destinationName.contains("ORDER")) {
+					pubSubDomain = true;
+				}
+				return super.resolveDestinationName(session, destinationName, pubSubDomain);
+			}
+		};
+	}
 }
