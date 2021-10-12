@@ -12,6 +12,7 @@ import io.opentracing.Tracer;
 import oracle.jms.AQjmsConsumer;
 import oracle.jms.AQjmsFactory;
 import oracle.jms.AQjmsSession;
+import oracle.jms.AQjmsTopicSubscriber;
 
 import javax.jms.*;
 import java.sql.Connection;
@@ -38,10 +39,10 @@ public class OrderServiceEventConsumer implements Runnable {
     }
 
     public void dolistenForMessages() throws JMSException {
-        TopicConnectionFactory t_cf = AQjmsFactory.getTopConnectionFactory(orderResource.atpOrderPdb);
+        TopicConnectionFactory t_cf = AQjmsFactory.getTopicConnectionFactory(orderResource.atpOrderPdb);
         TopicSession tsess = null;
         TopicConnection tconn = null;
-        TopicReceiver receiver = null;
+        TopicSubscriber subscriber = null;
 //        TracingMessageConsumer consumer = null;
         Connection dbConnection = null;
         //python (and likely nodejs) message causes javax.jms.MessageFormatException: JMS-117: Conversion failed - invalid property type
@@ -57,13 +58,13 @@ public class OrderServiceEventConsumer implements Runnable {
                     tsess = tconn.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
                     tconn.start();
                     Topic inventoryEvents = ((AQjmsSession) tsess).getTopic(OrderResource.queueOwner, OrderResource.inventoryQueueName);
-                    receiver = ((AQjmsSession) tsess).createTopicReceiver(inventoryEvents, "order", null);
+                    subscriber = ((AQjmsSession) tsess).createDurableSubscriber(inventoryEvents, "order_service");
 //                    consumer = new TracingMessageConsumer(qsess.createConsumer(queue), tracer);
                 }
 //                if (tracingMessageConsumer == null || qsess == null) continue;
-                if (receiver == null || tsess == null) continue;
+                if (subscriber == null || tsess == null) continue;
                 System.out.println("Inventory before receive tracer.activeSpan():" + tracer.activeSpan());
-                TextMessage textMessage = (TextMessage) receiver.receive(-1);
+                TextMessage textMessage = (TextMessage) subscriber.receive(-1);
 //                TextMessage textMessage = (TextMessage) consumer.receive(-1);
                 String messageText = textMessage.getText();
                 System.out.println("messageText " + messageText);
@@ -87,13 +88,13 @@ public class OrderServiceEventConsumer implements Runnable {
                 activeSpan.log("end received inventory status");
                 activeSpan.finish();
                 if (crashAfterInventoryMessageReceived) System.exit(-1);
-                dbConnection = ((AQjmsSession) qsess).getDBConnection();
+                dbConnection = ((AQjmsSession) tsess).getDBConnection();
                 System.out.println("((AQjmsSession) qsess).getDBConnection(): " + dbConnection);
                 //todo remove this check on the order as it should be part of update...
                 Order order = orderResource.orderServiceEventProducer.getOrderViaSODA(dbConnection, orderid);
                 if (order == null) {
                     System.out.println("No orderDetail found for orderid:" + orderid);
-                    qsess.commit();
+                    tsess.commit();
                     continue;
                 }
                 if (isSuccessfulInventoryCheck) {

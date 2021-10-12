@@ -42,11 +42,11 @@ BEGIN
 
    DBMS_AQADM.add_subscriber(
       queue_name=>'$ORDER_QUEUE',
-      subscriber=>sys.aq\$_agent('inventory',NULL,NULL));
+      subscriber=>sys.aq\$_agent('inventory_service',NULL,NULL));
 
    DBMS_AQADM.add_subscriber(
       queue_name=>'$INVENTORY_QUEUE',
-      subscriber=>sys.aq\$_agent('order',NULL,NULL));
+      subscriber=>sys.aq\$_agent('order_service',NULL,NULL));
 
    DBMS_AQADM.START_QUEUE (
       queue_name          => '$ORDER_QUEUE');

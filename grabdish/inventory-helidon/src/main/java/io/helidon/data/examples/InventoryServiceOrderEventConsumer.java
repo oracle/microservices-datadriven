@@ -77,18 +77,18 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         TopicConnectionFactory t_cf = AQjmsFactory.getTopicConnectionFactory(inventoryResource.atpInventoryPDB);
         TopicSession tsess = null;
         TopicConnection tconn = null;
-        TopicReceiver receiver = null;
-        TracingMessageRetriever tracingMessageRetriever = null;
+        TopicSubscriber subscriber = null;
+        TracingMessageConsumer tracingMessageConsumer = null;
         boolean done = false;
         while (!done) {
             try {
                 if (tconn == null || tsess == null ||  dbConnection ==null || dbConnection.isClosed()) {
                     tconn = t_cf.createTopicConnection(inventoryResource.inventoryuser, inventoryResource.inventorypw);
-                    tsess = tconn.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
+                    tsess = tconn.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
                     tconn.start();
-                    Topic orderEvents = ((AQjmsSession) qsess).getTopic(inventoryResource.queueOwner, inventoryResource.orderQueueName);
-                    receiver = ((AQjmsSession) tsess).createTopicReceiver(inventoryEvents, "inventory", null);
-                    tracingMessageConsumer = new TracingMessageConsumer(receiver, inventoryResource.getTracer());
+                    Topic orderEvents = ((AQjmsSession) tsess).getTopic(inventoryResource.queueOwner, inventoryResource.orderQueueName);
+                    subscriber = ((AQjmsSession) tsess).createDurableSubscriber(orderEvents, "inventory_service", null);
+                    tracingMessageConsumer = new TracingMessageConsumer(subscriber, inventoryResource.getTracer());
                 }
                 if (tracingMessageConsumer == null) continue;
                 TextMessage orderMessage = (TextMessage) (tracingMessageConsumer.receive(-1));
@@ -103,10 +103,10 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
                 System.out.println("message sent");
             } catch (IllegalStateException e) {
                 System.out.println("IllegalStateException in receiveMessages: " + e + " unrecognized message will be ignored");
-                if (qsess != null) tsess.commit(); //drain unrelated messages - todo add selector for this instead
+                if (tsess != null) tsess.commit(); //drain unrelated messages - todo add selector for this instead
             } catch (Exception e) {
                 System.out.println("Error in receiveMessages: " + e);
-                if (qsess != null) tsess.rollback();
+                if (tsess != null) tsess.rollback();
             }
         }
     }
