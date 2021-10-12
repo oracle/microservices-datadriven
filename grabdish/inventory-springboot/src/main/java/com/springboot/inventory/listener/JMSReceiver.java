@@ -27,7 +27,7 @@ public class JMSReceiver {
 
 	Logger logger = LoggerFactory.getLogger(JMSReceiver.class);
 
-	@JmsListener(destination = "ORDER_QUEUE", containerFactory = "topicConnectionFactory")
+	@JmsListener(destination = "ORDER_QUEUE", containerFactory = "queueConnectionFactory")
 	public void listenOrderEvent(String message, AQjmsSession session) throws JMSException {
 		Order order = JsonUtils.read(message, Order.class);
 

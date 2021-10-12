@@ -76,7 +76,7 @@ public class OracleAQConfiguration {
 			@Override
 			public Destination resolveDestinationName(Session session, String destinationName, boolean pubSubDomain)
 					throws JMSException {
-				if (destinationName.contains("ORDER")) {
+				if (destinationName.contains("INVENTORY")) {
 					pubSubDomain = true;
 				}
 				return super.resolveDestinationName(session, destinationName, pubSubDomain);
