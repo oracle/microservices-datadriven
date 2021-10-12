@@ -74,20 +74,21 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
     }
 
     public void listenForOrderEvents() throws Exception {
-        QueueConnectionFactory qcfact = AQjmsFactory.getQueueConnectionFactory(inventoryResource.atpInventoryPDB);
-        QueueSession qsess = null;
-        QueueConnection qconn = null;
-        TracingMessageConsumer tracingMessageConsumer = null;
+        TopicConnectionFactory t_cf = AQjmsFactory.getTopicConnectionFactory(inventoryResource.atpInventoryPDB);
+        TopicSession tsess = null;
+        TopicConnection tconn = null;
+        TopicReceiver receiver = null;
+        TracingMessageRetriever tracingMessageRetriever = null;
         boolean done = false;
         while (!done) {
             try {
-                if (qconn == null || qsess == null ||  dbConnection ==null || dbConnection.isClosed()) {
-                    qconn = qcfact.createQueueConnection(inventoryResource.inventoryuser, inventoryResource.inventorypw);
-                    qsess = qconn.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
-                    qconn.start();
-                    Queue queue = ((AQjmsSession) qsess).getQueue(inventoryResource.queueOwner, inventoryResource.orderQueueName);
-                    AQjmsConsumer consumer = (AQjmsConsumer) qsess.createConsumer(queue);
-                    tracingMessageConsumer = new TracingMessageConsumer(consumer, inventoryResource.getTracer());
+                if (tconn == null || tsess == null ||  dbConnection ==null || dbConnection.isClosed()) {
+                    tconn = t_cf.createTopicConnection(inventoryResource.inventoryuser, inventoryResource.inventorypw);
+                    tsess = tconn.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
+                    tconn.start();
+                    Topic orderEvents = ((AQjmsSession) qsess).getTopic(inventoryResource.queueOwner, inventoryResource.orderQueueName);
+                    receiver = ((AQjmsSession) tsess).createTopicReceiver(inventoryEvents, "inventory", null);
+                    tracingMessageConsumer = new TracingMessageConsumer(receiver, inventoryResource.getTracer());
                 }
                 if (tracingMessageConsumer == null) continue;
                 TextMessage orderMessage = (TextMessage) (tracingMessageConsumer.receive(-1));
@@ -97,15 +98,15 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
                 Order order = JsonUtils.read(txt, Order.class);
                 System.out.print(" orderid:" + order.getOrderid());
                 System.out.print(" itemid:" + order.getItemid());
-                updateDataAndSendEventOnInventory((AQjmsSession) qsess, order.getOrderid(), order.getItemid());
-                if(qsess!=null) qsess.commit();
+                updateDataAndSendEventOnInventory((AQjmsSession) tsess, order.getOrderid(), order.getItemid());
+                if(tsess!=null) tsess.commit();
                 System.out.println("message sent");
             } catch (IllegalStateException e) {
                 System.out.println("IllegalStateException in receiveMessages: " + e + " unrecognized message will be ignored");
-                if (qsess != null) qsess.commit(); //drain unrelated messages - todo add selector for this instead
+                if (qsess != null) tsess.commit(); //drain unrelated messages - todo add selector for this instead
             } catch (Exception e) {
                 System.out.println("Error in receiveMessages: " + e);
-                if (qsess != null) qsess.rollback();
+                if (qsess != null) tsess.rollback();
             }
         }
     }

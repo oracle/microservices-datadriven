@@ -38,10 +38,10 @@ public class OrderServiceEventConsumer implements Runnable {
     }
 
     public void dolistenForMessages() throws JMSException {
-        QueueConnectionFactory q_cf = AQjmsFactory.getQueueConnectionFactory(orderResource.atpOrderPdb);
-        QueueSession qsess = null;
-        QueueConnection qconn = null;
-        MessageConsumer consumer = null;
+        TopicConnectionFactory t_cf = AQjmsFactory.getTopConnectionFactory(orderResource.atpOrderPdb);
+        TopicSession tsess = null;
+        TopicConnection tconn = null;
+        TopicReceiver receiver = null;
 //        TracingMessageConsumer consumer = null;
         Connection dbConnection = null;
         //python (and likely nodejs) message causes javax.jms.MessageFormatException: JMS-117: Conversion failed - invalid property type
@@ -52,18 +52,18 @@ public class OrderServiceEventConsumer implements Runnable {
         Tracer tracer = orderResource.getTracer();
         while (!done) {
             try {
-                if (qconn == null || qsess == null || dbConnection == null || dbConnection.isClosed()) {
-                    qconn = q_cf.createQueueConnection();
-                    qsess = qconn.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
-                    qconn.start();
-                    Queue queue = ((AQjmsSession) qsess).getQueue(OrderResource.queueOwner, OrderResource.inventoryQueueName);
-                    consumer = (AQjmsConsumer) qsess.createConsumer(queue);
+                if (tconn == null || tsess == null || dbConnection == null || dbConnection.isClosed()) {
+                    tconn = t_cf.createTopicConnection();
+                    tsess = tconn.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+                    tconn.start();
+                    Topic inventoryEvents = ((AQjmsSession) tsess).getTopic(OrderResource.queueOwner, OrderResource.inventoryQueueName);
+                    receiver = ((AQjmsSession) tsess).createTopicReceiver(inventoryEvents, "order", null);
 //                    consumer = new TracingMessageConsumer(qsess.createConsumer(queue), tracer);
                 }
 //                if (tracingMessageConsumer == null || qsess == null) continue;
-                if (consumer == null || qsess == null) continue;
+                if (receiver == null || tsess == null) continue;
                 System.out.println("Inventory before receive tracer.activeSpan():" + tracer.activeSpan());
-                TextMessage textMessage = (TextMessage) consumer.receive(-1);
+                TextMessage textMessage = (TextMessage) receiver.receive(-1);
 //                TextMessage textMessage = (TextMessage) consumer.receive(-1);
                 String messageText = textMessage.getText();
                 System.out.println("messageText " + messageText);
@@ -104,11 +104,11 @@ public class OrderServiceEventConsumer implements Runnable {
                     order.setStatus("failed inventory does not exist");
                 }
                 orderResource.orderServiceEventProducer.updateOrderViaSODA(order, dbConnection);
-                qsess.commit();
+                tsess.commit();
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("Exception in receiveMessages: " + e);
-                if(qsess != null) qsess.rollback();
+                if(tsess != null) tsess.rollback();
             }
         }
     }
