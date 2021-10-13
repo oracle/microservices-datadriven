@@ -87,8 +87,10 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
                     tsess = tconn.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
                     tconn.start();
                     Topic orderEvents = ((AQjmsSession) tsess).getTopic(inventoryResource.queueOwner, inventoryResource.orderQueueName);
-                    subscriber = ((AQjmsSession) tsess).createDurableSubscriber(orderEvents, "inventory_service", null);
-                    tracingMessageConsumer = new TracingMessageConsumer(subscriber, inventoryResource.getTracer());
+                    receiver = ((AQjmsSession) tsess).createTopicReceiver(orderEvents, "inventory_service", null);
+                    tracingMessageConsumer = new TracingMessageConsumer(receiver, inventoryResource.getTracer());
+//                    subscriber = ((AQjmsSession) tsess).createDurableSubscriber(orderEvents, "inventory_service", null);
+//                    tracingMessageConsumer = new TracingMessageConsumer(subscriber, inventoryResource.getTracer());
                 }
                 if (tracingMessageConsumer == null) continue;
                 TextMessage orderMessage = (TextMessage) (tracingMessageConsumer.receive(-1));

@@ -58,13 +58,15 @@ public class OrderServiceEventConsumer implements Runnable {
                     tsess = tconn.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
                     tconn.start();
                     Topic inventoryEvents = ((AQjmsSession) tsess).getTopic(OrderResource.queueOwner, OrderResource.inventoryQueueName);
-                    subscriber = ((AQjmsSession) tsess).createDurableSubscriber(inventoryEvents, "order_service");
+                    receiver = ((AQjmsSession) tsess).createTopicReceiver(inventoryEvents, "order_service", null);
+//                    subscriber = ((AQjmsSession) tsess).createDurableSubscriber(inventoryEvents, "order_service");
 //                    consumer = new TracingMessageConsumer(qsess.createConsumer(queue), tracer);
                 }
 //                if (tracingMessageConsumer == null || qsess == null) continue;
                 if (subscriber == null || tsess == null) continue;
                 System.out.println("Inventory before receive tracer.activeSpan():" + tracer.activeSpan());
-                TextMessage textMessage = (TextMessage) subscriber.receive(-1);
+                TextMessage textMessage = (TextMessage) receiver.receive(-1);
+//                TextMessage textMessage = (TextMessage) subscriber.receive(-1);
 //                TextMessage textMessage = (TextMessage) consumer.receive(-1);
                 String messageText = textMessage.getText();
                 System.out.println("messageText " + messageText);
