@@ -168,6 +168,7 @@ async function processOrder() {
     oracledb.autoCommit = false;
     connection = await oracledb.getConnection();
     const orderQueue = await connection.getQueue(queueConfig.orderQueue, queueOptions);
+    orderQueue.deqOptions.consumerName = 'inventory_service';
     logStats(opName, opStart, process.hrtime.bigint());
     const orderMsg = await orderQueue.deqOne();
     opName = 'Inventory:ordQConsumer';

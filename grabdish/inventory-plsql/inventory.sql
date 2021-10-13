@@ -17,6 +17,7 @@ BEGIN
   LOOP
     -- Wait for and dequeue the next order message
     dequeue_options.wait := dbms_aq.FOREVER;
+    dequeue_options.consumer_name := 'inventory_service';
     DBMS_AQ.DEQUEUE(
       queue_name => 'AQ.ORDERQUEUE',
       dequeue_options => dequeue_options,
