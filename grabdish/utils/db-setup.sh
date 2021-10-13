@@ -150,6 +150,7 @@ $(<$CONFIG_HOME/05-inventory.sql)
 # DB Setup Done
 state_set_done DB_SETUP
 
+exit
 
 # Order DB User, Objects
 while ! state_done ORDER_USER; do
