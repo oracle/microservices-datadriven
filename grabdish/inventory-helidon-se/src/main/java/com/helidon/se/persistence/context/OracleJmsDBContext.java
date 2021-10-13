@@ -97,8 +97,10 @@ public class OracleJmsDBContext extends DBContext {
     public String getMessage(String owner, String queueName) throws JMSException, SQLException {
         getConnection(); // using for init connections if needed
         Queue queue = ((AQjmsSession) session).getQueue(owner, queueName);
-        MessageConsumer consumer = session.createConsumer(queue);
-        TextMessage message = (TextMessage) consumer.receive(-1);
+        TopicReceiver receiver = ((AQjmsSession) tsess).createTopicReceiver(orderEvents, "inventory_service", null);
+        TextMessage message = (TextMessage) receiver.receive(-1);
+//        MessageConsumer consumer = session.createConsumer(queue);
+//        TextMessage message = (TextMessage) consumer.receive(-1);
         if (message != null) {
             String id = message.getJMSMessageID();
             String body = message.getText();

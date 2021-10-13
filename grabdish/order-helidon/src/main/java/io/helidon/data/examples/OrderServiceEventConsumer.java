@@ -12,7 +12,8 @@ import io.opentracing.Tracer;
 import oracle.jms.AQjmsConsumer;
 import oracle.jms.AQjmsFactory;
 import oracle.jms.AQjmsSession;
-import oracle.jms.AQjmsTopicSubscriber;
+import oracle.jms.AQjmsTopicReceiver;
+//import oracle.jms.AQjmsTopicSubscriber;
 
 import javax.jms.*;
 import java.sql.Connection;
@@ -42,7 +43,8 @@ public class OrderServiceEventConsumer implements Runnable {
         TopicConnectionFactory t_cf = AQjmsFactory.getTopicConnectionFactory(orderResource.atpOrderPdb);
         TopicSession tsess = null;
         TopicConnection tconn = null;
-        TopicSubscriber subscriber = null;
+        TopicReceiver receiver = null;
+//      TopicSubscriber subscriber = null;
 //        TracingMessageConsumer consumer = null;
         Connection dbConnection = null;
         //python (and likely nodejs) message causes javax.jms.MessageFormatException: JMS-117: Conversion failed - invalid property type

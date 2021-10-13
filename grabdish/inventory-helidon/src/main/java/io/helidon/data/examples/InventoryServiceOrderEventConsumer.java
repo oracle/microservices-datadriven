@@ -77,7 +77,8 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         TopicConnectionFactory t_cf = AQjmsFactory.getTopicConnectionFactory(inventoryResource.atpInventoryPDB);
         TopicSession tsess = null;
         TopicConnection tconn = null;
-        TopicSubscriber subscriber = null;
+        TopicReceiver receiver = null;
+    //    TopicSubscriber subscriber = null;
         TracingMessageConsumer tracingMessageConsumer = null;
         boolean done = false;
         while (!done) {
