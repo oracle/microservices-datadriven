@@ -112,7 +112,7 @@ while true; do
 done
 
 CONFIG_HOME=$GRABDISH_HOME/config/db
-SCRIPT_HOME=$CONFIF_HOME/1pdb
+SCRIPT_HOME=$CONFIG_HOME/2pdb
 ORDER_DB_ALIAS="$(state_get ORDER_DB_NAME)_tp"
 ORDER_DB_TNS_ADMIN=$TNS_ADMIN
 INVENTORY_DB_TNS_ADMIN=$TNS_ADMIN
@@ -129,7 +129,14 @@ while ! state_done ORDER_DB_PASSWORD_SET; do
 done
 
 
-files=$(ls SCRIPT_HOME)
+# Wait for DB Password to be set in Order DB
+while ! state_done INVENTORY_DB_PASSWORD_SET; do
+  echo "`date`: Waiting for ORDER_DB_PASSWORD_SET"
+  sleep 2
+done
+
+
+files=$(ls $SCRIPT_HOME)
 for f in $files; do
   # Execute all the SQL scripts in order using the appropriate TNS_ADMIN
   db_number=`grep -oP '(?<=\d\d-db)\d(?=-)' <<<"$f"`
