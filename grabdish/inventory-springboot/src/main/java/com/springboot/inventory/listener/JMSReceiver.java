@@ -1,5 +1,7 @@
 package com.springboot.inventory.listener;
 
+import javax.jms.JMSException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,27 +27,26 @@ public class JMSReceiver {
 
 	Logger logger = LoggerFactory.getLogger(JMSReceiver.class);
 
-	@JmsListener(destination = "orderqueue")
-	public void listenOrderEvent(String message, AQjmsSession session) {
+	@JmsListener(destination = "ORDER_QUEUE", containerFactory = "queueConnectionFactory")
+	public void listenOrderEvent(String message, AQjmsSession session) throws JMSException {
 		Order order = JsonUtils.read(message, Order.class);
 
-		logger.info("ListenOrderEvenet orderMessage:" + message);
-		logger.info("ListenOrderEvenet Session" + session);
+		logger.info("ListenOrderEvenet orderMessage :" + message);
 
 		String location = evaluateInventory(order, session);
 		inventoryEvent(order.getOrderid(), order.getItemid(), location);
+
 		logger.info("Received Message Session: " + session);
 	}
 
-	public void inventoryEvent(String orderId, String itemId, String location) {
+	public void inventoryEvent(String orderId, String itemId, String location) throws JMSException {
 
 		InventoryTable inventory = new InventoryTable(orderId, itemId, location, "beer");
 		String jsonString = JsonUtils.writeValueAsString(inventory);
-		logger.info("Inventory msg" + jsonString + "\n");
 
-		jmsTemplate.convertAndSend("inventoryqueue", jsonString);
-		logger.info(jmsTemplate.getDefaultDestinationName());
+		jmsTemplate.convertAndSend("INVENTORY_QUEUE", jsonString);
 
+		logger.info("Inventory template" + jsonString + "\n");
 	}
 
 	public String evaluateInventory(Order order, AQjmsSession session) {
@@ -64,4 +65,3 @@ public class JMSReceiver {
 	}
 
 }
-
