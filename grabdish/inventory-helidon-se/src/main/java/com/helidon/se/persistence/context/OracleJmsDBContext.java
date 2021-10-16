@@ -21,6 +21,7 @@ import com.helidon.se.util.JsonUtils;
 import oracle.jdbc.OracleConnection;
 import oracle.jms.AQjmsFactory;
 import oracle.jms.AQjmsSession;
+import oracle.jms.*;
 
 public class OracleJmsDBContext extends DBContext {
 
@@ -96,8 +97,8 @@ public class OracleJmsDBContext extends DBContext {
     @Override
     public String getMessage(String owner, String queueName) throws JMSException, SQLException {
         getConnection(); // using for init connections if needed
-        Queue queue = ((AQjmsSession) session).getQueue(owner, queueName);
-        TopicReceiver receiver = ((AQjmsSession) tsess).createTopicReceiver(orderEvents, "inventory_service", null);
+        Topic orderEvents = ((AQjmsSession) session).getTopic(owner, queueName);
+        TopicReceiver receiver = ((AQjmsSession) session).createTopicReceiver(orderEvents, "inventory_service", null);
         TextMessage message = (TextMessage) receiver.receive(-1);
 //        MessageConsumer consumer = session.createConsumer(queue);
 //        TextMessage message = (TextMessage) consumer.receive(-1);
