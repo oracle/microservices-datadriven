@@ -46,9 +46,11 @@ END;
 /
 
 BEGIN
+  CREATE OR REPLACE DIRECTORY dblink_wallet_dir AS 'dblink_wallet_dir';
+
   DBMS_CLOUD.GET_OBJECT(
-    object_uri => '$DB2_CWALLET_SSO_AUTH_URL)',
-    directory_name => 'DATA_PUMP_DIR');
+    object_uri => '$DB2_CWALLET_SSO_AUTH_URL',
+    directory_name => 'dblink_wallet_dir');
 
   DBMS_CLOUD.CREATE_CREDENTIAL(
     credential_name => 'CRED',
@@ -58,10 +60,10 @@ BEGIN
   DBMS_CLOUD_ADMIN.CREATE_DATABASE_LINK(
     db_link_name => '$DB1_TO_DB2_LINK',
     hostname => '$DB2_HOSTNAME',
-    port => '$DB2_PORT`',
+    port => '$DB2_PORT',
     service_name => '$DB2_SERVICE_NAME',
     ssl_server_cert_dn => '$DB2_SSL_SERVER_CERT_DN',
     credential_name => 'CRED',
-    directory_name => 'DATA_PUMP_DIR');
+    directory_name => 'dblink_wallet_dir');
 END;
 /

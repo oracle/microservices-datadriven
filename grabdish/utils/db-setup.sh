@@ -112,12 +112,13 @@ while true; do
 done
 
 CONFIG_HOME=$GRABDISH_HOME/config/db
-SCRIPT_HOME=$CONFIG_HOME/2pdb
-ORDER_DB_ALIAS="$(state_get ORDER_DB_NAME)_tp"
+SCRIPT_HOME=$CONFIG_HOME/2pdb/apply
 ORDER_DB_TNS_ADMIN=$TNS_ADMIN
 INVENTORY_DB_TNS_ADMIN=$TNS_ADMIN
+ORDER_DB_ALIAS="$(state_get ORDER_DB_NAME)_tp"
 INVENTORY_DB_ALIAS="$(state_get INVENTORY_DB_NAME)_tp"
-state_set INVENTORY_DB_NAME "$(state_get ORDER_DB_NAME)"
+ORDER_DB_CWALLET_SSO_AUTH_URL="$(state_get CWALLET_SSO_AUTH_URL)"
+INVENTORY_DB_CWALLET_SSO_AUTH_URL="$(state_get CWALLET_SSO_AUTH_URL)"
 DB_DEPLOYMENT='2PDB'
 DB_TYPE=ATP
 source $CONFIG_HOME/params.env
@@ -129,9 +130,9 @@ while ! state_done ORDER_DB_PASSWORD_SET; do
 done
 
 
-# Wait for DB Password to be set in Order DB
+# Wait for DB Password to be set in Inventory DB
 while ! state_done INVENTORY_DB_PASSWORD_SET; do
-  echo "`date`: Waiting for ORDER_DB_PASSWORD_SET"
+  echo "`date`: Waiting for INVENTORY_DB_PASSWORD_SET"
   sleep 2
 done
 
@@ -140,6 +141,7 @@ files=$(ls $SCRIPT_HOME)
 for f in $files; do
   # Execute all the SQL scripts in order using the appropriate TNS_ADMIN
   db_number=`grep -oP '(?<=\d\d-db)\d(?=-)' <<<"$f"`
+  echo "Executing $SCRIPT_HOME/$f on database DB$db_number"
   eval "
 export TNS_ADMIN=\$DB${db_number}_TNS_ADMIN
 sqlplus /nolog <<!
