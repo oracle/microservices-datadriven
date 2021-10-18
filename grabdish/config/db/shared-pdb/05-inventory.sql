@@ -1,4 +1,0 @@
-WHENEVER SQLERROR EXIT 1
-connect $INVENTORY_USER/"$INVENTORY_PASSWORD"@$DB_SVC
-
-@$GRABDISH_HOME/inventory-dotnet/dequeueenqueue.sql

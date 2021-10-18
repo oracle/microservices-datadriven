@@ -12,7 +12,6 @@ import io.opentracing.Tracer;
 import oracle.jms.AQjmsConsumer;
 import oracle.jms.AQjmsFactory;
 import oracle.jms.AQjmsSession;
-import oracle.jms.AQjmsTopicReceiver;
 import oracle.jms.*;
 //import oracle.jms.AQjmsTopicSubscriber;
 
@@ -67,7 +66,6 @@ public class OrderServiceEventConsumer implements Runnable {
                 }
 //                if (tracingMessageConsumer == null || qsess == null) continue;
                 if (receiver == null || tsess == null) continue;
-//                if (subscriber == null || tsess == null) continue;
                 System.out.println("Inventory before receive tracer.activeSpan():" + tracer.activeSpan());
                 TextMessage textMessage = (TextMessage) receiver.receive(-1);
 //                TextMessage textMessage = (TextMessage) subscriber.receive(-1);
