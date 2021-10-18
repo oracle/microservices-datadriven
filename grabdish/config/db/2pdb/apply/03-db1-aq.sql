@@ -45,9 +45,9 @@ BEGIN
 END;
 /
 
-BEGIN
-  CREATE OR REPLACE DIRECTORY dblink_wallet_dir AS 'dblink_wallet_dir';
+CREATE OR REPLACE DIRECTORY dblink_wallet_dir AS 'dblink_wallet_dir';
 
+BEGIN
   DBMS_CLOUD.GET_OBJECT(
     object_uri => '$DB2_CWALLET_SSO_AUTH_URL',
     directory_name => 'dblink_wallet_dir');
