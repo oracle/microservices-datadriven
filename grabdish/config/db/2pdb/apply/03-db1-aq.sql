@@ -45,12 +45,10 @@ BEGIN
 END;
 /
 
-CREATE OR REPLACE DIRECTORY dblink_wallet_dir AS 'dblink_wallet_dir';
-
 BEGIN
   DBMS_CLOUD.GET_OBJECT(
     object_uri => '$DB2_CWALLET_SSO_AUTH_URL',
-    directory_name => 'dblink_wallet_dir');
+    directory_name => 'aq_dblink_wallet_dir');
 
   DBMS_CLOUD.CREATE_CREDENTIAL(
     credential_name => 'CRED',
@@ -64,6 +62,6 @@ BEGIN
     service_name => '$DB2_SERVICE_NAME',
     ssl_server_cert_dn => '$DB2_SSL_SERVER_CERT_DN',
     credential_name => 'CRED',
-    directory_name => 'dblink_wallet_dir');
+    directory_name => 'aq_dblink_wallet_dir');
 END;
 /

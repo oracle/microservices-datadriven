@@ -43,7 +43,7 @@ for s in $SERVICES; do
   ./deploy.sh || true
 done
 
-while test 4 -gt `kubectl get pods -n msdataworkshop | egrep 'frontend-helidon||order-helidon|supplier-helidon-se' | grep "1/1" | wc -l`; do
+while test 3 -gt `kubectl get pods -n msdataworkshop | egrep 'frontend-helidon||order-helidon|supplier-helidon-se' | grep "1/1" | wc -l`; do
   echo "Waiting for pods to start..."
   sleep 10
 done

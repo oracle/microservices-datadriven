@@ -46,7 +46,7 @@ function addInventoryTest() {
 
 # Create the ext-order service
 cd $GRABDISH_HOME/order-helidon; 
-kubectl apply -f ext-order-service.yaml -n msdataworkshop
+kubectl apply -f ext-order-ingress.yaml -n msdataworkshop
 
 # Install k6
 cd $GRABDISH_HOME/k6; 
