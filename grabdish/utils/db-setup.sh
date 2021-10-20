@@ -151,5 +151,14 @@ $(<$SCRIPT_HOME/$f)
 done
 
 
+echo "Executing $CONFIG_HOME/inventory.sql on database DB$db_number"
+eval "
+export TNS_ADMIN=\$INVENTORY_DB_TNS_ADMIN
+sqlplus /nolog <<!
+connect $INVENTORY_USER/$INVENTORY_PASSWORD@$INVENTORY_DB_ALIAS
+$($CONFIG_HOME/inventory.sql)
+"
+
+
 # DB Setup Done
 state_set_done DB_SETUP

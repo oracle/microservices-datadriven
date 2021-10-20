@@ -90,72 +90,59 @@ namespace inventory_dotnet
                 ";Data Source=" +
                 Environment.GetEnvironmentVariable("DB_CONNECT_STRING") +
                 ";";
-        using (
-                OracleConnection connection = new OracleConnection(connString)
-            )
+
+            using ( OracleConnection connection = new OracleConnection(connString) )
             {
                 connection.Open();
+
+                // Setup PL/SQL commands
+                // dequeue_order_message
+                OracleCommand dequeueOrderMessageCommand = new OracleCommand("dequeue_order_message", connection);
+                dequeueOrderMessageCommand.CommandType = CommandType.StoredProcedure;
+                dequeueOrderMessageCommand.Parameters.Add(
+                    new OracleParameter("in_wait_option", OracleDbType.Int32, 0, -1, ParameterDirection.Input));
+                dequeueOrderMessageCommand.Parameters.Add(
+                    new OracleParameter("out_order_message", OracleDbType.Varchar2, 32767, "", ParameterDirection.Output));
+
+                // check_inventory
+                OracleCommand checkInventoryCommand = new OracleCommand("check_inventory", connection);
+                checkInventoryCommand.CommandType = CommandType.StoredProcedure;
+                checkInventoryCommand.Parameters.Add(
+                    new OracleParameter("in_inventory_id", OracleDbType.Varchar2, 32767, "", ParameterDirection.Input));
+                checkInventoryCommand.Parameters.Add(
+                    new OracleParameter("out_inventory_location", OracleDbType.Varchar2, 32767, "", ParameterDirection.Output));
+
+                // enqueue_inventory_message
+                OracleCommand enqueueInventoryMessageCommand = new OracleCommand("enqueue_inventory_message", connection);
+                enqueueInventoryMessageCommand.CommandType = CommandType.StoredProcedure;
+                enqueueInventoryMessageCommand.Parameters.Add(
+                    new OracleParameter("in_inventory_message", OracleDbType.Varchar2, 32767, "", ParameterDirection.Input));
+
+                Console.WriteLine("listening for messages...");
                 while (true) {
                     try
                     {
-                        Console.WriteLine("listening for messages...");
-                        OracleTransaction tx = connection.BeginTransaction();
                         //dequeue from order queues (out param)
-                        OracleCommand orderReceiveMessageCommand = new OracleCommand();
-                        orderReceiveMessageCommand.Connection = connection;
-                        orderReceiveMessageCommand.CommandText = "dequeueOrderMessage";
-                        orderReceiveMessageCommand.CommandType = CommandType.StoredProcedure;
-                        OracleParameter p_orderInfoParam =
-                            new OracleParameter("p_orderInfo",
-                                OracleDbType.Varchar2,
-                                32767);
-                        p_orderInfoParam.Direction = ParameterDirection.Output;
-                        orderReceiveMessageCommand.Parameters.Add (p_orderInfoParam);
-                        orderReceiveMessageCommand.ExecuteNonQuery();
+                        dequeueOrderMessageCommand.ExecuteNonQuery();
+
                         // Console.WriteLine("orderReceiveMessageCommand.Parameters[p_orderInfo].Value:" + orderReceiveMessageCommand.Parameters["p_orderInfo"].Value);
-                        if (orderReceiveMessageCommand.Parameters["p_orderInfo"] is null || orderReceiveMessageCommand.Parameters["p_orderInfo"].Value is null) {
+                        if (dequeueOrderMessageCommand.Parameters["out_order_message"].Value is null) {
                             Console.WriteLine("message was null");
-                            System.Threading.Thread.Sleep(1000);
-                            continue;
+                            break;
                         }
                         Order order;
                         try {
                             order = JsonConvert.DeserializeObject<Order>(
-                                "" + orderReceiveMessageCommand.Parameters["p_orderInfo"].Value);
+                                "" + dequeueOrderMessageCommand.Parameters["out_order_message"].Value);
                         } catch (System.NullReferenceException ex)  {
                             Console.WriteLine("message was null" + ex);
-                            System.Threading.Thread.Sleep(1000);
-                            continue;
+                            break;
                         } 
-                        System
-                            .Console
-                            .WriteLine("order.itemid inventorychecked sendmessage for {0}",
-                            order.orderid);
-                        // check inventory (in and out params)
-                        OracleCommand checkInventoryReturnLocationCommand =
-                            new OracleCommand();
-                        checkInventoryReturnLocationCommand.Connection = connection;
-                        checkInventoryReturnLocationCommand.CommandText =
-                            "checkInventoryReturnLocation";
-                        checkInventoryReturnLocationCommand.CommandType =
-                            CommandType.StoredProcedure;
-                        OracleParameter p_itemIdParam =
-                            new OracleParameter("p_inventoryId",
-                                OracleDbType.Varchar2,
-                                32767);
-                        p_itemIdParam.Direction =
-                            ParameterDirection.Input;
-                        p_itemIdParam.Value = order.itemid;
-                        checkInventoryReturnLocationCommand.Parameters.Add (
-                            p_itemIdParam
-                        );
-                        OracleParameter p_inventorylocationParam =
-                            new OracleParameter("p_inventorylocation",
-                                OracleDbType.Varchar2,
-                                32767);
-                        p_inventorylocationParam.Direction = ParameterDirection.Output;
-                        checkInventoryReturnLocationCommand.Parameters.Add (p_inventorylocationParam);
-                        checkInventoryReturnLocationCommand.ExecuteNonQuery();
+                        Console.WriteLine("order.itemid inventorychecked sendmessage for {0}", order.orderid);
+
+                        // check inventory (in and out params) 
+                        checkInventoryCommand.Parameters["in_inventory_id"].Value = order.itemid;
+                        checkInventoryCommand.ExecuteNonQuery();
 
                         // direct query version (ie not using sproc)...
                         // checkInventoryCommand.CommandText =
@@ -176,37 +163,18 @@ namespace inventory_dotnet
 
                         //inventory status object creation (using inventory location deteremined from query above)
                         Inventory inventory = new Inventory();
-                        var inventoryLocation = "" + checkInventoryReturnLocationCommand.Parameters["p_inventorylocation"].Value;
-                        inventory.inventorylocation = inventoryLocation.Equals("null") ? "inventorydoesnotexist" : inventoryLocation;
+                        inventory.inventorylocation = checkInventoryCommand.Parameters["out_inventory_location"].Value;
                         inventory.itemid = order.itemid;
                         inventory.orderid = order.orderid;
-                        inventory.suggestiveSale = inventoryLocation.Equals("null") ? "" : "beer";
-                        string inventoryJSON =
-                            JsonConvert.SerializeObject(inventory);
-                        System
-                            .Console
-                            .WriteLine("order.itemid inventoryJSON {0}",
-                            inventoryJSON);
+                        inventory.suggestiveSale = "beer";
+                        string inventoryJSON = JsonConvert.SerializeObject(inventory);
+                        System.Console.WriteLine("order.itemid inventoryJSON {0}", inventoryJSON);
+
                         //enqueue to inventory queue (in param)
-                        OracleCommand inventorySendMessageCommand =
-                            new OracleCommand();
-                        inventorySendMessageCommand.Connection = connection;
-                        inventorySendMessageCommand.CommandText =
-                            "enqueueInventoryMessage";
-                        inventorySendMessageCommand.CommandType =
-                            CommandType.StoredProcedure;
-                        OracleParameter p_inventoryInfoParam =
-                            new OracleParameter("p_inventoryInfo",
-                                OracleDbType.Varchar2,
-                                32767);
-                        p_inventoryInfoParam.Direction =
-                            ParameterDirection.Input;
-                        p_inventoryInfoParam.Value = inventoryJSON;
-                        inventorySendMessageCommand.Parameters.Add (
-                            p_inventoryInfoParam
-                        );
-                        inventorySendMessageCommand.ExecuteNonQuery();
-                        tx.Commit();
+                        enqueueInventoryMessageCommand.Parameters["in_inventory_message"].Value = inventoryJSON;
+                        enqueueInventoryMessageCommand.ExecuteNonQuery();
+
+                        connection.Commit();
                     }
                     catch (NullReferenceException ex) {
                         if(ex != null) System.Threading.Thread.Sleep(1000);
