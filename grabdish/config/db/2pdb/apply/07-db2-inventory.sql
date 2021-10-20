@@ -14,3 +14,5 @@ insert into inventory values ('sushi', '1468 WEBSTER ST,San Francisco,CA', 0);
 insert into inventory values ('pizza', '1469 WEBSTER ST,San Francisco,CA', 0);
 insert into inventory values ('burger', '1470 WEBSTER ST,San Francisco,CA', 0);
 commit;
+
+@$GRABDISH_HOME/inventory-dotnet/dequeueenqueue.sql
