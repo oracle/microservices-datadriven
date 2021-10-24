@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[2]:
 
 
 import os
@@ -25,13 +25,15 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import PCA
 from matplotlib import pyplot as plt
 
+import traceback
+
 pd.set_option('display.max_rows', 500)
 pd.set_option('display.max_columns', 500)
 
 
 # First, import the wine dataset.
 
-# In[2]:
+# In[3]:
 
 
 base_location = r"wine_data"
@@ -47,7 +49,7 @@ for file in os.listdir(base_location):
         wine_dataframe = pd.concat([wine_dataframe, df_to_append], axis=0)
 
 
-# In[3]:
+# In[4]:
 
 
 #wine_dataframe.drop_duplicates(subset=['Name'], inplace=True)
@@ -56,12 +58,10 @@ geographies = ['Subregion', 'Region', 'Province', 'Country']
 for geo in geographies:
     wine_dataframe[geo] = wine_dataframe[geo].apply(lambda x : str(x).strip())
 
-print(wine_dataframe)
-
 
 # Then, the food dataset.
 
-# In[4]:
+# In[5]:
 
 
 food_review_dataset = pd.read_csv('food_data/Reviews.csv')
@@ -72,7 +72,7 @@ print(food_review_dataset.shape)
 # 
 # First, we need to train a Word2Vec model on all the words in our corpus. We will process our wine and food terms separately - some of the wine terms will be standardized to account for commonalities in the colorful language of the world of wine.
 
-# In[5]:
+# In[6]:
 
 
 wine_reviews_list = list(wine_dataframe['Description'])
@@ -81,7 +81,7 @@ food_reviews_list = list(food_review_dataset['Text'])
 
 # To begin, we need to tokenize the terms in our corpus (wine and food).
 
-# In[6]:
+# In[7]:
 
 
 full_wine_reviews_list = [str(r) for r in wine_reviews_list]
@@ -92,13 +92,13 @@ full_food_reviews_list = [str(r) for r in food_reviews_list]
 full_food_corpus = ' '.join(full_food_reviews_list)
 food_sentences_tokenized = sent_tokenize(full_food_corpus)
 
-print(wine_sentences_tokenized[:2])
-print(food_sentences_tokenized[:2])
+#print(wine_sentences_tokenized[:2])
+#print(food_sentences_tokenized[:2])
 
 
 # Next, the text in each sentence is normalized (tokenize, remove punctuation and remove stopwords).
 
-# In[7]:
+# In[8]:
 
 
 stop_words = set(stopwords.words('english')) 
@@ -134,15 +134,15 @@ for s in food_sentences_tokenized:
     normalized_text = normalize_text(s)
     normalized_food_sentences.append(normalized_text)
     
-print(normalized_wine_sentences[:2])
-print(normalized_food_sentences[:2])
+#print(normalized_wine_sentences[:2])
+#print(normalized_food_sentences[:2])
 
 
 # Not all of the terms we are interested in are single words. Some of the terms are phrases, consisting of two (or more!) words. An example of this might be 'high tannin'. We can use gensim's Phrases feature to extract all the most relevant bi- and tri-grams from our corpus.
 # 
 # We will train a separate trigram model for wine and for food. 
 
-# In[8]:
+# In[9]:
 
 
 # first, take care of the wine trigrams
@@ -150,14 +150,14 @@ wine_bigram_model = Phrases(normalized_wine_sentences, min_count=100)
 wine_bigrams = [wine_bigram_model[line] for line in normalized_wine_sentences]
 wine_trigram_model = Phrases(wine_bigrams, min_count=50)
 phrased_wine_sentences = [wine_trigram_model[line] for line in wine_bigrams]
-#wine_trigram_model.save('wine_trigrams.pkl')
+wine_trigram_model.save('wine_trigrams.pkl')
 
 ### now, do the same for food
 food_bigram_model = Phrases(normalized_food_sentences, min_count=100)
 food_bigrams = [food_bigram_model[sent] for sent in normalized_food_sentences]
 food_trigram_model = Phrases(food_bigrams, min_count=50)
 phrased_food_sentences = [food_trigram_model[sent] for sent in food_bigrams]
-#food_trigram_model.save('food_trigrams.pkl')
+food_trigram_model.save('food_trigrams.pkl')
 
 wine_trigram_model = Phraser.load('wine_trigrams.pkl')
 food_trigram_model = Phraser.load('food_trigrams.pkl')
@@ -184,7 +184,7 @@ for sent in phrased_wine_sentences:
 
 # If the trigram model has already been trained, simply retrieve it.
 
-# In[9]:
+# In[10]:
 
 
 #wine_trigram_model = Phraser.load('wine_trigrams.pkl')
@@ -193,7 +193,7 @@ for sent in phrased_wine_sentences:
 
 # Now for the most important part: leveraging existing wine theory, the work of others like Bernard Chen, wine descriptor mappings and the UC Davis wine wheel, the top 5000 most frequent wine terms were reviewed to (i) determine whether they are a descriptor that can be derived by blind tasting, and (ii) whether they are informative (judgments like 'tasty' and 'great' are not considered to be informative). The roughly 1000 descriptors that remain were then mapped onto a normalized descriptor, a category and a class:
 
-# In[10]:
+# In[11]:
 
 
 #descriptor_mapping = pd.read_csv('descriptor_mapping.csv', encoding='latin1').set_index('raw descriptor')
@@ -216,11 +216,11 @@ for sent in phrased_wine_sentences:
 
 # We will go through the same process for food, but without normalizing the nonaroma descriptors.
 
-# In[11]:
+# In[12]:
 
 
 aroma_descriptor_mapping = descriptor_mapping.loc[descriptor_mapping['type'] == 'aroma']
-print(aroma_descriptor_mapping)
+#print(aroma_descriptor_mapping)
 normalized_food_sentences = []
 for sent in phrased_food_sentences:
     normalized_food_sentence = []
@@ -232,24 +232,37 @@ for sent in phrased_food_sentences:
 
 # Now, let's combine the wine dataset with our food dataset so we can train our embeddings. We want to make sure that the food and wine embeddings are calculated in the same feature space so that we can compute similarity vectors later on.
 
-# In[12]:
+# In[13]:
 
 
 normalized_sentences = normalized_wine_sentences + normalized_food_sentences
 
 
+# In[98]:
+
+
+normalized_sentences
+
+
 # We are ready to train our Word2Vec model!
 
-# In[13]:
+# In[14]:
 
 
+#Changed by Praveen - vector_size and epochs added)
 wine_word2vec_model = Word2Vec(normalized_sentences, vector_size=300, min_count=8, epochs=15)
 print(wine_word2vec_model)
 
 wine_word2vec_model.save('food_word2vec_model.bin')
 
 
-# In[14]:
+# In[ ]:
+
+
+wine_word2vec_model
+
+
+# In[15]:
 
 
 # if the word2vec model has already been trained, simply load it
@@ -262,7 +275,7 @@ wine_word2vec_model = Word2Vec.load("food_word2vec_model.bin")
 # 
 # First, let's normalize the names of the grape varieties in our dataset.
 
-# In[15]:
+# In[16]:
 
 
 variety_mapping = {'Shiraz': 'Syrah', 'Pinot Gris': 'Pinot Grigio', 'Pinot Grigio/Gris': 'Pinot Grigio', 
@@ -294,7 +307,7 @@ wine_df_clean['Variety'] = wine_df_clean['Variety'].apply(consolidate_varieties)
 
 # Next, we need to define the set of geography subregions we will use to define our wines. Not too general, not too specific... just right. 
 
-# In[16]:
+# In[17]:
 
 
 order_of_geographies = ['Subregion', 'Region', 'Province', 'Country']
@@ -313,7 +326,7 @@ for o in order_of_geographies:
 wine_df_clean.loc[:, order_of_geographies].fillna('none', inplace=True)
 
 
-# In[17]:
+# In[18]:
 
 
 variety_geo = wine_df_clean.groupby(['Variety', 'Country', 'Province', 'Region', 'Subregion']).size().reset_index().rename(columns={0:'count'})
@@ -323,7 +336,7 @@ vgeos_df = pd.DataFrame(variety_geo_sliced, columns=['Variety', 'Country', 'Prov
 vgeos_df.to_csv('varieties_all_geos.csv')
 
 
-# In[18]:
+# In[19]:
 
 
 variety_geo_df = pd.read_csv('varieties_all_geos_normalized.csv', index_col=0)
@@ -339,7 +352,7 @@ wine_df_merged.shape
 
 # We only want to keep wine types (location + variety) that appear frequently enough in our dataset. 
 
-# In[19]:
+# In[20]:
 
 
 variety_geos = wine_df_merged.groupby(['Variety', 'geo_normalized']).size()
@@ -363,12 +376,12 @@ print(wine_df_merged_filtered.shape)
 #     
 #  In our descriptor file, we have defined which normalized descriptors pertain to each nonaroma. 
 
-# In[20]:
+# In[173]:
 
 
 wine_reviews = list(wine_df_merged_filtered['Description'])
 
-descriptor_mapping = pd.read_csv('descriptor_mapping_tastes.csv', encoding='latin1').set_index('raw descriptor')
+descriptor_mapping = pd.read_csv('descriptor_mapping_tastes - Copy.csv', encoding='latin1').set_index('raw descriptor')
 
 core_tastes = ['aroma', 'weight', 'sweet', 'acid', 'salt', 'piquant', 'fat', 'bitter']
 descriptor_mappings = dict()
@@ -379,7 +392,6 @@ for c in core_tastes:
         descriptor_mapping_filtered=descriptor_mapping.loc[descriptor_mapping['primary taste']==c]
     descriptor_mappings[c] = descriptor_mapping_filtered                                                   
     
-
 def return_descriptor_from_mapping(descriptor_mapping, word, core_taste):
     if word in list(descriptor_mapping.index):
         descriptor_to_return = descriptor_mapping['combined'][word]
@@ -392,8 +404,7 @@ for review in wine_reviews:
     taste_descriptors = []
     normalized_review = normalize_text(review)
     phrased_review = wine_trigram_model[normalized_review]
-#     print(phrased_review)
-    
+    #print("normalized_review : ", normalized_review)
     for c in core_tastes:                                                      
         descriptors_only = [return_descriptor_from_mapping(descriptor_mappings[c], word, c) for word in phrased_review]
         no_nones = [str(d).strip() for d in descriptors_only if d is not None]
@@ -402,50 +413,75 @@ for review in wine_reviews:
     review_descriptors.append(taste_descriptors)
 
 
+# In[174]:
+
+
+#print("Vector of word salinity : ", wine_word2vec_model.wv['salility'])
+#np.zeros(1)
+
+
 # Now we will take the list of descriptors for each wine and its aroma/nonaroma vectors and compute a TF-IDF weighted embedding for each. We will store the results in a dataframe.
 
-# In[21]:
+# In[175]:
 
 
 taste_descriptors = []
 taste_vectors = []
 
 for n, taste in enumerate(core_tastes):
-    print(taste)
+    print("taste : ",taste)
     taste_words = [r[n] for r in review_descriptors]
-    
+    #if taste == 'salt':
+    #    print("salt taste_words : ", taste_words)
     vectorizer = TfidfVectorizer()
     X = vectorizer.fit(taste_words)
+    #print("Feature names : ", X.get_feature_names())
+    #print("IDF           : ", X.idf_)
     dict_of_tfidf_weightings = dict(zip(X.get_feature_names(), X.idf_))
-        
+    #print("dict_of_tfidf_weightings keys : ", dict_of_tfidf_weightings.keys())
     wine_review_descriptors = []
     wine_review_vectors = []
-    
     for d in taste_words:
         descriptor_count = 0
         weighted_review_terms = []
         terms = d.split(' ')
+        #if taste == 'salt':
+        #    print("Salt terms : ", terms)
         for term in terms:
             if term in dict_of_tfidf_weightings.keys():
                 tfidf_weighting = dict_of_tfidf_weightings[term]
+                
                 try:
+                    #if taste == 'salt':
+                    #    print("------ tfidf_weighting : ", tfidf_weighting, " => ",term)
+                    #    print("vector without reshape : ", wine_word2vec_model.wv.get_vector(term))
                     word_vector = wine_word2vec_model.wv.get_vector(term).reshape(1, 300)
                     weighted_word_vector = tfidf_weighting * word_vector
                     weighted_review_terms.append(weighted_word_vector)
                     descriptor_count += 1
                 except:
+                    if taste == 'bitter':
+                        print("term : ", term)
+                        traceback.print_exc()
                     continue
             else:
                 continue
         try:
+            #review_vector = ((sum(weighted_review_terms)/len(weighted_review_terms)).reshape(-1,1)).round(3)
             review_vector = sum(weighted_review_terms)/len(weighted_review_terms)
             review_vector = review_vector[0]
         except:
+            #traceback.print_exc()
             review_vector = np.nan
+            #if taste == 'salt' or taste == 'bitter':
+            #    review_vector = np.ones(1)
 #         terms_and_vec = [terms, review_vector]
+        #if taste == 'acid':
+        #    print("acid review_vector : ", review_vector)
         wine_review_vectors.append(review_vector)
         wine_review_descriptors.append(terms)
-    
+    #if taste == 'salt':
+    #    wine_review_vectors.reshape(1,300)
     taste_vectors.append(wine_review_vectors)
     taste_descriptors.append(wine_review_descriptors)
     
@@ -464,14 +500,16 @@ wine_df_vecs.head(5)
 
 # If we don't have a nonaroma embedding for one of the wines, we will simply take the average nonaroma embedding for all the wines in the dataset.
 
-# In[22]:
+# In[176]:
 
 
 # pull the average embedding for the wine attribute across all wines. 
+
 avg_taste_vecs = dict()
 for t in core_tastes:
     # look at the average embedding for a taste, across all wines that have descriptors for that taste 
     review_arrays = wine_df_vecs[t].dropna()
+    #print("review_arrays : ", review_arrays)
     average_taste_vec = np.average(review_arrays)
     avg_taste_vecs[t] = average_taste_vec
 
@@ -480,7 +518,7 @@ for t in core_tastes:
 # 
 # For each variety, we will pull (i) a 300-dimensional aroma vector, and (ii) 7 non-aroma scalars.
 
-# In[23]:
+# In[177]:
 
 
 normalized_geos = list(set(zip(wine_df_vecs['Variety'], wine_df_vecs['geo_normalized'])))
@@ -516,11 +554,13 @@ def pca_wine_variety(list_of_varieties, wine_attribute, pca=True):
     
     wine_varieties = [str(w[0]).replace('(', '').replace(')', '').replace("'", '').replace('"', '') for w in wine_var_vectors]
     wine_var_vec = [w[1] for w in wine_var_vectors]
+    print("Type of wine_var_vec : ",type(wine_var_vec) , ", wine_attribute : ", wine_attribute)
+    #if pca and wine_attribute != 'salt' and wine_attribute != 'bitter':
     if pca:
         pca = PCA(1)
-        #below one line newly added by praveen
+        #below one line newly added by praveen(trying to resolve issue)
         #wine_var_vec = np.array(wine_var_vec).reshape(-1, 1)
-        
+        #print("wine_var_vec : ", wine_var_vec)
         wine_var_vec = pca.fit_transform(wine_var_vec)
         wine_var_vec = pd.DataFrame(wine_var_vec, index=wine_varieties)
     else:
@@ -535,13 +575,18 @@ def pca_wine_variety(list_of_varieties, wine_attribute, pca=True):
 
 taste_dataframes = []
 # generate the dataframe of aromas vectors as output, 
+print("normalized_geos Type1: ", type(normalized_geos))
 aroma_vec, aroma_descriptors = pca_wine_variety(normalized_geos, 'aroma', pca=False)
 taste_dataframes.append(aroma_vec)
 #print(taste_dataframes)
 print(core_tastes)
+#print(normalized_geos)
 # generate the dataframes of nonaroma scalars
 for tw in core_tastes[1:]:
-    pca_w_dataframe, nonaroma_descriptors = pca_wine_variety(normalized_geos, tw, pca=False)
+    #TODO: below one line newly added by praveen, Pca was True, changed to False
+    print("normalized_geos Type: ", type(normalized_geos))
+    
+    pca_w_dataframe, nonaroma_descriptors = pca_wine_variety(normalized_geos, tw, pca=True)
     taste_dataframes.append(pca_w_dataframe)
     
 # combine all the dataframes created above into one 
@@ -549,7 +594,7 @@ all_nonaromas = pd.concat(taste_dataframes, axis=1)
 all_nonaromas.columns = core_tastes
 
 
-# In[24]:
+# In[178]:
 
 
 # save the 50 top descriptors for each wine variety as a CSV file. We will us this later to dig deeper into our proposed wine recommendations.
@@ -565,7 +610,7 @@ aroma_descriptors_copy.to_csv('wine_variety_descriptors.csv')
 
 # At the moment, it's hard to interpret the nonaroma scalars. To allow for greater interpretability, we will normalize the nonaroma scalars between 0 and 1.
 
-# In[25]:
+# In[179]:
 
 
 def normalize(df, cols_to_normalize):
@@ -573,10 +618,10 @@ def normalize(df, cols_to_normalize):
         print(feature_name)
         
         # TODO : Praveen (solve min and max function values)
-        max_value = 1 #np.max(df[feature_name])
-        min_value = 0 # np.min(df[feature_name])
-        #max_value = df[feature_name].max()
-        #min_value = df[feature_name].min()
+        #max_value = 1 #np.max(df[feature_name])
+        #min_value = 0 # np.min(df[feature_name])
+        max_value = df[feature_name].max()
+        min_value = df[feature_name].min()
         df[feature_name] = df[feature_name].apply(lambda x: (x- min_value)/(max_value-min_value))
 #         (df[feature_name] - min_value) / (max_value - min_value)
     return df
@@ -597,7 +642,7 @@ all_nonaromas_normalized.to_csv('wine_aromas_nonaromas.csv')
 # 
 # First, let's load this list of common foods.
 
-# In[26]:
+# In[180]:
 
 
 foods = pd.read_csv('list_of_foods.csv')
@@ -609,7 +654,7 @@ foods_list_preprocessed = list(set(foods_list_preprocessed))
 
 # Load the word embedding for each food in the list of sample foods, and save to a dictionary. 
 
-# In[27]:
+# In[181]:
 
 
 foods_vecs = dict()
@@ -625,7 +670,7 @@ for f in foods_list_preprocessed:
 
 # Now, we can define the nonaroma embeddings + the weight embedding as the average of foods that represent each nonaroma characteristic.
 
-# In[28]:
+# In[182]:
 
 
 from scipy import spatial
@@ -661,7 +706,7 @@ for taste, keywords in core_tastes_revised.items():
 
 # We can now find out which foods most and least resemble each nonaroma.
 
-# In[29]:
+# In[183]:
 
 
 food_nonaroma_infos = dict()
@@ -681,7 +726,7 @@ for key, value in core_tastes_revised.items():
 
 # Now, let's save the average embedding for each nonaroma, as well as the minimum and maximum distance to each nonaroma embedding - we will use these to scale the nonaroma scalars that we obtain for any foods we try to pair wine with.
 
-# In[30]:
+# In[184]:
 
 
 food_nonaroma_infos_df = pd.DataFrame(food_nonaroma_infos).T

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[20]:
+# In[61]:
 
 
 import os
@@ -48,7 +48,10 @@ print ('Passed Food Item : ', argList[1])
 # 
 # First up, the dataset with all our wine varieties and their average aroma & nonaroma embeddings.
 
-# In[21]:
+# In[62]:
+
+
+
 
 directory = os.getcwd()
 print("python directory : ",directory)
@@ -59,24 +62,18 @@ wine_variety_vectors.head()
 
 # Before we proceed, we should make sure that the nonaromas are modeled on a scale from low to high for each flavor. At a glance, those for weight, acid, salt and bitter need to be flipped.
 
-# In[22]:
+# In[63]:
 
 
-#wine_variety_vectors['weight'] = wine_variety_vectors['weight'].apply(lambda x: 1 - x)
-#wine_variety_vectors['acid'] = wine_variety_vectors['acid'].apply(lambda x: 1 - x)
-#wine_variety_vectors['salt'] = wine_variety_vectors['salt'].apply(lambda x: 1 - x)
-#wine_variety_vectors['bitter'] = wine_variety_vectors['bitter'].apply(lambda x: 1 - x)
-
-# TODO : Praveen ( Here doing nothing)
-wine_variety_vectors['weight'] = wine_variety_vectors['weight'].apply(lambda x: x)
-wine_variety_vectors['acid'] = wine_variety_vectors['acid'].apply(lambda x: x)
-wine_variety_vectors['salt'] = wine_variety_vectors['salt'].apply(lambda x: x)
-wine_variety_vectors['bitter'] = wine_variety_vectors['bitter'].apply(lambda x: x)
+wine_variety_vectors['weight'] = wine_variety_vectors['weight'].apply(lambda x: 1 - x)
+wine_variety_vectors['acid'] = wine_variety_vectors['acid'].apply(lambda x: 1 - x)
+wine_variety_vectors['salt'] = wine_variety_vectors['salt'].apply(lambda x: 1 - x)
+wine_variety_vectors['bitter'] = wine_variety_vectors['bitter'].apply(lambda x: 1 - x)
 
 
 # Let's load the other files we'll need:
 
-# In[23]:
+# In[64]:
 
 
 # a file containing the 50 most frequently appearing descriptors for each wine
@@ -95,7 +92,7 @@ food_nonaroma_infos = pd.read_csv(r'average_nonaroma_vectors.csv', index_col='Un
 # 
 # We will need a method to extract nonaroma values from food. We will compute a value for each nonaroma by looking at the distance between a food's embedding and the embedding that represents each nonaroma. We will normalize this to return a value between 0 and 1. Then, we will further standardize this by mapping the value between 0 and 1 to an ordinal integer value between 1 (low) and 4 (high). 
 
-# In[24]:
+# In[65]:
 
 
 # this function scales each nonaroma between 0 and 1
@@ -149,7 +146,7 @@ def return_all_food_values(sample_foods):
     return food_nonaromas, food_weight, average_food_embedding
 
 
-# In[25]:
+# In[66]:
 
 
 # this is the mapping of food similarities to the normalized ordinal integer values between 1 and 4
@@ -168,7 +165,7 @@ food_weights = {
 # 
 # To compare the nonaroma characteristics of wines and foods, we need to normalize them on the same scale (1-4).
 
-# In[26]:
+# In[67]:
 
 
 wine_weights = {
@@ -183,9 +180,7 @@ wine_weights = {
             
 wine_variety_vectors_normalized = wine_variety_vectors.copy()
 for w, subdict in wine_weights.items():
-    # TODO : Praveen change this to x, make x compatible with integer 
-    #wine_variety_vectors_normalized[w] = wine_variety_vectors_normalized[w].apply(lambda x: check_in_range(subdict, x))
-    wine_variety_vectors_normalized[w] = wine_variety_vectors_normalized[w].apply(lambda x: check_in_range(subdict, random.randint(1, 4)))
+    wine_variety_vectors_normalized[w] = wine_variety_vectors_normalized[w].apply(lambda x: check_in_range(subdict, x))
     
 wine_variety_vectors_normalized.sort_index(inplace=True)
 
@@ -194,13 +189,13 @@ wine_variety_vectors_normalized.sort_index(inplace=True)
 # 
 # Now, we will set some rules for creating wine pairings. We will run the rules below sequentially to eliminate pairings that do not make sense. 
 
-# In[27]:
+# In[68]:
 
 
 def weight_rule(df, food_weight):
     # Rule 1: the wine should have at least the same body as the food
     #TODO : Praveen changed
-    df = df.loc[(df['weight'] >= food_weight[1] - 1) & (df['weight'] <= food_weight[1]+4)]
+    df = df.loc[(df['weight'] >= food_weight[1] - 1) & (df['weight'] <= food_weight[1])]
     return df
 
 def acidity_rule(df, food_nonaromas):
@@ -257,7 +252,7 @@ def nonaroma_rules(wine_df, food_nonaromas, food_weight):
 
 # Now, we would like to find which pairings are contrasting or congruent. Contrasting pairings have nonaroma attributes that are different but that match well, whereas congruent pairings make use of shared compounds between wine and food. 
 
-# In[28]:
+# In[69]:
 
 
 def sweet_pairing(df, food_nonaromas):
@@ -305,30 +300,13 @@ def congruent_pairing(pairing_type, max_food_nonaroma_val, wine_nonaroma_val):
         return ''
     
 def congruent_or_contrasting(df, food_nonaromas):
-    #print("------In congruent_or_contrasting()------")
-    #print(df)
-    #print("--food_nonaromas--")
-    #print(food_nonaromas)
     # first, look for a congruent match
     max_nonaroma_val = max([i[1] for i in list(food_nonaromas.values())])
     most_defining_tastes = [key for key, val in food_nonaromas.items() if val[1] == max_nonaroma_val]
-    #print("-----------max_nonaroma_val--------------")
-    #print(max_nonaroma_val)
-    #print("-----------most_defining_tastes--------------")
-    #print(most_defining_tastes)
-    print("=============================================================")
     df['pairing_type'] = ''
-    #print("Sweet food aromas  = ",food_nonaromas['sweet'][1])
-    #print("fat food aromas  = ",food_nonaromas['fat'][1])
-    #print("bitter food aromas  = ",food_nonaromas['bitter'][1])
     for m in most_defining_tastes:
-        #print("***************Inside loop********************* m = ", m)
-        #print("food_nonaromas[m][1] : ", food_nonaromas[m][1])
-        #df['pairing_type'] = df.apply(lambda x: print("x[m]", x[m]))
         df['pairing_type'] = df.apply(lambda x: congruent_pairing(x['pairing_type'], food_nonaromas[m][1], x[m]), axis=1)
-        # TODO : Changed by praveen
-        #df['pairing_type'] = df.apply(lambda x: congruent_pairing(x['pairing_type'], 2, 1), axis=1)
-
+        
     # then, look for any contrasting matches
     list_of_tests = [sweet_pairing, acid_pairing, salt_pairing, piquant_pairing, fat_pairing, bitter_pairing]
     for t in list_of_tests:
@@ -338,7 +316,7 @@ def congruent_or_contrasting(df, food_nonaromas):
 
 # Finally, we will prioritize wine recommendations that share aroma characteristics with the food. We will sort the resulting recommendations by similarity between the wine aroma embedding and the average food embedding, in descending order. 
 
-# In[29]:
+# In[70]:
 
 
 def sort_by_aroma_similarity(df, food_aroma):
@@ -357,15 +335,12 @@ def sort_by_aroma_similarity(df, food_aroma):
 
 # For the top wine recommendations, we would also like to have a bit of additional context on which aroma descriptors in the wine match well with our food. 
 
-# In[30]:
+# In[71]:
 
 
 # these functions return the wine descriptors that most closely match the wine aromas of the selected recommendations. This will help give additional context and justification to the recommendations.
 
 def find_descriptor_distance(word, foodvec):
-    #print("=========================================================")
-    #print("IN find_descriptor_distance, WORD = ", word)
-    #print("word_vectors : ", word_vectors)
     # TODO : added try catch block: actual is only below 2 lines
     try:
         descriptor_wordvec = word_vectors[word]
@@ -385,7 +360,7 @@ def most_impactful_descriptors(recommendation):
 
 # The following function puts all the steps in our recommendation generation process together.
 
-# In[31]:
+# In[72]:
 
 
 def retrieve_pairing_type_info(wine_recommendations, full_nonaroma_table, pairing_type):
@@ -402,7 +377,7 @@ def retrieve_pairing_type_info(wine_recommendations, full_nonaroma_table, pairin
 # 
 # We will want to examine the proposed recommendations in a visual manner. The following cells lay out functions that we can use to generate a visualization of the food nonaromas, and subsequently nonaroma & aroma details for a series of wine recommendations.
 
-# In[32]:
+# In[73]:
 
 
 def make_spider(gs, n, data, title, color, pairing_type):
@@ -454,7 +429,7 @@ def make_spider(gs, n, data, title, color, pairing_type):
     plt.title(title_incl_pairing_type, size=13, color='black', y=1.2)
 
 
-# In[33]:
+# In[74]:
 
 
 def plot_number_line(gs, n, value, dot_color):
@@ -483,7 +458,7 @@ def plot_number_line(gs, n, value, dot_color):
     plt.axis('off')
 
 
-# In[34]:
+# In[75]:
 
 
 def create_text(gs, n, impactful_descriptors):
@@ -499,7 +474,7 @@ def create_text(gs, n, impactful_descriptors):
     ax.text(x=0, y=1, s=text, fontsize=12, color='grey')
 
 
-# In[35]:
+# In[76]:
 
 
 def plot_wine_recommendations(pairing_wines, pairing_nonaromas, pairing_body, impactful_descriptors, pairing_types):
@@ -525,27 +500,24 @@ def plot_wine_recommendations(pairing_wines, pairing_nonaromas, pairing_body, im
 
 # It's showtime. Time to generate our wine recommendations.
 
-# In[ ]:
+# In[77 ]:
 aroma_embedding = ''
 def getRecommendedWines(itemid):
+
 
     #test_food = ['hotdog', 'mustard', 'tomato', 'onion', 'pepperoncini', 'gherkin', 'celery', 'relish']
     #test_food = argList[1]
     test_food = itemid
+
     print("Input Food : ", test_food)
-#    appetizer = ['trout', 'dill', 'cucumber', 'sour_cream']
-#    entree = ['roast_chicken', 'tarragon', 'sage']
-#    dessert = ['peach', 'pie']
+    #appetizer = ['trout', 'dill', 'cucumber', 'sour_cream']
+    #entree = ['roast_chicken', 'tarragon', 'sage']
+    #dessert = ['peach', 'pie']
 
     food_nonaromas, food_weight, aroma_embedding = return_all_food_values(test_food)
     wine_recommendations = wine_variety_vectors_normalized.copy()
-    #print("WINE RECOMMENDATIONS")
-    #print(wine_recommendations)
-    #print("Recommand Length = ", len(wine_recommendations))
     wine_recommendations = nonaroma_rules(wine_recommendations, food_nonaromas, food_weight)
 
-    #print("Food Non-Aromas")
-    #print(food_nonaromas)
     wine_recommendations = congruent_or_contrasting(wine_recommendations, food_nonaromas)
     wine_recommendations = sort_by_aroma_similarity(wine_recommendations, aroma_embedding)
     wine_recommendations['most_impactful_descriptors'] = wine_recommendations.index.map(most_impactful_descriptors)
@@ -585,7 +557,7 @@ def getRecommendedWines(itemid):
     return wine_names
 
 
-# In[37]:
+# In[78]:
 
 
 #plt.figure(figsize=(4, 5), dpi=75)
@@ -599,12 +571,8 @@ def getRecommendedWines(itemid):
 #plot_number_line(gs, 1, food_weight[0], dot_color='orange')
 
 
-# In[38]:
+# In[79]:
 
 
 #print(food_nonaromas_norm)
 
-if __name__ == "__main__":
-    test_food = argList[1]
-    print('Input in main : ',test_food)
-    getRecommendedWines(test_food)
