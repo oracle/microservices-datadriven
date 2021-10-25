@@ -112,7 +112,7 @@ while true; do
 done
 
 CONFIG_HOME=$GRABDISH_HOME/config/db
-SCRIPT_HOME=$CONFIG_HOME/2pdb/apply
+SCRIPT_HOME=$CONFIG_HOME/2pdb-atp/apply
 ORDER_DB_TNS_ADMIN=$TNS_ADMIN
 INVENTORY_DB_TNS_ADMIN=$TNS_ADMIN
 ORDER_DB_ALIAS="$(state_get ORDER_DB_NAME)_tp"
@@ -121,6 +121,7 @@ ORDER_DB_CWALLET_SSO_AUTH_URL="$(state_get CWALLET_SSO_AUTH_URL)"
 INVENTORY_DB_CWALLET_SSO_AUTH_URL="$(state_get CWALLET_SSO_AUTH_URL)"
 DB_DEPLOYMENT='2PDB'
 DB_TYPE=ATP
+QUEUE_TYPE=stdq
 source $CONFIG_HOME/params.env
 
 # Wait for DB Password to be set in Order DB
@@ -137,6 +138,19 @@ while ! state_done INVENTORY_DB_PASSWORD_SET; do
 done
 
 
+# Expand common scripts
+mkdir -p $COMMON_SCRIPT_HOME
+files=$(ls $CONFIG_HOME/common)
+for f in files; do
+  eval "
+cat >$COMMON_SCRIPT_HOME/$f <<!
+$(<$CONFIG_HOME/common/$f)
+!
+"
+done
+
+
+# Execute DB etup scripts
 files=$(ls $SCRIPT_HOME)
 for f in $files; do
   # Execute all the SQL scripts in order using the appropriate TNS_ADMIN
@@ -145,6 +159,7 @@ for f in $files; do
   eval "
 export TNS_ADMIN=\$DB${db_number}_TNS_ADMIN
 sqlplus /nolog <<!
+set echo on
 $(<$SCRIPT_HOME/$f)
 !
 "

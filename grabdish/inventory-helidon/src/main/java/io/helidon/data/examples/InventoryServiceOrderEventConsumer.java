@@ -82,18 +82,19 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         Topic orderEvents = ((AQjmsSession) tsess).getTopic(inventoryResource.queueOwner, inventoryResource.orderQueueName);
         TopicReceiver receiver = ((AQjmsSession) tsess).createTopicReceiver(orderEvents, "inventory_service", null);
 
-        Topic inventoryTopic = session.getTopic(InventoryResource.queueOwner, InventoryResource.inventoryQueueName);
-        TopicPublisher publisher = session.createPublisher(inventoryTopic);
+        Topic inventoryTopic = ((AQjmsSession) tsess).getTopic(InventoryResource.queueOwner, InventoryResource.inventoryQueueName);
+        TopicPublisher publisher = tsess.createPublisher(inventoryTopic);
 
         Order order;
         String inventorylocation;
         Inventory inventory;
         ResultSet res;
-        TextMessage orderMessage, inventoryMessage;
+        TextMessage orderMessage;
+        TextMessage inventoryMessage = tsess.createTextMessage();
         int i;
 
-        dbConnection = session.getDBConnection();
-        OraclePreparedStatement st = (OraclePreparedStatement) dbConnection.prepareStatement(DECREMENT_BY_ID)
+        dbConnection = ((AQjmsSession) tsess).getDBConnection();
+        OraclePreparedStatement st = (OraclePreparedStatement) dbConnection.prepareStatement(DECREMENT_BY_ID);
         st.registerReturnParameter(2, Types.VARCHAR);
 
         boolean done = false;
@@ -117,9 +118,9 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
 
                 // Create inventory event
                 inventory = new Inventory(order.getOrderid(), order.getItemid(), inventorylocation, "beer"); //static suggestiveSale - represents an additional service/event
-                inventoryMessage.setText(jession.createTextMessage(JsonUtils.writeValueAsString(inventory)));
+                inventoryMessage.setText(JsonUtils.writeValueAsString(inventory));
 
-                // Publish eventory event
+                // Publish inventory event
                 publisher.send(inventoryTopic, inventoryMessage, DeliveryMode.PERSISTENT, 2, AQjmsConstants.EXPIRATION_NEVER);
 
                 // Commit
@@ -135,7 +136,6 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         }
     }
 
-    }
     public void listenForOrderEvents() throws Exception {
         TopicConnectionFactory t_cf = AQjmsFactory.getTopicConnectionFactory(inventoryResource.atpInventoryPDB);
         TopicSession tsess = null;
