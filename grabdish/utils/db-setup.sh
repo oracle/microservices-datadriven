@@ -111,18 +111,46 @@ while true; do
   sleep 5
 done
 
+
 CONFIG_HOME=$GRABDISH_HOME/config/db
-SCRIPT_HOME=$CONFIG_HOME/2pdb-atp/apply
-ORDER_DB_TNS_ADMIN=$TNS_ADMIN
-INVENTORY_DB_TNS_ADMIN=$TNS_ADMIN
-ORDER_DB_ALIAS="$(state_get ORDER_DB_NAME)_tp"
-INVENTORY_DB_ALIAS="$(state_get INVENTORY_DB_NAME)_tp"
-ORDER_DB_CWALLET_SSO_AUTH_URL="$(state_get CWALLET_SSO_AUTH_URL)"
-INVENTORY_DB_CWALLET_SSO_AUTH_URL="$(state_get CWALLET_SSO_AUTH_URL)"
-DB_DEPLOYMENT='2PDB'
+
+
+DB_DEPLOYMENT='1PDB'
 DB_TYPE=ATP
-QUEUE_TYPE=stdq
+
+if test $DB_DEPLOYMENT == "1PDB"; then
+  # 1PDB
+  SCRIPT_HOME=$CONFIG_HOME/1pdb/apply
+  ORDER_DB_TNS_ADMIN=$TNS_ADMIN
+  INVENTORY_DB_TNS_ADMIN=$TNS_ADMIN
+  ORDER_DB_ALIAS="$(state_get ORDER_DB_NAME)_tp"
+  INVENTORY_DB_ALIAS="$(state_get ORDER_DB_NAME)_tp"
+  QUEUE_TYPE=teq
+else
+  # 2PDB
+  if test $DB_TYPE == "ATP"; then
+    # ATP
+    SCRIPT_HOME=$CONFIG_HOME/2pdb-atp/apply
+    ORDER_DB_TNS_ADMIN=$TNS_ADMIN
+    INVENTORY_DB_TNS_ADMIN=$TNS_ADMIN
+    ORDER_DB_ALIAS="$(state_get ORDER_DB_NAME)_tp"
+    INVENTORY_DB_ALIAS="$(state_get INVENTORY_DB_NAME)_tp"
+    ORDER_DB_CWALLET_SSO_AUTH_URL="$(state_get CWALLET_SSO_AUTH_URL)"
+    INVENTORY_DB_CWALLET_SSO_AUTH_URL="$(state_get CWALLET_SSO_AUTH_URL)"
+    QUEUE_TYPE=stdq
+  else
+    # Standard Database
+    SCRIPT_HOME=$CONFIG_HOME/2pdb-std/apply
+    ORDER_DB_TNS_ADMIN=$TNS_ADMIN
+    INVENTORY_DB_TNS_ADMIN=$TNS_ADMIN
+    ORDER_DB_ALIAS="$(state_get ORDER_DB_NAME)_tp"
+    INVENTORY_DB_ALIAS="$(state_get INVENTORY_DB_NAME)_tp"
+    QUEUE_TYPE=teq
+  fi
+fi
+
 source $CONFIG_HOME/params.env
+
 
 # Wait for DB Password to be set in Order DB
 while ! state_done ORDER_DB_PASSWORD_SET; do
@@ -164,16 +192,6 @@ $(<$SCRIPT_HOME/$f)
 !
 "
 done
-
-
-echo "Executing $CONFIG_HOME/inventory.sql on database DB$db_number"
-eval "
-export TNS_ADMIN=\$INVENTORY_DB_TNS_ADMIN
-sqlplus /nolog <<!
-connect $INVENTORY_USER/$INVENTORY_PASSWORD@$INVENTORY_DB_ALIAS
-$($CONFIG_HOME/inventory.sql)
-"
-
 
 # DB Setup Done
 state_set_done DB_SETUP

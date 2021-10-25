@@ -223,14 +223,9 @@ namespace inventory_dotnet
             String tnsAdmin = Environment.GetEnvironmentVariable("TNS_ADMIN");
             OracleConfiguration.WalletLocation = tnsAdmin;
             String pw = Environment.GetEnvironmentVariable("DB_PASSWORD");
-            string connString =
-                "User Id=" +
-                Environment.GetEnvironmentVariable("DB_USER") +
-                ";Password=" +
-                "\"" + pw + "\"" +
-                ";Data Source=" +
-                Environment.GetEnvironmentVariable("DB_CONNECT_STRING") +
-                ";";
+            String user = Environment.GetEnvironmentVariable("DB_USER");
+            String tns = Environment.GetEnvironmentVariable("DB_CONNECT_STRING");
+            string connString = $"User Id={user};Password=\"{pw}\";Data Source={tns};";
 
             using ( OracleConnection connection = new OracleConnection(connString) )
             {
