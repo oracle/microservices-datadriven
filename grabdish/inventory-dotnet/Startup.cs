@@ -74,7 +74,7 @@ namespace inventory_dotnet
                 });
         }
 
-        public String ListenForMessages()
+        public void NewListenForMessages()
         {
             //Other options include...
             //   using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, TimeSpan.MaxValue))
