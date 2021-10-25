@@ -141,7 +141,7 @@ done
 # Expand common scripts
 mkdir -p $COMMON_SCRIPT_HOME
 files=$(ls $CONFIG_HOME/common)
-for f in files; do
+for f in $files; do
   eval "
 cat >$COMMON_SCRIPT_HOME/$f <<!
 $(<$CONFIG_HOME/common/$f)
