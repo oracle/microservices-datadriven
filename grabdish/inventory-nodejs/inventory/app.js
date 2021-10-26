@@ -168,6 +168,7 @@ async function processOrder() {
     oracledb.autoCommit = false;
     connection = await oracledb.getConnection();
     const orderQueue = await connection.getQueue(queueConfig.orderQueue, queueOptions);
+    orderQueue.deqOptions.navigation = oracledb.AQ_DEQ_NAV_FIRST_MSG;  // Required for TEQ
     orderQueue.deqOptions.consumerName = 'inventory_service';
     logStats(opName, opStart, process.hrtime.bigint());
     const orderMsg = await orderQueue.deqOne();

@@ -15,6 +15,8 @@ BEGIN
 --  dequeue_options.wait := dbms_aq.NO_WAIT;
    dequeue_options.wait := dbms_aq.FOREVER;
    dequeue_options.consumer_name := 'inventory_service';
+   dequeue_options.navigation    := DBMS_AQ.FIRST_MESSAGE;
+  
   -- dequeue_options.navigation := dbms_aq.FIRST_MESSAGE;
   -- dequeue_options.dequeue_mode := dbms_aq.LOCKED;
 

@@ -19,7 +19,7 @@ IS
   dequeue_options       dbms_aq.dequeue_options_t;
   message_properties    dbms_aq.message_properties_t;
   message_handle        RAW(16);
-  message               SYS.AQ$_JMS_TEXT_MESSAGE;
+  message               SYS.AQ\$_JMS_TEXT_MESSAGE;
   no_messages           EXCEPTION;
   pragma                exception_init(no_messages, -25228); 
 BEGIN
@@ -33,6 +33,7 @@ BEGIN
   END CASE;
 
   dequeue_options.consumer_name := '$INVENTORY_SERVICE_NAME';
+  dequeue_options.navigation    := dbms_aq.FIRST_MESSAGE;  -- Required for TEQ
 
   DBMS_AQ.DEQUEUE(
     queue_name         => '$AQ_USER.$ORDER_QUEUE',
@@ -54,15 +55,15 @@ show errors
 
 CREATE OR REPLACE PROCEDURE enqueue_inventory_message(in_inventory_message IN VARCHAR2)
 IS
-   enqueue_options     DBMS_AQ.enqueue_options_t;
-   message_properties  DBMS_AQ.message_properties_t;
+   enqueue_options     dbms_aq.enqueue_options_t;
+   message_properties  dbms_aq.message_properties_t;
    message_handle      RAW(16);
-   message             SYS.AQ$_JMS_TEXT_MESSAGE;
+   message             SYS.AQ\$_JMS_TEXT_MESSAGE;
 BEGIN
-  message := SYS.AQ$_JMS_TEXT_MESSAGE.construct;
+  message := SYS.AQ\$_JMS_TEXT_MESSAGE.construct;
   message.set_text(in_inventory_message);
 
-  DBMS_AQ.ENQUEUE(queue_name => '$AQ_USER.$INVENTORY_QUEUE',
+  dbms_aq.ENQUEUE(queue_name => '$AQ_USER.$INVENTORY_QUEUE',
     enqueue_options    => enqueue_options,
     message_properties => message_properties,
     payload            => message,

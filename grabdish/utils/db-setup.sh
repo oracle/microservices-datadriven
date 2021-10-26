@@ -125,6 +125,7 @@ if test $DB_DEPLOYMENT == "1PDB"; then
   INVENTORY_DB_TNS_ADMIN=$TNS_ADMIN
   ORDER_DB_ALIAS="$(state_get ORDER_DB_NAME)_tp"
   INVENTORY_DB_ALIAS="$(state_get ORDER_DB_NAME)_tp"
+  state_set INVENTORY_DB_NAME "$(state_get ORDER_DB_NAME)"
   QUEUE_TYPE=teq
 else
   # 2PDB

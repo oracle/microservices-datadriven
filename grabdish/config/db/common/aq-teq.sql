@@ -5,12 +5,12 @@
 BEGIN
    DBMS_AQADM.CREATE_SHARDED_QUEUE (
       queue_name          => '$ORDER_QUEUE',
-      queue_payload_type   => 'SYS.AQ\$_JMS_TEXT_MESSAGE',
+      queue_payload_type   => DBMS_AQADM.JMS_TYPE,
       multiple_consumers   => true);
 
    DBMS_AQADM.CREATE_SHARDED_QUEUE (
       queue_name          => '$INVENTORY_QUEUE',
-      queue_payload_type   => 'SYS.AQ\$_JMS_TEXT_MESSAGE',
+      queue_payload_type   => DBMS_AQADM.JMS_TYPE,
       multiple_consumers   => true);
 
    DBMS_AQADM.START_QUEUE (
