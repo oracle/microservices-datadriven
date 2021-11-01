@@ -33,12 +33,14 @@ def run():
         try:
             conn = dbmgr.acquireConn()
             orderQueue = conn.queue(queue_owner + ".orderqueue", conn.gettype("SYS.AQ$_JMS_TEXT_MESSAGE"))
+            orderQueue.deqoptions.navigation = cx_Oracle.DEQ_FIRST_MSG  # Required for TEQ
+            orderQueue.deqoptions.consumername = "inventory_service"
             inventoryQueue = conn.queue(queue_owner + ".inventoryqueue", conn.gettype("SYS.AQ$_JMS_TEXT_MESSAGE"))
             cursor = conn.cursor()
             # Loop requesting inventory requests from the order queue
             while True:
                 # Dequeue the next event from the order queue
-                conn.begin()
+                conn.autocommit = False
                 payload =orderQueue.deqOne().payload
                 logger.debug(payload.TEXT_VC)
                 orderInfo = simplejson.loads(payload.TEXT_VC)

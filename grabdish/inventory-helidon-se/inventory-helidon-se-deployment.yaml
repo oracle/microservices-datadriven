@@ -54,7 +54,7 @@ spec:
             - name: db_url
               value: "jdbc:oracle:thin:@%INVENTORY_PDB_NAME%_tp?TNS_ADMIN=/msdataworkshop/creds"
             - name: db_queueOwner
-              value: "inventoryuser"
+              value: "AQ"
             - name: db_orderQueueName
               value: "orderqueue"
             - name: db_inventoryQueueName
