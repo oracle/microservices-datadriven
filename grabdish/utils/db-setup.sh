@@ -179,7 +179,7 @@ $(<$CONFIG_HOME/common/$f)
 done
 
 
-# Execute DB etup scripts
+# Execute DB setup scripts
 files=$(ls $SCRIPT_HOME)
 for f in $files; do
   # Execute all the SQL scripts in order using the appropriate TNS_ADMIN
