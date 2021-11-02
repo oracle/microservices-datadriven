@@ -76,35 +76,8 @@ SSL_SERVER_DN_MATCH=yes
 fi
 
 
-# Create Object Store Bucket
-if ! test -f $MY_STATE/state_os_bucket_created; then
-  BUCKET_NAME="${RUN_NAME}_${DB_NAME}_cwallet"
-  oci os bucket create --compartment-id "$COMPARTMENT_OCID" --name "$BUCKET_NAME"
-  echo "BUCKET_NAME='$BUCKET_NAME'" >>$STATE_FILE
-  touch $MY_STATE/state_os_bucket_created
-fi
-
-
-# Put DB Connection Wallet in the bucket in Object Store
-if ! test -f $MY_STATE/state_cwallet_put; then
-  cd $TNS_ADMIN
-  oci os object put --bucket-name $BUCKET_NAME --name "cwallet.sso" --file 'cwallet.sso'
-  touch $MY_STATE/state_cwallet_put
-fi
-
-
-# Create Authenticated Link to Wallet
-if ! test -f $MY_STATE/state_cwallet_auth_url; then
-  ACCESS_URI=`oci os preauth-request create --object-name 'cwallet.sso' --access-type 'ObjectRead' --bucket-name $BUCKET_NAME --name 'grabdish' --time-expires $(date '+%Y-%m-%d' --date '+7 days') --query 'data."access-uri"' --raw-output`
-  CWALLET_SSO_AUTH_URL="https://objectstorage.${REGION}.oraclecloud.com${ACCESS_URI}"
-  echo "CWALLET_SSO_AUTH_URL='$CWALLET_SSO_AUTH_URL'" >>$STATE_FILE
-  touch $MY_STATE/state_cwallet_auth_url
-fi
-
-
 cat >$OUTPUT_FILE <<!
 DB_OCID='$DB_OCID'
 DB_ALIAS='$DB_ALIAS'
 TNS_ADMIN='$TNS_ADMIN'
-CWALLET_SSO_AUTH_URL='$CWALLET_SSO_AUTH_URL'
 !
