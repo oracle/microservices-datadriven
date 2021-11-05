@@ -29,3 +29,17 @@ select propagation_name, STATUS, ERROR_MESSAGE, ERROR_DATE from all_propagation 
 
 
 select propagation_name, STATUS, ERROR_MESSAGE, ERROR_DATE from all_propagation where SOURCE_QUEUE_OWNER='INVENTORYUSER';
+
+select * from dba_scheduler_jobs where job_name like 'AQ_JOB$%'
+
+select * from dba_scheduler_job_run_details where job_name like 'AQ_JOB$%'
+
+SELECT
+  ADMIN.ORDERQUEUE@.'||
+    p.SOURCE_QUEUE_NAME||'@'||
+    g.GLOBAL_NAME SOURCE_QUEUE,
+  p.DESTINATION_QUEUE_OWNER||'.'||
+    p.DESTINATION_QUEUE_NAME||'@'||
+    p.DESTINATION_DBLINK DESTINATION_QUEUE
+  FROM DBA_PROPAGATION p, GLOBAL_NAME g
+  WHERE p.PROPAGATION_NAME = 'DBS1_TO_DBS2';

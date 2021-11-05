@@ -1,0 +1,142 @@
+package io.helidon.data.examples;
+
+/*
+   DESCRIPTION
+   This is the Airline Reservation listener class example, this class
+   implements a message listener for the Airline microservice. The
+   listener will join an existing saga using AQjmsSaga API and interact
+   with the initiator.
+   PRIVATE CLASSES None
+   NOTES:  These are code snippets only and this sample should be used for reference.
+            */
+
+import oracle.AQ.*;
+import oracle.jms.*;
+import javax.jms.*;
+import java.lang.*;
+import java.math.*;
+import java.util.*;
+
+public class AirlineListener implements MessageListener
+{
+    Session             mysess;
+    String              myname;
+    public int          msgCount;
+    public boolean      useMsgVector;
+    public Vector       msgVector;
+
+    AirlineListener(String name, Session sess)
+    {
+        myname = name;
+        mysess = sess;
+    }
+
+    public static void main ()
+            throws java.sql.SQLException, ClassNotFoundException, JMSException
+    {
+        tc_fact = (TopicConnectionFactory) AQjmsFactory.getTopicConnectionFactory(url,prop);
+
+        /* create topic connection and session (for publisher)*/
+        t_conn = tc_fact.createTopicConnection();
+        t_sess = t_conn.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+
+        /* Get handle to outbound topic */
+        AirlineOut_topic = ((AQjmsSession)t_sess).getSagaOutTopic("JMSUSER", "Airline");
+        /* create a publisher */
+        Airline_publisher = t_sess.createPublisher(AirlineOut_topic);
+
+        /* Get handle to inbound topic and setup the subscriber */
+        AirlineIn_topic = ((AQjmsSession)t_sess).getSagaInTopic("JMSUSER", "Airline");
+        t_subs = t_sess.createDurableSubscriber(AirlineIn_topic, "Airline");
+
+        /* setup the message listener for Airline */
+        AirlineListener alis = new AirlineListener("Airline", t_sess);
+        MessageListener myAirlineListener = (MessageListener) alis;
+        t_subs.setMessageListener(myAirlineListener);
+    }
+
+    public void onMessage(javax.jms.Message m)
+    {
+        TextMessage      SagaM = (TextMessage ) m;
+        AQMessageProperty    m_property = null;
+        AQjmsSaga    SagaAirline;
+
+        /* if a valid saga message */
+        if (SagaM.getJMSSagaId())
+        {
+            SagaAirline = new AQjmsSaga("Airline", mysess);
+            /* Opcode: Request(0), Commit(1), Rollback(2) */
+            switch(SagaAirline.getJMSSagaOpcode())
+            {
+                Request:
+                SagaAirline.joinSaga(SagaM.getJMSSagaId());  // this is enroll_participant
+/* Dictionary entries for a successful joinSaga()
+saga$ at AirlinePDB:
+Id	Level	Initiator	Coordinator	User#	Duration	Begin	End 	status
+1234	1	TravelAgency	TACoordinator	789	Null	07/23/2020	07/24/2020	0
+
+saga$_participant_set at TravelAgencyPDB:
+Id	Coordinator	Participant	Status
+1234	TACoordinator	Airline	0
+
+*/
+
+            /* process message payload and make transactional changes
+               to escrow column
+		   prepare message for the travel agency
+		   note: the message recipient is the JMSSagaSender for
+               message SagaM */
+                Message_TravelAgency.SetJMSSagaRecipient(SagaM.getJMSSender());
+                Message_TravelAgency.SetText("{ "Reservation_Name": "Sample1", "Status": "Success", "Ticket_No": "ABC123", "Conf Code": "123LAX"}");
+                Airline_publisher.publish(AirlineOut_topic, Message_TravelAgency);
+
+                /* commit local transaction participating in the saga */
+                mysess.commit(); /* commit on the session belonging to the publisher */
+                break;
+
+                Commit:
+                /* performs saga finalization at the Airline and commits the local txn */
+                SagaAirline.commit();
+                break;
+/* Dictionary entries for a successful commit()
+saga$ at AirlinePDB:
+Id	Level	Initiator	Coordinator	User#	Duration	Begin	End 	status
+1234	1	TravelAgency	TACoordinator	789	Null	07/23/2020	07/24/2020	2
+
+saga$_participant_set at TravelAgencyPDB:
+Id	Coordinator	Participant	Status
+1234	TACoordinator	Airline	2
+
+/* SAGA$ database table entries at TravelAgencyPDB
+Id	Level	Initiator	Coordinator	User#	Duration	Begin	End 	status
+1234	0	TravelAgency	TACoordinator	456	Null	07/23/2020	07/24/2020	2
+
+*/
+                Rollback:
+                /* performs saga compensation at the Airline and commits the local txn */
+                SagaAirline.rollback();
+                break;
+/* Dictionary entries for a successful commit()
+saga$ at AirlinePDB:
+Id	Level	Initiator	Coordinator	User#	Duration	Begin	End 	status
+1234	1	TravelAgency	TACoordinator	789	Null	07/23/2020	07/24/2020	3
+
+saga$_participant_set at TravelAgencyPDB:
+Id	Coordinator	Participant	Status
+1234	TACoordinator	Airline	3
+
+/* SAGA$ database table entries at TravelAgencyPDB
+Id	Level	Initiator	Coordinator	User#	Duration	Begin	End 	status
+1234	0	TravelAgency	TACoordinator	456	Null	07/23/2020	07/24/2020	3
+
+*/
+
+
+            }
+
+            mysess.commit();
+
+        }
+    }
+}
+
