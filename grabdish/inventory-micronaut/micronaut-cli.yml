@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: io.micronaut.data.examples
+testFramework: junit
+sourceLanguage: java
+buildTool: gradle
+features: [annotation-api, app-name, gradle, http-client, java, java-application, jdbc-ucp, junit, logback, netty-server, oracle, readme, shade, testcontainers, yaml]
