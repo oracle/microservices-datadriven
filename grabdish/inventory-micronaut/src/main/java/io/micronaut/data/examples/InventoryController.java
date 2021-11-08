@@ -2,11 +2,13 @@ package io.micronaut.data.examples;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.micronaut.context.event.StartupEvent;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.*;
 
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
+import io.micronaut.runtime.event.annotation.EventListener;
 
 import javax.inject.Inject;
 import javax.sql.DataSource;
@@ -20,6 +22,12 @@ public class InventoryController {
     private final InventoryEventProducer inventoryEventProducer;
     public InventoryController(InventoryEventProducer inventoryEventProducer) {
         this.inventoryEventProducer = inventoryEventProducer;
+    }
+
+    @EventListener
+    void onStartup(StartupEvent event) {
+        System.out.println("InventoryController.onStartup");
+        new Thread(new InventoryServiceOrderEventConsumer(atpInventoryPDB)).start();
     }
 
     @Post(value = "/send", produces = MediaType.APPLICATION_JSON)

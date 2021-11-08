@@ -6,16 +6,12 @@
  */
 package io.micronaut.data.examples;
 
-import io.micronaut.context.annotation.Bean;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jms.AQjmsConstants;
 import oracle.jms.AQjmsConsumer;
 import oracle.jms.AQjmsFactory;
 import oracle.jms.AQjmsSession;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
 import javax.jms.*;
 import javax.sql.DataSource;
 import java.sql.*;
@@ -26,12 +22,15 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
     private static final String DECREMENT_BY_ID =
             "update inventory set inventorycount = inventorycount - 1 where inventoryid = ? and inventorycount > 0 returning inventorylocation into ?";
     public static final String INVENTORYDOESNOTEXIST = "inventorydoesnotexist";
+    private DataSource atpInventoryPDB;
     Connection dbConnection;
     String inventoryuser = "inventoryuser", inventorypw ="Welcome12345", orderQueueName = "ORDERQUEUE", inventoryQueueName = "INVENTORYQUEUE";
 
 
-    @Inject
-    DataSource atpInventoryPDB;
+    public InventoryServiceOrderEventConsumer(DataSource atpInventoryPDB) {
+        this.atpInventoryPDB = atpInventoryPDB;
+    }
+
 
     @Override
     public void run() {

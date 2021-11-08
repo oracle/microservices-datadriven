@@ -29,6 +29,10 @@ docker build -t $IMAGE .
 #./gradlew dockerPush
 cd ../../
 
+#gu install native-image
+#./mvnw package -Dpackaging=native-image
+#run with ./target/application
+
 docker push $IMAGE
 if [  $? -eq 0 ]; then
     docker rmi ${IMAGE}

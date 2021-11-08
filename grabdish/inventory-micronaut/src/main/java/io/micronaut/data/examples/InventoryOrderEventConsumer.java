@@ -6,7 +6,7 @@ import io.micronaut.jms.annotations.JMSListener;
 import io.micronaut.jms.annotations.Queue;
 import io.micronaut.messaging.annotation.MessageBody;
 
-@JMSListener("aqConnectionFactory")
+//@JMSListener("aqConnectionFactory")
 public class InventoryOrderEventConsumer {
 
     @Queue(value = "inventoryuser.ORDERQUEUE", concurrency = "1-5")
