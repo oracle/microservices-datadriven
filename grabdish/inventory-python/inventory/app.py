@@ -68,3 +68,4 @@ def get_inventory_id(inventory_id):
 
     return "", 500
 
+
