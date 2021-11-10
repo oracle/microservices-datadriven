@@ -11,30 +11,26 @@ if ! provisioning-helper-pre-apply; then
 fi
 
 
-if test "$BYO_OKE_OCID" =~ ^ocid1\.cluster; then
-  # OKE has been provisioned already
-  OKE_OCID=$BYO_OKE_OCID
-else
-  # Provision OKE
-  cp -rf $MY_CODE/terraform $MY_STATE
-  cd $MY_STATE/terraform
-  export TF_VAR_ociCompartmentOcid="$COMPARTMENT_OCID"
-  export TF_VAR_ociRegionIdentifier="$REGION"
-  export TF_VAR_ociTenancyOcid="$TENANCY_OCID"
+# Provision OKE
+cp -rf $MY_CODE/terraform $MY_STATE
+cd $MY_STATE/terraform
+export TF_VAR_ociCompartmentOcid="$COMPARTMENT_OCID"
+export TF_VAR_ociRegionIdentifier="$REGION"
+export TF_VAR_ociTenancyOcid="$TENANCY_OCID"
+export TF_VAR_vcnOcid="$VCN_OCID"
 
-  if ! terraform init; then
-      echo 'ERROR: terraform init failed!'
-      exit
-  fi
-
-  if ! terraform apply -auto-approve; then
-      echo 'ERROR: terraform apply failed!'
-      exit
-  fi
-
-  # Get the OKE_OCID
-  OKE_OCID=`terraform output -raw oke_ocid`
+if ! terraform init; then
+    echo 'ERROR: terraform init failed!'
+    exit 1
 fi
+
+if ! terraform apply -auto-approve; then
+    echo 'ERROR: terraform apply failed!'
+    exit 1
+fi
+
+# Get the OKE_OCID
+OKE_OCID=`terraform output -raw oke_ocid`
 
 
 #Setup kukbctl
@@ -53,6 +49,4 @@ while true; do
 done
 
 
-cat >$OUTPUT_FILE <<!
-OKE_OCID='$OKE_OCID'
-!
+echo "" >$OUTPUT_FILE

@@ -4,3 +4,4 @@
 variable "ociTenancyOcid" {}
 variable "ociCompartmentOcid" {}
 variable "ociRegionIdentifier" {}
+variable "vcnOcid" {}

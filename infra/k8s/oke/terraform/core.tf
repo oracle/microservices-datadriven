@@ -1,35 +1,27 @@
 //Copyright (c) 2021 Oracle and/or its affiliates.
 //Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
-resource "oci_core_vcn" "okell_vcn" {
-  cidr_block     = "10.0.0.0/16"
-  compartment_id = var.ociCompartmentOcid
-  display_name   = "grabdish"
-  dns_label    = "grabdish"
+locals {
+    endpoint_cidr_block = "10.0.0.0/28"
+    nodepool_cidr_block = "10.0.10.0/24"
+    svclb_cidr_block    = "10.0.20.0/24"
 }
-resource "oci_core_internet_gateway" "ig" {
-   compartment_id = var.ociCompartmentOcid
-   display_name   = "ClusterInternetGateway"
-   vcn_id         = oci_core_vcn.okell_vcn.id
+
+data "oci_core_vcn" "vcn" {
+    #Required
+    vcn_id = var.vcnOcid
 }
-resource oci_core_nat_gateway ngw {
-  block_traffic  = "false"
-  compartment_id = var.ociCompartmentOcid
-  display_name = "ngw"
-  freeform_tags = {
-  }
-  vcn_id       = oci_core_vcn.okell_vcn.id
+
+data "oci_core_nat_gateways" "ngws" {
+    compartment_id = var.ociCompartmentOcid
+    vcn_id = data.oci_core_vcn.vcn.id
 }
-resource oci_core_service_gateway sg {
-  compartment_id = var.ociCompartmentOcid
-  display_name = "grabdish"
-  freeform_tags = {
-  }
-  services {
-    service_id = data.oci_core_services.services.services.0.id
-  }
-  vcn_id = oci_core_vcn.okell_vcn.id
+
+data "oci_core_service_gateways" "sgs" {
+    compartment_id = var.ociCompartmentOcid
+    vcn_id = data.oci_core_vcn.vcn.id
 }
+
 resource oci_core_route_table private {
   compartment_id = var.ociCompartmentOcid
   display_name = "private"
@@ -39,72 +31,64 @@ resource oci_core_route_table private {
     description       = "traffic to the internet"
     destination       = "0.0.0.0/0"
     destination_type  = "CIDR_BLOCK"
-    network_entity_id = oci_core_nat_gateway.ngw.id
+    network_entity_id = data.oci_core_nat_gateways.ngws.nat_gateways.0.id
   }
   route_rules {
     description       = "traffic to OCI services"
     destination       = data.oci_core_services.services.services.0.cidr_block
     destination_type  = "SERVICE_CIDR_BLOCK"
-    network_entity_id = oci_core_service_gateway.sg.id
+    network_entity_id = data.oci_core_service_gateways.sgs.service_gateways.0.id
   }
-  vcn_id = oci_core_vcn.okell_vcn.id
+  vcn_id = data.oci_core_vcn.vcn.id
 }
-resource oci_core_default_route_table public {
-  display_name = "public"
-  freeform_tags = {
-  }
-  manage_default_resource_id = oci_core_vcn.okell_vcn.default_route_table_id
-  route_rules {
-    description       = "traffic to/from internet"
-    destination       = "0.0.0.0/0"
-    destination_type  = "CIDR_BLOCK"
-    network_entity_id = oci_core_internet_gateway.ig.id
-  }
-}
-resource "oci_core_subnet" "endpoint_Subnet" {
-  cidr_block          = "10.0.0.0/28"
+
+resource "oci_core_subnet" "endpoint" {
+  cidr_block          = local.endpoint_cidr_block
   compartment_id      = var.ociCompartmentOcid
-  vcn_id              = oci_core_vcn.okell_vcn.id
+  vcn_id              = data.oci_core_vcn.vcn.id
   security_list_ids   = [oci_core_security_list.endpoint.id]
-  display_name        = "SubNet1ForEndpoint"
+  display_name        = "Endpoint"
   prohibit_public_ip_on_vnic = "false"
-  route_table_id      = oci_core_vcn.okell_vcn.default_route_table_id
+  route_table_id      = data.oci_core_vcn.vcn.default_route_table_id
   dns_label           = "endpoint"
 }
-resource "oci_core_subnet" "nodePool_Subnet" {
-  cidr_block          = "10.0.10.0/24"
+
+resource "oci_core_subnet" "nodepool" {
+  cidr_block          = local.nodepool_cidr_block
   compartment_id      = var.ociCompartmentOcid
-  vcn_id              = oci_core_vcn.okell_vcn.id
-  security_list_ids = [oci_core_security_list.nodePool.id]
-  display_name      = "SubNet1ForNodePool"
+  vcn_id              = data.oci_core_vcn.vcn.id
+  security_list_ids = [oci_core_security_list.nodepool.id]
+  display_name      = "Node Pool"
   prohibit_public_ip_on_vnic = "true"
   route_table_id    = oci_core_route_table.private.id
   dns_label           = "nodepool"
 }
-resource "oci_core_subnet" "svclb_Subnet" {
-  cidr_block          = "10.0.20.0/24"
+
+resource "oci_core_subnet" "svclb" {
+  cidr_block          = local.svclb_cidr_block
   compartment_id      = var.ociCompartmentOcid
-  vcn_id              = oci_core_vcn.okell_vcn.id
-  security_list_ids = [oci_core_default_security_list.svcLB.id]
-  display_name      = "SubNet1ForSvcLB"
-  route_table_id    = oci_core_vcn.okell_vcn.default_route_table_id
-  dhcp_options_id = oci_core_vcn.okell_vcn.default_dhcp_options_id
+  vcn_id              = data.oci_core_vcn.vcn.id
+  security_list_ids = [data.oci_core_vcn.vcn.default_security_list_id]
+  display_name      = "Service Load Balancer"
+  route_table_id    = data.oci_core_vcn.vcn.default_route_table_id
+  dhcp_options_id = data.oci_core_vcn.vcn.default_dhcp_options_id
   prohibit_public_ip_on_vnic = "false"
   dns_label           = "svclb"
 }
-resource oci_core_security_list nodePool {
+
+resource oci_core_security_list nodepool {
   compartment_id = var.ociCompartmentOcid
-  display_name = "nodepool"
+  display_name = "Node Pool"
   egress_security_rules {
     description      = "Allow pods on one worker node to communicate with pods on other worker nodes"
-    destination      = "10.0.10.0/24"
+    destination      = local.nodepool_cidr_block
     destination_type = "CIDR_BLOCK"
     protocol  = "all"
     stateless = "false"
   }
   egress_security_rules {
     description      = "Access to Kubernetes API Endpoint"
-    destination      = "10.0.0.0/28"
+    destination      = local.endpoint_cidr_block
     destination_type = "CIDR_BLOCK"
     protocol  = "6"
     stateless = "false"
@@ -115,7 +99,7 @@ resource oci_core_security_list nodePool {
   }
   egress_security_rules {
     description      = "Kubernetes worker to control plane communication"
-    destination      = "10.0.0.0/28"
+    destination      = local.endpoint_cidr_block
     destination_type = "CIDR_BLOCK"
     protocol  = "6"
     stateless = "false"
@@ -126,7 +110,7 @@ resource oci_core_security_list nodePool {
   }
   egress_security_rules {
     description      = "Path discovery"
-    destination      = "10.0.0.0/28"
+    destination      = local.endpoint_cidr_block
     destination_type = "CIDR_BLOCK"
     icmp_options {
       code = "4"
@@ -169,7 +153,7 @@ resource oci_core_security_list nodePool {
   ingress_security_rules {
     description = "Allow pods on one worker node to communicate with pods on other worker nodes"
     protocol    = "all"
-    source      = "10.0.10.0/24"
+    source      = local.nodepool_cidr_block
     source_type = "CIDR_BLOCK"
     stateless   = "false"
   }
@@ -180,14 +164,14 @@ resource oci_core_security_list nodePool {
       type = "3"
     }
     protocol    = "1"
-    source      = "10.0.0.0/28"
+    source      = local.endpoint_cidr_block
     source_type = "CIDR_BLOCK"
     stateless   = "false"
   }
   ingress_security_rules {
     description = "TCP access from Kubernetes Control Plane"
     protocol    = "6"
-    source      = "10.0.0.0/28"
+    source      = local.endpoint_cidr_block
     source_type = "CIDR_BLOCK"
     stateless   = "false"
   }
@@ -202,12 +186,12 @@ resource oci_core_security_list nodePool {
       min = "22"
     }
   }
-  vcn_id = oci_core_vcn.okell_vcn.id
+  vcn_id = data.oci_core_vcn.vcn.id
 }
 
 resource oci_core_security_list endpoint {
   compartment_id = var.ociCompartmentOcid
-  display_name = "endpoint"
+  display_name = "Endpoint"
   egress_security_rules {
     description      = "Allow Kubernetes Control Plane to communicate with OKE"
     destination      = data.oci_core_services.services.services.0.cidr_block
@@ -221,14 +205,14 @@ resource oci_core_security_list endpoint {
   }
   egress_security_rules {
     description      = "All traffic to worker nodes"
-    destination      = "10.0.10.0/24"
+    destination      = local.nodepool_cidr_block
     destination_type = "CIDR_BLOCK"
     protocol  = "6"
     stateless = "false"
   }
   egress_security_rules {
     description      = "Path discovery"
-    destination      = "10.0.10.0/24"
+    destination      = local.nodepool_cidr_block
     destination_type = "CIDR_BLOCK"
     icmp_options {
       code = "4"
@@ -253,7 +237,7 @@ resource oci_core_security_list endpoint {
   ingress_security_rules {
     description = "Kubernetes worker to Kubernetes API endpoint communication"
     protocol    = "6"
-    source      = "10.0.10.0/24"
+    source      = local.nodepool_cidr_block
     source_type = "CIDR_BLOCK"
     stateless   = "false"
     tcp_options {
@@ -264,7 +248,7 @@ resource oci_core_security_list endpoint {
   ingress_security_rules {
     description = "Kubernetes worker to control plane communication"
     protocol    = "6"
-    source      = "10.0.10.0/24"
+    source      = local.nodepool_cidr_block
     source_type = "CIDR_BLOCK"
     stateless   = "false"
     tcp_options {
@@ -279,17 +263,18 @@ resource oci_core_security_list endpoint {
       type = "3"
     }
     protocol    = "1"
-    source      = "10.0.10.0/24"
+    source      = local.nodepool_cidr_block
     source_type = "CIDR_BLOCK"
     stateless   = "false"
   }
-  vcn_id = oci_core_vcn.okell_vcn.id
+  vcn_id = data.oci_core_vcn.vcn.id
 }
 
 resource oci_core_default_security_list svcLB {
-  display_name = "svcLB"
-  manage_default_resource_id = oci_core_vcn.okell_vcn.default_security_list_id
+  display_name = "Service Load Balancer"
+  manage_default_resource_id = data.oci_core_vcn.vcn.default_security_list_id
 }
+
 data "oci_core_services" "services" {
   filter {
     name   = "name"

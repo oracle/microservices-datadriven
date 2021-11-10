@@ -2,6 +2,14 @@
 # Copyright (c) 2021 Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
-REQ_UTILS="cd cp cat sleep terraform oci kubectl"
-REQ_INPUT_PARAMS="BYO_OKE_OCID COMPARTMENT_OCID TENANCY_OCID REGION VCN_OCID"
-REQ_OUTPUT_PARAMS="OKE_OCID"
+if ! provisioning-helper-pre-destroy; then
+  return 1
+fi
+
+VAULT_FOLDER=$MY_STATE/vault
+
+if test -d $VAULT_FOLDER; then
+  rm -rf $VAULT_FOLDER
+fi
+
+rm -f $STATE_FILE

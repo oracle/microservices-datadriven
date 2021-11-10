@@ -18,10 +18,10 @@ mkdir -p $DCMS_LOG_DIR $DCMS_INFRA_STATE $DCMS_APP_STATE $DCMS_THREAD_STATE
 
 # Create the state store
 STATE_STORE=$DCMS_INFRA_STATE/state_store
-if ! test -d $STATE_STORE; then
+if ! test -f $STATE_STORE/output.env; then
   mkdir -p $STATE_STORE
-  echo "STATE_LOG='$DCMS_LOG_DIR/state.log'" > $STATE_STORE/input.env
   cd $STATE_STORE
+  echo "STATE_LOG='$DCMS_LOG_DIR/state.log'" > input.env
   provisioning-apply $MSDD_INFRA_CODE/state_store
 fi
 source $STATE_STORE/output.env
@@ -29,7 +29,7 @@ source $STATE_STORE/output.env
 
 # Create the vault
 VAULT=$DCMS_INFRA_STATE/vault
-if ! test -d $VAULT; then
+if ! test -f $VAULT/output.env; then
   mkdir -p $VAULT
   cd $VAULT
   provisioning-apply $MSDD_INFRA_CODE/vault/folder
@@ -53,6 +53,12 @@ mkdir -p "$MY_STATE/background-builds"
 $MY_CODE/background-builds.sh "$MY_STATE/background-builds" &>> $DCMS_LOG_DIR/background-builds.log &
 
 
+# Hard coded for now
+state_set DB_DEPLOYMENT 2PDB
+state_set DB_TYPE ATP
+state_set QUEUE_TYPE stdq
+
+
 # Identify Run Type
 while ! state_done RUN_TYPE; do
   if [[ "$HOME" =~ /home/ll[0-9]{1,5}_us ]]; then
@@ -62,8 +68,8 @@ while ! state_done RUN_TYPE; do
     state_set USER_OCID 'NA'
     state_set USER_NAME "LL$(state_get RESERVATION_ID)-USER"
     state_set RUN_NAME "grabdish$(state_get RESERVATION_ID)"
-    state_set ORDER_DB_NAME "ORDER$(state_get RESERVATION_ID)"
-    state_set INVENTORY_DB_NAME "INVENTORY$(state_get RESERVATION_ID)"
+    state_set DB1_NAME "ORDER$(state_get RESERVATION_ID)"
+    state_set DB2_NAME "INVENTORY$(state_get RESERVATION_ID)"
     state_set_done OKE_LIMIT_CHECK
     state_set_done ATP_LIMIT_CHECK
   else
@@ -110,8 +116,8 @@ while ! state_done RUN_NAME; do
   # Validate run name.  Must be between 1 and 13 characters, only letters or numbers, starting with letter
   if [[ "$DN" =~ ^[a-zA-Z][a-zA-Z0-9]{0,12}$ ]]; then
     state_set RUN_NAME `echo "$DN" | awk '{print tolower($0)}'`
-    state_set ORDER_DB_NAME "$(state_get RUN_NAME)o"
-    state_set INVENTORY_DB_NAME "$(state_get RUN_NAME)i"
+    state_set DB1_NAME "$(state_get RUN_NAME)1"
+    state_set DB2_NAME "$(state_get RUN_NAME)2"
   else
     echo "Error: Invalid directory name $RN.  The directory name must be between 1 and 13 characters,"
     echo "containing only letters or numbers, starting with a letter.  Please restart the workshop with a valid directory name."
@@ -330,12 +336,12 @@ cat >$OUTPUT_FILE <<!
 export DOCKER_REGISTRY='$(state_get DOCKER_REGISTRY)'
 export JAVA_HOME=$(state_get JAVA_HOME)
 export PATH=$(state_get JAVA_HOME)/bin:$PATH
-export ORDER_DB_NAME="$(state_get ORDER_DB_NAME)"
-export ORDER_DB_TNS_ADMIN="$(state_get ORDER_DB_TNS_ADMIN)"
-export ORDER_DB_ALIAS="$(state_get ORDER_DB_ALIAS)"
-export INVENTORY_DB_NAME="$(state_get INVENTORY_DB_NAME)"
-export INVENTORY_DB_TNS_ADMIN="$(state_get INVENTORY_DB_TNS_ADMIN)"
-export INVENTORY_DB_ALIAS="$(state_get INVENTORY_DB_ALIAS)"
+export ORDER_DB_NAME="$(state_get DB1_NAME)"
+export ORDER_DB_TNS_ADMIN="$(state_get DB1_TNS_ADMIN)"
+export ORDER_DB_ALIAS="$(state_get DB1_ALIAS)"
+export INVENTORY_DB_NAME="$(state_get DB2_NAME)"
+export INVENTORY_DB_TNS_ADMIN="$(state_get DB2_TNS_ADMIN)"
+export INVENTORY_DB_ALIAS="$(state_get DB2_ALIAS)"
 export REGION="$(state_get OCI_REGION)"
 export VAULT_SECRET_OCID=""
 !
