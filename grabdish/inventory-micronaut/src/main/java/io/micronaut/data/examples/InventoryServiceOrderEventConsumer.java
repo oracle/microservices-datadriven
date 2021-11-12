@@ -6,6 +6,7 @@
  */
 package io.micronaut.data.examples;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import oracle.jdbc.OraclePreparedStatement;
 import oracle.jms.AQjmsConstants;
 import oracle.jms.AQjmsConsumer;
@@ -62,7 +63,9 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
                 String txt = orderMessage.getText();
                 System.out.println("txt " + txt);
                 System.out.print(" Message: " + orderMessage.getIntProperty("Id"));
-                Order order = JsonUtils.read(txt, Order.class);
+                ObjectMapper mapper = new ObjectMapper();
+                Order order = mapper.readValue(txt, Order.class);
+//                Order order = JsonUtils.read(txt, Order.class);
                 System.out.print(" orderid:" + order.getOrderid());
                 System.out.print(" itemid:" + order.getItemid());
                 updateDataAndSendEventOnInventory((AQjmsSession) qsess, order.getOrderid(), order.getItemid());

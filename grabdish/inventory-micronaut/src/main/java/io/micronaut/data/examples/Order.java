@@ -6,18 +6,20 @@
  */
 package io.micronaut.data.examples;
 
-import javax.json.bind.annotation.JsonbProperty;
+import io.micronaut.core.annotation.Introspected;
+//import com.fasterxml.jackson.annotation.JsonProperty;
 
+@Introspected
 public class Order {
-    private String orderid;
-    private String itemid;
-    private String deliverylocation;
-    @JsonbProperty(nillable = true)
-    private String status;
-    @JsonbProperty(nillable = true)
-    private String inventoryLocation;
-    @JsonbProperty(nillable = true)
-    private String suggestiveSale;
+    private String orderid = "";
+    private String itemid = "";
+    private String deliverylocation = "";
+//    @JsonbProperty(nillable = true)
+    private String status = "";
+//    @JsonbProperty(nillable = true)
+    private String inventoryLocation = "";
+//    @JsonbProperty(nillable = true)
+    private String suggestiveSale = "";
 
     public Order() {
     }
