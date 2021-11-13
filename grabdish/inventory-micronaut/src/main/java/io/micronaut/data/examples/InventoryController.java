@@ -24,6 +24,8 @@ public class InventoryController {
         this.inventoryEventProducer = inventoryEventProducer;
     }
 
+    //todo explore use of https://github.com/micronaut-projects/micronaut-jms/blob/f49e7a327b680cb94a4150a739aac58371f643b9/jms-core/src/main/java/io/micronaut/jms/bind/JMSArgumentBinderRegistry.java
+    // in conjunction with the @JMSListener already implemented
     @EventListener
     void onStartup(StartupEvent event) {
         System.out.println("InventoryController.onStartup");

@@ -8,7 +8,7 @@ import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
 import javax.sql.DataSource;
 
-@Factory
+//@Factory
 public class AQConfig {
 
     private final DataSource dataSource;
@@ -19,6 +19,6 @@ public class AQConfig {
 
     @JMSConnectionFactory("aqConnectionFactory")
     public ConnectionFactory connectionFactory() throws JMSException {
-        return AQjmsFactory.getConnectionFactory(dataSource);
+        return null; //AQjmsFactory.getConnectionFactory(dataSource);
     }
 }
