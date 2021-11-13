@@ -37,12 +37,7 @@ fi
 
 IMAGE_NAME=inventory-micronaut-native-image
 export IMAGE=${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_VERSION}
-#to rebuild will entail gu install native-image
-cp  ./inventory-micronaut ./build/native-image/inventory-micronaut
-
-#./gradlew dockerBuildNative
-#run with ./target/application
-
+./gradlew dockerBuildNative
 
 docker push $IMAGE
 if [  $? -eq 0 ]; then

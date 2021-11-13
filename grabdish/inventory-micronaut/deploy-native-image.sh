@@ -28,7 +28,7 @@ echo create inventory-micronaut-native-image deployment and service...
 
 export CURRENTTIME=$( date '+%F_%H:%M:%S' )
 echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated deployment yaml
-cp inventory-micronaut-deployment.yaml inventory-micronaut-native-image-deployment-$CURRENTTIME.yaml
+cp inventory-micronaut-native-image-deployment.yaml inventory-micronaut-native-image-deployment-$CURRENTTIME.yaml
 
 sed -e "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" inventory-micronaut-native-image-deployment-$CURRENTTIME.yaml > /tmp/inventory-micronaut-native-image-deployment-$CURRENTTIME.yaml
 mv -- /tmp/inventory-micronaut-native-image-deployment-$CURRENTTIME.yaml inventory-micronaut-native-image-deployment-$CURRENTTIME.yaml
