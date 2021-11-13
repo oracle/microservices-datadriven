@@ -33,13 +33,3 @@ docker push $IMAGE
 if [  $? -eq 0 ]; then
     docker rmi ${IMAGE}
 fi
-
-
-IMAGE_NAME=inventory-micronaut-native-image
-export IMAGE=${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_VERSION}
-./gradlew dockerBuildNative
-
-docker push $IMAGE
-if [  $? -eq 0 ]; then
-    docker rmi ${IMAGE}
-fi
