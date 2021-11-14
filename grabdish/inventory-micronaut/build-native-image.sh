@@ -24,6 +24,7 @@ echo set images value of dockerBuildNative task in build.gradle to $IMAGE ...
 ./gradlew clean
 ./gradlew build
 ./gradlew dockerBuildNative
+#./gradlew nativeImage
 
 docker push $IMAGE
 if [  $? -eq 0 ]; then
