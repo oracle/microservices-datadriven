@@ -27,6 +27,7 @@ dependencies {
     implementation("javax.transaction:jta:1.1")
     implementation("com.oracle.database.messaging:aqapi:19.3.0.0")
     implementation("javax.json.bind:javax.json.bind-api:1.0")
+    implementation("org.json:json:20210307")
 //    implementation("com.fasterxml.jackson.core:jackson-databind")
 
     annotationProcessor(platform("io.micronaut:micronaut-bom:2.0.2"))
