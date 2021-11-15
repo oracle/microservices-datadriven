@@ -118,7 +118,14 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         String recommendedWines = new io.helidon.data.examples.aiml.FoodWinePairingRecommender().suggestSuitableWineForFood(itemid);
         System.out.println("RECOMMENED WINES FROM WOOD AND WINE PAIRING MODEL : " + recommendedWines);
         */
-        String recommendedWines = inventoryResource.foodWinePairingService(itemid);
+        
+        String recommendedWines;
+        System.out.println("** isSuggestiveSaleAIEnabled : " + InventoryResource.isSuggestiveSaleAIEnabled);
+        if(InventoryResource.isSuggestiveSaleAIEnabled.equalsIgnoreCase("true")) {
+        	recommendedWines = inventoryResource.foodWinePairingService(itemid); 
+        } else {
+        	recommendedWines = "beer";
+        }
         
         String inventorylocation = evaluateInventory(session, itemid);
         Inventory inventory = new Inventory(orderid, itemid, inventorylocation, recommendedWines); //static suggestiveSale - represents an additional service/event

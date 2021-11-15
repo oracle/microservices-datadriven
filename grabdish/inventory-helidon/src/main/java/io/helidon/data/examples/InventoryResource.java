@@ -48,6 +48,8 @@ public class InventoryResource {
     static boolean crashAfterOrderMessageReceived;
     static boolean crashAfterOrderMessageProcessed;
     private Client client;
+    
+    static String isSuggestiveSaleAIEnabled = System.getenv("isSuggestiveSaleAIEnabled");
 
     static {
         System.setProperty("oracle.jdbc.fanEnabled", "false");
