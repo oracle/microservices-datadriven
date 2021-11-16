@@ -33,7 +33,7 @@ spec:
         - name: VAULT_SECRET_OCID
           value: "%VAULT_SECRET_OCID%"
         - name: isSuggestiveSaleAIEnabled
-            value: "true"
+          value: "true"
         - name: dbpassword
           valueFrom:
             secretKeyRef:
