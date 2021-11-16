@@ -30,7 +30,5 @@ spec:
             value: "8080"
           - name: DEBUG_MODE
             value: "1"
-          - name: isSuggestiveSaleAIEnabled
-            value: "true"  
       restartPolicy: Always
       
