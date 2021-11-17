@@ -1,0 +1,9 @@
+micronaut:
+  application:
+    name: inventoryMicronaut
+datasources:
+  default:
+    url: ${JDBC_URL:`jdbc:oracle:thin:/@gdpaulsep27i_tp?TNS_ADMIN=/Users/pparkins/Downloads/Wallet_gdpaulsep27o`}
+    driverClassName: oracle.jdbc.pool.OracleDataSource
+    username: ${JDBC_USER:`inventoryuser`}
+    password: ${JDBC_PASSWORD:`Welcome12345`}

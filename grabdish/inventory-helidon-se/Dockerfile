@@ -1,4 +1,4 @@
-FROM openjdk:11-jre-slim
+FROM ghcr.io/graalvm/graalvm-ce:21.3.0
 
 ENTRYPOINT ["java", "-jar", "/usr/share/myservice/myservice.jar"]
 

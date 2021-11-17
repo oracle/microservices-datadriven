@@ -1,0 +1,74 @@
+plugins {
+    id("com.github.johnrengelman.shadow") version "7.1.0"
+    id("io.micronaut.application") version "2.0.8"
+}
+
+version = "0.1"
+group = "io.micronaut.data.examples"
+
+repositories {
+    mavenCentral()
+}
+
+micronaut {
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("io.micronaut.data.examples.*")
+    }
+}
+
+dependencies {
+    annotationProcessor("io.micronaut:micronaut-http-validation")
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut:micronaut-runtime")
+    implementation("io.micronaut.sql:micronaut-jdbc-ucp")
+    implementation("io.micronaut.jms:micronaut-jms-core")
+    implementation("javax.transaction:jta:1.1")
+    implementation("com.oracle.database.messaging:aqapi:19.3.0.0")
+    implementation("javax.json.bind:javax.json.bind-api:1.0")
+    implementation("org.json:json:20210307")
+//    implementation("com.fasterxml.jackson.core:jackson-databind")
+
+    annotationProcessor(platform("io.micronaut:micronaut-bom:2.0.2"))
+    annotationProcessor("io.micronaut:micronaut-inject-java")
+    implementation(platform("io.micronaut:micronaut-bom:2.0.2"))
+    implementation("io.micronaut:micronaut-inject")
+    implementation("javax.inject:javax.inject:1")
+
+    implementation("javax.annotation:javax.annotation-api")
+    runtimeOnly("ch.qos.logback:logback-classic")
+    implementation("com.oracle.database.jdbc:ojdbc8-production:21.1.0.0")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:oracle-xe")
+    testImplementation("org.testcontainers:testcontainers")
+    implementation("io.micronaut:micronaut-validation")
+
+}
+
+tasks.named("dockerBuildNative") {
+    images = ["us-ashburn-1.ocir.io/maacloud/gdpaulsep27/inventory-micronaut-native-image:0.1"]
+}
+
+nativeImage {
+    imageName("inventory-micronaut")
+    args = [
+            '-H:+ReportExceptionStackTraces',
+            '-H:+AddAllCharsets',
+            '-H:IncludeResources=application.yaml',
+            '--initialize-at-build-time=oracle.i18n.text.converter,oracle.xml.parser.v2,oracle.xml.util,oracle.sql',
+            '--initialize-at-run-time=io.micronaut.oraclecloud.atp.jdbc.upc,oracle.xml.util.UnicodeUtil,oracle.jdbc,oracle.jdbc.pool,oracle.ucp.admin',
+            '--report-unsupported-elements-at-runtime'
+    ]
+}
+
+application {
+    mainClass.set("io.micronaut.data.examples.Application")
+}
+java {
+    sourceCompatibility = JavaVersion.toVersion("11")
+    targetCompatibility = JavaVersion.toVersion("11")
+}
+
+
+
