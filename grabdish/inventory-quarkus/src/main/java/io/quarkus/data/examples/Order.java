@@ -4,22 +4,20 @@
  ** Copyright (c) 2021 Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
-package io.micronaut.data.examples;
+package io.quarkus.data.examples;
 
-import io.micronaut.core.annotation.Introspected;
-//import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.json.bind.annotation.JsonbProperty;
 
-@Introspected
 public class Order {
-    private String orderid = "";
-    private String itemid = "";
-    private String deliverylocation = "";
-//    @JsonbProperty(nillable = true)
-    private String status = "";
-//    @JsonbProperty(nillable = true)
-    private String inventoryLocation = "";
-//    @JsonbProperty(nillable = true)
-    private String suggestiveSale = "";
+    private String orderid;
+    private String itemid;
+    private String deliverylocation;
+    @JsonbProperty(nillable = true)
+    private String status;
+    @JsonbProperty(nillable = true)
+    private String inventoryLocation;
+    @JsonbProperty(nillable = true)
+    private String suggestiveSale;
 
     public Order() {
     }

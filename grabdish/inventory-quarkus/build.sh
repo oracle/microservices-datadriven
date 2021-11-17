@@ -3,7 +3,7 @@
 ## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 
-IMAGE_NAME=inventory-micronaut
+IMAGE_NAME=inventory-quarkus
 IMAGE_VERSION=0.1
 
 
@@ -20,16 +20,9 @@ fi
 
 export IMAGE=${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_VERSION}
 
-./gradlew build
-./gradlew dockerFile
-cd build/docker
-echo IMAGE is $IMAGE
-#./gradlew dockerBuild
-docker build -t $IMAGE .
-cd ../../
+./mvnw clean package -Dquarkus.container-image.build=true -Dquarkus.container-image.push=true -Dquarkus.container-image.group="${DOCKER_REGISTRY}" -Dquarkus.container-image.name=${IMAGE_NAME} -Dquarkus.container-image.tag=${IMAGE_VERSION}
 
-#./gradlew dockerPush
-docker push $IMAGE
-if [  $? -eq 0 ]; then
-    docker rmi ${IMAGE}
-fi
+#docker push $IMAGE
+#if [  $? -eq 0 ]; then
+#    docker rmi ${IMAGE}
+#fi
