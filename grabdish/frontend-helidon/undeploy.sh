@@ -3,6 +3,7 @@
 ## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 
+SCRIPT_DIR=$(dirname $0)
 echo delete frontend deployment and service...
 
 # Delete Frontend Ingress
