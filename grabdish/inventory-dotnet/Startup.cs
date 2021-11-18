@@ -5,6 +5,7 @@ using System.Data.Common;
 using System.Data.OracleClient;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Transactions;
 using Microsoft.AspNetCore.Builder;
@@ -18,6 +19,16 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Oracle.ManagedDataAccess.Client;
+// dotnet add package OCI.DotNetSDK.Common --version 29.0.0
+// dotnet add package OCI.DotNetSDK.Vault --version 29.0.0
+using System.IO;
+using Oci.Common;
+using Oci.Common.Auth;
+using Oci.VaultService;
+using Oci.VaultService.Requests;
+using Oci.VaultService.Responses;
+
+
 
 namespace inventory_dotnet
 {
@@ -79,6 +90,7 @@ namespace inventory_dotnet
             //Other options include...
             //   using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, TimeSpan.MaxValue))
             //   DbProviderFactory factory = DbProviderFactories.GetFactory("Oracle.ManagedDataAccess.Client"); DbCommand oracleCommand = factory.CreateCommand();
+            getSecretFromVault();
             String tnsAdmin = Environment.GetEnvironmentVariable("TNS_ADMIN");
             OracleConfiguration.WalletLocation = tnsAdmin;
             String pw = Environment.GetEnvironmentVariable("DB_PASSWORD");
@@ -157,7 +169,7 @@ namespace inventory_dotnet
                         checkInventoryReturnLocationCommand.Parameters.Add (p_inventorylocationParam);
                         checkInventoryReturnLocationCommand.ExecuteNonQuery();
 
-                        // direct query version (ie not using sproc)...
+                        // direct query version (ie not using stored procedure)...
                         // checkInventoryCommand.CommandText =
                         //     @"update inventory set inventorycount = inventorycount - 1 where inventoryid = " +
                         //     order.itemid +
@@ -183,10 +195,7 @@ namespace inventory_dotnet
                         inventory.suggestiveSale = inventoryLocation.Equals("null") ? "" : "beer";
                         string inventoryJSON =
                             JsonConvert.SerializeObject(inventory);
-                        System
-                            .Console
-                            .WriteLine("order.itemid inventoryJSON {0}",
-                            inventoryJSON);
+                        System.Console.WriteLine("order.itemid inventoryJSON {0}", inventoryJSON);
                         //enqueue to inventory queue (in param)
                         OracleCommand inventorySendMessageCommand =
                             new OracleCommand();
@@ -212,6 +221,57 @@ namespace inventory_dotnet
                         if(ex != null) System.Threading.Thread.Sleep(1000);
                     } 
                 }
+            }
+        }
+
+        public String getSecretFromVault() {
+            System.Console.WriteLine("getSecretFromVault ");
+            var response = getSecretResponse().GetAwaiter().GetResult();
+            System.Console.WriteLine("getSecretFromVault response {0}", response);
+            // var response = await getSecretResponse();
+			var secret = response.Secret; // resp.Secret.String()
+            System.Console.WriteLine("getSecretFromVault secret {0}", secret);
+			var secretid = response.Secret.Id; // resp.Secret.String()
+            System.Console.WriteLine("getSecretFromVault secretid {0}", secretid);
+            byte[] data = System.Convert.FromBase64String(response.Secret.Id);
+            var base64Decoded = System.Text.ASCIIEncoding.ASCII.GetString(data);
+            return "";
+        }
+
+
+        public static async Task<GetSecretResponse> getSecretResponse()
+        {
+            String vaultSecretOCID = Environment.GetEnvironmentVariable("VAULT_SECRET_OCID");
+            System.Console.WriteLine("vaultSecretOCID {0}", vaultSecretOCID);
+            if (vaultSecretOCID == "") {
+                // return "";
+            }
+            String ociRegion = Environment.GetEnvironmentVariable("OCI_REGION");
+            System.Console.WriteLine("ociRegion {0}", ociRegion);
+            if (ociRegion == "") {
+                // return "";
+            }
+            var provider = new InstancePrincipalsAuthenticationDetailsProvider();
+
+			var getSecretRequest = new Oci.VaultService.Requests.GetSecretRequest
+			{
+				SecretId = "ocid1.vaultsecret.oc1.iad.amaaaaaa55avruqajymh4cfabh7aiisl7z3geuuxy47ciobbi5grzfemrbwa",
+			};
+            try
+            {
+				using (var vaultsClient = new VaultsClient(provider, new ClientConfiguration()))
+				{
+                    // vaultsClient.SetRegion(ociRegion);
+                    vaultsClient.SetRegion("us-ashburn-1");
+					var response = await vaultsClient.GetSecret(getSecretRequest);
+					var id = response.Secret.Id;
+                    return response;
+				}
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"GetSecret Failed with {e.Message}");
+                return new GetSecretResponse();
             }
         }
     }
