@@ -112,8 +112,17 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
 
     private void updateDataAndSendEventOnInventory(AQjmsSession session, String orderid, String itemid) throws Exception {
         if (inventoryResource.crashAfterOrderMessageReceived) System.exit(-1);
+        
+        String recommendedWines;
+        System.out.println("** isSuggestiveSaleAIEnabled : " + InventoryResource.isSuggestiveSaleAIEnabled);
+        if(InventoryResource.isSuggestiveSaleAIEnabled.equalsIgnoreCase("true")) {
+        	recommendedWines = inventoryResource.foodWinePairingService(itemid); 
+        } else {
+        	recommendedWines = "beer";
+        }
+        
         String inventorylocation = evaluateInventory(session, itemid);
-        Inventory inventory = new Inventory(orderid, itemid, inventorylocation, "beer"); //static suggestiveSale - represents an additional service/event
+        Inventory inventory = new Inventory(orderid, itemid, inventorylocation, recommendedWines); //static suggestiveSale - represents an additional service/event
         Span activeSpan = inventoryResource.getTracer().buildSpan("inventorylocation").asChildOf(inventoryResource.getTracer().activeSpan()).start();
         activeSpan.log("begin placing order"); // logs are for a specific moment or event within the span (in contrast to tags which should apply to the span regardless of time).
         activeSpan.setTag("orderid", orderid); //tags are annotations of spans in order to query, filter, and comprehend trace data
