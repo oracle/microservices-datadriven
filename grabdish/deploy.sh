@@ -3,7 +3,7 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 #MS="frontend-helidon order-helidon supplier-helidon-se inventory-helidon inventory-springboot"
-MS="frontend-helidon order-helidon supplier-helidon-se inventory-helidon foodwinepairing-python"
+MS="frontend-helidon order-helidon supplier-helidon-se inventory-helidon"
 for s in $MS; do 
     echo ________________________________________
     echo "Deploying $s..."
