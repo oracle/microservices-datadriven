@@ -113,12 +113,6 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
     private void updateDataAndSendEventOnInventory(AQjmsSession session, String orderid, String itemid) throws Exception {
         if (inventoryResource.crashAfterOrderMessageReceived) System.exit(-1);
         
-        /**System.out.println("In Praveen's updateDataAndSendEventOnInventory()");
-        System.out.println("itemid : " + itemid);
-        String recommendedWines = new io.helidon.data.examples.aiml.FoodWinePairingRecommender().suggestSuitableWineForFood(itemid);
-        System.out.println("RECOMMENED WINES FROM WOOD AND WINE PAIRING MODEL : " + recommendedWines);
-        */
-        
         String recommendedWines;
         System.out.println("** isSuggestiveSaleAIEnabled : " + InventoryResource.isSuggestiveSaleAIEnabled);
         if(InventoryResource.isSuggestiveSaleAIEnabled.equalsIgnoreCase("true")) {
