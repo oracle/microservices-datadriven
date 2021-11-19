@@ -12,13 +12,16 @@ import (
 	"github.com/godror/godror"
 	"github.com/oracle/oci-go-sdk/v49/common"
 	"github.com/oracle/oci-go-sdk/v49/common/auth"
-	"github.com/oracle/oci-go-sdk/v49/vault"
+	"github.com/oracle/oci-go-sdk/v49/secrets"
 )
 
 func main() {
 	tnsAdmin := os.Getenv("TNS_ADMIN")
 	user := os.Getenv("user")
 	inventoryPDBName := os.Getenv("INVENTORY_PDB_NAME")
+	//uncomment to enable vault retrieval...
+	// dbpassword := getSecretFromVault()
+	// if dbpassword == "" { dbpassword = os.Getenv("dbpassword") }
 	dbpassword := os.Getenv("dbpassword")
 	fmt.Println("os.Getenv(TNS_ADMIN): %s", tnsAdmin)
 	connectionString := user + "/" + dbpassword + "@" + inventoryPDBName
@@ -266,7 +269,7 @@ func listenForMessagesAQAPI(ctx context.Context, db *sql.DB) {
 }
 
 func getSecretFromVault() string {
-	vault_secret_ocid := os.Getenv("VAULT_SECRET_OCID") // eg ocid1.compartment.oc1..aaaaaaaasqkh32mmf4zt5j6plkm4l4rdjli3vhtdfmfkmna3nyskui6kcqnq
+  vault_secret_ocid := os.Getenv("VAULT_SECRET_OCID")
 	if vault_secret_ocid == "" {
 		return ""
 	}
@@ -275,19 +278,19 @@ func getSecretFromVault() string {
 		return ""
 	}
 	instancePrincipalConfigurationProvider, err := auth.InstancePrincipalConfigurationProviderForRegion(common.RegionIAD)
-	client, err := vault.NewVaultsClientWithConfigurationProvider(instancePrincipalConfigurationProvider)
+	client, err := secrets.NewSecretsClientWithConfigurationProvider(instancePrincipalConfigurationProvider)
 	if err != nil {
 		fmt.Printf("failed to create client err = %s", err)
 		return ""
 	}
-	req := vault.GetSecretRequest{SecretId: common.String(vault_secret_ocid)}
-	resp, err := client.GetSecret(context.Background(), req)
+	req := secrets.GetSecretBundleRequest{SecretId: common.String(vault_secret_ocid)}
+	resp, err := client.GetSecretBundle(context.Background(), req)
 	if err != nil {
 		fmt.Printf("failed to create resp err = %s", err)
 		return ""
 	}
-	fmt.Println(resp)
-	secretValue, err := base64.StdEncoding.DecodeString(resp.Secret.String())
+	base64SecretBundleContentDetails := resp.SecretBundle.SecretBundleContent.(secrets.Base64SecretBundleContentDetails)
+	secretValue, err := base64.StdEncoding.DecodeString(*base64SecretBundleContentDetails.Content)
 	if err != nil {
 		fmt.Printf("failed to decode err = %s", err)
 		return ""

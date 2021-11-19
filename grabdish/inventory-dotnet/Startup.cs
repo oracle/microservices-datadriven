@@ -244,6 +244,7 @@ namespace inventory_dotnet
             System.Console.WriteLine("getSecretFromVault System.Text.ASCIIEncoding.ASCII.GetString(data) {0}", System.Text.ASCIIEncoding.ASCII.GetString(data));
             return System.Text.ASCIIEncoding.ASCII.GetString(data);
         }
+
         public static async Task<GetSecretBundleResponse> getSecretResponse(string vaultSecretOCID, string ociRegion)
         {
 			var getSecretBundleRequest = new Oci.SecretsService.Requests.GetSecretBundleRequest
