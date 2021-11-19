@@ -20,13 +20,13 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Oracle.ManagedDataAccess.Client;
 // dotnet add package OCI.DotNetSDK.Common --version 29.0.0
-// dotnet add package OCI.DotNetSDK.Vault --version 29.0.0
+// dotnet add package OCI.DotNetSDK.Secrets --version 29.0.0
 using System.IO;
+using Oci.SecretsService.Responses;
+using Oci.SecretsService;
 using Oci.Common;
 using Oci.Common.Auth;
-using Oci.VaultService;
-using Oci.VaultService.Requests;
-using Oci.VaultService.Responses;
+using Oci.SecretsService.Models;
 
 
 
@@ -226,53 +226,48 @@ namespace inventory_dotnet
 
         public String getSecretFromVault() {
             System.Console.WriteLine("getSecretFromVault ");
-            var response = getSecretResponse().GetAwaiter().GetResult();
-            System.Console.WriteLine("getSecretFromVault response {0}", response);
-            // var response = await getSecretResponse();
-			var secret = response.Secret; // resp.Secret.String()
-            System.Console.WriteLine("getSecretFromVault secret {0}", secret);
-			var secretid = response.Secret.Id; // resp.Secret.String()
-            System.Console.WriteLine("getSecretFromVault secretid {0}", secretid);
-            byte[] data = System.Convert.FromBase64String(response.Secret.Id);
-            var base64Decoded = System.Text.ASCIIEncoding.ASCII.GetString(data);
-            return "";
-        }
-
-
-        public static async Task<GetSecretResponse> getSecretResponse()
-        {
             String vaultSecretOCID = Environment.GetEnvironmentVariable("VAULT_SECRET_OCID");
             System.Console.WriteLine("vaultSecretOCID {0}", vaultSecretOCID);
             if (vaultSecretOCID == "") {
-                // return "";
+                return "";
             }
             String ociRegion = Environment.GetEnvironmentVariable("OCI_REGION");
             System.Console.WriteLine("ociRegion {0}", ociRegion);
             if (ociRegion == "") {
-                // return "";
+                return "";
             }
-            var provider = new InstancePrincipalsAuthenticationDetailsProvider();
-
-			var getSecretRequest = new Oci.VaultService.Requests.GetSecretRequest
+            var response = getSecretResponse(vaultSecretOCID,ociRegion).GetAwaiter().GetResult();
+            System.Console.WriteLine("getSecretFromVault response {0}", response);
+            System.Console.WriteLine("getSecretFromVault response.SecretBundle.SecretId; {0}", response.SecretBundle.SecretId);
+            System.Console.WriteLine("getSecretFromVault secretBundle {0}", response.SecretBundle.SecretBundleContent);
+            byte[] data = System.Convert.FromBase64String(((Base64SecretBundleContentDetails)response.SecretBundle.SecretBundleContent).Content);
+            System.Console.WriteLine("getSecretFromVault System.Text.ASCIIEncoding.ASCII.GetString(data) {0}", System.Text.ASCIIEncoding.ASCII.GetString(data));
+            return System.Text.ASCIIEncoding.ASCII.GetString(data);
+        }
+        public static async Task<GetSecretBundleResponse> getSecretResponse(string vaultSecretOCID, string ociRegion)
+        {
+			var getSecretBundleRequest = new Oci.SecretsService.Requests.GetSecretBundleRequest
 			{
-				SecretId = "ocid1.vaultsecret.oc1.iad.amaaaaaa55avruqajymh4cfabh7aiisl7z3geuuxy47ciobbi5grzfemrbwa",
+				// SecretId = "ocid1.vaultsecret.oc1.iad.amaaaaaaq33dybya5qo2jtafngz7krbqdt64fygvm4v5ml7dnamg6ct7vaza"
+				SecretId = vaultSecretOCID
 			};
+            var provider = new InstancePrincipalsAuthenticationDetailsProvider();
             try
             {
-				using (var vaultsClient = new VaultsClient(provider, new ClientConfiguration()))
+				using (var client = new SecretsClient(provider, new ClientConfiguration()))
 				{
-                    // vaultsClient.SetRegion(ociRegion);
-                    vaultsClient.SetRegion("us-ashburn-1");
-					var response = await vaultsClient.GetSecret(getSecretRequest);
-					var id = response.Secret.Id;
-                    return response;
+                    // client.SetRegion("us-ashburn-1");
+                    client.SetRegion(ociRegion);
+					return await client.GetSecretBundle(getSecretBundleRequest);
 				}
             }
             catch (Exception e)
             {
-                Console.WriteLine($"GetSecret Failed with {e.Message}");
-                return new GetSecretResponse();
+                Console.WriteLine($"GetSecretBundle Failed with {e.Message}");
+                throw e;
             }
         }
+        
+
     }
 }

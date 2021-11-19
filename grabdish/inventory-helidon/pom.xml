@@ -186,11 +186,11 @@
             <artifactId>aqapi</artifactId>
             <version>19.3.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.oracle.oci.sdk</groupId>
-            <artifactId>oci-java-sdk-vault</artifactId>
-            <version>1.32.2</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.oracle.oci.sdk</groupId>-->
+<!--            <artifactId>oci-java-sdk-vault</artifactId>-->
+<!--            <version>1.32.2</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.oracle.oci.sdk</groupId>
             <artifactId>oci-java-sdk-common</artifactId>
