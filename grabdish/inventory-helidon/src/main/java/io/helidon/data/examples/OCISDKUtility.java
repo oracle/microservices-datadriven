@@ -6,6 +6,7 @@
  */
 package io.helidon.data.examples;
 
+import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
 import com.oracle.bmc.auth.InstancePrincipalsAuthenticationDetailsProvider;
 import com.oracle.bmc.secrets.SecretsClient;
 import com.oracle.bmc.secrets.model.Base64SecretBundleContentDetails;
@@ -13,11 +14,18 @@ import com.oracle.bmc.secrets.requests.GetSecretBundleRequest;
 import com.oracle.bmc.secrets.responses.GetSecretBundleResponse;
 import org.apache.commons.codec.binary.Base64;
 
+import java.io.IOException;
+
 public class OCISDKUtility {
 
-    static String getSecreteFromVault(boolean isInstancePrincipal, String regionIdString, String secretOcid)  {
+    static String getSecreteFromVault(boolean isInstancePrincipal, String regionIdString, String secretOcid) throws IOException {
         System.out.println("OCISDKUtility.getSecretFromVault isInstancePrincipal:" + isInstancePrincipal);
-        SecretsClient secretsClient = new SecretsClient(InstancePrincipalsAuthenticationDetailsProvider.builder().build());
+        SecretsClient secretsClient;
+        if (isInstancePrincipal) {
+            secretsClient = new SecretsClient(InstancePrincipalsAuthenticationDetailsProvider.builder().build());
+        } else {
+            secretsClient = new SecretsClient(new ConfigFileAuthenticationDetailsProvider("~/.oci/config", "DEFAULT"));
+        }
         secretsClient.setRegion(regionIdString);
         GetSecretBundleRequest getSecretBundleRequest = GetSecretBundleRequest
                 .builder()
