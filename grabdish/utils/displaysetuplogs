@@ -1,0 +1,22 @@
+#!/bin/bash
+## Copyright (c) 2021 Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+## export k8s_pod=$1
+## for line in $(kubectl get pods --all-namespaces | \
+##   grep $k8s_pod | awk '{print $2}'); do
+##     echo "kubectl describe pod $line -n msdataworkshop"
+##     kubectl describe pod $line -n msdataworkshop
+## done
+
+
+for FILE in $GRABDISH_LOG/*; do echo $FILE; done
+
+while true; do
+    read -p "Do you wish to install this program?" yn
+    case $yn in
+        [Yy]* ) make install; break;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
