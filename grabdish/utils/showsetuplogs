@@ -1,0 +1,16 @@
+#!/bin/bash
+## Copyright (c) 2021 Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+for FILE in $GRABDISH_LOG/*; do echo $FILE; done
+
+for FILE in $GRABDISH_LOG/*; do
+    while true; do
+        read -p "Do you wish to cat $FILE ? y or n or x to exit?" yn
+        case $yn in
+            [Yy]* ) cat $FILE; break;;
+            [Xx]* ) exit;;
+            * ) echo "skipping file..."; break;
+        esac
+    done
+done
