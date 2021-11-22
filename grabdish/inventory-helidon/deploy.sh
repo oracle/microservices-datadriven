@@ -3,6 +3,12 @@
 ## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 SCRIPT_DIR=$(dirname $0)
+export IS_SUGGESTIVE_SALE_ENABLED=$1
+
+if [ -z "$IS_SUGGESTIVE_SALE_ENABLED" ]; then
+    echo "No argument for IS_SUGGESTIVE_SALE_ENABLED, defaulting to false..."
+  export IS_SUGGESTIVE_SALE_ENABLED=false
+fi
 
 if [ -z "$DOCKER_REGISTRY" ]; then
     echo "DOCKER_REGISTRY not set. Will get it with state_get"
@@ -40,11 +46,13 @@ sed -e "s|%OCI_REGION%|${OCI_REGION}|g" inventory-helidon-deployment-${CURRENTTI
 mv -- /tmp/inventory-helidon-deployment-$CURRENTTIME.yaml inventory-helidon-deployment-$CURRENTTIME.yaml
 sed -e "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" inventory-helidon-deployment-${CURRENTTIME}.yaml > /tmp/inventory-helidon-deployment-$CURRENTTIME.yaml
 mv -- /tmp/inventory-helidon-deployment-$CURRENTTIME.yaml inventory-helidon-deployment-$CURRENTTIME.yaml
+sed -e "s|%IS_SUGGESTIVE_SALE_ENABLED%|${IS_SUGGESTIVE_SALE_ENABLED}|g" inventory-helidon-deployment-${CURRENTTIME}.yaml > /tmp/inventory-helidon-deployment-$CURRENTTIME.yaml
+mv -- /tmp/inventory-helidon-deployment-$CURRENTTIME.yaml inventory-helidon-deployment-$CURRENTTIME.yaml
 
-if [ -z "$1" ]; then
-    kubectl apply -f $SCRIPT_DIR/inventory-helidon-deployment-$CURRENTTIME.yaml -n msdataworkshop
-else
-    kubectl apply -f <(istioctl kube-inject -f $SCRIPT_DIR/inventory-helidon-deployment-$CURRENTTIME.yaml) -n msdataworkshop
-fi
+#if [ -z "$1" ]; then
+kubectl apply -f $SCRIPT_DIR/inventory-helidon-deployment-$CURRENTTIME.yaml -n msdataworkshop
+#else
+#    kubectl apply -f <(istioctl kube-inject -f $SCRIPT_DIR/inventory-helidon-deployment-$CURRENTTIME.yaml) -n msdataworkshop
+#fi
 
 kubectl create -f inventory-service.yaml -n msdataworkshop

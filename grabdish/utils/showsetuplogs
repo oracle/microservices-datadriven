@@ -9,9 +9,8 @@ for FILE in $GRABDISH_LOG/*; do
         read -p "Do you wish to cat $FILE ? y or n or x to exit?" yn
         case $yn in
             [Yy]* ) cat $FILE; break;;
-            [Nn]* ) break;;
             [Xx]* ) exit;;
-            * ) echo "Please answer yes or no.";;
+            * ) echo "skipping file..."; break;
         esac
     done
 done
