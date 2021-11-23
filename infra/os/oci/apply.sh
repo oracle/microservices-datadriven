@@ -2,14 +2,15 @@
 # Copyright (c) 2021 Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
-if ! provisioning-helper-pre-destroy; then
-  return 1
+# Fail on error
+set -e
+
+
+if ! provisioning-helper-pre-apply; then
+  exit 1
 fi
 
-VAULT_FOLDER=$MY_STATE/vault
 
-if test -d $VAULT_FOLDER; then
-  rm -rf $VAULT_FOLDER
-fi
+oci os bucket create --compartment-id "$COMPARTMENT_OCID" --name "$BUCKET_NAME"
 
-rm -f $STATE_FILE
+touch $OUTPUT_FILE

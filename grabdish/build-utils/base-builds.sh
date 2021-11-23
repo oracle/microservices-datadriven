@@ -33,5 +33,5 @@ for b in $BUILDS; do
   echo "Building $MS_CODE"
   cd $MS_CODE
   # Tried running in parallel and found to be unstable, so run serially.  Assume maven thread safety issue.
-  time ./build.sh &>> $LOG_DIR/build-$b.log
+  time ./build.sh > $LOG_DIR/build-$b.log 2>&1
 done

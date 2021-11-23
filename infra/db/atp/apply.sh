@@ -20,7 +20,7 @@ if ! test -f $MY_STATE/state_provisioning_done; then
     cp -rf $MY_CODE/terraform $MY_STATE
     cd $MY_STATE/terraform
     export TF_VAR_ociCompartmentOcid="$COMPARTMENT_OCID"
-    export TF_VAR_ociRegionIdentifier="$REGION"
+    export TF_VAR_ociRegionIdentifier="$OCI_REGION"
     export TF_VAR_dbName="$DB_NAME"
     export TF_VAR_displayName="$DISPLAY_NAME"
 
@@ -61,7 +61,7 @@ if ! test -f $MY_STATE/state_wallet_downloaded; then
   rm -rf $TNS_ADMIN/*
   cd $TNS_ADMIN
   echo "DB OCID is $DB_OCID"
-  oci db autonomous-database generate-wallet --autonomous-database-id "$DB_OCID" --file 'wallet.zip' --password 'Welcome1' --generate-type 'ALL'
+  oci db autonomous-database generate-wallet --autonomous-database-id "$DB_OCID" --file 'wallet.zip' --password 'Welcome1'
   unzip wallet.zip
 
   cat - >sqlnet.ora <<!

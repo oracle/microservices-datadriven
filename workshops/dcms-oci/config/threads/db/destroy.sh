@@ -25,7 +25,8 @@ while ! test -z "$DEPENDENCIES"; do
   sleep 1
 done
 
-# Destroy Order and Inventory DBs
+
+# Destroy the DBs
 DBS="db1 db2"
 for db in $DBS; do
   db_upper=`echo $db | tr '[:lower:]' '[:upper:]'`
@@ -38,6 +39,16 @@ for db in $DBS; do
   state_reset ${db_upper}_TNS_ADMIN
   state_reset ${db_upper}_ALIAS
 done
+
+
+# Destroy the Object Store Bucket (ATP only)
+if test "$(state_get DB_TYPE)" == "ATP"; then
+  OS_STATE=$DCMS_INFRA_STATE/os
+  mkdir -p $OS_STATE
+  cd $OS_STATE
+  provisioning-destroy
+  state_reset CWALLET_OS_BUCKET "$(state_get RUN_NAME)"
+fi
 
 
 # Delete state file

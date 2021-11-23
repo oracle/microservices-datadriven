@@ -27,6 +27,27 @@ fi
 source $STATE_STORE/output.env
 
 
+# Set tenancy OCID (input parameter)
+if ! state_done TENANCY_OCID; then
+  state_set TENANCY_OCID "$TENANCY_OCID"
+fi
+
+
+# Set Compartment OCID (input parameter)
+if ! state_done COMPARTMENT_OCID; then
+  state_set COMPARTMENT_OCID "$COMPARTMENT_OCID"
+fi
+
+
+# Generate Random (hopefully unique) Run Name
+
+
+
+if ! state_done RUN_NAME; then
+  state_set RUN_NAME gd`awk 'BEGIN { srand(); print int(1 + rand() * 100000000)}'`
+fi
+
+
 # Create the vault
 VAULT=$DCMS_INFRA_STATE/vault
 if ! test -f $VAULT/output.env; then
@@ -44,30 +65,36 @@ for t in $THREADS; do
   mkdir -p $THREAD_STATE
   cd $THREAD_STATE
   THREAD_CODE="$MY_CODE/threads/$t"
-  (provisioning-apply $THREAD_CODE &>> $DCMS_LOG_DIR/$t-apply-thread.log) &
+  nohup bash -c "provisioning-apply $THREAD_CODE" >>$DCMS_LOG_DIR/$t-thread.log 2>&1 &
 done
 
 
 # Start background builds
 mkdir -p "$MY_STATE/background-builds"
-$MY_CODE/background-builds.sh "$MY_STATE/background-builds" &>> $DCMS_LOG_DIR/background-builds.log &
+nohup $MY_CODE/background-builds.sh "$MY_STATE/background-builds" >>$DCMS_LOG_DIR/background-builds.log 2>&1 &
 
 
 # Hard coded for now
+if ! state_done DB_DEPLOYMENT; then
 state_set DB_DEPLOYMENT 2PDB
+fi
+
+if ! state_done DB_TYPE; then
 state_set DB_TYPE ATP
-state_set QUEUE_TYPE stdq
+fi
+
+if ! state_done QUEUE_TYPE; then
+state_set QUEUE_TYPE classicq
+fi
 
 
 # Identify Run Type
 while ! state_done RUN_TYPE; do
   if [[ "$HOME" =~ /home/ll[0-9]{1,5}_us ]]; then
-    # Green Button (hosted by Live Labs)
     state_set RUN_TYPE "LL"
     state_set RESERVATION_ID `grep -oP '(?<=/home/ll).*?(?=_us)' <<<"$HOME"`
     state_set USER_OCID 'NA'
     state_set USER_NAME "LL$(state_get RESERVATION_ID)-USER"
-    state_set RUN_NAME "grabdish$(state_get RESERVATION_ID)"
     state_set DB1_NAME "ORDER$(state_get RESERVATION_ID)"
     state_set DB2_NAME "INVENTORY$(state_get RESERVATION_ID)"
     state_set_done OKE_LIMIT_CHECK
@@ -75,6 +102,8 @@ while ! state_done RUN_TYPE; do
   else
     # Run in your own tenancy
     state_set RUN_TYPE "OT"
+    state_set DB1_NAME "$(state_get RUN_NAME)1"
+    state_set DB2_NAME "$(state_get RUN_NAME)2"
   fi
 done
 
@@ -103,68 +132,29 @@ while ! state_done USER_NAME; do
 done
 
 
-# Get Run Name from directory name
-while ! state_done RUN_NAME; do
-  cd $MSDD_CODE
-  cd ..
-  # Validate that a folder was creared
-  if test "$PWD" == ~; then
-    echo "ERROR: The workshop is not installed in a separate folder."
-    exit
-  fi
-  DN=`basename "$PWD"`
-  # Validate run name.  Must be between 1 and 13 characters, only letters or numbers, starting with letter
-  if [[ "$DN" =~ ^[a-zA-Z][a-zA-Z0-9]{0,12}$ ]]; then
-    state_set RUN_NAME `echo "$DN" | awk '{print tolower($0)}'`
-    state_set DB1_NAME "$(state_get RUN_NAME)1"
-    state_set DB2_NAME "$(state_get RUN_NAME)2"
-  else
-    echo "Error: Invalid directory name $RN.  The directory name must be between 1 and 13 characters,"
-    echo "containing only letters or numbers, starting with a letter.  Please restart the workshop with a valid directory name."
-    exit
-  fi
+# Double check and then set the home region and region
+while ! state_done HOME_REGION; do
+  HOME_REGION=`oci iam region-subscription list --query 'data[?"is-home-region"]."region-name" | join('\'' '\'', @)' --raw-output`
+  state_set HOME_REGION "$HOME_REGION"
 done
 
-
-# Get the tenancy OCID
-while ! state_done TENANCY_OCID; do
-  state_set TENANCY_OCID "$OCI_TENANCY" # Set in cloud shell env
-done
-
-
-# Double check and then set the region and home region
-while ! state_done REGION; do
-  if test $(state_get RUN_TYPE) != "LL"; then
-    HOME_REGION=`oci iam region-subscription list --query 'data[?"is-home-region"]."region-name" | join('\'' '\'', @)' --raw-output`
-    state_set HOME_REGION "$HOME_REGION"
+while ! state_done OCI_REGION; do
+  if test -z "$OCI_REGION"; then
+    if test 1 -eq `oci iam region-subscription list --query 'length(data[])' --raw-output`; then
+      # Only one subcribed region so must be home region
+      OCI_REGION="$(state_get HOME_REGION)"
+    else
+      read -p "Please enter the name of the region that you are connected to: " OCI_REGION
+    fi
   fi
-  state_set REGION "$OCI_REGION" # Set in cloud shell env
   state_set OCI_REGION "$OCI_REGION"
-done
-
-
-# Create the compartment
-while ! state_done COMPARTMENT_OCID; do
-  if test $(state_get RUN_TYPE) != "LL"; then
-    echo "Resources will be created in a new compartment named $(state_get RUN_NAME)"
-    export OCI_CLI_PROFILE=$(state_get HOME_REGION)
-    COMPARTMENT_OCID=`oci iam compartment create --compartment-id "$(state_get TENANCY_OCID)" --name "$(state_get RUN_NAME)" --description "GrabDish Workshop" --query 'data.id' --raw-output`
-    export OCI_CLI_PROFILE=$(state_get REGION)
-  else
-    read -p "Please enter your OCI compartment's OCID: " COMPARTMENT_OCID
-  fi
-  while ! test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output 2>/dev/null`"" == 'ACTIVE'; do
-    echo "Waiting for the compartment to become ACTIVE"
-    sleep 2
-  done
-  state_set COMPARTMENT_OCID "$COMPARTMENT_OCID"
 done
 
 
 # Check OKE Limits
 if ! state_done OKE_LIMIT_CHECK; then
   # Cluster Service Limit
-  OKE_LIMIT=`oci limits value list --compartment-id "$OCI_TENANCY" --service-name "container-engine" --query 'sum(data[?"name"=='"'cluster-count'"'].value)'`
+  OKE_LIMIT=`oci limits value list --compartment-id "$(state_get TENANCY_OCID)" --service-name "container-engine" --query 'sum(data[?"name"=='"'cluster-count'"'].value)'`
   if test "$OKE_LIMIT" -lt 1; then
     echo 'The service limit for the "Container Engine" "Cluster Count" is insufficent to run this workshop.  At least 1 is required.'
     exit
@@ -182,14 +172,14 @@ fi
 while ! state_done ATP_LIMIT_CHECK; do
   CHECK=1
   # ATP OCPU availability
-  if test $(oci limits resource-availability get --compartment-id="$OCI_TENANCY" --service-name "database" --limit-name "atp-ocpu-count" --query 'to_string(min([data."fractional-availability",`4.0`]))' --raw-output) != '4.0'; then
+  if test $(oci limits resource-availability get --compartment-id="$(state_get TENANCY_OCID)" --service-name "database" --limit-name "atp-ocpu-count" --query 'to_string(min([data."fractional-availability",`4.0`]))' --raw-output) != '4.0'; then
     echo 'The "Autonomous Transaction Processing OCPU Count" resource availability is insufficent to run this workshop.'
     echo '4 OCPUs are required.  Terminate some existing ATP databases and try again.'
     CHECK=0
   fi
 
   # ATP storage availability
-  if test $(oci limits resource-availability get --compartment-id="$OCI_TENANCY" --service-name "database" --limit-name "atp-total-storage-tb" --query 'to_string(min([data."fractional-availability",`2.0`]))' --raw-output) != '2.0'; then
+  if test $(oci limits resource-availability get --compartment-id="$(state_get TENANCY_OCID)" --service-name "database" --limit-name "atp-total-storage-tb" --query 'to_string(min([data."fractional-availability",`2.0`]))' --raw-output) != '2.0'; then
     echo 'The "Autonomous Transaction Processing Total Storage (TB)" resource availability is insufficent to run this workshop.'
     echo '2 TB are required.  Terminate some existing ATP databases and try again.'
     CHECK=0
@@ -213,8 +203,8 @@ done
 # Get the docker auth token
 while ! is_secret_set DOCKER_AUTH_TOKEN; do
   if test $(state_get RUN_TYPE) != "LL"; then
-    export OCI_CLI_PROFILE=$(state_get HOME_REGION)
-    if ! TOKEN=`oci iam auth-token create  --user-id "$(state_get USER_OCID)" --description 'grabdish docker login' --query 'data.token' --raw-output 2>$DCMS_LOG_DIR/docker_auth_token`; then
+    # export OCI_CLI_PROFILE=$(state_get HOME_REGION)
+    if ! TOKEN=`oci iam auth-token create --region "$(state_get HOME_REGION)" --user-id "$(state_get USER_OCID)" --description 'grabdish docker login' --query 'data.token' --raw-output 2>$DCMS_LOG_DIR/docker_auth_token`; then
       if grep UserCapacityExceeded $DCMS_LOG_DIR/docker_auth_token >/dev/null; then
         # The key already exists
         echo 'ERROR: Failed to create auth token.  Please delete an old token from the OCI Console (Profile -> User Settings -> Auth Tokens).'
@@ -239,10 +229,9 @@ done
 while ! state_done DOCKER_REGISTRY; do
   RETRIES=0
   while test $RETRIES -le 30; do
-    if echo "$(get_secret DOCKER_AUTH_TOKEN)" | docker login -u "$(state_get NAMESPACE)/$(state_get USER_NAME)" --password-stdin "$(state_get REGION).ocir.io" &>/dev/null; then
+    if echo "$(get_secret DOCKER_AUTH_TOKEN)" | docker login -u "$(state_get NAMESPACE)/$(state_get USER_NAME)" --password-stdin "$(state_get OCI_REGION).ocir.io" &>/dev/null; then
       echo "Docker login completed"
-      state_set DOCKER_REGISTRY "$(state_get REGION).ocir.io/$(state_get NAMESPACE)/$(state_get RUN_NAME)"
-      export OCI_CLI_PROFILE=$(state_get REGION)
+      state_set DOCKER_REGISTRY "$(state_get OCI_REGION).ocir.io/$(state_get NAMESPACE)/$(state_get RUN_NAME)"
       break
     else
       # echo "Docker login failed.  Retrying"
@@ -316,6 +305,7 @@ echo "BASE_BUILDS:     Builds the microservices for Lab 2 to save you time later
 echo "GRABDISH_THREAD: Configures the grabdish application once the database and OKE are provisioned - approx 1 minutes"
 echo
 
+
 # Wait for the threads and base builds to complete
 DEPENDENCIES=' DB_THREAD K8S_THREAD BASE_BUILDS GRABDISH_THREAD'
 while ! test -z "$DEPENDENCIES"; do
@@ -336,14 +326,14 @@ cat >$OUTPUT_FILE <<!
 export DOCKER_REGISTRY='$(state_get DOCKER_REGISTRY)'
 export JAVA_HOME=$(state_get JAVA_HOME)
 export PATH=$(state_get JAVA_HOME)/bin:$PATH
-export ORDER_DB_NAME="$(state_get DB1_NAME)"
-export ORDER_DB_TNS_ADMIN="$(state_get DB1_TNS_ADMIN)"
-export ORDER_DB_ALIAS="$(state_get DB1_ALIAS)"
-export INVENTORY_DB_NAME="$(state_get DB2_NAME)"
-export INVENTORY_DB_TNS_ADMIN="$(state_get DB2_TNS_ADMIN)"
-export INVENTORY_DB_ALIAS="$(state_get DB2_ALIAS)"
-export REGION="$(state_get OCI_REGION)"
-export VAULT_SECRET_OCID=""
+export ORDER_DB_NAME='$(state_get DB1_NAME)'
+export ORDER_DB_TNS_ADMIN='$(state_get DB1_TNS_ADMIN)'
+export ORDER_DB_ALIAS='$(state_get DB1_ALIAS)'
+export INVENTORY_DB_NAME='$(state_get DB2_NAME)'
+export INVENTORY_DB_TNS_ADMIN='$(state_get DB2_TNS_ADMIN)'
+export INVENTORY_DB_ALIAS='$(state_get DB2_ALIAS)'
+export OCI_REGION='$(state_get OCI_REGION)'
+export VAULT_SECRET_OCID='NA'
 !
 
 state_set_done SETUP_VERIFIED # Legacy

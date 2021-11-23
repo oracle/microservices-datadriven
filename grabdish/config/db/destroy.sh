@@ -14,59 +14,82 @@ fi
 export GRABDISH_LOG
 
 
-# Useful variables
-ORDER_DB_SVC="$ORDER_DB_ALIAS"
-INVENTORY_DB_SVC="$INVENTORY_DB_ALIAS"
-ORDER_USER=ORDERUSER
-INVENTORY_USER=INVENTORYUSER
+# Setup the environment variable
 DB_PASSWORD=$(get_secret $DB_PASSWORD_SECRET)
 
-
-# Inventory User
-while test -f $MY_STATE/inventory_user; do
-  export TNS_ADMIN=$INVENTORY_DB_TNS_ADMIN
-  U=$INVENTORY_USER
-  SVC=$INVENTORY_DB_SVC
-  if sqlplus /nolog; then
-    rm -f $MY_STATE/inventory_plsql_proc $MY_STATE/inventory_prop $MY_STATE/inventory_db_link rm $MY_STATE/inventory_user
+CONFIG_HOME=$GRABDISH_HOME/config/db
+if test $DB_DEPLOYMENT == "1PDB"; then
+  # 1PDB
+  SCRIPT_HOME=$CONFIG_HOME/1pdb/destroy
+else
+  # 2PDB
+  if test $DB_TYPE == "ATP"; then
+    # ATP
+    SCRIPT_HOME=$CONFIG_HOME/2pdb-atp/destroy
   else
-    echo "Failed to remove inventory schema.  Retrying..."
-    sleep 10
-  fi <<!
-WHENEVER SQLERROR EXIT 1
-connect admin/"$DB_PASSWORD"@$SVC
-DROP USER $U CASCADE;
-!
-done
-
-
-# Order User
-while test -f $MY_STATE/order_user; do
-  export TNS_ADMIN=$ORDER_DB_TNS_ADMIN
-  U=$ORDER_USER
-  SVC=$ORDER_DB_SVC
-  if sqlplus /nolog; then
-    rm -f $MY_STATE/order_prop $MY_STATE/order_db_link $MY_STATE/order_user
-  else
-    echo "Failed to remove order schema.  Retrying..."
-    sleep 10
-  fi <<!
-WHENEVER SQLERROR EXIT 1
-connect admin/"$DB_PASSWORD"@$SVC
-DROP USER $U CASCADE;
-!
-done
-
-
-# Inventory DB Connection Setup
-if test -f $MY_STATE/inventorydb_tns_admin; then
-  rm $MY_STATE/inventorydb_tns_admin
+    # Stand Alone
+    SCRIPT_HOME=$CONFIG_HOME/2pdb-sa/destroy
+  fi
 fi
 
+source $CONFIG_HOME/params.env
 
-# Order DB Connection Setup
-if test -f $MY_STATE/orderdb_tns_admin; then
-  rm $MY_STATE/orderdb_tns_admin
+
+# Expand common destroy scripts
+COMMON_SCRIPT_HOME=$MY_STATE/expanded-common-scripts/destroy
+mkdir -p $COMMON_SCRIPT_HOME
+chmod 700 $COMMON_SCRIPT_HOME
+files=$(ls -r $CONFIG_HOME/common/destroy)
+for f in $files; do
+  eval "
+cat >$COMMON_SCRIPT_HOME/$f <<!
+$(<$CONFIG_HOME/common/destroy/$f)
+!
+"
+  chmod 400 $COMMON_SCRIPT_HOME/$f
+done
+
+
+# Execute DB destroy scripts
+files=$(ls -r $SCRIPT_HOME)
+for f in $files; do
+  # Execute all the SQL scripts in order using the appropriate TNS_ADMIN
+  db=`grep -o 'db.' <<<"$f"`
+  db_upper=`echo $db | tr '[:lower:]' '[:upper:]'`
+  echo "Executing $SCRIPT_HOME/$f on database $db"
+  eval "
+export TNS_ADMIN=\$${db_upper}_TNS_ADMIN
+sqlplus /nolog <<!
+$(<$SCRIPT_HOME/$f)
+!
+"
+done
+
+
+# Remove expanded common scripts
+rm -rf $COMMON_SCRIPT_HOME
+
+
+# Clean up the object store
+if test $DB_DEPLOYMENT == "2PDB" && test $DB_TYPE == "ATP"; then
+  # Delete Authenticated Link to Wallet
+  if !  test -f $MY_STATE/DB1_state_cwallet_auth_url || test -f $MY_STATE/DB2_state_cwallet_auth_url; then
+    PARIDS=`oci os preauth-request list --bucket-name "$CWALLET_OS_BUCKET" --query "join(' ',data[*].id)" --raw-output`
+    for id in $PARIDS; do
+      oci os preauth-request delete --par-id "$id" --bucket-name "$CWALLET_OS_BUCKET" --force
+    done
+    rm -f $MY_STATE/DB1_state_cwallet_auth_url
+    rm -f $MY_STATE/DB2_state_cwallet_auth_url
+  fi
+
+
+  for db in DB1 DB2; do
+    # Remove Object from Bucket
+    if test -f $MY_STATE/${db}_state_cwallet_put; then
+      oci os object delete --object-name "${db}_cwallet.sso" --bucket-name "$CWALLET_OS_BUCKET" --force
+      rm -f $MY_STATE/${db}_state_cwallet_put
+    fi
+  done
 fi
 
 

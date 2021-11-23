@@ -12,7 +12,7 @@ fi
 
 
 # Wait for dependencies
-DEPENDENCIES='COMPARTMENT_OCID REGION DB1_NAME DB2_NAME DB_PASSWORD_SECRET RUN_NAME ATP_LIMIT_CHECK VCN_OCID DB_DEPLOYMENT DB_TYPE'
+DEPENDENCIES='COMPARTMENT_OCID OCI_REGION DB1_NAME DB2_NAME DB_PASSWORD_SECRET RUN_NAME ATP_LIMIT_CHECK VCN_OCID DB_DEPLOYMENT DB_TYPE'
 while ! test -z "$DEPENDENCIES"; do
   echo "Waiting for $DEPENDENCIES"
   WAITING_FOR=""
@@ -24,6 +24,22 @@ while ! test -z "$DEPENDENCIES"; do
   DEPENDENCIES="$WAITING_FOR"
   sleep 1
 done
+
+
+# Provision the Wallet Object Store Bucket (ATP only)
+if test "$(state_get DB_TYPE)" == "ATP"; then
+  OS_STATE=$DCMS_INFRA_STATE/os
+  mkdir -p $OS_STATE
+  cd $OS_STATE
+  cat >$OS_STATE/input.env <<!
+COMPARTMENT_OCID=$(state_get COMPARTMENT_OCID)
+BUCKET_NAME=$(state_get RUN_NAME)
+!
+  provisioning-apply $MSDD_INFRA_CODE/os/oci
+  state_set CWALLET_OS_BUCKET "$(state_get RUN_NAME)"
+else
+  state_set CWALLET_OS_BUCKET 'NA'
+fi
 
 
 # For Live Labs
@@ -82,7 +98,7 @@ else
       cat >$DB_STATE/input.env <<!
 TENANCY_OCID='$(state_get TENANCY_OCID)'
 COMPARTMENT_OCID=$(state_get COMPARTMENT_OCID)
-REGION=$(state_get REGION)
+OCI_REGION=$(state_get OCI_REGION)
 DB_NAME=$(state_get DB1_NAME)
 DISPLAY_NAME='DB1'
 DB_PASSWORD_SECRET=$(state_get DB_PASSWORD_SECRET)
@@ -106,20 +122,21 @@ VCN_OCID=$(state_get VCN_OCID)
       )
       ;;
     2PDB)
-      for db in "db1 db2"; do
+      for db in db1 db2; do
         db_upper=`echo $db | tr '[:lower:]' '[:upper:]'`
         DB_STATE=$DCMS_INFRA_STATE/db/$db
         mkdir -p $DB_STATE
         cd $DB_STATE
+        DB_NAME="$(state_get ${db_upper}_NAME)"
         cat >input.env <<!
 TENANCY_OCID='$(state_get TENANCY_OCID)'
-COMPARTMENT_OCID=$(state_get COMPARTMENT_OCID)
-REGION=$(state_get REGION)
-DB_NAME=$(state_get ${db_upper}_NAME)
-DISPLAY_NAME=${db_upper}
-DB_PASSWORD_SECRET=$(state_get DB_PASSWORD_SECRET)
-RUN_NAME=$(state_get RUN_NAME)
-VCN_OCID=$(state_get VCN_OCID)
+COMPARTMENT_OCID='$(state_get COMPARTMENT_OCID)'
+OCI_REGION='$(state_get OCI_REGION)'
+DB_NAME='$DB_NAME'
+DISPLAY_NAME='${db_upper}'
+DB_PASSWORD_SECRET='$(state_get DB_PASSWORD_SECRET)'
+RUN_NAME='$(state_get RUN_NAME)'
+VCN_OCID='$(state_get VCN_OCID)'
 !
         if test $(state_get DB_TYPE) == "ATP"; then
           provisioning-apply $MSDD_INFRA_CODE/db/atp

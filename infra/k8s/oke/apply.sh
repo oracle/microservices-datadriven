@@ -15,7 +15,7 @@ fi
 cp -rf $MY_CODE/terraform $MY_STATE
 cd $MY_STATE/terraform
 export TF_VAR_ociCompartmentOcid="$COMPARTMENT_OCID"
-export TF_VAR_ociRegionIdentifier="$REGION"
+export TF_VAR_ociRegionIdentifier="$OCI_REGION"
 export TF_VAR_ociTenancyOcid="$TENANCY_OCID"
 export TF_VAR_vcnOcid="$VCN_OCID"
 
@@ -34,7 +34,7 @@ OKE_OCID=`terraform output -raw oke_ocid`
 
 
 #Setup kukbctl
-oci ce cluster create-kubeconfig --cluster-id "$OKE_OCID" --file $HOME/.kube/config --region "$REGION" --token-version 2.0.0
+oci ce cluster create-kubeconfig --cluster-id "$OKE_OCID" --file $HOME/.kube/config --region "$OCI_REGION" --token-version 2.0.0
 
 
 # Wait for OKE nodes to become ready

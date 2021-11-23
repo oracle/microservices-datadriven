@@ -12,10 +12,11 @@ fi
 
 
 # Workaround for cloud shell bug where it caches only on terraform version
-  cat >~/.terraformrc <<!
+mkdir -p $HOME/.terraform.d/plugin-cache
+cat >~/.terraformrc <<!
 provider_installation {
   filesystem_mirror {
-    path    = "/usr/share/terraform/plugins"
+    path    = "$HOME/.terraform.d/plugin-cache"
   }
   direct {
   }
@@ -28,7 +29,7 @@ cp -rf $MY_CODE/terraform $MY_STATE
 
 cd $MY_STATE/terraform
 export TF_VAR_ociCompartmentOcid="$COMPARTMENT_OCID"
-export TF_VAR_ociRegionIdentifier="$REGION"
+export TF_VAR_ociRegionIdentifier="$OCI_REGION"
 export TF_VAR_vcnDnsLabel="$VCN_DNS_LABEL"
 
 if ! terraform init; then

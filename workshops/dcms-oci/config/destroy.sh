@@ -24,7 +24,7 @@ for t in $THREADS; do
   THREAD_STATE=$DCMS_THREAD_STATE/$t
   mkdir -p $THREAD_STATE
   cd $THREAD_STATE
-  (provisioning-destroy "$MY_CODE/threads/$t" &>> $DCMS_LOG_DIR/$t-destroy-thread.log) &
+  nohup bash -c "provisioning-destroy" >> $DCMS_LOG_DIR/$t-thread.log 2>&1 &
 done
 
 

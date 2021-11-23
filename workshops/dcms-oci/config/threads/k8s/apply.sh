@@ -12,7 +12,7 @@ fi
 
 
 # Wait for dependencies
-DEPENDENCIES='COMPARTMENT_OCID REGION TENANCY_OCID OKE_LIMIT_CHECK'
+DEPENDENCIES='COMPARTMENT_OCID OCI_REGION TENANCY_OCID OKE_LIMIT_CHECK'
 while ! test -z "$DEPENDENCIES"; do
   echo "Waiting for $DEPENDENCIES"
   WAITING_FOR=""
@@ -35,7 +35,7 @@ if ! state_done VCN_OCID; then
     cd $STATE
     cat >$STATE/input.env <<!
 COMPARTMENT_OCID=$(state_get COMPARTMENT_OCID)
-REGION=$(state_get REGION)
+OCI_REGION=$(state_get OCI_REGION)
 VCN_DNS_LABEL=dcmsoci
 !
     provisioning-apply $MSDD_INFRA_CODE/network/oci
@@ -60,7 +60,7 @@ else
   cd $STATE
   cat >$STATE/input.env <<!
 COMPARTMENT_OCID=$(state_get COMPARTMENT_OCID)
-REGION=$(state_get REGION)
+OCI_REGION=$(state_get OCI_REGION)
 TENANCY_OCID=$(state_get TENANCY_OCID)
 VCN_OCID=$(state_get VCN_OCID)
 !

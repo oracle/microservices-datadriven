@@ -28,18 +28,23 @@ else
     SCRIPT_HOME=$CONFIG_HOME/2pdb-atp/apply
 
     # Create Object Store CWALLET objects and auth URLs for each database
-    for db in "DB1 DB2"; do
+    for db in DB1 DB2; do
       # Put DB Connection Wallet in the bucket in Object Store
-      if ! test -f $MY_STATE/${db}_state_cwallet; then
-        eval "cd ${db}_TNS_ADMIN"
+      if ! test -f $MY_STATE/${db}_state_cwallet_put; then
+        eval "cd \$${db}_TNS_ADMIN"
         oci os object put --bucket-name $CWALLET_OS_BUCKET --name "${db}_cwallet.sso" --file 'cwallet.sso'
         touch $MY_STATE/${db}_state_cwallet_put
       fi
 
       # Create Authenticated Link to Wallet
       if ! test -f $MY_STATE/${db}_state_cwallet_auth_url; then
-        ACCESS_URI=`oci os preauth-request create --object-name 'cwallet.sso' --access-type 'ObjectRead' --bucket-name $BUCKET_NAME --name 'grabdish' --time-expires $(date '+%Y-%m-%d' --date '+7 days') --query 'data."access-uri"' --raw-output`
-        CWALLET_SSO_AUTH_URL="https://objectstorage.${REGION}.oraclecloud.com${ACCESS_URI}"
+        if test `uname` == 'Linux'; then
+          EXPIRE_DATE=$(date '+%Y-%m-%d' --date '+7 days')
+        else
+          EXPIRE_DATE=$(date -v +7d '+%Y-%m-%d')
+        fi
+        ACCESS_URI=`oci os preauth-request create --object-name "${db}_cwallet.sso" --access-type 'ObjectRead' --bucket-name "$CWALLET_OS_BUCKET" --name 'grabdish' --time-expires "$EXPIRE_DATE" --query 'data."access-uri"' --raw-output`
+        CWALLET_SSO_AUTH_URL="https://objectstorage.${OCI_REGION}.oraclecloud.com${ACCESS_URI}"
         echo "${db}_CWALLET_SSO_AUTH_URL='$CWALLET_SSO_AUTH_URL'" >>$STATE_FILE
         touch $MY_STATE/${db}_state_cwallet_auth_url
       fi
@@ -55,32 +60,39 @@ source $CONFIG_HOME/params.env
 
 
 # Expand common scripts
-COMMON_SCRIPT_HOME=$MY_STATE/common-scripts
+COMMON_SCRIPT_HOME=$MY_STATE/expanded-common-scripts/apply
+rm -rf $COMMON_SCRIPT_HOME
 mkdir -p $COMMON_SCRIPT_HOME
+chmod 700 $COMMON_SCRIPT_HOME
 files=$(ls $CONFIG_HOME/common/apply)
 for f in $files; do
   eval "
 cat >$COMMON_SCRIPT_HOME/$f <<!
-$(<$CONFIG_HOME/common/$f)
+$(<$CONFIG_HOME/common/apply/$f)
 !
 "
+  chmod 400 $COMMON_SCRIPT_HOME/$f
 done
 
-
+set
 # Execute DB setup scripts
 files=$(ls $SCRIPT_HOME)
 for f in $files; do
   # Execute all the SQL scripts in order using the appropriate TNS_ADMIN
-  db_number=`grep -oP '(?<=\d\d-db)\d(?=-)' <<<"$f"`
-  echo "Executing $SCRIPT_HOME/$f on database DB$db_number"
+  db=`grep -o 'db.' <<<"$f"`
+  db_upper=`echo $db | tr '[:lower:]' '[:upper:]'`
+  echo "Executing $SCRIPT_HOME/$f on database $db_upper"
   eval "
-export TNS_ADMIN=\$DB${db_number}_TNS_ADMIN
+export TNS_ADMIN=\$${db_upper}_TNS_ADMIN
 sqlplus /nolog <<!
-set echo on
 $(<$SCRIPT_HOME/$f)
 !
 "
 done
+
+
+# Remove expanded common scripts
+rm -rf $COMMON_SCRIPT_HOME
 
 
 cat >$OUTPUT_FILE <<!
@@ -88,6 +100,4 @@ ORDER_DB_ALIAS="$ORDER_DB_ALIAS"
 ORDER_DB_TNS_ADMIN="$ORDER_DB_TNS_ADMIN"
 INVENTORY_DB_ALIAS="$INVENTORY_DB_ALIAS"
 INVENTORY_DB_TNS_ADMIN="$INVENTORY_DB_TNS_ADMIN"
-RECOMM_DB_ALIAS="$RECOMM_DB_ALIAS"
-RECOMM_DB_TNS_ADMIN="$RECOMM_DB_TNS_ADMIN"
 !

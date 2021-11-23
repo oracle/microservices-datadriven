@@ -19,8 +19,10 @@ export GRABDISH_HOME=$PWD
 CONFIGS="db-k8s k8s db"
 for c in $CONFIGS; do
   CONFIG_STATE=$MY_STATE/$c
-  cd $CONFIG_STATE
-  provisioning-destroy
+  if test -d $CONFIG_STATE; then
+    cd $CONFIG_STATE
+    provisioning-destroy
+  fi
 done
 
 

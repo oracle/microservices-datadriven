@@ -11,30 +11,6 @@ if ! provisioning-helper-pre-destroy; then
 fi
 
 
-# Remove Authenticated Link to Wallet
-if test -f $MY_STATE/state_cwallet_auth_url; then
-  PARIDS=`oci os preauth-request list --bucket-name "$BUCKET_NAME" --query "join(' ',data[*].id)" --raw-output`
-  for id in $PARIDS; do
-      oci os preauth-request delete --par-id "$id" --bucket-name "$BUCKET_NAME" --force
-  done
-  rm $MY_STATE/state_cwallet_auth_url
-fi
-
-
-# Remove Object from Bucket
-if test -f $MY_STATE/state_cwallet_put; then
-  oci os object delete --object-name "cwallet.sso" --bucket-name "$BUCKET_NAME" --force
-  rm $MY_STATE/state_cwallet_put
-fi
-
-
-# Remove Bucket
-if test -f $MY_STATE/state_os_bucket_created; then
-   oci os bucket delete --force --bucket-name "$BUCKET_NAME" --force
- rm $MY_STATE/state_os_bucket_created
-fi
-
-
 # Remove wallet and other TNS information
 if test -f $MY_STATE/state_wallet_downloaded; then
   TNS_ADMIN=$MY_STATE/tns_admin

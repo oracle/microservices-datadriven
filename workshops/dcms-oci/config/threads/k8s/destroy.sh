@@ -25,7 +25,7 @@ while ! test -z "$DEPENDENCIES"; do
   sleep 1
 done
 
-# Destroy OKE and network(unless Live Labs)
+# Destroy OKE and network (unless Live Labs)
 if ! test $(state_get RUN_TYPE) == "LL"; then
   # Destroy OKE
   cd $DCMS_INFRA_STATE/k8s
