@@ -13,7 +13,7 @@ fi
 
 cd $MY_STATE/terraform
 export TF_VAR_ociCompartmentOcid="$COMPARTMENT_OCID"
-export TF_VAR_ociRegionIdentifier="$REGION"
+export TF_VAR_ociRegionIdentifier="$OCI_REGION"
 export TF_VAR_ociTenancyOcid="$TENANCY_OCID"
 export TF_VAR_vcnOcid="$VCN_OCID"
 

@@ -2,8 +2,6 @@
 ## Copyright (c) 2021 Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
-echo delete order deployment and service...
 
-kubectl delete deployment order-helidon -n msdataworkshop
-
-kubectl delete service order -n msdataworkshop
+SCRIPT_DIR=$(dirname $0)
+k8s-undeploy "$SCRIPT_DIR" "$K8S_NAMESPACE" 'order-service.yaml order-helidon-deployment.yaml'

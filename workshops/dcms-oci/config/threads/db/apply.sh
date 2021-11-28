@@ -38,7 +38,7 @@ BUCKET_NAME=$(state_get RUN_NAME)
   provisioning-apply $MSDD_INFRA_CODE/os/oci
   state_set CWALLET_OS_BUCKET "$(state_get RUN_NAME)"
 else
-  state_set CWALLET_OS_BUCKET 'NA'
+  state_set CWALLET_OS_BUCKET ''
 fi
 
 
@@ -91,7 +91,7 @@ else
   # Not Live Labs so need to provision the databases
   # Switch depending on DB deployment mode
   case $(state_get DB_DEPLOYMENT) in
-    1PDB)
+    1DB)
       # We need to provision one database
       DB_STATE=$DCMS_INFRA_STATE/db/db1
       mkdir -p $DB_STATE
@@ -116,12 +116,12 @@ VCN_OCID=$(state_get VCN_OCID)
       state_set DB1_OCID "$DB_OCID"
       state_set DB1_TNS_ADMIN $TNS_ADMIN
       state_set DB1_ALIAS "$DB_ALIAS"
-      state_set DB2_OCID 'NA'
-      state_set DB2_TNS_ADMIN 'NA'
-      state_set DB1_ALIAS 'NA'
+      state_set DB2_OCID ''
+      state_set DB2_TNS_ADMIN ''
+      state_set DB1_ALIAS ''
       )
       ;;
-    2PDB)
+    2DB)
       for db in db1 db2; do
         db_upper=`echo $db | tr '[:lower:]' '[:upper:]'`
         DB_STATE=$DCMS_INFRA_STATE/db/$db

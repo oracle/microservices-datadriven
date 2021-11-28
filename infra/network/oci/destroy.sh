@@ -14,7 +14,7 @@ fi
 # Execute terraform destroy
 cd $MY_STATE/terraform
 export TF_VAR_ociCompartmentOcid="$COMPARTMENT_OCID"
-export TF_VAR_ociRegionIdentifier="$REGION"
+export TF_VAR_ociRegionIdentifier="$OCI_REGION"
 export TF_VAR_vcnDnsLabel="$VCN_DNS_LABEL"
 
 if ! terraform init; then

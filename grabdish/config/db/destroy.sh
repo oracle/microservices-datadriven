@@ -18,17 +18,17 @@ export GRABDISH_LOG
 DB_PASSWORD=$(get_secret $DB_PASSWORD_SECRET)
 
 CONFIG_HOME=$GRABDISH_HOME/config/db
-if test $DB_DEPLOYMENT == "1PDB"; then
-  # 1PDB
-  SCRIPT_HOME=$CONFIG_HOME/1pdb/destroy
+if test $DB_DEPLOYMENT == "1DB"; then
+  # 1DB
+  SCRIPT_HOME=$CONFIG_HOME/1db/destroy
 else
-  # 2PDB
+  # 2DB
   if test $DB_TYPE == "ATP"; then
     # ATP
-    SCRIPT_HOME=$CONFIG_HOME/2pdb-atp/destroy
+    SCRIPT_HOME=$CONFIG_HOME/2db-atp/destroy
   else
     # Stand Alone
-    SCRIPT_HOME=$CONFIG_HOME/2pdb-sa/destroy
+    SCRIPT_HOME=$CONFIG_HOME/2db-sa/destroy
   fi
 fi
 
@@ -36,18 +36,18 @@ source $CONFIG_HOME/params.env
 
 
 # Expand common destroy scripts
-COMMON_SCRIPT_HOME=$MY_STATE/expanded-common-scripts/destroy
-mkdir -p $COMMON_SCRIPT_HOME
-chmod 700 $COMMON_SCRIPT_HOME
-files=$(ls -r $CONFIG_HOME/common/destroy)
-for f in $files; do
-  eval "
-cat >$COMMON_SCRIPT_HOME/$f <<!
-$(<$CONFIG_HOME/common/destroy/$f)
-!
-"
-  chmod 400 $COMMON_SCRIPT_HOME/$f
-done
+# COMMON_SCRIPT_HOME=$MY_STATE/expanded-common-scripts/destroy
+# mkdir -p $COMMON_SCRIPT_HOME
+# chmod 700 $COMMON_SCRIPT_HOME
+# files=$(ls -r $CONFIG_HOME/common/destroy)
+# for f in $files; do
+#   eval "
+# cat >$COMMON_SCRIPT_HOME/$f <<!
+# $(<$CONFIG_HOME/common/destroy/$f)
+# !
+# "
+#   chmod 400 $COMMON_SCRIPT_HOME/$f
+# done
 
 
 # Execute DB destroy scripts
@@ -71,7 +71,7 @@ rm -rf $COMMON_SCRIPT_HOME
 
 
 # Clean up the object store
-if test $DB_DEPLOYMENT == "2PDB" && test $DB_TYPE == "ATP"; then
+if test $DB_DEPLOYMENT == "2DB" && test $DB_TYPE == "ATP"; then
   # Delete Authenticated Link to Wallet
   if !  test -f $MY_STATE/DB1_state_cwallet_auth_url || test -f $MY_STATE/DB2_state_cwallet_auth_url; then
     PARIDS=`oci os preauth-request list --bucket-name "$CWALLET_OS_BUCKET" --query "join(' ',data[*].id)" --raw-output`

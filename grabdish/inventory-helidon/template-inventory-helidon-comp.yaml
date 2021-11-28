@@ -20,21 +20,21 @@ spec:
         podSpec:
           containers:
             - name: inventory
-              image: %DOCKER_REGISTRY%/inventory-helidon:0.1
+              image: ${DOCKER_REGISTRY}/inventory-helidon:0.1
               imagePullPolicy: Always
               env:
                 - name: oracle.ucp.jdbc.PoolDataSource.inventorypdb.user
                   value: "inventoryuser"
                 - name: oracle.ucp.jdbc.PoolDataSource.inventorypdb.URL
-                  value: "jdbc:oracle:thin:@%INVENTORY_PDB_NAME%_tp?TNS_ADMIN=/msdataworkshop/creds"
+                  value: "jdbc:oracle:thin:@${INVENTORY_DB_ALIAS}?TNS_ADMIN=/msdataworkshop/creds"
                 - name: orderqueuename
                   value: "AQ.ORDERQUEUE"
                 - name: inventoryqueuename
                   value: "AQ.inventoryqueue"
                 - name: OCI_REGION
-                  value: "%OCI_REGION%"
+                  value: "${OCI_REGION}"
                 - name: VAULT_SECRET_OCID
-                  value: "%VAULT_SECRET_OCID%"
+                  value: "${VAULT_SECRET_OCID}"
                 - name: dbpassword
                   valueFrom:
                     secretKeyRef:

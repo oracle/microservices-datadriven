@@ -30,7 +30,7 @@ if test -f $MY_STATE/state_provisioning_done; then
   if [[ ! "$BYO_DB_OCID" =~ ^ocid1\.autonomousdatabase ]]; then
     cd $MY_STATE/terraform
     export TF_VAR_ociCompartmentOcid="$COMPARTMENT_OCID"
-    export TF_VAR_ociRegionIdentifier="$REGION"
+    export TF_VAR_ociRegionIdentifier="$OCI_REGION"
     export TF_VAR_dbName="$DB_NAME"
     export TF_VAR_displayName="$DISPLAY_NAME"
 

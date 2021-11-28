@@ -15,19 +15,19 @@ spec:
     spec:
       containers:
       - name: supplier
-        image: %DOCKER_REGISTRY%/supplier-helidon-se:0.1
+        image: ${DOCKER_REGISTRY}/supplier-helidon-se:0.1
         imagePullPolicy: Always
         env:
         - name: database.user
           value: "INVENTORYUSER"
         - name: database.url
-          value: "jdbc:oracle:thin:@%INVENTORY_PDB_NAME%_tp?TNS_ADMIN=/msdataworkshop/creds"
+          value: "jdbc:oracle:thin:${INVENTORY_DB_ALIAS}?TNS_ADMIN=/msdataworkshop/creds"
         - name: inventoryqueuename
           value: "inventoryqueue"
         - name: OCI_REGION
-          value: "%OCI_REGION%"
+          value: "${OCI_REGION}"
         - name: VAULT_SECRET_OCID
-          value: "%VAULT_SECRET_OCID%"
+          value: "${%VAULT_SECRET_OCID}"
         - name: dbpassword
           valueFrom:
             secretKeyRef:

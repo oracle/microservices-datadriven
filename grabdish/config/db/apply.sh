@@ -18,14 +18,14 @@ export GRABDISH_LOG
 DB_PASSWORD=$(get_secret $DB_PASSWORD_SECRET)
 
 CONFIG_HOME=$GRABDISH_HOME/config/db
-if test $DB_DEPLOYMENT == "1PDB"; then
-  # 1PDB
-  SCRIPT_HOME=$CONFIG_HOME/1pdb/apply
+if test $DB_DEPLOYMENT == "1DB"; then
+  # 1DB
+  SCRIPT_HOME=$CONFIG_HOME/1db/apply
 else
-  # 2PDB
+  # 2DB
   if test $DB_TYPE == "ATP"; then
     # ATP
-    SCRIPT_HOME=$CONFIG_HOME/2pdb-atp/apply
+    SCRIPT_HOME=$CONFIG_HOME/2db-atp/apply
 
     # Create Object Store CWALLET objects and auth URLs for each database
     for db in DB1 DB2; do
@@ -52,7 +52,7 @@ else
     source $STATE_FILE
   else
     # Standard Database
-    SCRIPT_HOME=$CONFIG_HOME/2pdb-std/apply
+    SCRIPT_HOME=$CONFIG_HOME/2db-std/apply
   fi
 fi
 

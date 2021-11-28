@@ -115,12 +115,12 @@ done
 CONFIG_HOME=$GRABDISH_HOME/config/db
 
 
-DB_DEPLOYMENT='1PDB'
+DB_DEPLOYMENT='1DB'
 DB_TYPE=ATP
 
-if test $DB_DEPLOYMENT == "1PDB"; then
-  # 1PDB
-  SCRIPT_HOME=$CONFIG_HOME/1pdb/apply
+if test $DB_DEPLOYMENT == "1DB"; then
+  # 1DB
+  SCRIPT_HOME=$CONFIG_HOME/1db/apply
   ORDER_DB_TNS_ADMIN=$TNS_ADMIN
   INVENTORY_DB_TNS_ADMIN=$TNS_ADMIN
   ORDER_DB_ALIAS="$(state_get ORDER_DB_NAME)_tp"
@@ -128,10 +128,10 @@ if test $DB_DEPLOYMENT == "1PDB"; then
   state_set INVENTORY_DB_NAME "$(state_get ORDER_DB_NAME)"
   QUEUE_TYPE=teq
 else
-  # 2PDB
+  # 2DB
   if test $DB_TYPE == "ATP"; then
     # ATP
-    SCRIPT_HOME=$CONFIG_HOME/2pdb-atp/apply
+    SCRIPT_HOME=$CONFIG_HOME/2db-atp/apply
     ORDER_DB_TNS_ADMIN=$TNS_ADMIN
     INVENTORY_DB_TNS_ADMIN=$TNS_ADMIN
     ORDER_DB_ALIAS="$(state_get ORDER_DB_NAME)_tp"
@@ -141,7 +141,7 @@ else
     QUEUE_TYPE=stdq
   else
     # Standard Database
-    SCRIPT_HOME=$CONFIG_HOME/2pdb-std/apply
+    SCRIPT_HOME=$CONFIG_HOME/2db-std/apply
     ORDER_DB_TNS_ADMIN=$TNS_ADMIN
     INVENTORY_DB_TNS_ADMIN=$TNS_ADMIN
     ORDER_DB_ALIAS="$(state_get ORDER_DB_NAME)_tp"

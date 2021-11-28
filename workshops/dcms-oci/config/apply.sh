@@ -76,7 +76,7 @@ nohup $MY_CODE/background-builds.sh "$MY_STATE/background-builds" >>$DCMS_LOG_DI
 
 # Hard coded for now
 if ! state_done DB_DEPLOYMENT; then
-state_set DB_DEPLOYMENT 2PDB
+state_set DB_DEPLOYMENT 2DB
 fi
 
 if ! state_done DB_TYPE; then
@@ -333,7 +333,7 @@ export INVENTORY_DB_NAME='$(state_get DB2_NAME)'
 export INVENTORY_DB_TNS_ADMIN='$(state_get DB2_TNS_ADMIN)'
 export INVENTORY_DB_ALIAS='$(state_get DB2_ALIAS)'
 export OCI_REGION='$(state_get OCI_REGION)'
-export VAULT_SECRET_OCID='NA'
+export VAULT_SECRET_OCID=''
 !
 
 state_set_done SETUP_VERIFIED # Legacy
