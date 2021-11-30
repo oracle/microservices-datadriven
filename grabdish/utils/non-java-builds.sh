@@ -8,12 +8,9 @@ set -e
 NON_JAVA_POLYGLOT_BUILDS="foodwinepairing-python inventory-python inventory-nodejs inventory-dotnet inventory-go"
 # Run serially (Java)
 JAVA_POLYGLOT_BUILDS="inventory-helidon-se order-mongodb-kafka inventory-postgres-kafka inventory-springboot inventory-micronaut inventory-quarkus"
-# Run serially (Java)
-NON_JAVA_EXTRA_BUILDS=""
-JAVA_EXTRA_BUILDS=""
-# we provision a repos for db-log-exporter but it's in nested observability/db-log-exporter dir so not reusing BUILDS list to build (see DB_LOG_EXPORTER_BUILD below)
 
-REPOS="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se order-mongodb-kafka inventory-postgres-kafka inventory-springboot inventory-micronaut inventory-micronaut-native-image inventory-quarkus db-log-exporter foodwinepairing-python"
+# we provision a repos for db-log-exporter but it's in nested observability/db-log-exporter dir so not reusing BUILDS list to build (see DB_LOG_EXPORTER_BUILD below)
+REPOS="$NON_JAVA_POLYGLOT_BUILDS $JAVA_POLYGLOT_BUILDS db-log-exporter"
 
 # Provision Repos
 while ! state_done NON_JAVA_REPOS; do
