@@ -5,13 +5,12 @@
 # Fail on error
 set -e
 
-P2_BUILDS="foodwinepairing-python"
-P3_NON_JAVA_BUILDS="inventory-python inventory-nodejs inventory-dotnet inventory-go"
+NON_JAVA_POLYGLOT_BUILDS="foodwinepairing-python inventory-python inventory-nodejs inventory-dotnet inventory-go"
 # Run serially (Java)
-P3_JAVA_BUILDS="inventory-helidon-se order-mongodb-kafka inventory-postgres-kafka"
+JAVA_POLYGLOT_BUILDS="inventory-helidon-se order-mongodb-kafka inventory-postgres-kafka"
 # Run serially (Java)
-P4_NON_JAVA_BUILDS=""
-P4_JAVA_BUILDS="inventory-springboot inventory-micronaut inventory-quarkus"
+NON_JAVA_EXTRA_BUILDS=""
+JAVA_EXTRA_BUILDS="inventory-springboot inventory-micronaut inventory-quarkus"
 # we provision a repos for db-log-exporter but it's in nested observability/db-log-exporter dir so not reusing BUILDS list to build (see DB_LOG_EXPORTER_BUILD below)
 
 REPOS="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se order-mongodb-kafka inventory-postgres-kafka inventory-springboot inventory-micronaut inventory-micronaut-native-image inventory-quarkus db-log-exporter foodwinepairing-python"
@@ -40,55 +39,44 @@ done
 
 
 # Build P2_BUILDS images
-while ! state_done P2_BUILDS; do
-  for b in $P2_BUILDS; do
-    cd $GRABDISH_HOME/$b
-    echo "### building $b"
-    time ./build.sh &>> $GRABDISH_LOG/build-$b.log
-  done
-  wait
-  state_set_done P2_BUILDS
-done
-
-# Build P3_BUILDS images
-while ! state_done P3_BUILDS; do
-  for b in $P3_NON_JAVA_BUILDS; do
+while ! state_done POLYGLOT_BUILDS; do
+  for b in $NON_JAVA_POLYGLOT_BUILDS; do
     cd $GRABDISH_HOME/$b
     echo "### building $b"
     time ./build.sh &>> $GRABDISH_LOG/build-$b.log &
   done
 
   # Run serially because maven is unstable in parallel
-  for b in $P3_JAVA_BUILDS; do
+  for b in $JAVA_POLYGLOT_BUILDS; do
     cd $GRABDISH_HOME/$b
     echo "### building $b"
     time ./build.sh &>> $GRABDISH_LOG/build-$b.log
   done
   wait
-  state_set_done P3_BUILDS
+  state_set_done POLYGLOT_BUILDS
+  state_set_done NON_JAVA_BUILDS
 done
 
 if ! state_done NON_JAVA_BUILDS; then
-  state_set_done NON_JAVA_BUILDS
 fi
 
 
 # Build P4_BUILDS images
-while ! state_done P4_BUILDS; do
-  for b in $P4_NON_JAVA_BUILDS; do
+while ! state_done EXTRA_BUILDS; do
+  for b in $NON_JAVA_EXTRA_BUILDS; do
     cd $GRABDISH_HOME/$b
     echo "### building $b"
     time ./build.sh &>> $GRABDISH_LOG/build-$b.log &
   done
 
   # Run serially because maven is unstable in parallel
-  for b in $P4_JAVA_BUILDS; do
+  for b in $JAVA_EXTRA_BUILDS; do
     cd $GRABDISH_HOME/$b
     echo "### building $b"
     time ./build.sh &>> $GRABDISH_LOG/build-$b.log
   done
   wait
-  state_set_done P4_BUILDS
+  state_set_done EXTRA_BUILDS
 done
 
 
