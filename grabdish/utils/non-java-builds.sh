@@ -7,10 +7,10 @@ set -e
 
 NON_JAVA_POLYGLOT_BUILDS="foodwinepairing-python inventory-python inventory-nodejs inventory-dotnet inventory-go"
 # Run serially (Java)
-JAVA_POLYGLOT_BUILDS="inventory-helidon-se order-mongodb-kafka inventory-postgres-kafka"
+JAVA_POLYGLOT_BUILDS="inventory-helidon-se order-mongodb-kafka inventory-postgres-kafka inventory-springboot inventory-micronaut inventory-quarkus"
 # Run serially (Java)
 NON_JAVA_EXTRA_BUILDS=""
-JAVA_EXTRA_BUILDS="inventory-springboot inventory-micronaut inventory-quarkus"
+JAVA_EXTRA_BUILDS=""
 # we provision a repos for db-log-exporter but it's in nested observability/db-log-exporter dir so not reusing BUILDS list to build (see DB_LOG_EXPORTER_BUILD below)
 
 REPOS="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se order-mongodb-kafka inventory-postgres-kafka inventory-springboot inventory-micronaut inventory-micronaut-native-image inventory-quarkus db-log-exporter foodwinepairing-python"
@@ -55,25 +55,6 @@ while ! state_done POLYGLOT_BUILDS; do
   wait
   state_set_done POLYGLOT_BUILDS
   state_set_done NON_JAVA_BUILDS
-done
-
-
-# Build EXTRA_BUILDS images
-while ! state_done EXTRA_BUILDS; do
-  for b in $NON_JAVA_EXTRA_BUILDS; do
-    cd $GRABDISH_HOME/$b
-    echo "### building $b"
-    time ./build.sh &>> $GRABDISH_LOG/build-$b.log &
-  done
-
-  # Run serially because maven is unstable in parallel
-  for b in $JAVA_EXTRA_BUILDS; do
-    cd $GRABDISH_HOME/$b
-    echo "### building $b"
-    time ./build.sh &>> $GRABDISH_LOG/build-$b.log
-  done
-  wait
-  state_set_done EXTRA_BUILDS
 done
 
 
