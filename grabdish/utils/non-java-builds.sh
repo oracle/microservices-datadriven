@@ -38,7 +38,7 @@ while ! state_done JAVA_BUILDS; do
 done
 
 
-# Build P2_BUILDS images
+# Build POLYGLOT_BUILDS images
 while ! state_done POLYGLOT_BUILDS; do
   for b in $NON_JAVA_POLYGLOT_BUILDS; do
     cd $GRABDISH_HOME/$b
@@ -57,11 +57,8 @@ while ! state_done POLYGLOT_BUILDS; do
   state_set_done NON_JAVA_BUILDS
 done
 
-if ! state_done NON_JAVA_BUILDS; then
-fi
 
-
-# Build P4_BUILDS images
+# Build EXTRA_BUILDS images
 while ! state_done EXTRA_BUILDS; do
   for b in $NON_JAVA_EXTRA_BUILDS; do
     cd $GRABDISH_HOME/$b
