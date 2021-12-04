@@ -5,7 +5,7 @@
 # Make sure this is run via source or .
 
 if ! provisioning-helper-pre-apply; then
-  return 1
+  exit 1
 fi
 
 STATE_STORE_STATE_DIR=$MY_STATE/state

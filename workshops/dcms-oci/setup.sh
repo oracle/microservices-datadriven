@@ -41,8 +41,9 @@ case "$DCMS_SS_STATUS" in
     ;;
 
   apply-failed | none)
-    # Start or restart the vault setup
+    # Start or restart the state_store setup
     cd $DCMS_STATE_STORE
+    echo "STATE_LOG='$DCMS_LOG_DIR/state.log'" > $DCMS_STATE_STORE/input.env
     if provisioning-apply $MSDD_INFRA_CODE/state_store; then
       source $DCMS_STATE_STORE/output.env
     else

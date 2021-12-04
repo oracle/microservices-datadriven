@@ -3,7 +3,7 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 if ! provisioning-helper-pre-apply; then
-  return 1
+  exit 1
 fi
 
 VAULT_FOLDER=$MY_STATE/vault
