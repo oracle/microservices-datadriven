@@ -44,16 +44,14 @@ case "$DCMS_SS_STATUS" in
     # Start or restart the state_store setup
     cd $DCMS_STATE_STORE
     echo "STATE_LOG='$DCMS_LOG_DIR/state.log'" > $DCMS_STATE_STORE/input.env
-    if provisioning-apply $MSDD_INFRA_CODE/state_store; then
-      source $DCMS_STATE_STORE/output.env
-    else
+    if !provisioning-apply $MSDD_INFRA_CODE/state_store; then
       echo "ERROR: Failed to create state_store in $DCMS_STATE_STORE"
       exit 1
     fi
     ;;
 
 esac
-
+source $DCMS_STATE_STORE/output.env
 
 # Get the vault status
 if ! DCMS_VAULT_STATUS=$(provisioning-get-status $DCMS_VAULT); then
@@ -81,15 +79,14 @@ case "$DCMS_VAULT_STATUS" in
   apply-failed | none)
     # Start or restart the vault setup
     cd $DCMS_VAULT
-    if provisioning-apply $MSDD_INFRA_CODE/vault/folder; then
-      source $DCMS_VAULT/output.env
-    else
+    if ! provisioning-apply $MSDD_INFRA_CODE/vault/folder; then
       echo "ERROR: Failed to create vault in $DCMS_VAULT"
       exit 1
     fi
     ;;
 
 esac
+source $DCMS_VAULT/output.env
 
 # Start background builds
 nohup $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/config/background-builds.sh "$DCMS_BACKGROUND_BUILDS" >>$DCMS_LOG_DIR/background-builds.log 2>&1 &
@@ -259,7 +256,7 @@ done
 
 # Create or validate the compartment
 while ! state_done COMPARTMENT_OCID; do
-  if test "$RUN_TYPE" == 'LL'; then
+  if test "$(state_get RUN_TYPE)" == 'LL'; then
     # The compartment is already created.  Ask for the OCID
     read -p "Please enter your OCI compartment's OCID: " COMPARTMENT_OCID
     if ! oci iam compartment get --compartment-id "$COMPARTMENT_OCID" 2>&1 >$DCMS_LOG_DIR/comp_ocid_err; then
