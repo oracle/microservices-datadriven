@@ -44,7 +44,7 @@ case "$DCMS_SS_STATUS" in
     # Start or restart the state_store setup
     cd $DCMS_STATE_STORE
     echo "STATE_LOG='$DCMS_LOG_DIR/state.log'" > $DCMS_STATE_STORE/input.env
-    if !provisioning-apply $MSDD_INFRA_CODE/state_store; then
+    if ! provisioning-apply $MSDD_INFRA_CODE/state_store; then
       echo "ERROR: Failed to create state_store in $DCMS_STATE_STORE"
       exit 1
     fi
