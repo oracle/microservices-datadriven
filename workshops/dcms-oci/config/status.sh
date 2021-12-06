@@ -12,7 +12,7 @@ THREADS="db build-prep k8s grabdish"
 for t in $THREADS; do
   THREAD_STATE=$DCMS_THREAD_STATE/$t
   STATUS=$(provisioning-get-status $THREAD_STATE)
-  printf "Thread %8s: Status: %9s Log: %s" "$t" "$STATUS" "$DCMS_LOG_DIR/$t-thread.log"
+  printf "Thread %8s: Status: %9s Log: %s" "$t" "$STATUS" "$DCMS_LOG_DIR/$t-thread.log\n"
 done
 
 for t in $THREADS; do
@@ -22,7 +22,6 @@ for t in $THREADS; do
     # Skip this log
     continue
   fi
-  echo
-  echo "Thread $t Most recent log:"
+  printf "\nThread %8s: Most recent log entry:\n" "$t"
   tail -1 $DCMS_LOG_DIR/$t-thread.log
 done

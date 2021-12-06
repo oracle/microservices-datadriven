@@ -89,7 +89,8 @@ esac
 source $DCMS_VAULT/output.env
 
 # Start background builds
-nohup $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/config/background-builds.sh "$DCMS_BACKGROUND_BUILDS" >>$DCMS_LOG_DIR/background-builds.log 2>&1 &
+cd $DCMS_BACKGROUND_BUILDS
+nohup $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-builds.sh >>$DCMS_LOG_DIR/background-builds.log 2>&1 &
 
 # Get the setup status
 if ! DCMS_STATUS=$(provisioning-get-status $DCMS_STATE); then
