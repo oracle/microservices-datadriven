@@ -1,0 +1,51 @@
+set cloudconfig ./aqWorkflow/network/admin/wallet.zip
+--connect DBUSER/"&password"@AQDATABASE_TP ;
+connect DBUSER/"Mayanktayal1234"@AQDATABASE_TP ;
+
+CREATE type Message_type as object (subject     VARCHAR2(30), text        VARCHAR2(80));  
+/
+-- Creating an Object type queue 
+BEGIN
+ DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
+     queue_name=>'objType_TEQ',
+     storage_clause=>null, 
+     multiple_consumers=>true, 
+     max_retries=>10,
+     comment=>'ObjectType for TEQ', 
+     queue_payload_type=>'Message_type', 
+     queue_properties=>null, 
+     replication_mode=>null);
+ DBMS_AQADM.START_QUEUE (queue_name=> 'objType_TEQ', enqueue =>TRUE, dequeue=> True); 
+END;
+/
+
+-- Creating a RAW type queue: 
+BEGIN
+ DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
+     queue_name=>'rawType_TEQ',
+     storage_clause=>null, 
+     multiple_consumers=>true, 
+     max_retries=>10,
+     comment=>'RAW type for TEQ', 
+     queue_payload_type=>'RAW', 
+     queue_properties=>null, 
+     replication_mode=>null);
+ DBMS_AQADM.START_QUEUE (queue_name=> 'rawType_TEQ', enqueue =>TRUE, dequeue=> True); 
+END;
+/
+
+--Creating JSON type queue:
+BEGIN
+ DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
+     queue_name=>'jsonType_TEQ',
+     storage_clause=>null, 
+     multiple_consumers=>true, 
+     max_retries=>10,
+     comment=>'jsonType for TEQ', 
+     queue_payload_type=>'JSON', 
+     queue_properties=>null, 
+     replication_mode=>null);
+ DBMS_AQADM.START_QUEUE (queue_name=> 'jsonType_TEQ', enqueue =>TRUE, dequeue=> True); 
+END;
+/
+       
