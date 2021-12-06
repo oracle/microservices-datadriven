@@ -36,8 +36,6 @@ while true; do
     case "$STATUS" in
       applied | byo)
         # Nothing to do
-        echo "Setup is completed"
-        exit
         ;;
 
       apply)

@@ -11,11 +11,9 @@ if ! provisioning-helper-pre-destroy; then
 fi
 
 
-# Source the vault
-VAULT=$DCMS_INFRA_STATE/vault
-if test -f $VAULT/output.env; then
-  source $VAULT/output.env
-fi
+export DCMS_INFRA_STATE=$DCMS_STATE/infra
+export DCMS_APP_STATE=$DCMS_STATE/grabdish
+export DCMS_THREAD_STATE=$DCMS_STATE/threads
 
 
 # Start the background destroy threads
@@ -28,41 +26,40 @@ for t in $THREADS; do
 done
 
 
-# Wait for the threads to undo the setup
-DEPENDENCIES='DB_THREAD K8S_THREAD BUILD_PREP_THREAD GRABDISH_THREAD'
-while ! test -z "$DEPENDENCIES"; do
-  WAITING_FOR=""
-  for d in $DEPENDENCIES; do
-    if state_done $d; then
-      WAITING_FOR="$WAITING_FOR $d"
-    fi
+# Check the threads
+while true; do
+  sleep 10
+  RUNNING_THREADS=''
+  for t in $THREADS; do
+    THREAD_STATE=$DCMS_THREAD_STATE/$t
+    STATUS=$(provisioning-get-status $THREAD_STATE)
+    case "$STATUS" in
+      none | byo)
+        # Nothing to do
+        ;;
+
+      destroy)
+        RUNNING_THREADS="$RUNNING_THREADS $t"
+        ;;
+
+      destroy-failed)
+        # Thread failed so exit
+        echo "ERROR: Thread $t failed"
+        exit 1
+        ;;
+
+      *)
+        # Unexpected status
+        echo "ERROR: Unexpected status of thread $t"
+        exit 1
+        ;;
+    esac
   done
-  DEPENDENCIES="$WAITING_FOR"
-  echo "Waiting for $DEPENDENCIES to be undone"
-  sleep 5
+  if test -z "$RUNNING_THREADS"; then
+    # Setup completed
+    break
+  fi
+  echo "Running threads $RUNNING_THREADS"
 done
-
-
-# Logout of docker
-if state_done DOCKER_REGISTRY; then
-   docker logout "$(state_get REGION).ocir.io" 
-   state_reset DOCKER_REGISTRY
-fi
-
-
-# Destroy the vault
-VAULT=$DCMS_INFRA_STATE/vault
-if test -d $VAULT; then
-  cd $VAULT
-  provisioning-destroy
-fi
-
-
-# Destroy the state store.  This unsets all the other state variables.
-STATE_STORE=$DCMS_INFRA_STATE/state_store
-if test -d $STATE_STORE; then
-  cd $STATE_STORE
-  provisioning-destroy
-fi
 
 rm -f $STATE_FILE
