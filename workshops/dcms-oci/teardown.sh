@@ -28,7 +28,7 @@ fi
 
 case "$DCMS_STATUS" in
 
-  none | byo | destroy)
+  new | destroyed | byo | destroy)
     # Nothing to do
     ;;
 

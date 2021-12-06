@@ -34,7 +34,7 @@ while true; do
     THREAD_STATE=$DCMS_THREAD_STATE/$t
     STATUS=$(provisioning-get-status $THREAD_STATE)
     case "$STATUS" in
-      none | byo)
+      new | destroyed | byo)
         # Nothing to do
         ;;
 

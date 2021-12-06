@@ -34,13 +34,13 @@ case "$DCMS_SS_STATUS" in
     exit
     ;;
 
-  destroy-failed | destroy)
+  destroy-failed | destroy | destroyed)
     # Cannot setup during destroy phase
     echo "ERROR: Destroy is running and so cannot run setup"
     exit 1
     ;;
 
-  apply-failed | none)
+  apply-failed | new)
     # Start or restart the state_store setup
     cd $DCMS_STATE_STORE
     echo "STATE_LOG='$DCMS_LOG_DIR/state.log'" > $DCMS_STATE_STORE/input.env
@@ -70,13 +70,13 @@ case "$DCMS_VAULT_STATUS" in
     exit
     ;;
 
-  destroy-failed | destroy)
+  destroy-failed | destroy | destroyed)
     # Cannot setup during destroy phase
     echo "ERROR: Destroy is running and so cannot run setup"
     exit 1
     ;;
 
-  apply-failed | none)
+  apply-failed | new)
     # Start or restart the vault setup
     cd $DCMS_VAULT
     if ! provisioning-apply $MSDD_INFRA_CODE/vault/folder; then
@@ -111,7 +111,7 @@ case "$DCMS_STATUS" in
     exit
     ;;
 
-  destroy | destroy-failed)
+  destroy | destroy-failed | destroyed)
     # Cannot setup during destroy phase
     echo "ERROR: Destroy is running and so cannot run setup"
     exit 1
@@ -125,7 +125,7 @@ case "$DCMS_STATUS" in
     exit
     ;;
 
-  none)
+  new)
     # New setup
     ;;
 
@@ -134,10 +134,12 @@ esac
 ##### New Setup
 
 # Register our source.env in .bash_profile
-if test -f ~/.bash_profile; then
-  sed -i.bak '/microservices-datadriven/d' ~/.bash_profile
+PROF=~/.bashrc
+if test -f "$PROF"; then
+  sed -i.bak '/microservices-datadriven/d' $PROF
 fi
-echo "source $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/source.env" >>~/.bash_profile
+echo "source $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/source.env #microservices-datadriven" >>$PROF
+echo "Running workshop from folder $MSDD_WORKSHOP_CODE #microservices-datadriven" >>$PROF
 
 # Check that the prerequisite utils are installed
 for util in oci kubectl terraform docker mvn ssh sqlplus helm; do
