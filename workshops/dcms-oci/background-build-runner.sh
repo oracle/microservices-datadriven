@@ -6,11 +6,6 @@
 # Fail on error
 set -eu
 
-if test -z "$1"; then
-  echo "ERROR: Usage background-builds.sh <BUILD_NAME>"
-  exit
-fi
-
 BUILD="$1"
 
 MY_STATE=$PWD
@@ -42,5 +37,5 @@ fi
 
 echo "Build of $BUILD starting in $PWD"
 time ./build.sh
-echo Build of $BUILD completed"
+echo "Build of $BUILD completed"
 state_set_done BUILD_$BUILD

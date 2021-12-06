@@ -34,6 +34,7 @@ echo "Overall provisioning status: $DCMS_STATUS"
 
 $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/config/status.sh
 
+echo
 echo "Build status:"
 BUILDS="$LAB2_JAVA_BUILDS $LAB2_NON_JAVA_BUILDS $LAB3_JAVA_BUILDS $LAB3_NON_JAVA_BUILDS"
 RUNNING_BUILDS=""
@@ -46,10 +47,14 @@ for b in $BUILDS; do
       COMPLETED_BUILDS=" $b"
     else
       PID_FILE="$DCMS_BACKGROUND_BUILDS/$b/PID"
-      if ! ps -fp $(<$PID_FILE) >>/dev/null 2>&1; then
-        FAILED_BUILDS=" $b"
+      if test -f $PID_FILE; then
+        if ! ps -fp $(<$PID_FILE) >>/dev/null 2>&1; then
+          FAILED_BUILDS=" $b"
+        else
+          RUNNING_BUILDS=" $b"
+        fi
       else
-        RUNNING_BUILDS=" $b"
+        echo "Unknown status for build $b log $DCMS_LOG_DIR/build_$b.log"
       fi
     fi
   else

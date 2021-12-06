@@ -7,11 +7,6 @@
 set -eu
 
 
-if test -z "$1"; then
-  echo "ERROR: Usage background-builds.sh"
-  exit
-fi
-
 MY_STATE=$PWD
 
 # Wait for dependencies
@@ -38,14 +33,14 @@ for b in $LAB2_NON_JAVA_BUILDS; do
   mkdir -p $MY_STATE/$b
   cd $MY_STATE/$b
   # Run non-java in parallel
-  $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background_build_runner.sh >>DCMS_LOG_DIR/build_$b.log 2>&1 &
+  $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-build-runner.sh "$b" >>$DCMS_LOG_DIR/build_$b.log 2>&1 &
 done
 
 for b in $LAB2_JAVA_BUILDS; do
   mkdir -p $MY_STATE/$b
   cd $MY_STATE/$b
   # Run java serially
-  $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background_build_runner.sh >>DCMS_LOG_DIR/build_$b.log 2>&1 &
+  $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-build-runner.sh "$b" >>$DCMS_LOG_DIR/build_$b.log 2>&1 &
 done
 
 # Wait for Lab2 builds
@@ -55,12 +50,12 @@ for b in $LAB3_NON_JAVA_BUILDS; do
   mkdir -p $MY_STATE/$b
   cd $MY_STATE/$b
   # Run non-java in parallel
-  $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background_build_runner.sh >>DCMS_LOG_DIR/build_$b.log 2>&1 &
+  $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-build-runner.sh "$b" >>$DCMS_LOG_DIR/build_$b.log 2>&1 &
 done
 
 for b in $LAB3_JAVA_BUILDS; do
   mkdir -p $MY_STATE/$b
   cd $MY_STATE/$b
   # Run java serially
-  $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background_build_runner.sh >>DCMS_LOG_DIR/build_$b.log 2>&1 &
+  $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-build-runner.sh "$b" >>$DCMS_LOG_DIR/build_$b.log 2>&1 &
 done
