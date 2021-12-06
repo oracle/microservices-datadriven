@@ -12,7 +12,7 @@ THREADS="db build-prep k8s grabdish"
 for t in $THREADS; do
   THREAD_STATE=$DCMS_THREAD_STATE/$t
   STATUS=$(provisioning-get-status $THREAD_STATE)
-  echo "Thread $t status $STATUS"
+  echo "Thread $t status: $STATUS"
   tail -1 $DCMS_LOG_DIR/$t-thread.log
   echo
 done

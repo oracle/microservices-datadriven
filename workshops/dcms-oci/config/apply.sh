@@ -33,7 +33,7 @@ while true; do
   for t in $THREADS; do
     THREAD_STATE=$DCMS_THREAD_STATE/$t
     STATUS=$(provisioning-get-status $THREAD_STATE)
-    case "$DCMS_STATUS" in
+    case "$STATUS" in
       applied | byo)
         # Nothing to do
         echo "Setup is completed"

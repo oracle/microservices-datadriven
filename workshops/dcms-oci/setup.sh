@@ -301,12 +301,12 @@ while ! state_done COMPARTMENT_OCID; do
     PARENT_COMPARTMENT_OCID="$(state_get TENANCY_OCID)"
   fi
 
-  COMPARTMENT_OCID=`oci iam compartment create --region $HOME_REGION --compartment-id "$PARENT_COMPARTMENT_OCID" --name "$COMP" --description "GrabDish Workshop $(state_get RUN_NAME)" --query 'data.id' --raw-output`
+  COMPARTMENT_OCID=`oci iam compartment create --region "$(state_get HOME_REGION)" --compartment-id "$PARENT_COMPARTMENT_OCID" --name "$COMP" --description "GrabDish Workshop $(state_get RUN_NAME)" --query 'data.id' --raw-output`
   state_set COMPARTMENT_OCID $COMPARTMENT_OCID
 done
 
 # Wait for the compartment to become active
-while ! test `oci iam compartment get --compartment-id "$COMPARTMENT_OCID" --query 'data."lifecycle-state"' --raw-output 2>/dev/null`"" == 'ACTIVE'; do
+while ! test `oci iam compartment get --compartment-id "$(state_get COMPARTMENT_OCID)" --query 'data."lifecycle-state"' --raw-output 2>/dev/null`"" == 'ACTIVE'; do
   echo "Waiting for the compartment to become ACTIVE"
   sleep 5
 done
