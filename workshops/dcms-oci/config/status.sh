@@ -12,11 +12,12 @@ THREADS="db build-prep k8s grabdish"
 for t in $THREADS; do
   THREAD_STATE=$DCMS_THREAD_STATE/$t
   STATUS=$(provisioning-get-status $THREAD_STATE)
-  printf "Thread %10s: Status: %14s\n" "$t" "$STATUS" 
+  printf "Thread %-10s: Status: %s\n" "$t" "$STATUS" 
   if [[ "$STATUS" =~ byo|new|applied|destroyed ]]; then
     # Skip this log
     continue
   fi
   printf "  Most recent entry in log %s:\n" "$DCMS_LOG_DIR/$t-thread.log"
-  printf "  %s\n\n" `tail -1 $DCMS_LOG_DIR/$t-thread.log`
+  LAST_LOG=`tail -1 $DCMS_LOG_DIR/$t-thread.log`
+  printf "  %-100s\n\n" "$LAST_LOG"
 done

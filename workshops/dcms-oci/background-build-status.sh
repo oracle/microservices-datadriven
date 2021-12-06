@@ -9,7 +9,7 @@ set -eu
 LAB="$1"
 LAB_UPPER=`echo $LAB | tr '[:lower:]' '[:upper:]'`
 
-printf "$LAB builds: "
+printf "$LAB builds:"
 JAVA_BUILDS_VAR="${LAB_UPPER}_JAVA_BUILDS"
 NON_JAVA_BUILDS_VAR="${LAB_UPPER}_NON_JAVA_BUILDS"
 BUILDS="${!JAVA_BUILDS_VAR} ${!NON_JAVA_BUILDS_VAR}"
@@ -40,19 +40,19 @@ for b in $BUILDS; do
 done
 
 if ! test -z "$COMPLETED_BUILDS"; then
-  printf " Completed: $COMPLETED_BUILDS"
+  printf " Completed:$COMPLETED_BUILDS "
 fi
 
 if ! test -z "$RUNNING_BUILDS"; then
-  printf " Running: $RUNNING_BUILDS"
+  printf " Running:$RUNNING_BUILDS "
 fi
 
 if ! test -z "$TO_BE_RUN_BUILDS"; then
-  printf " Waiting to run: $TO_BE_RUN_BUILDS"
+  printf " Waiting to run:$TO_BE_RUN_BUILDS "
 fi
 
 if ! test -z "$FAILED_BUILDS"; then
-  printf " Failed: $FAILED_BUILDS"
+  printf " Failed:$FAILED_BUILDS "
 fi
 
 echo
