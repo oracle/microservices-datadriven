@@ -118,21 +118,3 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
 
 
 }
-
-
-        QueueConnectionFactory qcfact = AQjmsFactory.getQueueConnectionFactory(inventoryResource.atpInventoryPDB);
-        QueueConnection qconn = qcfact.createQueueConnection(inventoryResource.inventoryuser, inventoryResource.inventorypw);
-        QueueSession qsess = qconn.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
-        qconn.start();
-        Queue queue = ((AQjmsSession) qsess).getQueue(inventoryResource.inventoryuser, inventoryResource.orderQueueName);
-        AQjmsConsumer consumer = (AQjmsConsumer) qsess.createConsumer(queue);
-        // Dequeue from order queue
-        TextMessage orderMessage = (TextMessage) (consumer(-1));
-        Connection connection = session.getDBConnection();
-        // use connection to query inventory status
-        Topic inventoryTopic = session.getTopic(InventoryResource.inventoryuser, InventoryResource.inventoryQueueName);
-        TextMessage objmsg = session.createTextMessage();
-        TopicPublisher publisher = session.createPublisher(inventoryTopic);
-        // Enqueue the response on the inventory queue and commit
-        publisher.publish(inventoryTopic, objmsg, DeliveryMode.PERSISTENT, 2, AQjmsConstants.EXPIRATION_NEVER);
-        qsess.commit();
