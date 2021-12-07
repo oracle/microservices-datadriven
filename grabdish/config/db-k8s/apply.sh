@@ -33,6 +33,7 @@ rm -f $TEMP_OUTPUT
 # Create db-wallet-secret for each database
 for db in order_db inventory_db; do
   db_upper=`echo $db | tr '[:lower:]' '[:upper:]'`
+  db_dash=`echo $db | tr '_' '-'`
   TNS_ADMIN_VARIABLE="${db_upper}_TNS_ADMIN"
   TNS_ADMIN=${!TNS_ADMIN_VARIABLE}
   if ! test -d $TNS_ADMIN; then
@@ -63,9 +64,9 @@ data:
   truststore.jks: $(base64-encode truststore.jks)
 kind: Secret
 metadata:
-  name: ${db}-tns-admin-secret
+  name: ${db_dash}-tns-admin-secret
 !
-  echo "${db_upper}_TNS_ADMIN_SECRET=${db}-tns-admin-secret" >> $TEMP_OUTPUT
+  echo "${db_upper}_TNS_ADMIN_SECRET='${db_dash}-tns-admin-secret'" >> $TEMP_OUTPUT
 done
 
 

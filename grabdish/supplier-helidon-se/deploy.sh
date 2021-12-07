@@ -4,4 +4,4 @@
 
 
 SCRIPT_DIR=$(dirname $0)
-k8s-deploy "$SCRIPT_DIR" "$K8S_NAMESPACE" 'supplier-helidon-se-deployment.yaml supplier-helidon-se-service.yaml' 'DOCKER_REGISTRY INVENTORY_DB_ALIAS'
+k8s-deploy "$SCRIPT_DIR" "$K8S_NAMESPACE" 'supplier-helidon-se-deployment.yaml supplier-helidon-se-service.yaml' 'DOCKER_REGISTRY INVENTORY_DB_ALIAS INVENTORY_DB_TNS_ADMIN_SECRET'
