@@ -75,4 +75,5 @@ export INVENTORY_DB_TNS_ADMIN='$(state_get DB2_TNS_ADMIN)'
 export INVENTORY_DB_ALIAS='$(state_get DB2_ALIAS)'
 export OCI_REGION='$(state_get OCI_REGION)'
 export VAULT_SECRET_OCID=''
+export K8S_NAMESPACE='msdataworkshop'
 !
