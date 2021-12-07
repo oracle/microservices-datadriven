@@ -140,7 +140,7 @@ if test -f "$PROF"; then
   sed -i.bak '/microservices-datadriven/d' $PROF
 fi
 echo "source $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/source.env #microservices-datadriven" >>$PROF
-echo "Running workshop from folder $MSDD_WORKSHOP_CODE #microservices-datadriven" >>$PROF
+echo 'echo "Running workshop from folder $MSDD_WORKSHOP_CODE #microservices-datadriven"' >>$PROF
 
 # Check that the prerequisite utils are installed
 for util in oci kubectl terraform docker mvn ssh sqlplus helm; do
