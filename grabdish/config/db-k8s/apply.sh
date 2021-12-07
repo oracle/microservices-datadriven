@@ -31,7 +31,7 @@ TEMP_OUTPUT=$MY_STATE/temp_output.env
 rm -f $TEMP_OUTPUT
 
 # Create db-wallet-secret for each database
-for db in db1 db2; do
+for db in order_db inventory_db; do
   db_upper=`echo $db | tr '[:lower:]' '[:upper:]'`
   TNS_ADMIN_VARIABLE="${db_upper}_TNS_ADMIN"
   TNS_ADMIN=${!TNS_ADMIN_VARIABLE}
@@ -63,9 +63,9 @@ data:
   truststore.jks: $(base64-encode truststore.jks)
 kind: Secret
 metadata:
-  name: ${db}-wallet-secret
+  name: ${db}-tns-admin-secret
 !
-  echo "${db_upper}_WALLET_SECRET=${db}-wallet-secret" >> $TEMP_OUTPUT
+  echo "${db_upper}_TNS_ADMIN_SECRET=${db}-tns-admin-secret" >> $TEMP_OUTPUT
 done
 
 

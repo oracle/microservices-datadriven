@@ -61,7 +61,7 @@ spec:
       volumes:
       - name: creds
         secret:
-          secretName: db-wallet-secret
+          secretName: ${ORDER_DB_TNS_ADMIN_SECRET}
       topologySpreadConstraints:
       - maxSkew: 1
         topologyKey: kubernetes.io/hostname

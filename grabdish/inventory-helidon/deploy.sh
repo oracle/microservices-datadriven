@@ -12,4 +12,4 @@ if [ -z "$IS_SUGGESTIVE_SALE_ENABLED" ]; then
   export IS_SUGGESTIVE_SALE_ENABLED=false
 fi
 
-k8s-deploy "$SCRIPT_DIR" "$K8S_NAMESPACE" 'inventory-helidon-deployment.yaml inventory-service.yaml' 'DOCKER_REGISTRY INVENTORY_DB_ALIAS'
+k8s-deploy "$SCRIPT_DIR" "$K8S_NAMESPACE" 'inventory-helidon-deployment.yaml inventory-service.yaml' 'DOCKER_REGISTRY INVENTORY_DB_ALIAS INVENTORY_DB_TNS_ADMIN_SECRET'
