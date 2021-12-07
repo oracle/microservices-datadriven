@@ -1,7 +1,9 @@
-set cloudconfig ./aqWorkflow/network/admin/wallet.zip
+set cloudconfig ./oracleAQ/network/admin/wallet.zip
 show tns
 connect admin/"WelcomeAQ1234"@AQDATABASE_TP
-CREATE USER DBUSER IDENTIFIED BY "&&password" ;
+--CREATE USER DBUSER IDENTIFIED BY "&&password" ;
+CREATE USER DBUSER IDENTIFIED BY "WelcomeAQ1234" ;
+
 GRANT execute on DBMS_AQ TO DBUSER;
 GRANT CREATE SESSION TO DBUSER;
 GRANT RESOURCE TO DBUSER;

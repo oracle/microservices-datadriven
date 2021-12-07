@@ -1,2 +1,2 @@
 cd $HOME ;
-sql /nolog @$HOME/teqWorkflowEnqueue.sql
+sql /nolog @$HOME/oracleAQ/teqWorkflowEnqueue.sql

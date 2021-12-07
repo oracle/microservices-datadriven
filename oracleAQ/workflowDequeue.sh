@@ -1,2 +1,2 @@
 cd $HOME ;
-sql /nolog @$HOME/workflowDequeueUserDeli.sql
+sql /nolog @$HOME/oracleAQ/workflowDequeueUserDeli.sql

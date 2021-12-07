@@ -1,2 +1,2 @@
 cd $HOME ;
-sql /nolog @$HOME/basicCreateQueue.sql
+sql /nolog @$HOME/oracleAQ/basicCreateQueue.sql

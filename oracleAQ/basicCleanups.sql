@@ -1,7 +1,7 @@
  
- set cloudconfig ./aqWorkflow/network/admin/wallet.zip
+ set cloudconfig ./oracleAQ/network/admin/wallet.zip
 --connect DBUSER/"&password"@AQDATABASE_TP ;
-connect DBUSER/"Mayanktayal1234"@AQDATABASE_TP ;
+connect DBUSER/"WelcomeAQ1234"@AQDATABASE_TP ;
 /
 --Clean up all objects related to the obj type: */
 EXECUTE DBMS_AQADM.STOP_QUEUE ( queue_name       => 'objType_classicQueue');  

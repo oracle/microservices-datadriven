@@ -1,2 +1,2 @@
 cd $HOME ;
-sql /nolog @$HOME/teqWorkflowCleanups.sql
+sql /nolog @$HOME/oracleAQ/teqWorkflowCleanups.sql

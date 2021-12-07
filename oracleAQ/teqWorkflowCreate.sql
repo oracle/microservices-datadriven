@@ -1,6 +1,6 @@
-set cloudconfig ./aqWorkflow/network/admin/wallet.zip
+set cloudconfig ./oracleAQ/network/admin/wallet.zip
 --connect DBUSER/"&password"@AQDATABASE_TP ;
-connect DBUSER/"Mayanktayal1234"@AQDATABASE_TP ;
+connect DBUSER/"WelcomeAQ1234"@AQDATABASE_TP ;
 
 CREATE TYPE Message_typeTEQ AS OBJECT (ORDERID NUMBER(10), USERNAME VARCHAR2(255), OTP NUMBER(4), DELIVERY_STATUS VARCHAR2(10),DELIVERY_LOCATION VARCHAR2(255)); 
 /

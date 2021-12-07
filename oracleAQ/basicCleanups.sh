@@ -1,2 +1,2 @@
 cd $HOME ;
-sql /nolog @$HOME/basicCleanups.sql
+sql /nolog @$HOME/oracleAQ/basicCleanups.sql

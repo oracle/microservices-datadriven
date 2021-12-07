@@ -1,7 +1,7 @@
 
-set cloudconfig ./aqWorkflow/network/admin/wallet.zip
+set cloudconfig ./oracleAQ/network/admin/wallet.zip
 --connect DBUSER/"&password"@AQDATABASE_TP ;
-connect DBUSER/"Mayanktayal1234"@AQDATABASE_TP ;
+connect DBUSER/"WelcomeAQ1234"@AQDATABASE_TP ;
 
 --user and delivery enqueue
 DECLARE
@@ -20,12 +20,12 @@ BEGIN
 
     SELECT ORDERID INTO chkOrderId FROM USERDETAILS WHERE ORDERID=orderId;
 
-WHILE(chkOrderId is not null)
-    IF  chkOrderId is not NULL then
-      orderId := dbms_random.value(10000,99999);
-      SELECT ORDERID INTO chkOrderId FROM USERDETAILS WHERE ORDERID=orderId;
-    END IF;
-END LOOP;
+-- WHILE(chkOrderId is not null)
+--     IF  chkOrderId is not NULL then
+--       orderId := dbms_random.value(10000,99999);
+--       SELECT ORDERID INTO chkOrderId FROM USERDETAILS WHERE ORDERID=orderId;
+--     END IF;
+-- END LOOP;
     user_message := Message_typ(orderId,'User', otp, 'PENDING', 'US');
     --Deliverer will not have OTP
     delivery_message := Message_typ(orderId, 'User', 0, 'PENDING', 'US');
