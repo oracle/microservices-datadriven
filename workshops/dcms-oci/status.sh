@@ -14,23 +14,43 @@ if test -z "$DCMS_STATE"; then
   exit 1
 fi
 
-# Banner
-echo
-echo "$DCMS_WORKSHOP workshop provisioning status:"
-echo
-
-# Code and state location
-echo "Workshop installed at $MSDD_CODE"
-echo
-
 # Get the setup status
 if ! DCMS_STATUS=$(provisioning-get-status $DCMS_STATE); then
   echo "ERROR: Unable to get workshop provisioning status"
   exit 1
 fi
 
+case "$DCMS_STATE" in
+  new)
+    PHASE='NEW (ready for setup)'
+    ;;
+  apply)
+    PHASE='SETUP RUNNING'
+    ;;
+  apply-failed)
+    PHASE='SETUP FAILED'
+    ;;
+  applied)
+    PHASE='SETUP COMPLETED'
+    ;;
+  destroy)
+    PHASE='TEARDOWN RUNNING'
+    ;;
+  destroy-failed)
+    PHASE='TEARDOWN FAILED'
+    ;;
+  destroyed)
+    PHASE='TEARDOWN COMPLETED'
+    ;;
+  byo)
+    PHASE='BYO'
+    ;;
+esac
+
 # Provisioning status
-echo "Overall provisioning status: $DCMS_STATUS"
+echo
+echo "dcms-oci workshop provisioning phase: $PHASE"
+echo
 
 $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/config/status.sh
 

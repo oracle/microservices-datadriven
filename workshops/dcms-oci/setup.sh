@@ -3,7 +3,7 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Fail on error
-set -xu
+set -eu
 
 # Make sure this is executed and not sourced
 if (return 0 2>/dev/null) ; then
