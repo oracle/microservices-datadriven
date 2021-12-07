@@ -3,7 +3,7 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Fail on error
-set -eu
+set -xu
 
 # Make sure this is executed and not sourced
 if (return 0 2>/dev/null) ; then
@@ -272,9 +272,13 @@ while ! state_done COMPARTMENT_OCID; do
     fi
   fi
 
-  echo 'Please enter the OCI compartment where you would like the workshop resources to be created.'
-  echo 'For an existing compartment, enter the OCID. For a new compartment, enter the name.'
-  read -p "Please specify the compartment: " COMP
+  if ! test -z "$TEST_COMPARTMENT"; then
+    COMP="$TEST_COMPARTMENT"
+  else
+    echo 'Please enter the OCI compartment where you would like the workshop resources to be created.'
+    echo 'For an existing compartment, enter the OCID. For a new compartment, enter the name.'
+    read -p "Please specify the compartment: " COMP
+  fi
 
   if test -z "$COMP"; then
     echo "ERROR: No compartment specified"
@@ -295,8 +299,13 @@ while ! state_done COMPARTMENT_OCID; do
   fi
 
   # New compartment
-  echo 'Please enter the OCID of the compartment in which you would like the new compartment to be created.'
-  read -p "Please specify the parent compartment OCID (hit return for the root compartment): " PARENT_COMP
+  if ! test -z "$TEST_PARENT_COMPARTMENT_OCID"; then
+    PARENT_COMP="$TEST_PARENT_COMPARTMENT_OCID"
+  else
+    echo 'Please enter the OCID of the compartment in which you would like the new compartment to be created.'
+    read -p "Please specify the parent compartment OCID (hit return for the root compartment): " PARENT_COMP
+  fi
+
   if [[ "$PARENT_COMP" =~ ocid1.* ]]; then
     # We have the parent compartment's OCID
     PARENT_COMPARTMENT_OCID="$PARENT_COMP"
