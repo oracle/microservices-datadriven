@@ -62,3 +62,10 @@ spec:
       - name: creds
         secret:
           secretName: db-wallet-secret
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app: order

@@ -5,7 +5,6 @@
 const oracledb = require('oracledb');
 const express = require('express');
 const common = require("oci-common”);
-const vault = require("oci-vault");
 const secrets = require("oci-secrets");
 
 //const os = require("oci-objectstorage");

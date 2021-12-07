@@ -4,4 +4,12 @@
 
 
 SCRIPT_DIR=$(dirname $0)
-k8s-deploy "$SCRIPT_DIR" "$K8S_NAMESPACE" 'inventory-helidon-deployment.yaml inventory-service.yaml' 'DOCKER_REGISTRY'
+
+export IS_SUGGESTIVE_SALE_ENABLED=${1-}
+
+if [ -z "$IS_SUGGESTIVE_SALE_ENABLED" ]; then
+    echo "No argument for IS_SUGGESTIVE_SALE_ENABLED, defaulting to false..."
+  export IS_SUGGESTIVE_SALE_ENABLED=false
+fi
+
+k8s-deploy "$SCRIPT_DIR" "$K8S_NAMESPACE" 'inventory-helidon-deployment.yaml inventory-service.yaml' 'DOCKER_REGISTRY INVENTORY_DB_ALIAS'

@@ -5,6 +5,7 @@ import javax.jms.JMSException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Component;
@@ -24,10 +25,17 @@ public class JMSReceiver {
 
 	@Autowired
 	SupplierService supplierService;
+	
+	@Autowired
+	private Environment environment;
+	
+    String orderQueueName = environment.getProperty("db_orderQueueName");  //System.getenv("db_orderQueueName");
+    String inventoryQueueName = environment.getProperty("db_inventoryQueueName");
+
 
 	Logger logger = LoggerFactory.getLogger(JMSReceiver.class);
 
-	@JmsListener(destination = "ORDER_QUEUE", containerFactory = "queueConnectionFactory")
+	@JmsListener(destination ="${orderQueueName}", containerFactory = "queueConnectionFactory")
 	public void listenOrderEvent(String message, AQjmsSession session) throws JMSException {
 		Order order = JsonUtils.read(message, Order.class);
 
@@ -44,7 +52,7 @@ public class JMSReceiver {
 		InventoryTable inventory = new InventoryTable(orderId, itemId, location, "beer");
 		String jsonString = JsonUtils.writeValueAsString(inventory);
 
-		jmsTemplate.convertAndSend("INVENTORY_QUEUE", jsonString);
+		jmsTemplate.convertAndSend(inventoryQueueName, jsonString);
 
 		logger.info("Inventory template" + jsonString + "\n");
 	}
