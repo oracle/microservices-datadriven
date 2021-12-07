@@ -63,3 +63,7 @@ while true; do
 done
 
 rm -f $STATE_FILE
+
+# Clean up the auth token
+TOKEN_OCID=$(oci iam auth-token list --region "$(state_get HOME_REGION)" --user-id="$(state_get USER_OCID)" --query 'data[?description=='"'$(state_get DOCKER_AUTH_TOKEN_DESC)'"'].id|[0]' --raw-output)
+oci iam auth-token delete --region "$(state_get HOME_REGION)" --user-id="$(state_get USER_OCID)" --force --auth-token-id "$TOKEN_OCID"
