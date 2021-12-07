@@ -20,7 +20,7 @@ if ! DCMS_STATUS=$(provisioning-get-status $DCMS_STATE); then
   exit 1
 fi
 
-case "$DCMS_STATE" in
+case "$DCMS_STATUS" in
   new)
     PHASE='NEW (ready for setup)'
     ;;
