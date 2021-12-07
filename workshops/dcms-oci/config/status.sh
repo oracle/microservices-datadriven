@@ -17,7 +17,7 @@ for t in $THREADS; do
     # Skip this log
     continue
   fi
-  printf "  Most recent entry in log %s:\n" "$DCMS_LOG_DIR/$t-thread.log"
+  printf "  Most recent log entry in %s:\n" "$DCMS_LOG_DIR/$t-thread.log"
   LAST_LOG=`tail -1 $DCMS_LOG_DIR/$t-thread.log`
   printf "  %-100s\n\n" "$LAST_LOG"
 done
