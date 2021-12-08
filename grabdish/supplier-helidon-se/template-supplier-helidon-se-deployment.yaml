@@ -21,7 +21,7 @@ spec:
         - name: database.user
           value: "INVENTORYUSER"
         - name: database.url
-          value: "jdbc:oracle:thin:${INVENTORY_DB_ALIAS}?TNS_ADMIN=/msdataworkshop/creds"
+          value: "jdbc:oracle:thin:@${INVENTORY_DB_ALIAS}?TNS_ADMIN=/msdataworkshop/creds"
         - name: inventoryqueuename
           value: "inventoryqueue"
         - name: OCI_REGION
