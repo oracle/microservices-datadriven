@@ -124,3 +124,4 @@ BEGIN
   END LOOP;
 END;
 /
+show errors

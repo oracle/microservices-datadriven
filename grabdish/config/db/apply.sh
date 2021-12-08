@@ -88,6 +88,12 @@ sqlplus /nolog <<!
 $(<$SCRIPT_HOME/$f)
 !
 "
+# DEBUG
+eval "
+cat <<!
+$(<$SCRIPT_HOME/$f)
+!
+"
 done
 
 
