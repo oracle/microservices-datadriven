@@ -13,11 +13,10 @@ export db_pwd="WelcomeAQ1234";
    # read user's OCID
 #echo "Enter OCID of root compartment:" ; read -s rootCompOCID; export rootCompOCID                          
    # fetch user's OCID
-rootCompOCID=$()
-$(oci iam compartment list --all --compartment-id-in-subtree true --access-level ACCESSIBLE --include-root --raw-output --query "data[?contains(\"id\",'tenancy')].id | [0]")
+rootCompOCID=$(oci iam compartment list --all --compartment-id-in-subtree true --access-level ACCESSIBLE --include-root --raw-output --query "data[?contains(\"id\",'tenancy')].id | [0]")
 
 #create compartment
-oci iam compartment create --name ${comp_name} -c ${rootCompOCID} --description "Livelab AQTEQ workflow"    
+oci iam compartment create --name ${comp_name} -c ${rootCompOCID} --description "Oracle Advanced Queue workflow"    
 ocid_comp=$(oci iam compartment list --all | jq -r ".data[] | select(.name == \"${comp_name}\") | .id")
 
 #get the database password
