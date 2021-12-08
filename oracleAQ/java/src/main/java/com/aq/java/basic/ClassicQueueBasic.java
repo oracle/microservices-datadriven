@@ -42,10 +42,11 @@ public class ClassicQueueBasic {
 	String oracleQueueTable_multi = "java_QueueTable_Multi";
 	String oracleQueueName_multi = "java_QueueName_Multi";
 
-	Logger logger = LoggerFactory.getLogger(ClassicQueueBasic.class);
+	java.util.logging.Logger logger = LoggerFactory.getLogger(ClassicQueueBasic.class);
 
 	public String lab1() {
 		AQSession aq_sess = null;
+		logger.info("URL: "+url);
 		String status;
 		try {
 			aq_sess = createSession();
