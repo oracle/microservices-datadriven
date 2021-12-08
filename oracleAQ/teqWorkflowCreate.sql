@@ -68,5 +68,6 @@ CREATE TABLE USERDETAILSTEQ(
     primary key(ORDERID)
 );
 /
-select * from ALL_QUEUES where OWNER='DBUSER';
+select * from ALL_QUEUES where OWNER='DBUSER' and QUEUE_TYPE='NORMAL_QUEUE';
+/
 EXIT;

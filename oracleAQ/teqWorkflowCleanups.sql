@@ -17,6 +17,6 @@ Execute DBMS_AQADM.drop_transactional_event_queue(queue_name =>'plsql_appTEQ',fo
 --Clean up object type */
 DROP TYPE Message_typeTEQ;
 /
-select * from ALL_QUEUES where OWNER='DBUSER';
+select * from ALL_QUEUES where OWNER='DBUSER' and QUEUE_TYPE='NORMAL_QUEUE';
 /
 EXIT;

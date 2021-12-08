@@ -7,7 +7,7 @@ DECLARE
     dequeue_options     dbms_aq.dequeue_options_t;
     message_properties  dbms_aq.message_properties_t;
     message_handle      RAW(16);
-    message             message_typeTEQ;
+    message             Message_type;
 
 BEGIN
     DBMS_AQ.DEQUEUE(

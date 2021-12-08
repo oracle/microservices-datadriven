@@ -20,5 +20,6 @@ EXECUTE DBMS_AQADM.DROP_QUEUE_TABLE (queue_table =>'plsql_appQueueTable');
  
 --Clean up object type */
 DROP TYPE message_typ;
-select * from ALL_QUEUES where OWNER='DBUSER';
+select * from ALL_QUEUES where OWNER='DBUSER' and QUEUE_TYPE='NORMAL_QUEUE';
+/
 EXIT;
