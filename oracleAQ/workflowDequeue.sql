@@ -40,8 +40,8 @@ BEGIN
     -- app enqueue after collecting user OTP
     app_message := Message_typ(user_message.ORDERID, user_message.USERNAME, user_message.OTP, user_message.DELIVERY_STATUS, user_message.DELIVERY_LOCATION);
     DBMS_AQ.enqueue(
-        queue_name => 'plsql_appQueue',           
-        enqueue_options      => enqueue_options,       
+        queue_name           => 'plsql_appQueue',           
+        enqueue_options      => app_enqueue_options,       
         message_properties   => message_properties,     
         payload              => app_message,               
         msgid                => message_handle);
@@ -82,6 +82,7 @@ BEGIN
     END IF;
 
 END;
+/
 EXIT; 
 
         

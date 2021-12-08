@@ -10,7 +10,7 @@ DECLARE
     message             Message_type;
 
 BEGIN
- dequeue_options.dequeue_mode     := DBMS_AQ.REMOVE;
+    dequeue_options.dequeue_mode  := DBMS_AQ.REMOVE;
     dequeue_options.wait          := DBMS_AQ.NO_WAIT;
     dequeue_options.navigation    := DBMS_AQ.FIRST_MESSAGE;           
     dequeue_options.consumer_name := 'teqBasicObjSubscriber';

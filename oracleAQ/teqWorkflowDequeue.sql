@@ -37,14 +37,17 @@ BEGIN
     DBMS_AQ.DEQUEUE(queue_name => 'plsql_deliveryTEQ', dequeue_options => deli_dequeue_options, message_properties => message_properties, payload => delivery_message, msgid => message_handle);
     DBMS_OUTPUT.PUT_LINE ('Delivery Message: ' || delivery_message.ORDERID || ' ... ' || delivery_message.USERNAME || ' ... ' || delivery_message.OTP);   
     
-    -- app enqueue after collecting user OTP
-    app_message := Message_typeTEQ(user_message.ORDERID, user_message.USERNAME, user_message.OTP, user_message.DELIVERY_STATUS, user_message.DELIVERY_LOCATION);
-    DBMS_AQ.enqueue(
-        queue_name => 'plsql_appTEQ',           
-        enqueue_options      => enqueue_options,       
-        message_properties   => message_properties,     
-        payload              => app_message,               
-        msgid                => message_handle);
+    BEGIN
+        -- app enqueue after collecting user OTP
+        app_message := Message_typeTEQ(user_message.ORDERID, user_message.USERNAME, user_message.OTP, user_message.DELIVERY_STATUS, user_message.DELIVERY_LOCATION);
+        DBMS_AQ.enqueue(
+            queue_name => 'plsql_appTEQ',           
+            enqueue_options      => app_enqueue_options,       
+            message_properties   => message_properties,     
+            payload              => app_message,               
+            msgid                => message_handle);
+        commit;
+    END;
 
     -- app dequeue browse to verify OTP
     app_dequeue_options.dequeue_mode  := DBMS_AQ.BROWSE;
@@ -82,6 +85,7 @@ BEGIN
     END IF;
 
 END;
+/
 EXIT; 
 
         

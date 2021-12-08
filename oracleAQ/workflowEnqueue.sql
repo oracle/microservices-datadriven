@@ -12,25 +12,17 @@ DECLARE
     delivery_message    Message_typ;
     otp                 pls_integer;
     orderId             pls_integer;
-    chkOrderId          pls_integer;
 
 BEGIN
     otp := dbms_random.value(1000,9999);
     orderId := dbms_random.value(10000,99999);
 
-    SELECT ORDERID INTO chkOrderId FROM USERDETAILS WHERE ORDERID=orderId;
-
--- WHILE(chkOrderId is not null)
---     IF  chkOrderId is not NULL then
---       orderId := dbms_random.value(10000,99999);
---       SELECT ORDERID INTO chkOrderId FROM USERDETAILS WHERE ORDERID=orderId;
---     END IF;
--- END LOOP;
     user_message := Message_typ(orderId,'User', otp, 'PENDING', 'US');
     --Deliverer will not have OTP
     delivery_message := Message_typ(orderId, 'User', 0, 'PENDING', 'US');
 
     INSERT INTO USERDETAILS VALUES(orderId,'User', otp, 'PENDING', 'US');
+
     dbms_aq.enqueue(
         queue_name => 'plsql_userQueue',           
         enqueue_options      => enqueue_options,       
@@ -46,4 +38,5 @@ BEGIN
         msgid                => message_handle);
     COMMIT;
 END;
+/
 EXIT;

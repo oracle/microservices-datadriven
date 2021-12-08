@@ -10,7 +10,7 @@ DECLARE
  message             Message_type;
 
 BEGIN
- message := message_typeTEQ('NORMAL MESSAGE','enqueued to objType_TEQ first.');
+ message := Message_type('NORMAL MESSAGE','enqueued to objType_TEQ first.');
  DBMS_AQ.ENQUEUE(
      queue_name           => 'objType_TEQ',           
      enqueue_options      => enqueue_options,       

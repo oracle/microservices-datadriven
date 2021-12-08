@@ -15,7 +15,7 @@ Execute DBMS_AQADM.STOP_QUEUE ( queue_name     => 'jsonType_TEQ');
 Execute DBMS_AQADM.drop_transactional_event_queue(queue_name =>'jsonType_TEQ',force=> TRUE);
 
 --Clean up object type */
-DROP TYPE message_typeTEQ;
+DROP TYPE Message_type;
 /
 select * from ALL_QUEUES where OWNER='DBUSER' and QUEUE_TYPE='NORMAL_QUEUE';
 /

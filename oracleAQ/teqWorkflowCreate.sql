@@ -7,41 +7,41 @@ CREATE TYPE Message_typeTEQ AS OBJECT (ORDERID NUMBER(10), USERNAME VARCHAR2(255
 -- Creating an Object type queue 
 BEGIN
  DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
-     queue_name=>'plsql_userTEQ',
-     storage_clause=>null, 
-     multiple_consumers=>true, 
-     max_retries=>10,
-     comment=>'plsql_user for TEQ', 
-     queue_payload_type=>'Message_typeTEQ', 
-     queue_properties=>null, 
-     replication_mode=>null);
- DBMS_AQADM.START_QUEUE (queue_name=> 'plsql_userQueue', enqueue =>TRUE, dequeue=> True); 
+     queue_name         =>'plsql_userTEQ',
+     storage_clause     =>null, 
+     multiple_consumers =>true, 
+     max_retries        =>10,
+     comment            =>'plsql_user for TEQ', 
+     queue_payload_type =>'Message_typeTEQ', 
+     queue_properties   =>null, 
+     replication_mode   =>null);
+ DBMS_AQADM.START_QUEUE (queue_name=> 'plsql_userTEQ', enqueue =>TRUE, dequeue=> True); 
 END;
 /
 BEGIN
  DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
-     queue_name=>'plsql_deliveryTEQ',
-     storage_clause=>null, 
-     multiple_consumers=>true, 
-     max_retries=>10,
-     comment=>'plsql_delivery for TEQ', 
-     queue_payload_type=>'Message_typeTEQ', 
-     queue_properties=>null, 
-     replication_mode=>null);
+     queue_name         =>'plsql_deliveryTEQ',
+     storage_clause     =>null, 
+     multiple_consumers =>true, 
+     max_retries        =>10,
+     comment            =>'plsql_delivery for TEQ', 
+     queue_payload_type =>'Message_typeTEQ', 
+     queue_properties   =>null, 
+     replication_mode   =>null);
  DBMS_AQADM.START_QUEUE (queue_name=> 'plsql_deliveryTEQ', enqueue =>TRUE, dequeue=> True); 
 END;
 /
 
 BEGIN
  DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
-     queue_name=>'plsql_appTEQ',
-     storage_clause=>null, 
+     queue_name        =>'plsql_appTEQ',
+     storage_clause    =>null, 
      multiple_consumers=>true, 
-     max_retries=>10,
-     comment=>'plsql_appQueue for TEQ', 
+     max_retries       =>10,
+     comment           =>'plsql_appQueue for TEQ', 
      queue_payload_type=>'Message_typeTEQ', 
-     queue_properties=>null, 
-     replication_mode=>null);
+     queue_properties  =>null, 
+     replication_mode  =>null);
  DBMS_AQADM.START_QUEUE (queue_name=> 'plsql_appTEQ', enqueue =>TRUE, dequeue=> True); 
 END;
 /
