@@ -46,3 +46,4 @@ END LOOP;
         msgid                => message_handle);
     COMMIT;
 END;
+EXIT;

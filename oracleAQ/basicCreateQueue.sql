@@ -19,13 +19,13 @@ BEGIN
  DBMS_AQADM.START_QUEUE ( queue_name            => 'rawType_classicQueue'); 
 END;
 /
--- Creating a JSON type queue table and queue */
--- BEGIN
---  DBMS_AQADM.CREATE_QUEUE_TABLE ( queue_table    => 'jsonType_classicQueueTable',     queue_payload_type   => 'JSON');  
---  DBMS_AQADM.CREATE_QUEUE ( queue_name           => 'jsonType_classicQueue',          queue_table          => 'jsonType_classicQueueTable');   
---  DBMS_AQADM.START_QUEUE ( queue_name            => 'jsonType_classicQueue');
--- END;
--- /
+--Creating a JSON type queue table and queue */
+BEGIN
+ DBMS_AQADM.CREATE_QUEUE_TABLE ( queue_table    => 'jsonType_classicQueueTable',     queue_payload_type   => 'JSON');  
+ DBMS_AQADM.CREATE_QUEUE ( queue_name           => 'jsonType_classicQueue',          queue_table          => 'jsonType_classicQueueTable');   
+ DBMS_AQADM.START_QUEUE ( queue_name            => 'jsonType_classicQueue');
+END;
+/
 -- Creating a Multiconsumer RAW type queue table and queue */
 BEGIN
  DBMS_AQADM.CREATE_QUEUE_TABLE ( queue_table    => 'multiconsumer_rawType_classicQueueTable',      queue_payload_type  => 'RAW',                     multiple_consumers => TRUE);   
@@ -33,4 +33,5 @@ BEGIN
  DBMS_AQADM.START_QUEUE ( queue_name            => 'multiconsumer_rawType_classicQueue'); 
 END;
 /
+select * from ALL_QUEUES where OWNER='DBUSER';
 EXIT;

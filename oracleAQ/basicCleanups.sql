@@ -20,3 +20,7 @@ EXECUTE DBMS_AQADM.DROP_QUEUE_TABLE (queue_table =>'multiconsumer_rawType_classi
  
 --Clean up object type */
 DROP TYPE message_typ;
+/
+select * from ALL_QUEUES where OWNER='DBUSER';
+/
+EXIT;

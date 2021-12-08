@@ -48,4 +48,6 @@ BEGIN
  DBMS_AQADM.START_QUEUE (queue_name=> 'jsonType_TEQ', enqueue =>TRUE, dequeue=> True); 
 END;
 /
-       
+ select * from ALL_QUEUES where OWNER='DBUSER';
+/
+EXIT;      

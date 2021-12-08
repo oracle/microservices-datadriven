@@ -46,3 +46,4 @@ BEGIN
         msgid                => message_handle);
     COMMIT;
 END;
+EXIT;
