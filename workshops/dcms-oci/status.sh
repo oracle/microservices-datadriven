@@ -54,6 +54,6 @@ echo
 
 $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/config/status.sh
 
-for l in Lab2 Lab3; do
-  $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-build-status.sh "$l"
+for lab in $LABS_WITH_BUILDS; do
+  $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-build-status.sh "$lab"
 done

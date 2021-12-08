@@ -28,34 +28,28 @@ export JAVA_HOME="$(state_get JAVA_HOME)"
 export PATH=$JAVA_HOME/bin:$PATH
 export DOCKER_REGISTRY="$(state_get DOCKER_REGISTRY)"
 
-# Run builds
-for b in $LAB2_NON_JAVA_BUILDS; do
-  mkdir -p $MY_STATE/$b
-  cd $MY_STATE/$b
-  # Run non-java in parallel
-  $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-build-runner.sh "$b" >>$DCMS_LOG_DIR/build_$b.log 2>&1 &
-done
+for lab in $LABS_WITH_BUILDS; do
+  
+  lab_upper=`echo $LAB | tr '[:lower:]' '[:upper:]'`
 
-for b in $LAB2_JAVA_BUILDS; do
-  mkdir -p $MY_STATE/$b
-  cd $MY_STATE/$b
-  # Run java serially
-  $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-build-runner.sh "$b" >>$DCMS_LOG_DIR/build_$b.log 2>&1
-done
+  JAVA_BUILDS_VAR="${lab_upper}_JAVA_BUILDS"
+  NON_JAVA_BUILDS_VAR="${lab_upper}_NON_JAVA_BUILDS"
 
-# Wait for Lab2 builds
-wait
+  # Run builds
+  for b in ${!NON_JAVA_BUILDS_VAR}; do
+    mkdir -p $MY_STATE/$b
+    cd $MY_STATE/$b
+    # Run non-java in parallel
+    $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-build-runner.sh "$b" >>$DCMS_LOG_DIR/build_$b.log 2>&1 &
+  done
 
-for b in $LAB3_NON_JAVA_BUILDS; do
-  mkdir -p $MY_STATE/$b
-  cd $MY_STATE/$b
-  # Run non-java in parallel
-  $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-build-runner.sh "$b" >>$DCMS_LOG_DIR/build_$b.log 2>&1 &
-done
+  for b in ${!JAVA_BUILDS_VAR}; do
+    mkdir -p $MY_STATE/$b
+    cd $MY_STATE/$b
+    # Run java serially
+    $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-build-runner.sh "$b" >>$DCMS_LOG_DIR/build_$b.log 2>&1
+  done
 
-for b in $LAB3_JAVA_BUILDS; do
-  mkdir -p $MY_STATE/$b
-  cd $MY_STATE/$b
-  # Run java serially
-  $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-build-runner.sh "$b" >>$DCMS_LOG_DIR/build_$b.log 2>&1
+  # Wait for Lab2 builds
+  wait
 done
