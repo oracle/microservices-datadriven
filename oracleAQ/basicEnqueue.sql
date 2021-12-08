@@ -7,7 +7,7 @@ DECLARE
  enqueue_options     dbms_aq.enqueue_options_t;
  message_properties  dbms_aq.message_properties_t;
  message_handle      RAW(16);
- message             message_typ;
+ message             obj_typ;
 
 BEGIN
  message := message_typ('NORMAL MESSAGE','enqueued to msg_queue first.');
