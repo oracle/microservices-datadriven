@@ -35,7 +35,7 @@ echo "Compartment Name : " ${comp_name}
 echo "Compartment OCID : " ${ocid_comp}
 echo "Database Name    : " ${db_name}
 echo "Database Password: " ${db_pwd}
-echo "TNS Conn String  : " ${conn_string}
+echo "TNS Conn String  : " ${display_name}_tp
 
 # Get connection string
 db_conn=$(oci db autonomous-database list -c ${ocid_comp} --query "data [?\"db-name\"=='${db_name}'] | [0].\"connection-strings\".low" --raw-output)
@@ -44,8 +44,9 @@ echo "DB Name/OCID for ATP: " ${db_name} / ${adb_id}
 
 mkdir -p ${TNS_ADMIN}
 
-cd ./network/admin;
+cd $TNS_ADMIN;
 oci db autonomous-database generate-wallet --autonomous-database-id ${adb_id} --password ${db_pwd} --file wallet.zip --generate-type ALL
 unzip wallet.zip
 
+cd $WORKFLOW_HOME;
 sql /nolog @$WORKFLOW_HOME/basicCreateUser.sql
