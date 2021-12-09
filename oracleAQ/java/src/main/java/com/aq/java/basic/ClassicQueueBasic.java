@@ -27,13 +27,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class ClassicQueueBasic {
 
-	@Value("${spring.datasource.username")
+	@Value("${spring.datasource.username}")
 	private String username;
 
-	@Value("${spring.datasource.password")
+	@Value("${spring.datasource.password}")
 	private String password;
 
-	@Value("${spring.datasource.url")
+	@Value("${spring.datasource.url}")
 	private String url;
 
 	String oracleQueueTable = "java_QueueTable";
@@ -42,7 +42,7 @@ public class ClassicQueueBasic {
 	String oracleQueueTable_multi = "java_QueueTable_Multi";
 	String oracleQueueName_multi = "java_QueueName_Multi";
 
-	java.util.logging.Logger logger = LoggerFactory.getLogger(ClassicQueueBasic.class);
+	Logger logger = LoggerFactory.getLogger(ClassicQueueBasic.class);
 
 	public String lab1() {
 		AQSession aq_sess = null;

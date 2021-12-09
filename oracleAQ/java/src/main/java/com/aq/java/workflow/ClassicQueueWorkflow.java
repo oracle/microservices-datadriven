@@ -28,13 +28,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class ClassicQueueWorkflow {
 
-	@Value("${spring.datasource.username")
+	@Value("${spring.datasource.username}")
 	private String username;
 
-	@Value("${spring.datasource.password")
+	@Value("${spring.datasource.password}")
 	private String password;
 
-	@Value("${spring.datasource.url")
+	@Value("${spring.datasource.url}")
 	private String jdbcURL;
 
 	String userAQQueueTable = "java_userQueueTable";
