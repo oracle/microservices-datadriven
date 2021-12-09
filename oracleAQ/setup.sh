@@ -34,7 +34,6 @@ echo "WORKFLOW_HOME    : " $WORKFLOW_HOME;
 echo "Compartment Name : " ${comp_name}
 echo "Compartment OCID : " ${ocid_comp}
 echo "Database Name    : " ${db_name}
-echo "Database Password: " ${db_pwd}
 echo "TNS Conn String  : " ${display_name}_tp
 
 # Get connection string
@@ -50,3 +49,11 @@ unzip wallet.zip
 
 cd $WORKFLOW_HOME;
 sql /nolog @$WORKFLOW_HOME/basicCreateUser.sql
+
+cd $WORKFLOW_HOME/java;
+mvn clean install
+docker build -f Dockerfile -t mydockerapp .
+docker image ls
+docker run -d -p 9900:8081 mydockerapp
+
+cd $WORKFLOW_HOME;
