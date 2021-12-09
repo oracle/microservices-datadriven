@@ -52,7 +52,7 @@ else
     source $STATE_FILE
   else
     # Standard Database
-    SCRIPT_HOME=$CONFIG_HOME/2db-std/apply
+    SCRIPT_HOME=$CONFIG_HOME/2db-sa/apply
   fi
 fi
 

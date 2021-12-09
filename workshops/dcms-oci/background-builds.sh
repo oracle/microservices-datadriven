@@ -30,7 +30,7 @@ export DOCKER_REGISTRY="$(state_get DOCKER_REGISTRY)"
 
 for lab in $LABS_WITH_BUILDS; do
   
-  lab_upper=`echo $LAB | tr '[:lower:]' '[:upper:]'`
+  lab_upper=`echo $lab | tr '[:lower:]' '[:upper:]'`
 
   JAVA_BUILDS_VAR="${lab_upper}_JAVA_BUILDS"
   NON_JAVA_BUILDS_VAR="${lab_upper}_NON_JAVA_BUILDS"

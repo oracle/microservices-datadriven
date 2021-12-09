@@ -87,9 +87,9 @@ show errors
 
 CREATE OR REPLACE PROCEDURE inventory_service
 IS
-  order_message VARCHAR2;
-  order_inv_id VARCHAR2;
-  order_inv_loc VARCHAR2;
+  order_message VARCHAR2(32767);
+  order_inv_id VARCHAR2(16);
+  order_inv_loc VARCHAR2(32);
   order_json JSON_OBJECT_T;
   inventory_json JSON_OBJECT_T;
 BEGIN

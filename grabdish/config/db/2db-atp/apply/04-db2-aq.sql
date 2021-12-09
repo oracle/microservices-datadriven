@@ -30,7 +30,8 @@ BEGIN
 
   DBMS_CLOUD.GET_OBJECT(
     object_uri => '$DB1_CWALLET_SSO_AUTH_URL',
-    directory_name => '$DBLINK_CREDENTIAL_DIRECTORY');
+    directory_name => '$DBLINK_CREDENTIAL_DIRECTORY',
+    file_name => 'cwallet.sso');
 
   DBMS_CLOUD.CREATE_CREDENTIAL(
     credential_name => 'CRED',
