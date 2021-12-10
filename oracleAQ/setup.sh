@@ -41,10 +41,10 @@ db_conn=$(oci db autonomous-database list -c ${ocid_comp} --query "data [?\"db-n
 adb_id=$(oci db autonomous-database list -c ${ocid_comp} --query "data [?\"db-name\"=='${db_name}'] | [0].id" --raw-output)
 echo "DB Name/OCID for ATP: " ${db_name} / ${adb_id}
 
-while ! test `oci db autonomous-database get --autonomous-database-id ${adb_id} --query 'data."lifecycle-state"' --raw-output 2>/dev/null`"" == 'ACTIVE'; do
-    echo "Waiting for the 21c ATP to become ACTIVE"
-    sleep 5
-done
+# while ! test `oci db autonomous-database get --autonomous-database-id ${adb_id} --query 'data."lifecycle-state"' --raw-output 2>/dev/null`"" == 'ACTIVE'; do
+#     echo "Waiting for the 21c ATP to become ACTIVE"
+#     sleep 5
+# done
 
 
 mkdir -p ${TNS_ADMIN}
