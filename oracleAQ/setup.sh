@@ -7,7 +7,7 @@ mkdir -p $comp_name ;
 export WORKFLOW_HOME=${HOME}/${comp_name}; 
 export display_name=${db_name}                                      
 export TNS_ADMIN=$WORKFLOW_HOME/network/admin 
-export db_pwd="WelcomeAQ1234";
+#export db_pwd="WelcomeAQ1234";
 
 #get user's OCID
    # read user's OCID
@@ -20,13 +20,13 @@ oci iam compartment create --name ${comp_name} -c ${rootCompOCID} --description 
 ocid_comp=$(oci iam compartment list --all | jq -r ".data[] | select(.name == \"${comp_name}\") | .id")
 
 #get the database password
-#echo "Enter Database Password :" ; 
-#echo "NOTE: Password must be 12 to 30 characters and contain at least one uppercase letter, one lowercase letter, and one number. The password cannot contain the double quote character or the username 'admin' ";
-#read -s db_pwd; export db_pwd
+echo "Enter Database Password :" ; 
+echo "NOTE: Password must be 12 to 30 characters and contain at least one uppercase letter, one lowercase letter, and one number. The password cannot contain the double quote character or the username 'admin' ";
+read -s db_pwd; export db_pwd
 
 #Create ATP
    #21c always free
-oci db autonomous-database create --admin-password ${db_pwd} -c ${ocid_comp} --db-name ${db_name} --display-name ${db_name} --db-workload OLTP --is-free-tier true --cpu-core-count 1 --data-storage-size-in-tbs 1 --db-version "21c";
+oci db autonomous-database create --admin-password ${db_pwd} -c ${ocid_comp} --db-name ${db_name} --display-name ${db_name} --db-workload OLTP --is-free-tier true --cpu-core-count 1 --data-storage-size-in-tbs 1 --db-version "21c" --wait-for-state AVAILABLE;
    #19c default
 #oci db autonomous-database create --admin-password ${db_pwd} -c ${ocid_comp} --db-name ${db_name} --display-name ${db_name} --db-workload OLTP --cpu-core-count 1 --data-storage-size-in-tbs 1 
 
@@ -54,7 +54,7 @@ oci db autonomous-database generate-wallet --autonomous-database-id ${adb_id} --
 unzip wallet.zip
 
 cd $WORKFLOW_HOME;
-sql /nolog @$WORKFLOW_HOME/basicCreateUser.sql
+sql /nolog @$WORKFLOW_HOME/basicCreateUser.sql -v $db_pwd
 
 cd $WORKFLOW_HOME/java;
 mvn clean install

@@ -1,6 +1,6 @@
 set cloudconfig ./oracleAQ/network/admin/wallet.zip
 show tns
-connect admin/"WelcomeAQ1234"@AQDATABASE_TP
+connect admin/"${db_pwd}"@AQDATABASE_TP
 --CREATE USER DBUSER IDENTIFIED BY "&&password" ;
 CREATE USER DBUSER IDENTIFIED BY "WelcomeAQ1234" ;
 
