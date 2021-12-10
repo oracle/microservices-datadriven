@@ -1,2 +1,2 @@
 cd $HOME ;
-sql /nolog @$HOME/oracleAQ/teqBasicCreate.sql
+sql /nolog @$HOME/oracleAQ/teqBasicCreate.sql $db_pwd

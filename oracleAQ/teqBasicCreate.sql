@@ -1,6 +1,5 @@
 set cloudconfig ./oracleAQ/network/admin/wallet.zip
---connect DBUSER/"&password"@AQDATABASE_TP ;
-connect DBUSER/"WelcomeAQ1234"@AQDATABASE_TP ;
+connect DBUSER/&1@AQDATABASE_TP ;
 
 CREATE type Message_type as object (subject     VARCHAR2(30), text        VARCHAR2(80));  
 /

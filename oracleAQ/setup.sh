@@ -7,7 +7,7 @@ mkdir -p $comp_name ;
 export WORKFLOW_HOME=${HOME}/${comp_name}; 
 export display_name=${db_name}                                      
 export TNS_ADMIN=$WORKFLOW_HOME/network/admin 
-export db_pwd="WelcomeAQ1234";
+#export db_pwd="WelcomeAQ1234";
 
 #get user's OCID
    # read user's OCID
@@ -16,13 +16,13 @@ export db_pwd="WelcomeAQ1234";
 rootCompOCID=$(oci iam compartment list --all --compartment-id-in-subtree true --access-level ACCESSIBLE --include-root --raw-output --query "data[?contains(\"id\",'tenancy')].id | [0]")
 
 #create compartment
-oci iam compartment create --name ${comp_name} -c ${rootCompOCID} --description "Oracle Advanced Queue workflow"    
+oci iam compartment create --name ${comp_name} -c ${rootCompOCID} --description "Oracle Advanced Queue workflow" --wait-for-state ACTIVE  
 ocid_comp=$(oci iam compartment list --all | jq -r ".data[] | select(.name == \"${comp_name}\") | .id")
 
 #get the database password
-# echo "Enter Database Password :" ; 
-# echo "NOTE: Password must be 12 to 30 characters and contain at least one uppercase letter, one lowercase letter, and one number. The password cannot contain the double quote character or the username 'admin' ";
-# read -s db_pwd; export db_pwd
+echo "Enter Database Password :" ; 
+echo "NOTE: Password must be 12 to 30 characters and contain at least one uppercase letter, one lowercase letter, and one number. The password cannot contain the double quote character or the username 'admin' ";
+read -s db_pwd; export db_pwd
 echo "Database Password verified"
 
 #Create ATP
