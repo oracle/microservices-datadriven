@@ -41,6 +41,12 @@ db_conn=$(oci db autonomous-database list -c ${ocid_comp} --query "data [?\"db-n
 adb_id=$(oci db autonomous-database list -c ${ocid_comp} --query "data [?\"db-name\"=='${db_name}'] | [0].id" --raw-output)
 echo "DB Name/OCID for ATP: " ${db_name} / ${adb_id}
 
+while ! test `oci db autonomous-database get --autonomous-database-id ${adb_id} --query 'data."lifecycle-state"' --raw-output 2>/dev/null`"" == 'ACTIVE'; do
+    echo "Waiting for the 21c ATP to become ACTIVE"
+    sleep 5
+done
+
+
 mkdir -p ${TNS_ADMIN}
 
 cd $TNS_ADMIN;
@@ -52,8 +58,11 @@ sql /nolog @$WORKFLOW_HOME/basicCreateUser.sql
 
 cd $WORKFLOW_HOME/java;
 mvn clean install
-docker build -f Dockerfile -t mydockerapp .
-docker image ls
-docker run -d -p 9900:8081 mydockerapp
+cd target
+nohup java -jar java-0.0.1-SNAPSHOT.jar &
+
+# docker build -f Dockerfile -t mydockerapp .
+# docker image ls
+# docker run -d -p 9900:8081 mydockerapp
 
 cd $WORKFLOW_HOME;
