@@ -48,6 +48,7 @@ sql /nolog @$WORKFLOW_HOME/basicCreateUser.sql $db_pwd
 cd $WORKFLOW_HOME/java;
 mvn clean install
 cd target
+killall java
 nohup java -jar java-0.0.1-SNAPSHOT.jar &
 echo "Setup completed."
 
