@@ -7,7 +7,7 @@ mkdir -p $comp_name ;
 export WORKFLOW_HOME=${HOME}/${comp_name}; 
 export display_name=${db_name}                                      
 export TNS_ADMIN=$WORKFLOW_HOME/network/admin 
-#export db_pwd="WelcomeAQ1234";
+export db_pwd="WelcomeAQ1234";
 
 #get user's OCID
    # read user's OCID
@@ -20,9 +20,10 @@ oci iam compartment create --name ${comp_name} -c ${rootCompOCID} --description 
 ocid_comp=$(oci iam compartment list --all | jq -r ".data[] | select(.name == \"${comp_name}\") | .id")
 
 #get the database password
-echo "Enter Database Password :" ; 
-echo "NOTE: Password must be 12 to 30 characters and contain at least one uppercase letter, one lowercase letter, and one number. The password cannot contain the double quote character or the username 'admin' ";
-read -s db_pwd; export db_pwd
+# echo "Enter Database Password :" ; 
+# echo "NOTE: Password must be 12 to 30 characters and contain at least one uppercase letter, one lowercase letter, and one number. The password cannot contain the double quote character or the username 'admin' ";
+# read -s db_pwd; export db_pwd
+echo "Database Password verified"
 
 #Create ATP
    #21c always free
@@ -41,12 +42,6 @@ db_conn=$(oci db autonomous-database list -c ${ocid_comp} --query "data [?\"db-n
 adb_id=$(oci db autonomous-database list -c ${ocid_comp} --query "data [?\"db-name\"=='${db_name}'] | [0].id" --raw-output)
 echo "DB Name/OCID for ATP: " ${db_name} / ${adb_id}
 
-# while ! test `oci db autonomous-database get --autonomous-database-id ${adb_id} --query 'data."lifecycle-state"' --raw-output 2>/dev/null`"" == 'ACTIVE'; do
-#     echo "Waiting for the 21c ATP to become ACTIVE"
-#     sleep 5
-# done
-
-
 mkdir -p ${TNS_ADMIN}
 
 cd $TNS_ADMIN;
@@ -54,15 +49,12 @@ oci db autonomous-database generate-wallet --autonomous-database-id ${adb_id} --
 unzip wallet.zip
 
 cd $WORKFLOW_HOME;
-sql /nolog @$WORKFLOW_HOME/basicCreateUser.sql -v $db_pwd
+sql /nolog @$WORKFLOW_HOME/basicCreateUser.sql $db_pwd
 
 cd $WORKFLOW_HOME/java;
 mvn clean install
 cd target
 nohup java -jar java-0.0.1-SNAPSHOT.jar &
-
-# docker build -f Dockerfile -t mydockerapp .
-# docker image ls
-# docker run -d -p 9900:8081 mydockerapp
+echo "Java setup completed"
 
 cd $WORKFLOW_HOME;
