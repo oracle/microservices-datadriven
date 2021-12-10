@@ -8,6 +8,8 @@ import javax.jms.QueueConnectionFactory;
 import javax.jms.Session;
 import javax.sql.DataSource;
 
+import oracle.ucp.jdbc.PoolDataSource;
+import oracle.ucp.jdbc.PoolDataSourceFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +31,17 @@ public class OracleAQConfiguration {
 	@Autowired
 	private Environment environment;
 
+//	@Autowired
+//	private DataSource dataSource;
+
 	@Bean
 	public DataSource dataSource() throws SQLException {
+
+//		PoolDataSource atpInventoryPDB = PoolDataSourceFactory.getPoolDataSource();
+//		atpInventoryPDB.setConnectionFactoryClassName("oracle.jdbc.pool.OracleDataSource");
+//		atpInventoryPDB.setURL(environment.getProperty("db_url"));
+//		atpInventoryPDB.setUser(environment.getProperty("db_user"));
+//		atpInventoryPDB.setPassword(environment.getProperty("db_password"));
 		OracleDataSource ds = new OracleDataSource();
 
 		ds.setUser(environment.getProperty("db_user"));
@@ -76,7 +87,7 @@ public class OracleAQConfiguration {
 			@Override
 			public Destination resolveDestinationName(Session session, String destinationName, boolean pubSubDomain)
 					throws JMSException {
-				if (destinationName.contains("INVENTORY")) {
+				if (destinationName.contains("INVENTORY") || destinationName.contains("inventory")) {
 					pubSubDomain = true;
 				}
 				return super.resolveDestinationName(session, destinationName, pubSubDomain);
