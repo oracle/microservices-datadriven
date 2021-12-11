@@ -3,5 +3,4 @@
 ## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 
-SCRIPT_DIR=$(dirname $0)
-k8s-deploy "$SCRIPT_DIR" "$K8S_NAMESPACE" 'order-helidon-deployment.yaml order-service.yaml' 'DOCKER_REGISTRY ORDER_DB_ALIAS ORDER_DB_TNS_ADMIN_SECRET'
+k8s-deploy 'order-helidon-deployment.yaml order-service.yaml'

@@ -50,4 +50,4 @@ spec:
           volumes:
             - name: creds
               secret:
-                secretName: db-wallet-secret
+                secretName: inventory-db-tns-admin-secret
