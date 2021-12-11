@@ -72,4 +72,4 @@ spec:
           volumes:
             - name: creds
               secret:
-                secretName: db-wallet-secret
+                secretName: order-db-tns-admin-secret

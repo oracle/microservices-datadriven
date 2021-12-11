@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: foodwinepairing
-        image: %DOCKER_REGISTRY%/foodwinepairing-python:0.1
+        image: ${DOCKER_REGISTRY}/foodwinepairing-python:0.1
         imagePullPolicy: Always
         ports:
           - containerPort: 8080

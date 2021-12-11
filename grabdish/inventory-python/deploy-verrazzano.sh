@@ -19,8 +19,8 @@ cp inventory-python-comp.yaml inventory-python-comp-$CURRENTTIME.yaml
 #may hit sed incompat issue with mac
 sed_i "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" inventory-python-comp-$CURRENTTIME.yaml
 sed_i "s|%INVENTORY_PDB_NAME%|${INVENTORY_PDB_NAME}|g" inventory-python-comp-${CURRENTTIME}.yaml
-sed_i "s|%OCI_REGION%|${OCI_REGION}|g" inventory-python-comp-${CURRENTTIME}.yaml
-sed_i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" inventory-python-comp-${CURRENTTIME}.yaml
+sed_i "s|${OCI_REGION-}|${OCI_REGION}|g" inventory-python-comp-${CURRENTTIME}.yaml
+sed_i "s|${VAULT_SECRET_OCID-}|${VAULT_SECRET_OCID}|g" inventory-python-comp-${CURRENTTIME}.yaml
 
 if [ -z "$1" ]; then
     kubectl apply -f $SCRIPT_DIR/inventory-python-comp-$CURRENTTIME.yaml

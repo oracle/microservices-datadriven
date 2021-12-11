@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: db-log-exporter
-        image: %DOCKER_REGISTRY%/db-log-exporter:0.1
+        image: ${DOCKER_REGISTRY}/db-log-exporter:0.1
         imagePullPolicy: Always
         env:
         - name: oracle.ucp.jdbc.PoolDataSource.alertlogpdb.user
@@ -34,9 +34,9 @@ spec:
         - name: QUERY_SQL
           value: "select ORIGINATING_TIMESTAMP, MODULE_ID, EXECUTION_CONTEXT_ID, MESSAGE_TEXT from V$diag_alert_ext"
         - name: OCI_REGION
-          value: "%OCI_REGION%"
+          value: "${OCI_REGION-}"
         - name: VAULT_SECRET_OCID
-          value: "%VAULT_SECRET_OCID%"
+          value: "${VAULT_SECRET_OCID-}"
         volumeMounts:
         - name: creds
           mountPath: /msdataworkshop/creds

@@ -40,9 +40,9 @@ sed -e  "s|%PDB_NAME%|${ORDER_PDB_NAME}|g" db-log-exporter-orderpdb-deployment-$
 mv -- /tmp/db-log-exporter-orderpdb-deployment-$CURRENTTIME.yaml db-log-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 sed -e  "s|%USER%|orderUSER|g" db-log-exporter-orderpdb-deployment-${CURRENTTIME}.yaml > /tmp/db-log-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-log-exporter-orderpdb-deployment-$CURRENTTIME.yaml db-log-exporter-orderpdb-deployment-$CURRENTTIME.yaml
-sed -e  "s|%OCI_REGION%|${OCI_REGION}|g" db-log-exporter-orderpdb-deployment-${CURRENTTIME}.yaml > /tmp/db-log-exporter-orderpdb-deployment-$CURRENTTIME.yaml
+sed -e  "s|${OCI_REGION-}|${OCI_REGION}|g" db-log-exporter-orderpdb-deployment-${CURRENTTIME}.yaml > /tmp/db-log-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-log-exporter-orderpdb-deployment-$CURRENTTIME.yaml db-log-exporter-orderpdb-deployment-$CURRENTTIME.yaml
-sed -e  "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" db-log-exporter-orderpdb-deployment-${CURRENTTIME}.yaml > /tmp/db-log-exporter-orderpdb-deployment-$CURRENTTIME.yaml
+sed -e  "s|${VAULT_SECRET_OCID-}|${VAULT_SECRET_OCID}|g" db-log-exporter-orderpdb-deployment-${CURRENTTIME}.yaml > /tmp/db-log-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-log-exporter-orderpdb-deployment-$CURRENTTIME.yaml db-log-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 
 if [ -z "$1" ]; then

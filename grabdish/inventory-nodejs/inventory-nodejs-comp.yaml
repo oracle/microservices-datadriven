@@ -20,7 +20,7 @@ spec:
         podSpec:
           containers:
             - name: inventory
-              image: %DOCKER_REGISTRY%/inventory-nodejs:0.1
+              image: ${DOCKER_REGISTRY}/inventory-nodejs:0.1
               imagePullPolicy: Always
               ports:
                 - containerPort: 8080
@@ -28,7 +28,7 @@ spec:
                 - name: TNS_ADMIN
                   value: "/usr/lib/oracle/19.9/client64/lib/network/admin"
                 - name: DB_CONNECT_STRING
-                  value: "%INVENTORY_PDB_NAME%_tp"
+                  value: "${INVENTORY_DB_ALIAS}"
                 - name: DB_USER
                   value: "inventoryuser"
                 - name: DB_CONNECTION_COUNT
@@ -44,9 +44,9 @@ spec:
                 - name: AQ_INVENTORY_QUEUE_NAME
                   value: "AQ.inventoryqueue"
                 - name: OCI_REGION
-                  value: "%OCI_REGION%"
+                  value: "${OCI_REGION-}"
                 - name: VAULT_SECRET_OCID
-                  value: "%VAULT_SECRET_OCID%"
+                  value: "${VAULT_SECRET_OCID-}"
                 - name: dbpassword
                   valueFrom:
                     secretKeyRef:
@@ -70,4 +70,4 @@ spec:
           volumes:
             - name: creds
               secret:
-                secretName: db-wallet-secret
+                secretName: inventory-db-tns-admin-secret
