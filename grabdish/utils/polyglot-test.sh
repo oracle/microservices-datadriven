@@ -7,7 +7,7 @@ set -e
 
 # Deploy each inventory service and perform functional test
 #SERVICES="inventory-python inventory-nodejs inventory-dotnet inventory-go inventory-helidon-se"
-SERVICES="inventory-dotnet inventory-go inventory-python inventory-nodejs inventory-helidon-se inventory-plsql order-mongodb-kafka inventory-postgres-kafka inventory-springboot inventory-micronaut inventory-quarkus"
+SERVICES="inventory-dotnet inventory-go inventory-python inventory-nodejs inventory-helidon-se inventory-plsql inventory-springboot inventory-micronaut inventory-quarkus"
 ORDER_ID=66
 
 cd $GRABDISH_HOME/inventory-helidon

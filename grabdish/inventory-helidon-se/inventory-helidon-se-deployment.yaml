@@ -22,7 +22,7 @@ spec:
       containers:
         - name: inventory
           imagePullPolicy: Always
-          image: ${DOCKER_REGISTRY}/%IMAGE_NAME%:%IMAGE_VERSION%
+          image: ${DOCKER_REGISTRY}/inventory-helidon-se:0.1
           volumeMounts:
             - name: creds
               mountPath: /msdataworkshop/creds

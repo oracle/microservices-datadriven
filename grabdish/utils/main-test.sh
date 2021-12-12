@@ -95,10 +95,10 @@ logpodnotail inventory > $GRABDISH_LOG/testlog-inventory-from-Walkthrough
 # POLYGLOT
 echo "TEST_LOG: #### Testing Lab3: Polyglot"
 # Deploy each inventory service and perform functional test
-while ! $(state_get NON_JAVA_BUILDS); do
-  sleep 10
-  echo "Waiting for NON_JAVA_BUILDS"
-done
+#while ! $(state_get NON_JAVA_BUILDS); do
+#  sleep 10
+#  echo "Waiting for NON_JAVA_BUILDS"
+#done
 
 utils/polyglot-test.sh
 echo writing log to $GRABDISH_LOG/testlog-frontend-from-polyglot

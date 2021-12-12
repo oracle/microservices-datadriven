@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: inventory
-        image: ${DOCKER_REGISTRY}%/inventory-go:0.1
+        image: ${DOCKER_REGISTRY}/inventory-go:0.1
         imagePullPolicy: Always
         env:
         - name: user
