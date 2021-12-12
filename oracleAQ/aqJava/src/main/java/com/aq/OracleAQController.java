@@ -1,4 +1,4 @@
-package com.aq.java;
+package com.aq;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.aq.java.basic.ClassicQueueBasic;
-import com.aq.java.workflow.ClassicQueueWorkflow;
+import com.aq.basic.ClassicQueueBasic;
+import com.aq.workflow.ClassicQueueWorkflow;
 
 @RequestMapping("/oracleAQ")
 @RestController

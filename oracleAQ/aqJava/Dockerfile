@@ -1,4 +1,3 @@
-mvn clean install
 FROM openjdk:8
 VOLUME /tmp
 EXPOSE 8080

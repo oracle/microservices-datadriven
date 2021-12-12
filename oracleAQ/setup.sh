@@ -49,7 +49,7 @@ cd $WORKFLOW_HOME/java;
 mvn clean install
 cd target
 killall java
-nohup java -jar java-0.0.1-SNAPSHOT.jar &
+nohup java -jar aqJava-0.0.1-SNAPSHOT.jar &
 echo "Setup completed."
 
 cd $WORKFLOW_HOME;

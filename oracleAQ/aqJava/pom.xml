@@ -10,7 +10,7 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.aq</groupId>
-	<artifactId>java</artifactId>
+	<artifactId>aqJava</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>java</name>
 	<description>AQ workshop </description>

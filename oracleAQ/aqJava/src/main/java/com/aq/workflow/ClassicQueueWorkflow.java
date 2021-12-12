@@ -1,4 +1,4 @@
-package com.aq.java.workflow;
+package com.aq.workflow;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,8 +20,8 @@ import oracle.AQ.AQQueueTable;
 import oracle.AQ.AQQueueTableProperty;
 import oracle.AQ.AQRawPayload;
 import oracle.AQ.AQSession;
-import com.aq.java.config.JsonUtils;
-import com.aq.java.config.UserDetails;
+import com.aq.config.JsonUtils;
+import com.aq.config.UserDetails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

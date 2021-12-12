@@ -1,4 +1,4 @@
-package com.aq.java.basic;
+package com.aq.basic;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

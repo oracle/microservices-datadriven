@@ -1,4 +1,4 @@
-package com.aq.java.config;
+package com.aq.config;
 
 import java.io.Serializable;
 
