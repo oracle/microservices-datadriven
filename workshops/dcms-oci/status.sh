@@ -20,12 +20,14 @@ if ! DCMS_STATUS=$(provisioning-get-status $DCMS_STATE); then
   exit 1
 fi
 
+RETURN_CODE=0 # Not running
 case "$DCMS_STATUS" in
   new)
     PHASE='NEW (ready for setup)'
     ;;
   apply)
     PHASE='SETUP RUNNING'
+    RETURN_CODE=1
     ;;
   apply-failed)
     PHASE='SETUP FAILED'
@@ -35,6 +37,7 @@ case "$DCMS_STATUS" in
     ;;
   destroy)
     PHASE='TEARDOWN RUNNING'
+    RETURN_CODE=1
     ;;
   destroy-failed)
     PHASE='TEARDOWN FAILED'
@@ -44,7 +47,7 @@ case "$DCMS_STATUS" in
     ;;
   byo)
     PHASE='BYO'
-    ;;
+  ;;
 esac
 
 # Provisioning status
@@ -57,3 +60,5 @@ $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/config/status.sh
 for lab in $LABS_WITH_BUILDS; do
   $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-build-status.sh "$lab"
 done
+
+return $RETURN_CODE
