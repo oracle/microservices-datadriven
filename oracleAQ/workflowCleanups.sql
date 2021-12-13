@@ -18,6 +18,20 @@ EXECUTE DBMS_AQADM.STOP_QUEUE ( queue_name       =>'plsql_appQueue');
 EXECUTE DBMS_AQADM.DROP_QUEUE ( queue_name       =>'plsql_appQueue');   
 EXECUTE DBMS_AQADM.DROP_QUEUE_TABLE (queue_table =>'plsql_appQueueTable'); 
  
+
+--Clean up all Java Basic Queue Tables and Queues
+EXECUTE DBMS_AQADM.STOP_QUEUE ( queue_name       => 'java_userQueueName');  
+EXECUTE DBMS_AQADM.DROP_QUEUE ( queue_name       => 'java_userQueueName');  
+EXECUTE DBMS_AQADM.DROP_QUEUE_TABLE (queue_table => 'java_userQueueTable');
+
+EXECUTE DBMS_AQADM.STOP_QUEUE ( queue_name       => 'java_deliQueueName');  
+EXECUTE DBMS_AQADM.DROP_QUEUE ( queue_name       => 'java_deliQueueName');  
+EXECUTE DBMS_AQADM.DROP_QUEUE_TABLE (queue_table => 'java_deliQueueTable');
+
+EXECUTE DBMS_AQADM.STOP_QUEUE ( queue_name       => 'java_appQueueName');  
+EXECUTE DBMS_AQADM.DROP_QUEUE ( queue_name       => 'java_appQueueName');  
+EXECUTE DBMS_AQADM.DROP_QUEUE_TABLE (queue_table => 'java_appQueueTable');
+
 --Clean up object type */
 DROP TYPE message_typ;
 select * from ALL_QUEUES where OWNER='DBUSER' and QUEUE_TYPE='NORMAL_QUEUE';
