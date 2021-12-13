@@ -57,8 +57,11 @@ echo
 
 $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/config/status.sh
 
-for lab in $LABS_WITH_BUILDS; do
-  $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-build-status.sh "$lab"
-done
+if [[ "$PHASE" =~ SETUP* ]]; then
+  echo
+  for lab in $LABS_WITH_BUILDS; do
+    $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-build-status.sh "$lab"
+  done
+fi
 
 exit $RETURN_CODE
