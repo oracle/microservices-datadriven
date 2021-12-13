@@ -29,6 +29,12 @@ public class UserDetails implements Serializable {
 	@Column(name = "DELIVERY_LOCATION")
 	private String deliveryLocation;
 
+
+	
+	public UserDetails() {
+		super();
+	}
+
 	public UserDetails(int orderId, String username, int otp, String deliveryStatus, String deliveryLocation) {
 		super();
 		this.orderId = orderId;
