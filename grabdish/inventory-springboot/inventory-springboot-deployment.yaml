@@ -24,7 +24,11 @@ spec:
           value: "8080"
         - name: db_user
           value: "inventoryuser"
+        - name: spring.datasource.username
+          value: "inventoryuser"
         - name: db_url
+          value: "jdbc:oracle:thin:@${INVENTORY_DB_ALIAS}?TNS_ADMIN=/msdataworkshop/creds"
+        - name: spring.datasource.url
           value: "jdbc:oracle:thin:@${INVENTORY_DB_ALIAS}?TNS_ADMIN=/msdataworkshop/creds"
         - name: db_queueOwner
           value: "AQ"
@@ -37,6 +41,12 @@ spec:
         - name: VAULT_SECRET_OCID
           value: "${VAULT_SECRET_OCID-}"
         - name: db_password
+          valueFrom:
+            secretKeyRef:
+              name: dbuser
+              key: dbpassword
+              optional: true #not needed/used if using VAULT_SECRET_OCID exists
+        - name: spring.datasource.password
           valueFrom:
             secretKeyRef:
               name: dbuser
