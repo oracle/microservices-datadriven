@@ -1,6 +1,6 @@
 set cloudconfig ./oracleAQ/network/admin/wallet.zip
 connect DBUSER/&1@AQDATABASE_TP ;
-/
+
 --Dequeue from obj Type Messages */ 
 DECLARE
     dequeue_options     dbms_aq.dequeue_options_t;
@@ -10,7 +10,7 @@ DECLARE
 
 BEGIN
     DBMS_AQ.DEQUEUE(
-        queue_name => 'objType_classicQueue',
+        queue_name         => 'objType_classicQueue',
         dequeue_options    => dequeue_options,
         message_properties => message_properties,
         payload            => message,
@@ -30,7 +30,7 @@ DECLARE
         
 BEGIN 
     DBMS_AQ.DEQUEUE(
-        queue_name => 'rawType_classicQueue', 
+        queue_name         => 'rawType_classicQueue', 
         dequeue_options    => dequeue_options, 
         message_properties => message_properties, 
         payload            => message, 
