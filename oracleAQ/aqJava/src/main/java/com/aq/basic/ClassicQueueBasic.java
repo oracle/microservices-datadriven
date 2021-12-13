@@ -132,12 +132,12 @@ public class ClassicQueueBasic {
 		AQQueueTableProperty qtable_prop = new AQQueueTableProperty("RAW");
 		/* qtable_prop.setCompatible("8.1"); */
 
-		AQQueueTable q_table = aq_sess.createQueueTable(username, "oracleQueueTable1", qtable_prop);
+		AQQueueTable q_table = aq_sess.createQueueTable(username, "java_basicOracleQueueTable", qtable_prop);
 		logger.info("Successful createQueueTable");
 
 		AQQueueProperty queue_prop = new AQQueueProperty();
 
-		AQQueue queue = aq_sess.createQueue(q_table, "oracleQueueName1", queue_prop);
+		AQQueue queue = aq_sess.createQueue(q_table, "java_basicOracleQueueName", queue_prop);
 		logger.info("Successful createQueue");
 
 		queue.start(true, true);
