@@ -59,14 +59,14 @@ BEGIN
   DBMS_AQADM.ADD_SUBSCRIBER(queue_name => 'plsql_appTEQ',subscriber => subscriber);
 END;
 /
-CREATE TABLE USERDETAILSTEQ(
-    ORDERID number(10), 
-    USERNAME varchar2(255), 
-    OTP number(4), 
-    DELIVERY_STATUS varchar2(10),
-    DELIVERY_LOCATION varchar2(255),
-    primary key(ORDERID)
-);
+-- CREATE TABLE USERDETAILSTEQ(
+--     ORDERID number(10), 
+--     USERNAME varchar2(255), 
+--     OTP number(4), 
+--     DELIVERY_STATUS varchar2(10),
+--     DELIVERY_LOCATION varchar2(255),
+--     primary key(ORDERID)
+-- );
 /
 select * from ALL_QUEUES where OWNER='DBUSER' and QUEUE_TYPE='NORMAL_QUEUE';
 /
