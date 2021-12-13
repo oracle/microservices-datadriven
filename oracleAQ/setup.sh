@@ -7,7 +7,6 @@ mkdir -p $comp_name ;
 export WORKFLOW_HOME=${HOME}/${comp_name}; 
 export display_name=${db_name}                                      
 export TNS_ADMIN=$WORKFLOW_HOME/network/admin 
-#export db_pwd="WelcomeAQ1234";
 
 #get user's OCID
    # read user's OCID
