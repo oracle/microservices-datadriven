@@ -61,4 +61,4 @@ for lab in $LABS_WITH_BUILDS; do
   $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-build-status.sh "$lab"
 done
 
-return $RETURN_CODE
+exit $RETURN_CODE

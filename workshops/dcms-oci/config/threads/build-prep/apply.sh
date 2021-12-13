@@ -3,7 +3,7 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Fail on error
-set -e
+set -eu
 
 
 if ! provisioning-helper-pre-apply; then
@@ -48,7 +48,7 @@ mkdir -p $STATE
 cat >$STATE/input.env <<!
 COMPARTMENT_OCID=$(state_get COMPARTMENT_OCID)
 RUN_NAME=$(state_get RUN_NAME)
-BUILDS='$All_LAB_BUILDS'
+BUILDS='$ALL_LAB_BUILDS'
 !
 cd $STATE
 provisioning-apply $MSDD_INFRA_CODE/image-repo/ocr
