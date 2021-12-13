@@ -3,8 +3,6 @@ package com.aq;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,8 +23,6 @@ public class OracleAQController {
 	@Autowired(required = true)
 	ClassicQueueWorkflow classicQueueWorkflow;
 
-	Logger logger = LoggerFactory.getLogger(OracleAQController.class);
-
 	@GetMapping(value = "/lab1")
 	public Map<String, Object> lab1() throws Exception {
 		Map<String, Object> response = new HashMap();
@@ -40,7 +36,7 @@ public class OracleAQController {
 			response.put("ResponseCode", "300");
 			response.put("ResponseText", "Failed to execute Lab 1");
 		}
-		logger.info("AddUser response:{}", response);
+		System.out.println("Basic Queue response:{}"+ response);
 		return response;
 	}
 
@@ -57,7 +53,7 @@ public class OracleAQController {
 			response.put("ResponseCode", "300");
 			response.put("ResponseText", "Failed to execute Lab 2");
 		}
-		logger.info("AddUser response:{}", response);
+		System.out.println("Workflow response:{}"+ response);
 		return response;
 	}
 

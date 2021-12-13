@@ -8,6 +8,14 @@ import java.util.Random;
 
 import javax.jms.JMSException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import com.aq.config.JsonUtils;
+import com.aq.config.UserDetails;
+import com.aq.dto.WorkflowRepository;
+
 import oracle.AQ.AQAgent;
 import oracle.AQ.AQDequeueOption;
 import oracle.AQ.AQDriverManager;
@@ -20,13 +28,12 @@ import oracle.AQ.AQQueueTable;
 import oracle.AQ.AQQueueTableProperty;
 import oracle.AQ.AQRawPayload;
 import oracle.AQ.AQSession;
-import com.aq.config.JsonUtils;
-import com.aq.config.UserDetails;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 @Service
 public class ClassicQueueWorkflow {
+	
+	@Autowired
+	private WorkflowRepository workflowRepository;
 
 	@Value("${spring.datasource.username}")
 	private String username;
@@ -49,8 +56,6 @@ public class ClassicQueueWorkflow {
 	String deliSubscriber = "java_deliSubscriber";
 	String appSubscriber = "java_appSubscriber";
 
-	private String query = null;
-
 	// @PostConstruct
 	public String lab2() throws JMSException, AQException, SQLException, ClassNotFoundException {
 
@@ -68,9 +73,7 @@ public class ClassicQueueWorkflow {
 		int orderId = rnd.nextInt(999);
 
 		UserDetails userDetails = new UserDetails(orderId, "DBUSER", otp, "Pending", "US");
-		String query = "insert into USERDETAILS values('" + orderId + "', '" + userDetails.getUsername() + "', '" + otp
-				+ "', '" + userDetails.getDeliveryStatus() + "', '" + userDetails.getDeliveryLocation() + "')";
-		databaseOperations(query);
+		workflowRepository.saveAndFlush(userDetails);
 		enqueueMessages(qsession, userQueue, userDetails, userSubscriber);
 		System.out.println("Step 1: Enqueue user is complete.");
 
@@ -133,7 +136,7 @@ public class ClassicQueueWorkflow {
 		// queue.addSubscriber(subscriber, "priority < 2");
 
 		System.out.println("        Add Subscriber : " + subscriberName);
-		String jsonString = JsonUtils.writeValueAsString(user);
+		String jsonString = user.toString();
 		AQMessage message = queue.createMessage();
 
 		byte[] b_array = jsonString.getBytes();
@@ -198,13 +201,11 @@ public class ClassicQueueWorkflow {
 		System.out.println("Step 7: Dequeue Browse by app:  [" + appBrowse_value + "]");
 
 		UserDetails deliDetails = JsonUtils.read(appBrowse_value, UserDetails.class);
-		query = "UPDATE USERDETAILS set Delivery_Status = 'DELIVERED' WHERE ORDERID = '" + deliDetails.getOrderId()
-				+ "' AND OTP = '" + deliDetails.getOtp() + "'";
+		UserDetails updateData = workflowRepository.findByOrderId(deliDetails.getOrderId());
 
 		// Step 8: Match user OTP and app OTP
 		if (userDetails.getOtp() == deliDetails.getOtp()) {
-			System.out.println("Step 8: OTP matched where user_OTP: " + userDetails.getOtp() + " and App_OTP:  "
-					+ deliDetails.getOtp());
+			System.out.println("Step 8: OTP matched where user_OTP: " + userDetails.getOtp() + " and App_OTP:  "+ deliDetails.getOtp());
 
 			// Step 9: dequeue remove
 			userReceiver.setDequeueMode(AQDequeueOption.DEQUEUE_REMOVE);
@@ -224,22 +225,19 @@ public class ClassicQueueWorkflow {
 			System.out.println("          Dequeue ends for all receivers.....");
 
 			// Step 10: Update DB
-			query = "UPDATE USERDETAILS set Delivery_Status = 'DELIVERED' WHERE ORDERID = '" + deliDetails.getOrderId()
-					+ "' AND OTP = '" + deliDetails.getOtp() + "'";
-			databaseOperations(query);
+			updateData.setDeliveryStatus("DELIVERED");
 			System.out.println("Step 10: Update Delivery Status as DELIVERED in DB");
 
 			status = "Success";
 
 		} else {
 			// Step 10: Update DB
-			query = "UPDATE USERDETAILS set Delivery_Status = 'FAILED' WHERE ORDERID = '" + deliDetails.getOrderId()
-					+ "' AND OTP = '" + deliDetails.getOtp() + "'";
-			databaseOperations(query);
 			System.out.println("Step 10: Update Delivery Status as FAILED in DB");
+			updateData.setDeliveryStatus("FAILED");
 
 			status = "Failed";
 		}
+		workflowRepository.saveAndFlush(updateData);
 		return status;
 	}
 
@@ -255,19 +253,5 @@ public class ClassicQueueWorkflow {
 		} else {
 			System.out.println("Queue tables dropped failed");
 		}
-	}
-
-	public void databaseOperations(String queryData) throws ClassNotFoundException, SQLException {
-		Class.forName("oracle.jdbc.driver.OracleDriver");
-		Connection con = DriverManager.getConnection(jdbcURL, username, password);
-		Statement stmt = con.createStatement();
-
-		int x = stmt.executeUpdate(queryData);
-		if (x > 0) {
-			System.out.println("        Successfully executed database operation");
-		} else {
-			System.out.println("        Failed database operation");
-		}
-		con.close();
 	}
 }

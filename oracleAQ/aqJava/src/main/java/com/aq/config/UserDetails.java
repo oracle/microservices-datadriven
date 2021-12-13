@@ -2,72 +2,80 @@ package com.aq.config;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-	public class UserDetails implements Serializable {
+@Entity
+@Table(name = "USERDETAILS")
+public class UserDetails implements Serializable {
 
-		private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-		private int orderId;
-		
-		private String username;
-		
-		private int otp;
-		
-		private String deliveryStatus;
-		
-		private String deliveryLocation;
-	
-		public UserDetails() {
-	
-		}
-	
-		public UserDetails(int string, String username, int otp, String deliveryStatus, String deliveryLocation) {
-			super();
-			this.orderId = string;
-			this.username = username;
-			this.otp = otp;
-			this.deliveryStatus = deliveryStatus;
-			this.deliveryLocation = deliveryLocation;
-		}
+	@Id
+	@Column(name = "ORDERID")
+	private int orderId;
 
-		public int getOrderId() {
-			return orderId;
-		}
+	@Column(name = "USERNAME")
+	private String username;
 
-		public void setOrderId(int orderId) {
-			this.orderId = orderId;
-		}
+	@Column(name = "OTP")
+	private int otp;
 
-		public String getUsername() {
-			return username;
-		}
+	@Column(name = "DELIVERYSTATUS")
+	private String deliveryStatus;
 
-		public void setUsername(String username) {
-			this.username = username;
-		}
+	@Column(name = "DELIVERYLOCATION")
+	private String deliveryLocation;
 
-		public int getOtp() {
-			return otp;
-		}
+	public UserDetails(int orderId, String username, int otp, String deliveryStatus, String deliveryLocation) {
+		super();
+		this.orderId = orderId;
+		this.username = username;
+		this.otp = otp;
+		this.deliveryStatus = deliveryStatus;
+		this.deliveryLocation = deliveryLocation;
+	}
 
-		public void setOtp(int otp) {
-			this.otp = otp;
-		}
+	public int getOrderId() {
+		return orderId;
+	}
 
-		public String getDeliveryStatus() {
-			return deliveryStatus;
-		}
+	public void setOrderId(int orderId) {
+		this.orderId = orderId;
+	}
 
-		public void setDeliveryStatus(String deliveryStatus) {
-			this.deliveryStatus = deliveryStatus;
-		}
+	public String getUsername() {
+		return username;
+	}
 
-		public String getDeliveryLocation() {
-			return deliveryLocation;
-		}
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-		public void setDeliveryLocation(String deliveryLocation) {
-			this.deliveryLocation = deliveryLocation;
-		}
+	public int getOtp() {
+		return otp;
+	}
+
+	public void setOtp(int otp) {
+		this.otp = otp;
+	}
+
+	public String getDeliveryStatus() {
+		return deliveryStatus;
+	}
+
+	public void setDeliveryStatus(String deliveryStatus) {
+		this.deliveryStatus = deliveryStatus;
+	}
+
+	public String getDeliveryLocation() {
+		return deliveryLocation;
+	}
+
+	public void setDeliveryLocation(String deliveryLocation) {
+		this.deliveryLocation = deliveryLocation;
+	}
 
 }
