@@ -5,7 +5,7 @@
 # Make sure this is run via source or .
 if (return 0 2>/dev/null); then
   echo "ERROR: Usage './status.sh'"
-  exit
+  exit 1
 fi
 
 # Environment must be setup before running this script
@@ -27,7 +27,7 @@ case "$DCMS_STATUS" in
     ;;
   apply)
     PHASE='SETUP RUNNING'
-    RETURN_CODE=1
+    RETURN_CODE=64 # Still running
     ;;
   apply-failed)
     PHASE='SETUP FAILED'
@@ -37,7 +37,7 @@ case "$DCMS_STATUS" in
     ;;
   destroy)
     PHASE='TEARDOWN RUNNING'
-    RETURN_CODE=1
+    RETURN_CODE=64 # Still running
     ;;
   destroy-failed)
     PHASE='TEARDOWN FAILED'
