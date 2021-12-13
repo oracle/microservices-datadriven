@@ -9,9 +9,9 @@ DECLARE
  message             obj_typ;
 
 BEGIN
- message := obj_typ('NORMAL MESSAGE','enqueued to msg_queue first.');
+ message := obj_typ('NORMAL MESSAGE','enqueued to objType_classicQueue first.');
  DBMS_AQ.ENQUEUE(
-     queue_name => 'objType_classicQueue',           
+     queue_name           => 'objType_classicQueue',           
      enqueue_options      => enqueue_options,       
      message_properties   => message_properties,     
      payload              => message,               
