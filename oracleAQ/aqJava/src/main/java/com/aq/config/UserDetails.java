@@ -23,10 +23,10 @@ public class UserDetails implements Serializable {
 	@Column(name = "OTP")
 	private int otp;
 
-	@Column(name = "DELIVERYSTATUS")
+	@Column(name = "DELIVERY_STATUS")
 	private String deliveryStatus;
 
-	@Column(name = "DELIVERYLOCATION")
+	@Column(name = "DELIVERY_LOCATION")
 	private String deliveryLocation;
 
 	public UserDetails(int orderId, String username, int otp, String deliveryStatus, String deliveryLocation) {
