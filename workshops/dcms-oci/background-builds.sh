@@ -50,6 +50,6 @@ for lab in $LABS_WITH_BUILDS; do
     $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-build-runner.sh "$b" >>$DCMS_LOG_DIR/build_$b.log 2>&1
   done
 
-  # Wait for Lab2 builds
+  # Wait for Lab builds
   wait
 done

@@ -102,13 +102,11 @@ case "$DCMS_STATUS" in
 
   applied | byo)
     # Nothing to do
-    echo "Setup is completed"
     exit
     ;;
 
   apply)
     # Nothing to do
-    echo "Setup is already running.  Run 'status' to get the status of the setup"
     exit
     ;;
 
