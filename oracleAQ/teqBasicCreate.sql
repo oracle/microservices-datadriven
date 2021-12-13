@@ -2,7 +2,7 @@ set cloudconfig ./oracleAQ/network/admin/wallet.zip
 connect DBUSER/&1@AQDATABASE_TP ;
 
 CREATE type Message_type as object (subject     VARCHAR2(30), text        VARCHAR2(80));  
-
+/
 -- Creating an Object type queue 
 BEGIN
  DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(

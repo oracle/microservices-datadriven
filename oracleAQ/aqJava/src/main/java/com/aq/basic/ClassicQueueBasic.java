@@ -120,10 +120,10 @@ public class ClassicQueueBasic {
 
 	public void useCreatedQueue(AQSession aq_sess) throws AQException {
 
-		AQQueueTable q_table = aq_sess.getQueueTable(username, "oracleQueueTable0");
+		AQQueueTable q_table = aq_sess.getQueueTable(username, oracleQueueTable);
 		logger.info("Successful getQueueTable");
 
-		AQQueue queue = aq_sess.getQueue(username, "oracleQueueName0");
+		AQQueue queue = aq_sess.getQueue(username, oracleQueueName);
 		logger.info("Successful getQueue" + queue.getQueueTableName() + "------" + queue.getName());
 	}
 

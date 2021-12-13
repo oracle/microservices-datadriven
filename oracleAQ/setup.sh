@@ -45,7 +45,7 @@ cd $WORKFLOW_HOME;
 sql /nolog @$WORKFLOW_HOME/basicCreateUser.sql $db_pwd
 
 # Java setup
-cd $WORKFLOW_HOME/java;
+cd $WORKFLOW_HOME/aqJava;
 mvn clean install
 cd target
 killall java

@@ -2,7 +2,7 @@
 set cloudconfig ./oracleAQ/network/admin/wallet.zip
 --connect DBUSER/"&password"@AQDATABASE_TP ;
 connect DBUSER/&1@AQDATABASE_TP ;
-
+/
 --user and delivery enqueue
 DECLARE
     enqueue_options     dbms_aq.enqueue_options_t;
