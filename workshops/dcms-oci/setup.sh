@@ -155,11 +155,6 @@ if ! test -f "$OCI_CLI_CONFIG_FILE" && ! test -f ~/.oci/config; then
   return 1
 fi
 
-# Home Region
-if ! state_done HOME_REGION; then
-  state_set HOME_REGION `oci iam region-subscription list --query 'data[?"is-home-region"]."region-name" | join('\'' '\'', @)' --raw-output`
-fi
-
 # Run Name (random)
 if ! state_done RUN_NAME; then
   state_set RUN_NAME gd`awk 'BEGIN { srand(); print int(1 + rand() * 100000000)}'`
@@ -189,6 +184,7 @@ while ! state_done RUN_TYPE; do
     state_set DB2_NAME "INVENTORY$(state_get RESERVATION_ID)"
     state_set_done OKE_LIMIT_CHECK
     state_set_done ATP_LIMIT_CHECK
+    state_set HOME_REGION 'NA'
   else
     # Run in your own tenancy
     state_set RUN_TYPE "OT"
@@ -255,6 +251,11 @@ while ! state_done ATP_LIMIT_CHECK; do
   fi
 done
 
+# Home Region
+if ! state_done HOME_REGION; then
+  state_set HOME_REGION `oci iam region-subscription list --query 'data[?"is-home-region"]."region-name" | join('\'' '\'', @)' --raw-output`
+fi
+
 # Create or validate the compartment
 while ! state_done COMPARTMENT_OCID; do
   if test "$(state_get RUN_TYPE)" == 'LL'; then
@@ -270,7 +271,7 @@ while ! state_done COMPARTMENT_OCID; do
     fi
   fi
 
-  if ! test -z "$TEST_COMPARTMENT"; then
+  if ! test -z "${TEST_COMPARTMENT-}"; then
     COMP="$TEST_COMPARTMENT"
   else
     echo 'Please enter the OCI compartment where you would like the workshop resources to be created.'
@@ -297,7 +298,7 @@ while ! state_done COMPARTMENT_OCID; do
   fi
 
   # New compartment
-  if ! test -z "$TEST_PARENT_COMPARTMENT_OCID"; then
+  if ! test -z "${TEST_PARENT_COMPARTMENT_OCID-}"; then
     PARENT_COMP="$TEST_PARENT_COMPARTMENT_OCID"
   else
     echo 'Please enter the OCID of the compartment in which you would like the new compartment to be created.'
@@ -323,11 +324,11 @@ done
 
 # Get the User OCID
 while ! state_done USER_OCID; do
-  if test -z "$TEST_USER_OCID"; then
+  if test -z "${TEST_USER_OCID-}"; then
     echo "Your user's OCID has a name beginning ocid1.user.oc1.."
     read -p "Please enter your OCI user's OCID: " USER_OCID
   else
-    USER_OCID=$TEST_USER_OCID
+    USER_OCID=${TEST_USER_OCID-}
   fi
   # Validate
   if test ""`oci iam user get --user-id "$USER_OCID" --query 'data."lifecycle-state"' --raw-output 2>$DCMS_LOG_DIR/user_ocid_err` == 'ACTIVE'; then
@@ -416,10 +417,10 @@ if ! is_secret_set DB_PASSWORD; then
   echo
 
   while true; do
-    if test -z "$TEST_DB_PASSWORD"; then
+    if test -z "${TEST_DB_PASSWORD-}"; then
       read -s -r -p "Enter the password to be used for the order and inventory databases: " PW
     else
-      PW="$TEST_DB_PASSWORD"
+      PW="${TEST_DB_PASSWORD-}"
     fi
     if [[ ${#PW} -ge 12 && ${#PW} -le 30 && "$PW" =~ [A-Z] && "$PW" =~ [a-z] && "$PW" =~ [0-9] && "$PW" != *admin* && "$PW" != *'"'* ]]; then
       echo
@@ -439,10 +440,10 @@ if ! is_secret_set UI_PASSWORD; then
   echo
 
   while true; do
-    if test -z "$TEST_UI_PASSWORD"; then
+    if test -z "${TEST_UI_PASSWORD-}"; then
       read -s -r -p "Enter the password to be used for accessing the UI: " PW
     else
-      PW="$TEST_UI_PASSWORD"
+      PW="${TEST_UI_PASSWORD-}"
     fi
     if [[ ${#PW} -ge 8 && ${#PW} -le 30 ]]; then
       echo

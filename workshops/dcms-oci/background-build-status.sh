@@ -24,10 +24,10 @@ for b in $BUILDS; do
       COMPLETED_BUILDS="$COMPLETED_BUILDS $b"
     else
       PID_FILE="$DCMS_BACKGROUND_BUILDS/$b/PID"
-      if test -f $PID_FILE && ! ps -fp $(<$PID_FILE) >>/dev/null 2>&1; then
-        FAILED_BUILDS="$FAILED_BUILDS $b"
-      else
+      if test -f $PID_FILE && ps -fp $(<$PID_FILE) >>/dev/null 2>&1; then
         RUNNING_BUILDS="$RUNNING_BUILDS $b"
+      else
+        FAILED_BUILDS="$FAILED_BUILDS $b"
       fi
     fi
   else

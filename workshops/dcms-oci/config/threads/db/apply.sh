@@ -3,7 +3,7 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Fail on error
-set -e
+set -eu
 
 
 if ! provisioning-helper-pre-apply; then
@@ -43,12 +43,12 @@ fi
 
 
 # For Live Labs
-if test $(state_get RUN_TYPE) == "LL"; then
+if test "$(state_get RUN_TYPE)" == 'LL'; then
   # For Live Labs set the password and download the tns info
   for db in "db1 db2"; do
     db_upper=`echo $db | tr '[:lower:]' '[:upper:]'`
     # Legacy - until we change LL terraform to create DB1 and DB2
-    if test "$db" == 'order_db'; then
+    if test "$db" == 'db1'; then
       DB_DIS_NAME="ORDERDB"
     else
       DB_DIS_NAME="INVENTORYDB"
@@ -62,11 +62,11 @@ if test $(state_get RUN_TYPE) == "LL"; then
 
     # Set the password
     if ! state_done ${db_upper}_PASSWORD_SET; then
-      DB_PASSWORD=$(get_secret ${state_get $DB_PASSWORD_SECRET})
+      DB_PASSWORD=$(get_secret $(state_get DB_PASSWORD_SECRET))
       umask 177
       echo '{"adminPassword": "'"$DB_PASSWORD"'"}' > temp_params
       umask 22
-      oci db autonomous-database update --autonomous-database-id "${state_get ${db_upper}_OCID}" --from-json "file://temp_params" >/dev/null
+      oci db autonomous-database update --autonomous-database-id "$(state_get ${db_upper}_OCID)" --from-json "file://temp_params" >/dev/null
       rm temp_params
       state_set_done ${db_upper}_PASSWORD_SET
     fi
@@ -77,14 +77,14 @@ if test $(state_get RUN_TYPE) == "LL"; then
       mkdir -p $TNS_ADMIN
       rm -rf $TNS_ADMIN/*
       cd $TNS_ADMIN
-      oci db autonomous-database generate-wallet --autonomous-database-id "${state_get ${db_upper}_OCID}" --file 'wallet.zip' --password 'Welcome1' --generate-type 'ALL'
+      oci db autonomous-database generate-wallet --autonomous-database-id "$(state_get ${db_upper}_OCID)" --file 'wallet.zip' --password 'Welcome1' --generate-type 'ALL'
       unzip wallet.zip
       cat - >sqlnet.ora <<!
 WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$TNS_ADMIN")))
 SSL_SERVER_DN_MATCH=yes
 !
       state_set ${db_upper}_TNS_ADMIN "$TNS_ADMIN"
-      state_set ${db_upper}_DB_ALIAS="${state_get ${db_upper}_NAME}_tp"
+      state_set ${db_upper}_DB_ALIAS "$(state_get ${db_upper}_NAME)_tp"
     fi
   done
 else
