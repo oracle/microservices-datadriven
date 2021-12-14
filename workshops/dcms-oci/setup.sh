@@ -8,7 +8,7 @@ set -eu
 # Make sure this is executed and not sourced
 if (return 0 2>/dev/null) ; then
   echo "ERROR: Usage './setup.sh'"
-  exit
+  exit 1
 fi
 
 # Environment must be setup before running this script
@@ -31,7 +31,7 @@ case "$DCMS_SS_STATUS" in
 
   applying)
     # Setup already running so exit
-    exit
+    exit 0
     ;;
 
   destroying-failed | destroying | destroyed)

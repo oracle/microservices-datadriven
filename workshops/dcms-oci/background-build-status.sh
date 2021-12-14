@@ -24,14 +24,10 @@ for b in $BUILDS; do
       COMPLETED_BUILDS="$COMPLETED_BUILDS $b"
     else
       PID_FILE="$DCMS_BACKGROUND_BUILDS/$b/PID"
-      if test -f $PID_FILE; then
-        if ! ps -fp $(<$PID_FILE) >>/dev/null 2>&1; then
-          FAILED_BUILDS="$FAILED_BUILDS $b"
-        else
-          RUNNING_BUILDS="$RUNNING_BUILDS $b"
-        fi
+      if test -f $PID_FILE && ! ps -fp $(<$PID_FILE) >>/dev/null 2>&1; then
+        FAILED_BUILDS="$FAILED_BUILDS $b"
       else
-        echo "Unknown status for build $b log $DCMS_LOG_DIR/build_$b.log"
+        RUNNING_BUILDS="$RUNNING_BUILDS $b"
       fi
     fi
   else
