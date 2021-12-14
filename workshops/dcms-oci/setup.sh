@@ -29,18 +29,18 @@ case "$DCMS_SS_STATUS" in
     # Nothing to do
     ;;
 
-  apply)
+  applying)
     # Setup already running so exit
     exit
     ;;
 
-  destroy-failed | destroy | destroyed)
+  destroying-failed | destroying | destroyed)
     # Cannot setup during destroy phase
     echo "ERROR: Destroy is running and so cannot run setup"
     exit 1
     ;;
 
-  apply-failed | new)
+  applying-failed | new)
     # Start or restart the state_store setup
     cd $DCMS_STATE_STORE
     echo "STATE_LOG='$DCMS_LOG_DIR/state.log'" > $DCMS_STATE_STORE/input.env
@@ -65,18 +65,18 @@ case "$DCMS_VAULT_STATUS" in
     # Nothing to do
     ;;
 
-  apply)
+  applying)
     # Setup already running so exit
     exit
     ;;
 
-  destroy-failed | destroy | destroyed)
+  destroying-failed | destroying | destroyed)
     # Cannot setup during destroy phase
     echo "ERROR: Destroy is running and so cannot run setup"
     exit 1
     ;;
 
-  apply-failed | new)
+  applying-failed | new)
     # Start or restart the vault setup
     cd $DCMS_VAULT
     if ! provisioning-apply $MSDD_INFRA_CODE/vault/folder; then
@@ -105,18 +105,18 @@ case "$DCMS_STATUS" in
     exit
     ;;
 
-  apply)
+  applying)
     # Nothing to do
     exit
     ;;
 
-  destroy | destroy-failed | destroyed)
+  destroying | destroying-failed | destroyed)
     # Cannot setup during destroy phase
     echo "ERROR: Destroy is running and so cannot run setup"
     exit 1
     ;;
 
-  apply-failed)
+  applying-failed)
     # Restart the setup
     cd $DCMS_STATE
     echo "Restarting setup.  Call 'status' to get the status of the setup"

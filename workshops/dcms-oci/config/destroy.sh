@@ -38,11 +38,11 @@ while true; do
         # Nothing to do
         ;;
 
-      destroy)
+      destroying)
         RUNNING_THREADS="$RUNNING_THREADS $t"
         ;;
 
-      destroy-failed)
+      destroying-failed)
         # Thread failed so exit
         echo "ERROR: Thread $t failed"
         exit 1

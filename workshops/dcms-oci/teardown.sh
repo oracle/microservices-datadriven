@@ -28,17 +28,17 @@ fi
 
 case "$DCMS_STATUS" in
 
-  new | destroyed | byo | destroy)
+  new | destroyed | byo | destroying)
     # Nothing to do
     ;;
 
-  apply)
+  applying)
     echo "ERROR: Destroy cannot be executed because setup is running."
     exit 1
     ;;
 
-  applied | apply-failed | destroy-failed)
-    if ! test "$DCMS_STATUS" == 'destroy-failed'; then
+  applied | applying-failed | destroying-failed)
+    if ! test "$DCMS_STATUS" == 'destroying-failed'; then
       # First time running destroy. Take an archive copy of the state
       BACKUP_DIR=${DCMS_RUN_DIR}_$( date '+%F_%H:%M:%S' )
       mkdir -p $BACKUP_DIR
