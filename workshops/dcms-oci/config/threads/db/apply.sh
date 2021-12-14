@@ -45,7 +45,7 @@ fi
 # For Live Labs
 if test "$(state_get RUN_TYPE)" == 'LL'; then
   # For Live Labs set the password and download the tns info
-  for db in "db1 db2"; do
+  for db in db1 db2; do
     db_upper=`echo $db | tr '[:lower:]' '[:upper:]'`
     # Legacy - until we change LL terraform to create DB1 and DB2
     if test "$db" == 'db1'; then
@@ -84,7 +84,7 @@ WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$TNS_ADMI
 SSL_SERVER_DN_MATCH=yes
 !
       state_set ${db_upper}_TNS_ADMIN "$TNS_ADMIN"
-      state_set ${db_upper}_DB_ALIAS "$(state_get ${db_upper}_NAME)_tp"
+      state_set ${db_upper}_ALIAS "$(state_get ${db_upper}_NAME)_tp"
     fi
   done
 else
