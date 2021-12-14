@@ -1,0 +1,64 @@
+## nginx configuration
+## Ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/index.md
+##
+controller:
+  # https://github.com/kubernetes/ingress-nginx
+  # https://github.com/kubernetes/ingress-nginx/blob/main/stable.txt
+  # Adopting the last stable version : controller-v0.49.0
+  image:
+    tag: "v0.49.0"
+    pullPolicy: Always
+
+  metrics: 
+    enabled: true
+
+  # Define requests resources to avoid probe issues due to CPU utilization in busy nodes
+  # ref: https://github.com/kubernetes/ingress-nginx/issues/4735#issuecomment-551204903
+  # Ideally, there should be no limits.
+  # https://engineering.indeedblog.com/blog/2019/12/cpu-throttling-regression-fix/
+  resources:
+#    limits:
+#      cpu: 200m
+#      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 90Mi
+
+  service:
+    annotations:
+      service.beta.kubernetes.io/oci-load-balancer-ssl-ports: "443"
+      service.beta.kubernetes.io/oci-load-balancer-tls-secret: ssl-certificate-secret
+      service.beta.kubernetes.io/oci-load-balancer-shape: "100Mbps"
+
+      # The 10 Mbps shape is Always Free eligible.
+      # https://docs.oracle.com/en-us/iaas/Content/Balance/Concepts/balanceoverview.htm#Overview\_of\_Load\_Balancing
+      # service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
+      # service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
+      # service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "100"
+
+#    enableHttp: false
+#    enableHttps: true
+
+    ## Set external traffic policy to: "Local" to preserve source IP on
+    ## providers supporting it
+    ## Ref: https://kubernetes.io/docs/tutorials/services/source-ip/#source-ip-for-services-with-typeloadbalancer
+    externalTrafficPolicy: "Local"
+
+    # Must be either "None" or "ClientIP" if set. Kubernetes will default to "None".
+    # Ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    # sessionAffinity: ""
+
+    # specifies the health check node port (numeric port number) for the service. If healthCheckNodePort isn’t specified,
+    # the service controller allocates a port from your cluster’s NodePort range.
+    # Ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    # healthCheckNodePort: 0
+
+#    ports:
+#      http: 80
+#      https: 443
+
+    targetPorts:
+      http: http
+      https: http
+
+#    type: LoadBalancer
