@@ -5,7 +5,7 @@
 # Make sure this is run via source or .
 if (return 0 2>/dev/null); then
   echo "ERROR: Usage './teardown.env'"
-  exit
+  exit 1
 fi
 
 # Environment must be setup before running this script
@@ -17,7 +17,7 @@ fi
 # Check for Live Labs
 if [[ "$HOME" =~ /home/ll[0-9]{1,5}_us ]]; then
   echo "No need to teardown in Live Labs"
-  return 1
+  exit 0
 fi
 
 # Get the provisioning status
@@ -42,6 +42,7 @@ case "$DCMS_STATUS" in
       # First time running destroy. Take an archive copy of the state
       BACKUP_DIR=${DCMS_RUN_DIR}_$( date '+%F_%H:%M:%S' )
       mkdir -p $BACKUP_DIR
+      echo "Making a backup copy of the workshop state in $BACKUP_DIR"
       cp -r $DCMS_RUN_DIR/* $BACKUP_DIR/
     fi
 

@@ -14,12 +14,25 @@ if test -z "$DCMS_STATE"; then
   exit 1
 fi
 
+# First parameter repeat
+if test "${1-0}" != '0'; then
+  # Repeating so make some screen space
+  for i in {1..15}; do
+    echo
+  done
+
+  for i in {1..15}; do
+    tput cuu1
+  done
+fi
+
 # Remember initial screen location
 tput sc
 
 while true; do
   # Move to initial screen position and clear to bottom of screen
-  tput rc ed
+  tput rc
+  tput ed
 
   # Get the setup status
 
@@ -58,7 +71,10 @@ while true; do
 
   # Provisioning status
   echo
-  echo "dcms-oci workshop provisioning phase: $PHASE"
+  printf 'dcms-oci workshop provisioning phase: '
+  tput bold
+  echo "$PHASE"
+  tput sgr0
   echo
 
   $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/config/status.sh
@@ -79,7 +95,7 @@ while true; do
     break
   fi
 
-  if [[ ! "$DCMS_STATUS" =~ *RUNNING ]]; then
+  if [[ ! "$PHASE" =~ .*RUNNING ]]; then
     # Nothing more to see
     break
   fi
