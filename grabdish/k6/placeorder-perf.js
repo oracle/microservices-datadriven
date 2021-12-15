@@ -3,6 +3,7 @@
 import http from 'k6/http';
 import { sleep, check } from 'k6';
 
+//this is used by test suite, not by workshop itself
 export default function() {
   let orderid=(100000 * __VU + __ITER).toString();
   const res = http.get(`https://${__ENV.LB}:443/placeOrder?orderid=${orderid}&itemid=sushi&deliverylocation=London`);
