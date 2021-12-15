@@ -3,16 +3,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: db-log-exporter-%EXPORTER_NAME%
+  name: db-log-exporter-orderpdb
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: db-log-exporter-%EXPORTER_NAME%
+      app: db-log-exporter-orderpdb
   template:
     metadata:
       labels:
-        app: db-log-exporter-%EXPORTER_NAME%
+        app: db-log-exporter-orderpdb
         version: helidon-mp
     spec:
       containers:
@@ -21,9 +21,9 @@ spec:
         imagePullPolicy: Always
         env:
         - name: oracle.ucp.jdbc.PoolDataSource.alertlogpdb.user
-          value: "%USER%"
+          value: "ORDERUSER"
         - name: oracle.ucp.jdbc.PoolDataSource.alertlogpdb.URL
-          value: "jdbc:oracle:thin:@%PDB_NAME%_tp?TNS_ADMIN=/msdataworkshop/creds"
+          value: "jdbc:oracle:thin:@${ORDER_DB_ALIAS}?TNS_ADMIN=/msdataworkshop/creds"
         - name: oracle.ucp.jdbc.PoolDataSource.alertlogpdb.password
           valueFrom:
             secretKeyRef:
@@ -46,4 +46,4 @@ spec:
       volumes:
       - name: creds
         secret:
-          secretName: db-wallet-secret
+          secretName: order-db-tns-admin-secret
