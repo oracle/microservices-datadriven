@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: inventory
-        image: ${DOCKER_REGISTRY}/%IMAGE_NAME%:%IMAGE_VERSION%
+        image: ${DOCKER_REGISTRY}/inventory-springboot:0.1
         imagePullPolicy: Always
         env:
         - name: LOG_LEVEL
@@ -24,10 +24,14 @@ spec:
           value: "8080"
         - name: db_user
           value: "inventoryuser"
+        - name: spring.datasource.username
+          value: "inventoryuser"
         - name: db_url
           value: "jdbc:oracle:thin:@${INVENTORY_DB_ALIAS}?TNS_ADMIN=/msdataworkshop/creds"
+        - name: spring.datasource.url
+          value: "jdbc:oracle:thin:@${INVENTORY_DB_ALIAS}?TNS_ADMIN=/msdataworkshop/creds"
         - name: db_queueOwner
-          value: "inventoryuser"
+          value: "AQ"
         - name: db_orderQueueName
           value: "orderqueue"
         - name: db_inventoryQueueName
@@ -37,6 +41,12 @@ spec:
         - name: VAULT_SECRET_OCID
           value: "${VAULT_SECRET_OCID-}"
         - name: db_password
+          valueFrom:
+            secretKeyRef:
+              name: dbuser
+              key: dbpassword
+              optional: true #not needed/used if using VAULT_SECRET_OCID exists
+        - name: spring.datasource.password
           valueFrom:
             secretKeyRef:
               name: dbuser

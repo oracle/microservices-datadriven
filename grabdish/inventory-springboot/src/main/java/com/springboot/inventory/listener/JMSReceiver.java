@@ -35,6 +35,7 @@ public class JMSReceiver {
 	@Autowired
 	private Environment environment;
 	
+    String queueOwner = System.getenv("db_queueOwner"); // environment.getProperty("db_queueOwner");
     String orderQueueName = System.getenv("db_orderQueueName"); // environment.getProperty("db_orderQueueName");
     String inventoryQueueName = System.getenv("db_inventoryQueueName"); // environment.getProperty("db_inventoryQueueName");
 
@@ -44,7 +45,7 @@ public class JMSReceiver {
 	public static final String INVENTORYDOESNOTEXIST = "inventorydoesnotexist";
 	Logger logger = LoggerFactory.getLogger(JMSReceiver.class);
 
-	@JmsListener(destination ="ORDERQUEUE", containerFactory = "queueConnectionFactory")
+	@JmsListener(destination = "AQ.ORDER_QUEUE", containerFactory = "topicConnectionFactory")
 	public void listenOrderEvent(String message, AQjmsSession session) throws Exception {
 		logger.info("Received Message Session: " + session + " orderMessage :" + message);
 		Order order = JsonUtils.read(message, Order.class);
@@ -57,7 +58,7 @@ public class JMSReceiver {
 		Inventory inventory = new Inventory(orderid, itemid, inventorylocation, "beer");
 		String jsonString = JsonUtils.writeValueAsString(inventory);
 		logger.info("Sending reply for orderId :" + orderid + " itemid:" + itemid + " inventorylocation:" + inventorylocation+ " jsonString:" + jsonString+ " inventoryQueueName:" + inventoryQueueName);
-		jmsTemplate.convertAndSend(session.getTopic("INVENTORYUSER", inventoryQueueName), jsonString);
+		jmsTemplate.convertAndSend(session.getTopic(queueOwner, inventoryQueueName), jsonString);
 		logger.info("Sending successful");
 	}
 

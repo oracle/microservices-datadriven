@@ -78,6 +78,7 @@ public class OracleAQConfiguration {
 		DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
 		configurer.configure(factory, connectionFactory);
 		factory.setPubSubDomain(true);
+		factory.setClientId("inventory_service");
 		return factory;
 	}
 
@@ -87,10 +88,7 @@ public class OracleAQConfiguration {
 			@Override
 			public Destination resolveDestinationName(Session session, String destinationName, boolean pubSubDomain)
 					throws JMSException {
-				if (destinationName.contains("INVENTORY") || destinationName.contains("inventory")) {
-					pubSubDomain = true;
-				}
-				return super.resolveDestinationName(session, destinationName, pubSubDomain);
+				return super.resolveDestinationName(session, destinationName, true);
 			}
 		};
 	}
