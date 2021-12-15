@@ -18,7 +18,7 @@
     <artifactId>order-mongodb-kafka</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>${project.artifactId}</name>
-    <description>stateful microservices demo</description>
+    <description>Order MongoDB Kafka</description>
 
     <parent>
         <groupId>io.helidon.applications</groupId>
