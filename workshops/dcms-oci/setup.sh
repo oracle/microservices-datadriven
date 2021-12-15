@@ -220,7 +220,7 @@ if ! state_done OKE_LIMIT_CHECK; then
     exit
   elif test "$OKE_LIMIT" -eq 1; then
     echo 'You are limited to only one OKE cluster in this tenancy.  This workshop will create one additional OKE cluster and so any other OKE clusters must be terminated.'
-    if test -z "$TEST_USER_OCID"; then
+    if test -z "${TEST_USER_OCID-}"; then
       read -p "Please confirm that no other un-terminated OKE clusters exist in this tenancy and then hit [RETURN]? " DUMMY
     fi
   fi
