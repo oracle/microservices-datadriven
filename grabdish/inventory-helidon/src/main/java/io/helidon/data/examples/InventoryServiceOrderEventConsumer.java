@@ -42,7 +42,7 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         System.out.println("... isAutoCommit:" + isAutoCommit);
         try {
             if (isPLSQL)listenForOrderEventsPLSQL(isRollback, isAutoCommit);
-            else listenForOrderEventsNew();
+            else listenForOrderEventsTopic();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -73,7 +73,7 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         }
     }
 
-    public void listenForOrderEventsNew() throws Exception {
+    public void listenForOrderEventsrtopic() throws Exception {
         TopicConnectionFactory t_cf = AQjmsFactory.getTopicConnectionFactory(inventoryResource.atpInventoryPDB);
         TopicConnection tconn = t_cf.createTopicConnection(inventoryResource.inventoryuser, inventoryResource.inventorypw);
         TopicSession tsess = tconn.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -136,7 +136,7 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         }
     }
 
-    public void listenForOrderEvents() throws Exception {
+    public void listenForOrderEventsQueue() throws Exception {
         TopicConnectionFactory t_cf = AQjmsFactory.getTopicConnectionFactory(inventoryResource.atpInventoryPDB);
         TopicSession tsess = null;
         TopicConnection tconn = null;

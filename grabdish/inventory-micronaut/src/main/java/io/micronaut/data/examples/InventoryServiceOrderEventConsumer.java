@@ -42,13 +42,13 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
     public void run() {
         System.out.println("Receive messages... ");
         try {
-            listenForOrderEventsNew();
+            listenForOrderEventsTopic();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void listenForOrderEventsNew() throws Exception {
+    public void listenForOrderEventsTopic() throws Exception {
         TopicConnectionFactory t_cf = AQjmsFactory.getTopicConnectionFactory(atpInventoryPDB);
         TopicConnection tconn = t_cf.createTopicConnection(inventoryuser, inventorypw);
         TopicSession tsess = tconn.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -111,7 +111,7 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         }
     }
 
-    public void listenForOrderEvents() throws Exception {
+    public void listenForOrderEventsQueue() throws Exception {
         QueueConnectionFactory qcfact = AQjmsFactory.getQueueConnectionFactory(atpInventoryPDB);
         QueueSession qsess = null;
         QueueConnection qconn = null;

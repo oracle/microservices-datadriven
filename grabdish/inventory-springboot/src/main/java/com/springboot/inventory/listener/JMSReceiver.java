@@ -45,7 +45,7 @@ public class JMSReceiver {
 	public static final String INVENTORYDOESNOTEXIST = "inventorydoesnotexist";
 	Logger logger = LoggerFactory.getLogger(JMSReceiver.class);
 
-	@JmsListener(destination = "AQ.ORDER_QUEUE", containerFactory = "topicConnectionFactory")
+	@JmsListener(destination = "AQ.orderqueue", containerFactory = "topicConnectionFactory")
 	public void listenOrderEvent(String message, AQjmsSession session) throws Exception {
 		logger.info("Received Message Session: " + session + " orderMessage :" + message);
 		Order order = JsonUtils.read(message, Order.class);
