@@ -6,7 +6,7 @@ EXECUTE SYS.DBMS_AQADM.CREATE_QUEUE_TABLE(queue_table = > 'TRAVELAGENCYQUEUETABL
 BEGIN
    DBMS_AQADM.CREATE_QUEUE_TABLE (
       queue_table          => 'TRAVELAGENCYQUEUETABLE',
-      queue_payload_type   => 'SYS.AQ\$_JMS_TEXT_MESSAGE',
+      queue_payload_type   => 'SYS.AQ$_JMS_TEXT_MESSAGE',
       multiple_consumers   => true,
       compatible           => '8.1');
 
