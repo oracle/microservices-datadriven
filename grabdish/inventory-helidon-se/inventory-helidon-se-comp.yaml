@@ -21,7 +21,7 @@ spec:
           containers:
             - name: inventory
               imagePullPolicy: Always
-              image: %DOCKER_REGISTRY%/%IMAGE_NAME%:%IMAGE_VERSION%
+              image: ${DOCKER_REGISTRY}/%IMAGE_NAME%:%IMAGE_VERSION%
               volumeMounts:
                 - name: creds
                   mountPath: /msdataworkshop/creds
@@ -51,17 +51,17 @@ spec:
                 - name: db_user
                   value: "inventoryuser"
                 - name: db_url
-                  value: "jdbc:oracle:thin:@%INVENTORY_PDB_NAME%_tp?TNS_ADMIN=/msdataworkshop/creds"
+                  value: "jdbc:oracle:thin:@${INVENTORY_DB_ALIAS}?TNS_ADMIN=/msdataworkshop/creds"
                 - name: db_queueOwner
-                  value: "inventoryuser"
+                  value: "AQ"
                 - name: db_orderQueueName
                   value: "orderqueue"
                 - name: db_inventoryQueueName
                   value: "inventoryqueue"
                 - name: OCI_REGION
-                  value: "%OCI_REGION%"
+                  value: "${OCI_REGION-}"
                 - name: VAULT_SECRET_OCID
-                  value: "%VAULT_SECRET_OCID%"
+                  value: "${VAULT_SECRET_OCID-}"
                 - name: db_password
                   valueFrom:
                     secretKeyRef:
@@ -72,4 +72,4 @@ spec:
           volumes:
             - name: creds
               secret:
-                secretName: db-wallet-secret
+                secretName: inventory-db-tns-admin-secret

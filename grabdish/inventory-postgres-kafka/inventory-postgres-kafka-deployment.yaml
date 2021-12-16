@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: inventory
-        image: %DOCKER_REGISTRY%/inventory-postgres-kafka:0.1
+        image: ${DOCKER_REGISTRY}/inventory-postgres-kafka:0.1
         imagePullPolicy: Always
         env:
         - name: javax.sql.DataSource.postgresDataSource.dataSource.user
@@ -40,4 +40,4 @@ spec:
       volumes:
       - name: creds
         secret:
-          secretName: db-wallet-secret
+          secretName: inventory-db-tns-admin-secret

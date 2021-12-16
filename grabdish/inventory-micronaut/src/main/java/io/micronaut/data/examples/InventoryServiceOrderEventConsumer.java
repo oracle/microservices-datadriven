@@ -4,11 +4,14 @@
  ** Copyright (c) 2021 Oracle and/or its affiliates.
  ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
  */
+
+
 package io.micronaut.data.examples;
 
 //import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 import oracle.jdbc.OraclePreparedStatement;
+import oracle.jms.*;
 import oracle.jms.AQjmsConstants;
 import oracle.jms.AQjmsConsumer;
 import oracle.jms.AQjmsFactory;
@@ -27,7 +30,7 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
     public static final String INVENTORYDOESNOTEXIST = "inventorydoesnotexist";
     private DataSource atpInventoryPDB;
     Connection dbConnection;
-    String inventoryuser = "inventoryuser", inventorypw = "Welcome12345", orderQueueName = "ORDERQUEUE", inventoryQueueName = "INVENTORYQUEUE";
+    String inventoryuser = "inventoryuser", inventorypw = "Welcome12345", orderQueueName = "ORDERQUEUE", inventoryQueueName = "INVENTORYQUEUE", queueOwner = "AQ";
 
 
     public InventoryServiceOrderEventConsumer(DataSource atpInventoryPDB) {
@@ -39,14 +42,76 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
     public void run() {
         System.out.println("Receive messages... ");
         try {
-            listenForOrderEvents();
+            listenForOrderEventsTopic();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    public void listenForOrderEventsTopic() throws Exception {
+        TopicConnectionFactory t_cf = AQjmsFactory.getTopicConnectionFactory(atpInventoryPDB);
+        TopicConnection tconn = t_cf.createTopicConnection(inventoryuser, inventorypw);
+        TopicSession tsess = tconn.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
 
-    public void listenForOrderEvents() throws Exception {
+        tconn.start();
+        Topic orderEvents = ((AQjmsSession) tsess).getTopic(queueOwner, orderQueueName);
+        TopicReceiver receiver = ((AQjmsSession) tsess).createTopicReceiver(orderEvents, "inventory_service", null);
+
+        Topic inventoryTopic = ((AQjmsSession) tsess).getTopic(queueOwner, inventoryQueueName);
+        TopicPublisher publisher = tsess.createPublisher(inventoryTopic);
+
+        Order order;
+        String inventorylocation;
+        Inventory inventory;
+        ResultSet res;
+        TextMessage orderMessage;
+        TextMessage inventoryMessage = tsess.createTextMessage();
+        int i;
+
+        dbConnection = ((AQjmsSession) tsess).getDBConnection();
+        OraclePreparedStatement st = (OraclePreparedStatement) dbConnection.prepareStatement(DECREMENT_BY_ID);
+        st.registerReturnParameter(2, Types.VARCHAR);
+
+        boolean done = false;
+        while (!done) {
+            try {
+                // Receive next order event
+                orderMessage = (TextMessage) (receiver.receive(-1));
+
+                // Parse order event
+                order = JsonUtils.read(orderMessage.getText(), Order.class);
+
+                // Check inventory
+                st.setString(1, order.getItemid());
+                i = st.executeUpdate();
+                res = st.getReturnResultSet();
+                if (i > 0 && res.next()) {
+                    inventorylocation = res.getString(1);
+                } else {
+                    inventorylocation = INVENTORYDOESNOTEXIST;
+                }
+
+                // Create inventory event
+                inventory = new Inventory(order.getOrderid(), order.getItemid(), inventorylocation, "beer"); //static suggestiveSale - represents an additional service/event
+                inventoryMessage.setText(JsonUtils.writeValueAsString(inventory));
+
+                // Publish inventory event
+                publisher.send(inventoryTopic, inventoryMessage, DeliveryMode.PERSISTENT, 2, AQjmsConstants.EXPIRATION_NEVER);
+
+                // Commit
+                tsess.commit();
+
+            } catch (javax.jms.IllegalStateException e) {
+                System.out.println("IllegalStateException in receiveMessages: " + e + " unrecognized message will be ignored");
+                if (tsess != null) tsess.commit(); //drain unrelated messages - todo add selector for this instead
+            } catch (Exception e) {
+                System.out.println("Error in receiveMessages: " + e);
+                if (tsess != null) tsess.rollback();
+            }
+        }
+    }
+
+    public void listenForOrderEventsQueue() throws Exception {
         QueueConnectionFactory qcfact = AQjmsFactory.getQueueConnectionFactory(atpInventoryPDB);
         QueueSession qsess = null;
         QueueConnection qconn = null;

@@ -46,7 +46,7 @@ function addInventoryTest() {
 
 # Create the ext-order service
 cd $GRABDISH_HOME/order-helidon; 
-kubectl apply -f ext-order-service.yaml -n msdataworkshop
+kubectl apply -f ext-order-ingress.yaml -n msdataworkshop
 
 # Install k6
 cd $GRABDISH_HOME/k6; 
@@ -60,7 +60,7 @@ fi
 RETRIES=0
 while ! state_done EXT_ORDER_IP; do
   #IP=`kubectl get services -n msdataworkshop | awk '/ext-order/ {print $4}'`
-  IP=$(kubectl -n ingress-nginx get svc ingress-nginx-controller -o "go-template={{range .status.loadBalancer.ingress}}{{or .ip .hostname}}{{end}}")
+  IP=$(kubectl -n msdataworkshop get svc ingress-nginx-controller -o "go-template={{range .status.loadBalancer.ingress}}{{or .ip .hostname}}{{end}}")
   if [[ "$IP" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
     state_set EXT_ORDER_IP "$IP"
   else
@@ -115,13 +115,12 @@ commit;
 
   if test "$s" != 'inventory-plsql'; then # PL/SQL service is not deployed in k8s and starts immediately
     while test 1 -gt `kubectl get pods -n msdataworkshop | grep "${s}" | grep "1/1" | wc -l`; do
-      echo "Waiting for pod to start..."
-      sleep 1
+      /bin/sleep 0.1
     done
   fi
 
   START_TIME=`date`
-  START_SECONDS="$(date -u +%s)"
+  START_NANOSECONDS="$(date +%s%N)"
   echo "PERF_LOG: $s Processing started at $START_TIME"
 
   # Monitor to see how long it takes to consume all the inventory
@@ -137,13 +136,13 @@ commit;
       echo "PERF_LOG_FAILED_FATAL: $s Failed to get inventory count"
       exit
     fi
-    sleep 1
+    /bin/sleep 0.1
   done
 
   END_TIME=`date`
-  END_SECONDS="$(date -u +%s)"
+  END_NANOSECONDS="$(date +%s%N)"
   echo "PERF_LOG: $s Processing completed at $END_TIME"
-  echo "PERF_LOG_STAT: $s Processed $ORDER_COUNT orders in $(($END_SECONDS-$START_SECONDS)) seconds"
+  echo "PERF_LOG_STAT: $s Processed $ORDER_COUNT orders in $((($END_NANOSECONDS-$START_NANOSECONDS)/1000000)) milliseconds"
 
   logpodnotail inventory > $GRABDISH_LOG/perflog-$s
 

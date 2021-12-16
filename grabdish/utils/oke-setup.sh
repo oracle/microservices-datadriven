@@ -69,10 +69,5 @@ while ! state_done OKE_NAMESPACE; do
   fi
 done
 
-# Wait for Order User (avoid concurrent kubectl)
-while ! state_done ORDER_USER; do
-  echo "`date`: Waiting for ORDER_USER"
-  sleep 2
-done
 
 state_set_done OKE_SETUP

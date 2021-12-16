@@ -43,6 +43,7 @@ public class InventoryResource {
     static String pwSecretFromK8s = System.getenv("dbpassword");
     static String inventoryuser = "INVENTORYUSER";
     static String inventorypw;
+    static final String queueOwner =   System.getenv("queueowner");
     static final String orderQueueName =   System.getenv("orderqueuename");
     static final String inventoryQueueName =  System.getenv("inventoryqueuename");
     static boolean crashAfterOrderMessageReceived;
