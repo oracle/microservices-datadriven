@@ -3,7 +3,5 @@
 ## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 
-echo delete frontend OAM Component and ApplicationConfiguration
-
-kubectl delete applicationconfiguration supplier-helidon-se-appconf -n msdataworkshop
-kubectl delete component supplier-helidon-se-component -n msdataworkshop
+SCRIPT_DIR=$(dirname $0)
+k8s-undeploy "$SCRIPT_DIR" "$K8S_NAMESPACE" 'supplier-helidon-se-app.yaml supplier-helidon-se-comp.yaml'

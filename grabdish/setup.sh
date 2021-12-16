@@ -10,7 +10,7 @@ fi
 
 if state_done SETUP; then
   echo "The setup has been completed"
-  return
+  return 0
 fi
 
 SETUP_SCRIPT="$GRABDISH_HOME/utils/main-setup.sh"

@@ -18,18 +18,18 @@ while ! state_done NGINX_HELM_REPO; do
 done
 
 # Create Ingress NGINX Namespace
-while ! state_done NGINX_NAMESPACE; do
-  if kubectl create -f $GRABDISH_HOME/ingress/nginx/ingress-nginx-namespace.yaml 2>$GRABDISH_LOG/nginx_ingress_ns_err; then
-    state_set_done NGINX_NAMESPACE
-  else
-    echo "Failed to create Ingress NGINX namespace.  Retrying..."
-    sleep 5
-  fi
-done
+#while ! state_done NGINX_NAMESPACE; do
+#  if kubectl create -f $GRABDISH_HOME/ingress/nginx/ingress-nginx-namespace.yaml 2>$GRABDISH_LOG/nginx_ingress_ns_err; then
+#    state_set_done NGINX_NAMESPACE
+#  else
+#    echo "Failed to create Ingress NGINX namespace.  Retrying..."
+#    sleep 5
+#  fi
+#done
 
 # Create SSL Secret
 while ! state_done SSL_SECRET_INGRESS; do
-  if kubectl create secret tls ssl-certificate-secret --key $GRABDISH_HOME/tls/tls.key --cert $GRABDISH_HOME/tls/tls.crt -n ingress-nginx; then
+  if kubectl create secret tls ssl-certificate-secret --key $GRABDISH_HOME/tls/tls.key --cert $GRABDISH_HOME/tls/tls.crt -n msdataworkshop; then
     state_set_done SSL_SECRET_INGRESS
   else
     echo "Ingress SSL Secret creation failed.  Retrying..."
@@ -39,7 +39,7 @@ done
 
 # Provision Ingress Controller
 while ! state_done NGINX_INGRESS_SETUP; do
-  if helm install ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --values $GRABDISH_HOME/ingress/nginx/ingress-nginx-helm-values4oci.yaml 2>$GRABDISH_LOG/nginx_ingress_err; then
+  if helm install ingress-nginx ingress-nginx/ingress-nginx --namespace msdataworkshop --values $GRABDISH_HOME/ingress/nginx/ingress-nginx-helm-values4oci.yaml 2>$GRABDISH_LOG/nginx_ingress_err; then
     state_set_done NGINX_INGRESS_SETUP
   else
     echo "Ingress Controller installation failed.  Retrying..."

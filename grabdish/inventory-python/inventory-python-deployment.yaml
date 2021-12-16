@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: inventory
-        image: %DOCKER_REGISTRY%/inventory-python:0.1
+        image: ${DOCKER_REGISTRY}/inventory-python:0.1
         imagePullPolicy: Always
         ports:
           - containerPort: 8080
@@ -26,7 +26,7 @@ spec:
             value: "/msdataworkshop/creds"
 #            value: "/usr/lib/oracle/19.9/client64/lib/network/admin"
           - name: DB_CONNECT_STRING
-            value: "%INVENTORY_PDB_NAME%_tp"
+            value: "${INVENTORY_DB_ALIAS}"
           - name: DB_USER
             value: "inventoryuser"
           - name: DB_CONNECTION_COUNT
@@ -42,11 +42,11 @@ spec:
           - name: AQ_CONSUMER_THREADS
             value: "1"
           - name: QUEUE_OWNER
-            value: "inventoryuser"
+            value: "AQ"
           - name: OCI_REGION
-            value: "%OCI_REGION%"
+            value: "${OCI_REGION-}"
           - name: VAULT_SECRET_OCID
-            value: "%VAULT_SECRET_OCID%"
+            value: "${VAULT_SECRET_OCID-}"
           - name: DB_PASSWORD
             valueFrom:
               secretKeyRef:
@@ -71,4 +71,4 @@ spec:
       volumes:
       - name: creds
         secret:
-          secretName: db-wallet-secret
+          secretName: inventory-db-tns-admin-secret

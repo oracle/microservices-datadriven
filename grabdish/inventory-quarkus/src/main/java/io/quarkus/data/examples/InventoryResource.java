@@ -38,6 +38,7 @@ public class InventoryResource {
     static String inventorypw;
     static final String orderQueueName =   System.getenv("orderqueuename");
     static final String inventoryQueueName =  System.getenv("inventoryqueuename");
+    static final String queueOwner =   System.getenv("queueowner");
     static final String inventoryUser =  System.getenv("oracle.ucp.jdbc.PoolDataSource.inventorypdb.user");
     static final String inventoryPW =  System.getenv("dbpassword");
     static final String inventoryURL =  System.getenv("oracle.ucp.jdbc.PoolDataSource.inventorypdb.URL");
