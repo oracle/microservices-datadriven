@@ -16,7 +16,9 @@ public class InventoryApplication {
 
 	public static void main(String[] args) {
 		ConfigurableApplicationContext context = SpringApplication.run(InventoryApplication.class, args);
-		JmsTemplate jmsTemplate = context.getBean(JmsTemplate.class);
+	//	JmsTemplate jmsTemplate = context.getBean(JmsTemplate.class);
+
+
 	}
 
 }
