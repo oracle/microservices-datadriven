@@ -3,14 +3,12 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Fail on error
-set -eu
+set -e
 
-
-if ! provisioning-helper-pre-apply; then
+if ! provisioning-helper-pre-destroy; then
   exit 1
 fi
 
+oci os bucket delete --force --name "$BUCKET_NAME"
 
-oci os bucket create --compartment-id "$COMPARTMENT_OCID" --name "$BUCKET_NAME"
-
-touch $OUTPUT_FILE
+rm -f $STATE_FILE

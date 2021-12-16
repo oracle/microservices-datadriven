@@ -76,8 +76,8 @@ public class OracleAQConfiguration {
 	public JmsListenerContainerFactory<?> topicConnectionFactory(QueueConnectionFactory connectionFactory,
 			DefaultJmsListenerContainerFactoryConfigurer configurer) {
 		DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-		configurer.configure(factory, connectionFactory);
 		factory.setPubSubDomain(true);
+		configurer.configure(factory, connectionFactory);
 		factory.setClientId("inventory_service");
 		return factory;
 	}

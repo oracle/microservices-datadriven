@@ -53,41 +53,6 @@ case "$DCMS_SS_STATUS" in
 esac
 source $DCMS_STATE_STORE/output.env
 
-# Get the vault status
-if ! DCMS_VAULT_STATUS=$(provisioning-get-status $DCMS_VAULT); then
-  echo "ERROR: Unable to get workshop vault status"
-  exit 1
-fi
-
-case "$DCMS_VAULT_STATUS" in
-
-  applied | byo)
-    # Nothing to do
-    ;;
-
-  applying)
-    # Setup already running so exit
-    exit
-    ;;
-
-  destroying-failed | destroying | destroyed)
-    # Cannot setup during destroy phase
-    echo "ERROR: Destroy is running and so cannot run setup"
-    exit 1
-    ;;
-
-  applying-failed | new)
-    # Start or restart the vault setup
-    cd $DCMS_VAULT
-    if ! provisioning-apply $MSDD_INFRA_CODE/vault/folder; then
-      echo "ERROR: Failed to create vault in $DCMS_VAULT"
-      exit 1
-    fi
-    ;;
-
-esac
-source $DCMS_VAULT/output.env
-
 # Start background builds
 cd $DCMS_BACKGROUND_BUILDS
 nohup $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-builds.sh >>$DCMS_LOG_DIR/background-builds.log 2>&1 &
@@ -321,6 +286,45 @@ while ! test `oci iam compartment get --compartment-id "$(state_get COMPARTMENT_
   echo "Waiting for the compartment to become ACTIVE"
   sleep 5
 done
+
+# Setup the vault status
+if ! DCMS_VAULT_STATUS=$(provisioning-get-status $DCMS_VAULT); then
+  echo "ERROR: Unable to get workshop vault status"
+  exit 1
+fi
+
+case "$DCMS_VAULT_STATUS" in
+
+  applied | byo)
+    # Nothing to do
+    ;;
+
+  applying)
+    # Setup already running so exit
+    exit
+    ;;
+
+  destroying-failed | destroying | destroyed)
+    # Cannot setup during destroy phase
+    echo "ERROR: Destroy is running and so cannot run setup"
+    exit 1
+    ;;
+
+  applying-failed | new)
+    # Start or restart the vault setup
+    cd $DCMS_VAULT
+    cat input.env <<!
+COMPARTMENT_OCID='$(state_get COMPARTMENT_OCID)'
+BUCKET_NAME='$(state_get RUN_NAME)_vault'
+!
+    if ! provisioning-apply $MSDD_INFRA_CODE/vault/oci-os; then
+      echo "ERROR: Failed to create vault in $DCMS_VAULT"
+      exit 1
+    fi
+    ;;
+
+esac
+source $DCMS_VAULT/output.env
 
 # Get the User OCID
 while ! state_done USER_OCID; do

@@ -5,7 +5,7 @@
 WHENEVER SQLERROR EXIT 1
 connect $AQ_USER/"$AQ_PASSWORD"@$DB2_ALIAS
 
-@$COMMON_SCRIPT_HOME/aq-${QUEUE_TYPE}.sql
+@$COMMON_SCRIPT_HOME/aq-${QUEUE_TYPE}-create-queues.sql
 
 BEGIN
    DBMS_AQADM.grant_queue_privilege (

@@ -11,9 +11,9 @@ DROP USER $ORDER_USER CASCADE;
 WHENEVER SQLERROR EXIT 1
 
 -- AQ User
-@$COMMON_SCRIPT_HOME/admin-aq.sql
+@$COMMON_SCRIPT_HOME/admin-aq-create-schema.sql
 -- For AQ Propagation
 GRANT CREATE DATABASE LINK TO $AQ_USER;
 
 -- Order User
-@$COMMON_SCRIPT_HOME/admin-order.sql
+@$COMMON_SCRIPT_HOME/admin-order-create-schema.sql

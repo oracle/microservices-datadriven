@@ -11,10 +11,10 @@ DROP USER $INVENTORY_USER CASCADE;
 
 WHENEVER SQLERROR EXIT 1
 -- AQ User
-@$COMMON_SCRIPT_HOME/admin-aq.sql
+@$COMMON_SCRIPT_HOME/admin-aq-create-schema.sql
 
 -- Order User
-@$COMMON_SCRIPT_HOME/admin-order.sql
+@$COMMON_SCRIPT_HOME/admin-order-create-schema.sql
 
 -- Inventory User
-@$COMMON_SCRIPT_HOME/admin-inventory.sql
+@$COMMON_SCRIPT_HOME/admin-inventory-create-schema.sql

@@ -73,7 +73,7 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         }
     }
 
-    public void listenForOrderEventsrtopic() throws Exception {
+    public void listenForOrderEventsTopic() throws Exception {
         TopicConnectionFactory t_cf = AQjmsFactory.getTopicConnectionFactory(inventoryResource.atpInventoryPDB);
         TopicConnection tconn = t_cf.createTopicConnection(inventoryResource.inventoryuser, inventoryResource.inventorypw);
         TopicSession tsess = tconn.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);

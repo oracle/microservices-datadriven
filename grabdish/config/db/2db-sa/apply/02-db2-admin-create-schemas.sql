@@ -11,10 +11,10 @@ DROP USER $INVENTORY_USER CASCADE;
 WHENEVER SQLERROR EXIT 1
 
 -- AQ User
-@$COMMON_SCRIPT_HOME/admin-aq.sql
+@$COMMON_SCRIPT_HOME/admin-aq-create-schema.sql
 -- For AQ Propagation
 GRANT CREATE DATABASE LINK TO $AQ_USER;
 
 
 -- Inventory User
-@$COMMON_SCRIPT_HOME/admin-inventory.sql
+@$COMMON_SCRIPT_HOME/admin-inventory-create-schema.sql

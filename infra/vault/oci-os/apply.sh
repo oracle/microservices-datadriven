@@ -12,5 +12,9 @@ fi
 
 
 oci os bucket create --compartment-id "$COMPARTMENT_OCID" --name "$BUCKET_NAME"
-
-touch $OUTPUT_FILE
+VAULT_BUCKET="$BUCKET_NAME"
+  
+cat >$OUTPUT_FILE <<!
+export VAULT_BUCKET='$BUCKET_NAME'
+!
+cat $MY_CODE/vault-oci-os-functions.env >>$OUTPUT_FILE
