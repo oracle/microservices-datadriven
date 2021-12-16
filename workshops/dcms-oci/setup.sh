@@ -313,7 +313,7 @@ case "$DCMS_VAULT_STATUS" in
   applying-failed | new)
     # Start or restart the vault setup
     cd $DCMS_VAULT
-    cat input.env <<!
+    cat >input.env <<!
 COMPARTMENT_OCID='$(state_get COMPARTMENT_OCID)'
 BUCKET_NAME='$(state_get RUN_NAME)_vault'
 !
