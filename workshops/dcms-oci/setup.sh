@@ -317,7 +317,7 @@ case "$DCMS_VAULT_STATUS" in
 COMPARTMENT_OCID='$(state_get COMPARTMENT_OCID)'
 BUCKET_NAME='$(state_get RUN_NAME)_vault'
 !
-    if ! provisioning-apply $MSDD_INFRA_CODE/vault/oci-os; then
+    if ! provisioning-apply $MSDD_INFRA_CODE/vault/folder; then
       echo "ERROR: Failed to create vault in $DCMS_VAULT"
       exit 1
     fi
