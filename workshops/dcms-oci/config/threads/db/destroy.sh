@@ -30,6 +30,9 @@ done
 DBS="db1 db2"
 for db in $DBS; do
   db_upper=`echo $db | tr '[:lower:]' '[:upper:]'`
+  if ! state_set ${db_upper}_OCID || test -z "$(state_get ${db_upper}_OCID)"; then
+    continue
+  fi
   if ! test $(state_get RUN_TYPE) == "LL"; then
     DB_STATE=$DCMS_INFRA_STATE/db/$db
     cd $DB_STATE
