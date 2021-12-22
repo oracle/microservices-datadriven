@@ -118,7 +118,7 @@ VCN_OCID=$(state_get VCN_OCID)
       state_set DB1_ALIAS "$DB_ALIAS"
       state_set DB2_OCID ''
       state_set DB2_TNS_ADMIN ''
-      state_set DB1_ALIAS ''
+      state_set DB2_ALIAS ''
       )
       ;;
     2DB)
