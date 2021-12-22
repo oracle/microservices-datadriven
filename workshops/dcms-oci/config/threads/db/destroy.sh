@@ -30,10 +30,14 @@ done
 DBS="db1 db2"
 for db in $DBS; do
   db_upper=`echo $db | tr '[:lower:]' '[:upper:]'`
-  if ! state_set ${db_upper}_OCID || test -z "$(state_get ${db_upper}_OCID)"; then
+  if ! state_set ${db_upper}_OCID; then
+    # Already destroyed
     continue
   fi
-  if ! test $(state_get RUN_TYPE) == "LL"; then
+  if test $(state_get RUN_TYPE) == "LL" || test -z "$(state_get ${db_upper}_OCID)"; then
+    # Nothing to destroy
+    :
+  else
     DB_STATE=$DCMS_INFRA_STATE/db/$db
     cd $DB_STATE
     provisioning-destroy
