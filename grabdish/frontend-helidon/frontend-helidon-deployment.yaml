@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: %DOCKER_REGISTRY%/frontend-helidon:0.1
+        image: ${DOCKER_REGISTRY}/frontend-helidon:0.1
         imagePullPolicy: Always
         env:
           - name: SECRETS_PASSWORD

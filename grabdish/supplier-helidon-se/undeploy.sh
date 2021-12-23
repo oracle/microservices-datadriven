@@ -3,8 +3,5 @@
 ## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 
-echo delete supplier deployment and service...
-
-kubectl delete deployment supplier-helidon-se -n msdataworkshop
-
-kubectl delete service supplier -n msdataworkshop
+# See docs/Deploy.md for details
+k8s-undeploy

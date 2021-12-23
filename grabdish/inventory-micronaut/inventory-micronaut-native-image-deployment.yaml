@@ -17,13 +17,13 @@ spec:
     spec:
       containers:
         - name: inventory
-          image: %DOCKER_REGISTRY%/inventory-micronaut-native-image:0.1
+          image: ${DOCKER_REGISTRY}/inventory-micronaut-native-image:0.1
           imagePullPolicy: Always
           env:
             - name: JDBC_USER
               value: "inventoryuser"
             - name: JDBC_URL
-              value: "jdbc:oracle:thin:@%INVENTORY_PDB_NAME%_tp?TNS_ADMIN=/msdataworkshop/creds"
+              value: "jdbc:oracle:thin:@${INVENTORY_DB_ALIAS}?TNS_ADMIN=/msdataworkshop/creds"
             - name: orderqueuename
               value: "ORDERQUEUE"
             - name: inventoryqueuename
@@ -47,4 +47,4 @@ spec:
       volumes:
         - name: creds
           secret:
-            secretName: db-wallet-secret
+            secretName: inventory-db-tns-admin-secret

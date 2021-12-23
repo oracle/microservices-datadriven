@@ -18,7 +18,7 @@
     <artifactId>order-helidon</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>${project.artifactId}</name>
-    <description>stateful microservices demo</description>
+    <description>Order Helidon</description>
 
     <parent>
         <groupId>io.helidon.applications</groupId>

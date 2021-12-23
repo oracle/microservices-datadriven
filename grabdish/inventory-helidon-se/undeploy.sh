@@ -3,6 +3,5 @@
 ## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 
-echo delete inventory-helidon-se deployment...
-
-kubectl delete deployment inventory-helidon-se -n msdataworkshop
+# See docs/Deploy.md for details
+k8s-undeploy

@@ -17,8 +17,11 @@ BEGIN
   LOOP
     -- Wait for and dequeue the next order message
     dequeue_options.wait := dbms_aq.FOREVER;
+    dequeue_options.navigation    := dbms_aq.FIRST_MESSAGE;
+
+    dequeue_options.consumer_name := 'inventory_service';
     DBMS_AQ.DEQUEUE(
-      queue_name => 'ORDERQUEUE',
+      queue_name => 'AQ.ORDERQUEUE',
       dequeue_options => dequeue_options,
       message_properties => message_properties,
       payload => message,
@@ -30,7 +33,8 @@ BEGIN
 
     -- Check the inventory
     update INVENTORYUSER.INVENTORY set inventorycount = inventorycount - 1 
-      where inventoryid = order_inv_id and inventorycount > 0 returning inventorylocation into order_inv_loc;
+      where inventoryid = order_inv_id and inventorycount > 0 returning inventorylocation 
+      into order_inv_loc;
     if sql%rowcount = 0 then
       order_inv_loc := 'inventorydoesnotexist';
     end if;
@@ -45,7 +49,7 @@ BEGIN
     -- Send the inventory message
     message := SYS.AQ$_JMS_TEXT_MESSAGE.construct;
     message.set_text(inventory_json.to_string());
-    DBMS_AQ.ENQUEUE(queue_name => 'INVENTORYQUEUE',
+    DBMS_AQ.ENQUEUE(queue_name => 'AQ.INVENTORYQUEUE',
       enqueue_options    => enqueue_options,
       message_properties => message_properties,
       payload            => message,

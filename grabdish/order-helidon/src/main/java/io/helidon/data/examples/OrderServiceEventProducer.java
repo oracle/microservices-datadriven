@@ -31,7 +31,7 @@ class OrderServiceEventProducer {
             DataSource dataSource, String orderid, String itemid, String deliverylocation, Span activeSpan, String spanIdForECID) throws Exception {
         System.out.println("updateDataAndSendEvent enter dataSource:" + dataSource +
                 ", itemid:" + itemid + ", orderid:" + orderid +
-                ",queueOwner:" + OrderResource.orderQueueOwner + "queueName:" + OrderResource.orderQueueName);
+                ",queueOwner:" + OrderResource.queueOwner + "queueName:" + OrderResource.orderQueueName);
         TopicSession session = null;
         try {
             TopicConnectionFactory q_cf = AQjmsFactory.getTopicConnectionFactory(dataSource);
@@ -51,7 +51,7 @@ class OrderServiceEventProducer {
             Order insertedOrder = insertOrderViaSODA(orderid, itemid, deliverylocation, jdbcConnection);
             if (OrderResource.crashAfterInsert) System.exit(-1);
             System.out.println("updateDataAndSendEvent insertOrderViaSODA complete about to send order message...");
-            Topic topic = ((AQjmsSession) session).getTopic(OrderResource.orderQueueOwner, OrderResource.orderQueueName);
+            Topic topic = ((AQjmsSession) session).getTopic(OrderResource.queueOwner, OrderResource.orderQueueName);
             System.out.println("updateDataAndSendEvent topic:" + topic);
             TextMessage objmsg = session.createTextMessage();
             TracingMessageProducer producer = new TracingMessageProducer(session.createPublisher(topic), orderResource.getTracer());

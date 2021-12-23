@@ -9,10 +9,19 @@ context = "orderqueue_messages_by_state"
 labels = ["state"]
 metricsdesc = { value = "Total number of messages in order queue by state"}
 request = "select state, count(*) as value from orderqueuetable group by state"
+ignorezeroresult = true
 
 [[metric]]
 context = "orderpdb_orders_by_status"
 labels = ["status"]
 metricsdesc = { value = "Total number of orders by status"}
-request = "select JSON_VALUE(JSON_DOCUMENT ,'$.status') as status,   count(*) as value from orderscollection group by JSON_VALUE(JSON_DOCUMENT ,'$.status')"
+request = "select JSON_VALUE(JSON_DOCUMENT ,'$.status') as status, count(*) as value from orderscollection group by JSON_VALUE(JSON_DOCUMENT ,'$.status')"
+ignorezeroresult = true
+
+[[metric]]
+context = "orderpdb_propagation_disabled_status"
+labels = ["QNAME"]
+metricsdesc = { value = "Total number of propagation schedules disabled by queue name"}
+request = "select count(*) as value from DBA_QUEUE_SCHEDULES where qname = 'ORDERQUEUE' and SCHEDULE_DISABLED = 'Y'"
+ignorezeroresult = true
 

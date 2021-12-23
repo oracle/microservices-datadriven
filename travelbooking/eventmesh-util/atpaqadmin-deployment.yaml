@@ -1,0 +1,93 @@
+# Copyright (c) 2021 Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: atpaqadmin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: atpaqadmin
+  template:
+    metadata:
+      labels:
+        app: atpaqadmin
+        version: helidon
+    spec:
+      initContainers:
+      - name: decode-creds-travelagency
+        command:
+        - bash
+        - -c
+        - "for i in `ls -1 /tmp/creds-travelagency | grep -v user_name`; do cat /tmp/creds-travelagency/$i  | base64 --decode > /creds-travelagency/$i; done; ls -l /creds-travelagency/*;"
+        image: oraclelinux:7.5
+        volumeMounts:
+        - name: creds-raw-travelagency
+          mountPath: /tmp/creds-travelagency
+          readOnly: false
+        - name: creds-travelagency
+          mountPath: /creds-travelagency
+      - name: decode-creds-participant
+        command:
+        - bash
+        - -c
+        - "for i in `ls -1 /tmp/creds-participant | grep -v user_name`; do cat /tmp/creds-participant/$i  | base64 --decode > /creds-participant/$i; done; ls -l /creds-participant/*;"
+        image: oraclelinux:7.5
+        volumeMounts:
+        - name: creds-raw-participant
+          mountPath: /tmp/creds-participant
+          readOnly: false
+        - name: creds-participant
+          mountPath: /creds-participant
+      containers:
+      - name: helidonatp
+        image: %DOCKER_REGISTRY%/helidonatp:0.1
+        imagePullPolicy: Always
+        env:
+        - name: oracle.ucp.jdbc.PoolDataSource.travelagencypdb.URL
+          value: "jdbc:oracle:thin:@%ORDER_PDB_NAME%_tp?TNS_ADMIN=/msdataworkshop/creds-travelagency"
+        - name: oracle.ucp.jdbc.PoolDataSource.participantpdb.URL
+          value: "jdbc:oracle:thin:@%INVENTORY_PDB_NAME%_tp?TNS_ADMIN=/msdataworkshop/creds-participant"
+        - name: OCI_REGION
+          value: "%OCI_REGION%"
+        - name: VAULT_SECRET_OCID
+          value: "%VAULT_SECRET_OCID%"
+        - name: cwalletobjecturi
+          value: "%cwalletobjecturi%"
+        - name: travelagencyhostname
+          value: "%travelagencyhostname%"
+        - name: travelagencyport
+          value: "%travelagencyport%"
+        - name: travelagencyservice_name
+          value: "%travelagencyservice_name%"
+        - name: travelagencyssl_server_cert_dn
+          value: "%travelagencyssl_server_cert_dn%"
+        - name: participanthostname
+          value: "%participanthostname%"
+        - name: participantport
+          value: "%participantport%"
+        - name: participantservice_name
+          value: "%participantservice_name%"
+        - name: participantssl_server_cert_dn
+          value: "%participantssl_server_cert_dn%"
+        volumeMounts:
+        - name: creds-travelagency
+          mountPath: /msdataworkshop/creds-travelagency
+        - name: creds-participant
+          mountPath: /msdataworkshop/creds-participant
+        ports:
+        - containerPort: 8080
+      restartPolicy: Always
+      volumes:
+      - name: creds-raw-travelagency
+        secret:
+          secretName: atp-demo-binding-travelagency
+      - name: creds-travelagency
+        emptyDir: {}
+      - name: creds-raw-participant
+        secret:
+          secretName: atp-demo-binding-participant
+      - name: creds-participant
+        emptyDir: {}
