@@ -1,4 +1,4 @@
-package com.springboot.travelagency;
+package com.springboot.travelparticipant;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

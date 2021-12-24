@@ -53,14 +53,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jdbc</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency>
@@ -70,24 +62,6 @@
 			<version>5.3.5</version>
 		</dependency>
 
-
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>6.0.0.Alpha9</version>
-			<type>pom</type>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate.validator</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>7.0.1.Final</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>6.0.0.Alpha7</version>
-			<type>pom</type>
-		</dependency>
 
 
 		<dependency>
@@ -166,8 +140,14 @@
 			<artifactId>dockerfile-maven-plugin</artifactId>
 			<version>1.4.13</version>
 		</dependency>
-		
-	<dependency>
+
+		<dependency>
+			<groupId>osaga</groupId>
+			<artifactId>osaga-java-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
     <groupId>org.apache.axis2</groupId>
     <artifactId>axis2-jaxws</artifactId>
     <version>1.8.0</version>

@@ -11,8 +11,8 @@
 		<relativePath />
 	</parent>
 
-	<groupId>com.springboot.travelagency</groupId>
-	<artifactId>travelagency-springboot</artifactId>
+	<groupId>com.springboot.travelparticipant</groupId>
+	<artifactId>travelparticipant-springboot</artifactId>
 	<version>0.1.0</version>
 	<packaging>jar</packaging>
 
@@ -51,10 +51,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>org.springframework.boot</groupId>-->
-<!--			<artifactId>spring-boot-starter-jdbc</artifactId>-->
-<!--		</dependency>-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
@@ -65,16 +61,6 @@
 			<artifactId>spring-jms</artifactId>
 			<version>5.3.5</version>
 		</dependency>
-
-
-
-
-<!--		<dependency>-->
-<!--			<groupId>javax.xml.bind</groupId>-->
-<!--			<artifactId>jaxb-api</artifactId>-->
-<!--			<version>2.2.11</version>-->
-<!--		</dependency>-->
-
 
 		<dependency>
 			<groupId>javax.json.bind</groupId>
@@ -132,6 +118,12 @@
 			<groupId>com.spotify</groupId>
 			<artifactId>dockerfile-maven-plugin</artifactId>
 			<version>1.4.13</version>
+		</dependency>
+
+		<dependency>
+			<groupId>osaga</groupId>
+			<artifactId>osaga-java-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		
 	<dependency>
