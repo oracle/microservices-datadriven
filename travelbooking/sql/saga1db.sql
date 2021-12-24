@@ -89,7 +89,7 @@ exec dbms_saga_adm.add_participant(  participant_name => 'TravelAgencyPLSQL',   
 
 --do saga2db.sql then this test...
 
-select id, initiator, coordinator, owner, begin_time, status from saga$;
+select id, initiator, coordinator, owner, begin_time, status from saga$ order by begin_time asc;
 select * from travelagencytest;
 
 declare
@@ -102,12 +102,12 @@ declare
 end;
 /
 
-select id, initiator, coordinator, owner, begin_time, status from saga$;
+select id, initiator, coordinator, owner, begin_time, status from saga$ order by begin_time asc;
 select * from travelagencytest;
 
 --check saga2db, get the sagaid and do this... status will be 0
 
-select id, initiator, coordinator, owner, begin_time, status from saga$;
+select id, initiator, coordinator, owner, begin_time, status from saga$ order by begin_time asc;
 select * from travelagencytest;
 
 begin
@@ -117,7 +117,7 @@ end;
 
 --check saga2db, saga_sender and response payload will be CARPLSQL and [{"result":"success"}], and do this... status will be 3
 
-select id, initiator, coordinator, owner, begin_time, status from saga$;
+select id, initiator, coordinator, owner, begin_time, status from saga$ order by begin_time asc;
 select * from travelagencytest;
 
 
@@ -126,3 +126,4 @@ select * from travelagencytest;
 
 exec dbms_saga_adm.add_participant(  participant_name => 'TravelAgencyJava',   coordinator_name => 'TravelCoordinator' ,   dblink_to_broker => null ,   mailbox_schema => 'admin' ,   broker_name => 'TEST' ,   callback_package => null ,   dblink_to_participant => null);
 exec dbms_saga_adm.add_participant(  participant_name => 'TravelAgencyJava3',   coordinator_name => 'TravelCoordinator' ,   dblink_to_broker => null ,   mailbox_schema => 'admin' ,   broker_name => 'TEST' ,   callback_package => null ,   dblink_to_participant => null);
+exec dbms_saga_adm.add_participant(  participant_name => 'TravelAgencyJava4',   coordinator_name => 'TravelCoordinator' ,   dblink_to_broker => null ,   mailbox_schema => 'admin' ,   broker_name => 'TEST' ,   callback_package => null ,   dblink_to_participant => null);

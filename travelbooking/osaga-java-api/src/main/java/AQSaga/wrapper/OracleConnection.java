@@ -150,8 +150,9 @@ public class OracleConnection {
 //        CallableStatement pstmt = connection.prepareCall("{call CREATEDATAAPPUSER(?,?)}");
         CallableStatement pstmt = connection.prepareCall("{dbms_saga.rollback_saga(?, ?)}");
 //        CallableStatement pstmt = connection.prepareCall("{dbms_saga.commit_saga('TravelAgency', saga_id)}");
-        pstmt.setNString(1, "TravelAgency");
-        pstmt.setNString(1, "");
+        pstmt.setNString(1, participantName);
+//        pstmt.setNString(1, "TravelAgency");
+//        pstmt.setNString(1, sagaId);
         pstmt.execute();
         return null;
     }

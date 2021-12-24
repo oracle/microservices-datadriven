@@ -79,12 +79,12 @@ exec dbms_saga_adm.add_participant(participant_name=> 'CarPLSQL' ,  dblink_to_br
 --- status will be 0, saga_sender and request payload will be TRAVELAGENCYPLSQL and car:Venza available will be 1 ...
 select * from cars;
 select * from cartest;
-select id, initiator, coordinator, owner, begin_time, status from saga$;
+select id, initiator, coordinator, owner, begin_time, status from saga$ order by begin_time asc;
 
 --- do rollback on pdb1 then...
 --- status will be 3, available will be 2
 select * from cars;
 select * from cartest;
-select id, initiator, coordinator, owner, begin_time, status from saga$;
+select id, initiator, coordinator, owner, begin_time, status from saga$ order by begin_time asc;
 
 exec dbms_saga_adm.add_participant(participant_name=> 'CarJava' ,  dblink_to_broker=> 'travelagencyadminlink',mailbox_schema=> 'admin',broker_name=> 'TEST', callback_package => null , dblink_to_participant=> 'participantadminlink');

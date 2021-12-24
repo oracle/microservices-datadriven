@@ -140,7 +140,7 @@ public class AQjmsSaga implements Osaga {
 //        }
 //
 
-        System.out.println("AQjmsSaga.enrollParticipant call enrollParticipant message");
+//        System.out.println("AQjmsSaga.enrollParticipant call enrollParticipant message");
         AQjmsTextMessage requestMessage = (AQjmsTextMessage)((AQjmsSession) this.session).createTextMessage();
 //        AQSaga.wrapper.AQjmsTextMessage requestMessage = new AQSaga.wrapper.AQjmsTextMessage((AQjmsTextMessage)(session).createTextMessage());
 //        requestMessage.setSagaId(sagaId);

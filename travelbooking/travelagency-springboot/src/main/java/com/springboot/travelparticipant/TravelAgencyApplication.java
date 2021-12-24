@@ -57,17 +57,17 @@ public class TravelAgencyApplication {
 
 
 	public void beginAndEnroll() throws Exception {
+		String initiator = "TravelAgencyJava5";
 		AQjmsSaga saga = new AQjmsSaga("jdbc:oracle:thin:@sagadb1_tp?TNS_ADMIN=/Users/pparkins/Downloads/Wallet_sagadb1", "admin", "Welcome12345");
 		MainTestListener listener = new MainTestListener();
 		System.out.println("TravelAgencyApplication.beginAndEnroll setSagaMessageListener...");
-		saga.setSagaMessageListener("ADMIN", "TravelAgencyJava2", listener);
-		System.out.println("TravelAgencyApplication.beginAndEnroll beginSaga...");
-		String sagaId = saga.beginSaga("TravelAgencyJava2");
+		saga.setSagaMessageListener("ADMIN", initiator, listener);
+		System.out.println("TravelAgencyApplication.beginAndEnroll beginSaga... initiator/sender:" + initiator);
+		String sagaId = saga.beginSaga(initiator);
 		System.out.println(sagaId);
 		String payload = "[{\"car\" : \"toyota2\"}]";
-		System.out.println("TravelAgencyApplication.beginAndEnroll enrollParticipant CarPLSQL...");
-		saga.enrollParticipant(sagaId, "admin", "TravelAgencyJava2", "CarJava", "TravelCoordinator", payload);
-
+		System.out.println("TravelAgencyApplication.beginAndEnroll enrollParticipant CarJava...");
+		saga.enrollParticipant(sagaId, "admin", initiator, "CarJava", "TravelCoordinator", payload);
 		System.in.read();
 			System.in.read();
 		//saga.rollbackSaga("D24480320F484F10E053E698F80AECAB", "TRAVELAGENCY");
