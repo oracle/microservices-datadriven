@@ -107,6 +107,12 @@ public class OracleConnection {
             int flags,
             int spareNumeric,
             String spareText) throws SQLException {
+//        function join_saga_int(
+//                saga_id         IN  saga_id_t,
+//                initiator_name  IN  VARCHAR2,
+//                saga_initiator  IN  VARCHAR2,
+//                coordinator     IN  VARCHAR2,
+//                payload         IN  CLOB) return NUMBER;
 //        dbms_saga.enroll_participant(saga_id, ‘TravelAgency’, ‘Flight’, ‘TACoordinator’, request);
         CallableStatement pstmt = connection.prepareCall("{call  join_saga_int(?,?)}");
         pstmt.setNString(1, "");

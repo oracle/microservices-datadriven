@@ -48,7 +48,7 @@ public abstract class AQjmsSagaMessageListener implements MessageListener {
                         = new OracleConnection((oracle.jdbc.internal.OracleConnection)((AQjmsSession) this.session).getDBConnection());
                 dbConn.setAutoCommit(false);
                 switch (opcode) {
-                    case Constants.OSAGA_REQUEST:
+                    case 4:
                         int sagaStatus = joinSaga(dbConn, sagaId, recipient, sender, coordinator, timeout, version, payload);
                         if (sagaStatus == Constants.JOIN_EXISTS) {
                             response = request(sagaId, payload);

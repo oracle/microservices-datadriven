@@ -67,7 +67,8 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>${dependenciesDirectory}</classpathPrefix>
-                            <mainClass>io.helidon.microprofile.server.Main</mainClass>
+<!--                            <mainClass>io.helidon.microprofile.server.Main</mainClass>-->
+                            <mainClass>AQSaga.UploadWalletToDataDumpDir</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -93,34 +94,11 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>io.helidon.health</groupId>
-            <artifactId>helidon-health</artifactId>
-        </dependency>
-        <dependency> <!-- these are builtin health checks such as deadlock, diskspace, and heapMemory -->
-            <groupId>io.helidon.health</groupId>
-            <artifactId>helidon-health-checks</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.helidon.tracing</groupId>
-            <artifactId>helidon-tracing-jaeger</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.helidon.integrations.cdi</groupId>
-            <artifactId>helidon-integrations-cdi-datasource-ucp</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
             <groupId>javax.transaction</groupId>
             <artifactId>javax.transaction-api</artifactId>
             <version>1.2</version>
             <scope>runtime</scope>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.oracle.database.jdbc</groupId>-->
-<!--            <artifactId>ojdbc8-production</artifactId>-->
-<!--            <version>19.8.0.0</version>-->
-<!--            <type>pom</type>-->
-<!--        </dependency>-->
             <dependency>
                 <groupId>com.oracle.database.jdbc.debug</groupId>
                 <artifactId>ojdbc8-debug</artifactId>
@@ -142,35 +120,6 @@
                 <artifactId>ojdbc8</artifactId>
                 </exclusion>
             </exclusions> 
-        </dependency>
-        <dependency>
-            <groupId>javax.json.bind</groupId>
-            <artifactId>javax.json.bind-api</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.oci.sdk</groupId>
-            <artifactId>oci-java-sdk-vault</artifactId>
-            <version>1.32.2</version>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.oci.sdk</groupId>
-            <artifactId>oci-java-sdk-common</artifactId>
-            <version>1.32.2</version>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.oci.sdk</groupId>
-            <artifactId>oci-java-sdk-secrets</artifactId>
-            <version>1.32.2</version>
-        </dependency>
-        <dependency>
-            <groupId>io.opentracing.contrib</groupId>
-            <artifactId>opentracing-jms-2</artifactId>
-            <version>0.1.11</version>
         </dependency>
 
     </dependencies>

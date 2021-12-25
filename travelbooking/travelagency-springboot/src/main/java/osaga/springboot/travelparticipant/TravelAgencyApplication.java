@@ -1,4 +1,4 @@
-package com.springboot.travelparticipant;
+package osaga.springboot.travelparticipant;
 
 import oracle.jdbc.OracleConnection;
 import oracle.jdbc.pool.OracleDataSource;
@@ -59,7 +59,7 @@ public class TravelAgencyApplication {
 	public void beginAndEnroll() throws Exception {
 		String initiator = "TravelAgencyJava5";
 		AQjmsSaga saga = new AQjmsSaga("jdbc:oracle:thin:@sagadb1_tp?TNS_ADMIN=/Users/pparkins/Downloads/Wallet_sagadb1", "admin", "Welcome12345");
-		MainTestListener listener = new MainTestListener();
+		TravelAgencyTestListener listener = new TravelAgencyTestListener();
 		System.out.println("TravelAgencyApplication.beginAndEnroll setSagaMessageListener...");
 		saga.setSagaMessageListener("ADMIN", initiator, listener);
 		System.out.println("TravelAgencyApplication.beginAndEnroll beginSaga... initiator/sender:" + initiator);
@@ -71,6 +71,41 @@ public class TravelAgencyApplication {
 		System.in.read();
 			System.in.read();
 		//saga.rollbackSaga("D24480320F484F10E053E698F80AECAB", "TRAVELAGENCY");
+	}
+
+	public class TravelAgencyTestListener extends AQjmsSagaMessageListener{
+
+		@Override
+		public String request(String sagaId, String payload) {
+			throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+		}
+
+		@Override
+		public void response(String sagaId, String payload) {
+			System.err.println(payload);
+			System.out.println("Got re!");
+		}
+
+		@Override
+		public void beforeCommit(String sagaId) {
+			System.out.println("Before Commit Called");
+		}
+
+		@Override
+		public void afterCommit(String sagaId) {
+			System.out.println("After Commit Called");
+		}
+
+		@Override
+		public void beforeRollback(String sagaId) {
+			System.out.println("before rb");
+		}
+
+		@Override
+		public void afterRollback(String sagaId) {
+			System.out.println("after rb");
+		}
+
 	}
 
 	public void send() throws Exception {
@@ -111,5 +146,45 @@ public class TravelAgencyApplication {
 			if (session != null) session.close();
 		}
 	}
+
+	public static void main0(String args[]) {
+		String username = "admin";
+		String password = "test";
+		String url = "jdbc:oracle:thin:@//slc17qxb.us.oracle.com:1581/cdb1_pdb2.regress.rdbms.dev.us.oracle.com";
+		String url1 = "jdbc:oracle:thin:@//slc17qxb.us.oracle.com:1581/cdb1_pdb3.regress.rdbms.dev.us.oracle.com";
+		// Travelagency java
+		try {
+			AQjmsSaga saga = new AQjmsSaga(url, username, password);
+			MainTestListener listener = new MainTestListener();
+			saga.setSagaMessageListener("ADMIN", "TRAVELAGENCY", listener);
+			String sagaId = saga.beginSaga("TRAVELAGENCY");
+			System.out.println(sagaId);
+			String payload = "[{\"flight\" : \"United\"}]";
+			saga.enrollParticipant(sagaId, "ADMIN", "TRAVELAGENCY", "AIRLINE", "TACOORDINATOR", payload);
+			//saga.rollbackSaga("D24480320F484F10E053E698F80AECAB", "TRAVELAGENCY");
+			try {
+				System.in.read();
+				System.in.read();
+				//saga.rollbackSaga("D1C241C10B916B0DE053E698F80A889C", "TRAVELAGENCY");
+			} catch (IOException ex) {
+				Logger.getLogger(MainTest.class.getName()).log(Level.SEVERE, null, ex);
+			}
+
+		} catch (JMSException ex) {
+			Logger.getLogger(MainTest.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+// Airline Java
+//        try {
+//            AQjmsSaga saga = new AQjmsSaga(url1, username, password);
+//            MainTestListener1 listener = new MainTestListener1();
+//            saga.setSagaMessageListener("ADMIN", "AIRLINE", listener);
+//            System.in.read();
+//            System.in.read();
+//        } catch (JMSException ex) {
+//            Logger.getLogger(MainTest.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (IOException ex) {
+//            Logger.getLogger(MainTest.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
 }
