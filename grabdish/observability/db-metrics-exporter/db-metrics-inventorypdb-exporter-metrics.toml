@@ -9,9 +9,18 @@ context = "inventoryqueue_messages_by_state"
 labels = ["state"]
 metricsdesc = { value = "Total number of messages in inventory queue by state"}
 request = "select state, count(*) as value from inventoryqueuetable group by state"
+ignorezeroresult = true
 
 [[metric]]
 context = "inventorypdb_inventory_by_inventoryid"
 labels = ["inventoryid"]
 metricsdesc = { value = "Total number of inventory by inventoryid"}
 request = "select inventoryid, inventorycount as value from inventory"
+ignorezeroresult = true
+
+[[metric]]
+context = "inventorypdb_propagation_disabled_status"
+labels = ["QNAME"]
+metricsdesc = { value = "Total number of propagation schedules disabled by queue name"}
+request = "select count(*) as value from DBA_QUEUE_SCHEDULES where qname = 'INVENTORYQUEUE' and SCHEDULE_DISABLED = 'Y'"
+ignorezeroresult = true

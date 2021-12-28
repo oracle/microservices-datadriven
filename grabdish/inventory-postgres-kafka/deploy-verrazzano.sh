@@ -19,8 +19,8 @@ cp inventory-postgres-kafka-comp.yaml inventory-postgres-kafka-comp-$CURRENTTIME
 #may hit sed incompat issue with mac
 sed -i "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" inventory-postgres-kafka-comp-$CURRENTTIME.yaml
 sed -i "s|%INVENTORY_PDB_NAME%|${INVENTORY_PDB_NAME}|g" inventory-postgres-kafka-comp-${CURRENTTIME}.yaml
-sed -i "s|%OCI_REGION%|${OCI_REGION}|g" inventory-postgres-kafka-comp-${CURRENTTIME}.yaml
-sed -i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" inventory-postgres-kafka-comp-${CURRENTTIME}.yaml
+sed -i "s|${OCI_REGION-}|${OCI_REGION}|g" inventory-postgres-kafka-comp-${CURRENTTIME}.yaml
+sed -i "s|${VAULT_SECRET_OCID-}|${VAULT_SECRET_OCID}|g" inventory-postgres-kafka-comp-${CURRENTTIME}.yaml
 
 if [ -z "$1" ]; then
     kubectl apply -f $SCRIPT_DIR/inventory-postgres-kafka-comp-$CURRENTTIME.yaml

@@ -20,7 +20,7 @@ fi
 # Get LB (may have to retry)
 RETRIES=0
 while ! state_done EXT_ORDER_IP; do
-  IP=$(kubectl -n ingress-nginx get svc ingress-nginx-controller -o "go-template={{range .status.loadBalancer.ingress}}{{or .ip .hostname}}{{end}}")
+  IP=$(kubectl -n msdataworkshop get svc ingress-nginx-controller -o "go-template={{range .status.loadBalancer.ingress}}{{or .ip .hostname}}{{end}}")
   if [[ "$IP" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
     state_set EXT_ORDER_IP "$IP"
   else
@@ -57,7 +57,7 @@ done
 
 # Scale to 3/2
 echo "Scaling DB core count to 2"
-oci db autonomous-database update --autonomous-database-id $(state_get ORDER_DB_OCID) --cpu-core-count 2
+oci db autonomous-database update --autonomous-database-id $(state_get DB1_OCID) --cpu-core-count 2
 
 echo "Waiting for scaling to complete"
 sleep 90
@@ -70,4 +70,4 @@ echo "TEST_LOG: Scale App 3 DB 2: `./test.sh | grep http_reqs | awk '{print $3}'
 
 # Scale down to 1/1
 kubectl scale deployment.apps/order-helidon --replicas=1 -n msdataworkshop
-oci db autonomous-database update --autonomous-database-id $(state_get ORDER_DB_OCID) --cpu-core-count 1
+oci db autonomous-database update --autonomous-database-id $(state_get DB1_OCID) --cpu-core-count 1

@@ -1,0 +1,31 @@
+# Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+travelagencyQueueName: travelagencyqueue;
+travelagencyuser: INVENTORYUSER;
+oracle:
+  jdbc:
+    fanEnabled: false
+  ucp:
+    jdbc:
+      PoolDataSource:
+        travelagencypdb:
+          URL: jdbc:oracle:thin:@travelagencydb_high?TNS_ADMIN=/Users/pparkins/Downloads/Wallet_PARTICIPANTDB
+          connectionFactoryClassName: oracle.jdbc.pool.OracleDataSource
+          password: WelcomeInventory123
+          user: admin
+travelagencyQueueName: travelagencyqueue;
+server:
+  host: 0.0.0.0
+  port: 8080
+spring:
+  datasource:
+    driver-class-name: oracle.jdbc.pool.OracleDataSource
+    password: WelcomeInventory123
+    url: jdbc:oracle:thin:@travelagencydb_high?TNS_ADMIN=/Users/pparkins/Downloads/Wallet_PARTICIPANTDB
+    username: admin
+  jpa:
+    database: ORACLE
+    database-platform: org.hibernate.dialect.Oracle10gDialect
+    hibernate:
+      ddl-auto: none
+    show-sql: true

@@ -1,3 +1,7 @@
+# Deployment artifacts
+.deployed/
+.deployed/*.yaml
+
 # Compiled class file
 *.class
 

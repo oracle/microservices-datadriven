@@ -42,9 +42,9 @@ sed -e  "s|%PDB_NAME%|${ORDER_PDB_NAME}|g" db-metrics-exporter-orderpdb-deployme
 mv -- /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 sed -e  "s|%USER%|orderUSER|g" db-metrics-exporter-orderpdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
-sed -e  "s|%OCI_REGION%|${OCI_REGION}|g" db-metrics-exporter-orderpdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
+sed -e  "s|${OCI_REGION-}|${OCI_REGION}|g" db-metrics-exporter-orderpdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
-sed -e  "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" db-metrics-exporter-orderpdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
+sed -e  "s|${VAULT_SECRET_OCID-}|${VAULT_SECRET_OCID}|g" db-metrics-exporter-orderpdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 sed -e  "s|%DATA_SOURCE_NAME_URL%|orderurl|g" db-metrics-exporter-orderpdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml

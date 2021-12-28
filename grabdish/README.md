@@ -1,7 +1,7 @@
 # Sample Application: GrabDish
 
 Source code and workshop scripts for the
-[Building Microservices with Oracle Converged Database Workshop][1]
+[Simplify Microservices with converged Oracle Database Workshop][1]
 available on [Oracle LiveLabs][2].
 
 ## License

@@ -100,7 +100,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.5",
+      "pluginVersion": "8.1.5",
       "targets": [
         {
           "exemplar": true,
@@ -177,7 +177,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.5",
+      "pluginVersion": "8.1.5",
       "targets": [
         {
           "exemplar": true,
@@ -233,7 +233,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.5",
+      "pluginVersion": "8.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -342,7 +342,32 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "application_io_helidon_data_examples_FrontEndResource_frontend_placeOrder_timed_mean_seconds{container=\"frontend\", endpoint=\"metrics\", instance=\"10.244.1.4:8080\", job=\"frontend\", namespace=\"msdataworkshop\", pod=\"frontend-helidon-789d788fbf-sxhqd\", service=\"frontend\"}"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -370,6 +395,7 @@
           "refId": "A"
         }
       ],
+      "thresholds": [],
       "title": "PlaceOrder average time",
       "type": "timeseries"
     },
@@ -414,7 +440,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.5",
+      "pluginVersion": "8.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -516,7 +542,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.5",
+      "pluginVersion": "8.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -671,7 +697,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.5",
+      "pluginVersion": "8.1.5",
       "targets": [
         {
           "exemplar": true,
@@ -748,7 +774,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.5",
+      "pluginVersion": "8.1.5",
       "targets": [
         {
           "exemplar": true,
@@ -829,7 +855,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.5",
+      "pluginVersion": "8.1.5",
       "targets": [
         {
           "exemplar": true,
@@ -846,6 +872,42 @@
       "type": "stat"
     },
     {
+      "alert": {
+        "alertRuleTags": {},
+        "conditions": [
+          {
+            "evaluator": {
+              "params": [
+                0.01
+              ],
+              "type": "gt"
+            },
+            "operator": {
+              "type": "and"
+            },
+            "query": {
+              "params": [
+                "A",
+                "1m",
+                "now"
+              ]
+            },
+            "reducer": {
+              "params": [],
+              "type": "avg"
+            },
+            "type": "query"
+          }
+        ],
+        "executionErrorState": "alerting",
+        "for": "5m",
+        "frequency": "1m",
+        "handler": 1,
+        "message": "PlaceOrder average time for Order service exceeded .02",
+        "name": "PlaceOrder average time alert",
+        "noDataState": "no_data",
+        "notifications": []
+      },
       "datasource": null,
       "fieldConfig": {
         "defaults": {
@@ -903,7 +965,7 @@
         "x": 0,
         "y": 19
       },
-      "id": 37,
+      "id": 90,
       "options": {
         "legend": {
           "calcs": [],
@@ -917,13 +979,21 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "application_io_helidon_data_examples_OrderResource_order_placeOrder_counted_total",
+          "expr": "application_io_helidon_data_examples_OrderResource_order_placeOrder_timed_mean_seconds",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "PlaceOrder count",
+      "thresholds": [
+        {
+          "colorMode": "critical",
+          "op": "gt",
+          "value": 0.01,
+          "visible": true
+        }
+      ],
+      "title": "PlaceOrder average time",
       "type": "timeseries"
     },
     {
@@ -977,7 +1047,32 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "oracledb_orderpdb_orders_by_status_value{endpoint=\"metrics\", instance=\"10.244.1.94:9161\", job=\"db-metrics-exporter-order\", namespace=\"msdataworkshop\", pod=\"db-metrics-exporter-orderpdb-86c776c7f4-tfpn9\", service=\"db-metrics-exporter-order\", status=\"pending\"}"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -1009,204 +1104,85 @@
       "type": "timeseries"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "description": "",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
-          "links": []
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
-        "h": 6,
-        "w": 7,
+        "h": 8,
+        "w": 12,
         "x": 0,
         "y": 27
       },
-      "hiddenSeries": false,
-      "id": 8,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "max": true,
-        "min": true,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
+      "id": 37,
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
       },
-      "percentage": false,
-      "pluginVersion": "8.0.5",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
       "targets": [
         {
           "exemplar": true,
-          "expr": "base_cpu_systemLoadAverage",
+          "expr": "application_io_helidon_data_examples_OrderResource_order_placeOrder_counted_total",
           "interval": "",
-          "intervalFactor": 2,
-          "legendFormat": "CPU load",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "CPU Load",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "percentunit",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "Prometheus",
-      "fieldConfig": {
-        "defaults": {
-          "links": []
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 6,
-        "w": 5,
-        "x": 7,
-        "y": 27
-      },
-      "hiddenSeries": false,
-      "id": 2,
-      "legend": {
-        "alignAsTable": true,
-        "avg": true,
-        "current": true,
-        "max": true,
-        "min": true,
-        "rightSide": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "8.0.5",
-      "pointradius": 5,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "base_thread_count{job=\"order\"}",
-          "interval": "",
-          "intervalFactor": 2,
-          "legendFormat": "Thread Count",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Thread Count",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": false
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "title": "PlaceOrder count",
+      "type": "timeseries"
     },
     {
       "datasource": null,
@@ -1295,6 +1271,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "Prometheus",
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -1304,15 +1281,112 @@
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
-        "h": 7,
-        "w": 12,
+        "h": 6,
+        "w": 7,
         "x": 0,
-        "y": 33
+        "y": 35
       },
       "hiddenSeries": false,
-      "hideTimeOverride": false,
-      "id": 10,
-      "interval": "",
+      "id": 8,
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": true,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.1.5",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "base_cpu_systemLoadAverage",
+          "interval": "",
+          "intervalFactor": 2,
+          "legendFormat": "CPU load",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "CPU Load",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "percentunit",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "links": []
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 6,
+        "w": 5,
+        "x": 7,
+        "y": 35
+      },
+      "hiddenSeries": false,
+      "id": 2,
       "legend": {
         "alignAsTable": true,
         "avg": true,
@@ -1332,7 +1406,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.5",
+      "pluginVersion": "8.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -1343,37 +1417,21 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "base_memory_usedHeap_bytes{job=\"order\"}",
+          "expr": "base_thread_count{job=\"order\"}",
           "interval": "",
           "intervalFactor": 2,
-          "legendFormat": "Used Heap",
+          "legendFormat": "Thread Count",
           "refId": "A"
-        },
-        {
-          "exemplar": true,
-          "expr": "base_memory_committedHeap_bytes{job=\"order\"}",
-          "interval": "",
-          "intervalFactor": 2,
-          "legendFormat": "Commited Heap",
-          "refId": "C"
-        },
-        {
-          "exemplar": true,
-          "expr": "base_memory_maxHeap_bytes{job=\"order\"}",
-          "interval": "",
-          "intervalFactor": 2,
-          "legendFormat": "Max Heap",
-          "refId": "B"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Heap Sizes",
+      "title": "Thread Count",
       "tooltip": {
         "shared": true,
-        "sort": 2,
+        "sort": 0,
         "value_type": "individual"
       },
       "type": "graph",
@@ -1386,7 +1444,7 @@
       },
       "yaxes": [
         {
-          "format": "decbytes",
+          "format": "short",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -1514,13 +1572,131 @@
       "type": "timeseries"
     },
     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "Prometheus",
+      "fieldConfig": {
+        "defaults": {
+          "links": []
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 41
+      },
+      "hiddenSeries": false,
+      "hideTimeOverride": false,
+      "id": 10,
+      "interval": "",
+      "legend": {
+        "alignAsTable": true,
+        "avg": true,
+        "current": true,
+        "max": true,
+        "min": true,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": true
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "8.1.5",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "base_memory_usedHeap_bytes{job=\"order\"}",
+          "interval": "",
+          "intervalFactor": 2,
+          "legendFormat": "Used Heap",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "base_memory_committedHeap_bytes{job=\"order\"}",
+          "interval": "",
+          "intervalFactor": 2,
+          "legendFormat": "Commited Heap",
+          "refId": "C"
+        },
+        {
+          "exemplar": true,
+          "expr": "base_memory_maxHeap_bytes{job=\"order\"}",
+          "interval": "",
+          "intervalFactor": 2,
+          "legendFormat": "Max Heap",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Heap Sizes",
+      "tooltip": {
+        "shared": true,
+        "sort": 2,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "decbytes",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": false
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
       "collapsed": false,
       "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 43
+        "y": 48
       },
       "id": 45,
       "panels": [],
@@ -1572,7 +1748,7 @@
         "h": 2,
         "w": 4,
         "x": 0,
-        "y": 44
+        "y": 49
       },
       "id": 58,
       "interval": null,
@@ -1593,11 +1769,11 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.5",
+      "pluginVersion": "8.1.5",
       "targets": [
         {
           "exemplar": true,
-          "expr": "up{job=\"order\"}",
+          "expr": "up{job=\"inventory\"}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -1649,7 +1825,7 @@
         "h": 2,
         "w": 3,
         "x": 4,
-        "y": 44
+        "y": 49
       },
       "id": 61,
       "interval": null,
@@ -1670,7 +1846,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.5",
+      "pluginVersion": "8.1.5",
       "targets": [
         {
           "exemplar": true,
@@ -1730,7 +1906,7 @@
         "h": 2,
         "w": 4,
         "x": 12,
-        "y": 44
+        "y": 49
       },
       "id": 59,
       "interval": null,
@@ -1751,7 +1927,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.0.5",
+      "pluginVersion": "8.1.5",
       "targets": [
         {
           "exemplar": true,
@@ -1764,6 +1940,7 @@
       "timeFrom": null,
       "timeShift": null,
       "title": "PDB Status",
+      "transformations": [],
       "type": "stat"
     },
     {
@@ -1824,7 +2001,7 @@
               "options": {
                 "mode": "exclude",
                 "names": [
-                  "application_inventorydoesnotexistCount_total{container=\"inventory\", endpoint=\"metrics\", instance=\"10.244.0.78:8080\", job=\"inventory\", namespace=\"msdataworkshop\", pod=\"inventory-helidon-dbff44756-lkgkw\", service=\"inventory\"}"
+                  "application_inventorydoesnotexistCount_total{container=\"inventory\", endpoint=\"metrics\", instance=\"10.244.0.122:8080\", job=\"inventory\", namespace=\"msdataworkshop\", pod=\"inventory-helidon-bf88c6f7d-2mlt2\", service=\"inventory\"}"
                 ],
                 "prefix": "All except:",
                 "readOnly": true
@@ -1847,7 +2024,7 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 46
+        "y": 51
       },
       "id": 47,
       "options": {
@@ -1863,7 +2040,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "application_inventorydoesnotexistCount_total",
+          "expr": "application_inventorydoesnotexistCount_total{}",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -1928,7 +2105,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 46
+        "y": 51
       },
       "id": 82,
       "options": {
@@ -1972,7 +2149,7 @@
         "h": 6,
         "w": 7,
         "x": 0,
-        "y": 52
+        "y": 57
       },
       "hiddenSeries": false,
       "id": 64,
@@ -1994,7 +2171,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.5",
+      "pluginVersion": "8.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2071,7 +2248,7 @@
         "h": 6,
         "w": 5,
         "x": 7,
-        "y": 52
+        "y": 57
       },
       "hiddenSeries": false,
       "id": 63,
@@ -2094,7 +2271,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.5",
+      "pluginVersion": "8.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2209,7 +2386,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 54
+        "y": 59
       },
       "id": 49,
       "options": {
@@ -2252,7 +2429,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 58
+        "y": 63
       },
       "hiddenSeries": false,
       "hideTimeOverride": false,
@@ -2277,7 +2454,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.0.5",
+      "pluginVersion": "8.1.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2408,7 +2585,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 62
+        "y": 67
       },
       "id": 70,
       "options": {
@@ -2432,6 +2609,166 @@
       ],
       "title": "Inventory queue messages",
       "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 75
+      },
+      "id": 84,
+      "panels": [],
+      "title": "Event Mesh (Message Propagation)",
+      "type": "row"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "index": 1,
+                  "text": "UP"
+                },
+                "1": {
+                  "index": 0,
+                  "text": "DOWN"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 76
+      },
+      "id": 88,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "oracledb_orderpdb_propagation_disabled_status_value{}",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "OrderDB to InventoryDB Propagation Schedule",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "index": 1,
+                  "text": "UP"
+                },
+                "1": {
+                  "index": 0,
+                  "text": "DOWN"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 76
+      },
+      "id": 86,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.5",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "oracledb_inventorypdb_propagation_disabled_status_value{}",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "InventoryDB to OrderDB Propagation Schedule",
+      "type": "stat"
     }
   ],
   "refresh": false,
@@ -2442,7 +2779,7 @@
     "list": []
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-1m",
     "to": "now"
   },
   "timepicker": {
@@ -2473,5 +2810,5 @@
   "timezone": "",
   "title": "GrabDish Dash",
   "uid": "kmgGniV7k",
-  "version": 10
+  "version": 6
 }

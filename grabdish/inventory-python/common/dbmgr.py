@@ -3,7 +3,6 @@
 # Database Manager
 
 import os
-import sys
 import logging
 from os import environ as env
 import cx_Oracle
