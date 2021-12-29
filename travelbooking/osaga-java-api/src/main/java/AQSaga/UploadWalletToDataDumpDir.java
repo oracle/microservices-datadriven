@@ -14,35 +14,27 @@ import java.sql.Types;
 public class UploadWalletToDataDumpDir {
 
     public static void main(String args[]) throws Exception {
+        uploadWallet("jdbc:oracle:thin:@sagadb1_tp?TNS_ADMIN=/Users/pparkins/Downloads/Wallet_sagadb1");
+        uploadWallet("jdbc:oracle:thin:@sagadb2_tp?TNS_ADMIN=/Users/pparkins/Downloads/Wallet_sagadb1");
+    }
 
-//        https://stackoverflow.com/questions/8348427/how-to-write-update-oracle-blob-in-a-reliable-way
-
+    private static void uploadWallet(String url) throws Exception {
         System.setProperty("oracle.jdbc.fanEnabled", "false");
         PoolDataSource poolDataSource = PoolDataSourceFactory.getPoolDataSource();
         poolDataSource.setConnectionFactoryClassName("oracle.jdbc.pool.OracleDataSource");
-        poolDataSource.setURL("jdbc:oracle:thin:@sagadb2_tp?TNS_ADMIN=/Users/pparkins/Downloads/Wallet_sagadb1");
+        poolDataSource.setURL(url);
         poolDataSource.setUser("admin");
         poolDataSource.setPassword("Welcome12345");
         Connection conn = poolDataSource.getConnection();
-        System.out.println("UploadWalletToDataDumpDir conn:" + conn);
+        System.out.println("UploadWalletToDataDumpDir conn:" + conn + " url:" + url);
         File blob = new File("/Users/pparkins/Downloads/Wallet_sagadb1/cwallet.sso");
         FileInputStream in = new FileInputStream(blob);
-
-// the cast to int is necessary because with JDBC 4 there is
-// also a version of this method with a (int, long)
-// but that is not implemented by Oracle
-//        pstmt.setBinaryStream(1, in, (int)blob.length());
-//
         CallableStatement cstmt = conn.prepareCall("{call write_file(?,?,?)}");
-        cstmt.setString(1, "DATA_PUMP_DIR"); //'DATA_PUMP_DIR'
-//        cstmt.setString("directory_name", "DATA_DUMP_DIR");
-        cstmt.setString(2, "cwallet.sso");
-//        cstmt.setString("file_name", "cwallet.sso");
-        cstmt.setBinaryStream(3, in);
-//        cstmt.setBinaryStream(3, in, (int)blob.length());
+        cstmt.setString(1, "DATA_PUMP_DIR"); // "directory_name"
+        cstmt.setString(2, "cwallet.sso"); // "file_name"
+        cstmt.setBinaryStream(3, in); //"contents"
         cstmt.execute();
         System.out.println("UploadWalletToDataDumpDir wallet uploaded");
-
     }
 
 /**

@@ -114,9 +114,12 @@ public class OracleConnection {
 //                coordinator     IN  VARCHAR2,
 //                payload         IN  CLOB) return NUMBER;
 //        dbms_saga.enroll_participant(saga_id, ‘TravelAgency’, ‘Flight’, ‘TACoordinator’, request);
-        CallableStatement pstmt = connection.prepareCall("{call  join_saga_int(?,?)}");
-        pstmt.setNString(1, "");
-        pstmt.execute();
+        CallableStatement cstmt = connection.prepareCall("{call  join_saga_int(?,?)}");
+//        cstmt.setString(1, sagaId);
+        cstmt.setString(2, initiatorName);
+        cstmt.setString(3, "");
+        cstmt.setString(4, coordinatorName);
+        cstmt.execute();
         return null;
     }
 
