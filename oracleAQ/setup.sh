@@ -21,7 +21,7 @@ ocid_comp=$(oci iam compartment list --all | jq -r ".data[] | select(.name == \"
 #Get the database password
 echo "Enter Database Password :" ; 
 echo "NOTE: Password must be 12 to 30 characters and contain at least one uppercase letter, one lowercase letter, and one number. The password cannot contain the double quote character or the username 'admin' ";
-read -s db_pwd; export db_pwd
+read -s db_pwd;
 
 # Create ATP
    #21c always free
@@ -36,12 +36,19 @@ adb_id=$(oci db autonomous-database list -c ${ocid_comp} --query "data [?\"db-na
 # Generating wallet
 mkdir -p ${TNS_ADMIN}
 cd $TNS_ADMIN;
+
+echo ${db_pwd} | openssl enc -aes256 -md sha512 -a -salt -pass pass:Secret@123# > cred.txt
+chmod 600 cred.txt
+
 oci db autonomous-database generate-wallet --autonomous-database-id ${adb_id} --password ${db_pwd} --file wallet.zip --generate-type ALL
 unzip wallet.zip
+sed 's/?/$WORKFLOW_HOME/' sqlnet.ora
+
 
 # create DBUSER
 cd $WORKFLOW_HOME;
-sql /nolog @$WORKFLOW_HOME/basicCreateUser.sql $db_pwd
+credData=$(cat cred.txt |openssl enc -aes256 -md sha512 -a -d -salt -pass pass:Secret@123#)
+sqlplus @$WORKFLOW_HOME/basicCreateUser.sql
 
 # Java setup
 cd $WORKFLOW_HOME/aqJava;
