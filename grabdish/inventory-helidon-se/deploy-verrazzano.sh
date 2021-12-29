@@ -19,8 +19,8 @@ cp inventory-helidon-se-comp.yaml inventory-helidon-se-comp-$CURRENTTIME.yaml
 #may hit sed incompat issue with mac
 sed_i "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" inventory-helidon-se-comp-$CURRENTTIME.yaml
 sed_i "s|%INVENTORY_PDB_NAME%|${INVENTORY_PDB_NAME}|g" inventory-helidon-se-comp-${CURRENTTIME}.yaml
-sed_i "s|%OCI_REGION%|${OCI_REGION}|g" inventory-helidon-se-comp-${CURRENTTIME}.yaml
-sed_i "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" inventory-helidon-se-comp-${CURRENTTIME}.yaml
+sed_i "s|${OCI_REGION-}|${OCI_REGION}|g" inventory-helidon-se-comp-${CURRENTTIME}.yaml
+sed_i "s|${VAULT_SECRET_OCID-}|${VAULT_SECRET_OCID}|g" inventory-helidon-se-comp-${CURRENTTIME}.yaml
 
 if [ -z "$1" ]; then
     kubectl apply -f $SCRIPT_DIR/inventory-helidon-se-comp-$CURRENTTIME.yaml
