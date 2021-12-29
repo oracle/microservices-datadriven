@@ -1,4 +1,4 @@
-ADMIN/$(cat cred.txt |openssl enc -aes256 -md sha512 -a -d -salt -pass pass:Secret@123#)@AQDATABASE1_TP ;
+ADMIN/$(cat cred.txt |openssl enc -aes256 -md sha512 -a -d -salt -pass pass:Secret@123#)@AQDATABASETEST_TP ;
 CREATE USER DBUSER IDENTIFIED BY $(cat cred.txt |openssl enc -aes256 -md sha512 -a -d -salt -pass pass:Secret@123#) ;
 
 GRANT execute on DBMS_AQ TO DBUSER;

@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # variable declarations
-export comp_name="oracleAQ";   
-export db_name="aqdatabase"; 
+export comp_name="oracleAQTest";   
+export db_name="aqdatabasetest"; 
 mkdir -p $comp_name ;
 export WORKFLOW_HOME=${HOME}/${comp_name}; 
 export display_name=${db_name}                                      
