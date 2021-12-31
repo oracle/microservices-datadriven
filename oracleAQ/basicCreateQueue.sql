@@ -1,7 +1,3 @@
-
-set cloudconfig ./oracleAQ/network/admin/wallet.zip
-connect DBUSER/&1@AQDATABASE_TP ;
-
 CREATE type obj_typ as object (subject     VARCHAR2(30), text        VARCHAR2(80));  
 /
 -- Creating an OBJECT type Queue Table and Queue 

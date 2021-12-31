@@ -1,7 +1,4 @@
-set cloudconfig ./oracleAQ/network/admin/wallet.zip
-connect DBUSER/&1@AQDATABASE_TP ;
-/
- --Enqueue to objType Message 
+--Enqueue to objType Message 
 DECLARE
  enqueue_options     dbms_aq.enqueue_options_t;
  message_properties  dbms_aq.message_properties_t;

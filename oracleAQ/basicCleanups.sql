@@ -1,7 +1,3 @@
- 
- set cloudconfig ./oracleAQ/network/admin/wallet.zip
-connect DBUSER/&1@AQDATABASE_TP ;
-
 --Clean up all objects related to the obj type: 
 EXECUTE DBMS_AQADM.STOP_QUEUE ( queue_name       => 'objType_classicQueue');  
 EXECUTE DBMS_AQADM.DROP_QUEUE ( queue_name       => 'objType_classicQueue');  

@@ -20,7 +20,12 @@ ocid_comp=$(oci iam compartment list --all | jq -r ".data[] | select(.name == \"
 
 #Get the database password
 echo "Enter Database Password :" ; 
-echo "NOTE: Password must be 12 to 30 characters and contain at least one uppercase letter, one lowercase letter, and one number. The password cannot contain the double quote character or the username 'admin' ";
+echo "NOTE: Password must contain:"
+echo "* 12 to 30 characters"
+echo "* at least one uppercase letter"
+echo "* at least one lowercase letter"
+echo "* at least one number"
+echo "* The password cannot contain the double quote character or the username 'admin' ";
 read -s db_pwd;
 
 # Create ATP
@@ -36,19 +41,16 @@ adb_id=$(oci db autonomous-database list -c ${ocid_comp} --query "data [?\"db-na
 # Generating wallet
 mkdir -p ${TNS_ADMIN}
 cd $TNS_ADMIN;
-
-echo ${db_pwd} | openssl enc -aes256 -md sha512 -a -salt -pass pass:Secret@123# > cred.txt
-chmod 600 cred.txt
-
 oci db autonomous-database generate-wallet --autonomous-database-id ${adb_id} --password ${db_pwd} --file wallet.zip --generate-type ALL
 unzip wallet.zip
-sed 's/?/$WORKFLOW_HOME/' sqlnet.ora
+sed -i "s|?|$WORKFLOW_HOME|" sqlnet.ora
 
 
 # create DBUSER
 cd $WORKFLOW_HOME;
-credData=$(cat cred.txt |openssl enc -aes256 -md sha512 -a -d -salt -pass pass:Secret@123#)
-sqlplus @$WORKFLOW_HOME/basicCreateUser.sql
+echo ${db_pwd} | openssl enc -aes256 -md sha512 -a -salt -pass pass:Secret@123# > cred.txt
+chmod 600 cred.txt
+sqlplus ADMIN/$(cat cred.txt |openssl enc -aes256 -md sha512 -a -d -salt -pass pass:Secret@123#)@AQDATABASE_TP @basicCreateUser.sql (cat cred.txt |openssl enc -aes256 -md sha512 -a -d -salt -pass pass:Secret@123#)
 
 # Java setup
 cd $WORKFLOW_HOME/aqJava;
@@ -61,8 +63,11 @@ echo "Setup completed."
 cd $WORKFLOW_HOME;
 
 echo "WORKFLOW_HOME     : " $WORKFLOW_HOME;
+
 echo "Compartment Name  : " ${comp_name}
 echo "Compartment OCID  : " ${ocid_comp}
+
 echo "Database Name     : " ${db_name}
 echo "ATP Database OCID : " ${adb_id}
+
 echo "TNS Conn String   : " ${display_name}_tp
