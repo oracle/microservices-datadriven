@@ -1,5 +1,13 @@
 package AQSaga.wrapper;
 
+import AQSaga.Constants;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.Arrays;
@@ -70,6 +78,34 @@ public class OracleConnection {
         System.out.println("OracleConnection.enrollParticipant end");
     }
 
+    public String joinSaga(@QueryParam("PARTICIPANTTYPE") String PARTICIPANTTYPE,
+                             @QueryParam("RESERVATIONTYPE") String RESERVATIONTYPE,
+                             @QueryParam("RESERVATIONVALUE") String RESERVATIONVALUE,
+                             @QueryParam("SAGANAME") String SAGANAME,
+                             @QueryParam("SAGAID") String SAGAID) throws SQLException {
+        System.out.println("--->joinSaga calling dbms_saga.enroll_participant for   PARTICIPANTTYPE = " + PARTICIPANTTYPE + ", RESERVATIONTYPE = " + RESERVATIONTYPE +
+                ", RESERVATIONVALUE = " + RESERVATIONVALUE + ", SAGANAME = " + SAGANAME + ", SAGAID = " + SAGAID);
+        CallableStatement cstmt = connection.prepareCall("{call REGISTER_PARTICIPANT_IN_SAGA(?,?,?,?,?)}");
+//        cstmt.setString("PARTICIPANTTYPE", "Airline");
+        cstmt.setString("PARTICIPANTTYPE", "JavaAirline");
+        cstmt.setString("RESERVATIONTYPE", "flight");
+        cstmt.setString("RESERVATIONVALUE", "United");
+        cstmt.setString("SAGANAME", "TravelAgency");
+        cstmt.setBytes("SAGAID", oracle.sql.RAW.hexString2Bytes(SAGAID));
+        cstmt.execute();
+        return SAGAID;
+    }
+
+
+
+
+    String callCommitOnSaga(Connection connection, String sagaId)  throws SQLException {
+        CallableStatement cstmt  = connection.prepareCall("{call COMMITSAGA(?)}");
+        cstmt.setString(1, sagaId);
+        cstmt.execute();
+        return "commitSaga (ImplementionWithOSaga) sagaId:" + sagaId;
+    }
+
     /**
      * Join a saga specified by the sagaId and the participant name and listen
      * to acknowledements sent by the coordinator.
@@ -107,20 +143,27 @@ public class OracleConnection {
             int flags,
             int spareNumeric,
             String spareText) throws SQLException {
-//        function join_saga_int(
-//                saga_id         IN  saga_id_t,
-//                initiator_name  IN  VARCHAR2,
-//                saga_initiator  IN  VARCHAR2,
-//                coordinator     IN  VARCHAR2,
-//                payload         IN  CLOB) return NUMBER;
-//        dbms_saga.enroll_participant(saga_id, ‘TravelAgency’, ‘Flight’, ‘TACoordinator’, request);
-        CallableStatement cstmt = connection.prepareCall("{call  join_saga_int(?,?)}");
-//        cstmt.setString(1, sagaId);
-        cstmt.setString(2, initiatorName);
-        cstmt.setString(3, "");
-        cstmt.setString(4, coordinatorName);
+        String sagaIDString = new String(sagaId, StandardCharsets.UTF_8);
+        CallableStatement cstmt = connection.prepareCall("{? = call  dbms_saga_sys.join_saga_int(?,?,?,?,?)}");
+        System.out.println("joinSaga participantName = " + participantName + ", sagaIDString = " + sagaIDString +
+                ", coordinatorName = " + coordinatorName + ", initiatorName = " + initiatorName +
+                ", timeout = " + timeout + ", version = " + version + ", opcode = " + opcode +
+                ", flags = " + flags + ", spareNumeric = " + spareNumeric + ", spareText = " + spareText);
+        cstmt.registerOutParameter(1, java.sql.Types.INTEGER);
+        cstmt.setString(2, sagaIDString); // saga_id IN saga_id_t,
+        cstmt.setString(3, participantName); // initiator_name IN VARCHAR2,
+        cstmt.setString(4, initiatorName); // saga_initiator IN VARCHAR2,
+        cstmt.setString(5, coordinatorName);  // coordinator IN VARCHAR2,
+        cstmt.setString(6, ""); //  payload IN CLOB
         cstmt.execute();
-        return null;
+        int joinStatus = cstmt.getInt(1);
+        System.out.println("OracleConnection.joinSaga joinStatus is:" + joinStatus);
+        return joinStatus;
+    }
+
+    public void updateStatusToJoined(String sagaId, String recipient, String sender, String coordinator, int osagaResponse, Integer timeout, Integer version, Object o, String response) throws SQLException {
+        // JOINED CONSTANT NUMBER := 0;
+        connection.prepareStatement("update saga$ set status = '0' where id = '"+sagaId+"'  and participant = '"+recipient+"'").execute();
     }
 
     /**

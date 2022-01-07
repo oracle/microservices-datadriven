@@ -94,12 +94,6 @@ public class AQjmsSaga implements Osaga {
             if (createConsumer) {
                 this.messageConsumer.setMessageListener(this.listener);
             }
-            //paul added these 3 lines...
-//            if (isReceive) {
-//                System.out.println("AQjmsSaga.setSagaMessageListener messageConsumer.receive(-1);");
-//                Message message = messageConsumer.receive(-1);
-//                System.out.println("AQjmsSaga.setSagaMessageListener messageConsumer.receive(-1) message:" + message);
-//            }
         }
     }
 
@@ -128,17 +122,17 @@ public class AQjmsSaga implements Osaga {
         System.out.println("enrollParticipant sagaId = " + sagaId + ", schema = " + schema + ", sender = " + sender +
                 ", recipient = " + recipient + ", coordinator = " + coordinator +
                 ", payload = " + payload + ", timeout = " + timeout + ", version = " + version + ", spare = " + spare);
-//        try {
-//            System.out.println("AQjmsSaga.enrollParticipant call enrollParticipant sproc directly");
-//            OracleConnection dbConn
-//                    = new OracleConnection((oracle.jdbc.internal.OracleConnection) ((AQjmsSession) this.session).getDBConnection());
-//            dbConn.setAutoCommit(false);
-//            dbConn.enrollParticipant(sagaId, schema, sender, recipient, coordinator);
-//            this.session.commit();
-//        } catch (SQLException ex) {
-//            throw new AQjmsSagaException(ex);
-//        }
-//
+        try {
+            System.out.println("AQjmsSaga.enrollParticipant call enrollParticipant sproc directly");
+            OracleConnection dbConn
+                    = new OracleConnection((oracle.jdbc.internal.OracleConnection) ((AQjmsSession) this.session).getDBConnection());
+            dbConn.setAutoCommit(false);
+            dbConn.enrollParticipant(sagaId, schema, sender, recipient, coordinator);
+            this.session.commit();
+        } catch (SQLException ex) {
+            throw new AQjmsSagaException(ex);
+        }
+
 
 //        System.out.println("AQjmsSaga.enrollParticipant call enrollParticipant message");
         AQjmsTextMessage requestMessage = (AQjmsTextMessage)((AQjmsSession) this.session).createTextMessage();
@@ -159,7 +153,7 @@ public class AQjmsSaga implements Osaga {
 //        requestMessage.setStringProperty("jms_oracle_aq$_saga", version);
 //        requestMessage.setSagaSpare(spare);
 //        requestMessage.setStringProperty("jms_oracle_aq$_saga", spare);
-        getSagaOutTopicPublisher(schema, sender).publish(requestMessage);
+//        getSagaOutTopicPublisher(schema, sender).publish(requestMessage);
         this.session.commit();
     }
 

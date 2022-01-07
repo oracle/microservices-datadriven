@@ -4,13 +4,13 @@
 GRANT ALL ON dbms_saga_adm TO admin;
 
 
-BEGIN
- DBMS_CLOUD.GET_OBJECT(
-    object_uri => 'https://objectstorage.us-phoenix-1.oraclecloud.com/p/hyWE8lAKMz_FJgbnAVQHam83_CIWTzI4Zt6Xn6WRbTeMAp1CGLs1ez0DNloDiQNs/n/ax2mkfmpukkx/b/testbucket/o/cwallet.sso',
-    directory_name => 'DATA_PUMP_DIR');
--- or directory_name => 'dblink_wallet_dir'
-END;
-/
+--BEGIN
+-- DBMS_CLOUD.GET_OBJECT(
+--    object_uri => 'https://objectstorage.us-phoenix-1.oraclecloud.com/p/hyWE8lAKMz_FJgbnAVQHam83_CIWTzI4Zt6Xn6WRbTeMAp1CGLs1ez0DNloDiQNs/n/ax2mkfmpukkx/b/testbucket/o/cwallet.sso',
+--    directory_name => 'DATA_PUMP_DIR');
+---- or directory_name => 'dblink_wallet_dir'
+--END;
+--/
 
 BEGIN
 DBMS_CLOUD.CREATE_CREDENTIAL(
@@ -70,7 +70,17 @@ end;
 end dbms_car_cbk;
 /
 
---exec dbms_saga_adm.add_participant(participant_name=> 'CarPLSQL' , coordinator_name => 'TravelCoordinator' ,  dblink_to_broker=> 'travelagencyadminlink',mailbox_schema=> 'admin',broker_name=> 'TEST', callback_package => 'dbms_car_cbk' , dblink_to_participant=> 'participantadminlink');
+exec dbms_saga_adm.add_participant(participant_name=> 'CarPLSQL' , coordinator_name => 'TravelCoordinator' ,  dblink_to_broker=> 'travelagencyadminlink',mailbox_schema=> 'admin',broker_name=> 'TEST', callback_package => 'dbms_car_cbk' , dblink_to_participant=> 'participantadminlink');
+gives...
+Error report -
+ORA-20001: Cannot Create Participant:
+    Invalid Coordinator Name
+ORA-06512: at "ADMIN.DBMS_SAGA_ADM_SYS", line 473
+ORA-06512: at "ADMIN.DBMS_SAGA_ADM_SYS", line 1137
+ORA-06512: at "ADMIN.DBMS_SAGA_ADM_SYS", line 459
+ORA-06512: at "ADMIN.DBMS_SAGA_ADM", line 188
+ORA-06512: at line 1
+
 --exec dbms_saga_adm.drop_participant(participant_name=> 'CarPLSQL');
 
 exec dbms_saga_adm.add_participant(participant_name=> 'CarPLSQL' ,  dblink_to_broker=> 'travelagencyadminlink',mailbox_schema=> 'admin',broker_name=> 'TEST', callback_package => 'dbms_car_cbk' , dblink_to_participant=> 'participantadminlink');

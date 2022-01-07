@@ -57,7 +57,7 @@ public class TravelAgencyApplication {
 
 
 	public void beginAndEnroll() throws Exception {
-		String initiator = "TravelAgencyJava5";
+		String initiator = "TravelAgencyJava";
 		AQjmsSaga saga = new AQjmsSaga("jdbc:oracle:thin:@sagadb1_tp?TNS_ADMIN=/Users/pparkins/Downloads/Wallet_sagadb1", "admin", "Welcome12345");
 		TravelAgencyTestListener listener = new TravelAgencyTestListener();
 		System.out.println("TravelAgencyApplication.beginAndEnroll setSagaMessageListener...");
@@ -147,32 +147,32 @@ public class TravelAgencyApplication {
 		}
 	}
 
-	public static void main0(String args[]) {
-		String username = "admin";
-		String password = "test";
-		String url = "jdbc:oracle:thin:@//slc17qxb.us.oracle.com:1581/cdb1_pdb2.regress.rdbms.dev.us.oracle.com";
-		String url1 = "jdbc:oracle:thin:@//slc17qxb.us.oracle.com:1581/cdb1_pdb3.regress.rdbms.dev.us.oracle.com";
-		// Travelagency java
-		try {
-			AQjmsSaga saga = new AQjmsSaga(url, username, password);
-			MainTestListener listener = new MainTestListener();
-			saga.setSagaMessageListener("ADMIN", "TRAVELAGENCY", listener);
-			String sagaId = saga.beginSaga("TRAVELAGENCY");
-			System.out.println(sagaId);
-			String payload = "[{\"flight\" : \"United\"}]";
-			saga.enrollParticipant(sagaId, "ADMIN", "TRAVELAGENCY", "AIRLINE", "TACOORDINATOR", payload);
-			//saga.rollbackSaga("D24480320F484F10E053E698F80AECAB", "TRAVELAGENCY");
-			try {
-				System.in.read();
-				System.in.read();
-				//saga.rollbackSaga("D1C241C10B916B0DE053E698F80A889C", "TRAVELAGENCY");
-			} catch (IOException ex) {
-				Logger.getLogger(MainTest.class.getName()).log(Level.SEVERE, null, ex);
-			}
-
-		} catch (JMSException ex) {
-			Logger.getLogger(MainTest.class.getName()).log(Level.SEVERE, null, ex);
-		}
+//	public static void main0(String args[]) {
+//		String username = "admin";
+//		String password = "test";
+//		String url = "jdbc:oracle:thin:@//slc17qxb.us.oracle.com:1581/cdb1_pdb2.regress.rdbms.dev.us.oracle.com";
+//		String url1 = "jdbc:oracle:thin:@//slc17qxb.us.oracle.com:1581/cdb1_pdb3.regress.rdbms.dev.us.oracle.com";
+//		// Travelagency java
+//		try {
+//			AQjmsSaga saga = new AQjmsSaga(url, username, password);
+//			MainTestListener listener = new MainTestListener();
+//			saga.setSagaMessageListener("ADMIN", "TRAVELAGENCY", listener);
+//			String sagaId = saga.beginSaga("TRAVELAGENCY");
+//			System.out.println(sagaId);
+//			String payload = "[{\"flight\" : \"United\"}]";
+//			saga.enrollParticipant(sagaId, "ADMIN", "TRAVELAGENCY", "AIRLINE", "TACOORDINATOR", payload);
+//			//saga.rollbackSaga("D24480320F484F10E053E698F80AECAB", "TRAVELAGENCY");
+//			try {
+//				System.in.read();
+//				System.in.read();
+//				//saga.rollbackSaga("D1C241C10B916B0DE053E698F80A889C", "TRAVELAGENCY");
+//			} catch (IOException ex) {
+//				Logger.getLogger(MainTest.class.getName()).log(Level.SEVERE, null, ex);
+//			}
+//
+//		} catch (JMSException ex) {
+//			Logger.getLogger(MainTest.class.getName()).log(Level.SEVERE, null, ex);
+//		}
 
 // Airline Java
 //        try {

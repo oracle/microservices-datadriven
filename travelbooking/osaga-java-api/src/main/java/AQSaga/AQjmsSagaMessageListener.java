@@ -23,7 +23,7 @@ public abstract class AQjmsSagaMessageListener implements MessageListener {
 
     @Override
     public final void onMessage(Message message) {
-        System.out.println("AQjmsSagaMessageListener.onMessage message:" + message);
+        log("AQjmsSagaMessageListener.onMessage message:" + message);
         AQjmsTextMessage msg = (AQjmsTextMessage)message;
         try {
 
@@ -36,42 +36,62 @@ public abstract class AQjmsSagaMessageListener implements MessageListener {
             Integer timeout = Constants.DEFAULT_TIMEOUT;// msg.getSagaTimeout() == null ? Constants.DEFAULT_TIMEOUT : msg.getSagaTimeout();
             Integer version = Constants.SAGA_V1;// msg.getSagaVersion() == null ? Constants.SAGA_V1 : msg.getSagaVersion();
             String spare = "";// msg.getSagaSpare();
-            System.out.println("AQjmsSagaMessageListener.onMessage sagaId:" + sagaId);
-            System.out.println("AQjmsSagaMessageListener.onMessage opcode:" + opcode);
-            System.out.println("AQjmsSagaMessageListener.onMessage recipient:" + recipient);
-            System.out.println("AQjmsSagaMessageListener.onMessage coordinator:" + coordinator);
-            System.out.println("AQjmsSagaMessageListener.onMessage sender:" + sender);
-            System.out.println("AQjmsSagaMessageListener.onMessage payload:" + payload);
+            log("AQjmsSagaMessageListener.onMessage sagaId:" + sagaId);
+            log("AQjmsSagaMessageListener.onMessage opcode:" + opcode);
+            log("AQjmsSagaMessageListener.onMessage recipient:" + recipient);
+            log("AQjmsSagaMessageListener.onMessage coordinator:" + coordinator);
+            log("AQjmsSagaMessageListener.onMessage sender:" + sender);
+            log("AQjmsSagaMessageListener.onMessage payload:" + payload);
             if (sagaId != null && !sagaId.isEmpty()) {
                 String response = null;
                 OracleConnection dbConn
                         = new OracleConnection((oracle.jdbc.internal.OracleConnection)((AQjmsSession) this.session).getDBConnection());
                 dbConn.setAutoCommit(false);
+                /**
+                 JOIN_SAGA CONSTANT NUMBER := 0;
+                 CMT_SAGA CONSTANT NUMBER := 1;
+                 ABRT_SAGA CONSTANT NUMBER := 2;
+
+
+                 RESPONSE CONSTANT NUMBER := 5;
+                 CMT_FAIL CONSTANT NUMBER := 6;
+                 ABRT_FAIL CONSTANT NUMBER := 7;
+                 */
                 switch (opcode) {
-                    case 4:
+                    case 4: //  REQUEST CONSTANT NUMBER := 4;
+                        //todo parse annotation on this.getClass().get (String request(String sagaId, String payload); method) and act accordingly
                         int sagaStatus = joinSaga(dbConn, sagaId, recipient, sender, coordinator, timeout, version, payload);
-                        if (sagaStatus == Constants.JOIN_EXISTS) {
-                            response = request(sagaId, payload);
-                            sendMessage(sagaId, recipient, sender, coordinator, Constants.OSAGA_RESPONSE, timeout, version, null, response);
-                        }
+                        log("AQjmsSagaMessageListener.onMessage sagaStatus == Constants.JOIN_EXISTS sendMessage with response");
+                        //todo add this back for the case where join already exists ...
+//                        if (sagaStatus == Constants.JOIN_EXISTS) {
+//                            log("AQjmsSagaMessageListener.onMessage sagaStatus == Constants.JOIN_EXISTS sendMessage with response");
+//                            response = request(sagaId, payload);
+//                            sendMessage(sagaId, recipient, sender, coordinator, Constants.OSAGA_RESPONSE, timeout, version, null, response);
+//                        }
                         break;
-//                    case Constants.OSAGA_ACK:
-//                        dbConn.joinSaga(recipient, AQjmsSagaUtils.parseHexBinary(sagaId), null, null, timeout, version, Constants.OSAGA_ACK, 0, 0, null);
-//                        response = request(sagaId, payload);
-//                        sendMessage(sagaId, recipient, spare, sender, Constants.OSAGA_RESPONSE, timeout, version, null, response);
-//                        break;
-//                    case Constants.OSAGA_COMMIT:
-//                        commitOrRollbackSaga(dbConn, recipient, sagaId, Constants.OSAGA_COMMIT_NTFN, true);
-//                        break;
-//                    case Constants.OSAGA_ABORT:
-//                        commitOrRollbackSaga(dbConn, recipient, sagaId, Constants.OSAGA_ABORT_NTFN, true);
-//                        break;
-//                    case Constants.OSAGA_RESPONSE:
-//                        response(sagaId, payload);
-//                        break;
+                    case 3: // ACK_SAGA CONSTANT NUMBER := 3;
+                        log("ACK_SAGA received, updating status to joined...");
+                        dbConn.updateStatusToJoined(sagaId, recipient, sender, coordinator, Constants.OSAGA_RESPONSE, timeout, version, null, response);
+                        log("ACK_SAGA received, getting response...");
+                        response = request(sagaId, payload);
+                        log("ACK_SAGA received, about to send response:" + response);
+                        sendMessage(sagaId, recipient, sender, coordinator, Constants.OSAGA_RESPONSE, timeout, version, null, response);
+                        log("ACK_SAGA received, response sent");
+                        break;
+                    case 1: // Constants.OSAGA_COMMIT:
+                        commitOrRollbackSaga(dbConn, recipient, sagaId, Constants.OSAGA_COMMIT_NTFN, true);
+                        break;
+                    case 2: // Constants.OSAGA_ABORT:
+                        commitOrRollbackSaga(dbConn, recipient, sagaId, Constants.OSAGA_ABORT_NTFN, true);
+                        break;
+                    case 5: // Constants.OSAGA_RESPONSE:
+                        response(sagaId, payload);
+                        break;
                 }
             }
+            log("AQjmsSagaMessageListener.about to commit session");
             this.session.commit();
+            log("AQjmsSagaMessageListener session committed");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -87,15 +107,16 @@ public abstract class AQjmsSagaMessageListener implements MessageListener {
         try {
             int sagaStatus = dbConn.joinSaga(recipient, AQjmsSagaUtils.parseHexBinary(sagaId), coordinator, sender, timeout, saga_version, Constants.OSAGA_JOIN, 0, 0, null);
             /* Check the saga status before requesting an ACK from the coordinator */
-            if (sagaStatus == Constants.OSAGA_JOINED) {
+            log("AQjmsSagaMessageListener.joinSaga sagaStatus:" + sagaStatus);
+            if (sagaStatus == Constants.OSAGA_JOINED) { //joined is 0
                 return Constants.JOIN_EXISTS;
             } else if (sagaStatus != Constants.OSAGA_NEW) {
                 return Constants.JOIN_SKIP;
             }
             /* Request an ACK from the coordinator */
-            sendMessage(sagaId, recipient, coordinator, coordinator, Constants.OSAGA_JOIN, timeout, saga_version, sender, payload);
+//            sendMessage(sagaId, recipient, coordinator, coordinator, Constants.OSAGA_JOIN, timeout, saga_version, sender, payload);
             /* Update sys.saga$ locally */
-            dbConn.joinSaga(recipient, AQjmsSagaUtils.parseHexBinary(sagaId), coordinator, sender, timeout, saga_version, Constants.OSAGA_BEGIN, 0, 0, null);
+//            dbConn.joinSaga(recipient, AQjmsSagaUtils.parseHexBinary(sagaId), coordinator, sender, timeout, saga_version, Constants.OSAGA_BEGIN, 0, 0, null);
             this.session.commit();
         } catch (SQLException ex) {
             throw new AQjmsSagaException(ex);
@@ -164,4 +185,8 @@ public abstract class AQjmsSagaMessageListener implements MessageListener {
 
     public abstract void afterRollback(String sagaId);
 
+    
+    void log(String msg) {
+        System.out.println("AQjmsSagaMessageListener:" + msg);
+    }
 }

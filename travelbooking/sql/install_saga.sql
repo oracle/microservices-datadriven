@@ -263,8 +263,8 @@ return VARCHAR2;
 end dbms_saga;
 /
 show errors;
-create or replace package dbms_saga_adm_sys ACCESSIBLE BY
-(PACKAGE DBMS_SAGA_ADM, DBMS_SAGA_CONNECT_INT) AS
+create or replace package dbms_saga_adm_sys
+ AS
 
 -------------------------------------------------------------------------------
 ----------------------------ENTITY CONSTANTS-----------------------------------
@@ -421,8 +421,8 @@ PRAGMA                      EXCEPTION_INIT(CONNECTTOBROKERFAILURE, -20001);
 END dbms_saga_adm_sys;
 /
 show errors;
-create or replace package dbms_saga_sys ACCESSIBLE BY
-(PACKAGE DBMS_SAGA, DBMS_SAGA_ADM_SYS) AS
+create or replace package dbms_saga_sys
+ AS
 
 -------------------------------------------------------------------------------
 ---------------------------- ENTITY CONSTANTS ---------------------------------
