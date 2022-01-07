@@ -1,81 +1,96 @@
 package AQSaga.wrapper;
 
 
+import AQSaga.Constants;
+
+import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.TextMessage;
 
 public class AQjmsTextMessage extends  oracle.jms.AQjmsTextMessage {
-    oracle.jms.AQjmsTextMessage aqjmsTextMessage;
+    oracle.jms.AQjmsTextMessage requestMessage;
             
     public AQjmsTextMessage(oracle.jms.AQjmsTextMessage textMessage) {
         super();
-        aqjmsTextMessage = textMessage;
+        requestMessage = textMessage;
     }
 
-    public void setSagaId(String sagaId) {
+    public oracle.jms.AQjmsTextMessage getrequestMessage() {
+        return requestMessage;
     }
 
-    public void setSagaSender(String sender) {
+    @Override
+    public void setText(String s) throws JMSException {
+        requestMessage.setText(s);
     }
 
-    public void setSagaRecipient(String recipient) {
+    public void setSagaId(String sagaId) throws JMSException {
+        requestMessage.setStringProperty("jms_oracle_aq$_saga_id", sagaId);
     }
 
-    public void setSagaCoordinator(String coordinator) {
+    public void setSagaSender(String sender)  throws JMSException {
+        requestMessage.setStringProperty("jms_oracle_aq$_saga_sender", sender);
     }
 
-    public void setSagaOpcode(int osagaRequest) {
+    public void setSagaRecipient(String recipient) throws JMSException {
+        requestMessage.setStringProperty("jms_oracle_aq$_saga_recipient", recipient);
     }
 
-    public void setSagaTimeout(int timeout) {
+    public void setSagaCoordinator(String coordinator) throws JMSException {
+        requestMessage.setStringProperty("jms_oracle_aq$_saga_coordinator", coordinator);
     }
 
-    public void setSagaVersion(int version) {
+    public void setSagaOpcode(int osagaRequest) throws JMSException {
+        requestMessage.setIntProperty("jms_oracle_aq$_saga_opcode", osagaRequest );
     }
 
-    public void setSagaSpare(String spare) {
+    public void setSagaTimeout(int timeout) throws JMSException {
+        requestMessage.setIntProperty("jms_oracle_aq$_saga_timeout", timeout );
+    }
+
+    public void setSagaVersion(int version)  throws JMSException {
+        requestMessage.setIntProperty("jms_oracle_aq$_saga_version", version );
+    }
+
+    public void setSagaSpare(String spare) throws JMSException {
+        requestMessage.setStringProperty("jms_oracle_aq$_saga_spare", spare);
     }
 
     public Message getTextMessage() {
-        return aqjmsTextMessage;
+        return requestMessage;
     }
 
-    public String getSagaId() {
-        return "";
+    public String getSagaId() throws JMSException {
+        return requestMessage.getStringProperty("jms_oracle_aq$_saga_id");
     }
 
-    public Integer getSagaOpcode() {
-        return 0;
+    public Integer getSagaOpcode() throws JMSException {
+        return requestMessage.getIntProperty("jms_oracle_aq$_saga_opcode");
     }
 
-    public String getSagaRecipient() {
-        return "";
+    public String getSagaRecipient() throws JMSException {
+        return requestMessage.getStringProperty("jms_oracle_aq$_saga_recipient");
     }
 
-    public String getSagaCoordinator() {
-        return "";
+    public String getSagaCoordinator() throws JMSException {
+        return requestMessage.getStringProperty("jms_oracle_aq$_saga_coordinator");
     }
 
-    public String getSagaSender() {
-        return "";
+    public String getSagaSender() throws JMSException {
+        return requestMessage.getStringProperty("jms_oracle_aq$_saga_recipient");
     }
 
-    public String getText() {
-        return "";
+
+    public Integer getSagaTimeout() throws JMSException {
+        return requestMessage.getIntProperty("jms_oracle_aq$_saga_timeout");
     }
 
-    public Integer getSagaTimeout() {
-        return 0;
+    public Integer getSagaVersion() throws JMSException {
+        return requestMessage.getIntProperty("jms_oracle_aq$_saga_version");
     }
 
-    public Integer getSagaVersion() {
-        return 0;
+    public String getSagaSpare() throws JMSException {
+        return requestMessage.getStringProperty("jms_oracle_aq$_saga_spare");
     }
 
-    public String getSagaSpare() {
-        return "";
-    }
-
-    public void setText(String payload) {
-    }
 }

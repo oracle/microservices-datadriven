@@ -194,17 +194,14 @@ public class OracleConnection {
             int flags,
             int spareNumeric,
             String spareText) throws SQLException {
-        System.out.println("participantName = " + participantName + ", sagaId = " + Arrays.toString(sagaId) +
+        String sagaIDString = new String(sagaId, StandardCharsets.UTF_8);
+        System.out.println("participantName = " + participantName + ", sagaId = " + Arrays.toString(sagaId) +", sagaIDString = " + sagaIDString +
                 ", currentUser = " + currentUser + ", opcode = " + opcode +
                 ", flags = " + flags + ", spareNumeric = " + spareNumeric + ", spareText = " + spareText);
-//   OSAGA_ABORT = 4;     dbms_saga.rollback_saga('TravelAgency', saga_id);
-//   OSAGA_COMMIT = 2;     dbms_saga.commit_saga('TravelAgency', saga_id);
-//        CallableStatement pstmt = connection.prepareCall("{call CREATEDATAAPPUSER(?,?)}");
-        CallableStatement pstmt = connection.prepareCall("{dbms_saga.rollback_saga(?, ?)}");
+        CallableStatement pstmt = connection.prepareCall("{call dbms_saga.rollback_saga(?, ?)}");
 //        CallableStatement pstmt = connection.prepareCall("{dbms_saga.commit_saga('TravelAgency', saga_id)}");
-        pstmt.setNString(1, participantName);
-//        pstmt.setNString(1, "TravelAgency");
-//        pstmt.setNString(1, sagaId);
+        pstmt.setString(1, participantName);
+        pstmt.setString(2, sagaIDString);
         pstmt.execute();
         return null;
     }

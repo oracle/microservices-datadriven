@@ -44,14 +44,7 @@ IS
 BEGIN
   SAGAID := dbms_saga.begin_saga(SAGANAME);
 END;
-
-
---DECLARE
---JOINCODE NUMBER;
---begin
--- JOINCODE := dbms_saga_sys.join_saga_int('0000', 'initiator_name', 'saga_initiator', 'coordinator', null);
--- end;
-
+rfc
 
 CREATE OR REPLACE PROCEDURE ENROLL_PARTICIPANT_IN_SAGA
 (
@@ -68,7 +61,13 @@ BEGIN
     dbms_saga.enroll_participant(SAGAID, SAGANAME, PARTICIPANTTYPE, 'TravelCoordinator', request);
 END;
 
+// sagaId = 4435303045434237453743383644463345303533393531383030304131433130, schema = admin, sender = TravelAgencyJava, recipient = CarJava, coordinator = TravelCoordinator
 
+procedure enroll_participant(saga_id        IN saga_id_t,
+                             sender         IN VARCHAR2,
+                             recipient      IN VARCHAR2,
+                             coordinator    IN VARCHAR2,
+                             payload        IN JSON DEFAULT NULL);
 
 --CREATE OR REPLACE PROCEDURE BEGINTRAVELAGENCYSAGA
 --(
@@ -98,26 +97,10 @@ BEGIN
 END;
 
 
---    CREATE OR REPLACE PROCEDURE COMMITSAGA(SAGAID IN RAW)
---     IS
---     saga_id RAW(16);
---     begin
---     select id into saga_id from sys.saga$ where id = SAGAID;
---     dbms_saga.commit_saga(saga_id);
---     END;
---
---
---    CREATE OR REPLACE PROCEDURE ROLLBACKSAGA(SAGAID IN RAW)
---     IS
---     saga_id RAW(16);
---     begin
---     select id into saga_id from sys.saga$ where id = SAGAID;
---     dbms_saga.rollback_saga(saga_id);
---     END;
-
 
 exec dbms_saga_adm.add_broker(broker_name => 'TEST');
 
+--For the add_coordinator call, if coordinator is co-located with broker, dblink_to_broker should be NULL or equal to the dblink_to_participant/coordinator.
 exec dbms_saga_adm.add_coordinator( coordinator_name => 'TravelCoordinator',  dblink_to_broker => null,   mailbox_schema => 'admin',  broker_name => 'TEST',  dblink_to_coordinator => 'travelagencyadminlink');
 
 
@@ -141,4 +124,7 @@ end;
 end dbms_ta_cbk;
 /
 exec dbms_saga_adm.add_participant(  participant_name => 'TravelAgencyPLSQL',   coordinator_name => 'TravelCoordinator' ,   dblink_to_broker => null ,   mailbox_schema => 'admin' ,   broker_name => 'TEST' ,   callback_package => 'dbms_ta_cbk' ,   dblink_to_participant => null);
-exec dbms_saga_adm.add_participant(  participant_name => 'TravelAgencyJava',   coordinator_name => 'TravelCoordinator' ,   dblink_to_broker => null ,   mailbox_schema => 'admin' ,   broker_name => 'TEST' ,   callback_package => 'dbms_ta_cbk' ,   dblink_to_participant => null);
+exec dbms_saga_adm.add_participant(  participant_name => 'TravelAgencyJava',   coordinator_name => 'TravelCoordinator' ,   dblink_to_broker => null ,   mailbox_schema => 'admin' ,   broker_name => 'TEST' ,   callback_package => null ,   dblink_to_participant => null);
+exec dbms_saga_adm.drop_participant(  participant_name => 'TravelAgencyJava');
+
+

@@ -74,15 +74,19 @@ public abstract class AQjmsSagaMessageListener implements MessageListener {
                         dbConn.updateStatusToJoined(sagaId, recipient, sender, coordinator, Constants.OSAGA_RESPONSE, timeout, version, null, response);
                         log("ACK_SAGA received, getting response...");
                         response = request(sagaId, payload);
-                        log("ACK_SAGA received, about to send response:" + response);
-                        sendMessage(sagaId, recipient, sender, coordinator, Constants.OSAGA_RESPONSE, timeout, version, null, response);
+                        log("ACK_SAGA received, about to send response with TRAVELAGENCYJAVA hardcoded:" + response);
+                        //get iniator from select and use it as sender
+                        sendMessage(sagaId, recipient, "TRAVELAGENCYJAVA", coordinator, Constants.OSAGA_RESPONSE, timeout, version, null, response);
+//                        sendMessage(sagaId, recipient, sender, coordinator, Constants.OSAGA_RESPONSE, timeout, version, null, response);
                         log("ACK_SAGA received, response sent");
                         break;
                     case 1: // Constants.OSAGA_COMMIT:
-                        commitOrRollbackSaga(dbConn, recipient, sagaId, Constants.OSAGA_COMMIT_NTFN, true);
+                        afterCommit(sagaId);
+//                        commitOrRollbackSaga(dbConn, recipient, sagaId, Constants.OSAGA_COMMIT_NTFN, true);
                         break;
                     case 2: // Constants.OSAGA_ABORT:
-                        commitOrRollbackSaga(dbConn, recipient, sagaId, Constants.OSAGA_ABORT_NTFN, true);
+                        afterRollback(sagaId);
+//                        commitOrRollbackSaga(dbConn, recipient, sagaId, Constants.OSAGA_ABORT_NTFN, true);
                         break;
                     case 5: // Constants.OSAGA_RESPONSE:
                         response(sagaId, payload);
@@ -169,7 +173,11 @@ public abstract class AQjmsSagaMessageListener implements MessageListener {
         responseMessage.setSagaTimeout(timeout);
         responseMessage.setSagaSpare(spare);
         responseMessage.setText(payload);
-        this.outTopicPublisher.publish(responseMessage.getTextMessage());
+        log("publishing to outTopicPublisher:" + outTopicPublisher + " sagaId = " + sagaId + ", sender = " + sender +
+                ", recipient = " + recipient + ", coordinator = " + coordinator +
+                ", opcode = " + opcode + ", timeout = " + timeout + ", version = " + version +
+                ", spare = " + spare + ", payload = " + payload);
+        this.outTopicPublisher.publish(responseMessage.getrequestMessage());
         this.session.commit();
     }
 

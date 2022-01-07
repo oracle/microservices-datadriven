@@ -135,18 +135,18 @@ public class AQjmsSaga implements Osaga {
 
 
 //        System.out.println("AQjmsSaga.enrollParticipant call enrollParticipant message");
-        AQjmsTextMessage requestMessage = (AQjmsTextMessage)((AQjmsSession) this.session).createTextMessage();
-//        AQSaga.wrapper.AQjmsTextMessage requestMessage = new AQSaga.wrapper.AQjmsTextMessage((AQjmsTextMessage)(session).createTextMessage());
-//        requestMessage.setSagaId(sagaId);
-        requestMessage.setStringProperty("jms_oracle_aq$_saga_id", sagaId); //may need to convert to byte[] as it's raw type not varchar2
-//        requestMessage.setSagaSender(sender);
-        requestMessage.setStringProperty("jms_oracle_aq$_saga_sender", sender);
-//        requestMessage.setSagaRecipient(recipient);
-        requestMessage.setStringProperty("jms_oracle_aq$_saga_recipient", recipient);
-//        requestMessage.setSagaCoordinator(coordinator);
-        requestMessage.setStringProperty("jms_oracle_aq$_saga_coordinator", coordinator);
-//        requestMessage.setSagaOpcode(Constants.OSAGA_REQUEST);
-        requestMessage.setIntProperty("jms_oracle_aq$_saga_opcode", Constants.OSAGA_REQUEST);
+   //     AQjmsTextMessage requestMessage = (AQjmsTextMessage)((AQjmsSession) this.session).createTextMessage();
+        AQSaga.wrapper.AQjmsTextMessage requestMessage = new AQSaga.wrapper.AQjmsTextMessage((AQjmsTextMessage)(session).createTextMessage());
+        requestMessage.setSagaId(sagaId);
+//        requestMessage.setStringProperty("jms_oracle_aq$_saga_id", sagaId); //may need to convert to byte[] as it's raw type not varchar2
+        requestMessage.setSagaSender(sender);
+//        requestMessage.setStringProperty("jms_oracle_aq$_saga_sender", sender);
+        requestMessage.setSagaRecipient(recipient);
+//        requestMessage.setStringProperty("jms_oracle_aq$_saga_recipient", recipient);
+        requestMessage.setSagaCoordinator(coordinator);
+//        requestMessage.setStringProperty("jms_oracle_aq$_saga_coordinator", coordinator);
+        requestMessage.setSagaOpcode(Constants.OSAGA_REQUEST);
+//        requestMessage.setIntProperty("jms_oracle_aq$_saga_opcode", Constants.OSAGA_REQUEST);
 //        requestMessage.setSagaTimeout(timeout);
 //        requestMessage.setStringProperty("jms_oracle_aq$_saga", timeout);
 //        requestMessage.setSagaVersion(version);
@@ -210,46 +210,49 @@ public class AQjmsSaga implements Osaga {
 
     private void commitOrRollbackSaga(String sagaId, String participant_name, int opcode, boolean force) throws JMSException {
         Integer ttc_opcode = null;
-        boolean cr_result = true;
-        
-        if(!AQjmsSagaUtils.isSimpleSQLName(participant_name))
-            AQjmsSagaError.throwEx(AQjmsSagaError.SAGA_SIMPLENAMERROR);
-        
-        participant_name = AQjmsSagaUtils.canonicalize(participant_name);
-        
-        if(this.listener == null)
-            AQjmsSagaError.throwEx(AQjmsSagaError.SAGA_LISTENERNOTFOUND);
-        
+//        boolean cr_result = true;
+//
+//        if(!AQjmsSagaUtils.isSimpleSQLName(participant_name))
+//            AQjmsSagaError.throwEx(AQjmsSagaError.SAGA_SIMPLENAMERROR);
+//
+//        participant_name = AQjmsSagaUtils.canonicalize(participant_name);
+//
+//        if(this.listener == null)
+//            AQjmsSagaError.throwEx(AQjmsSagaError.SAGA_LISTENERNOTFOUND);
+//
         try {
             /* Get Connection */
 //            oracle.jdbc.internal.OracleConnection dbConn
 //                    = (oracle.jdbc.internal.OracleConnection) ((AQjmsSession) this.session).getDBConnection();
             OracleConnection dbConn
                     = new OracleConnection((oracle.jdbc.internal.OracleConnection) ((AQjmsSession) this.session).getDBConnection());
-            int saga_status = dbConn.commitRollbackSaga(participant_name, AQjmsSagaUtils.parseHexBinary(sagaId), dbConn.getSchema(), opcode, 0, 0, null);
-
-            if (saga_status == Constants.OSAGA_JOINED) {
-                if (opcode == Constants.OSAGA_COMMIT) {
-                    this.listener.beforeCommit(sagaId);
-                    /* Call escrow TTC here if required */
-                    if (cr_result) {
-                        ttc_opcode = Constants.OSAGA_COMMIT_SUCCESS;
-                    } else {
-                        ttc_opcode = Constants.OSAGA_COMMIT_FAIL;
-                    }
-                    this.listener.afterCommit(sagaId);
-                } else if (opcode == Constants.OSAGA_ABORT) {
-                    this.listener.beforeRollback(sagaId);
-                    if (cr_result) {
-                        ttc_opcode = Constants.OSAGA_ABORT_SUCCESS;
-                    } else {
-                        ttc_opcode = Constants.OSAGA_ABORT_FAIL;
-                    }
-                    this.listener.afterRollback(sagaId);
-                }
-                dbConn.commitRollbackSaga(participant_name, AQjmsSagaUtils.parseHexBinary(sagaId), dbConn.getSchema(), ttc_opcode, 0, 0, null);
+//            int saga_status = dbConn.commitRollbackSaga(participant_name, AQjmsSagaUtils.parseHexBinary(sagaId), dbConn.getSchema(), opcode, 0, 0, null);
+//
+//            if (saga_status == Constants.OSAGA_JOINED) {
+//                if (opcode == Constants.OSAGA_COMMIT) {
+//                    this.listener.beforeCommit(sagaId);
+//                    /* Call escrow TTC here if required */
+//                    if (cr_result) {
+//                        ttc_opcode = Constants.OSAGA_COMMIT_SUCCESS;
+//                    } else {
+//                        ttc_opcode = Constants.OSAGA_COMMIT_FAIL;
+//                    }
+//                    this.listener.afterCommit(sagaId);
+//                } else if (opcode == Constants.OSAGA_ABORT) {
+//                    this.listener.beforeRollback(sagaId);
+//                    if (cr_result) {
+//                        ttc_opcode = Constants.OSAGA_ABORT_SUCCESS;
+//                    } else {
+//                        ttc_opcode = Constants.OSAGA_ABORT_FAIL;
+//                    }
+//                    this.listener.afterRollback(sagaId);
+//                }
+            System.out.println("commitOrRollbackSaga dbConn=" + dbConn+ " sagaId = " + sagaId + ", participant_name = " + participant_name + ", opcode = " + opcode + ", force = " + force);
+            byte[] sagaId1 = AQjmsSagaUtils.parseHexBinary(sagaId);
+            String schema = dbConn.getSchema();
+            dbConn.commitRollbackSaga(participant_name, sagaId1, schema, -9, 0, 0, null);
                 this.session.commit();
-            }
+//            }
         } catch (SQLException ex) {
             throw new AQjmsSagaException(ex);
         }
@@ -257,17 +260,17 @@ public class AQjmsSaga implements Osaga {
 
     @Override
     public void forgetSaga(String sagaId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 
     @Override
     public void leaveSaga(String sagaId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 
     @Override
     public void afterSaga(String sagaId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 
 }

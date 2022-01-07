@@ -86,6 +86,14 @@ HOTELADMIN                                                                      
 
 
 select * from aq$saga$_carjava_in_qt
-
+select * from saga$_carjava_out_qt;
 
 select id, initiator, coordinator, owner, begin_time, status from saga$ order by begin_time asc;
+
+
+
+--DECLARE
+--JOINCODE NUMBER;
+--begin
+-- JOINCODE := dbms_saga_sys.join_saga_int('0000', 'initiator_name', 'saga_initiator', 'coordinator', null);
+-- end;
