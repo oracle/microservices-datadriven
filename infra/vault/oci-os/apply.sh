@@ -11,8 +11,7 @@ if ! provisioning-helper-pre-apply; then
 fi
 
 
-oci os bucket create --compartment-id "$COMPARTMENT_OCID" --name "$BUCKET_NAME"
-VAULT_BUCKET="$BUCKET_NAME"
+oci os bucket create --compartment-id "$COMPARTMENT_OCID" --name "$BUCKET_NAME" >/dev/null
   
 cat >$OUTPUT_FILE <<!
 export VAULT_BUCKET='$BUCKET_NAME'
