@@ -68,7 +68,6 @@ public class AQjmsSaga implements Osaga {
         TopicPublisher outTopicPublisher = null;
         if (session != null) {
             String sagaQueue = getSagaQueue(participant_name, Queuetype.OUT_QUEUE);
-            System.out.println("AQjmsSaga.getSagaOutTopicPublisher sagaQueue:" + sagaQueue);
             Topic outTopic = ((AQjmsSession) this.session).getTopic(schema, sagaQueue);
             outTopicPublisher = ((AQjmsSession) this.session).createPublisher(outTopic);
         }
@@ -76,14 +75,10 @@ public class AQjmsSaga implements Osaga {
     }
 
     public void setSagaMessageListener(String schema, String participant, MessageListener sagaListener) throws JMSException {
-        setSagaMessageListener(schema, participant, sagaListener, true, false);
+        setSagaMessageListener(schema, participant, sagaListener, true);
     }
 
-    public void setSagaMessageListener(String schema, String participant, MessageListener sagaListener, boolean isReceive) throws JMSException {
-        setSagaMessageListener(schema, participant, sagaListener, true, isReceive);
-    }
-
-    public void setSagaMessageListener(String schema, String participant, MessageListener sagaListener, boolean createConsumer, boolean isReceive) throws JMSException {
+    public void setSagaMessageListener(String schema, String participant, MessageListener sagaListener, boolean createConsumer) throws JMSException {
         if (session != null) {
             if (this.messageConsumer == null && createConsumer) {
                 Queue inQueue = ((AQjmsSession) this.session).getQueue(schema, getSagaQueue(participant, Queuetype.IN_QUEUE));
@@ -94,6 +89,7 @@ public class AQjmsSaga implements Osaga {
             if (createConsumer) {
                 this.messageConsumer.setMessageListener(this.listener);
             }
+            System.out.println("setSagaMessageListener complete. listening for messages for participant:" + participant + "...");
         }
     }
 
@@ -123,7 +119,6 @@ public class AQjmsSaga implements Osaga {
                 ", recipient = " + recipient + ", coordinator = " + coordinator +
                 ", payload = " + payload + ", timeout = " + timeout + ", version = " + version + ", spare = " + spare);
         try {
-            System.out.println("AQjmsSaga.enrollParticipant call enrollParticipant sproc directly");
             OracleConnection dbConn
                     = new OracleConnection((oracle.jdbc.internal.OracleConnection) ((AQjmsSession) this.session).getDBConnection());
             dbConn.setAutoCommit(false);
@@ -251,8 +246,7 @@ public class AQjmsSaga implements Osaga {
             byte[] sagaId1 = AQjmsSagaUtils.parseHexBinary(sagaId);
             String schema = dbConn.getSchema();
             dbConn.commitRollbackSaga(participant_name, sagaId1, schema, -9, 0, 0, null);
-                this.session.commit();
-//            }
+            this.session.commit();
         } catch (SQLException ex) {
             throw new AQjmsSagaException(ex);
         }

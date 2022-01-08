@@ -67,7 +67,7 @@ public class OracleConnection {
 
     //this is not part of the interface, only temp convenience
     public void enrollParticipant(String sagaId, String schema, String sender, String recipient, String coordinator) throws SQLException {
-        System.out.println("sagaId = " + sagaId + ", schema = " + schema + ", sender = " + sender + ", recipient = " + recipient + ", coordinator = " + coordinator);
+        System.out.println("enroll participant sagaId = " + sagaId + ", schema = " + schema + ", sender = " + sender + ", recipient = " + recipient + ", coordinator = " + coordinator);
          CallableStatement cstmt = connection.prepareCall("{call ENROLL_PARTICIPANT_IN_SAGA(?,?,?,?,?)}");
          cstmt.setString("PARTICIPANTTYPE", recipient);
          cstmt.setString("RESERVATIONTYPE", "car"); //todo take from payload
@@ -75,7 +75,7 @@ public class OracleConnection {
          cstmt.setString("SAGANAME", sender);
          cstmt.setString("SAGAID", sagaId);
          cstmt.execute();
-        System.out.println("OracleConnection.enrollParticipant end");
+        System.out.println("enroll participant successful");
     }
 
     public String joinSaga(@QueryParam("PARTICIPANTTYPE") String PARTICIPANTTYPE,
@@ -204,34 +204,6 @@ public class OracleConnection {
         pstmt.setString(2, sagaIDString);
         pstmt.execute();
         return null;
-    }
-//    public static final int OSAGA_BEGIN = 0;
-//    public static final int OSAGA_JOIN = 1;
-//    public static final int OSAGA_COMMIT = 2;
-//    public static final int OSAGA_COMMIT_NTFN = 3;
-//    public static final int OSAGA_ABORT = 4;
-//    public static final int OSAGA_ABORT_NTFN = 5;
-//    public static final int OSAGA_ACK = 6;
-//    public static final int OSAGA_REQUEST = 7;
-//    public static final int OSAGA_RESPONSE = 8;
-//    public static final int OSAGA_COMMIT_FAIL = 9;
-//    public static final int OSAGA_ABORT_FAIL = 10;
-//    public static final int OSAGA_COMMIT_SUCCESS = 11;
-//    public static final int OSAGA_ABORT_SUCCESS = 12;
-
-
-    String callCommitOnSaga(Connection connection, String travelagencyid, String sagaId)  throws SQLException {
-        CallableStatement cstmt  = connection.prepareCall("{call COMMITSAGA(?)}");
-        cstmt.setString(1, sagaId);
-        cstmt.execute();
-        return "commitSaga (ImplementionWithOSaga) sagaId:" + sagaId;
-    }
-
-    String callRollbackOnSaga(Connection connection, String travelagencyid, String sagaId)  throws SQLException {
-        CallableStatement cstmt  = connection.prepareCall("{call ROLLBACKSAGA(?)}");
-        cstmt.setString(1, sagaId);
-        cstmt.execute();
-        return "commitSaga (ImplementionWithOSaga) sagaId:" + sagaId;
     }
 
     public void setAutoCommit(boolean b) throws SQLException {
