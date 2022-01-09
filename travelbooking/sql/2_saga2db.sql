@@ -1,31 +1,5 @@
---todo install saga
-
-
 GRANT ALL ON dbms_saga_adm TO admin;
 
-
-
-BEGIN
-DBMS_CLOUD.CREATE_CREDENTIAL(
-    credential_name => 'TRAVELAGENCYADMINCRED',
-    username => 'ADMIN',
-    password => 'Welcome12345');
-END;
-/
-
-
-BEGIN
-  DBMS_CLOUD_ADMIN.CREATE_DATABASE_LINK(
-    db_link_name => 'travelagencyadminlink',
-    hostname => 'adb.us-phoenix-1.oraclecloud.com',
-    port => '1522',
-    service_name => 'fcnesu1k4xmzwf1_sagadb1_tp.adb.oraclecloud.com',
-    ssl_server_cert_dn => 'CN=adwc.uscom-east-1.oraclecloud.com, OU=Oracle BMCS US, O=Oracle Corporation, L=Redwood City, ST=California, C=US',
-    credential_name => 'TRAVELAGENCYADMINCRED',
-    directory_name => 'DATA_PUMP_DIR');
-END;
-/
-select sysdate from dual@travelagencyadminlink;
 
 
 

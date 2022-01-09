@@ -1,30 +1,6 @@
---todo install saga
-
-
 grant all on dbms_saga_adm to admin;
 
 
-begin
-DBMS_CLOUD.CREATE_CREDENTIAL(
-    credential_name => 'PARTICIPANTADMINCRED',
-    username => 'ADMIN',
-    password => 'Welcome12345');
-end;
-/
-
-
-begin
-  DBMS_CLOUD_ADMIN.CREATE_DATABASE_LINK(
-    db_link_name => 'participantadminlink',
-    hostname => 'adb.us-phoenix-1.oraclecloud.com',
-    port => '1522',
-    service_name => 'fcnesu1k4xmzwf1_sagadb2_tp.adb.oraclecloud.com',
-    ssl_server_cert_dn => 'CN=adwc.uscom-east-1.oraclecloud.com, OU=Oracle BMCS US, O=Oracle Corporation, L=Redwood City, ST=California, C=US',
-    credential_name => 'PARTICIPANTADMINCRED',
-    directory_name => 'DATA_PUMP_DIR');
-end;
-/
-select sysdate from dual@participantadminlink;
 
 CREATE OR REPLACE PROCEDURE BEGINSAGAWRAPPER
 (
