@@ -158,4 +158,4 @@ RUN_NAME='$RUN_NAME'
 !
 echo "Setup running"
 provisioning-apply $MSDD_WORKSHOP_CODE/$EG21C_WORKSHOP/config
-source 
+source $EG21C_STATE/output.env

@@ -12,7 +12,7 @@ fi
 # Destroy the DBs
 DBS="db1 db2"
 for db in $DBS; do
-  DB_STATE=$EG21C_INFRA_STATE/db/$db
+  DB_STATE=$MY_STATE/$db
   cd $DB_STATE
   provisioning-destroy
 done
