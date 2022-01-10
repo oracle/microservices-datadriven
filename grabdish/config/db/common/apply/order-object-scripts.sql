@@ -22,6 +22,7 @@ show errors
 
 
 -- place order microserice (GET)
+-- Example: ../ords/orderuser/placeorder/order?orderId=66&orderItem=sushi&deliverTo=Redwood
 CREATE OR REPLACE PROCEDURE place_order (
   orderid           IN varchar2,
   itemid            IN varchar2,
@@ -99,6 +100,73 @@ BEGIN
     message_properties => message_properties,
     payload            => message,
     msgid              => message_handle);
+END;
+/
+show errors
+
+
+-- Place Order using MLE JavaScript
+CREATE OR REPLACE PROCEDURE place_order_js (
+  orderid           IN varchar2,
+  itemid            IN varchar2,
+  deliverylocation  IN varchar2)
+AUTHID CURRENT_USER
+IS
+   ctx DBMS_MLE.context_handle_t := DBMS_MLE.create_context();
+   order VARCHAR2(4000);
+   js_code clob := q'~
+    var oracledb = require("mle-js-oracledb");
+    var bindings = require("mle-js-bindings");
+    conn = oracledb.defaultConnection();
+
+    // Construct the order object
+    const order = {
+      orderid: bindings.importValue("orderid"),
+      itemid: bindings.importValue("itemid"),
+      deliverylocation: bindings.importValue("deliverylocation"),
+      status: "Pending",
+      inventoryLocation: "",
+      suggestiveSale: ""
+    }
+    
+    // Insert the order object
+    insert_order(conn, order);
+
+    // Send the order message
+    enqueue_order_message(conn, order);
+
+    // Commit
+    conn.commit;
+
+    // Output order
+    bindings.exportValue("order", order.stringify());
+
+    function insert_order(conn, order) {
+        conn.execute( "BEGIN insert_order(:1, :2); END;", [order.orderid, order.stringify()]);
+    }
+
+    function enqueue_order_message(conn, order) {
+        conn.execute( "BEGIN enqueue_order_message(:1); END;", [order.stringify()]);
+    }
+   ~';
+BEGIN
+   -- Pass variables to JavaScript
+   dbms_mle.export_to_mle(ctx, 'orderid', orderid); 
+   dbms_mle.export_to_mle(ctx, 'itemid', itemid); 
+   dbms_mle.export_to_mle(ctx, 'deliverylocation', deliverylocation); 
+
+   -- Execute JavaScript
+   DBMS_MLE.eval(ctx, 'JAVASCRIPT', js_code);
+   DBMS_MLE.import_from_mle(ctx, 'order', order);
+   DBMS_MLE.drop_context(ctx);
+
+   HTP.print(order);
+
+EXCEPTION
+   WHEN others THEN
+     dbms_mle.drop_context(ctx);
+     HTP.print(SQLERRM);
+
 END;
 /
 show errors
