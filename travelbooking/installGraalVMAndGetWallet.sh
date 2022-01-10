@@ -4,6 +4,9 @@
 
 curl -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.1.0/graalvm-ce-java11-linux-amd64-20.1.0.tar.gz | tar xz
 mv graalvm-ce-java11-20.1.0 ~/
+export JAVA_HOME=~/graalvm-ce-java11-20.1.0
+export PATH=$JAVA_HOME/bin:$PATH
+#~/graalvm-ce-java11-20.1.0/bin/gu install native-image
 
 #mkdir wallet
 #cd wallet
