@@ -50,7 +50,7 @@ sed -i "s|?|$WORKFLOW_HOME|" sqlnet.ora
 cd $WORKFLOW_HOME;
 echo ${db_pwd} | openssl enc -aes256 -md sha512 -a -salt -pass pass:Secret@123# > cred.txt
 chmod 600 cred.txt
-sqlplus ADMIN/$(cat cred.txt |openssl enc -aes256 -md sha512 -a -d -salt -pass pass:Secret@123#)@AQDATABASE_TP @basicCreateUser.sql (cat cred.txt |openssl enc -aes256 -md sha512 -a -d -salt -pass pass:Secret@123#)
+sqlplus ADMIN/$(cat cred.txt |openssl enc -aes256 -md sha512 -a -d -salt -pass pass:Secret@123#)@AQDATABASE_TP @basicCreateUser.sql $(cat cred.txt |openssl enc -aes256 -md sha512 -a -d -salt -pass pass:Secret@123#)
 
 # Java setup
 cd $WORKFLOW_HOME/aqJava;
