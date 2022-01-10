@@ -78,54 +78,32 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
         TopicConnection tconn = t_cf.createTopicConnection(inventoryResource.inventoryuser, inventoryResource.inventorypw);
         TopicSession tsess = tconn.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
 
+        TracingMessageConsumer tracingMessageConsumer = null;
         tconn.start();
         Topic orderEvents = ((AQjmsSession) tsess).getTopic(inventoryResource.queueOwner, inventoryResource.orderQueueName);
         TopicReceiver receiver = ((AQjmsSession) tsess).createTopicReceiver(orderEvents, "inventory_service", null);
 
-        Topic inventoryTopic = ((AQjmsSession) tsess).getTopic(InventoryResource.queueOwner, InventoryResource.inventoryQueueName);
-        TopicPublisher publisher = tsess.createPublisher(inventoryTopic);
-
         Order order;
         String inventorylocation;
-        Inventory inventory;
-        ResultSet res;
         TextMessage orderMessage;
-        TextMessage inventoryMessage = tsess.createTextMessage();
-        int i;
-
+    
         dbConnection = ((AQjmsSession) tsess).getDBConnection();
-        OraclePreparedStatement st = (OraclePreparedStatement) dbConnection.prepareStatement(DECREMENT_BY_ID);
-        st.registerReturnParameter(2, Types.VARCHAR);
 
         boolean done = false;
         while (!done) {
             try {
+                tracingMessageConsumer = new TracingMessageConsumer(receiver, inventoryResource.getTracer());
                 // Receive next order event
-                orderMessage = (TextMessage) (receiver.receive(-1));
-
-                // Parse order event
-                order = JsonUtils.read(orderMessage.getText(), Order.class);
-
-                // Check inventory
-                st.setString(1, order.getItemid());
-                i = st.executeUpdate();
-                res = st.getReturnResultSet();
-                if (i > 0 && res.next()) {
-                    inventorylocation = res.getString(1);
-                } else {
-                    inventorylocation = INVENTORYDOESNOTEXIST;
-                }
-
-                // Create inventory event
-                inventory = new Inventory(order.getOrderid(), order.getItemid(), inventorylocation, "beer"); //static suggestiveSale - represents an additional service/event
-                inventoryMessage.setText(JsonUtils.writeValueAsString(inventory));
-
-                // Publish inventory event
-                publisher.send(inventoryTopic, inventoryMessage, DeliveryMode.PERSISTENT, 2, AQjmsConstants.EXPIRATION_NEVER);
-
-                // Commit
-                tsess.commit();
-
+                orderMessage = (TextMessage) (tracingMessageConsumer.receive(-1));
+                String txt = orderMessage.getText();
+                System.out.println("txt " + txt);
+                System.out.print(" Message: " + orderMessage.getIntProperty("Id"));
+                order = JsonUtils.read(txt, Order.class);
+                System.out.print(" orderid:" + order.getOrderid());
+                System.out.print(" itemid:" + order.getItemid());
+                updateDataAndSendEventOnInventory((AQjmsSession) tsess, order.getOrderid(), order.getItemid());
+                if(tsess!=null) tsess.commit();
+                System.out.println("message sent");
             } catch (IllegalStateException e) {
                 System.out.println("IllegalStateException in receiveMessages: " + e + " unrecognized message will be ignored");
                 if (tsess != null) tsess.commit(); //drain unrelated messages - todo add selector for this instead
