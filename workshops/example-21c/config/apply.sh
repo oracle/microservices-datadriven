@@ -13,7 +13,7 @@ fi
 # Provision Databases
 for db in db1 db2; do
   db_upper=`echo $db | tr '[:lower:]' '[:upper:]'`
-  DB_STATE=$DCMS_INFRA_STATE/db/$db
+  DB_STATE=$EG21C_INFRA_STATE/db/$db
   mkdir -p $DB_STATE
   cd $DB_STATE
   cat >input.env <<!
