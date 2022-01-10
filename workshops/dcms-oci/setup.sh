@@ -21,6 +21,7 @@ fi
 if ! state-store-setup "$DCMS_STATE_STORE" "$DCMS_LOG_DIR/state.log"; then
   echo "Error: Provisioning the state store failed"
   exit 1
+fi
 
 # Start background builds
 cd $DCMS_BACKGROUND_BUILDS
