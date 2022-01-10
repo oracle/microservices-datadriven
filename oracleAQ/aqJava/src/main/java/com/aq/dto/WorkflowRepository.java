@@ -10,9 +10,5 @@ import com.aq.config.UserDetails;
 @Transactional
 public interface WorkflowRepository extends JpaRepository<UserDetails, Integer> {
 
-
 	UserDetails findByOrderId(int orderId);
-
-
-
 }

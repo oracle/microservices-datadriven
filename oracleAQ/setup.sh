@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # variable declarations
-export comp_name="oracleAQTest";   
-export db_name="aqdatabasetest"; 
+export comp_name="oracleAQ";   
+export db_name="aqdatabase"; 
 mkdir -p $comp_name ;
 export WORKFLOW_HOME=${HOME}/${comp_name}; 
 export display_name=${db_name}                                      
@@ -26,8 +26,8 @@ echo "* at least one uppercase letter"
 echo "* at least one lowercase letter"
 echo "* at least one number"
 echo "* The password cannot contain the double quote character or the username 'admin' ";
-read -s db_pwd;
-
+#read -s db_pwd;
+export db_pwd="MayankTayal1234";
 # Create ATP
    #21c always free
 oci db autonomous-database create --admin-password ${db_pwd} -c ${ocid_comp} --db-name ${db_name} --display-name ${db_name} --db-workload OLTP --is-free-tier true --cpu-core-count 1 --data-storage-size-in-tbs 1 --db-version "21c" --wait-for-state AVAILABLE --wait-interval-seconds 5;
@@ -58,7 +58,6 @@ mvn clean install
 cd target
 killall java
 nohup java -jar aqJava-0.0.1-SNAPSHOT.jar &
-echo "Setup completed."
 
 cd $WORKFLOW_HOME;
 
@@ -71,3 +70,5 @@ echo "Database Name     : " ${db_name}
 echo "ATP Database OCID : " ${adb_id}
 
 echo "TNS Conn String   : " ${display_name}_tp
+
+echo "**SETUP_VERIFIED completed**."

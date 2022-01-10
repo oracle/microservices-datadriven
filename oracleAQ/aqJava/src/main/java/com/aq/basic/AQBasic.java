@@ -25,7 +25,7 @@ import oracle.AQ.AQSession;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ClassicQueueBasic {
+public class AQBasic {
 
 	@Value("${spring.datasource.username}")
 	private String username;
@@ -42,43 +42,42 @@ public class ClassicQueueBasic {
 	String oracleQueueTable_multi = "java_QueueTable_Multi";
 	String oracleQueueName_multi = "java_QueueName_Multi";
 
-	Logger logger = LoggerFactory.getLogger(ClassicQueueBasic.class);
 
 	public String lab1() {
 		AQSession aq_sess = null;
-		logger.info("URL: "+url);
+		System.out.println("URL: "+url);
 		String status;
 		try {
 			aq_sess = createSession();
 
 			createQueue(aq_sess);
-			logger.info("---------------createQueue successfully-------------------");
+			System.out.println("---------------createQueue successfully-------------------");
 
 			useCreatedQueue(aq_sess);
-			logger.info("---------------useCreatedQueue successfully---------------");
+			System.out.println("---------------useCreatedQueue successfully---------------");
 
 			enqueueAndDequeue(aq_sess);
-			logger.info("---------------enqueueAndDequeue successfully-------------");
+			System.out.println("---------------enqueueAndDequeue successfully-------------");
 
 			multiuserQueue(aq_sess);
-			logger.info("---------------multiuserQueue successfully----------------");
+			System.out.println("---------------multiuserQueue successfully----------------");
 
 			enqueueRAWMessages(aq_sess);
-			logger.info("---------------enqueueRAWMessages successfully------------");
+			System.out.println("---------------enqueueRAWMessages successfully------------");
 
 			dequeueRawMessages(aq_sess);
-			logger.info("---------------dequeueRAWMessages successfully------------");
+			System.out.println("---------------dequeueRAWMessages successfully------------");
 
 			dequeueMessagesBrowseMode(aq_sess);
-			logger.info("---------------dequeueMessagesBrowseMode successfully------");
+			System.out.println("---------------dequeueMessagesBrowseMode successfully------");
 
 			enqueueMessagesWithPriority(aq_sess);
-			logger.info("---------------enqueueMessagesWithPriority successfully----");
+			System.out.println("---------------enqueueMessagesWithPriority successfully----");
 
 			status = "Success";
 
 		} catch (Exception ex) {
-			logger.info("Exception-1: " + ex);
+			System.out.println("Exception-1: " + ex);
 			ex.printStackTrace();
 			status = "Failed";
 		}
@@ -92,16 +91,16 @@ public class ClassicQueueBasic {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			db_conn = DriverManager.getConnection(url, username, password);
 
-			logger.info("JDBC Connection opened ");
+			System.out.println("JDBC Connection opened ");
 			db_conn.setAutoCommit(false);
 			Class.forName("oracle.AQ.AQOracleDriver");
 
 			/* Creating an AQ Session: */
 			aq_sess = AQDriverManager.createAQSession(db_conn);
 
-			logger.info("Successfully created AQSession ");
+			System.out.println("Successfully created AQSession ");
 		} catch (Exception ex) {
-			logger.info("Exception: " + ex);
+			System.out.println("Exception: " + ex);
 			ex.printStackTrace();
 		}
 		return aq_sess;
@@ -112,19 +111,19 @@ public class ClassicQueueBasic {
 		AQQueueProperty queue_prop = new AQQueueProperty();
 
 		AQQueueTable q_table = aq_sess.createQueueTable(username, oracleQueueTable, qtable_prop);
-		logger.info("Successfully created classicRawQueueTable in  DBUSER schema");
+		System.out.println("Successfully created classicRawQueueTable in  DBUSER schema");
 
 		AQQueue queue = aq_sess.createQueue(q_table, oracleQueueName, queue_prop);
-		logger.info("Successfully created classicRawQueue in classicRawQueue");
+		System.out.println("Successfully created classicRawQueue in classicRawQueue");
 	}
 
 	public void useCreatedQueue(AQSession aq_sess) throws AQException {
 
 		AQQueueTable q_table = aq_sess.getQueueTable(username, oracleQueueTable);
-		logger.info("Successful getQueueTable");
+		System.out.println("Successful getQueueTable");
 
 		AQQueue queue = aq_sess.getQueue(username, oracleQueueName);
-		logger.info("Successful getQueue" + queue.getQueueTableName() + "------" + queue.getName());
+		System.out.println("Successful getQueue" + queue.getQueueTableName() + "------" + queue.getName());
 	}
 
 	public void enqueueAndDequeue(AQSession aq_sess) throws AQException {
@@ -133,18 +132,18 @@ public class ClassicQueueBasic {
 		/* qtable_prop.setCompatible("8.1"); */
 
 		AQQueueTable q_table = aq_sess.createQueueTable(username, "java_basicOracleQueueTable", qtable_prop);
-		logger.info("Successful createQueueTable");
+		System.out.println("Successful createQueueTable");
 
 		AQQueueProperty queue_prop = new AQQueueProperty();
 
 		AQQueue queue = aq_sess.createQueue(q_table, "java_basicOracleQueueName", queue_prop);
-		logger.info("Successful createQueue");
+		System.out.println("Successful createQueue");
 
 		queue.start(true, true);
-		logger.info("Successful start queue");
+		System.out.println("Successful start queue");
 
 		queue.grantQueuePrivilege("ENQUEUE", username);
-		logger.info("Successful grantQueuePrivilege");
+		System.out.println("Successful grantQueuePrivilege");
 	}
 
 	public void multiuserQueue(AQSession aq_sess) throws AQException {
@@ -162,24 +161,24 @@ public class ClassicQueueBasic {
 
 		/* Creating a queue table in DBUSER schema: */
 		AQQueueTable q_table = aq_sess.createQueueTable(username, oracleQueueTable_multi, qtable_prop);
-		logger.info("Successful createQueueTable");
+		System.out.println("Successful createQueueTable");
 
 		AQQueue queue = aq_sess.createQueue(q_table, oracleQueueName_multi, queue_prop);
-		logger.info("Successful createQueue");
+		System.out.println("Successful createQueue");
 
 		/* Enable enqueue/dequeue on this queue: */
 		queue.start();
-		logger.info("Successful start queue");
+		System.out.println("Successful start queue");
 
 		/* Add subscribers to this queue: */
 		subs111 = new AQAgent("GREEN_MULTI", null, 0);
 		subs222 = new AQAgent("BLUE_MULTI", null, 0);
 
 		queue.addSubscriber(subs111, null); /* no rule */
-		logger.info("Successful addSubscriber 111");
+		System.out.println("Successful addSubscriber 111");
 
 		queue.addSubscriber(subs222, "priority < 2"); /* with rule */
-		logger.info("Successful addSubscriber 222");
+		System.out.println("Successful addSubscriber 222");
 	}
 
 	public void enqueueRAWMessages(AQSession aq_sess) throws AQException, SQLException {
@@ -191,7 +190,7 @@ public class ClassicQueueBasic {
 
 		/* Get a handle to a queue-classicRawMultiUserQueue in DBUSER schema: */
 		AQQueue queue = aq_sess.getQueue(username, oracleQueueName_multi);
-		logger.info("Successful getQueue");
+		System.out.println("Successful getQueue");
 
 		/* Creating a message to contain raw payload: */
 		AQMessage message = queue.createMessage();
@@ -252,7 +251,7 @@ public class ClassicQueueBasic {
 
 		/* Get a handle to a queue in DBUSER schema: */
 		AQQueue queue = aq_sess.getQueue(username, oracleQueueName_multi);
-		logger.info("Successful getQueue");
+		System.out.println("Successful getQueue");
 
 		/* Creating a message to contain raw payload: */
 		AQMessage message = queue.createMessage();
@@ -267,7 +266,7 @@ public class ClassicQueueBasic {
 		AQEnqueueOption enq_option = new AQEnqueueOption();
 
 		queue.enqueue(enq_option, message);
-		logger.info("Successful enqueue");
+		System.out.println("Successful enqueue");
 
 		db_conn.commit();
 
@@ -289,7 +288,7 @@ public class ClassicQueueBasic {
 		b_array = raw_payload.getBytes();
 
 		String ret_value = new String(b_array);
-		logger.info("Dequeued message: " + ret_value);
+		System.out.println("Dequeued message: " + ret_value);
 
 		db_conn.commit();
 	}
@@ -302,7 +301,7 @@ public class ClassicQueueBasic {
 
 		/* Get a handle to a queue in DBUSER schema: */
 		AQQueue queue = aq_sess.getQueue(username, oracleQueueName_multi);
-		logger.info("Successful getQueue");
+		System.out.println("Successful getQueue");
 
 		/* Enqueue 5 messages with priorities with different priorities: */
 		for (int i = 0; i < 5; i++) {
@@ -330,7 +329,7 @@ public class ClassicQueueBasic {
 
 			/* Enqueue the message: */
 			queue.enqueue(enq_option, message);
-			logger.info("Successful enqueue");
+			System.out.println("Successful enqueue");
 		}
 		db_conn.commit();
 	}
