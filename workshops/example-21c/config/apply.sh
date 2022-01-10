@@ -13,7 +13,7 @@ fi
 # Provision Databases
 for db in db1 db2; do
   db_upper=`echo $db | tr '[:lower:]' '[:upper:]'`
-  DB_STATE=$EG21C_INFRA_STATE/db/$db
+  DB_STATE=$MY_STATE/$db
   mkdir -p $DB_STATE
   cd $DB_STATE
   cat >input.env <<!
@@ -25,7 +25,8 @@ DISPLAY_NAME='${db_upper}'
 DB_PASSWORD_SECRET='DB_PASSWORD_SECRET'
 RUN_NAME='$RUN_NAME'
 VCN_OCID=''
-VERSION='21c'
+VERSION='19c'
+#VERSION='21c'
 !
 
   provisioning-apply $MSDD_INFRA_CODE/db/atp
@@ -34,7 +35,7 @@ VERSION='21c'
   cat >>$OUTPUT_FILE <<!
   ${db_upper}_OCID='$DB_OCID'
   ${db_upper}_TNS_ADMIN='$TNS_ADMIN'
-  ${db_upper}='$DB_ALIAS'
+  ${db_upper}_ALIAS='$DB_ALIAS'
 !
   )
 done

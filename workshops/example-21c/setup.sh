@@ -23,6 +23,12 @@ if ! EG21C_STATUS=$(provisioning-get-status $EG21C_STATE); then
   exit 1
 fi
 
+# Setup the vault
+if ! folder-vault-setup $EG21C_VAULT; then
+  echo "Error: Failed to provision the folder vault"
+  exit 1
+fi
+
 case "$EG21C_STATUS" in
 
   applied | byo)
@@ -108,12 +114,6 @@ if ! compartment-dialog 'OT' "$TENANCY_OCID" "$HOME_REGION" "GrabDish Workshop $
   exit 1
 fi
 
-# Setup the vault
-if ! folder-vault-setup $EG21C_VAULT; then
-  echo "Error: Failed to provision the folder vault"
-  exit 1
-fi
-
 # OCI Region
 if test -z "$OCI_REGION"; then
   if test 1 -eq `oci iam region-subscription list --query 'length(data[])' --raw-output`; then
@@ -158,3 +158,4 @@ RUN_NAME='$RUN_NAME'
 !
 echo "Setup running"
 provisioning-apply $MSDD_WORKSHOP_CODE/$EG21C_WORKSHOP/config
+source 
