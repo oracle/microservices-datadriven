@@ -4,7 +4,7 @@
 
 
 #echo ____________________________________________________
-export sagadb1_tptnsentry=$(grep -i "sagadb1_tp " ../wallet/tnsnames.ora)
+export sagadb1_tptnsentry=$(grep -i "sagadb1_tp " wallet/tnsnames.ora)
 echo ____________________________________________________
 # for each variable, string off begin (based on identifier)
 echo sagadb1hostname...
@@ -45,7 +45,7 @@ echo $sagadb1ssl_server_cert_dn
 
 
 #echo ____________________________________________________
-export sagadb2_tptnsentry=$(grep -i "sagadb2_tp " ../wallet/tnsnames.ora)
+export sagadb2_tptnsentry=$(grep -i "sagadb2_tp " wallet/tnsnames.ora)
 echo ____________________________________________________
 # for each variable, string off begin (based on identifier)
 echo sagadb2hostname...
@@ -87,6 +87,6 @@ echo $sagadb2ssl_server_cert_dn
 
 
 echo setting up DB links and OSaga infrastructure ...
-#java -jar target/osaga-java-api.jar
+java -jar osaga-java-api.jar
 
 
