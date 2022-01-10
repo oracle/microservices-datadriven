@@ -14,12 +14,6 @@ if test -z "$DCMS_STATE"; then
   exit 1
 fi
 
-# Check for Live Labs
-if [[ "$HOME" =~ /home/ll[0-9]{1,5}_us ]]; then
-  echo "No need to teardown in Live Labs"
-  exit 0
-fi
-
 # Get the provisioning status
 if ! DCMS_STATUS=$(provisioning-get-status $DCMS_STATE); then
   echo "ERROR: Unable to get workshop provisioning status"
@@ -48,9 +42,9 @@ case "$DCMS_STATUS" in
 
     # Start or restart destroy
     cd $DCMS_STATE
-    echo "Starting teardown.  Call 'status' to get the status of the teardown"
-    nohup bash -c "provisioning-destroy" >>$DCMS_LOG_DIR/teardown.log 2>&1 &
-    exit
+    echo "Starting teardown."
+    provisioning-destroy
+    exit 0
     ;;
 
 esac
