@@ -1,54 +1,9 @@
-grant all on dbms_saga_adm to admin;
-
-
-
-CREATE OR REPLACE PROCEDURE BEGINSAGAWRAPPER
-(
-   SAGANAME IN VARCHAR2,
-   SAGAID OUT VARCHAR2
-)
-IS
-     request JSON;
-BEGIN
-  SAGAID := dbms_saga.begin_saga(SAGANAME);
-END;
-
-CREATE OR REPLACE PROCEDURE ENROLL_PARTICIPANT_IN_SAGA
-(
-                        PARTICIPANTTYPE IN VARCHAR2,
-                        RESERVATIONTYPE IN VARCHAR2,
-                        RESERVATIONVALUE IN VARCHAR2,
-                        SAGANAME IN VARCHAR2,
-                        SAGAID IN VARCHAR2
-)
-IS
-    request JSON;
-BEGIN
-    request := json('[{"flight":"United"}]');
-    dbms_saga.enroll_participant(SAGAID, SAGANAME, PARTICIPANTTYPE, 'TravelCoordinator', request);
-END;
-
-
-CREATE OR REPLACE PROCEDURE REGISTER_PARTICIPANT_IN_SAGA
-(
-   PARTICIPANTTYPE IN VARCHAR2,
-   RESERVATIONTYPE IN VARCHAR2,
-   RESERVATIONVALUE IN VARCHAR2,
-   SAGANAME IN VARCHAR2,
-   SAGAID IN VARCHAR2
-)
-IS
-     request JSON;
-BEGIN
-  request := json('[{"flight":"United"}]');
-  dbms_saga.enroll_participant(SAGAID, SAGANAME, PARTICIPANTTYPE, 'TACoordinator', request);
-END;
 
 
 --Create Broker
 exec dbms_saga_adm.add_broker(broker_name => 'TEST');
 
---For the add_coordinator call, if coordinator is co-located with broker, dblink_to_broker should be NULL or equal to the dblink_to_participant/coordinator.
+--Create Coordinator (Note that if the coordinator is co-located with the broker, dblink_to_broker should be NULL)
 exec dbms_saga_adm.add_coordinator( coordinator_name => 'TravelCoordinator',  dblink_to_broker => null,   mailbox_schema => 'admin',  broker_name => 'TEST',  dblink_to_coordinator => 'travelagencyadminlink');
 
 create table travelagencytest(text VARCHAR2(100));

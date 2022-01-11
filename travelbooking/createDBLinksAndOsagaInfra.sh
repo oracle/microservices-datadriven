@@ -2,9 +2,13 @@
 # Copyright (c) 2021 Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
+pwd=$(pwd)
+echo $pwd
+export TNS_ADMIN=$pwd/wallet
+echo TNS_ADMIN = $TNS_ADMIN
 
 #echo ____________________________________________________
-export sagadb1_tptnsentry=$(grep -i "sagadb1_tp " ../wallet/tnsnames.ora)
+export sagadb1_tptnsentry=$(grep -i "sagadb1_tp " $TNS_ADMIN/tnsnames.ora)
 echo ____________________________________________________
 # for each variable, string off begin (based on identifier)
 echo sagadb1hostname...
@@ -45,7 +49,7 @@ echo $sagadb1ssl_server_cert_dn
 
 
 #echo ____________________________________________________
-export sagadb2_tptnsentry=$(grep -i "sagadb2_tp " ../wallet/tnsnames.ora)
+export sagadb2_tptnsentry=$(grep -i "sagadb2_tp " $TNS_ADMIN/tnsnames.ora)
 echo ____________________________________________________
 # for each variable, string off begin (based on identifier)
 echo sagadb2hostname...
@@ -87,9 +91,9 @@ echo $sagadb2ssl_server_cert_dn
 
 
 echo setting up DB links and OSaga infrastructure ...
-cd infrasetup
+cd osaga-java-api
 #nohup java -jar
-java -jar osaga-java-api.jar
+java -jar target/osaga-java-api.jar
 cd ../
 
 

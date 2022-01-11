@@ -78,23 +78,23 @@ public class OracleConnection {
         System.out.println("enroll participant successful");
     }
 
-    public String joinSaga(@QueryParam("PARTICIPANTTYPE") String PARTICIPANTTYPE,
-                             @QueryParam("RESERVATIONTYPE") String RESERVATIONTYPE,
-                             @QueryParam("RESERVATIONVALUE") String RESERVATIONVALUE,
-                             @QueryParam("SAGANAME") String SAGANAME,
-                             @QueryParam("SAGAID") String SAGAID) throws SQLException {
-        System.out.println("--->joinSaga calling dbms_saga.enroll_participant for   PARTICIPANTTYPE = " + PARTICIPANTTYPE + ", RESERVATIONTYPE = " + RESERVATIONTYPE +
-                ", RESERVATIONVALUE = " + RESERVATIONVALUE + ", SAGANAME = " + SAGANAME + ", SAGAID = " + SAGAID);
-        CallableStatement cstmt = connection.prepareCall("{call REGISTER_PARTICIPANT_IN_SAGA(?,?,?,?,?)}");
-//        cstmt.setString("PARTICIPANTTYPE", "Airline");
-        cstmt.setString("PARTICIPANTTYPE", "JavaAirline");
-        cstmt.setString("RESERVATIONTYPE", "flight");
-        cstmt.setString("RESERVATIONVALUE", "United");
-        cstmt.setString("SAGANAME", "TravelAgency");
-        cstmt.setBytes("SAGAID", oracle.sql.RAW.hexString2Bytes(SAGAID));
-        cstmt.execute();
-        return SAGAID;
-    }
+//    public String joinSaga(@QueryParam("PARTICIPANTTYPE") String PARTICIPANTTYPE,
+//                             @QueryParam("RESERVATIONTYPE") String RESERVATIONTYPE,
+//                             @QueryParam("RESERVATIONVALUE") String RESERVATIONVALUE,
+//                             @QueryParam("SAGANAME") String SAGANAME,
+//                             @QueryParam("SAGAID") String SAGAID) throws SQLException {
+//        System.out.println("--->joinSaga calling dbms_saga.enroll_participant for   PARTICIPANTTYPE = " + PARTICIPANTTYPE + ", RESERVATIONTYPE = " + RESERVATIONTYPE +
+//                ", RESERVATIONVALUE = " + RESERVATIONVALUE + ", SAGANAME = " + SAGANAME + ", SAGAID = " + SAGAID);
+//        CallableStatement cstmt = connection.prepareCall("{call REGISTER_PARTICIPANT_IN_SAGA(?,?,?,?,?)}");
+////        cstmt.setString("PARTICIPANTTYPE", "Airline");
+//        cstmt.setString("PARTICIPANTTYPE", "JavaAirline");
+//        cstmt.setString("RESERVATIONTYPE", "flight");
+//        cstmt.setString("RESERVATIONVALUE", "United");
+//        cstmt.setString("SAGANAME", "TravelAgency");
+//        cstmt.setBytes("SAGAID", oracle.sql.RAW.hexString2Bytes(SAGAID));
+//        cstmt.execute();
+//        return SAGAID;
+//    }
 
 
 
