@@ -21,10 +21,10 @@ public class UploadWalletToDataDumpDir {
         String TNS_ADMIN = System.getenv("TNS_ADMIN");
 //        String TNS_ADMIN = Paths.get(System.getProperty("user.dir")).getParent() + "/" + "wallet";
         //link from sagadb1 to sagadb2
-//        uploadWalletAndCreateDBLink(TNS_ADMIN, "ADMIN", passwordsagadb1,"jdbc:oracle:thin:@sagadb1_tp?TNS_ADMIN=" + TNS_ADMIN,
-//                "PARTICIPANTADMINCRED", "ADMIN", passwordsagadb2,
-//                "participantadminlink", System.getenv("sagadb2hostname"), System.getenv("sagadb2port"),
-//                System.getenv("sagadb2service_name"), System.getenv("sagadb2ssl_server_cert_dn"), true);
+        uploadWalletAndCreateDBLink(TNS_ADMIN, "ADMIN", passwordsagadb1,"jdbc:oracle:thin:@sagadb1_tp?TNS_ADMIN=" + TNS_ADMIN,
+                "PARTICIPANTADMINCRED", "ADMIN", passwordsagadb2,
+                "participantadminlink", System.getenv("sagadb2hostname"), System.getenv("sagadb2port"),
+                System.getenv("sagadb2service_name"), System.getenv("sagadb2ssl_server_cert_dn"), true);
         //link from sagadb2 to sagadb1
         uploadWalletAndCreateDBLink(TNS_ADMIN, "ADMIN", passwordsagadb2,"jdbc:oracle:thin:@sagadb2_tp?TNS_ADMIN=" + TNS_ADMIN,
                 "TRAVELAGENCYADMINCRED", "ADMIN", passwordsagadb1,

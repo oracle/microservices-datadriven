@@ -7,9 +7,3 @@ mv graalvm-ce-java11-20.1.0 ~/
 export JAVA_HOME=~/graalvm-ce-java11-20.1.0
 export PATH=$JAVA_HOME/bin:$PATH
 #~/graalvm-ce-java11-20.1.0/bin/gu install native-image
-
-#mkdir wallet
-#cd wallet
-#oci db autonomous-database generate-wallet --autonomous-database-id "$1" --file 'wallet.zip' --password 'Welcome1' --generate-type 'ALL'
-#unzip wallet.zip
-#cd ../
