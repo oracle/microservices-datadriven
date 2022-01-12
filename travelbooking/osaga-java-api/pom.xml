@@ -78,21 +78,21 @@
         </plugins>
     </build>
     <dependencies>
-        <dependency>
-            <groupId>io.helidon.microprofile.bundles</groupId>
-            <artifactId>helidon-microprofile</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jboss</groupId>
-            <artifactId>jandex</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.activation</groupId>
-            <artifactId>jakarta.activation-api</artifactId>
-            <scope>runtime</scope>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>io.helidon.microprofile.bundles</groupId>-->
+<!--            <artifactId>helidon-microprofile</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.jboss</groupId>-->
+<!--            <artifactId>jandex</artifactId>-->
+<!--            <scope>runtime</scope>-->
+<!--            <optional>true</optional>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>jakarta.activation</groupId>-->
+<!--            <artifactId>jakarta.activation-api</artifactId>-->
+<!--            <scope>runtime</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>javax.transaction</groupId>
             <artifactId>javax.transaction-api</artifactId>
@@ -110,18 +110,6 @@
             <artifactId>aqapi</artifactId>
             <version>19.3.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.oracle.database.soda</groupId>
-            <artifactId>orajsoda</artifactId>
-            <version>1.1.7.1</version>
-            <exclusions>
-                <exclusion>
-                <groupId>com.oracle.database.jdbc</groupId>
-                <artifactId>ojdbc8</artifactId>
-                </exclusion>
-            </exclusions> 
-        </dependency>
-
     </dependencies>
 
 </project>
