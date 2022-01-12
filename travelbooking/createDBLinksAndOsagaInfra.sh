@@ -92,8 +92,8 @@ echo $sagadb2ssl_server_cert_dn
 
 echo setting up DB links and OSaga infrastructure ...
 cd osaga-java-api
-mvn dependency:resolve > /dev/null
-cp prebuilt/osaga-java-api.jar target/osaga-java-api.jar
+#mvn dependency:resolve > /dev/null
+#cp prebuilt/osaga-java-api.jar target/osaga-java-api.jar
 #nohup java -jar
 java -jar target/osaga-java-api.jar
 cd ../
