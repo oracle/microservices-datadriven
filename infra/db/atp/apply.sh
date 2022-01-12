@@ -23,6 +23,21 @@ if ! test -f $MY_STATE/state_provisioning_done; then
     export TF_VAR_ociRegionIdentifier="$OCI_REGION"
     export TF_VAR_dbName="$DB_NAME"
     export TF_VAR_displayName="$DISPLAY_NAME"
+    case "$VERSION" in
+      21c)
+        export TF_VAR_dbVersion='21c'
+        export TF_VAR_dbIsFreeTier='true'
+        ;;
+      19c)
+        export TF_VAR_dbVersion='19c'
+        export TF_VAR_dbIsFreeTier='false'
+        ;;
+      *)
+        echo "Error: Invalid DB version $VERSION"
+        exit 1
+        ;;
+    esac
+
 
     if ! terraform init; then
         echo 'ERROR: terraform init failed!'

@@ -19,7 +19,8 @@ resource "oci_database_autonomous_database" "autonomous_database" {
   cpu_core_count           = "1"
   data_storage_size_in_tbs = "1"
   db_name                  = var.dbName
-  is_free_tier             = false
+  is_free_tier             = var.dbIsFreeTier
+  db_version               = var.dbVersion
   db_workload              = "OLTP"
   display_name             = var.displayName
   is_auto_scaling_enabled  = "false"
