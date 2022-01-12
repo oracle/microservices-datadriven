@@ -1,7 +1,10 @@
 
 
 --Create Broker
-exec dbms_saga_adm.add_broker(broker_name => 'TEST');
+begin
+    exec dbms_saga_adm.add_broker(broker_name => 'TEST');
+end;
+/
 
 --Create Coordinator (Note that if the coordinator is co-located with the broker, dblink_to_broker should be NULL)
 exec dbms_saga_adm.add_coordinator( coordinator_name => 'TravelCoordinator',  dblink_to_broker => null,   mailbox_schema => 'admin',  broker_name => 'TEST',  dblink_to_coordinator => 'travelagencyadminlink');
