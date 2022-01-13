@@ -100,13 +100,13 @@ public class TravelParticipantApplication {
 		@Override
 		public void beforeRollback(String sagaId) {
 			out.println("Before Rollback Called");
-			tickets++;
-			System.out.println("Total Tickets : " + tickets);
 		}
 
 		@Override
 		public void afterRollback(String sagaId) {
 			out.println("After Rollback Called");
+			tickets++;
+			System.out.println("Total Tickets : " + tickets);
 		}
 
 	}
