@@ -1,17 +1,16 @@
 
-select id, initiator, coordinator, owner, begin_time, status from saga$ order by begin_time asc;
-select * from saga_message_broker$;
-select * from saga_participant_set$;
-select * from saga_participant$;
-select * from travelagencytest;
 
 declare
   saga_id raw(16);
   request JSON;
  begin
   saga_id := dbms_saga.begin_saga('TravelAgencyPLSQL');
-  request := json('[{"car":"toyota"}]');
-  dbms_saga.enroll_participant(saga_id, 'TravelAgencyPLSQL', 'CarPLSQL', 'TravelCoordinator', request);
+  flightrequest := json('[{"flight":"myflight"}]');
+  dbms_saga.enroll_participant(saga_id, 'TravelAgencyPLSQL', 'FlightPLSQL', 'TravelCoordinator', flightrequest);
+  hotelrequest := json('[{"hotel":"myhoteg"}]');
+  dbms_saga.enroll_participant(saga_id, 'TravelAgencyPLSQL', 'CarPLSQL', 'TravelCoordinator', hotelrequest);
+  carrequest := json('[{"car":"mycar"}]');
+  dbms_saga.enroll_participant(saga_id, 'TravelAgencyPLSQL', 'HotelPLSQL', 'TravelCoordinator', carrequest);
 end;
 /
 

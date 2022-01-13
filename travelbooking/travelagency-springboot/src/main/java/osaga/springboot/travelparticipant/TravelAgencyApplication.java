@@ -1,6 +1,8 @@
 package osaga.springboot.travelparticipant;
 
 import AQSaga.*;
+import oracle.ucp.jdbc.PoolDataSource;
+import oracle.ucp.jdbc.PoolDataSourceFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -10,6 +12,9 @@ import javax.jms.JMSException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,9 +41,28 @@ public class TravelAgencyApplication {
 		String parentOfCurrentWorkingDir = "" + path.getParent();
 		String TNS_ADMIN = PromptUtil.getValueFromPrompt("Enter TNS_ADMIN (unzipped wallet location)", parentOfCurrentWorkingDir + "/" + "wallet");
 		String jdbcUrl = "jdbc:oracle:thin:@sagadb1_tp?TNS_ADMIN=" + TNS_ADMIN;
+		String user = "admin";
 		out.println("TravelAgencyApplication jdbcUrl:" + jdbcUrl);
-
 		String initiator = "TravelAgencyJava";
+		boolean callAddParticipant =
+				PromptUtil.getValueFromPrompt(
+						"Is one-time setup call 'add_participant' needed for " + initiator + " ('y' if this has not been done previously, 'n' otherwise)?", "n").equalsIgnoreCase("y");
+		if (callAddParticipant) {
+			PoolDataSource poolDataSource = PoolDataSourceFactory.getPoolDataSource();
+			poolDataSource.setConnectionFactoryClassName("oracle.jdbc.pool.OracleDataSource");
+			poolDataSource.setURL(jdbcUrl);
+			poolDataSource.setUser(user);
+			poolDataSource.setPassword(password);
+			Connection conn = poolDataSource.getConnection();
+			CallableStatement callableStatement = conn.prepareCall(
+					"{call dbms_saga_adm.add_participant(  participant_name => ?,   " +
+					"coordinator_name => 'TravelCoordinator' ,   dblink_to_broker => null ,   " +
+					"mailbox_schema => 'admin' ,   broker_name => 'TEST' ,   callback_package => null ,   " +
+					"dblink_to_participant => null)}");
+			callableStatement.setString(1, initiator);
+			callableStatement.execute();
+			out.println("add_participant successfully called for initiator:" + initiator );
+		}
 		out.println("Adding listener for this saga initiator:" + initiator + "...");
 		AQjmsSaga saga = new AQjmsSaga(jdbcUrl, "admin", password);
 		TravelAgencyTestListener listener = new TravelAgencyTestListener();
@@ -63,6 +87,11 @@ public class TravelAgencyApplication {
 		boolean isAddCar = PromptUtil.getBoolValueFromPrompt("add Car(Java) participant? (y or n)", "y");
 		boolean isAddFlight = PromptUtil.getBoolValueFromPrompt("add Flight(Java) participant? (y or n)", "y");
 		out.println("Enrolling participants... ");
+		if (isAddFlight) {
+			String payload = "[{\"flight\" : \"myflight\"}]";
+			out.println("Enrolling Flight(Java) participant in sagaId:" + sagaId);
+			saga.enrollParticipant(sagaId, "admin", initiator, "FlightJava", coordinator, payload);
+		}
 		if (isAddHotel) {
 			String payload = "[{\"hotel\" : \"myhotel\"}]";
 			out.println("Enrolling Hotel(Java) participant in sagaId:" + sagaId);
@@ -72,11 +101,6 @@ public class TravelAgencyApplication {
 			String payload = "[{\"car\" : \"mycar\"}]";
 			out.println("Enrolling Car(Java) participant in sagaId:" + sagaId);
 			saga.enrollParticipant(sagaId, "admin", initiator, "CarJava", coordinator, payload);
-		}
-		if (isAddFlight) {
-			String payload = "[{\"flight\" : \"myflight\"}]";
-			out.println("Enrolling Flight(Java) participant in sagaId:" + sagaId);
-			saga.enrollParticipant(sagaId, "admin", initiator, "FlightJava", coordinator, payload);
 		}
 
 		//todo wait/poll for all replies

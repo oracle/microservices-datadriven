@@ -2,6 +2,8 @@ package osaga.springboot.travelparticipant;
 
 import AQSaga.AQjmsSaga;
 import AQSaga.AQjmsSagaMessageListener;
+import oracle.ucp.jdbc.PoolDataSource;
+import oracle.ucp.jdbc.PoolDataSourceFactory;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -9,6 +11,9 @@ import org.springframework.context.annotation.Configuration;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 
 import static java.lang.System.out;
 
@@ -30,14 +35,32 @@ public class TravelParticipantApplication {
 		String parentOfCurrentWorkingDir = "" + path.getParent();
 		String TNS_ADMIN = PromptUtil.getValueFromPrompt("Enter TNS_ADMIN (unzipped wallet location)", parentOfCurrentWorkingDir + "/" + "wallet");
 		String jdbcUrl = "jdbc:oracle:thin:@sagadb2_tp?TNS_ADMIN=" + TNS_ADMIN;
+		String user = "admin";
 		out.println("TravelParticipantApplication jdbcUrl:" + jdbcUrl);
 
 		String participant = PromptUtil.getValueFromPrompt("Enter participant type (1) HotelJava, (2) CarJava, or (3) FlightJava", "1");
 		if (participant.equalsIgnoreCase("2")) participant = "CarJava";
 		else if (participant.equalsIgnoreCase("3")) participant = "FlightJava";
 		else participant = "HotelJava";
+		boolean callAddParticipant =
+				PromptUtil.getValueFromPrompt(
+						"Is one-time setup call 'add_participant' needed for " + participant + " ('y' if this has not been done previously, 'n' otherwise)?", "n").equalsIgnoreCase("y");
+		if (callAddParticipant) {
+			PoolDataSource poolDataSource = PoolDataSourceFactory.getPoolDataSource();
+			poolDataSource.setConnectionFactoryClassName("oracle.jdbc.pool.OracleDataSource");
+			poolDataSource.setURL(jdbcUrl);
+			poolDataSource.setUser(user);
+			poolDataSource.setPassword(password);
+			Connection conn = poolDataSource.getConnection();
+			CallableStatement callableStatement = conn.prepareCall(
+					"{call dbms_saga_adm.add_participant(participant_name=> ? ,  " +
+					"dblink_to_broker=> 'travelagencyadminlink',mailbox_schema=> 'admin'," +
+					"broker_name=> 'TEST', callback_package => null , dblink_to_participant=> 'participantadminlink')}");
+			callableStatement.setString(1, participant);
+			callableStatement.execute();
+		}
 		out.println("Adding listener for this saga participant:" + participant + "...");
-		AQjmsSaga saga = new AQjmsSaga(jdbcUrl, "admin", password);
+		AQjmsSaga saga = new AQjmsSaga(jdbcUrl, user, password);
 		TravelParticipantSagaMessageListener listener = new TravelParticipantSagaMessageListener();
 		saga.setSagaMessageListener("ADMIN", participant, listener);
 
