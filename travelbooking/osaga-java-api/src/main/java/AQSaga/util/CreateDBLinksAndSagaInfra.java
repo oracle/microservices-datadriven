@@ -18,20 +18,19 @@ public class CreateDBLinksAndSagaInfra {
     }
 
     public static void main(String args[]) throws Exception {
-        String passwordsagadb1 = "Welcome12345"; // PromptUtil.getValueFromPromptSecure("Enter password for sagadb1", null);
-        String passwordsagadb2 = "Welcome12345"; // PromptUtil.getValueFromPromptSecure("Enter password for sagadb2", null);
+        String passwordsagadb1 = PromptUtil.getValueFromPromptSecure("Enter password for sagadb1", null);
+        String passwordsagadb2 = PromptUtil.getValueFromPromptSecure("Enter password for sagadb2", null);
         String TNS_ADMIN = System.getenv("TNS_ADMIN");
-//        String TNS_ADMIN = Paths.get(System.getProperty("user.dir")).getParent() + "/" + "wallet";
         //link from sagadb1 to sagadb2
         uploadWalletAndCreateDBLink(TNS_ADMIN, "ADMIN", passwordsagadb1,"jdbc:oracle:thin:@sagadb1_tp?TNS_ADMIN=" + TNS_ADMIN,
                 "PARTICIPANTADMINCRED", "ADMIN", passwordsagadb2,
                 "participantadminlink", System.getenv("sagadb2hostname"), System.getenv("sagadb2port"),
                 System.getenv("sagadb2service_name"), System.getenv("sagadb2ssl_server_cert_dn"), true);
         //link from sagadb2 to sagadb1
-//        uploadWalletAndCreateDBLink(TNS_ADMIN, "ADMIN", passwordsagadb2,"jdbc:oracle:thin:@sagadb2_tp?TNS_ADMIN=" + TNS_ADMIN,
-//                "TRAVELAGENCYADMINCRED", "ADMIN", passwordsagadb1,
-//                "travelagencyadminlink", System.getenv("sagadb1hostname"), System.getenv("sagadb1port"),
-//                System.getenv("sagadb1service_name"), System.getenv("sagadb1ssl_server_cert_dn"), false);
+        uploadWalletAndCreateDBLink(TNS_ADMIN, "ADMIN", passwordsagadb2,"jdbc:oracle:thin:@sagadb2_tp?TNS_ADMIN=" + TNS_ADMIN,
+                "TRAVELAGENCYADMINCRED", "ADMIN", passwordsagadb1,
+                "travelagencyadminlink", System.getenv("sagadb1hostname"), System.getenv("sagadb1port"),
+                System.getenv("sagadb1service_name"), System.getenv("sagadb1ssl_server_cert_dn"), false);
     }
 
     private static void uploadWalletAndCreateDBLink(String tnsAdmin, String localUser, String localPW, String url,

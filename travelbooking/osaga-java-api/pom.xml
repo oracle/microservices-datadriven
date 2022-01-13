@@ -67,7 +67,6 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>${dependenciesDirectory}</classpathPrefix>
-<!--                            <mainClass>io.helidon.microprofile.server.Main</mainClass>-->
                             <mainClass>AQSaga.util.CreateDBLinksAndSagaInfra</mainClass>
                         </manifest>
                     </archive>
@@ -78,21 +77,6 @@
         </plugins>
     </build>
     <dependencies>
-<!--        <dependency>-->
-<!--            <groupId>io.helidon.microprofile.bundles</groupId>-->
-<!--            <artifactId>helidon-microprofile</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.jboss</groupId>-->
-<!--            <artifactId>jandex</artifactId>-->
-<!--            <scope>runtime</scope>-->
-<!--            <optional>true</optional>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>jakarta.activation</groupId>-->
-<!--            <artifactId>jakarta.activation-api</artifactId>-->
-<!--            <scope>runtime</scope>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>javax.transaction</groupId>
             <artifactId>javax.transaction-api</artifactId>
@@ -109,6 +93,13 @@
             <groupId>com.oracle.database.messaging</groupId>
             <artifactId>aqapi</artifactId>
             <version>19.3.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>osaga</groupId>
+            <artifactId>osaga-java-infra</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${env.HOME}/microservices-datadriven/travelbooking/osaga-java-api/osagainfra.jar</systemPath>
         </dependency>
     </dependencies>
 

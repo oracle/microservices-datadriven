@@ -82,10 +82,22 @@ echo ____________________________________________________
 
 echo setting up DB links and OSaga infrastructure ...
 cd osaga-java-api
-#mvn dependency:resolve > /dev/null
-#cp prebuilt/osaga-java-api.jar target/osaga-java-api.jar
+mvn install:install-file –Dfile=/home/paul_parki/microservices-datadriven/travelbooking/osaga-java-api/target/osaga-java-api.jar -DgroupId=osaga -DartifactId=osaga-java-api -Dversion=0.0.1-SNAPSHOT
+mvn install:install-file –Dfile=/Users/pparkins/go/src/github.com/paulparkinson/microservices-datadriven/travelbooking/osaga-java-api/osagainfra.jar -DgroupId=osaga -DartifactId=osaga-java-infra -Dversion=0.0.1-SNAPSHOT
+
+
+
+mvn install:install-file –Dfile=osagainfra.jar -DgroupId=osaga -DartifactId=osaga-java-infra -Dversion=0.0.1-SNAPSHOT -Dpackaging=jar
+mvn install:install-file -Dfile=<path-to-file> -DgroupId=<group-id> -DartifactId=<artifact-id> -Dversion=<version> -Dpackaging=<packaging>
+
 #nohup java -jar
 java -jar target/osaga-java-api.jar | grep -v "WARNING"
 cd ../
 
 
+
+		<dependency>
+			<groupId>osaga</groupId>
+			<artifactId>osaga-java-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
