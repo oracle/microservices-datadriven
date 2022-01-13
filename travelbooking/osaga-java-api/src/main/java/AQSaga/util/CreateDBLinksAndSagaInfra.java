@@ -7,13 +7,15 @@ import oracle.ucp.jdbc.PoolDataSourceFactory;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.nio.file.Paths;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class UploadWalletToDataDumpDir {
+public class CreateDBLinksAndSagaInfra {
+    static {
+        System.setProperty("oracle.jdbc.fanEnabled", "false");
+    }
 
     public static void main(String args[]) throws Exception {
         String passwordsagadb1 = "Welcome12345"; // PromptUtil.getValueFromPromptSecure("Enter password for sagadb1", null);
@@ -26,13 +28,14 @@ public class UploadWalletToDataDumpDir {
                 "participantadminlink", System.getenv("sagadb2hostname"), System.getenv("sagadb2port"),
                 System.getenv("sagadb2service_name"), System.getenv("sagadb2ssl_server_cert_dn"), true);
         //link from sagadb2 to sagadb1
-        uploadWalletAndCreateDBLink(TNS_ADMIN, "ADMIN", passwordsagadb2,"jdbc:oracle:thin:@sagadb2_tp?TNS_ADMIN=" + TNS_ADMIN,
-                "TRAVELAGENCYADMINCRED", "ADMIN", passwordsagadb1,
-                "travelagencyadminlink", System.getenv("sagadb1hostname"), System.getenv("sagadb1port"),
-                System.getenv("sagadb1service_name"), System.getenv("sagadb1ssl_server_cert_dn"), false);
+//        uploadWalletAndCreateDBLink(TNS_ADMIN, "ADMIN", passwordsagadb2,"jdbc:oracle:thin:@sagadb2_tp?TNS_ADMIN=" + TNS_ADMIN,
+//                "TRAVELAGENCYADMINCRED", "ADMIN", passwordsagadb1,
+//                "travelagencyadminlink", System.getenv("sagadb1hostname"), System.getenv("sagadb1port"),
+//                System.getenv("sagadb1service_name"), System.getenv("sagadb1ssl_server_cert_dn"), false);
     }
 
-    private static void uploadWalletAndCreateDBLink(String tnsAdmin, String localUser, String localPW, String url, String credName, String remoteUser, String remotePW,
+    private static void uploadWalletAndCreateDBLink(String tnsAdmin, String localUser, String localPW, String url,
+                                                    String credName, String remoteUser, String remotePW,
                                                     String linkName, String linkhostname, String linkport,
                                                     String linkservice_name, String linkssl_server_cert_dn,
                                                     boolean isCoordinator) throws Exception {
@@ -51,12 +54,25 @@ public class UploadWalletToDataDumpDir {
         Connection conn = poolDataSource.getConnection();
         System.out.println("Connection:" + conn + " url:" + url);
         createDBLink(tnsAdmin, url, credName, remoteUser, remotePW, linkName, linkhostname, linkport, linkservice_name, linkssl_server_cert_dn, conn);
-        installSaga(conn);
+        installSaga(conn, url);
         if (isCoordinator) {
             System.out.println("Creating wrappers...");
             conn.prepareStatement(OsagaInfra.createBEGINSAGAWRAPPER).execute();
             conn.prepareStatement(OsagaInfra.createEnrollParticipant).execute();
-            System.out.println("Finished creating wrappers...");
+            System.out.println("Finished creating wrappers.");
+            System.out.println("Creating broker...");
+            conn.prepareStatement("{call dbms_saga_adm.add_broker(broker_name => 'TEST')}").execute();
+            System.out.println("Finished creating broker.");
+            System.out.println("Creating coordinator...");
+            //Note that if the coordinator is co-located with the broker, dblink_to_broker should be NULL
+            conn.prepareStatement("{dbms_saga_adm.add_coordinator( " +
+                    "coordinator_name => 'TravelCoordinator',  " +
+                    "dblink_to_broker => null,   " +
+                    "mailbox_schema => 'admin',  " +
+                    "broker_name => 'TEST',  " +
+                    "dblink_to_coordinator => 'travelagencyadminlink')}").execute();
+            System.out.println("Finished creating coordinator.");
+            System.out.println("Setup complete.");
         }
     }
 
@@ -99,17 +115,15 @@ public class UploadWalletToDataDumpDir {
         System.out.println("select sysdate from dual@" + linkName + " was successful");
     }
 
-    private static void installSaga(Connection conn) throws SQLException {
-       conn.setAutoCommit(false);
-        for (int i = 0;i<OsagaInfra.SQL.length;i++) { //14 in total
-            System.out.println("install OSaga infra starting..." + i);
+    private static void installSaga(Connection conn, String pdbName) throws SQLException {
+        System.out.println("Installing OSaga infra for " + pdbName + "...");
+        for (int i = 0;i<OsagaInfra.SQL.length;i++) {
+            System.out.print("" + i + "...");
             conn.prepareStatement(OsagaInfra.SQL[i]).execute();
-            System.out.println("install OSaga infra completed..." + i);
         }
-        conn.commit();
-        System.out.println("saga setup complete");
+        System.out.println("Install of OSaga infra completed for " + pdbName );
         conn.prepareStatement("grant all on dbms_saga_adm to admin").execute();
-        System.out.println("grant complete");
+        System.out.println("Grant complete");
     }
 
 

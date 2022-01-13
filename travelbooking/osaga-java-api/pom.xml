@@ -68,7 +68,7 @@
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>${dependenciesDirectory}</classpathPrefix>
 <!--                            <mainClass>io.helidon.microprofile.server.Main</mainClass>-->
-                            <mainClass>AQSaga.util.UploadWalletToDataDumpDir</mainClass>
+                            <mainClass>AQSaga.util.CreateDBLinksAndSagaInfra</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
