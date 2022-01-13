@@ -57,6 +57,7 @@ public class TravelParticipantApplication {
 					"broker_name=> 'TEST', callback_package => null , dblink_to_participant=> 'participantadminlink')}");
 			callableStatement.setString(1, participant);
 			callableStatement.execute();
+			out.println("add_participant call successful for participant:" + participant + "...");
 		}
 		out.println("Adding listener for this saga participant:" + participant + "...");
 		AQjmsSaga saga = new AQjmsSaga(jdbcUrl, user, password);
