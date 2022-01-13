@@ -4,23 +4,22 @@ import AQSaga.AQjmsSaga;
 import AQSaga.AQjmsSagaMessageListener;
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+//import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+//import org.springframework.boot.autoconfigure.SpringBootApplication;
+//import org.springframework.context.annotation.ComponentScan;
+//import org.springframework.context.annotation.Configuration;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 
 import static java.lang.System.out;
 
-@Configuration
-@EnableAutoConfiguration
-@ComponentScan
-@SpringBootApplication
+//@Configuration
+//@EnableAutoConfiguration
+//@ComponentScan
+//@SpringBootApplication
 public class TravelParticipantApplication {
 
 	public static void main(String[] args) throws Exception {
