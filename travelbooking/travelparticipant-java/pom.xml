@@ -67,7 +67,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>${dependenciesDirectory}</classpathPrefix>
-							<mainClass>osaga.springboot.travelparticipant.TravelParticipantApplication</mainClass>
+							<mainClass>osaga.travelparticipant.TravelParticipantApplication</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

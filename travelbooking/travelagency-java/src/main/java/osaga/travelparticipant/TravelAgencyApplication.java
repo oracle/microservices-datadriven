@@ -1,12 +1,8 @@
-package osaga.springboot.travelparticipant;
+package osaga.travelparticipant;
 
 import AQSaga.*;
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 
 import javax.jms.JMSException;
 import java.io.IOException;
@@ -14,17 +10,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.util.HashMap;
 import java.util.Map;
 
 import static java.lang.System.*;
 
 
-@Configuration
-@EnableAutoConfiguration
-@ComponentScan
-@SpringBootApplication
 public class TravelAgencyApplication {
 
 	Map<String, TravelBookingSaga> sagaParticipantReplies = new HashMap();
@@ -106,7 +97,6 @@ public class TravelAgencyApplication {
 		//todo wait/poll for all replies
 		out.println("----> Hit enter once all replies are received ");
 		in.read();
-		//Prompt for rollback or commit...
 		String commitOrRollback = PromptUtil.getValueFromPrompt("Commit or Rollback Saga? (c or r)", "r");
 		if (commitOrRollback.equalsIgnoreCase("c")) {
 			log("about to commit");

@@ -1,4 +1,4 @@
-package osaga.springboot.travelparticipant;
+package osaga.travelparticipant;
 
 import AQSaga.AQjmsSaga;
 import AQSaga.AQjmsSagaMessageListener;
