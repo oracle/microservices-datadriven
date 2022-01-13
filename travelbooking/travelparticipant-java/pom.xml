@@ -67,7 +67,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>${dependenciesDirectory}</classpathPrefix>
-							<mainClass>osaga.travelparticipant.TravelParticipantApplication</mainClass>
+							<mainClass>osaga.travelagency.TravelParticipantApplication</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

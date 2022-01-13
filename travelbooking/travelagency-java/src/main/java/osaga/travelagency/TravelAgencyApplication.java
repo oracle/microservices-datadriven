@@ -1,4 +1,4 @@
-package osaga.travelparticipant;
+package osaga.travelagency;
 
 import AQSaga.*;
 import oracle.ucp.jdbc.PoolDataSource;
