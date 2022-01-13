@@ -78,17 +78,17 @@
     </build>
     <dependencies>
         <dependency>
+            <groupId>com.oracle.database.jdbc.debug</groupId>
+            <artifactId>ojdbc8-debug</artifactId>
+            <version>21.1.0.0</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
             <groupId>javax.transaction</groupId>
             <artifactId>javax.transaction-api</artifactId>
             <version>1.2</version>
             <scope>runtime</scope>
         </dependency>
-            <dependency>
-                <groupId>com.oracle.database.jdbc.debug</groupId>
-                <artifactId>ojdbc8-debug</artifactId>
-                <version>21.1.0.0</version>
-                <type>pom</type>
-            </dependency>
         <dependency>
             <groupId>com.oracle.database.messaging</groupId>
             <artifactId>aqapi</artifactId>
