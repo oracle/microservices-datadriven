@@ -481,3 +481,23 @@ $RECYCLE.BIN/
 #!.vscode/tasks.json
 #!.vscode/launch.json
 #!.vscode/extensions.json
+
+##
+## Gradle
+##
+.gradle/
+.gradle/*
+
+## Workshops / Event Mesh - TEQ - Kafka 
+##
+## Local JVM
+##
+workshops/eventmesh-teq-kafka/.java-version
+
+## Remove Deploy Dir -- K8s Deployment artifacts
+workshops/eventmesh-teq-kafka/**/deploy/
+
+## Remove Other Local project stuffs
+workshops/eventmesh-teq-kafka/cloud-setup/database/
+workshops/eventmesh-teq-kafka/cloud-setup/terraform_dbsystem/
+workshops/eventmesh-teq-kafka/wallet/
