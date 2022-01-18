@@ -11,9 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.aq.config.JsonUtils;
 import com.aq.config.UserDetails;
 import com.aq.dto.WorkflowRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import oracle.AQ.AQAgent;
 import oracle.AQ.AQDequeueOption;
@@ -30,7 +32,7 @@ import oracle.AQ.AQSession;
 
 @Service
 public class AQWorkflow {
-	
+
 	@Autowired
 	private WorkflowRepository workflowRepository;
 
@@ -42,6 +44,8 @@ public class AQWorkflow {
 
 	@Value("${spring.datasource.url}")
 	private String jdbcURL;
+
+	ObjectMapper mapper = new ObjectMapper();
 
 	String userAQQueueTable = "java_userQueueTable";
 	String deliAQQueueTable = "java_deliQueueTable";
@@ -55,71 +59,77 @@ public class AQWorkflow {
 	String deliSubscriber = "java_deliSubscriber";
 	String appSubscriber = "java_appSubscriber";
 
-	// @PostConstruct
-	public String lab2() throws JMSException, AQException, SQLException, ClassNotFoundException {
+	public String aqWorkflow() throws JMSException, AQException, SQLException, ClassNotFoundException,
+			JsonMappingException, JsonProcessingException {
 
 		AQSession qsession = null;
 		UserDetails userDetails = null;
 		String deliveryStatus;
 
-		// Setup
+		/* Setup */
 		qsession = createSession();
-		AQQueue userQueue = createQueue(qsession, username, userAQQueueTable, userAQQueueName);
-		AQQueue deliQueue = createQueue(qsession, username, deliAQQueueTable, deliAQQueueName);
-		AQQueue appQueue  = createQueue(qsession, username, appAQQueueTable, appAQQueueName);
+		AQQueue userQueue = createQueue(qsession, username, userAQQueueTable, userAQQueueName, userSubscriber);
+		AQQueue deliQueue = createQueue(qsession, username, deliAQQueueTable, deliAQQueueName, deliSubscriber);
+		AQQueue appQueue = createQueue(qsession, username, appAQQueueTable, appAQQueueName, appSubscriber);
 
 		Random rnd = new Random();
 		int otp = rnd.nextInt(9999);
 		int orderId = rnd.nextInt(999);
 
-		// Step 1: Application shared order details to USER
+		/* Step 1: Application shared order details to USER */
 		userDetails = new UserDetails(orderId, "DBUSER", otp, "PENDING", "US");
-		enqueueMessages(qsession, userQueue, userDetails, userSubscriber);
-		UserDetails userMessage= dequeueMessages(userQueue, userSubscriber);
+		enqueueMessages(qsession, userQueue, userDetails);
+		UserDetails userMessage = dequeueMessages(userQueue, userSubscriber);
 		System.out.println("Step 1: Application shared order details to USER");
 
-		// Step 2: Application saved order details to DATABASE
+		/* Step 2: Application saved order details to DATABASE */
 		workflowRepository.saveAndFlush(userDetails);
 		System.out.println("Step 2: Application saved order details to DATABASE");
 
-		// Step 3: Application shared delivery details to DELIVERER
-		userDetails = new UserDetails(userMessage.getOrderId(), userMessage.getUsername(), 0, userMessage.getDeliveryStatus(), userMessage.getDeliveryLocation());
-		enqueueMessages(qsession, deliQueue, userDetails, deliSubscriber);
-		UserDetails deliMessage= dequeueMessages(deliQueue, deliSubscriber);
+		/* Step 3: Application shared delivery details to DELIVERER */
+		userDetails = new UserDetails(userMessage.getOrderId(), userMessage.getUsername(), 0,
+				userMessage.getDeliveryStatus(), userMessage.getDeliveryLocation());
+		enqueueMessages(qsession, deliQueue, userDetails);
+		UserDetails deliMessage = dequeueMessages(deliQueue, deliSubscriber);
 		System.out.println("Step 3: Application shared delivery details to DELIVERER");
 
-		// Step 4: Deliverer shared the user OTP to APPLICATION
-		userDetails = new UserDetails(deliMessage.getOrderId(), deliMessage.getUsername(), userMessage.getOtp(), deliMessage.getDeliveryStatus(), deliMessage.getDeliveryLocation());
-		enqueueMessages(qsession, appQueue, userDetails, appSubscriber);
-		UserDetails appMessage= dequeueMessages(appQueue, appSubscriber);
+		/* Step 4: Deliverer shared the user OTP to APPLICATION */
+		userDetails = new UserDetails(deliMessage.getOrderId(), deliMessage.getUsername(), userMessage.getOtp(),
+				deliMessage.getDeliveryStatus(), deliMessage.getDeliveryLocation());
+		enqueueMessages(qsession, appQueue, userDetails);
+		UserDetails appMessage = dequeueMessages(appQueue, appSubscriber);
 		System.out.println("Step 4: Deliverer shared the user OTP to APPLICATION");
-		
 
-		// Step 5: Application verifies OTP from USER_OTP with DATABASE_OTP
+		/* Step 5: Application verifies OTP from USER_OTP with DATABASE_OTP */
 		UserDetails existingData = workflowRepository.findByOrderId(appMessage.getOrderId());
-		
+
 		if (appMessage.getOtp() == existingData.getOtp()) {
 			existingData.setDeliveryStatus("DELIVERED");
-			deliveryStatus= "DELIVERED";
-		}
-		else {
+			deliveryStatus = "DELIVERED";
+		} else {
 			existingData.setDeliveryStatus("FAILED");
-			deliveryStatus= "FAILED";
+			deliveryStatus = "FAILED";
 		}
 		System.out.println("Step 5: Application verifies OTP from USER_OTP with DATABASE_OTP");
 
+		/* Step 6: APPLICATION updated DELIVERY_STATUS in DATABASE */
 		workflowRepository.saveAndFlush(existingData);
-		System.out.println("Step 6: APPLICATION updated DELIVERY_STATUS in DATABASE: "+deliveryStatus);
-		
-		userDetails = new UserDetails(appMessage.getOrderId(), appMessage.getUsername(), appMessage.getOtp(), appMessage.getDeliveryStatus(), appMessage.getDeliveryLocation());
-		
-		enqueueMessages(qsession, deliQueue, userDetails, deliSubscriber);
-		UserDetails updateDeliMessage= dequeueMessages(deliQueue, deliSubscriber);
-		System.out.println("Step 7: APPLICATION updated DELIVERY_STATUS to DELIVERER: "+updateDeliMessage.getDeliveryStatus());
-	
-		enqueueMessages(qsession, userQueue, userDetails, userSubscriber);
-		UserDetails updateUserMessage= dequeueMessages(userQueue, userSubscriber);	
-		System.out.println("Step 8: APPLICATION updated DELIVERY_STATUS to USER: "+updateUserMessage.getDeliveryStatus());
+		System.out.println("Step 6: APPLICATION updated DELIVERY_STATUS in DATABASE: " + deliveryStatus);
+
+		UserDetails updatedData = workflowRepository.findByOrderId(appMessage.getOrderId());
+		userDetails = new UserDetails(appMessage.getOrderId(), appMessage.getUsername(), appMessage.getOtp(),
+				updatedData.getDeliveryStatus(), appMessage.getDeliveryLocation());
+
+		/* Step 7: APPLICATION updated DELIVERY_STATUS to DELIVERER: */
+		enqueueMessages(qsession, deliQueue, userDetails);
+		UserDetails updateDeliMessage = dequeueMessages(deliQueue, deliSubscriber);
+		System.out.println(
+				"Step 7: APPLICATION updated DELIVERY_STATUS to DELIVERER: " + updatedData.getDeliveryStatus());
+
+		/* Step 8: APPLICATION updated DELIVERY_STATUS to USER */
+		enqueueMessages(qsession, userQueue, userDetails);
+		UserDetails updateUserMessage = dequeueMessages(userQueue, userSubscriber);
+		System.out.println("Step 8: APPLICATION updated DELIVERY_STATUS to USER: " + updatedData.getDeliveryStatus());
 
 		qsession.close();
 		return deliveryStatus;
@@ -141,8 +151,8 @@ public class AQWorkflow {
 		return aq_sess;
 	}
 
-	public AQQueue createQueue(AQSession session, String username, String queueTable, String queueName)
-			throws JMSException, AQException {
+	public AQQueue createQueue(AQSession session, String username, String queueTable, String queueName,
+			String subscriberName) throws JMSException, AQException {
 
 		AQQueueTableProperty qtable_prop = new AQQueueTableProperty("RAW");
 		AQQueueProperty queue_prop = new AQQueueProperty();
@@ -154,45 +164,48 @@ public class AQWorkflow {
 		queue.start(true, true);
 		System.out.println("Create Queue success QueueName : " + queueName);
 
+		AQAgent subscriber = new AQAgent(subscriberName, null, 0);
+		queue.addSubscriber(subscriber, null);
+		System.out.println("Subscriber : " + subscriberName);
+
 		return queue;
 	}
 
-	public void enqueueMessages(AQSession qsession, AQQueue queue, UserDetails user, String subscriberName)
-			throws JMSException, java.sql.SQLException, AQException {
+	public void enqueueMessages(AQSession qsession, AQQueue queue, UserDetails user)
+			throws JMSException, java.sql.SQLException, AQException, JsonProcessingException {
 
-		AQAgent subscriber = new AQAgent(subscriberName, null, 0);
-		queue.addSubscriber(subscriber, null);
+		String jsonString = mapper.writeValueAsString(user);
 
-		System.out.println("Subscriber : " + subscriberName);
-		String jsonString = user.toString();
 		AQMessage message = queue.createMessage();
-
 		byte[] b_array = jsonString.getBytes();
 		AQRawPayload raw_payload = message.getRawPayload();
 		raw_payload.setStream(b_array, b_array.length);
-
+		message.setRawPayload(raw_payload);
 		AQEnqueueOption enq_option = new AQEnqueueOption();
 		queue.enqueue(enq_option, message);
-		System.out.println("Enqueue success for Queue : " + queue.getName());
+		System.out.println("Enqueue Message2 Queue : " + message.toString());
+
 	}
-	
-	public UserDetails dequeueMessages(AQQueue queue, String subscriberName) throws AQException {
+
+	public UserDetails dequeueMessages(AQQueue queue, String subscriberName)
+			throws AQException, JMSException, JsonMappingException, JsonProcessingException {
 		AQMessage message = queue.createMessage();
 		AQDequeueOption dequeueOption = new AQDequeueOption();
-		byte[] b_array;
-		
+
 		dequeueOption.setDequeueMode(AQDequeueOption.DEQUEUE_REMOVE);
 		dequeueOption.setConsumerName(subscriberName);
 		dequeueOption.setWaitTime(10);
 		message = queue.dequeue(dequeueOption);
-		
-		AQRawPayload raw_payload= message.getRawPayload();
-		b_array = raw_payload.getBytes();
-		String userBrowse_value = new String(b_array);
-		System.out.println("Dequeue Message :[" + userBrowse_value + "]");
-		
-		UserDetails userDetails = JsonUtils.read(userBrowse_value, UserDetails.class);
-		return userDetails;
+
+		AQRawPayload raw_payload = message.getRawPayload();
+		byte[] b_array = raw_payload.getBytes();
+
+		String ret_value = new String(b_array);
+		UserDetails user = mapper.readValue(ret_value, UserDetails.class);
+
+		System.out.println("Dequeue Message :" + ret_value);
+
+		return user;
 	}
 
 }

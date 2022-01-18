@@ -27,7 +27,7 @@ public class OracleAQController {
 	public Map<String, Object> aqEnqueueDequeue() throws Exception {
 		Map<String, Object> response = new HashMap();
 
-		String status = classicQueueBasic.lab1();
+		String status = classicQueueBasic.aqEnqueueDequeue();
 
 		if (status.equalsIgnoreCase("Success")) {
 			response.put("ResponseCode", "200");
@@ -44,7 +44,7 @@ public class OracleAQController {
 	public Map<String, Object> aqWorkflow() throws Exception {
 		Map<String, Object> response = new HashMap();
 
-		String status = classicQueueWorkflow.lab2();
+		String status = classicQueueWorkflow.aqWorkflow();
 
 		if (status.equalsIgnoreCase("DELIVERED")) {
 			response.put("ResponseCode", "200");

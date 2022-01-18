@@ -43,7 +43,7 @@ public class AQBasic {
 	String oracleQueueName_multi = "java_QueueName_Multi";
 
 
-	public String lab1() {
+	public String aqEnqueueDequeue() {
 		AQSession aq_sess = null;
 		System.out.println("URL: "+url);
 		String status;

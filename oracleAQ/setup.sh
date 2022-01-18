@@ -70,5 +70,6 @@ echo "Database Name     : " ${db_name}
 echo "ATP Database OCID : " ${adb_id}
 
 echo "TNS Conn String   : " ${display_name}_tp
-
-echo "**SETUP_VERIFIED completed**."
+echo "-------------------------------"
+echo "        SETUP COMPLETED        "
+echo "------------------------------"

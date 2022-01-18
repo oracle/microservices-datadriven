@@ -1,6 +1,10 @@
 package com.aq.config;
 
 import java.io.Serializable;
+import java.sql.SQLData;
+import java.sql.SQLException;
+import java.sql.SQLInput;
+import java.sql.SQLOutput;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
