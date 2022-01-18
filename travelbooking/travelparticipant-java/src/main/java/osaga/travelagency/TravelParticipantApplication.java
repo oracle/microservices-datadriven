@@ -4,10 +4,6 @@ import AQSaga.AQjmsSaga;
 import AQSaga.AQjmsSagaMessageListener;
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
-//import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-//import org.springframework.boot.autoconfigure.SpringBootApplication;
-//import org.springframework.context.annotation.ComponentScan;
-//import org.springframework.context.annotation.Configuration;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,11 +12,9 @@ import java.sql.Connection;
 
 import static java.lang.System.out;
 
-//@Configuration
-//@EnableAutoConfiguration
-//@ComponentScan
-//@SpringBootApplication
 public class TravelParticipantApplication {
+
+	String participant;
 
 	public static void main(String[] args) throws Exception {
 		System.setProperty("oracle.jdbc.fanEnabled", "false");
@@ -37,7 +31,7 @@ public class TravelParticipantApplication {
 		String user = "admin";
 		out.println("TravelParticipantApplication jdbcUrl:" + jdbcUrl);
 
-		String participant = PromptUtil.getValueFromPrompt("Enter participant type (1) HotelJava, (2) CarJava, or (3) FlightJava", "1");
+		participant = PromptUtil.getValueFromPrompt("Enter participant type (1) HotelJava, (2) CarJava, or (3) FlightJava", "1");
 		if (participant.equalsIgnoreCase("2")) participant = "CarJava";
 		else if (participant.equalsIgnoreCase("3")) participant = "FlightJava";
 		else participant = "HotelJava";
@@ -77,9 +71,9 @@ public class TravelParticipantApplication {
 			System.out.println("request called sagaId = " + sagaId + ", payload = " + payload);
 			System.out.println("Tickets remaining : " + --tickets);
 			if(tickets >= 0)
-				return "[{\"result\":\"success\"}]";
+				return "{\"" + participant + "\":\"success\"}";
 			else
-				return "[{\"result\":\"failure\"}]";
+				return "{\"" + participant + "\":\"failed\"}";
 		}
 
 		@Override
