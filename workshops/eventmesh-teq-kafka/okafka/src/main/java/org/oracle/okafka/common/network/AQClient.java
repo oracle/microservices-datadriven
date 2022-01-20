@@ -124,9 +124,6 @@ public abstract class AQClient {
 					try {
 						String str = result.getString(4);
 
-						// TODO DEBUG Connection Issues
-						log.debug("AQClient::result from listener_network: {}", str);
-
 						StringBuilder sb = new StringBuilder();
 						for(int ind = 0;ind < str.length(); ind++)
 							if(str.charAt(ind) != ' ')

@@ -31,9 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ConnectionUtils {
-	//TODO Including Logger
-	private static final Logger log = LoggerFactory.getLogger(ConnectionUtils.class);
-
     public static String createUrl(Node node, AbstractConfig configs) {
     	
     	if( !configs.getString(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG).equalsIgnoreCase("PLAINTEXT")) {
@@ -78,8 +75,6 @@ public class ConnectionUtils {
 			dataSource.setConnectionProperties(info);
 		}
     	catch(SQLException sql) {
-			// TODO DEBUG Connection
-			System.out.println(sql.toString());
     		throw new JMSException(sql.toString());
     	}
 
@@ -90,8 +85,6 @@ public class ConnectionUtils {
 			conn = connFactory.createTopicConnection();
 			conn.setClientID(configs.getString(CommonClientConfigs.CLIENT_ID_CONFIG));
 		} catch (Exception ex) {
-			// TODO DEBUG Connection
-			System.out.println("ERRO DE CONNECTION: \n");
 			ex.printStackTrace();
 		}
         return conn;  	

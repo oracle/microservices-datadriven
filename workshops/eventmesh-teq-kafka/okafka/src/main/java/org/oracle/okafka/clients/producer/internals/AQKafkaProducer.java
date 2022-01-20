@@ -98,9 +98,6 @@ public final class AQKafkaProducer extends AQClient {
 	 *Returns response for all messages in a memory records.
 	 */
 	private ClientResponse publish(ClientRequest request) {
-		// TODO Debugging Send
-		log.debug("AQKafkaClient publish :: after aqClient send ");
-
 		ProduceRequest.Builder builder = (ProduceRequest.Builder)request.requestBuilder();
 		ProduceRequest produceRequest = builder.build();
 		Node node = request.destination();
@@ -131,15 +128,9 @@ public final class AQKafkaProducer extends AQClient {
 
 			msgs = messages.toArray(new AQjmsBytesMessage[0]);
 
-			// TODO Debugging Send -- return to trace
-
-			log.debug("AQKAFKAPRD:: sending messages to topic : {} with partition: {}, number of messages: {}", topicPartition.topic(), topicPartition.partition(), msgs.length);
 			sendToAQ(msgs, publisher);
-			log.debug("AQKAFKAPRD:: Messages sent successfully to topic : {} with partition: {}, number of messages: {}", topicPartition.topic(), topicPartition.partition(), msgs.length);
 
 		} catch(Exception exception) {
-			// TODO Debugging Send
-			log.debug("AQKafkaProducer Exception");
 			exception.printStackTrace();
 
 			partitionResponse =  createResponses(topicPartition, new NotLeaderForPartitionException(exception), msgs);
@@ -182,8 +173,6 @@ public final class AQKafkaProducer extends AQClient {
 	 * @throws JMSException throws JMSException
 	 */
 	private void sendToAQ(AQjmsBytesMessage[] messages, TopicPublisher publisher) throws JMSException {
-		//TODO Debugging Send
-		log.debug("sendToAq :: topic {}", publisher.getTopic());
 		for (AQjmsBytesMessage message :  messages) {
 			message.reset();
 			log.debug("sendToAq :: message JMSMessageID {}", message.getJMSMessageID());

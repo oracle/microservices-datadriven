@@ -364,8 +364,7 @@ public class NetworkClient implements KafkaClient {
             if (!canSendRequest(node, now))
                 throw new IllegalStateException("Attempt to send a request to node " + node + " which is not ready.");
         }
-        // TODO Debugging Send
-        log.debug("NetworkClient Calling :: before aqClient send ");
+
        ClientResponse response =  aqClient.send(clientRequest);
 
        handleDisconnection(node, response.wasDisconnected(), time.milliseconds());

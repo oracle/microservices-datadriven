@@ -411,25 +411,16 @@ private static void validateMsgId(String msgId) throws IllegalArgumentException 
 	}
 	
 	public void connect(Node node) throws JMSException{
-		//TODO CLEAN DEBUG
-		log.debug("Start try Connect!");
-
 		if(!topicConsumersMap.containsKey(node)) {
 			TopicConsumers nodeConsumers = null;
 			try {
 				nodeConsumers = new TopicConsumers(node);
-				//TODO CLEAN DEBUG
-				log.debug("TopicConsumers Created!");
-
-
 				topicConsumersMap.put(node, nodeConsumers);
 			} catch(JMSException e) {
 				e.printStackTrace();
 				close(node, nodeConsumers);
 				throw e;
 			}
-			
-       	
         }
 	}
 	

@@ -8,14 +8,12 @@ import org.oracle.okafka.clients.consumer.ConsumerRecord;
 import org.oracle.okafka.clients.consumer.ConsumerRecords;
 import org.oracle.okafka.clients.consumer.KafkaConsumer;
 import org.oracle.okafka.common.config.SslConfigs;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Properties;
 
-public class OKafkaConsumer {
+public class OKafkaConsumerADBD {
 
     public static void main(String[] args) {
 
@@ -26,19 +24,17 @@ public class OKafkaConsumer {
         String topic = "LAB8022_TOPIC" ;
 
         props.put("oracle.user.name","LAB8022_USER");
-        props.put("oracle.password","Welcome#1@Oracle");
+        props.put("oracle.password","W3lcome@123456");
 
-        props.put("oracle.instance.name", "lab8022atp_tp"); //name of the oracle databse instance
-        props.put("oracle.service.name", "bsenjiat5lmurtq_lab8022atp_tp.adb.oraclecloud.com");	//name of the service running on the instance
+        props.put("oracle.instance.name", "db202110141444_medium"); //name of the oracle databse instance
+        props.put("oracle.service.name", "DB202110141444_medium.atp.oraclecloud.com");	//name of the service running on the instance
 
-        // /Users/pasimoes/Work/Oracle/Labs/Grabdish/ATP/Wallet_psgrabdishi
-        props.put("oracle.net.tns_admin", "/Users/pasimoes/Work/Oracle/Code/aq-teq/microservices-datadriven/workshops/eventmesh-teq-kafka/wallet/lab8022atp"); //eg: "/msdataworkshop/creds" if ojdbc.properies file is in home
+        props.put("oracle.net.tns_admin", "/Users/pasimoes/Work/Oracle/Code/aq-teq/microservices-datadriven/workshops/eventmesh-teq-kafka/wallet/adb-d"); //eg: "/msdataworkshop/creds" if ojdbc.properies file is in home
         //SSL
         props.put("security.protocol", "SSL");
-        props.put(SslConfigs.TNS_ALIAS, "lab8022atp_tp");
+        props.put(SslConfigs.TNS_ALIAS, "db202110141444_medium");
 
-        //"adb.us-ashburn-1.oraclecloud.com:1522"
-        props.put("bootstrap.servers", "adb.us-ashburn-1.oraclecloud.com:1522"); //ip address or host name where instance running : port where instance listener running
+        props.put("bootstrap.servers", "127.0.0.1:1521"); //ip address or host name where instance running : port where instance listener running
         props.put("group.id", "LAB8022_SUBSCRIBER");
         props.put("enable.auto.commit", "true");
         props.put("auto.commit.interval.ms", "10000");
@@ -77,7 +73,7 @@ public class OKafkaConsumer {
         try {
             // TODO There is a issue with elapsedTime usually greater timeoutMs
             //  (I tested with 10000 and gave timeout and didn't returning nothing)
-            ConsumerRecords<String, GenericRecord> records = consumer.poll(Duration.ofMillis(25000));
+            ConsumerRecords<String, GenericRecord> records = consumer.poll(Duration.ofMillis(120000));
             System.out.println("Records: " + records.count());
 
             for (ConsumerRecord<String, GenericRecord> record : records) {

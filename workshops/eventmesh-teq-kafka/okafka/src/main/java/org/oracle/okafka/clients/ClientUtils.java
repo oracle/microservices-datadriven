@@ -53,18 +53,12 @@ public final class ClientUtils {
         for (String url : urls) {
             if (url != null && !url.isEmpty()) {
                 try {
-                    // TODO DEBUG Connection
-                    System.out.println("InetAddress - URL: "+ url);
-
                     String host = getHost(url);
                     Integer port = getPort(url);
                     if (host == null || port == null)
                         throw new ConfigException("Invalid url in " + CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG + ": " + url);
 
                     InetSocketAddress address = new InetSocketAddress(host, port);
-
-                    // TODO DEBUG Connection
-                    System.out.println("InetAddress - Host: "+ address.getHostString());
 
                     if (address.isUnresolved()) {
                         log.warn("Removing server {} from {} as DNS resolution failed for {}", url, CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG, host);

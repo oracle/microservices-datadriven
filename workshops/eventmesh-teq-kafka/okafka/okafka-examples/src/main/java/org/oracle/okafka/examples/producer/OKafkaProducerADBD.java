@@ -1,7 +1,6 @@
 package org.oracle.okafka.examples.producer;
 
 import org.apache.avro.Schema;
-
 import org.oracle.okafka.clients.producer.KafkaProducer;
 import org.oracle.okafka.clients.producer.ProducerRecord;
 import org.oracle.okafka.common.config.SslConfigs;
@@ -9,29 +8,27 @@ import org.oracle.okafka.examples.model.DataRecord;
 
 import java.util.Properties;
 
-public class OKafkaProducer {
+public class OKafkaProducerADBD {
 
     public static void main(String[] args) {
 
-        String topic = "LAB8022_TOPIC_2" ;
+        String topic = "LAB8022_TOPIC" ;
 
         KafkaProducer<String,String> prod = null;
         Properties props = new Properties();
 
         props.put("oracle.user.name","LAB8022_USER");
-        props.put("oracle.password","Welcome#1@Oracle");
+        props.put("oracle.password","W3lcome@123456");
 
-        props.put("oracle.instance.name", "lab8022atp_tp"); //name of the oracle databse instance
-        props.put("oracle.service.name", "bsenjiat5lmurtq_lab8022atp_tp.adb.oraclecloud.com");	//name of the service running on the instance
+        props.put("oracle.instance.name", "db202110141444_medium"); //name of the oracle databse instance
+        props.put("oracle.service.name", "DB202110141444_medium.atp.oraclecloud.com");	//name of the service running on the instance
 
-
-        // /Users/pasimoes/Work/Oracle/Labs/Grabdish/ATP/Wallet_psgrabdishi
-        props.put("oracle.net.tns_admin", "/Users/pasimoes/Work/Oracle/Code/aq-teq/microservices-datadriven/workshops/eventmesh-teq-kafka/wallet/lab8022atp"); //eg: "/msdataworkshop/creds" if ojdbc.properies file is in home
+        props.put("oracle.net.tns_admin", "/Users/pasimoes/Work/Oracle/Code/aq-teq/microservices-datadriven/workshops/eventmesh-teq-kafka/wallet/adb-d"); //eg: "/msdataworkshop/creds" if ojdbc.properies file is in home
         //SSL
         props.put("security.protocol", "SSL");
-        props.put(SslConfigs.TNS_ALIAS, "lab8022atp_tp");
+        props.put(SslConfigs.TNS_ALIAS, "db202110141444_medium");
 
-        props.put("bootstrap.servers", "adb.us-ashburn-1.oraclecloud.com:1522"); //ip address or host name where instance running : port where instance listener running
+        props.put("bootstrap.servers", "127.0.0.1:1521"); //ip address or host name where instance running : port where instance listener running
         props.put("linger.ms", 1000);
         //props.put("batch.size", 200);
         //props.put("linger.ms", 100);
