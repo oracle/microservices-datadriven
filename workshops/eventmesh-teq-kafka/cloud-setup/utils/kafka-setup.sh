@@ -3,22 +3,30 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Fail on error
-set -e
+#set -e
 
 # Install Docker Compose
 while ! state_done DOCKER_COMPOSE; do
-  if ! test -f "$LAB_HOME"/cloud-setup/confluent/docker-compose; then
-    curl -sL "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o "$LAB_HOME"/cloud-setup/confluent/docker-compose
-    chmod +x "$LAB_HOME"/cloud-setup/confluent/docker-compose
+  if ! test -f "$LAB_HOME"/cloud-setup/confluent-kafka/docker-compose; then
+    curl -sL "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o "$LAB_HOME"/cloud-setup/confluent-kafka/docker-compose
+    chmod +x "$LAB_HOME"/cloud-setup/confluent-kafka/docker-compose
   fi
   state_set_done DOCKER_COMPOSE
 done
 
-
+# Build Confluent Kafka Connect Customer Image
+while ! state_done CFLCONNECT_IMAGE; do
+  cd "$LAB_HOME"/cloud-setup/confluent-kafka
+  mkdir wallet
+  cp "$LAB_HOME"/wallet/lab8022atp/* ./wallet/
+  docker build . -t cp-kafka-connect-custom:0.1.0
+  rm -rf wallet
+  state_set_done CFLCONNECT_IMAGE
+done
 
 # Setup Kafka
 while ! state_done KAFKA_SETUP; do
-  cd "$LAB_HOME"/cloud-setup/confluent
+  cd "$LAB_HOME"/cloud-setup/confluent-kafka
   ./docker-compose up --no-start
   cd "$LAB_HOME"
   state_set_done KAFKA_SETUP

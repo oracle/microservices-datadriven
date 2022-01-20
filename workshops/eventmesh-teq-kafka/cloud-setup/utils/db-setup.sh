@@ -110,9 +110,9 @@ connect $U/"$DB_PASSWORD"@$SVC
 -- Creating a JMS type sharded queue:
 BEGIN
   sys.dbms_aqadm.create_sharded_queue(queue_name=>'LAB8022_TOPIC', multiple_consumers => TRUE);
-  sys.dbms_aqadm.set_queue_parameter('LAB8022_TOPIC', 'SHARD_NUM', 1);
-  sys.dbms_aqadm.set_queue_parameter('LAB8022_TOPIC', 'STICKY_DEQUEUE', 1);
-  sys.dbms_aqadm.set_queue_parameter('LAB8022_TOPIC', 'KEY_BASED_ENQUEUE', 1);
+  -- sys.dbms_aqadm.set_queue_parameter('LAB8022_TOPIC', 'SHARD_NUM', 1);
+  -- sys.dbms_aqadm.set_queue_parameter('LAB8022_TOPIC', 'STICKY_DEQUEUE', 1);
+  -- sys.dbms_aqadm.set_queue_parameter('LAB8022_TOPIC', 'KEY_BASED_ENQUEUE', 1);
   sys.dbms_aqadm.start_queue('LAB8022_TOPIC');
 END;
 /
