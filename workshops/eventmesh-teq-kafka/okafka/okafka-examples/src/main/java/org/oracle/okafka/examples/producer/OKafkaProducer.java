@@ -61,7 +61,7 @@ public class OKafkaProducer {
         Schema schema = parser.parse(ORDER_EVT_SCHEMA);
         try {
             // Produce sample data
-            final Long numMessages = 10L;
+            final Long numMessages = 5L;
             for (Long i = 0L; i < numMessages; i++) {
                 String key = "alice";
                 DataRecord record = new DataRecord(i);

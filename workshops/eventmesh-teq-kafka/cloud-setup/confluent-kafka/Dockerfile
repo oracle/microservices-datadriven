@@ -20,13 +20,15 @@ COPY wallet/* /home/appuser/wallet/
 
 ENV TNS_ADMIN="/home/appuser/wallet"
 
-RUN mkdir /home/appuser/.oci
-COPY oci/* /home/appuser/.oci/
+## Run this code to ADB-D
+#RUN mkdir /home/appuser/.oci
+#COPY oci/* /home/appuser/.oci/
 
 USER root
 RUN  chown appuser:appuser ${CONNECT_HUB_COMPONENTS_PATH}/confluentinc-kafka-connect-jms-sink/lib/*
 RUN  chown appuser:appuser ${CONNECT_HUB_COMPONENTS_PATH}/confluentinc-kafka-connect-jms/lib/*
 RUN  chmod 777 /home/appuser/wallet/*
 
-RUN  yum update -y && yum upgrade -y
-RUN  yum install openssh-clients -y
+## Run this code to ADB-D
+#RUN  yum update -y && yum upgrade -y
+#RUN  yum install openssh-clients -y

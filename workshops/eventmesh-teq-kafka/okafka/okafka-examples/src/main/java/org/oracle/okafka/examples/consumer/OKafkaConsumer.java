@@ -23,7 +23,7 @@ public class OKafkaConsumer {
 
         Properties props = new Properties();
 
-        String topic = "LAB8022_TOPIC" ;
+        String topic = "LAB8022_TOPIC_2" ;
 
         props.put("oracle.user.name","LAB8022_USER");
         props.put("oracle.password","Welcome#1@Oracle");
@@ -39,7 +39,7 @@ public class OKafkaConsumer {
 
         //"adb.us-ashburn-1.oraclecloud.com:1522"
         props.put("bootstrap.servers", "adb.us-ashburn-1.oraclecloud.com:1522"); //ip address or host name where instance running : port where instance listener running
-        props.put("group.id", "LAB8022_SUBSCRIBER");
+        props.put("group.id", "LAB8022_SUBSCRIBER_2");
         props.put("enable.auto.commit", "true");
         props.put("auto.commit.interval.ms", "10000");
 
