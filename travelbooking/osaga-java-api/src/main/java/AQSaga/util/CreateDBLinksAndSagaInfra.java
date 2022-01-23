@@ -39,9 +39,9 @@ public class CreateDBLinksAndSagaInfra {
                                                     String linkservice_name, String linkssl_server_cert_dn,
                                                     boolean isCoordinator) throws Exception {
         System.out.println(
-                "tnsAdmin = " + tnsAdmin + "\nlocalUser = " + localUser + "\nlocalPW = " + localPW +
+                "tnsAdmin = " + tnsAdmin + "\nlocalUser = " + localUser +
                         "\nurl = " + url + "\ncredName = " + credName +
-                        "\nremoteUser = " + remoteUser + "\nremotePW = " + remotePW +
+                        "\nremoteUser = " + remoteUser +
                         "\nlinkName = " + linkName + "\nlinkhostname = " + linkhostname + "\nlinkport = " + linkport +
                         "\nlinkservice_name = " + linkservice_name + "\nlinkssl_server_cert_dn = " + linkssl_server_cert_dn);
         System.setProperty("oracle.jdbc.fanEnabled", "false");
@@ -52,7 +52,8 @@ public class CreateDBLinksAndSagaInfra {
         poolDataSource.setPassword(localPW);
         Connection conn = poolDataSource.getConnection();
         System.out.println("Connection:" + conn + " url:" + url);
-        createDBLink(tnsAdmin, url, credName, remoteUser, remotePW, linkName, linkhostname, linkport, linkservice_name, linkssl_server_cert_dn, conn);
+        if (System.getProperty("skipdblinks") == null || !System.getProperty("skipdblinks").equals("true") )
+            createDBLink(tnsAdmin, url, credName, remoteUser, remotePW, linkName, linkhostname, linkport, linkservice_name, linkssl_server_cert_dn, conn);
         installSaga(conn, url);
         if (isCoordinator) {
             System.out.println("Creating wrappers...");
@@ -95,7 +96,13 @@ public class CreateDBLinksAndSagaInfra {
         preparedStatement.setString(1, credName);
         preparedStatement.setString(2, remoteUser);
         preparedStatement.setString(3, remotePW);
-        preparedStatement.execute();
+        try {
+            preparedStatement.execute();
+        } catch (SQLException sqlex) {
+            if (sqlex.getMessage().contains("already exists")) {
+                System.out.println("Credential for dblink already exists, proceeding... ");
+            }
+        }
         System.out.println("credName created = " + credName + " from url = " + url );
 
         preparedStatement = conn.prepareStatement(OsagaInfra.CREATE_DBLINK_SQL);
