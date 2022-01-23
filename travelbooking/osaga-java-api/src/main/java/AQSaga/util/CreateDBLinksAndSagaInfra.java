@@ -39,13 +39,15 @@ public class CreateDBLinksAndSagaInfra {
                                                     String linkservice_name, String linkssl_server_cert_dn,
                                                     boolean isCoordinator) throws Exception {
         boolean skipdblinks = System.getenv("skipdblinks") != null && System.getenv("skipdblinks").equals("true");
+        boolean skipinstallSaga = System.getenv("skipinstallSaga") != null && System.getenv("skipinstallSaga").equals("true");
         System.out.println(
                 "tnsAdmin = " + tnsAdmin + "\nlocalUser = " + localUser +
                         "\nurl = " + url + "\ncredName = " + credName +
                         "\nremoteUser = " + remoteUser +
                         "\nlinkName = " + linkName + "\nlinkhostname = " + linkhostname + "\nlinkport = " + linkport +
                         "\nlinkservice_name = " + linkservice_name + "\nlinkssl_server_cert_dn = " + linkssl_server_cert_dn +
-                        "\nskipdblinks = " + skipdblinks
+                        "\nskipdblinks = " + skipdblinks +
+                        "\nskipinstallSaga = " + skipinstallSaga
         );
         System.setProperty("oracle.jdbc.fanEnabled", "false");
         PoolDataSource poolDataSource = PoolDataSourceFactory.getPoolDataSource();
@@ -57,7 +59,8 @@ public class CreateDBLinksAndSagaInfra {
         System.out.println("Connection:" + conn + " url:" + url);
         if (!skipdblinks)
             createDBLink(tnsAdmin, url, credName, remoteUser, remotePW, linkName, linkhostname, linkport, linkservice_name, linkssl_server_cert_dn, conn);
-        installSaga(conn, url);
+        if (!skipinstallSaga)
+            installSaga(conn, url);
         if (isCoordinator) {
             System.out.println("Creating wrappers...");
             conn.prepareStatement(OsagaInfra.createBEGINSAGAWRAPPER).execute();
@@ -68,7 +71,7 @@ public class CreateDBLinksAndSagaInfra {
             System.out.println("Finished creating broker.");
             System.out.println("Creating coordinator...");
             //Note that if the coordinator is co-located with the broker, dblink_to_broker should be NULL
-            conn.prepareStatement("{dbms_saga_adm.add_coordinator( " +
+            conn.prepareStatement("{call dbms_saga_adm.add_coordinator( " +
                     "coordinator_name => 'TravelCoordinator',  " +
                     "dblink_to_broker => null,   " +
                     "mailbox_schema => 'admin',  " +

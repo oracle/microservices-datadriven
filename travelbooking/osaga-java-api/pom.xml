@@ -94,13 +94,13 @@
             <artifactId>aqapi</artifactId>
             <version>19.3.0.0</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>osaga</groupId>-->
-<!--            <artifactId>osaga-java-infra</artifactId>-->
-<!--            <version>0.0.1-SNAPSHOT</version>-->
-<!--            <scope>system</scope>-->
-<!--            <systemPath>${env.HOME}/microservices-datadriven/travelbooking/osaga-java-api/osagainfra.jar</systemPath>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>osaga</groupId>
+            <artifactId>osaga-java-infra</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${env.HOME}/microservices-datadriven/travelbooking/osaga-java-api/osagainfra.jar</systemPath>
+        </dependency>
     </dependencies>
 
 </project>
