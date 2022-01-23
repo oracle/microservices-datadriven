@@ -40,14 +40,13 @@ public class CreateDBLinksAndSagaInfra {
                                                     boolean isCoordinator) throws Exception {
         boolean skipdblinks = System.getenv("skipdblinks") != null && System.getenv("skipdblinks").equals("true");
         boolean skipinstallSaga = System.getenv("skipinstallSaga") != null && System.getenv("skipinstallSaga").equals("true");
+        boolean skipbrokerinstall = System.getenv("skipbrokerinstall") != null && System.getenv("skipbrokerinstall").equals("true");
         System.out.println(
                 "tnsAdmin = " + tnsAdmin + "\nlocalUser = " + localUser +
                         "\nurl = " + url + "\ncredName = " + credName +
                         "\nremoteUser = " + remoteUser +
                         "\nlinkName = " + linkName + "\nlinkhostname = " + linkhostname + "\nlinkport = " + linkport +
-                        "\nlinkservice_name = " + linkservice_name + "\nlinkssl_server_cert_dn = " + linkssl_server_cert_dn +
-                        "\nskipdblinks = " + skipdblinks +
-                        "\nskipinstallSaga = " + skipinstallSaga
+                        "\nlinkservice_name = " + linkservice_name + "\nlinkssl_server_cert_dn = " + linkssl_server_cert_dn
         );
         System.setProperty("oracle.jdbc.fanEnabled", "false");
         PoolDataSource poolDataSource = PoolDataSourceFactory.getPoolDataSource();
@@ -67,7 +66,7 @@ public class CreateDBLinksAndSagaInfra {
             conn.prepareStatement(OsagaInfra.createEnrollParticipant).execute();
             System.out.println("Finished creating wrappers.");
             System.out.println("Creating broker...");
-            conn.prepareStatement("{call dbms_saga_adm.add_broker(broker_name => 'TEST')}").execute();
+            if (!skipbrokerinstall) conn.prepareStatement("{call dbms_saga_adm.add_broker(broker_name => 'TEST')}").execute();
             System.out.println("Finished creating broker.");
             System.out.println("Creating coordinator...");
             //Note that if the coordinator is co-located with the broker, dblink_to_broker should be NULL
