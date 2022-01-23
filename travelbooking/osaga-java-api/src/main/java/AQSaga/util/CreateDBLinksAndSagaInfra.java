@@ -38,12 +38,15 @@ public class CreateDBLinksAndSagaInfra {
                                                     String linkName, String linkhostname, String linkport,
                                                     String linkservice_name, String linkssl_server_cert_dn,
                                                     boolean isCoordinator) throws Exception {
+        boolean skipdblinks = System.getenv("skipdblinks") != null && System.getenv("skipdblinks").equals("true");
         System.out.println(
                 "tnsAdmin = " + tnsAdmin + "\nlocalUser = " + localUser +
                         "\nurl = " + url + "\ncredName = " + credName +
                         "\nremoteUser = " + remoteUser +
                         "\nlinkName = " + linkName + "\nlinkhostname = " + linkhostname + "\nlinkport = " + linkport +
-                        "\nlinkservice_name = " + linkservice_name + "\nlinkssl_server_cert_dn = " + linkssl_server_cert_dn);
+                        "\nlinkservice_name = " + linkservice_name + "\nlinkssl_server_cert_dn = " + linkssl_server_cert_dn +
+                        "\nskipdblinks = " + skipdblinks
+        );
         System.setProperty("oracle.jdbc.fanEnabled", "false");
         PoolDataSource poolDataSource = PoolDataSourceFactory.getPoolDataSource();
         poolDataSource.setConnectionFactoryClassName("oracle.jdbc.pool.OracleDataSource");
@@ -52,7 +55,7 @@ public class CreateDBLinksAndSagaInfra {
         poolDataSource.setPassword(localPW);
         Connection conn = poolDataSource.getConnection();
         System.out.println("Connection:" + conn + " url:" + url);
-        if (System.getProperty("skipdblinks") == null || !System.getProperty("skipdblinks").equals("true") )
+        if (!skipdblinks)
             createDBLink(tnsAdmin, url, credName, remoteUser, remotePW, linkName, linkhostname, linkport, linkservice_name, linkssl_server_cert_dn, conn);
         installSaga(conn, url);
         if (isCoordinator) {
