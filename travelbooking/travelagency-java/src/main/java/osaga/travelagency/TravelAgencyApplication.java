@@ -16,7 +16,7 @@ import static java.lang.System.*;
 
 public class TravelAgencyApplication {
 
-	public static void main(String[] args) throws Exception {
+	public static void main	(String[] args) throws Exception {
 		setProperty("oracle.jdbc.fanEnabled", "false");
 		new TravelAgencyApplication().bookTravel();
 	}
@@ -130,9 +130,18 @@ public class TravelAgencyApplication {
 		public void response(String sagaId, String payload) {
 			out.println("Response received:" + payload);
 			JSONObject obj = new JSONObject(payload);
-			if (obj.getString("HotelJava") != null) hotelStatus = "replyReceived";
-			else if (obj.getString("CarJava") != null) carStatus = "replyReceived";
-			else if (obj.getString("FlightJava") != null) flightStatus = "replyReceived";
+			if (obj.getString("HotelJava") != null) {
+				out.println("TravelAgencyTestListener.response HotelJava");
+				hotelStatus = "replyReceived";
+			}
+			else if (obj.getString("CarJava") != null) {
+				out.println("TravelAgencyTestListener.response CarJava");
+				carStatus = "replyReceived";
+			}
+			else if (obj.getString("FlightJava") != null) {
+				out.println("TravelAgencyTestListener.response FlightJava");
+				flightStatus = "replyReceived";
+			}
 		}
 
 		@Override
