@@ -12,8 +12,8 @@ ENV CONNECT_PLUGIN_PATH="/usr/share/java,/usr/share/confluent-hub-components"
 RUN confluent-hub install --no-prompt confluentinc/kafka-connect-jms-sink:latest
 RUN confluent-hub install --no-prompt confluentinc/kafka-connect-jms:latest
 
-COPY lib/*.jar ${CONNECT_HUB_COMPONENTS_PATH}/confluentinc-kafka-connect-jms-sink/lib/
-COPY lib/*.jar ${CONNECT_HUB_COMPONENTS_PATH}/confluentinc-kafka-connect-jms/lib/
+COPY target/dependency/*.jar ${CONNECT_HUB_COMPONENTS_PATH}/confluentinc-kafka-connect-jms-sink/lib/
+COPY target/dependency/*.jar ${CONNECT_HUB_COMPONENTS_PATH}/confluentinc-kafka-connect-jms/lib/
 
 RUN  mkdir /home/appuser/wallet 
 COPY wallet/* /home/appuser/wallet/
