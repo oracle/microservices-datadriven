@@ -56,16 +56,17 @@ SSL_SERVER_DN_MATCH=yes
 LAB_DB_SVC="$(state_get LAB_DB_NAME)_tp"
 
 # Define Database User
-LAB_USER=LAB8022_USER
-echo "$(date): Oracle DB USER = $LAB_USER"
+LAB_DB_USER=LAB8022_USER
+echo "$(date): Oracle DB USER = $LAB_DB_USER"
 
 # Define TEQ Topic
-LAB_TOPIC=LAB8022_TOPIC
-echo "$(date): Oracle TEQ TOPIC = $LAB_TOPIC"
+LAB_TEQ_TOPIC=LAB8022_TOPIC
+echo "$(date): Oracle TEQ TOPIC = $LAB_TEQ_TOPIC"
+state_set LAB_TEQ_TOPIC "$LAB_TEQ_TOPIC"
 
 # Define TEQ Agent Subscriber (group-ip)
-LAB_TOPIC_SUBSCRIBER=LAB8022_TOPIP_SUBSCRIBER
-echo "$(date): Oracle TEQ TOPIC Subscriber= $LAB_TOPIC_SUBSCRIBER"
+LAB_TEQ_TOPIC_SUBSCRIBER=LAB8022_TOPIC_SUBSCRIBER
+echo "$(date): Oracle TEQ TOPIC Subscriber= $LAB_TEQ_TOPIC_SUBSCRIBER"
 
 # Wait for DB Password to be set in Lab DB
 while ! state_done LAB_DB_PASSWORD_SET; do
@@ -78,8 +79,8 @@ DB_PASSWORD=$(state_get BASE64_DB_PASSWORD | base64 --decode)
 state_reset BASE64_DB_PASSWORD
 
 # Lab DB User, Objects
-while ! state_done LAB_USER; do
-  U=$LAB_USER
+while ! state_done LAB_DB_USER; do
+  U=$LAB_DB_USER
   SVC=$LAB_DB_SVC
   sqlplus /nolog <<!
 WHENEVER SQLERROR EXIT 1
@@ -118,11 +119,11 @@ connect $U/"$DB_PASSWORD"@$SVC
 
 -- Creating a JMS type sharded queue:
 BEGIN
-  sys.dbms_aqadm.create_sharded_queue(queue_name=>'$LAB_TOPIC', multiple_consumers => TRUE);
-  -- sys.dbms_aqadm.set_queue_parameter('$LAB_TOPIC', 'SHARD_NUM', 1);
-  -- sys.dbms_aqadm.set_queue_parameter('$LAB_TOPIC', 'STICKY_DEQUEUE', 1);
-  -- sys.dbms_aqadm.set_queue_parameter('$LAB_TOPIC', 'KEY_BASED_ENQUEUE', 1);
-  sys.dbms_aqadm.start_queue('$LAB_TOPIC');
+  sys.dbms_aqadm.create_sharded_queue(queue_name=>'$LAB_TEQ_TOPIC', multiple_consumers => TRUE);
+  -- sys.dbms_aqadm.set_queue_parameter('$LAB_TEQ_TOPIC', 'SHARD_NUM', 1);
+  -- sys.dbms_aqadm.set_queue_parameter('$LAB_TEQ_TOPIC', 'STICKY_DEQUEUE', 1);
+  -- sys.dbms_aqadm.set_queue_parameter('$LAB_TEQ_TOPIC', 'KEY_BASED_ENQUEUE', 1);
+  sys.dbms_aqadm.start_queue('$LAB_TEQ_TOPIC');
 END;
 /
 
@@ -130,13 +131,13 @@ END;
 DECLARE
   subscriber sys.aq$_agent;
 BEGIN
-  subscriber := sys.aq$_agent('$LAB_TOPIC_SUBSCRIBER', NULL, NULL);
-  DBMS_AQADM.ADD_SUBSCRIBER(queue_name => '$LAB_TOPIC',   subscriber => subscriber);
+  subscriber := sys.aq$_agent('$LAB_TEQ_TOPIC_SUBSCRIBER', NULL, NULL);
+  DBMS_AQADM.ADD_SUBSCRIBER(queue_name => '$LAB_TEQ_TOPIC',   subscriber => subscriber);
 END;
 /
 commit;
 !
-  state_set_done LAB_USER
+  state_set LAB_DB_USER "$LAB_DB_USER"
 done
 
 # DB Setup Done
