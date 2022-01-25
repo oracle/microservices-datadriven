@@ -23,7 +23,7 @@ while ! state_done CFLCONNECT_IMAGE; do
 
   # Get Oracle DB Wallet
   mkdir wallet
-  cp "$LAB_HOME"/wallet/lab8022atp/* ./wallet/
+  cp "$LAB_HOME"/wallet/* ./wallet/
 
   # Build the Kafka Connect Custom Image
   docker build . -t cp-kafka-connect-custom:0.1.0
