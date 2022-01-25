@@ -54,9 +54,18 @@ WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$TNS_ADMI
 SSL_SERVER_DN_MATCH=yes
 !
 LAB_DB_SVC="$(state_get LAB_DB_NAME)_tp"
-LAB_USER=LAB8022_USER
-LAB_QUEUE=LAB8022_TOPIC
 
+# Define Database User
+LAB_USER=LAB8022_USER
+echo "$(date): Oracle DB USER = $LAB_USER"
+
+# Define TEQ Topic
+LAB_TOPIC=LAB8022_TOPIC
+echo "$(date): Oracle TEQ TOPIC = $LAB_TOPIC"
+
+# Define TEQ Agent Subscriber (group-ip)
+LAB_TOPIC_SUBSCRIBER=LAB8022_TOPIP_SUBSCRIBER
+echo "$(date): Oracle TEQ TOPIC Subscriber= $LAB_TOPIC_SUBSCRIBER"
 
 # Wait for DB Password to be set in Lab DB
 while ! state_done LAB_DB_PASSWORD_SET; do
@@ -109,11 +118,11 @@ connect $U/"$DB_PASSWORD"@$SVC
 
 -- Creating a JMS type sharded queue:
 BEGIN
-  sys.dbms_aqadm.create_sharded_queue(queue_name=>'LAB8022_TOPIC', multiple_consumers => TRUE);
-  -- sys.dbms_aqadm.set_queue_parameter('LAB8022_TOPIC', 'SHARD_NUM', 1);
-  -- sys.dbms_aqadm.set_queue_parameter('LAB8022_TOPIC', 'STICKY_DEQUEUE', 1);
-  -- sys.dbms_aqadm.set_queue_parameter('LAB8022_TOPIC', 'KEY_BASED_ENQUEUE', 1);
-  sys.dbms_aqadm.start_queue('LAB8022_TOPIC');
+  sys.dbms_aqadm.create_sharded_queue(queue_name=>'$LAB_TOPIC', multiple_consumers => TRUE);
+  -- sys.dbms_aqadm.set_queue_parameter('$LAB_TOPIC', 'SHARD_NUM', 1);
+  -- sys.dbms_aqadm.set_queue_parameter('$LAB_TOPIC', 'STICKY_DEQUEUE', 1);
+  -- sys.dbms_aqadm.set_queue_parameter('$LAB_TOPIC', 'KEY_BASED_ENQUEUE', 1);
+  sys.dbms_aqadm.start_queue('$LAB_TOPIC');
 END;
 /
 
@@ -121,8 +130,8 @@ END;
 DECLARE
   subscriber sys.aq$_agent;
 BEGIN
-  subscriber := sys.aq$_agent('LAB8022_SUBSCRIBER', NULL, NULL);
-  DBMS_AQADM.ADD_SUBSCRIBER(queue_name => 'LAB8022_TOPIC',   subscriber => subscriber);
+  subscriber := sys.aq$_agent('$LAB_TOPIC_SUBSCRIBER', NULL, NULL);
+  DBMS_AQADM.ADD_SUBSCRIBER(queue_name => '$LAB_TOPIC',   subscriber => subscriber);
 END;
 /
 commit;
