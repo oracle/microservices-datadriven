@@ -8,8 +8,6 @@ import org.oracle.okafka.clients.consumer.ConsumerRecord;
 import org.oracle.okafka.clients.consumer.ConsumerRecords;
 import org.oracle.okafka.clients.consumer.KafkaConsumer;
 import org.oracle.okafka.common.config.SslConfigs;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.Arrays;
@@ -19,7 +17,7 @@ public class OKafkaConsumer {
 
     public static void main(String[] args) {
 
-        System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "DEBUG");
+        System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "TRACE");
 
         Properties props = new Properties();
 
@@ -32,14 +30,14 @@ public class OKafkaConsumer {
         props.put("oracle.service.name", "bsenjiat5lmurtq_lab8022atp_tp.adb.oraclecloud.com");	//name of the service running on the instance
 
         // /Users/pasimoes/Work/Oracle/Labs/Grabdish/ATP/Wallet_psgrabdishi
-        props.put("oracle.net.tns_admin", "/Users/pasimoes/Work/Oracle/Code/aq-teq/microservices-datadriven/workshops/eventmesh-teq-kafka/wallet/lab8022atp"); //eg: "/msdataworkshop/creds" if ojdbc.properies file is in home
+        props.put("oracle.net.tns_admin", "/Users/pasimoes/Work/Oracle/Code/db-aq-dev/microservices-datadriven/workshops/eventmesh-teq-kafka/wallet/lab8022atp"); //eg: "/msdataworkshop/creds" if ojdbc.properies file is in home
         //SSL
         props.put("security.protocol", "SSL");
         props.put(SslConfigs.TNS_ALIAS, "lab8022atp_tp");
 
         //"adb.us-ashburn-1.oraclecloud.com:1522"
         props.put("bootstrap.servers", "adb.us-ashburn-1.oraclecloud.com:1522"); //ip address or host name where instance running : port where instance listener running
-        props.put("group.id", "LAB8022_SUBSCRIBER_2");
+        props.put("group.id", "LAB8022_SUBSCRIBER_2_2");
         props.put("enable.auto.commit", "true");
         props.put("auto.commit.interval.ms", "10000");
 
@@ -47,7 +45,9 @@ public class OKafkaConsumer {
                 "org.oracle.okafka.common.serialization.StringDeserializer");
         props.put("value.deserializer",
                 "org.oracle.okafka.common.serialization.StringDeserializer");
-        props.put("max.poll.records", 100);
+        props.put("max.poll.records", 200);
+
+        props.put("fetch.max.wait.ms", 3000);
 
         //KafkaConsumer<String, String> consumer = null;
         //consumer = new KafkaConsumer<String, String>(props);
@@ -77,7 +77,7 @@ public class OKafkaConsumer {
         try {
             // TODO There is a issue with elapsedTime usually greater timeoutMs
             //  (I tested with 10000 and gave timeout and didn't returning nothing)
-            ConsumerRecords<String, GenericRecord> records = consumer.poll(Duration.ofMillis(25000));
+            ConsumerRecords<String, GenericRecord> records = consumer.poll(Duration.ofMillis(30000));
             System.out.println("Records: " + records.count());
 
             for (ConsumerRecord<String, GenericRecord> record : records) {

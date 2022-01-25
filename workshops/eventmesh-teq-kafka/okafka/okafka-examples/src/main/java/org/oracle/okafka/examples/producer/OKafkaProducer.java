@@ -26,7 +26,7 @@ public class OKafkaProducer {
 
 
         // /Users/pasimoes/Work/Oracle/Labs/Grabdish/ATP/Wallet_psgrabdishi
-        props.put("oracle.net.tns_admin", "/Users/pasimoes/Work/Oracle/Code/aq-teq/microservices-datadriven/workshops/eventmesh-teq-kafka/wallet/lab8022atp"); //eg: "/msdataworkshop/creds" if ojdbc.properies file is in home
+        props.put("oracle.net.tns_admin", "/Users/pasimoes/Work/Oracle/Code/db-aq-dev/microservices-datadriven/workshops/eventmesh-teq-kafka/wallet/lab8022atpd"); //eg: "/msdataworkshop/creds" if ojdbc.properies file is in home
         //SSL
         props.put("security.protocol", "SSL");
         props.put(SslConfigs.TNS_ALIAS, "lab8022atp_tp");
