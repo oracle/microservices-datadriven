@@ -29,11 +29,6 @@
             <artifactId>ojdbc11</artifactId>
             <version>${oracle-jdbc.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ucp</artifactId>
-            <version>${oracle-jdbc.version}</version>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/com.oracle.database.security/oraclepki -->
         <dependency>
             <groupId>com.oracle.database.security</groupId>
@@ -52,18 +47,6 @@
             <artifactId>osdt_cert</artifactId>
             <version>${oracle-jdbc.version}</version>
         </dependency>
-        <dependency>
-            <groupId>javax.jms</groupId>
-            <artifactId>javax.jms-api</artifactId>
-            <version>${jms.version}</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/javax.transaction/javax.transaction-api -->
-        <dependency>
-            <groupId>javax.transaction</groupId>
-            <artifactId>javax.transaction-api</artifactId>
-            <version>${javax-transaction.version}</version>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/javax.transaction/jta -->
         <dependency>
             <groupId>javax.transaction</groupId>
             <artifactId>jta</artifactId>
@@ -88,9 +71,6 @@
                         <goals>
                             <goal>copy-dependencies</goal>
                         </goals>
-                        <!--configuration>
-                            <outputDirectory>${project.build.directory}/lib</outputDirectory>
-                        </configuration-->
                     </execution>
                 </executions>
             </plugin>
