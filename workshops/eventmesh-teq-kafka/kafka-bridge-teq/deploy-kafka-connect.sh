@@ -8,26 +8,43 @@ set -e
 # Collect the DB password
 echo "Please enter Oracle DB Password: "
 IFS= read -s -r -p ORACLE_DB_PASSWORD
-ORACLE_DB_PASSWORD_BASE64=$(echo -n "$ORACLE_DB_PASSWORD" | base64)
 
 # Collect the Kafka Topic to be consumed by Connect
 echo "Please enter the Kafka Topic: "
 IFS= read -r KAFKA_TOPIC
-
-# Collect the DB USER
-LAB_DB_USER="$(state_get LAB_DB_USER)"
-
-# Collect Oracle Database Service
-LAB_DB_SVC="$(state_get LAB_DB_NAME)_tp"
-jq '.java.naming.provider.url |= "jdbc:oracle:thin:@${LAB_DB_SVC}?TNS_ADMIN=/home/appuser/wallet"' "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.json > "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.tmp
+jq '.topics |= "$KAFKA_TOPIC"' "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.json > "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.tmp
 mv "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.tmp "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.json
 
+# Collect the DB USER
+while ! state_done LAB_DB_USER; do
+  LAB_DB_USER="$(state_get LAB_DB_USER)"
+  jq '.java.naming.security.principal |= "$LAB_DB_USER"' "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.json > "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.tmp
+  mv "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.tmp "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.json
+done
+
+# Collect Oracle Database Service
+while ! state_done LAB_DB_NAME; do
+  LAB_DB_SVC="$(state_get LAB_DB_NAME)_tp"
+  jq '.java.naming.provider.url |= "jdbc:oracle:thin:@${LAB_DB_SVC}?TNS_ADMIN=/home/appuser/wallet"' "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.json > "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.tmp
+  jq '.db_url |= "jdbc:oracle:thin:@${LAB_DB_SVC}?TNS_ADMIN=/home/appuser/wallet"' "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.tmp > "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.json
+done
+
 # Collect the Oracle TEQ Topic (Destination)
-LAB_TEQ_TOPIC="$(state_get LAB_TEQ_TOPIC)"
-jq '.topics |= "$LAB_TEQ_TOPIC"' "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.json > "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.tmp
+while ! state_done LAB_TEQ_TOPIC; do
+  LAB_TEQ_TOPIC="$(state_get LAB_TEQ_TOPIC)"
+  jq '.jms.destination.name |= "$LAB_TEQ_TOPIC"' "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.json > "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.tmp
+  mv "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.tmp "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.json
+done
+
+# Setup the Oracle DB User Password
+jq '.java.naming.security.credentials |= "$ORACLE_DB_PASSWORD"' "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.json > "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.tmp
 mv "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.tmp "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.json
 
 # Configure the Kafka Connect Sync with Oracle Database
 curl -i -X PUT -H "Accept:application/json" \
     -H  "Content-Type:application/json" http://localhost:8083/connectors/JmsSink_lab8022t/config \
     -T kafka-connect-configuration.json
+
+# Reset the Oracle DB User Password
+jq '.java.naming.security.credentials |= "ORACLE_DB_PASSWORD"' "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.json > "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.tmp
+mv "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.tmp "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.json
