@@ -6,12 +6,13 @@
 set -e
 
 # Collect the DB password
-echo "Please enter Oracle DB Password: "
-IFS= read -s -r -p ORACLE_DB_PASSWORD
+#echo "Please enter Oracle DB Password: "
+#IFS= read -s -r -p ORACLE_DB_PASSWORD
+read -s -r -p "Please enter Oracle DB Password: " ORACLE_DB_PASSWORD
 
 # Collect the Kafka Topic to be consumed by Connect
-echo "Please enter the Kafka Topic: "
-IFS= read -r KAFKA_TOPIC
+read -p "Please enter the Kafka Topic: " KAFKA_TOPIC
+
 jq '.topics |= "$KAFKA_TOPIC"' "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.json > "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.tmp
 mv "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.tmp "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.json
 
@@ -42,7 +43,7 @@ mv "${LAB_HOME}"/kafka-bridge-teq/kafka-connect-configuration.tmp "${LAB_HOME}"/
 
 # Configure the Kafka Connect Sync with Oracle Database
 curl -i -X PUT -H "Accept:application/json" \
-    -H  "Content-Type:application/json" http://localhost:8083/connectors/JmsSink_lab8022t/config \
+    -H  "Content-Type:application/json" http://localhost:8083/connectors/"${LAB_DB_NAME}"_"${LAB_TEQ_TOPIC}"/config \
     -T kafka-connect-configuration.json
 
 # Reset the Oracle DB User Password
