@@ -104,6 +104,7 @@ DISPLAY_NAME='DB1'
 DB_PASSWORD_SECRET=$(state_get DB_PASSWORD_SECRET)
 RUN_NAME=$(state_get RUN_NAME)
 VCN_OCID=$(state_get VCN_OCID)
+VERSION='19c'
 !
       cd $DB_STATE
       if test $(state_get DB_TYPE) == "ATP"; then
@@ -137,6 +138,7 @@ DISPLAY_NAME='${db_upper}'
 DB_PASSWORD_SECRET='$(state_get DB_PASSWORD_SECRET)'
 RUN_NAME='$(state_get RUN_NAME)'
 VCN_OCID='$(state_get VCN_OCID)'
+VERSION='19c'
 !
         if test $(state_get DB_TYPE) == "ATP"; then
           provisioning-apply $MSDD_INFRA_CODE/db/atp
