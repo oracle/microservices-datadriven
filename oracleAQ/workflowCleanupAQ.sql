@@ -1,17 +1,17 @@
 --Clean up all objects related to the user 
-EXECUTE DBMS_AQADM.STOP_QUEUE ( queue_name       => 'plsql_userQueue');  
-EXECUTE DBMS_AQADM.DROP_QUEUE ( queue_name       => 'plsql_userQueue');  
-EXECUTE DBMS_AQADM.DROP_QUEUE_TABLE (queue_table => 'plsql_userQueueTable');
+EXECUTE DBMS_AQADM.STOP_QUEUE ( queue_name       => 'plsql_UserQueue');  
+EXECUTE DBMS_AQADM.DROP_QUEUE ( queue_name       => 'plsql_UserQueue');  
+EXECUTE DBMS_AQADM.DROP_QUEUE_TABLE (queue_table => 'plsql_UserQueueTable');
 
 --Clean up all objects related to the deliverer 
-EXECUTE DBMS_AQADM.STOP_QUEUE ( queue_name       =>'plsql_deliveryQueue');   
-EXECUTE DBMS_AQADM.DROP_QUEUE ( queue_name       =>'plsql_deliveryQueue');   
-EXECUTE DBMS_AQADM.DROP_QUEUE_TABLE (queue_table =>'plsql_deliveryQueueTable'); 
+EXECUTE DBMS_AQADM.STOP_QUEUE ( queue_name       =>'plsql_DelivererQueue');   
+EXECUTE DBMS_AQADM.DROP_QUEUE ( queue_name       =>'plsql_DelivererQueue');   
+EXECUTE DBMS_AQADM.DROP_QUEUE_TABLE (queue_table =>'plsql_DelivererQueueTable'); 
 
 --Cleans up all objects related to the application 
-EXECUTE DBMS_AQADM.STOP_QUEUE ( queue_name       =>'plsql_appQueue');   
-EXECUTE DBMS_AQADM.DROP_QUEUE ( queue_name       =>'plsql_appQueue');   
-EXECUTE DBMS_AQADM.DROP_QUEUE_TABLE (queue_table =>'plsql_appQueueTable'); 
+EXECUTE DBMS_AQADM.STOP_QUEUE ( queue_name       =>'plsql_ApplicationQueue');   
+EXECUTE DBMS_AQADM.DROP_QUEUE ( queue_name       =>'plsql_ApplicationQueue');   
+EXECUTE DBMS_AQADM.DROP_QUEUE_TABLE (queue_table =>'pplsql_ApplicationQueueTable'); 
  
 
 --Clean up all Java Basic Queue Tables and Queues
