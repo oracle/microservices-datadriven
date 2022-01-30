@@ -11,9 +11,10 @@ CONF_FILE="${LAB_HOME}"/kafka-connect-teq/kafka-connect-configuration.json
 #echo "Please enter Oracle DB Password: "
 #IFS= read -s -r -p ORACLE_DB_PASSWORD
 read -s -r -p "Please enter Oracle DB Password: " ORACLE_DB_PASSWORD
+seq  -f "*" -s '' -t '\n' "${#ORACLE_DB_PASSWORD}"
 
 # Collect the Kafka Topic to be consumed by Connect
-read -r -p "Please enter the Kafka Topic: " KAFKA_TOPIC
+read -r -p "Please enter Kafka Topic: " KAFKA_TOPIC
 
 # Set the Kafka Topic to be consumed by Connect Sync
 sed -i 's/KAFKA_TOPIC/'"${KAFKA_TOPIC}"'/g' "$CONF_FILE"
@@ -55,7 +56,8 @@ fi
 sed -i 's/LAB_DB_PASSWORD/'"${ORACLE_DB_PASSWORD}"'/g' "$CONF_FILE"
 
 # Configure the Kafka Connect Sync with Oracle Database
-curl -i -X PUT -H "Accept:application/json" \
+curl -S -s -o /dev/null \
+     -i -X PUT -H "Accept:application/json" \
      -H "Content-Type:application/json" http://localhost:8083/connectors/JmsConnectSync_lab8022/config \
      -T "$CONF_FILE"
 
