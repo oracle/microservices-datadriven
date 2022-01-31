@@ -67,6 +67,7 @@ state_set LAB_TEQ_TOPIC "$LAB_TEQ_TOPIC"
 # Define TEQ Agent Subscriber (group-ip)
 LAB_TEQ_TOPIC_SUBSCRIBER=LAB8022_TOPIC_SUBSCRIBER
 echo "$(date): Oracle TEQ TOPIC Subscriber= $LAB_TEQ_TOPIC_SUBSCRIBER"
+state_set LAB_TEQ_TOPIC_SUBSCRIBER "$LAB_TEQ_TOPIC_SUBSCRIBER"
 
 # Wait for DB Password to be set in Lab DB
 while ! state_done LAB_DB_PASSWORD_SET; do

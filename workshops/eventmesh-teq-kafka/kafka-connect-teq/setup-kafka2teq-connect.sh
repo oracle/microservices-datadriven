@@ -5,7 +5,7 @@
 # Fail on error
 set -e
 
-CONF_FILE="${LAB_HOME}"/kafka-connect-teq/kafka-connect-configuration.json
+CONF_FILE="${LAB_HOME}"/kafka-connect-teq/kafka2teq-connect-configuration.json
 
 # Collect the DB password
 #echo "Please enter Oracle DB Password: "
