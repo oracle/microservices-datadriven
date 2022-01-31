@@ -23,6 +23,7 @@ DECLARE
   subscriber sys.aq$_agent;
 BEGIN
 --user Subscriber
+
   subscriber := sys.aq$_agent('plsql_userAppSubscriber', NULL, NULL);
   DBMS_AQADM.ADD_SUBSCRIBER  (queue_name => 'plsql_UserQueue', subscriber => subscriber);
 

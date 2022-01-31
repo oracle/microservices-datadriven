@@ -1,4 +1,4 @@
-package com.aq.basic;
+package com.examples.enqueueDequeueAQ;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -25,7 +25,7 @@ import oracle.AQ.AQSession;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AQBasic {
+public class EnqueueDequeueAQ {
 
 	@Value("${spring.datasource.username}")
 	private String username;
@@ -43,9 +43,8 @@ public class AQBasic {
 	String oracleQueueName_multi = "java_QueueName_Multi";
 
 
-	public String aqEnqueueDequeue() {
+	public String pointToPointAQ() {
 		AQSession aq_sess = null;
-		System.out.println("URL: "+url);
 		String status;
 		try {
 			aq_sess = createSession();

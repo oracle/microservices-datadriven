@@ -1,4 +1,4 @@
-package com.aq.config;
+package com.examples.config;
 
 import java.io.Serializable;
 import java.sql.SQLData;

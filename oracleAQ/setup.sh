@@ -99,7 +99,7 @@ GRANT EXECUTE ON sys.dbms_aq TO dbuser;
 EXIT;
 !
 
-echo "crweating mkstore for dbuser"
+echo "creating mkstore for dbuser"
 java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$TNS_ADMIN" -createCredential aqdatabase_tp_dbuser dbuser  <<!
 $WALLET_PASSWORD
 $WALLET_PASSWORD
