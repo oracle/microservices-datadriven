@@ -1,12 +1,19 @@
 #!/bin/bash
-
-# variable declarations
+# Copyright (c) 2021 Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+ 
+# Fail on error or undefined variable
+set -eu
+ 
 comp_name="oracleAQ";
 db_name="aqdatabase";
-mkdir -p $comp_name ;
 export WORKFLOW_HOME=${HOME}/${comp_name};
 display_name=${db_name}
 TNS_ADMIN=$WORKFLOW_HOME/wallet
+USER_DEFINED_WALLET=${TNS_ADMIN}/user_defined_wallet
+DB_USER1=admin
+DB_USER2=dbuser
+TNS_WALLET_STR="(MY_WALLET_DIRECTORY="$TNS_ADMIN")"
 
 #get user's OCID # read user's OCID:  #echo "Enter OCID of root compartment:" ; read -s rootCompOCID; export rootCompOCID                          
    # fetch user's OCID
@@ -33,6 +40,10 @@ while true; do
         echo "Invalid Password, please retry"
     fi
 done
+umask 177 
+DB_PASSWORD=$(cat db_password.txt)
+WALLET_PASSWORD='Pwd'`awk 'BEGIN { srand(); print int(1 + rand() * 100000000)}'`
+umask 22
 DB_PASSWORD="$db_pwd"
 
 # Create ATP- #21c always free
@@ -56,29 +67,72 @@ oci db autonomous-database generate-wallet --autonomous-database-id "$DB_OCID" -
 rm temp_params
 unzip -oq wallet.zip
 #sed -i "s|?|$WORKFLOW_HOME|" sqlnet.ora
-
+ 
+# Configure the sqlnet.ora
 cd $TNS_ADMIN
 cat >sqlnet.ora <<!
-WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$TNS_ADMIN")))
+WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$USER_DEFINED_WALLET")))
 SQLNET.WALLET_OVERRIDE = TRUE
 SSL_SERVER_DN_MATCH = yes
 !
-WALLET_PASSWORD='Pwd'`awk 'BEGIN { srand(); print int(1 + rand() * 100000000)}'`
+
+
+# Get the DB Alias
+# This also validates the DB OCID
+DB_ALIAS=`oci db autonomous-database get --autonomous-database-id "$DB_OCID" \ --query 'data."connection-strings".profiles[?"consumer-group"=='"'TP'"']."display-name" | [0]' --raw-output`
+echo "Found TNS Alias: $DB_ALIAS"
+ 
+
+mkdir -p $TNS_ADMIN 
+cd $TNS_ADMIN
+TNS_ADMIN=$PWD
+
+rm -rf $USER_DEFINED_WALLET
+mkdir -p $USER_DEFINED_WALLET 
+
+# Add the admin credential to the wallet
+# set classpath for mkstore - align this to your local SQLcl installation
 SQLCL=$(dirname $(which sql))/../lib
 CLASSPATH=${SQLCL}/oraclepki.jar:${SQLCL}/osdt_core.jar:${SQLCL}/osdt_cert.jar
-java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$TNS_ADMIN" -createCredential aqdatabase_tp_admin admin <<!
+
+# Create New User Defined Wallet to store DB Credentials
+java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$USER_DEFINED_WALLET" -create >/dev/null <<!
 $WALLET_PASSWORD
 $WALLET_PASSWORD
-$DB_PASSWORD
 !
 
-sed -i "s|security=|security=(MY_WALLET_DIRECTORY=$TNS_ADMIN)|" tnsnames.ora 
-echo "mkstore database created";
-export TNS_ADMIN=$TNS_ADMIN
+# Add User1 Credentials to the newly created User Defined Wallet
+java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$USER_DEFINED_WALLET" -createCredential "${DB_ALIAS}_${DB_USER1}" $DB_USER1 >/dev/null <<!
+$DB_PASSWORD
+$DB_PASSWORD
+$WALLET_PASSWORD
+!
+
+# Add User2 Credentials to the newly created User Defined Wallet
+java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$USER_DEFINED_WALLET" -createCredential "${DB_ALIAS}_${DB_USER2}" $DB_USER2 >/dev/null <<!
+$DB_PASSWORD
+$DB_PASSWORD
+$WALLET_PASSWORD
+!
+
+# ADD TNS Aliases to the TNSNAMES.ORA
+
+tns_alias=$(grep "$DB_ALIAS " $TNS_ADMIN/tnsnames.ora)
+tns_alias=${tns_alias/security=/security= $TNS_WALLET_STR}
+tns_alias1=${tns_alias/$DB_ALIAS /${DB_ALIAS}_${DB_USER1} }
+tns_alias2=${tns_alias/$DB_ALIAS /${DB_ALIAS}_${DB_USER2} }
+
+ 
+echo $tns_alias1 >> $TNS_ADMIN/tnsnames.ora
+echo $tns_alias2 >> $TNS_ADMIN/tnsnames.ora
+
+# Print names of the newly created TNS Aliases
+echo "Added TNS Alias: ${DB_ALIAS}_${DB_USER1}"
+echo "Added TNS Alias: ${DB_ALIAS}_${DB_USER2}"
 
 sqlplus /@aqdatabase_tp_admin <<!
 SET VERIFY OFF;
-CREATE USER dbuser IDENTIFIED BY "$DB_PASSWORD" ;
+CREATE USER dbuser IDENTIFIED BY $DB_PASSWORD ;
 
 GRANT execute on DBMS_AQ TO dbuser;
 GRANT CREATE SESSION TO dbuser;
@@ -99,12 +153,6 @@ GRANT EXECUTE ON sys.dbms_aq TO dbuser;
 EXIT;
 !
 
-echo "creating mkstore for dbuser"
-java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$TNS_ADMIN" -createCredential aqdatabase_tp_dbuser dbuser  <<!
-$WALLET_PASSWORD
-$WALLET_PASSWORD
-$DB_PASSWORD
-!
 sqlplus /@aqdatabase_tp_dbuser <<!
 Show users;
 /
