@@ -7,12 +7,13 @@
  
 comp_name="oracleAQ";
 db_name="aqdatabase";
-export WORKFLOW_HOME=${HOME}/${comp_name};
 display_name=${db_name}
+
+export WORKFLOW_HOME=${HOME}/${comp_name};
 export TNS_ADMIN=$WORKFLOW_HOME/wallet
+export DB_USER1=admin
+export DB_USER2=dbuser
 USER_DEFINED_WALLET=${TNS_ADMIN}/user_defined_wallet
-DB_USER1=admin
-DB_USER2=dbuser
 TNS_WALLET_STR="(MY_WALLET_DIRECTORY="$TNS_ADMIN")"
 
 #get user's OCID # read user's OCID:  #echo "Enter OCID of root compartment:" ; read -s rootCompOCID; export rootCompOCID                          
@@ -79,7 +80,7 @@ SSL_SERVER_DN_MATCH = yes
 
 # Get the DB Alias
 # This also validates the DB OCID
-DB_ALIAS=`oci db autonomous-database get --autonomous-database-id "$DB_OCID" --query 'data."connection-strings".profiles[?"consumer-group"=='"'TP'"']."display-name" | [0]' --raw-output`
+export DB_ALIAS=`oci db autonomous-database get --autonomous-database-id "$DB_OCID" --query 'data."connection-strings".profiles[?"consumer-group"=='"'TP'"']."display-name" | [0]' --raw-output`
 echo "Found TNS Alias: $DB_ALIAS"
  
 
@@ -119,8 +120,8 @@ $WALLET_PASSWORD
 
 tns_alias=$(grep "$DB_ALIAS " $TNS_ADMIN/tnsnames.ora)
 tns_alias=${tns_alias/security=/security= $TNS_WALLET_STR}
-export tns_alias1=${tns_alias/$DB_ALIAS /${DB_ALIAS}_${DB_USER1} }
-export tns_alias2=${tns_alias/$DB_ALIAS /${DB_ALIAS}_${DB_USER2} }
+tns_alias1=${tns_alias/$DB_ALIAS /${DB_ALIAS}_${DB_USER1} }
+tns_alias2=${tns_alias/$DB_ALIAS /${DB_ALIAS}_${DB_USER2} }
 
  
 echo $tns_alias1 >> $TNS_ADMIN/tnsnames.ora
@@ -130,30 +131,30 @@ echo $tns_alias2 >> $TNS_ADMIN/tnsnames.ora
 echo "Added TNS Alias: ${DB_ALIAS}_${DB_USER1}"
 echo "Added TNS Alias: ${DB_ALIAS}_${DB_USER2}"
 
-sqlplus /@$tns_alias1 <<!
+sqlplus /@${DB_ALIAS}_${DB_USER1} <<!
 SET VERIFY OFF;
-CREATE USER dbuser IDENTIFIED BY $DB_PASSWORD ;
+CREATE USER ${DB_USER2} IDENTIFIED BY $DB_PASSWORD ;
 
-GRANT execute on DBMS_AQ TO dbuser;
-GRANT CREATE SESSION TO dbuser;
-GRANT RESOURCE TO dbuser;
-GRANT CONNECT TO dbuser;
-GRANT EXECUTE ANY PROCEDURE TO dbuser;
-GRANT aq_user_role TO dbuser;
-GRANT EXECUTE ON dbms_aqadm TO dbuser;
-GRANT EXECUTE ON dbms_aq TO dbuser ;
-GRANT EXECUTE ON dbms_aqin TO dbuser;
-GRANT UNLIMITED TABLESPACE TO dbuser;
-GRANT EXECUTE ON DBMS_CLOUD_ADMIN TO dbuser;
-GRANT pdb_dba TO dbuser;
-GRANT EXECUTE ON DBMS_CLOUD TO dbuser;
-GRANT CREATE DATABASE LINK TO dbuser;
-GRANT EXECUTE ON sys.dbms_aqadm TO dbuser;
-GRANT EXECUTE ON sys.dbms_aq TO dbuser;
+GRANT execute on DBMS_AQ TO ${DB_USER2};
+GRANT CREATE SESSION TO ${DB_USER2};
+GRANT RESOURCE TO ${DB_USER2};
+GRANT CONNECT TO ${DB_USER2};
+GRANT EXECUTE ANY PROCEDURE TO ${DB_USER2};
+GRANT aq_user_role TO ${DB_USER2};
+GRANT EXECUTE ON dbms_aqadm TO ${DB_USER2};
+GRANT EXECUTE ON dbms_aq TO ${DB_USER2} ;
+GRANT EXECUTE ON dbms_aqin TO ${DB_USER2};
+GRANT UNLIMITED TABLESPACE TO ${DB_USER2};
+GRANT EXECUTE ON DBMS_CLOUD_ADMIN TO ${DB_USER2};
+GRANT pdb_dba TO ${DB_USER2};
+GRANT EXECUTE ON DBMS_CLOUD TO ${DB_USER2};
+GRANT CREATE DATABASE LINK TO ${DB_USER2};
+GRANT EXECUTE ON sys.dbms_aqadm TO ${DB_USER2};
+GRANT EXECUTE ON sys.dbms_aq TO ${DB_USER2};
 EXIT;
 !
 
-sqlplus /@$tns_alias2 <<!
+sqlplus /@${DB_ALIAS}_${DB_USER2} <<!
 Show users;
 /
 !
