@@ -119,8 +119,8 @@ $WALLET_PASSWORD
 
 tns_alias=$(grep "$DB_ALIAS " $TNS_ADMIN/tnsnames.ora)
 tns_alias=${tns_alias/security=/security= $TNS_WALLET_STR}
-tns_alias1=${tns_alias/$DB_ALIAS /${DB_ALIAS}_${DB_USER1} }
-tns_alias2=${tns_alias/$DB_ALIAS /${DB_ALIAS}_${DB_USER2} }
+export tns_alias1=${tns_alias/$DB_ALIAS /${DB_ALIAS}_${DB_USER1} }
+export tns_alias2=${tns_alias/$DB_ALIAS /${DB_ALIAS}_${DB_USER2} }
 
  
 echo $tns_alias1 >> $TNS_ADMIN/tnsnames.ora
@@ -130,7 +130,7 @@ echo $tns_alias2 >> $TNS_ADMIN/tnsnames.ora
 echo "Added TNS Alias: ${DB_ALIAS}_${DB_USER1}"
 echo "Added TNS Alias: ${DB_ALIAS}_${DB_USER2}"
 
-sqlplus /@aqdatabase_high_admin <<!
+sqlplus /@$tns_alias1 <<!
 SET VERIFY OFF;
 CREATE USER dbuser IDENTIFIED BY $DB_PASSWORD ;
 
@@ -153,16 +153,16 @@ GRANT EXECUTE ON sys.dbms_aq TO dbuser;
 EXIT;
 !
 
-sqlplus /@aqdatabase_high_dbuser <<!
+sqlplus /@$tns_alias2 <<!
 Show users;
 /
 !
 
 # Java setup
 cd $WORKFLOW_HOME/aqJava;
-mvn clean install
-cd target
-killall java
+mvn clean install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.test.skip=true;
+cd target;
+killall java;
 nohup java -jar aqJava-0.0.1-SNAPSHOT.jar &
 
 cd $WORKFLOW_HOME;
