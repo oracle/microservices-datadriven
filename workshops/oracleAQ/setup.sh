@@ -155,7 +155,7 @@ EXIT;
 !
 
 sqlplus /@${DB_ALIAS}_${DB_USER2} <<!
-Show users;
+Show user;
 /
 !
 

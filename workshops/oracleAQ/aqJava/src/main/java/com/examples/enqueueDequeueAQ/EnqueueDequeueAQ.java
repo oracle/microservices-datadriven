@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class EnqueueDequeueAQ {
 
-	@Value("${spring.datasource.username}")
+	@Value("${username}")
 	private String username;
 
 //	@Value("${spring.datasource.password}")

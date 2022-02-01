@@ -43,7 +43,7 @@ public class WorkflowAQ {
 	@Autowired
 	private WorkflowRepository workflowRepository;
 
-	@Value("${spring.datasource.username}")
+	@Value("${username}")
 	private String username;
 
 //	@Value("${spring.datasource.password}")

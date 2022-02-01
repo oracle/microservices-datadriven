@@ -22,7 +22,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import oracle.AQ.AQException;
-
 import oracle.jdbc.pool.OracleDataSource;
 import oracle.jms.AQjmsAgent;
 import oracle.jms.AQjmsFactory;
@@ -36,7 +35,7 @@ public class WorkflowTEQ {
 	@Autowired
 	private WorkflowRepository workflowRepository;
 
-	@Value("${spring.datasource.username}")
+	@Value("${username}")
 	private String username;
 
 //	@Value("${spring.datasource.password}")
