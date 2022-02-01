@@ -3,13 +3,13 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
  
 # Fail on error or undefined variable
-set -eu
+#set -eu
  
 comp_name="oracleAQ";
 db_name="aqdatabase";
 export WORKFLOW_HOME=${HOME}/${comp_name};
 display_name=${db_name}
-TNS_ADMIN=$WORKFLOW_HOME/wallet
+export TNS_ADMIN=$WORKFLOW_HOME/wallet
 USER_DEFINED_WALLET=${TNS_ADMIN}/user_defined_wallet
 DB_USER1=admin
 DB_USER2=dbuser
@@ -41,10 +41,10 @@ while true; do
     fi
 done
 umask 177 
-DB_PASSWORD=$(cat db_password.txt)
+DB_PASSWORD="$db_pwd"
 WALLET_PASSWORD='Pwd'`awk 'BEGIN { srand(); print int(1 + rand() * 100000000)}'`
 umask 22
-DB_PASSWORD="$db_pwd"
+
 
 # Create ATP- #21c always free
 umask 177
@@ -79,7 +79,7 @@ SSL_SERVER_DN_MATCH = yes
 
 # Get the DB Alias
 # This also validates the DB OCID
-DB_ALIAS=`oci db autonomous-database get --autonomous-database-id "$DB_OCID" \ --query 'data."connection-strings".profiles[?"consumer-group"=='"'TP'"']."display-name" | [0]' --raw-output`
+DB_ALIAS=`oci db autonomous-database get --autonomous-database-id "$DB_OCID" --query 'data."connection-strings".profiles[?"consumer-group"=='"'TP'"']."display-name" | [0]' --raw-output`
 echo "Found TNS Alias: $DB_ALIAS"
  
 
@@ -130,7 +130,7 @@ echo $tns_alias2 >> $TNS_ADMIN/tnsnames.ora
 echo "Added TNS Alias: ${DB_ALIAS}_${DB_USER1}"
 echo "Added TNS Alias: ${DB_ALIAS}_${DB_USER2}"
 
-sqlplus /@aqdatabase_tp_admin <<!
+sqlplus /@aqdatabase_high_admin <<!
 SET VERIFY OFF;
 CREATE USER dbuser IDENTIFIED BY $DB_PASSWORD ;
 
@@ -153,7 +153,7 @@ GRANT EXECUTE ON sys.dbms_aq TO dbuser;
 EXIT;
 !
 
-sqlplus /@aqdatabase_tp_dbuser <<!
+sqlplus /@aqdatabase_high_dbuser <<!
 Show users;
 /
 !
@@ -175,7 +175,6 @@ echo "Compartment OCID  : " ${ocid_comp}
 echo "Database Name     : " ${db_name}
 echo "ATP Database OCID : " ${DB_OCID}
 
-echo "TNS Conn String   : " ${display_name}_tp
 echo "-------------------------------"
 echo "        SETUP COMPLETED        "
 echo "------------------------------"
