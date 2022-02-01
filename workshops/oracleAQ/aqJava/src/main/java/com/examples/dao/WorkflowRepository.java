@@ -1,10 +1,8 @@
-package com.examples.dto;
+package com.examples.dao;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.examples.config.UserDetails;
 
 @Repository
 @Transactional

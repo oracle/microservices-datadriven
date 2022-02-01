@@ -15,7 +15,7 @@
 	<name>java</name>
 	<description>AQ workshop </description>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>8</java.version>
 		<version.lib.ojdbc>21.1.0.0</version.lib.ojdbc>
 	</properties>
 	<dependencies>

@@ -1,4 +1,4 @@
-package com.examples.config;
+package com.examples.dao;
 
 import java.io.Serializable;
 import java.sql.SQLData;

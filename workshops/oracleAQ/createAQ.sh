@@ -1,0 +1,2 @@
+cd $WORKFLOW_HOME ;
+sqlplus /@AQDATABASE_HIGH_DBUSER @$WORKFLOW_HOME/createAQ.sql

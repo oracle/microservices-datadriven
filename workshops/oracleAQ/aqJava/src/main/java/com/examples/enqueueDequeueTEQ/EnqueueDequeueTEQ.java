@@ -15,9 +15,9 @@ package com.examples.enqueueDequeueTEQ;
 	import org.springframework.beans.factory.annotation.Value;
 	import org.springframework.stereotype.Service;
 
-	import com.examples.config.UserDetails;
-	import com.examples.dto.WorkflowRepository;
-	import com.fasterxml.jackson.core.JsonProcessingException;
+import com.examples.dao.UserDetails;
+import com.examples.dao.WorkflowRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 	import com.fasterxml.jackson.databind.JsonMappingException;
 	import com.fasterxml.jackson.databind.ObjectMapper;
 
