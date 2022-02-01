@@ -46,8 +46,8 @@ public class WorkflowAQ {
 	@Value("${spring.datasource.username}")
 	private String username;
 
-	@Value("${spring.datasource.password}")
-	private String password;
+//	@Value("${spring.datasource.password}")
+//	private String password;
 
 	@Value("${spring.datasource.url}")
 	private String jdbcURL;
@@ -84,7 +84,7 @@ public class WorkflowAQ {
 		OracleDataSource ds = new OracleDataSource();
 
 		ds.setUser(username);
-		ds.setPassword(password);
+		//ds.setPassword(password);
 		ds.setURL(jdbcURL);
 		Class.forName("oracle.AQ.AQOracleDriver");
 
@@ -194,7 +194,7 @@ public class WorkflowAQ {
 		AQSession aq_sess = null;
 
 		Class.forName("oracle.jdbc.driver.OracleDriver");
-		db_conn = DriverManager.getConnection(jdbcURL, username, password);
+		db_conn = DriverManager.getConnection(jdbcURL);
 		db_conn.setAutoCommit(true);
 
 		Class.forName("oracle.AQ.AQOracleDriver");

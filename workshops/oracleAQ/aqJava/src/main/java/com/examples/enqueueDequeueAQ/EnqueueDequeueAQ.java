@@ -30,8 +30,8 @@ public class EnqueueDequeueAQ {
 	@Value("${spring.datasource.username}")
 	private String username;
 
-	@Value("${spring.datasource.password}")
-	private String password;
+//	@Value("${spring.datasource.password}")
+//	private String password;
 
 	@Value("${spring.datasource.url}")
 	private String url;
@@ -88,7 +88,7 @@ public class EnqueueDequeueAQ {
 		AQSession aq_sess = null;
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			db_conn = DriverManager.getConnection(url, username, password);
+			db_conn = DriverManager.getConnection(url);
 
 			System.out.println("JDBC Connection opened ");
 			db_conn.setAutoCommit(false);
