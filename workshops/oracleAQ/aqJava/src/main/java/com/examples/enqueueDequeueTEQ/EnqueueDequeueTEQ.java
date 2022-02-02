@@ -1,90 +1,78 @@
 package com.examples.enqueueDequeueTEQ;
 
-	import java.sql.SQLException;
-	import java.util.Random;
+import java.sql.SQLException;
+import java.util.Random;
 
-	import javax.jms.JMSException;
-	import javax.jms.Session;
-	import javax.jms.Topic;
-	import javax.jms.TopicConnection;
-	import javax.jms.TopicConnectionFactory;
-	import javax.jms.TopicSession;
-	import javax.jms.TopicSubscriber;
+import javax.jms.JMSException;
+import javax.jms.Session;
+import javax.jms.Topic;
+import javax.jms.TopicConnection;
+import javax.jms.TopicConnectionFactory;
+import javax.jms.TopicSession;
+import javax.jms.TopicSubscriber;
 
-	import org.springframework.beans.factory.annotation.Autowired;
-	import org.springframework.beans.factory.annotation.Value;
-	import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
-import com.examples.dao.UserDetails;
-import com.examples.dao.WorkflowRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
-	import com.fasterxml.jackson.databind.JsonMappingException;
-	import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-	import oracle.AQ.AQException;
+import oracle.jdbc.pool.OracleDataSource;
+import oracle.jms.AQjmsAgent;
+import oracle.jms.AQjmsFactory;
+import oracle.jms.AQjmsSession;
+import oracle.jms.AQjmsTextMessage;
+import oracle.jms.AQjmsTopicPublisher;
 
-	import oracle.jdbc.pool.OracleDataSource;
-	import oracle.jms.AQjmsAgent;
-	import oracle.jms.AQjmsFactory;
-	import oracle.jms.AQjmsSession;
-	import oracle.jms.AQjmsTextMessage;
-	import oracle.jms.AQjmsTopicPublisher;
+@Service
+public class EnqueueDequeueTEQ {
 
-	@Service
-	public class EnqueueDequeueTEQ {
+	@Value("${username}")
+	private String username;
 
-		@Autowired
-		private WorkflowRepository workflowRepository;
+	@Value("${url}")
+	private String url;
+	
+//	@Value("${password}")
+//	private String password;
 
-		@Value("${username}")
-		private String username;
+	ObjectMapper mapper = new ObjectMapper();
+	Random rnd = new Random();
 
-//		@Value("${spring.datasource.password}")
-//		private String password;
+	String queueName = "java_TEQ";
+	String subscriberName = "java_SubscriberTEQ";
 
-		@Value("${spring.datasource.url}")
-		private String jdbcURL;
+	public String pubSubTEQ() throws JsonProcessingException, ClassNotFoundException, SQLException, JMSException {
+		String deliveryStatus;
 
-		ObjectMapper mapper = new ObjectMapper();
-		Random rnd = new Random();
+		OracleDataSource ds = new OracleDataSource();
+		ds.setURL(url);
+	/*	ds.setUser(username);
+		ds.setPassword(password);*/
+		Class.forName("oracle.AQ.AQOracleDriver");
 
-		String queueName = "java_TEQ";
-		String subscriberName = "java_SubscriberTEQ";
+		TopicConnectionFactory tc_fact = AQjmsFactory.getTopicConnectionFactory(ds);
+		TopicConnection conn = null;
 
+		conn = tc_fact.createTopicConnection();
+		conn.start();
+		TopicSession session = (AQjmsSession) conn.createSession(true, Session.AUTO_ACKNOWLEDGE);
 
-		public String pubSubTEQ()
-				throws JsonProcessingException, ClassNotFoundException, SQLException, JMSException {
-			String deliveryStatus;
+		Topic topic = ((AQjmsSession) session).getTopic(username, queueName);
+		AQjmsTopicPublisher publisher = (AQjmsTopicPublisher) session.createPublisher(topic);
+		TopicSubscriber topicSubscriber = (TopicSubscriber) ((AQjmsSession) session).createDurableSubscriber(topic,
+				subscriberName);
 
-			OracleDataSource ds = new OracleDataSource();
+		AQjmsTextMessage publisherMessage = (AQjmsTextMessage) session.createTextMessage("Sample text message");
+		publisher.publish(publisherMessage, new AQjmsAgent[] { new AQjmsAgent(subscriberName, null) });
+		session.commit();
 
-			ds.setUser(username);
-			//ds.setPassword(password);
-			ds.setURL(jdbcURL);
-			Class.forName("oracle.AQ.AQOracleDriver");
+		AQjmsTextMessage subscriberMessage = (AQjmsTextMessage) topicSubscriber.receive(10);
+		System.out.println("------Subscriber Message: " + subscriberMessage.getText());
+		deliveryStatus = "Success";
+		session.commit();
 
-			TopicConnectionFactory tc_fact = AQjmsFactory.getTopicConnectionFactory(ds);
-			TopicConnection conn = null;
-
-			conn = tc_fact.createTopicConnection();
-			conn.start();
-			TopicSession session = (AQjmsSession) conn.createSession(true, Session.AUTO_ACKNOWLEDGE);
-			
-			Topic topic = ((AQjmsSession) session).getTopic(username, queueName);
-			AQjmsTopicPublisher publisher = (AQjmsTopicPublisher) session.createPublisher(topic);
-			TopicSubscriber topicSubscriber = (TopicSubscriber) ((AQjmsSession) session).createDurableSubscriber(topic,subscriberName);
-
-			AQjmsTextMessage publisherMessage = (AQjmsTextMessage) session.createTextMessage("Sample text message");
-			publisher.publish(publisherMessage, new AQjmsAgent[] { new AQjmsAgent(subscriberName, null) });
-	        session.commit();
-
-			AQjmsTextMessage subscriberMessage = (AQjmsTextMessage) topicSubscriber.receive(10);				
-			System.out.println("------Subscriber Message: "+subscriberMessage.getText());
-			deliveryStatus = "Success";
-	        session.commit();
-
-			return deliveryStatus;
-		}
-
+		return deliveryStatus;
 	}
 
+}

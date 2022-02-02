@@ -11,29 +11,27 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity
-@Table(name = "USERDETAILS")
-public class UserDetails implements Serializable {
+/*@Entity
+@Table(name = "USERDETAILS")*/
+public class UserDetails { /*implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@Column(name = "ORDERID")
+	@Column(name = "ORDERID")*/
 	private int orderId;
 
-	@Column(name = "USERNAME")
+	/*@Column(name = "USERNAME")*/
 	private String username;
 
-	@Column(name = "OTP")
+	/*@Column(name = "OTP")*/
 	private int otp;
 
-	@Column(name = "DELIVERY_STATUS")
+	/*@Column(name = "DELIVERY_STATUS")*/
 	private String deliveryStatus;
 
-	@Column(name = "DELIVERY_LOCATION")
+	/*@Column(name = "DELIVERY_LOCATION")*/
 	private String deliveryLocation;
-
-
 	
 	public UserDetails() {
 		super();

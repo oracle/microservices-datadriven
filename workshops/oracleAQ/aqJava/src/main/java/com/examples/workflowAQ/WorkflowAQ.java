@@ -3,6 +3,7 @@ package com.examples.workflowAQ;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Random;
 
 import javax.jms.JMSException;
@@ -18,7 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.examples.dao.UserDetails;
-import com.examples.dao.WorkflowRepository;
+import com.examples.dao.UserDetailsDao;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,32 +42,32 @@ import oracle.jms.AQjmsTopicPublisher;
 public class WorkflowAQ {
 
 	@Autowired
-	private WorkflowRepository workflowRepository;
+	UserDetailsDao userDetailsDao;
 
 	@Value("${username}")
 	private String username;
 
-//	@Value("${spring.datasource.password}")
+	@Value("${url}")
+	private String url;
+	
+//	@Value("${password}")
 //	private String password;
-
-	@Value("${spring.datasource.url}")
-	private String jdbcURL;
 
 	ObjectMapper mapper = new ObjectMapper();
 	Random rnd = new Random();
 
-	String userQueueTable = "java_UserQueueTable"+rnd.nextInt(99);
-	String userQueueName = "java_UserQueue"+rnd.nextInt(99);
+	String userQueueTable = "java_UserQueueTable"+rnd.nextInt(9999);
+	String userQueueName = "java_UserQueue"+rnd.nextInt(9999);
 	String userApplicationSubscriber = "java_userAppSubscriber";
 	String userDelivererSubscriber = "java_userDelivererSubscriber";
 
-	String delivererQueueTable = "java_DelivererQueueTable"+rnd.nextInt(99);
-	String delivererQueueName = "java_DelivererQueue"+rnd.nextInt(99);
+	String delivererQueueTable = "java_DelivererQueueTable"+rnd.nextInt(9999);
+	String delivererQueueName = "java_DelivererQueue"+rnd.nextInt(9999);
 	String delivererUserSubscriber = "java_delivererUserSubscriber";
 	String delivererApplicationSubscriber = "java_delivererApplicationSubscriber";
 
-	String applicationQueueTable = "java_ApplicationQueueTable"+rnd.nextInt(99);
-	String applicationQueueName = "java_ApplicationQueue"+rnd.nextInt(99);
+	String applicationQueueTable = "java_ApplicationQueueTable"+rnd.nextInt(9999);
+	String applicationQueueName = "java_ApplicationQueue"+rnd.nextInt(9999);
 	String applicationUserSubscriber = "java_appUserSubscriber";
 	String applicationDelivererSubscriber = "java_appDelivererSubscriber";
 
@@ -82,16 +83,12 @@ public class WorkflowAQ {
 		String deliveryStatus = "Success";
 
 		OracleDataSource ds = new OracleDataSource();
-
-		ds.setUser(username);
-		//ds.setPassword(password);
-		ds.setURL(jdbcURL);
+		ds.setURL(url);
+//		ds.setUser(username);
+//		ds.setPassword(password);
 		Class.forName("oracle.AQ.AQOracleDriver");
-
 		TopicConnectionFactory tc_fact = AQjmsFactory.getTopicConnectionFactory(ds);
-		TopicConnection conn = null;
-
-		conn = tc_fact.createTopicConnection();
+		TopicConnection conn = tc_fact.createTopicConnection();
 		conn.start();
 		TopicSession session = (AQjmsSession) conn.createSession(true, Session.AUTO_ACKNOWLEDGE);
 		
@@ -120,7 +117,9 @@ public class WorkflowAQ {
 				+ applicationToUser_message.getDeliveryStatus());
 
 		/* 3: APPLICATION CREATES AN USER RECORD */
-		workflowRepository.saveAndFlush(applicationToUser_message);
+
+		userDetailsDao.add(applicationToUser_message);
+/*	    workflowRepository.saveAndFlush(applicationToUser_message);*/
 
 		System.out.println("APPLICATION ADDED USER ORDER INTO RECORD");
 
@@ -149,25 +148,25 @@ public class WorkflowAQ {
 		System.out.println("DELIVERER TO APPLICATION MESSAGE:  " + "ORDERID: "+ delivererToApplication_message.getOrderId() + ", OTP: " + delivererToApplication_message.getOtp()+ ", DeliveryStatus: " + delivererToApplication_message.getDeliveryStatus());
 
 		/* 7: APPLICATION VERIFIES OTP WITH USER RECORD AND UPDATE DELIVERY STATUS */
-		UserDetails recordData = workflowRepository.findByOrderId(delivererToApplication_message.getOrderId());
-
-		if (delivererToApplication_message.getOtp() == recordData.getOtp()
-				&& recordData.getDeliveryStatus() != "DELIVERED") {
-			recordData.setDeliveryStatus("DELIVERED");
-			deliveryStatus = "DELIVERED";
-			
+		/*UserDetails recordData = workflowRepository.findByOrderId(delivererToApplication_message.getOrderId()); */
+		
+		UserDetails recordData =userDetailsDao.getUserDetails(delivererToApplication_message.getOrderId());
+		
+		if (delivererToApplication_message.getOtp() == recordData.getOtp() && recordData.getDeliveryStatus() != "DELIVERED") {
+			//recordData.setDeliveryStatus("DELIVERED");
+			deliveryStatus = "DELIVERED";			
 			System.out.println("APPLICATION VERIFICATION FOR DELIVERY STATUS: " + deliveryStatus);
 
 		} else {
-			recordData.setDeliveryStatus("FAILED");
 			deliveryStatus = "FAILED";
-
 			System.out.println("APPLICATION VERIFICATION FOR DELIVERY STATUS: " + deliveryStatus);
-
 		}
-		workflowRepository.saveAndFlush(recordData);
+		userDetailsDao.update(recordData.getOrderId(), deliveryStatus);
 
-		UserDetails updatedData = workflowRepository.findByOrderId(delivererToApplication_message.getOrderId());
+		//workflowRepository.saveAndFlush(recordData);
+
+		UserDetails updatedData = userDetailsDao.getUserDetails(delivererToApplication_message.getOrderId());
+		/* UserDetails updatedData = workflowRepository.findByOrderId(delivererToApplication_message.getOrderId()); */
 		/* 8: APPLICATION UPDATE DELIVERER TO DELIVER ORDER */
 		applicationToDeliverer_message = enqueueDequeueMessage(session, applicationDelivererSubscriber, applicationQueueName,
 				new UserDetails(delivererToApplication_message.getOrderId(),
@@ -194,7 +193,7 @@ public class WorkflowAQ {
 		AQSession aq_sess = null;
 
 		Class.forName("oracle.jdbc.driver.OracleDriver");
-		db_conn = DriverManager.getConnection(jdbcURL);
+		db_conn = DriverManager.getConnection(url);
 		db_conn.setAutoCommit(true);
 
 		Class.forName("oracle.AQ.AQOracleDriver");

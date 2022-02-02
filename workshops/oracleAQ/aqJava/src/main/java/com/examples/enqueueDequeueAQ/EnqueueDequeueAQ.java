@@ -30,11 +30,11 @@ public class EnqueueDequeueAQ {
 	@Value("${username}")
 	private String username;
 
-//	@Value("${spring.datasource.password}")
-//	private String password;
-
-	@Value("${spring.datasource.url}")
+	@Value("${url}")
 	private String url;
+	
+//	@Value("${password}")
+//	private String password;
 
 	String oracleQueueTable = "java_QueueTable";
 	String oracleQueueName = "java_QueueName";

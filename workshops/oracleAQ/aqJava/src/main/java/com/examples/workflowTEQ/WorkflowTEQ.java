@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.examples.dao.UserDetails;
+import com.examples.dao.UserDetailsDao;
 import com.examples.dao.WorkflowRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -33,17 +34,19 @@ import oracle.jms.AQjmsTopicPublisher;
 public class WorkflowTEQ {
 
 	@Autowired
-	private WorkflowRepository workflowRepository;
+	UserDetailsDao userDetailsDao;
+
+	/*private WorkflowRepository workflowRepository; */
 
 	@Value("${username}")
 	private String username;
 
-//	@Value("${spring.datasource.password}")
-//	private String password;
-
-	@Value("${spring.datasource.url}")
-	private String jdbcURL;
-
+	@Value("${url}")
+	private String url;
+	
+	@Value("${password}")
+	private String password;
+	
 	ObjectMapper mapper = new ObjectMapper();
 	Random rnd = new Random();
 
@@ -71,10 +74,9 @@ public class WorkflowTEQ {
 		String deliveryStatus = "Success";
 
 		OracleDataSource ds = new OracleDataSource();
-
-		ds.setUser(username);
-		//ds.setPassword(password);
-		ds.setURL(jdbcURL);
+		ds.setURL(url);
+//		ds.setUser(username);
+//		ds.setPassword(password);
 		Class.forName("oracle.AQ.AQOracleDriver");
 
 		TopicConnectionFactory tc_fact = AQjmsFactory.getTopicConnectionFactory(ds);
@@ -105,7 +107,8 @@ public class WorkflowTEQ {
 		System.out.println();
 
 		/* 3: APPLICATION CREATES AN USER RECORD */
-		workflowRepository.saveAndFlush(applicationToUser_message);
+		userDetailsDao.add(applicationToUser_message);
+/*	    workflowRepository.saveAndFlush(applicationToUser_message);*/
 
 		System.out.println("APPLICATION ADDED USER ORDER INTO RECORD");
 		System.out.println();
@@ -140,27 +143,26 @@ public class WorkflowTEQ {
 		System.out.println();
 
 		/* 7: APPLICATION VERIFIES OTP WITH USER RECORD AND UPDATE DELIVERY STATUS */
-		UserDetails recordData = workflowRepository.findByOrderId(delivererToApplication_message.getOrderId());
+		/*UserDetails recordData = workflowRepository.findByOrderId(delivererToApplication_message.getOrderId());*/
+		UserDetails recordData =userDetailsDao.getUserDetails(delivererToApplication_message.getOrderId());
 
 		if (delivererToApplication_message.getOtp() == recordData.getOtp()
 				&& recordData.getDeliveryStatus() != "DELIVERED") {
-			recordData.setDeliveryStatus("DELIVERED");
 			deliveryStatus = "DELIVERED";
 			
 			System.out.println("APPLICATION VERIFICATION FOR DELIVERY STATUS: " + deliveryStatus);
 			System.out.println();
 
 		} else {
-			recordData.setDeliveryStatus("FAILED");
 			deliveryStatus = "FAILED";
 
 			System.out.println("APPLICATION VERIFICATION FOR DELIVERY STATUS: " + deliveryStatus);
 			System.out.println();
 
 		}
-		workflowRepository.saveAndFlush(recordData);
+		userDetailsDao.update(recordData.getOrderId(), deliveryStatus);
 
-		UserDetails updatedData = workflowRepository.findByOrderId(delivererToApplication_message.getOrderId());
+		UserDetails updatedData = userDetailsDao.getUserDetails(delivererToApplication_message.getOrderId());
 		/* 8: APPLICATION UPDATE DELIVERER TO DELIVER ORDER */
 		applicationToDeliverer_message = enqueueDequeueMessage(session, applicationDelivererSubscriber, applicationQueueName,
 				new UserDetails(delivererToApplication_message.getOrderId(),
