@@ -13,7 +13,7 @@ export WORKFLOW_HOME=${HOME}/${comp_name};
 export TNS_ADMIN=$WORKFLOW_HOME/wallet
 export DB_USER1=admin
 export DB_USER2=dbuser
-USER_DEFINED_WALLET=${TNS_ADMIN}/user_defined_wallet
+export USER_DEFINED_WALLET=${TNS_ADMIN}/user_defined_wallet
 TNS_WALLET_STR="(MY_WALLET_DIRECTORY="$TNS_ADMIN")"
 
 #get user's OCID # read user's OCID:  #echo "Enter OCID of root compartment:" ; read -s rootCompOCID; export rootCompOCID                          
@@ -70,13 +70,18 @@ unzip -oq wallet.zip
 #sed -i "s|?|$WORKFLOW_HOME|" sqlnet.ora
  
 # Configure the sqlnet.ora
+# cd $TNS_ADMIN
+# cat >sqlnet.ora <<!
+# WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$USER_DEFINED_WALLET")))
+# SQLNET.WALLET_OVERRIDE = TRUE
+# SSL_SERVER_DN_MATCH = yes
+# !
 cd $TNS_ADMIN
 cat >sqlnet.ora <<!
-WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$USER_DEFINED_WALLET")))
+WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$TNS_ADMIN")))
 SQLNET.WALLET_OVERRIDE = TRUE
 SSL_SERVER_DN_MATCH = yes
 !
-
 
 # Get the DB Alias
 # This also validates the DB OCID
@@ -96,21 +101,35 @@ mkdir -p $USER_DEFINED_WALLET
 SQLCL=$(dirname $(which sql))/../lib
 CLASSPATH=${SQLCL}/oraclepki.jar:${SQLCL}/osdt_core.jar:${SQLCL}/osdt_cert.jar
 
-# Create New User Defined Wallet to store DB Credentials
-java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$USER_DEFINED_WALLET" -create >/dev/null <<!
-$WALLET_PASSWORD
-$WALLET_PASSWORD
-!
+# # Create New User Defined Wallet to store DB Credentials
+# java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$USER_DEFINED_WALLET" -create >/dev/null <<!
+# $WALLET_PASSWORD
+# $WALLET_PASSWORD
+# !
+
+# # Add User1 Credentials to the newly created User Defined Wallet
+# java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$USER_DEFINED_WALLET" -createCredential "${DB_ALIAS}_${DB_USER1}" $DB_USER1 >/dev/null <<!
+# $DB_PASSWORD
+# $DB_PASSWORD
+# $WALLET_PASSWORD
+# !
+
+# # Add User2 Credentials to the newly created User Defined Wallet
+# java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$USER_DEFINED_WALLET" -createCredential "${DB_ALIAS}_${DB_USER2}" $DB_USER2 >/dev/null <<!
+# $DB_PASSWORD
+# $DB_PASSWORD
+# $WALLET_PASSWORD
+# !
 
 # Add User1 Credentials to the newly created User Defined Wallet
-java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$USER_DEFINED_WALLET" -createCredential "${DB_ALIAS}_${DB_USER1}" $DB_USER1 >/dev/null <<!
+java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$TNS_ADMIN" -createCredential "${DB_ALIAS}_${DB_USER1}" $DB_USER1 >/dev/null <<!
 $DB_PASSWORD
 $DB_PASSWORD
 $WALLET_PASSWORD
 !
 
 # Add User2 Credentials to the newly created User Defined Wallet
-java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$USER_DEFINED_WALLET" -createCredential "${DB_ALIAS}_${DB_USER2}" $DB_USER2 >/dev/null <<!
+java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$TNS_ADMIN" -createCredential "${DB_ALIAS}_${DB_USER2}" $DB_USER2 >/dev/null <<!
 $DB_PASSWORD
 $DB_PASSWORD
 $WALLET_PASSWORD
@@ -160,22 +179,26 @@ Show user;
 !
 
 # Java setup
-cd $WORKFLOW_HOME/aqJava;
+cd $WORKFLOW_HOME/TestTest;
 mvn clean install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.test.skip=true;
 cd target;
 killall java;
-nohup java -jar aqJava-0.0.1-SNAPSHOT.jar &
+nohup java -jar TestTest-0.0.1-SNAPSHOT.jar &
+
+# # Java setup
+# cd $WORKFLOW_HOME/aqJava;
+# mvn clean install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.test.skip=true;
+# cd target;
+# killall java;
+# nohup java -jar aqJava-0.0.1-SNAPSHOT.jar &
 
 cd $WORKFLOW_HOME;
 
 echo "WORKFLOW_HOME     : " $WORKFLOW_HOME;
-
 echo "Compartment Name  : " ${comp_name}
 echo "Compartment OCID  : " ${ocid_comp}
-
 echo "Database Name     : " ${db_name}
 echo "ATP Database OCID : " ${DB_OCID}
-
 echo "-------------------------------"
 echo "        SETUP COMPLETED        "
 echo "------------------------------"

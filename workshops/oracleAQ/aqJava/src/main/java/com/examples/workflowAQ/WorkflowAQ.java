@@ -13,6 +13,7 @@ import javax.jms.TopicConnection;
 import javax.jms.TopicConnectionFactory;
 import javax.jms.TopicSession;
 import javax.jms.TopicSubscriber;
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,6 +44,9 @@ public class WorkflowAQ {
 
 	@Autowired
 	UserDetailsDao userDetailsDao;
+	
+	@Autowired 
+	DataSource ds;
 
 	@Value("${username}")
 	private String username;
@@ -82,11 +86,12 @@ public class WorkflowAQ {
 			JsonMappingException, JsonProcessingException {
 		String deliveryStatus = "Success";
 
-		OracleDataSource ds = new OracleDataSource();
-		ds.setURL(url);
+//		OracleDataSource ds = new OracleDataSource();
+//		ds.setURL(url);
+//		ds.setDriverType("oracle.jdbc.OracleDriver");
+
 //		ds.setUser(username);
 //		ds.setPassword(password);
-		Class.forName("oracle.AQ.AQOracleDriver");
 		TopicConnectionFactory tc_fact = AQjmsFactory.getTopicConnectionFactory(ds);
 		TopicConnection conn = tc_fact.createTopicConnection();
 		conn.start();
@@ -189,15 +194,11 @@ public class WorkflowAQ {
 	}
 
 	public AQSession createSession() throws ClassNotFoundException, SQLException, AQException, JMSException {
-		Connection db_conn;
+
 		AQSession aq_sess = null;
 
-		Class.forName("oracle.jdbc.driver.OracleDriver");
-		db_conn = DriverManager.getConnection(url);
-		db_conn.setAutoCommit(true);
-
 		Class.forName("oracle.AQ.AQOracleDriver");
-		aq_sess = AQDriverManager.createAQSession(db_conn);
+		aq_sess = AQDriverManager.createAQSession(ds);
 
 		System.out.println("Successfully created AQSession ");
 

@@ -4,8 +4,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import oracle.AQ.AQAgent;
@@ -35,6 +38,9 @@ public class EnqueueDequeueAQ {
 	
 //	@Value("${password}")
 //	private String password;
+	
+	@Autowired 
+	DataSource ds;
 
 	String oracleQueueTable = "java_QueueTable";
 	String oracleQueueName = "java_QueueName";
@@ -87,15 +93,15 @@ public class EnqueueDequeueAQ {
 		Connection db_conn;
 		AQSession aq_sess = null;
 		try {
-			Class.forName("oracle.jdbc.driver.OracleDriver");
-			db_conn = DriverManager.getConnection(url);
-
-			System.out.println("JDBC Connection opened ");
-			db_conn.setAutoCommit(false);
+//			Class.forName("oracle.jdbc.driver.OracleDriver");
+//			db_conn = DriverManager.getConnection(url, username );
+//
+//			System.out.println("JDBC Connection opened ");
+//			db_conn.setAutoCommit(false);
 			Class.forName("oracle.AQ.AQOracleDriver");
 
 			/* Creating an AQ Session: */
-			aq_sess = AQDriverManager.createAQSession(db_conn);
+			aq_sess = AQDriverManager.createAQSession(ds);
 
 			System.out.println("Successfully created AQSession ");
 		} catch (Exception ex) {

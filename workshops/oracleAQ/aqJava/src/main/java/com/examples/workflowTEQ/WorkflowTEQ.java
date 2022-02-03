@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import com.examples.dao.UserDetails;
 import com.examples.dao.UserDetailsDao;
-import com.examples.dao.WorkflowRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -44,8 +43,8 @@ public class WorkflowTEQ {
 	@Value("${url}")
 	private String url;
 	
-	@Value("${password}")
-	private String password;
+//	@Value("${password}")
+//	private String password;
 	
 	ObjectMapper mapper = new ObjectMapper();
 	Random rnd = new Random();
