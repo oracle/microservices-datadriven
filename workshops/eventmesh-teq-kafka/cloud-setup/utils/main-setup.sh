@@ -239,18 +239,28 @@ if ! state_done CONTAINER_ENG_SETUP; then
   echo
 fi
 
-if ! state_done DOCKER_COMPOSE; then
-  echo "$(date): Getting Docker Compose"
-  cd "$LAB_HOME"/cloud-setup/confluent-kafka
-  curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o "$LAB_HOME"/cloud-setup/confluent-kafka/docker-compose
-  chmod +x "$LAB_HOME"/cloud-setup/confluent-kafka/docker-compose
-  state_set_done DOCKER_COMPOSE
+#if ! state_done DOCKER_COMPOSE; then
+#  echo "$(date): Getting Docker Compose"
+#  cd "$LAB_HOME"/cloud-setup/confluent-kafka
+#  curl -L "https://github.com/docker/compose/releases/download/v2.2.3/docker-compose-$(uname -s)-$(uname -m)" -o "$LAB_HOME"/cloud-setup/confluent-kafka/docker-compose
+#  chmod +x "$LAB_HOME"/cloud-setup/confluent-kafka/docker-compose
+#  state_set_done DOCKER_COMPOSE
+#fi
+
+# run kafka-setup.sh in background
+if ! state_get KAFKA_SETUP; then
+  if ps -ef | grep "$LAB_HOME/cloud-setup/utils/kafka-setup.sh" | grep -v grep; then
+    echo "$LAB_HOME/cloud-setup/utils/kafka-setup.sh is already running"
+  else
+    echo "Executing kafka-setup.sh in the background"
+    nohup "$LAB_HOME"/cloud-setup/utils/kafka-setup.sh &>>"$LAB_LOG"/kafka-setup.log &
+  fi
 fi
 
 ps -ef | grep "$LAB_HOME/cloud-setup/utils" | grep -v grep
 
 # Verify Setup
-# bgs="BUILD_ALL JAVA_BUILDS NON_JAVA_BUILDS OKE_SETUP DB_SETUP PROVISIONING"
+# bgs="BUILD_ALL JAVA_BUILDS NON_JAVA_BUILDS OKE_SETUP DB_SETUP KAFKA_SETUP PROVISIONING"
 bgs="DB_SETUP PROVISIONING CONTAINER_ENG_SETUP"
 while ! state_done SETUP_VERIFIED; do
   NOT_DONE=0

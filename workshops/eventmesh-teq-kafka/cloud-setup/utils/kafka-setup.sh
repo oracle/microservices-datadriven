@@ -8,7 +8,7 @@ set -e
 # Install Docker Compose
 while ! state_done DOCKER_COMPOSE; do
   if ! test -f "$LAB_HOME"/cloud-setup/confluent-kafka/docker-compose; then
-    curl -sL "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o "$LAB_HOME"/cloud-setup/confluent-kafka/docker-compose
+    curl -L "https://github.com/docker/compose/releases/download/v2.2.3/docker-compose-$(uname -s)-$(uname -m)" -o "$LAB_HOME"/cloud-setup/confluent-kafka/docker-compose
     chmod +x "$LAB_HOME"/cloud-setup/confluent-kafka/docker-compose
   fi
   state_set_done DOCKER_COMPOSE
