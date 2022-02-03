@@ -1,2 +1,2 @@
 cd $WORKFLOW_HOME ;
-sqlplus /@AQDATABASE_HIGH_DBUSER @$WORKFLOW_HOME/createTEQ.sql
+sqlplus /@${DB_ALIAS}_${DB_USER2} @createTEQ.sql

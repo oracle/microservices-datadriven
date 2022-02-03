@@ -1,2 +1,2 @@
 cd $WORKFLOW_HOME ;
-sqlplus /@AQDATABASE_HIGH_DBUSER @$WORKFLOW_HOME/enqueueTEQ.sql
+sqlplus /@${DB_ALIAS}_${DB_USER2} @enqueueTEQ.sql

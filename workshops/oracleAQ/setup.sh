@@ -159,23 +159,6 @@ Show user;
 /
 !
 
-# Java setup
-cd $WORKFLOW_HOME/TestTest;
-mvn clean install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.test.skip=true;
-cd target;
-killall java;
-nohup java -cp TestTest-0.0.1-SNAPSHOT-shaded.jar com.oracle.DataSourceSample &
-
-# # Java setup
-cd .. ; 
-cd .. ;
-cd aqJava
-#cd $WORKFLOW_HOME/aqJava;
-mvn clean install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.test.skip=true;
-cd target;
-killall java;
-nohup java -jar aqJava-0.0.1-SNAPSHOT.jar &
-
 cd $WORKFLOW_HOME;
 
 echo "WORKFLOW_HOME     : " $WORKFLOW_HOME;
