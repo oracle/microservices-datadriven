@@ -15,7 +15,7 @@ import java.sql.DatabaseMetaData;
 public class DataSourceSample {  
   // The recommended format of a connection URL is the long format with the
   // connection descriptor.
-  final static String DB_URL= "jdbc:oracle:thin:@aqdatabase_tp?TNS_ADMIN=/Users/mayanktayal/Code/Database/Wallet_aqdatabase";
+  final static String DB_URL= "jdbc:oracle:thin:@aqdatabase_tp?TNS_ADMIN=/home/mayank_tay/oracleAQ/wallet";
   final static String DB_USER = "admin";
   final static String DB_PASSWORD = "MayankTayal1234";
 
