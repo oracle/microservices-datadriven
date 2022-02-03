@@ -69,19 +69,14 @@ rm temp_params
 unzip -oq wallet.zip
 #sed -i "s|?|$WORKFLOW_HOME|" sqlnet.ora
  
-# Configure the sqlnet.ora
-# cd $TNS_ADMIN
-# cat >sqlnet.ora <<!
-# WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$USER_DEFINED_WALLET")))
-# SQLNET.WALLET_OVERRIDE = TRUE
-# SSL_SERVER_DN_MATCH = yes
-# !
+Configure the sqlnet.ora
 cd $TNS_ADMIN
 cat >sqlnet.ora <<!
-WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$TNS_ADMIN")))
+WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$USER_DEFINED_WALLET")))
 SQLNET.WALLET_OVERRIDE = TRUE
 SSL_SERVER_DN_MATCH = yes
 !
+
 
 # Get the DB Alias
 # This also validates the DB OCID
@@ -101,35 +96,21 @@ mkdir -p $USER_DEFINED_WALLET
 SQLCL=$(dirname $(which sql))/../lib
 CLASSPATH=${SQLCL}/oraclepki.jar:${SQLCL}/osdt_core.jar:${SQLCL}/osdt_cert.jar
 
-# # Create New User Defined Wallet to store DB Credentials
-# java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$USER_DEFINED_WALLET" -create >/dev/null <<!
-# $WALLET_PASSWORD
-# $WALLET_PASSWORD
-# !
-
-# # Add User1 Credentials to the newly created User Defined Wallet
-# java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$USER_DEFINED_WALLET" -createCredential "${DB_ALIAS}_${DB_USER1}" $DB_USER1 >/dev/null <<!
-# $DB_PASSWORD
-# $DB_PASSWORD
-# $WALLET_PASSWORD
-# !
-
-# # Add User2 Credentials to the newly created User Defined Wallet
-# java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$USER_DEFINED_WALLET" -createCredential "${DB_ALIAS}_${DB_USER2}" $DB_USER2 >/dev/null <<!
-# $DB_PASSWORD
-# $DB_PASSWORD
-# $WALLET_PASSWORD
-# !
+# Create New User Defined Wallet to store DB Credentials
+java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$USER_DEFINED_WALLET" -create >/dev/null <<!
+$WALLET_PASSWORD
+$WALLET_PASSWORD
+!
 
 # Add User1 Credentials to the newly created User Defined Wallet
-java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$TNS_ADMIN" -createCredential "${DB_ALIAS}_${DB_USER1}" $DB_USER1 >/dev/null <<!
+java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$USER_DEFINED_WALLET" -createCredential "${DB_ALIAS}_${DB_USER1}" $DB_USER1 >/dev/null <<!
 $DB_PASSWORD
 $DB_PASSWORD
 $WALLET_PASSWORD
 !
 
 # Add User2 Credentials to the newly created User Defined Wallet
-java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$TNS_ADMIN" -createCredential "${DB_ALIAS}_${DB_USER2}" $DB_USER2 >/dev/null <<!
+java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$USER_DEFINED_WALLET" -createCredential "${DB_ALIAS}_${DB_USER2}" $DB_USER2 >/dev/null <<!
 $DB_PASSWORD
 $DB_PASSWORD
 $WALLET_PASSWORD
@@ -183,14 +164,17 @@ cd $WORKFLOW_HOME/TestTest;
 mvn clean install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.test.skip=true;
 cd target;
 killall java;
-nohup java -jar TestTest-0.0.1-SNAPSHOT.jar &
+nohup java -cp TestTest-0.0.1-SNAPSHOT-shaded.jar com.oracle.DataSourceSample &
 
 # # Java setup
-# cd $WORKFLOW_HOME/aqJava;
-# mvn clean install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.test.skip=true;
-# cd target;
-# killall java;
-# nohup java -jar aqJava-0.0.1-SNAPSHOT.jar &
+cd .. ; 
+cd .. ;
+cd aqJava
+#cd $WORKFLOW_HOME/aqJava;
+mvn clean install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.test.skip=true;
+cd target;
+killall java;
+nohup java -jar aqJava-0.0.1-SNAPSHOT.jar &
 
 cd $WORKFLOW_HOME;
 
