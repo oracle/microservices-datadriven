@@ -15,17 +15,18 @@ import java.sql.DatabaseMetaData;
 public class DataSourceSample {  
   // The recommended format of a connection URL is the long format with the
   // connection descriptor.
-  final static String DB_URL= "jdbc:oracle:thin:@aqdatabase_tp?TNS_ADMIN=/home/mayank_tay/oracleAQ/wallet";
-  final static String DB_USER = "admin";
-  final static String DB_PASSWORD = "MayankTayal1234";
+	
+  final static String DB_URL= "jdbc:oracle:thin:@/aqdatabase_tp_admin";
+//  final static String DB_USER = "admin";
+//  final static String DB_PASSWORD = "MayankTayal1234";
 
   public static void main(String args[]) throws SQLException, ClassNotFoundException {
+	    System.setProperty("oracle.net.tns_admin", "/home/mayank_tay/oracleAQ/wallet");
 
     OracleDataSource ods = new OracleDataSource();
     ods.setURL(DB_URL); 
-    ods.setPassword(DB_PASSWORD);
-    ods.setUser(DB_USER);
-  
+//    ods.setPassword(DB_PASSWORD);
+//    ods.setUser(DB_USER);
     try (OracleConnection connection = (OracleConnection) ods.getConnection()) {
       // Get the JDBC driver name and version 
       DatabaseMetaData dbmd = connection.getMetaData();       
