@@ -81,7 +81,6 @@ SSL_SERVER_DN_MATCH = yes
 # Get the DB Alias
 # This also validates the DB OCID
 export DB_ALIAS=`oci db autonomous-database get --autonomous-database-id "$DB_OCID" --query 'data."connection-strings".profiles[?"consumer-group"=='"'TP'"']."display-name" | [0]' --raw-output`
-echo "Found TNS Alias: $DB_ALIAS"
  
 
 mkdir -p $TNS_ADMIN 
@@ -165,7 +164,10 @@ echo "WORKFLOW_HOME     : " $WORKFLOW_HOME;
 echo "Compartment Name  : " ${comp_name}
 echo "Compartment OCID  : " ${ocid_comp}
 echo "Database Name     : " ${db_name}
-echo "ATP Database OCID : " ${DB_OCID}
+echo "ATP OCID          : " ${DB_OCID}
+echo "TNS Alias         :   ${DB_ALIAS}_${DB_USER1}"
+echo "TNS Alias         :   ${DB_ALIAS}_${DB_USER2}"
+echo 
 echo "-------------------------------"
 echo "        SETUP COMPLETED        "
 echo "------------------------------"

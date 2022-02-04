@@ -1,3 +1,4 @@
+
 CREATE type Message_type as object (subject     VARCHAR2(30), text        VARCHAR2(80));  
 /
 -- Creating an Object type queue 

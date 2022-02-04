@@ -1,3 +1,4 @@
+
 --Enqueue to objType Message 
 DECLARE
  enqueue_options     dbms_aq.enqueue_options_t;
@@ -6,9 +7,9 @@ DECLARE
  message             obj_typ;
 
 BEGIN
- message := obj_typ('NORMAL MESSAGE','enqueued to objType_classicQueue first.');
+ message := obj_typ('NORMAL MESSAGE','enqueue objType_AQ first.');
  DBMS_AQ.ENQUEUE(
-     queue_name           => 'objType_classicQueue',           
+     queue_name           => 'objType_AQ',           
      enqueue_options      => enqueue_options,       
      message_properties   => message_properties,     
      payload              => message,               
@@ -27,7 +28,7 @@ DECLARE
 BEGIN
  message :=  HEXTORAW(RPAD('FF',4095,'FF')); 
  DBMS_AQ.ENQUEUE(
-     queue_name => 'rawType_classicQueue',           
+     queue_name => 'rawType_AQ',           
      enqueue_options      => enqueue_options,       
      message_properties   => message_properties,     
      payload              => message,               
@@ -46,7 +47,7 @@ DECLARE
 BEGIN
  message :=  HEXTORAW(RPAD('FF',4095,'FF')); 
  DBMS_AQ.ENQUEUE(
-     queue_name           => 'multiconsumer_rawType_classicQueue',           
+     queue_name           => 'multiconsumer_rawType_AQ',           
      enqueue_options      => enqueue_options,       
      message_properties   => message_properties,     
      payload              => message,               

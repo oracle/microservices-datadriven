@@ -1,3 +1,4 @@
+
 --Dequeue from obj Type Messages */ 
 DECLARE
     dequeue_options     dbms_aq.dequeue_options_t;
@@ -7,7 +8,7 @@ DECLARE
 
 BEGIN
     DBMS_AQ.DEQUEUE(
-        queue_name         => 'objType_classicQueue',
+        queue_name         => 'objType_AQ',
         dequeue_options    => dequeue_options,
         message_properties => message_properties,
         payload            => message,
@@ -27,7 +28,7 @@ DECLARE
         
 BEGIN 
     DBMS_AQ.DEQUEUE(
-        queue_name         => 'rawType_classicQueue', 
+        queue_name         => 'rawType_AQ', 
         dequeue_options    => dequeue_options, 
         message_properties => message_properties, 
         payload            => message, 
@@ -50,7 +51,7 @@ BEGIN
     dequeue_options.consumer_name := 'basicSubscriber';
 
     DBMS_AQ.DEQUEUE(
-        queue_name         => 'multiconsumer_rawType_classicQueue', 
+        queue_name         => 'multiconsumer_rawType_AQ', 
         dequeue_options    => dequeue_options, 
         message_properties => message_properties, 
         payload            => message, 
