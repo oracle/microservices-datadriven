@@ -1,0 +1,3 @@
+[submodule "workshops/eventmesh-teq-kafka/okafka"]
+	path = workshops/eventmesh-teq-kafka/okafka
+	url = https://github.com/oracle/okafka.git
