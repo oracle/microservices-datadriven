@@ -4,13 +4,9 @@ package com.oracle.developers.eventmesh.teq.okafka.service;
 import com.oracle.developers.eventmesh.teq.okafka.config.producer.OKafkaProducerConfig;
 import org.oracle.okafka.clients.producer.KafkaProducer;
 import org.oracle.okafka.clients.producer.ProducerRecord;
-import org.oracle.okafka.clients.producer.RecordMetadata;
-import org.oracle.okafka.support.SendResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.util.concurrent.ListenableFuture;
-import org.springframework.util.concurrent.ListenableFutureCallback;
 
 import javax.annotation.PreDestroy;
 import java.util.Map;
@@ -56,25 +52,24 @@ public class OKafkaProducerService {
         }
     }
 
-    private void addCallback(String topicName, String message,
-                             ListenableFuture<SendResult<String, String>> kafkaResultFuture) {
-        kafkaResultFuture.addCallback(new ListenableFutureCallback<>() {
-            @Override
-            public void onFailure(Throwable throwable) {
-                LOG.error("Error while sending message {} to topic {}", message, topicName, throwable);
-            }
-
-            @Override
-            public void onSuccess(SendResult<String, String> result) {
-                RecordMetadata metadata = result.getRecordMetadata();
-                LOG.debug("Received new metadata. Topic: {}; Partition {}; Offset {}; Timestamp {}, at time {}",
-                        metadata.topic(),
-                        metadata.partition(),
-                        metadata.offset(),
-                        metadata.timestamp(),
-                        System.nanoTime());
-            }
-        });
-
-    }
+//    private void addCallback(String topicName, String message,
+//                             ListenableFuture<SendResult<String, String>> kafkaResultFuture) {
+//        kafkaResultFuture.addCallback(new ListenableFutureCallback<>() {
+//            @Override
+//            public void onFailure(Throwable throwable) {
+//                LOG.error("Error while sending message {} to topic {}", message, topicName, throwable);
+//            }
+//
+//            @Override
+//            public void onSuccess(SendResult<String, String> result) {
+//                RecordMetadata metadata = result.getRecordMetadata();
+//                LOG.debug("Received new metadata. Topic: {}; Partition {}; Offset {}; Timestamp {}, at time {}",
+//                        metadata.topic(),
+//                        metadata.partition(),
+//                        metadata.offset(),
+//                        metadata.timestamp(),
+//                        System.nanoTime());
+//            }
+//        });
+//    }
 }

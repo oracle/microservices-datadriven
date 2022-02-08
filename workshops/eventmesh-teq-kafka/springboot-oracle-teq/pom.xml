@@ -58,7 +58,7 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.oracle</groupId>
+                <groupId>org.oracle.okafka</groupId>
                 <artifactId>okafka</artifactId>
                 <version>${okafka.version}</version>
             </dependency>

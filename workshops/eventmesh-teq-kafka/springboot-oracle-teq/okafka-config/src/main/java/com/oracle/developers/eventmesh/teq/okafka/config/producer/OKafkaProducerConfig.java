@@ -1,10 +1,14 @@
 package com.oracle.developers.eventmesh.teq.okafka.config.producer;
 
 import com.oracle.developers.eventmesh.teq.okafka.config.data.OKafkaConfigData;
+
+
 import org.oracle.okafka.clients.CommonClientConfigs;
 import org.oracle.okafka.clients.producer.KafkaProducer;
 import org.oracle.okafka.clients.producer.ProducerConfig;
+
 import org.oracle.okafka.common.config.SslConfigs;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -35,8 +39,8 @@ public class OKafkaProducerConfig<K extends Serializable, V extends Serializable
         props.put(ProducerConfig.ORACLE_SERVICE_NAME, configData.getOracleServiceName());
         props.put(ProducerConfig.ORACLE_NET_TNS_ADMIN, configData.getOracleNetTns_admin());
         props.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, configData.getSecurityProtocol());
-        props.put(CommonClientConfigs.ORACLE_USER_NAME, configData.getOracleUserName());
-        props.put(CommonClientConfigs.ORACLE_PASSWORD, configData.getOraclePassword());
+//        props.put(CommonClientConfigs.ORACLE_USER_NAME, configData.getOracleUserName());
+//        props.put(CommonClientConfigs.ORACLE_PASSWORD, configData.getOraclePassword());
         props.put(SslConfigs.TNS_ALIAS, configData.getTnsAlias());
 
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, configData.getBootstrapServers());

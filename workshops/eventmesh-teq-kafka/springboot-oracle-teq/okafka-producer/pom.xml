@@ -28,7 +28,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.oracle</groupId>
+            <groupId>org.oracle.okafka</groupId>
             <artifactId>okafka</artifactId>
         </dependency>
         <dependency>
