@@ -38,12 +38,16 @@ public class CreateDBLinksAndSagaInfra {
                                                     String linkName, String linkhostname, String linkport,
                                                     String linkservice_name, String linkssl_server_cert_dn,
                                                     boolean isCoordinator) throws Exception {
+        boolean skipdblinks = System.getenv("skipdblinks") != null && System.getenv("skipdblinks").equals("true");
+        boolean skipinstallSaga = System.getenv("skipinstallSaga") != null && System.getenv("skipinstallSaga").equals("true");
+        boolean skipbrokerinstall = System.getenv("skipbrokerinstall") != null && System.getenv("skipbrokerinstall").equals("true");
         System.out.println(
-                "tnsAdmin = " + tnsAdmin + "\nlocalUser = " + localUser + "\nlocalPW = " + localPW +
+                "tnsAdmin = " + tnsAdmin + "\nlocalUser = " + localUser +
                         "\nurl = " + url + "\ncredName = " + credName +
-                        "\nremoteUser = " + remoteUser + "\nremotePW = " + remotePW +
+                        "\nremoteUser = " + remoteUser +
                         "\nlinkName = " + linkName + "\nlinkhostname = " + linkhostname + "\nlinkport = " + linkport +
-                        "\nlinkservice_name = " + linkservice_name + "\nlinkssl_server_cert_dn = " + linkssl_server_cert_dn);
+                        "\nlinkservice_name = " + linkservice_name + "\nlinkssl_server_cert_dn = " + linkssl_server_cert_dn
+        );
         System.setProperty("oracle.jdbc.fanEnabled", "false");
         PoolDataSource poolDataSource = PoolDataSourceFactory.getPoolDataSource();
         poolDataSource.setConnectionFactoryClassName("oracle.jdbc.pool.OracleDataSource");
@@ -52,19 +56,21 @@ public class CreateDBLinksAndSagaInfra {
         poolDataSource.setPassword(localPW);
         Connection conn = poolDataSource.getConnection();
         System.out.println("Connection:" + conn + " url:" + url);
-        createDBLink(tnsAdmin, url, credName, remoteUser, remotePW, linkName, linkhostname, linkport, linkservice_name, linkssl_server_cert_dn, conn);
-        installSaga(conn, url);
+        if (!skipdblinks)
+            createDBLink(tnsAdmin, url, credName, remoteUser, remotePW, linkName, linkhostname, linkport, linkservice_name, linkssl_server_cert_dn, conn);
+        if (!skipinstallSaga)
+            installSaga(conn, url);
         if (isCoordinator) {
             System.out.println("Creating wrappers...");
             conn.prepareStatement(OsagaInfra.createBEGINSAGAWRAPPER).execute();
             conn.prepareStatement(OsagaInfra.createEnrollParticipant).execute();
             System.out.println("Finished creating wrappers.");
             System.out.println("Creating broker...");
-            conn.prepareStatement("{call dbms_saga_adm.add_broker(broker_name => 'TEST')}").execute();
+            if (!skipbrokerinstall) conn.prepareStatement("{call dbms_saga_adm.add_broker(broker_name => 'TEST')}").execute();
             System.out.println("Finished creating broker.");
             System.out.println("Creating coordinator...");
             //Note that if the coordinator is co-located with the broker, dblink_to_broker should be NULL
-            conn.prepareStatement("{dbms_saga_adm.add_coordinator( " +
+            conn.prepareStatement("{call dbms_saga_adm.add_coordinator( " +
                     "coordinator_name => 'TravelCoordinator',  " +
                     "dblink_to_broker => null,   " +
                     "mailbox_schema => 'admin',  " +
@@ -95,7 +101,13 @@ public class CreateDBLinksAndSagaInfra {
         preparedStatement.setString(1, credName);
         preparedStatement.setString(2, remoteUser);
         preparedStatement.setString(3, remotePW);
-        preparedStatement.execute();
+        try {
+            preparedStatement.execute();
+        } catch (SQLException sqlex) {
+            if (sqlex.getMessage().contains("already exists")) {
+                System.out.println("Credential for dblink already exists, proceeding... ");
+            }
+        }
         System.out.println("credName created = " + credName + " from url = " + url );
 
         preparedStatement = conn.prepareStatement(OsagaInfra.CREATE_DBLINK_SQL);

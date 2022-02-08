@@ -83,7 +83,7 @@ echo ____________________________________________________
 echo setting up DB links and OSaga infrastructure ...
 cd osaga-java-api
 mvn clean install
-#nohup java -jar
-java -jar target/osaga-java-api.jar | grep -v "WARNING"
+cp osaga-java-api.jar target/
+java -jar target/osaga-java-api.jar
 cd ../
 
