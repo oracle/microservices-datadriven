@@ -14,13 +14,13 @@ if [ -z "$DOCKER_REGISTRY" ]; then
     exit 1
 fi
 
-if [ -z "$ORDER_PDB_NAME" ]; then
-    echo "ORDER_PDB_NAME not set. Will get it with state_get"
-  export ORDER_PDB_NAME=$(state_get ORDER_DB_NAME)
+if [ -z "$ORDER_DB_NAME" ]; then
+    echo "ORDER_DB_NAME not set. Will get it with state_get"
+  export ORDER_DB_NAME=$(state_get ORDER_DB_NAME)
 fi
 
-if [ -z "$ORDER_PDB_NAME" ]; then
-    echo "Error: ORDER_PDB_NAME env variable needs to be set!"
+if [ -z "$ORDER_DB_NAME" ]; then
+    echo "Error: ORDER_DB_NAME env variable needs to be set!"
     exit 1
 fi
 
@@ -38,7 +38,7 @@ sed -e  "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" db-metrics-exporter-orderpdb-
 mv -- /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 sed -e  "s|%EXPORTER_NAME%|orderpdb|g" db-metrics-exporter-orderpdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
-sed -e  "s|%PDB_NAME%|${ORDER_PDB_NAME}|g" db-metrics-exporter-orderpdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
+sed -e  "s|%PDB_NAME%|${ORDER_DB_NAME}|g" db-metrics-exporter-orderpdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 sed -e  "s|%USER%|orderUSER|g" db-metrics-exporter-orderpdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
