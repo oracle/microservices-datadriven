@@ -159,13 +159,13 @@ while ! state_done NAMESPACE; do
   state_set NAMESPACE "$NAMESPACE"
 done
 
-# run db-setup.sh in background
+# run oracle_db_setup.sh in background
 if ! state_get DB_SETUP; then
-  if ps -ef | grep "$LAB_HOME/cloud-setup/utils/db-setup.sh" | grep -v grep; then
-    echo "$LAB_HOME/cloud-setup/utils/db-setup.sh is already running"
+  if ps -ef | grep "$LAB_HOME/cloud-setup/database/oracle_db_setup.sh" | grep -v grep; then
+    echo "$LAB_HOME/cloud-setup/database/oracle_db_setup.sh is already running"
   else
-    echo "Executing db-setup.sh in the background"
-    nohup "$LAB_HOME"/cloud-setup/utils/db-setup.sh &>>"$LAB_LOG"/db-setup.log &
+    echo "Executing oracle_db_setup.sh in the background"
+    nohup "$LAB_HOME"/cloud-setup/database/oracle_db_setup.sh &>>"$LAB_LOG"/db-setup.log &
   fi
 fi
 
@@ -249,15 +249,18 @@ fi
 
 # run kafka-setup.sh in background
 if ! state_get KAFKA_SETUP; then
-  if ps -ef | grep "$LAB_HOME/cloud-setup/utils/kafka-setup.sh" | grep -v grep; then
-    echo "$LAB_HOME/cloud-setup/utils/kafka-setup.sh is already running"
+  if ps -ef | grep "$LAB_HOME/cloud-setup/confluent-kafka/kafka-setup.sh" | grep -v grep; then
+    echo "$LAB_HOME/cloud-setup/confluent-kafka/kafka-setup.sh is already running"
   else
     echo "Executing kafka-setup.sh in the background"
-    nohup "$LAB_HOME"/cloud-setup/utils/kafka-setup.sh &>>"$LAB_LOG"/kafka-setup.log &
+    nohup "$LAB_HOME"/cloud-setup/confluent-kafka/kafka-setup.sh &>>"$LAB_LOG"/kafka-setup.log &
   fi
 fi
 
 ps -ef | grep "$LAB_HOME/cloud-setup/utils" | grep -v grep
+
+ps -ef | grep "$LAB_HOME/cloud-setup/confluent-kafka" | grep -v grep
+
 
 # Verify Setup
 # bgs="BUILD_ALL JAVA_BUILDS NON_JAVA_BUILDS OKE_SETUP DB_SETUP KAFKA_SETUP PROVISIONING"
