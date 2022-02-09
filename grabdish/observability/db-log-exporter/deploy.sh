@@ -4,4 +4,4 @@
 
 
 # See docs/Deploy.md for details
-k8s-deploy 'db-log-exporter-inventorypdb-deployment.yaml db-log-inventorypdb-exporter-service.yaml db-log-exporter-orderypdb-deployment.yaml db-log-orderpdb-exporter-service.yaml '
+k8s-deploy 'db-log-exporter-inventorypdb-deployment.yaml db-log-inventorypdb-exporter-service.yaml db-log-exporter-orderpdb-deployment.yaml db-log-orderpdb-exporter-service.yaml '
