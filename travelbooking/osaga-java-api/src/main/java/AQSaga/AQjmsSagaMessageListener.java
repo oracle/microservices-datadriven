@@ -80,6 +80,9 @@ public abstract class AQjmsSagaMessageListener implements MessageListener {
                     case 5: // OSAGA_RESPONSE
                         response(sagaId, payload);
                         break;
+                    case 8: // OSAGA_RESPONSE
+                        response(sagaId, payload);
+                        break;
                 }
             }
             this.session.commit();
