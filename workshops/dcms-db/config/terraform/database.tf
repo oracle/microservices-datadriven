@@ -16,7 +16,7 @@ resource "random_password" "autonomous_database_password" {
 resource "oci_database_autonomous_database" "autonomous_database" {
   admin_password           = var.db_password
   compartment_id           = var.compartment_ocid
-  db_name                  = format("%sDB%s", upper(var.proj_abrv), var.size)
+  db_name                  = "dcmsdb"
   cpu_core_count           = var.adb_cpu_core_count[var.size]
   data_storage_size_in_tbs = var.adb_storage_size_in_tbs
   db_version               = var.adb_db_version
