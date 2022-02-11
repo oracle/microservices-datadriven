@@ -24,6 +24,11 @@ variable "proj_abrv" {
 variable "size" {
     default = "ALF"
 }
+
+variable "db_password" {
+    default = ""
+}
+
 variable "adb_license_model" {
   default = "BRING_YOUR_OWN_LICENSE"
 }
