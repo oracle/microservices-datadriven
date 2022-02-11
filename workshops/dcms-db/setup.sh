@@ -23,10 +23,6 @@ if ! state-store-setup "$DCMS_STATE_STORE" "$DCMS_LOG_DIR/state.log"; then
   exit 1
 fi
 
-# Start background builds
-cd $DCMS_BACKGROUND_BUILDS
-nohup $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-builds.sh >>$DCMS_LOG_DIR/background-builds.log 2>&1 &
-
 # Get the setup status
 if ! DCMS_STATUS=$(provisioning-get-status $DCMS_STATE); then
   echo "ERROR: Unable to get workshop provisioning status"

@@ -10,16 +10,16 @@ if ! provisioning-helper-pre-apply; then
   exit 1
 fi
 
-DB_DEPLOYMENT='$(state_get DB_DEPLOYMENT)'
-DB_TYPE='$(state_get DB_TYPE)'
-QUEUE_TYPE='$(state_get QUEUE_TYPE)'
-DB_PASSWORD_SECRET='$(state_get DB_PASSWORD_SECRET)'
-UI_PASSWORD_SECRET='$(state_get UI_PASSWORD_SECRET)'
-OCI_REGION='$(state_get OCI_REGION)'
+DB_DEPLOYMENT=$(state_get DB_DEPLOYMENT)
+DB_TYPE=$(state_get DB_TYPE)
+QUEUE_TYPE=$(state_get QUEUE_TYPE)
+DB_PASSWORD_SECRET=$(state_get DB_PASSWORD_SECRET)
+UI_PASSWORD_SECRET=$(state_get UI_PASSWORD_SECRET)
+OCI_REGION="$(state_get OCI_REGION)"
 
 DB_PASSWORD=$(get_secret $DB_PASSWORD_SECRET)
 
-GRABDISH_DB_CONFIG_CODE=$MSDD_WORKSHOP_CODE/grabdish/config/db
+GRABDISH_DB_CONFIG_CODE=$MSDD_CODE/grabdish/config/db
 
 # Source the DB environment variables
 source $GRABDISH_DB_CONFIG_CODE/params.env
