@@ -51,7 +51,7 @@ case "$DCMS_STATUS" in
     # Restart the setup
     cd $DCMS_STATE
     echo "Restarting setup.  Call 'status' to get the status of the setup"
-    nohup bash -c "provisioning-apply $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/config" >>$DCMS_LOG_DIR/setup.log 2>&1 &
+    nohup bash -c "provisioning-apply $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/config" >>$DCMS_LOG_DIR/config.log 2>&1 &
     exit 0
     ;;
 

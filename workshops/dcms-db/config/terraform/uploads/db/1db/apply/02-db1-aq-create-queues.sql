@@ -2,9 +2,6 @@
 -- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 
-WHENEVER SQLERROR EXIT 1
-connect $AQ_USER/"$AQ_PASSWORD"@$DB1_ALIAS
-
 ../../common/apply/aq-${QUEUE_TYPE}-create-queues.sql
 
 BEGIN

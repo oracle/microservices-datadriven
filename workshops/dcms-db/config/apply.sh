@@ -16,13 +16,9 @@ UI_PASSWORD_SECRET=$(state_get UI_PASSWORD_SECRET)
 OCI_REGION="$(state_get OCI_REGION)"
 DB_PASSWORD=$(get_secret $DB_PASSWORD_SECRET)
 
-GRABDISH_DB_CONFIG_CODE=$MSDD_CODE/grabdish/config/db
-
 # Copy terraform to my state
-if ! test -d $MY_STATE/terraform; then
-  cp -r $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/config/terraform $MY_STATE
-fi
-
+rm -rf $MY_STATE/terraform
+cp -r $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/config/terraform $MY_STATE
 
 # Source the DB environment variables
 source $MY_STATE/terraform/uploads/db/params.env

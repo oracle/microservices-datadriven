@@ -12,8 +12,6 @@ insert into inventory values ('pizza', '1469 WEBSTER ST,San Francisco,CA', 0);
 insert into inventory values ('burger', '1470 WEBSTER ST,San Francisco,CA', 0);
 commit;
 
-@$GRABDISH_HOME/inventory-dotnet/dequeueenqueue.sql
-
 CREATE OR REPLACE PROCEDURE dequeue_order_message(in_wait_option in BINARY_INTEGER, out_order_message OUT varchar2)
 IS
   dequeue_options       dbms_aq.dequeue_options_t;
@@ -21,7 +19,7 @@ IS
   message_handle        RAW(16);
   message               SYS.AQ\$_JMS_TEXT_MESSAGE;
   no_messages           EXCEPTION;
-  pragma                exception_init(no_messages, -25228); 
+  pragma                exception_init(no_messages, -25228);
 BEGIN
   CASE in_wait_option
   WHEN 0 THEN
@@ -75,8 +73,8 @@ show errors
 CREATE OR REPLACE PROCEDURE check_inventory(in_inventory_id IN VARCHAR2, out_inventory_location OUT varchar2)
 IS
 BEGIN
-  update INVENTORYUSER.INVENTORY set inventorycount = inventorycount - 1 
-    where inventoryid = in_inventory_id and inventorycount > 0 
+  update INVENTORYUSER.INVENTORY set inventorycount = inventorycount - 1
+    where inventoryid = in_inventory_id and inventorycount > 0
     returning inventorylocation into out_inventory_location;
   if sql%rowcount = 0 then
     out_inventory_location := 'inventorydoesnotexist';
@@ -107,7 +105,7 @@ BEGIN
     check_inventory(
       in_inventory_id        => order_inv_id,
       out_inventory_location => order_inv_loc);
-      
+
     -- Construct the inventory message
     inventory_json := new JSON_OBJECT_T;
     inventory_json.put('orderid',           order_json.get_string('orderid'));
