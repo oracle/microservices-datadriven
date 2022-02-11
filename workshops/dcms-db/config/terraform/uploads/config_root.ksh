@@ -43,10 +43,11 @@ fi
 if [[ ${MYSTAGE} == "PRE" ]]; then
 	print -- "Ensuring OCI Repo is enabled"
 	yum-config-manager --enable ol7_oci_included
-	
-	print -- "Updating System"
-	yum -y update
 
+	# print -- "Updating System"
+	# yum -y update
+  # Takes too long
+	
 	print -- "Installing ords and yum-cron"
 	yum -y install ords yum-cron oracle-instantclient-release-el7
 	yum -y install oracle-instantclient-sqlplus
