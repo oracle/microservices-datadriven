@@ -105,7 +105,7 @@ done
 # run java_mkstore.sh in background
 if ! state_get CWALLET_SSO_UPDATED; then
   echo "Executing jaka_mkstore.sh in the background"
-  "$LAB_HOME"/cloud-setup/database/jaka_mkstore.sh -nologo \
+  "$LAB_HOME"/cloud-setup/database/java_mkstore.sh -nologo \
   -wrl "$LAB_HOME"/wallet \
   -createCredential "$LAB_DB_SVC" "$LAB_DB_USER" >/dev/null <<!
   "$DB_PASSWORD"
