@@ -1,0 +1,23 @@
+# Populate <> values and source before running terraform as per the README.md
+# Required for the OCI Provider
+export TF_VAR_region="$(state_get OCI_REGION)"
+export TF_VAR_tenancy_ocid="$(state_get TENANCY_OCID)"
+export TF_VAR_compartment_ocid="$(state_get COMPARTMENT_OCID)"
+export TF_VAR_user_ocid="$(state_get USER_OCID)"
+export TF_VAR_db_password="$(get_secret DB_PASSWORD)"
+export TF_VAR_ui_password="$(get_secret UI_PASSWORD)"
+
+# Keys used to SSH to OCI VMs via Bastion (use cat to to populate value)
+# export TF_VAR_ssh_public_key=$(cat <PATH TO PUBLIC KEY>)
+# export TF_VAR_ssh_private_key=$(cat <PATH TO PRIVATE KEY>)
+
+# Set the Project Abbreviation (default apexpoc)
+export TF_VAR_proj_abrv="dcms-db"
+
+# Set the Environment, refer to README.md for differences (default ALf)
+# export TF_VAR_size="<ALF|S|M|L|XL>"
+export TF_VAR_size="ALF"
+
+# Setup logging just in case something fails
+export TF_LOG=TRACE
+export TF_LOG_PATH="terraform.log"
