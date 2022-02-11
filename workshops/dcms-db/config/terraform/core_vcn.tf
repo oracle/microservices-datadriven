@@ -1,4 +1,4 @@
-# Copyright © 2020, Oracle and/or its affiliates. 
+# Copyright © 2020, Oracle and/or its affiliates.
 # All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
 resource "oci_core_vcn" "vcn" {
@@ -6,7 +6,7 @@ resource "oci_core_vcn" "vcn" {
   display_name   = format("%s-vcn", var.proj_abrv)
   cidr_block     = var.vcn_cidr
   is_ipv6enabled = var.vcn_is_ipv6enabled
-  dns_label      = var.proj_abrv
+  dns_label      = "dcmsdb"
 }
 
 // Catch-22 for Always Free; Need to have ORDS in public with public
