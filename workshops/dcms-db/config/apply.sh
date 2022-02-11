@@ -22,6 +22,7 @@ DB_PASSWORD=$(get_secret $DB_PASSWORD_SECRET)
 GRABDISH_DB_CONFIG_CODE=$MSDD_CODE/grabdish/config/db
 
 # Source the DB environment variables
+GRABDISH_HOME=BLAH # Quick Workaround
 source $GRABDISH_DB_CONFIG_CODE/params.env
 
 # Copy terraform to my state
