@@ -22,10 +22,8 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import io.opentracing.Span;
 import io.opentracing.Tracer;
 import oracle.ucp.jdbc.PoolDataSource;
-import oracle.ucp.jdbc.PoolDataSourceFactory;
 import org.eclipse.microprofile.metrics.Counter;
 import org.eclipse.microprofile.metrics.Metadata;
 import org.eclipse.microprofile.metrics.MetricRegistry;
@@ -34,11 +32,8 @@ import org.eclipse.microprofile.opentracing.Traced;
 
 import static io.helidon.data.examples.InventoryServiceOrderEventConsumer.INVENTORYDOESNOTEXIST;
 
-import io.opentelemetry.instrumentation.jdbc.datasource.OpenTelemetryDataSource;
-
 @Path("/")
 @ApplicationScoped
-@Traced
 public class InventoryResource {
 
     @Inject
@@ -67,13 +62,12 @@ public class InventoryResource {
     }
 
     @Inject
-    Tracer tracer;
+    private Tracer tracer;
 
     @Inject
     private MetricRegistry metricRegistry;
 
-    public void init(Object init) throws Exception {
-//    public void init(@Observes @Initialized(ApplicationScoped.class) Object init) throws Exception {
+    public void init(@Observes @Initialized(ApplicationScoped.class) Object init) throws Exception {
         System.out.println("InventoryResource.init " + init);
         String pw;
         if(pwSecretOcid != null && !pwSecretOcid.equals("")) {
@@ -105,19 +99,11 @@ public class InventoryResource {
     @Path("/addInventory")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    @Traced(operationName = "order_placeOrder_timed")
     public Response  addInventory(@QueryParam("itemid") String itemid) {
         String response;
         System.out.println("SupplierService.addInventory itemid:" + itemid);
         try {
-            Connection conn = new OpenTelemetryDataSource(atpInventoryPDB).getConnection();
-            System.out.println("--->placeOrder...  itemid:" + itemid);
-            Span activeSpan = tracer.buildSpan("orderDetail").asChildOf(tracer.activeSpan()).start();
-            String traceid = activeSpan.toString().substring(0, activeSpan.toString().indexOf(":"));
-            activeSpan.log("begin placing order"); // logs are for a specific moment or event within the span (in contrast to tags which should apply to the span regardless of time).
-            activeSpan.setTag("itemid", itemid);
-            activeSpan.setTag("ecid", traceid);
-            activeSpan.setTag("db.user", atpInventoryPDB.getUser()); // https://github.com/opentracing/specification/blob/master/semantic_conventions.md
+            Connection conn = atpInventoryPDB.getConnection();
             conn.createStatement().execute(
                     "UPDATE inventory SET inventorycount = inventorycount + 1 where inventoryid = '" + itemid + "'");
             response = getInventoryCount(itemid, conn);
@@ -153,13 +139,7 @@ public class InventoryResource {
     public Response  getInventoryCount(@QueryParam("itemid") String itemid) {
         String response;
         System.out.println("SupplierService.getInventoryCount itemid:" + itemid);
-//        PoolDataSource poolDataSource = PoolDataSourceFactory.getPoolDataSource();
-//        poolDataSource.setConnectionFactoryClassName("oracle.jdbc.pool.OracleDataSource");
-//        String url = args[0];
-//        String user = args[1];
-//        poolDataSource.setURL(url);
-//        poolDataSource.setUser(user);
-        try (Connection conn = new OpenTelemetryDataSource(atpInventoryPDB).getConnection()) {
+        try (Connection conn = atpInventoryPDB.getConnection()) {
             response = getInventoryCount(itemid, conn);
         } catch (SQLException ex) {
             response = ex.getMessage();

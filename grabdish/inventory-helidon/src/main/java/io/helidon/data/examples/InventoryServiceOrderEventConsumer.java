@@ -19,7 +19,6 @@ import javax.jms.*;
 import java.lang.IllegalStateException;
 import java.sql.*;
 import java.sql.Connection;
-import io.opentelemetry.instrumentation.jdbc.datasource.OpenTelemetryDataSource;
 
 public class InventoryServiceOrderEventConsumer implements Runnable {
 
@@ -102,32 +101,6 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
                 order = JsonUtils.read(txt, Order.class);
                 System.out.print(" orderid:" + order.getOrderid());
                 System.out.print(" itemid:" + order.getItemid());
-
-
-
-
-
-                System.out.print(" traceinventory add inventory item:" + order.getItemid());
-
-                Connection conn = new OpenTelemetryDataSource(inventoryResource.atpInventoryPDB).getConnection();
-                System.out.println("--->placeOrder...  itemid:" + order.getItemid());
-                Span activeSpan = inventoryResource.tracer.buildSpan("orderDetail").asChildOf(inventoryResource.tracer.activeSpan()).start();
-                String traceid = activeSpan.toString().substring(0, activeSpan.toString().indexOf(":"));
-                activeSpan.log("begin placing order"); // logs are for a specific moment or event within the span (in contrast to tags which should apply to the span regardless of time).
-                activeSpan.setTag("itemid", order.getItemid());
-                activeSpan.setTag("ecid", traceid);
-                activeSpan.setTag("db.user", inventoryResource.atpInventoryPDB.getUser()); // https://github.com/opentracing/specification/blob/master/semantic_conventions.md
-                conn.createStatement().execute(
-                        "UPDATE inventory SET inventorycount = inventorycount + 1 where inventoryid = '" + order.getItemid() + "'");
-
-
-
-                System.out.print(" traceinventory DONE add inventory item:" + order.getItemid());
-
-
-
-
-
                 updateDataAndSendEventOnInventory((AQjmsSession) tsess, order.getOrderid(), order.getItemid());
                 if(tsess!=null) tsess.commit();
                 System.out.println("message sent");
@@ -169,31 +142,6 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
                 Order order = JsonUtils.read(txt, Order.class);
                 System.out.print(" orderid:" + order.getOrderid());
                 System.out.print(" itemid:" + order.getItemid());
-
-
-
-
-
-
-                System.out.print(" traceinventory add inventory item:" + order.getItemid());
-
-                Connection conn = new OpenTelemetryDataSource(inventoryResource.atpInventoryPDB).getConnection();
-                System.out.println("--->placeOrder...  itemid:" + order.getItemid());
-                Span activeSpan = inventoryResource.tracer.buildSpan("orderDetail").asChildOf(inventoryResource.tracer.activeSpan()).start();
-                String traceid = activeSpan.toString().substring(0, activeSpan.toString().indexOf(":"));
-                activeSpan.log("begin placing order"); // logs are for a specific moment or event within the span (in contrast to tags which should apply to the span regardless of time).
-                activeSpan.setTag("itemid", order.getItemid());
-                activeSpan.setTag("ecid", traceid);
-                activeSpan.setTag("db.user", inventoryResource.atpInventoryPDB.getUser()); // https://github.com/opentracing/specification/blob/master/semantic_conventions.md
-                conn.createStatement().execute(
-                        "UPDATE inventory SET inventorycount = inventorycount + 1 where inventoryid = '" + order.getItemid() + "'");
-
-
-
-                System.out.print(" traceinventory DONE add inventory item:" + order.getItemid());
-
-
-
                 updateDataAndSendEventOnInventory((AQjmsSession) tsess, order.getOrderid(), order.getItemid());
                 if(tsess!=null) tsess.commit();
                 System.out.println("message sent");
