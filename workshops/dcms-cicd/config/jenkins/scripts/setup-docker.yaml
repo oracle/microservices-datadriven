@@ -1,0 +1,38 @@
+#cloud-config
+
+bootcmd:
+  - [ cloud-init-per, once, enable-epel,  yum-config-manager, --enable, ol7_developer_epel]
+
+groups:
+  - docker
+users:
+  - default 
+  - name: opc
+    groups: docker
+    shell: /bin/bash
+    sudo: ALL=(ALL) NOPASSWD:ALL
+
+# update package
+package_update: true
+
+# add kubectl to the yum repos
+yum_repos:
+  kubernetes:
+    baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+    enabled: true
+    gpgcheck: true
+    repo_gpgcheck: true
+    gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+    name: Installing Kubernetes CLI kubectl
+
+
+# install docker, git, then kubectl, as well as OCI
+packages:
+ - docker-engine
+ - docker-compose
+
+runcmd:
+  - [ systemctl, daemon-reload ]
+  - [ systemctl, enable, docker.service ]
+  - [ systemctl, start, --no-block, docker.service ]
+  - [ touch, /tmp/cloud-init-complete ]
