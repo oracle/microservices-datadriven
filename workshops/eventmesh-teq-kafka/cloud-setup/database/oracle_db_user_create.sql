@@ -1,6 +1,6 @@
 -- Copyright (c) 2021 Oracle and/or its affiliates.
 -- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
-set echo on
+set echo off
 
 DECLARE
   my_user  varchar2(30) := '&1' ;
@@ -8,7 +8,6 @@ DECLARE
 
 BEGIN
     --- USER SQL
-    CREATE USER username IDENTIFIED BY password  ;
     EXECUTE IMMEDIATE 'CREATE USER '||my_user||' IDENTIFIED BY '||my_password;
 
     --- GRANT User permissions.
