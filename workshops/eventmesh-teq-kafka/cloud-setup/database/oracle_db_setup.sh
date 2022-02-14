@@ -89,7 +89,29 @@ while ! state_done LAB_DB_USER; do
     WHENEVER SQLERROR EXIT 1
     connect admin/"$DB_PASSWORD"@$SVC
 
-    @oracle_db_user_create.sql $U $DB_PASSWORD
+    --- USER SQL
+    CREATE USER $U IDENTIFIED BY "$DB_PASSWORD"  ;
+    --- GRANT User permissions.
+    GRANT pdb_dba TO $U;
+    GRANT CREATE SESSION TO $U;
+    GRANT RESOURCE TO $U;
+    GRANT CONNECT TO $U;
+    GRANT EXECUTE ANY PROCEDURE TO $U;
+    GRANT CREATE DATABASE LINK TO $U;
+    GRANT UNLIMITED TABLESPACE TO $U;
+    --- GRANT AQ
+    GRANT AQ_ADMINISTRATOR_ROLE TO $U;
+    GRANT AQ_USER_ROLE TO $U;
+    GRANT SELECT_CATALOG_ROLE TO $U;
+    GRANT EXECUTE ON DBMS_AQADM TO $U;
+    GRANT EXECUTE on DBMS_AQ TO $U;
+    GRANT EXECUTE on DBMS_AQIN TO $U;
+    GRANT EXECUTE on DBMS_AQJMS TO $U;
+    GRANT EXECUTE ON sys.dbms_aqadm TO $U;
+    GRANT EXECUTE ON sys.dbms_aq TO $U;
+    GRANT EXECUTE ON sys.dbms_aqin TO $U;
+    GRANT EXECUTE ON sys.dbms_aqjms TO $U;
+
 
     connect $U/"$DB_PASSWORD"@$SVC
 
