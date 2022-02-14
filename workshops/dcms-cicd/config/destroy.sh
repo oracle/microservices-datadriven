@@ -12,12 +12,12 @@ fi
 
 
 export DCMS_INFRA_STATE=$DCMS_STATE/infra
-export DCMS_APP_STATE=$DCMS_STATE/grabdish
-export DCMS_THREAD_STATE=$DCMS_STATE/threads
+#export DCMS_APP_STATE=$DCMS_STATE/grabdish
+#export DCMS_THREAD_STATE=$DCMS_STATE/threads
 
 
 # Start the background destroy threads
-THREADS="db build-prep k8s grabdish"
+THREADS="jenkins"
 for t in $THREADS; do
   THREAD_STATE=$DCMS_THREAD_STATE/$t
   mkdir -p $THREAD_STATE
@@ -65,5 +65,5 @@ done
 rm -f $STATE_FILE
 
 # Clean up the auth token
-TOKEN_OCID=$(oci iam auth-token list --region "$(state_get HOME_REGION)" --user-id="$(state_get USER_OCID)" --query 'data[?description=='"'$(state_get DOCKER_AUTH_TOKEN_DESC)'"'].id|[0]' --raw-output)
-oci iam auth-token delete --region "$(state_get HOME_REGION)" --user-id="$(state_get USER_OCID)" --force --auth-token-id "$TOKEN_OCID"
+#TOKEN_OCID=$(oci iam auth-token list --region "$(state_get HOME_REGION)" --user-id="$(state_get USER_OCID)" --query 'data[?description=='"'$(state_get DOCKER_AUTH_TOKEN_DESC)'"'].id|[0]' --raw-output)
+#oci iam auth-token delete --region "$(state_get HOME_REGION)" --user-id="$(state_get USER_OCID)" --force --auth-token-id "$TOKEN_OCID"

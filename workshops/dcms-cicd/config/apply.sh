@@ -12,9 +12,9 @@ fi
 
 # Make sure folders are created
 export DCMS_INFRA_STATE=$DCMS_STATE/infra
-export DCMS_APP_STATE=$DCMS_STATE/grabdish
-export DCMS_THREAD_STATE=$DCMS_STATE/threads
-mkdir -p $DCMS_INFRA_STATE $DCMS_APP_STATE $DCMS_THREAD_STATE 
+#export DCMS_APP_STATE=$DCMS_STATE/grabdish
+#export DCMS_THREAD_STATE=$DCMS_STATE/threads
+mkdir -p $DCMS_INFRA_STATE # $DCMS_APP_STATE $DCMS_THREAD_STATE
 
 # Start the background threads
 THREADS="jenkins"
@@ -65,15 +65,20 @@ done
 # Write the output
 cat >$OUTPUT_FILE <<!
 export DOCKER_REGISTRY='$(state_get DOCKER_REGISTRY)'
-export JAVA_HOME=$(state_get JAVA_HOME)
+
 export PATH=$(state_get JAVA_HOME)/bin:$PATH
-export ORDER_DB_NAME='$(state_get ORDER_DB_NAME)'
-export ORDER_DB_TNS_ADMIN='$(state_get ORDER_DB_TNS_ADMIN)'
-export ORDER_DB_ALIAS='$(state_get ORDER_DB_ALIAS)'
-export INVENTORY_DB_NAME='$(state_get INVENTORY_DB_NAME)'
-export INVENTORY_DB_TNS_ADMIN='$(state_get INVENTORY_DB_TNS_ADMIN)'
-export INVENTORY_DB_ALIAS='$(state_get INVENTORY_DB_ALIAS)'
 export OCI_REGION='$(state_get OCI_REGION)'
-export VAULT_SECRET_OCID=''
-export K8S_NAMESPACE='msdataworkshop'
+
+
 !
+
+
+#export ORDER_DB_NAME='$(state_get ORDER_DB_NAME)'
+#export JAVA_HOME=$(state_get JAVA_HOME)
+#export VAULT_SECRET_OCID=''
+#export K8S_NAMESPACE='msdataworkshop'
+#export ORDER_DB_TNS_ADMIN='$(state_get ORDER_DB_TNS_ADMIN)'
+#export ORDER_DB_ALIAS='$(state_get ORDER_DB_ALIAS)'
+#export INVENTORY_DB_NAME='$(state_get INVENTORY_DB_NAME)'
+#export INVENTORY_DB_TNS_ADMIN='$(state_get INVENTORY_DB_TNS_ADMIN)'
+#export INVENTORY_DB_ALIAS='$(state_get INVENTORY_DB_ALIAS)'

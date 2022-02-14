@@ -8,7 +8,7 @@ set -eu
 
 export DCMS_THREAD_STATE=$DCMS_STATE/threads
 
-THREADS="build-prep db k8s grabdish"
+THREADS="jenkins"
 for t in $THREADS; do
   THREAD_STATE=$DCMS_THREAD_STATE/$t
   STATUS=$(provisioning-get-status $THREAD_STATE)
