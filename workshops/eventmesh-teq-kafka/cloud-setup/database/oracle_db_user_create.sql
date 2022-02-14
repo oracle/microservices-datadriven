@@ -2,39 +2,37 @@
 -- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 set echo on
 
-declare
-  username  varchar2(30) := '&1' ;
-  password  varchar2(30) := '&2' ;
+DECLARE
+  my_user  varchar2(30) := '&1' ;
+  my_password  varchar2(30) := '&2' ;
 
-begin
+BEGIN
     --- USER SQL
     CREATE USER username IDENTIFIED BY password  ;
-    
+    EXECUTE IMMEDIATE 'CREATE USER '||my_user||' IDENTIFIED BY '||my_password;
+
     --- GRANT User permissions.
-    GRANT pdb_dba TO username;
-    GRANT CREATE SESSION TO username;
-    GRANT RESOURCE TO username;
-    GRANT CONNECT TO username;
-    GRANT EXECUTE ANY PROCEDURE TO username;
-    GRANT CREATE DATABASE LINK TO username;
-    GRANT UNLIMITED TABLESPACE TO username;
-    
+    EXECUTE IMMEDIATE 'GRANT CREATE SESSION TO '||my_user;
+    EXECUTE IMMEDIATE 'GRANT pdb_dba TO '||my_user;
+    EXECUTE IMMEDIATE 'GRANT RESOURCE TO '||my_user;
+    EXECUTE IMMEDIATE 'GRANT CONNECT TO '||my_user;
+    EXECUTE IMMEDIATE 'GRANT EXECUTE ANY PROCEDURE TO '||my_user;
+    EXECUTE IMMEDIATE 'GRANT CREATE DATABASE LINK TO '||my_user;
+    EXECUTE IMMEDIATE 'GRANT UNLIMITED TABLESPACE TO '||my_user;
+
     --- GRANT AQ
-    GRANT AQ_ADMINISTRATOR_ROLE TO username;
-    GRANT AQ_USER_ROLE TO username;
-    GRANT SELECT_CATALOG_ROLE TO username;
-    GRANT EXECUTE ON DBMS_AQADM TO username;
-    GRANT EXECUTE on DBMS_AQ TO username;
-    GRANT EXECUTE on DBMS_AQIN TO username;
-    GRANT EXECUTE on DBMS_AQJMS TO username;
-    GRANT EXECUTE ON sys.dbms_aqadm TO username;
-    GRANT EXECUTE ON sys.dbms_aq TO username;
-    GRANT EXECUTE ON sys.dbms_aqin TO username;
-    GRANT EXECUTE ON sys.dbms_aqjms TO username;
+    EXECUTE IMMEDIATE 'GRANT AQ_ADMINISTRATOR_ROLE TO '||my_user;
+    EXECUTE IMMEDIATE 'GRANT AQ_USER_ROLE TO  '||my_user;
+    EXECUTE IMMEDIATE 'GRANT SELECT_CATALOG_ROLE TO  '||my_user;
+    EXECUTE IMMEDIATE 'GRANT EXECUTE ON DBMS_AQADM TO  '||my_user;
+    EXECUTE IMMEDIATE 'GRANT EXECUTE on DBMS_AQ TO  '||my_user;
+    EXECUTE IMMEDIATE 'GRANT EXECUTE on DBMS_AQIN TO  '||my_user;
+    EXECUTE IMMEDIATE 'GRANT EXECUTE on DBMS_AQJMS TO  '||my_user;
+    EXECUTE IMMEDIATE 'GRANT EXECUTE ON sys.dbms_aqadm TO  '||my_user;
+    EXECUTE IMMEDIATE 'GRANT EXECUTE ON sys.dbms_aq TO  '||my_user;
+    EXECUTE IMMEDIATE 'GRANT EXECUTE ON sys.dbms_aqin TO  '||my_user;
+    EXECUTE IMMEDIATE 'GRANT EXECUTE ON sys.dbms_aqjms TO  '||my_user;
     
-    --- Cloud
-    GRANT EXECUTE ON DBMS_CLOUD_ADMIN TO username;
-    GRANT EXECUTE ON DBMS_CLOUD TO username;
-end;
+END;
 /
 exit;

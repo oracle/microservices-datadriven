@@ -64,7 +64,7 @@ done
 # Get Run Name from directory name
 while ! state_done RUN_NAME; do
   cd "$LAB_HOME"
-  cd ../..
+  cd ../../..
   # Validate that a folder was creared
   if test "$PWD" == ~; then
     echo "ERROR: The workshop is not installed in a separate folder."
