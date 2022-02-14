@@ -115,7 +115,20 @@ while ! state_done LAB_DB_USER; do
 
     connect $U/"$DB_PASSWORD"@$SVC
 
-    @oracle_db_teq_topic_create.sql
+    -- Creating a JMS type sharded queue:
+    BEGIN
+      sys.dbms_aqadm.create_sharded_queue(queue_name=>'LAB8022_TOPIC', multiple_consumers => TRUE);
+      sys.dbms_aqadm.start_queue('LAB8022_TOPIC');
+    END;
+    /
+    --- Create the subscriber agent
+    DECLARE
+      subscriber sys.aq$_agent;
+    BEGIN
+      subscriber := sys.aq$_agent('LAB8022_SUBSCRIBER', NULL, NULL);
+      DBMS_AQADM.ADD_SUBSCRIBER(queue_name => 'LAB8022_TOPIC',   subscriber => subscriber);
+    END;
+    /
 
     commit;
 !
