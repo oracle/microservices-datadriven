@@ -86,51 +86,49 @@ while ! state_done LAB_DB_USER; do
   SVC=$LAB_DB_SVC
 
   sqlplus /nolog <<!
-    WHENEVER SQLERROR EXIT 1
-    connect admin/"$DB_PASSWORD"@$SVC
-
-    --- USER SQL
-    CREATE USER $U IDENTIFIED BY "$DB_PASSWORD"  ;
-    --- GRANT User permissions.
-    GRANT pdb_dba TO $U;
-    GRANT CREATE SESSION TO $U;
-    GRANT RESOURCE TO $U;
-    GRANT CONNECT TO $U;
-    GRANT EXECUTE ANY PROCEDURE TO $U;
-    GRANT CREATE DATABASE LINK TO $U;
-    GRANT UNLIMITED TABLESPACE TO $U;
-    --- GRANT AQ
-    GRANT AQ_ADMINISTRATOR_ROLE TO $U;
-    GRANT AQ_USER_ROLE TO $U;
-    GRANT SELECT_CATALOG_ROLE TO $U;
-    GRANT EXECUTE ON DBMS_AQADM TO $U;
-    GRANT EXECUTE on DBMS_AQ TO $U;
-    GRANT EXECUTE on DBMS_AQIN TO $U;
-    GRANT EXECUTE on DBMS_AQJMS TO $U;
-    GRANT EXECUTE ON sys.dbms_aqadm TO $U;
-    GRANT EXECUTE ON sys.dbms_aq TO $U;
-    GRANT EXECUTE ON sys.dbms_aqin TO $U;
-    GRANT EXECUTE ON sys.dbms_aqjms TO $U;
-
-
-    connect $U/"$DB_PASSWORD"@$SVC
-
-    -- Creating a JMS type sharded queue:
-    BEGIN
-      sys.dbms_aqadm.create_sharded_queue(queue_name=>'LAB8022_TOPIC', multiple_consumers => TRUE);
-      sys.dbms_aqadm.start_queue('LAB8022_TOPIC');
-    END;
-    /
-    --- Create the subscriber agent
-    DECLARE
-      subscriber sys.aq$_agent;
-    BEGIN
-      subscriber := sys.aq$_agent('LAB8022_SUBSCRIBER', NULL, NULL);
-      DBMS_AQADM.ADD_SUBSCRIBER(queue_name => 'LAB8022_TOPIC',   subscriber => subscriber);
-    END;
-    /
-
-    commit;
+WHENEVER SQLERROR EXIT 1
+connect admin/"$DB_PASSWORD"@$SVC
+--- USER SQL
+CREATE USER $U IDENTIFIED BY "$DB_PASSWORD"  ;
+--- GRANT User permissions.
+GRANT pdb_dba TO $U;
+GRANT CREATE SESSION TO $U;
+GRANT RESOURCE TO $U;
+GRANT CONNECT TO $U;
+GRANT EXECUTE ANY PROCEDURE TO $U;
+GRANT CREATE DATABASE LINK TO $U;
+GRANT UNLIMITED TABLESPACE TO $U;
+--- GRANT AQ
+GRANT AQ_ADMINISTRATOR_ROLE TO $U;
+GRANT AQ_USER_ROLE TO $U;
+GRANT SELECT_CATALOG_ROLE TO $U;
+GRANT EXECUTE ON DBMS_AQADM TO $U;
+GRANT EXECUTE on DBMS_AQ TO $U;
+GRANT EXECUTE on DBMS_AQIN TO $U;
+GRANT EXECUTE on DBMS_AQJMS TO $U;
+GRANT EXECUTE ON sys.dbms_aqadm TO $U;
+GRANT EXECUTE ON sys.dbms_aq TO $U;
+GRANT EXECUTE ON sys.dbms_aqin TO $U;
+GRANT EXECUTE ON sys.dbms_aqjms TO $U;
+--- Cloud
+GRANT EXECUTE ON DBMS_CLOUD_ADMIN TO $U;
+GRANT EXECUTE ON DBMS_CLOUD TO $U;
+connect $U/"$DB_PASSWORD"@$SVC
+-- Creating a JMS type sharded queue:
+BEGIN
+  sys.dbms_aqadm.create_sharded_queue(queue_name=>'LAB8022_TOPIC', multiple_consumers => TRUE);
+  sys.dbms_aqadm.start_queue('LAB8022_TOPIC');
+END;
+/
+--- Create the subscriber agent
+DECLARE
+  subscriber sys.aq$_agent;
+BEGIN
+  subscriber := sys.aq$_agent('LAB8022_SUBSCRIBER', NULL, NULL);
+  DBMS_AQADM.ADD_SUBSCRIBER(queue_name => 'LAB8022_TOPIC',   subscriber => subscriber);
+END;
+/
+commit;
 !
   cd "$LAB_HOME"
   state_set LAB_DB_USER "$LAB_DB_USER"
