@@ -81,15 +81,15 @@ state_reset BASE64_DB_PASSWORD
 
 # Lab DB User, Objects
 while ! state_done LAB_DB_USER; do
-  cd "$LAB_HOME"/cloud-setup/database
   U=$LAB_DB_USER
   SVC=$LAB_DB_SVC
-
   sqlplus /nolog <<!
 WHENEVER SQLERROR EXIT 1
 connect admin/"$DB_PASSWORD"@$SVC
+
 --- USER SQL
 CREATE USER $U IDENTIFIED BY "$DB_PASSWORD"  ;
+
 --- GRANT User permissions.
 GRANT pdb_dba TO $U;
 GRANT CREATE SESSION TO $U;
@@ -98,6 +98,7 @@ GRANT CONNECT TO $U;
 GRANT EXECUTE ANY PROCEDURE TO $U;
 GRANT CREATE DATABASE LINK TO $U;
 GRANT UNLIMITED TABLESPACE TO $U;
+
 --- GRANT AQ
 GRANT AQ_ADMINISTRATOR_ROLE TO $U;
 GRANT AQ_USER_ROLE TO $U;
@@ -110,29 +111,37 @@ GRANT EXECUTE ON sys.dbms_aqadm TO $U;
 GRANT EXECUTE ON sys.dbms_aq TO $U;
 GRANT EXECUTE ON sys.dbms_aqin TO $U;
 GRANT EXECUTE ON sys.dbms_aqjms TO $U;
+
 --- Cloud
 GRANT EXECUTE ON DBMS_CLOUD_ADMIN TO $U;
 GRANT EXECUTE ON DBMS_CLOUD TO $U;
+
 connect $U/"$DB_PASSWORD"@$SVC
+
 -- Creating a JMS type sharded queue:
 BEGIN
-  sys.dbms_aqadm.create_sharded_queue(queue_name=>'LAB8022_TOPIC', multiple_consumers => TRUE);
-  sys.dbms_aqadm.start_queue('LAB8022_TOPIC');
+  sys.dbms_aqadm.create_sharded_queue(queue_name=>'$LAB_TEQ_TOPIC', multiple_consumers => TRUE);
+  -- sys.dbms_aqadm.set_queue_parameter('$LAB_TEQ_TOPIC', 'SHARD_NUM', 1);
+  -- sys.dbms_aqadm.set_queue_parameter('$LAB_TEQ_TOPIC', 'STICKY_DEQUEUE', 1);
+  -- sys.dbms_aqadm.set_queue_parameter('$LAB_TEQ_TOPIC', 'KEY_BASED_ENQUEUE', 1);
+  sys.dbms_aqadm.start_queue('$LAB_TEQ_TOPIC');
 END;
 /
+
 --- Create the subscriber agent
 DECLARE
   subscriber sys.aq$_agent;
 BEGIN
-  subscriber := sys.aq$_agent('LAB8022_SUBSCRIBER', NULL, NULL);
-  DBMS_AQADM.ADD_SUBSCRIBER(queue_name => 'LAB8022_TOPIC',   subscriber => subscriber);
+  subscriber := sys.aq$_agent('$LAB_TEQ_TOPIC_SUBSCRIBER', NULL, NULL);
+  DBMS_AQADM.ADD_SUBSCRIBER(queue_name => '$LAB_TEQ_TOPIC',   subscriber => subscriber);
 END;
 /
 commit;
 !
-  cd "$LAB_HOME"
   state_set LAB_DB_USER "$LAB_DB_USER"
 done
+
+cd "$LAB_HOME"
 
 # Setup User Login on Wallet
 # run java_mkstore.sh in background
