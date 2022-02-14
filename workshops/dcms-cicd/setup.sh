@@ -2,6 +2,10 @@
 # Copyright (c) 2021 Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
+#
+# This shell file will setup the environment and related variables required
+#
+
 # Fail on error
 set -eu
 
@@ -24,8 +28,8 @@ if ! state-store-setup "$DCMS_STATE_STORE" "$DCMS_LOG_DIR/state.log"; then
 fi
 
 # Start background builds
-cd $DCMS_BACKGROUND_BUILDS
-nohup $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-builds.sh >>$DCMS_LOG_DIR/background-builds.log 2>&1 &
+#cd $DCMS_BACKGROUND_BUILDS
+#nohup $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-builds.sh >>$DCMS_LOG_DIR/background-builds.log 2>&1 &
 
 # Get the setup status
 if ! DCMS_STATUS=$(provisioning-get-status $DCMS_STATE); then
@@ -96,13 +100,13 @@ if ! state_done RUN_NAME; then
 fi
 
 # Hard coded for now
-if ! state_done DB_DEPLOYMENT; then
-state_set DB_DEPLOYMENT 2DB
-fi
+#if ! state_done DB_DEPLOYMENT; then
+#state_set DB_DEPLOYMENT 2DB
+#fi
 
-if ! state_done DB_TYPE; then
-state_set DB_TYPE ATP
-fi
+#if ! state_done DB_TYPE; then
+#state_set DB_TYPE ATP
+#fi
 
 if ! state_done QUEUE_TYPE; then
 state_set QUEUE_TYPE classicq
@@ -115,16 +119,16 @@ while ! state_done RUN_TYPE; do
     state_set RESERVATION_ID `grep -oP '(?<=/home/ll).*?(?=_us)' <<<"$HOME"`
     state_set USER_OCID 'NA'
     state_set USER_NAME "LL$(state_get RESERVATION_ID)-USER"
-    state_set DB1_NAME "ORDER$(state_get RESERVATION_ID)"
-    state_set DB2_NAME "INVENTORY$(state_get RESERVATION_ID)"
-    state_set_done OKE_LIMIT_CHECK
-    state_set_done ATP_LIMIT_CHECK
+#    state_set DB1_NAME "ORDER$(state_get RESERVATION_ID)"
+#    state_set DB2_NAME "INVENTORY$(state_get RESERVATION_ID)"
+#    state_set_done OKE_LIMIT_CHECK
+#    state_set_done ATP_LIMIT_CHECK
     state_set HOME_REGION 'NA'
   else
     # Run in your own tenancy
     state_set RUN_TYPE "OT"
-    state_set DB1_NAME "$(state_get RUN_NAME)1"
-    state_set DB2_NAME "$(state_get RUN_NAME)2"
+#    state_set DB1_NAME "$(state_get RUN_NAME)1"
+#    state_set DB2_NAME "$(state_get RUN_NAME)2"
   fi
 done
 
@@ -147,44 +151,44 @@ while ! state_done TENANCY_OCID; do
 done
 
 # Check OKE Limits
-if ! state_done OKE_LIMIT_CHECK; then
-  # Cluster Service Limit
-  OKE_LIMIT=`oci limits value list --compartment-id "$(state_get TENANCY_OCID)" --service-name "container-engine" --query 'sum(data[?"name"=='"'cluster-count'"'].value)'`
-  if test "$OKE_LIMIT" -lt 1; then
-    echo 'The service limit for the "Container Engine" "Cluster Count" is insufficent to run this workshop.  At least 1 is required.'
-    exit
-  elif test "$OKE_LIMIT" -eq 1; then
-    echo 'You are limited to only one OKE cluster in this tenancy.  This workshop will create one additional OKE cluster and so any other OKE clusters must be terminated.'
-    if test -z "${TEST_USER_OCID-}"; then
-      read -p "Please confirm that no other un-terminated OKE clusters exist in this tenancy and then hit [RETURN]? " DUMMY
-    fi
-  fi
-  state_set_done OKE_LIMIT_CHECK
-fi
+#if ! state_done OKE_LIMIT_CHECK; then
+#  # Cluster Service Limit
+#  OKE_LIMIT=`oci limits value list --compartment-id "$(state_get TENANCY_OCID)" --service-name "container-engine" --query 'sum(data[?"name"=='"'cluster-count'"'].value)'`
+#  if test "$OKE_LIMIT" -lt 1; then
+#    echo 'The service limit for the "Container Engine" "Cluster Count" is insufficent to run this workshop.  At least 1 is required.'
+#    exit
+#  elif test "$OKE_LIMIT" -eq 1; then
+#    echo 'You are limited to only one OKE cluster in this tenancy.  This workshop will create one additional OKE cluster and so any other OKE clusters must be terminated.'
+#    if test -z "${TEST_USER_OCID-}"; then
+#      read -p "Please confirm that no other un-terminated OKE clusters exist in this tenancy and then hit [RETURN]? " DUMMY
+#    fi
+#  fi
+#  state_set_done OKE_LIMIT_CHECK
+#fi
 
 # Check ATP resource availability
-while ! state_done ATP_LIMIT_CHECK; do
-  CHECK=1
-  # ATP OCPU availability
-  if test $(oci limits resource-availability get --compartment-id="$(state_get TENANCY_OCID)" --service-name "database" --limit-name "atp-ocpu-count" --query 'to_string(min([data."fractional-availability",`4.0`]))' --raw-output) != '4.0'; then
-    echo 'The "Autonomous Transaction Processing OCPU Count" resource availability is insufficent to run this workshop.'
-    echo '4 OCPUs are required.  Terminate some existing ATP databases and try again.'
-    CHECK=0
-  fi
-
-  # ATP storage availability
-  if test $(oci limits resource-availability get --compartment-id="$(state_get TENANCY_OCID)" --service-name "database" --limit-name "atp-total-storage-tb" --query 'to_string(min([data."fractional-availability",`2.0`]))' --raw-output) != '2.0'; then
-    echo 'The "Autonomous Transaction Processing Total Storage (TB)" resource availability is insufficent to run this workshop.'
-    echo '2 TB are required.  Terminate some existing ATP databases and try again.'
-    CHECK=0
-  fi
-
-  if test $CHECK -eq 1; then
-    state_set_done ATP_LIMIT_CHECK
-  else
-    read -p "Hit [RETURN] when you are ready to retry? " DUMMY
-  fi
-done
+#while ! state_done ATP_LIMIT_CHECK; do
+#  CHECK=1
+#  # ATP OCPU availability
+#  if test $(oci limits resource-availability get --compartment-id="$(state_get TENANCY_OCID)" --service-name "database" --limit-name "atp-ocpu-count" --query 'to_string(min([data."fractional-availability",`4.0`]))' --raw-output) != '4.0'; then
+#    echo 'The "Autonomous Transaction Processing OCPU Count" resource availability is insufficent to run this workshop.'
+#    echo '4 OCPUs are required.  Terminate some existing ATP databases and try again.'
+#    CHECK=0
+#  fi
+#
+#  # ATP storage availability
+#  if test $(oci limits resource-availability get --compartment-id="$(state_get TENANCY_OCID)" --service-name "database" --limit-name "atp-total-storage-tb" --query 'to_string(min([data."fractional-availability",`2.0`]))' --raw-output) != '2.0'; then
+#    echo 'The "Autonomous Transaction Processing Total Storage (TB)" resource availability is insufficent to run this workshop.'
+#    echo '2 TB are required.  Terminate some existing ATP databases and try again.'
+#    CHECK=0
+#  fi
+#
+#  if test $CHECK -eq 1; then
+#    state_set_done ATP_LIMIT_CHECK
+#  else
+#    read -p "Hit [RETURN] when you are ready to retry? " DUMMY
+#  fi
+#done
 
 # Home Region
 if ! state_done HOME_REGION; then
@@ -252,96 +256,93 @@ while ! state_done NAMESPACE; do
 done
 
 # Auth Token Desc (used for destroy)
-if ! state_done DOCKER_AUTH_TOKEN_DESC; then
-  state_set DOCKER_AUTH_TOKEN_DESC "grabdish docker login $(state_get RUN_NAME)"
-fi
+#if ! state_done DOCKER_AUTH_TOKEN_DESC; then
+#  state_set DOCKER_AUTH_TOKEN_DESC "grabdish docker login $(state_get RUN_NAME)"
+#fi
 
 # Get the docker auth token
-while ! is_secret_set DOCKER_AUTH_TOKEN; do
-  if test $(state_get RUN_TYPE) != "LL"; then
-    if ! TOKEN=`oci iam auth-token create --region "$(state_get HOME_REGION)" --user-id "$(state_get USER_OCID)" --description "$(state_get DOCKER_AUTH_TOKEN_DESC)" --query 'data.token' --raw-output 2>$DCMS_LOG_DIR/docker_auth_token`; then
-      if grep UserCapacityExceeded $DCMS_LOG_DIR/docker_auth_token >/dev/null; then
-        # The key already exists
-        echo 'ERROR: Failed to create auth token.  Please delete an old token from the OCI Console (Profile -> User Settings -> Auth Tokens).'
-        read -p "Hit return when you are ready to retry?"
-        continue
-      else
-        echo "ERROR: Creating auth token has failed:"
-        cat $DCMS_LOG_DIR/docker_auth_token
-        exit
-      fi
-    fi
-  else
-    read -s -r -p "Please generate an Auth Token and enter the value: " TOKEN
-    echo
-    echo "Auth Token entry accepted.  Attempting docker login."
-  fi
-  set_secret DOCKER_AUTH_TOKEN "$TOKEN"
-done
+#while ! is_secret_set DOCKER_AUTH_TOKEN; do
+#  if test $(state_get RUN_TYPE) != "LL"; then
+#    if ! TOKEN=`oci iam auth-token create --region "$(state_get HOME_REGION)" --user-id "$(state_get USER_OCID)" --description "$(state_get DOCKER_AUTH_TOKEN_DESC)" --query 'data.token' --raw-output 2>$DCMS_LOG_DIR/docker_auth_token`; then
+#      if grep UserCapacityExceeded $DCMS_LOG_DIR/docker_auth_token >/dev/null; then
+#        # The key already exists
+#        echo 'ERROR: Failed to create auth token.  Please delete an old token from the OCI Console (Profile -> User Settings -> Auth Tokens).'
+#        read -p "Hit return when you are ready to retry?"
+#        continue
+#      else
+#        echo "ERROR: Creating auth token has failed:"
+#        cat $DCMS_LOG_DIR/docker_auth_token
+#        exit
+#      fi
+#    fi
+#  else
+#    read -s -r -p "Please generate an Auth Token and enter the value: " TOKEN
+#    echo
+#    echo "Auth Token entry accepted.  Attempting docker login."
+#  fi
+#  set_secret DOCKER_AUTH_TOKEN "$TOKEN"
+#done
 
 # Login to docker
-while ! state_done DOCKER_REGISTRY; do
-  RETRIES=0
-  while test $RETRIES -le 30; do
-    if echo "$(get_secret DOCKER_AUTH_TOKEN)" | docker login -u "$(state_get NAMESPACE)/$(state_get USER_NAME)" --password-stdin "$(state_get OCI_REGION).ocir.io" &>/dev/null; then
-      echo "Docker login completed"
-      state_set DOCKER_REGISTRY "$(state_get OCI_REGION).ocir.io/$(state_get NAMESPACE)/$(state_get RUN_NAME)"
-      break
-    else
-      # echo "Docker login failed.  Retrying"
-      RETRIES=$((RETRIES+1))
-      sleep 5
-    fi
-  done
-done
+#while ! state_done DOCKER_REGISTRY; do
+#  RETRIES=0
+#  while test $RETRIES -le 30; do
+#    if echo "$(get_secret DOCKER_AUTH_TOKEN)" | docker login -u "$(state_get NAMESPACE)/$(state_get USER_NAME)" --password-stdin "$(state_get OCI_REGION).ocir.io" &>/dev/null; then
+#      echo "Docker login completed"
+#      state_set DOCKER_REGISTRY "$(state_get OCI_REGION).ocir.io/$(state_get NAMESPACE)/$(state_get RUN_NAME)"
+#      break
+#    else
+#      # echo "Docker login failed.  Retrying"
+#      RETRIES=$((RETRIES+1))
+#      sleep 5
+#    fi
+#  done
+#done
 
 # Collect DB password
-if ! is_secret_set DB_PASSWORD; then
+if ! is_secret_set JENKINS_PASSWORD; then
   echo
-  echo 'Database passwords must be 12 to 30 characters and contain at least one uppercase letter,'
-  echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
-  echo 'character or the word "admin".'
   echo
 
   while true; do
-    if test -z "${TEST_DB_PASSWORD-}"; then
-      read -s -r -p "Enter the password to be used for the order and inventory databases: " PW
+    if test -z "${TEST_JENKINS_PASSWORD-}"; then
+      read -s -r -p "Enter the password to be used for Jenkins: " PW
     else
-      PW="${TEST_DB_PASSWORD-}"
+      PW="${TEST_JENKINS_PASSWORD-}"
     fi
-    if [[ ${#PW} -ge 12 && ${#PW} -le 30 && "$PW" =~ [A-Z] && "$PW" =~ [a-z] && "$PW" =~ [0-9] && "$PW" != *admin* && "$PW" != *'"'* ]]; then
-      echo
-      break
-    else
-      echo "Invalid Password, please retry"
-    fi
+#    if [[ ${#PW} -ge 12 && ${#PW} -le 30 && "$PW" =~ [A-Z] && "$PW" =~ [a-z] && "$PW" =~ [0-9] && "$PW" != *admin* && "$PW" != *'"'* ]]; then
+#      echo
+#      break
+#    else
+#      echo "Invalid Password, please retry"
+#    fi
   done
-  set_secret DB_PASSWORD $PW
-  state_set DB_PASSWORD_SECRET "DB_PASSWORD"
+  set_secret JENKINS_PASSWORD $PW
+  state_set JENKINS_PASSWORD_SECRET "JENKINS_PASSWORD"
 fi
 
-# Collect UI password
-if ! is_secret_set UI_PASSWORD; then
-  echo
-  echo 'UI passwords must be 8 to 30 characters'
-  echo
-
-  while true; do
-    if test -z "${TEST_UI_PASSWORD-}"; then
-      read -s -r -p "Enter the password to be used for accessing the UI: " PW
-    else
-      PW="${TEST_UI_PASSWORD-}"
-    fi
-    if [[ ${#PW} -ge 8 && ${#PW} -le 30 ]]; then
-      echo
-      break
-    else
-      echo "Invalid Password, please retry"
-    fi
-  done
-  set_secret UI_PASSWORD $PW
-  state_set UI_PASSWORD_SECRET "UI_PASSWORD"
-fi
+## Collect UI password
+#if ! is_secret_set UI_PASSWORD; then
+#  echo
+#  echo 'UI passwords must be 8 to 30 characters'
+#  echo
+#
+#  while true; do
+#    if test -z "${TEST_UI_PASSWORD-}"; then
+#      read -s -r -p "Enter the password to be used for accessing the UI: " PW
+#    else
+#      PW="${TEST_UI_PASSWORD-}"
+#    fi
+#    if [[ ${#PW} -ge 8 && ${#PW} -le 30 ]]; then
+#      echo
+#      break
+#    else
+#      echo "Invalid Password, please retry"
+#    fi
+#  done
+#  set_secret UI_PASSWORD $PW
+#  state_set UI_PASSWORD_SECRET "UI_PASSWORD"
+#fi
 
 # Run the setup in the background
 cd $DCMS_STATE
