@@ -71,7 +71,7 @@ while true; do
 
   # Provisioning status
   echo
-  printf 'dcms-oci workshop provisioning phase: '
+  printf 'dcms-cicd workshop provisioning phase: '
   tput bold
   echo "$PHASE"
   tput sgr0
@@ -79,12 +79,12 @@ while true; do
 
   $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/config/status.sh
 
-  if [[ "$PHASE" =~ SETUP* ]]; then
-    echo
-    for lab in $LABS_WITH_BUILDS; do
-      $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-build-status.sh "$lab"
-    done
-  fi
+#  if [[ "$PHASE" =~ SETUP* ]]; then
+#    echo
+#    for lab in $LABS_WITH_BUILDS; do
+#      $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-build-status.sh "$lab"
+#    done
+#  fi
 
   # clear to bottom of screen
   tput ed
