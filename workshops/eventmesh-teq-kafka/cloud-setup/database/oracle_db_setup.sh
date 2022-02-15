@@ -158,7 +158,7 @@ if ! state_get CWALLET_SSO_UPDATED; then
   echo "Executing java_mkstore.sh in the background"
   "$LAB_HOME"/cloud-setup/database/java_mkstore.sh -nologo \
   -wrl "$LAB_HOME"/wallet \
-  -createCredential "$LAB_DB_SVC" "$LAB_DB_USER" >/dev/null <<!
+  -createCredential "$LAB_DB_SVC" "$LAB_DB_USER" &>> "$LAB_LOG"/mkstore.log  <<!
   "$DB_PASSWORD"
   "$DB_PASSWORD"
   "$WALLET_PASSWORD"

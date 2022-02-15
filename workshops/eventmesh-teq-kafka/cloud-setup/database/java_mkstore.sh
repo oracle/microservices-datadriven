@@ -12,4 +12,4 @@ CLASSPATH=${SQLCL}/oraclepki.jar:${SQLCL}/osdt_core.jar:${SQLCL}/osdt_cert.jar
 
 # simulate mkstore command
 # Debug  -Doracle.pki.debug=true
-$JAVA_HOME/bin/java -classpath "${CLASSPATH}" oracle.security.pki.OracleSecretStoreTextUI  "$@"
+$JAVA_HOME/bin/java -Doracle.pki.debug=true -classpath "${CLASSPATH}" oracle.security.pki.OracleSecretStoreTextUI  "$@"
