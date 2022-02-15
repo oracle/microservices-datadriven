@@ -264,7 +264,7 @@ ps -ef | grep "$LAB_HOME/cloud-setup/confluent-kafka" | grep -v grep
 
 # Verify Setup
 # bgs="BUILD_ALL JAVA_BUILDS NON_JAVA_BUILDS OKE_SETUP DB_SETUP KAFKA_SETUP PROVISIONING"
-bgs="DB_SETUP PROVISIONING CONTAINER_ENG_SETUP"
+bgs="DB_SETUP PROVISIONING CONTAINER_ENG_SETUP KAFKA_SETUP"
 while ! state_done SETUP_VERIFIED; do
   NOT_DONE=0
   bg_not_done=

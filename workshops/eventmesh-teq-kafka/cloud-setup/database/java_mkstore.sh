@@ -9,5 +9,7 @@ set -e
 SQLCL=$(dirname $(which sql))/../lib
 CLASSPATH=${SQLCL}/oraclepki.jar:${SQLCL}/osdt_core.jar:${SQLCL}/osdt_cert.jar
 
+
 # simulate mkstore command
-java -classpath "${CLASSPATH}" oracle.security.pki.OracleSecretStoreTextUI  "$@"
+# Debug  -Doracle.pki.debug=true
+$JAVA_HOME/bin/java -classpath "${CLASSPATH}" oracle.security.pki.OracleSecretStoreTextUI  "$@"
