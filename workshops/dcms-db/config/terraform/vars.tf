@@ -14,7 +14,7 @@ variable "fingerprint" {
   default = ""
 }
 
-variable "ssh_public_key" {
+variable "ssh_public_key_file" {
   default = ""
 }
 
