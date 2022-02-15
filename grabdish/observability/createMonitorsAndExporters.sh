@@ -21,4 +21,3 @@ cd ../
 #cd db-log-exporter
 #./deploy.sh
 #cd ../
-
