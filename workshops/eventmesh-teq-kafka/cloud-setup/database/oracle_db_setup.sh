@@ -130,9 +130,9 @@ END;
 
 --- Create the subscriber agent
 DECLARE
-  subscriber sys.aq$_agent;
+  subscriber sys.aq\$_agent;
 BEGIN
-  subscriber := sys.aq$_agent('$LAB_TEQ_TOPIC_SUBSCRIBER', NULL, NULL);
+  subscriber := sys.aq\$_agent('$LAB_TEQ_TOPIC_SUBSCRIBER', NULL, NULL);
   DBMS_AQADM.ADD_SUBSCRIBER(queue_name => '$LAB_TEQ_TOPIC',   subscriber => subscriber);
 END;
 /
