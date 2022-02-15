@@ -49,7 +49,7 @@ resource "oci_core_instance" "instance" {
     nsg_ids          = [oci_core_network_security_group.security_group_ssh.id, oci_core_network_security_group.security_group_ords.id]
   }
   metadata = {
-    ssh_authorized_keys = var.ssh_public_key
+    ssh_authorized_keys = file(var.ssh_public_key_file)
   }
   lifecycle {
     ignore_changes = all

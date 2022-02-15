@@ -83,8 +83,7 @@ while true; do
   fi
 
   LOG="$DCMS_LOG_DIR/config.log"
-  LAST_LOG=`tail -1 $LOG`
-  printf "  %-100s\n\n" "$LAST_LOG"
+  tail -4 $LOG
 
   # clear to bottom of screen
   tput ed

@@ -20,7 +20,7 @@ DB_PASSWORD=$(get_secret $DB_PASSWORD_SECRET)
 if ! test -d $MY_STATE/ssh; then
   mkdir -p $MY_STATE/ssh
   ssh-keygen -t rsa -N "" -b 2048 -C "db" -f $MY_STATE/ssh/dcmsdb
-  set_secret SSH_PUBLIC_KEY $(<$MY_STATE/ssh/dcmsdb.pub)
+  state_set SSH_PUBLIC_KEY_FILE $"$MY_STATE/ssh/dcmsdb.pub"
   state_set SSH_PRIVATE_KEY_FILE "$MY_STATE/ssh/dcmsdb"
 fi
 
