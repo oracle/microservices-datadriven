@@ -5,7 +5,7 @@ export TF_VAR_tenancy_ocid="$(state_get TENANCY_OCID)"
 export TF_VAR_compartment_ocid="$(state_get COMPARTMENT_OCID)"
 export TF_VAR_user_ocid="$(state_get USER_OCID)"
 export TF_VAR_db_password="$(get_secret DB_PASSWORD)"
-export TF_VAR_ui_password="$(get_secret UI_PASSWORD)"
+export TF_VAR_ssh_public_key="$(get_secret SSH_PUBLIC_KEY)"
 
 # Keys used to SSH to OCI VMs via Bastion (use cat to to populate value)
 # export TF_VAR_ssh_public_key=$(cat <PATH TO PUBLIC KEY>)

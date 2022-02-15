@@ -13,7 +13,8 @@ variable "user_ocid" {
 variable "fingerprint" {
   default = ""
 }
-variable "private_key_path" {
+
+variable "ssh_public_key" {
   default = ""
 }
 

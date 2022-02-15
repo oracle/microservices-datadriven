@@ -16,6 +16,14 @@ UI_PASSWORD_SECRET=$(state_get UI_PASSWORD_SECRET)
 OCI_REGION="$(state_get OCI_REGION)"
 DB_PASSWORD=$(get_secret $DB_PASSWORD_SECRET)
 
+# Generate the ssh keys
+if ! test -d $MY_STATE/ssh; then
+  mkdir -p $MY_STATE/ssh
+  ssh-keygen -t rsa -N "" -b 2048 -C "db" -f $MY_STATE/ssh/dcmsdb
+  set_secret SSH_PUBLIC_KEY $(<$MY_STATE/ssh/dcmsdb.pub)
+  state_set SSH_PRIVATE_KEY_FILE "$MY_STATE/ssh/dcmsdb"
+fi
+
 # Copy terraform to my state
 rm -rf $MY_STATE/terraform
 cp -r $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/config/terraform $MY_STATE
