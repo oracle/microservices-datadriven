@@ -18,6 +18,5 @@ for t in $THREADS; do
     # Skip this log
     continue
   fi
-  LAST_LOG=`tail -1 $LOG`
-  printf "  %-100s\n\n" "$LAST_LOG"
+  tail -4 $LOG
 done
