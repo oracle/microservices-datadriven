@@ -1,9 +1,9 @@
 variable "compartment_ocid" {}
 variable "region" {}
+
 variable "availability_domain_name" {
   default = null
 }
-
 
 ## Networking
 
