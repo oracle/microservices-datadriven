@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import oracle.AQ.AQQueue;
 import oracle.jdbc.pool.OracleDataSource;
 import oracle.jms.AQjmsAgent;
 import oracle.jms.AQjmsFactory;

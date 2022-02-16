@@ -50,17 +50,17 @@ public class WorkflowTEQ {
 	ObjectMapper mapper = new ObjectMapper();
 	Random rnd = new Random();
 
-	String userQueueName = "java_UserQueue";
-	String userApplicationSubscriber = "java_userAppSubscriber";
-	String userDelivererSubscriber = "java_userDelivererSubscriber";
+	String userQueueName = "javaTEQ_UserQueue";
+	String userApplicationSubscriber = "javaTEQ_userAppSubscriber";
+	String userDelivererSubscriber = "javaTEQ_userDelivererSubscriber";
 
-	String delivererQueueName = "java_DelivererQueue";
-	String delivererUserSubscriber = "java_delivererUserSubscriber";
-	String delivererApplicationSubscriber = "java_delivererApplicationSubscriber";
+	String delivererQueueName = "javaTEQ_DelivererQueue";
+	String delivererUserSubscriber = "javaTEQ_delivererUserSubscriber";
+	String delivererApplicationSubscriber = "javaTEQ_delivererApplicationSubscriber";
 
-	String applicationQueueName = "java_ApplicationQueue";
-	String applicationUserSubscriber = "java_appUserSubscriber";
-	String applicationDelivererSubscriber = "java_appDelivererSubscriber";
+	String applicationQueueName = "javaTEQ_ApplicationQueue";
+	String applicationUserSubscriber = "javaTEQ_appUserSubscriber";
+	String applicationDelivererSubscriber = "javaTEQ_appDelivererSubscriber";
 
 	UserDetails userToApplication_message;
 	UserDetails userToDeliverer_message;

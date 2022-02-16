@@ -40,6 +40,46 @@ BEGIN
  DBMS_AQADM.START_QUEUE (queue_name=> 'teq_ApplicationQueue', enqueue =>TRUE, dequeue=> True); 
 END;
 /
+--JAVA TEQ
+BEGIN
+ DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
+     queue_name         =>'javaTEQ_UserQueue',
+     storage_clause     =>null, 
+     multiple_consumers =>true, 
+     max_retries        =>10,
+     comment            =>'java_user for TEQ', 
+     queue_payload_type =>'JMS', 
+     queue_properties   =>null, 
+     replication_mode   =>null);
+ DBMS_AQADM.START_QUEUE (queue_name=> 'javaTEQ_UserQueue', enqueue =>TRUE, dequeue=> True); 
+END;
+/
+BEGIN
+ DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
+     queue_name         =>'javaTEQ_DelivererQueue',
+     storage_clause     =>null, 
+     multiple_consumers =>true, 
+     max_retries        =>10,
+     comment            =>'java_deliverer for TEQ', 
+     queue_payload_type =>'JMS', 
+     queue_properties   =>null, 
+     replication_mode   =>null);
+ DBMS_AQADM.START_QUEUE (queue_name=> 'javaTEQ_DelivererQueue', enqueue =>TRUE, dequeue=> True); 
+END;
+/
+BEGIN
+ DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
+     queue_name        =>'javaTEQ_ApplicationQueue',
+     storage_clause    =>null, 
+     multiple_consumers=>true, 
+     max_retries       =>10,
+     comment           =>'java_appQueue for TEQ', 
+     queue_payload_type=>'JMS', 
+     queue_properties  =>null, 
+     replication_mode  =>null);
+ DBMS_AQADM.START_QUEUE (queue_name=> 'javaTEQ_ApplicationQueue', enqueue =>TRUE, dequeue=> True); 
+END;
+/
 
 DECLARE
   subscriber sys.aq$_agent;
@@ -77,7 +117,7 @@ BEGIN
         payload                       => messageData,               
         msgid                         => message_handle);
         COMMIT;
-    DBMS_OUTPUT.PUT_LINE ('----------ENQUEUE Message        :  ' || 'ORDERID: ' ||  messageData.ORDERID || ', OTP: ' || messageData.OTP ||', DELIVERY_STATUS: ' || messageData.DELIVERY_STATUS  );  
+   -- DBMS_OUTPUT.PUT_LINE ('----------ENQUEUE Message        :  ' || 'ORDERID: ' ||  messageData.ORDERID || ', OTP: ' || messageData.OTP ||', DELIVERY_STATUS: ' || messageData.DELIVERY_STATUS  );  
 
   
     dequeue_options.dequeue_mode      := DBMS_AQ.REMOVE;
@@ -91,7 +131,7 @@ BEGIN
         payload                       => messageData, 
         msgid                         => message_handle);
         COMMIT;
-    DBMS_OUTPUT.PUT_LINE ('----------DEQUEUE Message        :  ' || 'ORDERID: ' ||  messageData.ORDERID || ', OTP: ' || messageData.OTP ||', DELIVERY_STATUS: ' || messageData.DELIVERY_STATUS  );  
+    --DBMS_OUTPUT.PUT_LINE ('----------DEQUEUE Message        :  ' || 'ORDERID: ' ||  messageData.ORDERID || ', OTP: ' || messageData.OTP ||', DELIVERY_STATUS: ' || messageData.DELIVERY_STATUS  );  
 
     RETURN messageData;
 END;

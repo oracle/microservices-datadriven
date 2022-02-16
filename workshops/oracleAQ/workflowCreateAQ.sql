@@ -66,7 +66,7 @@ BEGIN
         payload                       => messageData,               
         msgid                         => message_handle);
         COMMIT;
-    DBMS_OUTPUT.PUT_LINE ('----------ENQUEUE Message        :  ' || 'ORDERID: ' ||  messageData.ORDERID || ', OTP: ' || messageData.OTP ||', DELIVERY_STATUS: ' || messageData.DELIVERY_STATUS  );  
+    --DBMS_OUTPUT.PUT_LINE ('----------ENQUEUE Message        :  ' || 'ORDERID: ' ||  messageData.ORDERID || ', OTP: ' || messageData.OTP ||', DELIVERY_STATUS: ' || messageData.DELIVERY_STATUS  );  
 
   
     dequeue_options.dequeue_mode      := DBMS_AQ.REMOVE;
@@ -80,7 +80,7 @@ BEGIN
         payload                       => messageData, 
         msgid                         => message_handle);
         COMMIT;
-    DBMS_OUTPUT.PUT_LINE ('----------DEQUEUE Message        :  ' || 'ORDERID: ' ||  messageData.ORDERID || ', OTP: ' || messageData.OTP ||', DELIVERY_STATUS: ' || messageData.DELIVERY_STATUS  );  
+    --DBMS_OUTPUT.PUT_LINE ('----------DEQUEUE Message        :  ' || 'ORDERID: ' ||  messageData.ORDERID || ', OTP: ' || messageData.OTP ||', DELIVERY_STATUS: ' || messageData.DELIVERY_STATUS  );  
 
     RETURN messageData;
 END;
