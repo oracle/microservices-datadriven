@@ -159,6 +159,25 @@ while ! state_done NAMESPACE; do
   state_set NAMESPACE "$NAMESPACE"
 done
 
+GRAALVM_VERSION="22.0.0.2"
+if ! state_get GRAALVM_INSTALLED; then
+  if ps -ef | grep "$LAB_HOME/cloud-setup/java/graalvm-install.sh" | grep -v grep; then
+    echo "$LAB_HOME/cloud-setup/java/graalvm-install.sh is already running"
+  else
+    echo "Executing java/graalvm-install.sh in the background"
+    nohup "$LAB_HOME"/cloud-setup/java/graalvm-install.sh ${GRAALVM_VERSION} &>>"$LAB_LOG"/graalvm_install.log &
+  fi
+fi
+
+if ! state_done CONTAINER_ENG_SETUP; then
+  echo "$(date): Installing GraalVM CE Java 11 Image"
+  docker pull ghcr.io/graalvm/graalvm-ce:ol8-java11 --quiet
+  echo "$(date): Create Containers Network"
+  docker network create lab8022network
+  state_set_done CONTAINER_ENG_SETUP
+  echo
+fi
+
 # run oracle_db_setup.sh in background
 if ! state_get DB_SETUP; then
   if ps -ef | grep "$LAB_HOME/cloud-setup/database/oracle_db_setup.sh" | grep -v grep; then
@@ -229,27 +248,6 @@ while ! state_done LAB_DB_PASSWORD_SET; do
   state_set_done DB_PASSWORD
   state_set_done LAB_DB_PASSWORD_SET
 done
-
-
-GRAALVM_VERSION="22.0.0.2"
-if ! state_get GRAALVM_INSTALLED; then
-  if ps -ef | grep "$LAB_HOME/cloud-setup/java/graalvm-install.sh" | grep -v grep; then
-    echo "$LAB_HOME/cloud-setup/java/graalvm-install.sh is already running"
-  else
-    echo "Executing java/graalvm-install.sh in the background"
-    nohup "$LAB_HOME"/cloud-setup/java/graalvm-install.sh ${GRAALVM_VERSION} &>>"$LAB_LOG"/graalvm_install.log &
-  fi
-fi
-
-if ! state_done CONTAINER_ENG_SETUP; then
-  echo "$(date): Installing GraalVM ${GRAALVM_VERSION} Image"
-  docker pull ghcr.io/graalvm/graalvm-ce:java11-${GRAALVM_VERSION} --quiet
-  echo "$(date): Create Containers Network"
-  docker network create lab8022network
-  state_set_done CONTAINER_ENG_SETUP
-  echo
-fi
-
 
 # run kafka-setup.sh in background
 if ! state_get KAFKA_SETUP; then

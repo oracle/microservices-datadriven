@@ -6,10 +6,11 @@
 set -e
 
 GRAALVM_VERSION=${1:-"22.0.0.2"}
-OS_NAME=`uname`
+OS_NAME=$(uname)
 
 # Install GraalVM
 if ! test -d ~/graalvm-ce-java11-${GRAALVM_VERSION}; then
+  echo "$(date): Installing graalvm-ce-java11-${GRAALVM_VERSION}"
   (cd ~ && curl -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${GRAALVM_VERSION}/graalvm-ce-java11-${OS_NAME}-amd64-${GRAALVM_VERSION}.tar.gz | tar xz)
 #  mv graalvm-ce-java11-${GRAALVM_VERSION} ~/
 fi
@@ -22,8 +23,10 @@ else
   # We are on Mac doing local dev
   ~/graalvm-ce-java11-${GRAALVM_VERSION}/Contents/Home/bin/gu install native-image
   export JAVA_HOME=~/graalvm-ce-java11-${GRAALVM_VERSION}/Contents/Home;
+  echo "$(date): JAVA_HOME ${JAVA_HOME}"
 fi
 
 export PATH=$JAVA_HOME/bin:$PATH
+echo "$(date): PATH ${PATH}"
 
 state_set_done GRAALVM_INSTALLED

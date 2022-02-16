@@ -13,7 +13,7 @@ done
 
 # Generate a wallet password
 # Variable is not exported
-WALLET_PASSWORD='Pwd'`awk 'BEGIN { srand(); print int(1 + rand() * 100000000)}'`
+WALLET_PASSWORD='Pwd'$(awk 'BEGIN { srand(); print int(1 + rand() * 100000000)}')
 
 # Get Wallet
 while ! state_done WALLET_GET; do
