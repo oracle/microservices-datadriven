@@ -2,10 +2,6 @@
 # Copyright (c) 2021 Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
-#
-# This shell file will setup the environment and related variables required
-#
-
 # Fail on error
 set -eu
 
@@ -37,37 +33,37 @@ if ! DCMS_STATUS=$(provisioning-get-status $DCMS_STATE); then
   exit 1
 fi
 
-case "$DCMS_STATUS" in
-
-  applied | byo)
-    # Nothing to do
-    exit 0
-    ;;
-
-  applying)
-    # Nothing to do
-    exit 0
-    ;;
-
-  destroying | destroying-failed | destroyed)
-    # Cannot setup during destroy phase
-    echo "ERROR: Destroy is running and so cannot run setup"
-    exit 1
-    ;;
-
-  applying-failed)
-    # Restart the setup
-    cd $DCMS_STATE
-    echo "Restarting setup.  Call 'status' to get the status of the setup"
-    nohup bash -c "provisioning-apply $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/config" >>$DCMS_LOG_DIR/setup.log 2>&1 &
-    exit 0
-    ;;
-
-  new)
-    # New setup
-    ;;
-
-esac
+#case "$DCMS_STATUS" in
+#
+#  applied | byo)
+#    # Nothing to do
+#    exit 0
+#    ;;
+#
+#  applying)
+#    # Nothing to do
+#    exit 0
+#    ;;
+#
+#  destroying | destroying-failed | destroyed)
+#    # Cannot setup during destroy phase
+#    echo "ERROR: Destroy is running and so cannot run setup"
+#    exit 1
+#    ;;
+#
+#  applying-failed)
+#    # Restart the setup
+#    cd $DCMS_STATE
+#    echo "Restarting setup.  Call 'status' to get the status of the setup"
+#    nohup bash -c "provisioning-apply $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/config" >>$DCMS_LOG_DIR/setup.log 2>&1 &
+#    exit 0
+#    ;;
+#
+#  new)
+#    # New setup
+#    ;;
+#
+#esac
 
 ##### New Setup
 
@@ -80,19 +76,19 @@ echo "source $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/source.env #microservices-datadr
 echo 'echo "Running workshop from folder $MSDD_WORKSHOP_CODE #microservices-datadriven"' >>$PROF
 
 # Check that the prerequisite utils are installed
-for util in oci kubectl terraform docker mvn ssh sqlplus helm; do
-  exec=`which $util`
-  if test -z "$exec"; then
-    echo "ERROR: $util is not installed"
-    exit 1
-  fi
-done
+#for util in oci kubectl terraform docker mvn ssh sqlplus helm; do
+#  exec=`which $util`
+#  if test -z "$exec"; then
+#    echo "ERROR: $util is not installed"
+#    exit 1
+#  fi
+#done
 
 # Check that the OCI CLI is configured
-if ! test -f "$OCI_CLI_CONFIG_FILE" && ! test -f ~/.oci/config; then
-  echo "ERROR: The OCI CLI is not configured"
-  exit 1
-fi
+#if ! test -f "$OCI_CLI_CONFIG_FILE" && ! test -f ~/.oci/config; then
+#  echo "ERROR: The OCI CLI is not configured"
+#  exit 1
+#fi
 
 # Run Name (random)
 if ! state_done RUN_NAME; then
@@ -113,42 +109,42 @@ fi
 #fi
 
 # Identify Run Type
-while ! state_done RUN_TYPE; do
-  if [[ "$HOME" =~ /home/ll[0-9]{1,5}_us ]]; then
-    state_set RUN_TYPE "LL"
-    state_set RESERVATION_ID `grep -oP '(?<=/home/ll).*?(?=_us)' <<<"$HOME"`
-    state_set USER_OCID 'NA'
-    state_set USER_NAME "LL$(state_get RESERVATION_ID)-USER"
-#    state_set DB1_NAME "ORDER$(state_get RESERVATION_ID)"
-#    state_set DB2_NAME "INVENTORY$(state_get RESERVATION_ID)"
-#    state_set_done OKE_LIMIT_CHECK
-#    state_set_done ATP_LIMIT_CHECK
-    state_set HOME_REGION 'NA'
-  else
-    # Run in your own tenancy
-    state_set RUN_TYPE "OT"
-#    state_set DB1_NAME "$(state_get RUN_NAME)1"
-#    state_set DB2_NAME "$(state_get RUN_NAME)2"
-  fi
-done
+#while ! state_done RUN_TYPE; do
+#  if [[ "$HOME" =~ /home/ll[0-9]{1,5}_us ]]; then
+#    state_set RUN_TYPE "LL"
+#    state_set RESERVATION_ID `grep -oP '(?<=/home/ll).*?(?=_us)' <<<"$HOME"`
+#    state_set USER_OCID 'NA'
+#    state_set USER_NAME "LL$(state_get RESERVATION_ID)-USER"
+##    state_set DB1_NAME "ORDER$(state_get RESERVATION_ID)"
+##    state_set DB2_NAME "INVENTORY$(state_get RESERVATION_ID)"
+##    state_set_done OKE_LIMIT_CHECK
+##    state_set_done ATP_LIMIT_CHECK
+#    state_set HOME_REGION 'NA'
+#  else
+#    # Run in your own tenancy
+#    state_set RUN_TYPE "OT"
+##    state_set DB1_NAME "$(state_get RUN_NAME)1"
+##    state_set DB2_NAME "$(state_get RUN_NAME)2"
+#  fi
+#done
 
 # Tenancy OCID
-while ! state_done TENANCY_OCID; do
-  if ! test -z "$OCI_TENANCY"; then
-    state_set TENANCY_OCID "$OCI_TENANCY"
-  else
-    # Get the tenancy OCID
-    while true; do
-      read -p "Please enter your OCI tenancy OCID: " OCI_TENANCY
-      if oci iam tenancy get --tenancy-id "$OCI_TENANCY" 2>&1 >$DCMS_LOG_DIR/tenancy_ocid_err; then
-        state_set TENANCY_OCID "$OCI_TENANCY"
-      else
-        echo "The tenancy OCID $OCI_TENANCY could not be validated.  Please retry."
-        cat $DCMS_LOG_DIR/tenancy_ocid_err
-      fi
-    done
-  fi
-done
+#while ! state_done TENANCY_OCID; do
+#  if ! test -z "$OCI_TENANCY"; then
+#    state_set TENANCY_OCID "$OCI_TENANCY"
+#  else
+#    # Get the tenancy OCID
+#    while true; do
+#      read -p "Please enter your OCI tenancy OCID: " OCI_TENANCY
+#      if oci iam tenancy get --tenancy-id "$OCI_TENANCY" 2>&1 >$DCMS_LOG_DIR/tenancy_ocid_err; then
+#        state_set TENANCY_OCID "$OCI_TENANCY"
+#      else
+#        echo "The tenancy OCID $OCI_TENANCY could not be validated.  Please retry."
+#        cat $DCMS_LOG_DIR/tenancy_ocid_err
+#      fi
+#    done
+#  fi
+#done
 
 # Check OKE Limits
 #if ! state_done OKE_LIMIT_CHECK; then
@@ -191,9 +187,9 @@ done
 #done
 
 # Home Region
-if ! state_done HOME_REGION; then
-  state_set HOME_REGION `oci iam region-subscription list --query 'data[?"is-home-region"]."region-name" | join('\'' '\'', @)' --raw-output`
-fi
+#if ! state_done HOME_REGION; then
+#  state_set HOME_REGION `oci iam region-subscription list --query 'data[?"is-home-region"]."region-name" | join('\'' '\'', @)' --raw-output`
+#fi
 
 # Request compartment details and create or validate
 if ! state_done COMPARTMENT_OCID; then
@@ -207,34 +203,34 @@ fi
 
 
 # Setup the vault
-if ! folder-vault-setup $DCMS_VAULT; then
-  echo "Error: Failed to provision the folder vault"
-  exit 1
-fi
+#if ! folder-vault-setup $DCMS_VAULT; then
+#  echo "Error: Failed to provision the folder vault"
+#  exit 1
+#fi
 
 
 # Get the User OCID
-while ! state_done USER_OCID; do
-  if test -z "${TEST_USER_OCID-}"; then
-    echo "Your user's OCID has a name beginning ocid1.user.oc1.."
-    read -p "Please enter your OCI user's OCID: " USER_OCID
-  else
-    USER_OCID=${TEST_USER_OCID-}
-  fi
-  # Validate
-  if test ""`oci iam user get --user-id "$USER_OCID" --query 'data."lifecycle-state"' --raw-output 2>$DCMS_LOG_DIR/user_ocid_err` == 'ACTIVE'; then
-    state_set USER_OCID "$USER_OCID"
-  else
-    echo "That user OCID could not be validated"
-    cat $DCMS_LOG_DIR/user_ocid_err
-  fi
-done
+#while ! state_done USER_OCID; do
+#  if test -z "${TEST_USER_OCID-}"; then
+#    echo "Your user's OCID has a name beginning ocid1.user.oc1.."
+#    read -p "Please enter your OCI user's OCID: " USER_OCID
+#  else
+#    USER_OCID=${TEST_USER_OCID-}
+#  fi
+#  # Validate
+#  if test ""`oci iam user get --user-id "$USER_OCID" --query 'data."lifecycle-state"' --raw-output 2>$DCMS_LOG_DIR/user_ocid_err` == 'ACTIVE'; then
+#    state_set USER_OCID "$USER_OCID"
+#  else
+#    echo "That user OCID could not be validated"
+#    cat $DCMS_LOG_DIR/user_ocid_err
+#  fi
+#done
 
 # Get User Name
-while ! state_done USER_NAME; do
-  USER_NAME=`oci iam user get --user-id "$(state_get USER_OCID)" --query "data.name" --raw-output`
-  state_set USER_NAME "$USER_NAME"
-done
+#while ! state_done USER_NAME; do
+#  USER_NAME=`oci iam user get --user-id "$(state_get USER_OCID)" --query "data.name" --raw-output`
+#  state_set USER_NAME "$USER_NAME"
+#done
 
 # OCI Region
 while ! state_done OCI_REGION; do
@@ -250,10 +246,10 @@ while ! state_done OCI_REGION; do
 done
 
 # Get Namespace
-while ! state_done NAMESPACE; do
-  NAMESPACE=`oci os ns get --compartment-id "$(state_get COMPARTMENT_OCID)" --query "data" --raw-output`
-  state_set NAMESPACE "$NAMESPACE"
-done
+#while ! state_done NAMESPACE; do
+#  NAMESPACE=`oci os ns get --compartment-id "$(state_get COMPARTMENT_OCID)" --query "data" --raw-output`
+#  state_set NAMESPACE "$NAMESPACE"
+#done
 
 # Auth Token Desc (used for destroy)
 #if ! state_done DOCKER_AUTH_TOKEN_DESC; then

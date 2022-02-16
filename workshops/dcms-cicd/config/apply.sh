@@ -13,7 +13,7 @@ fi
 rm -rf $MY_STATE/jenkins
 cp -r $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/config/jenkins $MY_STATE
 
-# Start the provisioning destroy
+# Start the provisioning apply
 cd $MY_STATE/jenkins
 source scripts/terraform-env.sh
 
