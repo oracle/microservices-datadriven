@@ -29,15 +29,15 @@ export LAB_HOME=${str:0:$index-1}
 cd "$LAB_HOME"
 echo "LAB_HOME: $LAB_HOME"
 
-# Java Home
-if test -d ~/graalvm-ce-java11-21.3.0/Contents/Home/bin; then
-  # We are on Mac doing local dev
-  export JAVA_HOME=~/graalvm-ce-java11-21.3.0/Contents/Home;
-else
-  # Assume linux
-  export JAVA_HOME=~/graalvm-ce-java11-21.3.0
-fi
-export PATH=$JAVA_HOME/bin:$PATH
+## Java Home
+#if test -d ~/graalvm-ce-java11-21.3.0/Contents/Home/bin; then
+#  # We are on Mac doing local dev
+#  export JAVA_HOME=~/graalvm-ce-java11-21.3.0/Contents/Home;
+#else
+#  # Assume linux
+#  export JAVA_HOME=~/graalvm-ce-java11-21.3.0
+#fi
+#export PATH=$JAVA_HOME/bin:$PATH
 
 # State directory
 if test -d ~/lab-state; then
