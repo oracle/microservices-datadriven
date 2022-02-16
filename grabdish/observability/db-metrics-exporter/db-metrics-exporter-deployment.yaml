@@ -47,7 +47,7 @@ spec:
       volumes:
         - name: creds
           secret:
-            secretName: db-wallet-secret
+            secretName: %db-wallet-secret%
         - name: config-volume
           configMap:
             name: db-metrics-%EXPORTER_NAME%-exporter-config

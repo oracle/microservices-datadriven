@@ -16,9 +16,8 @@ echo create deployments and services for db metrics exporters...
 cd db-metrics-exporter
 ./deploy.sh
 cd ../
-echo
-echo create deployments and services for db log exporters...
-cd db-log-exporter
-./deploy.sh
-cd ../
-
+#echo
+#echo create deployments and services for db log exporters...
+#cd db-log-exporter
+#./deploy.sh
+#cd ../
