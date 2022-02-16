@@ -1,9 +1,5 @@
-variable "tenancy_ocid" {}
 variable "compartment_ocid" {}
 variable "region" {}
-variable "fingerprint" {}
-variable "private_key_path" {}
-variable "user_ocid" {}
 variable "availability_domain_name" {
   default = null
 }
@@ -62,4 +58,5 @@ variable "jenkins_user" {
 
 variable "jenkins_password" {
   description = "Password for Jenkins admin user"
+  sensitive = true
 }
