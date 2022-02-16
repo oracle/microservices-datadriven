@@ -42,6 +42,8 @@ sed -e  "s|%PDB_NAME%|${INVENTORY_DB_NAME}|g" db-metrics-exporter-inventorypdb-d
 mv -- /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
 sed -e  "s|%USER%|INVENTORYUSER|g" db-metrics-exporter-inventorypdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
+sed -e  "s|%db-wallet-secret%|inventory-db-tns-admin-secret|g" db-metrics-exporter-inventorypdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
+mv -- /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
 #sed -e  "s|${OCI_REGION-}|${OCI_REGION}|g" db-metrics-exporter-inventorypdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
 #mv -- /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
 #sed -e  "s|${VAULT_SECRET_OCID-}|${VAULT_SECRET_OCID}|g" db-metrics-exporter-inventorypdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
