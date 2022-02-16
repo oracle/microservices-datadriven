@@ -1,3 +1,4 @@
+SET SERVEROUTPUT ON ;
 DECLARE
     userToApplication_message         Message_typ;
     userToDeliverer_message           Message_typ;
