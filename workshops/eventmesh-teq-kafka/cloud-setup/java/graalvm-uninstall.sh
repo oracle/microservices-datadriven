@@ -7,11 +7,11 @@ set -e
 
 GRAALVM_VERSION=${1:-"22.0.0.2"}
 
-if ! provisioning-helper-pre-destroy; then
+if ! state_get GRAALVM_INSTALLED; then
   exit 1
 fi
 
 # Install GraalVM
-if test -d ~/graalvm-ce-java11-${GRAALVM_VERSION}; then
-  rm -rf ~/graalvm-ce-java11-${GRAALVM_VERSION}
+if test -d ~/graalvm-ce-java11-"${GRAALVM_VERSION}"; then
+  rm -rf ~/graalvm-ce-java11-"${GRAALVM_VERSION}"
 fi
