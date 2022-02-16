@@ -2,4 +2,7 @@
 -- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 
-../../common/apply/inventory-table-scripts.sql
+WHENEVER SQLERROR EXIT 1
+connect $INVENTORY_USER/"$INVENTORY_PASSWORD"@$DB1_ALIAS
+
+@../../common/apply/inventory-table-scripts.sql

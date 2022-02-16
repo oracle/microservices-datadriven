@@ -1,25 +1,28 @@
-#!/usr/bin/env ksh
-#------------------------------------------------------------------------------
-# GLOBAL/DEFAULT VARS
-#------------------------------------------------------------------------------
-typeset -i  RC=0
-typeset -r  IFS_ORIG=$IFS
-typeset -rx SCRIPT_NAME="${0##*/}"
+#!/bin/bash
+# Copyright (c) 2021 Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
-typeset -r CONTEXT="ords"
-typeset -r ORDS_DIR="/opt/oracle/ords"
+
+# fail on error or undefined variable access
+set -eu
+
 #------------------------------------------------------------------------------
-# LOCAL FUNCTIONS
+# global variables
+#------------------------------------------------------------------------------
+typeset -r script_name="${0##*/}"
+
+#------------------------------------------------------------------------------
+# local functions
 #------------------------------------------------------------------------------
 function usage {
-	print -- "${SCRIPT_NAME} Usage"
-	print -- "${SCRIPT_NAME} MUST be run by root"
-	print -- "\t\t${SCRIPT_NAME} -s <PRE|POST> [-h]"
+	print -- "${script_name} Usage"
+	print -- "${script_name} must be run by root"
+	print -- "\t\t${script_name} -s <PRE|POST> [-h]"
 	return 0
 }
 
 #------------------------------------------------------------------------------
-# INIT
+# init
 #------------------------------------------------------------------------------
 if [[ $(whoami) != "root" ]]; then
 	usage && exit 1
@@ -27,33 +30,22 @@ fi
 
 while getopts :s:h args; do
 	case $args in
-		s) typeset -r  MYSTAGE="${OPTARG}" ;;
+		s) typeset -r  mystage="${OPTARG}" ;;
 		h) usage ;;
 	esac
 
 done
 
-if [[ ${MYSTAGE} != @(PRE|POST) ]]; then
+if [[ ${mystage} != @(PRE|POST) ]]; then
 	usage && exit 1
 fi
 
 #------------------------------------------------------------------------------
-# MAIN
+# main
 #------------------------------------------------------------------------------
-if [[ ${MYSTAGE} == "PRE" ]]; then
-	print -- "Ensuring OCI Repo is enabled"
-	yum-config-manager --enable ol7_oci_included
-
-	# print -- "Updating System"
-	# yum -y update
-  # Takes too long
-	
-	print -- "Installing ords and yum-cron"
-	yum -y install ords yum-cron oracle-instantclient-release-el7
-	yum -y install oracle-instantclient-sqlplus
-
-	print -- "Removing dependencies no longer required"
-	yum -y autoremove
+if [[ ${mystage} == "PRE" ]]; then
+	print -- "Installing ords and sqlplus"
+	dnf -y install ords oracle-instantclient-release-el8 oracle-instantclient-sqlplus
 
 	print -- "Symlinking /etc/init.d/ords to /opt/oracle/ords/ords"
 	if [[ ! -f /opt/oracle/ords/ords ]]; then
@@ -75,12 +67,10 @@ if [[ ${MYSTAGE} == "PRE" ]]; then
 	EOF
 fi
 
-if [[ ${MYSTAGE} == "POST" ]]; then
-	java -jar -Xmx1024M /opt/oracle/ords/${CONTEXT}.war configdir /opt/oracle/ords/config
+if [[ ${mystage} == "POST" ]]; then
+	java -jar -Xmx1024M /opt/oracle/ords/ords.war configdir /opt/oracle/ords/config
 
 	systemctl enable ords
 	systemctl restart ords
 	systemctl restart firewalld
 fi
-
-return ${RC}

@@ -1,4 +1,4 @@
-# Copyright © 2020, Oracle and/or its affiliates. 
+# Copyright © 2020, Oracle and/or its affiliates.
 # All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
 #####################################################################
@@ -23,7 +23,7 @@ resource "oci_core_network_security_group_security_rule" "security_group_ssh_ing
   network_security_group_id = oci_core_network_security_group.security_group_ssh.id
   direction                 = "INGRESS"
   protocol                  = "6"
-  source                    = var.public_subnet_cidr
+  source                    = "0.0.0.0/0"
   source_type               = "CIDR_BLOCK"
   tcp_options {
     destination_port_range {

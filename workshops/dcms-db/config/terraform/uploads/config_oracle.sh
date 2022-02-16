@@ -1,25 +1,72 @@
-#!/usr/bin/env ksh
-#------------------------------------------------------------------------------
-# GLOBAL/DEFAULT VARS
-#------------------------------------------------------------------------------
-typeset -i  RC=0
-typeset -r  IFS_ORIG=$IFS
-typeset -rx SCRIPT_NAME="${0##*/}"
-typeset -rx SCRIPTDIR="/tmp/uploads"
+#!/bin/bash
+# Copyright (c) 2021 Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
-typeset -r ORDS_DIR="/opt/oracle/ords"
-typeset -r CONTEXT="ords"
-typeset -r ORDS_USER="ORDS_PUBLIC_USER_OCI"
-typeset -r ORDS_PLGW="ORDS_PLSQL_GATEWAY_OCI"
+
+# fail on error or undefined variable access
+set -eu
+
+#------------------------------------------------------------------------------
+# vars
+#------------------------------------------------------------------------------
+typeset -i  rc=0
+typeset -rx script_name="${0##*/}"
+typeset -rx script_dir="/tmp/uploads"
+
+typeset -r ords_dir="/opt/oracle/ords"
+typeset -r ords_user="ORDS_PUBLIC_USER_OCI"
+typeset -r ords_plgw="ORDS_PLSQL_GATEWAY_OCI"
 
 #------------------------------------------------------------------------------
 # LOCAL FUNCTIONS
 #------------------------------------------------------------------------------
 function usage {
-	print -- "${SCRIPT_NAME} Usage"
-	print -- "${SCRIPT_NAME} MUST be run by oracle"
-	print -- "\t\t${SCRIPT_NAME} -t <DB_NAME> -p <ADMIN_PASS> -v <APEX_VERSION> [-h]"
+	print -- "${script_name} Usage"
+	print -- "${script_name} MUST be run by oracle"
+	print -- "\t\t${script_name} -t <DB_NAME> -p <ADMIN_PASS> -v <APEX_VERSION> [-h]"
 	return 0
+}
+
+function grabdish_db_setup {
+	typeset -r _pass=$1
+	typeset -r _db_alias=$2
+	typeset -r _queue_type=$3
+
+	db_script_home=/tmp/uploads/db
+	cd ${db_script_home}
+
+	# source the script params
+	DB_PASSWORD=_pass
+	QUEUE_TYPE=_queue_type
+	source ${db_script_home}/params.env
+
+	# expand the common scripts
+	common_script_home=${db_script_home}/common/apply
+	cd ${common_script_home}
+	for f in $(ls); do
+	  cat $f >TEMP
+	  eval "
+		cat >$f <<- !
+		$(<TEMP)
+		!
+		"
+	  rm TEMP
+	  chmod 400 $f
+	done
+
+	# execute the apply sql scripts in order
+	apply_script_home=${db_script_home}/1db/apply
+  cd ${apply_script_home}
+	for f in $(ls); do
+	  echo "Executing $apply_script_home/${f}"
+	  eval "
+		sqlplus /nolog <<- !
+		set serveroutput on size 99999 feedback off timing on linesize 180 echo on
+		whenever sqlerror exit 1
+		$(<${f})
+		!
+		"
+	done
 }
 
 function run_sql {
@@ -74,18 +121,18 @@ function config_user {
 	typeset -r _PASS=$1
 	typeset -r _DBNAME=$2
 
-	create_user "${_PASS}" "${_DBNAME}" "${ORDS_USER}"
+	create_user "${_PASS}" "${_DBNAME}" "${ords_user}"
 	_RC=$?
 
-	create_user "${_PASS}" "${_DBNAME}" "${ORDS_PLGW}"
+	create_user "${_PASS}" "${_DBNAME}" "${ords_plgw}"
 	_RC=$(( _RC + $? ))
 
 	if (( _RC == 0 )); then
 		typeset -r _PUBLIC_SQL="
 			BEGIN
-				DBMS_OUTPUT.PUT_LINE('Giving ${ORDS_USER} the Runtime Role');
+				DBMS_OUTPUT.PUT_LINE('Giving ${ords_user} the Runtime Role');
 				ORDS_ADMIN.PROVISION_RUNTIME_ROLE (
-					p_user => '${ORDS_USER}',
+					p_user => '${ords_user}',
 					p_proxy_enabled_schemas => TRUE
 				);
 			END;
@@ -94,11 +141,11 @@ function config_user {
 		run_sql "${_PASS}" "${_DBNAME}" "${_PUBLIC_SQL}"
 
 		typeset -r _GATEWAY_SQL="
-			ALTER USER ${ORDS_PLGW} GRANT CONNECT THROUGH ${ORDS_USER};
+			ALTER USER ${ords_plgw} GRANT CONNECT THROUGH ${ords_user};
 			BEGIN
 				ORDS_ADMIN.CONFIG_PLSQL_GATEWAY (
-					p_runtime_user => '${ORDS_USER}',
-					p_plsql_gateway_user => '${ORDS_PLGW}'
+					p_runtime_user => '${ords_user}',
+					p_plsql_gateway_user => '${ords_plgw}'
 				);
 			END;
 			/"
@@ -119,7 +166,7 @@ function set_image_cdn {
 	    begin
     	    apex_instance_admin.set_parameter(
         	    p_parameter => 'IMAGE_PREFIX',
-        	    p_value     => 'https://static.oracle.com/cdn/apex/${_VERSION}/' );      
+        	    p_value     => 'https://static.oracle.com/cdn/apex/${_VERSION}/' );
         	commit;
     	end;
 		/"
@@ -145,7 +192,7 @@ function write_apex_pu {
 		<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 		<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 		<properties>
-		<entry key="db.username">${ORDS_USER}</entry>
+		<entry key="db.username">${ords_user}</entry>
 		<entry key="db.password">!${_PASS}</entry>
 		<entry key="db.wallet.zip.service">${_DBNAME}_TP</entry>
 		<entry key="db.wallet.zip"><![CDATA[${_WALLET}]]></entry>
@@ -239,50 +286,50 @@ fi
 
 while getopts :t:p:v:h args; do
 	case $args in
-		t) typeset -r  MYTARGET=${OPTARG} ;;
-		p) typeset -r  MYPASSWORD=${OPTARG} ;;
-		v) typeset -r  MYAPEX_VERSION=${OPTARG} ;;
+		t) typeset -r  db_name=${OPTARG} ;;
+		p) typeset -r  admin_password=${OPTARG} ;;
+		v) typeset -r  apex_version=${OPTARG} ;;
 		h) usage ;;
 	esac
 done
 
-if [[ -z ${MYTARGET} || -z ${MYPASSWORD} || -z ${MYAPEX_VERSION} ]]; then
+if [[ -z ${db_name} || -z ${admin_password} || -z ${apex_version} ]]; then
 	usage && exit 1
 fi
 
-if [[ ! -d ${ORDS_DIR} ]]; then
-	print -- "ERROR: Cannot find ${ORDS_DIR}; is ords installed?" && exit 1
+if [[ ! -d ${ords_dir} ]]; then
+	print -- "ERROR: Cannot find ${ords_dir}; is ords installed?" && exit 1
 fi
-typeset -r STANDALONE_ROOT="${ORDS_DIR}/config/${CONTEXT}/standalone/doc_root"
 #------------------------------------------------------------------------------
-# MAIN
+# main
 #------------------------------------------------------------------------------
-export ORACLE_HOME=${HOME}
-print -- "Set ORACLE_HOME=$ORACLE_HOME"
-export TNS_ADMIN=$ORACLE_HOME/network/admin
-print -- "Setting up $TNS_ADMIN"
-
+export TNS_ADMIN=~/tns_admin
 mkdir -p $TNS_ADMIN
-cp ${SCRIPTDIR}/adb_wallet.zip $TNS_ADMIN/
-base64 -w 0 $TNS_ADMIN/adb_wallet.zip > $TNS_ADMIN/adb_wallet.zip.b64
-unzip -o ${TNS_ADMIN}/adb_wallet.zip -d ${TNS_ADMIN}
+cp ${script_dir}/adb_wallet.zip $TNS_ADMIN/
+unzip -o ${script_dir}/adb_wallet.zip -d ${TNS_ADMIN}
+base64 -w 0 ${script_dir}/adb_wallet.zip > $TNS_ADMIN/adb_wallet.zip.b64
 
-config_user "${MYPASSWORD}" "${MYTARGET}"
+grabdish_db_setup "${admin_password}" "${db_name}_TP" 'classicq'
 RC=$?
 
-set_image_cdn "${MYPASSWORD}" "${MYTARGET}" "${MYAPEX_VERSION}"
+config_user "${admin_password}" "${db_name}"
+RC=$?
+
+set_image_cdn "${admin_password}" "${db_name}" "${apex_version}"
 RC=$(( RC + $? ))
 
-write_apex_pu "${ORDS_DIR}/config/${CONTEXT}/conf" "${MYPASSWORD}" "${MYTARGET}" "$TNS_ADMIN/adb_wallet.zip.b64"
+write_apex_pu "${ords_dir}/config/ords/conf" "${admin_password}" "${db_name}" "$TNS_ADMIN/adb_wallet.zip.b64"
 RC=$(( RC + $? ))
 
-write_defaults "${ORDS_DIR}/config/${CONTEXT}" 
+write_defaults "${ords_dir}/config/ords"
 RC=$(( RC + $? ))
 
-write_standalone_properties "${ORDS_DIR}/config/${CONTEXT}/standalone" "${MYAPEX_VERSION}" "${CONTEXT}" "${STANDALONE_ROOT}"
+standalone_root="${ords_dir}/config/ords/standalone/doc_root"
+
+write_standalone_properties "${ords_dir}/config/ords/standalone" "${apex_version}" 'ords' "${standalone_root}"
 RC=$(( RC + $? ))
 
-write_index "${STANDALONE_ROOT}"
+write_index "${standalone_root}"
 
 print -- "FINISHED: Return Code: ${RC}"
 exit $RC
