@@ -167,9 +167,10 @@ Show user;
 #Java Setup
 
 # Add JavaUser Credentials to the ATP Wallet
+
 cd ..
 cd $TNS_ADMIN_FOR_JAVA
-java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$TNS_ADMIN_FOR_JAVA" -createCredential "${DB_ALIAS}" $DB_USER3 >/dev/null <<!
+java -Doracle.pki.debug=true -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$TNS_ADMIN_FOR_JAVA" -createCredential "${DB_ALIAS}" $DB_USER3 >/dev/null <<!
 $DB_PASSWORD
 $DB_PASSWORD
 $WALLET_PASSWORD
