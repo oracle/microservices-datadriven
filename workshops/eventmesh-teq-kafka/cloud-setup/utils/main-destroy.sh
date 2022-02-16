@@ -25,7 +25,7 @@ if ps -ef | grep "${LAB_HOME}/cloud-setup/java/graalvm-uninstall.sh" | grep -v g
   echo "${LAB_HOME}/cloud-setup/java/graalvm-uninstall.sh is already running"
 else
   echo "Executing java/graalvm-uninstall.sh in the background"
-  nohup "${LAB_HOME}"/cloud-setup/java/graalvm-uninstall.sh &>> "${LAB_LOG}"graalvm-uninstall.log &
+  nohup "${LAB_HOME}"/cloud-setup/java/graalvm-uninstall.sh &>> "${LAB_LOG}"/graalvm-uninstall.log &
 fi
 
 # Run the objstore-destroy.sh in the background

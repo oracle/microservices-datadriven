@@ -25,7 +25,7 @@ while ! state_done WALLET_GET; do
   echo '{"password": "'"$WALLET_PASSWORD"'"}' > temp_params
   umask 22
   oci db autonomous-database generate-wallet --autonomous-database-id "$(state_get LAB_DB_OCID)" --file 'wallet.zip' --generate-type 'ALL' --from-json "file://temp_params"
-  rm temp_params
+  #rm temp_params
   unzip -oq wallet.zip
   cd "$LAB_HOME"
   state_set_done WALLET_GET
@@ -152,6 +152,9 @@ done
 
 cd "$LAB_HOME"
 
+echo "$DB_PASSWORD"
+echo "$WALLET_PASSWORD"
+
 # Setup User Login on Wallet
 # run java_mkstore.sh in background
 if ! state_get CWALLET_SSO_UPDATED; then
@@ -159,9 +162,9 @@ if ! state_get CWALLET_SSO_UPDATED; then
   "$LAB_HOME"/cloud-setup/database/java_mkstore.sh -nologo \
   -wrl "$LAB_HOME"/wallet \
   -createCredential "$LAB_DB_SVC" "$LAB_DB_USER" &>> "$LAB_LOG"/mkstore.log  <<!
-  "$DB_PASSWORD"
-  "$DB_PASSWORD"
-  "$WALLET_PASSWORD"
+  $DB_PASSWORD
+  $DB_PASSWORD
+  $WALLET_PASSWORD
 !
   state_set_done CWALLET_SSO_UPDATED
 fi
