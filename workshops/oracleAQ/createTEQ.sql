@@ -48,14 +48,12 @@ END;
 DECLARE
   subscriber sys.aq$_agent;
 BEGIN
-  subscriber := sys.aq$_agent('teqBasicObjSubscriber', NULL, NULL);
-  DBMS_AQADM.ADD_SUBSCRIBER(queue_name => 'objType_TEQ',   subscriber => subscriber);
+dbms_aqadm.add_subscriber(queue_name => 'objType_TEQ'       , subscriber => sys.aq$_agent('teqBasicObjSubscriber'      , null ,0), rule => 'correlation = ''teqBasicObjSubscriber''');
 
-  subscriber := sys.aq$_agent('teqBasicRawSubscriber', NULL, NULL);
-  DBMS_AQADM.ADD_SUBSCRIBER(queue_name => 'rawType_TEQ',   subscriber => subscriber);
+dbms_aqadm.add_subscriber(queue_name => 'rawType_TEQ'       , subscriber => sys.aq$_agent('teqBasicRawSubscriber'      , null ,0), rule => 'correlation = ''teqBasicRawSubscriber''');
 
-  subscriber := sys.aq$_agent('teqBasicJsonSubscriber', NULL, NULL);
-  DBMS_AQADM.ADD_SUBSCRIBER(queue_name => 'jsonType_TEQ',   subscriber => subscriber);
+dbms_aqadm.add_subscriber(queue_name => 'jsonType_TEQ'       , subscriber => sys.aq$_agent('teqBasicJsonSubscriber'      , null ,0), rule => 'correlation = ''teqBasicJsonSubscriber''');
+
 END;
 /
 select * from ALL_QUEUES where OWNER='DBUSER' and QUEUE_TYPE='NORMAL_QUEUE';

@@ -2,47 +2,39 @@ CREATE TYPE Message_typ AS OBJECT (ORDERID NUMBER(10), USERNAME VARCHAR2(255), O
 /
 -- Creating a Multiconsumer object type queue table and queue */
 BEGIN
- DBMS_AQADM.CREATE_QUEUE_TABLE ( queue_table    => 'plsql_UserQueueTable',      queue_payload_type  => 'Message_typ',                     multiple_consumers => TRUE);   
- DBMS_AQADM.CREATE_QUEUE       ( queue_name     => 'plsql_UserQueue',           queue_table         => 'plsql_UserQueueTable');  
- DBMS_AQADM.START_QUEUE        ( queue_name     => 'plsql_UserQueue'); 
+ DBMS_AQADM.CREATE_QUEUE_TABLE ( queue_table    => 'aq_UserQueueTable',      queue_payload_type  => 'Message_typ',                     multiple_consumers => TRUE);   
+ DBMS_AQADM.CREATE_QUEUE       ( queue_name     => 'aq_UserQueue',           queue_table         => 'aq_UserQueueTable');  
+ DBMS_AQADM.START_QUEUE        ( queue_name     => 'aq_UserQueue'); 
 END;
 /
 BEGIN
- DBMS_AQADM.CREATE_QUEUE_TABLE ( queue_table    => 'plsql_DelivererQueueTable',   queue_payload_type  => 'Message_typ',                     multiple_consumers => TRUE);   
- DBMS_AQADM.CREATE_QUEUE       ( queue_name     => 'plsql_DelivererQueue',        queue_table         => 'plsql_DelivererQueueTable');  
- DBMS_AQADM.START_QUEUE        ( queue_name     => 'plsql_DelivererQueue'); 
+ DBMS_AQADM.CREATE_QUEUE_TABLE ( queue_table    => 'aq_DelivererQueueTable',   queue_payload_type  => 'Message_typ',                     multiple_consumers => TRUE);   
+ DBMS_AQADM.CREATE_QUEUE       ( queue_name     => 'aq_DelivererQueue',        queue_table         => 'aq_DelivererQueueTable');  
+ DBMS_AQADM.START_QUEUE        ( queue_name     => 'aq_DelivererQueue'); 
 END;
 /
 BEGIN
- DBMS_AQADM.CREATE_QUEUE_TABLE ( queue_table    => 'plsql_ApplicationQueueTable', queue_payload_type  => 'Message_typ',                     multiple_consumers => TRUE);   
- DBMS_AQADM.CREATE_QUEUE       ( queue_name     => 'plsql_ApplicationQueue',      queue_table         => 'plsql_ApplicationQueueTable');  
- DBMS_AQADM.START_QUEUE        ( queue_name     => 'plsql_ApplicationQueue'); 
+ DBMS_AQADM.CREATE_QUEUE_TABLE ( queue_table    => 'aq_ApplicationQueueTable', queue_payload_type  => 'Message_typ',                     multiple_consumers => TRUE);   
+ DBMS_AQADM.CREATE_QUEUE       ( queue_name     => 'aq_ApplicationQueue',      queue_table         => 'aq_ApplicationQueueTable');  
+ DBMS_AQADM.START_QUEUE        ( queue_name     => 'aq_ApplicationQueue'); 
 END;
 /
 DECLARE
   subscriber sys.aq$_agent;
 BEGIN
---user Subscriber
 
-  subscriber := sys.aq$_agent('plsql_userAppSubscriber', NULL, NULL);
-  DBMS_AQADM.ADD_SUBSCRIBER  (queue_name => 'plsql_UserQueue', subscriber => subscriber);
+--PLSQL: USER Subscriber
+dbms_aqadm.add_subscriber(queue_name => 'aq_UserQueue'       , subscriber => sys.aq$_agent('aq_userAppSubscriber'      , null ,0), rule => 'correlation = ''aq_userAppSubscriber''');
+dbms_aqadm.add_subscriber(queue_name => 'aq_UserQueue'       , subscriber => sys.aq$_agent('aq_userDelivererSubscriber', null ,0), rule => 'correlation = ''aq_userDelivererSubscriber''');
 
-  subscriber := sys.aq$_agent('plsql_userDelivererSubscriber', NULL, NULL);
-  DBMS_AQADM.ADD_SUBSCRIBER  (queue_name => 'plsql_UserQueue', subscriber => subscriber);
+--PLSQL: Deliverer Subscriber
+dbms_aqadm.add_subscriber(queue_name => 'aq_DelivererQueue'  , subscriber => sys.aq$_agent('aq_delivererUserSubscriber', null ,0), rule => 'correlation = ''aq_delivererUserSubscriber''');
+dbms_aqadm.add_subscriber(queue_name => 'aq_DelivererQueue'  , subscriber => sys.aq$_agent('aq_delivererAppSubscriber' , null ,0), rule => 'correlation = ''aq_delivererAppSubscriber''');
 
---Deliverer Subscriber
-  subscriber := sys.aq$_agent('plsql_delivererUserSubscriber', NULL, NULL);
-  DBMS_AQADM.ADD_SUBSCRIBER  (queue_name => 'plsql_DelivererQueue', subscriber => subscriber);
+--PLSQL: Application Subscriber
+dbms_aqadm.add_subscriber(queue_name => 'aq_ApplicationQueue', subscriber => sys.aq$_agent('aq_appUserSubscriber'      , null ,0), rule => 'correlation = ''aq_appUserSubscriber''');
+dbms_aqadm.add_subscriber(queue_name => 'aq_ApplicationQueue', subscriber => sys.aq$_agent('aq_appDelivererSubscriber' , null ,0), rule => 'correlation = ''aq_appDelivererSubscriber''');
 
-  subscriber := sys.aq$_agent('plsql_delivererApplicationSubscriber', NULL, NULL);
-  DBMS_AQADM.ADD_SUBSCRIBER  (queue_name => 'plsql_DelivererQueue', subscriber => subscriber);
-
---Application Subscriber
-  subscriber := sys.aq$_agent('plsql_appUserSubscriber', NULL, NULL);
-  DBMS_AQADM.ADD_SUBSCRIBER  (queue_name => 'plsql_ApplicationQueue', subscriber => subscriber);
-
-  subscriber := sys.aq$_agent('plsql_appDelivererSubscriber', NULL, NULL);
-  DBMS_AQADM.ADD_SUBSCRIBER  (queue_name => 'plsql_ApplicationQueue', subscriber => subscriber);
 END;
 /
 CREATE TABLE USERDETAILS(

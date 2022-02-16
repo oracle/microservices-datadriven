@@ -7,9 +7,9 @@ DECLARE
  message             obj_typ;
 
 BEGIN
- message := obj_typ('NORMAL MESSAGE','enqueue objType_AQ first.');
+ message := obj_typ('NORMAL MESSAGE','enqueue obj first.');
  DBMS_AQ.ENQUEUE(
-     queue_name           => 'objType_AQ',           
+     queue_name           => 'aq_obj',           
      enqueue_options      => enqueue_options,       
      message_properties   => message_properties,     
      payload              => message,               
@@ -28,7 +28,7 @@ DECLARE
 BEGIN
  message :=  HEXTORAW(RPAD('FF',4095,'FF')); 
  DBMS_AQ.ENQUEUE(
-     queue_name => 'rawType_AQ',           
+     queue_name           => 'aq_raw',           
      enqueue_options      => enqueue_options,       
      message_properties   => message_properties,     
      payload              => message,               
@@ -47,7 +47,7 @@ DECLARE
 BEGIN
  message :=  HEXTORAW(RPAD('FF',4095,'FF')); 
  DBMS_AQ.ENQUEUE(
-     queue_name           => 'multiconsumer_rawType_AQ',           
+     queue_name           => 'aq_multiconsumer_raw',           
      enqueue_options      => enqueue_options,       
      message_properties   => message_properties,     
      payload              => message,               

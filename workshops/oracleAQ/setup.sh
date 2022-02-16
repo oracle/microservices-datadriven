@@ -2,30 +2,26 @@
 # Copyright (c) 2021 Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
  
-# Fail on error or undefined variable
-#set -eu
- 
-comp_name="oracleAQ";
-db_name="aqdatabase";
-display_name=${db_name}
-
-export WORKFLOW_HOME=${HOME}/${comp_name};
-export TNS_ADMIN=$WORKFLOW_HOME/wallet
-export DB_USER1=admin
-export DB_USER2=dbuser
+COMPARTMENT="oracleAQ";
+DB_NAME="aqdatabase";
+export DB_USER1="admin";
+export DB_USER2="dbuser";
+export DB_USER3="javaUser";
+export ORACLEAQ_HOME=${HOME}/${COMPARTMENT};
+export TNS_ADMIN=$ORACLEAQ_HOME/wallet
 export USER_DEFINED_WALLET=${TNS_ADMIN}/user_defined_wallet
+export TNS_ADMIN_FOR_JAVA=$ORACLEAQ_HOME/wallet_java
 TNS_WALLET_STR="(MY_WALLET_DIRECTORY="$TNS_ADMIN")"
 
-#get user's OCID # read user's OCID:  #echo "Enter OCID of root compartment:" ; read -s rootCompOCID; export rootCompOCID                          
-   # fetch user's OCID
-rootCompOCID=$(oci iam compartment list --all --compartment-id-in-subtree true --access-level ACCESSIBLE --include-root --raw-output --query "data[?contains(\"id\",'tenancy')].id | [0]")
+# fetch user's OCID
+ROOT_COMPARTMENT_OCID=$(oci iam compartment list --all --compartment-id-in-subtree true --access-level ACCESSIBLE --include-root --raw-output --query "data[?contains(\"id\",'tenancy')].id | [0]")
 
 #Create compartment
-oci iam compartment create --name ${comp_name} -c ${rootCompOCID} --description "Oracle Advanced Queue workflow" --wait-for-state ACTIVE
-ocid_comp=$(oci iam compartment list --all | jq -r ".data[] | select(.name == \"${comp_name}\") | .id")
+oci iam compartment create --name ${COMPARTMENT} -c ${ROOT_COMPARTMENT_OCID} --description "Oracle Advanced Queue workflow" --wait-for-state ACTIVE
+COMPARTMENT_OCID=$(oci iam compartment list --all | jq -r ".data[] | select(.name == \"${COMPARTMENT}\") | .id")
 
 #Get the database password
-echo "Enter Database Password :" ;
+echo "ENTER THE DATABASE PASSWORD:" ;
 echo "NOTE: Password must contain:"
 echo "* 12 to 30 characters"
 echo "* at least one uppercase letter"
@@ -51,15 +47,17 @@ umask 22
 umask 177
 echo '{"adminPassword": "'"$DB_PASSWORD"'"}' > temp_params
 umask 22
-oci db autonomous-database create -c ${ocid_comp} --db-name ${db_name} --display-name ${db_name} --db-workload OLTP --is-free-tier true --cpu-core-count 1 --data-storage-size-in-tbs 1 --db-version "21c" --wait-for-state AVAILABLE --wait-interval-seconds 5 --from-json "file://temp_params"
+oci db autonomous-database create -c ${COMPARTMENT_OCID} --db-name ${DB_NAME} --display-name ${DB_NAME} --db-workload OLTP --is-free-tier true --cpu-core-count 1 --data-storage-size-in-tbs 1 --db-version "21c" --wait-for-state AVAILABLE --wait-interval-seconds 5 --from-json "file://temp_params"
 rm temp_params;
 
 # Get connection string
-db_conn=$(oci db autonomous-database list -c ${ocid_comp} --query "data [?\"db-name\"=='${db_name}'] | [0].\"connection-strings\".low" --raw-output)
-DB_OCID=$(oci db autonomous-database list -c ${ocid_comp} --query "data [?\"db-name\"=='${db_name}'] | [0].id" --raw-output)
+DB_OCID=$(oci db autonomous-database list -c ${COMPARTMENT_OCID} --query "data [?\"db-name\"=='${DB_NAME}'] | [0].id" --raw-output)
+export DB_ALIAS=`oci db autonomous-database get --autonomous-database-id "$DB_OCID" --query 'data."connection-strings".profiles[?"consumer-group"=='"'TP'"']."display-name" | [0]' --raw-output`
 
 # Generating wallet
+
 mkdir -p $TNS_ADMIN
+mkdir -p $TNS_ADMIN_FOR_JAVA
 cd $TNS_ADMIN
 umask 177
 echo '{"password": "'"$DB_PASSWORD"'"}' > temp_params
@@ -67,9 +65,11 @@ umask 22
 oci db autonomous-database generate-wallet --autonomous-database-id "$DB_OCID" --file 'wallet.zip' --from-json "file://temp_params"
 rm temp_params
 unzip -oq wallet.zip
-#sed -i "s|?|$WORKFLOW_HOME|" sqlnet.ora
+cp wallet.zip $TNS_ADMIN_FOR_JAVA/
+cd $TNS_ADMIN_FOR_JAVA
+unzip -oq wallet.zip
  
-Configure the sqlnet.ora
+#Configure the sqlnet.ora
 cd $TNS_ADMIN
 cat >sqlnet.ora <<!
 WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$USER_DEFINED_WALLET")))
@@ -77,23 +77,13 @@ SQLNET.WALLET_OVERRIDE = TRUE
 SSL_SERVER_DN_MATCH = yes
 !
 
-
-# Get the DB Alias
-# This also validates the DB OCID
-export DB_ALIAS=`oci db autonomous-database get --autonomous-database-id "$DB_OCID" --query 'data."connection-strings".profiles[?"consumer-group"=='"'TP'"']."display-name" | [0]' --raw-output`
- 
-
-mkdir -p $TNS_ADMIN 
-cd $TNS_ADMIN
-TNS_ADMIN=$PWD
-
 rm -rf $USER_DEFINED_WALLET
 mkdir -p $USER_DEFINED_WALLET 
 
 # Add the admin credential to the wallet
 # set classpath for mkstore - align this to your local SQLcl installation
-SQLCL=$(dirname $(which sql))/../lib
-CLASSPATH=${SQLCL}/oraclepki.jar:${SQLCL}/osdt_core.jar:${SQLCL}/osdt_cert.jar
+export SQLCL=$(dirname $(which sql))/../lib
+export CLASSPATH=${SQLCL}/oraclepki.jar:${SQLCL}/osdt_core.jar:${SQLCL}/osdt_cert.jar
 
 # Create New User Defined Wallet to store DB Credentials
 java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$USER_DEFINED_WALLET" -create >/dev/null <<!
@@ -116,12 +106,10 @@ $WALLET_PASSWORD
 !
 
 # ADD TNS Aliases to the TNSNAMES.ORA
-
 tns_alias=$(grep "$DB_ALIAS " $TNS_ADMIN/tnsnames.ora)
 tns_alias=${tns_alias/security=/security= $TNS_WALLET_STR}
 tns_alias1=${tns_alias/$DB_ALIAS /${DB_ALIAS}_${DB_USER1} }
 tns_alias2=${tns_alias/$DB_ALIAS /${DB_ALIAS}_${DB_USER2} }
-
  
 echo $tns_alias1 >> $TNS_ADMIN/tnsnames.ora
 echo $tns_alias2 >> $TNS_ADMIN/tnsnames.ora
@@ -139,17 +127,35 @@ GRANT CREATE SESSION TO ${DB_USER2};
 GRANT RESOURCE TO ${DB_USER2};
 GRANT CONNECT TO ${DB_USER2};
 GRANT EXECUTE ANY PROCEDURE TO ${DB_USER2};
-GRANT aq_user_role TO ${DB_USER2};
+GRANT AQ_USER_ROLE TO ${DB_USER2};
 GRANT EXECUTE ON dbms_aqadm TO ${DB_USER2};
 GRANT EXECUTE ON dbms_aq TO ${DB_USER2} ;
 GRANT EXECUTE ON dbms_aqin TO ${DB_USER2};
 GRANT UNLIMITED TABLESPACE TO ${DB_USER2};
 GRANT EXECUTE ON DBMS_CLOUD_ADMIN TO ${DB_USER2};
-GRANT pdb_dba TO ${DB_USER2};
+GRANT PDB_DBA TO ${DB_USER2};
 GRANT EXECUTE ON DBMS_CLOUD TO ${DB_USER2};
 GRANT CREATE DATABASE LINK TO ${DB_USER2};
 GRANT EXECUTE ON sys.dbms_aqadm TO ${DB_USER2};
 GRANT EXECUTE ON sys.dbms_aq TO ${DB_USER2};
+
+CREATE USER ${DB_USER3} IDENTIFIED BY $DB_PASSWORD ;
+GRANT execute on DBMS_AQ TO ${DB_USER3};
+GRANT CREATE SESSION TO ${DB_USER3};
+GRANT RESOURCE TO ${DB_USER3};
+GRANT CONNECT TO ${DB_USER3};
+GRANT EXECUTE ANY PROCEDURE TO ${DB_USER3};
+GRANT AQ_USER_ROLE TO ${DB_USER3};
+GRANT EXECUTE ON dbms_aqadm TO ${DB_USER3};
+GRANT EXECUTE ON dbms_aq TO ${DB_USER3} ;
+GRANT EXECUTE ON dbms_aqin TO ${DB_USER3};
+GRANT UNLIMITED TABLESPACE TO ${DB_USER3};
+GRANT EXECUTE ON DBMS_CLOUD_ADMIN TO ${DB_USER3};
+GRANT PDB_DBA TO ${DB_USER3};
+GRANT EXECUTE ON DBMS_CLOUD TO ${DB_USER3};
+GRANT CREATE DATABASE LINK TO ${DB_USER3};
+GRANT EXECUTE ON sys.dbms_aqadm TO ${DB_USER3};
+GRANT EXECUTE ON sys.dbms_aq TO ${DB_USER3};
 EXIT;
 !
 
@@ -158,16 +164,38 @@ Show user;
 /
 !
 
-cd $WORKFLOW_HOME;
+#Java Setup
 
-echo "WORKFLOW_HOME     : " $WORKFLOW_HOME;
-echo "Compartment Name  : " ${comp_name}
-echo "Compartment OCID  : " ${ocid_comp}
-echo "Database Name     : " ${db_name}
-echo "ATP OCID          : " ${DB_OCID}
-echo "TNS Alias         :   ${DB_ALIAS}_${DB_USER1}"
-echo "TNS Alias         :   ${DB_ALIAS}_${DB_USER2}"
+# Add JavaUser Credentials to the ATP Wallet
+cd ..
+cd $TNS_ADMIN_FOR_JAVA
+java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$TNS_ADMIN_FOR_JAVA" -createCredential "${DB_ALIAS}" $DB_USER3 >/dev/null <<!
+$DB_PASSWORD
+$DB_PASSWORD
+$WALLET_PASSWORD
+!
+export JDBC_URL=jdbc:oracle:thin:@${DB_ALIAS}?TNS_ADMIN=${TNS_ADMIN_FOR_JAVA}
+
+#Build java code
+cd ../
+cd aqJava;
+mvn clean install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.test.skip=true;
+cd target;
+killall java;
+nohup java -jar aqJava-0.0.1-SNAPSHOT.jar &
+
+
+cd $ORACLEAQ_HOME;
+
+echo "ORACLEAQ_HOME     : "$ORACLEAQ_HOME;
+echo "COMPARTMENT NAME  : "${COMPARTMENT}
+echo "COMPARTMENT OCID  : "${COMPARTMENT_OCID}
+echo "DATABASE NAME     : "${DB_NAME}
+echo "ATP OCID          : "${DB_OCID}
+echo "TNS ALIAS- USER1  :  ${DB_ALIAS}_${DB_USER1}"
+echo "TNS ALIAS- USER2  :  ${DB_ALIAS}_${DB_USER2}"
+echo "JDBC URL          : "${JDBC_URL}
 echo 
 echo "-------------------------------"
 echo "        SETUP COMPLETED        "
-echo "------------------------------"
+echo "-------------------------------"
