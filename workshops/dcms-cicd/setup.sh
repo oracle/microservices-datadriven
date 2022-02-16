@@ -108,9 +108,9 @@ fi
 #state_set DB_TYPE ATP
 #fi
 
-if ! state_done QUEUE_TYPE; then
-state_set QUEUE_TYPE classicq
-fi
+#if ! state_done QUEUE_TYPE; then
+#state_set QUEUE_TYPE classicq
+#fi
 
 # Identify Run Type
 while ! state_done RUN_TYPE; do
@@ -299,7 +299,7 @@ done
 #  done
 #done
 
-# Collect DB password
+# Collect Jenkins password
 if ! is_secret_set JENKINS_PASSWORD; then
   echo
   echo
