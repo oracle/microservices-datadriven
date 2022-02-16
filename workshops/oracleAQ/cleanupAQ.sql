@@ -35,6 +35,6 @@ EXECUTE DBMS_AQADM.DROP_QUEUE_TABLE (queue_table => 'java_basicOracleQueue_queue
 --Clean up object type 
 DROP TYPE obj_typ;
 /
-select * from ALL_QUEUES where OWNER='DBUSER' and QUEUE_TYPE='NORMAL_QUEUE';
+select name, queue_table, dequeue_enabled,enqueue_enabled, sharded, queue_category, recipients from all_queues where OWNER='DBUSER' and QUEUE_TYPE<>'EXCEPTION_QUEUE';
 /
 EXIT;

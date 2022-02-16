@@ -77,5 +77,9 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE ('UPDATE USER MESSAGE-             :  ' || 'ORDERID: ' ||  applicationToUser_message.ORDERID || ', USERNAME: ' || applicationToUser_message.USERNAME || ', DELIVERY_STATUS: ' || applicationToUser_message.DELIVERY_STATUS);  
     DBMS_OUTPUT.PUT_LINE (' ');
 END;
+/
+select name, queue_table, dequeue_enabled,enqueue_enabled, sharded, queue_category, recipients from all_queues where OWNER='DBUSER' and QUEUE_TYPE<>'EXCEPTION_QUEUE';
+/
+EXIT;
 
 
