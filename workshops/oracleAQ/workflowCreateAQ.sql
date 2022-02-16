@@ -24,16 +24,16 @@ DECLARE
 BEGIN
 
 --PLSQL: USER Subscriber
-dbms_aqadm.add_subscriber(queue_name => 'aq_UserQueue'       , subscriber => sys.aq$_agent('aq_userAppSubscriber'      , null ,0), rule => 'correlation = ''aq_userAppSubscriber''');
-dbms_aqadm.add_subscriber(queue_name => 'aq_UserQueue'       , subscriber => sys.aq$_agent('aq_userDelivererSubscriber', null ,0), rule => 'correlation = ''aq_userDelivererSubscriber''');
+dbms_aqadm.add_subscriber(queue_name => 'aq_UserQueue'       , subscriber => sys.aq$_agent('aq_userAppSubscriber'      , null ,0));
+dbms_aqadm.add_subscriber(queue_name => 'aq_UserQueue'       , subscriber => sys.aq$_agent('aq_userDelivererSubscriber', null ,0));
 
 --PLSQL: Deliverer Subscriber
-dbms_aqadm.add_subscriber(queue_name => 'aq_DelivererQueue'  , subscriber => sys.aq$_agent('aq_delivererUserSubscriber', null ,0), rule => 'correlation = ''aq_delivererUserSubscriber''');
-dbms_aqadm.add_subscriber(queue_name => 'aq_DelivererQueue'  , subscriber => sys.aq$_agent('aq_delivererAppSubscriber' , null ,0), rule => 'correlation = ''aq_delivererAppSubscriber''');
+dbms_aqadm.add_subscriber(queue_name => 'aq_DelivererQueue'  , subscriber => sys.aq$_agent('aq_delivererUserSubscriber', null ,0));
+dbms_aqadm.add_subscriber(queue_name => 'aq_DelivererQueue'  , subscriber => sys.aq$_agent('aq_delivererAppSubscriber' , null ,0));
 
 --PLSQL: Application Subscriber
-dbms_aqadm.add_subscriber(queue_name => 'aq_ApplicationQueue', subscriber => sys.aq$_agent('aq_appUserSubscriber'      , null ,0), rule => 'correlation = ''aq_appUserSubscriber''');
-dbms_aqadm.add_subscriber(queue_name => 'aq_ApplicationQueue', subscriber => sys.aq$_agent('aq_appDelivererSubscriber' , null ,0), rule => 'correlation = ''aq_appDelivererSubscriber''');
+dbms_aqadm.add_subscriber(queue_name => 'aq_ApplicationQueue', subscriber => sys.aq$_agent('aq_appUserSubscriber'      , null ,0));
+dbms_aqadm.add_subscriber(queue_name => 'aq_ApplicationQueue', subscriber => sys.aq$_agent('aq_appDelivererSubscriber' , null ,0));
 
 END;
 /
@@ -51,12 +51,14 @@ IS
     enqueue_options                   DBMS_AQ.enqueue_options_t;
     message_properties                DBMS_AQ.message_properties_t;
     message_handle                    RAW(16);
+    recipients                        DBMS_AQ.aq$_recipient_list_t;
     dequeue_options                   DBMS_AQ.dequeue_options_t;
     messageData                       Message_Typ;
 
 BEGIN
     messageData                       := message;
-    message_properties.correlation := subscriber;
+    recipients(1)                     := sys.aq$_agent(subscriber, NULL, NULL);
+    message_properties.recipient_list := recipients;    
     DBMS_AQ.ENQUEUE(
         queue_name                    => queueName,           
         enqueue_options               => enqueue_options,       
@@ -64,7 +66,8 @@ BEGIN
         payload                       => messageData,               
         msgid                         => message_handle);
         COMMIT;
-    DBMS_OUTPUT.PUT_LINE ('----------ENQUEUE Message:  ' || 'ORDERID: ' ||  messageData.ORDERID || ', OTP: ' || messageData.OTP ||', DELIVERY_STATUS: ' || messageData.DELIVERY_STATUS  );  
+    DBMS_OUTPUT.PUT_LINE ('----------ENQUEUE Message        :  ' || 'ORDERID: ' ||  messageData.ORDERID || ', OTP: ' || messageData.OTP ||', DELIVERY_STATUS: ' || messageData.DELIVERY_STATUS  );  
+
   
     dequeue_options.dequeue_mode      := DBMS_AQ.REMOVE;
     dequeue_options.wait              := DBMS_AQ.NO_WAIT;
@@ -77,10 +80,9 @@ BEGIN
         payload                       => messageData, 
         msgid                         => message_handle);
         COMMIT;
-    DBMS_OUTPUT.PUT_LINE ('----------DEQUEUE Message:  ' || 'ORDERID: ' ||  messageData.ORDERID || ', OTP: ' || messageData.OTP ||', DELIVERY_STATUS: ' || messageData.DELIVERY_STATUS  );  
+    DBMS_OUTPUT.PUT_LINE ('----------DEQUEUE Message        :  ' || 'ORDERID: ' ||  messageData.ORDERID || ', OTP: ' || messageData.OTP ||', DELIVERY_STATUS: ' || messageData.DELIVERY_STATUS  );  
+
     RETURN messageData;
 END;
-/
-select name, queue_table, dequeue_enabled,enqueue_enabled, sharded, queue_category, recipients from all_queues where OWNER='DBUSER' and QUEUE_TYPE<>'EXCEPTION_QUEUE';
 /
 EXIT;
