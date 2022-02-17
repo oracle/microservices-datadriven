@@ -504,6 +504,7 @@ workshops/eventmesh-teq-kafka/cloud-setup/database/wallet-tests/
 workshops/eventmesh-teq-kafka/cloud-setup/database/wallet-tests/*
 workshops/eventmesh-teq-kafka/cloud-setup/database/wallet-tests/**
 workshops/eventmesh-teq-kafka/wallet/
+!okafka*.jar
 
 ## 
 .classpath
