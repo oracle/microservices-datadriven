@@ -12,58 +12,58 @@ if (return 0 2>/dev/null) ; then
 fi
 
 # Environment must be setup before running this script
-if test -z "$DCMS_STATE"; then
+if test -z "$DCMS_CICD_STATE_DIR"; then
   echo "ERROR: Workshop environment not setup"
   exit 1
 fi
 
 # Setup the state store
-if ! state-store-setup "$DCMS_STATE_STORE" "$DCMS_LOG_DIR/state.log"; then
+if ! state-store-setup "$DCMS_CICD_STORE_DIR" "$DCMS_CICD_LOG_DIR/state.log"; then
   echo "Error: Provisioning the state store failed"
   exit 1
 fi
 
 # Start background builds
 #cd $DCMS_BACKGROUND_BUILDS
-#nohup $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-builds.sh >>$DCMS_LOG_DIR/background-builds.log 2>&1 &
+#nohup $MSDD_WORKSHOP_CODE/$DCMS_CICD_WORKSHOP/background-builds.sh >>$DCMS_CICD_LOG_DIR/background-builds.log 2>&1 &
 
 # Get the setup status
-if ! DCMS_STATUS=$(provisioning-get-status $DCMS_STATE); then
+if ! DCMS_STATUS=$(provisioning-get-status $DCMS_CICD_STATE_DIR); then
   echo "ERROR: Unable to get workshop provisioning status"
   exit 1
 fi
 
-#case "$DCMS_STATUS" in
-#
-#  applied | byo)
-#    # Nothing to do
-#    exit 0
-#    ;;
-#
-#  applying)
-#    # Nothing to do
-#    exit 0
-#    ;;
-#
-#  destroying | destroying-failed | destroyed)
-#    # Cannot setup during destroy phase
-#    echo "ERROR: Destroy is running and so cannot run setup"
-#    exit 1
-#    ;;
-#
-#  applying-failed)
-#    # Restart the setup
-#    cd $DCMS_STATE
-#    echo "Restarting setup.  Call 'status' to get the status of the setup"
-#    nohup bash -c "provisioning-apply $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/config" >>$DCMS_LOG_DIR/setup.log 2>&1 &
-#    exit 0
-#    ;;
-#
-#  new)
-#    # New setup
-#    ;;
-#
-#esac
+case "$DCMS_STATUS" in
+
+  applied | byo)
+    # Nothing to do
+    exit 0
+    ;;
+
+  applying)
+    # Nothing to do
+    exit 0
+    ;;
+
+  destroying | destroying-failed | destroyed)
+    # Cannot setup during destroy phase
+    echo "ERROR: Destroy is running and so cannot run setup"
+    exit 1
+    ;;
+
+  applying-failed)
+    # Restart the setup
+    cd $DCMS_CICD_STATE_DIR
+    echo "Restarting setup.  Call 'status' to get the status of the setup"
+    nohup bash -c "provisioning-apply $MSDD_WORKSHOP_CODE/$DCMS_CICD_WORKSHOP/config" >>$DCMS_CICD_LOG_DIR/setup.log 2>&1 &
+    exit 0
+    ;;
+
+  new)
+    # New setup
+    ;;
+
+esac
 
 ##### New Setup
 
@@ -72,7 +72,7 @@ PROF=~/.bashrc
 if test -f "$PROF"; then
   sed -i.bak '/microservices-datadriven/d' $PROF
 fi
-echo "source $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/source.env #microservices-datadriven" >>$PROF
+echo "source $MSDD_WORKSHOP_CODE/$DCMS_CICD_WORKSHOP/source.env #microservices-datadriven" >>$PROF
 echo 'echo "Running workshop from folder $MSDD_WORKSHOP_CODE #microservices-datadriven"' >>$PROF
 
 # Check that the prerequisite utils are installed
@@ -136,11 +136,11 @@ fi
 #    # Get the tenancy OCID
 #    while true; do
 #      read -p "Please enter your OCI tenancy OCID: " OCI_TENANCY
-#      if oci iam tenancy get --tenancy-id "$OCI_TENANCY" 2>&1 >$DCMS_LOG_DIR/tenancy_ocid_err; then
+#      if oci iam tenancy get --tenancy-id "$OCI_TENANCY" 2>&1 >$DCMS_CICD_LOG_DIR/tenancy_ocid_err; then
 #        state_set TENANCY_OCID "$OCI_TENANCY"
 #      else
 #        echo "The tenancy OCID $OCI_TENANCY could not be validated.  Please retry."
-#        cat $DCMS_LOG_DIR/tenancy_ocid_err
+#        cat $DCMS_CICD_LOG_DIR/tenancy_ocid_err
 #      fi
 #    done
 #  fi
@@ -203,10 +203,10 @@ fi
 
 
 # Setup the vault
-#if ! folder-vault-setup $DCMS_VAULT; then
-#  echo "Error: Failed to provision the folder vault"
-#  exit 1
-#fi
+if ! folder-vault-setup $DCMS_CICD_VAULT_DIR; then
+  echo "Error: Failed to provision the folder vault"
+  exit 1
+fi
 
 
 # Get the User OCID
@@ -218,11 +218,11 @@ fi
 #    USER_OCID=${TEST_USER_OCID-}
 #  fi
 #  # Validate
-#  if test ""`oci iam user get --user-id "$USER_OCID" --query 'data."lifecycle-state"' --raw-output 2>$DCMS_LOG_DIR/user_ocid_err` == 'ACTIVE'; then
+#  if test ""`oci iam user get --user-id "$USER_OCID" --query 'data."lifecycle-state"' --raw-output 2>$DCMS_CICD_LOG_DIR/user_ocid_err` == 'ACTIVE'; then
 #    state_set USER_OCID "$USER_OCID"
 #  else
 #    echo "That user OCID could not be validated"
-#    cat $DCMS_LOG_DIR/user_ocid_err
+#    cat $DCMS_CICD_LOG_DIR/user_ocid_err
 #  fi
 #done
 
@@ -259,15 +259,15 @@ done
 # Get the docker auth token
 #while ! is_secret_set DOCKER_AUTH_TOKEN; do
 #  if test $(state_get RUN_TYPE) != "LL"; then
-#    if ! TOKEN=`oci iam auth-token create --region "$(state_get HOME_REGION)" --user-id "$(state_get USER_OCID)" --description "$(state_get DOCKER_AUTH_TOKEN_DESC)" --query 'data.token' --raw-output 2>$DCMS_LOG_DIR/docker_auth_token`; then
-#      if grep UserCapacityExceeded $DCMS_LOG_DIR/docker_auth_token >/dev/null; then
+#    if ! TOKEN=`oci iam auth-token create --region "$(state_get HOME_REGION)" --user-id "$(state_get USER_OCID)" --description "$(state_get DOCKER_AUTH_TOKEN_DESC)" --query 'data.token' --raw-output 2>$DCMS_CICD_LOG_DIR/docker_auth_token`; then
+#      if grep UserCapacityExceeded $DCMS_CICD_LOG_DIR/docker_auth_token >/dev/null; then
 #        # The key already exists
 #        echo 'ERROR: Failed to create auth token.  Please delete an old token from the OCI Console (Profile -> User Settings -> Auth Tokens).'
 #        read -p "Hit return when you are ready to retry?"
 #        continue
 #      else
 #        echo "ERROR: Creating auth token has failed:"
-#        cat $DCMS_LOG_DIR/docker_auth_token
+#        cat $DCMS_CICD_LOG_DIR/docker_auth_token
 #        exit
 #      fi
 #    fi
@@ -297,24 +297,16 @@ done
 
 # Collect Jenkins password
 if ! is_secret_set JENKINS_PASSWORD; then
-  echo
-  echo
 
-  while true; do
     if test -z "${TEST_JENKINS_PASSWORD-}"; then
       read -s -r -p "Enter the password to be used for Jenkins: " PW
     else
       PW="${TEST_JENKINS_PASSWORD-}"
     fi
-#    if [[ ${#PW} -ge 12 && ${#PW} -le 30 && "$PW" =~ [A-Z] && "$PW" =~ [a-z] && "$PW" =~ [0-9] && "$PW" != *admin* && "$PW" != *'"'* ]]; then
-#      echo
-#      break
-#    else
-#      echo "Invalid Password, please retry"
-#    fi
-  done
+
   set_secret JENKINS_PASSWORD $PW
   state_set JENKINS_PASSWORD_SECRET "JENKINS_PASSWORD"
+  echo ""
 fi
 
 ## Collect UI password
@@ -341,6 +333,6 @@ fi
 #fi
 
 # Run the setup in the background
-cd $DCMS_STATE
+cd $DCMS_CICD_STATE_DIR
 echo "Setup running in background.  Call 'status' to get the status of the setup"
-nohup bash -c "provisioning-apply $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/config" >>$DCMS_LOG_DIR/setup.log 2>&1 &
+nohup bash -c "provisioning-apply $MSDD_WORKSHOP_CODE/$DCMS_CICD_WORKSHOP/config" >>$DCMS_CICD_LOG_DIR/setup.log 2>&1 &

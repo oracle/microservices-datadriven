@@ -10,12 +10,16 @@ if ! provisioning-helper-pre-apply; then
   exit 1
 fi
 
-rm -rf $MY_STATE/jenkins
-cp -r $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/config/jenkins $MY_STATE
+
+if ! test -d $MY_STATE/jenkins; then
+  rm -rf $MY_STATE/jenkins
+  cp -r $DCMS_CICD_JNKNS_DIR $MY_STATE
+fi
+
 
 # Start the provisioning apply
 cd $MY_STATE/jenkins
-source scripts/terraform-env.sh
+source $DCMS_CICD_JNKNS_DIR/scripts/terraform-env.sh
 
 if ! terraform init; then
     echo 'ERROR: terraform init failed!'

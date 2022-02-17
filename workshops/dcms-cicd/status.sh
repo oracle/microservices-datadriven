@@ -9,7 +9,7 @@ if (return 0 2>/dev/null); then
 fi
 
 # Environment must be setup before running this script
-if test -z "$DCMS_STATE"; then
+if test -z "$DCMS_CICD_STATE_DIR"; then
   echo "ERROR: Workshop environment not setup"
   exit 1
 fi
@@ -36,7 +36,7 @@ while true; do
 
   # Get the setup status
 
-  if ! DCMS_STATUS=$(provisioning-get-status $DCMS_STATE); then
+  if ! DCMS_STATUS=$(provisioning-get-status $DCMS_CICD_STATE_DIR); then
     echo "ERROR: Unable to get workshop provisioning status"
     exit 1
   fi
@@ -77,12 +77,12 @@ while true; do
   tput sgr0
   echo
 
-  $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/config/status.sh
+  $MSDD_WORKSHOP_CODE/$DCMS_CICD_WORKSHOP/config/status.sh
 
 #  if [[ "$PHASE" =~ SETUP* ]]; then
 #    echo
 #    for lab in $LABS_WITH_BUILDS; do
-#      $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/background-build-status.sh "$lab"
+#      $MSDD_WORKSHOP_CODE/$DCMS_CICD_WORKSHOP/background-build-status.sh "$lab"
 #    done
 #  fi
 

@@ -14,7 +14,7 @@ fi
 
 # Start the provisioning destroy
 cd $MY_STATE/jenkins
-source scripts/terraform-env.sh
+source $DCMS_CICD_JNKNS_DIR/scripts/terraform-env.sh
 
 if ! terraform init; then
     echo 'ERROR: terraform init failed!'
@@ -25,6 +25,5 @@ if ! terraform destroy -auto-approve; then
     echo 'ERROR: terraform apply failed!'
     exit 1
 fi
-
 
 rm -f $STATE_FILE
