@@ -6,7 +6,7 @@
 set -e
 
 # set classpath for mkstore - align this to your local SQLcl installation
-SQLCL=$(dirname $(which sql))/../lib
+SQLCL=/opt/oracle/sqlcl/lib
 CLASSPATH=${SQLCL}/oraclepki.jar:${SQLCL}/osdt_core.jar:${SQLCL}/osdt_cert.jar
 
 

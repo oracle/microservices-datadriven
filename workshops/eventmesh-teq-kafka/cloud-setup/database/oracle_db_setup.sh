@@ -11,9 +11,25 @@ while ! state_done LAB_DB_OCID; do
   sleep 2
 done
 
+# Give DB_PASSWORD priority
+while ! state_done DB_PASSWORD; do
+  echo "Waiting for DB_PASSWORD"
+  sleep 5
+done
+
+# Wait for DB Password to be set in Lab DB
+while ! state_done LAB_DB_PASSWORD_SET; do
+  echo "$(date): Waiting for LAB_DB_PASSWORD_SET"
+  sleep 2
+done
+
+# Get DB Password
+DB_PASSWORD=$(state_get BASE64_DB_PASSWORD | base64 --decode)
+state_reset BASE64_DB_PASSWORD
+
 # Generate a wallet password
 # Variable is not exported
-WALLET_PASSWORD='Pwd'$(awk 'BEGIN { srand(); print int(1 + rand() * 100000000)}')
+WALLET_PASSWORD=$DB_PASSWORD
 
 # Get Wallet
 while ! state_done WALLET_GET; do
@@ -48,12 +64,6 @@ while ! state_done CWALLET_SSO_AUTH_URL; do
 done
 
 
-# Give DB_PASSWORD priority
-while ! state_done DB_PASSWORD; do
-  echo "Waiting for DB_PASSWORD"
-  sleep 5
-done
-
 
 state_set_done DB_WALLET_SECRET
 # DB Connection Setup
@@ -77,16 +87,6 @@ state_set LAB_TEQ_TOPIC "$LAB_TEQ_TOPIC"
 LAB_TEQ_TOPIC_SUBSCRIBER=LAB8022_TOPIC_SUBSCRIBER
 echo "$(date): Oracle TEQ TOPIC Subscriber= $LAB_TEQ_TOPIC_SUBSCRIBER"
 state_set LAB_TEQ_TOPIC_SUBSCRIBER "$LAB_TEQ_TOPIC_SUBSCRIBER"
-
-# Wait for DB Password to be set in Lab DB
-while ! state_done LAB_DB_PASSWORD_SET; do
-  echo "$(date): Waiting for LAB_DB_PASSWORD_SET"
-  sleep 2
-done
-
-# Get DB Password
-DB_PASSWORD=$(state_get BASE64_DB_PASSWORD | base64 --decode)
-state_reset BASE64_DB_PASSWORD
 
 # Lab DB User, Objects
 while ! state_done LAB_DB_USER; do
@@ -157,11 +157,10 @@ cd "$LAB_HOME"
 if ! state_get CWALLET_SSO_UPDATED; then
   echo "Executing java_mkstore.sh in the background"
   "$LAB_HOME"/cloud-setup/database/java_mkstore.sh -nologo -wrl "$LAB_HOME"/wallet -createCredential "$LAB_DB_SVC" "$LAB_DB_USER" &>> "$LAB_LOG"/mkstore.log  <<!
-  $DB_PASSWORD
-  $DB_PASSWORD
-  $WALLET_PASSWORD
+$DB_PASSWORD
+$DB_PASSWORD
+$WALLET_PASSWORD
 !
-
   state_set_done CWALLET_SSO_UPDATED
 fi
 
