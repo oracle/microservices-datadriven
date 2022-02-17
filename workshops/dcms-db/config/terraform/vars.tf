@@ -105,7 +105,7 @@ variable "adb_db_version" {
 }
 
 variable "compute_os" {
-  default = "Oracle Autonomous Linux"
+  default = "Oracle Linux"
 }
 
 variable "linux_os_version" {
