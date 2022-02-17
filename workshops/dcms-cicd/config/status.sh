@@ -6,7 +6,7 @@
 # Fail on error
 set -eu
 
-export DCMS_THREAD_STATE=$DCMS_STATE/threads
+export DCMS_THREAD_STATE=$DCMS_CICD_STATE_DIR/jenkins
 
 THREADS="jenkins"
 for t in $THREADS; do

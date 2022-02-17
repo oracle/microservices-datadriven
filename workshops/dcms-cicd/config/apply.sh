@@ -30,3 +30,13 @@ if ! terraform apply -auto-approve; then
     echo 'ERROR: terraform apply failed!'
     exit 1
 fi
+
+
+state_set JENKINS_IP `terraform output jenkins_public_ip`
+set_secret JENKINS_PRIVATE_KEY `terraform output -raw generated_ssh_private_key`
+
+# Write the output
+cat >$OUTPUT_FILE <<!
+export JENKINS_IP='$(state_get JENKINS_IP)'
+export JENKINS_PRIVATE_KEY='$(get_secret JENKINS_PRIVATE_KEY)'
+!
