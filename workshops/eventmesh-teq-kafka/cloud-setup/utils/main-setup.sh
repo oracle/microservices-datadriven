@@ -300,3 +300,4 @@ done
 
 # Export state file for local development
 cd "$LAB_HOME"
+source "$LAB_HOME"/cloud-setup/env.sh
