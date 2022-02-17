@@ -29,15 +29,17 @@ export LAB_HOME=${str:0:$index-1}
 cd "$LAB_HOME"
 echo "LAB_HOME: $LAB_HOME"
 
-## Java Home
-#if test -d ~/graalvm-ce-java11-21.3.0/Contents/Home/bin; then
-#  # We are on Mac doing local dev
-#  export JAVA_HOME=~/graalvm-ce-java11-21.3.0/Contents/Home;
-#else
-#  # Assume linux
-#  export JAVA_HOME=~/graalvm-ce-java11-21.3.0
-#fi
-#export PATH=$JAVA_HOME/bin:$PATH
+# Java Home
+GRAALVM_VERSION=${1:-"22.0.0.2"}
+OS_NAME=$(uname)
+if ! [[ $OS_NAME == *"darwin"* ]]; then
+  # Assume linux
+  export JAVA_HOME=~/graalvm-ce-java11-${GRAALVM_VERSION}
+else
+  # We are on Mac doing local dev
+  export JAVA_HOME=~/graalvm-ce-java11-${GRAALVM_VERSION}/Contents/Home;
+fi
+export PATH=$JAVA_HOME/bin/:$PATH
 
 # State directory
 if test -d ~/lab-state; then
