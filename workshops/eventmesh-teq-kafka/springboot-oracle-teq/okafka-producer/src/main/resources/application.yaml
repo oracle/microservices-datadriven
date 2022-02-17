@@ -44,7 +44,7 @@ logging:
 okafka-server-config:
   oracle-instance-name: lab8022_tp
   oracle-service-name: bsenjiat5lmurtq_lab8022_tp.adb.oraclecloud.com
-  oracle-net-tns_admin: LAB_HOME/wallet
+  oracle-net-tns_admin: /home/appuser/wallet
   tns-alias: lab8022_tp
   security-protocol: SSL
   bootstrap-servers: adb.us-ashburn-1.oraclecloud.com:1522
