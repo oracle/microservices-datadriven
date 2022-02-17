@@ -64,13 +64,14 @@ function grabdish_db_setup {
   cd ${db_script_home}/1db/apply
 	for f in $(ls); do
 		target=${target_apply_script_home}/${f}
+		cd ${target_apply_script_home}
 		if ! test -f ${target}; then
 			echo "Executing ${target}"
 		  eval "
 			cat >${target} <<- !
 				set serveroutput on size 99999 feedback off timing on linesize 180 echo on
 				whenever sqlerror exit 1
-				$(<${f})
+				$(<${db_script_home}/1db/apply/${f})
 			!
 			"
 			chmod 400 ${target}
@@ -313,11 +314,17 @@ fi
 #------------------------------------------------------------------------------
 # main
 #------------------------------------------------------------------------------
+
+# setup the tns_admin
 export TNS_ADMIN=~/tns_admin
 mkdir -p $TNS_ADMIN
 cp ${script_dir}/adb_wallet.zip $TNS_ADMIN/
 unzip -o ${script_dir}/adb_wallet.zip -d ${TNS_ADMIN}
 base64 -w 0 ${script_dir}/adb_wallet.zip > $TNS_ADMIN/adb_wallet.zip.b64
+cat >$TNS_ADMIN/sqlnet.ora <<- !
+	WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$TNS_ADMIN")))
+	SSL_SERVER_DN_MATCH=yes
+!
 
 grabdish_db_setup "${admin_password}" "${db_name}_TP" 'classicq'
 RC=$?

@@ -25,7 +25,6 @@ resource "oci_database_autonomous_database" "autonomous_database" {
   is_free_tier             = local.is_always_free
   is_auto_scaling_enabled  = local.is_always_free ? false : true
   license_model            = local.is_always_free ? "LICENSE_INCLUDED" : var.adb_license_model
-  whitelisted_ips          = local.is_always_free ? [oci_core_vcn.vcn.id] : null
   nsg_ids                  = local.adb_private_endpoint ? [oci_core_network_security_group.security_group_adb[0].id] : null
   private_endpoint_label   = local.adb_private_endpoint ? "ADBPrivateEndpoint" : null
   subnet_id                = local.adb_private_endpoint ? oci_core_subnet.subnet_private[0].id : null
