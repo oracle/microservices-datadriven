@@ -169,6 +169,15 @@ if ! state_get GRAALVM_INSTALLED; then
   fi
 fi
 
+if ! state_get OKAFKA_INSTALLED; then
+  if ps -ef | grep "$LAB_HOME/cloud-setup/okafka/okafka-maven-install.sh" | grep -v grep; then
+    echo "$LAB_HOME/cloud-setup/okafka/okafka-maven-install.sh is already running"
+  else
+    echo "Executing okafka/okafka-maven-install.sh in the background"
+    nohup "$LAB_HOME"/cloud-setup/okafka/okafka-maven-install.sh &>>"$LAB_LOG"/okafka_install.log &
+  fi
+fi
+
 if ! state_done CONTAINER_ENG_SETUP; then
   echo "$(date): Installing GraalVM CE Java 11 Image"
   docker pull ghcr.io/graalvm/graalvm-ce:ol8-java11 --quiet
