@@ -5,8 +5,6 @@
 # Fail on error
 set -e
 
-
-
 if ! provisioning-helper-pre-destroy; then
   exit 1
 fi

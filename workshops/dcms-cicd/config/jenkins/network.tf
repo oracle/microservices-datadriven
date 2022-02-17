@@ -17,7 +17,7 @@ resource "oci_core_route_table" "public_route_table" {
   vcn_id = oci_core_virtual_network.jnkns_vcn.id
   display_name = "RouteTableForJenkins"
   route_rules {
-    cidr_block = "0.0.0.0/0"
+    destination = "0.0.0.0/0"
     network_entity_id = oci_core_internet_gateway.internet_gateway.id
   }
 }
