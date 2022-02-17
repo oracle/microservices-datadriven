@@ -49,7 +49,7 @@ case "$DCMS_STATUS" in
     # Start or restart destroy
     cd $DCMS_CICD_STATE_DIR
     echo "Starting teardown.  Call 'status' to get the status of the teardown"
-    nohup bash -c "provisioning-destroy" >>DCMS_CICD_LOG_DIR/teardown.log 2>&1 &
+    nohup bash -c "provisioning-destroy" >> $DCMS_CICD_LOG_DIR/teardown.log 2>&1 &
     exit
     ;;
 
