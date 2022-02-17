@@ -13,14 +13,19 @@ done
 
 # Generate a wallet password
 # Variable is not exported
-#WALLET_PASSWORD='Pwd'$(awk 'BEGIN { srand(); print int(1 + rand() * 100000000)}')
+WALLET_PASSWORD='Pwd'$(awk 'BEGIN { srand(); print int(1 + rand() * 100000000)}')
 
 # Get Wallet
 while ! state_done WALLET_GET; do
   cd "$LAB_HOME"
   mkdir wallet
   cd wallet
-  oci db autonomous-database generate-wallet --autonomous-database-id "$(state_get LAB_DB_OCID)" --file 'wallet.zip' --password 'Welcome1' --generate-type 'ALL'
+  umask 177
+  echo '{"password": "'"$WALLET_PASSWORD"'"}' > temp_params
+  umask 22
+  #oci db autonomous-database generate-wallet --autonomous-database-id "$(state_get LAB_DB_OCID)" --file 'wallet.zip' --password $WALLET_PASSWORD --generate-type 'S'
+  oci db autonomous-database generate-wallet --autonomous-database-id "$(state_get LAB_DB_OCID)" --generate-type 'SINGLE' --file 'wallet.zip' --from-json "file://temp_params"
+  rm temp_params
   unzip -oq wallet.zip
   cd "$LAB_HOME"
   state_set_done WALLET_GET
@@ -147,20 +152,16 @@ done
 
 cd "$LAB_HOME"
 
-echo "$DB_PASSWORD"
-echo "$WALLET_PASSWORD"
-
 # Setup User Login on Wallet
 # run java_mkstore.sh in background
 if ! state_get CWALLET_SSO_UPDATED; then
   echo "Executing java_mkstore.sh in the background"
-  "$LAB_HOME"/cloud-setup/database/java_mkstore.sh -nologo \
-  -wrl "$LAB_HOME"/wallet \
-  -createCredential "$LAB_DB_SVC" "$LAB_DB_USER" &>> "$LAB_LOG"/mkstore.log  <<!
+  "$LAB_HOME"/cloud-setup/database/java_mkstore.sh -nologo -wrl "$LAB_HOME"/wallet -createCredential "$LAB_DB_SVC" "$LAB_DB_USER" &>> "$LAB_LOG"/mkstore.log  <<!
   $DB_PASSWORD
   $DB_PASSWORD
-  Welcome1
+  $WALLET_PASSWORD
 !
+
   state_set_done CWALLET_SSO_UPDATED
 fi
 
