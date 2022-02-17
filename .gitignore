@@ -502,6 +502,7 @@ workshops/eventmesh-teq-kafka/cloud-setup/terraform_dbsystem/
 workshops/eventmesh-teq-kafka/cloud-setup/database/*.sql
 workshops/eventmesh-teq-kafka/cloud-setup/database/wallet-tests/
 workshops/eventmesh-teq-kafka/cloud-setup/database/wallet-tests/*
+workshops/eventmesh-teq-kafka/cloud-setup/database/wallet-tests/**
 workshops/eventmesh-teq-kafka/wallet/
 
 ## 
