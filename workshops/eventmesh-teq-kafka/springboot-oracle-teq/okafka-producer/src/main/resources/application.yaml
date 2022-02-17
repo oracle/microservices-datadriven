@@ -44,11 +44,8 @@ logging:
 okafka-server-config:
   oracle-instance-name: lab8022atp_tp
   oracle-service-name: bsenjiat5lmurtq_lab8022atp_tp.adb.oraclecloud.com
-  #  oracle-net-tns_admin: /home/appuser/wallet
-  oracle-net-tns_admin: /Users/pasimoes/Work/Oracle/Code/db-aq-dev/microservices-datadriven/workshops/eventmesh-teq-kafka/wallet
+  oracle-net-tns_admin: /home/appuser/wallet
   tns-alias: lab8022atp_tp
-#  oracle-user-name: LAB8022_USER
-#  oracle-password: Welcome#1@Oracle
   security-protocol: SSL
   bootstrap-servers: adb.us-ashburn-1.oraclecloud.com:1522
 
