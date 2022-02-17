@@ -45,7 +45,9 @@ fi
 #------------------------------------------------------------------------------
 if [[ ${mystage} == "PRE" ]]; then
 	echo "Installing ords and sqlplus"
-	dnf -y install ords oracle-instantclient-release-el8 oracle-instantclient-sqlplus
+	dnf -y install ords
+	dnf -y install oracle-instantclient-release-el8
+	dnf -y install oracle-instantclient-sqlplus
 
 	echo "Symlinking /etc/init.d/ords to /opt/oracle/ords/ords"
 	if [[ ! -f /opt/oracle/ords/ords ]]; then

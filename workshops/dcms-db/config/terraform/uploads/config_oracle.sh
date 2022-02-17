@@ -33,7 +33,9 @@ function grabdish_db_setup {
 	typeset -r _queue_type=$3
 
 	db_script_home=/tmp/uploads/db
-	cd ${db_script_home}
+	cd
+	target_db_script_home=`pwd`/db
+	mkdir -p ${target_db_script_home}
 
 	# source the script params
 	DB_PASSWORD=${_pass}
@@ -42,31 +44,38 @@ function grabdish_db_setup {
 	source ${db_script_home}/params.env
 
 	# expand the common scripts
-	common_script_home=${db_script_home}/common/apply
-	cd ${common_script_home}
-	for f in $(ls); do
-	  cat $f >TEMP
-	  eval "
-		cat >$f <<- !
-		$(<TEMP)
-		!
-		"
-	  rm TEMP
-	  chmod 700 $f
-	done
+	target_common_script_home=${target_db_script_home}/common/apply
+	if ! test -d ${target_common_script_home}; then
+		mkdir -p ${target_common_script_home}
+		cd ${db_script_home}/common/apply
+		for f in $(ls); do
+		  eval "
+			cat >${target_common_script_home}/${f} <<- !
+			$(<${f})
+			!
+			"
+		  chmod 400 ${target_common_script_home}/${f}
+		done
+  fi
 
 	# execute the apply sql scripts in order
-	apply_script_home=${db_script_home}/1db/apply
-  cd ${apply_script_home}
+	target_apply_script_home=${target_db_script_home}/1db/apply
+	mkdir -p ${target_apply_script_home}
+  cd ${db_script_home}/1db/apply
 	for f in $(ls); do
-	  echo "Executing $apply_script_home/${f}"
-	  eval "
-		sqlplus /nolog <<- !
-		set serveroutput on size 99999 feedback off timing on linesize 180 echo on
-		whenever sqlerror exit 1
-		$(<${f})
-		!
-		"
+		target=${target_apply_script_home}/${f}
+		if ! test -f ${target}; then
+			echo "Executing ${target}"
+		  eval "
+			cat >${target} <<- !
+				set serveroutput on size 99999 feedback off timing on linesize 180 echo on
+				whenever sqlerror exit 1
+				$(<${f})
+			!
+			"
+			chmod 400 ${target}
+			sqlplus /nolog <${target}
+		fi
 	done
 }
 
