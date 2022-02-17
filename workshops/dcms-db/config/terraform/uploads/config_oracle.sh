@@ -21,9 +21,9 @@ typeset -r ords_plgw="ORDS_PLSQL_GATEWAY_OCI"
 # LOCAL FUNCTIONS
 #------------------------------------------------------------------------------
 function usage {
-	print -- "${script_name} Usage"
-	print -- "${script_name} MUST be run by oracle"
-	print -- "\t\t${script_name} -t <DB_NAME> -p <ADMIN_PASS> -v <APEX_VERSION> [-h]"
+	echo "${script_name} Usage"
+	echo "${script_name} MUST be run by oracle"
+	echo "\t\t${script_name} -t <DB_NAME> -p <ADMIN_PASS> -v <APEX_VERSION> [-h]"
 	return 0
 }
 
@@ -36,8 +36,9 @@ function grabdish_db_setup {
 	cd ${db_script_home}
 
 	# source the script params
-	DB_PASSWORD=_pass
-	QUEUE_TYPE=_queue_type
+	DB_PASSWORD=${_pass}
+	QUEUE_TYPE=${_queue_type}
+	DB1_ALIAS=${_db_alias}
 	source ${db_script_home}/params.env
 
 	# expand the common scripts
@@ -51,7 +52,7 @@ function grabdish_db_setup {
 		!
 		"
 	  rm TEMP
-	  chmod 400 $f
+	  chmod 700 $f
 	done
 
 	# execute the apply sql scripts in order
@@ -75,7 +76,7 @@ function run_sql {
 	typeset -r _DBNAME=$2
 	typeset -r _SQL=$3
 
-	print "Connnecting to ${_DBNAME}_TP (TNS_ADMIN=$TNS_ADMIN)"
+	echo "Connnecting to ${_DBNAME}_TP (TNS_ADMIN=$TNS_ADMIN)"
 	sqlplus -s /nolog <<-EOSQL
 		connect ADMIN/${_PASS}@${_DBNAME}_TP
 		set serveroutput on size 99999 feedback off timing on linesize 180 echo on
@@ -199,10 +200,10 @@ function write_apex_pu {
 		</properties>
 	EOF
 	if [[ ! -f ${_DIR}/${_FILE} ]]; then
-		print -- "ERROR: Unable to write ${_DIR}/${_FILE}"
+		echo "ERROR: Unable to write ${_DIR}/${_FILE}"
 		_RC=1
 	else
-		print -- "Wrote ${_DIR}/${_FILE}"
+		echo "Wrote ${_DIR}/${_FILE}"
 	fi
 	return ${_RC}
 }
@@ -228,10 +229,10 @@ function write_defaults {
 		</properties>
 	EOF
 	if [[ ! -f ${_DIR}/${_FILE} ]]; then
-		print -- "ERROR: Unable to write ${_DIR}/${_FILE}"
+		echo "ERROR: Unable to write ${_DIR}/${_FILE}"
 		_RC=1
 	else
-		print -- "Wrote ${_DIR}/${_FILE}"
+		echo "Wrote ${_DIR}/${_FILE}"
 	fi
 	return ${_RC}
 }
@@ -298,7 +299,7 @@ if [[ -z ${db_name} || -z ${admin_password} || -z ${apex_version} ]]; then
 fi
 
 if [[ ! -d ${ords_dir} ]]; then
-	print -- "ERROR: Cannot find ${ords_dir}; is ords installed?" && exit 1
+	echo "ERROR: Cannot find ${ords_dir}; is ords installed?" && exit 1
 fi
 #------------------------------------------------------------------------------
 # main
@@ -331,5 +332,5 @@ RC=$(( RC + $? ))
 
 write_index "${standalone_root}"
 
-print -- "FINISHED: Return Code: ${RC}"
+echo "FINISHED: Return Code: ${RC}"
 exit $RC

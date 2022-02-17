@@ -109,7 +109,7 @@ variable "compute_os" {
 }
 
 variable "linux_os_version" {
-  default = "7.9"
+  default = "8.0"
 }
 
 variable "bastion_user" {

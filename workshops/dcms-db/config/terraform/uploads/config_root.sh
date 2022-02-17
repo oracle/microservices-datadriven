@@ -15,9 +15,9 @@ typeset -r script_name="${0##*/}"
 # local functions
 #------------------------------------------------------------------------------
 function usage {
-	print -- "${script_name} Usage"
-	print -- "${script_name} must be run by root"
-	print -- "\t\t${script_name} -s <PRE|POST> [-h]"
+	echo "${script_name} Usage"
+	echo "${script_name} must be run by root"
+	echo "\t\t${script_name} -s <PRE|POST> [-h]"
 	return 0
 }
 
@@ -44,21 +44,21 @@ fi
 # main
 #------------------------------------------------------------------------------
 if [[ ${mystage} == "PRE" ]]; then
-	print -- "Installing ords and sqlplus"
+	echo "Installing ords and sqlplus"
 	dnf -y install ords oracle-instantclient-release-el8 oracle-instantclient-sqlplus
 
-	print -- "Symlinking /etc/init.d/ords to /opt/oracle/ords/ords"
+	echo "Symlinking /etc/init.d/ords to /opt/oracle/ords/ords"
 	if [[ ! -f /opt/oracle/ords/ords ]]; then
 		ln -s /etc/init.d/ords /opt/oracle/ords/ords
-		print -- "Symlink'd"
+		echo "Symlink'd"
 	else
-		print -- "Symlink already exists"
+		echo "Symlink already exists"
 	fi
 
-	print "Opening up port 8080 for the ORDS Listener"
+	echo "Opening up port 8080 for the ORDS Listener"
 	firewall-cmd --zone=public --add-port 8080/tcp --permanent
 
-	print -- "Writing /etc/ords/ords.conf"
+	echo "Writing /etc/ords/ords.conf"
 	cat > /etc/ords/ords.conf <<- EOF
 		ORDS_CONFIGDIR=/opt/oracle/ords/config
 		JAVA_HOME=/usr/java/latest
