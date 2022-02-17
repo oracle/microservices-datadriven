@@ -14,9 +14,6 @@ read -s -r -p "Please enter Oracle DB Password: " ORACLE_DB_PASSWORD
 # Collect the Kafka Topic to be consumed by Connect
 # read -r -p "Please enter Kafka Topic: " KAFKA_TOPIC
 
-# Set the Kafka Topic to be consumed by Connect Sync
-sed -i 's/KAFKA_TOPIC/'"${KAFKA_TOPIC}"'/g' "$CONF_FILE"
-
 # Collect the DB USER
 if state_get LAB_DB_USER; then
   LAB_DB_USER="$(state_get LAB_DB_USER)"

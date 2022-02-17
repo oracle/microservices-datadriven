@@ -23,6 +23,7 @@ begin
         dequeue_options.dequeue_mode  := DBMS_AQ.REMOVE;
         dequeue_options.wait          := DBMS_AQ.NO_WAIT;
         dequeue_options.navigation    := DBMS_AQ.FIRST_MESSAGE;
+        dequeue_options.wait          := 1;
         dequeue_options.consumer_name := teq_subscriber;
 
       DBMS_AQ.DEQUEUE(
@@ -39,4 +40,3 @@ begin
     end if;
 end;
 /
-exit;

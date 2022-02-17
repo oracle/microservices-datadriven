@@ -55,4 +55,6 @@ sql -S /nolog <<!
   connect $LAB_DB_USER/"$ORACLE_DB_PASSWORD"@$LAB_DB_SVC
 
   @dequeue_msg_oracle_teq_topic.sql $TEQ_TOPIC $TEQ_SUBSCRIBER
+
+  exit;
 !
