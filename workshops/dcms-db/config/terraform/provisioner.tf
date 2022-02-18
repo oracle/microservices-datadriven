@@ -28,16 +28,11 @@ resource "null_resource" "ords_config" {
   provisioner "file" {
     connection {
       type                = "ssh"
-      user                = var.bastion_user
-      host                = data.oci_core_vnic.instance_vnic.private_ip_address
-      private_key         = tls_private_key.example_com.private_key_pem
-
+      user                = "opc"
+      host                = oci_core_instance.instance.public_ip
+      private_key         = chomp(file(var.ssh_private_key_file))
       agent               = false
       timeout             = "10m"
-      bastion_host        = "host.bastion.${var.region}.oci.oraclecloud.com"
-      bastion_port        = "22"
-      bastion_user        = oci_bastion_session.bastion_service_ssh.id
-      bastion_private_key = tls_private_key.example_com.private_key_pem
     }
     source      = "uploads"
     destination = "/tmp"
@@ -46,16 +41,11 @@ resource "null_resource" "ords_config" {
   provisioner "remote-exec" {
     connection {
       type                = "ssh"
-      user                = var.bastion_user
-      host                = data.oci_core_vnic.instance_vnic.private_ip_address
-      private_key         = tls_private_key.example_com.private_key_pem
-
+      user                = "opc"
+      host                = oci_core_instance.instance.public_ip
+      private_key         = chomp(file(var.ssh_private_key_file))
       agent               = false
       timeout             = "10m"
-      bastion_host        = "host.bastion.${var.region}.oci.oraclecloud.com"
-      bastion_port        = "22"
-      bastion_user        = oci_bastion_session.bastion_service_ssh.id
-      bastion_private_key = tls_private_key.example_com.private_key_pem
     }
     inline = [
       "sudo chmod +x /tmp/uploads/config_*.ksh",

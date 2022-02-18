@@ -18,6 +18,10 @@ variable "ssh_public_key_file" {
   default = ""
 }
 
+variable "ssh_private_key_file" {
+  default = ""
+}
+
 // General Configuration
 variable "proj_abrv" {
   default = "apexpoc"
