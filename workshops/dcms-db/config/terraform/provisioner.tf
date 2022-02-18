@@ -48,6 +48,7 @@ resource "null_resource" "ords_config" {
       timeout             = "10m"
     }
     inline = [
+      "while ! test -d /tmp/uploads; do sleep 1; done",
       "sudo chmod +x /tmp/uploads/config_*.ksh",
       "sudo -u root /tmp/uploads/config_root.ksh -s PRE",
       "sudo -u oracle /tmp/uploads/config_oracle.ksh -t ${local.db_name} -p \"${local.password}\" -v ${local.apex_ver}",
