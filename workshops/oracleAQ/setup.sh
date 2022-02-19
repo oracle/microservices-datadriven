@@ -39,7 +39,7 @@ while true; do
 done
 umask 177 
 DB_PASSWORD="$db_pwd"
-WALLET_PASSWORD='Pwd'`awk 'BEGIN { srand(); print int(1 + rand() * 100000000)}'`
+WALLET_PASSWORD="$db_pwd"
 umask 22
 
 
@@ -82,7 +82,8 @@ mkdir -p $USER_DEFINED_WALLET
 
 # Add the admin credential to the wallet
 # set classpath for mkstore - align this to your local SQLcl installation
-export SQLCL=$(dirname $(which sql))/../lib
+#export SQLCL=$(dirname $(which sql))/../lib
+export SQLCL=/opt/oracle/sqlcl/lib
 export CLASSPATH=${SQLCL}/oraclepki.jar:${SQLCL}/osdt_core.jar:${SQLCL}/osdt_cert.jar
 
 # Create New User Defined Wallet to store DB Credentials
