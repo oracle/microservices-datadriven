@@ -31,6 +31,7 @@ import oracle.AQ.AQQueueTable;
 import oracle.AQ.AQQueueTableProperty;
 import oracle.AQ.AQRawPayload;
 import oracle.AQ.AQSession;
+import oracle.jms.AQjmsSession;
 
 @Service
 public class EnqueueDequeueAQ {
@@ -47,34 +48,41 @@ public class EnqueueDequeueAQ {
 	@Value("${username}")
 	private String username;
 
-	public Map<Integer, String> pointToPointAQ() throws ClassNotFoundException, SQLException, AQException {
+	public Map<Integer, String> pointToPointAQ() throws ClassNotFoundException, SQLException, AQException, JMSException {
 		Map<Integer, String> response = new HashMap();
 
 		AQSession aq_sess = configData.queueDataSourceConnection();
 
 		createQueue(aq_sess);
-		response.put(1, "Sample to Create Queue executed");
+		response.put(1, "Sample to create single-consumer Queue executed");
 
 		useCreatedQueue(aq_sess);
 		response.put(2, "Sample to use existing Queues executed");
 
 		enqueueAndDequeue(aq_sess);
-		response.put(3, "Sample to Enqueue and Dequeue executed");
+		response.put(3, "Sample to Enqueue and Dequeue single-consumer Queue executed");
+		
+		cleanupAQ(aq_sess, constantName.aq_createTable);
+		cleanupAQ(aq_sess, constantName.aq_enqueueDequeueTable);
+		response.put(4, "Sample to Cleanup single-consumer Queue executed");
 
 		multiConsumerQueue(aq_sess);
-		response.put(4, "Sample to create multi-consumer Queue executed");
+		response.put(5, "Sample to create multi-consumer Queue executed");
 
 		enqueueMultiConsumer(aq_sess);
-		response.put(5, "Sample to create multi-consumer Enqueue executed");
+		response.put(6, "Sample to create multi-consumer Enqueue executed");
 
 		dequeueMultiConsumer(aq_sess);
-		response.put(6, "Sample to create multi-consumer Dequeue executed");
+		response.put(7, "Sample to create multi-consumer Dequeue executed");
 
 		enqueueMultiConsumerWithPriority(aq_sess);
-		response.put(7, "Sample to create multi-consumer Enqueue with Priority executed");
+		response.put(8, "Sample to create multi-consumer Enqueue with Priority executed");
 
 		dequeueMultiConsumerBrowseMode(aq_sess);
-		response.put(8, "Sample to create multi-consumer Dequeue with Browse mode executed");
+		response.put(9, "Sample to create multi-consumer Dequeue with Browse mode executed");
+		
+		cleanupAQ(aq_sess, constantName.aq_multiConsumerQueue);
+		response.put(10, "Sample to Cleanup multi-consumer Queue executed");
 
 		return response;
 	}
@@ -282,7 +290,15 @@ public class EnqueueDequeueAQ {
 		pubSubUtil.pubSub(session, constantName.aq_pubSubSubscriber1, topic.getTopicName(), "Sample text message");
 		response.put(3, "Topic pubSub  executed.");
 
-		return response;
+		AQQueueTable qtable= ((AQOracleSession) session).getQueueTable(username, constantName.aq_pubSubTable );
+        qtable.drop(true);
+		response.put(4, "Topic pubSub cleanup executed.");
+	
+        return response;
 	}
-
+	
+	public void cleanupAQ(AQSession session, String queueTable) throws SQLException, JMSException, AQException {
+		AQQueueTable qtable= session.getQueueTable(username, queueTable );
+        qtable.drop(true);
+	}
 }

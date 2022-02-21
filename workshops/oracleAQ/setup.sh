@@ -4,14 +4,16 @@
  
 COMPARTMENT="oracleAQ";
 DB_NAME="aqdatabase";
-export DB_USER1="admin";
-export DB_USER2="dbuser";
-export DB_USER3="javaUser";
+export PLSQL_DB_USER1="admin";
+export PLSQL_DB_USER2="dbuser";
+export JAVA_DB_USER="javaUser";
 export ORACLEAQ_HOME=${HOME}/${COMPARTMENT};
-export TNS_ADMIN=$ORACLEAQ_HOME/wallet
+TNS_ADMIN=$ORACLEAQ_HOME/wallet
 export USER_DEFINED_WALLET=${TNS_ADMIN}/user_defined_wallet
 export TNS_ADMIN_FOR_JAVA=$ORACLEAQ_HOME/wallet_java
 TNS_WALLET_STR="(MY_WALLET_DIRECTORY="$TNS_ADMIN")"
+
+
 
 # fetch user's OCID
 ROOT_COMPARTMENT_OCID=$(oci iam compartment list --all --compartment-id-in-subtree true --access-level ACCESSIBLE --include-root --raw-output --query "data[?contains(\"id\",'tenancy')].id | [0]")
@@ -68,8 +70,15 @@ unzip -oq wallet.zip
 cp wallet.zip $TNS_ADMIN_FOR_JAVA/
 cd $TNS_ADMIN_FOR_JAVA
 unzip -oq wallet.zip
+#Configure sqlnet.ora for java
+cat >sqlnet.ora <<!
+WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$TNS_ADMIN_FOR_JAVA")))
+SQLNET.WALLET_OVERRIDE = TRUE
+SSL_SERVER_DN_MATCH = yes
+!
+
  
-#Configure the sqlnet.ora
+#Configure sqlnet.ora
 cd $TNS_ADMIN
 cat >sqlnet.ora <<!
 WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$USER_DEFINED_WALLET")))
@@ -93,14 +102,14 @@ $WALLET_PASSWORD
 !
 
 # Add User1 Credentials to the newly created User Defined Wallet
-java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$USER_DEFINED_WALLET" -createCredential "${DB_ALIAS}_${DB_USER1}" $DB_USER1 >/dev/null <<!
+java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$USER_DEFINED_WALLET" -createCredential "${DB_ALIAS}_${PLSQL_DB_USER1}" $PLSQL_DB_USER1 >/dev/null <<!
 $DB_PASSWORD
 $DB_PASSWORD
 $WALLET_PASSWORD
 !
 
 # Add User2 Credentials to the newly created User Defined Wallet
-java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$USER_DEFINED_WALLET" -createCredential "${DB_ALIAS}_${DB_USER2}" $DB_USER2 >/dev/null <<!
+java -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$USER_DEFINED_WALLET" -createCredential "${DB_ALIAS}_${PLSQL_DB_USER2}" $PLSQL_DB_USER2 >/dev/null <<!
 $DB_PASSWORD
 $DB_PASSWORD
 $WALLET_PASSWORD
@@ -109,58 +118,58 @@ $WALLET_PASSWORD
 # ADD TNS Aliases to the TNSNAMES.ORA
 tns_alias=$(grep "$DB_ALIAS " $TNS_ADMIN/tnsnames.ora)
 tns_alias=${tns_alias/security=/security= $TNS_WALLET_STR}
-tns_alias1=${tns_alias/$DB_ALIAS /${DB_ALIAS}_${DB_USER1} }
-tns_alias2=${tns_alias/$DB_ALIAS /${DB_ALIAS}_${DB_USER2} }
- 
+tns_alias1=${tns_alias/$DB_ALIAS /${DB_ALIAS}_${PLSQL_DB_USER1} }
+tns_alias2=${tns_alias/$DB_ALIAS /${DB_ALIAS}_${PLSQL_DB_USER2} }
+
 echo $tns_alias1 >> $TNS_ADMIN/tnsnames.ora
 echo $tns_alias2 >> $TNS_ADMIN/tnsnames.ora
 
 # Print names of the newly created TNS Aliases
-echo "Added TNS Alias: ${DB_ALIAS}_${DB_USER1}"
-echo "Added TNS Alias: ${DB_ALIAS}_${DB_USER2}"
+echo "Added TNS Alias: ${DB_ALIAS}_${PLSQL_DB_USER1}"
+echo "Added TNS Alias: ${DB_ALIAS}_${PLSQL_DB_USER2}"
 
-sqlplus /@${DB_ALIAS}_${DB_USER1} <<!
+sqlplus /@${DB_ALIAS}_${PLSQL_DB_USER1} <<!
 SET VERIFY OFF;
-CREATE USER ${DB_USER2} IDENTIFIED BY $DB_PASSWORD ;
+CREATE USER ${PLSQL_DB_USER2} IDENTIFIED BY $DB_PASSWORD ;
 
-GRANT execute on DBMS_AQ TO ${DB_USER2};
-GRANT CREATE SESSION TO ${DB_USER2};
-GRANT RESOURCE TO ${DB_USER2};
-GRANT CONNECT TO ${DB_USER2};
-GRANT EXECUTE ANY PROCEDURE TO ${DB_USER2};
-GRANT AQ_USER_ROLE TO ${DB_USER2};
-GRANT EXECUTE ON dbms_aqadm TO ${DB_USER2};
-GRANT EXECUTE ON dbms_aq TO ${DB_USER2} ;
-GRANT EXECUTE ON dbms_aqin TO ${DB_USER2};
-GRANT UNLIMITED TABLESPACE TO ${DB_USER2};
-GRANT EXECUTE ON DBMS_CLOUD_ADMIN TO ${DB_USER2};
-GRANT PDB_DBA TO ${DB_USER2};
-GRANT EXECUTE ON DBMS_CLOUD TO ${DB_USER2};
-GRANT CREATE DATABASE LINK TO ${DB_USER2};
-GRANT EXECUTE ON sys.dbms_aqadm TO ${DB_USER2};
-GRANT EXECUTE ON sys.dbms_aq TO ${DB_USER2};
+GRANT execute on DBMS_AQ TO ${PLSQL_DB_USER2};
+GRANT CREATE SESSION TO ${PLSQL_DB_USER2};
+GRANT RESOURCE TO ${PLSQL_DB_USER2};
+GRANT CONNECT TO ${PLSQL_DB_USER2};
+GRANT EXECUTE ANY PROCEDURE TO ${PLSQL_DB_USER2};
+GRANT AQ_USER_ROLE TO ${PLSQL_DB_USER2};
+GRANT EXECUTE ON dbms_aqadm TO ${PLSQL_DB_USER2};
+GRANT EXECUTE ON dbms_aq TO ${PLSQL_DB_USER2} ;
+GRANT EXECUTE ON dbms_aqin TO ${PLSQL_DB_USER2};
+GRANT UNLIMITED TABLESPACE TO ${PLSQL_DB_USER2};
+GRANT EXECUTE ON DBMS_CLOUD_ADMIN TO ${PLSQL_DB_USER2};
+GRANT PDB_DBA TO ${PLSQL_DB_USER2};
+GRANT EXECUTE ON DBMS_CLOUD TO ${PLSQL_DB_USER2};
+GRANT CREATE DATABASE LINK TO ${PLSQL_DB_USER2};
+GRANT EXECUTE ON sys.dbms_aqadm TO ${PLSQL_DB_USER2};
+GRANT EXECUTE ON sys.dbms_aq TO ${PLSQL_DB_USER2};
 
-CREATE USER ${DB_USER3} IDENTIFIED BY $DB_PASSWORD ;
-GRANT execute on DBMS_AQ TO ${DB_USER3};
-GRANT CREATE SESSION TO ${DB_USER3};
-GRANT RESOURCE TO ${DB_USER3};
-GRANT CONNECT TO ${DB_USER3};
-GRANT EXECUTE ANY PROCEDURE TO ${DB_USER3};
-GRANT AQ_USER_ROLE TO ${DB_USER3};
-GRANT EXECUTE ON dbms_aqadm TO ${DB_USER3};
-GRANT EXECUTE ON dbms_aq TO ${DB_USER3} ;
-GRANT EXECUTE ON dbms_aqin TO ${DB_USER3};
-GRANT UNLIMITED TABLESPACE TO ${DB_USER3};
-GRANT EXECUTE ON DBMS_CLOUD_ADMIN TO ${DB_USER3};
-GRANT PDB_DBA TO ${DB_USER3};
-GRANT EXECUTE ON DBMS_CLOUD TO ${DB_USER3};
-GRANT CREATE DATABASE LINK TO ${DB_USER3};
-GRANT EXECUTE ON sys.dbms_aqadm TO ${DB_USER3};
-GRANT EXECUTE ON sys.dbms_aq TO ${DB_USER3};
+CREATE USER ${JAVA_DB_USER} IDENTIFIED BY $DB_PASSWORD ;
+GRANT execute on DBMS_AQ TO ${JAVA_DB_USER};
+GRANT CREATE SESSION TO ${JAVA_DB_USER};
+GRANT RESOURCE TO ${JAVA_DB_USER};
+GRANT CONNECT TO ${JAVA_DB_USER};
+GRANT EXECUTE ANY PROCEDURE TO ${JAVA_DB_USER};
+GRANT AQ_USER_ROLE TO ${JAVA_DB_USER};
+GRANT EXECUTE ON dbms_aqadm TO ${JAVA_DB_USER};
+GRANT EXECUTE ON dbms_aq TO ${JAVA_DB_USER} ;
+GRANT EXECUTE ON dbms_aqin TO ${JAVA_DB_USER};
+GRANT UNLIMITED TABLESPACE TO ${JAVA_DB_USER};
+GRANT EXECUTE ON DBMS_CLOUD_ADMIN TO ${JAVA_DB_USER};
+GRANT PDB_DBA TO ${JAVA_DB_USER};
+GRANT EXECUTE ON DBMS_CLOUD TO ${JAVA_DB_USER};
+GRANT CREATE DATABASE LINK TO ${JAVA_DB_USER};
+GRANT EXECUTE ON sys.dbms_aqadm TO ${JAVA_DB_USER};
+GRANT EXECUTE ON sys.dbms_aq TO ${JAVA_DB_USER};
 EXIT;
 !
 
-sqlplus /@${DB_ALIAS}_${DB_USER2} <<!
+sqlplus /@${DB_ALIAS}_${PLSQL_DB_USER2} <<!
 Show user;
 /
 !
@@ -171,12 +180,17 @@ Show user;
 
 cd ..
 cd $TNS_ADMIN_FOR_JAVA
-java -Doracle.pki.debug=true -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$TNS_ADMIN_FOR_JAVA" -createCredential "${DB_ALIAS}" $DB_USER3 >/dev/null <<!
+java -Doracle.pki.debug=true -classpath ${CLASSPATH} oracle.security.pki.OracleSecretStoreTextUI -nologo -wrl "$TNS_ADMIN_FOR_JAVA" -createCredential "${DB_ALIAS}" $JAVA_DB_USER >/dev/null <<!
 $DB_PASSWORD
 $DB_PASSWORD
 $WALLET_PASSWORD
 !
 export JDBC_URL=jdbc:oracle:thin:@${DB_ALIAS}?TNS_ADMIN=${TNS_ADMIN_FOR_JAVA}
+
+TNS_ADMIN=${TNS_ADMIN_FOR_JAVA}
+sqlplus /@"${DB_ALIAS}" @javaTables.sql
+
+export TNS_ADMIN=$ORACLEAQ_HOME/wallet
 
 #Build java code
 cd ../
@@ -194,8 +208,8 @@ echo "COMPARTMENT NAME  : "${COMPARTMENT}
 echo "COMPARTMENT OCID  : "${COMPARTMENT_OCID}
 echo "DATABASE NAME     : "${DB_NAME}
 echo "ATP OCID          : "${DB_OCID}
-echo "TNS ALIAS- USER1  :  ${DB_ALIAS}_${DB_USER1}"
-echo "TNS ALIAS- USER2  :  ${DB_ALIAS}_${DB_USER2}"
+echo "TNS ALIAS- USER1  :  ${DB_ALIAS}_${PLSQL_DB_USER1}"
+echo "TNS ALIAS- USER2  :  ${DB_ALIAS}_${PLSQL_DB_USER2}"
 echo "JDBC URL          : "${JDBC_URL}
 echo 
 echo "-------------------------------"

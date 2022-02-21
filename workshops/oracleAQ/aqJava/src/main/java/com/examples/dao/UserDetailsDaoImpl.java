@@ -5,9 +5,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+
+import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.examples.config.ConfigData;
@@ -22,6 +24,22 @@ import oracle.AQ.AQException;
 		
 		static Connection con= null;
 
+//		 @PostConstruct     
+//		 public void createTable(UserDetails user)throws SQLException, ClassNotFoundException, AQException{
+//			 con= configData.dbConnection();
+//
+//		    String sqlCreate = "CREATE TABLE IF NOT EXISTS " + "USERDETAILS"
+//		            + "  ( ORDERID  number(10),"
+//		            + "    USERNAME varchar2(255), "
+//		            + "    OTP      number(4),"
+//		            + "    DELIVERY_STATUS varchar2(10),"
+//		            + "    DELIVERY_LOCATION varchar2(255),"
+//		            + "    PRIMARY KEY(ORDERID))";
+//
+//		    Statement stmt = con.createStatement();
+//		    stmt.executeUpdate(sqlCreate);
+//		}
+		 
 		@Override
 		public void add(UserDetails user)throws SQLException, ClassNotFoundException, AQException{
 			
