@@ -1,5 +1,7 @@
 package com.examples.config;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import javax.jms.JMSException;
@@ -11,6 +13,9 @@ import javax.jms.TopicSession;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
+import oracle.AQ.AQDriverManager;
+import oracle.AQ.AQException;
+import oracle.AQ.AQSession;
 import oracle.jms.AQjmsFactory;
 import oracle.jms.AQjmsSession;
 import oracle.ucp.jdbc.PoolDataSource;
@@ -34,7 +39,7 @@ public class ConfigData {
 		ds.setConnectionFactoryClassName("oracle.jdbc.pool.OracleDataSource");
 		ds.setURL(url);
 		ds.setUser(username);
-		ds.setPassword(password);
+		/*ds.setPassword(password);*/
 		
 		TopicConnectionFactory tc_fact = AQjmsFactory.getTopicConnectionFactory(ds);
 		TopicConnection conn = tc_fact.createTopicConnection();
@@ -42,6 +47,34 @@ public class ConfigData {
 		TopicSession session = (AQjmsSession) conn.createSession(true, Session.AUTO_ACKNOWLEDGE);
 
 		return session;
+	}
+	
+	
+	public AQSession queueDataSourceConnection() throws SQLException, ClassNotFoundException, AQException {
+		Connection db_conn;
+		AQSession aq_sess = null;
+
+		Class.forName("oracle.jdbc.driver.OracleDriver");
+		db_conn = DriverManager.getConnection(url/*, username, password*/);
+		db_conn.setAutoCommit(false);
+		
+		Class.forName("oracle.AQ.AQOracleDriver");
+		System.out.println("JDBC Connection opened ");
+		
+		aq_sess = AQDriverManager.createAQSession(db_conn);
+		System.out.println("Successfully created AQSession ");
+
+		return aq_sess;
+	}
+	
+	public Connection dbConnection() throws SQLException, ClassNotFoundException, AQException {
+		Connection db_conn;
+
+		Class.forName("oracle.jdbc.driver.OracleDriver");
+		db_conn = DriverManager.getConnection(url/*, username, password*/);
+		db_conn.setAutoCommit(true);
+		
+		return db_conn;
 	}
 
 }

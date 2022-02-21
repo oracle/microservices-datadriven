@@ -1,16 +1,12 @@
 package com.examples.enqueueDequeueAQ;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.jms.JMSException;
-import javax.jms.Session;
 import javax.jms.Topic;
-import javax.jms.TopicConnection;
-import javax.jms.TopicConnectionFactory;
 import javax.jms.TopicSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +19,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 import oracle.AQ.AQAgent;
 import oracle.AQ.AQDequeueOption;
-import oracle.AQ.AQDriverManager;
 import oracle.AQ.AQEnqueueOption;
 import oracle.AQ.AQException;
 import oracle.AQ.AQMessage;
@@ -35,18 +30,14 @@ import oracle.AQ.AQQueueTable;
 import oracle.AQ.AQQueueTableProperty;
 import oracle.AQ.AQRawPayload;
 import oracle.AQ.AQSession;
-import oracle.jms.AQjmsFactory;
-import oracle.jms.AQjmsSession;
-import oracle.ucp.jdbc.PoolDataSource;
-import oracle.ucp.jdbc.PoolDataSourceFactory;
 
 @Service
 public class EnqueueDequeueAQ {
-	
-	@Autowired(required=true)
+
+	@Autowired(required = true)
 	private pubSubUtil pubSubUtil;
-	
-	@Autowired(required=true)
+
+	@Autowired(required = true)
 	private ConfigData configData;
 
 	@Value("${username}")
@@ -54,63 +45,46 @@ public class EnqueueDequeueAQ {
 
 	@Value("${url}")
 	private String url;
-	
+
 	@Value("${password}")
 	private String password;
 
-	String oracleQueueTable = "java_QueueTable11";
-	String oracleQueueName = "java_QueueName11";
+	String oracleQueueTable = "java_QueueTable";
+	String oracleQueueName = "java_QueueName";
 
-	String oracleQueueTable_multi = "java_QueueTable_Multi11";
-	String oracleQueueName_multi = "java_QueueName_Multi11";
+	String oracleQueueTable_multi = "java_QueueTable_Multi";
+	String oracleQueueName_multi = "java_QueueName_Multi";
 
-	public Map<Integer,String> pointToPointAQ() throws ClassNotFoundException, SQLException, AQException {
-		Map<Integer,String> response = new HashMap();
+	public Map<Integer, String> pointToPointAQ() throws ClassNotFoundException, SQLException, AQException {
+		Map<Integer, String> response = new HashMap();
 
-		AQSession aq_sess = createSession();
+		AQSession aq_sess = configData.queueDataSourceConnection();
 
-			createQueue(aq_sess);
-			response.put(1, "Sample to Create Queue executed");
+//		createQueue(aq_sess);
+//		response.put(1, "Sample to Create Queue executed");
 
-			useCreatedQueue(aq_sess);
-			response.put(2, "Sample to use existing Queues executed");
+		useCreatedQueue(aq_sess);
+		response.put(2, "Sample to use existing Queues executed");
 
-			enqueueAndDequeue(aq_sess);
-			response.put(3, "Sample to Enqueue and Dequeue executed");
+		enqueueAndDequeue(aq_sess);
+		response.put(3, "Sample to Enqueue and Dequeue executed");
 
-			multiConsumerQueue(aq_sess);
-			response.put(4, "Sample to create multi-consumer Queue executed");
+		multiConsumerQueue(aq_sess);
+		response.put(4, "Sample to create multi-consumer Queue executed");
 
-			enqueueMultiConsumer(aq_sess);
-			response.put(5, "Sample to create multi-consumer Enqueue executed");
+		enqueueMultiConsumer(aq_sess);
+		response.put(5, "Sample to create multi-consumer Enqueue executed");
 
-			dequeueMultiConsumer(aq_sess);
-			response.put(6, "Sample to create multi-consumer Dequeue executed");
-			
-			enqueueMultiConsumerWithPriority(aq_sess);
-			response.put(7, "Sample to create multi-consumer Enqueue with Priority executed");
+		dequeueMultiConsumer(aq_sess);
+		response.put(6, "Sample to create multi-consumer Dequeue executed");
 
-			dequeueMultiConsumerBrowseMode(aq_sess);
-			response.put(8, "Sample to create multi-consumer Dequeue with Browse mode executed");
-	
+		enqueueMultiConsumerWithPriority(aq_sess);
+		response.put(7, "Sample to create multi-consumer Enqueue with Priority executed");
+
+		dequeueMultiConsumerBrowseMode(aq_sess);
+		response.put(8, "Sample to create multi-consumer Dequeue with Browse mode executed");
+
 		return response;
-	}
-
-	public AQSession createSession() throws SQLException, ClassNotFoundException, AQException {
-		Connection db_conn;
-		AQSession aq_sess = null;
-
-		Class.forName("oracle.jdbc.driver.OracleDriver");
-		db_conn = DriverManager.getConnection(url, username, password);
-		db_conn.setAutoCommit(false);
-		
-		Class.forName("oracle.AQ.AQOracleDriver");
-		System.out.println("JDBC Connection opened ");
-		
-		aq_sess = AQDriverManager.createAQSession(db_conn);
-		System.out.println("Successfully created AQSession ");
-
-		return aq_sess;
 	}
 
 	public void createQueue(AQSession aq_sess) throws AQException {
@@ -127,7 +101,7 @@ public class EnqueueDequeueAQ {
 		AQQueueTable q_table = aq_sess.getQueueTable(username, oracleQueueTable);
 
 		AQQueue queue = aq_sess.getQueue(username, oracleQueueName);
-		System.out.println("Successful getQueue" + queue.getQueueTableName()  + queue.getName());
+		System.out.println("Successful createQueue" + queue.getQueueTableName() + queue.getName());
 	}
 
 	public void enqueueAndDequeue(AQSession aq_sess) throws AQException, SQLException {
@@ -136,36 +110,33 @@ public class EnqueueDequeueAQ {
 
 		AQQueueTableProperty qtable_prop = new AQQueueTableProperty("RAW");
 
-		AQQueueTable q_table = aq_sess.createQueueTable(username, "java_basicOracleQueueTable11", qtable_prop);
+		AQQueueTable q_table = aq_sess.createQueueTable(username, "java_basicOracleQueueTable", qtable_prop);
 		AQQueueProperty queue_prop = new AQQueueProperty();
 
-		AQQueue queue = aq_sess.createQueue(q_table, "java_basicOracleQueueName11", queue_prop);
-
+		AQQueue queue = aq_sess.createQueue(q_table, "java_basicOracleQueueName", queue_prop);
 		queue.start(true, true);
-		System.out.println("Successful start queue");
-
 		queue.grantQueuePrivilege("ALL", username);
-		System.out.println("Successful grantQueuePrivilege");
-		
+
 		String test_data = "new message";
 		byte[] b_array;
-		
-		/*Enqueue */
+
+		/* Enqueue */
 		AQMessage message = queue.createMessage();
 		b_array = test_data.getBytes();
 		AQRawPayload raw_payload = message.getRawPayload();
 		raw_payload.setStream(b_array, b_array.length);
-		
+
 		AQEnqueueOption enq_option = new AQEnqueueOption();
 		queue.enqueue(enq_option, message);
 		db_conn.commit();
 
-		/*Dequeue */
+		/* Dequeue */
 		AQDequeueOption deq_option = new AQDequeueOption();
 		message = queue.dequeue(deq_option);
 		raw_payload = message.getRawPayload();
 		b_array = raw_payload.getBytes();
 		db_conn.commit();
+		System.out.println("Successful enqueueAndDequeue");
 	}
 
 	public void multiConsumerQueue(AQSession aq_sess) throws AQException {
@@ -178,23 +149,17 @@ public class EnqueueDequeueAQ {
 		qtable_prop.setMultiConsumer(true);
 
 		AQQueueTable q_table = aq_sess.createQueueTable(username, oracleQueueTable_multi, qtable_prop);
-		System.out.println("Successful createQueueTable");
 
 		AQQueue queue = aq_sess.createQueue(q_table, oracleQueueName_multi, queue_prop);
-		System.out.println("Successful createQueue");
-
 		queue.start();
-		System.out.println("Successful start queue");
 
 		/* Add subscribers to this queue: */
 		subs111 = new AQAgent("GREEN_MULTI", null, 0);
-		subs222 = new AQAgent("BLUE_MULTI" , null, 0);
+		subs222 = new AQAgent("BLUE_MULTI", null, 0);
 
 		queue.addSubscriber(subs111, null); /* no rule */
-		System.out.println("Successful addSubscriber 111");
-
 		queue.addSubscriber(subs222, "priority < 2"); /* with rule */
-		System.out.println("Successful addSubscriber 222");
+		System.out.println("Successful multiConsumerQueue");
 	}
 
 	public void enqueueMultiConsumer(AQSession aq_sess) throws AQException, SQLException {
@@ -205,7 +170,6 @@ public class EnqueueDequeueAQ {
 		Connection db_conn = ((AQOracleSession) aq_sess).getDBConnection();
 
 		AQQueue queue = aq_sess.getQueue(username, oracleQueueName_multi);
-		System.out.println("Successful getQueue");
 
 		AQMessage message = queue.createMessage();
 		b_array = test_data.getBytes();
@@ -215,8 +179,9 @@ public class EnqueueDequeueAQ {
 
 		AQEnqueueOption enq_option = new AQEnqueueOption();
 		queue.enqueue(enq_option, message);
-
 		db_conn.commit();
+
+		System.out.println("Successful enqueueMultiConsumer");
 	}
 
 	public void dequeueMultiConsumer(AQSession aq_sess) throws AQException, SQLException {
@@ -231,7 +196,7 @@ public class EnqueueDequeueAQ {
 		b_array = test_data.getBytes();
 		AQRawPayload raw_payload = message.getRawPayload();
 		raw_payload.setStream(b_array, b_array.length);
-		
+
 		AQEnqueueOption enq_option = new AQEnqueueOption();
 		queue.enqueue(enq_option, message);
 		db_conn.commit();
@@ -242,6 +207,8 @@ public class EnqueueDequeueAQ {
 		raw_payload = message.getRawPayload();
 		b_array = raw_payload.getBytes();
 		db_conn.commit();
+
+		System.out.println("Successful dequeueMultiConsumer");
 	}
 
 	public void enqueueMultiConsumerWithPriority(AQSession aq_sess) throws AQException, SQLException {
@@ -251,11 +218,10 @@ public class EnqueueDequeueAQ {
 		Connection db_conn = ((AQOracleSession) aq_sess).getDBConnection();
 
 		AQQueue queue = aq_sess.getQueue(username, oracleQueueName_multi);
-		System.out.println("Successful getQueue");
 
 		for (int i = 0; i < 5; i++) {
 			AQMessage message = queue.createMessage();
-			
+
 			test_data = "Small_message_" + (i + 1); /* some test data */
 			b_array = test_data.getBytes();
 
@@ -272,11 +238,11 @@ public class EnqueueDequeueAQ {
 			/* Creating a AQEnqueueOption object with default options: */
 			AQEnqueueOption enq_option = new AQEnqueueOption();
 			queue.enqueue(enq_option, message);
-			System.out.println("Successful enqueue");
 		}
 		db_conn.commit();
+		System.out.println("Successful enqueueMultiConsumerWithPriority");
 	}
-	
+
 	public void dequeueMultiConsumerBrowseMode(AQSession aq_sess) throws AQException, SQLException {
 
 		String test_data = "new message";
@@ -285,7 +251,6 @@ public class EnqueueDequeueAQ {
 		Connection db_conn = ((AQOracleSession) aq_sess).getDBConnection();
 
 		AQQueue queue = aq_sess.getQueue(username, oracleQueueName_multi);
-		System.out.println("Successful getQueue");
 
 		AQMessage message = queue.createMessage();
 		b_array = test_data.getBytes();
@@ -295,7 +260,6 @@ public class EnqueueDequeueAQ {
 
 		AQEnqueueOption enq_option = new AQEnqueueOption();
 		queue.enqueue(enq_option, message);
-		System.out.println("Successful enqueue");
 		db_conn.commit();
 
 		AQDequeueOption deq_option = new AQDequeueOption();
@@ -309,16 +273,19 @@ public class EnqueueDequeueAQ {
 		String ret_value = new String(b_array);
 		System.out.println("Dequeued message: " + ret_value);
 		db_conn.commit();
+		System.out.println("Successful dequeueMultiConsumerBrowseMode");
+
 	}
 
-	public Map<Integer,String> pubSubAQ() throws AQException, JMSException, SQLException, JsonProcessingException, ClassNotFoundException {
-		Map<Integer,String> response = new HashMap();
+	public Map<Integer, String> pubSubAQ()
+			throws AQException, JMSException, SQLException, JsonProcessingException, ClassNotFoundException {
+		Map<Integer, String> response = new HashMap();
 
 		TopicSession session = configData.topicDataSourceConnection();
 		response.put(1, "Topic Connection created.");
 
-		Topic topic = pubSubUtil.setupTopic(session, "java_EnqueueDequeueTable112", "java_EnqueueDequeue11");
-		response.put(2, "Topic created: "+topic.getTopicName());
+		Topic topic = pubSubUtil.setupTopic(session, "java_EnqueueDequeueTable", "java_EnqueueDequeue");
+		response.put(2, "Topic created: " + topic.getTopicName());
 
 		pubSubUtil.pubSub(session, "java_Subscriber", topic.getTopicName(), "Sample text message");
 		response.put(3, "Topic pubSub  executed.");

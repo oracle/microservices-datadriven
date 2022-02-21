@@ -6,30 +6,27 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import com.examples.config.ConfigData;
+
+import oracle.AQ.AQException;
 
 @Service
 	public class UserDetailsDaoImpl implements UserDetailsDao {
 
-	@Value("${username}")
-	private String username;
-
-	@Value("${url}")
-	private String url;
-	
-//	@Value("${password}")
-//	private String password;
+	@Autowired(required=true)
+	private ConfigData configData;
 		
 		static Connection con= null;
 
 		@Override
-		public void add(UserDetails user)throws SQLException, ClassNotFoundException{
+		public void add(UserDetails user)throws SQLException, ClassNotFoundException, AQException{
 			
-			Class.forName("oracle.jdbc.OracleDriver");
-			con = DriverManager.getConnection(url);
-			String query
-				= "insert into UserDetails(orderId, username, otp, deliveryStatus, deliveryLocation) VALUES (?, ?, ?, ?, ?)";
+			con= configData.dbConnection();
+			String query= "insert into UserDetails(orderId, username, otp, deliveryStatus, deliveryLocation) VALUES (?, ?, ?, ?, ?)";
 			
 			PreparedStatement ps = con.prepareStatement(query);
 			ps.setInt   (1, user.getOrderId());
@@ -42,11 +39,10 @@ import org.springframework.stereotype.Service;
 		}
 
 		@Override
-		public UserDetails getUserDetails(int id) throws SQLException, ClassNotFoundException{
+		public UserDetails getUserDetails(int id) throws SQLException, ClassNotFoundException, AQException{
 
-			Class.forName("oracle.jdbc.OracleDriver");
-			con = DriverManager.getConnection(url);
-			
+			con= configData.dbConnection();
+
 			String query
 				= "select * from UserDetails where orderId= ?";
 			PreparedStatement ps
@@ -75,11 +71,10 @@ import org.springframework.stereotype.Service;
 
 
 		@Override
-		public void update(int orderId, String deliveryStatus)throws SQLException, ClassNotFoundException{
+		public void update(int orderId, String deliveryStatus)throws SQLException, ClassNotFoundException, AQException{
 
-			Class.forName("oracle.jdbc.OracleDriver");
-			con = DriverManager.getConnection(url);
-			
+			con= configData.dbConnection();
+
 			String query= "update UserDetails set deliveryStatus=? where orderId = ?";
 			PreparedStatement ps = con.prepareStatement(query);
 			ps.setString(1, deliveryStatus);
