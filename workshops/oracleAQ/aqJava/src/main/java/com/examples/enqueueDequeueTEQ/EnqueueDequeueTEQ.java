@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.examples.config.ConfigData;
+import com.examples.config.ConstantName;
 import com.examples.util.pubSubUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -25,15 +26,8 @@ public class EnqueueDequeueTEQ {
 	@Autowired(required=true)
 	private ConfigData configData;
 
-	@Value("${username}")
-	private String username;
-
-	@Value("${url}")
-	private String url;
-
-	String queueName = "java_TEQ11";
-	String subscriberName = "java_SubscriberTEQ11";
-	
+	@Autowired(required = true)
+	private ConstantName constantName;
 
 	public Map<Integer,String> pubSubTEQ() throws JsonProcessingException, ClassNotFoundException, SQLException, JMSException {
 		Map<Integer,String> response = new HashMap();
@@ -41,7 +35,7 @@ public class EnqueueDequeueTEQ {
 		TopicSession session = configData.topicDataSourceConnection();
 		response.put(1, "Topic Connection created.");
 
-		pubSubUtil.pubSub(session, "java_Subscriber", queueName, "Sample text message");
+		pubSubUtil.pubSub(session, constantName.teq_pubSubSubscriber1, constantName.teq_pubSubQueue, "Sample text message");
 		response.put(2, "Topic pubSub  executed.");
 
 		return response;

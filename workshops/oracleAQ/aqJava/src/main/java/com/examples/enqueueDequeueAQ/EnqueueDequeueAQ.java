@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.examples.config.ConfigData;
+import com.examples.config.ConstantName;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.examples.util.pubSubUtil;
 
@@ -39,30 +40,20 @@ public class EnqueueDequeueAQ {
 
 	@Autowired(required = true)
 	private ConfigData configData;
+	
+	@Autowired(required = true)
+	private ConstantName constantName;
 
 	@Value("${username}")
 	private String username;
-
-	@Value("${url}")
-	private String url;
-
-	/*	@Value("${password}")
-	private String password;
-	*/
-	
-	String oracleQueueTable = "java_QueueTable";
-	String oracleQueueName = "java_QueueName";
-
-	String oracleQueueTable_multi = "java_QueueTable_Multi";
-	String oracleQueueName_multi = "java_QueueName_Multi";
 
 	public Map<Integer, String> pointToPointAQ() throws ClassNotFoundException, SQLException, AQException {
 		Map<Integer, String> response = new HashMap();
 
 		AQSession aq_sess = configData.queueDataSourceConnection();
 
-//		createQueue(aq_sess);
-//		response.put(1, "Sample to Create Queue executed");
+		createQueue(aq_sess);
+		response.put(1, "Sample to Create Queue executed");
 
 		useCreatedQueue(aq_sess);
 		response.put(2, "Sample to use existing Queues executed");
@@ -92,16 +83,16 @@ public class EnqueueDequeueAQ {
 		AQQueueTableProperty qtable_prop = new AQQueueTableProperty("RAW");
 		AQQueueProperty queue_prop = new AQQueueProperty();
 
-		AQQueueTable q_table = aq_sess.createQueueTable(username, oracleQueueTable, qtable_prop);
+		AQQueueTable q_table = aq_sess.createQueueTable(username, constantName.aq_createTable, qtable_prop);
 
-		AQQueue queue = aq_sess.createQueue(q_table, oracleQueueName, queue_prop);
+		AQQueue queue = aq_sess.createQueue(q_table, constantName.aq_createQueue, queue_prop);
 	}
 
 	public void useCreatedQueue(AQSession aq_sess) throws AQException {
 
-		AQQueueTable q_table = aq_sess.getQueueTable(username, oracleQueueTable);
+		AQQueueTable q_table = aq_sess.getQueueTable(username, constantName.aq_createTable);
 
-		AQQueue queue = aq_sess.getQueue(username, oracleQueueName);
+		AQQueue queue = aq_sess.getQueue(username, constantName.aq_createQueue);
 		System.out.println("Successful createQueue" + queue.getQueueTableName() + queue.getName());
 	}
 
@@ -111,10 +102,10 @@ public class EnqueueDequeueAQ {
 
 		AQQueueTableProperty qtable_prop = new AQQueueTableProperty("RAW");
 
-		AQQueueTable q_table = aq_sess.createQueueTable(username, "java_basicOracleQueueTable", qtable_prop);
+		AQQueueTable q_table = aq_sess.createQueueTable(username, constantName.aq_enqueueDequeueTable, qtable_prop);
 		AQQueueProperty queue_prop = new AQQueueProperty();
 
-		AQQueue queue = aq_sess.createQueue(q_table, "java_basicOracleQueueName", queue_prop);
+		AQQueue queue = aq_sess.createQueue(q_table, constantName.aq_enqueueDequeueQueue, queue_prop);
 		queue.start(true, true);
 		queue.grantQueuePrivilege("ALL", username);
 
@@ -149,9 +140,9 @@ public class EnqueueDequeueAQ {
 
 		qtable_prop.setMultiConsumer(true);
 
-		AQQueueTable q_table = aq_sess.createQueueTable(username, oracleQueueTable_multi, qtable_prop);
+		AQQueueTable q_table = aq_sess.createQueueTable(username, constantName.aq_multiConsumerTable, qtable_prop);
 
-		AQQueue queue = aq_sess.createQueue(q_table, oracleQueueName_multi, queue_prop);
+		AQQueue queue = aq_sess.createQueue(q_table, constantName.aq_multiConsumerQueue, queue_prop);
 		queue.start();
 
 		/* Add subscribers to this queue: */
@@ -170,7 +161,7 @@ public class EnqueueDequeueAQ {
 
 		Connection db_conn = ((AQOracleSession) aq_sess).getDBConnection();
 
-		AQQueue queue = aq_sess.getQueue(username, oracleQueueName_multi);
+		AQQueue queue = aq_sess.getQueue(username, constantName.aq_multiConsumerQueue);
 
 		AQMessage message = queue.createMessage();
 		b_array = test_data.getBytes();
@@ -191,7 +182,7 @@ public class EnqueueDequeueAQ {
 		byte[] b_array;
 
 		Connection db_conn = ((AQOracleSession) aq_sess).getDBConnection();
-		AQQueue queue = aq_sess.getQueue(username, oracleQueueName_multi);
+		AQQueue queue = aq_sess.getQueue(username, constantName.aq_multiConsumerQueue);
 
 		AQMessage message = queue.createMessage();
 		b_array = test_data.getBytes();
@@ -218,7 +209,7 @@ public class EnqueueDequeueAQ {
 		byte[] b_array;
 		Connection db_conn = ((AQOracleSession) aq_sess).getDBConnection();
 
-		AQQueue queue = aq_sess.getQueue(username, oracleQueueName_multi);
+		AQQueue queue = aq_sess.getQueue(username, constantName.aq_multiConsumerQueue);
 
 		for (int i = 0; i < 5; i++) {
 			AQMessage message = queue.createMessage();
@@ -251,7 +242,7 @@ public class EnqueueDequeueAQ {
 
 		Connection db_conn = ((AQOracleSession) aq_sess).getDBConnection();
 
-		AQQueue queue = aq_sess.getQueue(username, oracleQueueName_multi);
+		AQQueue queue = aq_sess.getQueue(username, constantName.aq_multiConsumerQueue);
 
 		AQMessage message = queue.createMessage();
 		b_array = test_data.getBytes();
@@ -285,10 +276,10 @@ public class EnqueueDequeueAQ {
 		TopicSession session = configData.topicDataSourceConnection();
 		response.put(1, "Topic Connection created.");
 
-		Topic topic = pubSubUtil.setupTopic(session, "java_EnqueueDequeueTable", "java_EnqueueDequeue");
+		Topic topic = pubSubUtil.setupTopic(session, constantName.aq_pubSubTable, constantName.aq_pubSubQueue);
 		response.put(2, "Topic created: " + topic.getTopicName());
 
-		pubSubUtil.pubSub(session, "java_Subscriber", topic.getTopicName(), "Sample text message");
+		pubSubUtil.pubSub(session, constantName.aq_pubSubSubscriber1, topic.getTopicName(), "Sample text message");
 		response.put(3, "Topic pubSub  executed.");
 
 		return response;

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.examples.config.ConfigData;
+import com.examples.config.ConstantName;
 import com.examples.dao.UserDetails;
 import com.examples.dao.UserDetailsDao;
 import com.examples.util.pubSubUtil;
@@ -46,6 +47,9 @@ public class WorkflowAQ {
 	@Autowired(required=true)
 	private pubSubUtil pubSubUtil;
 	
+	@Autowired(required = true)
+	private ConstantName constantName;
+	
 	@Value("${username}")
 	private String username;
 
@@ -54,21 +58,6 @@ public class WorkflowAQ {
 
 	ObjectMapper mapper = new ObjectMapper();
 	Random rnd = new Random();
-
-	String userQueueTable 				  = "java_UserQueueTable"+rnd.nextInt(9999);
-	String userQueueName 				  = "java_UserQueue"+rnd.nextInt(9999);
-	String userApplicationSubscriber      = "java_userAppSubscriber";
-	String userDelivererSubscriber        = "java_userDelivererSubscriber";
-
-	String delivererQueueTable            = "java_DelivererQueueTable"+rnd.nextInt(9999);
-	String delivererQueueName             = "java_DelivererQueue"+rnd.nextInt(9999);
-	String delivererUserSubscriber        = "java_delivererUserSubscriber";
-	String delivererApplicationSubscriber = "java_delivererApplicationSubscriber";
-
-	String applicationQueueTable          = "java_ApplicationQueueTable"+rnd.nextInt(9999);
-	String applicationQueueName           = "java_ApplicationQueue"+rnd.nextInt(9999);
-	String applicationUserSubscriber      = "java_appUserSubscriber";
-	String applicationDelivererSubscriber = "java_appDelivererSubscriber";
 
 	UserDetails userToApplication_message;
 	UserDetails userToDeliverer_message;
@@ -84,21 +73,21 @@ public class WorkflowAQ {
 		
 		/* Setup */
 		AQSession qsession = configData.queueDataSourceConnection();
-		createQueue(qsession, username, userQueueTable, userQueueName);
-		createQueue(qsession, username, delivererQueueTable, delivererQueueName);
-		createQueue(qsession, username, applicationQueueTable, applicationQueueName);
+		createQueue(qsession, username, constantName.aq_userQueueTable, constantName.aq_userQueueName);
+		createQueue(qsession, username, constantName.aq_delivererQueueTable, constantName.aq_delivererQueueName);
+		createQueue(qsession, username, constantName.aq_applicationQueueTable, constantName.aq_applicationQueueName);
 		
 		TopicSession session = configData.topicDataSourceConnection();
 		response.put(1, "Topic Connection created.");
 		
 		/* 1: USER PLACED OREDER ON APPLICATION */
-		userToApplication_message = enqueueDequeueMessage(session, userApplicationSubscriber, userQueueName,new UserDetails(rnd.nextInt(99999), "DBUSER", 0, "Pending", "US"));
+		userToApplication_message = pubSubUtil.pubSubWorkflowAQ(session, constantName.aq_userApplicationSubscriber, constantName.aq_userQueueName,new UserDetails(rnd.nextInt(99999), "DBUSER", 0, "Pending", "US"));
 		response.put(2,"USER ORDER MESSAGE              - ORDERID: " + userToApplication_message.getOrderId() + ", OTP: "
 				+ userToApplication_message.getOtp() + ", DeliveryStatus: "
 				+ userToApplication_message.getDeliveryStatus());
 
 		/* 2: APPLICATION SHARES OTP TO USER */
-		applicationToUser_message = enqueueDequeueMessage(session, applicationUserSubscriber, applicationQueueName,
+		applicationToUser_message = pubSubUtil.pubSubWorkflowAQ(session, constantName.aq_applicationUserSubscriber, constantName.aq_applicationQueueName,
 				new UserDetails(userToApplication_message.getOrderId(), userToApplication_message.getUsername(),
 						rnd.nextInt(9999), userToApplication_message.getDeliveryStatus(),
 						userToApplication_message.getDeliveryLocation()));
@@ -112,14 +101,14 @@ public class WorkflowAQ {
 		response.put(4,"APPLICATION ADDED USER ORDER INTO RECORD");
 
 		/* 4: APPLICATION SHARES DELIVERY DETAILS TO DELIVERER */
-		applicationToDeliverer_message = enqueueDequeueMessage(session, applicationDelivererSubscriber, applicationQueueName,
+		applicationToDeliverer_message = pubSubUtil.pubSubWorkflowAQ(session, constantName.aq_applicationDelivererSubscriber, constantName.aq_applicationQueueName,
 				new UserDetails(userToApplication_message.getOrderId(), userToApplication_message.getUsername(), 0,
 						userToApplication_message.getDeliveryStatus(),
 						userToApplication_message.getDeliveryLocation()));
 		response.put(5,"APPLICATION TO DELIVERER MESSAGE- ORDERID: "+ applicationToDeliverer_message.getOrderId() + ", OTP: " + applicationToDeliverer_message.getOtp()+ ", DeliveryStatus: " + applicationToDeliverer_message.getDeliveryStatus());
 
 		/* 5: USER SHARES OTP TO DELIVERER */
-		userToDeliverer_message = enqueueDequeueMessage(session, userDelivererSubscriber, userQueueName,
+		userToDeliverer_message = pubSubUtil.pubSubWorkflowAQ(session, constantName.aq_userDelivererSubscriber, constantName.aq_userQueueName,
 				new UserDetails(applicationToUser_message.getOrderId(), applicationToUser_message.getUsername(),
 						applicationToUser_message.getOtp(), applicationToUser_message.getDeliveryStatus(),
 						applicationToUser_message.getDeliveryLocation()));
@@ -127,7 +116,7 @@ public class WorkflowAQ {
 		System.out.println();
 
 		/* 6: DELIVERER TO APPLICATION FOR OTP VERIFICATION */
-		delivererToApplication_message = enqueueDequeueMessage(session, delivererApplicationSubscriber, delivererQueueName,
+		delivererToApplication_message = pubSubUtil.pubSubWorkflowAQ(session, constantName.aq_delivererApplicationSubscriber, constantName.aq_delivererQueueName,
 				new UserDetails(userToDeliverer_message.getOrderId(), userToDeliverer_message.getUsername(),
 						userToDeliverer_message.getOtp(), userToDeliverer_message.getDeliveryStatus(),
 						userToDeliverer_message.getDeliveryLocation()));
@@ -152,20 +141,17 @@ public class WorkflowAQ {
 
 		UserDetails updatedData = userDetailsDao.getUserDetails(delivererToApplication_message.getOrderId());
 		/* 8: APPLICATION UPDATE DELIVERER TO DELIVER ORDER */
-		applicationToDeliverer_message = enqueueDequeueMessage(session, applicationDelivererSubscriber, applicationQueueName,
+		applicationToDeliverer_message = pubSubUtil.pubSubWorkflowAQ(session, constantName.aq_applicationDelivererSubscriber, constantName.aq_applicationQueueName,
 				new UserDetails(delivererToApplication_message.getOrderId(), delivererToApplication_message.getUsername(), delivererToApplication_message.getOtp(), updatedData.getDeliveryStatus(), delivererToApplication_message.getDeliveryLocation()));
 		response.put(9, "UPDATE DELIVERER MESSAGE        - ORDERID: " + applicationToDeliverer_message.getOrderId()+ ", OTP: " + applicationToDeliverer_message.getOtp() + ", DeliveryStatus: "+ applicationToDeliverer_message.getDeliveryStatus());
 
 		/* 9: APPLICATION UPDATE USER FOR DELIVERED ORDER */
-		applicationToUser_message = enqueueDequeueMessage(session, applicationUserSubscriber, applicationQueueName,
+		applicationToUser_message = pubSubUtil.pubSubWorkflowAQ(session, constantName.aq_applicationUserSubscriber, constantName.aq_applicationQueueName,
 				new UserDetails(delivererToApplication_message.getOrderId(), delivererToApplication_message.getUsername(), delivererToApplication_message.getOtp(), updatedData.getDeliveryStatus(), delivererToApplication_message.getDeliveryLocation()));
 		response.put(10, "UPDATE USER MESSAGE             - ORDERID: " + applicationToUser_message.getOrderId() + ", OTP: "+ applicationToUser_message.getOtp() + ", DeliveryStatus: "+ applicationToUser_message.getDeliveryStatus());
 
 		return response;
 	}
-
-
-	
 
 	public AQQueue createQueue(AQSession session, String username, String queueTable, String queueName)
 			throws JMSException, AQException {
@@ -183,23 +169,5 @@ public class WorkflowAQ {
 		return queue;
 	}
 
-	public UserDetails enqueueDequeueMessage(TopicSession session, String subscriberName, String queueName, UserDetails user)
-			throws JsonProcessingException, ClassNotFoundException, SQLException, JMSException {
-
-		Topic topic = ((AQjmsSession) session).getTopic(username, queueName);
-		AQjmsTopicPublisher publisher = (AQjmsTopicPublisher) session.createPublisher(topic);
-		TopicSubscriber topicSubscriber = (TopicSubscriber) ((AQjmsSession) session).createDurableSubscriber(topic,subscriberName);
-
-		String jsonString = mapper.writeValueAsString(user);
-		AQjmsTextMessage publisherMessage = (AQjmsTextMessage) session.createTextMessage(jsonString);
-		publisher.publish(publisherMessage, new AQjmsAgent[] { new AQjmsAgent(subscriberName, null) });
-        session.commit();
-
-		AQjmsTextMessage subscriberMessage = (AQjmsTextMessage) topicSubscriber.receive(10);				
-		UserDetails userData = mapper.readValue(subscriberMessage.getText(), UserDetails.class);
-        session.commit();
-
-		return userData;
-	}
-
+	
 }

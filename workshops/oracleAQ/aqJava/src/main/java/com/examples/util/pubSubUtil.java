@@ -35,7 +35,7 @@ public class pubSubUtil {
 	
 	ObjectMapper mapper = new ObjectMapper();
 
-	public UserDetails pubSubWorkflow(TopicSession session, String subscriberName, String queueName, UserDetails user)
+	public UserDetails pubSubWorkflowTEQ(TopicSession session, String subscriberName, String queueName, UserDetails user)
 			throws JsonProcessingException, ClassNotFoundException, SQLException, JMSException {
 
 		Topic topic = ((AQjmsSession) session).getTopic(username, queueName);
@@ -58,6 +58,26 @@ public class pubSubUtil {
 
 		return userData;
 	}
+	
+	public UserDetails pubSubWorkflowAQ(TopicSession session, String subscriberName, String queueName, UserDetails user)
+			throws JsonProcessingException, ClassNotFoundException, SQLException, JMSException {
+
+		Topic topic = ((AQjmsSession) session).getTopic(username, queueName);
+		AQjmsTopicPublisher publisher = (AQjmsTopicPublisher) session.createPublisher(topic);
+		TopicSubscriber topicSubscriber = (TopicSubscriber) ((AQjmsSession) session).createDurableSubscriber(topic,subscriberName);
+
+		String jsonString = mapper.writeValueAsString(user);
+		AQjmsTextMessage publisherMessage = (AQjmsTextMessage) session.createTextMessage(jsonString);
+		publisher.publish(publisherMessage, new AQjmsAgent[] { new AQjmsAgent(subscriberName, null) });
+        session.commit();
+
+		AQjmsTextMessage subscriberMessage = (AQjmsTextMessage) topicSubscriber.receive(10);				
+		UserDetails userData = mapper.readValue(subscriberMessage.getText(), UserDetails.class);
+        session.commit();
+
+		return userData;
+	}
+
 	
 	public void pubSub(TopicSession session, String subscriberName, String queueName, String message)
 			throws JsonProcessingException, ClassNotFoundException, SQLException, JMSException {
