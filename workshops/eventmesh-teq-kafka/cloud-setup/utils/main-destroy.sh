@@ -20,6 +20,13 @@ if test "$(state_get RUN_TYPE)" == "3"; then
   exit
 fi
 
+# Run the graalvm-uninstall.sh in the background
+if ps -ef | grep "${LAB_HOME}/cloud-setup/java/graalvm-uninstall.sh" | grep -v grep; then
+  echo "${LAB_HOME}/cloud-setup/java/graalvm-uninstall.sh is already running"
+else
+  echo "Executing java/graalvm-uninstall.sh in the background"
+  nohup "${LAB_HOME}"/cloud-setup/java/graalvm-uninstall.sh &>> "${LAB_LOG}"/graalvm-uninstall.log &
+fi
 
 # Run the objstore-destroy.sh in the background
 if ps -ef | grep "${LAB_HOME}/cloud-setup/utils/objstore-destroy.sh" | grep -v grep; then
