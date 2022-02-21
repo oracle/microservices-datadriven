@@ -59,3 +59,4 @@ BEGIN
  DBMS_AQADM.START_QUEUE (queue_name=> 'JAVA_TEQ_PUBSUB_QUEUE', enqueue =>TRUE, dequeue=> True); 
 END;
 /
+EXIT;

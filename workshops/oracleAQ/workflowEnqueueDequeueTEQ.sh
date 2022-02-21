@@ -1,2 +1,2 @@
 cd $ORACLEAQ_HOME ;
-sqlplus /@${DB_ALIAS}_${DB_USER2} @workflowEnqueueDequeueTEQ.sql
+sqlplus /@${DB_ALIAS} @workflowEnqueueDequeueTEQ.sql

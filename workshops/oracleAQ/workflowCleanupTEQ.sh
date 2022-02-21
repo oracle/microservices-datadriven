@@ -1,2 +1,2 @@
 cd $ORACLEAQ_HOME ;
-sqlplus /@${DB_ALIAS}_${DB_USER2} @workflowCleanupTEQ.sql
+sqlplus /@${DB_ALIAS} @workflowCleanupTEQ.sql

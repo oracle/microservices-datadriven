@@ -81,7 +81,7 @@ public class EnqueueDequeueAQ {
 		dequeueMultiConsumerBrowseMode(aq_sess);
 		response.put(9, "Sample to create multi-consumer Dequeue with Browse mode executed");
 		
-		cleanupAQ(aq_sess, constantName.aq_multiConsumerQueue);
+		cleanupAQ(aq_sess, constantName.aq_multiConsumerTable);
 		response.put(10, "Sample to Cleanup multi-consumer Queue executed");
 
 		return response;
@@ -290,7 +290,7 @@ public class EnqueueDequeueAQ {
 		pubSubUtil.pubSub(session, constantName.aq_pubSubSubscriber1, topic.getTopicName(), "Sample text message");
 		response.put(3, "Topic pubSub  executed.");
 
-		AQQueueTable qtable= ((AQOracleSession) session).getQueueTable(username, constantName.aq_pubSubTable );
+		AQQueueTable qtable= ((AQjmsSession) session).getQueueTable(username, constantName.aq_pubSubTable );
         qtable.drop(true);
 		response.put(4, "Topic pubSub cleanup executed.");
 	
