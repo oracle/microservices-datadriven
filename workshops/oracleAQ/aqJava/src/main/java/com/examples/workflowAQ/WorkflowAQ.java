@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import javax.jms.JMSException;
@@ -19,8 +21,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.examples.config.ConfigData;
 import com.examples.dao.UserDetails;
 import com.examples.dao.UserDetailsDao;
+import com.examples.util.pubSubUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,7 +50,13 @@ public class WorkflowAQ {
 
 	@Autowired
 	UserDetailsDao userDetailsDao;
+	
+	@Autowired(required=true)
+	private ConfigData configData;
 
+	@Autowired(required=true)
+	private pubSubUtil pubSubUtil;
+	
 	@Value("${username}")
 	private String username;
 
@@ -56,19 +66,19 @@ public class WorkflowAQ {
 	ObjectMapper mapper = new ObjectMapper();
 	Random rnd = new Random();
 
-	String userQueueTable = "java_UserQueueTable"+rnd.nextInt(9999);
-	String userQueueName = "java_UserQueue"+rnd.nextInt(9999);
-	String userApplicationSubscriber = "java_userAppSubscriber";
-	String userDelivererSubscriber = "java_userDelivererSubscriber";
+	String userQueueTable 				  = "java_UserQueueTable"+rnd.nextInt(9999);
+	String userQueueName 				  = "java_UserQueue"+rnd.nextInt(9999);
+	String userApplicationSubscriber      = "java_userAppSubscriber";
+	String userDelivererSubscriber        = "java_userDelivererSubscriber";
 
-	String delivererQueueTable = "java_DelivererQueueTable"+rnd.nextInt(9999);
-	String delivererQueueName = "java_DelivererQueue"+rnd.nextInt(9999);
-	String delivererUserSubscriber = "java_delivererUserSubscriber";
+	String delivererQueueTable            = "java_DelivererQueueTable"+rnd.nextInt(9999);
+	String delivererQueueName             = "java_DelivererQueue"+rnd.nextInt(9999);
+	String delivererUserSubscriber        = "java_delivererUserSubscriber";
 	String delivererApplicationSubscriber = "java_delivererApplicationSubscriber";
 
-	String applicationQueueTable = "java_ApplicationQueueTable"+rnd.nextInt(9999);
-	String applicationQueueName = "java_ApplicationQueue"+rnd.nextInt(9999);
-	String applicationUserSubscriber = "java_appUserSubscriber";
+	String applicationQueueTable          = "java_ApplicationQueueTable"+rnd.nextInt(9999);
+	String applicationQueueName           = "java_ApplicationQueue"+rnd.nextInt(9999);
+	String applicationUserSubscriber      = "java_appUserSubscriber";
 	String applicationDelivererSubscriber = "java_appDelivererSubscriber";
 
 	UserDetails userToApplication_message;
@@ -78,23 +88,13 @@ public class WorkflowAQ {
 	UserDetails applicationToUser_message;
 	UserDetails applicationToDeliverer_message;
 
-	public String pubSubWorkflowAQ() throws JMSException, AQException, SQLException, ClassNotFoundException,
+	public Map<Integer,String> pubSubWorkflowAQ() throws JMSException, AQException, SQLException, ClassNotFoundException,
 			JsonMappingException, JsonProcessingException {
-		String deliveryStatus = "Success";
-		PoolDataSource ds = PoolDataSourceFactory.getPoolDataSource();
-	       ds.setConnectionFactoryClassName("oracle.jdbc.pool.OracleDataSource");
-	       ds.setURL(url);
-	       ds.setUser(username);
-//		OracleDataSource ds = new OracleDataSource();
-//		ds.setURL(url);
-//		ds.setDriverType("oracle.jdbc.OracleDriver");
-
-//		ds.setUser(username);
-//		ds.setPassword(password);
-		TopicConnectionFactory tc_fact = AQjmsFactory.getTopicConnectionFactory(ds);
-		TopicConnection conn = tc_fact.createTopicConnection();
-		conn.start();
-		TopicSession session = (AQjmsSession) conn.createSession(true, Session.AUTO_ACKNOWLEDGE);
+		String deliveryStatus;
+		Map<Integer,String> response = new HashMap();
+		
+		TopicSession session = configData.topicDataSourceConnection();
+		response.put(1, "Topic Connection created.");
 		
 		/* Setup */
 		AQSession qsession = createSession();
@@ -103,94 +103,78 @@ public class WorkflowAQ {
 		createQueue(qsession, username, applicationQueueTable, applicationQueueName);
 		
 		/* 1: USER PLACED OREDER ON APPLICATION */
-		userToApplication_message = enqueueDequeueMessage(session, userApplicationSubscriber, userQueueName,
-				new UserDetails(rnd.nextInt(999), "DBUSER", 0, "Pending", "US"));
-
-		System.out.println("USER ORDER MESSAGE:  " + "ORDERID: " + userToApplication_message.getOrderId() + ", OTP: "
+		userToApplication_message = pubSubUtil.pubSubWorkflow(session, userApplicationSubscriber, userQueueName,new UserDetails(rnd.nextInt(99999), "DBUSER", 0, "Pending", "US"));
+		response.put(2,"USER ORDER MESSAGE              - ORDERID: " + userToApplication_message.getOrderId() + ", OTP: "
 				+ userToApplication_message.getOtp() + ", DeliveryStatus: "
 				+ userToApplication_message.getDeliveryStatus());
 
 		/* 2: APPLICATION SHARES OTP TO USER */
-		applicationToUser_message = enqueueDequeueMessage(session, applicationUserSubscriber, applicationQueueName,
+		applicationToUser_message = pubSubUtil.pubSubWorkflow(session, applicationUserSubscriber, applicationQueueName,
 				new UserDetails(userToApplication_message.getOrderId(), userToApplication_message.getUsername(),
 						rnd.nextInt(9999), userToApplication_message.getDeliveryStatus(),
 						userToApplication_message.getDeliveryLocation()));
-
-		System.out.println("APPLICATION TO USER MESSAGE:  " + "ORDERID: " + applicationToUser_message.getOrderId()
+		response.put(3,"APPLICATION TO USER MESSAGE     - ORDERID: " + applicationToUser_message.getOrderId()
 				+ ", OTP: " + applicationToUser_message.getOtp() + ", DeliveryStatus: "
 				+ applicationToUser_message.getDeliveryStatus());
 
 		/* 3: APPLICATION CREATES AN USER RECORD */
-
 		userDetailsDao.add(applicationToUser_message);
 /*	    workflowRepository.saveAndFlush(applicationToUser_message);*/
-
-		System.out.println("APPLICATION ADDED USER ORDER INTO RECORD");
+		response.put(4,"APPLICATION ADDED USER ORDER INTO RECORD");
 
 		/* 4: APPLICATION SHARES DELIVERY DETAILS TO DELIVERER */
-		applicationToDeliverer_message = enqueueDequeueMessage(session, applicationDelivererSubscriber, applicationQueueName,
+		applicationToDeliverer_message = pubSubUtil.pubSubWorkflow(session, applicationDelivererSubscriber, applicationQueueName,
 				new UserDetails(userToApplication_message.getOrderId(), userToApplication_message.getUsername(), 0,
 						userToApplication_message.getDeliveryStatus(),
 						userToApplication_message.getDeliveryLocation()));
-
-		System.out.println("APPLICATION TO DELIVERER MESSAGE:  " + "ORDERID: "+ applicationToDeliverer_message.getOrderId() + ", OTP: " + applicationToDeliverer_message.getOtp()+ ", DeliveryStatus: " + applicationToDeliverer_message.getDeliveryStatus());
+		response.put(5,"APPLICATION TO DELIVERER MESSAGE- ORDERID: "+ applicationToDeliverer_message.getOrderId() + ", OTP: " + applicationToDeliverer_message.getOtp()+ ", DeliveryStatus: " + applicationToDeliverer_message.getDeliveryStatus());
 
 		/* 5: USER SHARES OTP TO DELIVERER */
-		userToDeliverer_message = enqueueDequeueMessage(session, userDelivererSubscriber, userQueueName,
+		userToDeliverer_message = pubSubUtil.pubSubWorkflow(session, userDelivererSubscriber, userQueueName,
 				new UserDetails(applicationToUser_message.getOrderId(), applicationToUser_message.getUsername(),
 						applicationToUser_message.getOtp(), applicationToUser_message.getDeliveryStatus(),
 						applicationToUser_message.getDeliveryLocation()));
-
-		System.out.println("USER TO DELIVERER MESSAGE:  " + "ORDERID: " + userToDeliverer_message.getOrderId()+ ", OTP: " + userToDeliverer_message.getOtp() + ", DeliveryStatus: "+ userToDeliverer_message.getDeliveryStatus());
+		response.put(6, "USER TO DELIVERER MESSAGE       - ORDERID: " + userToDeliverer_message.getOrderId()+ ", OTP: " + userToDeliverer_message.getOtp() + ", DeliveryStatus: "+ userToDeliverer_message.getDeliveryStatus());
+		System.out.println();
 
 		/* 6: DELIVERER TO APPLICATION FOR OTP VERIFICATION */
-		delivererToApplication_message = enqueueDequeueMessage(session, delivererApplicationSubscriber, delivererQueueName,
+		delivererToApplication_message = pubSubUtil.pubSubWorkflow(session, delivererApplicationSubscriber, delivererQueueName,
 				new UserDetails(userToDeliverer_message.getOrderId(), userToDeliverer_message.getUsername(),
 						userToDeliverer_message.getOtp(), userToDeliverer_message.getDeliveryStatus(),
 						userToDeliverer_message.getDeliveryLocation()));
-
-		System.out.println("DELIVERER TO APPLICATION MESSAGE:  " + "ORDERID: "+ delivererToApplication_message.getOrderId() + ", OTP: " + delivererToApplication_message.getOtp()+ ", DeliveryStatus: " + delivererToApplication_message.getDeliveryStatus());
+		response.put(7, "DELIVERER TO APPLICATION MESSAGE- ORDERID: "+ delivererToApplication_message.getOrderId() + ", OTP: " + delivererToApplication_message.getOtp()+ ", DeliveryStatus: " + delivererToApplication_message.getDeliveryStatus());
 
 		/* 7: APPLICATION VERIFIES OTP WITH USER RECORD AND UPDATE DELIVERY STATUS */
-		/*UserDetails recordData = workflowRepository.findByOrderId(delivererToApplication_message.getOrderId()); */
-		
+		/*UserDetails recordData = workflowRepository.findByOrderId(delivererToApplication_message.getOrderId());*/
 		UserDetails recordData =userDetailsDao.getUserDetails(delivererToApplication_message.getOrderId());
 		
-		if (delivererToApplication_message.getOtp() == recordData.getOtp() && recordData.getDeliveryStatus() != "DELIVERED") {
-			//recordData.setDeliveryStatus("DELIVERED");
-			deliveryStatus = "DELIVERED";			
-			System.out.println("APPLICATION VERIFICATION FOR DELIVERY STATUS: " + deliveryStatus);
+		if (delivererToApplication_message.getOtp() == recordData.getOtp()
+				&& recordData.getDeliveryStatus() != "DELIVERED") {
+			deliveryStatus = "DELIVERED";
+			
+			response.put(8, "APPLICATION VERIFICATION FOR DELIVERY STATUS: " + deliveryStatus);
 
 		} else {
 			deliveryStatus = "FAILED";
-			System.out.println("APPLICATION VERIFICATION FOR DELIVERY STATUS: " + deliveryStatus);
+
+			response.put(8, "APPLICATION VERIFICATION FOR DELIVERY STATUS: " + deliveryStatus);
 		}
 		userDetailsDao.update(recordData.getOrderId(), deliveryStatus);
 
-		//workflowRepository.saveAndFlush(recordData);
-
 		UserDetails updatedData = userDetailsDao.getUserDetails(delivererToApplication_message.getOrderId());
-		/* UserDetails updatedData = workflowRepository.findByOrderId(delivererToApplication_message.getOrderId()); */
 		/* 8: APPLICATION UPDATE DELIVERER TO DELIVER ORDER */
-		applicationToDeliverer_message = enqueueDequeueMessage(session, applicationDelivererSubscriber, applicationQueueName,
-				new UserDetails(delivererToApplication_message.getOrderId(),
-						delivererToApplication_message.getUsername(), delivererToApplication_message.getOtp(),
-						updatedData.getDeliveryStatus(),
-						delivererToApplication_message.getDeliveryLocation()));
-
-		System.out.println("UPDATE DELIVERER MESSAGE:  " + "ORDERID: " + applicationToDeliverer_message.getOrderId()+ ", OTP: " + applicationToDeliverer_message.getOtp() + ", DeliveryStatus: "+ applicationToDeliverer_message.getDeliveryStatus());
+		applicationToDeliverer_message = pubSubUtil.pubSubWorkflow(session, applicationDelivererSubscriber, applicationQueueName,
+				new UserDetails(delivererToApplication_message.getOrderId(), delivererToApplication_message.getUsername(), delivererToApplication_message.getOtp(), updatedData.getDeliveryStatus(), delivererToApplication_message.getDeliveryLocation()));
+		response.put(9, "UPDATE DELIVERER MESSAGE        - ORDERID: " + applicationToDeliverer_message.getOrderId()+ ", OTP: " + applicationToDeliverer_message.getOtp() + ", DeliveryStatus: "+ applicationToDeliverer_message.getDeliveryStatus());
 
 		/* 9: APPLICATION UPDATE USER FOR DELIVERED ORDER */
-		applicationToUser_message = enqueueDequeueMessage(session, applicationUserSubscriber, applicationQueueName,
-				new UserDetails(delivererToApplication_message.getOrderId(),
-						delivererToApplication_message.getUsername(), delivererToApplication_message.getOtp(),
-						updatedData.getDeliveryStatus(),
-						delivererToApplication_message.getDeliveryLocation()));
+		applicationToUser_message = pubSubUtil.pubSubWorkflow(session, applicationUserSubscriber, applicationQueueName,
+				new UserDetails(delivererToApplication_message.getOrderId(), delivererToApplication_message.getUsername(), delivererToApplication_message.getOtp(), updatedData.getDeliveryStatus(), delivererToApplication_message.getDeliveryLocation()));
+		response.put(10, "UPDATE USER MESSAGE             - ORDERID: " + applicationToUser_message.getOrderId() + ", OTP: "+ applicationToUser_message.getOtp() + ", DeliveryStatus: "+ applicationToUser_message.getDeliveryStatus());
 
-		System.out.println("UPDATE USER MESSAGE:  " + "ORDERID: " + applicationToUser_message.getOrderId() + ", OTP: "+ applicationToUser_message.getOtp() + ", DeliveryStatus: "+ applicationToUser_message.getDeliveryStatus());
-
-		return deliveryStatus;
+		return response;
 	}
+
 
 	public AQSession createSession() throws ClassNotFoundException, SQLException, AQException, JMSException {
 
