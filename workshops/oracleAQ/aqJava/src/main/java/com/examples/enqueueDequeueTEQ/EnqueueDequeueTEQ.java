@@ -3,15 +3,9 @@ package com.examples.enqueueDequeueTEQ;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
-
 import javax.jms.JMSException;
-import javax.jms.Session;
-import javax.jms.Topic;
-import javax.jms.TopicConnection;
-import javax.jms.TopicConnectionFactory;
+
 import javax.jms.TopicSession;
-import javax.jms.TopicSubscriber;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,12 +14,6 @@ import org.springframework.stereotype.Service;
 import com.examples.config.ConfigData;
 import com.examples.util.pubSubUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import oracle.jms.AQjmsAgent;
-import oracle.jms.AQjmsFactory;
-import oracle.jms.AQjmsSession;
-import oracle.jms.AQjmsTextMessage;
 
 
 @Service

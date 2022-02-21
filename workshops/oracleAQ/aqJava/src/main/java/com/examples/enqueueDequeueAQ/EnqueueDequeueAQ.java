@@ -14,8 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.examples.config.ConfigData;
-import com.examples.util.pubSubUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.examples.util.pubSubUtil;
 
 import oracle.AQ.AQAgent;
 import oracle.AQ.AQDequeueOption;
@@ -46,9 +46,10 @@ public class EnqueueDequeueAQ {
 	@Value("${url}")
 	private String url;
 
-	@Value("${password}")
+	/*	@Value("${password}")
 	private String password;
-
+	*/
+	
 	String oracleQueueTable = "java_QueueTable";
 	String oracleQueueName = "java_QueueName";
 

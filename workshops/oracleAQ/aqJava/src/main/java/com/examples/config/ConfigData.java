@@ -30,9 +30,9 @@ public class ConfigData {
 	@Value("${url}")
 	private String url;
 	
-	@Value("${password}")
+/*	@Value("${password}")
 	private String password;
-	
+	*/
 	public TopicSession topicDataSourceConnection() throws SQLException, JMSException {
 
 		PoolDataSource ds = PoolDataSourceFactory.getPoolDataSource();

@@ -1,21 +1,15 @@
 package com.examples.workflowAQ;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
 import javax.jms.JMSException;
-import javax.jms.Session;
 import javax.jms.Topic;
-import javax.jms.TopicConnection;
-import javax.jms.TopicConnectionFactory;
 import javax.jms.TopicSession;
 import javax.jms.TopicSubscriber;
-import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,21 +23,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import oracle.AQ.AQDriverManager;
 import oracle.AQ.AQException;
 import oracle.AQ.AQQueue;
 import oracle.AQ.AQQueueProperty;
 import oracle.AQ.AQQueueTable;
 import oracle.AQ.AQQueueTableProperty;
 import oracle.AQ.AQSession;
-import oracle.jdbc.pool.OracleDataSource;
 import oracle.jms.AQjmsAgent;
-import oracle.jms.AQjmsFactory;
 import oracle.jms.AQjmsSession;
 import oracle.jms.AQjmsTextMessage;
 import oracle.jms.AQjmsTopicPublisher;
-import oracle.ucp.jdbc.PoolDataSource;
-import oracle.ucp.jdbc.PoolDataSourceFactory;
 
 @Service
 public class WorkflowAQ {
