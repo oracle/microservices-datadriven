@@ -1,4 +1,4 @@
-CREATE TYPE Message_typ AS OBJECT (ORDERID NUMBER(10), USERNAME VARCHAR2(255), OTP NUMBER(4), DELIVERY_STATUS VARCHAR2(10),DELIVERY_LOCATION VARCHAR2(255)); 
+CREATE TYPE Message_typ AS OBJECT (ORDERID NUMBER(10), USERNAME VARCHAR2(255), OTP NUMBER(4), DELIVERYSTATUS VARCHAR2(10),DELIVERYLOCATION VARCHAR2(255)); 
 /
 -- Creating a Multiconsumer object type queue table and queue */
 BEGIN
@@ -41,8 +41,8 @@ CREATE TABLE USERDETAILS(
     ORDERID number(10), 
     USERNAME varchar2(255), 
     OTP number(4), 
-    DELIVERY_STATUS varchar2(10),
-    DELIVERY_LOCATION varchar2(255),
+    DELIVERYSTATUS varchar2(10),
+    DELIVERYLOCATION varchar2(255),
     primary key(ORDERID)
 );
 /
@@ -66,7 +66,7 @@ BEGIN
         payload                       => messageData,               
         msgid                         => message_handle);
         COMMIT;
-    --DBMS_OUTPUT.PUT_LINE ('----------ENQUEUE Message        :  ' || 'ORDERID: ' ||  messageData.ORDERID || ', OTP: ' || messageData.OTP ||', DELIVERY_STATUS: ' || messageData.DELIVERY_STATUS  );  
+    --DBMS_OUTPUT.PUT_LINE ('----------ENQUEUE Message        :  ' || 'ORDERID: ' ||  messageData.ORDERID || ', OTP: ' || messageData.OTP ||', DELIVERYSTATUS: ' || messageData.DELIVERYSTATUS  );  
 
   
     dequeue_options.dequeue_mode      := DBMS_AQ.REMOVE;
@@ -80,7 +80,7 @@ BEGIN
         payload                       => messageData, 
         msgid                         => message_handle);
         COMMIT;
-    --DBMS_OUTPUT.PUT_LINE ('----------DEQUEUE Message        :  ' || 'ORDERID: ' ||  messageData.ORDERID || ', OTP: ' || messageData.OTP ||', DELIVERY_STATUS: ' || messageData.DELIVERY_STATUS  );  
+    --DBMS_OUTPUT.PUT_LINE ('----------DEQUEUE Message        :  ' || 'ORDERID: ' ||  messageData.ORDERID || ', OTP: ' || messageData.OTP ||', DELIVERYSTATUS: ' || messageData.DELIVERYSTATUS  );  
 
     RETURN messageData;
 END;

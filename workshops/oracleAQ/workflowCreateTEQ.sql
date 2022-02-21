@@ -1,4 +1,4 @@
-CREATE TYPE Message_typ AS OBJECT (ORDERID NUMBER(10), USERNAME VARCHAR2(255), OTP NUMBER(4), DELIVERY_STATUS VARCHAR2(10),DELIVERY_LOCATION VARCHAR2(255)); 
+CREATE TYPE Message_typ AS OBJECT (ORDERID NUMBER(10), USERNAME VARCHAR2(255), OTP NUMBER(4), DELIVERYSTATUS VARCHAR2(10),DELIVERYLOCATION VARCHAR2(255)); 
 /
 -- Creating an Object type queue 
 BEGIN
@@ -40,6 +40,62 @@ BEGIN
  DBMS_AQADM.START_QUEUE (queue_name=> 'teq_ApplicationQueue', enqueue =>TRUE, dequeue=> True); 
 END;
 /
+-- Java TEQ
+/
+BEGIN
+ DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
+     queue_name         =>'JAVA_TEQ_USER_QUEUE',
+     storage_clause     =>null, 
+     multiple_consumers =>true, 
+     max_retries        =>10,
+     comment            =>'java_user for TEQ', 
+     queue_payload_type =>'JMS', 
+     queue_properties   =>null, 
+     replication_mode   =>null);
+ DBMS_AQADM.START_QUEUE (queue_name=> 'JAVA_TEQ_USER_QUEUE', enqueue =>TRUE, dequeue=> True); 
+END;
+/
+BEGIN
+ DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
+     queue_name         =>'JAVA_TEQ_DELIVERER_QUEUE',
+     storage_clause     =>null, 
+     multiple_consumers =>true, 
+     max_retries        =>10,
+     comment            =>'java_deliverer for TEQ', 
+     queue_payload_type =>'JMS', 
+     queue_properties   =>null, 
+     replication_mode   =>null);
+ DBMS_AQADM.START_QUEUE (queue_name=> 'JAVA_TEQ_DELIVERER_QUEUE', enqueue =>TRUE, dequeue=> True); 
+END;
+/
+BEGIN
+ DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
+     queue_name        =>'JAVA_TEQ_APPLICATION_QUEUE',
+     storage_clause    =>null, 
+     multiple_consumers=>true, 
+     max_retries       =>10,
+     comment           =>'java_appQueue for TEQ', 
+     queue_payload_type=>'JMS', 
+     queue_properties  =>null, 
+     replication_mode  =>null);
+ DBMS_AQADM.START_QUEUE (queue_name=> 'JAVA_TEQ_APPLICATION_QUEUE', enqueue =>TRUE, dequeue=> True); 
+END;
+/
+BEGIN
+ DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
+     queue_name        =>'JAVA_TEQ_PUBSUB_QUEUE',
+     storage_clause    =>null, 
+     multiple_consumers=>true, 
+     max_retries       =>10,
+     comment           =>'JAVA_TEQ_PUBSUB_QUEUE', 
+     queue_payload_type=>'JMS', 
+     queue_properties  =>null, 
+     replication_mode  =>null);
+ DBMS_AQADM.START_QUEUE (queue_name=> 'JAVA_TEQ_PUBSUB_QUEUE', enqueue =>TRUE, dequeue=> True); 
+END;
+/
+
+-- add Subscriber
 DECLARE
   subscriber sys.aq$_agent;
 BEGIN
@@ -76,7 +132,7 @@ BEGIN
         payload                       => messageData,               
         msgid                         => message_handle);
         COMMIT;
-   -- DBMS_OUTPUT.PUT_LINE ('----------ENQUEUE Message        :  ' || 'ORDERID: ' ||  messageData.ORDERID || ', OTP: ' || messageData.OTP ||', DELIVERY_STATUS: ' || messageData.DELIVERY_STATUS  );  
+   -- DBMS_OUTPUT.PUT_LINE ('----------ENQUEUE Message        :  ' || 'ORDERID: ' ||  messageData.ORDERID || ', OTP: ' || messageData.OTP ||', DELIVERYSTATUS: ' || messageData.DELIVERYSTATUS  );  
 
   
     dequeue_options.dequeue_mode      := DBMS_AQ.REMOVE;
@@ -90,7 +146,7 @@ BEGIN
         payload                       => messageData, 
         msgid                         => message_handle);
         COMMIT;
-    --DBMS_OUTPUT.PUT_LINE ('----------DEQUEUE Message        :  ' || 'ORDERID: ' ||  messageData.ORDERID || ', OTP: ' || messageData.OTP ||', DELIVERY_STATUS: ' || messageData.DELIVERY_STATUS  );  
+    --DBMS_OUTPUT.PUT_LINE ('----------DEQUEUE Message        :  ' || 'ORDERID: ' ||  messageData.ORDERID || ', OTP: ' || messageData.OTP ||', DELIVERYSTATUS: ' || messageData.DELIVERYSTATUS  );  
 
     RETURN messageData;
 END;
