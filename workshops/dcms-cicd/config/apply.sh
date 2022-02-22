@@ -18,7 +18,7 @@ fi
 
 # Start the provisioning apply
 cd $MY_STATE/jenkins
-source $DCMS_CICD_JNKNS_DIR/scripts/terraform-env.sh
+source $DCMS_CICD_JNKNS_DIR/terraform-env.sh
 
 if ! terraform init; then
     echo 'ERROR: terraform init failed!'

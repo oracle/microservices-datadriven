@@ -7,7 +7,7 @@ volumes:
 services:
 
   jenkins:
-    container_name: jenkins-docker
+    container_name: terraform-docker
     restart: always
     privileged: true
     build: ""
@@ -15,11 +15,11 @@ services:
       - 80:8080
     volumes:
       - jenkins_home:/var/jenkins_home
-      - jenkinsRef:/usr/share/jenkins/ref
-      - "./casc.yaml:/jenkins/config/casc.yaml"
+      - jenkinsRef:/usr/share/terraform/ref
+      - "./casc.yaml:/terraform/config/casc.yaml"
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
       - JENKINS_ADMIN_ID=${jenkins_user}
       - JENKINS_ADMIN_PASSWORD=${jenkins_password}
-      - CASC_JENKINS_CONFIG=/jenkins/config/casc.yaml
+      - CASC_JENKINS_CONFIG=/terraform/config/casc.yaml
