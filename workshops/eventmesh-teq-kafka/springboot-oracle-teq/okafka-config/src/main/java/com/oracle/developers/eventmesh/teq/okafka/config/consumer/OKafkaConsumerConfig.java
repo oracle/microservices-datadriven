@@ -29,8 +29,8 @@ public class OKafkaConsumerConfig {
 
         Map<String, Object> props = new HashMap<>();
 
-        props.put(CommonClientConfigs.ORACLE_USER_NAME, configData.getOracleUserName());
-        props.put(CommonClientConfigs.ORACLE_PASSWORD, configData.getOraclePassword());
+//        props.put(CommonClientConfigs.ORACLE_USER_NAME, configData.getOracleUserName());
+//        props.put(CommonClientConfigs.ORACLE_PASSWORD, configData.getOraclePassword());
         props.put(ConsumerConfig.ORACLE_INSTANCE_NAME, configData.getOracleInstanceName());
         props.put(ConsumerConfig.ORACLE_SERVICE_NAME, configData.getOracleServiceName());
         props.put(ConsumerConfig.ORACLE_NET_TNS_ADMIN, configData.getOracleNetTns_admin());
