@@ -498,6 +498,17 @@ workshops/eventmesh-teq-kafka/.java-version
 workshops/eventmesh-teq-kafka/**/deploy/
 
 ## Remove Other Local project stuffs
-workshops/eventmesh-teq-kafka/cloud-setup/database/
 workshops/eventmesh-teq-kafka/cloud-setup/terraform_dbsystem/
+workshops/eventmesh-teq-kafka/cloud-setup/database/*.sql
+workshops/eventmesh-teq-kafka/cloud-setup/database/wallet-tests/
+workshops/eventmesh-teq-kafka/cloud-setup/database/wallet-tests/*
+workshops/eventmesh-teq-kafka/cloud-setup/database/wallet-tests/**
 workshops/eventmesh-teq-kafka/wallet/
+*/**/*_local
+!okafka*.jar
+
+## 
+.classpath
+.project
+.settings
+.factorypath
