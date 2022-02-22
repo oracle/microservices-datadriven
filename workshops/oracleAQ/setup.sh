@@ -156,7 +156,6 @@ cd ../
 cd aqJava;
 mvn clean install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.test.skip=true;
 cd target;
-killall java;
 nohup java -jar aqJava-0.0.1-SNAPSHOT.jar &
 
 cd $ORACLEAQ_HOME;
