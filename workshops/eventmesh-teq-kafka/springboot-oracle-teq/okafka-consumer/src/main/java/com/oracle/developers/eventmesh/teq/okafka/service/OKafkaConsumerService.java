@@ -10,10 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.security.Provider;
-import java.security.Security;
 import java.time.Duration;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Map;
 
 @Service
@@ -30,17 +28,16 @@ public class OKafkaConsumerService {
         this.configData = configData;
         this.topicConfigData = topicConfigData;
         this.consumerSetup = consumerSetup;
-        addOraclePKIProvider();
     }
 
     public void startReceive() {
         Map<String, Object> configMap = consumerSetup.consumerConfig();
 
-        consumer = new KafkaConsumer<>(configMap);
+        consumer = new KafkaConsumer<String, String>(configMap);
 
         LOG.debug("Subscribe {}", topicConfigData.getTopicName());
-        consumer.subscribe(List.of(topicConfigData.getTopicName()));
-        ConsumerRecords<String, String> records;
+        consumer.subscribe(Arrays.asList(topicConfigData.getTopicName()));
+        ConsumerRecords<String, String> records = null;
         try {
             // TODO There is a issue with elapsedTime usually greater timeoutMs
             LOG.debug("Start to Receive");
@@ -67,11 +64,5 @@ public class OKafkaConsumerService {
     public void receive(String key, String message) {
         LOG.info("message received {}. using key {}. sending to processing: Thread id {}", message, key, Thread.currentThread().getId());
         //inventoryService.removeInventory(message);
-    }
-
-    private static void addOraclePKIProvider() {
-        System.out.println("Installing Oracle PKI provider.");
-        Provider oraclePKI = new oracle.security.pki.OraclePKIProvider();
-        Security.insertProviderAt(oraclePKI,3);
     }
 }

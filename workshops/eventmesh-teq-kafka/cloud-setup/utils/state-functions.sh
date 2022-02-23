@@ -30,7 +30,7 @@ function state_set_done() {
 function state_set() {
   echo "$2" > "$LAB_STATE_HOME"/"$1"
   echo "$(date): $1: $2" >>"$LAB_LOG"/state.log
-#  echo "$1: $2"
+  echo "$1: $2"
 }
 
 # Reset the state - not done and no value

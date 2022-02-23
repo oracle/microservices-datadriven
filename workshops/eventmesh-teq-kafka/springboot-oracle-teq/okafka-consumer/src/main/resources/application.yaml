@@ -42,10 +42,12 @@ logging:
               okafka: INFO
 
 okafka-server-config:
-  oracle-instance-name: lab8022_tp
-  oracle-service-name: bsenjiat5lmurtq_lab8022_tp.adb.oraclecloud.com
+  oracle-instance-name: lab8022atp_tp
+  oracle-service-name: bsenjiat5lmurtq_lab8022atp_tp.adb.oraclecloud.com
   oracle-net-tns_admin: /home/appuser/wallet
-  tns-alias: lab8022_tp
+  tns-alias: lab8022atp_tp
+  oracle-user-name: LAB8022_USER
+  oracle-password: Welcome#1@Oracle
   security-protocol: SSL
   bootstrap-servers: adb.us-ashburn-1.oraclecloud.com:1522
 
@@ -57,7 +59,7 @@ okafka-topic-config:
 okafka-consumer-config:
   key-deserializer: org.oracle.okafka.common.serialization.StringDeserializer
   value-deserializer: org.oracle.okafka.common.serialization.StringDeserializer
-  group-id: LAB8022_TOPIC_SUBSCRIBER
+  group-id: LAB8022_SUBSCRIBER
   enable-auto-commit: true
   auto-commit-interval-ms: 10000
   max-poll-records: 100
