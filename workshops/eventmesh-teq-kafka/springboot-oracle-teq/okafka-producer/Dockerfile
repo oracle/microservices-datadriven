@@ -1,6 +1,6 @@
 ## Copyright (c) 2021 Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
-FROM ghcr.io/graalvm/graalvm-ce:ol8-java11
+FROM ghcr.io/graalvm/graalvm-ce:java11-21.3.0
 
 ARG IMAGE_NAME=okafka-producer
 ARG IMAGE_VERSION=0.0.1-SNAPSHOT
