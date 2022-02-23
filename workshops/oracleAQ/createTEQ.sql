@@ -45,6 +45,19 @@ BEGIN
  DBMS_AQADM.START_QUEUE (queue_name=> 'jsonType_TEQ', enqueue =>TRUE, dequeue=> True); 
 END;
 /
+BEGIN
+ DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
+     queue_name        =>'JAVA_TEQ_PUBSUB_QUEUE',
+     storage_clause    =>null, 
+     multiple_consumers=>true, 
+     max_retries       =>10,
+     comment           =>'JAVA_TEQ_PUBSUB_QUEUE', 
+     queue_payload_type=>'JMS', 
+     queue_properties  =>null, 
+     replication_mode  =>null);
+ DBMS_AQADM.START_QUEUE (queue_name=> 'JAVA_TEQ_PUBSUB_QUEUE', enqueue =>TRUE, dequeue=> True); 
+END;
+/
 DECLARE
   subscriber sys.aq$_agent;
 BEGIN
@@ -90,7 +103,5 @@ BEGIN
     DBMS_OUTPUT.PUT_LINE ('----------DEQUEUE Message:  ' || 'ORDERID: ' ||  messageData.ORDERID || ', OTP: ' || messageData.OTP ||', DELIVERY_STATUS: ' || messageData.DELIVERY_STATUS  );  
     RETURN messageData;
 END;
-/
-select name, queue_table, dequeue_enabled,enqueue_enabled, sharded, queue_category, recipients from all_queues where OWNER='DBUSER' and QUEUE_TYPE<>'EXCEPTION_QUEUE';
 /
 EXIT;      

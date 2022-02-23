@@ -17,20 +17,6 @@ EXECUTE DBMS_AQADM.DROP_QUEUE_TABLE ( queue_table      =>'aq_JSON_queueTable');
 EXECUTE DBMS_AQADM.STOP_QUEUE       ( queue_name       =>'aq_multiconsumer_raw');   
 EXECUTE DBMS_AQADM.DROP_QUEUE       ( queue_name       =>'aq_multiconsumer_raw');   
 EXECUTE DBMS_AQADM.DROP_QUEUE_TABLE ( queue_table      =>'aq_multiconsumer_raw_queueTable'); 
- 
-
---Clean up all Java Basic Queue Tables and Queues
-EXECUTE DBMS_AQADM.STOP_QUEUE ( queue_name       => 'java_QueueName');  
-EXECUTE DBMS_AQADM.DROP_QUEUE ( queue_name       => 'java_QueueName');  
-EXECUTE DBMS_AQADM.DROP_QUEUE_TABLE (queue_table => 'JAVA_QUEUETABLE');
-
-EXECUTE DBMS_AQADM.STOP_QUEUE ( queue_name       => 'java_QueueName_Multi');  
-EXECUTE DBMS_AQADM.DROP_QUEUE ( queue_name       => 'java_QueueName_Multi');  
-EXECUTE DBMS_AQADM.DROP_QUEUE_TABLE (queue_table => 'java_QueueTable_Multi');
-
-EXECUTE DBMS_AQADM.STOP_QUEUE ( queue_name       => 'java_basicOracleQueueName');  
-EXECUTE DBMS_AQADM.DROP_QUEUE ( queue_name       => 'java_basicOracleQueueName');  
-EXECUTE DBMS_AQADM.DROP_QUEUE_TABLE (queue_table => 'java_basicOracleQueue_queueTable');
 
 --Clean up object type 
 DROP TYPE obj_typ;

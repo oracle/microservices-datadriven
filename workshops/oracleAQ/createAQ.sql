@@ -28,6 +28,4 @@ BEGIN
   DBMS_AQADM.ADD_SUBSCRIBER(queue_name => 'aq_multiconsumer_raw',   subscriber => subscriber);
 END;
 /
-select name, queue_table, dequeue_enabled,enqueue_enabled, sharded, queue_category, recipients from all_queues where OWNER='DBUSER' and QUEUE_TYPE<>'EXCEPTION_QUEUE';
-/
 EXIT;

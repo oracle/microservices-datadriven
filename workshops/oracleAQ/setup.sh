@@ -162,7 +162,6 @@ cd $ORACLEAQ_HOME;
 export TNS_ADMIN=${TNS_ADMIN_FOR_JAVA}
 sqlplus /@"${DB_ALIAS}" <<!
 Show user;
-/
 !
 
 echo "ORACLEAQ_HOME     : "$ORACLEAQ_HOME;
@@ -171,7 +170,7 @@ echo "COMPARTMENT OCID  : "${COMPARTMENT_OCID}
 echo "DATABASE NAME     : "${DB_NAME}
 echo "ATP OCID          : "${DB_OCID}
 echo "TNS ALIAS- USER1  :  ${DB_ALIAS}_${PLSQL_DB_USER1}"
-echo "TNS ALIAS- USER2  :  ${DB_ALIAS}
+echo "TNS ALIAS- USER2  : "${DB_ALIAS}
 echo "JDBC URL          : "${JDBC_URL}
 echo 
 echo "-------------------------------"

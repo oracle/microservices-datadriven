@@ -81,19 +81,6 @@ BEGIN
  DBMS_AQADM.START_QUEUE (queue_name=> 'JAVA_TEQ_APPLICATION_QUEUE', enqueue =>TRUE, dequeue=> True); 
 END;
 /
-BEGIN
- DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
-     queue_name        =>'JAVA_TEQ_PUBSUB_QUEUE',
-     storage_clause    =>null, 
-     multiple_consumers=>true, 
-     max_retries       =>10,
-     comment           =>'JAVA_TEQ_PUBSUB_QUEUE', 
-     queue_payload_type=>'JMS', 
-     queue_properties  =>null, 
-     replication_mode  =>null);
- DBMS_AQADM.START_QUEUE (queue_name=> 'JAVA_TEQ_PUBSUB_QUEUE', enqueue =>TRUE, dequeue=> True); 
-END;
-/
 
 -- add Subscriber
 DECLARE
