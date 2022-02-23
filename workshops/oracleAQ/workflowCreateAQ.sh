@@ -1,2 +1,2 @@
-cd $WORKFLOW_HOME ;
-sqlplus /@${DB_ALIAS}_${DB_USER2} @workflowCreateAQ.sql
+cd $ORACLEAQ_HOME ;
+sqlplus /@${DB_ALIAS} @workflowCreateAQ.sql

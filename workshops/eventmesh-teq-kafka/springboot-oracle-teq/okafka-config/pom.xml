@@ -20,7 +20,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.oracle.okafka</groupId>
+            <groupId>org.oracle</groupId>
             <artifactId>okafka</artifactId>
         </dependency>
         <dependency>

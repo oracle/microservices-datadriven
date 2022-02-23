@@ -28,12 +28,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.oracle.okafka</groupId>
+            <groupId>org.oracle</groupId>
             <artifactId>okafka</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.database.security</groupId>
-            <artifactId>oraclepki</artifactId>
         </dependency>
         <dependency>
             <groupId>com.oracle.developers.eventmesh.teq</groupId>
