@@ -14,13 +14,14 @@
 
 	<packaging>pom</packaging>
 
-    <groupId>com.oracle.developers.database.messaging.okafka</groupId>
-	<artifactId>oracle-database-messaging-okafka-samples</artifactId>
+    <groupId>com.oracle.developers.database.messaging.teq</groupId>
+	<artifactId>oracle-database-messaging-teq</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Oracle Database Messaging :: TEQ :: Sample Projects</name>
-	<description>Kafka Java Client for Oracle Transactional Event Queues Demo Projects.
-	</description>
-
+	<name>Oracle Developers :: W8022 :: Event-driven App with Oracle TEQ</name>
+	<description>
+        Workshop 8022 - Simplify Event-driven Apps with TEQ in Oracle Database (with Kafka interoperability)
+        Samples code for Developers Kafka Java Client for Oracle Transactional Event Queues, Spring Boot and Kafka.
+    </description>
 
     <properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
