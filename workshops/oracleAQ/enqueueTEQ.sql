@@ -7,6 +7,8 @@ DECLARE
 
 BEGIN
  message := Message_type('NORMAL MESSAGE','enqueue objType_TEQ');
+ message_properties.correlation := 'teqBasicObjSubscriber';
+
  DBMS_AQ.ENQUEUE(
      queue_name           => 'objType_TEQ',           
      enqueue_options      => enqueue_options,       
@@ -26,6 +28,8 @@ DECLARE
 
 BEGIN
  message :=  HEXTORAW(RPAD('FF',4095,'FF')); 
+ message_properties.correlation := 'teqBasicRawSubscriber';
+
  DBMS_AQ.ENQUEUE(
      queue_name           => 'rawType_TEQ',           
      enqueue_options      => enqueue_options,       
