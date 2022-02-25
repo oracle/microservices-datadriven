@@ -15,18 +15,6 @@ public class LabResponseData implements Serializable {
     private String id;
     private String statusMessage;
 
-    /*
-    public static final String LAB_RESPONSE_SCHEMA =
-            "{\"namespace\": \"com.oracle.developers.eventmesh\","+
-                    "\"type\":\"record\"," +
-                    "\"doc\":\"Response record from lab8022\"," +
-                    "\"name\":\"LabResponse\"," +
-                    "\"fields\":["+
-                    "{\"name\":\"id\",\"type\":\"string\"},"+
-                    "{\"name\":\"status\",\"type\":\"string\"}"+
-                    "]}";
-
-     */
 
     public LabResponseData() {}
 

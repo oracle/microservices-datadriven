@@ -16,9 +16,9 @@ public class LabEventData implements Serializable {
     private String message;
 
     public static final String LAB_EVT_SCHEMA =
-            "{\"namespace\": \"com.oracle.developers.eventmesh\","+
+            "{\"namespace\": \"com.oracle.developers.oracleteq\","+
                     "\"type\":\"record\"," +
-                    "\"doc\":\"This event records the lab8022\"," +
+                    "\"doc\":\"This event records the lab 8022\"," +
                     "\"name\":\"LabEvent\"," +
                     "\"fields\":["+
                     "{\"name\":\"id\",\"type\":\"string\"},"+

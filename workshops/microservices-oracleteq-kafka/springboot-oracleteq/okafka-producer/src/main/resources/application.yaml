@@ -43,9 +43,8 @@ logging:
     com:
       oracle:
         developers:
-          eventmesh:
-            teq:
-              okafka: INFO
+          oracleteq:
+            okafka: INFO
 
 okafka-server-config:
   oracle-instance-name: lab8022_tp
