@@ -8,7 +8,7 @@ DECLARE
 
 BEGIN
     DBMS_AQ.DEQUEUE(
-        queue_name         => 'objType_AQ',
+        queue_name         => 'aq_obj',
         dequeue_options    => dequeue_options,
         message_properties => message_properties,
         payload            => message,
@@ -28,7 +28,7 @@ DECLARE
         
 BEGIN 
     DBMS_AQ.DEQUEUE(
-        queue_name         => 'rawType_AQ', 
+        queue_name         => 'aq_raw', 
         dequeue_options    => dequeue_options, 
         message_properties => message_properties, 
         payload            => message, 
@@ -48,10 +48,10 @@ BEGIN
     dequeue_options.dequeue_mode  := DBMS_AQ.REMOVE;
     dequeue_options.wait          := DBMS_AQ.NO_WAIT;
     dequeue_options.navigation    := DBMS_AQ.FIRST_MESSAGE;           
-    dequeue_options.consumer_name := 'basicSubscriber';
+    dequeue_options.consumer_name := 'aq_Subscriber';
 
     DBMS_AQ.DEQUEUE(
-        queue_name         => 'multiconsumer_rawType_AQ', 
+        queue_name         => 'aq_multiconsumer_raw', 
         dequeue_options    => dequeue_options, 
         message_properties => message_properties, 
         payload            => message, 
