@@ -1,6 +1,6 @@
-package com.oracle.developers.eventmesh.kafka.consumer.service;
+package com.oracle.developers.kafka.consumer.service;
 
-import com.oracle.developers.eventmesh.kafka.config.data.KafkaConfigData;
+import com.oracle.developers.kafka.config.data.KafkaConfigData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.event.ApplicationStartedEvent;

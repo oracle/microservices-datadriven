@@ -1,4 +1,4 @@
-package com.oracle.developers.eventmesh.kafka.consumer;
+package com.oracle.developers.kafka.consumer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,10 +11,10 @@ import org.springframework.kafka.listener.SeekToCurrentErrorHandler;
 import org.springframework.util.backoff.FixedBackOff;
 
 @SpringBootApplication
-@ComponentScan(basePackages = "com.oracle.developers.eventmesh.kafka",
+@ComponentScan(basePackages = "com.oracle.developers.kafka",
         excludeFilters =
         @ComponentScan.Filter(type= FilterType.REGEX,
-                pattern="com\\.oracle\\.developers\\.eventmesh\\.kafka\\.config\\.producer\\..*"))
+                pattern="com\\.oracle\\.developers\\.kafka\\.config\\.producer\\..*"))
 public class KafkaConsumerApplication {
 
     public static void main(String[] args) {

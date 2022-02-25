@@ -1,4 +1,4 @@
-package com.oracle.developers.eventmesh.kafka.producer;
+package com.oracle.developers.kafka.producer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,10 +8,10 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 
 @SpringBootApplication
-@ComponentScan(basePackages = "com.oracle.developers.eventmesh.kafka",
+@ComponentScan(basePackages = "com.oracle.developers.kafka",
         excludeFilters =
         @ComponentScan.Filter(type= FilterType.REGEX,
-                pattern="com\\.oracle\\.developers\\.eventmesh\\.kafka\\.config\\.consumer\\..*"))
+                pattern="com\\.oracle\\.developers\\.kafka\\.config\\.consumer\\..*"))
 public class KafkaProducerApplication {
     private static final Logger LOG = LoggerFactory.getLogger(KafkaProducerApplication.class);
 

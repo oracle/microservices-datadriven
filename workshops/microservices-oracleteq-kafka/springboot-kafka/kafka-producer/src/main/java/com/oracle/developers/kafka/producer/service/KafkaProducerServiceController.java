@@ -1,4 +1,4 @@
-package com.oracle.developers.eventmesh.kafka.producer.service;
+package com.oracle.developers.kafka.producer.service;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.oracle.developers.eventmesh.kafka.config.data.LabEventData;
-import com.oracle.developers.eventmesh.kafka.config.data.LabResponseData;
+import com.oracle.developers.kafka.config.data.LabEventData;
+import com.oracle.developers.kafka.config.data.LabResponseData;
 
 @RestController
 public class KafkaProducerServiceController {

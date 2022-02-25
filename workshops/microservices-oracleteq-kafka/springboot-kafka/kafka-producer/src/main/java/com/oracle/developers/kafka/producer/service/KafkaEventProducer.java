@@ -1,8 +1,8 @@
-package com.oracle.developers.eventmesh.kafka.producer.service;
+package com.oracle.developers.kafka.producer.service;
 
-import com.oracle.developers.eventmesh.kafka.config.data.KafkaConfigData;
-import com.oracle.developers.eventmesh.kafka.config.data.KafkaTopicConfigData;
-import com.oracle.developers.eventmesh.kafka.config.data.LabEventData;
+import com.oracle.developers.kafka.config.data.KafkaConfigData;
+import com.oracle.developers.kafka.config.data.KafkaTopicConfigData;
+import com.oracle.developers.kafka.config.data.LabEventData;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

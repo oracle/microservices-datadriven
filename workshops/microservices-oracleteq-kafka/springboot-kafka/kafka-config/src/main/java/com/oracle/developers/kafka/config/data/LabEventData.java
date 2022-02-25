@@ -1,4 +1,4 @@
-package com.oracle.developers.eventmesh.kafka.config.data;
+package com.oracle.developers.kafka.config.data;
 
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
@@ -11,7 +11,7 @@ public class LabEventData implements Serializable {
     private String message;
 
     public static final String LAB_EVT_SCHEMA =
-            "{\"namespace\": \"com.oracle.developers.eventmesh\","+
+            "{\"namespace\": \"com.oracle.developers\","+
                     "\"type\":\"record\"," +
                     "\"doc\":\"This event records the lab8022\"," +
                     "\"name\":\"LabEvent\"," +

@@ -1,6 +1,6 @@
-package com.oracle.developers.eventmesh.kafka.config.consumer;
+package com.oracle.developers.kafka.config.consumer;
 
-import com.oracle.developers.eventmesh.kafka.config.data.KafkaConfigData;
+import com.oracle.developers.kafka.config.data.KafkaConfigData;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

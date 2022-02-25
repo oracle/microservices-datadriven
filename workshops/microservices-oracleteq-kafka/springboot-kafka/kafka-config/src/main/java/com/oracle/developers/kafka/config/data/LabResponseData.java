@@ -1,4 +1,4 @@
-package com.oracle.developers.eventmesh.kafka.config.data;
+package com.oracle.developers.kafka.config.data;
 
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericData;
@@ -12,7 +12,7 @@ public class LabResponseData implements Serializable {
 
     /*
     public static final String LAB_RESPONSE_SCHEMA =
-            "{\"namespace\": \"com.oracle.developers.eventmesh\","+
+            "{\"namespace\": \"com.oracle.developers\","+
                     "\"type\":\"record\"," +
                     "\"doc\":\"Response record from lab8022\"," +
                     "\"name\":\"LabResponse\"," +

@@ -1,4 +1,4 @@
-package com.oracle.developers.eventmesh.kafka.producer.service;
+package com.oracle.developers.kafka.producer.service;
 
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
