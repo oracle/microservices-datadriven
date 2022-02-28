@@ -1,4 +1,4 @@
 output "lb_address" {
-  value       = oci_load_balancer.lb.ip_addresses
+  value       = oci_load_balancer.lb.ip_addresses[0]
   description = "The Public facing IP Address assigned to the instance"
 }

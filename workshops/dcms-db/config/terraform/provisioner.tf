@@ -21,10 +21,6 @@ data "oci_core_vnic" "instance_vnic" {
 
 resource "null_resource" "ords_config" {
   depends_on = [oci_core_instance.instance, oci_database_autonomous_database.autonomous_database]
-  // Cause the provisioners to run on every apply
-  triggers = {
-    always_run = timestamp()
-  }
   provisioner "file" {
     connection {
       type                = "ssh"
@@ -48,11 +44,10 @@ resource "null_resource" "ords_config" {
       timeout             = "10m"
     }
     inline = [
-      "while ! test -d /tmp/uploads; do sleep 1; done",
-      "sudo chmod +x /tmp/uploads/config_*.ksh",
-      "sudo -u root /tmp/uploads/config_root.ksh -s PRE",
-      "sudo -u oracle /tmp/uploads/config_oracle.ksh -t ${local.db_name} -p \"${local.password}\" -v ${local.apex_ver}",
-      "sudo -u root /tmp/uploads/config_root.ksh -s POST",
+      "sudo chmod +x /tmp/uploads/config_*.sh",
+      "sudo -u root /tmp/uploads/config_root.sh -s PRE",
+      "sudo -u oracle /tmp/uploads/config_oracle.sh -t ${local.db_name} -p \"${local.password}\" -v ${local.apex_ver}",
+      "sudo -u root /tmp/uploads/config_root.sh -s POST",
     ]
   }
 }
