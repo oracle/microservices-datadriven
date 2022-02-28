@@ -7,7 +7,6 @@ SCRIPT_DIR=$(dirname $0)
 IMAGE_NAME=foodwinepairing-python
 IMAGE_VERSION=0.1
 
-
 if [ -z "$DOCKER_REGISTRY" ]; then
     echo "DOCKER_REGISTRY not set. Will get it with state_get"
   export DOCKER_REGISTRY=$(state_get DOCKER_REGISTRY)
