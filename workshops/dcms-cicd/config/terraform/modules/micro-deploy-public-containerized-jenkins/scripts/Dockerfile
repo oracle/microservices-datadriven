@@ -21,6 +21,6 @@ echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https:/
 RUN sudo apt-get update && sudo apt-get install -y kubectl
 
 # install plugins
-RUN terraform-plugin-cli --plugins blueocean docker-workflow matrix-auth git workflow-aggregator credentials-binding configuration-as-code kubernetes-cli
+RUN jenkins-plugin-cli --plugins blueocean docker-workflow matrix-auth git workflow-aggregator credentials-binding configuration-as-code kubernetes-cli
 
 USER jenkins

@@ -1,8 +1,7 @@
 
-module micro-deployment-public-jenkins {
-  source = "modules/micro-deployment-public-dockerized-jenkins"
-
-  compartment_ocid = var.compartment_ocid
+module micro-deploy-public-containerized-jenkins {
+  source = "modules/micro-deploy-public-containerized-jenkins"
+  compartment_id = var.compartment_ocid
   jenkins_password = var.jenkins_password
   region = var.region
 
