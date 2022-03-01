@@ -2,171 +2,251 @@
 -- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 
--- frontend place order (POST)
-CREATE OR REPLACE PROCEDURE frontend_place_order (
-  serviceName IN varchar2,
-  commandName IN varchar2,
-  orderId     IN varchar2,
-  orderItem   IN varchar2,
-  deliverTo   IN varchar2)
-IS
-AUTHID CURRENT_USER
-BEGIN
-  place_order(
-    orderid => orderId,
-    itemid  => orderItem,
-    deliverylocation => deliverTo);
-END;
+-- order_collection package
+create or replace package order_collection
+  authid current_user
+as
+  procedure insert_order (in_order in json_object_t);
+  procedure create_collection;
+  procedure drop_collection;
+end order_collection;
+/
+show errors
+
+create or replace package body order_collection
+as
+  -- Private constants
+  collection_metadata   constant varchar2(4000) := '{"keyColumn" : {"assignmentMethod": "CLIENT"}}';
+  collection_name       constant nvarchar2(20) := 'orderscollection';
+
+  function get_collection return soda_collection_t
+  is
+  begin
+    return dbms_soda.open_collection(collection_name);
+  end get_collection;
+
+  procedure insert_order (in_order in json_object_t)
+  is
+    order_doc   soda_document_t;
+    status      number;
+    collection  soda_collection_t;
+  begin
+    -- write the order object
+    order_doc := soda_document_t(in_order.get_string('orderid'), in_order.to_blob);
+    dbms_output.put_line(in_order.get_string('orderid'));
+    collection := get_collection;
+    status := collection.insert_one(order_doc);
+  end insert_order;
+
+  procedure create_collection
+  is
+    collection  soda_collection_t;
+  begin
+  dbms_output.put_line(collection_name || ' ' || collection_metadata);
+
+    collection := dbms_soda.create_collection(collection_name => collection_name, metadata => collection_metadata);
+  end create_collection;
+
+  procedure drop_collection
+  is
+    status number;
+  begin
+    status := dbms_soda.drop_collection(collection_name => collection_name);
+  end drop_collection;
+
+end order_collection;
 /
 show errors
 
 
--- place order microserice (GET)
--- Example: ../ords/orderuser/placeorder/order?orderId=66&orderItem=sushi&deliverTo=Redwood
-CREATE OR REPLACE PROCEDURE place_order (
-  orderid           IN varchar2,
-  itemid            IN varchar2,
-  deliverylocation  IN varchar2)
-AUTHID CURRENT_USER
-IS
-  order_json            JSON_OBJECT_T;
-BEGIN
-  -- Construct the order object
-  order_json := new JSON_OBJECT_T;
-  order_json.put('orderid', orderid);
-  order_json.put('itemid',  itemid);
-  order_json.put('deliverylocation', deliverylocation);
-  order_json.put('status', 'Pending');
-  order_json.put('inventoryLocation', '');
-  order_json.put('suggestiveSale', '');
+-- order_messaging package
+create or replace package order_messaging
+  authid current_user
+as
+  procedure enqueue_order_message (in_order in json_object_t);
+end order_messaging;
+/
+show errors
 
-  -- Insert the order object
-  insert_order(orderid, order_json.to_string());
+create or replace package body order_messaging
+as
+  -- Private constants
+  order_queue_name      constant varchar2(100) := '$AQ_USER.$ORDER_QUEUE';
 
-  -- Send the order message
-  enqueue_order_message(order_json.to_string());
+  -- enqueue order message
+  procedure enqueue_order_message(in_order in json_object_t)
+  is
+     enqueue_options     dbms_aq.enqueue_options_t;
+     message_properties  dbms_aq.message_properties_t;
+     message_handle      raw(16);
+     message             sys.aq\$_jms_text_message;
+  begin
+    message := sys.aq\$_jms_text_message.construct;
+    message.set_text(in_order.to_string);
 
-  -- Commit
+    dbms_aq.enqueue(queue_name => order_queue_name,
+      enqueue_options    => enqueue_options,
+      message_properties => message_properties,
+      payload            => message,
+      msgid              => message_handle);
+  end enqueue_order_message;
+
+end order_messaging;
+/
+show errors
+
+
+-- place order in PL/SQL
+create or replace procedure place_order_plsql (
+  orderid in out varchar2,
+  itemid in out varchar2,
+  deliverylocation in out varchar2,
+  status out varchar2,
+  inventorylocation out varchar2,
+  suggestivesale out varchar2)
+  authid current_user
+is
+  order_jo json_object_t;
+begin
+  status := 'pending';
+  inventorylocation := '';
+  suggestivesale := '';
+
+  -- construct the order object
+  order_jo := new json_object_t;
+  order_jo.put('orderid', orderid);
+  order_jo.put('itemid',  itemid);
+  order_jo.put('deliverylocation', deliverylocation);
+  order_jo.put('status', status);
+  order_jo.put('inventorylocation', inventorylocation);
+  order_jo.put('suggestivesale', suggestivesale);
+
+  -- insert the order object
+  order_collection.insert_order(order_jo);
+
+  -- send the order message
+  order_messaging.enqueue_order_message(order_jo);
+
+  -- commit
   commit;
 
-  HTP.print(order_json.to_string());
+exception
+   when others then
+     rollback;
+     raise;
 
-  EXCEPTION
-    WHEN OTHERS THEN
-      HTP.print(SQLERRM);
-
-END;
+end;
 /
 show errors
 
 
--- Insert order
-CREATE OR REPLACE PROCEDURE insert_order(in_order_id IN VARCHAR2, in_order IN VARCHAR2)
-AUTHID CURRENT_USER
-IS
-  order_doc             SODA_DOCUMENT_T;
-  collection            SODA_COLLECTION_T;
-  status                NUMBER;
-  collection_name       CONSTANT VARCHAR2(20) := 'orderscollection';
-  collection_metadata   CONSTANT VARCHAR2(4000) := '{"keyColumn" : {"assignmentMethod": "CLIENT"}}';
-BEGIN
-  -- Write the order object
-  collection := DBMS_SODA.open_collection(collection_name);
-  IF collection IS NULL THEN
-    collection := DBMS_SODA.create_collection(collection_name, collection_metadata);
-  END IF;
-
-  order_doc := SODA_DOCUMENT_T(in_order_id, b_content => utl_raw.cast_to_raw(in_order));
-  status := collection.insert_one(order_doc);
-END;
-/
-show errors
-
-
--- Enqueue order message
-CREATE OR REPLACE PROCEDURE enqueue_order_message(in_order_message IN VARCHAR2)
-AUTHID CURRENT_USER
-IS
-   enqueue_options     dbms_aq.enqueue_options_t;
-   message_properties  dbms_aq.message_properties_t;
-   message_handle      RAW(16);
-   message             SYS.AQ\$_JMS_TEXT_MESSAGE;
-BEGIN
-  message := SYS.AQ\$_JMS_TEXT_MESSAGE.construct;
-  message.set_text(in_order_message);
-
-  dbms_aq.ENQUEUE(queue_name => '$AQ_USER.$ORDER_QUEUE',
-    enqueue_options    => enqueue_options,
-    message_properties => message_properties,
-    payload            => message,
-    msgid              => message_handle);
-END;
-/
-show errors
-
-
--- Place Order using MLE JavaScript
-CREATE OR REPLACE PROCEDURE place_order_js (
-  orderid           IN varchar2,
-  itemid            IN varchar2,
-  deliverylocation  IN varchar2)
-AUTHID CURRENT_USER
-IS
-   ctx DBMS_MLE.context_handle_t := DBMS_MLE.create_context();
-   order VARCHAR2(4000);
-   js_code clob := q'~
+-- place order using mle javascript
+create or replace procedure place_order_js (
+  orderid in out varchar2,
+  itemid in out varchar2,
+  deliverylocation in out varchar2,
+  status out varchar2,
+  inventorylocation out varchar2,
+  suggestivesale out varchar2)
+authid current_user
+is
+  ctx dbms_mle.context_handle_t := dbms_mle.create_context();
+  js_code clob := q'~
     var oracledb = require("mle-js-oracledb");
     var bindings = require("mle-js-bindings");
-    conn = oracledb.defaultConnection();
+    var conn = oracledb.defaultConnection();
+    try {
+      // construct the order object
+      const order = {
+        orderid: bindings.importValue("orderid"),
+        itemid: bindings.importValue("itemid"),
+        deliverylocation: bindings.importValue("deliverylocation"),
+        status: "pending",
+        inventorylocation: "",
+        suggestivesale: ""
+      }
 
-    // Construct the order object
-    const order = {
-      orderid: bindings.importValue("orderid"),
-      itemid: bindings.importValue("itemid"),
-      deliverylocation: bindings.importValue("deliverylocation"),
-      status: "Pending",
-      inventoryLocation: "",
-      suggestiveSale: ""
+      // insert the order object
+      insert_order(conn, order);
+
+      // send the order message
+      enqueue_order_message(conn, order);
+
+      // commit
+      conn.commit;
+
+      // output order
+      bindings.exportValue("status", order.status);
+      bindings.exportValue("inventorylocation", "blah");
+      bindings.exportValue("suggestivesale", order.suggestivesale);
+
+    } catch(error) {
+      conn.rollback;
+      throw error;
     }
-    
-    // Insert the order object
-    insert_order(conn, order);
-
-    // Send the order message
-    enqueue_order_message(conn, order);
-
-    // Commit
-    conn.commit;
-
-    // Output order
-    bindings.exportValue("order", order.stringify());
 
     function insert_order(conn, order) {
-        conn.execute( "BEGIN insert_order(:1, :2); END;", [order.orderid, order.stringify()]);
+        conn.execute( "begin order_collection.insert_order(json_object_t(:1)); end;", [JSON.stringify(order)]);
     }
 
     function enqueue_order_message(conn, order) {
-        conn.execute( "BEGIN enqueue_order_message(:1); END;", [order.stringify()]);
+        conn.execute( "begin order_messaging.enqueue_order_message(json_object_t(:1)); end;", [JSON.stringify(order)]);
     }
    ~';
-BEGIN
-   -- Pass variables to JavaScript
-   dbms_mle.export_to_mle(ctx, 'orderid', orderid); 
-   dbms_mle.export_to_mle(ctx, 'itemid', itemid); 
-   dbms_mle.export_to_mle(ctx, 'deliverylocation', deliverylocation); 
+begin
+  -- pass variables to javascript
+  dbms_mle.export_to_mle(ctx, 'orderid', orderid);
+  dbms_mle.export_to_mle(ctx, 'itemid', itemid);
+  dbms_mle.export_to_mle(ctx, 'deliverylocation', deliverylocation);
 
-   -- Execute JavaScript
-   DBMS_MLE.eval(ctx, 'JAVASCRIPT', js_code);
-   DBMS_MLE.import_from_mle(ctx, 'order', order);
-   DBMS_MLE.drop_context(ctx);
+  -- execute javascript
+  dbms_mle.eval(ctx, 'JAVASCRIPT', js_code);
 
-   HTP.print(order);
+  -- handle response
+  dbms_mle.import_from_mle(ctx, 'status', status);
+  dbms_mle.import_from_mle(ctx, 'inventorylocation', inventorylocation);
+  dbms_mle.import_from_mle(ctx, 'suggestivesale', suggestivesale);
 
-EXCEPTION
-   WHEN others THEN
-     dbms_mle.drop_context(ctx);
-     HTP.print(SQLERRM);
+  dbms_mle.drop_context(ctx);
 
-END;
+exception
+  when others then
+    dbms_mle.drop_context(ctx);
+    raise;
+
+end;
 /
 show errors
+
+-- Create the order collection
+begin
+  order_collection.create_collection;
+end;
+/
+
+
+begin
+  ords.enable_schema(
+    p_enabled             => true,
+    p_schema              => 'ORDERUSER',
+    p_url_mapping_type    => 'BASE_PATH',
+    p_url_mapping_pattern => 'order',
+    p_auto_rest_auth      => false
+  );
+
+  commit;
+end;
+/
+
+begin
+  ords.enable_object (
+    p_enabled      => true,
+    p_schema       => 'ORDERUSER',
+    p_object       => 'PLACE_ORDER_PLSQL',
+    p_object_type  => 'procedure',
+    p_object_alias => 'placeorder'
+  );
+
+  commit;
+end;
+/
