@@ -230,7 +230,8 @@ function write_defaults {
 		<properties>
 		<entry key="plsql.gateway.enabled">true</entry>
 		<entry key="jdbc.InitialLimit">10</entry>
-		<entry key="jdbc.MaxLimit">1200</entry>
+		<entry key="jdbc.MaxLimit">20</entry>
+    <entry key="jdbc.enableONS">false</entry>
 		<entry key="feature.sdw">false</entry>
 		<entry key="restEnabledSql.active">true</entry>
 		<entry key="database.api.enabled">false</entry>
