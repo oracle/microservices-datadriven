@@ -104,6 +104,37 @@ while ! state_done OCI_REGION; do
   state_set OCI_REGION "$OCI_REGION"
 done
 
+# Select Jenkins Deployment
+echo 'Jenkins Deployment Options'
+PS3='Please select Jenkins deployment type: '
+options=("Micro-Deployed Jenkins on Public VM" "Micro-deployed Jenkins on Private VM" "Oracle DevOps" "Cancel")
+select opt in "${options[@]}"
+do
+    case $opt in
+        "Micro-Deployed Jenkins on Public VM")
+            CONFIGURATION='MDPUBJ'
+            echo "You have selected Micro-Deployed Jenkins on Public VM"
+            break
+            ;;
+        "Micro-deployed Jenkins on Private VM")
+            CONFIGURATION='MDPRVJ'
+            echo "You have selected Micro-Deployed Jenkins on Private VM"
+            break
+            ;;
+        "Oracle DevOps")
+            CONFIGURATION='DEVOPS'
+            echo "You have selected Oracle DevOps service"
+            break
+            ;;
+        "Cancel")
+            break
+            ;;
+        *) echo "invalid option $REPLY";;
+    esac
+done
+state_set JENKINS_DEPLOYMENT $CONFIGURATION
+echo ""
+
 # Collect Jenkins password
 if ! is_secret_set JENKINS_PASSWORD; then
 
