@@ -13,5 +13,6 @@ variable deployment {
   description = "Type of Deployment deploying different Jenkins infrastrcuture configuration"
 }
 locals {
-  micro-deployment-public-jenkins : var.deployment == "MDPJ"
+  micro-deployment-public-jenkins : var.deployment == "MDPUBJ"
+  micro-deployment-private-jenkins : var.deployment == "MDPRVJ"
 }
