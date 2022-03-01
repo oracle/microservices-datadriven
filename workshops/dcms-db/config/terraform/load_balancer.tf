@@ -1,4 +1,4 @@
-# Copyright © 2020, Oracle and/or its affiliates. 
+# Copyright © 2020, Oracle and/or its affiliates.
 # All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
 resource "oci_load_balancer" "lb" {
@@ -24,13 +24,13 @@ resource "oci_load_balancer_backend_set" "lb_backend_set" {
     cookie_name = "*"
   }
   health_checker {
-    interval_ms         = "30000"
+    interval_ms         = "3000"
     port                = "8080"
     protocol            = "HTTP"
     response_body_regex = ""
     retries             = "3"
     return_code         = "200"
-    timeout_in_millis   = "3000"
+    timeout_in_millis   = "1000"
     url_path            = "/favicon.ico"
   }
 }
