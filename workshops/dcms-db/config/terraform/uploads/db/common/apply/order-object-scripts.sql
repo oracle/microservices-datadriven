@@ -243,7 +243,7 @@ begin
     p_enabled      => true,
     p_schema       => 'ORDERUSER',
     p_object       => 'PLACE_ORDER_PLSQL',
-    p_object_type  => 'procedure',
+    p_object_type  => 'PROCEDURE',
     p_object_alias => 'placeorder'
   );
 

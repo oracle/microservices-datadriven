@@ -231,7 +231,6 @@ function write_defaults {
 		<entry key="plsql.gateway.enabled">true</entry>
 		<entry key="jdbc.InitialLimit">10</entry>
 		<entry key="jdbc.MaxLimit">1200</entry>
-		<entry key="security.httpsHeaderCheck">X-Forwarded-Proto: https</entry>
 		<entry key="feature.sdw">false</entry>
 		<entry key="restEnabledSql.active">true</entry>
 		<entry key="database.api.enabled">false</entry>

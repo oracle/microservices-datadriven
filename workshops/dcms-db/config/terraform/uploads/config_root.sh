@@ -73,6 +73,8 @@ if [[ ${mystage} == "POST" ]]; then
 	java -jar -Xmx1024M /opt/oracle/ords/ords.war configdir /opt/oracle/ords/config
 
 	systemctl enable ords
-	systemctl restart ords
+#	systemctl restart ords
+	systemctl stop ords
+	systemctl start ords
 	systemctl restart firewalld
 fi
