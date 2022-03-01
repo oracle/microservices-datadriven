@@ -20,7 +20,6 @@ microservices complex.
 ## Resources
 
 * [Building Microservices with Oracle Converged Database Workshop][Workshop]
-* [On-Premises: Building Microservices with Oracle Converged Database Workshop][On-Premises-Workshop]
 * [Blogs][Blogs]
 
 
@@ -35,7 +34,5 @@ Licensed under the Universal Permissive License v 1.0 as shown at <https://oss.o
 [Workshops]: https://apexapps.oracle.com/pls/apex/dbpm/r/livelabs/livelabs-workshop-cards?p100_role=12&p100_focus_area=35&me=126
 [DRC]: https://developer.oracle.com
 [Helidon]: https://helidon.io
-[On-Premises-Workshop]: https://github.com/oracle/microservices-datadriven/tree/main/infra
 [Workshop]: https://bit.ly/simplifymicroservices
-[Blogs]: https://blogs.oracle.com/developers/category/dev-app-dev 
-
+[Blogs]: https://blogs.oracle.com/developers/category/dev-app-dev
