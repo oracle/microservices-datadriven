@@ -35,6 +35,4 @@ set_secret JENKINS_PRIVATE_KEY `terraform output -raw generated_ssh_private_key`
 
 # Write the output
 cat >$OUTPUT_FILE <<!
-export JENKINS_IP='$(state_get JENKINS_IP)'
-export JENKINS_PRIVATE_KEY='$(get_secret JENKINS_PRIVATE_KEY)'
 !

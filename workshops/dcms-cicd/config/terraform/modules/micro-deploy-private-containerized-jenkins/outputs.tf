@@ -1,4 +1,4 @@
-output jenkins_ip {
+output jenkins_public_ip {
   value = "http://${oci_core_public_ip.jenkins_public_ip.ip_address}/login"
 }
 
