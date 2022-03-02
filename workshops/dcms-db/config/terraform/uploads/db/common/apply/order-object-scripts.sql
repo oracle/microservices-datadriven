@@ -7,6 +7,7 @@ create or replace package order_collection
   authid current_user
 as
   procedure insert_order (in_order in json_object_t);
+  procedure get_order (in_order_id in varchar2, out_order out json_object_t);
   procedure create_collection;
   procedure drop_collection;
 end order_collection;
@@ -33,10 +34,21 @@ as
   begin
     -- write the order object
     order_doc := soda_document_t(in_order.get_string('orderid'), in_order.to_blob);
-    dbms_output.put_line(in_order.get_string('orderid'));
     collection := get_collection;
     status := collection.insert_one(order_doc);
   end insert_order;
+
+  procedure get_order (in_order_id in varchar2, out_order out json_object_t)
+  is
+    order_doc   soda_document_t;
+    status      number;
+    collection  soda_collection_t;
+  begin
+    -- write the order object
+    collection := get_collection;
+    order_doc := collection.find().key(in_order_id).get_one;
+    out_order := json_object_t(order_doc.get_blob);
+  end get_order;
 
   procedure create_collection
   is
@@ -129,6 +141,37 @@ begin
 
   -- commit
   commit;
+
+exception
+   when others then
+     rollback;
+     raise;
+
+end;
+/
+show errors
+
+-- get order in PL/SQL
+create or replace procedure get_order_plsql (
+  orderid in out varchar2,
+  itemid out varchar2,
+  deliverylocation out varchar2,
+  status out varchar2,
+  inventorylocation out varchar2,
+  suggestivesale out varchar2)
+  authid current_user
+is
+  order_jo json_object_t;
+begin
+
+  -- insert the order object
+  order_collection.get_order(orderid, order_jo);
+
+  itemid :=            order_jo.get('itemid');
+  deliverylocation :=  order_jo.get('deliverylocation');
+  status :=            order_jo.get('status');
+  inventorylocation := order_jo.get('inventorylocation');
+  suggestivesale :=    order_jo.get('suggestivesale');
 
 exception
    when others then
@@ -245,6 +288,19 @@ begin
     p_object       => 'PLACE_ORDER_PLSQL',
     p_object_type  => 'PROCEDURE',
     p_object_alias => 'placeorder'
+  );
+
+  commit;
+end;
+/
+
+begin
+  ords.enable_object (
+    p_enabled      => true,
+    p_schema       => 'ORDERUSER',
+    p_object       => 'GET_ORDER_PLSQL',
+    p_object_type  => 'PROCEDURE',
+    p_object_alias => 'getorder'
   );
 
   commit;

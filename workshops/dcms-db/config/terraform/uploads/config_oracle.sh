@@ -86,7 +86,7 @@ function run_sql {
 	typeset -r _DBNAME=$2
 	typeset -r _SQL=$3
 
-	echo "Connnecting to ${_DBNAME}_TP (TNS_ADMIN=$TNS_ADMIN)"
+	echo "Connecting to ${_DBNAME}_TP (TNS_ADMIN=$TNS_ADMIN)"
 	sqlplus -s /nolog <<-EOSQL
 		connect ADMIN/${_PASS}@${_DBNAME}_TP
 		set serveroutput on size 99999 feedback off timing on linesize 180 echo on

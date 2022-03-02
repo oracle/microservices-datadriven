@@ -151,6 +151,7 @@ locals {
 locals {
   is_always_free       = var.size != "ALF" ? false : true
   adb_private_endpoint = var.size != "ALF" ? true  : false
-  compute_shape        = var.size != "ALF" ? "VM.Standard.E3.Flex" : "VM.Standard.E2.1.Micro"
+#  compute_shape        = var.size != "ALF" ? "VM.Standard.E3.Flex" : "VM.Standard.E2.1.Micro"
+  compute_shape        = var.size != "ALF" ? "VM.Standard.E3.Flex" : "VM.Standard.E3.Flex"
   is_flexible_shape    = contains(local.compute_flexible_shapes, local.compute_shape)
 }
