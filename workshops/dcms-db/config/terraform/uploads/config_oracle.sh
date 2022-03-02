@@ -266,25 +266,16 @@ function write_standalone_properties {
 	return ${_RC}
 }
 
-function write_index {
+function copy_app {
 	typeset -i _RC=0
-	typeset -r _FILE="index.html"
 	typeset -r _DIR=$1
 
 	#Ensure the webroot exists for CertBot/LetsEncrypt purposes
 	#Add a redirect index to the DEFAULT application
 	mkdir -p ${_DIR}
 
-	cat > ${_DIR}/${_FILE} <<- EOF
-		<!DOCTYPE HTML>
-		<meta charset="UTF-8">
-		<meta http-equiv="refresh" content="1; url=./ords/f?p=DEFAULT">
-		<script>
-		window.location.href = "./ords/f?p=DEFAULT"
-		</script>
-		<title>Page Redirection</title>
-		If you are not redirected automatically, follow this <a href='./ords/f?p=DEFAULT"'>link</a>
-	EOF
+	cp -r /tmp/uploads/web/* ${_DIR}
+
 	return ${_RC}
 }
 
@@ -342,12 +333,11 @@ write_defaults "${ords_dir}/config/ords"
 RC=$(( RC + $? ))
 
 standalone_root="${ords_dir}/config/ords/standalone/web"
-cp -r /tmp/uploads/web/* $standalone_root
 
 write_standalone_properties "${ords_dir}/config/ords/standalone" "${apex_version}" 'ords' "${standalone_root}"
 RC=$(( RC + $? ))
 
-write_index "${standalone_root}"
+copy_app "${standalone_root}"
 
 # Debugging Startup
 cat > /opt/oracle/ords/mylogfile.properties <<'!'

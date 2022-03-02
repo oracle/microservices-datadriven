@@ -97,4 +97,8 @@ while true; do
   sleep "${1-10}"
 done
 
+echo "Grabdish URL: https://$(state_get LB_ADDRESS)"
+echo "ORDS Instance access:"
+echo "ssh -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS)"
+
 exit 0
