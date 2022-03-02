@@ -8,6 +8,7 @@ create or replace package order_collection
 as
   procedure insert_order (in_order in json_object_t);
   procedure get_order (in_order_id in varchar2, out_order out json_object_t);
+  procedure delete_all_orders ();
   procedure create_collection;
   procedure drop_collection;
 end order_collection;
@@ -50,12 +51,20 @@ as
     out_order := json_object_t(order_doc.get_blob);
   end get_order;
 
+  procedure delete_all_orders ()
+  is
+    status      number;
+    collection  soda_collection_t;
+  begin
+    -- write the order object
+    collection := get_collection;
+    status := collection.truncate;
+  end delete_all_orders;
+
   procedure create_collection
   is
     collection  soda_collection_t;
   begin
-  dbms_output.put_line(collection_name || ' ' || collection_metadata);
-
     collection := dbms_soda.create_collection(collection_name => collection_name, metadata => collection_metadata);
   end create_collection;
 
@@ -172,6 +181,29 @@ begin
   status :=            order_jo.get('status');
   inventorylocation := order_jo.get('inventorylocation');
   suggestivesale :=    order_jo.get('suggestivesale');
+
+exception
+   when others then
+     rollback;
+     raise;
+
+end;
+/
+show errors
+
+
+-- Delete all orders in PL/SQL
+create or replace procedure delete_all_orders_plsql ()
+  authid current_user
+is
+  order_jo json_object_t;
+begin
+
+  -- insert the order object
+  order_collection.delete_all_orders;
+
+  -- commit
+  commit;
 
 exception
    when others then
@@ -301,6 +333,19 @@ begin
     p_object       => 'GET_ORDER_PLSQL',
     p_object_type  => 'PROCEDURE',
     p_object_alias => 'getorder'
+  );
+
+  commit;
+end;
+/
+
+begin
+  ords.enable_object (
+    p_enabled      => true,
+    p_schema       => 'ORDERUSER',
+    p_object       => 'DELETE_ALL_ORDERS_PLSQL',
+    p_object_type  => 'PROCEDURE',
+    p_object_alias => 'deleteallorders'
   );
 
   commit;

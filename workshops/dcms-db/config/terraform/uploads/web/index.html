@@ -99,7 +99,7 @@
               <!-- Each Lab's UI is defined by a section in the switcher here
                  This in turn is controlled by the selected task in the navigation  -->
               <oj-switcher value="[[selectedTask]]">
-                <!-- 
+                <!--
                 <div slot="lab7">
                   <oj-button disabled="[[inProgress]]" on-oj-action="[[lab7TestDatasourcesAction]]">Test Data Sources</oj-button>
                 </div>
@@ -121,9 +121,9 @@
                   <oj-form-layout>
                     <table style="width:100%">
                       <tr>
-                        <th><img src="/sushi" alt="sushi" width="50" height="50"></th>
-                        <th><img src="/pizza" alt="pizza" width="50" height="50"></th>
-                        <th><img src="/burger" alt="burger" width="50" height="50"></th>
+                        <th><img src="/images/sushi" alt="sushi" width="50" height="50"></th>
+                        <th><img src="/images/pizza" alt="pizza" width="50" height="50"></th>
+                        <th><img src="/images/burger" alt="burger" width="50" height="50"></th>
                       </tr>
                     </table>
 
@@ -144,13 +144,6 @@
                   <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9AddInventoryAction]]">Add Inventory</oj-button>
                   <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9RemoveInventoryAction]]">Remove Inventory</oj-button>
                   <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9GetInventoryAction]]">Get Inventory</oj-button>
-                  <br><br>
-                  <br>Transactional Exactly-Once Message Delivery Tests...
-                  <br>
-                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterInsertAction]]">Crash Order service after Order is inserted (before Order message is sent to Inventory service)</oj-button>
-                  <br><oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterOrderMessageReceivedAction]]">Crash Inventory service after Order message is received (before inventory for order is checked)</oj-button>
-                  <br><oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterOrderMessageProcessedAction]]">Crash Inventory service after inventory for order is checked (before Inventory status message is sent)</oj-button>
-                  <br><oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterInventoryMessageReceivedAction]]">Crash Order service after Inventory message is received (before Order status is updated)</oj-button>
                 </div>
                 <!-- lab10 -->
                 <div slot="lab10">
@@ -248,11 +241,11 @@
       'ojs/ojswitcher',
       'ojs/ojformlayout',
       'ojs/ojinputtext',
-      'ojs/ojinputnumber',  
+      'ojs/ojinputnumber',
       'https://elocation.oracle.com/elocation/jslib/oracleelocationv3.3.js',
-      'ojs/ojlistview', 
-      'ojs/ojavatar', 
-      'ojs/ojtrain', 
+      'ojs/ojlistview',
+      'ojs/ojavatar',
+      'ojs/ojtrain',
       'ojs/ojaccordion',
       'oj-spatial-map/loader'],
       function (Bootstrap, ko, ResponsiveUtils, ResponsiveKnockoutUtils, ArrayDataProvider, grubSourceData, NumberConverter) {
@@ -491,11 +484,9 @@
           this.lab9PlaceOrderAction = function (event, vm) {
             vm.inProgress(true);
             var order = {
-              serviceName: 'order',
-              commandName: 'placeOrder',
-              orderId: Number.parseInt(vm.lab9OrderId()),
-              orderItem: vm.lab9Food(),
-              deliverTo: vm.lab9DeliverTo()
+              orderid: Number.parseInt(vm.lab9OrderId()),
+              itemid: vm.lab9Food(),
+              deliverylocation: vm.lab9DeliverTo()
             };
             var fetchOptions = {
               method: 'POST',
@@ -503,7 +494,7 @@
               body: JSON.stringify(order)
             };
 
-            fetch('/placeorder', fetchOptions).then(fetchResult => {
+            fetch('/ords/order/placeorder', fetchOptions).then(fetchResult => {
               vm.httpCode(fetchResult.status);
               fetchResult.json().then(payload => {
                 vm.labResult(JSON.stringify(payload, null, 2));
@@ -515,11 +506,7 @@
           this.lab9DeleteAllOrdersAction = function (event, vm) {
             vm.inProgress(true);
             var order = {
-              serviceName: 'order',
-              commandName: 'deleteallorders',
-              orderId: -1,
-              orderItem: '',
-              deliverTo: ''
+              orderid: -1
             };
             var fetchOptions = {
               method: 'POST',
@@ -527,7 +514,7 @@
               body: JSON.stringify(order)
             };
 
-            fetch('/command', fetchOptions).then(fetchResult => {
+            fetch('/ords/order/deleteallorders', fetchOptions).then(fetchResult => {
               vm.httpCode(fetchResult.status);
               fetchResult.json().then(payload => {
                 vm.labResult(JSON.stringify(payload, null, 2));
@@ -539,11 +526,7 @@
           this.lab9ShowOrderAction = function (event, vm) {
             vm.inProgress(true);
             var order = {
-              serviceName: 'order',
-              commandName: 'showorder',
-              orderId: Number.parseInt(vm.lab9OrderId()),
-              orderItem: '',
-              deliverTo: ''
+              orderid: Number.parseInt(vm.lab9OrderId())
             };
             var fetchOptions = {
               method: 'POST',
@@ -551,7 +534,7 @@
               body: JSON.stringify(order)
             };
 
-            fetch('/command', fetchOptions).then(fetchResult => {
+            fetch('/ords/order/showorder', fetchOptions).then(fetchResult => {
               vm.httpCode(fetchResult.status);
               fetchResult.json().then(payload => {
                 vm.labResult(JSON.stringify(payload, null, 2));
