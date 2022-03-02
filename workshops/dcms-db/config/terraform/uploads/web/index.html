@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<!--
+ Copyright (c) 2019, 2020, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+ -->
+
+<html lang="en-us">
+
+<head>
+  <title>GrabDish</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://static.oracle.com/cdn/jet/9.0.0/default/css/redwood/oj-redwood-min.css"
+    id="css" />
+  <link rel="stylesheet" href="/styles" id="css" />
+  <link rel="icon" href="css/images/favicon.ico" type="image/x-icon" />
+
+  <!-- This is the main css file for the default Alta theme -->
+  <!-- injector:theme -->
+  <link rel="stylesheet" href="css/alta/9.2.0/web/alta.css" id="css" />
+  <!-- endinjector -->
+  <!-- This contains icon fonts used by the starter template -->
+  <link rel="stylesheet" href="css/demo-alta-site-min.css" type="text/css" />
+  <!-- This points to the Oracle universal theme icon font -->
+  <link type="text/css" rel="stylesheet"
+    href="https://static.oracle.com/cdn/apex/18.2.0.00.12/libraries/font-apex/2.1/css/font-apex.min.css">
+
+  <!-- This is where you would add any app specific styling -->
+  <link rel="stylesheet" href="css/app.css" type="text/css" />
+  <style>
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 12px 30px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+.button1 {
+  background-color: white;
+  color: black;
+  border: 2px solid #e7e7e7; color: black;
+}
+</style>
+</head>
+
+<body class="oj-web-applayout-body">
+  <div id="globalBody" class="oj-web-applayout-page">
+    <div class="headerUnderlay">
+      <header role="banner" class="oj-web-applayout-header">
+        <div class="oj-flex-bar oj-sm-align-items-center">
+          <div class="oj-flex-bar-middle oj-sm-align-items-baseline">
+            <span role="img" class="logo" title="Oracle Logo" alt="Oracle Logo"></span>
+            <h1 class="oj-sm-only-hide oj-web-applayout-header-title" title="Application Name">
+              GrabDish Explorer
+            </h1>
+          </div>
+        </div>
+        <div class="oj-flex-bar">
+          <div class="oj-flex-bar-middle oj-sm-align-items-baseline">
+            <p class="oj-text-color-secondary oj-typography-subheading-xs">Data-driven Microservices with
+              converged Oracle Database</p>
+          </div>
+        </div>
+      </header>
+    </div>
+    <div role="main" class="oj-web-applayout-content oj-flex-bar">
+      <div class="oj-flex-bar-start oj-flex oj-sm-flex-direction-column oj-bg-neutral-20">
+        <p class="oj-typography-heading-sm">Labs</p>
+        <oj-navigation-list class="oj-navigationlist-item-text-wrap oj-flex-item" data="[[tasks]]"
+          selection="{{selectedTask}}" style="min-width:20rem;">
+          <template slot="itemTemplate" data-oj-as="task">
+            <li :id="[[task.data.id]]">
+              <a href="#">
+                <oj-bind-text value="[[task.data.label]]"> </oj-bind-text>
+              </a>
+            </li>
+          </template>
+        </oj-navigation-list>
+      </div>
+      <div class="oj-flex-bar-middle oj-sm-padding-4x-horizontal">
+        <div class="oj-flex oj-sm-flex-direction-column oj-web-applayout-max-width">
+          <div>
+            <p class="oj-typography-heading-sm">
+              <oj-bind-text value="[[menuTasks.get(selectedTask()).title]]"></oj-bind-text>
+            </p>
+          </div>
+          <div>
+            <p class="oj-typography-body-sm">
+              <oj-bind-text value="[[menuTasks.get(selectedTask()).description]]"></oj-bind-text>
+            </p>
+          </div>
+
+          <oj-bind-if test="[[selectedTask() !=='about']]">
+            <div class="oj-panel oj-bg-neutral-0 labPanel  oj-flex-item">
+              <!-- Each Lab's UI is defined by a section in the switcher here
+                 This in turn is controlled by the selected task in the navigation  -->
+              <oj-switcher value="[[selectedTask]]">
+                <!-- 
+                <div slot="lab7">
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab7TestDatasourcesAction]]">Test Data Sources</oj-button>
+                </div>
+                <div slot="lab8">
+                  Setup...<br><br>
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab8CreateUsersAction]]">Create Users</oj-button>
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab8CreateInventoryTableAction]]">Create Inventory Table</oj-button>
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab8CreateDatabaseLinksAction]]">Create Database Links</oj-button>
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab8SetupTablesQueuesAndPropagationAction]]">Setup Tables Queues and Propagation</oj-button>
+                  <br><br><br><br>
+                  Teardown and other admin...<br><br>
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab8EnablePropagationAction]]">Enable Propagation</oj-button>
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab8UnschedulePropagationAction]]">Unschedule Propagation</oj-button>
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab8DeleteUsersAction]]">Delete Users</oj-button>
+                </div>
+                -->
+                <!-- lab9 -->
+                <div slot="lab9">
+                  <oj-form-layout>
+                    <table style="width:100%">
+                      <tr>
+                        <th><img src="/sushi" alt="sushi" width="50" height="50"></th>
+                        <th><img src="/pizza" alt="pizza" width="50" height="50"></th>
+                        <th><img src="/burger" alt="burger" width="50" height="50"></th>
+                      </tr>
+                    </table>
+
+                    <oj-input-text label-hint="Food" value="{{lab9Food}}"></oj-input-text>
+                    <oj-input-text label-hint="Deliver to" value="{{lab9DeliverTo}}"></oj-input-text>
+                    <oj-input-text label-hint="Order ID" value="{{lab9OrderId}}"></oj-input-text>
+                  </oj-form-layout>
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9DeleteAllOrdersAction]]">Delete All Orders</oj-button>
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9PlaceOrderAction]]">Place Order</oj-button>
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9ShowOrderAction]]">Show Order</oj-button>
+                  <oj-button onclick="window.open('/spatial');">Spatial</oj-button>
+                  <br><br>
+                  <br>Supplier/Inventory Admin...
+                  <br>
+                  <oj-form-layout>
+                    <oj-input-text label-hint="Item" value="{{lab9Item}}"></oj-input-text>
+                  </oj-form-layout>
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9AddInventoryAction]]">Add Inventory</oj-button>
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9RemoveInventoryAction]]">Remove Inventory</oj-button>
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9GetInventoryAction]]">Get Inventory</oj-button>
+                  <br><br>
+                  <br>Transactional Exactly-Once Message Delivery Tests...
+                  <br>
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterInsertAction]]">Crash Order service after Order is inserted (before Order message is sent to Inventory service)</oj-button>
+                  <br><oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterOrderMessageReceivedAction]]">Crash Inventory service after Order message is received (before inventory for order is checked)</oj-button>
+                  <br><oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterOrderMessageProcessedAction]]">Crash Inventory service after inventory for order is checked (before Inventory status message is sent)</oj-button>
+                  <br><oj-button disabled="[[inProgress]]" on-oj-action="[[lab11CrashAfterInventoryMessageReceivedAction]]">Crash Order service after Inventory message is received (before Order status is updated)</oj-button>
+                </div>
+                <!-- lab10 -->
+                <div slot="lab10">
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab10ShowOpenAPIAction]]">Show OpenAPI/Swagger</oj-button>
+                  <br><br>
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab10ShowMetricsAction]]">Show Metrics</oj-button>
+                  <br><br>
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab10healthliveAction]]">Show Health: Liveness</oj-button>
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab10healthreadyAction]]">Show Health: Readiness</oj-button>
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab10ordersetlivenesstofalseAction]]">Set Liveness to False</oj-button>
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab10lastContainerStartTimeAction]]">Get Last Container Start Time</oj-button>
+                  <br><br>
+                </div>
+              </oj-switcher>
+            </div>
+            <oj-bind-if test="[[httpCode() && httpCode() > 0]]">
+              <div class="responsePanel oj-flex-item">
+                <p class="oj-typography-body-xs">HTTP Response: <span>
+                    <oj-bind-text value="[[httpCode()]]"></oj-bind-text>
+                  </span></p>
+              </div>
+            </oj-bind-if>
+            <oj-bind-if test="[[labResult() && labResult().length > 0]]">
+              <div class="oj-panel oj-bg-neutral-1 resultsPanel oj-flex-item">
+                <p class="oj-typography-heading-sm">Result</p>
+                <code><pre><oj-bind-text value="[[labResult()]]"></oj-bind-text></pre></code>
+              </div>
+            </oj-bind-if>
+          </oj-bind-if>
+        </div>
+      </div>
+    </div>
+    <footer class="oj-web-applayout-footer" role="contentinfo">
+      <div class="oj-web-applayout-footer-item">
+        <ul>
+          <oj-bind-for-each data="[[footerLinks]]">
+            <template>
+              <li>
+                <a :id="[[$current.data.linkId]]" :href="[[$current.data.linkTarget]]">
+                  <oj-bind-text value="[[$current.data.name]]"></oj-bind-text>
+                </a>
+              </li>
+            </template>
+          </oj-bind-for-each>
+        </ul>
+      </div>
+      <div class="oj-web-applayout-footer-item oj-text-secondary-color oj-text-sm">
+        Copyright © 2021 Oracle and/or its affiliates All rights reserved.
+      </div>
+    </footer>
+  </div>
+
+  <script src="https://static.oracle.com/cdn/jet/9.0.0/3rdparty/require/require.js"></script>
+  <script type="text/javascript" src="https://static.oracle.com/cdn/jet/9.0.0/default/js/bundles-config.js"></script>
+  <script>
+
+    (function () {
+      requirejs.config({
+        baseUrl: "js",
+        paths: {
+          knockout: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/knockout/knockout-3.5.1",
+          jquery: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/jquery/jquery-3.5.1.min",
+          "jqueryui-amd": "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/jquery/jqueryui-amd-1.12.1.min",
+          promise: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/es6-promise/es6-promise.min",
+          hammerjs: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/hammer/hammer-2.0.8.min",
+          ojdnd: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/dnd-polyfill/dnd-polyfill-1.0.2.min",
+          ojL10n: "libs/oj/v9.0.0/ojL10n",
+          persist: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/persist/min",
+          text: "libs/require/text",
+          signals: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/js-signals/signals.min",
+          touchr: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/touchr/touchr",
+          "regenerator-runtime": "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/regenerator-runtime/runtime",
+          corejs: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/corejs/shim.min",
+          customElements: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/webcomponents/custom-elements.min",
+          proj4: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/proj4js/dist/proj4"
+        }
+      })
+    }());
+
+    /**
+     * Ensure that any JET components that are needed are imported here
+     */
+    require(['ojs/ojbootstrap',
+      'knockout',
+      'ojs/ojresponsiveutils',
+      'ojs/ojresponsiveknockoututils',
+      'ojs/ojarraydataprovider',
+      'text!data/grub.json',
+      'ojs/ojconverter-number',
+      'ojs/ojknockout',
+      'ojs/ojbutton',
+      'ojs/ojtoolbar',
+      'ojs/ojmenu',
+      'ojs/ojnavigationlist',
+      'ojs/ojswitcher',
+      'ojs/ojformlayout',
+      'ojs/ojinputtext',
+      'ojs/ojinputnumber',  
+      'https://elocation.oracle.com/elocation/jslib/oracleelocationv3.3.js',
+      'ojs/ojlistview', 
+      'ojs/ojavatar', 
+      'ojs/ojtrain', 
+      'ojs/ojaccordion',
+      'oj-spatial-map/loader'],
+      function (Bootstrap, ko, ResponsiveUtils, ResponsiveKnockoutUtils, ArrayDataProvider, grubSourceData, NumberConverter) {
+
+        function ControllerViewModel() {
+          // Media queries for repsonsive layouts
+          const smQuery = ResponsiveUtils.getFrameworkQuery(ResponsiveUtils.FRAMEWORK_QUERY_KEY.SM_ONLY);
+          this.smScreen = ResponsiveKnockoutUtils.createMediaQueryObservable(smQuery);
+
+          //Hold the results of the last call
+          this.labResult = ko.observable();
+          this.httpCode = ko.observable();
+
+
+          // Screen Control
+          this.selectedTask = ko.observable('about');
+          this.selectedTask.subscribe(function () { this.labResult(null) }.bind(this));
+
+          // This map controls the available options in the navigation menu - add new options here
+          // Key for the map matches the slot name used in the switcher
+          this.menuTasks = new Map();
+          this.menuTasks.set('about', { label: 'About', title: 'About the GrabDish Explorer', description: 'The GrabDish Explorer screen allows you to test the results of each lab.  Simply click the tab on the left that corresponds to the lab that you want to test out and follow the on-screen instructions.' });
+//          this.menuTasks.set('lab7', { label: 'Datasources', title: 'Datasources', description: 'Verify that the Datasources are all working' });
+//          this.menuTasks.set('lab8', { label: 'Setup (and Tear Down) Data and Messaging', title: 'Setup (and Tear Down) Data and Messaging', description: 'This lab sets up data and messaging in the database' });
+          this.menuTasks.set('lab9', { label: 'Transactional', title: 'Transactional', description: 'JSON and relational data types, AQ transactional event-driven communication, saga, event sourcing, and CQRS' });
+          this.menuTasks.set('lab10', { label: 'OpenAPI, Metrics, and Health', title: 'OpenAPI, Metrics, and Health', description: 'Use Helidon features to provide OpenAPI, tracing, metrics, and health checks' });
+
+          //Drives the navigation list itself
+          this.tasks = new ArrayDataProvider(Array.from(this.menuTasks.entries()).map(entry => { entry[1].id = entry[0]; return entry[1]; }), { keyAttributes: 'id' });
+
+          this.inProgress = ko.observable(false);
+
+          // Function calls and state relating to given labs
+
+          // Lab 7. ----------------------------------------------------------- //
+          this.lab7TestDatasourcesAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'admin',
+              commandName: 'testdatasources',
+              orderId: -1,
+              orderItem: vm.lab9Food(),
+              deliverTo: vm.lab9DeliverTo()
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          };
+
+
+      // Lab 8. ----------------------------------------------------------- //
+          this.lab8CreateUsersAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'admin',
+              commandName: 'createUsers',
+              orderId: -1,
+              orderItem: vm.lab9Food(),
+              deliverTo: vm.lab9DeliverTo()
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          this.lab8CreateInventoryTableAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'admin',
+              commandName: 'createInventoryTable',
+              orderId: -1,
+              orderItem: vm.lab9Food(),
+              deliverTo: vm.lab9DeliverTo()
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          this.lab8CreateDatabaseLinksAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'admin',
+              commandName: 'createDBLinks',
+              orderId: -1,
+              orderItem: vm.lab9Food(),
+              deliverTo: vm.lab9DeliverTo()
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          this.lab8SetupTablesQueuesAndPropagationAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'admin',
+              commandName: 'setupTablesQueuesAndPropagation',
+              orderId: -1,
+              orderItem: vm.lab9Food(),
+              deliverTo: vm.lab9DeliverTo()
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          this.lab8EnablePropagationAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'admin',
+              commandName: 'enablePropagation',
+              orderId: -1,
+              orderItem: vm.lab9Food(),
+              deliverTo: vm.lab9DeliverTo()
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          this.lab8UnschedulePropagationAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'admin',
+              commandName: 'unschedulePropagation',
+              orderId: -1,
+              orderItem: vm.lab9Food(),
+              deliverTo: vm.lab9DeliverTo()
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          this.lab8DeleteUsersAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'admin',
+              commandName: 'deleteUsers',
+              orderId: -1,
+              orderItem: vm.lab9Food(),
+              deliverTo: vm.lab9DeliverTo()
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          // Lab 9. ----------------------------------------------------------- //
+          this.lab9Food = ko.observable('sushi');
+          this.lab9OrderId = ko.observable(66);
+          this.lab9DeliverTo = ko.observable('780 PANORAMA DR,San Francisco,CA');
+          this.lab9Item = ko.observable('sushi');
+
+          this.lab9PlaceOrderAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'order',
+              commandName: 'placeOrder',
+              orderId: Number.parseInt(vm.lab9OrderId()),
+              orderItem: vm.lab9Food(),
+              deliverTo: vm.lab9DeliverTo()
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/placeorder', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          }
+
+          this.lab9DeleteAllOrdersAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'order',
+              commandName: 'deleteallorders',
+              orderId: -1,
+              orderItem: '',
+              deliverTo: ''
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          }
+
+          this.lab9ShowOrderAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'order',
+              commandName: 'showorder',
+              orderId: Number.parseInt(vm.lab9OrderId()),
+              orderItem: '',
+              deliverTo: ''
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          }
+
+          // supplier service
+
+          this.lab9AddInventoryAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'supplier',
+              commandName: 'addInventory',
+              orderId: -1,
+              orderItem: vm.lab9Item(),
+              deliverTo: ''
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          }
+
+          this.lab9RemoveInventoryAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'supplier',
+              commandName: 'removeInventory',
+              orderId: -1,
+              orderItem: vm.lab9Item(),
+              deliverTo: ''
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          }
+
+          this.lab9GetInventoryAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'supplier',
+              commandName: 'getInventory',
+              orderId: -1,
+              orderItem: vm.lab9Item(),
+              deliverTo: ''
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          }
+
+          // Lab 10. ----------------------------------------------------------- //
+
+          this.lab10ShowOpenAPIAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'order',
+              commandName: 'openapi',
+              orderId: -1,
+              orderItem: '',
+              deliverTo: ''
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/openAPI', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.text().then(payload => {
+                vm.labResult(payload);
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          this.lab10ShowMetricsAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'order',
+              commandName: 'metrics',
+              orderId: -1,
+              orderItem: '',
+              deliverTo: ''
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/getmetrics', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.text().then(payload => {
+                vm.labResult(payload);
+                vm.inProgress(false);
+              });
+            });
+          };
+
+
+          this.lab10healthliveAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'order',
+              commandName: 'health/live',
+              orderId: -1,
+              orderItem: '',
+              deliverTo: ''
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          this.lab10healthreadyAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'order',
+              commandName: 'health/ready',
+              orderId: -1,
+              orderItem: '',
+              deliverTo: ''
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          this.lab10ordersetlivenesstofalseAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'order',
+              commandName: 'ordersetlivenesstofalse',
+              orderId: -1,
+              orderItem: '',
+              deliverTo: ''
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          this.lab10lastContainerStartTimeAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'order',
+              commandName: 'lastContainerStartTime',
+              orderId: -1,
+              orderItem: '',
+              deliverTo: ''
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          this.lab10ShowTracingAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'jaeger',
+              commandName: '',
+              orderId: -1,
+              orderItem: '',
+              deliverTo: ''
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          };
+
+
+          // Lab 11. ---------Transaction crash tests including MongoDB, Kafka, Postgres version---- //
+
+
+          this.lab11CrashAfterInsertAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'order',
+              commandName: 'crashAfterInsert',
+              orderId: -1,
+              orderItem: '',
+              deliverTo: ''
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.text().then(payload => {
+                vm.labResult(payload);
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          this.lab11CrashAfterOrderMessageReceivedAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'inventory',
+              commandName: 'crashAfterOrderMessageReceived',
+              orderId: -1,
+              orderItem: '',
+              deliverTo: ''
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.text().then(payload => {
+                vm.labResult(payload);
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          this.lab11CrashAfterOrderMessageProcessedAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'inventory',
+              commandName: 'crashAfterOrderMessageProcessed',
+              orderId: -1,
+              orderItem: '',
+              deliverTo: ''
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.text().then(payload => {
+                vm.labResult(payload);
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          this.lab11CrashAfterInventoryMessageReceivedAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              serviceName: 'order',
+              commandName: 'crashAfterInventoryMessageReceived',
+              orderId: -1,
+              orderItem: '',
+              deliverTo: ''
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/command', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.text().then(payload => {
+                vm.labResult(payload);
+                vm.inProgress(false);
+              });
+            });
+          };
+
+
+          // Footer
+          this.footerLinks = [
+            { name: 'About Oracle', linkId: 'aboutOracle', linkTarget: 'http://www.oracle.com/us/corporate/index.html#menu-about' },
+            { name: "Contact Us", id: "contactUs", linkTarget: "http://www.oracle.com/us/corporate/contact/index.html" },
+            { name: "Legal Notices", id: "legalNotices", linkTarget: "http://www.oracle.com/us/legal/index.html" },
+            { name: "Terms Of Use", id: "termsOfUse", linkTarget: "http://www.oracle.com/us/legal/terms/index.html" },
+            { name: "Your Privacy Rights", id: "yourPrivacyRights", linkTarget: "http://www.oracle.com/us/legal/privacy/index.html" },
+          ];
+        }
+
+        Bootstrap.whenDocumentReady().then(
+          function () {
+            var app = new ControllerViewModel();
+            ko.applyBindings(app, document.getElementById('globalBody'));
+          }
+        );
+      }
+    );
+
+  </script>
+</body>
+
+</html>

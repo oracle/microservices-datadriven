@@ -44,10 +44,14 @@ if ! terraform apply -auto-approve; then
     exit 1
 fi
 
-# Get the OKE_OCID
+# Get the load balancer public IP
 state_set LB_ADDRESS `terraform output -raw lb_address`
+
+# Get the ORDS instance public IP
+state_set ORDS_ADDRESS `terraform output -raw ords_address`
 
 # Write the output
 cat >$OUTPUT_FILE <<!
 export LB_ADDRESS='$(state_get LB_ADDRESS)'
+export ORDS_ADDRESS='$(state_get ORDS_ADDRESS)'
 !

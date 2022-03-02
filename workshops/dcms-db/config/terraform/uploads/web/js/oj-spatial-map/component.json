@@ -1,0 +1,108 @@
+{
+    "name": "oj-spatial-map",
+    "displayName":"Oracle Spatial Map Component",
+    "description": "A basic standalone Oracle JET web component for displaying customer data on a map.",
+    "version": "0.0.4",
+    "jetVersion": ">=8.1.0 <10.0.0",
+    "icon": {
+      "iconPath": "extension/images/cca-maps.svg",
+      "selectedIconPath": "extension/images/cca-maps.svg",
+      "hoverIconPath": "extension/images/cca-maps-ovr.svg"
+    },
+    "properties": {     
+        "center":{
+          "displayName":"Center point of the map",
+            "description": "The center point of the map defined by longitude and latitude sub-properties",
+            "propertyGroup":"common",
+            "writeback" : true,
+            "properties":{
+              "longitude" : {
+                "displayName":"Center on longitude",
+                "description": "The longitude of the initial map center",
+                "type": "number",
+                "value":0,
+                "minimum":-180,
+                "maximum":180                
+              },
+              "latitude" : {
+                "displayName":"Center on latitude",
+                "description": "The latitude of the initial map center",
+                "type": "number",
+                "value":0,
+                "minimum":-90,
+                "maximum":90                
+              }                
+            }
+        },
+        "zoomLevel": {
+            "displayName":"Zoom level",
+            "description": "The initial map zoom level. 0 for world wide map",
+            "propertyGroup":"common",
+            "type": "number",
+            "writeback" : true,
+            "value":0, 
+            "minimum":0,
+            "maximum":22
+        },
+        "basemap": {
+            "displayName":"Base map",
+            "description": "The name of the basemap",
+            "propertyGroup":"common",
+            "type": "string",
+            "enumValues":["default","osm_bright","osm_positron","osm_darkmatter"],
+            "value":"default"
+        },
+        "dataset" : {
+            "displayName":"Data set",
+            "description": "If specified, defines the initial dataset to be displayed",
+            "propertyGroup":"data",
+            "type": "Object"
+        }
+    },
+    "methods": {
+        "addDataset" : {
+            "displayName":"Add data set",
+            "description": "A function that adds a new dataset to the map.",
+            "params": [
+                {
+                    "description": "The definition of the dataset",
+                    "name": "dataset",
+                    "type": "Object"
+                }
+            ]
+        },
+
+        "removeDataset": {
+            "displayName":"Remove data set",
+            "description": "A function that removes an existing dataset from the map.",
+            "params": [
+                {
+                    "description": "the unique name of the dataset to remove",
+                    "name": "name",
+                    "type": "string"
+                }
+            ]
+        },
+
+        "removeAllDatasets" : {
+            "displayName":"Remove all data sets",
+            "description": "A function that removes all datasets from the map.",
+            "params" : [
+            ]        
+        }
+    },
+  "extension": {
+    "catalog": {
+      "category": "Oracle Spatial",
+      "tags": [
+        "VBCS"
+      ],
+      "coverImage": "extension/images/cca-maps.svg",
+      "screenshots": {
+            "0": "extension/images/basic-map.jpg",
+            "1": "extension/images/route-and-directions.jpg",
+            "2": "extension/images/dark-map.jpg"
+        }
+    }
+  }    
+}

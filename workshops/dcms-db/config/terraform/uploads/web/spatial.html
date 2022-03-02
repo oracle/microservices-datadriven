@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<!--
+ Copyright (c) 2019, 2020, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+ -->
+
+<html lang="en-us">
+
+<head>
+    <title>GrabDish</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://static.oracle.com/cdn/jet/9.0.0/default/css/redwood/oj-redwood-min.css"
+          id="css" />
+    <link rel="stylesheet" href="/styles" id="css" />
+    <link rel="icon" href="css/images/favicon.ico" type="image/x-icon" />
+
+    <!-- This is the main css file for the default Alta theme -->
+    <!-- injector:theme -->
+    <link rel="stylesheet" href="css/alta/9.2.0/web/alta.css" id="css" />
+    <!-- endinjector -->
+    <!-- This contains icon fonts used by the starter template -->
+    <link rel="stylesheet" href="css/demo-alta-site-min.css" type="text/css" />
+    <!-- This points to the Oracle universal theme icon font -->
+    <link type="text/css" rel="stylesheet"
+          href="https://static.oracle.com/cdn/apex/18.2.0.00.12/libraries/font-apex/2.1/css/font-apex.min.css">
+
+    <!-- This is where you would add any app specific styling -->
+    <link rel="stylesheet" href="css/app.css" type="text/css" />
+    <style>
+        .button {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+        .button1 {
+            background-color: white;
+            color: black;
+            border: 2px solid #e7e7e7; color: black;
+        }
+    </style>
+</head>
+
+<body class="oj-web-applayout-body">
+<div id="globalBody" class="oj-web-applayout-page">
+    <div class="headerUnderlay">
+        <header role="banner" class="oj-web-applayout-header">
+            <div class="oj-flex-bar oj-sm-align-items-center">
+                <div class="oj-flex-bar-middle oj-sm-align-items-baseline">
+                    <span role="img" class="logo" title="Oracle Logo" alt="Oracle Logo"></span>
+                    <h1 class="oj-sm-only-hide oj-web-applayout-header-title" title="Application Name">
+                        GrabDish Explorer
+                    </h1>
+                </div>
+            </div>
+            <div class="oj-flex-bar">
+                <div class="oj-flex-bar-middle oj-sm-align-items-baseline">
+                    <p class="oj-text-color-secondary oj-typography-subheading-xs">Data-driven Microservices with
+                        converged Oracle Database</p>
+                </div>
+            </div>
+        </header>
+    </div>
+    <div role="main" class="oj-web-applayout-content oj-flex-bar">
+        <div class="oj-flex-bar-middle oj-sm-padding-4x-horizontal">
+            <div class="oj-flex oj-sm-flex-direction-column oj-web-applayout-max-width">
+                <div>
+                    <p class="oj-typography-heading-sm">
+                        <oj-bind-text value="[[menuTasks.get(selectedTask()).title]]"></oj-bind-text>
+                    </p>
+                </div>
+                <div>
+                    <p class="oj-typography-body-sm">
+                        <oj-bind-text value="[[menuTasks.get(selectedTask()).description]]"></oj-bind-text>
+                    </p>
+                </div>
+
+                <!-- lab9_1 -->
+                <div>
+                    <div role="main" class="oj-web-applayout-max-width oj-web-applayout-content">
+                        <oj-train id="train" class="oj-train-stretch" style="max-width:700px;margin-left:auto;margin-right:auto;"
+                                  selected-step="{{navStop}}" steps="[[stepArray]]">
+                        </oj-train>
+                        <oj-switcher value="[[navStop]]">
+                            <div slot="menuStyle">
+                                <h1>What's Your Fancy?</h1>
+                                <oj-list-view id="menuStyles" aria-label="List of Cuisines" selection-mode="single"
+                                              first-selected-item="{{styleSelected}}" data="[[stylesDataProvider]]">
+                                    <template slot="itemTemplate" data-oj-as="style">
+                                        <div class="oj-flex-bar oj-flex-items-pad">
+                                            <div class="oj-flex-bar-start">
+                                                <oj-avatar role="img" size="lg" src="[[style.data.image]]"
+                                                           :aria-label="[['Image of ' + style.data.name + ' menu style']]" :title="[[style.data.name]]">
+                                                </oj-avatar>
+                                            </div>
+                                            <div class="oj-flex-bar-middle oj-flex oj-sm-flex-direction-column oj-sm-margin-4x-start">
+                                                <div class="oj-flex-item">
+                                                    <h4><span class="name">
+                                      <oj-bind-text value="[[style.data.name]]"></oj-bind-text>
+                                    </span></h4>
+                                                </div>
+                                                <div class="oj-flex-item">
+                                  <span class="oj-text-secondary-color">
+                                    <oj-bind-text value="[[style.data.description]]"></oj-bind-text>
+                                  </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </oj-list-view>
+                                <div class="oj-flex-bar oj-web-applayout-max-width oj-sm-margin-2x-top">
+                                    <div class="oj-flex-bar-end">
+                                        <oj-bind-if test="[[menuAvailable]]">
+                                            <oj-button on-oj-action="[[showMenuPage]]" class="oj-button-lg oj-button-confirm"><span>
+                                  <oj-bind-text value="[['Show me the '+ styleSelected().data.name+ ' menu']]"></oj-bind-text>
+                                </span></oj-button>
+                                        </oj-bind-if>
+                                    </div>
+                                </div>
+                            </div>
+                            <div slot="menu">
+                                <h1>Make Your Choices...</h1>
+                                <div class="oj-flex oj-sm-justify-content-center">
+                                    <div class="oj-flex-item oj-panel" style="max-width:30rem;">
+                                        <oj-bind-if test="[[menuOptions()]]">
+                                            <oj-bind-for-each data="[[menuOptions()]]">
+                                                <template data-oj-as="option">
+                                                    <div class="oj-flex oj-flex-items-pad">
+                                                        <div class="oj-sm-4 oj-flex-item">
+                                                            <p>
+                                                                <oj-bind-text value="[[option.data.item]]"></oj-bind-text>
+                                                            </p>
+                                                        </div>
+                                                        <div class="oj-sm-2 oj-flex-item">
+                                                            <p>
+                                                                <oj-bind-text value="[[currencyConverter.format(option.data.price)]]"></oj-bind-text>
+                                                            </p>
+                                                        </div>
+                                                        <div class="oj-sm-6 oj-flex-item oj-sm-justify-content-flex-end">
+                                                            <div class="oj-flex-bar">
+                                                                <div class="oj-flex-bar-middle oj-sm-align-items-top">
+                                                                    <oj-button display="icons" chroming="borderless" on-oj-action="[[menuAddItem]]" class="smallButton"><span
+                                                                            slot="startIcon" class="fa fa-plus-circle" aria-hidden="true"></span></oj-button>
+                                                                    <oj-button display="icons" chroming="borderless" on-oj-action="[[menuRemoveItem]]" class="smallButton" :style.visibility="[[option.data.qty()===0?'hidden':'visible']]"
+                                                                               disabled="[[option.data.qty()===0]]"><span slot="startIcon" class="fa fa-minus-circle-o"
+                                                                                                                          aria-hidden="true"></span></oj-button>
+                                                                </div>
+                                                                <div class="oj-flex-bar-end">
+                                                                    <oj-bind-if test="[[option.data.qty() >0]]">
+                                                                        <p>
+                                              <span>
+                                                <oj-bind-text value="[[option.data.qty]]"></oj-bind-text>
+                                              </span>
+                                                                            ordered
+                                                                        </p>
+                                                                    </oj-bind-if>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </template>
+                                            </oj-bind-for-each>
+                                            <oj-bind-if test="[[runningOrder()>0]]">
+                                                <div class="oj-flex oj-flex-items-pad oj-sm-justify-content-flex-end">
+                                                    <div class="oj-sm-8 oj-flex-item ">
+                                                        <p>
+                                                            Order of <span>
+                                        <oj-bind-text value="[[runningOrder()]]"></oj-bind-text>
+                                      </span> items, current total: <span>
+                                        <oj-bind-text value="[[currencyConverter.format(totalOrderPrice())]]"></oj-bind-text>
+                                      </span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="oj-flex-bar oj-web-applayout-max-width oj-sm-margin-2x-top">
+                                                    <div class="oj-flex-bar-end">
+                                                        <oj-button on-oj-action="[[showAddressPage]]"><span>
+                                          <oj-bind-text value="[['Ready to order!']]"></oj-bind-text>
+                                        </span></oj-button>
+                                                    </div>
+                                                </div>
+                                            </oj-bind-if>
+                                        </oj-bind-if>
+                                    </div>
+                                </div>
+                            </div>
+                            <div slot="address">
+                                <h1>Deliver to</h1>
+                                <oj-accordion>
+                                    <oj-collapsible id="home" expanded="true">
+                                        <span slot="header"><span><span class="oj-sm-margin-1x-top fa fa-home"></span> Home (On File)</span></span>
+                                        <oj-form-layout label-edge="start">
+                                            <oj-input-text label-hint="Address" value="200, Oracle Parkway" readonly="true"></oj-input-text>
+                                            <oj-input-text label-hint=" " value="12th Floor" readonly="true"></oj-input-text>
+                                            <oj-input-text label-hint="City" value="Redwood Shores" readonly="true"></oj-input-text>
+                                            <oj-input-text label-hint="State" value="CA" readonly="true"></oj-input-text>
+                                            <oj-input-text label-hint="Zip" value="94065" readonly="true"></oj-input-text>
+                                        </oj-form-layout>
+                                        <div class="oj-flex-bar oj-web-applayout-max-width oj-sm-margin-2x-top">
+                                            <div class="oj-flex-bar-end">
+                                                <oj-button on-oj-action="[[showMapPage]]" class="oj-button-lg oj-button-primary"><span>
+                                      Deliver here
+                                    </span></oj-button>
+                                            </div>
+                                        </div>
+                                    </oj-collapsible>
+                                    <oj-collapsible id="new">
+                                        <span slot="header"><span><span class="fa fa-car oj-sm-margin-1x-top"></span> New Address</span></span>
+                                        <oj-form-layout label-edge="start">
+                                            <oj-input-text label-hint="Address" ></oj-input-text>
+                                            <oj-input-text label-hint=" " ></oj-input-text>
+                                            <oj-input-text label-hint="City" ></oj-input-text>
+                                            <oj-input-text label-hint="State" ></oj-input-text>
+                                            <oj-input-text label-hint="Zip"></oj-input-text>
+                                        </oj-form-layout>
+                                        <div class="oj-flex-bar oj-web-applayout-max-width oj-sm-margin-2x-top">
+                                            <div class="oj-flex-bar-end">
+                                                <oj-button><span>
+                                      Use this new address
+                                    </span></oj-button>
+                                            </div>
+                                        </div>
+                                    </oj-collapsible>
+
+                                </oj-accordion>
+                            </div>
+                            <div slot="map">
+                                <oj-bind-if test="[[mapReady()]]">
+                                    <h1>SushiHeaven will be fulfilling your order</h1>
+                                    <div class="oj-flex">
+                                        <div class="oj-flex-item" style="height:600px;">
+                                            <oj-spatial-map id="geomap"
+                                                            center="{{mapCenter}}"
+                                                            zoom-level="4"
+                                                            style="height:100%;width:100%;">
+                                            </oj-spatial-map>
+                                        </div>
+                                    </div>
+                                    <div class="oj-sm-margin-2x-top oj-panel">
+                                        <h4>Estimated Delivery time is 24 minutes</h4>
+                                        <h4>Your total order cost is <span>
+                            <oj-bind-text value="[[currencyConverter.format(totalOrderPrice())]]"></oj-bind-text>
+                          </span>
+                                        </h4>
+                                        <div class="oj-flex-bar oj-web-applayout-max-width oj-sm-margin-2x-top">
+                                            <div class="oj-flex-bar-end">
+                                                <oj-button display="all" class="oj-button-lg oj-button-confirm"><span>
+                                  Looks good to me, let's GrabDish!
+                                </span>
+                                                    <span slot="endIcon" class="fa fa-cutlery fa-anim-horizontal-shake" aria-hidden="true"></span>
+                                                </oj-button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </oj-bind-if>
+                            </div>
+                            <div slot="order">
+                                <h1>Confirm Order</h1>
+                            </div>
+                        </oj-switcher>
+                    </div>
+                </div>
+                    <oj-bind-if test="[[httpCode() && httpCode() > 0]]">
+                        <div class="responsePanel oj-flex-item">
+                            <p class="oj-typography-body-xs">HTTP Response: <span>
+                    <oj-bind-text value="[[httpCode()]]"></oj-bind-text>
+                  </span></p>
+                        </div>
+                    </oj-bind-if>
+                    <oj-bind-if test="[[labResult() && labResult().length > 0]]">
+                        <div class="oj-panel oj-bg-neutral-1 resultsPanel oj-flex-item">
+                            <p class="oj-typography-heading-sm">Result</p>
+                            <code><pre><oj-bind-text value="[[labResult()]]"></oj-bind-text></pre></code>
+                        </div>
+                    </oj-bind-if>
+                </oj-bind-if>
+            </div>
+        </div>
+    </div>
+    <footer class="oj-web-applayout-footer" role="contentinfo">
+        <div class="oj-web-applayout-footer-item">
+            <ul>
+                <oj-bind-for-each data="[[footerLinks]]">
+                    <template>
+                        <li>
+                            <a :id="[[$current.data.linkId]]" :href="[[$current.data.linkTarget]]">
+                                <oj-bind-text value="[[$current.data.name]]"></oj-bind-text>
+                            </a>
+                        </li>
+                    </template>
+                </oj-bind-for-each>
+            </ul>
+        </div>
+        <div class="oj-web-applayout-footer-item oj-text-secondary-color oj-text-sm">
+            Copyright © 2021 Oracle and/or its affiliates All rights reserved.
+        </div>
+    </footer>
+</div>
+
+<script src="https://static.oracle.com/cdn/jet/9.0.0/3rdparty/require/require.js"></script>
+<script type="text/javascript" src="https://static.oracle.com/cdn/jet/9.0.0/default/js/bundles-config.js"></script>
+<script>
+
+    (function () {
+        requirejs.config({
+            baseUrl: "js",
+            paths: {
+                knockout: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/knockout/knockout-3.5.1",
+                jquery: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/jquery/jquery-3.5.1.min",
+                "jqueryui-amd": "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/jquery/jqueryui-amd-1.12.1.min",
+                promise: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/es6-promise/es6-promise.min",
+                hammerjs: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/hammer/hammer-2.0.8.min",
+                ojdnd: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/dnd-polyfill/dnd-polyfill-1.0.2.min",
+                ojL10n: "libs/oj/v9.0.0/ojL10n",
+                persist: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/persist/min",
+                text: "libs/require/text",
+                signals: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/js-signals/signals.min",
+                touchr: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/touchr/touchr",
+                "regenerator-runtime": "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/regenerator-runtime/runtime",
+                corejs: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/corejs/shim.min",
+                customElements: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/webcomponents/custom-elements.min",
+                proj4: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/proj4js/dist/proj4"
+            }
+        })
+    }());
+
+    /**
+     * Ensure that any JET components that are needed are imported here
+     */
+    require(['ojs/ojbootstrap',
+            'knockout',
+            'ojs/ojresponsiveutils',
+            'ojs/ojresponsiveknockoututils',
+            'ojs/ojarraydataprovider',
+            'text!data/grub.json',
+            'ojs/ojconverter-number',
+            'ojs/ojknockout',
+            'ojs/ojbutton',
+            'ojs/ojtoolbar',
+            'ojs/ojmenu',
+            'ojs/ojnavigationlist',
+            'ojs/ojswitcher',
+            'ojs/ojformlayout',
+            'ojs/ojinputtext',
+            'ojs/ojinputnumber',
+            'https://elocation.oracle.com/elocation/jslib/oracleelocationv3.3.js',
+            'ojs/ojlistview',
+            'ojs/ojavatar',
+            'ojs/ojtrain',
+            'ojs/ojaccordion',
+            'oj-spatial-map/loader'],
+        function (Bootstrap, ko, ResponsiveUtils, ResponsiveKnockoutUtils, ArrayDataProvider, grubSourceData, NumberConverter) {
+
+            function ControllerViewModel() {
+                // Media queries for repsonsive layouts
+                const smQuery = ResponsiveUtils.getFrameworkQuery(ResponsiveUtils.FRAMEWORK_QUERY_KEY.SM_ONLY);
+                this.smScreen = ResponsiveKnockoutUtils.createMediaQueryObservable(smQuery);
+
+                //Hold the results of the last call
+                this.labResult = ko.observable();
+                this.httpCode = ko.observable();
+
+
+                // Screen Control
+                this.selectedTask = ko.observable('about');
+                this.selectedTask.subscribe(function () { this.labResult(null) }.bind(this));
+
+                // This map controls the available options in the navigation menu - add new options here
+                // Key for the map matches the slot name used in the switcher
+                this.menuTasks = new Map();
+                this.menuTasks.set('about', { label: 'About', title: 'About the GrabDish Explorer', description: 'The GrabDish Explorer screen allows you to test the results of each lab.  Simply click the tab on the left that corresponds to the lab that you want to test out and follow the on-screen instructions.' });
+                this.menuTasks.set('lab7', { label: 'Datasources', title: 'Datasources', description: 'Verify that the Datasources are all working' });
+                this.menuTasks.set('lab8', { label: 'Setup (and Tear Down) Data and Messaging', title: 'Setup (and Tear Down) Data and Messaging', description: 'This lab sets up data and messaging in the database' });
+                this.menuTasks.set('lab9', { label: 'Transactional', title: 'Transactional', description: 'JSON and relational data types, AQ transactional event-driven communication, saga, event sourcing, and CQRS' });
+                this.menuTasks.set('lab9_1', { label: 'Spatial', title: 'Spatial', description: 'Spatial Data' });
+                this.menuTasks.set('lab10', { label: 'Metrics, and Health', title: 'Metrics, and Health', description: 'Use Helidon features to provide tracing, metrics, and health checks' });
+
+                //Drives the navigation list itself
+                this.tasks = new ArrayDataProvider(Array.from(this.menuTasks.entries()).map(entry => { entry[1].id = entry[0]; return entry[1]; }), { keyAttributes: 'id' });
+
+                this.inProgress = ko.observable(false);
+
+                // Function calls and state relating to given labs
+
+                // Lab 7. ----------------------------------------------------------- //
+                this.lab7TestDatasourcesAction = function (event, vm) {
+                    vm.inProgress(true);
+                    var order = {
+                        serviceName: 'admin',
+                        commandName: 'testdatasources',
+                        orderId: -1,
+                        orderItem: vm.lab9Food(),
+                        deliverTo: vm.lab9DeliverTo()
+                    };
+                    var fetchOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(order)
+                    };
+
+                    fetch('/command', fetchOptions).then(fetchResult => {
+                        vm.httpCode(fetchResult.status);
+                        fetchResult.json().then(payload => {
+                            vm.labResult(JSON.stringify(payload, null, 2));
+                            vm.inProgress(false);
+                        });
+                    });
+                };
+
+
+                // Lab 8. ----------------------------------------------------------- //
+                this.lab8CreateUsersAction = function (event, vm) {
+                    vm.inProgress(true);
+                    var order = {
+                        serviceName: 'admin',
+                        commandName: 'createUsers',
+                        orderId: -1,
+                        orderItem: vm.lab9Food(),
+                        deliverTo: vm.lab9DeliverTo()
+                    };
+                    var fetchOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(order)
+                    };
+
+                    fetch('/command', fetchOptions).then(fetchResult => {
+                        vm.httpCode(fetchResult.status);
+                        fetchResult.json().then(payload => {
+                            vm.labResult(JSON.stringify(payload, null, 2));
+                            vm.inProgress(false);
+                        });
+                    });
+                };
+
+                this.lab8CreateInventoryTableAction = function (event, vm) {
+                    vm.inProgress(true);
+                    var order = {
+                        serviceName: 'admin',
+                        commandName: 'createInventoryTable',
+                        orderId: -1,
+                        orderItem: vm.lab9Food(),
+                        deliverTo: vm.lab9DeliverTo()
+                    };
+                    var fetchOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(order)
+                    };
+
+                    fetch('/command', fetchOptions).then(fetchResult => {
+                        vm.httpCode(fetchResult.status);
+                        fetchResult.json().then(payload => {
+                            vm.labResult(JSON.stringify(payload, null, 2));
+                            vm.inProgress(false);
+                        });
+                    });
+                };
+
+                this.lab8CreateDatabaseLinksAction = function (event, vm) {
+                    vm.inProgress(true);
+                    var order = {
+                        serviceName: 'admin',
+                        commandName: 'createDBLinks',
+                        orderId: -1,
+                        orderItem: vm.lab9Food(),
+                        deliverTo: vm.lab9DeliverTo()
+                    };
+                    var fetchOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(order)
+                    };
+
+                    fetch('/command', fetchOptions).then(fetchResult => {
+                        vm.httpCode(fetchResult.status);
+                        fetchResult.json().then(payload => {
+                            vm.labResult(JSON.stringify(payload, null, 2));
+                            vm.inProgress(false);
+                        });
+                    });
+                };
+
+                this.lab8SetupTablesQueuesAndPropagationAction = function (event, vm) {
+                    vm.inProgress(true);
+                    var order = {
+                        serviceName: 'admin',
+                        commandName: 'setupTablesQueuesAndPropagation',
+                        orderId: -1,
+                        orderItem: vm.lab9Food(),
+                        deliverTo: vm.lab9DeliverTo()
+                    };
+                    var fetchOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(order)
+                    };
+
+                    fetch('/command', fetchOptions).then(fetchResult => {
+                        vm.httpCode(fetchResult.status);
+                        fetchResult.json().then(payload => {
+                            vm.labResult(JSON.stringify(payload, null, 2));
+                            vm.inProgress(false);
+                        });
+                    });
+                };
+
+                this.lab8EnablePropagationAction = function (event, vm) {
+                    vm.inProgress(true);
+                    var order = {
+                        serviceName: 'admin',
+                        commandName: 'enablePropagation',
+                        orderId: -1,
+                        orderItem: vm.lab9Food(),
+                        deliverTo: vm.lab9DeliverTo()
+                    };
+                    var fetchOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(order)
+                    };
+
+                    fetch('/command', fetchOptions).then(fetchResult => {
+                        vm.httpCode(fetchResult.status);
+                        fetchResult.json().then(payload => {
+                            vm.labResult(JSON.stringify(payload, null, 2));
+                            vm.inProgress(false);
+                        });
+                    });
+                };
+
+                this.lab8UnschedulePropagationAction = function (event, vm) {
+                    vm.inProgress(true);
+                    var order = {
+                        serviceName: 'admin',
+                        commandName: 'unschedulePropagation',
+                        orderId: -1,
+                        orderItem: vm.lab9Food(),
+                        deliverTo: vm.lab9DeliverTo()
+                    };
+                    var fetchOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(order)
+                    };
+
+                    fetch('/command', fetchOptions).then(fetchResult => {
+                        vm.httpCode(fetchResult.status);
+                        fetchResult.json().then(payload => {
+                            vm.labResult(JSON.stringify(payload, null, 2));
+                            vm.inProgress(false);
+                        });
+                    });
+                };
+
+                this.lab8DeleteUsersAction = function (event, vm) {
+                    vm.inProgress(true);
+                    var order = {
+                        serviceName: 'admin',
+                        commandName: 'deleteUsers',
+                        orderId: -1,
+                        orderItem: vm.lab9Food(),
+                        deliverTo: vm.lab9DeliverTo()
+                    };
+                    var fetchOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(order)
+                    };
+
+                    fetch('/command', fetchOptions).then(fetchResult => {
+                        vm.httpCode(fetchResult.status);
+                        fetchResult.json().then(payload => {
+                            vm.labResult(JSON.stringify(payload, null, 2));
+                            vm.inProgress(false);
+                        });
+                    });
+                };
+
+                // Lab 9. ----------------------------------------------------------- //
+                this.lab9Food = ko.observable('sushi');
+                this.lab9OrderId = ko.observable(66);
+                this.lab9DeliverTo = ko.observable('780 PANORAMA DR,San Francisco,CA');
+                this.lab9Item = ko.observable('sushi');
+
+                this.lab9PlaceOrderAction = function (event, vm) {
+                    vm.inProgress(true);
+                    var order = {
+                        serviceName: 'order',
+                        commandName: 'placeOrder',
+                        orderId: Number.parseInt(vm.lab9OrderId()),
+                        orderItem: vm.lab9Food(),
+                        deliverTo: vm.lab9DeliverTo()
+                    };
+                    var fetchOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(order)
+                    };
+
+                    fetch('/placeorder', fetchOptions).then(fetchResult => {
+                        vm.httpCode(fetchResult.status);
+                        fetchResult.json().then(payload => {
+                            vm.labResult(JSON.stringify(payload, null, 2));
+                            vm.inProgress(false);
+                        });
+                    });
+                }
+
+                this.lab9DeleteAllOrdersAction = function (event, vm) {
+                    vm.inProgress(true);
+                    var order = {
+                        serviceName: 'order',
+                        commandName: 'deleteallorders',
+                        orderId: -1,
+                        orderItem: '',
+                        deliverTo: ''
+                    };
+                    var fetchOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(order)
+                    };
+
+                    fetch('/command', fetchOptions).then(fetchResult => {
+                        vm.httpCode(fetchResult.status);
+                        fetchResult.json().then(payload => {
+                            vm.labResult(JSON.stringify(payload, null, 2));
+                            vm.inProgress(false);
+                        });
+                    });
+                }
+
+                this.lab9ShowOrderAction = function (event, vm) {
+                    vm.inProgress(true);
+                    var order = {
+                        serviceName: 'order',
+                        commandName: 'showorder',
+                        orderId: Number.parseInt(vm.lab9OrderId()),
+                        orderItem: '',
+                        deliverTo: ''
+                    };
+                    var fetchOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(order)
+                    };
+
+                    fetch('/command', fetchOptions).then(fetchResult => {
+                        vm.httpCode(fetchResult.status);
+                        fetchResult.json().then(payload => {
+                            vm.labResult(JSON.stringify(payload, null, 2));
+                            vm.inProgress(false);
+                        });
+                    });
+                }
+
+                this.lab9SpatialAction = function (event, vm) {
+                    // TODO
+                }
+
+                // supplier service
+
+                this.lab9AddInventoryAction = function (event, vm) {
+                    vm.inProgress(true);
+                    var order = {
+                        serviceName: 'supplier',
+                        commandName: 'addInventory',
+                        orderId: -1,
+                        orderItem: vm.lab9Item(),
+                        deliverTo: ''
+                    };
+                    var fetchOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(order)
+                    };
+
+                    fetch('/command', fetchOptions).then(fetchResult => {
+                        vm.httpCode(fetchResult.status);
+                        fetchResult.json().then(payload => {
+                            vm.labResult(JSON.stringify(payload, null, 2));
+                            vm.inProgress(false);
+                        });
+                    });
+                }
+
+                this.lab9RemoveInventoryAction = function (event, vm) {
+                    vm.inProgress(true);
+                    var order = {
+                        serviceName: 'supplier',
+                        commandName: 'removeInventory',
+                        orderId: -1,
+                        orderItem: vm.lab9Item(),
+                        deliverTo: ''
+                    };
+                    var fetchOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(order)
+                    };
+
+                    fetch('/command', fetchOptions).then(fetchResult => {
+                        vm.httpCode(fetchResult.status);
+                        fetchResult.json().then(payload => {
+                            vm.labResult(JSON.stringify(payload, null, 2));
+                            vm.inProgress(false);
+                        });
+                    });
+                }
+
+                this.lab9GetInventoryAction = function (event, vm) {
+                    vm.inProgress(true);
+                    var order = {
+                        serviceName: 'supplier',
+                        commandName: 'getInventory',
+                        orderId: -1,
+                        orderItem: vm.lab9Item(),
+                        deliverTo: ''
+                    };
+                    var fetchOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(order)
+                    };
+
+                    fetch('/command', fetchOptions).then(fetchResult => {
+                        vm.httpCode(fetchResult.status);
+                        fetchResult.json().then(payload => {
+                            vm.labResult(JSON.stringify(payload, null, 2));
+                            vm.inProgress(false);
+                        });
+                    });
+                }
+
+                // Lab 9_1. ----------------------------------------------------------- //
+                var self = this;
+
+                //Utils
+                self.currencyConverter = new NumberConverter.IntlNumberConverter({
+                    style: "currency",
+                    currency: "USD",
+                    currencyDisplay: "symbol",
+                    currencyFormat: "short",
+                    minimumFractionDigits: "0"
+                });
+
+                self.eloc = new OracleELocation("https://elocation.oracle.com/elocation");
+
+                // Setup the train and navigation functions
+                self.stepArray =
+                    ko.observableArray(
+                        [{ label: 'Cuisine', id: 'menuStyle' },
+                            { label: 'Menu', id: 'menu', disabled: true },
+                            { label: 'Address', id: 'address', disabled: true },
+                            { label: 'Delivery', id: 'map', disabled: true },
+                            { label: 'Confirmation', id: 'order', disabled: true }]);
+                self.navStop = ko.observable("menuStyle");
+
+
+                // State for the Cuisine page
+                self.styleSelected = ko.observable();
+                self.menuAvailable = ko.observable(false);
+                self.grubData = JSON.parse(grubSourceData);
+                this.stylesDataProvider = new ArrayDataProvider(self.grubData, { keyAttributes: 'style' });
+
+                //Register a function to be called when the style selection changes
+                self.styleSelected.subscribe(function (newValue) {
+                    if (newValue && newValue.key) {
+                        self.menuAvailable(true);
+                    }
+                    else {
+                        self.menuAvailable(false);
+                    }
+
+                    var updateSteps = self.stepArray();
+                    updateSteps[1].disabled = !self.menuAvailable();
+                    self.stepArray(updateSteps);
+                });
+
+                //Navigate to the menu page and set things up
+                self.showMenuPage = function (event, viewModel) {
+                    viewModel.navStop('menu');
+                    self.menuData = self.styleSelected().data.menu.map(function (menuItem) {
+                        menuItem.qty = ko.observable(0);
+                        return menuItem;
+                    });
+                    self.menuOptions(self.menuData);
+                }
+
+                //State for the Menu page
+                self.menuOptions = ko.observableArray();
+                self.runningOrder = ko.observable(0);
+                self.totalOrderPrice = ko.pureComputed(function () {
+                    var total = 0;
+                    if (self.runningOrder() > 0) {
+                        total = self.menuData.reduce(function (runningTotal, item) {
+                            if (item.qty() > 0) {
+                                var itemCost = item.qty() * item.price;
+                                runningTotal += itemCost;
+                            }
+                            return runningTotal;
+                        }, total);
+                    }
+                    return total;
+                });
+
+                self.menuAddItem = function (event, viewModel, data) {
+                    self.updateOrder(data['$current'].data.id, 1);
+                }
+
+                self.menuRemoveItem = function (event, viewModel, data) {
+                    self.updateOrder(data['$current'].data.id, -1);
+                }
+
+                self.updateOrder = function (menuItemId, change) {
+                    var item = self.menuData.find(function (menuItem) { return menuItem.id === menuItemId })
+                    item.qty(item.qty() + change);
+                    self.runningOrder(self.runningOrder() + change);
+
+                    var updateSteps = self.stepArray();
+                    updateSteps[2].disabled = self.runningOrder() === 0;
+                    self.stepArray(updateSteps);
+                }
+
+                //Navigate to the address page
+                self.showAddressPage = function (event, viewModel) {
+                    viewModel.navStop('address');
+                }
+
+                //State for the Address page
+                //Navigate to the address page
+                self.showMapPage = function (event, viewModel) {
+                    var updateSteps = self.stepArray();
+                    updateSteps[3].disabled = false;
+                    self.stepArray(updateSteps);
+                    viewModel.navStop('map');
+                    window.setTimeout(function(){
+                        self.mapReady(true);
+                        var toAddress = '200 Oracle Pkwy, Redwood Shores, CA';
+                        var fromAddress = '219 East Third Ave, San Mateo, CA';
+                        var route = [[fromAddress,toAddress]];
+                        var routeOptions = {
+                            routePref: "shortest", roadPref: "highway", distUnit: "km", langPref: "english"
+                        };
+                        self.eloc.getDirections(route, self._displayRoute.bind(self), self._routeErrHandler.bind(self), routeOptions);
+
+
+                    },500);
+                }
+
+                //State for the Map page
+                self.mapCenter = ko.observable({longitude:-100.5,latitude:37.25});
+                self.mapReady = ko.observable(false);
+
+                // Mapping callbacks
+                self._routeErrHandler = function (errCode, errMes, gcResult, route, index) {
+                    alert("Error encountered at route:" + route + " with index:" + index +
+                        "\nerrCode:" + errCode + "\nerrorMessage:" + errMes);
+                }
+
+                this._displayRoute = function (gcResult, routeRes) {
+                    // first remove any previously displayed route geometry.
+                    var mapComponent = document.getElementById('geomap');
+                    mapComponent.removeAllDatasets();
+                    let route = routeRes[0];//Get the first (and only) route
+
+                    const feature = {
+                        type: 'Feature',
+                        properties: {},
+                        geometry: {
+                            type: 'LineString',
+                            coordinates: [
+                            ]
+                        }
+                    };
+                    let jsonCoords = feature.geometry.coordinates;
+                    let start = [], end = [];
+                    let routeCoords = route.routeGeom;
+                    let coordinate = null;
+                    for (let ordCount = 0; ordCount < routeCoords.length; ordCount += 2) {
+                        coordinate = [
+                            routeCoords[ordCount],
+                            routeCoords[ordCount + 1]
+                        ];
+
+                        if (ordCount == 0) {
+                            start.push(coordinate[0]);
+                            start.push(coordinate[1]);
+                        }
+
+                        jsonCoords.push(coordinate);
+                    }
+
+                    end[0] = coordinate[0];
+                    end[1] = coordinate[1];
+
+                    //create the route dataset
+                    //
+                    const geoJson = {
+                        "type": "FeatureCollection",
+                        "features": [
+                            feature
+                        ]
+                    };
+
+                    // the dataset object.
+                    var routeDataset = {
+                        'name': 'my-directions',
+                        'data': geoJson,
+                        'renderer': {
+                            'type': 'line',
+                            'zoomToData': true,  // zoom and pan the map to the extent of the dataset
+                            'lineColor': '#006400',
+                            'lineWidth': 5,
+                            'lineOpacity': 0.6
+                        }
+                    };
+
+                    // add the route dataset.
+                    mapComponent.addDataset(routeDataset);
+                }
+
+                // Lab 10. ----------------------------------------------------------- //
+
+
+                this.lab10ShowMetricsAction = function (event, vm) {
+                    vm.inProgress(true);
+                    var order = {
+                        serviceName: 'order',
+                        commandName: 'metrics',
+                        orderId: -1,
+                        orderItem: '',
+                        deliverTo: ''
+                    };
+                    var fetchOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(order)
+                    };
+
+                    fetch('/metrics', fetchOptions).then(fetchResult => {
+                        vm.httpCode(fetchResult.status);
+                        fetchResult.text().then(payload => {
+                            vm.labResult(payload);
+                            vm.inProgress(false);
+                        });
+                    });
+                };
+
+
+                this.lab10healthliveAction = function (event, vm) {
+                    vm.inProgress(true);
+                    var order = {
+                        serviceName: 'order',
+                        commandName: 'health/live',
+                        orderId: -1,
+                        orderItem: '',
+                        deliverTo: ''
+                    };
+                    var fetchOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(order)
+                    };
+
+                    fetch('/command', fetchOptions).then(fetchResult => {
+                        vm.httpCode(fetchResult.status);
+                        fetchResult.json().then(payload => {
+                            vm.labResult(JSON.stringify(payload, null, 2));
+                            vm.inProgress(false);
+                        });
+                    });
+                };
+
+                this.lab10healthreadyAction = function (event, vm) {
+                    vm.inProgress(true);
+                    var order = {
+                        serviceName: 'order',
+                        commandName: 'health/ready',
+                        orderId: -1,
+                        orderItem: '',
+                        deliverTo: ''
+                    };
+                    var fetchOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(order)
+                    };
+
+                    fetch('/command', fetchOptions).then(fetchResult => {
+                        vm.httpCode(fetchResult.status);
+                        fetchResult.json().then(payload => {
+                            vm.labResult(JSON.stringify(payload, null, 2));
+                            vm.inProgress(false);
+                        });
+                    });
+                };
+
+                this.lab10ordersetlivenesstofalseAction = function (event, vm) {
+                    vm.inProgress(true);
+                    var order = {
+                        serviceName: 'order',
+                        commandName: 'ordersetlivenesstofalse',
+                        orderId: -1,
+                        orderItem: '',
+                        deliverTo: ''
+                    };
+                    var fetchOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(order)
+                    };
+
+                    fetch('/command', fetchOptions).then(fetchResult => {
+                        vm.httpCode(fetchResult.status);
+                        fetchResult.json().then(payload => {
+                            vm.labResult(JSON.stringify(payload, null, 2));
+                            vm.inProgress(false);
+                        });
+                    });
+                };
+
+                this.lab10lastContainerStartTimeAction = function (event, vm) {
+                    vm.inProgress(true);
+                    var order = {
+                        serviceName: 'order',
+                        commandName: 'lastContainerStartTime',
+                        orderId: -1,
+                        orderItem: '',
+                        deliverTo: ''
+                    };
+                    var fetchOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(order)
+                    };
+
+                    fetch('/command', fetchOptions).then(fetchResult => {
+                        vm.httpCode(fetchResult.status);
+                        fetchResult.json().then(payload => {
+                            vm.labResult(JSON.stringify(payload, null, 2));
+                            vm.inProgress(false);
+                        });
+                    });
+                };
+
+                this.lab10ShowTracingAction = function (event, vm) {
+                    vm.inProgress(true);
+                    var order = {
+                        serviceName: 'jaeger',
+                        commandName: '',
+                        orderId: -1,
+                        orderItem: '',
+                        deliverTo: ''
+                    };
+                    var fetchOptions = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(order)
+                    };
+
+                    fetch('/command', fetchOptions).then(fetchResult => {
+                        vm.httpCode(fetchResult.status);
+                        fetchResult.json().then(payload => {
+                            vm.labResult(JSON.stringify(payload, null, 2));
+                            vm.inProgress(false);
+                        });
+                    });
+                };
+
+
+                // Footer
+                this.footerLinks = [
+                    { name: 'About Oracle', linkId: 'aboutOracle', linkTarget: 'http://www.oracle.com/us/corporate/index.html#menu-about' },
+                    { name: "Contact Us", id: "contactUs", linkTarget: "http://www.oracle.com/us/corporate/contact/index.html" },
+                    { name: "Legal Notices", id: "legalNotices", linkTarget: "http://www.oracle.com/us/legal/index.html" },
+                    { name: "Terms Of Use", id: "termsOfUse", linkTarget: "http://www.oracle.com/us/legal/terms/index.html" },
+                    { name: "Your Privacy Rights", id: "yourPrivacyRights", linkTarget: "http://www.oracle.com/us/legal/privacy/index.html" },
+                ];
+            }
+
+            Bootstrap.whenDocumentReady().then(
+                function () {
+                    var app = new ControllerViewModel();
+                    ko.applyBindings(app, document.getElementById('globalBody'));
+                }
+            );
+        }
+    );
+
+</script>
+</body>
+
+</html>

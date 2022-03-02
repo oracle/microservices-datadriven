@@ -341,7 +341,8 @@ RC=$(( RC + $? ))
 write_defaults "${ords_dir}/config/ords"
 RC=$(( RC + $? ))
 
-standalone_root="${ords_dir}/config/ords/standalone/doc_root"
+standalone_root="${ords_dir}/config/ords/standalone/web"
+cp -r /tmp/uploads/web/* $standalone_root
 
 write_standalone_properties "${ords_dir}/config/ords/standalone" "${apex_version}" 'ords' "${standalone_root}"
 RC=$(( RC + $? ))
