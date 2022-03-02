@@ -8,7 +8,7 @@ create or replace package order_collection
 as
   procedure insert_order (in_order in json_object_t);
   procedure get_order (in_order_id in varchar2, out_order out json_object_t);
-  procedure delete_all_orders ();
+  procedure delete_all_orders;
   procedure create_collection;
   procedure drop_collection;
 end order_collection;
@@ -51,7 +51,7 @@ as
     out_order := json_object_t(order_doc.get_blob);
   end get_order;
 
-  procedure delete_all_orders ()
+  procedure delete_all_orders
   is
     status      number;
     collection  soda_collection_t;
