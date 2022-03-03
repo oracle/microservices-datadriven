@@ -77,6 +77,16 @@ while true; do
   tput sgr0
   echo
 
+  if [[ "$DCMS_STATUS" =~ applied ]]; then
+    echo
+    echo "Grabdish URL:"
+    echo "  https://$(state_get LB_ADDRESS)"
+    echo
+    echo "ORDS Instance access:"
+    echo "  ssh -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS)"
+    echo
+  fi
+
   if [[ "$DCMS_STATUS" =~ byo|new|applied|destroyed ]]; then
     # Skip this log
     break
@@ -96,9 +106,5 @@ while true; do
 
   sleep "${1-10}"
 done
-
-echo "Grabdish URL: https://$(state_get LB_ADDRESS)"
-echo "ORDS Instance access:"
-echo "ssh -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS)"
 
 exit 0

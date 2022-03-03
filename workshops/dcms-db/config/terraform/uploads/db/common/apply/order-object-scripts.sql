@@ -161,7 +161,7 @@ end;
 show errors
 
 -- get order in PL/SQL
-create or replace procedure get_order_plsql (
+create or replace procedure show_order_plsql (
   orderid in out varchar2,
   itemid out varchar2,
   deliverylocation out varchar2,
@@ -193,7 +193,7 @@ show errors
 
 
 -- Delete all orders in PL/SQL
-create or replace procedure delete_all_orders_plsql ()
+create or replace procedure delete_all_orders_plsql
   authid current_user
 is
   order_jo json_object_t;
@@ -332,7 +332,7 @@ begin
     p_schema       => 'ORDERUSER',
     p_object       => 'GET_ORDER_PLSQL',
     p_object_type  => 'PROCEDURE',
-    p_object_alias => 'getorder'
+    p_object_alias => 'showorder'
   );
 
   commit;
