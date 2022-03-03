@@ -121,9 +121,9 @@
                   <oj-form-layout>
                     <table style="width:100%">
                       <tr>
-                        <th><img src="/images/sushi" alt="sushi" width="50" height="50"></th>
-                        <th><img src="/images/pizza" alt="pizza" width="50" height="50"></th>
-                        <th><img src="/images/burger" alt="burger" width="50" height="50"></th>
+                        <th><img src="/images/sushi.svg" alt="sushi" width="50" height="50"></th>
+                        <th><img src="/images/pizza.svg" alt="pizza" width="50" height="50"></th>
+                        <th><img src="/images/burger.svg" alt="burger" width="50" height="50"></th>
                       </tr>
                     </table>
 
@@ -494,7 +494,7 @@
               body: JSON.stringify(order)
             };
 
-            fetch('/ords/order/placeorder', fetchOptions).then(fetchResult => {
+            fetch('/ords/order/placeorder/', fetchOptions).then(fetchResult => {
               vm.httpCode(fetchResult.status);
               fetchResult.json().then(payload => {
                 vm.labResult(JSON.stringify(payload, null, 2));
@@ -514,7 +514,7 @@
               body: JSON.stringify(order)
             };
 
-            fetch('/ords/order/deleteallorders', fetchOptions).then(fetchResult => {
+            fetch('/ords/order/deleteallorders/', fetchOptions).then(fetchResult => {
               vm.httpCode(fetchResult.status);
               fetchResult.json().then(payload => {
                 vm.labResult(JSON.stringify(payload, null, 2));
@@ -534,7 +534,7 @@
               body: JSON.stringify(order)
             };
 
-            fetch('/ords/order/showorder', fetchOptions).then(fetchResult => {
+            fetch('/ords/order/showorder/', fetchOptions).then(fetchResult => {
               vm.httpCode(fetchResult.status);
               fetchResult.json().then(payload => {
                 vm.labResult(JSON.stringify(payload, null, 2));
