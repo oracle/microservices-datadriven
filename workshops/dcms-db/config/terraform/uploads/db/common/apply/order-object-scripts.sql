@@ -173,7 +173,7 @@ is
   order_jo json_object_t;
 begin
 
-  -- insert the order object
+  -- get the order object
   order_collection.get_order(orderid, order_jo);
 
   itemid :=            order_jo.get('itemid');
@@ -199,7 +199,7 @@ is
   order_jo json_object_t;
 begin
 
-  -- insert the order object
+  -- delete all the order objects
   order_collection.delete_all_orders;
 
   -- commit
@@ -330,7 +330,7 @@ begin
   ords.enable_object (
     p_enabled      => true,
     p_schema       => 'ORDERUSER',
-    p_object       => 'GET_ORDER_PLSQL',
+    p_object       => 'SHOW_ORDER_PLSQL',
     p_object_type  => 'PROCEDURE',
     p_object_alias => 'showorder'
   );
