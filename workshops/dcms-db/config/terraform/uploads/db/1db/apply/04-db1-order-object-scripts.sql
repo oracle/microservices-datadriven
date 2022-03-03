@@ -5,4 +5,6 @@
 WHENEVER SQLERROR EXIT 1
 connect $ORDER_USER/"$ORDER_PASSWORD"@$DB1_ALIAS
 
-@../../common/apply/order-object-scripts.sql
+@../../common/apply/order-collection.sql
+@../../common/apply/order-messaging.sql
+@../../common/apply/order-db-plsql.sql
