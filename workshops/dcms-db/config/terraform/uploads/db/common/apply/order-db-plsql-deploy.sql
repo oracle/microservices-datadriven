@@ -81,7 +81,7 @@ begin
 --    'order_service_plsql', 'logging_level', dbms_scheduler.logging_full);
 
     dbms_scheduler.run_job(
-    job_name            => 'inventory_plsql_service',
+    job_name            => 'order_service_plsql',
     use_current_session => false);
 end;
 /

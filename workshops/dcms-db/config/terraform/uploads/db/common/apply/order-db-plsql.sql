@@ -99,7 +99,7 @@ end;
 /
 show errors
 
--- inventory message processor - background job
+-- inventory message consumer - background job
 create or replace procedure inventory_message_consumer
 is
   order_jo json_object_t;
@@ -118,7 +118,7 @@ begin
     order_jo := order_collection.get_order(inv_msg_jo.get_string('orderid'));
 
     -- update the order based on inv message
-    if inv_msg_jo.get_string('inventorylocation') == 'inventorydoesnotexist' then
+    if inv_msg_jo.get_string('inventorylocation') = 'inventorydoesnotexist' then
       order_jo.put('status', 'failed inventory does not exist');
     else
       order_jo.put('status', 'success inventory exists');
