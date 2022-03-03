@@ -84,7 +84,7 @@ show errors
 begin
   ords.enable_schema(
     p_enabled             => true,
-    p_schema              => 'ORDERUSER',
+    p_schema              => '$ORDER_USER',
     p_url_mapping_type    => 'BASE_PATH',
     p_url_mapping_pattern => 'order',
     p_auto_rest_auth      => false
@@ -97,7 +97,7 @@ end;
 begin
   ords.enable_object (
     p_enabled      => true,
-    p_schema       => 'ORDERUSER',
+    p_schema       => '$ORDER_USER',
     p_object       => 'PLACE_ORDER_PLSQL',
     p_object_type  => 'PROCEDURE',
     p_object_alias => 'placeorder'
@@ -110,7 +110,7 @@ end;
 begin
   ords.enable_object (
     p_enabled      => true,
-    p_schema       => 'ORDERUSER',
+    p_schema       => '$ORDER_USER',
     p_object       => 'SHOW_ORDER_PLSQL',
     p_object_type  => 'PROCEDURE',
     p_object_alias => 'showorder'
@@ -123,7 +123,7 @@ end;
 begin
   ords.enable_object (
     p_enabled      => true,
-    p_schema       => 'ORDERUSER',
+    p_schema       => '$ORDER_USER',
     p_object       => 'DELETE_ALL_ORDERS_PLSQL',
     p_object_type  => 'PROCEDURE',
     p_object_alias => 'deleteallorders'

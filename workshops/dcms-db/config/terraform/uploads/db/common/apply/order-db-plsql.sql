@@ -2,8 +2,8 @@
 -- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 
--- place order in PL/SQL
-create or replace procedure place_order_plsql (
+-- place order - REST api
+create or replace procedure place_order (
   orderid in out varchar2,
   itemid in out varchar2,
   deliverylocation in out varchar2,
@@ -45,8 +45,8 @@ end;
 /
 show errors
 
--- get order in PL/SQL
-create or replace procedure show_order_plsql (
+-- show order - REST api
+create or replace procedure show_order (
   orderid in out varchar2,
   itemid out varchar2,
   deliverylocation out varchar2,
@@ -55,17 +55,17 @@ create or replace procedure show_order_plsql (
   suggestivesale out varchar2)
   authid current_user
 is
-  order_jo json_object_t;
+  order_jo json_object_t := new json_object_t;
 begin
 
   -- get the order object
-  order_collection.get_order(orderid, order_jo);
+  order_jo := order_collection.get_order(orderid);
 
-  itemid :=            order_jo.get('itemid');
-  deliverylocation :=  order_jo.get('deliverylocation');
-  status :=            order_jo.get('status');
-  inventorylocation := order_jo.get('inventorylocation');
-  suggestivesale :=    order_jo.get('suggestivesale');
+  itemid :=            order_jo.get_string('itemid');
+  deliverylocation :=  order_jo.get_string('deliverylocation');
+  status :=            order_jo.get_string('status');
+  inventorylocation := order_jo.get_string('inventorylocation');
+  suggestivesale :=    order_jo.get_string('suggestivesale');
 
 exception
    when others then
@@ -77,8 +77,8 @@ end;
 show errors
 
 
--- Delete all orders in PL/SQL
-create or replace procedure delete_all_orders_plsql
+-- delete all orders - REST api
+create or replace procedure delete_all_orders
   authid current_user
 is
   order_jo json_object_t;
@@ -99,55 +99,40 @@ end;
 /
 show errors
 
-
+-- inventory message processor - background job
+create or replace procedure inventory_message_consumer
+is
+  order_jo json_object_t;
+  inv_msg_jo json_object_t;
 begin
-  ords.enable_schema(
-    p_enabled             => true,
-    p_schema              => 'ORDERUSER',
-    p_url_mapping_type    => 'BASE_PATH',
-    p_url_mapping_pattern => 'order',
-    p_auto_rest_auth      => false
-  );
+  loop
+    -- wait for and dequeue the next order message
+    inv_msg_jo := order_messaging.dequeue_inventory_message(-1); -- wait forever
 
-  commit;
+    if inv_msg_jo is null then
+      rollback;
+      continue;
+    end if;
+
+    -- get the existing order
+    order_jo := order_collection.get_order(inv_msg_jo.get_string('orderid'));
+
+    -- update the order based on inv message
+    if inv_msg_jo.get_string('inventorylocation') == 'inventorydoesnotexist' then
+      order_jo.put('status', 'failed inventory does not exist');
+    else
+      order_jo.put('status', 'success inventory exists');
+      order_jo.put('inventorylocation', inv_msg_jo.get_string('inventorylocation'));
+      order_jo.put('suggestivesale', inv_msg_jo.get_string('suggestiveSale'));
+    end if;
+
+    -- persist the updates
+    order_collection.update_order(order_jo);
+
+    -- commit
+    commit;
+
+  end loop;
 end;
 /
-
-begin
-  ords.enable_object (
-    p_enabled      => true,
-    p_schema       => 'ORDERUSER',
-    p_object       => 'PLACE_ORDER_PLSQL',
-    p_object_type  => 'PROCEDURE',
-    p_object_alias => 'placeorder'
-  );
-
-  commit;
-end;
-/
-
-begin
-  ords.enable_object (
-    p_enabled      => true,
-    p_schema       => 'ORDERUSER',
-    p_object       => 'SHOW_ORDER_PLSQL',
-    p_object_type  => 'PROCEDURE',
-    p_object_alias => 'showorder'
-  );
-
-  commit;
-end;
-/
-
-begin
-  ords.enable_object (
-    p_enabled      => true,
-    p_schema       => 'ORDERUSER',
-    p_object       => 'DELETE_ALL_ORDERS_PLSQL',
-    p_object_type  => 'PROCEDURE',
-    p_object_alias => 'deleteallorders'
-  );
-
-  commit;
-end;
-/
+show errors
