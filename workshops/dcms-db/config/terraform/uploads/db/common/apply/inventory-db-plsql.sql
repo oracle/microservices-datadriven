@@ -7,7 +7,7 @@ create or replace procedure add_inventory (itemid in varchar2)
   authid current_user
 is
 begin
-  update inventory set inventorycount=inventorycount+1 where inventoryid = itemid;
+  update inventory set inventorycount=inventorycount + 1 where inventoryid = itemid;
   commit;
 end;
 /
@@ -18,7 +18,7 @@ create or replace procedure remove_inventory (itemid in varchar2)
   authid current_user
 is
 begin
-  update inventory set inventorycount=inventorycount+1 where inventoryid = itemid;
+  update inventory set inventorycount=inventorycount - 1 where inventoryid = itemid;
   commit;
 end;
 /
@@ -56,6 +56,7 @@ show errors
 
 -- order message consumer - background job
 create or replace procedure order_message_consumer
+  authid current_user
 is
   order_jo json_object_t;
   inv_msg_jo json_object_t;

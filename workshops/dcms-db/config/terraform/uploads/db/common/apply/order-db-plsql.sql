@@ -101,6 +101,7 @@ show errors
 
 -- inventory message consumer - background job
 create or replace procedure inventory_message_consumer
+  authid current_user
 is
   order_jo json_object_t;
   inv_msg_jo json_object_t;

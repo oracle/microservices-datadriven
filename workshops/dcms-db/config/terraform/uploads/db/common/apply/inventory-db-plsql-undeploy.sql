@@ -6,34 +6,34 @@
 begin
   ords.enable_schema(
     p_enabled             => false,
-    p_schema              => '$ORDER_USER',
+    p_schema              => '$INVENTORY_USER',
     p_url_mapping_type    => 'BASE_PATH',
-    p_url_mapping_pattern => 'order',
+    p_url_mapping_pattern => 'inventory',
     p_auto_rest_auth      => false
   );
 
   ords.enable_object (
     p_enabled      => false,
-    p_schema       => '$ORDER_USER',
-    p_object       => 'PLACE_ORDER',
+    p_schema       => '$INVENTORY_USER',
+    p_object       => 'ADD_INVENTORY',
     p_object_type  => 'PROCEDURE',
-    p_object_alias => 'placeorder'
+    p_object_alias => 'addInventory'
   );
 
   ords.enable_object (
     p_enabled      => false,
-    p_schema       => '$ORDER_USER',
-    p_object       => 'SHOW_ORDER',
+    p_schema       => '$INVENTORY_USER',
+    p_object       => 'REMOVE_INVENTORY',
     p_object_type  => 'PROCEDURE',
-    p_object_alias => 'showorder'
+    p_object_alias => 'removeInventory'
   );
 
   ords.enable_object (
     p_enabled      => false,
-    p_schema       => '$ORDER_USER',
-    p_object       => 'DELETE_ALL_ORDERS',
+    p_schema       => '$INVENTORY_USER',
+    p_object       => 'GET_INVENTORY',
     p_object_type  => 'PROCEDURE',
-    p_object_alias => 'deleteallorders'
+    p_object_alias => 'getInventory'
   );
 
   commit;
@@ -43,20 +43,14 @@ end;
 
 -- deploy the backend message consumer
 declare
-  job_name varchar2(50) := 'order_service_plsql';
+  job_name varchar2(50) := 'inventory_service_plsql';
 begin
   begin
     dbms_scheduler.stop_job(job_name);
-    exception
-      when others then
-        null;
   end;
 
   begin
     dbms_scheduler.drop_job(job_name);
-    exception
-      when others then
-        null;
   end;
 end;
 /
