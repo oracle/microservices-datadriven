@@ -12,8 +12,7 @@ end inventory_messaging;
 /
 show errors
 
-create or replace package body inventory_messaginChar2797!
-  g
+create or replace package body inventory_messaging
 as
   -- Private constants
   order_queue_name       constant varchar2(100) := '$AQ_USER.$ORDER_QUEUE';

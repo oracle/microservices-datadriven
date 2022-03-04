@@ -38,7 +38,7 @@ show errors
 
 
 -- check inventory - private
-create or replace function update_inventory(in_inventory_id in varchar2) return varchar2
+create or replace function fulfill_order(in_inventory_id in varchar2) return varchar2
 is
   v_inventory_location inventory.inventorylocation%type;
 begin
@@ -71,11 +71,11 @@ begin
       continue;
     end if;
 
-    -- Parse the order message
+    -- get the item id for the order
     order_inv_id := order_jo.get_string('itemid');
 
-    -- check the inventory
-    order_inv_loc := update_inventory(in_inventory_id => order_inv_id);
+    -- fulfill the order
+    order_inv_loc := fulfill_order(order_inv_id);
 
     -- construct the inventory message
     inv_msg_jo := new json_object_t;
@@ -84,7 +84,7 @@ begin
     inv_msg_jo.put('inventorylocation', order_inv_loc);
     inv_msg_jo.put('suggestiveSale',    'beer');
 
-    -- persist the updates
+    -- send the inventory message in response
     inventory_messaging.enqueue_inventory_message(inv_msg_jo);
 
     -- commit
