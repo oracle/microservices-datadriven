@@ -5,7 +5,7 @@
 -- deploy the web interfaces
 begin
   ords.enable_schema(
-    p_enabled             => true,
+    p_enabled             => false,
     p_schema              => '$ORDER_USER',
     p_url_mapping_type    => 'BASE_PATH',
     p_url_mapping_pattern => 'order',
@@ -13,7 +13,7 @@ begin
   );
 
   ords.enable_object (
-    p_enabled      => true,
+    p_enabled      => false,
     p_schema       => '$ORDER_USER',
     p_object       => 'PLACE_ORDER',
     p_object_type  => 'PROCEDURE',
@@ -21,7 +21,7 @@ begin
   );
 
   ords.enable_object (
-    p_enabled      => true,
+    p_enabled      => false,
     p_schema       => '$ORDER_USER',
     p_object       => 'SHOW_ORDER',
     p_object_type  => 'PROCEDURE',
@@ -29,7 +29,7 @@ begin
   );
 
   ords.enable_object (
-    p_enabled      => true,
+    p_enabled      => false,
     p_schema       => '$ORDER_USER',
     p_object       => 'DELETE_ALL_ORDERS',
     p_object_type  => 'PROCEDURE',
@@ -58,18 +58,5 @@ begin
       when others then
         null;
   end;
-
-  dbms_scheduler.create_job (
-    job_name           =>  job_name,
-    job_type           =>  'STORED_PROCEDURE',
-    job_action         =>  'inventory_message_consumer',
-    repeat_interval    =>  'FREQ=SECONDLY;INTERVAL=10');
-
-  dbms_scheduler.set_attribute (
-    job_name, 'logging_level', dbms_scheduler.logging_full);
-
-  dbms_scheduler.run_job(
-    job_name            => job_name,
-    use_current_session => false);
 end;
 /
