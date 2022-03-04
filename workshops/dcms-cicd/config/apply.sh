@@ -10,14 +10,14 @@ if ! provisioning-helper-pre-apply; then
 fi
 
 
-if ! test -d $MY_STATE/jenkins; then
-  rm -rf $MY_STATE/jenkins
+if ! test -d $MY_STATE/terraform; then
+  rm -rf $MY_STATE/terraform
   cp -r $DCMS_CICD_JNKNS_DIR $MY_STATE
 fi
 
 
 # Start the provisioning apply
-cd $MY_STATE/jenkins
+cd $MY_STATE/terraform
 source $DCMS_CICD_JNKNS_DIR/terraform-env.sh
 
 if ! terraform init; then
