@@ -547,20 +547,16 @@
 
           this.lab9AddInventoryAction = function (event, vm) {
             vm.inProgress(true);
-            var order = {
-              serviceName: 'supplier',
-              commandName: 'addInventory',
-              orderId: -1,
-              orderItem: vm.lab9Item(),
-              deliverTo: ''
+            var inventory = {
+              itemid: vm.lab9Item()
             };
             var fetchOptions = {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(order)
+              body: JSON.stringify(inventory)
             };
 
-            fetch('/command', fetchOptions).then(fetchResult => {
+            fetch('/ords/inventory/addInventory', fetchOptions).then(fetchResult => {
               vm.httpCode(fetchResult.status);
               fetchResult.json().then(payload => {
                 vm.labResult(JSON.stringify(payload, null, 2));
@@ -571,20 +567,17 @@
 
           this.lab9RemoveInventoryAction = function (event, vm) {
             vm.inProgress(true);
-            var order = {
-              serviceName: 'supplier',
-              commandName: 'removeInventory',
-              orderId: -1,
-              orderItem: vm.lab9Item(),
-              deliverTo: ''
+            var inventory = {
+              itemid: vm.lab9Item()
             };
+
             var fetchOptions = {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(order)
+              body: JSON.stringify(inventory)
             };
 
-            fetch('/command', fetchOptions).then(fetchResult => {
+            fetch('/ords/inventory/removeInventory', fetchOptions).then(fetchResult => {
               vm.httpCode(fetchResult.status);
               fetchResult.json().then(payload => {
                 vm.labResult(JSON.stringify(payload, null, 2));
@@ -595,20 +588,17 @@
 
           this.lab9GetInventoryAction = function (event, vm) {
             vm.inProgress(true);
-            var order = {
-              serviceName: 'supplier',
-              commandName: 'getInventory',
-              orderId: -1,
-              orderItem: vm.lab9Item(),
-              deliverTo: ''
+            var inventory = {
+              itemid: vm.lab9Item()
             };
+
             var fetchOptions = {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(order)
+              body: JSON.stringify(inventory)
             };
 
-            fetch('/command', fetchOptions).then(fetchResult => {
+            fetch('/ords/inventory/getInventory', fetchOptions).then(fetchResult => {
               vm.httpCode(fetchResult.status);
               fetchResult.json().then(payload => {
                 vm.labResult(JSON.stringify(payload, null, 2));
