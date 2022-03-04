@@ -1,6 +1,6 @@
 
 module micro-deploy-public-containerized-jenkins {
-  source = "modules/micro-deploy-public-containerized-jenkins"
+  source = "./modules/micro-deploy-public-containerized-jenkins"
   compartment_id = var.compartment_ocid
   jenkins_password = var.jenkins_password
   region = var.region
@@ -9,7 +9,7 @@ module micro-deploy-public-containerized-jenkins {
 }
 
 module micro-deploy-private-containerized-jenkins {
-  source = "modules/micro-deploy-private-containerized-jenkins"
+  source = "./modules/micro-deploy-private-containerized-jenkins"
   compartment_id = var.compartment_ocid
   jenkins_password = var.jenkins_password
   region = var.region
