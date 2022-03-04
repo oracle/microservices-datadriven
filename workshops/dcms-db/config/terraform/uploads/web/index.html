@@ -556,7 +556,7 @@
               body: JSON.stringify(inventory)
             };
 
-            fetch('/ords/inventory/addInventory', fetchOptions).then(fetchResult => {
+            fetch('/ords/inventory/addInventory/', fetchOptions).then(fetchResult => {
               vm.httpCode(fetchResult.status);
               fetchResult.json().then(payload => {
                 vm.labResult(JSON.stringify(payload, null, 2));
@@ -577,7 +577,7 @@
               body: JSON.stringify(inventory)
             };
 
-            fetch('/ords/inventory/removeInventory', fetchOptions).then(fetchResult => {
+            fetch('/ords/inventory/removeInventory/', fetchOptions).then(fetchResult => {
               vm.httpCode(fetchResult.status);
               fetchResult.json().then(payload => {
                 vm.labResult(JSON.stringify(payload, null, 2));
@@ -598,7 +598,7 @@
               body: JSON.stringify(inventory)
             };
 
-            fetch('/ords/inventory/getInventory', fetchOptions).then(fetchResult => {
+            fetch('/ords/inventory/getInventory/', fetchOptions).then(fetchResult => {
               vm.httpCode(fetchResult.status);
               fetchResult.json().then(payload => {
                 vm.labResult(JSON.stringify(payload, null, 2));
