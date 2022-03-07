@@ -99,23 +99,24 @@
               <!-- Each Lab's UI is defined by a section in the switcher here
                  This in turn is controlled by the selected task in the navigation  -->
               <oj-switcher value="[[selectedTask]]">
-                <!--
-                <div slot="lab7">
-                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab7TestDatasourcesAction]]">Test Data Sources</oj-button>
+                <!-- login -->
+                <div slot="login">
+                  <div slot="body">
+                    <oj-form-layout>
+                      <oj-input-text label-hint="Username" value="{{loginUserName}}"></oj-input-text>
+                      <oj-input-password label-hint="Password" value="{{loginPassword}}"></oj-input-password>
+                    </oj-form-layout>
+                  </div>
+                  <div slot="footer">
+                    <oj-button disabled="[[inProgress]]" on-oj-action="[[loginAction]]"> Submit </oj-button>
+                    <div class="responsePanel oj-flex-item">
+                      <p class="oj-typography-body-xs">Logon Status: <span>
+                          <oj-bind-text value="[[loginStatus()]]"></oj-bind-text>
+                        </span></p>
+                    </div>
+                  </div>
                 </div>
-                <div slot="lab8">
-                  Setup...<br><br>
-                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab8CreateUsersAction]]">Create Users</oj-button>
-                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab8CreateInventoryTableAction]]">Create Inventory Table</oj-button>
-                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab8CreateDatabaseLinksAction]]">Create Database Links</oj-button>
-                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab8SetupTablesQueuesAndPropagationAction]]">Setup Tables Queues and Propagation</oj-button>
-                  <br><br><br><br>
-                  Teardown and other admin...<br><br>
-                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab8EnablePropagationAction]]">Enable Propagation</oj-button>
-                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab8UnschedulePropagationAction]]">Unschedule Propagation</oj-button>
-                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab8DeleteUsersAction]]">Delete Users</oj-button>
-                </div>
-                -->
+
                 <!-- lab9 -->
                 <div slot="lab9">
                   <oj-form-layout>
@@ -126,7 +127,6 @@
                         <th><img src="/images/burger.svg" alt="burger" width="50" height="50"></th>
                       </tr>
                     </table>
-
                     <oj-input-text label-hint="Food" value="{{lab9Food}}"></oj-input-text>
                     <oj-input-text label-hint="Deliver to" value="{{lab9DeliverTo}}"></oj-input-text>
                     <oj-input-text label-hint="Order ID" value="{{lab9OrderId}}"></oj-input-text>
@@ -144,18 +144,6 @@
                   <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9AddInventoryAction]]">Add Inventory</oj-button>
                   <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9RemoveInventoryAction]]">Remove Inventory</oj-button>
                   <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9GetInventoryAction]]">Get Inventory</oj-button>
-                </div>
-                <!-- lab10 -->
-                <div slot="lab10">
-                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab10ShowOpenAPIAction]]">Show OpenAPI/Swagger</oj-button>
-                  <br><br>
-                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab10ShowMetricsAction]]">Show Metrics</oj-button>
-                  <br><br>
-                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab10healthliveAction]]">Show Health: Liveness</oj-button>
-                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab10healthreadyAction]]">Show Health: Readiness</oj-button>
-                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab10ordersetlivenesstofalseAction]]">Set Liveness to False</oj-button>
-                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab10lastContainerStartTimeAction]]">Get Last Container Start Time</oj-button>
-                  <br><br>
                 </div>
               </oj-switcher>
             </div>
@@ -251,14 +239,48 @@
       function (Bootstrap, ko, ResponsiveUtils, ResponsiveKnockoutUtils, ArrayDataProvider, grubSourceData, NumberConverter) {
 
         function ControllerViewModel() {
-          // Media queries for repsonsive layouts
+          // Media queries for responsive layouts
           const smQuery = ResponsiveUtils.getFrameworkQuery(ResponsiveUtils.FRAMEWORK_QUERY_KEY.SM_ONLY);
           this.smScreen = ResponsiveKnockoutUtils.createMediaQueryObservable(smQuery);
+
+          // login dialog
+          this.loginUserName = ko.observable("");
+          this.loginPassword = ko.observable("");
+          this.loginStatus = ko.observable("Not logged in");
+          this.authorization = "";
+
+          this.loginAction = function (event, vm) {
+            vm.inProgress(true);
+            vm.loginStatus("Logging in...");
+            var inventory = {
+              itemid: "sushi"
+            };
+
+            vm.authorization = "Basic " + btoa(vm.loginUserName() + ":" + vm.loginPassword());
+
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json',
+                         'Authorization': vm.authorization },
+              body: JSON.stringify(inventory)
+            };
+
+            fetch('/ords/inventory/getInventory/', fetchOptions).then(fetchResult => {
+              if (fetchResult.status == 200) {
+                vm.loginStatus("Login success");
+              } else {
+                vm.loginStatus("Login failed");
+              }
+              fetchResult.json().then(payload => {
+//                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          };
 
           //Hold the results of the last call
           this.labResult = ko.observable();
           this.httpCode = ko.observable();
-
 
           // Screen Control
           this.selectedTask = ko.observable('about');
@@ -268,10 +290,8 @@
           // Key for the map matches the slot name used in the switcher
           this.menuTasks = new Map();
           this.menuTasks.set('about', { label: 'About', title: 'About the GrabDish Explorer', description: 'The GrabDish Explorer screen allows you to test the results of each lab.  Simply click the tab on the left that corresponds to the lab that you want to test out and follow the on-screen instructions.' });
-//          this.menuTasks.set('lab7', { label: 'Datasources', title: 'Datasources', description: 'Verify that the Datasources are all working' });
-//          this.menuTasks.set('lab8', { label: 'Setup (and Tear Down) Data and Messaging', title: 'Setup (and Tear Down) Data and Messaging', description: 'This lab sets up data and messaging in the database' });
+          this.menuTasks.set('login', { label: 'Login', title: 'Grabdish Login', description: 'Login to the Grabdish application' });
           this.menuTasks.set('lab9', { label: 'Transactional', title: 'Transactional', description: 'JSON and relational data types, AQ transactional event-driven communication, saga, event sourcing, and CQRS' });
-          this.menuTasks.set('lab10', { label: 'OpenAPI, Metrics, and Health', title: 'OpenAPI, Metrics, and Health', description: 'Use Helidon features to provide OpenAPI, tracing, metrics, and health checks' });
 
           //Drives the navigation list itself
           this.tasks = new ArrayDataProvider(Array.from(this.menuTasks.entries()).map(entry => { entry[1].id = entry[0]; return entry[1]; }), { keyAttributes: 'id' });
@@ -279,201 +299,6 @@
           this.inProgress = ko.observable(false);
 
           // Function calls and state relating to given labs
-
-          // Lab 7. ----------------------------------------------------------- //
-          this.lab7TestDatasourcesAction = function (event, vm) {
-            vm.inProgress(true);
-            var order = {
-              serviceName: 'admin',
-              commandName: 'testdatasources',
-              orderId: -1,
-              orderItem: vm.lab9Food(),
-              deliverTo: vm.lab9DeliverTo()
-            };
-            var fetchOptions = {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(order)
-            };
-
-            fetch('/command', fetchOptions).then(fetchResult => {
-              vm.httpCode(fetchResult.status);
-              fetchResult.json().then(payload => {
-                vm.labResult(JSON.stringify(payload, null, 2));
-                vm.inProgress(false);
-              });
-            });
-          };
-
-
-      // Lab 8. ----------------------------------------------------------- //
-          this.lab8CreateUsersAction = function (event, vm) {
-            vm.inProgress(true);
-            var order = {
-              serviceName: 'admin',
-              commandName: 'createUsers',
-              orderId: -1,
-              orderItem: vm.lab9Food(),
-              deliverTo: vm.lab9DeliverTo()
-            };
-            var fetchOptions = {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(order)
-            };
-
-            fetch('/command', fetchOptions).then(fetchResult => {
-              vm.httpCode(fetchResult.status);
-              fetchResult.json().then(payload => {
-                vm.labResult(JSON.stringify(payload, null, 2));
-                vm.inProgress(false);
-              });
-            });
-          };
-
-          this.lab8CreateInventoryTableAction = function (event, vm) {
-            vm.inProgress(true);
-            var order = {
-              serviceName: 'admin',
-              commandName: 'createInventoryTable',
-              orderId: -1,
-              orderItem: vm.lab9Food(),
-              deliverTo: vm.lab9DeliverTo()
-            };
-            var fetchOptions = {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(order)
-            };
-
-            fetch('/command', fetchOptions).then(fetchResult => {
-              vm.httpCode(fetchResult.status);
-              fetchResult.json().then(payload => {
-                vm.labResult(JSON.stringify(payload, null, 2));
-                vm.inProgress(false);
-              });
-            });
-          };
-
-          this.lab8CreateDatabaseLinksAction = function (event, vm) {
-            vm.inProgress(true);
-            var order = {
-              serviceName: 'admin',
-              commandName: 'createDBLinks',
-              orderId: -1,
-              orderItem: vm.lab9Food(),
-              deliverTo: vm.lab9DeliverTo()
-            };
-            var fetchOptions = {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(order)
-            };
-
-            fetch('/command', fetchOptions).then(fetchResult => {
-              vm.httpCode(fetchResult.status);
-              fetchResult.json().then(payload => {
-                vm.labResult(JSON.stringify(payload, null, 2));
-                vm.inProgress(false);
-              });
-            });
-          };
-
-          this.lab8SetupTablesQueuesAndPropagationAction = function (event, vm) {
-            vm.inProgress(true);
-            var order = {
-              serviceName: 'admin',
-              commandName: 'setupTablesQueuesAndPropagation',
-              orderId: -1,
-              orderItem: vm.lab9Food(),
-              deliverTo: vm.lab9DeliverTo()
-            };
-            var fetchOptions = {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(order)
-            };
-
-            fetch('/command', fetchOptions).then(fetchResult => {
-              vm.httpCode(fetchResult.status);
-              fetchResult.json().then(payload => {
-                vm.labResult(JSON.stringify(payload, null, 2));
-                vm.inProgress(false);
-              });
-            });
-          };
-
-          this.lab8EnablePropagationAction = function (event, vm) {
-            vm.inProgress(true);
-            var order = {
-              serviceName: 'admin',
-              commandName: 'enablePropagation',
-              orderId: -1,
-              orderItem: vm.lab9Food(),
-              deliverTo: vm.lab9DeliverTo()
-            };
-            var fetchOptions = {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(order)
-            };
-
-            fetch('/command', fetchOptions).then(fetchResult => {
-              vm.httpCode(fetchResult.status);
-              fetchResult.json().then(payload => {
-                vm.labResult(JSON.stringify(payload, null, 2));
-                vm.inProgress(false);
-              });
-            });
-          };
-
-          this.lab8UnschedulePropagationAction = function (event, vm) {
-            vm.inProgress(true);
-            var order = {
-              serviceName: 'admin',
-              commandName: 'unschedulePropagation',
-              orderId: -1,
-              orderItem: vm.lab9Food(),
-              deliverTo: vm.lab9DeliverTo()
-            };
-            var fetchOptions = {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(order)
-            };
-
-            fetch('/command', fetchOptions).then(fetchResult => {
-              vm.httpCode(fetchResult.status);
-              fetchResult.json().then(payload => {
-                vm.labResult(JSON.stringify(payload, null, 2));
-                vm.inProgress(false);
-              });
-            });
-          };
-
-          this.lab8DeleteUsersAction = function (event, vm) {
-            vm.inProgress(true);
-            var order = {
-              serviceName: 'admin',
-              commandName: 'deleteUsers',
-              orderId: -1,
-              orderItem: vm.lab9Food(),
-              deliverTo: vm.lab9DeliverTo()
-            };
-            var fetchOptions = {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(order)
-            };
-
-            fetch('/command', fetchOptions).then(fetchResult => {
-              vm.httpCode(fetchResult.status);
-              fetchResult.json().then(payload => {
-                vm.labResult(JSON.stringify(payload, null, 2));
-                vm.inProgress(false);
-              });
-            });
-          };
 
           // Lab 9. ----------------------------------------------------------- //
           this.lab9Food = ko.observable('sushi');
@@ -490,7 +315,8 @@
             };
             var fetchOptions = {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: { 'Content-Type': 'application/json',
+                         'Authorization': vm.authorization },
               body: JSON.stringify(order)
             };
 
@@ -501,7 +327,7 @@
                 vm.inProgress(false);
               });
             });
-          }
+          };
 
           this.lab9DeleteAllOrdersAction = function (event, vm) {
             vm.inProgress(true);
@@ -510,7 +336,8 @@
             };
             var fetchOptions = {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: { 'Content-Type': 'application/json',
+                         'Authorization': vm.authorization },
               body: JSON.stringify(order)
             };
 
@@ -521,7 +348,7 @@
                 vm.inProgress(false);
               });
             });
-          }
+          };
 
           this.lab9ShowOrderAction = function (event, vm) {
             vm.inProgress(true);
@@ -530,10 +357,10 @@
             };
             var fetchOptions = {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: { 'Content-Type': 'application/json',
+                         'Authorization': vm.authorization },
               body: JSON.stringify(order)
             };
-
             fetch('/ords/order/showorder/', fetchOptions).then(fetchResult => {
               vm.httpCode(fetchResult.status);
               fetchResult.json().then(payload => {
@@ -541,7 +368,7 @@
                 vm.inProgress(false);
               });
             });
-          }
+          };
 
           // supplier service
 
@@ -552,7 +379,8 @@
             };
             var fetchOptions = {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: { 'Content-Type': 'application/json',
+                         'Authorization': vm.authorization },
               body: JSON.stringify(inventory)
             };
 
@@ -563,7 +391,7 @@
                 vm.inProgress(false);
               });
             });
-          }
+          };
 
           this.lab9RemoveInventoryAction = function (event, vm) {
             vm.inProgress(true);
@@ -573,7 +401,8 @@
 
             var fetchOptions = {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: { 'Content-Type': 'application/json',
+                         'Authorization': vm.authorization },
               body: JSON.stringify(inventory)
             };
 
@@ -584,7 +413,7 @@
                 vm.inProgress(false);
               });
             });
-          }
+          };
 
           this.lab9GetInventoryAction = function (event, vm) {
             vm.inProgress(true);
@@ -594,7 +423,8 @@
 
             var fetchOptions = {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: { 'Content-Type': 'application/json',
+                         'Authorization': vm.authorization },
               body: JSON.stringify(inventory)
             };
 
@@ -605,279 +435,7 @@
                 vm.inProgress(false);
               });
             });
-          }
-
-          // Lab 10. ----------------------------------------------------------- //
-
-          this.lab10ShowOpenAPIAction = function (event, vm) {
-            vm.inProgress(true);
-            var order = {
-              serviceName: 'order',
-              commandName: 'openapi',
-              orderId: -1,
-              orderItem: '',
-              deliverTo: ''
-            };
-            var fetchOptions = {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(order)
-            };
-
-            fetch('/openAPI', fetchOptions).then(fetchResult => {
-              vm.httpCode(fetchResult.status);
-              fetchResult.text().then(payload => {
-                vm.labResult(payload);
-                vm.inProgress(false);
-              });
-            });
           };
-
-          this.lab10ShowMetricsAction = function (event, vm) {
-            vm.inProgress(true);
-            var order = {
-              serviceName: 'order',
-              commandName: 'metrics',
-              orderId: -1,
-              orderItem: '',
-              deliverTo: ''
-            };
-            var fetchOptions = {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(order)
-            };
-
-            fetch('/getmetrics', fetchOptions).then(fetchResult => {
-              vm.httpCode(fetchResult.status);
-              fetchResult.text().then(payload => {
-                vm.labResult(payload);
-                vm.inProgress(false);
-              });
-            });
-          };
-
-
-          this.lab10healthliveAction = function (event, vm) {
-            vm.inProgress(true);
-            var order = {
-              serviceName: 'order',
-              commandName: 'health/live',
-              orderId: -1,
-              orderItem: '',
-              deliverTo: ''
-            };
-            var fetchOptions = {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(order)
-            };
-
-            fetch('/command', fetchOptions).then(fetchResult => {
-              vm.httpCode(fetchResult.status);
-              fetchResult.json().then(payload => {
-                vm.labResult(JSON.stringify(payload, null, 2));
-                vm.inProgress(false);
-              });
-            });
-          };
-
-          this.lab10healthreadyAction = function (event, vm) {
-            vm.inProgress(true);
-            var order = {
-              serviceName: 'order',
-              commandName: 'health/ready',
-              orderId: -1,
-              orderItem: '',
-              deliverTo: ''
-            };
-            var fetchOptions = {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(order)
-            };
-
-            fetch('/command', fetchOptions).then(fetchResult => {
-              vm.httpCode(fetchResult.status);
-              fetchResult.json().then(payload => {
-                vm.labResult(JSON.stringify(payload, null, 2));
-                vm.inProgress(false);
-              });
-            });
-          };
-
-          this.lab10ordersetlivenesstofalseAction = function (event, vm) {
-            vm.inProgress(true);
-            var order = {
-              serviceName: 'order',
-              commandName: 'ordersetlivenesstofalse',
-              orderId: -1,
-              orderItem: '',
-              deliverTo: ''
-            };
-            var fetchOptions = {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(order)
-            };
-
-            fetch('/command', fetchOptions).then(fetchResult => {
-              vm.httpCode(fetchResult.status);
-              fetchResult.json().then(payload => {
-                vm.labResult(JSON.stringify(payload, null, 2));
-                vm.inProgress(false);
-              });
-            });
-          };
-
-          this.lab10lastContainerStartTimeAction = function (event, vm) {
-            vm.inProgress(true);
-            var order = {
-              serviceName: 'order',
-              commandName: 'lastContainerStartTime',
-              orderId: -1,
-              orderItem: '',
-              deliverTo: ''
-            };
-            var fetchOptions = {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(order)
-            };
-
-            fetch('/command', fetchOptions).then(fetchResult => {
-              vm.httpCode(fetchResult.status);
-              fetchResult.json().then(payload => {
-                vm.labResult(JSON.stringify(payload, null, 2));
-                vm.inProgress(false);
-              });
-            });
-          };
-
-          this.lab10ShowTracingAction = function (event, vm) {
-            vm.inProgress(true);
-            var order = {
-              serviceName: 'jaeger',
-              commandName: '',
-              orderId: -1,
-              orderItem: '',
-              deliverTo: ''
-            };
-            var fetchOptions = {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(order)
-            };
-
-            fetch('/command', fetchOptions).then(fetchResult => {
-              vm.httpCode(fetchResult.status);
-              fetchResult.json().then(payload => {
-                vm.labResult(JSON.stringify(payload, null, 2));
-                vm.inProgress(false);
-              });
-            });
-          };
-
-
-          // Lab 11. ---------Transaction crash tests including MongoDB, Kafka, Postgres version---- //
-
-
-          this.lab11CrashAfterInsertAction = function (event, vm) {
-            vm.inProgress(true);
-            var order = {
-              serviceName: 'order',
-              commandName: 'crashAfterInsert',
-              orderId: -1,
-              orderItem: '',
-              deliverTo: ''
-            };
-            var fetchOptions = {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(order)
-            };
-
-            fetch('/command', fetchOptions).then(fetchResult => {
-              vm.httpCode(fetchResult.status);
-              fetchResult.text().then(payload => {
-                vm.labResult(payload);
-                vm.inProgress(false);
-              });
-            });
-          };
-
-          this.lab11CrashAfterOrderMessageReceivedAction = function (event, vm) {
-            vm.inProgress(true);
-            var order = {
-              serviceName: 'inventory',
-              commandName: 'crashAfterOrderMessageReceived',
-              orderId: -1,
-              orderItem: '',
-              deliverTo: ''
-            };
-            var fetchOptions = {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(order)
-            };
-
-            fetch('/command', fetchOptions).then(fetchResult => {
-              vm.httpCode(fetchResult.status);
-              fetchResult.text().then(payload => {
-                vm.labResult(payload);
-                vm.inProgress(false);
-              });
-            });
-          };
-
-          this.lab11CrashAfterOrderMessageProcessedAction = function (event, vm) {
-            vm.inProgress(true);
-            var order = {
-              serviceName: 'inventory',
-              commandName: 'crashAfterOrderMessageProcessed',
-              orderId: -1,
-              orderItem: '',
-              deliverTo: ''
-            };
-            var fetchOptions = {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(order)
-            };
-
-            fetch('/command', fetchOptions).then(fetchResult => {
-              vm.httpCode(fetchResult.status);
-              fetchResult.text().then(payload => {
-                vm.labResult(payload);
-                vm.inProgress(false);
-              });
-            });
-          };
-
-          this.lab11CrashAfterInventoryMessageReceivedAction = function (event, vm) {
-            vm.inProgress(true);
-            var order = {
-              serviceName: 'order',
-              commandName: 'crashAfterInventoryMessageReceived',
-              orderId: -1,
-              orderItem: '',
-              deliverTo: ''
-            };
-            var fetchOptions = {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(order)
-            };
-
-            fetch('/command', fetchOptions).then(fetchResult => {
-              vm.httpCode(fetchResult.status);
-              fetchResult.text().then(payload => {
-                vm.labResult(payload);
-                vm.inProgress(false);
-              });
-            });
-          };
-
 
           // Footer
           this.footerLinks = [
@@ -893,6 +451,7 @@
           function () {
             var app = new ControllerViewModel();
             ko.applyBindings(app, document.getElementById('globalBody'));
+//            document.getElementById("loginDialog").open();
           }
         );
       }

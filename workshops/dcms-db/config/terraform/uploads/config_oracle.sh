@@ -339,12 +339,18 @@ RC=$(( RC + $? ))
 
 copy_app "${standalone_root}"
 
+cd ${ords_dir}
+java -jar ords.war user grabdish order_user inventory_user <<!
+${admin_password}
+${admin_password}
+!
+
 # Debugging Startup
 cat > /opt/oracle/ords/mylogfile.properties <<'!'
 handlers=java.util.logging.FileHandler
 # Default global logging level for ORDS
-#.level=CONFIG
-.level=FINE
+.level=CONFIG
+#.level=FINE
 java.util.logging.FileHandler.pattern=/var/log/ords/ords-sys.log
 java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter
 java.util.logging.SimpleFormatter.format = %1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS %4$-6s %2$s %5$s%6$s%n
