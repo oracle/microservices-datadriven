@@ -2,6 +2,20 @@
 -- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 
+-- enable ORDS for this schema
+begin
+  ords.enable_schema(
+    p_enabled             => true,
+    p_schema              => '$INVENTORY_USER',
+    p_url_mapping_type    => 'BASE_PATH',
+    p_url_mapping_pattern => 'inventory',
+    p_auto_rest_auth      => false
+  );
+  commit;
+end;
+/
+
+-- define roles and privileges
 begin
   ords.delete_privilege (
     p_name => 'inventory_mgmt'
@@ -52,14 +66,6 @@ end;
 
 -- deploy the web interfaces
 begin
-  ords.enable_schema(
-    p_enabled             => true,
-    p_schema              => '$INVENTORY_USER',
-    p_url_mapping_type    => 'BASE_PATH',
-    p_url_mapping_pattern => 'inventory',
-    p_auto_rest_auth      => false
-  );
-
   ords.enable_object (
     p_enabled      => true,
     p_schema       => '$INVENTORY_USER',
