@@ -37,18 +37,32 @@ end;
 show errors
 
 
--- check inventory - private
-create or replace function fulfill_order(in_inventory_id in varchar2) return varchar2
+-- fulfill order - business logic
+create or replace function fulfill_order(in_order_jo in json_object_t) return json_object_t
 is
+  inv_msg_jo json_object_t;
+  v_item_id inventory.inventoryid%type;
   v_inventory_location inventory.inventorylocation%type;
 begin
+  v_item_id := in_order_jo.get_string('itemid');
+
+  -- construct the inventory message
+  inv_msg_jo := new json_object_t;
+  inv_msg_jo.put('orderid',           in_order_jo.get_string('orderid'));
+  inv_msg_jo.put('itemid',            v_item_id);
+  inv_msg_jo.put('suggestiveSale',    'beer');
+
   update inventory set inventorycount = inventorycount - 1
-    where inventoryid = in_inventory_id and inventorycount > 0
+    where inventoryid = v_item_id and inventorycount > 0
     returning inventorylocation into v_inventory_location;
+
   if sql%rowcount = 0 then
-    return 'inventorydoesnotexist';
+    inv_msg_jo.put('inventorylocation', 'inventorydoesnotexist');
+  else
+    inv_msg_jo.put('inventorylocation', v_inventorylocation);
   end if;
-  return v_inventory_location;
+
+  return inv_msg_jo;
 end;
 /
 show errors
@@ -72,18 +86,8 @@ begin
       continue;
     end if;
 
-    -- get the item id for the order
-    order_inv_id := order_jo.get_string('itemid');
-
     -- fulfill the order
-    order_inv_loc := fulfill_order(order_inv_id);
-
-    -- construct the inventory message
-    inv_msg_jo := new json_object_t;
-    inv_msg_jo.put('orderid',           order_jo.get_string('orderid'));
-    inv_msg_jo.put('itemid',            order_inv_id);
-    inv_msg_jo.put('inventorylocation', order_inv_loc);
-    inv_msg_jo.put('suggestiveSale',    'beer');
+    inv_msg_jo := fulfill_order(order_jo);
 
     -- send the inventory message in response
     inventory_messaging.enqueue_inventory_message(inv_msg_jo);

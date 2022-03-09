@@ -43,7 +43,7 @@ end;
 
 -- deploy the backend message consumer
 declare
-  job_name varchar2(50) := 'order_service_plsql';
+  job_name varchar2(50) := 'order_service';
 begin
   begin
     dbms_scheduler.stop_job(job_name);

@@ -2,8 +2,8 @@
 -- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 
--- place order using mle javascript
-create or replace procedure place_order_js (
+-- place order - REST api
+create or replace procedure place_order (
   orderid in out varchar2,
   itemid in out varchar2,
   deliverylocation in out varchar2,
@@ -14,60 +14,44 @@ authid current_user
 is
   ctx dbms_mle.context_handle_t := dbms_mle.create_context();
   js_code clob := q'~
-    var oracledb = require("mle-js-oracledb");
-    var bindings = require("mle-js-bindings");
-    var conn = oracledb.defaultConnection();
-    try {
-      // construct the order object
-      const order = {
-        orderid: bindings.importValue("orderid"),
-        itemid: bindings.importValue("itemid"),
-        deliverylocation: bindings.importValue("deliverylocation"),
-        status: "pending",
-        inventorylocation: "",
-        suggestivesale: ""
-      }
+  var db = require("mle-js-oracledb");
+  var bindings = require("mle-js-bindings");
+  var conn = db.defaultConnection();
 
-      // insert the order object
-      insert_order(conn, order);
+  // import order object
+  const order = JSON.parse( bindings.importValue("order") );
 
-      // send the order message
-      enqueue_order_message(conn, order);
+  // place the orders
+  order = placeorder(conn, order);
 
-      // commit
-      conn.commit;
+  // export order
+  bindings.exportValue("order", order);
 
-      // output order
-      bindings.exportValue("status", order.status);
-      bindings.exportValue("inventorylocation", "blah");
-      bindings.exportValue("suggestivesale", order.suggestivesale);
-
-    } catch(error) {
-      conn.rollback;
-      throw error;
-    }
-
-    function insert_order(conn, order) {
-        conn.execute( "begin order_collection.insert_order(json_object_t(:1)); end;", [JSON.stringify(order)]);
-    }
-
-    function enqueue_order_message(conn, order) {
-        conn.execute( "begin order_messaging.enqueue_order_message(json_object_t(:1)); end;", [JSON.stringify(order)]);
-    }
-   ~';
+  $(<./js/order.js)~';
 begin
+
+  -- construct the order object
+  order_jo := new json_object_t;
+  order_jo.put('orderid', orderid);
+  order_jo.put('itemid',  itemid);
+  order_jo.put('deliverylocation', deliverylocation);
+
   -- pass variables to javascript
-  dbms_mle.export_to_mle(ctx, 'orderid', orderid);
-  dbms_mle.export_to_mle(ctx, 'itemid', itemid);
-  dbms_mle.export_to_mle(ctx, 'deliverylocation', deliverylocation);
+  dbms_mle.export_to_mle(ctx, 'order', order_jo.to_string);
 
   -- execute javascript
   dbms_mle.eval(ctx, 'JAVASCRIPT', js_code);
 
   -- handle response
-  dbms_mle.import_from_mle(ctx, 'status', status);
-  dbms_mle.import_from_mle(ctx, 'inventorylocation', inventorylocation);
-  dbms_mle.import_from_mle(ctx, 'suggestivesale', suggestivesale);
+  dbms_mle.import_from_mle(ctx, 'order', order_string);
+
+  order_jo := json_object_t(order_string);
+  orderid :=           order_jo.get_string('orderid');
+  itemid :=            order_jo.get_string('itemid');
+  deliverylocation :=  order_jo.get_string('deliverylocation');
+  status :=            order_jo.get_string('status');
+  inventorylocation := order_jo.get_string('inventorylocation');
+  suggestivesale :=    order_jo.get_string('suggestivesale');
 
   dbms_mle.drop_context(ctx);
 
@@ -80,55 +64,118 @@ end;
 /
 show errors
 
--- deploy the microservice
-begin
-  ords.enable_schema(
-    p_enabled             => true,
-    p_schema              => '$ORDER_USER',
-    p_url_mapping_type    => 'BASE_PATH',
-    p_url_mapping_pattern => 'order',
-    p_auto_rest_auth      => false
-  );
 
-  commit;
-end;
-/
+-- show order - REST api
+create or replace procedure show_order (
+  orderid in out varchar2,
+  itemid out varchar2,
+  deliverylocation out varchar2,
+  status out varchar2,
+  inventorylocation out varchar2,
+  suggestivesale out varchar2)
+  authid current_user
+  is
+    ctx dbms_mle.context_handle_t := dbms_mle.create_context();
+    js_code clob := q'~
+    var db = require("mle-js-oracledb");
+    var bindings = require("mle-js-bindings");
+    var conn = db.defaultConnection();
 
-begin
-  ords.enable_object (
-    p_enabled      => true,
-    p_schema       => '$ORDER_USER',
-    p_object       => 'PLACE_ORDER_PLSQL',
-    p_object_type  => 'PROCEDURE',
-    p_object_alias => 'placeorder'
-  );
+    // import order object
+    const orderid = bindings.importValue("orderid");
 
-  commit;
-end;
-/
+    // place the orders
+    order = showorder(orderid);
 
-begin
-  ords.enable_object (
-    p_enabled      => true,
-    p_schema       => '$ORDER_USER',
-    p_object       => 'SHOW_ORDER_PLSQL',
-    p_object_type  => 'PROCEDURE',
-    p_object_alias => 'showorder'
-  );
+    // export order
+    bindings.exportValue("order", order);
 
-  commit;
-end;
-/
+    $(<./js/order.js)~';
+  begin
+    -- pass variables to javascript
+    dbms_mle.export_to_mle(ctx, 'orderid', orderid);
 
-begin
-  ords.enable_object (
-    p_enabled      => true,
-    p_schema       => '$ORDER_USER',
-    p_object       => 'DELETE_ALL_ORDERS_PLSQL',
-    p_object_type  => 'PROCEDURE',
-    p_object_alias => 'deleteallorders'
-  );
+    -- execute javascript
+    dbms_mle.eval(ctx, 'JAVASCRIPT', js_code);
 
-  commit;
-end;
-/
+    -- handle response
+    dbms_mle.import_from_mle(ctx, 'order', order_string);
+
+    order_jo := json_object_t(order_string);
+    orderid :=           order_jo.get_string('orderid');
+    itemid :=            order_jo.get_string('itemid');
+    deliverylocation :=  order_jo.get_string('deliverylocation');
+    status :=            order_jo.get_string('status');
+    inventorylocation := order_jo.get_string('inventorylocation');
+    suggestivesale :=    order_jo.get_string('suggestivesale');
+
+    dbms_mle.drop_context(ctx);
+
+  exception
+    when others then
+      dbms_mle.drop_context(ctx);
+      raise;
+
+  end;
+  /
+  show errors
+
+
+  -- delete all orders - REST api
+  create or replace procedure delete_all_orders
+  authid current_user
+  is
+    ctx dbms_mle.context_handle_t := dbms_mle.create_context();
+    js_code clob := q'~
+    var db = require("mle-js-oracledb");
+    var bindings = require("mle-js-bindings");
+    var conn = db.defaultConnection();
+
+    // place the orders
+    deleteallorders(conn);
+
+    $(<./js/order.js)~';
+  begin
+    -- execute javascript
+    dbms_mle.eval(ctx, 'JAVASCRIPT', js_code);
+
+    dbms_mle.drop_context(ctx);
+
+  exception
+    when others then
+      dbms_mle.drop_context(ctx);
+      raise;
+
+  end;
+  /
+  show errors
+
+
+  -- inventory message consumer - background job
+  create or replace procedure inventory_message_consumer
+  authid current_user
+  is
+    ctx dbms_mle.context_handle_t := dbms_mle.create_context();
+    js_code clob := q'~
+    var db = require("mle-js-oracledb");
+    var bindings = require("mle-js-bindings");
+    var conn = db.defaultConnection();
+
+    // process inventory messages
+    inventoryMessageConsumer();
+
+    $(<./js/order.js)~';
+  begin
+    -- execute javascript
+    dbms_mle.eval(ctx, 'JAVASCRIPT', js_code);
+
+    dbms_mle.drop_context(ctx);
+
+  exception
+    when others then
+      dbms_mle.drop_context(ctx);
+      raise;
+
+  end;
+  /
+  show errors

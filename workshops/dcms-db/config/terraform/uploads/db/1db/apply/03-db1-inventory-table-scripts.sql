@@ -8,4 +8,4 @@ connect $INVENTORY_USER/"$INVENTORY_PASSWORD"@$DB1_ALIAS
 @../../common/apply/inventory-table.sql
 @../../common/apply/inventory-messaging.sql
 @../../common/apply/inventory-db-plsql.sql
-@../../common/apply/inventory-db-plsql-deploy.sql
+@../../common/apply/inventory-db-deploy.sql
