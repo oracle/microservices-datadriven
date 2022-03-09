@@ -13,6 +13,7 @@ create or replace procedure place_order (
 authid current_user
 is
   ctx dbms_mle.context_handle_t := dbms_mle.create_context();
+  order_jo json_object_t;
   js_code clob := q'~
   var db = require("mle-js-oracledb");
   var bindings = require("mle-js-bindings");
@@ -74,108 +75,109 @@ create or replace procedure show_order (
   inventorylocation out varchar2,
   suggestivesale out varchar2)
   authid current_user
-  is
-    ctx dbms_mle.context_handle_t := dbms_mle.create_context();
-    js_code clob := q'~
-    var db = require("mle-js-oracledb");
-    var bindings = require("mle-js-bindings");
-    var conn = db.defaultConnection();
+is
+  ctx dbms_mle.context_handle_t := dbms_mle.create_context();
+  order_jo json_object_t;
+  js_code clob := q'~
+  var db = require("mle-js-oracledb");
+  var bindings = require("mle-js-bindings");
+  var conn = db.defaultConnection();
 
-    // import order object
-    const orderid = bindings.importValue("orderid");
+  // import order object
+  const orderid = bindings.importValue("orderid");
 
-    // place the orders
-    order = showorder(orderid);
+  // place the orders
+  order = showorder(orderid);
 
-    // export order
-    bindings.exportValue("order", order);
+  // export order
+  bindings.exportValue("order", order);
 
-    $(<./js/order.js)~';
-  begin
-    -- pass variables to javascript
-    dbms_mle.export_to_mle(ctx, 'orderid', orderid);
+  $(<./js/order.js)~';
+begin
+  -- pass variables to javascript
+  dbms_mle.export_to_mle(ctx, 'orderid', orderid);
 
-    -- execute javascript
-    dbms_mle.eval(ctx, 'JAVASCRIPT', js_code);
+  -- execute javascript
+  dbms_mle.eval(ctx, 'JAVASCRIPT', js_code);
 
-    -- handle response
-    dbms_mle.import_from_mle(ctx, 'order', order_string);
+  -- handle response
+  dbms_mle.import_from_mle(ctx, 'order', order_string);
 
-    order_jo := json_object_t(order_string);
-    orderid :=           order_jo.get_string('orderid');
-    itemid :=            order_jo.get_string('itemid');
-    deliverylocation :=  order_jo.get_string('deliverylocation');
-    status :=            order_jo.get_string('status');
-    inventorylocation := order_jo.get_string('inventorylocation');
-    suggestivesale :=    order_jo.get_string('suggestivesale');
+  order_jo := json_object_t(order_string);
+  orderid :=           order_jo.get_string('orderid');
+  itemid :=            order_jo.get_string('itemid');
+  deliverylocation :=  order_jo.get_string('deliverylocation');
+  status :=            order_jo.get_string('status');
+  inventorylocation := order_jo.get_string('inventorylocation');
+  suggestivesale :=    order_jo.get_string('suggestivesale');
 
+  dbms_mle.drop_context(ctx);
+
+exception
+  when others then
     dbms_mle.drop_context(ctx);
+    raise;
 
-  exception
-    when others then
-      dbms_mle.drop_context(ctx);
-      raise;
-
-  end;
-  /
-  show errors
+end;
+/
+show errors
 
 
-  -- delete all orders - REST api
-  create or replace procedure delete_all_orders
-  authid current_user
-  is
-    ctx dbms_mle.context_handle_t := dbms_mle.create_context();
-    js_code clob := q'~
-    var db = require("mle-js-oracledb");
-    var bindings = require("mle-js-bindings");
-    var conn = db.defaultConnection();
+-- delete all orders - REST api
+create or replace procedure delete_all_orders
+authid current_user
+is
+  ctx dbms_mle.context_handle_t := dbms_mle.create_context();
+  js_code clob := q'~
+  var db = require("mle-js-oracledb");
+  var bindings = require("mle-js-bindings");
+  var conn = db.defaultConnection();
 
-    // place the orders
-    deleteallorders(conn);
+  // place the orders
+  deleteallorders(conn);
 
-    $(<./js/order.js)~';
-  begin
-    -- execute javascript
-    dbms_mle.eval(ctx, 'JAVASCRIPT', js_code);
+  $(<./js/order.js)~';
+begin
+  -- execute javascript
+  dbms_mle.eval(ctx, 'JAVASCRIPT', js_code);
 
+  dbms_mle.drop_context(ctx);
+
+exception
+  when others then
     dbms_mle.drop_context(ctx);
+    raise;
 
-  exception
-    when others then
-      dbms_mle.drop_context(ctx);
-      raise;
-
-  end;
-  /
-  show errors
+end;
+/
+show errors
 
 
-  -- inventory message consumer - background job
-  create or replace procedure inventory_message_consumer
-  authid current_user
-  is
-    ctx dbms_mle.context_handle_t := dbms_mle.create_context();
-    js_code clob := q'~
-    var db = require("mle-js-oracledb");
-    var bindings = require("mle-js-bindings");
-    var conn = db.defaultConnection();
+-- inventory message consumer - background job
+create or replace procedure inventory_message_consumer
+authid current_user
+is
+  ctx dbms_mle.context_handle_t := dbms_mle.create_context();
+  js_code clob := q'~
+  var db = require("mle-js-oracledb");
+  var bindings = require("mle-js-bindings");
+  var conn = db.defaultConnection();
 
-    // process inventory messages
-    inventoryMessageConsumer();
+  // process inventory messages
+  inventoryMessageConsumer();
 
-    $(<./js/order.js)~';
-  begin
-    -- execute javascript
-    dbms_mle.eval(ctx, 'JAVASCRIPT', js_code);
+  $(<./js/order.js)~';
+begin
+  -- execute javascript
+  dbms_mle.eval(ctx, 'JAVASCRIPT', js_code);
 
+  dbms_mle.drop_context(ctx);
+
+exception
+  when others then
     dbms_mle.drop_context(ctx);
+    raise;
 
-  exception
-    when others then
-      dbms_mle.drop_context(ctx);
-      raise;
-
-  end;
-  /
-  show errors
+end;
+/
+show errors

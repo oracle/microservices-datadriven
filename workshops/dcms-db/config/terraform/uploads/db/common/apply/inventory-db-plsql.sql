@@ -36,9 +36,9 @@ end;
 /
 show errors
 
-
 -- fulfill order - business logic
 create or replace function fulfill_order(in_order_jo in json_object_t) return json_object_t
+  authid current_user
 is
   inv_msg_jo json_object_t;
   v_item_id inventory.inventoryid%type;
@@ -59,7 +59,7 @@ begin
   if sql%rowcount = 0 then
     inv_msg_jo.put('inventorylocation', 'inventorydoesnotexist');
   else
-    inv_msg_jo.put('inventorylocation', v_inventorylocation);
+    inv_msg_jo.put('inventorylocation', v_inventory_location);
   end if;
 
   return inv_msg_jo;
@@ -74,8 +74,6 @@ create or replace procedure order_message_consumer
 is
   order_jo json_object_t;
   inv_msg_jo json_object_t;
-  order_inv_id inventory.inventoryid%type;
-  order_inv_loc inventory.inventorylocation%type;
 begin
   loop
     -- wait for and dequeue the next order message
