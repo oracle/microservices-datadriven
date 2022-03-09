@@ -14,6 +14,7 @@ authid current_user
 is
   ctx dbms_mle.context_handle_t := dbms_mle.create_context();
   order_jo json_object_t;
+  order_string varchar2(1000);
   js_code clob := q'~
   var db = require("mle-js-oracledb");
   var bindings = require("mle-js-bindings");
@@ -78,6 +79,7 @@ create or replace procedure show_order (
 is
   ctx dbms_mle.context_handle_t := dbms_mle.create_context();
   order_jo json_object_t;
+  order_string varchar2(1000);
   js_code clob := q'~
   var db = require("mle-js-oracledb");
   var bindings = require("mle-js-bindings");

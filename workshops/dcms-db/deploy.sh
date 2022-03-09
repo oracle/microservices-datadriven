@@ -14,7 +14,7 @@ fi
 if test "$1" == 'plsql'; then
   inv_svc=inventory-db-plsql.sql
   ord_svc=order-db-js-plsql.sql
-else if test "$1" == 'js'; then
+elif test "$1" == 'js'; then
   inv_svc=inventory-db-js-wrapper.sql
   ord_svc=order-db-js-wrapper.sql
 else
@@ -42,7 +42,7 @@ DB_PASSWORD=Welcome12345
 
 ssh -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
 sudo su - oracle
-cd ~/db/db1/common/apply
+cd ~/db/common/apply
 
 # Expand the service definition scripts (mainly to expand the javascript files)
 eval "cat >inv_svc.sql <<EOF
@@ -59,16 +59,15 @@ EOF
 export TNS_ADMIN=~/tns_admin
 sqlplus /nolog <<EOF
 connect inventoryuser/${DB_PASSWORD}@dcmsdb_tp
-\$(<inventory-db-undeploy.sh)
+\$(<inventory-db-undeploy.sql)
 \$(<inv_svc.sql)
-\$(<inventory-db-deploy.sh)
+\$(<inventory-db-deploy.sql)
 EOF
 
 sqlplus /nolog <<EOF
 connect orderuser/${DB_PASSWORD}@dcmsdb_tp
-\$(<order-db-undeploy.sh)
+\$(<order-db-undeploy.sql)
 \$(<ord_svc.sql)
-\$(<order-db-deploy.sh)
+\$(<order-db-deploy.sql)
 EOF
-sqlplus orderuser/${DB_PASSWORD}@dcmsdb_tp
 !
