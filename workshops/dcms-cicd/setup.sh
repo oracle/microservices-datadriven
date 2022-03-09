@@ -151,5 +151,5 @@ fi
 
 # Run the setup in the background
 cd $DCMS_CICD_STATE_DIR
-echo "Setup running in background.  Call 'status' to get the status of the setup"
+echo "Setup running in background.  Call 'jenkins-status' to get the status of the setup"
 nohup bash -c "provisioning-apply $MSDD_WORKSHOP_CODE/$DCMS_CICD_WORKSHOP/config" >>$DCMS_CICD_LOG_DIR/setup.log 2>&1 &

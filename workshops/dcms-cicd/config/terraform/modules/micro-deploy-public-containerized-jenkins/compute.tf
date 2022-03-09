@@ -25,7 +25,7 @@ resource oci_core_instance jenkins_vm {
 
   metadata = {
     ssh_authorized_keys = var.generate_public_ssh_key ? tls_private_key.tls_key_pair.public_key_openssh : join("\n", [var.public_ssh_key, tls_private_key.tls_key_pair.public_key_openssh])
-    user_data = base64encode(templatefile("./scripts/cloud-init.yaml",
+    user_data = base64encode(templatefile("${path.module}/scripts/cloud-init.yaml",
       {
         jenkins_user     = var.jenkins_user,
         jenkins_password = var.jenkins_password

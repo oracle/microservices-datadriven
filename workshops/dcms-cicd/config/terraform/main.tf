@@ -14,5 +14,5 @@ module micro-deploy-private-containerized-jenkins {
   jenkins_password = var.jenkins_password
   region = var.region
 
-  count = micro-deployment-private-jenkins ? 1 : 0
+  count = local.micro-deployment-private-jenkins ? 1 : 0
 }
