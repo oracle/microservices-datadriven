@@ -1,18 +1,24 @@
 // Copyright (c) 2021 Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
+
+// global constants
+const db = require("mle-js-oracledb");
+const bindings = require("mle-js-bindings");
+const conn = db.defaultConnection();
+
 // placeOrder - API
-function placeOrder(conn, order) {
+function placeOrder(order) {
   try {
     order.status = "pending";
     order.inventorylocation = "";
     order.suggestivesale = "";
 
     // insert the order object
-    _insertOrder(conn, order);
+    _insertOrder(order);
 
     // send the order message
-    _enqueueOrderMessage(conn, order);
+    _enqueueOrderMessage(order);
 
     // commit
     conn.commit;
@@ -26,12 +32,12 @@ function placeOrder(conn, order) {
 }
 
 // showOrder - API
-function showOrder(conn, orderid) {
-  return _getOrder(conn, orderid);
+function showOrder(orderid) {
+  return _getOrder(orderid);
 }
 
 // deleteAllOrders
-function deleteAllOrders(conn) {
+function deleteAllOrders() {
   try {
     _deleteAllOrders(conn);
   } catch(error) {
@@ -41,12 +47,12 @@ function deleteAllOrders(conn) {
 }
 
 // inventoryMessageConsumer - background
-function inventoryMessageConsumer(conn) {
+function inventoryMessageConsumer() {
   let invMsg = null;
   let order =  null;
   while (true) {
     // wait for and dequeue the next order message
-    invMsg = _dequeueInventoryMessage(conn, -1); // wait forever
+    invMsg = _dequeueInventoryMessage(-1); // wait forever
 
     if (invMsg === null) {
       conn.rollback;
@@ -54,7 +60,7 @@ function inventoryMessageConsumer(conn) {
     }
 
     // get the existing order
-    order = _getOrder(conn, invMsg.orderid);
+    order = _getOrder(invMsg.orderid);
 
     // update the order based on inv message
     if (invMsg.inventorylocation === "inventorydoesnotexist") {
@@ -66,7 +72,7 @@ function inventoryMessageConsumer(conn) {
     }
 
     // persist the updates
-    _updateOrder(conn, order);
+    _updateOrder(order);
 
     // commit
     conn.commit;
@@ -75,37 +81,37 @@ function inventoryMessageConsumer(conn) {
 
 
 // functions to access the order collection
-function _insertOrder(conn, order) {
+function _insertOrder(order) {
   conn.execute( "begin order_collection.insert_order(json_object_t(:1)); end;", [order.stringify()]);
 }
 
-function _updateOrder(conn, order) {
+function _updateOrder(order) {
   conn.execute( "begin order_collection.update_order(json_object_t(:1)); end;", [order.stringify()]);
 }
 
-function _getOrder(conn, orderid) {
+function _getOrder(orderid) {
   let result = conn.execute( "begin :orderString := order_collection.get_order(:orderid).to_string; end;", {
-    orderString: { dir: oracledb.BIND_OUT, type: oracledb.STRING },
-    orderid: { val: orderid, dir: oracledb.BIND_IN, type: oracledb.STRING }
+    orderString: { dir: db.BIND_OUT, type: db.STRING },
+    orderid: { val: orderid, dir: db.BIND_IN, type: db.STRING }
   });
   return JSON.parse(result.outBinds.orderString.val);
 }
 
-function _deleteAllOrders(conn) {
+function _deleteAllOrders() {
   conn.execute("begin order_collection.delete_all_orders; end;");
 }
 
 
 // functions to enqueue and dequeue messages
-function _enqueueOrderMessage(conn, order) {
+function _enqueueOrderMessage(order) {
   conn.execute( "begin order_messaging.enqueue_order_message(json_object_t(:1)); end;", [order.stringify()]);
 }
 
-function _dequeueInventoryMessage(conn, waitOption) {
+function _dequeueInventoryMessage(waitOption) {
   let result = conn.execute(
     "begin :invMsgString := order_messaging.dequeue_inventory_message(:waitOption).to_string; end;", {
-    invMsgString: { dir: oracledb.BIND_OUT, type: oracledb.STRING },
-    waitOption: { val: waitOption, dir: oracledb.BIND_IN, type: oracledb.NUMBER }
+    invMsgString: { dir: db.BIND_OUT, type: db.STRING },
+    waitOption: { val: waitOption, dir: db.BIND_IN, type: db.NUMBER }
   });
   return JSON.parse(result.outBinds.invMsgString.val);
 }

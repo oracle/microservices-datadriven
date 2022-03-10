@@ -16,20 +16,17 @@ is
   order_jo json_object_t;
   order_string varchar2(1000);
   js_code clob := q'~
-  var db = require("mle-js-oracledb");
-  var bindings = require("mle-js-bindings");
-  var conn = db.defaultConnection();
+$(<./js/order.js)
 
-  // import order object
-  const order = JSON.parse( bindings.importValue("order") );
+// import order object
+const order = JSON.parse(bindings.importValue("order"));
 
-  // place the orders
-  order = placeorder(conn, order);
+// place the orders
+order = placeorder(order);
 
-  // export order
-  bindings.exportValue("order", order);
-
-  $(<./js/order.js)~';
+// export order
+bindings.exportValue("order", order);
+~';
 begin
 
   -- construct the order object
@@ -81,20 +78,17 @@ is
   order_jo json_object_t;
   order_string varchar2(1000);
   js_code clob := q'~
-  var db = require("mle-js-oracledb");
-  var bindings = require("mle-js-bindings");
-  var conn = db.defaultConnection();
+$(<./js/order.js)
 
-  // import order object
-  const orderid = bindings.importValue("orderid");
+// import order object
+const orderid = bindings.importValue("orderid");
 
-  // place the orders
-  order = showorder(orderid);
+// place the orders
+order = showorder(orderid);
 
-  // export order
-  bindings.exportValue("order", order);
-
-  $(<./js/order.js)~';
+// export order
+bindings.exportValue("order", order);
+~';
 begin
   -- pass variables to javascript
   dbms_mle.export_to_mle(ctx, 'orderid', orderid);
@@ -131,14 +125,11 @@ authid current_user
 is
   ctx dbms_mle.context_handle_t := dbms_mle.create_context();
   js_code clob := q'~
-  var db = require("mle-js-oracledb");
-  var bindings = require("mle-js-bindings");
-  var conn = db.defaultConnection();
+$(<./js/order.js)
 
-  // place the orders
-  deleteallorders(conn);
-
-  $(<./js/order.js)~';
+// place the orders
+deleteallorders();
+~';
 begin
   -- execute javascript
   dbms_mle.eval(ctx, 'JAVASCRIPT', js_code);
@@ -161,14 +152,11 @@ authid current_user
 is
   ctx dbms_mle.context_handle_t := dbms_mle.create_context();
   js_code clob := q'~
-  var db = require("mle-js-oracledb");
-  var bindings = require("mle-js-bindings");
-  var conn = db.defaultConnection();
+$(<./js/order.js)
 
-  // process inventory messages
-  inventoryMessageConsumer();
-
-  $(<./js/order.js)~';
+// process inventory messages
+inventoryMessageConsumer();
+~';
 begin
   -- execute javascript
   dbms_mle.eval(ctx, 'JAVASCRIPT', js_code);

@@ -48,7 +48,7 @@ function grabdish_db_setup {
 	if ! test -d ${target_common_script_home}; then
 		mkdir -p ${target_common_script_home}
 		cd ${db_script_home}/common/apply
-		for f in $(ls); do
+		for f in $(ls *.sql); do
 		  eval "
 			cat >${target_common_script_home}/${f} <<- !
 			$(<${f})
@@ -62,7 +62,7 @@ function grabdish_db_setup {
 	target_apply_script_home=${target_db_script_home}/1db/apply
 	mkdir -p ${target_apply_script_home}
   cd ${db_script_home}/1db/apply
-	for f in $(ls); do
+	for f in $(ls *.sql); do
 		target=${target_apply_script_home}/${f}
 		cd ${target_apply_script_home}
 		if ! test -f ${target}; then
@@ -344,7 +344,7 @@ cat > /opt/oracle/ords/mylogfile.properties <<'!'
 handlers=java.util.logging.FileHandler
 # Default global logging level for ORDS
 #.level=CONFIG
-.level=FINER
+.level=FINE
 java.util.logging.FileHandler.pattern=/var/log/ords/ords-sys.log
 java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter
 java.util.logging.SimpleFormatter.format = %1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS %4$-6s %2$s %5$s%6$s%n

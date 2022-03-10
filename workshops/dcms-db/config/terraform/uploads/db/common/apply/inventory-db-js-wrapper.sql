@@ -8,18 +8,14 @@ authid current_user
 is
   ctx dbms_mle.context_handle_t := dbms_mle.create_context();
   js_code clob := q'~
-    var db = require("mle-js-oracledb");
-    var bindings = require("mle-js-bindings");
-    var conn = db.defaultConnection();
+$(<./js/inventory.js)
 
-    // import itemid
-    const itemid = bindings.importValue("itemid");
+// import itemid
+const itemid = bindings.importValue("itemid");
 
-    // add inventory
-    addInventory(conn, itemid);
-
-    $(<./js/inventory.js)
-  ~';
+// add inventory
+addInventory(itemid);
+~';
 begin
 
   -- pass variables to javascript
@@ -46,18 +42,14 @@ authid current_user
 is
   ctx dbms_mle.context_handle_t := dbms_mle.create_context();
   js_code clob := q'~
-    var db = require("mle-js-oracledb");
-    var bindings = require("mle-js-bindings");
-    var conn = db.defaultConnection();
+$(<./js/inventory.js)
 
-    // import itemid
-    const itemid = bindings.importValue("itemid");
+// import itemid
+const itemid = bindings.importValue("itemid");
 
-    // remove inventory
-    removeInventory(conn, itemid);
-
-    $(<./js/inventory.js)
-  ~';
+// remove inventory
+removeInventory(itemid);
+~';
 begin
 
   -- pass variables to javascript
@@ -85,21 +77,17 @@ create or replace procedure get_inventory (
 is
   ctx dbms_mle.context_handle_t := dbms_mle.create_context();
   js_code clob := q'~
-    var db = require("mle-js-oracledb");
-    var bindings = require("mle-js-bindings");
-    var conn = db.defaultConnection();
+$(<./js/inventory.js)
 
-    // import itemid
-    const itemid = bindings.importValue("itemid");
+// import itemid
+const itemid = bindings.importValue("itemid");
 
-    // get the inventory count
-    const invCount = getInventory(conn, itemid);
+// get the inventory count
+const invCount = getInventory(itemid);
 
-    // export invCount
-    bindings.exportValue("invCount", invCount);
-
-    $(<./js/inventory.js)
-  ~';
+// export invCount
+bindings.exportValue("invCount", invCount);
+~';
 begin
 
   -- pass variables to javascript
@@ -128,15 +116,11 @@ authid current_user
 is
   ctx dbms_mle.context_handle_t := dbms_mle.create_context();
   js_code clob := q'~
-    var db = require("mle-js-oracledb");
-    var bindings = require("mle-js-bindings");
-    var conn = db.defaultConnection();
+$(<./js/inventory.js)
 
-    // process inventory messages
-    orderMessageConsumer();
-
-    $(<./js/inventory.js)
-  ~';
+// process inventory messages
+orderMessageConsumer();
+~';
 begin
   -- execute javascript
   dbms_mle.eval(ctx, 'JAVASCRIPT', js_code);
