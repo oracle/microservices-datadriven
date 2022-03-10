@@ -46,7 +46,7 @@ function inventoryMessageConsumer(conn) {
   let order =  null;
   while (true) {
     // wait for and dequeue the next order message
-    invMsg := _dequeueInventoryMessage(conn, -1); // wait forever
+    invMsg = _dequeueInventoryMessage(conn, -1); // wait forever
 
     if (invMsg === null) {
       conn.rollback;
@@ -89,7 +89,6 @@ function _getOrder(conn, orderid) {
     orderid: { val: orderid, dir: oracledb.BIND_IN, type: oracledb.STRING }
   });
   return JSON.parse(result.outBinds.orderString.val);
-}
 }
 
 function _deleteAllOrders(conn) {

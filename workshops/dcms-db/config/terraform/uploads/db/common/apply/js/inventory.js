@@ -69,9 +69,9 @@ function fulfillOrder(conn, order) {
 
   // check the inventory
   conn.execute(
-    "update inventory set inventorycount = inventorycount - 1
-      where inventoryid = :itemid and inventorycount > 0
-      returning inventorylocation into :inventorylocation;",
+    "update inventory set inventorycount = inventorycount - 1 " +
+    "where inventoryid = :itemid and inventorycount > 0 " +
+    "returning inventorylocation into :inventorylocation;",
     {
       itemid: { val: order.itemid, dir: oracledb.BIND_IN, type: oracledb.STRING },
       inventorylocation: { dir: oracledb.BIND_OUT, type: oracledb.STRING } }
