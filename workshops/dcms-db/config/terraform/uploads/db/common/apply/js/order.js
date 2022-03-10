@@ -45,7 +45,7 @@ function inventoryMessageConsumer(conn) {
   let invMsg = null;
   let order =  null;
   while (true) {
-    -- wait for and dequeue the next order message
+    // wait for and dequeue the next order message
     invMsg := _dequeueInventoryMessage(conn, -1); // wait forever
 
     if (invMsg === null) {
@@ -53,10 +53,10 @@ function inventoryMessageConsumer(conn) {
       continue;
     }
 
-    -- get the existing order
+    // get the existing order
     order = _getOrder(conn, invMsg.orderid);
 
-    -- update the order based on inv message
+    // update the order based on inv message
     if (invMsg.inventorylocation === "inventorydoesnotexist") {
       order.status = "failed inventory does not exist";
     } else {
@@ -65,10 +65,10 @@ function inventoryMessageConsumer(conn) {
       order.suggestivesale = invMsg.suggestiveSale;
     }
 
-    -- persist the updates
+    // persist the updates
     _updateOrder(conn, order);
 
-    -- commit
+    // commit
     conn.commit;
   }
 }

@@ -43,7 +43,7 @@ function orderMessageConsumer(conn) {
   let itemid = null;
   let invMsg = null;
   while (true) {
-    -- wait for and dequeue the next order message
+    // wait for and dequeue the next order message
     order := _dequeueOrderMessage(conn, -1); // wait forever
 
     if (order === null) {
@@ -51,13 +51,13 @@ function orderMessageConsumer(conn) {
       continue;
     }
 
-    -- fulfill the orders
+    // fulfill the orders
     invMsg = fulfillOrder(conn, order);
 
-    -- enqueue the inventory messages
+    // enqueue the inventory messages
     _enqueueInventoryMessage(conn, invMsg);
 
-    -- commit
+    // commit
     conn.commit;
   }
 }
@@ -67,7 +67,7 @@ function orderMessageConsumer(conn) {
 function fulfillOrder(conn, order) {
   let invMsg = {orderid: order.orderid, itemid: order.itemid, suggestiveSale: "beer"};
 
-  -- check the inventory
+  // check the inventory
   conn.execute(
     "update inventory set inventorycount = inventorycount - 1
       where inventoryid = :itemid and inventorycount > 0
