@@ -339,12 +339,6 @@ RC=$(( RC + $? ))
 
 copy_app "${standalone_root}"
 
-cd ${ords_dir}
-java -jar ords.war user grabdish order_user inventory_user <<!
-${admin_password}
-${admin_password}
-!
-
 # Debugging Startup
 cat > /opt/oracle/ords/mylogfile.properties <<'!'
 handlers=java.util.logging.FileHandler

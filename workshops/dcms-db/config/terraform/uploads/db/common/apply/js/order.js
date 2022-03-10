@@ -92,7 +92,7 @@ function _getOrder(conn, orderid) {
 }
 
 function _deleteAllOrders(conn) {
-  conn.execute( "begin order_collection.delete_all_orders; end;"]);
+  conn.execute( "begin order_collection.delete_all_orders; end;");
 }
 
 

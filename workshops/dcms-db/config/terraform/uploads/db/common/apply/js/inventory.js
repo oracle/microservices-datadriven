@@ -44,7 +44,7 @@ function orderMessageConsumer(conn) {
   let invMsg = null;
   while (true) {
     // wait for and dequeue the next order message
-    order := _dequeueOrderMessage(conn, -1); // wait forever
+    order = _dequeueOrderMessage(conn, -1); // wait forever
 
     if (order === null) {
       conn.rollback;
