@@ -95,14 +95,14 @@ function fulfillOrder(order) {
 // functions to enqueue and dequeue messages
 function _enqueueInventoryMessage(invMsg) {
   conn.execute(
-    "begin order_messaging.enqueue_order_message(json_object_t(:1)); end;",
+    "begin inventory_messaging.enqueue_inventory_message(json_object_t(:1)); end;",
     [invMsg.stringify()]
   );
 }
 
 function _dequeueOrderMessage(waitOption) {
   conn.execute(
-    "begin :orderString := order_messaging.dequeue_inventory_message(:waitOption).to_string; end;", {
+    "begin :orderString := inventory_messaging.dequeue_order_message(:waitOption).to_string; end;", {
     orderString: { dir: db.BIND_OUT, type: db.STRING },
     waitOption: { val: waitOption, dir: db.BIND_IN, type: db.NUMBER }
   });

@@ -13,7 +13,7 @@ fi
 
 if test "$1" == 'plsql'; then
   inv_svc=inventory-db-plsql.sql
-  ord_svc=order-db-js-plsql.sql
+  ord_svc=order-db-plsql.sql
 elif test "$1" == 'js'; then
   inv_svc=inventory-db-js-wrapper.sql
   ord_svc=order-db-js-wrapper.sql

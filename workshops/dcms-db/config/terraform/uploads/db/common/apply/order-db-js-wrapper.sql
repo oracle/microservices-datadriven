@@ -22,7 +22,7 @@ $(<./js/order.js)
 const order = JSON.parse(bindings.importValue("order"));
 
 // place the orders
-order = placeorder(order);
+order = placeOrder(order);
 
 // export order
 bindings.exportValue("order", order);
@@ -84,7 +84,7 @@ $(<./js/order.js)
 const orderid = bindings.importValue("orderid");
 
 // place the orders
-order = showorder(orderid);
+order = showOrder(orderid);
 
 // export order
 bindings.exportValue("order", order);
@@ -128,7 +128,7 @@ is
 $(<./js/order.js)
 
 // place the orders
-deleteallorders();
+deleteAllOrders();
 ~';
 begin
   -- execute javascript
