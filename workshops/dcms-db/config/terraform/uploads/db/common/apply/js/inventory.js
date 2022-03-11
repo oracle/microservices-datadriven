@@ -37,14 +37,15 @@ function removeInventory(itemid) {
 // getInventory - API
 function getInventory(itemid) {
   try {
-    let result = conn.execute( 
-      "select inventorycount into :invcount from inventory where inventoryid = :itemid", 
-      {
-        invcount: { dir: db.BIND_OUT, type: db.STRING },
-        itemid: { val: itemid, dir: db.BIND_IN, type: db.STRING }
-      }
+    let rows = conn.execute( 
+      "select to_char(inventorycount) as invcount from inventory where inventoryid = :itemid", 
+      [itemid]
     );
-    return result.outBinds.invCount;
+    if (rows.length > 0) {
+      return rows[0][0];
+    } else {
+      return "0";
+    }
   } catch(error) {
     conn.rollback;
     throw error;
