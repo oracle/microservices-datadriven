@@ -44,7 +44,7 @@ function getInventory(itemid) {
         itemid: { val: itemid, dir: db.BIND_IN, type: db.STRING }
       }
     );
-    return result.outBinds.invCount.val;
+    return result.outBinds.invCount;
   } catch(error) {
     conn.rollback;
     throw error;
@@ -95,7 +95,7 @@ function fulfillOrder(order) {
   if (result.outBinds === undefined) {
     invMsg.inventorylocation = "inventorydoesnotexist";
   } else {
-    invMsg.inventorylocation = result.outBinds.inventorylocation.val;
+    invMsg.inventorylocation = result.outBinds.inventorylocation;
   }
 
   return invMsg;
@@ -116,5 +116,5 @@ function _dequeueOrderMessage(waitOption) {
     orderString: { dir: db.BIND_OUT, type: db.STRING },
     waitOption: { val: waitOption, dir: db.BIND_IN, type: db.NUMBER }
   });
-  return JSON.parse(result.outBinds.orderString;
+  return JSON.parse(result.outBinds.orderString);
 }

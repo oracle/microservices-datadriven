@@ -103,7 +103,7 @@ function _getOrder(orderid) {
       orderid: { val: orderid, dir: db.BIND_IN, type: db.STRING }
     }
   );
-  return JSON.parse(result.outBinds.orderString;
+  return JSON.parse(result.outBinds.orderString);
 }
 
 function _deleteAllOrders() {
@@ -127,5 +127,5 @@ function _dequeueInventoryMessage(waitOption) {
       waitOption: { val: waitOption, dir: db.BIND_IN, type: db.NUMBER }
     }
   );
-  return JSON.parse(result.outBinds.invMsgString;
+  return JSON.parse(result.outBinds.invMsgString);
 }
