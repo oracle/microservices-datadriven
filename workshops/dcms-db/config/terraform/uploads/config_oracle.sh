@@ -340,7 +340,7 @@ RC=$(( RC + $? ))
 copy_app "${standalone_root}"
 
 # Debugging Startup
-cat > /opt/oracle/ords/mylogfile.properties <<'!'
+cat > ${ords_dir}/mylogfile.properties <<'!'
 handlers=java.util.logging.FileHandler
 # Default global logging level for ORDS
 #.level=CONFIG
@@ -353,7 +353,7 @@ java.util.logging.SimpleFormatter.format = %1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS %
 cat >/etc/ords/ords.conf <<'!'
 ORDS_CONFIGDIR=/opt/oracle/ords/config
 JAVA_HOME=/usr/java/latest
-JAVA_OPTIONS=-Djava.util.logging.config.file=mylogfile.properties -Xmx2048m
+JAVA_OPTIONS=-Djava.util.logging.config.file=${ords_dir}/mylogfile.properties -Xmx2048m
 ORDS_BASE_PATH=/opt/oracle
 !
 
