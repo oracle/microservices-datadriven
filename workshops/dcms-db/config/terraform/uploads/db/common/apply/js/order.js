@@ -82,11 +82,11 @@ function inventoryMessageConsumer() {
 
 // functions to access the order collection
 function _insertOrder(order) {
-  conn.execute( "begin order_collection.insert_order(json_object_t(:1)); end;", [order.stringify()]);
+  conn.execute( "begin order_collection.insert_order(json_object_t(:1)); end;", [JSON.stringify(order)]);
 }
 
 function _updateOrder(order) {
-  conn.execute( "begin order_collection.update_order(json_object_t(:1)); end;", [order.stringify()]);
+  conn.execute( "begin order_collection.update_order(json_object_t(:1)); end;", [JSON.stringify(order)]);
 }
 
 function _getOrder(orderid) {
@@ -104,7 +104,7 @@ function _deleteAllOrders() {
 
 // functions to enqueue and dequeue messages
 function _enqueueOrderMessage(order) {
-  conn.execute( "begin order_messaging.enqueue_order_message(json_object_t(:1)); end;", [order.stringify()]);
+  conn.execute( "begin order_messaging.enqueue_order_message(json_object_t(:1)); end;", [JSON.stringify(order))]);
 }
 
 function _dequeueInventoryMessage(waitOption) {

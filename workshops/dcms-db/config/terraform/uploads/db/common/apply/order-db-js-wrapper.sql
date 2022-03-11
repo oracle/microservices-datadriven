@@ -19,13 +19,13 @@ is
 $(<./js/order.js)
 
 // import order object
-const order = JSON.parse(bindings.importValue("order"));
+let order = JSON.parse(bindings.importValue("order"));
 
 // place the orders
 order = placeOrder(order);
 
 // export order
-bindings.exportValue("order", order);
+bindings.exportValue("order", JSON.stringify(order));
 ~';
 begin
 
@@ -84,10 +84,10 @@ $(<./js/order.js)
 const orderid = bindings.importValue("orderid");
 
 // place the orders
-order = showOrder(orderid);
+const order = showOrder(orderid);
 
 // export order
-bindings.exportValue("order", order);
+bindings.exportValue("order", JSON.stringify(order));
 ~';
 begin
   -- pass variables to javascript
@@ -99,7 +99,7 @@ begin
   -- handle response
   dbms_mle.import_from_mle(ctx, 'order', order_string);
 
-  order_jo := json_object_t(order_string);
+  order_jo :=          json_object_t(order_string);
   orderid :=           order_jo.get_string('orderid');
   itemid :=            order_jo.get_string('itemid');
   deliverylocation :=  order_jo.get_string('deliverylocation');

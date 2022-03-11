@@ -9,7 +9,10 @@ const conn = db.defaultConnection();
 // addInventory - API
 function addInventory(itemid) {
   try {
-    conn.execute( "update inventory set inventorycount=inventorycount + 1 where inventoryid = :1;", [itemid]);
+    conn.execute(
+      "update inventory set inventorycount=inventorycount + 1 where inventoryid = :1", 
+      [itemid]
+    );
     conn.commit;
   } catch(error) {
     conn.rollback;
@@ -20,7 +23,10 @@ function addInventory(itemid) {
 // removeInventory - API
 function removeInventory(itemid) {
   try {
-    conn.execute( "update inventory set inventorycount=inventorycount - 1 where inventoryid = :1;", [itemid]);
+    conn.execute( 
+      "update inventory set inventorycount=inventorycount - 1 where inventoryid = :1", 
+      [itemid]
+    );
     conn.commit;
   } catch(error) {
     conn.rollback;
@@ -31,10 +37,13 @@ function removeInventory(itemid) {
 // getInventory - API
 function getInventory(itemid) {
   try {
-    let result = conn.execute( "select inventorycount into :invCount from inventory where inventoryid = :itemid;", {
-      invCount: { dir: db.BIND_OUT, type: db.STRING },
-      itemid: { val: itemid, dir: db.BIND_IN, type: db.STRING }
-    });
+    let result = conn.execute( 
+      "select inventorycount into :invCount from inventory where inventoryid = :itemid", 
+      {
+        invCount: { dir: db.BIND_OUT, type: db.STRING },
+        itemid: { val: itemid, dir: db.BIND_IN, type: db.STRING }
+      }
+    );
     return result.outBinds.invCount.val;
   } catch(error) {
     conn.rollback;
@@ -76,10 +85,11 @@ function fulfillOrder(order) {
   conn.execute(
     "update inventory set inventorycount = inventorycount - 1 " +
     "where inventoryid = :itemid and inventorycount > 0 " +
-    "returning inventorylocation into :inventorylocation;",
+    "returning inventorylocation into :inventorylocation",
     {
       itemid: { val: order.itemid, dir: db.BIND_IN, type: db.STRING },
-      inventorylocation: { dir: db.BIND_OUT, type: db.STRING } }
+      inventorylocation: { dir: db.BIND_OUT, type: db.STRING } 
+    }
   );
 
   if (result.outBinds === undefined) {
