@@ -38,9 +38,9 @@ function removeInventory(itemid) {
 function getInventory(itemid) {
   try {
     let result = conn.execute( 
-      "select inventorycount into :invCount from inventory where inventoryid = :itemid", 
+      "select inventorycount into :invcount from inventory where inventoryid = :itemid", 
       {
-        invCount: { dir: db.BIND_OUT, type: db.STRING },
+        invcount: { dir: db.BIND_OUT, type: db.STRING },
         itemid: { val: itemid, dir: db.BIND_IN, type: db.STRING }
       }
     );

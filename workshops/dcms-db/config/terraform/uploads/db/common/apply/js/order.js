@@ -82,18 +82,27 @@ function inventoryMessageConsumer() {
 
 // functions to access the order collection
 function _insertOrder(order) {
-  conn.execute( "begin order_collection.insert_order(json_object_t(:1)); end;", [JSON.stringify(order)]);
+  conn.execute( 
+    "begin order_collection.insert_order(json_object_t(:1)); end;", 
+    [JSON.stringify(order)]
+  );
 }
 
 function _updateOrder(order) {
-  conn.execute( "begin order_collection.update_order(json_object_t(:1)); end;", [JSON.stringify(order)]);
+  conn.execute( 
+    "begin order_collection.update_order(json_object_t(:1)); end;", 
+    [JSON.stringify(order)]
+  );
 }
 
 function _getOrder(orderid) {
-  let result = conn.execute( "begin :orderString := order_collection.get_order(:orderid).to_string; end;", {
-    orderString: { dir: db.BIND_OUT, type: db.STRING },
-    orderid: { val: orderid, dir: db.BIND_IN, type: db.STRING }
-  });
+  let result = conn.execute( 
+    "begin :orderString := order_collection.get_order(:orderid).to_string; end;", 
+    {
+      orderString: { dir: db.BIND_OUT, type: db.STRING },
+      orderid: { val: orderid, dir: db.BIND_IN, type: db.STRING }
+    }
+  );
   return JSON.parse(result.outBinds.orderString.val);
 }
 
@@ -104,14 +113,19 @@ function _deleteAllOrders() {
 
 // functions to enqueue and dequeue messages
 function _enqueueOrderMessage(order) {
-  conn.execute( "begin order_messaging.enqueue_order_message(json_object_t(:1)); end;", [JSON.stringify(order))]);
+  conn.execute( 
+    "begin order_messaging.enqueue_order_message(json_object_t(:1)); end;", 
+    [JSON.stringify(order)]
+  );
 }
 
 function _dequeueInventoryMessage(waitOption) {
   let result = conn.execute(
-    "begin :invMsgString := order_messaging.dequeue_inventory_message(:waitOption).to_string; end;", {
-    invMsgString: { dir: db.BIND_OUT, type: db.STRING },
-    waitOption: { val: waitOption, dir: db.BIND_IN, type: db.NUMBER }
-  });
+    "begin :invMsgString := order_messaging.dequeue_inventory_message(:waitOption).to_string; end;", 
+    {
+      invMsgString: { dir: db.BIND_OUT, type: db.STRING },
+      waitOption: { val: waitOption, dir: db.BIND_IN, type: db.NUMBER }
+    }
+  );
   return JSON.parse(result.outBinds.invMsgString.val);
 }
