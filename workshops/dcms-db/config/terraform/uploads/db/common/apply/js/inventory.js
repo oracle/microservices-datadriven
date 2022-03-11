@@ -116,5 +116,5 @@ function _dequeueOrderMessage(waitOption) {
     orderString: { dir: db.BIND_OUT, type: db.STRING },
     waitOption: { val: waitOption, dir: db.BIND_IN, type: db.NUMBER }
   });
-  return JSON.parse(result.outBinds.orderString(;
+  return JSON.parse(result.outBinds.orderString;
 }
