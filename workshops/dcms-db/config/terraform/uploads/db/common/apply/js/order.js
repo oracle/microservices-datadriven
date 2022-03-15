@@ -50,33 +50,32 @@ function deleteAllOrders() {
 function inventoryMessageConsumer() {
   let invMsg = null;
   let order =  null;
-  while (true) {
-    // wait for and dequeue the next order message
-    invMsg = _dequeueInventoryMessage(-1); // wait forever
+  
+  // wait for and dequeue the next order message
+  invMsg = _dequeueInventoryMessage(-1); // wait forever
 
-    if (invMsg === null) {
-      conn.rollback;
-      continue;
-    }
-
-    // get the existing order
-    order = _getOrder(invMsg.orderid);
-
-    // update the order based on inv message
-    if (invMsg.inventorylocation === "inventorydoesnotexist") {
-      order.status = "failed inventory does not exist";
-    } else {
-      order.status = "success inventory exists";
-      order.inventorylocation = invMsg.inventorylocation;
-      order.suggestivesale = invMsg.suggestiveSale;
-    }
-
-    // persist the updates
-    _updateOrder(order);
-
-    // commit
-    conn.commit;
+  if (invMsg === null) {
+    conn.rollback;
+    return;
   }
+
+  // get the existing order
+  order = _getOrder(invMsg.orderid);
+
+  // update the order based on inv message
+  if (invMsg.inventorylocation === "inventorydoesnotexist") {
+    order.status = "failed inventory does not exist";
+  } else {
+    order.status = "success inventory exists";
+    order.inventorylocation = invMsg.inventorylocation;
+    order.suggestivesale = invMsg.suggestiveSale;
+  }
+
+  // persist the updates
+  _updateOrder(order);
+
+  // commit
+  conn.commit;
 }
 
 

@@ -32,6 +32,15 @@ end order_js;
 /
 show errors
 
+-- Preload the js
+set serveroutput on
+declare
+  ctx dbms_mle.context_handle_t := order_js.ctx;
+begin
+  dbms_output.put_line('order.js loaded');
+end;
+/
+show errors
 
 -- place order - REST api
 create or replace procedure place_order (
@@ -172,9 +181,11 @@ is
 inventoryMessageConsumer();
 ~';
 begin
-  -- execute javascript
-  dbms_mle.eval(ctx, 'JAVASCRIPT', js_code);
-
+  loop
+    -- execute javascript
+    dbms_mle.eval(ctx, 'JAVASCRIPT', js_code);
+    commit;
+  end loop;
 exception
   when others then
     raise;

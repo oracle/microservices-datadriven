@@ -56,24 +56,23 @@ function getInventory(itemid) {
 function orderMessageConsumer() {
   let order = null;
   let invMsg = null;
-  while (true) {
-    // wait for and dequeue the next order message
-    order = _dequeueOrderMessage(-1); // wait forever
 
-    if (order === null) {
-      conn.rollback;
-      continue;
-    }
+  // wait for and dequeue the next order message
+  order = _dequeueOrderMessage(-1); // wait forever
 
-    // fulfill the orders
-    invMsg = fulfillOrder(order);
-
-    // enqueue the inventory messages
-    _enqueueInventoryMessage(invMsg);
-
-    // commit
-    conn.commit;
+  if (order === null) {
+    conn.rollback;
+    return;
   }
+
+  // fulfill the orders
+  invMsg = fulfillOrder(order);
+
+  // enqueue the inventory messages
+  _enqueueInventoryMessage(invMsg);
+
+  // commit
+  conn.commit;
 }
 
 
