@@ -56,14 +56,13 @@ is
   order_jo json_object_t;
   order_string varchar2(1000);
   js_code clob := q'~
-// import order object
-let order = JSON.parse(bindings.importValue("order"));
-
-// place the orders
-order = placeOrder(order);
-
 // export order
-bindings.exportValue("order", JSON.stringify(order));
+bindings.exportValue(
+  "order", 
+  JSON.stringify(
+    placeOrder(
+      JSON.parse(
+        bindings.importValue("order")))));
 ~';
 begin
 
@@ -120,7 +119,10 @@ const orderid = bindings.importValue("orderid");
 const order = showOrder(orderid);
 
 // export order
-bindings.exportValue("order", JSON.stringify(order));
+bindings.exportValue(
+  "order", 
+  JSON.stringify(
+    showOrder(orderid)));
 ~';
 begin
   -- pass variables to javascript

@@ -16,6 +16,7 @@ as
   mle_ctx dbms_mle.context_handle_t := dbms_mle.create_context();
   js_loaded boolean := false;
   js_code clob := q'~
+$(<./js/inventory.js)
 ~';
 
   function ctx return dbms_mle.context_handle_t
@@ -49,11 +50,8 @@ authid current_user
 is
   ctx dbms_mle.context_handle_t := inventory_js.ctx;
   js_code clob := q'~
-// import itemid
-const itemid = bindings.importValue("itemid");
-
 // add inventory
-addInventory(itemid);
+addInventory(bindings.importValue("itemid");
 ~';
 begin
 
@@ -78,11 +76,8 @@ authid current_user
 is
   ctx dbms_mle.context_handle_t := inventory_js.ctx;
   js_code clob := q'~
-// import itemid
-const itemid = bindings.importValue("itemid");
-
 // remove inventory
-removeInventory(itemid);
+removeInventory(bindings.importValue("itemid"));
 ~';
 begin
 
@@ -108,17 +103,10 @@ create or replace procedure get_inventory (
 is
   ctx dbms_mle.context_handle_t := inventory_js.ctx;
   js_code clob := q'~
-// import itemid
-const itemid = bindings.importValue("itemid");
-
-// get the inventory count
-const invCount = getInventory(itemid);
-
-// export invCount
-bindings.exportValue("invCount", invCount);
+// get the inventory count and export it
+bindings.exportValue("invCount", getInventory(bindings.importValue("itemid")));
 ~';
 begin
-
   -- pass variables to javascript
   dbms_mle.export_to_mle(ctx, 'itemid', itemid);
 
