@@ -54,3 +54,5 @@ begin
   end;
 end;
 /
+
+select job_name, state, logging_level from USER_SCHEDULER_JOBS;

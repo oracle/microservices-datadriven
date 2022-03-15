@@ -83,7 +83,7 @@ function fulfillOrder(order) {
   let invMsg = {orderid: order.orderid, itemid: order.itemid, suggestiveSale: "beer"};
 
   // check the inventory
-  conn.execute(
+  let result = conn.execute(
     "update inventory set inventorycount = inventorycount - 1 " +
     "where inventoryid = :itemid and inventorycount > 0 " +
     "returning inventorylocation into :inventorylocation",
@@ -107,12 +107,12 @@ function fulfillOrder(order) {
 function _enqueueInventoryMessage(invMsg) {
   conn.execute(
     "begin inventory_messaging.enqueue_inventory_message(json_object_t(:1)); end;",
-    [invMsg.stringify()]
+    [JSON.stringify(invMsg)]
   );
 }
 
 function _dequeueOrderMessage(waitOption) {
-  conn.execute(
+  let result = conn.execute(
     "begin :orderString := inventory_messaging.dequeue_order_message(:waitOption).to_string; end;", {
     orderString: { dir: db.BIND_OUT, type: db.STRING },
     waitOption: { val: waitOption, dir: db.BIND_IN, type: db.NUMBER }
