@@ -55,7 +55,6 @@ function getInventory(itemid) {
 // orderMessageConsumer - background
 function orderMessageConsumer() {
   let order = null;
-  let itemid = null;
   let invMsg = null;
   while (true) {
     // wait for and dequeue the next order message

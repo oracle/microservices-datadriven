@@ -2,37 +2,6 @@
 -- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 
--- order js loader
-create or replace package order_js
-  authid current_user
-as
-  function ctx return dbms_mle.context_handle_t;
-end order_js;
-/
-show errors
-
-create or replace package body order_js
-as
-  mle_ctx dbms_mle.context_handle_t := dbms_mle.create_context();
-  js_loaded boolean := false;
-  js_code clob := q'~
-$(<./js/order.js)
-~';
-
-  function ctx return dbms_mle.context_handle_t
-  is
-  begin
-    if not js_loaded then
-      dbms_mle.eval(mle_ctx, 'JAVASCRIPT', js_code);
-      js_loaded := true;
-    end if;
-    return mle_ctx;
-  end ctx;
-end order_js;
-/
-show errors
-
-
 -- place order - REST api
 create or replace procedure place_order (
   orderid in out varchar2,
@@ -43,10 +12,12 @@ create or replace procedure place_order (
   suggestivesale out varchar2)
 authid current_user
 is
-  ctx dbms_mle.context_handle_t := order_js.ctx;
+  ctx dbms_mle.context_handle_t := dbms_mle.create_context();
   order_jo json_object_t;
   order_string varchar2(1000);
   js_code clob := q'~
+$(<./js/order.js)
+
 // import order object
 let order = JSON.parse(bindings.importValue("order"));
 
@@ -81,8 +52,11 @@ begin
   inventorylocation := order_jo.get_string('inventorylocation');
   suggestivesale :=    order_jo.get_string('suggestivesale');
 
+  dbms_mle.drop_context(ctx);
+
 exception
   when others then
+    dbms_mle.drop_context(ctx);
     raise;
 
 end;
@@ -100,10 +74,12 @@ create or replace procedure show_order (
   suggestivesale out varchar2)
   authid current_user
 is
-  ctx dbms_mle.context_handle_t := order_js.ctx;
+  ctx dbms_mle.context_handle_t := dbms_mle.create_context();
   order_jo json_object_t;
   order_string varchar2(1000);
   js_code clob := q'~
+$(<./js/order.js)
+
 // import order object
 const orderid = bindings.importValue("orderid");
 
@@ -131,8 +107,11 @@ begin
   inventorylocation := order_jo.get_string('inventorylocation');
   suggestivesale :=    order_jo.get_string('suggestivesale');
 
+  dbms_mle.drop_context(ctx);
+
 exception
   when others then
+    dbms_mle.drop_context(ctx);
     raise;
 
 end;
@@ -144,8 +123,10 @@ show errors
 create or replace procedure delete_all_orders
 authid current_user
 is
-  ctx dbms_mle.context_handle_t := order_js.ctx;
+  ctx dbms_mle.context_handle_t := dbms_mle.create_context();
   js_code clob := q'~
+$(<./js/order.js)
+
 // place the orders
 deleteAllOrders();
 ~';
@@ -153,8 +134,11 @@ begin
   -- execute javascript
   dbms_mle.eval(ctx, 'JAVASCRIPT', js_code);
 
+  dbms_mle.drop_context(ctx);
+
 exception
   when others then
+    dbms_mle.drop_context(ctx);
     raise;
 
 end;
@@ -166,8 +150,10 @@ show errors
 create or replace procedure inventory_message_consumer
 authid current_user
 is
-  ctx dbms_mle.context_handle_t := order_js.ctx;
+  ctx dbms_mle.context_handle_t := dbms_mle.create_context();
   js_code clob := q'~
+$(<./js/order.js)
+
 // process inventory messages
 inventoryMessageConsumer();
 ~';
@@ -175,8 +161,11 @@ begin
   -- execute javascript
   dbms_mle.eval(ctx, 'JAVASCRIPT', js_code);
 
+  dbms_mle.drop_context(ctx);
+
 exception
   when others then
+    dbms_mle.drop_context(ctx);
     raise;
 
 end;
