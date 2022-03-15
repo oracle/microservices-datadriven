@@ -93,7 +93,7 @@ function fulfillOrder(order) {
     }
   );
 
-  if (result.outBinds === undefined) {
+  if (result.rowsAffected === 0) {
     invMsg.inventorylocation = "inventorydoesnotexist";
   } else {
     invMsg.inventorylocation = result.outBinds.inventorylocation;
@@ -101,7 +101,6 @@ function fulfillOrder(order) {
 
   return invMsg;
 }
-
 
 // functions to enqueue and dequeue messages
 function _enqueueInventoryMessage(invMsg) {
