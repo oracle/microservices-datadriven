@@ -24,7 +24,7 @@ $(<./js/inventory.js)
   begin
     if not js_loaded then
       dbms_mle.eval(mle_ctx, 'JAVASCRIPT', js_code);
-      js_loaded := true;
+      -- js_loaded := true;
     end if;
     return mle_ctx;
   end ctx;
@@ -32,8 +32,7 @@ end inventory_js;
 /
 show errors
 
-
--- Preload the js
+-- preload the js
 set serveroutput on
 declare
   ctx dbms_mle.context_handle_t := inventory_js.ctx;
@@ -43,23 +42,17 @@ end;
 /
 show errors
 
-
 -- add inventory - REST api
 create or replace procedure add_inventory (itemid in varchar2)
 authid current_user
 is
   ctx dbms_mle.context_handle_t := inventory_js.ctx;
-  js_code clob := q'~
-// add inventory
-addInventory(bindings.importValue("itemid"));
-~';
 begin
-
   -- pass variables to javascript
   dbms_mle.export_to_mle(ctx, 'itemid', itemid);
 
   -- execute javascript
-  dbms_mle.eval(ctx, 'JAVASCRIPT', js_code);
+  dbms_mle.eval(ctx, 'JAVASCRIPT', 'addInventory(bindings.importValue("itemid"));');
 
 exception
   when others then
@@ -69,23 +62,18 @@ end;
 /
 show errors
 
-
 -- remove inventory - REST api
 create or replace procedure remove_inventory (itemid in varchar2)
 authid current_user
 is
   ctx dbms_mle.context_handle_t := inventory_js.ctx;
-  js_code clob := q'~
-// remove inventory
-removeInventory(bindings.importValue("itemid"));
-~';
 begin
 
   -- pass variables to javascript
   dbms_mle.export_to_mle(ctx, 'itemid', itemid);
 
   -- execute javascript
-  dbms_mle.eval(ctx, 'JAVASCRIPT', js_code);
+  dbms_mle.eval(ctx, 'JAVASCRIPT', 'removeInventory(bindings.importValue("itemid"));');
 
 exception
   when others then
@@ -102,16 +90,13 @@ create or replace procedure get_inventory (
   authid current_user
 is
   ctx dbms_mle.context_handle_t := inventory_js.ctx;
-  js_code clob := q'~
-// get the inventory count and export it
-bindings.exportValue("invCount", getInventory(bindings.importValue("itemid")));
-~';
 begin
   -- pass variables to javascript
   dbms_mle.export_to_mle(ctx, 'itemid', itemid);
 
   -- execute javascript
-  dbms_mle.eval(ctx, 'JAVASCRIPT', js_code);
+  dbms_mle.eval(ctx, 'JAVASCRIPT', 
+    'bindings.exportValue("invCount", getInventory(bindings.importValue("itemid")));');
 
   -- handle response
   dbms_mle.import_from_mle(ctx, 'invCount', inventorycount);
@@ -129,14 +114,10 @@ create or replace procedure order_message_consumer
 authid current_user
 is
   ctx dbms_mle.context_handle_t := inventory_js.ctx;
-  js_code clob := q'~
-// process inventory messages
-orderMessageConsumer();
-~';
 begin
   loop
     -- execute javascript
-    dbms_mle.eval(ctx, 'JAVASCRIPT', js_code);
+    dbms_mle.eval(ctx, 'JAVASCRIPT', 'orderMessageConsumer();');
     commit;
   end loop;
 exception
