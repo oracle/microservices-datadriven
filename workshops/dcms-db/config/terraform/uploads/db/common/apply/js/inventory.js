@@ -94,7 +94,7 @@ function fulfillOrder(order) {
   if (result.rowsAffected === 0) {
     invMsg.inventorylocation = "inventorydoesnotexist";
   } else {
-    invMsg.inventorylocation = result.outBinds.inventorylocation;
+    invMsg.inventorylocation = result.outBinds.inventorylocation[0];
   }
 
   return invMsg;
@@ -111,7 +111,7 @@ function _enqueueInventoryMessage(invMsg) {
 function _dequeueOrderMessage(waitOption) {
   let result = conn.execute(
     "begin :orderString := inventory_messaging.dequeue_order_message(:waitOption).to_string; end;", {
-    orderString: { dir: db.BIND_OUT, type: db.STRING },
+    orderString: { dir: db.BIND_OUT, type: db.STRING, maxSize: 400 },
     waitOption: { val: waitOption, dir: db.BIND_IN, type: db.NUMBER }
   });
   return JSON.parse(result.outBinds.orderString);

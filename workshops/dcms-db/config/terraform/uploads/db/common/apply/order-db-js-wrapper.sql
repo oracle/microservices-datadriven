@@ -112,17 +112,11 @@ is
   order_jo json_object_t;
   order_string varchar2(1000);
   js_code clob := q'~
-// import order object
-const orderid = bindings.importValue("orderid");
-
-// place the orders
-const order = showOrder(orderid);
-
-// export order
 bindings.exportValue(
   "order", 
   JSON.stringify(
-    showOrder(orderid)));
+    showOrder(
+      bindings.importValue("orderid"))));
 ~';
 begin
   -- pass variables to javascript

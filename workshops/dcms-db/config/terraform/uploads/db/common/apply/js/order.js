@@ -50,7 +50,7 @@ function deleteAllOrders() {
 function inventoryMessageConsumer() {
   let invMsg = null;
   let order =  null;
-  
+
   // wait for and dequeue the next order message
   invMsg = _dequeueInventoryMessage(-1); // wait forever
 
@@ -98,7 +98,7 @@ function _getOrder(orderid) {
   let result = conn.execute( 
     "begin :orderString := order_collection.get_order(:orderid).to_string; end;", 
     {
-      orderString: { dir: db.BIND_OUT, type: db.STRING },
+      orderString: { dir: db.BIND_OUT, type: db.STRING, maxSize: 400 },
       orderid: { val: orderid, dir: db.BIND_IN, type: db.STRING }
     }
   );
@@ -122,7 +122,7 @@ function _dequeueInventoryMessage(waitOption) {
   let result = conn.execute(
     "begin :invMsgString := order_messaging.dequeue_inventory_message(:waitOption).to_string; end;", 
     {
-      invMsgString: { dir: db.BIND_OUT, type: db.STRING },
+      invMsgString: { dir: db.BIND_OUT, type: db.STRING, maxSize: 400 },
       waitOption: { val: waitOption, dir: db.BIND_IN, type: db.NUMBER }
     }
   );

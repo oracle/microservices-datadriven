@@ -51,7 +51,7 @@ is
   ctx dbms_mle.context_handle_t := inventory_js.ctx;
   js_code clob := q'~
 // add inventory
-addInventory(bindings.importValue("itemid");
+addInventory(bindings.importValue("itemid"));
 ~';
 begin
 
