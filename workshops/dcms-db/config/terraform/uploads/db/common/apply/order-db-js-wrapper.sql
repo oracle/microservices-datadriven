@@ -24,7 +24,7 @@ $(<./js/order.js)
   begin
     if not js_loaded then
       dbms_mle.eval(mle_ctx, 'JAVASCRIPT', js_code);
-      js_loaded := true;
+      -- js_loaded := true;
     end if;
     return mle_ctx;
   end ctx;
