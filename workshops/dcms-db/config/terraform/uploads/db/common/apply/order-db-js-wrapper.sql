@@ -32,7 +32,7 @@ end order_js;
 /
 show errors
 
--- Preload the js
+-- preload the js
 set serveroutput on
 declare
   ctx dbms_mle.context_handle_t := order_js.ctx;
@@ -97,7 +97,6 @@ end;
 /
 show errors
 
-
 -- show order - REST api
 create or replace procedure show_order (
   orderid in out varchar2,
@@ -144,19 +143,14 @@ end;
 /
 show errors
 
-
 -- delete all orders - REST api
 create or replace procedure delete_all_orders
 authid current_user
 is
   ctx dbms_mle.context_handle_t := order_js.ctx;
-  js_code clob := q'~
-// place the orders
-deleteAllOrders();
-~';
 begin
   -- execute javascript
-  dbms_mle.eval(ctx, 'JAVASCRIPT', js_code);
+  dbms_mle.eval(ctx, 'JAVASCRIPT', 'deleteAllOrders();');
 
 exception
   when others then
@@ -166,20 +160,15 @@ end;
 /
 show errors
 
-
 -- inventory message consumer - background job
 create or replace procedure inventory_message_consumer
 authid current_user
 is
   ctx dbms_mle.context_handle_t := order_js.ctx;
-  js_code clob := q'~
-// process inventory messages
-inventoryMessageConsumer();
-~';
 begin
   loop
-    -- execute javascript
-    dbms_mle.eval(ctx, 'JAVASCRIPT', js_code);
+    -- execute javascript'
+    dbms_mle.eval(ctx, 'JAVASCRIPT', 'inventoryMessageConsumer();');
     commit;
   end loop;
 exception
