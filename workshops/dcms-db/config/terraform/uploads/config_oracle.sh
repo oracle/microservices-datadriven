@@ -229,8 +229,8 @@ function write_defaults {
 		<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 		<properties>
 		<entry key="plsql.gateway.enabled">true</entry>
-		<entry key="jdbc.InitialLimit">10</entry>
-		<entry key="jdbc.MaxLimit">20</entry>
+		<entry key="jdbc.InitialLimit">3</entry>
+		<entry key="jdbc.MaxLimit">3</entry>
     <entry key="jdbc.enableONS">false</entry>
 		<entry key="feature.sdw">false</entry>
 		<entry key="restEnabledSql.active">true</entry>

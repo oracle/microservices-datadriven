@@ -40,7 +40,7 @@ function getInventory(itemid) {
     let rows = conn.execute( 
       "select to_char(inventorycount) as invcount from inventory where inventoryid = :itemid", 
       [itemid]
-    );
+    ).rows;
     if (rows.length > 0) {
       return rows[0][0];
     } else {
