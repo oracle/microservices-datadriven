@@ -107,10 +107,15 @@ done
 # Select Jenkins Deployment
 echo 'Jenkins Deployment Options'
 PS3='Please select Jenkins deployment type: '
-options=("Micro-Deployed Jenkins on Public VM" "Micro-deployed Jenkins on Private VM" "Oracle DevOps" "Cancel")
+options=("Distributed Builds with Jenkins on Private VM" "Micro-Deployed Jenkins on Public VM" "Micro-deployed Jenkins on Private VM" "Oracle DevOps" "Cancel")
 select opt in "${options[@]}"
 do
     case $opt in
+        "Distributed Builds with Jenkins on Private VM")
+            CONFIGURATION='DBPRVJ'
+            echo "You have selected Distributed Builds with Jenkins on Private VM"
+            break
+            ;;
         "Micro-Deployed Jenkins on Public VM")
             CONFIGURATION='MDPUBJ'
             echo "You have selected Micro-Deployed Jenkins on Public VM"
@@ -133,6 +138,16 @@ do
     esac
 done
 state_set JENKINS_DEPLOYMENT $CONFIGURATION
+echo ""
+
+
+# Collect Agent Names
+if [ "$(state_get JENKINS_DEPLOYMENT)" = "DBPRVJ" ]
+then
+  read -p "Please enter a list of Jenkins Agent names to provision separated by spaces:" AGENTS
+  # Expects a string with names split with spaces
+  state_set JENKINS_AGENTS "$AGENTS"
+fi
 echo ""
 
 # Collect Jenkins password

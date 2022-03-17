@@ -35,4 +35,5 @@ set_secret JENKINS_PRIVATE_KEY `terraform output -raw generated_ssh_private_key`
 
 # Write the output
 cat >$OUTPUT_FILE <<!
+
 !

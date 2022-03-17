@@ -16,3 +16,13 @@ module micro-deploy-private-containerized-jenkins {
 
   count = local.micro-deployment-private-jenkins ? 1 : 0
 }
+
+module distributed-builds-private-jenkins {
+  source = "./modules/controller-agent-private-containerized-jenkins"
+  compartment_id     = var.compartment_ocid
+  jenkins_password   = var.jenkins_password
+  region             = var.region
+  unique_agent_names = split(" ", var.agents)
+
+  count = local.distributed-builds-private-jenkins ? 1 : 0
+}

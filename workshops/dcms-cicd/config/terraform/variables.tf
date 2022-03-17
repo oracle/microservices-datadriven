@@ -9,10 +9,13 @@ variable jenkins_password {
   type = string
   sensitive = true
 }
-variable deployment {
-  description = "Type of Deployment deploying different Jenkins infrastrcuture configuration"
+
+variable agents {
+  description = "Agents"
+  type = string
+  default = ""
 }
-locals {
-  micro-deployment-public-jenkins = var.deployment == "MDPUBJ" ? true : false
-  micro-deployment-private-jenkins = var.deployment == "MDPRVJ" ? true : false
+
+variable deployment {
+  description = "Type of Deployment deploying different Jenkins infrastructure configuration"
 }
