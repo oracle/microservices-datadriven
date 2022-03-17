@@ -188,14 +188,13 @@ function set_image_cdn {
 	return ${_RC}
 }
 
-function write_apex_pu {
+function create_ords_connection {
 	typeset -i _RC=0
-	typeset -r _FILE="apex_pu.xml"
 	typeset -r _DIR=$1
-	typeset -r _PASS=$2
-	typeset -r _DBNAME=$3
-	typeset -r _WALLET_FILE=$4
-
+	typeset -r _FILE=$2
+	typeset -r _PASS=$3
+	typeset -r _DBNAME=$4
+	typeset -r _WALLET_FILE=$5
 	typeset -r _WALLET=$(cat ${_WALLET_FILE})
 
 	mkdir -p ${_DIR}
@@ -215,6 +214,30 @@ function write_apex_pu {
 	else
 		echo "Wrote ${_DIR}/${_FILE}"
 	fi
+
+	return ${_RC}
+}
+
+function create_ords_mappings {
+	typeset -i _RC=0
+	typeset -r _DIR=$1
+	typeset -r _FILE='url-mapping.xml'
+
+	mkdir -p ${_DIR}
+	cat > ${_DIR}/${_FILE} <<- EOF
+		<?xml version="1.0" encoding="UTF-8"?>
+		<pool-config xmlns="http://xmlns.oracle.com/apex/pool-config">
+		<pool name="order" base-path="/order" updated="2022-03-17T20:07:33.480Z"/>
+		<pool name="inventory" base-path="/inventory" updated="2022-03-17T20:07:33.480Z"/>
+		</pool-config>
+	EOF
+	if [[ ! -f ${_DIR}/${_FILE} ]]; then
+		echo "ERROR: Unable to write ${_DIR}/${_FILE}"
+		_RC=1
+	else
+		echo "Wrote ${_DIR}/${_FILE}"
+	fi
+
 	return ${_RC}
 }
 
@@ -326,7 +349,16 @@ RC=$?
 set_image_cdn "${admin_password}" "${db_name}" "${apex_version}"
 RC=$(( RC + $? ))
 
-write_apex_pu "${ords_dir}/config/ords/conf" "${admin_password}" "${db_name}" "$TNS_ADMIN/adb_wallet.zip.b64"
+create_ords_connection "${ords_dir}/config/ords/conf" 'apex_pu.xml' "${admin_password}" "${db_name}" "$TNS_ADMIN/adb_wallet.zip.b64"
+RC=$(( RC + $? ))
+
+create_ords_connection "${ords_dir}/config/ords/conf" 'order_pu.xml' "${admin_password}" "${db_name}" "$TNS_ADMIN/adb_wallet.zip.b64"
+RC=$(( RC + $? ))
+
+create_ords_connection "${ords_dir}/config/ords/conf" 'inventory_pu.xml' "${admin_password}" "${db_name}" "$TNS_ADMIN/adb_wallet.zip.b64"
+RC=$(( RC + $? ))
+
+create_ords_mappings "${ords_dir}/config/ords"
 RC=$(( RC + $? ))
 
 write_defaults "${ords_dir}/config/ords"
@@ -343,14 +375,14 @@ copy_app "${standalone_root}"
 cat > ${ords_dir}/mylogfile.properties <<'!'
 handlers=java.util.logging.FileHandler
 # Default global logging level for ORDS
-#.level=CONFIG
-.level=FINE
+.level=CONFIG
+#.level=FINE
 java.util.logging.FileHandler.pattern=/var/log/ords/ords-sys.log
 java.util.logging.FileHandler.formatter = java.util.logging.SimpleFormatter
 java.util.logging.SimpleFormatter.format = %1$tY-%1$tm-%1$td %1$tH:%1$tM:%1$tS %4$-6s %2$s %5$s%6$s%n
 !
 
-cat >/etc/ords/ords.conf <<'!'
+cat >/etc/ords/ords.conf <<!
 ORDS_CONFIGDIR=/opt/oracle/ords/config
 JAVA_HOME=/usr/java/latest
 JAVA_OPTIONS=-Djava.util.logging.config.file=${ords_dir}/mylogfile.properties -Xmx2048m
