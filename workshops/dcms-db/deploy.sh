@@ -40,7 +40,7 @@ fi
 
 DB_PASSWORD=Welcome12345
 
-ssh -o StrictHostKeyChecking=accept-new -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
+ssh -o StrictHostKeyChecking=false -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
 sudo su - oracle
 cd ~/db/common/apply
 

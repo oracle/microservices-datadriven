@@ -73,7 +73,7 @@ while true; do
   fi
 done
 
-ssh -o StrictHostKeyChecking=accept-new -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
+ssh -o StrictHostKeyChecking=false -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
 sudo su oracle
 cd /opt/oracle/ords
 java -jar ords.war user grabdish order_user inventory_user <<EOF
