@@ -12,7 +12,6 @@ fi
 
 QUEUE_TYPE=$(state_get QUEUE_TYPE)
 OCI_REGION="$(state_get OCI_REGION)"
-DB_PASSWORD=$(get_secret $DB_PASSWORD_SECRET)
 
 # Generate the ssh keys
 if ! test -d $MY_STATE/ssh; then
