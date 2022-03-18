@@ -47,6 +47,9 @@ state_set LB_ADDRESS `terraform output -raw lb_address`
 # Get the ORDS instance public IP
 state_set ORDS_ADDRESS `terraform output -raw ords_address`
 
+# Get the ORDS instance public IP
+state_set DB_OCID `terraform output -raw db_ocid`
+
 # Write the output
 cat >$OUTPUT_FILE <<!
 export LB_ADDRESS='$(state_get LB_ADDRESS)'

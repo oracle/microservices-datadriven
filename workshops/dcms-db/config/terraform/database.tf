@@ -37,7 +37,7 @@ resource "oci_database_autonomous_database" "autonomous_database" {
 
 resource "oci_database_autonomous_database_wallet" "database_wallet" {
   autonomous_database_id = oci_database_autonomous_database.autonomous_database.id
-  password               = var.db_password
+  password               = random_password.autonomous_database_password.result
   base64_encode_content  = "true"
 }
 

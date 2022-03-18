@@ -59,7 +59,7 @@ trap "rm -f -- '$param_file'" EXIT
 umask 177
 echo '{"adminPassword": "'"$DB_PASSWORD"'"}' > $param_file
 umask 22
-oci db autonomous-database update --autonomous-database-id "$DB_OCID" --from-json "file://$param_file" >/dev/null
+oci db autonomous-database update --autonomous-database-id "$(state_get DB_OCID)" --from-json "file://$param_file" >/dev/null
 rm $param_file
 
 # Update the password of all the other schemas

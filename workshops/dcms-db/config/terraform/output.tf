@@ -7,3 +7,8 @@ output "ords_address" {
   value       = oci_core_instance.instance.public_ip
   description = "The Public facing IP Address assigned to the ORDS instance"
 }
+
+output "db_ocid" {
+  value       = oci_database_autonomous_database.autonomous_database.id
+  description = "The OCID of the ATP database"
+}

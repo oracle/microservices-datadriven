@@ -5,7 +5,7 @@
 // so instead of complicating with different ways to bootstrap the ORDS, using provisioners :()
 locals {
   db_name  = lookup(oci_database_autonomous_database.autonomous_database,"db_name")
-  password = var.db_password
+  password = random_password.autonomous_database_password.result
   apex_ver = lookup(oci_database_autonomous_database.autonomous_database.apex_details[0],"apex_version")
 }
 
