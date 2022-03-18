@@ -123,8 +123,8 @@ while ! state_done RUN_TYPE; do
   else
     # Run in your own tenancy
     state_set RUN_TYPE "OT"
-    state_set DB1_NAME "$(state_get RUN_NAME)1"
-    state_set DB2_NAME "$(state_get RUN_NAME)2"
+    state_set DB_NAME "$(state_get RUN_NAME)"
+    state_set DB_ALIAS "$(state_get RUN_NAME)_tp"
   fi
 done
 
@@ -147,10 +147,10 @@ while ! state_done TENANCY_OCID; do
 done
 
 
-# TODO Add Limit Checks
-state_set_done ATP_LIMIT_CHECK # Override for now
 # Check ATP resource availability
 while ! state_done ATP_LIMIT_CHECK; do
+  # TODO Add Limit Checks
+  break # Override for now
   CHECK=1
   # ATP OCPU availability
   if test $(oci limits resource-availability get --compartment-id="$(state_get TENANCY_OCID)" --service-name "database" --limit-name "atp-ocpu-count" --query 'to_string(min([data."fractional-availability",`4.0`]))' --raw-output) != '4.0'; then
@@ -186,13 +186,6 @@ if ! state_done COMPARTMENT_OCID; then
     echo "Error: Failed in compartment-dialog"
     exit 1
   fi
-fi
-
-
-# Setup the vault
-if ! folder-vault-setup $DCMS_VAULT; then
-  echo "Error: Failed to provision the folder vault"
-  exit 1
 fi
 
 
@@ -232,56 +225,7 @@ while ! state_done OCI_REGION; do
   state_set OCI_REGION "$OCI_REGION"
 done
 
-
-# Collect DB password
-if ! is_secret_set DB_PASSWORD; then
-  echo
-  echo 'Database passwords must be 12 to 30 characters and contain at least one uppercase letter,'
-  echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
-  echo 'character or the word "admin".'
-  echo
-
-  while true; do
-    if test -z "${TEST_DB_PASSWORD-}"; then
-      read -s -r -p "Enter the password to be used for the order and inventory databases: " PW
-    else
-      PW="${TEST_DB_PASSWORD-}"
-    fi
-    if [[ ${#PW} -ge 12 && ${#PW} -le 30 && "$PW" =~ [A-Z] && "$PW" =~ [a-z] && "$PW" =~ [0-9] && "$PW" != *admin* && "$PW" != *'"'* ]]; then
-      echo
-      break
-    else
-      echo "Invalid Password, please retry"
-    fi
-  done
-  set_secret DB_PASSWORD $PW
-  state_set DB_PASSWORD_SECRET "DB_PASSWORD"
-fi
-
-# Collect UI password
-if ! is_secret_set UI_PASSWORD; then
-  echo
-  echo 'UI passwords must be 8 to 30 characters'
-  echo
-
-  while true; do
-    if test -z "${TEST_UI_PASSWORD-}"; then
-      read -s -r -p "Enter the password to be used for accessing the UI: " PW
-    else
-      PW="${TEST_UI_PASSWORD-}"
-    fi
-    if [[ ${#PW} -ge 8 && ${#PW} -le 30 ]]; then
-      echo
-      break
-    else
-      echo "Invalid Password, please retry"
-    fi
-  done
-  set_secret UI_PASSWORD $PW
-  state_set UI_PASSWORD_SECRET "UI_PASSWORD"
-fi
-
 # Run the setup in the background
 cd $DCMS_STATE
-echo "Setup running in background.  Call 'status' to get the status of the setup"
+echo "Setup is running and the status will be updated every 10 seconds.  Setup usually takes about 7 minutes.  The setup log is $DCMS_LOG_DIR/config.log."
 nohup bash -c "provisioning-apply $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/config" >>$DCMS_LOG_DIR/config.log 2>&1 &

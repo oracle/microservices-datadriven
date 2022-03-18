@@ -101,19 +101,15 @@
               <oj-switcher value="[[selectedTask]]">
                 <!-- login -->
                 <div slot="login">
-                  <div slot="body">
-                    <oj-form-layout>
-                      <oj-input-text label-hint="Username" value="{{loginUserName}}"></oj-input-text>
-                      <oj-input-password label-hint="Password" value="{{loginPassword}}"></oj-input-password>
-                    </oj-form-layout>
-                  </div>
-                  <div slot="footer">
-                    <oj-button disabled="[[inProgress]]" on-oj-action="[[loginAction]]"> Login </oj-button>
-                    <div class="responsePanel oj-flex-item">
-                      <p class="oj-typography-body-xs">Logon Status: <span>
-                          <oj-bind-text value="[[loginStatus()]]"></oj-bind-text>
-                        </span></p>
-                    </div>
+                  <oj-form-layout>
+                    <oj-input-text label-hint="Username" value="{{loginUserName}}"></oj-input-text>
+                    <oj-input-password label-hint="Password" value="{{loginPassword}}"></oj-input-password>
+                  </oj-form-layout>
+                  <oj-button disabled="[[inProgress]]" on-oj-action="[[loginAction]]"> Login </oj-button>
+                  <div class="responsePanel oj-flex-item">
+                    <p class="oj-typography-body-xs">Logon Status: <span>
+                        <oj-bind-text value="[[loginStatus()]]"></oj-bind-text>
+                      </span></p>
                   </div>
                 </div>
 
@@ -177,7 +173,7 @@
           </oj-bind-for-each>
         </ul>
       </div>
-      <div class="oj-web-applayout-footer-item oj-text-secondary-color oj-text-sm">
+      <div class="oj-web-applayout-footer-item oj-text-color-secondary oj-typography-body-sm">
         Copyright © 2021 Oracle and/or its affiliates All rights reserved.
       </div>
     </footer>

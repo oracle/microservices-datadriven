@@ -14,14 +14,14 @@ resource "random_password" "autonomous_database_password" {
 }
 
 resource "oci_database_autonomous_database" "autonomous_database" {
-  admin_password           = var.db_password
+  admin_password           = random_password.autonomous_database_password.result
   compartment_id           = var.compartment_ocid
-  db_name                  = "dcmsdb"
+  db_name                  = var.db_name
   cpu_core_count           = var.adb_cpu_core_count[var.size]
   data_storage_size_in_tbs = var.adb_storage_size_in_tbs
   db_version               = var.adb_db_version
   db_workload              = "OLTP"
-  display_name             = format("%sDB_%s", upper(var.proj_abrv), var.size)
+  display_name             = "DCMSDBWORKSHOP"
   is_free_tier             = local.is_always_free
   is_auto_scaling_enabled  = local.is_always_free ? false : true
   license_model            = local.is_always_free ? "LICENSE_INCLUDED" : var.adb_license_model

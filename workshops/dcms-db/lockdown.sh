@@ -30,29 +30,71 @@ fi
 
 
 # Collect DB password
-if ! is_secret_set DB_PASSWORD; then
-  echo
-  echo 'Database passwords must be 12 to 30 characters and contain at least one uppercase letter,'
-  echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
-  echo 'character or the word "admin".'
-  echo
+while true; do
+  if test -z "${TEST_DB_PASSWORD-}"; then
+    echo
+    echo 'Database passwords must be 12 to 30 characters and contain at least one uppercase letter,'
+    echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
+    echo 'character or the word "admin".'
+    echo
 
-  while true; do
-    if test -z "${TEST_DB_PASSWORD-}"; then
-      read -s -r -p "Enter the password to be used for the order and inventory databases: " PW
-    else
-      PW="${TEST_DB_PASSWORD-}"
-    fi
-    if [[ ${#PW} -ge 12 && ${#PW} -le 30 && "$PW" =~ [A-Z] && "$PW" =~ [a-z] && "$PW" =~ [0-9] && "$PW" != *admin* && "$PW" != *'"'* ]]; then
-      echo
-      break
-    else
-      echo "Invalid Password, please retry"
-    fi
-  done
-  set_secret DB_PASSWORD $PW
-  state_set DB_PASSWORD_SECRET "DB_PASSWORD"
-fi
+    read -s -r -p "Enter the password to be used for the database: " PW
+  else
+    PW="${TEST_DB_PASSWORD-}"
+  fi
+  if [[ ${#PW} -ge 12 && ${#PW} -le 30 && "$PW" =~ [A-Z] && "$PW" =~ [a-z] && "$PW" =~ [0-9] && "$PW" != *admin* && "$PW" != *'"'* ]]; then
+    echo
+    DB_PASSWORD="$PW"
+    break
+  else
+    echo "Invalid Password, please retry"
+  fi
+done
+
+
+# Set the DB admin password
+param_file=temp_params
+trap "rm -f -- '$param_file'" EXIT
+
+umask 177
+echo '{"adminPassword": "'"$DB_PASSWORD"'"}' > $param_file
+umask 22
+oci db autonomous-database update --autonomous-database-id "$DB_OCID" --from-json "file://$param_file" >/dev/null
+rm $param_file
+
+# Update the password of all the other schemas
+ssh -o StrictHostKeyChecking=false -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
+sudo su - oracle
+cd ~/db/common/apply
+export TNS_ADMIN=~/tns_admin
+
+sqlplus /nolog <<EOF
+  connect admin/'$DB_PASSWORD'@$(state_get DB_ALIAS)
+  UPDATE USER AQ IDENTIFIED BY "$DB_PASSWORD";
+  UPDATE USER ORDERUSER IDENTIFIED BY "$DB_PASSWORD";
+  UPDATE USER INVENTORYUSER IDENTIFIED BY "$DB_PASSWORD";
+  UPDATE USER ORDS_PUBLIC_USER_OCI IDENTIFIED BY "$DB_PASSWORD";
+  UPDATE USER ORDS_PLSQL_GATEWAY_OCI IDENTIFIED BY "$DB_PASSWORD";
+EOF
+!
+
+# Update the ORDS config
+ssh -o StrictHostKeyChecking=false -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
+sudo su - oracle
+cd /opt/oracle/ords/config/ords/conf
+for conn in apex order inventory; do
+  cat >${conn}_pu.xml <<- EOF
+		<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+		<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+		<properties>
+		<entry key="db.username">ORDS_PUBLIC_USER_OCI</entry>
+		<entry key="db.password">!${DB_PASSWORD}</entry>
+		<entry key="db.wallet.zip.service">$(state_get DB_ALIAS)</entry>
+		<entry key="db.wallet.zip"><![CDATA[\$(cat /home/oracle/tns_admin/adb_wallet.zip.b64)]]></entry>
+		</properties>
+	EOF
+done
+!
 
 # Collect UI password
 echo
@@ -67,20 +109,26 @@ while true; do
   fi
   if [[ ${#PW} -ge 8 && ${#PW} -le 30 ]]; then
     echo
+    UI_PASSWORD="$PW"
     break
   else
     echo "Invalid Password, please retry"
   fi
 done
 
+# Setup the UI Password
 ssh -o StrictHostKeyChecking=false -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
+# Setup the UI Password
 sudo su oracle
 cd /opt/oracle/ords
 java -jar ords.war user grabdish order_user inventory_user <<EOF
-$PW
-$PW
+$UI_PASSWORD
+$UI_PASSWORD
 EOF
-exit
+!
+
+# Restart ORDS
+ssh -o StrictHostKeyChecking=false -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
 sudo su root
 systemctl restart ords
 !

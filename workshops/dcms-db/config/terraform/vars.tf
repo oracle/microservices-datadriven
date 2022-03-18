@@ -5,6 +5,7 @@
 variable "tenancy_ocid" {}
 variable "compartment_ocid" {}
 variable "region" {}
+variable "db_name" {}
 
 // Extra Hidden
 variable "user_ocid" {
@@ -28,10 +29,6 @@ variable "proj_abrv" {
 }
 variable "size" {
     default = "ALF"
-}
-
-variable "db_password" {
-    default = ""
 }
 
 variable "adb_license_model" {

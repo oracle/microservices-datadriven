@@ -11,8 +11,6 @@ if ! provisioning-helper-pre-apply; then
 fi
 
 QUEUE_TYPE=$(state_get QUEUE_TYPE)
-DB_PASSWORD_SECRET=$(state_get DB_PASSWORD_SECRET)
-UI_PASSWORD_SECRET=$(state_get UI_PASSWORD_SECRET)
 OCI_REGION="$(state_get OCI_REGION)"
 DB_PASSWORD=$(get_secret $DB_PASSWORD_SECRET)
 
