@@ -134,7 +134,6 @@
                   <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9DeleteAllOrdersAction]]">Delete All Orders</oj-button>
                   <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9PlaceOrderAction]]">Place Order</oj-button>
                   <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9ShowOrderAction]]">Show Order</oj-button>
-                  <oj-button onclick="window.open('/spatial');">Spatial</oj-button>
                   <br><br>
                   <br>Supplier/Inventory Admin...
                   <br>
@@ -248,7 +247,8 @@
           this.loginPassword = ko.observable("");
           this.loginStatus = ko.observable("Not logged in");
           this.authorization = "";
-
+          this.inProgress = ko.observable(false);
+  
           this.loginAction = function (event, vm) {
             vm.inProgress(true);
             vm.loginStatus("Logging in...");
@@ -271,6 +271,7 @@
               } else {
                 vm.loginStatus("Login failed");
               }
+              vm.inProgress(false);
               fetchResult.json().then(payload => {
 //                vm.labResult(JSON.stringify(payload, null, 2));
                 vm.inProgress(false);
@@ -296,10 +297,7 @@
           //Drives the navigation list itself
           this.tasks = new ArrayDataProvider(Array.from(this.menuTasks.entries()).map(entry => { entry[1].id = entry[0]; return entry[1]; }), { keyAttributes: 'id' });
 
-          this.inProgress = ko.observable(false);
-
           // Function calls and state relating to given labs
-
           // Lab 9. ----------------------------------------------------------- //
           this.lab9Food = ko.observable('sushi');
           this.lab9OrderId = ko.observable(66);

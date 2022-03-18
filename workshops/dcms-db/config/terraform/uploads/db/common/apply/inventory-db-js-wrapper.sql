@@ -13,8 +13,7 @@ show errors
 
 create or replace package body inventory_js
 as
-  mle_ctx dbms_mle.context_handle_t := dbms_mle.create_context();
-  js_loaded boolean := false;
+  mle_ctx dbms_mle.context_handle_t := null;
   js_code clob := q'~
 $(<./js/inventory.js)
 ~';
@@ -22,9 +21,8 @@ $(<./js/inventory.js)
   function ctx return dbms_mle.context_handle_t
   is
   begin
-    if not js_loaded then
+    if mle_ctx is null then
       dbms_mle.eval(mle_ctx, 'JAVASCRIPT', js_code);
-      js_loaded := true;
     end if;
     return mle_ctx;
   end ctx;
