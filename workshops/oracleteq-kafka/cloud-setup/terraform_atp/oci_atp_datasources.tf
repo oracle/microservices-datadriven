@@ -15,8 +15,3 @@ data "oci_database_autonomous_databases" "autonomous_databases_atp" {
   db_workload  = var.autonomous_database_db_workload
 }
 
-//======= Name space details ------------------------------------------------------
-data "oci_objectstorage_namespace" "lab8022_objstore_namespace" {
-  #Optional
-  compartment_id = var.compartment_ocid
-}
