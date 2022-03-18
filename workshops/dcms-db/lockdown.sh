@@ -69,12 +69,12 @@ cd ~/db/common/apply
 export TNS_ADMIN=~/tns_admin
 
 sqlplus /nolog <<EOF
-  connect admin/'$DB_PASSWORD'@$(state_get DB_ALIAS)
-  UPDATE USER AQ IDENTIFIED BY "$DB_PASSWORD";
-  UPDATE USER ORDERUSER IDENTIFIED BY "$DB_PASSWORD";
-  UPDATE USER INVENTORYUSER IDENTIFIED BY "$DB_PASSWORD";
-  UPDATE USER ORDS_PUBLIC_USER_OCI IDENTIFIED BY "$DB_PASSWORD";
-  UPDATE USER ORDS_PLSQL_GATEWAY_OCI IDENTIFIED BY "$DB_PASSWORD";
+  connect admin/"$DB_PASSWORD"@$(state_get DB_ALIAS)
+  ALTER USER AQ IDENTIFIED BY "$DB_PASSWORD";
+  ALTER USER ORDERUSER IDENTIFIED BY "$DB_PASSWORD";
+  ALTER USER INVENTORYUSER IDENTIFIED BY "$DB_PASSWORD";
+  ALTER USER ORDS_PUBLIC_USER_OCI IDENTIFIED BY "$DB_PASSWORD";
+  ALTER USER ORDS_PLSQL_GATEWAY_OCI IDENTIFIED BY "$DB_PASSWORD";
 EOF
 !
 
@@ -83,16 +83,16 @@ ssh -o StrictHostKeyChecking=false -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(st
 sudo su - oracle
 cd /opt/oracle/ords/config/ords/conf
 for conn in apex order inventory; do
-  cat >${conn}_pu.xml <<- EOF
-		<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-		<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
-		<properties>
-		<entry key="db.username">ORDS_PUBLIC_USER_OCI</entry>
-		<entry key="db.password">!${DB_PASSWORD}</entry>
-		<entry key="db.wallet.zip.service">$(state_get DB_ALIAS)</entry>
-		<entry key="db.wallet.zip"><![CDATA[\$(cat /home/oracle/tns_admin/adb_wallet.zip.b64)]]></entry>
-		</properties>
-	EOF
+  cat >\${conn}_pu.xml <<EOF
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<entry key="db.username">ORDS_PUBLIC_USER_OCI</entry>
+<entry key="db.password">!${DB_PASSWORD}</entry>
+<entry key="db.wallet.zip.service">$(state_get DB_ALIAS)</entry>
+<entry key="db.wallet.zip"><![CDATA[\$(cat /home/oracle/tns_admin/adb_wallet.zip.b64)]]></entry>
+</properties>
+  EOF
 done
 !
 

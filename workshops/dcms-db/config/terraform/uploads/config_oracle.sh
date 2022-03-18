@@ -88,7 +88,7 @@ function run_sql {
 
 	echo "Connecting to ${_DBNAME}_TP (TNS_ADMIN=$TNS_ADMIN)"
 	sqlplus -s /nolog <<-EOSQL
-		connect ADMIN/${_PASS}@${_DBNAME}_TP
+		connect ADMIN/"${_PASS}"@${_DBNAME}_TP
 		set serveroutput on size 99999 feedback off timing on linesize 180 echo on
 		whenever sqlerror exit 1
 		$_SQL
