@@ -92,7 +92,7 @@ for conn in apex order inventory; do
 <entry key="db.wallet.zip.service">$(state_get DB_ALIAS)</entry>
 <entry key="db.wallet.zip"><![CDATA[\$(cat /home/oracle/tns_admin/adb_wallet.zip.b64)]]></entry>
 </properties>
-  EOF
+EOF
 done
 !
 
