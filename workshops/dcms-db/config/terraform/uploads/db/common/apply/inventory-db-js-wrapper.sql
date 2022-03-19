@@ -21,9 +21,7 @@ $(<./js/inventory.js)
   function ctx return dbms_mle.context_handle_t
   is
   begin
-    if mle_ctx is null then
-      dbms_mle.eval(mle_ctx, 'JAVASCRIPT', js_code);
-    end if;
+    dbms_mle.eval(mle_ctx, 'JAVASCRIPT', js_code);
     return mle_ctx;
   end ctx;
 end inventory_js;

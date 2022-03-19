@@ -14,7 +14,6 @@ show errors
 create or replace package body order_js
 as
   mle_ctx dbms_mle.context_handle_t := dbms_mle.create_context();
-  js_loaded boolean := false;
   js_code clob := q'~
 $(<./js/order.js)
 ~';
@@ -22,10 +21,7 @@ $(<./js/order.js)
   function ctx return dbms_mle.context_handle_t
   is
   begin
-    if not js_loaded then
-      dbms_mle.eval(mle_ctx, 'JAVASCRIPT', js_code);
-      js_loaded := true;
-    end if;
+    dbms_mle.eval(mle_ctx, 'JAVASCRIPT', js_code);
     return mle_ctx;
   end ctx;
 end order_js;

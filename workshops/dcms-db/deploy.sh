@@ -62,14 +62,14 @@ cd ~/db/common/apply
 export TNS_ADMIN=~/tns_admin
 
 sqlplus /nolog <<EOF
-connect inventoryuser/'${DB_PASSWORD}'@$(state_get DB_ALIAS)
+connect inventoryuser/"${DB_PASSWORD}"@$(state_get DB_ALIAS)
 @inventory-db-undeploy.sql
 @${inv_svc}
 @inventory-db-deploy.sql
 EOF
 
 sqlplus /nolog <<EOF
-connect orderuser/'${DB_PASSWORD}'@$(state_get DB_ALIAS)
+connect orderuser/"${DB_PASSWORD}"@$(state_get DB_ALIAS)
 @order-db-undeploy.sql
 @${ord_svc}
 @order-db-deploy.sql

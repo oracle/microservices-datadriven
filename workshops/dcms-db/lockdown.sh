@@ -119,7 +119,7 @@ done
 # Setup the UI Password
 ssh -o StrictHostKeyChecking=false -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
 # Setup the UI Password
-sudo su oracle
+sudo su - oracle
 cd /opt/oracle/ords
 java -jar ords.war user grabdish order_user inventory_user <<EOF
 $UI_PASSWORD
@@ -129,6 +129,6 @@ EOF
 
 # Restart ORDS
 ssh -o StrictHostKeyChecking=false -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
-sudo su root
+sudo su - root
 systemctl restart ords
 !
