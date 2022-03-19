@@ -87,7 +87,7 @@ while true; do
     echo
   fi
 
-  if [[ "$DCMS_STATUS" =~ byo|new|applied|destroyed ]]; then
+  if [[ "$DCMS_STATUS" =~ byo|new|applied|applying-failed|destroyed|destroying-failed ]]; then
     # Skip this log
     break
   fi
