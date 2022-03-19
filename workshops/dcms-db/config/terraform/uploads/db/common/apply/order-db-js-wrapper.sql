@@ -14,7 +14,7 @@ show errors
 create or replace package body order_js
 as
   mle_ctx dbms_mle.context_handle_t := dbms_mle.create_context();
-  js_eval := false;
+  js_eval boolean := false;
   js_code clob := q'~
 $(<./js/order.js)
 ~';
