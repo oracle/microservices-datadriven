@@ -5,6 +5,18 @@
 # Fail on error
 set -eu
 
+# Check JAVA_HOME
+if [ -z "${JAVA_HOME}" ]
+then
+    #JAVA_HOME=$(readlink -nf $(which java) | xargs dirname | xargs dirname | xargs dirname)
+    JAVA_HOME="$HOME"/graalvm-ce-java11-22.0.0.2
+    if [ ! -e "$JAVA_HOME" ]
+    then
+        JAVA_HOME=""
+    fi
+    export JAVA_HOME=$JAVA_HOME
+fi
+
 # PATH to OKafka Library
 OKAFKA_LIB="$LAB_HOME"/cloud-setup/okafka/okafka-0.8.lib
 OKAFKA_JAR="$LAB_HOME"/cloud-setup/okafka/okafka-0.8.jar
