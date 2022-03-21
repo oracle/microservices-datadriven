@@ -64,6 +64,12 @@ done
 
 rm -f $STATE_FILE
 
+# Remove the source.env from the .bashrc
+PROF=~/.bashrc
+if test -f "$PROF"; then
+  sed -i.bak '/microservices-datadriven/d' $PROF
+fi
+
 # Clean up the auth token
 TOKEN_OCID=$(oci iam auth-token list --region "$(state_get HOME_REGION)" --user-id="$(state_get USER_OCID)" --query 'data[?description=='"'$(state_get DOCKER_AUTH_TOKEN_DESC)'"'].id|[0]' --raw-output)
 oci iam auth-token delete --region "$(state_get HOME_REGION)" --user-id="$(state_get USER_OCID)" --force --auth-token-id "$TOKEN_OCID"
