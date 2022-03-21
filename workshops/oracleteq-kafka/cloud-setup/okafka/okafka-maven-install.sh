@@ -5,6 +5,12 @@
 # Fail on error
 set -eu
 
+# Give GRAALVM_INSTALLED priority
+while ! state_done GRAALVM_INSTALLED; do
+  echo "Waiting for GRAALVM_INSTALLED"
+  sleep 5
+done
+
 # Check JAVA_HOME
 pattern='*graalvm-ce-java11-22.0.0.2'
 
