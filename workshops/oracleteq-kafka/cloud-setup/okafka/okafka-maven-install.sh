@@ -6,13 +6,15 @@
 set -eu
 
 # Check JAVA_HOME
-if [ -z "${JAVA_HOME}" ]
+pattern='*graalvm-ce-java11-22.0.0.2'
+
+if [[ -z "${JAVA_HOME}" ]] ||  [[ "${JAVA_HOME}" != $pattern ]]
 then
-    #JAVA_HOME=$(readlink -nf $(which java) | xargs dirname | xargs dirname | xargs dirname)
     JAVA_HOME="$HOME"/graalvm-ce-java11-22.0.0.2
     if [ ! -e "$JAVA_HOME" ]
     then
-        JAVA_HOME=""
+      echo "ERROR: This script requires JAVA_HOME to be set to GraalVM"
+      exit
     fi
     export JAVA_HOME=$JAVA_HOME
 fi
