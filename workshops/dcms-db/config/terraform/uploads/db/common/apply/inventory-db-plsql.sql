@@ -3,22 +3,30 @@
 
 
 -- add inventory - REST api
-create or replace procedure add_inventory (itemid in varchar2)
+create or replace procedure add_inventory (
+  itemid in out varchar2,
+  inventorycount out varchar2)
   authid current_user
 is
 begin
-  update inventory set inventorycount=inventorycount + 1 where inventoryid = itemid;
+  update inventory set inventorycount=inventorycount + 1 
+    where inventoryid = itemid
+    returning inventorycount into inventorycount;
   commit;
 end;
 /
 show errors
 
 -- remove inventory - REST api
-create or replace procedure remove_inventory (itemid in varchar2)
+create or replace procedure remove_inventory (
+  itemid in out varchar2,
+  inventorycount out varchar2)
   authid current_user
 is
 begin
-  update inventory set inventorycount=inventorycount - 1 where inventoryid = itemid;
+  update inventory set inventorycount=inventorycount - 1 
+    where inventoryid = itemid
+    returning inventorycount into inventorycount;
   commit;
 end;
 /
@@ -26,7 +34,7 @@ show errors
 
 -- get inventory - REST api
 create or replace procedure get_inventory (
-  itemid in varchar2,
+  itemid in out varchar2,
   inventorycount out varchar2)
   authid current_user
 is

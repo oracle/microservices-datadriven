@@ -146,23 +146,13 @@ while ! state_done TENANCY_OCID; do
   fi
 done
 
-
-# Check ATP resource availability
+# Check "Always Free Autonomous Transaction Processing Instance Count" limit
 while ! state_done ATP_LIMIT_CHECK; do
-  # TODO Add Limit Checks
-  break # Override for now
   CHECK=1
-  # ATP OCPU availability
-  if test $(oci limits resource-availability get --compartment-id="$(state_get TENANCY_OCID)" --service-name "database" --limit-name "atp-ocpu-count" --query 'to_string(min([data."fractional-availability",`4.0`]))' --raw-output) != '4.0'; then
-    echo 'The "Autonomous Transaction Processing OCPU Count" resource availability is insufficent to run this workshop.'
-    echo '4 OCPUs are required.  Terminate some existing ATP databases and try again.'
-    CHECK=0
-  fi
-
-  # ATP storage availability
-  if test $(oci limits resource-availability get --compartment-id="$(state_get TENANCY_OCID)" --service-name "database" --limit-name "atp-total-storage-tb" --query 'to_string(min([data."fractional-availability",`2.0`]))' --raw-output) != '2.0'; then
-    echo 'The "Autonomous Transaction Processing Total Storage (TB)" resource availability is insufficent to run this workshop.'
-    echo '2 TB are required.  Terminate some existing ATP databases and try again.'
+  # ADB Always Free availability
+  if test $(oci limits resource-availability get --compartment-id="$(state_get TENANCY_OCID)" --service-name "database" --limit-name "adb-free-count" --query 'to_string(min([data."fractional-availability",`1.0`]))' --raw-output) != '1.0'; then
+    echo 'The "Always Free Autonomous Transaction Processing Instance Count" resource availability is insufficent to run this workshop.'
+    echo '1 instance is required.  Terminate some existing always free databases and try again.'
     CHECK=0
   fi
 
