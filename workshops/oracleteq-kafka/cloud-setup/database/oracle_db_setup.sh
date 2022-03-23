@@ -3,7 +3,7 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Fail on error
-set -e
+set -eu
 
 # Wait for Lab DB OCID
 while ! state_done LAB_DB_OCID; do
@@ -47,6 +47,11 @@ while ! state_done WALLET_GET; do
   state_set_done WALLET_GET
 done
 
+# Create Object Store Bucket
+while ! state_done OBJECT_STORE_BUCKET; do
+  oci os bucket create --compartment-id "$(state_get COMPARTMENT_OCID)" --name "$(state_get RUN_NAME)"
+  state_set_done OBJECT_STORE_BUCKET
+done
 
 # Get DB Connection Wallet and to Object Store
 while ! state_done CWALLET_SSO_OBJECT; do
