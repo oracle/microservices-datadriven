@@ -8,7 +8,7 @@ const conn = db.defaultConnection();
 
 // addInventory - API
 function addInventory(itemid) {
-  let invCount = 0;
+  let invCount = "invalid inventory item";
   try {
     let result = conn.execute( 
       "update inventory set inventorycount=inventorycount + 1 where inventoryid = :itemid " +
