@@ -43,7 +43,9 @@ end;
 show errors
 
 -- add inventory - REST api
-create or replace procedure add_inventory (itemid in varchar2)
+create or replace procedure add_inventory (
+  itemid in out varchar2,
+  inventorycount out varchar2)
 authid current_user
 is
   ctx dbms_mle.context_handle_t := inventory_js.ctx;
@@ -52,7 +54,11 @@ begin
   dbms_mle.export_to_mle(ctx, 'itemid', itemid);
 
   -- execute javascript
-  dbms_mle.eval(ctx, 'JAVASCRIPT', 'addInventory(bindings.importValue("itemid"));');
+  dbms_mle.eval(ctx, 'JAVASCRIPT', 
+    'bindings.exportValue("invCount", addInventory(bindings.importValue("itemid")));');
+
+  -- handle response
+  dbms_mle.import_from_mle(ctx, 'invCount', inventorycount);
 
 exception
   when others then
@@ -63,7 +69,9 @@ end;
 show errors
 
 -- remove inventory - REST api
-create or replace procedure remove_inventory (itemid in varchar2)
+create or replace procedure remove_inventory (
+  itemid in out varchar2,
+  inventorycount out varchar2)
 authid current_user
 is
   ctx dbms_mle.context_handle_t := inventory_js.ctx;
@@ -73,7 +81,11 @@ begin
   dbms_mle.export_to_mle(ctx, 'itemid', itemid);
 
   -- execute javascript
-  dbms_mle.eval(ctx, 'JAVASCRIPT', 'removeInventory(bindings.importValue("itemid"));');
+  dbms_mle.eval(ctx, 'JAVASCRIPT', 
+    'bindings.exportValue("invCount", removeInventory(bindings.importValue("itemid")));');
+
+  -- handle response
+  dbms_mle.import_from_mle(ctx, 'invCount', inventorycount);
 
 exception
   when others then
@@ -85,7 +97,7 @@ show errors
 
 -- get inventory - REST api
 create or replace procedure get_inventory (
-  itemid in varchar2,
+  itemid in out varchar2,
   inventorycount out varchar2)
   authid current_user
 is

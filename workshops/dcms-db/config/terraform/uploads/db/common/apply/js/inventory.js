@@ -8,12 +8,24 @@ const conn = db.defaultConnection();
 
 // addInventory - API
 function addInventory(itemid) {
+  let invCount = 0;
   try {
-    conn.execute(
-      "update inventory set inventorycount=inventorycount + 1 where inventoryid = :1", 
-      [itemid]
+    let result = conn.execute( 
+      "update inventory set inventorycount=inventorycount + 1 where inventoryid = :itemid " +
+      "returning to_char(inventorycount) into :invCount", 
+      {
+        itemid: { val: itemid, dir: db.BIND_IN, type: db.STRING },
+        invCount: { dir: db.BIND_OUT, type: db.STRING }
+      }
     );
+
+    if (result.rowsAffected > 0) {
+      invCount = result.outBinds.invCount[0];
+    }
+
     conn.commit;
+
+    return invCount;
   } catch(error) {
     conn.rollback;
     throw error;
@@ -22,12 +34,24 @@ function addInventory(itemid) {
 
 // removeInventory - API
 function removeInventory(itemid) {
+  let invCount = "invalid inventory item";
   try {
-    conn.execute( 
-      "update inventory set inventorycount=inventorycount - 1 where inventoryid = :1", 
-      [itemid]
+    let result = conn.execute( 
+      "update inventory set inventorycount=inventorycount - 1 where inventoryid = :itemid " +
+      "returning to_char(inventorycount) into :invCount", 
+      {
+        itemid: { val: itemid, dir: db.BIND_IN, type: db.STRING },
+        invCount: { dir: db.BIND_OUT, type: db.STRING }
+      }
     );
+
+    if (result.rowsAffected > 0) {
+      invCount = result.outBinds.invCount[0];
+    }
+
     conn.commit;
+
+    return invCount;
   } catch(error) {
     conn.rollback;
     throw error;
@@ -44,7 +68,7 @@ function getInventory(itemid) {
     if (rows.length > 0) {
       return rows[0][0];
     } else {
-      return "0";
+      return "invalid inventory item";
     }
   } catch(error) {
     conn.rollback;
