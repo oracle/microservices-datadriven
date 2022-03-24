@@ -49,18 +49,18 @@
 
 <body class="oj-web-applayout-body">
   <div id="globalBody" class="oj-web-applayout-page">
-    <div id="componentDemoContent" style="width: 1px; min-width: 100%;">
+    <div id="grabdishContent" style="width: 1px; min-width: 100%;">
                   
-      <div id="dialogWrapper">
-        <oj-dialog id="modalDialog1" dialog-title="Modal Dialog" aria-describedby="desc">
+      <div id="grabdishWrapper">
+        <oj-dialog id="loginDialog" dialog-title="Grabdish Login" initial-visibility="show" cancel-behavior="none">
           <div slot="body">
-            <p id="desc">
-              This is the dialog content. User can change dialog resize behavior, cancel behavior and drag
-              behavior by setting attributes. Default attribute value depends on the theme.
-            </p>
+            <oj-form-layout>
+              <oj-input-text label-hint="Username" value="{{loginUserName}}"></oj-input-text>
+              <oj-input-password label-hint="Password" value="{{loginPassword}}"></oj-input-password>
+            </oj-form-layout>
           </div>
           <div slot="footer">
-            <oj-button id="okButton" on-oj-action="[[close]]">OK</oj-button>
+            <oj-button on-oj-action="[[close]]"> Login </oj-button>
           </div>
         </oj-dialog>
         <oj-button id="buttonOpener" on-oj-action="[[open]]">Open Modal Dialog</oj-button>
@@ -70,6 +70,9 @@
             <oj-input-text value="{{textVal2}}" label-hint="Address 2"></oj-input-text>
           </oj-form-layout>
         </div>
+        <p id="desc">
+          This is where Grabdish will be.
+        </p>
       </div>
     </div>
   </div>
@@ -108,19 +111,21 @@
       "use strict";
       
       class viewModel {
-          constructor() {
-              this.textVal1 = ko.observable("");
-              this.textVal2 = ko.observable("");
-          }
-          close(event) {
-              document.getElementById("modalDialog1").close();
-          }
-          open(event) {
-              document.getElementById("modalDialog1").open();
-          }
+        constructor() {
+          this.textVal1 = ko.observable("");
+          this.textVal2 = ko.observable("");
+          this.loginUserName = ko.observable("");
+          this.loginPassword = ko.observable("");
+        }
+        close(event) {
+            document.getElementById("loginDialog").close();
+        }
+        open(event) {
+            document.getElementById("loginDialog").open();
+        }
       }
       Bootstrap.whenDocumentReady().then(() => {
-          ko.applyBindings(new viewModel(), document.getElementById("dialogWrapper"));
+          ko.applyBindings(new viewModel(), document.getElementById("grabdishWrapper"));
       });
     });
 
