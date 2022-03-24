@@ -3,7 +3,7 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Fail on error
-set -e
+set -eu
 
 # Provision Cluster, DBs, etc with terraform (and wait)
 if ! state_done PROVISIONING; then
@@ -47,7 +47,7 @@ provider_installation {
   fi
   
   cd "$LAB_HOME"
-  state_set_done OBJECT_STORE_BUCKET
+  #state_set_done OBJECT_STORE_BUCKET
   state_set_done PROVISIONING
 
 fi
