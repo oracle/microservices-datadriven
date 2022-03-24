@@ -49,22 +49,6 @@
 
 <body class="oj-web-applayout-body">
   <div id="globalBody" class="oj-web-applayout-page">
-    <div id="grabdishContent" style="width: 1px; min-width: 100%;">
-      <div id="grabdishWrapper">
-        <oj-dialog id="loginDialog" dialog-title="Grabdish Login" initial-visibility="show" cancel-behavior="none">
-          <div slot="body">
-            <oj-form-layout>
-              <oj-input-text label-hint="Username" value="{{loginUserName}}"></oj-input-text>
-              <oj-input-password label-hint="Password" value="{{loginPassword}}"></oj-input-password>
-            </oj-form-layout>
-          </div>
-          <div slot="footer">
-            <oj-button on-oj-action="[[loginAction]]"> Login </oj-button>
-          </div>
-        </oj-dialog>
-      </div>
-    </div>
-    <oj-bind-if test="[[loggedIn]]">
     <div class="headerUnderlay">
       <header role="banner" class="oj-web-applayout-header">
         <div class="oj-flex-bar oj-sm-align-items-center">
@@ -175,7 +159,6 @@
         </div>
       </div>
     </div>
-    </oj-bind-if>
     <footer class="oj-web-applayout-footer" role="contentinfo">
       <div class="oj-web-applayout-footer-item">
         <ul>
@@ -260,7 +243,6 @@
           this.loginPassword = ko.observable("");
           this.loginStatus = ko.observable("Not logged in");
           this.authorization = "";
-          this.loggedIn = false;
           this.inProgress = ko.observable(false);
   
           this.loginAction = function (event, vm) {
@@ -463,6 +445,7 @@
           function () {
             var app = new ControllerViewModel();
             ko.applyBindings(app, document.getElementById('globalBody'));
+//            document.getElementById("loginDialog").open();
           }
         );
       }

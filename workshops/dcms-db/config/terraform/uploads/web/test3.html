@@ -59,132 +59,21 @@
             </oj-form-layout>
           </div>
           <div slot="footer">
-            <oj-button disabled="[[inProgress]]" on-oj-action="[[loginAction]]"> Login </oj-button>
-            <div class="responsePanel oj-flex-item">
-              <p class="oj-typography-body-s"><span>
-                <oj-bind-text value="[[loginStatus()]]"></oj-bind-text>
-              </span></p>
-            </div>
+            <oj-button on-oj-action="[[loginAction]]"> Login </oj-button>
           </div>
         </oj-dialog>
+        <oj-button id="buttonOpener" on-oj-action="[[loginAction]]">Open Modal Dialog</oj-button>
+        <div class="oj-sm-padding-4x-top" id="form-container">
+          <oj-form-layout direction="row" max-columns="1">
+            <oj-input-text value="{{textVal1}}" label-hint="Address 1"></oj-input-text>
+            <oj-input-text value="{{textVal2}}" label-hint="Address 2"></oj-input-text>
+          </oj-form-layout>
+        </div>
+        <p id="desc">
+          This is where Grabdish will be.
+        </p>
       </div>
     </div>
-    <oj-bind-if test="[[loggedIn]]">
-    <div class="headerUnderlay">
-      <header role="banner" class="oj-web-applayout-header">
-        <div class="oj-flex-bar oj-sm-align-items-center">
-          <div class="oj-flex-bar-middle oj-sm-align-items-baseline">
-            <span role="img" class="logo" title="Oracle Logo" alt="Oracle Logo"></span>
-            <h1 class="oj-sm-only-hide oj-web-applayout-header-title" title="Application Name">
-              GrabDish Explorer
-            </h1>
-          </div>
-        </div>
-        <div class="oj-flex-bar">
-          <div class="oj-flex-bar-middle oj-sm-align-items-baseline">
-            <p class="oj-text-color-secondary oj-typography-subheading-xs">Data-driven Microservices with
-              converged Oracle Database</p>
-          </div>
-        </div>
-      </header>
-    </div>
-    <div role="main" class="oj-web-applayout-content oj-flex-bar">
-      <div class="oj-flex-bar-start oj-flex oj-sm-flex-direction-column oj-bg-neutral-20">
-        <p class="oj-typography-heading-sm">Labs</p>
-        <oj-navigation-list class="oj-navigationlist-item-text-wrap oj-flex-item" data="[[tasks]]"
-          selection="{{selectedTask}}" style="min-width:20rem;">
-          <template slot="itemTemplate" data-oj-as="task">
-            <li :id="[[task.data.id]]">
-              <a href="#">
-                <oj-bind-text value="[[task.data.label]]"> </oj-bind-text>
-              </a>
-            </li>
-          </template>
-        </oj-navigation-list>
-      </div>
-      <div class="oj-flex-bar-middle oj-sm-padding-4x-horizontal">
-        <div class="oj-flex oj-sm-flex-direction-column oj-web-applayout-max-width">
-          <div>
-            <p class="oj-typography-heading-sm">
-              <oj-bind-text value="[[menuTasks.get(selectedTask()).title]]"></oj-bind-text>
-            </p>
-          </div>
-          <div>
-            <p class="oj-typography-body-sm">
-              <oj-bind-text value="[[menuTasks.get(selectedTask()).description]]"></oj-bind-text>
-            </p>
-          </div>
-
-          <oj-bind-if test="[[selectedTask() !=='about']]">
-            <div class="oj-panel oj-bg-neutral-0 labPanel  oj-flex-item">
-              <!-- Each Lab's UI is defined by a section in the switcher here
-                 This in turn is controlled by the selected task in the navigation  -->
-              <oj-switcher value="[[selectedTask]]">
-                <!-- lab9 -->
-                <div slot="lab9">
-                  <oj-form-layout>
-                    <table style="width:100%">
-                      <tr>
-                        <th><img src="/images/sushi.svg" alt="sushi" width="50" height="50"></th>
-                        <th><img src="/images/pizza.svg" alt="pizza" width="50" height="50"></th>
-                        <th><img src="/images/burger.svg" alt="burger" width="50" height="50"></th>
-                      </tr>
-                    </table>
-                    <oj-input-text label-hint="Food" value="{{lab9Food}}"></oj-input-text>
-                    <oj-input-text label-hint="Deliver to" value="{{lab9DeliverTo}}"></oj-input-text>
-                    <oj-input-text label-hint="Order ID" value="{{lab9OrderId}}"></oj-input-text>
-                  </oj-form-layout>
-                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9DeleteAllOrdersAction]]">Delete All Orders</oj-button>
-                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9PlaceOrderAction]]">Place Order</oj-button>
-                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9ShowOrderAction]]">Show Order</oj-button>
-                  <br><br>
-                  <br>Supplier/Inventory Admin...
-                  <br>
-                  <oj-form-layout>
-                    <oj-input-text label-hint="Item" value="{{lab9Item}}"></oj-input-text>
-                  </oj-form-layout>
-                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9AddInventoryAction]]">Add Inventory</oj-button>
-                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9RemoveInventoryAction]]">Remove Inventory</oj-button>
-                  <oj-button disabled="[[inProgress]]" on-oj-action="[[lab9GetInventoryAction]]">Get Inventory</oj-button>
-                </div>
-              </oj-switcher>
-            </div>
-            <oj-bind-if test="[[httpCode() && httpCode() > 0]]">
-              <div class="responsePanel oj-flex-item">
-                <p class="oj-typography-body-xs">HTTP Response: <span>
-                    <oj-bind-text value="[[httpCode()]]"></oj-bind-text>
-                  </span></p>
-              </div>
-            </oj-bind-if>
-            <oj-bind-if test="[[labResult() && labResult().length > 0]]">
-              <div class="oj-panel oj-bg-neutral-1 resultsPanel oj-flex-item">
-                <p class="oj-typography-heading-sm">Result</p>
-                <code><pre><oj-bind-text value="[[labResult()]]"></oj-bind-text></pre></code>
-              </div>
-            </oj-bind-if>
-          </oj-bind-if>
-        </div>
-      </div>
-    </div>
-    <footer class="oj-web-applayout-footer" role="contentinfo">
-      <div class="oj-web-applayout-footer-item">
-        <ul>
-          <oj-bind-for-each data="[[footerLinks]]">
-            <template>
-              <li>
-                <a :id="[[$current.data.linkId]]" :href="[[$current.data.linkTarget]]">
-                  <oj-bind-text value="[[$current.data.name]]"></oj-bind-text>
-                </a>
-              </li>
-            </template>
-          </oj-bind-for-each>
-        </ul>
-      </div>
-      <div class="oj-web-applayout-footer-item oj-text-color-secondary oj-typography-body-sm">
-        Copyright © 2021 Oracle and/or its affiliates All rights reserved.
-      </div>
-    </footer>
-    </oj-bind-if>
   </div>
 
   <script src="https://static.oracle.com/cdn/jet/9.0.0/3rdparty/require/require.js"></script>
@@ -226,7 +115,7 @@
       'ojs/ojconverter-number',
       'ojs/ojknockout',
       'ojs/ojbutton',
-      "ojs/ojdialog",
+      "ojs/ojdialog", 
       'ojs/ojtoolbar',
       'ojs/ojmenu',
       'ojs/ojnavigationlist',
@@ -248,11 +137,13 @@
           this.smScreen = ResponsiveKnockoutUtils.createMediaQueryObservable(smQuery);
 
           // login dialog
+          this.textVal1 = ko.observable("");
+          this.testVal2 = ko.observable("");
           this.loginUserName = ko.observable("");
           this.loginPassword = ko.observable("");
           this.loginStatus = ko.observable("Not logged in");
           this.authorization = "";
-          this.loggedIn = ko.observable(false);
+          this.loggedIn = ko.observable(false);;
           this.inProgress = ko.observable(false);
   
           this.loginAction = function (event, vm) {
@@ -274,8 +165,6 @@
             fetch('/ords/inventory/inventory/getInventory/', fetchOptions).then(fetchResult => {
               if (fetchResult.status == 200) {
                 vm.loginStatus("Login success");
-                vm.loggedIn(true);
-                document.getElementById("loginDialog").close();
               } else {
                 vm.loginStatus("Login failed");
               }
@@ -299,6 +188,7 @@
           // Key for the map matches the slot name used in the switcher
           this.menuTasks = new Map();
           this.menuTasks.set('about', { label: 'About', title: 'About the GrabDish Explorer', description: 'The GrabDish Explorer screen allows you to test the results of each lab.  Simply click the tab on the left that corresponds to the lab that you want to test out and follow the on-screen instructions.' });
+          this.menuTasks.set('login', { label: 'Login', title: 'Grabdish Login', description: 'Login to the Grabdish application' });
           this.menuTasks.set('lab9', { label: 'Transactional', title: 'Transactional', description: 'JSON and relational data types, AQ transactional event-driven communication, saga, event sourcing, and CQRS' });
 
           //Drives the navigation list itself
