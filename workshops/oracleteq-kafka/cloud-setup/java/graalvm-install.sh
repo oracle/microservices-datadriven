@@ -3,7 +3,7 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Fail on error
-set -e
+set -eu
 
 GRAALVM_VERSION=${1:-"22.0.0.2"}
 OS_NAME=$(uname)
