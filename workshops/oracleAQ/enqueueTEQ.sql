@@ -39,4 +39,28 @@ BEGIN
     COMMIT;
 END;
 /
+-- Enqueue for JSON Message
+DECLARE
+enqueue_options    dbms_aq.enqueue_options_t;
+message_properties dbms_aq.message_properties_t;
+message_handle     RAW(16);
+message            json;
+BEGIN
+  message:= json('
+        {
+        "ORDERID":12345, 
+        "USERNAME":"name"  
+        }');
+  message_properties.correlation := 'teqBasicJsonSubscriber';
+
+DBMS_AQ.ENQUEUE(
+     queue_name           => 'jsonType_TEQ',           
+     enqueue_options      => enqueue_options,       
+     message_properties   => message_properties,     
+     payload              => message,               
+     msgid                => message_handle);
+   dbms_output.put_line(json_serialize(message));
+   COMMIT;
+END;
+/
 EXIT;
