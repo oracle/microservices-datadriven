@@ -1,0 +1,42 @@
+/*
+
+ **
+ ** Copyright (c) 2021 Oracle and/or its affiliates.
+ ** Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+ */
+ body {
+  background-image:url(/img?name=redwood-bg);
+}
+
+header {
+  background-color: white;
+  opacity: 0.55;
+}
+
+.headerUnderlay {
+  background-image:url(/img?name=bkgd_redwood);
+}
+
+.logo {
+  background-image:url(/logo);
+  width:120px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-position: bottom; 
+  margin-right: 20px;
+}
+
+.labPanel {
+  min-height: 200px;
+  padding-top:10px;
+}
+
+.resultsPanel {
+  min-height: 60px;
+  padding-top:10px;
+}
+
+.responsePanel {
+  max-height: 30px;
+  padding-top:10px;
+}

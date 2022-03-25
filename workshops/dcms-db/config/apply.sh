@@ -50,8 +50,20 @@ state_set ORDS_ADDRESS `terraform output -raw ords_address`
 # Get the ORDS instance public IP
 state_set DB_OCID `terraform output -raw db_ocid`
 
+state_set TNS_ADMIN_ZIP_FILE $MY_STATE/terraform/uploads/adb_wallet.zip
+TNS_ADMIN=$MY_STATE/tns_admin
+mkdir -p $TNS_ADMIN
+unzip $(state_get TNS_ADMIN_ZIP_FILE) -d $TNS_ADMIN
+cat >$TNS_ADMIN/sqlnet.ora <<- !
+	WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$TNS_ADMIN")))
+	SSL_SERVER_DN_MATCH=yes
+!
+
+state_set TNS_ADMIN $TNS_ADMIN
+
 # Write the output
 cat >$OUTPUT_FILE <<!
 export LB_ADDRESS='$(state_get LB_ADDRESS)'
 export ORDS_ADDRESS='$(state_get ORDS_ADDRESS)'
+export TNS_ADMIN='$(state_get TNS_ADMIN)'
 !
