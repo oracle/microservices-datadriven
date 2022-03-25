@@ -10,9 +10,13 @@ if ! provisioning-helper-pre-destroy; then
   exit 1
 fi
 
+cd $MY_STATE/terraform
+
+# Workaround for issue where terraform fails in OCI cloud shell after a few days
+rm -rf .terraform
+rm -f .terraform.lock.hcl
 
 # Start the provisioning destroy
-cd $MY_STATE/terraform
 source terraform-env.sh
 
 if ! terraform init; then
@@ -24,6 +28,5 @@ if ! terraform destroy -auto-approve; then
     echo 'ERROR: terraform apply failed!'
     exit 1
 fi
-
 
 rm -f $STATE_FILE
