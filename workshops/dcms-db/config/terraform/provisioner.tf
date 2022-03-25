@@ -76,8 +76,8 @@ resource "null_resource" "ords_oracle_config" {
     }
     inline = [
 //      "sudo -u oracle /tmp/uploads/config_oracle.sh -t ${local.db_name} -p \"${local.password}\" -v ${local.apex_ver}",
-//      "sudo -u oracle /tmp/uploads/config_oracle.sh -t ${local.db_name} -p \"${local.password}\" -v 21.1.7",
-//      "sudo -u root /tmp/uploads/config_root.sh -s POST"
+      "sudo -u oracle /tmp/uploads/config_oracle.sh -t ${local.db_name} -p \"${local.password}\" -v 21.1.7",
+      "sudo -u root /tmp/uploads/config_root.sh -s POST"
       "echo"
     ]
   }

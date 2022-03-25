@@ -22,7 +22,7 @@ DB_PASSWORD=""
 collect_adbs_db_password
 
 # Set DB admin password
-set_adbs_admin_password "$_db_ocid"
+set_adbs_admin_password "$(state_get DB_OCID)"
 
 # DB Setup
 grabdish_db_setup $(state_get DB_ALIAS) $(state_get QUEUE_TYPE)
