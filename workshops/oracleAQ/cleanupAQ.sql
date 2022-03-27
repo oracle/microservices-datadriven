@@ -17,9 +17,6 @@ EXECUTE DBMS_AQADM.DROP_QUEUE_TABLE ( queue_table      =>'aq_JSON_queueTable');
 EXECUTE DBMS_AQADM.STOP_QUEUE       ( queue_name       =>'aq_multiconsumer_raw');   
 EXECUTE DBMS_AQADM.DROP_QUEUE       ( queue_name       =>'aq_multiconsumer_raw');   
 EXECUTE DBMS_AQADM.DROP_QUEUE_TABLE ( queue_table      =>'aq_multiconsumer_raw_queueTable'); 
-
---Clean up object type 
-DROP TYPE obj_typ;
 /
 select name, queue_table, dequeue_enabled,enqueue_enabled, sharded, queue_category, recipients from all_queues where OWNER='DBUSER' and QUEUE_TYPE<>'EXCEPTION_QUEUE';
 /
