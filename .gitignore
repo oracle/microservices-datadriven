@@ -502,3 +502,4 @@ workshops/eventmesh-teq-kafka/cloud-setup/database/
 workshops/eventmesh-teq-kafka/cloud-setup/terraform_dbsystem/
 workshops/eventmesh-teq-kafka/wallet/
 workshops/oracleAQ/aqJava/.project
+workshops/oracleAQ/aqJava/.classpath
