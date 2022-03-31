@@ -15,7 +15,7 @@ if (return 0 2>/dev/null) ; then
 fi
 
 # Source the setup functions
-source $DCMS_APP_CODE/setup_functions.env
+source $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/setup_functions.env
 
 # Collect DB password
 DB_PASSWORD=""
@@ -29,7 +29,7 @@ fi
 
 _setup_func=/tmp/setup_functions.env
 # Upload tns zip file
-scp -i $(state_get SSH_PRIVATE_KEY_FILE) $DCMS_APP_CODE/setup_functions.env opc@$(state_get ORDS_ADDRESS):/tmp
+scp -i $(state_get SSH_PRIVATE_KEY_FILE) $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/setup_functions.env opc@$(state_get ORDS_ADDRESS):/tmp
 
 _tns_zip=/tmp/adb_wallet.zip
 # Upload tns zip file
@@ -57,6 +57,7 @@ scp -i $(state_get SSH_PRIVATE_KEY_FILE) /tmp/grabdish.zip opc@$(state_get ORDS_
 ssh -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
   sudo su - oracle
   cd
+  rm -rf grabdish
   unzip /tmp/grabdish.zip
 !
 
