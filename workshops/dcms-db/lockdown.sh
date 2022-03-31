@@ -121,7 +121,7 @@ ssh -o StrictHostKeyChecking=false -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(st
 # Setup the UI Password
 sudo su - oracle
 cd /opt/oracle/ords
-java -jar ords.war user grabdish order_user inventory_user <<EOF
+java -jar /opt/oracle/ords/ords.war user grabdish order_user inventory_user <<EOF
 $UI_PASSWORD
 $UI_PASSWORD
 EOF

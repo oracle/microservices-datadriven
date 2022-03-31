@@ -3,9 +3,10 @@
 
 
 WHENEVER SQLERROR EXIT 1
-connect $AQ_USER/"\$AQ_PASSWORD"@$DB1_ALIAS -- "\" to protect password from first shell expansion
+-- "\" to protect password from first shell expansion
+connect $AQ_USER/"\$AQ_PASSWORD"@$DB1_ALIAS
 
-$(../../common/apply/aq-${QUEUE_TYPE}-create-queues.sql)
+$(<../../common/apply/aq-${QUEUE_TYPE}-create-queues.sql)
 
 BEGIN
    DBMS_AQADM.grant_queue_privilege (
@@ -34,10 +35,10 @@ BEGIN
 
    DBMS_AQADM.add_subscriber(
       queue_name=>'$ORDER_QUEUE',
-      subscriber=>sys.aq\$_agent('inventory_service',NULL,NULL));
+      subscriber=>sys.aq\\\$_agent('inventory_service',NULL,NULL));
 
    DBMS_AQADM.add_subscriber(
       queue_name=>'$INVENTORY_QUEUE',
-      subscriber=>sys.aq\$_agent('order_service',NULL,NULL));
+      subscriber=>sys.aq\\\$_agent('order_service',NULL,NULL));
 END;
 /

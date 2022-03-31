@@ -3,7 +3,8 @@
 
 
 WHENEVER SQLERROR EXIT 1
-connect $INVENTORY_USER/"\$INVENTORY_PASSWORD"@$DB1_ALIAS -- "\" to protect password from first shell expansion
+-- "\" to protect password from first shell expansion
+connect $INVENTORY_USER/"\$INVENTORY_PASSWORD"@$DB1_ALIAS
 
-$(../../common/apply/inventory-table.sql)
-$(../../common/apply/inventory-messaging.sql)
+$(<../../common/apply/inventory-table.sql)
+$(<../../common/apply/inventory-messaging.sql)

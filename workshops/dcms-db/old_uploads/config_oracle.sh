@@ -254,7 +254,7 @@ function write_defaults {
 		<entry key="plsql.gateway.enabled">true</entry>
 		<entry key="jdbc.InitialLimit">3</entry>
 		<entry key="jdbc.MaxLimit">3</entry>
-    <entry key="jdbc.enableONS">false</entry>
+		<entry key="jdbc.enableONS">false</entry>
 		<entry key="feature.sdw">false</entry>
 		<entry key="restEnabledSql.active">true</entry>
 		<entry key="database.api.enabled">false</entry>
@@ -339,9 +339,6 @@ cat >$TNS_ADMIN/sqlnet.ora <<- !
 	WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="$TNS_ADMIN")))
 	SSL_SERVER_DN_MATCH=yes
 !
-
-grabdish_db_setup "${admin_password}" "${db_name}_TP" 'classicq'
-RC=$?
 
 config_user "${admin_password}" "${db_name}"
 RC=$?

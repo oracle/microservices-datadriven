@@ -5,73 +5,82 @@
 # Fail on error
 set -eu
 
+# Parameters:
+_lang=${1-plsql}      # plsql(default) / js
+
 # Make sure this is executed and not sourced
 if (return 0 2>/dev/null) ; then
-  echo "ERROR: Usage './deploy.sh plsql|js'"
+  echo "ERROR: Usage './deploy.sh plsql/js'"
   exit 1
 fi
 
-if test "$1" == 'plsql'; then
-  inv_svc=inventory-db-plsql.sql
-  ord_svc=order-db-plsql.sql
-elif test "$1" == 'js'; then
-  inv_svc=inventory-db-js-wrapper.sql
-  ord_svc=order-db-js-wrapper.sql
-else
-  echo "ERROR: Usage './deploy.sh plsql|js'"
-fi
-
-# Environment must be setup before running this script
-if test -z "$DCMS_STATE"; then
-  echo "ERROR: Workshop environment not setup"
-  exit 1
-fi
-
-# Get the setup status
-if ! DCMS_STATUS=$(provisioning-get-status $DCMS_STATE); then
-  echo "ERROR: Unable to get workshop provisioning status"
-  exit 1
-fi
-
-if test "$DCMS_STATUS" != 'applied'; then
-  echo "ERROR: Setup status $DCMS_STATUS.  Not ready for deploy."
-  exit 1
-fi
+# Source the setup functions
+source $DCMS_APP_CODE/setup_functions.env
 
 # Collect DB password
-while true; do
-  if test -z "${TEST_DB_PASSWORD-}"; then
-    read -s -r -p "Enter the database password: " PW
-  else
-    PW="${TEST_DB_PASSWORD-}"
-  fi
-  if [[ ${#PW} -ge 12 && ${#PW} -le 30 && "$PW" =~ [A-Z] && "$PW" =~ [a-z] && "$PW" =~ [0-9] && "$PW" != *admin* && "$PW" != *'"'* ]]; then
-    echo
-    DB_PASSWORD="$PW"
-    break
-  else
-    echo "Invalid Password, please retry"
-  fi
-done
+DB_PASSWORD=""
+collect_db_password
 
-ssh -o StrictHostKeyChecking=false -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
+if ! state_done DB_LOCKDOWN; then
+  # Set DB admin password
+  set_adbs_admin_password "$(state_get DB_OCID)"
+  state_set_done DB_LOCKDOWN
+fi
+
+_setup_func=/tmp/setup_functions.env
+# Upload tns zip file
+scp -i $(state_get SSH_PRIVATE_KEY_FILE) $DCMS_APP_CODE/setup_functions.env opc@$(state_get ORDS_ADDRESS):/tmp
+
+_tns_zip=/tmp/adb_wallet.zip
+# Upload tns zip file
+scp -i $(state_get SSH_PRIVATE_KEY_FILE) $(state_get TNS_ADMIN_ZIP_FILE) opc@$(state_get ORDS_ADDRESS):/tmp
+
+# Configure customer managed ORDS
+ssh -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
+  sudo su - oracle
+  source ${_setup_func}
+  DB_PASSWORD='$DB_PASSWORD'
+  setup_adbs_customer_managed_ords $(state_get DB_ALIAS) ${_tns_zip}
+!
+
+#### DEPLOY GRABDISH
+
+# Collect UI password
+UI_PASSWORD=""
+collect_ui_password
+
+# Upload the Grabdish code
+_grabdish_code=/home/oracle/grabdish
+cd $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP
+zip -r /tmp/grabdish.zip grabdish
+scp -i $(state_get SSH_PRIVATE_KEY_FILE) /tmp/grabdish.zip opc@$(state_get ORDS_ADDRESS):/tmp
+ssh -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
+  sudo su - oracle
+  cd
+  unzip /tmp/grabdish.zip
+!
+
+# Deploy Grabdish on ORDS
+ssh -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
 sudo su - oracle
-cd ~/db/common/apply
+source ${_setup_func}
+UI_PASSWORD=$UI_PASSWORD
+deploy_grabdish_on_ords ${_grabdish_code}
+!
 
-# Execute the sql scripts
-export TNS_ADMIN=~/tns_admin
+# Grabdish DB Setup
+setup_grabdish_in_db $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/grabdish "$_lang" "$_lang" $(state_get QUEUE_TYPE) $(state_get DB_ALIAS)
 
-sqlplus /nolog <<EOF
-connect inventoryuser/"${DB_PASSWORD}"@$(state_get DB_ALIAS)
-@inventory-db-undeploy.sql
-@${inv_svc}
-@inventory-db-deploy.sql
-EOF
+# Enable and start ORDS
+ssh -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
+  sudo su - root
+  
+  # Open Firewall
+	firewall-cmd --zone=public --add-port 8080/tcp --permanent
+	systemctl restart firewalld
 
-sqlplus /nolog <<EOF
-connect orderuser/"${DB_PASSWORD}"@$(state_get DB_ALIAS)
-@order-db-undeploy.sql
-@${ord_svc}
-@order-db-deploy.sql
-EOF
+	# Configure ORDS systemctl and restart
+  ln -s /etc/init.d/ords /opt/oracle/ords/ords
+  systemctl enable ords
+  systemctl restart ords
 !

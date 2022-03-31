@@ -30,7 +30,7 @@ resource "null_resource" "ords_root_config" {
       agent               = false
       timeout             = "10m"
     }
-    source      = "uploads"
+    source      = "utils"
     destination = "/tmp"
   }
 
@@ -44,40 +44,8 @@ resource "null_resource" "ords_root_config" {
       timeout             = "10m"
     }
     inline = [
-      "sudo chmod +x /tmp/uploads/config_*.sh",
-      "sudo -u root /tmp/uploads/config_root.sh -s PRE"
-    ]
-  }
-}
-
-resource "null_resource" "ords_oracle_config" {
-  depends_on = [null_resource.ords_root_config, oci_database_autonomous_database.autonomous_database, local_file.database_wallet_file]
-  provisioner "file" {
-    connection {
-      type                = "ssh"
-      user                = "opc"
-      host                = oci_core_instance.instance.public_ip
-      private_key         = chomp(file(var.ssh_private_key_file))
-      agent               = false
-      timeout             = "10m"
-    }
-    source      = "uploads"
-    destination = "/tmp"
-  }
-
-  provisioner "remote-exec" {
-    connection {
-      type                = "ssh"
-      user                = "opc"
-      host                = oci_core_instance.instance.public_ip
-      private_key         = chomp(file(var.ssh_private_key_file))
-      agent               = false
-      timeout             = "10m"
-    }
-    inline = [
-//      "sudo -u oracle /tmp/uploads/config_oracle.sh -t ${local.db_name} -p \"${local.password}\" -v ${local.apex_ver}",
-      "sudo -u oracle /tmp/uploads/config_oracle.sh -t ${local.db_name} -p \"${local.password}\" -v 21.1.7",
-      "sudo -u root /tmp/uploads/config_root.sh -s POST"
+      "sudo chmod +x /tmp/utils/install_ords.sh",
+      "sudo -u root /tmp/utils/install_ords.sh"
     ]
   }
 }
