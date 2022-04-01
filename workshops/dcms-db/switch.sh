@@ -18,5 +18,9 @@ fi
 # Source the setup functions
 source $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/setup_functions.env
 
+# Collect DB password
+DB_PASSWORD=""
+collect_db_password
+
 deploy_mservice ${DCMS_APP_CODE} 'order'     ${_order_lang}     $(state_get QUEUE_TYPE) $(state_get DB_ALIAS)
 deploy_mservice ${DCMS_APP_CODE} 'inventory' ${_inventory_lang} $(state_get QUEUE_TYPE) $(state_get DB_ALIAS)

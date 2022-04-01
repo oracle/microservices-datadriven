@@ -16,7 +16,7 @@ as
   mle_ctx dbms_mle.context_handle_t := dbms_mle.create_context();
   js_eval boolean := false;
   js_code clob := q'~
-$(<./js/inventory.js)
+$(<./inventory-js/inventory.js)
 ~';
 
   function ctx return dbms_mle.context_handle_t
