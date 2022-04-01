@@ -215,6 +215,10 @@ while ! state_done OCI_REGION; do
   state_set OCI_REGION "$OCI_REGION"
 done
 
+if ! state_done ORDS_SCHEMA_NAME; then
+  state_set ORDS_SCHEMA_NAME 'ORDS_PUBLIC_USER2'
+fi
+
 # Run the setup in the background
 cd $DCMS_STATE
 echo "Setup is running and the status will be updated every 10 seconds.  Setup usually takes about 7 minutes.  The setup log is $DCMS_LOG_DIR/config.log."

@@ -27,8 +27,13 @@ if ! state_done DB_LOCKDOWN; then
   state_set_done DB_LOCKDOWN
 fi
 
+#### SETUP ORDS
+
+# Create the ORDS schema
+create_ords_schema $(state_get ORDS_SCHEMA_NAME) 'admin' "$(state_get DB_ALIAS)"
+
 _setup_func=/tmp/setup_functions.env
-# Upload tns zip file
+# Upload setup functions
 scp -i $(state_get SSH_PRIVATE_KEY_FILE) $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/setup_functions.env opc@$(state_get ORDS_ADDRESS):/tmp
 
 _tns_zip=/tmp/adb_wallet.zip
@@ -40,7 +45,7 @@ ssh -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
   sudo su - oracle
   source ${_setup_func}
   DB_PASSWORD='$DB_PASSWORD'
-  setup_adbs_customer_managed_ords $(state_get DB_ALIAS) ${_tns_zip}
+  setup_adbs_customer_managed_ords $(state_get DB_ALIAS) ${_tns_zip} $(state_get ORDS_SCHEMA_NAME)
 !
 
 #### DEPLOY GRABDISH
@@ -71,6 +76,8 @@ deploy_grabdish_on_ords ${_grabdish_code}
 
 # Grabdish DB Setup
 setup_grabdish_in_db $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/grabdish "$_lang" "$_lang" $(state_get QUEUE_TYPE) $(state_get DB_ALIAS)
+
+### START ORDS
 
 # Enable and start ORDS
 ssh -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
