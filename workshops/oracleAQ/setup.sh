@@ -11,7 +11,7 @@ export TNS_ADMIN=$ORACLEAQ_HOME/wallet
 export USER_DEFINED_WALLET=${TNS_ADMIN}/user_defined_wallet
 export TNS_ADMIN_FOR_JAVA=$ORACLEAQ_HOME/wallet_java
 TNS_WALLET_STR="(MY_WALLET_DIRECTORY="$TNS_ADMIN")"
-
+export JAVA_HOME=$(readlink -f /usr/bin/javac | sed "s:/bin/javac::")
 
 # fetch user's OCID
 ROOT_COMPARTMENT_OCID=$(oci iam compartment list --all --compartment-id-in-subtree true --access-level ACCESSIBLE --include-root --raw-output --query "data[?contains(\"id\",'tenancy')].id | [0]")
