@@ -11,3 +11,4 @@ GRANT SODA_APP to $ORDER_USER;
 GRANT select on GV$SESSION to orderuser;
 GRANT select on DBA_QUEUE_SCHEDULES to orderuser;
 GRANT select on V$diag_alert_ext to orderuser;
+GRANT select on v$active_session_history to orderuser;
