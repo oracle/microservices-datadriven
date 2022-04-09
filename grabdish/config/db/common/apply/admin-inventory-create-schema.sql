@@ -12,3 +12,4 @@ GRANT CREATE JOB to $INVENTORY_USER;
 GRANT EXECUTE ON sys.DBMS_SCHEDULER TO $INVENTORY_USER;
 GRANT select on GV$SESSION to inventoryuser;
 GRANT select on DBA_QUEUE_SCHEDULES to inventoryuser;
+GRANT select on V$diag_alert_ext to inventoryuser;
