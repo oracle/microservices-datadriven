@@ -41,7 +41,7 @@ public class DBLogExporterResource {
     private int vashQueryLastSampleId = -1;
     private String alertLogDefaultQuery = "select ORIGINATING_TIMESTAMP, MODULE_ID, EXECUTION_CONTEXT_ID, MESSAGE_TEXT from TABLE(GV$(CURSOR(select * from v$diag_alert_ext)))";
     private String vashDefaultQuery = "select SAMPLE_ID, SAMPLE_TIME, SQL_ID, SQL_OPNAME, PROGRAM, MODULE, ACTION, CLIENT_ID, MACHINE, ECID " +
-            "from TABLE(GV$(CURSOR(select * from v$active_session_history))) where ECID is not null";// and SAMPLE_ID > ";
+                "from TABLE(GV$(CURSOR(select * from v$active_session_history))) where ECID is not null and SAMPLE_ID > ";
 
     public void init(@Observes @Initialized(ApplicationScoped.class) Object init) throws Exception {
         // todo for each config entry write to different logger, eg...
@@ -57,7 +57,7 @@ public class DBLogExporterResource {
         try (Connection conn = alertlogpdbPdb.getConnection()) {
             while (enabled) {
                 executeAlertLogQuery(conn);
-                executeVASHQuery(conn);
+       //         executeVASHQuery(conn);
                 int queryRetryInterval = queryRetryIntervalString == null ||
                                 queryRetryIntervalString.trim().equals("") ?
                                 DEFAULT_RETRY_INTERVAL : Integer.parseInt(queryRetryIntervalString.trim());
