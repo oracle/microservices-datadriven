@@ -10,7 +10,7 @@ resource "oci_containerengine_cluster" "oke" {
     ]
     subnet_id = oci_core_subnet.endpoint.id
   }
-  kubernetes_version = "v1.21.5"
+  kubernetes_version = "v1.22.5"
   name               = "grabdish"
   vcn_id             = data.oci_core_vcn.vcn.id
   #Optional
@@ -37,9 +37,13 @@ resource "oci_containerengine_cluster" "oke" {
 resource "oci_containerengine_node_pool" "okell_node_pool" {
   cluster_id         = oci_containerengine_cluster.oke.id
   compartment_id     = var.ociCompartmentOcid
-  kubernetes_version = "v1.21.5"
+  kubernetes_version = "v1.22.5"
   name               = "Pool"
-  node_shape         = "VM.Standard.E2.1"
+  node_shape         = "VM.Standard.E3.Flex"
+	node_shape_config {
+		memory_in_gbs = "16"
+		ocpus = "1"
+	}
   node_config_details {
     placement_configs {
       availability_domain = data.oci_identity_availability_domain.ad1.name
