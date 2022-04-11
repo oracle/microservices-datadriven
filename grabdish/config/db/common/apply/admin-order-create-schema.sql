@@ -8,7 +8,3 @@ GRANT connect, resource TO $ORDER_USER;
 GRANT aq_user_role TO $ORDER_USER;
 GRANT EXECUTE ON sys.dbms_aq TO $ORDER_USER;
 GRANT SODA_APP to $ORDER_USER;
---GRANT select on GV$SESSION to orderuser;
-GRANT select on DBA_QUEUE_SCHEDULES to orderuser;
---GRANT select on V$diag_alert_ext to orderuser;
---GRANT select on v$active_session_history to orderuser;
