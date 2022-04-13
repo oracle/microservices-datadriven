@@ -16,8 +16,11 @@ import static java.lang.System.*;
 
 public class TravelAgencyApplication {
 
+	static {
+		System.setProperty("oracle.jdbc.fanEnabled", "false");
+	}
+
 	public static void main	(String[] args) throws Exception {
-		setProperty("oracle.jdbc.fanEnabled", "false");
 		new TravelAgencyApplication().bookTravel();
 	}
 
