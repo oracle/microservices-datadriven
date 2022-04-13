@@ -14,10 +14,12 @@ import static java.lang.System.out;
 
 public class TravelParticipantApplication {
 
+	static {
+		System.setProperty("oracle.jdbc.fanEnabled", "false");
+	}
 	String participant;
 
 	public static void main(String[] args) throws Exception {
-		System.setProperty("oracle.jdbc.fanEnabled", "false");
 		new TravelParticipantApplication().participate();
 	}
 
