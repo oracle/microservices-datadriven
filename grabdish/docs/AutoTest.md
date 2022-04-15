@@ -7,17 +7,19 @@ Here is how to run an automated test in your free tier tenancy or with a Live La
 1. (Free Tier Only) Clean up your existing tenancy so that you have disk space and the docker cache is empty:
 ```
 docker image prune -a -f
-csreset -a
+csreset -a <<< 'y'
 ```
 
 2. (Free Tier Only) From the OCI Console, make space for a new auth token.  The limit is 2.
 
-3. (Free Tier Only) Create a directory to run the test:
+3. (Free Tier Only) Create a directory to run the test and name your compartment:
 ```
 export TEST_DIRECTORY=gd`awk 'BEGIN { srand(); print int(1 + rand() * 1000000)}'`
 echo "Test directory $TEST_DIRECTORY"
 mkdir $TEST_DIRECTORY
 cd $TEST_DIRECTORY
+export TEST_COMPARTMENT="$TEST_DIRECTORY"
+export TEST_PARENT_COMPARTMENT_OCID='$OCI_TENANCY'
 ```
 
 4. (Free Tier Only) Register your user OCID:
@@ -40,11 +42,8 @@ git clone -b "$GITHUB_BRANCH" --single-branch "https://github.com/${GITHUB_USER}
 
 7. Execute the setup.  Note in the Live Labs case, the setup will prompt for the compartment OCID and an auth token.
 ```
-sed -i.bak '/grabdish/d' ~/.bashrc
-echo "source $PWD/microservices-datadriven/grabdish/env.sh" >>~/.bashrc
-source microservices-datadriven/grabdish/env.sh
-source setup.sh
-
+source microservices-datadriven/workshops/dcms-oci/source.env
+time setup
 ```
 
 8. Execute the test
@@ -55,6 +54,6 @@ source test.sh
 
 9. Clean up
 ```
-source destroy.sh
+time teardown
 
 ```
