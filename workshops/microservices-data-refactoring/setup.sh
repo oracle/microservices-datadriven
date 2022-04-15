@@ -85,6 +85,19 @@ GRANT UNLIMITED TABLESPACE TO ${DB_NORMAL_USER};
 GRANT EXECUTE ON DBMS_CLOUD_ADMIN TO ${DB_NORMAL_USER};
 GRANT ADMINISTER SQL TUNING SET TO ${DB_NORMAL_USER};
 GRANT SELECT ON DBA_SQLSET_PLANS TO ${DB_NORMAL_USER};
+
+-- enable web access to database actions
+BEGIN
+   ORDS_ADMIN.ENABLE_SCHEMA(
+     p_enabled => TRUE,
+     p_schema => '${DB_NORMAL_USER}',
+     p_url_mapping_type => 'BASE_PATH',
+     p_url_mapping_pattern => '${DB_NORMAL_USER}',
+     p_auto_rest_auth => TRUE
+   );
+   COMMIT;
+END;
+/
 EXIT;
 EOF
 
