@@ -1,0 +1,79 @@
+
+.login {
+    background-color: rgb(52, 48, 45);
+    background-image: url("./images/login.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    font-size: 12px;
+}
+
+.login.app-section {
+    padding: 60px 0;
+}
+
+.login .modal {
+    background: #fff;
+    width: 360px;
+    margin: 0 auto;
+    border-radius: 10px;
+    filter: drop-shadow(7px 10px 7px rgba(0,0,0,.4));
+}
+
+.login .modal .modal-header {
+    height: 90px;
+    border-radius: 10px 10px 0 0;
+    background-color: #eee;
+    background-image: url("./images/login-header.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    border-bottom-color: #FFD600;
+    border-bottom-width: 7px;
+    border-bottom-style: solid;
+}
+.login .modal .title span {
+    margin: 0 auto;
+    position: absolute;
+    border-radius: 50%;
+    padding: 22px 12px;
+    font-size: 18px;
+    top: 55px;
+    background-color: #ffffff;
+}
+
+.login .modal .form {
+    margin: 19px 0;
+}
+.login .modal .fields .username.field {
+    margin-bottom: 14px;
+}
+
+.login .modal .fields, .login .modal .actions {
+    padding: 19px 0;
+    width: 75%;
+    margin: 0 auto;
+}
+
+.login .app-button:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.login .signin.app-button {
+    background-color: #FFD233;
+    color: #292929;
+    font-weight: bold;
+}
+.login .signup.app-button {
+    background-color: #FFB240;
+    color: #292929;
+    font-weight: lighter;
+    text-decoration: none;
+}
+
+.login .login-link {
+    padding-left: 4px;
+    text-decoration: underline;
+}
+
