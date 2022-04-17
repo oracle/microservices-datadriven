@@ -7,39 +7,39 @@ import org.apache.http.util.EntityUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 
 public class CrashAfterInventoryMessageReceivedTest extends TransactionalTests {
 
     /**
      * Transactional lab of "simplify microservices"
+     * Crash the order service after inventory status message is received
+     * Order should be successful.
      * @throws Exception
      */
     @Test
     void testCrashAfterInventoryMessageReceived() throws Exception {
-        CloseableHttpClient httpClient = getHttpClient();
-        //delete all orders for clean run where we can use any order id
-        HttpResponse httpResponse = deleteAllOrders(httpClient);
+        CloseableHttpClient httpClient = getCloseableHttpClientAndDeleteAllOrders();
+        setInventoryToOne();
+        HttpResponse httpResponse1 = setCrashType(crashAfterInventoryMessageReceived);
+        //assert success of request
+        assertThat(httpResponse1.getStatusLine().getStatusCode(), equalTo(HttpStatus.SC_OK));
+        placeOrder(httpClient, false);
+        //show the order (use clean/new http client)
+        HttpResponse httpResponse =  showorder(getHttpClient());
         //assert success of request
         assertThat(httpResponse.getStatusLine().getStatusCode(), equalTo(HttpStatus.SC_OK));
-        //set the "crashAfterInsert" failure case
-        httpResponse = crashAfterInsert(httpClient);
-        //assert success of request
-        assertThat(httpResponse.getStatusLine().getStatusCode(), equalTo(HttpStatus.SC_OK));
-        //place and order async, expecting hang due to order service crash
-        placeOrder(httpClient, true);
-        //sleep so that the next request is after order service restarts
-        System.out.println("CrashAfterOrderInsertedBeforeMessageSentTest.testCrashAfterOrderInsertedBeforeMessageSent sleep for a minute");
-        Thread.sleep(60 * 1000); //  non-deterministic but adequate
-        //get a clean http client
-        httpClient = getHttpClient();
-        //show the order
-        httpResponse = showorder(httpClient);
-        //assert success of request
-        assertThat(httpResponse.getStatusLine().getStatusCode(), equalTo(HttpStatus.SC_OK));
-        //confirm the order is null (doesnt exist) because it was rolledback
+        //confirm successful order
         String jsonFromResponse = EntityUtils.toString(httpResponse.getEntity());
-        System.out.println("CrashAfterOrderInsertedBeforeMessageSentTest.testCrashAfterOrderInsertedBeforeMessageSent jsonFromResponse:" + jsonFromResponse);
-        assertThat(jsonFromResponse, equalTo("null"));
+        System.out.println("testCrashAfterInventoryMessageReceived jsonFromResponse:" + jsonFromResponse);
+        while (jsonFromResponse.contains("Connection refused") || jsonFromResponse.contains("pending") ) {
+            Thread.sleep(1000 * 1);
+            httpResponse =  showorder(getHttpClient());
+            jsonFromResponse = EntityUtils.toString(httpResponse.getEntity());
+            System.out.println("testCrashAfterInventoryMessageReceived jsonFromResponse:" + jsonFromResponse);
+        }
+        assertThat(jsonFromResponse, containsString("beer"));
+        assertInventoryCount(0);
     }
 }

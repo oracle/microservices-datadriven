@@ -6,25 +6,25 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.junit.jupiter.api.Test;
 
+
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 
-public class CrashAfterOrderMessageProcessedTest  extends TransactionalTests {
+public class WalkThroughTest extends TransactionalTests { // estBase {
 
-    /**
-     * Transactional lab of "simplify microservices" workshop
-     * Crash the inventory service after order message is processed
-     * Order should be successful.
-     * @throws Exception
-     */
     @Test
-    void testCrashAfterOrderMessageProcessed() throws Exception {
+    void testWalkThroughNoInventory() throws Exception {
+        assertWalkThrough(true);
+    }
+
+    @Test
+    void testWalkThroughWithInventory() throws Exception {
+        assertWalkThrough(false);
+    }
+
+    private void assertWalkThrough(boolean isNoInventory) throws Exception {
         CloseableHttpClient httpClient = getCloseableHttpClientAndDeleteAllOrders();
-        setInventoryToOne();
-        HttpResponse httpResponse1 = setCrashType(crashAfterOrderMessageProcessed);
-        //assert success of request
-        assertThat(httpResponse1.getStatusLine().getStatusCode(), equalTo(HttpStatus.SC_OK));
+        if (isNoInventory ) reduceInventoryToZero(); else setInventoryToOne();
         placeOrder(httpClient, false);
         //show the order (use clean/new http client)
         HttpResponse httpResponse =  showorder(getHttpClient());
@@ -32,16 +32,15 @@ public class CrashAfterOrderMessageProcessedTest  extends TransactionalTests {
         assertThat(httpResponse.getStatusLine().getStatusCode(), equalTo(HttpStatus.SC_OK));
         //confirm successful order
         String jsonFromResponse = EntityUtils.toString(httpResponse.getEntity());
-        System.out.println("testCrashAfterOrderMessageProcessed jsonFromResponse:" + jsonFromResponse);
+        System.out.println("testWalkThrough jsonFromResponse:" + jsonFromResponse);
         while (jsonFromResponse.contains("pending")) {
             Thread.sleep(1000 * 1);
             httpResponse =  showorder(getHttpClient());
             jsonFromResponse = EntityUtils.toString(httpResponse.getEntity());
-            System.out.println("testCrashAfterOrderMessageProcessed jsonFromResponse:" + jsonFromResponse);
+            System.out.println("testWalkThrough jsonFromResponse:" + jsonFromResponse);
         }
-        assertThat(jsonFromResponse, containsString("beer"));
+        assertThat(jsonFromResponse, containsString(isNoInventory?"failed inventory does not exist":"beer"));
         assertInventoryCount(0);
     }
 
 }
-
