@@ -8,7 +8,6 @@ tblnm varchar2(128);
 ins_sql varchar2(2000);
 upd_sql varchar2(2000);
 begin
-    --open c;
     for r in c loop
         ins_sql:= q'{
             insert into tkdradata.table_map 
@@ -32,7 +31,8 @@ begin
                 join_executions, 
                 round(join_count/(all_sql-join_count),5) static_coefficient, 
                 round(join_executions/(all_executions-join_executions),5) dynamic_coefficient, 
-                (round(join_count/(all_sql-join_count),5)*0.5 + round(join_executions/(all_executions-join_executions),5)*0.5) total_affinity
+                (round(join_count/(all_sql-join_count),5)*0.5 + 
+                 round(join_executions/(all_executions-join_executions),5)*0.5) total_affinity
             from (
                 select 
                     v2.tbl1, 
@@ -62,28 +62,30 @@ begin
                             sql_id,
                             executions 
                         from ( 
-                            select '}'||r.table_name||q'{' tbl1, 
-                            s.object_name tbl2, 
-                            i.table_name table_name, 
-                            sql_id, 
-                            operation, 
-                            executions 
-                        from dba_sqlset_plans s, all_indexes i 
-                        where sqlset_name='tkdradata' 
-                        and object_owner=upper('tkdradata') 
-                        and s.object_name = i.index_name(+) 
-                        and sql_id in (
-                            select distinct sql_id 
-                            from dba_sqlset_plans 
+                            select 
+                                '}'||r.table_name||q'{' tbl1, 
+                                s.object_name tbl2, 
+                                i.table_name table_name, 
+                                sql_id, 
+                                operation, 
+                                executions 
+                            from dba_sqlset_plans s, all_indexes i 
                             where sqlset_name='tkdradata' 
-                            and object_name='}'||r.table_name||q'{' 
-                            and  object_owner=upper('tkdradata')
-                        ) 
-                    ) v 
-                ) v1  
-                group by v1.tbl1, v1.tbl2   
-                having v1.tbl2 is not null 
-                and v1.tbl1 <> v1.tbl2 ) v2 
+                            and object_owner=upper('tkdradata') 
+                            and s.object_name = i.index_name(+) 
+                            and sql_id in (
+                                select distinct sql_id 
+                                from dba_sqlset_plans 
+                                where sqlset_name='tkdradata' 
+                                and object_name='}'||r.table_name||q'{' 
+                                and  object_owner=upper('tkdradata')
+                            ) 
+                        ) v 
+                    ) v1  
+                    group by v1.tbl1, v1.tbl2   
+                    having v1.tbl2 is not null 
+                    and v1.tbl1 <> v1.tbl2 
+                ) v2 
             )
         }';
         execute immediate ins_sql;
