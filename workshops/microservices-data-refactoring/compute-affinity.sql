@@ -5,8 +5,8 @@ create or replace procedure compute_affinity_tkdra as
 cursor c is
 select table_name, schema from tableset_tables;
 tblnm varchar2(128);
-ins_sql varchar2(2000);
-upd_sql varchar2(2000);
+ins_sql varchar2(4000);
+upd_sql varchar2(4000);
 begin
     for r in c loop
         ins_sql:= q'{
