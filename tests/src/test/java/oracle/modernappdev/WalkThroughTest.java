@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-public class WalkThroughTest extends TransactionalTests { // estBase {
+public class WalkThroughTest extends TestBase {
 
     @Test
     void testWalkThroughNoInventory() throws Exception {
