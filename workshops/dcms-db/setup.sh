@@ -101,7 +101,7 @@ state_set DB_TYPE ATP
 fi
 
 if ! state_done QUEUE_TYPE; then
-state_set QUEUE_TYPE classicq
+state_set QUEUE_TYPE teq
 fi
 
 if ! state_done DB_VERSION; then
