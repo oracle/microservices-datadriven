@@ -34,14 +34,14 @@ create_ords_schema $(state_get ORDS_SCHEMA_NAME) 'admin' "$(state_get DB_ALIAS)"
 
 _setup_func=/tmp/setup_functions.env
 # Upload setup functions
-scp -i $(state_get SSH_PRIVATE_KEY_FILE) $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/setup_functions.env opc@$(state_get ORDS_ADDRESS):/tmp
+scp -o StrictHostKeyChecking=no -i $(state_get SSH_PRIVATE_KEY_FILE) $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/setup_functions.env opc@$(state_get ORDS_ADDRESS):/tmp
 
 _tns_zip=/tmp/adb_wallet.zip
 # Upload tns zip file
-scp -i $(state_get SSH_PRIVATE_KEY_FILE) $(state_get TNS_ADMIN_ZIP_FILE) opc@$(state_get ORDS_ADDRESS):/tmp
+scp -o StrictHostKeyChecking=no -i $(state_get SSH_PRIVATE_KEY_FILE) $(state_get TNS_ADMIN_ZIP_FILE) opc@$(state_get ORDS_ADDRESS):/tmp
 
 # Configure customer managed ORDS
-ssh -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
+ssh -o StrictHostKeyChecking=no -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
   sudo su - oracle
   source ${_setup_func}
   DB_PASSWORD='$DB_PASSWORD'
@@ -58,8 +58,8 @@ collect_ui_password
 _grabdish_code=/home/oracle/grabdish
 cd $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP
 zip -r /tmp/grabdish.zip grabdish
-scp -i $(state_get SSH_PRIVATE_KEY_FILE) /tmp/grabdish.zip opc@$(state_get ORDS_ADDRESS):/tmp
-ssh -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
+scp -o StrictHostKeyChecking=no -i $(state_get SSH_PRIVATE_KEY_FILE) /tmp/grabdish.zip opc@$(state_get ORDS_ADDRESS):/tmp
+ssh -o StrictHostKeyChecking=no -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
   sudo su - oracle
   cd
   rm -rf grabdish
@@ -67,7 +67,7 @@ ssh -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
 !
 
 # Deploy Grabdish on ORDS
-ssh -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
+ssh -o StrictHostKeyChecking=no -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
 sudo su - oracle
 source ${_setup_func}
 UI_PASSWORD=$UI_PASSWORD
@@ -80,7 +80,7 @@ setup_grabdish_in_db $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/grabdish "$_lang" "$_lan
 ### START ORDS
 
 # Enable and start ORDS
-ssh -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
+ssh -o StrictHostKeyChecking=no -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
   sudo su - root
   
   # Open Firewall
@@ -92,3 +92,13 @@ ssh -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) <<!
   systemctl enable ords
   systemctl restart ords
 !
+
+echo
+echo "GrabDish is deployed"
+echo
+echo "GrabDish URL:"
+echo "  https://$(state_get LB_ADDRESS)"
+echo
+echo "ORDS Instance access:"
+echo "  ssh -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS)"
+echo
