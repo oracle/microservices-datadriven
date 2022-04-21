@@ -86,7 +86,6 @@ ssh -o StrictHostKeyChecking=no -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state
 echo
 echo "You get to choose the password for the application.  Please make a note"
 echo "of the password that you choose because you will need it later."
-echo
 UI_PASSWORD=""
 collect_ui_password
 echo

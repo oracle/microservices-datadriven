@@ -57,7 +57,7 @@ case "$DCMS_STATUS" in
       BACKUP_DIR=${DCMS_RUN_DIR}_$( date '+%F_%H:%M:%S' )
       mkdir -p $BACKUP_DIR
       echo
-      echo "Making a backup copy of the workshop state in $BACKUP_DIR"
+      echo "Making a backup copy of the workshop state in $BACKUP_DIR ..."
       cp -r $DCMS_RUN_DIR/* $BACKUP_DIR/
     fi
 
