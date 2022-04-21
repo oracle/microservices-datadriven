@@ -15,6 +15,11 @@ if (return 0 2>/dev/null) ; then
   exit 1
 fi
 
+if ! state_done DEPLOYED; then
+  echo "ERROR: Grabdish must be deployed before switch can be run"
+  exit 1
+fi
+
 # Source the setup functions
 source $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/setup_functions.env
 
@@ -24,3 +29,15 @@ collect_db_password
 
 deploy_mservice ${DCMS_APP_CODE} 'order'     ${_order_lang}     $(state_get QUEUE_TYPE) $(state_get DB_ALIAS)
 deploy_mservice ${DCMS_APP_CODE} 'inventory' ${_inventory_lang} $(state_get QUEUE_TYPE) $(state_get DB_ALIAS)
+
+if test "${_order_lang}" == "plsql"; then
+  state_set ORDER_LANG 'PL/SQL'
+else
+  state_set ORDER_LANG 'JavaScript'
+fi
+
+if test "${_inventory_lang}" == "plsql"; then
+  state_set INVENTORY_LANG 'PL/SQL'
+else
+  state_set INVENTORY_LANG 'JavaScript'
+fi

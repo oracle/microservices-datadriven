@@ -77,6 +77,34 @@ while true; do
   tput sgr0
   echo
 
+  if [[ "$DCMS_STATUS" =~ destroyed ]]; then
+    # Remove from .bashrc
+    PROF=~/.bashrc
+    sed -i.bak '/microservices-datadriven/d' $PROF
+    cd
+  fi
+
+  if [[ "$DCMS_STATUS" =~ applied ]]; then
+    # Check deployment status
+    echo
+    if state_done DEPLOYED; then
+      echo "GrabDish is DEPLOYED"
+      echo
+      echo "GrabDish URL:"
+      echo "  https://$(state_get LB_ADDRESS)"
+      echo
+      echo "Order microservice deployed with $(state_get ORDER_LANG) language"
+      echo "Inventory microservice deployed with $(state_get INVENTORY_LANG) language"
+      echo
+      echo "ORDS Compute Instance:"
+      echo "  ssh -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS)"
+      echo
+    else
+      echo "GrabDish is NOT DEPLOYED"
+      echo
+    fi
+  fi
+
   if [[ "$DCMS_STATUS" =~ byo|new|applied|applying-failed|destroyed|destroying-failed ]]; then
     # Skip this log
     break

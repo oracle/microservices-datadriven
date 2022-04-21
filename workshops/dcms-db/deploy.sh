@@ -14,6 +14,17 @@ if (return 0 2>/dev/null) ; then
   exit 1
 fi
 
+# Get the setup status
+if ! DCMS_STATUS=$(provisioning-get-status $DCMS_STATE); then
+  echo "ERROR: Unable to get workshop provisioning status"
+  exit 1
+fi
+
+if [[ ! "$DCMS_STATUS" =~ applied ]]; then
+  echo "ERROR: Setup must be completed before deploy can be run"
+  exit 1
+fi
+
 # Source the setup functions
 source $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/setup_functions.env
 
@@ -93,12 +104,11 @@ ssh -o StrictHostKeyChecking=no -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state
   systemctl restart ords
 !
 
-echo
-echo "GrabDish is deployed"
-echo
-echo "GrabDish URL:"
-echo "  https://$(state_get LB_ADDRESS)"
-echo
-echo "ORDS Instance access:"
-echo "  ssh -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS)"
-echo
+state_set_done DEPLOYED
+if test "$_lang" == "plsql"; then
+  state_set ORDER_LANG 'PL/SQL'
+  state_set INVENTORY_LANG 'PL/SQL'
+else
+  state_set ORDER_LANG 'JavaScript'
+  state_set INVENTORY_LANG 'JavaScript'
+fi
