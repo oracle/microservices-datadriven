@@ -71,7 +71,7 @@ while true; do
 
   # Provisioning status
   echo
-  printf "$DCMS_WORKSHOP workshop provisioning phase: "
+  printf "$DCMS_WORKSHOP workshop provisioning status: "
   tput bold
   echo "$PHASE"
   tput sgr0

@@ -48,7 +48,12 @@ case "$DCMS_STATUS" in
 
     # Start or restart destroy
     cd $DCMS_STATE
-    echo "Starting teardown.  Call 'status' to get the status of the teardown"
+    # Explain what is happening
+    echo "Teardown runs terraform to destroy the autonomous database, compute instance, load balancer and network."
+    echo "The status of teardown and the most recent log entries will be displayed as it runs."
+    echo "The full log file ( $DCMS_LOG_DIR/config.log ) can be viewed in a separate Cloud Console window."
+    echo
+
     nohup bash -c "provisioning-destroy" >>$DCMS_LOG_DIR/config.log 2>&1 &
     exit
     ;;

@@ -221,5 +221,8 @@ fi
 
 # Run the setup in the background
 cd $DCMS_STATE
-echo "Setup is running and the status will be updated every 10 seconds.  Setup usually takes about 7 minutes.  The setup log is $DCMS_LOG_DIR/config.log."
+echo "Setup runs terraform to provision a network, autonomous database, compute instance and load balancer."
+echo "The status of setup and the most recent log entries will be displayed as the setup runs."
+echo "The full log file ( $DCMS_LOG_DIR/config.log ) can be viewed in a separate Cloud Console window."
+echo
 nohup bash -c "provisioning-apply $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/config" >>$DCMS_LOG_DIR/config.log 2>&1 &

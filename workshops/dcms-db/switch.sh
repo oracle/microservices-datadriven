@@ -23,21 +23,35 @@ fi
 # Source the setup functions
 source $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/setup_functions.env
 
+# Explain what is happening
+echo "To switch to a different implementation we need to collect the DB password,"
+echo "and replace the service implementations in the database."
+echo
+echo "The log file is $DCMS_LOG_DIR/config.log"
+echo
+
 # Collect DB password
+echo "The DB password is required to update the services deployed in the database"
+echo
 DB_PASSWORD=""
 collect_db_password
 
-deploy_mservice ${DCMS_APP_CODE} 'order'     ${_order_lang}     $(state_get QUEUE_TYPE) $(state_get DB_ALIAS)
-deploy_mservice ${DCMS_APP_CODE} 'inventory' ${_inventory_lang} $(state_get QUEUE_TYPE) $(state_get DB_ALIAS)
-
+# Order
 if test "${_order_lang}" == "plsql"; then
-  state_set ORDER_LANG 'PL/SQL'
+  l='PL/SQL'
 else
-  state_set ORDER_LANG 'JavaScript'
+  l='JavaScript'
 fi
+echo "Deploying the Order microservice with language $l"
+deploy_mservice ${DCMS_APP_CODE} 'order'     ${_order_lang}     $(state_get QUEUE_TYPE) $(state_get DB_ALIAS) >>$DCMS_LOG_DIR/config.log 2>&1
+state_set ORDER_LANG "$l"
 
+# Inventory
 if test "${_inventory_lang}" == "plsql"; then
-  state_set INVENTORY_LANG 'PL/SQL'
+  l='PL/SQL'
 else
-  state_set INVENTORY_LANG 'JavaScript'
+  l='JavaScript'
 fi
+echo "Deploying the Inventory microservice with language $l"
+deploy_mservice ${DCMS_APP_CODE} 'inventory' ${_inventory_lang} $(state_get QUEUE_TYPE) $(state_get DB_ALIAS) >>$DCMS_LOG_DIR/config.log 2>&1
+state_set INVENTORY_LANG "$l"
