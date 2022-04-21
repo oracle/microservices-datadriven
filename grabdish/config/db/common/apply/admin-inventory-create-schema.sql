@@ -10,3 +10,7 @@ GRANT EXECUTE ON sys.dbms_aq TO $INVENTORY_USER;
 -- For inventory-plsql deployment
 GRANT CREATE JOB to $INVENTORY_USER; 
 GRANT EXECUTE ON sys.DBMS_SCHEDULER TO $INVENTORY_USER;
+--This is all we want but table hasn't been created yet... GRANT select on AQ.inventoryqueuetable to $INVENTORY_USER;
+GRANT SELECT ANY TABLE TO $INVENTORY_USER;
+GRANT select on gv\$session to $INVENTORY_USER;
+GRANT select on DBA_QUEUE_SCHEDULES to $INVENTORY_USER;
