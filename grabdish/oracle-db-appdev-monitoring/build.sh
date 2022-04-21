@@ -4,3 +4,4 @@
 
 cd $GRABDISH_HOME/../oracle-db-appdev-monitoring
 ./build.sh
+cd $GRABDISH_HOME/oracle-db-appdev-monitoring
