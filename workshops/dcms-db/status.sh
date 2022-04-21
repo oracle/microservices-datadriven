@@ -86,7 +86,6 @@ while true; do
 
   if [[ "$DCMS_STATUS" =~ applied ]]; then
     # Check deployment status
-    echo
     if state_done DEPLOYED; then
       echo "GrabDish is DEPLOYED"
       echo
@@ -100,7 +99,7 @@ while true; do
       echo "  ssh -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS)"
       echo
     else
-      echo "GrabDish is NOT DEPLOYED"
+      echo "GrabDish has not been deployed"
       echo
     fi
   fi

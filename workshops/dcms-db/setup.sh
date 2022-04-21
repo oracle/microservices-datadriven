@@ -170,6 +170,7 @@ fi
 
 # Request compartment details and create or validate
 if ! state_done COMPARTMENT_OCID; then
+  echo
   if compartment-dialog "$(state_get RUN_TYPE)" "$(state_get TENANCY_OCID)" "$(state_get HOME_REGION)" "GrabDish Workshop $(state_get RUN_NAME)"; then
     state_set COMPARTMENT_OCID $COMPARTMENT_OCID
   else
@@ -181,6 +182,7 @@ fi
 
 # Get the User OCID
 while ! state_done USER_OCID; do
+  echo
   if test -z "${TEST_USER_OCID-}"; then
     echo "Your user's OCID has a name beginning ocid1.user.oc1.."
     read -p "Please enter your OCI user's OCID: " USER_OCID
@@ -221,8 +223,8 @@ fi
 
 # Run the setup in the background
 cd $DCMS_STATE
+echo
 echo "Setup runs terraform to provision a network, autonomous database, compute instance and load balancer."
 echo "The status of setup and the most recent log entries will be displayed as the setup runs."
 echo "The full log file ( $DCMS_LOG_DIR/config.log ) can be viewed in a separate Cloud Console window."
-echo
 nohup bash -c "provisioning-apply $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/config" >>$DCMS_LOG_DIR/config.log 2>&1 &

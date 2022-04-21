@@ -24,6 +24,7 @@ fi
 source $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/setup_functions.env
 
 # Explain what is happening
+echo
 echo "To switch to a different implementation we need to collect the DB password,"
 echo "and replace the service implementations in the database."
 echo
@@ -35,6 +36,7 @@ echo "The DB password is required to update the services deployed in the databas
 echo
 DB_PASSWORD=""
 collect_db_password
+echo
 
 # Order
 if test "${_order_lang}" == "plsql"; then
@@ -42,7 +44,8 @@ if test "${_order_lang}" == "plsql"; then
 else
   l='JavaScript'
 fi
-echo "Deploying the Order microservice with language $l"
+echo
+echo "Deploying the Order microservice with language $l ..."
 deploy_mservice ${DCMS_APP_CODE} 'order'     ${_order_lang}     $(state_get QUEUE_TYPE) $(state_get DB_ALIAS) >>$DCMS_LOG_DIR/config.log 2>&1
 state_set ORDER_LANG "$l"
 
@@ -52,6 +55,7 @@ if test "${_inventory_lang}" == "plsql"; then
 else
   l='JavaScript'
 fi
-echo "Deploying the Inventory microservice with language $l"
+echo
+echo "Deploying the Inventory microservice with language $l ..."
 deploy_mservice ${DCMS_APP_CODE} 'inventory' ${_inventory_lang} $(state_get QUEUE_TYPE) $(state_get DB_ALIAS) >>$DCMS_LOG_DIR/config.log 2>&1
 state_set INVENTORY_LANG "$l"

@@ -35,22 +35,24 @@ if state_done DEPLOYED; then
 fi
 
 # Explain what is happening
+echo
 echo "To deploy GrabDish we need to collect the DB password and application password and deploy"
 echo "the application on the ORDS server and in the database."
 echo
 echo "The log file is $DCMS_LOG_DIR/config.log"
-echo
 
 # Collect DB password
+echo
 echo "You get to choose the password for the autonomous database.  Please make a note"
 echo "of the password that you choose because you will need it later."
-echo
 DB_PASSWORD=""
 collect_db_password
+echo
 
 if ! state_done DB_LOCKDOWN; then
   # Set DB admin password
-  echo "Setting the DB password"
+  echo
+  echo "Setting the DB password..."
   set_adbs_admin_password "$(state_get DB_OCID)" >>$DCMS_LOG_DIR/config.log 2>&1
   state_set_done DB_LOCKDOWN >>$DCMS_LOG_DIR/config.log 2>&1
 fi
@@ -58,10 +60,10 @@ fi
 #### SETUP ORDS
 
 # Create the ORDS schema
-echo "Creating the ORDS schema in the database"
+echo "Creating the ORDS schema in the database..."
 create_ords_schema $(state_get ORDS_SCHEMA_NAME) 'admin' "$(state_get DB_ALIAS)" >>$DCMS_LOG_DIR/config.log 2>&1
 
-echo "Configuring the ORDS server"
+echo "Configuring the ORDS server..."
 _setup_func=/tmp/setup_functions.env
 # Upload setup functions
 scp -o StrictHostKeyChecking=no -i $(state_get SSH_PRIVATE_KEY_FILE) $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/setup_functions.env opc@$(state_get ORDS_ADDRESS):/tmp >>$DCMS_LOG_DIR/config.log 2>&1
@@ -81,13 +83,16 @@ ssh -o StrictHostKeyChecking=no -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state
 #### DEPLOY GRABDISH
 
 # Collect UI password
+echo
 echo "You get to choose the password for the application.  Please make a note"
 echo "of the password that you choose because you will need it later."
 echo
 UI_PASSWORD=""
 collect_ui_password
+echo
 
-echo "Deploying the GrabDish Application in the ORDS server"
+echo
+echo "Deploying the GrabDish Application in the ORDS server..."
 # Upload the Grabdish code
 _grabdish_code=/home/oracle/grabdish
 cd $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP
@@ -109,13 +114,13 @@ deploy_grabdish_on_ords ${_grabdish_code}
 !
 
 # Grabdish DB Setup
-echo "Deploying Grabdish in the database."
+echo "Deploying Grabdish in the database..."
 setup_grabdish_in_db $MSDD_WORKSHOP_CODE/$DCMS_WORKSHOP/grabdish "$_lang" "$_lang" $(state_get QUEUE_TYPE) $(state_get DB_ALIAS) >>$DCMS_LOG_DIR/config.log 2>&1
 
 ### START ORDS
 
 # Enable and start ORDS
-echo "Starting the ORDS server"
+echo "Starting the ORDS server..."
 ssh -o StrictHostKeyChecking=no -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS) >>$DCMS_LOG_DIR/config.log 2>&1 <<!
   sudo su - root
   

@@ -38,22 +38,31 @@ case "$DCMS_STATUS" in
     ;;
 
   applied | applying-failed | destroying-failed)
+    # Explain what is happening
+    echo
+    echo "Teardown runs terraform to destroy the autonomous database, compute instance, load balancer and network."
+    echo "The status of teardown and the most recent log entries will be displayed as it runs."
+    echo "The full log file ( $DCMS_LOG_DIR/config.log ) can be viewed in a separate Cloud Console window."
+
+    echo
+    read "Okay to continue?  Enter yes/no: " _is_ok
+    echo
+    if ! test ${_is_ok} == 'yes'; then
+      echo "Teardown aborted"
+      exit
+    fi
+
     if ! test "$DCMS_STATUS" == 'destroying-failed'; then
       # First time running destroy. Take an archive copy of the state
       BACKUP_DIR=${DCMS_RUN_DIR}_$( date '+%F_%H:%M:%S' )
       mkdir -p $BACKUP_DIR
+      echo
       echo "Making a backup copy of the workshop state in $BACKUP_DIR"
       cp -r $DCMS_RUN_DIR/* $BACKUP_DIR/
     fi
 
     # Start or restart destroy
     cd $DCMS_STATE
-    # Explain what is happening
-    echo "Teardown runs terraform to destroy the autonomous database, compute instance, load balancer and network."
-    echo "The status of teardown and the most recent log entries will be displayed as it runs."
-    echo "The full log file ( $DCMS_LOG_DIR/config.log ) can be viewed in a separate Cloud Console window."
-    echo
-
     nohup bash -c "provisioning-destroy" >>$DCMS_LOG_DIR/config.log 2>&1 &
     exit
     ;;
