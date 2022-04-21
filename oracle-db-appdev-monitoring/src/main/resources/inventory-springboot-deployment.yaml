@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inventory-springboot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: inventory
+  template:
+    metadata:
+      labels:
+        app: inventory
+        version: springboot
+    spec:
+      containers:
+      - name: inventory
+        image: ${DOCKER_REGISTRY}/inventory-springboot:0.1
+        imagePullPolicy: Always
+        env:
+        - name: LOG_LEVEL
+          value: "DEBUG"
+        - name: server_port
+          value: "8080"
+        - name: db_user
+          value: "inventoryuser"
+        - name: spring.datasource.username
+          value: "inventoryuser"
+        - name: db_url
+          value: "jdbc:oracle:thin:@${INVENTORY_DB_ALIAS}?TNS_ADMIN=/msdataworkshop/creds"
+        - name: spring.datasource.url
+          value: "jdbc:oracle:thin:@${INVENTORY_DB_ALIAS}?TNS_ADMIN=/msdataworkshop/creds"
+        - name: db_queueOwner
+          value: "AQ"
+        - name: db_orderQueueName
+          value: "orderqueue"
+        - name: db_inventoryQueueName
+          value: "inventoryqueue"
+        - name: OCI_REGION
+          value: "${OCI_REGION-}"
+        - name: VAULT_SECRET_OCID
+          value: "${VAULT_SECRET_OCID-}"
+        - name: db_password
+          valueFrom:
+            secretKeyRef:
+              name: dbuser
+              key: dbpassword
+              optional: true #not needed/used if using VAULT_SECRET_OCID exists
+        - name: spring.datasource.password
+          valueFrom:
+            secretKeyRef:
+              name: dbuser
+              key: dbpassword
+              optional: true #not needed/used if using VAULT_SECRET_OCID exists
+        volumeMounts:
+        - name: creds
+          mountPath: /msdataworkshop/creds
+        ports:
+        - containerPort: 8080
+      restartPolicy: Always
+      volumes:
+      - name: creds
+        secret:
+          secretName: inventory-db-tns-admin-secret
+      

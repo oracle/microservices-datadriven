@@ -1,0 +1,31 @@
+# Copyright (c) 2020, 2021, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+inventoryQueueName: inventoryqueue;
+inventoryuser: INVENTORYUSER;
+oracle:
+  jdbc:
+    fanEnabled: false
+  ucp:
+    jdbc:
+      PoolDataSource:
+        inventorypdb:
+          URL: jdbc:oracle:thin:@inventorydb_high?TNS_ADMIN=/Users/pparkins/Downloads/Wallet_INVENTORYDB
+          connectionFactoryClassName: oracle.jdbc.pool.OracleDataSource
+          password: WelcomeInventory123
+          user: admin
+orderQueueName: orderqueue;
+server:
+  host: 0.0.0.0
+  port: 8080
+spring:
+  datasource:
+    driver-class-name: oracle.jdbc.pool.OracleDataSource
+    password: WelcomeInventory123
+    url: jdbc:oracle:thin:@inventorydb_high?TNS_ADMIN=/Users/pparkins/Downloads/Wallet_INVENTORYDB
+    username: admin
+  jpa:
+    database: ORACLE
+    database-platform: org.hibernate.dialect.Oracle10gDialect
+    hibernate:
+      ddl-auto: none
+    show-sql: true
