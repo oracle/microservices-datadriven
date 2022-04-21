@@ -93,8 +93,8 @@ while true; do
       echo "GrabDish URL:"
       echo "  https://$(state_get LB_ADDRESS)"
       echo
-      echo "Order microservice deployed with $(state_get ORDER_LANG) language"
-      echo "Inventory microservice deployed with $(state_get INVENTORY_LANG) language"
+      echo "Order microservice deployed with the $(state_get ORDER_LANG) language"
+      echo "Inventory microservice deployed with the $(state_get INVENTORY_LANG) language"
       echo
       echo "ORDS Compute Instance:"
       echo "  ssh -i $(state_get SSH_PRIVATE_KEY_FILE) opc@$(state_get ORDS_ADDRESS)"
