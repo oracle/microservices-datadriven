@@ -2,17 +2,14 @@ import os
 import logging
 from os import environ as env
 import cx_Oracle
-import threading
-import time
 import oci
-import base64
 
 connection = cx_Oracle.connect(dsn=env.get('DB_ALIAS'))
 cursor = connection.cursor()
 
 #ADT payload
-book_type = connection.gettype("ADT_BOOK")
-queue = connection.queue("PYTHON_ADT_Q", book_type)
+book_type = connection.gettype("Python_AQ_MESSAGE_TYPE")
+queue = connection.queue("PYTHON_AQ_ADT", book_type)
 
 book = book_type.newobject()
 book.TITLE = "Quick Brown Fox"
@@ -28,8 +25,8 @@ print("Enqueue Done!!!")
 
 #deqOptions should have consumername in case of multiconsumer queue
 #queue.deqOptions.consumername = "PYTHON_ADT_SUBSCIBER"
-options = connection.deqoptions()
-options.wait = cx_Oracle.DEQ_NO_WAIT
+queue.deqOptions.wait = cx_Oracle.DEQ_NO_WAIT
+queue.deqOptions.navigation = cx_Oracle.DEQ_FIRST_MSG
 msg = queue.deqOne()
 connection.commit()
 print("Dequeued message with ADT payload : ",msg.payload.TITLE)
@@ -38,8 +35,7 @@ print("-----------------------------------------------------------------")
 
 #RAW PAYLOAD
 print("\n2) Sample for Classic queue : RAW payload")
-
-queue = connection.queue("PYTHON_RAW_Q")
+queue = connection.queue("PYTHON_AQ_RAW")
 PAYLOAD_DATA = [
         "The first message"
 ]
@@ -63,7 +59,7 @@ jmsType = connection.gettype("SYS.AQ$_JMS_TEXT_MESSAGE")
 headerType = connection.gettype("SYS.AQ$_JMS_HEADER")
 user_prop_Type = connection.gettype("SYS.AQ$_JMS_USERPROPARRAY")
 
-queue = connection.queue("PYTHON_JMS_Q",jmsType)
+queue = connection.queue("PYTHON_AQ_JMS",jmsType)
 #create python object for JMS type
 text = jmsType.newobject()
 text.HEADER = headerType.newobject()

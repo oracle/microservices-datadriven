@@ -1,0 +1,69 @@
+const oracledb = require('oracledb');
+
+async function run() {
+
+  let connection;
+
+  try {
+    const config = { connectString: process.env.DB_ALIAS, externalAuth: true };
+    const connection = await oracledb.getConnection(config); 
+
+    /*ADT PAYLOAD*/
+    console.log("1)Enqueue one message with ADT payload ");
+    const adtQueue = await connection.getQueue("NODE_AQ_ADT", {payloadType: "NODE_AQ_MESSAGE_TYPE"});
+    const message = new queue.payloadTypeClass(
+        {
+          NAME: "scott",
+          ADDRESS: "The Kennel"
+        }
+    );
+    await adtQueue.enqOne(message);
+    await connection.commit();
+    console.log("Enqueue Done!!!")
+    const result = await connection.execute("Select QUEUE, USER_DATA from AQ$NODE_AQTABLE_ADT");
+    console.dir(result.rows);
+    
+    const adtMsg = await adtQueue.deqOne();
+    await connection.commit();
+    console.log("Dequeued message with ADT payload : ",adtMsg.payload.NAME)
+    console.log("Dequeue Done!!!") 
+    console.log("-----------------------------------------------------------------")
+
+    /*RAW PAYLOAD*/
+    console.log("2)Enqueue one message with RAW payload ");
+    const queue = await connection.getQueue("NODE_AQ_RAW");
+    await queue.enqOne("This is my RAW message");
+    await connection.commit();
+    console.log("Enqueue Done!!!")
+    const result = await connection.execute("Select QUEUE, USER_DATA from AQ$NODE_AQTABLE_RAW");
+    console.dir(result.rows);
+
+    const rawMsg = await queue.deqOne();
+    await connection.commit();
+    console.log("Dequeued message with ADT payload : ",rawMsg.payload)
+    console.log("Dequeue Done!!!") 
+    console.log("-----------------------------------------------------------------")
+
+    // /*JMS PAYLOAD*/
+    // const queue = await connection.getQueue("NODE_AQ_JMS");
+    // await queue.enqOne("This is my JMS message");
+    // await connection.commit();
+    // const result = await connection.execute("Select QUEUE, USER_DATA from AQ$NODE_AQTABLE_JMS");
+    // console.dir(result.rows);
+
+    // const msg = await queue.deqOne();
+    // await connection.commit();
+    
+  } catch (err) {
+    console.error(err);
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
+}
+run();
