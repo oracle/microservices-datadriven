@@ -27,7 +27,7 @@ connection.commit()
 print("Enqueue Done!!!")
 
 #deqOptions should have consumername in case of multiconsumer queue
-adtQueue.deqOptions.consumername = "PYTHON_ADT_SUBSCIBER_TEQ"
+adtQueue.deqOptions.consumername = "PYTHON_TEQ_SUBSCIBER_ADT"
 adtQueue.deqOptions.wait = cx_Oracle.DEQ_NO_WAIT
 adtQueue.deqOptions.navigation = cx_Oracle.DEQ_FIRST_MSG
 adtMsg = adtQueue.deqOne()
@@ -39,7 +39,7 @@ print("-----------------------------------------------------------------")
 #RAW PAYLOAD
 print("\n2) Sample for Classic queue : RAW payload")
 
-rawQueue = connection.queue("PYTHON_RAW_TEQ")
+rawQueue = connection.queue("PYTHON_TEQ_RAW")
 PAYLOAD_DATA = [
         "The first message"
 ]
@@ -49,7 +49,7 @@ for data in PAYLOAD_DATA:
 connection.commit()
 print("Enqueue Done!!!")	
 
-rawQueue.deqOptions.consumername = "PYTHON_RAW_SUBSCIBER_TEQ"
+rawQueue.deqOptions.consumername = "PYTHON_TEQ_SUBSCIBER_RAW"
 rawQueue.deqOptions.wait = cx_Oracle.DEQ_NO_WAIT
 rawQueue.deqOptions.navigation = cx_Oracle.DEQ_FIRST_MSG
 rawMsg = rawQueue.deqOne()
@@ -65,7 +65,7 @@ jmsType = connection.gettype("SYS.AQ$_JMS_TEXT_MESSAGE")
 headerType = connection.gettype("SYS.AQ$_JMS_HEADER")
 user_prop_Type = connection.gettype("SYS.AQ$_JMS_USERPROPARRAY")
 
-jmsQueue = connection.queue("PYTHON_JMS_TEQ",jmsType)
+jmsQueue = connection.queue("PYTHON_TEQ_JMS",jmsType)
 #create python object for JMS type
 text = jmsType.newobject()
 text.HEADER = headerType.newobject()
@@ -80,7 +80,7 @@ jmsQueue.enqOne(connection.msgproperties(payload=text))
 connection.commit()
 print("Enqueue Done!!!")
 
-jmsQueue.deqOptions.consumername = "PYTHON_JMS_SUBSCIBER_TEQ"
+jmsQueue.deqOptions.consumername = "PYTHON_TEQ_SUBSCIBER_JMS"
 jmsQueue.deqOptions.wait = cx_Oracle.DEQ_NO_WAIT
 jmsQueue.deqOptions.navigation = cx_Oracle.DEQ_FIRST_MSG
 jmsMsg = jmsQueue.deqOne()

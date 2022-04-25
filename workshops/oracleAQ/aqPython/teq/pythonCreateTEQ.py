@@ -26,7 +26,7 @@ adtQuery="""
         replication_mode   =>null);
     DBMS_AQADM.START_QUEUE (queue_name=> 'PYTHON_TEQ_ADT', enqueue =>TRUE, dequeue=> True); 
     COMMIT;
-        DBMS_AQADM.add_subscriber(queue_name => 'PYTHON_TEQ_ADT', subscriber => sys.aq$_agent('Subscriber_ADT', null ,0)); END;"""
+        DBMS_AQADM.add_subscriber(queue_name => 'PYTHON_TEQ_ADT', subscriber => sys.aq$_agent('PYTHON_TEQ_SUBSCIBER_ADT', null ,0)); END;"""
 cursor.execute(adtQuery)
 
 rawQuery = """
@@ -44,7 +44,7 @@ rawQuery = """
             replication_mode   =>null);
         DBMS_AQADM.START_QUEUE (queue_name=>'PYTHON_TEQ_RAW', enqueue =>TRUE, dequeue=> True); 
     COMMIT;
-        DBMS_AQADM.add_subscriber(queue_name => 'PYTHON_TEQ_RAW', subscriber => sys.aq$_agent('Subscriber_RAW', null ,0)); END;"""
+        DBMS_AQADM.add_subscriber(queue_name => 'PYTHON_TEQ_RAW', subscriber => sys.aq$_agent('PYTHON_TEQ_SUBSCIBER_RAW', null ,0)); END;"""
 cursor.execute(rawQuery)
 
 jsonQuery = """
@@ -62,7 +62,7 @@ jsonQuery = """
             replication_mode   =>null);
         DBMS_AQADM.START_QUEUE (queue_name=>'PYTHON_TEQ_JSON', enqueue =>TRUE, dequeue=> True); 
     COMMIT;
-        DBMS_AQADM.add_subscriber(queue_name => 'PYTHON_TEQ_JSON', subscriber => sys.aq$_agent('Subscriber_JSON', null ,0)); END;"""
+        DBMS_AQADM.add_subscriber(queue_name => 'PYTHON_TEQ_JSON', subscriber => sys.aq$_agent('PYTHON_TEQ_SUBSCIBER_JSON', null ,0)); END;"""
 cursor.execute(jsonQuery)
 
 jmsQuery = """
@@ -80,7 +80,7 @@ jmsQuery = """
             replication_mode   =>null);
         DBMS_AQADM.START_QUEUE (queue_name=>'PYTHON_TEQ_JMS', enqueue =>TRUE, dequeue=> True); 
     COMMIT;
-        DBMS_AQADM.add_subscriber(queue_name => 'PYTHON_TEQ_JMS', subscriber => sys.aq$_agent('Subscriber_JMS', null ,0)); END;"""
+        DBMS_AQADM.add_subscriber(queue_name => 'PYTHON_TEQ_JMS', subscriber => sys.aq$_agent('PYTHON_TEQ_SUBSCIBER_JMS', null ,0)); END;"""
 cursor.execute(jmsQuery)
 
 query= "select name, queue_table, dequeue_enabled,enqueue_enabled, sharded, queue_category, recipients from all_queues where OWNER='JAVAUSER' and QUEUE_TYPE<>'EXCEPTION_QUEUE'";
