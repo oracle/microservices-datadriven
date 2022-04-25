@@ -12,7 +12,7 @@ async function run() {
 
     createQueue(connection,"NODE_AQ_ADT_TABLE", "NODE_AQ_ADT" , "NODE_AQ_MESSAGE_TYPE");
     createQueue(connection,"NODE_AQ_RAW_TABLE", "NODE_AQ_RAW" , "RAW");
-    createQueue(connection,"NODE_AQ_JMS_TABLE", "NODE_AQ_JMS" , "JMS");
+    createQueue(connection,"NODE_AQ_JMS_TABLE", "NODE_AQ_JMS" , "SYS.AQ$_JMS_TEXT_MESSAGE");
 
     const result = await connection.execute("select name, queue_table, dequeue_enabled,enqueue_enabled, sharded, queue_category, recipients from all_queues where OWNER='JAVAUSER' ");
     console.dir(result.rows);

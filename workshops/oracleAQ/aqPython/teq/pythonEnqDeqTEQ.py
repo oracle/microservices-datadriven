@@ -11,7 +11,7 @@ connection = cx_Oracle.connect(dsn=env.get('DB_ALIAS'))
 cursor = connection.cursor()
 
 #ADT payload
-book_type = connection.gettype("Python_TEQ_MESSAGE_TYPE")
+book_type = connection.gettype("PYTHON_TEQ_MESSAGE_TYPE")
 adtQueue = connection.queue("PYTHON_TEQ_ADT", book_type)
 
 book = book_type.newobject()

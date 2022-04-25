@@ -10,13 +10,14 @@ async function run() {
     /*ADT PAYLOAD*/
     console.log("1)Enqueue one message with ADT payload ");
     const adtQueue = await connection.getQueue("NODE_TEQ_ADT", {payloadType: "NODE_TEQ_MESSAGE_TYPE"});
-    const message = new queue.payloadTypeClass(
+    const message = new adtQueue.payloadTypeClass(
         {
           NAME: "scott",
           ADDRESS: "The Kennel"
         }
     );
-    await adtQueue.enqOne(message);
+    await adtQueue.enqOne(props={payload: message});
+    /*await adtQueue.enqOne(message);*/
     await connection.commit();
     console.log("Enqueue Done!!!");
     const adtResult = await connection.execute("Select QUEUE, USER_DATA from AQ$NODE_TEQ_ADT");

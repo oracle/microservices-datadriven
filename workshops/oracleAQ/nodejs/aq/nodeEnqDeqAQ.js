@@ -11,17 +11,18 @@ async function run() {
     /*ADT PAYLOAD*/
     console.log("1)Enqueue one message with ADT payload ");
     const adtQueue = await connection.getQueue("NODE_AQ_ADT", {payloadType: "NODE_AQ_MESSAGE_TYPE"});
-    const message = new queue.payloadTypeClass(
+    const message = new adtQueue.payloadTypeClass(
         {
           NAME: "scott",
           ADDRESS: "The Kennel"
         }
     );
-    await adtQueue.enqOne(message);
+    await adtQueue.enqOne(props={payload: message});
+   /* await adtQueue.enqOne(message);*/
     await connection.commit();
     console.log("Enqueue Done!!!")
-    const result = await connection.execute("Select QUEUE, USER_DATA from AQ$NODE_AQTABLE_ADT");
-    console.dir(result.rows);
+    const adtResult = await connection.execute("Select QUEUE, USER_DATA from AQ$NODE_AQTABLE_ADT");
+    console.dir(adtResult.rows);
     
     const adtMsg = await adtQueue.deqOne();
     await connection.commit();
@@ -35,8 +36,8 @@ async function run() {
     await queue.enqOne("This is my RAW message");
     await connection.commit();
     console.log("Enqueue Done!!!")
-    const result = await connection.execute("Select QUEUE, USER_DATA from AQ$NODE_AQTABLE_RAW");
-    console.dir(result.rows);
+    const rawResult = await connection.execute("Select QUEUE, USER_DATA from AQ$NODE_AQTABLE_RAW");
+    console.dir(rawResult.rows);
 
     const rawMsg = await queue.deqOne();
     await connection.commit();
@@ -44,15 +45,15 @@ async function run() {
     console.log("Dequeue Done!!!") 
     console.log("-----------------------------------------------------------------")
 
-    // /*JMS PAYLOAD*/
-    // const queue = await connection.getQueue("NODE_AQ_JMS");
-    // await queue.enqOne("This is my JMS message");
-    // await connection.commit();
-    // const result = await connection.execute("Select QUEUE, USER_DATA from AQ$NODE_AQTABLE_JMS");
-    // console.dir(result.rows);
+    /*JMS PAYLOAD*/
+    /*const queue = await connection.getQueue("NODE_AQ_JMS");
+    await queue.enqOne("This is my JMS message");
+    await connection.commit();
+    const Result = await connection.execute("Select QUEUE, USER_DATA from AQ$NODE_AQTABLE_JMS");
+    console.dir(Result.rows);
 
-    // const msg = await queue.deqOne();
-    // await connection.commit();
+    const msg = await queue.deqOne();
+    await connection.commit();*/
     
   } catch (err) {
     console.error(err);

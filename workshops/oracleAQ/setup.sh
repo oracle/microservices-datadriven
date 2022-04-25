@@ -191,6 +191,9 @@ sqlplus /@"${DB_ALIAS}" <<!
 Show user;
 !
 
+#Node.js setup
+npm install oracledb debug
+
 echo "ORACLEAQ_HOME     : "$ORACLEAQ_HOME;
 echo "COMPARTMENT NAME  : "${COMPARTMENT}
 echo "COMPARTMENT OCID  : "${COMPARTMENT_OCID}

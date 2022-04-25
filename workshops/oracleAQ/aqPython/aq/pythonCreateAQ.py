@@ -15,7 +15,7 @@ cursor.execute("CREATE OR REPLACE TYPE PYTHON_AQ_MESSAGE_TYPE AS OBJECT (Title  
 
 adtQuery="""
    BEGIN
-      DBMS_AQADM.CREATE_QUEUE_TABLE ( queue_table    => 'PYTHON_AQ_ADT_Table',     queue_payload_type  => 'ADT_BOOK');   
+      DBMS_AQADM.CREATE_QUEUE_TABLE ( queue_table    => 'PYTHON_AQ_ADT_Table',     queue_payload_type  => 'PYTHON_AQ_MESSAGE_TYPE');   
       DBMS_AQADM.CREATE_QUEUE       ( queue_name     => 'PYTHON_AQ_ADT',          queue_table         => 'PYTHON_AQ_ADT_Table');  
       DBMS_AQADM.START_QUEUE        ( queue_name     => 'PYTHON_AQ_ADT'); 
    END;"""
