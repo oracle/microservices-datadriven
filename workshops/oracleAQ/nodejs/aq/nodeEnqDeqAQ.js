@@ -20,8 +20,8 @@ async function run() {
     await adtQueue.enqOne(props={payload: message});
    /* await adtQueue.enqOne(message);*/
     await connection.commit();
-    console.log("Enqueue Done!!!")
-    const adtResult = await connection.execute("Select QUEUE, USER_DATA from AQ$NODE_AQTABLE_ADT");
+    console.log("Enqueue Done!!!")AQ$NODE_AQ_ADT_TABLE
+    const adtResult = await connection.execute("Select QUEUE, USER_DATA from AQ$NODE_AQ_ADT_TABLE");
     console.dir(adtResult.rows);
     
     const adtMsg = await adtQueue.deqOne();
@@ -36,7 +36,7 @@ async function run() {
     await queue.enqOne("This is my RAW message");
     await connection.commit();
     console.log("Enqueue Done!!!")
-    const rawResult = await connection.execute("Select QUEUE, USER_DATA from AQ$NODE_AQTABLE_RAW");
+    const rawResult = await connection.execute("Select QUEUE, USER_DATA from AQ$NODE_AQ_RAW_TABLE");
     console.dir(rawResult.rows);
 
     const rawMsg = await queue.deqOne();
@@ -49,7 +49,7 @@ async function run() {
     /*const queue = await connection.getQueue("NODE_AQ_JMS");
     await queue.enqOne("This is my JMS message");
     await connection.commit();
-    const Result = await connection.execute("Select QUEUE, USER_DATA from AQ$NODE_AQTABLE_JMS");
+    const Result = await connection.execute("Select QUEUE, USER_DATA from AQ$NODE_AQ_JMS_TABLE");
     console.dir(Result.rows);
 
     const msg = await queue.deqOne();
