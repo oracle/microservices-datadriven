@@ -9,10 +9,11 @@ export JAVA_DB_USER="javaUser";
 
 #set all language paths
 export ORACLEAQ_HOME=${HOME}/${COMPARTMENT};
-export ORACLEAQ_PLSQL_AQ=${ORACLEAQ_HOME}/aqPlsql/AQ;
-export ORACLEAQ_PLSQL_TEQ=${ORACLEAQ_HOME}/aqPlsql/TEQ;
-export ORACLEAQ_PYTHON_AQ=${ORACLEAQ_HOME}/aqPython/AQ;
-export ORACLEAQ_PYTHON_TEQ=${ORACLEAQ_HOME}/aqPython/TEQ;
+
+export ORACLEAQ_PLSQL_AQ=${ORACLEAQ_HOME}/aqPlsql/aq;
+export ORACLEAQ_PLSQL_TEQ=${ORACLEAQ_HOME}/aqPlsql/teq;
+export ORACLEAQ_PYTHON_AQ=${ORACLEAQ_HOME}/aqPython/aq;
+export ORACLEAQ_PYTHON_TEQ=${ORACLEAQ_HOME}/aqPython/teq;
 export ORACLEAQ_JAVA=${ORACLEAQ_HOME}/aqJava;
 
 export TNS_ADMIN=$ORACLEAQ_HOME/wallet
@@ -26,7 +27,7 @@ ROOT_COMPARTMENT_OCID=$(oci iam compartment list --all --compartment-id-in-subtr
 
 #Create compartment
 oci iam compartment create --name ${COMPARTMENT} -c ${ROOT_COMPARTMENT_OCID} --description "Oracle Advanced Queue workflow" --wait-for-state ACTIVE
-COMPARTMENT_OCID=$(oci iam compartment list --all | jq -r ".data[] | select(.name == \"${COMPARTMENT}\") | .id")
+export COMPARTMENT_OCID=$(oci iam compartment list --all | jq -r ".data[] | select(.name == \"${COMPARTMENT}\") | .id")
     
 create_db() { 
     #Get the database password
@@ -59,7 +60,7 @@ create_db() {
     rm temp_params;
 }
 
-DB_ID=$(oci db autonomous-database list -c ${COMPARTMENT_OCID} --query "data[?\"db-name\"=='aqdatabase'].id | [0]" --raw-output)
+export DB_ID=$(oci db autonomous-database list -c ${COMPARTMENT_OCID} --query "data[?\"db-name\"=='aqdatabase'].id | [0]" --raw-output)
 if [[ -z "${DB_ID}" ]]; then
     create_db;
 else
