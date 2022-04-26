@@ -20,7 +20,7 @@ async function run() {
     /*await adtQueue.enqOne(message);*/
     await connection.commit();
     console.log("Enqueue Done!!!");
-    const adtResult = await connection.execute("Select QUEUE, USER_DATA from AQ$NODE_TEQ_ADT");
+    const adtResult = await connection.execute("Select QUEUE, USER_DATA from AQ$NODE_TEQ_ADT_TABLE");
     console.dir(adtResult.rows);
 
     adtQueue.deqOptions.consumerName="SUBSCRIBER_NODE_TEQ_ADT";
@@ -38,7 +38,7 @@ async function run() {
     await rawQueue.enqOne("This is my RAW message");
     await connection.commit();
     console.log("Enqueue Done!!!");
-    const rawResult = await connection.execute("Select QUEUE, USER_DATA from AQ$NODE_TEQ_RAW");
+    const rawResult = await connection.execute("Select QUEUE, USER_DATA from AQ$NODE_TEQ_RAW_TABLE");
     console.dir(rawResult.rows);
 
     rawQueue.deqOptions.consumerName="SUBSCRIBER_NODE_TEQ_RAW";
