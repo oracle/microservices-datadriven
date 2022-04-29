@@ -18,4 +18,4 @@ RUN  chmod 777 /home/appuser/wallet/*
 
 EXPOSE 8081
 
-ENTRYPOINT java -jar /${ENV_IMAGE_NAME}-${ENV_IMAGE_VERSION}.jar
+ENTRYPOINT java -jar ${ENV_IMAGE_NAME}-${ENV_IMAGE_VERSION}.jar
