@@ -7,4 +7,4 @@
 set -eu
 
 echo "Installing ORDS"
-#yum -y install ords
+yum -y install ords-21*
