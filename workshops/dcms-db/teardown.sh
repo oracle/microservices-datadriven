@@ -45,9 +45,9 @@ case "$DCMS_STATUS" in
     echo "The full log file ( $DCMS_LOG_DIR/config.log ) can be viewed in a separate Cloud Console window."
 
     echo
-    read "Okay to continue?  Enter yes/no: " _is_ok
+    read -r -p "Okay to continue?  Enter yes/no: " _is_ok
     echo
-    if ! test ${_is_ok} == 'yes'; then
+    if ! test "${_is_ok}" == 'yes'; then
       echo "Teardown aborted"
       exit
     fi
