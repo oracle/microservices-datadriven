@@ -4,6 +4,6 @@ COPY src /tmp/src/
 WORKDIR /tmp/
 FROM openjdk
 EXPOSE 8080
-ARG JAR_FILE=target/*.jar
+ARG JAR_FILE=target/oracle-db-appdev-monitoring-0.1.0-spring-boot.jar
 COPY ${JAR_FILE} app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]

@@ -25,3 +25,17 @@ metricsdesc = { value = "Total number of propagation schedules disabled by queue
 request = "select count(*) as value from DBA_QUEUE_SCHEDULES where qname = 'ORDERQUEUE' and SCHEDULE_DISABLED = 'Y'"
 ignorezeroresult = true
 
+[[metric]]
+context = "orderpdb_propagation_disabled_status"
+labels = ["QNAME"]
+metricsdesc = { value = "Total number of propagation schedules disabled by queue name"}
+request = "select count(*) as value from DBA_QUEUE_SCHEDULES where qname = 'ORDERQUEUE' and SCHEDULE_DISABLED = 'Y'"
+ignorezeroresult = true
+
+[[metric]]
+context = "orderqueue_messages_by_state_from_view"
+labels = ["MSG_STATE"]
+metricsdesc = { value = "Total number of messages in order queue by MSG_STATE"}
+request = "select MSG_STATE, count(*) as value from AQ$orderqueuetable group by MSG_STATE"
+ignorezeroresult = true
+
