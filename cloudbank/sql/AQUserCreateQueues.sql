@@ -16,14 +16,6 @@ BEGIN
       queue_name          => 'BANKAQUEUE',
       queue_table         => 'BANKAQUEUETABLE');
 
-
-BEGIN
-   DBMS_AQADM.ALTER_QUEUE(
-      queue_name        => 'BANKAQUEUE',
-      retention_time    => 3600);
-END;
-/
-
    DBMS_AQADM.CREATE_QUEUE (
       queue_name          => 'BANKBQUEUE',
       queue_table         => 'BANKBQUEUETABLE');
@@ -34,9 +26,13 @@ END;
    DBMS_AQADM.START_QUEUE (
       queue_name          => 'BANKBQUEUE');
 
+--       2hr retention - todo, remove or set as appropriate/common
+   DBMS_AQADM.ALTER_QUEUE(
+      queue_name        => 'BANKAQUEUE',
+      retention_time    => 3600);
+
 END;
 /
-
 
 BEGIN
    DBMS_AQADM.grant_queue_privilege (

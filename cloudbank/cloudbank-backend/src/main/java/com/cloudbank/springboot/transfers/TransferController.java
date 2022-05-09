@@ -1,38 +1,27 @@
 package com.cloudbank.springboot.transfers;
 
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.SQLException;
-import oracle.jdbc.internal.OraclePreparedStatement;
 import oracle.jms.*;
 
 import javax.jms.*;
-import java.lang.IllegalStateException;
-import java.sql.*;
-import java.sql.Connection;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TransferController {
 
 
     static PoolDataSource atpInventoryPDB ;
-    static String inventoryuser = "INVENTORYUSER";
-    static String inventorypw;
-    static final String orderQueueName =   System.getenv("orderqueuename");
-    static final String inventoryQueueName =  System.getenv("inventoryqueuename");
-    static final String queueOwner =   System.getenv("queueowner");
-    static final String inventoryUser =  System.getenv("oracle.ucp.jdbc.PoolDataSource.inventorypdb.user");
-    static final String inventoryPW =  System.getenv("dbpassword");
-    static final String inventoryURL =  System.getenv("oracle.ucp.jdbc.PoolDataSource.inventorypdb.URL");
+    static final String bankaqueueschema =  "aquser";
+    static final String bankaqueuename =  "BANKAQUEUE";
+    static final String bankasubscribername =  "bankb_service";
+    static final String bankauser =   System.getenv("bankauser");
+    static final String bankapw =  System.getenv("bankapw");
+    static final String bankaurl =   System.getenv("bankaurl");
 
     static {
         System.setProperty("oracle.jdbc.fanEnabled", "false");
@@ -68,10 +57,10 @@ public class TransferController {
             System.out.println("bank connection:" + connection);
         }
         TopicConnectionFactory t_cf = AQjmsFactory.getTopicConnectionFactory(atpInventoryPDB);
-        TopicConnection tconn = t_cf.createTopicConnection("bankauser", "Welcome12345");
+        TopicConnection tconn = t_cf.createTopicConnection(bankauser, bankapw);
         TopicSession tsess = tconn.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
         tconn.start();
-        Topic orderEvents = ((AQjmsSession) tsess).getTopic("AQUSER", "BANKAQUEUE");
+        Topic orderEvents = ((AQjmsSession) tsess).getTopic(bankaqueueschema, bankaqueuename);
         TopicPublisher publisher = tsess.createPublisher(orderEvents);
         TextMessage inventoryMessage = tsess.createTextMessage();
         inventoryMessage.setText("somemessagetext");
@@ -85,11 +74,11 @@ tsess.commit();
             System.out.println("bank connection:" + connection);
         }
         TopicConnectionFactory t_cf = AQjmsFactory.getTopicConnectionFactory(atpInventoryPDB);
-        TopicConnection tconn = t_cf.createTopicConnection("bankbuser", "Welcome12345");
+        TopicConnection tconn = t_cf.createTopicConnection(bankauser, bankapw);
         TopicSession tsess = tconn.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
         tconn.start();
-        Topic orderEvents = ((AQjmsSession) tsess).getTopic("AQUSER", "BANKAQUEUE");
-        TopicReceiver receiver = ((AQjmsSession) tsess).createTopicReceiver(orderEvents, "bankb_service", null);
+        Topic orderEvents = ((AQjmsSession) tsess).getTopic(bankaqueueschema, bankaqueuename);
+        TopicReceiver receiver = ((AQjmsSession) tsess).createTopicReceiver(orderEvents, bankasubscribername, null);
         TextMessage tm = (TextMessage) (receiver.receive(-1));
 tsess.commit();
         System.out.println("________________________________dequeue complete tm:" + tm);
@@ -99,9 +88,10 @@ tsess.commit();
         if(atpInventoryPDB!=null) return atpInventoryPDB;
         atpInventoryPDB = PoolDataSourceFactory.getPoolDataSource();
         atpInventoryPDB.setConnectionFactoryClassName("oracle.jdbc.pool.OracleDataSource");
-        atpInventoryPDB.setURL("jdbc:oracle:thin:@gd49301311_tp?TNS_ADMIN=/Users/pparkins/Downloads/Wallet_gd49301311");
-        atpInventoryPDB.setUser("bankbuser");
-        atpInventoryPDB.setPassword("Welcome12345");
+        atpInventoryPDB.setURL(bankaurl);
+//        atpInventoryPDB.setURL("jdbc:oracle:thin:@gd49301311_tp?TNS_ADMIN=/Users/pparkins/Downloads/Wallet_gd49301311");
+        atpInventoryPDB.setUser(bankauser);
+        atpInventoryPDB.setPassword(bankapw);
         System.out.println("bank atpInventoryPDB:" + atpInventoryPDB);
         return atpInventoryPDB;
     }
