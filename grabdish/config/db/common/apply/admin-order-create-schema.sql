@@ -8,3 +8,7 @@ GRANT connect, resource TO $ORDER_USER;
 GRANT aq_user_role TO $ORDER_USER;
 GRANT EXECUTE ON sys.dbms_aq TO $ORDER_USER;
 GRANT SODA_APP to $ORDER_USER;
+--This is all we want but table hasn't been created yet... GRANT select on AQ.orderqueuetable to $ORDER_USER;
+GRANT SELECT ANY TABLE TO $ORDER_USER;
+GRANT select on gv\$session to $ORDER_USER;
+GRANT select on DBA_QUEUE_SCHEDULES to $ORDER_USER;

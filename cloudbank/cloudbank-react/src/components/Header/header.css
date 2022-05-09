@@ -1,0 +1,39 @@
+.app-header {
+    background: #434343;
+    width: 100%;
+    min-height: 70px;
+    color: #fff;
+    padding-bottom: 9px;
+
+    border-bottom-color: #FFD600;
+    border-bottom-width: 7px;
+    border-bottom-style: solid;
+}
+
+.app-header h3 {
+    margin: 0;
+}
+.app-header .title .app-title {
+    font-family: Roboto, sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    margin-top: 15px;
+}
+.app-header .title .app-description {
+    font-family: Roboto Light, sans-serif;
+    font-weight: 100;
+    font-size: 12px;
+}
+
+.app-header .actions {
+    margin-top: 15px;
+}
+.app-header button.app-button {
+    transition: background-color .25s ease-in;
+    background-color: #434343;
+    border: 1px solid #9a9a9a;
+}
+
+.app-header button.app-button:hover {
+    background-color: #555555;
+}

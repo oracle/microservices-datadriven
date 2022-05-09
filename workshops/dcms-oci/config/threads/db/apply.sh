@@ -64,7 +64,7 @@ if test "$(state_get RUN_TYPE)" == 'LL'; then
     if ! state_done ${db_upper}_PASSWORD_SET; then
       DB_PASSWORD=$(get_secret $(state_get DB_PASSWORD_SECRET))
       umask 177
-      echo '{"adminPassword": "'"$DB_PASSWORD"'"}' > temp_params
+      echo '{"adminPassword": '`echo -n "$DB_PASSWORD" | jq -aRs .`'}' > temp_params
       umask 22
       oci db autonomous-database update --autonomous-database-id "$(state_get ${db_upper}_OCID)" --from-json "file://temp_params" >/dev/null
       rm temp_params
