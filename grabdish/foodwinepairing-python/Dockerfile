@@ -18,7 +18,7 @@ RUN yum install -y tar && \
     python3.6 -m pip install -U pip setuptools
 
 #wine-pairing dependencies
-RUN python3.6 -m pip install -U gensim && \
+RUN python3.6 -m pip install -U gensim==4.1.2 && \
 	python3.6 -m pip install -U scikit-learn && \
 	python3.6 -m pip install -U pandas && \
 	python3.6 -m pip install -U nltk && \
