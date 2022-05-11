@@ -60,7 +60,7 @@ fi
 if ! test -f $MY_STATE/state_password_set; then
   DB_PASSWORD=$(get_secret $DB_PASSWORD_SECRET)
   umask 177
-  echo '{"adminPassword": "'"$DB_PASSWORD"'"}' > temp_params
+  echo '{"adminPassword": '`echo -n "$DB_PASSWORD" | jq -aRs .`'}' > temp_params
   umask 22
   oci db autonomous-database update --autonomous-database-id "$DB_OCID" --from-json "file://temp_params" >/dev/null
   rm temp_params
