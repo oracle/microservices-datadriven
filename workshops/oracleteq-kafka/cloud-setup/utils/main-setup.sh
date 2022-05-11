@@ -159,7 +159,8 @@ while ! state_done NAMESPACE; do
   state_set NAMESPACE "$NAMESPACE"
 done
 
-GRAALVM_VERSION="22.0.0.2"
+# Install GraalVM
+GRAALVM_VERSION="22.1.0"
 if ! state_get GRAALVM_INSTALLED; then
   if ps -ef | grep "$LAB_HOME/cloud-setup/java/graalvm-install.sh" | grep -v grep; then
     echo "$LAB_HOME/cloud-setup/java/graalvm-install.sh is already running"
@@ -169,6 +170,7 @@ if ! state_get GRAALVM_INSTALLED; then
   fi
 fi
 
+# Install Local version of OKAFKA Library
 if ! state_get OKAFKA_INSTALLED; then
   if ps -ef | grep "$LAB_HOME/cloud-setup/okafka/okafka-maven-install.sh" | grep -v grep; then
     echo "$LAB_HOME/cloud-setup/okafka/okafka-maven-install.sh is already running"

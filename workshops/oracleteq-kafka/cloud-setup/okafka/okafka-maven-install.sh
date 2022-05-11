@@ -11,18 +11,15 @@ while ! state_done GRAALVM_INSTALLED; do
   sleep 5
 done
 
-# Check JAVA_HOME
-pattern='*graalvm-ce-java11-22.0.0.2'
-
-if [[ -z "${JAVA_HOME}" ]] ||  [[ "${JAVA_HOME}" != $pattern ]]
-then
-    JAVA_HOME="$HOME"/graalvm-ce-java11-22.0.0.2
-    if [ ! -e "$JAVA_HOME" ]
-    then
-      echo "ERROR: This script requires JAVA_HOME to be set to GraalVM"
-      exit
-    fi
-    export JAVA_HOME=$JAVA_HOME
+# Java Home
+GRAALVM_VERSION=${1:-"22.1.0"}
+OS_NAME=$(uname)
+if ! [[ $OS_NAME == *"darwin"* ]]; then
+  # Assume linux
+  export JAVA_HOME=~/graalvm-ce-java11-${GRAALVM_VERSION}
+else
+  # We are on Mac doing local dev
+  export JAVA_HOME=~/graalvm-ce-java11-${GRAALVM_VERSION}/Contents/Home;
 fi
 
 # PATH to OKafka Library
