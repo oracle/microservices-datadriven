@@ -28,7 +28,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.oracle.okafka</groupId>
+            <groupId>com.oracle.database.messaging</groupId>
             <artifactId>okafka</artifactId>
         </dependency>
         <dependency>

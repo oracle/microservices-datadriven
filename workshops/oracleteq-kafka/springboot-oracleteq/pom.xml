@@ -55,16 +55,10 @@
         <okafka.version>0.8</okafka.version>
     </properties>
 
-    <!--
-        Upgrade from Spring Boot 2.6.1 to 2.6.2
-        Log4J2 Vulnerability and Spring Boot
-        Ref: https://spring.io/blog/2021/12/10/log4j2-vulnerability-and-spring-boot
-    -->
-
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.oracle.okafka</groupId>
+                <groupId>com.oracle.database.messaging</groupId>
                 <artifactId>okafka</artifactId>
                 <version>${okafka.version}</version>
             </dependency>
