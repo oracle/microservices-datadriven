@@ -37,7 +37,7 @@ kafka-server-config:
   #schema-registry-url:
 
 kafka-topic-config:
-  topic-name: LAB8022_TOPIC
+  topic-name: TEQLABTOPIC
   num-of-partitions: 3
   replication-factor: 1
 

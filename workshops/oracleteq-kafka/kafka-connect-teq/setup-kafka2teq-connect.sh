@@ -53,7 +53,7 @@ sed -i 's/LAB_DB_PASSWORD/'"${ORACLE_DB_PASSWORD}"'/g' "$CONF_FILE"
 # Configure the Kafka Connect Sync with Oracle Database
 curl -S -s -o /dev/null \
      -i -X PUT -H "Accept:application/json" \
-     -H "Content-Type:application/json" http://localhost:8083/connectors/JmsConnectSync_lab8022/config \
+     -H "Content-Type:application/json" http://localhost:8083/connectors/JmsConnectSync_teqlab/config \
      -T "$CONF_FILE"
 
 # Reset the Oracle DB User Password
