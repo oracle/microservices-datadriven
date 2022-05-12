@@ -1,7 +1,7 @@
-
+-- Copyright (c) 2022 Oracle and/or its affiliates.
+-- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 -- connect admin/"$DB1_ADMIN_PASSWORD"@$DB1_ALIAS
--- connect admin/Welcome12345@
 
 WHENEVER SQLERROR CONTINUE
 DROP USER AQUSER CASCADE;
