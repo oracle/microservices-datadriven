@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: %BANK_NAME%-springboot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: %BANK_NAME%
+  template:
+    metadata:
+      labels:
+        app: %BANK_NAME%
+        version: springboot
+    spec:
+      containers:
+      - name: bank
+        image: %DOCKER_REGISTRY%/bank-springboot:0.1
+        imagePullPolicy: Always
+        env:
+        - name: localbankqueueschema
+          value: "%localbankqueueschema%"
+        - name: localbankqueuename
+          value: "%localbankqueuename%"
+        - name: remotebankqueueschema
+          value: "%remotebankqueueschema%"
+        - name: remotebankqueuename
+          value: "%remotebankqueuename%"
+        - name: banksubscribername
+          value: "%banksubscribername%"
+        - name: bankdbuser
+          value: "%USER%"
+        - name: bankdburl
+          value: "jdbc:oracle:thin:@%PDB_NAME%_tp?TNS_ADMIN=/msdataworkshop/creds"
+        - name: bankdbpw
+          valueFrom:
+            secretKeyRef:
+              name: dbuser
+              key: dbpassword
+              optional: true
+        volumeMounts:
+        - name: creds
+          mountPath: /msdataworkshop/creds
+        ports:
+        - containerPort: 8080
+      restartPolicy: Always
+      volumes:
+      - name: creds
+        secret:
+          secretName: %db-wallet-secret%
+      

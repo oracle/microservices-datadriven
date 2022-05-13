@@ -1,4 +1,5 @@
-FROM oraclelinux:7-slim
+# FROM oraclelinux:7-slim
+FROM container-registry.oracle.com/os/oraclelinux:7-slim
 
 ARG release=19
 ARG update=9
