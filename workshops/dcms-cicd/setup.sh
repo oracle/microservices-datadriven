@@ -107,23 +107,23 @@ done
 # Select Jenkins Deployment
 echo 'Jenkins Deployment Options'
 PS3='Please select Jenkins deployment type: '
-options=("Distributed Builds with Jenkins on Private VM" "Micro-Deployed Jenkins on Public VM" "Micro-deployed Jenkins on Private VM" "Oracle DevOps" "Cancel")
+options=("Micro-Deployed Jenkins on Public VM" "Micro-deployed Jenkins on Private VM" "Distributed Builds with Jenkins on Private VM" "Oracle DevOps" "Cancel")
 select opt in "${options[@]}"
 do
     case $opt in
+        "Micro-Deployed Jenkins on Public VM")
+                CONFIGURATION='MDPUBJ'
+                echo "You have selected Micro-Deployed Jenkins on Public VM"
+                break
+                ;;
+        "Micro-deployed Jenkins on Private VM")
+                    CONFIGURATION='MDPRVJ'
+                    echo "You have selected Micro-Deployed Jenkins on Private VM"
+                    break
+                    ;;
         "Distributed Builds with Jenkins on Private VM")
             CONFIGURATION='DBPRVJ'
             echo "You have selected Distributed Builds with Jenkins on Private VM"
-            break
-            ;;
-        "Micro-Deployed Jenkins on Public VM")
-            CONFIGURATION='MDPUBJ'
-            echo "You have selected Micro-Deployed Jenkins on Public VM"
-            break
-            ;;
-        "Micro-deployed Jenkins on Private VM")
-            CONFIGURATION='MDPRVJ'
-            echo "You have selected Micro-Deployed Jenkins on Private VM"
             break
             ;;
         "Oracle DevOps")
