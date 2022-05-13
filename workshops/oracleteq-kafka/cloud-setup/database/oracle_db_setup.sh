@@ -80,16 +80,16 @@ SSL_SERVER_DN_MATCH=yes
 LAB_DB_SVC="$(state_get LAB_DB_NAME)_tp"
 
 # Define Database User
-LAB_DB_USER=TEQLAB_USER
+LAB_DB_USER="$(state_get RUN_NAME)_USER"
 echo "$(date): Oracle DB USER = $LAB_DB_USER"
 
 # Define TEQ Topic
-LAB_TEQ_TOPIC=TEQLABTOPIC
+LAB_TEQ_TOPIC="$(state_get RUN_NAME)TOPIC"
 echo "$(date): Oracle TEQ TOPIC = $LAB_TEQ_TOPIC"
 state_set LAB_TEQ_TOPIC "$LAB_TEQ_TOPIC"
 
 # Define TEQ Agent Subscriber (group-ip)
-LAB_TEQ_TOPIC_SUBSCRIBER=TEQLABTOPIC_SUBSCRIBER
+LAB_TEQ_TOPIC_SUBSCRIBER="$(state_get RUN_NAME)_SUBS"
 echo "$(date): Oracle TEQ TOPIC Subscriber= $LAB_TEQ_TOPIC_SUBSCRIBER"
 state_set LAB_TEQ_TOPIC_SUBSCRIBER "$LAB_TEQ_TOPIC_SUBSCRIBER"
 

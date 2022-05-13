@@ -184,7 +184,7 @@ if ! state_done CONTAINER_ENG_SETUP; then
   echo "$(date): Installing GraalVM CE Java 11 Image"
   docker pull ghcr.io/graalvm/graalvm-ce:ol8-java11 --quiet
   echo "$(date): Create Containers Network"
-  docker network create teqlabnetwork
+  docker network create "$(state_get RUN_NAME)_NET"
   state_set_done CONTAINER_ENG_SETUP
   echo
 fi
