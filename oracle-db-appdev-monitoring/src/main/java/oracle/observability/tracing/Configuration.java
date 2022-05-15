@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package oracle.observability;
+package oracle.observability.tracing;
 
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.trace.propagation.W3CTraceContextPropagator;
@@ -17,7 +17,7 @@ import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
  * All SDK management takes place here, away from the instrumentation code, which should only access
  * the OpenTelemetry APIs.
  */
-class ExampleConfiguration {
+class Configuration {
 
   /**
    * Initializes the OpenTelemetry SDK with a logging span exporter and the W3C Trace Context

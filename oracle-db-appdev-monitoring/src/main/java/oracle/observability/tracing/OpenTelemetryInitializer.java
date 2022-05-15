@@ -1,4 +1,4 @@
-package oracle.observability;
+package oracle.observability.tracing;
 
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.common.Attributes;

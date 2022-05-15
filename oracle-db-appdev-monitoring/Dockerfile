@@ -1,9 +1,7 @@
-FROM maven:3.6.3-openjdk-11 AS maven_build
-COPY pom.xml /tmp/
-COPY src /tmp/src/
-WORKDIR /tmp/
-FROM openjdk
-EXPOSE 8080
-ARG JAR_FILE=target/oracle-db-appdev-monitoring-0.1.0-spring-boot.jar
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+FROM openjdk:11-jre-slim
+
+ENTRYPOINT ["java", "-jar", "/usr/share/oracle-db-appdev-monitoring.jar"]
+
+#ARG JAR_FILE
+#ADD target/${JAR_FILE} /usr/share/myservice/myservice.jar
+ADD target/oracle-db-appdev-monitoring-0.1.jar /usr/share/oracle-db-appdev-monitoring.jar

@@ -1,5 +1,6 @@
 package oracle.observability;
 
+import oracle.observability.metrics.OracleDBMetricsExporter;
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 
@@ -33,7 +34,8 @@ public class ObservabilityExporter {
 	public static void main(String[] args) throws Exception {
 //		ConfigurableApplicationContext context = SpringApplication.run(ObservabilityExporter.class, args);
 		System.out.println("ObservabilityExporter.main");
-		new ObservabilityExporter().init();
+//		new ObservabilityExporter().init();
+		new OracleDBMetricsExporter().init();
 	}
 
 	public void init() throws Exception {
