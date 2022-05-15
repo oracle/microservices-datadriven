@@ -41,6 +41,7 @@ public class WalkThroughTest extends TestBase {
             if (!lastCallResponse.equals(jsonFromResponse))
                 System.out.print("testWalkThrough jsonFromResponse:" + jsonFromResponse);
             else System.out.print(".");
+            lastCallResponse = jsonFromResponse;
         }
         assertThat(jsonFromResponse, containsString(isNoInventory?"failed inventory does not exist":"beer"));
         assertInventoryCount(0);
