@@ -1,12 +1,15 @@
-Tests can be run with either `./test.sh` or `./testIncludingPolyglot.sh`
-The only assumption is that the core microservices have been deployed (eg by running grabdish/deploy.sh)
+All tests can be run using ./testAll.sh which in turn calls the following...
 
-Does not require any environment variables or state_get, etc. type scripts 
-and is secure as I use java k8s client from within the tests to get the frontend ingress/LB and password.  
+./build.sh
+./undeployAll.sh
+./deployCoreServices.sh
+./testHelidonAndTransactional.sh
+./testPolyglot.sh
 
-Therefore, it can be run as-is in any environment against any k8s cluster 
+The only preq is the completion of setup (ie lab 1).
+
+Test setup does not require any environment variables or state_get, etc. type scripts (*todo: aside from perhaps PL/SQL polyglot test which requires sqlplus etc.)
+and is secure as the java k8s client is used from within the tests to get the frontend ingress/LB and password.  
+
+Therefore, it can be run as-is in any environment against any k8s cluster that was used for setup (OKE other otherwise/vendor)
 simply by running microservices-datadriven/tests/test.sh or testIncludingPolyglot.sh. 
-
-The only assumption being that the core microservices (frontend, order, inventory, and supplier) are deployed (eg by running grabdish/deploy.sh as usual).
-
- 
