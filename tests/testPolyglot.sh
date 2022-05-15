@@ -34,10 +34,10 @@ echo TESTING inventory-nodejs
 mvn surefire:test -Dtest=oracle.modernappdev.WalkThroughTest
 $GRABDISH_HOME/inventory-nodejs/undeploy.sh
 
-$GRABDISH_HOME/inventory-quarkus/deploy.sh
-echo TESTING inventory-quarkus
-mvn surefire:test -Dtest=oracle.modernappdev.WalkThroughTest
-$GRABDISH_HOME/inventory-quarkus/undeploy.sh
+#$GRABDISH_HOME/inventory-quarkus/deploy.sh
+#echo TESTING inventory-quarkus
+#mvn surefire:test -Dtest=oracle.modernappdev.WalkThroughTest
+#$GRABDISH_HOME/inventory-quarkus/undeploy.sh
 
 $GRABDISH_HOME/inventory-springboot/deploy.sh
 echo TESTING inventory-springboot
