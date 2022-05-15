@@ -2,9 +2,6 @@
 # Copyright (c) 2021 Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
-$GRABDISH_HOME/order-helidon/deploy.sh
-$GRABDISH_HOME/inventory-helidon/deploy.sh
-$GRABDISH_HOME/supplier-helidon-se/deploy.sh
 echo TESTING inventory-helidon
 mvn surefire:test -Dtest=oracle.modernappdev.WalkThroughTest
 $GRABDISH_HOME/inventory-helidon/undeploy.sh
@@ -29,15 +26,15 @@ echo TESTING inventory-micronaut
 mvn surefire:test -Dtest=oracle.modernappdev.WalkThroughTest
 $GRABDISH_HOME/inventory-micronaut/undeploy.sh
 
-#$GRABDISH_HOME/inventory-nodejs/deploy.sh
-#echo TESTING inventory-nodejs
-#mvn surefire:test -Dtest=oracle.modernappdev.WalkThroughTest
-#$GRABDISH_HOME/inventory-nodejs/undeploy.sh
-
-$GRABDISH_HOME/inventory-quarkus/deploy.sh
-echo TESTING inventory-quarkus
+$GRABDISH_HOME/inventory-plsql/deploy.sh
+echo TESTING inventory-plsql
 mvn surefire:test -Dtest=oracle.modernappdev.WalkThroughTest
-$GRABDISH_HOME/inventory-quarkus/undeploy.sh
+$GRABDISH_HOME/inventory-plsql/undeploy.sh
+
+$GRABDISH_HOME/inventory-nodejs/deploy.sh
+echo TESTING inventory-nodejs
+mvn surefire:test -Dtest=oracle.modernappdev.WalkThroughTest
+$GRABDISH_HOME/inventory-nodejs/undeploy.sh
 
 $GRABDISH_HOME/inventory-springboot/deploy.sh
 echo TESTING inventory-springboot
@@ -49,10 +46,10 @@ echo TESTING inventory-python
 mvn surefire:test -Dtest=oracle.modernappdev.WalkThroughTest
 $GRABDISH_HOME/inventory-python/undeploy.sh
 
-$GRABDISH_HOME/inventory-plsql/deploy.sh
-echo TESTING inventory-plsql
+$GRABDISH_HOME/inventory-quarkus/deploy.sh
+echo TESTING inventory-quarkus
 mvn surefire:test -Dtest=oracle.modernappdev.WalkThroughTest
-$GRABDISH_HOME/inventory-plsql/undeploy.sh
+$GRABDISH_HOME/inventory-quarkus/undeploy.sh
 
 echo TESTING complete, redeploying inventory-helidon
 $GRABDISH_HOME/inventory-helidon/deploy.sh

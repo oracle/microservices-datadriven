@@ -2,7 +2,7 @@ All tests can be run using ./testAll.sh which in turn calls the following...
 
 ./build.sh
 ./undeployAll.sh
-./deployCoreServices.sh
+./redeployCoreServices.sh
 ./testHelidonAndTransactional.sh
 ./testPolyglot.sh
 
