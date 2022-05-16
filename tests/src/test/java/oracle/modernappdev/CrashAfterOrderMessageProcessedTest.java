@@ -33,11 +33,15 @@ public class CrashAfterOrderMessageProcessedTest  extends TransactionalTests {
         //confirm successful order
         String jsonFromResponse = EntityUtils.toString(httpResponse.getEntity());
         System.out.println("testCrashAfterOrderMessageProcessed jsonFromResponse:" + jsonFromResponse);
+        String lastCallResponse = "";
         while (jsonFromResponse.contains("pending") || jsonFromResponse.contains("ConnectException")) {
             Thread.sleep(1000 * 1);
-            httpResponse =  showorder(getHttpClient());
+            httpResponse =  lastCallResponse.equals("") ? showorder(getHttpClient()):showorderNoDebug(getHttpClient());
             jsonFromResponse = EntityUtils.toString(httpResponse.getEntity());
-            System.out.println("testCrashAfterOrderMessageProcessed jsonFromResponse:" + jsonFromResponse);
+            if (!lastCallResponse.equals(jsonFromResponse))
+                System.out.println("testCrashAfterOrderMessageProcessed jsonFromResponse:" + jsonFromResponse);
+            else System.out.print(".");
+            lastCallResponse = jsonFromResponse;
         }
         assertThat(jsonFromResponse, containsString("beer"));
         assertInventoryCount(0);
