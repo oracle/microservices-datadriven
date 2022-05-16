@@ -46,10 +46,10 @@ echo TESTING inventory-python
 mvn surefire:test -Dtest=oracle.modernappdev.WalkThroughTest
 $GRABDISH_HOME/inventory-python/undeploy.sh
 
-$GRABDISH_HOME/inventory-quarkus/deploy.sh
-echo TESTING inventory-quarkus
-mvn surefire:test -Dtest=oracle.modernappdev.WalkThroughTest
-$GRABDISH_HOME/inventory-quarkus/undeploy.sh
+#$GRABDISH_HOME/inventory-quarkus/deploy.sh
+#echo TESTING inventory-quarkus
+#mvn surefire:test -Dtest=oracle.modernappdev.WalkThroughTest
+#$GRABDISH_HOME/inventory-quarkus/undeploy.sh
 
 echo TESTING complete, redeploying inventory-helidon
 $GRABDISH_HOME/inventory-helidon/deploy.sh
