@@ -29,11 +29,6 @@ echo TESTING inventory-plsql
 mvn surefire:test -Dtest=oracle.modernappdev.WalkThroughTest
 $GRABDISH_HOME/inventory-plsql/undeploy.sh
 
-$GRABDISH_HOME/inventory-nodejs/deploy.sh
-echo TESTING inventory-nodejs
-mvn surefire:test -Dtest=oracle.modernappdev.WalkThroughTest
-$GRABDISH_HOME/inventory-nodejs/undeploy.sh
-
 #$GRABDISH_HOME/inventory-springboot/deploy.sh
 #echo TESTING inventory-springboot
 #mvn surefire:test -Dtest=oracle.modernappdev.WalkThroughTest
@@ -48,6 +43,11 @@ $GRABDISH_HOME/inventory-python/undeploy.sh
 #echo TESTING inventory-quarkus
 #mvn surefire:test -Dtest=oracle.modernappdev.WalkThroughTest
 #$GRABDISH_HOME/inventory-quarkus/undeploy.sh
+
+$GRABDISH_HOME/inventory-nodejs/deploy.sh
+echo TESTING inventory-nodejs
+mvn surefire:test -Dtest=oracle.modernappdev.WalkThroughTest
+$GRABDISH_HOME/inventory-nodejs/undeploy.sh
 
 echo TESTING complete, redeploying inventory-helidon
 $GRABDISH_HOME/inventory-helidon/deploy.sh
