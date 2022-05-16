@@ -5,6 +5,6 @@
 ./build.sh
 ./undeployAll.sh
 ./redeployCoreServices.sh
-./testHelidonAndTransactional.sh
-./redeployCoreServices.sh
 ./testPolyglot.sh
+./redeployCoreServices.sh
+./testHelidonAndTransactional.sh
