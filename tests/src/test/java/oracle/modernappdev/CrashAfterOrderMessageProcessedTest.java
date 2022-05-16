@@ -18,7 +18,7 @@ public class CrashAfterOrderMessageProcessedTest  extends TransactionalTests {
      * Order should be successful.
      * @throws Exception
      */
-    @Test
+//    @Test
     void testCrashAfterOrderMessageProcessed() throws Exception {
         CloseableHttpClient httpClient = getCloseableHttpClientAndDeleteAllOrders();
         setInventoryToOne();
