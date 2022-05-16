@@ -34,7 +34,7 @@ public class WalkThroughTest extends TestBase {
         String jsonFromResponse = EntityUtils.toString(httpResponse.getEntity());
         System.out.println("testWalkThrough jsonFromResponse:" + jsonFromResponse);
         String lastCallResponse = "";
-        while (jsonFromResponse.contains("pending")) {
+        while (jsonFromResponse.contains("pending") || jsonFromResponse.contains("ConnectException")) {
             Thread.sleep(1000 * 1);
             httpResponse =  lastCallResponse.equals("") ? showorder(getHttpClient()):showorderNoDebug(getHttpClient());
             jsonFromResponse = EntityUtils.toString(httpResponse.getEntity());

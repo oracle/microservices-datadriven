@@ -33,7 +33,7 @@ public class CrashAfterOrderMessageProcessedTest  extends TransactionalTests {
         //confirm successful order
         String jsonFromResponse = EntityUtils.toString(httpResponse.getEntity());
         System.out.println("testCrashAfterOrderMessageProcessed jsonFromResponse:" + jsonFromResponse);
-        while (jsonFromResponse.contains("pending")) {
+        while (jsonFromResponse.contains("pending") || jsonFromResponse.contains("ConnectException")) {
             Thread.sleep(1000 * 1);
             httpResponse =  showorder(getHttpClient());
             jsonFromResponse = EntityUtils.toString(httpResponse.getEntity());
