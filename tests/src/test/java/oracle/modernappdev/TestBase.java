@@ -180,6 +180,9 @@ public class TestBase {
     HttpResponse showorder(CloseableHttpClient httpClient) throws IOException {
         return servicecall(httpClient, showorder, order, orderNumber);
     }
+    HttpResponse showorderNoDebug(CloseableHttpClient httpClient) throws IOException {
+        return servicecall(httpClient, showorder, order, orderNumber, false);
+    }
 
     //supplier service calls...
     HttpResponse getInventory(CloseableHttpClient httpClient) throws IOException {
@@ -232,7 +235,10 @@ public class TestBase {
     //Calls that require only commandname and service, no params (orderid and orderitem , where application, use defaults)
     @NotNull
     private HttpResponse servicecall(CloseableHttpClient httpClient, String commandName, String serviceName, int orderId) throws IOException {
-        System.out.println("servicecall serviceName:" + serviceName + " commandName:" + commandName);
+        return servicecall(httpClient, commandName, serviceName, orderId, true);
+    }
+    private HttpResponse servicecall(CloseableHttpClient httpClient, String commandName, String serviceName, int orderId, boolean isShowDebug) throws IOException {
+        if (isShowDebug) System.out.println("servicecall serviceName:" + serviceName + " commandName:" + commandName);
                 HttpPost request = new HttpPost(frontendAddress + command);
         Command command = new Command();
         command.commandName = commandName;
@@ -243,7 +249,7 @@ public class TestBase {
         StringEntity requestEntity = new StringEntity(jsonString, ContentType.APPLICATION_JSON);
         request.setEntity(requestEntity);
         HttpResponse httpResponse = httpClient.execute(request);
-        System.out.println("servicecall serviceName:" + serviceName + " commandName:" + commandName + "  returned");
+        if (isShowDebug) System.out.println("servicecall serviceName:" + serviceName + " commandName:" + commandName + "  returned");
         return httpResponse;
     }
 }

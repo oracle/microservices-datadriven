@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: db-metrics-exporter-%EXPORTER_NAME%
+  name: new-db-metrics-exporter-%EXPORTER_NAME%
 spec:
   replicas: 1
   selector:
@@ -16,7 +16,8 @@ spec:
     spec:
       containers:
         - name: db-metrics-exporter-%EXPORTER_NAME%
-          image: iamseth/oracledb_exporter:latest #todo never a good idea to use "latest"
+#          image: iamseth/oracledb_exporter:latest
+          image: us-ashburn-1.ocir.io/maacloud/gd4930131/oracle-db-appdev-monitoring:0.1
           imagePullPolicy: Always
           env:
             - name: DEFAULT_METRICS
