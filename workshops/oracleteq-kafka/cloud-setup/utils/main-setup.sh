@@ -3,7 +3,7 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Fail on error
-set -e
+set -eu
 
 # Check home is set
 if test -z "$LAB_HOME"; then
@@ -184,7 +184,9 @@ if ! state_done CONTAINER_ENG_SETUP; then
   echo "$(date): Installing GraalVM CE Java 11 Image"
   docker pull ghcr.io/graalvm/graalvm-ce:ol8-java11 --quiet
   echo "$(date): Create Containers Network"
-  docker network create "$(state_get RUN_NAME)_NET"
+  LAB_KAFKA_NETWORK="$(state_get RUN_NAME)_net"
+  docker network create "${LAB_KAFKA_NETWORK}"
+  state_set_done LAB_KAFKA_NETWORK
   state_set_done CONTAINER_ENG_SETUP
   echo
 fi
@@ -303,3 +305,13 @@ done
 # Export state file for local development
 cd "$LAB_HOME"
 source "$LAB_HOME"/cloud-setup/env.sh
+
+# run bash_setup.sh in background
+if ! state_get BASH_SETUP; then
+  if ps -ef | grep "$LAB_HOME/cloud-setup/utils/bash_setup.sh" | grep -v grep; then
+    echo "$LAB_HOME/cloud-setup/utils/bash_setup.sh is already running"
+  else
+    echo "Executing bash_setup.sh in the background"
+    nohup "$LAB_HOME"/cloud-setup/utils/bash_setup.sh &>>"$LAB_LOG"/bash-setup.log &
+  fi
+fi

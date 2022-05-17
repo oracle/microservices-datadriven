@@ -23,11 +23,9 @@ substr="cloud-setup"
 prefix=${str%%$substr*}
 index=${#prefix}
 export LAB_HOME=${str:0:$index-1}
-
-# export LAB_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-# shellcheck disable=SC2164
 cd "$LAB_HOME"
 echo "LAB_HOME: $LAB_HOME"
+
 
 # Java Home
 GRAALVM_VERSION=${1:-"22.1.0"}
