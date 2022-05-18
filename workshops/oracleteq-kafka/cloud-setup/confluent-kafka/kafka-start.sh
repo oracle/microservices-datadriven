@@ -17,3 +17,4 @@ cd "$LAB_HOME"/cloud-setup/confluent-kafka
 # Connect Kafka Broker to Lab network
 docker network connect $(state_get LAB_KAFKA_NETWORK) broker
 
+state_set_done KAFKA_RUNNING

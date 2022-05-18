@@ -37,7 +37,7 @@ kafka-server-config:
   #schema-registry-url:
 
 kafka-topic-config:
-  topic-name: TEQ_LAB_TOPIC
+  topic-name: KAFKA_TOPIC_NAME
   num-of-partitions: 3
   replication-factor: 1
 
