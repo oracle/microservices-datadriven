@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-package oracle.observability;
+package oracle.observability.tracing;
 
 import static io.opentelemetry.api.common.AttributeKey.stringKey;
 
@@ -83,7 +83,7 @@ public final class HttpServer {
   private HttpServer(int port) throws IOException {
     server = com.sun.net.httpserver.HttpServer.create(new InetSocketAddress(port), 0);
     // Test urls
-//    server.createContext("/", new HelloHandler());
+//    server.createContext("/", new TracingHandler());
 //    server.start();
     System.out.println("Server ready on http://127.0.0.1:" + port);
   }
@@ -91,7 +91,7 @@ public final class HttpServer {
   public static final TextMapPropagator TEXT_MAP_PROPAGATOR =
           openTelemetry.getPropagators().getTextMapPropagator();
 
-  private static class HelloHandler implements HttpHandler {
+  private static class TracingHandler implements HttpHandler {
 
     public static final TextMapPropagator TEXT_MAP_PROPAGATOR =
         openTelemetry.getPropagators().getTextMapPropagator();

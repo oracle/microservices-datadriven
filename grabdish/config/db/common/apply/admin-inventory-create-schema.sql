@@ -13,5 +13,5 @@ GRANT EXECUTE ON sys.DBMS_SCHEDULER TO $INVENTORY_USER;
 --This is all we want but table hasn't been created yet... GRANT select on AQ.inventoryqueuetable to $INVENTORY_USER;
 GRANT SELECT ANY TABLE TO $INVENTORY_USER;
 GRANT select on gv\$session to $INVENTORY_USER;
-GRANT select on gv\$diag_alert_ext to $INVENTORY_USER;
+GRANT select on v\$diag_alert_ext to $INVENTORY_USER;
 GRANT select on DBA_QUEUE_SCHEDULES to $INVENTORY_USER;
