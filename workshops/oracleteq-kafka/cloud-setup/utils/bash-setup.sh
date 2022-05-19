@@ -10,7 +10,9 @@ DIRNAME=$(state_get RUN_NAME)
   echo "# LiveLab Setup -- BEGIN"
   echo "export LAB_HOME=${HOME}/${DIRNAME}/microservices-datadriven/workshops/oracleteq-kafka"
   echo "export JAVA_HOME=${HOME}/graalvm-ce-java11-${GRAALVM_VERSION}"
-  echo "export PATH=${LAB_HOME}/cloud-setup/cmd:${JAVA_HOME}/bin/:$PATH"
+  echo "LAB_PATH=${LAB_HOME}/cloud-setup/utils"
+  echo "LAB_PATH=${LAB_HOME}/cloud-setup/cmd:${LAB_PATH}"
+  echo "export PATH=${JAVA_HOME}/bin/:${LAB_PATH}:${PATH}"
   echo "# LiveLab Setup -- END"
 } >> "${HOME}"/.bashrc
 

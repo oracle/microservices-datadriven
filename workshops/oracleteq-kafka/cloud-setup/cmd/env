@@ -53,4 +53,5 @@ mkdir -p "${LAB_LOG}"
 # Source the state functions
 source "${LAB_HOME}"/cloud-setup/utils/state-functions.sh
 
-export PATH=$PATH:${LAB_HOME}/cloud-setup/utils/
+# Configure Bash to LAB Environment
+source "${LAB_HOME}"/cloud-setup/utils/bash-setup.sh
