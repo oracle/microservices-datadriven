@@ -3,7 +3,7 @@
 ## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 # Fail on error
-set -e
+set -eu
 
 # Local Run Only
 #image: ghcr.io/pasimoes/order-in-store-service:1.0
@@ -48,3 +48,18 @@ docker build . -t "$IMAGE" \
 #if [  $? -eq 0 ]; then
 #    docker rmi "${IMAGE}"
 #fi
+
+
+# Print the maven build summary
+
+# Print deployment result
+result=$(grep "writing image" "$LAB_LOG"/kafka-consumer-deployment.log)
+if [[ "$result" =~ *"writing"* ]]; then
+  echo "ERROR: Kafka consumer microservices deployment failed!"
+  exit
+else
+  PRINT_VAR="Kafka consumer microservices deployment succeeded!"
+  PRINT_VAR="$PRINT_VAR\n"$(grep -hr -A3 "writing image" "$LAB_LOG"/kafka-consumer-deployment.log)
+  echo "$PRINT_VAR"
+  state_set_done KAFKA_CONSUMER_MS_DEPLOYED
+fi

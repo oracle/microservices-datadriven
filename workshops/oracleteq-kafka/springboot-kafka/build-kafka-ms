@@ -1,0 +1,49 @@
+#!/bin/bash
+## Copyright (c) 2021 Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+# Fail on error
+set -eu
+
+LAB_LOG="."
+# Build Kafka Microservices (Producer and Consumer)
+mvn clean install -Dmaven.test.skip=true &> "$LAB_LOG"/mvn-build-kafka-ms.log
+
+# Print the maven build summary
+## grep -hnr
+grep -hr -A11 -B1 "Reactor Summary" "$LAB_LOG"/mvn-build-kafka-ms.log
+
+# Test building process result
+result=$(grep "BUILD SUCCESS" "$LAB_LOG"/mvn-build-kafka-ms.log)
+if [[ "$result" =~ *"SUCCESS"* ]]; then
+  echo "ERROR: Build Kafka microservices failed!"
+  exit
+fi
+
+## Deploy Kafka Microservices using Docker
+#  Producer
+if ! state_get KAFKA_PRODUCER_MS_DEPLOYED; then
+  if ps -ef | grep "$LAB_HOME/springboot-kafka/kafka-producer/deploy.sh" | grep -v grep; then
+    echo "$LAB_HOME/springboot-kafka/kafka-producer/deploy.sh is already running"
+  else
+    echo "Executing producer deploy.sh in the background"
+    cd "$LAB_HOME"/springboot-kafka/kafka-producer
+    nohup ./deploy.sh &>> "$LAB_LOG"/kafka-producer-deployment.log &
+  fi
+fi
+
+
+## Consumer
+#cd "$LAB_HOME"/springboot-kafka/kafka-consumer
+if ! state_get KAFKA_CONSUMER_MS_DEPLOYED; then
+  if ps -ef | grep "$LAB_HOME/springboot-kafka/kafka-consumer/deploy.sh" | grep -v grep; then
+    echo "$LAB_HOME/springboot-kafka/kafka-consumer/deploy.sh is already running"
+  else
+    echo "Executing consumer deploy.sh in the background"
+    cd "$LAB_HOME"/springboot-kafka/kafka-consumer
+    nohup ./deploy.sh &>> "$LAB_LOG"/kafka-consumer-deployment.log &
+  fi
+fi
+
+cd "$LAB_HOME"/springboot-kafka
+

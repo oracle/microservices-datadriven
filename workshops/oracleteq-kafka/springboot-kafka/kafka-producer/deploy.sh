@@ -45,3 +45,15 @@ docker build . -t "$IMAGE" \
 #if [  $? -eq 0 ]; then
 #    docker rmi "${IMAGE}"
 #fi
+
+# Print deployment result
+result=$(grep "writing image" "$LAB_LOG"/kafka-producer-deployment.log)
+if [[ "$result" =~ *"writing"* ]]; then
+  echo "ERROR: Kafka producer microservices deployment failed!"
+  exit
+else
+  PRINT_VAR="Kafka producer microservices deployment succeeded!"
+  PRINT_VAR="$PRINT_VAR\n"$(grep -hr -A3 "writing image" "$LAB_LOG"/kafka-producer-deployment.log)
+  echo "$PRINT_VAR"
+  state_set_done KAFKA_PRODUCER_MS_DEPLOYED
+fi
