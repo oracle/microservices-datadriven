@@ -33,11 +33,15 @@ public class WalkThroughTest extends TestBase {
         //confirm successful order
         String jsonFromResponse = EntityUtils.toString(httpResponse.getEntity());
         System.out.println("testWalkThrough jsonFromResponse:" + jsonFromResponse);
-        while (jsonFromResponse.contains("pending")) {
+        String lastCallResponse = "";
+        while (jsonFromResponse.contains("pending") || jsonFromResponse.contains("ConnectException")) {
             Thread.sleep(1000 * 1);
-            httpResponse =  showorder(getHttpClient());
+            httpResponse =  lastCallResponse.equals("") ? showorder(getHttpClient()):showorderNoDebug(getHttpClient());
             jsonFromResponse = EntityUtils.toString(httpResponse.getEntity());
-            System.out.println("testWalkThrough jsonFromResponse:" + jsonFromResponse);
+            if (!lastCallResponse.equals(jsonFromResponse))
+                System.out.print("testWalkThrough jsonFromResponse:" + jsonFromResponse);
+            else System.out.print(".");
+            lastCallResponse = jsonFromResponse;
         }
         assertThat(jsonFromResponse, containsString(isNoInventory?"failed inventory does not exist":"beer"));
         assertInventoryCount(0);
