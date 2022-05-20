@@ -6,7 +6,9 @@ function Transfer() {
     const [destinations, setDestinations] = useState([]);
     const [transferDate, setTransferDate] = useState("");
     const [recipient, setRecipient] = useState("");
+    const [recipientBank, setRecipientBank] = useState("");
     const [sender, setSender] = useState("");
+    const [senderBank, setSenderBank] = useState("");
     const [amount, setAmount] = useState(0);
     const [memo, setMemo] = useState("");
 
@@ -16,27 +18,31 @@ function Transfer() {
     // Load source and destination accounts
     useEffect( async () => {
 
-        const getAvailableAccounts = async () => {
-            let options = {};
-            await fetch(`${process.env.REACT_APP_API_EP}/api/account/transfer`, options)
-                .then( res => res.json() )
-                .then( data => {
-                    setSources(data.sources);
-                    setDestinations(data.destinations);
-                })
-                .catch( err => {
-                    setError(err);
-                })
-        }
-
-        await getAvailableAccounts();
+        // const getAvailableAccounts = async () => {
+        //     let options = {};
+        //     await fetch(`${process.env.REACT_APP_API_EP}/api/account/transfer`, options)
+        //         .then( res => res.json() )
+        //         .then( data => {
+        //             setSources(data.sources);
+        //             setDestinations(data.destinations);
+        //         })
+        //         .catch( err => {
+        //             setError(err);
+        //         })
+        // }
+        //
+        // await getAvailableAccounts();
     }, []);
 
-    let handleSubmit = async () => {
+    let handleSubmit = async e => {
+        e.preventDefault();
+
         let data = JSON.stringify({
             transferDate: transferDate,
-            recipient: recipient,
-            sender: sender,
+            frombank: senderBank,
+            fromaccount: sender,
+            tobank: recipientBank,
+            toaccount: recipient,
             amount: amount,
             memo: memo
         })
@@ -49,12 +55,12 @@ function Transfer() {
             body: data
         }
 
-        await fetch(`${process.env.REACT_APP_API_EP}/api/transfer`, options)
+        await fetch(`${process.env.REACT_APP_API_EP}/transferfunds`, options)
             .then( res => {
                 return res.json();
             })
             .then( data => {
-                setResponseData(data);
+                setResponseData(JSON.stringify(data));
             })
             .catch( err => {
                 setError(err);
@@ -63,31 +69,33 @@ function Transfer() {
     }
 
     let handleTransferDateChange = e => { setTransferDate(e.target.value )}
+    let handleRecipientBankChange = e => { setRecipientBank(e.target.value )}
+    let handleSenderBankChange = e => { setSenderBank(e.target.value )}
     let handleRecipientChange = e => { setRecipient(e.target.value )}
     let handleSenderChange = e => { setSender(e.target.value )}
     let handleAmountChange = e => { setAmount(e.target.value )}
     let handleMemoChange = e => { setMemo(e.target.value )}
 
-    let source_options = () => {
-
-        if (sources && sources.length) {
-            let options = [<option className={"option"} value={null} key={-1}>Select a bank account as a source</option>];
-            let items = sources.map( (source, index) => <option className={"option"} value={source.accountId} key={index}>{source.accountName}</option>)
-            return [...options, ...items];
-        }
-        return <option className={"option"} value={null} disabled={true}>No bank accounts are available as a source</option>;
-
-    }
-
-    let destination_options = () => {
-
-        if (destinations && destinations.length) {
-            let options = [<option className={"option"} value={null} key={-1}>Select a bank account as a destination</option>];
-            let items = destinations.map( (destinations, index) => <option className={"option"} value={destinations.recordId} key={index}>{destinations.accountName}</option>)
-            return [...options, ...items];
-        }
-        return <option className={"option"} value={null} disabled={true}>No bank accounts are available as a destination</option>;
-    }
+    // let source_options = () => {
+    //
+    //     if (sources && sources.length) {
+    //         let options = [<option className={"option"} value={null} key={-1}>Select a bank account as a source</option>];
+    //         let items = sources.map( (source, index) => <option className={"option"} value={source.accountId} key={index}>{source.accountName}</option>)
+    //         return [...options, ...items];
+    //     }
+    //     return <option className={"option"} value={null} disabled={true}>No bank accounts are available as a source</option>;
+    //
+    // }
+    //
+    // let destination_options = () => {
+    //
+    //     if (destinations && destinations.length) {
+    //         let options = [<option className={"option"} value={null} key={-1}>Select a bank account as a destination</option>];
+    //         let items = destinations.map( (destinations, index) => <option className={"option"} value={destinations.recordId} key={index}>{destinations.accountName}</option>)
+    //         return [...options, ...items];
+    //     }
+    //     return <option className={"option"} value={null} disabled={true}>No bank accounts are available as a destination</option>;
+    // }
 
     return (
         <div className={"container flex flex-row transfer-block"}>
@@ -99,23 +107,41 @@ function Transfer() {
 
                         <h4 className={"title"}>Transfer Money</h4>
 
-                        <div className={"transfer sender field flex flex-col"}>
-                            <label htmlFor={"app-transfer-source"}>Transfer from</label>
-                            <select id={"app-transfer-source"} className={"app-field"} required={true} onChange={ handleSenderChange } value={sender}>
-                                {source_options()}
-                            </select>
-                        </div>
+                        {/*<div className={"transfer sender field flex flex-col"}>*/}
+                        {/*    <label htmlFor={"app-transfer-source"}>Transfer from</label>*/}
+                        {/*    <select id={"app-transfer-source"} className={"app-field"} required={true} onChange={ handleSenderChange } value={sender}>*/}
+                        {/*        {source_options()}*/}
+                        {/*    </select>*/}
+                        {/*</div>*/}
 
-                        <div className={"transfer recipient field flex flex-col"}>
-                            <label htmlFor={"app-transfer-source"}>Transfer to</label>
-                            <select id={"app-transfer-source"} className={"app-field"} required={true} onChange={ handleRecipientChange } value={recipient}>
-                                {destination_options()}
-                            </select>
+                        {/*<div className={"transfer recipient field flex flex-col"}>*/}
+                        {/*    <label htmlFor={"app-transfer-source"}>Transfer to</label>*/}
+                        {/*    <select id={"app-transfer-source"} className={"app-field"} required={true} onChange={ handleRecipientChange } value={recipient}>*/}
+                        {/*        {destination_options()}*/}
+                        {/*    </select>*/}
+                        {/*</div>*/}
+
+                        {/* Source/Sender */}
+                        <form action={null} onSubmit={handleSubmit} >
+                        <div className={"transfer date field flex flex-col"}>
+                            <label htmlFor={"app-transfer-date"}>Transfer from Bank</label>
+                            <input type={"text"} id={"app-sender-bank"} className={"app-field"} required={true} onChange={ handleSenderBankChange } value={senderBank}/>
                         </div>
 
                         <div className={"transfer date field flex flex-col"}>
-                            <label htmlFor={"app-transfer-date"}>Scheduled Date of Transfer</label>
-                            <input type={"date"} id={"app-transfer-date"} className={"app-field"} required={true} onChange={ handleTransferDateChange } value={transferDate}/>
+                            <label htmlFor={"app-transfer-date"}>Transfer from Account</label>
+                            <input type={"text"} id={"app-sender"} className={"app-field"} required={true} onChange={ handleSenderChange } value={sender}/>
+                        </div>
+
+                        {/* Destination/Recipient */}
+                        <div className={"transfer date field flex flex-col"}>
+                            <label htmlFor={"app-transfer-date"}>Transfer to Bank</label>
+                            <input type={"text"} id={"app-recipient-bank"} className={"app-field"} required={true} onChange={ handleRecipientBankChange } value={recipientBank}/>
+                        </div>
+
+                        <div className={"transfer date field flex flex-col"}>
+                            <label htmlFor={"app-transfer-date"}>Transfer to Account</label>
+                            <input type={"text"} id={"app-recipient"} className={"app-field"} required={true} onChange={ handleRecipientChange } value={recipient}/>
                         </div>
 
                         <div className={"amount amount field flex flex-col"}>
@@ -126,13 +152,21 @@ function Transfer() {
                             </div>
                         </div>
 
+                        {/* Metadata/Informational */}
+                        <div className={"transfer date field flex flex-col"}>
+                            <label htmlFor={"app-transfer-date"}>Scheduled Date of Transfer</label>
+                            <input type={"text"} id={"app-transfer-date"} className={"app-field"} onChange={ handleTransferDateChange } value={transferDate}/>
+                        </div>
+
                         <div className={"memo memo field flex flex-col"}>
                             <label htmlFor={"app-transfer-memo"}>Memo <em>(Optional)</em></label>
                             <input type={"text"} placeholder={"car, bills, loan, etc."} id={"app-transfer-memo"} className={"app-field"} onChange={ handleMemoChange } value={memo}/>
                         </div>
                         <div className={"actions flex flex-col"}>
-                            <input type={"submit"} className={"submit app-button"} value={"Submit Transfer"} onClick={ handleSubmit }/>
+                            <input type={"submit"} className={"submit app-button"} value={"Submit Transfer"} />
                         </div>
+
+                        </form>
                     </div>
                 </div>
                 <div className={"guide flex-grow-6"}>
