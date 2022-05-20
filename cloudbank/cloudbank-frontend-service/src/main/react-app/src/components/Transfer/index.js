@@ -1,7 +1,6 @@
 import TransferNav from "./nav";
 import History from "./history";
 import Transfer from "./transfer";
-import Login from "../Login";
 
 import {Route, Routes} from "react-router-dom";
 import React, {useState} from "react";
