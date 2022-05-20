@@ -1,21 +1,9 @@
 import React from "react";
 import "./header.css";
-import {useAuth} from "../Auth";
 import {useNavigate} from "react-router-dom";
 
 function Component() {
 
-    let navigation = useNavigate();
-    let auth = useAuth();
-    let displayIfAuthenticated = auth.user !== null;
-
-    const onSignOut = () => {
-        auth.signOut(() => {
-            navigation("/login")
-        })
-    }
-
-    const username = auth.user;
 
     return (
         <header className="app-header">
@@ -33,7 +21,6 @@ function Component() {
                     </div>
                 </div>
                 <div className={"actions flex flex-row"}>
-                    { displayIfAuthenticated && <button onClick={ onSignOut } className={"app-button dark"}>Sign Out</button> }
                 </div>
             </div>
         </header>
