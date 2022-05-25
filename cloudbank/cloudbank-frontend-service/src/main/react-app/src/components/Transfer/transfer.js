@@ -2,6 +2,13 @@ import React, {useEffect, useState} from 'react';
 
 function Transfer() {
 
+    const BANKA = "banka";
+    const BANKB = "bankb";
+    const TRANSFER_A_B = "AB";
+    const TRANSFER_B_A = "BA";
+    const DEFAULT_TRANSFER = TRANSFER_A_B;
+    const API_EP_TRANSFER_FUNDS = "/api/transfer/transferfunds";
+
     const [sources, setSources] = useState([]);
     const [destinations, setDestinations] = useState([]);
     const [transferDate, setTransferDate] = useState("");
@@ -32,6 +39,7 @@ function Transfer() {
         // }
         //
         // await getAvailableAccounts();
+        setChangeOfTransfers(DEFAULT_TRANSFER)
     }, []);
 
     let handleSubmit = async e => {
@@ -55,7 +63,7 @@ function Transfer() {
             body: data
         }
 
-        await fetch(`${process.env.REACT_APP_API_EP}/transferfunds`, options)
+        await fetch(API_EP_TRANSFER_FUNDS, options)
             .then( res => {
                 return res.json();
             })
@@ -68,9 +76,18 @@ function Transfer() {
             })
     }
 
+    let setChangeOfTransfers = e => {
+        let start = e === TRANSFER_A_B ? BANKA : BANKB;
+        let end = e === TRANSFER_A_B ? BANKB : BANKA;
+
+        setSenderBank(start);
+        setRecipientBank(end);
+    }
+
     let handleTransferDateChange = e => { setTransferDate(e.target.value )}
-    let handleRecipientBankChange = e => { setRecipientBank(e.target.value )}
-    let handleSenderBankChange = e => { setSenderBank(e.target.value )}
+    let handleChangeOfTransfers = e => {
+        setChangeOfTransfers(e.target.value);
+    };
     let handleRecipientChange = e => { setRecipient(e.target.value )}
     let handleSenderChange = e => { setSender(e.target.value )}
     let handleAmountChange = e => { setAmount(e.target.value )}
@@ -121,26 +138,23 @@ function Transfer() {
                         {/*    </select>*/}
                         {/*</div>*/}
 
-                        {/* Source/Sender */}
+
                         <form action={null} onSubmit={handleSubmit} >
                         <div className={"transfer date field flex flex-col"}>
-                            <label htmlFor={"app-transfer-date"}>Transfer from Bank</label>
-                            <input type={"text"} id={"app-sender-bank"} className={"app-field"} required={true} onChange={ handleSenderBankChange } value={senderBank}/>
+                            <label htmlFor={"app-transfer-bank"}>Bank Transfer</label>
+                            <select id={"app-transfer-bank"} className={"app-field"} required={true} onChange={ handleChangeOfTransfers } defaultValue={DEFAULT_TRANSFER}>
+                                <option className={"option"} value={TRANSFER_A_B} key={TRANSFER_A_B}>Bank A to Bank B</option>
+                                <option className={"option"} value={TRANSFER_B_A} key={TRANSFER_B_A}>Bank B to Bank A</option>
+                            </select>
                         </div>
 
                         <div className={"transfer date field flex flex-col"}>
-                            <label htmlFor={"app-transfer-date"}>Transfer from Account</label>
+                            <label htmlFor={"app-sender"}>Transfer from Account</label>
                             <input type={"text"} id={"app-sender"} className={"app-field"} required={true} onChange={ handleSenderChange } value={sender}/>
                         </div>
 
-                        {/* Destination/Recipient */}
                         <div className={"transfer date field flex flex-col"}>
-                            <label htmlFor={"app-transfer-date"}>Transfer to Bank</label>
-                            <input type={"text"} id={"app-recipient-bank"} className={"app-field"} required={true} onChange={ handleRecipientBankChange } value={recipientBank}/>
-                        </div>
-
-                        <div className={"transfer date field flex flex-col"}>
-                            <label htmlFor={"app-transfer-date"}>Transfer to Account</label>
+                            <label htmlFor={"app-recipient"}>Transfer to Account</label>
                             <input type={"text"} id={"app-recipient"} className={"app-field"} required={true} onChange={ handleRecipientChange } value={recipient}/>
                         </div>
 
