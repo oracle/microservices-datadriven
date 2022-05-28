@@ -1,5 +1,6 @@
 package oracle.observability;
 
+import oracle.observability.metrics.OracleDBMetricsExporter;
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 
@@ -8,9 +9,15 @@ import java.util.logging.Logger;
 import java.sql.*;
 import java.util.logging.FileHandler;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 //@Configuration
 //@EnableAutoConfiguration
 //@ComponentScan
+
 //@SpringBootApplication
 public class ObservabilityExporter {
 	PoolDataSource alertlogpdbPdb = null;
@@ -30,10 +37,12 @@ public class ObservabilityExporter {
 			"from TABLE(GV$(CURSOR(select * from v$active_session_history))) where ECID is not null and SAMPLE_ID > ";
 
 
+
 	public static void main(String[] args) throws Exception {
 //		ConfigurableApplicationContext context = SpringApplication.run(ObservabilityExporter.class, args);
 		System.out.println("ObservabilityExporter.main");
-		new ObservabilityExporter().init();
+//		new ObservabilityExporter().init();
+		new OracleDBMetricsExporter().init();
 	}
 
 	public void init() throws Exception {

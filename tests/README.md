@@ -1,3 +1,5 @@
+## Running tests
+
 All tests can be run using ./testAll.sh which in turn calls the following...
 
 ./build.sh
@@ -14,9 +16,18 @@ and is secure as the java k8s client is used from within the tests to get the fr
 Therefore, it can be run as-is in any environment against any k8s cluster that was used for setup (OKE other otherwise/vendor)
 simply by running microservices-datadriven/tests/test.sh or testIncludingPolyglot.sh. 
 
-You can see the results of a test run quickly by doing `cat  target/surefire-reports/*.txt`
+## View test results
 
-*TODO...
+You can see a quick summary of the test results by running the following... 
+
+cat  target/surefire-reports/*.txt
+
+cat  target/surefire-reports/polyglot/inventory-*/*.txt
+
+
+
+
+## TODO...
 
 The surefire reports get overridden for WalkThroughTest as it's reused by 
 

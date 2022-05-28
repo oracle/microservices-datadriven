@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: inventory
-        image: ${DOCKER_REGISTRY}/inventory-springboot:0.1
+        image: ${DOCKER_REGISTRY}/oracle-db-appdev-monitoring:0.1
         imagePullPolicy: Always
         env:
         - name: LOG_LEVEL
