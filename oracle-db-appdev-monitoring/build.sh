@@ -4,7 +4,8 @@
 
 
 export IMAGE_NAME=oracle-db-appdev-monitoring
-export IMAGE_VERSION=0.1.0
+export IMAGE_VERSION=0.1
+
 
 if [ -z "$DOCKER_REGISTRY" ]; then
     echo "DOCKER_REGISTRY not set. Will get it with state_get"

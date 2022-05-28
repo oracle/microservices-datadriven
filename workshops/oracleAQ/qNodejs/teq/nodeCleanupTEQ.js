@@ -8,9 +8,11 @@ async function run() {
     const config = { connectString: process.env.DB_ALIAS, externalAuth: true };
     const connection = await oracledb.getConnection(config); 
 
-    createQueue(connection,"NODE_TEQ_ADT" );
-    createQueue(connection,"NODE_TEQ_RAW" );
-    createQueue(connection,"NODE_TEQ_JMS" );
+    cleanUp(connection,"NODE_TEQ_ADT" );
+    cleanUp(connection,"NODE_TEQ_RAW" );
+    cleanUp(connection,"NODE_TEQ_JMS" );
+    cleanUp(connection,"NODE_TEQ_JSON" );
+
 
 } catch (err) {
     console.error(err);
@@ -27,9 +29,6 @@ async function run() {
 run();
 
 async function cleanUp(conn, queueTable, queueName) {
-
- DBMS_AQADM.STOP_QUEUE ( queue_name => 'objType_TEQ'); 
- DBMS_AQADM.drop_transactional_event_queue(queue_name =>'objType_TEQ',force=> TRUE);
 
     await conn.execute(`
         BEGIN
