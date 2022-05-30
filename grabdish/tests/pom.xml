@@ -74,7 +74,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
                 <configuration>
-                    <reportsDirectory>${surefireReportsDirectory}</reportsDirectory>
+                    <reportsDirectory>target/surefire-reports</reportsDirectory>
                 </configuration>
             </plugin>
         </plugins>
