@@ -8,6 +8,7 @@ GRANT connect, resource TO $INVENTORY_USER;
 GRANT aq_user_role TO $INVENTORY_USER;
 GRANT EXECUTE ON sys.dbms_aq TO $INVENTORY_USER;
 -- For inventory-springboot deployment
+GRANT aq_administrator_role TO $INVENTORY_USER;
 GRANT EXECUTE ON sys.dbms_aqadm TO $INVENTORY_USER;
 -- For inventory-plsql deployment
 GRANT CREATE JOB to $INVENTORY_USER; 
