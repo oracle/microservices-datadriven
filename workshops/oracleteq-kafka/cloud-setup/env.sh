@@ -55,7 +55,7 @@ source "${LAB_HOME}"/cloud-setup/utils/state-functions.sh
 # Identify Run Type
 regex='/home/ll[0-9]{1,5}_us'
 while ! state_done RUN_TYPE; do
-  if ! [[ "$HOME" =~  ${regex} ]]; then
+  if [[ "$HOME" =~  ${regex} ]]; then
     # Green Button (hosted by Live Labs)
     state_set RUN_TYPE "3"
     state_set RESERVATION_ID $(grep -oP '(?<=/home/ll).*?(?=_us)' <<<"$HOME")
@@ -68,6 +68,29 @@ while ! state_done RUN_TYPE; do
   else
     state_set RUN_TYPE "1"
   fi
+done
+
+# Get Run Name from directory name
+while ! state_done RUN_NAME; do
+  cd "$LAB_HOME"
+  cd ../../..
+  # Validate that a folder was creared
+  if test "$PWD" == ~; then
+    echo "ERROR: The workshop is not installed in a separate folder."
+    exit
+  fi
+  DN=$(basename "$PWD")
+  # Validate run name.  Must be between 1 and 13 characters, only letters or numbers, starting with letter
+  if [[ "$DN" =~ ^[a-zA-Z][a-zA-Z0-9]{0,12}$ ]]; then
+    # shellcheck disable=SC2046
+    state_set RUN_NAME $(echo "$DN" | awk '{print tolower($0)}')
+    state_set LAB_DB_NAME "$(state_get RUN_NAME)"
+  else
+    echo "Error: Invalid directory name $RN.  The directory name must be between 1 and 13 characters,"
+    echo "containing only letters or numbers, starting with a letter.  Please restart the workshop with a valid directory name."
+    exit
+  fi
+  cd "$LAB_HOME"
 done
 
 # Configure Bash to LAB Environment
