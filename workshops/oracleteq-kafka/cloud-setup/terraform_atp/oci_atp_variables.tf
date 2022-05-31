@@ -23,7 +23,7 @@ variable "autonomous_database_is_dedicated" {
 }
 
 variable "autonomous_database_cpu_core_count" {
-  default = "2"
+  default = "1"
 }
 
 variable "autonomous_database_db_name" {
