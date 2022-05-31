@@ -16,26 +16,25 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: frontend:latest
+          image: %CLOUDBANK_SECURITY_PASSWORD%
           imagePullPolicy: Always
           env:
-            - name: spring.security.user.password
-              value: "${USERNAME}"
-            - name: spring.security.user.name
-              value: "${PASSWORD}"
+            - name: CLOUDBANK_SECURITY_PASSWORD
+              value: "%CLOUDBANK_SECURITY_PASSWORD%"
+            - name: CLOUDBANK_SECURITY_USERNAME
+              value: "%CLOUDBANK_SECURITY_USERNAME%"
+            - name: CLOUDBANK_APIS_BANKA
+              value: "%CLOUDBANK_APIS_BANKA%"
+            - name: CLOUDBANK_APIS_BANKB
+              value: "%CLOUDBANK_APIS_BANKB%"
           ports:
             - containerPort: 8080
-
 ---
 
-
-##
-## Copyright (c) 2021 Oracle and/or its affiliates.
-## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend
+  name: frontend-service
   labels:
     app: frontend
   #annotations:
@@ -43,7 +42,7 @@ metadata:
   #  service.beta.kubernetes.io/oci-load-balancer-tls-secret: ssl-certificate-secret
 spec:
   #  type: LoadBalancer
-  type: ClusterIP
+  type: LoadBalancer
   ports:
     - port: 80
       name: metrics

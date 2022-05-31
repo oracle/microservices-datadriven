@@ -1,0 +1,10 @@
+spring:
+  security:
+    user:
+      name: ${CLOUDBANK_SECURITY_USERNAME}
+      password: ${CLOUDBANK_SECURITY_PASSWORD}
+
+cloudbank:
+  ep:
+    banka: ${CLOUDBANK_APIS_BANKA}
+    bankb: ${CLOUDBANK_APIS_BANKB}
