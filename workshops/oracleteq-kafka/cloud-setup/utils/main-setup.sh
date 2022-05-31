@@ -19,22 +19,22 @@ if state_done SETUP_VERIFIED; then
 fi
 
 
-# Identify Run Type
-while ! state_done RUN_TYPE; do
-  if [[ "$HOME" =~ /home/ll[0-9]{1,5}_us ]]; then
-    # Green Button (hosted by Live Labs)
-    state_set RUN_TYPE "3"
-    state_set RESERVATION_ID $(grep -oP '(?<=/home/ll).*?(?=_us)' <<<"$HOME")
-    state_set USER_OCID 'NA'
-    state_set USER_NAME "LL$(state_get RESERVATION_ID)-USER"
-    state_set_done PROVISIONING
-    state_set RUN_NAME "lab$(state_get RESERVATION_ID)"
-    state_set LAB_DB_NAME "LAB$(state_get RESERVATION_ID)"
-    state_set_done ATP_LIMIT_CHECK
-  else
-    state_set RUN_TYPE "1"
-  fi
-done
+## Identify Run Type
+#while ! state_done RUN_TYPE; do
+#  if [[ "$HOME" =~ /home/ll[0-9]{1,5}_us ]]; then
+#    # Green Button (hosted by Live Labs)
+#    state_set RUN_TYPE "3"
+#    state_set RESERVATION_ID $(grep -oP '(?<=/home/ll).*?(?=_us)' <<<"$HOME")
+#    state_set USER_OCID 'NA'
+#    state_set USER_NAME "LL$(state_get RESERVATION_ID)-USER"
+#    state_set_done PROVISIONING
+#    state_set RUN_NAME "lab$(state_get RESERVATION_ID)"
+#    state_set LAB_DB_NAME "LAB$(state_get RESERVATION_ID)"
+#    state_set_done ATP_LIMIT_CHECK
+#  else
+#    state_set RUN_TYPE "1"
+#  fi
+#done
 
 
 # Get the User OCID
@@ -87,7 +87,7 @@ done
 
 # Get the tenancy OCID
 while ! state_done TENANCY_OCID; do
-  state_set TENANCY_OCID "$OCI_TENANCY" # Set in cloud shell env
+  state_set TENANCY_OCID "$OCI_TENANCY" # Set in cloud shell env.sh
 done
 
 
@@ -97,7 +97,7 @@ while ! state_done REGION; do
     HOME_REGION=$(oci iam region-subscription list --query 'data[?"is-home-region"]."region-name" | join('\'' '\'', @)' --raw-output)
     state_set HOME_REGION "$HOME_REGION"
   fi
-  state_set REGION "$OCI_REGION" # Set in cloud shell env
+  state_set REGION "$OCI_REGION" # Set in cloud shell env.sh
 done
 
 

@@ -23,9 +23,8 @@ substr="cloud-setup"
 prefix=${str%%$substr*}
 index=${#prefix}
 export LAB_HOME=${str:0:$index-1}
-cd "$LAB_HOME"
+cd "$LAB_HOME" || exit
 echo "LAB_HOME: $LAB_HOME"
-
 
 # Java Home
 GRAALVM_VERSION=${1:-"22.1.0"}
@@ -52,6 +51,24 @@ mkdir -p "${LAB_LOG}"
 
 # Source the state functions
 source "${LAB_HOME}"/cloud-setup/utils/state-functions.sh
+
+# Identify Run Type
+regex='/home/ll[0-9]{1,5}_us'
+while ! state_done RUN_TYPE; do
+  if ! [[ "$HOME" =~  ${regex} ]]; then
+    # Green Button (hosted by Live Labs)
+    state_set RUN_TYPE "3"
+    state_set RESERVATION_ID $(grep -oP '(?<=/home/ll).*?(?=_us)' <<<"$HOME")
+    state_set USER_OCID 'NA'
+    state_set USER_NAME "LL$(state_get RESERVATION_ID)-USER"
+    state_set_done PROVISIONING
+    state_set RUN_NAME "lab$(state_get RESERVATION_ID)"
+    state_set LAB_DB_NAME "LAB$(state_get RESERVATION_ID)"
+    state_set_done ATP_LIMIT_CHECK
+  else
+    state_set RUN_TYPE "1"
+  fi
+done
 
 # Configure Bash to LAB Environment
 source "${LAB_HOME}"/cloud-setup/utils/bash-setup.sh
