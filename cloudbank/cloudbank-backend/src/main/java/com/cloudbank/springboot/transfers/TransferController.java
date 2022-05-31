@@ -26,14 +26,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RestController
 public class TransferController {
 
-     PoolDataSource atpBankPDB ;
+    PoolDataSource atpBankPDB ;
     final String localbankqueueschema =  System.getenv("localbankqueueschema");
     final String localbankqueuename =  System.getenv("localbankqueuename");
-     final String remotebankqueueschema =  System.getenv("remotebankqueueschema");
-     final String remotebankqueuename =  System.getenv("remotebankqueuename");
-     final String banksubscribername =  System.getenv("banksubscribername");
-     final String bankdbuser =   System.getenv("bankdbuser");
-     final String bankdbpw =  System.getenv("bankdbpw");
+    final String remotebankqueueschema =  System.getenv("remotebankqueueschema");
+    final String remotebankqueuename =  System.getenv("remotebankqueuename");
+    final String banksubscribername =  System.getenv("banksubscribername");
+    final String bankdbuser =   System.getenv("bankdbuser");
+    final String bankdbpw =  System.getenv("bankdbpw");
 
     final String bankdburl =   System.getenv("bankdburl");
     //transfer id is currently just the currentTimeMillis and not persisted
@@ -120,11 +120,11 @@ public class TransferController {
         TopicConnection tconn = t_cf.createTopicConnection(bankdbuser, bankdbpw);
         TopicSession tsess = tconn.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
         tconn.start();
-        adjustBalance(transferInformation.getAmount(), transferInformation.getFromaccount(), (AQjmsSession) tsess);
+        adjustBalance(transferInformation.getAmount(), transferInformation.getFromAccount(), (AQjmsSession) tsess);
         Topic bankEvents = ((AQjmsSession) tsess).getTopic(localbankqueueschema, localbankqueuename);
         TopicPublisher publisher = tsess.createPublisher(bankEvents);
         TextMessage transferMessage = tsess.createTextMessage();
-        String jsonString = JsonUtils.writeValueAsString(new TransferMessage(transferId, transferInformation.getToaccount(), transferInformation.getAmount()));
+        String jsonString = JsonUtils.writeValueAsString(new TransferMessage(transferId, transferInformation.getToAccount(), transferInformation.getAmount()));
         transferMessage.setText(jsonString);
         publisher.send(bankEvents, transferMessage, DeliveryMode.PERSISTENT, 2, AQjmsConstants.EXPIRATION_NEVER);
         tsess.commit(); //todo handle rollback

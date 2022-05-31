@@ -4,51 +4,51 @@ package com.cloudbank.springboot.transfers;
  * Rest request and bank representation of transfer (as opposed to TransferMessage which is the transfer message sent between banks)
  */
 public class TransferInformation {
-        private  String frombank;
-        private  int fromaccount;
-        private  String tobank;
-        private  int toaccount;
+        private  String fromBank;
+        private  int fromAccount;
+        private  String toBank;
+        private  int toAccount;
         private  int amount;
 
-        public TransferInformation(String frombank, int fromaccount, String tobank, int toaccount, int amount) {
-        this.frombank = frombank;
-        this.fromaccount = fromaccount;
-        this.tobank = tobank;
-        this.toaccount = toaccount;
+        public TransferInformation(String fromBank, int fromAccount, String toBank, int toAccount, int amount) {
+        this.fromBank = fromBank;
+        this.fromAccount = fromAccount;
+        this.toBank = toBank;
+        this.toAccount = toAccount;
         this.amount = amount;
     }
 
 
-        public String getFrombank() {
-        return frombank;
+        public String getFromBank() {
+        return fromBank;
     }
 
-        public void setFrombank(String frombank) {
-        this.frombank = frombank;
+        public void setFromBank(String fromBank) {
+        this.fromBank = fromBank;
     }
 
-        public int getFromaccount() {
-        return fromaccount;
+        public int getFromAccount() {
+        return fromAccount;
     }
 
-        public void setFromaccount(int fromaccount) {
-        this.fromaccount = fromaccount;
+        public void setFromAccount(int fromAccount) {
+        this.fromAccount = fromAccount;
     }
 
-        public String getTobank() {
-        return tobank;
+        public String getToBank() {
+        return toBank;
     }
 
-        public void setTobank(String tobank) {
-        this.tobank = tobank;
+        public void setToBank(String toBank) {
+        this.toBank = toBank;
     }
 
-        public int getToaccount() {
-        return toaccount;
+        public int getToAccount() {
+        return toAccount;
     }
 
-        public void setToaccount(int toaccount) {
-        this.toaccount = toaccount;
+        public void setToAccount(int toAccount) {
+        this.toAccount = toAccount;
     }
 
         public int getAmount() {
@@ -62,10 +62,10 @@ public class TransferInformation {
     @Override
     public String toString() {
         return "TransferInformation{" +
-                "frombank=" + frombank +
-                ", fromaccount=" + fromaccount +
-                ", tobank=" + tobank +
-                ", toaccount=" + toaccount +
+                "fromBank=" + fromBank +
+                ", fromAccount=" + fromAccount +
+                ", toBank=" + toBank +
+                ", toAccount=" + toAccount +
                 ", amount=" + amount +
                 '}';
     }
