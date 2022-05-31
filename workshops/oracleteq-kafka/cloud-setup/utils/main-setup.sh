@@ -3,7 +3,7 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Fail on error
-set -eu
+set -e
 
 # Check home is set
 if test -z "$LAB_HOME"; then
@@ -302,16 +302,7 @@ while ! state_done SETUP_VERIFIED; do
   fi
 done
 
-# Export state file for local development
-cd "$LAB_HOME"
-source "$LAB_HOME"/cloud-setup/env.sh
-
-# run bash_setup.sh in background
-if ! state_get BASH_SETUP; then
-  if ps -ef | grep "$LAB_HOME/cloud-setup/utils/bash_setup.sh" | grep -v grep; then
-    echo "$LAB_HOME/cloud-setup/utils/bash_setup.sh is already running"
-  else
-    echo "Executing bash_setup.sh in the background"
-    nohup "$LAB_HOME"/cloud-setup/utils/bash_setup.sh &>>"$LAB_LOG"/bash-setup.log &
-  fi
-fi
+## Export state file for local development
+#cd "$LAB_HOME"
+#source "$LAB_HOME"/cloud-setup/env.sh
+#

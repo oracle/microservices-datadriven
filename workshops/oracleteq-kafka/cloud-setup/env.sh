@@ -94,4 +94,12 @@ while ! state_done RUN_NAME; do
 done
 
 # Configure Bash to LAB Environment
-source "${LAB_HOME}"/cloud-setup/utils/bash-setup.sh
+#source "${LAB_HOME}"/cloud-setup/utils/bash-setup.sh
+if ! state_get BASH_SETUP; then
+  if ps -ef | grep "$LAB_HOME/cloud-setup/utils/bash_setup.sh" | grep -v grep; then
+    echo "$LAB_HOME/cloud-setup/utils/bash_setup.sh is already running"
+  else
+    echo "Executing bash_setup.sh in the background"
+    nohup "$LAB_HOME"/cloud-setup/utils/bash_setup.sh &>>"$LAB_LOG"/bash-setup.log &
+  fi
+fi
