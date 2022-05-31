@@ -143,8 +143,8 @@ public class TransferController {
             //todo something wrong where I'm not getting account value return....
             ResultSet res = st.getReturnResultSet();
             if (res.next()) {
-                int accountBalance = res.getInt(3);
-                System.out.println("Account balance is:" + accountBalance + "for account:" + account);
+//                int accountBalance = res.getInt(3);
+//                System.out.println("Account balance is:" + accountBalance + "for account:" + account);
             } else {
 //                System.out.println("No account (balance) found for account:" + account + " i:" + i);
             }
