@@ -47,18 +47,21 @@ function Transfer() {
 
         let data = JSON.stringify({
             transferDate: transferDate,
-            frombank: senderBank,
-            fromaccount: sender,
-            tobank: recipientBank,
-            toaccount: recipient,
+            fromBank: senderBank,
+            fromAccount: sender,
+            toBank: recipientBank,
+            toAccount: recipient,
             amount: amount,
             memo: memo
         })
 
+        const csrfToken = document.cookie.replace(/(?:(?:^|.*;\s*)XSRF-TOKEN\s*\=\s*([^;]*).*$)|^.*$/, '$1');
+
         let options = {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': csrfToken
             },
             body: data
         }
