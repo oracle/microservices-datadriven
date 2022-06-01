@@ -4,4 +4,4 @@
 
 
 # See docs/Deploy.md for details
-k8s-deploy 'inventory-quarkus-deployment.yaml inventory-service.yaml'
+k8s-deploy 'inventory-quarkus-deployment.yaml'

@@ -1,0 +1,118 @@
+.transfer.app-section {
+    font-size: 12px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.transfer-header {
+    height: 50px;
+    background-image: url("./images/transfer-header.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: #fff;
+    filter: drop-shadow(2px 7px 13px rgba(0,0,0,.08));
+}
+.transfer-header .nav {
+    background-color: #fff;
+    color: inherit;
+    padding: 0 25px;
+    border-radius: 0;
+    height: 100%;
+}
+
+.transfer-header a.nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+}
+
+.transfer-header .app-button {
+    border: 1px solid transparent;
+    transition: background-color .25s;
+}
+.transfer-header .app-button.current {
+    background: #292929;
+    color: #fff;
+    border: 1px solid #000;
+}
+.transfer-header .app-button:not(.current):hover {
+    border: 1px solid #000;
+    cursor: pointer;
+    background-color: #FFC700;
+}
+.transfer-header .app-button.current:hover {
+    cursor: initial;
+}
+
+
+.transfer-block {
+    background-color: #fff;
+    margin-top: 9px;
+}
+.transfer-block .rows {
+    width: 100%;
+}
+
+.transfer-block .guide {
+    background: rgb(52, 48, 45);
+    color: #e9e9e9;
+    box-shadow: -10px 0 10px rgba(25, 25, 25, .15);
+}
+
+.transfer-block .guide,
+.transfer-block .fields {
+    padding: 18px 12px;
+}
+
+.transfer-block .guide .title,
+.transfer-block .fields .title {
+    padding: 9px 0;
+    font-size: 1.3em;
+    border-bottom: 1px solid #555555;
+    margin-bottom: 9px;
+}
+
+.transfer-block .fields .field:not(:last-child) {
+    margin-bottom: 9px;
+}
+
+/* Custom Design for Amount field */
+.transfer-block .fields .field .amount-with-currency {
+    background-color: #e9e9e9;
+    box-sizing: border-box;
+}
+.transfer-block .fields .field .currency {
+    padding-top: 10px;
+    padding-left: 10px;
+}
+.transfer-block .fields .field .app-field {
+    border-radius: 0;
+}
+.transfer-block .fields .submit.app-button {
+    background-color: #FFC700;
+}
+
+
+.transfer-block .guide .response .response-title {
+    font-weight: lighter;
+    padding: 4px 0;
+    color: #9a9a9a;
+}
+textarea.output {
+    padding: 9px;
+    width: 100%;
+    height: 100px;
+    resize: vertical;
+    background-color: #434343;
+    color: #c4c4c4;
+}
+textarea.output:focus {
+    outline: none;
+}
+
+select > option {
+    padding: 4px;
+}

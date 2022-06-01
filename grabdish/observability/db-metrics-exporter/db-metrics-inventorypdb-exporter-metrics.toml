@@ -8,7 +8,7 @@ request = "select inst_id, status, type, count(*) as value from gv$session group
 context = "inventoryqueue_messages_by_state"
 labels = ["state"]
 metricsdesc = { value = "Total number of messages in inventory queue by state"}
-request = "select state, count(*) as value from inventoryqueuetable group by state"
+request = "select state, count(*) as value from AQ.inventoryqueuetable group by state"
 ignorezeroresult = true
 
 [[metric]]

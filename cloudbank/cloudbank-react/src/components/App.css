@@ -1,0 +1,60 @@
+
+.app-button {
+    padding: 9px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.app-button.submit {
+    border: none;
+}
+
+button.app-button:hover,
+.app-button.submit:hover {
+    cursor: pointer;
+}
+.app-button.submit:active {
+    position: relative;
+    top: 2px;
+}
+
+button.app-button {
+    border: none;
+    font-size: 12px;
+}
+button.app-button.dark {
+    background-color: #292929;
+    color: #fff;
+}
+
+label {
+    margin-bottom: 4px;
+    font-size: 12px;
+}
+.app-field {
+    background-color: #e9e9e9;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+footer {
+    background: #ffffff;
+    font-size: 10px;
+    padding: 12px 0;
+}
+
+.link,
+.link:active,
+.link:visited {
+    color: #0057FF;
+}
+
+footer .footer-link {
+
+    text-decoration: underline;
+    margin: 4px 9px;
+}
+footer .copyright {
+    text-align: center;
+}

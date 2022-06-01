@@ -25,7 +25,7 @@ microservices complex.
 
 ## License
 
-Copyright (c) 2021 Oracle and/or its affiliates.
+Copyright (c) 2022 Oracle and/or its affiliates.
 
 Licensed under the Universal Permissive License v 1.0 as shown at <https://oss.oracle.com/licenses/upl>.
 
@@ -33,6 +33,5 @@ Licensed under the Universal Permissive License v 1.0 as shown at <https://oss.o
 [LiveLabs]: https://apexapps.oracle.com/pls/apex/f?p=133:1
 [Workshops]: https://apexapps.oracle.com/pls/apex/dbpm/r/livelabs/livelabs-workshop-cards?p100_role=12&p100_focus_area=35&me=126
 [DRC]: https://developer.oracle.com
-[Helidon]: https://helidon.io
 [Workshop]: https://bit.ly/simplifymicroservices
-[Blogs]: https://blogs.oracle.com/developers/category/dev-app-dev
+[Blogs]: https://blogs.oracle.com/developers/authors/Blog-Author/CORE18EB69239F2845558809929771DB8EFA/paulparkinson
