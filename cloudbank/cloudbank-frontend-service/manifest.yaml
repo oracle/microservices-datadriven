@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: %CLOUDBANK_SECURITY_PASSWORD%
+          image: %CLOUDBANK_APP_IMAGE%
           imagePullPolicy: Always
           env:
             - name: CLOUDBANK_SECURITY_PASSWORD

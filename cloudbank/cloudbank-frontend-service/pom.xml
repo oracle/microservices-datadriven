@@ -16,7 +16,7 @@
     <properties>
         <frontend-src-dir>${project.basedir}/src/main/react-app</frontend-src-dir>
         <node.version>v16.13.1</node.version>
-        <npm.version>v8.1.2</npm.version>
+        <npm.version>8.1.2</npm.version>
         <frontend-maven-plugin.version>1.7.6</frontend-maven-plugin.version>
         <java.version>11</java.version>
     </properties>
