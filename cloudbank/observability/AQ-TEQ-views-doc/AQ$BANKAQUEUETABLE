@@ -1,0 +1,33 @@
+Name                  Null?    Type
+--------------------- -------- ------------------------
+QUEUE                          VARCHAR2(128)
+MSG_ID                NOT NULL RAW(16 BYTE)
+CORR_ID                        VARCHAR2(128)
+MSG_PRIORITY                   NUMBER
+MSG_STATE                      VARCHAR2(16)
+DELAY                          DATE
+DELAY_TIMESTAMP                TIMESTAMP(6)
+EXPIRATION                     NUMBER
+ENQ_TIME                       DATE
+ENQ_TIMESTAMP                  TIMESTAMP(6)
+ENQ_USER_ID                    NUMBER
+ENQ_TXN_ID                     VARCHAR2(30)
+DEQ_TIME                       DATE
+DEQ_TIMESTAMP                  TIMESTAMP(9)
+DEQ_USER_ID                    NUMBER
+DEQ_TXN_ID                     VARCHAR2(30)
+RETRY_COUNT                    NUMBER
+EXCEPTION_QUEUE_OWNER          VARCHAR2(128)
+EXCEPTION_QUEUE                VARCHAR2(128)
+USER_DATA                      SYS.AQ$_JMS_TEXT_MESSAGE
+PROPAGATED_MSGID               RAW(16 BYTE)
+SENDER_NAME                    VARCHAR2(128)
+SENDER_ADDRESS                 VARCHAR2(1024)
+SENDER_PROTOCOL                NUMBER
+ORIGINAL_MSGID                 RAW(16 BYTE)
+ORIGINAL_QUEUE_NAME            VARCHAR2(128)
+ORIGINAL_QUEUE_OWNER           VARCHAR2(128)
+EXPIRATION_REASON              VARCHAR2(31)
+CONSUMER_NAME                  VARCHAR2(512)
+ADDRESS                        VARCHAR2(1024)
+PROTOCOL                       NUMBER

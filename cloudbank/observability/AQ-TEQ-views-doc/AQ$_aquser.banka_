@@ -1,0 +1,98 @@
+Name              Null?    Type
+----------------- -------- ------------------------
+Q_NAME                     VARCHAR2(128)
+MSGID             NOT NULL RAW(16 BYTE)
+CORRID                     VARCHAR2(128)
+PRIORITY                   NUMBER
+STATE                      NUMBER
+DELAY                      TIMESTAMP(6)
+EXPIRATION                 NUMBER
+TIME_MANAGER_INFO          TIMESTAMP(6)
+LOCAL_ORDER_NO             NUMBER
+CHAIN_NO                   NUMBER
+CSCN                       NUMBER
+DSCN                       NUMBER
+ENQ_TIME                   TIMESTAMP(6)
+ENQ_UID                    NUMBER
+ENQ_TID                    VARCHAR2(30)
+DEQ_TIME                   TIMESTAMP(6)
+DEQ_UID                    NUMBER
+DEQ_TID                    VARCHAR2(30)
+RETRY_COUNT                NUMBER
+EXCEPTION_QSCHEMA          VARCHAR2(128)
+EXCEPTION_QUEUE            VARCHAR2(128)
+STEP_NO                    NUMBER
+RECIPIENT_KEY              NUMBER
+DEQUEUE_MSGID              RAW(16 BYTE)
+SENDER_NAME                VARCHAR2(128)
+SENDER_ADDRESS             VARCHAR2(1024)
+SENDER_PROTOCOL            NUMBER
+USER_DATA                  SYS.AQ$_JMS_TEXT_MESSAGE
+USER_PROP                  SYS.ANYDATA
+
+
+
+AQ$_<queue_table>_I (the dequeue IOT)
+AQ$_<queue_table>_T (the time-management IOT)
+AQ$_<queue_table>_S (the subscriber table)
+AQ$_aquser.banka_H (the history IOT)
+
+
+select DEQUEUE_TIME from  AQ$_BANKAQUEUETABLE_H;
+select * from AQ$_BANKAQUEUETABLE_H;
+Name             Null?    Type
+---------------- -------- -------------
+MSGID            NOT NULL RAW(16 BYTE)
+SUBSCRIBER#      NOT NULL NUMBER
+NAME             NOT NULL VARCHAR2(512)
+ADDRESS#         NOT NULL NUMBER
+DEQUEUE_TIME              TIMESTAMP(6)
+TRANSACTION_ID            VARCHAR2(30)
+DEQUEUE_USER              NUMBER
+PROPAGATED_MSGID          RAW(16 BYTE)
+RETRY_COUNT               NUMBER
+HINT                      ROWID
+SPARE                     RAW(16 BYTE)
+
+
+
+select * from AQ$_BANKAQUEUETABLE_I;
+Name               Null?    Type
+------------------ -------- -------------
+SUBSCRIBER#        NOT NULL NUMBER
+NAME               NOT NULL VARCHAR2(512)
+QUEUE#             NOT NULL NUMBER
+MSG_ENQ_TIME       NOT NULL TIMESTAMP(6)
+MSG_STEP_NO        NOT NULL NUMBER
+MSG_CHAIN_NO       NOT NULL NUMBER
+MSG_LOCAL_ORDER_NO NOT NULL NUMBER
+MSGID              NOT NULL RAW(16 BYTE)
+HINT                        ROWID
+SPARE                       RAW(16 BYTE)
+
+select * from AQ$_BANKAQUEUETABLE_T;
+Name      Null?    Type
+--------- -------- ------------
+NEXT_DATE NOT NULL TIMESTAMP(6)
+TXN_ID    NOT NULL VARCHAR2(30)
+MSGID     NOT NULL RAW(16 BYTE)
+ACTION             NUMBER
+
+select * from AQ$_BANKAQUEUETABLE_S;
+Name                  Null?    Type
+--------------------- -------- ---------------------------
+SUBSCRIBER_ID         NOT NULL NUMBER
+QUEUE_NAME            NOT NULL VARCHAR2(128)
+NAME                           VARCHAR2(512)
+ADDRESS                        VARCHAR2(1024)
+PROTOCOL                       NUMBER
+SUBSCRIBER_TYPE                NUMBER
+RULE_NAME                      VARCHAR2(128)
+TRANS_NAME                     VARCHAR2(261)
+RULESET_NAME                   VARCHAR2(261)
+NEGATIVE_RULESET_NAME          VARCHAR2(261)
+CREATION_TIME                  TIMESTAMP(6) WITH TIME ZONE
+MODIFICATION_TIME              TIMESTAMP(6) WITH TIME ZONE
+DELETION_TIME                  TIMESTAMP(6) WITH TIME ZONE
+SCN_AT_REMOVE                  NUMBER
+SCN_AT_ADD                     NUMBER
