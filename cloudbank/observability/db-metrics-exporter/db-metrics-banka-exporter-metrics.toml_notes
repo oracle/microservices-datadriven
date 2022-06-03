@@ -1,0 +1,15 @@
+
+[[metric]]
+context = "bankqueue_enqueuerate_by_state"
+labels = ["state"]
+metricsdesc = { value = "Total number of messages enqueued from  bank queue by state"}
+request = "select state, count(*) as value from AQuser.bankaqueuetable WHERE sysdate - ENQ_TIME < interval '30' second group by state"
+ignorezeroresult = true
+
+
+[[metric]]
+context = "bankqueue_dequeuerate_by_state"
+labels = ["state"]
+metricsdesc = { value = "Total number of messages dequeued from  bank queue by state"}
+request = "select state, count(*) as value from AQuser.bankaqueuetable WHERE sysdate - DEQ_TIME < interval '30' second group by state"
+ignorezeroresult = true
