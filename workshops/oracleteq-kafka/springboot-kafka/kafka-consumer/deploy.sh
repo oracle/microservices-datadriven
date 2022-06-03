@@ -50,16 +50,3 @@ docker build . -t "$IMAGE" \
 #fi
 
 
-# Print the maven build summary
-
-# Print deployment result
-result=$(grep "writing image" "$LAB_LOG"/kafka-consumer-deployment.log)
-if [[ "$result" =~ *"writing"* ]]; then
-  echo "ERROR: Kafka consumer microservices deployment failed!"
-  exit
-else
-  PRINT_VAR="Kafka consumer microservices deployment succeeded!"
-  PRINT_VAR="$PRINT_VAR\n"$(grep -hr -A3 "writing image" "$LAB_LOG"/kafka-consumer-deployment.log)
-  echo "$PRINT_VAR"
-  state_set_done KAFKA_CONSUMER_MS_DEPLOYED
-fi

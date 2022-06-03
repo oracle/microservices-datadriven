@@ -186,7 +186,7 @@ if ! state_done CONTAINER_ENG_SETUP; then
   echo "$(date): Create Containers Network"
   LAB_KAFKA_NETWORK="$(state_get RUN_NAME)_net"
   docker network create "${LAB_KAFKA_NETWORK}"
-  state_set_done LAB_KAFKA_NETWORK
+  state_set LAB_KAFKA_NETWORK "$LAB_KAFKA_NETWORK"
   state_set_done CONTAINER_ENG_SETUP
   echo
 fi
