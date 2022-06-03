@@ -8,6 +8,8 @@
 
 package io.micronaut.data.examples;
 
+import io.micronaut.context.annotation.Value;
+
 //import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 import oracle.jdbc.OraclePreparedStatement;
@@ -30,7 +32,12 @@ public class InventoryServiceOrderEventConsumer implements Runnable {
     public static final String INVENTORYDOESNOTEXIST = "inventorydoesnotexist";
     private DataSource atpInventoryPDB;
     Connection dbConnection;
-    String inventoryuser = "inventoryuser", inventorypw = "Welcome12345", orderQueueName = "ORDERQUEUE", inventoryQueueName = "INVENTORYQUEUE", queueOwner = "AQ";
+
+    @Value("${datasources.default.username}")
+    String inventoryuser;
+    @Value("${datasources.default.password}")
+    String inventorypw;
+    String orderQueueName = "ORDERQUEUE", inventoryQueueName = "INVENTORYQUEUE", queueOwner = "AQ";
 
 
     public InventoryServiceOrderEventConsumer(DataSource atpInventoryPDB) {
