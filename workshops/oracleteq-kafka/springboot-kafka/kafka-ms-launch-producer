@@ -1,0 +1,28 @@
+#!/bin/bash
+## Copyright (c) 2021 Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+# Fail on error
+set -e
+
+## Launch Kafka consumer microservice.
+echo "Launching Kafka producer microservices!"
+
+container_name="kafka-producer"
+docker run --detach \
+           --name=${container_name} \
+           --network $(state_get LAB_KAFKA_NETWORK) \
+           -p 8080:8080 \
+           oracle-developers-kafka-producer:0.0.1-SNAPSHOT
+
+if [ "$(docker inspect -f '{{.State.Running}}' ${container_name} 2>/dev/null)" = "true" ]; then
+  echo yup;
+else
+  echo nope;
+fi
+
+if [ "$( docker container inspect -f '{{.State.Status}}' ${container_name} )" == "running" ]; then
+  echo ""
+else
+  echo ""
+fi

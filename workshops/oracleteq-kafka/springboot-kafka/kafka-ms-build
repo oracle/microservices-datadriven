@@ -17,7 +17,7 @@ grep -hr -A11 -B1 "Reactor Summary" "$LAB_LOG"/kafka-ms-build.log
 result=$(grep "BUILD SUCCESS" "$LAB_LOG"/kafka-ms-build.log)
 if [[ "$result" =~ *"SUCCESS"* ]]; then
   echo "ERROR: Build Kafka microservices failed!"
-  echo "Please check detailed logs at "$LAB_LOG"/kafka-ms-build.log. "
+  echo "Please check detailed logs at $LAB_LOG/kafka-ms-build.log."
   exit
 else
   state_set_done KAFKA_MS_BUILDED
