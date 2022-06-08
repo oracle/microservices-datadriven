@@ -6,7 +6,7 @@
 set -e
 
 ## Launch Kafka consumer microservice.
-echo "Launching Kafka producer microservices!"
+echo "Launching Kafka producer microservice!"
 
 container_name="kafka-producer"
 docker run --detach \
@@ -15,14 +15,14 @@ docker run --detach \
            -p 8080:8080 \
            oracle-developers-kafka-producer:0.0.1-SNAPSHOT
 
-if [ "$(docker inspect -f '{{.State.Running}}' ${container_name} 2>/dev/null)" = "true" ]; then
-  echo yup;
-else
-  echo nope;
+if ! state_done KAFKA_MS_PRODUCER_LAUNCHED; then
+  echo "$(date): Waiting for producer running!"
+  sleep 3
+  echo
 fi
 
 if [ "$( docker container inspect -f '{{.State.Status}}' ${container_name} )" == "running" ]; then
-  echo ""
+  echo "Kafka producer microservice is running!";
 else
-  echo ""
+  echo "Kafka producer microservice launching failed!";
 fi
