@@ -1,0 +1,22 @@
+#!/bin/bash
+# Copyright (c) 2021 Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
+kafka_topic=${1:-$(state_get KAFKA_TOPIC_NAME)}
+
+if ! state_get KAFKA_SETUP; then
+  echo "ERROR: Kafka infrastructure should be setting up!"
+  exit 2
+fi
+
+if [ -z "${kafka_topic}" ]; then
+  echo "ERROR: The topic name should not be empty!"
+  exit 2
+fi
+
+echo "Dequeuing Topic ${kafka_topic} from beginning."
+docker exec --interactive --tty broker \
+       kafka-console-consumer \
+       --bootstrap-server broker:9092 \
+       --topic "${kafka_topic}" \
+       --from-beginning
