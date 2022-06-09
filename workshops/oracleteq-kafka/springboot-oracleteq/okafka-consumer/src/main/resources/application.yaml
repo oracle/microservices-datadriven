@@ -47,10 +47,10 @@ logging:
             okafka: INFO
 
 okafka-server-config:
-  oracle-instance-name: teqlab_tp
+  oracle-instance-name: LAB_DB_SVC
   oracle-service-name: xxxxxxxxxxxxxxx_teqlab_tp.adb.oraclecloud.com
   oracle-net-tns_admin: /home/appuser/wallet
-  tns-alias: teqlab_tp
+  tns-alias: LAB_DB_SVC
   security-protocol: SSL
   bootstrap-servers: <namedb>.<region>.oraclecloud.com:<1522>
 
