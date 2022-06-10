@@ -16,5 +16,10 @@ RUN apt-get update && apt-get install -qq -y git
 RUN curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg && \
 echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
+
+# install sqlcl
+RUN curl https://download.oracle.com/otn_software/java/sqldeveloper/sqlcl-latest.zip -o sqlcl-latest.zip && \
+unzip -q sqlcl-latest.zip -d /workspace && rm sqlcl-latest.zip
+
 # install kubectl
 RUN sudo apt-get update && sudo apt-get install -y kubectl
