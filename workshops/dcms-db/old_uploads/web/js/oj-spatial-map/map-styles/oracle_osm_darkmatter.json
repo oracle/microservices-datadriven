@@ -1,0 +1,34 @@
+{
+    "version": 8,
+    "id"     : "elocation-osm-darkmatter-raster",
+    "name"   : "OSM Dark Matter (Oracle)",
+    "metadata" : {
+        "sgtech:version": "19.1.0",
+        "sgtech:sources:type": "raster"
+    },
+
+    "sources": {
+
+        "elocation-osm-darkmatter": {
+            "type": "raster",
+            "attribution": "<a target=''_blank'' href=''http://openmaptiles.org''> &copy; OpenMapTiles </a> &nbsp; <a target=''_blank'' href=''https://www.openstreetmap.org/copyright''> &copy; OpenStreetMap contributors </a>",
+            "tiles": [
+                "https://elocation.oracle.com/mapviewer/mcserver/ELOCATION_MERCATOR/osm_darkmatter/{z}/{y}/{x}.png"
+            ],
+            "tileSize": 256
+        }        
+
+    },
+
+    "layers": [
+        {
+            "id": "Oracle OSM Dark Matter",
+            "type": "raster",
+            "source": "elocation-osm-darkmatter",
+            "minzoom": 0,
+            "maxzoom": 19
+        }
+    ],
+    "sprite": "{BASE_URL}/map-styles/sprites/sgtech-maki",
+    "glyphs": "{BASE_URL}/map-styles/fonts/glyphs/{fontstack}/{range}.pbf"
+}
