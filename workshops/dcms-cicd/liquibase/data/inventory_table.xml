@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:n0="http://www.oracle.com/xml/ns/dbchangelog-ext" 
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <changeSet id="create_${schema}" labels="data_${schema}" author="john" failOnError="true">
+        <n0:runOracleScript objectName="SCRIPT" objectType="DATA" ownerName="INVENTORY" sourceType="STRING"  >
+            <n0:source><![CDATA[
+                TRUNCATE TABLE INVENTORY;                
+                INSERT into INVENTORY values ('sushi', '1468 WEBSTER ST,San Francisco,CA', 0);
+                INSERT into INVENTORY values ('pizza', '1469 WEBSTER ST,San Francisco,CA', 0);
+                INSERT into INVENTORY values ('burger', '1470 WEBSTER ST,San Francisco,CA', 0);
+            ]]></n0:source>
+        </n0:runOracleScript>
+        <rollback>DELETE FROM INVENTORY;</rollback>
+    </changeSet>
+</databaseChangeLog>
