@@ -64,6 +64,17 @@ variable subnet_dns {
   default = "jnknsappsub"
 }
 
+variable "proj_abrv" {
+  default = "jenkins"
+}
+
+variable "autonomous_database_id" {
+}
+
+variable "compute_user" {
+  default = "opc"
+}
+
 locals {
   availability_domain_name   = var.availability_domain_name != null ? var.availability_domain_name : data.oci_identity_availability_domains.ADs.availability_domains[0].name
   instance_shape             = var.instance_shape
