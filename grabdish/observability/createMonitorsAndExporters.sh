@@ -12,15 +12,7 @@ kubectl apply -f db-metrics-exporter/db-metrics-orderpdb-service-monitor.yaml -n
 kubectl apply -f db-metrics-exporter/db-metrics-inventorypdb-service-monitor.yaml -n msdataworkshop
 kubectl get ServiceMonitor --all-namespaces
 echo
-echo create deployments and services for db metrics exporters...
+echo create deployments and services for db observability exporters...
 cd db-metrics-exporter
 ./deploy.sh
 cd ../
-cd db-log-exporter
-./deploy.sh
-cd ../
-#echo
-#echo create deployments and services for db log exporters...
-#cd db-log-exporter
-#./deploy.sh
-#cd ../

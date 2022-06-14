@@ -20,7 +20,7 @@ ignorezeroresult = true
 
 [[metric]]
 context = "inventorypdb_propagation_disabled_status"
-labels = ["qname"]
+labels = ["value"]
 metricsdesc = { value = "Total number of propagation schedules disabled by queue name"}
 request = "select count(*) as value from DBA_QUEUE_SCHEDULES where qname = 'INVENTORYQUEUE' and SCHEDULE_DISABLED = 'Y'"
 ignorezeroresult = true
