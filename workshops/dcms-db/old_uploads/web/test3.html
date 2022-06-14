@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<!--
+ Copyright (c) 2019, 2020, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+ -->
+
+<html lang="en-us">
+
+<head>
+  <title>GrabDish</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://static.oracle.com/cdn/jet/9.0.0/default/css/redwood/oj-redwood-min.css"
+    id="css" />
+  <link rel="stylesheet" href="/styles" id="css" />
+  <link rel="icon" href="css/images/favicon.ico" type="image/x-icon" />
+
+  <!-- This is the main css file for the default Alta theme -->
+  <!-- injector:theme -->
+  <link rel="stylesheet" href="css/alta/9.2.0/web/alta.css" id="css" />
+  <!-- endinjector -->
+  <!-- This contains icon fonts used by the starter template -->
+  <link rel="stylesheet" href="css/demo-alta-site-min.css" type="text/css" />
+  <!-- This points to the Oracle universal theme icon font -->
+  <link type="text/css" rel="stylesheet"
+    href="https://static.oracle.com/cdn/apex/18.2.0.00.12/libraries/font-apex/2.1/css/font-apex.min.css">
+
+  <!-- This is where you would add any app specific styling -->
+  <link rel="stylesheet" href="css/app.css" type="text/css" />
+  <style>
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 12px 30px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+.button1 {
+  background-color: white;
+  color: black;
+  border: 2px solid #e7e7e7; color: black;
+}
+</style>
+</head>
+
+<body class="oj-web-applayout-body">
+  <div id="globalBody" class="oj-web-applayout-page">
+    <div id="grabdishContent" style="width: 1px; min-width: 100%;">
+      <div id="grabdishWrapper">
+        <oj-dialog id="loginDialog" dialog-title="Grabdish Login" initial-visibility="show" cancel-behavior="none">
+          <div slot="body">
+            <oj-form-layout>
+              <oj-input-text label-hint="Username" value="{{loginUserName}}"></oj-input-text>
+              <oj-input-password label-hint="Password" value="{{loginPassword}}"></oj-input-password>
+            </oj-form-layout>
+          </div>
+          <div slot="footer">
+            <oj-button on-oj-action="[[loginAction]]"> Login </oj-button>
+          </div>
+        </oj-dialog>
+        <oj-button id="buttonOpener" on-oj-action="[[loginAction]]">Open Modal Dialog</oj-button>
+        <div class="oj-sm-padding-4x-top" id="form-container">
+          <oj-form-layout direction="row" max-columns="1">
+            <oj-input-text value="{{textVal1}}" label-hint="Address 1"></oj-input-text>
+            <oj-input-text value="{{textVal2}}" label-hint="Address 2"></oj-input-text>
+          </oj-form-layout>
+        </div>
+        <p id="desc">
+          This is where Grabdish will be.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://static.oracle.com/cdn/jet/9.0.0/3rdparty/require/require.js"></script>
+  <script type="text/javascript" src="https://static.oracle.com/cdn/jet/9.0.0/default/js/bundles-config.js"></script>
+  <script>
+
+    (function () {
+      requirejs.config({
+        baseUrl: "js",
+        paths: {
+          knockout: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/knockout/knockout-3.5.1",
+          jquery: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/jquery/jquery-3.5.1.min",
+          "jqueryui-amd": "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/jquery/jqueryui-amd-1.12.1.min",
+          promise: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/es6-promise/es6-promise.min",
+          hammerjs: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/hammer/hammer-2.0.8.min",
+          ojdnd: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/dnd-polyfill/dnd-polyfill-1.0.2.min",
+          ojL10n: "libs/oj/v9.0.0/ojL10n",
+          persist: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/persist/min",
+          text: "libs/require/text",
+          signals: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/js-signals/signals.min",
+          touchr: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/touchr/touchr",
+          "regenerator-runtime": "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/regenerator-runtime/runtime",
+          corejs: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/corejs/shim.min",
+          customElements: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/webcomponents/custom-elements.min",
+          proj4: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/proj4js/dist/proj4"
+        }
+      })
+    }());
+
+    /**
+     * Ensure that any JET components that are needed are imported here
+     */
+    require(['ojs/ojbootstrap',
+      'knockout',
+      'ojs/ojresponsiveutils',
+      'ojs/ojresponsiveknockoututils',
+      'ojs/ojarraydataprovider',
+      'text!data/grub.json',
+      'ojs/ojconverter-number',
+      'ojs/ojknockout',
+      'ojs/ojbutton',
+      "ojs/ojdialog", 
+      'ojs/ojtoolbar',
+      'ojs/ojmenu',
+      'ojs/ojnavigationlist',
+      'ojs/ojswitcher',
+      'ojs/ojformlayout',
+      'ojs/ojinputtext',
+      'ojs/ojinputnumber',
+      'https://elocation.oracle.com/elocation/jslib/oracleelocationv3.3.js',
+      'ojs/ojlistview',
+      'ojs/ojavatar',
+      'ojs/ojtrain',
+      'ojs/ojaccordion',
+      'oj-spatial-map/loader'],
+      function (Bootstrap, ko, ResponsiveUtils, ResponsiveKnockoutUtils, ArrayDataProvider, grubSourceData, NumberConverter) {
+
+        function ControllerViewModel() {
+          // Media queries for responsive layouts
+          const smQuery = ResponsiveUtils.getFrameworkQuery(ResponsiveUtils.FRAMEWORK_QUERY_KEY.SM_ONLY);
+          this.smScreen = ResponsiveKnockoutUtils.createMediaQueryObservable(smQuery);
+
+          // login dialog
+          this.textVal1 = ko.observable("");
+          this.testVal2 = ko.observable("");
+          this.loginUserName = ko.observable("");
+          this.loginPassword = ko.observable("");
+          this.loginStatus = ko.observable("Not logged in");
+          this.authorization = "";
+          this.loggedIn = ko.observable(false);;
+          this.inProgress = ko.observable(false);
+  
+          this.loginAction = function (event, vm) {
+            vm.inProgress(true);
+            vm.loginStatus("Logging in...");
+            var inventory = {
+              itemid: "sushi"
+            };
+
+            vm.authorization = "Basic " + btoa(vm.loginUserName() + ":" + vm.loginPassword());
+
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json',
+                         'Authorization': vm.authorization },
+              body: JSON.stringify(inventory)
+            };
+
+            fetch('/ords/inventory/inventory/getInventory/', fetchOptions).then(fetchResult => {
+              if (fetchResult.status == 200) {
+                vm.loginStatus("Login success");
+              } else {
+                vm.loginStatus("Login failed");
+              }
+              vm.inProgress(false);
+              fetchResult.json().then(payload => {
+//                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          //Hold the results of the last call
+          this.labResult = ko.observable();
+          this.httpCode = ko.observable();
+
+          // Screen Control
+          this.selectedTask = ko.observable('about');
+          this.selectedTask.subscribe(function () { this.labResult(null) }.bind(this));
+
+          // This map controls the available options in the navigation menu - add new options here
+          // Key for the map matches the slot name used in the switcher
+          this.menuTasks = new Map();
+          this.menuTasks.set('about', { label: 'About', title: 'About the GrabDish Explorer', description: 'The GrabDish Explorer screen allows you to test the results of each lab.  Simply click the tab on the left that corresponds to the lab that you want to test out and follow the on-screen instructions.' });
+          this.menuTasks.set('login', { label: 'Login', title: 'Grabdish Login', description: 'Login to the Grabdish application' });
+          this.menuTasks.set('lab9', { label: 'Transactional', title: 'Transactional', description: 'JSON and relational data types, AQ transactional event-driven communication, saga, event sourcing, and CQRS' });
+
+          //Drives the navigation list itself
+          this.tasks = new ArrayDataProvider(Array.from(this.menuTasks.entries()).map(entry => { entry[1].id = entry[0]; return entry[1]; }), { keyAttributes: 'id' });
+
+          // Function calls and state relating to given labs
+          // Lab 9. ----------------------------------------------------------- //
+          this.lab9Food = ko.observable('sushi');
+          this.lab9OrderId = ko.observable(66);
+          this.lab9DeliverTo = ko.observable('780 PANORAMA DR,San Francisco,CA');
+          this.lab9Item = ko.observable('sushi');
+
+          this.lab9PlaceOrderAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              orderid: Number.parseInt(vm.lab9OrderId()),
+              itemid: vm.lab9Food(),
+              deliverylocation: vm.lab9DeliverTo()
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json',
+                         'Authorization': vm.authorization },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/ords/order/order/placeorder/', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          this.lab9DeleteAllOrdersAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              orderid: -1
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json',
+                         'Authorization': vm.authorization },
+              body: JSON.stringify(order)
+            };
+
+            fetch('/ords/order/order/deleteallorders/', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          this.lab9ShowOrderAction = function (event, vm) {
+            vm.inProgress(true);
+            var order = {
+              orderid: Number.parseInt(vm.lab9OrderId())
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json',
+                         'Authorization': vm.authorization },
+              body: JSON.stringify(order)
+            };
+            fetch('/ords/order/order/showorder/', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          // supplier service
+
+          this.lab9AddInventoryAction = function (event, vm) {
+            vm.inProgress(true);
+            var inventory = {
+              itemid: vm.lab9Item()
+            };
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json',
+                         'Authorization': vm.authorization },
+              body: JSON.stringify(inventory)
+            };
+
+            fetch('/ords/inventory/inventory/addInventory/', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          this.lab9RemoveInventoryAction = function (event, vm) {
+            vm.inProgress(true);
+            var inventory = {
+              itemid: vm.lab9Item()
+            };
+
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json',
+                         'Authorization': vm.authorization },
+              body: JSON.stringify(inventory)
+            };
+
+            fetch('/ords/inventory/inventory/removeInventory/', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          this.lab9GetInventoryAction = function (event, vm) {
+            vm.inProgress(true);
+            var inventory = {
+              itemid: vm.lab9Item()
+            };
+
+            var fetchOptions = {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json',
+                         'Authorization': vm.authorization },
+              body: JSON.stringify(inventory)
+            };
+
+            fetch('/ords/inventory/inventory/getInventory/', fetchOptions).then(fetchResult => {
+              vm.httpCode(fetchResult.status);
+              fetchResult.json().then(payload => {
+                vm.labResult(JSON.stringify(payload, null, 2));
+                vm.inProgress(false);
+              });
+            });
+          };
+
+          // Footer
+          this.footerLinks = [
+            { name: 'About Oracle', linkId: 'aboutOracle', linkTarget: 'http://www.oracle.com/us/corporate/index.html#menu-about' },
+            { name: "Contact Us", id: "contactUs", linkTarget: "http://www.oracle.com/us/corporate/contact/index.html" },
+            { name: "Legal Notices", id: "legalNotices", linkTarget: "http://www.oracle.com/us/legal/index.html" },
+            { name: "Terms Of Use", id: "termsOfUse", linkTarget: "http://www.oracle.com/us/legal/terms/index.html" },
+            { name: "Your Privacy Rights", id: "yourPrivacyRights", linkTarget: "http://www.oracle.com/us/legal/privacy/index.html" },
+          ];
+        }
+
+        Bootstrap.whenDocumentReady().then(
+          function () {
+            var app = new ControllerViewModel();
+            ko.applyBindings(app, document.getElementById('globalBody'));
+          }
+        );
+      }
+    );
+
+  </script>
+</body>
+
+</html>

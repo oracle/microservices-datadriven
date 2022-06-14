@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<!--
+ Copyright (c) 2019, 2020, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+ -->
+
+<html lang="en-us">
+
+<head>
+  <title>GrabDish</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://static.oracle.com/cdn/jet/9.0.0/default/css/redwood/oj-redwood-min.css"
+    id="css" />
+  <link rel="stylesheet" href="/styles" id="css" />
+  <link rel="icon" href="css/images/favicon.ico" type="image/x-icon" />
+
+  <!-- This is the main css file for the default Alta theme -->
+  <!-- injector:theme -->
+  <link rel="stylesheet" href="css/alta/9.2.0/web/alta.css" id="css" />
+  <!-- endinjector -->
+  <!-- This contains icon fonts used by the starter template -->
+  <link rel="stylesheet" href="css/demo-alta-site-min.css" type="text/css" />
+  <!-- This points to the Oracle universal theme icon font -->
+  <link type="text/css" rel="stylesheet"
+    href="https://static.oracle.com/cdn/apex/18.2.0.00.12/libraries/font-apex/2.1/css/font-apex.min.css">
+
+  <!-- This is where you would add any app specific styling -->
+  <link rel="stylesheet" href="css/app.css" type="text/css" />
+  <style>
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 12px 30px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+.button1 {
+  background-color: white;
+  color: black;
+  border: 2px solid #e7e7e7; color: black;
+}
+</style>
+</head>
+
+<body class="oj-web-applayout-body">
+  <div id="globalBody" class="oj-web-applayout-page">
+    <div id="grabdishContent" style="width: 1px; min-width: 100%;">
+                  
+      <div id="grabdishWrapper">
+        <oj-dialog id="loginDialog" dialog-title="Grabdish Login" initial-visibility="show" cancel-behavior="none">
+          <div slot="body">
+            <oj-form-layout>
+              <oj-input-text label-hint="Username" value="{{loginUserName}}"></oj-input-text>
+              <oj-input-password label-hint="Password" value="{{loginPassword}}"></oj-input-password>
+            </oj-form-layout>
+          </div>
+          <div slot="footer">
+            <oj-button on-oj-action="[[close]]"> Login </oj-button>
+          </div>
+        </oj-dialog>
+        <oj-button id="buttonOpener" on-oj-action="[[open]]">Open Modal Dialog</oj-button>
+        <div class="oj-sm-padding-4x-top" id="form-container">
+          <oj-form-layout direction="row" max-columns="1">
+            <oj-input-text value="{{textVal1}}" label-hint="Address 1"></oj-input-text>
+            <oj-input-text value="{{textVal2}}" label-hint="Address 2"></oj-input-text>
+          </oj-form-layout>
+        </div>
+        <p id="desc">
+          This is where Grabdish will be.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://static.oracle.com/cdn/jet/9.0.0/3rdparty/require/require.js"></script>
+  <script type="text/javascript" src="https://static.oracle.com/cdn/jet/9.0.0/default/js/bundles-config.js"></script>
+  <script>
+
+    (function () {
+      requirejs.config({
+        baseUrl: "js",
+        paths: {
+          knockout: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/knockout/knockout-3.5.1",
+          jquery: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/jquery/jquery-3.5.1.min",
+          "jqueryui-amd": "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/jquery/jqueryui-amd-1.12.1.min",
+          promise: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/es6-promise/es6-promise.min",
+          hammerjs: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/hammer/hammer-2.0.8.min",
+          ojdnd: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/dnd-polyfill/dnd-polyfill-1.0.2.min",
+          ojL10n: "libs/oj/v9.0.0/ojL10n",
+          persist: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/persist/min",
+          text: "libs/require/text",
+          signals: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/js-signals/signals.min",
+          touchr: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/touchr/touchr",
+          "regenerator-runtime": "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/regenerator-runtime/runtime",
+          corejs: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/corejs/shim.min",
+          customElements: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/webcomponents/custom-elements.min",
+          proj4: "https://static.oracle.com/cdn/jet/9.0.0/3rdparty/proj4js/dist/proj4"
+        }
+      })
+    }());
+
+    /**
+     * Ensure that any JET components that are needed are imported here
+     */
+    require(["require", "exports", "knockout", "ojs/ojbootstrap", "ojs/ojknockout", "ojs/ojbutton", "ojs/ojdialog", "ojs/ojformlayout", "ojs/ojinputtext"], function (require, exports, ko, Bootstrap) {
+      "use strict";
+      
+      class viewModel {
+        constructor() {
+          this.textVal1 = ko.observable("");
+          this.textVal2 = ko.observable("");
+          this.loginUserName = ko.observable("");
+          this.loginPassword = ko.observable("");
+        }
+        close(event) {
+            document.getElementById("loginDialog").close();
+        }
+        open(event) {
+            document.getElementById("loginDialog").open();
+        }
+      }
+      Bootstrap.whenDocumentReady().then(() => {
+          ko.applyBindings(new viewModel(), document.getElementById("grabdishWrapper"));
+      });
+    });
+
+  </script>
+</body>
+
+</html>
