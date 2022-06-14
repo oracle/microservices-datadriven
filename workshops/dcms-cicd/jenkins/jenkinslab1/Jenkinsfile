@@ -1,0 +1,190 @@
+def inventory   = null
+def supplier    = null
+def order       = null
+def frontend    = null
+
+pipeline {
+    agent any
+    tools {
+        maven "maven3"
+    }
+    environment {
+        // Registry
+        ocir_credentials_id = ""
+        region = ""
+        registry = "${region}.ocir.io"
+        http_registry = "https://${registry}"
+        namespace = ""
+        lab_id = "gd"
+
+        // Repository
+        repository = ""
+        branch = ""
+
+        // Directory
+        root = "grabdish"
+
+        // Images
+        inventory_directory = "inventory-helidon"
+        supplier_directory = "supplier-helidon-se"
+        order_directory = "order-helidon"
+        frontend_directory = "frontend-helidon"
+
+        // Containers
+        inventory_name = "inventory"
+        supplier_name = "supplier"
+        order_name = "order"
+        frontend_name = "frontend"
+
+        // Kubernetes
+        kube_cluster_name = ""
+        kube_cluster_credentials_id = ""
+        kube_cluster_namespace = "msdataworkshop"
+        kube_cluster_serviceaccount_namespace = "kube-system"
+        kube_cluster_server_url =   ""
+    }
+
+    stages {
+        stage("checkout") {
+            steps {
+                git branch: branch, url: repository
+            }
+        }
+        stage("build-push-deploy") {
+            parallel {
+                stage("update-inventory-helidon") {
+                    when {
+                        changeset "${root}/${inventory_directory}/**"
+                        beforeAgent true
+                    }
+                    stages {
+                        stage("build-and-push-inventory-helidon") {
+                            steps {
+                                script {
+                                    env.full_image = mvn_build(inventory_directory)
+                                    push(env.full_image)
+                                }
+                            }
+                        }
+                        stage("deploy-inventory-helidon") {
+                            steps {
+                                script {
+                                    deploy(inventory_directory, inventory_name, env.full_image)
+                                }
+                            }
+                        }
+                    }
+                }
+                stage("update-supplier-helidon-se") {
+                    when {
+                        changeset "${root}/${supplier_directory}/**"
+                        beforeAgent true
+                    }
+                    stages {
+                        stage("build-and-push-supplier-helidon-se") {
+                            steps {
+                                script {
+                                    env.full_image = mvn_build(supplier_directory)
+                                    push(env.full_image)
+                                }
+                            }
+                        }
+                        stage("deploy-supplier-helidon-se") {
+                            steps {
+                                script {
+                                    deploy(supplier_directory, supplier_name, env.full_image)
+                                }
+                            }
+                        }
+                    }
+                }
+                stage("update-order-helidon") {
+                    when {
+                        changeset "${root}/${order_directory}/**"
+                        beforeAgent true
+                    }
+                    stages {
+                        stage("build-and-push-order-helidon") {
+                            steps {
+                                script {
+                                    env.full_image = mvn_build(order_directory)
+                                    push(env.full_image)
+                                }
+                            }
+                        }
+                        stage("deploy-order-helidon") {
+                            steps {
+                                script {
+                                    deploy(order_directory, order_name, env.full_image)
+                                }
+                            }
+                        }
+                    }
+                }
+
+                stage("update-frontend-helidon") {
+                    when {
+                        changeset "${root}/${frontend_directory}/**"
+                        beforeAgent true
+                    }
+                    stages {
+                        stage("build-and-push-frontend-helidon") {
+                            steps {
+                                script {
+                                    env.full_image = mvn_build(frontend_directory)
+                                    push(env.full_image)
+                                }
+                            }
+                        }
+                        stage("deploy-frontend-helidon") {
+                            steps {
+                                script {
+                                    deploy(frontend_directory, frontend_name, env.full_image)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+def getVersion(location=".") {
+    dir(location) {
+        version = readFile "version.txt"
+        return version
+    }
+}
+
+def mvn_build(repository) {
+    dir("${root}/${repository}") {
+        env.IMAGE_VERSION = getVersion()
+        env.DOCKER_REGISTRY = "${registry}/${namespace}/${lab_id}"
+        full_image = "${registry}/${namespace}/${lab_id}/${repository}:${env.IMAGE_VERSION}"
+        sh "mvn package"
+        return full_image
+    }
+}
+
+def push(image) {
+    withDockerRegistry(credentialsId: ocir_credentials_id, url: http_registry) {
+        sh "docker push ${image}"
+        sh "docker rmi ${image}"
+    }
+}
+
+def deploy(deployment, container, image){
+
+    withKubeCredentials(kubectlCredentials: [[
+    caCertificate: '',
+    clusterName: kube_cluster_name,
+    contextName: '',
+    credentialsId: kube_cluster_credentials_id,
+    namespace: kube_cluster_serviceaccount_namespace,
+    serverUrl: kube_cluster_server_url
+    ]]) {
+        sh "kubectl config set-context --current --namespace=${kube_cluster_namespace}"
+        sh "kubectl set image deployment/${deployment} ${container}=${image}"
+    }   
+}
