@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:n0="http://www.oracle.com/xml/ns/dbchangelog-ext" 
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+	<changeSet id="create_${schema}" labels="create_${schema}" author="john" failOnError="true">
+		<n0:runOracleScript objectName="SCRIPT" objectType="USER" ownerName="ADMIN" sourceType="STRING">
+			<n0:source><![CDATA[				
+				CREATE USER ${schema} IDENTIFIED BY "${password}"
+					DEFAULT COLLATION "USING_NLS_COMP" 
+					DEFAULT TABLESPACE "DATA"
+					TEMPORARY TABLESPACE "TEMP";
+				ALTER USER ${schema} QUOTA UNLIMITED ON "DATA";
+				GRANT CREATE SESSION TO ${schema};
+				GRANT CREATE TABLE TO ${schema};
+				GRANT CREATE CLUSTER TO ${schema};
+				GRANT CREATE SYNONYM TO ${schema};
+				GRANT CREATE VIEW TO ${schema};
+				GRANT CREATE SEQUENCE TO ${schema};
+				GRANT CREATE PROCEDURE TO ${schema};
+				GRANT CREATE TRIGGER TO ${schema};
+				GRANT CREATE MATERIALIZED VIEW TO ${schema};
+				GRANT CREATE TYPE TO ${schema};
+				GRANT CREATE OPERATOR TO ${schema};
+				GRANT CREATE INDEXTYPE TO ${schema};
+				GRANT CREATE DIMENSION TO ${schema};
+				GRANT CREATE JOB TO ${schema};
+			]]></n0:source>
+		</n0:runOracleScript>
+		<rollback>drop user ${schema} cascade;</rollback>
+	</changeSet>
+</databaseChangeLog>
