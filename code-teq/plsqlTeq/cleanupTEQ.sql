@@ -1,15 +1,18 @@
---Clean up all objects related to the obj type: */
-Execute DBMS_AQADM.STOP_QUEUE ( queue_name => 'objType_TEQ'); 
-Execute DBMS_AQADM.drop_transactional_event_queue(queue_name =>'objType_TEQ',force=> TRUE);
+--
+--  This sample demonstrates how to remove (clean up) a TEQ using PL/SQL
+--
 
---Cleans up all objects related to the RAW type: */
-Execute DBMS_AQADM.STOP_QUEUE ( queue_name      => 'rawType_TEQ');   
-Execute DBMS_AQADM.drop_transactional_event_queue(queue_name =>'rawType_TEQ',force=> TRUE);
+--  Execute permission on dbms_aqadm is required.
 
---Cleans up all objects related to the priority queue: */
-Execute DBMS_AQADM.STOP_QUEUE ( queue_name     => 'jsonType_TEQ');  
-Execute DBMS_AQADM.drop_transactional_event_queue(queue_name =>'jsonType_TEQ',force=> TRUE);
+begin
+    -- first we need to stop the TEQ
+    dbms_aqadm.stop_queue( 
+        queue_name     => 'my_json_teq'
+    );  
+
+    -- now we can drop the TEQ
+    dbms_aqadm.drop_transactional_event_queue(
+        queue_name     => 'my_json_teq'
+    );
+end;
 /
-select name, queue_table, dequeue_enabled,enqueue_enabled, sharded, queue_category, recipients from all_queues where OWNER='DBUSER' and QUEUE_TYPE<>'EXCEPTION_QUEUE';
-/
-EXIT;
