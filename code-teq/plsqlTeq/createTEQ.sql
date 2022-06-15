@@ -2,6 +2,9 @@
 --  This sample demonstrates how to create a TEQ using PL/SQL
 --
 
+--  There are various payload types supported, including user-defined object, raw, JMS and JSON.
+--  This sample uses the JMS payload type (which is the default).
+
 --  Execute permission on dbms_aqadm is required.
 
 begin
