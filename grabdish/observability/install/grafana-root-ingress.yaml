@@ -14,7 +14,7 @@ spec:
   tls:
     - secretName: ssl-certificate-secret
   rules:
-    - https:
+    - http:
         paths:
           - path: /
 #            pathType: Prefix
