@@ -6,7 +6,7 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: "nginx"
     nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
-#    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
     #nginx.ingress.kubernetes.io/backend-protocol: "https"
     #nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
     #nginx.ingress.kubernetes.io/add-base-url: "true"
@@ -14,7 +14,7 @@ spec:
   tls:
     - secretName: ssl-certificate-secret
   rules:
-    - http:
+    - https:
         paths:
           - path: /
 #            pathType: Prefix
@@ -23,4 +23,5 @@ spec:
               service:
                 name: grafana
                 port:
-                  number: 80
+#                  number: 80
+                  number: 443
