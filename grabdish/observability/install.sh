@@ -20,6 +20,7 @@ helm install stable prometheus-community/kube-prometheus-stack --namespace=msdat
 echo
 
 echo Installing Grafana...
+kubectl apply -f install/grafana-config-map-ini.yml -n msdataworkshop
 kubectl apply -f install/grafana.yaml -n msdataworkshop
 #todo instead of LB... kubectl apply -f install/grafana-ingress.yaml -n ingress-nginx
 #mkdir tls

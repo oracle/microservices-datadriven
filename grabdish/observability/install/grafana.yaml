@@ -59,6 +59,9 @@ spec:
               cpu: 250m
               memory: 750Mi
           volumeMounts:
+            - name: grafana-config
+              mountPath: /etc/grafana/grafana.ini
+              subPath: grafana.ini
             - mountPath: /var/lib/grafana
               name: grafana-pv
       volumes:
