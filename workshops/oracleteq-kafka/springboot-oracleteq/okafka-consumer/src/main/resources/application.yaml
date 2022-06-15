@@ -48,21 +48,21 @@ logging:
 
 okafka-server-config:
   oracle-instance-name: LAB_DB_SVC
-  oracle-service-name: xxxxxxxxxxxxxxx_teqlab_tp.adb.oraclecloud.com
+  oracle-service-name: SERVICE_NAME
   oracle-net-tns_admin: /home/appuser/wallet
   tns-alias: LAB_DB_SVC
   security-protocol: SSL
-  bootstrap-servers: <namedb>.<region>.oraclecloud.com:<1522>
+  bootstrap-servers: BOOTSTRAP_SRV
 
 okafka-topic-config:
-  topic-name: TEQ_LAB_TOPIC
+  topic-name: TEQ_TOPIC_NAME
   num-of-partitions: 3
   replication-factor: 1
 
 okafka-consumer-config:
   key-deserializer: org.oracle.okafka.common.serialization.StringDeserializer
   value-deserializer: org.oracle.okafka.common.serialization.StringDeserializer
-  group-id: TEQLABTOPIC_SUBSCRIBER
+  group-id: TEQ_SUBSCRIBER
   enable-auto-commit: true
   auto-commit-interval-ms: 10000
   max-poll-records: 100

@@ -1,0 +1,75 @@
+#!/bin/bash
+# Copyright (c) 2021 Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
+# Fail on error
+set -e
+
+TEQ_TOPIC=${1:-"LABTEQTOPIC"}
+
+# Collect the DB password
+read -s -r -p "Please enter Oracle DB Password: " ORACLE_DB_PASSWORD
+echo "***********"
+
+# Collect the DB USER
+if state_done LAB_DB_USER; then
+  LAB_DB_USER="$(state_get LAB_DB_USER)"
+else
+  echo "ERROR: Oracle DB user is missing!"
+  exit
+fi
+
+# Collect Oracle Database Service
+if state_done LAB_DB_NAME; then
+  LAB_DB_SVC="$(state_get LAB_DB_NAME)_tp"
+else
+  echo "ERROR: Oracle DB Service is missing!"
+  exit
+fi
+
+## Collect the Oracle TEQ Topic (Destination)
+#if state_done LAB_TEQ_TOPIC; then
+#  TEQ_TOPIC="$(state_get LAB_TEQ_TOPIC)"
+#else
+#  echo "ERROR: Oracle TEQ Topic is missing!"
+#  exit
+#fi
+#
+## Collect the Oracle TEQ Subscriber (Destination)
+#if state_done LAB_TEQ_TOPIC_SUBSCRIBER; then
+#  TEQ_SUBSCRIBER="$(state_get LAB_TEQ_TOPIC_SUBSCRIBER)"
+#else
+#  echo "ERROR: Oracle TEQ Topic Subscriber is missing!"
+#  exit
+#fi
+
+TEQ_SUBSCRIBER=${TEQ_TOPIC}_SUBS
+
+# DB Connection Setup
+export TNS_ADMIN=$LAB_HOME/wallet
+
+# Add TEQ Topic
+VAR=$(sqlplus -S /nolog <<!
+  connect $LAB_DB_USER/"$ORACLE_DB_PASSWORD"@$LAB_DB_SVC
+
+  @$LAB_HOME/cloud-setup/database/create_oracle_teq_topic.sql $TEQ_TOPIC $TEQ_SUBSCRIBER
+
+  exit;
+!
+)
+
+if [[ "$VAR" == *"PL/SQL procedure successfully"* ]]; then
+  echo "Created topic ${TEQ_TOPIC}"
+  state_set TEQ_TOPIC_NAME "${TEQ_TOPIC}"
+
+  # Adjust the Kafka Producer and Consumer configuration files.
+  echo "Configuring TEQ Producer to produce on topic ${TEQ_TOPIC}."
+  sed -i 's/TEQ_TOPIC_NAME/'"${TEQ_TOPIC}"'/g' "$LAB_HOME/springboot-oracleteq/okafka-producer/src/main/resources/application.yaml"
+
+  echo "Configuring Kafka Consumer to consume from topic ${TEQ_TOPIC}."
+  sed -i 's/TEQ_TOPIC_NAME/'"${TEQ_TOPIC}"'/g' "$LAB_HOME/springboot-oracleteq/okafka-consumer/src/main/resources/application.yaml"
+  sed -i 's/TEQ_SUBSCRIBER/'"${TEQ_SUBSCRIBER}"'/g' "$LAB_HOME/springboot-oracleteq/okafka-consumer/src/main/resources/application.yaml"
+else
+    echo "ERROR: Create Oracle TEQ TOPIC ${TEQ_TOPIC} failed!"
+    exit 2
+fi

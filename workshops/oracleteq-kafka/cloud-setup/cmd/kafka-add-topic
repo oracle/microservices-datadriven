@@ -14,7 +14,7 @@ if [[ "$VAR" == "Created topic"* ]]; then
   echo "Configuring Kafka Producer to produce on topic ${KAFKA_TOPIC}."
   sed -i 's/KAFKA_TOPIC_NAME/'"${KAFKA_TOPIC}"'/g' "$LAB_HOME/springboot-kafka/kafka-producer/src/main/resources/application.yaml"
 
-  echo "Configuring Kafka Producer to consume from topic ${KAFKA_TOPIC}."
+  echo "Configuring Kafka Consumer to consume from topic ${KAFKA_TOPIC}."
   sed -i 's/KAFKA_TOPIC_NAME/'"${KAFKA_TOPIC}"'/g' "$LAB_HOME/springboot-kafka/kafka-consumer/src/main/resources/application.yaml"
 fi
 

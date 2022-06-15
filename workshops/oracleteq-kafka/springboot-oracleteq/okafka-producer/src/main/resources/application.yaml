@@ -48,14 +48,14 @@ logging:
 
 okafka-server-config:
   oracle-instance-name: LAB_DB_SVC
-  oracle-service-name: xxxxxxxxxxxxxxx_teqlab_tp.adb.oraclecloud.com
+  oracle-service-name: SERVICE_NAME
   oracle-net-tns_admin: /home/appuser/wallet
   tns-alias: LAB_DB_SVC
   security-protocol: SSL
-  bootstrap-servers: <namedb>.<region>.oraclecloud.com:<1522>
+  bootstrap-servers: BOOTSTRAP_SRV
 
 okafka-topic-config:
-  topic-name: TEQ_LAB_TOPIC
+  topic-name: TEQ_TOPIC_NAME
   num-of-partitions: 3
   replication-factor: 1
 
