@@ -22,7 +22,7 @@ echo
 echo Installing Grafana...
 kubectl apply -f install/grafana-config-map-ini.yml -n msdataworkshop
 kubectl apply -f install/grafana.yaml -n msdataworkshop
-#todo instead of LB... kubectl apply -f install/grafana-ingress.yaml -n ingress-nginx
+#todo instead of LB... kubectl apply -f install/grafana-ingress.yaml -n msdataworkshop
 #mkdir tls
 #chmod 700 tls
 #openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls/tls.key -out tls/tls.crt -subj "/CN=grabdish/O=grabdish"
