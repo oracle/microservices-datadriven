@@ -62,9 +62,9 @@ spec:
             - mountPath: /var/lib/grafana
               name: grafana-pv
       volumes:
-        - name: grafana-config
-          configMap:
-            name: grafana-ini
+#        - name: grafana-config
+#          configMap:
+#            name: grafana-ini
         - name: grafana-pv
           persistentVolumeClaim:
             claimName: grafana-pvc
