@@ -25,6 +25,6 @@ RUN curl https://download.oracle.com/otn_software/java/sqldeveloper/sqlcl-latest
 unzip -q sqlcl-latest.zip -d /workspace && rm sqlcl-latest.zip
 
 # install plugins
-RUN jenkins-plugin-cli --plugins blueocean docker-workflow matrix-auth git workflow-aggregator credentials-binding configuration-as-code kubernetes-cli
+RUN jenkins-plugin-cli --plugins blueocean docker-workflow matrix-auth git github github-branch-source workflow-aggregator credentials-binding configuration-as-code kubernetes-cli
 
 USER jenkins
