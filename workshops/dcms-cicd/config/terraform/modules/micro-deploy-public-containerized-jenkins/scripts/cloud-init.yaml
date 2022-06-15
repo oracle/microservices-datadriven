@@ -24,4 +24,5 @@ runcmd:
   - [ systemctl, daemon-reload ]
   - [ systemctl, enable, docker.service ]
   - [ systemctl, start, --no-block, docker.service ]
+  - [ mkdir, /jenkins/wallet ]
   - [ touch, /tmp/cloud-init-complete ]
