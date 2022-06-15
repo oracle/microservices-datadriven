@@ -17,7 +17,8 @@ spec:
   rules:
   - http:
       paths:
-      - path: /
+#      - path: /
+      - path: /grabdish
         pathType: Prefix
         backend:
           service:
