@@ -24,10 +24,10 @@ jmsType = connection.gettype("SYS.AQ$_JMS_TEXT_MESSAGE")
 headerType = connection.gettype("SYS.AQ$_JMS_HEADER")
 userPropType = connection.gettype("SYS.AQ$_JMS_USERPROPARRAY")
 
-queue = connection.queue(topicName, jmsType)
+queue = connection.queue(topicName) #, jmsType)
 queue.deqOptions.consumername = consumerName
 queue.deqOptions.wait = 10
 
 message = queue.deqOne()
 connection.commit()
-print("message: ", message.payload.TEXT_VC)
+print("message: ", message.payload.decode(connection.encoding)) #TEXT_VC)
