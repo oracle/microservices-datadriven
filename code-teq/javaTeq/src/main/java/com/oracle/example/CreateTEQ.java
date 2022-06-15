@@ -5,16 +5,13 @@ import java.sql.SQLException;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Session;
-import javax.jms.Topic;
 import javax.jms.TopicConnection;
 import javax.jms.TopicConnectionFactory;
 import javax.jms.TopicSession;
 
 import oracle.AQ.AQException;
-import oracle.AQ.AQQueueTable;
 import oracle.AQ.AQQueueTableProperty;
 import oracle.jms.AQjmsDestination;
-import oracle.jms.AQjmsDestinationProperty;
 import oracle.jms.AQjmsFactory;
 import oracle.jms.AQjmsSession;
 import oracle.ucp.jdbc.PoolDataSource;
@@ -45,7 +42,7 @@ public class CreateTEQ {
         props.setPayloadType("SYS.AQ$_JMS_TEXT_MESSAGE");
 
         // create queue table, topic and start it
-        Destination myTeq = ((AQjmsSession) session).createJMSShardedQueue("my_jms_teq", true);
+        Destination myTeq = ((AQjmsSession) session).createJMSTransactionalEventQueue("my_jms_teq", true);
         ((AQjmsDestination) myTeq).start(session, true, true);
 
     }
