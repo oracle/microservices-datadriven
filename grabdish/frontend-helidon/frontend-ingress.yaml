@@ -17,10 +17,10 @@ spec:
   rules:
   - http:
       paths:
-#      - path: /
-      - path: /grabdish
-        pathType: ImplementationSpecific
-#        pathType: Prefix
+      - path: /
+#      - path: /grabdish
+#        pathType: ImplementationSpecific
+        pathType: Prefix
         backend:
           service:
             name: frontend
