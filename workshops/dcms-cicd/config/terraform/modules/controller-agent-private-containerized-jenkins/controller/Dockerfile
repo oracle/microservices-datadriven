@@ -4,6 +4,6 @@ FROM jenkins/jenkins:lts-jdk11
 USER root
 
 # install plugins
-RUN jenkins-plugin-cli --plugins blueocean docker-workflow matrix-auth git workflow-aggregator credentials-binding configuration-as-code kubernetes-cli
+RUN jenkins-plugin-cli --plugins blueocean docker-workflow matrix-auth git github github-branch-source workflow-aggregator credentials-binding configuration-as-code kubernetes-cli
 
 USER jenkins
