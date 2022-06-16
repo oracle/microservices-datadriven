@@ -29,7 +29,7 @@ kubectl delete configmap db-metrics-inventorypdb-exporter-config -n msdataworksh
 kubectl create configmap db-metrics-inventorypdb-exporter-config --from-file=db-metrics-inventorypdb-exporter-metrics.toml -n msdataworkshop
 echo
 echo create db-metrics-exporter deployment and service...
-export CURRENTTIME=$( date '+%F_%H:%M:%S' )
+export CURRENTTIME=generated
 echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated deployment yaml
 
 cp db-metrics-exporter-deployment.yaml db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
@@ -40,7 +40,7 @@ sed -e  "s|%EXPORTER_NAME%|inventorypdb|g" db-metrics-exporter-inventorypdb-depl
 mv -- /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
 sed -e  "s|%PDB_NAME%|${INVENTORY_DB_NAME}|g" db-metrics-exporter-inventorypdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
-sed -e  "s|%USER%|INVENTORYUSER|g" db-metrics-exporter-inventorypdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
+sed -e  "s|%USER%|admin|g" db-metrics-exporter-inventorypdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
 sed -e  "s|%db-wallet-secret%|inventory-db-tns-admin-secret|g" db-metrics-exporter-inventorypdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml

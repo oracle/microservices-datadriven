@@ -8,8 +8,8 @@ BEGIN
     dequeue_options.wait := dbms_aq.FOREVER;
     dequeue_options.navigation    := dbms_aq.FIRST_MESSAGE;
 
-    dequeue_options.consumer_name := 'inventory_service';
-   DBMS_AQ.DEQUEUE(queue_name => 'AQ.orderqueue',
+    dequeue_options.consumer_name := 'bankb_service';
+   DBMS_AQ.DEQUEUE(queue_name => 'aquser.banka',
            dequeue_options    => dequeue_options,
            message_properties => message_properties,
            payload            => message,

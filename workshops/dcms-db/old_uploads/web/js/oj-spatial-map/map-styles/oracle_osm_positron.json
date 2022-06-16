@@ -1,0 +1,33 @@
+{
+    "version": 8,
+    "id"     : "elocation-osm-positron-raster",
+    "name"   : "OSM Positron (Oracle)",
+    "metadata" : {
+        "sgtech:version": "19.1.0",
+        "sgtech:sources:type": "raster"
+    },
+
+    "sources": {
+
+        "elocation-osm-positron": {
+            "type": "raster",
+            "attribution": "<a target=''_blank'' href=''http://openmaptiles.org''> &copy; OpenMapTiles </a> &nbsp; <a target=''_blank'' href=''https://www.openstreetmap.org/copyright''> &copy; OpenStreetMap contributors </a>",
+            "tiles": [
+                "https://elocation.oracle.com/mapviewer/mcserver/ELOCATION_MERCATOR/osm_positron/{z}/{y}/{x}.png"
+            ],
+            "tileSize": 256
+        }
+    },
+
+    "layers": [
+        {
+            "id": "Oracle OSM Positron",
+            "type": "raster",
+            "source": "elocation-osm-positron",
+            "minzoom": 0,
+            "maxzoom": 19
+        }
+    ],
+    "sprite": "{BASE_URL}/map-styles/sprites/sgtech-maki",
+    "glyphs": "{BASE_URL}/map-styles/fonts/glyphs/{fontstack}/{range}.pbf"
+}

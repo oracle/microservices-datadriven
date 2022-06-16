@@ -194,7 +194,10 @@ public class OrderResource {
             @QueryParam("orderid") String orderId) {
         System.out.println("--->showorder (via JSON/SODA query) for orderId:" + orderId);
         try {
-            Order order = orderServiceEventProducer.getOrderViaSODA(atpOrderPdb.getConnection(), orderId);
+            Order order;
+            try (Connection connection =atpOrderPdb.getConnection()) {
+                order = orderServiceEventProducer.getOrderViaSODA(connection, orderId);
+            }
             String returnJSON = JsonUtils.writeValueAsString(order);
             System.out.println("OrderResource.showorder returnJSON:" + returnJSON);
             return Response.ok()
