@@ -18,7 +18,7 @@ spec:
   tls:
     - secretName: ssl-certificate-secret
   rules:
-    - https:
+    - http:
         paths:
         - path: /grafana(/|$)(.*)
           pathType: ImplementationSpecific
@@ -26,5 +26,4 @@ spec:
             service:
               name: grafana
               port:
-                number: 443
-#                number: 3000
+                number: 3000
