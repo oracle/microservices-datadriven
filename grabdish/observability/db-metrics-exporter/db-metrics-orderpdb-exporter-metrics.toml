@@ -269,7 +269,8 @@ FROM
 
 [[log]]
 context = "orderpdb_propagation_disabled_status"
-logdesc = { value = "Severe events from alert logs"}
+logdesc = "alert logs for order PDB"
+timestamp = "ORIGINATING_TIMESTAMP"
 request = "select ORIGINATING_TIMESTAMP, MODULE_ID, EXECUTION_CONTEXT_ID, MESSAGE_TEXT from V$diag_alert_ext"
 
 [[trace]]
