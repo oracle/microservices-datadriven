@@ -3,7 +3,7 @@
 --
 
 --  There are various payload types supported, including user-defined object, raw, JMS and JSON.
---  This sample uses the JSON payload type.
+--  This sample uses the JMS payload type.
 
 --  Execute permission on dbms_aq is required.
 
@@ -12,7 +12,7 @@ declare
     dequeue_options     dbms_aq.dequeue_options_t;
     message_properties  dbms_aq.message_properties_t;
     message_handle      raw(16);
-    message             json;
+    message             SYS.AQ$_JMS_TEXT_MESSAGE;
 
 begin
     -- dequeue_mode determines whether we will consume the message or just browse it and leave it there
@@ -26,7 +26,7 @@ begin
 
     -- perform the dequeue
     dbms_aq.dequeue(
-        queue_name         => 'my_json_teq',
+        queue_name         => 'my_teq',
         dequeue_options    => dequeue_options,
         message_properties => message_properties,
         payload            => message,
@@ -34,7 +34,7 @@ begin
     );
 
     -- print out the message payload
-    dbms_output.put_line(json_serialize(message));
+    dbms_output.put_line(message.text);
     
     -- commit the transaction
     commit;

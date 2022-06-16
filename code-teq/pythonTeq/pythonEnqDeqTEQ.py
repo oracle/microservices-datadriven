@@ -1,63 +1,63 @@
 import os
-import logging
+# import logging
 from os import environ as env
 import cx_Oracle
-import threading
-import time
-import oci
-import base64
+# import threading
+# import time
+# import oci
+# import base64
 
-connection = cx_Oracle.connect(dsn=env.get('DB_ALIAS'))
-cursor = connection.cursor()
+connection = cx_Oracle.connect(dsn='localhost:1521/pdb1',user='pdbadmin',password=env.get('DB_PASSWORD'))
+# cursor = connection.cursor()
 
-#ADT payload
-book_type = connection.gettype("PYTHON_TEQ_MESSAGE_TYPE")
-adtQueue = connection.queue("PYTHON_TEQ_ADT", book_type)
+# #ADT payload
+# book_type = connection.gettype("PYTHON_TEQ_MESSAGE_TYPE")
+# adtQueue = connection.queue("PYTHON_TEQ_ADT", book_type)
 
-book = book_type.newobject()
-book.TITLE = "Quick Brown Fox"
-book.AUTHORS = "The Dog"
-book.PRICE = 123
-props = connection.msgproperties(payload=book, correlation="correlation-py", expiration=30, priority=7)
+# book = book_type.newobject()
+# book.TITLE = "Quick Brown Fox"
+# book.AUTHORS = "The Dog"
+# book.PRICE = 123
+# props = connection.msgproperties(payload=book, correlation="correlation-py", expiration=30, priority=7)
 
-print("1) Sample for Classic Queue : ADT payload")
-print("Enqueue one message with ADT payload : ",book.TITLE)
-adtQueue.enqOne(props)
-connection.commit()
-print("Enqueue Done!!!")
+# print("1) Sample for Classic Queue : ADT payload")
+# print("Enqueue one message with ADT payload : ",book.TITLE)
+# adtQueue.enqOne(props)
+# connection.commit()
+# print("Enqueue Done!!!")
 
-#deqOptions should have consumername in case of multiconsumer queue
-adtQueue.deqOptions.consumername = "PYTHON_TEQ_SUBSCIBER_ADT"
-adtQueue.deqOptions.wait = cx_Oracle.DEQ_NO_WAIT
-adtQueue.deqOptions.navigation = cx_Oracle.DEQ_FIRST_MSG
-adtMsg = adtQueue.deqOne()
-connection.commit()
-print("Dequeued message with ADT payload : ",adtMsg.payload.TITLE)
-print("Dequeue Done!!!") 
-print("-----------------------------------------------------------------")
+# #deqOptions should have consumername in case of multiconsumer queue
+# adtQueue.deqOptions.consumername = "PYTHON_TEQ_SUBSCIBER_ADT"
+# adtQueue.deqOptions.wait = cx_Oracle.DEQ_NO_WAIT
+# adtQueue.deqOptions.navigation = cx_Oracle.DEQ_FIRST_MSG
+# adtMsg = adtQueue.deqOne()
+# connection.commit()
+# print("Dequeued message with ADT payload : ",adtMsg.payload.TITLE)
+# print("Dequeue Done!!!") 
+# print("-----------------------------------------------------------------")
 
-#RAW PAYLOAD
-print("\n2) Sample for Classic queue : RAW payload")
+# #RAW PAYLOAD
+# print("\n2) Sample for Classic queue : RAW payload")
 
-rawQueue = connection.queue("PYTHON_TEQ_RAW")
-PAYLOAD_DATA = [
-        "The first message"
-]
-for data in PAYLOAD_DATA:
-    print("Enqueue message with RAW payload : ",data)
-    rawQueue.enqone(connection.msgproperties(payload=data))
-connection.commit()
-print("Enqueue Done!!!")	
+# rawQueue = connection.queue("PYTHON_TEQ_RAW")
+# PAYLOAD_DATA = [
+#         "The first message"
+# ]
+# for data in PAYLOAD_DATA:
+#     print("Enqueue message with RAW payload : ",data)
+#     rawQueue.enqone(connection.msgproperties(payload=data))
+# connection.commit()
+# print("Enqueue Done!!!")	
 
-rawQueue.deqOptions.consumername = "PYTHON_TEQ_SUBSCIBER_RAW"
-rawQueue.deqOptions.wait = cx_Oracle.DEQ_NO_WAIT
-rawQueue.deqOptions.navigation = cx_Oracle.DEQ_FIRST_MSG
-rawMsg = rawQueue.deqOne()
-connection.commit()
-print(rawMsg.payload.decode(connection.encoding))
-print("Dequeued message with RAW payload : ",rawMsg.payload)
-print("Dequeue Done!!!") 
-print("-----------------------------------------------------------------")
+# rawQueue.deqOptions.consumername = "PYTHON_TEQ_SUBSCIBER_RAW"
+# rawQueue.deqOptions.wait = cx_Oracle.DEQ_NO_WAIT
+# rawQueue.deqOptions.navigation = cx_Oracle.DEQ_FIRST_MSG
+# rawMsg = rawQueue.deqOne()
+# connection.commit()
+# print(rawMsg.payload.decode(connection.encoding))
+# print("Dequeued message with RAW payload : ",rawMsg.payload)
+# print("Dequeue Done!!!") 
+# print("-----------------------------------------------------------------")
 
 print("\n3) Sample for Classic queue : JMS payload")
 #get the JMS type
@@ -65,7 +65,7 @@ jmsType = connection.gettype("SYS.AQ$_JMS_TEXT_MESSAGE")
 headerType = connection.gettype("SYS.AQ$_JMS_HEADER")
 user_prop_Type = connection.gettype("SYS.AQ$_JMS_USERPROPARRAY")
 
-jmsQueue = connection.queue("PYTHON_TEQ_JMS",jmsType)
+jmsQueue = connection.queue("my_teq",jmsType)
 #create python object for JMS type
 text = jmsType.newobject()
 text.HEADER = headerType.newobject()
