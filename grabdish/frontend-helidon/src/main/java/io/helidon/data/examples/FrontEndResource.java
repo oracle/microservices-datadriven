@@ -217,6 +217,19 @@ public class FrontEndResource {
 
     }
 
+    int autoincrementorderid = 1;
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/placeorderautoincrement")
+    @Traced(operationName = "Frontend.placeOrder")
+    @Timed(name = "frontend_placeOrder_timed") //length of time of an object
+    @Counted(name = "frontend_placeOrder_counted") //amount of invocations
+    public String placeorderautoincrement(Command command) {
+        command.orderId = autoincrementorderid++;
+        return placeorder(command);
+    }
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
