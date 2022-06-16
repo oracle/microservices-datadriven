@@ -15,7 +15,7 @@ ignorezeroresult = true
 context = "orderpdb_orders_by_status"
 labels = ["status"]
 metricsdesc = { value = "Total number of orders by status"}
-request = "select JSON_VALUE(JSON_DOCUMENT ,'$.status') as status, count(*) as value from orderscollection group by JSON_VALUE(JSON_DOCUMENT ,'$.status')"
+request = "select JSON_VALUE(JSON_DOCUMENT ,'$.status') as status, count(*) as value from orderuser.orderscollection group by JSON_VALUE(JSON_DOCUMENT ,'$.status')"
 ignorezeroresult = true
 
 [[metric]]

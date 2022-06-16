@@ -15,7 +15,7 @@ ignorezeroresult = true
 context = "inventorypdb_inventory_by_inventoryid"
 labels = ["inventoryid"]
 metricsdesc = { value = "Total number of inventory by inventoryid"}
-request = "select inventoryid, inventorycount as value from inventory"
+request = "select inventoryid, inventorycount as value from inventoryuser.inventory"
 ignorezeroresult = true
 
 [[metric]]
