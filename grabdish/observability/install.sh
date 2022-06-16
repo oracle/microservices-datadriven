@@ -20,17 +20,21 @@ helm install stable prometheus-community/kube-prometheus-stack --namespace=msdat
 echo
 
 echo Installing Grafana...
-kubectl apply -f install/grafana-config-map-ini.yml -n msdataworkshop
-kubectl apply -f install/grafana.yaml -n msdataworkshop
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+helm install grafana-lab grafana/grafana --namespace msdataworkshop -f install/grafana-helm-values.yaml
+# Paul'version (v 20220616)
+# kubectl apply -f install/grafana-config-map-ini.yml -n msdataworkshop
+# kubectl apply -f install/grafana.yaml -n msdataworkshop
 #todo instead of LB... kubectl apply -f install/grafana-ingress.yaml -n msdataworkshop
 #mkdir tls
 #chmod 700 tls
 #openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls/tls.key -out tls/tls.crt -subj "/CN=grabdish/O=grabdish"
 #kubectl create secret tls ssl-certificate-secret --key tls/tls.key --cert $GRABDISH_HOME/tls/tls.crt -n msdataworkshop
 
-echo Creating Grafana Service...
-kubectl apply -f install/grafana-service.yaml -n msdataworkshop
-echo
+# echo Creating Grafana Service...
+# kubectl apply -f install/grafana-service.yaml -n msdataworkshop
+# echo
 
 echo Installing loki-stack with Promtail...
 helm repo add grafana https://grafana.github.io/helm-charts
