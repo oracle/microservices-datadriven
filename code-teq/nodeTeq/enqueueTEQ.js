@@ -6,6 +6,7 @@
 //  This sample uses the RAW payload type.
 
 //  Execute permission on dbms_aq is required.
+//  The node module 'oracledb' must be installed, e.g. with npm
 
 const oracledb = require('oracledb');
 
