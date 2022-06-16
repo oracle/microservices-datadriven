@@ -271,7 +271,8 @@ FROM
 
 [[log]]
 context = "inventorydb_alertlogs"
-timestamp = "ORIGINATING_TIMESTAMP"
+logdesc = "alert logs for inventory PDB"
+timestampfield = "ORIGINATING_TIMESTAMP"
 request = "select ORIGINATING_TIMESTAMP, MODULE_ID, EXECUTION_CONTEXT_ID, MESSAGE_TEXT from V$diag_alert_ext"
 
 [[trace]]

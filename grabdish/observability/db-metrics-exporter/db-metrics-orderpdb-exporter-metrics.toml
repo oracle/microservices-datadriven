@@ -270,11 +270,12 @@ FROM
 [[log]]
 context = "orderpdb_propagation_disabled_status"
 logdesc = "alert logs for order PDB"
-timestamp = "ORIGINATING_TIMESTAMP"
+timestampfield = "ORIGINATING_TIMESTAMP"
 request = "select ORIGINATING_TIMESTAMP, MODULE_ID, EXECUTION_CONTEXT_ID, MESSAGE_TEXT from V$diag_alert_ext"
 
 [[trace]]
 context = "orderpdb_propagation_disabled_status"
 tracingdesc = { value = "Trace including sqltext with bind values of all sessions by orderuser"}
+traceidfield = { value = "Trace including sqltext with bind values of all sessions by orderuser"}
 request = "select ECID, SQL_ID from GV$SESSION where ECID IS NOT NULL"
 
