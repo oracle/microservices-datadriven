@@ -1,5 +1,5 @@
 //
-//  This sample demonstrates how to enqueue a message onto a TEQ using PL/SQL
+//  This sample demonstrates how to enqueue a message onto a TEQ using JavaScript/Node
 //
 
 //  There are various payload types supported, including user-defined object, raw, JMS and JSON.
