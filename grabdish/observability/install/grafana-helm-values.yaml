@@ -1,3 +1,6 @@
+# Administrator credentials when not using an existing secret (see below)
+adminPassword: prom-operator
+
 ingress:
   enabled: true
   annotations:
@@ -13,7 +16,12 @@ ingress:
   tls:
     - secretName: ssl-certificate-secret
 
-​grafana.ini:
+persistence:
+  enabled: true
+  type: pvc
+  #size: 10Gi
+
+grafana.ini:
   server:
     root_url: "%(protocol)s://%(domain)s/grafana"
     serve_from_sub_path: true
