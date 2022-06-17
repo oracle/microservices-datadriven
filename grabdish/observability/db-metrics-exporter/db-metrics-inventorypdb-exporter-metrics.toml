@@ -277,6 +277,8 @@ request = "select ORIGINATING_TIMESTAMP, MODULE_ID, EXECUTION_CONTEXT_ID, MESSAG
 
 [[trace]]
 context = "inventorydb_tracing"
-tracingdesc = { value = "Trace including sqltext with bind values of all sessions by orderuser"}
+tracingdesc = { value = "Trace including sqltext with bind values of all sessions by inventoryuser"}
+traceidfield = "ECID"
+template = "ECID_BIND_VALUES"
 request = "select ECID, SQL_ID from GV$SESSION where ECID IS NOT NULL"
 
