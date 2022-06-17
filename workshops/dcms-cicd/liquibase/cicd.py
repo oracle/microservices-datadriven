@@ -14,12 +14,13 @@ tns_admin = '/var/lib/jenkins'
 """
 def run_sqlcl(schema, password, service, cmd, resolution, conn_file, run_as):
     lb_env = os.environ.copy()
-    lb_env['TNS_ADMIN'] = tns_admin #<-Global
     lb_env['password']  = password
     lb_env['schema']    = schema
 
     if resolution == 'wallet':
-        wallet = f'set cloudconfig {tns_admin}/{conn_file}'
+        wallet = f'set cloudconfig {conn_file}'
+    else:
+        lb_env['TNS_ADMIN'] = tns_admin #<-Global
 
     # Keep password off the command line/shell history
     sql_cmd = f'''
@@ -33,34 +34,36 @@ def run_sqlcl(schema, password, service, cmd, resolution, conn_file, run_as):
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     exit_status = 0
+    error_matches = ['Error Message','ORA-','SQL Error']
     result_list = result.stdout.splitlines();
     for line in filter(None, result_list):
         log.info(line)
-        if 'Error Message' in line:
+        if any(x in line for x in error_matches):
             exit_status = 1
     if result.returncode or exit_status:
-        sys.exit(log.fatal('Exiting...'))
+        log.fatal('Exiting...')
+        sys.exit(1)
 
     log.info('SQLcl command successful')
 
 
 def deploy(password, resolution, conn_file, args):
     log.info('Running controller.admin.xml')
-    cmd = f'lb update -emit_schema -changelog controller.admin.xml;'
+    cmd = 'lb update -emit_schema -changelog controller.admin.xml;'
     run_sqlcl(args.dbUser, password, args.dbName, cmd, resolution, conn_file, 'ADMIN')
 
     log.info('Running controller.xml')
-    cmd = f'lb update -emit_schema -changelog controller.xml;'
+    cmd = 'lb update -emit_schema -changelog controller.xml;'
     run_sqlcl(args.dbUser, password, args.dbName, cmd, resolution, conn_file, args.dbUser)
 
     if os.path.exists('controller.data.xml'):
         log.info('Running controller.data.xml')
-        cmd = f'lb update -emit_schema -changelog controller.data.xml;'
+        cmd = 'lb update -emit_schema -changelog controller.data.xml;'
         run_sqlcl(args.dbUser, password, args.dbName, cmd, resolution, conn_file, args.dbUser)
 
 
 def generate(password, resolution, conn_file, args):
-    cmd = f'lb genschema -grants -split'
+    cmd = 'lb genschema -grants -split'
     run_sqlcl(args.dbUser, password, args.dbName, cmd, resolution, conn_file, args.dbUser)
 
     # To avoid false changes impacting version control, replace schema names
@@ -76,8 +79,8 @@ def generate(password, resolution, conn_file, args):
 
 
 def destroy(password, resolution, conn_file, args):
-    cmd = f'lb rollback -changelog user.xml -count 999;'
-    run_sqlcl(args.dbUser, password, args.dbName, cmd, resolution, conn_file, True)
+    cmd = 'lb rollback -changelog user.xml -count 999;'
+    run_sqlcl(args.dbUser, password, args.dbName, cmd, resolution, conn_file, 'ADMIN')
 
 """ INIT
 """
@@ -130,17 +133,18 @@ if __name__ == "__main__":
             f = open(".secret", "r")
             password = f.readline().split()[-1]
         except:
-            sys.exit(log.fatal('Database password required'))
+            log.fatal('Database password required')
+            sys.exit(1)
 
     resolution = 'wallet' # Default
     if args.dbWallet:
         conn_file     = args.dbWallet
     else:
         if os.path.exists(f'{tns_admin}/{args.dbName}_wallet.zip'):
-            conn_file = f'{args.dbName}_wallet.zip'
+            conn_file = f'{tns_admin}/{args.dbName}_wallet.zip'
         elif os.path.exists(f'{tns_admin}/tnsnames.ora'):
             resolution   = 'tnsnames'
-            conn_file    = 'tnsnames.ora'
+            conn_file    = '{tns_admin}/tnsnames.ora'
 
     args.func(password, resolution, conn_file,  args)
     sys.exit(0)
