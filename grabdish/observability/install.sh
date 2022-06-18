@@ -19,13 +19,14 @@ helm repo add prometheus-community https://prometheus-community.github.io/helm-c
 helm repo add grafana https://grafana.github.io/helm-charts
 helm repo update
 
-echo Installing Prometheus...
-helm install stable prometheus-community/kube-prometheus-stack --namespace=msdataworkshop --set grafana.enabled=false
+echo Installing Prometheus and custom Grafana ...
+helm install stable prometheus-community/kube-prometheus-stack --namespace msdataworkshop -f install/prometheus-stack-values.yaml
+#helm install stable prometheus-community/kube-prometheus-stack --namespace=msdataworkshop --set grafana.enabled=false
 echo
 
-echo Installing Grafana...
-helm install grafana-lab grafana/grafana --namespace msdataworkshop -f install/grafana-helm-values.yaml
-echo
+# echo Installing Grafana...
+# helm install grafana-lab grafana/grafana --namespace msdataworkshop -f install/grafana-helm-values.yaml
+# echo
 
 echo Installing loki-stack with Promtail...
 helm install loki-stack grafana/loki-stack --create-namespace --namespace loki-stack --set promtail.enabled=true,loki.persistence.enabled=true,loki.persistence.size=100Gi
