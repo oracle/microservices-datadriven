@@ -1,3 +1,9 @@
+// Copyright (c) 2022, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
+// This is an example of how to consume a message from a TEQ using Java.
+// Please see the Maven POM file for dependencies.
+
 package com.oracle.example;
 
 import java.sql.SQLException;

@@ -1,5 +1,7 @@
+-- Copyright (c) 2022, Oracle and/or its affiliates.
+-- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 --
---  This sample demonstrates how to enqueue a message onto a TEQ using PL/SQL
+--  This sample demonstrates how to dequeue a message from a TEQ using PL/SQL
 --
 
 --  There are various payload types supported, including user-defined object, raw, JMS and JSON.
