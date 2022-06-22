@@ -9,7 +9,7 @@ The code that provisions the Grabdish application is located in the grabdish/con
 ## Prerequisites
 
 The following are required before provisioning Grabdish:
-1. Kubernetes cluster with kuebctl configured
+1. Kubernetes cluster with kubectl configured
 2. One or two databases
 3. An OCI object store bucket (ATP 2DB only)
 4. get_secret bash function (available in infra/vault/folder)
