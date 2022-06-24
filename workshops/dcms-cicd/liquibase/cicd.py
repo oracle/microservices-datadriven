@@ -34,7 +34,7 @@ def run_sqlcl(schema, password, service, cmd, resolution, conn_file, run_as):
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     exit_status = 0
-    error_matches = ['Error Message','ORA-','SQL Error']
+    error_matches = ['Error Message','ORA-','SQL Error','Validation Failed']
     result_list = result.stdout.splitlines();
     for line in filter(None, result_list):
         log.info(line)
@@ -137,6 +137,7 @@ if __name__ == "__main__":
             sys.exit(1)
 
     resolution = 'wallet' # Default
+    conn_file  = None
     if args.dbWallet:
         conn_file     = args.dbWallet
     else:
