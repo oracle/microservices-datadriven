@@ -1,6 +1,8 @@
 ## Using custom values based on https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
 ##
 grafana:
+  image:
+    tag: "9.0.1"
   ingress:
     enabled: true
     annotations:
