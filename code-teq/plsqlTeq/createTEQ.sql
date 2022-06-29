@@ -1,107 +1,47 @@
+-- Copyright (c) 2022, Oracle and/or its affiliates.
+-- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
-CREATE type Message_type as object (subject     VARCHAR2(30), text        VARCHAR2(80));  
-/
--- Creating an Object type queue 
-BEGIN
- DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
-     queue_name         =>'objType_TEQ',
-     storage_clause     =>null, 
-     multiple_consumers =>true, 
-     max_retries        =>10,
-     comment            =>'ObjectType for TEQ', 
-     queue_payload_type =>'Message_type', 
-     queue_properties   =>null, 
-     replication_mode   =>null);
- DBMS_AQADM.START_QUEUE (queue_name=> 'objType_TEQ', enqueue =>TRUE, dequeue=> True); 
-END;
-/
+--
+--  This sample demonstrates how to create a TEQ using PL/SQL
+--
 
--- Creating a RAW type queue: 
-BEGIN
- DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
-     queue_name         =>'rawType_TEQ',
-     storage_clause     =>null, 
-     multiple_consumers =>true, 
-     max_retries        =>10,
-     comment            =>'RAW type for TEQ', 
-     queue_payload_type =>'RAW', 
-     queue_properties   =>null, 
-     replication_mode   =>null);
- DBMS_AQADM.START_QUEUE (queue_name=> 'rawType_TEQ', enqueue =>TRUE, dequeue=> True); 
-END;
+--  There are various payload types supported, including user-defined object, raw, JMS and JSON.
+--  This sample uses the JMS payload type (which is the default).
+
+--  Execute permission on dbms_aqadm is required.
+
+begin
+    -- create the TEQ
+    dbms_aqadm.create_transactional_event_queue(
+        -- note, in Oracle 19c this is called create_sharded_queue() but has the same parameters
+        queue_name         => 'my_teq',
+        -- when mutiple_consumers is true, this will create a pub/sub "topic" - the default is false
+        multiple_consumers => true
+    );
+    
+    -- start the TEQ
+    dbms_aqadm.start_queue(
+        queue_name         => 'my_teq'
+    ); 
+end;
 /
 
---Creating JSON type queue:
-BEGIN
- DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
-     queue_name         =>'jsonType_TEQ',
-     storage_clause     =>null, 
-     multiple_consumers =>true, 
-     max_retries        =>10,
-     comment            =>'jsonType for TEQ', 
-     queue_payload_type =>'JSON', 
-     queue_properties   =>null, 
-     replication_mode   =>null);
- DBMS_AQADM.START_QUEUE (queue_name=> 'jsonType_TEQ', enqueue =>TRUE, dequeue=> True); 
-END;
-/
-BEGIN
- DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
-     queue_name        =>'JAVA_TEQ_PUBSUB_QUEUE',
-     storage_clause    =>null, 
-     multiple_consumers=>true, 
-     max_retries       =>10,
-     comment           =>'JAVA_TEQ_PUBSUB_QUEUE', 
-     queue_payload_type=>'JMS', 
-     queue_properties  =>null, 
-     replication_mode  =>null);
- DBMS_AQADM.START_QUEUE (queue_name=> 'JAVA_TEQ_PUBSUB_QUEUE', enqueue =>TRUE, dequeue=> True); 
-END;
-/
-DECLARE
-  subscriber sys.aq$_agent;
-BEGIN
-dbms_aqadm.add_subscriber(queue_name => 'objType_TEQ'       , subscriber => sys.aq$_agent('teqBasicObjSubscriber'      , null ,0), rule => 'correlation = ''teqBasicObjSubscriber''');
+--
+--  You may also want to create a subscriber for the TEQ, pub/sub topics normally deliver 
+--  messages only when the consumer/subscriber is present. 
+--
 
-dbms_aqadm.add_subscriber(queue_name => 'rawType_TEQ'       , subscriber => sys.aq$_agent('teqBasicRawSubscriber'      , null ,0), rule => 'correlation = ''teqBasicRawSubscriber''');
-
-dbms_aqadm.add_subscriber(queue_name => 'jsonType_TEQ'       , subscriber => sys.aq$_agent('teqBasicJsonSubscriber'      , null ,0), rule => 'correlation = ''teqBasicJsonSubscriber''');
-
-END;
+declare
+    subscriber sys.aq$_agent;
+begin
+    dbms_aqadm.add_subscriber(
+        queue_name => 'my_teq',
+        subscriber => sys.aq$_agent(
+            'my_subscriber',    -- the subscriber name
+            null,               -- address, only used for notifications
+            0                   -- protocol
+        ),
+        rule => 'correlation = ''my_subscriber'''
+    );
+end;
 /
-CREATE OR REPLACE FUNCTION enqueueDequeueTEQ(subscriber varchar2, queueName varchar2, message Message_Typ) RETURN Message_Typ 
-IS 
-    enqueue_options                   DBMS_AQ.enqueue_options_t;
-    message_properties                DBMS_AQ.message_properties_t;
-    message_handle                    RAW(16);
-    dequeue_options                   DBMS_AQ.dequeue_options_t;
-    messageData                       Message_Typ;
-
-BEGIN
-    messageData                       := message;
-    message_properties.correlation := subscriber;
-    DBMS_AQ.ENQUEUE(
-        queue_name                    => queueName,           
-        enqueue_options               => enqueue_options,       
-        message_properties            => message_properties,     
-        payload                       => messageData,               
-        msgid                         => message_handle);
-        COMMIT;
-    DBMS_OUTPUT.PUT_LINE ('----------ENQUEUE Message:  ' || 'ORDERID: ' ||  messageData.ORDERID || ', OTP: ' || messageData.OTP ||', DELIVERY_STATUS: ' || messageData.DELIVERY_STATUS  );  
-  
-    dequeue_options.dequeue_mode      := DBMS_AQ.REMOVE;
-    dequeue_options.wait              := DBMS_AQ.NO_WAIT;
-    dequeue_options.navigation        := DBMS_AQ.FIRST_MESSAGE;           
-    dequeue_options.consumer_name     := subscriber;
-    DBMS_AQ.DEQUEUE(
-        queue_name                    => queueName,
-        dequeue_options               => dequeue_options, 
-        message_properties            => message_properties, 
-        payload                       => messageData, 
-        msgid                         => message_handle);
-        COMMIT;
-    DBMS_OUTPUT.PUT_LINE ('----------DEQUEUE Message:  ' || 'ORDERID: ' ||  messageData.ORDERID || ', OTP: ' || messageData.OTP ||', DELIVERY_STATUS: ' || messageData.DELIVERY_STATUS  );  
-    RETURN messageData;
-END;
-/
-EXIT;      
