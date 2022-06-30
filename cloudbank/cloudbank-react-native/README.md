@@ -22,14 +22,17 @@ The CloudBank mobile app has the following features:
 
 To use this sample you will require the following:
 
-* Either Android Studio or XCode and a device emulator.  For Android it must be Android version 11.0 Google APIs 30 (for compatibility with react-native tools)
+* Either Android Studio or XCode and a device emulator.  For Android it must be Android version 11.0 Google APIs 30 (for compatibility with react-native tools) - see the [environment setup](https://reactnative.dev/docs/environment-setup) page for more details.
 * NodeJS, version 16.14.2 or later recommended, earlier versions *may* work but are not tested
 * The react-native tools, version 7.0.3 recommended, no other versions are tested
 
 
 ## Building and running
 
-To build the application, open it in Android Studio (or XCode) and use the IDE's build function to perform a full build.  This is important so that 'linking' will be performed for React Native libraries.
+To build the application:
+
+* Run `npm install` to download JavaScript dependencies.
+* Open it in Android Studio (or XCode) and use the IDE's build function to perform a full build.  This is important so that 'linking' will be performed for React Native libraries.  Note:  You may need to run `gradle wrapper` in Android Studio to download the build tools.
 
 To run the application:
 
