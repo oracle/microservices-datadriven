@@ -29,8 +29,7 @@ kubectl delete configmap db-metrics-orderpdb-exporter-config -n msdataworkshop
 kubectl create configmap db-metrics-orderpdb-exporter-config --from-file=db-metrics-orderpdb-exporter-metrics.toml -n msdataworkshop
 echo
 echo create db-metrics-exporter deployment and service...
-export CURRENTTIME=$( date '+%F_%H:%M:%S' )
-echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated deployment yaml
+export CURRENTTIME=generated
 
 cp db-metrics-exporter-deployment.yaml db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 
@@ -40,7 +39,7 @@ sed -e  "s|%EXPORTER_NAME%|orderpdb|g" db-metrics-exporter-orderpdb-deployment-$
 mv -- /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 sed -e  "s|%PDB_NAME%|${ORDER_DB_NAME}|g" db-metrics-exporter-orderpdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
-sed -e  "s|%USER%|orderUSER|g" db-metrics-exporter-orderpdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
+sed -e  "s|%USER%|admin|g" db-metrics-exporter-orderpdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 sed -e  "s|%db-wallet-secret%|order-db-tns-admin-secret|g" db-metrics-exporter-orderpdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-orderpdb-deployment-$CURRENTTIME.yaml

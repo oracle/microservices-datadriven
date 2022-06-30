@@ -1,72 +1,44 @@
---Dequeue from obj Type Messages */ 
-DECLARE
+-- Copyright (c) 2022, Oracle and/or its affiliates.
+-- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+--
+--  This sample demonstrates how to dequeue a message from a TEQ using PL/SQL
+--
+
+--  There are various payload types supported, including user-defined object, raw, JMS and JSON.
+--  This sample uses the JMS payload type.
+
+--  Execute permission on dbms_aq is required.
+
+set serveroutput on;
+declare
     dequeue_options     dbms_aq.dequeue_options_t;
     message_properties  dbms_aq.message_properties_t;
-    message_handle      RAW(16);
-    message             Message_type;
+    message_handle      raw(16);
+    message             SYS.AQ$_JMS_TEXT_MESSAGE;
 
-BEGIN
-    dequeue_options.dequeue_mode  := DBMS_AQ.REMOVE;
-    dequeue_options.wait          := DBMS_AQ.NO_WAIT;
-    dequeue_options.navigation    := DBMS_AQ.FIRST_MESSAGE;           
-    dequeue_options.consumer_name := 'teqBasicObjSubscriber';
+begin
+    -- dequeue_mode determines whether we will consume the message or just browse it and leave it there
+    dequeue_options.dequeue_mode  := dbms_aq.remove;
+    -- wait controls how long to wait for a message to arrive before giving up
+    dequeue_options.wait          := dbms_aq.no_wait;
+    -- we must specify navigation so we know where to look in the TEQ
+    dequeue_options.navigation    := dbms_aq.first_message;          
+    -- set the consumer name 
+    dequeue_options.consumer_name := 'my_subscriber';
 
-    DBMS_AQ.DEQUEUE(
-        queue_name         => 'objType_TEQ',
+    -- perform the dequeue
+    dbms_aq.dequeue(
+        queue_name         => 'my_teq',
         dequeue_options    => dequeue_options,
         message_properties => message_properties,
         payload            => message,
-        msgid              => message_handle);
-        
-    DBMS_OUTPUT.PUT_LINE ('Message: ' || message.subject || ' ... ' || message.text );
-    COMMIT;
-END;
+        msgid              => message_handle
+    );
+
+    -- print out the message payload
+    dbms_output.put_line(message.text);
+    
+    -- commit the transaction
+    commit;
+end;
 /
-
---Dequeue from RAW Type Messages */ 
-DECLARE 
-    dequeue_options     DBMS_AQ.dequeue_options_t; 
-    message_properties  DBMS_AQ.message_properties_t; 
-    message_handle      RAW(16); 
-    message             RAW(4096); 
-        
-BEGIN 
- dequeue_options.dequeue_mode     := DBMS_AQ.REMOVE;
-    dequeue_options.wait          := DBMS_AQ.NO_WAIT;
-    dequeue_options.navigation    := DBMS_AQ.FIRST_MESSAGE;           
-    dequeue_options.consumer_name := 'teqBasicRawSubscriber';
-
-    DBMS_AQ.DEQUEUE(
-        queue_name         => 'rawType_TEQ', 
-        dequeue_options    => dequeue_options, 
-        message_properties => message_properties, 
-        payload            => message, 
-        msgid              => message_handle); 
-    COMMIT; 
-END;
-/
-
---Dequeue from JSON TEQ
-DECLARE
-    dequeue_options     dbms_aq.dequeue_options_t;
-    message_properties  dbms_aq.message_properties_t;
-    message_handle      RAW(16);
-    message             JSON;
-
-BEGIN
-    dequeue_options.dequeue_mode  := DBMS_AQ.REMOVE;
-    dequeue_options.wait          := DBMS_AQ.NO_WAIT;
-    dequeue_options.navigation    := DBMS_AQ.FIRST_MESSAGE;           
-    dequeue_options.consumer_name := 'teqBasicJsonSubscriber';
-
-DBMS_AQ.DEQUEUE(
-        queue_name         => 'jsonType_TEQ',
-        dequeue_options    => dequeue_options,
-        message_properties => message_properties,
-        payload            => message,
-        msgid              => message_handle);
-  dbms_output.put_line(json_serialize(message));
- COMMIT;
-END;
-/
-EXIT;
