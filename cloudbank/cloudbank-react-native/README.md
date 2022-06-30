@@ -32,7 +32,7 @@ To use this sample you will require the following:
 To build the application:
 
 * Run `npm install` to download JavaScript dependencies.
-* Open it in Android Studio (or XCode) and use the IDE's build function to perform a full build.  This is important so that 'linking' will be performed for React Native libraries.
+* Open it in Android Studio (or XCode) and use the IDE's build function to perform a full build.  This is important so that 'linking' will be performed for React Native libraries.  Note:  You may need to run `gradle wrapper` in Android Studio to download the build tools.
 
 To run the application:
 

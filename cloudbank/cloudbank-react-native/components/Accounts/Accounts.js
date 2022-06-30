@@ -103,7 +103,7 @@ const Accounts = props => {
           );
         })
     ) : (
-      <View style={styles.row}>
+      <View style={styles.row} key="0">
         <View style={styles.cell}>
           <Text> </Text>
           <Text>No accounts to display</Text>
