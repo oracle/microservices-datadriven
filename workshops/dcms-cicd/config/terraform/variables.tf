@@ -16,6 +16,8 @@ variable agents {
   default = ""
 }
 
+variable autonomous_database_id {}
+
 variable deployment {
   description = "Type of Deployment deploying different Jenkins infrastructure configuration"
 }

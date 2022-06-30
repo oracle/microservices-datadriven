@@ -11,7 +11,7 @@ fi
 
 
 # Start the provisioning destroy
-cd $MY_STATE/jenkins
+cd $MY_STATE/terraform
 source $DCMS_CICD_JNKNS_DIR/terraform-env.sh
 
 if ! terraform init; then
