@@ -15,7 +15,7 @@ pipeline {
             }
             steps {
                 echo "Updating Schema ${PROD_SCHEMA}"
-                sh('cd liquibase && ./cicd.py deploy --dbName $OCI_ADB_NAME --dbPass $OCI_ADB_CREDS_PSW --dbUser $PROD_SCHEMA')
+                sh('cd workshops/dcms-cicd/liquibase && ./cicd.py deploy --dbName $OCI_ADB_NAME --dbPass $OCI_ADB_CREDS_PSW --dbUser $PROD_SCHEMA')
            }
         } 
         stage('feature-branch') {
@@ -30,7 +30,7 @@ pipeline {
             }
             steps {
                 echo "Creating Isolated Schema ${PROD_SCHEMA}${MYBRANCH}"
-                sh('cd liquibase && ./cicd.py deploy --dbName $OCI_ADB_NAME --dbPass $OCI_ADB_CREDS_PSW --dbUser $PROD_SCHEMA$MYBRANCH')
+                sh('cd workshops/dcms-cicd/liquibase && ./cicd.py deploy --dbName $OCI_ADB_NAME --dbPass $OCI_ADB_CREDS_PSW --dbUser $PROD_SCHEMA$MYBRANCH')
            }
         }
         stage('pull-request') {
@@ -40,9 +40,9 @@ pipeline {
             }
             steps {
                 echo "Testing Load of Changes into ${PROD_SCHEMA}${MYBRANCH}"
-                sh('cd liquibase && ./cicd.py deploy --dbName $OCI_ADB_NAME --dbPass $OCI_ADB_CREDS_PSW --dbUser $PROD_SCHEMA$MYBRANCH')
+                sh('cd workshops/dcms-cicd/liquibase && ./cicd.py deploy --dbName $OCI_ADB_NAME --dbPass $OCI_ADB_CREDS_PSW --dbUser $PROD_SCHEMA$MYBRANCH')
                 echo "Deleting Isolated Schema ${PROD_SCHEMA}${MYBRANCH}"
-                sh('cd liquibase && ./cicd.py destroy --dbName $OCI_ADB_NAME --dbPass $OCI_ADB_CREDS_PSW --dbUser $PROD_SCHEMA$MYBRANCH')
+                sh('cd workshops/dcms-cicd/liquibase && ./cicd.py destroy --dbName $OCI_ADB_NAME --dbPass $OCI_ADB_CREDS_PSW --dbUser $PROD_SCHEMA$MYBRANCH')
            }
         }
     }
