@@ -108,7 +108,7 @@ done
 while ! state_done AUTONOMOUS_DATABASE_ID; do
   if [[ -f $DCMS_CICD_RUN_DIR/../dcms-oci-run/state/infra/db/db2/terraform/terraform.tfstate ]]; then
     echo "Getting OCID of Grabdish DB"
-    cd $DCMS_CICD_RUN_DIR/../dcms-oci-run/state/infra/db/db2/terraform/ && ADB_OCID=$(terraform output db_ocid)
+    cd $DCMS_CICD_RUN_DIR/../dcms-oci-run/state/infra/db/db2/terraform/ && ADB_OCID=$(terraform output db_ocid|jq -r .)
   fi
   if [[ -z ${ADB_OCID} ]]; then
     echo "Unable to find OCID of Autonomous Database; please wait until GrabDish has been provisioned and retry"
