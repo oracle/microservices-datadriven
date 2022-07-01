@@ -15,7 +15,6 @@ pipeline {
             }
             steps {
                 echo "Updating Schema ${PROD_SCHEMA}"
-		sh('which python3')
 		sh('which python')
 		sh('ls $WORKSPACE/workshops')
 		sh('ls $WORKSPACE/workshops/dcms-cicd')
