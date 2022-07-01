@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         PROD_SCHEMA   = "INVENTORYUSER"
-        OCI_ADB_NAME  = "DB2"
+        OCI_ADB_NAME  = "gd615291022_high"
         OCI_ADB_CREDS = credentials("${OCI_ADB_NAME}_ADMIN")
     }
     stages {
