@@ -147,5 +147,6 @@ if __name__ == "__main__":
             resolution   = 'tnsnames'
             conn_file    = '{tns_admin}/tnsnames.ora'
 
+    logging.info(f'{resolution} resolution with {conn_file}')
     args.func(password, resolution, conn_file,  args)
     sys.exit(0)
