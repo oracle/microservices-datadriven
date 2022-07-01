@@ -1,0 +1,27 @@
+#cloud-config
+
+bootcmd:
+  - [ cloud-init-per, once, enable-epel,  yum-config-manager, --enable, ol7_developer_epel]
+
+groups:
+  - docker
+users:
+  - default 
+  - name: opc
+    groups: docker
+    shell: /bin/bash
+    sudo: ALL=(ALL) NOPASSWD:ALL
+
+# update package
+package_update: true
+
+# install docker
+packages:
+ - docker-engine
+ - docker-compose
+
+runcmd:
+  - [ systemctl, daemon-reload ]
+  - [ systemctl, enable, docker.service ]
+  - [ systemctl, start, --no-block, docker.service ]
+  - [ touch, /tmp/cloud-init-complete ]
