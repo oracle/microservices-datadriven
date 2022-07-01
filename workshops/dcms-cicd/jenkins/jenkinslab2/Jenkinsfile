@@ -15,10 +15,6 @@ pipeline {
             }
             steps {
                 echo "Updating Schema ${PROD_SCHEMA}"
-		sh('which python')
-		sh('ls $WORKSPACE/workshops')
-		sh('ls $WORKSPACE/workshops/dcms-cicd')
-		sh('ls $WORKSPACE/workshops/dcms-cicd/liquibase')
                 sh('cd $WORKSPACE/workshops/dcms-cicd/liquibase && ./cicd.py deploy --dbName $OCI_ADB_NAME --dbPass $OCI_ADB_CREDS_PSW --dbUser $PROD_SCHEMA')
            }
         } 
