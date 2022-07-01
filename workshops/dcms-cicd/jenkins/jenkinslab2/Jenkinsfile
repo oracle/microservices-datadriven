@@ -2,8 +2,7 @@ pipeline {
     agent any
     environment {
         PROD_SCHEMA   = "INVENTORYUSER"
-        OCI_ADB_NAME  = "gd615291022_high"
-        OCI_ADB_CREDS = credentials("${OCI_ADB_NAME}_ADMIN")
+        OCI_ADB_CREDS = credentials("ADB_ADMIN")
     }
     stages {
         stage('main-branch') {
@@ -15,7 +14,7 @@ pipeline {
             }
             steps {
                 echo "Updating Schema ${PROD_SCHEMA}"
-                sh('cd $WORKSPACE/workshops/dcms-cicd/liquibase && ./cicd.py deploy --dbName $OCI_ADB_NAME --dbPass $OCI_ADB_CREDS_PSW --dbUser $PROD_SCHEMA')
+                sh('cd $WORKSPACE/workshops/dcms-cicd/liquibase && ./cicd.py deploy --dbName $ADB_NAME --dbPass $OCI_ADB_CREDS_PSW --dbUser $PROD_SCHEMA')
            }
         } 
         stage('feature-branch') {
@@ -30,7 +29,7 @@ pipeline {
             }
             steps {
                 echo "Creating Isolated Schema ${PROD_SCHEMA}${MYBRANCH}"
-                sh('cd $WORKSPACE/workshops/dcms-cicd/liquibase && ./cicd.py deploy --dbName $OCI_ADB_NAME --dbPass $OCI_ADB_CREDS_PSW --dbUser $PROD_SCHEMA$MYBRANCH')
+                sh('cd $WORKSPACE/workshops/dcms-cicd/liquibase && ./cicd.py deploy --dbName $ADB_NAME --dbPass $OCI_ADB_CREDS_PSW --dbUser $PROD_SCHEMA$MYBRANCH')
            }
         }
         stage('pull-request') {
@@ -40,9 +39,9 @@ pipeline {
             }
             steps {
                 echo "Testing Load of Changes into ${PROD_SCHEMA}${MYBRANCH}"
-                sh('cd $WORKSPACE/workshops/dcms-cicd/liquibase && ./cicd.py deploy --dbName $OCI_ADB_NAME --dbPass $OCI_ADB_CREDS_PSW --dbUser $PROD_SCHEMA$MYBRANCH')
+                sh('cd $WORKSPACE/workshops/dcms-cicd/liquibase && ./cicd.py deploy --dbName $ADB_NAME --dbPass $OCI_ADB_CREDS_PSW --dbUser $PROD_SCHEMA$MYBRANCH')
                 echo "Deleting Isolated Schema ${PROD_SCHEMA}${MYBRANCH}"
-                sh('cd $WORKSPACE/workshops/dcms-cicd/liquibase && ./cicd.py destroy --dbName $OCI_ADB_NAME --dbPass $OCI_ADB_CREDS_PSW --dbUser $PROD_SCHEMA$MYBRANCH')
+                sh('cd $WORKSPACE/workshops/dcms-cicd/liquibase && ./cicd.py destroy --dbName $ADB_NAME --dbPass $OCI_ADB_CREDS_PSW --dbUser $PROD_SCHEMA$MYBRANCH')
            }
         }
     }

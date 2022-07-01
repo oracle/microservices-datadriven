@@ -141,8 +141,8 @@ if __name__ == "__main__":
     if args.dbWallet:
         conn_file     = args.dbWallet
     else:
-        if os.path.exists(f'{tns_admin}/{args.dbName}_wallet.zip'):
-            conn_file = f'{tns_admin}/{args.dbName}_wallet.zip'
+        if os.path.exists(f'{tns_admin}/adb_wallet.zip'):
+            conn_file = f'{tns_admin}/adb_wallet.zip'
         elif os.path.exists(f'{tns_admin}/tnsnames.ora'):
             resolution   = 'tnsnames'
             conn_file    = '{tns_admin}/tnsnames.ora'
