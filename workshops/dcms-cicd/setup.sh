@@ -50,7 +50,7 @@ case "$DCMS_STATUS" in
   applying-failed)
     # Restart the setup
     cd $DCMS_CICD_STATE_DIR
-    echo "Restarting setup.  Call 'status' to get the status of the setup"
+    echo "Restarting setup.  Call 'jenkins-status' to get the status of the setup"
     nohup bash -c "provisioning-apply $MSDD_WORKSHOP_CODE/$DCMS_CICD_WORKSHOP/config" >>$DCMS_CICD_LOG_DIR/setup.log 2>&1 &
     exit 0
     ;;
@@ -105,16 +105,17 @@ while ! state_done OCI_REGION; do
 done
 
 # Get OCID of Grabdish DB
-export TF_VAR_autonomous_database_id=""
-if [[ -f $DCMS_CICD_RUN_DIR/../dcms-oci-run/state/infra/db/db2/terraform/terraform.tfstate ]]; then
-	echo "Getting OCID of Grabdish DB"
-        cd $DCMS_CICD_RUN_DIR/../dcms-oci-run/state/infra/db/db2/terraform/ && export TF_VAR_autonomous_database_id=$(terraform output db_ocid)
-fi
-
-if [[ -z ${TF_VAR_autonomous_database_id} ]]; then
-        echo "Unable to find OCID of Autonomous Database; please wait until GrabDish has been provisioned and retry"
-        exit 1
-fi
+while ! state_done AUTONOMOUS_DATABASE_ID; do
+  if [[ -f $DCMS_CICD_RUN_DIR/../dcms-oci-run/state/infra/db/db2/terraform/terraform.tfstate ]]; then
+    echo "Getting OCID of Grabdish DB"
+    cd $DCMS_CICD_RUN_DIR/../dcms-oci-run/state/infra/db/db2/terraform/ && ADB_OCID=$(terraform output db_ocid)
+  fi
+  if [[ -z ${ADB_OCID} ]]; then
+    echo "Unable to find OCID of Autonomous Database; please wait until GrabDish has been provisioned and retry"
+    exit 1
+  fi
+  state_set AUTONOMOUS_DATABASE_ID "${ADB_OCID}"
+done
 
 # Select Jenkins Deployment
 echo 'Jenkins Deployment Options'
@@ -179,4 +180,4 @@ fi
 # Run the setup in the background
 cd $DCMS_CICD_STATE_DIR
 echo "Setup running in background.  Call 'jenkins-status' to get the status of the setup"
-nohup bash -c "provisioning-apply $MSDD_WORKSHOP_CODE/$DCMS_CICD_WORKSHOP/config" >>$DCMS_CICD_LOG_DIR/jenkins-setup.log 2>&1 &
+nohup bash -c "provisioning-apply $MSDD_WORKSHOP_CODE/$DCMS_CICD_WORKSHOP/config" >>$DCMS_CICD_LOG_DIR/setup.log 2>&1 &
