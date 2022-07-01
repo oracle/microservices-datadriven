@@ -13,6 +13,9 @@ RUN apt-get update && apt-get install -qq -y docker.io
 # install git
 RUN apt-get update && apt-get install -qq -y git
 
+# install git
+RUN apt-get update && apt-get install -qq -y python3
+
 # setup repository for kubectl install
 RUN curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg && \
 echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list

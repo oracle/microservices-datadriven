@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/usr/bin/env python3
 import argparse, logging, subprocess, os, sys, glob
 
 # Logging Default
