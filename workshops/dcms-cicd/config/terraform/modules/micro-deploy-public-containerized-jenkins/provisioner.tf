@@ -8,6 +8,6 @@ resource "null_resource" "upload_wallet" {
       private_key         = tls_private_key.tls_key_pair.private_key_pem
     }
     source      = local_file.database_wallet_file.filename
-    destination = format("/tmp/%sDB_wallet.zip", upper(var.proj_abrv))
+    destination = "/jenkins/wallet/adb_wallet.zip"
   }
 }
