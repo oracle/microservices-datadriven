@@ -8,4 +8,5 @@
     <property name="password" dbms="oracle" global="true"/>
     <include file="preconditions.xml"/>
     <include file="user.xml"/>
+    <include file="grants.sql"/>
 </databaseChangeLog> 

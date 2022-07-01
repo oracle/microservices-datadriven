@@ -77,7 +77,9 @@ while true; do
   tput sgr0
   echo
 
-  $MSDD_WORKSHOP_CODE/$DCMS_CICD_WORKSHOP/config/status.sh
+  if [[ -f $MSDD_WORKSHOP_CODE/$DCMS_CICD_WORKSHOP/config/status.sh ]]; then 
+    $MSDD_WORKSHOP_CODE/$DCMS_CICD_WORKSHOP/config/status.sh
+  fi
 
   # clear to bottom of screen
   tput ed

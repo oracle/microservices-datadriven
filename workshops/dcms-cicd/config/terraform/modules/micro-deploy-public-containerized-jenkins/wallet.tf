@@ -5,7 +5,7 @@ resource "oci_database_autonomous_database_wallet" "database_wallet" {
 }
 resource "local_file" "database_wallet_file" {
   content_base64 = oci_database_autonomous_database_wallet.database_wallet.content
-  filename       = format("../wallet/%sDB_wallet.zip", upper(var.proj_abrv))
+  filename       = "../wallet/adb_wallet.zip)
 }
 resource "random_password" "password" {
   length           = 16

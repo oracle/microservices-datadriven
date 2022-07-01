@@ -1,4 +1,4 @@
-#!/bin/env python3
+#!/usr/bin/env python3
 import argparse, logging, subprocess, os, sys, glob
 
 # Logging Default
@@ -30,7 +30,7 @@ def run_sqlcl(schema, password, service, cmd, resolution, conn_file, run_as):
     '''
 
     log.debug(f'Running: {sql_cmd}')
-    result = subprocess.run(['sql', '/nolog'], universal_newlines=True, input=f'{sql_cmd}', env=lb_env,
+    result = subprocess.run(['/workspace/sqlcl/bin/sql', '/nolog'], universal_newlines=True, input=f'{sql_cmd}', env=lb_env,
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
     exit_status = 0
@@ -141,11 +141,12 @@ if __name__ == "__main__":
     if args.dbWallet:
         conn_file     = args.dbWallet
     else:
-        if os.path.exists(f'{tns_admin}/{args.dbName}_wallet.zip'):
-            conn_file = f'{tns_admin}/{args.dbName}_wallet.zip'
+        if os.path.exists(f'{tns_admin}/adb_wallet.zip'):
+            conn_file = f'{tns_admin}/adb_wallet.zip'
         elif os.path.exists(f'{tns_admin}/tnsnames.ora'):
             resolution   = 'tnsnames'
             conn_file    = '{tns_admin}/tnsnames.ora'
 
+    logging.info(f'{resolution} resolution with {conn_file}')
     args.func(password, resolution, conn_file,  args)
     sys.exit(0)
