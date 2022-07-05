@@ -1,16 +1,21 @@
+
+##
 ## Copyright (c) 2021 Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 apiVersion: v1
 kind: Service
 metadata:
-  name: db-log-exporter-inventory
+  name: frontendnp
   labels:
-    app: db-log-exporter-inventorypdb
+    app: frontend
+  #annotations:
+  #  service.beta.kubernetes.io/oci-load-balancer-ssl-ports: "443"
+  #  service.beta.kubernetes.io/oci-load-balancer-tls-secret: ssl-certificate-secret
 spec:
   type: NodePort
   ports:
     - port: 8080
-      name: http
+      name: metrics
       targetPort: 8080
   selector:
-    app: db-log-exporter-inventorypdb
+    app: frontend

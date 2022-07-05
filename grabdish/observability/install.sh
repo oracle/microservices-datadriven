@@ -28,6 +28,6 @@ echo
 # helm install grafana-lab grafana/grafana --namespace msdataworkshop -f install/grafana-helm-values.yaml
 # echo
 
-echo Installing loki-stack with Promtail...
+echo Installing Loki stack with Promtail...
 helm install loki-stack grafana/loki-stack --create-namespace --namespace loki-stack --set promtail.enabled=true,loki.persistence.enabled=true,loki.persistence.size=100Gi
 echo
