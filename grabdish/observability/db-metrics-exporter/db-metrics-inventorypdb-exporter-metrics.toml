@@ -280,5 +280,5 @@ context = "inventorydb_tracing"
 tracingdesc = { value = "Trace including sqltext with bind values of all sessions by inventoryuser"}
 traceidfield = "ECID"
 template = "ECID_BIND_VALUES"
-request = "select ECID, SQL_ID from GV$SESSION where ECID IS NOT NULL"
+request = "select ECID, SQL_ID from GV$ACTIVE_SESSION_HISTORY where ECID IS NOT NULL"
 
