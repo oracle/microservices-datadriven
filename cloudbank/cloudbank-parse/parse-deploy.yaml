@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment # Kubernetes resource kind we are creating
+metadata:
+  name: parse-server
+spec:
+  selector:
+    matchLabels:
+      app: parse-server
+  replicas: 1 # Number of replicas that will be created for this deployment
+  template:
+    metadata:
+      labels:
+        app: parse-server
+    spec:
+      containers:
+        - name: parse-server
+          env:
+            - name: PARSE_SERVER_DATABASE_URI
+              value: mongodb://admin:password@DBConnectionString:Port/admin?authMechanism=PLAIN&authSource=$external&ssl=true&retryWrites=false
+          image: iad.ocir.io/tenancy/registry/my-parse-server:1.0.0
+# Image that will be used to containers in the cluster
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 1337
+# The port that the container is running on in the cluster
