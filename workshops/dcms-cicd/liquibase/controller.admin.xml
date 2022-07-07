@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <property name="schema"   dbms="oracle" global="true"/>
+    <property name="password" dbms="oracle" global="true"/>
+    <include file="preconditions.xml"/>
+    <include file="user.xml"/>
+    <include file="grants.sql"/>
+</databaseChangeLog> 

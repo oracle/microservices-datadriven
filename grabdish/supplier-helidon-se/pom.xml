@@ -87,7 +87,7 @@
                 </executions>
                 <configuration>
                     <repository>${env.DOCKER_REGISTRY}/${project.artifactId}</repository>
-                    <tag>0.1</tag>
+                    <tag>${env.IMAGE_VERSION}</tag>
                     <buildArgs>
                         <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
                     </buildArgs>
