@@ -4,4 +4,4 @@
 
 
 # See docs/Deploy.md for details
-k8s-deploy 'frontend-helidon-deployment.yaml frontend-service.yaml frontend-ingress.yaml'
+k8s-deploy 'frontend-helidon-deployment.yaml frontend-service.yaml frontend-ingress.yaml frontendnp-service-nodeport.yaml'

@@ -20,6 +20,7 @@ fi
 
 
 export IMAGE=${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_VERSION}
+export IMAGE_VERSION=$IMAGE_VERSION
 
 mvn package
 

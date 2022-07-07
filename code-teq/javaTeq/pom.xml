@@ -33,8 +33,6 @@
             <groupId>com.oracle.database.messaging</groupId>
             <artifactId>aqapi</artifactId>
             <version>21.3.0.0</version>
-            <scope>system</scope>
-            <systemPath>/home/mark/src/aqapi.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>javax.jms</groupId>

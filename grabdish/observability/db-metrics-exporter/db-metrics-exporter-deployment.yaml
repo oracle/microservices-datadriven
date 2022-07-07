@@ -16,8 +16,7 @@ spec:
     spec:
       containers:
         - name: db-metrics-exporter-%EXPORTER_NAME%
-          image: us-ashburn-1.ocir.io/maacloud/gd4930131/observability-exporter:0.1.0
-#        replace with  image: container-registry.oracle.com/database/observability-exporter:0.1.0
+          image: container-registry.oracle.com/database/observability-exporter:0.1.0
           imagePullPolicy: Always
           env:
             - name: DEFAULT_METRICS

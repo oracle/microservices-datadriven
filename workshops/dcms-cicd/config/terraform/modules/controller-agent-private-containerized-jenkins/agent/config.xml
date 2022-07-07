@@ -1,0 +1,17 @@
+<slave>
+    <description>Installed agent node for pipeline jobs</description>
+    <remoteFS>/home/jenkins/agent</remoteFS>
+    <numExecutors>1</numExecutors>
+    <mode>NORMAL</mode>
+    <retentionStrategy class="hudson.slaves.RetentionStrategy$Always"/>
+        <launcher class="hudson.slaves.JNLPLauncher">
+            <workDirSettings>
+            <disabled>false</disabled>
+            <internalDir>remoting</internalDir>
+            <failIfWorkDirIsMissing>false</failIfWorkDirIsMissing>
+            </workDirSettings>
+            <webSocket>false</webSocket>
+        </launcher>
+    <label/>
+    <nodeProperties/>
+</slave>
