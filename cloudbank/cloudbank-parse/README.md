@@ -43,20 +43,31 @@ A big *thank you* 🙏 to our [sponsors](#sponsors) and [backers](#backers) who 
 
 # Building BankApp
 
-1.  Copy wallet files
+## 1.  Copy wallet files
 
   ```cp -R /user/mydownlaods/wallet wallet```   
+ 
+  Update sqlnet.ora in the wallet dir to point to the location of the wallet files.
+  In this example, /wallet
+
+
+```bash 
+vi wallet/sqlnet.ora
+WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="/wallet")))
+```
+  
+  
  https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/connect-download-wallet.html
 
-  2. Copy Oracle Client files
+##  2. Copy Oracle Client files
 
   ```cp -R /usr/mydownloads/instantclient_19_15 instantclient_19_15```
   https://www.oracle.com/database/technologies/instant-client/linux-x86-64-downloads.html
 
 
-3. Update Dockerfile.OracleDB
+## 3. Update Dockerfile.OracleDB
 
-Set Wallet and OracleClient directories if differnet form above
+Set Wallet and OracleClient directories if differnet from above
 
 ```
 # Copy Database Credentials
@@ -69,24 +80,105 @@ COPY wallet /wallet
 Update PARSE_SERVER_APPLICATION_ID and PARSE_SERVER_MASTER_KEY to something unique
 
 ```
-ENV PARSE_SERVER_APPLICATION_ID=APPLICATION_ID
-ENV PARSE_SERVER_MASTER_KEY=MASTER_KEY
+    ENV PARSE_SERVER_APPLICATION_ID=APPLICATION_ID
+    ENV PARSE_SERVER_MASTER_KEY=MASTER_KEY
+```
+## 4. Update cloud/bankapp.js to work with your DB instance
+
+Need to update credentials in runSQL, enquemsg and dequemsg
+
+```        
+        const user = "user";
+        const password = "password";
+        const connectString = "database";
 ```
 
-4. Build the image
+For AQ creation, the defaults are 
+```
+  queuetable = publish_queuetable
+  queue      = publish
+```
+
+Update these values to something more relative, i.e. abcbank_queuetable and abcbank
+
+The AQ is used for external transfers between banks
+More on Configuring DB Links below
+
+
+
+## 5. Build the image
 
 ```
-docker build --tag myimage  --file Dockerfile.OracleDB .
+  docker build --tag myimage  --file Dockerfile.OracleDB .
 ```
 
-5.  Run It
+## 6.  Run It
 
 ```
-docker run --rm  -v config-vol:/parse-server/config  -p 1337:1337  -e "PARSE_SERVER_DATABASE_URI=mongodb://user:password@D4VVQTGHTA12FYY-PARSEMONGO.adb.us-ashburn-1.oraclecloudapps.com:27017/user?authMechanism=PLAIN&authSource=\$external&ssl=true&retryWrites=false&loadBalanced=true" -d myimage:latest | xargs docker logs -f
+  docker run --rm  -v config-vol:/parse-server/config  -p 1337:1337  -e "PARSE_SERVER_DATABASE_URI=mongodb://user:password@D4VVQTGHTA12FYY-PARSEMONGO.adb.us-ashburn-1.oraclecloudapps.com:27017/user?authMechanism=PLAIN&authSource=\$external&ssl=true&retryWrites=false&loadBalanced=true" -d myimage:latest | xargs docker logs -f
 ```
 
 PARSE_SEREVR_DATABASE_URI is the mongodb api connection string created for JSON databases
 https://blogs.oracle.com/database/post/mongodb-api
+
+## 7. Configuring DB Links
+
+External transfer is supported using AQ functionality in the Database.
+In the CloudBank example, the external transfer is initiated on the local db that enques the msg to it's local queue and that message then gets propagated to the remote Q using a DBLink.  This is about configuring that link between the local bank and the remote bank.
+
+Configure credentials so the the local bank can enque the msg to the remote bank
+
+Download the remote banks wallet and upload cwallet.sso into an OCI bucket for local bank use
+
+Look at Create the Database Link in link below, it has pictures and better descibes the process
+https://redstack.wordpress.com/2022/05/24/cross-region-event-propagation-with-oracle-transactional-event-queues/
+
+Create the DBLink using the SQL Database Action Window
+Run the following PL/SQL updated for your configuration.
+
+First create the directory
+```
+create or replace directory AQ_DBLINK_CREDENTIALS
+as 'aq_dblink_credentials';
+```
+
+Then create the dblink
+
+```
+BEGIN
+  DBMS_CLOUD.GET_OBJECT(
+    object_uri => 'The URI created when you uploaded wallet.cso to your OCI Bucket and then created a pre authenticated requets.  That long uri, stick it here'
+    directory_name => 'AQ_DBLINK_CREDENTIALS',
+    file_name => 'cwallet.sso');
+
+  DBMS_CLOUD.CREATE_CREDENTIAL(
+    credential_name => 'CRED',
+    username => 'Remote DB User, ADMIN', -- remote db has case-sensitive login enabled, must be uppercase
+    password => 'REMOTE DB PASWORD');
+
+// All this info below is from the Remote Bank Connection String
+  DBMS_CLOUD_ADMIN.CREATE_DATABASE_LINK(
+    db_link_name => 'REMOTEBANK',
+    hostname => 'adb.us-ashburn-1.oraclecloud.com',
+    port => '1522',
+    service_name => 'd4vvqtghta12fyy_remotebank_high.adb.oraclecloud.com',
+    ssl_server_cert_dn => 'CN=adwc.uscom-east-1.oraclecloud.com, OU=Oracle BMCS US, O=Oracle Corporation, L=Redwood City, ST=California, C=US',
+    credential_name => 'CRED',
+    directory_name => 'AQ_DBLINK_CREDENTIALS');
+END;
+```
+
+Then configure the propagation schedule
+
+```
+BEGIN
+   dbms_aqadm.schedule_propagation(
+      queue_name         => 'Local Bank Q Name', 
+      destination        => 'Remote Database Name',
+      destination_queue  => 'Remote Q Name');
+end;
+```
+
 
 ---
 
