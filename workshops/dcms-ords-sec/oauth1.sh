@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Copyright © 2022, Oracle and/or its affiliates.
+# All rights reserved. The Universal Permissive License (UPL), Version 1.0 as shown at http://oss.oracle.com/licenses/upl
 
 CLIENT_ID=$1
 CLIENT_SECRET=$2

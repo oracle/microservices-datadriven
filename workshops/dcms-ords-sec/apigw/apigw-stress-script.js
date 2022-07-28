@@ -26,3 +26,4 @@ import { check } from 'k6';
                 'is status 400': (r) => (r.status >= 400 && r.status < 500 ) ,
             });
         }
+        
