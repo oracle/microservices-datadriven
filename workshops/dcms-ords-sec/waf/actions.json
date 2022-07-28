@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Pre-configured Allow Action",
+    "type": "ALLOW"
+  },
+  {
+    "name": "Pre-configured Check Action",
+    "type": "CHECK"
+  },
+  {
+    "body": {
+        "text": "{\"code\":\"401\",\"message\":\"Unauthorized\"}",
+        "type": "STATIC_TEXT"
+      }
+    ,
+    "code": 401,
+    "headers": [
+      {
+        "name": "Content-Type",
+        "value": "application/json"
+      }
+    ],
+     "name": "Pre-configured 401 Response Code Action",
+     "type": "RETURN_HTTP_RESPONSE"
+  }
+]

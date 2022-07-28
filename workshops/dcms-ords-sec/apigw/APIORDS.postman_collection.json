@@ -1,0 +1,161 @@
+{
+	"info": {
+		"_postman_id": "fa10a948-7ee7-4439-bdc7-f09565d577da",
+		"name": "APIORDS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ORDS_OAuth20",
+			"request": {
+				"auth": {
+					"type": "oauth2",
+					"oauth2": [
+						{
+							"key": "redirect_uri",
+							"value": "http://{{api_hostname}}/auth/code/example/",
+							"type": "string"
+						},
+						{
+							"key": "state",
+							"value": "7843928792043222",
+							"type": "string"
+						},
+						{
+							"key": "useBrowser",
+							"value": false,
+							"type": "boolean"
+						},
+						{
+							"key": "authUrl",
+							"value": "https://{{api_hostname}}/ords/ordstest/oauth/auth",
+							"type": "string"
+						},
+						{
+							"key": "accessTokenUrl",
+							"value": "https://{{api_hostname}}/ords/ordstest/oauth/token",
+							"type": "string"
+						},
+						{
+							"key": "clientSecret",
+							"value": "{{client_secret}}",
+							"type": "string"
+						},
+						{
+							"key": "clientId",
+							"value": "{{client_id}}",
+							"type": "string"
+						},
+						{
+							"key": "tokenName",
+							"value": "access_token",
+							"type": "string"
+						},
+						{
+							"key": "addTokenTo",
+							"value": "header",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://{{api_hostname}}/ords/ordstest/examples/employees/",
+					"protocol": "https",
+					"host": [
+						"{{api_hostname}}"
+					],
+					"path": [
+						"ords",
+						"ordstest",
+						"examples",
+						"employees",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "tokenName",
+				"value": "access_token",
+				"type": "string"
+			},
+			{
+				"key": "challengeAlgorithm",
+				"value": "S256",
+				"type": "string"
+			},
+			{
+				"key": "state",
+				"value": "3668D7A713E93372E0406A38A8C02171",
+				"type": "string"
+			},
+			{
+				"key": "redirect_uri",
+				"value": "https://{{api_hostname}}/v3/auth/code/example/",
+				"type": "string"
+			},
+			{
+				"key": "grant_type",
+				"value": "authorization_code",
+				"type": "string"
+			},
+			{
+				"key": "clientSecret",
+				"value": "{{client_secret}}",
+				"type": "string"
+			},
+			{
+				"key": "clientId",
+				"value": "{{client_id}}",
+				"type": "string"
+			},
+			{
+				"key": "authUrl",
+				"value": "https://{{api_hostname}}/app/ords/ordstest/oauth/auth",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			},
+			{
+				"key": "client_authentication",
+				"value": "header",
+				"type": "string"
+			},
+			{
+				"key": "accessTokenUrl",
+				"value": "https://{{api_hostname}}/ords/ordstest/oauth/token",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

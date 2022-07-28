@@ -1,0 +1,53 @@
+{
+  "securityRules": [
+    {
+      "description": null,
+      "destination": null,
+      "destinationType": null,
+      "direction": "INGRESS",
+      "icmpOptions": null,
+      "isStateless": false,
+      "protocol": "6",
+      "source": "0.0.0.0/0",
+      "sourceType": "CIDR_BLOCK",
+      "tcpOptions": {
+        "destinationPortRange": {
+          "max": 443,
+          "min": 443
+        }
+      },
+      "udpOptions":null
+    },
+    {
+      "description": null,
+      "destination": null,
+      "destinationType": null,
+      "direction": "INGRESS",
+      "icmpOptions": null,
+      "isStateless": false,
+      "protocol": "6",
+      "source": "0.0.0.0/0",
+      "sourceType": "CIDR_BLOCK",
+      "tcpOptions": {
+        "destinationPortRange": {
+          "max": 80,
+          "min": 80
+        }
+      },
+      "udpOptions":null
+    }, 
+    {
+      "description": null,
+      "destination": "0.0.0.0/0",
+      "destinationType": "CIDR_BLOCK",
+      "direction": "EGRESS",
+      "icmpOptions": null,
+      "isStateless": false,
+      "protocol": "6",
+      "source": null,
+      "sourceType":null,
+      "tcpOptions": null,
+      "udpOptions":null
+    }
+  ]
+}
