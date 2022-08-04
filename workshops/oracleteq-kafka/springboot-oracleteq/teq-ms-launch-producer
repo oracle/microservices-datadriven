@@ -13,7 +13,7 @@ docker run --detach \
            --name=${container_name} \
            --network $(state_get LAB_KAFKA_NETWORK) \
            -p 8090:8080 \
-           oracle-developers-teq-producer:0.0.1-SNAPSHOT
+           oracle-developers-okafka-producer:0.0.1-SNAPSHOT
 
 if ! state_done TEQ_MS_PRODUCER_LAUNCHED; then
   echo "$(date): Waiting for producer running!"

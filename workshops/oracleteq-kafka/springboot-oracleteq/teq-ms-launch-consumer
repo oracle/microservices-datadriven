@@ -12,7 +12,7 @@ container_name="teq-consumer"
 docker run --detach \
            --name=${container_name} \
            --network $(state_get LAB_KAFKA_NETWORK) \
-           oracle-developers-teq-consumer:0.0.1-SNAPSHOT
+           oracle-developers-okafka-consumer:0.0.1-SNAPSHOT
 
 if ! state_done TEQ_MS_CONSUMER_LAUNCHED; then
   echo "$(date): Waiting for consumer running!"
