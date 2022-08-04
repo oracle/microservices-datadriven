@@ -121,10 +121,11 @@ done
 # Check ATP resource availability
 while ! state_done ATP_LIMIT_CHECK; do
   CHECK=1
-  # ATP OCPU availability
-  if test $(oci limits resource-availability get --compartment-id="$OCI_TENANCY" --service-name "database" --limit-name "atp-ocpu-count" --query 'to_string(min([data."fractional-availability",`2.0`]))' --raw-output) != '2.0'; then
+  # ATP Free Tier OCPU availability
+  #if test $(oci limits resource-availability get --compartment-id="$OCI_TENANCY" --service-name "database" --limit-name "atp-ocpu-count" --query 'to_string(min([data."fractional-availability",`2.0`]))' --raw-output) != '2.0'; then
+  if test $(oci limits resource-availability get --compartment-id="$OCI_TENANCY" --service-name "database" --limit-name "adb-free-count" --query 'to_string(min([data."fractional-availability",`1.0`]))' --raw-output) != '1.0'; then
     echo 'The "Autonomous Transaction Processing OCPU Count" resource availability is insufficient to run this workshop.'
-    echo '2 OCPUs are required.  Terminate some existing ATP databases and try again.'
+    echo '1 OCPUs are required.  Terminate some existing ATP databases and try again.'
     CHECK=0
   fi
 
