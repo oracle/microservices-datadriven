@@ -38,6 +38,9 @@ else
 fi
 export PATH=$JAVA_HOME/bin/:$PATH
 
+# Setup CMD bin
+export PATH=${LAB_HOME}/cloud-setup/cmd/:$PATH
+
 # State directory
 if test -d ~/lab-state; then
   export LAB_STATE_HOME=~/lab-state
@@ -96,10 +99,10 @@ done
 # Configure Bash to LAB Environment
 #source "${LAB_HOME}"/cloud-setup/utils/bash-setup.sh
 if ! state_get BASH_SETUP; then
-  if ps -ef | grep "$LAB_HOME/cloud-setup/utils/bash_setup.sh" | grep -v grep; then
+  if ps -ef | grep "$LAB_HOME/cloud-setup/utils/bash-setup.sh" | grep -v grep; then
     echo "$LAB_HOME/cloud-setup/utils/bash_setup.sh is already running"
   else
     echo "Executing bash_setup.sh in the background"
-    nohup "$LAB_HOME"/cloud-setup/utils/bash_setup.sh &>>"$LAB_LOG"/bash-setup.log &
+    nohup "$LAB_HOME"/cloud-setup/utils/bash-setup.sh &>>"$LAB_LOG"/bash-setup.log &
   fi
 fi
