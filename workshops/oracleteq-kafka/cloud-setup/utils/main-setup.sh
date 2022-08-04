@@ -130,11 +130,11 @@ while ! state_done ATP_LIMIT_CHECK; do
   fi
 
   # ATP storage availability
-  if test $(oci limits resource-availability get --compartment-id="$OCI_TENANCY" --service-name "database" --limit-name "atp-total-storage-tb" --query 'to_string(min([data."fractional-availability",`1.0`]))' --raw-output) != '1.0'; then
-    echo 'The "Autonomous Transaction Processing Total Storage (TB)" resource availability is insufficient to run this workshop.'
-    echo '1 TB are required.  Terminate some existing ATP databases and try again.'
-    CHECK=0
-  fi
+#  if test $(oci limits resource-availability get --compartment-id="$OCI_TENANCY" --service-name "database" --limit-name "atp-total-storage-tb" --query 'to_string(min([data."fractional-availability",`1.0`]))' --raw-output) != '1.0'; then
+#    echo 'The "Autonomous Transaction Processing Total Storage (TB)" resource availability is insufficient to run this workshop.'
+#    echo '1 TB are required.  Terminate some existing ATP databases and try again.'
+#    CHECK=0
+#  fi
 
   if test $CHECK -eq 1; then
     state_set_done ATP_LIMIT_CHECK
