@@ -15,7 +15,7 @@ read -s -r -p "Please enter Oracle DB Password: " ORACLE_DB_PASSWORD
 # read -r -p "Please enter Kafka Topic: " KAFKA_TOPIC
 
 # Collect the KAFKA Topic (Source)
-if state_get LAB_KAFKA_TOPIC; then
+if state_get KAFKA_TOPIC_NAME; then
   KAFKA_TOPIC="$(state_get KAFKA_TOPIC_NAME)"
 
   # Set the KAFKA TOPIC produced by Connect sync
