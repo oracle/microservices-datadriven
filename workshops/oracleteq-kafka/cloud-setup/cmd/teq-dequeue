@@ -27,21 +27,13 @@ else
   exit
 fi
 
-## Collect the Oracle TEQ Topic (Destination)
-#if state_done LAB_TEQ_TOPIC; then
-#  TEQ_TOPIC="$(state_get LAB_TEQ_TOPIC)"
-#else
-#  echo "ERROR: Oracle TEQ Topic is missing!"
-#  exit
-#fi
-#
-## Collect the Oracle TEQ Subscriber (Destination)
-#if state_done LAB_TEQ_TOPIC_SUBSCRIBER; then
-#  TEQ_SUBSCRIBER="$(state_get LAB_TEQ_TOPIC_SUBSCRIBER)"
-#else
-#  echo "ERROR: Oracle TEQ Topic Subscriber is missing!"
-#  exit
-#fi
+# Collect the Oracle TEQ Topic (Destination)
+if state_get TEQ_TOPIC_NAME; then
+  TEQ_TOPIC="$(state_get TEQ_TOPIC_NAME)"
+else
+  echo "ERROR: Oracle TEQ Topic is missing!"
+  exit
+fi
 
 TEQ_SUBSCRIBER=${TEQ_TOPIC}_SUBS
 

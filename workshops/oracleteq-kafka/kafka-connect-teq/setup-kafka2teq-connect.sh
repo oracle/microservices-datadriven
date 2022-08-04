@@ -49,8 +49,8 @@ else
 fi
 
 # Collect the Oracle TEQ Topic (Destination)
-if state_get LAB_TEQ_TOPIC; then
-  TEQ_TOPIC="$(state_get LAB_TEQ_TOPIC)"
+if state_get TEQ_TOPIC_NAME; then
+  TEQ_TOPIC="$(state_get TEQ_TOPIC_NAME)"
 
   # Set the Oracle TEQ TOPIC produced by Connect sync
   sed -i 's/LAB_TEQ_TOPIC/'"${TEQ_TOPIC}"'/g' "$CONF_FILE"
