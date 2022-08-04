@@ -14,6 +14,18 @@ read -s -r -p "Please enter Oracle DB Password: " ORACLE_DB_PASSWORD
 # Collect the Kafka Topic to be consumed by Connect
 # read -r -p "Please enter Kafka Topic: " KAFKA_TOPIC
 
+# Collect the KAFKA Topic (Source)
+if state_get LAB_KAFKA_TOPIC; then
+  KAFKA_TOPIC="$(state_get KAFKA_TOPIC_NAME)"
+
+  # Set the KAFKA TOPIC produced by Connect sync
+  sed -i 's/LAB_KAFKA_TOPIC/'"${KAFKA_TOPIC}"'/g' "$CONF_FILE"
+else
+  echo "ERROR: KAFKA Topic is missing!"
+  exit
+fi
+
+
 # Collect the DB USER
 if state_get LAB_DB_USER; then
   LAB_DB_USER="$(state_get LAB_DB_USER)"

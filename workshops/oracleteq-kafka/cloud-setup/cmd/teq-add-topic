@@ -66,7 +66,7 @@ if [[ "$VAR" == *"PL/SQL procedure successfully"* ]]; then
   echo "Configuring TEQ Producer to produce on topic ${TEQ_TOPIC}."
   sed -i 's/TEQ_TOPIC_NAME/'"${TEQ_TOPIC}"'/g' "$LAB_HOME/springboot-oracleteq/okafka-producer/src/main/resources/application.yaml"
 
-  echo "Configuring Kafka Consumer to consume from topic ${TEQ_TOPIC}."
+  echo "Configuring TEQ Consumer to consume from topic ${TEQ_TOPIC}."
   sed -i 's/TEQ_TOPIC_NAME/'"${TEQ_TOPIC}"'/g' "$LAB_HOME/springboot-oracleteq/okafka-consumer/src/main/resources/application.yaml"
   sed -i 's/TEQ_SUBSCRIBER/'"${TEQ_SUBSCRIBER}"'/g' "$LAB_HOME/springboot-oracleteq/okafka-consumer/src/main/resources/application.yaml"
 else
