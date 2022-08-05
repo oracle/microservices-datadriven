@@ -80,16 +80,16 @@ SSL_SERVER_DN_MATCH=yes
 LAB_DB_SVC="$(state_get LAB_DB_NAME)_tp"
 
 # Define Database User
-LAB_DB_USER=LAB8022_USER
+LAB_DB_USER="$(state_get RUN_NAME)_USER"
 echo "$(date): Oracle DB USER = $LAB_DB_USER"
 
 # Define TEQ Topic
-LAB_TEQ_TOPIC=LAB8022_TOPIC
+LAB_TEQ_TOPIC="$(state_get RUN_NAME)TOPIC"
 echo "$(date): Oracle TEQ TOPIC = $LAB_TEQ_TOPIC"
 state_set LAB_TEQ_TOPIC "$LAB_TEQ_TOPIC"
 
 # Define TEQ Agent Subscriber (group-ip)
-LAB_TEQ_TOPIC_SUBSCRIBER=LAB8022_TOPIC_SUBSCRIBER
+LAB_TEQ_TOPIC_SUBSCRIBER="$(state_get RUN_NAME)_SUBS"
 echo "$(date): Oracle TEQ TOPIC Subscriber= $LAB_TEQ_TOPIC_SUBSCRIBER"
 state_set LAB_TEQ_TOPIC_SUBSCRIBER "$LAB_TEQ_TOPIC_SUBSCRIBER"
 
@@ -124,24 +124,6 @@ GRANT EXECUTE ON sys.dbms_aq TO $U;
 GRANT EXECUTE ON sys.dbms_aqin TO $U;
 GRANT EXECUTE ON sys.dbms_aqjms TO $U;
 
-
-connect $U/"$DB_PASSWORD"@$SVC
-
--- Creating a JMS type sharded queue:
-BEGIN
-  sys.dbms_aqadm.create_sharded_queue(queue_name=>'$LAB_TEQ_TOPIC', multiple_consumers => TRUE);
-  sys.dbms_aqadm.start_queue('$LAB_TEQ_TOPIC');
-END;
-/
-
---- Create the subscriber agent
-DECLARE
-  subscriber sys.aq\$_agent;
-BEGIN
-  subscriber := sys.aq\$_agent('$LAB_TEQ_TOPIC_SUBSCRIBER', NULL, NULL);
-  DBMS_AQADM.ADD_SUBSCRIBER(queue_name => '$LAB_TEQ_TOPIC',   subscriber => subscriber);
-END;
-/
 commit;
 !
   state_set LAB_DB_USER "$LAB_DB_USER"
@@ -159,6 +141,12 @@ $DB_PASSWORD
 $WALLET_PASSWORD
 !
   state_set_done CWALLET_SSO_UPDATED
+fi
+
+# Setup DB Connection
+if ! state_get LAB_DB_CONNECTION; then
+  echo "Executing Database Connection setup for apps in the background."
+  "$LAB_HOME"/cloud-setup/database/oracle_db_setup_conn.sh &>> "$LAB_LOG"/oracle_db_setup_conn.log &
 fi
 
 # DB Setup Done

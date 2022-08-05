@@ -1,0 +1,37 @@
+#!/bin/bash
+## Copyright (c) 2021 Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+# Fail on error
+set -e
+
+## Deploy Kafka consumer microservices.
+
+if ! state_get KAFKA_MS_BUILDED; then
+  echo "ERROR:The deployment task requires that the microservices have been successfully built."
+  exit
+fi
+
+if ps -ef | grep "$LAB_HOME/springboot-kafka/kafka-producer/deploy.sh" | grep -v grep; then
+  echo "Kafka producer microservice deployment task is already running."
+  exit
+fi
+
+echo "Executing Kafka producer microservice deployment!"
+cd "$LAB_HOME"/springboot-kafka/kafka-producer
+
+./deploy.sh &>> "$LAB_LOG"/kafka-ms-producer-deployment.log
+
+# Print deployment result
+result=$(grep "Successfully built" "$LAB_LOG"/kafka-ms-producer-deployment.log)
+if [[ "$result" =~ *"Successfully"* ]]; then
+  echo "ERROR: Kafka producer microservices deployment failed!"
+  exit
+else
+  echo "Kafka producer microservices deployment succeeded!"
+  echo $(grep -hr -A3 "Successfully built" "$LAB_LOG"/kafka-ms-producer-deployment.log)
+  state_set_done KAFKA_MS_PRODUCER_DEPLOYED
+fi
+
+cd "$LAB_HOME"/springboot-kafka
+

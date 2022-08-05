@@ -14,6 +14,18 @@ read -s -r -p "Please enter Oracle DB Password: " ORACLE_DB_PASSWORD
 # Collect the Kafka Topic to be consumed by Connect
 # read -r -p "Please enter Kafka Topic: " KAFKA_TOPIC
 
+# Collect the KAFKA Topic (Source)
+if state_get KAFKA_TOPIC_NAME; then
+  KAFKA_TOPIC="$(state_get KAFKA_TOPIC_NAME)"
+
+  # Set the KAFKA TOPIC produced by Connect sync
+  sed -i 's/LAB_KAFKA_TOPIC/'"${KAFKA_TOPIC}"'/g' "$CONF_FILE"
+else
+  echo "ERROR: KAFKA Topic is missing!"
+  exit
+fi
+
+
 # Collect the DB USER
 if state_get LAB_DB_USER; then
   LAB_DB_USER="$(state_get LAB_DB_USER)"
@@ -37,8 +49,8 @@ else
 fi
 
 # Collect the Oracle TEQ Topic (Destination)
-if state_get LAB_TEQ_TOPIC; then
-  TEQ_TOPIC="$(state_get LAB_TEQ_TOPIC)"
+if state_get TEQ_TOPIC_NAME; then
+  TEQ_TOPIC="$(state_get TEQ_TOPIC_NAME)"
 
   # Set the Oracle TEQ TOPIC produced by Connect sync
   sed -i 's/LAB_TEQ_TOPIC/'"${TEQ_TOPIC}"'/g' "$CONF_FILE"
@@ -53,7 +65,7 @@ sed -i 's/LAB_DB_PASSWORD/'"${ORACLE_DB_PASSWORD}"'/g' "$CONF_FILE"
 # Configure the Kafka Connect Sync with Oracle Database
 curl -S -s -o /dev/null \
      -i -X PUT -H "Accept:application/json" \
-     -H "Content-Type:application/json" http://localhost:8083/connectors/JmsConnectSync_lab8022/config \
+     -H "Content-Type:application/json" http://localhost:8083/connectors/JmsConnectSync_teqlab/config \
      -T "$CONF_FILE"
 
 # Reset the Oracle DB User Password

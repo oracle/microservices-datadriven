@@ -2,14 +2,11 @@
 ## Copyright (c) 2021 Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
-# Fail on error
-set -e
-
 # Local Run Only
 #image: ghcr.io/pasimoes/order-in-store-service:1.0
 #CONTAINER_REGISTRY=ghcr.io/pasimoes
 
-IMAGE_NAME=oracle-developers-kafka-consumer
+IMAGE_NAME=oracle-developers-kafka-producer
 IMAGE_VERSION=0.0.1-SNAPSHOT
 #IMAGE_NAME=$1
 #IMAGE_VERSION=$2

@@ -15,7 +15,8 @@ variable "autonomous_database_defined_tags_value" {
 }
 
 variable "autonomous_database_license_model" {
-  default = "BRING_YOUR_OWN_LICENSE"
+#  default = "BRING_YOUR_OWN_LICENSE"
+  default = "LICENSE_INCLUDED"
 }
 
 variable "autonomous_database_is_dedicated" {
@@ -23,7 +24,7 @@ variable "autonomous_database_is_dedicated" {
 }
 
 variable "autonomous_database_cpu_core_count" {
-  default = "2"
+  default = "1"
 }
 
 variable "autonomous_database_db_name" {
@@ -49,5 +50,5 @@ variable "autonomous_database_data_storage_size_in_tbs" {
 }
 
 variable "autonomous_database_is_free_tier" {
-  default = false
+  default = true
 }
