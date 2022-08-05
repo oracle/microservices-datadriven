@@ -14,7 +14,7 @@ public class LabResponseData implements Serializable {
     public static final String LAB_RESPONSE_SCHEMA =
             "{\"namespace\": \"com.oracle.developers\","+
                     "\"type\":\"record\"," +
-                    "\"doc\":\"Response record from lab8022\"," +
+                    "\"doc\":\"Response record from TEQLAB\"," +
                     "\"name\":\"LabResponse\"," +
                     "\"fields\":["+
                     "{\"name\":\"id\",\"type\":\"string\"},"+

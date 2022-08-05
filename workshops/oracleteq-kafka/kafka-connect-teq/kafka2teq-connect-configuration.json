@@ -1,7 +1,7 @@
 {
   "connector.class": "io.confluent.connect.jms.JmsSinkConnector",
   "tasks.max": "1",
-  "topics": "LAB8022_TOPIC",
+  "topics": "LAB_KAFKA_TOPIC",
   "java.naming.factory.initial": "oracle.jms.AQjmsInitialContextFactory",
   "java.naming.provider.url": "jdbc:oracle:thin:@LAB_DB_SVC?TNS_ADMIN=/home/appuser/wallet",
   "db_url": "jdbc:oracle:thin:@LAB_DB_SVC?TNS_ADMIN=/home/appuser/wallet",

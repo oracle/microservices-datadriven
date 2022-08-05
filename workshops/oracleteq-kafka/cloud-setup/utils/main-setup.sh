@@ -19,22 +19,22 @@ if state_done SETUP_VERIFIED; then
 fi
 
 
-# Identify Run Type
-while ! state_done RUN_TYPE; do
-  if [[ "$HOME" =~ /home/ll[0-9]{1,5}_us ]]; then
-    # Green Button (hosted by Live Labs)
-    state_set RUN_TYPE "3"
-    state_set RESERVATION_ID $(grep -oP '(?<=/home/ll).*?(?=_us)' <<<"$HOME")
-    state_set USER_OCID 'NA'
-    state_set USER_NAME "LL$(state_get RESERVATION_ID)-USER"
-    state_set_done PROVISIONING
-    state_set RUN_NAME "lab$(state_get RESERVATION_ID)"
-    state_set LAB_DB_NAME "LAB$(state_get RESERVATION_ID)"
-    state_set_done ATP_LIMIT_CHECK
-  else
-    state_set RUN_TYPE "1"
-  fi
-done
+## Identify Run Type
+#while ! state_done RUN_TYPE; do
+#  if [[ "$HOME" =~ /home/ll[0-9]{1,5}_us ]]; then
+#    # Green Button (hosted by Live Labs)
+#    state_set RUN_TYPE "3"
+#    state_set RESERVATION_ID $(grep -oP '(?<=/home/ll).*?(?=_us)' <<<"$HOME")
+#    state_set USER_OCID 'NA'
+#    state_set USER_NAME "LL$(state_get RESERVATION_ID)-USER"
+#    state_set_done PROVISIONING
+#    state_set RUN_NAME "lab$(state_get RESERVATION_ID)"
+#    state_set LAB_DB_NAME "LAB$(state_get RESERVATION_ID)"
+#    state_set_done ATP_LIMIT_CHECK
+#  else
+#    state_set RUN_TYPE "1"
+#  fi
+#done
 
 
 # Get the User OCID
@@ -61,33 +61,33 @@ while ! state_done USER_NAME; do
 done
 
 
-# Get Run Name from directory name
-while ! state_done RUN_NAME; do
-  cd "$LAB_HOME"
-  cd ../../..
-  # Validate that a folder was creared
-  if test "$PWD" == ~; then
-    echo "ERROR: The workshop is not installed in a separate folder."
-    exit
-  fi
-  DN=$(basename "$PWD")
-  # Validate run name.  Must be between 1 and 13 characters, only letters or numbers, starting with letter
-  if [[ "$DN" =~ ^[a-zA-Z][a-zA-Z0-9]{0,12}$ ]]; then
-    # shellcheck disable=SC2046
-    state_set RUN_NAME $(echo "$DN" | awk '{print tolower($0)}')
-    state_set LAB_DB_NAME "$(state_get RUN_NAME)"
-  else
-    echo "Error: Invalid directory name $RN.  The directory name must be between 1 and 13 characters,"
-    echo "containing only letters or numbers, starting with a letter.  Please restart the workshop with a valid directory name."
-    exit
-  fi
-  cd "$LAB_HOME"
-done
+## Get Run Name from directory name
+#while ! state_done RUN_NAME; do
+#  cd "$LAB_HOME"
+#  cd ../../..
+#  # Validate that a folder was creared
+#  if test "$PWD" == ~; then
+#    echo "ERROR: The workshop is not installed in a separate folder."
+#    exit
+#  fi
+#  DN=$(basename "$PWD")
+#  # Validate run name.  Must be between 1 and 13 characters, only letters or numbers, starting with letter
+#  if [[ "$DN" =~ ^[a-zA-Z][a-zA-Z0-9]{0,12}$ ]]; then
+#    # shellcheck disable=SC2046
+#    state_set RUN_NAME $(echo "$DN" | awk '{print tolower($0)}')
+#    state_set LAB_DB_NAME "$(state_get RUN_NAME)"
+#  else
+#    echo "Error: Invalid directory name $RN.  The directory name must be between 1 and 13 characters,"
+#    echo "containing only letters or numbers, starting with a letter.  Please restart the workshop with a valid directory name."
+#    exit
+#  fi
+#  cd "$LAB_HOME"
+#done
 
 
 # Get the tenancy OCID
 while ! state_done TENANCY_OCID; do
-  state_set TENANCY_OCID "$OCI_TENANCY" # Set in cloud shell env
+  state_set TENANCY_OCID "$OCI_TENANCY" # Set in cloud shell env.sh
 done
 
 
@@ -97,7 +97,7 @@ while ! state_done REGION; do
     HOME_REGION=$(oci iam region-subscription list --query 'data[?"is-home-region"]."region-name" | join('\'' '\'', @)' --raw-output)
     state_set HOME_REGION "$HOME_REGION"
   fi
-  state_set REGION "$OCI_REGION" # Set in cloud shell env
+  state_set REGION "$OCI_REGION" # Set in cloud shell env.sh
 done
 
 
@@ -106,7 +106,8 @@ while ! state_done COMPARTMENT_OCID; do
   if test $(state_get RUN_TYPE) -ne 3; then
     echo "Resources will be created in a new compartment named $(state_get RUN_NAME)"
     export OCI_CLI_PROFILE=$(state_get HOME_REGION)
-    COMPARTMENT_OCID=$(oci iam compartment create --compartment-id "$(state_get TENANCY_OCID)" --name "$(state_get RUN_NAME)" --description "Lab TEQ Workshop" --query 'data.id' --raw-output)
+    LAB_DESCRIPTION="Simplify Event-driven Apps with TEQ in Oracle Database (with Kafka interoperability)"
+    COMPARTMENT_OCID=$(oci iam compartment create --compartment-id "$(state_get TENANCY_OCID)" --name "$(state_get RUN_NAME)" --description "$LAB_DESCRIPTION" --query 'data.id' --raw-output)
     export OCI_CLI_PROFILE=$(state_get REGION)
   else
     read -p "Please enter your OCI compartment's OCID: " COMPARTMENT_OCID
@@ -121,19 +122,20 @@ done
 # Check ATP resource availability
 while ! state_done ATP_LIMIT_CHECK; do
   CHECK=1
-  # ATP OCPU availability
-  if test $(oci limits resource-availability get --compartment-id="$OCI_TENANCY" --service-name "database" --limit-name "atp-ocpu-count" --query 'to_string(min([data."fractional-availability",`2.0`]))' --raw-output) != '2.0'; then
+  # ATP Free Tier OCPU availability
+  #if test $(oci limits resource-availability get --compartment-id="$OCI_TENANCY" --service-name "database" --limit-name "atp-ocpu-count" --query 'to_string(min([data."fractional-availability",`2.0`]))' --raw-output) != '2.0'; then
+  if test $(oci limits resource-availability get --compartment-id="$OCI_TENANCY" --service-name "database" --limit-name "adb-free-count" --query 'to_string(min([data."fractional-availability",`1.0`]))' --raw-output) != '1.0'; then
     echo 'The "Autonomous Transaction Processing OCPU Count" resource availability is insufficient to run this workshop.'
-    echo '2 OCPUs are required.  Terminate some existing ATP databases and try again.'
+    echo '1 OCPUs are required.  Terminate some existing ATP databases and try again.'
     CHECK=0
   fi
 
   # ATP storage availability
-  if test $(oci limits resource-availability get --compartment-id="$OCI_TENANCY" --service-name "database" --limit-name "atp-total-storage-tb" --query 'to_string(min([data."fractional-availability",`1.0`]))' --raw-output) != '1.0'; then
-    echo 'The "Autonomous Transaction Processing Total Storage (TB)" resource availability is insufficient to run this workshop.'
-    echo '1 TB are required.  Terminate some existing ATP databases and try again.'
-    CHECK=0
-  fi
+#  if test $(oci limits resource-availability get --compartment-id="$OCI_TENANCY" --service-name "database" --limit-name "atp-total-storage-tb" --query 'to_string(min([data."fractional-availability",`1.0`]))' --raw-output) != '1.0'; then
+#    echo 'The "Autonomous Transaction Processing Total Storage (TB)" resource availability is insufficient to run this workshop.'
+#    echo '1 TB are required.  Terminate some existing ATP databases and try again.'
+#    CHECK=0
+#  fi
 
   if test $CHECK -eq 1; then
     state_set_done ATP_LIMIT_CHECK
@@ -159,7 +161,8 @@ while ! state_done NAMESPACE; do
   state_set NAMESPACE "$NAMESPACE"
 done
 
-GRAALVM_VERSION="22.0.0.2"
+# Install GraalVM
+GRAALVM_VERSION="22.1.0"
 if ! state_get GRAALVM_INSTALLED; then
   if ps -ef | grep "$LAB_HOME/cloud-setup/java/graalvm-install.sh" | grep -v grep; then
     echo "$LAB_HOME/cloud-setup/java/graalvm-install.sh is already running"
@@ -169,20 +172,13 @@ if ! state_get GRAALVM_INSTALLED; then
   fi
 fi
 
-if ! state_get OKAFKA_INSTALLED; then
-  if ps -ef | grep "$LAB_HOME/cloud-setup/okafka/okafka-maven-install.sh" | grep -v grep; then
-    echo "$LAB_HOME/cloud-setup/okafka/okafka-maven-install.sh is already running"
-  else
-    echo "Executing okafka/okafka-maven-install.sh in the background"
-    nohup "$LAB_HOME"/cloud-setup/okafka/okafka-maven-install.sh &>>"$LAB_LOG"/okafka_install.log &
-  fi
-fi
-
 if ! state_done CONTAINER_ENG_SETUP; then
   echo "$(date): Installing GraalVM CE Java 11 Image"
   docker pull ghcr.io/graalvm/graalvm-ce:ol8-java11 --quiet
-  echo "$(date): Create Containers Network"
-  docker network create lab8022network
+#  echo "$(date): Create Containers Network"
+#  LAB_KAFKA_NETWORK="$(state_get RUN_NAME)_net"
+#  docker network create "${LAB_KAFKA_NETWORK}"
+#  state_set LAB_KAFKA_NETWORK "$LAB_KAFKA_NETWORK"
   state_set_done CONTAINER_ENG_SETUP
   echo
 fi
@@ -298,6 +294,7 @@ while ! state_done SETUP_VERIFIED; do
   fi
 done
 
-# Export state file for local development
-cd "$LAB_HOME"
-source "$LAB_HOME"/cloud-setup/env.sh
+## Export state file for local development
+#cd "$LAB_HOME"
+#source "$LAB_HOME"/cloud-setup/env.sh
+#
