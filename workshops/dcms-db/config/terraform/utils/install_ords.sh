@@ -7,4 +7,5 @@
 set -eu
 
 echo "Installing ORDS"
+yum-config-manager --add-repo=http://yum.oracle.com/repo/OracleLinux/OL8/oracle/software/x86_64
 yum -y install ords-21*
