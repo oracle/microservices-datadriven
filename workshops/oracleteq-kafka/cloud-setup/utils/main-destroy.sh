@@ -11,7 +11,7 @@ set -e
 
 
 # Remove from .bashrc
-sed -i.bak '/lab8022/d' ~/.bashrc
+sed -i.bak '/teqlab/d' ~/.bashrc
 
 
 # No destroy necessary for Live Labs

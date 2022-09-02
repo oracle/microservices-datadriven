@@ -3,7 +3,7 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Fail on error
-set -e
+set -eu
 
 # Install Docker Compose
 while ! state_done DOCKER_COMPOSE; do
@@ -37,6 +37,16 @@ done
 while ! state_done KAFKA_SETUP; do
   cd "$LAB_HOME"/cloud-setup/confluent-kafka
   ./docker-compose up --no-start
+
   cd "$LAB_HOME"
   state_set_done KAFKA_SETUP
 done
+
+if state_get KAFKA_SETUP; then
+  echo "$(date): Create Containers Network"
+  LAB_KAFKA_NETWORK="$(state_get RUN_NAME)_net"
+  docker network create "${LAB_KAFKA_NETWORK}"
+  state_set LAB_KAFKA_NETWORK "$LAB_KAFKA_NETWORK"
+fi
+
+
