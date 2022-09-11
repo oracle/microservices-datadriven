@@ -104,7 +104,7 @@ done
 # Create the compartment
 while ! state_done COMPARTMENT_OCID; do
   if test $(state_get RUN_TYPE) -ne 3; then
-    echo "Resources will be created in a new compartment named $(state_get RUN_NAME)"
+    echo "Resources will be created in a new compartment named $(state_get COMP_NAME)"
     export OCI_CLI_PROFILE=$(state_get HOME_REGION)
     LAB_DESCRIPTION="Simplify Event-driven Apps with TEQ in Oracle Database (with Kafka interoperability)"
     COMPARTMENT_OCID=$(oci iam compartment create --compartment-id "$(state_get TENANCY_OCID)" --name "$(state_get COMP_NAME)" --description "$LAB_DESCRIPTION" --query 'data.id' --raw-output)
