@@ -5,8 +5,8 @@
 # Fail on error
 set -e
 
-# DIRNAME=$(state_get RUN_NAME)
-DIR_NAME=$(basename "$PWD")
+DIRNAME=$(state_get RUN_NAME)
+# DIR_NAME=$(basename "$PWD")
 {
   echo "# LiveLab Setup -- BEGIN"
   echo "export LAB_HOME=${HOME}/${DIRNAME}/microservices-datadriven/workshops/oracleteq-kafka"
