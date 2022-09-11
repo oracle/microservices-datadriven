@@ -82,7 +82,9 @@ while ! state_done RUN_NAME; do
     echo "ERROR: The workshop is not installed in a separate folder."
     exit
   fi
-  DN=$(basename "$PWD")
+  # DN=$(basename "$PWD")
+  # Genrate unique'ish variable for Comp Name, DB Name etc
+  DN=teq`awk 'BEGIN { srand(); print int(1 + rand() * 100000001)}'`
   # Validate run name.  Must be between 1 and 13 characters, only letters or numbers, starting with letter
   if [[ "$DN" =~ ^[a-zA-Z][a-zA-Z0-9]{0,12}$ ]]; then
     # shellcheck disable=SC2046

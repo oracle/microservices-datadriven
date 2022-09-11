@@ -10,6 +10,7 @@ OS_NAME=$(uname)
 
 # Install GraalVM
 # https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java11-linux-amd64-22.1.0.tar.gz
+# https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/graalvm-ce-java17-linux-amd64-22.2.0.tar.gz
 if ! test -d ~/graalvm-ce-java11-"${GRAALVM_VERSION}"; then
   echo "$(date): Installing graalvm-ce-java11-${GRAALVM_VERSION}"
   (cd ~ && curl -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-"${GRAALVM_VERSION}"/graalvm-ce-java11-${OS_NAME}-amd64-${GRAALVM_VERSION}.tar.gz | tar xz)
