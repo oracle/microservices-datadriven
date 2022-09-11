@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright (c) 2021 Oracle and/or its affiliates.
+# Copyright (c) 2022 Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Make sure this is run via source or .
@@ -82,7 +82,8 @@ while ! state_done RUN_NAME; do
     echo "ERROR: The workshop is not installed in a separate folder."
     exit
   fi
-  # DN=$(basename "$PWD")
+  # Get the directory name e.g. teqodb -- Hardcoded in lab needs fix
+  DIRNAME=$(basename "$PWD")
   # Genrate unique'ish variable for Comp Name, DB Name etc
   DN=teq`awk 'BEGIN { srand(); print int(1 + rand() * 100000001)}'`
   # Validate run name.  Must be between 1 and 13 characters, only letters or numbers, starting with letter
@@ -90,6 +91,7 @@ while ! state_done RUN_NAME; do
     # shellcheck disable=SC2046
     state_set RUN_NAME $(echo "$DN" | awk '{print tolower($0)}')
     state_set LAB_DB_NAME "$(state_get RUN_NAME)"
+    state_set DIRNAME $(echo "$DIRNAME" | awk '{print tolower($0)}')
   else
     echo "Error: Invalid directory name $RN.  The directory name must be between 1 and 13 characters,"
     echo "containing only letters or numbers, starting with a letter.  Please restart the workshop with a valid directory name."

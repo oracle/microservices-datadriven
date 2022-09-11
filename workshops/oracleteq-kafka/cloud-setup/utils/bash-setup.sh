@@ -1,11 +1,12 @@
 #!/bin/bash
-# Copyright (c) 2021 Oracle and/or its affiliates.
+# Copyright (c) 2022 Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Fail on error
 set -e
 
-DIRNAME=$(state_get RUN_NAME)
+# DIRNAME=$(state_get RUN_NAME)
+DIR_NAME=$(basename "$PWD")
 {
   echo "# LiveLab Setup -- BEGIN"
   echo "export LAB_HOME=${HOME}/${DIRNAME}/microservices-datadriven/workshops/oracleteq-kafka"
