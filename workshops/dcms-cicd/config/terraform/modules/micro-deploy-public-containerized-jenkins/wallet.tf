@@ -15,3 +15,8 @@ resource "oci_database_autonomous_database_wallet" "database_wallet" {
   password               = random_password.password.result
   base64_encode_content  = "true"
 }
+
+resource "local_file" "database_wallet_file" {
+  content_base64 = oci_database_autonomous_database_wallet.database_wallet.content
+  filename       = "../wallet/adb_wallet.zip"
+}

@@ -54,7 +54,19 @@ resource "null_resource" "jenkins_provisioner" {
       private_key = tls_private_key.tls_key_pair.private_key_pem
 
     }
+  }
 
+  provisioner "file" {
+    connection {
+      type        = "ssh"
+      agent       = false
+      user        = var.compute_user
+      host        = oci_core_public_ip.jenkins_public_ip.ip_address
+      private_key = tls_private_key.tls_key_pair.private_key_pem
+    }
+    # Place in an existing directory; cloud-init will move it
+    source      = local_file.database_wallet_file.filename
+    destination = "/home/opc/adb_wallet.zip"
   }
 
   provisioner "remote-exec" {
@@ -75,5 +87,3 @@ resource "null_resource" "jenkins_provisioner" {
 
   }
 }
-
-

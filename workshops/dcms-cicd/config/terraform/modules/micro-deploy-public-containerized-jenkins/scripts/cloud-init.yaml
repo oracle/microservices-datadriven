@@ -31,4 +31,6 @@ runcmd:
   - [ systemctl, daemon-reload ]
   - [ systemctl, enable, docker.service ]
   - [ systemctl, start, --no-block, docker.service ]
+  - [ mkdir, -p, /jenkins/wallet ]
+  - [ cp, /home/opc/adb_wallet.zip, /jenkins/wallet/adb_wallet.zip ]
   - [ touch, /tmp/cloud-init-complete ]
