@@ -1,10 +1,10 @@
-resource oci_core_instance jenkins_vm {
+resource "oci_core_instance" "jenkins_vm" {
   availability_domain = local.availability_domain_name
   compartment_id      = var.compartment_id
   display_name        = "jenkins-vm"
   shape               = local.instance_shape
 
-  dynamic shape_config {
+  dynamic "shape_config" {
     for_each = local.is_flexible_instance_shape ? [1] : []
     content {
       ocpus         = var.instance_ocpus

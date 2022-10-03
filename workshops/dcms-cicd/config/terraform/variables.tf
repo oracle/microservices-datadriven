@@ -1,23 +1,23 @@
-variable region {
+variable "region" {
   description = "Tenancy region to provision resources in"
 }
-variable compartment_ocid {
+variable "compartment_ocid" {
   description = "OCID of compartment to provision resources in"
 }
-variable jenkins_password {
+variable "jenkins_password" {
   description = "Password for Jenkins admin user"
-  type = string
-  sensitive = true
+  type        = string
+  sensitive   = true
 }
 
-variable agents {
+variable "agents" {
   description = "Agents"
-  type = string
-  default = ""
+  type        = string
+  default     = ""
 }
 
-variable autonomous_database_id {}
+variable "autonomous_database_id" {}
 
-variable deployment {
+variable "deployment" {
   description = "Type of Deployment deploying different Jenkins infrastructure configuration"
 }

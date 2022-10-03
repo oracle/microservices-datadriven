@@ -1,37 +1,37 @@
-resource oci_core_virtual_network jenkins_vcn {
+resource "oci_core_virtual_network" "jenkins_vcn" {
   compartment_id = var.compartment_id
-  cidr_block = var.vcn_cidr
-  display_name = var.vcn_name
-  dns_label = var.vcn_dns
+  cidr_block     = var.vcn_cidr
+  display_name   = var.vcn_name
+  dns_label      = var.vcn_dns
 }
 
-resource oci_core_internet_gateway igw {
+resource "oci_core_internet_gateway" "igw" {
   compartment_id = var.compartment_id
-  vcn_id = oci_core_virtual_network.jenkins_vcn.id
-  display_name = "${var.vcn_name}-igw"
+  vcn_id         = oci_core_virtual_network.jenkins_vcn.id
+  display_name   = "${var.vcn_name}-igw"
 }
 
-resource oci_core_nat_gateway ngw {
+resource "oci_core_nat_gateway" "ngw" {
   compartment_id = var.compartment_id
-  vcn_id = oci_core_virtual_network.jenkins_vcn.id
-  display_name = "${var.vcn_name}-nat"
+  vcn_id         = oci_core_virtual_network.jenkins_vcn.id
+  display_name   = "${var.vcn_name}-nat"
 }
 
-resource oci_core_route_table pub_lb_rt {
+resource "oci_core_route_table" "pub_lb_rt" {
   compartment_id = var.compartment_id
-  vcn_id = oci_core_virtual_network.jenkins_vcn.id
-  display_name = "${var.vcn_name}-pub-lb-rt"
+  vcn_id         = oci_core_virtual_network.jenkins_vcn.id
+  display_name   = "${var.vcn_name}-pub-lb-rt"
 
   route_rules {
-    destination = "0.0.0.0/0"
+    destination       = "0.0.0.0/0"
     network_entity_id = oci_core_internet_gateway.igw.id
   }
 }
 
-resource "oci_core_route_table" prv_subnet_rt {
+resource "oci_core_route_table" "prv_subnet_rt" {
   compartment_id = var.compartment_id
   vcn_id         = oci_core_virtual_network.jenkins_vcn.id
-  display_name = "${var.vcn_name}-prv-subnet-rt"
+  display_name   = "${var.vcn_name}-prv-subnet-rt"
 
   route_rules {
     destination       = "0.0.0.0/0"
@@ -40,14 +40,14 @@ resource "oci_core_route_table" prv_subnet_rt {
   }
 }
 
-resource oci_core_security_list pub_sl_http {
+resource "oci_core_security_list" "pub_sl_http" {
   compartment_id = var.compartment_id
-  display_name = "Allow HTTP(S) Connections to Jenkins"
-  vcn_id = oci_core_virtual_network.jenkins_vcn.id
+  display_name   = "Allow HTTP(S) Connections to Jenkins"
+  vcn_id         = oci_core_virtual_network.jenkins_vcn.id
 
   egress_security_rules {
     destination = "0.0.0.0/0"
-    protocol = "6"
+    protocol    = "6"
   }
 
   ingress_security_rules {
@@ -69,27 +69,27 @@ resource oci_core_security_list pub_sl_http {
   }
 }
 
-resource "oci_core_subnet" pub_jenkins_lb_subnet {
+resource "oci_core_subnet" "pub_jenkins_lb_subnet" {
   compartment_id = var.compartment_id
-  cidr_block = cidrsubnet(var.vcn_cidr, 8, 1)
-  display_name = "${var.vcn_name}-pub-lb-subnet"
+  cidr_block     = cidrsubnet(var.vcn_cidr, 8, 1)
+  display_name   = "${var.vcn_name}-pub-lb-subnet"
 
-  vcn_id = oci_core_virtual_network.jenkins_vcn.id
-  route_table_id = oci_core_route_table.pub_lb_rt.id
+  vcn_id            = oci_core_virtual_network.jenkins_vcn.id
+  route_table_id    = oci_core_route_table.pub_lb_rt.id
   security_list_ids = [oci_core_security_list.pub_sl_http.id]
-  dhcp_options_id = oci_core_virtual_network.jenkins_vcn.default_dhcp_options_id
+  dhcp_options_id   = oci_core_virtual_network.jenkins_vcn.default_dhcp_options_id
 
   dns_label = "jnkslbpub"
 }
 
-resource oci_core_security_list agent_sl_access {
-  display_name               = "Allow Access to/from Agent"
-  compartment_id             = var.compartment_id
-  vcn_id                     = oci_core_virtual_network.jenkins_vcn.id
+resource "oci_core_security_list" "agent_sl_access" {
+  display_name   = "Allow Access to/from Agent"
+  compartment_id = var.compartment_id
+  vcn_id         = oci_core_virtual_network.jenkins_vcn.id
 
   egress_security_rules {
     destination = "0.0.0.0/0"
-    protocol = "6"
+    protocol    = "6"
   }
 
   ingress_security_rules {
@@ -102,15 +102,15 @@ resource oci_core_security_list agent_sl_access {
   }
 }
 
-resource oci_core_security_list priv_sl_lb_http {
+resource "oci_core_security_list" "priv_sl_lb_http" {
   compartment_id = var.compartment_id
-  display_name = "Allow HTTP(s) Connections to Jenkins through the LB Subnet"
-  vcn_id = oci_core_virtual_network.jenkins_vcn.id
+  display_name   = "Allow HTTP(s) Connections to Jenkins through the LB Subnet"
+  vcn_id         = oci_core_virtual_network.jenkins_vcn.id
 
 
   egress_security_rules {
     destination = "0.0.0.0/0"
-    protocol = "6"
+    protocol    = "6"
   }
 
   ingress_security_rules {
@@ -149,10 +149,10 @@ resource oci_core_security_list priv_sl_lb_http {
   }
 }
 
-resource oci_core_security_list priv_sl_bastion_ssh {
+resource "oci_core_security_list" "priv_sl_bastion_ssh" {
   compartment_id = var.compartment_id
-  display_name = "Allow SSH Connections to Jenkins VM from the Bastion"
-  vcn_id = oci_core_virtual_network.jenkins_vcn.id
+  display_name   = "Allow SSH Connections to Jenkins VM from the Bastion"
+  vcn_id         = oci_core_virtual_network.jenkins_vcn.id
 
 
   ingress_security_rules {
@@ -165,30 +165,30 @@ resource oci_core_security_list priv_sl_bastion_ssh {
   }
 }
 
-resource "oci_core_subnet" prv_jenkins_controller_subnet {
+resource "oci_core_subnet" "prv_jenkins_controller_subnet" {
   compartment_id = var.compartment_id
-  cidr_block = cidrsubnet(var.vcn_cidr, 8, 3)
-  display_name = "${var.vcn_name}-prv-ctlr-subnet"
+  cidr_block     = cidrsubnet(var.vcn_cidr, 8, 3)
+  display_name   = "${var.vcn_name}-prv-ctlr-subnet"
 
-  vcn_id = oci_core_virtual_network.jenkins_vcn.id
-  route_table_id = oci_core_route_table.prv_subnet_rt.id
+  vcn_id            = oci_core_virtual_network.jenkins_vcn.id
+  route_table_id    = oci_core_route_table.prv_subnet_rt.id
   security_list_ids = [oci_core_security_list.priv_sl_lb_http.id, oci_core_security_list.priv_sl_bastion_ssh.id]
-  dhcp_options_id = oci_core_virtual_network.jenkins_vcn.default_dhcp_options_id
+  dhcp_options_id   = oci_core_virtual_network.jenkins_vcn.default_dhcp_options_id
 
   prohibit_public_ip_on_vnic = true
-  dns_label = "jnkscntrlpriv"
+  dns_label                  = "jnkscntrlpriv"
 }
 
-resource "oci_core_subnet" prv_jenkins_agent_subnet {
+resource "oci_core_subnet" "prv_jenkins_agent_subnet" {
   compartment_id = var.compartment_id
-  cidr_block = cidrsubnet(var.vcn_cidr, 8, 4)
-  display_name = "${var.vcn_name}-prv-agnt-subnet"
+  cidr_block     = cidrsubnet(var.vcn_cidr, 8, 4)
+  display_name   = "${var.vcn_name}-prv-agnt-subnet"
 
-  vcn_id = oci_core_virtual_network.jenkins_vcn.id
-  route_table_id = oci_core_route_table.prv_subnet_rt.id
+  vcn_id            = oci_core_virtual_network.jenkins_vcn.id
+  route_table_id    = oci_core_route_table.prv_subnet_rt.id
   security_list_ids = [oci_core_security_list.agent_sl_access.id, oci_core_security_list.priv_sl_bastion_ssh.id]
-  dhcp_options_id = oci_core_virtual_network.jenkins_vcn.default_dhcp_options_id
+  dhcp_options_id   = oci_core_virtual_network.jenkins_vcn.default_dhcp_options_id
 
   prohibit_public_ip_on_vnic = true
-  dns_label = "jnksagentpriv"
+  dns_label                  = "jnksagentpriv"
 }

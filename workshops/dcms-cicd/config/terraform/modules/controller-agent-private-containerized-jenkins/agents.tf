@@ -1,6 +1,6 @@
-resource oci_core_instance agent_vm {
+resource "oci_core_instance" "agent_vm" {
   depends_on = [oci_core_instance.jenkins_vm]
-  for_each = toset(var.unique_agent_names)
+  for_each   = toset(var.unique_agent_names)
 
 
   availability_domain = local.availability_domain_name
@@ -8,7 +8,7 @@ resource oci_core_instance agent_vm {
   display_name        = "agent-vm-${each.value}"
   shape               = local.instance_shape
 
-  dynamic shape_config {
+  dynamic "shape_config" {
     for_each = local.is_flexible_instance_shape ? [1] : []
     content {
       ocpus         = var.instance_ocpus
