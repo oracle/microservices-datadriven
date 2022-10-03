@@ -50,5 +50,5 @@ variable "autonomous_database_data_storage_size_in_tbs" {
 }
 
 variable "autonomous_database_is_free_tier" {
-  default = true
+  default = false
 }

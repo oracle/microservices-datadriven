@@ -25,6 +25,7 @@ if ! state_done PROVISIONING; then
   export TF_VAR_autonomous_database_db_name="$(state_get LAB_DB_NAME)"
 
   export TF_VAR_runName="$(state_get RUN_NAME)"
+  export TF_VAR_autonomous_database_is_free_tier=$(state_get ADB_FREE)
 
   cat >~/.terraformrc <<!
 provider_installation {
