@@ -20,9 +20,15 @@ packages:
  - docker-engine
  - docker-compose
 
+write_files:
+- encoding: b64
+  content: ${adb_wallet_b64}
+  owner: root:root
+  path: /jenkins/wallet/adb_wallet.zip
+  permissions: '0666'
+
 runcmd:
   - [ systemctl, daemon-reload ]
   - [ systemctl, enable, docker.service ]
   - [ systemctl, start, --no-block, docker.service ]
-  - [ mkdir, /jenkins/wallet ]
   - [ touch, /tmp/cloud-init-complete ]
