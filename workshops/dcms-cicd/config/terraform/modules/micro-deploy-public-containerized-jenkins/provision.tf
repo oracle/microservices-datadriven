@@ -56,19 +56,6 @@ resource "null_resource" "jenkins_provisioner" {
     }
   }
 
-  provisioner "file" {
-    connection {
-      type        = "ssh"
-      agent       = false
-      user        = var.compute_user
-      host        = oci_core_public_ip.jenkins_public_ip.ip_address
-      private_key = tls_private_key.tls_key_pair.private_key_pem
-    }
-    # Place in an existing directory; cloud-init will move it
-    source      = local_file.database_wallet_file.filename
-    destination = "/home/opc/adb_wallet.zip"
-  }
-
   provisioner "remote-exec" {
     connection {
       type        = "ssh"
@@ -79,11 +66,24 @@ resource "null_resource" "jenkins_provisioner" {
       private_key = tls_private_key.tls_key_pair.private_key_pem
 
     }
-
     inline = [
       "while [ ! -f /tmp/cloud-init-complete ]; do sleep 1; done",
       "docker-compose -f /home/opc/jenkins.yaml up -d"
     ]
+  }
+}
 
+resource "null_resource" "upload_wallet" {
+  provisioner "file" {
+    connection {
+      type                = "ssh"
+      agent               = false
+      user                = var.compute_user
+      host                = oci_core_public_ip.jenkins_public_ip.ip_address
+      private_key         = tls_private_key.tls_key_pair.private_key_pem
+    }
+    source      = local_file.database_wallet_file.filename
+    # Place in an existing directory; cloud-init will move it
+    destination = "/jenkins/wallet/adb_wallet.zip"
   }
 }
