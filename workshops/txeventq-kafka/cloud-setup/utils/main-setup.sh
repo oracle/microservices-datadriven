@@ -123,7 +123,7 @@ done
 while ! state_done ATP_LIMIT_CHECK; do
   CHECK=1
   # Check if user wants to use Always Free Autonomous Database Instance.
-  read -r -p "Do you want use Always Free Autonomous Database Instance? (y/N) " ADB_FREE
+  read -r -p "Do you want to use Always Free Autonomous Database Instance? (y/N) " ADB_FREE
   if [[ "$ADB_FREE" =~ ^([yY][eE][sS]|[yY])$ ]]
   then
         # ATP Free Tier OCPU availability
