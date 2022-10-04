@@ -23,6 +23,16 @@ resource "oci_core_instance" "jenkins_vm" {
     source_id   = data.oci_core_images.instance_images.images[0].id
   }
 
+  agent_config {
+    are_all_plugins_disabled = false
+    is_management_disabled   = false
+    is_monitoring_disabled   = false
+    plugins_config {
+      desired_state = "ENABLED"
+      name          = "Bastion"
+    }
+  }
+
   metadata = {
     ssh_authorized_keys = var.generate_public_ssh_key ? tls_private_key.tls_key_pair.public_key_openssh : join("\n", [var.public_ssh_key, tls_private_key.tls_key_pair.public_key_openssh])
     user_data           = base64encode("${path.module}/scripts/cloud-init.yaml")

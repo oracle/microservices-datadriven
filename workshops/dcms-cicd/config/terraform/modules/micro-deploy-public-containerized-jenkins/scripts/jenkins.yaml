@@ -15,7 +15,7 @@ services:
       - 80:8080
     volumes:
       - jenkins_home:/var/jenkins_home
-      - /jenkins/wallet:/var/lib/jenkins
+      - /home/opc/wallet:/var/lib/jenkins
       - jenkinsRef:/usr/share/jenkins/ref
       - "./casc.yaml:/jenkins/config/casc.yaml"
       - /var/run/docker.sock:/var/run/docker.sock
