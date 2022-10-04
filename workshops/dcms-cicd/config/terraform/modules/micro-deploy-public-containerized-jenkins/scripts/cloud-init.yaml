@@ -20,8 +20,83 @@ packages:
  - docker-engine
  - docker-compose
 
+write_files:
+- path: /home/opc/jenkins.yaml
+  permissions: '0644'
+  owner: opc:docker
+  content: |
+    version: '3'
+    volumes:
+      jenkins_home:
+      jenkinsRef:
+    services:
+      jenkins:
+        container_name: jenkins-docker
+        restart: always
+        privileged: true
+        build: .
+        ports:
+          - 80:8080
+        volumes:
+          - jenkins_home:/var/jenkins_home
+          - /home/opc/wallet:/var/lib/jenkins
+          - jenkinsRef:/usr/share/jenkins/ref
+          - "./casc.yaml:/jenkins/config/casc.yaml"
+          - /var/run/docker.sock:/var/run/docker.sock
+        environment:
+          - JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
+          - JENKINS_ADMIN_ID=${jenkins_user}
+          - JENKINS_ADMIN_PASSWORD=${jenkins_password}
+          - CASC_JENKINS_CONFIG=/jenkins/config/casc.yaml
+  append: false
+  defer: true
+- path: /home/opc/casc.yaml
+  permissions: '0644'
+  owner: opc:docker
+  content: |
+    jenkins:
+      securityRealm:
+        local:
+          allowsSignup: false
+          users:
+           - id: ${jenkins_user}
+             password: ${jenkins_password}
+      authorizationStrategy:
+          loggedInUsersCanDoAnything:
+            allowAnonymousRead: false
+  append: false
+  defer: true
+- path: /home/opc/Dockerfile
+  permissions: '0644'
+  owner: opc:docker
+  content: |
+    FROM jenkins/jenkins:lts-jdk11
+    # if we want to install via apt
+    USER root
+    # install sudo and curl and setup apt for https sources as well as kubernetes dependencies
+    RUN apt-get update && apt-get install -qq -y sudo apt-transport-https ca-certificates curl
+    #install docker
+    RUN apt-get update && apt-get install -qq -y docker.io
+    # install git
+    RUN apt-get update && apt-get install -qq -y git
+    # install git
+    RUN apt-get update && apt-get install -qq -y python3
+    # setup repository for kubectl install
+    RUN curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+    # install kubectl
+    RUN sudo apt-get update && sudo apt-get install -y kubectl
+    # install sqlcl
+    RUN curl https://download.oracle.com/otn_software/java/sqldeveloper/sqlcl-latest.zip -o sqlcl-latest.zip && \
+    unzip -q sqlcl-latest.zip -d /workspace && rm sqlcl-latest.zip
+    # install plugins
+    RUN jenkins-plugin-cli --plugins blueocean docker-workflow matrix-auth git github github-branch-source workflow-aggregator credentials-binding configuration-as-code kubernetes-cli
+    USER jenkins
+  append: false
+  defer: true
 runcmd:
   - systemctl daemon-reload
   - systemctl enable docker.service
   - systemctl start --no-block docker.service
+  - sudo su - opc docker-compose -f /home/opc/jenkins.yaml up -d
   - touch /tmp/cloud-init-complete
