@@ -26,8 +26,6 @@ def run_sqlcl(schema, password, service, cmd, resolution, conn_file, run_as):
     sql_cmd = f'''
         {wallet}
         conn {run_as}/{password}@{service}_high
-        lb version
-        lb help update
         {cmd}
     '''
 
