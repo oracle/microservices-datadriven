@@ -25,7 +25,7 @@ def run_sqlcl(schema, password, service, cmd, resolution, conn_file, run_as):
     # Keep password off the command line/shell history
     sql_cmd = f'''
         {wallet}
-        conn {run_as}/{password}@{service}_high
+        conn {run_as}/"{password}"@{service}_high
         {cmd}
     '''
 
