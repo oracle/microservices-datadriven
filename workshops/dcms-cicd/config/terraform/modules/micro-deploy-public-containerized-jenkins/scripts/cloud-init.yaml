@@ -1,5 +1,5 @@
 #cloud-config
-
+output: {all: '| tee -a /var/log/cloud-init-cicd.log'}
 bootcmd:
   - [ cloud-init-per, once, enable-epel,  yum-config-manager, --enable, ol7_developer_epel]
 
@@ -21,9 +21,12 @@ packages:
  - docker-compose
 
 write_files:
-- path: /home/opc/jenkins.yaml
+- path: /cicd/wallet/adb_wallet.zip
   permissions: '0644'
-  owner: opc:docker
+  content: |
+    MARKER
+- path: /cicd/jenkins.yaml
+  permissions: '0644'
   content: |
     version: '3'
     volumes:
@@ -39,20 +42,17 @@ write_files:
           - 80:8080
         volumes:
           - jenkins_home:/var/jenkins_home
-          - /home/opc/wallet:/var/lib/jenkins
+          - /cicd/wallet:/var/lib/jenkins
           - jenkinsRef:/usr/share/jenkins/ref
-          - "./casc.yaml:/jenkins/config/casc.yaml"
+          - /cicd/casc.yaml:/jenkins/config/casc.yaml
           - /var/run/docker.sock:/var/run/docker.sock
         environment:
           - JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
           - JENKINS_ADMIN_ID=${jenkins_user}
           - JENKINS_ADMIN_PASSWORD=${jenkins_password}
           - CASC_JENKINS_CONFIG=/jenkins/config/casc.yaml
-  append: false
-  defer: true
-- path: /home/opc/casc.yaml
+- path: /cicd/casc.yaml
   permissions: '0644'
-  owner: opc:docker
   content: |
     jenkins:
       securityRealm:
@@ -64,11 +64,8 @@ write_files:
       authorizationStrategy:
           loggedInUsersCanDoAnything:
             allowAnonymousRead: false
-  append: false
-  defer: true
-- path: /home/opc/Dockerfile
+- path: /cicd/Dockerfile
   permissions: '0644'
-  owner: opc:docker
   content: |
     FROM jenkins/jenkins:lts-jdk11
     # if we want to install via apt
@@ -92,11 +89,10 @@ write_files:
     # install plugins
     RUN jenkins-plugin-cli --plugins blueocean docker-workflow matrix-auth git github github-branch-source workflow-aggregator credentials-binding configuration-as-code kubernetes-cli
     USER jenkins
-  append: false
-  defer: true
 runcmd:
+  - mv /tmp/adb_wallet.zip /cicd/wallet/adb_wallet.zip
+  - chown -R opc:docker /cicd
   - systemctl daemon-reload
   - systemctl enable docker.service
   - systemctl start --no-block docker.service
-  - sudo su - opc docker-compose -f /home/opc/jenkins.yaml up -d
-  - touch /tmp/cloud-init-complete
+  - sudo -u opc docker-compose -f /cicd/jenkins.yaml up -d
