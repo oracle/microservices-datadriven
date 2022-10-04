@@ -49,16 +49,16 @@ def run_sqlcl(schema, password, service, cmd, resolution, conn_file, run_as):
 
 def deploy(password, resolution, conn_file, args):
     log.info('Running controller.admin.xml')
-    cmd = 'lb update -changelog-file controller.admin.xml;'
+    cmd = 'lb update -changelog controller.admin.xml;'
     run_sqlcl(args.dbUser, password, args.dbName, cmd, resolution, conn_file, 'ADMIN')
 
     log.info('Running controller.xml')
-    cmd = 'lb update -changelog-file controller.xml;'
+    cmd = 'lb update -changelog controller.xml;'
     run_sqlcl(args.dbUser, password, args.dbName, cmd, resolution, conn_file, args.dbUser)
 
     if os.path.exists('controller.data.xml'):
         log.info('Running controller.data.xml')
-        cmd = 'lb update -changelog-file controller.data.xml;'
+        cmd = 'lb update -changelog controller.data.xml;'
         run_sqlcl(args.dbUser, password, args.dbName, cmd, resolution, conn_file, args.dbUser)
 
 
@@ -79,7 +79,7 @@ def generate(password, resolution, conn_file, args):
 
 
 def destroy(password, resolution, conn_file, args):
-    cmd = 'lb rollback -changelog-file user.xml -count 999;'
+    cmd = 'lb rollback -changelog user.xml -count 999;'
     run_sqlcl(args.dbUser, password, args.dbName, cmd, resolution, conn_file, 'ADMIN')
 
 """ INIT
