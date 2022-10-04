@@ -18,14 +18,15 @@ def run_sqlcl(schema, password, service, cmd, resolution, conn_file, run_as):
     lb_env['schema']    = schema
 
     if resolution == 'wallet':
-        wallet = f'set cloudconfig {conn_file}'
+        wallet = f'set cloudconfig {conn_file};'
     else:
         lb_env['TNS_ADMIN'] = tns_admin #<-Global
 
     # Keep password off the command line/shell history
     sql_cmd = f'''
         {wallet}
-        conn {run_as}/"{password}"@{service}_high
+        conn {run_as}/{password}@{service}_high
+        select name from v$database;
         {cmd}
     '''
 

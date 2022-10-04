@@ -1,0 +1,32 @@
+Manifest-Version: 1.0
+Class-Path: libs/micronaut-jms-core-2.0.0-M1.jar libs/micronaut-jdbc-ucp
+ -4.0.4.jar libs/micronaut-jdbc-4.0.4.jar libs/micronaut-http-client-3.1
+ .3.jar libs/micronaut-http-netty-3.1.3.jar libs/micronaut-websocket-3.1
+ .3.jar libs/micronaut-http-client-core-3.1.3.jar libs/micronaut-messagi
+ ng-3.1.3.jar libs/micronaut-runtime-3.1.3.jar libs/jta-1.1.jar libs/aqa
+ pi-19.3.0.0.jar libs/javax.json.bind-api-1.0.jar libs/json-20210307.jar
+  libs/micronaut-validation-3.1.3.jar libs/micronaut-jackson-databind-3.
+ 1.3.jar libs/micronaut-jackson-core-3.1.3.jar libs/micronaut-json-core-
+ 3.1.3.jar libs/micronaut-http-3.1.3.jar libs/micronaut-context-3.1.3.ja
+ r libs/micronaut-aop-3.1.3.jar libs/micronaut-buffer-netty-3.1.3.jar li
+ bs/micronaut-inject-3.1.3.jar libs/javax.inject-1.jar libs/javax.annota
+ tion-api-1.3.2.jar libs/logback-classic-1.2.3.jar libs/jackson-datatype
+ -jdk8-2.12.4.jar libs/jackson-datatype-jsr310-2.12.4.jar libs/jackson-d
+ atabind-2.12.4.jar libs/jackson-annotations-2.12.4.jar libs/jackson-cor
+ e-2.12.4.jar libs/micronaut-core-reactive-3.1.3.jar libs/micronaut-core
+ -3.1.3.jar libs/jakarta.annotation-api-2.0.0.jar libs/netty-handler-pro
+ xy-4.1.69.Final.jar libs/netty-codec-http2-4.1.69.Final.jar libs/netty-
+ codec-http-4.1.69.Final.jar libs/netty-codec-socks-4.1.69.Final.jar lib
+ s/netty-handler-4.1.69.Final.jar libs/netty-codec-4.1.69.Final.jar libs
+ /netty-transport-4.1.69.Final.jar libs/netty-buffer-4.1.69.Final.jar li
+ bs/reactor-core-3.4.8.jar libs/reactive-streams-1.0.3.jar libs/slf4j-ap
+ i-1.7.29.jar libs/snakeyaml-1.29.jar libs/validation-api-2.0.1.Final.ja
+ r libs/javax.jms-api-2.0.1.jar libs/ojdbc8-21.1.0.0.jar libs/ucp-21.1.0
+ .0.jar libs/rsi-21.1.0.0.jar libs/oraclepki-21.1.0.0.jar libs/osdt_core
+ -21.1.0.0.jar libs/osdt_cert-21.1.0.0.jar libs/simplefan-21.1.0.0.jar l
+ ibs/ons-21.1.0.0.jar libs/orai18n-21.1.0.0.jar libs/xdb-21.1.0.0.jar li
+ bs/xmlparserv2-21.1.0.0.jar libs/netty-resolver-4.1.69.Final.jar libs/n
+ etty-common-4.1.69.Final.jar libs/jakarta.inject-api-2.0.1.jar libs/log
+ back-core-1.2.3.jar libs/commons-pool2-2.10.0.jar resources/
+Main-Class: io.micronaut.data.examples.Application
+
