@@ -1,0 +1,37 @@
+#!/bin/bash
+## Copyright (c) 2021 Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+# Fail on error
+set -e
+
+## Deploy TxEventQ consumer microservices.
+
+if ! state_get TXEVENTQ_MS_BUILDED; then
+  echo "ERROR:The deployment task requires that the microservices have been successfully built."
+  exit
+fi
+
+if ps -ef | grep "${LAB_HOME}/springboot-txeventq/okafka-consumer/deploy.sh" | grep -v grep; then
+  echo "TxEventQ consumer microservice deployment task is already running."
+  exit
+fi
+
+echo "Executing TxEventQ consumer microservice deployment!"
+cd "${LAB_HOME}"/springboot-txeventq/okafka-consumer
+
+./deploy.sh &>> "$LAB_LOG"/txeventq-ms-consumer-deployment.log
+
+# Print deployment result
+result=$(grep "Successfully built" "$LAB_LOG"/txeventq-ms-consumer-deployment.log)
+if [[ "$result" =~ *"Successfully"* ]]; then
+  echo "ERROR: TxEventQ consumer microservices deployment failed!"
+  exit
+else
+  echo "TxEventQ consumer microservices deployment succeeded!"
+  echo $(grep -hr -A3 "Successfully built" "$LAB_LOG"/txeventq-ms-consumer-deployment.log)
+  state_set_done TXEVENTQ_MS_CONSUMER_DEPLOYED
+fi
+
+cd "${LAB_HOME}"/springboot-txeventq
+

@@ -1,0 +1,27 @@
+#!/bin/bash
+## Copyright (c) 2021 Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+# Fail on error
+set -e
+
+## Launch TxEventQ consumer microservice.
+echo "Launching TxEventQ consumer microservice!"
+
+container_name="txeventq-consumer"
+docker run --detach \
+           --name=${container_name} \
+           --network $(state_get LAB_KAFKA_NETWORK) \
+           oracle-developers-okafka-consumer:0.0.1-SNAPSHOT
+
+if ! state_done TXEVENTQ_MS_CONSUMER_LAUNCHED; then
+  echo "$(date): Waiting for consumer running!"
+  sleep 3
+  echo
+fi
+
+if [ "$( docker container inspect -f '{{.State.Status}}' ${container_name} )" == "running" ]; then
+  echo "TxEventQ consumer microservice is running!";
+else
+  echo "TxEventQ consumer microservice launching failed!";
+fi
