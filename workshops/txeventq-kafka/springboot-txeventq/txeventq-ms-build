@@ -1,0 +1,24 @@
+#!/bin/bash
+## Copyright (c) 2021 Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+# Fail on error
+set -e
+
+#LAB_LOG="."
+# Build Kafka Microservices (Producer and Consumer)
+mvn clean install -Dmaven.test.skip=true &> "$LAB_LOG"/txeventq-ms-build.log
+
+# Print the maven build summary
+## grep -hnr
+grep -hr -A11 -B1 "Reactor Summary" "$LAB_LOG"/txeventq-ms-build.log
+
+# Test building process result
+result=$(grep "BUILD SUCCESS" "$LAB_LOG"/txeventq-ms-build.log)
+if [[ "$result" =~ *"SUCCESS"* ]]; then
+  echo "ERROR: Build TxEventQ microservices failed!"
+  echo "Please check detailed logs at $LAB_LOG/txeventq-ms-build.log."
+  exit
+else
+  state_set_done TXEVENTQ_MS_BUILDED
+fi

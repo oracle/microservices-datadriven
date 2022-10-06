@@ -1,29 +1,29 @@
-data template_file jenkins_docker_compose {
+data "template_file" "jenkins_docker_compose" {
   template = file("${path.module}/controller/jenkins.yaml")
 
   vars = {
-    jenkins_user       = var.jenkins_user,
-    jenkins_password   = var.jenkins_password
+    jenkins_user     = var.jenkins_user,
+    jenkins_password = var.jenkins_password
   }
 }
 
-data template_file agent_setup {
+data "template_file" "agent_setup" {
   depends_on = [oci_core_instance.jenkins_vm]
-  for_each = toset(var.unique_agent_names)
-  template = file("${path.module}/agent/setup.sh")
+  for_each   = toset(var.unique_agent_names)
+  template   = file("${path.module}/agent/setup.sh")
 
   vars = {
-    jenkins_endpoint       = "http://${oci_core_instance.jenkins_vm.private_ip}",
-    jenkins_user           = var.jenkins_user
-    jenkins_password       = var.jenkins_password
-    jenkins_agent_name     = each.value
+    jenkins_endpoint   = "http://${oci_core_instance.jenkins_vm.private_ip}",
+    jenkins_user       = var.jenkins_user
+    jenkins_password   = var.jenkins_password
+    jenkins_agent_name = each.value
   }
 }
 
-resource null_resource jenkins_provisioner {
+resource "null_resource" "jenkins_provisioner" {
   depends_on = [oci_core_instance.jenkins_vm, oci_bastion_session.bastion_session]
 
-  provisioner file {
+  provisioner "file" {
     content     = data.template_file.jenkins_docker_compose.rendered
     destination = "/home/opc/jenkins.yaml"
 
@@ -40,7 +40,7 @@ resource null_resource jenkins_provisioner {
     }
   }
 
-  provisioner file {
+  provisioner "file" {
     content     = file("${path.module}/controller/Dockerfile")
     destination = "/home/opc/Dockerfile"
 
@@ -58,7 +58,7 @@ resource null_resource jenkins_provisioner {
     }
   }
 
-  provisioner file {
+  provisioner "file" {
     content     = file("${path.module}/controller/casc.yaml")
     destination = "/home/opc/casc.yaml"
 
@@ -78,7 +78,7 @@ resource null_resource jenkins_provisioner {
 
   }
 
-  provisioner remote-exec {
+  provisioner "remote-exec" {
     connection {
       host        = oci_core_instance.jenkins_vm.private_ip
       agent       = false
@@ -100,7 +100,7 @@ resource null_resource jenkins_provisioner {
 }
 
 
-resource null_resource agents_provisioner {
+resource "null_resource" "agents_provisioner" {
   depends_on = [
     oci_bastion_session.bastion_agent_session,
     oci_core_instance.agent_vm,
@@ -108,7 +108,7 @@ resource null_resource agents_provisioner {
   ]
   for_each = toset(var.unique_agent_names)
 
-  provisioner file {
+  provisioner "file" {
 
     content     = file("${path.module}/agent/agent.yaml")
     destination = "/home/opc/agent.yaml"
@@ -126,7 +126,7 @@ resource null_resource agents_provisioner {
     }
   }
 
-  provisioner file {
+  provisioner "file" {
     content     = file("${path.module}/agent/Dockerfile")
     destination = "/home/opc/Dockerfile"
 
@@ -144,7 +144,7 @@ resource null_resource agents_provisioner {
     }
   }
 
-  provisioner file {
+  provisioner "file" {
     content     = file("${path.module}/agent/config.xml")
     destination = "/home/opc/config.xml"
 
@@ -164,7 +164,7 @@ resource null_resource agents_provisioner {
 
   }
 
-  provisioner file {
+  provisioner "file" {
     content     = data.template_file.agent_setup[each.key].rendered
     destination = "/home/opc/setup.sh"
 
@@ -184,7 +184,7 @@ resource null_resource agents_provisioner {
 
   }
 
-  provisioner remote-exec {
+  provisioner "remote-exec" {
 
     connection {
       host        = oci_core_instance.agent_vm[each.key].private_ip

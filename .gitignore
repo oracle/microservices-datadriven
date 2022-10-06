@@ -1,3 +1,6 @@
+# Temporary Builds
+grabdish/inventory-micronaut/build/
+
 # Deployment artifacts
 .deployed/
 .deployed/*.yaml
