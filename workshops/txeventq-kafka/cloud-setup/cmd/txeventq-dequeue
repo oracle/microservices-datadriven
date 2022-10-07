@@ -40,6 +40,17 @@ TXEVENTQ_SUBSCRIBER=${TXEVENTQ_TOPIC}_SUBS
 # DB Connection Setup
 export TNS_ADMIN=$LAB_HOME/wallet
 
+# Validate User/Password
+user_is_valid=$(sqlplus -S /nolog <<!
+  connect $LAB_DB_USER/"$ORACLE_DB_PASSWORD"@$LAB_DB_SVC
+!
+)
+
+if [[ "$user_is_valid" == *"ORA-01017"* ]]; then
+  echo "ERROR: invalid username/password."
+  return 2
+fi
+
 # DEQUEUE TxEventQ Message
 sqlplus -S /nolog <<!
   connect $LAB_DB_USER/"$ORACLE_DB_PASSWORD"@$LAB_DB_SVC

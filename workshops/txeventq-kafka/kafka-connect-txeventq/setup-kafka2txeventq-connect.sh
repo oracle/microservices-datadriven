@@ -46,7 +46,7 @@ echo "***********"
 # DB Connection Setup
 export TNS_ADMIN=$LAB_HOME/wallet
 
-# Add TxEventQ Topic
+# Validate User/Password
 user_is_valid=$(sqlplus -S /nolog <<!
   connect $LAB_DB_USER/"$ORACLE_DB_PASSWORD"@$LAB_DB_SVC
 !
