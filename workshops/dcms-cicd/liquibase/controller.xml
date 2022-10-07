@@ -5,4 +5,4 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
   <include file="table/inventory_table.xml"/> 
-</databaseChangeLog>
+</databaseChangeLog> 
