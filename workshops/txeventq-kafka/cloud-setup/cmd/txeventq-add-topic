@@ -48,6 +48,17 @@ TXEVENTQ_SUBSCRIBER=${TXEVENTQ_TOPIC}_SUBS
 # DB Connection Setup
 export TNS_ADMIN=$LAB_HOME/wallet
 
+# Validate User/Password
+user_is_valid=$(sqlplus -S /nolog <<!
+  connect $LAB_DB_USER/"$ORACLE_DB_PASSWORD"@$LAB_DB_SVC
+!
+)
+
+if [[ "$user_is_valid" == *"ORA-01017"* ]]; then
+  echo "ERROR: invalid username/password."
+  exit 2
+fi
+
 # Add TxEventQ Topic
 VAR=$(sqlplus -S /nolog <<!
   connect $LAB_DB_USER/"$ORACLE_DB_PASSWORD"@$LAB_DB_SVC
@@ -57,6 +68,7 @@ VAR=$(sqlplus -S /nolog <<!
   exit;
 !
 )
+
 
 if [[ "$VAR" == *"PL/SQL procedure successfully"* ]]; then
   echo "Created topic ${TXEVENTQ_TOPIC}"
