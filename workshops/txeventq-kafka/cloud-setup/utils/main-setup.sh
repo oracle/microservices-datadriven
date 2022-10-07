@@ -301,7 +301,7 @@ while ! state_done SETUP_VERIFIED; do
   if test "$NOT_DONE" -gt 0; then
     # echo "Log files are located in $LAB_LOG"
     bgs=$bg_not_done
-    echo -ne r"\033[2K\r$bgs still running "
+    echo -ne r"\033[2K\r$bgs still executing... \n"
     sleep 10
   else
     state_set_done SETUP_VERIFIED
