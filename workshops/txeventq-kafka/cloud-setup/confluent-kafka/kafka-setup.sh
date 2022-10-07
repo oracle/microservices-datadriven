@@ -38,15 +38,20 @@ while ! state_done KAFKA_SETUP; do
   cd "$LAB_HOME"/cloud-setup/confluent-kafka
   ./docker-compose up --no-start
 
-  cd "$LAB_HOME"
-  state_set_done KAFKA_SETUP
-done
-
-if state_get KAFKA_SETUP; then
   echo "$(date): Create Containers Network"
   LAB_KAFKA_NETWORK="$(state_get RUN_NAME)_net"
   docker network create "${LAB_KAFKA_NETWORK}"
   state_set LAB_KAFKA_NETWORK "$LAB_KAFKA_NETWORK"
-fi
+
+  cd "$LAB_HOME"
+  state_set_done KAFKA_SETUP
+done
+
+#if state_get KAFKA_SETUP; then
+#  echo "$(date): Create Containers Network"
+#  LAB_KAFKA_NETWORK="$(state_get RUN_NAME)_net"
+#  docker network create "${LAB_KAFKA_NETWORK}"
+#  state_set LAB_KAFKA_NETWORK "$LAB_KAFKA_NETWORK"
+#fi
 
 
