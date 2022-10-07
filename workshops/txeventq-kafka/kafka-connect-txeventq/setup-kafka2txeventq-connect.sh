@@ -54,7 +54,7 @@ user_is_valid=$(sqlplus -S /nolog <<!
 
 if [[ "$user_is_valid" == *"ORA-01017"* ]]; then
   echo "ERROR: invalid username/password."
-  return 2
+  exit 2
 fi
 
 # Set the KAFKA TOPIC produced by Connect sync
