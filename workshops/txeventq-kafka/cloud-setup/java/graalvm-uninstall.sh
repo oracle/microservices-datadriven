@@ -20,7 +20,7 @@ fi
 # Uninstall GraalVM Image
 if state_done CONTAINER_ENG_SETUP; then
   result=$(docker inspect -f '{{.Id}}' "$(state_get CONTAINER_ENG_SETUP)")
-  if [[ "$result" == "" ]]; then
+  if [[ "$result" != "" ]]; then
     echo "$(date): Uninstalling $(state_get CONTAINER_ENG_SETUP) Image"
     docker rmi -f $(state_get CONTAINER_ENG_SETUP)
     state_reset CONTAINER_ENG_SETUP
