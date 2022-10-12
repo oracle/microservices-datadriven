@@ -27,7 +27,7 @@ cd "$LAB_HOME" || exit
 echo "LAB_HOME: $LAB_HOME"
 
 # Java Home
-GRAALVM_VERSION=${1:-"22.1.0"}
+GRAALVM_VERSION=${1:-"22.2.0"}
 OS_NAME=$(uname)
 if ! [[ $OS_NAME == *"darwin"* ]]; then
   # Assume linux

@@ -5,7 +5,7 @@
 # Fail on error
 set -e
 
-GRAALVM_VERSION=${1:-"22.1.0"}
+GRAALVM_VERSION=${1:-"22.2.0"}
 
 if ! state_get GRAALVM_INSTALLED; then
   exit 1
