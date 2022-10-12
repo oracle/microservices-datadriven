@@ -11,9 +11,9 @@ if ! state_get KAFKA_SETUP; then
 fi
 
 # Start Kafka Infrastructure
-cd "$LAB_HOME"/cloud-setup/confluent-kafka 
+cd "$LAB_HOME"/cloud-setup/confluent-kafka || exit 1 ;
 ./docker-compose down
-cd "${HOME}"
+cd "${HOME}" || exit 1 ;
 
 # Stop and remove containers
 docker container stop txeventq-consumer txeventq-producer kafka-consumer kafka-producer
