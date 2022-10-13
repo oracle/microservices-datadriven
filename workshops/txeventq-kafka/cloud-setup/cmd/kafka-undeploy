@@ -3,7 +3,7 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Fail on error
-set -e
+#set -e
 
 if ! state_get KAFKA_SETUP; then
   echo "ERROR: Kafka infrastructure should be setting up!"
@@ -11,9 +11,9 @@ if ! state_get KAFKA_SETUP; then
 fi
 
 # Start Kafka Infrastructure
-cd "$LAB_HOME"/cloud-setup/confluent-kafka
+cd "$LAB_HOME"/cloud-setup/confluent-kafka || exit 1 ;
 ./docker-compose down
-cd "${HOME}"
+cd "${HOME}" || exit 1 ;
 
 # Stop and remove containers
 docker container stop txeventq-consumer txeventq-producer kafka-consumer kafka-producer
@@ -26,4 +26,4 @@ docker images -a |  grep "cp-kafka-connect-custom" | awk '{print $3}' | xargs do
 docker images -a |  grep -E "confluentinc|7.0.1" | awk '{print $3}' | xargs docker rmi -f
 
 # Remove Network
-docker network rm $(state_get LAB_KAFKA_NETWORK)
+docker network rm "$(state_get LAB_KAFKA_NETWORK)"
