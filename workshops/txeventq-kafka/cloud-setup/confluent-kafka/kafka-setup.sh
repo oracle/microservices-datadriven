@@ -14,6 +14,12 @@ while ! state_done DOCKER_COMPOSE; do
   state_set_done DOCKER_COMPOSE
 done
 
+# Wait for Oracle DB Wallet
+while ! state_done CWALLET_SSO_UPDATED; do
+  echo "$(date): Waiting for Oracle DB Wallet provisioning"
+  sleep 10
+done
+
 # Build Confluent Kafka Connect Customer Image
 while ! state_done CFLCONNECT_IMAGE; do
   cd "$LAB_HOME"/cloud-setup/confluent-kafka
