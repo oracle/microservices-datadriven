@@ -3,7 +3,7 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Fail on error
-set -eu
+set -e
 
 # Install Docker Compose
 while ! state_done DOCKER_COMPOSE; do
@@ -40,8 +40,13 @@ while ! state_done KAFKA_SETUP; do
 
   echo "$(date): Create Containers Network"
   LAB_KAFKA_NETWORK="$(state_get RUN_NAME)_net"
-  docker network create "${LAB_KAFKA_NETWORK}"
-  state_set LAB_KAFKA_NETWORK "$LAB_KAFKA_NETWORK"
+
+  # Check if the lab's docker network exists and create if not.
+  check_lab_net="$(docker network ls --filter name=${LAB_KAFKA_NETWORK} -q)"
+  if [[ ${check_lab_net} == "" ]]; then
+    docker network create "${LAB_KAFKA_NETWORK}"
+    state_set LAB_KAFKA_NETWORK "$LAB_KAFKA_NETWORK"
+  fi
 
   cd "$LAB_HOME"
   state_set_done KAFKA_SETUP
