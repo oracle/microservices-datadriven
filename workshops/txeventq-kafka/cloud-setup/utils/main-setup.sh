@@ -5,6 +5,18 @@
 # Fail on error
 set -e
 
+function db_password_valid() {
+  local password=$1
+  (( ${#password} >= 12 ))         || echo 'Error: Too short'
+  (( ${#password} <= 30 ))         || echo 'Error: Too long'
+  [[ $password == *[[:digit:]]* ]] || echo 'Error: Does not contain a digit'
+  [[ $password == *[[:lower:]]* ]] || echo 'Error: Does not contain a lower case letter'
+  [[ $password == *[[:upper:]]* ]] || echo 'Error: Does not contain an upper case letter'
+  [[ $password != *'"'* ]]         || echo 'Error: Cannot contain the double quote (") character'
+  [[ $(echo "$password" | tr '[:lower:]' '[:upper:]') != *'ADMIN'* ]]  || echo 'Error: Cannot contain the word "admin".'
+}
+
+
 # Check home is set
 if test -z "$LAB_HOME"; then
   echo "ERROR: This script requires LAB_HOME to be set"
@@ -45,7 +57,7 @@ while ! state_done USER_OCID; do
     USER_OCID=$TEST_USER_OCID
   fi
   # Validate
-  if test ""$(oci iam user get --user-id "$USER_OCID" --query 'data."lifecycle-state"' --raw-output 2>"${LAB_LOG}"/user_ocid_err) == 'ACTIVE'; then
+  if test $(oci iam user get --user-id "$USER_OCID" --query 'data."lifecycle-state"' --raw-output 2>"${LAB_LOG}"/user_ocid_err) == 'ACTIVE'; then
     state_set USER_OCID "$USER_OCID"
   else
     echo "That user OCID could not be validated"
@@ -93,7 +105,7 @@ done
 
 # Double check and then set the region
 while ! state_done REGION; do
-  if test $(state_get RUN_TYPE) -eq 1; then
+  if test "$(state_get RUN_TYPE)" -eq 1; then
     HOME_REGION=$(oci iam region-subscription list --query 'data[?"is-home-region"]."region-name" | join('\'' '\'', @)' --raw-output)
     state_set HOME_REGION "$HOME_REGION"
   fi
@@ -103,7 +115,7 @@ done
 
 # Create the compartment
 while ! state_done COMPARTMENT_OCID; do
-  if test $(state_get RUN_TYPE) -ne 3; then
+  if test "$(state_get RUN_TYPE)" -ne 3; then
     echo "Resources will be created in a new compartment named $(state_get RUN_NAME)"
     export OCI_CLI_PROFILE=$(state_get HOME_REGION)
     LAB_DESCRIPTION="Simplify Event-driven Apps with TxEventQ in Oracle Database (with Kafka interoperability)"
@@ -176,7 +188,7 @@ while ! state_done NAMESPACE; do
 done
 
 # Install GraalVM
-GRAALVM_VERSION="22.1.0"
+GRAALVM_VERSION="22.2.0"
 if ! state_get GRAALVM_INSTALLED; then
   if ps -ef | grep "$LAB_HOME/cloud-setup/java/graalvm-install.sh" | grep -v grep; then
     echo "$LAB_HOME/cloud-setup/java/graalvm-install.sh is already running"
@@ -184,17 +196,6 @@ if ! state_get GRAALVM_INSTALLED; then
     echo "Executing java/graalvm-install.sh in the background"
     nohup "$LAB_HOME"/cloud-setup/java/graalvm-install.sh ${GRAALVM_VERSION} &>>"$LAB_LOG"/graalvm_install.log &
   fi
-fi
-
-if ! state_done CONTAINER_ENG_SETUP; then
-  echo "$(date): Installing GraalVM CE Java 11 Image"
-  docker pull ghcr.io/graalvm/graalvm-ce:ol8-java11 --quiet
-#  echo "$(date): Create Containers Network"
-#  LAB_KAFKA_NETWORK="$(state_get RUN_NAME)_net"
-#  docker network create "${LAB_KAFKA_NETWORK}"
-#  state_set LAB_KAFKA_NETWORK "$LAB_KAFKA_NETWORK"
-  state_set_done CONTAINER_ENG_SETUP
-  echo
 fi
 
 # run oracle_db_setup.sh in background
@@ -211,22 +212,33 @@ fi
 # Collect DB password
 if ! state_done DB_PASSWORD; then
   echo
+  echo 'Enter the password to be used for the lab database.'
   echo 'Database passwords must be 12 to 30 characters and contain at least one uppercase letter,'
   echo 'one lowercase letter, and one number. The password cannot contain the double quote (")'
   echo 'character or the word "admin".'
   echo
 
   while true; do
-    if test -z "$TEST_DB_PASSWORD"; then
-      read -s -r -p "Enter the password to be used for the lab database: " PW
-    else
-      PW="$TEST_DB_PASSWORD"
-    fi
-    if [[ ${#PW} -ge 12 && ${#PW} -le 30 && "$PW" =~ [A-Z] && "$PW" =~ [a-z] && "$PW" =~ [0-9] && "$PW" != *admin* && "$PW" != *'"'* ]]; then
+     #read -s -r -p "Enter the password to be used for the lab database: " PW
+     read -s -r -p "Please enter a password: " PW
+     echo "***********"
+     read -s -r -p "Retype a password: " second
+     echo "***********"
+
+     if [ "$PW" != "$second" ]; then
+       echo "You have entered different passwords. Please, try again.."
+       echo
+       continue
+     fi
+
+    msg=$(db_password_valid "$PW");
+    if [[ $msg != *'Error'* ]] ; then
       echo
       break
     else
-      echo "Invalid Password, please retry"
+      echo "$msg"
+      echo "You have entered invalid passwords. Please, try again.."
+      echo
     fi
   done
   BASE64_DB_PASSWORD=$(echo -n "$PW" | base64)

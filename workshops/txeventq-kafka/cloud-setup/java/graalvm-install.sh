@@ -5,14 +5,14 @@
 # Fail on error
 set -eu
 
-GRAALVM_VERSION=${1:-"22.1.0"}
+GRAALVM_VERSION=${1:-"22.2.0"}
 OS_NAME=$(uname)
 
 # Install GraalVM
-# https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.1.0/graalvm-ce-java11-linux-amd64-22.1.0.tar.gz
+# https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.2.0/graalvm-ce-java11-linux-amd64-22.2.0.tar.gz
 if ! test -d ~/graalvm-ce-java11-"${GRAALVM_VERSION}"; then
   echo "$(date): Installing graalvm-ce-java11-${GRAALVM_VERSION}"
-  (cd ~ && curl -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-"${GRAALVM_VERSION}"/graalvm-ce-java11-${OS_NAME}-amd64-${GRAALVM_VERSION}.tar.gz | tar xz)
+  (cd ~ && curl -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-"${GRAALVM_VERSION}"/graalvm-ce-java11-"${OS_NAME}"-amd64-"${GRAALVM_VERSION}".tar.gz | tar xz)
 #  mv graalvm-ce-java11-${GRAALVM_VERSION} ~/
 fi
 
@@ -29,5 +29,12 @@ fi
 
 export PATH=$JAVA_HOME/bin/:$PATH
 echo "$(date): PATH ${PATH}"
+
+if ! state_done CONTAINER_ENG_SETUP; then
+  echo "$(date): Installing GraalVM CE Java 11 Image"
+  docker pull ghcr.io/graalvm/graalvm-ce:ol8-java11 --quiet
+  state_set CONTAINER_ENG_SETUP "ghcr.io/graalvm/graalvm-ce:ol8-java11"
+  echo
+fi
 
 state_set_done GRAALVM_INSTALLED
