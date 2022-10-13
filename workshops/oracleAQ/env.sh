@@ -4,11 +4,16 @@ export PLSQL_DB_USER1="admin";
 export JAVA_DB_USER="dbUser";
 
 export ORACLEAQ_HOME=${HOME}/${COMPARTMENT};
-export ORACLEAQ_PLSQL_AQ=${ORACLEAQ_HOME}/aqPlsql/AQ;
-export ORACLEAQ_PLSQL_TEQ=${ORACLEAQ_HOME}/aqPlsql/TEQ;
-export ORACLEAQ_PYTHON_AQ=${ORACLEAQ_HOME}/aqPython/AQ;
-export ORACLEAQ_PYTHON_TEQ=${ORACLEAQ_HOME}/aqPython/TEQ;
 export ORACLEAQ_JAVA=${ORACLEAQ_HOME}/aqJava;
+
+export PLSQL_AQ=${ORACLEAQ_HOME}/qPlsql/aq;
+export PLSQL_TEQ=${ORACLEAQ_HOME}/qPlsql/teq;
+
+export PYTHON_AQ=${ORACLEAQ_HOME}/qPython/aq;
+export PYTHON_TEQ=${ORACLEAQ_HOME}/qPython/teq;
+
+export NODE_AQ=${ORACLEAQ_HOME}/qNodejs/aq;
+export NODE_TEQ=${ORACLEAQ_HOME}/qNodejs/teq;
 
 export TNS_ADMIN=$ORACLEAQ_HOME/wallet
 export USER_DEFINED_WALLET=${TNS_ADMIN}/user_defined_wallet

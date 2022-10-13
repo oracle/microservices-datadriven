@@ -1,0 +1,98 @@
+#cloud-config
+output: {all: '| tee -a /var/log/cloud-init-cicd.log'}
+bootcmd:
+  - [ cloud-init-per, once, enable-epel,  yum-config-manager, --enable, ol7_developer_epel]
+
+groups:
+  - docker
+users:
+  - default 
+  - name: opc
+    groups: docker
+    shell: /bin/bash
+    sudo: ALL=(ALL) NOPASSWD:ALL
+
+# update package
+package_update: false
+
+# install docker
+packages:
+ - docker-engine
+ - docker-compose
+
+write_files:
+- path: /cicd/wallet/adb_wallet.zip
+  permissions: '0644'
+  content: |
+    MARKER
+- path: /cicd/jenkins.yaml
+  permissions: '0644'
+  content: |
+    version: '3'
+    volumes:
+      jenkins_home:
+      jenkinsRef:
+    services:
+      jenkins:
+        container_name: jenkins-docker
+        restart: always
+        privileged: true
+        build: .
+        ports:
+          - 80:8080
+        volumes:
+          - jenkins_home:/var/jenkins_home
+          - /cicd/wallet:/var/lib/jenkins
+          - jenkinsRef:/usr/share/jenkins/ref
+          - /cicd/casc.yaml:/jenkins/config/casc.yaml
+          - /var/run/docker.sock:/var/run/docker.sock
+        environment:
+          - JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
+          - JENKINS_ADMIN_ID=${jenkins_user}
+          - JENKINS_ADMIN_PASSWORD=${jenkins_password}
+          - CASC_JENKINS_CONFIG=/jenkins/config/casc.yaml
+- path: /cicd/casc.yaml
+  permissions: '0644'
+  content: |
+    jenkins:
+      securityRealm:
+        local:
+          allowsSignup: false
+          users:
+           - id: ${jenkins_user}
+             password: ${jenkins_password}
+      authorizationStrategy:
+          loggedInUsersCanDoAnything:
+            allowAnonymousRead: false
+- path: /cicd/Dockerfile
+  permissions: '0644'
+  content: |
+    FROM jenkins/jenkins:lts-jdk11
+    # if we want to install via apt
+    USER root
+    # install sudo and curl and setup apt for https sources as well as kubernetes dependencies
+    RUN apt-get update && apt-get install -qq -y sudo apt-transport-https ca-certificates curl
+    #install docker
+    RUN apt-get update && apt-get install -qq -y docker.io
+    # install git
+    RUN apt-get update && apt-get install -qq -y git
+    # install git
+    RUN apt-get update && apt-get install -qq -y python3
+    # setup repository for kubectl install
+    RUN curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+    # install kubectl
+    RUN sudo apt-get update && sudo apt-get install -y kubectl
+    # install sqlcl
+    RUN curl https://download.oracle.com/otn_software/java/sqldeveloper/sqlcl-22.2.0.172.1718.zip -o sqlcl-latest.zip && \
+    unzip -q sqlcl-latest.zip -d /workspace && rm sqlcl-latest.zip
+    # install plugins
+    RUN jenkins-plugin-cli --plugins blueocean docker-workflow matrix-auth git github github-branch-source workflow-aggregator credentials-binding configuration-as-code kubernetes-cli
+    USER jenkins
+runcmd:
+  - mv /tmp/adb_wallet.zip /cicd/wallet/adb_wallet.zip
+  - chown -R opc:docker /cicd
+  - systemctl daemon-reload
+  - systemctl enable docker.service
+  - systemctl start --no-block docker.service
+  - sudo -u opc docker-compose -f /cicd/jenkins.yaml up -d

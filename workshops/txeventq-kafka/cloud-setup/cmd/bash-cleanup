@@ -1,0 +1,18 @@
+#!/bin/bash
+# Copyright (c) 2021 Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
+
+sed '/LiveLab Setup -- BEGIN/,/LiveLab Setup -- END/d'  "${HOME}"/.bashrc > "${HOME}"/.bashrc.tmp
+
+mv "${HOME}"/.bashrc.tmp "${HOME}"/.bashrc
+
+source "${HOME}"/.bashrc
+
+unset LAB_HOME
+
+echo
+echo "Your shell was cleaned up!"
+echo "All workshop-related configurations were removed from your .bashrc"
+echo "But your environment variables are still present thus it is important to close this Cloud Shell section before any other use."
+echo

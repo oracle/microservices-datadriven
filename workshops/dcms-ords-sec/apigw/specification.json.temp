@@ -1,0 +1,61 @@
+{
+  "loggingPolicies": {
+    "accessLog": {
+      "isEnabled": true
+    },
+    "executionLog": {
+      "isEnabled": true,
+      "logLevel": "INFO"
+    }
+  },
+  "requestPolicies": {
+    "authentication": null,
+    "cors": null,
+    "mutualTls": {
+      "allowedSans": [],
+      "isVerifiedCertificateRequired": false
+    },
+    "rateLimiting": {
+      "rateInRequestsPerSecond": 50,
+      "rateKey": "CLIENT_IP"
+    },
+    "usagePlans":null
+  },
+  "routes": [
+    {
+      "backend": {
+      "connect-timeout-in-seconds": 10.0,
+      "is-ssl-verify-disabled": true,
+      "read-timeout-in-seconds": 10.0,
+      "send-timeout-in-seconds": 10.0,
+      "type": "HTTP_BACKEND",
+      "url": "https://LB_URL/ords/ordstest/${request.path[generic_welcome]}"
+    },
+      "loggingPolicies": {
+        "accessLog":null,
+        "executionLog": {
+          "isEnabled": null,
+          "logLevel": null
+        }
+      },
+      "methods": [ 
+          "ANY"      
+      ],
+      "path": "/ordstest/{generic_welcome*}",
+      "requestPolicies": {
+        "authorization":null,
+        "bodyValidation": null,
+        "cors": null,
+        "headerTransformations": null ,
+        "headerValidations":null,
+        "queryParameterTransformations":null,
+        "queryParameterValidations": null,
+        "responseCacheLookup": null
+      },
+      "response-policies": {
+        "header-transformations": null,
+        "response-cache-store": null
+      }
+    }
+  ]
+}

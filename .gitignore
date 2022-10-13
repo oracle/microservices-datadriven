@@ -1,3 +1,6 @@
+# Temporary Builds
+grabdish/inventory-micronaut/build/
+
 # Deployment artifacts
 .deployed/
 .deployed/*.yaml
@@ -503,3 +506,7 @@ workshops/eventmesh-teq-kafka/cloud-setup/terraform_dbsystem/
 workshops/eventmesh-teq-kafka/wallet/
 workshops/oracleAQ/aqJava/.project
 workshops/oracleAQ/aqJava/.classpath
+workshops/oracleAQ/qJava/.classpath
+workshops/oracleAQ/qJava/.factorypath
+workshops/oracleAQ/qJava/.project
+*.prefs

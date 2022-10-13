@@ -33,5 +33,5 @@ Licensed under the Universal Permissive License v 1.0 as shown at <https://oss.o
 [LiveLabs]: https://apexapps.oracle.com/pls/apex/f?p=133:1
 [Workshops]: https://apexapps.oracle.com/pls/apex/dbpm/r/livelabs/livelabs-workshop-cards?p100_role=12&p100_focus_area=35&me=126
 [DRC]: https://developer.oracle.com
-[Workshop]: https://bit.ly/simplifymicroservices
+[Workshop]: https://bit.ly/bettermicroservices
 [Blogs]: https://blogs.oracle.com/developers/authors/Blog-Author/CORE18EB69239F2845558809929771DB8EFA/paulparkinson

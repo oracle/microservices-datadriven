@@ -1,0 +1,14 @@
+config:
+  target: "https://API_GW_BASE_URL"
+  phases:
+    - duration: 1
+      arrivalRate: 400 
+
+scenarios:
+  - name: "Get Employees "
+    flow:
+      - get:
+          url: "/ords/ordstest/examples/employees/"
+          headers:
+            Authorization: "Bearer TOKEN"
+            

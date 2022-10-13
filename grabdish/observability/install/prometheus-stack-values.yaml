@@ -1,0 +1,30 @@
+## Using custom values based on https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
+##
+grafana:
+  image:
+    tag: "9.0.1"
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
+      nginx.ingress.kubernetes.io/rewrite-target: /$1
+      nginx.ingress.kubernetes.io/use-regex: "true"
+      nginx.ingress.kubernetes.io/enable-rewrite-log: "true"
+      #nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+
+    path: /grafana/?(.*)
+    hosts:
+      - ""
+    tls:
+      - secretName: ssl-certificate-secret
+
+  persistence:
+    enabled: true
+    type: pvc
+    #size: 10Gi
+
+  grafana.ini:
+    server:
+      root_url: "%(protocol)s://%(domain)s/grafana"
+      serve_from_sub_path: true
+      router_logging: true

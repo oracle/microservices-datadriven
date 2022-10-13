@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: db-metrics-exporter-%EXPORTER_NAME%
-          image: iamseth/oracledb_exporter:latest #todo never a good idea to use "latest"
+          image: container-registry.oracle.com/database/observability-exporter:0.1.0
           imagePullPolicy: Always
           env:
             - name: DEFAULT_METRICS
@@ -25,7 +25,6 @@ spec:
 #              value: /msdataworkshop/observability/db-metrics-%EXPORTER_NAME%-exporter-metrics.toml
             - name: TNS_ADMIN
               value: "/msdataworkshop/creds"
-#          value: "/lib/oracle/instantclient_19_3/client64/lib/network/admin"
             - name: dbpassword
               valueFrom:
                 secretKeyRef:
@@ -37,7 +36,6 @@ spec:
           volumeMounts:
             - name: creds
               mountPath: /msdataworkshop/creds
-          #          mountPath: /lib/oracle/instantclient_19_3/client64/lib/network/admin # 19.10
             - name: config-volume
               mountPath: /msdataworkshop/observability/db-metrics-%EXPORTER_NAME%-exporter-metrics.toml
               subPath: db-metrics-%EXPORTER_NAME%-exporter-metrics.toml

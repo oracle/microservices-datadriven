@@ -1,4 +1,4 @@
-FROM oracle/graalvm-ce:20.1.0-java11
+FROM openjdk:11-jre-slim
 
 ENTRYPOINT ["java", "-jar", "/usr/share/myservice/myservice.jar"]
 

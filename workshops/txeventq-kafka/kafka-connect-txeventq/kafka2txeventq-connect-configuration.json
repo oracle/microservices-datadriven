@@ -1,0 +1,18 @@
+{
+  "connector.class": "io.confluent.connect.jms.JmsSinkConnector",
+  "tasks.max": "1",
+  "topics": "LAB_KAFKA_TOPIC",
+  "java.naming.factory.initial": "oracle.jms.AQjmsInitialContextFactory",
+  "java.naming.provider.url": "jdbc:oracle:thin:@LAB_DB_SVC?TNS_ADMIN=/home/appuser/wallet",
+  "db_url": "jdbc:oracle:thin:@LAB_DB_SVC?TNS_ADMIN=/home/appuser/wallet",
+  "java.naming.security.principal": "LAB_DB_USER",
+  "java.naming.security.credentials": "LAB_DB_PASSWORD",
+  "jndi.connection.factory": "javax.jms.XAQueueConnectionFactory",
+  "jms.destination.type": "topic",
+  "jms.destination.name": "LAB_TXEVENTQ_TOPIC",
+  "key.converter":"org.apache.kafka.connect.storage.StringConverter",
+  "value.converter":"org.apache.kafka.connect.storage.StringConverter",
+  "confluent.topic.bootstrap.servers":"broker:29092",
+  "confluent.topic.replication.factor": "1"
+}
+
