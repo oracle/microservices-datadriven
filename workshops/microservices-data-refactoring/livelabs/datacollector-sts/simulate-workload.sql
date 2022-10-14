@@ -3,42 +3,27 @@
 
 -------------------------------------------
 --Printing the sql statements for cluster 5...
-select dra_95.col1 as dra95_col1 ,dra_90.col1 as dra90_col1, dra_98.col1 as dra98_col1 from tkdradata.dra_95, tkdradata.dra_90, tkdradata.dra_98;
-select dra_81.col1 as dra81_col1 ,dra_93.col1 as dra93_col1, dra_94.col1 as dra94_col1, dra_97.col1 as dra97_col1 from tkdradata.dra_81, tkdradata.dra_93, tkdradata.dra_94, tkdradata.dra_97;
-select dra_82.col1 as dra82_col1, dra_84.col1 as dra84_col1, dra_81.col1 as dra81_col1, dra_100.col1 as dra100_col1, dra_86.col1 as dra86_col1, dra_93.col1 as dra93_col1, dra_88.col1 as dra88_col1 from tkdradata.dra_82, tkdradata.dra_84, tkdradata.dra_81, tkdradata.dra_100, tkdradata.dra_86, tkdradata.dra_93, tkdradata.dra_88;
-select dra_96.col1 as dra96_col1 ,dra_93.col1 as dra93_col1, dra_88.col1 as dra88_col1, dra_97.col1 as dra97_col1 from tkdradata.dra_96, tkdradata.dra_93, tkdradata.dra_88, tkdradata.dra_97;
-select dra_96.col1 as dra96_col1, dra_88.col1 as dra88_col1, dra_84.col1 as dra84_col1, dra_82.col1 as dra82_col1, dra_92.col1 as dra92_col1, dra_93.col1 as dra93_col1, dra_97.col1 as dra97_col1, dra_99.col1 as dra99_col1 from tkdradata.dra_96, tkdradata.dra_88, tkdradata.dra_84, tkdradata.dra_82, tkdradata.dra_92, tkdradata.dra_93, tkdradata.dra_97, tkdradata.dra_99;
-select dra_83.col1 as dra83_col1, dra_92.col1 as dra92_col1, dra_100.col1 as dra100_col1, dra_93.col1 as dra93_col1, dra_88.col1 as dra88_col1, 
-dra_87.col1 as dra87_col1, dra_98.col1 as dra98_col1 from tkdradata.dra_83, tkdradata.dra_92, tkdradata.dra_100, tkdradata.dra_93, tkdradata.dra_88, tkdradata.dra_87, tkdradata.dra_98;
-select dra_89.col1 as dra89_col1, dra_83.col1 as dra83_col1, dra_86.col1 as dra86_col1, dra_93.col1 as dra93_col1, dra_99.col1 as dra99_col1, dra_81.col1 as dra81_col1 from tkdradata.dra_89, tkdradata.dra_83, tkdradata.dra_86, tkdradata.dra_93, tkdradata.dra_99, tkdradata.dra_81;
-select dra_96.col1 as dra96_col1, dra_85.col1 as dra85_col1, dra_97.col1 as dra97_col1, dra_86.col1 as dra86_col1, dra_100.col1 as dra100_col1, dra_83.col1 as dra83_col1, dra_93.col1 as dra93_col1, dra_80.col1 as dra80_col1 from tkdradata.dra_96, tkdradata.dra_85, tkdradata.dra_97, tkdradata.dra_86, tkdradata.dra_100, tkdradata.dra_83, tkdradata.dra_93, tkdradata.dra_80;
-select dra_94.col1 as dra94_col1, dra_90.col1 as dra90_col1, dra_93.col1 as dra93_col1, dra_91.col1 as dra91_col1, dra_96.col1 as dra96_col1,
-dra_83.col1 as dra83_col1, dra_88.col1 as dra88_col1, dra_84.col1 as dra84_col1, dra_85.col1 as dra85_col1 from tkdradata.dra_94, tkdradata.dra_90, tkdradata.dra_93, tkdradata.dra_91, tkdradata.dra_96, tkdradata.dra_83, tkdradata.dra_88, tkdradata.dra_84, tkdradata.dra_85;
-select dra_90.col1 as dra90_col1, dra_82.col1 as dra82_col1, dra_96.col1 as dra96_col1, dra_81.col1 as dra81_col1, dra_97.col1 as dra97_col1,
-dra_91.col1 as dra84_col1, dra_99.col1 as dra99_col1, dra_88.col1 as dra88_col1 from tkdradata.dra_90, tkdradata.dra_82, tkdradata.dra_96, tkdradata.dra_81, tkdradata.dra_97, tkdradata.dra_91, tkdradata.dra_84, tkdradata.dra_99, tkdradata.dra_88;
-select dra_99.col1 as dra99_col1, dra_94.col1 as dra94_col1, dra_96.col1 as dra96_col1, dra_97.col1 as dra97_col1, dra_92.col1 as dra92_col1 from tkdradata.dra_99, tkdradata.dra_94, tkdradata.dra_96, tkdradata.dra_97, tkdradata.dra_92;
-select dra_86.col1 as dra86_col1, dra_98.col1 as dra98_col1, dra_100.col1 as dra100_col1, dra_89.col1 as dra89_col1, dra_87.col1 as dra87_col1,
-dra_83.col1 as dra83_col1, dra_91.col1 as dra91_col1, dra_81.col1 as dra81_col1, dra_93.col1 as dra93_col1 from tkdradata.dra_86, tkdradata.dra_98, tkdradata.dra_100, tkdradata.dra_89, tkdradata.dra_87, tkdradata.dra_83, tkdradata.dra_91, tkdradata.dra_81, tkdradata.dra_93;
-select dra_98.col1 as dra98_col1, dra_82.col1 as dra82_col1, dra_94.col1 as dra94_col1, dra_91.col1 as dra91_col1 from tkdradata.dra_98, tkdradata.dra_82, tkdradata.dra_94, tkdradata.dra_91;
-select dra_93.col1 as dra93_col1, dra_88.col1 as dra88_col1, dra_83.col1 as dra83_col1, dra_92.col1 as dra92_col1 from tkdradata.dra_93, tkdradata.dra_88, tkdradata.dra_83, tkdradata.dra_92;
-select dra_92.col1 as dra92_col1, dra_86.col1 as dra86_col1, dra_82.col1 as dra82_col1, dra_80.col1 as dra80_col1 from tkdradata.dra_92, tkdradata.dra_86, tkdradata.dra_82, tkdradata.dra_80;
-select dra_88.col1 as dra88_col1, dra_93.col1 as dra93_col1, dra_92.col1 as dra92_col1, dra_81.col1 as dra81_col1 from tkdradata.dra_88, tkdradata.dra_93, tkdradata.dra_92, tkdradata.dra_81;
-select dra_82.col1 as dra82_col1, dra_87.col1 as dra87_col1, dra_99.col1 as dra99_col1, dra_84.col1 as dra84_col1, dra_90.col1 as dra90_col1,
-dra_97.col1 as dra97_col1, dra_89.col1 as dra89_col1, dra_81.col1 as dra81_col1 from tkdradata.dra_82, tkdradata.dra_87, tkdradata.dra_99, tkdradata.dra_84, tkdradata.dra_90, tkdradata.dra_97, tkdradata.dra_89, tkdradata.dra_81;
-select dra_89.col1 as dra89_col1, dra_83.col1 as dra83_col1, dra_100.col1 as dra100_col1, dra_86.col1 as dra86_col1 from tkdradata.dra_89, tkdradata.dra_83, tkdradata.dra_100, tkdradata.dra_86;
-select dra_81.col1 as dra81_col1, dra_92.col1 as dra92_col1, dra_96.col1 as dra96_col1, dra_100.col1 as dra100_col1, dra_89.col1 as dra89_col1,
-dra_88.col1 as dra88_col1, dra_80.col1 as dra80_col1, dra_98.col1 as dra98_col1, dra_93.col1 as dra93_col1, dra_82.col1 as dra82_col1 from tkdradata.dra_81, tkdradata.dra_92, tkdradata.dra_96, tkdradata.dra_100, tkdradata.dra_89, tkdradata.dra_88, tkdradata.dra_80, tkdradata.dra_98, tkdradata.dra_93, tkdradata.dra_82;
-select dra_88.col1 as dra88_col1 from tkdradata.dra_88;
-select dra_81.col1 as dra81_col1, dra_96.col1 as dra96_col1, dra_95.col1 as dra95_col1, dra_97.col1 as dra97_col1, dra_90.col1 as dra90_col1,
-dra_94.col1 as dra94_col1, dra_91.col1 as dra91_col1, dra_85.col1 as dra85_col1, dra_87.col1 as dra87_col1, dra_100.col1 as dra100_col1 from tkdradata.dra_81, tkdradata.dra_96, tkdradata.dra_95, tkdradata.dra_97, tkdradata.dra_90, tkdradata.dra_94, tkdradata.dra_91, tkdradata.dra_85, tkdradata.dra_87, tkdradata.dra_100;
-
-
-dra_8.col1 as dra8_col1, dra_8.col1 as dra8_col1, dra_8.col1 as dra8_col1, dra_8.col1 as dra8_col1, dra_8.col1 as dra8_col1,
-dra_8.col1 as dra8_col1, dra_8.col1 as dra8_col1, dra_8.col1 as dra8_col1, dra_8.col1 as dra8_col1, dra_8.col1 as dra8_col1,
-
-
-
-
+select * from tkdradata.dra_95, tkdradata.dra_90, tkdradata.dra_98;
+select * from tkdradata.dra_81, tkdradata.dra_93, tkdradata.dra_94, tkdradata.dra_97;
+select * from tkdradata.dra_82, tkdradata.dra_84, tkdradata.dra_81, tkdradata.dra_100, tkdradata.dra_86, tkdradata.dra_93, tkdradata.dra_88;
+select * from tkdradata.dra_96, tkdradata.dra_93, tkdradata.dra_88, tkdradata.dra_97;
+select * from tkdradata.dra_96, tkdradata.dra_88, tkdradata.dra_84, tkdradata.dra_82, tkdradata.dra_92, tkdradata.dra_93, tkdradata.dra_97, tkdradata.dra_99;
+select * from tkdradata.dra_83, tkdradata.dra_92, tkdradata.dra_100, tkdradata.dra_93, tkdradata.dra_88, tkdradata.dra_87, tkdradata.dra_98;
+select * from tkdradata.dra_89, tkdradata.dra_83, tkdradata.dra_86, tkdradata.dra_93, tkdradata.dra_99, tkdradata.dra_81;
+select * from tkdradata.dra_96, tkdradata.dra_85, tkdradata.dra_97, tkdradata.dra_86, tkdradata.dra_100, tkdradata.dra_83, tkdradata.dra_93, tkdradata.dra_80;
+select * from tkdradata.dra_94, tkdradata.dra_90, tkdradata.dra_93, tkdradata.dra_91, tkdradata.dra_96, tkdradata.dra_83, tkdradata.dra_88, tkdradata.dra_84, tkdradata.dra_85;
+select * from tkdradata.dra_90, tkdradata.dra_82, tkdradata.dra_96, tkdradata.dra_81, tkdradata.dra_97, tkdradata.dra_91, tkdradata.dra_84, tkdradata.dra_99, tkdradata.dra_88;
+select * from tkdradata.dra_99, tkdradata.dra_94, tkdradata.dra_96, tkdradata.dra_97, tkdradata.dra_92;
+select * from tkdradata.dra_86, tkdradata.dra_98, tkdradata.dra_100, tkdradata.dra_89, tkdradata.dra_87, tkdradata.dra_83, tkdradata.dra_91, tkdradata.dra_81, tkdradata.dra_93;
+select * from tkdradata.dra_98, tkdradata.dra_82, tkdradata.dra_94, tkdradata.dra_91;
+select * from tkdradata.dra_93, tkdradata.dra_88, tkdradata.dra_83, tkdradata.dra_92;
+select * from tkdradata.dra_92, tkdradata.dra_86, tkdradata.dra_82, tkdradata.dra_80;
+select * from tkdradata.dra_88, tkdradata.dra_93, tkdradata.dra_92, tkdradata.dra_81;
+select * from tkdradata.dra_82, tkdradata.dra_87, tkdradata.dra_99, tkdradata.dra_84, tkdradata.dra_90, tkdradata.dra_97, tkdradata.dra_89, tkdradata.dra_81;
+select * from tkdradata.dra_89, tkdradata.dra_83, tkdradata.dra_100, tkdradata.dra_86;
+select * from tkdradata.dra_81, tkdradata.dra_92, tkdradata.dra_96, tkdradata.dra_100, tkdradata.dra_89, tkdradata.dra_88, tkdradata.dra_80, tkdradata.dra_98, tkdradata.dra_93, tkdradata.dra_82;
+select * from tkdradata.dra_88;
+select * from tkdradata.dra_81, tkdradata.dra_96, tkdradata.dra_95, tkdradata.dra_97, tkdradata.dra_90, tkdradata.dra_94, tkdradata.dra_91, tkdradata.dra_85, tkdradata.dra_87, tkdradata.dra_100;
 
 
 --Printing the sql statements for cluster 4...
