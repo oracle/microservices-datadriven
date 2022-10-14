@@ -17,7 +17,7 @@
 	<repositories>
 		<repository>
 			<id>spoofax</id>
-			<url>https://artifacts.metaborg.org/content/repositories/releases/org/metaborg/
+			<url>https://artifacts.metaborg.org/content/repositories/releases/
 			</url>
 		</repository>
 	</repositories>
