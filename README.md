@@ -35,3 +35,5 @@ Licensed under the Universal Permissive License v 1.0 as shown at <https://oss.o
 [DRC]: https://developer.oracle.com
 [Workshop]: https://bit.ly/bettermicroservices
 [Blogs]: https://blogs.oracle.com/developers/authors/Blog-Author/CORE18EB69239F2845558809929771DB8EFA/paulparkinson
+
+
