@@ -1,6 +1,19 @@
 
 The MBaaS is available to install from OCI Marketplace.
 
+## Prerequisites
+
+You must meet the following prerequisites to use the MBaaS:
+
+* An OCI account in a tenancy with sufficient quota to create:
+  * An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes
+  * A VCN with at least one public IP available
+  * A public load balancer
+  * An Oracle Autonomous Database - Shared instance
+  * At least one free OCI Auth Token (note that the maximum is two per user)
+
+## Setup
+
 To start installation:
 
 * Visit the [OCI Marketplace listing for MBaaS](https://cloud.oracle.com/marketplace/application/139274906) (see the image below)
@@ -54,7 +67,8 @@ application_id = "COOLAPP"
 dashboard_password = <sensitive>
 dashboard_uri = "http://1.2.3.4"
 dashboard_user = "ADMIN"
-kubeconfig_cmd = ""
+kubeconfig_cmd = "oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.iad.xxx
+ --file $HOME/.kube/config --region us-ashburn-1 --token-version 2.0.0 --kube-endpoint PUBLIC_ENDPOINT"
 parse_endpoint = "1.2.3.4/parse"
 ```
 

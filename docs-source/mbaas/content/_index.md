@@ -3,6 +3,10 @@
 
 Oracle Mobile Backend as a Service (MBaaS) allows developers to build and deploy mobile applications using Parse mobile APIs, and provision a backend as a service with the Oracle Database and other infrastructure components that operate on multiple clouds. This service vastly simplifies the task of building, testing, and operating a mobile app dev platform for reliable, secure, and scalable enterprise applications. This version includes an Oracle Database storage adapter for Parse (Parse already has MongoDB and Postgres adapters), and a quick demo of Google Firebase APIs emulated using Parse APIs.
 
+The MBaaS is based on the [Parse Platform](https://parseplatform.org/).
+
+**> > > Put video intro here < < <**
+
 In addition to an Oracle Autonomus Database Shared instance, the following software components are deployed in an Oracle Cloud Infrastructure Container Engine for Kubernetes (OKE) for customer usage with Oracle MBaaS:
 
 * Parse Server, plus the Oracle Database storage adapter for Parse

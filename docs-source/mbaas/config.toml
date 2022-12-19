@@ -16,7 +16,8 @@ enableRobotsTXT = true
 # menu configuration
 [params]
   geekdocMenuBundle = true
-  
+  geekdocCollapseAllSections = true
+    
 # Needed for mermaid shortcodes
 [markup]
   [markup.goldmark.renderer]
