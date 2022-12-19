@@ -36,7 +36,7 @@ curl -X POST \
     -H "X-Parse-Application-Id: APPLICATION_ID" \
     -H "Content-Type: application/json" \
     -d '{"name": "Moderators","ACL": {"*": {"read": true}}}' \
-    http://localhost:1338/parse/roles
+    http://1.2.3.4/parse/roles
 
 # output (formatted):
 {
@@ -53,6 +53,8 @@ Learn more about roles in the [Parse Server documentation](https://docs.parsepla
 Parse ACLs are implemented as part of the API and can be specified on most requests.
 
 The following examples will use the `GameScore` collection you created earlier. Also, the examples will focus on delete which requires the write permission.
+
+Learn more about ACLs in the [Parse Server documentation](https://docs.parseplatform.org/parse-server/guide/#object-level-access-control)
 
 ### Game Score with no ACLs
 
@@ -91,7 +93,7 @@ The following examples will use the `GameScore` collection you created earlier. 
     ```
     curl -X DELETE \
          -H "X-Parse-Application-Id: APPLICATION_ID" \
-         http://localhost:1337/parse/classes/GameScore/BLxUYqfh6E
+         http://1.2.3.4/parse/classes/GameScore/BLxUYqfh6E
 
     # output
     {}
@@ -107,7 +109,7 @@ The following examples will use the `GameScore` collection you created earlier. 
     curl -X POST \
          -H "X-Parse-Application-Id: APPLICATION_ID" \
          -H "Content-Type: application/json" \
-         http://localhost:1337/parse/classes/GameScore \
+         http://1.2.3.4/parse/classes/GameScore \
          --data-binary @- << EOF
          {
            "playerName":"Pop Staples",

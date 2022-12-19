@@ -17,7 +17,8 @@ enableRobotsTXT = true
 [params]
   geekdocMenuBundle = true
   geekdocCollapseAllSections = true
-    
+  geekdocLegalNotice = "https://oss.oracle.com/licenses/upl/"
+
 # Needed for mermaid shortcodes
 [markup]
   [markup.goldmark.renderer]

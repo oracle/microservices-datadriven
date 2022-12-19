@@ -15,6 +15,10 @@ main:
   - name: Firebase API emulation
     ref: "/firebase-emulation"
     sub:
+      - name: Friendly Eats example
+        ref: "/firebase-emulation/friendly-eats"
+      - name: Extra Parse test code
+        ref: "/firebase-emulation/extra"
       - name: Implemented APIs
         ref: "/firebase-emulation/scope"
   - name: Dashboard
