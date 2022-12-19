@@ -19,6 +19,16 @@ Click on the link to access the database details page, and then click on the "Da
 This will open the Database Actions page, where you have access to many database functions, including the ability to
 work with the JSON Collections where your MBaaS data are stored.
 
+**Note:** If you are asked for credentials you can obtain them by [connecting to the Kubernetes cluster](../cluster-access) and extracting the password
+from the Parse Server log using this command - you will need to use the correct name of the pod on your system, which will be different to this
+example.  In the example output shown below, the user name is `adam` and the password is `apple`.  You can use these credentials to log into Database
+Actions.
+
+```
+user@cloudshell:~ (us-ashburn-1)$ kubectl logs parse-server-646b97979-9pkq6 -n parse-server | grep databaseURI
+databaseURI: oracledb://adam:apple@MYMBAASAPPDB_TP
+```
+
 ![Database Actions](../mbaas-database-actions.png)
 
 Select the JSON tile to enter the JSON Console.
