@@ -14,4 +14,4 @@ configuration of the MBaaS.  You can click on the application to see details and
 
 Note the collections listed in the left hand pane. Click GameScore to see the data you created earlier.
 
-![Dashboard GameScore page](../dashboard-gemscore.png)
+![Dashboard GameScore page](../dashboard-gamescore.png)
