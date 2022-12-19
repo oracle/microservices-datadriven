@@ -1,0 +1,11 @@
+main:
+  - name: Setup
+    ref: "/setup"
+  - name: Getting Started
+    ref: "/getting-started"
+  - name: Sample apps
+    ref: "/sample-apps"
+  - name: Dashboard
+    ref: "/dashboard"
+  - name: Uninstall
+    ref: "/uninstall"
