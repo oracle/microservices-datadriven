@@ -1,0 +1,23 @@
+name: docs
+on : [push]
+jobs:
+  publish-docs:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Run Hugo
+        uses: crazy-max/ghaction-hugo@v2
+        with:
+          version: latest
+          extended: false
+          args: --cleanDestinationDir --minify --verbose
+      - name: Deploy to GitHub Pages
+        if: success()
+        uses: crazy-max/ghaction-github-pages@v3
+        with:
+          target_branch: docs
+          build_dir: public
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
