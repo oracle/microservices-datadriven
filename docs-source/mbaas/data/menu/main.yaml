@@ -7,5 +7,7 @@ main:
     ref: "/sample-apps"
   - name: Dashboard
     ref: "/dashboard"
+  - name: Database Access
+    ref: "/database"
   - name: Uninstall
     ref: "/uninstall"
