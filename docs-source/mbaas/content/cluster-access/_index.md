@@ -1,4 +1,6 @@
-
+---
+title: "Kubernetes Access"
+---
 
 As an MBaaS user, it is expected that you probably won't need to access the underlying infrastructure.  However, if you do want to have a look
 around, here is how you can access the Kubernetes cluster where your MBaaS is running.
@@ -13,7 +15,8 @@ kubeconfig_cmd = "oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc
 
 To use `kubectl` on your local machine, you will need to have the [OCI CLI installed and configured](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cliconcepts.htm).
 
-A simple alternative is to use the OCI Cloud Shell, which is provided in the OCI Console.  You can open Cloud Shell by clicking Developer Tools in
+A simple alternative is to use the [OCI Cloud Shell](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cloudshellintro.htm), which is provided in
+the OCI Console.  You can open Cloud Shell by clicking Developer Tools in
 the upper right hand corner of the OCI Console.
 
 ![Cloud Shell icon](../cloud-shell.png)
