@@ -1,8 +1,8 @@
 main:
   - name: Setup
     ref: "/setup"
-  - name: Getting Started
-    ref: "/getting-started"
+  # - name: Getting Started
+  #   ref: "/getting-started"
   - name: Sample apps
     ref: "/sample-apps"
 #  - name: Developing Services
@@ -17,8 +17,8 @@ main:
         ref: "/platform/eureka"
       - name: Configuration
         ref: "/platform/config"
-      - name: Workflow
-        ref: "/platform/conductor"
+      # - name: Workflow
+      #   ref: "/platform/conductor"
       - name: Spring Admin
         ref: "/operations/spring-admin"
       - name: Using the CLI

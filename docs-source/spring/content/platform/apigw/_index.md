@@ -59,26 +59,29 @@ kubectl --namespace apisix get all
     {{< img name="obaas-apisix-login" size="tiny" lazy=false >}}
     <!-- spellchecker-enable -->
 
-## Expose Spring application through API Gateway and Load Balancer
+## Exposing a Spring application through the API Gateway and Load Balancer
 
-Now that the application is running, you want to expose it to the outside world.  This is done by creating something called a "route" in the APISIX API Gateway.
+Once you have your application deployed and running, you may want to expose it to the outside world. Some applications may not need to be
+exposed if they are only called by other applications in the platform.
+To expose your application, you create a "route" in the APISIX API Gateway.
 
 1. Create a Route to the Service
 
-    * Then click on the "Routes" option in the menu on the left hand side.
+    * In the APISIX Dashboard, click on the "Routes" option in the menu on the left hand side.
 
         <!-- spellchecker-disable -->
         {{< img name="obaas-apisix-routes" size="medium" lazy=false >}}
         <!-- spellchecker-enable -->
 
     * Click on the "Create" button to create a new route.
-    * Fill out the following details (anything not mentioned here can be left at the default value):
+    * Fill out the necessary details (anything not mentioned here can be left at the default value). For example, for the "slow service"
+      included in the [sample apps](../../sample-apps):
         * name = slow
         * path = /fruit*
         * method = get, options
         * upstream type = service discovery
-        * discovery type =eureka
-        * service name = SLOW     (note that this is case sensitive, it is on Eureka Service dashboard)
+        * discovery type = eureka
+        * service name = SLOW     (note that this is case sensitive, this is the key from the Eureka dashboard)
 
         <!-- spellchecker-disable -->
         {{< img name="obaas-apisix-routes-step1" size="medium" lazy=false >}}
@@ -105,13 +108,13 @@ Now that the application is running, you want to expose it to the outside world.
 
 2. Test a Route to the Service
 
-    * Get the APISIX Gateway External IP
+    * Get the APISIX Gateway External IP using this command:
 
         ```shell
-        kubectl --namespace apisix get ingress/apisix-gateway
+        kubectl -n ingress-nginx get svc ingress-nginx-controller
         ```
 
-    * Call API using APISIX Gateway address plus path
+    * Call API using APISIX Gateway address plus path:
 
         ```shell
         curl http://APISIX_IP/fruit
