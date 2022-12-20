@@ -21,7 +21,7 @@ the upper right hand corner of the OCI Console.
 
 ![Cloud Shell icon](../cloud-shell.png)
 
-Run the provided command to create your Kuberneetes configuration file and then you will be able to access the Kubernetes
+Run the provided command to create your Kubernetes configuration file and then you will be able to access the Kubernetes
 cluster.  For example, you can list the pods in your cluster:
 
 ```

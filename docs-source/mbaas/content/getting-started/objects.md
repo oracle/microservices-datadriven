@@ -15,7 +15,7 @@ your environment:
 
 ```
 curl -X POST \
-     -H "X-Parse-Application-Id: APPLICATION_ID" \
+     -H "X-Parse-Application-Id: COOLAPPV100" \
      -H "Content-Type: application/json" \
      -d '{"score":100000,"playerName":"test user","cheatmode":false}' \
      http://1.2.3.4/parse/classes/GameScore
@@ -37,7 +37,7 @@ with your `APPLICATION_ID` and endpoint address:
 
 ```
 curl -X GET \
-     -H "X-Parse-Application-Id: APPLICATION_ID" \
+     -H "X-Parse-Application-Id: COOLAPPV100" \
      http://1.2.3.4/parse/classes/GameScore/Ts9B8JSBBX
 # output (formatted):
 {

@@ -8,7 +8,7 @@ You can create a user with this REST API. You must provide the correct `APPLICAT
 
 ```
 curl -X POST \
-    -H "X-Parse-Application-Id: APPLICATION_ID" \
+    -H "X-Parse-Application-Id: COOLAPPV100" \
     -H "X-Parse-Revocable-Session: 1" \
     -H "Content-Type: application/json" \
     -d '{"username":"newuser","password":"newpassword","phone":"415-392-0202"}' \
@@ -33,7 +33,7 @@ You can create a role with this REST API. You must provide the correct `APPLICAT
 
 ```
 curl -X POST \
-    -H "X-Parse-Application-Id: APPLICATION_ID" \
+    -H "X-Parse-Application-Id: COOLAPPV100" \
     -H "Content-Type: application/json" \
     -d '{"name": "Moderators","ACL": {"*": {"read": true}}}' \
     http://1.2.3.4/parse/roles
@@ -62,7 +62,7 @@ Learn more about ACLs in the [Parse Server documentation](https://docs.parseplat
 
     ```
     curl -X POST \
-         -H "X-Parse-Application-Id: APPLICATION_ID" \
+         -H "X-Parse-Application-Id: COOLAPPV100" \
          -H "Content-Type: application/json" \
          -d '{"playerName":"Mom Staples","cheatmode":false, "score":25}' \
          http://1.2.3.4/parse/classes/GameScore
@@ -92,7 +92,7 @@ Learn more about ACLs in the [Parse Server documentation](https://docs.parseplat
 
     ```
     curl -X DELETE \
-         -H "X-Parse-Application-Id: APPLICATION_ID" \
+         -H "X-Parse-Application-Id: COOLAPPV100" \
          http://1.2.3.4/parse/classes/GameScore/BLxUYqfh6E
 
     # output
@@ -107,7 +107,7 @@ Learn more about ACLs in the [Parse Server documentation](https://docs.parseplat
 
     ```
     curl -X POST \
-         -H "X-Parse-Application-Id: APPLICATION_ID" \
+         -H "X-Parse-Application-Id: COOLAPPV100" \
          -H "Content-Type: application/json" \
          http://1.2.3.4/parse/classes/GameScore \
          --data-binary @- << EOF
@@ -168,11 +168,11 @@ Learn more about ACLs in the [Parse Server documentation](https://docs.parseplat
 
 * Delete a `GameScore` document with a specific user that has read/write access.
 
-    To delete a document that has ACls, a caller needs to specify the session token that is obtained by logging in:
+    To delete a document that has ACLls, a caller needs to specify the session token that is obtained by logging in:
 
     ```
     curl -X POST \
-         -H "X-Parse-Application-Id: APPLICATION_ID" \
+         -H "X-Parse-Application-Id: COOLAPPV100" \
          -H "X-Parse-Revocable-Session: 1" \
          -H "Content-Type: application/json" \
          -d '{"username":"nyg","password":"password"}' \
@@ -204,7 +204,7 @@ Learn more about ACLs in the [Parse Server documentation](https://docs.parseplat
 
     ```
     curl -X DELETE \
-         -H "X-Parse-Application-Id: APPLICATION_ID" \
+         -H "X-Parse-Application-Id: COOLAPPV100" \
          -H "X-Parse-Session-Token: r:9431c553bb56f21c0a2853b18b5df37d" \
          http://1.2.3.4/parse/classes/GameScore/9xTZkqjTwB
 
@@ -221,7 +221,7 @@ Roles work in a similar fashion to Users. It is assumed that, for this example, 
 
     ```
     curl -X POST \
-    -H "X-Parse-Application-Id: APPLICATION_ID" \
+    -H "X-Parse-Application-Id: COOLAPPV100" \
     -H "Content-Type: application/json" \
     http://1.2.3.4/parse/classes/GameScore \
     --data-binary @- << EOF
@@ -281,7 +281,7 @@ Roles work in a similar fashion to Users. It is assumed that, for this example, 
 
     ```
     curl -X POST \
-    -H "X-Parse-Application-Id: APPLICATION_ID" \
+    -H "X-Parse-Application-Id: COOLAPPV100" \
     -H "X-Parse-Revocable-Session: 1" \
     -H "Content-Type: application/json" \
     -d '{"username":"bruce","password":"password"}' \
@@ -311,7 +311,7 @@ Roles work in a similar fashion to Users. It is assumed that, for this example, 
 
     ```
     curl -X DELETE \
-    -H "X-Parse-Application-Id: APPLICATION_ID" \
+    -H "X-Parse-Application-Id: COOLAPPV100" \
     -H "X-Parse-Session-Token: r:9805595b4a73c8d2135ae9e70bb885c6" \
     http://1.2.3.4/parse/classes/GameScore/LkTqWJKWw1
 
@@ -327,7 +327,7 @@ Using the Master Key in an API call turns off all ACL checking, for example:
 
 ```
 curl -X DELETE \
-     -H "X-Parse-Application-Id: APPLICATION_ID" \
+     -H "X-Parse-Application-Id: COOLAPPV100" \
      -H "X-Parse-Master-Key: MASTER_KEY" \
      http://1.2.3.4/parse/classes/GameScore/BLxUYqfh6E
 

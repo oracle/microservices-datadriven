@@ -29,7 +29,7 @@ To test the Parse API direct access from the same page, let's add a few lines of
     <script src="/parsef/parsef.js"></script>
     <script src="https://npmcdn.com/parse/dist/parse.min.js"></script> 
     <script>
-    firebase.app().options.appKey="APPLICATION_ID";
+    firebase.app().options.appKey="COOLAPPV100";
     Parse.initialize(firebase.app().options.appKey);
     Parse.serverURL = "http://localhost:1337/parse";
     </script>

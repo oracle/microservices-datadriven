@@ -4,7 +4,7 @@ title: "Friendly Eats tutorial"
 
 This is an example of porting a simple Firebase web application based on [JavaScript Firebase API - version 8](https://firebase.google.com/docs/reference/js/v8)
 and described in a public [Tutorial](https://firebase.google.com/codelabs/firestore-web#0) to the [Parse Platform](https://docs.parseplatform.org/js/guide/)
-leveraging an alpha quality Javascript library included in this example.
+leveraging an alpha quality JavaScript library included in this example.
 
 ## Complete the original tutorial first
 
@@ -13,7 +13,7 @@ through to the end using Firebase.
 
 ## Adapt the code to use the Firebase API emulation
 
-After completing the tutorial, you have a functioning application.  Next, you can adapt that application to ust the developer preview
+After completing the tutorial, you have a functioning application.  Next, you can adapt that application to use the developer preview
 of the Firebase API emulation using the following steps:
 
 * Open in a editor the file **index.html** in the directory **/friendlyeats**
@@ -27,7 +27,7 @@ of the Firebase API emulation using the following steps:
     ...
     ```
 
-    Comment out the Firebase imports and add the following imports and code in their place, as shown here.  Change the `APPLICATION_ID`
+    Comment out the Firebase imports and add the following imports and code in their place, as shown here.  Change the `COOLAPPV100`
     and `serverURL` to match your MBaaS/Parse Server environment:
     
     ```
@@ -43,7 +43,7 @@ of the Firebase API emulation using the following steps:
     <script src="/parsef/parsef.js"></script>
     <script src="https://npmcdn.com/parse/dist/parse.min.js"></script> 
     <script>
-        firebase.app().options.appKey="APPLICATION_ID";
+        firebase.app().options.appKey="COOLAPPV100";
         Parse.initialize(firebase.app().options.appKey);
         Parse.serverURL = "http://localhost:1337/parse";
     </script>
@@ -67,12 +67,12 @@ of the Firebase API emulation using the following steps:
       This initial setup is done by these lines of code:
         ```
         <script>
-            firebase.app().options.appKey="APPLICATION_ID";
+            firebase.app().options.appKey="COOLAPPV100";
             Parse.initialize(firebase.app().options.appKey);
             Parse.serverURL = "http://localhost:1337/parse";
         </script>
         ```
-    Change the code according to your actual Parse server URL and `APPLICATION_ID`.
+    Change the code according to your actual Parse server URL and `COOLAPPV100`.
 
 ## Repeat the tutorial steps with Firebase API Emulation
 
@@ -108,7 +108,7 @@ JavaScript demo application is still running without any other changes.
 * Check the original sort and Filter functions. Choose "Ramen" as the "Category":
     ![Filter](../../filter.jpg "filter page")
 
-    Notice the udpated page after the filter is applied:
+    Notice the updated page after the filter is applied:
     
     ![Filtered](../../newList.jpg "filtered  restaurant page")
     

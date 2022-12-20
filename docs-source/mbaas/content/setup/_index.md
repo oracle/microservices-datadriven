@@ -63,7 +63,7 @@ When the installation is finished, some important information will be included a
 the newly created environment:
 
 ```
-application_id = "COOLAPP"
+application_id = "COOLAPPV100"
 dashboard_password = <sensitive>
 dashboard_uri = "http://1.2.3.4"
 dashboard_user = "ADMIN"
