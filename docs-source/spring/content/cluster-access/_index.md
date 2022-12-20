@@ -21,6 +21,33 @@ To use `kubectl` on your local machine, you will need to have the [OCI CLI insta
 
 For more information about working with the Kubernetes cluster, see [Setting Up Cluster Access](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm#localdownload) in the OCI documentation.
 
+**Note:** The generated `kubeconfig` file will only work if you are using the `DEFAULT` profile in your OCI CLI configuration file. If you are using a different OCI CLI profile you must add `--profile <NAME>` to the command by editing the generated Kubernetes config file and add the following lines:
+
+```
+- --profile
+- MAACLOUD
+```
+
+For example:
+
+```
+- name: user-xxxx
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1beta1
+      args:
+      - ce
+      - cluster
+      - generate-token
+      - --cluster-id
+      - ocid1.cluster....xxxx
+      - --region
+      - us-ashburn-1
+      - --profile
+      - YOUR_PROFILE_NAME
+      command: oci
+```
+
 ### Using OCI Cloud Shell
 
 A simple alternative is to use the [OCI Cloud Shell](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cloudshellintro.htm), which is provided in the OCI Console. You can open Cloud Shell by clicking Developer Tools in the upper right hand corner of the OCI Console.

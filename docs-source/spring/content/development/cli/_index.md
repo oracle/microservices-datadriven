@@ -9,8 +9,8 @@ resources:
 ## Setup
 
 The Oracle Backend as a Service for Spring Cloud command-line tool, `oracle-spring`, is available for Linux and Mac systems.
-Download the binary you want from the [Releases](https://github.com/OBaaS/OBaaS/releases/) page and add it to your PATH environment
-variable.
+Download the binary you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0) page
+and add it to your PATH environment variable.  You may like to rename the binary to remove the suffix.
 
 ### Usage information
 
@@ -22,42 +22,42 @@ oracle-spring
 
 A set of commands will simplify the installation of the application and bindings with the BaaS infrastructure. Declaring and using a namespace for the application that is then resourced with resource groups deployed in the BaaS platform. Commands are exposed as REST endpoints for IDE and console access and include the following:
 
-1. oracle-spring create -n <app name>
+1. `oracle-spring create -n <app name>`
 
     - Creates namespace
     - (any other init)
 
-2. oracle-spring deploy -n <app name> -s <resource name> -g <resource group name> --jar-path ./target/cloudbank-oracle-sample-0.1.0.jar
+2. `oracle-spring deploy -n <app name> -s <resource name> -g <resource group name> --jar-path ./target/cloudbank-oracle-sample-0.1.0.jar`
 
     - Containerizes app and maintains in repos
     - Binds all necessary resources such as databases, messaging, etc.
     - Creates services, etc. and deploys app in Kubernetes
     - Creates unified observability for application including end to end metrics, logs, and tracing as well as Grafana dashboard
 
-3. oracle-spring show -n <app name> -s <resource name> -g <resource group name>
+3. `oracle-spring show -n <app name> -s <resource name> -g <resource group name>`
 
     - Show details of app
 
-## AVAILABLE COMMANDS
+## Available Commands
 
 Built-In Commands
-       help: Display help about available commands
-       stacktrace: Display the full stacktrace of the last error.
-       clear: Clear the shell screen.
-       quit, exit: Exit the shell.
-       history: Display or save the history of previously run commands
-       version: Show version info
-       script: Read and execute commands from a file.
+- `help`: Display help about available commands
+- `stacktrace`: Display the full stacktrace of the last error.
+- `clear`: Clear the shell screen.
+- `quit`, `exit`: Exit the shell.
+- `history`: Display or save the history of previously run commands
+- `version`: Show version info
+- `script`: Read and execute commands from a file.
 
 Commands
-       connect: connect to the Oracle Spring admin console
-       change-password: change password for Oracle Spring
-       create: create an application/namespace
-       create-schema: create a schema/user and bind it to service deployment
-       config: view and modify application configuration
-       deploy: deploy a service
-       list: list/show details of application services
-       delete: delete a service or entire application/namespace
+- `connect`: connect to the Oracle Spring admin console
+- `change-password`: change password for Oracle Spring
+- `create`: create an application/namespace
+- `create-schema`: create a schema/user and bind it to service deployment
+- `config`: view and modify application configuration
+- `deploy`: deploy a service
+- `list`: list/show details of application services
+- `delete`: delete a service or entire application/namespace
 
 The following is an example development workflow using the CLI.
 

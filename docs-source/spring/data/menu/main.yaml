@@ -5,11 +5,9 @@ main:
     ref: "/getting-started"
   - name: Sample apps
     ref: "/sample-apps"
-  - name: Developing Services
-    ref: "/development"
-    sub: 
-      - name: Using the CLI
-        ref: "/development/cli"
+#  - name: Developing Services
+#    ref: "/development"
+#    sub: 
   - name: Platform Services
     ref: "/platform"
     sub:
@@ -23,6 +21,8 @@ main:
         ref: "/platform/conductor"
       - name: Spring Admin
         ref: "/operations/spring-admin"
+      - name: Using the CLI
+        ref: "/development/cli"
   - name: Observability
     ref: "/observability"
     sub: 

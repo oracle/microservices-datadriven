@@ -1,5 +1,5 @@
 
-The MBaaS is available to install from [OCI Marketplace](https://cloud.oracle.com/marketplace/application/139274906).
+The MBaaS is available to install from [OCI Marketplace](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/139274906).
 
 ## Prerequisites
 
