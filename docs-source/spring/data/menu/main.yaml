@@ -20,7 +20,7 @@ main:
       # - name: Workflow
       #   ref: "/platform/conductor"
       - name: Spring Admin
-        ref: "/operations/spring-admin"
+        ref: "/platform/spring-admin"
       - name: Using the CLI
         ref: "/development/cli"
   - name: Observability

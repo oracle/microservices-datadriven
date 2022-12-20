@@ -23,5 +23,5 @@ Oracle Backend as a Service for Spring Cloud includes the Spring Eureka Service 
     {{< img name="obaas-eureka-dashboard" size="medium" lazy=false >}}
     <!-- spellchecker-enable -->
 
-    * On the web page, look for an entry called "SLOW" - the presence of this entry confirms that the application successfully registered itself with the service registry
-    * You should also see "CONFIG-SERVER" and "ADMIN-SERVER" there
+    * On the web page, you will see all of the services registered with Eureka.  If you deployed the [sample apps](../../sample-apps), look for an entry called "SLOW" - the presence of this entry confirms that the application successfully registered itself with the service registry
+    * You should also see "CONFIG-SERVER" and "ADMIN-SERVER" there - these are deployed as part of the platform
