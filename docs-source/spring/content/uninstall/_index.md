@@ -13,7 +13,7 @@ resources:
 
 To remove the Oracle Backend as a Service for Spring Cloud, in the OCI Console main menu, navigate to “Developer Services” then “Resource Manager - Stacks”. Make sure you are in the correct region and compartment where you installed the BaaS.
 
-Click on the link to open the detail view for the BaaS instance and click on the `Destroy` button to clean up resources:
+Click on the link to open the detail view for the Oracle Backend as a Service for Spring Cloud instance and click on the `Destroy` button to clean up resources:
 
 <!-- spellchecker-disable -->
 {{< img name="oci-stack-destroy" size="medium" lazy=false >}}

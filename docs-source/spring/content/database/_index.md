@@ -15,10 +15,6 @@ resources:
     title: "Download ADB client credential"
 ---
 
-## Get access to the BaaS Database
-
-### Accessing Cloud console
-
 The Oracle Backend as a Service for Spring Cloud includes an Oracle Database. An instance of the Oracle Autonomous Database (Shared) is created during installation.
 
 To work with data in the database, you can use the Database Actions interface, which can be accessed from the OCI Console. The Oracle Database is created in the same compartments as OKE. In the OCI Console, navigate to Autonomous Database in the main menu and select the database with the Application Name you configured during install, with the suffix “DB”, for example “OBAASTSTPSDB”.
@@ -33,7 +29,9 @@ Click on the link to access the database details page, and then click on the “
 {{< img name="oci-adb-cloud-portal-details" size="medium" lazy=false >}}
 <!-- spellchecker-enable -->
 
-### Accessing DB objects through local workstation
+## Accessing the database from a local workstation
+
+**TODO** explain download wallet, and the private/secure everywhere option in install...
 
 After create the OBaaS Environment, you will have to access to Autonoums Database for access, for example, the CONFIGSERVER.PROPERTIES, a table where Applications should add their properties. Also, each application can use the sabe DB instance to host its data. As BaaS Database is created only accessible in private VCN, your access will be possible only using the Bastion Service provisioned by Oracle BaaS template.
 

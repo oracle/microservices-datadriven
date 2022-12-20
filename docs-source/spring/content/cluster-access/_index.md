@@ -1,16 +1,14 @@
 ---
-title: Access Kubernetes Clusters (OKE)
+title: Access Kubernetes Cluster
 resources:
   - name: oci-cloud-shell
     src: "oci-cloud-shell.png"
     title: "OCI Cloud Shell icon"
 ---
 
-## Get access to the BaaS Kubernetes (OKE)
+The Oracle Backend as a Service for Spring Cloud setup creates a Kubernetes cluster where the server and dashboard components are deployed.  At the end of setup, in the log for the apply job, you were provided with a command to creating a Kubernetes configuration file to access that cluster.
 
-The Oracle Backend as a Service for Spring Cloud setup created a Kubernetes cluster where the server and dashboard components are deployment.  At the end of setup, you were provided with a command to creating a Kubernetes configuration file to access that cluster.
-
-```cmd
+```
 kubeconfig_cmd = "oci ce cluster create-kubeconfig 
                     --cluster-id ocid1.cluster.oc1.iad.xxx 
                     --file $HOME/.kube/config 
@@ -21,7 +19,9 @@ kubeconfig_cmd = "oci ce cluster create-kubeconfig
 
 To use `kubectl` on your local machine, you will need to have the [OCI CLI installed and configured](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cliconcepts.htm).
 
-To deploy Sample Applications to OBaaS OKE Cluster, you should setup your local Kubectl following the [Setting Up Cluster Access](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm#localdownload) documentation.
+For more information about working with the Kubernetes cluster, see [Setting Up Cluster Access](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm#localdownload) in the OCI documentation.
+
+### Using OCI Cloud Shell
 
 A simple alternative is to use the [OCI Cloud Shell](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cloudshellintro.htm), which is provided in the OCI Console. You can open Cloud Shell by clicking Developer Tools in the upper right hand corner of the OCI Console.
 
