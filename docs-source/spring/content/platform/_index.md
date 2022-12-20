@@ -8,4 +8,4 @@ For more details, please read about:
 * [Configuration](./config)
 * [Workflow](./conductor)
 * [Spring Admin](./spring-admin)
-* [Using the CLI](./cli)
+* [Using the CLI](../development/cli)
