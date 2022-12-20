@@ -39,13 +39,15 @@ This directory contains the sample applications source code.
 
 ## Create OCI Repositories for Sample Applications
 
-1. You have to create the repositories for each sample application in your compartment. The name of the repository should follow the pattern `<project name>/<app name>`
+1. Before building the sample applications, you have to create the repositories for each sample application in your compartment. The name of the repository should follow the pattern `<project name>/<app name>`
+
+    **Note:** If you do not pre-create the repositories, they will be created in the root compartment on the first push.
 
     <!-- spellchecker-disable -->
     {{< img name="oci-container-repository-create" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
-    The repositories are:
+    The required repositories are:
 
     * `<project>/banka`
     * `<project>/bankb`
@@ -54,9 +56,9 @@ This directory contains the sample applications source code.
     * `<project>/notification`
     * `<project>/slow_service`
 
-2. Create the auth-token to login to OCI-R using kubectl following the instructions on [Generating an Auth Token to Enable Login to Oracle Cloud Infrastructure Registry](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionsgenerateauthtokens.htm)
+2. Create an Authentication Token to login to OCI Registry by following the instructions on [Generating an Auth Token to Enable Login to Oracle Cloud Infrastructure Registry](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionsgenerateauthtokens.htm)
 
-3. Now you can login to OCI-R to allow you push the Sample Applications container images, executing the following commnad:
+3. Login to OCI Registry by executing the following command.  This will allow the build to push the sample applications' container images to OCI Registry.
 
     ```shell
     docker login <region>.ocir.io
@@ -64,9 +66,11 @@ This directory contains the sample applications source code.
     password: <auth-token>
     ```
 
-## Build Sample Applications and push container images
+    **Note:** Your username may not contain `oracleidentitycloudservice` if it is not a federated account, but the tenancy prefix will always be required.
 
-1. Update the `pom.xml` in the root directory to set your Container Registry. Configure region/tenancy and the right project name:
+## Build the sample applications and push container images
+
+1. Update the `pom.xml` in the root directory to match the OCI Registry repository prefix you used above. Configure the region, tenancy and project name:
 
     ```xml
         <properties>
@@ -88,7 +92,7 @@ This directory contains the sample applications source code.
     mvn package -P build-docker-image
     ```
 
-    Finishing the build and push process, you will be able to see a message similar to the one below portraying that all modules were builded successfully.
+    When this completes the build and push process, you will see a message similar to the one below reporting that all modules were builded successfully.
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-sample-apps-build-result" size="large" lazy=false >}}
@@ -96,7 +100,9 @@ This directory contains the sample applications source code.
 
 ## Update Images in Kubernetes Deployment Descriptors
 
-You also have to update the address of images in application deployment descriptor editing each `01--deployment--APPLICATION_NAME.yaml`.
+You also have to update the address of images in application deployment descriptor to match the repositories you created.
+You can do this by editing the `01--deployment--APPLICATION_NAME.yaml` file in each of the service sub-directories.  Use the
+same values you used in the previous steps.
 
 ```yaml
     spec:
@@ -105,9 +111,13 @@ You also have to update the address of images in application deployment descript
         image: phx.ocir.io/mytenancy/myproject/app_image:latest
 ```
 
-## Create Datbase Objects for each appliaction
+## Create Database Objects for each application
 
-Connected to the ADB instance using aforementioned instructions execute the sql commands for each application to create application database. You have to edit sql script to add user database password.
+You must create the database users and some objects that are required by the sample services. 
+Connect to the Oracle Autonmous Database instance using (using [these instructions](../database)) and execute the SQL statements
+for each application. You must edit each SQL script to add your desired password before running the statements.
+
+Each of the following files must be reviewed, updated, and then executed against the database (as the `ADMIN` user). 
 
 1. Customer microservice
 
@@ -122,19 +132,26 @@ Connected to the ADB instance using aforementioned instructions execute the sql 
     * db-01-notification-create-user.sql
     * db-03-notifications-db-queue.sql
 
-## Add appliactions configurations into Config Server Properties Table
+## Add applications configurations into Config Server Properties Table
 
-Connected to the ADB instance using aforementioned instructions execute the sql commands for each application but before we have to adjust configurations for the applications inside `db-02-<application>-configserver-props.sql` file.
+You must create the application configuration entries that are required by the sample services. 
+Connect to the Oracle Autonmous Database instance using (using [these instructions](../database)) and execute the SQL statements
+for each application. You must edit each SQL script to match your environment before running the statements.
+The example below shows the lines that must be updated. You must replace the `TNS_NAME` with the correct name
+for your database.  If your database is called `OBAASDB` then the `TNS_NAME` is `OBAASDB_TP`.
 
 ```sql
 INSERT INTO CONFIGSERVER.PROPERTIES(APPLICATION, PROFILE, LABEL, PROP_KEY, "VALUE")
-VALUES ('APPLICATION_NAME', 'kube', 'latest', 'spring.datasource.url', 'jdbc:oracle:thin:@TNS_NAME?TNS_ADMIN=/oracle/tnsadmin');
-
-INSERT INTO CONFIGSERVER.PROPERTIES (APPLICATION, PROFILE, LABEL, PROP_KEY, VALUE)
-VALUES ('APPLICATION_NAME', 'kube', 'latest', 'spring.datasource.driver-class-name', 'oracle.jdbc.OracleDriver');
-
-COMMIT;
+VALUES (
+    'APPLICATION_NAME', 
+    'kube', 
+    'latest', 
+    'spring.datasource.url', 
+    'jdbc:oracle:thin:@TNS_NAME?TNS_ADMIN=/oracle/tnsadmin'
+);
 ```
+
+Each of the following files must be reviewed, updated, and then executed against the database (as the `ADMIN` user). 
 
 1. Customer microservice
 
@@ -148,62 +165,69 @@ COMMIT;
 
     * db-02-notification-configserver-props.sql
 
-## Add Kubernetes Secret for each Application database credential
+## Add Kubernetes Secrets for each application's database credentials
 
-For each application, you will have a user created and its pasword, you have to inform to the application these credential. In this current version of BaaS, you have to create a Kubernetes Secret to hold this credentials for each application. You make this executing the following commands:
+For each application, you need to create a Kuberentes secret containing the database username and password that you chose in the previous steps.
+You can create these secrets by executing the following commands (update the values to match your environment):
 
 1. Customer microservice
 
     ```cmd
-     k -n application create secret generic oracledb-creds-customer --from-literal=sping.db.username=CUSTOMER --from-literal=spring.db.password=[DB_PASSWORD]
+     kubectl -n application \
+       create secret generic oracledb-creds-customer \
+       --from-literal=sping.db.username=CUSTOMER \
+       --from-literal=spring.db.password=[DB_PASSWORD]
     ```
 
 2. Fraud microservice
 
     ```cmd
-     k -n application create secret generic oracledb-creds-fraud --from-literal=sping.db.username=FRAUD --from-literal=spring.db.password=[DB_PASSWORD]
+     kubectl -n application \
+       create secret generic oracledb-creds-fraud \
+       --from-literal=sping.db.username=FRAUD \
+       --from-literal=spring.db.password=[DB_PASSWORD]
     ```
 
 3. Notification microservice
 
     ```cmd
-     k -n application create secret generic oracledb-creds-notification --from-literal=sping.db.username=NOTIFICATIONS --from-literal=spring.db.password=[DB_PASSWORD]
+     kubectl -n application \
+       create secret generic oracledb-creds-notification \
+       --from-literal=sping.db.username=NOTIFICATIONS \
+       --from-literal=spring.db.password=[DB_PASSWORD]
     ```
 
-## Deploy the applicatios
+## Deploy the applications
 
-1. Apply Application deployment using kubectl
+1. Apply each application's Kubernetes Deployment YAML using `kubectl`:
 
     ```shell
     cd <app dir>
     kubectl apply -f 01--deployment--<app name>.yaml
     ```
 
-2. Deploy Application Service using kubectl
+2. Deploy each application's Kuberenetes Service YAML using `kubectl`:
 
     ```shell
     kubectl apply -f 02--service--<app name>.yaml
     ```
 
-3. Deploy Application Ingress using kubectl
 
-    ```shell
-    kubectl apply -f 03--ingress--<app name>.yaml
-    ```
+After deploy all microservices, you will be able to check them executing on Kubernetes executing the following command:
 
-    After deploy all microservices, you will be able to check them executing on Kubernetes executing the following command:
+```shell
+kubectl --namespace=application get all -o wide
+```
 
-    ```shell
-    kubectl --namespace=application get all -o wide
-    ```
-
-    <!-- spellchecker-disable -->
-    {{< img name="obaas-sample-apps-deploy" size="medium" lazy=false >}}
-    <!-- spellchecker-enable -->
+<!-- spellchecker-disable -->
+{{< img name="obaas-sample-apps-deploy" size="medium" lazy=false >}}
+<!-- spellchecker-enable -->
 
 ## Explore the applications
 
-### Amigos Microservices APIs
+### TODO Microservices APIs
+
+**TODO** need to create a route before hitting them...
 
 1. Create customer
 

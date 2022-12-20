@@ -89,19 +89,25 @@ Oracle Backend as a Service for Spring Cloud setup will install the following co
     {{< img name="oci-private-template-create-stack-config" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
-    Now you can review the stack configuration and save the changes. Please, *DO NOT* check the `Run apply` box
+    Now you can review the stack configuration and save the changes.  Oracle recommends that you do not check the "Run apply" option - this will
+    give you the opportunity to run the "plan" first and check for issues.
 
     <!-- spellchecker-disable -->
     {{< img name="oci-private-template-create-stack-config-review" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
-3. Apply the Stack from the OBaaS Template
+3. Apply the Stack 
 
-    After you create your Stack, you will be able to test the Plan, Edit the Stack, Apply the Stack or Destroy.
+    After you create your stack, you will be able to test the plan, edit the stack, and apply or destroy the stack.
 
-    We recommend you test the Plan before apply the stack, the objective is review the plan and prevent run in issues.
+    Oracle recommends you test the plan before applying the stack, in order to identify any issues before you apply the plan and
+    create resources.  You can test the plan by clicking on the "Plan" button and then reviewing the output.  If you see any
+    issues, for example you may find that you do not have enough quota for some resource, you can fix that issue before
+    proceeding.
 
-    After plan test, you can apply the stack and create your OBaaS Environment.
+    When you are happy with the plan test, you can apply the stack by clicking on the "Apply" button. This will create your Oracle Backend
+    as a Service for Spring Cloud Environment.  This takes about 20 minutes to complete.  A lot of this time is spent provisioning the
+    Kuberentes cluster, worker nodes, and database.  You can watch the logs to follow progress of the operation.
 
     <!-- spellchecker-disable -->
     {{< img name="oci-stack-apply" size="large" lazy=false >}}

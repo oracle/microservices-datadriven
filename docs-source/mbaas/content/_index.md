@@ -5,8 +5,6 @@ Oracle Mobile Backend as a Service (MBaaS) allows developers to build and deploy
 
 The MBaaS is based on the [Parse Platform](https://parseplatform.org/).
 
-**> > > Put video intro here < < <**
-
 In addition to an Oracle Autonomus Database Shared instance, the following software components are deployed in an Oracle Cloud Infrastructure Container Engine for Kubernetes (OKE) for customer usage with Oracle MBaaS:
 
 * Parse Server, plus the Oracle Database storage adapter for Parse
