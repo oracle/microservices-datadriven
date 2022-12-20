@@ -59,6 +59,30 @@ Commands
 - `list`: list/show details of application services
 - `delete`: delete a service or entire application/namespace
 
+An application is a namespace encompassing related microservices. For example, a "cloudbank" application may have "banktransfer",
+"frauddetection", etc., microservices deployed within it.
+The `create` command results in the creation of an application namespace.
+​
+
+The `bind` command results in the automatic creation of a database schema for a given service/user and binds the information for that schema/database in the environment of the microservice for it to use.  The option of the prefix for the environment properties bound is also given.  For example, most Spring microservices us "spring.datasource".
+
+​
+The `deploy` command takes `serviceName`, `appName`, and `jarLocation` as it's main arguments (`imageVersion` and `javaVersion` options are also provided).
+When the deploy command is issued, the microservice jar file is uploaded to the backend, a Docker image is created for the jar/microservice, and various Kubernetes resources such as deployment, service, etc. are also created.  
+This is all done automatically to simplify the development process and the management of the microservices by the backend.
+
+​
+The `list` command can then be used to show details of the deployed microservice, etc.
+​
+The `config` command can also be used to view and update configuration managed by the Spring Config Server.
+
+​
+A common development workflow pattern is to `connect`, `change-password` (only if necessary), `create` (once per app/namespace), `config`, bind` (only if necessary), `deploy`, and `list`. 
+​
+
+Further development and redeployment of the service can then be iterated upon by issuing the `deploy`, `list`, etc. commands. 
+
+
 The following is an example development workflow using the CLI.
 
 {{< hint type=[warning] icon=gdoc_fire title=NOTE >}}
@@ -130,8 +154,8 @@ appname (defaults to cloudbank):
 using default value... 
 name:bankb-7c7c59db96-2tjjm  status:class V1ContainerStatus {
     containerID: cri-o://b82106811515f2226dffb85c82918318059f17f3403d002c52a488a26d94b5ff
-    image: iad.ocir.io/maacloud/baasdev/cloudbank/bankb:0.1
-    imageID: iad.ocir.io/maacloud/baasdev/cloudbank/bankb@sha256:6b50f2ec2a80100061fe93c48ca9620a44ec01c981520aa0b4a14f60f58513f4
+    image: iad.ocir.io/mytenancy/mybaas/cloudbank/bankb:0.1
+    imageID: iad.ocir.io/mytenancy/mybaas/cloudbank/bankb@sha256:6b50f2ec2a80100061fe93c48ca9620a44ec01c981520aa0b4a14f60f58513f4
     lastState: class V1ContainerState {
         running: null
         terminated: null
