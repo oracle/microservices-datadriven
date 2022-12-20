@@ -16,7 +16,7 @@ An example of a Config Server client's Spring `application.yaml` configuration f
 ```
 spring:
   config:
-    import: optional?configserver:http://config-server.config-server.svc.cluster.local:8080
+    import: optional:configserver:http://config-server.config-server.svc.cluster.local:8080
   application:
     name: atael
   cloud:

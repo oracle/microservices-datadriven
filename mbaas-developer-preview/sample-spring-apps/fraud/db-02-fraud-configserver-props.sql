@@ -5,12 +5,6 @@ INSERT INTO CONFIGSERVER.PROPERTIES(APPLICATION, PROFILE, LABEL, PROP_KEY, "VALU
 VALUES ('fraud', 'kube', 'latest', 'spring.datasource.url', 'jdbc:oracle:thin:@<DATABASE SERVICE>?TNS_ADMIN=/oracle/tnsadmin');
 
 INSERT INTO CONFIGSERVER.PROPERTIES (APPLICATION, PROFILE, LABEL, PROP_KEY, VALUE)
-VALUES ('fraud', 'kube', 'latest', 'spring.datasource.username', 'FRAUD');
-
-INSERT INTO CONFIGSERVER.PROPERTIES (APPLICATION, PROFILE, LABEL, PROP_KEY, VALUE)
-VALUES ('fraud', 'kube', 'latest', 'spring.datasource.password', '<DATABASE PASSWORD>');
-
-INSERT INTO CONFIGSERVER.PROPERTIES (APPLICATION, PROFILE, LABEL, PROP_KEY, VALUE)
 VALUES ('fraud', 'kube', 'latest', 'spring.datasource.driver-class-name', 'oracle.jdbc.OracleDriver');
 
 COMMIT;
