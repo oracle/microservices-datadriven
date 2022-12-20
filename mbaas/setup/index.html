@@ -14,7 +14,7 @@
 
   <meta name="description" content="The MBaaS is available to install from OCI Marketplace.
 Prerequisites You must meet the following prerequisites to use the MBaaS:
-An OCI account in a tenancy with sufficient quota to create: An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least one public IP available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user) Setup To start installation:" />
+An OCI account in a tenancy with sufficient quota to create: An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP&rsquo;s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user) Setup To start installation:" />
 
     <title>Setup | Oracle Mobile Backend as a Service</title>
 
@@ -42,7 +42,7 @@ An OCI account in a tenancy with sufficient quota to create: An OCI Container En
   <meta property="og:site_name" content="Oracle Mobile Backend as a Service" />
   <meta property="og:description" content="The MBaaS is available to install from OCI Marketplace.
 Prerequisites You must meet the following prerequisites to use the MBaaS:
-An OCI account in a tenancy with sufficient quota to create: An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least one public IP available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user) Setup To start installation:" />
+An OCI account in a tenancy with sufficient quota to create: An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP’s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user) Setup To start installation:" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/mbaas/setup/" />
 
@@ -53,7 +53,7 @@ An OCI account in a tenancy with sufficient quota to create: An OCI Container En
 <meta name="twitter:title" content="Setup" />
   <meta name="twitter:description" content="The MBaaS is available to install from OCI Marketplace.
 Prerequisites You must meet the following prerequisites to use the MBaaS:
-An OCI account in a tenancy with sufficient quota to create: An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least one public IP available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user) Setup To start installation:" />
+An OCI account in a tenancy with sufficient quota to create: An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP’s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user) Setup To start installation:" />
 
 
   <script type="application/ld+json">
@@ -64,7 +64,7 @@ An OCI account in a tenancy with sufficient quota to create: An OCI Container En
       "name": "Setup",
       "url" : "https://oracle.github.io/microservices-datadriven/mbaas/setup/",
       "headline": "Setup",
-      "description": "The MBaaS is available to install from OCI Marketplace.\nPrerequisites You must meet the following prerequisites to use the MBaaS:\nAn OCI account in a tenancy with sufficient quota to create: An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least one public IP available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user) Setup To start installation:",
+      "description": "The MBaaS is available to install from OCI Marketplace.\nPrerequisites You must meet the following prerequisites to use the MBaaS:\nAn OCI account in a tenancy with sufficient quota to create: An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP’s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user) Setup To start installation:",
       "wordCount" : "512",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
@@ -1018,7 +1018,7 @@ An OCI account in a tenancy with sufficient quota to create: An OCI Container En
     <h1>Setup</h1>
     <p>The MBaaS is available to install from <a
   class="gdoc-markdown__link"
-  href="https://cloud.oracle.com/marketplace/application/139274906"
+  href="https://cloudmarketplace.oracle.com/marketplace/en_US/listing/139274906"
 >OCI Marketplace</a>.</p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="prerequisites">
@@ -1033,7 +1033,7 @@ An OCI account in a tenancy with sufficient quota to create: An OCI Container En
 <li>An OCI account in a tenancy with sufficient quota to create:
 <ul>
 <li>An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes</li>
-<li>A VCN with at least one public IP available</li>
+<li>A VCN with at least two public IP&rsquo;s available</li>
 <li>A public load balancer</li>
 <li>An Oracle Autonomous Database - Shared instance</li>
 <li>At least one free OCI Auth Token (note that the maximum is two per user)</li>
@@ -1073,7 +1073,7 @@ An OCI account in a tenancy with sufficient quota to create: An OCI Container En
 <p>On the &ldquo;Configure variables&rdquo; page, in the &ldquo;Backend as a Service&rdquo; section (see image below):</p>
 <ul>
 <li>Set an application name if desired, if you do not, a randomized value will be generated.  This will be the name of the Parse application</li>
-<li>Set an application ID if desired, if you do not, a randomized value will be generated.  This will be the Parse APPLICAION_ID</li>
+<li>Set an application ID if desired, if you do not, a randomized value will be generated.  This will be the Parse APPLICATION_ID</li>
 <li>Set a server master key if desired, if you do not, a randomized value will be generated.  This will the Parse MASTER_KEY</li>
 <li>Change the dashboard user name if desired, note that this is case-sensitive</li>
 <li>Provide a password for the dashboard user.  Oracle recommends that you use a strong password</li>
@@ -1090,7 +1090,7 @@ addresses in the specified CIDR.</p>
 recommends using the provided default values.</p>
 <p>In the &ldquo;Database Options&rdquo; section you can customize the database shape and the CIDR for client access. Note that you will not be able to access
 Datbase Actions if you change the network access to &ldquo;PRIVATE_ENDPOINT_ACCESS&rdquo;</p>
-<p>Once you have completed customization, click on the &ldquo;Next&rdquo; butotn.</p>
+<p>Once you have completed customization, click on the &ldquo;Next&rdquo; button.</p>
 <p>The &ldquo;Review&rdquo; page is displayed, check your settings and then click on the &ldquo;Create&rdquo; button to create the &ldquo;stack&rdquo; and run the Terraform apply
 action to create all of the associated resources.</p>
 <p>You can monitor the installation in the log. Installation takes approximately 20 minutes to complete.  Most of this time is spent provisioning

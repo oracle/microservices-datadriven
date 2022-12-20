@@ -62,7 +62,7 @@ The MBaaS setup created a Kubernetes cluster where the server and dashboard comp
       "url" : "https://oracle.github.io/microservices-datadriven/mbaas/cluster-access/",
       "headline": "Kubernetes Access",
       "description": "As an MBaaS user, it is expected that you probably won’t need to access the underlying infrastructure. However, if you do want to have a look around, here is how you can access the Kubernetes cluster where your MBaaS is running.\nThe MBaaS setup created a Kubernetes cluster where the server and dashboard components are deployment. At the end of setup, you were provided with a command to creating a Kubernetes configuration file to access that cluster.",
-      "wordCount" : "391",
+      "wordCount" : "479",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1023,6 +1023,33 @@ with a command to creating a Kubernetes configuration file to access that cluste
   class="gdoc-markdown__link"
   href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cliconcepts.htm"
 >OCI CLI installed and configured</a>.</p>
+<p><strong>Note:</strong> The generated <code>kubeconfig</code> file will only work if you are using the <code>DEFAULT</code> profile in your OCI CLI configuration file. If you are using a different OCI CLI profile you must add <code>--profile &lt;NAME&gt;</code> to the command by editing the generated Kubernetes config file and add the following lines:</p>
+<pre tabindex="0"><code>- --profile
+- MAACLOUD
+</code></pre><p>For example:</p>
+<pre tabindex="0"><code>- name: user-xxxx
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1beta1
+      args:
+      - ce
+      - cluster
+      - generate-token
+      - --cluster-id
+      - ocid1.cluster....xxxx
+      - --region
+      - us-ashburn-1
+      - --profile
+      - YOUR_PROFILE_NAME
+      command: oci
+</code></pre><div class="gdoc-page__anchorwrap">
+    <h2 id="using-oci-cloud-shell">
+        Using OCI Cloud Shell
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/mbaas/cluster-access/#using-oci-cloud-shell" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Using OCI Cloud Shell" aria-label="Anchor to: Using OCI Cloud Shell" href="#using-oci-cloud-shell">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h2>
+</div>
 <p>A simple alternative is to use the <a
   class="gdoc-markdown__link"
   href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cloudshellintro.htm"
