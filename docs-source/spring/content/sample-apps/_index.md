@@ -1,6 +1,5 @@
 ---
 title: Sample Apps
-description: "Sample applications that demonstrate Oracle BaaS use case scenarios"
 resources:
   - name: oci-container-repository-create
     src: "oci-container-repository-create.png"
@@ -14,31 +13,31 @@ resources:
     src: "obaas-sample-apps-deploy.png"
     title: "OBaaS : All resources from the Sample Application deployed on Kubernetes"
 
-weight: 12
-draft: false
 ---
 
-Sample applications that demonstrate Oracle BaaS use case scenarios
+Sample applications that demonstrate Oracle Backend as a Service for Spring Cloud use cases.
 
 ## Prerequisites
 
-* GraalVM or OpenJDK 17
+* GraalVM or OpenJDK 17  (OpenJDK Runtime Environment GraalVM CE 22.3.0 (build 17.0.5+8-jvmci-22.3-b08) recommended)
 * Apache Maven 3.8+
-* A Docker Cli (to use for login against OCI-R)
+* A Docker CLI (to login and push images to OCI Registry)
 
 ## Make a Clone of the Sample Apps Source Code
 
-Now that you have your OBaaS environment available and accessible, we can start deploying the Sample applications.
+Now that you have your Oracle Backend as a Service for Spring Cloud environment available and accessible, we can start deploying the Sample applications.
 
 1. To work with the application code, you need to make a clone from the OraHub repository using the following command.  
 
  ```shell
- git clone https://xxxxx
+ git clone https://github.com/oracle/microservices-datadriven.git
+ cd mbaas-developer-preview/sample-spring-apps/
  ```
 
-You should now see the directory `ebaas-sample-apps` in the directory that you created.
+This directory contains the sample applications source code.
 
-## Create OCI Repositories to Sample Applications
+
+## Create OCI Repositories for Sample Applications
 
 1. You have to create the repositories for each sample application in your compartment. The name of the repository should follow the pattern `<project name>/<app name>`
 
