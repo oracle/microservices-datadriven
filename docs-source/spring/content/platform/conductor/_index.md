@@ -14,7 +14,7 @@ Conductor is a popular workflow solution that works well with Spring Boot micros
 
 Full documentation on Conductor can be found here:
 
-* [Spring Config Server](../../platform/config/)
+* [Netflix Conductor Documentation](https://conductor.netflix.com/)
 
 ### Accessing Conductor UI
 
