@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Firebase API Emulation on Oracle Mobile Backend as a Service</title>
+    <link>https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/</link>
+    <description>Recent content in Firebase API Emulation on Oracle Mobile Backend as a Service</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Extra Parse test code</title>
+      <link>https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/extra/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/extra/</guid>
+      <description>To test the Parse API direct access from the same page, let&amp;rsquo;s add a few lines of codes to the index.html to show four buttons to insert/get/update a Restaurant (minimum properties) in the same collection created from Firebase-on-Parse SDK. The application logic is in /parsef/example.js file.
+The modified parts included in index.html become:
+&amp;lt;!--ORACLE--&amp;gt; &amp;lt;div style=&amp;#34;text-align: center&amp;#34;&amp;gt; &amp;lt;p&amp;gt; &amp;lt;button id=&amp;#34;insertButton&amp;#34;&amp;gt;INSERT RESTAURANT&amp;lt;/button&amp;gt;&amp;lt;p&amp;gt; &amp;lt;button id=&amp;#34;createButton&amp;#34;&amp;gt;GET RESTAURANT&amp;lt;/button&amp;gt;&amp;lt;p&amp;gt; &amp;lt;button id=&amp;#34;updateButton&amp;#34;&amp;gt;SET RESTAURANT&amp;lt;/button&amp;gt;&amp;lt;p&amp;gt; &amp;lt;button id=&amp;#34;queryButton&amp;#34; &amp;gt;N° RESTAURANTS&amp;lt;/button&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/pre&amp;gt; &amp;lt;!</description>
+    </item>
+    
+    <item>
+      <title>Friendly Eats tutorial</title>
+      <link>https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/friendly-eats/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/friendly-eats/</guid>
+      <description>This is an example of porting a simple Firebase web application based on JavaScript Firebase API - version 8 and described in a public Tutorial to the Parse Platform leveraging an alpha quality JavaScript library included in this example.
+Complete the original tutorial first First, we recommend that you complete the original FriendlyEats tutorial instructions through to the end using Firebase.
+Adapt the code to use the Firebase API emulation After completing the tutorial, you have a functioning application.</description>
+    </item>
+    
+    <item>
+      <title>Implemented APIs</title>
+      <link>https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/scope/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/scope/</guid>
+      <description>This developer preview of Firebase API emulation includes only the following Implemented classes/methods:
+class Query where() orderBy() limit() get() onSnapshot() class CollectionReference add() orderBy() limit() onSnapshot() doc() get() where() class QueryDocumentSnapshot data() get() class DocumentReference get() collection() class QuerySnapshot forEach() class DocumentSnapshot data() class Firestore collection() runTransaction() class Transaction get() set() update() The diagram below shows relationships between these APIs:</description>
+    </item>
+    
+  </channel>
+</rss>
