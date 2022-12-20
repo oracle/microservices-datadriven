@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Service Discovery on Oracle Backend as a Service for Spring Cloud</title>
+    <link>https://oracle.github.io/microservices-datadriven/spring/platform/eureka/</link>
+    <description>Recent content in Service Discovery on Oracle Backend as a Service for Spring Cloud</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language><atom:link href="https://oracle.github.io/microservices-datadriven/spring/platform/eureka/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>
