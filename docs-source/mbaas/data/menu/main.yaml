@@ -1,0 +1,31 @@
+main:
+  - name: Setup
+    ref: "/setup"
+  - name: Getting Started
+    ref: "/getting-started"
+    sub: 
+      - name: Working with objects
+        ref: "/getting-started/objects"
+      - name: "Using the dasbboard"
+        ref: "/getting-started/dashboard"
+      - name: Users, Roles and ACLs
+        ref: "/getting-started/identity"        
+  - name: Sample apps
+    ref: "/sample-apps"
+  - name: Firebase API emulation
+    ref: "/firebase-emulation"
+    sub:
+      - name: Friendly Eats example
+        ref: "/firebase-emulation/friendly-eats"
+      - name: Extra Parse test code
+        ref: "/firebase-emulation/extra"
+      - name: Implemented APIs
+        ref: "/firebase-emulation/scope"
+  - name: Dashboard
+    ref: "/dashboard"
+  - name: Database Access
+    ref: "/database"
+  - name: Kubernetes Access
+    ref: "/cluster-access"
+  - name: Uninstall
+    ref: "/uninstall"
