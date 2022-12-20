@@ -30,6 +30,8 @@ resources:
     title: "Create Stack Apply Logs"
 ---
 
+Oracle Backend as a Service for Spring Cloud is available in the [OCI Marketplace](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911)
+
 ## Prerequisites
 
 You must meet the following prerequisites to use Oracle Backend as a Service for Spring Cloud:
@@ -63,17 +65,18 @@ Oracle Backend as a Service for Spring Cloud setup will install the following co
 
 ## Setup the environment
 
-1. Go to the [OCI Marketplace listing for Oracle Backend as a Service for Spring Cloud]().
+1. Go to the [OCI Marketplace listing for Oracle Backend as a Service for Spring Cloud](https://cloud.oracle.com/marketplace/application/138899911).
 
-    **replace this with oci mp image**
+    
     <!-- spellchecker-disable -->
-    {{< img name="oci-private-template-create-stack" size="large" lazy=false >}}
+    ![OCI Marketplace listing](../ebaas-mp-listing.png)
     <!-- spellchecker-enable -->
 
-    This will start the wizard to create the new stack. On the first page please choose a compartment to host your stack and select `Next`
+    Choose the target compartment, agree to the terms and click on the "Launch Stack" button.  This will start the wizard
+    to create the new stack. On the first page please choose a compartment to host your stack and select `Next`
 
     <!-- spellchecker-disable -->
-    {{< img name="oci-private-template-create-stack-info" size="large" lazy=false >}}
+    ![OCI Stack wizard page 1](../ebaas-stack-page1.png)
     <!-- spellchecker-enable -->
 
     Fill the configuration variables and select `Next`

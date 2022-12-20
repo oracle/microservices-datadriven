@@ -1,9 +1,5 @@
 ---
 title: Using the CLI
-resources:
-  - name: oci-cloud-shell
-    src: "oci-cloud-shell.png"
-    title: "OCI Cloud Shell icon"
 ---
 
 ## Setup
@@ -12,33 +8,26 @@ The Oracle Backend as a Service for Spring Cloud command-line tool, `oracle-spri
 Download the binary you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0) page
 and add it to your PATH environment variable.  You may like to rename the binary to remove the suffix.
 
-### Usage information
+### Using the CLI
 
-To start the CLI in interactive mode, run `oracle-spring` commands from your terminal window.
+
+1. Expose the Oracle Spring Cloud Admin Server that the CLI will call by using `port-forward`
+
+    ```shell
+    kubectl port-forward services/oracle-spring-admin -n oracle-spring-admin  8080:8080
+    ```
+
+2. Start the CLI in interactive mode by simply running `oracle-spring` from your terminal window.
 
 ```shell
-oracle-spring
+    oracle-spring
 ```
 
-A set of commands will simplify the installation of the application and bindings with the BaaS infrastructure. Declaring and using a namespace for the application that is then resourced with resource groups deployed in the BaaS platform. Commands are exposed as REST endpoints for IDE and console access and include the following:
+The CLI commands simplify the deployment of applications containing microservices as well as bindings with the resources they use.
 
-1. `oracle-spring create -n <app name>`
+Short descriptions of the available commands are as follows.
 
-    - Creates namespace
-    - (any other init)
-
-2. `oracle-spring deploy -n <app name> -s <resource name> -g <resource group name> --jar-path ./target/cloudbank-oracle-sample-0.1.0.jar`
-
-    - Containerizes app and maintains in repos
-    - Binds all necessary resources such as databases, messaging, etc.
-    - Creates services, etc. and deploys app in Kubernetes
-    - Creates unified observability for application including end to end metrics, logs, and tracing as well as Grafana dashboard
-
-3. `oracle-spring show -n <app name> -s <resource name> -g <resource group name>`
-
-    - Show details of app
-
-## Available Commands
+## AVAILABLE COMMANDS
 
 Built-In Commands
 - `help`: Display help about available commands
@@ -59,12 +48,27 @@ Commands
 - `list`: list/show details of application services
 - `delete`: delete a service or entire application/namespace
 
+An application is a namespace encompassing related microservices. For example, a "cloudbank" application may have "banktransfer", "frauddetection", etc. microservices deployed within it.
+The `create` command results in the creation of an application namespace.
+
+The `bind` command results in the automatic creation of a database schema for a given service/user and binds the information for that schema/database in the environment of the microservice for it to use.  The option of the prefix for the environment properties bound is also given.  For example, most Spring microservices us "spring.datasource".
+
+The `deploy` command takes `serviceName`, `appName`, and `jarLocation` as it's main arguments (`imageVersion` and `javaVersion` options are also provided).
+When the deploy command is issued, the microservice jar file is uploaded to the backend, a Docker image is created for the jar/microservice, and various Kubernetes resources such as deployment, service, etc. are also created.  
+This is all done automatically to simplify the development process and the management of the microservices by the backend.
+
+The `list` command can then be used show the details of the deployed microservice, etc.
+
+The `config` command can also be used to view and update configuration managed by the Spring Config Server.
+
+A common development workflow pattern is to `connect`, `change-password` (only if necessary), `create` (once per app/namespace), `config`, bind` (only if necessary), `deploy`, and `list`. 
+
+Further development and redeployment of the service can then be iterated upon by issuing the `deploy`, `list`, etc. commands. 
+
+
 The following is an example development workflow using the CLI.
 
-{{< hint type=[warning] icon=gdoc_fire title=NOTE >}}
-Note that Oracle Spring Admin console must first be accessible by issuing the following kubectl port-forward command:
-kubectl port-forward services/oracle-spring-admin -n  oracle-spring-admin  8080:8080
-{{< /hint >}}
+First, a connection is made to the Oracle server-side Spring Admin
 
 ```cmd
 oracle-spring:>connect
@@ -79,6 +83,7 @@ connect successful server version:121522 client version:121522
 ```
 
 </br>
+Then, an application namespace is created withe the `create` command. This namespace will contain the microservices that are deployed later.
 
 ```cmd
 oracle-spring:>create
@@ -88,6 +93,8 @@ application/namespace created successfully and image pull secret (registry-auth)
 ```
 
 </br>
+Next, the `bind` command will create a database schema/user for the service (if one hasn't already been created).
+The command will also create the Kubernetes secret and binding environment entries for the schema (these will be set in the Kubernetes deployment created with the `deploy` command).
 
 ```cmd
 oracle-spring:>bind
@@ -103,6 +110,7 @@ schema already exists for bankb and database secret (bankb-db-secrets) created s
 ```
 
 </br>
+The microservice jar will now be deployed with the `deploy` command which will create, build, and push an image for the microservice and create the necessary deployment, service, secret, etc. Kubernetes resources for the microservice.
 
 ```cmd
 oracle-spring:>deploy
@@ -123,35 +131,24 @@ successfully deployed
 ```
 
 </br>
+The `list` command can then be used to show details of the microservice deployed in the previous step.
 
 ```cmd
 oracle-spring:>list
 appname (defaults to cloudbank): 
 using default value... 
-name:bankb-7c7c59db96-2tjjm  status:class V1ContainerStatus {
-    containerID: cri-o://b82106811515f2226dffb85c82918318059f17f3403d002c52a488a26d94b5ff
-    image: iad.ocir.io/maacloud/baasdev/cloudbank/bankb:0.1
-    imageID: iad.ocir.io/maacloud/baasdev/cloudbank/bankb@sha256:6b50f2ec2a80100061fe93c48ca9620a44ec01c981520aa0b4a14f60f58513f4
-    lastState: class V1ContainerState {
-        running: null
-        terminated: null
-        waiting: null
-    }
+name:bankb-7c7c59db96-2tjjm 
     name: bankb
     ready: true
     restartCount: 0
     started: true
-    state: class V1ContainerState {
-        running: class V1ContainerStateRunning {
-            startedAt: 2022-12-16T19:06:21Z
-        }
-        terminated: null
-        waiting: null
-    }
-}name:bankb  kind:null
 ```
 
 </br>
+The `config` command can be used to view and update config managed by the Spring Config Server. 
+More information on the configuration server can be found here:
+
+* [Spring Config Server](../../platform/config/)
 
 ```cmd
 oracle-spring:>config

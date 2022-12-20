@@ -36,6 +36,8 @@ For more information on Jaeger, see the [Jaeger website](https://www.jaegertraci
 
 3. In the Jaeger UI, the `Search` Tab allow you list tracings using diverse criterias. Let's test with Customer Microservice
 
+    * If you deployed the [sample apps](../../sample-apps), exposed the customer service through the APISIX Gateway and called it at least once, you will
+      be able to find traces for it in Jaeger.
     * Select Service `customer` and Operation `/api/v1/customers`
     * Click on the search button -- Several traces will appear (one for each time you curl'ed)
 

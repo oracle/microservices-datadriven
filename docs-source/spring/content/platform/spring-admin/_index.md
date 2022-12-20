@@ -27,13 +27,16 @@ Spring Boot Admin is a web application, used for managing and monitoring Spring 
     * username: `admin`
     * password: `admin`
 
+    **Note:** Oracle recommends that you change the default password when you first login.  Even though the dashboard is not accessible externally,
+    we still recommend using strong passwords to maximize security.
+
     <!-- spellchecker-disable -->
     {{< img name="obaas-springadmin-apps" size="medium" lazy=false >}}
     <!-- spellchecker-enable -->
 
 3. On the web page, navigate to the applications tab
 
-    * Find the "slow" entry and click on it to expand it
+    * If you deployed the [sample apps](../../sample-apps), Find the "slow" entry and click on it to expand it
     * Click on the instance of the service
     * Notice you can see details about the service instance, metrics, configuration, etc.
 
