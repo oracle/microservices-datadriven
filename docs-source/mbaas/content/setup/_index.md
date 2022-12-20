@@ -7,7 +7,7 @@ You must meet the following prerequisites to use the MBaaS:
 
 * An OCI account in a tenancy with sufficient quota to create:
   * An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes
-  * A VCN with at least one public IP available
+  * A VCN with at least two public IP's available
   * A public load balancer
   * An Oracle Autonomous Database - Shared instance
   * At least one free OCI Auth Token (note that the maximum is two per user)
@@ -33,7 +33,7 @@ On the "Create Stack" page:
 On the "Configure variables" page, in the "Backend as a Service" section (see image below):
 
 * Set an application name if desired, if you do not, a randomized value will be generated.  This will be the name of the Parse application
-* Set an application ID if desired, if you do not, a randomized value will be generated.  This will be the Parse APPLICAION_ID
+* Set an application ID if desired, if you do not, a randomized value will be generated.  This will be the Parse APPLICATION_ID
 * Set a server master key if desired, if you do not, a randomized value will be generated.  This will the Parse MASTER_KEY
 * Change the dashboard user name if desired, note that this is case-sensitive
 * Provide a password for the dashboard user.  Oracle recommends that you use a strong password
@@ -51,7 +51,7 @@ recommends using the provided default values.
 In the "Database Options" section you can customize the database shape and the CIDR for client access. Note that you will not be able to access
 Datbase Actions if you change the network access to "PRIVATE_ENDPOINT_ACCESS"
 
-Once you have completed customization, click on the "Next" butotn. 
+Once you have completed customization, click on the "Next" button. 
 
 The "Review" page is displayed, check your settings and then click on the "Create" button to create the "stack" and run the Terraform apply
 action to create all of the associated resources.  

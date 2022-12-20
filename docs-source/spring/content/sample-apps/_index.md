@@ -1,38 +1,50 @@
-## Introduction
+---
+title: Sample Apps
+description: "Sample applications that demonstrate Oracle BaaS use case scenarios"
+resources:
+  - name: oci-container-repository-create
+    src: "oci-container-repository-create.png"
+    title: "OCI-R : Create Repository to host application image"
+    # params:
+    #   credits: "[Jay Mantri](https://unsplash.com/@jaymantri) on [Unsplash](https://unsplash.com/s/photos/forest)"
+  - name: obaas-sample-apps-build-result
+    src: "obaas-sample-apps-build-result.png"
+    title: "OBaaS : Sample Application build results"
+  - name: obaas-sample-apps-deploy
+    src: "obaas-sample-apps-deploy.png"
+    title: "OBaaS : All resources from the Sample Application deployed on Kubernetes"
 
-This lab helps you know how to test OBaaS using a set of sample applications.
+weight: 12
+draft: false
+---
 
-Estimated Time: 15 minutes
+Sample applications that demonstrate Oracle BaaS use case scenarios
 
-### Objectives
-
-* Deploy and test the Sample Applications
-
-### Prerequisites
+## Prerequisites
 
 * GraalVM or OpenJDK 17
 * Apache Maven 3.8+
 * A Docker Cli (to use for login against OCI-R)
 
-## Task 1: Make a Clone of the Sample Apps Source Code
+## Make a Clone of the Sample Apps Source Code
 
 Now that you have your OBaaS environment available and accessible, we can start deploying the Sample applications.
 
 1. To work with the application code, you need to make a clone from the OraHub repository using the following command.  
 
  ```shell
- <copy>
- git clone xxxxxxx
- </copy>
+ git clone https://xxxxx
  ```
 
 You should now see the directory `ebaas-sample-apps` in the directory that you created.
 
-## Task 2: Create OCI Repositories to Sample Applications
+## Create OCI Repositories to Sample Applications
 
 1. You have to create the repositories for each sample application in your compartment. The name of the repository should follow the pattern `<project name>/<app name>`
 
-    ![Create repository](images/oci-container-repository-create.png " ")
+    <!-- spellchecker-disable -->
+    {{< img name="oci-container-repository-create" size="large" lazy=false >}}
+    <!-- spellchecker-enable -->
 
     The repositories are:
 
@@ -53,7 +65,7 @@ You should now see the directory `ebaas-sample-apps` in the directory that you c
     password: <auth-token>
     ```
 
-## Task 3: Build Sample Applications and push container images
+## Build Sample Applications and push container images
 
 1. Update the `pom.xml` in the root directory to set your Container Registry. Configure region/tenancy and the right project name:
 
@@ -74,16 +86,16 @@ You should now see the directory `ebaas-sample-apps` in the directory that you c
 2. Run package using Maven with this profile:
 
     ```shell
-    <copy>
     mvn package -P build-docker-image
-    </copy>
     ```
 
     Finishing the build and push process, you will be able to see a message similar to the one below portraying that all modules were builded successfully.
 
-    ![Project build and push](images/obaas-sample-apps-build-result.png " ")
+    <!-- spellchecker-disable -->
+    {{< img name="obaas-sample-apps-build-result" size="large" lazy=false >}}
+    <!-- spellchecker-enable -->
 
-## Task 4: Update Images in Kubernetes Deployment Descriptors
+## Update Images in Kubernetes Deployment Descriptors
 
 You also have to update the address of images in application deployment descriptor editing each `01--deployment--APPLICATION_NAME.yaml`.
 
@@ -94,19 +106,30 @@ You also have to update the address of images in application deployment descript
         image: phx.ocir.io/mytenancy/myproject/app_image:latest
 ```
 
-## Task 5: Create Samples Applications Database Objects
+## Create Datbase Objects for each appliaction
+
+Connected to the ADB instance using aforementioned instructions execute the sql commands for each application to create application database. You have to edit sql script to add user database password.
+
+1. Customer microservice
+
+    * db-01-customer-create-user.sql
+
+2. Fraud microservice
+
+    * db-01-fraud-create-user.sql
+
+3. Notification microservice
+
+    * db-01-notification-create-user.sql
+    * db-03-notifications-db-queue.sql
+
+## Add appliactions configurations into Config Server Properties Table
 
 Connected to the ADB instance using aforementioned instructions execute the sql commands for each application but before we have to adjust configurations for the applications inside `db-02-<application>-configserver-props.sql` file.
 
 ```sql
 INSERT INTO CONFIGSERVER.PROPERTIES(APPLICATION, PROFILE, LABEL, PROP_KEY, "VALUE")
-VALUES ('APPLICATION_NAME', 'kube', 'latest', 'spring.datasource.url', 'jdbc:oracle:thin:@DATABASE_SERVICE?TNS_ADMIN=/oracle/tnsadmin');
-
-INSERT INTO CONFIGSERVER.PROPERTIES (APPLICATION, PROFILE, LABEL, PROP_KEY, VALUE)
-VALUES ('APPLICATION_NAME', 'kube', 'latest', 'spring.datasource.username', 'DATABASE_USERNAME');
-
-INSERT INTO CONFIGSERVER.PROPERTIES (APPLICATION, PROFILE, LABEL, PROP_KEY, VALUE)
-VALUES ('APPLICATION_NAME', 'kube', 'latest', 'spring.datasource.password', 'DATABASE_PASSWORD');
+VALUES ('APPLICATION_NAME', 'kube', 'latest', 'spring.datasource.url', 'jdbc:oracle:thin:@TNS_NAME?TNS_ADMIN=/oracle/tnsadmin');
 
 INSERT INTO CONFIGSERVER.PROPERTIES (APPLICATION, PROFILE, LABEL, PROP_KEY, VALUE)
 VALUES ('APPLICATION_NAME', 'kube', 'latest', 'spring.datasource.driver-class-name', 'oracle.jdbc.OracleDriver');
@@ -116,21 +139,17 @@ COMMIT;
 
 1. Customer microservice
 
-    * db-01-customer-create-user.sql
     * db-02-customer-configserver-props.sql
 
 2. Fraud microservice
 
-    * db-01-fraud-create-user.sql
     * db-02-fraud-configserver-props.sql
 
 3. Notification microservice
 
-    * db-01-notification-create-user.sql
     * db-02-notification-configserver-props.sql
-    * db-03-notifications-db-queue.sql
 
-## Task 6: Deploy Samples Applications
+## Deploy the applicatios
 
 1. Apply Application deployment using kubectl
 
@@ -157,9 +176,11 @@ COMMIT;
     kubectl --namespace=application get all -o wide
     ```
 
-    ![Sample Applications Deployment Result](images/obaas-sample-apps-deploy.png " ")
+    <!-- spellchecker-disable -->
+    {{< img name="obaas-sample-apps-deploy" size="medium" lazy=false >}}
+    <!-- spellchecker-enable -->
 
-## Task 7: Samples Applications Testing
+## Explore the applications
 
 ### Amigos Microservices APIs
 
@@ -188,8 +209,3 @@ COMMIT;
     ```shell
     curl  -X POST -H 'Content-Type: application/json' -d '{"fromAccount": "1", "toAccount": "2", "amount": 500}'   http://<ExternalIP>/banka/transfer
     ````
-
-> **Note:** We also made available a `postman` collection that you can import in your postman application. You have to adjust the endpoints for your environment. [Sample Applications Postman Collection](../../tests/obaas-tests.postman_collection.json)
-
-You may now proceed to the next lab.
-

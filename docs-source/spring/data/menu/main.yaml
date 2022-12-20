@@ -1,11 +1,40 @@
 main:
   - name: Setup
     ref: "/setup"
+  - name: Getting Started
+    ref: "/getting-started"
   - name: Sample apps
     ref: "/sample-apps"
-  - name: Operations
-    ref: "/operations"
+  - name: Developing Services
+    ref: "/development"
+    sub: 
+      - name: Using the CLI
+        ref: "/development/cli"
+  - name: Platform Services
+    ref: "/platform"
+    sub:
+      - name: API Gateway
+        ref: "/platform/apigw"
+      - name: Service Discovery
+        ref: "/platform/eureka"
+      - name: Configuration
+        ref: "/platform/config"
+      - name: Workflow
+        ref: "/platform/conductor"
+      - name: Spring Admin
+        ref: "/operations/spring-admin"
   - name: Observability
     ref: "/observability"
+    sub: 
+      - name: Metrics
+        ref: "/observability/metrics"
+      - name: Tracing
+        ref: "/observability/tracing"
+  - name: Security
+    ref: "/security"
+  - name: Database Access
+    ref: "/database"
+  - name: Kubernetes Access
+    ref: "/cluster-access"
   - name: Uninstall
     ref: "/uninstall"
