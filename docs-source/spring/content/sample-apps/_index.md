@@ -1,40 +1,53 @@
-## Introduction
+---
+title: Sample Apps
+resources:
+  - name: oci-container-repository-create
+    src: "oci-container-repository-create.png"
+    title: "OCI-R : Create Repository to host application image"
+    # params:
+    #   credits: "[Jay Mantri](https://unsplash.com/@jaymantri) on [Unsplash](https://unsplash.com/s/photos/forest)"
+  - name: obaas-sample-apps-build-result
+    src: "obaas-sample-apps-build-result.png"
+    title: "OBaaS : Sample Application build results"
+  - name: obaas-sample-apps-deploy
+    src: "obaas-sample-apps-deploy.png"
+    title: "OBaaS : All resources from the Sample Application deployed on Kubernetes"
 
-This lab helps you know how to test OBaaS using a set of sample applications.
+---
 
-Estimated Time: 15 minutes
+Sample applications that demonstrate Oracle Backend as a Service for Spring Cloud use cases.
 
-### Objectives
+## Prerequisites
 
-* Deploy and test the Sample Applications
-
-### Prerequisites
-
-* GraalVM or OpenJDK 17
+* GraalVM or OpenJDK 17  (OpenJDK Runtime Environment GraalVM CE 22.3.0 (build 17.0.5+8-jvmci-22.3-b08) recommended)
 * Apache Maven 3.8+
-* A Docker Cli (to use for login against OCI-R)
+* A Docker CLI (to login and push images to OCI Registry)
 
-## Task 1: Make a Clone of the Sample Apps Source Code
+## Make a Clone of the Sample Apps Source Code
 
-Now that you have your OBaaS environment available and accessible, we can start deploying the Sample applications.
+Now that you have your Oracle Backend as a Service for Spring Cloud environment available and accessible, we can start deploying the Sample applications.
 
 1. To work with the application code, you need to make a clone from the OraHub repository using the following command.  
 
  ```shell
- <copy>
- git clone xxxxxxx
- </copy>
+ git clone https://github.com/oracle/microservices-datadriven.git
+ cd mbaas-developer-preview/sample-spring-apps/
  ```
 
-You should now see the directory `ebaas-sample-apps` in the directory that you created.
+This directory contains the sample applications source code.
 
-## Task 2: Create OCI Repositories to Sample Applications
 
-1. You have to create the repositories for each sample application in your compartment. The name of the repository should follow the pattern `<project name>/<app name>`
+## Create OCI Repositories for Sample Applications
 
-    ![Create repository](images/oci-container-repository-create.png " ")
+1. Before building the sample applications, you have to create the repositories for each sample application in your compartment. The name of the repository should follow the pattern `<project name>/<app name>`
 
-    The repositories are:
+    **Note:** If you do not pre-create the repositories, they will be created in the root compartment on the first push.
+
+    <!-- spellchecker-disable -->
+    {{< img name="oci-container-repository-create" size="large" lazy=false >}}
+    <!-- spellchecker-enable -->
+
+    The required repositories are:
 
     * `<project>/banka`
     * `<project>/bankb`
@@ -43,9 +56,9 @@ You should now see the directory `ebaas-sample-apps` in the directory that you c
     * `<project>/notification`
     * `<project>/slow_service`
 
-2. Create the auth-token to login to OCI-R using kubectl following the instructions on [Generating an Auth Token to Enable Login to Oracle Cloud Infrastructure Registry](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionsgenerateauthtokens.htm)
+2. Create an Authentication Token to login to OCI Registry by following the instructions on [Generating an Auth Token to Enable Login to Oracle Cloud Infrastructure Registry](https://docs.oracle.com/en-us/iaas/Content/Functions/Tasks/functionsgenerateauthtokens.htm)
 
-3. Now you can login to OCI-R to allow you push the Sample Applications container images, executing the following commnad:
+3. Login to OCI Registry by executing the following command.  This will allow the build to push the sample applications' container images to OCI Registry.
 
     ```shell
     docker login <region>.ocir.io
@@ -53,9 +66,11 @@ You should now see the directory `ebaas-sample-apps` in the directory that you c
     password: <auth-token>
     ```
 
-## Task 3: Build Sample Applications and push container images
+    **Note:** Your username may not contain `oracleidentitycloudservice` if it is not a federated account, but the tenancy prefix will always be required.
 
-1. Update the `pom.xml` in the root directory to set your Container Registry. Configure region/tenancy and the right project name:
+## Build the sample applications and push container images
+
+1. Update the `pom.xml` in the root directory to match the OCI Registry repository prefix you used above. Configure the region, tenancy and project name:
 
     ```xml
         <properties>
@@ -74,18 +89,20 @@ You should now see the directory `ebaas-sample-apps` in the directory that you c
 2. Run package using Maven with this profile:
 
     ```shell
-    <copy>
     mvn package -P build-docker-image
-    </copy>
     ```
 
-    Finishing the build and push process, you will be able to see a message similar to the one below portraying that all modules were builded successfully.
+    When this completes the build and push process, you will see a message similar to the one below reporting that all modules were builded successfully.
 
-    ![Project build and push](images/obaas-sample-apps-build-result.png " ")
+    <!-- spellchecker-disable -->
+    {{< img name="obaas-sample-apps-build-result" size="large" lazy=false >}}
+    <!-- spellchecker-enable -->
 
-## Task 4: Update Images in Kubernetes Deployment Descriptors
+## Update Images in Kubernetes Deployment Descriptors
 
-You also have to update the address of images in application deployment descriptor editing each `01--deployment--APPLICATION_NAME.yaml`.
+You also have to update the address of images in application deployment descriptor to match the repositories you created.
+You can do this by editing the `01--deployment--APPLICATION_NAME.yaml` file in each of the service sub-directories.  Use the
+same values you used in the previous steps.
 
 ```yaml
     spec:
@@ -94,74 +111,123 @@ You also have to update the address of images in application deployment descript
         image: phx.ocir.io/mytenancy/myproject/app_image:latest
 ```
 
-## Task 5: Create Samples Applications Database Objects
+## Create Database Objects for each application
 
-Connected to the ADB instance using aforementioned instructions execute the sql commands for each application but before we have to adjust configurations for the applications inside `db-02-<application>-configserver-props.sql` file.
+You must create the database users and some objects that are required by the sample services. 
+Connect to the Oracle Autonmous Database instance using (using [these instructions](../database)) and execute the SQL statements
+for each application. You must edit each SQL script to add your desired password before running the statements.
 
-```sql
-INSERT INTO CONFIGSERVER.PROPERTIES(APPLICATION, PROFILE, LABEL, PROP_KEY, "VALUE")
-VALUES ('APPLICATION_NAME', 'kube', 'latest', 'spring.datasource.url', 'jdbc:oracle:thin:@DATABASE_SERVICE?TNS_ADMIN=/oracle/tnsadmin');
-
-INSERT INTO CONFIGSERVER.PROPERTIES (APPLICATION, PROFILE, LABEL, PROP_KEY, VALUE)
-VALUES ('APPLICATION_NAME', 'kube', 'latest', 'spring.datasource.username', 'DATABASE_USERNAME');
-
-INSERT INTO CONFIGSERVER.PROPERTIES (APPLICATION, PROFILE, LABEL, PROP_KEY, VALUE)
-VALUES ('APPLICATION_NAME', 'kube', 'latest', 'spring.datasource.password', 'DATABASE_PASSWORD');
-
-INSERT INTO CONFIGSERVER.PROPERTIES (APPLICATION, PROFILE, LABEL, PROP_KEY, VALUE)
-VALUES ('APPLICATION_NAME', 'kube', 'latest', 'spring.datasource.driver-class-name', 'oracle.jdbc.OracleDriver');
-
-COMMIT;
-```
+Each of the following files must be reviewed, updated, and then executed against the database (as the `ADMIN` user). 
 
 1. Customer microservice
 
     * db-01-customer-create-user.sql
-    * db-02-customer-configserver-props.sql
 
 2. Fraud microservice
 
     * db-01-fraud-create-user.sql
-    * db-02-fraud-configserver-props.sql
 
 3. Notification microservice
 
     * db-01-notification-create-user.sql
-    * db-02-notification-configserver-props.sql
     * db-03-notifications-db-queue.sql
 
-## Task 6: Deploy Samples Applications
+## Add applications configurations into Config Server Properties Table
 
-1. Apply Application deployment using kubectl
+You must create the application configuration entries that are required by the sample services. 
+Connect to the Oracle Autonmous Database instance using (using [these instructions](../database)) and execute the SQL statements
+for each application. You must edit each SQL script to match your environment before running the statements.
+The example below shows the lines that must be updated. You must replace the `TNS_NAME` with the correct name
+for your database.  If your database is called `OBAASDB` then the `TNS_NAME` is `OBAASDB_TP`.
+
+```sql
+INSERT INTO CONFIGSERVER.PROPERTIES(APPLICATION, PROFILE, LABEL, PROP_KEY, "VALUE")
+VALUES (
+    'APPLICATION_NAME', 
+    'kube', 
+    'latest', 
+    'spring.datasource.url', 
+    'jdbc:oracle:thin:@TNS_NAME?TNS_ADMIN=/oracle/tnsadmin'
+);
+```
+
+Each of the following files must be reviewed, updated, and then executed against the database (as the `ADMIN` user). 
+
+1. Customer microservice
+
+    * db-02-customer-configserver-props.sql
+
+2. Fraud microservice
+
+    * db-02-fraud-configserver-props.sql
+
+3. Notification microservice
+
+    * db-02-notification-configserver-props.sql
+
+## Add Kubernetes Secrets for each application's database credentials
+
+For each application, you need to create a Kuberentes secret containing the database username and password that you chose in the previous steps.
+You can create these secrets by executing the following commands (update the values to match your environment):
+
+1. Customer microservice
+
+    ```cmd
+     kubectl -n application \
+       create secret generic oracledb-creds-customer \
+       --from-literal=sping.db.username=CUSTOMER \
+       --from-literal=spring.db.password=[DB_PASSWORD]
+    ```
+
+2. Fraud microservice
+
+    ```cmd
+     kubectl -n application \
+       create secret generic oracledb-creds-fraud \
+       --from-literal=sping.db.username=FRAUD \
+       --from-literal=spring.db.password=[DB_PASSWORD]
+    ```
+
+3. Notification microservice
+
+    ```cmd
+     kubectl -n application \
+       create secret generic oracledb-creds-notification \
+       --from-literal=sping.db.username=NOTIFICATIONS \
+       --from-literal=spring.db.password=[DB_PASSWORD]
+    ```
+
+## Deploy the applications
+
+1. Apply each application's Kubernetes Deployment YAML using `kubectl`:
 
     ```shell
     cd <app dir>
     kubectl apply -f 01--deployment--<app name>.yaml
     ```
 
-2. Deploy Application Service using kubectl
+2. Deploy each application's Kuberenetes Service YAML using `kubectl`:
 
     ```shell
     kubectl apply -f 02--service--<app name>.yaml
     ```
 
-3. Deploy Application Ingress using kubectl
 
-    ```shell
-    kubectl apply -f 03--ingress--<app name>.yaml
-    ```
+After deploy all microservices, you will be able to check them executing on Kubernetes executing the following command:
 
-    After deploy all microservices, you will be able to check them executing on Kubernetes executing the following command:
+```shell
+kubectl --namespace=application get all -o wide
+```
 
-    ```shell
-    kubectl --namespace=application get all -o wide
-    ```
+<!-- spellchecker-disable -->
+{{< img name="obaas-sample-apps-deploy" size="medium" lazy=false >}}
+<!-- spellchecker-enable -->
 
-    ![Sample Applications Deployment Result](images/obaas-sample-apps-deploy.png " ")
+## Explore the applications
 
-## Task 7: Samples Applications Testing
+### TODO Microservices APIs
 
-### Amigos Microservices APIs
+**TODO** need to create a route before hitting them...
 
 1. Create customer
 
@@ -188,8 +254,3 @@ COMMIT;
     ```shell
     curl  -X POST -H 'Content-Type: application/json' -d '{"fromAccount": "1", "toAccount": "2", "amount": 500}'   http://<ExternalIP>/banka/transfer
     ````
-
-> **Note:** We also made available a `postman` collection that you can import in your postman application. You have to adjust the endpoints for your environment. [Sample Applications Postman Collection](../../tests/obaas-tests.postman_collection.json)
-
-You may now proceed to the next lab.
-

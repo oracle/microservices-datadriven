@@ -1,4 +1,4 @@
-baseURL = 'https://oracle.github.io/microservices-datadriven/springboot/'
+baseURL = 'https://oracle.github.io/microservices-datadriven/spring/'
 languageCode = 'en-us'
 title = 'Oracle Backend as a Service for Spring Cloud'
 theme = "hugo-geekdoc"
@@ -16,6 +16,8 @@ enableRobotsTXT = true
 # menu configuration
 [params]
   geekdocMenuBundle = true
+  geekdocCollapseAllSections = true
+  geekdocLegalNotice = "https://oss.oracle.com/licenses/upl/"  
 
 # Needed for mermaid shortcodes
 [markup]

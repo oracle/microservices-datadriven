@@ -1,0 +1,80 @@
+## Copyright (c) 2022, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notification
+  namespace: application
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notification
+  template:
+    metadata:
+      labels:
+        app: notification
+    spec:
+      containers:
+      - name: notification
+        image: phx.ocir.io/maacloud/obaaststps/notification:latest
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8088
+        env:
+          - name: spring.profiles.active
+            value: kube
+          - name: spring.config.label
+            value: latest
+          - name: spring.db.username
+            valueFrom:
+              secretKeyRef:
+                name: oracledb-creds-notification
+                key: spring.db.username
+          - name: spring.db.password
+            valueFrom:
+              secretKeyRef:
+                name: oracledb-creds-notification
+                key: spring.db.password
+          - name: config.server.url
+            value: http://config-server.config-server.svc.cluster.local:8080
+          - name: eureka.service-url
+            value: http://eureka.eureka.svc.cluster.local:8761/eureka
+          - name: zipkin.base-url
+            value: http://jaegertracing-collector.observability:9411
+          - name: db.service
+            valueFrom:
+              secretKeyRef:
+                name: obaaststpsdb-db-secrets
+                key: db.service
+          - name: db.password
+            valueFrom:
+              secretKeyRef:
+                name: obaaststpsdb-db-secrets
+                key: db.password
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8088
+          initialDelaySeconds: 60
+          timeoutSeconds: 10
+          periodSeconds: 10
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8088
+          initialDelaySeconds: 70
+          timeoutSeconds: 10
+          periodSeconds: 10
+          failureThreshold: 3
+        volumeMounts:
+          - name: tns-admin
+            mountPath: /oracle/tnsadmin
+      volumes:
+        - name: tns-admin
+          secret:
+            secretName: "obaaststpsdb-tns-admin"
+      imagePullSecrets:
+      - name: registry-auth
