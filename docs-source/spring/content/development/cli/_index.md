@@ -5,8 +5,8 @@ title: Using the CLI
 ## Setup
 
 The Oracle Backend as a Service for Spring Cloud command-line tool, `oracle-spring`, is available for Linux and Mac systems.
-Download the binary you want from the [Releases](https://github.com/OBaaS/OBaaS/releases/) page and add it to your PATH environment
-variable.
+Download the binary you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0) page
+and add it to your PATH environment variable.  You may like to rename the binary to remove the suffix.
 
 ### Using the CLI
 
@@ -28,26 +28,25 @@ The CLI commands simplify the deployment of applications containing microservice
 Short descriptions of the available commands are as follows.
 
 ## AVAILABLE COMMANDS
-```
+
 Built-In Commands
-       help: Display help about available commands
-       stacktrace: Display the full stacktrace of the last error.
-       clear: Clear the shell screen.
-       quit, exit: Exit the shell.
-       history: Display or save the history of previously run commands
-       version: Show version info
-       script: Read and execute commands from a file.
+- `help`: Display help about available commands
+- `stacktrace`: Display the full stacktrace of the last error.
+- `clear`: Clear the shell screen.
+- `quit`, `exit`: Exit the shell.
+- `history`: Display or save the history of previously run commands
+- `version`: Show version info
+- `script`: Read and execute commands from a file.
 
 Commands
-       connect: connect to the Oracle Spring admin console
-       change-password: change password for Oracle Spring
-       create: create an application/namespace
-       create-schema: create a schema/user and bind it to service deployment
-       config: view and modify application configuration
-       deploy: deploy a service
-       list: list/show details of application services
-       delete: delete a service or entire application/namespace
-```
+- `connect`: connect to the Oracle Spring admin console
+- `change-password`: change password for Oracle Spring
+- `create`: create an application/namespace
+- `create-schema`: create a schema/user and bind it to service deployment
+- `config`: view and modify application configuration
+- `deploy`: deploy a service
+- `list`: list/show details of application services
+- `delete`: delete a service or entire application/namespace
 
 An application is a namespace encompassing related microservices. For example, a "cloudbank" application may have "banktransfer", "frauddetection", etc. microservices deployed within it.
 The `create` command results in the creation of an application namespace.
