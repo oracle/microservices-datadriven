@@ -149,6 +149,28 @@ COMMIT;
 
     * db-02-notification-configserver-props.sql
 
+## Add Kubernetes Secret for each Application database credential
+
+For each application, you will have a user created and its pasword, you have to inform to the application these credential. In this current version of BaaS, you have to create a Kubernetes Secret to hold this credentials for each application. You make this executing the following commands:
+
+1. Customer microservice
+
+    ```cmd
+     k -n application create secret generic oracledb-creds-customer --from-literal=sping.db.username=CUSTOMER --from-literal=spring.db.password=[DB_PASSWORD]
+    ```
+
+2. Fraud microservice
+
+    ```cmd
+     k -n application create secret generic oracledb-creds-fraud --from-literal=sping.db.username=FRAUD --from-literal=spring.db.password=[DB_PASSWORD]
+    ```
+
+3. Notification microservice
+
+    ```cmd
+     k -n application create secret generic oracledb-creds-notification --from-literal=sping.db.username=NOTIFICATIONS --from-literal=spring.db.password=[DB_PASSWORD]
+    ```
+
 ## Deploy the applicatios
 
 1. Apply Application deployment using kubectl
