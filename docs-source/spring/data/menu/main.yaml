@@ -17,8 +17,8 @@ main:
         ref: "/platform/eureka"
       - name: Configuration
         ref: "/platform/config"
-      # - name: Workflow
-      #   ref: "/platform/conductor"
+      - name: Workflow
+        ref: "/platform/conductor"
       - name: Spring Admin
         ref: "/platform/spring-admin"
       - name: Using the CLI
