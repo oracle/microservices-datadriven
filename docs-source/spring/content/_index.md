@@ -30,6 +30,11 @@ Developers also have access to development/build time services and libraries inc
 - OpenFeign 
 - Open Telemetry (including automatic instrumentation)
 
+&nbsp;
+{{< hint type=[warning] icon=gdoc_fire title="Interested in Mobile or web apps too?" >}}
+Check out [Oracle Mobile Backend as a Service](https://oracle.github.io/microservices-datadriven/mbaas/)!
+{{< /hint >}}
+&nbsp;
 
 ## Developer Preview
 
