@@ -15,7 +15,7 @@
   <meta name="description" content="View application details using the Spring Admin Dashboard Spring Boot Admin is a web application, used for managing and monitoring Spring Boot applications. Each application is considered as a client and registers to the admin server. Behind the scenes, the magic is given by the Spring Boot Actuator endpoints.
 Exposing Spring Admin Dashboard using port-forward
 kubectl -n admin-server port-forward svc/admin-server 8989:8989 Open the Spring Admin Dashboard URL: http://localhost:8989
-username: admin password: admin Spring Admin DashboardI On the web page, navigate to the applications tab" />
+username: admin password: admin Note: Oracle recommends that you change the default password when you first login." />
 
     <title>Spring Admin | Oracle Backend as a Service for Spring Cloud</title>
 
@@ -44,7 +44,7 @@ username: admin password: admin Spring Admin DashboardI On the web page, navigat
   <meta property="og:description" content="View application details using the Spring Admin Dashboard Spring Boot Admin is a web application, used for managing and monitoring Spring Boot applications. Each application is considered as a client and registers to the admin server. Behind the scenes, the magic is given by the Spring Boot Actuator endpoints.
 Exposing Spring Admin Dashboard using port-forward
 kubectl -n admin-server port-forward svc/admin-server 8989:8989 Open the Spring Admin Dashboard URL: http://localhost:8989
-username: admin password: admin Spring Admin DashboardI On the web page, navigate to the applications tab" />
+username: admin password: admin Note: Oracle recommends that you change the default password when you first login." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/platform/spring-admin/" />
 
@@ -56,7 +56,7 @@ username: admin password: admin Spring Admin DashboardI On the web page, navigat
   <meta name="twitter:description" content="View application details using the Spring Admin Dashboard Spring Boot Admin is a web application, used for managing and monitoring Spring Boot applications. Each application is considered as a client and registers to the admin server. Behind the scenes, the magic is given by the Spring Boot Actuator endpoints.
 Exposing Spring Admin Dashboard using port-forward
 kubectl -n admin-server port-forward svc/admin-server 8989:8989 Open the Spring Admin Dashboard URL: http://localhost:8989
-username: admin password: admin Spring Admin DashboardI On the web page, navigate to the applications tab" />
+username: admin password: admin Note: Oracle recommends that you change the default password when you first login." />
 
 
   <script type="application/ld+json">
@@ -67,8 +67,8 @@ username: admin password: admin Spring Admin DashboardI On the web page, navigat
       "name": "Spring Admin",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/platform/spring-admin/",
       "headline": "Spring Admin",
-      "description": "View application details using the Spring Admin Dashboard Spring Boot Admin is a web application, used for managing and monitoring Spring Boot applications. Each application is considered as a client and registers to the admin server. Behind the scenes, the magic is given by the Spring Boot Actuator endpoints.\nExposing Spring Admin Dashboard using port-forward\nkubectl -n admin-server port-forward svc\/admin-server 8989:8989 Open the Spring Admin Dashboard URL: http:\/\/localhost:8989\nusername: admin password: admin Spring Admin DashboardI On the web page, navigate to the applications tab",
-      "wordCount" : "118",
+      "description": "View application details using the Spring Admin Dashboard Spring Boot Admin is a web application, used for managing and monitoring Spring Boot applications. Each application is considered as a client and registers to the admin server. Behind the scenes, the magic is given by the Spring Boot Actuator endpoints.\nExposing Spring Admin Dashboard using port-forward\nkubectl -n admin-server port-forward svc\/admin-server 8989:8989 Open the Spring Admin Dashboard URL: http:\/\/localhost:8989\nusername: admin password: admin Note: Oracle recommends that you change the default password when you first login.",
+      "wordCount" : "154",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -357,30 +357,6 @@ username: admin password: admin Spring Admin DashboardI On the web page, navigat
           
 
           
-        
-
-        
-      </li>
-    
-      
-      
-
-
-      <li>
-        
-        
-          
-          
-          
-          
-          
-          
-          
-
-          
-          
-
-          
             <input
               type="checkbox"
               
@@ -611,6 +587,27 @@ username: admin password: admin Spring Admin DashboardI On the web page, navigat
           
 
           
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/platform/conductor"
+                  class="gdoc-nav__entry"
+                >
+                  Workflow
+                </a>
+              </span>
+              
+            </label>
+          
         
 
         
@@ -634,6 +631,27 @@ username: admin password: admin Spring Admin DashboardI On the web page, navigat
           
           
 
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/platform/spring-admin"
+                  class="gdoc-nav__entry is-active"
+                >
+                  Spring Admin
+                </a>
+              </span>
+              
+            </label>
           
         
 
@@ -1122,6 +1140,8 @@ username: admin password: admin Spring Admin DashboardI On the web page, navigat
 <li>username: <code>admin</code></li>
 <li>password: <code>admin</code></li>
 </ul>
+<p><strong>Note:</strong> Oracle recommends that you change the default password when you first login.  Even though the dashboard is not accessible externally,
+we still recommend using strong passwords to maximize security.</p>
  <!-- spellchecker-disable -->
 
       
@@ -1155,7 +1175,10 @@ username: admin password: admin Spring Admin DashboardI On the web page, navigat
 <li>
 <p>On the web page, navigate to the applications tab</p>
 <ul>
-<li>Find the &ldquo;slow&rdquo; entry and click on it to expand it</li>
+<li>If you deployed the <a
+  class="gdoc-markdown__link"
+  href="../../sample-apps"
+>sample apps</a>, Find the &ldquo;slow&rdquo; entry and click on it to expand it</li>
 <li>Click on the instance of the service</li>
 <li>Notice you can see details about the service instance, metrics, configuration, etc.</li>
 </ul>
@@ -1280,30 +1303,6 @@ username: admin password: admin Spring Admin DashboardI On the web page, navigat
 
     
     
-  
-    
-    
-
-    
-    
-      
-      
-      
-
-      
-        
-      
-      
-
-      
-
-      
-
-      
-    
-
-    
-    
       
   
   
@@ -1422,6 +1421,9 @@ username: admin password: admin Spring Admin DashboardI On the web page, navigat
       
 
       
+        
+        
+      
 
       
     
@@ -1443,6 +1445,9 @@ username: admin password: admin Spring Admin DashboardI On the web page, navigat
       
       
 
+      
+        
+        
       
 
       
@@ -1638,9 +1643,27 @@ username: admin password: admin Spring Admin DashboardI On the web page, navigat
 
 
   <span class="gdoc-page__nav">
+    
+      <a
+        class="gdoc-page__nav--prev flex align-center"
+        href="/microservices-datadriven/spring/platform/conductor/"
+        title="Workflow"
+      >
+        <i class="gdoc-icon">gdoc_arrow_left_alt</i>
+        Workflow
+      </a>
     
   </span>
   <span class="gdoc-page__nav">
+    
+      <a
+        class="gdoc-page__nav--next flex align-center"
+        href="/microservices-datadriven/spring/development/cli/"
+        title="Using the CLI"
+      >
+        Using the CLI
+        <i class="gdoc-icon">gdoc_arrow_right_alt</i>
+      </a>
     
   </span>
 

@@ -62,7 +62,7 @@ Deploy and Secure Sample Apps APIs using APISIX Oracle Backend as a Service for 
       "url" : "https://oracle.github.io/microservices-datadriven/spring/platform/apigw/",
       "headline": "API Gateway",
       "description": "Apache APISIX is an open-source cloud native API platform that supports the full lifecycle of API management including publishing, traffic management, deployment strategies, and circuit breakers.\nDeploy and Secure Sample Apps APIs using APISIX Oracle Backend as a Service for Spring Cloud deploys APISIX Gateway and Dashboard in the apisix namespace. The gateway is exposed through the external load balancer and ingress controller. To access the APISIX Dashboard, you must use kubectl port-foward to create a secure channel to service\/apisix-dashboard.",
-      "wordCount" : "320",
+      "wordCount" : "364",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -351,30 +351,6 @@ Deploy and Secure Sample Apps APIs using APISIX Oracle Backend as a Service for 
           
 
           
-        
-
-        
-      </li>
-    
-      
-      
-
-
-      <li>
-        
-        
-          
-          
-          
-          
-          
-          
-          
-
-          
-          
-
-          
             <input
               type="checkbox"
               
@@ -605,6 +581,27 @@ Deploy and Secure Sample Apps APIs using APISIX Oracle Backend as a Service for 
           
 
           
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/platform/conductor"
+                  class="gdoc-nav__entry"
+                >
+                  Workflow
+                </a>
+              </span>
+              
+            </label>
+          
         
 
         
@@ -628,6 +625,27 @@ Deploy and Secure Sample Apps APIs using APISIX Oracle Backend as a Service for 
           
           
 
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/platform/spring-admin"
+                  class="gdoc-nav__entry"
+                >
+                  Spring Admin
+                </a>
+              </span>
+              
+            </label>
           
         
 
@@ -1184,20 +1202,22 @@ we still recommend using strong passwords to maximize security.</p>
 </li>
 </ol>
 <div class="gdoc-page__anchorwrap">
-    <h2 id="expose-spring-application-through-api-gateway-and-load-balancer">
-        Expose Spring application through API Gateway and Load Balancer
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/apigw/#expose-spring-application-through-api-gateway-and-load-balancer" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Expose Spring application through API Gateway and Load Balancer" aria-label="Anchor to: Expose Spring application through API Gateway and Load Balancer" href="#expose-spring-application-through-api-gateway-and-load-balancer">
+    <h2 id="exposing-a-spring-application-through-the-api-gateway-and-load-balancer">
+        Exposing a Spring application through the API Gateway and Load Balancer
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/apigw/#exposing-a-spring-application-through-the-api-gateway-and-load-balancer" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Exposing a Spring application through the API Gateway and Load Balancer" aria-label="Anchor to: Exposing a Spring application through the API Gateway and Load Balancer" href="#exposing-a-spring-application-through-the-api-gateway-and-load-balancer">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>
 </div>
-<p>Now that the application is running, you want to expose it to the outside world.  This is done by creating something called a &ldquo;route&rdquo; in the APISIX API Gateway.</p>
+<p>Once you have your application deployed and running, you may want to expose it to the outside world. Some applications may not need to be
+exposed if they are only called by other applications in the platform.
+To expose your application, you create a &ldquo;route&rdquo; in the APISIX API Gateway.</p>
 <ol>
 <li>
 <p>Create a Route to the Service</p>
 <ul>
 <li>
-<p>Then click on the &ldquo;Routes&rdquo; option in the menu on the left hand side.</p>
+<p>In the APISIX Dashboard, click on the &ldquo;Routes&rdquo; option in the menu on the left hand side.</p>
   <!-- spellchecker-disable -->
 
           
@@ -1232,14 +1252,18 @@ we still recommend using strong passwords to maximize security.</p>
 <p>Click on the &ldquo;Create&rdquo; button to create a new route.</p>
 </li>
 <li>
-<p>Fill out the following details (anything not mentioned here can be left at the default value):</p>
+<p>Fill out the necessary details (anything not mentioned here can be left at the default value). For example, for the &ldquo;slow service&rdquo;
+included in the <a
+  class="gdoc-markdown__link"
+  href="../../sample-apps"
+>sample apps</a>:</p>
 <ul>
 <li>name = slow</li>
 <li>path = /fruit*</li>
 <li>method = get, options</li>
 <li>upstream type = service discovery</li>
-<li>discovery type =eureka</li>
-<li>service name = SLOW     (note that this is case sensitive, it is on Eureka Service dashboard)</li>
+<li>discovery type = eureka</li>
+<li>service name = SLOW     (note that this is case sensitive, this is the key from the Eureka dashboard)</li>
 </ul>
   <!-- spellchecker-disable -->
 
@@ -1401,11 +1425,11 @@ we still recommend using strong passwords to maximize security.</p>
 <p>Test a Route to the Service</p>
 <ul>
 <li>
-<p>Get the APISIX Gateway External IP</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl --namespace apisix get ingress/apisix-gateway
+<p>Get the APISIX Gateway External IP using this command:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl -n ingress-nginx get svc ingress-nginx-controller
 </span></span></code></pre></div></li>
 <li>
-<p>Call API using APISIX Gateway address plus path</p>
+<p>Call API using APISIX Gateway address plus path:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">curl http://APISIX_IP/fruit
 </span></span></code></pre></div><p>You should get &ldquo;banana&rdquo; or &ldquo;fallback fruit is apple&rdquo; back as the response.</p>
 </li>
@@ -1430,30 +1454,6 @@ we still recommend using strong passwords to maximize security.</p>
   
   
 
-  
-    
-    
-
-    
-    
-      
-      
-      
-
-      
-        
-      
-      
-
-      
-
-      
-
-      
-    
-
-    
-    
   
     
     

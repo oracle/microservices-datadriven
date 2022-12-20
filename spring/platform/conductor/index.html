@@ -12,11 +12,12 @@
 <meta name="generator" content="Hugo 0.108.0">
 
 
-  <meta name="description" content="Oracle Backend as a Service for Spring Cloud includes a number of Spring platform components that provide services to applications deployed into the platform.
-For more details, please read about:
-API Gateway Service Discovery Configuration Conductor/Workflow " />
+  <meta name="description" content="Oracle Backend as a Service for Spring Cloud includes Netflix Conductor along with the Netflix Conductor UI. Conductor is a popular workflow solution that works well with Spring Boot microservices and the Oracle database.
+Full documentation on Conductor can be found here:
+Netflix Conductor Documentation Accessing Conductor UI Expose the Oracle Spring Cloud Admin Server that the CLI will call by using port-forward
+kubectl port-forward services/conductor-ui -n conductor-ui 5000:5000 Access the Conductor UI." />
 
-    <title>Platform | Oracle Backend as a Service for Spring Cloud</title>
+    <title>Netflix Conductor Workflow | Oracle Backend as a Service for Spring Cloud</title>
 
     <link rel="icon" type="image/svg+xml" href="/microservices-datadriven/spring/favicon/favicon.svg" />
 <link
@@ -37,23 +38,25 @@ API Gateway Service Discovery Configuration Conductor/Workflow " />
     
   <meta
     property="og:title"
-    content="Platform"
+    content="Netflix Conductor Workflow"
   />
   <meta property="og:site_name" content="Oracle Backend as a Service for Spring Cloud" />
-  <meta property="og:description" content="Oracle Backend as a Service for Spring Cloud includes a number of Spring platform components that provide services to applications deployed into the platform.
-For more details, please read about:
-API Gateway Service Discovery Configuration Conductor/Workflow " />
+  <meta property="og:description" content="Oracle Backend as a Service for Spring Cloud includes Netflix Conductor along with the Netflix Conductor UI. Conductor is a popular workflow solution that works well with Spring Boot microservices and the Oracle database.
+Full documentation on Conductor can be found here:
+Netflix Conductor Documentation Accessing Conductor UI Expose the Oracle Spring Cloud Admin Server that the CLI will call by using port-forward
+kubectl port-forward services/conductor-ui -n conductor-ui 5000:5000 Access the Conductor UI." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/platform/" />
+<meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/platform/conductor/" />
 
 <meta property="article:section" content="Platform" />
 
 
   <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="Platform" />
-  <meta name="twitter:description" content="Oracle Backend as a Service for Spring Cloud includes a number of Spring platform components that provide services to applications deployed into the platform.
-For more details, please read about:
-API Gateway Service Discovery Configuration Conductor/Workflow " />
+<meta name="twitter:title" content="Netflix Conductor Workflow" />
+  <meta name="twitter:description" content="Oracle Backend as a Service for Spring Cloud includes Netflix Conductor along with the Netflix Conductor UI. Conductor is a popular workflow solution that works well with Spring Boot microservices and the Oracle database.
+Full documentation on Conductor can be found here:
+Netflix Conductor Documentation Accessing Conductor UI Expose the Oracle Spring Cloud Admin Server that the CLI will call by using port-forward
+kubectl port-forward services/conductor-ui -n conductor-ui 5000:5000 Access the Conductor UI." />
 
 
   <script type="application/ld+json">
@@ -61,16 +64,16 @@ API Gateway Service Discovery Configuration Conductor/Workflow " />
       "@context": "http://schema.org",
       "@type": "TechArticle",
       "articleSection": "Platform",
-      "name": "Platform",
-      "url" : "https://oracle.github.io/microservices-datadriven/spring/platform/",
-      "headline": "Platform",
-      "description": "Oracle Backend as a Service for Spring Cloud includes a number of Spring platform components that provide services to applications deployed into the platform.\nFor more details, please read about:\nAPI Gateway Service Discovery Configuration Conductor\/Workflow ",
-      "wordCount" : "36",
+      "name": "Netflix Conductor Workflow",
+      "url" : "https://oracle.github.io/microservices-datadriven/spring/platform/conductor/",
+      "headline": "Netflix Conductor Workflow",
+      "description": "Oracle Backend as a Service for Spring Cloud includes Netflix Conductor along with the Netflix Conductor UI. Conductor is a popular workflow solution that works well with Spring Boot microservices and the Oracle database.\nFull documentation on Conductor can be found here:\nNetflix Conductor Documentation Accessing Conductor UI Expose the Oracle Spring Cloud Admin Server that the CLI will call by using port-forward\nkubectl port-forward services\/conductor-ui -n conductor-ui 5000:5000 Access the Conductor UI.",
+      "wordCount" : "139",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
           "@type": "WebPage",
-          "@id": "https://oracle.github.io/microservices-datadriven/spring/platform/"
+          "@id": "https://oracle.github.io/microservices-datadriven/spring/platform/conductor/"
       },
       "copyrightHolder" : "Oracle Backend as a Service for Spring Cloud",
       "copyrightYear" : "0001",
@@ -154,7 +157,7 @@ API Gateway Service Discovery Configuration Conductor/Workflow " />
   href="/microservices-datadriven/spring/custom.css"
   media="all"
 />
-  <link href="https://oracle.github.io/microservices-datadriven/spring/platform/" rel="canonical" type="text/html" />
+  <link href="https://oracle.github.io/microservices-datadriven/spring/platform/conductor/" rel="canonical" type="text/html" />
 
 <!-- Made with Geekdoc theme https://github.com/thegeeklab/hugo-geekdoc -->
 
@@ -412,7 +415,7 @@ API Gateway Service Discovery Configuration Conductor/Workflow " />
                 
                 <a
                   href="/microservices-datadriven/spring/platform"
-                  class="gdoc-nav__entry is-active"
+                  class="gdoc-nav__entry"
                 >
                   Platform Services
                 </a>
@@ -597,7 +600,7 @@ API Gateway Service Discovery Configuration Conductor/Workflow " />
                 
                 <a
                   href="/microservices-datadriven/spring/platform/conductor"
-                  class="gdoc-nav__entry"
+                  class="gdoc-nav__entry is-active"
                 >
                   Workflow
                 </a>
@@ -1089,7 +1092,15 @@ API Gateway Service Discovery Configuration Conductor/Workflow " />
     
   
   
-    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/' href='/microservices-datadriven/spring/'><span itemprop='name'>Oracle Backend as a Service for Spring Cloud - Developer Preview</span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>Platform</span><meta itemprop='position' content='4' /></li>
+    
+    
+    
+    
+  
+  
+    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/' href='/microservices-datadriven/spring/'><span itemprop='name'>Oracle Backend as a Service for Spring Cloud - Developer Preview</span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/platform/' href='/microservices-datadriven/spring/platform/'><span itemprop='name'>Platform</span></a><meta itemprop='position' content='4' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>Netflix Conductor Workflow</span><meta itemprop='position' content='5' /></li>
+  
+
   
 
   
@@ -1105,27 +1116,129 @@ API Gateway Service Discovery Configuration Conductor/Workflow " />
   <article
     class="gdoc-markdown gdoc-markdown__align--left"
   >
-    <h1>Platform</h1>
-    <p>Oracle Backend as a Service for Spring Cloud includes a number of Spring platform components
-that provide services to applications deployed into the platform.</p>
-<p>For more details, please read about:</p>
+    <h1>Netflix Conductor Workflow</h1>
+    <p>Oracle Backend as a Service for Spring Cloud includes Netflix Conductor along with the Netflix Conductor UI.
+Conductor is a popular workflow solution that works well with Spring Boot microservices and the Oracle database.</p>
+<p>Full documentation on Conductor can be found here:</p>
 <ul>
 <li><a
   class="gdoc-markdown__link"
-  href="./apigw"
->API Gateway</a></li>
+  href="https://conductor.netflix.com/"
+>Netflix Conductor Documentation</a></li>
+</ul>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="accessing-conductor-ui">
+        Accessing Conductor UI
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/conductor/#accessing-conductor-ui" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Accessing Conductor UI" aria-label="Anchor to: Accessing Conductor UI" href="#accessing-conductor-ui">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<ol>
+<li>
+<p>Expose the Oracle Spring Cloud Admin Server that the CLI will call by using <code>port-forward</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl port-forward services/conductor-ui -n conductor-ui  5000:5000
+</span></span></code></pre></div></li>
+<li>
+<p>Access the Conductor UI.</p>
+</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">http://localhost:5000
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h3 id="using-conductor-ui">
+        Using Conductor UI
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/conductor/#using-conductor-ui" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Using Conductor UI" aria-label="Anchor to: Using Conductor UI" href="#using-conductor-ui">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>The UI can be used to view and exercise workflows.</p>
+<ul>
 <li><a
   class="gdoc-markdown__link"
-  href="./eureka"
->Service Discovery</a></li>
+  href="https://conductor.netflix.com/configuration/workflowdef.html"
+>Conductor Workflow Documentation</a></li>
+</ul>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/conductor/conductor_ui_workflows.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/conductor/conductor_ui_workflows_huac5bc9d1be0ef1d9b135417ac0f6194e_220245_1200x0_resize_box_3.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/conductor/conductor_ui_workflows_huac5bc9d1be0ef1d9b135417ac0f6194e_220245_1800x0_resize_box_3.png"
+              alt="Conductor UI Workflows"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Conductor UI Workflows
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<p>Workflows consist of tasks and Spring Boot microservices can be called as/from tasks in order to participate in these workflows.</p>
+<ul>
 <li><a
   class="gdoc-markdown__link"
-  href="./config"
->Configuration</a></li>
+  href="https://conductor.netflix.com/configuration/taskdef.html"
+>Conductor Task Documentation</a></li>
+</ul>
+<p>The UI can also be used to view these tasks.</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/conductor/conductor_ui_tasks.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/conductor/conductor_ui_tasks_hu378351f9b2f7f9df9b8033192fc1ddce_336004_1200x0_resize_box_3.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/conductor/conductor_ui_tasks_hu378351f9b2f7f9df9b8033192fc1ddce_336004_1800x0_resize_box_3.png"
+              alt="Conductor UI Tasks"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Conductor UI Tasks
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<div class="gdoc-page__anchorwrap">
+    <h3 id="samples">
+        Samples
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/conductor/#samples" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Samples" aria-label="Anchor to: Samples" href="#samples">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>&ldquo;A First Workflow&rdquo; example can  be found here:</p>
+<ul>
 <li><a
   class="gdoc-markdown__link"
-  href="./conductor"
->Conductor/Workflow</a></li>
+  href="https://conductor.netflix.com/labs/running-first-workflow.html"
+>running-first-workflow</a></li>
 </ul>
 
   </article>
@@ -1211,9 +1324,6 @@ that provide services to applications deployed into the platform.</p>
       
 
       
-        
-        
-      
 
       
     
@@ -1239,9 +1349,6 @@ that provide services to applications deployed into the platform.</p>
       
       
 
-      
-        
-        
       
 
       
@@ -1317,6 +1424,9 @@ that provide services to applications deployed into the platform.</p>
       
 
       
+        
+        
+      
 
       
     
@@ -1338,6 +1448,9 @@ that provide services to applications deployed into the platform.</p>
       
       
 
+      
+        
+        
       
 
       
@@ -1560,11 +1673,11 @@ that provide services to applications deployed into the platform.</p>
     
       <a
         class="gdoc-page__nav--prev flex align-center"
-        href="/microservices-datadriven/spring/sample-apps/"
-        title="Sample apps"
+        href="/microservices-datadriven/spring/platform/config/"
+        title="Configuration"
       >
         <i class="gdoc-icon">gdoc_arrow_left_alt</i>
-        Sample apps
+        Configuration
       </a>
     
   </span>
@@ -1572,10 +1685,10 @@ that provide services to applications deployed into the platform.</p>
     
       <a
         class="gdoc-page__nav--next flex align-center"
-        href="/microservices-datadriven/spring/platform/apigw/"
-        title="API Gateway"
+        href="/microservices-datadriven/spring/platform/spring-admin/"
+        title="Spring Admin"
       >
-        API Gateway
+        Spring Admin
         <i class="gdoc-icon">gdoc_arrow_right_alt</i>
       </a>
     

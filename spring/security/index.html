@@ -71,7 +71,7 @@ Services deployed to the platofrm are not exposed through the gateway automatica
       "url" : "https://oracle.github.io/microservices-datadriven/spring/security/",
       "headline": "Security",
       "description": "The Oracle Backend as a Service for Spring Cloud has the following security characteristics:\nAll access to the database is done using Mutual TLS (Database Wallet). The username, password and URI are stored in Kuberentes secrets.\nAccessing the dashboards can only be done using port forwarding.\nThe only “public” exposure is the APISIX Gateway (note that the dashboard is not exposed publicly).\nServices deployed to the platofrm are not exposed through the gateway automatically.",
-      "wordCount" : "183",
+      "wordCount" : "153",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -360,30 +360,6 @@ Services deployed to the platofrm are not exposed through the gateway automatica
           
 
           
-        
-
-        
-      </li>
-    
-      
-      
-
-
-      <li>
-        
-        
-          
-          
-          
-          
-          
-          
-          
-
-          
-          
-
-          
             <input
               type="checkbox"
               
@@ -614,6 +590,27 @@ Services deployed to the platofrm are not exposed through the gateway automatica
           
 
           
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/platform/conductor"
+                  class="gdoc-nav__entry"
+                >
+                  Workflow
+                </a>
+              </span>
+              
+            </label>
+          
         
 
         
@@ -637,6 +634,27 @@ Services deployed to the platofrm are not exposed through the gateway automatica
           
           
 
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/platform/spring-admin"
+                  class="gdoc-nav__entry"
+                >
+                  Spring Admin
+                </a>
+              </span>
+              
+            </label>
           
         
 
@@ -1113,10 +1131,7 @@ Services deployed to the platofrm are not exposed through the gateway automatica
 </li>
 <li>
 <p>A customer application can only access service running in the platform via the APISIX GW. The IP Address for the GW can be determined by executing the following command:</p>
-<p><strong>TODO</strong> this is wrong - should be the external IP of the LB for NGINX - not the ing</p>
-<pre tabindex="0"><code>kubectl --namespace apisix get ingress/apisix-gateway
-NAME             CLASS   HOSTS   ADDRESS          PORTS   AGE
-apisix-gateway   nginx   *       1.2.3.4          80      8m7s
+<pre tabindex="0"><code>kubectl -n ingress-nginx get svc ingress-nginx-controller
 </code></pre></li>
 <li>
 <p>The customer application can be secured using Spring Security, e.g., Spring OAuth 2.0 Resource Server. An external authorization server is recommended (for example Okta, Oauth0)</p>
@@ -1146,30 +1161,6 @@ apisix-gateway   nginx   *       1.2.3.4          80      8m7s
   
   
 
-  
-    
-    
-
-    
-    
-      
-      
-      
-
-      
-        
-      
-      
-
-      
-
-      
-
-      
-    
-
-    
-    
   
     
     
