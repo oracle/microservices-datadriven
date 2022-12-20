@@ -1,0 +1,53 @@
+spring:
+  applications:
+    name: kafka-producer
+  profiles:
+    active: kubernetes
+  cloud:
+    kubernetes:
+      reload:
+        enabled: true
+        mode: POLLING
+        period: 2000
+      config:
+        name: kafka-producer-config
+        namespace: lab
+
+logging:
+  level:
+    org:
+      springframework: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      enabled: true
+    restart:
+      enabled: true
+    info:
+      enabled: true
+
+kafka-server-config:
+  bootstrap-servers: broker:29092
+  #schema-registry-url-key:
+  #schema-registry-url:
+
+kafka-topic-config:
+  topic-name: KAFKA_TOPIC_NAME
+  num-of-partitions: 3
+  replication-factor: 1
+
+kafka-producer-config:
+  key-serializer-class: org.apache.kafka.common.serialization.StringSerializer
+  value-serializer-class: org.apache.kafka.common.serialization.StringSerializer
+  compression-type: snappy
+  acks: all
+  batch-size: 16384
+  batch-size-boost-factor: 100
+  linger-ms: 5
+  request-timeout-ms: 60000
+  retry-count: 5

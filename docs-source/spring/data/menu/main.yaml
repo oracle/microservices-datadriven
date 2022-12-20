@@ -1,0 +1,11 @@
+main:
+  - name: Setup
+    ref: "/setup"
+  - name: Sample apps
+    ref: "/sample-apps"
+  - name: Operations
+    ref: "/operations"
+  - name: Observability
+    ref: "/observability"
+  - name: Uninstall
+    ref: "/uninstall"

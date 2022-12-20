@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+
+##
+## Copyright (c) 2021 Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>oracle-developers-kafka-samples</artifactId>
+        <groupId>com.oracle.developers.kafka</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>oracle-developers-kafka-consumer</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>Oracle Developers :: W8022 :: EDApp Kafka Consumer</name>
+    <description>
+        Workshop 8022 - Simplify Event-driven Apps with TxEventQ in Oracle Database (with Kafka interoperability)
+        Samples code for Developers using Spring Boot and Kafka.
+        Consumer Submodule
+    </description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.oracle.developers.kafka</groupId>
+            <artifactId>oracle-developers-kafka-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.avro</groupId>
+            <artifactId>avro</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <!-- <executions>
+                    <execution>
+                        <id>repackage</id>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <finalName>kafka-consumer-${project.version}</finalName>
+                        </configuration>
+                    </execution>
+                </executions> -->
+            </plugin>
+        </plugins>
+    </build>
+</project>
