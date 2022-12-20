@@ -1,17 +1,23 @@
+---
+title: "Service Discovery"
+resources:
+  - name: obaas-eureka-dashboard
+    src: "obaas-eureka-dashboard.png"
+    title: "Eureka web user interface"
+---
 
-## Validate the application registered with Eureka
 
-Spring Cloud Netflix provides Netflix OSS integrations for Spring Boot apps through autoconfiguration and binding to the Spring Environment and other Spring programming model idioms. The patterns provided include Service Discovery (Netflix Eureka service registry).
+Oracle Backend as a Service for Spring Cloud includes the Spring Eureka Service Registry, which is an application that stores information about client services/applications. Typically, each microservice will register with the Eureka server at startup and the Eureka server will maintain a list of all active instances of the service, including their ports and IP addresses.  This information can be looked up by other services using a well-known key.  This allows services to interact with each other without needing to know each others addresses at development/deployment time.
 
-Eureka Server is an application that holds the information about all client-service applications. Every microservice will register into the Eureka server and Eureka server knows all the client applications running on each port and IP address.
+### Access the Eureka web user interface
 
-1. Exposing Eureka Dashboard using `port-forward`
+1. Expose the Eureka web user interface using `port-forward`
 
     ```shell
-    kubectl port-forward -n apisix svc/apisix-dashboard 8761:8761
+    kubectl port-forward -n eureka svc/eureka 8080:8080
     ```
 
-2. Open the Eureka Dashboard URL: <http://localhost:8761>
+2. Open the Eureka web user interface: <http://localhost:8080>
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-eureka-dashboard" size="medium" lazy=false >}}

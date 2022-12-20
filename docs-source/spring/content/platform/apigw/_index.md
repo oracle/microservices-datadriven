@@ -27,11 +27,11 @@ resources:
     title: "APISIX Routes Step5"
 ---
 
-[Apache APISIX](https://apisix.apache.org) is an open source cloud native API platform that support the full lifecycle of API management as publishing, traffic management, deployment strategies, circuit breaking, and so on.
+[Apache APISIX](https://apisix.apache.org) is an open-source cloud native API platform that supports the full lifecycle of API management including publishing, traffic management, deployment strategies, and circuit breakers.
 
 ## Deploy and Secure Sample Apps APIs using APISIX
 
-Oracle Backend as a Service for Spring Cloud deploys APISIX inside `apisix` namespace as detailed bellow and to you have access to APISIX Dashboard for this version of OBaaS you have to request a port-foward from the `service/apisix-dashboard`.
+Oracle Backend as a Service for Spring Cloud deploys APISIX Gateway and Dashboard in the `apisix` namespace. The gateway is exposed through the external load balancer and ingress controller.  To access the APISIX Dashboard, you must use `kubectl port-foward` to create a secure channel to `service/apisix-dashboard`.
 
 ```shell
 kubectl --namespace apisix get all
@@ -51,6 +51,9 @@ kubectl --namespace apisix get all
 
     * username: `admin`
     * password: `admin`
+
+    **Note:** Oracle recommends that you change the default password when you first login.  Even though the dashboard is not accessible externally,
+    we still recommend using strong passwords to maximize security.
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-apisix-login" size="tiny" lazy=false >}}
