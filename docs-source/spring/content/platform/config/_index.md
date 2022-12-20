@@ -1,3 +1,6 @@
+---
+title: Configuration
+---
 
 Oracle Backend as a Service for Spring Cloud includes the Spring Config which provides server and client-side support for externalized
 configuration in a distributed system. The Spring Config Server provides a central place to manage external properties for applications
