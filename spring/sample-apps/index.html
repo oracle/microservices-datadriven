@@ -62,7 +62,7 @@ Prerequisites GraalVM or OpenJDK 17 (OpenJDK Runtime Environment GraalVM CE 22.3
       "url" : "https://oracle.github.io/microservices-datadriven/spring/sample-apps/",
       "headline": "Sample Apps",
       "description": "Sample applications that demonstrate Oracle Backend as a Service for Spring Cloud use cases.\nPrerequisites GraalVM or OpenJDK 17 (OpenJDK Runtime Environment GraalVM CE 22.3.0 (build 17.0.5\u002b8-jvmci-22.3-b08) recommended) Apache Maven 3.8\u002b A Docker CLI (to login and push images to OCI Registry) Make a Clone of the Sample Apps Source Code Now that you have your Oracle Backend as a Service for Spring Cloud environment available and accessible, we can start deploying the Sample applications.",
-      "wordCount" : "858",
+      "wordCount" : "1035",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1438,43 +1438,48 @@ You can create these secrets by executing the following commands (update the val
         </a>
     </h2>
 </div>
-<div class="gdoc-page__anchorwrap">
-    <h3 id="todo-microservices-apis">
-        TODO Microservices APIs
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/sample-apps/#todo-microservices-apis" class="gdoc-page__anchor clip flex align-center" title="Anchor to: TODO Microservices APIs" aria-label="Anchor to: TODO Microservices APIs" href="#todo-microservices-apis">
-            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
-        </a>
-    </h3>
-</div>
-<p><strong>TODO</strong> need to create a route before hitting them&hellip;</p>
-<ol>
-<li>
-<p>Create customer</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">curl -X POST -H <span class="s1">&#39;Content-Type: application/json&#39;</span> -d <span class="s1">&#39;{&#34;firstName&#34;: &#34;bob&#34;, &#34;lastName&#34;: &#34;smith&#34;, &#34;email&#34;: &#34;bob@bob.com&#34;}&#39;</span> http://&lt;ExternalIP&gt;/customer/api/v1/customers
-</span></span></code></pre></div></li>
-<li>
-<p>Send notification</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">curl -X POST -H <span class="s1">&#39;Content-Type: application/json&#39;</span> -d <span class="s1">&#39;{&#34;toCustomerId&#34;: 1, &#34;toCustomerEmail&#34;: &#34;bob@bob.com&#34;, &#34;message&#34;: &#34;hi bob&#34;}&#39;</span> http://&lt;ExternalIP&gt;/notification/api/v1/notify
-</span></span></code></pre></div></li>
-<li>
-<p>Fraud check</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">curl -X GET http://&lt;ExternalIP&gt;/fraud/api/v1/fraud-check/1
-</span></span></code></pre></div></li>
-</ol>
-<div class="gdoc-page__anchorwrap">
-    <h3 id="cloudbank-apis">
-        CloudBank APIs
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/sample-apps/#cloudbank-apis" class="gdoc-page__anchor clip flex align-center" title="Anchor to: CloudBank APIs" aria-label="Anchor to: CloudBank APIs" href="#cloudbank-apis">
-            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
-        </a>
-    </h3>
-</div>
-<ol>
-<li>
-<p>Transfer</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">curl  -X POST -H <span class="s1">&#39;Content-Type: application/json&#39;</span> -d <span class="s1">&#39;{&#34;fromAccount&#34;: &#34;1&#34;, &#34;toAccount&#34;: &#34;2&#34;, &#34;amount&#34;: 500}&#39;</span>   http://&lt;ExternalIP&gt;/banka/transfer
-</span></span></code></pre></div></li>
-</ol>
+<p>Before using the application, you need to expose them by creating a route in APISIX API Gateway.</p>
+<p>To expose the customer service, see the documentation on <a
+  class="gdoc-markdown__link"
+  href="../platform/apigw/#exposing-a-spring-application-through-the-api-gateway-and-load-balancer"
+>how to create a route</a>
+and use these values:</p>
+<ul>
+<li>name = customer</li>
+<li>path = /api/v1/customers*</li>
+<li>method = get, post, options</li>
+<li>upstream type = service discovery</li>
+<li>discovery type = eureka</li>
+<li>service name = CUSTOMER    (note that this is case sensitive, this is the key from the Eureka dashboard)</li>
+</ul>
+<p>Once the route is created, you can access the service using the load balancer IP address (as described on that page) using a call
+like this, for example, to create a customer:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">curl -X POST <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>     -H <span class="s1">&#39;Content-Type: application/json&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>     -d <span class="s1">&#39;{&#34;firstName&#34;: &#34;bob&#34;, &#34;lastName&#34;: &#34;smith&#34;, &#34;email&#34;: &#34;bob@bob.com&#34;}&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>     http://1.2.3.4&gt;/customer/api/v1/customers
+</span></span></code></pre></div><p>After you call the service a few times, you might also like to explore the various platform services, including:</p>
+<ul>
+<li><a
+  class="gdoc-markdown__link"
+  href="../platform/spring-admin"
+>Spring Admin Dashboard</a> where you can see details of the service including metrics, configuration,
+what endpoints it exposes, what Spring beans are used, etc.</li>
+<li><a
+  class="gdoc-markdown__link"
+  href="../platform/eureka"
+>Spring Eureka Service Registry</a> where you can see which services are registered and discoverable</li>
+<li><a
+  class="gdoc-markdown__link"
+  href="../observability/metrics"
+>Prometheus and Grafana</a> which allow you to view metrics and dashboards about the service performance</li>
+<li><a
+  class="gdoc-markdown__link"
+  href="../observability/tracing"
+>Jaeger</a> which will let you view traces of service executions.  For the cusomter service, look for a
+trace of the POST to <code>/api/v1/customers</code> above.  It will show interaction between the customer, fraud and notification services
+and each one writing to its own data store.  The notification service also enqueues a message.</li>
+</ul>
 
   </article>
 
