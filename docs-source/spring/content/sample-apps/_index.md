@@ -97,15 +97,17 @@ You can determine the `<region>`  vaule from this page: [Region code](https://do
 
     When the command completes the build and push process (it will take afew minutes), you will see a message similar to the one below reporting that all modules were builded successfully.
 
+    If you get a build failure, re-run the `mvn package -P build-docker-image` command.
+
     <!-- spellchecker-disable -->
     {{< img name="obaas-sample-apps-build-result" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
 ## Update Images in Kubernetes Deployment Descriptors
 
-You also have to update the address of images in application deployment descriptor to match the repositories you created.
-You can do this by editing the `01--deployment--APPLICATION_NAME.yaml` file in each of the service sub-directories.  Use the
-same values you used in the previous steps.
+You need to update the address of the images in application deployment descriptor to match the repositories you created.
+You do this by editing the `01--deployment--APPLICATION_NAME.yaml` file in each of the service sub-directories (a total of 6).  Use the
+same values you used when editing the `pom.xml` file in the previous steps.
 
 ```yaml
     spec:
@@ -134,6 +136,10 @@ Each of the following files must be reviewed, updated, and then executed against
 
     * db-01-notification-create-user.sql
     * db-03-notifications-db-queue.sql
+
+### Using the CLI to Create Users and Schemas
+
+A bunch of bind commands?
 
 ## Add applications configurations into Config Server Properties Table
 
@@ -167,6 +173,102 @@ Each of the following files must be reviewed, updated, and then executed against
 3. Notification microservice
 
     * db-02-notification-configserver-props.sql
+
+### Using the CLI to create Config Server Entries
+
+Go the the OCI Console and find out the database name, you're going to need this when creating the Config Server entries. Setup and start the CLI using the [following instructions](../development/cli/). You need to do the following steps following the CLI Instructions:
+
+* Download the binaries
+* Expose the Oracle Spring Admin Server using `port-forward`
+* Start the CLI
+* Connect to the Oracle Spring Admin Server
+* Add entries for the Config Server
+
+#### Customer Entries
+
+Replace the DB_NAME in the value field with your daatabase name.
+
+```text
+oracle-spring:>config
+command ([c]reate, [r]ead all, [u]pdate, [d]elete): c
+application: customer
+label: latest
+profile: kube
+propKey: spring.datasource.url
+value: jdbc:oracle:thin:@?TNS_ADMIN=/oracle/tnsadmin
+{"id":3,"application":"customer","profile":"latest","label":"kube","propKey":"spring.datasource.url","value":"jdbc:oracle:thin:@DB_NAME?TNS_ADMIN=/oracle/tnsadmin","createdOn":"2022-12-21T18:46:25.000+00:00","createdBy":"CONFIGSERVER"}
+```
+
+```text
+oracle-spring:>config
+command ([c]reate, [r]ead all, [u]pdate, [d]elete): c
+application: customer
+label: latest
+profile: kube
+propKey: spring.datasource.driver-class-name
+value: oracle.jdbc.OracleDriver
+{"id":4,"application":"customer","profile":"latest","label":"kube","propKey":"spring.datasource.driver-class-name","value":"oracle.jdbc.OracleDriver","createdOn":"2022-12-21T18:47:42.000+00:00","createdBy":"CONFIGSERVER"}
+```
+
+#### Fraud Entries
+
+Replace the DB_NAME in the value field with your daatabase name.
+
+```text
+oracle-spring:>config
+command ([c]reate, [r]ead all, [u]pdate, [d]elete): c
+application: fraud
+label: latest
+profile: kube
+propKey: spring.datasource.url
+value: jdbc:oracle:thin:@DB_NAME?TNS_ADMIN=/oracle/tnsadmin
+{"id":5,"application":"fraud","profile":"latest","label":"kube","propKey":"spring.datasource.url","value":"jdbc:oracle:thin:@DB_NAME?TNS_ADMIN=/oracle/tnsadmin","createdOn":"2022-12-21T18:49:46.000+00:00","createdBy":"CONFIGSERVER"}
+```
+
+```text
+oracle-spring:>config
+command ([c]reate, [r]ead all, [u]pdate, [d]elete): c
+application: fraud
+label: latest
+profile: kube
+propKey: spring.datasource.driver-class-name
+value: oracle.jdbc.OracleDriver
+{"id":6,"application":"fraud","profile":"latest","label":"kube","propKey":"spring.datasource.driver-class-name","value":"oracle.jdbc.OracleDriver","createdOn":"2022-12-21T18:50:22.000+00:00","createdBy":"CONFIGSERVER"}
+```
+
+#### Notification Entries
+
+Replace the DB_NAME in the value field with your daatabase name.
+
+```text
+oracle-spring:>config
+command ([c]reate, [r]ead all, [u]pdate, [d]elete): c
+application: notification
+label: latest
+profile: kube
+propKey: spring.datasource.url
+value: jdbc:oracle:thin:@DB_NAME?TNS_ADMIN=/oracle/tnsadmin
+{"id":7,"application":"notification","profile":"latest","label":"kube","propKey":"spring.datasource.url","value":"jdbc:oracle:thin:@DB_NAME?TNS_ADMIN=/oracle/tnsadmin","createdOn":"2022-12-21T18:51:47.000+00:00","createdBy":"CONFIGSERVER"}
+```
+
+```text
+oracle-spring:>config
+command ([c]reate, [r]ead all, [u]pdate, [d]elete): c
+application: notification
+label: latest
+profile: kube
+propKey: spring.datasource.driver-class-name
+value: oracle.jdbc.OracleDriver
+{"id":8,"application":"notification","profile":"latest","label":"kube","propKey":"spring.datasource.driver-class-name","value":"oracle.jdbc.OracleDriver","createdOn":"2022-12-21T18:52:20.000+00:00","createdBy":"CONFIGSERVER"}
+```
+
+#### Verify the entries
+
+```text
+oracle-spring:>config
+command ([c]reate, [r]ead all, [u]pdate, [d]elete): r
+[{"id":1,"application":"atael","profile":"dev","label":"latest","propKey":"test-property","value":"This is the test-property value","createdOn":"2022-12-21T16:14:44.000+00:00","createdBy":"ADMIN"},{"id":2,"application":"atael","profile":"dev","label":"latest","propKey":"test-property-2","value":"This is the test-property-2 value","createdOn":"2022-12-21T16:14:44.000+00:00","createdBy":"ADMIN"},{"id":3,"application":"customer","profile":"latest","label":"kube","propKey":"spring.datasource.url","value":"jdbc:oracle:thin:@DB_NAME?TNS_ADMIN=/oracle/tnsadmin","createdOn":"2022-12-21T18:46:25.000+00:00","createdBy":"CONFIGSERVER"},{"id":4,"application":"customer","profile":"latest","label":"kube","propKey":"spring.datasource.driver-class-name","value":"oracle.jdbc.OracleDriver","createdOn":"2022-12-21T18:47:42.000+00:00","createdBy":"CONFIGSERVER"},{"id":5,"application":"fraud","profile":"latest","label":"kube","propKey":"spring.datasource.url","value":"jdbc:oracle:thin:@DB_NAME?TNS_ADMIN=/oracle/tnsadmin","createdOn":"2022-12-21T18:49:46.000+00:00","createdBy":"CONFIGSERVER"},{"id":6,"application":"fraud","profile":"latest","label":"kube","propKey":"spring.datasource.driver-class-name","value":"oracle.jdbc.OracleDriver","createdOn":"2022-12-21T18:50:22.000+00:00","createdBy":"CONFIGSERVER"},{"id":7,"application":"notification","profile":"latest","label":"kube","propKey":"spring.datasource.url","value":"jdbc:oracle:thin:@DB_NAME?TNS_ADMIN=/oracle/tnsadmin","createdOn":"2022-12-21T18:51:47.000+00:00","createdBy":"CONFIGSERVER"},{"id":8,"application":"notification","profile":"latest","label":"kube","propKey":"spring.datasource.driver-class-name","value":"oracle.jdbc.OracleDriver","createdOn":"2022-12-21T18:52:20.000+00:00","createdBy":"CONFIGSERVER"}]
+```
 
 ## Add Kubernetes Secrets for each application's database credentials
 
@@ -258,4 +360,3 @@ After you call the service a few times, you might also like to explore the vario
 * [Jaeger](../observability/tracing) which will let you view traces of service executions.  For the cusomter service, look for a
   trace of the POST to `/api/v1/customers` above.  It will show interaction between the customer, fraud and notification services
   and each one writing to its own data store.  The notification service also enqueues a message.
-  

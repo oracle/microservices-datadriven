@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: slow
-        image: phx.ocir.io/maacloud/obaaststps/slow_service:latest
+        image: iad.ocir.io/maacloud/atest/slow_service:latest
         imagePullPolicy: Always
         ports:
           - containerPort: 8077

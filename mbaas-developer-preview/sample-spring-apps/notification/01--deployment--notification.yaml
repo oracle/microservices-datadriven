@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: notification
-        image: phx.ocir.io/maacloud/obaaststps/notification:latest
+        image: iad.ocir.io/maacloud/atest/notification:latest
         imagePullPolicy: Always
         ports:
           - containerPort: 8088
