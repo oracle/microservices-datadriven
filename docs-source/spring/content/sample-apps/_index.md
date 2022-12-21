@@ -225,32 +225,34 @@ kubectl --namespace=application get all -o wide
 
 ## Explore the applications
 
-### TODO Microservices APIs
+Before using the application, you need to expose them by creating a route in APISIX API Gateway.
 
-**TODO** need to create a route before hitting them...
+To expose the customer service, see the documentation on [how to create a route](../platform/apigw/#exposing-a-spring-application-through-the-api-gateway-and-load-balancer)
+and use these values: 
 
-1. Create customer
+* name = customer
+* path = /api/v1/customers*
+* method = get, post, options
+* upstream type = service discovery
+* discovery type = eureka
+* service name = CUSTOMER    (note that this is case sensitive, this is the key from the Eureka dashboard)
 
-    ```shell
-    curl -X POST -H 'Content-Type: application/json' -d '{"firstName": "bob", "lastName": "smith", "email": "bob@bob.com"}' http://<ExternalIP>/customer/api/v1/customers
-    ```
+Once the route is created, you can access the service using the load balancer IP address (as described on that page) using a call
+like this, for example, to create a customer:
 
-2. Send notification
+```shell
+curl -X POST \
+     -H 'Content-Type: application/json' \
+     -d '{"firstName": "bob", "lastName": "smith", "email": "bob@bob.com"}' \
+     http://1.2.3.4>/customer/api/v1/customers
+```
 
-    ```shell
-    curl -X POST -H 'Content-Type: application/json' -d '{"toCustomerId": 1, "toCustomerEmail": "bob@bob.com", "message": "hi bob"}' http://<ExternalIP>/notification/api/v1/notify
-    ```
+After you call the service a few times, you might also like to explore the various platform services, including:
 
-3. Fraud check
-
-    ```shell
-    curl -X GET http://<ExternalIP>/fraud/api/v1/fraud-check/1
-    ```
-
-### CloudBank APIs
-
-1. Transfer
-
-    ```shell
-    curl  -X POST -H 'Content-Type: application/json' -d '{"fromAccount": "1", "toAccount": "2", "amount": 500}'   http://<ExternalIP>/banka/transfer
-    ````
+* [Spring Admin Dashboard](../platform/spring-admin) where you can see details of the service including metrics, configuration,
+  what endpoints it exposes, what Spring beans are used, etc.
+* [Spring Eureka Service Registry](../platform/eureka) where you can see which services are registered and discoverable
+* [Prometheus and Grafana](../observability/metrics) which allow you to view metrics and dashboards about the service performance
+* [Jaeger](../observability/tracing) which will let you view traces of service executions.  For the cusomter service, look for a
+  trace of the POST to `/api/v1/customers` above.  It will show interaction between the customer, fraud and notification services
+  and each one writing to its own data store.  The notification service also enqueues a message.
