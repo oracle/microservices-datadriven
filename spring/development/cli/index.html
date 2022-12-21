@@ -13,7 +13,7 @@
 
 
   <meta name="description" content="Setup The Oracle Backend as a Service for Spring Cloud command-line tool, oracle-spring, is available for Linux and Mac systems. Download the binary you want from the Releases page and add it to your PATH environment variable. You may like to rename the binary to remove the suffix.
-If you&rsquo;re environment is a Linux or Mac machine you need to execute chmod &#43;x on the downloaded binary. ALso if your environment is a Mac you need execute the following command sudo xattr -r -d com." />
+If you&rsquo;re environment is a Linux or Mac machine you need to execute chmod &#43;x on the downloaded binary. Also if your environment is a Mac you need execute the following command sudo xattr -r -d com." />
 
     <title>Using the CLI | Oracle Backend as a Service for Spring Cloud</title>
 
@@ -40,7 +40,7 @@ If you&rsquo;re environment is a Linux or Mac machine you need to execute chmod 
   />
   <meta property="og:site_name" content="Oracle Backend as a Service for Spring Cloud" />
   <meta property="og:description" content="Setup The Oracle Backend as a Service for Spring Cloud command-line tool, oracle-spring, is available for Linux and Mac systems. Download the binary you want from the Releases page and add it to your PATH environment variable. You may like to rename the binary to remove the suffix.
-If you’re environment is a Linux or Mac machine you need to execute chmod &#43;x on the downloaded binary. ALso if your environment is a Mac you need execute the following command sudo xattr -r -d com." />
+If you’re environment is a Linux or Mac machine you need to execute chmod &#43;x on the downloaded binary. Also if your environment is a Mac you need execute the following command sudo xattr -r -d com." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/development/cli/" />
 
@@ -50,7 +50,7 @@ If you’re environment is a Linux or Mac machine you need to execute chmod &#43
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Using the CLI" />
   <meta name="twitter:description" content="Setup The Oracle Backend as a Service for Spring Cloud command-line tool, oracle-spring, is available for Linux and Mac systems. Download the binary you want from the Releases page and add it to your PATH environment variable. You may like to rename the binary to remove the suffix.
-If you’re environment is a Linux or Mac machine you need to execute chmod &#43;x on the downloaded binary. ALso if your environment is a Mac you need execute the following command sudo xattr -r -d com." />
+If you’re environment is a Linux or Mac machine you need to execute chmod &#43;x on the downloaded binary. Also if your environment is a Mac you need execute the following command sudo xattr -r -d com." />
 
 
   <script type="application/ld+json">
@@ -61,8 +61,8 @@ If you’re environment is a Linux or Mac machine you need to execute chmod &#43
       "name": "Using the CLI",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/development/cli/",
       "headline": "Using the CLI",
-      "description": "Setup The Oracle Backend as a Service for Spring Cloud command-line tool, oracle-spring, is available for Linux and Mac systems. Download the binary you want from the Releases page and add it to your PATH environment variable. You may like to rename the binary to remove the suffix.\nIf you’re environment is a Linux or Mac machine you need to execute chmod \u002bx on the downloaded binary. ALso if your environment is a Mac you need execute the following command sudo xattr -r -d com.",
-      "wordCount" : "865",
+      "description": "Setup The Oracle Backend as a Service for Spring Cloud command-line tool, oracle-spring, is available for Linux and Mac systems. Download the binary you want from the Releases page and add it to your PATH environment variable. You may like to rename the binary to remove the suffix.\nIf you’re environment is a Linux or Mac machine you need to execute chmod \u002bx on the downloaded binary. Also if your environment is a Mac you need execute the following command sudo xattr -r -d com.",
+      "wordCount" : "867",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1138,7 +1138,7 @@ Download the binary you want from the <a
   href="https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0"
 >Releases</a> page
 and add it to your PATH environment variable.  You may like to rename the binary to remove the suffix.</p>
-<p>If you&rsquo;re environment is a Linux or Mac machine you need to execute <code>chmod +x</code> on the downloaded binary. ALso if your environment is a Mac you need execute the following command <code>sudo xattr -r -d com.apple.quarantine &lt;downloaded-file&gt;</code> otherwise will you get a security warning and the CLI will not work.</p>
+<p>If you&rsquo;re environment is a Linux or Mac machine you need to execute <code>chmod +x</code> on the downloaded binary. Also if your environment is a Mac you need execute the following command <code>sudo xattr -r -d com.apple.quarantine &lt;downloaded-file&gt;</code> otherwise will you get a security warning and the CLI will not work.</p>
 <div class="gdoc-page__anchorwrap">
     <h3 id="using-the-cli">
         Using the CLI
@@ -1196,7 +1196,7 @@ When the deploy command is issued, the microservice jar file is uploaded to the 
 This is all done automatically to simplify the development process and the management of the microservices by the backend.</p>
 <p>The <code>list</code> command can then be used show the details of the deployed microservice, etc.</p>
 <p>The <code>config</code> command can also be used to view and update configuration managed by the Spring Config Server.</p>
-<p>A common development workflow pattern is to <code>connect</code>, <code>change-password</code> (only if necessary), <code>create</code> (once per app/namespace), <code>config</code>, bind<code>(only if necessary),</code>deploy<code>, and </code>list`.</p>
+<p>A common development workflow pattern is to <code>connect</code>, <code>change-password</code> (only if necessary), <code>create</code> (once per app/namespace), <code>config</code>, <code>bind</code> (only if necessary), <code>deploy</code>, and <code>list</code>.</p>
 <p>Further development and redeployment of the service can then be iterated upon by issuing the <code>deploy</code>, <code>list</code>, etc. commands.</p>
 <p>The following is an example development workflow using the CLI.</p>
 <p>First, a connection is made to the Oracle server-side Spring Admin</p>
@@ -1208,15 +1208,13 @@ This is all done automatically to simplify the development process and the manag
 </span></span><span class="line"><span class="cl">Password (defaults to oraclespring): 
 </span></span><span class="line"><span class="cl">using default value... 
 </span></span><span class="line"><span class="cl">connect successful server version:121522 client version:121522
-</span></span></code></pre></div></br>
-Then, an application namespace is created withe the `create` command. This namespace will contain the microservices that are deployed later.
+</span></span></code></pre></div><p>Then, an application namespace is created withe the <code>create</code> command. This namespace will contain the microservices that are deployed later.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oracle-spring:<span class="p">&gt;</span>create
 </span></span><span class="line"><span class="cl">appName (defaults to cloudbank): 
 </span></span><span class="line"><span class="cl">using default value... 
 </span></span><span class="line"><span class="cl">application/namespace created successfully and image pull secret (registry-auth) created successfully
-</span></span></code></pre></div></br>
-Next, the `bind` command will create a database schema/user for the service (if one hasn't already been created).
-The command will also create the Kubernetes secret and binding environment entries for the schema (these will be set in the Kubernetes deployment created with the `deploy` command).
+</span></span></code></pre></div><p>Next, the <code>bind</code> command will create a database schema/user for the service (if one hasn&rsquo;t already been created).
+The command will also create the Kubernetes secret and binding environment entries for the schema (these will be set in the Kubernetes deployment created with the <code>deploy</code> command).</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oracle-spring:<span class="p">&gt;</span>bind
 </span></span><span class="line"><span class="cl">appName (defaults to cloudbank): 
 </span></span><span class="line"><span class="cl">using default value... 
@@ -1227,8 +1225,7 @@ The command will also create the Kubernetes secret and binding environment entri
 </span></span><span class="line"><span class="cl">springBindingPrefix (defaults to spring.datasource): 
 </span></span><span class="line"><span class="cl">using default value... 
 </span></span><span class="line"><span class="cl">schema already exists for bankb and database secret (bankb-db-secrets) created successfully
-</span></span></code></pre></div></br>
-The microservice jar will now be deployed with the `deploy` command which will create, build, and push an image for the microservice and create the necessary deployment, service, secret, etc. Kubernetes resources for the microservice.
+</span></span></code></pre></div><p>The microservice jar will now be deployed with the <code>deploy</code> command which will create, build, and push an image for the microservice and create the necessary deployment, service, secret, etc. Kubernetes resources for the microservice.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oracle-spring:<span class="p">&gt;</span>deploy
 </span></span><span class="line"><span class="cl">isRedeploy (has already been deployed) (defaults to true): false
 </span></span><span class="line"><span class="cl">serviceName (defaults to bankb): 
@@ -1244,8 +1241,7 @@ The microservice jar will now be deployed with the `deploy` command which will c
 </span></span><span class="line"><span class="cl">building and pushing image... docker build and push successful
 </span></span><span class="line"><span class="cl">creating deployment and service... create deployment and service  = bankb, appName = cloudbank, isRedeploy = false successful
 </span></span><span class="line"><span class="cl">successfully deployed
-</span></span></code></pre></div></br>
-The `list` command can then be used to show details of the microservice deployed in the previous step.
+</span></span></code></pre></div><p>The <code>list</code> command can then be used to show details of the microservice deployed in the previous step.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oracle-spring:<span class="p">&gt;</span>list
 </span></span><span class="line"><span class="cl">appname (defaults to cloudbank): 
 </span></span><span class="line"><span class="cl">using default value... 
@@ -1254,9 +1250,8 @@ The `list` command can then be used to show details of the microservice deployed
 </span></span><span class="line"><span class="cl">    ready: true
 </span></span><span class="line"><span class="cl">    restartCount: 0
 </span></span><span class="line"><span class="cl">    started: true
-</span></span></code></pre></div></br>
-The `config` command can be used to view and update config managed by the Spring Config Server. 
-More information on the configuration server can be found here:
+</span></span></code></pre></div><p>The <code>config</code> command can be used to view and update config managed by the Spring Config Server.
+More information on the configuration server can be found here:</p>
 <ul>
 <li><a
   class="gdoc-markdown__link"

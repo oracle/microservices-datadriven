@@ -62,7 +62,7 @@ Prerequisites GraalVM or OpenJDK 17 (OpenJDK Runtime Environment GraalVM CE 22.3
       "url" : "https://oracle.github.io/microservices-datadriven/spring/sample-apps/",
       "headline": "Sample Apps",
       "description": "Sample applications that demonstrate Oracle Backend as a Service for Spring Cloud use cases.\nPrerequisites GraalVM or OpenJDK 17 (OpenJDK Runtime Environment GraalVM CE 22.3.0 (build 17.0.5\u002b8-jvmci-22.3-b08) recommended) Apache Maven 3.8\u002b A Docker CLI (to login and push images to OCI Registry) Make a Clone of the Sample Apps Source Code Now that you have your Oracle Backend as a Service for Spring Cloud environment available and accessible, we can start deploying the Sample applications.",
-      "wordCount" : "1035",
+      "wordCount" : "1094",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1204,12 +1204,17 @@ if (!doNotTrack) {
 </li>
 <li>
 <p>Login to OCI Registry by executing the following command.  This will allow the build to push the sample applications&rsquo; container images to OCI Registry.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker login &lt;region&gt;.ocir.io
-</span></span><span class="line"><span class="cl">username: &lt;tenancy&gt;/oracleidentitycloudservice/&lt;username&gt;
-</span></span><span class="line"><span class="cl">password: &lt;auth-token&gt;
-</span></span></code></pre></div><p><strong>Note:</strong> Your username may not contain <code>oracleidentitycloudservice</code> if it is not a federated account, but the tenancy prefix will always be required.</p>
 </li>
 </ol>
+<p><strong>Note:</strong> The docker deamon must be running in your environment</p>
+<p>You can determine the <code>&lt;region&gt;</code>  vaule from this page: <a
+  class="gdoc-markdown__link"
+  href="https://docs.oracle.com/en-us/iaas/Content/Registry/Concepts/registryprerequisites.htm#regional-availability"
+>Region code</a>. For example the US East (Ashburn) has the region code <code>iad</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">    docker login &lt;region&gt;.ocir.io <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    --username &lt;tenancy&gt;/oracleidentitycloudservice/&lt;username&gt; <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    --password <span class="s2">&#34;&lt;auth-token&gt;&#34;</span>
+</span></span></code></pre></div><p><strong>Note:</strong> If your account is a federatoed account you need to include <code>/oracleidentitycloudservice/</code> infront of the username as shown above.</p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="build-the-sample-applications-and-push-container-images">
         Build the sample applications and push container images
@@ -1232,7 +1237,8 @@ if (!doNotTrack) {
 <li>
 <p>Run package using Maven with this profile:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">mvn package -P build-docker-image
-</span></span></code></pre></div><p>When this completes the build and push process, you will see a message similar to the one below reporting that all modules were builded successfully.</p>
+</span></span></code></pre></div><p>When the command completes the build and push process (it will take afew minutes), you will see a message similar to the one below reporting that all modules were builded successfully.</p>
+<p>If you get a build failure, re-run the <code>mvn package -P build-docker-image</code> command.</p>
  <!-- spellchecker-disable -->
 
       
@@ -1272,9 +1278,9 @@ if (!doNotTrack) {
         </a>
     </h2>
 </div>
-<p>You also have to update the address of images in application deployment descriptor to match the repositories you created.
-You can do this by editing the <code>01--deployment--APPLICATION_NAME.yaml</code> file in each of the service sub-directories.  Use the
-same values you used in the previous steps.</p>
+<p>You need to update the address of the images in application deployment descriptor to match the repositories you created.
+You do this by editing the <code>01--deployment--APPLICATION_NAME.yaml</code> file in each of the service sub-directories (a total of 6).  Use the
+same values you used when editing the <code>pom.xml</code> file in the previous steps.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="w">    </span><span class="nt">spec</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">containers</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">app_name</span><span class="w">
@@ -1470,7 +1476,7 @@ like this, for example, to create a customer:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">curl -X POST <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>     -H <span class="s1">&#39;Content-Type: application/json&#39;</span> <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>     -d <span class="s1">&#39;{&#34;firstName&#34;: &#34;bob&#34;, &#34;lastName&#34;: &#34;smith&#34;, &#34;email&#34;: &#34;bob@bob.com&#34;}&#39;</span> <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>     http://1.2.3.4&gt;/customer/api/v1/customers
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>     http://1.2.3.4/customer/api/v1/customers
 </span></span></code></pre></div><p>After you call the service a few times, you might also like to explore the various platform services, including:</p>
 <ul>
 <li><a
