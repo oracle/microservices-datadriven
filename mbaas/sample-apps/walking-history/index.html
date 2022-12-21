@@ -12,10 +12,11 @@
 <meta name="generator" content="Hugo 0.108.0">
 
 
-  <meta name="description" content="As an MBaaS user, it is expected that you probably won&rsquo;t need to access the underlying infrastructure. However, if you do want to have a look around, here is how you can access the Kubernetes cluster where your MBaaS is running.
-The MBaaS setup created a Kubernetes cluster where the server and dashboard components are deployment. At the end of setup, you were provided with a command to creating a Kubernetes configuration file to access that cluster." />
+  <meta name="description" content="The Walking History sample application uses the Parse database and GeoPoints APIs. It is a React Native application that allows you to walk around New York City (or simulate that in a device emulator) and it will tell you about the closest attraction or &ldquo;point of interest.&rdquo;
+Here is what the Walking History app looks like running in the Android emulator:
+Try the sample To try this sample application you will need the following:" />
 
-    <title>Kubernetes Access | Oracle Mobile Backend as a Service</title>
+    <title>Walking History | Oracle Mobile Backend as a Service</title>
 
     <link rel="icon" type="image/svg+xml" href="/microservices-datadriven/mbaas/favicon/favicon.svg" />
 <link
@@ -36,38 +37,40 @@ The MBaaS setup created a Kubernetes cluster where the server and dashboard comp
     
   <meta
     property="og:title"
-    content="Kubernetes Access"
+    content="Walking History"
   />
   <meta property="og:site_name" content="Oracle Mobile Backend as a Service" />
-  <meta property="og:description" content="As an MBaaS user, it is expected that you probably won’t need to access the underlying infrastructure. However, if you do want to have a look around, here is how you can access the Kubernetes cluster where your MBaaS is running.
-The MBaaS setup created a Kubernetes cluster where the server and dashboard components are deployment. At the end of setup, you were provided with a command to creating a Kubernetes configuration file to access that cluster." />
+  <meta property="og:description" content="The Walking History sample application uses the Parse database and GeoPoints APIs. It is a React Native application that allows you to walk around New York City (or simulate that in a device emulator) and it will tell you about the closest attraction or “point of interest.”
+Here is what the Walking History app looks like running in the Android emulator:
+Try the sample To try this sample application you will need the following:" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://oracle.github.io/microservices-datadriven/mbaas/cluster-access/" />
+<meta property="og:url" content="https://oracle.github.io/microservices-datadriven/mbaas/sample-apps/walking-history/" />
 
-<meta property="article:section" content="Cluster Access" />
+<meta property="article:section" content="Sample Apps" />
 
 
   <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="Kubernetes Access" />
-  <meta name="twitter:description" content="As an MBaaS user, it is expected that you probably won’t need to access the underlying infrastructure. However, if you do want to have a look around, here is how you can access the Kubernetes cluster where your MBaaS is running.
-The MBaaS setup created a Kubernetes cluster where the server and dashboard components are deployment. At the end of setup, you were provided with a command to creating a Kubernetes configuration file to access that cluster." />
+<meta name="twitter:title" content="Walking History" />
+  <meta name="twitter:description" content="The Walking History sample application uses the Parse database and GeoPoints APIs. It is a React Native application that allows you to walk around New York City (or simulate that in a device emulator) and it will tell you about the closest attraction or “point of interest.”
+Here is what the Walking History app looks like running in the Android emulator:
+Try the sample To try this sample application you will need the following:" />
 
 
   <script type="application/ld+json">
   {
       "@context": "http://schema.org",
       "@type": "TechArticle",
-      "articleSection": "Cluster Access",
-      "name": "Kubernetes Access",
-      "url" : "https://oracle.github.io/microservices-datadriven/mbaas/cluster-access/",
-      "headline": "Kubernetes Access",
-      "description": "As an MBaaS user, it is expected that you probably won’t need to access the underlying infrastructure. However, if you do want to have a look around, here is how you can access the Kubernetes cluster where your MBaaS is running.\nThe MBaaS setup created a Kubernetes cluster where the server and dashboard components are deployment. At the end of setup, you were provided with a command to creating a Kubernetes configuration file to access that cluster.",
-      "wordCount" : "479",
+      "articleSection": "Sample Apps",
+      "name": "Walking History",
+      "url" : "https://oracle.github.io/microservices-datadriven/mbaas/sample-apps/walking-history/",
+      "headline": "Walking History",
+      "description": "The Walking History sample application uses the Parse database and GeoPoints APIs. It is a React Native application that allows you to walk around New York City (or simulate that in a device emulator) and it will tell you about the closest attraction or “point of interest.”\nHere is what the Walking History app looks like running in the Android emulator:\nTry the sample To try this sample application you will need the following:",
+      "wordCount" : "492",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
           "@type": "WebPage",
-          "@id": "https://oracle.github.io/microservices-datadriven/mbaas/cluster-access/"
+          "@id": "https://oracle.github.io/microservices-datadriven/mbaas/sample-apps/walking-history/"
       },
       "copyrightHolder" : "Oracle Mobile Backend as a Service",
       "copyrightYear" : "0001",
@@ -151,7 +154,7 @@ The MBaaS setup created a Kubernetes cluster where the server and dashboard comp
   href="/microservices-datadriven/mbaas/custom.css"
   media="all"
 />
-  <link href="https://oracle.github.io/microservices-datadriven/mbaas/cluster-access/" rel="canonical" type="text/html" />
+  <link href="https://oracle.github.io/microservices-datadriven/mbaas/sample-apps/walking-history/" rel="canonical" type="text/html" />
 
 <!-- Made with Geekdoc theme https://github.com/thegeeklab/hugo-geekdoc -->
 
@@ -604,7 +607,7 @@ The MBaaS setup created a Kubernetes cluster where the server and dashboard comp
                 
                 <a
                   href="/microservices-datadriven/mbaas/sample-apps/walking-history"
-                  class="gdoc-nav__entry"
+                  class="gdoc-nav__entry is-active"
                 >
                   Walking History
                 </a>
@@ -934,7 +937,7 @@ The MBaaS setup created a Kubernetes cluster where the server and dashboard comp
                 
                 <a
                   href="/microservices-datadriven/mbaas/cluster-access"
-                  class="gdoc-nav__entry is-active"
+                  class="gdoc-nav__entry"
                 >
                   Kubernetes Access
                 </a>
@@ -1064,7 +1067,15 @@ if (!doNotTrack) {
     
   
   
-    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/mbaas/' href='/microservices-datadriven/mbaas/'><span itemprop='name'></span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>Kubernetes Access</span><meta itemprop='position' content='4' /></li>
+    
+    
+    
+    
+  
+  
+    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/mbaas/' href='/microservices-datadriven/mbaas/'><span itemprop='name'></span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/mbaas/sample-apps/' href='/microservices-datadriven/mbaas/sample-apps/'><span itemprop='name'>Sample Apps</span></a><meta itemprop='position' content='4' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>Walking History</span><meta itemprop='position' content='5' /></li>
+  
+
   
 
   
@@ -1080,86 +1091,74 @@ if (!doNotTrack) {
   <article
     class="gdoc-markdown gdoc-markdown__align--left"
   >
-    <h1>Kubernetes Access</h1>
-    <p>As an MBaaS user, it is expected that you probably won&rsquo;t need to access the underlying infrastructure.  However, if you do want to have a look
-around, here is how you can access the Kubernetes cluster where your MBaaS is running.</p>
-<p>The MBaaS setup created a Kubernetes cluster where the server and dashboard components are deployment.  At the end of setup, you were provided
-with a command to creating a Kubernetes configuration file to access that cluster.</p>
-<pre tabindex="0"><code>kubeconfig_cmd = &#34;oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.iad.xxx
- --file $HOME/.kube/config --region us-ashburn-1 --token-version 2.0.0 --kube-endpoint PUBLIC_ENDPOINT&#34;
-</code></pre><p>To use <code>kubectl</code> on your local machine, you will need to have the <a
-  class="gdoc-markdown__link"
-  href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cliconcepts.htm"
->OCI CLI installed and configured</a>.</p>
-<p><strong>Note:</strong> The generated <code>kubeconfig</code> file will only work if you are using the <code>DEFAULT</code> profile in your OCI CLI configuration file. If you are using a different OCI CLI profile you must add <code>--profile &lt;NAME&gt;</code> to the command by editing the generated Kubernetes config file and add the following lines:</p>
-<pre tabindex="0"><code>- --profile
-- MAACLOUD
-</code></pre><p>For example:</p>
-<pre tabindex="0"><code>- name: user-xxxx
-  user:
-    exec:
-      apiVersion: client.authentication.k8s.io/v1beta1
-      args:
-      - ce
-      - cluster
-      - generate-token
-      - --cluster-id
-      - ocid1.cluster....xxxx
-      - --region
-      - us-ashburn-1
-      - --profile
-      - YOUR_PROFILE_NAME
-      command: oci
-</code></pre><div class="gdoc-page__anchorwrap">
-    <h2 id="using-oci-cloud-shell">
-        Using OCI Cloud Shell
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/mbaas/cluster-access/#using-oci-cloud-shell" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Using OCI Cloud Shell" aria-label="Anchor to: Using OCI Cloud Shell" href="#using-oci-cloud-shell">
+    <h1>Walking History</h1>
+    <p>The <em>Walking History</em> sample application uses the Parse database and GeoPoints APIs.  It is a React Native application
+that allows you to walk around New York City (or simulate that in a device emulator) and it will tell you about the
+closest attraction or &ldquo;point of interest.&rdquo;</p>
+<p>Here is what the Walking History app looks like running in the Android emulator:</p>
+<p><img
+  src="../../mbaas-walking-history.png"
+  alt="Walking History"
+  
+/></p>
+<div class="gdoc-page__anchorwrap">
+    <h2 id="try-the-sample">
+        Try the sample
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/mbaas/sample-apps/walking-history/#try-the-sample" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Try the sample" aria-label="Anchor to: Try the sample" href="#try-the-sample">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>
 </div>
-<p>A simple alternative is to use the <a
-  class="gdoc-markdown__link"
-  href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cloudshellintro.htm"
->OCI Cloud Shell</a>, which is provided in
-the OCI Console.  You can open Cloud Shell by clicking Developer Tools in
-the upper right hand corner of the OCI Console.</p>
-<p><img
-  src="../cloud-shell.png"
-  alt="Cloud Shell icon"
-  
-/></p>
-<p>Run the provided command to create your Kubernetes configuration file and then you will be able to access the Kubernetes
-cluster.  For example, you can list the pods in your cluster:</p>
-<pre tabindex="0"><code>Welcome to Oracle Cloud Shell.
- 
-Update: Cloud Shell will now use Oracle JDK 11 by default. To change this, see Managing Language Runtimes in the Cloud Shell documentation.
- 
-Your Cloud Shell machine comes with 5GB of storage for your home directory. Your Cloud Shell (machine and home directory) are located in: US East (Ashburn).
-You are using Cloud Shell in tenancy xxxx as an OCI user xxxx
- 
-Type `help` for more info.
-user@cloudshell:~ (us-ashburn-1)$ oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.iad.xxx
- --file $HOME/.kube/config --region us-ashburn-1 --token-version 2.0.0 --kube-endpoint PUBLIC_ENDPOINT
-Existing Kubeconfig file found at /home/user/.kube/config and new config merged into it
-user@cloudshell:~ (us-ashburn-1)$ kubectl get pods -A
-NAMESPACE         NAME                                        READY   STATUS      RESTARTS        AGE
-ingress-nginx     ingress-nginx-controller-7d45557d5c-bqwwp   1/1     Running     0               4h18m
-ingress-nginx     ingress-nginx-controller-7d45557d5c-klgnb   1/1     Running     0               4h18m
-ingress-nginx     ingress-nginx-controller-7d45557d5c-l4d2m   1/1     Running     0               4h18m
-kube-system       coredns-746957c9c6-hwnm8                    1/1     Running     0               4h27m
-kube-system       csi-oci-node-kqf5x                          1/1     Running     0               4h23m
-kube-system       kube-dns-autoscaler-6f789cfb88-7mptd        1/1     Running     0               4h27m
-kube-system       kube-flannel-ds-hb6ld                       1/1     Running     1 (4h22m ago)   4h23m
-kube-system       kube-proxy-v5qwm                            1/1     Running     0               4h23m
-kube-system       proxymux-client-vpnh7                       1/1     Running     0               4h23m
-parse-dashboard   kaniko                                      0/1     Completed   0               4h19m
-parse-dashboard   parse-dashboard-58cb567ffd-frc4x            1/1     Running     0               4h19m
-parse-server      kaniko                                      0/1     Completed   0               4h20m
-parse-server      parse-server-646b97979-9pkq6                1/1     Running     0               4h19m
-user@cloudshell:~ (us-ashburn-1)$
-</code></pre><p>The MBaaS Parse Server is running in the <code>parse-server</code> namespace and Parse Dashboard is running in the <code>parse-dashboard</code> namespace.</p>
+<p>To try this sample application you will need the following:</p>
+<ul>
+<li>An instance of Oracle Mobile Backend as a Service deployed and running.</li>
+<li>Android Studio or XCode, with the device emulator.
+For Android, use API level 30 and Android 11 for compatibilty with the version of React Native used in the sample.</li>
+<li>NodeJS to run the React Native &ldquo;metro&rdquo; development server.</li>
+</ul>
+<p>Once you have the prerequisites, start by cloning the source code for the application:</p>
+<pre tabindex="0"><code>git clone https://github.com/oracle/microservices-datadriven
+cd microservices-datadriven/mbaas-developer-preview/walking-history
+</code></pre><p>This directory contains the source code for the application.</p>
+<p>In the source code, you need to update the file <code>App.js</code> to set the APPLICAITON_ID and server URL to match your environment.
+Find these lines and update those two values.  Note that the required values were provided in the output at the end of
+the log for the stack apply job during the installation.</p>
+<pre tabindex="0"><code>const App: () =&gt; Node = () =&gt; {
+  const isDarkMode = useColorScheme() === &#39;dark&#39;;
 
+  const Parse = require(&#39;parse/react-native.js&#39;);
+  Parse.setAsyncStorage(AsyncStorage);
+  Parse.initialize(&#34;APPLICATION_ID&#34;);         //   &lt;-- update this
+  Parse.serverURL = &#39;http://1.2.3.4/parse&#39;;   //   &lt;-- update this
+</code></pre><p>Once you have made the updates, you can start the &ldquo;metro&rdquo; development server by running this command:</p>
+<pre tabindex="0"><code>npx react-native start
+</code></pre><p><strong>Note:</strong> The instructions below are for Android.  If you are using iOS, do the equivalent steps in XCode.</p>
+<p>Open the <code>android</code> sub-directory as a project in Android Studio.  Create an emulator if you have not already (noting the
+specific version requirements above) and then click on the &ldquo;Run&rdquo; button (or choose &ldquo;Run&hellip;&rdquo; from the &ldquo;Run&rdquo; menu) to start
+the application on the emulator.</p>
+<p>Click on the &ldquo;&hellip;&rdquo; item in the emulator menu to open the &ldquo;Extended Controls.&rdquo;  In the &ldquo;Location&rdquo; page create a new
+route from 33 Peck Slip, New York to 14 W 34th Street, New York.  Set the playplack speed to 4x and click on the
+&ldquo;Play Route&rdquo; button.  Your emulator will now silumate walking around New York City for several minutes.</p>
+<p>As you &ldquo;walk&rdquo; around, you will see the application updates your location and the nearest point of interest
+will change.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="explore-the-parse-api-usage-in-the-source-code">
+        Explore the Parse API usage in the source code
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/mbaas/sample-apps/walking-history/#explore-the-parse-api-usage-in-the-source-code" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Explore the Parse API usage in the source code" aria-label="Anchor to: Explore the Parse API usage in the source code" href="#explore-the-parse-api-usage-in-the-source-code">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>In addition to the Parse initialization in <code>App.js</code> you saw above, you may wish to review the file
+<code>components\Location.js</code> which uses the Parse Query API and the GeoPoints API to find a list of points of
+interest that are near the current location of the device (emulator):</p>
+<pre tabindex="0"><code>// find the closest attraction and update the state
+console.log(&#34;querying parse server for nearby attractions&#34;);
+let query = new Parse.Query(&#39;POI&#39;);
+query.near(&#39;location&#39;, new Parse.GeoPoint(currentPosition.coords.latitude,
+    currentPosition.coords.longitude));
+let results = await query.find().catch(err =&gt; console.log(&#34;OOPS &#34; + JSON.stringify(err)));
+</code></pre>
   </article>
 
 
@@ -1350,6 +1349,9 @@ user@cloudshell:~ (us-ashburn-1)$
       
 
       
+        
+        
+      
 
       
     
@@ -1375,34 +1377,9 @@ user@cloudshell:~ (us-ashburn-1)$
       
 
       
-
-      
-
-      
-    
-
-    
-    
-      
-  
-  
-
-  
-    
-    
-
-    
-    
-      
-      
-      
-
-      
+        
         
       
-      
-
-      
 
       
 
@@ -1411,57 +1388,10 @@ user@cloudshell:~ (us-ashburn-1)$
 
     
     
+      
   
-    
-    
-
-    
-    
-      
-      
-      
-
-      
-        
-      
-      
-
-      
-
-      
-
-      
-    
-
-    
-    
-  
-    
-    
-
-    
-    
-      
-      
-      
-
-      
-        
-      
-      
-
-      
-
-      
-
-      
-    
-
-    
-    
   
 
-    
   
     
     
@@ -1528,8 +1458,32 @@ user@cloudshell:~ (us-ashburn-1)$
       
 
       
+
+      
+    
+
+    
+    
+  
+
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
         
-        
+      
+      
+
+      
+
       
 
       
@@ -1553,8 +1507,53 @@ user@cloudshell:~ (us-ashburn-1)$
       
 
       
+
+      
+
+      
+    
+
+    
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
         
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
         
+      
+      
+
       
 
       
@@ -1575,11 +1574,11 @@ user@cloudshell:~ (us-ashburn-1)$
     
       <a
         class="gdoc-page__nav--prev flex align-center"
-        href="/microservices-datadriven/mbaas/database/"
-        title="Database Access"
+        href="/microservices-datadriven/mbaas/sample-apps/"
+        title="Sample apps"
       >
         <i class="gdoc-icon">gdoc_arrow_left_alt</i>
-        Database Access
+        Sample apps
       </a>
     
   </span>
@@ -1587,10 +1586,10 @@ user@cloudshell:~ (us-ashburn-1)$
     
       <a
         class="gdoc-page__nav--next flex align-center"
-        href="/microservices-datadriven/mbaas/uninstall/"
-        title="Uninstall"
+        href="/microservices-datadriven/mbaas/firebase-emulation/"
+        title="Firebase API emulation"
       >
-        Uninstall
+        Firebase API emulation
         <i class="gdoc-icon">gdoc_arrow_right_alt</i>
       </a>
     
