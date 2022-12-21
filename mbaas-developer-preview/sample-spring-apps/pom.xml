@@ -34,7 +34,7 @@
         <spring.boot.dependencies.version>2.6.6</spring.boot.dependencies.version>
         <spring.cloud.version>2021.0.1</spring.cloud.version>
         <jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
-        <container.registry>phx.ocir.io/maacloud/obaaststps</container.registry>
+        <container.registry>iad.ocir.io/maacloud/atest</container.registry>
     </properties>
 
     <dependencyManagement>
