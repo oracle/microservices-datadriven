@@ -1,0 +1,60 @@
+## Copyright (c) 2022, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bankb
+  namespace: application
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bankb
+  template:
+    metadata:
+      labels:
+        app: bankb
+    spec:
+      containers:
+      - name: bankb
+        image: phx.ocir.io/maacloud/obaaststps/bankb:latest
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 8079
+        # resources:
+        #     requests:
+        #       memory: "500Mi"
+        #       cpu: "500m"
+        #     limits:
+        #       memory: "1Gi"
+        #       cpu: "500m"
+        env:
+          - name: spring.profiles.active
+            value: kube
+          - name: spring.config.label
+            value: latest
+          - name: eureka.service-url
+            value: http://eureka.eureka.svc.cluster.local:8761/eureka
+          - name: zipkin.base-url
+            value: http://jaegertracing-collector.observability:9411
+          - name: otel.exporter.otlp.endpoint
+            value: http://open-telemetry-opentelemetry-collector.open-telemetry:4317
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8079
+          initialDelaySeconds: 60
+          timeoutSeconds: 10
+          periodSeconds: 10
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8079
+          initialDelaySeconds: 70
+          timeoutSeconds: 10
+          periodSeconds: 10
+          failureThreshold: 3
+      imagePullSecrets:
+      - name: registry-auth

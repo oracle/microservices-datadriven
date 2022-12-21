@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: banka
+# server:
+#   servlet:
+#     context-path: /banka
