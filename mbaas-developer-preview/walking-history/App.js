@@ -55,8 +55,8 @@ const App: () => Node = () => {
 
   const Parse = require('parse/react-native.js');
   Parse.setAsyncStorage(AsyncStorage);
-  Parse.initialize("gn05PM46nEk18SWkG8a0y8rBCAlFiz0NcA8Ad4C7");
-  Parse.serverURL = 'http://129.153.212.51/parse';
+  Parse.initialize("APPLICATION_ID");
+  Parse.serverURL = 'http://1.2.3.4/parse';
 
   const [isLoading, setLoading] = useState(true);
   const [topicList, setTopicList] = useState([]);
