@@ -12,6 +12,9 @@ main:
         ref: "/getting-started/identity"        
   - name: Sample apps
     ref: "/sample-apps"
+    sub: 
+      - name: Walking History
+        ref: "/sample-apps/walking-history"
   - name: Firebase API emulation
     ref: "/firebase-emulation"
     sub:
