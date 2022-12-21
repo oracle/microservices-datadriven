@@ -8,6 +8,8 @@ The Oracle Backend as a Service for Spring Cloud command-line tool, `oracle-spri
 Download the binary you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0) page
 and add it to your PATH environment variable.  You may like to rename the binary to remove the suffix.
 
+If you're environment is a Linux or Mac machine you need to execute `chmod +x` on the downloaded binary. ALso if your environment is a Mac you need execute the following command `sudo xattr -r -d com.apple.quarantine <downloaded-file>` otherwise will you get a security warning and the CLI will not work.
+
 ### Using the CLI
 
 
