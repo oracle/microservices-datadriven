@@ -36,7 +36,6 @@ Now that you have your Oracle Backend as a Service for Spring Cloud environment 
 
 This directory contains the sample applications source code.
 
-
 ## Create OCI Repositories for Sample Applications
 
 1. Before building the sample applications, you have to create the repositories for each sample application in your compartment. The name of the repository should follow the pattern `<project name>/<app name>`
@@ -60,13 +59,17 @@ This directory contains the sample applications source code.
 
 3. Login to OCI Registry by executing the following command.  This will allow the build to push the sample applications' container images to OCI Registry.
 
-    ```shell
-    docker login <region>.ocir.io
-    username: <tenancy>/oracleidentitycloudservice/<username>
-    password: <auth-token>
-    ```
+**Note:** The docker deamon must be running in your environment
 
-    **Note:** Your username may not contain `oracleidentitycloudservice` if it is not a federated account, but the tenancy prefix will always be required.
+You can determine the `<region>`  vaule from this page: [Region code](https://docs.oracle.com/en-us/iaas/Content/Registry/Concepts/registryprerequisites.htm#regional-availability). For example the US East (Ashburn) has the region code `iad`
+
+```shell
+    docker login <region>.ocir.io \
+    --username <tenancy>/oracleidentitycloudservice/<username> \
+    --password "<auth-token>"
+```
+
+**Note:** If your account is a federatoed account you need to include `/oracleidentitycloudservice/` infront of the username as shown above.
 
 ## Build the sample applications and push container images
 
@@ -92,7 +95,9 @@ This directory contains the sample applications source code.
     mvn package -P build-docker-image
     ```
 
-    When this completes the build and push process, you will see a message similar to the one below reporting that all modules were builded successfully.
+    When the command completes the build and push process (it will take afew minutes), you will see a message similar to the one below reporting that all modules were builded successfully.
+
+    If you get a build failure, re-run the `mvn package -P build-docker-image` command.
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-sample-apps-build-result" size="large" lazy=false >}}
@@ -100,9 +105,9 @@ This directory contains the sample applications source code.
 
 ## Update Images in Kubernetes Deployment Descriptors
 
-You also have to update the address of images in application deployment descriptor to match the repositories you created.
-You can do this by editing the `01--deployment--APPLICATION_NAME.yaml` file in each of the service sub-directories.  Use the
-same values you used in the previous steps.
+You need to update the address of the images in application deployment descriptor to match the repositories you created.
+You do this by editing the `01--deployment--APPLICATION_NAME.yaml` file in each of the service sub-directories (a total of 6).  Use the
+same values you used when editing the `pom.xml` file in the previous steps.
 
 ```yaml
     spec:
@@ -113,11 +118,11 @@ same values you used in the previous steps.
 
 ## Create Database Objects for each application
 
-You must create the database users and some objects that are required by the sample services. 
+You must create the database users and some objects that are required by the sample services.
 Connect to the Oracle Autonmous Database instance using (using [these instructions](../database)) and execute the SQL statements
 for each application. You must edit each SQL script to add your desired password before running the statements.
 
-Each of the following files must be reviewed, updated, and then executed against the database (as the `ADMIN` user). 
+Each of the following files must be reviewed, updated, and then executed against the database (as the `ADMIN` user).
 
 1. Customer microservice
 
@@ -134,7 +139,7 @@ Each of the following files must be reviewed, updated, and then executed against
 
 ## Add applications configurations into Config Server Properties Table
 
-You must create the application configuration entries that are required by the sample services. 
+You must create the application configuration entries that are required by the sample services.
 Connect to the Oracle Autonmous Database instance using (using [these instructions](../database)) and execute the SQL statements
 for each application. You must edit each SQL script to match your environment before running the statements.
 The example below shows the lines that must be updated. You must replace the `TNS_NAME` with the correct name
@@ -151,7 +156,7 @@ VALUES (
 );
 ```
 
-Each of the following files must be reviewed, updated, and then executed against the database (as the `ADMIN` user). 
+Each of the following files must be reviewed, updated, and then executed against the database (as the `ADMIN` user).
 
 1. Customer microservice
 
@@ -212,7 +217,6 @@ You can create these secrets by executing the following commands (update the val
     kubectl apply -f 02--service--<app name>.yaml
     ```
 
-
 After deploy all microservices, you will be able to check them executing on Kubernetes executing the following command:
 
 ```shell
@@ -228,7 +232,7 @@ kubectl --namespace=application get all -o wide
 Before using the application, you need to expose them by creating a route in APISIX API Gateway.
 
 To expose the customer service, see the documentation on [how to create a route](../platform/apigw/#exposing-a-spring-application-through-the-api-gateway-and-load-balancer)
-and use these values: 
+and use these values:
 
 * name = customer
 * path = /api/v1/customers*
@@ -244,7 +248,7 @@ like this, for example, to create a customer:
 curl -X POST \
      -H 'Content-Type: application/json' \
      -d '{"firstName": "bob", "lastName": "smith", "email": "bob@bob.com"}' \
-     http://1.2.3.4>/customer/api/v1/customers
+     http://1.2.3.4/customer/api/v1/customers
 ```
 
 After you call the service a few times, you might also like to explore the various platform services, including:

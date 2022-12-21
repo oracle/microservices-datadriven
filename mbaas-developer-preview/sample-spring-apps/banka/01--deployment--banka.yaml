@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: banka
-        image: phx.ocir.io/maacloud/obaaststps/banka:latest
+        image: iad.ocir.io/maacloud/atest/banka:latest
         imagePullPolicy: Always
         ports:
           - containerPort: 8078

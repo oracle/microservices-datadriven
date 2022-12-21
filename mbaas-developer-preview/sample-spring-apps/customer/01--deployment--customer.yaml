@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: customer
-        image: phx.ocir.io/maacloud/obaaststps/customer:latest
+        image: iad.ocir.io/maacloud/atest/customer:latest
         imagePullPolicy: Always
         ports:
           - containerPort: 8080
