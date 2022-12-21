@@ -6,6 +6,8 @@
   {{ $.Scratch.Set "geekdocFilePath" false }}
 {{ end }}
 
+{{ template "_internal/google_analytics.html" . }}
+
 {{ define "breadcrumb" }}
   {{ $parent := .page.Parent }}
   {{ if $parent }}

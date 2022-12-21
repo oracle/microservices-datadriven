@@ -13,6 +13,9 @@ disablePathToLower = true
 # Required if you want to render robots.txt template
 enableRobotsTXT = true
 
+# analytics
+googleAnalytics = "G-Z0MVCJ4T39"
+
 # menu configuration
 [params]
   geekdocMenuBundle = true
