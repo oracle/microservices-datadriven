@@ -1,6 +1,11 @@
 main:
   - name: Setup
     ref: "/setup"
+    sub:
+      - name: Kubernetes Access
+        ref: "/setup/cluster-access"
+      - name: Database Access
+        ref: "/setup/database"      
   # - name: Getting Started
   #   ref: "/getting-started"
   - name: Sample apps
@@ -21,7 +26,7 @@ main:
         ref: "/platform/conductor"
       - name: Spring Admin
         ref: "/platform/spring-admin"
-      - name: Using the CLI
+      - name: Oracle Spring CLI
         ref: "/development/cli"
   - name: Observability
     ref: "/observability"
@@ -32,9 +37,5 @@ main:
         ref: "/observability/tracing"
   - name: Security
     ref: "/security"
-  - name: Database Access
-    ref: "/database"
-  - name: Kubernetes Access
-    ref: "/cluster-access"
   - name: Uninstall
     ref: "/uninstall"

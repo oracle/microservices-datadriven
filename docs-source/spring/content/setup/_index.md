@@ -36,13 +36,18 @@ Oracle Backend as a Service for Spring Cloud is available in the [OCI Marketplac
 
 You must meet the following prerequisites to use Oracle Backend as a Service for Spring Cloud:
 
-- An OCI account in a tenancy with sufficient quota to create:
-- An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes
-- A VCN with at least two public IP's available
-- A public load balancer
-- An Oracle Autonomous Database - Shared instance
-- At least one free OCI Auth Token (note that the maximum is two per user)
+- On Oracle Cloud:
+  - An OCI account in a tenancy with sufficient quota to create:
+  - An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes
+  - A VCN with at least two public IP's available
+  - A public load balancer
+  - An Oracle Autonomous Database - Shared instance
+  - At least one free OCI Auth Token (note that the maximum is two per user)
 
+- On Local Workstation:
+  - The Kubernetes command-line tool (kubectl)
+  - Oracle Clound Infrastructure Command Line Interface (CLI)
+  - Oracle Backend as a Service for Spring Cloud command-line tool
 
 ## Summary of components
 
@@ -62,12 +67,10 @@ Oracle Backend as a Service for Spring Cloud setup will install the following co
 | Spring Cloud Config Server   | 2.7.5        | Provides server-side support for externalized configuration.                             |
 | Eureka Service Registry      | 2021.0.3     | Provides Service Discovery capabilities                                                  |
 
-
-## Setup the environment
+## Setup the OCI environment
 
 1. Go to the [OCI Marketplace listing for Oracle Backend as a Service for Spring Cloud](https://cloud.oracle.com/marketplace/application/138899911).
 
-    
     <!-- spellchecker-disable -->
     ![OCI Marketplace listing](../ebaas-mp-listing.png)
     <!-- spellchecker-enable -->
@@ -81,12 +84,12 @@ Oracle Backend as a Service for Spring Cloud setup will install the following co
 
     Fill the configuration variables and select `Next`
 
-    * `Application Name` (Optional)
-    * OKE Control Plane Options.
-        * `Public Control Plane`: this option allow you access the OKE Control Plane from the Internet (Public IP)
-        * `Control Plane Access Control`: IP range enabled to access the control plane (recommended)
-        * `Enable Horizontal Pod Scaling?`: The [Horizontal Pod Autoscaler](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusinghorizontalpodautoscaler.htm#Using_Kubernetes_Horizontal_Pod_Autoscaler) can help applications scale out to meet increased demand, or scale in when resources are no longer needed.
-        * `Node Pool Workers`: Number of VMs of the OKE Cluster.
+    - `Application Name` (Optional)
+    - OKE Control Plane Options.
+        - `Public Control Plane`: this option allow you access the OKE Control Plane from the Internet (Public IP)
+        - `Control Plane Access Control`: IP range enabled to access the control plane (recommended)
+        - `Enable Horizontal Pod Scaling?`: The [Horizontal Pod Autoscaler](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusinghorizontalpodautoscaler.htm#Using_Kubernetes_Horizontal_Pod_Autoscaler) can help applications scale out to meet increased demand, or scale in when resources are no longer needed.
+        - `Node Pool Workers`: Number of VMs of the OKE Cluster.
 
     <!-- spellchecker-disable -->
     {{< img name="oci-private-template-create-stack-config" size="large" lazy=false >}}
@@ -99,7 +102,7 @@ Oracle Backend as a Service for Spring Cloud setup will install the following co
     {{< img name="oci-private-template-create-stack-config-review" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
-3. Apply the Stack 
+2. Apply the Stack
 
     After you create your stack, you will be able to test the plan, edit the stack, and apply or destroy the stack.
 
@@ -121,3 +124,22 @@ Oracle Backend as a Service for Spring Cloud setup will install the following co
     <!-- spellchecker-disable -->
     {{< img name="oci-stack-apply-logs" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
+
+## Setup the local workstation
+
+1. Install Local Tools
+
+    Before you set up the [Kubernetes access](./cluster-access), you must have already done the following:
+
+    - generated an API signing key pair
+    - added the public key value of the API signing key pair to the User Settings for your username
+    - installed and configured the Oracle Cloud Infrastructure CLI (version 2.6.4 or later)
+    - installed and configured the Kubernetes command-line tool (kubectl)
+
+    To use `kubectl` on your local machine, you will need to have the [OCI CLI installed and configured](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cliconcepts.htm).
+
+2. Install Oracle Backend as a Service for Spring Cloud command-line
+
+    The Oracle Backend as a Service for Spring Cloud command-line tool, `oracle-spring`, is available for Linux and Mac systems. Download the binary you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0) page and add it to your PATH environment variable.  You may like to rename the binary to remove the suffix.
+
+    If you're environment is a Linux or Mac machine you need to execute `chmod +x` on the downloaded binary. Also if your environment is a Mac you need execute the following command `sudo xattr -r -d com.apple.quarantine <downloaded-file>` otherwise will you get a security warning and the CLI will not work.

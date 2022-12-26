@@ -8,7 +8,13 @@ resources:
 
 The Oracle Backend as a Service for Spring Cloud setup creates a Kubernetes cluster where the server and dashboard components are deployed.  At the end of setup, in the log for the apply job, you were provided with a command to creating a Kubernetes configuration file to access that cluster.
 
-```
+{{< hint type=[tip] icon=gdoc_check title=Tip >}}
+For more information about working with the Kubernetes cluster, see [Setting Up Cluster Access](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm#localdownload) in the OCI documentation.
+{{< /hint >}}
+
+</br>
+
+```txt
 kubeconfig_cmd = "oci ce cluster create-kubeconfig 
                     --cluster-id ocid1.cluster.oc1.iad.xxx 
                     --file $HOME/.kube/config 
@@ -17,20 +23,16 @@ kubeconfig_cmd = "oci ce cluster create-kubeconfig
                     --kube-endpoint PUBLIC_ENDPOINT"
 ```
 
-To use `kubectl` on your local machine, you will need to have the [OCI CLI installed and configured](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cliconcepts.htm).
-
-For more information about working with the Kubernetes cluster, see [Setting Up Cluster Access](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm#localdownload) in the OCI documentation.
-
 **Note:** The generated `kubeconfig` file will only work if you are using the `DEFAULT` profile in your OCI CLI configuration file. If you are using a different OCI CLI profile you must add `--profile <NAME>` to the command by editing the generated Kubernetes config file and add the following lines:
 
-```
+```yaml
 - --profile
 - MAACLOUD
 ```
 
 For example:
 
-```
+```yaml
 - name: user-xxxx
   user:
     exec:
