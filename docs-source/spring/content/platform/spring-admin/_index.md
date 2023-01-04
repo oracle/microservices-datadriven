@@ -14,7 +14,8 @@ resources:
 
 ## View application details using the Spring Admin Dashboard
 
-Spring Boot Admin is a web application, used for managing and monitoring Spring Boot applications. Each application is considered as a client and registers to the admin server. Behind the scenes, the magic is given by the Spring Boot Actuator endpoints.
+Spring Boot Admin is a web application used for managing and monitoring Spring Boot applications. Applications are discovered from the service registry.
+Most of the information displayed in the web user interface comes from the Spring Boot Actuator endpoints exposed by the applications.
 
 1. Exposing Spring Admin Dashboard using `port-forward`
 
@@ -34,7 +35,7 @@ Spring Boot Admin is a web application, used for managing and monitoring Spring 
     {{< img name="obaas-springadmin-apps" size="medium" lazy=false >}}
     <!-- spellchecker-enable -->
 
-3. On the web page, navigate to the applications tab
+3. On the web page, navigate to the applications tab:
 
     * If you deployed the [sample apps](../../sample-apps), Find the "slow" entry and click on it to expand it
     * Click on the instance of the service

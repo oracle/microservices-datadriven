@@ -25,7 +25,7 @@ For more information about working with the Kubernetes cluster, see [Setting Up 
 
 ```
 - --profile
-- MAACLOUD
+- MYTENANCY
 ```
 
 For example:
