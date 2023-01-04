@@ -44,7 +44,7 @@ You must meet the following prerequisites to use Oracle Backend as a Service for
   - An Oracle Autonomous Database - Shared instance
   - At least one free OCI Auth Token (note that the maximum is two per user)
 
-- On Local Workstation:
+- On local workstation:
   - The Kubernetes command-line tool (kubectl)
   - Oracle Clound Infrastructure Command Line Interface (CLI)
   - Oracle Backend as a Service for Spring Cloud command-line tool
@@ -127,19 +127,31 @@ Oracle Backend as a Service for Spring Cloud setup will install the following co
 
 ## Setup the local workstation
 
-1. Install Local Tools
+1. Setting Up Cluster Access
 
-    Before you set up the [Kubernetes access](./cluster-access), you must have already done the following:
+    To access a cluster using kubectl installed (see the [Kubernetes access](./cluster-access)) locally. If you haven't already done so,
 
-    - generated an API signing key pair
-    - added the public key value of the API signing key pair to the User Settings for your username
-    - installed and configured the Oracle Cloud Infrastructure CLI (version 2.6.4 or later)
-    - installed and configured the Kubernetes command-line tool (kubectl)
+    - install kubectl (see the [kubectl documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/)).
+    - generate an API signing key pair
+        If you already have an API signing key pair, go straight to the next step. If not:
 
-    To use `kubectl` on your local machine, you will need to have the [OCI CLI installed and configured](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cliconcepts.htm).
+        1. Use OpenSSL commands to generate the key pair in the required PEM format. If you're using Windows, you'll need to install Git Bash for Windows and run the commands with that tool. See [How to Generate an API Signing Key](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#two).
+        2. Copy the contents of the public key to the clipboard (you'll need to paste the value into the Console later).
+
+    - add the public key value of the API signing key pair to the User Settings for your username
+       1. In the top-right corner of the Oracle Cloud Infrastructure Console, open the **Profile** menu (User menu icon) and then click **User Settings** to view the details.
+       2. Click **Add Public Key**.
+       3. Paste the public key's value into the window and click **Add**.
+
+          The key is uploaded and its fingerprint is displayed (for example, d1:b2:32:53:d3:5f:cf:68:2d:6f:8b:5f:77:8f:07:13).
+
+    - install and configure the Oracle Cloud Infrastructure CLI
+        1. Install the Oracle Cloud Infrastructure CLI version 2.6.4 (or later). See [Quickstart](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#Quickstart).
+        2. Configure the Oracle Cloud Infrastructure CLI. See [Configuring the CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliconfigure.htm#Configuring_the_CLI).
+
 
 2. Install Oracle Backend as a Service for Spring Cloud command-line
 
-    The Oracle Backend as a Service for Spring Cloud command-line tool, `oracle-spring`, is available for Linux and Mac systems. Download the binary you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0) page and add it to your PATH environment variable.  You may like to rename the binary to remove the suffix.
+    The **Oracle Backend as a Service for Spring Cloud** command-line tool, `oracle-spring`, is available for Linux and Mac systems. Download the binary you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0) page and add it to your PATH environment variable.  You may like to rename the binary to remove the suffix.
 
     If you're environment is a Linux or Mac machine you need to execute `chmod +x` on the downloaded binary. Also if your environment is a Mac you need execute the following command `sudo xattr -r -d com.apple.quarantine <downloaded-file>` otherwise will you get a security warning and the CLI will not work.

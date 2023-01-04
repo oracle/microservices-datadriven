@@ -6,7 +6,7 @@ resources:
     title: "OCI Cloud Shell icon"
 ---
 
-The Oracle Backend as a Service for Spring Cloud setup creates a Kubernetes cluster where the server and dashboard components are deployed.  At the end of setup, in the log for the apply job, you were provided with a command to creating a Kubernetes configuration file to access that cluster.
+The **Oracle Backend as a Service for Spring Cloud** setup creates a Kubernetes cluster where the server and dashboard components are deployed.  At the end of setup, in the log for the apply job, you were provided with a command to creating a Kubernetes configuration file to access that cluster.
 
 {{< hint type=[tip] icon=gdoc_check title=Tip >}}
 For more information about working with the Kubernetes cluster, see [Setting Up Cluster Access](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm#localdownload) in the OCI documentation.
