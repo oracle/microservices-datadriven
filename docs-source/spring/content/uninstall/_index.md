@@ -1,24 +1,28 @@
-## Introduction
+---
+title: Uninstall
+description: Unistall the Oracle BaaS from tenancy"
+resources:
+  - name: oci-stack-destroy
+    src: "oci-stack-destroy.png"
+    title: "OCI Stack Destroy"
+  - name: oci-stack-destroy-logs
+    src: "oci-stack-destroy-logs.png"
+    title: "OCI Stack Destroy Logs"
 
-In this lab, we will tear down the resources created in your tenancy.
+---
 
-Estimates Time: 10 minutes
+To remove the Oracle Backend as a Service for Spring Cloud, in the OCI Console main menu, navigate to “Developer Services” then “Resource Manager - Stacks”. Make sure you are in the correct region and compartment where you installed the BaaS.
 
-### Objectives
+Click on the link to open the detail view for the Oracle Backend as a Service for Spring Cloud instance and click on the `Destroy` button to clean up resources:
 
-- Clean up your tenancy
+<!-- spellchecker-disable -->
+{{< img name="oci-stack-destroy" size="medium" lazy=false >}}
+<!-- spellchecker-enable -->
 
-### Prerequisites
+The OCI Resource Manager will use stack definition to destroy all resources.
 
-- Have successfully completed the earlier labs
+<!-- spellchecker-disable -->
+{{< img name="oci-stack-destroy-logs" size="medium" lazy=false >}}
+<!-- spellchecker-enable -->
 
-## **Task 1:** Delete the Test Resources
-
-1. To delete all OBaaS resources created to this test except the compartment, you can use the `Destroy` button in Stack details.
-
-    ![OCI Stack Destroy](images/oci-stack-destroy.png " ")
-
-    The OCI Resource Manager will use stack definition to destroy all resources.
-
-    ![OCI Stack Destroy Logs](images/oci-stack-destroy-logs.png " ")
-
+The destroy job takes about 20 minutes to complete. You should review the logs at the end to make sure it completed succesfully. If there were any errors, in most cases running the destroy job again will fix any issues.

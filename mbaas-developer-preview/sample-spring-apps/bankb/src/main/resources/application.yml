@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: bankB
+
+server:
+  port: 8082

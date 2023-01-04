@@ -1,47 +1,83 @@
-## Introduction
+---
+title: Setup
+resources:
+  - name: oci-private-templates
+    src: "oci-private-templates.png"
+    title: "Oracle Cloud Infrastructure Private Templates"
+  - name: oci-private-template-details
+    src: "oci-private-template-details.png"
+    title: "Private Template Details"
+  - name: oci-private-template-download
+    src: "oci-private-template-download.png"
+    title: "Download Private Template"
+  - name: oci-private-template-create-stack
+    src: "oci-private-template-create-stack.png"
+    title: "Create Stack from Private Template"
+  - name: oci-private-template-create-stack-info
+    src: "oci-private-template-create-stack-info.png"
+    title: "Create Stack Wizard Information"
+  - name: oci-private-template-create-stack-config
+    src: "oci-private-template-create-stack-config.png"
+    title: "Create Stack Wizard Config Variables"
+  - name: oci-private-template-create-stack-config-review
+    src: "oci-private-template-create-stack-config-review.png"
+    title: "Create Stack Wizard Config Review"
+  - name: oci-stack-apply
+    src: "oci-stack-apply.png"
+    title: "Create Stack Apply"
+  - name: oci-stack-apply-logs
+    src: "oci-stack-apply-logs.png"
+    title: "Create Stack Apply Logs"
+---
 
-In this lab, we will provision and setup the resources to execute OBaaS and Sample Applications in your tenancy.
+Oracle Backend as a Service for Spring Cloud is available in the [OCI Marketplace](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911)
 
-Estimated Time: 25 minutes
+## Prerequisites
 
-### Objectives
+You must meet the following prerequisites to use Oracle Backend as a Service for Spring Cloud:
 
-* Install OBaaS in your tenancy and region
-* Clone the setup and microservices code
-* Execute setup
+- An OCI account in a tenancy with sufficient quota to create:
+- An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes
+- A VCN with at least two public IP's available
+- A public load balancer
+- An Oracle Autonomous Database - Shared instance
+- At least one free OCI Auth Token (note that the maximum is two per user)
 
-## Log in to the Oracle Cloud Console
 
-1. If you haven't already, sign in to your account.
+## Summary of components
 
-## Check Your Tenancy Service Limits
+Oracle Backend as a Service for Spring Cloud setup will install the following components:
 
-If you have a **fresh** free trial account with credits then you can be sure that you have enough quota and you can proceed to the next step.
+| Component                    | Version      | Description                                                                              |
+|------------------------------|--------------|------------------------------------------------------------------------------------------|
+| cert-manager                 | 1.10.1       | Automates the management of certificates.                                                |
+| NGINX Ingress Controller     | 1.5.1        | Traffic management solution for cloud‑native applications in Kubernetes.                 |
+| Prometheus                   | 2.40.2       | Provides event monitoring and alerting.                                                  |
+| Prometheus Operator          | 0.60.1       | Provides management for Prometheus monitoring tools.                                     |
+| OpenTelemetry Collector      | 0.66.0       | Collects process and export telemetry data.                                              |
+| Grafana                      | 9.2.5        | Tool to help you examine, analyze, and monitor metrics.                                  |
+| Jaeger Tracing               | 1.37.0       | Distributed tracing system for monitoring and troubleshooting distributed systems.       |
+| APISIX                       | 2.15.1       | Provides full lifecycle API Management.                                                  |
+| Spring Admin Server          | 2.7.5        | Managing and monitoring Spring Boot applications.                                        |
+| Spring Cloud Config Server   | 2.7.5        | Provides server-side support for externalized configuration.                             |
+| Eureka Service Registry      | 2021.0.3     | Provides Service Discovery capabilities                                                  |
 
-If, however, you have already used up some quota on your tenancy, perhaps while completing other workshops, there may be insufficient quota left to run this workshop. The most likely quota limits you may reach are summarized in the following table.
 
-| Service          | Scope  | Resource                                             | Available | Free Account Limit |
-|------------------|:------:|------------------------------------------------------|:---------:|:------------------:|
-| Container Engine | Region | Cluster Count                                        |   **1**   |         1          |
-| Database         | Region | Autonomous Transaction Processing Total Storage (TB) |   **1**   |         2          |
-|                  | Region | Autonomous Transaction Processing OCPU Count         |   **1**   |         8          |
-| LBaaS            | Region | 100Mbps Load Balancer Count                          |   **1**   |         3          |
+## Setup the environment
 
-1. Quota usage and limits can be check through the console: **Limits, Quotas and Usage** in the **Governance & Administration** section , For example:
+1. Go to the [OCI Marketplace listing for Oracle Backend as a Service for Spring Cloud](https://cloud.oracle.com/marketplace/application/138899911).
 
-    ![Oracle Cloud Infrastructure Service Limit Example](images/oci-service-limits-example.png " ")
+    
+    <!-- spellchecker-disable -->
+    ![OCI Marketplace listing](../ebaas-mp-listing.png)
+    <!-- spellchecker-enable -->
 
-2. The Tenancy Explorer is used to locate existing resources: **Governance & Administration** --> **Governance** --> **Tenancy Explorer**. Use the "Show resources in subcompartments" feature to locate all the resources in your tenancy:
+    Choose the target compartment, agree to the terms and click on the "Launch Stack" button.  This will start the wizard
+    to create the new stack. On the first page please choose a compartment to host your stack and select `Next`
 
-    ![Oracle Cloud Infrastructure Show Subcompartments](images/show-subcompartments.png " ")
-
-    It may be necessary to delete some resources to make space to run the workshop. Once you have enough space you may proceed to the next step.
-
-## Setup OBaaS Environment
-
-1. Install OBaaS from OCI Marketplace 
-
-    ***write me***
+    <!-- spellchecker-disable -->
+    ![OCI Stack wizard page 1](../ebaas-stack-page1.png)
+    <!-- spellchecker-enable -->
 
     Fill the configuration variables and select `Next`
 
@@ -52,69 +88,36 @@ If, however, you have already used up some quota on your tenancy, perhaps while 
         * `Enable Horizontal Pod Scaling?`: The [Horizontal Pod Autoscaler](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusinghorizontalpodautoscaler.htm#Using_Kubernetes_Horizontal_Pod_Autoscaler) can help applications scale out to meet increased demand, or scale in when resources are no longer needed.
         * `Node Pool Workers`: Number of VMs of the OKE Cluster.
 
-    ![Create Stack Wizard Config Variables](images/oci-private-template-create-stack-config.png " ")
+    <!-- spellchecker-disable -->
+    {{< img name="oci-private-template-create-stack-config" size="large" lazy=false >}}
+    <!-- spellchecker-enable -->
 
-    Now you can review the stack configuration and save the changes. Please, *DO NOT* check the `Run apply` box
+    Now you can review the stack configuration and save the changes.  Oracle recommends that you do not check the "Run apply" option - this will
+    give you the opportunity to run the "plan" first and check for issues.
 
-    ![Create Stack Wizard Config Review](images/oci-private-template-create-stack-config-review.png " ")
+    <!-- spellchecker-disable -->
+    {{< img name="oci-private-template-create-stack-config-review" size="large" lazy=false >}}
+    <!-- spellchecker-enable -->
 
-3. Apply the Stack from the OBaaS Template
+3. Apply the Stack 
 
-    After you create your Stack, you will be able to test the Plan, Edit the Stack, Apply the Stack or Destroy.
+    After you create your stack, you will be able to test the plan, edit the stack, and apply or destroy the stack.
 
-    We recommend you test the Plan before apply the stack, the objective is review the plan and prevent run in issues.
+    Oracle recommends you test the plan before applying the stack, in order to identify any issues before you apply the plan and
+    create resources.  You can test the plan by clicking on the "Plan" button and then reviewing the output.  If you see any
+    issues, for example you may find that you do not have enough quota for some resource, you can fix that issue before
+    proceeding.
 
-    After plan test, you can apply the stack and create your OBaaS Environment.
+    When you are happy with the plan test, you can apply the stack by clicking on the "Apply" button. This will create your Oracle Backend
+    as a Service for Spring Cloud Environment.  This takes about 20 minutes to complete.  A lot of this time is spent provisioning the
+    Kuberentes cluster, worker nodes, and database.  You can watch the logs to follow progress of the operation.
 
-    ![Create Stack Apply](images/oci-stack-apply.png " ")
+    <!-- spellchecker-disable -->
+    {{< img name="oci-stack-apply" size="large" lazy=false >}}
+    <!-- spellchecker-enable -->
 
     The OCI Resource Manager will apply your stack and generate the execution logs.
 
-    ![Create Stack Apply Logs](images/oci-stack-apply-logs.png " ")
-
-## Task 5: Get access to the OBaaS OKE Cluster and ADB
-
-After create the OBaaS Environment, you will have get access to Autonoums Database and OKE Cluster to create the Database objects and deploy the sample applications. 
-
-1. Create Dynamic port forwarding (SOCKS5) session using Bastion service.
-
-    Let's start with ADB access that was created with private end point access only following security guidance. To allow you get access to ADB to execute sql commnads you will need to stablish an session between your local workstation and ADB passing by the Bastion service.
-
-    We will create a [Dynamic port forwarding (SOCKS5) session](https://docs.oracle.com/en-us/iaas/Content/Bastion/Tasks/managingsessions.htm#).
-
-   ![Create Bastion Session](images/oci-bastion-session-create.png " ")
-
-    After session create you will be able to stablish the tunnel with your ADB Instance issuing a SSH command that you can obtain clicking on three dots menu on right side of the session created.
-
-    ```shell
-    ssh -i <privateKey> -N -D 127.0.0.1:<localPort> -p 22 ocid1.bastionsession.oc1.phx....@host.bastion.us-phoenix-1.oci.oraclecloud.com
-    ```
-
-2. Connect with ADB Instance using SQLcl
-
-    With tunnel stablished, you will be able to connect with ADB instance. First export the Oracle Net port executing the next commmand:
-
-    ```shell
-    <copy>
-    export CUSTOM_JDBC="-Doracle.net.socksProxyHost=127.0.0.1 -Doracle.net.socksProxyPort=<PORT> -Doracle.net.socksRemoteDNS=true"
-    </copy>
-    ```
-
-    Download ADB client credentials (Wallet):
-
-    ![Download ADB client credential](images/oci-adb-download-wallet.png " ")
-
-    Connect with SQLcl
-
-    ```shell
-    sql /nolog
-    ```
-
-    ```sql
-    set cloudconfig <WALLET>.zip
-    connect ADMIN@<ADB SERVICE>
-    ```
-
-3. Connect with OKE Instance
-
-    To deploy Sample Applications to OBaaS OKE Cluster, you should setup your local Kubectl following the [Setting Up Cluster Access](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm#localdownload) documentation.
+    <!-- spellchecker-disable -->
+    {{< img name="oci-stack-apply-logs" size="large" lazy=false >}}
+    <!-- spellchecker-enable -->
