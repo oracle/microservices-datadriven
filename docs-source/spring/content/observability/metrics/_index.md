@@ -38,7 +38,8 @@ visualize them.
 
 ## View metrics from the application in Prometheus
 
-Prometheus is an open-source systems monitoring and alerting. Prometheus collects and stores its metrics as time series data, i.e. metrics information is stored with the timestamp at which it was recorded, alongside optional key-value pairs called labels.
+Prometheus is an open-source systems monitoring and alerting. Prometheus collects and stores its metrics as time series data, metrics are stored
+with the timestamp at which they were recorded, and optional key-value pairs called labels.
 
 1. Exposing Prometheus UI using `port-forward`
 
@@ -52,16 +53,16 @@ Prometheus is an open-source systems monitoring and alerting. Prometheus collect
     {{< img name="obaas-prometheus-ui" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
-3. In the Prometheus UI, home page you can search for metrics.
+3. In the Prometheus web user interface you can search for metrics:
 
-    * In the search bar, search for application_ready_time_seconds and hit Execute
+    * In the search bar, search for `application_ready_time_seconds` and click on the `Execute` button
     * Notice you see metrics for the sample applications
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-prometheus-home" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
-4. In the Prometheus UI, the `Status` Menu Item allow you list all targets being monitored by Prometheus.
+4. In the Prometheus web user interface the `Status` menu item allow you view the targets being monitored by Prometheus:
 
     * In the top menu, choose Status and then Targets
     * Notice targets "slow", "customer" and others are in "UP" status and others are in "Down".
@@ -121,9 +122,10 @@ Prometheus is an open-source systems monitoring and alerting. Prometheus collect
 
 5. Navigate in Spring Boot Dashboard
 
-    * Now you should see the new dashboard in the list - its called Spring Boot Dashboard 2.1 - click on it to open it
+    * Now you should see the new dashboard in the list - it is called Spring Boot Dashboard 2.1 - click on it to open it
     * You should automatically see details for the sample applications in the dashboard
-    * Go and do a few more curls to create some traffic and observe the dashboard - there is a little round arrow thing in the top right corner that lets you tell it to automatically refresh every 5 seconds (or whatever period you choose)
+    * Incoke the service, e.g., using curl, a number of times to create some traffic and observe the dashboard. There is round arrow icon in the top right corner
+      that enables automatic refresh every 5 seconds (or whatever period you choose).
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-grafana-dashboard" size="medium" lazy=false >}}
