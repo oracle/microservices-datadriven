@@ -12,7 +12,7 @@
 <meta name="generator" content="Hugo 0.108.0">
 
 
-  <meta name="description" content="Oracle Backend as a Service for Spring Cloud is available in the OCI Marketplace
+  <meta name="description" content="Oracle Backend as a Service for Spring Cloud is available in the OCI Marketplace.
 Prerequisites You must meet the following prerequisites to use Oracle Backend as a Service for Spring Cloud:
 An OCI account in a tenancy with sufficient quota to create: An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP&rsquo;s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user) Summary of components Oracle Backend as a Service for Spring Cloud setup will install the following components:" />
 
@@ -40,7 +40,7 @@ An OCI account in a tenancy with sufficient quota to create: An OCI Container En
     content="Setup"
   />
   <meta property="og:site_name" content="Oracle Backend as a Service for Spring Cloud" />
-  <meta property="og:description" content="Oracle Backend as a Service for Spring Cloud is available in the OCI Marketplace
+  <meta property="og:description" content="Oracle Backend as a Service for Spring Cloud is available in the OCI Marketplace.
 Prerequisites You must meet the following prerequisites to use Oracle Backend as a Service for Spring Cloud:
 An OCI account in a tenancy with sufficient quota to create: An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP’s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user) Summary of components Oracle Backend as a Service for Spring Cloud setup will install the following components:" />
 <meta property="og:type" content="article" />
@@ -51,7 +51,7 @@ An OCI account in a tenancy with sufficient quota to create: An OCI Container En
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Setup" />
-  <meta name="twitter:description" content="Oracle Backend as a Service for Spring Cloud is available in the OCI Marketplace
+  <meta name="twitter:description" content="Oracle Backend as a Service for Spring Cloud is available in the OCI Marketplace.
 Prerequisites You must meet the following prerequisites to use Oracle Backend as a Service for Spring Cloud:
 An OCI account in a tenancy with sufficient quota to create: An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP’s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user) Summary of components Oracle Backend as a Service for Spring Cloud setup will install the following components:" />
 
@@ -64,8 +64,8 @@ An OCI account in a tenancy with sufficient quota to create: An OCI Container En
       "name": "Setup",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/setup/",
       "headline": "Setup",
-      "description": "Oracle Backend as a Service for Spring Cloud is available in the OCI Marketplace\nPrerequisites You must meet the following prerequisites to use Oracle Backend as a Service for Spring Cloud:\nAn OCI account in a tenancy with sufficient quota to create: An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP’s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user) Summary of components Oracle Backend as a Service for Spring Cloud setup will install the following components:",
-      "wordCount" : "578",
+      "description": "Oracle Backend as a Service for Spring Cloud is available in the OCI Marketplace.\nPrerequisites You must meet the following prerequisites to use Oracle Backend as a Service for Spring Cloud:\nAn OCI account in a tenancy with sufficient quota to create: An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP’s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user) Summary of components Oracle Backend as a Service for Spring Cloud setup will install the following components:",
+      "wordCount" : "629",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1122,7 +1122,7 @@ if (!doNotTrack) {
     <p>Oracle Backend as a Service for Spring Cloud is available in the <a
   class="gdoc-markdown__link"
   href="https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911"
->OCI Marketplace</a></p>
+>OCI Marketplace</a>.</p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="prerequisites">
         Prerequisites
@@ -1133,11 +1133,14 @@ if (!doNotTrack) {
 </div>
 <p>You must meet the following prerequisites to use Oracle Backend as a Service for Spring Cloud:</p>
 <ul>
-<li>An OCI account in a tenancy with sufficient quota to create:</li>
+<li>An OCI account in a tenancy with sufficient quota to create:
+<ul>
 <li>An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes</li>
 <li>A VCN with at least two public IP&rsquo;s available</li>
 <li>A public load balancer</li>
 <li>An Oracle Autonomous Database - Shared instance</li>
+</ul>
+</li>
 <li>At least one free OCI Auth Token (note that the maximum is two per user)</li>
 </ul>
 <div class="gdoc-page__anchorwrap">
@@ -1237,7 +1240,7 @@ if (!doNotTrack) {
 /></p>
  <!-- spellchecker-enable -->
 <p>Choose the target compartment, agree to the terms and click on the &ldquo;Launch Stack&rdquo; button.  This will start the wizard
-to create the new stack. On the first page please choose a compartment to host your stack and select <code>Next</code></p>
+to create the new stack. On the first page choose a compartment to host your stack and select <code>Next</code></p>
  <!-- spellchecker-disable -->
 <p><img
   src="../ebaas-stack-page1.png"
@@ -1245,18 +1248,19 @@ to create the new stack. On the first page please choose a compartment to host y
   
 /></p>
  <!-- spellchecker-enable -->
-<p>Fill the configuration variables and select <code>Next</code></p>
+<p>Fill in the following configuration variables as needed and select <code>Next</code></p>
 <ul>
 <li><code>Application Name</code> (Optional)</li>
 <li>OKE Control Plane Options.
 <ul>
-<li><code>Public Control Plane</code>: this option allow you access the OKE Control Plane from the Internet (Public IP)</li>
-<li><code>Control Plane Access Control</code>: IP range enabled to access the control plane (recommended)</li>
+<li><code>Public Control Plane</code>: this option allows access the OKE Control Plane from the Internet (Public IP). If not selected, access
+will only be from a private VCN.</li>
+<li><code>Control Plane Access Control</code>: CIDR (IP range) allowed to access the control plane (Oracle recommends you set this as restrictive as possible).</li>
 <li><code>Enable Horizontal Pod Scaling?</code>: The <a
   class="gdoc-markdown__link"
   href="https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusinghorizontalpodautoscaler.htm#Using_Kubernetes_Horizontal_Pod_Autoscaler"
 >Horizontal Pod Autoscaler</a> can help applications scale out to meet increased demand, or scale in when resources are no longer needed.</li>
-<li><code>Node Pool Workers</code>: Number of VMs of the OKE Cluster.</li>
+<li><code>Node Pool Workers</code>: Number of Kubernetes worker nodes (virutal machines) to attach to the OKE Cluster.</li>
 </ul>
 </li>
 </ul>
@@ -1324,11 +1328,13 @@ give you the opportunity to run the &ldquo;plan&rdquo; first and check for issue
 <li>
 <p>Apply the Stack</p>
 <p>After you create your stack, you will be able to test the plan, edit the stack, and apply or destroy the stack.</p>
-<p>Oracle recommends you test the plan before applying the stack, in order to identify any issues before you apply the plan and
-create resources.  You can test the plan by clicking on the &ldquo;Plan&rdquo; button and then reviewing the output.  If you see any
+<p>Oracle recommends you test the plan before applying the stack, in order to identify any issues before you start
+creating resources.   Testing a plan does not create any actual resources, it is just a &ldquo;dry run&rdquo; to tell you
+what would happen if you applied.</p>
+<p>You can test the plan by clicking on the &ldquo;Plan&rdquo; button and then reviewing the output.  If you see any
 issues, for example you may find that you do not have enough quota for some resource, you can fix that issue before
 proceeding.</p>
-<p>When you are happy with the plan test, you can apply the stack by clicking on the &ldquo;Apply&rdquo; button. This will create your Oracle Backend
+<p>When you are happy with the results of the test, you can apply the stack by clicking on the &ldquo;Apply&rdquo; button. This will create your Oracle Backend
 as a Service for Spring Cloud Environment.  This takes about 20 minutes to complete.  A lot of this time is spent provisioning the
 Kuberentes cluster, worker nodes, and database.  You can watch the logs to follow progress of the operation.</p>
  <!-- spellchecker-disable -->

@@ -13,7 +13,7 @@
 
 
   <meta name="description" content="The Oracle Backend as a Service for Spring Cloud metrics stack automates metrics aggregation and consists of Prometheus and Grafana components. Metrics sources expose system and application metrics. The Prometheus components retrieve and store the metrics and Grafana provides dashboards to visualize them.
-Metrics View metrics from the application in Prometheus Prometheus is an open-source systems monitoring and alerting. Prometheus collects and stores its metrics as time series data, i.e. metrics information is stored with the timestamp at which it was recorded, alongside optional key-value pairs called labels." />
+Metrics View metrics from the application in Prometheus Prometheus is an open-source systems monitoring and alerting. Prometheus collects and stores its metrics as time series data, metrics are stored with the timestamp at which they were recorded, and optional key-value pairs called labels." />
 
     <title>Metrics | Oracle Backend as a Service for Spring Cloud</title>
 
@@ -40,7 +40,7 @@ Metrics View metrics from the application in Prometheus Prometheus is an open-so
   />
   <meta property="og:site_name" content="Oracle Backend as a Service for Spring Cloud" />
   <meta property="og:description" content="The Oracle Backend as a Service for Spring Cloud metrics stack automates metrics aggregation and consists of Prometheus and Grafana components. Metrics sources expose system and application metrics. The Prometheus components retrieve and store the metrics and Grafana provides dashboards to visualize them.
-Metrics View metrics from the application in Prometheus Prometheus is an open-source systems monitoring and alerting. Prometheus collects and stores its metrics as time series data, i.e. metrics information is stored with the timestamp at which it was recorded, alongside optional key-value pairs called labels." />
+Metrics View metrics from the application in Prometheus Prometheus is an open-source systems monitoring and alerting. Prometheus collects and stores its metrics as time series data, metrics are stored with the timestamp at which they were recorded, and optional key-value pairs called labels." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/observability/metrics/" />
 
@@ -50,7 +50,7 @@ Metrics View metrics from the application in Prometheus Prometheus is an open-so
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Metrics" />
   <meta name="twitter:description" content="The Oracle Backend as a Service for Spring Cloud metrics stack automates metrics aggregation and consists of Prometheus and Grafana components. Metrics sources expose system and application metrics. The Prometheus components retrieve and store the metrics and Grafana provides dashboards to visualize them.
-Metrics View metrics from the application in Prometheus Prometheus is an open-source systems monitoring and alerting. Prometheus collects and stores its metrics as time series data, i.e. metrics information is stored with the timestamp at which it was recorded, alongside optional key-value pairs called labels." />
+Metrics View metrics from the application in Prometheus Prometheus is an open-source systems monitoring and alerting. Prometheus collects and stores its metrics as time series data, metrics are stored with the timestamp at which they were recorded, and optional key-value pairs called labels." />
 
 
   <script type="application/ld+json">
@@ -61,7 +61,7 @@ Metrics View metrics from the application in Prometheus Prometheus is an open-so
       "name": "Metrics",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/observability/metrics/",
       "headline": "Metrics",
-      "description": "The Oracle Backend as a Service for Spring Cloud metrics stack automates metrics aggregation and consists of Prometheus and Grafana components. Metrics sources expose system and application metrics. The Prometheus components retrieve and store the metrics and Grafana provides dashboards to visualize them.\nMetrics View metrics from the application in Prometheus Prometheus is an open-source systems monitoring and alerting. Prometheus collects and stores its metrics as time series data, i.e. metrics information is stored with the timestamp at which it was recorded, alongside optional key-value pairs called labels.",
+      "description": "The Oracle Backend as a Service for Spring Cloud metrics stack automates metrics aggregation and consists of Prometheus and Grafana components. Metrics sources expose system and application metrics. The Prometheus components retrieve and store the metrics and Grafana provides dashboards to visualize them.\nMetrics View metrics from the application in Prometheus Prometheus is an open-source systems monitoring and alerting. Prometheus collects and stores its metrics as time series data, metrics are stored with the timestamp at which they were recorded, and optional key-value pairs called labels.",
       "wordCount" : "547",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
@@ -1165,7 +1165,8 @@ visualize them.</p>
         </a>
     </h2>
 </div>
-<p>Prometheus is an open-source systems monitoring and alerting. Prometheus collects and stores its metrics as time series data, i.e. metrics information is stored with the timestamp at which it was recorded, alongside optional key-value pairs called labels.</p>
+<p>Prometheus is an open-source systems monitoring and alerting. Prometheus collects and stores its metrics as time series data, metrics are stored
+with the timestamp at which they were recorded, and optional key-value pairs called labels.</p>
 <ol>
 <li>
 <p>Exposing Prometheus UI using <code>port-forward</code></p>
@@ -1207,9 +1208,9 @@ visualize them.</p>
  <!-- spellchecker-enable -->
 </li>
 <li>
-<p>In the Prometheus UI, home page you can search for metrics.</p>
+<p>In the Prometheus web user interface you can search for metrics:</p>
 <ul>
-<li>In the search bar, search for application_ready_time_seconds and hit Execute</li>
+<li>In the search bar, search for <code>application_ready_time_seconds</code> and click on the <code>Execute</code> button</li>
 <li>Notice you see metrics for the sample applications</li>
 </ul>
  <!-- spellchecker-disable -->
@@ -1243,7 +1244,7 @@ visualize them.</p>
  <!-- spellchecker-enable -->
 </li>
 <li>
-<p>In the Prometheus UI, the <code>Status</code> Menu Item allow you list all targets being monitored by Prometheus.</p>
+<p>In the Prometheus web user interface the <code>Status</code> menu item allow you view the targets being monitored by Prometheus:</p>
 <ul>
 <li>In the top menu, choose Status and then Targets</li>
 <li>Notice targets &ldquo;slow&rdquo;, &ldquo;customer&rdquo; and others are in &ldquo;UP&rdquo; status and others are in &ldquo;Down&rdquo;.</li>
@@ -1433,9 +1434,10 @@ visualize them.</p>
 <li>
 <p>Navigate in Spring Boot Dashboard</p>
 <ul>
-<li>Now you should see the new dashboard in the list - its called Spring Boot Dashboard 2.1 - click on it to open it</li>
+<li>Now you should see the new dashboard in the list - it is called Spring Boot Dashboard 2.1 - click on it to open it</li>
 <li>You should automatically see details for the sample applications in the dashboard</li>
-<li>Go and do a few more curls to create some traffic and observe the dashboard - there is a little round arrow thing in the top right corner that lets you tell it to automatically refresh every 5 seconds (or whatever period you choose)</li>
+<li>Incoke the service, e.g., using curl, a number of times to create some traffic and observe the dashboard. There is round arrow icon in the top right corner
+that enables automatic refresh every 5 seconds (or whatever period you choose).</li>
 </ul>
  <!-- spellchecker-disable -->
 

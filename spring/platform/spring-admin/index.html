@@ -12,10 +12,9 @@
 <meta name="generator" content="Hugo 0.108.0">
 
 
-  <meta name="description" content="View application details using the Spring Admin Dashboard Spring Boot Admin is a web application, used for managing and monitoring Spring Boot applications. Each application is considered as a client and registers to the admin server. Behind the scenes, the magic is given by the Spring Boot Actuator endpoints.
+  <meta name="description" content="View application details using the Spring Admin Dashboard Spring Boot Admin is a web application used for managing and monitoring Spring Boot applications. Applications are discovered from the service registry. Most of the information displayed in the web user interface comes from the Spring Boot Actuator endpoints exposed by the applications.
 Exposing Spring Admin Dashboard using port-forward
-kubectl -n admin-server port-forward svc/admin-server 8989:8989 Open the Spring Admin Dashboard URL: http://localhost:8989
-username: admin password: admin Note: Oracle recommends that you change the default password when you first login." />
+kubectl -n admin-server port-forward svc/admin-server 8989:8989 Open the Spring Admin Dashboard URL: http://localhost:8989" />
 
     <title>Spring Admin | Oracle Backend as a Service for Spring Cloud</title>
 
@@ -41,10 +40,9 @@ username: admin password: admin Note: Oracle recommends that you change the defa
     content="Spring Admin"
   />
   <meta property="og:site_name" content="Oracle Backend as a Service for Spring Cloud" />
-  <meta property="og:description" content="View application details using the Spring Admin Dashboard Spring Boot Admin is a web application, used for managing and monitoring Spring Boot applications. Each application is considered as a client and registers to the admin server. Behind the scenes, the magic is given by the Spring Boot Actuator endpoints.
+  <meta property="og:description" content="View application details using the Spring Admin Dashboard Spring Boot Admin is a web application used for managing and monitoring Spring Boot applications. Applications are discovered from the service registry. Most of the information displayed in the web user interface comes from the Spring Boot Actuator endpoints exposed by the applications.
 Exposing Spring Admin Dashboard using port-forward
-kubectl -n admin-server port-forward svc/admin-server 8989:8989 Open the Spring Admin Dashboard URL: http://localhost:8989
-username: admin password: admin Note: Oracle recommends that you change the default password when you first login." />
+kubectl -n admin-server port-forward svc/admin-server 8989:8989 Open the Spring Admin Dashboard URL: http://localhost:8989" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/platform/spring-admin/" />
 
@@ -53,10 +51,9 @@ username: admin password: admin Note: Oracle recommends that you change the defa
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Spring Admin" />
-  <meta name="twitter:description" content="View application details using the Spring Admin Dashboard Spring Boot Admin is a web application, used for managing and monitoring Spring Boot applications. Each application is considered as a client and registers to the admin server. Behind the scenes, the magic is given by the Spring Boot Actuator endpoints.
+  <meta name="twitter:description" content="View application details using the Spring Admin Dashboard Spring Boot Admin is a web application used for managing and monitoring Spring Boot applications. Applications are discovered from the service registry. Most of the information displayed in the web user interface comes from the Spring Boot Actuator endpoints exposed by the applications.
 Exposing Spring Admin Dashboard using port-forward
-kubectl -n admin-server port-forward svc/admin-server 8989:8989 Open the Spring Admin Dashboard URL: http://localhost:8989
-username: admin password: admin Note: Oracle recommends that you change the default password when you first login." />
+kubectl -n admin-server port-forward svc/admin-server 8989:8989 Open the Spring Admin Dashboard URL: http://localhost:8989" />
 
 
   <script type="application/ld+json">
@@ -67,8 +64,8 @@ username: admin password: admin Note: Oracle recommends that you change the defa
       "name": "Spring Admin",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/platform/spring-admin/",
       "headline": "Spring Admin",
-      "description": "View application details using the Spring Admin Dashboard Spring Boot Admin is a web application, used for managing and monitoring Spring Boot applications. Each application is considered as a client and registers to the admin server. Behind the scenes, the magic is given by the Spring Boot Actuator endpoints.\nExposing Spring Admin Dashboard using port-forward\nkubectl -n admin-server port-forward svc\/admin-server 8989:8989 Open the Spring Admin Dashboard URL: http:\/\/localhost:8989\nusername: admin password: admin Note: Oracle recommends that you change the default password when you first login.",
-      "wordCount" : "154",
+      "description": "View application details using the Spring Admin Dashboard Spring Boot Admin is a web application used for managing and monitoring Spring Boot applications. Applications are discovered from the service registry. Most of the information displayed in the web user interface comes from the Spring Boot Actuator endpoints exposed by the applications.\nExposing Spring Admin Dashboard using port-forward\nkubectl -n admin-server port-forward svc\/admin-server 8989:8989 Open the Spring Admin Dashboard URL: http:\/\/localhost:8989",
+      "wordCount" : "156",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1138,7 +1135,8 @@ if (!doNotTrack) {
         </a>
     </h2>
 </div>
-<p>Spring Boot Admin is a web application, used for managing and monitoring Spring Boot applications. Each application is considered as a client and registers to the admin server. Behind the scenes, the magic is given by the Spring Boot Actuator endpoints.</p>
+<p>Spring Boot Admin is a web application used for managing and monitoring Spring Boot applications. Applications are discovered from the service registry.
+Most of the information displayed in the web user interface comes from the Spring Boot Actuator endpoints exposed by the applications.</p>
 <ol>
 <li>
 <p>Exposing Spring Admin Dashboard using <code>port-forward</code></p>
@@ -1186,7 +1184,7 @@ we still recommend using strong passwords to maximize security.</p>
  <!-- spellchecker-enable -->
 </li>
 <li>
-<p>On the web page, navigate to the applications tab</p>
+<p>On the web page, navigate to the applications tab:</p>
 <ul>
 <li>If you deployed the <a
   class="gdoc-markdown__link"

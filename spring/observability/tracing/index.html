@@ -59,7 +59,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/observability/tracing/",
       "headline": "Jaeger Tracing",
       "description": "Configure Jaeger to capture application traces",
-      "wordCount" : "146",
+      "wordCount" : "168",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1127,20 +1127,20 @@ For more information on Jaeger, see the <a
   href="https://www.jaegertracing.io/"
 >Jaeger website</a>.</p>
 <div class="gdoc-page__anchorwrap">
-    <h2 id="view-application-traces-in-jaeger-ui">
-        View application traces in Jaeger UI
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/observability/tracing/#view-application-traces-in-jaeger-ui" class="gdoc-page__anchor clip flex align-center" title="Anchor to: View application traces in Jaeger UI" aria-label="Anchor to: View application traces in Jaeger UI" href="#view-application-traces-in-jaeger-ui">
+    <h2 id="view-application-traces-in-jaeger-web-user-interface">
+        View application traces in Jaeger web user interface
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/observability/tracing/#view-application-traces-in-jaeger-web-user-interface" class="gdoc-page__anchor clip flex align-center" title="Anchor to: View application traces in Jaeger web user interface" aria-label="Anchor to: View application traces in Jaeger web user interface" href="#view-application-traces-in-jaeger-web-user-interface">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>
 </div>
 <ol>
 <li>
-<p>Exposing Jaeger UI using <code>port-forward</code></p>
+<p>Exposing Jaeger web user interface using <code>port-forward</code></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl -n observability port-forward svc/jaegertracing-query 16686:16686
 </span></span></code></pre></div></li>
 <li>
-<p>Open the Jaeger UI URL: <a
+<p>Open the Jaeger web user interface URL: <a
   class="gdoc-markdown__link"
   href="http://localhost:16686"
 >http://localhost:16686</a></p>
@@ -1175,7 +1175,8 @@ For more information on Jaeger, see the <a
  <!-- spellchecker-enable -->
 </li>
 <li>
-<p>In the Jaeger UI, the <code>Search</code> Tab allow you list tracings using diverse criterias. Let&rsquo;s test with Customer Microservice</p>
+<p>In the Jaeger web user interface, the <code>Search</code> Tab allows you find tracings using various criteria. For example, to find
+traces for the customer microservice included in the sample apps:</p>
 <ul>
 <li>
 <p>If you deployed the <a
@@ -1188,7 +1189,7 @@ be able to find traces for it in Jaeger.</p>
 <p>Select Service <code>customer</code> and Operation <code>/api/v1/customers</code></p>
 </li>
 <li>
-<p>Click on the search button &ndash; Several traces will appear (one for each time you curl&rsquo;ed)</p>
+<p>Click on the search button &ndash; Several traces will appear (one for each time you invoked the service)</p>
   <!-- spellchecker-disable -->
 
           
@@ -1220,7 +1221,7 @@ be able to find traces for it in Jaeger.</p>
   <!-- spellchecker-enable -->
 </li>
 <li>
-<p>Click on any one of them to view the trace that include multiple services and going into the DB and AQ</p>
+<p>Click on any one of them to view the trace that include multiple services and extends into the Oracle database and Oracle Advanced Queueing:</p>
   <!-- spellchecker-disable -->
 
           

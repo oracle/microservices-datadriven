@@ -23,8 +23,6 @@
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/observability/metrics/</loc>
   </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/spring/platform/conductor/</loc>
-  </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/observability/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/</loc>
@@ -42,5 +40,7 @@
     <loc>https://oracle.github.io/microservices-datadriven/spring/uninstall/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/development/cli/</loc>
+  </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/platform/conductor/</loc>
   </url>
 </urlset>
