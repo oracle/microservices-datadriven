@@ -119,10 +119,10 @@ same values you used when editing the `pom.xml` file in the previous steps.
 ## Create Database Objects for each application
 
 You must create the database users and some objects that are required by the sample services.
-Connect to the Oracle Autonmous Database instance using (using [these instructions](../database)) and execute the SQL statements
+Connect to the Oracle Autonmous Database instance using (using [these instructions](../database)) and run the SQL statements
 for each application. You must edit each SQL script to add your desired password before running the statements.
 
-Each of the following files must be reviewed, updated, and then executed against the database (as the `ADMIN` user).
+Each of the following files must be reviewed, updated, and then processed against the database (as the `ADMIN` user).
 
 1. Customer microservice
 
@@ -140,7 +140,7 @@ Each of the following files must be reviewed, updated, and then executed against
 ## Add applications configurations into Spring Config Server Properties Table
 
 You must create the application configuration entries that are required by the sample services.
-Connect to the Oracle Autonmous Database instance using (using [these instructions](../database)) and execute the SQL statements
+Connect to the Oracle Autonmous Database instance using (using [these instructions](../database)) and run the SQL statements
 for each application. You must edit each SQL script to match your environment before running the statements.
 The example below shows the lines that must be updated. You must replace the `TNS_NAME` with the correct name
 for your database.  If your database is called `OBAASDB` then the `TNS_NAME` is `OBAASDB_TP`.

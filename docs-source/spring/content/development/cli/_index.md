@@ -30,12 +30,12 @@ Built-In Commands
 - `quit`, `exit`: Exit the shell.
 - `history`: Display or save the history of previously run commands
 - `version`: Show version info
-- `script`: Read and execute commands from a file.
+- `script`: Read and run commands from a file.
 
 Commands
 
-- `connect`: connect to the Oracle Spring admin console
-- `change-password`: change password for Oracle Spring
+- `connect`: connect to the OBaaS - Spring admin console
+- `change-password`: change password for Oracle BaaS
 - `create`: create an application/namespace
 - `create-schema`: create a schema/user and bind it to service deployment
 - `config`: view and modify application configuration
