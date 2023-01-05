@@ -14,7 +14,8 @@
 
   <meta name="description" content="Oracle Backend as a Service for Spring Cloud is available in the OCI Marketplace.
 Prerequisites You must meet the following prerequisites to use Oracle Backend as a Service for Spring Cloud:
-An OCI account in a tenancy with sufficient quota to create: An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP&rsquo;s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user) Summary of components Oracle Backend as a Service for Spring Cloud setup will install the following components:" />
+An OCI account in a tenancy with sufficient quota to create:
+An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP&rsquo;s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user)" />
 
     <title>Setup | Oracle Backend as a Service for Spring Cloud</title>
 
@@ -42,7 +43,8 @@ An OCI account in a tenancy with sufficient quota to create: An OCI Container En
   <meta property="og:site_name" content="Oracle Backend as a Service for Spring Cloud" />
   <meta property="og:description" content="Oracle Backend as a Service for Spring Cloud is available in the OCI Marketplace.
 Prerequisites You must meet the following prerequisites to use Oracle Backend as a Service for Spring Cloud:
-An OCI account in a tenancy with sufficient quota to create: An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP’s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user) Summary of components Oracle Backend as a Service for Spring Cloud setup will install the following components:" />
+An OCI account in a tenancy with sufficient quota to create:
+An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP’s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user)" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/setup/" />
 
@@ -53,7 +55,8 @@ An OCI account in a tenancy with sufficient quota to create: An OCI Container En
 <meta name="twitter:title" content="Setup" />
   <meta name="twitter:description" content="Oracle Backend as a Service for Spring Cloud is available in the OCI Marketplace.
 Prerequisites You must meet the following prerequisites to use Oracle Backend as a Service for Spring Cloud:
-An OCI account in a tenancy with sufficient quota to create: An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP’s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user) Summary of components Oracle Backend as a Service for Spring Cloud setup will install the following components:" />
+An OCI account in a tenancy with sufficient quota to create:
+An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP’s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user)" />
 
 
   <script type="application/ld+json">
@@ -64,8 +67,8 @@ An OCI account in a tenancy with sufficient quota to create: An OCI Container En
       "name": "Setup",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/setup/",
       "headline": "Setup",
-      "description": "Oracle Backend as a Service for Spring Cloud is available in the OCI Marketplace.\nPrerequisites You must meet the following prerequisites to use Oracle Backend as a Service for Spring Cloud:\nAn OCI account in a tenancy with sufficient quota to create: An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP’s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user) Summary of components Oracle Backend as a Service for Spring Cloud setup will install the following components:",
-      "wordCount" : "629",
+      "description": "Oracle Backend as a Service for Spring Cloud is available in the OCI Marketplace.\nPrerequisites You must meet the following prerequisites to use Oracle Backend as a Service for Spring Cloud:\nAn OCI account in a tenancy with sufficient quota to create:\nAn OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP’s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user)",
+      "wordCount" : "979",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -689,7 +692,7 @@ An OCI account in a tenancy with sufficient quota to create: An OCI Container En
                   href="/microservices-datadriven/spring/development/cli"
                   class="gdoc-nav__entry"
                 >
-                  Using the CLI
+                  OBaaS CLI
                 </a>
               </span>
               
@@ -1133,7 +1136,8 @@ if (!doNotTrack) {
 </div>
 <p>You must meet the following prerequisites to use Oracle Backend as a Service for Spring Cloud:</p>
 <ul>
-<li>An OCI account in a tenancy with sufficient quota to create:
+<li>
+<p>An OCI account in a tenancy with sufficient quota to create:</p>
 <ul>
 <li>An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes</li>
 <li>A VCN with at least two public IP&rsquo;s available</li>
@@ -1141,7 +1145,17 @@ if (!doNotTrack) {
 <li>An Oracle Autonomous Database - Shared instance</li>
 </ul>
 </li>
-<li>At least one free OCI Auth Token (note that the maximum is two per user)</li>
+<li>
+<p>At least one free OCI Auth Token (note that the maximum is two per user)</p>
+</li>
+<li>
+<p>On local workstation:</p>
+<ul>
+<li>The Kubernetes command-line tool (kubectl)</li>
+<li>Oracle Clound Infrastructure Command Line Interface (CLI)</li>
+<li>Oracle Backend as a Service for Spring Cloud command-line tool</li>
+</ul>
+</li>
 </ul>
 <div class="gdoc-page__anchorwrap">
     <h2 id="summary-of-components">
@@ -1219,9 +1233,9 @@ if (!doNotTrack) {
 </tbody>
 </table> </div>
 <div class="gdoc-page__anchorwrap">
-    <h2 id="setup-the-environment">
-        Setup the environment
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/setup/#setup-the-environment" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Setup the environment" aria-label="Anchor to: Setup the environment" href="#setup-the-environment">
+    <h2 id="setup-the-oci-environment">
+        Setup the OCI environment
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/setup/#setup-the-oci-environment" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Setup the OCI environment" aria-label="Anchor to: Setup the OCI environment" href="#setup-the-oci-environment">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>
@@ -1396,6 +1410,78 @@ Kuberentes cluster, worker nodes, and database.  You can watch the logs to follo
       </div>
 
  <!-- spellchecker-enable -->
+</li>
+</ol>
+<div class="gdoc-page__anchorwrap">
+    <h2 id="setup-the-local-workstation">
+        Setup the local workstation
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/setup/#setup-the-local-workstation" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Setup the local workstation" aria-label="Anchor to: Setup the local workstation" href="#setup-the-local-workstation">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<ol>
+<li>
+<p>Setting Up Cluster Access</p>
+<p>To access a cluster using kubectl installed (see the <a
+  class="gdoc-markdown__link"
+  href="./cluster-access"
+>Kubernetes access</a>) locally. If you haven&rsquo;t already done so,</p>
+<ul>
+<li>
+<p>install kubectl (see the <a
+  class="gdoc-markdown__link"
+  href="https://kubernetes.io/docs/tasks/tools/install-kubectl/"
+>kubectl documentation</a>).</p>
+</li>
+<li>
+<p>generate an API signing key pair
+If you already have an API signing key pair, go straight to the next step. If not:</p>
+<ol>
+<li>Use OpenSSL commands to generate the key pair in the required PEM format. If you&rsquo;re using Windows, you&rsquo;ll need to install Git Bash for Windows and run the commands with that tool. See <a
+  class="gdoc-markdown__link"
+  href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#two"
+>How to Generate an API Signing Key</a>.</li>
+<li>Copy the contents of the public key to the clipboard (you&rsquo;ll need to paste the value into the Console later).</li>
+</ol>
+</li>
+<li>
+<p>add the public key value of the API signing key pair to the User Settings for your username</p>
+<ol>
+<li>
+<p>In the top-right corner of the Oracle Cloud Infrastructure Console, open the <strong>Profile</strong> menu (User menu icon) and then click <strong>User Settings</strong> to view the details.</p>
+</li>
+<li>
+<p>Click <strong>Add Public Key</strong>.</p>
+</li>
+<li>
+<p>Paste the public key&rsquo;s value into the window and click <strong>Add</strong>.</p>
+<p>The key is uploaded and its fingerprint is displayed (for example, d1:b2:32:53:d3:5f:cf:68:2d:6f:8b:5f:77:8f:07:13).</p>
+</li>
+</ol>
+</li>
+<li>
+<p>install and configure the Oracle Cloud Infrastructure CLI</p>
+<ol>
+<li>Install the Oracle Cloud Infrastructure CLI version 2.6.4 (or later). See <a
+  class="gdoc-markdown__link"
+  href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#Quickstart"
+>Quickstart</a>.</li>
+<li>Configure the Oracle Cloud Infrastructure CLI. See <a
+  class="gdoc-markdown__link"
+  href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliconfigure.htm#Configuring_the_CLI"
+>Configuring the CLI</a>.</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>
+<p>Install Oracle Backend as a Service for Spring Cloud command-line</p>
+<p>The <strong>Oracle Backend as a Service for Spring Cloud</strong> command-line tool, <code>obaas</code>, is available for Linux and Mac systems. Download the binary you want from the <a
+  class="gdoc-markdown__link"
+  href="https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0"
+>Releases</a> page and add it to your PATH environment variable.  You may like to rename the binary to remove the suffix.</p>
+<p>If you&rsquo;re environment is a Linux or Mac machine you need to run <code>chmod +x</code> on the downloaded binary. Also if your environment is a Mac you need run the following command <code>sudo xattr -r -d com.apple.quarantine &lt;downloaded-file&gt;</code> otherwise will you get a security warning and the CLI will not work.</p>
 </li>
 </ol>
 

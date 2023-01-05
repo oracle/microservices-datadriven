@@ -13,7 +13,7 @@
 
 
   <meta name="description" content="The Oracle Backend as a Service for Spring Cloud setup creates a Kubernetes cluster where the server and dashboard components are deployed. At the end of setup, in the log for the apply job, you were provided with a command to creating a Kubernetes configuration file to access that cluster.
-kubeconfig_cmd = &#34;oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.iad.xxx --file $HOME/.kube/config --region us-ashburn-1 --token-version 2.0.0 --kube-endpoint PUBLIC_ENDPOINT&#34; To use kubectl on your local machine, you will need to have the OCI CLI installed and configured." />
+Tip For more information about working with the Kubernetes cluster, see Setting Up Cluster Access in the OCI documentation. kubeconfig_cmd = &#34;oci ce cluster create-kubeconfig --cluster-id ocid1." />
 
     <title>Access Kubernetes Cluster | Oracle Backend as a Service for Spring Cloud</title>
 
@@ -40,7 +40,7 @@ kubeconfig_cmd = &#34;oci ce cluster create-kubeconfig --cluster-id ocid1.cluste
   />
   <meta property="og:site_name" content="Oracle Backend as a Service for Spring Cloud" />
   <meta property="og:description" content="The Oracle Backend as a Service for Spring Cloud setup creates a Kubernetes cluster where the server and dashboard components are deployed. At the end of setup, in the log for the apply job, you were provided with a command to creating a Kubernetes configuration file to access that cluster.
-kubeconfig_cmd = &#34;oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.iad.xxx --file $HOME/.kube/config --region us-ashburn-1 --token-version 2.0.0 --kube-endpoint PUBLIC_ENDPOINT&#34; To use kubectl on your local machine, you will need to have the OCI CLI installed and configured." />
+Tip For more information about working with the Kubernetes cluster, see Setting Up Cluster Access in the OCI documentation. kubeconfig_cmd = &#34;oci ce cluster create-kubeconfig --cluster-id ocid1." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/cluster-access/" />
 
@@ -50,7 +50,7 @@ kubeconfig_cmd = &#34;oci ce cluster create-kubeconfig --cluster-id ocid1.cluste
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Access Kubernetes Cluster" />
   <meta name="twitter:description" content="The Oracle Backend as a Service for Spring Cloud setup creates a Kubernetes cluster where the server and dashboard components are deployed. At the end of setup, in the log for the apply job, you were provided with a command to creating a Kubernetes configuration file to access that cluster.
-kubeconfig_cmd = &#34;oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.iad.xxx --file $HOME/.kube/config --region us-ashburn-1 --token-version 2.0.0 --kube-endpoint PUBLIC_ENDPOINT&#34; To use kubectl on your local machine, you will need to have the OCI CLI installed and configured." />
+Tip For more information about working with the Kubernetes cluster, see Setting Up Cluster Access in the OCI documentation. kubeconfig_cmd = &#34;oci ce cluster create-kubeconfig --cluster-id ocid1." />
 
 
   <script type="application/ld+json">
@@ -61,8 +61,8 @@ kubeconfig_cmd = &#34;oci ce cluster create-kubeconfig --cluster-id ocid1.cluste
       "name": "Access Kubernetes Cluster",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/cluster-access/",
       "headline": "Access Kubernetes Cluster",
-      "description": "The Oracle Backend as a Service for Spring Cloud setup creates a Kubernetes cluster where the server and dashboard components are deployed. At the end of setup, in the log for the apply job, you were provided with a command to creating a Kubernetes configuration file to access that cluster.\nkubeconfig_cmd = \u0022oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.iad.xxx --file $HOME\/.kube\/config --region us-ashburn-1 --token-version 2.0.0 --kube-endpoint PUBLIC_ENDPOINT\u0022 To use kubectl on your local machine, you will need to have the OCI CLI installed and configured.",
-      "wordCount" : "432",
+      "description": "The Oracle Backend as a Service for Spring Cloud setup creates a Kubernetes cluster where the server and dashboard components are deployed. At the end of setup, in the log for the apply job, you were provided with a command to creating a Kubernetes configuration file to access that cluster.\nTip For more information about working with the Kubernetes cluster, see Setting Up Cluster Access in the OCI documentation. kubeconfig_cmd = \u0022oci ce cluster create-kubeconfig --cluster-id ocid1.",
+      "wordCount" : "415",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -686,7 +686,7 @@ kubeconfig_cmd = &#34;oci ce cluster create-kubeconfig --cluster-id ocid1.cluste
                   href="/microservices-datadriven/spring/development/cli"
                   class="gdoc-nav__entry"
                 >
-                  Using the CLI
+                  OBaaS CLI
                 </a>
               </span>
               
@@ -1116,41 +1116,48 @@ if (!doNotTrack) {
     class="gdoc-markdown gdoc-markdown__align--left"
   >
     <h1>Access Kubernetes Cluster</h1>
-    <p>The Oracle Backend as a Service for Spring Cloud setup creates a Kubernetes cluster where the server and dashboard components are deployed.  At the end of setup, in the log for the apply job, you were provided with a command to creating a Kubernetes configuration file to access that cluster.</p>
-<pre tabindex="0"><code>kubeconfig_cmd = &#34;oci ce cluster create-kubeconfig 
-                    --cluster-id ocid1.cluster.oc1.iad.xxx 
-                    --file $HOME/.kube/config 
-                    --region us-ashburn-1 
-                    --token-version 2.0.0 
-                    --kube-endpoint PUBLIC_ENDPOINT&#34;
-</code></pre><p>To use <code>kubectl</code> on your local machine, you will need to have the <a
-  class="gdoc-markdown__link"
-  href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cliconcepts.htm"
->OCI CLI installed and configured</a>.</p>
-<p>For more information about working with the Kubernetes cluster, see <a
+    <p>The <strong>Oracle Backend as a Service for Spring Cloud</strong> setup creates a Kubernetes cluster where the server and dashboard components are deployed.  At the end of setup, in the log for the apply job, you were provided with a command to creating a Kubernetes configuration file to access that cluster.</p>
+
+
+
+
+
+<blockquote class="gdoc-hint [tip]">
+  <div class="gdoc-hint__title flex align-center"><svg class="gdoc-icon gdoc_check"><use xlink:href="#gdoc_check"></use></svg>
+      <span>Tip</span></div>
+  <div class="gdoc-hint__text">For more information about working with the Kubernetes cluster, see <a
   class="gdoc-markdown__link"
   href="https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm#localdownload"
->Setting Up Cluster Access</a> in the OCI documentation.</p>
-<p><strong>Note:</strong> The generated <code>kubeconfig</code> file will only work if you are using the <code>DEFAULT</code> profile in your OCI CLI configuration file. If you are using a different OCI CLI profile you must add <code>--profile &lt;NAME&gt;</code> to the command by editing the generated Kubernetes config file and add the following lines:</p>
-<pre tabindex="0"><code>- --profile
-- MYTENANCY
-</code></pre><p>For example:</p>
-<pre tabindex="0"><code>- name: user-xxxx
-  user:
-    exec:
-      apiVersion: client.authentication.k8s.io/v1beta1
-      args:
-      - ce
-      - cluster
-      - generate-token
-      - --cluster-id
-      - ocid1.cluster....xxxx
-      - --region
-      - us-ashburn-1
-      - --profile
-      - YOUR_PROFILE_NAME
-      command: oci
-</code></pre><div class="gdoc-page__anchorwrap">
+>Setting Up Cluster Access</a> in the OCI documentation.</div>
+</blockquote>
+
+</br>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-txt" data-lang="txt"><span class="line"><span class="cl">kubeconfig_cmd = &#34;oci ce cluster create-kubeconfig 
+</span></span><span class="line"><span class="cl">                    --cluster-id ocid1.cluster.oc1.iad.xxx 
+</span></span><span class="line"><span class="cl">                    --file $HOME/.kube/config 
+</span></span><span class="line"><span class="cl">                    --region us-ashburn-1 
+</span></span><span class="line"><span class="cl">                    --token-version 2.0.0 
+</span></span><span class="line"><span class="cl">                    --kube-endpoint PUBLIC_ENDPOINT&#34;
+</span></span></code></pre></div><p><strong>Note:</strong> The generated <code>kubeconfig</code> file will only work if you are using the <code>DEFAULT</code> profile in your OCI CLI configuration file. If you are using a different OCI CLI profile you must add <code>--profile &lt;NAME&gt;</code> to the command by editing the generated Kubernetes config file and add the following lines:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl">- --<span class="l">profile</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="l">MYTENANCY</span><span class="w">
+</span></span></span></code></pre></div><p>For example:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">user-xxxx</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">user</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">exec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">client.authentication.k8s.io/v1beta1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">args</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">ce</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">cluster</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">generate-token</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- --<span class="l">cluster-id</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">ocid1.cluster....xxxx</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- --<span class="l">region</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">us-ashburn-1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- --<span class="l">profile</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">YOUR_PROFILE_NAME</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l">oci</span><span class="w">
+</span></span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="using-oci-cloud-shell">
         Using OCI Cloud Shell
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/cluster-access/#using-oci-cloud-shell" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Using OCI Cloud Shell" aria-label="Anchor to: Using OCI Cloud Shell" href="#using-oci-cloud-shell">

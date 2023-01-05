@@ -7,9 +7,6 @@
     <loc>https://oracle.github.io/microservices-datadriven/spring/development/</loc>
     <priority>0</priority>
   </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/spring/platform/</loc>
-    <priority>0</priority>
-  </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/security/</loc>
     <priority>0</priority>
   </url><url>
@@ -26,6 +23,8 @@
     <loc>https://oracle.github.io/microservices-datadriven/spring/observability/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/</loc>
+  </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/platform/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/sample-apps/</loc>
   </url><url>
