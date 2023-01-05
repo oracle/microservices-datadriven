@@ -38,8 +38,8 @@ main:
   - name: Security
     ref: "/security"
   - name: Database Access
-    ref: "/setup/database"    
+    ref: "/database"    
   - name: Kubernetes Access
-    ref: "/setup/cluster-access"
+    ref: "/cluster-access"
   - name: Uninstall
     ref: "/uninstall"

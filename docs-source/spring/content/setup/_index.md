@@ -37,10 +37,10 @@ Oracle Backend as a Service for Spring Cloud is available in the [OCI Marketplac
 You must meet the following prerequisites to use Oracle Backend as a Service for Spring Cloud:
 
 - An OCI account in a tenancy with sufficient quota to create:
-    - An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes
-    - A VCN with at least two public IP's available
-    - A public load balancer
-    - An Oracle Autonomous Database - Shared instance
+  - An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes
+  - A VCN with at least two public IP's available
+  - A public load balancer
+  - An Oracle Autonomous Database - Shared instance
 - At least one free OCI Auth Token (note that the maximum is two per user)
 
 - On local workstation:
@@ -155,6 +155,6 @@ Oracle Backend as a Service for Spring Cloud setup will install the following co
 
 2. Install Oracle Backend as a Service for Spring Cloud command-line
 
-    The **Oracle Backend as a Service for Spring Cloud** command-line tool, `oracle-spring`, is available for Linux and Mac systems. Download the binary you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0) page and add it to your PATH environment variable.  You may like to rename the binary to remove the suffix.
+    The **Oracle Backend as a Service for Spring Cloud** command-line tool, `obaas`, is available for Linux and Mac systems. Download the binary you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0) page and add it to your PATH environment variable.  You may like to rename the binary to remove the suffix.
 
     If you're environment is a Linux or Mac machine you need to execute `chmod +x` on the downloaded binary. Also if your environment is a Mac you need execute the following command `sudo xattr -r -d com.apple.quarantine <downloaded-file>` otherwise will you get a security warning and the CLI will not work.

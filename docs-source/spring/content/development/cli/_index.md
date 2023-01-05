@@ -6,16 +6,16 @@ The Oracle Backend as a Service for Spring Cloud offers a command-line tool, `ob
 
 ## Using the CLI
 
-1. Expose the Oracle Spring Cloud Admin Server that the CLI will call by using `port-forward`
+1. Expose the OBaaS Spring Cloud Admin Server that the CLI will call by using `port-forward`
 
     ```shell
     kubectl port-forward services/oracle-spring-admin -n oracle-spring-admin  8080:8080
     ```
 
-2. Start the CLI in interactive mode by simply running `oracle-spring` from your terminal window.
+2. Start the CLI in interactive mode by simply running `obaas` from your terminal window.
 
     ```shell
-        oracle-spring
+        obaas
     ```
 
 ## AVAILABLE COMMANDS
