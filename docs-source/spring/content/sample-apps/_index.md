@@ -21,20 +21,20 @@ Sample applications that demonstrate Oracle Backend as a Service for Spring Clou
 
 * GraalVM or OpenJDK 17  (OpenJDK Runtime Environment GraalVM CE 22.3.0 (build 17.0.5+8-jvmci-22.3-b08) recommended)
 * Apache Maven 3.8+
-* A Docker CLI (to login and push images to OCI Registry)
+* A container runtime (to login and push images to OCI Registry), e.g., Docker
 
 ## Make a Clone of the Sample Apps Source Code
 
-Now that you have your Oracle Backend as a Service for Spring Cloud environment available and accessible, we can start deploying the Sample applications.
+Now that you have your Oracle Backend as a Service for Spring Cloud environment available and accessible, you can deploy the sample applications.
 
-1. To work with the application code, you need to make a clone from the OraHub repository using the following command.  
+1. Create a clone from the GitHub repository using the following command.  
 
  ```shell
  git clone https://github.com/oracle/microservices-datadriven.git
  cd mbaas-developer-preview/sample-spring-apps/
  ```
 
-This directory contains the sample applications source code.
+This directory contains the sample applications' source code.
 
 ## Create OCI Repositories for Sample Applications
 
@@ -59,9 +59,9 @@ This directory contains the sample applications source code.
 
 3. Login to OCI Registry by executing the following command.  This will allow the build to push the sample applications' container images to OCI Registry.
 
-**Note:** The docker deamon must be running in your environment
+**Note:** A container runtime that allows you to push images to remote registries is required.
 
-You can determine the `<region>`  vaule from this page: [Region code](https://docs.oracle.com/en-us/iaas/Content/Registry/Concepts/registryprerequisites.htm#regional-availability). For example the US East (Ashburn) has the region code `iad`
+You can determine the `<region>` value from [Region code](https://docs.oracle.com/en-us/iaas/Content/Registry/Concepts/registryprerequisites.htm#regional-availability). For example the US East (Ashburn) has the region code `iad`.
 
 ```shell
     docker login <region>.ocir.io \
@@ -69,7 +69,7 @@ You can determine the `<region>`  vaule from this page: [Region code](https://do
     --password "<auth-token>"
 ```
 
-**Note:** If your account is a federatoed account you need to include `/oracleidentitycloudservice/` infront of the username as shown above.
+**Note:** If your account is federated you need to include `/oracleidentitycloudservice/` in front of the username as shown above.
 
 ## Build the sample applications and push container images
 
@@ -81,7 +81,7 @@ You can determine the `<region>`  vaule from this page: [Region code](https://do
         </properties>
     ```
 
-    For example, if your region is Phoenix and prject name is `myproject`
+    For example, if your region is Phoenix and project name is `myproject`:
 
     ```xml
         <properties>
@@ -89,15 +89,15 @@ You can determine the `<region>`  vaule from this page: [Region code](https://do
         </properties>
     ```
 
-2. Run package using Maven with this profile:
+2. Run the Maven package goal with the `build-docker-image` profile using this command:
 
     ```shell
     mvn package -P build-docker-image
     ```
 
-    When the command completes the build and push process (it will take afew minutes), you will see a message similar to the one below reporting that all modules were builded successfully.
+    When the command completes the build and push process (it will take a few minutes), you will see a message similar to the one below reporting that all modules were built successfully.
 
-    If you get a build failure, re-run the `mvn package -P build-docker-image` command.
+    If you get a build failure, check the output for details of any errors, correct them, and then re-run the command.
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-sample-apps-build-result" size="large" lazy=false >}}
@@ -106,7 +106,7 @@ You can determine the `<region>`  vaule from this page: [Region code](https://do
 ## Update Images in Kubernetes Deployment Descriptors
 
 You need to update the address of the images in application deployment descriptor to match the repositories you created.
-You do this by editing the `01--deployment--APPLICATION_NAME.yaml` file in each of the service sub-directories (a total of 6).  Use the
+You do this by editing the `01--deployment--APPLICATION_NAME.yaml` file in each of the service sub-directories (a total of six).  Use the
 same values you used when editing the `pom.xml` file in the previous steps.
 
 ```yaml
@@ -137,7 +137,7 @@ Each of the following files must be reviewed, updated, and then executed against
     * db-01-notification-create-user.sql
     * db-03-notifications-db-queue.sql
 
-## Add applications configurations into Config Server Properties Table
+## Add applications configurations into Spring Config Server Properties Table
 
 You must create the application configuration entries that are required by the sample services.
 Connect to the Oracle Autonmous Database instance using (using [these instructions](../database)) and execute the SQL statements
@@ -156,17 +156,17 @@ VALUES (
 );
 ```
 
-Each of the following files must be reviewed, updated, and then executed against the database (as the `ADMIN` user).
+Each of the following files must be reviewed, updated, and then run against the database (as the `ADMIN` user).
 
-1. Customer microservice
+1. Customer microservice:
 
     * db-02-customer-configserver-props.sql
 
-2. Fraud microservice
+2. Fraud microservice:
 
     * db-02-fraud-configserver-props.sql
 
-3. Notification microservice
+3. Notification microservice:
 
     * db-02-notification-configserver-props.sql
 
@@ -175,30 +175,30 @@ Each of the following files must be reviewed, updated, and then executed against
 For each application, you need to create a Kuberentes secret containing the database username and password that you chose in the previous steps.
 You can create these secrets by executing the following commands (update the values to match your environment):
 
-1. Customer microservice
+1. Customer microservice:
 
     ```cmd
      kubectl -n application \
        create secret generic oracledb-creds-customer \
-       --from-literal=sping.db.username=CUSTOMER \
+       --from-literal=spring.db.username=CUSTOMER \
        --from-literal=spring.db.password=[DB_PASSWORD]
     ```
 
-2. Fraud microservice
+2. Fraud microservice:
 
     ```cmd
      kubectl -n application \
        create secret generic oracledb-creds-fraud \
-       --from-literal=sping.db.username=FRAUD \
+       --from-literal=spring.db.username=FRAUD \
        --from-literal=spring.db.password=[DB_PASSWORD]
     ```
 
-3. Notification microservice
+3. Notification microservice:
 
     ```cmd
      kubectl -n application \
        create secret generic oracledb-creds-notification \
-       --from-literal=sping.db.username=NOTIFICATIONS \
+       --from-literal=spring.db.username=NOTIFICATIONS \
        --from-literal=spring.db.password=[DB_PASSWORD]
     ```
 
@@ -217,7 +217,7 @@ You can create these secrets by executing the following commands (update the val
     kubectl apply -f 02--service--<app name>.yaml
     ```
 
-After deploy all microservices, you will be able to check them executing on Kubernetes executing the following command:
+After deploying all microservices, you will be able to check they are running on Kubernetes using the following command:
 
 ```shell
 kubectl --namespace=application get all -o wide
@@ -229,7 +229,7 @@ kubectl --namespace=application get all -o wide
 
 ## Explore the applications
 
-Before using the application, you need to expose them by creating a route in APISIX API Gateway.
+Before using the applications, you need to expose them by creating a route in APISIX API Gateway.
 
 To expose the customer service, see the documentation on [how to create a route](../platform/apigw/#exposing-a-spring-application-through-the-api-gateway-and-load-balancer)
 and use these values:

@@ -14,15 +14,11 @@ import {
   useColorScheme,
   View,
   AsyncStorage,
-  Button, 
-  ActivityIndicator,
-  FlatList
 } from 'react-native';
 
 import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
-import { useState, useEffect } from 'react';
 
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -58,28 +54,6 @@ const App: () => Node = () => {
   Parse.initialize("APPLICATION_ID");
   Parse.serverURL = 'http://1.2.3.4/parse';
 
-  const [isLoading, setLoading] = useState(true);
-  const [topicList, setTopicList] = useState([]);
-
-  const getTopicList = async () => {
-    try {
-    const response = await fetch(
-      "https://bsenjiat5lmurtq-prod.adb.us-ashburn-1.oraclecloudapps.com/ords/mark/api/topics"
-    );
-    const json = await response.json();
-    console.log(json);
-    setTopicList(json.items);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    getTopicList();
-  }, []);
-
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
@@ -95,18 +69,6 @@ const App: () => Node = () => {
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>
-          {/* <Section title="Topics">
-            {isLoading ? <ActivityIndicator /> : 
-              topicList.map((item) => {
-                console.log("hi", item.name);
-                return  (
-                  <View style={{ flexDirection:'column', flex: 1, padding: 24 }}>
-                    <Text style={{flex: 1, flexWrap: 'wrap', flexShrink: 1}}>{item.name}</Text>
-                  </View>
-                )
-              })
-            }
-          </Section> */}
           <Section title="Walk around, discover history!">
             <Location />
           </Section>

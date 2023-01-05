@@ -1,5 +1,5 @@
 ---
-title: "Netflix Conductor Workflow"
+title: "Workflow"
 resources:
 - name: conductor_ui_workflows
   src: "conductor_ui_workflows.png"
@@ -26,9 +26,9 @@ Full documentation on Conductor can be found here:
 
 2. Access the Conductor UI.
 
-```shell
-http://localhost:5000
-```
+    ```shell
+    http://localhost:5000
+    ```
 
 ### Using Conductor UI
 

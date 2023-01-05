@@ -27,7 +27,7 @@ kubeconfig_cmd = "oci ce cluster create-kubeconfig
 
 ```yaml
 - --profile
-- MAACLOUD
+- MYTENANCY
 ```
 
 For example:
