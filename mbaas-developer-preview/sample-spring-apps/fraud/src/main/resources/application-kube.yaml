@@ -1,0 +1,71 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: fraud
+  
+  cloud:
+    config:
+      failFast: true
+      label: ${spring.config.label}
+      profile: ${spring.profiles.active}
+
+  config:
+    import: configserver:${config.server.url}
+
+  datasource:
+    username: ${spring.db.username}
+    password: ${spring.db.password}
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.Oracle10gDialect
+        format-sql: true
+        generate-statistics: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  zipkin:
+    base-url: ${zipkin.base-url}
+
+  sleuth:
+    otel:
+      config:
+        trace-id-ratio-based: 1.0
+      exporter:
+        otlp:
+          endpoint: ${otel.exporter.otlp.endpoint}
+
+eureka:
+  instance:
+    hostname: ${spring.application.name}
+    preferIpAddress: true
+  client:
+    service-url:
+      defaultZone: ${eureka.service-url}
+    fetch-registry: true
+    register-with-eureka: true
+    enabled: true
+
+management:
+  endpoint:
+    health:
+      show-details: always  
+  endpoints:
+    web:
+      exposure:
+        include: "health,metrics,env,beans,configprops,scheduledtasks.loggers,mappings,prometheus,refresh"
+
+logging:
+  level:
+    org:
+      hibernate: DEBUG
+      springframework: DEBUG
+    # org.hibernate: DEBUG
+    # org.springframework.jdbc.core.JdbcTemplate: DEBUG
+    # org.springframework.cloud: DEBUG
+    # com.netflix.discovery: OFF
+    

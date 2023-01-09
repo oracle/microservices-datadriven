@@ -1,0 +1,45 @@
+main:
+  - name: Setup
+    ref: "/setup"
+    # sub:
+    #   - name: Kubernetes Access
+    #     ref: "/setup/cluster-access"
+    #   - name: Database Access
+    #     ref: "/setup/database"      
+  # - name: Getting Started
+  #   ref: "/getting-started"
+  - name: Sample apps
+    ref: "/sample-apps"
+#  - name: Developing Services
+#    ref: "/development"
+#    sub: 
+  - name: Platform Services
+    ref: "/platform"
+    sub:
+      - name: API Gateway
+        ref: "/platform/apigw"
+      - name: Service Discovery
+        ref: "/platform/eureka"
+      - name: Configuration
+        ref: "/platform/config"
+      - name: Workflow
+        ref: "/platform/conductor"
+      - name: Spring Admin
+        ref: "/platform/spring-admin"
+      - name: OBaaS CLI
+        ref: "/development/cli"
+  - name: Observability
+    ref: "/observability"
+    sub: 
+      - name: Metrics
+        ref: "/observability/metrics"
+      - name: Tracing
+        ref: "/observability/tracing"
+  - name: Security
+    ref: "/security"
+  - name: Database Access
+    ref: "/database"    
+  - name: Kubernetes Access
+    ref: "/cluster-access"
+  - name: Uninstall
+    ref: "/uninstall"
