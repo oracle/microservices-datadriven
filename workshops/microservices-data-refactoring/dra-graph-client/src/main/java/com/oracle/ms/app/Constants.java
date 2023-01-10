@@ -6,6 +6,7 @@ public class Constants {
 	
 	public static final String TENANT_STR = "tenant";
 	public static final String DATABASE_STR = "database";
+	public static final String CLOUD_DB_OCID = "cloud_db_ocid";
 	public static final String DB_USERNAME_STR = "username";
 	public static final String DB_PASSWORD_STR = "password";
 	public static final String DB_ENDPOINT_STR = "endpoint";
