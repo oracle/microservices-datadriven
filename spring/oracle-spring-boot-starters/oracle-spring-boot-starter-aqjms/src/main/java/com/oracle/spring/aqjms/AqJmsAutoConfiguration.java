@@ -1,28 +1,26 @@
-package com.oracle.spring.aqjms.config;
+package com.oracle.spring.aqjms;
 
 import javax.jms.ConnectionFactory;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.oracle.spring.aqjms.properties.JmsConfigurationProperties;
 
 import oracle.jms.AQjmsFactory;
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 
 @Configuration
-@EnableConfigurationProperties(JmsConfigurationProperties.class)
-public class JmsConfiguration {
+@EnableConfigurationProperties(AqJmsConfigurationProperties.class)
+public class AqJmsAutoConfiguration {
 
-    private JmsConfigurationProperties properties;
-
-    public JmsConfiguration(JmsConfigurationProperties properties) {
-        this.properties = properties;
-    }
+	@Autowired
+    private AqJmsConfigurationProperties properties;
 
     @Bean
+	@ConditionalOnMissingBean
 	public PoolDataSource dataSource() {
 		PoolDataSource ds = PoolDataSourceFactory.getPoolDataSource();
 		try {
@@ -35,6 +33,7 @@ public class JmsConfiguration {
 	}
 
 	@Bean
+	@ConditionalOnMissingBean
 	public ConnectionFactory aqJmsConnectionFactory(PoolDataSource ds) {
 		ConnectionFactory connectionFactory = null;
 		try {
