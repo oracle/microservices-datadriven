@@ -21,7 +21,7 @@ import oracle.ucp.jdbc.PoolDataSourceFactory;
 
 @SpringBootApplication
 @EnableJms
-public class Jms2Application {
+public class JmsSampleApplication {
 
 	@Bean
 	public JmsListenerContainerFactory<?> myFactory(ConnectionFactory connectionFactory,
@@ -64,7 +64,7 @@ public class Jms2Application {
   
 	public static void main(String[] args) {
 	  // Launch the application
-	  ConfigurableApplicationContext context = SpringApplication.run(Jms2Application.class, args);
+	  ConfigurableApplicationContext context = SpringApplication.run(JmsSampleApplication.class, args);
   
 	  JmsTemplate jmsTemplate = context.getBean(JmsTemplate.class);
   

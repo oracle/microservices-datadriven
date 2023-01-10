@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.oracle.spring.jms.properties.JmsConfigurationProperties;
+import com.oracle.spring.aqjms.properties.JmsConfigurationProperties;
 
 import oracle.jms.AQjmsFactory;
 import oracle.ucp.jdbc.PoolDataSource;

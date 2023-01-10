@@ -53,6 +53,10 @@
             <groupId>jakarta.management.j2ee</groupId>
             <artifactId>jakarta.management.j2ee-api</artifactId>
         </dependency>
+         <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
