@@ -1,3 +1,6 @@
+// Copyright (c) 2022, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
 package com.example.aqjms;
 
 import javax.jms.ConnectionFactory;
@@ -15,10 +18,6 @@ import org.springframework.jms.support.converter.MappingJackson2MessageConverter
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 
-import oracle.jms.AQjmsFactory;
-import oracle.ucp.jdbc.PoolDataSource;
-import oracle.ucp.jdbc.PoolDataSourceFactory;
-
 @SpringBootApplication
 @EnableJms
 public class JmsSampleApplication {
@@ -33,27 +32,6 @@ public class JmsSampleApplication {
 	  return factory;
 	}
   
-	// @Bean
-	// public PoolDataSource getDataSource() {
-	// 	PoolDataSource ds = PoolDataSourceFactory.getPoolDataSource();
-	// 	try {
-	// 		ds.setConnectionFactoryClassName("oracle.jdbc.pool.OracleDataSource");
-	// 		ds.setURL("jdbc:oracle:thin:@//172.17.0.2:1521/pdb1");
-	// 		ds.setUser("pdbadmin");
-	// 		ds.setPassword("Welcome123");
-	// 	} catch (Exception ignore) {}
-	// 	return ds;
-	// }
-
-	// @Bean
-	// public ConnectionFactory getAQjmsConnectionFactory(PoolDataSource ds) {
-	// 	ConnectionFactory connectionFactory = null;
-	// 	try {
-	// 		connectionFactory = AQjmsFactory.getConnectionFactory(ds);
-	// 	} catch (Exception ignore) {}
-	// 	return connectionFactory;
-	// }
-
 	@Bean // Serialize message content to json using TextMessage
 	public MessageConverter jacksonJmsMessageConverter() {
 	  MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
@@ -73,5 +51,4 @@ public class JmsSampleApplication {
 	  jmsTemplate.convertAndSend("mailbox", new Email("info@example.com", "Hello"));
 	}
   
-
 }
