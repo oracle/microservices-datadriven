@@ -19,6 +19,7 @@
         <module>banka</module>
         <module>bankb</module>
         <module>slow_service</module>
+        <module>aqjms_sample</module>
     </modules>
 
     <name>sample-spring-apps</name>
