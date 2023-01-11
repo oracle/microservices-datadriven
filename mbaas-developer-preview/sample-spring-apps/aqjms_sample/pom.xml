@@ -20,7 +20,7 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<groupId>com.oracle.spring</groupId>
+			<groupId>com.oracle.database.spring</groupId>
 			<artifactId>oracle-spring-boot-starter-aqjms</artifactId>
 			<version>2.7.7</version>
 		</dependency>
