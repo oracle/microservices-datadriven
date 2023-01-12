@@ -54,7 +54,7 @@ from the private VCN, and access will only be possible using the Bastion Service
 
 1. Create Dynamic port forwarding (SOCKS5) session using Bastion service.
 
-    Let's start with ADB access that was created with private end point access only following security guidance. To allow you get access to ADB to execute sql commnads you will need to stablish an session between your local workstation and ADB passing by the Bastion service.
+    Let's start with ADB access that was created with private end point access only following security guidance. To allow you get access to ADB to run sql commnads you will need to stablish an session between your local workstation and ADB passing by the Bastion service.
 
     We will create a [Dynamic port forwarding (SOCKS5) session](https://docs.oracle.com/en-us/iaas/Content/Bastion/Tasks/managingsessions.htm#).
 

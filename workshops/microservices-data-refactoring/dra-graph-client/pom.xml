@@ -10,7 +10,7 @@
 		<dependency>
 			<groupId>com.oracle.database.graph</groupId>
 			<artifactId>opg-client</artifactId>
-			<version>22.3.0</version>
+			<version>22.4.1</version>
 		</dependency>
 	</dependencies>
 
@@ -20,7 +20,8 @@
 			<url>https://artifacts.metaborg.org/content/repositories/releases/
 			</url>
 		</repository>
-	</repositories>
+        
+    </repositories>
 	<build>
 		<plugins>
 			<plugin>

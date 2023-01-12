@@ -1,59 +1,47 @@
 ---
-title: Using the CLI
+title: Using the OBaaS CLI
 ---
 
-## Setup
+The Oracle Backend as a Service for Spring Cloud offers a command-line tool, `obaas`. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources they use.
 
-The Oracle Backend as a Service for Spring Cloud command-line tool, `obaas`, is available for Linux and Mac systems.
-Download the binary you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0) page
-and add it to your PATH environment variable.  You may like to rename the binary to remove the suffix.
+## Using the CLI
 
-If you're environment is a Linux or Mac machine you need to execute `chmod +x` on the downloaded binary. Also if your environment is a Mac you need execute the following command `sudo xattr -r -d com.apple.quarantine <downloaded-file>` otherwise will you get a security warning and the CLI will not work.
-
-### Using the CLI
-
-1. Expose the Oracle Spring Cloud Admin Server that the CLI will call by using `port-forward`
+1. Expose the OBaaS Spring Cloud Admin Server that the CLI will call by using `port-forward`
 
     ```shell
-    kubectl port-forward services/obaas-admin -n obaas-admin  8080:8080
+    kubectl port-forward services/oracle-spring-admin -n oracle-spring-admin  8080:8080
     ```
 
 2. Start the CLI in interactive mode by simply running `obaas` from your terminal window.
 
-```shell
-    obaas
-```
-
-The CLI commands simplify the deployment of applications containing microservices as well as bindings with the resources they use.
-
-Short descriptions of the available commands are as follows.
+    ```shell
+        obaas
+    ```
 
 ## AVAILABLE COMMANDS
 
-Admin Server Commands
-   - `change-password`: change password for Oracle Spring
-connect: connect to the Oracle Spring admin console
-
-Application/Namespace Commands
-   - `create`: create an application/namespace
-   - `delete`: delete a service or entire application/namespace
+Short descriptions of the available commands are as follows.
 
 Built-In Commands
-   - `help`: Display help about available commands
-   - `stacktrace`: Display the full stacktrace of the last error.
-   - `clear`: Clear the shell screen.
-   - `quit`, `exit`: Exit the shell.
-   - `history`: Display or save the history of previously run commands
-   - `version`: Show version info
-   - `script`: Read and execute commands from a file.
 
-Informational Commands
-   - `list`: list/show details of application services
+- `help`: Display help about available commands
+- `stacktrace`: Display the full stacktrace of the last error.
+- `clear`: Clear the shell screen.
+- `quit`, `exit`: Exit the shell.
+- `history`: Display or save the history of previously run commands
+- `version`: Show version info
+- `script`: Read and run commands from a file.
 
-Service Commands
-   - `bind`: create a schema/user and bind it to service deployment
-   - `config`: view and modify application configuration
-   - `deploy`: deploy a service
+Commands
+
+- `connect`: connect to the OBaaS - Spring admin console
+- `change-password`: change password for Oracle BaaS
+- `create`: create an application/namespace
+- `create-schema`: create a schema/user and bind it to service deployment
+- `config`: view and modify application configuration
+- `deploy`: deploy a service
+- `list`: list/show details of application services
+- `delete`: delete a service or entire application/namespace
 
 An application is a namespace encompassing related microservices. For example, a "cloudbank" application may have "banktransfer", "frauddetection", etc. microservices deployed within it.
 The `create` command results in the creation of an application namespace.
@@ -77,48 +65,22 @@ The following is an example development workflow using the CLI.
 First, a connection is made to the Oracle server-side Spring Admin
 
 ```cmd
-obaas:>help connect
-NAME
-       connect - connect to the Oracle Spring admin console
-
-SYNOPSIS
-       connect --url String --username String
-
-OPTIONS
-       --url String
-       Spring Cloud admin server URL
-       [Optional, default = http://localhost:8080]
-
-       --username String
-       Spring Cloud username (will be prompted for password)
-       [Optional, default = admin]
-
-
-
-obaas:>connect
-Spring Cloud password (defaults to oraclespring): 
+oracle-spring:>connect
+URL (defaults to http://localhost:8080): 
 using default value... 
-connect successful server version:121522
+Username (defaults to admin): 
+using default value... 
+Password (defaults to oraclespring): 
+using default value... 
+connect successful server version:121522 client version:121522
 ```
 
 Then, an application namespace is created withe the `create` command. This namespace will contain the microservices that are deployed later.
 
 ```cmd
-obaas:>help create
-NAME
-       create - create an application/namespace
-
-SYNOPSIS
-       create --appName String
-
-OPTIONS
-       --appName String
-       application/namespace
-       [Optional, default = cloudbank]
-
-
-
-obaas:>create
+oracle-spring:>create
+appName (defaults to cloudbank): 
+using default value... 
 application/namespace created successfully and image pull secret (registry-auth) created successfully
 ```
 
@@ -126,160 +88,59 @@ Next, the `bind` command will create a database schema/user for the service (if 
 The command will also create the Kubernetes secret and binding environment entries for the schema (these will be set in the Kubernetes deployment created with the `deploy` command).
 
 ```cmd
-obaas:>help bind
-NAME
-       bind - create a schema/user and bind it to service deployment
-
-SYNOPSIS
-       bind --appName String --serviceName String --springBindingPrefix String
-
-OPTIONS
-       --appName String
-       application/namespace
-       [Optional, default = cloudbank]
-
-       --serviceName String
-       database user/serviceName
-       [Optional, default = bankb]
-
-       --springBindingPrefix String
-       spring binding prefix
-       [Optional, default = spring.datasource]
-
-
-
-obaas:>bind
+oracle-spring:>bind
+appName (defaults to cloudbank): 
+using default value... 
+database user/serviceName (defaults to bankb): 
+using default value... 
 database password/servicePassword (defaults to Welcome12345): 
 using default value... 
-schema created successfully for bankb and database secret (bankb-db-secrets) created successfully
+springBindingPrefix (defaults to spring.datasource): 
+using default value... 
+schema already exists for bankb and database secret (bankb-db-secrets) created successfully
 ```
 
 The microservice jar will now be deployed with the `deploy` command which will create, build, and push an image for the microservice and create the necessary deployment, service, secret, etc. Kubernetes resources for the microservice.
 
 ```cmd
-obaas:>help deploy
-NAME
-       deploy - deploy a service
-
-SYNOPSIS
-       deploy --isRedeploy String --appName String --serviceName String --jarLocation String --imageVersion String --javaImage String
-
-OPTIONS
-       --isRedeploy String
-       whether the service has already been deployed or not
-       [Optional, default = true]
-
-       --appName String
-       application/namespace
-       [Optional, default = cloudbank]
-
-       --serviceName String
-       service name
-       [Optional, default = bankb]
-
-       --jarLocation String
-       service jar location
-       [Optional, default = target/bankb-0.0.1-SNAPSHOT.jar]
-
-       --imageVersion String
-       image version
-       [Optional, default = 0.1]
-
-       --javaImage String
-       java image
-       [Optional, default = ghcr.io/graalvm/jdk:ol7-java17-22.2.0]
-
-
-
-obaas:>deploy --jarLocation /Users/pparkins/Downloads/orahub/ora-microservices-dev/ebaas-platform/sample-app/bankb/target/bankb-0.0.1-SNAPSHOT.jar 
+oracle-spring:>deploy
+isRedeploy (has already been deployed) (defaults to true): false
+serviceName (defaults to bankb): 
+using default value... 
+appName (defaults to cloudbank): 
+using default value... 
+jarLocation (defaults to target/bankb-0.0.1-SNAPSHOT.jar): /Users/user/Downloads/sample-app/bankb/target/bankb-0.0.1-SNAPSHOT.jar
+imageVersion (defaults to 0.1): 
+using default value... 
+javaVersion (defaults to 11): 
+using default value... 
 uploading... upload successful
 building and pushing image... docker build and push successful
-creating deployment and service... create deployment and service  = bankb, appName = cloudbank, isRedeploy = true successful
+creating deployment and service... create deployment and service  = bankb, appName = cloudbank, isRedeploy = false successful
 successfully deployed
 ```
 
 The `list` command can then be used to show details of the microservice deployed in the previous step.
 
 ```cmd
-obaas:>help list
-NAME
-       list - list/show details of application services
-
-SYNOPSIS
-       list --appName String
-
-OPTIONS
-       --appName String
-       application/namespace
-       [Optional, default = cloudbank]
-
-
-
-obaas:>list
-name:bankb-5484bc9956-7hqjz  status:class V1ContainerStatus {
-    containerID: cri-o://86d55f11b2f52adfsfcd3ab3250090337904272
-    image: phx.ocir.io/mytenancy/mynamespace/cloudbank-bankb:0.1
-    imageID: phx.ocir.io/mytenancy/mynamespace/cloudbank-bankb@sha256:8badf04308068fbbff122951
-    lastState: class V1ContainerState {
-        running: null
-        terminated: null
-        waiting: null
-    }
+oracle-spring:>list
+appname (defaults to cloudbank): 
+using default value... 
+name:bankb-7c7c59db96-2tjjm 
     name: bankb
     ready: true
     restartCount: 0
     started: true
-    state: class V1ContainerState {
-        running: class V1ContainerStateRunning {
-            startedAt: 2023-01-03T03:10:03Z
-        }
-        terminated: null
-        waiting: null
-    }
-}name:bankb  kind:null
 ```
 
 The `config` command can be used to view and update config managed by the Spring Config Server.
-
 More information on the configuration server can be found here:
 
 - [Spring Config Server](../../platform/config/)
 
 ```cmd
-obaas:>help config
-NAME
-       config - view and modify application configuration
-
-SYNOPSIS
-       config --command String --application String --label String --profile String --propKey String --value String
-
-OPTIONS
-       --command String
-       possible values are [c]reate, [r]ead all, [u]pdate, and [d]elete
-       [Optional, default = r]
-
-       --application String
-       application/namespace config
-       [Optional, default = cloudbank]
-
-       --label String
-       label for config
-       [Optional, default = test]
-
-       --profile String
-       profile for config
-       [Optional, default = test]
-
-       --propKey String
-       the property key for the config
-       [Optional, default = test]
-
-       --value String
-       the value for the config
-       [Optional, default = test]
-
-
-
-obaas:>config --command r
-[{"id":1,"application":"cloudbank","profile":"dev","label":"latest","propKey":"test-property","value":"This is the test-property value","createdOn":"2022-12-26T18:42:37.000+00:00","createdBy":"ADMIN"}]
+oracle-spring:>config
+command ([c]reate, [r]ead all, [u]pdate, [d]elete): r
+[id":1,"application":"atael","profile":"dev","label":"latest","propKey":"test-property","value":"This is the test-property value","createdOn":"2022-12-14T12:42:33.000+00:00","createdBy":"ADMIN”
+[…]
 ```

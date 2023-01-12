@@ -5,7 +5,7 @@ The Oracle Backend as a Service for Spring Cloud has the following security char
 - The only "public" exposure is the APISIX Gateway (note that the dashboard is not exposed publicly). 
 - Services deployed to the platofrm are not exposed through the gateway automatically.
 - The deployed platform services are using using self-signed certificates.
-- A customer application can only access service running in the platform via the APISIX GW. The IP Address for the GW can be determined by executing the following command:
+- A customer application can only access service running in the platform via the APISIX Gateway. The IP address for the gateway can be determined by executing the following command:
 
 
     ```
