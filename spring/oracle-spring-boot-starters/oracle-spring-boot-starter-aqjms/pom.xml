@@ -4,7 +4,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.oracle.spring</groupId>
+    <groupId>com.oracle.database.spring</groupId>
     <artifactId>oracle-spring-boot-starter-aqjms</artifactId>
     <name>Oracle Spring Boot Starter - AQ JMS</name>
     <packaging>jar</packaging>
@@ -24,7 +24,7 @@
             <version>2.7.7</version>
         </dependency>
         <dependency>
-            <groupId>com.oracle.spring</groupId>
+            <groupId>com.oracle.database.spring</groupId>
             <artifactId>oracle-spring-boot-starter-ucp</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -40,7 +40,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.13.3</version>
+            <version>2.13.4</version>
         </dependency>
         <dependency>
             <groupId>javax.transaction</groupId>
