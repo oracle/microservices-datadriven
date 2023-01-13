@@ -1,8 +1,8 @@
 ---
-title: "Oracle Backend as a Service for Spring Cloud - Developer Preview"
+title: "Oracle Backend for Spring Boot - Developer Preview"
 ---
 
-Oracle Backend as a Service for Spring Cloud allows developers to build microservices in Spring Boot and
+Oracle Backend for Spring Boot allows developers to build microservices in Spring Boot and
 provision a backend as a service with the Oracle Database and other infrastructure components 
 that operate on multiple clouds. This service vastly simplifies the task of building, testing, and 
 operating microservices platforms for reliable, secure, and scalable enterprise applications. 
@@ -32,7 +32,7 @@ Developers also have access to development/build time services and libraries inc
 
 &nbsp;
 {{< hint type=[warning] icon=gdoc_fire title="Interested in Mobile or web apps too?" >}}
-Check out [Oracle Mobile Backend as a Service](https://oracle.github.io/microservices-datadriven/mbaas/)!
+Check out [Oracle Backend for Parse Platform](https://oracle.github.io/microservices-datadriven/mbaas/)!
 {{< /hint >}}
 &nbsp;
 

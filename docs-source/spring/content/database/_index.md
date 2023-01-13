@@ -15,7 +15,7 @@ resources:
     title: "Download ADB client credential"
 ---
 
-The Oracle Backend as a Service for Spring Cloud includes an Oracle Database. An instance of the Oracle Autonomous Database (Shared) is created during installation.
+The Oracle Backend for Spring Boot includes an Oracle Database. An instance of the Oracle Autonomous Database (Shared) is created during installation.
 
 If you chose the "secure access from anywhere" option for your database during installation (or just accepted the default), then you can use
 the Database Actions web user interface to work with your database.
@@ -36,12 +36,12 @@ Click on the link to access the database details page, and then click on the “
 <!-- spellchecker-enable -->
 
 This will open the Database Actions page, where you have access to many database functions, including the ability to
-work with the schemas where your Oracle Backend as a Service for Spring Cloud data are stored.
+work with the schemas where your Oracle Backend for Spring Boot data are stored.
 
 
 ## Accessing the database from a local workstation
 
-After create the Oracle Backend as a Service for Spring Cloud environment, you will have to access to Autonoums Database for access, for example, the 
+After create the Oracle Backend for Spring Boot environment, you will have to access to Autonoums Database for access, for example, the 
 `CONFIGSERVER.PROPERTIES`, a table where Applications should add their properties. Also, each application can use the same database instance to host
 its data.
 
