@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Platform on Oracle Backend as a Service for Spring Cloud</title>
+    <title>Platform on Oracle Backend for Spring Boot</title>
     <link>https://oracle.github.io/microservices-datadriven/spring/platform/</link>
-    <description>Recent content in Platform on Oracle Backend as a Service for Spring Cloud</description>
+    <description>Recent content in Platform on Oracle Backend for Spring Boot</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="https://oracle.github.io/microservices-datadriven/spring/platform/index.xml" rel="self" type="application/rss+xml" />
   </channel>

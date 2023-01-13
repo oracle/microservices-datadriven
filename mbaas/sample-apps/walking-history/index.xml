@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Oracle Mobile Backend as a Service</title>
+    <title>Oracle Backend for Parse Platform</title>
     <link>https://oracle.github.io/microservices-datadriven/mbaas/sample-apps/walking-history/</link>
-    <description>Recent content on Oracle Mobile Backend as a Service</description>
+    <description>Recent content on Oracle Backend for Parse Platform</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="https://oracle.github.io/microservices-datadriven/mbaas/sample-apps/walking-history/index.xml" rel="self" type="application/rss+xml" />
   </channel>

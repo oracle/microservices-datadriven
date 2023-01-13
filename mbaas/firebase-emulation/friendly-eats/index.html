@@ -16,7 +16,7 @@
 Complete the original tutorial first First, we recommend that you complete the original FriendlyEats tutorial instructions through to the end using Firebase.
 Adapt the code to use the Firebase API emulation After completing the tutorial, you have a functioning application." />
 
-    <title>Friendly Eats tutorial | Oracle Mobile Backend as a Service</title>
+    <title>Friendly Eats tutorial | Oracle Backend for Parse Platform</title>
 
     <link rel="icon" type="image/svg+xml" href="/microservices-datadriven/mbaas/favicon/favicon.svg" />
 <link
@@ -39,7 +39,7 @@ Adapt the code to use the Firebase API emulation After completing the tutorial, 
     property="og:title"
     content="Friendly Eats tutorial"
   />
-  <meta property="og:site_name" content="Oracle Mobile Backend as a Service" />
+  <meta property="og:site_name" content="Oracle Backend for Parse Platform" />
   <meta property="og:description" content="This is an example of porting a simple Firebase web application based on JavaScript Firebase API - version 8 and described in a public Tutorial to the Parse Platform leveraging an alpha quality JavaScript library included in this example.
 Complete the original tutorial first First, we recommend that you complete the original FriendlyEats tutorial instructions through to the end using Firebase.
 Adapt the code to use the Firebase API emulation After completing the tutorial, you have a functioning application." />
@@ -65,21 +65,21 @@ Adapt the code to use the Firebase API emulation After completing the tutorial, 
       "url" : "https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/friendly-eats/",
       "headline": "Friendly Eats tutorial",
       "description": "This is an example of porting a simple Firebase web application based on JavaScript Firebase API - version 8 and described in a public Tutorial to the Parse Platform leveraging an alpha quality JavaScript library included in this example.\nComplete the original tutorial first First, we recommend that you complete the original FriendlyEats tutorial instructions through to the end using Firebase.\nAdapt the code to use the Firebase API emulation After completing the tutorial, you have a functioning application.",
-      "wordCount" : "508",
+      "wordCount" : "514",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
           "@type": "WebPage",
           "@id": "https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/friendly-eats/"
       },
-      "copyrightHolder" : "Oracle Mobile Backend as a Service",
+      "copyrightHolder" : "Oracle Backend for Parse Platform",
       "copyrightYear" : "0001",
       "dateCreated": "0001-01-01T00:00:00.00Z",
       "datePublished": "0001-01-01T00:00:00.00Z",
       "dateModified": "0001-01-01T00:00:00.00Z",
       "publisher":{
           "@type":"Organization",
-          "name": "Oracle Mobile Backend as a Service",
+          "name": "Oracle Backend for Parse Platform",
           "url": "https://oracle.github.io/microservices-datadriven/mbaas/",
           "logo": {
               "@type": "ImageObject",
@@ -198,7 +198,7 @@ Adapt the code to use the Firebase API emulation After completing the tutorial, 
             src="/microservices-datadriven/mbaas/brand.svg"
             alt=""
           />
-          <span class="gdoc-brand__title">Oracle Mobile Backend as a Service</span>
+          <span class="gdoc-brand__title">Oracle Backend for Parse Platform</span>
         </span>
       </a>
     </div>
@@ -1140,7 +1140,7 @@ of the Firebase API emulation using the following steps:</p>
 &lt;script src=&#34;/__/firebase/init.js&#34;&gt;&lt;/script&gt;
 ...
 </code></pre><p>Comment out the Firebase imports and add the following imports and code in their place, as shown here.  Change the <code>COOLAPPV100</code>
-and <code>serverURL</code> to match your MBaaS/Parse Server environment:</p>
+and <code>serverURL</code> to match your Oracle Backend for Parse Platform environment:</p>
 <pre tabindex="0"><code>&lt;!-- comment these out: 
 &lt;script src=&#34;/__/firebase/9.6.6/firebase-app-compat.js&#34;&gt;&lt;/script&gt;
 &lt;script src=&#34;/__/firebase/9.6.6/firebase-auth-compat.js&#34;&gt;&lt;/script&gt;
@@ -1173,7 +1173,7 @@ and <code>serverURL</code> to match your MBaaS/Parse Server environment:</p>
 <pre tabindex="0"><code>&lt;script src=&#34;https://npmcdn.com/parse/dist/parse.min.js&#34;&gt;&lt;/script&gt; 
 </code></pre></li>
 <li>
-<p>To configure communication with the MBaaS/Parse platform, you must set your own <strong>APPLICATION_ID</strong> and <strong>Parse serverURL</strong>.
+<p>To configure communication with the Oracle Backend for Parse Platform, you must set your own <strong>APPLICATION_ID</strong> and <strong>Parse serverURL</strong>.
 This initial setup is done by these lines of code:</p>
 <pre tabindex="0"><code>&lt;script&gt;
     firebase.app().options.appKey=&#34;COOLAPPV100&#34;;
@@ -1193,7 +1193,7 @@ This initial setup is done by these lines of code:</p>
         </a>
     </h2>
 </div>
-<p>Repeat the original tutorial steps to load <strong>Restaurants</strong> and <strong>Ratings</strong> into the MBaaS/Parse Server and check if the original
+<p>Repeat the original tutorial steps to load <strong>Restaurants</strong> and <strong>Ratings</strong> into the Parse Server and check if the original
 JavaScript demo application is still running without any other changes.</p>
 <ul>
 <li>
@@ -1260,7 +1260,7 @@ corner, and click again on the same restaurant to force a reload:</p>
   title="filtered  restaurant page"
 /></p>
 <p><strong>Note</strong>: In this step, we don&rsquo;t need to add an index definition to the collection as in the original tutorial, since this is done
-automatically in the MBaaS/Parse Server.</p>
+automatically in the Parse Server.</p>
 </li>
 <li>
 <p>You can further test the sort functionalities by adding more reviews to other restaurants. This will allow you to see the number of reviews and average ratings.</p>

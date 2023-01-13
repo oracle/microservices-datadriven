@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Oracle Mobile Backend as a Service</title>
+    <title>Oracle Backend for Parse Platform</title>
     <link>https://oracle.github.io/microservices-datadriven/mbaas/getting-started/</link>
-    <description>Recent content on Oracle Mobile Backend as a Service</description>
+    <description>Recent content on Oracle Backend for Parse Platform</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="https://oracle.github.io/microservices-datadriven/mbaas/getting-started/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Using the MBaaS Dashboard</title>
+      <title>Using the Parse Dashboard</title>
       <link>https://oracle.github.io/microservices-datadriven/mbaas/getting-started/dashboard/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://oracle.github.io/microservices-datadriven/mbaas/getting-started/dashboard/</guid>
-      <description>The MBaaS includes a web user interface for managing your applications, to learn more see the dashboard page.</description>
+      <description>The Oracle Backend for Parse Platform includes a web user interface for managing your applications, to learn more see the dashboard page.</description>
     </item>
     
     <item>
@@ -21,7 +21,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://oracle.github.io/microservices-datadriven/mbaas/getting-started/objects/</guid>
-      <description>The MBaaS stores your data in objects, each object is an instance of a named class. A class has certain properties, or fields. You create a class by just creating the first object in that class. You define the fields by just using them. Once a class has a field with a certain type, you cannot change that field type while objects using it exist.
+      <description>The Oracle Backend for Parse Platform stores your data in objects, each object is an instance of a named class. A class has certain properties, or fields. You create a class by just creating the first object in that class. You define the fields by just using them. Once a class has a field with a certain type, you cannot change that field type while objects using it exist.
 Creating an object The most basic operation you can do is to create a new object in the database.</description>
     </item>
     
