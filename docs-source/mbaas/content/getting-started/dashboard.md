@@ -1,5 +1,5 @@
 ---
-title: "Using the MBaaS Dashboard"
+title: "Using the Parse Dashboard"
 ---
 
-The MBaaS includes a web user interface for managing your applications, to learn more see the [dashboard](../../dashboard) page.
+The Oracle Backend for Parse Platform includes a web user interface for managing your applications, to learn more see the [dashboard](../../dashboard) page.

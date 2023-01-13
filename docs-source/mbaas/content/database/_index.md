@@ -3,8 +3,8 @@ title: "Database Access"
 ---
 
 
-The MBaaS includes an *Oracle Database storage adapter for Parse* which allows Parse Server to use the Oracle Database.
-An instance of the Oracle Autonomous Database (Shared) is created during installation of the MBaaS.
+The Oracle Backend for Parse Platform includes an *Oracle Database storage adapter for Parse* which allows Parse Server to use the Oracle Database.
+An instance of the Oracle Autonomous Database (Shared) is created during installation of the Oracle Backend for Parse Platform.
 
 To work with data in the database, you can use the Database Actions interface, which can be accessed from the OCI Console.
 The Oracle Database is created in the same compartments as Parse Server.  In the OCI Console, navigate to Autonomous Database in the main menu
@@ -17,7 +17,7 @@ Click on the link to access the database details page, and then click on the "Da
 ![COOLAPPDB](../mbaas-coolappdb-details.png)
 
 This will open the Database Actions page, where you have access to many database functions, including the ability to
-work with the JSON Collections where your MBaaS data are stored.
+work with the JSON Collections where your Oracle Backend for Parse Platform data are stored.
 
 **Note:** If you are asked for credentials you can obtain them by [connecting to the Kubernetes cluster](../cluster-access) and extracting the password
 from the Parse Server log using this command - you will need to use the correct name of the pod on your system, which will be different to this

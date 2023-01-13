@@ -30,11 +30,11 @@ resources:
     title: "Create Stack Apply Logs"
 ---
 
-Oracle Backend as a Service for Spring Cloud is available in the [OCI Marketplace](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911).
+Oracle Backend for Spring Boot is available in the [OCI Marketplace](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911).
 
 ## Prerequisites
 
-You must meet the following prerequisites to use Oracle Backend as a Service for Spring Cloud:
+You must meet the following prerequisites to use Oracle Backend for Spring Boot:
 
 - An OCI account in a tenancy with sufficient quota to create:
   - An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes
@@ -46,11 +46,11 @@ You must meet the following prerequisites to use Oracle Backend as a Service for
 - On local workstation:
   - The Kubernetes command-line tool (kubectl)
   - Oracle Clound Infrastructure Command Line Interface (CLI)
-  - Oracle Backend as a Service for Spring Cloud command-line tool
+  - Oracle Backend for Spring Boot command-line tool
 
 ## Summary of components
 
-Oracle Backend as a Service for Spring Cloud setup will install the following components:
+Oracle Backend for Spring Boot setup will install the following components:
 
 | Component                    | Version      | Description                                                                              |
 |------------------------------|--------------|------------------------------------------------------------------------------------------|
@@ -68,7 +68,7 @@ Oracle Backend as a Service for Spring Cloud setup will install the following co
 
 ## Setup the OCI environment
 
-1. Go to the [OCI Marketplace listing for Oracle Backend as a Service for Spring Cloud](https://cloud.oracle.com/marketplace/application/138899911).
+1. Go to the [OCI Marketplace listing for Oracle Backend for Spring Boot](https://cloud.oracle.com/marketplace/application/138899911).
 
     <!-- spellchecker-disable -->
     ![OCI Marketplace listing](../ebaas-mp-listing.png)
@@ -153,8 +153,8 @@ Oracle Backend as a Service for Spring Cloud setup will install the following co
         2. Configure the Oracle Cloud Infrastructure CLI. See [Configuring the CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliconfigure.htm#Configuring_the_CLI).
 
 
-2. Install Oracle Backend as a Service for Spring Cloud command-line
+2. Install Oracle Backend for Spring Boot command-line
 
-    The **Oracle Backend as a Service for Spring Cloud** command-line tool, `obaas`, is available for Linux and Mac systems. Download the binary you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0) page and add it to your PATH environment variable.  You may like to rename the binary to remove the suffix.
+    The **Oracle Backend for Spring Boot** command-line tool, `obaas`, is available for Linux and Mac systems. Download the binary you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0) page and add it to your PATH environment variable.  You may like to rename the binary to remove the suffix.
 
     If you're environment is a Linux or Mac machine you need to run `chmod +x` on the downloaded binary. Also if your environment is a Mac you need run the following command `sudo xattr -r -d com.apple.quarantine <downloaded-file>` otherwise will you get a security warning and the CLI will not work.

@@ -11,7 +11,7 @@ Here is what the Walking History app looks like running in the Android emulator:
 
 To try this sample application you will need the following: 
 
-- An instance of Oracle Mobile Backend as a Service deployed and running.
+- An instance of Oracle Backend for Parse Platform deployed and running.
 - Android Studio or XCode, with the device emulator.
   For Android, use API level 30 and Android 11 for compatibilty with the version of React Native used in the sample.
 - NodeJS to run the React Native "metro" development server. 

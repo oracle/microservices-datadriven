@@ -1,4 +1,4 @@
-The Oracle Backend as a Service for Spring Cloud has the following security characteristics:
+The Oracle Backend for Spring Boot has the following security characteristics:
 
 - All access to the database is done using Mutual TLS (Database Wallet). The username, password and URI are stored in Kuberentes secrets. 
 - Accessing the dashboards can only be done using port forwarding.
