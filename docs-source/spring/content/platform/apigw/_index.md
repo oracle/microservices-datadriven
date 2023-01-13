@@ -31,7 +31,7 @@ resources:
 
 ## Deploy and Secure Sample Apps APIs using APISIX
 
-Oracle Backend as a Service for Spring Cloud deploys APISIX Gateway and Dashboard in the `apisix` namespace. The gateway is exposed through the external load balancer and ingress controller.  To access the APISIX Dashboard, you must use `kubectl port-foward` to create a secure channel to `service/apisix-dashboard`.
+Oracle Backend for Spring Boot deploys APISIX Gateway and Dashboard in the `apisix` namespace. The gateway is exposed through the external load balancer and ingress controller.  To access the APISIX Dashboard, you must use `kubectl port-foward` to create a secure channel to `service/apisix-dashboard`.
 
 ```shell
 kubectl --namespace apisix get all

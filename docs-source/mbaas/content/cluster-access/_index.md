@@ -2,10 +2,10 @@
 title: "Kubernetes Access"
 ---
 
-As an MBaaS user, it is expected that you probably won't need to access the underlying infrastructure.  However, if you do want to have a look
-around, here is how you can access the Kubernetes cluster where your MBaaS is running.
+As an Oracle Backend for Parse Platform user, it is expected that you probably won't need to access the underlying infrastructure.  However, if you do want to have a look
+around, here is how you can access the Kubernetes cluster where your Oracle Backend for Parse Platform is running.
 
-The MBaaS setup created a Kubernetes cluster where the server and dashboard components are deployment.  At the end of setup, you were provided
+The Oracle Backend for Parse Platform setup created a Kubernetes cluster where the server and dashboard components are deployment.  At the end of setup, you were provided
 with a command to creating a Kubernetes configuration file to access that cluster.
 
 ```
@@ -83,4 +83,4 @@ parse-server      parse-server-646b97979-9pkq6                1/1     Running   
 user@cloudshell:~ (us-ashburn-1)$
 ```
 
-The MBaaS Parse Server is running in the `parse-server` namespace and Parse Dashboard is running in the `parse-dashboard` namespace.
+The Oracle Backend for Parse Platform Parse Server is running in the `parse-server` namespace and Parse Dashboard is running in the `parse-dashboard` namespace.

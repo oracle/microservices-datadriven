@@ -2,14 +2,14 @@
 title: "Working with Objects"
 ---
 
-The MBaaS stores your data in objects, each object is an instance of a named class.  A class has certain properties, or fields. You create a class
+The Oracle Backend for Parse Platform stores your data in objects, each object is an instance of a named class.  A class has certain properties, or fields. You create a class
 by just creating the first object in that class.  You define the fields by just using them.  Once a class has a field with a certain type, you
 cannot change that field type while objects using it exist.
 
 ## Creating an object
 
-The most basic operation you can do is to create a new object in the database. The examples on this page use the REST API to access the MBaaS server. To create
-an object, you perform an HTTP POST to the MBaaS endpoint `/parse/classes/` and append the name of the class of object you want to create, in this example the
+The most basic operation you can do is to create a new object in the database. The examples on this page use the REST API to access the Parse Server. To create
+an object, you perform an HTTP POST to the Parse endpoint `/parse/classes/` and append the name of the class of object you want to create, in this example the
 object is a `GameScore`.  The content is provided in JSON format.  You need to provide the correct `APPLICATION_ID` and update the endpoint address to match
 your environment:
 
@@ -50,7 +50,7 @@ curl -X GET \
 }
 ```
 
-**Note**: You can use any arbitrary string as your `APPLICATION_ID`. These will be used by your clients to authenticate with the Parse Server.  During creation of the MBaaS environment, you provided an Application ID as a configuration option.  If any call to the MBaaS Server does not use a valid Application ID, the call will be rejected with this error message:
+**Note**: You can use any arbitrary string as your `APPLICATION_ID`. These will be used by your clients to authenticate with the Parse Server.  During creation of the Oracle Backend for Parse Platform environment, you provided an Application ID as a configuration option.  If any call to the Parse Server does not use a valid Application ID, the call will be rejected with this error message:
 
 ```
 {"error":"unauthorized"}
