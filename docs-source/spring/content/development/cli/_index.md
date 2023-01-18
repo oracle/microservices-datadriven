@@ -184,7 +184,7 @@ OPTIONS
        java image
        [Optional, default = ghcr.io/graalvm/jdk:ol7-java17-22.2.0]
 
-oractl:>deploy --isRedeploy false --bind jms --jarLocation /Users/pparkins/Downloads/src/orahub/ora-microservices-dev/ebaas-sample-apps/banka/target/banka-0.0.1-SNAPSHOT.jar 
+oractl:>deploy --isRedeploy false --bind jms --jarLocation ebaas-sample-apps/banka/target/banka-0.0.1-SNAPSHOT.jar 
 uploading... upload successful
 building and pushing image... docker build and push successful
 binding resources... successful (no resources found to bind)
