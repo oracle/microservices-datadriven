@@ -7,7 +7,7 @@ resources:
 ---
 
 
-Oracle Backend as a Service for Spring Cloud includes the Spring Eureka Service Registry, which is an application that stores information about client services/applications. Typically, each microservice will register with the Eureka server at startup and the Eureka server will maintain a list of all active instances of the service, including their ports and IP addresses.  This information can be looked up by other services using a well-known key.  This allows services to interact with each other without needing to know each others' addresses at development/deployment time.
+Oracle Backend for Spring Boot includes the Spring Eureka Service Registry, which is an application that stores information about client services/applications. Typically, each microservice will register with the Eureka server at startup and the Eureka server will maintain a list of all active instances of the service, including their ports and IP addresses.  This information can be looked up by other services using a well-known key.  This allows services to interact with each other without needing to know each others' addresses at development/deployment time.
 
 ### Access the Eureka web user interface
 

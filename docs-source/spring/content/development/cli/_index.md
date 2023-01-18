@@ -2,7 +2,7 @@
 title: Using the OBaaS CLI
 ---
 
-The Oracle Backend as a Service for Spring Cloud offers a command-line tool, `obaas`. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources they use.
+The Oracle Backend for Spring Boot offers a command-line tool, `obaas`. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources they use.
 
 ## Using the CLI
 
