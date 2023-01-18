@@ -1,32 +1,38 @@
-<!-- Copyright (c) 2023, Oracle and/or its affiliates. -->
-<!-- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl. -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+##
+## Copyright (c) 2023 Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>oracle-spring-boot-starters</artifactId>
+        <groupId>com.oracle.database.spring</groupId>
+        <version>2.7.7</version>
+    </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.oracle.database.spring</groupId>
-    <artifactId>oracle-spring-boot-starter-aqjms</artifactId>
-    <name>Oracle Spring Boot Starter - AQ JMS</name>
-    <packaging>jar</packaging>
-    <version>2.7.7</version>
 
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.7</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
+    <artifactId>oracle-spring-boot-starter-aqjms</artifactId>
+    <version>2.7.7</version>
+    <name>Oracle Spring Boot Starter - AQ JMS</name>
+    <description>Oracle's implementation of Spring Boot Starter for using with Oracle AQ JMS</description>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <version>2.7.7</version>
         </dependency>
         <dependency>
-            <groupId>com.oracle.database.spring</groupId>
-            <artifactId>oracle-spring-boot-starter-ucp</artifactId>
-            <version>${project.version}</version>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc11</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ucp</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -35,12 +41,11 @@
         <dependency>
             <groupId>com.oracle.database.messaging</groupId>
             <artifactId>aqapi</artifactId>
-            <version>21.3.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.13.4</version>
+            <version>2.14.1</version>
         </dependency>
         <dependency>
             <groupId>javax.transaction</groupId>
@@ -60,5 +65,51 @@
             <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.2</version>
+                <configuration>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                        </manifest>
+                    </archive>
+                    <finalName>${project.artifactId}-${project.version}</finalName>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.3.2</version>
+                <configuration>
+                    <bottom>
+                        <![CDATA[Copyright © 2001, 2023, Oracle and/or its affiliates. All rights reserved.]]>
+                    </bottom>
+                    <additionalJOption>-Xdoclint:none</additionalJOption>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.0</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>
