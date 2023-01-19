@@ -15,19 +15,31 @@ For more information about working with the Kubernetes cluster, see [Setting Up 
 </br>
 
 ```txt
-kubeconfig_cmd = "oci ce cluster create-kubeconfig 
-                    --cluster-id ocid1.cluster.oc1.iad.xxx 
-                    --file $HOME/.kube/config 
-                    --region us-ashburn-1 
-                    --token-version 2.0.0 
+kubeconfig_cmd = "oci ce cluster create-kubeconfig
+                    --cluster-id ocid1.cluster.oc1.iad.xxx
+                    --file $HOME/.kube/config
+                    --region us-ashburn-1
+                    --token-version 2.0.0
                     --kube-endpoint PUBLIC_ENDPOINT"
 ```
 
-**Note:** The generated `kubeconfig` file will only work if you are using the `DEFAULT` profile in your OCI CLI configuration file. If you are using a different OCI CLI profile you must add `--profile <NAME>` to the command by editing the generated Kubernetes config file and add the following lines:
+**Note:** The generated `kubeconfig` file will only work if you are using the `DEFAULT` profile in your OCI CLI configuration file. If you are using a different OCI CLI profile you must add `--profile <PROFILE-NAME>` to the command. For example:
+
+```txt
+kubeconfig_cmd = "oci ce cluster create-kubeconfig
+                    --cluster-id ocid1.cluster.oc1.iad.xxx
+                    --file $HOME/.kube/config
+                    --region us-ashburn-1
+                    --token-version 2.0.0
+                    --kube-endpoint PUBLIC_ENDPOINT"
+                    --profile <PROFILE-NAME>
+```
+
+You must also edit the the generated Kubernetes config file and add the following lines to the config file. For example:
 
 ```yaml
 - --profile
-- MYTENANCY
+- <PROFILE-NAME>
 ```
 
 For example:
@@ -46,7 +58,7 @@ For example:
       - --region
       - us-ashburn-1
       - --profile
-      - YOUR_PROFILE_NAME
+      - <PROFILE-NAME>
       command: oci
 ```
 
@@ -62,12 +74,12 @@ Run the provided command to create your Kubernetes configuration file and then y
 
 ```cmd
 Welcome to Oracle Cloud Shell.
- 
+
 Update: Cloud Shell will now use Oracle JDK 11 by default. To change this, see Managing Language Runtimes in the Cloud Shell documentation.
- 
+
 Your Cloud Shell machine comes with 5GB of storage for your home directory. Your Cloud Shell (machine and home directory) are located in: US East (Ashburn).
 You are using Cloud Shell in tenancy xxxx as an OCI user xxxx
- 
+
 Type `help` for more info.
 user@cloudshell:~ (us-ashburn-1)$ oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.iad.xxx
  --file $HOME/.kube/config --region us-ashburn-1 --token-version 2.0.0 --kube-endpoint PUBLIC_ENDPOINT
