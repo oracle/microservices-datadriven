@@ -29,6 +29,27 @@
   <version>2.7.7</version>
   <name>Oracle Spring Boot Starters</name>
 
+  <licenses>
+    <license>
+      <name>Oracle Free Use Terms and Conditions (FUTC)</name>
+      <comments>
+        https://www.oracle.com/downloads/licenses/oracle-free-license.html
+      </comments>
+    </license>
+  </licenses>
+  <organization>
+    <name>Oracle America, Inc.</name>
+    <url>http://www.oracle.com</url>
+  </organization>
+  <developers>
+    <developer>
+      <name>Oracle</name>
+      <email>obaas_ww@oracle.com</email>
+      <organization>Oracle America, Inc.</organization>
+      <organizationUrl>http://www.oracle.com</organizationUrl>
+    </developer>
+  </developers>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

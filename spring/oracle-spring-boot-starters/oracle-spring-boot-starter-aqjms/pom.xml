@@ -18,8 +18,28 @@
 
     <artifactId>oracle-spring-boot-starter-aqjms</artifactId>
     <version>2.7.7</version>
+
+    <!-- Project Information -->
     <name>Oracle Spring Boot Starter - AQ JMS</name>
     <description>Oracle's implementation of Spring Boot Starter for using with Oracle AQ JMS</description>
+    <url>https://github.com/oracle/microservices-datadriven/tree/main/spring/oracle-spring-boot-starters/oracle-spring-boot-starter-aqjms</url>
+    <inceptionYear>2023</inceptionYear>
+    <licenses>
+        <license>
+            <name>Oracle Free Use Terms and Conditions (FUTC)</name>
+            <comments>
+                https://www.oracle.com/downloads/licenses/oracle-free-license.html
+            </comments>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Oracle</name>
+            <email>obaas_ww@oracle.com</email>
+            <organization>Oracle America, Inc.</organization>
+            <organizationUrl>http://www.oracle.com</organizationUrl>
+        </developer>
+    </developers>
 
     <dependencies>
         <dependency>
@@ -85,8 +105,15 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.2</version>
+                <version>3.4.1</version>
                 <configuration>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                        </manifest>
+                    </archive>
                     <bottom>
                         <![CDATA[Copyright © 2001, 2023, Oracle and/or its affiliates. All rights reserved.]]>
                     </bottom>
@@ -96,20 +123,56 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <version>3.2.1</version>
+                <configuration>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.0</version>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>2.0.0</version>
+                <configuration>
+                    <licenseName>${license.licenseName}</licenseName>
+                    <licenseResolver>${project.baseUri}src/license</licenseResolver>
+                    <excludedScopes>test,provided,runtime,system</excludedScopes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>upd-header</id>
+                        <goals>
+                            <goal>update-file-header</goal>
+                        </goals>
+                        <phase>process-sources</phase>
+                        <configuration>
+                            <roots>
+                                <root>src/main/java</root>
+                                <root>src/test</root>
+                            </roots>
+                        </configuration>
+                    </execution>
+                     <execution>
+                        <id>add-lic</id>
+                        <goals>
+                            <goal>update-project-license</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+
+    <properties>
+        <license.licenseName>oracle</license.licenseName>
+    </properties>
 </project>

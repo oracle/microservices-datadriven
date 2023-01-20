@@ -1,7 +1,14 @@
-// Copyright (c) 2023, Oracle and/or its affiliates.
-// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
-
 package com.oracle.spring.aqjms;
+
+/*-
+ * #%L
+ * Oracle Spring Boot Starter - AQ JMS
+ * %%
+ * Copyright (C) 2023 Oracle America, Inc.
+ * %%
+ * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+ * #L%
+ */
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import lombok.Getter;
