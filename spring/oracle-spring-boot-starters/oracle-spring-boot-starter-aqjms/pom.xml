@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-##
-## Copyright (c) 2023 Oracle and/or its affiliates.
-## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
-
--->
+<!-- Copyright (c) 2023, Oracle and/or its affiliates. -->
+<!-- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -137,37 +132,6 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.0</version>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <version>2.0.0</version>
-                <configuration>
-                    <licenseName>${license.licenseName}</licenseName>
-                    <licenseResolver>${project.baseUri}src/license</licenseResolver>
-                    <excludedScopes>test,provided,runtime,system</excludedScopes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>upd-header</id>
-                        <goals>
-                            <goal>update-file-header</goal>
-                        </goals>
-                        <phase>process-sources</phase>
-                        <configuration>
-                            <roots>
-                                <root>src/main/java</root>
-                                <root>src/test</root>
-                            </roots>
-                        </configuration>
-                    </execution>
-                     <execution>
-                        <id>add-lic</id>
-                        <goals>
-                            <goal>update-project-license</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

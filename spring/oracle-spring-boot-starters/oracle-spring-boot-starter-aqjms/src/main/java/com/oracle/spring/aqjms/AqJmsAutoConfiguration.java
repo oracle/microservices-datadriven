@@ -1,14 +1,7 @@
-package com.oracle.spring.aqjms;
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
-/*-
- * #%L
- * Oracle Spring Boot Starter - AQ JMS
- * %%
- * Copyright (C) 2023 Oracle America, Inc.
- * %%
- * Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
- * #L%
- */
+package com.oracle.spring.aqjms;
 
 import javax.jms.ConnectionFactory;
 
