@@ -12,10 +12,9 @@
 <meta name="generator" content="Hugo 0.108.0">
 
 
-  <meta name="description" content="The Oracle Backend for Spring Boot offers a command-line tool, obaas. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources they use.
-Using the CLI Expose the OBaaS Spring Cloud Admin Server that the CLI will call by using port-forward
-kubectl port-forward services/oracle-spring-admin -n oracle-spring-admin 8080:8080 Start the CLI in interactive mode by simply running obaas from your terminal window.
-obaas AVAILABLE COMMANDS Short descriptions of the available commands are as follows." />
+  <meta name="description" content="The Oracle Backend for Spring Boot offers a command-line tool, oractl. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources they use. Download the CLI here The platform specific binary can be renamed to oractl for convenience.
+Using the CLI Expose the Oracle Backend for Spring Boot Admin Server that the CLI will call by using port-forward
+kubectl port-forward services/obaas-admin -n obaas-admin 8080:8080 Start the CLI in interactive mode by simply running oractl from your terminal window." />
 
     <title>Using the OBaaS CLI | Oracle Backend for Spring Boot</title>
 
@@ -41,10 +40,9 @@ obaas AVAILABLE COMMANDS Short descriptions of the available commands are as fol
     content="Using the OBaaS CLI"
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot" />
-  <meta property="og:description" content="The Oracle Backend for Spring Boot offers a command-line tool, obaas. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources they use.
-Using the CLI Expose the OBaaS Spring Cloud Admin Server that the CLI will call by using port-forward
-kubectl port-forward services/oracle-spring-admin -n oracle-spring-admin 8080:8080 Start the CLI in interactive mode by simply running obaas from your terminal window.
-obaas AVAILABLE COMMANDS Short descriptions of the available commands are as follows." />
+  <meta property="og:description" content="The Oracle Backend for Spring Boot offers a command-line tool, oractl. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources they use. Download the CLI here The platform specific binary can be renamed to oractl for convenience.
+Using the CLI Expose the Oracle Backend for Spring Boot Admin Server that the CLI will call by using port-forward
+kubectl port-forward services/obaas-admin -n obaas-admin 8080:8080 Start the CLI in interactive mode by simply running oractl from your terminal window." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/development/cli/" />
 
@@ -53,10 +51,9 @@ obaas AVAILABLE COMMANDS Short descriptions of the available commands are as fol
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Using the OBaaS CLI" />
-  <meta name="twitter:description" content="The Oracle Backend for Spring Boot offers a command-line tool, obaas. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources they use.
-Using the CLI Expose the OBaaS Spring Cloud Admin Server that the CLI will call by using port-forward
-kubectl port-forward services/oracle-spring-admin -n oracle-spring-admin 8080:8080 Start the CLI in interactive mode by simply running obaas from your terminal window.
-obaas AVAILABLE COMMANDS Short descriptions of the available commands are as follows." />
+  <meta name="twitter:description" content="The Oracle Backend for Spring Boot offers a command-line tool, oractl. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources they use. Download the CLI here The platform specific binary can be renamed to oractl for convenience.
+Using the CLI Expose the Oracle Backend for Spring Boot Admin Server that the CLI will call by using port-forward
+kubectl port-forward services/obaas-admin -n obaas-admin 8080:8080 Start the CLI in interactive mode by simply running oractl from your terminal window." />
 
 
   <script type="application/ld+json">
@@ -67,8 +64,8 @@ obaas AVAILABLE COMMANDS Short descriptions of the available commands are as fol
       "name": "Using the OBaaS CLI",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/development/cli/",
       "headline": "Using the OBaaS CLI",
-      "description": "The Oracle Backend for Spring Boot offers a command-line tool, obaas. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources they use.\nUsing the CLI Expose the OBaaS Spring Cloud Admin Server that the CLI will call by using port-forward\nkubectl port-forward services\/oracle-spring-admin -n oracle-spring-admin 8080:8080 Start the CLI in interactive mode by simply running obaas from your terminal window.\nobaas AVAILABLE COMMANDS Short descriptions of the available commands are as follows.",
-      "wordCount" : "779",
+      "description": "The Oracle Backend for Spring Boot offers a command-line tool, oractl. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources they use. Download the CLI here The platform specific binary can be renamed to oractl for convenience.\nUsing the CLI Expose the Oracle Backend for Spring Boot Admin Server that the CLI will call by using port-forward\nkubectl port-forward services\/obaas-admin -n obaas-admin 8080:8080 Start the CLI in interactive mode by simply running oractl from your terminal window.",
+      "wordCount" : "1103",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1130,7 +1127,12 @@ if (!doNotTrack) {
     class="gdoc-markdown gdoc-markdown__align--left"
   >
     <h1>Using the OBaaS CLI</h1>
-    <p>The Oracle Backend for Spring Boot offers a command-line tool, <code>obaas</code>. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources they use.</p>
+    <p>The Oracle Backend for Spring Boot offers a command-line tool, <code>oractl</code>. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources they use.
+Download the CLI <a
+  class="gdoc-markdown__link"
+  href="https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0"
+>here</a>
+The platform specific binary can be renamed to <code>oractl</code> for convenience.</p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="using-the-cli">
         Using the CLI
@@ -1141,12 +1143,12 @@ if (!doNotTrack) {
 </div>
 <ol>
 <li>
-<p>Expose the OBaaS Spring Cloud Admin Server that the CLI will call by using <code>port-forward</code></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl port-forward services/oracle-spring-admin -n oracle-spring-admin  8080:8080
+<p>Expose the Oracle Backend for Spring Boot Admin Server that the CLI will call by using <code>port-forward</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl port-forward services/obaas-admin -n obaas-admin  8080:8080
 </span></span></code></pre></div></li>
 <li>
-<p>Start the CLI in interactive mode by simply running <code>obaas</code> from your terminal window.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">    obaas
+<p>Start the CLI in interactive mode by simply running <code>oractl</code> from your terminal window.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">    oractl
 </span></span></code></pre></div></li>
 </ol>
 <div class="gdoc-page__anchorwrap">
@@ -1157,7 +1159,19 @@ if (!doNotTrack) {
         </a>
     </h2>
 </div>
-<p>Short descriptions of the available commands are as follows.</p>
+<p>Short descriptions of the available commands are as follows.<br>
+These can be viewed by issuing the <code>help</code> command and detailed help for any individual command can be viewed by issuing <code>help [commandname]</code></p>
+<p>AVAILABLE COMMANDS</p>
+<p>Admin Server Commands</p>
+<ul>
+<li><code>change-password</code>: Change password for OBaaS Spring Cloud admin user.</li>
+<li><code>connect</code>: Connect to the OBaaS Spring Cloud admin console.</li>
+</ul>
+<p>Application/Namespace Commands</p>
+<ul>
+<li><code>create</code>: Create an application/namespace.</li>
+<li><code>delete</code>: Delete a service or entire application/namespace.</li>
+</ul>
 <p>Built-In Commands</p>
 <ul>
 <li><code>help</code>: Display help about available commands</li>
@@ -1166,18 +1180,17 @@ if (!doNotTrack) {
 <li><code>quit</code>, <code>exit</code>: Exit the shell.</li>
 <li><code>history</code>: Display or save the history of previously run commands</li>
 <li><code>version</code>: Show version info</li>
-<li><code>script</code>: Read and run commands from a file.</li>
+<li><code>script</code>: Read and execute commands from a file.</li>
 </ul>
-<p>Commands</p>
+<p>Informational Commands</p>
 <ul>
-<li><code>connect</code>: connect to the OBaaS - Spring admin console</li>
-<li><code>change-password</code>: change password for Oracle BaaS</li>
-<li><code>create</code>: create an application/namespace</li>
-<li><code>create-schema</code>: create a schema/user and bind it to service deployment</li>
-<li><code>config</code>: view and modify application configuration</li>
-<li><code>deploy</code>: deploy a service</li>
-<li><code>list</code>: list/show details of application services</li>
-<li><code>delete</code>: delete a service or entire application/namespace</li>
+<li><code>list</code>: list/show details of application services.</li>
+</ul>
+<p>Service Commands</p>
+<ul>
+<li><code>bind</code>: Create a schema/user and bind it to service deployment.</li>
+<li>`config: View and modify application configuration.</li>
+<li><code>deploy</code>: Deploy a service.</li>
 </ul>
 <p>An application is a namespace encompassing related microservices. For example, a &ldquo;cloudbank&rdquo; application may have &ldquo;banktransfer&rdquo;, &ldquo;frauddetection&rdquo;, etc. microservices deployed within it.
 The <code>create</code> command results in the creation of an application namespace.</p>
@@ -1191,56 +1204,145 @@ This is all done automatically to simplify the development process and the manag
 <p>Further development and redeployment of the service can then be iterated upon by issuing the <code>deploy</code>, <code>list</code>, etc. commands.</p>
 <p>The following is an example development workflow using the CLI.</p>
 <p>First, a connection is made to the Oracle server-side Spring Admin</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oracle-spring:<span class="p">&gt;</span>connect
-</span></span><span class="line"><span class="cl">URL (defaults to http://localhost:8080): 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help connect
+</span></span><span class="line"><span class="cl">NAME
+</span></span><span class="line"><span class="cl">       connect - Connect to the OBaaS Spring Cloud admin console.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">SYNOPSIS
+</span></span><span class="line"><span class="cl">       connect --url String --username String
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">OPTIONS
+</span></span><span class="line"><span class="cl">       --url String
+</span></span><span class="line"><span class="cl">       admin server URL
+</span></span><span class="line"><span class="cl">       [Optional, default = http://localhost:8080]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       --username String
+</span></span><span class="line"><span class="cl">       username (will be prompted for password)
+</span></span><span class="line"><span class="cl">       [Optional, default = admin]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>connect
+</span></span><span class="line"><span class="cl">password (defaults to oractl): 
 </span></span><span class="line"><span class="cl">using default value... 
-</span></span><span class="line"><span class="cl">Username (defaults to admin): 
-</span></span><span class="line"><span class="cl">using default value... 
-</span></span><span class="line"><span class="cl">Password (defaults to oraclespring): 
-</span></span><span class="line"><span class="cl">using default value... 
-</span></span><span class="line"><span class="cl">connect successful server version:121522 client version:121522
+</span></span><span class="line"><span class="cl">connect successful server version:011223
 </span></span></code></pre></div><p>Then, an application namespace is created withe the <code>create</code> command. This namespace will contain the microservices that are deployed later.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oracle-spring:<span class="p">&gt;</span>create
-</span></span><span class="line"><span class="cl">appName (defaults to cloudbank): 
-</span></span><span class="line"><span class="cl">using default value... 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help create
+</span></span><span class="line"><span class="cl">NAME
+</span></span><span class="line"><span class="cl">       create - Create an application/namespace.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">SYNOPSIS
+</span></span><span class="line"><span class="cl">       create --appName String
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">OPTIONS
+</span></span><span class="line"><span class="cl">       --appName String
+</span></span><span class="line"><span class="cl">       application/namespace
+</span></span><span class="line"><span class="cl">       [Optional, default = cloudbank]
+</span></span><span class="line"><span class="cl">       
+</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>create
 </span></span><span class="line"><span class="cl">application/namespace created successfully and image pull secret (registry-auth) created successfully
 </span></span></code></pre></div><p>Next, the <code>bind</code> command will create a database schema/user for the service (if one hasn&rsquo;t already been created).
 The command will also create the Kubernetes secret and binding environment entries for the schema (these will be set in the Kubernetes deployment created with the <code>deploy</code> command).</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oracle-spring:<span class="p">&gt;</span>bind
-</span></span><span class="line"><span class="cl">appName (defaults to cloudbank): 
-</span></span><span class="line"><span class="cl">using default value... 
-</span></span><span class="line"><span class="cl">database user/serviceName (defaults to bankb): 
-</span></span><span class="line"><span class="cl">using default value... 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help bind
+</span></span><span class="line"><span class="cl">NAME
+</span></span><span class="line"><span class="cl">       bind - Create a schema/user and bind it to service deployment.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">SYNOPSIS
+</span></span><span class="line"><span class="cl">       bind --appName String --serviceName String --springBindingPrefix String
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">OPTIONS
+</span></span><span class="line"><span class="cl">       --appName String
+</span></span><span class="line"><span class="cl">       application/namespace
+</span></span><span class="line"><span class="cl">       [Optional, default = cloudbank]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       --serviceName String
+</span></span><span class="line"><span class="cl">       database user/serviceName
+</span></span><span class="line"><span class="cl">       [Optional, default = banka]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       --springBindingPrefix String
+</span></span><span class="line"><span class="cl">       spring binding prefix
+</span></span><span class="line"><span class="cl">       [Optional, default = spring.datasource]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>bind
 </span></span><span class="line"><span class="cl">database password/servicePassword (defaults to Welcome12345): 
 </span></span><span class="line"><span class="cl">using default value... 
-</span></span><span class="line"><span class="cl">springBindingPrefix (defaults to spring.datasource): 
-</span></span><span class="line"><span class="cl">using default value... 
-</span></span><span class="line"><span class="cl">schema already exists for bankb and database secret (bankb-db-secrets) created successfully
+</span></span><span class="line"><span class="cl">database secret created successfully and schema created successfully for banka
 </span></span></code></pre></div><p>The microservice jar will now be deployed with the <code>deploy</code> command which will create, build, and push an image for the microservice and create the necessary deployment, service, secret, etc. Kubernetes resources for the microservice.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oracle-spring:<span class="p">&gt;</span>deploy
-</span></span><span class="line"><span class="cl">isRedeploy (has already been deployed) (defaults to true): false
-</span></span><span class="line"><span class="cl">serviceName (defaults to bankb): 
-</span></span><span class="line"><span class="cl">using default value... 
-</span></span><span class="line"><span class="cl">appName (defaults to cloudbank): 
-</span></span><span class="line"><span class="cl">using default value... 
-</span></span><span class="line"><span class="cl">jarLocation (defaults to target/bankb-0.0.1-SNAPSHOT.jar): /Users/user/Downloads/sample-app/bankb/target/bankb-0.0.1-SNAPSHOT.jar
-</span></span><span class="line"><span class="cl">imageVersion (defaults to 0.1): 
-</span></span><span class="line"><span class="cl">using default value... 
-</span></span><span class="line"><span class="cl">javaVersion (defaults to 11): 
-</span></span><span class="line"><span class="cl">using default value... 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help deploy
+</span></span><span class="line"><span class="cl">NAME
+</span></span><span class="line"><span class="cl">       deploy - Deploy a service.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">SYNOPSIS
+</span></span><span class="line"><span class="cl">       deploy --isRedeploy String --bind String --appName String --serviceName String --jarLocation String --imageVersion String --javaImage String
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">OPTIONS
+</span></span><span class="line"><span class="cl">       --isRedeploy String
+</span></span><span class="line"><span class="cl">       whether the service has already been deployed or not
+</span></span><span class="line"><span class="cl">       [Optional, default = true]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       --bind String
+</span></span><span class="line"><span class="cl">       automatically create and bind resources. possible values are [jms]
+</span></span><span class="line"><span class="cl">       [Optional, default = none]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       --appName String
+</span></span><span class="line"><span class="cl">       application/namespace
+</span></span><span class="line"><span class="cl">       [Optional, default = cloudbank]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       --serviceName String
+</span></span><span class="line"><span class="cl">       service name
+</span></span><span class="line"><span class="cl">       [Optional, default = banka]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       --jarLocation String
+</span></span><span class="line"><span class="cl">       service jar location
+</span></span><span class="line"><span class="cl">       [Optional, default = target/banka-0.0.1-SNAPSHOT.jar]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       --imageVersion String
+</span></span><span class="line"><span class="cl">       image version
+</span></span><span class="line"><span class="cl">       [Optional, default = 0.1]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       --javaImage String
+</span></span><span class="line"><span class="cl">       java image
+</span></span><span class="line"><span class="cl">       [Optional, default = ghcr.io/graalvm/jdk:ol7-java17-22.2.0]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>deploy --isRedeploy false --bind jms --jarLocation ebaas-sample-apps/banka/target/banka-0.0.1-SNAPSHOT.jar 
 </span></span><span class="line"><span class="cl">uploading... upload successful
 </span></span><span class="line"><span class="cl">building and pushing image... docker build and push successful
-</span></span><span class="line"><span class="cl">creating deployment and service... create deployment and service  = bankb, appName = cloudbank, isRedeploy = false successful
+</span></span><span class="line"><span class="cl">binding resources... successful (no resources found to bind)
+</span></span><span class="line"><span class="cl">creating deployment and service... create deployment and service  = banka, appName = cloudbank, isRedeploy = false successful
 </span></span><span class="line"><span class="cl">successfully deployed
 </span></span></code></pre></div><p>The <code>list</code> command can then be used to show details of the microservice deployed in the previous step.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oracle-spring:<span class="p">&gt;</span>list
-</span></span><span class="line"><span class="cl">appname (defaults to cloudbank): 
-</span></span><span class="line"><span class="cl">using default value... 
-</span></span><span class="line"><span class="cl">name:bankb-7c7c59db96-2tjjm 
-</span></span><span class="line"><span class="cl">    name: bankb
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help list
+</span></span><span class="line"><span class="cl">NAME
+</span></span><span class="line"><span class="cl">       list - list/show details of application services.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">SYNOPSIS
+</span></span><span class="line"><span class="cl">       list --appName String
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">OPTIONS
+</span></span><span class="line"><span class="cl">       --appName String
+</span></span><span class="line"><span class="cl">       application/namespace
+</span></span><span class="line"><span class="cl">       [Optional, default = cloudbank]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>list
+</span></span><span class="line"><span class="cl">name:banka-7fbff59d8c-gt42g  status:class V1ContainerStatus {
+</span></span><span class="line"><span class="cl">    containerID: cri-o://df2ec83b9359dee8aad658bde2d9ba988f7e43ea2a3e7add61c0cd2eeca612af
+</span></span><span class="line"><span class="cl">    image: ams.ocir.io/maacloud/walleye/cloudbank-banka:0.1
+</span></span><span class="line"><span class="cl">    imageID: ams.ocir.io/maacloud/walleye/cloudbank-banka@sha256:d37f889f6f706accd32df0ccff576237b3a15c736d90ee99b7f97f84860c3502
+</span></span><span class="line"><span class="cl">    lastState: class V1ContainerState {
+</span></span><span class="line"><span class="cl">        running: null
+</span></span><span class="line"><span class="cl">        terminated: null
+</span></span><span class="line"><span class="cl">        waiting: null
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">    name: banka
 </span></span><span class="line"><span class="cl">    ready: true
 </span></span><span class="line"><span class="cl">    restartCount: 0
 </span></span><span class="line"><span class="cl">    started: true
+</span></span><span class="line"><span class="cl">    state: class V1ContainerState {
+</span></span><span class="line"><span class="cl">        running: class V1ContainerStateRunning {
+</span></span><span class="line"><span class="cl">            startedAt: 2023-01-18T15:54:10Z
+</span></span><span class="line"><span class="cl">        }
+</span></span><span class="line"><span class="cl">        terminated: null
+</span></span><span class="line"><span class="cl">        waiting: null
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">}name:banka  kind:null
 </span></span></code></pre></div><p>The <code>config</code> command can be used to view and update config managed by the Spring Config Server.
 More information on the configuration server can be found here:</p>
 <ul>
@@ -1249,7 +1351,39 @@ More information on the configuration server can be found here:</p>
   href="../../platform/config/"
 >Spring Config Server</a></li>
 </ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oracle-spring:<span class="p">&gt;</span>config
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help config
+</span></span><span class="line"><span class="cl">NAME
+</span></span><span class="line"><span class="cl">       config - View and modify application configuration.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">SYNOPSIS
+</span></span><span class="line"><span class="cl">       config --command String --application String --label String --profile String --propKey String --value String
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">OPTIONS
+</span></span><span class="line"><span class="cl">       --command String
+</span></span><span class="line"><span class="cl">       possible values are [c]reate, [r]ead all, [u]pdate, and [d]elete
+</span></span><span class="line"><span class="cl">       [Optional, default = r]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       --application String
+</span></span><span class="line"><span class="cl">       application/namespace config
+</span></span><span class="line"><span class="cl">       [Optional, default = cloudbank]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       --label String
+</span></span><span class="line"><span class="cl">       label for config
+</span></span><span class="line"><span class="cl">       [Optional, default = test]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       --profile String
+</span></span><span class="line"><span class="cl">       profile for config
+</span></span><span class="line"><span class="cl">       [Optional, default = test]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       --propKey String
+</span></span><span class="line"><span class="cl">       the property key for the config
+</span></span><span class="line"><span class="cl">       [Optional, default = test]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       --value String
+</span></span><span class="line"><span class="cl">       the value for the config
+</span></span><span class="line"><span class="cl">       [Optional, default = test]
+</span></span><span class="line"><span class="cl">       
+</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config
 </span></span><span class="line"><span class="cl">command ([c]reate, [r]ead all, [u]pdate, [d]elete): r
 </span></span><span class="line"><span class="cl">[id<span class="s2">&#34;:1,&#34;</span>application<span class="s2">&#34;:&#34;</span>atael<span class="s2">&#34;,&#34;</span>profile<span class="s2">&#34;:&#34;</span>dev<span class="s2">&#34;,&#34;</span>label<span class="s2">&#34;:&#34;</span>latest<span class="s2">&#34;,&#34;</span>propKey<span class="s2">&#34;:&#34;</span>test-property<span class="s2">&#34;,&#34;</span>value<span class="s2">&#34;:&#34;</span>This is the test-property value<span class="s2">&#34;,&#34;</span>createdOn<span class="s2">&#34;:&#34;</span>2022-12-14T12:42:33.000+00:00<span class="s2">&#34;,&#34;</span>createdBy<span class="s2">&#34;:&#34;</span>ADMIN”
 </span></span><span class="line"><span class="cl">[…]
