@@ -14,10 +14,10 @@ Oracle Backend for Spring Boot includes the Spring Eureka Service Registry, whic
 1. Expose the Eureka web user interface using `port-forward`
 
     ```shell
-    kubectl port-forward -n eureka svc/eureka 8080:8080
+    kubectl port-forward -n eureka svc/eureka 8761:8761
     ```
 
-2. Open the Eureka web user interface: <http://localhost:8080>
+2. Open the Eureka web user interface: <http://localhost:8761>
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-eureka-dashboard" size="medium" lazy=false >}}
