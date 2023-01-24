@@ -7,6 +7,7 @@ import oracle.pg.rdbms.AdbGraphClient;
 import oracle.pg.rdbms.AdbGraphClientConfiguration;
 import oracle.pgx.api.Analyst;
 import oracle.pgx.api.EdgeProperty;
+import oracle.pgx.api.GraphSource;
 import oracle.pgx.api.Partition;
 import oracle.pgx.api.PgxGraph;
 import oracle.pgx.api.PgxSession;
@@ -40,7 +41,7 @@ public class InfomapGraphClient {
 		ServerInstance instance = client.getPgxInstance();
 		PgxSession session = instance.createSession(Constants.SESSION_NAME_STR);
 		
-		GraphConfig graphConfig = 
+	/*	GraphConfig graphConfig = 
 				GraphConfigBuilder.forPropertyGraphRdbms()
 				.setName(properties.readGraphProperty(Constants.GRAPH_NAME_STR))
 				.addVertexProperty(properties.readGraphProperty(Constants.VERTEX_COLUMN_STR), PropertyType.STRING)
@@ -50,7 +51,11 @@ public class InfomapGraphClient {
 				.setLoadVertexLabels(true)
 				.setLoadEdgeLabel(true)
 				.build();
-		PgxGraph graph = session.readGraphWithProperties(graphConfig);
+
+	*/	
+		PgxGraph graph = session.readGraphByName(properties.readGraphProperty(Constants.GRAPH_NAME_STR), oracle.pgx.api.GraphSource.PG_VIEW);
+		// PgxGraph graph = session.readGraphWithProperties(graphConfig);
+
 		System.out.println("Graph : " + graph);
 		
 		Analyst analyst = session.createAnalyst();
