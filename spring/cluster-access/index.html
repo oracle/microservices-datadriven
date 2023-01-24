@@ -62,7 +62,7 @@ Tip For more information about working with the Kubernetes cluster, see Setting 
       "url" : "https://oracle.github.io/microservices-datadriven/spring/cluster-access/",
       "headline": "Access Kubernetes Cluster",
       "description": "The Oracle Backend for Spring Boot setup creates a Kubernetes cluster where the server and dashboard components are deployed. At the end of setup, in the log for the apply job, you were provided with a command to creating a Kubernetes configuration file to access that cluster.\nTip For more information about working with the Kubernetes cluster, see Setting Up Cluster Access in the OCI documentation. kubeconfig_cmd = \u0022oci ce cluster create-kubeconfig --cluster-id ocid1.",
-      "wordCount" : "412",
+      "wordCount" : "441",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1132,15 +1132,23 @@ if (!doNotTrack) {
 </blockquote>
 
 </br>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-txt" data-lang="txt"><span class="line"><span class="cl">kubeconfig_cmd = &#34;oci ce cluster create-kubeconfig 
-</span></span><span class="line"><span class="cl">                    --cluster-id ocid1.cluster.oc1.iad.xxx 
-</span></span><span class="line"><span class="cl">                    --file $HOME/.kube/config 
-</span></span><span class="line"><span class="cl">                    --region us-ashburn-1 
-</span></span><span class="line"><span class="cl">                    --token-version 2.0.0 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-txt" data-lang="txt"><span class="line"><span class="cl">kubeconfig_cmd = &#34;oci ce cluster create-kubeconfig
+</span></span><span class="line"><span class="cl">                    --cluster-id ocid1.cluster.oc1.iad.xxx
+</span></span><span class="line"><span class="cl">                    --file $HOME/.kube/config
+</span></span><span class="line"><span class="cl">                    --region us-ashburn-1
+</span></span><span class="line"><span class="cl">                    --token-version 2.0.0
 </span></span><span class="line"><span class="cl">                    --kube-endpoint PUBLIC_ENDPOINT&#34;
-</span></span></code></pre></div><p><strong>Note:</strong> The generated <code>kubeconfig</code> file will only work if you are using the <code>DEFAULT</code> profile in your OCI CLI configuration file. If you are using a different OCI CLI profile you must add <code>--profile &lt;NAME&gt;</code> to the command by editing the generated Kubernetes config file and add the following lines:</p>
+</span></span></code></pre></div><p><strong>Note:</strong> The generated <code>kubeconfig</code> file will only work if you are using the <code>DEFAULT</code> profile in your OCI CLI configuration file. If you are using a different OCI CLI profile you must add <code>--profile &lt;PROFILE-NAME&gt;</code> to the command. For example:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-txt" data-lang="txt"><span class="line"><span class="cl">kubeconfig_cmd = &#34;oci ce cluster create-kubeconfig
+</span></span><span class="line"><span class="cl">                    --cluster-id ocid1.cluster.oc1.iad.xxx
+</span></span><span class="line"><span class="cl">                    --file $HOME/.kube/config
+</span></span><span class="line"><span class="cl">                    --region us-ashburn-1
+</span></span><span class="line"><span class="cl">                    --token-version 2.0.0
+</span></span><span class="line"><span class="cl">                    --kube-endpoint PUBLIC_ENDPOINT&#34;
+</span></span><span class="line"><span class="cl">                    --profile &lt;PROFILE-NAME&gt;
+</span></span></code></pre></div><p>You must also edit the the generated Kubernetes config file and add the following lines to the config file. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl">- --<span class="l">profile</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="l">MYTENANCY</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="l">&lt;PROFILE-NAME&gt;</span><span class="w">
 </span></span></span></code></pre></div><p>For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl">- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">user-xxxx</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">user</span><span class="p">:</span><span class="w">
@@ -1155,7 +1163,7 @@ if (!doNotTrack) {
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span>- --<span class="l">region</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">us-ashburn-1</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span>- --<span class="l">profile</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">YOUR_PROFILE_NAME</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">&lt;PROFILE-NAME&gt;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="l">oci</span><span class="w">
 </span></span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="using-oci-cloud-shell">
@@ -1200,12 +1208,12 @@ if (!doNotTrack) {
 <!-- spellchecker-enable -->
 <p>Run the provided command to create your Kubernetes configuration file and then you will be able to access the Kubernetes cluster. For example, you can list the pods in your cluster:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">Welcome to Oracle Cloud Shell.
-</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">Update: Cloud Shell will now use Oracle JDK 11 by default. To change this, see Managing Language Runtimes in the Cloud Shell documentation.
-</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">Your Cloud Shell machine comes with 5GB of storage for your home directory. Your Cloud Shell (machine and home directory) are located in: US East (Ashburn).
 </span></span><span class="line"><span class="cl">You are using Cloud Shell in tenancy xxxx as an OCI user xxxx
-</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="k">Type</span> `help` for more info.
 </span></span><span class="line"><span class="cl">user@cloudshell:~ (us-ashburn-1)$ oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.iad.xxx
 </span></span><span class="line"><span class="cl"> --file $HOME/.kube/config --region us-ashburn-1 --token-version 2.0.0 --kube-endpoint PUBLIC_ENDPOINT

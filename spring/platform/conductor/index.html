@@ -12,10 +12,11 @@
 <meta name="generator" content="Hugo 0.108.0">
 
 
-  <meta name="description" content="Oracle Backend for Spring Boot includes Netflix Conductor along with the Netflix Conductor UI. Conductor is a popular workflow solution that works well with Spring Boot microservices and the Oracle database.
+  <meta name="description" content="Oracle Backend as a Service for Spring Cloud includes Netflix Conductor Server. Conductor is a popular workflow solution that works well with Spring Boot microservices and the Oracle database.
 Full documentation on Conductor can be found here:
-Netflix Conductor Documentation Accessing Conductor UI Expose the Oracle Spring Cloud Admin Server that the CLI will call by using port-forward
-kubectl port-forward services/conductor-ui -n conductor-ui 5000:5000 Access the Conductor UI." />
+Netflix Conductor Documentation Accessing Server UI Expose the Oracle Spring Cloud Admin Server that the CLI will call by using port-forward
+kubectl port-forward services/conductor-server -n conductor-server 8080:8080 Access the Conductor Server UI.
+http://localhost:8080 Access the Swagger Documentation" />
 
     <title>Workflow | Oracle Backend for Spring Boot</title>
 
@@ -41,10 +42,11 @@ kubectl port-forward services/conductor-ui -n conductor-ui 5000:5000 Access the 
     content="Workflow"
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot" />
-  <meta property="og:description" content="Oracle Backend for Spring Boot includes Netflix Conductor along with the Netflix Conductor UI. Conductor is a popular workflow solution that works well with Spring Boot microservices and the Oracle database.
+  <meta property="og:description" content="Oracle Backend as a Service for Spring Cloud includes Netflix Conductor Server. Conductor is a popular workflow solution that works well with Spring Boot microservices and the Oracle database.
 Full documentation on Conductor can be found here:
-Netflix Conductor Documentation Accessing Conductor UI Expose the Oracle Spring Cloud Admin Server that the CLI will call by using port-forward
-kubectl port-forward services/conductor-ui -n conductor-ui 5000:5000 Access the Conductor UI." />
+Netflix Conductor Documentation Accessing Server UI Expose the Oracle Spring Cloud Admin Server that the CLI will call by using port-forward
+kubectl port-forward services/conductor-server -n conductor-server 8080:8080 Access the Conductor Server UI.
+http://localhost:8080 Access the Swagger Documentation" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/platform/conductor/" />
 
@@ -53,10 +55,11 @@ kubectl port-forward services/conductor-ui -n conductor-ui 5000:5000 Access the 
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Workflow" />
-  <meta name="twitter:description" content="Oracle Backend for Spring Boot includes Netflix Conductor along with the Netflix Conductor UI. Conductor is a popular workflow solution that works well with Spring Boot microservices and the Oracle database.
+  <meta name="twitter:description" content="Oracle Backend as a Service for Spring Cloud includes Netflix Conductor Server. Conductor is a popular workflow solution that works well with Spring Boot microservices and the Oracle database.
 Full documentation on Conductor can be found here:
-Netflix Conductor Documentation Accessing Conductor UI Expose the Oracle Spring Cloud Admin Server that the CLI will call by using port-forward
-kubectl port-forward services/conductor-ui -n conductor-ui 5000:5000 Access the Conductor UI." />
+Netflix Conductor Documentation Accessing Server UI Expose the Oracle Spring Cloud Admin Server that the CLI will call by using port-forward
+kubectl port-forward services/conductor-server -n conductor-server 8080:8080 Access the Conductor Server UI.
+http://localhost:8080 Access the Swagger Documentation" />
 
 
   <script type="application/ld+json">
@@ -67,8 +70,8 @@ kubectl port-forward services/conductor-ui -n conductor-ui 5000:5000 Access the 
       "name": "Workflow",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/platform/conductor/",
       "headline": "Workflow",
-      "description": "Oracle Backend for Spring Boot includes Netflix Conductor along with the Netflix Conductor UI. Conductor is a popular workflow solution that works well with Spring Boot microservices and the Oracle database.\nFull documentation on Conductor can be found here:\nNetflix Conductor Documentation Accessing Conductor UI Expose the Oracle Spring Cloud Admin Server that the CLI will call by using port-forward\nkubectl port-forward services\/conductor-ui -n conductor-ui 5000:5000 Access the Conductor UI.",
-      "wordCount" : "136",
+      "description": "Oracle Backend as a Service for Spring Cloud includes Netflix Conductor Server. Conductor is a popular workflow solution that works well with Spring Boot microservices and the Oracle database.\nFull documentation on Conductor can be found here:\nNetflix Conductor Documentation Accessing Server UI Expose the Oracle Spring Cloud Admin Server that the CLI will call by using port-forward\nkubectl port-forward services\/conductor-server -n conductor-server 8080:8080 Access the Conductor Server UI.\nhttp:\/\/localhost:8080 Access the Swagger Documentation",
+      "wordCount" : "86",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1130,8 +1133,7 @@ if (!doNotTrack) {
     class="gdoc-markdown gdoc-markdown__align--left"
   >
     <h1>Workflow</h1>
-    <p>Oracle Backend for Spring Boot includes Netflix Conductor along with the Netflix Conductor UI.
-Conductor is a popular workflow solution that works well with Spring Boot microservices and the Oracle database.</p>
+    <p>Oracle Backend as a Service for Spring Cloud includes Netflix Conductor Server. Conductor is a popular workflow solution that works well with Spring Boot microservices and the Oracle database.</p>
 <p>Full documentation on Conductor can be found here:</p>
 <ul>
 <li><a
@@ -1140,9 +1142,9 @@ Conductor is a popular workflow solution that works well with Spring Boot micros
 >Netflix Conductor Documentation</a></li>
 </ul>
 <div class="gdoc-page__anchorwrap">
-    <h3 id="accessing-conductor-ui">
-        Accessing Conductor UI
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/conductor/#accessing-conductor-ui" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Accessing Conductor UI" aria-label="Anchor to: Accessing Conductor UI" href="#accessing-conductor-ui">
+    <h3 id="accessing-server-ui">
+        Accessing Server UI
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/conductor/#accessing-server-ui" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Accessing Server UI" aria-label="Anchor to: Accessing Server UI" href="#accessing-server-ui">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h3>
@@ -1150,108 +1152,41 @@ Conductor is a popular workflow solution that works well with Spring Boot micros
 <ol>
 <li>
 <p>Expose the Oracle Spring Cloud Admin Server that the CLI will call by using <code>port-forward</code></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl port-forward services/conductor-ui -n conductor-ui  5000:5000
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl port-forward services/conductor-server -n conductor-server 8080:8080
 </span></span></code></pre></div></li>
 <li>
-<p>Access the Conductor UI.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">http://localhost:5000
+<p>Access the Conductor Server UI.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">http://localhost:8080
 </span></span></code></pre></div></li>
 </ol>
+<!-- spellchecker-disable -->
+
+
+<!-- spellchecker-enable -->
+<ol start="3">
+<li>
+<p>Access the Swagger Documentation</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">http://localhost:8080/swagger-ui/index.html
+</span></span></code></pre></div></li>
+</ol>
+<!-- spellchecker-disable -->
+
+
+<!-- spellchecker-enable -->
 <div class="gdoc-page__anchorwrap">
-    <h3 id="using-conductor-ui">
-        Using Conductor UI
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/conductor/#using-conductor-ui" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Using Conductor UI" aria-label="Anchor to: Using Conductor UI" href="#using-conductor-ui">
+    <h3 id="api-specification">
+        API Specification
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/conductor/#api-specification" class="gdoc-page__anchor clip flex align-center" title="Anchor to: API Specification" aria-label="Anchor to: API Specification" href="#api-specification">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h3>
 </div>
-<p>The UI can be used to view and exercise workflows.</p>
+<p>The API Specification can be found here:</p>
 <ul>
 <li><a
   class="gdoc-markdown__link"
-  href="https://conductor.netflix.com/configuration/workflowdef.html"
->Conductor Workflow Documentation</a></li>
-</ul>
-<!-- spellchecker-disable -->
-
-  
-  
-
-
-  <div class="flex justify-center">
-    <figure
-      class="gdoc-markdown__figure"
-    >
-      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/conductor/conductor_ui_workflows.png">
-        <picture>
-            <source
-                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/conductor/conductor_ui_workflows_huac5bc9d1be0ef1d9b135417ac0f6194e_220245_1200x0_resize_box_3.png"
-
-            />
-          <img
-                src="https://oracle.github.io/microservices-datadriven/spring/platform/conductor/conductor_ui_workflows_huac5bc9d1be0ef1d9b135417ac0f6194e_220245_1800x0_resize_box_3.png"
-              alt="Conductor UI Workflows"
-          />
-        </picture>
-      </a>
-          <figcaption>
-            Conductor UI Workflows
-          </figcaption>
-    </figure>
-  </div>
-
-<!-- spellchecker-enable -->
-<p>Workflows consist of tasks and Spring Boot microservices can be called as/from tasks in order to participate in these workflows.</p>
-<ul>
-<li><a
-  class="gdoc-markdown__link"
-  href="https://conductor.netflix.com/configuration/taskdef.html"
->Conductor Task Documentation</a></li>
-</ul>
-<p>The UI can also be used to view these tasks.</p>
-<!-- spellchecker-disable -->
-
-  
-  
-
-
-  <div class="flex justify-center">
-    <figure
-      class="gdoc-markdown__figure"
-    >
-      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/conductor/conductor_ui_tasks.png">
-        <picture>
-            <source
-                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/conductor/conductor_ui_tasks_hu378351f9b2f7f9df9b8033192fc1ddce_336004_1200x0_resize_box_3.png"
-
-            />
-          <img
-                src="https://oracle.github.io/microservices-datadriven/spring/platform/conductor/conductor_ui_tasks_hu378351f9b2f7f9df9b8033192fc1ddce_336004_1800x0_resize_box_3.png"
-              alt="Conductor UI Tasks"
-          />
-        </picture>
-      </a>
-          <figcaption>
-            Conductor UI Tasks
-          </figcaption>
-    </figure>
-  </div>
-
-<!-- spellchecker-enable -->
-<div class="gdoc-page__anchorwrap">
-    <h3 id="samples">
-        Samples
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/conductor/#samples" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Samples" aria-label="Anchor to: Samples" href="#samples">
-            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
-        </a>
-    </h3>
-</div>
-<p>&ldquo;A First Workflow&rdquo; example can  be found here:</p>
-<ul>
-<li><a
-  class="gdoc-markdown__link"
-  href="https://conductor.netflix.com/labs/running-first-workflow.html"
->running-first-workflow</a></li>
+  href="https://conductor.netflix.com/apispec.html"
+>API Specification</a></li>
 </ul>
 
   </article>
