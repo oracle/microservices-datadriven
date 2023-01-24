@@ -15,7 +15,7 @@ resources:
 
 ---
 
-Sample applications that demonstrate Oracle Backend as a Service for Spring Cloud use cases.
+Sample applications that demonstrate Oracle Backend for Spring Boot use cases.
 
 ## Prerequisites
 
@@ -25,7 +25,7 @@ Sample applications that demonstrate Oracle Backend as a Service for Spring Clou
 
 ## Make a Clone of the Sample Apps Source Code
 
-Now that you have your Oracle Backend as a Service for Spring Cloud environment available and accessible, you can deploy the sample applications.
+Now that you have your Oracle Backend for Spring Boot environment available and accessible, you can deploy the sample applications.
 
 1. Create a clone from the GitHub repository using the following command.  
 

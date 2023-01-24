@@ -51,8 +51,11 @@ public class InfomapGraphClient {
 				.setLoadVertexLabels(true)
 				.setLoadEdgeLabel(true)
 				.build();
+
 	*/	
 		PgxGraph graph = session.readGraphByName(properties.readGraphProperty(Constants.GRAPH_NAME_STR), oracle.pgx.api.GraphSource.PG_VIEW);
+		// PgxGraph graph = session.readGraphWithProperties(graphConfig);
+
 		System.out.println("Graph : " + graph);
 		
 		Analyst analyst = session.createAnalyst();

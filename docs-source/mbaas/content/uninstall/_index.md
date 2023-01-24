@@ -1,5 +1,5 @@
 
-To remove the MBaaS, in the OCI Console main menu, navigate to "Developer Services" then "Resource Manager - Stacks".  Make sure you
+To remove the Oracle Backend for Parse Platform, in the OCI Console main menu, navigate to "Developer Services" then "Resource Manager - Stacks".  Make sure you
 are in the correct region and compartment where you installed the MBaaS.
 
 Click on the link to open the detail view for the MBaaS instance and click on the "Destroy" button to clean up resources:

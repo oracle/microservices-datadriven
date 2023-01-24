@@ -19,10 +19,11 @@
         <module>banka</module>
         <module>bankb</module>
         <module>slow_service</module>
+        <module>aqjms_sample</module>
     </modules>
 
     <name>sample-spring-apps</name>
-    <description>Sample application for racle Backend as a Service for Spring Cloudt</description>
+    <description>Sample application for Oracle Backend for Spring Boot</description>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>

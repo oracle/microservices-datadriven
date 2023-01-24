@@ -1,9 +1,9 @@
 
-The MBaaS is available to install from [OCI Marketplace](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/139274906).
+The Oracle Backend for Parse Platform is available to install from [OCI Marketplace](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/139274906).
 
 ## Prerequisites
 
-You must meet the following prerequisites to use the MBaaS:
+You must meet the following prerequisites to use the Oracle Backend for Parse Platform:
 
 * An OCI account in a tenancy with sufficient quota to create:
   * An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes
@@ -16,13 +16,13 @@ You must meet the following prerequisites to use the MBaaS:
 
 To start installation:
 
-* Visit the [OCI Marketplace listing for MBaaS](https://cloud.oracle.com/marketplace/application/139274906) (see the image below)
+* Visit the [OCI Marketplace listing for Oracle Backend for Parse Platform](https://cloud.oracle.com/marketplace/application/139274906) (see the image below)
 * Log into OCI Console if requested
 * Choose the target compartment
 * Review and accept the terms and conditions
 * Click on the "Launch Stack" button
 
-![OCI Marketplace Listing](../mbaas-oci-mp-listing.png)
+![OCI Marketplace Listing](../Oracle Backend for Parse Platform-oci-mp-listing.png)
 
 On the "Create Stack" page:
 

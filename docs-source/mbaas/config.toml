@@ -1,6 +1,6 @@
 baseURL = 'https://oracle.github.io/microservices-datadriven/mbaas/'
 languageCode = 'en-us'
-title = 'Oracle Mobile Backend as a Service'
+title = 'Oracle Backend for Parse Platform'
 theme = "hugo-geekdoc"
 
 pluralizeListTitles = false

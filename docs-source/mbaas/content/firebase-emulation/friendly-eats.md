@@ -28,7 +28,7 @@ of the Firebase API emulation using the following steps:
     ```
 
     Comment out the Firebase imports and add the following imports and code in their place, as shown here.  Change the `COOLAPPV100`
-    and `serverURL` to match your MBaaS/Parse Server environment:
+    and `serverURL` to match your Oracle Backend for Parse Platform environment:
     
     ```
     <!-- comment these out: 
@@ -63,7 +63,7 @@ of the Firebase API emulation using the following steps:
         <script src="https://npmcdn.com/parse/dist/parse.min.js"></script> 
         ```
 
-    * To configure communication with the MBaaS/Parse platform, you must set your own **APPLICATION_ID** and **Parse serverURL**.
+    * To configure communication with the Oracle Backend for Parse Platform, you must set your own **APPLICATION_ID** and **Parse serverURL**.
       This initial setup is done by these lines of code:
         ```
         <script>
@@ -76,7 +76,7 @@ of the Firebase API emulation using the following steps:
 
 ## Repeat the tutorial steps with Firebase API Emulation
 
-Repeat the original tutorial steps to load **Restaurants** and **Ratings** into the MBaaS/Parse Server and check if the original
+Repeat the original tutorial steps to load **Restaurants** and **Ratings** into the Parse Server and check if the original
 JavaScript demo application is still running without any other changes.
 
 * Stop and restart the Firebase CLI.
@@ -113,7 +113,7 @@ JavaScript demo application is still running without any other changes.
     ![Filtered](../../newList.jpg "filtered  restaurant page")
     
     **Note**: In this step, we don't need to add an index definition to the collection as in the original tutorial, since this is done
-    automatically in the MBaaS/Parse Server.
+    automatically in the Parse Server.
 
 * You can further test the sort functionalities by adding more reviews to other restaurants. This will allow you to see the number of reviews and average ratings.
 
