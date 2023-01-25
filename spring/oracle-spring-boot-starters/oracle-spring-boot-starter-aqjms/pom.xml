@@ -4,21 +4,37 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>oracle-spring-boot-starters</artifactId>
         <groupId>com.oracle.database.spring</groupId>
         <version>2.7.7</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
-    <modelVersion>4.0.0</modelVersion>
 
     <artifactId>oracle-spring-boot-starter-aqjms</artifactId>
     <version>2.7.7</version>
+    <packaging>jar</packaging>
 
     <!-- Project Information -->
     <name>Oracle Spring Boot Starter - AQ JMS</name>
     <description>Oracle's implementation of Spring Boot Starter for using with Oracle AQ JMS</description>
     <url>https://github.com/oracle/microservices-datadriven/tree/main/spring/oracle-spring-boot-starters/oracle-spring-boot-starter-aqjms</url>
-    <inceptionYear>2023</inceptionYear>
+
+    <organization>
+        <name>Oracle America, Inc.</name>
+        <url>http://www.oracle.com</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <name>Oracle</name>
+            <email>obaas_ww at oracle.com</email>
+            <organization>Oracle America, Inc.</organization>
+            <organizationUrl>http://www.oracle.com</organizationUrl>
+        </developer>
+    </developers>
+
     <licenses>
         <license>
             <name>Oracle Free Use Terms and Conditions (FUTC)</name>
@@ -27,14 +43,6 @@
             </comments>
         </license>
     </licenses>
-    <developers>
-        <developer>
-            <name>Oracle</name>
-            <email>obaas_ww@oracle.com</email>
-            <organization>Oracle America, Inc.</organization>
-            <organizationUrl>http://www.oracle.com</organizationUrl>
-        </developer>
-    </developers>
 
     <dependencies>
         <dependency>
@@ -42,25 +50,25 @@
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc11</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ucp</artifactId>
+            <groupId>com.oracle.database.spring</groupId>
+            <artifactId>oracle-spring-boot-starter-ucp</artifactId>
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jms</artifactId>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.oracle.database.messaging</groupId>
             <artifactId>aqapi</artifactId>
+            <version>21.3.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.14.1</version>
         </dependency>
         <dependency>
             <groupId>javax.transaction</groupId>
@@ -75,11 +83,12 @@
             <groupId>jakarta.management.j2ee</groupId>
             <artifactId>jakarta.management.j2ee-api</artifactId>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -136,7 +145,14 @@
         </plugins>
     </build>
 
-    <properties>
-        <license.licenseName>oracle</license.licenseName>
-    </properties>
+    <scm>
+        <connection>scm:git:git://github.com/oracle/microservices-datadriven.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:oracle/microservices-datadriven.git</developerConnection>
+        <url>https://github.com/oracle/microservices-datadriven/tree/main/spring/oracle-spring-boot-starters</url>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/oracle/microservices-datadriven/issues</url>
+    </issueManagement>
 </project>
