@@ -28,6 +28,8 @@ main:
         ref: "/platform/spring-admin"
       - name: OBaaS CLI
         ref: "/development/cli"
+      - name: Vault
+        ref: "/platform/vault"
   - name: Observability
     ref: "/observability"
     sub: 
