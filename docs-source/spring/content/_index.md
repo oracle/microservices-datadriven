@@ -2,11 +2,9 @@
 title: "Oracle Backend for Spring Boot - Developer Preview"
 ---
 
-Oracle Backend for Spring Boot allows developers to build microservices in Spring Boot and
-provision a backend as a service with the Oracle Database and other infrastructure components that operate on multiple clouds. This service vastly simplifies the task of building, testing, and operating microservices platforms for reliable, secure, and scalable enterprise applications.
+Oracle Backend for Spring Boot allows developers to build microservices in Spring Boot and provision a backend as a service with the Oracle Database and other infrastructure components that operate on multiple clouds. This service vastly simplifies the task of building, testing, and operating microservices platforms for reliable, secure, and scalable enterprise applications.
 
-In addition to an Oracle Autonomous Database Shared instance, the following software components are deployed in an
-Oracle Cloud Infrastructure Container Engine for Kubernetes (OKE) cluster:
+In addition to an Oracle Autonomous Database Shared instance, the following software components are deployed in an Oracle Cloud Infrastructure Container Engine for Kubernetes (OKE) cluster:
 
 - APISIX API Gateway and Dashboard
 - Spring Eureka Service Registry
@@ -19,7 +17,7 @@ Oracle Cloud Infrastructure Container Engine for Kubernetes (OKE) cluster:
 - Jaeger
 - Vault
 
-Developers also have access to development/build time services and libraries including: 
+Developers also have access to development/build time services and libraries including:
 
 - A CLI to manage service deployment and configuration, including database schema management
 - Spring Data (JPA, JDBC) to access Oracle Database

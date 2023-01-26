@@ -8,18 +8,25 @@ resources:
 
 Oracle Backend as a Service for Spring Cloud includes [Hashicorp Vault](https://www.vaultproject.io/) to secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets and other sensitive data using a UI, CLI, or HTTP API.
 
-## Vault Architecture and Setup
+{{< hint type=[tip] icon=gdoc_check title=Tip >}}
+For more information about working with the Hashicorp Vault, see the [Hashicorp Vault Documentation](https://www.vaultproject.io/) and [Tutorials Library](https://developer.hashicorp.com/tutorials/library?product=vault).
+{{< /hint >}}
+
+## Setup Information
 
 Vault uses the following Oracle OCI Services:
 
-- Object Storage
-- OCI Vault
-- OKE
+- [Object Storage](https://docs.oracle.com/en-us/iaas/Content/Object/home.htm) for storing Vault data
+- [OCI Vault](https://docs.oracle.com/en-us/iaas/Content/KeyManagement/home.htm) to auto unseal the Vault
+- [Container Engine for Kubernetes](https://docs.oracle.com/en-us/iaas/Content/ContEng/home.htm#) for running the Vault server
 
-<<Architecture picture>>
+The Vault has ben unsealed using the OCI Vault Master Key. The `root` token is provided during deployment of Oracle Backend as a Service for Spring Cloud.
 
-The Vault service has the following enabled:
-TBD
+The following Vault services are enabled during deployment. Other services can be enabled using the `vault` command and the Web User Interface.
+
+- [Token Auth Method](https://developer.hashicorp.com/vault/docs/auth/token). The token auth method is built-in and automatically available. It allows users to authenticate using a token, as well to create new tokens, revoke secrets by token, and more.
+- [KV Secrets Engine Version 2](https://developer.hashicorp.com/vault/docs/secrets/kv). The kv secrets engine is a generic Key-Value store used to store arbitrary secrets.
+- [AppRole Auth Method](https://developer.hashicorp.com/vault/docs/auth/approle). The approle auth method allows machines or apps to authenticate with Vault-defined roles.
 
 ## Accessing Vault using using kubectl
 
@@ -35,7 +42,7 @@ TBD
 
 4. Test access to Vault
 
-    [Vault Documentation](https://developer.hashicorp.com/vault/docs) contains all the commands you can use with the Vault CLI. For  example this command returns the current status of Vault:
+    [Vault Documentation](https://developer.hashicorp.com/vault/docs) contains all the commands you can use with the Vault CLI. For example this command returns the current status of Vault:
 
     ```shell
     kubectl exec pod/vault-0 -n vault  -it -- vault status
