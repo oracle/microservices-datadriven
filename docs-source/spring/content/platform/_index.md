@@ -2,8 +2,7 @@
 title: Platform
 ---
 
-Oracle Backend for Spring Boot includes a number of Spring platform components
-that provide services to applications deployed into the platform.
+Oracle Backend for Spring Boot includes a number of Spring platform components that provide services to applications deployed into the platform.
 
 For more details, please read about:
     - [API Gateway](./apigw)
