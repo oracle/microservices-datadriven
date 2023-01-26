@@ -5,14 +5,14 @@ main:
     #   - name: Kubernetes Access
     #     ref: "/setup/cluster-access"
     #   - name: Database Access
-    #     ref: "/setup/database"      
+    #     ref: "/setup/database"
   # - name: Getting Started
   #   ref: "/getting-started"
   - name: Sample apps
     ref: "/sample-apps"
 #  - name: Developing Services
 #    ref: "/development"
-#    sub: 
+#    sub:
   - name: Platform Services
     ref: "/platform"
     sub:
@@ -40,7 +40,7 @@ main:
   - name: Security
     ref: "/security"
   - name: Database Access
-    ref: "/database"    
+    ref: "/database"
   - name: Kubernetes Access
     ref: "/cluster-access"
   - name: Uninstall

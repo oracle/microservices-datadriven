@@ -20,7 +20,7 @@ Vault uses the following Oracle OCI Services:
 - [OCI Vault](https://docs.oracle.com/en-us/iaas/Content/KeyManagement/home.htm) to auto unseal the Vault
 - [Container Engine for Kubernetes](https://docs.oracle.com/en-us/iaas/Content/ContEng/home.htm#) for running the Vault server
 
-The Vault has ben unsealed using the OCI Vault Master Key. The `root` token is provided during deployment of Oracle Backend as a Service for Spring Cloud.
+The Vault is [unsealed](https://developer.hashicorp.com/vault/docs/configuration/seal/ocikms) using the OCI KMS key. The `root` token is provided during deployment of Oracle Backend as a Service for Spring Cloud.
 
 The following Vault services are enabled during deployment. Other services can be enabled using the `vault` command and the Web User Interface.
 
