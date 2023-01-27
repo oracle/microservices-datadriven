@@ -155,6 +155,6 @@ Oracle Backend for Spring Boot setup will install the following components:
 
 2. Install Oracle Backend for Spring Boot command-line
 
-    The **Oracle Backend for Spring Boot** command-line tool, `obaas`, is available for Linux and Mac systems. Download the binary you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0) page and add it to your PATH environment variable.  You may like to rename the binary to remove the suffix.
+    The **Oracle Backend for Spring Boot** command-line tool, `oractl`, is available for Linux and Mac systems. Download the binary you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0) page and add it to your PATH environment variable.  You may like to rename the binary to remove the suffix.
 
-    If you're environment is a Linux or Mac machine you need to run `chmod +x` on the downloaded binary. Also if your environment is a Mac you need run the following command `sudo xattr -r -d com.apple.quarantine <downloaded-file>` otherwise will you get a security warning and the CLI will not work.
+    If your environment is a Linux or Mac machine you need to run `chmod +x` on the downloaded binary. Also if your environment is a Mac you need run the following command `sudo xattr -r -d com.apple.quarantine <downloaded-file>` otherwise will you get a security warning and the CLI will not work.

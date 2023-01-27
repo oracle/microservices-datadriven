@@ -38,23 +38,19 @@ Click on the link to access the database details page, and then click on the “
 This will open the Database Actions page, where you have access to many database functions, including the ability to
 work with the schemas where your Oracle Backend for Spring Boot data are stored.
 
-
 ## Accessing the database from a local workstation
 
-After create the Oracle Backend for Spring Boot environment, you will have to access to Autonoums Database for access, for example, the 
-`CONFIGSERVER.PROPERTIES`, a table where Applications should add their properties. Also, each application can use the same database instance to host
-its data.
+After creating the Oracle Backend for Spring Boot environment, you will have to access to Autonomous Database for access, for example, the `CONFIGSERVER.PROPERTIES`, a table where Applications should add their properties. Also, each application can use the same database instance to host its data.
 
 If you chose the "secure access from anywhere" option for database access during installation (or accepted this default), you can
 [download the wallet](https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/connect-download-wallet.html) to access
 the database from your local machine.
 
-If you chose the "private" option for database access during installation, the database will be configure so that it is only accessible 
-from the private VCN, and access will only be possible using the Bastion Service provisioned during installation.
+If you chose the "private" option for database access during installation, the database will be configure so that it is only accessible from the private VCN, and access will only be possible using the Bastion Service provisioned during installation.
 
 1. Create Dynamic port forwarding (SOCKS5) session using Bastion service.
 
-    Let's start with ADB access that was created with private end point access only following security guidance. To allow you get access to ADB to run sql commnads you will need to stablish an session between your local workstation and ADB passing by the Bastion service.
+    Let's start with ADB access that was created with private end point access only following security guidance. To allow you get access to ADB to run sql commands you will need to stablish an session between your local workstation and ADB passing by the Bastion service.
 
     We will create a [Dynamic port forwarding (SOCKS5) session](https://docs.oracle.com/en-us/iaas/Content/Bastion/Tasks/managingsessions.htm#).
 

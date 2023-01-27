@@ -1,6 +1,6 @@
 ---
 title: Uninstall
-description: Unistall the Oracle BaaS from tenancy"
+description: Uninstall the Oracle BaaS from tenancy"
 resources:
   - name: oci-stack-destroy
     src: "oci-stack-destroy.png"
@@ -25,4 +25,4 @@ The OCI Resource Manager will use stack definition to destroy all resources.
 {{< img name="oci-stack-destroy-logs" size="medium" lazy=false >}}
 <!-- spellchecker-enable -->
 
-The destroy job takes about 20 minutes to complete. You should review the logs at the end to make sure it completed succesfully. If there were any errors, in most cases running the destroy job again will fix any issues.
+The destroy job takes about 20 minutes to complete. You should review the logs at the end to make sure it completed successfully. If there were any errors, in most cases running the destroy job again will fix any issues.
