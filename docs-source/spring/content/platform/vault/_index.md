@@ -32,15 +32,13 @@ The following Vault services are enabled during deployment. Other services can b
 
 1. To access Vault using kubectl you need to setup [Kubernetes Access](../../cluster-access/_index.md)
 
-2. Install the Vault client using these instructions [Install Vault](https://developer.hashicorp.com/vault/downloads). **NOTE** Installing the server part is not required to access Vault.
-
-3. Expose the Vault Server using `port-forward`
+2. Expose the Vault Server using `port-forward`
 
     ```shell
     kubectl port-forward -n vault svc/vault 8200:8200
     ```
 
-4. Test access to Vault
+3. Test access to Vault
 
     [Vault Documentation](https://developer.hashicorp.com/vault/docs) contains all the commands you can use with the Vault CLI. For example this command returns the current status of Vault:
 
@@ -69,7 +67,7 @@ The following Vault services are enabled during deployment. Other services can b
     Active Since             2023-01-26T16:14:32.628291153Z
     ```
 
-5. Login into Vault
+4. Login into Vault
 
     To interact with vault you need to login using a token.
 
