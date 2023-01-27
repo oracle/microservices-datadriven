@@ -11,7 +11,7 @@ resource "random_password" "database_admin_password" {
   length  = 12
   upper   = true
   lower   = true
-  number  = true
+  numeric  = true
   special = false
   min_lower = "1"
   min_upper = "1"
