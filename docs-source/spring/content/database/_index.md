@@ -40,7 +40,7 @@ work with the schemas where your Oracle Backend for Spring Boot data are stored.
 
 ## Accessing the database from a local workstation
 
-After create the Oracle Backend for Spring Boot environment, you will have to access to Autonomous Database for access, for example, the `CONFIGSERVER.PROPERTIES`, a table where Applications should add their properties. Also, each application can use the same database instance to host its data.
+After creating the Oracle Backend for Spring Boot environment, you will have to access to Autonomous Database for access, for example, the `CONFIGSERVER.PROPERTIES`, a table where Applications should add their properties. Also, each application can use the same database instance to host its data.
 
 If you chose the "secure access from anywhere" option for database access during installation (or accepted this default), you can
 [download the wallet](https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/connect-download-wallet.html) to access

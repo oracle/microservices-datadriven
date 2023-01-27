@@ -58,13 +58,13 @@ Service Commands
 oractl:>
 ```
 
-An application is a namespace encompassing related microservices. For example, a "cloudbank" application may have "banktransfer" "frauddetection", etc. microservices deployed within it.
+An application is a namespace encompassing related microservices. For example, a "cloudbank" application may have "banktransfer" "frauddetection", etc., microservices deployed within it.
 The `create` command results in the creation of an application namespace.
 
 The `bind` command results in the automatic creation of a database schema for a given service/user and binds the information for that schema/database in the environment of the microservice for it to use.  The option of the prefix for the environment properties bound is also given.  For example, most Spring microservices us "spring.datasource".
 
 The `deploy` command takes `serviceName`, `appName`, and `jarLocation` as it's main arguments (`imageVersion` and `javaVersion` options are also provided).
-When the deploy command is issued, the microservice jar file is uploaded to the backend, a Docker image is created for the jar/microservice, and various Kubernetes resources such as deployment, service, etc. are also created.
+When the deploy command is issued, the microservice JAR file is uploaded to the backend, a container image is created for the JAR/microservice, and various Kubernetes resources such as deployment, service, etc. are also created.
 This is all done automatically to simplify the development process and the management of the microservices by the backend.
 
 The `list` command can then be used show the details of the deployed microservice, etc.
@@ -151,7 +151,7 @@ using default value...
 database secret created successfully and schema created successfully for banka
 ```
 
-The microservice jar will now be deployed with the `deploy` command which will create, build, and push an image for the microservice and create the necessary deployment, service, secret, etc. Kubernetes resources for the microservice.
+The microservice JAR will now be deployed with the `deploy` command which will create, build, and push an image for the microservice and create the necessary deployment, service, secret, etc. Kubernetes resources for the microservice.
 
 ```cmd
 oractl:>help deploy
@@ -190,7 +190,7 @@ OPTIONS
        java image
        [Optional, default = ghcr.io/graalvm/jdk:ol7-java17-22.2.0]
 
-oractl:>deploy --isRedeploy false --bind jms --jarLocation ebaas-sample-apps/banka/target/banka-0.0.1-SNAPSHOT.jar 
+oractl:>deploy --isRedeploy false --bind jms --jarLocation ebaas-sample-apps/banka/target/banka-0.0.1-SNAPSHOT.jar
 uploading... upload successful
 building and pushing image... docker build and push successful
 binding resources... successful (no resources found to bind)
