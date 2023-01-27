@@ -43,7 +43,7 @@ BEGIN
     hostname => '$DB1_HOSTNAME',
     port => '$DB1_PORT',
     service_name => '$DB1_SERVICE_NAME',
-    ssl_server_cert_dn => '$DB1_SSL_SERVER_CERT_DN',
+    ssl_server_cert_dn => NULL,
     credential_name => 'CRED',
     directory_name => '$DBLINK_CREDENTIAL_DIRECTORY');
 END;
