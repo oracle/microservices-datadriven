@@ -4,6 +4,21 @@ resources:
   - name: vault-login
     src: "vault-login.png"
     title: "Vault Web User Interface"
+  - name: vault-home
+    src: "vault-home.png"
+    title: "Vault Home Page"
+  - name: vault-kv-v2-home
+    src: "vault-kv-v2-home.png"
+    title: "Vault K/V V2 Home"
+  - name: vault-create-secret
+    src: "vault-create-secret.png"
+    title: "Vault Create Secret"
+  - name: vault-secret
+    src: "vault-secret.png"
+    title: "Vault Secret"
+  - name: vault-show-secret
+    src: "vault-show-secret.png"
+    title: "Vault Show Secret"
 ---
 
 Oracle Backend as a Service for Spring Cloud includes [Hashicorp Vault](https://www.vaultproject.io/) to secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets and other sensitive data using a UI, CLI, or HTTP API.
@@ -188,3 +203,35 @@ For more information about the Key/Value secrets engine [Key/value Documentation
     <!-- spellchecker-enable -->
 
     Login using the root token. As an administrator you **must** generate separate tokens and ACLs for the users than needs access to Vault. See [Vault Documentation](https://developer.hashicorp.com/vault/docs).
+
+    You are presented with the home screen showing the installed secret engines
+
+    <!-- spellchecker-disable -->
+    {{< img name="vault-home" size="medium" lazy=false >}}
+    <!-- spellchecker-enable -->
+
+4. Create a Key/Value secret
+
+    Click on the `k2-v2` link from the home page.
+
+    <!-- spellchecker-disable -->
+    {{< img name="vault-kv-v2-home" size="medium" lazy=false >}}
+    <!-- spellchecker-enable -->
+
+    CLick on the `Create Secret` link
+
+    <!-- spellchecker-disable -->
+    {{< img name="vault-create-secret" size="medium" lazy=false >}}
+    <!-- spellchecker-enable -->
+
+    Create a secret
+
+    <!-- spellchecker-disable -->
+    {{< img name="vault-secret" size="medium" lazy=false >}}
+    <!-- spellchecker-enable -->
+
+    View the secret content by clicking on the eye icon for each value
+
+    <!-- spellchecker-disable -->
+    {{< img name="vault-show-secret" size="medium" lazy=false >}}
+    <!-- spellchecker-enable -->
