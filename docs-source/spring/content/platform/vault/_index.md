@@ -218,7 +218,7 @@ For more information about the Key/Value secrets engine [Key/value Documentation
     {{< img name="vault-kv-v2-home" size="medium" lazy=false >}}
     <!-- spellchecker-enable -->
 
-    CLick on the `Create Secret` link
+    Click on the `Create Secret` link
 
     <!-- spellchecker-disable -->
     {{< img name="vault-create-secret" size="medium" lazy=false >}}
