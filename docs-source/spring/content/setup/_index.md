@@ -45,7 +45,7 @@ You must meet the following prerequisites to use Oracle Backend for Spring Boot:
 
 - On local workstation:
   - The Kubernetes command-line tool (kubectl)
-  - Oracle Clound Infrastructure Command Line Interface (CLI)
+  - Oracle Cloud Infrastructure Command Line Interface (CLI)
   - Oracle Backend for Spring Boot command-line tool
 
 ## Summary of components
@@ -65,6 +65,7 @@ Oracle Backend for Spring Boot setup will install the following components:
 | Spring Admin Server          | 2.7.5        | Managing and monitoring Spring Boot applications.                                        |
 | Spring Cloud Config Server   | 2.7.5        | Provides server-side support for externalized configuration.                             |
 | Eureka Service Registry      | 2021.0.3     | Provides Service Discovery capabilities                                                  |
+| HashiCorp Vault              | v1.11.3      | Provides a way of store and tightly control access to sensitive data                     |
 
 ## Setup the OCI environment
 
@@ -151,7 +152,6 @@ Oracle Backend for Spring Boot setup will install the following components:
     - install and configure the Oracle Cloud Infrastructure CLI
         1. Install the Oracle Cloud Infrastructure CLI version 2.6.4 (or later). See [Quickstart](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#Quickstart).
         2. Configure the Oracle Cloud Infrastructure CLI. See [Configuring the CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliconfigure.htm#Configuring_the_CLI).
-
 
 2. Install Oracle Backend for Spring Boot command-line
 

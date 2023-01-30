@@ -21,10 +21,10 @@ resources:
     title: "Vault Show Secret"
 ---
 
-Oracle Backend as a Service for Spring Cloud includes [Hashicorp Vault](https://www.vaultproject.io/) to secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets and other sensitive data using a UI, CLI, or HTTP API.
+Oracle Backend as a Service for Spring Cloud includes [HashiCorp Vault](https://www.vaultproject.io/) to secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets and other sensitive data using a UI, CLI, or HTTP API.
 
 {{< hint type=[tip] icon=gdoc_check title=Tip >}}
-For more information about working with the Hashicorp Vault, see the [Hashicorp Vault Documentation](https://www.vaultproject.io/) and [Tutorials Library](https://developer.hashicorp.com/tutorials/library?product=vault).
+For more information about working with the HashiCorp Vault, see the [HashiCorp Vault Documentation](https://www.vaultproject.io/) and [Tutorials Library](https://developer.hashicorp.com/tutorials/library?product=vault).
 {{< /hint >}}
 
 ## Setup Information
