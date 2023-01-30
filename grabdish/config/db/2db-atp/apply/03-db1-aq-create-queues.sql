@@ -42,7 +42,7 @@ BEGIN
     hostname => '$DB2_HOSTNAME',
     port => '$DB2_PORT',
     service_name => '$DB2_SERVICE_NAME',
-    ssl_server_cert_dn => NULL,
+    ssl_server_cert_dn => '$DB2_SSL_SERVER_CERT_DN',
     credential_name => 'CRED',
     directory_name => '$DBLINK_CREDENTIAL_DIRECTORY');
 END;
