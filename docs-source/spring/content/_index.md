@@ -15,7 +15,7 @@ In addition to an Oracle Autonomous Database Shared instance, the following soft
 - Grafana
 - Open Telemetry Collector
 - Jaeger
-- Vault
+- HashiCorp Vault
 
 Developers also have access to development/build time services and libraries including:
 
