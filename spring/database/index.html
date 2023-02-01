@@ -697,6 +697,51 @@ If you chose the “secure access from anywhere” option for your database duri
         
       </li>
     
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/platform/vault"
+                  class="gdoc-nav__entry"
+                >
+                  Vault
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
   </ul>
 
         
@@ -1198,21 +1243,18 @@ work with the schemas where your Oracle Backend for Spring Boot data are stored.
         </a>
     </h2>
 </div>
-<p>After create the Oracle Backend for Spring Boot environment, you will have to access to Autonoums Database for access, for example, the
-<code>CONFIGSERVER.PROPERTIES</code>, a table where Applications should add their properties. Also, each application can use the same database instance to host
-its data.</p>
+<p>After creating the Oracle Backend for Spring Boot environment, you will have to access to Autonomous Database for access, for example, the <code>CONFIGSERVER.PROPERTIES</code>, a table where Applications should add their properties. Also, each application can use the same database instance to host its data.</p>
 <p>If you chose the &ldquo;secure access from anywhere&rdquo; option for database access during installation (or accepted this default), you can
 <a
   class="gdoc-markdown__link"
   href="https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/connect-download-wallet.html"
 >download the wallet</a> to access
 the database from your local machine.</p>
-<p>If you chose the &ldquo;private&rdquo; option for database access during installation, the database will be configure so that it is only accessible
-from the private VCN, and access will only be possible using the Bastion Service provisioned during installation.</p>
+<p>If you chose the &ldquo;private&rdquo; option for database access during installation, the database will be configure so that it is only accessible from the private VCN, and access will only be possible using the Bastion Service provisioned during installation.</p>
 <ol>
 <li>
 <p>Create Dynamic port forwarding (SOCKS5) session using Bastion service.</p>
-<p>Let&rsquo;s start with ADB access that was created with private end point access only following security guidance. To allow you get access to ADB to run sql commnads you will need to stablish an session between your local workstation and ADB passing by the Bastion service.</p>
+<p>Let&rsquo;s start with ADB access that was created with private end point access only following security guidance. To allow you get access to ADB to run sql commands you will need to stablish an session between your local workstation and ADB passing by the Bastion service.</p>
 <p>We will create a <a
   class="gdoc-markdown__link"
   href="https://docs.oracle.com/en-us/iaas/Content/Bastion/Tasks/managingsessions.htm#"
@@ -1383,6 +1425,30 @@ from the private VCN, and access will only be possible using the Bastion Service
   
   
 
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
   
     
     

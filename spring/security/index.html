@@ -13,10 +13,10 @@
 
 
   <meta name="description" content="The Oracle Backend for Spring Boot has the following security characteristics:
-All access to the database is done using Mutual TLS (Database Wallet). The username, password and URI are stored in Kuberentes secrets.
+All access to the database is done using Mutual TLS (Database Wallet). The username, password and URI are stored in Kubernetes secrets.
 Accessing the dashboards can only be done using port forwarding.
 The only &ldquo;public&rdquo; exposure is the APISIX Gateway (note that the dashboard is not exposed publicly).
-Services deployed to the platofrm are not exposed through the gateway automatically." />
+Services deployed to the platform are not exposed through the gateway automatically." />
 
     <title>Security | Oracle Backend for Spring Boot</title>
 
@@ -43,10 +43,10 @@ Services deployed to the platofrm are not exposed through the gateway automatica
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot" />
   <meta property="og:description" content="The Oracle Backend for Spring Boot has the following security characteristics:
-All access to the database is done using Mutual TLS (Database Wallet). The username, password and URI are stored in Kuberentes secrets.
+All access to the database is done using Mutual TLS (Database Wallet). The username, password and URI are stored in Kubernetes secrets.
 Accessing the dashboards can only be done using port forwarding.
 The only “public” exposure is the APISIX Gateway (note that the dashboard is not exposed publicly).
-Services deployed to the platofrm are not exposed through the gateway automatically." />
+Services deployed to the platform are not exposed through the gateway automatically." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/security/" />
 
@@ -56,10 +56,10 @@ Services deployed to the platofrm are not exposed through the gateway automatica
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Security" />
   <meta name="twitter:description" content="The Oracle Backend for Spring Boot has the following security characteristics:
-All access to the database is done using Mutual TLS (Database Wallet). The username, password and URI are stored in Kuberentes secrets.
+All access to the database is done using Mutual TLS (Database Wallet). The username, password and URI are stored in Kubernetes secrets.
 Accessing the dashboards can only be done using port forwarding.
 The only “public” exposure is the APISIX Gateway (note that the dashboard is not exposed publicly).
-Services deployed to the platofrm are not exposed through the gateway automatically." />
+Services deployed to the platform are not exposed through the gateway automatically." />
 
 
   <script type="application/ld+json">
@@ -70,7 +70,7 @@ Services deployed to the platofrm are not exposed through the gateway automatica
       "name": "Security",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/security/",
       "headline": "Security",
-      "description": "The Oracle Backend for Spring Boot has the following security characteristics:\nAll access to the database is done using Mutual TLS (Database Wallet). The username, password and URI are stored in Kuberentes secrets.\nAccessing the dashboards can only be done using port forwarding.\nThe only “public” exposure is the APISIX Gateway (note that the dashboard is not exposed publicly).\nServices deployed to the platofrm are not exposed through the gateway automatically.",
+      "description": "The Oracle Backend for Spring Boot has the following security characteristics:\nAll access to the database is done using Mutual TLS (Database Wallet). The username, password and URI are stored in Kubernetes secrets.\nAccessing the dashboards can only be done using port forwarding.\nThe only “public” exposure is the APISIX Gateway (note that the dashboard is not exposed publicly).\nServices deployed to the platform are not exposed through the gateway automatically.",
       "wordCount" : "150",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
@@ -706,6 +706,51 @@ Services deployed to the platofrm are not exposed through the gateway automatica
         
       </li>
     
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/platform/vault"
+                  class="gdoc-nav__entry"
+                >
+                  Vault
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
   </ul>
 
         
@@ -1128,7 +1173,7 @@ if (!doNotTrack) {
     <p>The Oracle Backend for Spring Boot has the following security characteristics:</p>
 <ul>
 <li>
-<p>All access to the database is done using Mutual TLS (Database Wallet). The username, password and URI are stored in Kuberentes secrets.</p>
+<p>All access to the database is done using Mutual TLS (Database Wallet). The username, password and URI are stored in Kubernetes secrets.</p>
 </li>
 <li>
 <p>Accessing the dashboards can only be done using port forwarding.</p>
@@ -1137,15 +1182,15 @@ if (!doNotTrack) {
 <p>The only &ldquo;public&rdquo; exposure is the APISIX Gateway (note that the dashboard is not exposed publicly).</p>
 </li>
 <li>
-<p>Services deployed to the platofrm are not exposed through the gateway automatically.</p>
+<p>Services deployed to the platform are not exposed through the gateway automatically.</p>
 </li>
 <li>
 <p>The deployed platform services are using using self-signed certificates.</p>
 </li>
 <li>
 <p>A customer application can only access service running in the platform via the APISIX Gateway. The IP address for the gateway can be determined by executing the following command:</p>
-<pre tabindex="0"><code>kubectl -n ingress-nginx get svc ingress-nginx-controller
-</code></pre></li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl -n ingress-nginx get svc ingress-nginx-controller
+</span></span></code></pre></div></li>
 <li>
 <p>The customer application can be secured using Spring Security, e.g., Spring OAuth 2.0 Resource Server. An external authorization server is recommended (for example Okta, Oauth0)</p>
 </li>
@@ -1250,6 +1295,30 @@ if (!doNotTrack) {
   
   
 
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
   
     
     

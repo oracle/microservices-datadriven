@@ -697,6 +697,51 @@ The Spring Config Server is pre-configured to work with the Spring Eureka Servic
         
       </li>
     
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/platform/vault"
+                  class="gdoc-nav__entry"
+                >
+                  Vault
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
   </ul>
 
         
@@ -1132,16 +1177,16 @@ in the Oracle Autonomous Database, so it easily supports labelled versions of co
 environments, as well as being accessible to a wide range of tooling for managing the content.
 Configuration is stored in the <code>CONFIGSERVER</code> schema in the <code>PROPERTIES</code> table.</p>
 <p>An example of a Config Server client&rsquo;s Spring <code>application.yaml</code> configuration file could include:</p>
-<pre tabindex="0"><code>spring:
-  config:
-    import: optional:configserver:http://config-server.config-server.svc.cluster.local:8080
-  application:
-    name: atael
-  cloud:
-    config:
-      label: latest
-      profile: dev
-</code></pre><p>This will fetch data in the value where the application is <code>atael</code>, profile is <code>dev</code> and the lable is <code>latest</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">spring</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">config</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">import</span><span class="p">:</span><span class="w"> </span><span class="l">optional:configserver:http://config-server.config-server.svc.cluster.local:8080</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">application</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">atael</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">cloud</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">config</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="l">latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">profile</span><span class="p">:</span><span class="w"> </span><span class="l">dev</span><span class="w">
+</span></span></span></code></pre></div><p>This will fetch data in the value where the application is <code>atael</code>, profile is <code>dev</code> and the label is <code>latest</code>.</p>
 <p>Managing the data for the Config Server should be done using the CLI.  If you prefer, you can also work directly with the <code>CONFIGSERVER.PROPERTIES</code> table in the database.</p>
 
   </article>
@@ -1330,6 +1375,30 @@ Configuration is stored in the <code>CONFIGSERVER</code> schema in the <code>PRO
       
         
         
+      
+
+      
+
+      
+    
+
+    
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
       
 
       

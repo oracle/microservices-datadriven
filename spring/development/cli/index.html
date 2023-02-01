@@ -65,7 +65,7 @@ kubectl port-forward services/obaas-admin -n obaas-admin 8080:8080 Start the CLI
       "url" : "https://oracle.github.io/microservices-datadriven/spring/development/cli/",
       "headline": "Using the OBaaS CLI",
       "description": "The Oracle Backend for Spring Boot offers a command-line tool, oractl. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources they use. Download the CLI here The platform specific binary can be renamed to oractl for convenience.\nUsing the CLI Expose the Oracle Backend for Spring Boot Admin Server that the CLI will call by using port-forward\nkubectl port-forward services\/obaas-admin -n obaas-admin 8080:8080 Start the CLI in interactive mode by simply running oractl from your terminal window.",
-      "wordCount" : "1103",
+      "wordCount" : "1107",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -700,6 +700,51 @@ kubectl port-forward services/obaas-admin -n obaas-admin 8080:8080 Start the CLI
         
       </li>
     
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/platform/vault"
+                  class="gdoc-nav__entry"
+                >
+                  Vault
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
   </ul>
 
         
@@ -1159,44 +1204,42 @@ The platform specific binary can be renamed to <code>oractl</code> for convenien
         </a>
     </h2>
 </div>
-<p>Short descriptions of the available commands are as follows.<br>
-These can be viewed by issuing the <code>help</code> command and detailed help for any individual command can be viewed by issuing <code>help [commandname]</code></p>
+<p>Short descriptions of the available commands are as follows. These can be viewed by issuing the <code>help</code> command and detailed help for any individual command can be viewed by issuing <code>help [commandname]</code></p>
 <p>AVAILABLE COMMANDS</p>
-<p>Admin Server Commands</p>
-<ul>
-<li><code>change-password</code>: Change password for OBaaS Spring Cloud admin user.</li>
-<li><code>connect</code>: Connect to the OBaaS Spring Cloud admin console.</li>
-</ul>
-<p>Application/Namespace Commands</p>
-<ul>
-<li><code>create</code>: Create an application/namespace.</li>
-<li><code>delete</code>: Delete a service or entire application/namespace.</li>
-</ul>
-<p>Built-In Commands</p>
-<ul>
-<li><code>help</code>: Display help about available commands</li>
-<li><code>stacktrace</code>: Display the full stacktrace of the last error.</li>
-<li><code>clear</code>: Clear the shell screen.</li>
-<li><code>quit</code>, <code>exit</code>: Exit the shell.</li>
-<li><code>history</code>: Display or save the history of previously run commands</li>
-<li><code>version</code>: Show version info</li>
-<li><code>script</code>: Read and execute commands from a file.</li>
-</ul>
-<p>Informational Commands</p>
-<ul>
-<li><code>list</code>: list/show details of application services.</li>
-</ul>
-<p>Service Commands</p>
-<ul>
-<li><code>bind</code>: Create a schema/user and bind it to service deployment.</li>
-<li>`config: View and modify application configuration.</li>
-<li><code>deploy</code>: Deploy a service.</li>
-</ul>
-<p>An application is a namespace encompassing related microservices. For example, a &ldquo;cloudbank&rdquo; application may have &ldquo;banktransfer&rdquo;, &ldquo;frauddetection&rdquo;, etc. microservices deployed within it.
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help
+</span></span><span class="line"><span class="cl">AVAILABLE COMMANDS
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Admin Server Commands
+</span></span><span class="line"><span class="cl">       change-password: Change password for OBaaS Spring Cloud admin user.
+</span></span><span class="line"><span class="cl">       connect: Connect to the OBaaS Spring Cloud admin console.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Application/Namespace Commands
+</span></span><span class="line"><span class="cl">       create: Create an application/namespace.
+</span></span><span class="line"><span class="cl">       delete: Delete a service or entire application/namespace.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Built-In Commands
+</span></span><span class="line"><span class="cl">       help: Display help about available commands
+</span></span><span class="line"><span class="cl">       stacktrace: Display the full stacktrace of the last error.
+</span></span><span class="line"><span class="cl">       clear: Clear the shell screen.
+</span></span><span class="line"><span class="cl">       quit, exit: Exit the shell.
+</span></span><span class="line"><span class="cl">       history: Display or save the history of previously run commands
+</span></span><span class="line"><span class="cl">       version: Show version info
+</span></span><span class="line"><span class="cl">       script: Read and execute commands from a file.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Informational Commands
+</span></span><span class="line"><span class="cl">       list: list/show details of application services.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Service Commands
+</span></span><span class="line"><span class="cl">       bind: Create a schema/user and bind it to service deployment.
+</span></span><span class="line"><span class="cl">       config: View and modify application configuration.
+</span></span><span class="line"><span class="cl">       deploy: Deploy a service.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">oractl:&gt;
+</span></span></code></pre></div><p>An application is a namespace encompassing related microservices. For example, a &ldquo;cloudbank&rdquo; application may have &ldquo;banktransfer&rdquo; &ldquo;frauddetection&rdquo;, etc., microservices deployed within it.
 The <code>create</code> command results in the creation of an application namespace.</p>
 <p>The <code>bind</code> command results in the automatic creation of a database schema for a given service/user and binds the information for that schema/database in the environment of the microservice for it to use.  The option of the prefix for the environment properties bound is also given.  For example, most Spring microservices us &ldquo;spring.datasource&rdquo;.</p>
 <p>The <code>deploy</code> command takes <code>serviceName</code>, <code>appName</code>, and <code>jarLocation</code> as it&rsquo;s main arguments (<code>imageVersion</code> and <code>javaVersion</code> options are also provided).
-When the deploy command is issued, the microservice jar file is uploaded to the backend, a Docker image is created for the jar/microservice, and various Kubernetes resources such as deployment, service, etc. are also created.<br>
+When the deploy command is issued, the microservice JAR file is uploaded to the backend, a container image is created for the JAR/microservice, and various Kubernetes resources such as deployment, service, etc. are also created.
 This is all done automatically to simplify the development process and the management of the microservices by the backend.</p>
 <p>The <code>list</code> command can then be used show the details of the deployed microservice, etc.</p>
 <p>The <code>config</code> command can also be used to view and update configuration managed by the Spring Config Server.</p>
@@ -1221,8 +1264,8 @@ This is all done automatically to simplify the development process and the manag
 </span></span><span class="line"><span class="cl">       [Optional, default = admin]
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>connect
-</span></span><span class="line"><span class="cl">password (defaults to oractl): 
-</span></span><span class="line"><span class="cl">using default value... 
+</span></span><span class="line"><span class="cl">password (defaults to oractl):
+</span></span><span class="line"><span class="cl">using default value...
 </span></span><span class="line"><span class="cl">connect successful server version:011223
 </span></span></code></pre></div><p>Then, an application namespace is created withe the <code>create</code> command. This namespace will contain the microservices that are deployed later.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help create
@@ -1236,7 +1279,7 @@ This is all done automatically to simplify the development process and the manag
 </span></span><span class="line"><span class="cl">       --appName String
 </span></span><span class="line"><span class="cl">       application/namespace
 </span></span><span class="line"><span class="cl">       [Optional, default = cloudbank]
-</span></span><span class="line"><span class="cl">       
+</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>create
 </span></span><span class="line"><span class="cl">application/namespace created successfully and image pull secret (registry-auth) created successfully
 </span></span></code></pre></div><p>Next, the <code>bind</code> command will create a database schema/user for the service (if one hasn&rsquo;t already been created).
@@ -1262,10 +1305,10 @@ The command will also create the Kubernetes secret and binding environment entri
 </span></span><span class="line"><span class="cl">       [Optional, default = spring.datasource]
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>bind
-</span></span><span class="line"><span class="cl">database password/servicePassword (defaults to Welcome12345): 
-</span></span><span class="line"><span class="cl">using default value... 
+</span></span><span class="line"><span class="cl">database password/servicePassword (defaults to Welcome12345):
+</span></span><span class="line"><span class="cl">using default value...
 </span></span><span class="line"><span class="cl">database secret created successfully and schema created successfully for banka
-</span></span></code></pre></div><p>The microservice jar will now be deployed with the <code>deploy</code> command which will create, build, and push an image for the microservice and create the necessary deployment, service, secret, etc. Kubernetes resources for the microservice.</p>
+</span></span></code></pre></div><p>The microservice JAR will now be deployed with the <code>deploy</code> command which will create, build, and push an image for the microservice and create the necessary deployment, service, secret, etc. Kubernetes resources for the microservice.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help deploy
 </span></span><span class="line"><span class="cl">NAME
 </span></span><span class="line"><span class="cl">       deploy - Deploy a service.
@@ -1302,7 +1345,7 @@ The command will also create the Kubernetes secret and binding environment entri
 </span></span><span class="line"><span class="cl">       java image
 </span></span><span class="line"><span class="cl">       [Optional, default = ghcr.io/graalvm/jdk:ol7-java17-22.2.0]
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>deploy --isRedeploy false --bind jms --jarLocation ebaas-sample-apps/banka/target/banka-0.0.1-SNAPSHOT.jar 
+</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>deploy --isRedeploy false --bind jms --jarLocation ebaas-sample-apps/banka/target/banka-0.0.1-SNAPSHOT.jar
 </span></span><span class="line"><span class="cl">uploading... upload successful
 </span></span><span class="line"><span class="cl">building and pushing image... docker build and push successful
 </span></span><span class="line"><span class="cl">binding resources... successful (no resources found to bind)
@@ -1629,6 +1672,33 @@ More information on the configuration server can be found here:</p>
     
     
   
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+        
+        
+      
+
+      
+
+      
+    
+
+    
+    
+  
 
     
   
@@ -1646,9 +1716,6 @@ More information on the configuration server can be found here:</p>
       
       
 
-      
-        
-        
       
 
       
@@ -1832,10 +1899,10 @@ More information on the configuration server can be found here:</p>
     
       <a
         class="gdoc-page__nav--next flex align-center"
-        href="/microservices-datadriven/spring/observability/"
-        title="Observability"
+        href="/microservices-datadriven/spring/platform/vault/"
+        title="Vault"
       >
-        Observability
+        Vault
         <i class="gdoc-icon">gdoc_arrow_right_alt</i>
       </a>
     
