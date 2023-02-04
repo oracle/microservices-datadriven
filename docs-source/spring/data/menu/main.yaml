@@ -12,9 +12,13 @@ main:
   #   ref: "/getting-started"
   - name: Sample apps
     ref: "/sample-apps"
-#  - name: Developing Services
-#    ref: "/development"
-#    sub:
+  - name: Development
+    ref: "/development"
+    sub:
+      - name: Setup
+        ref: "/development/setup"
+      - name: Starters
+        ref: "/development/starters"
   - name: Platform Services
     ref: "/platform"
     sub:
