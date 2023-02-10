@@ -1,6 +1,13 @@
 main:
   - name: Setup
     ref: "/setup"
+  - name: "On-Premises Installation"
+    ref: "/on-premises"
+    sub:
+      - name: MacOS Ventura (x86)
+        ref: "/on-premises/macos_ventura"
+      - name: OL8 (x86)
+        ref: "/on-premises/ol8"
   - name: Getting Started
     ref: "/getting-started"
     sub: 
