@@ -20,7 +20,7 @@ Once you have the prerequisites, start by cloning the source code for the applic
 
 ```
 git clone https://github.com/oracle/microservices-datadriven
-cd microservices-datadriven/mbaas-developer-preview/walking-history
+cd microservices-datadriven/developer-preview/walking-history
 ```
 
 This directory contains the source code for the application.    

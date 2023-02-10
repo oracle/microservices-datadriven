@@ -31,7 +31,7 @@ Now that you have your Oracle Backend for Spring Boot environment available and 
 
  ```shell
  git clone https://github.com/oracle/microservices-datadriven.git
- cd mbaas-developer-preview/sample-spring-apps/
+ cd developer-preview/sample-spring-apps/
  ```
 
 This directory contains the sample applications' source code.
