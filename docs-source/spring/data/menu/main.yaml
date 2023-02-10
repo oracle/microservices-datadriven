@@ -1,6 +1,8 @@
 main:
   - name: "Release Notes"
     ref: "/release-notes"
+  - name: "On-Premises Installation"
+    ref: "/on-premises"
   - name: Setup
     ref: "/setup"
     # sub:
