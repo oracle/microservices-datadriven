@@ -12,12 +12,11 @@
 <meta name="generator" content="Hugo 0.108.0">
 
 
-  <meta name="description" content="Oracle Backend for Spring Boot is available in the OCI Marketplace.
-Prerequisites You must meet the following prerequisites to use Oracle Backend for Spring Boot:
-An OCI account in a tenancy with sufficient quota to create:
-An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP&rsquo;s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user)" />
+  <meta name="description" content="On-Premises Installation - Oracle Linux 8 (x86) This is an example of installing on a MacOS Venture desktop
+Please read the On-Premises and ensure your desktop meets the minimum system requirements.
+Install Podman sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack podman curl sudo dnf -y install oracle-database-preinstall-21c Download the Database/ORDS Images The Desktop installation will provision an Oracle Database into the Kubernetes cluster. The images must be downloaded from Oracle&rsquo;s Container Registry prior to continuing." />
 
-    <title>Setup | Oracle Backend for Spring Boot</title>
+    <title>Ol8 | Oracle Backend for Spring Boot</title>
 
     <link rel="icon" type="image/svg+xml" href="/microservices-datadriven/spring/favicon/favicon.svg" />
 <link
@@ -38,42 +37,40 @@ An OCI Container Engine for Kubernetes cluster, plus a node pool with three work
     
   <meta
     property="og:title"
-    content="Setup"
+    content="Ol8"
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot" />
-  <meta property="og:description" content="Oracle Backend for Spring Boot is available in the OCI Marketplace.
-Prerequisites You must meet the following prerequisites to use Oracle Backend for Spring Boot:
-An OCI account in a tenancy with sufficient quota to create:
-An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP’s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user)" />
+  <meta property="og:description" content="On-Premises Installation - Oracle Linux 8 (x86) This is an example of installing on a MacOS Venture desktop
+Please read the On-Premises and ensure your desktop meets the minimum system requirements.
+Install Podman sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack podman curl sudo dnf -y install oracle-database-preinstall-21c Download the Database/ORDS Images The Desktop installation will provision an Oracle Database into the Kubernetes cluster. The images must be downloaded from Oracle’s Container Registry prior to continuing." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/setup/" />
+<meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/" />
 
-<meta property="article:section" content="Setup" />
+<meta property="article:section" content="On Premises" />
 
 
   <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="Setup" />
-  <meta name="twitter:description" content="Oracle Backend for Spring Boot is available in the OCI Marketplace.
-Prerequisites You must meet the following prerequisites to use Oracle Backend for Spring Boot:
-An OCI account in a tenancy with sufficient quota to create:
-An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP’s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user)" />
+<meta name="twitter:title" content="Ol8" />
+  <meta name="twitter:description" content="On-Premises Installation - Oracle Linux 8 (x86) This is an example of installing on a MacOS Venture desktop
+Please read the On-Premises and ensure your desktop meets the minimum system requirements.
+Install Podman sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack podman curl sudo dnf -y install oracle-database-preinstall-21c Download the Database/ORDS Images The Desktop installation will provision an Oracle Database into the Kubernetes cluster. The images must be downloaded from Oracle’s Container Registry prior to continuing." />
 
 
   <script type="application/ld+json">
   {
       "@context": "http://schema.org",
       "@type": "TechArticle",
-      "articleSection": "Setup",
-      "name": "Setup",
-      "url" : "https://oracle.github.io/microservices-datadriven/spring/setup/",
-      "headline": "Setup",
-      "description": "Oracle Backend for Spring Boot is available in the OCI Marketplace.\nPrerequisites You must meet the following prerequisites to use Oracle Backend for Spring Boot:\nAn OCI account in a tenancy with sufficient quota to create:\nAn OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP’s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user)",
-      "wordCount" : "1161",
+      "articleSection": "On Premises",
+      "name": "Ol8",
+      "url" : "https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/",
+      "headline": "Ol8",
+      "description": "On-Premises Installation - Oracle Linux 8 (x86) This is an example of installing on a MacOS Venture desktop\nPlease read the On-Premises and ensure your desktop meets the minimum system requirements.\nInstall Podman sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack podman curl sudo dnf -y install oracle-database-preinstall-21c Download the Database\/ORDS Images The Desktop installation will provision an Oracle Database into the Kubernetes cluster. The images must be downloaded from Oracle’s Container Registry prior to continuing.",
+      "wordCount" : "381",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
           "@type": "WebPage",
-          "@id": "https://oracle.github.io/microservices-datadriven/spring/setup/"
+          "@id": "https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/"
       },
       "copyrightHolder" : "Oracle Backend for Spring Boot",
       "copyrightYear" : "0001",
@@ -157,7 +154,7 @@ An OCI Container Engine for Kubernetes cluster, plus a node pool with three work
   href="/microservices-datadriven/spring/custom.css"
   media="all"
 />
-  <link href="https://oracle.github.io/microservices-datadriven/spring/setup/" rel="canonical" type="text/html" />
+  <link href="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/" rel="canonical" type="text/html" />
 
 <!-- Made with Geekdoc theme https://github.com/thegeeklab/hugo-geekdoc -->
 
@@ -325,7 +322,7 @@ An OCI Container Engine for Kubernetes cluster, plus a node pool with three work
                 
                 <a
                   href="/microservices-datadriven/spring/setup"
-                  class="gdoc-nav__entry is-active"
+                  class="gdoc-nav__entry"
                 >
                   Setup
                 </a>
@@ -465,7 +462,7 @@ An OCI Container Engine for Kubernetes cluster, plus a node pool with three work
                 
                 <a
                   href="/microservices-datadriven/spring/on-premises/ol8"
-                  class="gdoc-nav__entry"
+                  class="gdoc-nav__entry is-active"
                 >
                   OL8 (x86)
                 </a>
@@ -1340,7 +1337,15 @@ if (!doNotTrack) {
     
   
   
-    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/' href='/microservices-datadriven/spring/'><span itemprop='name'>Oracle Backend for Spring Boot - Developer Preview</span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>Setup</span><meta itemprop='position' content='4' /></li>
+    
+    
+    
+    
+  
+  
+    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/' href='/microservices-datadriven/spring/'><span itemprop='name'>Oracle Backend for Spring Boot - Developer Preview</span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/on-premises/' href='/microservices-datadriven/spring/on-premises/'><span itemprop='name'>On Premises</span></a><meta itemprop='position' content='4' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>Ol8</span><meta itemprop='position' content='5' /></li>
+  
+
   
 
   
@@ -1356,503 +1361,170 @@ if (!doNotTrack) {
   <article
     class="gdoc-markdown gdoc-markdown__align--left"
   >
-    <h1>Setup</h1>
-    <p>Oracle Backend for Spring Boot is available in the <a
+    <h1>Ol8</h1>
+    <div class="gdoc-page__anchorwrap">
+    <h1 id="on-premises-installation---oracle-linux-8-x86">
+        On-Premises Installation - Oracle Linux 8 (x86)
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#on-premises-installation---oracle-linux-8-x86" class="gdoc-page__anchor clip flex align-center" title="Anchor to: On-Premises Installation - Oracle Linux 8 (x86)" aria-label="Anchor to: On-Premises Installation - Oracle Linux 8 (x86)" href="#on-premises-installation---oracle-linux-8-x86">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h1>
+</div>
+<p>This is an example of installing on a MacOS Venture desktop</p>
+<p>Please read the <a
   class="gdoc-markdown__link"
-  href="https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911"
->OCI Marketplace</a>.</p>
+  href="../index.md"
+>On-Premises</a> and ensure your desktop meets the minimum system requirements.</p>
 <div class="gdoc-page__anchorwrap">
-    <h2 id="prerequisites">
-        Prerequisites
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/setup/#prerequisites" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Prerequisites" aria-label="Anchor to: Prerequisites" href="#prerequisites">
+    <h2 id="install">
+        Install
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#install" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Install" aria-label="Anchor to: Install" href="#install">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>
 </div>
-<p>You must meet the following prerequisites to use Oracle Backend for Spring Boot:</p>
-<ul>
-<li>
-<p>An OCI account in a tenancy with sufficient quota to create:</p>
-<ul>
-<li>An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes</li>
-<li>A VCN with at least two public IP&rsquo;s available</li>
-<li>A public load balancer</li>
-<li>An Oracle Autonomous Database - Shared instance</li>
-</ul>
-</li>
-<li>
-<p>At least one free OCI Auth Token (note that the maximum is two per user)</p>
-</li>
-<li>
-<p>On local workstation:</p>
-<ul>
-<li>The Kubernetes command-line tool (kubectl)</li>
-<li>Oracle Cloud Infrastructure Command Line Interface (CLI)</li>
-<li>Oracle Backend for Spring Boot command-line tool</li>
-</ul>
-</li>
-</ul>
 <div class="gdoc-page__anchorwrap">
-    <h2 id="summary-of-components">
-        Summary of components
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/setup/#summary-of-components" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Summary of components" aria-label="Anchor to: Summary of components" href="#summary-of-components">
+    <h3 id="podman">
+        Podman
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#podman" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Podman" aria-label="Anchor to: Podman" href="#podman">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo dnf -y module install container-tools:ol8
+</span></span><span class="line"><span class="cl">sudo dnf -y install conntrack podman curl
+</span></span><span class="line"><span class="cl">sudo dnf -y install oracle-database-preinstall-21c
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h3 id="download-the-databaseords-images">
+        Download the Database/ORDS Images
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#download-the-databaseords-images" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Download the Database/ORDS Images" aria-label="Anchor to: Download the Database/ORDS Images" href="#download-the-databaseords-images">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>The <em>Desktop</em> installation will provision an Oracle Database into the Kubernetes cluster.  The images must be downloaded from <a
+  class="gdoc-markdown__link"
+  href="https://container-registry.oracle.com/"
+>Oracle&rsquo;s Container Registry</a> prior to continuing.</p>
+<ol>
+<li>Log into Oracle&rsquo;s Container Registry: <code>podman login container-registry.oracle.com</code></li>
+<li>Pull the Database Image: <code>podman pull container-registry.oracle.com/database/enterprise:21.3.0.0</code></li>
+<li>Pull the ORDS Image: <code>podman pull container-registry.oracle.com/database/ords:21.4.2-gh</code></li>
+</ol>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="install-and-start-minikube">
+        Install and Start Minikube
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#install-and-start-minikube" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Install and Start Minikube" aria-label="Anchor to: Install and Start Minikube" href="#install-and-start-minikube">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+</span></span><span class="line"><span class="cl">sudo install minikube-linux-amd64 /usr/local/bin/minikube
+</span></span><span class="line"><span class="cl">minikube config <span class="nb">set</span> driver podman
+</span></span><span class="line"><span class="cl">minikube start --cpus <span class="m">4</span> --memory <span class="m">32768</span> --disk-size<span class="o">=</span><span class="s1">&#39;40g&#39;</span> --container-runtime<span class="o">=</span>cri-o
+</span></span><span class="line"><span class="cl">minikube addons <span class="nb">enable</span> ingress
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h3 id="download-oracle-backend-for-spring-boot">
+        Download Oracle Backend for Spring Boot
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#download-oracle-backend-for-spring-boot" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Download Oracle Backend for Spring Boot" aria-label="Anchor to: Download Oracle Backend for Spring Boot" href="#download-oracle-backend-for-spring-boot">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>Download the <a
+  class="gdoc-markdown__link"
+  href="https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/on-prem-ebaas-platform_v0.1.1.zip"
+>Oracle Backend for Spring Boot</a> and unzip into a new directory.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="install-ansible">
+        Install Ansible
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#install-ansible" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Install Ansible" aria-label="Anchor to: Install Ansible" href="#install-ansible">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./setup_ansible.sh
+</span></span><span class="line"><span class="cl"><span class="nb">source</span> ./activate.env
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h3 id="define-the-infrastructure">
+        Define the Infrastructure
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#define-the-infrastructure" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Define the Infrastructure" aria-label="Anchor to: Define the Infrastructure" href="#define-the-infrastructure">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>Use the helper Playbook to define the infrastructure.  This Playbook will also:</p>
+<ul>
+<li>Create additional namespaces for the Container Registry and Database</li>
+<li>Create a Private Container Registry in the Kubernetes Cluster</li>
+<li>Modify the application microservices to be Desktop compatible</li>
+</ul>
+<p>Run: <code>ansible-playbook ansible/desktop_apply.yaml</code></p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="open-a-tunnel">
+        Open a Tunnel
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#open-a-tunnel" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Open a Tunnel" aria-label="Anchor to: Open a Tunnel" href="#open-a-tunnel">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>In order to push the images to the Container Registry in the Kubernetes cluster; open a new terminal and start a port-forward.</p>
+<p>Run: <code>kubectl port-forward service/private -n container-registry 5000:5000</code></p>
+<p>To test access to the registry:
+<code>curl -X GET -k https://localhost:5000/v2/_catalog</code></p>
+<p>The above curl should result in:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">{&#34;errors&#34;:[{&#34;code&#34;:&#34;UNAUTHORIZED&#34;,&#34;message&#34;:&#34;authentication required&#34;,&#34;detail&#34;:[{&#34;Type&#34;:&#34;registry&#34;,&#34;Class&#34;:&#34;&#34;,&#34;Name&#34;:&#34;catalog&#34;,&#34;Action&#34;:&#34;*&#34;}]}]}
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h3 id="build-the-images">
+        Build the Images
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#build-the-images" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Build the Images" aria-label="Anchor to: Build the Images" href="#build-the-images">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>Build and Push the Images to the Container Registry in the Kubernetes cluster:</p>
+<p>Run: <code>ansible-playbook ansible/images_build.yaml</code></p>
+<p>After the images are built and pushed, the port-forward is no longer required and can be stopped.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="deploy-oracle-backend-for-spring-boot">
+        Deploy Oracle Backend for Spring Boot
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#deploy-oracle-backend-for-spring-boot" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Deploy Oracle Backend for Spring Boot" aria-label="Anchor to: Deploy Oracle Backend for Spring Boot" href="#deploy-oracle-backend-for-spring-boot">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>Deploy the Database and Microservices.</p>
+<p>Run: <code>ansible-playbook ansible/k8s_apply.yaml -t full</code></p>
+<div class="gdoc-page__anchorwrap">
+    <h2 id="notes">
+        Notes
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#notes" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Notes" aria-label="Anchor to: Notes" href="#notes">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>
 </div>
-<p>Oracle Backend for Spring Boot setup will install the following components:</p>
-<div class="table-wrap"> <table>
-<thead>
-<tr>
-<th>Component</th>
-<th>Version</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>cert-manager</td>
-<td>1.10.1</td>
-<td>Automates the management of certificates.</td>
-</tr>
-<tr>
-<td>NGINX Ingress Controller</td>
-<td>1.5.1</td>
-<td>Traffic management solution for cloud‑native applications in Kubernetes.</td>
-</tr>
-<tr>
-<td>Prometheus</td>
-<td>2.40.2</td>
-<td>Provides event monitoring and alerting.</td>
-</tr>
-<tr>
-<td>Prometheus Operator</td>
-<td>0.60.1</td>
-<td>Provides management for Prometheus monitoring tools.</td>
-</tr>
-<tr>
-<td>OpenTelemetry Collector</td>
-<td>0.66.0</td>
-<td>Collects process and export telemetry data.</td>
-</tr>
-<tr>
-<td>Grafana</td>
-<td>9.2.5</td>
-<td>Tool to help you examine, analyze, and monitor metrics.</td>
-</tr>
-<tr>
-<td>Jaeger Tracing</td>
-<td>1.37.0</td>
-<td>Distributed tracing system for monitoring and troubleshooting distributed systems.</td>
-</tr>
-<tr>
-<td>APISIX</td>
-<td>2.15.1</td>
-<td>Provides full lifecycle API Management.</td>
-</tr>
-<tr>
-<td>Spring Admin Server</td>
-<td>2.7.5</td>
-<td>Managing and monitoring Spring Boot applications.</td>
-</tr>
-<tr>
-<td>Spring Cloud Config Server</td>
-<td>2.7.5</td>
-<td>Provides server-side support for externalized configuration.</td>
-</tr>
-<tr>
-<td>Eureka Service Registry</td>
-<td>2021.0.3</td>
-<td>Provides Service Discovery capabilities</td>
-</tr>
-<tr>
-<td>HashiCorp Vault</td>
-<td>v1.11.3</td>
-<td>Provides a way of store and tightly control access to sensitive data</td>
-</tr>
-</tbody>
-</table> </div>
 <div class="gdoc-page__anchorwrap">
-    <h2 id="setup-the-oci-environment">
-        Setup the OCI environment
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/setup/#setup-the-oci-environment" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Setup the OCI environment" aria-label="Anchor to: Setup the OCI environment" href="#setup-the-oci-environment">
+    <h2 id="config-server-and-obaas-admin-pod-failures">
+        config-server and obaas-admin Pod Failures
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#config-server-and-obaas-admin-pod-failures" class="gdoc-page__anchor clip flex align-center" title="Anchor to: config-server and obaas-admin Pod Failures" aria-label="Anchor to: config-server and obaas-admin Pod Failures" href="#config-server-and-obaas-admin-pod-failures">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>
 </div>
-<ol>
-<li>
-<p>Go to the <a
-  class="gdoc-markdown__link"
-  href="https://cloud.oracle.com/marketplace/application/138899911"
->OCI Marketplace listing for Oracle Backend for Spring Boot</a>.</p>
- <!-- spellchecker-disable -->
-<p><img
-  src="../ebaas-mp-listing.png"
-  alt="OCI Marketplace listing"
-  
-/></p>
- <!-- spellchecker-enable -->
-<p>Choose the target compartment, agree to the terms and click on the &ldquo;Launch Stack&rdquo; button.  This will start the wizard to create the new stack. On the first page choose a compartment to host your stack and select <code>Next</code></p>
- <!-- spellchecker-disable -->
-<p><img
-  src="../ebaas-stack-page1.png"
-  alt="OCI Stack wizard page 1"
-  
-/></p>
- <!-- spellchecker-enable -->
-<p>Fill in the following configuration variables as needed and select <code>Next</code></p>
-<ul>
-<li><code>Application Name</code> (Optional)</li>
-<li>OKE Control Plane Options.
-<ul>
-<li><code>Public Control Plane</code>: this option allows access the OKE Control Plane from the Internet (Public IP). If not selected, access will only be from a private VCN.</li>
-<li><code>Control Plane Access Control</code>: CIDR (IP range) allowed to access the control plane (Oracle recommends you set this as restrictive as possible).</li>
-<li><code>Enable Horizontal Pod Scaling?</code>: The <a
-  class="gdoc-markdown__link"
-  href="https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusinghorizontalpodautoscaler.htm#Using_Kubernetes_Horizontal_Pod_Autoscaler"
->Horizontal Pod Autoscaler</a> can help applications scale out to meet increased demand, or scale in when resources are no longer needed.</li>
-<li><code>Node Pool Workers</code>: Number of Kubernetes worker nodes (virtual machines) to attach to the OKE Cluster.</li>
-</ul>
-</li>
-</ul>
- <!-- spellchecker-disable -->
-
-      
-      
-    
-    
-      <div class="flex justify-center">
-        <figure
-          class="gdoc-markdown__figure"
-        >
-          <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-private-template-create-stack-config.png">
-            <picture>
-                <source
-                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-private-template-create-stack-config_hudfb8493b37ad3935539e7c74a5aa78fe_142329_1800x0_resize_box_3.png"
-    
-                />
-              <img
-                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-private-template-create-stack-config_hudfb8493b37ad3935539e7c74a5aa78fe_142329_1800x0_resize_box_3.png"
-                  alt="Create Stack Wizard Config Variables"
-              />
-            </picture>
-          </a>
-              <figcaption>
-                Create Stack Wizard Config Variables
-              </figcaption>
-        </figure>
-      </div>
-
- <!-- spellchecker-enable -->
-<ul>
-<li>
-<p>Load Balancers Options.</p>
-<ul>
-<li><code>Enable Public Load Balancer</code> this option allows access to the load balancer from the Internet (Public IP). If not selected, access will only be from a private VCN.</li>
-<li><code>Public Load Balancer Ports Exposed</code>. Ports exposed from the load balancer.</li>
-<li><code>Minimum bandwidth</code>. The minimum bandwidth the load balancer can achieve.</li>
-<li><code>Maximum bandwidth</code>. The maximum bandwidth the load balancer can achieve.</li>
-</ul>
-</li>
-<li>
-<p>Vault Options. You have the option of creating a new OCI Vault or use an an existing OCI Vault. Fill in the information below if you want  to use an existing OCI Vault.</p>
-<ul>
-<li><code>Vault Compartment (Optional)</code> Select a Compartment for the OCI Vault.</li>
-<li><code>Existing Vault (Optional)</code>. Select an existing OCI Vault</li>
-<li><code>Existing Vault Key (Optional)</code>. Select an existing OCI Vault Key.</li>
-<li><code>Maximum bandwidth</code>. The maximum bandwidth the load balancer can achieve.</li>
-</ul>
-</li>
-</ul>
- <!-- spellchecker-disable -->
-
-      
-      
-    
-    
-      <div class="flex justify-center">
-        <figure
-          class="gdoc-markdown__figure"
-        >
-          <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-private-template-create-stack-config-lb-vault.png">
-            <picture>
-                <source
-                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-private-template-create-stack-config-lb-vault_hub4f5f29d8e3452f130e766753b786927_133136_1800x0_resize_box_3.png"
-    
-                />
-              <img
-                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-private-template-create-stack-config-lb-vault_hub4f5f29d8e3452f130e766753b786927_133136_1800x0_resize_box_3.png"
-                  alt="Create Stack Wizard Config Variables"
-              />
-            </picture>
-          </a>
-              <figcaption>
-                Create Stack Wizard Config Variables
-              </figcaption>
-        </figure>
-      </div>
-
- <!-- spellchecker-enable -->
-<p>Now you can review the stack configuration and save the changes.  Oracle recommends that you do not check the &ldquo;Run apply&rdquo; option - this will give you the opportunity to run the &ldquo;plan&rdquo; first and check for issues.</p>
- <!-- spellchecker-disable -->
-
-      
-      
-    
-    
-      <div class="flex justify-center">
-        <figure
-          class="gdoc-markdown__figure"
-        >
-          <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-private-template-create-stack-config-review.png">
-            <picture>
-                <source
-                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-private-template-create-stack-config-review_hu7c9088cd6c4da1423ce36ade6bc10ca9_128317_1800x0_resize_box_3.png"
-    
-                />
-              <img
-                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-private-template-create-stack-config-review_hu7c9088cd6c4da1423ce36ade6bc10ca9_128317_1800x0_resize_box_3.png"
-                  alt="Create Stack Wizard Config Review"
-              />
-            </picture>
-          </a>
-              <figcaption>
-                Create Stack Wizard Config Review
-              </figcaption>
-        </figure>
-      </div>
-
- <!-- spellchecker-enable -->
-</li>
-<li>
-<p>Apply the Stack</p>
-<p>After you create your stack, you will be able to test the plan, edit the stack, and apply or destroy the stack.</p>
-<p>Oracle recommends you test the plan before applying the stack, in order to identify any issues before you start creating resources. Testing a plan does not create any actual resources, it is just a &ldquo;dry run&rdquo; to tell you what would happen if you applied.</p>
- <!-- spellchecker-disable -->
-
-      
-      
-    
-    
-      <div class="flex justify-center">
-        <figure
-          class="gdoc-markdown__figure"
-        >
-          <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-plan.png">
-            <picture>
-                <source
-                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-plan_hu463909bc018a1f1a8383c8180244f02f_71049_1800x0_resize_box_3.png"
-    
-                />
-              <img
-                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-plan_hu463909bc018a1f1a8383c8180244f02f_71049_1800x0_resize_box_3.png"
-                  alt="Create Stack Plan"
-              />
-            </picture>
-          </a>
-              <figcaption>
-                Create Stack Plan
-              </figcaption>
-        </figure>
-      </div>
-
- <!-- spellchecker-enable -->
-<p>You can test the plan by clicking on the &ldquo;Plan&rdquo; button and then reviewing the output.  If you see any issues, for example you may find that you do not have enough quota for some resource, you can fix that issue before proceeding.</p>
-<p>When you are happy with the results of the test, you can apply the stack by clicking on the &ldquo;Apply&rdquo; button. This will create your Oracle Backend as a Service for Spring Cloud Environment.  This takes about 20 minutes to complete.  A lot of this time is spent provisioning the Kubernetes cluster, worker nodes, and database.  You can watch the logs to follow progress of the operation.</p>
- <!-- spellchecker-disable -->
-
-      
-      
-    
-    
-      <div class="flex justify-center">
-        <figure
-          class="gdoc-markdown__figure"
-        >
-          <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-apply.png">
-            <picture>
-                <source
-                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-apply_hub9414901d3ecced6a7dc041dfa1fccb6_113607_1800x0_resize_box_3.png"
-    
-                />
-              <img
-                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-apply_hub9414901d3ecced6a7dc041dfa1fccb6_113607_1800x0_resize_box_3.png"
-                  alt="Create Stack Apply"
-              />
-            </picture>
-          </a>
-              <figcaption>
-                Create Stack Apply
-              </figcaption>
-        </figure>
-      </div>
-
- <!-- spellchecker-enable -->
-<p>The OCI Resource Manager will apply your stack and generate the execution logs. The apply job takes approximately 45 minutes.</p>
- <!-- spellchecker-disable -->
-
-      
-      
-    
-    
-      <div class="flex justify-center">
-        <figure
-          class="gdoc-markdown__figure"
-        >
-          <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-apply-logs.png">
-            <picture>
-                <source
-                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-apply-logs_hu5463705758c88baa17073eb854ea9865_262599_1800x0_resize_box_3.png"
-    
-                />
-              <img
-                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-apply-logs_hu5463705758c88baa17073eb854ea9865_262599_1800x0_resize_box_3.png"
-                  alt="Create Stack Apply Logs"
-              />
-            </picture>
-          </a>
-              <figcaption>
-                Create Stack Apply Logs
-              </figcaption>
-        </figure>
-      </div>
-
- <!-- spellchecker-enable -->
-<p>Collect the OKE access information by clicking on the <code>Outputs</code> menu item.</p>
- <!-- spellchecker-disable -->
-
-      
-      
-    
-    
-      <div class="flex justify-center">
-        <figure
-          class="gdoc-markdown__figure"
-        >
-          <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-outputs.png">
-            <picture>
-                <source
-                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-outputs_hu7dd27dbe7b86a3519ecb4d4c62ee9e5d_192709_1800x0_resize_box_3.png"
-    
-                />
-              <img
-                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-outputs_hu7dd27dbe7b86a3519ecb4d4c62ee9e5d_192709_1800x0_resize_box_3.png"
-                  alt="Create Stack Outputs"
-              />
-            </picture>
-          </a>
-              <figcaption>
-                Create Stack Outputs
-              </figcaption>
-        </figure>
-      </div>
-
- <!-- spellchecker-enable -->
-<p>Click on the <code>Copy</code> for the Variable named <code>kubeconfig_cmd</code>. Save this information as it is needed to access the OKE Cluster.</p>
- <!-- spellchecker-disable -->
-
-      
-      
-    
-    
-      <div class="flex justify-center">
-        <figure
-          class="gdoc-markdown__figure"
-        >
-          <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-output-oke.png">
-            <picture>
-                <source
-                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-output-oke_hu9e547240c1cb6f64c1e990ce3694ca8a_50931_1800x0_resize_box_3.png"
-    
-                />
-              <img
-                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-output-oke_hu9e547240c1cb6f64c1e990ce3694ca8a_50931_1800x0_resize_box_3.png"
-                  alt="Get Kube Config Cmd"
-              />
-            </picture>
-          </a>
-              <figcaption>
-                Get Kube Config Cmd
-              </figcaption>
-        </figure>
-      </div>
-
- <!-- spellchecker-enable -->
-</li>
-</ol>
+<p>The pods in the <code>config-server</code> and <code>obaas-admin</code> namespaces rely on the database that is created in the <code>oracle-database-operator-system</code>.  During initial provisioning these pods will start well before the database is available resulting in intial failures.  They will resolve themselves once the database becomes available.</p>
 <div class="gdoc-page__anchorwrap">
-    <h2 id="setup-the-local-workstation">
-        Setup the local workstation
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/setup/#setup-the-local-workstation" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Setup the local workstation" aria-label="Anchor to: Setup the local workstation" href="#setup-the-local-workstation">
+    <h3 id="vpn-and-proxies">
+        VPN and Proxies
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#vpn-and-proxies" class="gdoc-page__anchor clip flex align-center" title="Anchor to: VPN and Proxies" aria-label="Anchor to: VPN and Proxies" href="#vpn-and-proxies">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
-    </h2>
+    </h3>
 </div>
-<ol>
-<li>
-<p>Setting Up Cluster Access</p>
-<p>To access a cluster using kubectl installed (see the <a
+<p>If you are behind a VPN or Proxy, please see <a
   class="gdoc-markdown__link"
-  href="./cluster-access"
->Kubernetes access</a>) locally. If you haven&rsquo;t already done so,</p>
-<ul>
-<li>
-<p>install kubectl (see the <a
-  class="gdoc-markdown__link"
-  href="https://kubernetes.io/docs/tasks/tools/install-kubectl/"
->kubectl documentation</a>).</p>
-</li>
-<li>
-<p>generate an API signing key pair
-If you already have an API signing key pair, go straight to the next step. If not:</p>
-<ol>
-<li>Use OpenSSL commands to generate the key pair in the required PEM format. If you&rsquo;re using Windows, you&rsquo;ll need to install Git Bash for Windows and run the commands with that tool. See <a
-  class="gdoc-markdown__link"
-  href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#two"
->How to Generate an API Signing Key</a>.</li>
-<li>Copy the contents of the public key to the clipboard (you&rsquo;ll need to paste the value into the Console later).</li>
-</ol>
-</li>
-<li>
-<p>add the public key value of the API signing key pair to the User Settings for your username</p>
-<ol>
-<li>
-<p>In the top-right corner of the Oracle Cloud Infrastructure Console, open the <strong>Profile</strong> menu (User menu icon) and then click <strong>User Settings</strong> to view the details.</p>
-</li>
-<li>
-<p>Click <strong>Add Public Key</strong>.</p>
-</li>
-<li>
-<p>Paste the public key&rsquo;s value into the window and click <strong>Add</strong>.</p>
-<p>The key is uploaded and its fingerprint is displayed (for example, d1:b2:32:53:d3:5f:cf:68:2d:6f:8b:5f:77:8f:07:13).</p>
-</li>
-</ol>
-</li>
-<li>
-<p>install and configure the Oracle Cloud Infrastructure CLI</p>
-<ol>
-<li>Install the Oracle Cloud Infrastructure CLI version 2.6.4 (or later). See <a
-  class="gdoc-markdown__link"
-  href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#Quickstart"
->Quickstart</a>.</li>
-<li>Configure the Oracle Cloud Infrastructure CLI. See <a
-  class="gdoc-markdown__link"
-  href="https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliconfigure.htm#Configuring_the_CLI"
->Configuring the CLI</a>.</li>
-</ol>
-</li>
-</ul>
-</li>
-<li>
-<p>Install Oracle Backend for Spring Boot command-line</p>
-<p>The <strong>Oracle Backend for Spring Boot</strong> command-line tool, <code>oractl</code>, is available for Linux and Mac systems. Download the binary you want from the <a
-  class="gdoc-markdown__link"
-  href="https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0"
->Releases</a> page and add it to your PATH environment variable.  You may like to rename the binary to remove the suffix.</p>
-<p>If your environment is a Linux or Mac machine you need to run <code>chmod +x</code> on the downloaded binary. Also if your environment is a Mac you need run the following command <code>sudo xattr -r -d com.apple.quarantine &lt;downloaded-file&gt;</code> otherwise will you get a security warning and the CLI will not work.</p>
-</li>
-</ol>
+  href="https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/"
+>https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/</a> for more details on additional tasks.  Specifically, when you start minikube, you may see the following messages:</p>
 
   </article>
 
@@ -1889,9 +1561,6 @@ If you already have an API signing key pair, go straight to the next step. If no
       
 
       
-        
-        
-      
 
       
     
@@ -1913,9 +1582,6 @@ If you already have an API signing key pair, go straight to the next step. If no
       
       
 
-      
-        
-        
       
 
       
@@ -1971,6 +1637,9 @@ If you already have an API signing key pair, go straight to the next step. If no
       
 
       
+        
+        
+      
 
       
     
@@ -1995,6 +1664,9 @@ If you already have an API signing key pair, go straight to the next step. If no
       
       
 
+      
+        
+        
       
 
       
@@ -2410,16 +2082,25 @@ If you already have an API signing key pair, go straight to the next step. If no
 
 
   <span class="gdoc-page__nav">
+    
+      <a
+        class="gdoc-page__nav--prev flex align-center"
+        href="/microservices-datadriven/spring/on-premises/macos_ventura/"
+        title="MacOS Ventura (x86)"
+      >
+        <i class="gdoc-icon">gdoc_arrow_left_alt</i>
+        MacOS Ventura (x86)
+      </a>
     
   </span>
   <span class="gdoc-page__nav">
     
       <a
         class="gdoc-page__nav--next flex align-center"
-        href="/microservices-datadriven/spring/on-premises/"
-        title="On-Premises Installation"
+        href="/microservices-datadriven/spring/sample-apps/"
+        title="Sample apps"
       >
-        On-Premises Installation
+        Sample apps
         <i class="gdoc-icon">gdoc_arrow_right_alt</i>
       </a>
     

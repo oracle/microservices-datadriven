@@ -7,6 +7,15 @@
     <loc>https://oracle.github.io/microservices-datadriven/spring/development/</loc>
     <priority>0</priority>
   </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/on-premises/</loc>
+    <priority>0</priority>
+  </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/</loc>
+    <priority>0</priority>
+  </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/</loc>
+    <priority>0</priority>
+  </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/release-notes/</loc>
     <priority>0</priority>
   </url><url>
@@ -24,12 +33,6 @@
     <loc>https://oracle.github.io/microservices-datadriven/spring/observability/metrics/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/observability/</loc>
-  </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/spring/on-premises/</loc>
-  </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/spring/on-premises/ONPREM_MACOS_VENTURA/</loc>
-  </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/spring/on-premises/ONPREM_OL8/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/</loc>
   </url><url>

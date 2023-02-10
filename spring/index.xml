@@ -6,27 +6,5 @@
     <description>Recent content in Oracle Backend for Spring Boot - Developer Preview on Oracle Backend for Spring Boot</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="https://oracle.github.io/microservices-datadriven/spring/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>On-Premises Installation - MacOS Ventura (x86)</title>
-      <link>https://oracle.github.io/microservices-datadriven/spring/on-premises/ONPREM_MACOS_VENTURA/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://oracle.github.io/microservices-datadriven/spring/on-premises/ONPREM_MACOS_VENTURA/</guid>
-      <description>This is an example of installing on a MacOS Venture desktop
-Please read the On-Premises and ensure your desktop meets the minimum system requirements.
-Install Podman brew install podman PODMAN_VERSION=$(podman -v |awk &amp;#39;{print $NF}&amp;#39;) sudo /usr/local/Cellar/podman/${PODMAN_VERSION}/bin/podman-mac-helper install podman machine init --cpus 4 --disk-size 60 --memory 8192 --rootful --now podman system connection default podman-machine-default-root Download the Database/ORDS Images The Desktop installation will provision an Oracle Database into the Kubernetes cluster. The images must be downloaded from Oracle&amp;rsquo;s Container Registry prior to continuing.</description>
-    </item>
-    
-    <item>
-      <title>On-Premises Installation - Oracle Linux 8 (x86)</title>
-      <link>https://oracle.github.io/microservices-datadriven/spring/on-premises/ONPREM_OL8/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://oracle.github.io/microservices-datadriven/spring/on-premises/ONPREM_OL8/</guid>
-      <description>This is an example of installing on a MacOS Venture desktop
-Please read the On-Premises and ensure your desktop meets the minimum system requirements.
-Install Podman sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack podman curl sudo dnf -y install oracle-database-preinstall-21c Download the Database/ORDS Images The Desktop installation will provision an Oracle Database into the Kubernetes cluster. The images must be downloaded from Oracle&amp;rsquo;s Container Registry prior to continuing.</description>
-    </item>
-    
   </channel>
 </rss>

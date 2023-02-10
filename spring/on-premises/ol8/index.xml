@@ -2,9 +2,9 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Oracle Backend for Spring Boot</title>
-    <link>https://oracle.github.io/microservices-datadriven/spring/on-premises/</link>
+    <link>https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/</link>
     <description>Recent content on Oracle Backend for Spring Boot</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://oracle.github.io/microservices-datadriven/spring/on-premises/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language><atom:link href="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
