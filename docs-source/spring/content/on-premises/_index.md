@@ -25,11 +25,7 @@ When installing on a _Desktop_ the above pre-requisites are met through an addit
 
 ## Download
 
-<<<<<<< HEAD
 Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/on-prem-ebaas-platform_v0.1.1.zip).
-=======
-Download Oracle Backend for Spring Boot.
->>>>>>> origin/main
 
 ## Setup
 
@@ -39,13 +35,8 @@ For an _Estate_ installation, you need to have a Kubernetes cluster, and the kub
 
 A helper Playbook has been provided for the _Desktop_ installations to assist in defining the Infrastructure.  Please review the appropriate documentation for examples of installing and defining the _Desktop_ installation (more _Desktop_  examples may be provided in the future).
 
-<<<<<<< HEAD
 * [MacOS Ventura (x86)](macos_ventura/_index.md)
 * [Oracle Linux 8 (x86)](ol8/_index.md)
-=======
-* [MacOS Ventura (x86)](ONPREM_MACOS_VENTURA.md)
-* [Oracle Linux 8 (x86)](ONPREM_OL8.md)
->>>>>>> origin/main
 
 The _Desktop_ Playbook will be run as part of the Configuration Management.
 
@@ -128,12 +119,7 @@ ansible-playbook ansible/desktop-apply.yaml
 
 ### Build and Push Images to the Container Repository
 
-<<<<<<< HEAD
 For the _Desktop_ installation, start a new terminal and tunnel or port-forward to the minikube cluster.  Refer to the specific platform details for more information.
-=======
-For the _Desktop_ installation, start a new terminal and tunnel to the minikube cluster:
-`minikube tunnel`
->>>>>>> origin/main
 
 For both installations, on the original terminal, run the Images Playbook:
 
