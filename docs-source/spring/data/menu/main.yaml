@@ -1,22 +1,10 @@
 main:
-  - name: "Release Notes"
-    ref: "/release-notes"
-  - name: "On-Premises Installation"
-    ref: "/on-premises"
   - name: Setup
     ref: "/setup"
-    # sub:
-    #   - name: Kubernetes Access
-    #     ref: "/setup/cluster-access"
-    #   - name: Database Access
-    #     ref: "/setup/database"
-  # - name: Getting Started
-  #   ref: "/getting-started"
+  - name: "On-Premises Installation"
+    ref: "/on-premises"
   - name: Sample apps
     ref: "/sample-apps"
-#  - name: Developing Services
-#    ref: "/development"
-#    sub:
   - name: Platform Services
     ref: "/platform"
     sub:
@@ -49,3 +37,5 @@ main:
     ref: "/cluster-access"
   - name: Uninstall
     ref: "/uninstall"
+  - name: "Release Notes"
+    ref: "/release-notes"
