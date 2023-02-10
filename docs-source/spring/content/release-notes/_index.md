@@ -8,6 +8,7 @@ The following components were added:
 | HashiCorp Vault              | v1.11.3      | Provides a way of store and tightly control access to sensitive data                     |
 | Oracle Backend for Spring Boot CLI | 0.1.0  | Command line tool to manage application deployment and configuration                     |
 | Netflix Conductor OSS        | 3.13.2       | Workflow orchestration for microservices                                                 |
+| On-premises installer        | 0.1.0        | Allows you to install a self-hosted stack                                                |
 
 There were no deprecations or removals.
 
@@ -28,4 +29,3 @@ This release includes the following components:
 | Spring Admin Server          | 2.7.5        | Managing and monitoring Spring Boot applications.                                        |
 | Spring Cloud Config Server   | 2.7.5        | Provides server-side support for externalized configuration.                             |
 | Eureka Service Registry      | 2021.0.3     | Provides Service Discovery capabilities                                                  |
-| HashiCorp Vault              | v1.11.3      | Provides a way of store and tightly control access to sensitive data                     |
