@@ -26,7 +26,6 @@
   </organization>
 
   <modules>
-    <module>oracle-spring-boot-starter-aqjms</module>
     <module>oracle-spring-boot-starter-ucp</module>
   </modules>
 
