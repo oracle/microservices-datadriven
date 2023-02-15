@@ -235,3 +235,21 @@ For more information about the Key/Value secrets engine [Key/value Documentation
     <!-- spellchecker-disable -->
     {{< img name="vault-show-secret" size="medium" lazy=false >}}
     <!-- spellchecker-enable -->
+
+## Accessing Vault Recovery Keys
+
+Vault is configured to Auto Unseal using OCI Vault. Initializing with Auto Unseal creates 5 recovery keys and they are stored in k8s secrets. They **MUST** be retrieved and stored in a 2nd location.
+
+To extract the 5 recovery keys use the following commands:
+
+``` shell
+% kubectl get secret recovery-keys -n vault --template="{{index .data \"recovery.key.1\" }}"
+
+% kubectl get secret recovery-keys -n vault --template="{{index .data \"recovery.key.2\" }}"
+
+% kubectl get secret recovery-keys -n vault --template="{{index .data \"recovery.key.3\" }}"
+
+% kubectl get secret recovery-keys -n vault --template="{{index .data \"recovery.key.4\" }}"
+
+% kubectl get secret recovery-keys -n vault --template="{{index .data \"recovery.key.5\" }}"
+```
