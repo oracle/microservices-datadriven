@@ -65,7 +65,7 @@ Object Storage for storing Vault data OCI Vault to auto unseal the Vault Contain
       "url" : "https://oracle.github.io/microservices-datadriven/spring/platform/vault/",
       "headline": "Vault",
       "description": "Oracle Backend as a Service for Spring Cloud includes HashiCorp Vault to secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets and other sensitive data using a UI, CLI, or HTTP API.\nTip For more information about working with the HashiCorp Vault, see the HashiCorp Vault Documentation and Tutorials Library. Setup Information Vault uses the following Oracle OCI Services:\nObject Storage for storing Vault data OCI Vault to auto unseal the Vault Container Engine for Kubernetes for running the Vault server The Vault is unsealed using the OCI KMS key.",
-      "wordCount" : "842",
+      "wordCount" : "945",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1754,9 +1754,29 @@ if (!doNotTrack) {
         </figure>
       </div>
 
- <!-- spellchecker-enable --></li>
+ <!-- spellchecker-enable -->
+</li>
 </ol>
-
+<div class="gdoc-page__anchorwrap">
+    <h2 id="accessing-vault-recovery-keys">
+        Accessing Vault Recovery Keys
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/vault/#accessing-vault-recovery-keys" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Accessing Vault Recovery Keys" aria-label="Anchor to: Accessing Vault Recovery Keys" href="#accessing-vault-recovery-keys">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>Vault is configured to Auto Unseal using OCI Vault. Initializing with Auto Unseal creates five recovery keys and they are stored in k8s secrets. They <strong>MUST</strong> be retrieved and stored in a second location.</p>
+<p>To extract the five recovery keys use the following commands:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">% kubectl get secret recovery-keys -n vault --template<span class="o">=</span><span class="s2">&#34;{{index .data \&#34;recovery.key.1\&#34; }}&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">% kubectl get secret recovery-keys -n vault --template<span class="o">=</span><span class="s2">&#34;{{index .data \&#34;recovery.key.2\&#34; }}&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">% kubectl get secret recovery-keys -n vault --template<span class="o">=</span><span class="s2">&#34;{{index .data \&#34;recovery.key.3\&#34; }}&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">% kubectl get secret recovery-keys -n vault --template<span class="o">=</span><span class="s2">&#34;{{index .data \&#34;recovery.key.4\&#34; }}&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">% kubectl get secret recovery-keys -n vault --template<span class="o">=</span><span class="s2">&#34;{{index .data \&#34;recovery.key.5\&#34; }}&#34;</span>
+</span></span></code></pre></div>
   </article>
 
 
