@@ -22,7 +22,7 @@ To start installation:
 * Review and accept the terms and conditions
 * Click on the "Launch Stack" button
 
-![OCI Marketplace Listing](../Oracle Backend for Parse Platform-oci-mp-listing.png)
+![OCI Marketplace Listing](../mbaas-oci-mp-listing.png)
 
 On the "Create Stack" page:
 
