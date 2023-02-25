@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/microservices-datadriven/txeventQUI/static/css/main.f7b2f321.css",
-    "main.js": "/microservices-datadriven/txeventQUI/static/js/main.c43f622c.js",
+    "main.css": "/microservices-datadriven/txeventQUI/static/css/main.758d9d55.css",
+    "main.js": "/microservices-datadriven/txeventQUI/static/js/main.ca8193cb.js",
     "static/js/787.5e3799a0.chunk.js": "/microservices-datadriven/txeventQUI/static/js/787.5e3799a0.chunk.js",
     "index.html": "/microservices-datadriven/txeventQUI/index.html",
-    "main.f7b2f321.css.map": "/microservices-datadriven/txeventQUI/static/css/main.f7b2f321.css.map"
+    "main.758d9d55.css.map": "/microservices-datadriven/txeventQUI/static/css/main.758d9d55.css.map"
   },
   "entrypoints": [
-    "static/css/main.f7b2f321.css",
-    "static/js/main.c43f622c.js"
+    "static/css/main.758d9d55.css",
+    "static/js/main.ca8193cb.js"
   ]
 }
