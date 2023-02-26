@@ -5,30 +5,110 @@ resources:
     src: "mark.png"
 ---
 
-Our team members post blog articles and other content on various sites.
+Our team members post blog articles and other content on various sites including [Medium](https://medium.com/@mark.x.nelson), LinkedIn ([Corrado de Bari](https://www.linkedin.com/in/corradodebari/), [Doug Drechsel](https://www.linkedin.com/in/dougdrechsel/)), [RedStack](https://redstack.wordpress.com), [DZone](https://dzone.com/users/4571557/paulparkinson.html), and the [Oracle Developers Blog](https://blogs.oracle.com/developers).
 We'd love you to check them out.
-This page acts as an index/aggregator for all our content.
+This page acts as an index/aggregator for some of our featured content.
 
-* [Two new Backend as a Service offerings live now!](https://redstack.wordpress.com/2022/12/21/two-new-backend-as-a-service-offerings-live-now/) 
+{{< blog  
+    author="mark" 
+    date="2/3/2023" 
+    title="A First Spring Boot Service with Oracle" 
+    link="https://redstack.wordpress.com/2023/02/03/a-first-spring-boot-microservice-with-oracle/"
+    abstract="A detailed guide to building a Spring Boot microservice from scratch that uses Spring Data JPA to manage data in the Oracle Database and exposes various endpoints to access the data." 
+>}}
 
-* [Development Environment Setup with Spring Boot For Oracle](https://redstack.wordpress.com/2022/12/08/development-environment-setup-for-spring-boot-with-oracle/)
+{{< blog  
+    author="corrado" 
+    date="1/5/2023" 
+    title="React Native and Oracle MBaaS – a beginner’s tutorial" 
+    link="https://www.linkedin.com/pulse/react-native-oracle-mbaas-beginner-tutorial-corrado-de-bari/"
+    abstract="A step-by-step guide to building a React Native mobile application using the Parse APIs and Oracle Backend for Parse Platform." 
+>}}
 
-* [A First Spring Boot Service with Oracle](https://redstack.wordpress.com/2023/02/03/a-first-spring-boot-microservice-with-oracle/)
+{{< blog  
+    author="doug" 
+    date="12/23/2022" 
+    title="Oracle Mobile Backend as a Service (MBaaS)" 
+    link="https://medium.com/@DatabaseDoug/oracle-mobile-backend-as-a-service-mbaas-501be7ab201d"
+    abstract="An introduction and walk-through of the Oracle Backend for Parse Platform, including installation, using the dashboard, getting started with application development and integration with the Oracle Autonomous Database." 
+>}}
 
-* [Backend-as-a-Service (BaaS) and Oracle Database (Video) OCW Teaser](https://www.youtube.com/watch?v=9PIHjIjcBAY)
+{{< blog  
+    author="corrado" 
+    date="12/22/2022" 
+    title="React.JS on Oracle MBaaS" 
+    link="https://www.linkedin.com/pulse/reactjs-oracle-mbaas-corrado-de-bari/"
+    abstract="A step-by-step guide to implement a simple ReactJS app leveraging Oracle MBaaS." 
+>}}
 
-* [Getting Started with the New Observability Exporter for Oracle Database](https://redstack.wordpress.com/2022/09/27/getting-started-with-the-new-observability-exporter-for-oracle-database/)
+{{< blog  
+    author="mark" 
+    date="12/21/2022" 
+    title="Two new Backend as a Service offerings live now!" 
+    link="https://redstack.wordpress.com/2022/12/21/two-new-backend-as-a-service-offerings-live-now/"
+    abstract="A brief announcement and introduction to our Developer Preview releases of Oracle Backend for Spring Boot and Parse Platform." 
+>}}
 
-* [Oracle REST Data Services 22.3 bring new REST APIs for Transactional Event Queues](https://redstack.wordpress.com/2022/10/31/oracle-rest-data-services-22-3-brings-new-rest-apis-for-transactional-event-queueing/)
+{{< blog  
+    author="mark" 
+    date="12/8/2022" 
+    title="Development Environment Setup with Spring Boot For Oracle" 
+    link="https://redstack.wordpress.com/2022/12/08/development-environment-setup-for-spring-boot-with-oracle/"
+    abstract="A detailed guide to setting up a development environment to build Spring Boot microservices with the Oracle Database." 
+>}}
 
-* [Apache Kafka vs Oracle Transactional Event Queues for Event Driven Microservices](https://dzone.com/articles/apache-kafka-versus-oracle-transactional-event-que)
+{{< blog  
+    author="mark" 
+    date="10/12/2022" 
+    title="Backend-as-a-Service (BaaS) and Oracle Database (Video) OCW Teaser" 
+    link="https://www.youtube.com/watch?v=9PIHjIjcBAY"
+    abstract="Erin Dawson, DevRel Communications Manager talks with Mark about the Oracle CloudWorld 2022 presentations and hands-on labs for Oracle Backend for Spring Boot and Parse Platform." 
+>}}
 
-* [Developing Event Driven Microservices in Java, Javascript, PL/SQL, Go, Python](https://dzone.com/articles/developing-event-driven-microservices-in-java-java)
+{{< blog  
+    author="mark" 
+    date="10/11/2022" 
+    title="Oracle REST Data Services 22.3 bring new REST APIs for Transactional Event Queues" 
+    link="https://redstack.wordpress.com/2022/10/31/oracle-rest-data-services-22-3-brings-new-rest-apis-for-transactional-event-queueing/"
+    abstract="An announcement and several example that show how to use the new REST APIs for Transactional Event Queues." 
+>}}
 
-* [How to use Vaults and Wallets for Simple Secure Connectivity](https://dzone.com/articles/how-to-use-vaults-and-wallets-for-simple-secure-connectivity)
+{{< blog  
+    author="mark" 
+    date="9/27/2022" 
+    title="Getting Started with the New Observability Exporter for Oracle Database" 
+    link="https://redstack.wordpress.com/2022/09/27/getting-started-with-the-new-observability-exporter-for-oracle-database/"
+    abstract="A simple step-by-step getting started example that shows you how to use the Observability Exporter for Oracle Database to expose data from the Oracle Database as Promeheus metrics." 
+>}}
 
-* [React Native and Oracle MBaaS – a beginner’s tutorial](https://www.linkedin.com/pulse/react-native-oracle-mbaas-beginner-tutorial-corrado-de-bari/)
+{{< blog  
+    author="paulo" 
+    date="1/6/2022" 
+    title="Let the Oracle Database Operator for Kubernetes Do the Job" 
+    link="https://pasimoes.dev/p/oracle-db-k8s-oper-intro/"
+    abstract="An introduction to and overview of the Oracle Database Operator for Kubernetes." 
+>}}
 
-* [React.JS on Oracle MBaaS](https://www.linkedin.com/pulse/reactjs-oracle-mbaas-corrado-de-bari/)
+{{< blog  
+    author="paul" 
+    date="12/18/2021" 
+    title="How to use Vaults and Wallets for Simple Secure Connectivity" 
+    link="https://dzone.com/articles/how-to-use-vaults-and-wallets-for-simple-secure-connectivity"
+    abstract="Provides details on how to secure connections in Java, JavaScript, Python, .NET, and Go as well as convenience integration features that are provided by microservice frameworks, specifically Helidon and Micronaut." 
+>}}
 
-* [Oracle Mobile Backend as a Service (MBaaS)](https://medium.com/@DatabaseDoug/oracle-mobile-backend-as-a-service-mbaas-501be7ab201d)
+{{< blog  
+    author="paul" 
+    date="12/17/2021" 
+    title="Developing Event Driven Microservices in Java, Javascript, PL/SQL, Go, Python" 
+    link="https://dzone.com/articles/developing-event-driven-microservices-in-java-java"
+    abstract="Learn about developing Event-Driven Microservices in Java, JavaScript, Python, .NET, and Go with AQ/TEQ in the Oracle Database." 
+>}}
+
+{{< blog  
+    author="paul" 
+    date="9/23/2021" 
+    title="Apache Kafka vs Oracle Transactional Event Queues for Event Driven Microservices" 
+    link="https://dzone.com/articles/apache-kafka-versus-oracle-transactional-event-que"
+    abstract="Comparing transactional and message delivery behavior, as it relates to microservice architectures (event mesh, event sourcing, etc.) Kafka and Oracle Transaction Event Queues." 
+>}}
