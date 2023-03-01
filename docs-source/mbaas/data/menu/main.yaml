@@ -39,3 +39,5 @@ main:
     ref: "/cluster-access"
   - name: Uninstall
     ref: "/uninstall"
+  - name: "Release Notes"
+    ref: "/release-notes"    
