@@ -18,8 +18,8 @@ Check out [Oracle Backend for Spring Boot](https://oracle.github.io/microservice
 
 ## Developer Preview
 
-This release is a *Developer Preview*. This means that not all functionality is complete. In this release, approximately 80% of the Parse APIs are working. For
-interested developers, approximately 2100 of 2700 tests run successfully. This release is based on Parse Server version 5.2.7 and Parse Dashboard 5.0.0. We are
+This release is a *Developer Preview*. This means that not all functionality is complete. In this release, approximately 80-900% of the Parse APIs are working. For
+interested developers, approximately 2270 of 2700 tests run successfully. This release is based on Parse Server version 5.2.7 and Parse Dashboard 5.0.0. We are
 releasing this as a developer preview to allow interested developers to try it and give feedback.
 
 The following API families are mostly working: 
