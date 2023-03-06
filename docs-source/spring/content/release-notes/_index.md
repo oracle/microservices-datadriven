@@ -1,4 +1,16 @@
 
+## Developer Preview 0.2.0, Februarry 27, 2023
+
+The following components were added:
+
+| Component                    | Version       | Description                                                                             |
+|------------------------------|---------------|-----------------------------------------------------------------------------------------|
+| Oracle Transaction Manager for Microservices | 22.3.1 | Manages distributed transactions to ensure consistency across microservices    |
+| Strimzi Kafka Operator       | 0.33.1        | Manages Kafka clusters                                                                  |
+| Apacha Kafka                 | 3.2.0 - 3.3.2 | Distributed event streaming                                                             |
+
+There were no deprecations or removals.
+
 ## Developer Preview 0.1.0, January 30, 2023
 
 The following components were added:
