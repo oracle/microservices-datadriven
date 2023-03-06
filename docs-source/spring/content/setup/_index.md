@@ -19,15 +19,27 @@ resources:
   - name: oci-private-template-create-stack-config
     src: "oci-private-template-create-stack-config.png"
     title: "Create Stack Wizard Config Variables"
+  - name: oci-private-template-create-stack-config-lb-vault
+    src: "oci-private-template-create-stack-config-lb-vault.png"
+    title: "Create Stack Wizard Config Variables"
   - name: oci-private-template-create-stack-config-review
     src: "oci-private-template-create-stack-config-review.png"
     title: "Create Stack Wizard Config Review"
+  - name: oci-stack-plan
+    src: "oci-stack-plan.png"
+    title: "Create Stack Plan"
   - name: oci-stack-apply
     src: "oci-stack-apply.png"
     title: "Create Stack Apply"
   - name: oci-stack-apply-logs
     src: "oci-stack-apply-logs.png"
     title: "Create Stack Apply Logs"
+  - name: oci-stack-outputs
+    src: "oci-stack-outputs.png"
+    title: "Create Stack Outputs"
+  - name: oci-stack-output-oke
+    src: "oci-stack-output-oke.png"
+    title: "Get Kube Config Cmd"
 ---
 
 Oracle Backend for Spring Boot is available in the [OCI Marketplace](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911).
@@ -45,7 +57,7 @@ You must meet the following prerequisites to use Oracle Backend for Spring Boot:
 
 - On local workstation:
   - The Kubernetes command-line tool (kubectl)
-  - Oracle Clound Infrastructure Command Line Interface (CLI)
+  - Oracle Cloud Infrastructure Command Line Interface (CLI)
   - Oracle Backend for Spring Boot command-line tool
 
 ## Summary of components
@@ -65,6 +77,7 @@ Oracle Backend for Spring Boot setup will install the following components:
 | Spring Admin Server          | 2.7.5        | Managing and monitoring Spring Boot applications.                                        |
 | Spring Cloud Config Server   | 2.7.5        | Provides server-side support for externalized configuration.                             |
 | Eureka Service Registry      | 2021.0.3     | Provides Service Discovery capabilities                                                  |
+| HashiCorp Vault              | v1.11.3      | Provides a way of store and tightly control access to sensitive data                     |
 
 ## Setup the OCI environment
 
@@ -74,8 +87,7 @@ Oracle Backend for Spring Boot setup will install the following components:
     ![OCI Marketplace listing](../ebaas-mp-listing.png)
     <!-- spellchecker-enable -->
 
-    Choose the target compartment, agree to the terms and click on the "Launch Stack" button.  This will start the wizard
-    to create the new stack. On the first page choose a compartment to host your stack and select `Next`
+    Choose the target compartment, agree to the terms and click on the "Launch Stack" button.  This will start the wizard to create the new stack. On the first page choose a compartment to host your stack and select `Next`
 
     <!-- spellchecker-disable -->
     ![OCI Stack wizard page 1](../ebaas-stack-page1.png)
@@ -85,18 +97,32 @@ Oracle Backend for Spring Boot setup will install the following components:
 
     - `Application Name` (Optional)
     - OKE Control Plane Options.
-        - `Public Control Plane`: this option allows access the OKE Control Plane from the Internet (Public IP). If not selected, access
-          will only be from a private VCN.
+        - `Public Control Plane`: this option allows access the OKE Control Plane from the Internet (Public IP). If not selected, access will only be from a private VCN.
         - `Control Plane Access Control`: CIDR (IP range) allowed to access the control plane (Oracle recommends you set this as restrictive as possible).
         - `Enable Horizontal Pod Scaling?`: The [Horizontal Pod Autoscaler](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusinghorizontalpodautoscaler.htm#Using_Kubernetes_Horizontal_Pod_Autoscaler) can help applications scale out to meet increased demand, or scale in when resources are no longer needed.
-        - `Node Pool Workers`: Number of Kubernetes worker nodes (virutal machines) to attach to the OKE Cluster.
+        - `Node Pool Workers`: Number of Kubernetes worker nodes (virtual machines) to attach to the OKE Cluster.
 
     <!-- spellchecker-disable -->
     {{< img name="oci-private-template-create-stack-config" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
-    Now you can review the stack configuration and save the changes.  Oracle recommends that you do not check the "Run apply" option - this will
-    give you the opportunity to run the "plan" first and check for issues.
+    - Load Balancers Options.
+        - `Enable Public Load Balancer` this option allows access to the load balancer from the Internet (Public IP). If not selected, access will only be from a private VCN.
+        - `Public Load Balancer Ports Exposed`. Ports exposed from the load balancer.
+        - `Minimum bandwidth`. The minimum bandwidth the load balancer can achieve.
+        - `Maximum bandwidth`. The maximum bandwidth the load balancer can achieve.
+
+    - Vault Options. You have the option of creating a new OCI Vault or use an an existing OCI Vault. Fill in the information below if you want  to use an existing OCI Vault.
+        - `Vault Compartment (Optional)` Select a Compartment for the OCI Vault.
+        - `Existing Vault (Optional)`. Select an existing OCI Vault
+        - `Existing Vault Key (Optional)`. Select an existing OCI Vault Key.
+        - `Maximum bandwidth`. The maximum bandwidth the load balancer can achieve.
+
+    <!-- spellchecker-disable -->
+    {{< img name="oci-private-template-create-stack-config-lb-vault" size="large" lazy=false >}}
+    <!-- spellchecker-enable -->
+
+    Now you can review the stack configuration and save the changes.  Oracle recommends that you do not check the "Run apply" option - this will give you the opportunity to run the "plan" first and check for issues.
 
     <!-- spellchecker-disable -->
     {{< img name="oci-private-template-create-stack-config-review" size="large" lazy=false >}}
@@ -106,26 +132,36 @@ Oracle Backend for Spring Boot setup will install the following components:
 
     After you create your stack, you will be able to test the plan, edit the stack, and apply or destroy the stack.
 
-    Oracle recommends you test the plan before applying the stack, in order to identify any issues before you start
-    creating resources.   Testing a plan does not create any actual resources, it is just a "dry run" to tell you
-    what would happen if you applied.
+    Oracle recommends you test the plan before applying the stack, in order to identify any issues before you start creating resources. Testing a plan does not create any actual resources, it is just a "dry run" to tell you what would happen if you applied.
 
-    You can test the plan by clicking on the "Plan" button and then reviewing the output.  If you see any
-    issues, for example you may find that you do not have enough quota for some resource, you can fix that issue before
-    proceeding.
+    <!-- spellchecker-disable -->
+    {{< img name="oci-stack-plan" size="large" lazy=false >}}
+    <!-- spellchecker-enable -->
 
-    When you are happy with the results of the test, you can apply the stack by clicking on the "Apply" button. This will create your Oracle Backend
-    as a Service for Spring Cloud Environment.  This takes about 20 minutes to complete.  A lot of this time is spent provisioning the
-    Kuberentes cluster, worker nodes, and database.  You can watch the logs to follow progress of the operation.
+    You can test the plan by clicking on the "Plan" button and then reviewing the output.  If you see any issues, for example you may find that you do not have enough quota for some resource, you can fix that issue before proceeding.
+
+    When you are happy with the results of the test, you can apply the stack by clicking on the "Apply" button. This will create your Oracle Backend as a Service for Spring Cloud Environment.  This takes about 20 minutes to complete.  A lot of this time is spent provisioning the Kubernetes cluster, worker nodes, and database.  You can watch the logs to follow progress of the operation.
 
     <!-- spellchecker-disable -->
     {{< img name="oci-stack-apply" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
-    The OCI Resource Manager will apply your stack and generate the execution logs.
+    The OCI Resource Manager will apply your stack and generate the execution logs. The apply job takes approximately 45 minutes.
 
     <!-- spellchecker-disable -->
     {{< img name="oci-stack-apply-logs" size="large" lazy=false >}}
+    <!-- spellchecker-enable -->
+
+    Collect the OKE access information by clicking on the `Outputs` menu item.
+
+    <!-- spellchecker-disable -->
+    {{< img name="oci-stack-outputs" size="large" lazy=false >}}
+    <!-- spellchecker-enable -->
+
+    Click on the `Copy` for the Variable named `kubeconfig_cmd`. Save this information as it is needed to access the OKE Cluster.
+
+    <!-- spellchecker-disable -->
+    {{< img name="oci-stack-output-oke" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
 ## Setup the local workstation
@@ -152,9 +188,8 @@ Oracle Backend for Spring Boot setup will install the following components:
         1. Install the Oracle Cloud Infrastructure CLI version 2.6.4 (or later). See [Quickstart](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#Quickstart).
         2. Configure the Oracle Cloud Infrastructure CLI. See [Configuring the CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliconfigure.htm#Configuring_the_CLI).
 
-
 2. Install Oracle Backend for Spring Boot command-line
 
-    The **Oracle Backend for Spring Boot** command-line tool, `obaas`, is available for Linux and Mac systems. Download the binary you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0) page and add it to your PATH environment variable.  You may like to rename the binary to remove the suffix.
+    The **Oracle Backend for Spring Boot** command-line tool, `oractl`, is available for Linux and Mac systems. Download the binary you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0) page and add it to your PATH environment variable.  You may like to rename the binary to remove the suffix.
 
-    If you're environment is a Linux or Mac machine you need to run `chmod +x` on the downloaded binary. Also if your environment is a Mac you need run the following command `sudo xattr -r -d com.apple.quarantine <downloaded-file>` otherwise will you get a security warning and the CLI will not work.
+    If your environment is a Linux or Mac machine you need to run `chmod +x` on the downloaded binary. Also if your environment is a Mac you need run the following command `sudo xattr -r -d com.apple.quarantine <downloaded-file>` otherwise will you get a security warning and the CLI will not work.

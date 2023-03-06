@@ -4,52 +4,44 @@ resources:
 - name: conductor_ui_workflows
   src: "conductor_ui_workflows.png"
   title: "Conductor UI Workflows"
-- name: conductor_ui_tasks
-  src: "conductor_ui_tasks.png"
-  title: "Conductor UI Tasks"
 ---
 
-Oracle Backend for Spring Boot includes Netflix Conductor along with the Netflix Conductor UI.
-Conductor is a popular workflow solution that works well with Spring Boot microservices and the Oracle database.
+Oracle Backend as a Service for Spring Cloud includes Netflix Conductor Server. Conductor is a popular workflow solution that works well with Spring Boot microservices and the Oracle database.
 
 Full documentation on Conductor can be found here:
 
 * [Netflix Conductor Documentation](https://conductor.netflix.com/)
 
-### Accessing Conductor UI
+### Accessing Server UI
 
 1. Expose the Oracle Spring Cloud Admin Server that the CLI will call by using `port-forward`
 
     ```shell
-    kubectl port-forward services/conductor-ui -n conductor-ui  5000:5000
+    kubectl port-forward services/conductor-server -n conductor-server 8080:8080
     ```
 
-2. Access the Conductor UI.
+2. Access the Conductor Server UI.
 
     ```shell
-    http://localhost:5000
+    http://localhost:8080
     ```
 
-### Using Conductor UI
-
-The UI can be used to view and exercise workflows.
-* [Conductor Workflow Documentation](https://conductor.netflix.com/configuration/workflowdef.html)
-
 <!-- spellchecker-disable -->
-{{< img name="conductor_ui_workflows" size="medium" lazy=false >}}
+{{< img name="conductor_server_ui" size="medium" lazy=false >}}
 <!-- spellchecker-enable -->
 
+3. Access the Swagger Documentation
 
-Workflows consist of tasks and Spring Boot microservices can be called as/from tasks in order to participate in these workflows.
-* [Conductor Task Documentation](https://conductor.netflix.com/configuration/taskdef.html) 
-
-The UI can also be used to view these tasks.
+    ```shell
+    http://localhost:8080/swagger-ui/index.html
+    ```
 
 <!-- spellchecker-disable -->
-{{< img name="conductor_ui_tasks" size="medium" lazy=false >}}
+{{< img name="conductor_server_swagger" size="medium" lazy=false >}}
 <!-- spellchecker-enable -->
 
-### Samples 
+### API Specification
 
-"A First Workflow" example can  be found here:
-* [running-first-workflow](https://conductor.netflix.com/labs/running-first-workflow.html)
+The API Specification can be found here:
+
+* [API Specification](https://conductor.netflix.com/apispec.html)

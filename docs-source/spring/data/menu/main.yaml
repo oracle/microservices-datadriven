@@ -1,18 +1,15 @@
 main:
   - name: Setup
     ref: "/setup"
-    # sub:
-    #   - name: Kubernetes Access
-    #     ref: "/setup/cluster-access"
-    #   - name: Database Access
-    #     ref: "/setup/database"      
-  # - name: Getting Started
-  #   ref: "/getting-started"
+  - name: "On-Premises Installation"
+    ref: "/on-premises"
+    sub:
+      - name: "MacOS Ventura (x86)"
+        ref: "/on-premises/macos_ventura"
+      - name: "OL8 (x86)"
+        ref: "/on-premises/ol8"      
   - name: Sample apps
     ref: "/sample-apps"
-#  - name: Developing Services
-#    ref: "/development"
-#    sub: 
   - name: Platform Services
     ref: "/platform"
     sub:
@@ -28,6 +25,8 @@ main:
         ref: "/platform/spring-admin"
       - name: OBaaS CLI
         ref: "/development/cli"
+      - name: Vault
+        ref: "/platform/vault"
   - name: Observability
     ref: "/observability"
     sub: 
@@ -38,8 +37,10 @@ main:
   - name: Security
     ref: "/security"
   - name: Database Access
-    ref: "/database"    
+    ref: "/database"
   - name: Kubernetes Access
     ref: "/cluster-access"
   - name: Uninstall
     ref: "/uninstall"
+  - name: "Release Notes"
+    ref: "/release-notes"
