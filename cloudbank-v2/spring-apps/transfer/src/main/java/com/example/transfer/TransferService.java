@@ -92,4 +92,46 @@ public class TransferService {
         return withdrawOutcome;
     }
 
+    @POST
+    @Path("/processconfirm")
+    @Produces(MediaType.APPLICATION_JSON)
+    @LRA(value = LRA.Type.MANDATORY)
+    public Response processconfirm(@HeaderParam(LRA_HTTP_CONTEXT_HEADER) String lraId) throws NotFoundException {
+        log.info("Process confirm for transfer : " + lraId);
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/processcancel")
+    @Produces(MediaType.APPLICATION_JSON)
+    @LRA(value = LRA.Type.MANDATORY, cancelOn = Response.Status.OK)
+    public Response processcancel(@HeaderParam(LRA_HTTP_CONTEXT_HEADER) String lraId) throws NotFoundException {
+        log.info("Process cancel for transfer : " + lraId);
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("/confirm")
+    @Produces(MediaType.APPLICATION_JSON)
+    @LRA(value = LRA.Type.NOT_SUPPORTED)
+    public Response confirm(@HeaderParam(TRANSFER_ID) String transferId) throws NotFoundException {
+        log.info("Received confirm for transfer : " + transferId);
+        String confirmOutcome = ClientBuilder.newClient().target(transferProcessConfirmUri).request()
+                .header(LRA_HTTP_CONTEXT_HEADER, transferId)
+                .post(Entity.text("")).readEntity(String.class);
+        return Response.ok(confirmOutcome).build();
+    }
+
+    @POST
+    @Path("/cancel")
+    @Produces(MediaType.APPLICATION_JSON)
+    @LRA(value = LRA.Type.NOT_SUPPORTED, cancelOn = Response.Status.OK)
+    public Response cancel(@HeaderParam(TRANSFER_ID) String transferId) throws NotFoundException {
+        log.info("Received cancel for transfer : " + transferId);
+        String confirmOutcome = ClientBuilder.newClient().target(transferProcessCancelUri).request()
+                .header(LRA_HTTP_CONTEXT_HEADER, transferId)
+                .post(Entity.text("")).readEntity(String.class);
+        return Response.ok(confirmOutcome).build();
+    }
+
 }
