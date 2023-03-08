@@ -1,0 +1,32 @@
+# Copyright (c) 2023, Oracle and/or its affiliates. 
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/ 
+
+spring:
+  application:
+    name: accounts
+  jersey:
+    type: filter
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.Oracle12cDialect
+        format_sql: true
+    show-sql: true
+  datasource:
+    url: ${CONNECT_STRING}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: oracle.jdbc.OracleDriver
+    type: oracle.ucp.jdbc.PoolDataSource
+    oracleucp:
+      connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
+      connection-pool-name: TransactionConnectionPool
+      initial-pool-size: 15
+      min-pool-size: 10
+      max-pool-size: 30
+
+lra:
+  coordinator:
+    url: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator

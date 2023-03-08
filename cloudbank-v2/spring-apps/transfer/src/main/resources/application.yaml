@@ -1,0 +1,24 @@
+# Copyright (c) 2023, Oracle and/or its affiliates. 
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/ 
+
+server:
+  port: 8080
+
+mp.lra:
+  coordinator.url: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator
+  propagation.active: true
+  participant.url: http://localhost:8080
+  coordinator.headers-propagation.prefix: ["x-b3-", "oracle-tmm-", "authorization", "refresh-"]
+
+deposit:
+  account:
+    service:
+      url: http://account.application:8080/deposit
+withdraw:
+  account:
+    service:
+      url: http://account.application:8080/withdraw
+
+lra:
+  coordinator:
+    url: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator
