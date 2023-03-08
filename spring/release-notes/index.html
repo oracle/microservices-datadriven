@@ -12,10 +12,9 @@
 <meta name="generator" content="Hugo 0.108.0">
 
 
-  <meta name="description" content="Developer Preview 0.2.0, Februarry 27, 2023 The following components were added:
-Component Version Description Oracle Transaction Manager for Microservices 22.3.1 Manages distributed transactions to ensure consistency across microservices Strimzi Kafka Operator 0.33.1 Manages Kafka clusters Apacha Kafka 3.2.0 - 3.3.2 Distributed event streaming There were no deprecations or removals.
-Developer Preview 0.1.0, January 30, 2023 The following components were added:
-Component Version Description HashiCorp Vault v1.11.3 Provides a way of store and tightly control access to sensitive data Oracle Backend for Spring Boot CLI 0." />
+  <meta name="description" content="Developer Preview 0.2.3, March 8, 2023 Notes:
+Oracle Backend for Spring Boot now includes the option to also install Parse Platform in the same deployment. Oracle Backend for Spring Boot CLI 0.2.3 includes a number of bug fixes, and adds support for custom listen ports for services. APISIX is now pre-configured for both Eureka and Kubernetes service discovery. The following components were added:
+Component Version Description Oracle Database Operator for Kubernetes 0." />
 
     <title>Release Notes | Oracle Backend for Spring Boot</title>
 
@@ -41,10 +40,9 @@ Component Version Description HashiCorp Vault v1.11.3 Provides a way of store an
     content="Release Notes"
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot" />
-  <meta property="og:description" content="Developer Preview 0.2.0, Februarry 27, 2023 The following components were added:
-Component Version Description Oracle Transaction Manager for Microservices 22.3.1 Manages distributed transactions to ensure consistency across microservices Strimzi Kafka Operator 0.33.1 Manages Kafka clusters Apacha Kafka 3.2.0 - 3.3.2 Distributed event streaming There were no deprecations or removals.
-Developer Preview 0.1.0, January 30, 2023 The following components were added:
-Component Version Description HashiCorp Vault v1.11.3 Provides a way of store and tightly control access to sensitive data Oracle Backend for Spring Boot CLI 0." />
+  <meta property="og:description" content="Developer Preview 0.2.3, March 8, 2023 Notes:
+Oracle Backend for Spring Boot now includes the option to also install Parse Platform in the same deployment. Oracle Backend for Spring Boot CLI 0.2.3 includes a number of bug fixes, and adds support for custom listen ports for services. APISIX is now pre-configured for both Eureka and Kubernetes service discovery. The following components were added:
+Component Version Description Oracle Database Operator for Kubernetes 0." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/release-notes/" />
 
@@ -53,10 +51,9 @@ Component Version Description HashiCorp Vault v1.11.3 Provides a way of store an
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Release Notes" />
-  <meta name="twitter:description" content="Developer Preview 0.2.0, Februarry 27, 2023 The following components were added:
-Component Version Description Oracle Transaction Manager for Microservices 22.3.1 Manages distributed transactions to ensure consistency across microservices Strimzi Kafka Operator 0.33.1 Manages Kafka clusters Apacha Kafka 3.2.0 - 3.3.2 Distributed event streaming There were no deprecations or removals.
-Developer Preview 0.1.0, January 30, 2023 The following components were added:
-Component Version Description HashiCorp Vault v1.11.3 Provides a way of store and tightly control access to sensitive data Oracle Backend for Spring Boot CLI 0." />
+  <meta name="twitter:description" content="Developer Preview 0.2.3, March 8, 2023 Notes:
+Oracle Backend for Spring Boot now includes the option to also install Parse Platform in the same deployment. Oracle Backend for Spring Boot CLI 0.2.3 includes a number of bug fixes, and adds support for custom listen ports for services. APISIX is now pre-configured for both Eureka and Kubernetes service discovery. The following components were added:
+Component Version Description Oracle Database Operator for Kubernetes 0." />
 
 
   <script type="application/ld+json">
@@ -67,8 +64,8 @@ Component Version Description HashiCorp Vault v1.11.3 Provides a way of store an
       "name": "Release Notes",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/release-notes/",
       "headline": "Release Notes",
-      "description": "Developer Preview 0.2.0, Februarry 27, 2023 The following components were added:\nComponent Version Description Oracle Transaction Manager for Microservices 22.3.1 Manages distributed transactions to ensure consistency across microservices Strimzi Kafka Operator 0.33.1 Manages Kafka clusters Apacha Kafka 3.2.0 - 3.3.2 Distributed event streaming There were no deprecations or removals.\nDeveloper Preview 0.1.0, January 30, 2023 The following components were added:\nComponent Version Description HashiCorp Vault v1.11.3 Provides a way of store and tightly control access to sensitive data Oracle Backend for Spring Boot CLI 0.",
-      "wordCount" : "236",
+      "description": "Developer Preview 0.2.3, March 8, 2023 Notes:\nOracle Backend for Spring Boot now includes the option to also install Parse Platform in the same deployment. Oracle Backend for Spring Boot CLI 0.2.3 includes a number of bug fixes, and adds support for custom listen ports for services. APISIX is now pre-configured for both Eureka and Kubernetes service discovery. The following components were added:\nComponent Version Description Oracle Database Operator for Kubernetes 0.",
+      "wordCount" : "404",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1466,9 +1463,103 @@ if (!doNotTrack) {
   >
     <h1>Release Notes</h1>
     <div class="gdoc-page__anchorwrap">
-    <h2 id="developer-preview-020-februarry-27-2023">
-        Developer Preview 0.2.0, Februarry 27, 2023
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/release-notes/#developer-preview-020-februarry-27-2023" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Developer Preview 0.2.0, Februarry 27, 2023" aria-label="Anchor to: Developer Preview 0.2.0, Februarry 27, 2023" href="#developer-preview-020-februarry-27-2023">
+    <h2 id="developer-preview-023-march-8-2023">
+        Developer Preview 0.2.3, March 8, 2023
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/release-notes/#developer-preview-023-march-8-2023" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Developer Preview 0.2.3, March 8, 2023" aria-label="Anchor to: Developer Preview 0.2.3, March 8, 2023" href="#developer-preview-023-march-8-2023">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>Notes:</p>
+<ul>
+<li>Oracle Backend for Spring Boot now includes the option to also install Parse Platform in the same deployment.</li>
+<li>Oracle Backend for Spring Boot CLI 0.2.3 includes a number of bug fixes, and adds support for custom listen ports for services.</li>
+<li>APISIX is now pre-configured for both Eureka and Kubernetes service discovery.</li>
+</ul>
+<p>The following components were added:</p>
+<div class="table-wrap"> <table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Version</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oracle Database Operator for Kubernetes</td>
+<td>0.6.1</td>
+<td>Helps reduce the time and complexity of deploying and managing Oracle Databases</td>
+</tr>
+<tr>
+<td>Parse Server</td>
+<td>5.2.7</td>
+<td>Provides backend services for mobile and web applications</td>
+</tr>
+<tr>
+<td>Parse Dashboard</td>
+<td>5.0.0</td>
+<td>Web user interface for managing Parse Server</td>
+</tr>
+<tr>
+<td>Oracle Storage Adapter for Parse</td>
+<td>0.2.0</td>
+<td>Enables Parse Server to store data in Oracle Database</td>
+</tr>
+</tbody>
+</table> </div>
+<p>The following components were updated:</p>
+<div class="table-wrap"> <table>
+<thead>
+<tr>
+<th>Component</th>
+<th>New Version</th>
+<th>Replaced Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oracle Backend for Spring Boot CLI</td>
+<td>0.2.3</td>
+<td>0.1.0</td>
+</tr>
+<tr>
+<td>cert-manager</td>
+<td>1.11.0</td>
+<td>1.10.1</td>
+</tr>
+<tr>
+<td>NGNIX Ingress Controller</td>
+<td>1.6.4</td>
+<td>1.5.1</td>
+</tr>
+<tr>
+<td>Jaeger Tracing</td>
+<td>1.39.0</td>
+<td>1.37.0</td>
+</tr>
+<tr>
+<td>APISIX</td>
+<td>3.1.1</td>
+<td>2.15.1</td>
+</tr>
+<tr>
+<td>Eureka Service Registry</td>
+<td>3.1.4</td>
+<td>2021.0.3</td>
+</tr>
+<tr>
+<td>Hashicorp Vault</td>
+<td>1.12.1</td>
+<td>1.11.3</td>
+</tr>
+</tbody>
+</table> </div>
+<p>There were no deprecations or removals.</p>
+<div class="gdoc-page__anchorwrap">
+    <h2 id="developer-preview-020-february-27-2023">
+        Developer Preview 0.2.0, February 27, 2023
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/release-notes/#developer-preview-020-february-27-2023" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Developer Preview 0.2.0, February 27, 2023" aria-label="Anchor to: Developer Preview 0.2.0, February 27, 2023" href="#developer-preview-020-february-27-2023">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>
