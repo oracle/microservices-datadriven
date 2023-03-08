@@ -1,5 +1,5 @@
 
-## Developer Preview 0.2.0, Februarry 27, 2023
+## Developer Preview 0.2.0, February 27, 2023
 
 No components were added.
 

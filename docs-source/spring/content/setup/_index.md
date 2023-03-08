@@ -66,18 +66,19 @@ Oracle Backend for Spring Boot setup will install the following components:
 
 | Component                    | Version      | Description                                                                              |
 |------------------------------|--------------|------------------------------------------------------------------------------------------|
-| cert-manager                 | 1.10.1       | Automates the management of certificates.                                                |
-| NGINX Ingress Controller     | 1.5.1        | Traffic management solution for cloud‑native applications in Kubernetes.                 |
+| cert-manager                 | 1.11.0       | Automates the management of certificates.                                                |
+| NGINX Ingress Controller     | 1.6.4        | Traffic management solution for cloud‑native applications in Kubernetes.                 |
 | Prometheus                   | 2.40.2       | Provides event monitoring and alerting.                                                  |
 | Prometheus Operator          | 0.60.1       | Provides management for Prometheus monitoring tools.                                     |
 | OpenTelemetry Collector      | 0.66.0       | Collects process and export telemetry data.                                              |
 | Grafana                      | 9.2.5        | Tool to help you examine, analyze, and monitor metrics.                                  |
-| Jaeger Tracing               | 1.37.0       | Distributed tracing system for monitoring and troubleshooting distributed systems.       |
-| APISIX                       | 2.15.1       | Provides full lifecycle API Management.                                                  |
+| Jaeger Tracing               | 1.39.0       | Distributed tracing system for monitoring and troubleshooting distributed systems.       |
+| APISIX                       | 3.1.1        | Provides full lifecycle API Management.                                                  |
 | Spring Admin Server          | 2.7.5        | Managing and monitoring Spring Boot applications.                                        |
 | Spring Cloud Config Server   | 2.7.5        | Provides server-side support for externalized configuration.                             |
-| Eureka Service Registry      | 2021.0.3     | Provides Service Discovery capabilities                                                  |
-| HashiCorp Vault              | v1.11.3      | Provides a way of store and tightly control access to sensitive data                     |
+| Eureka Service Registry      | 3.1.4        | Provides Service Discovery capabilities                                                  |
+| HashiCorp Vault              | 1.12.1      | Provides a way of store and tightly control access to sensitive data                     |
+| Oracle Database Operator     | 0.6.1        | Helps reduce the time and complexity of deploying and managing Oracle Databases.         |
 
 ## Setup the OCI environment
 
