@@ -27,7 +27,6 @@ The following components were updated:
 | Jaeger Tracing               | 1.39.0        | 1.37.0              |
 | APISIX                       | 3.1.1         | 2.15.1              |
 | Eureka Service Registry      | 3.1.4         | 2021.0.3            |
-| Hashicorp Vault              | 1.12.1        | 1.11.3              |
 
 There were no deprecations or removals.
 
