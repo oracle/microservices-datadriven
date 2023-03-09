@@ -77,7 +77,7 @@ Oracle Backend for Spring Boot setup will install the following components:
 | Spring Admin Server          | 2.7.5        | Managing and monitoring Spring Boot applications.                                        |
 | Spring Cloud Config Server   | 2.7.5        | Provides server-side support for externalized configuration.                             |
 | Eureka Service Registry      | 3.1.4        | Provides Service Discovery capabilities                                                  |
-| HashiCorp Vault              | 1.12.1      | Provides a way of store and tightly control access to sensitive data                     |
+| HashiCorp Vault              | 1.11.3       | Provides a way of store and tightly control access to sensitive data                     |
 | Oracle Database Operator     | 0.6.1        | Helps reduce the time and complexity of deploying and managing Oracle Databases.         |
 
 ## Setup the OCI environment
