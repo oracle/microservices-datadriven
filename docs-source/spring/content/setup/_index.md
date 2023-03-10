@@ -108,7 +108,7 @@ Oracle Backend for Spring Boot setup will install the following components:
     <!-- spellchecker-enable -->
 
     - Load Balancers Options.
-        - `Enable Public Load Balancer` this option allows access to the load balancer from the Internet (Public IP). If not selected, access will only be from a private VCN.
+        - `Enable Public Load Balancer`. This option allows access to the load balancer from the Internet (Public IP). If not selected, access will only be from a private VCN.
         - `Public Load Balancer Ports Exposed`. Ports exposed from the load balancer.
         - `Minimum bandwidth`. The minimum bandwidth the load balancer can achieve.
         - `Maximum bandwidth`. The maximum bandwidth the load balancer can achieve.
