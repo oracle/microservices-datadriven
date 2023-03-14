@@ -10,4 +10,5 @@ import java.util.List;
 
 public interface JournalRepository extends JpaRepository<Journal, Long> {
     Journal findJournalByLraIdAndJournalType(String lraId, String journalType);
+    List<Journal> findByAccountId(long accountId);
 }

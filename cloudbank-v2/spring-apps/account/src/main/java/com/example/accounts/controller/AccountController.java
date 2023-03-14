@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.accounts.repository.AccountRepository;
+import com.example.accounts.repository.JournalRepository;
 import java.util.List;
 import com.example.accounts.model.Account;
+import com.example.accounts.model.Journal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.http.HttpStatus;
@@ -25,14 +27,16 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 public class AccountController {
 
     final AccountRepository accountRepository;
+    final JournalRepository journalRepository;
 
     @GetMapping("/hello")
     public String ping() {
         return "Hello from Spring Boot";
     }
 
-    public AccountController(AccountRepository accountRepository) {
+    public AccountController(AccountRepository accountRepository, JournalRepository journalRepository) {
         this.accountRepository = accountRepository;
+        this.journalRepository = journalRepository;
     }
 
     @GetMapping("/accounts")
@@ -82,6 +86,20 @@ public class AccountController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/account/{accountId}/transactions")
+    public ResponseEntity<List<Journal>> getTransactions(@PathVariable("accountId") long accountId) {
+        try {
+            List<Journal> transactions = new ArrayList<Journal>();
+            transactions.addAll(journalRepository.findByAccountId(accountId));
+            if (transactions.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(transactions, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
