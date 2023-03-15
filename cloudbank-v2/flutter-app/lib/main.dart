@@ -53,7 +53,7 @@ final _router = GoRouter(
 void main() async {
   // Initialize Parse
   WidgetsFlutterBinding.ensureInitialized();
-  const keyApplicationId = 'M023';
+  const keyApplicationId = 'APPLICATION_ID';
   const keyParseServerUrl = '$backendUrl/parse';
 
   var response = await Parse().initialize(keyApplicationId, keyParseServerUrl);
