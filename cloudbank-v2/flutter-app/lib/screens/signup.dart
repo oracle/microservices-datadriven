@@ -1,3 +1,6 @@
+// Copyright (c) 2023, Oracle and/or its affiliates. 
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/ 
+
 import 'package:flutter/material.dart';
 import 'package:loginapp/screens/home.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';

@@ -18,9 +18,9 @@ spring:
     show-sql: true
   liquibase:
     change-log: classpath:db/changelog/controller.yaml
-    url: ${CONNECT_STRING}
-    user: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
     enabled: ${LIQUIBASE_ENABLED:true}
     
   datasource:

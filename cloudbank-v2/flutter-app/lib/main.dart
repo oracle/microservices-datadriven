@@ -1,3 +1,6 @@
+// Copyright (c) 2023, Oracle and/or its affiliates. 
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/ 
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -11,7 +14,7 @@ import 'package:loginapp/screens/transfer.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:go_router/go_router.dart';
 
-const String backendUrl = 'http://129.158.244.40';
+const String backendUrl = 'http://1.2.3.4';
 
 // GoRouter configuration
 final _router = GoRouter(
@@ -41,10 +44,6 @@ final _router = GoRouter(
       builder: (context, state) => const Transfer(),
     ),
     GoRoute(
-      path: '/accountdetail',
-      builder: (context, state) => const AccountDetail(),
-    ),
-    GoRoute(
       path: '/applycc',
       builder: (context, state) => const ApplyForCreditCard(),
     ),
@@ -52,25 +51,19 @@ final _router = GoRouter(
 );
 
 void main() async {
-//  Parse code
+  // Initialize Parse
   WidgetsFlutterBinding.ensureInitialized();
-  const keyApplicationId = 'APPLICATION_ID';
-  // WebLogicOnDocker Old Install
-  const keyParseServerUrl = 'http://129.80.94.27/parse';
-  // MaaCloud New Install  Not Working Yet, Parse Server Keep crashing
-  // const keyParseServerUrl = 'http://129.159.115.55/parse';
+  const keyApplicationId = 'M023';
+  const keyParseServerUrl = '$backendUrl/parse';
 
   var response = await Parse().initialize(keyApplicationId, keyParseServerUrl);
   if (!response.hasParseBeenInitialized()) {
-    // https://stackoverflow.com/questions/45109557/flutter-how-to-programmatically-exit-the-app
     exit(0);
   }
   var firstObject = ParseObject('FirstClass')
-    ..set('message', 'LoginApp is Connected 2');
+    ..set('message', 'LoginApp is Connected 3');
   await firstObject.save();
-
-  print('done');
-// Parse code done
+  // Parse code done
 
   runApp(const MyApp());
 }
