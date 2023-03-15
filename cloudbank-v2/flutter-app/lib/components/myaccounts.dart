@@ -1,8 +1,18 @@
+// Copyright (c) 2023, Oracle and/or its affiliates. 
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/ 
+
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:loginapp/components/credentials.dart';
 import 'package:loginapp/screens/accountdetail.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:intl/intl.dart';
+
+import 'accountdetailarguments.dart';
+
+final formatCurrency = new NumberFormat.simpleCurrency();
 
 class Accounts {
   final List<dynamic> accounts;
@@ -87,12 +97,14 @@ class _MyAccountsState extends State<MyAccounts> {
                               children: [
                                 Text(data[index]['accountName'].toString()),
                                 Text(
-                                  data[index]['accountBalance'].toString(),
+                                  formatCurrency
+                                      .format(data[index]['accountBalance']),
                                   textScaleFactor: 1.5,
                                 ),
                               ],
                             ),
-                            subtitle: Text(data[index]['accountId'].toString()),
+                            subtitle:
+                                Text("CB ACCT-${data[index]['accountId']}"),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
@@ -103,12 +115,11 @@ class _MyAccountsState extends State<MyAccounts> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) =>
-                                            const AccountDetail(),
-                                        // Pass the arguments as part of the RouteSettings. The
-                                        // DetailScreen reads the arguments from these settings.
-                                        settings: RouteSettings(
-                                          arguments: widget.creds,
+                                        builder: (context) => AccountDetail(
+                                          args: AccountDetailArguments(
+                                            widget.creds,
+                                            data[index]['accountId'],
+                                          ),
                                         ),
                                       ),
                                     );
