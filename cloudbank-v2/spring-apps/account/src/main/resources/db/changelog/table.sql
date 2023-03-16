@@ -25,9 +25,9 @@ COMMENT ON TABLE ACCOUNT.ACCOUNTS is 'CLOUDBANK ACCOUNTS TABLE';
 
 CREATE TABLE ACCOUNT.JOURNAL (
                                  JOURNAL_ID NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 CACHE 20),
-                                 JOURNAL_TYPE VARCHAR2(40) NOT NULL,
-                                 LRA_ID VARCHAR2 (20),
-                                 LRA_STATE VARCHAR2 (20),
+                                 JOURNAL_TYPE VARCHAR2(20) NOT NULL,
+                                 LRA_ID VARCHAR2 (1024),
+                                 LRA_STATE VARCHAR2 (40),
                                  JOURNAL_AMOUNT NUMBER,
                                  ACCOUNT_ID NUMBER NOT NULL
 ) LOGGING;
