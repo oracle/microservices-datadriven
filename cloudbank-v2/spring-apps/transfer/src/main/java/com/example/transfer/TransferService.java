@@ -45,9 +45,13 @@ public class TransferService {
 
     @PostConstruct
     private void initController() {
-        try { //todo get from Environment instead...
-            withdrawUri = new URI(System.getenv("withdraw.account.service.url"));
-            depositUri = new URI(System.getenv("deposit.account.service.url"));
+        try {
+            withdrawUri = new URI(ApplicationConfig.accountWithdrawUrl);
+            depositUri = new URI(ApplicationConfig.accountDepositUrl);
+            transferCancelUri = new URI(ApplicationConfig.transferCancelURL);
+            transferConfirmUri = new URI(ApplicationConfig.transferConfirmURL);
+            transferProcessCancelUri = new URI(ApplicationConfig.transferCancelProcessURL);
+            transferProcessConfirmUri = new URI(ApplicationConfig.transferConfirmProcessURL);
         } catch (URISyntaxException ex) {
             throw new IllegalStateException("Failed to initialize " + TransferService.class.getName(), ex);
         }
@@ -56,40 +60,65 @@ public class TransferService {
     @POST
     @Path("/transfer")
     @Produces(MediaType.APPLICATION_JSON)
-    @LRA(value = LRA.Type.REQUIRES_NEW)
-    public Response bookTrip(@QueryParam("fromAccount") String fromAccount,
-                             @QueryParam("toAccount") String toAccount,
-                             @QueryParam("amount") long amount,
-                             @Context UriInfo uriInfo,
-                             @HeaderParam(LRA_HTTP_CONTEXT_HEADER) String lraId,
-                             @Context ContainerRequestContext containerRequestContext)
-    {
+    @LRA(value = LRA.Type.REQUIRES_NEW, end = false)
+    public Response transfer(@QueryParam("fromAccount") long fromAccount,
+            @QueryParam("toAccount") long toAccount,
+            @QueryParam("amount") long amount,
+            @HeaderParam(LRA_HTTP_CONTEXT_HEADER) String lraId) {
         if (lraId == null) {
             return Response.serverError().entity("Failed to create LRA").build();
         }
-        log.info("Started new LRA : " + lraId);
-        withdraw(fromAccount, amount);
-        deposit(toAccount, amount);
-        return Response.ok("transfer successful").build();
+        log.info("Started new LRA/transfer Id: " + lraId);
+
+        boolean isCompensate = false;
+        String returnString = "";
+
+        // perform the withdrawal
+        returnString += withdraw(fromAccount, amount);
+        log.info(returnString);
+        if (returnString.contains("succeeded")) {
+            // if it worked, perform the deposit
+            returnString += " " + deposit(toAccount, amount);
+            log.info(returnString);
+            if (returnString.contains("failed"))
+                isCompensate = true; // deposit failed
+        } else
+            isCompensate = true; // withdraw failed
+        log.info("LRA/transfer action will be " + (isCompensate ? "cancel" : "confirm"));
+
+        // call complete or cancel based on outcome of previous actions
+        WebTarget webTarget = ClientBuilder.newClient().target(isCompensate ? transferCancelUri : transferConfirmUri);
+        webTarget.request().header(TRANSFER_ID, lraId)
+                .post(Entity.text("")).readEntity(String.class);
+
+        // return status
+        return Response.ok("transfer status:" + returnString).build();
 
     }
-    private String withdraw(String accountName, long depositAmount) {
-        log.info("withdraw accountName = " + accountName + ", depositAmount = " + depositAmount);
-        WebTarget webTarget =
-                ClientBuilder.newClient().target(withdrawUri).path("/")
-                        .queryParam("accountName", accountName)
-                        .queryParam("withdrawAmount", depositAmount);
-        String withdrawOutcome = webTarget.request().post(Entity.text("")).getEntity().toString();
+
+    private String withdraw(long accountId, long amount) {
+        log.info("withdraw accountId = " + accountId + ", amount = " + amount);
+        WebTarget webTarget = ClientBuilder.newClient().target(withdrawUri).path("/")
+                .queryParam("accountId", accountId)
+                .queryParam("amount", amount);
+        URI lraId = Current.peek();
+        log.info("withdraw lraId = " + lraId);
+        String withdrawOutcome = webTarget.request().header(LRA_HTTP_CONTEXT_HEADER, lraId)
+                .post(Entity.text("")).readEntity(String.class);
         return withdrawOutcome;
     }
-    private String deposit(String accountName, long depositAmount) {
-        log.info("deposit accountName = " + accountName + ", depositAmount = " + depositAmount);
-        WebTarget webTarget =
-                ClientBuilder.newClient().target(depositUri).path("/")
-                        .queryParam("accountName", accountName)
-                        .queryParam("depositAmount", depositAmount);
-        String withdrawOutcome = webTarget.request().post(Entity.text("")).getEntity().toString();
-        return withdrawOutcome;
+
+    private String deposit(long accountId, long amount) {
+        log.info("deposit accountId = " + accountId + ", amount = " + amount);
+        WebTarget webTarget = ClientBuilder.newClient().target(depositUri).path("/")
+                .queryParam("accountId", accountId)
+                .queryParam("amount", amount);
+        URI lraId = Current.peek();
+        log.info("deposit lraId = " + lraId);
+        String depositOutcome = webTarget.request().header(LRA_HTTP_CONTEXT_HEADER, lraId)
+                .post(Entity.text("")).readEntity(String.class);
+        ;
+        return depositOutcome;
     }
 
     @POST
