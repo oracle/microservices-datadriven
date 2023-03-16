@@ -3,26 +3,33 @@
 
 package com.example.transfer;
 
-import io.narayana.lra.client.NarayanaLRAClient;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.net.URISyntaxException;
-import java.util.logging.Logger;
+import io.narayana.lra.client.NarayanaLRAClient;
 
 @Configuration
 public class ApplicationConfig {
-    private static final Logger log = Logger.getLogger(ApplicationConfig.class.getName());
+    static String accountWithdrawUrl;
+    static String accountDepositUrl;
+    static String transferCancelURL;
+    static String transferCancelProcessURL;
+    static String transferConfirmURL;
+    static String transferConfirmProcessURL;
 
-    public ApplicationConfig(@Value("${lra.coordinator.url}") String lraCoordinatorUrl) {
-        log.info(NarayanaLRAClient.LRA_COORDINATOR_URL_KEY + " = " + lraCoordinatorUrl);
+    public ApplicationConfig(@Value("${lra.coordinator.url}") String lraCoordinatorUrl,
+            @Value("${account.withdraw.url}") String accountWithdrawUrl,
+            @Value("${account.deposit.url}") String accountDepositUrl,
+            @Value("${transfer.cancel.url}") String transferCancelURL,
+            @Value("${transfer.cancel.process.url}") String transferCancelProcessURL,
+            @Value("${transfer.confirm.url}") String transferConfirmURL,
+            @Value("${transfer.confirm.process.url}") String transferConfirmProcessURL) {
         System.getProperties().setProperty(NarayanaLRAClient.LRA_COORDINATOR_URL_KEY, lraCoordinatorUrl);
+        this.accountWithdrawUrl = accountWithdrawUrl;
+        this.accountDepositUrl = accountDepositUrl;
+        this.transferCancelURL = transferCancelURL;
+        this.transferCancelProcessURL = transferCancelProcessURL;
+        this.transferConfirmURL = transferConfirmURL;
+        this.transferConfirmProcessURL = transferConfirmProcessURL;
     }
-
-    @Bean
-    public NarayanaLRAClient NarayanaLRAClient() throws URISyntaxException {
-        return new NarayanaLRAClient();
-    }
-
 }
