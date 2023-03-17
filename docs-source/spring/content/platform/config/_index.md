@@ -13,7 +13,7 @@ Configuration is stored in the `CONFIGSERVER` schema in the `PROPERTIES` table.
 
 An example of a Config Server client's Spring `application.yaml` configuration file could include:
 
-```
+```yaml
 spring:
   config:
     import: optional:configserver:http://config-server.config-server.svc.cluster.local:8080
@@ -25,6 +25,6 @@ spring:
       profile: dev
 ```
 
-This will fetch data in the value where the application is `atael`, profile is `dev` and the lable is `latest`.
+This will fetch data in the value where the application is `atael`, profile is `dev` and the label is `latest`.
 
 Managing the data for the Config Server should be done using the CLI.  If you prefer, you can also work directly with the `CONFIGSERVER.PROPERTIES` table in the database.
