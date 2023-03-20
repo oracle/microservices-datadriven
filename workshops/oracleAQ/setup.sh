@@ -10,10 +10,15 @@ export JAVA_DB_USER="javaUser"
 #set all language paths
 export ORACLEAQ_HOME=${HOME}/${COMPARTMENT}
 
-export ORACLEAQ_PLSQL_AQ=${ORACLEAQ_HOME}/aqPlsql/aq
-export ORACLEAQ_PLSQL_TEQ=${ORACLEAQ_HOME}/aqPlsql/teq
-export ORACLEAQ_PYTHON_AQ=${ORACLEAQ_HOME}/aqPython/aq
-export ORACLEAQ_PYTHON_TEQ=${ORACLEAQ_HOME}/aqPython/teq
+export ORACLEAQ_PLSQL_AQ=${ORACLEAQ_HOME}/qPlsql/aq
+export ORACLEAQ_PLSQL_TxEventQ=${ORACLEAQ_HOME}/qPlsql/txEventQ
+
+export ORACLEAQ_PYTHON_AQ=${ORACLEAQ_HOME}/qPython/aq
+export ORACLEAQ_PYTHON_TxEventQ=${ORACLEAQ_HOME}/qPython/txEventQ
+
+export ORACLEAQ_NODE_AQ=${ORACLEAQ_HOME}/qNode/aq
+export ORACLEAQ_NODE_TxEventQ=${ORACLEAQ_HOME}/qNode/txEventQ
+
 export ORACLEAQ_JAVA=${ORACLEAQ_HOME}/aqJava
 
 export TNS_ADMIN=$ORACLEAQ_HOME/wallet
