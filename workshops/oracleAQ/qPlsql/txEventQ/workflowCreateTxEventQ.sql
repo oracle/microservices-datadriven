@@ -3,82 +3,82 @@ CREATE TYPE Message_typ AS OBJECT (ORDERID NUMBER(10), USERNAME VARCHAR2(255), O
 -- Creating an Object type queue 
 BEGIN
  DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
-     queue_name         =>'teq_UserQueue',
+     queue_name         =>'TxEventQ_UserQueue',
      storage_clause     =>null, 
      multiple_consumers =>true, 
      max_retries        =>10,
-     comment            =>'teq_user', 
+     comment            =>'TxEventQ_user', 
      queue_payload_type =>'Message_typ', 
      queue_properties   =>null, 
      replication_mode   =>null);
- DBMS_AQADM.START_QUEUE (queue_name=> 'teq_UserQueue', enqueue =>TRUE, dequeue=> True); 
+ DBMS_AQADM.START_QUEUE (queue_name=> 'TxEventQ_UserQueue', enqueue =>TRUE, dequeue=> True); 
 END;
 /
 BEGIN
  DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
-     queue_name         =>'teq_DelivererQueue',
+     queue_name         =>'TxEventQ_DelivererQueue',
      storage_clause     =>null, 
      multiple_consumers =>true, 
      max_retries        =>10,
-     comment            =>'teq_deliverer', 
+     comment            =>'TxEventQ_deliverer', 
      queue_payload_type =>'Message_typ', 
      queue_properties   =>null, 
      replication_mode   =>null);
- DBMS_AQADM.START_QUEUE (queue_name=> 'teq_DelivererQueue', enqueue =>TRUE, dequeue=> True); 
+ DBMS_AQADM.START_QUEUE (queue_name=> 'TxEventQ_DelivererQueue', enqueue =>TRUE, dequeue=> True); 
 END;
 /
 BEGIN
  DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
-     queue_name        =>'teq_ApplicationQueue',
+     queue_name        =>'TxEventQ_ApplicationQueue',
      storage_clause    =>null, 
      multiple_consumers=>true, 
      max_retries       =>10,
-     comment           =>'teq_appQueue', 
+     comment           =>'TxEventQ_appQueue', 
      queue_payload_type=>'Message_typ', 
      queue_properties  =>null, 
      replication_mode  =>null);
- DBMS_AQADM.START_QUEUE (queue_name=> 'teq_ApplicationQueue', enqueue =>TRUE, dequeue=> True); 
+ DBMS_AQADM.START_QUEUE (queue_name=> 'TxEventQ_ApplicationQueue', enqueue =>TRUE, dequeue=> True); 
 END;
 /
--- Java TEQ
+-- Java TxEventQ
 /
 BEGIN
  DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
-     queue_name         =>'JAVA_TEQ_USER_QUEUE',
+     queue_name         =>'JAVA_TxEventQ_USER_QUEUE',
      storage_clause     =>null, 
      multiple_consumers =>true, 
      max_retries        =>10,
-     comment            =>'java_user for TEQ', 
+     comment            =>'java_user for TxEventQ', 
      queue_payload_type =>'JMS', 
      queue_properties   =>null, 
      replication_mode   =>null);
- DBMS_AQADM.START_QUEUE (queue_name=> 'JAVA_TEQ_USER_QUEUE', enqueue =>TRUE, dequeue=> True); 
+ DBMS_AQADM.START_QUEUE (queue_name=> 'JAVA_TxEventQ_USER_QUEUE', enqueue =>TRUE, dequeue=> True); 
 END;
 /
 BEGIN
  DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
-     queue_name         =>'JAVA_TEQ_DELIVERER_QUEUE',
+     queue_name         =>'JAVA_TxEventQ_DELIVERER_QUEUE',
      storage_clause     =>null, 
      multiple_consumers =>true, 
      max_retries        =>10,
-     comment            =>'java_deliverer for TEQ', 
+     comment            =>'java_deliverer for TxEventQ', 
      queue_payload_type =>'JMS', 
      queue_properties   =>null, 
      replication_mode   =>null);
- DBMS_AQADM.START_QUEUE (queue_name=> 'JAVA_TEQ_DELIVERER_QUEUE', enqueue =>TRUE, dequeue=> True); 
+ DBMS_AQADM.START_QUEUE (queue_name=> 'JAVA_TxEventQ_DELIVERER_QUEUE', enqueue =>TRUE, dequeue=> True); 
 END;
 /
 BEGIN
  DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE(
-     queue_name        =>'JAVA_TEQ_APPLICATION_QUEUE',
+     queue_name        =>'JAVA_TxEventQ_APPLICATION_QUEUE',
      storage_clause    =>null, 
      multiple_consumers=>true, 
      max_retries       =>10,
-     comment           =>'java_appQueue for TEQ', 
+     comment           =>'java_appQueue for TxEventQ', 
      queue_payload_type=>'JMS', 
      queue_properties  =>null, 
      replication_mode  =>null);
- DBMS_AQADM.START_QUEUE (queue_name=> 'JAVA_TEQ_APPLICATION_QUEUE', enqueue =>TRUE, dequeue=> True); 
+ DBMS_AQADM.START_QUEUE (queue_name=> 'JAVA_TxEventQ_APPLICATION_QUEUE', enqueue =>TRUE, dequeue=> True); 
 END;
 /
 
@@ -88,20 +88,20 @@ DECLARE
 BEGIN
 
 --PLSQL: USER Subscriber
-dbms_aqadm.add_subscriber(queue_name => 'teq_UserQueue'       , subscriber => sys.aq$_agent('teq_userAppSubscriber'      , null ,0), rule => 'correlation = ''teq_userAppSubscriber''');
-dbms_aqadm.add_subscriber(queue_name => 'teq_UserQueue'       , subscriber => sys.aq$_agent('teq_userDelivererSubscriber', null ,0), rule => 'correlation = ''teq_userDelivererSubscriber''');
+dbms_aqadm.add_subscriber(queue_name => 'TxEventQ_UserQueue'       , subscriber => sys.aq$_agent('TxEventQ_userAppSubscriber'      , null ,0), rule => 'correlation = ''TxEventQ_userAppSubscriber''');
+dbms_aqadm.add_subscriber(queue_name => 'TxEventQ_UserQueue'       , subscriber => sys.aq$_agent('TxEventQ_userDelivererSubscriber', null ,0), rule => 'correlation = ''TxEventQ_userDelivererSubscriber''');
 
 --PLSQL: Deliverer Subscriber
-dbms_aqadm.add_subscriber(queue_name => 'teq_DelivererQueue'  , subscriber => sys.aq$_agent('teq_delivererUserSubscriber', null ,0), rule => 'correlation = ''teq_delivererUserSubscriber''');
-dbms_aqadm.add_subscriber(queue_name => 'teq_DelivererQueue'  , subscriber => sys.aq$_agent('teq_delivererAppSubscriber' , null ,0), rule => 'correlation = ''teq_delivererAppSubscriber''');
+dbms_aqadm.add_subscriber(queue_name => 'TxEventQ_DelivererQueue'  , subscriber => sys.aq$_agent('TxEventQ_delivererUserSubscriber', null ,0), rule => 'correlation = ''TxEventQ_delivererUserSubscriber''');
+dbms_aqadm.add_subscriber(queue_name => 'TxEventQ_DelivererQueue'  , subscriber => sys.aq$_agent('TxEventQ_delivererAppSubscriber' , null ,0), rule => 'correlation = ''TxEventQ_delivererAppSubscriber''');
 
 --PLSQL: Application Subscriber
-dbms_aqadm.add_subscriber(queue_name => 'teq_ApplicationQueue', subscriber => sys.aq$_agent('teq_appUserSubscriber'      , null ,0), rule => 'correlation = ''teq_appUserSubscriber''');
-dbms_aqadm.add_subscriber(queue_name => 'teq_ApplicationQueue', subscriber => sys.aq$_agent('teq_appDelivererSubscriber' , null ,0), rule => 'correlation = ''teq_appDelivererSubscriber''');
+dbms_aqadm.add_subscriber(queue_name => 'TxEventQ_ApplicationQueue', subscriber => sys.aq$_agent('TxEventQ_appUserSubscriber'      , null ,0), rule => 'correlation = ''TxEventQ_appUserSubscriber''');
+dbms_aqadm.add_subscriber(queue_name => 'TxEventQ_ApplicationQueue', subscriber => sys.aq$_agent('TxEventQ_appDelivererSubscriber' , null ,0), rule => 'correlation = ''TxEventQ_appDelivererSubscriber''');
 
 END;
 /
-CREATE OR REPLACE FUNCTION enqueueDequeueTEQ(subscriber varchar2, queueName varchar2, message Message_Typ) RETURN Message_Typ 
+CREATE OR REPLACE FUNCTION enqueueDequeueTxEventQ(subscriber varchar2, queueName varchar2, message Message_Typ) RETURN Message_Typ 
 IS 
     enqueue_options                   DBMS_AQ.enqueue_options_t;
     message_properties                DBMS_AQ.message_properties_t;

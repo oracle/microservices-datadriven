@@ -6,11 +6,11 @@ DECLARE
  message             Message_type;
 
 BEGIN
- message := Message_type('NORMAL MESSAGE','enqueue objType_TEQ');
- message_properties.correlation := 'teqBasicObjSubscriber';
+ message := Message_type('NORMAL MESSAGE','enqueue objType_TxEventQ');
+ message_properties.correlation := 'TxEventQBasicObjSubscriber';
 
  DBMS_AQ.ENQUEUE(
-     queue_name           => 'objType_TEQ',           
+     queue_name           => 'objType_TxEventQ',           
      enqueue_options      => enqueue_options,       
      message_properties   => message_properties,     
      payload              => message,               
@@ -28,10 +28,10 @@ DECLARE
 
 BEGIN
  message :=  HEXTORAW(RPAD('FF',4095,'FF')); 
- message_properties.correlation := 'teqBasicRawSubscriber';
+ message_properties.correlation := 'TxEventQBasicRawSubscriber';
 
  DBMS_AQ.ENQUEUE(
-     queue_name           => 'rawType_TEQ',           
+     queue_name           => 'rawType_TxEventQ',           
      enqueue_options      => enqueue_options,       
      message_properties   => message_properties,     
      payload              => message,               
@@ -51,10 +51,10 @@ BEGIN
         "ORDERID":12345, 
         "USERNAME":"name"  
         }');
-  message_properties.correlation := 'teqBasicJsonSubscriber';
+  message_properties.correlation := 'TxEventQBasicJsonSubscriber';
 
 DBMS_AQ.ENQUEUE(
-     queue_name           => 'jsonType_TEQ',           
+     queue_name           => 'jsonType_TxEventQ',           
      enqueue_options      => enqueue_options,       
      message_properties   => message_properties,     
      payload              => message,               
