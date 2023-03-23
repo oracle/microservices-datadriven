@@ -9,10 +9,10 @@ BEGIN
     dequeue_options.dequeue_mode  := DBMS_AQ.REMOVE;
     dequeue_options.wait          := DBMS_AQ.NO_WAIT;
     dequeue_options.navigation    := DBMS_AQ.FIRST_MESSAGE;           
-    dequeue_options.consumer_name := 'teqBasicObjSubscriber';
+    dequeue_options.consumer_name := 'TxEventQBasicObjSubscriber';
 
     DBMS_AQ.DEQUEUE(
-        queue_name         => 'objType_TEQ',
+        queue_name         => 'objType_TxEventQ',
         dequeue_options    => dequeue_options,
         message_properties => message_properties,
         payload            => message,
@@ -34,10 +34,10 @@ BEGIN
  dequeue_options.dequeue_mode     := DBMS_AQ.REMOVE;
     dequeue_options.wait          := DBMS_AQ.NO_WAIT;
     dequeue_options.navigation    := DBMS_AQ.FIRST_MESSAGE;           
-    dequeue_options.consumer_name := 'teqBasicRawSubscriber';
+    dequeue_options.consumer_name := 'TxEventQBasicRawSubscriber';
 
     DBMS_AQ.DEQUEUE(
-        queue_name         => 'rawType_TEQ', 
+        queue_name         => 'rawType_TxEventQ', 
         dequeue_options    => dequeue_options, 
         message_properties => message_properties, 
         payload            => message, 
@@ -46,7 +46,7 @@ BEGIN
 END;
 /
 
---Dequeue from JSON TEQ
+--Dequeue from JSON TxEventQ
 DECLARE
     dequeue_options     dbms_aq.dequeue_options_t;
     message_properties  dbms_aq.message_properties_t;
@@ -57,10 +57,10 @@ BEGIN
     dequeue_options.dequeue_mode  := DBMS_AQ.REMOVE;
     dequeue_options.wait          := DBMS_AQ.NO_WAIT;
     dequeue_options.navigation    := DBMS_AQ.FIRST_MESSAGE;           
-    dequeue_options.consumer_name := 'teqBasicJsonSubscriber';
+    dequeue_options.consumer_name := 'TxEventQBasicJsonSubscriber';
 
 DBMS_AQ.DEQUEUE(
-        queue_name         => 'jsonType_TEQ',
+        queue_name         => 'jsonType_TxEventQ',
         dequeue_options    => dequeue_options,
         message_properties => message_properties,
         payload            => message,
