@@ -73,7 +73,7 @@ Oracle Backend for Spring Boot setup will install the following components:
 | OpenTelemetry Collector      | 0.66.0       | Collects process and export telemetry data.                                              |
 | Grafana                      | 9.2.5        | Tool to help you examine, analyze, and monitor metrics.                                  |
 | Jaeger Tracing               | 1.39.0       | Distributed tracing system for monitoring and troubleshooting distributed systems.       |
-| APISIX                       | 3.1.1        | Provides full lifecycle API Management.                                                  |
+| APISIX                       | 3.2.0        | Provides full lifecycle API Management.                                                  |
 | Spring Admin Server          | 2.7.5        | Managing and monitoring Spring Boot applications.                                        |
 | Spring Cloud Config Server   | 2.7.5        | Provides server-side support for externalized configuration.                             |
 | Eureka Service Registry      | 3.1.4        | Provides Service Discovery capabilities                                                  |
