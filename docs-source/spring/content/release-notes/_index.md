@@ -1,5 +1,36 @@
 
-## Developer Preview 0.2.0, Februarry 27, 2023
+## Developer Preview 0.2.3, March 8, 2023
+
+Notes: 
+
+* Oracle Backend for Spring Boot now includes the option to also install Parse Platform in the same deployment.
+* Oracle Backend for Spring Boot CLI 0.2.3 includes a number of bug fixes, and adds support for custom listen ports for services.
+* APISIX is now pre-configured for both Eureka and Kubernetes service discovery.
+
+The following components were added:
+
+| Component                    | Version       | Description                                                                             |
+|------------------------------|---------------|-----------------------------------------------------------------------------------------|
+| Oracle Database Operator for Kubernetes | 0.6.1 | Helps reduce the time and complexity of deploying and managing Oracle Databases      |  
+| Parse Server                 | 5.2.7        | Provides backend services for mobile and web applications                                |
+| Parse Dashboard              | 5.0.0        | Web user interface for managing Parse Server                                             |
+| Oracle Storage Adapter for Parse | 0.2.0    | Enables Parse Server to store data in Oracle Database                                    |
+
+
+The following components were updated:
+
+| Component                    | New Version   | Replaced Version    |
+|------------------------------|---------------|---------------------|
+| Oracle Backend for Spring Boot CLI | 0.2.3   | 0.1.0               |
+| cert-manager                 | 1.11.0        | 1.10.1              |
+| NGNIX Ingress Controller     | 1.6.4         | 1.5.1               |
+| Jaeger Tracing               | 1.39.0        | 1.37.0              |
+| APISIX                       | 3.1.1         | 2.15.1              |
+| Eureka Service Registry      | 3.1.4         | 2021.0.3            |
+
+There were no deprecations or removals.
+
+## Developer Preview 0.2.0, February 27, 2023
 
 The following components were added:
 
