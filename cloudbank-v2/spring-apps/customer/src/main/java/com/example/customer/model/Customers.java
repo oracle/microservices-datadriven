@@ -23,7 +23,6 @@ import java.util.Date;
 public class Customers {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CUSTOMER_ID")
     private String customerId;
 
