@@ -1,4 +1,4 @@
-package com.examples.workflowTEQ;
+package com.examples.workflowTxEventQ;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -33,7 +33,7 @@ import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 
 @Service
-public class WorkflowTEQ {
+public class WorkflowTxEventQ {
 
 	@Autowired
 	UserDetailsDao userDetailsDao;
@@ -59,7 +59,7 @@ public class WorkflowTEQ {
 	UserDetails applicationToUser_message;
 	UserDetails applicationToDeliverer_message;
 
-	public Map<Integer,String> pubSubWorkflowTEQ() throws JMSException, SQLException, ClassNotFoundException, JsonMappingException, JsonProcessingException, AQException {
+	public Map<Integer,String> pubSubWorkflowTxEventQ() throws JMSException, SQLException, ClassNotFoundException, JsonMappingException, JsonProcessingException, AQException {
 		
 		String deliveryStatus;
 		Map<Integer,String> response = new HashMap();
@@ -68,13 +68,13 @@ public class WorkflowTEQ {
 		response.put(1, "Topic Connection created.");
 		
 		/* 1: USER PLACED OREDER ON APPLICATION */
-		userToApplication_message = pubSubUtil.pubSubWorkflowTEQ(session, constantName.teq_userApplicationSubscriber, constantName.teq_userQueueName,new UserDetails(rnd.nextInt(99999), "DBUSER", 0, "Pending", "US"));
+		userToApplication_message = pubSubUtil.pubSubWorkflowTxEventQ(session, constantName.txEventQ_userApplicationSubscriber, constantName.txEventQ_userQueueName,new UserDetails(rnd.nextInt(99999), "DBUSER", 0, "Pending", "US"));
 		response.put(2,"USER ORDER MESSAGE              - ORDERID: " + userToApplication_message.getOrderId() + ", OTP: "
 				+ userToApplication_message.getOtp() + ", DeliveryStatus: "
 				+ userToApplication_message.getDeliveryStatus());
 
 		/* 2: APPLICATION SHARES OTP TO USER */
-		applicationToUser_message = pubSubUtil.pubSubWorkflowTEQ(session, constantName.teq_applicationUserSubscriber, constantName.teq_applicationQueueName,
+		applicationToUser_message = pubSubUtil.pubSubWorkflowTxEventQ(session, constantName.txEventQ_applicationUserSubscriber, constantName.txEventQ_applicationQueueName,
 				new UserDetails(userToApplication_message.getOrderId(), userToApplication_message.getUsername(),
 						rnd.nextInt(9999), userToApplication_message.getDeliveryStatus(),
 						userToApplication_message.getDeliveryLocation()));
@@ -88,14 +88,14 @@ public class WorkflowTEQ {
 		response.put(4,"APPLICATION ADDED USER ORDER INTO RECORD");
 
 		/* 4: APPLICATION SHARES DELIVERY DETAILS TO DELIVERER */
-		applicationToDeliverer_message = pubSubUtil.pubSubWorkflowTEQ(session, constantName.teq_applicationDelivererSubscriber, constantName.teq_applicationQueueName,
+		applicationToDeliverer_message = pubSubUtil.pubSubWorkflowTxEventQ(session, constantName.txEventQ_applicationDelivererSubscriber, constantName.txEventQ_applicationQueueName,
 				new UserDetails(userToApplication_message.getOrderId(), userToApplication_message.getUsername(), 0,
 						userToApplication_message.getDeliveryStatus(),
 						userToApplication_message.getDeliveryLocation()));
 		response.put(5,"APPLICATION TO DELIVERER MESSAGE- ORDERID: "+ applicationToDeliverer_message.getOrderId() + ", OTP: " + applicationToDeliverer_message.getOtp()+ ", DeliveryStatus: " + applicationToDeliverer_message.getDeliveryStatus());
 
 		/* 5: USER SHARES OTP TO DELIVERER */
-		userToDeliverer_message = pubSubUtil.pubSubWorkflowTEQ(session, constantName.teq_userDelivererSubscriber, constantName.teq_userQueueName,
+		userToDeliverer_message = pubSubUtil.pubSubWorkflowTxEventQ(session, constantName.txEventQ_userDelivererSubscriber, constantName.txEventQ_userQueueName,
 				new UserDetails(applicationToUser_message.getOrderId(), applicationToUser_message.getUsername(),
 						applicationToUser_message.getOtp(), applicationToUser_message.getDeliveryStatus(),
 						applicationToUser_message.getDeliveryLocation()));
@@ -103,7 +103,7 @@ public class WorkflowTEQ {
 		System.out.println();
 
 		/* 6: DELIVERER TO APPLICATION FOR OTP VERIFICATION */
-		delivererToApplication_message = pubSubUtil.pubSubWorkflowTEQ(session, constantName.teq_delivererApplicationSubscriber, constantName.teq_delivererQueueName,
+		delivererToApplication_message = pubSubUtil.pubSubWorkflowTxEventQ(session, constantName.txEventQ_delivererApplicationSubscriber, constantName.txEventQ_delivererQueueName,
 				new UserDetails(userToDeliverer_message.getOrderId(), userToDeliverer_message.getUsername(),
 						userToDeliverer_message.getOtp(), userToDeliverer_message.getDeliveryStatus(),
 						userToDeliverer_message.getDeliveryLocation()));
@@ -128,12 +128,12 @@ public class WorkflowTEQ {
 
 		UserDetails updatedData = userDetailsDao.getUserDetails(delivererToApplication_message.getOrderId());
 		/* 8: APPLICATION UPDATE DELIVERER TO DELIVER ORDER */
-		applicationToDeliverer_message = pubSubUtil.pubSubWorkflowTEQ(session, constantName.teq_applicationDelivererSubscriber, constantName.teq_applicationQueueName,
+		applicationToDeliverer_message = pubSubUtil.pubSubWorkflowTxEventQ(session, constantName.txEventQ_applicationDelivererSubscriber, constantName.txEventQ_applicationQueueName,
 				new UserDetails(delivererToApplication_message.getOrderId(), delivererToApplication_message.getUsername(), delivererToApplication_message.getOtp(), updatedData.getDeliveryStatus(), delivererToApplication_message.getDeliveryLocation()));
 		response.put(9, "UPDATE DELIVERER MESSAGE        - ORDERID: " + applicationToDeliverer_message.getOrderId()+ ", OTP: " + applicationToDeliverer_message.getOtp() + ", DeliveryStatus: "+ applicationToDeliverer_message.getDeliveryStatus());
 
 		/* 9: APPLICATION UPDATE USER FOR DELIVERED ORDER */
-		applicationToUser_message = pubSubUtil.pubSubWorkflowTEQ(session, constantName.teq_applicationUserSubscriber, constantName.teq_applicationQueueName,
+		applicationToUser_message = pubSubUtil.pubSubWorkflowTxEventQ(session, constantName.txEventQ_applicationUserSubscriber, constantName.txEventQ_applicationQueueName,
 				new UserDetails(delivererToApplication_message.getOrderId(), delivererToApplication_message.getUsername(), delivererToApplication_message.getOtp(), updatedData.getDeliveryStatus(), delivererToApplication_message.getDeliveryLocation()));
 		response.put(10, "UPDATE USER MESSAGE             - ORDERID: " + applicationToUser_message.getOrderId() + ", OTP: "+ applicationToUser_message.getOtp() + ", DeliveryStatus: "+ applicationToUser_message.getDeliveryStatus());
 
