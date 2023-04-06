@@ -1,4 +1,4 @@
-package com.examples.enqueueDequeueTEQ;
+package com.examples.enqueueDequeueTxEventQ;
 
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -18,7 +18,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 
 @Service
-public class EnqueueDequeueTEQ {
+public class EnqueueDequeueTxEventQ {
 	
 	@Autowired(required=true)
 	private pubSubUtil pubSubUtil;
@@ -35,7 +35,7 @@ public class EnqueueDequeueTEQ {
 		TopicSession session = configData.topicDataSourceConnection();
 		response.put(1, "Topic Connection created.");
 
-		pubSubUtil.pubSub(session, constantName.teq_pubSubSubscriber1, constantName.teq_pubSubQueue, "Sample text message");
+		pubSubUtil.pubSub(session, constantName.txEventQ_pubSubSubscriber1, constantName.txEventQ_pubSubQueue, "Sample text message");
 		response.put(2, "Topic pubSub  executed.");
 
 		return response;

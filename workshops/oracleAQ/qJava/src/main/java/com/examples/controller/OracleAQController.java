@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.examples.enqueueDequeueAQ.EnqueueDequeueAQ;
-import com.examples.enqueueDequeueTEQ.EnqueueDequeueTEQ;
+import com.examples.enqueueDequeueTxEventQ.EnqueueDequeueTxEventQ;
 import com.examples.workflowAQ.WorkflowAQ;
-import com.examples.workflowTEQ.WorkflowTEQ;
+import com.examples.workflowTxEventQ.WorkflowTxEventQ;
 
 @RequestMapping("/oracleAQ")
 @RestController
@@ -23,13 +23,13 @@ public class OracleAQController {
 	EnqueueDequeueAQ enqueueDequeueAQ;
 
 	@Autowired(required = true)
-	EnqueueDequeueTEQ enqueueDequeueTEQ;
+	EnqueueDequeueTxEventQ enqueueDequeueTEQ;
 
 	@Autowired(required = true)
 	WorkflowAQ workflowAQ;
 
 	@Autowired(required = true)
-	WorkflowTEQ workflowTEQ;
+	WorkflowTxEventQ workflowTxEventQ;
 
 	@GetMapping(value = "/pointToPointAQ")
 	public Map<String, Object> pointToPointAQ() throws Exception {
@@ -106,7 +106,7 @@ public class OracleAQController {
 	@GetMapping(value = "/workflowTEQ")
 	public Map<String, Object> workflowTEQ() throws Exception {
 		Map<String, Object> response = new HashMap();
-		Map<Integer, String> responseBody= workflowTEQ.pubSubWorkflowTEQ();
+		Map<Integer, String> responseBody= workflowTxEventQ.pubSubWorkflowTxEventQ();
 				
 		if (responseBody != null) {
 			response.put("ResponseCode", "200");
