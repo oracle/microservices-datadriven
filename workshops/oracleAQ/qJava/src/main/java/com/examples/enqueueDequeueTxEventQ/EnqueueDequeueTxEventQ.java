@@ -29,7 +29,7 @@ public class EnqueueDequeueTxEventQ {
 	@Autowired(required = true)
 	private ConstantName constantName;
 
-	public Map<Integer,String> pubSubTEQ() throws JsonProcessingException, ClassNotFoundException, SQLException, JMSException {
+	public Map<Integer,String> pubSubTxEventQ() throws JsonProcessingException, ClassNotFoundException, SQLException, JMSException {
 		Map<Integer,String> response = new HashMap();
 
 		TopicSession session = configData.topicDataSourceConnection();

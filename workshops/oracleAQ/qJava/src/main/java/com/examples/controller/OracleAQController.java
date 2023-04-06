@@ -23,7 +23,7 @@ public class OracleAQController {
 	EnqueueDequeueAQ enqueueDequeueAQ;
 
 	@Autowired(required = true)
-	EnqueueDequeueTxEventQ enqueueDequeueTEQ;
+	EnqueueDequeueTxEventQ enqueueDequeueTxEventQ;
 
 	@Autowired(required = true)
 	WorkflowAQ workflowAQ;
@@ -67,21 +67,21 @@ public class OracleAQController {
 		return response;
 	}
 
-	@GetMapping(value = "/pubSubTEQ")
-	public Map<String, Object> pubSubTEQ() throws Exception {
+	@GetMapping(value = "/pubSubTxEventQ")
+	public Map<String, Object> pubSubTxEventQ() throws Exception {
 		Map<String, Object> response = new HashMap();
-		Map<Integer, String> responseBody= enqueueDequeueTEQ.pubSubTEQ();
+		Map<Integer, String> responseBody= enqueueDequeueTxEventQ.pubSubTxEventQ();
 
 		if (responseBody != null) {
 			response.put("ResponseCode", "200");
-			response.put("ResponseText", "TEQ PubSub execution SUCCESS ...!!!");
+			response.put("ResponseText", "TxEventQ PubSub execution SUCCESS ...!!!");
 			response.put("ResponseBody", responseBody);
 
 		} else {
 			response.put("ResponseCode", "300");
-			response.put("ResponseText", "TEQ PubSub execution FAILED ...!!!");
+			response.put("ResponseText", "TxEventQ PubSub execution FAILED ...!!!");
 		}
-		System.out.println("TEQ PubSub response:" + response);
+		System.out.println("TxEventQ PubSub response:" + response);
 		return response;
 	}
 
@@ -103,19 +103,19 @@ public class OracleAQController {
 		return response;
 	}
 
-	@GetMapping(value = "/workflowTEQ")
-	public Map<String, Object> workflowTEQ() throws Exception {
+	@GetMapping(value = "/workflowTxEventQ")
+	public Map<String, Object> workflowTxEventQ() throws Exception {
 		Map<String, Object> response = new HashMap();
 		Map<Integer, String> responseBody= workflowTxEventQ.pubSubWorkflowTxEventQ();
 				
 		if (responseBody != null) {
 			response.put("ResponseCode", "200");
-			response.put("ResponseText", "TEQ Enqueue and Dequeue execution SUCCESS ...!!!");
+			response.put("ResponseText", "TxEventQ Enqueue and Dequeue execution SUCCESS ...!!!");
 			response.put("ResponseBody", responseBody);
 
 		} else {
 			response.put("ResponseCode", "300");
-			response.put("ResponseText", "TEQ Enqueue and Dequeue execution FAILED ...!!!");
+			response.put("ResponseText", "TxEventQ Enqueue and Dequeue execution FAILED ...!!!");
 		}
 		System.out.println("AQ Enqueue and Dequeue response:" + response);
 		return response;
