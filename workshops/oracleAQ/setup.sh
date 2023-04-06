@@ -220,7 +220,7 @@ cd $ORACLEAQ_JAVA
 {
     mvn clean install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.test.skip=true
     cd target
-    nohup java -jar aqJava-0.0.1-SNAPSHOT.jar &
+    nohup java -jar qJava-0.0.1-SNAPSHOT.jar &
 } &>/dev/null
 echo "Java setup completed."
 
