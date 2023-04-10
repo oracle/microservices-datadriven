@@ -21,6 +21,7 @@ def run_sqlcl(schema, password, service, cmd, resolution, conn_file, run_as):
         wallet = f'set cloudconfig {conn_file}'
     else:
         lb_env['TNS_ADMIN'] = tns_admin #<-Global
+        wallet=''
 
     # Keep password off the command line/shell history
     sql_cmd = f'''
