@@ -29,7 +29,7 @@ pipeline {
             }
             steps {
                 echo "Creating Isolated Schema ${PROD_SCHEMA}${MYBRANCH}"
-                sh('cd $WORKSPACE/workshops/dcms-cicd/liquibase && ./cicd.py deploy --dbName $ADB_NAME --dbPass $OCI_ADB_CREDS_PSW --dbUser $PROD_SCHEMA$MYBRANCH')
+                sh('cd $WORKSPACE/workshops/dcms-cicd/liquibase && ./cicd.py deploy --dbName $ADB_NAME --dbPass $OCI_ADB_CREDS_PSW --dbUser $PROD_SCHEMA')
            }
         }
         stage('pull-request') {
