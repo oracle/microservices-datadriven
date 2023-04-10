@@ -136,7 +136,7 @@ if __name__ == "__main__":
             log.fatal('Database password required')
             sys.exit(1)
 
-    resolution = 'wallet' # Default
+    resolution = ''  #'wallet' # Default
     conn_file  = None
     if args.dbWallet:
         conn_file     = args.dbWallet
