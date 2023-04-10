@@ -29,6 +29,7 @@ pipeline {
             }
             steps {
                 echo "Creating Isolated Schema ${PROD_SCHEMA}${MYBRANCH}"
+                echo "OCI_ADB_CREDS_PSW is ${OCI_ADB_CREDS_PSW}"
                 sh('cd $WORKSPACE/workshops/dcms-cicd/liquibase && ./cicd.py deploy --dbName $ADB_NAME --dbPass $OCI_ADB_CREDS_PSW --dbUser $PROD_SCHEMA')
            }
         }
