@@ -3,6 +3,7 @@ pipeline {
     environment {
         PROD_SCHEMA   = "INVENTORYUSER"
         OCI_ADB_CREDS = credentials("ADB_ADMIN")
+        OCI_ADB_CREDS_PSW = "oracle"
     }
     stages {
         stage('main-branch') {
