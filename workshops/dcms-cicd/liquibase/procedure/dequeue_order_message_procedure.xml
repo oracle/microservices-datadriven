@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:n0="http://www.oracle.com/xml/ns/dbchangelog-ext" 
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+	<changeSet id="8b78e5788071f1c556d6069d05e2b2029d1e0cfe" author="(INVENTORYUSER)-Generated" failOnError="false"   runOnChange="true" runAlways="false"  >
+		<n0:createOracleProcedure objectName="DEQUEUE_ORDER_MESSAGE" objectType="PROCEDURE" ownerName="INVENTORYUSER"  replaceIfExists="true" >
+			<n0:source><![CDATA[
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "INVENTORYUSER"."DEQUEUE_ORDER_MESSAGE" (in_wait_option in BINARY_INTEGER, out_order_message OUT varchar2)
+IS
+  dequeue_options       dbms_aq.dequeue_options_t;
+  message_properties    dbms_aq.message_properties_t;
+  message_handle        RAW(16);
+  message               SYS.AQ$_JMS_TEXT_MESSAGE;
+  no_messages           EXCEPTION;
+  pragma                exception_init(no_messages, -25228); 
+BEGIN
+  CASE in_wait_option
+  WHEN 0 THEN
+    dequeue_options.wait := dbms_aq.NO_WAIT;
+  WHEN -1 THEN
+    dequeue_options.wait := dbms_aq.FOREVER;
+  ELSE
+    dequeue_options.wait := in_wait_option;
+  END CASE;
+
+  dequeue_options.consumer_name := '$INVENTORY_SERVICE_NAME';
+  dequeue_options.navigation    := dbms_aq.FIRST_MESSAGE;  -- Required for TEQ
+
+  DBMS_AQ.DEQUEUE(
+    queue_name         => 'AQ.ORDERQUEUE',
+    dequeue_options    => dequeue_options,
+    message_properties => message_properties,
+    payload            => message,
+    msgid              => message_handle);
+
+  out_order_message := message.text_vc;
+
+  EXCEPTION
+    WHEN no_messages THEN
+      out_order_message := '';
+    WHEN OTHERS THEN
+      RAISE;
+END;
+]]></n0:source>
+		</n0:createOracleProcedure>
+	</changeSet>
+</databaseChangeLog>

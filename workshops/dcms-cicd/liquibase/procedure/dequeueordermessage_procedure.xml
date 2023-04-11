@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:n0="http://www.oracle.com/xml/ns/dbchangelog-ext" 
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+	<changeSet id="4e47ed4193e26e4b52daf2dcdca4086a1f203fa1" author="(INVENTORYUSER)-Generated" failOnError="false"   runOnChange="true" runAlways="false"  >
+		<n0:createOracleProcedure objectName="DEQUEUEORDERMESSAGE" objectType="PROCEDURE" ownerName="INVENTORYUSER"  replaceIfExists="true" >
+			<n0:source><![CDATA[
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "INVENTORYUSER"."DEQUEUEORDERMESSAGE" (p_orderInfo OUT varchar2)
+IS
+
+  dequeue_options       dbms_aq.dequeue_options_t;
+  message_properties    dbms_aq.message_properties_t;
+  message_handle        RAW(16);
+  message               SYS.AQ$_JMS_TEXT_MESSAGE;
+  no_messages           EXCEPTION;
+  pragma                exception_init(no_messages, -25228);
+
+BEGIN
+--  dequeue_options.wait := dbms_aq.NO_WAIT;
+   dequeue_options.wait := dbms_aq.FOREVER;
+   dequeue_options.consumer_name := 'inventory_service';
+   dequeue_options.navigation    := DBMS_AQ.FIRST_MESSAGE;
+
+  -- dequeue_options.navigation := dbms_aq.FIRST_MESSAGE;
+  -- dequeue_options.dequeue_mode := dbms_aq.LOCKED;
+
+  DBMS_AQ.DEQUEUE(
+    queue_name => 'AQ.ORDERQUEUE',
+    dequeue_options => dequeue_options,
+    message_properties => message_properties,
+    payload => message,
+    msgid => message_handle);
+    -- COMMIT;
+
+--  p_action := message.get_string_property('action');
+--  p_orderid := message.get_int_property('orderid');
+    p_orderInfo := message.text_vc;
+--  message.get_text(p_orderInfo);
+
+  EXCEPTION
+    WHEN no_messages THEN
+    BEGIN
+      p_orderInfo := '';
+    END;
+    WHEN OTHERS THEN
+     RAISE;
+END;
+]]></n0:source>
+		</n0:createOracleProcedure>
+	</changeSet>
+</databaseChangeLog>

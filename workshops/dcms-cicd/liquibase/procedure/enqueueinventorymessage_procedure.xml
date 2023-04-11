@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:n0="http://www.oracle.com/xml/ns/dbchangelog-ext" 
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+	<changeSet id="3a86f5b3c64cb3baf28b9d1b5ebe4f5e6f62c154" author="(INVENTORYUSER)-Generated" failOnError="false"   runOnChange="true" runAlways="false"  >
+		<n0:createOracleProcedure objectName="ENQUEUEINVENTORYMESSAGE" objectType="PROCEDURE" ownerName="INVENTORYUSER"  replaceIfExists="true" >
+			<n0:source><![CDATA[
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "INVENTORYUSER"."ENQUEUEINVENTORYMESSAGE" (p_inventoryInfo IN VARCHAR2)
+IS
+   enqueue_options     DBMS_AQ.enqueue_options_t;
+   message_properties  DBMS_AQ.message_properties_t;
+   message_handle      RAW(16);
+   message             SYS.AQ$_JMS_TEXT_MESSAGE;
+
+BEGIN
+
+  message := SYS.AQ$_JMS_TEXT_MESSAGE.construct;
+  -- message.text_vc := p_inventoryInfo;
+  message.set_text(p_inventoryInfo);
+  -- message.set_string_property('action', p_action);
+  -- message.set_int_property('orderid', p_orderid);
+
+  DBMS_AQ.ENQUEUE(queue_name => 'AQ.INVENTORYQUEUE',
+           enqueue_options    => enqueue_options,
+           message_properties => message_properties,
+           payload            => message,
+           msgid              => message_handle);
+
+END;
+]]></n0:source>
+		</n0:createOracleProcedure>
+	</changeSet>
+</databaseChangeLog>

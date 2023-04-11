@@ -1,8 +1,53 @@
-<?xml version="1.0" encoding="UTF-8"?> 
-<databaseChangeLog
-  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
-  <include file="table/inventory_table.xml"/> 
-</databaseChangeLog>
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+############ 2023.04.11.10.31.11 #################################
+############ ddl.parms  ########################################
+BODY                           : ON
+COLLATION_CLAUSE               : NEVER
+CONSTRAINTS                    : ON
+CONSTRAINTS_AS_ALTER           : ON
+EMIT_SCHEMA                    : ON
+FORCE                          : ON
+INHERIT                        : ON
+INSERT                         : ON
+OID                            : ON
+PARTITIONING                   : ON
+PRETTY                         : ON
+REF_CONSTRAINTS                : ON
+SEGMENT_ATTRIBUTES             : ON
+SIZE_BYTE_KEYWORD              : ON
+SPECIFICATION                  : ON
+SQLTERMINATOR                  : ON
+STORAGE                        : ON
+TABLESPACE                     : ON
+
+############ lb.parameters ########################################
+basecommand                    : lb
+command                        : generate-schema
+database-changelog-table-name  : DATABASECHANGELOG
+fail-on-error                  : false
+grants                         : false
+log                            : false
+replace                        : true
+runalways                      : false
+runonchange                    : true
+split                          : true
+sqlclversion                   : 23.1.0.0
+synonyms                       : false
+############ End Parameters #######################################
+-->
+<databaseChangeLog 
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xmlns:n0="http://www.oracle.com/xml/ns/dbchangelog-ext" 
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+  <include file="table\inventory_table.xml"/> 
+  <include file="procedure\dequeueordermessage_procedure.xml"/> 
+  <include file="procedure\checkinventoryreturnlocation_procedure.xml"/> 
+  <include file="procedure\enqueueinventorymessage_procedure.xml"/> 
+  <include file="procedure\dequeue_order_message_procedure.xml"/> 
+  <include file="procedure\enqueue_inventory_message_procedure.xml"/> 
+  <include file="procedure\check_inventory_procedure.xml"/> 
+  <include file="procedure\inventory_service_procedure.xml"/> 
+</databaseChangeLog> 

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:n0="http://www.oracle.com/xml/ns/dbchangelog-ext" 
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+	<changeSet id="5c1e0865a193fb46ce08b51e06a596ae08c5022d" author="(INVENTORYUSER)-Generated" failOnError="false"   runOnChange="true" runAlways="false"  >
+		<n0:createOracleProcedure objectName="CHECKINVENTORYRETURNLOCATION" objectType="PROCEDURE" ownerName="INVENTORYUSER"  replaceIfExists="true" >
+			<n0:source><![CDATA[
+  CREATE OR REPLACE EDITIONABLE PROCEDURE "INVENTORYUSER"."CHECKINVENTORYRETURNLOCATION" (p_inventoryId IN VARCHAR2, p_inventorylocation OUT varchar2)
+IS
+
+BEGIN
+  update INVENTORYUSER.INVENTORY set inventorycount = inventorycount - 1 where inventoryid = p_inventoryId and inventorycount > 0 returning inventorylocation into p_inventorylocation;
+  dbms_output.put_line('p_inventorylocation');
+  dbms_output.put_line(p_inventorylocation);
+END;
+]]></n0:source>
+		</n0:createOracleProcedure>
+	</changeSet>
+</databaseChangeLog>
