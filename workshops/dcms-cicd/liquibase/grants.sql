@@ -1,7 +1,7 @@
 -- liquibase formatted sql
 
 -- changeset gotsysdba:grant_${schema} context:admin
-ALTER USER "${schema}" QUOTA UNLIMITED ON "DATA";
+ALTER USER "${schema}" QUOTA UNLIMITED ON "tbs_ADMIN";
 GRANT CREATE SESSION TO "${schema}";
 GRANT CREATE TABLE TO "${schema}";
 GRANT CREATE CLUSTER TO "${schema}";
@@ -17,7 +17,7 @@ GRANT CREATE INDEXTYPE TO "${schema}";
 GRANT CREATE DIMENSION TO "${schema}";
 GRANT CREATE JOB TO "${schema}";
 
---rollback ALTER USER "${schema}" QUOTA 0 ON "DATA";
+--rollback ALTER USER "${schema}" QUOTA 0 ON "tbs_ADMIN";
 --rollback REVOKE CREATE SESSION FROM "${schema}";
 --rollback REVOKE CREATE TABLE FROM "${schema}";
 --rollback REVOKE CREATE CLUSTER FROM "${schema}";
