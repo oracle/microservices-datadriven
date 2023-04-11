@@ -62,7 +62,7 @@
                      <FLASH_CACHE>DEFAULT</FLASH_CACHE>
                      <CELL_FLASH_CACHE>DEFAULT</CELL_FLASH_CACHE>
                   </STORAGE>
-                  <TABLESPACE>DATA</TABLESPACE>
+                  <TABLESPACE>tbs_ADMIN</TABLESPACE>
                   <LOGGING>Y</LOGGING>
                </INDEX_ATTRIBUTES>
             </USING_INDEX>
