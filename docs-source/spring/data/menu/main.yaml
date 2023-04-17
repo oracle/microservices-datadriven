@@ -1,6 +1,8 @@
 main:
   - name: Setup
     ref: "/setup"
+  - name: "Multi-Cloud (OCI/Azure) Installation"
+    ref: "/azure"
   - name: "On-Premises Installation"
     ref: "/on-premises"
     sub:

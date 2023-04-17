@@ -33,6 +33,8 @@ minikube start --cpus 4 --memory max --container-runtime=containerd
 minikube addons enable ingress
 ```
 
+If minikube fails to start due to: `Failed kubeconfig update: could not read config`, run: `mv ~/.kube ~/.kube.bak` and retry.
+
 ### Download Oracle Backend for Spring Boot
 
 Download the [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/on-prem-ebaas-platform_v0.1.1.zip) and unzip into a new directory.

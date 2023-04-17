@@ -1,3 +1,9 @@
+## Developer Preview 0.3.0, April 17, 2023
+
+Notes:
+* Oracle Backend for Spring Boot now includes the option to install in a Multi-Cloud (OCI/Azure) Environment.
+* The Oracle Database Operator for Kubernetes will be bound the existing ADB created by IaC in an all-OCI installation and will provision the ADB in the multi-cloud installation.
+* Improvements to On-Premises and Desktop Installation process
 
 ## Developer Preview 0.2.3, March 8, 2023
 
