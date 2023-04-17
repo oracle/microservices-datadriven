@@ -315,49 +315,49 @@ The `config add` allow add the application configuration to Spring Config Server
 
 - add a specific configuration using the set of parameters `--service-name`, `--service-label`, `--service-profile`, `--property-key` and `--property-value`.
 
-```cmd
-oractl:>config add --service-name myserv --service-label 0.0.1 --service-profile default --property-key k1 --property-value value1
-Property added successfully.
-```
+  ```cmd
+  oractl:>config add --service-name myserv --service-label 0.0.1 --service-profile default --property-key k1 --property-value value1
+  Property added successfully.
+  ```
 
-- add a set of configurations based on a config file using `--artifact-path`
+- add a set of configurations based on a config file using `--artifact-path` Example: `myserv.json`
 
-```json
-{
- "application": "myserv",
- "profile": "obaas",
- "label": "0.0.1",
- "properties": {
-  "spring.datasource.driver-class-name": "oracle.jdbc.OracleDriver",
-  "spring.datasource.url": "jdbc:oracle:thin:@$(db.service)?TNS_ADMIN=/oracle/tnsadmin"
- }
-}
-```
+  ```json
+  {
+   "application": "myserv",
+   "profile": "obaas",
+   "label": "0.0.1",
+   "properties": {
+    "spring.datasource.driver-class-name": "oracle.jdbc.OracleDriver",
+    "spring.datasource.url": "jdbc:oracle:thin:@$(db.service)?TNS_ADMIN=/oracle/tnsadmin"
+   }
+  }
+  ```
 
-```cmd
-oractl:>config add --artifact-path /obaas/myserv-properties.json
-2 property(s) added successfully.
-oractl:>config list --service-name myserv --service-profile obaas --service-label 0.0.1
-[ {
-  "id" : 222,
-  "application" : "myserv",
-  "profile" : "obaas",
-  "label" : "0.0.1",
-  "propKey" : "spring.datasource.driver-class-name",
-  "value" : "oracle.jdbc.OracleDriver",
-  "createdOn" : "2023-04-13T01:29:38.000+00:00",
-  "createdBy" : "CONFIGSERVER"
-}, {
-  "id" : 223,
-  "application" : "myserv",
-  "profile" : "obaas",
-  "label" : "0.0.1",
-  "propKey" : "spring.datasource.url",
-  "value" : "jdbc:oracle:thin:@$(db.service)?TNS_ADMIN=/oracle/tnsadmin",
-  "createdOn" : "2023-04-13T01:29:38.000+00:00",
-  "createdBy" : "CONFIGSERVER"
-} ]
-```
+  ```cmd
+  oractl:>config add --artifact-path /obaas/myserv-properties.json
+  2 property(s) added successfully.
+  oractl:>config list --service-name myserv --service-profile obaas --service-label 0.0.1
+  [ {
+    "id" : 222,
+    "application" : "myserv",
+    "profile" : "obaas",
+    "label" : "0.0.1",
+    "propKey" : "spring.datasource.driver-class-name",
+    "value" : "oracle.jdbc.OracleDriver",
+    "createdOn" : "2023-04-13T01:29:38.000+00:00",
+    "createdBy" : "CONFIGSERVER"
+  }, {
+    "id" : 223,
+    "application" : "myserv",
+    "profile" : "obaas",
+    "label" : "0.0.1",
+    "propKey" : "spring.datasource.url",
+    "value" : "jdbc:oracle:thin:@$(db.service)?TNS_ADMIN=/oracle/tnsadmin",
+    "createdOn" : "2023-04-13T01:29:38.000+00:00",
+    "createdBy" : "CONFIGSERVER"
+  } ]
+  ```
 
 The `config list` without any parameter will bring the list of services that has at least one configuration inserted Spring Config Server.
 
@@ -396,7 +396,13 @@ oractl:>config list --service-name myserv --service-profile default --service-la
 } ]
 ```
 
-The `config update` allow update a specific configuration using the set of parameters `--service-name`, `--service-label`, `--service-profile`, `--property-key` and `--property-value`.
+The `config update` allow update a specific configuration using the set of parameters:
+
+- `--service-name`
+- `--service-label`
+- `--service-profile`
+- `--property-key`
+- `--property-value`
 
 ```cmd
 oractl:>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key k1
@@ -429,31 +435,31 @@ oractl:>config list --service-name myserv --service-profile obaas --service-labe
 
 The `config delete` allow delete the application configuration from Spring Config Server following two options:
 
-- delete all configurations from a specific service using the filters by `--service-name`, `--service-profile` and `--service-label 0.0.1`. The CLI will inform how many configurations are present in Config Server and ask to confirm the complete deletion.
+- delete all configurations from a specific service using the filters by `--service-name`, `--service-profile` and `--service-label`. The CLI will inform how many configurations are present in Config Server and ask to confirm the complete deletion.
 
-```cmd
-oractl:>config delete --service-name myserv
-[obaas] 7 property(ies) found, delete all (y/n)?:
-```
+  ```cmd
+  oractl:>config delete --service-name myserv
+  [obaas] 7 property(ies) found, delete all (y/n)?:
+  ```
 
 - delete a specific configuration using the set of parameters `--service-name`, `--service-label`, `--service-profile` and `--property-key`.
 
-```cmd
-oractl:>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
-[ {
-  "id" : 224,
-  "application" : "myserv",
-  "profile" : "obaas",
-  "label" : "0.1",
-  "propKey" : "ktest2",
-  "value" : "value2",
-  "createdOn" : "2023-04-13T01:52:11.000+00:00",
-  "createdBy" : "CONFIGSERVER"
-} ]
-
-oractl:>config delete --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
-[obaas] property successfully deleted.
-
-oractl:>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
-400 : "Couldn't find any property for submitted query."
-```
+  ```cmd
+  oractl:>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
+  [ {
+    "id" : 224,
+    "application" : "myserv",
+    "profile" : "obaas",
+    "label" : "0.1",
+    "propKey" : "ktest2",
+    "value" : "value2",
+    "createdOn" : "2023-04-13T01:52:11.000+00:00",
+    "createdBy" : "CONFIGSERVER"
+  } ]
+  
+  oractl:>config delete --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
+  [obaas] property successfully deleted.
+  
+  oractl:>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
+  400 : "Couldn't find any property for submitted query."
+  ```
