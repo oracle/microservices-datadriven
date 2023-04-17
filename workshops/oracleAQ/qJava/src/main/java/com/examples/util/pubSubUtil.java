@@ -35,7 +35,7 @@ public class pubSubUtil {
 	
 	ObjectMapper mapper = new ObjectMapper();
 
-	public UserDetails pubSubWorkflowTEQ(TopicSession session, String subscriberName, String queueName, UserDetails user)
+	public UserDetails pubSubWorkflowTxEventQ(TopicSession session, String subscriberName, String queueName, UserDetails user)
 			throws JsonProcessingException, ClassNotFoundException, SQLException, JMSException {
 
 		Topic topic = ((AQjmsSession) session).getTopic(username, queueName);

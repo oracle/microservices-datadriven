@@ -6,8 +6,6 @@ package com.example.customer.model;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Column;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,7 +21,6 @@ import java.util.Date;
 public class Customers {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CUSTOMER_ID")
     private String customerId;
 
