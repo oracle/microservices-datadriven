@@ -2,7 +2,7 @@
 title: "Oracle Backend for Spring Boot VS Code plugin"
 ---
 
-**Developer Preview 0.3.6 - April, 2023**
+**Developer Preview 0.3.7 - April, 2023**
 
 Oracle Backend for Spring Boot VS Code plugin is an extension to browse and deploy applications on the Oracle Backend for Spring Boot platform. This plugin allows to inspect the content of an Oracle Backend for Spring Boot deployment, in terms of applications, services and related configurations. It simplifies the access to the Platform Services installed, like Grafana, Spring, Apisix, Eureka and Jaeger creating ssh tunnels on-demand, and providing access to their respective web admin consoles. It allows to add credentials to access and bind services to the Oracle Autonomous DB included into Oracle Backend for Spring Boot deployment. This plug-in replicates the functionalities available in [OBaas CLI](../../development/cli) and simplify the access to Oracle Backend for Spring Boot deployments from a development IDE like VS Code.
 
