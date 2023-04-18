@@ -9,7 +9,7 @@ The following components were added:
 
 | Component                    | New Version   | Description         |
 |------------------------------|---------------|---------------------|
-| Oracle Backend for Spring Boot Visual Studio Code Extension | 0.3.0   |  Allows Visual Studio Code users to manage the platform, deployments and configuration.  |
+| Oracle Backend for Spring Boot Visual Studio Code Extension | 0.3.7   |  Allows Visual Studio Code users to manage the platform, deployments and configuration.  |
 
 The following components were updated:
 

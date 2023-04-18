@@ -9,6 +9,23 @@ Our team members post blog articles and other content on various sites including
 We'd love you to check them out.
 This page acts as an index/aggregator for some of our featured content.
 
+
+{{< blog  
+    author="mark" 
+    date="4/6/2023" 
+    title="Introducing Cloud Bank" 
+    link="https://medium.com/oracledevs/introducing-cloud-bank-d3af56e1141f"
+    abstract="And introduction to the Cloud Bank sample application which showcases Spring Boot microservices, long running actions/sagas and a Flutter mobile application built with the Oracle Backend for Spring Boot." 
+>}}
+
+{{< blog  
+    author="andy" 
+    date="3/25/2023" 
+    title="Oracle Backend for Spring Boot is LIVE! (Developer Preview)" 
+    link="https://mr-a.org/oracle-backend-for-spring-boot-is-live-developer-preview/"
+    abstract="An introduction to the Oracle Backend for Spring Boot." 
+>}}
+
 {{< blog  
     author="mark" 
     date="2/3/2023" 
