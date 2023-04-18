@@ -63,13 +63,13 @@ The `create` command results in the creation of an application namespace.
 
 The `bind` command results in the automatic creation of a database schema for a given service/user and binds the information for that schema/database in the environment of the microservice for it to use.  The option of the prefix for the environment properties bound is also given.  For example, most Spring microservices us "spring.datasource".
 
-The `deploy` command takes `serviceName`, `appName`, and `jarLocation` as it's main arguments (`imageVersion` and `javaVersion` options are also provided).
+The `deploy` command takes `service-name`, `app-name`, and `artifact-path` as it's main arguments (`image-version` and `java-version` options are also provided).
 When the deploy command is issued, the microservice JAR file is uploaded to the backend, a container image is created for the JAR/microservice, and various Kubernetes resources such as deployment, service, etc. are also created.
 This is all done automatically to simplify the development process and the management of the microservices by the backend.
 
 The `list` command can then be used show the details of the deployed microservice, etc.
 
-The `config` command can also be used to view and update configuration managed by the Spring Config Server.
+The `config` command can also be used to add, view, update and delete configuration managed by the Spring Config Server.
 
 A common development workflow pattern is to `connect`, `change-password` (only if necessary), `create` (once per app/namespace), `config`, `bind` (only if necessary), `deploy`, and `list`.
 
@@ -99,7 +99,7 @@ OPTIONS
 oractl:>connect
 password (defaults to oractl):
 using default value...
-connect successful server version:011223
+connect successful server version:0.3.0
 ```
 
 Then, an application namespace is created withe the `create` command. This namespace will contain the microservices that are deployed later.
@@ -110,15 +110,19 @@ NAME
        create - Create an application/namespace.
 
 SYNOPSIS
-       create --appName String
+       create [--app-name String] --help
 
 OPTIONS
-       --appName String
+       --app-name String
        application/namespace
-       [Optional, default = cloudbank]
+       [Mandatory]
 
-oractl:>create
-application/namespace created successfully and image pull secret (registry-auth) created successfully
+       --help or -h
+       help for create
+       [Optional]
+
+oractl:>create --app-name myapp
+application/namespace created successfully and image pull secret (registry-auth) created successfully and database TNSAdmin/wallet secret created successfully
 ```
 
 Next, the `bind` command will create a database schema/user for the service (if one hasn't already been created).
@@ -130,25 +134,29 @@ NAME
        bind - Create a schema/user and bind it to service deployment.
 
 SYNOPSIS
-       bind --appName String --serviceName String --springBindingPrefix String
+       bind --app-name String [--service-name String] --binding-prefix String --help
 
 OPTIONS
-       --appName String
+       --app-name String
        application/namespace
-       [Optional, default = cloudbank]
+       [Optional, default = application]
 
-       --serviceName String
-       database user/serviceName
-       [Optional, default = banka]
+       --service-name String
+       Service Name/Database User
+       [Mandatory]
 
-       --springBindingPrefix String
+       --binding-prefix String
        spring binding prefix
        [Optional, default = spring.datasource]
 
-oractl:>bind
-database password/servicePassword (defaults to Welcome12345):
-using default value...
-database secret created successfully and schema created successfully for banka
+       --help or -h
+       help for bind
+       [Optional]
+
+
+oractl:>bind --app-name myapp --service-name myserv
+database password/servicePassword (defaults to Welcome12345): ************
+database secret created successfully and schema created successfully for myserv
 ```
 
 The microservice JAR will now be deployed with the `deploy` command which will create, build, and push an image for the microservice and create the necessary deployment, service, secret, etc. Kubernetes resources for the microservice.
@@ -159,43 +167,57 @@ NAME
        deploy - Deploy a service.
 
 SYNOPSIS
-       deploy --isRedeploy String --bind String --appName String --serviceName String --jarLocation String --imageVersion String --javaImage String
+       deploy --redeploy boolean --bind String --app-name String [--service-name String] [--image-version String] --service-profile String --port String --java-version String --add-health-probe boolean [--artifact-path String] --help
 
 OPTIONS
-       --isRedeploy String
+       --redeploy boolean
        whether the service has already been deployed or not
-       [Optional, default = true]
+       [Optional, default = false]
 
        --bind String
        automatically create and bind resources. possible values are [jms]
-       [Optional, default = none]
+       [Optional]
 
-       --appName String
+       --app-name String
        application/namespace
-       [Optional, default = cloudbank]
+       [Optional, default = application]
 
-       --serviceName String
-       service name
-       [Optional, default = banka]
+       --service-name String
+       Service Name
+       [Mandatory]
 
-       --jarLocation String
-       service jar location
-       [Optional, default = target/banka-0.0.1-SNAPSHOT.jar]
+       --image-version String
+       Image Version
+       [Mandatory]
 
-       --imageVersion String
-       image version
-       [Optional, default = 0.1]
+       --service-profile String
+       Service Profile
+       [Optional]
 
-       --javaImage String
-       java image
-       [Optional, default = ghcr.io/graalvm/jdk:ol7-java17-22.2.0]
+       --port String
+       Service Port
+       [Optional, default = 8080]
 
-oractl:>deploy --isRedeploy false --bind jms --jarLocation ebaas-sample-apps/banka/target/banka-0.0.1-SNAPSHOT.jar
-uploading... upload successful
-building and pushing image... docker build and push successful
-binding resources... successful (no resources found to bind)
-creating deployment and service... create deployment and service  = banka, appName = cloudbank, isRedeploy = false successful
-successfully deployed
+       --java-version String
+       Java Container Base Image [ghcr.io/graalvm/jdk:ol9-java17-22.3.1]
+       [Optional]
+
+       --add-health-probe boolean
+       Inject or not Health probes to service.
+       [Optional, default = false]
+
+       --artifact-path String
+       Service jar location
+       [Mandatory]
+
+       --help or -h
+       help for deploy
+       [Optional]
+
+oractl:>deploy --app-name myapp --service-name myserv --image-version 0.0.1 --port 8081 --bind jms --add-health-probe true --artifact-path obaas/myserv/target/demo-0.0.1-SNAPSHOT.jar
+uploading: obaas/myserv/target/demo-0.0.1-SNAPSHOT.jar building and pushing image...
+binding resources... successful
+creating deployment and service... successfully deployed
 ```
 
 The `list` command can then be used to show details of the microservice deployed in the previous step.
@@ -206,35 +228,39 @@ NAME
        list - list/show details of application services.
 
 SYNOPSIS
-       list --appName String
+       list --app-name String --help
 
 OPTIONS
-       --appName String
+       --app-name String
        application/namespace
-       [Optional, default = cloudbank]
+       [Optional, default = application]
 
-oractl:>list
-name:banka-7fbff59d8c-gt42g  status:class V1ContainerStatus {
-    containerID: cri-o://df2ec83b9359dee8aad658bde2d9ba988f7e43ea2a3e7add61c0cd2eeca612af
-    image: ams.ocir.io/maacloud/walleye/cloudbank-banka:0.1
-    imageID: ams.ocir.io/maacloud/walleye/cloudbank-banka@sha256:d37f889f6f706accd32df0ccff576237b3a15c736d90ee99b7f97f84860c3502
+       --help or -h
+       help for list
+       [Optional]
+
+oractl:>list --app-name myapp
+name:myserv-c46688645-r6lhl  status:class V1ContainerStatus {
+    containerID: cri-o://6d10194c5058a8cf7ecbd5e745cebd5e44c5768c7df73053fa85f54af4b352b2
+    image: <region>.ocir.io/<tenancy>/obaas03/myapp-myserv:0.0.1
+    imageID: <region>.ocir.io/<tenancy>/obaas03/myapp-myserv@sha256:99d4bbe42ceef97497105218594ea19a9e9869c75f48bdfdc1a2f2aec33b503c
     lastState: class V1ContainerState {
         running: null
         terminated: null
         waiting: null
     }
-    name: banka
+    name: myserv
     ready: true
     restartCount: 0
     started: true
     state: class V1ContainerState {
         running: class V1ContainerStateRunning {
-            startedAt: 2023-01-18T15:54:10Z
+            startedAt: 2023-04-13T01:00:51Z
         }
         terminated: null
         waiting: null
     }
-}name:banka  kind:null
+}name:myserv  kind:null
 ```
 
 The `config` command can be used to view and update config managed by the Spring Config Server.
@@ -245,38 +271,195 @@ More information on the configuration server can be found here:
 ```cmd
 oractl:>help config
 NAME
-       config - View and modify application configuration.
+       config - View and modify Service configuration.
 
 SYNOPSIS
-       config --command String --application String --label String --profile String --propKey String --value String
+       config [--action CommandConstants.ConfigActions] --service-name String --service-label String --service-profile String --property-key String --property-value String --artifact-path String --help
 
 OPTIONS
-       --command String
-       possible values are [c]reate, [r]ead all, [u]pdate, and [d]elete
-       [Optional, default = r]
+       --action CommandConstants.ConfigActions
+       possible actions: add, list, update, or delete
+       [Mandatory]
 
-       --application String
-       application/namespace config
-       [Optional, default = cloudbank]
+       --service-name String
+       Service Name
+       [Optional]
 
-       --label String
+       --service-label String
        label for config
-       [Optional, default = test]
+       [Optional]
 
-       --profile String
-       profile for config
-       [Optional, default = test]
+       --service-profile String
+       Application Profile
+       [Optional]
 
-       --propKey String
+       --property-key String
        the property key for the config
-       [Optional, default = test]
+       [Optional]
 
-       --value String
+       --property-value String
        the value for the config
-       [Optional, default = test]
-       
-oractl:>config
-command ([c]reate, [r]ead all, [u]pdate, [d]elete): r
-[id":1,"application":"atael","profile":"dev","label":"latest","propKey":"test-property","value":"This is the test-property value","createdOn":"2022-12-14T12:42:33.000+00:00","createdBy":"ADMIN”
-[…]
+       [Optional]
+
+       --artifact-path String
+       the context
+       [Optional]
+
+       --help or -h
+       help for config
+       [Optional]
+
 ```
+
+The `config add` allow add the application configuration to Spring Config Server following two options:
+
+- add a specific configuration using the set of parameters `--service-name`, `--service-label`, `--service-profile`, `--property-key` and `--property-value`.
+
+  ```cmd
+  oractl:>config add --service-name myserv --service-label 0.0.1 --service-profile default --property-key k1 --property-value value1
+  Property added successfully.
+  ```
+
+- add a set of configurations based on a config file using `--artifact-path` Example: `myserv.json`
+
+  ```json
+  {
+   "application": "myserv",
+   "profile": "obaas",
+   "label": "0.0.1",
+   "properties": {
+    "spring.datasource.driver-class-name": "oracle.jdbc.OracleDriver",
+    "spring.datasource.url": "jdbc:oracle:thin:@$(db.service)?TNS_ADMIN=/oracle/tnsadmin"
+   }
+  }
+  ```
+
+  ```cmd
+  oractl:>config add --artifact-path /obaas/myserv-properties.json
+  2 property(s) added successfully.
+  oractl:>config list --service-name myserv --service-profile obaas --service-label 0.0.1
+  [ {
+    "id" : 222,
+    "application" : "myserv",
+    "profile" : "obaas",
+    "label" : "0.0.1",
+    "propKey" : "spring.datasource.driver-class-name",
+    "value" : "oracle.jdbc.OracleDriver",
+    "createdOn" : "2023-04-13T01:29:38.000+00:00",
+    "createdBy" : "CONFIGSERVER"
+  }, {
+    "id" : 223,
+    "application" : "myserv",
+    "profile" : "obaas",
+    "label" : "0.0.1",
+    "propKey" : "spring.datasource.url",
+    "value" : "jdbc:oracle:thin:@$(db.service)?TNS_ADMIN=/oracle/tnsadmin",
+    "createdOn" : "2023-04-13T01:29:38.000+00:00",
+    "createdBy" : "CONFIGSERVER"
+  } ]
+  ```
+
+The `config list` without any parameter will bring the list of services that has at least one configuration inserted Spring Config Server.
+
+```cmd
+oractl:>config list
+[ {
+  "name" : "apptest",
+  "label" : "",
+  "profile" : ""
+}, {
+  "name" : "myapp",
+  "label" : "",
+  "profile" : ""
+}, […]
+
+```
+
+The `config list [parameters]` can be used to list the parameters using parameters as filters:
+
+- `--service-name` : will list all parameters from the specified service.
+- `--service-label`: filter by label
+- `--service-profile`: filter by profiel
+- `--property-key`: list a specific parameter filter by key.
+
+```cmd
+oractl:>config list --service-name myserv --service-profile default --service-label 0.0.1
+[ {
+  "id" : 221,
+  "application" : "myserv",
+  "profile" : "default",
+  "label" : "0.0.1",
+  "propKey" : "k1",
+  "value" : "value1",
+  "createdOn" : "2023-04-13T01:10:16.000+00:00",
+  "createdBy" : "CONFIGSERVER"
+} ]
+```
+
+The `config update` allow update a specific configuration using the set of parameters:
+
+- `--service-name`
+- `--service-label`
+- `--service-profile`
+- `--property-key`
+- `--property-value`
+
+```cmd
+oractl:>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key k1
+[ {
+  "id" : 30,
+  "application" : "myserv",
+  "profile" : "obaas",
+  "label" : "0.1",
+  "propKey" : "k1",
+  "value" : "value1",
+  "createdOn" : "2023-03-23T18:02:29.000+00:00",
+  "createdBy" : "CONFIGSERVER"
+} ]
+
+oractl:>config update --service-name myserv --service-profile obaas --service-label 0.1 --property-key k1 --property-value value1Updated
+Property successful modified.
+
+oractl:>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key k1
+[ {
+  "id" : 30,
+  "application" : "myserv",
+  "profile" : "obaas",
+  "label" : "0.1",
+  "propKey" : "k1",
+  "value" : "value1Updated",
+  "createdOn" : "2023-03-23T18:02:29.000+00:00",
+  "createdBy" : "CONFIGSERVER"
+} ]
+```
+
+The `config delete` allow delete the application configuration from Spring Config Server following two options:
+
+- delete all configurations from a specific service using the filters by `--service-name`, `--service-profile` and `--service-label`. The CLI will inform how many configurations are present in Config Server and ask to confirm the complete deletion.
+
+  ```cmd
+  oractl:>config delete --service-name myserv
+  [obaas] 7 property(ies) found, delete all (y/n)?:
+  ```
+
+- delete a specific configuration using the set of parameters `--service-name`, `--service-label`, `--service-profile` and `--property-key`.
+
+  ```cmd
+  oractl:>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
+  [ {
+    "id" : 224,
+    "application" : "myserv",
+    "profile" : "obaas",
+    "label" : "0.1",
+    "propKey" : "ktest2",
+    "value" : "value2",
+    "createdOn" : "2023-04-13T01:52:11.000+00:00",
+    "createdBy" : "CONFIGSERVER"
+  } ]
+  
+  oractl:>config delete --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
+  [obaas] property successfully deleted.
+  
+  oractl:>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
+  400 : "Couldn't find any property for submitted query."
+  ```
