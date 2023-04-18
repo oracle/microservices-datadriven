@@ -12,9 +12,9 @@
 <meta name="generator" content="Hugo 0.108.0">
 
 
-  <meta name="description" content="Developer Preview 0.2.3, March 8, 2023 Notes:
-Oracle Backend for Spring Boot now includes the option to also install Parse Platform in the same deployment. Oracle Backend for Spring Boot CLI 0.2.3 includes a number of bug fixes, and adds support for custom listen ports for services. APISIX is now pre-configured for both Eureka and Kubernetes service discovery. The following components were added:
-Component Version Description Oracle Database Operator for Kubernetes 0." />
+  <meta name="description" content="Developer Preview 0.3.0, April 17, 2023 Notes:
+Oracle Backend for Spring Boot now includes the option to install in a Multi-Cloud (OCI/Azure) Environment. The Oracle Database Operator for Kubernetes will be bound the existing ADB created by IaC in an all-OCI installation and will provision the ADB in the multi-cloud installation. Improvements to On-Premises and Desktop Installation process The following components were added:
+Component New Version Description Oracle Backend for Spring Boot Visual Studio Code Extension 0." />
 
     <title>Release Notes | Oracle Backend for Spring Boot</title>
 
@@ -40,9 +40,9 @@ Component Version Description Oracle Database Operator for Kubernetes 0." />
     content="Release Notes"
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot" />
-  <meta property="og:description" content="Developer Preview 0.2.3, March 8, 2023 Notes:
-Oracle Backend for Spring Boot now includes the option to also install Parse Platform in the same deployment. Oracle Backend for Spring Boot CLI 0.2.3 includes a number of bug fixes, and adds support for custom listen ports for services. APISIX is now pre-configured for both Eureka and Kubernetes service discovery. The following components were added:
-Component Version Description Oracle Database Operator for Kubernetes 0." />
+  <meta property="og:description" content="Developer Preview 0.3.0, April 17, 2023 Notes:
+Oracle Backend for Spring Boot now includes the option to install in a Multi-Cloud (OCI/Azure) Environment. The Oracle Database Operator for Kubernetes will be bound the existing ADB created by IaC in an all-OCI installation and will provision the ADB in the multi-cloud installation. Improvements to On-Premises and Desktop Installation process The following components were added:
+Component New Version Description Oracle Backend for Spring Boot Visual Studio Code Extension 0." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/release-notes/" />
 
@@ -51,9 +51,9 @@ Component Version Description Oracle Database Operator for Kubernetes 0." />
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Release Notes" />
-  <meta name="twitter:description" content="Developer Preview 0.2.3, March 8, 2023 Notes:
-Oracle Backend for Spring Boot now includes the option to also install Parse Platform in the same deployment. Oracle Backend for Spring Boot CLI 0.2.3 includes a number of bug fixes, and adds support for custom listen ports for services. APISIX is now pre-configured for both Eureka and Kubernetes service discovery. The following components were added:
-Component Version Description Oracle Database Operator for Kubernetes 0." />
+  <meta name="twitter:description" content="Developer Preview 0.3.0, April 17, 2023 Notes:
+Oracle Backend for Spring Boot now includes the option to install in a Multi-Cloud (OCI/Azure) Environment. The Oracle Database Operator for Kubernetes will be bound the existing ADB created by IaC in an all-OCI installation and will provision the ADB in the multi-cloud installation. Improvements to On-Premises and Desktop Installation process The following components were added:
+Component New Version Description Oracle Backend for Spring Boot Visual Studio Code Extension 0." />
 
 
   <script type="application/ld+json">
@@ -64,8 +64,8 @@ Component Version Description Oracle Database Operator for Kubernetes 0." />
       "name": "Release Notes",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/release-notes/",
       "headline": "Release Notes",
-      "description": "Developer Preview 0.2.3, March 8, 2023 Notes:\nOracle Backend for Spring Boot now includes the option to also install Parse Platform in the same deployment. Oracle Backend for Spring Boot CLI 0.2.3 includes a number of bug fixes, and adds support for custom listen ports for services. APISIX is now pre-configured for both Eureka and Kubernetes service discovery. The following components were added:\nComponent Version Description Oracle Database Operator for Kubernetes 0.",
-      "wordCount" : "400",
+      "description": "Developer Preview 0.3.0, April 17, 2023 Notes:\nOracle Backend for Spring Boot now includes the option to install in a Multi-Cloud (OCI\/Azure) Environment. The Oracle Database Operator for Kubernetes will be bound the existing ADB created by IaC in an all-OCI installation and will provision the ADB in the multi-cloud installation. Improvements to On-Premises and Desktop Installation process The following components were added:\nComponent New Version Description Oracle Backend for Spring Boot Visual Studio Code Extension 0.",
+      "wordCount" : "514",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -325,6 +325,51 @@ Component Version Description Oracle Database Operator for Kubernetes 0." />
                   class="gdoc-nav__entry"
                 >
                   Setup
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/azure"
+                  class="gdoc-nav__entry"
+                >
+                  Multi-Cloud (OCI/Azure) Installation
                 </a>
               </span>
               
@@ -880,6 +925,51 @@ Component Version Description Oracle Database Operator for Kubernetes 0." />
                   class="gdoc-nav__entry"
                 >
                   Vault
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/platform/vscode-plugin"
+                  class="gdoc-nav__entry"
+                >
+                  VS Code plugin
                 </a>
               </span>
               
@@ -1463,6 +1553,55 @@ if (!doNotTrack) {
   >
     <h1>Release Notes</h1>
     <div class="gdoc-page__anchorwrap">
+    <h2 id="developer-preview-030-april-17-2023">
+        Developer Preview 0.3.0, April 17, 2023
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/release-notes/#developer-preview-030-april-17-2023" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Developer Preview 0.3.0, April 17, 2023" aria-label="Anchor to: Developer Preview 0.3.0, April 17, 2023" href="#developer-preview-030-april-17-2023">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>Notes:</p>
+<ul>
+<li>Oracle Backend for Spring Boot now includes the option to install in a Multi-Cloud (OCI/Azure) Environment.</li>
+<li>The Oracle Database Operator for Kubernetes will be bound the existing ADB created by IaC in an all-OCI installation and will provision the ADB in the multi-cloud installation.</li>
+<li>Improvements to On-Premises and Desktop Installation process</li>
+</ul>
+<p>The following components were added:</p>
+<div class="table-wrap"> <table>
+<thead>
+<tr>
+<th>Component</th>
+<th>New Version</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oracle Backend for Spring Boot Visual Studio Code Extension</td>
+<td>0.3.7</td>
+<td>Allows Visual Studio Code users to manage the platform, deployments and configuration.</td>
+</tr>
+</tbody>
+</table> </div>
+<p>The following components were updated:</p>
+<div class="table-wrap"> <table>
+<thead>
+<tr>
+<th>Component</th>
+<th>New Version</th>
+<th>Replaced Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oracle Backend for Spring Boot CLI</td>
+<td>0.3.0</td>
+<td>0.1.0</td>
+</tr>
+</tbody>
+</table> </div>
+<p>There were no component deprecations or removals.</p>
+<div class="gdoc-page__anchorwrap">
     <h2 id="developer-preview-023-march-8-2023">
         Developer Preview 0.2.3, March 8, 2023
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/release-notes/#developer-preview-023-march-8-2023" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Developer Preview 0.2.3, March 8, 2023" aria-label="Anchor to: Developer Preview 0.2.3, March 8, 2023" href="#developer-preview-023-march-8-2023">
@@ -1769,6 +1908,30 @@ if (!doNotTrack) {
 
     
     
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
       
   
   
@@ -1876,6 +2039,30 @@ if (!doNotTrack) {
   
   
 
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
   
     
     

@@ -5,6 +5,9 @@
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/</loc>
     <priority>0</priority>
   </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/mbaas/azure/</loc>
+    <priority>0</priority>
+  </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/dashboard/</loc>
     <priority>0</priority>
   </url><url>

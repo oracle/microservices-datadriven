@@ -65,7 +65,7 @@ Install Podman brew install podman PODMAN_VERSION=$(podman -v |awk &#39;{print $
       "url" : "https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/",
       "headline": "Macos Ventura",
       "description": "On-Premises Installation - MacOS Ventura (x86) This is an example of installing on a MacOS Venture desktop\nPlease read the On-Premises and ensure your desktop meets the minimum system requirements.\nInstall Podman brew install podman PODMAN_VERSION=$(podman -v |awk \u0027{print $NF}\u0027) sudo \/usr\/local\/Cellar\/podman\/${PODMAN_VERSION}\/bin\/podman-mac-helper install podman machine init --cpus 4 --disk-size 60 --memory 8192 --rootful --now podman system connection default podman-machine-default-root Download the Database\/ORDS Images The Desktop installation will provision an Oracle Database into the Kubernetes cluster.",
-      "wordCount" : "317",
+      "wordCount" : "337",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -325,6 +325,51 @@ Install Podman brew install podman PODMAN_VERSION=$(podman -v |awk &#39;{print $
                   class="gdoc-nav__entry"
                 >
                   Setup
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/azure"
+                  class="gdoc-nav__entry"
+                >
+                  Multi-Cloud (OCI/Azure) Installation
                 </a>
               </span>
               
@@ -880,6 +925,51 @@ Install Podman brew install podman PODMAN_VERSION=$(podman -v |awk &#39;{print $
                   class="gdoc-nav__entry"
                 >
                   Vault
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/platform/vscode-plugin"
+                  class="gdoc-nav__entry"
+                >
+                  VS Code plugin
                 </a>
               </span>
               
@@ -1533,7 +1623,8 @@ if (!doNotTrack) {
 </span></span><span class="line"><span class="cl">minikube config <span class="nb">set</span> driver podman
 </span></span><span class="line"><span class="cl">minikube start --cpus <span class="m">4</span> --memory max --container-runtime<span class="o">=</span>containerd
 </span></span><span class="line"><span class="cl">minikube addons <span class="nb">enable</span> ingress
-</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+</span></span></code></pre></div><p>If minikube fails to start due to: <code>Failed kubeconfig update: could not read config</code>, run: <code>mv ~/.kube ~/.kube.bak</code> and retry.</p>
+<div class="gdoc-page__anchorwrap">
     <h3 id="download-oracle-backend-for-spring-boot">
         Download Oracle Backend for Spring Boot
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/#download-oracle-backend-for-spring-boot" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Download Oracle Backend for Spring Boot" aria-label="Anchor to: Download Oracle Backend for Spring Boot" href="#download-oracle-backend-for-spring-boot">
@@ -1543,7 +1634,7 @@ if (!doNotTrack) {
 </div>
 <p>Download the <a
   class="gdoc-markdown__link"
-  href="https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/on-prem-ebaas-platform_v0.1.1.zip"
+  href="https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas-platform_latest.zip"
 >Oracle Backend for Spring Boot</a> and unzip into a new directory.</p>
 <div class="gdoc-page__anchorwrap">
     <h3 id="install-ansible">
@@ -1691,6 +1782,30 @@ if (!doNotTrack) {
 
     
     
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
       
   
   
@@ -1804,6 +1919,30 @@ if (!doNotTrack) {
   
   
 
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
   
     
     
