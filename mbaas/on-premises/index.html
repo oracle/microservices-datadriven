@@ -68,7 +68,7 @@ Access to an Oracle Database - Enterprise Edition 21." />
       "url" : "https://oracle.github.io/microservices-datadriven/mbaas/on-premises/",
       "headline": "On Premises",
       "description": "On-Premises Installation The Oracle Backend for Parse Platform is available to install On-Premises. The On-Premises installation includes both a Desktop installation and an Estate installation.\nThe Desktop installation can be used to explore the in a non-Production environment, while the Estate installation is targeted for Production infrastructure.\nPrerequisites You must meet the following prerequisites to use the Oracle Backend for Parse Platform On-Premises:\nAccess to an Oracle Database - Enterprise Edition 21.",
-      "wordCount" : "771",
+      "wordCount" : "770",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -328,6 +328,51 @@ Access to an Oracle Database - Enterprise Edition 21." />
                   class="gdoc-nav__entry"
                 >
                   Setup
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/mbaas/azure"
+                  class="gdoc-nav__entry"
+                >
+                  Multi-Cloud (OCI/Azure) Installation
                 </a>
               </span>
               
@@ -1388,7 +1433,9 @@ if (!doNotTrack) {
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">master_key</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;Q5CP7MHpoZhSwbk39XpHxamp4rJJ4F3vPZ3NZ7ee&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">dashboard_username</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;ADMIN&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">dashboard_password</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;OZ0-mSt-27Evb-Qy&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">bucket</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">access_key</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">private_key</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
 </span></span></span></code></pre></div><p>You can use any arbitrary string as your <code>app_name</code>, <code>app_id</code> and <code>master_key</code>. These will be used by your clients to authenticate with the Parse Server.  It is recommended to specify a unique <code>dashboard_username</code> and <code>dashboard_password</code>.</p>
 <div class="gdoc-page__anchorwrap">
@@ -1407,7 +1454,7 @@ if (!doNotTrack) {
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;PDBADMIN&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;Correct-horse-Battery-staple-35&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">service</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=BAASPDB)))&#39;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">wallet</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ocid</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
 </span></span></span></code></pre></div><p>The <code>oracle_dbs</code> and <code>default_db</code> keys should be the name of your Pluggable Database (PDB).  These keys are followed by the PDB and keys defining how to access the PDB.  If using mTLS authentication, specify the full path of the wallet file.</p>
 <div class="gdoc-page__anchorwrap">
@@ -1424,16 +1471,18 @@ if (!doNotTrack) {
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">registry_username</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;oracle&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">registry_password</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;Correct-horse-Battery-staple-35&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">push_registry_url</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;docker.io/myorg&#39;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">pull_registry_url</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;docker.io/myorg&#39;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">registry_auth</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">push_registry_auth</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">auths</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">docker.io/myorg</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">auth</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;b3JhY2xlOjdaUVgxLXhhbFR0NTJsS0VITlA0&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">pull_registry_url</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;docker.io/myorg&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">pull_registry_auth</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">auths</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">docker.io/myorg</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">auth</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;b3JhY2xlOjdaUVgxLXhhbFR0NTJsS0VITlA0&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
-</span></span></span></code></pre></div><p>Leave <code>compartment_ocid</code> blank for all On-Premises installations.  Specify the URL/authentication credentials for your Container Repository in <code>pull_registry_url</code>, <code>push_registry_url</code>, <code>registry_username</code> and <code>registry_password</code>.</p>
-<p>For the <code>registry_auth</code> section, manually log into your repository and copy the values found in file created, often found in <code>$HOME/.config/containers/auth.json</code></p>
+</span></span></span></code></pre></div><p>Specify the URL/authentication credentials for your Container Repository in <code>pull_registry_url</code>, <code>push_registry_url</code>, <code>registry_username</code> and <code>registry_password</code>.</p>
+<p>For the <code>&lt;pull|push&gt;_registry_auth</code> section, manually log into your repository and copy the values found in file created, often found in <code>$HOME/.config/containers/auth.json</code></p>
 <p>You maybe curious as to why there is duplication between the push and pull URL&rsquo;s.  The pull URL is used inside the pods while the push is used from the deployment machine.  If you have a private registry inside the Kubernetes cluster, these URL&rsquo;s could be different.  This is the case for the <em>Desktop</em> installation; the push URL is <code>localhost:5000</code>, while the pull URL is <code>&lt;Registry Pod ClusterIP&gt;:5000</code>.</p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="configuration-management">
@@ -1531,6 +1580,30 @@ if (!doNotTrack) {
   
   
 
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
   
     
     
@@ -2032,11 +2105,11 @@ if (!doNotTrack) {
     
       <a
         class="gdoc-page__nav--prev flex align-center"
-        href="/microservices-datadriven/mbaas/setup/"
-        title="Setup"
+        href="/microservices-datadriven/mbaas/azure/"
+        title="Multi-Cloud (OCI/Azure) Installation"
       >
         <i class="gdoc-icon">gdoc_arrow_left_alt</i>
-        Setup
+        Multi-Cloud (OCI/Azure) Installation
       </a>
     
   </span>

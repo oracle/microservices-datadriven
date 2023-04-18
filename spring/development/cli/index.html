@@ -65,7 +65,7 @@ kubectl port-forward services/obaas-admin -n obaas-admin 8080:8080 Start the CLI
       "url" : "https://oracle.github.io/microservices-datadriven/spring/development/cli/",
       "headline": "Using the OBaaS CLI",
       "description": "The Oracle Backend for Spring Boot offers a command-line tool, oractl. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources they use. Download the CLI here The platform specific binary can be renamed to oractl for convenience.\nUsing the CLI Expose the Oracle Backend for Spring Boot Admin Server that the CLI will call by using port-forward\nkubectl port-forward services\/obaas-admin -n obaas-admin 8080:8080 Start the CLI in interactive mode by simply running oractl from your terminal window.",
-      "wordCount" : "1107",
+      "wordCount" : "1655",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -325,6 +325,51 @@ kubectl port-forward services/obaas-admin -n obaas-admin 8080:8080 Start the CLI
                   class="gdoc-nav__entry"
                 >
                   Setup
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/azure"
+                  class="gdoc-nav__entry"
+                >
+                  Multi-Cloud (OCI/Azure) Installation
                 </a>
               </span>
               
@@ -880,6 +925,51 @@ kubectl port-forward services/obaas-admin -n obaas-admin 8080:8080 Start the CLI
                   class="gdoc-nav__entry"
                 >
                   Vault
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/platform/vscode-plugin"
+                  class="gdoc-nav__entry"
+                >
+                  VS Code plugin
                 </a>
               </span>
               
@@ -1536,11 +1626,11 @@ The platform specific binary can be renamed to <code>oractl</code> for convenien
 </span></span></code></pre></div><p>An application is a namespace encompassing related microservices. For example, a &ldquo;cloudbank&rdquo; application may have &ldquo;banktransfer&rdquo; &ldquo;frauddetection&rdquo;, etc., microservices deployed within it.
 The <code>create</code> command results in the creation of an application namespace.</p>
 <p>The <code>bind</code> command results in the automatic creation of a database schema for a given service/user and binds the information for that schema/database in the environment of the microservice for it to use.  The option of the prefix for the environment properties bound is also given.  For example, most Spring microservices us &ldquo;spring.datasource&rdquo;.</p>
-<p>The <code>deploy</code> command takes <code>serviceName</code>, <code>appName</code>, and <code>jarLocation</code> as it&rsquo;s main arguments (<code>imageVersion</code> and <code>javaVersion</code> options are also provided).
+<p>The <code>deploy</code> command takes <code>service-name</code>, <code>app-name</code>, and <code>artifact-path</code> as it&rsquo;s main arguments (<code>image-version</code> and <code>java-version</code> options are also provided).
 When the deploy command is issued, the microservice JAR file is uploaded to the backend, a container image is created for the JAR/microservice, and various Kubernetes resources such as deployment, service, etc. are also created.
 This is all done automatically to simplify the development process and the management of the microservices by the backend.</p>
 <p>The <code>list</code> command can then be used show the details of the deployed microservice, etc.</p>
-<p>The <code>config</code> command can also be used to view and update configuration managed by the Spring Config Server.</p>
+<p>The <code>config</code> command can also be used to add, view, update and delete configuration managed by the Spring Config Server.</p>
 <p>A common development workflow pattern is to <code>connect</code>, <code>change-password</code> (only if necessary), <code>create</code> (once per app/namespace), <code>config</code>, <code>bind</code> (only if necessary), <code>deploy</code>, and <code>list</code>.</p>
 <p>Further development and redeployment of the service can then be iterated upon by issuing the <code>deploy</code>, <code>list</code>, etc. commands.</p>
 <p>The following is an example development workflow using the CLI.</p>
@@ -1564,22 +1654,26 @@ This is all done automatically to simplify the development process and the manag
 </span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>connect
 </span></span><span class="line"><span class="cl">password (defaults to oractl):
 </span></span><span class="line"><span class="cl">using default value...
-</span></span><span class="line"><span class="cl">connect successful server version:011223
+</span></span><span class="line"><span class="cl">connect successful server version:0.3.0
 </span></span></code></pre></div><p>Then, an application namespace is created withe the <code>create</code> command. This namespace will contain the microservices that are deployed later.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help create
 </span></span><span class="line"><span class="cl">NAME
 </span></span><span class="line"><span class="cl">       create - Create an application/namespace.
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">SYNOPSIS
-</span></span><span class="line"><span class="cl">       create --appName String
+</span></span><span class="line"><span class="cl">       create [--app-name String] --help
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">OPTIONS
-</span></span><span class="line"><span class="cl">       --appName String
+</span></span><span class="line"><span class="cl">       --app-name String
 </span></span><span class="line"><span class="cl">       application/namespace
-</span></span><span class="line"><span class="cl">       [Optional, default = cloudbank]
+</span></span><span class="line"><span class="cl">       [Mandatory]
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>create
-</span></span><span class="line"><span class="cl">application/namespace created successfully and image pull secret (registry-auth) created successfully
+</span></span><span class="line"><span class="cl">       --help or -h
+</span></span><span class="line"><span class="cl">       help for create
+</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>create --app-name myapp
+</span></span><span class="line"><span class="cl">application/namespace created successfully and image pull secret (registry-auth) created successfully and database TNSAdmin/wallet secret created successfully
 </span></span></code></pre></div><p>Next, the <code>bind</code> command will create a database schema/user for the service (if one hasn&rsquo;t already been created).
 The command will also create the Kubernetes secret and binding environment entries for the schema (these will be set in the Kubernetes deployment created with the <code>deploy</code> command).</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help bind
@@ -1587,103 +1681,125 @@ The command will also create the Kubernetes secret and binding environment entri
 </span></span><span class="line"><span class="cl">       bind - Create a schema/user and bind it to service deployment.
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">SYNOPSIS
-</span></span><span class="line"><span class="cl">       bind --appName String --serviceName String --springBindingPrefix String
+</span></span><span class="line"><span class="cl">       bind --app-name String [--service-name String] --binding-prefix String --help
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">OPTIONS
-</span></span><span class="line"><span class="cl">       --appName String
+</span></span><span class="line"><span class="cl">       --app-name String
 </span></span><span class="line"><span class="cl">       application/namespace
-</span></span><span class="line"><span class="cl">       [Optional, default = cloudbank]
+</span></span><span class="line"><span class="cl">       [Optional, default = application]
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">       --serviceName String
-</span></span><span class="line"><span class="cl">       database user/serviceName
-</span></span><span class="line"><span class="cl">       [Optional, default = banka]
+</span></span><span class="line"><span class="cl">       --service-name String
+</span></span><span class="line"><span class="cl">       Service Name/Database User
+</span></span><span class="line"><span class="cl">       [Mandatory]
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">       --springBindingPrefix String
+</span></span><span class="line"><span class="cl">       --binding-prefix String
 </span></span><span class="line"><span class="cl">       spring binding prefix
 </span></span><span class="line"><span class="cl">       [Optional, default = spring.datasource]
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>bind
-</span></span><span class="line"><span class="cl">database password/servicePassword (defaults to Welcome12345):
-</span></span><span class="line"><span class="cl">using default value...
-</span></span><span class="line"><span class="cl">database secret created successfully and schema created successfully for banka
+</span></span><span class="line"><span class="cl">       --help or -h
+</span></span><span class="line"><span class="cl">       help for bind
+</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>bind --app-name myapp --service-name myserv
+</span></span><span class="line"><span class="cl">database password/servicePassword (defaults to Welcome12345): ************
+</span></span><span class="line"><span class="cl">database secret created successfully and schema created successfully for myserv
 </span></span></code></pre></div><p>The microservice JAR will now be deployed with the <code>deploy</code> command which will create, build, and push an image for the microservice and create the necessary deployment, service, secret, etc. Kubernetes resources for the microservice.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help deploy
 </span></span><span class="line"><span class="cl">NAME
 </span></span><span class="line"><span class="cl">       deploy - Deploy a service.
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">SYNOPSIS
-</span></span><span class="line"><span class="cl">       deploy --isRedeploy String --bind String --appName String --serviceName String --jarLocation String --imageVersion String --javaImage String
+</span></span><span class="line"><span class="cl">       deploy --redeploy boolean --bind String --app-name String [--service-name String] [--image-version String] --service-profile String --port String --java-version String --add-health-probe boolean [--artifact-path String] --help
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">OPTIONS
-</span></span><span class="line"><span class="cl">       --isRedeploy String
+</span></span><span class="line"><span class="cl">       --redeploy boolean
 </span></span><span class="line"><span class="cl">       whether the service has already been deployed or not
-</span></span><span class="line"><span class="cl">       [Optional, default = true]
+</span></span><span class="line"><span class="cl">       [Optional, default = false]
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --bind String
 </span></span><span class="line"><span class="cl">       automatically create and bind resources. possible values are [jms]
-</span></span><span class="line"><span class="cl">       [Optional, default = none]
+</span></span><span class="line"><span class="cl">       [Optional]
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">       --appName String
+</span></span><span class="line"><span class="cl">       --app-name String
 </span></span><span class="line"><span class="cl">       application/namespace
-</span></span><span class="line"><span class="cl">       [Optional, default = cloudbank]
+</span></span><span class="line"><span class="cl">       [Optional, default = application]
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">       --serviceName String
-</span></span><span class="line"><span class="cl">       service name
-</span></span><span class="line"><span class="cl">       [Optional, default = banka]
+</span></span><span class="line"><span class="cl">       --service-name String
+</span></span><span class="line"><span class="cl">       Service Name
+</span></span><span class="line"><span class="cl">       [Mandatory]
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">       --jarLocation String
-</span></span><span class="line"><span class="cl">       service jar location
-</span></span><span class="line"><span class="cl">       [Optional, default = target/banka-0.0.1-SNAPSHOT.jar]
+</span></span><span class="line"><span class="cl">       --image-version String
+</span></span><span class="line"><span class="cl">       Image Version
+</span></span><span class="line"><span class="cl">       [Mandatory]
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">       --imageVersion String
-</span></span><span class="line"><span class="cl">       image version
-</span></span><span class="line"><span class="cl">       [Optional, default = 0.1]
+</span></span><span class="line"><span class="cl">       --service-profile String
+</span></span><span class="line"><span class="cl">       Service Profile
+</span></span><span class="line"><span class="cl">       [Optional]
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">       --javaImage String
-</span></span><span class="line"><span class="cl">       java image
-</span></span><span class="line"><span class="cl">       [Optional, default = ghcr.io/graalvm/jdk:ol7-java17-22.2.0]
+</span></span><span class="line"><span class="cl">       --port String
+</span></span><span class="line"><span class="cl">       Service Port
+</span></span><span class="line"><span class="cl">       [Optional, default = 8080]
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>deploy --isRedeploy false --bind jms --jarLocation ebaas-sample-apps/banka/target/banka-0.0.1-SNAPSHOT.jar
-</span></span><span class="line"><span class="cl">uploading... upload successful
-</span></span><span class="line"><span class="cl">building and pushing image... docker build and push successful
-</span></span><span class="line"><span class="cl">binding resources... successful (no resources found to bind)
-</span></span><span class="line"><span class="cl">creating deployment and service... create deployment and service  = banka, appName = cloudbank, isRedeploy = false successful
-</span></span><span class="line"><span class="cl">successfully deployed
+</span></span><span class="line"><span class="cl">       --java-version String
+</span></span><span class="line"><span class="cl">       Java Container Base Image [ghcr.io/graalvm/jdk:ol9-java17-22.3.1]
+</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       --add-health-probe boolean
+</span></span><span class="line"><span class="cl">       Inject or not Health probes to service.
+</span></span><span class="line"><span class="cl">       [Optional, default = false]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       --artifact-path String
+</span></span><span class="line"><span class="cl">       Service jar location
+</span></span><span class="line"><span class="cl">       [Mandatory]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       --help or -h
+</span></span><span class="line"><span class="cl">       help for deploy
+</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>deploy --app-name myapp --service-name myserv --image-version 0.0.1 --port 8081 --bind jms --add-health-probe true --artifact-path obaas/myserv/target/demo-0.0.1-SNAPSHOT.jar
+</span></span><span class="line"><span class="cl">uploading: obaas/myserv/target/demo-0.0.1-SNAPSHOT.jar building and pushing image...
+</span></span><span class="line"><span class="cl">binding resources... successful
+</span></span><span class="line"><span class="cl">creating deployment and service... successfully deployed
 </span></span></code></pre></div><p>The <code>list</code> command can then be used to show details of the microservice deployed in the previous step.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help list
 </span></span><span class="line"><span class="cl">NAME
 </span></span><span class="line"><span class="cl">       list - list/show details of application services.
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">SYNOPSIS
-</span></span><span class="line"><span class="cl">       list --appName String
+</span></span><span class="line"><span class="cl">       list --app-name String --help
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">OPTIONS
-</span></span><span class="line"><span class="cl">       --appName String
+</span></span><span class="line"><span class="cl">       --app-name String
 </span></span><span class="line"><span class="cl">       application/namespace
-</span></span><span class="line"><span class="cl">       [Optional, default = cloudbank]
+</span></span><span class="line"><span class="cl">       [Optional, default = application]
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>list
-</span></span><span class="line"><span class="cl">name:banka-7fbff59d8c-gt42g  status:class V1ContainerStatus {
-</span></span><span class="line"><span class="cl">    containerID: cri-o://df2ec83b9359dee8aad658bde2d9ba988f7e43ea2a3e7add61c0cd2eeca612af
-</span></span><span class="line"><span class="cl">    image: ams.ocir.io/maacloud/walleye/cloudbank-banka:0.1
-</span></span><span class="line"><span class="cl">    imageID: ams.ocir.io/maacloud/walleye/cloudbank-banka@sha256:d37f889f6f706accd32df0ccff576237b3a15c736d90ee99b7f97f84860c3502
+</span></span><span class="line"><span class="cl">       --help or -h
+</span></span><span class="line"><span class="cl">       help for list
+</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>list --app-name myapp
+</span></span><span class="line"><span class="cl">name:myserv-c46688645-r6lhl  status:class V1ContainerStatus {
+</span></span><span class="line"><span class="cl">    containerID: cri-o://6d10194c5058a8cf7ecbd5e745cebd5e44c5768c7df73053fa85f54af4b352b2
+</span></span><span class="line"><span class="cl">    image: <span class="p">&lt;</span>region<span class="p">&gt;</span>.ocir.io/<span class="p">&lt;</span>tenancy<span class="p">&gt;</span>/obaas03/myapp-myserv:0.0.1
+</span></span><span class="line"><span class="cl">    imageID: <span class="p">&lt;</span>region<span class="p">&gt;</span>.ocir.io/<span class="p">&lt;</span>tenancy<span class="p">&gt;</span>/obaas03/myapp-myserv@sha256:99d4bbe42ceef97497105218594ea19a9e9869c75f48bdfdc1a2f2aec33b503c
 </span></span><span class="line"><span class="cl">    lastState: class V1ContainerState {
 </span></span><span class="line"><span class="cl">        running: null
 </span></span><span class="line"><span class="cl">        terminated: null
 </span></span><span class="line"><span class="cl">        waiting: null
 </span></span><span class="line"><span class="cl">    }
-</span></span><span class="line"><span class="cl">    name: banka
+</span></span><span class="line"><span class="cl">    name: myserv
 </span></span><span class="line"><span class="cl">    ready: true
 </span></span><span class="line"><span class="cl">    restartCount: 0
 </span></span><span class="line"><span class="cl">    started: true
 </span></span><span class="line"><span class="cl">    state: class V1ContainerState {
 </span></span><span class="line"><span class="cl">        running: class V1ContainerStateRunning {
-</span></span><span class="line"><span class="cl">            startedAt: 2023-01-18T15:54:10Z
+</span></span><span class="line"><span class="cl">            startedAt: 2023-04-13T01:00:51Z
 </span></span><span class="line"><span class="cl">        }
 </span></span><span class="line"><span class="cl">        terminated: null
 </span></span><span class="line"><span class="cl">        waiting: null
 </span></span><span class="line"><span class="cl">    }
-</span></span><span class="line"><span class="cl">}name:banka  kind:null
+</span></span><span class="line"><span class="cl">}name:myserv  kind:null
 </span></span></code></pre></div><p>The <code>config</code> command can be used to view and update config managed by the Spring Config Server.
 More information on the configuration server can be found here:</p>
 <ul>
@@ -1694,41 +1810,177 @@ More information on the configuration server can be found here:</p>
 </ul>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help config
 </span></span><span class="line"><span class="cl">NAME
-</span></span><span class="line"><span class="cl">       config - View and modify application configuration.
+</span></span><span class="line"><span class="cl">       config - View and modify Service configuration.
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">SYNOPSIS
-</span></span><span class="line"><span class="cl">       config --command String --application String --label String --profile String --propKey String --value String
+</span></span><span class="line"><span class="cl">       config [--action CommandConstants.ConfigActions] --service-name String --service-label String --service-profile String --property-key String --property-value String --artifact-path String --help
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">OPTIONS
-</span></span><span class="line"><span class="cl">       --command String
-</span></span><span class="line"><span class="cl">       possible values are [c]reate, [r]ead all, [u]pdate, and [d]elete
-</span></span><span class="line"><span class="cl">       [Optional, default = r]
+</span></span><span class="line"><span class="cl">       --action CommandConstants.ConfigActions
+</span></span><span class="line"><span class="cl">       possible actions: add, list, update, or delete
+</span></span><span class="line"><span class="cl">       [Mandatory]
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">       --application String
-</span></span><span class="line"><span class="cl">       application/namespace config
-</span></span><span class="line"><span class="cl">       [Optional, default = cloudbank]
+</span></span><span class="line"><span class="cl">       --service-name String
+</span></span><span class="line"><span class="cl">       Service Name
+</span></span><span class="line"><span class="cl">       [Optional]
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">       --label String
+</span></span><span class="line"><span class="cl">       --service-label String
 </span></span><span class="line"><span class="cl">       label for config
-</span></span><span class="line"><span class="cl">       [Optional, default = test]
+</span></span><span class="line"><span class="cl">       [Optional]
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">       --profile String
-</span></span><span class="line"><span class="cl">       profile for config
-</span></span><span class="line"><span class="cl">       [Optional, default = test]
+</span></span><span class="line"><span class="cl">       --service-profile String
+</span></span><span class="line"><span class="cl">       Application Profile
+</span></span><span class="line"><span class="cl">       [Optional]
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">       --propKey String
+</span></span><span class="line"><span class="cl">       --property-key String
 </span></span><span class="line"><span class="cl">       the property key for the config
-</span></span><span class="line"><span class="cl">       [Optional, default = test]
+</span></span><span class="line"><span class="cl">       [Optional]
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">       --value String
+</span></span><span class="line"><span class="cl">       --property-value String
 </span></span><span class="line"><span class="cl">       the value for the config
-</span></span><span class="line"><span class="cl">       [Optional, default = test]
-</span></span><span class="line"><span class="cl">       
-</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config
-</span></span><span class="line"><span class="cl">command ([c]reate, [r]ead all, [u]pdate, [d]elete): r
-</span></span><span class="line"><span class="cl">[id<span class="s2">&#34;:1,&#34;</span>application<span class="s2">&#34;:&#34;</span>atael<span class="s2">&#34;,&#34;</span>profile<span class="s2">&#34;:&#34;</span>dev<span class="s2">&#34;,&#34;</span>label<span class="s2">&#34;:&#34;</span>latest<span class="s2">&#34;,&#34;</span>propKey<span class="s2">&#34;:&#34;</span>test-property<span class="s2">&#34;,&#34;</span>value<span class="s2">&#34;:&#34;</span>This is the test-property value<span class="s2">&#34;,&#34;</span>createdOn<span class="s2">&#34;:&#34;</span>2022-12-14T12:42:33.000+00:00<span class="s2">&#34;,&#34;</span>createdBy<span class="s2">&#34;:&#34;</span>ADMIN”
-</span></span><span class="line"><span class="cl">[…]
-</span></span></code></pre></div>
+</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       --artifact-path String
+</span></span><span class="line"><span class="cl">       the context
+</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       --help or -h
+</span></span><span class="line"><span class="cl">       help for config
+</span></span><span class="line"><span class="cl">       [Optional]
+</span></span></code></pre></div><p>The <code>config add</code> allow add the application configuration to Spring Config Server following two options:</p>
+<ul>
+<li>
+<p>add a specific configuration using the set of parameters <code>--service-name</code>, <code>--service-label</code>, <code>--service-profile</code>, <code>--property-key</code> and <code>--property-value</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config add --service-name myserv --service-label 0.0.1 --service-profile default --property-key k1 --property-value value1
+</span></span><span class="line"><span class="cl">Property added successfully.
+</span></span></code></pre></div></li>
+<li>
+<p>add a set of configurations based on a config file using <code>--artifact-path</code> Example: <code>myserv.json</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl"> <span class="nt">&#34;application&#34;</span><span class="p">:</span> <span class="s2">&#34;myserv&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="nt">&#34;profile&#34;</span><span class="p">:</span> <span class="s2">&#34;obaas&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="nt">&#34;label&#34;</span><span class="p">:</span> <span class="s2">&#34;0.0.1&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"> <span class="nt">&#34;properties&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;spring.datasource.driver-class-name&#34;</span><span class="p">:</span> <span class="s2">&#34;oracle.jdbc.OracleDriver&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;spring.datasource.url&#34;</span><span class="p">:</span> <span class="s2">&#34;jdbc:oracle:thin:@$(db.service)?TNS_ADMIN=/oracle/tnsadmin&#34;</span>
+</span></span><span class="line"><span class="cl"> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config add --artifact-path /obaas/myserv-properties.json
+</span></span><span class="line"><span class="cl">2 property(s) added successfully.
+</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config list --service-name myserv --service-profile obaas --service-label 0.0.1
+</span></span><span class="line"><span class="cl">[ {
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;id&#34;</span> : 222,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;application&#34;</span> : <span class="s2">&#34;myserv&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;profile&#34;</span> : <span class="s2">&#34;obaas&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;label&#34;</span> : <span class="s2">&#34;0.0.1&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;propKey&#34;</span> : <span class="s2">&#34;spring.datasource.driver-class-name&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;value&#34;</span> : <span class="s2">&#34;oracle.jdbc.OracleDriver&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;createdOn&#34;</span> : <span class="s2">&#34;2023-04-13T01:29:38.000+00:00&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;createdBy&#34;</span> : <span class="s2">&#34;CONFIGSERVER&#34;</span>
+</span></span><span class="line"><span class="cl">}, {
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;id&#34;</span> : 223,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;application&#34;</span> : <span class="s2">&#34;myserv&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;profile&#34;</span> : <span class="s2">&#34;obaas&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;label&#34;</span> : <span class="s2">&#34;0.0.1&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;propKey&#34;</span> : <span class="s2">&#34;spring.datasource.url&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;value&#34;</span> : <span class="s2">&#34;jdbc:oracle:thin:@$(db.service)?TNS_ADMIN=/oracle/tnsadmin&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;createdOn&#34;</span> : <span class="s2">&#34;2023-04-13T01:29:38.000+00:00&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;createdBy&#34;</span> : <span class="s2">&#34;CONFIGSERVER&#34;</span>
+</span></span><span class="line"><span class="cl">} ]
+</span></span></code></pre></div></li>
+</ul>
+<p>The <code>config list</code> without any parameter will bring the list of services that has at least one configuration inserted Spring Config Server.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config list
+</span></span><span class="line"><span class="cl">[ {
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;name&#34;</span> : <span class="s2">&#34;apptest&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;label&#34;</span> : <span class="s2">&#34;&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;profile&#34;</span> : <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">}, {
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;name&#34;</span> : <span class="s2">&#34;myapp&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;label&#34;</span> : <span class="s2">&#34;&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;profile&#34;</span> : <span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">}, […]
+</span></span></code></pre></div><p>The <code>config list [parameters]</code> can be used to list the parameters using parameters as filters:</p>
+<ul>
+<li><code>--service-name</code> : will list all parameters from the specified service.</li>
+<li><code>--service-label</code>: filter by label</li>
+<li><code>--service-profile</code>: filter by profiel</li>
+<li><code>--property-key</code>: list a specific parameter filter by key.</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config list --service-name myserv --service-profile default --service-label 0.0.1
+</span></span><span class="line"><span class="cl">[ {
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;id&#34;</span> : 221,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;application&#34;</span> : <span class="s2">&#34;myserv&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;profile&#34;</span> : <span class="s2">&#34;default&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;label&#34;</span> : <span class="s2">&#34;0.0.1&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;propKey&#34;</span> : <span class="s2">&#34;k1&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;value&#34;</span> : <span class="s2">&#34;value1&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;createdOn&#34;</span> : <span class="s2">&#34;2023-04-13T01:10:16.000+00:00&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;createdBy&#34;</span> : <span class="s2">&#34;CONFIGSERVER&#34;</span>
+</span></span><span class="line"><span class="cl">} ]
+</span></span></code></pre></div><p>The <code>config update</code> allow update a specific configuration using the set of parameters:</p>
+<ul>
+<li><code>--service-name</code></li>
+<li><code>--service-label</code></li>
+<li><code>--service-profile</code></li>
+<li><code>--property-key</code></li>
+<li><code>--property-value</code></li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key k1
+</span></span><span class="line"><span class="cl">[ {
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;id&#34;</span> : 30,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;application&#34;</span> : <span class="s2">&#34;myserv&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;profile&#34;</span> : <span class="s2">&#34;obaas&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;label&#34;</span> : <span class="s2">&#34;0.1&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;propKey&#34;</span> : <span class="s2">&#34;k1&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;value&#34;</span> : <span class="s2">&#34;value1&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;createdOn&#34;</span> : <span class="s2">&#34;2023-03-23T18:02:29.000+00:00&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;createdBy&#34;</span> : <span class="s2">&#34;CONFIGSERVER&#34;</span>
+</span></span><span class="line"><span class="cl">} ]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config update --service-name myserv --service-profile obaas --service-label 0.1 --property-key k1 --property-value value1Updated
+</span></span><span class="line"><span class="cl">Property successful modified.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key k1
+</span></span><span class="line"><span class="cl">[ {
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;id&#34;</span> : 30,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;application&#34;</span> : <span class="s2">&#34;myserv&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;profile&#34;</span> : <span class="s2">&#34;obaas&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;label&#34;</span> : <span class="s2">&#34;0.1&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;propKey&#34;</span> : <span class="s2">&#34;k1&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;value&#34;</span> : <span class="s2">&#34;value1Updated&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;createdOn&#34;</span> : <span class="s2">&#34;2023-03-23T18:02:29.000+00:00&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;createdBy&#34;</span> : <span class="s2">&#34;CONFIGSERVER&#34;</span>
+</span></span><span class="line"><span class="cl">} ]
+</span></span></code></pre></div><p>The <code>config delete</code> allow delete the application configuration from Spring Config Server following two options:</p>
+<ul>
+<li>
+<p>delete all configurations from a specific service using the filters by <code>--service-name</code>, <code>--service-profile</code> and <code>--service-label</code>. The CLI will inform how many configurations are present in Config Server and ask to confirm the complete deletion.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config delete --service-name myserv
+</span></span><span class="line"><span class="cl">[obaas] 7 property(ies) found, delete all (y/n)?:
+</span></span></code></pre></div></li>
+<li>
+<p>delete a specific configuration using the set of parameters <code>--service-name</code>, <code>--service-label</code>, <code>--service-profile</code> and <code>--property-key</code>.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
+</span></span><span class="line"><span class="cl">[ {
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;id&#34;</span> : 224,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;application&#34;</span> : <span class="s2">&#34;myserv&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;profile&#34;</span> : <span class="s2">&#34;obaas&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;label&#34;</span> : <span class="s2">&#34;0.1&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;propKey&#34;</span> : <span class="s2">&#34;ktest2&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;value&#34;</span> : <span class="s2">&#34;value2&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;createdOn&#34;</span> : <span class="s2">&#34;2023-04-13T01:52:11.000+00:00&#34;</span>,
+</span></span><span class="line"><span class="cl">  <span class="s2">&#34;createdBy&#34;</span> : <span class="s2">&#34;CONFIGSERVER&#34;</span>
+</span></span><span class="line"><span class="cl">} ]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config delete --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
+</span></span><span class="line"><span class="cl">[obaas] property successfully deleted.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
+</span></span><span class="line"><span class="cl">400 : <span class="s2">&#34;Couldn&#39;t find any property for submitted query.&#34;</span>
+</span></span></code></pre></div></li>
+</ul>
+
   </article>
 
 
@@ -1794,85 +2046,6 @@ More information on the configuration server can be found here:</p>
 
     
     
-      
-  
-  
-
-  
-    
-    
-
-    
-    
-      
-      
-      
-
-      
-        
-      
-      
-
-      
-
-      
-
-      
-    
-
-    
-    
-  
-    
-    
-
-    
-    
-      
-      
-      
-
-      
-        
-      
-      
-
-      
-
-      
-
-      
-    
-
-    
-    
-  
-
-    
-  
-    
-    
-
-    
-    
-      
-      
-      
-
-      
-        
-      
-      
-
-      
-
-      
-
-      
-    
-
-    
-    
   
     
     
@@ -1950,6 +2123,109 @@ More information on the configuration server can be found here:</p>
     
     
   
+
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+      
+  
+  
+
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+  
     
     
 
@@ -2066,6 +2342,30 @@ More information on the configuration server can be found here:</p>
       
         
         
+      
+
+      
+
+      
+    
+
+    
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
       
 
       

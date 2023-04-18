@@ -65,7 +65,7 @@ Object Storage for storing Vault data OCI Vault to auto unseal the Vault Contain
       "url" : "https://oracle.github.io/microservices-datadriven/spring/platform/vault/",
       "headline": "Vault",
       "description": "Oracle Backend as a Service for Spring Cloud includes HashiCorp Vault to secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets and other sensitive data using a UI, CLI, or HTTP API.\nTip For more information about working with the HashiCorp Vault, see the HashiCorp Vault Documentation and Tutorials Library. Setup Information Vault uses the following Oracle OCI Services:\nObject Storage for storing Vault data OCI Vault to auto unseal the Vault Container Engine for Kubernetes for running the Vault server The Vault is unsealed using the OCI KMS key.",
-      "wordCount" : "945",
+      "wordCount" : "1057",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -325,6 +325,51 @@ Object Storage for storing Vault data OCI Vault to auto unseal the Vault Contain
                   class="gdoc-nav__entry"
                 >
                   Setup
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/azure"
+                  class="gdoc-nav__entry"
+                >
+                  Multi-Cloud (OCI/Azure) Installation
                 </a>
               </span>
               
@@ -880,6 +925,51 @@ Object Storage for storing Vault data OCI Vault to auto unseal the Vault Contain
                   class="gdoc-nav__entry is-active"
                 >
                   Vault
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/platform/vscode-plugin"
+                  class="gdoc-nav__entry"
+                >
+                  VS Code plugin
                 </a>
               </span>
               
@@ -1523,15 +1613,23 @@ if (!doNotTrack) {
 <li><a
   class="gdoc-markdown__link"
   href="https://developer.hashicorp.com/vault/docs/auth/token"
->Token Auth Method</a>. The token auth method is built-in and automatically available. It allows users to authenticate using a token, as well to create new tokens, revoke secrets by token, and more.</li>
+>Token Auth Method</a>. The <code>token</code> auth method is built-in and automatically available. It allows users to authenticate using a token, as well to create new tokens, revoke secrets by token, and more.</li>
+<li><a
+  class="gdoc-markdown__link"
+  href="https://developer.hashicorp.com/vault/docs/auth/approle"
+>AppRole Auth Method</a>. The <code>approle</code> auth method allows machines or apps to authenticate with Vault-defined roles.</li>
+<li><a
+  class="gdoc-markdown__link"
+  href="https://developer.hashicorp.com/vault/docs/auth/kubernetes"
+>Kubernetes Auth Method</a>. The <code>kubernetes</code> auth method can be used to authenticate with Vault using a Kubernetes Service Account Token. This method of authentication makes it easy to introduce a Vault token into a Kubernetes Pod.</li>
+<li><a
+  class="gdoc-markdown__link"
+  href="https://developer.hashicorp.com/vault/docs/auth/userpass"
+>Userpass Auth Method</a>The <code>userpass</code> auth method allows users to authenticate with Vault using a username and password combination.</li>
 <li><a
   class="gdoc-markdown__link"
   href="https://developer.hashicorp.com/vault/docs/secrets/kv"
 >KV Secrets Engine Version 2</a>. The kv secrets engine is a generic Key-Value store used to store arbitrary secrets.</li>
-<li><a
-  class="gdoc-markdown__link"
-  href="https://developer.hashicorp.com/vault/docs/auth/approle"
->AppRole Auth Method</a>. The approle auth method allows machines or apps to authenticate with Vault-defined roles.</li>
 </ul>
 <div class="gdoc-page__anchorwrap">
     <h2 id="accessing-vault-using-using-kubectl">
@@ -1576,7 +1674,7 @@ if (!doNotTrack) {
 <li>
 <p>Login into Vault</p>
 <p>To interact with vault you need to login using a token. The root token is stored in a k8s secret. Get the token by running this command, the output is the root token. It is <strong>VERY IMPORTANT</strong> that the token is saved in multiple places, loosing the token can result in loss of access to the Vault.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl get secret root-token -n vault --template<span class="o">=</span><span class="s2">&#34;{{index .data \&#34;root.token\&#34; | base64decode}}&#34;</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl get secret vault-root-token -n vault --template<span class="o">=</span><span class="s2">&#34;{{index .data \&#34;root.token\&#34; | base64decode}}&#34;</span>
 </span></span></code></pre></div><p>Login to the vault:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl <span class="nb">exec</span> pod/vault-0 -n vault  -it -- vault login
 </span></span><span class="line"><span class="cl">Token <span class="o">(</span>will be hidden<span class="o">)</span>:
@@ -1605,6 +1703,18 @@ if (!doNotTrack) {
 </span></span><span class="line"><span class="cl">identity/     identity     identity_8b1e1a80     identity store
 </span></span><span class="line"><span class="cl">kv-v2/        kv           kv_06acc397           n/a
 </span></span><span class="line"><span class="cl">sys/          system       system_df5c39a8       system endpoints used for control, policy and debugging
+</span></span></code></pre></div></li>
+<li>
+<p>Display the authentication methods enabled:</p>
+<p>To display the enabled authentication methods execute the following command:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl <span class="nb">exec</span> pod/vault-0 -n vault  -it -- vault auth list
+</span></span></code></pre></div><p>The output will look similar to this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Path           Type          Accessor                    Description
+</span></span><span class="line"><span class="cl">----           ----          --------                    -----------
+</span></span><span class="line"><span class="cl">approle/       approle       auth_approle_00ffb93b       n/a
+</span></span><span class="line"><span class="cl">kubernetes/    kubernetes    auth_kubernetes_c9bb0698    n/a
+</span></span><span class="line"><span class="cl">token/         token         auth_token_68b0beb2         token based credentials
+</span></span><span class="line"><span class="cl">userpass/      userpass      auth_userpass_afb2fb02      n/a
 </span></span></code></pre></div></li>
 <li>
 <p>Create a secret</p>
@@ -1875,15 +1985,15 @@ if (!doNotTrack) {
 </div>
 <p>Vault is configured to Auto Unseal using OCI Vault. Initializing with Auto Unseal creates five recovery keys and they are stored in k8s secrets. They <strong>MUST</strong> be retrieved and stored in a second location.</p>
 <p>To extract the five recovery keys use the following commands:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">% kubectl get secret recovery-keys -n vault --template<span class="o">=</span><span class="s2">&#34;{{index .data \&#34;recovery.key.1\&#34; }}&#34;</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">% kubectl get secret vault-recovery-keys -n vault --template<span class="o">=</span><span class="s2">&#34;{{index .data \&#34;recovery.key.1\&#34; }}&#34;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">% kubectl get secret recovery-keys -n vault --template<span class="o">=</span><span class="s2">&#34;{{index .data \&#34;recovery.key.2\&#34; }}&#34;</span>
+</span></span><span class="line"><span class="cl">% kubectl get secret vault-recovery-keys -n vault --template<span class="o">=</span><span class="s2">&#34;{{index .data \&#34;recovery.key.2\&#34; }}&#34;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">% kubectl get secret recovery-keys -n vault --template<span class="o">=</span><span class="s2">&#34;{{index .data \&#34;recovery.key.3\&#34; }}&#34;</span>
+</span></span><span class="line"><span class="cl">% kubectl get secret vault-recovery-keys -n vault --template<span class="o">=</span><span class="s2">&#34;{{index .data \&#34;recovery.key.3\&#34; }}&#34;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">% kubectl get secret recovery-keys -n vault --template<span class="o">=</span><span class="s2">&#34;{{index .data \&#34;recovery.key.4\&#34; }}&#34;</span>
+</span></span><span class="line"><span class="cl">% kubectl get secret vault-recovery-keys -n vault --template<span class="o">=</span><span class="s2">&#34;{{index .data \&#34;recovery.key.4\&#34; }}&#34;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">% kubectl get secret recovery-keys -n vault --template<span class="o">=</span><span class="s2">&#34;{{index .data \&#34;recovery.key.5\&#34; }}&#34;</span>
+</span></span><span class="line"><span class="cl">% kubectl get secret vault-recovery-keys -n vault --template<span class="o">=</span><span class="s2">&#34;{{index .data \&#34;recovery.key.5\&#34; }}&#34;</span>
 </span></span></code></pre></div>
   </article>
 
@@ -1950,85 +2060,6 @@ if (!doNotTrack) {
 
     
     
-      
-  
-  
-
-  
-    
-    
-
-    
-    
-      
-      
-      
-
-      
-        
-      
-      
-
-      
-
-      
-
-      
-    
-
-    
-    
-  
-    
-    
-
-    
-    
-      
-      
-      
-
-      
-        
-      
-      
-
-      
-
-      
-
-      
-    
-
-    
-    
-  
-
-    
-  
-    
-    
-
-    
-    
-      
-      
-      
-
-      
-        
-      
-      
-
-      
-
-      
-
-      
-    
-
-    
-    
   
     
     
@@ -2106,6 +2137,9 @@ if (!doNotTrack) {
     
     
   
+
+    
+  
     
     
 
@@ -2129,6 +2163,34 @@ if (!doNotTrack) {
 
     
     
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+      
+  
+  
+
   
     
     
@@ -2219,8 +2281,107 @@ if (!doNotTrack) {
       
 
       
+
+      
+    
+
+    
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
         
         
+      
+
+      
+    
+
+    
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+        
+        
+      
+
       
 
       
@@ -2246,9 +2407,6 @@ if (!doNotTrack) {
       
       
 
-      
-        
-        
       
 
       
@@ -2456,10 +2614,10 @@ if (!doNotTrack) {
     
       <a
         class="gdoc-page__nav--next flex align-center"
-        href="/microservices-datadriven/spring/observability/"
-        title="Observability"
+        href="/microservices-datadriven/spring/platform/vscode-plugin/"
+        title="VS Code plugin"
       >
-        Observability
+        VS Code plugin
         <i class="gdoc-icon">gdoc_arrow_right_alt</i>
       </a>
     
