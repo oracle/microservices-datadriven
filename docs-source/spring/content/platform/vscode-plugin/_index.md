@@ -92,7 +92,7 @@ Until you create a dedicated ssh tunnel to the Kubernetes cluster, and you don't
 
    Before proceed to connection, please wait until the tunnel is established and the terminal shows a message like this:
 
-   ![okTunnel](./imaeges/oktunnel.jpg)
+   ![okTunnel](./images/oktunnel.jpg)
 
    NOTE: if the K8s cluster it's not related to an Oracle Backend for Spring Boot deployment, the tunnel creation will fail. In this case in command palette execute a window reload to chose another cluster. If you have any problem in connection, you could start another tunnel: the plugin will try on another local port to connect to the cluster.
 
@@ -199,7 +199,7 @@ Expanding the leaf **oBaasConf** you will see the applications deployed and, exp
 Moving mouse on each key-value pair, you can see the other metadata related to the key, **profile** and **label**.
 In the following picture, the key **spring.datasource.url** with value **'jdbc:oracle:thin:@$....'** has the property **application** coming from the root, i.e. **cloudbank**,  **profile**=**1.0** and **label**=**kube**.
 
-   ![detailConf](./dimages/detailsConf.jpg)
+   ![detailConf](./images/detailsConf.jpg)
 
 The operation that can be done are:
 
