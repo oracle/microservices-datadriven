@@ -4,6 +4,10 @@ title: "Oracle Backend for Spring Boot - Developer Preview"
 
 Oracle Backend for Spring Boot allows developers to build microservices in Spring Boot and provision a backend as a service with the Oracle Database and other infrastructure components that operate on multiple clouds. This service vastly simplifies the task of building, testing, and operating microservices platforms for reliable, secure, and scalable enterprise applications.
 
+Learn more in this short introduction video:
+
+{{< youtube 3MQy89oo894 >}}
+
 In addition to an Oracle Autonomous Database Shared instance, the following software components are deployed in an Oracle Cloud Infrastructure Container Engine for Kubernetes (OKE) cluster:
 
 - APISIX API Gateway and Dashboard
