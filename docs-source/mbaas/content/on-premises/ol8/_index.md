@@ -6,12 +6,20 @@ Please read the [On-Premises](../index.md) and ensure your desktop meets the min
 
 ## Install
 
-### Podman
+### Additional OS Packages
 
 ```bash
 sudo dnf -y module install container-tools:ol8
 sudo dnf -y install conntrack podman curl
 sudo dnf -y install oracle-database-preinstall-21c
+sudo dnf -y install langpacks-en glibc-all-langpack
+sudo dnf module install python39
+```
+
+Set the default Python3 to Python 3.9:
+
+```bash
+sudo alternatives --set python3 /usr/bin/python3.9
 ```
 
 ### Download the Database/ORDS Images
