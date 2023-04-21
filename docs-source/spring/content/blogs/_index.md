@@ -10,6 +10,22 @@ We'd love you to check them out.
 This page acts as an index/aggregator for some of our featured content.
 
 {{< blog  
+    author="andy" 
+    date="4/20/2023" 
+    title="I have deployed Oracle Backend for Spring Boot (Developer preview). Now what?" 
+    link="https://mr-a.org/i-have-deployed-oracle-backend-for-spring-boot-developer-preview-now-what/"
+    abstract="Andy shows us how easy it is to build a Spring Boot Phone Book application, deploy it to Oracle Backend for Spring Boot using the CLI, and create a route in APISIX Gateway to expose the REST endpoints." 
+>}}
+
+{{< blog  
+    author="andy" 
+    date="4/20/2023" 
+    title="Oracle Backend for Spring and Parse Video" 
+    link="https://mr-a.org/oracle-backend-for-spring-and-parse-video/"
+    abstract="This video introduces the Oracle Backend for Spring Boot (and Parse Platform) which makes it super easy to develop, run and manage Spring Boot microservices and mobile applications leveraging all the power of Oracle’s converged database." 
+>}}
+
+{{< blog  
     author="paul" 
     date="4/18/2023" 
     title="Long Running Actions" 
