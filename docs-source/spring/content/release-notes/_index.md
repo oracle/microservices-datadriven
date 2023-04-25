@@ -5,6 +5,20 @@ Notes:
 * The Oracle Database Operator for Kubernetes will be bound the existing ADB created by IaC in an all-OCI installation and will provision the ADB in the multi-cloud installation.
 * Improvements to On-Premises and Desktop Installation process
 
+The following components were added:
+
+| Component                    | New Version   | Description         |
+|------------------------------|---------------|---------------------|
+| Oracle Backend for Spring Boot Visual Studio Code Extension | 0.3.7   |  Allows Visual Studio Code users to manage the platform, deployments and configuration.  |
+
+The following components were updated:
+
+| Component                    | New Version   | Replaced Version    |
+|------------------------------|---------------|---------------------|
+| Oracle Backend for Spring Boot CLI | 0.3.0   | 0.1.0               |
+
+There were no component deprecations or removals.
+
 ## Developer Preview 0.2.3, March 8, 2023
 
 Notes: 

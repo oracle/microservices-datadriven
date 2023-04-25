@@ -10,6 +10,55 @@ We'd love you to check them out.
 This page acts as an index/aggregator for some of our featured content.
 
 {{< blog  
+    author="andy" 
+    date="4/20/2023" 
+    title="I have deployed Oracle Backend for Spring Boot (Developer preview). Now what?" 
+    link="https://mr-a.org/i-have-deployed-oracle-backend-for-spring-boot-developer-preview-now-what/"
+    abstract="Andy shows us how easy it is to build a Spring Boot Phone Book application, deploy it to Oracle Backend for Spring Boot using the CLI, and create a route in APISIX Gateway to expose the REST endpoints." 
+>}}
+
+{{< blog  
+    author="andy" 
+    date="4/20/2023" 
+    title="Oracle Backend for Spring and Parse Video" 
+    link="https://mr-a.org/oracle-backend-for-spring-and-parse-video/"
+    abstract="This video introduces the Oracle Backend for Spring Boot (and Parse Platform) which makes it super easy to develop, run and manage Spring Boot microservices and mobile applications leveraging all the power of Oracle’s converged database." 
+>}}
+
+{{< blog  
+    author="paul" 
+    date="4/18/2023" 
+    title="Long Running Actions" 
+    link="https://www.youtube.com/watch?v=2E8acaNnX8Q"
+    abstract="Paul Parkinson demonstrates a Spring Boot microservices application that implements the Saga pattern with Long Running Actions using the Oracle Transaction Manager for Microservices to manage data consistency across microservices." 
+>}}
+
+{{< blog  
+    author="mark" 
+    date="4/6/2023" 
+    title="Introducing Cloud Bank" 
+    link="https://medium.com/oracledevs/introducing-cloud-bank-d3af56e1141f"
+    abstract="And introduction to the Cloud Bank sample application which showcases Spring Boot microservices, long running actions/sagas and a Flutter mobile application built with the Oracle Backend for Spring Boot." 
+>}}
+
+{{< blog  
+    author="paul" 
+    date="3/27/2023" 
+    title="Developing Saga Participant Code For Compensating Transactions" 
+    link="https://blogs.oracle.com/developers/post/developing-saga-participant-code-for-compensating-transactions"
+    abstract="A detailed comparison of the saga pattern with XA (2PC) comparing the pros and cons of each approach to provide data integrity between multiple services and for potentially long running transactions." 
+>}}
+
+
+{{< blog  
+    author="andy" 
+    date="3/25/2023" 
+    title="Oracle Backend for Spring Boot is LIVE! (Developer Preview)" 
+    link="https://mr-a.org/oracle-backend-for-spring-boot-is-live-developer-preview/"
+    abstract="An introduction to the Oracle Backend for Spring Boot." 
+>}}
+
+{{< blog  
     author="mark" 
     date="2/3/2023" 
     title="A First Spring Boot Service with Oracle" 
@@ -79,6 +128,22 @@ This page acts as an index/aggregator for some of our featured content.
     title="Getting Started with the New Observability Exporter for Oracle Database" 
     link="https://redstack.wordpress.com/2022/09/27/getting-started-with-the-new-observability-exporter-for-oracle-database/"
     abstract="A simple step-by-step getting started example that shows you how to use the Observability Exporter for Oracle Database to expose data from the Oracle Database as Promeheus metrics." 
+>}}
+
+{{< blog  
+    author="paul" 
+    date="9/18/2022" 
+    title="Develop React + GraphQL + Spring Data JPA + UCP + Oracle" 
+    link="https://blogs.oracle.com/developers/post/develop-react-graphql-spring-boot-data-jpa-ucp-oracle"
+    abstract="A a succinct description and example of a modern full stack microservice app including a React frontend service that conducts GraphQL queries against a Spring Boot Data JPA backend service that in turn maps to an Oracle database." 
+>}}
+
+{{< blog  
+    author="paul" 
+    date="8/11/2022" 
+    title="Unified Observability Exporters: Metrics, Logs, and Tracing" 
+    link="https://blogs.oracle.com/developers/post/unified-observability-exporters-metrics-logs-and-tracing"
+    abstract="A deep dive into metrics, logs and tracing exporters for the Oracle Database and how to configure them with Grafana to provide unified observability for microservices and the Oracle Database." 
 >}}
 
 {{< blog  

@@ -1,4 +1,19 @@
 
+## Developer Preview 0.3.0, April 17, 2023
+
+No components were added.
+
+The following components were updated:
+
+| Component                    | Version       | Description                                                                             |
+|------------------------------|---------------|-----------------------------------------------------------------------------------------|
+| Oracle Storage Adapter for Parse | 0.3.0     | Enables Parse Server to store data in Oracle Database                                   |
+
+
+The following areas were improved in this release: Schema Field Validation, Schema Field Default Values, Create and Delete Indexes, Composite Indexes and Schema Field Deletion.
+
+There were no deprecations or removals.
+
 ## Developer Preview 0.2.0, February 27, 2023
 
 No components were added.
