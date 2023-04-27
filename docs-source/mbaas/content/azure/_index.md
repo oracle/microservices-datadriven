@@ -11,7 +11,7 @@ You must meet the following prerequisites to use the Oracle Backend for Spring B
 
 ## Download
 
-Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-mbaas-platform_latest.zip).
+Download [Oracle Backend for Parse Server](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-mbaas_latest.zip).
 
 ## Setup
 
