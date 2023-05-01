@@ -17,7 +17,7 @@ The platform specific binary can be renamed to `oractl` for convenience.
 2. Start the CLI in interactive mode by simply running `oractl` from your terminal window.
 
     ```shell
-        oractl
+    oractl
     ```
 
 ## AVAILABLE COMMANDS

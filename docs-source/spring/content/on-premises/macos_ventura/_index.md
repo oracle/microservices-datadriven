@@ -2,7 +2,7 @@
 
 This is an example of installing on a MacOS Venture desktop
 
-Please read the [On-Premises](../index.md) and ensure your desktop meets the minimum system requirements.
+Please read the [On-Premises](../../on-premises) and ensure your desktop meets the minimum system requirements.
 
 ## Install
 
