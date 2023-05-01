@@ -11,7 +11,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>aqjms-sample</artifactId>
+	<artifactId>aqjms-jakarta-sample</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>aqjms-jakarta-sample</name>
 	<description>Demo project for Spring Boot</description>
