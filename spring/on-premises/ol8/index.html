@@ -14,7 +14,7 @@
 
   <meta name="description" content="On-Premises Installation - Oracle Linux 8 (x86) This is an example of installing on a MacOS Venture desktop
 Please read the On-Premises and ensure your desktop meets the minimum system requirements.
-Install Podman sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack podman curl sudo dnf -y install oracle-database-preinstall-21c Download the Database/ORDS Images The Desktop installation will provision an Oracle Database into the Kubernetes cluster. The images must be downloaded from Oracle&rsquo;s Container Registry prior to continuing." />
+Install Additional OS Packages sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack podman curl sudo dnf -y install oracle-database-preinstall-21c sudo dnf -y install langpacks-en glibc-all-langpack sudo dnf module install python39 Set the default Python3 to Python 3." />
 
     <title>Ol8 | Oracle Backend for Spring Boot</title>
 
@@ -42,7 +42,7 @@ Install Podman sudo dnf -y module install container-tools:ol8 sudo dnf -y instal
   <meta property="og:site_name" content="Oracle Backend for Spring Boot" />
   <meta property="og:description" content="On-Premises Installation - Oracle Linux 8 (x86) This is an example of installing on a MacOS Venture desktop
 Please read the On-Premises and ensure your desktop meets the minimum system requirements.
-Install Podman sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack podman curl sudo dnf -y install oracle-database-preinstall-21c Download the Database/ORDS Images The Desktop installation will provision an Oracle Database into the Kubernetes cluster. The images must be downloaded from Oracle’s Container Registry prior to continuing." />
+Install Additional OS Packages sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack podman curl sudo dnf -y install oracle-database-preinstall-21c sudo dnf -y install langpacks-en glibc-all-langpack sudo dnf module install python39 Set the default Python3 to Python 3." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/" />
 
@@ -53,7 +53,7 @@ Install Podman sudo dnf -y module install container-tools:ol8 sudo dnf -y instal
 <meta name="twitter:title" content="Ol8" />
   <meta name="twitter:description" content="On-Premises Installation - Oracle Linux 8 (x86) This is an example of installing on a MacOS Venture desktop
 Please read the On-Premises and ensure your desktop meets the minimum system requirements.
-Install Podman sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack podman curl sudo dnf -y install oracle-database-preinstall-21c Download the Database/ORDS Images The Desktop installation will provision an Oracle Database into the Kubernetes cluster. The images must be downloaded from Oracle’s Container Registry prior to continuing." />
+Install Additional OS Packages sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack podman curl sudo dnf -y install oracle-database-preinstall-21c sudo dnf -y install langpacks-en glibc-all-langpack sudo dnf module install python39 Set the default Python3 to Python 3." />
 
 
   <script type="application/ld+json">
@@ -64,8 +64,8 @@ Install Podman sudo dnf -y module install container-tools:ol8 sudo dnf -y instal
       "name": "Ol8",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/",
       "headline": "Ol8",
-      "description": "On-Premises Installation - Oracle Linux 8 (x86) This is an example of installing on a MacOS Venture desktop\nPlease read the On-Premises and ensure your desktop meets the minimum system requirements.\nInstall Podman sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack podman curl sudo dnf -y install oracle-database-preinstall-21c Download the Database\/ORDS Images The Desktop installation will provision an Oracle Database into the Kubernetes cluster. The images must be downloaded from Oracle’s Container Registry prior to continuing.",
-      "wordCount" : "381",
+      "description": "On-Premises Installation - Oracle Linux 8 (x86) This is an example of installing on a MacOS Venture desktop\nPlease read the On-Premises and ensure your desktop meets the minimum system requirements.\nInstall Additional OS Packages sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack podman curl sudo dnf -y install oracle-database-preinstall-21c sudo dnf -y install langpacks-en glibc-all-langpack sudo dnf module install python39 Set the default Python3 to Python 3.",
+      "wordCount" : "414",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1571,7 +1571,7 @@ if (!doNotTrack) {
 <p>This is an example of installing on a MacOS Venture desktop</p>
 <p>Please read the <a
   class="gdoc-markdown__link"
-  href="../index.md"
+  href="../../on-premises"
 >On-Premises</a> and ensure your desktop meets the minimum system requirements.</p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="install">
@@ -1582,9 +1582,9 @@ if (!doNotTrack) {
     </h2>
 </div>
 <div class="gdoc-page__anchorwrap">
-    <h3 id="podman">
-        Podman
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#podman" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Podman" aria-label="Anchor to: Podman" href="#podman">
+    <h3 id="additional-os-packages">
+        Additional OS Packages
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#additional-os-packages" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Additional OS Packages" aria-label="Anchor to: Additional OS Packages" href="#additional-os-packages">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h3>
@@ -1592,6 +1592,10 @@ if (!doNotTrack) {
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo dnf -y module install container-tools:ol8
 </span></span><span class="line"><span class="cl">sudo dnf -y install conntrack podman curl
 </span></span><span class="line"><span class="cl">sudo dnf -y install oracle-database-preinstall-21c
+</span></span><span class="line"><span class="cl">sudo dnf -y install langpacks-en glibc-all-langpack
+</span></span><span class="line"><span class="cl">sudo dnf module install python39
+</span></span></code></pre></div><p>Set the default Python3 to Python 3.9:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo alternatives --set python3 /usr/bin/python3.9
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="download-the-databaseords-images">
         Download the Database/ORDS Images
@@ -1620,7 +1624,7 @@ if (!doNotTrack) {
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 </span></span><span class="line"><span class="cl">sudo install minikube-linux-amd64 /usr/local/bin/minikube
 </span></span><span class="line"><span class="cl">minikube config <span class="nb">set</span> driver podman
-</span></span><span class="line"><span class="cl">minikube start --cpus <span class="m">4</span> --memory <span class="m">32768</span> --disk-size<span class="o">=</span><span class="s1">&#39;40g&#39;</span> --container-runtime<span class="o">=</span>cri-o
+</span></span><span class="line"><span class="cl">minikube start --cpus max --memory max --disk-size<span class="o">=</span><span class="s1">&#39;40g&#39;</span> --container-runtime<span class="o">=</span>cri-o
 </span></span><span class="line"><span class="cl">minikube addons <span class="nb">enable</span> ingress
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="download-oracle-backend-for-spring-boot">
@@ -1632,7 +1636,7 @@ if (!doNotTrack) {
 </div>
 <p>Download the <a
   class="gdoc-markdown__link"
-  href="https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas-platform_latest.zip"
+  href="https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip"
 >Oracle Backend for Spring Boot</a> and unzip into a new directory.</p>
 <div class="gdoc-page__anchorwrap">
     <h3 id="install-ansible">
@@ -1710,7 +1714,9 @@ if (!doNotTrack) {
         </a>
     </h2>
 </div>
-<p>The pods in the <code>config-server</code> and <code>obaas-admin</code> namespaces rely on the database that is created in the <code>oracle-database-operator-system</code>.  During initial provisioning these pods will start well before the database is available resulting in intial failures.  They will resolve themselves once the database becomes available.</p>
+<p>The pods in the <code>config-server</code> and <code>obaas-admin</code> namespaces rely on the database that is created in the <code>oracle-database-operator-system</code>.  During initial provisioning these pods will start well before the database is available resulting in initial failures.  They will resolve themselves once the database becomes available.</p>
+<p>You can check on the status of the database by running:
+<code>kubectl get singleinstancedatabase baas -n oracle-database-operator-system -o &quot;jsonpath={.status.status}&quot;</code></p>
 <div class="gdoc-page__anchorwrap">
     <h3 id="vpn-and-proxies">
         VPN and Proxies
@@ -1722,7 +1728,7 @@ if (!doNotTrack) {
 <p>If you are behind a VPN or Proxy, please see <a
   class="gdoc-markdown__link"
   href="https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/"
->https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/</a> for more details on additional tasks.  Specifically, when you start minikube, you may see the following messages:</p>
+>https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/</a> for more details on additional tasks.</p>
 
   </article>
 
