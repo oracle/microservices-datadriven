@@ -10,6 +10,30 @@ We'd love you to check them out.
 This page acts as an index/aggregator for some of our featured content.
 
 {{< blog  
+    author="mark" 
+    date="5/1/2023" 
+    title="Start up an Oracle Database in Kubernetes with Oracle REST Data Services and Database Actions in no time at all!" 
+    link="https://redstack.wordpress.com/2023/05/01/start-up-an-oracle-database-in-kubernetes-with-oracle-rest-data-services-and-database-actions-in-no-time-at-all/"
+    abstract="Mark demonstrates how easy it is to get an instance of Oracle up and running in Kubernetes, with Oracle REST Data Services and Database Actions using the Oracle Database Operator for Kubernetes." 
+>}}
+
+{{< blog  
+    author="mark" 
+    date="5/1/2023" 
+    title="New 23c version of Kafka-compatible Java APIs for Transactional Event Queues published" 
+    link="https://redstack.wordpress.com/2023/05/01/new-23c-version-of-kafka-compatible-java-apis-for-transactional-event-queues-published/"
+    abstract="Mark demonstrates how to use the new 23c version of the Kafka-compatible Java APIs for Transactional Event Queues, available in Maven Central, which allow you to use the standard Kafka Java API with Transactaional Event Queues acting as the Kafka broker. The only things that you would need to change are the broker address, and you need to use the Oracle versions of KafkaProducer and KafkaConsumer – other than that, your existing Kafka Java code should just work!" 
+>}}
+
+{{< blog  
+    author="mark" 
+    date="4/24/2023" 
+    title="Spring Boot Starters for Oracle updated" 
+    link="https://redstack.wordpress.com/2023/04/24/spring-boot-starters-for-oracle-updated/"
+    abstract="An example of how to use the new Spring Boot Starter for UCP for Spring 3.0.x." 
+>}}
+
+{{< blog  
     author="andy" 
     date="4/20/2023" 
     title="I have deployed Oracle Backend for Spring Boot (Developer preview). Now what?" 
@@ -31,6 +55,14 @@ This page acts as an index/aggregator for some of our featured content.
     title="Long Running Actions" 
     link="https://www.youtube.com/watch?v=2E8acaNnX8Q"
     abstract="Paul Parkinson demonstrates a Spring Boot microservices application that implements the Saga pattern with Long Running Actions using the Oracle Transaction Manager for Microservices to manage data consistency across microservices." 
+>}}
+
+{{< blog  
+    author="doug" 
+    date="4/14/2023" 
+    title="Oracle Mobile Backend As A Service" 
+    link="https://medium.com/@DatabaseDoug/oracle-mobile-backend-as-a-service-22b867ce70d2"
+    abstract="Mobile Backend As A Service (MBaaS) is a cloud service that an app developer can immediately start development against with just an endpoint.  Doug frinds out how far he can get developing a phone application without interacting with the server in any way other than the API endpoint." 
 >}}
 
 {{< blog  
