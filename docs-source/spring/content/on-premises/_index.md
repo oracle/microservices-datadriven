@@ -1,6 +1,6 @@
 # On-Premises Installation
 
-The Oracle Backend for Spring Boot is available is available to install On-Premises.  The On-Premises installation includes both a _Desktop_ installation and an _Estate_ installation.
+The Oracle Backend for Spring Boot is available to install On-Premises.  The On-Premises installation includes both a _Desktop_ installation and an _Estate_ installation.
 
 The _Desktop_ installation can be used to explore the in a non-Production environment, while the _Estate_ installation is targeted for Production infrastructure.
 
@@ -25,7 +25,7 @@ When installing on a _Desktop_ the above pre-requisites are met through an addit
 
 ## Download
 
-Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/on-prem-ebaas-platform_v0.1.1.zip).
+Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas-platform_latest.zip).
 
 ## Setup
 
@@ -62,7 +62,7 @@ BAASPDB:
   username: 'PDBADMIN'
   password: 'Correct-horse-Battery-staple-35'
   service: '(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=BAASPDB)))'
-  wallet: ''
+  ocid: ''
 ...
 ```
 
@@ -74,21 +74,22 @@ The container repository is defined in `ansible/roles/registry/vars/main.yaml`. 
 
 ```yaml
 ---
-compartment_ocid: ''
 registry_username: 'oracle'
 registry_password: 'Correct-horse-Battery-staple-35'
 push_registry_url: 'docker.io/myorg'
-pull_registry_url: 'docker.io/myorg'
-registry_auth:
+push_registry_auth:
   auths:
     docker.io/myorg:
       auth: 'b3JhY2xlOjdaUVgxLXhhbFR0NTJsS0VITlA0'
+pull_registry_url: 'docker.io/myorg'
+pull_registry_auth:
+  auths:
     docker.io/myorg:
       auth: 'b3JhY2xlOjdaUVgxLXhhbFR0NTJsS0VITlA0'
 ...
 ```
 
-Leave `compartment_ocid` blank for all On-Premises installations.  Specify the URL/authentication credentials for your Container Repository in `pull_registry_url`, `push_registry_url`, `registry_username` and `registry_password`.  
+Specify the URL/authentication credentials for your Container Repository in `pull_registry_url`, `push_registry_url`, `registry_username` and `registry_password`.  
 
 For the `registry_auth` section, manually log into your repository and copy the values found in file created, often found in `$HOME/.config/containers/auth.json`
 

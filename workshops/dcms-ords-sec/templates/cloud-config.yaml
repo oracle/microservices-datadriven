@@ -2,6 +2,7 @@
 output: {all: '| tee -a /var/log/cloud-init-ords.log'}
 package_upgrade: false
 packages:
+  - ksh
   - yum-cron
   - [jdk-17, ${jdk_version}]
   - [ords, ${ords_version}] 
@@ -144,7 +145,7 @@ write_files:
     chown -R oracle:oinstall /home/oracle
     /bin/cp /etc/ords.conf.custom /etc/ords.conf
     systemctl enable ords.service
-    systemctl restart ords.servicepwd
+    systemctl restart ords.service
     
   append: false
   defer: true

@@ -39,9 +39,12 @@ The Vault is [unsealed](https://developer.hashicorp.com/vault/docs/configuration
 
 The following Vault services are enabled during deployment. Other services can be enabled using the `vault` command and the Web User Interface.
 
-- [Token Auth Method](https://developer.hashicorp.com/vault/docs/auth/token). The token auth method is built-in and automatically available. It allows users to authenticate using a token, as well to create new tokens, revoke secrets by token, and more.
+- [Token Auth Method](https://developer.hashicorp.com/vault/docs/auth/token). The `token` auth method is built-in and automatically available. It allows users to authenticate using a token, as well to create new tokens, revoke secrets by token, and more.
+- [AppRole Auth Method](https://developer.hashicorp.com/vault/docs/auth/approle). The `approle` auth method allows machines or apps to authenticate with Vault-defined roles.
+- [Kubernetes Auth Method](https://developer.hashicorp.com/vault/docs/auth/kubernetes). The `kubernetes` auth method can be used to authenticate with Vault using a Kubernetes Service Account Token. This method of authentication makes it easy to introduce a Vault token into a Kubernetes Pod.
+- [Userpass Auth Method](https://developer.hashicorp.com/vault/docs/auth/userpass)The `userpass` auth method allows users to authenticate with Vault using a username and password combination.
 - [KV Secrets Engine Version 2](https://developer.hashicorp.com/vault/docs/secrets/kv). The kv secrets engine is a generic Key-Value store used to store arbitrary secrets.
-- [AppRole Auth Method](https://developer.hashicorp.com/vault/docs/auth/approle). The approle auth method allows machines or apps to authenticate with Vault-defined roles.
+
 
 ## Accessing Vault using using kubectl
 
@@ -81,7 +84,7 @@ The following Vault services are enabled during deployment. Other services can b
     To interact with vault you need to login using a token. The root token is stored in a k8s secret. Get the token by running this command, the output is the root token. It is **VERY IMPORTANT** that the token is saved in multiple places, loosing the token can result in loss of access to the Vault.
 
     ```shell
-    kubectl get secret root-token -n vault --template="{{index .data \"root.token\" | base64decode}}"
+    kubectl get secret vault-root-token -n vault --template="{{index .data \"root.token\" | base64decode}}"
     ```
 
     Login to the vault:
@@ -124,7 +127,26 @@ The following Vault services are enabled during deployment. Other services can b
     sys/          system       system_df5c39a8       system endpoints used for control, policy and debugging
     ```
 
-5. Create a secret
+5. Display the authentication methods enabled:
+
+    To display the enabled authentication methods execute the following command:
+
+    ```shell
+    kubectl exec pod/vault-0 -n vault  -it -- vault auth list
+    ```
+
+    The output will look similar to this:
+
+    ```text
+    Path           Type          Accessor                    Description
+    ----           ----          --------                    -----------
+    approle/       approle       auth_approle_00ffb93b       n/a
+    kubernetes/    kubernetes    auth_kubernetes_c9bb0698    n/a
+    token/         token         auth_token_68b0beb2         token based credentials
+    userpass/      userpass      auth_userpass_afb2fb02      n/a
+    ```
+
+6. Create a secret
 
     Create a secret at path `kv-v2/customer/acme` with a `nme` and an `email`
 
@@ -148,7 +170,7 @@ The following Vault services are enabled during deployment. Other services can b
     version            1
     ```
 
-6. Get a secret
+7. Get a secret
 
     Get the created secret:
 
@@ -243,13 +265,13 @@ Vault is configured to Auto Unseal using OCI Vault. Initializing with Auto Unsea
 To extract the five recovery keys use the following commands:
 
 ``` shell
-% kubectl get secret recovery-keys -n vault --template="{{index .data \"recovery.key.1\" }}"
+% kubectl get secret vault-recovery-keys -n vault --template="{{index .data \"recovery.key.1\" }}"
 
-% kubectl get secret recovery-keys -n vault --template="{{index .data \"recovery.key.2\" }}"
+% kubectl get secret vault-recovery-keys -n vault --template="{{index .data \"recovery.key.2\" }}"
 
-% kubectl get secret recovery-keys -n vault --template="{{index .data \"recovery.key.3\" }}"
+% kubectl get secret vault-recovery-keys -n vault --template="{{index .data \"recovery.key.3\" }}"
 
-% kubectl get secret recovery-keys -n vault --template="{{index .data \"recovery.key.4\" }}"
+% kubectl get secret vault-recovery-keys -n vault --template="{{index .data \"recovery.key.4\" }}"
 
-% kubectl get secret recovery-keys -n vault --template="{{index .data \"recovery.key.5\" }}"
+% kubectl get secret vault-recovery-keys -n vault --template="{{index .data \"recovery.key.5\" }}"
 ```
