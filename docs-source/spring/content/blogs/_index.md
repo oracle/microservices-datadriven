@@ -9,6 +9,8 @@ Our team members post blog articles and other content on various sites including
 We'd love you to check them out.
 This page acts as an index/aggregator for some of our featured content.
 
+And be sure to subscribe to our YouTube channel ["The Converged Database"](https://www.youtube.com/@theconvergeddatabase6236) for more great content!
+
 {{< blog  
     author="mark" 
     date="5/1/2023" 
