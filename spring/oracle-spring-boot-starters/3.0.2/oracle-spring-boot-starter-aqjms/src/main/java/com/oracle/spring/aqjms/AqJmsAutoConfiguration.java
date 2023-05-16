@@ -15,6 +15,10 @@ import oracle.jakarta.jms.AQjmsFactory;
 import oracle.ucp.jdbc.PoolDataSource;
 import oracle.ucp.jdbc.PoolDataSourceFactory;
 
+/**
+ * This class autowires the configuration and injects both a JDBC DataSource
+ * and a JMSConnectionFactory into your application.
+ */
 @Configuration
 @EnableConfigurationProperties(AqJmsConfigurationProperties.class)
 public class AqJmsAutoConfiguration {
