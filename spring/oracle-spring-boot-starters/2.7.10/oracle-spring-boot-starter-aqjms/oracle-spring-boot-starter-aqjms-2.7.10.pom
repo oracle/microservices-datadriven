@@ -19,7 +19,7 @@
     <!-- Project Information -->
     <name>Oracle Spring Boot Starter - AQ JMS</name>
     <description>Oracle's implementation of Spring Boot Starter for using with Oracle AQ JMS</description>
-    <url>https://github.com/oracle/microservices-datadriven/tree/main/spring/oracle-spring-boot-starters/oracle-spring-boot-starter-aqjms</url>
+    <url>https://github.com/oracle/microservices-datadriven/tree/main/spring/oracle-spring-boot-starters</url>
 
     <organization>
         <name>Oracle America, Inc.</name>
