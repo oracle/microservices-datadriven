@@ -17,7 +17,7 @@ microservices complex.
 | :----- | :---------- |
 | [`grabdish`](./grabdish) | Mobile food delivery application sample code |
 
-## Documentation
+## Resources
 
 * [Building Microservices with Oracle Converged Database Workshop][Workshop]
 * [Blogs][Blogs]
