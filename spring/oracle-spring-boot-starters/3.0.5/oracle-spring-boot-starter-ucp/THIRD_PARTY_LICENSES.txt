@@ -394,6 +394,7 @@ Copyright 2002-2019 the original author or authors.
 Copyright 2002-2020 the original author or authors.
 Copyright 2002-2021 the original author or authors.
 Copyright 2002-2022 the original author or authors.
+Copyright 2002-2023 the original author or authors.
 
 --------------------------------- (separator) ----------------------------------
 
@@ -407,7 +408,7 @@ SPDX:Apache-2.0
 Copyright 2002-2017 the original author or authors.
 Copyright 2002-2018 the original author or authors.
 Copyright 2002-2019 the original author or authors.
-Copyright 2002-2022 the original author or authors.
+Copyright 2002-2023 the original author or authors.
 
 --------------------------------- (separator) ----------------------------------
 
