@@ -5,11 +5,19 @@ resources:
     src: "mark.png"
 ---
 
-Our team members post blog articles and other content on various sites including [Medium](https://medium.com/@mark.x.nelson), LinkedIn ([Corrado de Bari](https://www.linkedin.com/in/corradodebari/), [Doug Drechsel](https://www.linkedin.com/in/dougdrechsel/)), [RedStack](https://redstack.wordpress.com), [DZone](https://dzone.com/users/4571557/paulparkinson.html), and the [Oracle Developers Blog](https://blogs.oracle.com/developers).
+Our team members post blog articles and other content on various sites including [Medium](https://medium.com/@mark.x.nelson), LinkedIn ([Corrado de Bari](https://www.linkedin.com/in/corradodebari/), [Doug Drechsel](https://www.linkedin.com/in/dougdrechsel/)), [RedStack](https://redstack.wordpress.com), [DZone](https://dzone.com/users/4571557/paulparkinson.html), [Andy Tael](https://mr-a.org) and the [Oracle Developers Blog](https://blogs.oracle.com/developers).
 We'd love you to check them out.
 This page acts as an index/aggregator for some of our featured content.
 
 And be sure to subscribe to our YouTube channel ["The Converged Database"](https://www.youtube.com/@theconvergeddatabase6236) for more great content!
+
+{{< blog  
+    author="andy"
+    date="5/17/2023"
+    title="Learn how to build and deploy a Spring Boot application to Oracle Backend for Spring Boot using Spring starters for UCP and Wallet"
+    link="https://mr-a.org/build-and-deploy-a-spring-boot-application-to-oracle-backend-for-spring-boot-using-spring-startes-for-ucp-and-wallet/"
+    abstract="Andy shows us how to build a Phonebook application using Spring Boot with the Oracle Spring Boot Starters for Universal Connection Pools and wallet, and deploys the applications to the Oracle Backend for Spring Boot and tests it."
+>}}
 
 {{< blog  
     author="mark" 
