@@ -4,7 +4,150 @@
 SPDX:Apache-2.0
 
 ---------------------------------- Copyright -----------------------------------
+Copyright (C) 1989, 1991 Free Software Foundation, Inc.
+Copyright (C) 1999-2002, QOS.ch. All rights reserved.
+Copyright (C) 1999-2015, QOS.ch. All rights
+Copyright (C) 1999-2015, QOS.ch. All rights reserved.
+Copyright (C) 1999-2021, QOS.ch. All rights reserved.
+Copyright (C) 1999-2022, QOS.ch. All rights reserved.
+Copyright (C) 1999-2023, QOS.ch. All rights reserved.
+Copyright (C) 2009 The Project Lombok Authors.
+Copyright (C) 2009-2010 The Project Lombok Authors.
+Copyright (C) 2009-2011 The Project Lombok Authors.
+Copyright (C) 2009-2012 The Project Lombok Authors.
+Copyright (C) 2009-2014 The Project Lombok Authors.
+Copyright (C) 2009-2016 The Project Lombok Authors.
+Copyright (C) 2009-2017 The Project Lombok Authors.
+Copyright (C) 2009-2018 The Project Lombok Authors.
+Copyright (C) 2009-2019 The Project Lombok Authors.
+Copyright (C) 2009-2020 The Project Lombok Authors.
+Copyright (C) 2009-2021 The Project Lombok Authors.
+Copyright (C) 2009-2021 The Project Lombok Authors.");
+Copyright (C) 2009-2022 The Project Lombok Authors.
+Copyright (C) 2010 The Project Lombok Authors.
+Copyright (C) 2010-2011 The Project Lombok Authors.
+Copyright (C) 2010-2012 The Project Lombok Authors.
+Copyright (C) 2010-2013 The Project Lombok Authors.
+Copyright (C) 2010-2017 The Project Lombok Authors.
+Copyright (C) 2010-2018 The Project Lombok Authors.
+Copyright (C) 2010-2019 The Project Lombok Authors.
+Copyright (C) 2010-2020 The Project Lombok Authors.
+Copyright (C) 2010-2021 The Project Lombok Authors.
+Copyright (C) 2011 The Project Lombok Authors.
+Copyright (C) 2011-2013 The Project Lombok Authors.
+Copyright (C) 2011-2015 The Project Lombok Authors.
+Copyright (C) 2011-2019 The Project Lombok Authors.
+Copyright (C) 2011-2020 The Project Lombok Authors.
+Copyright (C) 2011-2021 The Project Lombok Authors.
+Copyright (C) 2012 The Project Lombok Authors.
+Copyright (C) 2012-2013 The Project Lombok Authors.
+Copyright (C) 2012-2014 The Project Lombok Authors.
+Copyright (C) 2012-2017 The Project Lombok Authors.
+Copyright (C) 2012-2019 The Project Lombok Authors.
+Copyright (C) 2012-2021 The Project Lombok Authors.
+Copyright (C) 2012-2022 The Project Lombok Authors.
+Copyright (C) 2013 The Project Lombok Authors.
+Copyright (C) 2013-2014 The Project Lombok Authors.
+Copyright (C) 2013-2015 The Project Lombok Authors.
+Copyright (C) 2013-2017 The Project Lombok Authors.
+Copyright (C) 2013-2018 The Project Lombok Authors.
+Copyright (C) 2013-2019 The Project Lombok Authors.
+Copyright (C) 2013-2020 The Project Lombok Authors.
+Copyright (C) 2013-2021 The Project Lombok Authors.
+Copyright (C) 2013-2022 The Project Lombok Authors.
+Copyright (C) 2014 Google, Inc.
+Copyright (C) 2014 The Project Lombok Authors.
+Copyright (C) 2014-2015 The Project Lombok Authors.
+Copyright (C) 2014-2018 The Project Lombok Authors.
+Copyright (C) 2014-2019 The Project Lombok Authors.
+Copyright (C) 2014-2020 The Project Lombok Authors.
+Copyright (C) 2014-2021 The Project Lombok Authors.
+Copyright (C) 2014-2022 The Project Lombok Authors.
+Copyright (C) 2015 Square, Inc.
+Copyright (C) 2015 The Project Lombok Authors.
+Copyright (C) 2015-2016 The Project Lombok Authors.
+Copyright (C) 2015-2017 The Project Lombok Authors.
+Copyright (C) 2015-2019 The Project Lombok Authors.
+Copyright (C) 2015-2020 The Project Lombok Authors.
+Copyright (C) 2015-2021 The Project Lombok Authors.
+Copyright (C) 2016 Square, Inc.
+Copyright (C) 2016 The Project Lombok Authors.
+Copyright (C) 2016-2017 The Project Lombok Authors.
+Copyright (C) 2016-2021 The Project Lombok Authors.
+Copyright (C) 2017 The Project Lombok Authors.
+Copyright (C) 2017-2021 The Project Lombok Authors.
+Copyright (C) 2018 The Project Lombok Authors.
+Copyright (C) 2018-2021 The Project Lombok Authors.
+Copyright (C) 2019 The Project Lombok Authors.
+Copyright (C) 2019-2020 The Project Lombok Authors.
+Copyright (C) 2020 The Project Lombok Authors.
+Copyright (C) 2020-2021 The Project Lombok Authors.
+Copyright (C) 2020-2022 The Project Lombok Authors.
+Copyright (C) 2021 The Project Lombok Authors.
+Copyright (C) 2022 The Project Lombok Authors.
+Copyright (c) 1997, 2018 Oracle and/or its affiliates. All rights reserved.
+Copyright (c) 1997, 2020 Oracle and/or its affiliates. All rights reserved.
+Copyright (c) 2000-2005 INRIA, France Telecom
+Copyright (c) 2000-2011 INRIA, France Telecom
+Copyright (c) 2004-2011 QOS.ch
+Copyright (c) 2004-2019 QOS.ch
+Copyright (c) 2004-2021 QOS.ch
+Copyright (c) 2004-2022 QOS.ch
+Copyright (c) 2004-2022 QOS.ch Sarl (Switzerland)
+Copyright (c) 2004-2023 QOS.ch
+Copyright (c) 2005, 2020 Oracle and/or its affiliates. All rights reserved.
+Copyright (c) 2007- Tatu Saloranta, tatu.saloranta@iki.fi
+Copyright (c) 2008 Google Inc.
+Copyright (c) 2008, SnakeYAML
+Copyright (c) 2009, 2020 Oracle and/or its affiliates. All rights reserved.
+Copyright (c) 2009, 2022 Oracle and/or its affiliates. All rights reserved.
+Copyright (c) 2011, 2020 Oracle and/or its affiliates. All rights reserved.
+Copyright (c) 2012, 2020 Oracle and/or its affiliates. All rights reserved.
+Copyright (c) 2012-2023 VMware, Inc.
+Copyright (c) 2018, 2020 Oracle and/or its affiliates. All rights reserved.
+Copyright (c) 2020 Oracle and/or its affiliates. All rights reserved.
+Copyright (c) 2021 Contributors to the Eclipse Foundation
+Copyright (c) 2021 Oracle and/or its affiliates. All rights reserved.
+Copyright (c) 2021, 2022, Oracle and/or its affiliates. All rights reserved.
 Copyright (c) 2023, Oracle and/or its affiliates.
+Copyright 1999-2022 The Apache Software Foundation
+Copyright 2002,2003 The Apache Software Foundation
+Copyright 2002,2003,2004 The Apache Software Foundation
+Copyright 2002-2005 the original author or authors.
+Copyright 2002-2006 the original author or authors.
+Copyright 2002-2007 the original author or authors.
+Copyright 2002-2008 the original author or authors.
+Copyright 2002-2009 the original author or authors.
+Copyright 2002-2010 the original author or authors.
+Copyright 2002-2011 the original author or authors.
+Copyright 2002-2012 the original author or authors.
+Copyright 2002-2013 the original author or authors.
+Copyright 2002-2014 the original author or authors.
+Copyright 2002-2015 the original author or authors.
+Copyright 2002-2016 the original author or authors.
+Copyright 2002-2017 the original author or authors.
+Copyright 2002-2018 the original author or authors.
+Copyright 2002-2019 the original author or authors.
+Copyright 2002-2020 the original author or authors.
+Copyright 2002-2021 the original author or authors.
+Copyright 2002-2022 the original author or authors.
+Copyright 2002-2023 the original author or authors.
+Copyright 2003 The Apache Software Foundation
+Copyright 2003,2004 The Apache Software Foundation
+Copyright 2003-2010 Christian d'Heureuse, Inventec Informatik AG, Zurich, Switzerland
+Copyright 2004 The Apache Software Foundation
+Copyright 2006 Sun Microsystems, Inc. All rights reserved.
+Copyright 2006-2021 the original author or authors.
+Copyright 2010 Google Inc. All Rights Reserved.
+Copyright 2011 Google Inc. All Rights Reserved.
+Copyright 2011 The Apache Software Foundation
+Copyright 2012-2019 the original author or authors.
+Copyright 2012-2020 the original author or authors.
+Copyright 2012-2021 the original author or authors.
+Copyright 2012-2022 the original author or authors.
+Copyright 2012-2023 the original author or authors.
+Copyright 2019-2022 the original author or authors.
+Copyright 2020-2022 the original author or authors.
 Copyright © 2001, 2023, Oracle and/or its affiliates. All rights reserved.'
 
 -------------------------- Fourth Party Dependencies ---------------------------
@@ -137,7 +280,6 @@ from the source code management (SCM) system project uses.
 
 
 --------------------------------- (separator) ----------------------------------
-
 
 == Dependency
 jakarta.annotation:jakarta.annotation-api
@@ -635,6 +777,7 @@ Copyright 2003 The Apache Software Foundation
 Copyright 2003,2004 The Apache Software Foundation
 Copyright 2004 The Apache Software Foundation
 Copyright 2006-2021 the original author or authors.
+Copyright 2006-2022 the original author or authors.
 Copyright 2011 The Apache Software Foundation
 Copyright 2012-2020 the original author or authors.
 
@@ -658,6 +801,7 @@ Copyright 2002-2019 the original author or authors.
 Copyright 2002-2020 the original author or authors.
 Copyright 2002-2021 the original author or authors.
 Copyright 2002-2022 the original author or authors.
+Copyright 2002-2023 the original author or authors.
 
 --------------------------------- (separator) ----------------------------------
 
@@ -671,7 +815,7 @@ SPDX:Apache-2.0
 Copyright 2002-2017 the original author or authors.
 Copyright 2002-2018 the original author or authors.
 Copyright 2002-2019 the original author or authors.
-Copyright 2002-2022 the original author or authors.
+Copyright 2002-2023 the original author or authors.
 
 --------------------------------- (separator) ----------------------------------
 
@@ -694,6 +838,7 @@ Copyright 2002-2019 the original author or authors.
 Copyright 2002-2020 the original author or authors.
 Copyright 2002-2021 the original author or authors.
 Copyright 2002-2022 the original author or authors.
+Copyright 2002-2023 the original author or authors.
 
 --------------------------------- (separator) ----------------------------------
 
@@ -715,6 +860,7 @@ Copyright 2002-2019 the original author or authors.
 Copyright 2002-2020 the original author or authors.
 Copyright 2002-2021 the original author or authors.
 Copyright 2002-2022 the original author or authors.
+Copyright 2002-2023 the original author or authors.
 
 --------------------------------- (separator) ----------------------------------
 
@@ -737,6 +883,7 @@ Copyright 2002-2019 the original author or authors.
 Copyright 2002-2020 the original author or authors.
 Copyright 2002-2021 the original author or authors.
 Copyright 2002-2022 the original author or authors.
+Copyright 2002-2023 the original author or authors.
 
 --------------------------------- (separator) ----------------------------------
 
