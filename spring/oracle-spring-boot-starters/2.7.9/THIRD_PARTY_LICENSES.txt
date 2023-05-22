@@ -524,7 +524,6 @@ Copyright 2002-2019 the original author or authors.
 Copyright 2002-2020 the original author or authors.
 Copyright 2002-2021 the original author or authors.
 Copyright 2002-2022 the original author or authors.
-Copyright 2002-2023 the original author or authors.
 
 --------------------------------- (separator) ----------------------------------
 
@@ -550,7 +549,6 @@ Copyright 2002-2019 the original author or authors.
 Copyright 2002-2020 the original author or authors.
 Copyright 2002-2021 the original author or authors.
 Copyright 2002-2022 the original author or authors.
-Copyright 2002-2023 the original author or authors.
 
 --------------------------------- (separator) ----------------------------------
 
@@ -576,7 +574,6 @@ Copyright 2002-2019 the original author or authors.
 Copyright 2002-2020 the original author or authors.
 Copyright 2002-2021 the original author or authors.
 Copyright 2002-2022 the original author or authors.
-Copyright 2002-2023 the original author or authors.
 
 --------------------------------- (separator) ----------------------------------
 
@@ -587,12 +584,7 @@ org.springframework:spring-core
 SPDX:Apache-2.0
 
 == Copyright
-Copyright (C) 2014 Google, Inc.
-Copyright (C) 2015 Square, Inc.
-Copyright (C) 2016 Square, Inc.
-Copyright (c) 2000-2005 INRIA, France Telecom
 Copyright (c) 2000-2011 INRIA, France Telecom
-Copyright 2002,2003 The Apache Software Foundation
 Copyright 2002,2003,2004 The Apache Software Foundation
 Copyright 2002-2007 the original author or authors.
 Copyright 2002-2009 the original author or authors.
@@ -608,12 +600,8 @@ Copyright 2002-2019 the original author or authors.
 Copyright 2002-2020 the original author or authors.
 Copyright 2002-2021 the original author or authors.
 Copyright 2002-2022 the original author or authors.
-Copyright 2002-2023 the original author or authors.
 Copyright 2003 The Apache Software Foundation
 Copyright 2003,2004 The Apache Software Foundation
-Copyright 2004 The Apache Software Foundation
-Copyright 2006-2021 the original author or authors.
-Copyright 2011 The Apache Software Foundation
 Copyright 2012-2020 the original author or authors.
 
 --------------------------------- (separator) ----------------------------------
@@ -649,7 +637,7 @@ SPDX:Apache-2.0
 Copyright 2002-2017 the original author or authors.
 Copyright 2002-2018 the original author or authors.
 Copyright 2002-2019 the original author or authors.
-Copyright 2002-2022 the original author or authors.
+Copyright 2002-2021 the original author or authors.
 
 --------------------------------- (separator) ----------------------------------
 
