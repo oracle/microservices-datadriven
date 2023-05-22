@@ -1,0 +1,1 @@
+com.oracle.database.spring:oracle-spring-boot-starter-ucp:2.7.8
