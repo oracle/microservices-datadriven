@@ -9,9 +9,11 @@ main:
       - name: "MacOS Ventura (x86)"
         ref: "/on-premises/macos_ventura"
       - name: "OL8 (x86)"
-        ref: "/on-premises/ol8"      
-  - name: Sample apps
-    ref: "/sample-apps"
+        ref: "/on-premises/ol8" 
+  - name: Getting Started
+    ref: "/getting-started"     
+#  - name: Sample Applications
+#    ref: "/sample-apps"
   - name: Platform Services
     ref: "/platform"
     sub:

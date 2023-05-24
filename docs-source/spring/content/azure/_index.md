@@ -1,4 +1,6 @@
-# Azure/OCI Multi-Cloud Installation
+---
+title: Azure/OCI Multi-Cloud Installation
+---
 
 The Oracle Backend for Spring Boot is available to install in Multi-Cloud (Azure and OCI).  This installation will deplpoy the Oracle Backend for Spring Boot in Azure with an Oracle Autonomous Database running in OCI.
 
