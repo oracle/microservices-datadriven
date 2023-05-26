@@ -38,3 +38,15 @@ spring:
 lra:
   coordinator:
     url: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    tags:
+      application: ${spring.application.name}
