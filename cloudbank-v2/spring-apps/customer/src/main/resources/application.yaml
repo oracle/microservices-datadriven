@@ -12,6 +12,7 @@ spring:
         dialect: org.hibernate.dialect.Oracle12cDialect
         format_sql: true
     show-sql: true
+    
   liquibase:
     change-log: classpath:db/changelog/controller.yaml
     url: ${spring.datasource.url}
