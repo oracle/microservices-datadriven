@@ -1,10 +1,6 @@
 # Application.yaml for customer service
 # Copyright (c) 2023, Oracle and/or its affiliates. 
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/ 
-
-server:
-  port: 7071
-
 spring:
   application:
     name: customers
@@ -31,7 +27,7 @@ spring:
     type: oracle.ucp.jdbc.PoolDataSource
     oracleucp:
       connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
-      connection-pool-name: TransactionConnectionPool
+      connection-pool-name: CustomerConnectionPool
       initial-pool-size: 15
       min-pool-size: 10
       max-pool-size: 30
@@ -54,5 +50,8 @@ management:
   endpoints:
     web:
       exposure:
-        include: "health,metrics,env,beans,configprops,scheduledtasks,loggers,mappings,prometheus"
+        include: "*"
+  metrics:
+    tags:
+      application: ${spring.application.name}
 

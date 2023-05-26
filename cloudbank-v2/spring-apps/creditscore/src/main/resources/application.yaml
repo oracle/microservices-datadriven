@@ -24,4 +24,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: "health,metrics,env,beans,configprops,scheduledtasks,loggers,mappings,prometheus"
+        include: "*"
+  metrics:
+    tags:
+      application: ${spring.application.name}
