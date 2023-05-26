@@ -59,7 +59,7 @@ public class TransferService {
     }
 
     @GET
-    @Path("hello")
+    @Path("/hello")
     @Produces(MediaType.APPLICATION_JSON)
     public Response ping () throws NotFoundException {
         log.info("Say Hello!");
