@@ -12,6 +12,14 @@ This page acts as an index/aggregator for some of our featured content.
 And be sure to subscribe to our YouTube channel ["The Converged Database"](https://www.youtube.com/@theconvergeddatabase6236) for more great content!
 
 {{< blog  
+    author="john"
+    date="5/26/2023"
+    title="Example: Use SQLcl + Liquibase in Kubernetes initContainers"
+    link="https://gotsysdba.com/k8s-sqlcl-lb-init"
+    abstract="John shows us how to use SQLcl and Liquibase in Kubernetes initContainers for effective Schema Change Management during deployments of microservices applications in Kubernetes that use Oracle Database."
+>}}
+
+{{< blog  
     author="andy"
     date="5/17/2023"
     title="Learn how to build and deploy a Spring Boot application to Oracle Backend for Spring Boot using Spring starters for UCP and Wallet"
