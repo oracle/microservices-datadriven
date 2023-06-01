@@ -14,9 +14,9 @@
     <artifactId>creditscore</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>creditscore</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Creditscore Application</description>
 
-    <dependencies>
+<!--    <dependencies> -->
 <!--        <dependency>-->
 <!--            <groupId>org.springframework.boot</groupId>-->
 <!--            <artifactId>spring-boot-starter-web</artifactId>-->
@@ -42,7 +42,7 @@
 <!--            <artifactId>spring-boot-starter-test</artifactId>-->
 <!--            <scope>test</scope>-->
 <!--        </dependency>-->
-    </dependencies>
+<!--    </dependencies>-->
 
     <build>
         <plugins>

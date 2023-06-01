@@ -14,7 +14,7 @@
     <artifactId>transfer</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>transfer</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Transfer Application</description>
 
     <properties>
         <microprofile-lra-api.version>1.0</microprofile-lra-api.version>

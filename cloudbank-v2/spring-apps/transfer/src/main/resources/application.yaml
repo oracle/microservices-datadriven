@@ -12,7 +12,7 @@ spring:
       - "/rest/*"
       - "/actuator/*"
       - "/error/*"
-
+      
 account:
   deposit:
       url: http://account.application:8080/deposit/deposit

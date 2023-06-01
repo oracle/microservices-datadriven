@@ -14,11 +14,11 @@
     <artifactId>customer</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>customer</name>
-    <description>Demo project for Spring Boot</description>
+    <description>Customer Application</description>
 
     <properties>
         <oracle-springboot-starter.version>2.7.7</oracle-springboot-starter.version>
-        <snakeyaml.version>1.33</snakeyaml.version>
+<!--    <snakeyaml.version>1.33</snakeyaml.version> -->
         <liquibase.version>4.19.1</liquibase.version>
     </properties>
 
