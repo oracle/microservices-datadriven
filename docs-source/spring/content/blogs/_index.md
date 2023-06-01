@@ -9,7 +9,23 @@ Our team members post blog articles and other content on various sites including
 We'd love you to check them out.
 This page acts as an index/aggregator for some of our featured content.
 
-And be sure to subscribe to our YouTube channel ["The Converged Database"](https://www.youtube.com/@theconvergeddatabase6236) for more great content!
+![YouTube icon](./youtube.png)  &nbsp; And be sure to subscribe to our YouTube channel ["The Converged Database"](https://www.youtube.com/@theconvergeddatabase6236) for more great content!
+
+{{< blog  
+    author="corrado"
+    date="6/1/2023"
+    title="Spring Boot integration with Parse Platform"
+    link="https://medium.com/@corradodebari/spring-boot-integration-with-parse-platform-212c0f807e4b"
+    abstract="Corrado and Doug show us how to use WebHooks in Parse Platform to expose Spring Boot microservices to mobile apps."
+>}}
+
+{{< blog  
+    author="john"
+    date="6/1/2023"
+    title="Example: Use Liquibase with Spring Boot in Kubernetes"
+    link="https://gotsysdba.com/k8s-spring-lb"
+    abstract="John shows us how to use Liquibase with Spring Boot."
+>}}
 
 {{< blog  
     author="john"
@@ -17,6 +33,14 @@ And be sure to subscribe to our YouTube channel ["The Converged Database"](https
     title="Example: Use SQLcl + Liquibase in Kubernetes initContainers"
     link="https://gotsysdba.com/k8s-sqlcl-lb-init"
     abstract="John shows us how to use SQLcl and Liquibase in Kubernetes initContainers for effective Schema Change Management during deployments of microservices applications in Kubernetes that use Oracle Database."
+>}}
+
+{{< blog  
+    author="mark"
+    date="5/22/2023"
+    title="Kafka interopability in Oracle Database 23c"
+    link="https://medium.com/p/4d1c98d5a349"
+    abstract="Mark probvides an overview of the Kafka compatibility features in Oracle Database 23c Free - Developer Release including the Java and REST APIs and the connectors."
 >}}
 
 {{< blog  
