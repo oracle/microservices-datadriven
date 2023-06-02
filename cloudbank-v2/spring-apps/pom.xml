@@ -33,11 +33,6 @@
         <java.version>17</java.version>
         <spring.boot.dependencies.version>2.7.12</spring.boot.dependencies.version>
         <spring-cloud.version>2021.0.7</spring-cloud.version>
-
-<!--        <oracle.jdbc.version>21.8.0.0</oracle.jdbc.version>-->
-<!--        <spring-boot-starter-log4j2.version>2.7.8</spring-boot-starter-log4j2.version>-->
-<!--        <springdoc-openapi-ui.version>1.6.12</springdoc-openapi-ui.version>-->
-<!--        <spring-boot-starter-data-jpa.version>2.7.8</spring-boot-starter-data-jpa.version>-->
     </properties>
 
     <dependencies>
