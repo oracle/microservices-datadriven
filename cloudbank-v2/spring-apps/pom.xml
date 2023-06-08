@@ -5,12 +5,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.7.12</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <packaging>pom</packaging>
+
     <name>cloudbank</name>
     <description>Sample application for Oracle Backend for Spring Boot</description>
 
     <groupId>com.example</groupId>
     <artifactId>sample-spring-apps</artifactId>
-    <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
 
     <modules>
@@ -21,25 +29,71 @@
     </modules>
 
     <properties>
-        <liquibase.version>4.19.1</liquibase.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.boot.dependencies.version>2.7.8</spring.boot.dependencies.version>
-        <spring-cloud.version>2021.0.5</spring-cloud.version>
         <java.version>17</java.version>
-        <spring-cloud.version>2021.0.5</spring-cloud.version>
-        <oracle.jdbc.version>21.8.0.0</oracle.jdbc.version>
-        <spring-boot-starter-log4j2.version>2.7.8</spring-boot-starter-log4j2.version>
-        <springdoc-openapi-ui.version>1.6.12</springdoc-openapi-ui.version>
-        <spring-cloud-starter-netflix-eureka-client.version>4.0.0</spring-cloud-starter-netflix-eureka-client.version>
-        <spring-boot-starter-data-jpa.version>2.7.8</spring-boot-starter-data-jpa.version>
+        <spring.boot.dependencies.version>2.7.12</spring.boot.dependencies.version>
+        <spring-cloud.version>2021.0.7</spring-cloud.version>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.7.9</version>
                 <configuration>
                     <excludes>
                         <exclude>
