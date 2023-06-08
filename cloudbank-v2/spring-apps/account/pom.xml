@@ -39,9 +39,9 @@
 					<artifactId>jsr311-api</artifactId>
 				</exclusion>
 				<exclusion>
-                    <groupId>javax.servlet</groupId>
-                    <artifactId>servlet-api</artifactId>
-                </exclusion>
+                    			<groupId>javax.servlet</groupId>
+                    			<artifactId>servlet-api</artifactId>
+                		</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
