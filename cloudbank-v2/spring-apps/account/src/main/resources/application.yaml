@@ -3,7 +3,7 @@
 
 spring:
   application:
-    name: accounts
+    name: account
   jersey:
     type: filter
   jpa:
@@ -30,7 +30,7 @@ spring:
     type: oracle.ucp.jdbc.PoolDataSource
     oracleucp:
       connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
-      connection-pool-name: TransactionConnectionPool
+      connection-pool-name: AccountConnectionPool
       initial-pool-size: 15
       min-pool-size: 10
       max-pool-size: 30
@@ -38,3 +38,15 @@ spring:
 lra:
   coordinator:
     url: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    tags:
+      application: ${spring.application.name}

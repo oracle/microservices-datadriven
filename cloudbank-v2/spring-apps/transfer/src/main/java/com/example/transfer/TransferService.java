@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.POST;
@@ -55,6 +56,14 @@ public class TransferService {
         } catch (URISyntaxException ex) {
             throw new IllegalStateException("Failed to initialize " + TransferService.class.getName(), ex);
         }
+    }
+
+    @GET
+    @Path("/hello")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response ping () throws NotFoundException {
+        log.info("Say Hello!");
+        return Response.ok().build();   
     }
 
     @POST

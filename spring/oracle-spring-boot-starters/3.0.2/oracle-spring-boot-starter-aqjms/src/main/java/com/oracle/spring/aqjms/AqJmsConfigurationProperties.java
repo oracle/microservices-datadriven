@@ -7,12 +7,26 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Configuration properties for the Oracle Spring Boot Starter for AQ/TxEventQ JMS
+ */
 @ConfigurationProperties(prefix = "oracle.aq")
 @Getter 
 @Setter
 public class AqJmsConfigurationProperties {
+    /**
+     * Database URL, e.g. `jdbc:oracle:thin:@//172.17.0.2:1521/pdb1`
+     */
     private String url;
+
+    /**
+     * Username to connect to database, e.g. `dave`
+     */
     private String username;
+
+    /**
+     * Password to connect to database.
+     */
     private String password;
-    private String queue;
+
 }

@@ -1,9 +1,18 @@
 # Copyright (c) 2023, Oracle and/or its affiliates. 
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/ 
 
-server:
-  port: 8080
-
+spring:
+  application:
+    name: transfer
+  mvc:
+    enforced-prefixes:
+      - /actuator
+      - /rest
+    url-mappings:
+      - "/rest/*"
+      - "/actuator/*"
+      - "/error/*"
+      
 account:
   deposit:
       url: http://account.application:8080/deposit/deposit
@@ -21,3 +30,24 @@ transfer:
 lra:
   coordinator:
     url: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator
+   
+management:
+  endpoint:
+    prometheus:
+      enabled: true
+    health:
+      show-details: always
+  endpoints:
+    migrate-legacy-ids: true
+    web:
+      base-path: /actuator
+      path-mapping:
+        health: status
+      exposure:
+        include: "*"
+#        include: health, metrics, env, beans, prometheus, refresh
+  server:
+    add-application-context-header: true
+  metrics:
+    tags:
+      application: ${spring.application.name}

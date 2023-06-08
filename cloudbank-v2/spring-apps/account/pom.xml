@@ -4,57 +4,61 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.9</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<groupId>com.example</groupId>
+		<artifactId>sample-spring-apps</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	<groupId>com.example</groupId>
-	<artifactId>accounts</artifactId>
+
+	<artifactId>account</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>accounts</name>
-	<description>Demo project for Spring Boot</description>
+	<name>account</name>
+	<description>Account Application</description>
+
 	<properties>
-		<java.version>17</java.version>
-		<oracle.jdbc.version>21.8.0.0</oracle.jdbc.version>
+		<microprofile-lra-api.version>1.0</microprofile-lra-api.version>
+		<narayana-lra.version>5.13.1.Final</narayana-lra.version>
+		<jakarta.enterprise.cdi-api.version>2.0.2</jakarta.enterprise.cdi-api.version>
+		<oracle-springboot-starter.version>2.7.7</oracle-springboot-starter.version>
+		<javax.el.version>3.0.0</javax.el.version>
 		<liquibase.version>4.19.0</liquibase.version>
 	</properties>
+
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.ws.rs</groupId>
+					<artifactId>jsr311-api</artifactId>
+				</exclusion>
+				<exclusion>
+                    			<groupId>javax.servlet</groupId>
+                    			<artifactId>servlet-api</artifactId>
+                		</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jersey</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.oracle.database.spring</groupId>
 			<artifactId>oracle-spring-boot-starter-ucp</artifactId>
+			<version>${oracle-springboot-starter.version}</version>
 			<type>pom</type>
-			<version>2.7.7</version>
-		</dependency>
-		
-		<!-- For Oracle Wallet (ADB-S); oraclepki, osdt_core, and osdt_cert artifacts -->
-		<dependency>
-		  <groupId>com.oracle.database.security</groupId>
-		  <artifactId>oraclepki</artifactId>
-		  <version>${oracle.jdbc.version}</version>
 		</dependency>
 		<dependency>
-		  <groupId>com.oracle.database.security</groupId>
-		  <artifactId>osdt_core</artifactId>
-		  <version>${oracle.jdbc.version}</version>
-		</dependency>
-		<dependency>
-		  <groupId>com.oracle.database.security</groupId>
-		  <artifactId>osdt_cert</artifactId>
-		  <version>${oracle.jdbc.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
+    		<groupId>com.oracle.database.spring</groupId>
+    		<artifactId>oracle-spring-boot-starter-wallet</artifactId>
+    		<version>${oracle-springboot-starter.version}</version>
+    		<type>pom</type>
 		</dependency>
 		<dependency>
 			<groupId>org.liquibase</groupId>
@@ -62,36 +66,39 @@
 			<version>${liquibase.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jersey</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.eclipse.microprofile.lra</groupId>
 			<artifactId>microprofile-lra-api</artifactId>
-			<version>1.0</version>
+			<version>${microprofile-lra-api.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.narayana.rts</groupId>
 			<artifactId>narayana-lra</artifactId>
-			<version>5.13.1.Final</version>
+			<version>${narayana-lra.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>jakarta.enterprise</groupId>
 			<artifactId>jakarta.enterprise.cdi-api</artifactId>
-			<version>2.0.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
+			<version>${jakarta.enterprise.cdi-api.version}</version>
 		</dependency>
 	</dependencies>
+
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<version>2.7.9</version>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.liquibase</groupId>
+				<artifactId>liquibase-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>

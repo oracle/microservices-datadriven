@@ -5,9 +5,51 @@ resources:
     src: "mark.png"
 ---
 
-Our team members post blog articles and other content on various sites including [Medium](https://medium.com/@mark.x.nelson), LinkedIn ([Corrado de Bari](https://www.linkedin.com/in/corradodebari/), [Doug Drechsel](https://www.linkedin.com/in/dougdrechsel/)), [RedStack](https://redstack.wordpress.com), [DZone](https://dzone.com/users/4571557/paulparkinson.html), and the [Oracle Developers Blog](https://blogs.oracle.com/developers).
+Our team members post blog articles and other content on various sites including [Medium](https://medium.com/@mark.x.nelson), LinkedIn ([Corrado de Bari](https://www.linkedin.com/in/corradodebari/), [Doug Drechsel](https://www.linkedin.com/in/dougdrechsel/)), [RedStack](https://redstack.wordpress.com), [DZone](https://dzone.com/users/4571557/paulparkinson.html), [Andy Tael](https://mr-a.org) and the [Oracle Developers Blog](https://blogs.oracle.com/developers).
 We'd love you to check them out.
 This page acts as an index/aggregator for some of our featured content.
+
+![YouTube icon](./youtube.png)  &nbsp; And be sure to subscribe to our YouTube channel ["The Converged Database"](https://www.youtube.com/@theconvergeddatabase6236) for more great content!
+
+{{< blog  
+    author="corrado"
+    date="6/1/2023"
+    title="Spring Boot integration with Parse Platform"
+    link="https://medium.com/@corradodebari/spring-boot-integration-with-parse-platform-212c0f807e4b"
+    abstract="Corrado and Doug show us how to use WebHooks in Parse Platform to expose Spring Boot microservices to mobile apps."
+>}}
+
+{{< blog  
+    author="john"
+    date="6/1/2023"
+    title="Example: Use Liquibase with Spring Boot in Kubernetes"
+    link="https://gotsysdba.com/k8s-spring-lb"
+    abstract="John shows us how to use Liquibase with Spring Boot."
+>}}
+
+{{< blog  
+    author="john"
+    date="5/26/2023"
+    title="Example: Use SQLcl + Liquibase in Kubernetes initContainers"
+    link="https://gotsysdba.com/k8s-sqlcl-lb-init"
+    abstract="John shows us how to use SQLcl and Liquibase in Kubernetes initContainers for effective Schema Change Management during deployments of microservices applications in Kubernetes that use Oracle Database."
+>}}
+
+{{< blog  
+    author="mark"
+    date="5/22/2023"
+    title="Kafka interopability in Oracle Database 23c"
+    link="https://medium.com/p/4d1c98d5a349"
+    abstract="Mark probvides an overview of the Kafka compatibility features in Oracle Database 23c Free - Developer Release including the Java and REST APIs and the connectors."
+>}}
+
+{{< blog  
+    author="andy"
+    date="5/17/2023"
+    title="Learn how to build and deploy a Spring Boot application to Oracle Backend for Spring Boot using Spring starters for UCP and Wallet"
+    link="https://mr-a.org/build-and-deploy-a-spring-boot-application-to-oracle-backend-for-spring-boot-using-spring-startes-for-ucp-and-wallet/"
+    abstract="Andy shows us how to build a Phonebook application using Spring Boot with the Oracle Spring Boot Starters for Universal Connection Pools and wallet, and deploys the applications to the Oracle Backend for Spring Boot and tests it."
+>}}
 
 {{< blog  
     author="mark" 

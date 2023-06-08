@@ -4,7 +4,8 @@
 package com.example.creditscore.controller;
 
 import org.springframework.web.bind.annotation.*;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,8 +14,11 @@ import java.util.Map;
 @RequestMapping("/api/v1")
 public class CreditScoreController {
 
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
     @GetMapping("/creditscore")
-    public Map<String, String> sayHello() {
+    public Map<String, String> getCreditScore() {
+        log.info("CREDITSCORE: getCreditScore");
         int max = 900;
         int min = 500;
         SecureRandom secureRandom = new SecureRandom();

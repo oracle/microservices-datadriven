@@ -1,10 +1,5 @@
-# Application.yaml for customer service
 # Copyright (c) 2023, Oracle and/or its affiliates. 
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/ 
-
-server:
-  port: 7071
-
 spring:
   application:
     name: customers
@@ -16,6 +11,7 @@ spring:
         dialect: org.hibernate.dialect.Oracle12cDialect
         format_sql: true
     show-sql: true
+    
   liquibase:
     change-log: classpath:db/changelog/controller.yaml
     url: ${spring.datasource.url}
@@ -24,14 +20,14 @@ spring:
     enabled: ${LIQUIBASE_ENABLED:true}
     
   datasource:
-    url: ${CONNECT_STRING}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ${spring.datasource.url}
+    username: ${spring.datasource.username}
+    password: ${spring.datasource.password}
     driver-class-name: oracle.jdbc.OracleDriver
     type: oracle.ucp.jdbc.PoolDataSource
     oracleucp:
       connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
-      connection-pool-name: TransactionConnectionPool
+      connection-pool-name: CustomerConnectionPool
       initial-pool-size: 15
       min-pool-size: 10
       max-pool-size: 30
@@ -54,5 +50,8 @@ management:
   endpoints:
     web:
       exposure:
-        include: "health,metrics,env,beans,configprops,scheduledtasks,loggers,mappings,prometheus"
+        include: "*"
+  metrics:
+    tags:
+      application: ${spring.application.name}
 

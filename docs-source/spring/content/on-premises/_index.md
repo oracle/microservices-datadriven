@@ -25,7 +25,7 @@ When installing on a _Desktop_ the above pre-requisites are met through an addit
 
 ## Download
 
-Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas-platform_latest.zip).
+Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip).
 
 ## Setup
 
