@@ -13,6 +13,14 @@ This page acts as an index/aggregator for some of our featured content.
 
 {{< blog  
     author="corrado"
+    date="6/5/2023"
+    title="How to use ChatGPT/OpenAI APIs from Oracle Backend for Spring Boot/Parse"
+    link="https://medium.com/@corradodebari/how-to-use-chatgpt-openai-apis-from-oracle-backend-for-spring-boot-parse-5fcc0ffa4bcd"
+    abstract="Corrado demonstrates how to use OpenAI APIs to provide AI application services to mobile clients through the Parse Platform."
+>}}
+
+{{< blog  
+    author="corrado"
     date="6/1/2023"
     title="Spring Boot integration with Parse Platform"
     link="https://medium.com/@corradodebari/spring-boot-integration-with-parse-platform-212c0f807e4b"
