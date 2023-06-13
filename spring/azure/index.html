@@ -1612,7 +1612,7 @@ if (!doNotTrack) {
   src="userprofilemenu.png"
   alt="User Profile Menu"
   
-/> and click My profile.</li>
+/> and click User settings.</li>
 <li>In the Resources section at the bottom left, click API Keys</li>
 <li>Click Download Private Key and save the key as <code>private_key.pem</code>. You do not need to download the public key.</li>
 <li>Click Add.</li>
@@ -1646,12 +1646,12 @@ if (!doNotTrack) {
 /></li>
 <li>Upload the API Private Key (<code>private_key.pem</code>)</li>
 <li>Unzip the Stack to a directory called <code>obaas</code>
-<code>unzip azure-ebaas-platform_latest.zip -d obaas</code></li>
+<code>unzip azure-ebaas-platform_latest.zip -d /tmp/obaas</code></li>
 <li>Move the <code>private_key.pem</code> file to obaas
-<code>mv private_key.pem obaas/</code></li>
+<code>mv private_key.pem /tmp/obaas/</code></li>
 <li>Run the configuration helper script, inputing the values from the API Key
 <ul>
-<li><code>cd ~/obaas</code></li>
+<li><code>cd /tmp/obaas</code></li>
 <li><code>./obaas_configure.py</code>
 <img
   src="AzureConfigure.png"
@@ -1670,7 +1670,7 @@ if (!doNotTrack) {
     </h2>
 </div>
 <p>Install Ansible to run the Configuration Management Playbook.  The helper scripts will create a Python Virtual Environment and install Ansible and additional modules:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> ~/obaas/ansible
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> /tmp/obaas/ansible
 </span></span><span class="line"><span class="cl">./setup_ansible.sh
 </span></span><span class="line"><span class="cl"><span class="nb">source</span> ./activate.env
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
@@ -1682,7 +1682,7 @@ if (!doNotTrack) {
     </h2>
 </div>
 <p>From the Azure Cloud Shell:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> ~/obaas
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> /tmp/obaas
 </span></span><span class="line"><span class="cl">terraform init
 </span></span><span class="line"><span class="cl">terraform plan -out<span class="o">=</span>multicloud.plan
 </span></span><span class="line"><span class="cl">terraform apply <span class="s2">&#34;multicloud.plan&#34;</span>
