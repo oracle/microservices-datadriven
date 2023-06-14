@@ -1,3 +1,20 @@
+## Developer Preview 0.3.1, June 14, 2023
+
+Notes:
+* Improvements to OCI Installation process
+* Continued incremental improvements to Oracle Database Adapter for Parse Server
+
+No components were added:
+
+The following components were updated:
+
+| Component                    | New Version   | Replaced Version    |
+|------------------------------|---------------|---------------------|
+| Oracle Backend for Spring Boot CLI | 0.3.1   | 0.3.0               |
+| Oracle Backend for Spring Boot Visual Studio Code Extension | 0.3.7 | 0.3.8 |
+
+There were no component deprecations or removals.
+
 ## Developer Preview 0.3.0, April 17, 2023
 
 Notes:
