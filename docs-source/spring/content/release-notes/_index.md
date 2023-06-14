@@ -11,7 +11,7 @@ The following components were updated:
 | Component                    | New Version   | Replaced Version    |
 |------------------------------|---------------|---------------------|
 | Oracle Backend for Spring Boot CLI | 0.3.1   | 0.3.0               |
-| Oracle Backend for Spring Boot Visual Studio Code Extension | 0.3.7 | 0.3.8 |
+| Oracle Backend for Spring Boot Visual Studio Code Extension | 0.3.8 | 0.3.7 |
 
 There were no component deprecations or removals.
 
