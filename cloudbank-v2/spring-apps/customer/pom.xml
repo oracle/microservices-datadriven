@@ -18,7 +18,7 @@
 
     <properties>
         <oracle-springboot-starter.version>2.7.7</oracle-springboot-starter.version>
-        <liquibase.version>4.19.1</liquibase.version>
+        <liquibase.version>4.19.0</liquibase.version>
     </properties>
 
     <dependencies>
