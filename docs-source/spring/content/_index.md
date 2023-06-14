@@ -20,6 +20,7 @@ In addition to an Oracle Autonomous Database Shared instance, the following soft
 - Open Telemetry Collector
 - Jaeger
 - HashiCorp Vault
+- Apache Kafka
 
 Developers also have access to development/build time services and libraries including:
 
