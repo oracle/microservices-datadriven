@@ -83,6 +83,12 @@ Oracle Backend for Spring Boot setup will install the following components:
 | Strimzi Kafka Operator       | 0.33.1        | Manages Kafka clusters                                                                  |
 | Apacha Kafka                 | 3.2.0 - 3.3.2 | Distributed event streaming                                                             |
 
+## Overview of setup process
+
+This video provides a quick overview of the setup process.
+
+{{< youtube rAi10TiUraE >}}
+
 ## Setup the OCI environment
 
 1. Go to the [OCI Marketplace listing for Oracle Backend for Spring Boot](https://cloud.oracle.com/marketplace/application/138899911).
