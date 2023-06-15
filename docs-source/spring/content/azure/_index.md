@@ -11,6 +11,12 @@ You must meet the following prerequisites to use the Oracle Backend for Spring B
 * An account on Azure
 * An account on OCI
 
+## Overview of setup process
+
+This video provides a quick overview of the setup process.
+
+{{< youtube IpWe12UYeJ4 >}}
+
 ## Download
 
 Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-ebaas-platform_latest.zip).

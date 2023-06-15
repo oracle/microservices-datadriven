@@ -12,6 +12,14 @@ This page acts as an index/aggregator for some of our featured content.
 ![YouTube icon](./youtube.png)  &nbsp; And be sure to subscribe to our YouTube channel ["The Converged Database"](https://www.youtube.com/@theconvergeddatabase6236) for more great content!
 
 {{< blog  
+    author="john"
+    date="6/15/2023"
+    title="Oracle Backend for Spring Boot multi-cloud install on Azure"
+    link="https://www.youtube.com/watch?v=IpWe12UYeJ4"
+    abstract="John shows us how to install Oracle Backend for Spring Boot on Azure."
+>}}
+
+{{< blog  
     author="corrado"
     date="6/5/2023"
     title="How to use ChatGPT/OpenAI APIs from Oracle Backend for Spring Boot/Parse"
