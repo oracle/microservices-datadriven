@@ -1,0 +1,31 @@
+[ 
+    {
+        "name": "first_sample_workflow",
+        "description": "First Sample Workflow",
+        "version": 1,
+        "tasks": [
+            {
+                "name": "get_population_data",
+                "taskReferenceName": "get_population_data",
+                "inputParameters": {
+                    "http_request": {
+                        "uri": "https://datausa.io/api/data?drilldowns=Nation&measures=Population",
+                        "method": "GET"
+                    }
+                },
+                "type": "HTTP"
+            }
+        ],
+        "inputParameters": [],
+        "outputParameters": {
+            "data": "${get_population_data.output.response.body.data}",
+            "source": "${get_population_data.output.response.body.source}"
+        },
+        "schemaVersion": 2,
+        "restartable": true,
+        "workflowStatusListenerEnabled": false,
+        "ownerEmail": "example@email.com",
+        "timeoutPolicy": "ALERT_ONLY",
+        "timeoutSeconds": 0
+    }
+]
