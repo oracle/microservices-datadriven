@@ -76,10 +76,48 @@
                 "fromAccountList": "${call_account_service_from.output.response.body}",
                 "queryExpression": ".fromAccountList[] | select (.accountType == \"${workflow.input.fromAccountType}\") | .accountId"
             }
+        },
+        {
+            "name": "call_account_service",
+            "taskReferenceName": "call_account_service_to",
+            "type": "HTTP",
+            "inputParameters": {
+                "toCustomerId": "${jq_get_toCustomerId.output.result}",
+                "http_request": {
+                    "uri": "http://account.application.svc.cluster.local:8080/api/v1/account/getAccounts/${jq_get_toCustomerId.output.result}",
+                    "method": "GET",
+                    "connectionTimeOut": 3000,
+                    "readTimeOut": 3000
+                }
+            }
+        },
+        {
+            "name": "jq_get_toAccountId",
+            "taskReferenceName": "jq_get_toAccountId",
+            "type": "JSON_JQ_TRANSFORM",
+            "inputParameters": {
+                "toAccountList": "${call_account_service_to.output.response.body}",
+                "queryExpression": ".toAccountList[] | select (.accountType == \"${workflow.input.toAccountType}\") | .accountId"
+            }
+        },
+        {
+            "name": "call_transfer_service",
+            "taskReferenceName": "call_transfer_service",
+            "type": "HTTP",
+            "inputParameters": {
+                "fromAccountId": "${jq_get_fromAccountId.output.result}",
+                "toAccountId": "${jq_get_toAccountId.output.result}",
+                "http_request": {
+                    "uri": "http://transfer.application.svc.cluster.local:8080/transfer?fromAccount=${jq_get_fromAccountId.output.result}&toAccount=${jq_get_toAccountId.output.result}&amount=${workflow.input.amount}",
+                    "method": "POST"
+                }
+            }
         }
     ],
     "outputParameters": {
-        "fromAccountId": "${jq_get_fromAccountId.output.result}"
+        "fromAccountId": "${jq_get_fromAccountId.output.result}",
+        "toAccountId": "${jq_get_toAccountId.output.result}",
+        "transferMessage": "${call_transfer_service.output.body}"
     },
     "schemaVersion": 2,
     "restartable": true,
