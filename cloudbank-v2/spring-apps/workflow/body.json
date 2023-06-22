@@ -1,5 +1,0 @@
-                "http_request": {
-                    "uri": "http://transfer.application.svc.cluster.local:8080/api/v1/transfer?fromAccount=${jq_get_fromAccountId.output.result}&toAccount=${jq_get_toAccountId.output.result}&amount=${workflow.input.amount}",
-                    "method": "POST",
-                    "body": "{
-                }"
