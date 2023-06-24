@@ -4,106 +4,47 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.8</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>com.example</groupId>
+        <artifactId>sample-spring-apps</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
-    <groupId>com.example</groupId>
+
     <artifactId>customer</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>customer</name>
-    <description>customer</description>
+    <description>Customer Application</description>
+
     <properties>
-        <java.version>17</java.version>
-        <spring-cloud.version>2021.0.5</spring-cloud.version>
-        <oracle.jdbc.version>21.8.0.0</oracle.jdbc.version>
+        <oracle-springboot-starter.version>2.7.7</oracle-springboot-starter.version>
         <liquibase.version>4.19.0</liquibase.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-            <version>2.7.8</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-            <version>4.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc11</artifactId>
-            <version>${oracle.jdbc.version}</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ucp</artifactId>
-            <version>${oracle.jdbc.version}</version>
-        </dependency>
-        <!-- For Oracle Wallet (ADB-S); oraclepki, osdt_core, and osdt_cert artifacts -->
-        <dependency>
-            <groupId>com.oracle.database.security</groupId>
-            <artifactId>oraclepki</artifactId>
-            <version>${oracle.jdbc.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.database.security</groupId>
-            <artifactId>osdt_core</artifactId>
-            <version>${oracle.jdbc.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.database.security</groupId>
-            <artifactId>osdt_cert</artifactId>
-            <version>${oracle.jdbc.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j2</artifactId>
-            <version>2.7.8</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.12</version>
-        </dependency>
+			<groupId>com.oracle.database.spring</groupId>
+			<artifactId>oracle-spring-boot-starter-ucp</artifactId>
+			<version>${oracle-springboot-starter.version}</version>
+            <type>pom</type>
+		</dependency>
+		<dependency>
+    		<groupId>com.oracle.database.spring</groupId>
+    		<artifactId>oracle-spring-boot-starter-wallet</artifactId>
+    		<version>${oracle-springboot-starter.version}</version>
+    		<type>pom</type>
+		</dependency>
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>${liquibase.version}</version>
         </dependency>
     </dependencies>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+
 
     <build>
         <plugins>

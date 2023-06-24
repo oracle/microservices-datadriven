@@ -10,10 +10,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.examples</groupId>
-	<artifactId>aqJava</artifactId>
+	<artifactId>qJava</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>java</name>
-	<description>AQ workshop </description>
+	<description>AQ/TxEventQ java workshop </description>
 	<properties>
 		<java.version>8</java.version>
 		<version.lib.ojdbc>21.1.0.0</version.lib.ojdbc>

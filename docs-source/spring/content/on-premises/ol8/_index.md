@@ -2,17 +2,26 @@
 
 This is an example of installing on a MacOS Venture desktop
 
-Please read the [On-Premises](../index.md) and ensure your desktop meets the minimum system requirements.
+Please read the [On-Premises](../../on-premises) and ensure your desktop meets the minimum system requirements.
 
 ## Install
 
-### Podman
+### Additional OS Packages
 
 ```bash
 sudo dnf -y module install container-tools:ol8
 sudo dnf -y install conntrack podman curl
 sudo dnf -y install oracle-database-preinstall-21c
+sudo dnf -y install langpacks-en glibc-all-langpack
+sudo dnf module install python39
 ```
+
+Set the default Python3 to Python 3.9:
+
+```bash
+sudo alternatives --set python3 /usr/bin/python3.9
+```
+
 
 ### Download the Database/ORDS Images
 
@@ -28,13 +37,13 @@ The _Desktop_ installation will provision an Oracle Database into the Kubernetes
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 sudo install minikube-linux-amd64 /usr/local/bin/minikube
 minikube config set driver podman
-minikube start --cpus 4 --memory 32768 --disk-size='40g' --container-runtime=cri-o
+minikube start --cpus max --memory max --disk-size='40g' --container-runtime=cri-o
 minikube addons enable ingress
 ```
 
 ### Download Oracle Backend for Spring Boot
 
-Download the [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/on-prem-ebaas-platform_v0.1.1.zip) and unzip into a new directory.
+Download the [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip) and unzip into a new directory.
 
 ### Install Ansible
 
@@ -86,8 +95,11 @@ Run: `ansible-playbook ansible/k8s_apply.yaml -t full`
 
 ## config-server and obaas-admin Pod Failures
 
-The pods in the `config-server` and `obaas-admin` namespaces rely on the database that is created in the `oracle-database-operator-system`.  During initial provisioning these pods will start well before the database is available resulting in intial failures.  They will resolve themselves once the database becomes available.
+The pods in the `config-server` and `obaas-admin` namespaces rely on the database that is created in the `oracle-database-operator-system`.  During initial provisioning these pods will start well before the database is available resulting in initial failures.  They will resolve themselves once the database becomes available.
+
+You can check on the status of the database by running:
+`kubectl get singleinstancedatabase baas -n oracle-database-operator-system -o "jsonpath={.status.status}"`
 
 ### VPN and Proxies
 
-If you are behind a VPN or Proxy, please see https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/ for more details on additional tasks.  Specifically, when you start minikube, you may see the following messages:
+If you are behind a VPN or Proxy, please see https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/ for more details on additional tasks.

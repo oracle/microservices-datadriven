@@ -2,8 +2,6 @@
 # Copyright (c) 2023, Oracle and/or its affiliates. 
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/ 
 
-server:
-  port: 7073
 spring:
   application:
     name: creditscore
@@ -26,4 +24,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: "health,metrics,env,beans,configprops,scheduledtasks,loggers,mappings,prometheus"
+        include: "*"
+  metrics:
+    tags:
+      application: ${spring.application.name}

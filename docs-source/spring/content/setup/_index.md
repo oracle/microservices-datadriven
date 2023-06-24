@@ -79,6 +79,15 @@ Oracle Backend for Spring Boot setup will install the following components:
 | Eureka Service Registry      | 3.1.4        | Provides Service Discovery capabilities                                                  |
 | HashiCorp Vault              | 1.11.3       | Provides a way of store and tightly control access to sensitive data                     |
 | Oracle Database Operator     | 0.6.1        | Helps reduce the time and complexity of deploying and managing Oracle Databases.         |
+| Oracle Transaction Manager for Microservices | 22.3.1 | Manages distributed transactions to ensure consistency across microservices    |
+| Strimzi Kafka Operator       | 0.33.1        | Manages Kafka clusters                                                                  |
+| Apacha Kafka                 | 3.2.0 - 3.3.2 | Distributed event streaming                                                             |
+
+## Overview of setup process
+
+This video provides a quick overview of the setup process.
+
+{{< youtube rAi10TiUraE >}}
 
 ## Setup the OCI environment
 

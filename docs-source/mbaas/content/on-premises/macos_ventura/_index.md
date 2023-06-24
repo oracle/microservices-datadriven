@@ -35,7 +35,7 @@ minikube addons enable ingress
 
 ### Download Oracle Backend for Spring Boot
 
-Download the [Oracle Backend for Parse Platform](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/on-prem-mbaas_v0.1.1.zip) and unzip into a new directory.
+Download the [Oracle Backend for Parse Server](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-mbaas_latest.zip) and unzip into a new directory.
 
 ### Install Ansible
 
