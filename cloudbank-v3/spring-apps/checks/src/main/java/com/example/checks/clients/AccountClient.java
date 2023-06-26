@@ -5,7 +5,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient("accounts")
+// @FeignClient("accounts")
+@FeignClient("account")
 public interface AccountClient {
 
     @PostMapping("/api/v1/account/journal")
