@@ -4,5 +4,5 @@ databaseChangeLog:
       file: classpath:db/changelog/table.sql
   - include:
       file: classpath:db/changelog/data.sql
-#  - include:
-#      file: classpath:db/changelog/grants.sql
+  - include:
+      file: classpath:db/changelog/grants.sql
