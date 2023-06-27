@@ -267,5 +267,19 @@ http://localhost:8081/api/v1/account/journal
 
 1. Test the transfer service
 
+http :9090/api/v1/accounts
+
+curl -X POST "http://localhost:7000/transfer?fromAccount=594&toAccount=596&amount=100"
+
+curl -X POST "http://localhost:7000/transfer?fromAccount=594&toAccount=596&amount=100000"
+
+http POST :7000/transfer fromAccount==594 toAccount==596 amount==1000000
+
+http :9090/api/v1/account/596
+
+http :9090/api/v1/account/594
+
+klf -n cbv3 svc/transfer
+
 ## Verify Monitoring of Cloudbank
 

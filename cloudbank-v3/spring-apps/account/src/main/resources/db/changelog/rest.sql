@@ -1,4 +1,6 @@
-/*
+-- liquibase formatted sql
+
+-- changeset gotsysdba:Initial endDelimiter:/
 BEGIN
     ORDS.ENABLE_SCHEMA(
             p_enabled => TRUE,
@@ -10,4 +12,3 @@ BEGIN
     COMMIT;
 END;
 /
-*/
