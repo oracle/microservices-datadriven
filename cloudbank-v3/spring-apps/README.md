@@ -261,6 +261,8 @@ http://localhost:8081/api/v1/account/journal
 1. Test check processing services
 `curl -i -X POST -H 'Content-Type: application/json' -d '{"journalId": 4}' http://localhost:8083/api/v1/testrunner/clear`
 
+http POST :8083/api/v1/testrunner/clear journalId:=4
+
 ```json
 {"journalId":4}
 ```
