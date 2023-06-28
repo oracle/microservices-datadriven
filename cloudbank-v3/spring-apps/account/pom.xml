@@ -59,11 +59,13 @@
     		<version>${oracle-springboot-starter.version}</version>
     		<type>pom</type>
 		</dependency>
+		<!--
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
 			<version>${liquibase.version}</version>
 		</dependency>
+		-->
 		<dependency>
 			<groupId>org.eclipse.microprofile.lra</groupId>
 			<artifactId>microprofile-lra-api</artifactId>

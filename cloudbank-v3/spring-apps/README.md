@@ -261,11 +261,27 @@ http://localhost:8081/api/v1/account/journal
 1. Test check processing services
 `curl -i -X POST -H 'Content-Type: application/json' -d '{"journalId": 4}' http://localhost:8083/api/v1/testrunner/clear`
 
+http POST :8083/api/v1/testrunner/clear journalId:=4
+
 ```json
 {"journalId":4}
 ```
 
 1. Test the transfer service
+
+http :9090/api/v1/accounts
+
+curl -X POST "http://localhost:7000/transfer?fromAccount=594&toAccount=596&amount=100"
+
+curl -X POST "http://localhost:7000/transfer?fromAccount=594&toAccount=596&amount=100000"
+
+http POST :7000/transfer fromAccount==594 toAccount==596 amount==1000000
+
+http :9090/api/v1/account/596
+
+http :9090/api/v1/account/594
+
+klf -n cbv3 svc/transfer
 
 ## Verify Monitoring of Cloudbank
 
