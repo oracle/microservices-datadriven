@@ -19,7 +19,7 @@ export ORACLEAQ_PYTHON_TxEventQ=${ORACLEAQ_HOME}/qPython/txEventQ
 export ORACLEAQ_NODE_AQ=${ORACLEAQ_HOME}/qNode/aq
 export ORACLEAQ_NODE_TxEventQ=${ORACLEAQ_HOME}/qNode/txEventQ
 
-export ORACLEAQ_JAVA=${ORACLEAQ_HOME}/aqJava
+export ORACLEAQ_JAVA=${ORACLEAQ_HOME}/qJava
 
 export TNS_ADMIN=$ORACLEAQ_HOME/wallet
 export USER_DEFINED_WALLET=${TNS_ADMIN}/user_defined_wallet
@@ -216,11 +216,11 @@ export JDBC_URL=jdbc:oracle:thin:@${DB_ALIAS}?TNS_ADMIN=${TNS_ADMIN_FOR_JAVA}
 
 #Build java code
 cd ../
-cd aqJava
+cd $ORACLEAQ_JAVA
 {
     mvn clean install -Dmaven.wagon.http.ssl.insecure=true -Dmaven.test.skip=true
     cd target
-    nohup java -jar aqJava-0.0.1-SNAPSHOT.jar &
+    nohup java -jar qJava-0.0.1-SNAPSHOT.jar &
 } &>/dev/null
 echo "Java setup completed."
 

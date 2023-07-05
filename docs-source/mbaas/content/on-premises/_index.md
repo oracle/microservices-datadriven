@@ -61,7 +61,9 @@ app_id: "PiITzsu3RCc499RRDOYOBgWnyAlMm6695r1536y1"
 master_key: "Q5CP7MHpoZhSwbk39XpHxamp4rJJ4F3vPZ3NZ7ee"
 dashboard_username: "ADMIN"
 dashboard_password: "OZ0-mSt-27Evb-Qy"
-bucket: ""
+storage: ""
+access_key: ""
+private_key: ""
 ...
 ```
 
@@ -79,7 +81,7 @@ BAASPDB:
   username: 'PDBADMIN'
   password: 'Correct-horse-Battery-staple-35'
   service: '(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=BAASPDB)))'
-  wallet: ''
+  ocid: ''
 ...
 ```
 
@@ -95,19 +97,21 @@ compartment_ocid: ''
 registry_username: 'oracle'
 registry_password: 'Correct-horse-Battery-staple-35'
 push_registry_url: 'docker.io/myorg'
-pull_registry_url: 'docker.io/myorg'
-registry_auth:
+push_registry_auth:
   auths:
     docker.io/myorg:
       auth: 'b3JhY2xlOjdaUVgxLXhhbFR0NTJsS0VITlA0'
+pull_registry_url: 'docker.io/myorg'
+pull_registry_auth:
+  auths:
     docker.io/myorg:
       auth: 'b3JhY2xlOjdaUVgxLXhhbFR0NTJsS0VITlA0'
 ...
 ```
 
-Leave `compartment_ocid` blank for all On-Premises installations.  Specify the URL/authentication credentials for your Container Repository in `pull_registry_url`, `push_registry_url`, `registry_username` and `registry_password`.  
+Specify the URL/authentication credentials for your Container Repository in `pull_registry_url`, `push_registry_url`, `registry_username` and `registry_password`.  
 
-For the `registry_auth` section, manually log into your repository and copy the values found in file created, often found in `$HOME/.config/containers/auth.json`
+For the `<pull|push>_registry_auth` section, manually log into your repository and copy the values found in file created, often found in `$HOME/.config/containers/auth.json`
 
 You maybe curious as to why there is duplication between the push and pull URL's.  The pull URL is used inside the pods while the push is used from the deployment machine.  If you have a private registry inside the Kubernetes cluster, these URL's could be different.  This is the case for the _Desktop_ installation; the push URL is `localhost:5000`, while the pull URL is `<Registry Pod ClusterIP>:5000`.
 

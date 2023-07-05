@@ -20,6 +20,7 @@
         <module>bankb</module>
         <module>slow_service</module>
         <module>aqjms_sample</module>
+        <module>aqjms-jakarta_sample</module>
     </modules>
 
     <name>sample-spring-apps</name>

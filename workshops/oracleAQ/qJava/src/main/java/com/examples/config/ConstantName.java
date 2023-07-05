@@ -8,7 +8,7 @@ public class ConstantName {
 
 	//AQ- Point to Point 
 	public String aq_createTable = "JAVA_QUEUE_TABLE";
-	public String aq_creaTxEventQueue = "JAVA_QUEUE";
+	public String aq_createQueue = "JAVA_QUEUE";
 	
 	public String aq_enqueueDequeueTable= "JAVA_ENQUEUE_DEQUEUE_QUEUE_TABLE";
 	public String aq_enqueueDequeueQueue= "JAVA_ENQUEUE_DEQUEUE_QUEUE";
@@ -22,8 +22,8 @@ public class ConstantName {
 	public String aq_pubSubSubscriber1  = "JAVA_AQ_PUBSUB_SUBSCRIBER1";
 	
 	//TxEventQ- PUBSUB
-	public String TxEventQ_pubSubQueue       = "JAVA_TxEventQ_PUBSUB_QUEUE";
-	public String TxEventQ_pubSubSubscriber1 = "JAVA_TxEventQ_PUBSUB_SUBSCRIBER1";
+	public String txEventQ_pubSubQueue       = "JAVA_TxEventQ_PUBSUB_QUEUE";
+	public String txEventQ_pubSubSubscriber1 = "JAVA_TxEventQ_PUBSUB_SUBSCRIBER1";
 	
 	//AQ- WORKFLOW
 	public String aq_userQueueTable                 = "JAVA_AQ_USER_QUEUE_TABLE";
@@ -42,17 +42,17 @@ public class ConstantName {
 	public String aq_applicationDelivererSubscriber = "JAVA_AQ_APPLICATION_DELIVERER_SUBS";
 	
 	//TxEventQ- WORKFLOW
-	public String TxEventQ_userQueueName 				= "JAVA_TxEventQ_USER_QUEUE";
-	public String TxEventQ_userApplicationSubscriber     = "JAVA_TxEventQ_USER_APPLICATION_SUBS";
-	public String TxEventQ_userDelivererSubscriber       = "JAVA_TxEventQ_USER_DELIVERER_SUBS";
+	public String txEventQ_userQueueName 				= "JAVA_TxEventQ_USER_QUEUE";
+	public String txEventQ_userApplicationSubscriber     = "JAVA_TxEventQ_USER_APPLICATION_SUBS";
+	public String txEventQ_userDelivererSubscriber       = "JAVA_TxEventQ_USER_DELIVERER_SUBS";
 
-	public String TxEventQ_delivererQueueName            = "JAVA_TxEventQ_DELIVERER_QUEUE";
-	public String TxEventQ_delivererApplicationSubscriber= "JAVA_TxEventQ_DELIVERER_APPLICATION_SUBS";
-	public String TxEventQ_delivererUserSubscriber       = "JAVA_TxEventQ_DELIVERER_USER_SUBS";
+	public String txEventQ_delivererQueueName            = "JAVA_TxEventQ_DELIVERER_QUEUE";
+	public String txEventQ_delivererApplicationSubscriber= "JAVA_TxEventQ_DELIVERER_APPLICATION_SUBS";
+	public String txEventQ_delivererUserSubscriber       = "JAVA_TxEventQ_DELIVERER_USER_SUBS";
 
-	public String TxEventQ_applicationQueueName          = "JAVA_TxEventQ_APPLICATION_QUEUE";
-	public String TxEventQ_applicationUserSubscriber     = "JAVA_TxEventQ_APPLICATION_USER_SUBS";
-	public String TxEventQ_applicationDelivererSubscriber= "JAVA_TxEventQ_APPLICATION_DELIVERER_SUBS";
+	public String txEventQ_applicationQueueName          = "JAVA_TxEventQ_APPLICATION_QUEUE";
+	public String txEventQ_applicationUserSubscriber     = "JAVA_TxEventQ_APPLICATION_USER_SUBS";
+	public String txEventQ_applicationDelivererSubscriber= "JAVA_TxEventQ_APPLICATION_DELIVERER_SUBS";
 
 
 }
