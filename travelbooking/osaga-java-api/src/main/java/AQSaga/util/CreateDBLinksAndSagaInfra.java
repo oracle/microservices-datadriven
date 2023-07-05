@@ -110,14 +110,13 @@ public class CreateDBLinksAndSagaInfra {
         }
         System.out.println("credName created = " + credName + " from url = " + url );
 
-        preparedStatement = conn.prepareStatement(OsagaInfra.CREATE_DBLINK_SQL);
+        preparedStatement = conn.prepareStatement(CREATE_DBLINK_SQL);
         preparedStatement.setString(1, linkName);
         preparedStatement.setString(2, linkhostname);
         preparedStatement.setInt(3, Integer.valueOf(linkport));
         preparedStatement.setString(4, linkservice_name);
-        preparedStatement.setString(5, linkssl_server_cert_dn);
-        preparedStatement.setString(6, credName);
-        preparedStatement.setString(7, OsagaInfra.DATA_PUMP_DIR);
+        preparedStatement.setString(5, credName);
+        preparedStatement.setString(6, OsagaInfra.DATA_PUMP_DIR);
         preparedStatement.execute();
         System.out.println("dblink created = " + linkName + " from url = " + url );
 
