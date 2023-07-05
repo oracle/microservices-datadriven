@@ -81,6 +81,17 @@ public class CreateDBLinksAndSagaInfra {
         }
     }
 
+
+    static String CREATE_DBLINK_SQL = "BEGIN " +
+            "DBMS_CLOUD_ADMIN.CREATE_DATABASE_LINK(" +
+            "db_link_name => ?," +
+            "hostname => ?," +
+            "port => ?," +
+            "ssl_server_cert_dn => NULL," +
+            "service_name => ?," +
+            "credential_name => ?," +
+            "directory_name => ?);" +
+            "END;";
     private static void createDBLink(String tnsAdmin, String url, String credName, String remoteUser, String remotePW,
                                      String linkName, String linkhostname, String linkport, String linkservice_name,
                                      String linkssl_server_cert_dn, Connection conn) throws FileNotFoundException, SQLException {
