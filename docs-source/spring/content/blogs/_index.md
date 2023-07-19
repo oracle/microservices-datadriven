@@ -16,7 +16,7 @@ This page acts as an index/aggregator for some of our featured content.
     date="7/19/2023"
     title="Chat with the Oracle DB"
     link="https://medium.com/@corradodebari/chat-with-the-oracle-db-4ed274130d17"
-    abstract="Corrado shows how to leverage OpenAI models to make text-to-SQL translation on Orace DB."
+    abstract="Corrado shows how to leverage OpenAI models to make text-to-SQL translation on Oracle DB."
 >}}
 
 {{< blog  
