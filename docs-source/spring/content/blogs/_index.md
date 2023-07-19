@@ -12,6 +12,14 @@ This page acts as an index/aggregator for some of our featured content.
 ![YouTube icon](./youtube.png)  &nbsp; And be sure to subscribe to our YouTube channel ["The Converged Database"](https://www.youtube.com/@theconvergeddatabase6236) for more great content!
 
 {{< blog  
+    author="corrado"
+    date="7/19/2023"
+    title="Chat with the Oracle DB"
+    link="https://medium.com/@corradodebari/chat-with-the-oracle-db-4ed274130d17"
+    abstract="Corrado shows how to leverage OpenAI models to make text-to-SQL translation on Orace DB."
+>}}
+
+{{< blog  
     author="john"
     date="6/15/2023"
     title="Oracle Backend for Spring Boot multi-cloud install on Azure"
