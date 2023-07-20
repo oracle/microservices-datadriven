@@ -28,7 +28,7 @@ sudo alternatives --set python3 /usr/bin/python3.9
 The _Desktop_ installation will provision an Oracle Database into the Kubernetes cluster.  The images must be downloaded from [Oracle's Container Registry](https://container-registry.oracle.com/) prior to continuing.
 
 1. Log into Oracle's Container Registry: `podman login container-registry.oracle.com`
-2. Pull the Database Image: `podman pull container-registry.oracle.com/database/enterprise:21.3.0.0`
+2. Pull the Database Image: `podman pull container-registry.oracle.com/database/enterprise:19.3.0.0`
 3. Pull the ORDS Image: `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
 
 ### Install and Start Minikube
