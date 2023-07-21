@@ -47,7 +47,7 @@ The _Desktop_ installation will provision an Oracle Database into the Kubernetes
 After Installing Podman:
 
 1. Log into Oracle's Container Registry: `podman login container-registry.oracle.com`
-2. Pull the Database Image: `podman pull container-registry.oracle.com/database/enterprise:21.3.0.0`
+2. Pull the Database Image: `podman pull container-registry.oracle.com/database/enterprise:19.3.0.0`
 3. Pull the ORDS Image: `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
 
 ### Defining the Database  (_Estate_ Installation)
