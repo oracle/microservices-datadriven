@@ -1,3 +1,7 @@
+---
+title: Release Notes
+---
+
 ## Developer Preview 0.7.0, July 24, 2023
 
 Notes:
@@ -77,7 +81,6 @@ The following components were added:
 | Parse Server                 | 5.2.7        | Provides backend services for mobile and web applications                                |
 | Parse Dashboard              | 5.0.0        | Web user interface for managing Parse Server                                             |
 | Oracle Storage Adapter for Parse | 0.2.0    | Enables Parse Server to store data in Oracle Database                                    |
-
 
 The following components were updated:
 

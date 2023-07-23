@@ -162,10 +162,10 @@ This video provides a quick overview of the setup process.
         - `Existing Vault Key (Optional)`. Select an existing OCI Vault Key.
         - `Maximum bandwidth`. The maximum bandwidth the load balancer can achieve.
 
-      If you unselect `Enable Vault` HashiCorp Vault will be installed in Development mode 
+      If you unselect `Enable Vault` HashiCorp Vault will be installed in Development mode.
 
     {{< hint type=[warning] icon=gdoc_check title=Warning >}}
-    Warning: Never, ever, ever run a "development" mode server in production. It is insecure and will lose data 
+    Warning: Never, ever, ever run a "development" mode server in production. It is insecure and will lose data
     on every restart (since it stores data in-memory). It is only made for development or experimentation.
     {{< /hint >}}
 
