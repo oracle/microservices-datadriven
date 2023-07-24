@@ -88,7 +88,7 @@ Oracle Backend for Spring Boot setup will install the following components:
 | APISIX                       | 3.1.1        | Provides full lifecycle API Management.                                                  |
 | Spring Admin Server          | 2.7.5        | Managing and monitoring Spring Boot applications.                                        |
 | Spring Cloud Config Server   | 2.7.5        | Provides server-side support for externalized configuration.                             |
-| Eureka Service Registry      | 3.1.4        | Provides Service Discovery capabilities                                                  |
+| Eureka Service Registry      | 2.0.1        | Provides Service Discovery capabilities                                                  |
 | HashiCorp Vault              | 1.14.0       | Provides a way of store and tightly control access to sensitive data                     |
 | Oracle Database Operator     | 1.0        | Helps reduce the time and complexity of deploying and managing Oracle Databases.         |
 | Oracle Transaction Manager for Microservices | 22.3.1 | Manages distributed transactions to ensure consistency across microservices    |

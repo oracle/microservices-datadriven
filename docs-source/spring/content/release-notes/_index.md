@@ -91,7 +91,7 @@ The following components were updated:
 | NGNIX Ingress Controller     | 1.6.4         | 1.5.1               |
 | Jaeger Tracing               | 1.39.0        | 1.37.0              |
 | APISIX                       | 3.1.1         | 2.15.1              |
-| Eureka Service Registry      | 3.1.4         | 2021.0.3            |
+| Eureka Service Registry      | 2.0.1         | 2021.0.3            |
 
 There were no deprecations or removals.
 
