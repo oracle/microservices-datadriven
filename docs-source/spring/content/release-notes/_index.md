@@ -1,7 +1,37 @@
+---
+title: Release Notes
+---
+
+## Developer Preview 0.7.0, July 24, 2023
+
+Notes:
+
+* Continued incremental improvements to Oracle Database Adapter for Parse Server
+
+The following Components were added:
+
+| Component                    | Version   | Description         |
+|------------------------------|---------------|---------------------|
+| Coherence | 3.2.11 | In-memory data grid |
+
+The following components were updated:
+
+| Component                    | New Version   | Replaced Version    |
+|------------------------------|---------------|---------------------|
+| Oracle Backend for Spring Boot Visual Studio Code Extension | 0.3.9 | 0.3.8 |
+| HashiCorp Vault              |  1.14.0 | v1.11.3 |
+| Oracle Database Operator for Kubernetes | 1.0 | 0.6.1 |
+| Parse Server                 | 6.2.0  | 5.2.7 |
+| Parse Dashboard              | 5.1.0 | 5.0.0 |
+| Oracle Transaction Manager for Microservices | 22.3.2 | 22.3.1 |
+
+There were no component deprecations or removals.
+
 ## Developer Preview 0.3.1, June 14, 2023
 
 Notes:
-* Improvements to OCI Installation process
+
+* Improvements to OCI Installation process.
 * Continued incremental improvements to Oracle Database Adapter for Parse Server
 
 No components were added:
@@ -18,6 +48,7 @@ There were no component deprecations or removals.
 ## Developer Preview 0.3.0, April 17, 2023
 
 Notes:
+
 * Oracle Backend for Spring Boot now includes the option to install in a Multi-Cloud (OCI/Azure) Environment.
 * The Oracle Database Operator for Kubernetes will be bound the existing ADB created by IaC in an all-OCI installation and will provision the ADB in the multi-cloud installation.
 * Improvements to On-Premises and Desktop Installation process
@@ -38,7 +69,7 @@ There were no component deprecations or removals.
 
 ## Developer Preview 0.2.3, March 8, 2023
 
-Notes: 
+Notes:
 
 * Oracle Backend for Spring Boot now includes the option to also install Parse Platform in the same deployment.
 * Oracle Backend for Spring Boot CLI 0.2.3 includes a number of bug fixes, and adds support for custom listen ports for services.
@@ -53,7 +84,6 @@ The following components were added:
 | Parse Dashboard              | 5.0.0        | Web user interface for managing Parse Server                                             |
 | Oracle Storage Adapter for Parse | 0.2.0    | Enables Parse Server to store data in Oracle Database                                    |
 
-
 The following components were updated:
 
 | Component                    | New Version   | Replaced Version    |
@@ -63,7 +93,7 @@ The following components were updated:
 | NGNIX Ingress Controller     | 1.6.4         | 1.5.1               |
 | Jaeger Tracing               | 1.39.0        | 1.37.0              |
 | APISIX                       | 3.1.1         | 2.15.1              |
-| Eureka Service Registry      | 3.1.4         | 2021.0.3            |
+| Eureka Service Registry      | 2.0.1         | 2021.0.3            |
 
 There were no deprecations or removals.
 
