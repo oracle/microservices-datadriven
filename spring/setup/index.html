@@ -68,7 +68,7 @@ An OCI Container Engine for Kubernetes cluster, plus a node pool with three work
       "url" : "https://oracle.github.io/microservices-datadriven/spring/setup/",
       "headline": "Setup",
       "description": "Oracle Backend for Spring Boot is available in the OCI Marketplace.\nPrerequisites You must meet the following prerequisites to use Oracle Backend for Spring Boot:\nAn OCI account in a tenancy with sufficient quota to create:\nAn OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP’s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user)",
-      "wordCount" : "1220",
+      "wordCount" : "1509",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1625,7 +1625,7 @@ if (!doNotTrack) {
 </tr>
 <tr>
 <td>Prometheus Operator</td>
-<td>0.60.1</td>
+<td>0.63.0</td>
 <td>Provides management for Prometheus monitoring tools.</td>
 </tr>
 <tr>
@@ -1645,7 +1645,7 @@ if (!doNotTrack) {
 </tr>
 <tr>
 <td>APISIX</td>
-<td>3.1.1</td>
+<td>3.2.0</td>
 <td>Provides full lifecycle API Management.</td>
 </tr>
 <tr>
@@ -1660,22 +1660,22 @@ if (!doNotTrack) {
 </tr>
 <tr>
 <td>Eureka Service Registry</td>
-<td>3.1.4</td>
+<td>2.0.1</td>
 <td>Provides Service Discovery capabilities</td>
 </tr>
 <tr>
 <td>HashiCorp Vault</td>
-<td>1.11.3</td>
+<td>1.14.0</td>
 <td>Provides a way of store and tightly control access to sensitive data</td>
 </tr>
 <tr>
 <td>Oracle Database Operator</td>
-<td>0.6.1</td>
+<td>1.0</td>
 <td>Helps reduce the time and complexity of deploying and managing Oracle Databases.</td>
 </tr>
 <tr>
 <td>Oracle Transaction Manager for Microservices</td>
-<td>22.3.1</td>
+<td>22.3.2</td>
 <td>Manages distributed transactions to ensure consistency across microservices</td>
 </tr>
 <tr>
@@ -1687,6 +1687,31 @@ if (!doNotTrack) {
 <td>Apacha Kafka</td>
 <td>3.2.0 - 3.3.2</td>
 <td>Distributed event streaming</td>
+</tr>
+<tr>
+<td>Coherence</td>
+<td>3.2.11</td>
+<td>In-memory data grid</td>
+</tr>
+<tr>
+<td>Parse Server (optional)</td>
+<td>6.2.0</td>
+<td>Provides backend services for mobile and web applications</td>
+</tr>
+<tr>
+<td>Parse Dashboard (optional)</td>
+<td>5.1.0</td>
+<td>Web user interface for managing Parse Server</td>
+</tr>
+<tr>
+<td>Oracle Storage Adapter for Parse  (optional)</td>
+<td>0.2.0</td>
+<td>Enables Parse Server to store data in Oracle Database</td>
+</tr>
+<tr>
+<td>Conductor Server</td>
+<td>3.13.2</td>
+<td>Microservice orchestration platform</td>
 </tr>
 </tbody>
 </table> </div>
@@ -1719,11 +1744,33 @@ if (!doNotTrack) {
   href="https://cloud.oracle.com/marketplace/application/138899911"
 >OCI Marketplace listing for Oracle Backend for Spring Boot</a>.</p>
  <!-- spellchecker-disable -->
-<p><img
-  src="../ebaas-mp-listing.png"
-  alt="OCI Marketplace listing"
-  
-/></p>
+
+      
+      
+    
+    
+      <div class="flex justify-center">
+        <figure
+          class="gdoc-markdown__figure"
+        >
+          <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/ebaas-mp-listing.png">
+            <picture>
+                <source
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/ebaas-mp-listing_hu796e5d7bb9b5db779966a1588bc45a30_463560_1800x0_resize_box_3.png"
+    
+                />
+              <img
+                    src="https://oracle.github.io/microservices-datadriven/spring/setup/ebaas-mp-listing_hu796e5d7bb9b5db779966a1588bc45a30_463560_1800x0_resize_box_3.png"
+                  alt="Marketplace Listing"
+              />
+            </picture>
+          </a>
+              <figcaption>
+                Marketplace Listing
+              </figcaption>
+        </figure>
+      </div>
+
  <!-- spellchecker-enable -->
 <p>Choose the target compartment, agree to the terms and click on the &ldquo;Launch Stack&rdquo; button.  This will start the wizard to create the new stack. On the first page choose a compartment to host your stack and select <code>Next</code></p>
  <!-- spellchecker-disable -->
@@ -1735,7 +1782,78 @@ if (!doNotTrack) {
  <!-- spellchecker-enable -->
 <p>Fill in the following configuration variables as needed and select <code>Next</code></p>
 <ul>
-<li><code>Application Name</code> (Optional)</li>
+<li><code>Compartment</code> : Select the Compartment where you want to install Oracle BAckend ofr Spring Boot</li>
+<li><code>Application Name</code> (Optional) : A random animal name will be used as application name if left empty.</li>
+</ul>
+ <!-- spellchecker-disable -->
+
+      
+      
+    
+    
+      <div class="flex justify-center">
+        <figure
+          class="gdoc-markdown__figure"
+        >
+          <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-app-name.png">
+            <picture>
+                <source
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-app-name_hu8c0a7565ca030d096aae1a11a896fbfc_59542_1800x0_resize_box_3.png"
+    
+                />
+              <img
+                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-app-name_hu8c0a7565ca030d096aae1a11a896fbfc_59542_1800x0_resize_box_3.png"
+                  alt="Compartment and Application Name"
+              />
+            </picture>
+          </a>
+              <figcaption>
+                Compartment and Application Name
+              </figcaption>
+        </figure>
+      </div>
+
+ <!-- spellchecker-enable -->
+<ul>
+<li>Parse Server.
+<ul>
+<li><code>Application ID</code> : (Optional) Leave blank to auto-generate.</li>
+<li><code>Server Master Key</code> : (Optional) Leave blank to auto-generate.</li>
+<li><code>Dashboard Username</code> : The username of the user to grant access to the dashboard.</li>
+<li><code>Dashboard Password</code> : The password of the Dashboard USer (minimum 12 characters)</li>
+</ul>
+</li>
+</ul>
+ <!-- spellchecker-disable -->
+
+      
+      
+    
+    
+      <div class="flex justify-center">
+        <figure
+          class="gdoc-markdown__figure"
+        >
+          <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-parse-options.png">
+            <picture>
+                <source
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-parse-options_hub3f66028b935ef79250823e5a33a4f5e_90765_1800x0_resize_box_3.png"
+    
+                />
+              <img
+                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-parse-options_hub3f66028b935ef79250823e5a33a4f5e_90765_1800x0_resize_box_3.png"
+                  alt="Parse Server Options"
+              />
+            </picture>
+          </a>
+              <figcaption>
+                Parse Server Options
+              </figcaption>
+        </figure>
+      </div>
+
+ <!-- spellchecker-enable -->
+<ul>
 <li>OKE Control Plane Options.
 <ul>
 <li><code>Public Control Plane</code>: this option allows access the OKE Control Plane from the Internet (Public IP). If not selected, access will only be from a private VCN.</li>
@@ -1745,6 +1863,8 @@ if (!doNotTrack) {
   href="https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusinghorizontalpodautoscaler.htm#Using_Kubernetes_Horizontal_Pod_Autoscaler"
 >Horizontal Pod Autoscaler</a> can help applications scale out to meet increased demand, or scale in when resources are no longer needed.</li>
 <li><code>Node Pool Workers</code>: Number of Kubernetes worker nodes (virtual machines) to attach to the OKE Cluster.</li>
+<li><code>Node Pool Worker Shape</code> : The shape of the Node Pool Workers.</li>
+<li><code>Node Workers OCPU</code> : The initial number of OCPUs for the Node Pool Workers</li>
 </ul>
 </li>
 </ul>
@@ -1761,11 +1881,11 @@ if (!doNotTrack) {
           <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-private-template-create-stack-config.png">
             <picture>
                 <source
-                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-private-template-create-stack-config_hudfb8493b37ad3935539e7c74a5aa78fe_142329_1800x0_resize_box_3.png"
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-private-template-create-stack-config_hue640d07687e4e06a95ecfd26bcf81c1d_85802_1800x0_resize_box_3.png"
     
                 />
               <img
-                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-private-template-create-stack-config_hudfb8493b37ad3935539e7c74a5aa78fe_142329_1800x0_resize_box_3.png"
+                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-private-template-create-stack-config_hue640d07687e4e06a95ecfd26bcf81c1d_85802_1800x0_resize_box_3.png"
                   alt="Create Stack Wizard Config Variables"
               />
             </picture>
@@ -1788,15 +1908,30 @@ if (!doNotTrack) {
 </ul>
 </li>
 <li>
-<p>Vault Options. You have the option of creating a new OCI Vault or use an an existing OCI Vault. Fill in the information below if you want  to use an existing OCI Vault.</p>
+<p>Vault Options. If you select <code>Enable Vault</code> You have the option of creating a new OCI Vault or use an an existing OCI Vault. Fill in the information below if you want to use an existing OCI Vault.</p>
 <ul>
 <li><code>Vault Compartment (Optional)</code> Select a Compartment for the OCI Vault.</li>
 <li><code>Existing Vault (Optional)</code>. Select an existing OCI Vault</li>
 <li><code>Existing Vault Key (Optional)</code>. Select an existing OCI Vault Key.</li>
 <li><code>Maximum bandwidth</code>. The maximum bandwidth the load balancer can achieve.</li>
 </ul>
+<p>If you unselect <code>Enable Vault</code> HashiCorp Vault will be installed in Development mode.</p>
 </li>
 </ul>
+
+
+
+
+
+<blockquote class="gdoc-hint [warning]">
+  <div class="gdoc-hint__title flex align-center"><svg class="gdoc-icon gdoc_check"><use xlink:href="#gdoc_check"></use></svg>
+      <span>Warning</span></div>
+  <div class="gdoc-hint__text"><pre><code>Warning: Never, ever, ever run a &quot;development&quot; mode server in production. It is insecure and will lose data
+on every restart (since it stores data in-memory). It is only made for development or experimentation.
+</code></pre>
+</div>
+</blockquote>
+
  <!-- spellchecker-disable -->
 
       
@@ -1810,17 +1945,57 @@ if (!doNotTrack) {
           <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-private-template-create-stack-config-lb-vault.png">
             <picture>
                 <source
-                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-private-template-create-stack-config-lb-vault_hub4f5f29d8e3452f130e766753b786927_133136_1800x0_resize_box_3.png"
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-private-template-create-stack-config-lb-vault_hu248079d541f968b3f975baf4b37933d2_136465_1800x0_resize_box_3.png"
     
                 />
               <img
-                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-private-template-create-stack-config-lb-vault_hub4f5f29d8e3452f130e766753b786927_133136_1800x0_resize_box_3.png"
+                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-private-template-create-stack-config-lb-vault_hu248079d541f968b3f975baf4b37933d2_136465_1800x0_resize_box_3.png"
                   alt="Create Stack Wizard Config Variables"
               />
             </picture>
           </a>
               <figcaption>
                 Create Stack Wizard Config Variables
+              </figcaption>
+        </figure>
+      </div>
+
+ <!-- spellchecker-enable -->
+<ul>
+<li>Database Options. If you check <code>Show Database Options</code> you can modify the following values.
+<ul>
+<li><code>Autonomous Database Network Access</code> : Choose the Autonomous Database Network Access.</li>
+<li><code>Autonomous Database CPU Core Count</code> : How many initial OCPUs will be used for the ADB-S instance.</li>
+<li><code>Allow Autonomous Database OCPU Auto Scaling</code> : Turn on ADB-S autoscaling.</li>
+<li><code>Autonomous Database Data Storage Size</code> : ADB-S initial data storage size in TB.</li>
+<li><code>Autonomous Database License Model</code> : Autonomous Database license model.</li>
+</ul>
+</li>
+</ul>
+ <!-- spellchecker-disable -->
+
+      
+      
+    
+    
+      <div class="flex justify-center">
+        <figure
+          class="gdoc-markdown__figure"
+        >
+          <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-db-options.png">
+            <picture>
+                <source
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-db-options_hub5b7dc8b386f792eccbd8605bd4aa7a6_111743_1800x0_resize_box_3.png"
+    
+                />
+              <img
+                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-db-options_hub5b7dc8b386f792eccbd8605bd4aa7a6_111743_1800x0_resize_box_3.png"
+                  alt="Database Options"
+              />
+            </picture>
+          </a>
+              <figcaption>
+                Database Options
               </figcaption>
         </figure>
       </div>
