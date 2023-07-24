@@ -81,11 +81,11 @@ Oracle Backend for Spring Boot setup will install the following components:
 | cert-manager                 | 1.11.0       | Automates the management of certificates.                                                |
 | NGINX Ingress Controller     | 1.6.4        | Traffic management solution for cloud‑native applications in Kubernetes.                 |
 | Prometheus                   | 2.40.2       | Provides event monitoring and alerting.                                                  |
-| Prometheus Operator          | 0.60.1       | Provides management for Prometheus monitoring tools.                                     |
+| Prometheus Operator          | 0.63.0       | Provides management for Prometheus monitoring tools.                                     |
 | OpenTelemetry Collector      | 0.66.0       | Collects process and export telemetry data.                                              |
 | Grafana                      | 9.2.5        | Tool to help you examine, analyze, and monitor metrics.                                  |
 | Jaeger Tracing               | 1.39.0       | Distributed tracing system for monitoring and troubleshooting distributed systems.       |
-| APISIX                       | 3.1.1        | Provides full lifecycle API Management.                                                  |
+| APISIX                       | 3.2.0        | Provides full lifecycle API Management.                                                  |
 | Spring Admin Server          | 2.7.5        | Managing and monitoring Spring Boot applications.                                        |
 | Spring Cloud Config Server   | 2.7.5        | Provides server-side support for externalized configuration.                             |
 | Eureka Service Registry      | 2.0.1        | Provides Service Discovery capabilities                                                  |
@@ -96,8 +96,10 @@ Oracle Backend for Spring Boot setup will install the following components:
 | Apacha Kafka                 | 3.2.0 - 3.3.2 | Distributed event streaming                                                             |
 | Coherence                    | 3.2.11 | In-memory data grid |
 | Parse Server (optional)                | 6.2.0        | Provides backend services for mobile and web applications                                |
-| Parse Dashboard (optional)             | 5.0.0        | Web user interface for managing Parse Server                                             |
+| Parse Dashboard (optional)             | 5.1.0        | Web user interface for managing Parse Server                                             |
 | Oracle Storage Adapter for Parse  (optional) | 0.2.0    | Enables Parse Server to store data in Oracle Database                                    |
+| Conductor Server | 3.13.2 | Microservice orchestration platform |
+
 
 ## Overview of setup process
 
