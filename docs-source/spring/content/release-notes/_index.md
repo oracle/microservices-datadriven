@@ -22,6 +22,7 @@ The following components were updated:
 | HashiCorp Vault              |  1.14.0 | v1.11.3 |
 | Oracle Database Operator for Kubernetes | 1.0 | 0.6.1 |
 | Parse Server                 | 6.2.0  | 5.2.7        |
+| Oracle Transaction Manager for Microservices | 22.3.2 | 22.3.1 |
 
 There were no component deprecations or removals.
 
