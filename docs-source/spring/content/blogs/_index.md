@@ -13,6 +13,14 @@ This page acts as an index/aggregator for some of our featured content.
 
 {{< blog  
     author="corrado"
+    date="7/25/2023"
+    title="Coding for Observability in the Oracle Backend for Spring Boot"
+    link="https://medium.com/@corradodebari/coding-for-observability-in-the-oracle-backend-for-spring-boot-b920ae3e14f6"
+    abstract="Corrado shows how to configure a Spring Boot application to allow Prometheus to collect metrics and show them in a Grafana dashboard."
+>}}
+
+{{< blog  
+    author="corrado"
     date="7/19/2023"
     title="Chat with the Oracle DB"
     link="https://medium.com/@corradodebari/chat-with-the-oracle-db-4ed274130d17"
