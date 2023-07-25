@@ -2,7 +2,7 @@
 title: Azure/OCI Multi-Cloud Installation
 ---
 
-The Oracle Backend for Spring Boot is available to install in Multi-Cloud (Azure and OCI).  This installation will deplpoy the Oracle Backend for Spring Boot in Azure with an Oracle Autonomous Database running in OCI.
+The Oracle Backend for Spring Boot is available to install in Multi-Cloud (Azure and OCI).  This installation will deploy the Oracle Backend for Spring Boot in Azure with an Oracle Autonomous Database running in OCI.
 
 ## Prerequisites
 
@@ -53,7 +53,7 @@ The Multi-Cloud Installation will be done via the Azure Cloud Shell.  The follow
     `unzip azure-ebaas-platform_latest.zip -d /tmp/obaas`
 6. Move the `private_key.pem` file to obaas
     `mv private_key.pem /tmp/obaas/`
-5. Run the configuration helper script, inputing the values from the API Key
+7. Run the configuration helper script, inputting the values from the API Key
     * `cd /tmp/obaas`
     * `./obaas_configure.py`
     ![Azure Configure](AzureConfigure.png)
