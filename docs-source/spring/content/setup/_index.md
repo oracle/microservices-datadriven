@@ -52,6 +52,9 @@ resources:
   - name: ebaas-mp-listing
     src: "ebaas-mp-listing.png"
     title: "Marketplace Listing"
+  - name: ebaas-stack-page1
+    src: "ebaas-stack-page1.png"
+    title: "Create Stack"
 ---
 
 Oracle Backend for Spring Boot is available in the [OCI Marketplace](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911).
@@ -118,7 +121,7 @@ This video provides a quick overview of the setup process.
     Choose the target compartment, agree to the terms and click on the "Launch Stack" button.  This will start the wizard to create the new stack. On the first page choose a compartment to host your stack and select `Next`
 
     <!-- spellchecker-disable -->
-    ![OCI Stack wizard page 1](../ebaas-stack-page1.png)
+    {{< img name="ebaas-stack-page1" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
     Fill in the following configuration variables as needed and select `Next`
