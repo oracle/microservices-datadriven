@@ -44,4 +44,3 @@ Most of the information displayed in the web user interface comes from the Sprin
     <!-- spellchecker-disable -->
     {{< img name="obaas-springadmin-svc-details" size="medium" lazy=false >}}
     <!-- spellchecker-enable -->
-

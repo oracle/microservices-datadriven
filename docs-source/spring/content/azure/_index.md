@@ -2,7 +2,7 @@
 title: Azure/OCI Multi-Cloud Installation
 ---
 
-The Oracle Backend for Spring Boot is available to install in Multi-Cloud (Azure and OCI).  This installation will deplpoy the Oracle Backend for Spring Boot in Azure with an Oracle Autonomous Database running in OCI.
+The Oracle Backend for Spring Boot is available to install in Multi-Cloud (Azure and OCI).  This installation will deploy the Oracle Backend for Spring Boot in Azure with an Oracle Autonomous Database running in OCI.
 
 ## Prerequisites
 
@@ -11,9 +11,15 @@ You must meet the following prerequisites to use the Oracle Backend for Spring B
 * An account on Azure
 * An account on OCI
 
+## Overview of setup process
+
+This video provides a quick overview of the setup process.
+
+{{< youtube IpWe12UYeJ4 >}}
+
 ## Download
 
-Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-ebaas-platform_latest.zip).
+Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-ebaas_latest.zip).
 
 ## Setup
 
@@ -26,7 +32,7 @@ The Multi-Cloud Installation will provision an Oracle Autonomous Database in OCI
 To allow the OraOperator access to OCI, an [API Key](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm) must be generated:
 
 1. Log into OCI
-2. Open the Profile menu ![User Profile Menu](userprofilemenu.png) and click My profile.
+2. Open the Profile menu ![User Profile Menu](userprofilemenu.png) and click User settings.
 3. In the Resources section at the bottom left, click API Keys
 4. Click Download Private Key and save the key as `private_key.pem`. You do not need to download the public key.
 5. Click Add.
@@ -40,15 +46,15 @@ The Multi-Cloud Installation will be done via the Azure Cloud Shell.  The follow
 1. Log into Azure
 2. Open the Azure Cloud Shell
     ![Azure Cloud Shell Icon](AzureCloudShellIcon.png)
-3. Upload the [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-ebaas-platform_latest.zip) Stack
+3. Upload the [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-ebaas_latest.zip) Stack
     ![Azure Upload](AzureUpload.png)
 4. Upload the API Private Key (`private_key.pem`)
 5. Unzip the Stack to a directory called `obaas`
-    `unzip azure-ebaas-platform_latest.zip -d obaas`
+    `unzip azure-ebaas_latest.zip -d /tmp/obaas`
 6. Move the `private_key.pem` file to obaas
-    `mv private_key.pem obaas/`
-5. Run the configuration helper script, inputing the values from the API Key
-    * `cd ~/obaas`
+    `mv private_key.pem /tmp/obaas/`
+7. Run the configuration helper script, inputting the values from the API Key
+    * `cd /tmp/obaas`
     * `./obaas_configure.py`
     ![Azure Configure](AzureConfigure.png)
 
@@ -57,7 +63,7 @@ The Multi-Cloud Installation will be done via the Azure Cloud Shell.  The follow
 Install Ansible to run the Configuration Management Playbook.  The helper scripts will create a Python Virtual Environment and install Ansible and additional modules:
 
 ```bash
-cd ~/obaas/ansible
+cd /tmp/obaas/ansible
 ./setup_ansible.sh
 source ./activate.env
 ```
@@ -67,7 +73,7 @@ source ./activate.env
 From the Azure Cloud Shell:
 
 ```bash
-cd ~/obaas
+cd /tmp/obaas
 terraform init
 terraform plan -out=multicloud.plan
 terraform apply "multicloud.plan"
