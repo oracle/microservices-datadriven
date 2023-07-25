@@ -103,7 +103,6 @@ Oracle Backend for Spring Boot setup will install the following components:
 | Oracle Storage Adapter for Parse  (optional) | 0.2.0    | Enables Parse Server to store data in Oracle Database                                    |
 | Conductor Server | 3.13.2 | Microservice orchestration platform |
 
-
 ## Overview of setup process
 
 This video provides a quick overview of the setup process.
