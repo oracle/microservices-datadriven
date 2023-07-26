@@ -65,7 +65,7 @@ You must meet the following prerequisites to use Oracle Backend for Spring Boot.
 
 - An Oracle Cloud Infrastructure (OCI) account in a tenancy with sufficient quota to create:
 
-  - An OCI Container Engine for Kubernetes (OKE) cluster, plus a node pool with three worker nodes
+  - An Oracle Container Engine for Kubernetes (OKE) cluster, plus a node pool with three worker nodes
   - A virtual cloud network (VCN) with at least two public IP's available
   - A public load balancer
   - An Oracle Autonomous Database Serverless instance
@@ -78,7 +78,7 @@ You must meet the following prerequisites to use Oracle Backend for Spring Boot.
   - Oracle Cloud Infrastructure command-line interface (CLI)
   - Oracle Backend for Spring Boot command-line tool
 
-## Summary of components
+## Summary of Components
 
 Oracle Backend for Spring Boot setup installs the following components:
 
@@ -91,31 +91,31 @@ Oracle Backend for Spring Boot setup installs the following components:
 | OpenTelemetry Collector      | 0.66.0        | Collects process and export telemetry data.                                                 |
 | Grafana                      | 9.2.5         | Provides the tool to examine, analyze, and monitor metrics.                                 |
 | Jaeger Tracing               | 1.39.0        | Provides distributed tracing system for monitoring and troubleshooting distributed systems. |
-| APISIX                       | 3.2.0         | Provides full lifecycle API management.                                                     |
-| Spring Admin Server          | 2.7.5         | Manages and monitors Spring Boot applications.                                              |
-| Spring Cloud Config Server   | 2.7.5         | Provides server-side support for externalized configuration.                                |
-| Eureka Service Registry      | 3.1.4         | Provides Service discovery capabilities.                                                    |
+| Apache APISIX                       | 3.2.0         | Provides full lifecycle API management.                                                     |
+| Spring Boot Admin server          | 2.7.5         | Manages and monitors Spring Boot applications.                                              |
+| Spring Cloud Config server   | 2.7.5         | Provides server-side support for externalized configuration.                                |
+| Spring Boot Eureka service registry      | 3.1.4         | Provides Service discovery capabilities.                                                    |
 | HashiCorp Vault              | 1.14.0        | Provides a way to store and tightly control access to sensitive data.                       |
-| Oracle Database Operator     | 1.0           | Helps reduce the time and complexity of deploying and managing Oracle Databases.            |
+| Oracle Database operator     | 1.0           | Helps reduce the time and complexity of deploying and managing Oracle Databases.            |
 | Oracle Transaction Manager for Microservices | 22.3.1 | Manages distributed transactions to ensure consistency across microservices.       |
-| Strimzi Kafka Operator       | 0.33.1        | Manages Kafka clusters.                                                                     |
+| Strimzi - Apache Kafka operator       | 0.33.1        | Manages Apache Kafka clusters.                                                                     |
 | Apacha Kafka                 | 3.2.0 - 3.3.2 | Distributed event streaming.                                                                |
 | Coherence                    | 3.2.11        | In-memory data grid                                                                         |
 | Parse Server (optional)      | 6.2.0         | Provides backend services for mobile and web applications                                   |
 | Parse Dashboard (optional)   | 5.1.0         | Web user interface for managing Parse Server                                                |
-| Oracle Storage Adapter for Parse  (optional) | 0.2.0    | Enables Parse Server to store data in Oracle Database                            |
+| Oracle Database storage adapter for Parse  (optional) | 0.2.0    | Enables Parse Server to store data in Oracle Database                            |
 | Conductor Server             | 3.13.2        | Microservice orchestration platform                                                         |
 
 
-## Overview of setup process
+## Overview of the Setup Process
 
 This video provides a quick overview of the setup process.
 
 {{< youtube rAi10TiUraE >}}
 
-## Setup the OCI environment
+## Set Up the OCI Environment
 
-To set up the OCI environment, execute these steps:
+To set up the OCI environment, process these steps:
 
 1. Go to the [OCI Marketplace listing for Oracle Backend for Spring Boot](https://cloud.oracle.com/marketplace/application/138899911).
 
@@ -123,7 +123,7 @@ To set up the OCI environment, execute these steps:
     {{< img name="ebaas-mp-listing" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
-    Choose the target compartment, agree to the terms, and click on the **Launch Stack** button.  This starts the wizard and creates the new stack. On the first page, choose a compartment to host your stack and select **Next**.
+    Choose the target compartment, agree to the terms, and click on **Launch Stack**.  This starts the wizard and creates the new stack. On the first page, choose a compartment to host your stack and select **Next**.
 
     <!-- spellchecker-disable -->
     {{< img name="ebaas-stack-page1" size="large" lazy=false >}}
@@ -131,64 +131,64 @@ To set up the OCI environment, execute these steps:
 
     Fill in the following configuration variables as needed and select **Next**:
 
-    - `Compartment` : Select the Compartment where you want to install Oracle BAckend ofr Spring Boot
-    - `Application Name` (Optional) : A random animal name will be used as application name if left empty.
+    - `Compartment` : Select the compartment where you want to install Oracle Backend for Spring Boot.
+    - `Application Name` (optional) : A random animal name that will be used as the application name if left empty.
 
     <!-- spellchecker-disable -->
     {{< img name="oci-stack-app-name" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
     - Parse Server.
-        - `Application ID` : (Optional) Leave blank to auto-generate.
-        - `Server Master Key` : (Optional) Leave blank to auto-generate.
-        - `Dashboard Username` : The username of the user to grant access to the dashboard.
-        - `Dashboard Password` : The password of the Dashboard USer (minimum 12 characters)
+        - `Application ID` (optional) : Leave blank to auto-generate.
+        - `Server Master Key` (optional) : Leave blank to auto-generate.
+        - `Dashboard Username` : The user name of the user to whom access to the dashboard is granted.
+        - `Dashboard Password` : The password of the dashboard user (a minimum of 12 characters).
 
     <!-- spellchecker-disable -->
     {{< img name="oci-stack-parse-options" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
-    - OKE Control Plane Options.
-        - `Public Control Plane`: this option allows access the OKE Control Plane from the Internet (Public IP). If not selected, access will only be from a private VCN.
-        - `Control Plane Access Control`: CIDR (IP range) allowed to access the control plane (Oracle recommends you set this as restrictive as possible).
-        - `Enable Horizontal Pod Scaling?`: The [Horizontal Pod Autoscaler](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusinghorizontalpodautoscaler.htm#Using_Kubernetes_Horizontal_Pod_Autoscaler) can help applications scale out to meet increased demand, or scale in when resources are no longer needed.
-        - `Node Pool Workers`: Number of Kubernetes worker nodes (virtual machines) to attach to the OKE Cluster.
+    - OKE Control Plane Options:
+        - `Public Control Plane` : This option allows access to the OKE Control Plane from the internet (public IP). If not selected, access can only be from a private virtual cloud network (VCN).
+        - `Control Plane Access Control` : CIDR (IP range) allows access to the control plane (Oracle recommends that you set this variable to be as restrictive as possible).
+        - `Enable Horizontal Pod Scaling?` : The [Horizontal Pod Autoscaler](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusinghorizontalpodautoscaler.htm#Using_Kubernetes_Horizontal_Pod_Autoscaler) can help applications scale out to meet increased demand, or scale in when resources are no longer needed.
+        - `Node Pool Workers` : The number of Kubernetes worker nodes (virtual machines) attached to the OKE cluster.
         - `Node Pool Worker Shape` : The shape of the Node Pool Workers.
-        - `Node Workers OCPU` : The initial number of OCPUs for the Node Pool Workers
+        - `Node Workers OCPU` : The initial number of Oracle Compute Units (OCPUs) for the Node Pool Workers.
 
     <!-- spellchecker-disable -->
     {{< img name="oci-private-template-create-stack-config" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
     - Load Balancers options:
-        - `Enable Public Load Balancer`: This option allows access to the load balancer from the internet (public IP). If not selected, access is only from a private VCN.
-        - `Public Load Balancer Ports Exposed`: Ports exposed from the load balancer.
-        - `Minimum bandwidth`: The minimum bandwidth that the load balancer can achieve.
-        - `Maximum bandwidth`: The maximum bandwidth that the load balancer can achieve.
+        - `Enable Public Load Balancer` : This option allows access to the load balancer from the internet (public IP). If not selected, access can only be from a private VCN.
+        - `Public Load Balancer Ports Exposed` : Ports exposed from the load balancer.
+        - `Minimum bandwidth` : The minimum bandwidth that the load balancer can achieve.
+        - `Maximum bandwidth` : The maximum bandwidth that the load balancer can achieve.
 
     - Vault options. You have the option of creating a new OCI Vault or using an existing OCI Vault. Fill in the following information if you want to use an existing OCI Vault:
-        - `Vault Compartment (Optional)`: Select a compartment for the OCI Vault.
-        - `Existing Vault (Optional)`: Select an existing OCI Vault.
-        - `Existing Vault Key (Optional)`: Select an existing OCI Vault key.
-        - `Maximum bandwidth`: The maximum bandwidth that the load balancer can achieve.
+        - `Vault Compartment (Optional)` : Select a compartment for the OCI Vault.
+        - `Existing Vault (Optional)` : Select an existing OCI Vault.
+        - `Existing Vault Key (Optional)` : Select an existing OCI Vault key.
+        - `Maximum bandwidth` : The maximum bandwidth that the load balancer can achieve.
 
-      If you unselect `Enable Vault` HashiCorp Vault will be installed in Development mode.
+      If you unselect `Enable Vault`, the HashiCorp Vault is installed in Development mode.
 
     {{< hint type=[warning] icon=gdoc_check title=Warning >}}
-    Warning: Never, ever, ever run a "development" mode server in production. It is insecure and will lose data
-    on every restart (since it stores data in-memory). It is only made for development or experimentation.
+    **WARNING:** Never run a Development mode server in a production environment. It is insecure and will lose data
+    on every restart (since it stores data in-memory). It is only for development or experimentation.
     {{< /hint >}}
 
     <!-- spellchecker-disable -->
     {{< img name="oci-private-template-create-stack-config-lb-vault" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
-    - Database Options. If you check `Show Database Options` you can modify the following values.
-      - `Autonomous Database Network Access` : Choose the Autonomous Database Network Access.
-      - `Autonomous Database CPU Core Count` : How many initial OCPUs will be used for the ADB-S instance.
+    - Database Options. If you check `Show Database Options`, you can modify the following values:
+      - `Autonomous Database Network Access` : Choose the Autonomous Database network access.
+      - `Autonomous Database CPU Core Count` : The number of initial OCPUs used for the Oracle Autonomous Database Serverless (ADB-S) instance.
       - `Allow Autonomous Database OCPU Auto Scaling` : Turn on ADB-S autoscaling.
-      - `Autonomous Database Data Storage Size` : ADB-S initial data storage size in TB.
-      - `Autonomous Database License Model` : Autonomous Database license model.
+      - `Autonomous Database Data Storage Size` : The initial data storage size in TB for ADB-S.
+      - `Autonomous Database License Model` : The Autonomous Database license model.
 
     <!-- spellchecker-disable -->
     {{< img name="oci-stack-db-options" size="large" lazy=false >}}
@@ -210,9 +210,9 @@ To set up the OCI environment, execute these steps:
     {{< img name="oci-stack-plan" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
-    You can test the plan by clicking on the **Plan** button and then reviewing the output. You can fix any issues (for example, you may find that you do not have enough quota for some resource) before proceeding.
+    You can test the plan by clicking on **Plan** and then reviewing the output. You can fix any issues (for example, you may find that you do not have enough quota for some resource) before proceeding.
 
-    When you are happy with the results of the test, you can apply the stack by clicking on the **Apply** button. This creates your Oracle Backend as a service for a Spring Cloud environment.  This takes about 20 minutes to complete.  Much of this time is spent provisioning the Kubernetes cluster, worker nodes, and database.  You can watch the logs to follow the progress of the operation.
+    When you are happy with the results of the test, you can apply the stack by clicking on **Apply**. This creates your Oracle Backend as a Service for a Spring Cloud environment.  This takes about 20 minutes to complete.  Much of this time is spent provisioning the Kubernetes cluster, worker nodes, and database.  You can watch the logs to follow the progress of the operation.
 
     <!-- spellchecker-disable -->
     {{< img name="oci-stack-apply" size="large" lazy=false >}}
@@ -224,7 +224,7 @@ To set up the OCI environment, execute these steps:
     {{< img name="oci-stack-apply-logs" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
-    Collect the OKE access information by clicking on the **Outputs** menu item.
+    Collect the OKE access information by clicking on **Outputs**.
 
     <!-- spellchecker-disable -->
     {{< img name="oci-stack-outputs" size="large" lazy=false >}}
@@ -236,9 +236,9 @@ To set up the OCI environment, execute these steps:
     {{< img name="oci-stack-output-oke" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
-## Set up the local workstation
+## Set Up the Local Workstation
 
-To set up the local workstation, execute these steps:
+To set up the local workstation, process these steps:
 
 1. Set up cluster access.
 
@@ -246,14 +246,14 @@ To set up the local workstation, execute these steps:
 
     - Install the kubectl command-line tool (see the [kubectl documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/)).
 	
-    - Generate an API signing key pair. If you already have an API signing key pair, go straight to the next step. If not:
+    - Generate an API signing key pair. If you already have an API signing key pair, go to the next step. If not:
 
         1. Use OpenSSL commands to generate the key pair in the required P-Early-Media (PEM) format. If you are using Windows, you need to install Git Bash for Windows in order to run the commands. See [How to Generate an API Signing Key](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm#two).
-        2. Copy the contents of the public key to the clipboard (you need to paste the value into the Console later).
+        2. Copy the contents of the public key to the clipboard to paste the value into the Console later.
 
-    - Add the public key value of the API signing key pair to the **User Settings** for your username. For example:
+    - Add the public key value of the API signing key pair to the **User Settings** for your user name. For example:
 	
-       1. In the top right corner of the Oracle Cloud Infrastructure Console, open the **Profile** menu (User menu icon) and click **User Settings** to view the details.
+       1. In the upper right corner of the Oracle Cloud Infrastructure Console, open the **Profile** menu (User menu icon) and click **User Settings** to view the details.
        2. Click **Add Public Key**.
        3. Paste the value of the public key into the window and click **Add**.
 

@@ -27,13 +27,13 @@ sudo alternatives --set python3 /usr/bin/python3.9
 
 ### Download the Database or ORDS Images
 
-The _Desktop_ installation provisions an Oracle Database into the Kubernetes cluster.  The images must be downloaded from [Oracle's Container Registry](https://container-registry.oracle.com/) prior to continuing. Execute these steps:
+The _Desktop_ installation provisions an Oracle Database into the Kubernetes cluster.  The images must be downloaded from [Oracle's Container Registry](https://container-registry.oracle.com/) before continuing. Process these steps:
 
 1. Log into Oracle's Container Registry. For example: 
 
    `podman login container-registry.oracle.com`
    
-2. Pull the Database Image. For example: 
+2. Pull the database image. For example: 
 
    `podman pull container-registry.oracle.com/database/enterprise:21.3.0.0`
    
@@ -43,7 +43,7 @@ The _Desktop_ installation provisions an Oracle Database into the Kubernetes clu
 
 ### Install and Start Minikube
 
-Install and start minikube by running these commands:
+Install and start Minikube by running these commands:
 
 ```bash
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
@@ -55,11 +55,11 @@ minikube addons enable ingress
 
 ### Download Oracle Backend for Spring Boot
 
-Download the [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip) and unzip into a new directory.
+Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip) and unzip into a new directory.
 
 ### Install Ansible
 
-Install Ansible by executing these commands:
+Install Ansible by processing these commands:
 
 ```bash
 ./setup_ansible.sh
@@ -71,14 +71,14 @@ source ./activate.env
 Use the helper Playbook to define the infrastructure.  This Playbook also:
 
 * Creates additional namespaces for the Container Registry and database.
-* Creates a Private Container Registry in the Kubernetes cluster.
-* Modifies the application microservices to be Desktop compatible by running this command:
+* Creates a private Container Registry in the Kubernetes cluster.
+* Modifies the application microservices to be desktop compatible by running this command:
 
   `ansible-playbook ansible/desktop_apply.yaml`
 
 ### Open a Tunnel
 
-In order to push the images to the Container Registry in the Kubernetes cluster, open a new terminal and start a port-forward by running this command:
+In order to push the images to the Container Registry in the Kubernetes cluster, open a new terminal and process this command:
 
 `kubectl port-forward service/private -n container-registry 5000:5000`
 
@@ -98,7 +98,7 @@ Build and push the images to the Container Registry in the Kubernetes cluster by
 
 `ansible-playbook ansible/images_build.yaml`
 
-After the images are built and pushed, the port-forward is no longer required and can be stopped.
+After the images are built and pushed, the port forward is no longer required and can be stopped.
 
 ### Deploy Oracle Backend for Spring Boot
 
