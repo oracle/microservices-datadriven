@@ -3,7 +3,7 @@ The Oracle Backend for Spring Boot has the following security characteristics:
 - All access to the database is done using Mutual TLS (Database Wallet). The username, password and URI are stored in Kubernetes secrets.
 - Accessing the dashboards can only be done using port forwarding.
 - The only "public" exposure is the APISIX Gateway (note that the dashboard is not exposed publicly).
-- Services deployed to the platform are not exposed through the gateway automatically.
+- Services deployed to the platform are not exposed through the gateway automatically. If you want to expose the service through the gateway, you must define a route in the APISIX dashboard.
 - The deployed platform services are using using self-signed certificates.
 - A customer application can only access service running in the platform via the APISIX Gateway. The IP address for the gateway can be determined by executing the following command:
 
