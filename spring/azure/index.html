@@ -9,11 +9,11 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.108.0">
+<meta name="generator" content="Hugo 0.115.4">
 
 
-  <meta name="description" content="The Oracle Backend for Spring Boot is available to install in Multi-Cloud (Azure and OCI). This installation will deplpoy the Oracle Backend for Spring Boot in Azure with an Oracle Autonomous Database running in OCI.
-Prerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot Multi-Cloud (Azure and OCI):
+  <meta name="description" content="The Oracle Backend for Spring Boot is available to install in Multi-Cloud (Azure and Oracle Cloud Infrastructure (OCI)). This installation deplpoys the Oracle Backend for Spring Boot in Azure with an Oracle Autonomous Database running in OCI.
+Prerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot Multi-Cloud (Azure and OCI). You need:
 An account on Azure An account on OCI Overview of setup process This video provides a quick overview of the setup process." />
 
     <title>Azure/OCI Multi-Cloud Installation | Oracle Backend for Spring Boot</title>
@@ -40,8 +40,8 @@ An account on Azure An account on OCI Overview of setup process This video provi
     content="Azure/OCI Multi-Cloud Installation"
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot" />
-  <meta property="og:description" content="The Oracle Backend for Spring Boot is available to install in Multi-Cloud (Azure and OCI). This installation will deplpoy the Oracle Backend for Spring Boot in Azure with an Oracle Autonomous Database running in OCI.
-Prerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot Multi-Cloud (Azure and OCI):
+  <meta property="og:description" content="The Oracle Backend for Spring Boot is available to install in Multi-Cloud (Azure and Oracle Cloud Infrastructure (OCI)). This installation deplpoys the Oracle Backend for Spring Boot in Azure with an Oracle Autonomous Database running in OCI.
+Prerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot Multi-Cloud (Azure and OCI). You need:
 An account on Azure An account on OCI Overview of setup process This video provides a quick overview of the setup process." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/azure/" />
@@ -51,8 +51,8 @@ An account on Azure An account on OCI Overview of setup process This video provi
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Azure/OCI Multi-Cloud Installation" />
-  <meta name="twitter:description" content="The Oracle Backend for Spring Boot is available to install in Multi-Cloud (Azure and OCI). This installation will deplpoy the Oracle Backend for Spring Boot in Azure with an Oracle Autonomous Database running in OCI.
-Prerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot Multi-Cloud (Azure and OCI):
+  <meta name="twitter:description" content="The Oracle Backend for Spring Boot is available to install in Multi-Cloud (Azure and Oracle Cloud Infrastructure (OCI)). This installation deplpoys the Oracle Backend for Spring Boot in Azure with an Oracle Autonomous Database running in OCI.
+Prerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot Multi-Cloud (Azure and OCI). You need:
 An account on Azure An account on OCI Overview of setup process This video provides a quick overview of the setup process." />
 
 
@@ -64,8 +64,8 @@ An account on Azure An account on OCI Overview of setup process This video provi
       "name": "Azure/OCI Multi-Cloud Installation",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/azure/",
       "headline": "Azure/OCI Multi-Cloud Installation",
-      "description": "The Oracle Backend for Spring Boot is available to install in Multi-Cloud (Azure and OCI). This installation will deplpoy the Oracle Backend for Spring Boot in Azure with an Oracle Autonomous Database running in OCI.\nPrerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot Multi-Cloud (Azure and OCI):\nAn account on Azure An account on OCI Overview of setup process This video provides a quick overview of the setup process.",
-      "wordCount" : "369",
+      "description": "The Oracle Backend for Spring Boot is available to install in Multi-Cloud (Azure and Oracle Cloud Infrastructure (OCI)). This installation deplpoys the Oracle Backend for Spring Boot in Azure with an Oracle Autonomous Database running in OCI.\nPrerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot Multi-Cloud (Azure and OCI). You need:\nAn account on Azure An account on OCI Overview of setup process This video provides a quick overview of the setup process.",
+      "wordCount" : "383",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1552,7 +1552,7 @@ if (!doNotTrack) {
     class="gdoc-markdown gdoc-markdown__align--left"
   >
     <h1>Azure/OCI Multi-Cloud Installation</h1>
-    <p>The Oracle Backend for Spring Boot is available to install in Multi-Cloud (Azure and OCI).  This installation will deplpoy the Oracle Backend for Spring Boot in Azure with an Oracle Autonomous Database running in OCI.</p>
+    <p>The Oracle Backend for Spring Boot is available to install in Multi-Cloud (Azure and Oracle Cloud Infrastructure (OCI)).  This installation deplpoys the Oracle Backend for Spring Boot in Azure with an Oracle Autonomous Database running in OCI.</p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="prerequisites">
         Prerequisites
@@ -1561,7 +1561,7 @@ if (!doNotTrack) {
         </a>
     </h2>
 </div>
-<p>You must meet the following prerequisites to use the Oracle Backend for Spring Boot Multi-Cloud (Azure and OCI):</p>
+<p>You must meet the following prerequisites to use the Oracle Backend for Spring Boot Multi-Cloud (Azure and OCI). You need:</p>
 <ul>
 <li>An account on Azure</li>
 <li>An account on OCI</li>
@@ -1590,7 +1590,7 @@ if (!doNotTrack) {
 </div>
 <p>Download <a
   class="gdoc-markdown__link"
-  href="https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-ebaas-platform_latest.zip"
+  href="https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-ebaas_latest.zip"
 >Oracle Backend for Spring Boot</a>.</p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="setup">
@@ -1609,26 +1609,26 @@ if (!doNotTrack) {
         </a>
     </h3>
 </div>
-<p>The Multi-Cloud Installation will provision an Oracle Autonomous Database in OCI via the <a
+<p>The Multi-Cloud installation provisions an Oracle Autonomous Database in OCI using the <a
   class="gdoc-markdown__link"
   href="https://github.com/oracle/oracle-database-operator"
 >Oracle Database Operator for Kubernetes (OraOperator)</a>.</p>
 <p>To allow the OraOperator access to OCI, an <a
   class="gdoc-markdown__link"
   href="https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm"
->API Key</a> must be generated:</p>
+>API Key</a> must be generated using these steps:</p>
 <ol>
-<li>Log into OCI</li>
-<li>Open the Profile menu <img
+<li>Log into OCI.</li>
+<li>Open the <strong>Profile</strong> menu <img
   src="userprofilemenu.png"
   alt="User Profile Menu"
   
-/> and click User settings.</li>
-<li>In the Resources section at the bottom left, click API Keys</li>
-<li>Click Download Private Key and save the key as <code>private_key.pem</code>. You do not need to download the public key.</li>
-<li>Click Add.</li>
+/> and click <strong>User</strong> settings.</li>
+<li>In the <strong>Resources</strong> section at the bottom left, click <strong>API Keys</strong>.</li>
+<li>Click <strong>Download Private Key</strong> and save the key as <code>private_key.pem</code>. You do not need to download the public key.</li>
+<li>Click <strong>Add</strong>.</li>
 </ol>
-<p>The key is added and the Configuration File Preview is displayed. The file snippet includes required parameters and values you&rsquo;ll need. Copy and paste the configuration file snippet from the text box and keep handy for later steps.</p>
+<p>The key is added and the Configuration File Preview is displayed. The file snippet includes the required parameters and values. Copy and paste the configuration file snippet from the text box and save for later steps.</p>
 <div class="gdoc-page__anchorwrap">
     <h3 id="azure">
         Azure
@@ -1637,39 +1637,50 @@ if (!doNotTrack) {
         </a>
     </h3>
 </div>
-<p>The Multi-Cloud Installation will be done via the Azure Cloud Shell.  The following steps are required in Azure to prepare for the installation.</p>
+<p>The Multi-Cloud installation is done using the Azure Cloud Shell.  The following steps are required in Azure to prepare for the installation:</p>
 <ol>
-<li>Log into Azure</li>
-<li>Open the Azure Cloud Shell
-<img
+<li>
+<p>Log into Azure.</p>
+</li>
+<li>
+<p>Open the Azure Cloud Shell. For example:</p>
+<p><img
   src="AzureCloudShellIcon.png"
   alt="Azure Cloud Shell Icon"
   
-/></li>
-<li>Upload the <a
+/></p>
+</li>
+<li>
+<p>Upload the <a
   class="gdoc-markdown__link"
   href="https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-ebaas-platform_latest.zip"
->Oracle Backend for Spring Boot</a> Stack
-<img
+>Oracle Backend for Spring Boot</a> Stack</p>
+<p><img
   src="AzureUpload.png"
   alt="Azure Upload"
   
-/></li>
-<li>Upload the API Private Key (<code>private_key.pem</code>)</li>
-<li>Unzip the Stack to a directory called <code>obaas</code>
-<code>unzip azure-ebaas-platform_latest.zip -d /tmp/obaas</code></li>
-<li>Move the <code>private_key.pem</code> file to obaas
-<code>mv private_key.pem /tmp/obaas/</code></li>
-<li>Run the configuration helper script, inputing the values from the API Key
-<ul>
-<li><code>cd /tmp/obaas</code></li>
-<li><code>./obaas_configure.py</code>
+/></p>
+</li>
+<li>
+<p>Upload the API Private Key (<code>private_key.pem</code>).</p>
+</li>
+<li>
+<p>Unzip the Stack to a directory called OBaaS. For example:</p>
+<p><code>unzip azure-ebaas-platform_latest.zip -d /tmp/obaas</code></p>
+</li>
+<li>
+<p>Move the <code>private_key.pem</code> file to OBaaS. For example:</p>
+<p><code>mv private_key.pem /tmp/obaas/</code></p>
+</li>
+<li>
+<p>Run the configuration helper script, using the values from the API Key. For example:</p>
+<p><code>cd /tmp/obaas</code>
+<code>./obaas_configure.py</code>
 <img
   src="AzureConfigure.png"
   alt="Azure Configure"
   
-/></li>
-</ul>
+/></p>
 </li>
 </ol>
 <div class="gdoc-page__anchorwrap">
@@ -1680,7 +1691,7 @@ if (!doNotTrack) {
         </a>
     </h2>
 </div>
-<p>Install Ansible to run the Configuration Management Playbook.  The helper scripts will create a Python Virtual Environment and install Ansible and additional modules:</p>
+<p>Install Ansible to run the Configuration Management Playbook.  The helper script creates a Python virtual environment and installs Ansible and additional modules. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> /tmp/obaas/ansible
 </span></span><span class="line"><span class="cl">./setup_ansible.sh
 </span></span><span class="line"><span class="cl"><span class="nb">source</span> ./activate.env
@@ -1692,7 +1703,7 @@ if (!doNotTrack) {
         </a>
     </h2>
 </div>
-<p>From the Azure Cloud Shell:</p>
+<p>From the Azure Cloud Shell, run these commands:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> /tmp/obaas
 </span></span><span class="line"><span class="cl">terraform init
 </span></span><span class="line"><span class="cl">terraform plan -out<span class="o">=</span>multicloud.plan
@@ -1705,7 +1716,7 @@ if (!doNotTrack) {
         </a>
     </h2>
 </div>
-<p>Next, move on the the <a
+<p>Next, go to the <a
   class="gdoc-markdown__link"
   href="../getting-started/"
 >Getting Started</a> page to learn how to use the newly installed environment.</p>

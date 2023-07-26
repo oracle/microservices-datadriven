@@ -9,12 +9,13 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.108.0">
+<meta name="generator" content="Hugo 0.115.4">
 
 
-  <meta name="description" content="On-Premises Installation - Oracle Linux 8 (x86) This is an example of installing on a MacOS Venture desktop
-Please read the On-Premises and ensure your desktop meets the minimum system requirements.
-Install Additional OS Packages sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack podman curl sudo dnf -y install oracle-database-preinstall-21c sudo dnf -y install langpacks-en glibc-all-langpack sudo dnf module install python39 Set the default Python3 to Python 3." />
+  <meta name="description" content="On-Premises Installation - Oracle Linux 8 (x86) This is an example of installing on a MacOS Venture desktop.
+Read the On-Premises documentation and ensure that your desktop meets the minimum system requirements.
+Install Additional Operating System Packages Install additional operating system packages by executing these commands:
+sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack podman curl sudo dnf -y install oracle-database-preinstall-21c sudo dnf -y install langpacks-en glibc-all-langpack sudo dnf module install python39 Set the default Python3 to Python 3." />
 
     <title>Ol8 | Oracle Backend for Spring Boot</title>
 
@@ -40,9 +41,10 @@ Install Additional OS Packages sudo dnf -y module install container-tools:ol8 su
     content="Ol8"
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot" />
-  <meta property="og:description" content="On-Premises Installation - Oracle Linux 8 (x86) This is an example of installing on a MacOS Venture desktop
-Please read the On-Premises and ensure your desktop meets the minimum system requirements.
-Install Additional OS Packages sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack podman curl sudo dnf -y install oracle-database-preinstall-21c sudo dnf -y install langpacks-en glibc-all-langpack sudo dnf module install python39 Set the default Python3 to Python 3." />
+  <meta property="og:description" content="On-Premises Installation - Oracle Linux 8 (x86) This is an example of installing on a MacOS Venture desktop.
+Read the On-Premises documentation and ensure that your desktop meets the minimum system requirements.
+Install Additional Operating System Packages Install additional operating system packages by executing these commands:
+sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack podman curl sudo dnf -y install oracle-database-preinstall-21c sudo dnf -y install langpacks-en glibc-all-langpack sudo dnf module install python39 Set the default Python3 to Python 3." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/" />
 
@@ -51,9 +53,10 @@ Install Additional OS Packages sudo dnf -y module install container-tools:ol8 su
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Ol8" />
-  <meta name="twitter:description" content="On-Premises Installation - Oracle Linux 8 (x86) This is an example of installing on a MacOS Venture desktop
-Please read the On-Premises and ensure your desktop meets the minimum system requirements.
-Install Additional OS Packages sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack podman curl sudo dnf -y install oracle-database-preinstall-21c sudo dnf -y install langpacks-en glibc-all-langpack sudo dnf module install python39 Set the default Python3 to Python 3." />
+  <meta name="twitter:description" content="On-Premises Installation - Oracle Linux 8 (x86) This is an example of installing on a MacOS Venture desktop.
+Read the On-Premises documentation and ensure that your desktop meets the minimum system requirements.
+Install Additional Operating System Packages Install additional operating system packages by executing these commands:
+sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack podman curl sudo dnf -y install oracle-database-preinstall-21c sudo dnf -y install langpacks-en glibc-all-langpack sudo dnf module install python39 Set the default Python3 to Python 3." />
 
 
   <script type="application/ld+json">
@@ -64,8 +67,8 @@ Install Additional OS Packages sudo dnf -y module install container-tools:ol8 su
       "name": "Ol8",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/",
       "headline": "Ol8",
-      "description": "On-Premises Installation - Oracle Linux 8 (x86) This is an example of installing on a MacOS Venture desktop\nPlease read the On-Premises and ensure your desktop meets the minimum system requirements.\nInstall Additional OS Packages sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack podman curl sudo dnf -y install oracle-database-preinstall-21c sudo dnf -y install langpacks-en glibc-all-langpack sudo dnf module install python39 Set the default Python3 to Python 3.",
-      "wordCount" : "414",
+      "description": "On-Premises Installation - Oracle Linux 8 (x86) This is an example of installing on a MacOS Venture desktop.\nRead the On-Premises documentation and ensure that your desktop meets the minimum system requirements.\nInstall Additional Operating System Packages Install additional operating system packages by executing these commands:\nsudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack podman curl sudo dnf -y install oracle-database-preinstall-21c sudo dnf -y install langpacks-en glibc-all-langpack sudo dnf module install python39 Set the default Python3 to Python 3.",
+      "wordCount" : "474",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1568,11 +1571,11 @@ if (!doNotTrack) {
         </a>
     </h1>
 </div>
-<p>This is an example of installing on a MacOS Venture desktop</p>
-<p>Please read the <a
+<p>This is an example of installing on a MacOS Venture desktop.</p>
+<p>Read the <a
   class="gdoc-markdown__link"
   href="../../on-premises"
->On-Premises</a> and ensure your desktop meets the minimum system requirements.</p>
+>On-Premises</a> documentation and ensure that your desktop meets the minimum system requirements.</p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="install">
         Install
@@ -1582,36 +1585,46 @@ if (!doNotTrack) {
     </h2>
 </div>
 <div class="gdoc-page__anchorwrap">
-    <h3 id="additional-os-packages">
-        Additional OS Packages
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#additional-os-packages" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Additional OS Packages" aria-label="Anchor to: Additional OS Packages" href="#additional-os-packages">
+    <h3 id="additional-operating-system-packages">
+        Additional Operating System Packages
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#additional-operating-system-packages" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Additional Operating System Packages" aria-label="Anchor to: Additional Operating System Packages" href="#additional-operating-system-packages">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h3>
 </div>
+<p>Install additional operating system packages by executing these commands:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo dnf -y module install container-tools:ol8
 </span></span><span class="line"><span class="cl">sudo dnf -y install conntrack podman curl
 </span></span><span class="line"><span class="cl">sudo dnf -y install oracle-database-preinstall-21c
 </span></span><span class="line"><span class="cl">sudo dnf -y install langpacks-en glibc-all-langpack
 </span></span><span class="line"><span class="cl">sudo dnf module install python39
-</span></span></code></pre></div><p>Set the default Python3 to Python 3.9:</p>
+</span></span></code></pre></div><p>Set the default Python3 to Python 3.9 by running this command:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo alternatives --set python3 /usr/bin/python3.9
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
-    <h3 id="download-the-databaseords-images">
-        Download the Database/ORDS Images
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#download-the-databaseords-images" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Download the Database/ORDS Images" aria-label="Anchor to: Download the Database/ORDS Images" href="#download-the-databaseords-images">
+    <h3 id="download-the-database-or-ords-images">
+        Download the Database or ORDS Images
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#download-the-database-or-ords-images" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Download the Database or ORDS Images" aria-label="Anchor to: Download the Database or ORDS Images" href="#download-the-database-or-ords-images">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h3>
 </div>
-<p>The <em>Desktop</em> installation will provision an Oracle Database into the Kubernetes cluster.  The images must be downloaded from <a
+<p>The <em>Desktop</em> installation provisions an Oracle Database into the Kubernetes cluster.  The images must be downloaded from <a
   class="gdoc-markdown__link"
   href="https://container-registry.oracle.com/"
->Oracle&rsquo;s Container Registry</a> prior to continuing.</p>
+>Oracle&rsquo;s Container Registry</a> prior to continuing. Execute these steps:</p>
 <ol>
-<li>Log into Oracle&rsquo;s Container Registry: <code>podman login container-registry.oracle.com</code></li>
-<li>Pull the Database Image: <code>podman pull container-registry.oracle.com/database/enterprise:19.3.0.0</code></li>
-<li>Pull the ORDS Image: <code>podman pull container-registry.oracle.com/database/ords:21.4.2-gh</code></li>
+<li>
+<p>Log into Oracle&rsquo;s Container Registry. For example:</p>
+<p><code>podman login container-registry.oracle.com</code></p>
+</li>
+<li>
+<p>Pull the Database Image. For example:</p>
+<p><code>podman pull container-registry.oracle.com/database/enterprise:21.3.0.0</code></p>
+</li>
+<li>
+<p>Pull the Oracle REST Data Services (ORDS) image. For example:</p>
+<p><code>podman pull container-registry.oracle.com/database/ords:21.4.2-gh</code></p>
+</li>
 </ol>
 <div class="gdoc-page__anchorwrap">
     <h3 id="install-and-start-minikube">
@@ -1621,6 +1634,7 @@ if (!doNotTrack) {
         </a>
     </h3>
 </div>
+<p>Install and start minikube by running these commands:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 </span></span><span class="line"><span class="cl">sudo install minikube-linux-amd64 /usr/local/bin/minikube
 </span></span><span class="line"><span class="cl">minikube config <span class="nb">set</span> driver podman
@@ -1646,6 +1660,7 @@ if (!doNotTrack) {
         </a>
     </h3>
 </div>
+<p>Install Ansible by executing these commands:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./setup_ansible.sh
 </span></span><span class="line"><span class="cl"><span class="nb">source</span> ./activate.env
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
@@ -1656,13 +1671,19 @@ if (!doNotTrack) {
         </a>
     </h3>
 </div>
-<p>Use the helper Playbook to define the infrastructure.  This Playbook will also:</p>
+<p>Use the helper Playbook to define the infrastructure.  This Playbook also:</p>
 <ul>
-<li>Create additional namespaces for the Container Registry and Database</li>
-<li>Create a Private Container Registry in the Kubernetes Cluster</li>
-<li>Modify the application microservices to be Desktop compatible</li>
+<li>
+<p>Creates additional namespaces for the Container Registry and database.</p>
+</li>
+<li>
+<p>Creates a Private Container Registry in the Kubernetes cluster.</p>
+</li>
+<li>
+<p>Modifies the application microservices to be Desktop compatible by running this command:</p>
+<p><code>ansible-playbook ansible/desktop_apply.yaml</code></p>
+</li>
 </ul>
-<p>Run: <code>ansible-playbook ansible/desktop_apply.yaml</code></p>
 <div class="gdoc-page__anchorwrap">
     <h3 id="open-a-tunnel">
         Open a Tunnel
@@ -1671,11 +1692,11 @@ if (!doNotTrack) {
         </a>
     </h3>
 </div>
-<p>In order to push the images to the Container Registry in the Kubernetes cluster; open a new terminal and start a port-forward.</p>
-<p>Run: <code>kubectl port-forward service/private -n container-registry 5000:5000</code></p>
-<p>To test access to the registry:
-<code>curl -X GET -k https://localhost:5000/v2/_catalog</code></p>
-<p>The above curl should result in:</p>
+<p>In order to push the images to the Container Registry in the Kubernetes cluster, open a new terminal and start a port-forward by running this command:</p>
+<p><code>kubectl port-forward service/private -n container-registry 5000:5000</code></p>
+<p>To test access to the registry, run this command:</p>
+<p><code>curl -X GET -k https://localhost:5000/v2/_catalog</code></p>
+<p>This <code>curl</code> command results in the following:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">{&#34;errors&#34;:[{&#34;code&#34;:&#34;UNAUTHORIZED&#34;,&#34;message&#34;:&#34;authentication required&#34;,&#34;detail&#34;:[{&#34;Type&#34;:&#34;registry&#34;,&#34;Class&#34;:&#34;&#34;,&#34;Name&#34;:&#34;catalog&#34;,&#34;Action&#34;:&#34;*&#34;}]}]}
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="build-the-images">
@@ -1685,8 +1706,8 @@ if (!doNotTrack) {
         </a>
     </h3>
 </div>
-<p>Build and Push the Images to the Container Registry in the Kubernetes cluster:</p>
-<p>Run: <code>ansible-playbook ansible/images_build.yaml</code></p>
+<p>Build and push the images to the Container Registry in the Kubernetes cluster by running this command:</p>
+<p><code>ansible-playbook ansible/images_build.yaml</code></p>
 <p>After the images are built and pushed, the port-forward is no longer required and can be stopped.</p>
 <div class="gdoc-page__anchorwrap">
     <h3 id="deploy-oracle-backend-for-spring-boot">
@@ -1696,8 +1717,8 @@ if (!doNotTrack) {
         </a>
     </h3>
 </div>
-<p>Deploy the Database and Microservices.</p>
-<p>Run: <code>ansible-playbook ansible/k8s_apply.yaml -t full</code></p>
+<p>Deploy the database and microservices by running this command:</p>
+<p><code>ansible-playbook ansible/k8s_apply.yaml -t full</code></p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="notes">
         Notes
@@ -1714,9 +1735,9 @@ if (!doNotTrack) {
         </a>
     </h2>
 </div>
-<p>The pods in the <code>config-server</code> and <code>obaas-admin</code> namespaces rely on the database that is created in the <code>oracle-database-operator-system</code>.  During initial provisioning these pods will start well before the database is available resulting in initial failures.  They will resolve themselves once the database becomes available.</p>
-<p>You can check on the status of the database by running:
-<code>kubectl get singleinstancedatabase baas -n oracle-database-operator-system -o &quot;jsonpath={.status.status}&quot;</code></p>
+<p>The pods in the <code>config-server</code> and <code>obaas-admin</code> namespaces rely on the database that is created in the <code>oracle-database-operator-system</code>.  During initial provisioning, these pods start well before the database is available resulting in initial failures.  They resolve themselves once the database becomes available.</p>
+<p>You can check on the status of the database by running this command:</p>
+<p><code>kubectl get singleinstancedatabase baas -n oracle-database-operator-system -o &quot;jsonpath={.status.status}&quot;</code></p>
 <div class="gdoc-page__anchorwrap">
     <h3 id="vpn-and-proxies">
         VPN and Proxies
@@ -1725,7 +1746,7 @@ if (!doNotTrack) {
         </a>
     </h3>
 </div>
-<p>If you are behind a VPN or Proxy, please see <a
+<p>If you are behind a virtual private network (VPN) or proxy, see <a
   class="gdoc-markdown__link"
   href="https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/"
 >https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/</a> for more details on additional tasks.</p>

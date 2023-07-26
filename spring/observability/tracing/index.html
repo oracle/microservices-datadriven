@@ -9,7 +9,7 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.108.0">
+<meta name="generator" content="Hugo 0.115.4">
 
 
   <meta name="description" content="Configure Jaeger to capture application traces" />
@@ -59,7 +59,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/observability/tracing/",
       "headline": "Jaeger Tracing",
       "description": "Configure Jaeger to capture application traces",
-      "wordCount" : "168",
+      "wordCount" : "172",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1569,7 +1569,7 @@ For more information on Jaeger, see the <a
 </div>
 <ol>
 <li>
-<p>Exposing Jaeger web user interface using <code>port-forward</code></p>
+<p>Expose the Jaeger web user interface using this command:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl -n observability port-forward svc/jaegertracing-query 16686:16686
 </span></span></code></pre></div></li>
 <li>
@@ -1608,21 +1608,21 @@ For more information on Jaeger, see the <a
  <!-- spellchecker-enable -->
 </li>
 <li>
-<p>In the Jaeger web user interface, the <code>Search</code> Tab allows you find tracings using various criteria. For example, to find
-traces for the customer microservice included in the sample apps:</p>
+<p>In the Jaeger web user interface, the <code>Search</code> tab allows you to find tracings using various search criteria. For example, to find
+traces for the customer microservice included in the sample applications:</p>
 <ul>
 <li>
 <p>If you deployed the <a
   class="gdoc-markdown__link"
   href="../../sample-apps"
->sample apps</a>, exposed the customer service through the APISIX Gateway and called it at least once, you will
-be able to find traces for it in Jaeger.</p>
+>sample applications</a>, exposed the customer service through the Apache APISIX Gateway, and called it at least once, you can
+find traces for it in Jaeger.</p>
 </li>
 <li>
-<p>Select Service <code>customer</code> and Operation <code>/api/v1/customers</code></p>
+<p>Select Service <code>customer</code> and Operation <code>/api/v1/customers</code> .</p>
 </li>
 <li>
-<p>Click on the search button &ndash; Several traces will appear (one for each time you invoked the service)</p>
+<p>Click on the <strong>Find Traces</strong> button. Several traces appear (one for each time that you invoked the service).</p>
   <!-- spellchecker-disable -->
 
           
@@ -1654,7 +1654,7 @@ be able to find traces for it in Jaeger.</p>
   <!-- spellchecker-enable -->
 </li>
 <li>
-<p>Click on any one of them to view the trace that include multiple services and extends into the Oracle database and Oracle Advanced Queueing:</p>
+<p>Click on any one of them to view the trace that includes multiple services and extends into Oracle Database and Oracle Advanced Queuing. For example:</p>
   <!-- spellchecker-disable -->
 
           
