@@ -21,6 +21,7 @@ In addition to an Oracle Autonomous Database Shared instance, the following soft
 - Jaeger
 - HashiCorp Vault
 - Apache Kafka
+- Coherence
 
 Developers also have access to development/build time services and libraries including:
 

@@ -2,7 +2,7 @@
 title: Azure/OCI Multi-Cloud Installation
 ---
 
-The Oracle Backend for Spring Boot is available to install in Multi-Cloud (Azure and OCI).  This installation will deplpoy the Oracle Backend for Spring Boot in Azure with an Oracle Autonomous Database running in OCI.
+The Oracle Backend for Spring Boot is available to install in Multi-Cloud (Azure and OCI).  This installation will deploy the Oracle Backend for Spring Boot in Azure with an Oracle Autonomous Database running in OCI.
 
 ## Prerequisites
 
@@ -19,7 +19,7 @@ This video provides a quick overview of the setup process.
 
 ## Download
 
-Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-ebaas-platform_latest.zip).
+Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-ebaas_latest.zip).
 
 ## Setup
 
@@ -46,14 +46,14 @@ The Multi-Cloud Installation will be done via the Azure Cloud Shell.  The follow
 1. Log into Azure
 2. Open the Azure Cloud Shell
     ![Azure Cloud Shell Icon](AzureCloudShellIcon.png)
-3. Upload the [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-ebaas-platform_latest.zip) Stack
+3. Upload the [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-ebaas_latest.zip) Stack
     ![Azure Upload](AzureUpload.png)
 4. Upload the API Private Key (`private_key.pem`)
 5. Unzip the Stack to a directory called `obaas`
-    `unzip azure-ebaas-platform_latest.zip -d /tmp/obaas`
+    `unzip azure-ebaas_latest.zip -d /tmp/obaas`
 6. Move the `private_key.pem` file to obaas
     `mv private_key.pem /tmp/obaas/`
-5. Run the configuration helper script, inputing the values from the API Key
+7. Run the configuration helper script, inputting the values from the API Key
     * `cd /tmp/obaas`
     * `./obaas_configure.py`
     ![Azure Configure](AzureConfigure.png)
