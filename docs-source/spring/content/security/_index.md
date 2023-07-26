@@ -1,19 +1,19 @@
 The Oracle Backend for Spring Boot has the following security characteristics:
 
-- All access to the database is done using Mutual TLS (Database Wallet). The username, password and URI are stored in Kubernetes secrets.
+- All access to the database is done using mutual Transport Layer Security (mTLS) database wallet. The username, password, and URL are stored in Kubernetes secrets.
 - Accessing the dashboards can only be done using port forwarding.
-- The only "public" exposure is the APISIX Gateway (note that the dashboard is not exposed publicly).
+- The only "public" exposure is the Apache APISIX Gateway (note that the dashboard is not exposed publicly).
 - Services deployed to the platform are not exposed through the gateway automatically.
 - The deployed platform services are using using self-signed certificates.
-- A customer application can only access service running in the platform via the APISIX Gateway. The IP address for the gateway can be determined by executing the following command:
+- A customer application can only access services running in the platform using the Apache APISIX Gateway. The IP address for the gateway can be determined by executing this command:
 
 
     ```bash
     kubectl -n ingress-nginx get svc ingress-nginx-controller
     ```
 
-- The customer application can be secured using Spring Security, e.g., Spring OAuth 2.0 Resource Server. An external authorization server is recommended (for example Okta, Oauth0)
+- The customer application can be secured using Spring Security (for example, Spring OAuth 2.0 Resource Server). An external authorization server is recommended (for example Okta or Auth0).
 
-The diagram below provides an overview of the security architecture.
+The following diagram provides an overview of the security architecture:
 
 ![Security Architecture](../ebaas-security-architecture.png)
