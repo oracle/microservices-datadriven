@@ -8,7 +8,7 @@ Read the [On-Premises](../../on-premises) documentation and ensure that your des
 
 ### Additional Operating System Packages
 
-Install additional operating system packages by running these commands:
+Install additional operating system packages by executing these commands:
 
 ```bash
 sudo dnf -y module install container-tools:ol8
@@ -33,7 +33,7 @@ The _Desktop_ installation provisions an Oracle Database into the Kubernetes clu
 
    `podman login container-registry.oracle.com`
    
-2. Pull the database image. For example: 
+2. Pull the Database Image. For example: 
 
    `podman pull container-registry.oracle.com/database/enterprise:21.3.0.0`
    
@@ -59,7 +59,7 @@ Download the [Oracle Backend for Spring Boot](https://github.com/oracle/microser
 
 ### Install Ansible
 
-Install Ansible by running these commands:
+Install Ansible by executing these commands:
 
 ```bash
 ./setup_ansible.sh
@@ -78,7 +78,7 @@ Use the helper Playbook to define the infrastructure.  This Playbook also:
 
 ### Open a Tunnel
 
-In order to push the images to the Container Registry in the Kubernetes cluster; open a new terminal and start a port-forward by running this command:
+In order to push the images to the Container Registry in the Kubernetes cluster, open a new terminal and start a port-forward by running this command:
 
 `kubectl port-forward service/private -n container-registry 5000:5000`
 
@@ -86,7 +86,7 @@ To test access to the registry, run this command:
 
 `curl -X GET -k https://localhost:5000/v2/_catalog`
 
-This `curl` command results in:
+This `curl` command results in the following:
 
 ```text
 {"errors":[{"code":"UNAUTHORIZED","message":"authentication required","detail":[{"Type":"registry","Class":"","Name":"catalog","Action":"*"}]}]}
