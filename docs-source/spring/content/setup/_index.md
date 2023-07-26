@@ -40,6 +40,21 @@ resources:
   - name: oci-stack-output-oke
     src: "oci-stack-output-oke.png"
     title: "Get Kube Config Cmd"
+  - name: oci-stack-db-options
+    src: "oci-stack-db-options.png"
+    title: "Database Options"
+  - name: oci-stack-parse-options
+    src: "oci-stack-parse-options.png"
+    title: "Parse Server Options"
+  - name: oci-stack-app-name
+    src: "oci-stack-app-name.png"
+    title: "Compartment and Application Name"
+  - name: ebaas-mp-listing
+    src: "ebaas-mp-listing.png"
+    title: "Marketplace Listing"
+  - name: ebaas-stack-page1
+    src: "ebaas-stack-page1.png"
+    title: "Create Stack"
 ---
 
 Oracle Backend for Spring Boot is available in the [OCI Marketplace](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911).
@@ -67,24 +82,30 @@ You must meet the following prerequisites to use Oracle Backend for Spring Boot.
 
 Oracle Backend for Spring Boot setup installs the following components:
 
-| Component                    | Version      | Description                                                                                 |
-|------------------------------|--------------|---------------------------------------------------------------------------------------------|
-| cert-manager                 | 1.11.0       | Automates the management of certificates.                                                   |
-| NGINX Ingress Controller     | 1.6.4        | Provides traffic management solution for cloud‑native applications in Kubernetes.           |
-| Prometheus                   | 2.40.2       | Provides event monitoring and alerting.                                                     |
-| Prometheus Operator          | 0.60.1       | Provides management for Prometheus monitoring tools.                                        |
-| OpenTelemetry Collector      | 0.66.0       | Collects process and export telemetry data.                                                 |
-| Grafana                      | 9.2.5        | Provides the tool to examine, analyze, and monitor metrics.                                 |
-| Jaeger Tracing               | 1.39.0       | Provides distributed tracing system for monitoring and troubleshooting distributed systems. |
-| APISIX                       | 3.1.1        | Provides full lifecycle API management.                                                     |
-| Spring Admin Server          | 2.7.5        | Manages and monitors Spring Boot applications.                                              |
-| Spring Cloud Config Server   | 2.7.5        | Provides server-side support for externalized configuration.                                |
-| Eureka Service Registry      | 3.1.4        | Provides Service discovery capabilities.                                                    |
-| HashiCorp Vault              | 1.11.3       | Provides a way to store and tightly control access to sensitive data.                       |
-| Oracle Database Operator     | 0.6.1        | Helps reduce the time and complexity of deploying and managing Oracle Databases.            |
-| Oracle Transaction Manager for Microservices | 22.3.1 | Manages distributed transactions to ensure consistency across microservices.      |
-| Strimzi Kafka Operator       | 0.33.1        | Manages Kafka clusters.                                                                    |
-| Apacha Kafka                 | 3.2.0 - 3.3.2 | Distributed event streaming.                                                               |
+| Component                    | Version       | Description                                                                                 |
+|------------------------------|---------------|---------------------------------------------------------------------------------------------|
+| cert-manager                 | 1.11.0        | Automates the management of certificates.                                                   |
+| NGINX Ingress Controller     | 1.6.4         | Provides traffic management solution for cloud‑native applications in Kubernetes.           |
+| Prometheus                   | 2.40.2        | Provides event monitoring and alerting.                                                     |
+| Prometheus Operator          | 0.63.0        | Provides management for Prometheus monitoring tools.                                        |
+| OpenTelemetry Collector      | 0.66.0        | Collects process and export telemetry data.                                                 |
+| Grafana                      | 9.2.5         | Provides the tool to examine, analyze, and monitor metrics.                                 |
+| Jaeger Tracing               | 1.39.0        | Provides distributed tracing system for monitoring and troubleshooting distributed systems. |
+| APISIX                       | 3.2.0         | Provides full lifecycle API management.                                                     |
+| Spring Admin Server          | 2.7.5         | Manages and monitors Spring Boot applications.                                              |
+| Spring Cloud Config Server   | 2.7.5         | Provides server-side support for externalized configuration.                                |
+| Eureka Service Registry      | 3.1.4         | Provides Service discovery capabilities.                                                    |
+| HashiCorp Vault              | 1.14.0        | Provides a way to store and tightly control access to sensitive data.                       |
+| Oracle Database Operator     | 1.0           | Helps reduce the time and complexity of deploying and managing Oracle Databases.            |
+| Oracle Transaction Manager for Microservices | 22.3.1 | Manages distributed transactions to ensure consistency across microservices.       |
+| Strimzi Kafka Operator       | 0.33.1        | Manages Kafka clusters.                                                                     |
+| Apacha Kafka                 | 3.2.0 - 3.3.2 | Distributed event streaming.                                                                |
+| Coherence                    | 3.2.11        | In-memory data grid                                                                         |
+| Parse Server (optional)      | 6.2.0         | Provides backend services for mobile and web applications                                   |
+| Parse Dashboard (optional)   | 5.1.0         | Web user interface for managing Parse Server                                                |
+| Oracle Storage Adapter for Parse  (optional) | 0.2.0    | Enables Parse Server to store data in Oracle Database                            |
+| Conductor Server             | 3.13.2        | Microservice orchestration platform                                                         |
+
 
 ## Overview of setup process
 
@@ -99,23 +120,41 @@ To set up the OCI environment, execute these steps:
 1. Go to the [OCI Marketplace listing for Oracle Backend for Spring Boot](https://cloud.oracle.com/marketplace/application/138899911).
 
     <!-- spellchecker-disable -->
-    ![OCI Marketplace listing](../ebaas-mp-listing.png)
+    {{< img name="ebaas-mp-listing" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
     Choose the target compartment, agree to the terms, and click on the **Launch Stack** button.  This starts the wizard and creates the new stack. On the first page, choose a compartment to host your stack and select **Next**.
 
     <!-- spellchecker-disable -->
-    ![OCI Stack wizard page 1](../ebaas-stack-page1.png)
+    {{< img name="ebaas-stack-page1" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
     Fill in the following configuration variables as needed and select **Next**:
 
-    - `Application Name` (optional)
-    - OKE Control Plane options:
-        - `Public Control Plane`: This option allows access to the OKE Control Plane from the internet (public IP). If not selected, access is only allowed from a private virtual cloud network (VCN).
-        - `Control Plane Access Control`: CIDR (IP range) allows access to the control plane. Oracle recommends that you set this variable to be as restrictive as possible.
+    - `Compartment` : Select the Compartment where you want to install Oracle BAckend ofr Spring Boot
+    - `Application Name` (Optional) : A random animal name will be used as application name if left empty.
+
+    <!-- spellchecker-disable -->
+    {{< img name="oci-stack-app-name" size="large" lazy=false >}}
+    <!-- spellchecker-enable -->
+
+    - Parse Server.
+        - `Application ID` : (Optional) Leave blank to auto-generate.
+        - `Server Master Key` : (Optional) Leave blank to auto-generate.
+        - `Dashboard Username` : The username of the user to grant access to the dashboard.
+        - `Dashboard Password` : The password of the Dashboard USer (minimum 12 characters)
+
+    <!-- spellchecker-disable -->
+    {{< img name="oci-stack-parse-options" size="large" lazy=false >}}
+    <!-- spellchecker-enable -->
+
+    - OKE Control Plane Options.
+        - `Public Control Plane`: this option allows access the OKE Control Plane from the Internet (Public IP). If not selected, access will only be from a private VCN.
+        - `Control Plane Access Control`: CIDR (IP range) allowed to access the control plane (Oracle recommends you set this as restrictive as possible).
         - `Enable Horizontal Pod Scaling?`: The [Horizontal Pod Autoscaler](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengusinghorizontalpodautoscaler.htm#Using_Kubernetes_Horizontal_Pod_Autoscaler) can help applications scale out to meet increased demand, or scale in when resources are no longer needed.
-        - `Node Pool Workers`: The number of Kubernetes worker nodes (virtual machines) to attach to the OKE cluster.
+        - `Node Pool Workers`: Number of Kubernetes worker nodes (virtual machines) to attach to the OKE Cluster.
+        - `Node Pool Worker Shape` : The shape of the Node Pool Workers.
+        - `Node Workers OCPU` : The initial number of OCPUs for the Node Pool Workers
 
     <!-- spellchecker-disable -->
     {{< img name="oci-private-template-create-stack-config" size="large" lazy=false >}}
@@ -133,8 +172,26 @@ To set up the OCI environment, execute these steps:
         - `Existing Vault Key (Optional)`: Select an existing OCI Vault key.
         - `Maximum bandwidth`: The maximum bandwidth that the load balancer can achieve.
 
+      If you unselect `Enable Vault` HashiCorp Vault will be installed in Development mode.
+
+    {{< hint type=[warning] icon=gdoc_check title=Warning >}}
+    Warning: Never, ever, ever run a "development" mode server in production. It is insecure and will lose data
+    on every restart (since it stores data in-memory). It is only made for development or experimentation.
+    {{< /hint >}}
+
     <!-- spellchecker-disable -->
     {{< img name="oci-private-template-create-stack-config-lb-vault" size="large" lazy=false >}}
+    <!-- spellchecker-enable -->
+
+    - Database Options. If you check `Show Database Options` you can modify the following values.
+      - `Autonomous Database Network Access` : Choose the Autonomous Database Network Access.
+      - `Autonomous Database CPU Core Count` : How many initial OCPUs will be used for the ADB-S instance.
+      - `Allow Autonomous Database OCPU Auto Scaling` : Turn on ADB-S autoscaling.
+      - `Autonomous Database Data Storage Size` : ADB-S initial data storage size in TB.
+      - `Autonomous Database License Model` : Autonomous Database license model.
+
+    <!-- spellchecker-disable -->
+    {{< img name="oci-stack-db-options" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
     Now you can review the stack configuration and save the changes. Oracle recommends that you do not check the **Run apply** option. This gives you the opportunity to run the "plan" first and check for issues.

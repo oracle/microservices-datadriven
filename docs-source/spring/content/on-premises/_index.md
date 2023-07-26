@@ -58,6 +58,7 @@ After installing Podman, execute these steps:
 
    `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
 
+
 ### Defining the Database  (_Estate_ Installation)
 
 The database is defined in `ansible/roles/database/vars/main.yaml`. For example:  
