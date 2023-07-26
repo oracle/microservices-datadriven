@@ -15,7 +15,7 @@ There are a number of demonstrations (videos) and hands-on labs (Live Lab) that 
 
 [In this video (18 minutes)](https://youtu.be/T2Y21sk_Wzs), Andy shows you how to build a Phonebook application using Spring Boot with the Oracle Spring Boot Starters for Universal Connection Pools (UCP) and wallet, deploys the applications to the Oracle Backend for Spring Boot, and tests it.
 
-## CloudBank - Building an App with Spring Boot and Mobile APIs with Oracle Database and Kubernetes
+## CloudBank - Building an Application with Spring Boot and Mobile APIs with Oracle Database and Kubernetes
 
 [In this workshop (~ 2 hours)](https://bit.ly/CloudBankOnOBaaS) you learn how to build microservices using Spring Boot and deploy them to the Oracle Backend for Spring Boot. You learn about accessing the database using Java Persistence API (JPA), service discovery, exposing services with the API Gateway, managing transactions across microservices, workflow, and using observability tools to monitor your services and diagnose issues. You also learn about building a web and mobile user interface for your services using Flutter and Parse Platform.
 
