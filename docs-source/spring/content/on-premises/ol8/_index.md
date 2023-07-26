@@ -39,10 +39,11 @@ The _Desktop_ installation provisions an Oracle Database into the Kubernetes clu
    
 3. Pull the Oracle REST Data Services (ORDS) image. For example: 
 
+   `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
 
 ### Install and Start Minikube
 
-Install and start minikube by executing these commands:
+Install and start minikube by running these commands:
 
 ```bash
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
