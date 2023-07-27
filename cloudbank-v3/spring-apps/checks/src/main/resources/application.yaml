@@ -1,6 +1,8 @@
 spring:
   application:
     name: checks
+  zipkin:
+    base-url: ${zipkin.base-url}
 
 oracle:
   aq:
