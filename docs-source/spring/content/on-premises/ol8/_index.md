@@ -18,7 +18,7 @@ sudo dnf -y install langpacks-en
 sudo dnf module install python39
 ```
 
-Set the default Python3 to Python 3.9:
+Set the default Python3 to Python 3.9 by running this command:
 
 ```bash
 sudo alternatives --set python3 /usr/bin/python3.9
