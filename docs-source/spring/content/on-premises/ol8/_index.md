@@ -61,11 +61,11 @@ minikube start --cpus max --memory 7900mb --disk-size='40g' --container-runtime=
 minikube addons enable ingress
 ```
 
-### Download Oracle Backend for Parse Server
+### Download Oracle Backend for Spring Boot
 
 As the `obaas` user:
 
-Download the [Oracle Backend for Parse Server](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip) and unzip into a new directory; example:
+Download the [Oracle Backend forSpring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip) and unzip into a new directory; example:
 
 ```bash
 unzip onprem-ebaas_latest.zip -d ~/obaas
@@ -115,9 +115,7 @@ Assuming the source was unzip'ed to `~/obaas`, as the `obaas` user, run: `ansibl
 
 After the images are built and pushed, the port-forward is no longer required and can be stopped.
 
-### Deploy Oracle Backend for Spring Boot
-
-Deploy the Database and Microservices.
+### Deploy Microservices
 
 Assuming the source was unzip'ed to `~/obaas`, as the `obaas` user, run: `ansible-playbook ~/obaas/ansible/k8s_apply.yaml -t full`
 
