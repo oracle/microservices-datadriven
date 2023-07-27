@@ -6,21 +6,21 @@ resources:
   title: "Conductor UI Workflows"
 ---
 
-Oracle Backend as a Service for Spring Cloud includes Netflix Conductor Server. Conductor is a popular workflow solution that works well with Spring Boot microservices and the Oracle database.
+Oracle Backend as a Service for Spring Cloud includes the Netflix Conductor Server. Conductor is a popular workflow solution that works with Spring Boot microservices and Oracle Database.
 
 Full documentation on Conductor can be found here:
 
 * [Netflix Conductor Documentation](https://conductor.netflix.com/)
 
-### Accessing Server UI
+### Accessing the Server User Interface (UI)
 
-1. Expose the Oracle Spring Cloud Admin Server that the CLI will call by using `port-forward`
+1. Expose the Oracle Spring Cloud Admin server that the CLI calls by using this command:
 
     ```shell
     kubectl port-forward services/conductor-server -n conductor-server 8080:8080
     ```
 
-2. Access the Conductor Server UI.
+2. Access the Conductor server UI at this URL:
 
     ```shell
     http://localhost:8080
@@ -30,7 +30,7 @@ Full documentation on Conductor can be found here:
 {{< img name="conductor_server_ui" size="medium" lazy=false >}}
 <!-- spellchecker-enable -->
 
-3. Access the Swagger Documentation
+3. Access the Swagger documentation at this URL:
 
     ```shell
     http://localhost:8080/swagger-ui/index.html
