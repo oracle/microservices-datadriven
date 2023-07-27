@@ -1,6 +1,6 @@
 # On-Premises Installation - Oracle Linux 8 (x86)
 
-This is an example of installing on a MacOS Venture desktop
+This is an example of installing on a Oracle Linux 8 desktop.
 
 Please read the [On-Premises](../index.md) and ensure your desktop meets the minimum system requirements.
 
