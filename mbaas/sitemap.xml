@@ -3,40 +3,28 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/</loc>
-    <priority>0</priority>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/azure/</loc>
-    <priority>0</priority>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/dashboard/</loc>
-    <priority>0</priority>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/getting-started/</loc>
-    <priority>0</priority>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/on-premises/</loc>
-    <priority>0</priority>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/on-premises/macos_ventura/</loc>
-    <priority>0</priority>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/on-premises/ol8/</loc>
-    <priority>0</priority>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/release-notes/</loc>
-    <priority>0</priority>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/sample-apps/</loc>
-    <priority>0</priority>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/sample-apps/walking-history/</loc>
-    <priority>0</priority>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/setup/</loc>
-    <priority>0</priority>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/uninstall/</loc>
-    <priority>0</priority>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/database/</loc>
   </url><url>

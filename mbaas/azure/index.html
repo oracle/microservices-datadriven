@@ -9,13 +9,12 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.108.0">
-<meta name="mark" content="andy" /> 
+<meta name="generator" content="Hugo 0.115.4">
 
 
   <meta name="description" content="Azure/OCI Multi-Cloud Installation The Oracle Backend for Parse Platform is available to install in Multi-Cloud (Azure and OCI). This installation will deplpoy the Oracle Backend for Parse Platform in Azure with an Oracle Autonomous Database running in OCI.
 Prerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot Multi-Cloud (Azure and OCI):
-An account on Azure An account on OCI Download Download Oracle Backend for Spring Boot." />
+An account on Azure An account on OCI Download Download Oracle Backend for Parse Server." />
 
     <title>Azure | Oracle Backend for Parse Platform</title>
 
@@ -43,7 +42,7 @@ An account on Azure An account on OCI Download Download Oracle Backend for Sprin
   <meta property="og:site_name" content="Oracle Backend for Parse Platform" />
   <meta property="og:description" content="Azure/OCI Multi-Cloud Installation The Oracle Backend for Parse Platform is available to install in Multi-Cloud (Azure and OCI). This installation will deplpoy the Oracle Backend for Parse Platform in Azure with an Oracle Autonomous Database running in OCI.
 Prerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot Multi-Cloud (Azure and OCI):
-An account on Azure An account on OCI Download Download Oracle Backend for Spring Boot." />
+An account on Azure An account on OCI Download Download Oracle Backend for Parse Server." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/mbaas/azure/" />
 
@@ -54,7 +53,7 @@ An account on Azure An account on OCI Download Download Oracle Backend for Sprin
 <meta name="twitter:title" content="Azure" />
   <meta name="twitter:description" content="Azure/OCI Multi-Cloud Installation The Oracle Backend for Parse Platform is available to install in Multi-Cloud (Azure and OCI). This installation will deplpoy the Oracle Backend for Parse Platform in Azure with an Oracle Autonomous Database running in OCI.
 Prerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot Multi-Cloud (Azure and OCI):
-An account on Azure An account on OCI Download Download Oracle Backend for Spring Boot." />
+An account on Azure An account on OCI Download Download Oracle Backend for Parse Server." />
 
 
   <script type="application/ld+json">
@@ -65,7 +64,7 @@ An account on Azure An account on OCI Download Download Oracle Backend for Sprin
       "name": "Azure",
       "url" : "https://oracle.github.io/microservices-datadriven/mbaas/azure/",
       "headline": "Azure",
-      "description": "Azure\/OCI Multi-Cloud Installation The Oracle Backend for Parse Platform is available to install in Multi-Cloud (Azure and OCI). This installation will deplpoy the Oracle Backend for Parse Platform in Azure with an Oracle Autonomous Database running in OCI.\nPrerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot Multi-Cloud (Azure and OCI):\nAn account on Azure An account on OCI Download Download Oracle Backend for Spring Boot.",
+      "description": "Azure\/OCI Multi-Cloud Installation The Oracle Backend for Parse Platform is available to install in Multi-Cloud (Azure and OCI). This installation will deplpoy the Oracle Backend for Parse Platform in Azure with an Oracle Autonomous Database running in OCI.\nPrerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot Multi-Cloud (Azure and OCI):\nAn account on Azure An account on OCI Download Download Oracle Backend for Parse Server.",
       "wordCount" : "358",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
@@ -1352,8 +1351,8 @@ if (!doNotTrack) {
 </div>
 <p>Download <a
   class="gdoc-markdown__link"
-  href="https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-mbaas-platform_latest.zip"
->Oracle Backend for Spring Boot</a>.</p>
+  href="https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-mbaas_latest.zip"
+>Oracle Backend for Parse Server</a>.</p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="setup">
         Setup
@@ -1410,7 +1409,7 @@ if (!doNotTrack) {
 /></li>
 <li>Upload the <a
   class="gdoc-markdown__link"
-  href="https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-ebaas-platform_latest.zip"
+  href="https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-mbaas_latest.zip"
 >Oracle Backend for Spring Boot</a> Stack
 <img
   src="AzureUpload.png"
@@ -1419,7 +1418,7 @@ if (!doNotTrack) {
 /></li>
 <li>Upload the API Private Key (<code>private_key.pem</code>)</li>
 <li>Unzip the Stack to a directory called <code>obaas</code>
-<code>unzip azure-ebaas-platform_latest.zip -d obaas</code></li>
+<code>unzip azure-mbaas_latest.zip -d obaas</code></li>
 <li>Move the <code>private_key.pem</code> file to obaas
 <code>mv private_key.pem obaas/</code></li>
 <li>Run the configuration helper script, inputing the values from the API Key
