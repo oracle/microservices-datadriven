@@ -6,7 +6,9 @@ Read the [On-Premises](../../on-premises) documentation and ensure that your des
 
 ## Install
 
-### Additional OS Packages
+### Additional Operating System Packages
+
+Install additional operating system packages by executing these commands:
 
 ```bash
 sudo dnf -y module install container-tools:ol8
