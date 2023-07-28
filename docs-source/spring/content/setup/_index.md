@@ -175,8 +175,8 @@ To set up the OCI environment, execute these steps:
       If you unselect `Enable Vault` HashiCorp Vault will be installed in Development mode.
 
     {{< hint type=[warning] icon=gdoc_check title=Warning >}}
-    Warning: Never, ever, ever run a "development" mode server in production. It is insecure and will lose data
-    on every restart (since it stores data in-memory). It is only made for development or experimentation.
+    **Never** run a Development mode server in production. It is insecure and will lose data
+    on every restart (since it stores data in-memory). It is only available for development or experimentation.
     {{< /hint >}}
 
     <!-- spellchecker-disable -->

@@ -20,7 +20,7 @@ draft: false
 Jaeger is a distributed tracing system used for monitoring and troubleshooting microservices.
 For more information on Jaeger, see the [Jaeger website](https://www.jaegertracing.io/).
 
-## View application traces in Jaeger web user interface
+## View Application Traces in Jaeger Web User Interface
 
 1. Expose the Jaeger web user interface using this command:
 
@@ -34,13 +34,13 @@ For more information on Jaeger, see the [Jaeger website](https://www.jaegertraci
     {{< img name="obaas-jaeger-ui" size="medium" lazy=false >}}
     <!-- spellchecker-enable -->
 
-3. In the Jaeger web user interface, the `Search` tab allows you to find tracings using various search criteria. For example, to find
+3. In the Jaeger web user interface, the **Search** tab allows you to find tracings using various search criteria. For example, to find
    traces for the customer microservice included in the sample applications:
 
-    * If you deployed the [sample applications](../../sample-apps), exposed the customer service through the Apache APISIX Gateway, and called it at least once, you can
+    * If you deployed the [sample applications](../../sample-apps), exposing the customer service through the Apache APISIX Gateway and called it at least once, you can
       find traces for it in Jaeger.
-    * Select Service `customer` and Operation `/api/v1/customers` .
-    * Click on the **Find Traces** button. Several traces appear (one for each time that you invoked the service).
+    * Select **Service** `customer` and **Operation** `/api/v1/customers` .
+    * Click on **Find Traces**. Several traces appear (one for each time that you invoked the service).
 
         <!-- spellchecker-disable -->
         {{< img name="obaas-jaeger-customer-tracing" size="medium" lazy=false >}}
