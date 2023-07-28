@@ -12,7 +12,7 @@
 <meta name="generator" content="Hugo 0.115.4">
 
 
-  <meta name="description" content="Oracle Backend for Spring Boot includes the Spring Eureka Service Registry, which is an application that stores information about client services/applications. Typically, each microservice will register with the Eureka server at startup and the Eureka server will maintain a list of all active instances of the service, including their ports and IP addresses. This information can be looked up by other services using a well-known key. This allows services to interact with each other without needing to know each others&rsquo; addresses at development/deployment time." />
+  <meta name="description" content="Oracle Backend for Spring Boot includes the Spring Boot Eureka service registry, which is an application that stores information about client services or applications. Typically, each microservice registers with the Eureka server at startup and the Eureka server maintains a list of all active instances of the service, including their ports and IP addresses. This information can be accessed by other services using a well-known key. This allows services to interact with each other without needing to know the other addresses at development or deployment time." />
 
     <title>Service Discovery | Oracle Backend for Spring Boot</title>
 
@@ -38,7 +38,7 @@
     content="Service Discovery"
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot" />
-  <meta property="og:description" content="Oracle Backend for Spring Boot includes the Spring Eureka Service Registry, which is an application that stores information about client services/applications. Typically, each microservice will register with the Eureka server at startup and the Eureka server will maintain a list of all active instances of the service, including their ports and IP addresses. This information can be looked up by other services using a well-known key. This allows services to interact with each other without needing to know each others’ addresses at development/deployment time." />
+  <meta property="og:description" content="Oracle Backend for Spring Boot includes the Spring Boot Eureka service registry, which is an application that stores information about client services or applications. Typically, each microservice registers with the Eureka server at startup and the Eureka server maintains a list of all active instances of the service, including their ports and IP addresses. This information can be accessed by other services using a well-known key. This allows services to interact with each other without needing to know the other addresses at development or deployment time." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/platform/eureka/" />
 
@@ -47,7 +47,7 @@
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Service Discovery" />
-  <meta name="twitter:description" content="Oracle Backend for Spring Boot includes the Spring Eureka Service Registry, which is an application that stores information about client services/applications. Typically, each microservice will register with the Eureka server at startup and the Eureka server will maintain a list of all active instances of the service, including their ports and IP addresses. This information can be looked up by other services using a well-known key. This allows services to interact with each other without needing to know each others’ addresses at development/deployment time." />
+  <meta name="twitter:description" content="Oracle Backend for Spring Boot includes the Spring Boot Eureka service registry, which is an application that stores information about client services or applications. Typically, each microservice registers with the Eureka server at startup and the Eureka server maintains a list of all active instances of the service, including their ports and IP addresses. This information can be accessed by other services using a well-known key. This allows services to interact with each other without needing to know the other addresses at development or deployment time." />
 
 
   <script type="application/ld+json">
@@ -58,8 +58,8 @@
       "name": "Service Discovery",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/platform/eureka/",
       "headline": "Service Discovery",
-      "description": "Oracle Backend for Spring Boot includes the Spring Eureka Service Registry, which is an application that stores information about client services\/applications. Typically, each microservice will register with the Eureka server at startup and the Eureka server will maintain a list of all active instances of the service, including their ports and IP addresses. This information can be looked up by other services using a well-known key. This allows services to interact with each other without needing to know each others’ addresses at development\/deployment time.",
-      "wordCount" : "175",
+      "description": "Oracle Backend for Spring Boot includes the Spring Boot Eureka service registry, which is an application that stores information about client services or applications. Typically, each microservice registers with the Eureka server at startup and the Eureka server maintains a list of all active instances of the service, including their ports and IP addresses. This information can be accessed by other services using a well-known key. This allows services to interact with each other without needing to know the other addresses at development or deployment time.",
+      "wordCount" : "188",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1554,22 +1554,23 @@ if (!doNotTrack) {
     class="gdoc-markdown gdoc-markdown__align--left"
   >
     <h1>Service Discovery</h1>
-    <p>Oracle Backend for Spring Boot includes the Spring Eureka Service Registry, which is an application that stores information about client services/applications. Typically, each microservice will register with the Eureka server at startup and the Eureka server will maintain a list of all active instances of the service, including their ports and IP addresses.  This information can be looked up by other services using a well-known key.  This allows services to interact with each other without needing to know each others&rsquo; addresses at development/deployment time.</p>
+    <p>Oracle Backend for Spring Boot includes the Spring Boot Eureka service registry, which is an application that stores information about client services or applications. Typically, each microservice registers with the Eureka server at startup and the Eureka server maintains a list of all active instances of the service, including their ports and IP addresses.  This information can be accessed by other services using a well-known key.  This allows services to interact with each other without needing to know the other addresses at development or deployment time.</p>
 <div class="gdoc-page__anchorwrap">
     <h3 id="access-the-eureka-web-user-interface">
-        Access the Eureka web user interface
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/eureka/#access-the-eureka-web-user-interface" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Access the Eureka web user interface" aria-label="Anchor to: Access the Eureka web user interface" href="#access-the-eureka-web-user-interface">
+        Access the Eureka Web User Interface
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/eureka/#access-the-eureka-web-user-interface" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Access the Eureka Web User Interface" aria-label="Anchor to: Access the Eureka Web User Interface" href="#access-the-eureka-web-user-interface">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h3>
 </div>
+<p>To access the Eureka web user interface, process these steps:</p>
 <ol>
 <li>
-<p>Expose the Eureka web user interface using <code>port-forward</code></p>
+<p>Expose the Eureka web user interface using this command:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl port-forward -n eureka svc/eureka 8761:8761
 </span></span></code></pre></div></li>
 <li>
-<p>Open the Eureka web user interface: <a
+<p>Open the Eureka web user interface URL <a
   class="gdoc-markdown__link"
   href="http://localhost:8761"
 >http://localhost:8761</a></p>
@@ -1603,11 +1604,11 @@ if (!doNotTrack) {
 
  <!-- spellchecker-enable -->
 <ul>
-<li>On the web page, you will see all of the services registered with Eureka.  If you deployed the <a
+<li>On the web page, you see all of the services registered with Eureka.  If you deployed the <a
   class="gdoc-markdown__link"
   href="../../sample-apps"
->sample apps</a>, look for an entry called &ldquo;SLOW&rdquo; - the presence of this entry confirms that the application successfully registered itself with the service registry</li>
-<li>You should also see &ldquo;CONFIG-SERVER&rdquo; and &ldquo;ADMIN-SERVER&rdquo; there - these are deployed as part of the platform</li>
+>sample applications</a>, look for an entry called <strong>SLOW</strong>. The presence of this entry confirms that the application successfully registered itself with the service registry.</li>
+<li>You should also see the <strong>CONFIG-SERVER</strong> and <strong>ADMIN-SERVER</strong> applications. These applications are deployed as part of the platform.</li>
 </ul>
 </li>
 </ol>

@@ -12,8 +12,8 @@
 <meta name="generator" content="Hugo 0.115.4">
 
 
-  <meta name="description" content="Oracle Backend for Spring Boot includes the Spring Config which provides server and client-side support for externalized configuration in a distributed system. The Spring Config Server provides a central place to manage external properties for applications across all environments.
-The Spring Config Server is pre-configured to work with the Spring Eureka Service Registry, and it is configured to store the configuration in the Oracle Autonomous Database, so it easily supports labelled versions of configuration environments, as well as being accessible to a wide range of tooling for managing the content." />
+  <meta name="description" content="Oracle Backend for Spring Boot includes the Spring Cloud Config which provides server- and client-side support for externalized configurations in a distributed system. The Spring Cloud Config server provides a central place to manage external properties for applications across all environments.
+The Spring Cloud Config server is pre-configured to work with the Spring Boot Eureka service registry, and it is configured to store the configuration in the Oracle Autonomous Database, so it easily supports labelled versions of configuration environments, as well as being accessible to a wide range of tooling for managing the content." />
 
     <title>Configuration | Oracle Backend for Spring Boot</title>
 
@@ -39,8 +39,8 @@ The Spring Config Server is pre-configured to work with the Spring Eureka Servic
     content="Configuration"
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot" />
-  <meta property="og:description" content="Oracle Backend for Spring Boot includes the Spring Config which provides server and client-side support for externalized configuration in a distributed system. The Spring Config Server provides a central place to manage external properties for applications across all environments.
-The Spring Config Server is pre-configured to work with the Spring Eureka Service Registry, and it is configured to store the configuration in the Oracle Autonomous Database, so it easily supports labelled versions of configuration environments, as well as being accessible to a wide range of tooling for managing the content." />
+  <meta property="og:description" content="Oracle Backend for Spring Boot includes the Spring Cloud Config which provides server- and client-side support for externalized configurations in a distributed system. The Spring Cloud Config server provides a central place to manage external properties for applications across all environments.
+The Spring Cloud Config server is pre-configured to work with the Spring Boot Eureka service registry, and it is configured to store the configuration in the Oracle Autonomous Database, so it easily supports labelled versions of configuration environments, as well as being accessible to a wide range of tooling for managing the content." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/platform/config/" />
 
@@ -49,8 +49,8 @@ The Spring Config Server is pre-configured to work with the Spring Eureka Servic
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Configuration" />
-  <meta name="twitter:description" content="Oracle Backend for Spring Boot includes the Spring Config which provides server and client-side support for externalized configuration in a distributed system. The Spring Config Server provides a central place to manage external properties for applications across all environments.
-The Spring Config Server is pre-configured to work with the Spring Eureka Service Registry, and it is configured to store the configuration in the Oracle Autonomous Database, so it easily supports labelled versions of configuration environments, as well as being accessible to a wide range of tooling for managing the content." />
+  <meta name="twitter:description" content="Oracle Backend for Spring Boot includes the Spring Cloud Config which provides server- and client-side support for externalized configurations in a distributed system. The Spring Cloud Config server provides a central place to manage external properties for applications across all environments.
+The Spring Cloud Config server is pre-configured to work with the Spring Boot Eureka service registry, and it is configured to store the configuration in the Oracle Autonomous Database, so it easily supports labelled versions of configuration environments, as well as being accessible to a wide range of tooling for managing the content." />
 
 
   <script type="application/ld+json">
@@ -61,8 +61,8 @@ The Spring Config Server is pre-configured to work with the Spring Eureka Servic
       "name": "Configuration",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/platform/config/",
       "headline": "Configuration",
-      "description": "Oracle Backend for Spring Boot includes the Spring Config which provides server and client-side support for externalized configuration in a distributed system. The Spring Config Server provides a central place to manage external properties for applications across all environments.\nThe Spring Config Server is pre-configured to work with the Spring Eureka Service Registry, and it is configured to store the configuration in the Oracle Autonomous Database, so it easily supports labelled versions of configuration environments, as well as being accessible to a wide range of tooling for managing the content.",
-      "wordCount" : "175",
+      "description": "Oracle Backend for Spring Boot includes the Spring Cloud Config which provides server- and client-side support for externalized configurations in a distributed system. The Spring Cloud Config server provides a central place to manage external properties for applications across all environments.\nThe Spring Cloud Config server is pre-configured to work with the Spring Boot Eureka service registry, and it is configured to store the configuration in the Oracle Autonomous Database, so it easily supports labelled versions of configuration environments, as well as being accessible to a wide range of tooling for managing the content.",
+      "wordCount" : "178",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1557,14 +1557,14 @@ if (!doNotTrack) {
     class="gdoc-markdown gdoc-markdown__align--left"
   >
     <h1>Configuration</h1>
-    <p>Oracle Backend for Spring Boot includes the Spring Config which provides server and client-side support for externalized
-configuration in a distributed system. The Spring Config Server provides a central place to manage external properties for applications
+    <p>Oracle Backend for Spring Boot includes the Spring Cloud Config which provides server- and client-side support for externalized
+configurations in a distributed system. The Spring Cloud Config server provides a central place to manage external properties for applications
 across all environments.</p>
-<p>The Spring Config Server is pre-configured to work with the Spring Eureka Service Registry, and it is configured to store the configuration
+<p>The Spring Cloud Config server is pre-configured to work with the Spring Boot Eureka service registry, and it is configured to store the configuration
 in the Oracle Autonomous Database, so it easily supports labelled versions of configuration
 environments, as well as being accessible to a wide range of tooling for managing the content.
 Configuration is stored in the <code>CONFIGSERVER</code> schema in the <code>PROPERTIES</code> table.</p>
-<p>An example of a Config Server client&rsquo;s Spring <code>application.yaml</code> configuration file could include:</p>
+<p>For example, the Spring Cloud Config client&rsquo;s Spring <code>application.yaml</code> configuration file could include:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">spring</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">config</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">import</span><span class="p">:</span><span class="w"> </span><span class="l">optional:configserver:http://config-server.config-server.svc.cluster.local:8080</span><span class="w">
@@ -1574,8 +1574,8 @@ Configuration is stored in the <code>CONFIGSERVER</code> schema in the <code>PRO
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">config</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">label</span><span class="p">:</span><span class="w"> </span><span class="l">latest</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">profile</span><span class="p">:</span><span class="w"> </span><span class="l">dev</span><span class="w">
-</span></span></span></code></pre></div><p>This will fetch data in the value where the application is <code>atael</code>, profile is <code>dev</code> and the label is <code>latest</code>.</p>
-<p>Managing the data for the Config Server should be done using the CLI.  If you prefer, you can also work directly with the <code>CONFIGSERVER.PROPERTIES</code> table in the database.</p>
+</span></span></span></code></pre></div><p>This example fetches data where the application is <code>atael</code>, profile is <code>dev</code> and the label is <code>latest</code>.</p>
+<p>Managing the data for the Spring Cloud Config server should be done using the CLI.  If you prefer, you can also work directly with the <code>CONFIGSERVER.PROPERTIES</code> table in the database.</p>
 
   </article>
 
