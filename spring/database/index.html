@@ -62,7 +62,7 @@ If you chose the “secure access from anywhere” option for your database duri
       "url" : "https://oracle.github.io/microservices-datadriven/spring/database/",
       "headline": "Database Access",
       "description": "The Oracle Backend for Spring Boot includes an Oracle Database. An instance of the Oracle Autonomous Database Serverless is created during installation.\nIf you chose the “secure access from anywhere” option for your database during installation (or just accepted the default), then you can use the Database Actions web user interface to work with your database. If you chose the “private” option, you need to use a bastion to access the database.",
-      "wordCount" : "505",
+      "wordCount" : "503",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1561,7 +1561,10 @@ If you chose the &ldquo;private&rdquo; option, you need to use a bastion to acce
         </a>
     </h2>
 </div>
-<p>To work with data in the database, you can use the Database Actions web user interface, which can be accessed from the Oracle Cloud Infrastructure (OCI) Console. The Oracle database is created in the same compartments as OCI Container Engine for Kubernetes (OKE). In the OCI Console, navigate to Oracle Autonomous Database (ADB) in the main menu and select the database with the application name that you configured during installation with the suffix “DB”. For example, “OBAASTSTPSDB”.</p>
+<p>To work with data in the database, you can use the Database Actions web user interface, which can be accessed from the Oracle Cloud
+Infrastructure (OCI) Console. The Oracle database is created in the same compartments as Oracle Container Engine for Kubernetes (OKE). In the OCI Console,
+navigate to Oracle Autonomous Database (ADB) in the main menu and select the database with the application name that you configured during installation
+with the suffix “DB”. For example, <code>OBAASTSTPSDB</code>.</p>
 <!-- spellchecker-disable -->
 
   
@@ -1591,7 +1594,7 @@ If you chose the &ldquo;private&rdquo; option, you need to use a bastion to acce
   </div>
 
 <!-- spellchecker-enable -->
-<p>Click on the link to access the database details page, and then click on the “Database Actions” button:</p>
+<p>Click on the link to access the database details page, and then click on <strong>Database Actions</strong>:</p>
 <!-- spellchecker-disable -->
 
   
@@ -1621,28 +1624,31 @@ If you chose the &ldquo;private&rdquo; option, you need to use a bastion to acce
   </div>
 
 <!-- spellchecker-enable -->
-<p>This opens the <strong>Database Actions</strong> page, where you have access to many database functions, including the ability to
+<p>This opens the <strong>Database Actions</strong> page where you have access to many database functions, including the ability to
 work with the schemas where your Oracle Backend for Spring Boot data are stored.</p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="accessing-the-database-from-a-local-workstation">
-        Accessing the database from a local workstation
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/database/#accessing-the-database-from-a-local-workstation" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Accessing the database from a local workstation" aria-label="Anchor to: Accessing the database from a local workstation" href="#accessing-the-database-from-a-local-workstation">
+        Accessing the Database From a Local Workstation
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/database/#accessing-the-database-from-a-local-workstation" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Accessing the Database From a Local Workstation" aria-label="Anchor to: Accessing the Database From a Local Workstation" href="#accessing-the-database-from-a-local-workstation">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>
 </div>
-<p>After creating the Oracle Backend for Spring Boot environment, you have access to Oracle Autonomous Database. For example, the <code>CONFIGSERVER.PROPERTIES</code>, a table where applications should add their properties. Also, each application can use the same database instance to host its data.</p>
-<p>If you chose the &ldquo;secure access from anywhere&rdquo; option for database access during installation (or accepted this default), then you can
+<p>After creating the Oracle Backend for Spring Boot environment, you have access to Oracle Autonomous Database. For example,
+the <code>CONFIGSERVER.PROPERTIES</code> table where applications should add their properties. Also, each application can use the same database instance to host its data.</p>
+<p>If you chose the <code>secure access from anywhere</code> option for database access during installation (or accepted this default), then you can
 <a
   class="gdoc-markdown__link"
   href="https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/connect-download-wallet.html"
 >download the wallet</a> to access
 the database from your local machine.</p>
-<p>If you chose the &ldquo;private&rdquo; option for database access during installation, the database is configured so that it is only accessible from the private VCN, and access is only possible using the Bastion service provisioned during installation.</p>
+<p>If you chose the <code>private</code> option for database access during installation, the database is configured so that it is only accessible from the private
+VCN, and access is only possible using the Bastion service provisioned during installation.</p>
 <ol>
 <li>
 <p>Create a dynamic port forwarding (SOCKS5) session using the Bastion service.</p>
-<p>Start with ADB access that was created with private end point access only in accordance with security guidance. To allow ADB to run SQL commands, you need to establish a session between your local workstation and ADB passing by the Bastion service.</p>
+<p>Start with ADB access that was created with private end point access only in accordance with security guide lines. For ADB to run SQL commands, you
+need to establish a session between your local workstation and ADB passing by the Bastion service.</p>
 <p>A <a
   class="gdoc-markdown__link"
   href="https://docs.oracle.com/en-us/iaas/Content/Bastion/Tasks/managingsessions.htm#"
@@ -1676,18 +1682,21 @@ the database from your local machine.</p>
       </div>
 
  <!-- spellchecker-enable -->
-<p>After the session is created, you can establish the tunnel with your ADB instance by issuing an SSH command that you obtain by clicking on three dots symbol on right side of the session created. For example:</p>
+<p>After the session is created, you can establish the tunnel with your ADB instance by issuing an <code>ssh</code> command that you obtain by clicking on
+three dots symbol on right side of the created session. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ssh -i &lt;privateKey&gt; -N -D 127.0.0.1:&lt;localPort&gt; -p <span class="m">22</span> ocid1.bastionsession.oc1.phx....@host.bastion.us-phoenix-1.oci.oraclecloud.com
 </span></span></code></pre></div></li>
 <li>
 <p>Connect with the ADB instance using the Oracle SQL Developer Command Line (SQLcl) interface.</p>
 <p>With the tunnel established, you can connect to the ADB instance.</p>
 <ul>
-<li>First, export the Oracle Net port by executing this commmand:</li>
-</ul>
+<li>
+<p>First, export the Oracle Net port by processing this commmand:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">CUSTOM_JDBC</span><span class="o">=</span><span class="s2">&#34;-Doracle.net.socksProxyHost=127.0.0.1 -Doracle.net.socksProxyPort=&lt;PORT&gt; -Doracle.net.socksRemoteDNS=true&#34;</span>
-</span></span></code></pre></div><ul>
-<li>Download the ADB client credentials (wallet files). For example:</li>
+</span></span></code></pre></div></li>
+<li>
+<p>Download the ADB client credentials (wallet files). For example:</p>
+</li>
 </ul>
  <!-- spellchecker-disable -->
 
@@ -1719,12 +1728,16 @@ the database from your local machine.</p>
 
  <!-- spellchecker-enable -->
 <ul>
-<li>Connect with SQLcl by executing this command:</li>
-</ul>
+<li>
+<p>Connect with SQLcl by processing this command:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sql /nolog
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">set</span><span class="w"> </span><span class="n">cloudconfig</span><span class="w"> </span><span class="o">&lt;</span><span class="n">WALLET</span><span class="o">&gt;</span><span class="p">.</span><span class="n">zip</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">connect</span><span class="w"> </span><span class="k">ADMIN</span><span class="o">@&lt;</span><span class="n">TNS_NAME</span><span class="o">&gt;</span><span class="w">
-</span></span></span></code></pre></div></li>
+</span></span></code></pre></div></li>
+</ul>
+<pre tabindex="0"><code>
+ ```sql
+ set cloudconfig &lt;WALLET&gt;.zip
+ connect ADMIN@&lt;TNS_NAME&gt;
+</code></pre></li>
 </ol>
 
   </article>

@@ -12,9 +12,9 @@
 <meta name="generator" content="Hugo 0.115.4">
 
 
-  <meta name="description" content="The Oracle Backend for Spring Boot offers a command-line tool, oractl. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources they use. Download the CLI here The platform specific binary can be renamed to oractl for convenience.
-Using the CLI Expose the Oracle Backend for Spring Boot Admin Server that the CLI will call by using port-forward
-kubectl port-forward services/obaas-admin -n obaas-admin 8080:8080 Start the CLI in interactive mode by simply running oractl from your terminal window." />
+  <meta name="description" content="The Oracle Backend for Spring Boot offers a command-line interface (CLI), oractl. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources that they use. Download the CLI here. The platform-specific binary can be renamed to oractl for convenience.
+Using the CLI Expose the Oracle Backend for Spring Boot Admin server that the CLI calls using this command:
+kubectl port-forward services/obaas-admin -n obaas-admin 8080:8080 Start the CLI in interactive mode by running oractl from your terminal window." />
 
     <title>Using the OBaaS CLI | Oracle Backend for Spring Boot</title>
 
@@ -40,9 +40,9 @@ kubectl port-forward services/obaas-admin -n obaas-admin 8080:8080 Start the CLI
     content="Using the OBaaS CLI"
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot" />
-  <meta property="og:description" content="The Oracle Backend for Spring Boot offers a command-line tool, oractl. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources they use. Download the CLI here The platform specific binary can be renamed to oractl for convenience.
-Using the CLI Expose the Oracle Backend for Spring Boot Admin Server that the CLI will call by using port-forward
-kubectl port-forward services/obaas-admin -n obaas-admin 8080:8080 Start the CLI in interactive mode by simply running oractl from your terminal window." />
+  <meta property="og:description" content="The Oracle Backend for Spring Boot offers a command-line interface (CLI), oractl. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources that they use. Download the CLI here. The platform-specific binary can be renamed to oractl for convenience.
+Using the CLI Expose the Oracle Backend for Spring Boot Admin server that the CLI calls using this command:
+kubectl port-forward services/obaas-admin -n obaas-admin 8080:8080 Start the CLI in interactive mode by running oractl from your terminal window." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/development/cli/" />
 
@@ -51,9 +51,9 @@ kubectl port-forward services/obaas-admin -n obaas-admin 8080:8080 Start the CLI
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Using the OBaaS CLI" />
-  <meta name="twitter:description" content="The Oracle Backend for Spring Boot offers a command-line tool, oractl. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources they use. Download the CLI here The platform specific binary can be renamed to oractl for convenience.
-Using the CLI Expose the Oracle Backend for Spring Boot Admin Server that the CLI will call by using port-forward
-kubectl port-forward services/obaas-admin -n obaas-admin 8080:8080 Start the CLI in interactive mode by simply running oractl from your terminal window." />
+  <meta name="twitter:description" content="The Oracle Backend for Spring Boot offers a command-line interface (CLI), oractl. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources that they use. Download the CLI here. The platform-specific binary can be renamed to oractl for convenience.
+Using the CLI Expose the Oracle Backend for Spring Boot Admin server that the CLI calls using this command:
+kubectl port-forward services/obaas-admin -n obaas-admin 8080:8080 Start the CLI in interactive mode by running oractl from your terminal window." />
 
 
   <script type="application/ld+json">
@@ -64,8 +64,8 @@ kubectl port-forward services/obaas-admin -n obaas-admin 8080:8080 Start the CLI
       "name": "Using the OBaaS CLI",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/development/cli/",
       "headline": "Using the OBaaS CLI",
-      "description": "The Oracle Backend for Spring Boot offers a command-line tool, oractl. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources they use. Download the CLI here The platform specific binary can be renamed to oractl for convenience.\nUsing the CLI Expose the Oracle Backend for Spring Boot Admin Server that the CLI will call by using port-forward\nkubectl port-forward services\/obaas-admin -n obaas-admin 8080:8080 Start the CLI in interactive mode by simply running oractl from your terminal window.",
-      "wordCount" : "1655",
+      "description": "The Oracle Backend for Spring Boot offers a command-line interface (CLI), oractl. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources that they use. Download the CLI here. The platform-specific binary can be renamed to oractl for convenience.\nUsing the CLI Expose the Oracle Backend for Spring Boot Admin server that the CLI calls using this command:\nkubectl port-forward services\/obaas-admin -n obaas-admin 8080:8080 Start the CLI in interactive mode by running oractl from your terminal window.",
+      "wordCount" : "1684",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1560,12 +1560,12 @@ if (!doNotTrack) {
     class="gdoc-markdown gdoc-markdown__align--left"
   >
     <h1>Using the OBaaS CLI</h1>
-    <p>The Oracle Backend for Spring Boot offers a command-line tool, <code>oractl</code>. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources they use.
+    <p>The Oracle Backend for Spring Boot offers a command-line interface (CLI), <code>oractl</code>. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources that they use.
 Download the CLI <a
   class="gdoc-markdown__link"
   href="https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0"
->here</a>
-The platform specific binary can be renamed to <code>oractl</code> for convenience.</p>
+>here</a>.
+The platform-specific binary can be renamed to <code>oractl</code> for convenience.</p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="using-the-cli">
         Using the CLI
@@ -1576,24 +1576,23 @@ The platform specific binary can be renamed to <code>oractl</code> for convenien
 </div>
 <ol>
 <li>
-<p>Expose the Oracle Backend for Spring Boot Admin Server that the CLI will call by using <code>port-forward</code></p>
+<p>Expose the Oracle Backend for Spring Boot Admin server that the CLI calls using this command:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl port-forward services/obaas-admin -n obaas-admin  8080:8080
 </span></span></code></pre></div></li>
 <li>
-<p>Start the CLI in interactive mode by simply running <code>oractl</code> from your terminal window.</p>
+<p>Start the CLI in interactive mode by running <code>oractl</code> from your terminal window. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">oractl
 </span></span></code></pre></div></li>
 </ol>
 <div class="gdoc-page__anchorwrap">
     <h2 id="available-commands">
-        AVAILABLE COMMANDS
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/development/cli/#available-commands" class="gdoc-page__anchor clip flex align-center" title="Anchor to: AVAILABLE COMMANDS" aria-label="Anchor to: AVAILABLE COMMANDS" href="#available-commands">
+        Available Commands
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/development/cli/#available-commands" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Available Commands" aria-label="Anchor to: Available Commands" href="#available-commands">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>
 </div>
-<p>Short descriptions of the available commands are as follows. These can be viewed by issuing the <code>help</code> command and detailed help for any individual command can be viewed by issuing <code>help [commandname]</code></p>
-<p>AVAILABLE COMMANDS</p>
+<p>Short descriptions of the available commands can be viewed by issuing the <code>help</code> command and detailed help for any individual command can be viewed by issuing <code>help [commandname]</code>. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help
 </span></span><span class="line"><span class="cl">AVAILABLE COMMANDS
 </span></span><span class="line"><span class="cl">
@@ -1623,21 +1622,23 @@ The platform specific binary can be renamed to <code>oractl</code> for convenien
 </span></span><span class="line"><span class="cl">       deploy: Deploy a service.
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">oractl:&gt;
-</span></span></code></pre></div><p>An application is a namespace encompassing related microservices. For example, a &ldquo;cloudbank&rdquo; application may have &ldquo;banktransfer&rdquo; &ldquo;frauddetection&rdquo;, etc., microservices deployed within it.
+</span></span></code></pre></div><p>An application is a namespace encompassing related microservices. For example, a &ldquo;cloudbank&rdquo; application may have &ldquo;banktransfer&rdquo; and &ldquo;frauddetection&rdquo; microservices deployed within it.
 The <code>create</code> command results in the creation of an application namespace.</p>
-<p>The <code>bind</code> command results in the automatic creation of a database schema for a given service/user and binds the information for that schema/database in the environment of the microservice for it to use.  The option of the prefix for the environment properties bound is also given.  For example, most Spring microservices us &ldquo;spring.datasource&rdquo;.</p>
-<p>The <code>deploy</code> command takes <code>service-name</code>, <code>app-name</code>, and <code>artifact-path</code> as it&rsquo;s main arguments (<code>image-version</code> and <code>java-version</code> options are also provided).
-When the deploy command is issued, the microservice JAR file is uploaded to the backend, a container image is created for the JAR/microservice, and various Kubernetes resources such as deployment, service, etc. are also created.
+<p>The <code>bind</code> command results in the automatic creation of a database schema for a given serviceor user and binds the information for that schema or database in the environment of the microservice.  The option of the prefix for the environment properties bound is also given.  For example, most Spring microservices use <code>spring.datasource</code>.</p>
+<p>The <code>deploy</code> command takes <code>service-name</code>, <code>app-name</code>, and <code>artifact-path</code> as the main arguments (<code>image-version</code> and <code>java-version</code> options are also provided).
+When the <code>deploy</code> command is issued, the microservice JAR file is uploaded to the backend and a container image is created for the JAR or microservice, and various Kubernetes resources such as deployment and service are also created.
 This is all done automatically to simplify the development process and the management of the microservices by the backend.</p>
-<p>The <code>list</code> command can then be used show the details of the deployed microservice, etc.</p>
-<p>The <code>config</code> command can also be used to add, view, update and delete configuration managed by the Spring Config Server.</p>
-<p>A common development workflow pattern is to <code>connect</code>, <code>change-password</code> (only if necessary), <code>create</code> (once per app/namespace), <code>config</code>, <code>bind</code> (only if necessary), <code>deploy</code>, and <code>list</code>.</p>
-<p>Further development and redeployment of the service can then be iterated upon by issuing the <code>deploy</code>, <code>list</code>, etc. commands.</p>
+<p>The <code>list</code> command can then be used show the details of the deployed microservice.</p>
+<p>The <code>config</code> command can also be used to add, view, update, and delete configurations managed by the Spring Cloud Config server.</p>
+<p>A common development workflow pattern is to <code>connect</code>, <code>change-password</code> (only if necessary), <code>create</code> (once per application or namespace), <code>config</code>, <code>bind</code> (only if necessary), <code>deploy</code>, and <code>list</code>.</p>
+<p>Further development and redeployment of the service can then be repeated issuing the <code>deploy</code> and <code>list</code> commands.</p>
 <p>The following is an example development workflow using the CLI.</p>
-<p>First, a connection is made to the Oracle server-side Spring Admin</p>
+<ol>
+<li>
+<p>Make a connection to the Oracle server-side Spring Admin using these commands:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help connect
 </span></span><span class="line"><span class="cl">NAME
-</span></span><span class="line"><span class="cl">       connect - Connect to the OBaaS Spring Cloud admin console.
+</span></span><span class="line"><span class="cl">      connect - Connect to the OBaaS Spring Cloud admin console.
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">SYNOPSIS
 </span></span><span class="line"><span class="cl">       connect --url String --username String
@@ -1655,7 +1656,9 @@ This is all done automatically to simplify the development process and the manag
 </span></span><span class="line"><span class="cl">password (defaults to oractl):
 </span></span><span class="line"><span class="cl">using default value...
 </span></span><span class="line"><span class="cl">connect successful server version:0.3.0
-</span></span></code></pre></div><p>Then, an application namespace is created withe the <code>create</code> command. This namespace will contain the microservices that are deployed later.</p>
+</span></span></code></pre></div></li>
+<li>
+<p>Creat an application namespace with the <code>create</code> command. This namespace contains the microservices that are deployed later. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help create
 </span></span><span class="line"><span class="cl">NAME
 </span></span><span class="line"><span class="cl">       create - Create an application/namespace.
@@ -1674,8 +1677,10 @@ This is all done automatically to simplify the development process and the manag
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>create --app-name myapp
 </span></span><span class="line"><span class="cl">application/namespace created successfully and image pull secret (registry-auth) created successfully and database TNSAdmin/wallet secret created successfully
-</span></span></code></pre></div><p>Next, the <code>bind</code> command will create a database schema/user for the service (if one hasn&rsquo;t already been created).
-The command will also create the Kubernetes secret and binding environment entries for the schema (these will be set in the Kubernetes deployment created with the <code>deploy</code> command).</p>
+</span></span></code></pre></div></li>
+<li>
+<p>Use the <code>bind</code> command to create a database schema or user for the service (if one has not already been created).
+These commands also create the Kubernetes secret and binding environment entries for the schema. These will be set in the Kubernetes deployment created with the <code>deploy</code> command. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help bind
 </span></span><span class="line"><span class="cl">NAME
 </span></span><span class="line"><span class="cl">       bind - Create a schema/user and bind it to service deployment.
@@ -1700,11 +1705,12 @@ The command will also create the Kubernetes secret and binding environment entri
 </span></span><span class="line"><span class="cl">       help for bind
 </span></span><span class="line"><span class="cl">       [Optional]
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>bind --app-name myapp --service-name myserv
 </span></span><span class="line"><span class="cl">database password/servicePassword (defaults to Welcome12345): ************
 </span></span><span class="line"><span class="cl">database secret created successfully and schema created successfully for myserv
-</span></span></code></pre></div><p>The microservice JAR will now be deployed with the <code>deploy</code> command which will create, build, and push an image for the microservice and create the necessary deployment, service, secret, etc. Kubernetes resources for the microservice.</p>
+</span></span></code></pre></div></li>
+<li>
+<p>Use the microservice JAR <code>deploy</code> command to create, build, and push an image for the microservice and create the necessary deployment, service, and secret Kubernetes resources for the microservice. Forexample:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help deploy
 </span></span><span class="line"><span class="cl">NAME
 </span></span><span class="line"><span class="cl">       deploy - Deploy a service.
@@ -1761,7 +1767,9 @@ The command will also create the Kubernetes secret and binding environment entri
 </span></span><span class="line"><span class="cl">uploading: obaas/myserv/target/demo-0.0.1-SNAPSHOT.jar building and pushing image...
 </span></span><span class="line"><span class="cl">binding resources... successful
 </span></span><span class="line"><span class="cl">creating deployment and service... successfully deployed
-</span></span></code></pre></div><p>The <code>list</code> command can then be used to show details of the microservice deployed in the previous step.</p>
+</span></span></code></pre></div></li>
+<li>
+<p>Use the <code>list</code> command to show details of the microservice deployed in the previous step. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help list
 </span></span><span class="line"><span class="cl">NAME
 </span></span><span class="line"><span class="cl">       list - list/show details of application services.
@@ -1800,14 +1808,17 @@ The command will also create the Kubernetes secret and binding environment entri
 </span></span><span class="line"><span class="cl">        waiting: null
 </span></span><span class="line"><span class="cl">    }
 </span></span><span class="line"><span class="cl">}name:myserv  kind:null
-</span></span></code></pre></div><p>The <code>config</code> command can be used to view and update config managed by the Spring Config Server.
-More information on the configuration server can be found here:</p>
+</span></span></code></pre></div></li>
+<li>
+<p>Use the <code>config</code> command to view and update the configuration managed by the Spring Cloud Config server. More information on the configuration server can be found at this link:</p>
+</li>
+</ol>
 <ul>
-<li><a
+<li>
+<p><a
   class="gdoc-markdown__link"
   href="../../platform/config/"
->Spring Config Server</a></li>
-</ul>
+>Spring Config Server</a></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help config
 </span></span><span class="line"><span class="cl">NAME
 </span></span><span class="line"><span class="cl">       config - View and modify Service configuration.
@@ -1847,15 +1858,19 @@ More information on the configuration server can be found here:</p>
 </span></span><span class="line"><span class="cl">       --help or -h
 </span></span><span class="line"><span class="cl">       help for config
 </span></span><span class="line"><span class="cl">       [Optional]
-</span></span></code></pre></div><p>The <code>config add</code> allow add the application configuration to Spring Config Server following two options:</p>
+</span></span></code></pre></div></li>
+</ul>
+<ol start="7">
+<li>
+<p>Use the <code>config add</code> command to add the application configuration to the Spring Cloud Config server using one of the two following options:</p>
 <ul>
 <li>
-<p>add a specific configuration using the set of parameters <code>--service-name</code>, <code>--service-label</code>, <code>--service-profile</code>, <code>--property-key</code> and <code>--property-value</code>.</p>
+<p>Add a specific configuration using the set of parameters <code>--service-name</code>, <code>--service-label</code>, <code>--service-profile</code>, <code>--property-key</code>, and <code>--property-value</code>. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config add --service-name myserv --service-label 0.0.1 --service-profile default --property-key k1 --property-value value1
 </span></span><span class="line"><span class="cl">Property added successfully.
 </span></span></code></pre></div></li>
 <li>
-<p>add a set of configurations based on a config file using <code>--artifact-path</code> Example: <code>myserv.json</code></p>
+<p>Add a set of configurations based on a configuration file using these commands:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl"> <span class="nt">&#34;application&#34;</span><span class="p">:</span> <span class="s2">&#34;myserv&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl"> <span class="nt">&#34;profile&#34;</span><span class="p">:</span> <span class="s2">&#34;obaas&#34;</span><span class="p">,</span>
@@ -1889,7 +1904,9 @@ More information on the configuration server can be found here:</p>
 </span></span><span class="line"><span class="cl">} ]
 </span></span></code></pre></div></li>
 </ul>
-<p>The <code>config list</code> without any parameter will bring the list of services that has at least one configuration inserted Spring Config Server.</p>
+</li>
+<li>
+<p>Use the <code>config list</code> command, without any parameters, to list the services that have at least one configuration inserted in the Spring Cloud Config server. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config list
 </span></span><span class="line"><span class="cl">[ {
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;name&#34;</span> : <span class="s2">&#34;apptest&#34;</span>,
@@ -1900,12 +1917,14 @@ More information on the configuration server can be found here:</p>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;label&#34;</span> : <span class="s2">&#34;&#34;</span>,
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;profile&#34;</span> : <span class="s2">&#34;&#34;</span>
 </span></span><span class="line"><span class="cl">}, […]
-</span></span></code></pre></div><p>The <code>config list [parameters]</code> can be used to list the parameters using parameters as filters:</p>
+</span></span></code></pre></div></li>
+<li>
+<p>Use the <code>config list [parameters]</code> command to list the parameters using parameters as filters. For example:</p>
 <ul>
-<li><code>--service-name</code> : will list all parameters from the specified service.</li>
-<li><code>--service-label</code>: filter by label</li>
-<li><code>--service-profile</code>: filter by profiel</li>
-<li><code>--property-key</code>: list a specific parameter filter by key.</li>
+<li><code>--service-name</code> : List all of the parameters from the specified service.</li>
+<li><code>--service-label</code> : Filters by label.</li>
+<li><code>--service-profile</code> : Filters by profile.</li>
+<li><code>--property-key</code> : Lists a specific parameter filter by key.</li>
 </ul>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config list --service-name myserv --service-profile default --service-label 0.0.1
 </span></span><span class="line"><span class="cl">[ {
@@ -1918,7 +1937,11 @@ More information on the configuration server can be found here:</p>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;createdOn&#34;</span> : <span class="s2">&#34;2023-04-13T01:10:16.000+00:00&#34;</span>,
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;createdBy&#34;</span> : <span class="s2">&#34;CONFIGSERVER&#34;</span>
 </span></span><span class="line"><span class="cl">} ]
-</span></span></code></pre></div><p>The <code>config update</code> allow update a specific configuration using the set of parameters:</p>
+</span></span></code></pre></div></li>
+<li>
+<p>Use the <code>config update</code> command to update a specific configuration using the set of parameters. For example:</p>
+</li>
+</ol>
 <ul>
 <li><code>--service-name</code></li>
 <li><code>--service-label</code></li>
@@ -1952,15 +1975,17 @@ More information on the configuration server can be found here:</p>
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;createdOn&#34;</span> : <span class="s2">&#34;2023-03-23T18:02:29.000+00:00&#34;</span>,
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;createdBy&#34;</span> : <span class="s2">&#34;CONFIGSERVER&#34;</span>
 </span></span><span class="line"><span class="cl">} ]
-</span></span></code></pre></div><p>The <code>config delete</code> allow delete the application configuration from Spring Config Server following two options:</p>
+</span></span></code></pre></div><ol start="11">
+<li>Use the <code>config delete</code> command to delete the application configuration from Spring Cloud Config server using one of the following two options:</li>
+</ol>
 <ul>
 <li>
-<p>delete all configurations from a specific service using the filters by <code>--service-name</code>, <code>--service-profile</code> and <code>--service-label</code>. The CLI will inform how many configurations are present in Config Server and ask to confirm the complete deletion.</p>
+<p>Delete all configurations from a specific service using the filters <code>--service-name</code>, <code>--service-profile</code> and <code>--service-label</code>. The CLI tracks how many configurations are present in Spring Cloud Config server and confirms the complete deletion. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config delete --service-name myserv
 </span></span><span class="line"><span class="cl">[obaas] 7 property(ies) found, delete all (y/n)?:
 </span></span></code></pre></div></li>
 <li>
-<p>delete a specific configuration using the set of parameters <code>--service-name</code>, <code>--service-label</code>, <code>--service-profile</code> and <code>--property-key</code>.</p>
+<p>Delete a specific configuration using the parameters <code>--service-name</code>, <code>--service-label</code>, <code>--service-profile</code> and <code>--property-key</code>. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
 </span></span><span class="line"><span class="cl">[ {
 </span></span><span class="line"><span class="cl">  <span class="s2">&#34;id&#34;</span> : 224,
