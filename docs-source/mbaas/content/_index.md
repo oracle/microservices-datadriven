@@ -1,28 +1,32 @@
 
 # Oracle Backend for Parse Platform - Developer Preview
 
-Oracle Backend for Parse Platform allows developers to build and deploy mobile applications using Parse mobile APIs, and provision a backend as a service with the Oracle Database and other infrastructure components that operate on multiple clouds. This service vastly simplifies the task of building, testing, and operating a mobile app dev platform for reliable, secure, and scalable enterprise applications. This version includes an Oracle Database storage adapter for Parse (Parse already has MongoDB and Postgres adapters), and a proof of concept of Google Firebase APIs emulated using Parse APIs.
+Oracle Backend for Parse Platform deploys mobile applications using Parse mobile APIs, and provision an Oracle Backend as a Service (OBaaS)
+with Oracle Database and other infrastructure components that operate on multiple clouds. This service vastly simplifies the task of building, testing,
+and operating a mobile application development platform for reliable, secure, and scalable enterprise applications. This version includes an Oracle Database storage adapter
+for Parse (Parse already has MongoDB and Postgres adapters), and a proof-of-concept of Google Firebase APIs emulated using Parse mobile APIs.
 
 The Oracle Backend for Parse Platform is based on the [Parse Platform](https://parseplatform.org/).
 
-In addition to an Oracle Autonomus Database Shared instance, the following software components are deployed in an Oracle Cloud Infrastructure Container Engine for Kubernetes (OKE) for customer usage with Oracle Backend for Parse Platform:
+In addition to an Oracle Autonomous Database Serverless instance, the following software components are deployed in an OCI Container
+Engine for Kubernetes (OKE) for customer usage with Oracle Backend for Parse Platform:
 
 * Parse Server, plus the Oracle Database storage adapter for Parse
 * Parse Dashboard
 
 &nbsp;
-{{< hint type=[warning] icon=gdoc_fire title="Interested in Spring Boot or microservices too?" >}}
+{{< hint type=[warning] icon=gdoc_fire title="Interested in Spring Boot or Microservices, too?" >}}
 Check out [Oracle Backend for Spring Boot](https://oracle.github.io/microservices-datadriven/spring/)
 {{< /hint >}}
 &nbsp;
 
 ## Developer Preview
 
-This release is a *Developer Preview*. This means that not all functionality is complete. In this release, approximately 80-900% of the Parse APIs are working. For
-interested developers, approximately 2270 of 2700 tests run successfully. This release is based on Parse Server version 5.2.7 and Parse Dashboard 5.0.0. We are
-releasing this as a developer preview to allow interested developers to try it and give feedback.
+This release is a *Developer Preview*. This means that not all functionality is complete. In this release, approximately 80-90% of the Parse mobile APIs are working. For
+interested developers, approximately 2270 out of 2700 tests run successfully. This release is based on Parse Server version 5.2.7 and Parse Dashboard 5.0.0. Oracle is
+releasing this as a *Developer Preview* to allow interested developers to try it and provide feedback.
 
-The following API families are mostly working: 
+The following application program interface (API) families are mostly working: 
 
 * Database, including query
 * Identity/Security
@@ -34,19 +38,19 @@ The following API families are mostly working:
 
 The following API families are not expected to work in this release:
 
-* Cloud Functions
+* Cloud functions
 * GraphQL
-* Live Query
-* Push Notifications
+* Live query
+* Push notifications
 
-The Parse API exposed is exactly the same as an upstream Parse Server (version 5.2.7) - there are no changes to the public facing API.
-All existing Parse SDKs *should* work as-is with this developer preview (for those APIs that are working).
+The exposed Parse mobile API is exactly the same as an upstream Parse Server version 5.2.7. There are no changes to the public-facing API.
+All existing Parse Software Development Kits (SDKs) should work as-is with this *Developer Preview* for those APIs that are working.
 
 
-## About the Oracle Database storage adapter for Parse
+## About the Oracle Database Storage Adapter for Parse
 
-This developer preview includes an Oracle Database storage adapter for Parse based on the Parse Server 5.2.7 code line. The storage
-adapter is implemented using the [Node.js node-oracledb](https://oracle.github.io/node-oracledb/) library. Data are stored in the
-database in JSON collections, using the [Simple Oracle Document Access (SODA)](https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/)
+This *Developer Preview* includes an Oracle Database storage adapter for Parse based on Parse Server version 5.2.7. The storage
+adapter is implemented using the [Node.js node-oracledb](https://oracle.github.io/node-oracledb/) library. Data is stored in the
+database in JavaScript Object Notation (JSON) collections, using the [Simple Oracle Document Access (SODA)](https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/)
 API.
 
