@@ -39,7 +39,7 @@ visualize them.
 ## View Metrics From the Application in Prometheus
 
 Prometheus is an open source monitoring and alerting system. Prometheus collects and stores metrics as time series data with the timestamp of
-the time that they were recorded, and optional Key/Value pairs called labels.
+the time that they are recorded, and optional Key/Value pairs called labels.
 
 1. Expose the Prometheus user interface (UI) using the command:
 
@@ -47,7 +47,7 @@ the time that they were recorded, and optional Key/Value pairs called labels.
     kubectl port-forward -n prometheus svc/prometheus 9090:9090
     ```
 
-2. Open the Prometheus UI URL: <http://localhost:9090>
+2. Open the Prometheus web user interface URL: <http://localhost:9090>
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-prometheus-ui" size="large" lazy=false >}}
@@ -62,7 +62,7 @@ the time that they were recorded, and optional Key/Value pairs called labels.
     {{< img name="obaas-prometheus-home" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
-4. In the Prometheus web user interface, the **Status** menu allows you to view the targets being monitored by Prometheus:
+4. In the Prometheus web user interface, **Status** allows you to view the targets being monitored by Prometheus:
 
     * In the top menu, choose **Status** and then **Targets**.
     * Notice that the targets "slow", "customer" and others are in **UP** status and others are in **DOWN** status.
@@ -83,7 +83,7 @@ insightful graphs and visualizations. Take the following steps:
     kubectl -n grafana port-forward svc/grafana 8080:80
     ```
 
-2. Open the Grafana UI URL: <http://localhost:8080>
+2. Open the Grafana web user interface URL: <http://localhost:8080>
 
     * username: `admin`
     * To get the password, run this command:
@@ -92,7 +92,7 @@ insightful graphs and visualizations. Take the following steps:
         kubectl -n grafana get secret grafana -o jsonpath='{.data.admin-password}' | base64 -d
         ```
 
-        > **NOTE:** If you do not have "base64", leave off the last part ("| base64 -d") in the command, then copy the output, and use this
+        > **NOTE:** If you do not have `base64`, leave off the last part (`| base64 -d`) in the command, then copy the output, and use this
 		website to decode it: <https://www.base64decode.org/>.
 		
 		The password is a long string of characters that might be similar to `210BAqNzYkrcWjd58RKC2Xzerx9c0WkZi9LNsG4c`. For example:
@@ -103,9 +103,9 @@ insightful graphs and visualizations. Take the following steps:
 
 3. Set up the Prometheus data source:
 
-    * At the lower left, click on the system setup symbol and choose **Data Sources**.
-    * Click on the second data source called **Prometheus** and in the address (be careful to get the address field, not the name field), change the address from  <http://prometheus:9090>    to <http://prometheus.prometheus.svc.cluster.local:9090>.
-    * At the bottom of the page, click on **Save & Test** and wait for 2-3 seconds for the green icon which indicates that the data source is working.
+    a. At the lower left, click on the system setup symbol and choose **Data Sources**.
+    b. Click on the second data source called **Prometheus** and in the address (be careful to get the address field, not the name field), change the address from  <http://prometheus:9090>    to <http://prometheus.prometheus.svc.cluster.local:9090>.
+    c. At the bottom of the page, click on **Save & Test** and wait for 2-3 seconds for the green icon which indicates that the data source is working.
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-grafana-datasource" size="medium" lazy=false >}}
@@ -113,12 +113,12 @@ insightful graphs and visualizations. Take the following steps:
 
 4. Set up the dashboard:
 
-    * In the upper left, find and click the **dasbhoards** link.
-    * Click on the blue button to the right to add a new dashboard and, in the pull down menu, select **Import**.
-    * In the field for the Grafana dashboard ID, paste this value: `10280` .
-    * Click on **Next**.
-    * In the data source field, select **Prometheus**.
-    * Click **Save**.
+    a. In the upper left, find and click the **dasbhoards** link.
+    b. Click on the blue button to the right to add a new dashboard and, in the pull down menu, select **Import**.
+    c. In the field for the Grafana dashboard ID, paste this value: `10280` .
+    d. Click on **Next**.
+    e. In the data source field, select **Prometheus**.
+    f. Click **Save**.
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-grafana-import-dashboard" size="medium" lazy=false >}}
@@ -126,9 +126,9 @@ insightful graphs and visualizations. Take the following steps:
 
 5. Navigate the Spring Boot dashboard:
 
-    * You should see the new dashboard in the list called **Spring Boot Dashboard 2.1**. Click on it to open.
-    * You should automatically see details for the sample applications in the dashboard.
-    * Invoke the service. For example, use a `curl` command to create some traffic and observe the dashboard. You may need to repeat the `curl` command. There is a round arrow symbol in the top right corner
+    a. You should see the new dashboard in the list called **Spring Boot Dashboard 2.1**. Click on it to open.
+    b. You should automatically see details for the sample applications in the dashboard.
+    c. Invoke the service. For example, use a `curl` command to create some traffic and observe the dashboard. You may need to repeat the `curl` command. There is a refresh symbol in the top right corner
       that enables automatic refresh every 5 seconds (or, for whatever length of time that you choose).
 
     <!-- spellchecker-disable -->

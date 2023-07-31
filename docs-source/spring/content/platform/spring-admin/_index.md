@@ -1,5 +1,5 @@
 ---
-title: "Spring Admin"
+title: "Spring Boot Admin"
 resources:
   - name: obaas-springadmin-apps
     src: "obaas-springadmin-apps.png"
@@ -29,7 +29,7 @@ Most of the information displayed in the web user interface comes from the Sprin
     * password: `admin`
 
     **NOTE:** Oracle recommends that you change the default password when you first login.  Even though the dashboard is not accessible externally,
-    Oracle still recommends using strong passwords to maximize security.
+              Oracle still recommends using strong passwords to maximize security.
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-springadmin-apps" size="medium" lazy=false >}}
