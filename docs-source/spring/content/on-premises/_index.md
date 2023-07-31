@@ -16,8 +16,8 @@ You must meet the following prerequisites to use the Oracle Backend for Spring B
 When installing on a _Desktop_, the previously mentioned pre-requisites are met through an additional Setup task, but there are additional desktop system or software requirements. For example:
 
 * 2 CPUs or more
-* 8GB of free memory
-* 60GB of free disk space (40G minikube and container images, 20G database)
+* 8 GB of free memory
+* 60 GB of free disk space (40 GB minikube and container images, 20 GB database)
 * Internet connection
 * [Minikube](https://minikube.sigs.k8s.io/docs/start/)
 * [Podman](https://podman.io/getting-started/)[^1]
@@ -29,7 +29,7 @@ Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservice
 
 ## Setup
 
-An On-Premises installation, whether _Desktop_ or _Estate_, consists of defining the infrastructure followed by running the Configuration Management Playbook to build images and deploy the microservices.
+An On-Premises installation, whether _Desktop_ or _Estate_, consists of defining the infrastructure followed by running the Configuration Management playbook to build images and deploy the microservices.
 
 For an _Estate_ installation, you need to have a Kubernetes cluster and the kubectl command-line tool must be configured to communicate with your cluster.
 
@@ -38,13 +38,13 @@ A helper Playbook has been provided for the _Desktop_ installations to assist in
 * [MacOS Ventura (x86)](macos_ventura/_index.md)
 * [Oracle Linux 8 (x86)](ol8/_index.md)
 
-The _Desktop_ Playbook is run as part of the Configuration Management.
+The _Desktop_ playbook is run as part of the Configuration Management playbook.
 
-## Download the Database or ORDS Images (_Desktop_ Installation)
+## Download the Database or ORDS Images (_Desktop_  Installation)
 
-The _Desktop_ installation provisions an Oracle Database into the Kubernetes cluster.  The images must be downloaded from [Oracle's Container Registry](https://container-registry.oracle.com/) prior to continuing.
+The _Desktop_ installation provisions an Oracle Database to the Kubernetes cluster.  The images must be downloaded from [Oracle's Container Registry](https://container-registry.oracle.com/) before continuing.
 
-After installing Podman, execute these steps:
+After installing Podman, process these steps:
 
 1. Log into Oracle's Container Registry. For example: 
 
@@ -59,7 +59,7 @@ After installing Podman, execute these steps:
    `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
 
 
-### Defining the Database  (_Estate_ Installation)
+### Defining the Database  (_Estate_  Installation)
 
 The database is defined in `ansible/roles/database/vars/main.yaml`. For example:  
 
@@ -75,9 +75,9 @@ BAASPDB:
 ...
 ```
 
-The `oracle_dbs` and `default_db` key values should be the name of your Pluggable Database (PDB).  These are followed by the PDB name and key or values defining how to access the PDB.  If using Mutual Transport Layer Security (mTLS) authentication, specify the full path of the wallet file.
+The `oracle_dbs` and `default_db` key values should be the name of your Pluggable Database (PDB).  These are followed by the PDB name and Key/Values defining how to access the PDB.  If using mutual Transport Layer Security (mTLS) authentication, specify the full path of the wallet file.
 
-### Defining the Container Repository  (_Estate_ Installation)
+### Defining the Container Repository  (_Estate_  Installation)
 
 The container repository is defined in `ansible/roles/registry/vars/main.yaml`.  For example:
 
@@ -106,11 +106,11 @@ There may be duplication between the push and pull URL's.  The pull URL is used 
 
 ## Configuration Management
 
-From the source package, run the Configuration Management Playbook.
+From the source package, run the Configuration Management playbook.
 
 ### Install Ansible
 
-Using Python, install Ansible to run the Configuration Management Playbook.  The helper script creates a Python virtual environment and installs Ansible along with additional modules. For example:
+Using Python, install Ansible to run the Configuration Management playbook.  The helper script creates a Python virtual environment and installs Ansible along with other additional modules. For example:
 
 ```bash
 ./setup_ansible.sh
@@ -131,7 +131,7 @@ ansible-playbook ansible/desktop-apply.yaml
 
 For the _Desktop_ installation, start a new terminal and tunnel or port-forward to the minikube cluster.  Refer to the specific platform details for more information.
 
-For both installations, on the original terminal, run the Images Playbook. For example:
+For both installations, run the Images Playbook on the original terminal. For example:
 
 ```bash
 ansible-playbook ansible/images_build.yaml
@@ -139,7 +139,7 @@ ansible-playbook ansible/images_build.yaml
 
 ### Install the Microservices
 
-Install the mocroservices by running this command:
+Install the microservices by running this command:
 
 ```bash
 ansible-playbook ansible/k8s_apply.yaml -t full
