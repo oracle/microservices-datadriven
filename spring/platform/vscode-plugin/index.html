@@ -1562,11 +1562,11 @@ if (!doNotTrack) {
 platform. This plugin inspects the content of an Oracle Backend for Spring Boot deployment, in terms of applications, services, and related
 configurations. It simplifies access to the installed platform services (like Grafana, Spring, Apache APISIX, Eureka, and Jaeger) creating <code>ssh</code> tunnels
 on-demand and providing access to their respective web administrator consoles. It adds credentials to access and bind services to the Oracle Autonomous
-Database included in the Oracle Backend for Spring Boot deployment. This plug-in replicates the functionalities available in <a
+Database included in the Oracle Backend for Spring Boot deployment. This plugin replicates the functionalities available in <a
   class="gdoc-markdown__link"
   href="../../development/cli"
 >OBaas CLI</a>
-and simplifies the access to Oracle Backend for Spring Boot deployments from an integrated development environment (IDE) like VS Code.</p>
+and simplifies access to Oracle Backend for Spring Boot deployments from an integrated development environment (IDE) like VS Code.</p>
 <p>Oracle Free Use Terms and Conditions <a
   class="gdoc-markdown__link"
   href="https://oracle.gallerycdn.vsassets.io/extensions/oracle/oracledevtools/21.5.0/1662759024144/Microsoft.VisualStudio.Services.Content.License"
@@ -1585,7 +1585,7 @@ and simplifies the access to Oracle Backend for Spring Boot deployments from an 
 >set up</a>:</p>
 <ul>
 <li>Kubernetes command-line interface (<code>kubectl</code>)</li>
-<li>Oracle Cloud Infrastructure command-line interface (CLI)</li>
+<li>Oracle Cloud Infrastructure command-line interface (&lsquo;oractl&rsquo;)</li>
 </ul>
 <div class="gdoc-page__anchorwrap">
     <h2 id="installation">
@@ -1595,7 +1595,7 @@ and simplifies the access to Oracle Backend for Spring Boot deployments from an 
         </a>
     </h2>
 </div>
-<ul>
+<ol>
 <li>
 <p>Download the plug-in from <a
   class="gdoc-markdown__link"
@@ -1603,7 +1603,7 @@ and simplifies the access to Oracle Backend for Spring Boot deployments from an 
 >here</a>.</p>
 </li>
 <li>
-<p>On the VS Code left menu bar, click on <strong>Extensions</strong>:</p>
+<p>On the VS Code left menu bar, click on the <strong>Extensions</strong> symbol:</p>
 <p><img
   src="./images/extensions.jpg"
   alt="Extensions list"
@@ -1611,7 +1611,7 @@ and simplifies the access to Oracle Backend for Spring Boot deployments from an 
 /></p>
 </li>
 <li>
-<p>From the upper right menu, choose <strong>Install from VSIX&hellip;</strong> and upload plug-in binaries previously downloaded:</p>
+<p>From the upper right menu, select <strong>Install from VSIX&hellip;</strong> and upload plugin binaries that were previously downloaded:</p>
 <p><img
   src="./images/install.jpg"
   alt="Extensions list"
@@ -1622,14 +1622,14 @@ and simplifies the access to Oracle Backend for Spring Boot deployments from an 
 <p>Restart VS Code to make the plugin fully operational.</p>
 </li>
 <li>
-<p>If you do not see the plugin in the left bar, with the Oracle logo (as shown here), click on <strong>Additional Views</strong> to select the <strong>eBaaS Explorer</strong>:</p>
+<p>If you do not see the plugin in the left menu bar, with the Oracle logo (as shown here), click on <strong>Additional Views</strong> to select the <strong>eBaaS Explorer</strong>:</p>
 <p><img
   src="images/additional.jpg"
   alt="Additional"
   
 /></p>
 </li>
-</ul>
+</ol>
 <div class="gdoc-page__anchorwrap">
     <h2 id="using-vs-code-plugin">
         Using VS Code Plugin
@@ -1638,7 +1638,7 @@ and simplifies the access to Oracle Backend for Spring Boot deployments from an 
         </a>
     </h2>
 </div>
-<p>Selecting the plugin from the left plugin menu bar, the Oracle Backend for Spring Boot VS Code plugin asks you to specify the full path for the
+<p>After selecting the plugin from the left plugin menu bar, the Oracle Backend for Spring Boot VS Code plugin asks you to specify the full path for the
 Kubernetes configuration file. For example:</p>
 <p><img
   src="./images/getKubeConfig.jpg"
@@ -1646,26 +1646,26 @@ Kubernetes configuration file. For example:</p>
   
 /></p>
 <p>By default, it shows the path in the user&rsquo;s Home directory <code>.kube/config</code> in which <code>kubectl</code> stores all of the information regarding the configured
-K8s clusters. You could set the full path of another Kubernetes configuration file. If the file is correctly loaded, the plugin shows the list of contexts
+K8s clusters. You can set the full path of another Kubernetes configuration file. If the file is correctly loaded, the plugin shows the list of contexts
 available from which you can select one:</p>
 <p><img
   src="./images/choseContext.jpg"
   alt="kubeContextList"
   
 /></p>
-<p>If successful, you should see a tree view with one node and the context chosen. For example:</p>
+<p>If successful, you should see a tree view with one node and the selected context. For example:</p>
 <p><img
   src="./images/onenode.jpg"
   alt="onenode"
   
 /></p>
-<p>If the file path has not been correctly set, it shows an error message. For example:</p>
+<p>If the file path has not been correctly set, it returns an error message. For example:</p>
 <p><img
   src="./images/reloadWindowError.jpg"
   alt="kubeFileError"
   
 /></p>
-<p>To restart the plugin and proceed again in the Kubernetes configuration file setting, process a window reload in the command palette:</p>
+<p>To restart the plugin and proceed setting the Kubernetes configuration file, process a window reload in the command palette:</p>
 <p><img
   src="./images/reloadWindow.jpg"
   alt="kubeReload"
@@ -1683,7 +1683,7 @@ available from which you can select one:</p>
 services, you cannot browse resources included in the Oracle Backend for Spring Boot deployment. To do this, follow these steps:</p>
 <ol>
 <li>
-<p>Select the cluster and click on the system setup icon to set the credentials. For example:</p>
+<p>Select the cluster and click on the system setup symbol to set the credentials. For example:</p>
 <p><img
   src="./images/credentials.jpg"
   alt="Credentials"
@@ -1707,7 +1707,7 @@ services, you cannot browse resources included in the Oracle Backend for Spring 
   alt="confirmCredentials"
   
 /></p>
-<p><strong>NOTE:</strong> If you do not execute these steps and try to expand the Kubernetes context, you receive this message:</p>
+<p><strong>NOTE:</strong> If you do not process these steps and try to expand the Kubernetes context, you receive this message:</p>
 <p><img
   src="./images/oractlCred.jpg"
   alt="setCredentials"
@@ -1715,7 +1715,8 @@ services, you cannot browse resources included in the Oracle Backend for Spring 
 /></p>
 </li>
 <li>
-<p>Select the cluster again and right-click on <strong>Create tunnel</strong>. VS Code opens a new terminal that tries to open a tunnel to the Kubernetes cluster on a local port, starting from 8081. For example:</p>
+<p>Select the cluster again and right-click on <strong>Create tunnel</strong>. VS Code opens a new terminal that tries to open a tunnel to the Kubernetes cluster on a
+local port, starting from <code>8081</code>. For example:</p>
 <p><img
   src="./images/tunnel.jpg"
   alt="Tunnel"
@@ -1727,10 +1728,12 @@ services, you cannot browse resources included in the Oracle Backend for Spring 
   alt="okTunnel"
   
 /></p>
-<p><strong>NOTE:</strong> If the K8s cluster is not related to an Oracle Backend for Spring Boot deployment, the tunnel creation fails. In this case, process a window reload to chose another cluster from the command palette. If you have any problem with the connection, start another tunnel. The plugin tries to connect to the cluster on another local port.</p>
+<p><strong>NOTE:</strong> If the K8s cluster is not related to an Oracle Backend for Spring Boot deployment, the tunnel creation fails. In this case, process a window
+reload to chose another cluster from the command palette. If you have any problem with the connection, start another tunnel. The plugin tries to
+connect to the cluster on another local port.</p>
 </li>
 <li>
-<p>Select the cluster again and right-click <strong>Connect</strong>. This creates a session with credentials set at the first step.</p>
+<p>Select the cluster again and right-click <strong>Connect</strong>. This creates a session with the credentials set up in the first step.</p>
 </li>
 </ol>
 <div class="gdoc-page__anchorwrap">
@@ -1741,7 +1744,8 @@ services, you cannot browse resources included in the Oracle Backend for Spring 
         </a>
     </h3>
 </div>
-<p>When the steps to create the tunnel are complete and you are connected to the backend, it is possible to expand or refresh the tree related to the deployment. For example:</p>
+<p>When the steps to create the tunnel are complete and you are connected to the backend, it is possible to expand or refresh the tree related to the
+deployment. For example:</p>
 <p><img
   src="./images/browse.jpg"
   alt="Browse"
@@ -1750,11 +1754,10 @@ services, you cannot browse resources included in the Oracle Backend for Spring 
 <p>You see four top classes of resources that can be expanded in underlying items:</p>
 <ul>
 <li><strong>applications</strong> : The list of applications deployed and the holding services.</li>
-<li><strong>ADB database</strong> : In this release, there is one Autonomous Database in which the configuration and schema related to deployed services are stored.</li>
+<li><strong>ADB database</strong> : In this release, there is one Autonomous Database (ADB) in which the configuration and schema related to deployed services are stored.</li>
 <li><strong>platformServices</strong> : The list of Oracle Backend for Spring Boot deployed services, like Grafana, Spring, Apache APISIX, Eureka, and Jaeger.</li>
 <li><strong>oBaasConf</strong> : The list of keys defined by the application, stored in the Autonomous Database, that are provisioned and available to share configuration information among services in each application.</li>
 </ul>
-<p>Let&rsquo;s look at the operations that you can do on each item of browse tree.</p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="applications">
         Applications
@@ -1763,18 +1766,25 @@ services, you cannot browse resources included in the Oracle Backend for Spring 
         </a>
     </h2>
 </div>
+<p>Let&rsquo;s look at the operations that you can do on each item of the browse tree.</p>
+<ol>
+<li>
 <p>Open the list by clicking on the arrow to the left of <strong>applications</strong>:</p>
 <p><img
   src="./images/applications.jpg"
   alt="Applications"
   
 /></p>
-<p>Expand the application to see the list included services:</p>
+</li>
+<li>
+<p>Expand the application to see the list of included services:</p>
 <p><img
   src="./images/application.jpg"
   alt="Application"
   
 /></p>
+</li>
+<li>
 <p>At the root level, right-click on <strong>applications</strong>, and select <strong>Add application</strong> to create a new application. A VS Code command palette appears, prompting
 for the application name that is to be created. For example:</p>
 <p><img
@@ -1782,13 +1792,19 @@ for the application name that is to be created. For example:</p>
   alt="AppName"
   
 /></p>
+</li>
+<li>
 <p>To show the updated list, click on the <strong>Refresh</strong> symbol to the right of <strong>applications</strong>. For example:</p>
 <p><img
   src="./images/refreshApplications.jpg"
   alt="Refresh"
   
 /></p>
+</li>
+<li>
 <p>On each application, you can <strong>Add service -&gt; upload .jar</strong> or <strong>Delete Application</strong>.</p>
+</li>
+</ol>
 <div class="gdoc-page__anchorwrap">
     <h3 id="add-service">
         Add Service
@@ -1797,7 +1813,7 @@ for the application name that is to be created. For example:</p>
         </a>
     </h3>
 </div>
-<p>The <strong>Add service</strong> command uploads a Spring Boot microservice to an application. Click <strong>Add service -&gt; upload .jar</strong> for a specific application. For example:</p>
+<p>The <strong>Add service</strong> command uploads a Spring Boot Microservice to an application. Click <strong>Add service -&gt; upload .jar</strong> for a specific application. For example:</p>
 <p><img
   src="./images/uploadJar.jpg"
   alt="upload"
@@ -1828,28 +1844,28 @@ for the application name that is to be created. For example:</p>
 /></p>
 </li>
 <li>
-<p><strong>Spring Binding prefix</strong> (Default: spring.datasource)</p>
+<p><strong>Spring Binding prefix</strong> (Default: <code>spring.datasource</code>)</p>
 </li>
 <li>
-<p><strong>Image Version</strong> (Default: 0.1)</p>
+<p><strong>Image Version</strong> (Default: <code>0.1</code>)</p>
 </li>
 <li>
-<p><strong>Java image</strong> (Default: ghcr.io/graalvm/jdk:ol7-java17-22.2.0)</p>
+<p><strong>Java image</strong> (Default: <code>ghcr.io/graalvm/jdk:ol7-java17-22.2.0</code>)</p>
 </li>
 <li>
-<p><strong>Redeploy</strong> (Default: false)</p>
+<p><strong>Redeploy</strong> (Default: <code>false</code>)</p>
 </li>
 <li>
-<p><strong>Add Health probe</strong> (Default: false)</p>
+<p><strong>Add Health probe</strong> (Default: <code>false</code>)</p>
 </li>
 <li>
-<p><strong>Service Port</strong> (Default: 8080)11.</p>
+<p><strong>Service Port</strong> (Default: <code>8080</code>)</p>
 </li>
 <li>
-<p><strong>Service Profile</strong> (Default: obaas)</p>
+<p><strong>Service Profile</strong> (Default: <code>obaas</code>)</p>
 </li>
 </ol>
-<p>At the end of the parameters collection, the binding and upload process that generates a sequence of messages showing the status, will start. These
+<p>At the end of the parameters collection, the binding and upload process that generates a sequence of messages showing the status starts. These
 messages end with &ldquo;Service deployed successfully!&rdquo; or &ldquo;Deploy failed&rdquo;. The size and network constraints determine the amount of time for the process to terminate.</p>
 <div class="gdoc-page__anchorwrap">
     <h3 id="delete-service">
@@ -1905,14 +1921,14 @@ console of each platform service.</p>
   alt="Apisix"
   
 /></p>
-<p>For example, by right-clicking on <strong>grafana console</strong>, a tunnel opens with a message and a button to open a web browser on the administrator&rsquo;s Grafana
+<p>For example, by right-clicking on <strong>grafana monitor</strong>, a tunnel opens with a message and a button to open a web browser on the administrator&rsquo;s Grafana
 console. For example:</p>
 <p><img
   src="./images/grafana-browser.jpg"
   alt="GrafanaWeb"
   
 /></p>
-<p><strong>NOTE:</strong> If the port is already used or the connection times out, open another <code>ssh</code> tunnel. It will automatically open on another port.</p>
+<p><strong>NOTE:</strong> If the port is already used or the connection times out, open another <code>ssh</code> tunnel. It automatically opens on another port.</p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="obaasconf-configuration">
         oBaasConf Configuration
@@ -1921,8 +1937,8 @@ console. For example:</p>
         </a>
     </h2>
 </div>
-<p>With Oracle Backend for Spring Boot, developers can store the metadata and configurations that are useful to share information among pods in an
-application. The VS Code plug-in can browse the content of this Key/Value store and add, update and delete keys as needed.
+<p>With Oracle Backend for Spring Boot, developers can store the metadata and configurations between pods in an
+application. The VS Code plugin can browse the content of this Key/Value store and add, update and delete keys as needed.
 Expand <strong>oBaasConf configuration</strong> to see the applications that are deployed and, expanding each of them, the Key/Value pair. For example:</p>
 <p><img
   src="./images/configurations.jpg"

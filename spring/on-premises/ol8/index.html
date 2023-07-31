@@ -17,7 +17,7 @@ Read the On-Premises documentation and ensure that your desktop meets the minimu
 Install Additional Operating System Packages Install additional operating system packages by executing these commands:
 sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack podman curl sudo dnf -y install oracle-database-preinstall-21c sudo dnf -y install langpacks-en sudo dnf module install python39 Set the default Python3 to Python 3." />
 
-    <title>Ol8 | Oracle Backend for Spring Boot</title>
+    <title>OL8 | Oracle Backend for Spring Boot</title>
 
     <link rel="icon" type="image/svg+xml" href="/microservices-datadriven/spring/favicon/favicon.svg" />
 <link
@@ -38,7 +38,7 @@ sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack pod
     
   <meta
     property="og:title"
-    content="Ol8"
+    content="OL8"
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot" />
   <meta property="og:description" content="On-Premises Installation - Oracle Linux 8 (x86) This is an example of installing on a Oracle Linux 8 desktop.
@@ -52,7 +52,7 @@ sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack pod
 
 
   <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="Ol8" />
+<meta name="twitter:title" content="OL8" />
   <meta name="twitter:description" content="On-Premises Installation - Oracle Linux 8 (x86) This is an example of installing on a Oracle Linux 8 desktop.
 Read the On-Premises documentation and ensure that your desktop meets the minimum system requirements.
 Install Additional Operating System Packages Install additional operating system packages by executing these commands:
@@ -64,11 +64,11 @@ sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack pod
       "@context": "http://schema.org",
       "@type": "TechArticle",
       "articleSection": "On Premises",
-      "name": "Ol8",
+      "name": "OL8",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/",
-      "headline": "Ol8",
+      "headline": "OL8",
       "description": "On-Premises Installation - Oracle Linux 8 (x86) This is an example of installing on a Oracle Linux 8 desktop.\nRead the On-Premises documentation and ensure that your desktop meets the minimum system requirements.\nInstall Additional Operating System Packages Install additional operating system packages by executing these commands:\nsudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack podman curl sudo dnf -y install oracle-database-preinstall-21c sudo dnf -y install langpacks-en sudo dnf module install python39 Set the default Python3 to Python 3.",
-      "wordCount" : "533",
+      "wordCount" : "545",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1544,7 +1544,7 @@ if (!doNotTrack) {
     
   
   
-    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/' href='/microservices-datadriven/spring/'><span itemprop='name'>Oracle Backend for Spring Boot - Developer Preview</span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/on-premises/' href='/microservices-datadriven/spring/on-premises/'><span itemprop='name'>On Premises</span></a><meta itemprop='position' content='4' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>Ol8</span><meta itemprop='position' content='5' /></li>
+    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/' href='/microservices-datadriven/spring/'><span itemprop='name'>Oracle Backend for Spring Boot - Developer Preview</span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/on-premises/' href='/microservices-datadriven/spring/on-premises/'><span itemprop='name'>On-Premises</span></a><meta itemprop='position' content='4' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>OL8</span><meta itemprop='position' content='5' /></li>
   
 
   
@@ -1562,7 +1562,7 @@ if (!doNotTrack) {
   <article
     class="gdoc-markdown gdoc-markdown__align--left"
   >
-    <h1>Ol8</h1>
+    <h1>OL8</h1>
     <div class="gdoc-page__anchorwrap">
     <h1 id="on-premises-installation---oracle-linux-8-x86">
         On-Premises Installation - Oracle Linux 8 (x86)
@@ -1620,10 +1620,10 @@ if (!doNotTrack) {
         </a>
     </h3>
 </div>
-<p>The <em>Desktop</em> installation will provision an Oracle Database into the Kubernetes cluster.  The images must be downloaded from <a
+<p>The <em>Desktop</em> installation provisions an Oracle Database into the Kubernetes cluster.  The images must be downloaded from <a
   class="gdoc-markdown__link"
   href="https://container-registry.oracle.com/"
->Oracle&rsquo;s Container Registry</a> prior to continuing.</p>
+>Oracle&rsquo;s Container Registry</a> before continuing. Process these steps:</p>
 <p>As the <code>obaas</code> user:</p>
 <ol>
 <li>Log into Oracle&rsquo;s Container Registry: <code>podman login container-registry.oracle.com</code></li>
@@ -1638,6 +1638,7 @@ if (!doNotTrack) {
         </a>
     </h3>
 </div>
+<p>Install and start Minikube by running these commands.</p>
 <p>As the <code>root</code> user:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 </span></span><span class="line"><span class="cl">install minikube-linux-amd64 /usr/local/bin/minikube
@@ -1654,11 +1655,11 @@ if (!doNotTrack) {
         </a>
     </h3>
 </div>
-<p>As the <code>obaas</code> user:</p>
-<p>Download the <a
+<p>Download <a
   class="gdoc-markdown__link"
   href="https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip"
->Oracle Backend forSpring Boot</a> and unzip into a new directory; example:</p>
+>Oracle Backend for Spring Boot</a> and unzip into a new directory.</p>
+<p>As the <code>obaas</code> user:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">unzip onprem-ebaas_latest.zip -d ~/obaas
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="install-ansible">
@@ -1680,11 +1681,11 @@ if (!doNotTrack) {
         </a>
     </h3>
 </div>
-<p>Use the helper Playbook to define the infrastructure.  This Playbook will also:</p>
+<p>Use the helper Playbook to define the infrastructure.  This Playbook also:</p>
 <ul>
-<li>Create additional namespaces for the Container Registry and Database</li>
-<li>Create a Private Container Registry in the Kubernetes Cluster</li>
-<li>Modify the application microservices to be Desktop compatible</li>
+<li>Creates additional namespaces for the Container Registry and database.</li>
+<li>Creates a private Container Registry in the Kubernetes cluster.</li>
+<li>Modifies the application microservices to be desktop compatible by running this command:</li>
 </ul>
 <p>Assuming the source was unzip&rsquo;ed to <code>~/obaas</code>, as the <code>obaas</code> user, run: <code>ansible-playbook ~/obaas/ansible/desktop_apply.yaml</code></p>
 <div class="gdoc-page__anchorwrap">
@@ -1695,7 +1696,7 @@ if (!doNotTrack) {
         </a>
     </h3>
 </div>
-<p>In order to push the images to the Container Registry in the Kubernetes cluster; open a new terminal and start a port-forward.</p>
+<p>In order to push the images to the Container Registry in the Kubernetes cluster, open a new terminal and process this command:</p>
 <p>As the <code>obaas</code> user, run: <code>kubectl port-forward service/private -n container-registry 5000:5000 &amp;</code></p>
 <p>To test access to the registry:
 <code>curl -X GET -k https://localhost:5000/v2/_catalog</code></p>
@@ -1711,7 +1712,7 @@ if (!doNotTrack) {
 </div>
 <p>Build and Push the Images to the Container Registry in the Kubernetes cluster:</p>
 <p>Assuming the source was unzip&rsquo;ed to <code>~/obaas</code>, as the <code>obaas</code> user, run: <code>ansible-playbook ~/obaas/ansible/images_build.yaml</code></p>
-<p>After the images are built and pushed, the port-forward is no longer required and can be stopped.</p>
+<p>After the images are built and pushed, the port forward is no longer required and can be stopped.</p>
 <div class="gdoc-page__anchorwrap">
     <h3 id="deploy-microservices">
         Deploy Microservices
@@ -1730,12 +1731,12 @@ if (!doNotTrack) {
     </h2>
 </div>
 <div class="gdoc-page__anchorwrap">
-    <h2 id="config-server-and-obaas-admin-pod-failures">
+    <h3 id="config-server-and-obaas-admin-pod-failures">
         config-server and obaas-admin Pod Failures
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#config-server-and-obaas-admin-pod-failures" class="gdoc-page__anchor clip flex align-center" title="Anchor to: config-server and obaas-admin Pod Failures" aria-label="Anchor to: config-server and obaas-admin Pod Failures" href="#config-server-and-obaas-admin-pod-failures">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
-    </h2>
+    </h3>
 </div>
 <p>The pods in the <code>config-server</code> and <code>obaas-admin</code> namespaces rely on the database that is created in the <code>oracle-database-operator-system</code>.  During initial provisioning these pods will start well before the database is available resulting in initial failures.  They will resolve themselves once the database becomes available.</p>
 <p>You can check on the status of the database by running:

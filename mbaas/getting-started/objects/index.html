@@ -12,8 +12,8 @@
 <meta name="generator" content="Hugo 0.115.4">
 
 
-  <meta name="description" content="The Oracle Backend for Parse Platform stores your data in objects, each object is an instance of a named class. A class has certain properties, or fields. You create a class by just creating the first object in that class. You define the fields by just using them. Once a class has a field with a certain type, you cannot change that field type while objects using it exist.
-Creating an object The most basic operation you can do is to create a new object in the database." />
+  <meta name="description" content="The Oracle Backend for Parse Platform stores your data in objects. Each object is an instance of a named class. A class has certain properties or fields. You create a class by creating the first object in that class. You define the fields by using them. Once a class has a field with a certain type, you cannot change that field type while objects using it exist.
+Creating an Object The most basic operation you can do is to create a new object in the database." />
 
     <title>Working with Objects | Oracle Backend for Parse Platform</title>
 
@@ -39,8 +39,8 @@ Creating an object The most basic operation you can do is to create a new object
     content="Working with Objects"
   />
   <meta property="og:site_name" content="Oracle Backend for Parse Platform" />
-  <meta property="og:description" content="The Oracle Backend for Parse Platform stores your data in objects, each object is an instance of a named class. A class has certain properties, or fields. You create a class by just creating the first object in that class. You define the fields by just using them. Once a class has a field with a certain type, you cannot change that field type while objects using it exist.
-Creating an object The most basic operation you can do is to create a new object in the database." />
+  <meta property="og:description" content="The Oracle Backend for Parse Platform stores your data in objects. Each object is an instance of a named class. A class has certain properties or fields. You create a class by creating the first object in that class. You define the fields by using them. Once a class has a field with a certain type, you cannot change that field type while objects using it exist.
+Creating an Object The most basic operation you can do is to create a new object in the database." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/mbaas/getting-started/objects/" />
 
@@ -49,8 +49,8 @@ Creating an object The most basic operation you can do is to create a new object
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Working with Objects" />
-  <meta name="twitter:description" content="The Oracle Backend for Parse Platform stores your data in objects, each object is an instance of a named class. A class has certain properties, or fields. You create a class by just creating the first object in that class. You define the fields by just using them. Once a class has a field with a certain type, you cannot change that field type while objects using it exist.
-Creating an object The most basic operation you can do is to create a new object in the database." />
+  <meta name="twitter:description" content="The Oracle Backend for Parse Platform stores your data in objects. Each object is an instance of a named class. A class has certain properties or fields. You create a class by creating the first object in that class. You define the fields by using them. Once a class has a field with a certain type, you cannot change that field type while objects using it exist.
+Creating an Object The most basic operation you can do is to create a new object in the database." />
 
 
   <script type="application/ld+json">
@@ -61,8 +61,8 @@ Creating an object The most basic operation you can do is to create a new object
       "name": "Working with Objects",
       "url" : "https://oracle.github.io/microservices-datadriven/mbaas/getting-started/objects/",
       "headline": "Working with Objects",
-      "description": "The Oracle Backend for Parse Platform stores your data in objects, each object is an instance of a named class. A class has certain properties, or fields. You create a class by just creating the first object in that class. You define the fields by just using them. Once a class has a field with a certain type, you cannot change that field type while objects using it exist.\nCreating an object The most basic operation you can do is to create a new object in the database.",
-      "wordCount" : "359",
+      "description": "The Oracle Backend for Parse Platform stores your data in objects. Each object is an instance of a named class. A class has certain properties or fields. You create a class by creating the first object in that class. You define the fields by using them. Once a class has a field with a certain type, you cannot change that field type while objects using it exist.\nCreating an Object The most basic operation you can do is to create a new object in the database.",
+      "wordCount" : "362",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1324,40 +1324,41 @@ if (!doNotTrack) {
     class="gdoc-markdown gdoc-markdown__align--left"
   >
     <h1>Working with Objects</h1>
-    <p>The Oracle Backend for Parse Platform stores your data in objects, each object is an instance of a named class.  A class has certain properties, or fields. You create a class
-by just creating the first object in that class.  You define the fields by just using them.  Once a class has a field with a certain type, you
+    <p>The Oracle Backend for Parse Platform stores your data in objects. Each object is an instance of a named class. A class has certain properties or fields. You
+create a class by creating the first object in that class. You define the fields by using them. Once a class has a field with a certain type, you
 cannot change that field type while objects using it exist.</p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="creating-an-object">
-        Creating an object
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/mbaas/getting-started/objects/#creating-an-object" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Creating an object" aria-label="Anchor to: Creating an object" href="#creating-an-object">
+        Creating an Object
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/mbaas/getting-started/objects/#creating-an-object" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Creating an Object" aria-label="Anchor to: Creating an Object" href="#creating-an-object">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>
 </div>
-<p>The most basic operation you can do is to create a new object in the database. The examples on this page use the REST API to access the Parse Server. To create
-an object, you perform an HTTP POST to the Parse endpoint <code>/parse/classes/</code> and append the name of the class of object you want to create, in this example the
-object is a <code>GameScore</code>.  The content is provided in JSON format.  You need to provide the correct <code>APPLICATION_ID</code> and update the endpoint address to match
-your environment:</p>
+<p>The most basic operation you can do is to create a new object in the database. The following examples use the Representational State Transfer (REST) API to access
+the Parse Server. To create
+an object, perform an HTTP POST to the Parse endpoint <code>/parse/classes/</code> and append the name of the class of the object that you want to create. In this example, the
+object is <code>GameScore</code>.  The content is provided in JavaScript Object Notation (JSON) format. Provide the correct <code>APPLICATION_ID</code> and update the endpoint address to match
+your environment. For example:</p>
 <pre tabindex="0"><code>curl -X POST \
      -H &#34;X-Parse-Application-Id: COOLAPPV100&#34; \
      -H &#34;Content-Type: application/json&#34; \
      -d &#39;{&#34;score&#34;:100000,&#34;playerName&#34;:&#34;test user&#34;,&#34;cheatmode&#34;:false}&#39; \
      http://1.2.3.4/parse/classes/GameScore
-</code></pre><p>This command will create an entry for <code>GameScore</code> in the Schema collection and will create/update the GameScore collection with your new object. It will return
-the <code>objectId</code> for the newly created object:</p>
+</code></pre><p>This command creates an entry for <code>GameScore</code> in the schema collection and creates or updates the <code>GameScore</code> collection with your new object. It returns
+the <code>objectId</code> for the newly created object. For example:</p>
 <pre tabindex="0"><code>{&#34;objectId&#34;:&#34;Ts9B8JSBBX&#34;,&#34;createdAt&#34;:&#34;2022-12-12T14:47:28.431Z&#34;}
-</code></pre><p><code>objectId</code> is the unique identifier for the a document in the collection.</p>
+</code></pre><p>The <code>objectId</code> is the unique identifier for a document in the collection.</p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="retrieving-an-object">
-        Retrieving an object
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/mbaas/getting-started/objects/#retrieving-an-object" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Retrieving an object" aria-label="Anchor to: Retrieving an object" href="#retrieving-an-object">
+        Retrieving an Object
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/mbaas/getting-started/objects/#retrieving-an-object" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Retrieving an Object" aria-label="Anchor to: Retrieving an Object" href="#retrieving-an-object">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>
 </div>
-<p>To retrieve the newly created object, use the HTTP GET API as shown below.  Append the <code>objectId</code> to the end of the URL.  As above, update the command
-with your <code>APPLICATION_ID</code> and endpoint address:</p>
+<p>To retrieve the newly created object, use the HTTP GET API as shown in the following example.  Append the <code>objectId</code> to the end of the URL. Update the command
+with your <code>APPLICATION_ID</code> and endpoint address. For example:</p>
 <pre tabindex="0"><code>curl -X GET \
      -H &#34;X-Parse-Application-Id: COOLAPPV100&#34; \
      http://1.2.3.4/parse/classes/GameScore/Ts9B8JSBBX
@@ -1370,7 +1371,9 @@ with your <code>APPLICATION_ID</code> and endpoint address:</p>
     &#34;createdAt&#34;:&#34;2022-12-12T14:47:28.431Z&#34;,
     &#34;objectId&#34;:&#34;Ts9B8JSBBX&#34;
 }
-</code></pre><p><strong>Note</strong>: You can use any arbitrary string as your <code>APPLICATION_ID</code>. These will be used by your clients to authenticate with the Parse Server.  During creation of the Oracle Backend for Parse Platform environment, you provided an Application ID as a configuration option.  If any call to the Parse Server does not use a valid Application ID, the call will be rejected with this error message:</p>
+</code></pre><p><strong>NOTE:</strong> You can use any arbitrary string as your <code>APPLICATION_ID</code>. These are used by your clients to authenticate with the Parse Server. During creation of
+the Oracle Backend for Parse Platform environment, you provided an application ID as a configuration option. If any call to the Parse Server does not use a
+valid application ID, the call is rejected with this error message:</p>
 <pre tabindex="0"><code>{&#34;error&#34;:&#34;unauthorized&#34;}
 </code></pre><div class="gdoc-page__anchorwrap">
     <h2 id="more-information">

@@ -1281,12 +1281,16 @@ if (!doNotTrack) {
         </a>
     </h1>
 </div>
-<p>Oracle Backend for Parse Platform allows developers to build and deploy mobile applications using Parse mobile APIs, and provision a backend as a service with the Oracle Database and other infrastructure components that operate on multiple clouds. This service vastly simplifies the task of building, testing, and operating a mobile app dev platform for reliable, secure, and scalable enterprise applications. This version includes an Oracle Database storage adapter for Parse (Parse already has MongoDB and Postgres adapters), and a proof of concept of Google Firebase APIs emulated using Parse APIs.</p>
+<p>Oracle Backend for Parse Platform deploys mobile applications using Parse mobile APIs, and provision an Oracle Backend as a Service (OBaaS)
+with Oracle Database and other infrastructure components that operate on multiple clouds. This service vastly simplifies the task of building, testing,
+and operating a mobile application development platform for reliable, secure, and scalable enterprise applications. This version includes an Oracle Database storage adapter
+for Parse (Parse already has MongoDB and Postgres adapters), and a proof-of-concept of Google Firebase APIs emulated using Parse mobile APIs.</p>
 <p>The Oracle Backend for Parse Platform is based on the <a
   class="gdoc-markdown__link"
   href="https://parseplatform.org/"
 >Parse Platform</a>.</p>
-<p>In addition to an Oracle Autonomus Database Shared instance, the following software components are deployed in an Oracle Cloud Infrastructure Container Engine for Kubernetes (OKE) for customer usage with Oracle Backend for Parse Platform:</p>
+<p>In addition to an Oracle Autonomous Database Serverless instance, the following software components are deployed in an OCI Container
+Engine for Kubernetes (OKE) for customer usage with Oracle Backend for Parse Platform:</p>
 <ul>
 <li>Parse Server, plus the Oracle Database storage adapter for Parse</li>
 <li>Parse Dashboard</li>
@@ -1299,7 +1303,7 @@ if (!doNotTrack) {
 
 <blockquote class="gdoc-hint [warning]">
   <div class="gdoc-hint__title flex align-center"><svg class="gdoc-icon gdoc_fire"><use xlink:href="#gdoc_fire"></use></svg>
-      <span>Interested in Spring Boot or microservices too?</span></div>
+      <span>Interested in Spring Boot or Microservices, too?</span></div>
   <div class="gdoc-hint__text">Check out <a
   class="gdoc-markdown__link"
   href="https://oracle.github.io/microservices-datadriven/spring/"
@@ -1315,10 +1319,10 @@ if (!doNotTrack) {
         </a>
     </h2>
 </div>
-<p>This release is a <em>Developer Preview</em>. This means that not all functionality is complete. In this release, approximately 80-900% of the Parse APIs are working. For
-interested developers, approximately 2270 of 2700 tests run successfully. This release is based on Parse Server version 5.2.7 and Parse Dashboard 5.0.0. We are
-releasing this as a developer preview to allow interested developers to try it and give feedback.</p>
-<p>The following API families are mostly working:</p>
+<p>This release is a <em>Developer Preview</em>. This means that not all functionality is complete. In this release, approximately 80-90% of the Parse mobile APIs are working. For
+interested developers, approximately 2270 out of 2700 tests run successfully. This release is based on Parse Server version 5.2.7 and Parse Dashboard 5.0.0. Oracle is
+releasing this as a <em>Developer Preview</em> to allow interested developers to try it and provide feedback.</p>
+<p>The following application program interface (API) families are mostly working:</p>
 <ul>
 <li>Database, including query</li>
 <li>Identity/Security</li>
@@ -1330,27 +1334,27 @@ releasing this as a developer preview to allow interested developers to try it a
 </ul>
 <p>The following API families are not expected to work in this release:</p>
 <ul>
-<li>Cloud Functions</li>
+<li>Cloud functions</li>
 <li>GraphQL</li>
-<li>Live Query</li>
-<li>Push Notifications</li>
+<li>Live query</li>
+<li>Push notifications</li>
 </ul>
-<p>The Parse API exposed is exactly the same as an upstream Parse Server (version 5.2.7) - there are no changes to the public facing API.
-All existing Parse SDKs <em>should</em> work as-is with this developer preview (for those APIs that are working).</p>
+<p>The exposed Parse mobile API is exactly the same as an upstream Parse Server version 5.2.7. There are no changes to the public-facing API.
+All existing Parse Software Development Kits (SDKs) should work as-is with this <em>Developer Preview</em> for those APIs that are working.</p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="about-the-oracle-database-storage-adapter-for-parse">
-        About the Oracle Database storage adapter for Parse
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/mbaas/#about-the-oracle-database-storage-adapter-for-parse" class="gdoc-page__anchor clip flex align-center" title="Anchor to: About the Oracle Database storage adapter for Parse" aria-label="Anchor to: About the Oracle Database storage adapter for Parse" href="#about-the-oracle-database-storage-adapter-for-parse">
+        About the Oracle Database Storage Adapter for Parse
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/mbaas/#about-the-oracle-database-storage-adapter-for-parse" class="gdoc-page__anchor clip flex align-center" title="Anchor to: About the Oracle Database Storage Adapter for Parse" aria-label="Anchor to: About the Oracle Database Storage Adapter for Parse" href="#about-the-oracle-database-storage-adapter-for-parse">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>
 </div>
-<p>This developer preview includes an Oracle Database storage adapter for Parse based on the Parse Server 5.2.7 code line. The storage
+<p>This <em>Developer Preview</em> includes an Oracle Database storage adapter for Parse based on Parse Server version 5.2.7. The storage
 adapter is implemented using the <a
   class="gdoc-markdown__link"
   href="https://oracle.github.io/node-oracledb/"
->Node.js node-oracledb</a> library. Data are stored in the
-database in JSON collections, using the <a
+>Node.js node-oracledb</a> library. Data is stored in the
+database in JavaScript Object Notation (JSON) collections, using the <a
   class="gdoc-markdown__link"
   href="https://docs.oracle.com/en/database/oracle/simple-oracle-document-access/"
 >Simple Oracle Document Access (SODA)</a>

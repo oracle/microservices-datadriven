@@ -17,7 +17,7 @@ The Desktop installation can be used to explore in a non-production environment,
 Prerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot On-Premises. You need:
 Access to an Oracle Database Enterprise Edition 21." />
 
-    <title>On Premises | Oracle Backend for Spring Boot</title>
+    <title>On-Premises | Oracle Backend for Spring Boot</title>
 
     <link rel="icon" type="image/svg+xml" href="/microservices-datadriven/spring/favicon/favicon.svg" />
 <link
@@ -38,7 +38,7 @@ Access to an Oracle Database Enterprise Edition 21." />
     
   <meta
     property="og:title"
-    content="On Premises"
+    content="On-Premises"
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot" />
   <meta property="og:description" content="On-Premises Installation The Oracle Backend for Spring Boot is available to install On-Premises. The On-Premises installation includes both a Desktop installation and an Estate installation.
@@ -52,7 +52,7 @@ Access to an Oracle Database Enterprise Edition 21." />
 
 
   <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="On Premises" />
+<meta name="twitter:title" content="On-Premises" />
   <meta name="twitter:description" content="On-Premises Installation The Oracle Backend for Spring Boot is available to install On-Premises. The On-Premises installation includes both a Desktop installation and an Estate installation.
 The Desktop installation can be used to explore in a non-production environment, while the Estate installation is targeted for the production infrastructure.
 Prerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot On-Premises. You need:
@@ -64,11 +64,11 @@ Access to an Oracle Database Enterprise Edition 21." />
       "@context": "http://schema.org",
       "@type": "TechArticle",
       "articleSection": "On Premises",
-      "name": "On Premises",
+      "name": "On-Premises",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/on-premises/",
-      "headline": "On Premises",
+      "headline": "On-Premises",
       "description": "On-Premises Installation The Oracle Backend for Spring Boot is available to install On-Premises. The On-Premises installation includes both a Desktop installation and an Estate installation.\nThe Desktop installation can be used to explore in a non-production environment, while the Estate installation is targeted for the production infrastructure.\nPrerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot On-Premises. You need:\nAccess to an Oracle Database Enterprise Edition 21.",
-      "wordCount" : "720",
+      "wordCount" : "723",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1538,7 +1538,7 @@ if (!doNotTrack) {
     
   
   
-    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/' href='/microservices-datadriven/spring/'><span itemprop='name'>Oracle Backend for Spring Boot - Developer Preview</span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>On Premises</span><meta itemprop='position' content='4' /></li>
+    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/' href='/microservices-datadriven/spring/'><span itemprop='name'>Oracle Backend for Spring Boot - Developer Preview</span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>On-Premises</span><meta itemprop='position' content='4' /></li>
   
 
   
@@ -1554,7 +1554,7 @@ if (!doNotTrack) {
   <article
     class="gdoc-markdown gdoc-markdown__align--left"
   >
-    <h1>On Premises</h1>
+    <h1>On-Premises</h1>
     <div class="gdoc-page__anchorwrap">
     <h1 id="on-premises-installation">
         On-Premises Installation
@@ -1586,8 +1586,8 @@ if (!doNotTrack) {
 <p>When installing on a <em>Desktop</em>, the previously mentioned pre-requisites are met through an additional Setup task, but there are additional desktop system or software requirements. For example:</p>
 <ul>
 <li>2 CPUs or more</li>
-<li>8GB of free memory</li>
-<li>60GB of free disk space (40G minikube and container images, 20G database)</li>
+<li>8 GB of free memory</li>
+<li>60 GB of free disk space (40 GB minikube and container images, 20 GB database)</li>
 <li>Internet connection</li>
 <li><a
   class="gdoc-markdown__link"
@@ -1619,7 +1619,7 @@ if (!doNotTrack) {
         </a>
     </h2>
 </div>
-<p>An On-Premises installation, whether <em>Desktop</em> or <em>Estate</em>, consists of defining the infrastructure followed by running the Configuration Management Playbook to build images and deploy the microservices.</p>
+<p>An On-Premises installation, whether <em>Desktop</em> or <em>Estate</em>, consists of defining the infrastructure followed by running the Configuration Management playbook to build images and deploy the microservices.</p>
 <p>For an <em>Estate</em> installation, you need to have a Kubernetes cluster and the kubectl command-line tool must be configured to communicate with your cluster.</p>
 <p>A helper Playbook has been provided for the <em>Desktop</em> installations to assist in defining the infrastructure.  Review the appropriate documentation for examples of installing and defining the <em>Desktop</em> installation. For example:</p>
 <ul>
@@ -1632,20 +1632,20 @@ if (!doNotTrack) {
   href="ol8/_index.md"
 >Oracle Linux 8 (x86)</a></li>
 </ul>
-<p>The <em>Desktop</em> Playbook is run as part of the Configuration Management.</p>
+<p>The <em>Desktop</em> playbook is run as part of the Configuration Management playbook.</p>
 <div class="gdoc-page__anchorwrap">
-    <h2 id="download-the-database-or-ords-images-_desktop_-installation">
-        Download the Database or ORDS Images (<em>Desktop</em> Installation)
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#download-the-database-or-ords-images-_desktop_-installation" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Download the Database or ORDS Images (Desktop Installation)" aria-label="Anchor to: Download the Database or ORDS Images (Desktop Installation)" href="#download-the-database-or-ords-images-_desktop_-installation">
+    <h2 id="download-the-database-or-ords-images-_desktop_--installation">
+        Download the Database or ORDS Images (<em>Desktop</em>  Installation)
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#download-the-database-or-ords-images-_desktop_--installation" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Download the Database or ORDS Images (Desktop  Installation)" aria-label="Anchor to: Download the Database or ORDS Images (Desktop  Installation)" href="#download-the-database-or-ords-images-_desktop_--installation">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>
 </div>
-<p>The <em>Desktop</em> installation provisions an Oracle Database into the Kubernetes cluster.  The images must be downloaded from <a
+<p>The <em>Desktop</em> installation provisions an Oracle Database to the Kubernetes cluster.  The images must be downloaded from <a
   class="gdoc-markdown__link"
   href="https://container-registry.oracle.com/"
->Oracle&rsquo;s Container Registry</a> prior to continuing.</p>
-<p>After installing Podman, execute these steps:</p>
+>Oracle&rsquo;s Container Registry</a> before continuing.</p>
+<p>After installing Podman, process these steps:</p>
 <ol>
 <li>
 <p>Log into Oracle&rsquo;s Container Registry. For example:</p>
@@ -1661,9 +1661,9 @@ if (!doNotTrack) {
 </li>
 </ol>
 <div class="gdoc-page__anchorwrap">
-    <h3 id="defining-the-database--_estate_-installation">
-        Defining the Database  (<em>Estate</em> Installation)
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#defining-the-database--_estate_-installation" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Defining the Database  (Estate Installation)" aria-label="Anchor to: Defining the Database  (Estate Installation)" href="#defining-the-database--_estate_-installation">
+    <h3 id="defining-the-database--_estate_--installation">
+        Defining the Database  (<em>Estate</em>  Installation)
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#defining-the-database--_estate_--installation" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Defining the Database  (Estate  Installation)" aria-label="Anchor to: Defining the Database  (Estate  Installation)" href="#defining-the-database--_estate_--installation">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h3>
@@ -1678,11 +1678,11 @@ if (!doNotTrack) {
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">service</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=BAASPDB)))&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ocid</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
-</span></span></span></code></pre></div><p>The <code>oracle_dbs</code> and <code>default_db</code> key values should be the name of your Pluggable Database (PDB).  These are followed by the PDB name and key or values defining how to access the PDB.  If using Mutual Transport Layer Security (mTLS) authentication, specify the full path of the wallet file.</p>
+</span></span></span></code></pre></div><p>The <code>oracle_dbs</code> and <code>default_db</code> key values should be the name of your Pluggable Database (PDB).  These are followed by the PDB name and Key/Values defining how to access the PDB.  If using mutual Transport Layer Security (mTLS) authentication, specify the full path of the wallet file.</p>
 <div class="gdoc-page__anchorwrap">
-    <h3 id="defining-the-container-repository--_estate_-installation">
-        Defining the Container Repository  (<em>Estate</em> Installation)
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#defining-the-container-repository--_estate_-installation" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Defining the Container Repository  (Estate Installation)" aria-label="Anchor to: Defining the Container Repository  (Estate Installation)" href="#defining-the-container-repository--_estate_-installation">
+    <h3 id="defining-the-container-repository--_estate_--installation">
+        Defining the Container Repository  (<em>Estate</em>  Installation)
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#defining-the-container-repository--_estate_--installation" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Defining the Container Repository  (Estate  Installation)" aria-label="Anchor to: Defining the Container Repository  (Estate  Installation)" href="#defining-the-container-repository--_estate_--installation">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h3>
@@ -1713,7 +1713,7 @@ if (!doNotTrack) {
         </a>
     </h2>
 </div>
-<p>From the source package, run the Configuration Management Playbook.</p>
+<p>From the source package, run the Configuration Management playbook.</p>
 <div class="gdoc-page__anchorwrap">
     <h3 id="install-ansible">
         Install Ansible
@@ -1722,7 +1722,7 @@ if (!doNotTrack) {
         </a>
     </h3>
 </div>
-<p>Using Python, install Ansible to run the Configuration Management Playbook.  The helper script creates a Python virtual environment and installs Ansible along with additional modules. For example:</p>
+<p>Using Python, install Ansible to run the Configuration Management playbook.  The helper script creates a Python virtual environment and installs Ansible along with other additional modules. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./setup_ansible.sh
 </span></span><span class="line"><span class="cl"><span class="nb">source</span> ./activate.env
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
@@ -1745,7 +1745,7 @@ if (!doNotTrack) {
     </h3>
 </div>
 <p>For the <em>Desktop</em> installation, start a new terminal and tunnel or port-forward to the minikube cluster.  Refer to the specific platform details for more information.</p>
-<p>For both installations, on the original terminal, run the Images Playbook. For example:</p>
+<p>For both installations, run the Images Playbook on the original terminal. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ansible-playbook ansible/images_build.yaml
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="install-the-microservices">
@@ -1755,7 +1755,7 @@ if (!doNotTrack) {
         </a>
     </h3>
 </div>
-<p>Install the mocroservices by running this command:</p>
+<p>Install the microservices by running this command:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ansible-playbook ansible/k8s_apply.yaml -t full
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h2 id="finish">
