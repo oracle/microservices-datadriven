@@ -1,6 +1,6 @@
 # On-Premises Installation - Oracle Linux 8 (x86)
 
-This is an example of installing on a MacOS Venture desktop
+This is an example of installing on a Oracle Linux 8 desktop.
 
 Please read the [On-Premises](../index.md) and ensure your desktop meets the minimum system requirements.
 
@@ -115,20 +115,11 @@ Assuming the source was unzip'ed to `~/obaas`, as the `obaas` user, run: `ansibl
 
 After the images are built and pushed, the port-forward is no longer required and can be stopped.
 
-### Deploy Oracle Backend for Spring Boot
-
-Deploy the Database and Microservices.
+### Deploy Microservices
 
 Assuming the source was unzip'ed to `~/obaas`, as the `obaas` user, run: `ansible-playbook ~/obaas/ansible/k8s_apply.yaml -t full`
 
 ## Notes
-
-## config-server and obaas-admin Pod Failures
-
-The pods in the `config-server` and `obaas-admin` namespaces rely on the database that is created in the `oracle-database-operator-system`.  During initial provisioning these pods will start well before the database is available resulting in initial failures.  They will resolve themselves once the database becomes available.
-
-You can check on the status of the database by running:
-`kubectl get singleinstancedatabase baas -n oracle-database-operator-system -o "jsonpath={.status.status}"`
 
 ### VPN and Proxies
 
