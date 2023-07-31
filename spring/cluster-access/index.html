@@ -12,8 +12,8 @@
 <meta name="generator" content="Hugo 0.115.4">
 
 
-  <meta name="description" content="The Oracle Backend for Spring Boot setup creates a Kubernetes cluster where the server and dashboard components are deployed. At the end of setup, in the log for the apply job, you are provided with a command to create a Kubernetes configuration file to access that cluster.
-Tip For more information about working with the Kubernetes cluster, see Setting Up Cluster Access in the OCI documentation. kubeconfig_cmd = &#34;oci ce cluster create-kubeconfig --cluster-id ocid1." />
+  <meta name="description" content="The Oracle Backend for Spring Boot setup creates a Kubernetes cluster where the server and dashboard components are deployed. At the end of set up, you are provided with a command to create a Kubernetes configuration file to access that cluster in the log for the apply job.
+Tip For more information about working with the Kubernetes cluster, see Setting Up Cluster Access in the Oracle Cloud Infrastructure documentation. kubeconfig_cmd = &#34;oci ce cluster create-kubeconfig --cluster-id ocid1." />
 
     <title>Access Kubernetes Cluster | Oracle Backend for Spring Boot</title>
 
@@ -39,8 +39,8 @@ Tip For more information about working with the Kubernetes cluster, see Setting 
     content="Access Kubernetes Cluster"
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot" />
-  <meta property="og:description" content="The Oracle Backend for Spring Boot setup creates a Kubernetes cluster where the server and dashboard components are deployed. At the end of setup, in the log for the apply job, you are provided with a command to create a Kubernetes configuration file to access that cluster.
-Tip For more information about working with the Kubernetes cluster, see Setting Up Cluster Access in the OCI documentation. kubeconfig_cmd = &#34;oci ce cluster create-kubeconfig --cluster-id ocid1." />
+  <meta property="og:description" content="The Oracle Backend for Spring Boot setup creates a Kubernetes cluster where the server and dashboard components are deployed. At the end of set up, you are provided with a command to create a Kubernetes configuration file to access that cluster in the log for the apply job.
+Tip For more information about working with the Kubernetes cluster, see Setting Up Cluster Access in the Oracle Cloud Infrastructure documentation. kubeconfig_cmd = &#34;oci ce cluster create-kubeconfig --cluster-id ocid1." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/cluster-access/" />
 
@@ -49,8 +49,8 @@ Tip For more information about working with the Kubernetes cluster, see Setting 
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Access Kubernetes Cluster" />
-  <meta name="twitter:description" content="The Oracle Backend for Spring Boot setup creates a Kubernetes cluster where the server and dashboard components are deployed. At the end of setup, in the log for the apply job, you are provided with a command to create a Kubernetes configuration file to access that cluster.
-Tip For more information about working with the Kubernetes cluster, see Setting Up Cluster Access in the OCI documentation. kubeconfig_cmd = &#34;oci ce cluster create-kubeconfig --cluster-id ocid1." />
+  <meta name="twitter:description" content="The Oracle Backend for Spring Boot setup creates a Kubernetes cluster where the server and dashboard components are deployed. At the end of set up, you are provided with a command to create a Kubernetes configuration file to access that cluster in the log for the apply job.
+Tip For more information about working with the Kubernetes cluster, see Setting Up Cluster Access in the Oracle Cloud Infrastructure documentation. kubeconfig_cmd = &#34;oci ce cluster create-kubeconfig --cluster-id ocid1." />
 
 
   <script type="application/ld+json">
@@ -61,8 +61,8 @@ Tip For more information about working with the Kubernetes cluster, see Setting 
       "name": "Access Kubernetes Cluster",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/cluster-access/",
       "headline": "Access Kubernetes Cluster",
-      "description": "The Oracle Backend for Spring Boot setup creates a Kubernetes cluster where the server and dashboard components are deployed. At the end of setup, in the log for the apply job, you are provided with a command to create a Kubernetes configuration file to access that cluster.\nTip For more information about working with the Kubernetes cluster, see Setting Up Cluster Access in the OCI documentation. kubeconfig_cmd = \u0022oci ce cluster create-kubeconfig --cluster-id ocid1.",
-      "wordCount" : "429",
+      "description": "The Oracle Backend for Spring Boot setup creates a Kubernetes cluster where the server and dashboard components are deployed. At the end of set up, you are provided with a command to create a Kubernetes configuration file to access that cluster in the log for the apply job.\nTip For more information about working with the Kubernetes cluster, see Setting Up Cluster Access in the Oracle Cloud Infrastructure documentation. kubeconfig_cmd = \u0022oci ce cluster create-kubeconfig --cluster-id ocid1.",
+      "wordCount" : "431",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1549,8 +1549,8 @@ if (!doNotTrack) {
     class="gdoc-markdown gdoc-markdown__align--left"
   >
     <h1>Access Kubernetes Cluster</h1>
-    <p>The Oracle Backend for Spring Boot setup creates a Kubernetes cluster where the server and dashboard components are deployed.  At the end of setup, in the
-log for the apply job, you are provided with a command to create a Kubernetes configuration file to access that cluster.</p>
+    <p>The Oracle Backend for Spring Boot setup creates a Kubernetes cluster where the server and dashboard components are deployed.  At the end of set up, you are
+provided with a command to create a Kubernetes configuration file to access that cluster in the log for the apply job.</p>
 
 
 
@@ -1562,7 +1562,7 @@ log for the apply job, you are provided with a command to create a Kubernetes co
   <div class="gdoc-hint__text">For more information about working with the Kubernetes cluster, see <a
   class="gdoc-markdown__link"
   href="https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm#localdownload"
->Setting Up Cluster Access</a> in the OCI documentation.</div>
+>Setting Up Cluster Access</a> in the Oracle Cloud Infrastructure documentation.</div>
 </blockquote>
 
 </br>
@@ -1572,7 +1572,7 @@ log for the apply job, you are provided with a command to create a Kubernetes co
 </span></span><span class="line"><span class="cl">                    --region us-ashburn-1
 </span></span><span class="line"><span class="cl">                    --token-version 2.0.0
 </span></span><span class="line"><span class="cl">                    --kube-endpoint PUBLIC_ENDPOINT&#34;
-</span></span></code></pre></div><p><strong>NOTE:</strong> The generated <code>kubeconfig</code> file will works if you are using the <code>DEFAULT</code> profile in your Oracle Cloud Infrastructure (OCI) CLI configuration file. If you are using a different OCI CLI profile, you must add <code>--profile &lt;PROFILE-NAME&gt;</code> to the command. For example:</p>
+</span></span></code></pre></div><p><strong>NOTE:</strong> The generated <code>kubeconfig</code> file works if you are using the <code>DEFAULT</code> profile in your Oracle Cloud Infrastructure (OCI) CLI configuration file. If you are using a different OCI CLI profile, you must add <code>--profile &lt;PROFILE-NAME&gt;</code> to the command. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-txt" data-lang="txt"><span class="line"><span class="cl">kubeconfig_cmd = &#34;oci ce cluster create-kubeconfig
 </span></span><span class="line"><span class="cl">                    --cluster-id ocid1.cluster.oc1.iad.xxx
 </span></span><span class="line"><span class="cl">                    --file $HOME/.kube/config

@@ -59,7 +59,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/observability/tracing/",
       "headline": "Jaeger Tracing",
       "description": "Configure Jaeger to capture application traces",
-      "wordCount" : "170",
+      "wordCount" : "183",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1554,7 +1554,7 @@ if (!doNotTrack) {
     class="gdoc-markdown gdoc-markdown__align--left"
   >
     <h1>Jaeger Tracing</h1>
-    <p>Jaeger is a distributed tracing system used for monitoring and troubleshooting microservices.
+    <p>Jaeger is a distributed tracing system used for monitoring and troubleshooting Microservices.
 For more information on Jaeger, see the <a
   class="gdoc-markdown__link"
   href="https://www.jaegertracing.io/"
@@ -1608,23 +1608,17 @@ For more information on Jaeger, see the <a
  <!-- spellchecker-enable -->
 </li>
 <li>
-<p>In the Jaeger web user interface, the <strong>Search</strong> tab allows you to find tracings using various search criteria. For example, to find
-traces for the customer microservice included in the sample applications:</p>
-<ul>
-<li>
-<p>If you deployed the <a
+<p>In the Jaeger web user interface, the <strong>Search</strong> tab finds tracings using various search criteria. For example, to find
+traces for the customer Microservice included in the sample applications:</p>
+<p>a. If you deployed the <a
   class="gdoc-markdown__link"
   href="../../sample-apps"
 >sample applications</a>, exposing the customer service through the Apache APISIX Gateway and called it at least once, you can
-find traces for it in Jaeger.</p>
-</li>
-<li>
-<p>Select <strong>Service</strong> <code>customer</code> and <strong>Operation</strong> <code>/api/v1/customers</code> .</p>
-</li>
-<li>
-<p>Click on <strong>Find Traces</strong>. Several traces appear (one for each time that you invoked the service).</p>
-  <!-- spellchecker-disable -->
-
+find traces for it in Jaeger.
+b. Select <strong>Service</strong> <code>customer</code> and <strong>Operation</strong> <code>/api/v1/customers</code> .
+c. Click on <strong>Find Traces</strong>. Several traces appear (one for each time that you invoked the service).</p>
+<pre><code> &lt;!-- spellchecker-disable --&gt;
+ 
           
           
         
@@ -1651,12 +1645,11 @@ find traces for it in Jaeger.</p>
             </figure>
           </div>
 
-  <!-- spellchecker-enable -->
-</li>
-<li>
-<p>Click on any one of them to view the trace that includes multiple services and extends into Oracle Database and Oracle Advanced Queuing. For example:</p>
-  <!-- spellchecker-disable -->
-
+ &lt;!-- spellchecker-enable --&gt;
+</code></pre>
+<p>d. Click on any one of them to view the trace that includes multiple services and extends into Oracle Database and Oracle Advanced Queuing. For example:</p>
+<pre><code> &lt;!-- spellchecker-disable --&gt;
+ 
           
           
         
@@ -1683,9 +1676,8 @@ find traces for it in Jaeger.</p>
             </figure>
           </div>
 
-  <!-- spellchecker-enable -->
-</li>
-</ul>
+ &lt;!-- spellchecker-enable --&gt;
+</code></pre>
 </li>
 </ol>
 

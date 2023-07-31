@@ -13,8 +13,9 @@
 
 
   <meta name="description" content="The Oracle Backend for Parse Platform is available to install from OCI Marketplace.
-Prerequisites You must meet the following prerequisites to use the Oracle Backend for Parse Platform:
-An OCI account in a tenancy with sufficient quota to create: An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP&rsquo;s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user) Setup To start installation:" />
+Prerequisites You must meet the following prerequisites to use the Oracle Backend for Parse Platform. You need:
+An Oracle Cloud Infrastructure (OCI) account in a tenancy with sufficient quota to create the following:
+An OCI Container Engine for Kubernetes (OKE) cluster, plus a node pool with three worker nodes. A Virtual Cloud Network (VCN) with at least two public IP&rsquo;s available." />
 
     <title>Setup | Oracle Backend for Parse Platform</title>
 
@@ -41,8 +42,9 @@ An OCI account in a tenancy with sufficient quota to create: An OCI Container En
   />
   <meta property="og:site_name" content="Oracle Backend for Parse Platform" />
   <meta property="og:description" content="The Oracle Backend for Parse Platform is available to install from OCI Marketplace.
-Prerequisites You must meet the following prerequisites to use the Oracle Backend for Parse Platform:
-An OCI account in a tenancy with sufficient quota to create: An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP’s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user) Setup To start installation:" />
+Prerequisites You must meet the following prerequisites to use the Oracle Backend for Parse Platform. You need:
+An Oracle Cloud Infrastructure (OCI) account in a tenancy with sufficient quota to create the following:
+An OCI Container Engine for Kubernetes (OKE) cluster, plus a node pool with three worker nodes. A Virtual Cloud Network (VCN) with at least two public IP’s available." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/mbaas/setup/" />
 
@@ -52,8 +54,9 @@ An OCI account in a tenancy with sufficient quota to create: An OCI Container En
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Setup" />
   <meta name="twitter:description" content="The Oracle Backend for Parse Platform is available to install from OCI Marketplace.
-Prerequisites You must meet the following prerequisites to use the Oracle Backend for Parse Platform:
-An OCI account in a tenancy with sufficient quota to create: An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP’s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user) Setup To start installation:" />
+Prerequisites You must meet the following prerequisites to use the Oracle Backend for Parse Platform. You need:
+An Oracle Cloud Infrastructure (OCI) account in a tenancy with sufficient quota to create the following:
+An OCI Container Engine for Kubernetes (OKE) cluster, plus a node pool with three worker nodes. A Virtual Cloud Network (VCN) with at least two public IP’s available." />
 
 
   <script type="application/ld+json">
@@ -64,8 +67,8 @@ An OCI account in a tenancy with sufficient quota to create: An OCI Container En
       "name": "Setup",
       "url" : "https://oracle.github.io/microservices-datadriven/mbaas/setup/",
       "headline": "Setup",
-      "description": "The Oracle Backend for Parse Platform is available to install from OCI Marketplace.\nPrerequisites You must meet the following prerequisites to use the Oracle Backend for Parse Platform:\nAn OCI account in a tenancy with sufficient quota to create: An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes A VCN with at least two public IP’s available A public load balancer An Oracle Autonomous Database - Shared instance At least one free OCI Auth Token (note that the maximum is two per user) Setup To start installation:",
-      "wordCount" : "524",
+      "description": "The Oracle Backend for Parse Platform is available to install from OCI Marketplace.\nPrerequisites You must meet the following prerequisites to use the Oracle Backend for Parse Platform. You need:\nAn Oracle Cloud Infrastructure (OCI) account in a tenancy with sufficient quota to create the following:\nAn OCI Container Engine for Kubernetes (OKE) cluster, plus a node pool with three worker nodes. A Virtual Cloud Network (VCN) with at least two public IP’s available.",
+      "wordCount" : "530",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1331,16 +1334,19 @@ if (!doNotTrack) {
         </a>
     </h2>
 </div>
-<p>You must meet the following prerequisites to use the Oracle Backend for Parse Platform:</p>
+<p>You must meet the following prerequisites to use the Oracle Backend for Parse Platform. You need:</p>
 <ul>
-<li>An OCI account in a tenancy with sufficient quota to create:
+<li>
+<p>An Oracle Cloud Infrastructure (OCI) account in a tenancy with sufficient quota to create the following:</p>
 <ul>
-<li>An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes</li>
-<li>A VCN with at least two public IP&rsquo;s available</li>
-<li>A public load balancer</li>
-<li>An Oracle Autonomous Database - Shared instance</li>
-<li>At least one free OCI Auth Token (note that the maximum is two per user)</li>
+<li>An OCI Container Engine for Kubernetes (OKE) cluster, plus a node pool with three worker nodes.</li>
+<li>A Virtual Cloud Network (VCN) with at least two public IP&rsquo;s available.</li>
+<li>A public load balancer.</li>
+<li>An Oracle Autonomous Database Serverless instance.</li>
 </ul>
+</li>
+<li>
+<p>At least one free OCI auth token (note that the maximum is two per user).</p>
 </li>
 </ul>
 <div class="gdoc-page__anchorwrap">
@@ -1351,55 +1357,77 @@ if (!doNotTrack) {
         </a>
     </h2>
 </div>
-<p>To start installation:</p>
-<ul>
-<li>Visit the <a
+<p>To start the installation, take the following steps:</p>
+<ol>
+<li>
+<p>Visit the <a
   class="gdoc-markdown__link"
   href="https://cloud.oracle.com/marketplace/application/139274906"
->OCI Marketplace listing for Oracle Backend for Parse Platform</a> (see the image below)</li>
-<li>Log into OCI Console if requested</li>
-<li>Choose the target compartment</li>
-<li>Review and accept the terms and conditions</li>
-<li>Click on the &ldquo;Launch Stack&rdquo; button</li>
-</ul>
+>OCI Marketplace listing for Oracle Backend for Parse Platform</a> (see the following image).</p>
+</li>
+<li>
+<p>Log in to the OCI Console, if requested.</p>
+</li>
+<li>
+<p>Choose the target compartment.</p>
+</li>
+<li>
+<p>Review and accept the terms and conditions.</p>
+</li>
+<li>
+<p>Click <strong>Launch Stack</strong>.</p>
 <p><img
   src="../mbaas-oci-mp-listing.png"
   alt="OCI Marketplace Listing"
   
 /></p>
-<p>On the &ldquo;Create Stack&rdquo; page:</p>
-<ul>
-<li>Modify the suggested name if desired</li>
-<li>Add a description or tags if desired</li>
-<li>Click on the &ldquo;Next&rdquo; button</li>
-</ul>
-<p>On the &ldquo;Configure variables&rdquo; page, in the &ldquo;Backend as a Service&rdquo; section (see image below):</p>
-<ul>
-<li>Set an application name if desired, if you do not, a randomized value will be generated.  This will be the name of the Parse application</li>
-<li>Set an application ID if desired, if you do not, a randomized value will be generated.  This will be the Parse APPLICATION_ID</li>
-<li>Set a server master key if desired, if you do not, a randomized value will be generated.  This will the Parse MASTER_KEY</li>
-<li>Change the dashboard user name if desired, note that this is case-sensitive</li>
-<li>Provide a password for the dashboard user.  Oracle recommends that you use a strong password</li>
-</ul>
+</li>
+<li>
+<p>On the <strong>Create Stack</strong> page:</p>
+<p>a. Modify the suggested name, if desired.
+b. Add a description or tags, if desired.
+c. Click <strong>Next</strong>.</p>
+</li>
+<li>
+<p>On the <strong>Configure variables</strong> page, in the <strong>Backend as a Service</strong> section (see the following image):</p>
+<p>a. Specify an application name, if desired. If not specified, a randomized value is generated.  This is the name of the Parse application.
+b. Specify an application ID, if desired. If not specified, a randomized value is generated.  This is the Parse <code>APPLICATION_ID</code>.
+c. Specify a server master key, if desired. If not specified, a randomized value is generated.  This is the Parse <code>MASTER_KEY</code>.
+d. Change the dashboard user name, if desired. Note that this is case-sensitive.
+e. Provide a dashboard password for the dashboard user. Oracle recommends using a strong password for security purposes.</p>
 <p><img
   src="../mbaas-configure-variables.png"
   alt="Configure variables page"
   
 /></p>
-<p>In the &ldquo;Control Plane Options&rdquo; section, modify the CIDR if desired.  Note that you will only be able to access the service from IP
-addresses in the specified CIDR.</p>
-<p>In the &ldquo;Node Pool&rdquo; section you can customize the number of nodes and enable auto-scaling if desired.</p>
-<p>In the &ldquo;Load Balancers Options&rdquo; section you can customize the load balancer shape and the CIDR for client access.  For simple testing, Oracle
+</li>
+<li>
+<p>In the <strong>Control Plane Options</strong> section, modify the Classless Inter-Domain Routing (CIDR) block, if desired. Note that you can only access the service from IP
+addresses in the specified CIDR block.</p>
+</li>
+<li>
+<p>In the <strong>Node Pool</strong> section, you can customize the number of nodes and enable auto scaling, if desired.</p>
+</li>
+<li>
+<p>In the <strong>Load Balancers Options</strong> section, you can customize the load balancer shape and the CIDR for client access. For simple testing, Oracle
 recommends using the provided default values.</p>
-<p>In the &ldquo;Database Options&rdquo; section you can customize the database shape and the CIDR for client access. Note that you will not be able to access
-Datbase Actions if you change the network access to &ldquo;PRIVATE_ENDPOINT_ACCESS&rdquo;</p>
-<p>Once you have completed customization, click on the &ldquo;Next&rdquo; button.</p>
-<p>The &ldquo;Review&rdquo; page is displayed, check your settings and then click on the &ldquo;Create&rdquo; button to create the &ldquo;stack&rdquo; and run the Terraform apply
-action to create all of the associated resources.</p>
+</li>
+<li>
+<p>In the <strong>Database Options</strong> section, you can customize the database shape and the CIDR for client access. Note that you cannot access
+<strong>Database Actions</strong> if you change the network access to <code>PRIVATE_ENDPOINT_ACCESS</code>.</p>
+</li>
+<li>
+<p>Once you have completed customization, click <strong>Next</strong>.</p>
+</li>
+<li>
+<p>The <strong>Review</strong> page is displayed. Check your settings and then click <strong>Create</strong> to create the stack and run the Terraform <code>apply</code>
+command to create all of the associated resources.</p>
+</li>
+</ol>
 <p>You can monitor the installation in the log. Installation takes approximately 20 minutes to complete.  Most of this time is spent provisioning
 the Kubernetes cluster, its nodes, and the database.</p>
-<p>When the installation is finished, some important information will be included at the end of the log.  You will need this information to access
-the newly created environment:</p>
+<p>When the installation is finished, some important information isincluded at the end of the log.  You will need this information to access
+the newly created environment. For example:</p>
 <pre tabindex="0"><code>application_id = &#34;COOLAPPV100&#34;
 dashboard_password = &lt;sensitive&gt;
 dashboard_uri = &#34;http://1.2.3.4&#34;
@@ -1407,7 +1435,7 @@ dashboard_user = &#34;ADMIN&#34;
 kubeconfig_cmd = &#34;oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.iad.xxx
  --file $HOME/.kube/config --region us-ashburn-1 --token-version 2.0.0 --kube-endpoint PUBLIC_ENDPOINT&#34;
 parse_endpoint = &#34;1.2.3.4/parse&#34;
-</code></pre><p>Next, move on the the <a
+</code></pre><p>Next, go to the <a
   class="gdoc-markdown__link"
   href="../getting-started/"
 >Getting Started</a> page to learn how to use the newly installed environment.</p>

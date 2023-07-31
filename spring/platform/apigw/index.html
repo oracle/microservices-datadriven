@@ -13,7 +13,7 @@
 
 
   <meta name="description" content="Apache APISIX is an open-source cloud native API platform that supports the full lifecycle of API management including publishing, traffic management, deployment strategies, and circuit breakers.
-Deploy and Secure Sample Application APIs using APISIX Oracle Backend for Spring Boot deploys APISIX Gateway and Dashboard in the apisix namespace. The gateway is exposed through the external load balancer and ingress controller. To access the APISIX Dashboard, you must use the kubectl port-forward command to create a secure channel to service/apisix-dashboard." />
+Deploy and Secure Sample Application APIs using Apache APISIX Oracle Backend for Spring Boot deploys APISIX Gateway and Dashboard in the apisix namespace. The gateway is exposed through the external load balancer and ingress controller. To access the APISIX Dashboard, you must use the kubectl port-forward command to create a secure channel to service/apisix-dashboard." />
 
     <title>API Gateway | Oracle Backend for Spring Boot</title>
 
@@ -40,7 +40,7 @@ Deploy and Secure Sample Application APIs using APISIX Oracle Backend for Spring
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot" />
   <meta property="og:description" content="Apache APISIX is an open-source cloud native API platform that supports the full lifecycle of API management including publishing, traffic management, deployment strategies, and circuit breakers.
-Deploy and Secure Sample Application APIs using APISIX Oracle Backend for Spring Boot deploys APISIX Gateway and Dashboard in the apisix namespace. The gateway is exposed through the external load balancer and ingress controller. To access the APISIX Dashboard, you must use the kubectl port-forward command to create a secure channel to service/apisix-dashboard." />
+Deploy and Secure Sample Application APIs using Apache APISIX Oracle Backend for Spring Boot deploys APISIX Gateway and Dashboard in the apisix namespace. The gateway is exposed through the external load balancer and ingress controller. To access the APISIX Dashboard, you must use the kubectl port-forward command to create a secure channel to service/apisix-dashboard." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/platform/apigw/" />
 
@@ -50,7 +50,7 @@ Deploy and Secure Sample Application APIs using APISIX Oracle Backend for Spring
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="API Gateway" />
   <meta name="twitter:description" content="Apache APISIX is an open-source cloud native API platform that supports the full lifecycle of API management including publishing, traffic management, deployment strategies, and circuit breakers.
-Deploy and Secure Sample Application APIs using APISIX Oracle Backend for Spring Boot deploys APISIX Gateway and Dashboard in the apisix namespace. The gateway is exposed through the external load balancer and ingress controller. To access the APISIX Dashboard, you must use the kubectl port-forward command to create a secure channel to service/apisix-dashboard." />
+Deploy and Secure Sample Application APIs using Apache APISIX Oracle Backend for Spring Boot deploys APISIX Gateway and Dashboard in the apisix namespace. The gateway is exposed through the external load balancer and ingress controller. To access the APISIX Dashboard, you must use the kubectl port-forward command to create a secure channel to service/apisix-dashboard." />
 
 
   <script type="application/ld+json">
@@ -61,8 +61,8 @@ Deploy and Secure Sample Application APIs using APISIX Oracle Backend for Spring
       "name": "API Gateway",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/platform/apigw/",
       "headline": "API Gateway",
-      "description": "Apache APISIX is an open-source cloud native API platform that supports the full lifecycle of API management including publishing, traffic management, deployment strategies, and circuit breakers.\nDeploy and Secure Sample Application APIs using APISIX Oracle Backend for Spring Boot deploys APISIX Gateway and Dashboard in the apisix namespace. The gateway is exposed through the external load balancer and ingress controller. To access the APISIX Dashboard, you must use the kubectl port-forward command to create a secure channel to service\/apisix-dashboard.",
-      "wordCount" : "553",
+      "description": "Apache APISIX is an open-source cloud native API platform that supports the full lifecycle of API management including publishing, traffic management, deployment strategies, and circuit breakers.\nDeploy and Secure Sample Application APIs using Apache APISIX Oracle Backend for Spring Boot deploys APISIX Gateway and Dashboard in the apisix namespace. The gateway is exposed through the external load balancer and ingress controller. To access the APISIX Dashboard, you must use the kubectl port-forward command to create a secure channel to service\/apisix-dashboard.",
+      "wordCount" : "548",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1560,53 +1560,25 @@ if (!doNotTrack) {
     <p><a
   class="gdoc-markdown__link"
   href="https://apisix.apache.org"
->Apache APISIX</a> is an open-source cloud native API platform that supports the full lifecycle of API management including publishing, traffic management, deployment strategies, and circuit breakers.</p>
+>Apache APISIX</a> is an open-source cloud native API platform that supports the full lifecycle of API management including publishing,
+traffic management, deployment strategies, and circuit breakers.</p>
 <div class="gdoc-page__anchorwrap">
-    <h2 id="deploy-and-secure-sample-application-apis-using-apisix">
-        Deploy and Secure Sample Application APIs using APISIX
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/apigw/#deploy-and-secure-sample-application-apis-using-apisix" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Deploy and Secure Sample Application APIs using APISIX" aria-label="Anchor to: Deploy and Secure Sample Application APIs using APISIX" href="#deploy-and-secure-sample-application-apis-using-apisix">
+    <h2 id="deploy-and-secure-sample-application-apis-using-apache-apisix">
+        Deploy and Secure Sample Application APIs using Apache APISIX
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/apigw/#deploy-and-secure-sample-application-apis-using-apache-apisix" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Deploy and Secure Sample Application APIs using Apache APISIX" aria-label="Anchor to: Deploy and Secure Sample Application APIs using Apache APISIX" href="#deploy-and-secure-sample-application-apis-using-apache-apisix">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>
 </div>
-<p>Oracle Backend for Spring Boot deploys APISIX Gateway and Dashboard in the <code>apisix</code> namespace. The gateway is exposed through the external load balancer and ingress controller.  To access the APISIX Dashboard, you must use the <code>kubectl port-forward</code> command to create a secure channel to <code>service/apisix-dashboard</code>.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl --namespace apisix get all
-</span></span></code></pre></div><!-- spellchecker-disable -->
-
-  
-  
-
-
-  <div class="flex justify-center">
-    <figure
-      class="gdoc-markdown__figure"
-    >
-      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/apigw/obaas-apisix-k8s.png">
-        <picture>
-            <source
-                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/apigw/obaas-apisix-k8s_hu2655154a51ecfa49995dc8a65796a92c_210993_1200x0_resize_box_3.png"
-
-            />
-          <img
-                src="https://oracle.github.io/microservices-datadriven/spring/platform/apigw/obaas-apisix-k8s_hu2655154a51ecfa49995dc8a65796a92c_210993_1800x0_resize_box_3.png"
-              alt="APISIX K8s"
-          />
-        </picture>
-      </a>
-          <figcaption>
-            APISIX K8s
-          </figcaption>
-    </figure>
-  </div>
-
-<!-- spellchecker-enable -->
+<p>Oracle Backend for Spring Boot deploys APISIX Gateway and Dashboard in the <code>apisix</code> namespace. The gateway is exposed through the external load balancer and
+ingress controller.  To access the APISIX Dashboard, you must use the <code>kubectl port-forward</code> command to create a secure channel to <code>service/apisix-dashboard</code>.</p>
 <ol>
 <li>
-<p>To expose APISIX Dashboard using <code>port-forward</code>, run this command:</p>
+<p>To expose the Apache APISIX Dashboard using <code>port-forward</code>, run this command:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl port-forward -n apisix svc/apisix-dashboard 8080:80
 </span></span></code></pre></div></li>
 <li>
-<p>Open the APISIX Dashboard URL: <a
+<p>Open the Apache APISIX Dashboard URL: <a
   class="gdoc-markdown__link"
   href="http://localhost:8080"
 >http://localhost:8080</a></p>
@@ -1649,19 +1621,19 @@ Oracle still recommends using strong passwords to maximize security.</p>
 </ol>
 <div class="gdoc-page__anchorwrap">
     <h2 id="exposing-a-spring-application-through-the-api-gateway-and-load-balancer">
-        Exposing a Spring application through the API Gateway and Load Balancer
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/apigw/#exposing-a-spring-application-through-the-api-gateway-and-load-balancer" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Exposing a Spring application through the API Gateway and Load Balancer" aria-label="Anchor to: Exposing a Spring application through the API Gateway and Load Balancer" href="#exposing-a-spring-application-through-the-api-gateway-and-load-balancer">
+        Exposing a Spring Application Through the API Gateway and Load Balancer
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/apigw/#exposing-a-spring-application-through-the-api-gateway-and-load-balancer" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Exposing a Spring Application Through the API Gateway and Load Balancer" aria-label="Anchor to: Exposing a Spring Application Through the API Gateway and Load Balancer" href="#exposing-a-spring-application-through-the-api-gateway-and-load-balancer">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>
 </div>
 <p>Once you have your application deployed and running, you may want to expose it to the outside world. Some applications may not need to be
 exposed if they are only called by other applications in the platform.
-To expose your application, create a &ldquo;route&rdquo; in the APISIX API Gateway by executing these steps:</p>
+To expose your application, create a &ldquo;route&rdquo; in the Apache APISIX API Gateway by processing these steps:</p>
 <ol>
 <li>
 <p>Create a route to the service. For example:</p>
-<p>a.* In the APISIX Dashboard, click on the &ldquo;Routes&rdquo; option in the menu on the left hand side.</p>
+<p>a. In the APISIX Dashboard, click on the <strong>Routes</strong> option in the menu on the left hand side.</p>
 <pre><code> &lt;!-- spellchecker-disable --&gt;
  
           
@@ -1692,19 +1664,26 @@ To expose your application, create a &ldquo;route&rdquo; in the APISIX API Gatew
 
  &lt;!-- spellchecker-enable --&gt;
 </code></pre>
-<p>b.* Click on the &ldquo;Create&rdquo; button to create a new route.</p>
-<p>c.* Fill out the necessary details (anything not mentioned here can be left at the default value). For example, for the &ldquo;slow service&rdquo;
+<p>b. Click <strong>Create</strong> to create a new route.</p>
+<p>c. Fill out the necessary details (anything not mentioned here can be left at the default value). For example, for the &ldquo;slow service&rdquo;
 to be included in the <a
   class="gdoc-markdown__link"
   href="../../sample-apps"
->sample apps</a>, provide these details:
-* name = slow
-* path = /fruit*
-* method = get, options
-* upstream type = service discovery
-* discovery type = eureka
-* service name = SLOW     (note that this is case sensitive, this is the key from the Eureka dashboard)</p>
-<pre><code> **Note**: The API Gateway is pre-configured with both &quot;Eureka&quot; and &quot;Kubernetes&quot; discovery types.  For Eureka, the service name is the key used to deploy the service in Eureka, which is normally the value from `spring.application.name` in the Spring Boot configuration file (`src/main/resources/application.yaml`), in uppercase characters.  For Kubernetes, the service name is in the format `namespace/service:port` where `namespace` is the Kubernetes namespace in which the Spring Boot application is deployed, `service` is the name of the Kubernetes service for that application, and `port` is the name of the port in that service.  If you deployed your Spring Boot application with the Oracle Backend for Spring Boot CLI, the port name will be `spring`.  For example, an application called `slow-service` deployed in the `my-apps` namespace would be `my-apps/slow-service:spring`.
+>sample apps</a>, provide these details:</p>
+<pre><code> * name = slow
+ * path = /fruit*
+ * method = get, options
+ * upstream type = service discovery
+ * discovery type = eureka
+ * service name = SLOW (note that this is case sensitive, this is the key from the Eureka dashboard)
+
+ **NOTE:** The API Gateway is pre-configured with both &quot;Eureka&quot; and &quot;Kubernetes&quot; discovery types.  For Eureka, the service name is the key used to
+           deploy the service in Eureka, which is normally the value from `spring.application.name` in the Spring Boot configuration
+ 		  file (`src/main/resources/application.yaml`), in uppercase characters.  For Kubernetes, the service name is in the
+ 		  format `namespace/service:port` where `namespace` is the Kubernetes namespace in which the Spring Boot application is deployed, `service` is
+ 		  the name of the Kubernetes service for that application, and `port` is the name of the port in that service.  If you deployed your Spring Boot
+ 		  application with the Oracle Backend for Spring Boot CLI, the port name will be `spring`.  For example, an application called `slow-service` deployed
+ 		  in the `my-apps` namespace would be `my-apps/slow-service:spring`.
 
  &lt;!-- spellchecker-disable --&gt;
  
@@ -1797,7 +1776,7 @@ to be included in the <a
  &lt;!-- spellchecker-enable --&gt;
  &lt;/br&gt;
 </code></pre>
-<p>d.* Save the route that you created.
+<p>d. Save the route that you created.
 <!-- spellchecker-disable -->
 
           
@@ -1861,12 +1840,12 @@ to be included in the <a
 </li>
 <li>
 <p>Test a route to the service. For example:</p>
-<p>a.* Get the APISIX Gateway external IP using this command:</p>
+<p>a. Get the APISIX Gateway external IP using this command:</p>
 <pre><code> ```shell
  kubectl -n ingress-nginx get svc ingress-nginx-controller
  ```
 </code></pre>
-<p>b.* Call the API using the APISIX Gateway address plus path. For example:</p>
+<p>b. Call the API using the APISIX Gateway address plus path. For example:</p>
 <pre><code> ```shell
  curl http://APISIX_IP/fruit
  ```

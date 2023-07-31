@@ -7,25 +7,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Extra Parse test code</title>
+      <title>Extra Parse Test Code</title>
       <link>https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/extra/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/extra/</guid>
-      <description>To test the Parse API direct access from the same page, let&amp;rsquo;s add a few lines of codes to the index.html to show four buttons to insert/get/update a Restaurant (minimum properties) in the same collection created from Firebase-on-Parse SDK. The application logic is in /parsef/example.js file.
-The modified parts included in index.html become:
+      <description>To test the Parse API direct access from the same page, let&amp;rsquo;s add a few lines of codes to the index.html file to show four new buttons to Insert, Get and Update a restaurant (minimum properties) in the same collection created from the Firebase-on-Parse SDK. The application logic is in the /parsef/example.js file.
+The modified parts included in the index.html file are the following:
 &amp;lt;!--ORACLE--&amp;gt; &amp;lt;div style=&amp;#34;text-align: center&amp;#34;&amp;gt; &amp;lt;p&amp;gt; &amp;lt;button id=&amp;#34;insertButton&amp;#34;&amp;gt;INSERT RESTAURANT&amp;lt;/button&amp;gt;&amp;lt;p&amp;gt; &amp;lt;button id=&amp;#34;createButton&amp;#34;&amp;gt;GET RESTAURANT&amp;lt;/button&amp;gt;&amp;lt;p&amp;gt; &amp;lt;button id=&amp;#34;updateButton&amp;#34;&amp;gt;SET RESTAURANT&amp;lt;/button&amp;gt;&amp;lt;p&amp;gt; &amp;lt;button id=&amp;#34;queryButton&amp;#34; &amp;gt;N° RESTAURANTS&amp;lt;/button&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/pre&amp;gt; &amp;lt;!</description>
     </item>
     
     <item>
-      <title>Friendly Eats tutorial</title>
+      <title>Friendly Eats Tutorial</title>
       <link>https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/friendly-eats/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/friendly-eats/</guid>
-      <description>This is an example of porting a simple Firebase web application based on JavaScript Firebase API - version 8 and described in a public Tutorial to the Parse Platform leveraging an alpha quality JavaScript library included in this example.
-Complete the original tutorial first First, we recommend that you complete the original FriendlyEats tutorial instructions through to the end using Firebase.
-Adapt the code to use the Firebase API emulation After completing the tutorial, you have a functioning application.</description>
+      <description>This is an example of porting a simple Firebase web application based on JavaScript Firebase API - version 8 and described in a public tutorial to the Parse Platform leveraging an alpha quality JavaScript library included in this example.
+Complete the Original Tutorial First We recommend that you complete the original FriendlyEats tutorial instructions using Firebase.
+Adapt the Code to Use the Firebase API Emulation After completing the tutorial, you have a functioning application.</description>
     </item>
     
     <item>
@@ -34,7 +34,7 @@ Adapt the code to use the Firebase API emulation After completing the tutorial, 
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/scope/</guid>
-      <description>This developer preview of Firebase API emulation includes only the following Implemented classes/methods:
+      <description>This Developer Preview of the Firebase API emulation includes only the following implemented classes and methods:
 class Query where() orderBy() limit() get() onSnapshot() class CollectionReference add() orderBy() limit() onSnapshot() doc() get() where() class QueryDocumentSnapshot data() get() class DocumentReference get() collection() class QuerySnapshot forEach() class DocumentSnapshot data() class Firestore collection() runTransaction() class Transaction get() set() update() The diagram below shows relationships between these APIs:</description>
     </item>
     
