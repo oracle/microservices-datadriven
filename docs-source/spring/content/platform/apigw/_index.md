@@ -30,22 +30,18 @@ resources:
 [Apache APISIX](https://apisix.apache.org) is an open-source cloud native API platform that supports the full lifecycle of API management including publishing,
 traffic management, deployment strategies, and circuit breakers.
 
-## Deploy and Secure Sample Application APIs using APISIX
+## Deploy and Secure Sample Application APIs using Apache APISIX
 
 Oracle Backend for Spring Boot deploys APISIX Gateway and Dashboard in the `apisix` namespace. The gateway is exposed through the external load balancer and
 ingress controller.  To access the APISIX Dashboard, you must use the `kubectl port-forward` command to create a secure channel to `service/apisix-dashboard`.
 
-<!-- spellchecker-disable -->
-{{< img name="obaas-apisix-k8s" size="medium" lazy=false >}}
-<!-- spellchecker-enable -->
-
-1. To expose APISIX Dashboard using `port-forward`, run this command:
+1. To expose the Apache APISIX Dashboard using `port-forward`, run this command:
 
     ```shell
     kubectl port-forward -n apisix svc/apisix-dashboard 8080:80
     ```
 
-2. Open the APISIX Dashboard URL: <http://localhost:8080>
+2. Open the Apache APISIX Dashboard URL: <http://localhost:8080>
 
     * username: `admin`
     * password: `admin`
@@ -61,7 +57,7 @@ ingress controller.  To access the APISIX Dashboard, you must use the `kubectl p
 
 Once you have your application deployed and running, you may want to expose it to the outside world. Some applications may not need to be
 exposed if they are only called by other applications in the platform.
-To expose your application, create a "route" in the APISIX API Gateway by executing these steps:
+To expose your application, create a "route" in the Apache APISIX API Gateway by processing these steps:
 
 1. Create a route to the service. For example:
 

@@ -1,17 +1,17 @@
 ---
-title: Azure/OCI Multi-Cloud Installation
+title: Azure/OCI Multicloud Installation
 ---
 
-The Oracle Backend for Spring Boot is available to install in Multi-Cloud (Azure and Oracle Cloud Infrastructure (OCI)).  This installation deplpoys the Oracle Backend for Spring Boot in Azure with an Oracle Autonomous Database running in OCI.
+The Oracle Backend for Spring Boot is available to install in multicloud (Azure and Oracle Cloud Infrastructure (OCI)).  This installation deploys the Oracle Backend for Spring Boot in Azure with an Oracle Autonomous Database running in OCI.
 
 ## Prerequisites
 
-You must meet the following prerequisites to use the Oracle Backend for Spring Boot Multi-Cloud (Azure and OCI). You need:
+You must meet the following prerequisites to use the Oracle Backend for Spring Boot multicloud (Azure and OCI). You need:
 
-* An account on Azure
-* An account on OCI
+* An account on Azure.
+* An account on OCI.
 
-## Overview of setup process
+## Overview of the Set Up process
 
 This video provides a quick overview of the setup process.
 
@@ -27,13 +27,13 @@ A few setup steps are required in both Oracle Cloud Infrastructure (OCI) and Azu
 
 ### OCI
 
-The Multi-Cloud installation provisions an Oracle Autonomous Database in OCI using the [Oracle Database Operator for Kubernetes (OraOperator)](https://github.com/oracle/oracle-database-operator).  
+The multicloud installation provisions an Oracle Autonomous Database in OCI using the [Oracle Database Operator for Kubernetes (OraOperator)](https://github.com/oracle/oracle-database-operator).  
 
 To allow the OraOperator access to OCI, an [API Key](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm) must be generated using these steps:
 
 1. Log into OCI.
 2. Open the **Profile** menu ![User Profile Menu](userprofilemenu.png) and click **User** settings.
-3. In the **Resources** section at the bottom left, click **API Keys**.
+3. In the **Resources** section at the lower left, click **API Keys**.
 4. Click **Download Private Key** and save the key as `private_key.pem`. You do not need to download the public key.
 5. Click **Add**.
 
@@ -41,7 +41,7 @@ The key is added and the Configuration File Preview is displayed. The file snipp
 
 ### Azure
 
-The Multi-Cloud installation is done using the Azure Cloud Shell.  The following steps are required in Azure to prepare for the installation:
+The multicloud installation is done using the Azure Cloud Shell.  The following steps are required in Azure to prepare for the installation:
 
 1. Log into Azure.
 
@@ -49,21 +49,21 @@ The Multi-Cloud installation is done using the Azure Cloud Shell.  The following
 
    ![Azure Cloud Shell Icon](AzureCloudShellIcon.png)
    
-3. Upload the [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-ebaas-platform_latest.zip) Stack
+3. Upload the [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-ebaas-platform_latest.zip) stack. For example:
 
    ![Azure Upload](AzureUpload.png)
    
 4. Upload the API Private Key (`private_key.pem`).
 
-5. Unzip the Stack to a directory called OBaaS. For example:
+5. Unzip the stack to a directory called `obaas`. For example:
 
    `unzip azure-ebaas-platform_latest.zip -d /tmp/obaas`
 	
-6. Move the `private_key.pem` file to OBaaS. For example:
+6. Move the `private_key.pem` file to the `obaas` directory. For example:
 
    `mv private_key.pem /tmp/obaas/`
    
-7. Run the configuration helper script, using the values from the API Key. For example:
+7. Run the configuration helper script using the values from the API Key. For example:
 
    `cd /tmp/obaas`
    `./obaas_configure.py`
@@ -72,7 +72,7 @@ The Multi-Cloud installation is done using the Azure Cloud Shell.  The following
 
 ## Install Ansible
 
-Install Ansible to run the Configuration Management Playbook.  The helper script creates a Python virtual environment and installs Ansible and additional modules. For example:
+Install Ansible to run the Configuration Management playbook.  The helper script creates a Python virtual environment and installs Ansible and additional modules. For example:
 
 ```bash
 cd /tmp/obaas/ansible
