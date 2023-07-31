@@ -21,28 +21,34 @@ resources:
     title: "Vault Show Secret"
 ---
 
-Oracle Backend as a Service for Spring Cloud includes [HashiCorp Vault](https://www.vaultproject.io/) to secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets, and other sensitive data using a user interface (UI), command-line interface (CLI), or Hypertext Transfer Protocol (HTTP) API. The Vault can be deployed in two different ways. See the [Setup Documentation](../../setup/):
+Oracle Backend as a Service for Spring Cloud includes [HashiCorp Vault](https://www.vaultproject.io/) to secure, store and tightly control access to tokens,
+passwords, certificates, encryption keys for protecting secrets, and other sensitive data using a user interface (UI), command-line interface (CLI), or
+Hypertext Transfer Protocol (HTTP) API. The Vault can be deployed in two different ways. See the [Setup Documentation](../../setup/):
 
 - Development mode
 - Production mode
 
 {{< hint type=[warning] icon=gdoc_check title=Warning >}}
-**Never** run a Development mode server in production. It is insecure and will lose data on every restart (since it stores data in-memory). It is only available for development or experimentation.
+**Never** run a **Development** mode server in production. It is insecure and will lose data on every restart (since it stores data in-memory). It is only
+available for development or experimentation.
 {{< /hint >}}
 
 {{< hint type=[tip] icon=gdoc_check title=Tip >}}
-For more information about working with the HashiCorp Vault, see the [HashiCorp Vault Documentation](https://www.vaultproject.io/) and [Tutorials Library](https://developer.hashicorp.com/tutorials/library?product=vault).
+For more information about working with the HashiCorp Vault, see
+the [HashiCorp Vault Documentation](https://www.vaultproject.io/) and [Tutorials Library](https://developer.hashicorp.com/tutorials/library?product=vault).
 {{< /hint >}}
 
-## Setup Information
+## Set Up Information
 
-Vault uses the following Oracle Cloud Infrastructure (OCI) services when running in **Production** mode. When running in **Development** mode, only the Oracle Container Engine for Kubernetes (OKE) is used.
+Vault uses the following Oracle Cloud Infrastructure (OCI) services when running in **Production** mode. When running in **Development** mode, only the
+OCI Container Engine for Kubernetes (OKE) is used.
 
 - [Object storage](https://docs.oracle.com/en-us/iaas/Content/Object/home.htm) for storing Vault data.
 - [OCI Vault](https://docs.oracle.com/en-us/iaas/Content/KeyManagement/home.htm) to automatically unseal the Vault.
-- [Oracle Container Engine for Kubernetes](https://docs.oracle.com/en-us/iaas/Content/ContEng/home.htm#) for running the Vault server.
+- [OCI Container Engine for Kubernetes](https://docs.oracle.com/en-us/iaas/Content/ContEng/home.htm#) for running the Vault server.
 
-When running in **Production** mode, the Vault is [unsealed](https://developer.hashicorp.com/vault/docs/configuration/seal/ocikms) using the OCI Key Management Service (KMS) key. The `root` token can be accessed using the `kubectl` command. The `root` token in **Development** mode is `root`.
+When running in **Production** mode, the Vault is [unsealed](https://developer.hashicorp.com/vault/docs/configuration/seal/ocikms) using the OCI Key Management
+Service (KMS) key. The `root` token can be accessed using the `kubectl` command-line interface. The `root` token in **Development** mode is `root`.
 
 The following Vault services are enabled during deployment. Other services can be enabled using the `vault` command and the web user interface.
 
@@ -54,7 +60,9 @@ The following Vault services are enabled during deployment. Other services can b
 
 ### Accessing the Root Token Production Mode
 
-Root tokens have the root policy attached to them. Root tokens can do anything in Vault. Root tokens are useful in **Development** mode but should be restricted in **Production** mode. In fact, the Vault team recommends that root tokens are only used for initial setup. Be sure to save the initial root token in a secure way. For example:
+Root tokens have the root policy attached to them. Root tokens can do anything in Vault and are useful in **Development** mode but should be restricted
+in **Production** mode. In fact, the Vault team recommends that root tokens only be used for the initial set up. Be sure to save the initial root token in a
+secure way. For example:
 
 ```shell
 kubectl get secret vault-root-token -n vault --template="{{index .data \"root.token\" | base64decode}}"
@@ -66,7 +74,8 @@ The root token is set to `root` in **Development** mode. There are no recovery k
 
 ### Accessing Vault Recovery Keys Production Mode
 
-Vault is configured to automatically unseal (auto unseal) using OCI Vault. Initializing with auto unseal creates five recovery keys that are stored in K8s Secrets. They **MUST** be retrieved and stored in a second location.
+Vault is configured to automatically unseal (auto unseal) using OCI Vault. Initializing with auto unseal creates five recovery keys that are stored
+in K8s Secrets. They **MUST** be retrieved and stored in a second location.
 
 To extract the five recovery keys, use the following commands:
 
@@ -96,7 +105,8 @@ To extract the five recovery keys, use the following commands:
 
 2. Test access to the Vault.
 
-    [Vault Documentation](https://developer.hashicorp.com/vault/docs) contains all of the commands that you can use with the Vault CLI. For example, this command returns the current status of Vault:
+    [Vault Documentation](https://developer.hashicorp.com/vault/docs) contains all of the commands that you can use with the Vault CLI. For example, this
+	command returns the current status of Vault:
 
     ```shell
     kubectl exec pod/vault-0 -n vault -it -- vault status
@@ -125,7 +135,9 @@ To extract the five recovery keys, use the following commands:
 
 3. Get the token and log in to the Vault.
 
-    To interact with the Vault in **Production** mode, you need to log in using a token that is stored in a K8s Secret. Get the token by running the following command. The output is the root token. It is **VERY IMPORTANT** that the token is saved in multiple places. Loosing the token can result in loss of access to the Vault. In **Development** mode the root token is `root`.
+    To interact with the Vault in **Production** mode, you need to log in using a token that is stored in a K8s Secret. Get the token by running the
+	following command. The output is the root token. It is **very important** that the token is saved in multiple places. Losing the token can result in
+	loss of access to the Vault. In **Development** mode, the root token is `root`.
 	
 	Get the token:
 
@@ -139,7 +151,9 @@ To extract the five recovery keys, use the following commands:
     kubectl exec pod/vault-0 -n vault -it -- vault login
     ```
 
-    The following is sample output from logging in as the `root` user which should only be done during the initial set up. As an administrator, you **must** generate separate tokens and access control lists (ACLs) for the users that need access to the Vault. See [Vault Documentation](https://developer.hashicorp.com/vault/docs). For example:
+    The following is sample output from logging in as the `root` user which should only be done during the initial set up. As an administrator, you **must**
+	generate separate tokens and access control lists (ACLs) for the users that need access to the Vault.
+	See [Vault Documentation](https://developer.hashicorp.com/vault/docs). For example:
 
     ```text
     Key                  Value
@@ -153,9 +167,7 @@ To extract the five recovery keys, use the following commands:
     policies             ["root"]
     ```
 
-4. Display the enabled secret engines.
-
-    To display the enabled secrets engines, process this command:
+4. To display the enabled secret engines, process this command:
 
     ```shell
     kubectl exec pod/vault-0 -n vault -it -- vault secrets list
@@ -172,9 +184,7 @@ To extract the five recovery keys, use the following commands:
     sys/          system       system_df5c39a8       system endpoints used for control, policy and debugging
     ```
 
-5. Display the enabled authentication methods.
-
-    To display the enabled authentication methods, process this command:
+5. To display the enabled authentication methods, process this command:
 
     ```shell
     kubectl exec pod/vault-0 -n vault -it -- vault auth list
@@ -191,9 +201,7 @@ To extract the five recovery keys, use the following commands:
     userpass/      userpass      auth_userpass_afb2fb02      n/a
     ```
 
-6. Create a secret.
-
-    Create a secret at path `kv-v2/customer/acme` with a `customer_name` and a `customer_email`. For example:
+6. Create a secret at path `kv-v2/customer/acme` with a `customer_name` and a `customer_email`. For example:
 
     ```shell
     kubectl exec pod/vault-0 -n vault -it -- vault kv put -mount=kv-v2 \ 
@@ -216,9 +224,7 @@ To extract the five recovery keys, use the following commands:
     version            1
     ```
 
-7. Get a secret.
-
-    Get the created secret:
+7. Retrieve the created secret:
 
     ```shell
     kubectl exec pod/vault-0 -n vault -it -- vault kv get -mount=kv-v2 customer/acme
@@ -246,9 +252,12 @@ To extract the five recovery keys, use the following commands:
     customer_name    ACME Inc.
     ```
 
-For more information about the Key/Value secrets engine, see the [Key/Value Documentation](https://developer.hashicorp.com/vault/docs/secrets/kv/kv-v2) and [Versioned Key/Value Secrets Engine Tutorial](https://developer.hashicorp.com/vault/tutorials/secrets-management/versioned-kv).
+For more information about the Key/Value secrets engine, see the [Key/Value Documentation](https://developer.hashicorp.com/vault/docs/secrets/kv/kv-v2)
+and [Versioned Key/Value Secrets Engine Tutorial](https://developer.hashicorp.com/vault/tutorials/secrets-management/versioned-kv).
 
 ## Accessing the Vault Using the Web User Interface
+
+To access the Vault, process these steps:
 
 1. Expose the Vault web user interface (UI) using this command:
 
@@ -258,7 +267,9 @@ For more information about the Key/Value secrets engine, see the [Key/Value Docu
 
 2. Get the root token.
 
-    To interact with the Vault in **Production** mode, you need to log in using a token that is stored in a K8s Secret. Get the token by running the following command. The output is the root token. It is **VERY IMPORTANT** that the token is saved in multiple places. Loosing the token can result in loss of access to the Vault. In **Development** mode, the root token is `root`. For example:
+    To interact with the Vault in **Production** mode, you need to log in using a token that is stored in a K8s Secret. Get the token by running the
+	following command. The output is the root token. It is **very important** that the token is saved in multiple places. Losing the token can result in
+	loss of access to the Vault. In **Development** mode, the root token is `root`. For example:
 
     ```shell
     kubectl get secret root-token -n vault --template="{{index .data \"root.token\" | base64decode}}"
@@ -270,9 +281,10 @@ For more information about the Key/Value secrets engine, see the [Key/Value Docu
     {{< img name="vault-login" size="medium" lazy=false >}}
     <!-- spellchecker-enable -->
 
-    Log in using the root token. As an administrator, you **must** generate separate tokens and access control lists (ACLs) for the users that need access to the Vault. See [Vault Documentation](https://developer.hashicorp.com/vault/docs).
+    Log in using the root token. As an administrator, you **must** generate separate tokens and access control lists (ACLs) for the users that need
+	access to the Vault. See [Vault Documentation](https://developer.hashicorp.com/vault/docs).
 
-    You are presented with the Home screen showing the installed secret engines.
+    You are presented with the Home screen showing the installed secret engines. For example:
 
     <!-- spellchecker-disable -->
     {{< img name="vault-home" size="medium" lazy=false >}}
@@ -280,25 +292,25 @@ For more information about the Key/Value secrets engine, see the [Key/Value Docu
 
 4. Create a Key/Value secret.
 
-    * Click on the `k2-v2` link on the Home page.
+    a. Click on the `k2-v2` link on the Home page:
 
       <!-- spellchecker-disable -->
       {{< img name="vault-kv-v2-home" size="medium" lazy=false >}}
       <!-- spellchecker-enable -->
 
-    * Click on the `Create Secret` link.
+    b. Click on the `Create Secret` link:
 
       <!-- spellchecker-disable -->
       {{< img name="vault-create-secret" size="medium" lazy=false >}}
       <!-- spellchecker-enable -->
 
-    * Create a secret.
+    c. Create a secret:
 
       <!-- spellchecker-disable -->
       {{< img name="vault-secret" size="medium" lazy=false >}}
       <!-- spellchecker-enable -->
 
-    * View the secret content by clicking on the eye icon for each value.
+    d. View the secret content by clicking on the eye symbol for each value:
 
       <!-- spellchecker-disable -->
       {{< img name="vault-show-secret" size="medium" lazy=false >}}
