@@ -1,3 +1,6 @@
+---
+title: OL8
+---
 # On-Premises Installation - Oracle Linux 8 (x86)
 
 This is an example of installing on a Oracle Linux 8 desktop.
@@ -125,7 +128,7 @@ Assuming the source was unzip'ed to `~/obaas`, as the `obaas` user, run: `ansibl
 
 ## Notes
 
-## config-server and obaas-admin Pod Failures
+### config-server and obaas-admin Pod Failures
 
 The pods in the `config-server` and `obaas-admin` namespaces rely on the database that is created in the `oracle-database-operator-system`.  During initial provisioning these pods will start well before the database is available resulting in initial failures.  They will resolve themselves once the database becomes available.
 

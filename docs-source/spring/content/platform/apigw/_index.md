@@ -27,19 +27,13 @@ resources:
     title: "APISIX Routes Step5"
 ---
 
-[Apache APISIX](https://apisix.apache.org) is an open source cloud native API platform that supports the full lifecycle of API management including publishing, traffic management, deployment strategies, and circuit breakers.
+[Apache APISIX](https://apisix.apache.org) is an open-source cloud native API platform that supports the full lifecycle of API management including publishing,
+traffic management, deployment strategies, and circuit breakers.
 
 ## Deploy and Secure Sample Application APIs using Apache APISIX
 
-Oracle Backend for Spring Boot deploys Apache APISIX Gateway and Dashboard in the `apisix` namespace. The gateway is exposed through the external load balancer and ingress controller.  To access the Apache APISIX Dashboard, you must use the `kubectl port-forward` command to create a secure channel to `service/apisix-dashboard`.
-
-```shell
-kubectl --namespace apisix get all
-```
-
-<!-- spellchecker-disable -->
-{{< img name="obaas-apisix-k8s" size="medium" lazy=false >}}
-<!-- spellchecker-enable -->
+Oracle Backend for Spring Boot deploys APISIX Gateway and Dashboard in the `apisix` namespace. The gateway is exposed through the external load balancer and
+ingress controller.  To access the APISIX Dashboard, you must use the `kubectl port-forward` command to create a secure channel to `service/apisix-dashboard`.
 
 1. To expose the Apache APISIX Dashboard using `port-forward`, run this command:
 
@@ -67,28 +61,31 @@ To expose your application, create a "route" in the Apache APISIX API Gateway by
 
 1. Create a route to the service. For example:
 
-    a. In the Apache APISIX Dashboard, click on the **Routes** option in the menu on the left side.
+    a. In the APISIX Dashboard, click on the **Routes** option in the menu on the left hand side.
 
         <!-- spellchecker-disable -->
         {{< img name="obaas-apisix-routes" size="medium" lazy=false >}}
         <!-- spellchecker-enable -->
 
-    b. Click on **Create** to create a new route.
+    b. Click **Create** to create a new route.
     
 	c. Fill out the necessary details (anything not mentioned here can be left at the default value). For example, for the "slow service"
-       to be included in the [Sample Applications](../../sample-apps), provide these details:
+       to be included in the [sample apps](../../sample-apps), provide these details:
+	   
         * name = slow
         * path = /fruit*
         * method = get, options
         * upstream type = service discovery
         * discovery type = eureka
-        * service name = SLOW     (note that this is case sensitive, this is the key from the Eureka dashboard)
+        * service name = SLOW (note that this is case sensitive, this is the key from the Eureka dashboard)
 
-        **NOTE:** The API Gateway is pre-configured with both "Eureka" and "Kubernetes" discovery types. For Eureka, the service name is the key used to deploy the service in Eureka, which is normally the value from `spring.application.name` in the Spring Boot configuration file (`src/main/resources/application.yaml`), in uppercase characters. For Kubernetes, the service name is in the format `namespace/service:port` where:
-                  *	`namespace` is the Kubernetes namespace in which the Spring Boot application is deployed
-                  * `service` is the name of the Kubernetes service for that application
-				  * `port` is the name of the port in that service. 
-				  If you deployed your Spring Boot application with the Oracle Backend for Spring Boot CLI, the port name is `spring`. For example, an application called `slow-service` deployed in the `my-apps` namespace would be `my-apps/slow-service:spring`.
+        **NOTE:** The API Gateway is pre-configured with both "Eureka" and "Kubernetes" discovery types.  For Eureka, the service name is the key used to
+		          deploy the service in Eureka, which is normally the value from `spring.application.name` in the Spring Boot configuration
+				  file (`src/main/resources/application.yaml`), in uppercase characters.  For Kubernetes, the service name is in the
+				  format `namespace/service:port` where `namespace` is the Kubernetes namespace in which the Spring Boot application is deployed, `service` is
+				  the name of the Kubernetes service for that application, and `port` is the name of the port in that service.  If you deployed your Spring Boot
+				  application with the Oracle Backend for Spring Boot CLI, the port name will be `spring`.  For example, an application called `slow-service` deployed
+				  in the `my-apps` namespace would be `my-apps/slow-service:spring`.
 
         <!-- spellchecker-disable -->
         {{< img name="obaas-apisix-routes-step1" size="medium" lazy=false >}}
@@ -115,13 +112,13 @@ To expose your application, create a "route" in the Apache APISIX API Gateway by
 
 2. Test a route to the service. For example:
 
-    a. Get the Apache APISIX Gateway external IP using this command:
+    a. Get the APISIX Gateway external IP using this command:
 
         ```shell
         kubectl -n ingress-nginx get svc ingress-nginx-controller
         ```
 
-    b. Call the API using the Apache APISIX Gateway address plus path. For example:
+    b. Call the API using the APISIX Gateway address plus path. For example:
 
         ```shell
         curl http://APISIX_IP/fruit

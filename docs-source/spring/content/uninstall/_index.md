@@ -11,8 +11,9 @@ resources:
 
 ---
 
-To remove the Oracle Backend for Spring Boot, navigate to **Developer Services** then **Resource Manager - Stacks** in the OCI Console main menu. Ensure
-that you are in the correct region and compartment where you installed the OBaaS.
+To remove the Oracle Backend for Spring Boot, navigate to **Developer Services** then **Resource Manager - Stacks** in the Oracle Cloud Infrastructure (OCI) Console
+main menu. Ensure
+that you are in the correct region and compartment where you installed the Oracle Backend as a Service (OBaaS).
 
 Click on the link to open the detailed view for the Oracle Backend for Spring Boot instance and click on **Destroy** to clean up resources. For example:
 

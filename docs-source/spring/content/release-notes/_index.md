@@ -31,7 +31,7 @@ There were no component deprecations or removals.
 
 Notes:
 
-* Improvements to OCI installation process.
+* Improvements to Oracle Cloud Infrastructure (OCI) installation process.
 * Continued incremental improvements to Oracle Database Adapter for Parse Server.
 
 No components were added.
@@ -49,9 +49,9 @@ There were no component deprecations or removals.
 
 Notes:
 
-* Oracle Backend for Spring Boot now includes the option to install in a multicloud (OCI/Azure) environment.
-* The Oracle Database Operator for Kubernetes is bound to the existing Oracle Autonomous Database (ADB) created by infrastructure as code (IaC) in an all OCI installation and provisions the ADB in the multicloud installation.
-* Improvements to On-Premises and Desktop installation process.
+* Oracle Backend for Spring Boot now includes the option to install in a Multicloud (OCI/Azure) environment.
+* The Oracle Database Operator for Kubernetes is bound to the existing Oracle Autonomous Database (ADB) created by infrastructure as code (IaC) in an all-OCI installation and provisions the ADB in the Multicloud installation.
+* Improvements to On-Premises and Desktop installation processes.
 
 The following components were added:
 
@@ -82,7 +82,7 @@ The following components were added:
 | Oracle Database Operator for Kubernetes | 0.6.1 | Helps reduce the time and complexity of deploying and managing Oracle Databases.     |  
 | Parse Server                 | 5.2.7        | Provides backend services for mobile and web applications.                               |
 | Parse Dashboard              | 5.0.0        | Uses a web user interface for managing Parse Server.                                            |
-| Oracle Database Adapter for Parse Server | 0.2.0    | Enables Parse Server to store data in Oracle Database.                           |
+| Oracle Database Adapter for Parse Server | 0.2.0    | Enables the Parse Server to store data in an Oracle database.                           |
 
 The following components were updated:
 
@@ -91,7 +91,7 @@ The following components were updated:
 | Oracle Backend for Spring Boot CLI | 0.2.3   | 0.1.0               |
 | cert-manager                 | 1.11.0        | 1.10.1              |
 | NGINX Ingress Controller     | 1.6.4         | 1.5.1               |
-| Jaeger tracing               | 1.39.0        | 1.37.0              |
+| Jaeger Tracing               | 1.39.0        | 1.37.0              |
 | Apache APISIX                       | 3.1.1         | 2.15.1              |
 | Spring Boot Eureka service registry      | 2.0.1         | 2021.0.3            |
 
@@ -103,7 +103,7 @@ The following components were added:
 
 | Component                    | Version       | Description                                                                             |
 |------------------------------|---------------|-----------------------------------------------------------------------------------------|
-| Oracle Transaction Manager for Microservices | 22.3.1 | Manages distributed transactions to ensure consistency across microservices.   |
+| Oracle Transaction Manager for Microservices | 22.3.1 | Manages distributed transactions to ensure consistency across Microservices.   |
 | Strimzi - Apache Kafka Operator       | 0.33.1        | Manages Apache Kafka clusters.                                                        |
 | Apacha Kafka                 | 3.2.0 - 3.3.2 | Allows distributed event streaming.                                                            |
 
@@ -117,7 +117,7 @@ The following components were added:
 |------------------------------|--------------|------------------------------------------------------------------------------------------|
 | HashiCorp Vault              | v1.11.3      | Provides a way to store and tightly control access to sensitive data.                    |
 | Oracle Backend for Spring Boot CLI | 0.1.0  | Command-line interface to manage application deployment and configuration.               |
-| Netflix Conductor OSS        | 3.13.2       | Provides workflow orchestration for microservices.                                       |
+| Netflix Conductor OSS        | 3.13.2       | Provides workflow orchestration for Microservices.                                       |
 | On-premises installer        | 0.1.0        | Allows installation of a self-hosted stack.                                              |
 
 There were no deprecations or removals.
@@ -131,11 +131,11 @@ This release includes the following components:
 | cert-manager                 | 1.10.1       | Automates the management of certificates.                                                |
 | NGINX Ingress Controller     | 1.5.1        | Provides traffic management solution for cloud native applications in Kubernetes.        |
 | Prometheus                   | 2.40.2       | Provides event monitoring and alerting.                                                  |
-| Prometheus Operator          | 0.60.1       | Provides management for Prometheus monitoring tools.                                     |
+| Prometheus operator          | 0.60.1       | Provides management for Prometheus monitoring tools.                                     |
 | OpenTelemetry Collector      | 0.66.0       | Collects process and export telemetry data.                                              |
 | Grafana                      | 9.2.5        | Examines, analyzes, and monitors metrics.                                                |
 | Jaeger Tracing               | 1.37.0       | Provides a distributed tracing system for monitoring and troubleshooting distributed systems.       |
 | Apache APISIX                | 2.15.1       | Provides full lifecycle API Management.                                                  |
 | Spring Boot Admin server     | 2.7.5        | Manages and monitors Spring Boot applications.                                           |
 | Spring Cloud Config server   | 2.7.5        | Provides server-side support for externalized configuration.                             |
-| Eureka service registry      | 2021.0.3     | Provides service discovery capabilities                                                  |
+| Spring Boot Eureka service registry      | 2021.0.3     | Provides service discovery capabilities                                                  |

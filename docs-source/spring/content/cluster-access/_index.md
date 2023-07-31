@@ -6,11 +6,11 @@ resources:
     title: "OCI Cloud Shell icon"
 ---
 
-The Oracle Backend for Spring Boot setup creates a Kubernetes cluster where the server and dashboard components are deployed.  At the end of setup, in the
-log for the apply job, you are provided with a command to create a Kubernetes configuration file to access that cluster.
+The Oracle Backend for Spring Boot setup creates a Kubernetes cluster where the server and dashboard components are deployed.  At the end of set up, you are
+provided with a command to create a Kubernetes configuration file to access that cluster in the log for the apply job.
 
 {{< hint type=[tip] icon=gdoc_check title=Tip >}}
-For more information about working with the Kubernetes cluster, see [Setting Up Cluster Access](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm#localdownload) in the OCI documentation.
+For more information about working with the Kubernetes cluster, see [Setting Up Cluster Access](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm#localdownload) in the Oracle Cloud Infrastructure documentation.
 {{< /hint >}}
 
 </br>
@@ -24,7 +24,7 @@ kubeconfig_cmd = "oci ce cluster create-kubeconfig
                     --kube-endpoint PUBLIC_ENDPOINT"
 ```
 
-**NOTE:** The generated `kubeconfig` file will works if you are using the `DEFAULT` profile in your Oracle Cloud Infrastructure (OCI) CLI configuration file. If you are using a different OCI CLI profile, you must add `--profile <PROFILE-NAME>` to the command. For example:
+**NOTE:** The generated `kubeconfig` file works if you are using the `DEFAULT` profile in your Oracle Cloud Infrastructure (OCI) CLI configuration file. If you are using a different OCI CLI profile, you must add `--profile <PROFILE-NAME>` to the command. For example:
 
 ```txt
 kubeconfig_cmd = "oci ce cluster create-kubeconfig

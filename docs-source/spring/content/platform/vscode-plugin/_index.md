@@ -8,8 +8,8 @@ Oracle Backend for Spring Boot Visual Studio Code (VS Code) plugin is an extensi
 platform. This plugin inspects the content of an Oracle Backend for Spring Boot deployment, in terms of applications, services, and related
 configurations. It simplifies access to the installed platform services (like Grafana, Spring, Apache APISIX, Eureka, and Jaeger) creating `ssh` tunnels
 on-demand and providing access to their respective web administrator consoles. It adds credentials to access and bind services to the Oracle Autonomous
-Database included in the Oracle Backend for Spring Boot deployment. This plug-in replicates the functionalities available in [OBaas CLI](../../development/cli)
-and simplifies the access to Oracle Backend for Spring Boot deployments from an integrated development environment (IDE) like VS Code.
+Database included in the Oracle Backend for Spring Boot deployment. This plugin replicates the functionalities available in [OBaas CLI](../../development/cli)
+and simplifies access to Oracle Backend for Spring Boot deployments from an integrated development environment (IDE) like VS Code.
 
 Oracle Free Use Terms and Conditions [License](https://oracle.gallerycdn.vsassets.io/extensions/oracle/oracledevtools/21.5.0/1662759024144/Microsoft.VisualStudio.Services.Content.License)
 
@@ -18,48 +18,48 @@ Oracle Free Use Terms and Conditions [License](https://oracle.gallerycdn.vsasset
 You must have already installed and configured the following as required for the Oracle Backend for Spring Boot [set up](../../setup/):
 
 * Kubernetes command-line interface (`kubectl`)
-* Oracle Cloud Infrastructure command-line interface (CLI)
+* Oracle Cloud Infrastructure command-line interface ('oractl')
 
 ## Installation
 
-* Download the plug-in from [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0).
+1. Download the plug-in from [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0).
 
-* On the VS Code left menu bar, click on **Extensions**:
+2. On the VS Code left menu bar, click on the **Extensions** symbol:
 
     ![Extensions list](./images/extensions.jpg)
 
-* From the upper right menu, choose **Install from VSIX...** and upload plug-in binaries previously downloaded:
+3. From the upper right menu, select **Install from VSIX...** and upload plugin binaries that were previously downloaded:
 
     ![Extensions list](./images/install.jpg)
 
-* Restart VS Code to make the plugin fully operational.
+4. Restart VS Code to make the plugin fully operational.
 
-* If you do not see the plugin in the left bar, with the Oracle logo (as shown here), click on **Additional Views** to select the **eBaaS Explorer**:
+5. If you do not see the plugin in the left menu bar, with the Oracle logo (as shown here), click on **Additional Views** to select the **eBaaS Explorer**:
 
     ![Additional](images/additional.jpg)
 
 ## Using VS Code Plugin
 
-Selecting the plugin from the left plugin menu bar, the Oracle Backend for Spring Boot VS Code plugin asks you to specify the full path for the
+After selecting the plugin from the left plugin menu bar, the Oracle Backend for Spring Boot VS Code plugin asks you to specify the full path for the
 Kubernetes configuration file. For example:
 
 ![kubeConfig](./images/getKubeConfig.jpg)
 
 By default, it shows the path in the user's Home directory `.kube/config` in which `kubectl` stores all of the information regarding the configured
-K8s clusters. You could set the full path of another Kubernetes configuration file. If the file is correctly loaded, the plugin shows the list of contexts
+K8s clusters. You can set the full path of another Kubernetes configuration file. If the file is correctly loaded, the plugin shows the list of contexts
 available from which you can select one:
 
 ![kubeContextList](./images/choseContext.jpg)
 
-If successful, you should see a tree view with one node and the context chosen. For example:
+If successful, you should see a tree view with one node and the selected context. For example:
 
 ![onenode](./images/onenode.jpg)
 
-If the file path has not been correctly set, it shows an error message. For example:
+If the file path has not been correctly set, it returns an error message. For example:
 
 ![kubeFileError](./images/reloadWindowError.jpg)
 
-To restart the plugin and proceed again in the Kubernetes configuration file setting, process a window reload in the command palette:
+To restart the plugin and proceed setting the Kubernetes configuration file, process a window reload in the command palette:
 
 ![kubeReload](./images/reloadWindow.jpg)
 
@@ -68,7 +68,7 @@ To restart the plugin and proceed again in the Kubernetes configuration file set
 Until you create a dedicated `ssh` tunnel to the Kubernetes cluster, and if you do not connect to Oracle Backend for Spring Boot adminstrative
 services, you cannot browse resources included in the Oracle Backend for Spring Boot deployment. To do this, follow these steps:
 
-1. Select the cluster and click on the system setup icon to set the credentials. For example:
+1. Select the cluster and click on the system setup symbol to set the credentials. For example:
 
    ![Credentials](./images/credentials.jpg)
 
@@ -84,11 +84,12 @@ services, you cannot browse resources included in the Oracle Backend for Spring 
 
    ![confirmCredentials](./images/confirm.jpg)
 
-   **NOTE:** If you do not execute these steps and try to expand the Kubernetes context, you receive this message:
+   **NOTE:** If you do not process these steps and try to expand the Kubernetes context, you receive this message:
 
    ![setCredentials](./images/oractlCred.jpg)
 
-2. Select the cluster again and right-click on **Create tunnel**. VS Code opens a new terminal that tries to open a tunnel to the Kubernetes cluster on a local port, starting from 8081. For example:
+2. Select the cluster again and right-click on **Create tunnel**. VS Code opens a new terminal that tries to open a tunnel to the Kubernetes cluster on a
+local port, starting from `8081`. For example:
 
    ![Tunnel](./images/tunnel.jpg)
 
@@ -96,49 +97,52 @@ services, you cannot browse resources included in the Oracle Backend for Spring 
 
    ![okTunnel](./images/oktunnel.jpg)
 
-   **NOTE:** If the K8s cluster is not related to an Oracle Backend for Spring Boot deployment, the tunnel creation fails. In this case, process a window reload to chose another cluster from the command palette. If you have any problem with the connection, start another tunnel. The plugin tries to connect to the cluster on another local port.
+   **NOTE:** If the K8s cluster is not related to an Oracle Backend for Spring Boot deployment, the tunnel creation fails. In this case, process a window
+             reload to chose another cluster from the command palette. If you have any problem with the connection, start another tunnel. The plugin tries to
+			 connect to the cluster on another local port.
 
-3. Select the cluster again and right-click **Connect**. This creates a session with credentials set at the first step.
+3. Select the cluster again and right-click **Connect**. This creates a session with the credentials set up in the first step.
 
 ### Explore Resources
 
-When the steps to create the tunnel are complete and you are connected to the backend, it is possible to expand or refresh the tree related to the deployment. For example:
+When the steps to create the tunnel are complete and you are connected to the backend, it is possible to expand or refresh the tree related to the
+deployment. For example:
 
    ![Browse](./images/browse.jpg)
 
 You see four top classes of resources that can be expanded in underlying items:
 
 * **applications** : The list of applications deployed and the holding services.
-* **ADB database** : In this release, there is one Autonomous Database in which the configuration and schema related to deployed services are stored.
+* **ADB database** : In this release, there is one Autonomous Database (ADB) in which the configuration and schema related to deployed services are stored.
 * **platformServices** : The list of Oracle Backend for Spring Boot deployed services, like Grafana, Spring, Apache APISIX, Eureka, and Jaeger.
 * **oBaasConf** : The list of keys defined by the application, stored in the Autonomous Database, that are provisioned and available to share configuration information among services in each application.
 
-Let's look at the operations that you can do on each item of browse tree.
-
 ## Applications
 
-Open the list by clicking on the arrow to the left of **applications**:
+Let's look at the operations that you can do on each item of the browse tree.
+
+1. Open the list by clicking on the arrow to the left of **applications**:
 
    ![Applications](./images/applications.jpg)
 
-Expand the application to see the list included services:
+2. Expand the application to see the list of included services:
 
    ![Application](./images/application.jpg)
 
-At the root level, right-click on **applications**, and select **Add application** to create a new application. A VS Code command palette appears, prompting
-for the application name that is to be created. For example:
+3. At the root level, right-click on **applications**, and select **Add application** to create a new application. A VS Code command palette appears, prompting
+   for the application name that is to be created. For example:
 
    ![AppName](./images/appName.jpg)
 
-To show the updated list, click on the **Refresh** symbol to the right of **applications**. For example:
+4. To show the updated list, click on the **Refresh** symbol to the right of **applications**. For example:
 
    ![Refresh](./images/refreshApplications.jpg)
 
-On each application, you can **Add service -> upload .jar** or **Delete Application**.
+5. On each application, you can **Add service -> upload .jar** or **Delete Application**.
 
 ### Add Service
 
-The **Add service** command uploads a Spring Boot microservice to an application. Click **Add service -> upload .jar** for a specific application. For example:
+The **Add service** command uploads a Spring Boot Microservice to an application. Click **Add service -> upload .jar** for a specific application. For example:
 
    ![upload](./images/uploadJar.jpg)
 
@@ -154,15 +158,15 @@ The VS Code command palette prompts for the required the parameters, in this ord
 
     ![bind](./images/bindigDBpwd.jpg)
 
-5.  **Spring Binding prefix** (Default: spring.datasource)
-6.  **Image Version** (Default: 0.1)
-7.  **Java image** (Default: ghcr.io/graalvm/jdk:ol7-java17-22.2.0)
-8.  **Redeploy** (Default: false)
-9.  **Add Health probe** (Default: false)
-10. **Service Port** (Default: 8080)11.
-11. **Service Profile** (Default: obaas)
+5.  **Spring Binding prefix** (Default: `spring.datasource`)
+6.  **Image Version** (Default: `0.1`)
+7.  **Java image** (Default: `ghcr.io/graalvm/jdk:ol7-java17-22.2.0`)
+8.  **Redeploy** (Default: `false`)
+9.  **Add Health probe** (Default: `false`)
+10. **Service Port** (Default: `8080`)
+11. **Service Profile** (Default: `obaas`)
 
-At the end of the parameters collection, the binding and upload process that generates a sequence of messages showing the status, will start. These
+At the end of the parameters collection, the binding and upload process that generates a sequence of messages showing the status starts. These
 messages end with "Service deployed successfully!" or "Deploy failed". The size and network constraints determine the amount of time for the process to terminate.
 
 ### Delete Service
@@ -194,17 +198,17 @@ console of each platform service.
 
    ![Apisix](./images/grafana.jpg)
 
-For example, by right-clicking on **grafana console**, a tunnel opens with a message and a button to open a web browser on the administrator's Grafana
+For example, by right-clicking on **grafana monitor**, a tunnel opens with a message and a button to open a web browser on the administrator's Grafana
 console. For example:
 
    ![GrafanaWeb](./images/grafana-browser.jpg)
 
-**NOTE:** If the port is already used or the connection times out, open another `ssh` tunnel. It will automatically open on another port.
+**NOTE:** If the port is already used or the connection times out, open another `ssh` tunnel. It automatically opens on another port.
 
 ## oBaasConf Configuration
 
-With Oracle Backend for Spring Boot, developers can store the metadata and configurations that are useful to share information among pods in an
-application. The VS Code plug-in can browse the content of this Key/Value store and add, update and delete keys as needed.
+With Oracle Backend for Spring Boot, developers can store the metadata and configurations between pods in an
+application. The VS Code plugin can browse the content of this Key/Value store and add, update and delete keys as needed.
 Expand **oBaasConf configuration** to see the applications that are deployed and, expanding each of them, the Key/Value pair. For example:
 
    ![Configurations](./images/configurations.jpg)
