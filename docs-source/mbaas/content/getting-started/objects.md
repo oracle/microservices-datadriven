@@ -8,9 +8,9 @@ cannot change that field type while objects using it exist.
 
 ## Creating an Object
 
-The most basic operation you can do is to create a new object in the database. The following examples use the Representational State Transfer (REST) API to access
+The most basic operation that you can do is to create a new object in the database. The following examples use the Representational State Transfer (REST) API to access
 the Parse Server. To create
-an object, perform an HTTP POST to the Parse endpoint `/parse/classes/` and append the name of the class of the object that you want to create. In this example, the
+an object, perform an HTTP `POST` to the Parse endpoint `/parse/classes/` and append the name of the class of the object that you want to create. In this example, the
 object is `GameScore`.  The content is provided in JavaScript Object Notation (JSON) format. Provide the correct `APPLICATION_ID` and update the endpoint address to match
 your environment. For example:
 
@@ -33,7 +33,7 @@ The `objectId` is the unique identifier for a document in the collection.
 
 ## Retrieving an Object 
 
-To retrieve the newly created object, use the HTTP GET API as shown in the following example.  Append the `objectId` to the end of the URL. Update the command
+To retrieve the newly created object, use the HTTP `GET` API as shown in the following example.  Append the `objectId` to the end of the URL. Update the command
 with your `APPLICATION_ID` and endpoint address. For example:
 
 ```
@@ -53,7 +53,7 @@ curl -X GET \
 
 **NOTE:** You can use any arbitrary string as your `APPLICATION_ID`. These are used by your clients to authenticate with the Parse Server. During creation of
 the Oracle Backend for Parse Platform environment, you provided an application ID as a configuration option. If any call to the Parse Server does not use a
-valid application ID, the call is rejected with this error message:
+valid application ID, the call is rejected and returns this error message:
 
 ```
 {"error":"unauthorized"}
@@ -63,5 +63,4 @@ valid application ID, the call is rejected with this error message:
 
 Learn more about [working with objects](https://docs.parseplatform.org/parse-server/guide/#getting-started) in the Parse Server documentation.
 
-
-
+Next, go to the [Using the Parse Dashboard](../getting-started/dashboard/) page to learn how to use the dashboard.

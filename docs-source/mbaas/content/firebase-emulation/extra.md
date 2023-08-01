@@ -2,6 +2,8 @@
 title: "Extra Parse Test Code"
 ---
 
+# Extra Parse Test Code
+
 To test the Parse API direct access from the same page, let's add a few lines of codes to the `index.html` file to show four new buttons to **Insert**, **Get** and **Update** a
 restaurant (minimum properties) in the same collection created from the Firebase-on-Parse SDK. The application logic is
 in the [`/parsef/example.js`](https://github.com/oracle/microservices-datadriven/blob/main/developer-preview/parsef/example.js) file.
@@ -38,28 +40,28 @@ in the [`/parsef/example.js`](https://github.com/oracle/microservices-datadriven
     <script src="/parsef/example.js"></script>
     <!-- ORACLE-->
     ```
-* Reload the page to view the four new buttons. Running in the background, are the Parse JS API calls for **Insert**, **Get** and **Update**, and the Firebase API to count how many restaurants are in the Parse database. For example:
+* Reload the page to view the four new buttons. Running in the background are the Parse JS API calls for **Insert**, **Get** and **Update**, and the Firebase API to count how many restaurants are in the Parse database. For example:
 
     ![Filter](../../buttons.jpg "filter page")
 	
 * Click in sequence:
 
-    * Insert Restaurant: 
+    * **Insert Restaurant**: 
 
         ![Insert](../../insert.jpg "insert")
 
-    * Get Restaurant (Note: only Name and Category have been added):
+    * **Get Restaurant** (Note: only Name and Category have been added):
 
         ![Get](../../get.jpg "get")
 
-    * Set Restaurant:
+    * **Set Restaurant**:
 
         ![Set](../../set.jpg "set")
 
-    * Get Restaurant (note that the additional field city has been added):
+    * **Get Restaurant** (note that the additional field city has been added):
 
        ![Updated](../../updated.jpg "updated")
 
 * If you click on **N° Restaurants**, you get the `size` of the restaurants based on a Firebase API call.
 
-
+Next, go to the [Implemented APIs](../firebase-emulation/scope/) page to learn more.

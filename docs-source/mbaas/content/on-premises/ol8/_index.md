@@ -1,5 +1,5 @@
 ---
-Title: Oracle Linux 8 (x86)
+Title: "Oracle Linux 8 (x86)"
 ---
 
 # On-Premises Installation - Oracle Linux 8 (x86)
@@ -30,7 +30,7 @@ sudo alternatives --set python3 /usr/bin/python3.9
 
 ### Create a Non-Root User
 
-Create a new user. While any user name can be created, the rest of the documentation refers to the non-root user as `obaas`:
+Create a new user. While any user name can be created, the rest of the documentation refers to the non-root user as `obaas`.
 
 As `root`, process these commands:
 
@@ -99,7 +99,7 @@ Use the Helper Playbook to define the infrastructure. This Playbook also:
 
 * Creates additional namespaces for the Container Registry and database.
 * Creates a private Container Registry in the Kubernetes cluster.
-* Modifies the application Microservices to be desktop compatible.
+* Modifies the Microservices application to be desktop compatible.
 
 Assuming the source was unzipped to `~/obaas`, as the `obaas` user, run this command:
 
@@ -144,3 +144,5 @@ Assuming the source was unzipped to `~/obaas`, as the `obaas` user, run this com
 If you are behind a Virtual Private Network (VPN) or proxy, click on the following URL for more details on additional tasks:
 
 https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/
+
+Next, go to the [Getting Started](../getting-started/) page to learn how to use the newly installed environment.
