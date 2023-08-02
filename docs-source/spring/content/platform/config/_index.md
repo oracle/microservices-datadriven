@@ -2,8 +2,6 @@
 title: "Configuration"
 ---
 
-# Configuration
-
 Oracle Backend for Spring Boot includes Spring Cloud Config which provides server- and client-side support for externalized
 configurations in a distributed system. The Spring Cloud Config server provides a central place to manage external properties for applications
 across all environments.
