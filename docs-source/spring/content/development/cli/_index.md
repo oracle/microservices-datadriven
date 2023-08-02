@@ -1,8 +1,11 @@
 ---
-title: Using the OBaaS CLI
+title: "OBaaS CLI"
 ---
 
-The Oracle Backend for Spring Boot offers a command-line interface (CLI), `oractl`. The CLI commands simplify the deployment of Microservices applications as well as bindings with the resources that they use.
+# Using the OBaaS CLI
+
+The Oracle Backend for Spring Boot offers a command-line interface (CLI), `oractl`. The CLI commands simplify the deployment of
+Microservices applications as well as bindings with the resources that they use.
 Download the CLI [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0).
 The platform-specific binary can be renamed to `oractl` for convenience.
 
@@ -22,7 +25,8 @@ The platform-specific binary can be renamed to `oractl` for convenience.
 
 ## Available Commands
 
-Short descriptions for the available commands can be viewed by issuing the `help` command and detailed help for any individual commands can be viewed by issuing `help [commandname]`. For example:
+Short descriptions for the available commands can be viewed by issuing the `help` command and detailed help for any individual
+commands can be viewed by issuing `help [commandname]`. For example:
 
 ```cmd
 oractl:>help
@@ -56,25 +60,26 @@ Service Commands
 oractl:>
 ```
 
-An application is a namespace encompassing related Microservices. For example, a "cloudbank" application may have "banktransfer" and "frauddetection"
-Microservices deployed within it.
+An application is a namespace encompassing related Microservices. For example, a "cloudbank" application may have "banktransfer" and
+"frauddetection" Microservices deployed within it.
 
 The `create` command results in the creation of an application namespace.
 
 The `bind` command results in the automatic creation of a database schema for a given service or user and binds the information for that schema or
-database in the environment of the Microservice.  The option of the prefix for the bound environment properties is also returned.  For example, most
+database in the environment of the Microservice. The option of a prefix for the bound environment properties is also returned. For example, most
 Spring Boot Microservices use `spring.datasource`.
 
-The `deploy` command takes `service-name`, `app-name`, and `artifact-path` as the main arguments (`image-version` and `java-version` options are also provided).
-When the `deploy` command is issued, the Microservice JAR file is uploaded to the backend and a container image is created for the JAR or Microservice, and
-various Kubernetes resources such as **Deployment** and **Service** are also created. This is all done automatically to simplify the development process and the
-management of the Microservices by the backend.
+The `deploy` command takes `service-name`, `app-name`, and `artifact-path` as the main arguments (`image-version` and `java-version` options are
+also provided). When the `deploy` command is issued, the Microservice JAR file is uploaded to the backend and a container image is created for
+the JAR or Microservice, and various Kubernetes resources such as **Deployment** and **Service** are also created. This is all done
+automatically to simplify the development process and the management of the Microservices by the backend.
 
-The `list` command can then be used show the details of the deployed Microservice.
+The `list` command shows the details of the deployed Microservice.
 
 The `config` command can also be used to add, view, update, and delete configurations managed by the Spring Cloud Config server.
 
-A common development workflow pattern is to `connect`, `change-password` (only if necessary), `create` (once per application or namespace), `config`, `bind` (only if necessary), `deploy`, and `list`.
+A common development workflow pattern is to `connect`, `change-password` (only if necessary), `create` (once per application or
+namespace), `config`, `bind` (only if necessary), `deploy`, and `list`.
 
 Further development and redeployment of the service can then be repeated issuing the `deploy` and `list` commands.
 
@@ -129,8 +134,8 @@ The following is an example development workflow using the CLI:
    ```
 
 3. Use the `bind` command to create a database schema or user for the service (if one has not already been created).
-These commands also create the Kubernetes secret and binding environment entries for the schema. These are set in the Kubernetes deployment created
-with the `deploy` command. For example:
+   These commands also create the Kubernetes secret and binding environment entries for the schema. These are set in the Kubernetes
+   deployment created with the `deploy` command. For example:
 
    ```cmd
    oractl:>help bind
@@ -163,7 +168,7 @@ with the `deploy` command. For example:
    ```
 
 4. Use the Microservice JAR `deploy` command to create, build, and push an image for the Microservice and create the necessary deployment, service,
-and secret Kubernetes resources for the Microservice. For example:
+   and secret Kubernetes resources for the Microservice. For example:
 
    ```cmd
    oractl:>help deploy
@@ -267,8 +272,8 @@ and secret Kubernetes resources for the Microservice. For example:
    }name:myserv  kind:null
    ```
 
-6. Use the `config` command to view and update the configuration managed by the Spring Cloud Config server. More information about the configuration server
-can be found at this link:
+6. Use the `config` command to view and update the configuration managed by the Spring Cloud Config server. More information about the
+   configuration server can be found at this link:
 
 - [Spring Config Server](../../platform/config/)
 
@@ -317,7 +322,8 @@ can be found at this link:
 
 7. Use the `config add` command to add the application configuration to the Spring Cloud Config server using one of the two following options:
 
-   * Add a specific configuration using the set of parameters `--service-name`, `--service-label`, `--service-profile`, `--property-key`, and `--property-value`. For example:
+   * Add a specific configuration using the set of parameters `--service-name`, `--service-label`, `--service-profile`, `--property-key`,
+     and `--property-value`. For example:
 
      ```cmd
      oractl:>config add --service-name myserv --service-label 0.0.1 --service-profile default --property-key k1 --property-value value1
@@ -363,7 +369,8 @@ can be found at this link:
      } ]
      ```
 
-8. Use the `config list` command, without any parameters, to list the services that have at least one configuration inserted in the Spring Cloud Config server. For example:
+8. Use the `config list` command, without any parameters, to list the services that have at least one configuration inserted in the
+   Spring Cloud Config server. For example:
 
    ```cmd
    oractl:>config list
@@ -381,7 +388,7 @@ can be found at this link:
 
 9. Use the `config list [parameters]` command to list the parameters using parameters as filters. For example:
 
-   - `--service-name` : List all of the parameters from the specified service.
+   - `--service-name` : Lists all of the parameters from the specified service.
    - `--service-label` : Filters by label.
    - `--service-profile` : Filters by profile.
    - `--property-key` : Lists a specific parameter filter by key.
@@ -402,7 +409,7 @@ can be found at this link:
    } ]
    ```
 
-10. Use the `config update` command to update a specific configuration using the set of parameters. For example:
+10. Use the `config update` command to update a specific configuration using the set of parameters:
 
    - `--service-name`
    - `--service-label`
@@ -441,17 +448,19 @@ can be found at this link:
    } ]
    ```
 
-11. Use the `config delete` command to delete the application configuration from Spring Cloud Config server using one of the following two options:
+11. Use the `config delete` command to delete the application configuration from the Spring Cloud Config server using one of the
+    following two options:
 
-   - Delete all configurations from a specific service using the filters `--service-name`, `--service-profile` and `--service-label`. The CLI tracks how
-     many configurations are present in Spring Cloud Config server and confirms the complete deletion. For example:
+   - Delete all configurations from a specific service using the filters `--service-name`, `--service-profile` and `--service-label`. The
+     CLI tracks how many configurations are present in the Spring Cloud Config server and confirms the completed deletion. For example:
 
      ```cmd
      oractl:>config delete --service-name myserv
      [obaas] 7 property(ies) found, delete all (y/n)?:
      ```
 
-   - Delete a specific configuration using the parameters `--service-name`, `--service-label`, `--service-profile` and `--property-key`. For example:
+   - Delete a specific configuration using the parameters `--service-name`, `--service-label`, `--service-profile` and `--property-key`. For
+     example:
 
      ```cmd
      oractl:>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
@@ -472,3 +481,5 @@ can be found at this link:
      oractl:>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
      400 : "Couldn't find any property for submitted query."
      ```
+
+Next, go to the [Vault](../vault/) page to learn more.

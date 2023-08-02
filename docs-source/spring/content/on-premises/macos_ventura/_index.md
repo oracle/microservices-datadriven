@@ -1,6 +1,10 @@
-# On-Premises Installation - MacOS Ventura (x86)
+---
+title: "macOS Ventura"
+---
 
-This is an example of an installation on a MacOS Venture desktop.
+# On-Premises Installation - macOS Ventura (x86)
+
+This is a discussion of an installation on a macOS Venture desktop.
 
 Read the [On-Premises](../../on-premises) documentation and ensure that your desktop meets the minimum system requirements.
 
@@ -18,11 +22,12 @@ podman machine init --cpus 4 --disk-size 60 --memory 8192 --rootful --now
 podman system connection default podman-machine-default-root
 ```
 
-### Download the Database/ORDS Images
+### Download the Database or Oracle REST Data Services (ORDS) Images
 
-The _Desktop_ installation provisions an Oracle Database into the Kubernetes cluster.  The images must be downloaded from [Oracle's Container Registry](https://container-registry.oracle.com/) before continuing.
+The _Desktop_ installation provisions an Oracle database into the Kubernetes cluster. The images must be downloaded
+from [Oracle Cloud Infrastructure Registry (Container Registry)](https://container-registry.oracle.com/) before continuing.
 
-1. Log into Oracle's Container Registry. For example: 
+1. Log in to the Container Registry. For example: 
 
    `podman login container-registry.oracle.com`
 
@@ -30,7 +35,7 @@ The _Desktop_ installation provisions an Oracle Database into the Kubernetes clu
 
    `podman pull container-registry.oracle.com/database/enterprise:21.3.0.0`
 
-3. Pull the Oracle REST Data Services (ORDS) image. For example: 
+3. Pull the ORDS image. For example: 
 
    `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
 
@@ -64,11 +69,11 @@ source ./activate.env
 
 ### Define the Infrastructure
 
-Use the helper Playbook to define the infrastructure.  This Playbook also:
+Use the Helper Playbook to define the infrastructure. This Playbook also:
 
 * Creates additional namespaces for the Container Registry and the database.
 * Creates a private Container Registry in the Kubernetes cluster.
-* Modifies the application microservices to be desktop compatible.
+* Modifies the Microservices application to be desktop compatible.
 
 Run this command: 
 
@@ -100,7 +105,7 @@ After the images are built and pushed, the tunnel is no longer required and can 
 
 ### Deploy Oracle Backend for Spring Boot
 
-Deploy the database and microservices by running this command:
+Deploy the database and Microservices by running this command:
 
 `ansible-playbook ansible/k8s_apply.yaml -t full`
 
@@ -108,4 +113,7 @@ Deploy the database and microservices by running this command:
 
 ## VPN and Proxies
 
-If you are behind a virtual private network (VPN) or proxy, see https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/ for more details on additional tasks.
+If you are behind a virtual private network (VPN) or proxy, see https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/ for more details
+on additional tasks.
+
+Next, go to the [Oracle Linux 8 (x86)](../on-premises/ol8/) page to learn more.

@@ -1,3 +1,9 @@
+---
+title: "Setup"
+---
+
+# Setup
+
 The Oracle Backend for Parse Platform is available to install from [OCI Marketplace](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/139274906).
 
 ## Prerequisites

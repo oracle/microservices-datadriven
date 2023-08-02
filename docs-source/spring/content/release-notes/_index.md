@@ -1,6 +1,8 @@
 ---
-title: Release Notes
+title: "Release Notes"
 ---
+
+# Release Notes
 
 ## Developer Preview 0.7.0, July 24, 2023
 
@@ -12,7 +14,7 @@ The following components were added:
 
 | Component                    | Version   | Description         |
 |------------------------------|---------------|---------------------|
-| Coherence | 3.2.11 | In-memory data grid. |
+| Coherence | 3.2.11 | Provides in-memory data grid. |
 
 The following components were updated:
 
@@ -20,7 +22,7 @@ The following components were updated:
 |------------------------------|---------------|---------------------|
 | Oracle Backend for Spring Boot Visual Studio Code extension | 0.3.9 | 0.3.8 |
 | HashiCorp Vault              |  1.14.0 | v1.11.3 |
-| Oracle Database Operator for Kubernetes | 1.0 | 0.6.1 |
+| OCI Service Operator for Kubernetes | 1.0 | 0.6.1 |
 | Parse Server                 | 6.2.0  | 5.2.7 |
 | Parse Dashboard              | 5.1.0 | 5.0.0 |
 | Oracle Transaction Manager for Microservices | 22.3.2 | 22.3.1 |
@@ -50,8 +52,9 @@ There were no component deprecations or removals.
 Notes:
 
 * Oracle Backend for Spring Boot now includes the option to install in a Multicloud (OCI/Azure) environment.
-* The Oracle Database Operator for Kubernetes is bound to the existing Oracle Autonomous Database (ADB) created by infrastructure as code (IaC) in an all-OCI installation and provisions the ADB in the Multicloud installation.
-* Improvements to On-Premises and Desktop installation processes.
+* The OCI Service Operator for Kubernetes is bound to the existing Oracle Autonomous Database (ADB) created by infrastructure as code (IaC) in
+  an all-OCI installation and provisions the ADB in the Multicloud installation.
+* Improvements to On-Premises and desktop installation processes.
 
 The following components were added:
 
@@ -79,7 +82,7 @@ The following components were added:
 
 | Component                    | Version       | Description                                                                             |
 |------------------------------|---------------|-----------------------------------------------------------------------------------------|
-| Oracle Database Operator for Kubernetes | 0.6.1 | Helps reduce the time and complexity of deploying and managing Oracle Databases.     |  
+| OCI Service Operator for Kubernetes | 0.6.1 | Helps reduce the time and complexity of deploying and managing Oracle databases.     |  
 | Parse Server                 | 5.2.7        | Provides backend services for mobile and web applications.                               |
 | Parse Dashboard              | 5.0.0        | Uses a web user interface for managing Parse Server.                                            |
 | Oracle Database Adapter for Parse Server | 0.2.0    | Enables the Parse Server to store data in an Oracle database.                           |
@@ -104,7 +107,7 @@ The following components were added:
 | Component                    | Version       | Description                                                                             |
 |------------------------------|---------------|-----------------------------------------------------------------------------------------|
 | Oracle Transaction Manager for Microservices | 22.3.1 | Manages distributed transactions to ensure consistency across Microservices.   |
-| Strimzi - Apache Kafka Operator       | 0.33.1        | Manages Apache Kafka clusters.                                                        |
+| Strimzi-Apache Kafka Operator       | 0.33.1        | Manages Apache Kafka clusters.                                                        |
 | Apacha Kafka                 | 3.2.0 - 3.3.2 | Allows distributed event streaming.                                                            |
 
 There were no deprecations or removals.
@@ -116,7 +119,7 @@ The following components were added:
 | Component                    | Version      | Description                                                                              |
 |------------------------------|--------------|------------------------------------------------------------------------------------------|
 | HashiCorp Vault              | v1.11.3      | Provides a way to store and tightly control access to sensitive data.                    |
-| Oracle Backend for Spring Boot CLI | 0.1.0  | Command-line interface to manage application deployment and configuration.               |
+| Oracle Backend for Spring Boot CLI | 0.1.0  | Provides a command-line interface to manage application deployment and configuration.               |
 | Netflix Conductor OSS        | 3.13.2       | Provides workflow orchestration for Microservices.                                       |
 | On-premises installer        | 0.1.0        | Allows installation of a self-hosted stack.                                              |
 
@@ -129,13 +132,13 @@ This release includes the following components:
 | Component                    | Version      | Description                                                                              |
 |------------------------------|--------------|------------------------------------------------------------------------------------------|
 | cert-manager                 | 1.10.1       | Automates the management of certificates.                                                |
-| NGINX Ingress Controller     | 1.5.1        | Provides traffic management solution for cloud native applications in Kubernetes.        |
+| NGINX Ingress Controller     | 1.5.1        | Provides a traffic management solution for cloud native applications in Kubernetes.        |
 | Prometheus                   | 2.40.2       | Provides event monitoring and alerting.                                                  |
 | Prometheus operator          | 0.60.1       | Provides management for Prometheus monitoring tools.                                     |
 | OpenTelemetry Collector      | 0.66.0       | Collects process and export telemetry data.                                              |
 | Grafana                      | 9.2.5        | Examines, analyzes, and monitors metrics.                                                |
 | Jaeger Tracing               | 1.37.0       | Provides a distributed tracing system for monitoring and troubleshooting distributed systems.       |
-| Apache APISIX                | 2.15.1       | Provides full lifecycle API Management.                                                  |
-| Spring Boot Admin server     | 2.7.5        | Manages and monitors Spring Boot applications.                                           |
+| Apache APISIX                | 2.15.1       | Provides full lifecycle API management.                                                  |
+| Spring Cloud Admin server     | 2.7.5        | Manages and monitors Spring Boot applications.                                           |
 | Spring Cloud Config server   | 2.7.5        | Provides server-side support for externalized configuration.                             |
-| Spring Boot Eureka service registry      | 2021.0.3     | Provides service discovery capabilities                                                  |
+| Spring Boot Eureka service registry      | 2021.0.3     | Provides service discovery capabilities.                                                 |
