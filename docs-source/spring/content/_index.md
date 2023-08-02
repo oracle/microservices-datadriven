@@ -34,7 +34,7 @@ Developers also have access to development or build time services and libraries 
 - Spring Data (Java Persistence API (JPA) and Oracle JDBC) to access Oracle Database.
 - Oracle Java Database Connectivity (Oracle JDBC) drivers.
 - Spring Cloud Config client.
-- Spring Boot Eureka service discovery client.
+- Spring Eureka service discovery client.
 - Spring Cloud OpenFeign.
 - OpenTelemetry Collector (including automatic instrumentation).
 
