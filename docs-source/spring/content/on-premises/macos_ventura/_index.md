@@ -1,7 +1,3 @@
----
-title: "macOS Ventura"
----
-
 # On-Premises Installation - macOS Ventura (x86)
 
 This is a discussion of an installation on a macOS Venture desktop.
