@@ -16,8 +16,8 @@ In addition to an Oracle Autonomous Database Serverless instance, the following 
 Infrastructure (OCI) Container Engine for Kubernetes cluster (OKE cluster):
 
 - Apache APISIX API Gateway and Dashboard
-- Spring Boot Eureka service registry
-- Spring Cloud Admin dashboard
+- Spring Eureka service registry
+- Spring Boot Admin dashboard
 - Spring Cloud Config server
 - Netflix Conductor
 - Prometheus
