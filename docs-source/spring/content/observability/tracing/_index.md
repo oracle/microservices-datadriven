@@ -17,12 +17,12 @@ weight: 1
 draft: false
 ---
 
-Jaeger is a distributed tracing system used for monitoring and troubleshooting microservices.
+Jaeger is a distributed tracing system used for monitoring and troubleshooting Microservices.
 For more information on Jaeger, see the [Jaeger website](https://www.jaegertracing.io/).
 
-## View application traces in Jaeger web user interface
+## View Application Traces in Jaeger Web User Interface
 
-1. Exposing Jaeger web user interface using `port-forward`
+1. Expose the Jaeger web user interface using this command:
 
     ```shell
     kubectl -n observability port-forward svc/jaegertracing-query 16686:16686
@@ -34,19 +34,19 @@ For more information on Jaeger, see the [Jaeger website](https://www.jaegertraci
     {{< img name="obaas-jaeger-ui" size="medium" lazy=false >}}
     <!-- spellchecker-enable -->
 
-3. In the Jaeger web user interface, the `Search` Tab allows you find tracings using various criteria. For example, to find
-   traces for the customer microservice included in the sample apps:
+3. In the Jaeger web user interface, the **Search** tab finds tracings using various search criteria. For example, to find
+   traces for the customer Microservice included in the sample applications:
 
-    * If you deployed the [sample apps](../../sample-apps), exposed the customer service through the APISIX Gateway and called it at least once, you will
-      be able to find traces for it in Jaeger.
-    * Select Service `customer` and Operation `/api/v1/customers`
-    * Click on the search button -- Several traces will appear (one for each time you invoked the service)
+    a. If you deployed the [sample applications](../../sample-apps), exposing the customer service through the Apache APISIX Gateway and called it at least once, you can
+      find traces for it in Jaeger.
+    b. Select **Service** `customer` and **Operation** `/api/v1/customers` .
+    c. Click on **Find Traces**. Several traces appear (one for each time that you invoked the service).
 
         <!-- spellchecker-disable -->
         {{< img name="obaas-jaeger-customer-tracing" size="medium" lazy=false >}}
         <!-- spellchecker-enable -->
 
-    * Click on any one of them to view the trace that include multiple services and extends into the Oracle database and Oracle Advanced Queueing:
+    d. Click on any one of them to view the trace that includes multiple services and extends into Oracle Database and Oracle Advanced Queuing. For example:
 
         <!-- spellchecker-disable -->
         {{< img name="obaas-jaeger-customer-trace-details" size="medium" lazy=false >}}

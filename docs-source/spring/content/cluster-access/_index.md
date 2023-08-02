@@ -6,10 +6,11 @@ resources:
     title: "OCI Cloud Shell icon"
 ---
 
-The **Oracle Backend for Spring Boot** setup creates a Kubernetes cluster where the server and dashboard components are deployed.  At the end of setup, in the log for the apply job, you were provided with a command to creating a Kubernetes configuration file to access that cluster.
+The Oracle Backend for Spring Boot setup creates a Kubernetes cluster where the server and dashboard components are deployed.  At the end of set up, you are
+provided with a command to create a Kubernetes configuration file to access that cluster in the log for the apply job.
 
 {{< hint type=[tip] icon=gdoc_check title=Tip >}}
-For more information about working with the Kubernetes cluster, see [Setting Up Cluster Access](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm#localdownload) in the OCI documentation.
+For more information about working with the Kubernetes cluster, see [Setting Up Cluster Access](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm#localdownload) in the Oracle Cloud Infrastructure documentation.
 {{< /hint >}}
 
 </br>
@@ -23,7 +24,7 @@ kubeconfig_cmd = "oci ce cluster create-kubeconfig
                     --kube-endpoint PUBLIC_ENDPOINT"
 ```
 
-**Note:** The generated `kubeconfig` file will only work if you are using the `DEFAULT` profile in your OCI CLI configuration file. If you are using a different OCI CLI profile you must add `--profile <PROFILE-NAME>` to the command. For example:
+**NOTE:** The generated `kubeconfig` file works if you are using the `DEFAULT` profile in your Oracle Cloud Infrastructure (OCI) CLI configuration file. If you are using a different OCI CLI profile, you must add `--profile <PROFILE-NAME>` to the command. For example:
 
 ```txt
 kubeconfig_cmd = "oci ce cluster create-kubeconfig
@@ -35,14 +36,7 @@ kubeconfig_cmd = "oci ce cluster create-kubeconfig
                     --profile <PROFILE-NAME>
 ```
 
-You must also edit the the generated Kubernetes config file and add the following lines to the config file. For example:
-
-```yaml
-- --profile
-- <PROFILE-NAME>
-```
-
-For example:
+You must also edit the the generated Kubernetes configuration file and add the following lines:
 
 ```yaml
 - name: user-xxxx
@@ -64,13 +58,14 @@ For example:
 
 ### Using OCI Cloud Shell
 
-A simple alternative is to use the [OCI Cloud Shell](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cloudshellintro.htm), which is provided in the OCI Console. You can open Cloud Shell by clicking Developer Tools in the upper right hand corner of the OCI Console.
+A simple alternative is to use the [OCI Cloud Shell](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cloudshellintro.htm), which is provided in the
+OCI Console. You can open the OCI Cloud Shell by clicking **Developer Tools** in the upper right corner of the OCI Console.
 
 <!-- spellchecker-disable -->
 {{< img name="oci-cloud-shell" size="medium" lazy=false >}}
 <!-- spellchecker-enable -->
 
-Run the provided command to create your Kubernetes configuration file and then you will be able to access the Kubernetes cluster. For example, you can list the pods in your cluster:
+Run the provided command to create your Kubernetes configuration file after which you can access the Kubernetes cluster. For example, you can list the pods in your cluster:
 
 ```cmd
 Welcome to Oracle Cloud Shell.
