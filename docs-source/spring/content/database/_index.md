@@ -15,8 +15,6 @@ resources:
     title: "Download ADB client credential"
 ---
 
-# Database Access
-
 The Oracle Backend for Spring Boot includes an Oracle database. An instance of Oracle Autonomous Database Serverless is created during
 installation.
 
