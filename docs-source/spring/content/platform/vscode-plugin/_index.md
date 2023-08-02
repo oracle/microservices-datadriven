@@ -1,4 +1,6 @@
-# Oracle Backend for Spring Boot VS Code Plugin
+---
+title: "Oracle Backend for Spring Boot Visual Studio Code Extension"
+---
 
 **Developer Preview 0.3.9 - July, 2023**
 
