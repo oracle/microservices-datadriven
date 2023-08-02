@@ -2,8 +2,6 @@
 title: "Oracle Backend for Spring Boot - Developer Preview"
 ---
 
-# Oracle Backend for Spring Boot - Developer Preview
-
 Oracle Backend for Spring Boot allows developers to build Microservices in Spring Boot and provisions a backend as a service with
 Oracle Database and other infrastructure components that operate on multiple clouds. This service vastly simplifies the task of
 building, testing, and operating Microservices platforms for reliable, secure, and scalable enterprise applications.
