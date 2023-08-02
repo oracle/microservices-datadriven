@@ -12,8 +12,6 @@ resources:
     title: "Eureka Dashboard"
 ---
 
-# Spring Boot Admin
-
 ## View Application Details Using the Spring Boot Admin Dashboard
 
 Spring Boot Admin is a web application used for managing and monitoring Spring Boot applications. Applications are discovered from the
