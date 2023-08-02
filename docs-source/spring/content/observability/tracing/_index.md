@@ -17,8 +17,6 @@ weight: 1
 draft: false
 ---
 
-# Jaeger Tracing
-
 Jaeger is a distributed tracing system used for monitoring and troubleshooting Microservices.
 For more information on Jaeger, see the [Jaeger website](https://www.jaegertracing.io/).
 
