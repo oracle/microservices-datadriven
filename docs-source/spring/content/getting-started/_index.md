@@ -2,8 +2,6 @@
 title: "Getting Started"
 ---
 
-# Getting Started
-
 There are a number of demonstrations (videos) and hands-on labs (Live Lab) that show how to use Oracle Backend for Spring Boot (Spring Boot) and
 Oracle Backend for Parse Platform (Parse Platform).
 
