@@ -1,8 +1,8 @@
 ---
-Title: macOS Ventura (x86)
+Title: "macOS Ventura (x86)"
 ---
 
-# On-Premises Installation - MacOS Ventura (x86)
+# On-Premises Installation - macOS Ventura (x86)
 
 This is description of installing On-Premises on a macOS Ventura desktop.
 
@@ -64,11 +64,11 @@ source ./activate.env
 
 ### Define the Infrastructure
 
-Use the Helper Playbook to define the infrastructure.  This Playbook also:
+Use the Helper Playbook to define the infrastructure. This Playbook also:
 
 * Creates additional namespaces for the Container Registry and database.
 * Creates a private Container Registry in the Kubernetes cluster.
-* Modifies the application Microservices to be desktop compatible.
+* Modifies the Microservices application to be desktop compatible.
 
 Run this command:
 
@@ -112,4 +112,6 @@ Deploy the database and Microservices by running this command:
 
 If you are behind a Virtual Private Network (VPN) or proxy, click on the following URL for more details on additional tasks:
 
-`https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/`
+https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/
+
+Next, go to the [Oracle Linux 8 (x86)](../on-premises/ol8/) page to learn how to use the newly installed environment.

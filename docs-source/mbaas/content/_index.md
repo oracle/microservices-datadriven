@@ -1,10 +1,10 @@
 
 # Oracle Backend for Parse Platform - Developer Preview
 
-Oracle Backend for Parse Platform deploys mobile applications using Parse mobile APIs, and provision an Oracle Backend as a Service (OBaaS)
+Oracle Backend for Parse Platform deploys mobile applications using Parse mobile APIs, and provisions an Oracle Backend as a Service (OBaaS)
 with Oracle Database and other infrastructure components that operate on multiple clouds. This service vastly simplifies the task of building, testing,
 and operating a mobile application development platform for reliable, secure, and scalable enterprise applications. This version includes an Oracle Database storage adapter
-for Parse (Parse already has MongoDB and Postgres adapters), and a proof-of-concept of Google Firebase APIs emulated using Parse mobile APIs.
+for Parse (Parse already has MongoDB and Postgres adapters), and a proof-of-concept for Google Firebase APIs emulated using Parse mobile APIs.
 
 The Oracle Backend for Parse Platform is based on the [Parse Platform](https://parseplatform.org/).
 

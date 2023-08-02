@@ -2,6 +2,8 @@
 title: "Kubernetes Access"
 ---
 
+# Kubernetes Access
+
 As an Oracle Backend for Parse Platform user, it is expected that you probably will not need to access the underlying infrastructure.  However, if you do want to have a look
 around, here is how you can access the Kubernetes cluster where your Oracle Backend for Parse Platform is running.
 
@@ -51,7 +53,7 @@ the upper right corner of the OCI Console.
 ![Cloud Shell icon](../cloud-shell.png)
 
 Run the provided command to create your Kubernetes configuration file and then you can access the Kubernetes
-cluster. For example, you can list the pods in your cluster:
+cluster. For example, you can list the Pods in your cluster:
 
 ```
 Welcome to Oracle Cloud Shell.
@@ -83,4 +85,6 @@ parse-server      parse-server-646b97979-9pkq6                1/1     Running   
 user@cloudshell:~ (us-ashburn-1)$
 ```
 
-The Oracle Backend for Parse Platform Parse Server is running in the `parse-server` namespace and Parse Dashboard is running in the `parse-dashboard` namespace.
+The Parse Server is running in the `parse-server` namespace and the Parse Dashboard is running in the `parse-dashboard` namespace.
+
+Next, go to the [Uninstall](../uninstall/) page to learn how to uninstall the Oracle Backend for Parse Platform.

@@ -1,5 +1,5 @@
 ---
-Title: On-Premises
+Title: "On-Premises Installation"
 ---
 
 # On-Premises Installation
@@ -15,7 +15,7 @@ You must meet the following prerequisites to use the Oracle Backend for Parse Pl
 
 * An Oracle Database Enterprise Edition 21.3.0.0
 * A Container Repository
-* A Kubernetes Cluster
+* A Kubernetes cluster
 * [Python 3+](https://www.python.org/)
 
 When installing on a _Desktop_, the previously mentioned prerequisites are met through an additional setup task, but there are additional desktop
@@ -33,7 +33,7 @@ system or software requirements. For example:
 
 Download [Oracle Backend for Parse Platform](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/on-prem-mbaas_v0.1.1.zip).
 
-## Set Up
+## Setup
 
 An On-Premises installation, whether _Desktop_ or _Estate_, consists of defining the Parse application and infrastructure followed by running the
 Configuration Management Playbook to build images and deploy the Microservices.
@@ -43,7 +43,7 @@ For an _Estate_ installation, you need a Kubernetes cluster and the `kubectl` co
 A Helper Playbook is provided for _Desktop_ installations to assist in defining the infrastructure. Review the appropriate documentation for examples of
 installing and defining the _Desktop_ installation.
 
-* [MacOS Ventura (x86)](macos_ventura/_index.md)
+* [macOS Ventura (x86)](macos_ventura/_index.md)
 * [Oracle Linux 8 (x86)](ol8/_index.md)
 
 The _Desktop_ Playbook is run as part of the Configuration Management Playbook.
@@ -130,13 +130,13 @@ Specify the URL or authentication credentials for your Container Repository in `
 
 For the `push_registry_auth` and `pull_registry_auth` sections, manually log into your repository and copy the values found in created file, located in `$HOME/.config/containers/auth.json`
 
-Why there is duplication between the push and pull URL's?  The push URL is used from the deployment machine white the pull URL is used inside the pods. If you
+Why is there duplication between the push and pull URL's?  The push URL is used from the deployment machine while the pull URL is used inside the pods. If you
 have a private registry inside the Kubernetes cluster, these URL's could be different. This is the case for the _Desktop_ installation. The push URL
 is `localhost:5000`, while the pull URL is `<Registry Pod ClusterIP>:5000`.
 
 ## Configuration Management
 
-From the source package, run the Configuration Management Playbook:
+From the source package, run the Configuration Management Playbook.
 
 ### Install Ansible
 
@@ -175,9 +175,7 @@ To install Microservices, process this command:
 ansible-Playbook ansible/k8s_apply.yaml -t full
 ```
 
-## Finish
-
-Next, to to the [Getting Started](../getting-started/) page to learn how to use the newly installed environment.
+Next, go to the [macOS Ventura (x86)](../on-premises/macos_ventura/) page to learn how to use the newly installed environment.
 
 ## Footnotes
 

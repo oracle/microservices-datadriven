@@ -66,21 +66,21 @@ API Gateway by processing these steps:
 
     a. In the Apache APISIX Dashboard, click **Routes** in the menu on the left side.
 
-        <!-- spellchecker-disable -->
-        {{< img name="obaas-apisix-routes" size="medium" lazy=false >}}
-        <!-- spellchecker-enable -->
+      <!-- spellchecker-disable -->
+      {{< img name="obaas-apisix-routes" size="medium" lazy=false >}}
+      <!-- spellchecker-enable -->
 
     b. Click **Create** to create a new route.
     
 	c. Fill out the necessary details (anything not mentioned here can be left at the default value). For example, for the "slow service"
        to be included in the [Sample Applications](../../sample-apps), provide these details:
 	   
-        * name = slow
-        * path = /fruit*
-        * method = get, options
-        * upstream type = service discovery
-        * discovery type = eureka
-        * service name = SLOW (note that this is case sensitive, this is the key from the Eureka dashboard)
+      * name = slow
+      * path = /fruit*
+      * method = get, options
+      * upstream type = service discovery
+      * discovery type = eureka
+      * service name = SLOW (note that this is case sensitive, this is the key from the Eureka dashboard)
 
         **NOTE:** The API Gateway is pre-configured with both "Eureka" and "Kubernetes" discovery types. For Eureka, the service name is the key used to
 		          deploy the service in Eureka, which is normally the value from `spring.application.name` in the Spring Boot configuration
@@ -128,6 +128,6 @@ API Gateway by processing these steps:
         curl http://APISIX_IP/fruit
         ```
 
-        You should get "banana" or "fallback fruit is apple" back as the response.
+      You should get "banana" or "fallback fruit is apple" back as the response.
 
 Next, go to the [Service Discovery](../eureka/) page to learn more.

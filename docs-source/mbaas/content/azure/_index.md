@@ -1,5 +1,5 @@
 ---
-Title: Microsoft Azure
+Title: "Microsoft Azure/OCI Multicloud Installation"
 ---
 
 # Microsoft Azure/OCI Multicloud Installation
@@ -74,7 +74,8 @@ The Multicloud installation is done using the Azure Cloud Shell.  The following 
 
 ## Install Ansible
 
-Install Ansible to run the Configuration Management Playbook.  The helper scripts create a Python virtual environment and installs Ansible and any additional modules. For example:
+Install Ansible to run the Configuration Management Playbook.  The helper scripts create a Python virtual environment and installs Ansible
+and any additional modules. For example:
 
 ```bash
 cd ~/obaas/ansible
@@ -93,6 +94,4 @@ terraform plan -out=multicloud.plan
 terraform apply "multicloud.plan"
 ```
 
-## Finish
-
-Next, go to the [Getting Started](../getting-started/) page to learn how to use the newly installed environment.
+Next, go to the [On-Premises Installation](../on-premises/) page to learn how to use the newly installed environment.

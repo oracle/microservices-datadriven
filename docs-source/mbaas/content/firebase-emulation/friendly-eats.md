@@ -2,8 +2,10 @@
 title: "Friendly Eats Tutorial"
 ---
 
+# Friendly Eats Tutorial
+
 This is an example of porting a simple Firebase web application based on [JavaScript Firebase API - version 8](https://firebase.google.com/docs/reference/js/v8)
-and described in a public [tutorial](https://firebase.google.com/codelabs/firestore-web#0) to the [Parse Platform](https://docs.parseplatform.org/js/guide/)
+and describs a public [Tutorial](https://firebase.google.com/codelabs/firestore-web#0) to the [Parse Platform](https://docs.parseplatform.org/js/guide/)
 leveraging an alpha quality JavaScript library included in this example.
 
 ## Complete the Original Tutorial First
@@ -18,7 +20,7 @@ of the Firebase API emulation using the following steps:
 
 1. Open the file **index.html** in an editor in the directory **/friendlyeats**.
 
-2. Look for the Firebase libraries imports. For example:
+2. Look for the Firebase library imports. For example:
 
     ``` 
     ...
@@ -29,7 +31,7 @@ of the Firebase API emulation using the following steps:
     ...
     ```
 
-    Comment out the Firebase imports and replace with the following imports and code, as shown here. Change the `COOLAPPV100`
+    Comment out the Firebase imports and replace with the following imports and code. Change the `COOLAPPV100`
     and `serverURL` to match your Oracle Backend for Parse Platform environment. For example:
     
     ```
@@ -53,7 +55,7 @@ of the Firebase API emulation using the following steps:
     
     The added lines do the following:
 
-    * The **Firebase API emulation** library (called "parsef") is included with this line:
+    * The **Firebase API emulation** library (called `parsef`) is included with this line:
 	
         ```
         <script src="/parsef/parsef.js"></script>
@@ -68,7 +70,7 @@ of the Firebase API emulation using the following steps:
         <script src="https://npmcdn.com/parse/dist/parse.min.js"></script> 
         ```
 
-    * To configure communication with the Oracle Backend for Parse Platform, you must set your own `APPLICATION_ID` and Parse serverURL.
+    * To configure communication with the Oracle Backend for Parse Platform, you must set your own `APPLICATION_ID` and `Parse serverURL`.
       This initial setup is done using these lines of code:
 	  
         ```
@@ -79,7 +81,7 @@ of the Firebase API emulation using the following steps:
         </script>
         ```
 		
-    Change the code according to your actual Parse server URL and `COOLAPPV100`.
+    Change the code according to your actual `Parse server URL` and `COOLAPPV100`.
 
 ## Repeat the Tutorial Steps With Firebase API Emulation
 
@@ -126,3 +128,4 @@ JavaScript demo application is still running without any other changes.
 
 8. You can further test the sort functionalities by adding more reviews to other restaurants. This allows you to see the number of reviews and average ratings.
 
+Next, go to the [Extra Parse Test Code](../firebase-emulation/extra/) page to learn more.
