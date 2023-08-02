@@ -1,7 +1,3 @@
----
-title: "VS Code Plugin"
----
-
 # Oracle Backend for Spring Boot VS Code Plugin
 
 **Developer Preview 0.3.9 - July, 2023**
