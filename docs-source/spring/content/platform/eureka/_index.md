@@ -6,8 +6,6 @@ resources:
     title: "Eureka web user interface"
 ---
 
-# Service Discovery
-
 Oracle Backend for Spring Boot includes the Spring Boot Eureka service registry, which is an application that stores information about
 client services or applications. Typically, each Microservice registers with the Eureka server at startup and the Eureka server maintains
 a list of all active instances of the service, including their ports and IP addresses. This information can be accessed by other services
