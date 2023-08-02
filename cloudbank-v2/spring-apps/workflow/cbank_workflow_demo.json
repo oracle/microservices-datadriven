@@ -1,42 +1,106 @@
-{
-    "name": "cbank_workflow_demo",
-    "description": "Cloud Bank Demo Workflow",
-    "version": 1,
-    "inputParameters": [
-        "object"
-    ],
-    "tasks": [
-        {
-            "name": "call_account_service",
-            "taskReferenceName": "call_account_service_from",
-            "type": "HTTP",
-            "inputParameters": {
-                "fromCustomerId": "${jq_get_fromCustomerId.output.result}",
-                "http_request": {
-                    "uri": "http://account.application.svc.cluster.local:8080/api/v1/account/getAccounts/${workflow.input.object.fromAccount}",
-                    "method": "GET",
-                    "connectionTimeOut": 3000,
-                    "readTimeOut": 3000
+[
+    {
+        "name": "cbank_workflow_demo",
+        "description": "Cloud Bank Demo Workflow",
+        "version": 1,
+        "inputParameters": [
+            "object"
+        ],
+        "tasks": [
+            {
+                "name": "call_account_service",
+                "taskReferenceName": "call_account_service_from",
+                "type": "HTTP",
+                "inputParameters": {
+                    "http_request": {
+                        "uri": "http://account.application.svc.cluster.local:8080/api/v1/account/getAccounts/${workflow.input.object.fromAccount}",
+                        "method": "GET",
+                        "connectionTimeOut": 3000,
+                        "readTimeOut": 3000
+                    }
+                }
+            },
+            {
+                "name": "jq_get_fromAccountId",
+                "taskReferenceName": "jq_get_fromAccountId",
+                "type": "JSON_JQ_TRANSFORM",
+                "inputParameters": {
+                    "fromAccountList": "${call_account_service_from.output.response.body}",
+                    "queryExpression": ".fromAccountList[] | select (.accountType == \"SA\") | .accountId"
+                }
+            },
+            {
+                "name": "call_customer_service",
+                "taskReferenceName": "call_customer_service_to",
+                "type": "HTTP",
+                "inputParameters": {
+                    "http_request": {
+                        "uri": "http://customer.application.svc.cluster.local:8080/api/v1/customer/byemail/${workflow.input.object.destination}",
+                        "method": "GET",
+                        "connectionTimeOut": 3000,
+                        "readTimeOut": 3000
+                    }
+                }
+            },
+            {
+                "name": "jq_get_toCustomerId",
+                "taskReferenceName": "jq_get_toCustomerId",
+                "type": "JSON_JQ_TRANSFORM",
+                "inputParameters": {
+                    "fromAccountList": "${call_customer_service_to.output.response.body}",
+                    "queryExpression": ".fromAccountList[] | .customerId"
+                }
+            },
+            {
+                "name": "call_account_service",
+                "taskReferenceName": "call_account_service_to",
+                "type": "HTTP",
+                "inputParameters": {
+                    "toCustomerId": "${jq_get_toCustomerId.output.result}",
+                    "http_request": {
+                        "uri": "http://account.application.svc.cluster.local:8080/api/v1/account/getAccounts/${jq_get_toCustomerId.output.result}",
+                        "method": "GET",
+                        "connectionTimeOut": 3000,
+                        "readTimeOut": 3000
+                    }
+                }
+            },
+            {
+                "name": "jq_get_toAccountId",
+                "taskReferenceName": "jq_get_toAccountId",
+                "type": "JSON_JQ_TRANSFORM",
+                "inputParameters": {
+                    "toAccountList": "${call_account_service_to.output.response.body}",
+                    "queryExpression": ".toAccountList[] | select (.accountType == \"SA\") | .accountId"
+                }
+            },
+            {
+                "name": "call_transfer_service",
+                "taskReferenceName": "call_transfer_service",
+                "type": "HTTP",
+                "inputParameters": {
+                    "fromAccountId": "${jq_get_fromAccountId.output.result}",
+                    "toAccountId": "${jq_get_toAccountId.output.result}",
+                    "http_request": {
+                        "uri": "http://transfer.application.svc.cluster.local:8080/transfer?fromAccount=${jq_get_fromAccountId.output.result}&toAccount=${jq_get_toAccountId.output.result}&amount=${workflow.input.object.amount}",
+                        "method": "POST",
+                        "connectionTimeOut": 3000,
+                        "readTimeOut": 3000
+                    }
                 }
             }
-        },        
-        {
-            "name": "jq_get_cloudCashPaymentObj",
-            "taskReferenceName": "jq_get_cloudCashPaymentObj",
-            "type": "JSON_JQ_TRANSFORM",
-            "inputParameters": {
-                "paymentObj": "${workflow.input.object}",
-                "queryExpression": ".paymentObj.amount"
-            }
-        }
-    ],
-    "outputParameters": {
-        "amount": "${jq_get_cloudCashPaymentObj.output.result}"
-    },
-    "schemaVersion": 2,
-    "restartable": true,
-    "workflowStatusListenerEnabled": true,
-    "ownerEmail": "example@email.com",
-    "timeoutPolicy": "ALERT_ONLY",
-    "timeoutSeconds": 0
-}
+        ],
+        "outputParameters": {
+            "fromAccountId": "${jq_get_fromAccountId.output.result}",
+            "toAccountId": "${jq_get_toAccountId.output.result}",
+            "amount": "${jq_get_cloudCashPaymentObj.output.result}",
+            "transferMessage": "${call_transfer_service.output.body}"
+        },
+        "schemaVersion": 2,
+        "restartable": true,
+        "workflowStatusListenerEnabled": false,
+        "ownerEmail": "example@email.com",
+        "timeoutPolicy": "ALERT_ONLY",
+        "timeoutSeconds": 0
+    }
+]
