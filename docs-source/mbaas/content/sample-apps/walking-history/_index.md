@@ -1,5 +1,10 @@
+---
+Title: "Walking History"
+---
 
-The *Walking History* sample application uses the Parse database and GeoPoint APIs.  It is a React Native application
+# Walking History
+
+The *Walking History* sample application uses the Parse database and GeoPoints APIs.  It is a React Native application
 that allows you to walk around New York City (or simulate that in a device emulator) and it tells you about the
 closest attraction or point of interest.
 
@@ -23,7 +28,7 @@ git clone https://github.com/oracle/microservices-datadriven
 cd microservices-datadriven/developer-preview/walking-history
 ```
 
-This directory contains the source code for the application. In the source code, you need to update the file `App.js` to set the `APPLICAITON_ID` and server URL to match your environment.
+This directory contains the source code for the application. In the source code, you need to update the file `App.js` to set the `APPLICATION_ID` and server URL to match your environment.
 Find these lines and update those two values.  Note that the required values were provided in the output at the end of
 the log for the stack apply job during the installation. For example:
 
@@ -69,3 +74,5 @@ query.near('location', new Parse.GeoPoint(currentPosition.coords.latitude,
     currentPosition.coords.longitude));
 let results = await query.find().catch(err => console.log("OOPS " + JSON.stringify(err)));
 ```
+
+Next, go to the [Firebase API Emulation](../firebase-emulation/) page to learn more.

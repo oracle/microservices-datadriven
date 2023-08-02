@@ -1,3 +1,7 @@
+---
+Title: "Setup"
+---
+
 The Oracle Backend for Parse Platform is available to install from [OCI Marketplace](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/139274906).
 
 ## Prerequisites
@@ -6,7 +10,7 @@ You must meet the following prerequisites to use the Oracle Backend for Parse Pl
 
 * An Oracle Cloud Infrastructure (OCI) account in a tenancy with sufficient quota to create the following:
 
-  * An OCI Container Engine for Kubernetes (OKE) cluster, plus a node pool with three worker nodes.
+  * An OCI Container Engine for Kubernetes cluster (OKE cluster), plus a node pool with three worker nodes.
   * A Virtual Cloud Network (VCN) with at least two public IP's available.
   * A public load balancer.
   * An Oracle Autonomous Database Serverless instance.
@@ -28,16 +32,24 @@ To start the installation, take the following steps:
 6. On the **Create Stack** page:
 
    a. Modify the suggested name, if desired.
+   
    b. Add a description or tags, if desired.
+   
    c. Click **Next**.
 
 7. On the **Configure variables** page, in the **Backend as a Service** section (see the following image):
 
    a. Specify an application name, if desired. If not specified, a randomized value is generated.  This is the name of the Parse application.
+   
    b. Specify an application ID, if desired. If not specified, a randomized value is generated.  This is the Parse `APPLICATION_ID`.
+   
    c. Specify a server master key, if desired. If not specified, a randomized value is generated.  This is the Parse `MASTER_KEY`.
+   
    d. Change the dashboard user name, if desired. Note that this is case-sensitive.
+   
    e. Provide a dashboard password for the dashboard user. Oracle recommends using a strong password for security purposes.
+   
+   For example:
 
    ![Configure variables page](../mbaas-configure-variables.png)
 
@@ -47,7 +59,7 @@ To start the installation, take the following steps:
 9. In the **Node Pool** section, you can customize the number of nodes and enable auto scaling, if desired.
 
 10. In the **Load Balancers Options** section, you can customize the load balancer shape and the CIDR for client access. For simple testing, Oracle
-    recommends using the provided default values.
+    recommends using the default values.
 
 11. In the **Database Options** section, you can customize the database shape and the CIDR for client access. Note that you cannot access
     **Database Actions** if you change the network access to `PRIVATE_ENDPOINT_ACCESS`.
@@ -60,7 +72,7 @@ To start the installation, take the following steps:
 You can monitor the installation in the log. Installation takes approximately 20 minutes to complete.  Most of this time is spent provisioning
 the Kubernetes cluster, its nodes, and the database.
 
-When the installation is finished, some important information isincluded at the end of the log.  You will need this information to access
+When the installation is finished, some important information is included at the end of the log.  You need this information to access
 the newly created environment. For example:
 
 ```
@@ -73,4 +85,4 @@ kubeconfig_cmd = "oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc
 parse_endpoint = "1.2.3.4/parse"
 ```
 
-Next, go to the [Getting Started](../getting-started/) page to learn how to use the newly installed environment.
+Next, go to the [Microsoft Azure/OCI Multicloud Installation](../azure/) page to learn how to use the newly installed environment.

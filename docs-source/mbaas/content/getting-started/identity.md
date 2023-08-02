@@ -1,6 +1,8 @@
 ---
-title: Working With Users, Roles and ACLs
+title: "Users, Roles and ACLs"
 ---
+
+# Users, Roles and ACLs
 
 ## Creating Users
 
@@ -99,7 +101,7 @@ Learn more about ACLs in the [Parse Server documentation](https://docs.parseplat
     {}
     ```
 
-    The document is deleted. You can verify this using the GET API, the dashboard, or by looking in the JavaScript Object Notation (JSON) collection in the database.
+    The document is deleted. You can verify this using the `GET` API, the dashboard, or by looking in the JavaScript Object Notation (JSON) collection in the database.
 
 ### GameScore With User ACL
 
@@ -200,7 +202,7 @@ Learn more about ACLs in the [Parse Server documentation](https://docs.parseplat
 
     As you can see, user `nyg` has ID `E3t4Iid6XN` which matches the `_wperm` in the document.
 
-    To delete the document, use the DELETE API with the `sessionToken` associated with the user. For example:
+    To delete the document, use the `DELETE` API with the `sessionToken` associated with the user. For example:
 
     ```
     curl -X DELETE \
@@ -307,7 +309,7 @@ Roles work in a similar fashion to Users. It is assumed that, for this example, 
     }
     ```
 
-    The session token must be supplied in the DELETE API call. For example:
+    The session token must be supplied in the `DELETE` API call. For example:
 
     ```
     curl -X DELETE \
@@ -321,7 +323,7 @@ Roles work in a similar fashion to Users. It is assumed that, for this example, 
 
 ### Using the Master Key
 
-**NOTE:** Oracle does not recommended using the master key to avoid ACLs
+**NOTE:** Oracle does not recommended using the master key to avoid ACLs.
 
 Using the master key in an API call turns off all ACL checking. For example:
 
@@ -336,3 +338,5 @@ curl -X DELETE \
 ```
 
 This call deletes the specified document regardless of any ACLs present.
+
+Next, go to the [Sample Applications](../sample-apps/) page to learn how to use the Sample Applications.
