@@ -27,8 +27,6 @@ resources:
     title: "APISIX Routes Step5"
 ---
 
-# API Gateway
-
 [Apache APISIX](https://apisix.apache.org) is an open source cloud native API platform that supports the full lifecycle of API management
 including publishing, traffic management, deployment strategies, and circuit breakers.
 
