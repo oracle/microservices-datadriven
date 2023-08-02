@@ -62,7 +62,7 @@ Deploy and Secure Sample Application APIs using Apache APISIX Oracle Backend for
       "url" : "https://oracle.github.io/microservices-datadriven/spring/platform/apigw/",
       "headline": "API Gateway",
       "description": "Apache APISIX is an open-source cloud native API platform that supports the full lifecycle of API management including publishing, traffic management, deployment strategies, and circuit breakers.\nDeploy and Secure Sample Application APIs using Apache APISIX Oracle Backend for Spring Boot deploys APISIX Gateway and Dashboard in the apisix namespace. The gateway is exposed through the external load balancer and ingress controller. To access the APISIX Dashboard, you must use the kubectl port-forward command to create a secure channel to service\/apisix-dashboard.",
-      "wordCount" : "548",
+      "wordCount" : "515",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -557,6 +557,51 @@ Deploy and Secure Sample Application APIs using Apache APISIX Oracle Backend for
                   class="gdoc-nav__entry"
                 >
                   Getting Started
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/sample-apps"
+                  class="gdoc-nav__entry"
+                >
+                  Sample Applications
                 </a>
               </span>
               
@@ -1634,59 +1679,68 @@ To expose your application, create a &ldquo;route&rdquo; in the Apache APISIX AP
 <li>
 <p>Create a route to the service. For example:</p>
 <p>a. In the APISIX Dashboard, click on the <strong>Routes</strong> option in the menu on the left hand side.</p>
-<pre><code> &lt;!-- spellchecker-disable --&gt;
- 
-          
-          
-        
-        
-          <div class="flex justify-center">
-            <figure
-              class="gdoc-markdown__figure"
-            >
-              <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/apigw/obaas-apisix-routes.png">
-                <picture>
-                    <source
-                        srcset="https://oracle.github.io/microservices-datadriven/spring/platform/apigw/obaas-apisix-routes_hub53da0fc02cea3fab8e078541a0124ef_677629_1200x0_resize_box_3.png"
-        
-                    />
-                  <img
-                        src="https://oracle.github.io/microservices-datadriven/spring/platform/apigw/obaas-apisix-routes_hub53da0fc02cea3fab8e078541a0124ef_677629_1800x0_resize_box_3.png"
-                      alt="APISIX Routes"
-                  />
-                </picture>
-              </a>
-                  <figcaption>
-                    APISIX Routes
-                  </figcaption>
-            </figure>
-          </div>
+   <!-- spellchecker-disable -->
 
- &lt;!-- spellchecker-enable --&gt;
-</code></pre>
+        
+        
+      
+      
+        <div class="flex justify-center">
+          <figure
+            class="gdoc-markdown__figure"
+          >
+            <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/apigw/obaas-apisix-routes.png">
+              <picture>
+                  <source
+                      srcset="https://oracle.github.io/microservices-datadriven/spring/platform/apigw/obaas-apisix-routes_hub53da0fc02cea3fab8e078541a0124ef_677629_1200x0_resize_box_3.png"
+      
+                  />
+                <img
+                      src="https://oracle.github.io/microservices-datadriven/spring/platform/apigw/obaas-apisix-routes_hub53da0fc02cea3fab8e078541a0124ef_677629_1800x0_resize_box_3.png"
+                    alt="APISIX Routes"
+                />
+              </picture>
+            </a>
+                <figcaption>
+                  APISIX Routes
+                </figcaption>
+          </figure>
+        </div>
+
+   <!-- spellchecker-enable -->
 <p>b. Click <strong>Create</strong> to create a new route.</p>
 <p>c. Fill out the necessary details (anything not mentioned here can be left at the default value). For example, for the &ldquo;slow service&rdquo;
 to be included in the <a
   class="gdoc-markdown__link"
   href="../../sample-apps"
 >sample apps</a>, provide these details:</p>
-<pre><code> * name = slow
- * path = /fruit*
- * method = get, options
- * upstream type = service discovery
- * discovery type = eureka
- * service name = SLOW (note that this is case sensitive, this is the key from the Eureka dashboard)
+<ul>
+<li>
+<p>name = slow</p>
+</li>
+<li>
+<p>path = /fruit*</p>
+</li>
+<li>
+<p>method = get, options</p>
+</li>
+<li>
+<p>upstream type = service discovery</p>
+</li>
+<li>
+<p>discovery type = eureka</p>
+</li>
+<li>
+<p>service name = SLOW (note that this is case sensitive, this is the key from the Eureka dashboard)</p>
+<p><strong>NOTE:</strong> The API Gateway is pre-configured with both &ldquo;Eureka&rdquo; and &ldquo;Kubernetes&rdquo; discovery types.  For Eureka, the service name is the key used to
+deploy the service in Eureka, which is normally the value from <code>spring.application.name</code> in the Spring Boot configuration
+file (<code>src/main/resources/application.yaml</code>), in uppercase characters.  For Kubernetes, the service name is in the
+format <code>namespace/service:port</code> where <code>namespace</code> is the Kubernetes namespace in which the Spring Boot application is deployed, <code>service</code> is
+the name of the Kubernetes service for that application, and <code>port</code> is the name of the port in that service.  If you deployed your Spring Boot
+application with the Oracle Backend for Spring Boot CLI, the port name will be <code>spring</code>.  For example, an application called <code>slow-service</code> deployed
+in the <code>my-apps</code> namespace would be <code>my-apps/slow-service:spring</code>.</p>
+<!-- spellchecker-disable -->
 
- **NOTE:** The API Gateway is pre-configured with both &quot;Eureka&quot; and &quot;Kubernetes&quot; discovery types.  For Eureka, the service name is the key used to
-           deploy the service in Eureka, which is normally the value from `spring.application.name` in the Spring Boot configuration
- 		  file (`src/main/resources/application.yaml`), in uppercase characters.  For Kubernetes, the service name is in the
- 		  format `namespace/service:port` where `namespace` is the Kubernetes namespace in which the Spring Boot application is deployed, `service` is
- 		  the name of the Kubernetes service for that application, and `port` is the name of the port in that service.  If you deployed your Spring Boot
- 		  application with the Oracle Backend for Spring Boot CLI, the port name will be `spring`.  For example, an application called `slow-service` deployed
- 		  in the `my-apps` namespace would be `my-apps/slow-service:spring`.
-
- &lt;!-- spellchecker-disable --&gt;
- 
           
           
         
@@ -1713,10 +1767,10 @@ to be included in the <a
             </figure>
           </div>
 
- &lt;!-- spellchecker-enable --&gt;
- &lt;/br&gt;
- &lt;!-- spellchecker-disable --&gt;
- 
+<!-- spellchecker-enable -->
+</br>
+<!-- spellchecker-disable -->
+
           
           
         
@@ -1743,10 +1797,10 @@ to be included in the <a
             </figure>
           </div>
 
- &lt;!-- spellchecker-enable --&gt;
- &lt;/br&gt;
- &lt;!-- spellchecker-disable --&gt;
- 
+<!-- spellchecker-enable -->
+</br>
+<!-- spellchecker-disable -->
+
           
           
         
@@ -1773,9 +1827,10 @@ to be included in the <a
             </figure>
           </div>
 
- &lt;!-- spellchecker-enable --&gt;
- &lt;/br&gt;
-</code></pre>
+<!-- spellchecker-enable -->
+</br>
+</li>
+</ul>
 <p>d. Save the route that you created.
 <!-- spellchecker-disable -->
 
@@ -1849,9 +1904,8 @@ to be included in the <a
 <pre><code> ```shell
  curl http://APISIX_IP/fruit
  ```
-
- You should get &quot;banana&quot; or &quot;fallback fruit is apple&quot; back as the response.
 </code></pre>
+<p>You should get &ldquo;banana&rdquo; or &ldquo;fallback fruit is apple&rdquo; back as the response.</p>
 </li>
 </ol>
 
@@ -1998,6 +2052,30 @@ to be included in the <a
     
   
 
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
     
   
     
