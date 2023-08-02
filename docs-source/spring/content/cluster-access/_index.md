@@ -6,8 +6,6 @@ resources:
     title: "OCI Cloud Shell icon"
 ---
 
-# Access Kubernetes Cluster
-
 The Oracle Backend for Spring Boot setup creates a Kubernetes cluster where the server and dashboard components are deployed. At the end
 of setup, you are provided with a command in the log for the apply job to create a Kubernetes configuration file to access that cluster:
 
