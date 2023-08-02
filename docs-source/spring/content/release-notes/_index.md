@@ -2,8 +2,6 @@
 title: "Release Notes"
 ---
 
-# Release Notes
-
 ## Developer Preview 0.7.0, July 24, 2023
 
 Notes:
