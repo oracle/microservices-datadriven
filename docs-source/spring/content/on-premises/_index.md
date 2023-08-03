@@ -1,23 +1,26 @@
 ---
-title: On-Premises
+title: "On-Premises"
 ---
 
 # On-Premises Installation
 
-The Oracle Backend for Spring Boot is available to install On-Premises.  The On-Premises installation includes both a _Desktop_ installation and an _Estate_ installation.
+The Oracle Backend for Spring Boot is available to install On-Premises. The On-Premises installation includes both a _Desktop_ installation
+and an _Estate_ installation.
 
-The _Desktop_ installation can be used to explore in a non-production environment, while the _Estate_ installation is targeted for the production infrastructure.
+The _Desktop_ installation can be used to explore in a non-production environment, while the _Estate_ installation is targeted for the
+production infrastructure.
 
 ## Prerequisites
 
 You must meet the following prerequisites to use the Oracle Backend for Spring Boot On-Premises. You need:
 
-* Access to an Oracle Database Enterprise Edition 21.3.0.0
-* Access to a container repository
+* Access to Oracle Database Enterprise Edition 21.3.0.0
+* Access to a Container Repository
 * Access to a Kubernetes cluster
 * [Python 3+](https://www.python.org/)
 
-When installing on a _Desktop_, the previously mentioned pre-requisites are met through an additional Setup task, but there are additional desktop system or software requirements. For example:
+When installing on a _Desktop_, the previously mentioned pre-requisites are met through an additional Setup task, but there are additional
+desktop system or software requirements. For example:
 
 * 2 CPUs or more
 * 8 GB of free memory
@@ -33,24 +36,28 @@ Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservice
 
 ## Setup
 
-An On-Premises installation, whether _Desktop_ or _Estate_, consists of defining the infrastructure followed by running the Configuration Management playbook to build images and deploy the microservices.
+An On-Premises installation, whether _Desktop_ or _Estate_, consists of defining the infrastructure followed by running the Configuration
+Management Playbook to build images and deploy the Microservices.
 
-For an _Estate_ installation, you need to have a Kubernetes cluster and the kubectl command-line tool must be configured to communicate with your cluster.
+For an _Estate_ installation, you need to have a Kubernetes cluster and the `kubectl` command-line interface must be configured to
+communicate with your cluster.
 
-A helper Playbook has been provided for the _Desktop_ installations to assist in defining the infrastructure.  Review the appropriate documentation for examples of installing and defining the _Desktop_ installation. For example:
+A Helper Playbook has been provided for the _Desktop_ installations to assist in defining the infrastructure.  Review the
+appropriate documentation for examples of installing and defining the _Desktop_ installation. For example:
 
-* [MacOS Ventura (x86)](macos_ventura/_index.md)
+* [macOS Ventura (x86)](macos_ventura/_index.md)
 * [Oracle Linux 8 (x86)](ol8/_index.md)
 
-The _Desktop_ playbook is run as part of the Configuration Management playbook.
+The _Desktop_ playbook is run as part of the Configuration Management Playbook.
 
-## Download the Database or ORDS Images (_Desktop_  Installation)
+## Download the Database or Oracle REST Data Services (ORDS) Images (_Desktop_  Installation)
 
-The _Desktop_ installation provisions an Oracle Database to the Kubernetes cluster.  The images must be downloaded from [Oracle's Container Registry](https://container-registry.oracle.com/) before continuing.
+The _Desktop_ installation provisions an Oracle database to the Kubernetes cluster. The images must be downloaded
+from [Oracle's Container Registry](https://container-registry.oracle.com/) before continuing.
 
 After installing Podman, process these steps:
 
-1. Log into Oracle's Container Registry. For example: 
+1. Log in to Oracle Cloud Infrastructure Registry (Container Registry). For example: 
 
    `podman login container-registry.oracle.com`
    
@@ -58,12 +65,11 @@ After installing Podman, process these steps:
 
    `podman pull container-registry.oracle.com/database/enterprise:21.3.0.0`
    
-3. Pull the Oracle REST Data Services (ORDS) image. For example: 
+3. Pull the ORDS image. For example: 
 
    `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
 
-
-### Defining the Database  (_Estate_  Installation)
+### Defining the Database (_Estate_  Installation)
 
 The database is defined in `ansible/roles/database/vars/main.yaml`. For example:  
 
@@ -79,11 +85,13 @@ BAASPDB:
 ...
 ```
 
-The `oracle_dbs` and `default_db` key values should be the name of your Pluggable Database (PDB).  These are followed by the PDB name and Key/Values defining how to access the PDB.  If using mutual Transport Layer Security (mTLS) authentication, specify the full path of the wallet file.
+The `oracle_dbs` and `default_db` key values should be the name of your Pluggable Database (PDB). These are followed by the PDB
+name and Key/Values defining how to access the PDB. If using Mutual Transport Layer Security (mTLS) authentication, specify the
+full path of the wallet file.
 
-### Defining the Container Repository  (_Estate_  Installation)
+### Defining the Container Repository (_Estate_  Installation)
 
-The container repository is defined in `ansible/roles/registry/vars/main.yaml`.  For example:
+The Container Repository is defined in `ansible/roles/registry/vars/main.yaml`. For example:
 
 ```yaml
 ---
@@ -101,20 +109,24 @@ pull_registry_auth:
       auth: 'b3JhY2xlOjdaUVgxLXhhbFR0NTJsS0VITlA0'
 ...
 ```
+Specify the URL or authentication credentials for your Container Repository in `pull_registry_url`, `push_registry_url`, `registry_username`
+and `registry_password`.  
 
-Specify the URL or authentication credentials for your Container Repository in `pull_registry_url`, `push_registry_url`, `registry_username` and `registry_password`.  
+For the `registry_auth` section, manually log in to your repository and copy the values found in the previously created file, which is often
+found in `$HOME/.config/containers/auth.json`
 
-For the `registry_auth` section, manually log into your repository and copy the values found in the previously created file, often found in `$HOME/.config/containers/auth.json`
+There may be duplication between the push and pull URL's. The pull URL is used inside the Pods while the push URL is used from the
+deployment machine. If you have a private registry inside the Kubernetes cluster, these URL's could be different. This is the case for
+the _Desktop_ installation. For example, the push URL is `localhost:5000`, while the pull URL is `<Registry Pod ClusterIP>:5000`.
 
-There may be duplication between the push and pull URL's.  The pull URL is used inside the pods while the push is used from the deployment machine.  If you have a private registry inside the Kubernetes cluster, these URL's could be different.  This is the case for the _Desktop_ installation; the push URL is `localhost:5000`, while the pull URL is `<Registry Pod ClusterIP>:5000`.
+## Configuration Management Playbook
 
-## Configuration Management
-
-From the source package, run the Configuration Management playbook.
+From the source package, run the Configuration Management Playbook.
 
 ### Install Ansible
 
-Using Python, install Ansible to run the Configuration Management playbook.  The helper script creates a Python virtual environment and installs Ansible along with other additional modules. For example:
+Using Python, install Ansible to run the Configuration Management Playbook.  The Helper script creates a Python virtual environment
+and installs Ansible along with other additional modules. For example:
 
 ```bash
 ./setup_ansible.sh
@@ -125,7 +137,7 @@ source ./activate.env
 
 If this is an _Estate_ installation, the infrastructure should be manually defined as previously stated.  
 
-If this is a _Desktop_ installation, run the helper Playbook to define the infrastructure. For example:
+If this is a _Desktop_ installation, run the Helper Playbook to define the infrastructure. For example:
 
 ```bash
 ansible-playbook ansible/desktop-apply.yaml
@@ -133,7 +145,8 @@ ansible-playbook ansible/desktop-apply.yaml
 
 ### Build and Push Images to the Container Repository
 
-For the _Desktop_ installation, start a new terminal and tunnel or port-forward to the minikube cluster.  Refer to the specific platform details for more information.
+For the _Desktop_ installation, start a new terminal and tunnel or port-forward to the Minikube cluster.  Refer to the specific platform
+details for more information.
 
 For both installations, run the Images Playbook on the original terminal. For example:
 
@@ -143,16 +156,15 @@ ansible-playbook ansible/images_build.yaml
 
 ### Install the Microservices
 
-Install the microservices by running this command:
+Install the Microservices by running this command:
 
 ```bash
 ansible-playbook ansible/k8s_apply.yaml -t full
 ```
 
-## Finish
-
-Next, go to the [Getting Started](../getting-started/) page to learn how to use the newly installed environment.
+Next, go to the [macOS Ventura](../on-premises/macos_ventura/) page to learn more.
 
 ## Footnotes
 
-[^1]: Certification has been performed against Podman. However, other container or virtual machine managers are available and may be substituted.  Experience is needed and your milage may vary.
+[^1]: Certification has been performed against Podman. However, other container or virtual machine managers are available and may be
+substituted.

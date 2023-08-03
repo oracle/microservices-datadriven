@@ -1,9 +1,10 @@
 ---
-title: OL8
+title: "Oracle Linux 8 (x86)"
 ---
+
 # On-Premises Installation - Oracle Linux 8 (x86)
 
-This is an example of installing on a Oracle Linux 8 desktop.
+This is an description of installing on a Oracle Linux 8 desktop.
 
 Read the [On-Premises](../../on-premises) documentation and ensure that your desktop meets the minimum system requirements.
 
@@ -29,37 +30,43 @@ sudo alternatives --set python3 /usr/bin/python3.9
 
 ### Create a Non-Root User
 
-Create a new user.  While any username can be created, the rest of the documentation will refer to the non-root user as `obaas`:
+Create a new user. While any user name can be created, the rest of this documentation refers to the non-root user as `obaas`:
 
-As `root`:
+As `root`, process the following:
 
 ```bash
 useradd obaas
 echo "obaas ALL=(ALL) NOPASSWD: /bin/podman" >> /etc/sudoers
 ```
 
-### Download the Database/ORDS Images
+### Download the Database or Oracle REST Data Services (ORDS) Images
 
-The _Desktop_ installation provisions an Oracle Database into the Kubernetes cluster.  The images must be downloaded from [Oracle's Container Registry](https://container-registry.oracle.com/) before continuing. Process these steps:
+The _Desktop_ installation provisions an Oracle database into the Kubernetes cluster. The images must be downloaded
+from [Oracle Cloud Infrastructure Registry (Container Registry)](https://container-registry.oracle.com/) before continuing.
+As the `obaas` user, process these steps:
 
-As the `obaas` user:
+1. Log in to the Container Registry. For example: 
 
-1. Log into Oracle's Container Registry: `podman login container-registry.oracle.com`
-2. Pull the Database Image: `podman pull container-registry.oracle.com/database/enterprise:19.19.0.0`
-3. Pull the ORDS Image: `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
+   `podman login container-registry.oracle.com`
+   
+2. Pull the database image. For example: 
+
+   `podman pull container-registry.oracle.com/database/enterprise:19.19.0.0`
+   
+3. Pull the ORDS image. For example: 
+
+   `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
 
 ### Install and Start Minikube
 
-Install and start Minikube by running these commands.
-
-As the `root` user:
+Install and start Minikube by running these commands as the `root` user:
 
 ```bash
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 install minikube-linux-amd64 /usr/local/bin/minikube
 ```
 
-As the `obaas` user:
+As the `obaas` user, run these commands:
 
 ```bash
 echo "PATH=\$PATH:/usr/sbin" >> ~/.bashrc
@@ -72,7 +79,7 @@ minikube addons enable ingress
 
 Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip) and unzip into a new directory.
 
-As the `obaas` user:
+As the `obaas` user, run these commands:
 
 ```bash
 unzip onprem-ebaas_latest.zip -d ~/obaas
@@ -80,7 +87,7 @@ unzip onprem-ebaas_latest.zip -d ~/obaas
 
 ### Install Ansible
 
-As the `obaas` user, change to the source directory and install ansible:
+As the `obaas` user, change to the source directory and install Ansible by running these commands:
 
 ```bash
 cd ~/obaas
@@ -90,25 +97,28 @@ source ./activate.env
 
 ### Define the Infrastructure
 
-Use the helper Playbook to define the infrastructure.  This Playbook also:
+Use the Helper Playbook to define the infrastructure. This Playbook also:
 
 * Creates additional namespaces for the Container Registry and database.
 * Creates a private Container Registry in the Kubernetes cluster.
-* Modifies the application microservices to be desktop compatible by running this command:
+* Modifies the Microservices application to be desktop compatible.
 
+Assuming the source was unzipped to `~/obaas`, run the following command as the `obaas` user: 
 
-Assuming the source was unzip'ed to `~/obaas`, as the `obaas` user, run: `ansible-playbook ~/obaas/ansible/desktop_apply.yaml`
+`ansible-playbook ~/obaas/ansible/desktop_apply.yaml`
 
 ### Open a Tunnel
 
-In order to push the images to the Container Registry in the Kubernetes cluster, open a new terminal and process this command:
+In order to push the images to the Container Registry in the Kubernetes cluster, open a new terminal and process this command
+as the `obaas` user: 
 
-As the `obaas` user, run: `kubectl port-forward service/private -n container-registry 5000:5000 &`
+`kubectl port-forward service/private -n container-registry 5000:5000 &`
 
-To test access to the registry:
+To test access to the registry, run this command:
+
 `curl -X GET -k https://localhost:5000/v2/_catalog`
 
-The above curl should result in:
+This `curl` should result in the following:
 
 ```text
 {"errors":[{"code":"UNAUTHORIZED","message":"authentication required","detail":[{"Type":"registry","Class":"","Name":"catalog","Action":"*"}]}]}
@@ -116,25 +126,35 @@ The above curl should result in:
 
 ### Build the Images
 
-Build and Push the Images to the Container Registry in the Kubernetes cluster:
+Build and push the images to the Container Registry in the Kubernetes cluster.
 
-Assuming the source was unzip'ed to `~/obaas`, as the `obaas` user, run: `ansible-playbook ~/obaas/ansible/images_build.yaml`
+Assuming the source was unzipped to `~/obaas`, run the following command as the `obaas` user: 
 
-After the images are built and pushed, the port forward is no longer required and can be stopped.
+`ansible-playbook ~/obaas/ansible/images_build.yaml`
+
+After the images are built and pushed, the port-forward is no longer required and can be stopped.
 
 ### Deploy Microservices
 
-Assuming the source was unzip'ed to `~/obaas`, as the `obaas` user, run: `ansible-playbook ~/obaas/ansible/k8s_apply.yaml -t full`
+Assuming the source was unzipped to `~/obaas`, run this command as the `obaas` user: 
+
+`ansible-playbook ~/obaas/ansible/k8s_apply.yaml -t full`
 
 ## Notes
 
 ### config-server and obaas-admin Pod Failures
 
-The pods in the `config-server` and `obaas-admin` namespaces rely on the database that is created in the `oracle-database-operator-system`.  During initial provisioning these pods will start well before the database is available resulting in initial failures.  They will resolve themselves once the database becomes available.
+The Pods in the `config-server` and `obaas-admin` namespaces rely on the database that is created in
+the `oracle-database-operator-system`. During the initial provisioning, these Pods start well before the database is available
+resulting in initial failures. They resolve themselves once the database becomes available.
 
-You can check on the status of the database by running:
+You can check on the status of the database by running this command:
+
 `kubectl get singleinstancedatabase baas -n oracle-database-operator-system -o "jsonpath={.status.status}"`
 
 ### VPN and Proxies
 
-If you are behind a VPN or Proxy, please see https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/ for more details on additional tasks.
+If you are behind a Virtual Private Network (VPN) or proxy, see https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/ for more
+details on additional tasks.
+
+Next, go to the [Getting Started](../getting-started/) page to learn more.
