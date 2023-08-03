@@ -91,14 +91,14 @@ Oracle Backend for Spring Boot setup installs the following components:
 | OpenTelemetry Collector      | 0.66.0        | Collects process and export telemetry data.                                                 |
 | Grafana                      | 9.2.5         | Provides the tool to examine, analyze, and monitor metrics.                                 |
 | Jaeger Tracing               | 1.39.0        | Provides distributed tracing system for monitoring and troubleshooting distributed systems. |
-| Apache APISIX                       | 3.2.0         | Provides full lifecycle API management.                                              |
-| Spring Cloud Admin server          | 2.7.5         | Manages and monitors Spring Cloud applications.                                       |
+| Apache APISIX                | 3.2.0         | Provides full lifecycle API management.                                                     |
+| Spring Boot Admin server     | 2.7.5         | Manages and monitors Spring Cloud applications.                                             |
 | Spring Cloud Config server   | 2.7.5         | Provides server-side support for an externalized configuration.                             |
-| Spring Boot Eureka service registry      | 3.1.4         | Provides service discovery capabilities.                                                    |
+| Spring Eureka service registry | 3.1.4       | Provides service discovery capabilities.                                                    |
 | HashiCorp Vault              | 1.14.0        | Provides a way to store and tightly control access to sensitive data.                       |
 | Oracle Database operator     | 1.0           | Helps reduce the time and complexity of deploying and managing Oracle databases.            |
 | Oracle Transaction Manager for Microservices | 22.3.1 | Manages distributed transactions to ensure consistency across Microservices.       |
-| Strimzi-Apache Kafka operator       | 0.33.1        | Manages Apache Kafka clusters.                                                       |
+| Strimzi-Apache Kafka operator  | 0.33.1      | Manages Apache Kafka clusters.                                                              |
 | Apacha Kafka                 | 3.2.0 - 3.3.2 | Provides distributed event streaming.                                                       |
 | Coherence                    | 3.2.11        | Provides in-memory data grid.                                                               |
 | Parse Server (optional)      | 6.2.0         | Provides backend services for mobile and web applications.                                  |
