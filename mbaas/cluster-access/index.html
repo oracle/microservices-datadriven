@@ -12,8 +12,8 @@
 <meta name="generator" content="Hugo 0.115.4">
 
 
-  <meta name="description" content="As an Oracle Backend for Parse Platform user, it is expected that you probably will not need to access the underlying infrastructure. However, if you do want to have a look around, here is how you can access the Kubernetes cluster where your Oracle Backend for Parse Platform is running.
-The Oracle Backend for Parse Platform setup created a Kubernetes cluster where the server and dashboard components are deployed. At the end of setup, you were provided with a command to create a Kubernetes configuration file to access that cluster." />
+  <meta name="description" content="Kubernetes Access As an Oracle Backend for Parse Platform user, it is expected that you probably will not need to access the underlying infrastructure. However, if you do want to have a look around, here is how you can access the Kubernetes cluster where your Oracle Backend for Parse Platform is running.
+The Oracle Backend for Parse Platform setup created a Kubernetes cluster where the server and dashboard components are deployed." />
 
     <title>Kubernetes Access | Oracle Backend for Parse Platform</title>
 
@@ -39,8 +39,8 @@ The Oracle Backend for Parse Platform setup created a Kubernetes cluster where t
     content="Kubernetes Access"
   />
   <meta property="og:site_name" content="Oracle Backend for Parse Platform" />
-  <meta property="og:description" content="As an Oracle Backend for Parse Platform user, it is expected that you probably will not need to access the underlying infrastructure. However, if you do want to have a look around, here is how you can access the Kubernetes cluster where your Oracle Backend for Parse Platform is running.
-The Oracle Backend for Parse Platform setup created a Kubernetes cluster where the server and dashboard components are deployed. At the end of setup, you were provided with a command to create a Kubernetes configuration file to access that cluster." />
+  <meta property="og:description" content="Kubernetes Access As an Oracle Backend for Parse Platform user, it is expected that you probably will not need to access the underlying infrastructure. However, if you do want to have a look around, here is how you can access the Kubernetes cluster where your Oracle Backend for Parse Platform is running.
+The Oracle Backend for Parse Platform setup created a Kubernetes cluster where the server and dashboard components are deployed." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/mbaas/cluster-access/" />
 
@@ -49,8 +49,8 @@ The Oracle Backend for Parse Platform setup created a Kubernetes cluster where t
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Kubernetes Access" />
-  <meta name="twitter:description" content="As an Oracle Backend for Parse Platform user, it is expected that you probably will not need to access the underlying infrastructure. However, if you do want to have a look around, here is how you can access the Kubernetes cluster where your Oracle Backend for Parse Platform is running.
-The Oracle Backend for Parse Platform setup created a Kubernetes cluster where the server and dashboard components are deployed. At the end of setup, you were provided with a command to create a Kubernetes configuration file to access that cluster." />
+  <meta name="twitter:description" content="Kubernetes Access As an Oracle Backend for Parse Platform user, it is expected that you probably will not need to access the underlying infrastructure. However, if you do want to have a look around, here is how you can access the Kubernetes cluster where your Oracle Backend for Parse Platform is running.
+The Oracle Backend for Parse Platform setup created a Kubernetes cluster where the server and dashboard components are deployed." />
 
 
   <script type="application/ld+json">
@@ -61,8 +61,8 @@ The Oracle Backend for Parse Platform setup created a Kubernetes cluster where t
       "name": "Kubernetes Access",
       "url" : "https://oracle.github.io/microservices-datadriven/mbaas/cluster-access/",
       "headline": "Kubernetes Access",
-      "description": "As an Oracle Backend for Parse Platform user, it is expected that you probably will not need to access the underlying infrastructure. However, if you do want to have a look around, here is how you can access the Kubernetes cluster where your Oracle Backend for Parse Platform is running.\nThe Oracle Backend for Parse Platform setup created a Kubernetes cluster where the server and dashboard components are deployed. At the end of setup, you were provided with a command to create a Kubernetes configuration file to access that cluster.",
-      "wordCount" : "500",
+      "description": "Kubernetes Access As an Oracle Backend for Parse Platform user, it is expected that you probably will not need to access the underlying infrastructure. However, if you do want to have a look around, here is how you can access the Kubernetes cluster where your Oracle Backend for Parse Platform is running.\nThe Oracle Backend for Parse Platform setup created a Kubernetes cluster where the server and dashboard components are deployed.",
+      "wordCount" : "515",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1316,7 +1316,15 @@ if (!doNotTrack) {
     class="gdoc-markdown gdoc-markdown__align--left"
   >
     <h1>Kubernetes Access</h1>
-    <p>As an Oracle Backend for Parse Platform user, it is expected that you probably will not need to access the underlying infrastructure.  However, if you do want to have a look
+    <div class="gdoc-page__anchorwrap">
+    <h1 id="kubernetes-access">
+        Kubernetes Access
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/mbaas/cluster-access/#kubernetes-access" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Kubernetes Access" aria-label="Anchor to: Kubernetes Access" href="#kubernetes-access">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h1>
+</div>
+<p>As an Oracle Backend for Parse Platform user, it is expected that you probably will not need to access the underlying infrastructure.  However, if you do want to have a look
 around, here is how you can access the Kubernetes cluster where your Oracle Backend for Parse Platform is running.</p>
 <p>The Oracle Backend for Parse Platform setup created a Kubernetes cluster where the server and dashboard components are deployed.  At the end of setup, you were provided
 with a command to create a Kubernetes configuration file to access that cluster. For example:</p>
@@ -1365,7 +1373,7 @@ the upper right corner of the OCI Console.</p>
   
 /></p>
 <p>Run the provided command to create your Kubernetes configuration file and then you can access the Kubernetes
-cluster. For example, you can list the pods in your cluster:</p>
+cluster. For example, you can list the Pods in your cluster:</p>
 <pre tabindex="0"><code>Welcome to Oracle Cloud Shell.
  
 Update: Cloud Shell will now use Oracle JDK 11 by default. To change this, see Managing Language Runtimes in the Cloud Shell documentation.
@@ -1393,7 +1401,11 @@ parse-dashboard   parse-dashboard-58cb567ffd-frc4x            1/1     Running   
 parse-server      kaniko                                      0/1     Completed   0               4h20m
 parse-server      parse-server-646b97979-9pkq6                1/1     Running     0               4h19m
 user@cloudshell:~ (us-ashburn-1)$
-</code></pre><p>The Oracle Backend for Parse Platform Parse Server is running in the <code>parse-server</code> namespace and Parse Dashboard is running in the <code>parse-dashboard</code> namespace.</p>
+</code></pre><p>The Parse Server is running in the <code>parse-server</code> namespace and the Parse Dashboard is running in the <code>parse-dashboard</code> namespace.</p>
+<p>Next, go to the <a
+  class="gdoc-markdown__link"
+  href="../uninstall/"
+>Uninstall</a> page to learn how to uninstall the Oracle Backend for Parse Platform.</p>
 
   </article>
 

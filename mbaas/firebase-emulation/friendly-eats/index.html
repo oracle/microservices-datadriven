@@ -12,7 +12,7 @@
 <meta name="generator" content="Hugo 0.115.4">
 
 
-  <meta name="description" content="This is an example of porting a simple Firebase web application based on JavaScript Firebase API - version 8 and described in a public tutorial to the Parse Platform leveraging an alpha quality JavaScript library included in this example.
+  <meta name="description" content="Friendly Eats Tutorial This is an example of porting a simple Firebase web application based on JavaScript Firebase API - version 8 and describs a public Tutorial to the Parse Platform leveraging an alpha quality JavaScript library included in this example.
 Complete the Original Tutorial First We recommend that you complete the original FriendlyEats tutorial instructions using Firebase.
 Adapt the Code to Use the Firebase API Emulation After completing the tutorial, you have a functioning application." />
 
@@ -40,7 +40,7 @@ Adapt the Code to Use the Firebase API Emulation After completing the tutorial, 
     content="Friendly Eats Tutorial"
   />
   <meta property="og:site_name" content="Oracle Backend for Parse Platform" />
-  <meta property="og:description" content="This is an example of porting a simple Firebase web application based on JavaScript Firebase API - version 8 and described in a public tutorial to the Parse Platform leveraging an alpha quality JavaScript library included in this example.
+  <meta property="og:description" content="Friendly Eats Tutorial This is an example of porting a simple Firebase web application based on JavaScript Firebase API - version 8 and describs a public Tutorial to the Parse Platform leveraging an alpha quality JavaScript library included in this example.
 Complete the Original Tutorial First We recommend that you complete the original FriendlyEats tutorial instructions using Firebase.
 Adapt the Code to Use the Firebase API Emulation After completing the tutorial, you have a functioning application." />
 <meta property="og:type" content="article" />
@@ -51,7 +51,7 @@ Adapt the Code to Use the Firebase API Emulation After completing the tutorial, 
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Friendly Eats Tutorial" />
-  <meta name="twitter:description" content="This is an example of porting a simple Firebase web application based on JavaScript Firebase API - version 8 and described in a public tutorial to the Parse Platform leveraging an alpha quality JavaScript library included in this example.
+  <meta name="twitter:description" content="Friendly Eats Tutorial This is an example of porting a simple Firebase web application based on JavaScript Firebase API - version 8 and describs a public Tutorial to the Parse Platform leveraging an alpha quality JavaScript library included in this example.
 Complete the Original Tutorial First We recommend that you complete the original FriendlyEats tutorial instructions using Firebase.
 Adapt the Code to Use the Firebase API Emulation After completing the tutorial, you have a functioning application." />
 
@@ -64,8 +64,8 @@ Adapt the Code to Use the Firebase API Emulation After completing the tutorial, 
       "name": "Friendly Eats Tutorial",
       "url" : "https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/friendly-eats/",
       "headline": "Friendly Eats Tutorial",
-      "description": "This is an example of porting a simple Firebase web application based on JavaScript Firebase API - version 8 and described in a public tutorial to the Parse Platform leveraging an alpha quality JavaScript library included in this example.\nComplete the Original Tutorial First We recommend that you complete the original FriendlyEats tutorial instructions using Firebase.\nAdapt the Code to Use the Firebase API Emulation After completing the tutorial, you have a functioning application.",
-      "wordCount" : "522",
+      "description": "Friendly Eats Tutorial This is an example of porting a simple Firebase web application based on JavaScript Firebase API - version 8 and describs a public Tutorial to the Parse Platform leveraging an alpha quality JavaScript library included in this example.\nComplete the Original Tutorial First We recommend that you complete the original FriendlyEats tutorial instructions using Firebase.\nAdapt the Code to Use the Firebase API Emulation After completing the tutorial, you have a functioning application.",
+      "wordCount" : "533",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1327,14 +1327,22 @@ if (!doNotTrack) {
     class="gdoc-markdown gdoc-markdown__align--left"
   >
     <h1>Friendly Eats Tutorial</h1>
-    <p>This is an example of porting a simple Firebase web application based on <a
+    <div class="gdoc-page__anchorwrap">
+    <h1 id="friendly-eats-tutorial">
+        Friendly Eats Tutorial
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/friendly-eats/#friendly-eats-tutorial" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Friendly Eats Tutorial" aria-label="Anchor to: Friendly Eats Tutorial" href="#friendly-eats-tutorial">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h1>
+</div>
+<p>This is an example of porting a simple Firebase web application based on <a
   class="gdoc-markdown__link"
   href="https://firebase.google.com/docs/reference/js/v8"
 >JavaScript Firebase API - version 8</a>
-and described in a public <a
+and describs a public <a
   class="gdoc-markdown__link"
   href="https://firebase.google.com/codelabs/firestore-web#0"
->tutorial</a> to the <a
+>Tutorial</a> to the <a
   class="gdoc-markdown__link"
   href="https://docs.parseplatform.org/js/guide/"
 >Parse Platform</a>
@@ -1367,14 +1375,14 @@ of the Firebase API emulation using the following steps:</p>
 <p>Open the file <strong>index.html</strong> in an editor in the directory <strong>/friendlyeats</strong>.</p>
 </li>
 <li>
-<p>Look for the Firebase libraries imports. For example:</p>
+<p>Look for the Firebase library imports. For example:</p>
 <pre tabindex="0"><code>...
 &lt;script src=&#34;/__/firebase/9.6.6/firebase-app-compat.js&#34;&gt;&lt;/script&gt;
 &lt;script src=&#34;/__/firebase/9.6.6/firebase-auth-compat.js&#34;&gt;&lt;/script&gt;
 &lt;script src=&#34;/__/firebase/9.6.6/firebase-firestore-compat.js&#34;&gt;&lt;/script&gt;
 &lt;script src=&#34;/__/firebase/init.js&#34;&gt;&lt;/script&gt;
 ...
-</code></pre><p>Comment out the Firebase imports and replace with the following imports and code, as shown here. Change the <code>COOLAPPV100</code>
+</code></pre><p>Comment out the Firebase imports and replace with the following imports and code. Change the <code>COOLAPPV100</code>
 and <code>serverURL</code> to match your Oracle Backend for Parse Platform environment. For example:</p>
 <pre tabindex="0"><code>&lt;!-- comment these out: 
 &lt;script src=&#34;/__/firebase/9.6.6/firebase-app-compat.js&#34;&gt;&lt;/script&gt;
@@ -1395,7 +1403,7 @@ and <code>serverURL</code> to match your Oracle Backend for Parse Platform envir
 </code></pre><p>The added lines do the following:</p>
 <ul>
 <li>
-<p>The <strong>Firebase API emulation</strong> library (called &ldquo;parsef&rdquo;) is included with this line:</p>
+<p>The <strong>Firebase API emulation</strong> library (called <code>parsef</code>) is included with this line:</p>
 <pre tabindex="0"><code>&lt;script src=&#34;/parsef/parsef.js&#34;&gt;&lt;/script&gt;
 </code></pre><p>To enable the import, create a directory <code>parsef</code> under the project directory and copy the file
 <a
@@ -1408,7 +1416,7 @@ and <code>serverURL</code> to match your Oracle Backend for Parse Platform envir
 <pre tabindex="0"><code>&lt;script src=&#34;https://npmcdn.com/parse/dist/parse.min.js&#34;&gt;&lt;/script&gt; 
 </code></pre></li>
 <li>
-<p>To configure communication with the Oracle Backend for Parse Platform, you must set your own <code>APPLICATION_ID</code> and Parse serverURL.
+<p>To configure communication with the Oracle Backend for Parse Platform, you must set your own <code>APPLICATION_ID</code> and <code>Parse serverURL</code>.
 This initial setup is done using these lines of code:</p>
 <pre tabindex="0"><code>&lt;script&gt;
     firebase.app().options.appKey=&#34;COOLAPPV100&#34;;
@@ -1417,7 +1425,7 @@ This initial setup is done using these lines of code:</p>
 &lt;/script&gt;
 </code></pre></li>
 </ul>
-<p>Change the code according to your actual Parse server URL and <code>COOLAPPV100</code>.</p>
+<p>Change the code according to your actual <code>Parse server URL</code> and <code>COOLAPPV100</code>.</p>
 </li>
 </ol>
 <div class="gdoc-page__anchorwrap">
@@ -1501,6 +1509,10 @@ automatically in the Parse Server.</p>
 <p>You can further test the sort functionalities by adding more reviews to other restaurants. This allows you to see the number of reviews and average ratings.</p>
 </li>
 </ol>
+<p>Next, go to the <a
+  class="gdoc-markdown__link"
+  href="../firebase-emulation/extra/"
+>Extra Parse Test Code</a> page to learn more.</p>
 
   </article>
 

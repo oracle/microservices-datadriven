@@ -12,7 +12,7 @@
 <meta name="generator" content="Hugo 0.115.4">
 
 
-  <meta name="description" content="The Walking History sample application uses the Parse database and GeoPoint APIs. It is a React Native application that allows you to walk around New York City (or simulate that in a device emulator) and it tells you about the closest attraction or point of interest.
+  <meta name="description" content="Walking History The Walking History sample application uses the Parse database and GeoPoints APIs. It is a React Native application that allows you to walk around New York City (or simulate that in a device emulator) and it tells you about the closest attraction or point of interest.
 Here is what the Walking History application looks like running in the Android emulator:
 Try the Sample To try this sample application, you need the following:" />
 
@@ -40,7 +40,7 @@ Try the Sample To try this sample application, you need the following:" />
     content="Walking History"
   />
   <meta property="og:site_name" content="Oracle Backend for Parse Platform" />
-  <meta property="og:description" content="The Walking History sample application uses the Parse database and GeoPoint APIs. It is a React Native application that allows you to walk around New York City (or simulate that in a device emulator) and it tells you about the closest attraction or point of interest.
+  <meta property="og:description" content="Walking History The Walking History sample application uses the Parse database and GeoPoints APIs. It is a React Native application that allows you to walk around New York City (or simulate that in a device emulator) and it tells you about the closest attraction or point of interest.
 Here is what the Walking History application looks like running in the Android emulator:
 Try the Sample To try this sample application, you need the following:" />
 <meta property="og:type" content="article" />
@@ -51,7 +51,7 @@ Try the Sample To try this sample application, you need the following:" />
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Walking History" />
-  <meta name="twitter:description" content="The Walking History sample application uses the Parse database and GeoPoint APIs. It is a React Native application that allows you to walk around New York City (or simulate that in a device emulator) and it tells you about the closest attraction or point of interest.
+  <meta name="twitter:description" content="Walking History The Walking History sample application uses the Parse database and GeoPoints APIs. It is a React Native application that allows you to walk around New York City (or simulate that in a device emulator) and it tells you about the closest attraction or point of interest.
 Here is what the Walking History application looks like running in the Android emulator:
 Try the Sample To try this sample application, you need the following:" />
 
@@ -64,8 +64,8 @@ Try the Sample To try this sample application, you need the following:" />
       "name": "Walking History",
       "url" : "https://oracle.github.io/microservices-datadriven/mbaas/sample-apps/walking-history/",
       "headline": "Walking History",
-      "description": "The Walking History sample application uses the Parse database and GeoPoint APIs. It is a React Native application that allows you to walk around New York City (or simulate that in a device emulator) and it tells you about the closest attraction or point of interest.\nHere is what the Walking History application looks like running in the Android emulator:\nTry the Sample To try this sample application, you need the following:",
-      "wordCount" : "492",
+      "description": "Walking History The Walking History sample application uses the Parse database and GeoPoints APIs. It is a React Native application that allows you to walk around New York City (or simulate that in a device emulator) and it tells you about the closest attraction or point of interest.\nHere is what the Walking History application looks like running in the Android emulator:\nTry the Sample To try this sample application, you need the following:",
+      "wordCount" : "505",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1327,7 +1327,15 @@ if (!doNotTrack) {
     class="gdoc-markdown gdoc-markdown__align--left"
   >
     <h1>Walking History</h1>
-    <p>The <em>Walking History</em> sample application uses the Parse database and GeoPoint APIs.  It is a React Native application
+    <div class="gdoc-page__anchorwrap">
+    <h1 id="walking-history">
+        Walking History
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/mbaas/sample-apps/walking-history/#walking-history" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Walking History" aria-label="Anchor to: Walking History" href="#walking-history">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h1>
+</div>
+<p>The <em>Walking History</em> sample application uses the Parse database and GeoPoints APIs.  It is a React Native application
 that allows you to walk around New York City (or simulate that in a device emulator) and it tells you about the
 closest attraction or point of interest.</p>
 <p>Here is what the <em>Walking History</em> application looks like running in the Android emulator:</p>
@@ -1354,7 +1362,7 @@ For Android, use API level 30 and Android 11 for compatibilty with the version o
 <p>Once you have the prerequisites, start cloning the source code for the application. For example:</p>
 <pre tabindex="0"><code>git clone https://github.com/oracle/microservices-datadriven
 cd microservices-datadriven/developer-preview/walking-history
-</code></pre><p>This directory contains the source code for the application. In the source code, you need to update the file <code>App.js</code> to set the <code>APPLICAITON_ID</code> and server URL to match your environment.
+</code></pre><p>This directory contains the source code for the application. In the source code, you need to update the file <code>App.js</code> to set the <code>APPLICATION_ID</code> and server URL to match your environment.
 Find these lines and update those two values.  Note that the required values were provided in the output at the end of
 the log for the stack apply job during the installation. For example:</p>
 <pre tabindex="0"><code>const App: () =&gt; Node = () =&gt; {
@@ -1391,7 +1399,11 @@ let query = new Parse.Query(&#39;POI&#39;);
 query.near(&#39;location&#39;, new Parse.GeoPoint(currentPosition.coords.latitude,
     currentPosition.coords.longitude));
 let results = await query.find().catch(err =&gt; console.log(&#34;OOPS &#34; + JSON.stringify(err)));
-</code></pre>
+</code></pre><p>Next, go to the <a
+  class="gdoc-markdown__link"
+  href="../firebase-emulation/"
+>Firebase API Emulation</a> page to learn more.</p>
+
   </article>
 
 

@@ -12,10 +12,10 @@
 <meta name="generator" content="Hugo 0.115.4">
 
 
-  <meta name="description" content="Creating Users You can create a user with this Representational State Transfer (REST) API. You must provide the correct APPLICATION_ID and endpoint for your environment. For example:
-curl -X POST \ -H &#34;X-Parse-Application-Id: COOLAPPV100&#34; \ -H &#34;X-Parse-Revocable-Session: 1&#34; \ -H &#34;Content-Type: application/json&#34; \ -d &#39;{&#34;username&#34;:&#34;newuser&#34;,&#34;password&#34;:&#34;newpassword&#34;,&#34;phone&#34;:&#34;415-392-0202&#34;}&#39; \ http://1.2.3.4/parse/users # output (formatted): { &#34;objectId&#34;:&#34;DrIxj80hAf&#34;, &#34;createdAt&#34;:&#34;2022-12-12T18:11:18.497Z&#34;, &#34;sessionToken&#34;:&#34;r:6cad2f1fcd7de36e68ed86e3d215d324&#34; } NOTE: Email server integration is not available in this Developer Preview. Verifying email and the password reset functionality is not supported at this time." />
+  <meta name="description" content="Users, Roles and ACLs Creating Users You can create a user with this Representational State Transfer (REST) API. You must provide the correct APPLICATION_ID and endpoint for your environment. For example:
+curl -X POST \ -H &#34;X-Parse-Application-Id: COOLAPPV100&#34; \ -H &#34;X-Parse-Revocable-Session: 1&#34; \ -H &#34;Content-Type: application/json&#34; \ -d &#39;{&#34;username&#34;:&#34;newuser&#34;,&#34;password&#34;:&#34;newpassword&#34;,&#34;phone&#34;:&#34;415-392-0202&#34;}&#39; \ http://1.2.3.4/parse/users # output (formatted): { &#34;objectId&#34;:&#34;DrIxj80hAf&#34;, &#34;createdAt&#34;:&#34;2022-12-12T18:11:18.497Z&#34;, &#34;sessionToken&#34;:&#34;r:6cad2f1fcd7de36e68ed86e3d215d324&#34; } NOTE: Email server integration is not available in this Developer Preview." />
 
-    <title>Working With Users, Roles and ACLs | Oracle Backend for Parse Platform</title>
+    <title>Users, Roles and ACLs | Oracle Backend for Parse Platform</title>
 
     <link rel="icon" type="image/svg+xml" href="/microservices-datadriven/mbaas/favicon/favicon.svg" />
 <link
@@ -36,11 +36,11 @@ curl -X POST \ -H &#34;X-Parse-Application-Id: COOLAPPV100&#34; \ -H &#34;X-Pars
     
   <meta
     property="og:title"
-    content="Working With Users, Roles and ACLs"
+    content="Users, Roles and ACLs"
   />
   <meta property="og:site_name" content="Oracle Backend for Parse Platform" />
-  <meta property="og:description" content="Creating Users You can create a user with this Representational State Transfer (REST) API. You must provide the correct APPLICATION_ID and endpoint for your environment. For example:
-curl -X POST \ -H &#34;X-Parse-Application-Id: COOLAPPV100&#34; \ -H &#34;X-Parse-Revocable-Session: 1&#34; \ -H &#34;Content-Type: application/json&#34; \ -d &#39;{&#34;username&#34;:&#34;newuser&#34;,&#34;password&#34;:&#34;newpassword&#34;,&#34;phone&#34;:&#34;415-392-0202&#34;}&#39; \ http://1.2.3.4/parse/users # output (formatted): { &#34;objectId&#34;:&#34;DrIxj80hAf&#34;, &#34;createdAt&#34;:&#34;2022-12-12T18:11:18.497Z&#34;, &#34;sessionToken&#34;:&#34;r:6cad2f1fcd7de36e68ed86e3d215d324&#34; } NOTE: Email server integration is not available in this Developer Preview. Verifying email and the password reset functionality is not supported at this time." />
+  <meta property="og:description" content="Users, Roles and ACLs Creating Users You can create a user with this Representational State Transfer (REST) API. You must provide the correct APPLICATION_ID and endpoint for your environment. For example:
+curl -X POST \ -H &#34;X-Parse-Application-Id: COOLAPPV100&#34; \ -H &#34;X-Parse-Revocable-Session: 1&#34; \ -H &#34;Content-Type: application/json&#34; \ -d &#39;{&#34;username&#34;:&#34;newuser&#34;,&#34;password&#34;:&#34;newpassword&#34;,&#34;phone&#34;:&#34;415-392-0202&#34;}&#39; \ http://1.2.3.4/parse/users # output (formatted): { &#34;objectId&#34;:&#34;DrIxj80hAf&#34;, &#34;createdAt&#34;:&#34;2022-12-12T18:11:18.497Z&#34;, &#34;sessionToken&#34;:&#34;r:6cad2f1fcd7de36e68ed86e3d215d324&#34; } NOTE: Email server integration is not available in this Developer Preview." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/mbaas/getting-started/identity/" />
 
@@ -48,9 +48,9 @@ curl -X POST \ -H &#34;X-Parse-Application-Id: COOLAPPV100&#34; \ -H &#34;X-Pars
 
 
   <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="Working With Users, Roles and ACLs" />
-  <meta name="twitter:description" content="Creating Users You can create a user with this Representational State Transfer (REST) API. You must provide the correct APPLICATION_ID and endpoint for your environment. For example:
-curl -X POST \ -H &#34;X-Parse-Application-Id: COOLAPPV100&#34; \ -H &#34;X-Parse-Revocable-Session: 1&#34; \ -H &#34;Content-Type: application/json&#34; \ -d &#39;{&#34;username&#34;:&#34;newuser&#34;,&#34;password&#34;:&#34;newpassword&#34;,&#34;phone&#34;:&#34;415-392-0202&#34;}&#39; \ http://1.2.3.4/parse/users # output (formatted): { &#34;objectId&#34;:&#34;DrIxj80hAf&#34;, &#34;createdAt&#34;:&#34;2022-12-12T18:11:18.497Z&#34;, &#34;sessionToken&#34;:&#34;r:6cad2f1fcd7de36e68ed86e3d215d324&#34; } NOTE: Email server integration is not available in this Developer Preview. Verifying email and the password reset functionality is not supported at this time." />
+<meta name="twitter:title" content="Users, Roles and ACLs" />
+  <meta name="twitter:description" content="Users, Roles and ACLs Creating Users You can create a user with this Representational State Transfer (REST) API. You must provide the correct APPLICATION_ID and endpoint for your environment. For example:
+curl -X POST \ -H &#34;X-Parse-Application-Id: COOLAPPV100&#34; \ -H &#34;X-Parse-Revocable-Session: 1&#34; \ -H &#34;Content-Type: application/json&#34; \ -d &#39;{&#34;username&#34;:&#34;newuser&#34;,&#34;password&#34;:&#34;newpassword&#34;,&#34;phone&#34;:&#34;415-392-0202&#34;}&#39; \ http://1.2.3.4/parse/users # output (formatted): { &#34;objectId&#34;:&#34;DrIxj80hAf&#34;, &#34;createdAt&#34;:&#34;2022-12-12T18:11:18.497Z&#34;, &#34;sessionToken&#34;:&#34;r:6cad2f1fcd7de36e68ed86e3d215d324&#34; } NOTE: Email server integration is not available in this Developer Preview." />
 
 
   <script type="application/ld+json">
@@ -58,11 +58,11 @@ curl -X POST \ -H &#34;X-Parse-Application-Id: COOLAPPV100&#34; \ -H &#34;X-Pars
       "@context": "http://schema.org",
       "@type": "TechArticle",
       "articleSection": "Getting Started",
-      "name": "Working With Users, Roles and ACLs",
+      "name": "Users, Roles and ACLs",
       "url" : "https://oracle.github.io/microservices-datadriven/mbaas/getting-started/identity/",
-      "headline": "Working With Users, Roles and ACLs",
-      "description": "Creating Users You can create a user with this Representational State Transfer (REST) API. You must provide the correct APPLICATION_ID and endpoint for your environment. For example:\ncurl -X POST \\ -H \u0022X-Parse-Application-Id: COOLAPPV100\u0022 \\ -H \u0022X-Parse-Revocable-Session: 1\u0022 \\ -H \u0022Content-Type: application\/json\u0022 \\ -d \u0027{\u0022username\u0022:\u0022newuser\u0022,\u0022password\u0022:\u0022newpassword\u0022,\u0022phone\u0022:\u0022415-392-0202\u0022}\u0027 \\ http:\/\/1.2.3.4\/parse\/users # output (formatted): { \u0022objectId\u0022:\u0022DrIxj80hAf\u0022, \u0022createdAt\u0022:\u00222022-12-12T18:11:18.497Z\u0022, \u0022sessionToken\u0022:\u0022r:6cad2f1fcd7de36e68ed86e3d215d324\u0022 } NOTE: Email server integration is not available in this Developer Preview. Verifying email and the password reset functionality is not supported at this time.",
-      "wordCount" : "866",
+      "headline": "Users, Roles and ACLs",
+      "description": "Users, Roles and ACLs Creating Users You can create a user with this Representational State Transfer (REST) API. You must provide the correct APPLICATION_ID and endpoint for your environment. For example:\ncurl -X POST \\ -H \u0022X-Parse-Application-Id: COOLAPPV100\u0022 \\ -H \u0022X-Parse-Revocable-Session: 1\u0022 \\ -H \u0022Content-Type: application\/json\u0022 \\ -d \u0027{\u0022username\u0022:\u0022newuser\u0022,\u0022password\u0022:\u0022newpassword\u0022,\u0022phone\u0022:\u0022415-392-0202\u0022}\u0027 \\ http:\/\/1.2.3.4\/parse\/users # output (formatted): { \u0022objectId\u0022:\u0022DrIxj80hAf\u0022, \u0022createdAt\u0022:\u00222022-12-12T18:11:18.497Z\u0022, \u0022sessionToken\u0022:\u0022r:6cad2f1fcd7de36e68ed86e3d215d324\u0022 } NOTE: Email server integration is not available in this Developer Preview.",
+      "wordCount" : "885",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1305,7 +1305,7 @@ if (!doNotTrack) {
     
   
   
-    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/mbaas/' href='/microservices-datadriven/mbaas/'><span itemprop='name'></span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/mbaas/getting-started/' href='/microservices-datadriven/mbaas/getting-started/'><span itemprop='name'>Getting Started</span></a><meta itemprop='position' content='4' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>Working With Users, Roles and ACLs</span><meta itemprop='position' content='5' /></li>
+    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/mbaas/' href='/microservices-datadriven/mbaas/'><span itemprop='name'></span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/mbaas/getting-started/' href='/microservices-datadriven/mbaas/getting-started/'><span itemprop='name'>Getting Started</span></a><meta itemprop='position' content='4' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>Users, Roles and ACLs</span><meta itemprop='position' content='5' /></li>
   
 
   
@@ -1323,8 +1323,16 @@ if (!doNotTrack) {
   <article
     class="gdoc-markdown gdoc-markdown__align--left"
   >
-    <h1>Working With Users, Roles and ACLs</h1>
+    <h1>Users, Roles and ACLs</h1>
     <div class="gdoc-page__anchorwrap">
+    <h1 id="users-roles-and-acls">
+        Users, Roles and ACLs
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/mbaas/getting-started/identity/#users-roles-and-acls" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Users, Roles and ACLs" aria-label="Anchor to: Users, Roles and ACLs" href="#users-roles-and-acls">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h1>
+</div>
+<div class="gdoc-page__anchorwrap">
     <h2 id="creating-users">
         Creating Users
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/mbaas/getting-started/identity/#creating-users" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Creating Users" aria-label="Anchor to: Creating Users" href="#creating-users">
@@ -1430,7 +1438,7 @@ if (!doNotTrack) {
 
 # output
 {}
-</code></pre><p>The document is deleted. You can verify this using the GET API, the dashboard, or by looking in the JavaScript Object Notation (JSON) collection in the database.</p>
+</code></pre><p>The document is deleted. You can verify this using the <code>GET</code> API, the dashboard, or by looking in the JavaScript Object Notation (JSON) collection in the database.</p>
 </li>
 </ul>
 <div class="gdoc-page__anchorwrap">
@@ -1527,7 +1535,7 @@ if (!doNotTrack) {
     &#34;sessionToken&#34;:&#34;r:e8256f575a826b64a91a18d6ad21911b&#34;
 }
 </code></pre><p>As you can see, user <code>nyg</code> has ID <code>E3t4Iid6XN</code> which matches the <code>_wperm</code> in the document.</p>
-<p>To delete the document, use the DELETE API with the <code>sessionToken</code> associated with the user. For example:</p>
+<p>To delete the document, use the <code>DELETE</code> API with the <code>sessionToken</code> associated with the user. For example:</p>
 <pre tabindex="0"><code>curl -X DELETE \
      -H &#34;X-Parse-Application-Id: COOLAPPV100&#34; \
      -H &#34;X-Parse-Session-Token: r:9431c553bb56f21c0a2853b18b5df37d&#34; \
@@ -1628,7 +1636,7 @@ http://1.2.3.4/parse/login
   },
   &#34;sessionToken&#34;:&#34;r:9805595b4a73c8d2135ae9e70bb885c6&#34;
 }
-</code></pre><p>The session token must be supplied in the DELETE API call. For example:</p>
+</code></pre><p>The session token must be supplied in the <code>DELETE</code> API call. For example:</p>
 <pre tabindex="0"><code>curl -X DELETE \
 -H &#34;X-Parse-Application-Id: COOLAPPV100&#34; \
 -H &#34;X-Parse-Session-Token: r:9805595b4a73c8d2135ae9e70bb885c6&#34; \
@@ -1646,7 +1654,7 @@ http://1.2.3.4/parse/classes/GameScore/LkTqWJKWw1
         </a>
     </h3>
 </div>
-<p><strong>NOTE:</strong> Oracle does not recommended using the master key to avoid ACLs</p>
+<p><strong>NOTE:</strong> Oracle does not recommended using the master key to avoid ACLs.</p>
 <p>Using the master key in an API call turns off all ACL checking. For example:</p>
 <pre tabindex="0"><code>curl -X DELETE \
      -H &#34;X-Parse-Application-Id: COOLAPPV100&#34; \
@@ -1656,6 +1664,10 @@ http://1.2.3.4/parse/classes/GameScore/LkTqWJKWw1
 # output:
 {}
 </code></pre><p>This call deletes the specified document regardless of any ACLs present.</p>
+<p>Next, go to the <a
+  class="gdoc-markdown__link"
+  href="../sample-apps/"
+>Sample Applications</a> page to learn how to use the Sample Applications.</p>
 
   </article>
 

@@ -12,7 +12,7 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/extra/</guid>
-      <description>To test the Parse API direct access from the same page, let&amp;rsquo;s add a few lines of codes to the index.html file to show four new buttons to Insert, Get and Update a restaurant (minimum properties) in the same collection created from the Firebase-on-Parse SDK. The application logic is in the /parsef/example.js file.
+      <description>Extra Parse Test Code To test the Parse API direct access from the same page, let&amp;rsquo;s add a few lines of codes to the index.html file to show four new buttons to Insert, Get and Update a restaurant (minimum properties) in the same collection created from the Firebase-on-Parse SDK. The application logic is in the /parsef/example.js file.
 The modified parts included in the index.html file are the following:
 &amp;lt;!--ORACLE--&amp;gt; &amp;lt;div style=&amp;#34;text-align: center&amp;#34;&amp;gt; &amp;lt;p&amp;gt; &amp;lt;button id=&amp;#34;insertButton&amp;#34;&amp;gt;INSERT RESTAURANT&amp;lt;/button&amp;gt;&amp;lt;p&amp;gt; &amp;lt;button id=&amp;#34;createButton&amp;#34;&amp;gt;GET RESTAURANT&amp;lt;/button&amp;gt;&amp;lt;p&amp;gt; &amp;lt;button id=&amp;#34;updateButton&amp;#34;&amp;gt;SET RESTAURANT&amp;lt;/button&amp;gt;&amp;lt;p&amp;gt; &amp;lt;button id=&amp;#34;queryButton&amp;#34; &amp;gt;N° RESTAURANTS&amp;lt;/button&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/pre&amp;gt; &amp;lt;!</description>
     </item>
@@ -23,7 +23,7 @@ The modified parts included in the index.html file are the following:
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/friendly-eats/</guid>
-      <description>This is an example of porting a simple Firebase web application based on JavaScript Firebase API - version 8 and described in a public tutorial to the Parse Platform leveraging an alpha quality JavaScript library included in this example.
+      <description>Friendly Eats Tutorial This is an example of porting a simple Firebase web application based on JavaScript Firebase API - version 8 and describs a public Tutorial to the Parse Platform leveraging an alpha quality JavaScript library included in this example.
 Complete the Original Tutorial First We recommend that you complete the original FriendlyEats tutorial instructions using Firebase.
 Adapt the Code to Use the Firebase API Emulation After completing the tutorial, you have a functioning application.</description>
     </item>
@@ -34,8 +34,19 @@ Adapt the Code to Use the Firebase API Emulation After completing the tutorial, 
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/scope/</guid>
-      <description>This Developer Preview of the Firebase API emulation includes only the following implemented classes and methods:
-class Query where() orderBy() limit() get() onSnapshot() class CollectionReference add() orderBy() limit() onSnapshot() doc() get() where() class QueryDocumentSnapshot data() get() class DocumentReference get() collection() class QuerySnapshot forEach() class DocumentSnapshot data() class Firestore collection() runTransaction() class Transaction get() set() update() The diagram below shows relationships between these APIs:</description>
+      <description>Implemented APIs This Developer Preview of the Firebase API emulation includes only the following implemented classes and methods:
+class Query where() orderBy() limit() get() onSnapshot() class CollectionReference add() orderBy() limit() onSnapshot() doc() get() where() class QueryDocumentSnapshot data() get() class DocumentReference get() collection() class QuerySnapshot forEach() class DocumentSnapshot data() class Firestore collection() runTransaction() class Transaction get() set() update() The diagram below shows relationships between these APIs:
+Next, go to the Dashboard page to learn more about the dashboard.</description>
+    </item>
+    
+    <item>
+      <title>Users, Roles and ACLs</title>
+      <link>https://oracle.github.io/microservices-datadriven/mbaas/getting-started/identity/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://oracle.github.io/microservices-datadriven/mbaas/getting-started/identity/</guid>
+      <description>Users, Roles and ACLs Creating Users You can create a user with this Representational State Transfer (REST) API. You must provide the correct APPLICATION_ID and endpoint for your environment. For example:
+curl -X POST \ -H &amp;#34;X-Parse-Application-Id: COOLAPPV100&amp;#34; \ -H &amp;#34;X-Parse-Revocable-Session: 1&amp;#34; \ -H &amp;#34;Content-Type: application/json&amp;#34; \ -d &amp;#39;{&amp;#34;username&amp;#34;:&amp;#34;newuser&amp;#34;,&amp;#34;password&amp;#34;:&amp;#34;newpassword&amp;#34;,&amp;#34;phone&amp;#34;:&amp;#34;415-392-0202&amp;#34;}&amp;#39; \ http://1.2.3.4/parse/users # output (formatted): { &amp;#34;objectId&amp;#34;:&amp;#34;DrIxj80hAf&amp;#34;, &amp;#34;createdAt&amp;#34;:&amp;#34;2022-12-12T18:11:18.497Z&amp;#34;, &amp;#34;sessionToken&amp;#34;:&amp;#34;r:6cad2f1fcd7de36e68ed86e3d215d324&amp;#34; } NOTE: Email server integration is not available in this Developer Preview.</description>
     </item>
     
     <item>
@@ -44,7 +55,8 @@ class Query where() orderBy() limit() get() onSnapshot() class CollectionReferen
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://oracle.github.io/microservices-datadriven/mbaas/getting-started/dashboard/</guid>
-      <description>The Oracle Backend for Parse Platform includes a web user interface for managing your applications, to learn more see the dashboard page.</description>
+      <description>Using the Parse Dashboard The Oracle Backend for Parse Platform includes a web user interface for managing your applications. To learn more, see the dashboard page.
+Next, go to the Users, Roles and ACLs page to learn more.</description>
     </item>
     
     <item>
@@ -54,17 +66,7 @@ class Query where() orderBy() limit() get() onSnapshot() class CollectionReferen
       
       <guid>https://oracle.github.io/microservices-datadriven/mbaas/getting-started/objects/</guid>
       <description>The Oracle Backend for Parse Platform stores your data in objects. Each object is an instance of a named class. A class has certain properties or fields. You create a class by creating the first object in that class. You define the fields by using them. Once a class has a field with a certain type, you cannot change that field type while objects using it exist.
-Creating an Object The most basic operation you can do is to create a new object in the database.</description>
-    </item>
-    
-    <item>
-      <title>Working With Users, Roles and ACLs</title>
-      <link>https://oracle.github.io/microservices-datadriven/mbaas/getting-started/identity/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://oracle.github.io/microservices-datadriven/mbaas/getting-started/identity/</guid>
-      <description>Creating Users You can create a user with this Representational State Transfer (REST) API. You must provide the correct APPLICATION_ID and endpoint for your environment. For example:
-curl -X POST \ -H &amp;#34;X-Parse-Application-Id: COOLAPPV100&amp;#34; \ -H &amp;#34;X-Parse-Revocable-Session: 1&amp;#34; \ -H &amp;#34;Content-Type: application/json&amp;#34; \ -d &amp;#39;{&amp;#34;username&amp;#34;:&amp;#34;newuser&amp;#34;,&amp;#34;password&amp;#34;:&amp;#34;newpassword&amp;#34;,&amp;#34;phone&amp;#34;:&amp;#34;415-392-0202&amp;#34;}&amp;#39; \ http://1.2.3.4/parse/users # output (formatted): { &amp;#34;objectId&amp;#34;:&amp;#34;DrIxj80hAf&amp;#34;, &amp;#34;createdAt&amp;#34;:&amp;#34;2022-12-12T18:11:18.497Z&amp;#34;, &amp;#34;sessionToken&amp;#34;:&amp;#34;r:6cad2f1fcd7de36e68ed86e3d215d324&amp;#34; } NOTE: Email server integration is not available in this Developer Preview. Verifying email and the password reset functionality is not supported at this time.</description>
+Creating an Object The most basic operation that you can do is to create a new object in the database.</description>
     </item>
     
   </channel>

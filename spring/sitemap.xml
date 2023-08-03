@@ -8,10 +8,6 @@
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/</loc>
   </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/spring/security/</loc>
-  </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/spring/cluster-access/</loc>
-  </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/platform/apigw/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/azure/</loc>
@@ -22,17 +18,21 @@
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/getting-started/</loc>
   </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/cluster-access/</loc>
+  </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/observability/metrics/</loc>
   </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/spring/observability/</loc>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/development/cli/</loc>
   </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/</loc>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/observability/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/on-premises/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/platform/vscode-plugin/</loc>
+  </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/platform/</loc>
   </url><url>
@@ -41,6 +41,8 @@
     <loc>https://oracle.github.io/microservices-datadriven/spring/release-notes/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/sample-apps/</loc>
+  </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/security/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/platform/eureka/</loc>
   </url><url>
@@ -51,8 +53,6 @@
     <loc>https://oracle.github.io/microservices-datadriven/spring/tags/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/uninstall/</loc>
-  </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/spring/development/cli/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/platform/vault/</loc>
   </url><url>

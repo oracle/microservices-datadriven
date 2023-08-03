@@ -15,7 +15,7 @@
   <meta name="description" content="On-Premises Installation The Oracle Backend for Spring Boot is available to install On-Premises. The On-Premises installation includes both a Desktop installation and an Estate installation.
 The Desktop installation can be used to explore in a non-production environment, while the Estate installation is targeted for the production infrastructure.
 Prerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot On-Premises. You need:
-Access to an Oracle Database Enterprise Edition 21." />
+Access to Oracle Database Enterprise Edition 21." />
 
     <title>On-Premises | Oracle Backend for Spring Boot</title>
 
@@ -44,7 +44,7 @@ Access to an Oracle Database Enterprise Edition 21." />
   <meta property="og:description" content="On-Premises Installation The Oracle Backend for Spring Boot is available to install On-Premises. The On-Premises installation includes both a Desktop installation and an Estate installation.
 The Desktop installation can be used to explore in a non-production environment, while the Estate installation is targeted for the production infrastructure.
 Prerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot On-Premises. You need:
-Access to an Oracle Database Enterprise Edition 21." />
+Access to Oracle Database Enterprise Edition 21." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/on-premises/" />
 
@@ -56,7 +56,7 @@ Access to an Oracle Database Enterprise Edition 21." />
   <meta name="twitter:description" content="On-Premises Installation The Oracle Backend for Spring Boot is available to install On-Premises. The On-Premises installation includes both a Desktop installation and an Estate installation.
 The Desktop installation can be used to explore in a non-production environment, while the Estate installation is targeted for the production infrastructure.
 Prerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot On-Premises. You need:
-Access to an Oracle Database Enterprise Edition 21." />
+Access to Oracle Database Enterprise Edition 21." />
 
 
   <script type="application/ld+json">
@@ -67,8 +67,8 @@ Access to an Oracle Database Enterprise Edition 21." />
       "name": "On-Premises",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/on-premises/",
       "headline": "On-Premises",
-      "description": "On-Premises Installation The Oracle Backend for Spring Boot is available to install On-Premises. The On-Premises installation includes both a Desktop installation and an Estate installation.\nThe Desktop installation can be used to explore in a non-production environment, while the Estate installation is targeted for the production infrastructure.\nPrerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot On-Premises. You need:\nAccess to an Oracle Database Enterprise Edition 21.",
-      "wordCount" : "723",
+      "description": "On-Premises Installation The Oracle Backend for Spring Boot is available to install On-Premises. The On-Premises installation includes both a Desktop installation and an Estate installation.\nThe Desktop installation can be used to explore in a non-production environment, while the Estate installation is targeted for the production infrastructure.\nPrerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot On-Premises. You need:\nAccess to Oracle Database Enterprise Edition 21.",
+      "wordCount" : "718",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1608,8 +1608,10 @@ if (!doNotTrack) {
         </a>
     </h1>
 </div>
-<p>The Oracle Backend for Spring Boot is available to install On-Premises.  The On-Premises installation includes both a <em>Desktop</em> installation and an <em>Estate</em> installation.</p>
-<p>The <em>Desktop</em> installation can be used to explore in a non-production environment, while the <em>Estate</em> installation is targeted for the production infrastructure.</p>
+<p>The Oracle Backend for Spring Boot is available to install On-Premises. The On-Premises installation includes both a <em>Desktop</em> installation
+and an <em>Estate</em> installation.</p>
+<p>The <em>Desktop</em> installation can be used to explore in a non-production environment, while the <em>Estate</em> installation is targeted for the
+production infrastructure.</p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="prerequisites">
         Prerequisites
@@ -1620,15 +1622,16 @@ if (!doNotTrack) {
 </div>
 <p>You must meet the following prerequisites to use the Oracle Backend for Spring Boot On-Premises. You need:</p>
 <ul>
-<li>Access to an Oracle Database Enterprise Edition 21.3.0.0</li>
-<li>Access to a container repository</li>
+<li>Access to Oracle Database Enterprise Edition 21.3.0.0</li>
+<li>Access to a Container Repository</li>
 <li>Access to a Kubernetes cluster</li>
 <li><a
   class="gdoc-markdown__link"
   href="https://www.python.org/"
 >Python 3+</a></li>
 </ul>
-<p>When installing on a <em>Desktop</em>, the previously mentioned pre-requisites are met through an additional Setup task, but there are additional desktop system or software requirements. For example:</p>
+<p>When installing on a <em>Desktop</em>, the previously mentioned pre-requisites are met through an additional Setup task, but there are additional
+desktop system or software requirements. For example:</p>
 <ul>
 <li>2 CPUs or more</li>
 <li>8 GB of free memory</li>
@@ -1664,36 +1667,40 @@ if (!doNotTrack) {
         </a>
     </h2>
 </div>
-<p>An On-Premises installation, whether <em>Desktop</em> or <em>Estate</em>, consists of defining the infrastructure followed by running the Configuration Management playbook to build images and deploy the microservices.</p>
-<p>For an <em>Estate</em> installation, you need to have a Kubernetes cluster and the kubectl command-line tool must be configured to communicate with your cluster.</p>
-<p>A helper Playbook has been provided for the <em>Desktop</em> installations to assist in defining the infrastructure.  Review the appropriate documentation for examples of installing and defining the <em>Desktop</em> installation. For example:</p>
+<p>An On-Premises installation, whether <em>Desktop</em> or <em>Estate</em>, consists of defining the infrastructure followed by running the Configuration
+Management Playbook to build images and deploy the Microservices.</p>
+<p>For an <em>Estate</em> installation, you need to have a Kubernetes cluster and the <code>kubectl</code> command-line interface must be configured to
+communicate with your cluster.</p>
+<p>A Helper Playbook has been provided for the <em>Desktop</em> installations to assist in defining the infrastructure.  Review the
+appropriate documentation for examples of installing and defining the <em>Desktop</em> installation. For example:</p>
 <ul>
 <li><a
   class="gdoc-markdown__link"
   href="macos_ventura/_index.md"
->MacOS Ventura (x86)</a></li>
+>macOS Ventura (x86)</a></li>
 <li><a
   class="gdoc-markdown__link"
   href="ol8/_index.md"
 >Oracle Linux 8 (x86)</a></li>
 </ul>
-<p>The <em>Desktop</em> playbook is run as part of the Configuration Management playbook.</p>
+<p>The <em>Desktop</em> playbook is run as part of the Configuration Management Playbook.</p>
 <div class="gdoc-page__anchorwrap">
-    <h2 id="download-the-database-or-ords-images-_desktop_--installation">
-        Download the Database or ORDS Images (<em>Desktop</em>  Installation)
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#download-the-database-or-ords-images-_desktop_--installation" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Download the Database or ORDS Images (Desktop  Installation)" aria-label="Anchor to: Download the Database or ORDS Images (Desktop  Installation)" href="#download-the-database-or-ords-images-_desktop_--installation">
+    <h2 id="download-the-database-or-oracle-rest-data-services-ords-images-_desktop_--installation">
+        Download the Database or Oracle REST Data Services (ORDS) Images (<em>Desktop</em>  Installation)
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#download-the-database-or-oracle-rest-data-services-ords-images-_desktop_--installation" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Download the Database or Oracle REST Data Services (ORDS) Images (Desktop  Installation)" aria-label="Anchor to: Download the Database or Oracle REST Data Services (ORDS) Images (Desktop  Installation)" href="#download-the-database-or-oracle-rest-data-services-ords-images-_desktop_--installation">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>
 </div>
-<p>The <em>Desktop</em> installation provisions an Oracle Database to the Kubernetes cluster.  The images must be downloaded from <a
+<p>The <em>Desktop</em> installation provisions an Oracle database to the Kubernetes cluster. The images must be downloaded
+from <a
   class="gdoc-markdown__link"
   href="https://container-registry.oracle.com/"
 >Oracle&rsquo;s Container Registry</a> before continuing.</p>
 <p>After installing Podman, process these steps:</p>
 <ol>
 <li>
-<p>Log into Oracle&rsquo;s Container Registry. For example:</p>
+<p>Log in to Oracle Cloud Infrastructure Registry (Container Registry). For example:</p>
 <p><code>podman login container-registry.oracle.com</code></p>
 </li>
 <li>
@@ -1701,14 +1708,14 @@ if (!doNotTrack) {
 <p><code>podman pull container-registry.oracle.com/database/enterprise:21.3.0.0</code></p>
 </li>
 <li>
-<p>Pull the Oracle REST Data Services (ORDS) image. For example:</p>
+<p>Pull the ORDS image. For example:</p>
 <p><code>podman pull container-registry.oracle.com/database/ords:21.4.2-gh</code></p>
 </li>
 </ol>
 <div class="gdoc-page__anchorwrap">
-    <h3 id="defining-the-database--_estate_--installation">
-        Defining the Database  (<em>Estate</em>  Installation)
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#defining-the-database--_estate_--installation" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Defining the Database  (Estate  Installation)" aria-label="Anchor to: Defining the Database  (Estate  Installation)" href="#defining-the-database--_estate_--installation">
+    <h3 id="defining-the-database-_estate_--installation">
+        Defining the Database (<em>Estate</em>  Installation)
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#defining-the-database-_estate_--installation" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Defining the Database (Estate  Installation)" aria-label="Anchor to: Defining the Database (Estate  Installation)" href="#defining-the-database-_estate_--installation">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h3>
@@ -1723,16 +1730,18 @@ if (!doNotTrack) {
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">service</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=BAASPDB)))&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ocid</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
-</span></span></span></code></pre></div><p>The <code>oracle_dbs</code> and <code>default_db</code> key values should be the name of your Pluggable Database (PDB).  These are followed by the PDB name and Key/Values defining how to access the PDB.  If using mutual Transport Layer Security (mTLS) authentication, specify the full path of the wallet file.</p>
+</span></span></span></code></pre></div><p>The <code>oracle_dbs</code> and <code>default_db</code> key values should be the name of your Pluggable Database (PDB). These are followed by the PDB
+name and Key/Values defining how to access the PDB. If using Mutual Transport Layer Security (mTLS) authentication, specify the
+full path of the wallet file.</p>
 <div class="gdoc-page__anchorwrap">
-    <h3 id="defining-the-container-repository--_estate_--installation">
-        Defining the Container Repository  (<em>Estate</em>  Installation)
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#defining-the-container-repository--_estate_--installation" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Defining the Container Repository  (Estate  Installation)" aria-label="Anchor to: Defining the Container Repository  (Estate  Installation)" href="#defining-the-container-repository--_estate_--installation">
+    <h3 id="defining-the-container-repository-_estate_--installation">
+        Defining the Container Repository (<em>Estate</em>  Installation)
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#defining-the-container-repository-_estate_--installation" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Defining the Container Repository (Estate  Installation)" aria-label="Anchor to: Defining the Container Repository (Estate  Installation)" href="#defining-the-container-repository-_estate_--installation">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h3>
 </div>
-<p>The container repository is defined in <code>ansible/roles/registry/vars/main.yaml</code>.  For example:</p>
+<p>The Container Repository is defined in <code>ansible/roles/registry/vars/main.yaml</code>. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nn">---</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">registry_username</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;oracle&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">registry_password</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;Correct-horse-Battery-staple-35&#39;</span><span class="w">
@@ -1747,18 +1756,22 @@ if (!doNotTrack) {
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">docker.io/myorg</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">auth</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;b3JhY2xlOjdaUVgxLXhhbFR0NTJsS0VITlA0&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
-</span></span></span></code></pre></div><p>Specify the URL or authentication credentials for your Container Repository in <code>pull_registry_url</code>, <code>push_registry_url</code>, <code>registry_username</code> and <code>registry_password</code>.</p>
-<p>For the <code>registry_auth</code> section, manually log into your repository and copy the values found in the previously created file, often found in <code>$HOME/.config/containers/auth.json</code></p>
-<p>There may be duplication between the push and pull URL&rsquo;s.  The pull URL is used inside the pods while the push is used from the deployment machine.  If you have a private registry inside the Kubernetes cluster, these URL&rsquo;s could be different.  This is the case for the <em>Desktop</em> installation; the push URL is <code>localhost:5000</code>, while the pull URL is <code>&lt;Registry Pod ClusterIP&gt;:5000</code>.</p>
+</span></span></span></code></pre></div><p>Specify the URL or authentication credentials for your Container Repository in <code>pull_registry_url</code>, <code>push_registry_url</code>, <code>registry_username</code>
+and <code>registry_password</code>.</p>
+<p>For the <code>registry_auth</code> section, manually log in to your repository and copy the values found in the previously created file, which is often
+found in <code>$HOME/.config/containers/auth.json</code></p>
+<p>There may be duplication between the push and pull URL&rsquo;s. The pull URL is used inside the Pods while the push URL is used from the
+deployment machine. If you have a private registry inside the Kubernetes cluster, these URL&rsquo;s could be different. This is the case for
+the <em>Desktop</em> installation. For example, the push URL is <code>localhost:5000</code>, while the pull URL is <code>&lt;Registry Pod ClusterIP&gt;:5000</code>.</p>
 <div class="gdoc-page__anchorwrap">
-    <h2 id="configuration-management">
-        Configuration Management
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#configuration-management" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Configuration Management" aria-label="Anchor to: Configuration Management" href="#configuration-management">
+    <h2 id="configuration-management-playbook">
+        Configuration Management Playbook
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#configuration-management-playbook" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Configuration Management Playbook" aria-label="Anchor to: Configuration Management Playbook" href="#configuration-management-playbook">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>
 </div>
-<p>From the source package, run the Configuration Management playbook.</p>
+<p>From the source package, run the Configuration Management Playbook.</p>
 <div class="gdoc-page__anchorwrap">
     <h3 id="install-ansible">
         Install Ansible
@@ -1767,7 +1780,8 @@ if (!doNotTrack) {
         </a>
     </h3>
 </div>
-<p>Using Python, install Ansible to run the Configuration Management playbook.  The helper script creates a Python virtual environment and installs Ansible along with other additional modules. For example:</p>
+<p>Using Python, install Ansible to run the Configuration Management Playbook.  The Helper script creates a Python virtual environment
+and installs Ansible along with other additional modules. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./setup_ansible.sh
 </span></span><span class="line"><span class="cl"><span class="nb">source</span> ./activate.env
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
@@ -1779,7 +1793,7 @@ if (!doNotTrack) {
     </h3>
 </div>
 <p>If this is an <em>Estate</em> installation, the infrastructure should be manually defined as previously stated.</p>
-<p>If this is a <em>Desktop</em> installation, run the helper Playbook to define the infrastructure. For example:</p>
+<p>If this is a <em>Desktop</em> installation, run the Helper Playbook to define the infrastructure. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ansible-playbook ansible/desktop-apply.yaml
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="build-and-push-images-to-the-container-repository">
@@ -1789,7 +1803,8 @@ if (!doNotTrack) {
         </a>
     </h3>
 </div>
-<p>For the <em>Desktop</em> installation, start a new terminal and tunnel or port-forward to the minikube cluster.  Refer to the specific platform details for more information.</p>
+<p>For the <em>Desktop</em> installation, start a new terminal and tunnel or port-forward to the Minikube cluster.  Refer to the specific platform
+details for more information.</p>
 <p>For both installations, run the Images Playbook on the original terminal. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ansible-playbook ansible/images_build.yaml
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
@@ -1800,20 +1815,12 @@ if (!doNotTrack) {
         </a>
     </h3>
 </div>
-<p>Install the microservices by running this command:</p>
+<p>Install the Microservices by running this command:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ansible-playbook ansible/k8s_apply.yaml -t full
-</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
-    <h2 id="finish">
-        Finish
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#finish" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Finish" aria-label="Anchor to: Finish" href="#finish">
-            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
-        </a>
-    </h2>
-</div>
-<p>Next, go to the <a
+</span></span></code></pre></div><p>Next, go to the <a
   class="gdoc-markdown__link"
-  href="../getting-started/"
->Getting Started</a> page to learn how to use the newly installed environment.</p>
+  href="../on-premises/macos_ventura/"
+>macOS Ventura</a> page to learn more.</p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="footnotes">
         Footnotes
@@ -1826,7 +1833,8 @@ if (!doNotTrack) {
 <hr>
 <ol>
 <li id="fn:1">
-<p>Certification has been performed against Podman. However, other container or virtual machine managers are available and may be substituted.  Experience is needed and your milage may vary.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>Certification has been performed against Podman. However, other container or virtual machine managers are available and may be
+substituted.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </div>

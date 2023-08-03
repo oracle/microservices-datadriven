@@ -13,7 +13,7 @@
 
 
   <meta name="description" content="The Oracle Backend for Parse Platform stores your data in objects. Each object is an instance of a named class. A class has certain properties or fields. You create a class by creating the first object in that class. You define the fields by using them. Once a class has a field with a certain type, you cannot change that field type while objects using it exist.
-Creating an Object The most basic operation you can do is to create a new object in the database." />
+Creating an Object The most basic operation that you can do is to create a new object in the database." />
 
     <title>Working with Objects | Oracle Backend for Parse Platform</title>
 
@@ -40,7 +40,7 @@ Creating an Object The most basic operation you can do is to create a new object
   />
   <meta property="og:site_name" content="Oracle Backend for Parse Platform" />
   <meta property="og:description" content="The Oracle Backend for Parse Platform stores your data in objects. Each object is an instance of a named class. A class has certain properties or fields. You create a class by creating the first object in that class. You define the fields by using them. Once a class has a field with a certain type, you cannot change that field type while objects using it exist.
-Creating an Object The most basic operation you can do is to create a new object in the database." />
+Creating an Object The most basic operation that you can do is to create a new object in the database." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/mbaas/getting-started/objects/" />
 
@@ -50,7 +50,7 @@ Creating an Object The most basic operation you can do is to create a new object
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Working with Objects" />
   <meta name="twitter:description" content="The Oracle Backend for Parse Platform stores your data in objects. Each object is an instance of a named class. A class has certain properties or fields. You create a class by creating the first object in that class. You define the fields by using them. Once a class has a field with a certain type, you cannot change that field type while objects using it exist.
-Creating an Object The most basic operation you can do is to create a new object in the database." />
+Creating an Object The most basic operation that you can do is to create a new object in the database." />
 
 
   <script type="application/ld+json">
@@ -61,8 +61,8 @@ Creating an Object The most basic operation you can do is to create a new object
       "name": "Working with Objects",
       "url" : "https://oracle.github.io/microservices-datadriven/mbaas/getting-started/objects/",
       "headline": "Working with Objects",
-      "description": "The Oracle Backend for Parse Platform stores your data in objects. Each object is an instance of a named class. A class has certain properties or fields. You create a class by creating the first object in that class. You define the fields by using them. Once a class has a field with a certain type, you cannot change that field type while objects using it exist.\nCreating an Object The most basic operation you can do is to create a new object in the database.",
-      "wordCount" : "362",
+      "description": "The Oracle Backend for Parse Platform stores your data in objects. Each object is an instance of a named class. A class has certain properties or fields. You create a class by creating the first object in that class. You define the fields by using them. Once a class has a field with a certain type, you cannot change that field type while objects using it exist.\nCreating an Object The most basic operation that you can do is to create a new object in the database.",
+      "wordCount" : "380",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1335,9 +1335,9 @@ cannot change that field type while objects using it exist.</p>
         </a>
     </h2>
 </div>
-<p>The most basic operation you can do is to create a new object in the database. The following examples use the Representational State Transfer (REST) API to access
+<p>The most basic operation that you can do is to create a new object in the database. The following examples use the Representational State Transfer (REST) API to access
 the Parse Server. To create
-an object, perform an HTTP POST to the Parse endpoint <code>/parse/classes/</code> and append the name of the class of the object that you want to create. In this example, the
+an object, perform an HTTP <code>POST</code> to the Parse endpoint <code>/parse/classes/</code> and append the name of the class of the object that you want to create. In this example, the
 object is <code>GameScore</code>.  The content is provided in JavaScript Object Notation (JSON) format. Provide the correct <code>APPLICATION_ID</code> and update the endpoint address to match
 your environment. For example:</p>
 <pre tabindex="0"><code>curl -X POST \
@@ -1357,7 +1357,7 @@ the <code>objectId</code> for the newly created object. For example:</p>
         </a>
     </h2>
 </div>
-<p>To retrieve the newly created object, use the HTTP GET API as shown in the following example.  Append the <code>objectId</code> to the end of the URL. Update the command
+<p>To retrieve the newly created object, use the HTTP <code>GET</code> API as shown in the following example.  Append the <code>objectId</code> to the end of the URL. Update the command
 with your <code>APPLICATION_ID</code> and endpoint address. For example:</p>
 <pre tabindex="0"><code>curl -X GET \
      -H &#34;X-Parse-Application-Id: COOLAPPV100&#34; \
@@ -1373,7 +1373,7 @@ with your <code>APPLICATION_ID</code> and endpoint address. For example:</p>
 }
 </code></pre><p><strong>NOTE:</strong> You can use any arbitrary string as your <code>APPLICATION_ID</code>. These are used by your clients to authenticate with the Parse Server. During creation of
 the Oracle Backend for Parse Platform environment, you provided an application ID as a configuration option. If any call to the Parse Server does not use a
-valid application ID, the call is rejected with this error message:</p>
+valid application ID, the call is rejected and returns this error message:</p>
 <pre tabindex="0"><code>{&#34;error&#34;:&#34;unauthorized&#34;}
 </code></pre><div class="gdoc-page__anchorwrap">
     <h2 id="more-information">
@@ -1387,6 +1387,10 @@ valid application ID, the call is rejected with this error message:</p>
   class="gdoc-markdown__link"
   href="https://docs.parseplatform.org/parse-server/guide/#getting-started"
 >working with objects</a> in the Parse Server documentation.</p>
+<p>Next, go to the <a
+  class="gdoc-markdown__link"
+  href="../getting-started/dashboard/"
+>Using the Parse Dashboard</a> page to learn how to use the dashboard.</p>
 
   </article>
 
