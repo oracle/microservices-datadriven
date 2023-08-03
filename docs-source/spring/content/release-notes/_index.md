@@ -50,8 +50,7 @@ There were no component deprecations or removals.
 Notes:
 
 * Oracle Backend for Spring Boot now includes the option to install in a Multicloud (OCI/Azure) environment.
-* The OCI Service Operator for Kubernetes is bound to the existing Oracle Autonomous Database (ADB) created by infrastructure as code (IaC) in
-  an all-OCI installation and provisions the ADB in the Multicloud installation.
+* The Oracle Database Operator for Kubernetes is bound to the existing Oracle Autonomous Database (ADB) created by infrastructure as code (IaC) in an all-OCI installation and provisions the ADB in the Multicloud installation.
 * Improvements to On-Premises and desktop installation processes.
 
 The following components were added:
@@ -80,7 +79,7 @@ The following components were added:
 
 | Component                    | Version       | Description                                                                             |
 |------------------------------|---------------|-----------------------------------------------------------------------------------------|
-| OCI Service Operator for Kubernetes | 0.6.1 | Helps reduce the time and complexity of deploying and managing Oracle databases.     |  
+| Oracle Database Operator for Kubernetes | 0.6.1 | Helps reduce the time and complexity of deploying and managing Oracle databases.     |  
 | Parse Server                 | 5.2.7        | Provides backend services for mobile and web applications.                               |
 | Parse Dashboard              | 5.0.0        | Uses a web user interface for managing Parse Server.                                            |
 | Oracle Database Adapter for Parse Server | 0.2.0    | Enables the Parse Server to store data in an Oracle database.                           |
