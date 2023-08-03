@@ -1,10 +1,12 @@
 ---
-title: Working with Users, Roles and ACLs
+title: "Users, Roles and ACLs"
 ---
+
+# Users, Roles and ACLs
 
 ## Creating Users
 
-You can create a user with this REST API. You must provide the correct `APPLICATION_ID` and endpoint for your environment:
+You can create a user with this Representational State Transfer (REST) API. You must provide the correct `APPLICATION_ID` and endpoint for your environment. For example:
 
 ```
 curl -X POST \
@@ -22,14 +24,14 @@ curl -X POST \
 }
 ```
 
-**Note:** Email Server integration is not available in this developer preview. Verifying email and Password Reset functionality is not supported at this time.
+**NOTE:** Email server integration is not available in this _Developer_ _Preview_. Verifying email and the password reset functionality is not supported at this time.
 
 Learn more about users in the [Parse Server documentation](https://docs.parseplatform.org/rest/guide/#users)
 
 
 ## Creating Roles
 
-You can create a role with this REST API. You must provide the correct `APPLICATION_ID` and endpoint for your environment:
+You can create a role with this REST API. You must provide the correct `APPLICATION_ID` and endpoint for your environment. For example:
 
 ```
 curl -X POST \
@@ -48,17 +50,17 @@ curl -X POST \
 Learn more about roles in the [Parse Server documentation](https://docs.parseplatform.org/rest/guide/#roles)
 
 
-## Using Access Control Lists
+## Using Access Control Lists (ACLs)
 
 Parse ACLs are implemented as part of the API and can be specified on most requests.
 
-The following examples will use the `GameScore` collection you created earlier. Also, the examples will focus on delete which requires the write permission.
+The following examples use the `GameScore` collection that you created earlier. Also, the examples focus on the delete function which requires the write permission.
 
 Learn more about ACLs in the [Parse Server documentation](https://docs.parseplatform.org/parse-server/guide/#object-level-access-control)
 
-### Game Score with no ACLs
+### GameScore With No ACLs
 
-* Create a `GameScore` document:
+* Create a `GameScore` document using these commands:
 
     ```
     curl -X POST \
@@ -74,7 +76,7 @@ Learn more about ACLs in the [Parse Server documentation](https://docs.parseplat
     }
     ```
 
-    This creates a Document like this: 
+    This creates a document similar to the following: 
 
     ```
     {
@@ -88,7 +90,7 @@ Learn more about ACLs in the [Parse Server documentation](https://docs.parseplat
     ```
     Note that no ACLs are associated with this object.
 
-* Delete `GameScore` with no ACL
+* Delete `GameScore` without an ACL using these commands:
 
     ```
     curl -X DELETE \
@@ -99,11 +101,11 @@ Learn more about ACLs in the [Parse Server documentation](https://docs.parseplat
     {}
     ```
 
-    The document is deleted.  You can verify this using the GET API, the dashboard, or looking in the JSON collection in the database.
+    The document is deleted. You can verify this using the `GET` API, the dashboard, or by looking in the JavaScript Object Notation (JSON) collection in the database.
 
-### Game Score with User ACL
+### GameScore With User ACL
 
-* Create a `GameScore` document with a specific user that has read/write access
+* Create a `GameScore` document with a specific user that has read/write access. For example:
 
     ```
     curl -X POST \
@@ -135,7 +137,7 @@ Learn more about ACLs in the [Parse Server documentation](https://docs.parseplat
     }
     ```
 
-    This creates a Document like this:
+    This creates a document similar to the following:
 
     ```
     {
@@ -164,11 +166,11 @@ Learn more about ACLs in the [Parse Server documentation](https://docs.parseplat
     }
     ```
 
-    **Note:** specifying an ACL creates the internal _rperm and _wperm. These are not accessible through the API and are Parse internal implementation data.
+    **NOTE:** Specifying an ACL creates the internal `_rperm` and `_wperm`. These are not accessible through the API and are Parse internal implementation data.
 
 * Delete a `GameScore` document with a specific user that has read/write access.
 
-    To delete a document that has ACLls, a caller needs to specify the session token that is obtained by logging in:
+    To delete a document that has ACLs, a caller needs to specify the session token that is obtained by logging in. For example:
 
     ```
     curl -X POST \
@@ -198,9 +200,9 @@ Learn more about ACLs in the [Parse Server documentation](https://docs.parseplat
     }
     ```
 
-    As you can see, user `nyg` has id `E3t4Iid6XN` which matches the `_wperm` in the document.
+    As you can see, user `nyg` has ID `E3t4Iid6XN` which matches the `_wperm` in the document.
 
-    To delete the document, use the DELETE API with the `sessionToken` associated with the user:
+    To delete the document, use the `DELETE` API with the `sessionToken` associated with the user. For example:
 
     ```
     curl -X DELETE \
@@ -213,11 +215,11 @@ Learn more about ACLs in the [Parse Server documentation](https://docs.parseplat
     ```
 
 
-### Game Score with Roles ACL
+### GameScore With Roles ACL
 
-Roles work in a similar fashion to Users. It is assumed that, for this example, the User `bruce` has been associated with Role `Admins`.
+Roles work in a similar fashion to Users. It is assumed that, for this example, the User `bruce` has been associated with the role `Admins`.
 
-* Create a `GameScore` document with a specific role that has read/write access:
+* Create a `GameScore` document with a specific role that has read/write access. For example:
 
     ```
     curl -X POST \
@@ -248,7 +250,7 @@ Roles work in a similar fashion to Users. It is assumed that, for this example, 
     }
     ```
 
-    This creates a Document like this: 
+    This creates a document similar to the following: 
 
     ```
         {
@@ -277,7 +279,7 @@ Roles work in a similar fashion to Users. It is assumed that, for this example, 
     }
     ```
 
-*  To delete this document, a caller must get the session token for a user that has `Admins` role by logging in:
+*  To delete this document, a caller must get the session token for a user that has the `Admins` role by logging in. For example:
 
     ```
     curl -X POST \
@@ -307,7 +309,7 @@ Roles work in a similar fashion to Users. It is assumed that, for this example, 
     }
     ```
 
-    The session token must be supplied in the DELETE API call:
+    The session token must be supplied in the `DELETE` API call. For example:
 
     ```
     curl -X DELETE \
@@ -321,9 +323,9 @@ Roles work in a similar fashion to Users. It is assumed that, for this example, 
 
 ### Using the Master Key
 
-**Note:** Oracle does not recommended using the master key to avoid ACLs
+**NOTE:** Oracle does not recommended using the master key to avoid ACLs.
 
-Using the Master Key in an API call turns off all ACL checking, for example:
+Using the master key in an API call turns off all ACL checking. For example:
 
 ```
 curl -X DELETE \
@@ -335,4 +337,6 @@ curl -X DELETE \
 {}
 ```
 
-This call will delete the specified document regardless of any ACLs present.
+This call deletes the specified document regardless of any ACLs present.
+
+Next, go to the [Sample Applications](../sample-apps/) page to learn how to use the Sample Applications.

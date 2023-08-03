@@ -1,27 +1,33 @@
+---
+Title: "On-Premises Installation"
+---
+
 # On-Premises Installation
 
-The Oracle Backend for Parse Platform is available to install On-Premises.  The On-Premises installation includes both a _Desktop_ installation and an _Estate_ installation.
+The Oracle Backend for Parse Platform is available to install On-Premises.  The On-Premises installation includes both a _Desktop_ installation and
+an _Estate_ installation.
 
-The _Desktop_ installation can be used to explore the in a non-Production environment, while the _Estate_ installation is targeted for Production infrastructure.
+The _Desktop_ installation can be used to explore a non-Production environment, while the _Estate_ installation is targeted for a Production infrastructure.
 
 ## Prerequisites
 
-You must meet the following prerequisites to use the Oracle Backend for Parse Platform On-Premises:
+You must meet the following prerequisites to use the Oracle Backend for Parse Platform On-Premises. You need access to:
 
-* Access to an Oracle Database - Enterprise Edition 21.3.0.0
-* Access to a Container Repository
-* Access to a Kubernetes Cluster
+* An Oracle Database Enterprise Edition 21.3.0.0
+* A Container Repository
+* A Kubernetes cluster
 * [Python 3+](https://www.python.org/)
 
-When installing on a _Desktop_ the above pre-requisites are met through an additional Setup task, but there are additional desktop system/software requirements:
+When installing on a _Desktop_, the previously mentioned prerequisites are met through an additional setup task, but there are additional desktop
+system or software requirements. For example:
 
 * 2 CPUs or more
-* 8GB of free memory
-* 60GB of free disk space (40G minikube and container images, 20G database)
+* 8 GB of free memory
+* 60 GB of free disk space (40 GB Minikube and container images, 20 GB database)
 * Internet connection
 * [Minikube](https://minikube.sigs.k8s.io/docs/start/)
 * [Podman](https://podman.io/getting-started/)[^1]
-* Oracle SSO Account to download the database image
+* Oracle Single Sign-On (SSO) account to download the database image
 
 ## Download
 
@@ -29,30 +35,40 @@ Download [Oracle Backend for Parse Platform](https://github.com/oracle/microserv
 
 ## Setup
 
-An On-Premises installation, whether _Desktop_ or _Estate_, consists of defining the Parse Application and infrastructure; followed by running the Configuration Management Playbook to build images and deploy the microservices.
+An On-Premises installation, whether _Desktop_ or _Estate_, consists of defining the Parse application and infrastructure followed by running the
+Configuration Management Playbook to build images and deploy the Microservices.
 
-For an _Estate_ installation, you need to have a Kubernetes cluster, and the kubectl command-line tool must be configured to communicate with your cluster.
+For an _Estate_ installation, you need a Kubernetes cluster and the `kubectl` command-line interface must be configured to communicate with the cluster.
 
-A helper Playbook has been provided for _Desktop_ installations to assist in defining the Infrastructure.  Please review the appropriate documentation for examples of installing and defining the _Desktop_ installation (more _Desktop_  examples may be provided in the future).
+A Helper Playbook is provided for _Desktop_ installations to assist in defining the infrastructure. Review the appropriate documentation for examples of
+installing and defining the _Desktop_ installation.
 
-* [MacOS Ventura (x86)](macos_ventura/_index.md)
+* [macOS Ventura (x86)](macos_ventura/_index.md)
 * [Oracle Linux 8 (x86)](ol8/_index.md)
 
-The _Desktop_ Playbook will be run as part of the Configuration Management.
+The _Desktop_ Playbook is run as part of the Configuration Management Playbook.
 
-## Download the Database/ORDS Images (_Desktop_ Installation)
+## Download the Database/Oracle REST Data Services (ORDS) Images (_Desktop_  Installation)
 
-The _Desktop_ installation will provision an Oracle Database into the Kubernetes cluster.  The images must be downloaded from [Oracle's Container Registry](https://container-registry.oracle.com/) prior to continuing.
+The _Desktop_ installation provisions an Oracle Database into the Kubernetes cluster.  The images must be downloaded from the [Oracle Cloud Infrastructure Registry (Container Registry)](https://container-registry.oracle.com/) before continuing.
 
-After Installing Podman:
+After installing Podman:
 
-1. Log into Oracle's Container Registry: `podman login container-registry.oracle.com`
-2. Pull the Database Image: `podman pull container-registry.oracle.com/database/enterprise:21.3.0.0`
-3. Pull the ORDS Image: `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
+1. Log in to the Container Registry: 
 
-### Defining the Parse Application (_Estate_ Installation)
+   `podman login container-registry.oracle.com`
+   
+2. Pull the database image: 
 
-The Parse Application is defined in `ansible/vars/baas.yaml`.  Below is an example definition:
+   `podman pull container-registry.oracle.com/database/enterprise:21.3.0.0`
+   
+3. Pull the ORDS image: 
+
+   `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
+
+### Defining the Parse Application (_Estate_  Installation)
+
+The Parse application is defined in `ansible/vars/baas.yaml`. For example:
 
 ```yaml
 ---
@@ -67,11 +83,11 @@ private_key: ""
 ...
 ```
 
-You can use any arbitrary string as your `app_name`, `app_id` and `master_key`. These will be used by your clients to authenticate with the Parse Server.  It is recommended to specify a unique `dashboard_username` and `dashboard_password`.
+You can use any arbitrary string as your `app_name`, `app_id`, and `master_key`. These are used by your clients to authenticate with the Parse Server.  It is recommended to specify a unique `dashboard_username` and `dashboard_password`.
 
-### Defining the Database  (_Estate_ Installation)
+### Defining the Database  (_Estate_  Installation)
 
-The database is defined in `ansible/roles/database/vars/main.yaml`.  Below is an example definition:  
+The database is defined in `ansible/roles/database/vars/main.yaml`. For example:  
 
 ```yaml
 ---
@@ -85,11 +101,12 @@ BAASPDB:
 ...
 ```
 
-The `oracle_dbs` and `default_db` keys should be the name of your Pluggable Database (PDB).  These keys are followed by the PDB and keys defining how to access the PDB.  If using mTLS authentication, specify the full path of the wallet file.
+The `oracle_dbs` and `default_db` keys should be the name of your Pluggable Database (PDB).  These keys are followed by the PDB and keys defining how to
+access the PDB. If using Mutual Transport Layer Security (mTLS) authentication, specify the full path of the wallet file.
 
-### Defining the Container Repository  (_Estate_ Installation)
+### Defining the Container Repository  (_Estate_  Installation)
 
-The container repository is defined in `ansible/roles/registry/vars/main.yaml`.  Below is an example definition:
+The Container Repository is defined in `ansible/roles/registry/vars/main.yaml`. For example:
 
 ```yaml
 ---
@@ -109,19 +126,22 @@ pull_registry_auth:
 ...
 ```
 
-Specify the URL/authentication credentials for your Container Repository in `pull_registry_url`, `push_registry_url`, `registry_username` and `registry_password`.  
+Specify the URL or authentication credentials for your Container Repository in `pull_registry_url`, `push_registry_url`, `registry_username`, and `registry_password`.  
 
-For the `<pull|push>_registry_auth` section, manually log into your repository and copy the values found in file created, often found in `$HOME/.config/containers/auth.json`
+For the `push_registry_auth` and `pull_registry_auth` sections, manually log into your repository and copy the values found in created file, located in `$HOME/.config/containers/auth.json`
 
-You maybe curious as to why there is duplication between the push and pull URL's.  The pull URL is used inside the pods while the push is used from the deployment machine.  If you have a private registry inside the Kubernetes cluster, these URL's could be different.  This is the case for the _Desktop_ installation; the push URL is `localhost:5000`, while the pull URL is `<Registry Pod ClusterIP>:5000`.
+Why is there duplication between the push and pull URL's?  The push URL is used from the deployment machine while the pull URL is used inside the pods. If you
+have a private registry inside the Kubernetes cluster, these URL's could be different. This is the case for the _Desktop_ installation. The push URL
+is `localhost:5000`, while the pull URL is `<Registry Pod ClusterIP>:5000`.
 
 ## Configuration Management
 
-From the source package, run the configuration management Playbook:
+From the source package, run the Configuration Management Playbook.
 
 ### Install Ansible
 
-Using python, install Ansible to run the Configuration Management Playbook.  The helper scripts will create a Python Virtual Environment and install Ansible and additional modules:
+Using Python, install Ansible to run the Configuration Management Playbook. The Helper scripts create a Python virtual environment and installs Ansible and
+any additional modules. For example:
 
 ```bash
 ./setup_ansible.sh
@@ -130,7 +150,8 @@ source ./activate.env
 
 ### Desktop Playbook
 
-If this is an _Estate_ installation, the Infrastructure should be manually defined as per above.  If this is a _Desktop_ installation; run the helper Playbook to define the infrastructure:
+If this is an _Estate_ installation, the infrastructure should be manually defined as previously mentioned. If this is a _Desktop_ installation, run the
+Helper Playbook to define the infrastructure. For example:
 
 ```bash
 ansible-Playbook desktop-apply.yaml
@@ -138,9 +159,9 @@ ansible-Playbook desktop-apply.yaml
 
 ### Build and Push Images to the Container Repository
 
-For the _Desktop_ installation, start a new terminal and tunnel or port-forward to the minikube cluster.  Refer to the specific platform details for more information.
+For the _Desktop_ installation, start a new terminal and tunnel or port-forward to the Minikube cluster.  Refer to the specific platform details for more information.
 
-For both installations, on the original terminal, run the Images Playbook:
+For both installations, run the Images Playbook on the original terminal. For example:
 
 ```bash
 ansible-playbook ansible/images_build.yaml
@@ -148,14 +169,15 @@ ansible-playbook ansible/images_build.yaml
 
 ### Install the Microservices
 
+To install Microservices, process this command:
+
 ```bash
 ansible-Playbook ansible/k8s_apply.yaml -t full
 ```
 
-## Finish
-
-Next, move on the the [Getting Started](../getting-started/) page to learn how to use the newly installed environment.
+Next, go to the [macOS Ventura (x86)](../on-premises/macos_ventura/) page to learn how to use the newly installed environment.
 
 ## Footnotes
 
-[^1]: Certification has been performed against Podman, however, other container or virtual machine managers are available and may be substituted.  Experience is needed and your milage may vary.
+[^1]: Certification has been performed against Podman. However, other container or virtual machine managers are available and may be substituted. Experience is
+needed.
