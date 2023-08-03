@@ -2,8 +2,6 @@
 title: "Security"
 ---
 
-# Security
-
 The Oracle Backend for Spring Boot has the following security characteristics:
 
 - All access to the database is done using the Mutual Transport Layer Security (mTLS) database wallet. The user name, password, and URL are
