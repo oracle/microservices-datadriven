@@ -57,8 +57,6 @@ resources:
     title: "Create Stack"
 ---
 
-# Setup
-
 Oracle Backend for Spring Boot is available in the [OCI Marketplace](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911).
 
 ## Prerequisites
