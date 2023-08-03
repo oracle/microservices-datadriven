@@ -17,7 +17,7 @@ The Desktop installation can be used to explore a non-Production environment, wh
 Prerequisites You must meet the following prerequisites to use the Oracle Backend for Parse Platform On-Premises. You need access to:
 An Oracle Database Enterprise Edition 21." />
 
-    <title>On-Premises | Oracle Backend for Parse Platform</title>
+    <title>On-Premises Installation | Oracle Backend for Parse Platform</title>
 
     <link rel="icon" type="image/svg+xml" href="/microservices-datadriven/mbaas/favicon/favicon.svg" />
 <link
@@ -38,7 +38,7 @@ An Oracle Database Enterprise Edition 21." />
     
   <meta
     property="og:title"
-    content="On-Premises"
+    content="On-Premises Installation"
   />
   <meta property="og:site_name" content="Oracle Backend for Parse Platform" />
   <meta property="og:description" content="On-Premises Installation The Oracle Backend for Parse Platform is available to install On-Premises. The On-Premises installation includes both a Desktop installation and an Estate installation.
@@ -52,7 +52,7 @@ An Oracle Database Enterprise Edition 21." />
 
 
   <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="On-Premises" />
+<meta name="twitter:title" content="On-Premises Installation" />
   <meta name="twitter:description" content="On-Premises Installation The Oracle Backend for Parse Platform is available to install On-Premises. The On-Premises installation includes both a Desktop installation and an Estate installation.
 The Desktop installation can be used to explore a non-Production environment, while the Estate installation is targeted for a Production infrastructure.
 Prerequisites You must meet the following prerequisites to use the Oracle Backend for Parse Platform On-Premises. You need access to:
@@ -64,11 +64,11 @@ An Oracle Database Enterprise Edition 21." />
       "@context": "http://schema.org",
       "@type": "TechArticle",
       "articleSection": "On Premises",
-      "name": "On-Premises",
+      "name": "On-Premises Installation",
       "url" : "https://oracle.github.io/microservices-datadriven/mbaas/on-premises/",
-      "headline": "On-Premises",
+      "headline": "On-Premises Installation",
       "description": "On-Premises Installation The Oracle Backend for Parse Platform is available to install On-Premises. The On-Premises installation includes both a Desktop installation and an Estate installation.\nThe Desktop installation can be used to explore a non-Production environment, while the Estate installation is targeted for a Production infrastructure.\nPrerequisites You must meet the following prerequisites to use the Oracle Backend for Parse Platform On-Premises. You need access to:\nAn Oracle Database Enterprise Edition 21.",
-      "wordCount" : "771",
+      "wordCount" : "770",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1305,7 +1305,7 @@ if (!doNotTrack) {
     
   
   
-    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/mbaas/' href='/microservices-datadriven/mbaas/'><span itemprop='name'></span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>On-Premises</span><meta itemprop='position' content='4' /></li>
+    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/mbaas/' href='/microservices-datadriven/mbaas/'><span itemprop='name'></span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>On-Premises Installation</span><meta itemprop='position' content='4' /></li>
   
 
   
@@ -1321,7 +1321,7 @@ if (!doNotTrack) {
   <article
     class="gdoc-markdown gdoc-markdown__align--left"
   >
-    <h1>On-Premises</h1>
+    <h1>On-Premises Installation</h1>
     <div class="gdoc-page__anchorwrap">
     <h1 id="on-premises-installation">
         On-Premises Installation
@@ -1345,7 +1345,7 @@ an <em>Estate</em> installation.</p>
 <ul>
 <li>An Oracle Database Enterprise Edition 21.3.0.0</li>
 <li>A Container Repository</li>
-<li>A Kubernetes Cluster</li>
+<li>A Kubernetes cluster</li>
 <li><a
   class="gdoc-markdown__link"
   href="https://www.python.org/"
@@ -1381,9 +1381,9 @@ system or software requirements. For example:</p>
   href="https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/on-prem-mbaas_v0.1.1.zip"
 >Oracle Backend for Parse Platform</a>.</p>
 <div class="gdoc-page__anchorwrap">
-    <h2 id="set-up">
-        Set Up
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/mbaas/on-premises/#set-up" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Set Up" aria-label="Anchor to: Set Up" href="#set-up">
+    <h2 id="setup">
+        Setup
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/mbaas/on-premises/#setup" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Setup" aria-label="Anchor to: Setup" href="#setup">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>
@@ -1397,7 +1397,7 @@ installing and defining the <em>Desktop</em> installation.</p>
 <li><a
   class="gdoc-markdown__link"
   href="macos_ventura/_index.md"
->MacOS Ventura (x86)</a></li>
+>macOS Ventura (x86)</a></li>
 <li><a
   class="gdoc-markdown__link"
   href="ol8/_index.md"
@@ -1497,7 +1497,7 @@ access the PDB. If using Mutual Transport Layer Security (mTLS) authentication, 
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
 </span></span></span></code></pre></div><p>Specify the URL or authentication credentials for your Container Repository in <code>pull_registry_url</code>, <code>push_registry_url</code>, <code>registry_username</code>, and <code>registry_password</code>.</p>
 <p>For the <code>push_registry_auth</code> and <code>pull_registry_auth</code> sections, manually log into your repository and copy the values found in created file, located in <code>$HOME/.config/containers/auth.json</code></p>
-<p>Why there is duplication between the push and pull URL&rsquo;s?  The push URL is used from the deployment machine white the pull URL is used inside the pods. If you
+<p>Why is there duplication between the push and pull URL&rsquo;s?  The push URL is used from the deployment machine while the pull URL is used inside the pods. If you
 have a private registry inside the Kubernetes cluster, these URL&rsquo;s could be different. This is the case for the <em>Desktop</em> installation. The push URL
 is <code>localhost:5000</code>, while the pull URL is <code>&lt;Registry Pod ClusterIP&gt;:5000</code>.</p>
 <div class="gdoc-page__anchorwrap">
@@ -1508,7 +1508,7 @@ is <code>localhost:5000</code>, while the pull URL is <code>&lt;Registry Pod Clu
         </a>
     </h2>
 </div>
-<p>From the source package, run the Configuration Management Playbook:</p>
+<p>From the source package, run the Configuration Management Playbook.</p>
 <div class="gdoc-page__anchorwrap">
     <h3 id="install-ansible">
         Install Ansible
@@ -1553,18 +1553,10 @@ Helper Playbook to define the infrastructure. For example:</p>
 </div>
 <p>To install Microservices, process this command:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ansible-Playbook ansible/k8s_apply.yaml -t full
-</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
-    <h2 id="finish">
-        Finish
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/mbaas/on-premises/#finish" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Finish" aria-label="Anchor to: Finish" href="#finish">
-            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
-        </a>
-    </h2>
-</div>
-<p>Next, to to the <a
+</span></span></code></pre></div><p>Next, go to the <a
   class="gdoc-markdown__link"
-  href="../getting-started/"
->Getting Started</a> page to learn how to use the newly installed environment.</p>
+  href="../on-premises/macos_ventura/"
+>macOS Ventura (x86)</a> page to learn how to use the newly installed environment.</p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="footnotes">
         Footnotes

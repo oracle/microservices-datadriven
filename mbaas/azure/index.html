@@ -16,7 +16,7 @@
 Prerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot Multicloud (Microsoft Azure and OCI). You need:
 An account on Microsoft Azure (Azure) An account on OCI Download Download Oracle Backend for Parse Server." />
 
-    <title>Microsoft Azure | Oracle Backend for Parse Platform</title>
+    <title>Microsoft Azure/OCI Multicloud Installation | Oracle Backend for Parse Platform</title>
 
     <link rel="icon" type="image/svg+xml" href="/microservices-datadriven/mbaas/favicon/favicon.svg" />
 <link
@@ -37,7 +37,7 @@ An account on Microsoft Azure (Azure) An account on OCI Download Download Oracle
     
   <meta
     property="og:title"
-    content="Microsoft Azure"
+    content="Microsoft Azure/OCI Multicloud Installation"
   />
   <meta property="og:site_name" content="Oracle Backend for Parse Platform" />
   <meta property="og:description" content="Microsoft Azure/OCI Multicloud Installation The Oracle Backend for Parse Platform is available to install in Multicloud (Microsoft Azure and Oracle Cloud Infrastructure (OCI)). This installation deplpoys the Oracle Backend for Parse Platform in Azure with an Oracle Autonomous Database running in OCI.
@@ -50,7 +50,7 @@ An account on Microsoft Azure (Azure) An account on OCI Download Download Oracle
 
 
   <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="Microsoft Azure" />
+<meta name="twitter:title" content="Microsoft Azure/OCI Multicloud Installation" />
   <meta name="twitter:description" content="Microsoft Azure/OCI Multicloud Installation The Oracle Backend for Parse Platform is available to install in Multicloud (Microsoft Azure and Oracle Cloud Infrastructure (OCI)). This installation deplpoys the Oracle Backend for Parse Platform in Azure with an Oracle Autonomous Database running in OCI.
 Prerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot Multicloud (Microsoft Azure and OCI). You need:
 An account on Microsoft Azure (Azure) An account on OCI Download Download Oracle Backend for Parse Server." />
@@ -61,11 +61,11 @@ An account on Microsoft Azure (Azure) An account on OCI Download Download Oracle
       "@context": "http://schema.org",
       "@type": "TechArticle",
       "articleSection": "Azure",
-      "name": "Microsoft Azure",
+      "name": "Microsoft Azure/OCI Multicloud Installation",
       "url" : "https://oracle.github.io/microservices-datadriven/mbaas/azure/",
-      "headline": "Microsoft Azure",
+      "headline": "Microsoft Azure/OCI Multicloud Installation",
       "description": "Microsoft Azure\/OCI Multicloud Installation The Oracle Backend for Parse Platform is available to install in Multicloud (Microsoft Azure and Oracle Cloud Infrastructure (OCI)). This installation deplpoys the Oracle Backend for Parse Platform in Azure with an Oracle Autonomous Database running in OCI.\nPrerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot Multicloud (Microsoft Azure and OCI). You need:\nAn account on Microsoft Azure (Azure) An account on OCI Download Download Oracle Backend for Parse Server.",
-      "wordCount" : "383",
+      "wordCount" : "382",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1302,7 +1302,7 @@ if (!doNotTrack) {
     
   
   
-    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/mbaas/' href='/microservices-datadriven/mbaas/'><span itemprop='name'></span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>Microsoft Azure</span><meta itemprop='position' content='4' /></li>
+    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/mbaas/' href='/microservices-datadriven/mbaas/'><span itemprop='name'></span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>Microsoft Azure/OCI Multicloud Installation</span><meta itemprop='position' content='4' /></li>
   
 
   
@@ -1318,7 +1318,7 @@ if (!doNotTrack) {
   <article
     class="gdoc-markdown gdoc-markdown__align--left"
   >
-    <h1>Microsoft Azure</h1>
+    <h1>Microsoft Azure/OCI Multicloud Installation</h1>
     <div class="gdoc-page__anchorwrap">
     <h1 id="microsoft-azureoci-multicloud-installation">
         Microsoft Azure/OCI Multicloud Installation
@@ -1466,7 +1466,8 @@ the configuration file snippet from the text box and save for later steps.</p>
         </a>
     </h2>
 </div>
-<p>Install Ansible to run the Configuration Management Playbook.  The helper scripts create a Python virtual environment and installs Ansible and any additional modules. For example:</p>
+<p>Install Ansible to run the Configuration Management Playbook.  The helper scripts create a Python virtual environment and installs Ansible
+and any additional modules. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> ~/obaas/ansible
 </span></span><span class="line"><span class="cl">./setup_ansible.sh
 </span></span><span class="line"><span class="cl"><span class="nb">source</span> ./activate.env
@@ -1483,18 +1484,10 @@ the configuration file snippet from the text box and save for later steps.</p>
 </span></span><span class="line"><span class="cl">terraform init
 </span></span><span class="line"><span class="cl">terraform plan -out<span class="o">=</span>multicloud.plan
 </span></span><span class="line"><span class="cl">terraform apply <span class="s2">&#34;multicloud.plan&#34;</span>
-</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
-    <h2 id="finish">
-        Finish
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/mbaas/azure/#finish" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Finish" aria-label="Anchor to: Finish" href="#finish">
-            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
-        </a>
-    </h2>
-</div>
-<p>Next, go to the <a
+</span></span></code></pre></div><p>Next, go to the <a
   class="gdoc-markdown__link"
-  href="../getting-started/"
->Getting Started</a> page to learn how to use the newly installed environment.</p>
+  href="../on-premises/"
+>On-Premises Installation</a> page to learn how to use the newly installed environment.</p>
 
   </article>
 

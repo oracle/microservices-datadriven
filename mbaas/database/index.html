@@ -12,8 +12,8 @@
 <meta name="generator" content="Hugo 0.115.4">
 
 
-  <meta name="description" content="The Oracle Backend for Parse Platform includes an Oracle Database storage adapter for Parse which allows the Parse Server to use the Oracle Database. An instance of the Oracle Autonomous Database Serverless is created during installation of the Oracle Backend for Parse Platform.
-To work with data in the database, you can use the Database Actions interface, which can be accessed from the Oracle Cloud Infrastructure (OCI) Console. The Oracle database is created in the same compartments as the Parse Server." />
+  <meta name="description" content="Database Access The Oracle Backend for Parse Platform includes an Oracle Database storage adapter for Parse which allows the Parse Server to use the Oracle database. An instance of Oracle Autonomous Database Serverless is created during installation of the Oracle Backend for Parse Platform.
+To work with data in the database, you can use the Database Actions interface, which can be accessed from the OCI Console. The Oracle database is created in the same compartments as the Parse Server." />
 
     <title>Database Access | Oracle Backend for Parse Platform</title>
 
@@ -39,8 +39,8 @@ To work with data in the database, you can use the Database Actions interface, w
     content="Database Access"
   />
   <meta property="og:site_name" content="Oracle Backend for Parse Platform" />
-  <meta property="og:description" content="The Oracle Backend for Parse Platform includes an Oracle Database storage adapter for Parse which allows the Parse Server to use the Oracle Database. An instance of the Oracle Autonomous Database Serverless is created during installation of the Oracle Backend for Parse Platform.
-To work with data in the database, you can use the Database Actions interface, which can be accessed from the Oracle Cloud Infrastructure (OCI) Console. The Oracle database is created in the same compartments as the Parse Server." />
+  <meta property="og:description" content="Database Access The Oracle Backend for Parse Platform includes an Oracle Database storage adapter for Parse which allows the Parse Server to use the Oracle database. An instance of Oracle Autonomous Database Serverless is created during installation of the Oracle Backend for Parse Platform.
+To work with data in the database, you can use the Database Actions interface, which can be accessed from the OCI Console. The Oracle database is created in the same compartments as the Parse Server." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/mbaas/database/" />
 
@@ -49,8 +49,8 @@ To work with data in the database, you can use the Database Actions interface, w
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Database Access" />
-  <meta name="twitter:description" content="The Oracle Backend for Parse Platform includes an Oracle Database storage adapter for Parse which allows the Parse Server to use the Oracle Database. An instance of the Oracle Autonomous Database Serverless is created during installation of the Oracle Backend for Parse Platform.
-To work with data in the database, you can use the Database Actions interface, which can be accessed from the Oracle Cloud Infrastructure (OCI) Console. The Oracle database is created in the same compartments as the Parse Server." />
+  <meta name="twitter:description" content="Database Access The Oracle Backend for Parse Platform includes an Oracle Database storage adapter for Parse which allows the Parse Server to use the Oracle database. An instance of Oracle Autonomous Database Serverless is created during installation of the Oracle Backend for Parse Platform.
+To work with data in the database, you can use the Database Actions interface, which can be accessed from the OCI Console. The Oracle database is created in the same compartments as the Parse Server." />
 
 
   <script type="application/ld+json">
@@ -61,8 +61,8 @@ To work with data in the database, you can use the Database Actions interface, w
       "name": "Database Access",
       "url" : "https://oracle.github.io/microservices-datadriven/mbaas/database/",
       "headline": "Database Access",
-      "description": "The Oracle Backend for Parse Platform includes an Oracle Database storage adapter for Parse which allows the Parse Server to use the Oracle Database. An instance of the Oracle Autonomous Database Serverless is created during installation of the Oracle Backend for Parse Platform.\nTo work with data in the database, you can use the Database Actions interface, which can be accessed from the Oracle Cloud Infrastructure (OCI) Console. The Oracle database is created in the same compartments as the Parse Server.",
-      "wordCount" : "350",
+      "description": "Database Access The Oracle Backend for Parse Platform includes an Oracle Database storage adapter for Parse which allows the Parse Server to use the Oracle database. An instance of Oracle Autonomous Database Serverless is created during installation of the Oracle Backend for Parse Platform.\nTo work with data in the database, you can use the Database Actions interface, which can be accessed from the OCI Console. The Oracle database is created in the same compartments as the Parse Server.",
+      "wordCount" : "361",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1316,17 +1316,25 @@ if (!doNotTrack) {
     class="gdoc-markdown gdoc-markdown__align--left"
   >
     <h1>Database Access</h1>
-    <p>The Oracle Backend for Parse Platform includes an Oracle Database storage adapter for Parse which allows the Parse Server to use the Oracle Database.
-An instance of the Oracle Autonomous Database Serverless is created during installation of the Oracle Backend for Parse Platform.</p>
-<p>To work with data in the database, you can use the <strong>Database Actions</strong> interface, which can be accessed from the Oracle Cloud Infrastructure (OCI) Console.
+    <div class="gdoc-page__anchorwrap">
+    <h1 id="database-access">
+        Database Access
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/mbaas/database/#database-access" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Database Access" aria-label="Anchor to: Database Access" href="#database-access">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h1>
+</div>
+<p>The Oracle Backend for Parse Platform includes an Oracle Database storage adapter for Parse which allows the Parse Server to use the Oracle database.
+An instance of Oracle Autonomous Database Serverless is created during installation of the Oracle Backend for Parse Platform.</p>
+<p>To work with data in the database, you can use the <strong>Database Actions</strong> interface, which can be accessed from the OCI Console.
 The Oracle database is created in the same compartments as the Parse Server. In the OCI Console, navigate to Autonomous Database in the main menu
-and select the database with the application name that you configured during installation, with the suffix <code>DB</code>, for example <code>COOLAPPDB</code>.</p>
+and select the database with the application name that you configured during installation with the suffix <code>DB</code>. For example <code>COOLAPPDB</code>.</p>
 <p><img
   src="../mbaas-coolappdb.png"
   alt="COOLAPPDB"
   
 /></p>
-<p>Click on the link to access the database details page, and then click <strong>Database Actions</strong>:</p>
+<p>Click on the link to access the database details page, and then click <strong>Database Actions</strong>. For example:</p>
 <p><img
   src="../mbaas-coolappdb-details.png"
   alt="COOLAPPDB"
@@ -1338,8 +1346,8 @@ work with the JavaScript Object Notation (JSON) collections where your Oracle Ba
   class="gdoc-markdown__link"
   href="../cluster-access"
 >connecting to the Kubernetes cluster</a> and extracting the password
-from the Parse Server log using the following command. You need to use the correct name of the pod on your system, which is different than the name used in this
-example. In the following example output, the user name is <code>adam</code> and the password is <code>apple</code>.  You can use these credentials to log into <strong>Database Actions</strong>.</p>
+from the Parse Server log using the following command. You need to use the correct name of the Pod on your system, which is different than the name used in this
+example. In the following example, the user name is <code>adam</code> and the password is <code>apple</code>.  You can use these credentials to log into <strong>Database Actions</strong>.</p>
 <pre tabindex="0"><code>user@cloudshell:~ (us-ashburn-1)$ kubectl logs parse-server-646b97979-9pkq6 -n parse-server | grep databaseURI
 databaseURI: oracledb://adam:apple@MYMBAASAPPDB_TP
 </code></pre><p><img
@@ -1347,7 +1355,7 @@ databaseURI: oracledb://adam:apple@MYMBAASAPPDB_TP
   alt="Database Actions"
   
 /></p>
-<p>Select the JSON tile to enter the JSON Console.</p>
+<p>Select the JSON tile to access the JSON Console.</p>
 <p>At startup, the Parse Server creates a few collections including <code>_Hooks</code>, <code>_SCHEMA</code> and <code>_User</code>.  The <code>_SCHEMA</code> collection is where
 the schema of other collections are defined. For example:</p>
 <p><img
@@ -1363,6 +1371,10 @@ You can see the contents of the <code>GameScore</code> collection in the JSON da
   alt="GameScore collection"
   
 /></p>
+<p>Next, go to the <a
+  class="gdoc-markdown__link"
+  href="../cluster-access/"
+>Kubernetes Access</a> page to learn about Kubernetes access.</p>
 
   </article>
 

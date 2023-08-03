@@ -68,7 +68,7 @@ sudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack pod
       "url" : "https://oracle.github.io/microservices-datadriven/mbaas/on-premises/ol8/",
       "headline": "Oracle Linux 8 (x86)",
       "description": "On-Premises Installation - Oracle Linux 8 (x86) This is a description of installing On-Premises on an Oracle Linux 8 desktop.\nRead On-Premises and ensure that your desktop meets the minimum system requirements.\nInstall Additional Operating System Packages Install the following operating system packages:\nsudo dnf -y module install container-tools:ol8 sudo dnf -y install conntrack podman curl sudo dnf -y install oracle-database-preinstall-21c sudo dnf -y install langpacks-en sudo dnf module install python39 Set the default Python3 to Python 3.",
-      "wordCount" : "497",
+      "wordCount" : "513",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1311,7 +1311,7 @@ if (!doNotTrack) {
     
   
   
-    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/mbaas/' href='/microservices-datadriven/mbaas/'><span itemprop='name'></span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/mbaas/on-premises/' href='/microservices-datadriven/mbaas/on-premises/'><span itemprop='name'>On-Premises</span></a><meta itemprop='position' content='4' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>Oracle Linux 8 (x86)</span><meta itemprop='position' content='5' /></li>
+    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/mbaas/' href='/microservices-datadriven/mbaas/'><span itemprop='name'></span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/mbaas/on-premises/' href='/microservices-datadriven/mbaas/on-premises/'><span itemprop='name'>On-Premises Installation</span></a><meta itemprop='position' content='4' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>Oracle Linux 8 (x86)</span><meta itemprop='position' content='5' /></li>
   
 
   
@@ -1375,7 +1375,7 @@ if (!doNotTrack) {
         </a>
     </h3>
 </div>
-<p>Create a new user. While any user name can be created, the rest of the documentation refers to the non-root user as <code>obaas</code>:</p>
+<p>Create a new user. While any user name can be created, the rest of the documentation refers to the non-root user as <code>obaas</code>.</p>
 <p>As <code>root</code>, process these commands:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">useradd obaas
 </span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;obaas ALL=(ALL) NOPASSWD: /bin/podman&#34;</span> &gt;&gt; /etc/sudoers
@@ -1459,7 +1459,7 @@ if (!doNotTrack) {
 <ul>
 <li>Creates additional namespaces for the Container Registry and database.</li>
 <li>Creates a private Container Registry in the Kubernetes cluster.</li>
-<li>Modifies the application Microservices to be desktop compatible.</li>
+<li>Modifies the Microservices application to be desktop compatible.</li>
 </ul>
 <p>Assuming the source was unzipped to <code>~/obaas</code>, as the <code>obaas</code> user, run this command:</p>
 <p><code>ansible-playbook ~/obaas/ansible/desktop_apply.yaml</code></p>
@@ -1520,6 +1520,10 @@ if (!doNotTrack) {
   class="gdoc-markdown__link"
   href="https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/"
 >https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/</a></p>
+<p>Next, go to the <a
+  class="gdoc-markdown__link"
+  href="../getting-started/"
+>Getting Started</a> page to learn how to use the newly installed environment.</p>
 
   </article>
 

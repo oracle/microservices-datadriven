@@ -12,8 +12,8 @@
 <meta name="generator" content="Hugo 0.115.4">
 
 
-  <meta name="description" content="Oracle Backend as a Service for Spring Cloud includes HashiCorp Vault to secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets, and other sensitive data using a user interface (UI), command-line interface (CLI), or Hypertext Transfer Protocol (HTTP) API. The Vault can be deployed in two different ways. See the Setup Documentation:
-Development mode Production mode Warning Never run a Development mode server in production." />
+  <meta name="description" content="Oracle Backend as a Service for Spring Cloud includes HashiCorp Vault to secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets, and other sensitive data using a user interface (UI), command-line interface (CLI), or Hypertext Transfer Protocol (HTTP) API. The Vault can be deployed in two different ways. See the Setup:
+Development mode Production mode Warning Never run a Development mode server in production. It is insecure and will lose data on every restart (since it stores data in-memory)." />
 
     <title>Vault | Oracle Backend for Spring Boot</title>
 
@@ -39,8 +39,8 @@ Development mode Production mode Warning Never run a Development mode server in 
     content="Vault"
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot" />
-  <meta property="og:description" content="Oracle Backend as a Service for Spring Cloud includes HashiCorp Vault to secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets, and other sensitive data using a user interface (UI), command-line interface (CLI), or Hypertext Transfer Protocol (HTTP) API. The Vault can be deployed in two different ways. See the Setup Documentation:
-Development mode Production mode Warning Never run a Development mode server in production." />
+  <meta property="og:description" content="Oracle Backend as a Service for Spring Cloud includes HashiCorp Vault to secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets, and other sensitive data using a user interface (UI), command-line interface (CLI), or Hypertext Transfer Protocol (HTTP) API. The Vault can be deployed in two different ways. See the Setup:
+Development mode Production mode Warning Never run a Development mode server in production. It is insecure and will lose data on every restart (since it stores data in-memory)." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/platform/vault/" />
 
@@ -49,8 +49,8 @@ Development mode Production mode Warning Never run a Development mode server in 
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Vault" />
-  <meta name="twitter:description" content="Oracle Backend as a Service for Spring Cloud includes HashiCorp Vault to secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets, and other sensitive data using a user interface (UI), command-line interface (CLI), or Hypertext Transfer Protocol (HTTP) API. The Vault can be deployed in two different ways. See the Setup Documentation:
-Development mode Production mode Warning Never run a Development mode server in production." />
+  <meta name="twitter:description" content="Oracle Backend as a Service for Spring Cloud includes HashiCorp Vault to secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets, and other sensitive data using a user interface (UI), command-line interface (CLI), or Hypertext Transfer Protocol (HTTP) API. The Vault can be deployed in two different ways. See the Setup:
+Development mode Production mode Warning Never run a Development mode server in production. It is insecure and will lose data on every restart (since it stores data in-memory)." />
 
 
   <script type="application/ld+json">
@@ -61,8 +61,8 @@ Development mode Production mode Warning Never run a Development mode server in 
       "name": "Vault",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/platform/vault/",
       "headline": "Vault",
-      "description": "Oracle Backend as a Service for Spring Cloud includes HashiCorp Vault to secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets, and other sensitive data using a user interface (UI), command-line interface (CLI), or Hypertext Transfer Protocol (HTTP) API. The Vault can be deployed in two different ways. See the Setup Documentation:\nDevelopment mode Production mode Warning Never run a Development mode server in production.",
-      "wordCount" : "1314",
+      "description": "Oracle Backend as a Service for Spring Cloud includes HashiCorp Vault to secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets, and other sensitive data using a user interface (UI), command-line interface (CLI), or Hypertext Transfer Protocol (HTTP) API. The Vault can be deployed in two different ways. See the Setup:\nDevelopment mode Production mode Warning Never run a Development mode server in production. It is insecure and will lose data on every restart (since it stores data in-memory).",
+      "wordCount" : "1330",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1583,7 +1583,7 @@ if (!doNotTrack) {
     
   
   
-    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/' href='/microservices-datadriven/spring/'><span itemprop='name'>Oracle Backend for Spring Boot - Developer Preview</span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/platform/' href='/microservices-datadriven/spring/platform/'><span itemprop='name'>Platform</span></a><meta itemprop='position' content='4' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>Vault</span><meta itemprop='position' content='5' /></li>
+    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/' href='/microservices-datadriven/spring/'><span itemprop='name'>Oracle Backend for Spring Boot - Developer Preview</span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/platform/' href='/microservices-datadriven/spring/platform/'><span itemprop='name'>Platform Services</span></a><meta itemprop='position' content='4' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>Vault</span><meta itemprop='position' content='5' /></li>
   
 
   
@@ -1605,15 +1605,16 @@ if (!doNotTrack) {
     <p>Oracle Backend as a Service for Spring Cloud includes <a
   class="gdoc-markdown__link"
   href="https://www.vaultproject.io/"
->HashiCorp Vault</a> to secure, store and tightly control access to tokens,
-passwords, certificates, encryption keys for protecting secrets, and other sensitive data using a user interface (UI), command-line interface (CLI), or
-Hypertext Transfer Protocol (HTTP) API. The Vault can be deployed in two different ways. See the <a
+>HashiCorp Vault</a> to secure, store and tightly control
+access to tokens, passwords, certificates, encryption keys for protecting secrets, and other sensitive data using a user interface (UI),
+command-line interface (CLI), or Hypertext Transfer Protocol (HTTP) API. The Vault can be deployed in two different ways. See
+the <a
   class="gdoc-markdown__link"
   href="../../setup/"
->Setup Documentation</a>:</p>
+>Setup</a>:</p>
 <ul>
-<li>Development mode</li>
-<li>Production mode</li>
+<li><strong>Development</strong> mode</li>
+<li><strong>Production</strong> mode</li>
 </ul>
 
 
@@ -1623,8 +1624,8 @@ Hypertext Transfer Protocol (HTTP) API. The Vault can be deployed in two differe
 <blockquote class="gdoc-hint [warning]">
   <div class="gdoc-hint__title flex align-center"><svg class="gdoc-icon gdoc_check"><use xlink:href="#gdoc_check"></use></svg>
       <span>Warning</span></div>
-  <div class="gdoc-hint__text"><strong>Never</strong> run a <strong>Development</strong> mode server in production. It is insecure and will lose data on every restart (since it stores data in-memory). It is only
-available for development or experimentation.</div>
+  <div class="gdoc-hint__text"><strong>Never</strong> run a <strong>Development</strong> mode server in production. It is insecure and will lose data on every restart (since it stores data
+in-memory). It is only intended for development or experimentation.</div>
 </blockquote>
 
 
@@ -1646,15 +1647,15 @@ the <a
 </blockquote>
 
 <div class="gdoc-page__anchorwrap">
-    <h2 id="set-up-information">
-        Set Up Information
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/vault/#set-up-information" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Set Up Information" aria-label="Anchor to: Set Up Information" href="#set-up-information">
+    <h2 id="setup-information">
+        Setup Information
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/vault/#setup-information" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Setup Information" aria-label="Anchor to: Setup Information" href="#setup-information">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>
 </div>
-<p>Vault uses the following Oracle Cloud Infrastructure (OCI) services when running in <strong>Production</strong> mode. When running in <strong>Development</strong> mode, only the
-OCI Container Engine for Kubernetes (OKE) is used.</p>
+<p>Vault uses the following Oracle Cloud Infrastructure (OCI) services when running in <strong>Production</strong> mode. When running in <strong>Development</strong> mode,
+only the OCI Container Engine for Kubernetes (OKE) is used.</p>
 <ul>
 <li><a
   class="gdoc-markdown__link"
@@ -1672,9 +1673,10 @@ OCI Container Engine for Kubernetes (OKE) is used.</p>
 <p>When running in <strong>Production</strong> mode, the Vault is <a
   class="gdoc-markdown__link"
   href="https://developer.hashicorp.com/vault/docs/configuration/seal/ocikms"
->unsealed</a> using the OCI Key Management
-Service (KMS) key. The <code>root</code> token can be accessed using the <code>kubectl</code> command-line interface. The <code>root</code> token in <strong>Development</strong> mode is <code>root</code>.</p>
-<p>The following Vault services are enabled during deployment. Other services can be enabled using the <code>vault</code> command and the web user interface.</p>
+>unsealed</a> using the
+OCI Key Management Service (KMS) key. The <code>root</code> token can be accessed using the <code>kubectl</code> command-line interface. The <code>root</code> token
+in <strong>Development</strong> mode is <code>root</code>.</p>
+<p>The following Vault services are enabled during deployment. Other services can be enabled using the <code>vault</code> command and the web user interface:</p>
 <ul>
 <li><a
   class="gdoc-markdown__link"
@@ -1699,25 +1701,25 @@ Service (KMS) key. The <code>root</code> token can be accessed using the <code>k
 </ul>
 <div class="gdoc-page__anchorwrap">
     <h3 id="accessing-the-root-token-production-mode">
-        Accessing the Root Token Production Mode
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/vault/#accessing-the-root-token-production-mode" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Accessing the Root Token Production Mode" aria-label="Anchor to: Accessing the Root Token Production Mode" href="#accessing-the-root-token-production-mode">
+        Accessing the <code>root</code> Token Production Mode
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/vault/#accessing-the-root-token-production-mode" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Accessing the root Token Production Mode" aria-label="Anchor to: Accessing the root Token Production Mode" href="#accessing-the-root-token-production-mode">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h3>
 </div>
-<p>Root tokens have the root policy attached to them. Root tokens can do anything in Vault and are useful in <strong>Development</strong> mode but should be restricted
-in <strong>Production</strong> mode. In fact, the Vault team recommends that root tokens only be used for the initial set up. Be sure to save the initial root token in a
-secure way. For example:</p>
+<p><code>root</code> tokens have the <code>root</code> policy attached to them. <code>root</code> tokens can do anything in Vault and are useful in <strong>Development</strong> mode but should
+be restricted in <strong>Production</strong> mode. In fact, the Vault team recommends that <code>root</code> tokens only be used for the initial setup. Be sure to save
+the initial <code>root</code> token in a secure way. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl get secret vault-root-token -n vault --template<span class="o">=</span><span class="s2">&#34;{{index .data \&#34;root.token\&#34; | base64decode}}&#34;</span>
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="accessing-the-root-token-development-mode">
-        Accessing the Root Token Development Mode
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/vault/#accessing-the-root-token-development-mode" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Accessing the Root Token Development Mode" aria-label="Anchor to: Accessing the Root Token Development Mode" href="#accessing-the-root-token-development-mode">
+        Accessing the <code>root</code> Token Development Mode
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/vault/#accessing-the-root-token-development-mode" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Accessing the root Token Development Mode" aria-label="Anchor to: Accessing the root Token Development Mode" href="#accessing-the-root-token-development-mode">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h3>
 </div>
-<p>The root token is set to <code>root</code> in <strong>Development</strong> mode. There are no recovery keys when running in <strong>Development</strong> mode.</p>
+<p>The <code>root</code> token is set to <code>root</code> in <strong>Development</strong> mode. There are no recovery keys when running in <strong>Development</strong> mode.</p>
 <div class="gdoc-page__anchorwrap">
     <h3 id="accessing-vault-recovery-keys-production-mode">
         Accessing Vault Recovery Keys Production Mode
@@ -1726,8 +1728,8 @@ secure way. For example:</p>
         </a>
     </h3>
 </div>
-<p>Vault is configured to automatically unseal (auto unseal) using OCI Vault. Initializing with auto unseal creates five recovery keys that are stored
-in K8s Secrets. They <strong>MUST</strong> be retrieved and stored in a second location.</p>
+<p>Vault is configured to automatically unseal (auto unseal) using OCI Vault. Initializing with auto unseal creates five recovery keys that are
+stored in K8s Secrets. They <strong>MUST</strong> be retrieved and stored in a second location.</p>
 <p>To extract the five recovery keys, use the following commands:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">% kubectl get secret vault-recovery-keys -n vault --template<span class="o">=</span><span class="s2">&#34;{{index .data \&#34;recovery.key.1\&#34; }}&#34;</span>
 </span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">% kubectl get secret vault-recovery-keys -n vault --template<span class="o">=</span><span class="s2">&#34;{{index .data \&#34;recovery.key.2\&#34; }}&#34;</span>
@@ -1747,15 +1749,15 @@ in K8s Secrets. They <strong>MUST</strong> be retrieved and stored in a second l
 <p>To access the Vault using the <code>kubectl</code> command-line interface, you need to set up <a
   class="gdoc-markdown__link"
   href="../../cluster-access/_index.md"
->Kubernetes Access</a>.</p>
+>Access Kubernetes Cluster</a>.</p>
 </li>
 <li>
 <p>Test access to the Vault.</p>
 <p><a
   class="gdoc-markdown__link"
   href="https://developer.hashicorp.com/vault/docs"
->Vault Documentation</a> contains all of the commands that you can use with the Vault CLI. For example, this
-command returns the current status of Vault:</p>
+>Vault Documentation</a> contains all of the commands that you can use with the Vault CLI. For
+example, this command returns the current status of Vault:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl <span class="nb">exec</span> pod/vault-0 -n vault -it -- vault status
 </span></span></code></pre></div><p>The output looks similar to this:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Key                      Value
@@ -1777,15 +1779,15 @@ command returns the current status of Vault:</p>
 </span></span></code></pre></div></li>
 <li>
 <p>Get the token and log in to the Vault.</p>
-<p>To interact with the Vault in <strong>Production</strong> mode, you need to log in using a token that is stored in a K8s Secret. Get the token by running the
-following command. The output is the root token. It is <strong>very important</strong> that the token is saved in multiple places. Losing the token can result in
-loss of access to the Vault. In <strong>Development</strong> mode, the root token is <code>root</code>.</p>
-<p>Get the token:</p>
+<p>To interact with the Vault in <strong>Production</strong> mode, you need to log in using a token that is stored in a K8s Secret. Get the token by
+running the following command. The output is the <code>root</code> token. It is <strong>very important</strong> that the token is saved in multiple places.
+Losing the token can result in loss of access to the Vault. In <strong>Development</strong> mode, the <code>root</code> token is <code>root</code>.</p>
+<p>Get the token with this command:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl get secret vault-root-token -n vault --template<span class="o">=</span><span class="s2">&#34;{{index .data \&#34;root.token\&#34; | base64decode}}&#34;</span>
-</span></span></code></pre></div><p>Log in to the Vault and provide the token:</p>
+</span></span></code></pre></div><p>Log in to the Vault and provide the token with this command:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl <span class="nb">exec</span> pod/vault-0 -n vault -it -- vault login
-</span></span></code></pre></div><p>The following is sample output from logging in as the <code>root</code> user which should only be done during the initial set up. As an administrator, you <strong>must</strong>
-generate separate tokens and access control lists (ACLs) for the users that need access to the Vault.
+</span></span></code></pre></div><p>The following is sample output from logging in as the <code>root</code> user which should only be done during the initial set up. As an
+administrator, you <strong>must</strong> generate separate tokens and access control lists (ACLs) for the users that need access to the Vault.
 See <a
   class="gdoc-markdown__link"
   href="https://developer.hashicorp.com/vault/docs"
@@ -1862,7 +1864,8 @@ See <a
 </span></span><span class="line"><span class="cl">customer_name    ACME Inc.
 </span></span></code></pre></div></li>
 </ol>
-<p>For more information about the Key/Value secrets engine, see the <a
+<p>For more information about the Key/Value secrets engine, see
+the <a
   class="gdoc-markdown__link"
   href="https://developer.hashicorp.com/vault/docs/secrets/kv/kv-v2"
 >Key/Value Documentation</a>
@@ -1885,10 +1888,10 @@ and <a
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl port-forward -n vault svc/vault 8200:8200
 </span></span></code></pre></div></li>
 <li>
-<p>Get the root token.</p>
-<p>To interact with the Vault in <strong>Production</strong> mode, you need to log in using a token that is stored in a K8s Secret. Get the token by running the
-following command. The output is the root token. It is <strong>very important</strong> that the token is saved in multiple places. Losing the token can result in
-loss of access to the Vault. In <strong>Development</strong> mode, the root token is <code>root</code>. For example:</p>
+<p>Get the <code>root</code> token.</p>
+<p>To interact with the Vault in <strong>Production</strong> mode, you need to log in using a token that is stored in a K8s Secret. Get the token by
+running the following command. The output is the <code>root</code> token. It is <strong>very important</strong> that the token is saved in multiple places.
+Losing the token can result in loss of access to the Vault. In <strong>Development</strong> mode, the <code>root</code> token is <code>root</code>. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl get secret root-token -n vault --template<span class="o">=</span><span class="s2">&#34;{{index .data \&#34;root.token\&#34; | base64decode}}&#34;</span>
 </span></span></code></pre></div></li>
 <li>
@@ -1925,12 +1928,12 @@ loss of access to the Vault. In <strong>Development</strong> mode, the root toke
       </div>
 
  <!-- spellchecker-enable -->
-<p>Log in using the root token. As an administrator, you <strong>must</strong> generate separate tokens and access control lists (ACLs) for the users that need
-access to the Vault. See <a
+<p>Log in using the <code>root</code> token. As an administrator, you <strong>must</strong> generate separate tokens and access control lists (ACLs) for the
+users that need access to the Vault. See <a
   class="gdoc-markdown__link"
   href="https://developer.hashicorp.com/vault/docs"
 >Vault Documentation</a>.</p>
-<p>You are presented with the Home screen showing the installed secret engines. For example:</p>
+<p>You are presented with the <strong>Home</strong> screen showing the installed secret engines. For example:</p>
  <!-- spellchecker-disable -->
 
       
@@ -1963,7 +1966,7 @@ access to the Vault. See <a
 </li>
 <li>
 <p>Create a Key/Value secret.</p>
-<p>a. Click on the <code>k2-v2</code> link on the Home page:</p>
+<p>a. Click on the <strong>k2-v2</strong> link on the <strong>Home</strong> page:</p>
    <!-- spellchecker-disable -->
 
         
@@ -1993,7 +1996,7 @@ access to the Vault. See <a
         </div>
 
    <!-- spellchecker-enable -->
-<p>b. Click on the <code>Create Secret</code> link:</p>
+<p>b. Click on the <strong>Create Secret</strong> link:</p>
    <!-- spellchecker-disable -->
 
         
@@ -2053,7 +2056,7 @@ access to the Vault. See <a
         </div>
 
    <!-- spellchecker-enable -->
-<p>d. View the secret content by clicking on the eye symbol for each value:</p>
+<p>d. View the secret content by clicking on the eye symbol next to each value:</p>
    <!-- spellchecker-disable -->
 
         
@@ -2085,6 +2088,10 @@ access to the Vault. See <a
    <!-- spellchecker-enable -->
 </li>
 </ol>
+<p>Next, go to the <a
+  class="gdoc-markdown__link"
+  href="../platform/vscode-plugin/"
+>VS Code Plugin</a> page to learn more.</p>
 
   </article>
 

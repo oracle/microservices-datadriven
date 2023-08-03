@@ -6,16 +6,6 @@
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/dashboard/</loc>
   </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/mbaas/getting-started/</loc>
-  </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/mbaas/release-notes/</loc>
-  </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/mbaas/sample-apps/walking-history/</loc>
-  </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/mbaas/setup/</loc>
-  </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/mbaas/uninstall/</loc>
-  </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/database/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/extra/</loc>
@@ -23,6 +13,8 @@
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/friendly-eats/</loc>
+  </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/mbaas/getting-started/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/firebase-emulation/scope/</loc>
   </url><url>
@@ -36,14 +28,22 @@
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/on-premises/ol8/</loc>
   </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/mbaas/release-notes/</loc>
+  </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/sample-apps/</loc>
+  </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/mbaas/setup/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/tags/</loc>
   </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/mbaas/getting-started/dashboard/</loc>
-  </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/mbaas/getting-started/objects/</loc>
+    <loc>https://oracle.github.io/microservices-datadriven/mbaas/uninstall/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/mbaas/getting-started/identity/</loc>
+  </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/mbaas/getting-started/dashboard/</loc>
+  </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/mbaas/sample-apps/walking-history/</loc>
+  </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/mbaas/getting-started/objects/</loc>
   </url>
 </urlset>

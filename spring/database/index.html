@@ -12,7 +12,7 @@
 <meta name="generator" content="Hugo 0.115.4">
 
 
-  <meta name="description" content="The Oracle Backend for Spring Boot includes an Oracle database. An instance of the Oracle Autonomous Database Serverless is created during installation.
+  <meta name="description" content="The Oracle Backend for Spring Boot includes an Oracle database. An instance of Oracle Autonomous Database Serverless is created during installation.
 If you chose the Secure Access from Anywhere option for your database during installation (or just accepted the default), then you can use the Database Actions web user interface to work with your database. If you chose the Private option, you need to use Bastion to access the database." />
 
     <title>Database Access | Oracle Backend for Spring Boot</title>
@@ -39,7 +39,7 @@ If you chose the Secure Access from Anywhere option for your database during ins
     content="Database Access"
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot" />
-  <meta property="og:description" content="The Oracle Backend for Spring Boot includes an Oracle database. An instance of the Oracle Autonomous Database Serverless is created during installation.
+  <meta property="og:description" content="The Oracle Backend for Spring Boot includes an Oracle database. An instance of Oracle Autonomous Database Serverless is created during installation.
 If you chose the Secure Access from Anywhere option for your database during installation (or just accepted the default), then you can use the Database Actions web user interface to work with your database. If you chose the Private option, you need to use Bastion to access the database." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/database/" />
@@ -49,7 +49,7 @@ If you chose the Secure Access from Anywhere option for your database during ins
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Database Access" />
-  <meta name="twitter:description" content="The Oracle Backend for Spring Boot includes an Oracle database. An instance of the Oracle Autonomous Database Serverless is created during installation.
+  <meta name="twitter:description" content="The Oracle Backend for Spring Boot includes an Oracle database. An instance of Oracle Autonomous Database Serverless is created during installation.
 If you chose the Secure Access from Anywhere option for your database during installation (or just accepted the default), then you can use the Database Actions web user interface to work with your database. If you chose the Private option, you need to use Bastion to access the database." />
 
 
@@ -61,8 +61,8 @@ If you chose the Secure Access from Anywhere option for your database during ins
       "name": "Database Access",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/database/",
       "headline": "Database Access",
-      "description": "The Oracle Backend for Spring Boot includes an Oracle database. An instance of the Oracle Autonomous Database Serverless is created during installation.\nIf you chose the Secure Access from Anywhere option for your database during installation (or just accepted the default), then you can use the Database Actions web user interface to work with your database. If you chose the Private option, you need to use Bastion to access the database.",
-      "wordCount" : "524",
+      "description": "The Oracle Backend for Spring Boot includes an Oracle database. An instance of Oracle Autonomous Database Serverless is created during installation.\nIf you chose the Secure Access from Anywhere option for your database during installation (or just accepted the default), then you can use the Database Actions web user interface to work with your database. If you chose the Private option, you need to use Bastion to access the database.",
+      "wordCount" : "538",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1594,10 +1594,11 @@ if (!doNotTrack) {
     class="gdoc-markdown gdoc-markdown__align--left"
   >
     <h1>Database Access</h1>
-    <p>The Oracle Backend for Spring Boot includes an Oracle database. An instance of the Oracle Autonomous Database Serverless is created during installation.</p>
+    <p>The Oracle Backend for Spring Boot includes an Oracle database. An instance of Oracle Autonomous Database Serverless is created during
+installation.</p>
 <p>If you chose the <strong>Secure Access from Anywhere</strong> option for your database during installation (or just accepted the default), then you can use
-the <strong>Database Actions</strong> web user interface to work with your database.
-If you chose the <strong>Private</strong> option, you need to use Bastion to access the database.</p>
+the <strong>Database Actions</strong> web user interface to work with your database. If you chose the <strong>Private</strong> option, you need to use Bastion to access
+the database.</p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="using-database-actions">
         Using Database Actions
@@ -1607,9 +1608,9 @@ If you chose the <strong>Private</strong> option, you need to use Bastion to acc
     </h2>
 </div>
 <p>To work with data in the database, you can use the <strong>Database Actions</strong> web user interface, which can be accessed from the Oracle Cloud
-Infrastructure (OCI) Console. The Oracle database is created in the same compartments as Oracle Container Engine for Kubernetes (OKE). In the OCI Console,
-navigate to Oracle Autonomous Database (ADB) in the main menu and select the database with the application name that you configured during installation
-with the suffix <code>DB</code>. For example, <code>OBAASTSTPSDB</code>.</p>
+Infrastructure Console (OCI Console). The Oracle database is created in the same compartments as OCI Container Engine for Kubernetes (OKE).
+In the OCI Console, navigate to Oracle Autonomous Database (ADB) in the main menu and select the database with the application name that you
+configured during installation with the suffix <code>DB</code>. For example, <code>OBAASTSTPSDB</code>.</p>
 <!-- spellchecker-disable -->
 
   
@@ -1680,24 +1681,27 @@ work with the schemas where your Oracle Backend for Spring Boot data is stored.<
     </h2>
 </div>
 <p>After creating the Oracle Backend for Spring Boot environment, you have access to Oracle Autonomous Database. For example, you can access
-the <code>CONFIGSERVER.PROPERTIES</code> table where applications should add their properties. Also, each application can use the same database instance to host its data.</p>
+the <code>CONFIGSERVER.PROPERTIES</code> table where applications should add their properties. Also, each application can use the same database instance
+to host its data.</p>
 <p>If you chose the <strong>Secure Access from Anywhere</strong> option for database access during installation (or accepted this default), then you can
 <a
   class="gdoc-markdown__link"
   href="https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/connect-download-wallet.html"
 >download the wallet</a> to access
 the database from your local machine.</p>
-<p>If you chose the <strong>Private</strong> option for database access during installation, the database is configured so that it is only accessible from the private
-Virtual Cloud Network (VCN), and access is only possible using the Bastion service provisioned during installation.</p>
+<p>If you chose the <strong>Private</strong> option for database access during installation, the database is configured so that it is only accessible from
+the private Virtual Cloud Network (VCN), and access is only possible using the Bastion service provisioned during installation.</p>
+<p>Process the following steps:</p>
 <ol>
 <li>
 <p>Create a Dynamic Port Forwarding (SOCKS5) Session using the Bastion service.</p>
-<p>Start with Autonomous Database (ADB) access that was created with private end point access only in accordance with security guide lines. For ADB to run SQL commands, you
-need to establish a session between your local machine and ADB using by the Bastion service.</p>
+<p>Start with Autonomous Database (ADB) access that was created with private endpoint access only in accordance with security guide lines.
+For ADB to run SQL commands, you need to establish a session between your local machine and ADB using the Bastion service.</p>
 <p>A <a
   class="gdoc-markdown__link"
   href="https://docs.oracle.com/en-us/iaas/Content/Bastion/Tasks/managingsessions.htm#"
->Dynamic Port Forwarding (SOCKS5) Session</a> is created.</p>
+>Dynamic Port Forwarding (SOCKS5) Session</a> is created.
+For example:</p>
  <!-- spellchecker-disable -->
 
       
@@ -1727,13 +1731,15 @@ need to establish a session between your local machine and ADB using by the Bast
       </div>
 
  <!-- spellchecker-enable -->
-<p>After the session is created, you can establish the tunnel with your ADB instance by issuing an <code>ssh</code> command that you obtain by clicking on the
-three dots symbol on right side of the created session. For example:</p>
+</li>
+<li>
+<p>After the session is created, you can establish the tunnel with your ADB instance by issuing an <code>ssh</code> command that you obtain by clicking
+on the three dots symbol on right side of the created session. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ssh -i &lt;privateKey&gt; -N -D 127.0.0.1:&lt;localPort&gt; -p <span class="m">22</span> ocid1.bastionsession.oc1.phx....@host.bastion.us-phoenix-1.oci.oraclecloud.com
 </span></span></code></pre></div></li>
 <li>
-<p>Connect with the ADB instance using the Oracle SQL Developer Command Line (SQLcl) interface.</p>
-<p>With the tunnel established, you can connect to the ADB instance.</p>
+<p>Connect with the ADB instance using the Oracle SQL Developer Command Line (<code>SQLcl</code>) interface. With the tunnel established, you can connect
+to the ADB instance:</p>
 <p>a. First, export the Oracle Net port by processing this commmand:</p>
 <pre><code>```shell
 export CUSTOM_JDBC=&quot;-Doracle.net.socksProxyHost=127.0.0.1 -Doracle.net.socksProxyPort=&lt;PORT&gt; -Doracle.net.socksRemoteDNS=true&quot;
@@ -1770,7 +1776,7 @@ export CUSTOM_JDBC=&quot;-Doracle.net.socksProxyHost=127.0.0.1 -Doracle.net.sock
 
 &lt;!-- spellchecker-enable --&gt;
 </code></pre>
-<p>c. Connect with SQLcl by processing this command:</p>
+<p>c. Connect with <code>SQLcl</code> by processing this command:</p>
 <pre><code>```shell
 sql /nolog
 </code></pre>
@@ -1781,6 +1787,10 @@ sql /nolog
  ```
 </code></pre></li>
 </ol>
+<p>Next, go to the <a
+  class="gdoc-markdown__link"
+  href="../cluster-access/"
+>Kubernetes Access</a> page to learn more.</p>
 
   </article>
 
