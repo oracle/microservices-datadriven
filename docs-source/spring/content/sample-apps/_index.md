@@ -2,8 +2,6 @@
 title: "Sample Applications"
 ---
 
-# Sample Applications
-
 There are a number of demonstrations (videos) and hands on labs (Live Lab) that demonstrate how to use Oracle Backend for Spring Boot
 (and Parse Platform).
 
