@@ -27,106 +27,117 @@ resources:
     title: "Grafana Dashboard"
 ---
 
+# Metrics
+
 The Oracle Backend for Spring Boot metrics stack automates metrics aggregation and consists of Prometheus and Grafana components.
-Metrics sources expose system and application metrics.
-The Prometheus components retrieve and store the metrics and Grafana provides dashboards to
-visualize them.
+Metrics sources expose system and application metrics. The Prometheus components retrieve and store the metrics and Grafana provides
+dashboards to visualize them.
 
 <!-- spellchecker-disable -->
 {{< img name="metrics" size="small" lazy=false >}}
 <!-- spellchecker-enable -->
 
-## View metrics from the application in Prometheus
+## View Metrics From the Application in Prometheus
 
-Prometheus is an open-source systems monitoring and alerting. Prometheus collects and stores its metrics as time series data, metrics are stored
-with the timestamp at which they were recorded, and optional key-value pairs called labels.
+Prometheus is an open source monitoring and alerting system. Prometheus collects and stores metrics as time series data with the timestamp of
+the time that they are recorded, and optional Key/Value pairs called labels.
 
-1. Exposing Prometheus UI using `port-forward`
+1. Expose the Prometheus user interface (UI) using this command:
 
     ```shell
     kubectl port-forward -n prometheus svc/prometheus 9090:9090
     ```
 
-2. Open the Prometheus UI URL: <http://localhost:9090>
+2. Open the Prometheus web user interface URL: <http://localhost:9090>
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-prometheus-ui" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
-3. In the Prometheus web user interface you can search for metrics:
+3. In the Prometheus web user interface, search for metrics:
 
-    * In the search bar, search for `application_ready_time_seconds` and click on the `Execute` button
-    * Notice you see metrics for the sample applications
+   * In the search bar, search for `application_ready_time_seconds` and click on **Execute**.
+   * You should see metrics for the Sample Applications.
+   
+   For example:
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-prometheus-home" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
-4. In the Prometheus web user interface the `Status` menu item allow you view the targets being monitored by Prometheus:
+4. In the Prometheus web user interface, **Status** allows you to view the targets being monitored by Prometheus:
 
-    * In the top menu, choose Status and then Targets
-    * Notice targets "slow", "customer" and others are in "UP" status and others are in "Down".
+    * In the top menu, choose **Status** and then **Targets**.
+    * Notice that the targets "slow", "customer" and others are in **UP** status and others are in **DOWN** status.
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-prometheus-targets" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
-## View details of the application in Grafana
+## View Details of the Application in Grafana
 
-[Grafana](https://grafana.com/docs/grafana/latest/introduction/) open source software enables you to query, visualize, alert on, and explore your metrics, logs, and traces wherever they are stored. Grafana OSS provides you with tools to turn your time-series database (TSDB) data into insightful graphs and visualizations.
+[Grafana](https://grafana.com/docs/grafana/latest/introduction/) open source software enables you to query, visualize, alert, and explore your
+metrics, logs, and traces wherever they are stored. Grafana open source software provides tools that turn your time series database (TSDB) data
+into insightful graphs and visualizations. Take the following steps:
 
-1. Exposing Grafana using `port-forward`
+1. Expose Grafana using this command:
 
     ```shell
     kubectl -n grafana port-forward svc/grafana 8080:80
     ```
 
-2. Open the Grafana UI URL: <http://localhost:8080>
+2. Open the Grafana web user interface URL: <http://localhost:8080>
 
     * username: `admin`
-    * To get the password run this command:
+    * To get the password, run this command:
 
-        ```shell
-        kubectl -n grafana get secret grafana -o jsonpath='{.data.admin-password}' | base64 -d
-        ```
+      ```shell
+      kubectl -n grafana get secret grafana -o jsonpath='{.data.admin-password}' | base64 -d
+      ```
 
-        > **Note:** If you don't have "base64" leave off the last part ("| base64 -d") and then copy the output and use this website to decode it: <https://www.base64decode.org/>. The password will be a long string of characters like this 210BAqNzYkrcWjd58RKC2Xzerx9c0WkZi9LNsG4c (yours will be different)
+      > **NOTE:** If you do not have `base64`, leave off the last part (`| base64 -d`) in the command, then copy the output, and use this
+	  website to decode it: <https://www.base64decode.org/>.
+		
+	  The password is a long string of characters that might be similar to `210BAqNzYkrcWjd58RKC2Xzerx9c0WkZi9LNsG4c`. For example:
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-grafana-login" size="small" lazy=false >}}
     <!-- spellchecker-enable -->
 
-3. Setup Prometheus Datasource
+3. Set up the Prometheus data source:
 
-    * On the left hand side menu, down the bottom, click on the cog wheel and choose Data Sources
-    * Click on the second data source, its called "Prometheus"
-    & In the address (be careful to get the address field, not the name field), change the address from  <http://prometheus:9090>    to <http://prometheus.prometheus.svc.cluster.local:9090>
-    * Down the bottom of the page click on save & test and wait for the green icon to say the datasource is working (takes 2-3 seconds)
+    a. At the lower left, click on the system setup symbol and choose **Data Sources**.
+    b. Click on the second data source called **Prometheus** and in the address (be careful to get the address field, not the name field), change
+	   the address from <http://prometheus:9090> to <http://prometheus.prometheus.svc.cluster.local:9090>.
+    c. At the bottom of the page, click **Save & Test** and wait for 2-3 seconds for the green icon which indicates that the data source is working.
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-grafana-datasource" size="medium" lazy=false >}}
     <!-- spellchecker-enable -->
 
-4. Setup Dashboard
+4. Set up the dashboard:
 
-    * Now in the left hand side menu up the top, find the dasbhoards link and click on that
-    * Click on the blue button on the right to add a new dashboard, and in the pull down select "import"
-    * In the field for the grafana dashboard ID, paste in this value: `10280`
-    * Click on next
-    * In the datasource field, choose the one called "prometheus"
-    * Click on save
+    a. In the upper left, find and click the **dasbhoards** link.
+    b. Click on the blue button to the right to add a new dashboard. In the pull down menu, select **Import**.
+    c. In the field for the Grafana dashboard ID, paste this value: `10280` .
+    d. Click **Next**.
+    e. In the data source field, select **Prometheus**.
+    f. Click **Save**.
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-grafana-import-dashboard" size="medium" lazy=false >}}
     <!-- spellchecker-enable -->
 
-5. Navigate in Spring Boot Dashboard
+5. Navigate the Spring Boot dashboard:
 
-    * Now you should see the new dashboard in the list - it is called Spring Boot Dashboard 2.1 - click on it to open it
-    * You should automatically see details for the sample applications in the dashboard
-    * Incoke the service, e.g., using curl, a number of times to create some traffic and observe the dashboard. There is round arrow icon in the top right corner
-      that enables automatic refresh every 5 seconds (or whatever period you choose).
+    a. You should see the new dashboard in the list called **Spring Boot Dashboard 2.1**. Click on it to open.
+    b. You should automatically see details for the Sample Applications in the dashboard.
+    c. Invoke the service. For example, use a `curl` command to create some traffic and observe the dashboard. You may need to repeat
+	   the `curl` command. There is a refresh symbol in the top right corner that enables automatic refresh every 5 seconds (or, for
+	   whatever length of time that you choose).
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-grafana-dashboard" size="medium" lazy=false >}}
     <!-- spellchecker-enable -->
+	
+Next, go to the [Tracing](../observability/tracing/) page to learn more.

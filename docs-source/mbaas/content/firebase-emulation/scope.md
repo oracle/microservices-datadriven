@@ -2,7 +2,9 @@
 title: "Implemented APIs"
 ---
 
-This developer preview of Firebase API emulation includes only the following Implemented classes/methods:
+# Implemented APIs
+
+This _Developer_ _Preview_ of the Firebase API emulation includes only the following implemented classes and methods:
  
 * class Query
   * where()
@@ -39,3 +41,5 @@ This developer preview of Firebase API emulation includes only the following Imp
 The diagram below shows relationships between these APIs:
 
 ![Firebase APIs emulated](../../firebase-apis-emulated.jpeg)
+
+Next, go to the [Dashboard](../dashboard/) page to learn more about the dashboard.

@@ -1,12 +1,14 @@
-# On-Premises Installation - MacOS Ventura (x86)
+# On-Premises Installation - macOS Ventura (x86)
 
-This is an example of installing on a MacOS Venture desktop
+This is a discussion of an installation on a macOS Venture desktop.
 
-Please read the [On-Premises](../../on-premises) and ensure your desktop meets the minimum system requirements.
+Read the [On-Premises](../../on-premises) documentation and ensure that your desktop meets the minimum system requirements.
 
 ## Install
 
 ### Podman
+
+To install Podman, process these commands:
 
 ```bash
 brew install podman
@@ -16,15 +18,26 @@ podman machine init --cpus 4 --disk-size 60 --memory 8192 --rootful --now
 podman system connection default podman-machine-default-root
 ```
 
-### Download the Database/ORDS Images
+### Download the Database or Oracle REST Data Services (ORDS) Images
 
-The _Desktop_ installation will provision an Oracle Database into the Kubernetes cluster.  The images must be downloaded from [Oracle's Container Registry](https://container-registry.oracle.com/) prior to continuing.
+The _Desktop_ installation provisions an Oracle database into the Kubernetes cluster. The images must be downloaded
+from [Oracle Cloud Infrastructure Registry (Container Registry)](https://container-registry.oracle.com/) before continuing.
 
-1. Log into Oracle's Container Registry: `podman login container-registry.oracle.com`
-2. Pull the Database Image: `podman pull container-registry.oracle.com/database/enterprise:21.3.0.0`
-3. Pull the ORDS Image: `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
+1. Log in to the Container Registry. For example: 
+
+   `podman login container-registry.oracle.com`
+
+2. Pull the database image. For example: 
+
+   `podman pull container-registry.oracle.com/database/enterprise:21.3.0.0`
+
+3. Pull the ORDS image. For example: 
+
+   `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
 
 ### Minikube
+
+To install Minikube, process these commands:
 
 ```bash
 brew install minikube
@@ -33,13 +46,17 @@ minikube start --cpus 4 --memory max --container-runtime=containerd
 minikube addons enable ingress
 ```
 
-If minikube fails to start due to: `Failed kubeconfig update: could not read config`, run: `mv ~/.kube ~/.kube.bak` and retry.
+If Minikube fails to start and returns this `Failed kubeconfig update: could not read config` error, process this command and retry: 
+
+`mv ~/.kube ~/.kube.bak`
 
 ### Download Oracle Backend for Spring Boot
 
 Download the [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip) and unzip into a new directory.
 
 ### Install Ansible
+
+To install Ansible, process these commands:
 
 ```bash
 ./setup_ansible.sh
@@ -48,24 +65,27 @@ source ./activate.env
 
 ### Define the Infrastructure
 
-Use the helper Playbook to define the infrastructure.  This Playbook will also:
+Use the Helper Playbook to define the infrastructure. This Playbook also:
 
-* Create additional namespaces for the Container Registry and Database
-* Create a Private Container Registry in the Kubernetes Cluster
-* Modify the application microservices to be Desktop compatible
+* Creates additional namespaces for the Container Registry and the database.
+* Creates a private Container Registry in the Kubernetes cluster.
+* Modifies the Microservices application to be desktop compatible.
 
-Run: `ansible-playbook ansible/desktop_apply.yaml`
+Run this command: 
+
+`ansible-playbook ansible/desktop_apply.yaml`
 
 ### Open a Tunnel
 
-In order to push the images to the Container Registry in the Kubernetes cluster; open a new terminal and start a tunnel.
+In order to push the images to the Container Registry in the Kubernetes cluster, open a new terminal and start a tunnel by running this command:
 
-Run: `minikube tunnel`
+`minikube tunnel`
 
-To test access to the registry:
+To test access to the registry, process this command:
+
 `curl -X GET -k https://localhost:5000/v2/_catalog`
 
-The above curl should result in:
+This `curl` command should result in the following:
 
 ```text
 {"errors":[{"code":"UNAUTHORIZED","message":"authentication required","detail":[{"Type":"registry","Class":"","Name":"catalog","Action":"*"}]}]}
@@ -73,20 +93,23 @@ The above curl should result in:
 
 ### Build the Images
 
-Build and Push the Images to the Container Registry in the Kubernetes cluster:
+Build and push the images to the Container Registry in the Kubernetes cluster by running this command:
 
-Run: `ansible-playbook ansible/images_build.yaml`
+`ansible-playbook ansible/images_build.yaml`
 
 After the images are built and pushed, the tunnel is no longer required and can be stopped.
 
 ### Deploy Oracle Backend for Spring Boot
 
-Deploy the Database and Microservices.
+Deploy the database and Microservices by running this command:
 
-Run: `ansible-playbook ansible/k8s_apply.yaml -t full`
+`ansible-playbook ansible/k8s_apply.yaml -t full`
 
 ## Notes
 
 ## VPN and Proxies
 
-If you are behind a VPN or Proxy, please see https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/ for more details on additional tasks.
+If you are behind a virtual private network (VPN) or proxy, see https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/ for more details
+on additional tasks.
+
+Next, go to the [Oracle Linux 8 (x86)](../on-premises/ol8/) page to learn more.

@@ -2,20 +2,22 @@
 title: "Kubernetes Access"
 ---
 
-As an Oracle Backend for Parse Platform user, it is expected that you probably won't need to access the underlying infrastructure.  However, if you do want to have a look
+# Kubernetes Access
+
+As an Oracle Backend for Parse Platform user, it is expected that you probably will not need to access the underlying infrastructure.  However, if you do want to have a look
 around, here is how you can access the Kubernetes cluster where your Oracle Backend for Parse Platform is running.
 
-The Oracle Backend for Parse Platform setup created a Kubernetes cluster where the server and dashboard components are deployment.  At the end of setup, you were provided
-with a command to creating a Kubernetes configuration file to access that cluster.
+The Oracle Backend for Parse Platform setup created a Kubernetes cluster where the server and dashboard components are deployed.  At the end of setup, you were provided
+with a command to create a Kubernetes configuration file to access that cluster. For example:
 
 ```
 kubeconfig_cmd = "oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.iad.xxx
  --file $HOME/.kube/config --region us-ashburn-1 --token-version 2.0.0 --kube-endpoint PUBLIC_ENDPOINT"
  ```
 
-To use `kubectl` on your local machine, you will need to have the [OCI CLI installed and configured](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cliconcepts.htm).
+To use the `kubectl` command-line interface on your local machine, you need to have the [OCI CLI installed and configured](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cliconcepts.htm).
 
-**Note:** The generated `kubeconfig` file will only work if you are using the `DEFAULT` profile in your OCI CLI configuration file. If you are using a different OCI CLI profile you must add `--profile <NAME>` to the command by editing the generated Kubernetes config file and add the following lines:
+**NOTE:** The generated `kubeconfig` file only works if you are using the `DEFAULT` profile in your Oracle Cloud Interface (OCI) CLI configuration file. If you are using a different OCI CLI profile, you must add `--profile <NAME>` to the command by editing the generated Kubernetes configuration file and add the following lines:
 
 ```
 - --profile
@@ -45,13 +47,13 @@ For example:
 ## Using OCI Cloud Shell
 
 A simple alternative is to use the [OCI Cloud Shell](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/cloudshellintro.htm), which is provided in
-the OCI Console.  You can open Cloud Shell by clicking Developer Tools in
-the upper right hand corner of the OCI Console.
+the OCI Console. You can open the OCI Cloud Shell by clicking **Developer Tools** in
+the upper right corner of the OCI Console.
 
 ![Cloud Shell icon](../cloud-shell.png)
 
-Run the provided command to create your Kubernetes configuration file and then you will be able to access the Kubernetes
-cluster.  For example, you can list the pods in your cluster:
+Run the provided command to create your Kubernetes configuration file and then you can access the Kubernetes
+cluster. For example, you can list the Pods in your cluster:
 
 ```
 Welcome to Oracle Cloud Shell.
@@ -83,4 +85,6 @@ parse-server      parse-server-646b97979-9pkq6                1/1     Running   
 user@cloudshell:~ (us-ashburn-1)$
 ```
 
-The Oracle Backend for Parse Platform Parse Server is running in the `parse-server` namespace and Parse Dashboard is running in the `parse-dashboard` namespace.
+The Parse Server is running in the `parse-server` namespace and the Parse Dashboard is running in the `parse-dashboard` namespace.
+
+Next, go to the [Uninstall](../uninstall/) page to learn how to uninstall the Oracle Backend for Parse Platform.

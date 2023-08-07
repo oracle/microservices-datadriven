@@ -1,5 +1,5 @@
 ---
-title: Database Access
+title: "Database Access"
 resources:
   - name: oci-adb-cloud-portal
     src: "oci-adb-cloud-portal.png"
@@ -15,76 +15,90 @@ resources:
     title: "Download ADB client credential"
 ---
 
-The Oracle Backend for Spring Boot includes an Oracle Database. An instance of the Oracle Autonomous Database (Shared) is created during installation.
+The Oracle Backend for Spring Boot includes an Oracle database. An instance of Oracle Autonomous Database Serverless is created during
+installation.
 
-If you chose the "secure access from anywhere" option for your database during installation (or just accepted the default), then you can use
-the Database Actions web user interface to work with your database.
-If you chose the "private" option, you need to use a bastion to access the database.
+If you chose the **Secure Access from Anywhere** option for your database during installation (or just accepted the default), then you can use
+the **Database Actions** web user interface to work with your database. If you chose the **Private** option, you need to use Bastion to access
+the database.
 
 ## Using Database Actions
 
-To work with data in the database, you can use the Database Actions interface, which can be accessed from the OCI Console. The Oracle Database is created in the same compartments as OKE. In the OCI Console, navigate to Autonomous Database in the main menu and select the database with the Application Name you configured during install, with the suffix “DB”, for example “OBAASTSTPSDB”.
+To work with data in the database, you can use the **Database Actions** web user interface, which can be accessed from the Oracle Cloud
+Infrastructure Console (OCI Console). The Oracle database is created in the same compartments as OCI Container Engine for Kubernetes (OKE).
+In the OCI Console, navigate to Oracle Autonomous Database (ADB) in the main menu and select the database with the application name that you
+configured during installation with the suffix `DB`. For example, `OBAASTSTPSDB`.
 
 <!-- spellchecker-disable -->
 {{< img name="oci-adb-cloud-portal" size="medium" lazy=false >}}
 <!-- spellchecker-enable -->
 
-Click on the link to access the database details page, and then click on the “Database Actions” button:
+Click on the link to access the **Database Details** page, and then click on **Database Actions**:
 
 <!-- spellchecker-disable -->
 {{< img name="oci-adb-cloud-portal-details" size="medium" lazy=false >}}
 <!-- spellchecker-enable -->
 
-This will open the Database Actions page, where you have access to many database functions, including the ability to
-work with the schemas where your Oracle Backend for Spring Boot data are stored.
+This opens the **Database Actions** page where you have access to many database functions, including the ability to
+work with the schemas where your Oracle Backend for Spring Boot data is stored.
 
-## Accessing the database from a local workstation
+## Accessing the Database From a Local Machine
 
-After creating the Oracle Backend for Spring Boot environment, you will have to access to Autonomous Database for access, for example, the `CONFIGSERVER.PROPERTIES`, a table where Applications should add their properties. Also, each application can use the same database instance to host its data.
+After creating the Oracle Backend for Spring Boot environment, you have access to Oracle Autonomous Database. For example, you can access
+the `CONFIGSERVER.PROPERTIES` table where applications should add their properties. Also, each application can use the same database instance
+to host its data.
 
-If you chose the "secure access from anywhere" option for database access during installation (or accepted this default), you can
+If you chose the **Secure Access from Anywhere** option for database access during installation (or accepted this default), then you can
 [download the wallet](https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/connect-download-wallet.html) to access
 the database from your local machine.
 
-If you chose the "private" option for database access during installation, the database will be configure so that it is only accessible from the private VCN, and access will only be possible using the Bastion Service provisioned during installation.
+If you chose the **Private** option for database access during installation, the database is configured so that it is only accessible from
+the private Virtual Cloud Network (VCN), and access is only possible using the Bastion service provisioned during installation.
 
-1. Create Dynamic port forwarding (SOCKS5) session using Bastion service.
+Process the following steps:
 
-    Let's start with ADB access that was created with private end point access only following security guidance. To allow you get access to ADB to run sql commands you will need to stablish an session between your local workstation and ADB passing by the Bastion service.
+1. Create a Dynamic Port Forwarding (SOCKS5) Session using the Bastion service.
 
-    We will create a [Dynamic port forwarding (SOCKS5) session](https://docs.oracle.com/en-us/iaas/Content/Bastion/Tasks/managingsessions.htm#).
+    Start with Autonomous Database (ADB) access that was created with private endpoint access only in accordance with security guide lines.
+	For ADB to run SQL commands, you need to establish a session between your local machine and ADB using the Bastion service.
+
+    A [Dynamic Port Forwarding (SOCKS5) Session](https://docs.oracle.com/en-us/iaas/Content/Bastion/Tasks/managingsessions.htm#) is created.
+	For example:
 
     <!-- spellchecker-disable -->
     {{< img name="oci-bastion-session-create" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
-    After session create you will be able to stablish the tunnel with your ADB Instance issuing a SSH command that you can obtain clicking on three dots menu on right side of the session created.
+2.  After the session is created, you can establish the tunnel with your ADB instance by issuing an `ssh` command that you obtain by clicking
+	on the three dots symbol on right side of the created session. For example:
 
     ```shell
     ssh -i <privateKey> -N -D 127.0.0.1:<localPort> -p 22 ocid1.bastionsession.oc1.phx....@host.bastion.us-phoenix-1.oci.oraclecloud.com
     ```
 
-2. Connect with ADB Instance using SQLcl
+3. Connect with the ADB instance using the Oracle SQL Developer Command Line (`SQLcl`) interface. With the tunnel established, you can connect
+   to the ADB instance:
+	
+	a. First, export the Oracle Net port by processing this commmand:
 
-    With tunnel stablished, you will be able to connect with ADB instance. First export the Oracle Net port executing the next commmand:
+       ```shell
+       export CUSTOM_JDBC="-Doracle.net.socksProxyHost=127.0.0.1 -Doracle.net.socksProxyPort=<PORT> -Doracle.net.socksRemoteDNS=true"
+       ```
 
-    ```shell
-    export CUSTOM_JDBC="-Doracle.net.socksProxyHost=127.0.0.1 -Doracle.net.socksProxyPort=<PORT> -Doracle.net.socksRemoteDNS=true"
-    ```
+    b. Download the ADB client credentials (wallet files). For example:
 
-    Download ADB client credentials (Wallet):
+       <!-- spellchecker-disable -->
+       {{< img name="oci-adb-download-wallet" size="medium" lazy=false >}}
+       <!-- spellchecker-enable -->
 
-    <!-- spellchecker-disable -->
-    {{< img name="oci-adb-download-wallet" size="medium" lazy=false >}}
-    <!-- spellchecker-enable -->
+    c. Connect with `SQLcl` by processing this command:
 
-    Connect with SQLcl
+       ```shell
+       sql /nolog
+      ```
 
-    ```shell
-    sql /nolog
-    ```
-
-    ```sql
-    set cloudconfig <WALLET>.zip
-    connect ADMIN@<TNS_NAME>
-    ```
+       ```sql
+       set cloudconfig <WALLET>.zip
+       connect ADMIN@<TNS_NAME>
+       ```
+Next, go to the [Kubernetes Access](../cluster-access/) page to learn more.

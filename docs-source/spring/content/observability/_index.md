@@ -2,10 +2,12 @@
 title: "Observability"
 ---
 
-Oracle Backend for Spring Boot includes a number of common open-source components to provide application
-observability including Prometheus, Grafana, Jaeger and Open Telemetry Collector. 
+# Observability
 
-For more details, please read about: 
+Oracle Backend for Spring Boot includes a number of common open source components to provide application
+observability including Prometheus, Grafana, Jaeger, and OpenTelemetry Collector.
+
+For more details, read the following:
 
 * [Metrics](./metrics)
 * [Tracing](./tracing)
