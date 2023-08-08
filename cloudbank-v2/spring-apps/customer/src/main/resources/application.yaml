@@ -3,6 +3,8 @@
 spring:
   application:
     name: customers
+  zipkin:
+    base-url: ${zipkin.base-url}
   jpa:
     hibernate:
       ddl-auto: validate
