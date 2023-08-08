@@ -1,8 +1,5 @@
 ---
 title: "Read our blogs!"
-resources:
-  - name: mark
-    src: "mark.png"
 ---
 
 Our team members post blog articles and other content on various sites including [Medium](https://medium.com/@mark.x.nelson), LinkedIn ([Corrado de Bari](https://www.linkedin.com/in/corradodebari/), [Doug Drechsel](https://www.linkedin.com/in/dougdrechsel/)), [RedStack](https://redstack.wordpress.com), [DZone](https://dzone.com/users/4571557/paulparkinson.html), [Andy Tael](https://mr-a.org) and the [Oracle Developers Blog](https://blogs.oracle.com/developers).
@@ -217,6 +214,7 @@ This page acts as an index/aggregator for some of our featured content.
     title="Backend-as-a-Service (BaaS) and Oracle Database (Video) OCW Teaser"
     link="https://www.youtube.com/watch?v=9PIHjIjcBAY"
     abstract="Erin Dawson, DevRel Communications Manager talks with Mark about the Oracle CloudWorld 2022 presentations and hands-on labs for Oracle Backend for Spring Boot and Parse Platform."
+>}}
 
 {{< blog  
     author="mark"
@@ -272,7 +270,7 @@ This page acts as an index/aggregator for some of our featured content.
     title="Developing Event Driven Microservices in Java, Javascript, PL/SQL, Go, Python"
     link="https://dzone.com/articles/developing-event-driven-microservices-in-java-java"
     abstract="Learn about developing Event-Driven Microservices in Java, JavaScript, Python, .NET, and Go with AQ/TEQ in the Oracle Database."
->}
+>}}
 
 {{< blog  
     author="paul"

@@ -1,66 +1,79 @@
+---
+title: "Setup"
+---
 
 The Oracle Backend for Parse Platform is available to install from [OCI Marketplace](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/139274906).
 
 ## Prerequisites
 
-You must meet the following prerequisites to use the Oracle Backend for Parse Platform:
+You must meet the following prerequisites to use the Oracle Backend for Parse Platform. You need:
 
-* An OCI account in a tenancy with sufficient quota to create:
-  * An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes
-  * A VCN with at least two public IP's available
-  * A public load balancer
-  * An Oracle Autonomous Database - Shared instance
-  * At least one free OCI Auth Token (note that the maximum is two per user)
+* An Oracle Cloud Infrastructure (OCI) account in a tenancy with sufficient quota to create the following:
+
+  * An OCI Container Engine for Kubernetes cluster (OKE cluster), plus a node pool with three worker nodes.
+  * A Virtual Cloud Network (VCN) with at least two public IP's available.
+  * A public load balancer.
+  * An Oracle Autonomous Database Serverless instance.
+
+* At least one free OCI auth token (note that the maximum is two per user).
 
 ## Setup
 
-To start installation:
+To start the installation, take the following steps:
 
-* Visit the [OCI Marketplace listing for Oracle Backend for Parse Platform](https://cloud.oracle.com/marketplace/application/139274906) (see the image below)
-* Log into OCI Console if requested
-* Choose the target compartment
-* Review and accept the terms and conditions
-* Click on the "Launch Stack" button
+1. Visit the [OCI Marketplace listing for Oracle Backend for Parse Platform](https://cloud.oracle.com/marketplace/application/139274906) (see the following image).
+2. Log in to the OCI Console, if requested.
+3. Choose the target compartment.
+4. Review and accept the terms and conditions.
+5. Click **Launch Stack**.
 
-![OCI Marketplace Listing](../mbaas-oci-mp-listing.png)
+   ![OCI Marketplace Listing](../mbaas-oci-mp-listing.png)
 
-On the "Create Stack" page:
+6. On the **Create Stack** page:
 
-* Modify the suggested name if desired
-* Add a description or tags if desired
-* Click on the "Next" button
+   a. Modify the suggested name, if desired.
+   
+   b. Add a description or tags, if desired.
+   
+   c. Click **Next**.
 
-On the "Configure variables" page, in the "Backend as a Service" section (see image below):
+7. On the **Configure variables** page, in the **Backend as a Service** section (see the following image):
 
-* Set an application name if desired, if you do not, a randomized value will be generated.  This will be the name of the Parse application
-* Set an application ID if desired, if you do not, a randomized value will be generated.  This will be the Parse APPLICATION_ID
-* Set a server master key if desired, if you do not, a randomized value will be generated.  This will the Parse MASTER_KEY
-* Change the dashboard user name if desired, note that this is case-sensitive
-* Provide a password for the dashboard user.  Oracle recommends that you use a strong password
+   a. Specify an application name, if desired. If not specified, a randomized value is generated.  This is the name of the Parse application.
+   
+   b. Specify an application ID, if desired. If not specified, a randomized value is generated.  This is the Parse `APPLICATION_ID`.
+   
+   c. Specify a server master key, if desired. If not specified, a randomized value is generated.  This is the Parse `MASTER_KEY`.
+   
+   d. Change the dashboard user name, if desired. Note that this is case-sensitive.
+   
+   e. Provide a dashboard password for the dashboard user. Oracle recommends using a strong password for security purposes.
+   
+   For example:
 
-![Configure variables page](../mbaas-configure-variables.png)
+   ![Configure variables page](../mbaas-configure-variables.png)
 
-In the "Control Plane Options" section, modify the CIDR if desired.  Note that you will only be able to access the service from IP
-addresses in the specified CIDR.
+8. In the **Control Plane Options** section, modify the Classless Inter-Domain Routing (CIDR) block, if desired. Note that you can only access the service from IP
+   addresses in the specified CIDR block.
 
-In the "Node Pool" section you can customize the number of nodes and enable auto-scaling if desired.
+9. In the **Node Pool** section, you can customize the number of nodes and enable auto scaling, if desired.
 
-In the "Load Balancers Options" section you can customize the load balancer shape and the CIDR for client access.  For simple testing, Oracle
-recommends using the provided default values.
+10. In the **Load Balancers Options** section, you can customize the load balancer shape and the CIDR for client access. For simple testing, Oracle
+    recommends using the default values.
 
-In the "Database Options" section you can customize the database shape and the CIDR for client access. Note that you will not be able to access
-Datbase Actions if you change the network access to "PRIVATE_ENDPOINT_ACCESS"
+11. In the **Database Options** section, you can customize the database shape and the CIDR for client access. Note that you cannot access
+    **Database Actions** if you change the network access to `PRIVATE_ENDPOINT_ACCESS`.
 
-Once you have completed customization, click on the "Next" button. 
+12. Once you have completed customization, click **Next**. 
 
-The "Review" page is displayed, check your settings and then click on the "Create" button to create the "stack" and run the Terraform apply
-action to create all of the associated resources.  
+13. The **Review** page is displayed. Check your settings and then click **Create** to create the stack and run the Terraform `apply`
+    command to create all of the associated resources.  
 
 You can monitor the installation in the log. Installation takes approximately 20 minutes to complete.  Most of this time is spent provisioning
 the Kubernetes cluster, its nodes, and the database.
 
-When the installation is finished, some important information will be included at the end of the log.  You will need this information to access
-the newly created environment:
+When the installation is finished, some important information is included at the end of the log.  You need this information to access
+the newly created environment. For example:
 
 ```
 application_id = "COOLAPPV100"
@@ -72,4 +85,4 @@ kubeconfig_cmd = "oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc
 parse_endpoint = "1.2.3.4/parse"
 ```
 
-Next, move on the the [Getting Started](../getting-started/) page to learn how to use the newly installed environment.
+Next, go to the [Microsoft Azure/OCI Multicloud Installation](../azure/) page to learn how to use the newly installed environment.
