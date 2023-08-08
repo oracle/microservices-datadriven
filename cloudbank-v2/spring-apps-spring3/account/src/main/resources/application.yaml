@@ -4,6 +4,8 @@
 spring:
   application:
     name: account
+  zipkin:
+    base-url: ${zipkin.base-url}
   jersey:
     type: filter
   jpa:
