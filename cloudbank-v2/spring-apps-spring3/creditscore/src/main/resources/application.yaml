@@ -5,6 +5,8 @@
 spring:
   application:
     name: creditscore
+  zipkin:
+    base-url: ${zipkin.base-url}
 
 eureka:
   instance:
