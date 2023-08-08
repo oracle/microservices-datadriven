@@ -4,6 +4,8 @@
 spring:
   application:
     name: transfer
+  zipkin:
+    base-url: ${zipkin.base-url}
   mvc:
     enforced-prefixes:
       - /actuator
@@ -45,7 +47,6 @@ management:
         health: status
       exposure:
         include: "*"
-#        include: health, metrics, env, beans, prometheus, refresh
   server:
     add-application-context-header: true
   metrics:
