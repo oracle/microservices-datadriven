@@ -50,28 +50,24 @@ appropriate documentation for examples of installing and defining the _Desktop_ 
 
 The _Desktop_ playbook is run as part of the Configuration Management Playbook.
 
-## Download the Database or Oracle REST Data Services (ORDS) Images (_Desktop_  Installation)
+## Download the Database Image (_Desktop_  Installation)
 
-The _Desktop_ installation provisions an Oracle database to the Kubernetes cluster. The images must be downloaded
+The _Desktop_ installation provisions an Oracle database to the Kubernetes cluster. The image must be downloaded
 from [Oracle's Container Registry](https://container-registry.oracle.com/) before continuing.
 
 After installing Podman, process these steps:
 
-1. Log in to Oracle Cloud Infrastructure Registry (Container Registry). For example: 
+1. Log in to Oracle Cloud Infrastructure Registry (Container Registry). For example:
 
    `podman login container-registry.oracle.com`
-   
-2. Pull the database image. For example: 
 
-   `podman pull container-registry.oracle.com/database/enterprise:21.3.0.0`
-   
-3. Pull the ORDS image. For example: 
+2. Pull the database image. For example:
 
-   `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
+   `podman pull container-registry.oracle.com/database/enterprise:19.3.0.0`
 
 ### Defining the Database (_Estate_  Installation)
 
-The database is defined in `ansible/roles/database/vars/main.yaml`. For example:  
+The database is defined in `ansible/roles/database/vars/main.yaml`. For example:
 
 ```yaml
 ---
@@ -109,8 +105,9 @@ pull_registry_auth:
       auth: 'b3JhY2xlOjdaUVgxLXhhbFR0NTJsS0VITlA0'
 ...
 ```
+
 Specify the URL or authentication credentials for your Container Repository in `pull_registry_url`, `push_registry_url`, `registry_username`
-and `registry_password`.  
+and `registry_password`.
 
 For the `registry_auth` section, manually log in to your repository and copy the values found in the previously created file, which is often
 found in `$HOME/.config/containers/auth.json`
@@ -135,7 +132,7 @@ source ./activate.env
 
 ### Desktop Playbook
 
-If this is an _Estate_ installation, the infrastructure should be manually defined as previously stated.  
+If this is an _Estate_ installation, the infrastructure should be manually defined as previously stated.
 
 If this is a _Desktop_ installation, run the Helper Playbook to define the infrastructure. For example:
 

@@ -12,20 +12,20 @@ Read the [On-Premises](../../on-premises) documentation and ensure that your des
 
 ### Additional Operating System Packages
 
-Install additional operating system packages by executing these commands:
+Install additional operating system packages by executing these commands as `root`:
 
 ```bash
-sudo dnf -y module install container-tools:ol8
-sudo dnf -y install conntrack podman curl
-sudo dnf -y install oracle-database-preinstall-21c
-sudo dnf -y install langpacks-en
-sudo dnf module install python39
+dnf -y module install container-tools:ol8
+dnf -y install conntrack podman curl
+dnf -y install oracle-database-preinstall-21c
+dnf -y install langpacks-en
+dnf module install python39
 ```
 
 Set the default Python3 to Python 3.9 by running this command:
 
 ```bash
-sudo alternatives --set python3 /usr/bin/python3.9
+alternatives --set python3 /usr/bin/python3.9
 ```
 
 ### Create a Non-Root User
@@ -37,41 +37,45 @@ As `root`, process the following:
 ```bash
 useradd obaas
 echo "obaas ALL=(ALL) NOPASSWD: /bin/podman" >> /etc/sudoers
+loginctl enable-linger obaas
 ```
 
-### Download the Database or Oracle REST Data Services (ORDS) Images
+### Download the Database Image
 
-The _Desktop_ installation provisions an Oracle database into the Kubernetes cluster. The images must be downloaded
+The _Desktop_ installation provisions an Oracle database into the Kubernetes cluster. The image must be downloaded
 from [Oracle Cloud Infrastructure Registry (Container Registry)](https://container-registry.oracle.com/) before continuing.
 As the `obaas` user, process these steps:
 
-1. Log in to the Container Registry. For example: 
+1. Log in to the Container Registry. For example:
 
    `podman login container-registry.oracle.com`
-   
-2. Pull the database image. For example: 
 
-   `podman pull container-registry.oracle.com/database/enterprise:19.19.0.0`
-   
-3. Pull the ORDS image. For example: 
+2. Pull the database image. For example:
 
-   `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
+   `podman pull container-registry.oracle.com/database/enterprise:19.3.0.0`
 
-### Install and Start Minikube
+### Install Minikube
 
-Install and start Minikube by running these commands as the `root` user:
+As `obaas`, install minikube by running:
 
 ```bash
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-install minikube-linux-amd64 /usr/local/bin/minikube
+mkdir ~/bin
+install minikube-linux-amd64 ~/bin/minikube
 ```
+
+### Start Minikube
 
 As the `obaas` user, run these commands:
 
 ```bash
-echo "PATH=\$PATH:/usr/sbin" >> ~/.bashrc
+echo "export PATH=\$PATH:/usr/sbin" >> ~/.bashrc
+echo "export XDG_RUNTIME_DIR=/run/user/$(id -u)" >> ~/.bashrc
+source ~/.bashrc
+systemctl --user enable podman.socket
+systemctl --user start podman.socket
 minikube config set driver podman
-minikube start --cpus max --memory 7900mb --disk-size='40g' --container-runtime=cri-o
+minikube start --cpus max --memory max --disk-size='40g' --container-runtime=cri-o
 minikube addons enable ingress
 ```
 
@@ -103,14 +107,13 @@ Use the Helper Playbook to define the infrastructure. This Playbook also:
 * Creates a private Container Registry in the Kubernetes cluster.
 * Modifies the Microservices application to be desktop compatible.
 
-Assuming the source was unzipped to `~/obaas`, run the following command as the `obaas` user: 
+Assuming the source was unzipped to `~/obaas`, run the following command as the `obaas` user:
 
 `ansible-playbook ~/obaas/ansible/desktop_apply.yaml`
 
 ### Open a Tunnel
 
-In order to push the images to the Container Registry in the Kubernetes cluster, open a new terminal and process this command
-as the `obaas` user: 
+In order to push the images to the Container Registry in the Kubernetes cluster, open a new terminal and process this command as the `obaas` user:
 
 `kubectl port-forward service/private -n container-registry 5000:5000 &`
 
@@ -128,7 +131,7 @@ This `curl` should result in the following:
 
 Build and push the images to the Container Registry in the Kubernetes cluster.
 
-Assuming the source was unzipped to `~/obaas`, run the following command as the `obaas` user: 
+Assuming the source was unzipped to `~/obaas`, run the following command as the `obaas` user:
 
 `ansible-playbook ~/obaas/ansible/images_build.yaml`
 
@@ -136,7 +139,7 @@ After the images are built and pushed, the port-forward is no longer required an
 
 ### Deploy Microservices
 
-Assuming the source was unzipped to `~/obaas`, run this command as the `obaas` user: 
+Assuming the source was unzipped to `~/obaas`, run this command as the `obaas` user:
 
 `ansible-playbook ~/obaas/ansible/k8s_apply.yaml -t full`
 

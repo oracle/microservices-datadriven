@@ -18,25 +18,21 @@ To install Podman, process these commands:
 brew install podman
 PODMAN_VERSION=$(podman -v |awk '{print $NF}')
 sudo /usr/local/Cellar/podman/${PODMAN_VERSION}/bin/podman-mac-helper install
-podman machine init --cpus 4 --disk-size 60 --memory 8192 --rootful --now
+podman machine init --cpus 4 --disk-size 60 --memory max --rootful --now
 podman system connection default podman-machine-default-root
 ```
 
-### Download the Database/Oracle REST Data Services (ORDS) Images
+### Download the Database Image
 
-The _Desktop_ installation provisions an Oracle Database into the Kubernetes cluster. The images must be downloaded from [Oracle Cloud Infrastructure Registry (Container Registry)](https://container-registry.oracle.com/) before continuing.
+The _Desktop_ installation provisions an Oracle Database into the Kubernetes cluster. The image must be downloaded from [Oracle Cloud Infrastructure Registry (Container Registry)](https://container-registry.oracle.com/) before continuing.
 
 1. Log in to the Container Registry:
 
    `podman login container-registry.oracle.com`
-   
+
 2. Pull the database image:
 
-   `podman pull container-registry.oracle.com/database/enterprise:21.3.0.0`
-   
-3. Pull the ORDS Image:
-
-   `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
+   `podman pull container-registry.oracle.com/database/enterprise:19.3.0.0`
 
 ### Minikube
 
