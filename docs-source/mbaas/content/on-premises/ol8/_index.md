@@ -4,7 +4,7 @@ title: "Oracle Linux 8 (x86)"
 
 # On-Premises Installation - Oracle Linux 8 (x86)
 
-This is an description of installing on a Oracle Linux 8 desktop.
+This is a description of installing on an Oracle Linux 8 desktop.
 
 Read the [On-Premises](../../on-premises) documentation and ensure that your desktop meets the minimum system requirements.
 
