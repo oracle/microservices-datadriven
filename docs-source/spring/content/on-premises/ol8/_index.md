@@ -1,12 +1,12 @@
 ---
-title: "Oracle Linux 8 (x86)"
+Title: "Oracle Linux 8 (x86)"
 ---
 
 # On-Premises Installation - Oracle Linux 8 (x86)
 
-This is a description of installing on an Oracle Linux 8 desktop.
+This is a description of installing On-Premises on an Oracle Linux 8 desktop.
 
-Read the [On-Premises](../../on-premises) documentation and ensure that your desktop meets the minimum system requirements.
+Read [On-Premises](../index.md) and ensure that your desktop meets the minimum system requirements.
 
 ## Install
 
@@ -30,7 +30,7 @@ alternatives --set python3 /usr/bin/python3.9
 
 ### Create a Non-Root User
 
-Create a new user. While any user name can be created, the rest of this documentation refers to the non-root user as `obaas`:
+Create a new user. While any user name can be created, the rest of the documentation refers to the non-root user as `obaas`.
 
 As `root`, process the following:
 
@@ -42,15 +42,15 @@ loginctl enable-linger obaas
 
 ### Download the Database Image
 
-The _Desktop_ installation provisions an Oracle database into the Kubernetes cluster. The image must be downloaded
-from [Oracle Cloud Infrastructure Registry (Container Registry)](https://container-registry.oracle.com/) before continuing.
-As the `obaas` user, process these steps:
+The _Desktop_ installation provisions an Oracle Database into the Kubernetes cluster. The images must be downloaded from [Oracle Cloud Infrastructure Registry (Container Registry)](https://container-registry.oracle.com/) before continuing.
 
-1. Log in to the Container Registry. For example:
+As the `obaas` user, take these steps:
+
+1. Log in to the Container Registry:
 
    `podman login container-registry.oracle.com`
 
-2. Pull the database image. For example:
+2. Pull the database image:
 
    `podman pull container-registry.oracle.com/database/enterprise:19.3.0.0`
 
@@ -107,13 +107,15 @@ Use the Helper Playbook to define the infrastructure. This Playbook also:
 * Creates a private Container Registry in the Kubernetes cluster.
 * Modifies the Microservices application to be desktop compatible.
 
-Assuming the source was unzipped to `~/obaas`, run the following command as the `obaas` user:
+Assuming the source was unzipped to `~/obaas`, as the `obaas` user, run this command:
 
 `ansible-playbook ~/obaas/ansible/desktop_apply.yaml`
 
 ### Open a Tunnel
 
-In order to push the images to the Container Registry in the Kubernetes cluster, open a new terminal and process this command as the `obaas` user:
+In order to push the images to the Container Registry in the Kubernetes cluster, open a new terminal and start a port-forward service.
+
+As the `obaas` user, run this command:
 
 `kubectl port-forward service/private -n container-registry 5000:5000 &`
 
@@ -121,7 +123,7 @@ To test access to the registry, run this command:
 
 `curl -X GET -k https://localhost:5000/v2/_catalog`
 
-This `curl` should result in the following:
+This `curl` results in the following:
 
 ```text
 {"errors":[{"code":"UNAUTHORIZED","message":"authentication required","detail":[{"Type":"registry","Class":"","Name":"catalog","Action":"*"}]}]}
@@ -129,17 +131,15 @@ This `curl` should result in the following:
 
 ### Build the Images
 
-Build and push the images to the Container Registry in the Kubernetes cluster.
-
-Assuming the source was unzipped to `~/obaas`, run the following command as the `obaas` user:
+Build and push the images to the Container Registry in the Kubernetes cluster. Assuming the source was unzipped to `~/obaas`, as the `obaas` user, run this command:
 
 `ansible-playbook ~/obaas/ansible/images_build.yaml`
 
-After the images are built and pushed, the port-forward is no longer required and can be stopped.
+After the images are built and pushed, the port-forward service is no longer required and can be stopped.
 
 ### Deploy Microservices
 
-Assuming the source was unzipped to `~/obaas`, run this command as the `obaas` user:
+Assuming the source was unzipped to `~/obaas`, as the `obaas` user, run this command to deploy Microservices:
 
 `ansible-playbook ~/obaas/ansible/k8s_apply.yaml -t full`
 
@@ -160,4 +160,4 @@ You can check on the status of the database by running this command:
 If you are behind a Virtual Private Network (VPN) or proxy, see https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/ for more
 details on additional tasks.
 
-Next, go to the [Getting Started](../getting-started/) page to learn more.
+Next, go to the [Getting Started](../getting-started/) page to learn how to use the newly installed environment.
