@@ -36,6 +36,7 @@
         <spring.boot.dependencies.version>3.1.2</spring.boot.dependencies.version>
         <spring-cloud.version>2022.0.4</spring-cloud.version>
         <eureka-client-version>4.0.3</eureka-client-version>
+        <sleuth-zipkin-version>3.1.9</sleuth-zipkin-version>
     </properties>
 
     <dependencies>
@@ -67,12 +68,12 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-sleuth-zipkin</artifactId>
-            <version>3.1.9</version>
+            <version>${sleuth-zipkin-version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-sleuth</artifactId>
-            <version>3.1.9</version>
+            <version>${sleuth-zipkin-version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

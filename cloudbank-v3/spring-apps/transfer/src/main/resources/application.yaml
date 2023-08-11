@@ -47,7 +47,6 @@ management:
         health: status
       exposure:
         include: "*"
-#        include: health, metrics, env, beans, prometheus, refresh
   server:
     add-application-context-header: true
   metrics:
