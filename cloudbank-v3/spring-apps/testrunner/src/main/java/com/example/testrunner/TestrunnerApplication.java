@@ -1,10 +1,10 @@
 package com.example.testrunner;
 
-import javax.jms.ConnectionFactory;
+import jakarta.jms.ConnectionFactory;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.core.JmsTemplate;
@@ -14,7 +14,7 @@ import org.springframework.jms.support.converter.MessageType;
 
 @SpringBootApplication
 @EnableJms
-@EnableEurekaClient
+@EnableDiscoveryClient
 public class TestrunnerApplication {
 
 	public static void main(String[] args) {

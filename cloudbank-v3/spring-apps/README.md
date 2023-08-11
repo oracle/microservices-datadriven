@@ -9,21 +9,19 @@ Please visit the Live Lab for more information.
    `mvn clean package -Dmaven.test.skip=true`
 
    ```text
-   [INFO] --- spring-boot:2.7.12:repackage (repackage) @ checks ---
-   [INFO] Replacing main artifact with repackaged archive
    [INFO] ------------------------------------------------------------------------
    [INFO] Reactor Summary for cloudbank 0.0.1-SNAPSHOT:
-   [INFO]
-   [INFO] cloudbank .......................................... SUCCESS [  0.689 s]
-   [INFO] account ............................................ SUCCESS [  2.246 s]
-   [INFO] customer ........................................... SUCCESS [  0.686 s]
-   [INFO] creditscore ........................................ SUCCESS [  0.439 s]
-   [INFO] transfer ........................................... SUCCESS [  0.488 s]
-   [INFO] testrunner ......................................... SUCCESS [  0.440 s]
-   [INFO] checks ............................................. SUCCESS [  0.506 s]
+   [INFO] 
+   [INFO] cloudbank .......................................... SUCCESS [  0.589 s]
+   [INFO] account ............................................ SUCCESS [  1.681 s]
+   [INFO] customer ........................................... SUCCESS [  0.644 s]
+   [INFO] creditscore ........................................ SUCCESS [  0.716 s]
+   [INFO] transfer ........................................... SUCCESS [  0.516 s]
+   [INFO] testrunner ......................................... SUCCESS [  0.650 s]
+   [INFO] checks ............................................. SUCCESS [  0.636 s]
    [INFO] ------------------------------------------------------------------------
    [INFO] BUILD SUCCESS
-   [INFO] ------------------------------------------------------------------------```
+   [INFO] ------------------------------------------------------------------------
    ```
 
 ## Deploying Cloudbank

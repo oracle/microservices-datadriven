@@ -16,7 +16,6 @@ CREATE TABLE ACCOUNT.ACCOUNTS (
                                   ACCOUNT_NAME VARCHAR2(40) NOT NULL,
                                   ACCOUNT_TYPE VARCHAR2(2) CHECK (ACCOUNT_TYPE IN ('CH', 'SA', 'CC', 'LO')),
                                   CUSTOMER_ID VARCHAR2 (20),
-                                  ACCOUNT_OPENED_DATE DATE DEFAULT SYSDATE NOT NULL,
                                   ACCOUNT_OTHER_DETAILS VARCHAR2(4000),
                                   ACCOUNT_BALANCE NUMBER
 ) LOGGING;

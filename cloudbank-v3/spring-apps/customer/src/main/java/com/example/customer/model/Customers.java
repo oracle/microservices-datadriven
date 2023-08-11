@@ -3,16 +3,12 @@
 
 package com.example.customer.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenerationTime;
-import org.hibernate.annotations.Generated;
-
-import java.util.Date;
 
 @Entity
 @Table(name = "CUSTOMERS")
@@ -29,10 +25,6 @@ public class Customers {
 
     @Column(name = "CUSTOMER_EMAIL")
     private String customerEmail;
-
-    @Generated(GenerationTime.INSERT)
-    @Column(name = "DATE_BECAME_CUSTOMER", updatable = false, insertable = false)
-    private Date dateBecameCustomer;
 
     @Column(name = "CUSTOMER_OTHER_DETAILS")
     private String customerOtherDetails;
