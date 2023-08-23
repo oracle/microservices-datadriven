@@ -19,9 +19,9 @@
 	<properties>
 		<microprofile-lra-api.version>1.0</microprofile-lra-api.version>
 		<narayana-lra.version>5.13.1.Final</narayana-lra.version>
-		<jakarta.enterprise.cdi-api.version>2.0.2</jakarta.enterprise.cdi-api.version>
-		<oracle-springboot-starter.version>2.7.12</oracle-springboot-starter.version>
-		<liquibase.version>4.19.0</liquibase.version>
+		<jakarta.enterprise.cdi-api.version>4.0.1</jakarta.enterprise.cdi-api.version>
+		<oracle-springboot-starter.version>3.1.0</oracle-springboot-starter.version>
+		<liquibase.version>4.23.1</liquibase.version>
 	</properties>
 
 	<dependencies>
@@ -34,11 +34,11 @@
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 			<exclusions>
 				<exclusion>
-					<groupId>javax.ws.rs</groupId>
+					<groupId>jakarta.ws.rs</groupId>
 					<artifactId>jsr311-api</artifactId>
 				</exclusion>
 				<exclusion>
-                    <groupId>javax.servlet</groupId>
+                    <groupId>jakarta.servlet</groupId>
                     <artifactId>servlet-api</artifactId>
                 </exclusion>
 			</exclusions>
