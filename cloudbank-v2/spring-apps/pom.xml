@@ -31,8 +31,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
-        <spring.boot.dependencies.version>2.7.12</spring.boot.dependencies.version>
-        <spring-cloud.version>2021.0.7</spring-cloud.version>
+        <spring.boot.dependencies.version>2.7.14</spring.boot.dependencies.version>
+        <spring-cloud.version>2021.0.8</spring-cloud.version>
     </properties>
 
     <dependencies>
@@ -68,6 +68,10 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-sleuth</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
 
         <dependency>
