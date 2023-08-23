@@ -1,0 +1,2 @@
+mvn install:install-file -Dfile=lraclient/jakarta/microtx-lra-spring-boot-starter-jakarta-0.0.1-SNAPSHOT.jar -Dpomfile=lraclient/jakarta/microtx-lra-spring-boot-starter-jakarta-0.0.1-SNAPSHOT.pom
+
