@@ -1,2 +1,68 @@
 mvn install:install-file -Dfile=lraclient/jakarta/microtx-lra-spring-boot-starter-jakarta-0.0.1-SNAPSHOT.jar -Dpomfile=lraclient/jakarta/microtx-lra-spring-boot-starter-jakarta-0.0.1-SNAPSHOT.pom
 
+JAR file content:
+
+jar tvf microtx-lra-spring-boot-starter-jakarta-0.0.1-SNAPSHOT.jar
+     0 Thu Aug 10 18:18:50 CDT 2023 META-INF/
+   179 Thu Aug 10 18:18:50 CDT 2023 META-INF/MANIFEST.MF
+     0 Thu Aug 10 18:18:28 CDT 2023 META-INF/spring/
+     0 Thu Aug 10 18:18:32 CDT 2023 com/
+     0 Thu Aug 10 18:18:32 CDT 2023 com/oracle/
+     0 Thu Aug 10 18:18:32 CDT 2023 com/oracle/microtx/
+     0 Thu Aug 10 18:18:32 CDT 2023 com/oracle/microtx/springboot/
+     0 Thu Aug 10 18:18:36 CDT 2023 com/oracle/microtx/springboot/lra/
+     0 Thu Aug 10 18:18:36 CDT 2023 com/oracle/microtx/springboot/lra/annotation/
+     0 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/serverinterceptor/
+     0 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/participant/
+     0 Thu Aug 10 18:18:36 CDT 2023 com/oracle/microtx/springboot/lra/annotationhandler/
+     0 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/coordinator/
+     0 Thu Aug 10 18:18:36 CDT 2023 com/oracle/microtx/springboot/lra/clientinterceptor/
+     0 Thu Aug 10 18:18:36 CDT 2023 com/oracle/microtx/springboot/lra/context/
+     0 Thu Aug 10 18:18:36 CDT 2023 com/oracle/microtx/springboot/lra/validation/
+     0 Thu Aug 10 18:18:50 CDT 2023 META-INF/maven/
+     0 Thu Aug 10 18:18:50 CDT 2023 META-INF/maven/com.oracle.microtx.lra/
+     0 Thu Aug 10 18:18:50 CDT 2023 META-INF/maven/com.oracle.microtx.lra/microtx-lra-spring-boot-starter-jakarta/
+   972 Thu Aug 10 18:18:28 CDT 2023 META-INF/spring.factories
+   852 Thu Aug 10 18:18:28 CDT 2023 META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports
+  1662 Thu Aug 10 18:18:32 CDT 2023 com/oracle/microtx/springboot/lra/annotation/LRA$Type.class
+  1621 Thu Aug 10 18:18:32 CDT 2023 com/oracle/microtx/springboot/lra/annotation/LRA.class
+  1640 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/annotation/ParticipantStatus.class
+   414 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/annotation/Complete.class
+  1567 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/annotation/LRAStatus.class
+   410 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/annotation/Status.class
+   418 Thu Aug 10 18:18:36 CDT 2023 com/oracle/microtx/springboot/lra/annotation/Compensate.class
+   410 Thu Aug 10 18:18:36 CDT 2023 com/oracle/microtx/springboot/lra/annotation/Forget.class
+  2102 Thu Aug 10 18:18:36 CDT 2023 com/oracle/microtx/springboot/lra/annotation/LRAResponse.class
+   414 Thu Aug 10 18:18:36 CDT 2023 com/oracle/microtx/springboot/lra/annotation/AfterLRA.class
+   408 Thu Aug 10 18:18:36 CDT 2023 com/oracle/microtx/springboot/lra/annotation/Leave.class
+ 11901 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/serverinterceptor/NonSpringRestServerInterceptor.class
+  1776 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/serverinterceptor/ServerInterceptorConfig.class
+  3703 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/serverinterceptor/SpringRestServerInterceptor.class
+  1442 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/serverinterceptor/ServerFilter.class
+  8072 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/participant/ParticipantImpl.class
+  7054 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/participant/ParticipantService.class
+   381 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/participant/Participant.class
+  2564 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/participant/PropagatedHeaders$PrefixedPropagatedHeaders.class
+  1293 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/participant/PropagatedHeaders$NoopPropagatedHeaders.class
+  1957 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/participant/PropagatedHeaders.class
+  1716 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/MicroTxLRAClientMain.class
+  2589 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/MicroTxLRAConfigProperties.class
+  8251 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/annotationhandler/HandlerService.class
+   739 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/annotationhandler/AnnotationHandler$HandleMaker.class
+  5906 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/annotationhandler/AnnotationHandler.class
+  3995 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/annotationhandler/AnnotationLookUpService.class
+  3722 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/annotationhandler/MutableHttpServletRequest.class
+  3221 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/annotationhandler/DefaultAnnotationHandler.class
+  1238 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/annotationhandler/LraAnnotationHandler$1.class
+ 10345 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/annotationhandler/LraAnnotationHandler.class
+  3802 Thu Aug 10 18:18:36 CDT 2023 com/oracle/microtx/springboot/lra/annotationhandler/NonLraAnnotationHandler.class
+  6062 Thu Aug 10 18:18:36 CDT 2023 com/oracle/microtx/springboot/lra/annotationhandler/LeaveLraAnnotationHandler.class
+  1406 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/coordinator/CoordinatorClient.class
+ 20747 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/coordinator/MicroTxCoordinatorClient.class
+  3894 Thu Aug 10 18:18:34 CDT 2023 com/oracle/microtx/springboot/lra/clientinterceptor/ClientInterceptor.class
+  1387 Thu Aug 10 18:18:36 CDT 2023 com/oracle/microtx/springboot/lra/clientinterceptor/ClientInterceptorConfig.class
+  2466 Thu Aug 10 18:18:36 CDT 2023 com/oracle/microtx/springboot/lra/context/ThreadLocalVars.class
+  9073 Thu Aug 10 18:18:36 CDT 2023 com/oracle/microtx/springboot/lra/validation/CustomBeanPostProcessor.class
+  2211 Thu Aug 10 18:18:14 CDT 2023 META-INF/maven/com.oracle.microtx.lra/microtx-lra-spring-boot-starter-jakarta/pom.xml
+   105 Thu Aug 10 18:18:50 CDT 2023 META-INF/maven/com.oracle.microtx.lra/microtx-lra-spring-boot-starter-jakarta/pom.properties
+   
