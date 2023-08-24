@@ -44,7 +44,7 @@
         <javax-annotation.version>1.3.2</javax-annotation.version>
         <spring-boot.version>2.7.2</spring-boot.version>
         <spring-core.version>5.3.22</spring-core.version>
-        <spring-kafka.version>2.8.8</spring-kafka.version>
+        <spring-kafka.version>2.9.11</spring-kafka.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <oracle-jdbc.version>21.6.0.0.1</oracle-jdbc.version>
         <avro.version>1.11.0</avro.version>
