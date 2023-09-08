@@ -3,7 +3,7 @@
 
 resource "oci_containerengine_cluster" "oke" {
   #Required
-  compartment_id     = var.ociCompartmentOcid
+  compartment_id = var.ociCompartmentOcid
   endpoint_config {
     is_public_ip_enabled = "true"
     nsg_ids = [
@@ -58,8 +58,8 @@ data "oci_containerengine_node_pool_option" "okell_node_pool_option" {
 }
 
 locals {
-  all_sources = data.oci_containerengine_node_pool_option.okell_node_pool_option.sources
-  oracle_linux_images = [for source in local.all_sources : source.image_id if length(regexall("Oracle-Linux-[0-9]*.[0-9]*-20[0-9]*",source.source_name)) > 0]
+  all_sources         = data.oci_containerengine_node_pool_option.okell_node_pool_option.sources
+  oracle_linux_images = [for source in local.all_sources : source.image_id if length(regexall("Oracle-Linux-[0-9]*.[0-9]*-20[0-9]*", source.source_name)) > 0]
 }
 
 output "oke_ocid" {
