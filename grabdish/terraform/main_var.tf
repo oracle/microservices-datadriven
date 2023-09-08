@@ -7,3 +7,10 @@ variable "ociRegionIdentifier" {}
 variable "runName" {}
 variable "orderDbName" {}
 variable "inventoryDbName" {}
+
+variable "kubernetes_version" {
+  description = "OKE Version"
+  type        = string
+  default     = "v1.27.2"
+}
+

@@ -5,3 +5,9 @@ variable "ociTenancyOcid" {}
 variable "ociCompartmentOcid" {}
 variable "ociRegionIdentifier" {}
 variable "vcnOcid" {}
+
+variable "kubernetes_version" {
+  description = "OKE Version"
+  type        = string
+  default     = "v1.27.2"
+}
