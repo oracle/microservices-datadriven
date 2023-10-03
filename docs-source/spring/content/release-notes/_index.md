@@ -2,6 +2,38 @@
 title: "Release Notes"
 ---
 
+## Version 1.0.0, October 15, 2023
+
+This is the first production release.
+
+Notes:
+
+* All Spring platform components upgraded to Spring Boot 3.x, Spring 6.x and Spring Cloud 2022.0.4 versions.
+* Spring Native (with GraalVM native image ahead of time compilation) is the default/recommended
+  deployment option for microservices.  JVM continues to be available as an option.
+* TODO
+
+The following components were added:
+
+| Component                    | Version   | Description                          |
+|------------------------------|-----------|--------------------------------------|
+| Loki                         | 2.6.1     | Provides log aggregation and search. |
+| Promtail                     | 2.8.2     | Collects logs.                       |
+| Spring Authorization Server  | 2022.0.4  | Provides authentication and authorization for applications. |
+
+The following components were updated:
+
+| Component                                                   | New Version   | Replaced Version    |
+|-------------------------------------------------------------|---------------|---------------------|
+| Oracle Backend for Spring Boot Visual Studio Code extension | 1.0.0         | 0.3.9               |
+| Oracle Backend for Spring Boot CLI                          | 1.0.0         | 0.3.1               |
+| Grafana                                                     | 9.5.2         | x                   |
+| Spring Eureka Service Registry                              |               |                     |
+| Spring Config Server                                        |               |                     |
+| Spring Boot Admin                                           |               |                     |
+
+There were no component deprecations or removals.
+
 ## Developer Preview 0.7.0, July 24, 2023
 
 Notes:

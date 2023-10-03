@@ -42,6 +42,9 @@ main:
         ref: "/observability/tracing"
   - name: Security
     ref: "/security"
+    sub:
+      - name: Authorization Server
+        ref: "/security/azn-server"
   - name: Database Access
     ref: "/database"
   - name: Kubernetes Access
