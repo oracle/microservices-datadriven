@@ -2,7 +2,7 @@
 title: "Configuration"
 ---
 
-Oracle Backend for Spring Boot includes Spring Cloud Config which provides server- and client-side support for externalized
+Oracle Backend for Spring Boot and Microservices includes Spring Cloud Config which provides server- and client-side support for externalized
 configurations in a distributed system. The Spring Cloud Config server provides a central place to manage external properties for applications
 across all environments.
 
@@ -30,4 +30,3 @@ This example fetches data where the application is `atael`, profile is `dev` and
 Managing the data for the Spring Cloud Config server should be done using the CLI. If you prefer, you can also work directly
 with the `CONFIGSERVER.PROPERTIES` table in the database.
 
-Next, go to the [Workflow](../conductor/) page to learn more.

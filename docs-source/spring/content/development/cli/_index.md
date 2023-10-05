@@ -2,14 +2,14 @@
 title: "OBaaS CLI"
 ---
 
-The Oracle Backend for Spring Boot offers a command-line interface (CLI), `oractl`. The CLI commands simplify the deployment of
+The Oracle Backend for Spring Boot and Microservices offers a command-line interface (CLI), `oractl`. The CLI commands simplify the deployment of
 Microservices applications as well as bindings with the resources that they use.
 Download the CLI [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0).
 The platform-specific binary can be renamed to `oractl` for convenience.
 
 ## Using the CLI
 
-1. Expose the Oracle Backend for Spring Boot Admin server that the CLI calls using this command:
+1. Expose the Oracle Backend for Spring Boot and Microservices Admin server that the CLI calls using this command:
 
     ```shell
     kubectl port-forward services/obaas-admin -n obaas-admin  8080:8080
@@ -479,5 +479,3 @@ The following is an example development workflow using the CLI:
      oractl:>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
      400 : "Couldn't find any property for submitted query."
      ```
-
-Next, go to the [Vault](../vault/) page to learn more.

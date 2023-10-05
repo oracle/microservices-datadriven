@@ -32,7 +32,7 @@ including publishing, traffic management, deployment strategies, and circuit bre
 
 ## Deploy and Secure Sample Application APIs using Apache APISIX
 
-Oracle Backend for Spring Boot deploys Apache APISIX Gateway and Dashboard in the `apisix` namespace. The gateway is exposed through the
+Oracle Backend for Spring Boot and Microservices deploys Apache APISIX Gateway and Dashboard in the `apisix` namespace. The gateway is exposed through the
 external load balancer and ingress controller. To access the Apache APISIX Dashboard, you must use the `kubectl port-forward` command to
 create a secure channel to `service/apisix-dashboard`. Process the following steps:
 
@@ -85,7 +85,7 @@ API Gateway by processing these steps:
 				  file (`src/main/resources/application.yaml`), in uppercase characters. For Kubernetes, the service name is in the
 				  format `namespace/service:port` where `namespace` is the Kubernetes namespace in which the Spring Boot application is deployed, `service` is
 				  the name of the Kubernetes service for that application, and `port` is the name of the port in that service. If you deployed your Spring Boot
-				  application with the Oracle Backend for Spring Boot CLI, the port name will be `spring`. For example, an application called `slow-service` deployed
+				  application with the Oracle Backend for Spring Boot and Microservices CLI, the port name will be `spring`. For example, an application called `slow-service` deployed
 				  in the `my-apps` namespace would be `my-apps/slow-service:spring`.
 
         <!-- spellchecker-disable -->
@@ -100,9 +100,8 @@ API Gateway by processing these steps:
         {{< img name="obaas-apisix-routes-step3" size="medium" lazy=false >}}
         <!-- spellchecker-enable -->
         </br>
-
+    
     d. Save the route that you created.
-	
         <!-- spellchecker-disable -->
         {{< img name="obaas-apisix-routes-step4" size="medium" lazy=false >}}
         <!-- spellchecker-enable -->
@@ -116,16 +115,16 @@ API Gateway by processing these steps:
 
     a. Get the Apache APISIX Gateway external IP using this command:
 
-        ```shell
-        kubectl -n ingress-nginx get svc ingress-nginx-controller
-        ```
+      ```shell
+      kubectl -n ingress-nginx get svc ingress-nginx-controller
+      ```
 
     b. Call the API using the Apache APISIX Gateway address plus path. For example:
 
-        ```shell
-        curl http://APISIX_IP/fruit
-        ```
+      ```shell
+      curl http://APISIX_IP/fruit
+      ```
 
       You should get "banana" or "fallback fruit is apple" back as the response.
 
-Next, go to the [Service Discovery](../eureka/) page to learn more.
+

@@ -2,7 +2,7 @@
 title: "Security"
 ---
 
-The Oracle Backend for Spring Boot has the following security characteristics:
+The Oracle Backend for Spring Boot and Microservices has the following security characteristics:
 
 - All access to the database is done using the Mutual Transport Layer Security (mTLS) database wallet. The user name, password, and URL are
   stored in Kubernetes secrets.
@@ -30,4 +30,3 @@ The following diagram provides an overview of the Spring Security architecture:
 
 ![Security Architecture](../ebaas-security-architecture.png)
 
-Next, go to the [Database Access](../database/) page to learn more.

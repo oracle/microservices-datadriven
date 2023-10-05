@@ -25,8 +25,8 @@ The following components were updated:
 
 | Component                                                   | New Version   | Replaced Version    |
 |-------------------------------------------------------------|---------------|---------------------|
-| Oracle Backend for Spring Boot Visual Studio Code extension | 1.0.0         | 0.3.9               |
-| Oracle Backend for Spring Boot CLI                          | 1.0.0         | 0.3.1               |
+| Oracle Backend for Spring Boot and Microservices Visual Studio Code extension | 1.0.0         | 0.3.9               |
+| Oracle Backend for Spring Boot and Microservices CLI                          | 1.0.0         | 0.3.1               |
 | Grafana                                                     | 9.5.2         | x                   |
 | Spring Eureka Service Registry                              |               |                     |
 | Spring Config Server                                        |               |                     |
@@ -50,7 +50,7 @@ The following components were updated:
 
 | Component                    | New Version   | Replaced Version    |
 |------------------------------|---------------|---------------------|
-| Oracle Backend for Spring Boot Visual Studio Code extension | 0.3.9 | 0.3.8 |
+| Oracle Backend for Spring Boot and Microservices Visual Studio Code extension | 0.3.9 | 0.3.8 |
 | HashiCorp Vault              |  1.14.0 | v1.11.3 |
 | Oracle Database Operator for Kubernetes | 1.0 | 0.6.1 |
 | Parse Server                 | 6.2.0  | 5.2.7 |
@@ -72,8 +72,8 @@ The following components were updated:
 
 | Component                    | New Version   | Replaced Version    |
 |------------------------------|---------------|---------------------|
-| Oracle Backend for Spring Boot CLI | 0.3.1   | 0.3.0               |
-| Oracle Backend for Spring Boot Visual Studio Code extension | 0.3.8 | 0.3.7 |
+| Oracle Backend for Spring Boot and Microservices CLI | 0.3.1   | 0.3.0               |
+| Oracle Backend for Spring Boot and Microservices Visual Studio Code extension | 0.3.8 | 0.3.7 |
 
 There were no component deprecations or removals.
 
@@ -81,7 +81,7 @@ There were no component deprecations or removals.
 
 Notes:
 
-* Oracle Backend for Spring Boot now includes the option to install in a Multicloud (OCI/Azure) environment.
+* Oracle Backend for Spring Boot and Microservices now includes the option to install in a Multicloud (OCI/Azure) environment.
 * The Oracle Database Operator for Kubernetes is bound to the existing Oracle Autonomous Database (ADB) created by infrastructure as code (IaC) in an all-OCI installation and provisions the ADB in the Multicloud installation.
 * Improvements to On-Premises and desktop installation processes.
 
@@ -89,13 +89,13 @@ The following components were added:
 
 | Component                    | New Version   | Description         |
 |------------------------------|---------------|---------------------|
-| Oracle Backend for Spring Boot Visual Studio Code extension | 0.3.7   |  Allows Visual Studio Code users to manage the platform, deployments and configuration.  |
+| Oracle Backend for Spring Boot and Microservices Visual Studio Code extension | 0.3.7   |  Allows Visual Studio Code users to manage the platform, deployments and configuration.  |
 
 The following components were updated:
 
 | Component                    | New Version   | Replaced Version    |
 |------------------------------|---------------|---------------------|
-| Oracle Backend for Spring Boot CLI | 0.3.0   | 0.1.0               |
+| Oracle Backend for Spring Boot and Microservices CLI | 0.3.0   | 0.1.0               |
 
 There were no component deprecations or removals.
 
@@ -103,8 +103,8 @@ There were no component deprecations or removals.
 
 Notes:
 
-* Oracle Backend for Spring Boot now includes the option to also install Parse Platform in the same deployment.
-* Oracle Backend for Spring Boot CLI 0.2.3 includes a number of bug fixes and adds support for custom listening ports for services.
+* Oracle Backend for Spring Boot and Microservices now includes the option to also install Parse Platform in the same deployment.
+* Oracle Backend for Spring Boot and Microservices CLI 0.2.3 includes a number of bug fixes and adds support for custom listening ports for services.
 * Apache APISIX is now pre-configured for both Eureka and Kubernetes service discovery.
 
 The following components were added:
@@ -120,7 +120,7 @@ The following components were updated:
 
 | Component                    | New Version   | Replaced Version    |
 |------------------------------|---------------|---------------------|
-| Oracle Backend for Spring Boot CLI | 0.2.3   | 0.1.0               |
+| Oracle Backend for Spring Boot and Microservices CLI | 0.2.3   | 0.1.0               |
 | cert-manager                 | 1.11.0        | 1.10.1              |
 | NGINX Ingress Controller     | 1.6.4         | 1.5.1               |
 | Jaeger Tracing               | 1.39.0        | 1.37.0              |
@@ -148,7 +148,7 @@ The following components were added:
 | Component                    | Version      | Description                                                                              |
 |------------------------------|--------------|------------------------------------------------------------------------------------------|
 | HashiCorp Vault              | v1.11.3      | Provides a way to store and tightly control access to sensitive data.                    |
-| Oracle Backend for Spring Boot CLI | 0.1.0  | Provides a command-line interface to manage application deployment and configuration.               |
+| Oracle Backend for Spring Boot and Microservices CLI | 0.1.0  | Provides a command-line interface to manage application deployment and configuration.               |
 | Netflix Conductor OSS        | 3.13.2       | Provides workflow orchestration for Microservices.                                       |
 | On-premises installer        | 0.1.0        | Allows installation of a self-hosted stack.                                              |
 

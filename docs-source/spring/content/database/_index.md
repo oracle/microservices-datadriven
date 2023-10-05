@@ -15,7 +15,7 @@ resources:
     title: "Download ADB client credential"
 ---
 
-The Oracle Backend for Spring Boot includes an Oracle database. An instance of Oracle Autonomous Database Serverless is created during
+The Oracle Backend for Spring Boot and Microservices includes an Oracle database. An instance of Oracle Autonomous Database Serverless is created during
 installation.
 
 If you chose the **Secure Access from Anywhere** option for your database during installation (or just accepted the default), then you can use
@@ -40,11 +40,11 @@ Click on the link to access the **Database Details** page, and then click on **D
 <!-- spellchecker-enable -->
 
 This opens the **Database Actions** page where you have access to many database functions, including the ability to
-work with the schemas where your Oracle Backend for Spring Boot data is stored.
+work with the schemas where your Oracle Backend for Spring Boot and Microservices data is stored.
 
 ## Accessing the Database From a Local Machine
 
-After creating the Oracle Backend for Spring Boot environment, you have access to Oracle Autonomous Database. For example, you can access
+After creating the Oracle Backend for Spring Boot and Microservices environment, you have access to Oracle Autonomous Database. For example, you can access
 the `CONFIGSERVER.PROPERTIES` table where applications should add their properties. Also, each application can use the same database instance
 to host its data.
 
@@ -81,24 +81,26 @@ Process the following steps:
 	
 	a. First, export the Oracle Net port by processing this commmand:
 
-       ```shell
-       export CUSTOM_JDBC="-Doracle.net.socksProxyHost=127.0.0.1 -Doracle.net.socksProxyPort=<PORT> -Doracle.net.socksRemoteDNS=true"
-       ```
+    ```shell
+    export CUSTOM_JDBC="-Doracle.net.socksProxyHost=127.0.0.1 -Doracle.net.socksProxyPort=<PORT> -Doracle.net.socksRemoteDNS=true"
+    ```
 
     b. Download the ADB client credentials (wallet files). For example:
-
        <!-- spellchecker-disable -->
        {{< img name="oci-adb-download-wallet" size="medium" lazy=false >}}
        <!-- spellchecker-enable -->
 
     c. Connect with `SQLcl` by processing this command:
 
-       ```shell
+      ```shell
        sql /nolog
       ```
 
-       ```sql
-       set cloudconfig <WALLET>.zip
-       connect ADMIN@<TNS_NAME>
-       ```
-Next, go to the [Kubernetes Access](../cluster-access/) page to learn more.
+    d. Connect to the database using the wallet:
+
+      ```sql
+      set cloudconfig <WALLET>.zip
+      connect ADMIN@<TNS_NAME>
+      ```
+
+

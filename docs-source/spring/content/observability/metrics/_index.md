@@ -27,9 +27,7 @@ resources:
     title: "Grafana Dashboard"
 ---
 
-# Metrics
-
-The Oracle Backend for Spring Boot metrics stack automates metrics aggregation and consists of Prometheus and Grafana components.
+The Oracle Backend for Spring Boot and Microservices metrics stack automates metrics aggregation and consists of Prometheus and Grafana components.
 Metrics sources expose system and application metrics. The Prometheus components retrieve and store the metrics and Grafana provides
 dashboards to visualize them.
 

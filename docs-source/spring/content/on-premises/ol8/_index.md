@@ -1,8 +1,6 @@
 ---
-title: "Oracle Linux 8 (x86)"
+title: "On-Premises Installation - Oracle Linux 8 (x86)"
 ---
-
-# On-Premises Installation - Oracle Linux 8 (x86)
 
 This is an description of installing on a Oracle Linux 8 desktop.
 
@@ -75,9 +73,9 @@ minikube start --cpus max --memory 7900mb --disk-size='40g' --container-runtime=
 minikube addons enable ingress
 ```
 
-### Download Oracle Backend for Spring Boot
+### Download Oracle Backend for Spring Boot and Microservices
 
-Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip) and unzip into a new directory.
+Download [Oracle Backend for Spring Boot and Microservices](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip) and unzip into a new directory.
 
 As the `obaas` user, run these commands:
 
@@ -157,4 +155,3 @@ You can check on the status of the database by running this command:
 If you are behind a Virtual Private Network (VPN) or proxy, see https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/ for more
 details on additional tasks.
 
-Next, go to the [Getting Started](../getting-started/) page to learn more.

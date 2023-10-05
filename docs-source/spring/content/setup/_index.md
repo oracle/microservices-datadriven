@@ -57,11 +57,11 @@ resources:
     title: "Create Stack"
 ---
 
-Oracle Backend for Spring Boot is available in the [OCI Marketplace](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911).
+Oracle Backend for Spring Boot and Microservices is available in the [OCI Marketplace](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911).
 
 ## Prerequisites
 
-You must meet the following prerequisites to use Oracle Backend for Spring Boot. You need:
+You must meet the following prerequisites to use Oracle Backend for Spring Boot and Microservices. You need:
 
 - An Oracle Cloud Infrastructure (OCI) account in a tenancy with sufficient quota to create the following:
 
@@ -76,11 +76,11 @@ You must meet the following prerequisites to use Oracle Backend for Spring Boot.
 
   - The Kubernetes command-line interface (kubectl).
   - Oracle Cloud Infrastructure command-line interface (CLI).
-  - Oracle Backend for Spring Boot command-line interface (oractl).
+  - Oracle Backend for Spring Boot and Microservices command-line interface (oractl).
 
 ## Summary of Components
 
-Oracle Backend for Spring Boot setup installs the following components:
+Oracle Backend for Spring Boot and Microservices setup installs the following components:
 
 | Component                    | Version       | Description                                                                                 |
 |------------------------------|---------------|---------------------------------------------------------------------------------------------|
@@ -117,7 +117,7 @@ This video provides a quick overview of the setup process.
 
 To set up the OCI environment, process these steps:
 
-1. Go to the [OCI Marketplace listing for Oracle Backend for Spring Boot](https://cloud.oracle.com/marketplace/application/138899911).
+1. Go to the [OCI Marketplace listing for Oracle Backend for Spring Boot and Microservices](https://cloud.oracle.com/marketplace/application/138899911).
 
     <!-- spellchecker-disable -->
     {{< img name="ebaas-mp-listing" size="large" lazy=false >}}
@@ -132,7 +132,7 @@ To set up the OCI environment, process these steps:
 
 2.  Fill in the following configuration variables as needed and select **Next**:
 
-    - `Compartment` : Select the compartment where you want to install Oracle Backend for Spring Boot.
+    - `Compartment` : Select the compartment where you want to install Oracle Backend for Spring Boot and Microservices.
     - `Application Name` (optional) : A random name that will be used as the application name if left empty.
 
     <!-- spellchecker-disable -->
@@ -287,9 +287,9 @@ To set up the local machine, process these steps:
 
    b. Configure the Oracle Cloud Infrastructure CLI. See [Configuring the CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliconfigure.htm#Configuring_the_CLI).
 
-6. Install the Oracle Backend for Spring Boot command-line.
+6. Install the Oracle Backend for Spring Boot and Microservices command-line.
 
-   The Oracle Backend for Spring Boot command-line interface, `oractl`, is available for Linux and Mac systems. Download the binary
+   The Oracle Backend for Spring Boot and Microservices command-line interface, `oractl`, is available for Linux and Mac systems. Download the binary
    that you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0) page and add it to
    your PATH environment variable. You can rename the binary to remove the suffix.
 
@@ -298,4 +298,3 @@ To set up the local machine, process these steps:
    
    `sudo xattr -r -d com.apple.quarantine <downloaded-file>`
 
-Next, go to the [Azure/OCI Multicloud Installation](../azure/) page to learn how to install Multicloud.

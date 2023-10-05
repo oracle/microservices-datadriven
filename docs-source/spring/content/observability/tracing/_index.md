@@ -43,16 +43,13 @@ For more information on Jaeger, see the [Jaeger website](https://www.jaegertraci
     b. Select the **Service** `customer` and the **Operation** `/api/v1/customers` .
 	
     c. Click on **Find Traces**. Several traces appear (one for each time that you invoked the service).
-
         <!-- spellchecker-disable -->
         {{< img name="obaas-jaeger-customer-tracing" size="medium" lazy=false >}}
         <!-- spellchecker-enable -->
 
     d. Click on any one of them to view the trace that includes multiple services and extends into Oracle Database and Oracle
 	   Advanced Queuing. For example:
-
         <!-- spellchecker-disable -->
         {{< img name="obaas-jaeger-customer-trace-details" size="medium" lazy=false >}}
         <!-- spellchecker-enable -->
 
-Next, go to the [Security](../security/) page to learn more.

@@ -318,5 +318,3 @@ To access the Vault, process these steps:
       <!-- spellchecker-disable -->
       {{< img name="vault-show-secret" size="medium" lazy=false >}}
       <!-- spellchecker-enable -->
-
-Next, go to the [VS Code Plugin](../platform/vscode-plugin/) page to learn more.

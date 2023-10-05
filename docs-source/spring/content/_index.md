@@ -1,9 +1,9 @@
 ---
-title: "Oracle Backend for Spring Boot"
+title: "Oracle Backend for Spring Boot and Microservices"
 ---
 
-Oracle Backend for Spring Boot allows developers to build microservices in Spring Boot and provisions a "backend as a service" with
-Oracle Database and other infrastructure components that operate on multiple clouds. Oracle Backend for Spring Boot vastly simplifies the task of
+Oracle Backend for Spring Boot and Microservices allows developers to build microservices in Spring Boot and provisions a "backend as a service" with
+Oracle Database and other infrastructure components that operate on multiple clouds. Oracle Backend for Spring Boot and Microservices vastly simplifies the task of
 building, testing, and operating microservices platforms for reliable, secure, and scalable enterprise applications.
 
 To learn more, watch this short introductory video:
@@ -40,14 +40,14 @@ Developers also have access to development or build time services and libraries 
 
 ## Learn more, try it out with CloudBank!
 
-To learn more about deploying and using Oracle Backend for Spring Boot, we recommend our
+To learn more about deploying and using Oracle Backend for Spring Boot and Microservices, we recommend our
 [CloudBank](https://bit.ly/CloudBankOnOBaaS) self-paced, on-demand hands-on lab.
 
 ![](./cloudbank-hol.png)
 
 In the [CloudBank](https://bit.ly/CloudBankOnOBaaS) hands-on lab you can learn how to: 
 
-* Install Oracle Backend for Spring Boot.
+* Install Oracle Backend for Spring Boot and Microservices.
 * Set up a development environment for Spring Boot.
 * Build Spring Boot microservices from scratch using Spring Web to create REST services.
 * Use service discovery and client-side load balancing.

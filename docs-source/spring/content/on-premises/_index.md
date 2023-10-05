@@ -1,10 +1,8 @@
 ---
-title: "On-Premises"
+title: "On-Premises Installation"
 ---
 
-# On-Premises Installation
-
-The Oracle Backend for Spring Boot is available to install On-Premises. The On-Premises installation includes both a _Desktop_ installation
+The Oracle Backend for Spring Boot and Microservices is available to install On-Premises. The On-Premises installation includes both a _Desktop_ installation
 and an _Estate_ installation.
 
 The _Desktop_ installation can be used to explore in a non-production environment, while the _Estate_ installation is targeted for the
@@ -12,7 +10,7 @@ production infrastructure.
 
 ## Prerequisites
 
-You must meet the following prerequisites to use the Oracle Backend for Spring Boot On-Premises. You need:
+You must meet the following prerequisites to use the Oracle Backend for Spring Boot and Microservices On-Premises. You need:
 
 * Access to Oracle Database Enterprise Edition 21.3.0.0
 * Access to a Container Repository
@@ -32,7 +30,7 @@ desktop system or software requirements. For example:
 
 ## Download
 
-Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip).
+Download [Oracle Backend for Spring Boot and Microservices](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip).
 
 ## Setup
 
@@ -50,7 +48,7 @@ appropriate documentation for examples of installing and defining the _Desktop_ 
 
 The _Desktop_ playbook is run as part of the Configuration Management Playbook.
 
-## Download the Database or Oracle REST Data Services (ORDS) Images (_Desktop_  Installation)
+## Download the Database or Oracle REST Data Services (ORDS) Images (Desktop Installation)
 
 The _Desktop_ installation provisions an Oracle database to the Kubernetes cluster. The images must be downloaded
 from [Oracle's Container Registry](https://container-registry.oracle.com/) before continuing.
