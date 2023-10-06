@@ -98,14 +98,14 @@ curl -u <username>:<password> -i -X PUT \
 
 ```shell
 curl -u <username>:<password> -i -X DELETE \ 
-    http://localhost:8080/user/api/v1/deleteUsername/username=<username_to_be_deleted>
+    http://localhost:8080/user/api/v1/deleteUsername?username=<username_to_be_deleted>
 ```
 
 #### /user/api/v1/deleteId?id=\<id\>
 
 ```shell
 curl -u obaas-admin:password -i -X DELETE \
-    http://localhost:8080/user/api/v1/deleteId/id=<userid_to_be_deleted>
+    http://localhost:8080/user/api/v1/deleteId?id=<userid_to_be_deleted>
 ```
 
 ## Architecture
