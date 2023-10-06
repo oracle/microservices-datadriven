@@ -47,7 +47,7 @@ The following REST endpoints are available to manage users. The table lists whic
 
 | End point                                         | Method | Description                                     | Minimum required Role |
 |---------------------------------------------------|--------|-------------------------------------------------|-----------------------|
-| /user/api/v1/findUser                             | GET    | Find all users or users containing a username   | ROLE_ADMIN            |
+| /user/api/v1/findUser                             | GET    | Find all users                                  | ROLE_ADMIN            |
 | /user/api/v1/findUser?username=\<username\>       | GET    | Find a user with the username \<username\>      | ROLE_ADMIN            |
 | /user/api/v1/createUser                           | POST   | Create a user                                   | ROLE_ADMIN            |
 | /user/api/v1/updatePassword                       | PUT    | Update a password for a user. A user with<br>Role ROLE_ADMIN can update any users password | ROLE_USER |
