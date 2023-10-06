@@ -1,5 +1,114 @@
 ---
 title: "Authorization Server"
+resources:
+  - name: azn-server-arch
+    src: "azn-server-arch.svg"
+    title: "Authorization Server Architecture"
 ---
 
-TODO write me
+## Users
+
+When deploying Oracle Backend for Spring Boot two users are created with the following roles:
+
+| User Name     | Assigned Roles        |
+|---------------|-----------------------|
+| obaas-admin   | ROLE_ADMIN, ROLE_USER |
+| obaas-user    | ROLE_USER             |
+
+All the users are stored in the database deployed when installing Oracle Backend for Spring Boot. The Roles determines what the user is allowed to do in the environment. See each components documentation about the rules.
+
+The assigned passwords can be viewed in the OCI Console (ORM homepage)
+
+<< INSERT PICTURE >>
+
+The passwords can also be obtained from k8s secrets using the `kubectl` command.
+
+For `obaas-admin`:
+
+```shell
+kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.admin}' | base64 -d
+```
+
+For `obaas-user`:
+
+```shell
+kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.user}' | base64 -d
+```
+
+## User Management
+
+The following REST endpoints are available to manage users. The table lists which minimum required Role is needed to perform the operation.
+
+| End point                                         | Method | Description                                     | Minimum required Role |
+|---------------------------------------------------|--------|-------------------------------------------------|-----------------------|
+| /user/api/v1//findUser                            | GET    | Find all users or users containing a username   | ROLE_ADMIN            |
+| /user/api/v1//findUser?username=\<username\>      | GET    | Find a user with the username \<username\>      | ROLE_ADMIN            |
+| /user/api/v1/createUser                           | POST   | Create a user                                   | ROLE_ADMIN            |
+| /user/api/v1/updatePassword                       | PUT    | Update a password for a user. A user with<br>Role ROLE_ADMIN can update any users password | ROLE_USER |
+| /user/api/v1/deleteUsername?username=\<username\> | DELETE | Delete a user with username \<username\>        | ROLE_ADMIN            |
+| /user/api/v1/deleteId?id=\<id\>                   | DELETE | Delete a user with the id \<id\>                | ROLE_ADMIN            |
+
+### User Management Endpoints
+
+In all examples below you need to replace `<username>:<password>` with your username and password. The examples are using `curl` to interact with the endpoints. They also requires that you have opened a tunnel on port 8080 to either the `azn-server` or `obaas-admin` service. For example
+
+```shell
+kubectl port-forward -n obaas-admin svc/obaas-admin 8080
+```
+
+#### /user/api/v1//findUser
+
+```shell
+curl -i -u <username>:<password> http://localhost:8080/user/api/v1/findUser
+```
+
+#### /user/api/v1//findUser?username=\<username\>
+
+```shell
+curl -i -u <username>:<password> 'http://localhost:8080/user/api/v1/findUser?username=obaas-admin'
+```
+
+#### /user/api/v1/createUser
+
+```shell
+curl -u <username>:<password> -i -X POST \
+    -H 'Content-Type: application/json' \
+    -d '{"username": "a-new-user", "password": "top-secret-password", "roles" : "ROLE_ADMIN,ROLE_USER"}' \
+    http://localhost:8080/user/api/v1/createUser
+```
+
+#### /user/api/v1/updatePassword
+
+```shell
+curl -u <username>:<password> -i -X PUT \
+    -H 'Content-Type: application/json' \
+    -d '{"username": "a-new-user", "password": "more-top-secret-password"}' \
+    http://localhost:8080/user/api/v1/updatePassword
+```
+
+#### /user/api/v1/deleteUsername?username=\<username\>
+
+```shell
+curl -u <username>:<password> -i -X DELETE \ 
+    http://localhost:8080/user/api/v1/deleteUsername/username=<username_to_be_deleted>
+```
+
+#### /user/api/v1/deleteId?id=\<id\>
+
+```shell
+curl -u obaas-admin:password -i -X DELETE \
+    http://localhost:8080/user/api/v1/deleteId/id=<userid_to_be_deleted>
+```
+
+## Architecture
+
+The following picture shows how the Authentication Server is used for AuthZ for the following modules:
+
+- OBaaS Admin (OBaaS CLI server module)
+- Config Server (Manages Config Server Entries)
+- AZN Server (AUthentication Server User Management)
+- GraalVM Compiler (GraalVM Native Compiler module)
+
+<!-- spellchecker-disable -->
+{{< img name="azn-server-arch" size="medium" lazy=false >}}
+<!-- spellchecker-enable -->
