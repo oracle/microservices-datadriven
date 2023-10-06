@@ -1,12 +1,16 @@
 ---
-title: "Authorization Server"
+title: "Authentication and Authorization Server"
 resources:
   - name: azn-server-arch
     src: "azn-server-arch.svg"
     title: "Authorization Server Architecture"
 ---
 
-## Users
+The Authorization Server is an engine to authenticate and authorize requests to various components in Oracle Backend for Spring Boot. The end user can manages users using REST Endpoints.
+
+> **_NOTE:_** Oracle recommends that you change the default passwords for the default created users.
+
+## Users & Roles
 
 When deploying Oracle Backend for Spring Boot two users are created with the following roles:
 
@@ -15,7 +19,9 @@ When deploying Oracle Backend for Spring Boot two users are created with the fol
 | obaas-admin   | ROLE_ADMIN, ROLE_USER |
 | obaas-user    | ROLE_USER             |
 
-All the users are stored in the database deployed when installing Oracle Backend for Spring Boot. The Roles determines what the user is allowed to do in the environment. See each components documentation about the rules.
+All the users are stored in the database deployed when installing Oracle Backend for Spring Boot. The Roles determines what the user is allowed to do in the environment. The allowed roles are `ROLE_ADMIN` and `ROLE_USER`.
+
+> **_NOTE:_** See each components documentation about the rules.
 
 The assigned passwords can be viewed in the OCI Console (ORM homepage)
 
@@ -35,20 +41,20 @@ For `obaas-user`:
 kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.user}' | base64 -d
 ```
 
-## User Management
+## User Management REST endpoints
 
 The following REST endpoints are available to manage users. The table lists which minimum required Role is needed to perform the operation.
 
 | End point                                         | Method | Description                                     | Minimum required Role |
 |---------------------------------------------------|--------|-------------------------------------------------|-----------------------|
-| /user/api/v1//findUser                            | GET    | Find all users or users containing a username   | ROLE_ADMIN            |
-| /user/api/v1//findUser?username=\<username\>      | GET    | Find a user with the username \<username\>      | ROLE_ADMIN            |
+| /user/api/v1/findUser                             | GET    | Find all users or users containing a username   | ROLE_ADMIN            |
+| /user/api/v1/findUser?username=\<username\>       | GET    | Find a user with the username \<username\>      | ROLE_ADMIN            |
 | /user/api/v1/createUser                           | POST   | Create a user                                   | ROLE_ADMIN            |
 | /user/api/v1/updatePassword                       | PUT    | Update a password for a user. A user with<br>Role ROLE_ADMIN can update any users password | ROLE_USER |
 | /user/api/v1/deleteUsername?username=\<username\> | DELETE | Delete a user with username \<username\>        | ROLE_ADMIN            |
 | /user/api/v1/deleteId?id=\<id\>                   | DELETE | Delete a user with the id \<id\>                | ROLE_ADMIN            |
 
-### User Management Endpoints
+### User Management REST Endpoints
 
 In all examples below you need to replace `<username>:<password>` with your username and password. The examples are using `curl` to interact with the endpoints. They also requires that you have opened a tunnel on port 8080 to either the `azn-server` or `obaas-admin` service. For example
 
@@ -56,19 +62,21 @@ In all examples below you need to replace `<username>:<password>` with your user
 kubectl port-forward -n obaas-admin svc/obaas-admin 8080
 ```
 
-#### /user/api/v1//findUser
+#### /user/api/v1/findUser
 
 ```shell
 curl -i -u <username>:<password> http://localhost:8080/user/api/v1/findUser
 ```
 
-#### /user/api/v1//findUser?username=\<username\>
+#### /user/api/v1/findUser?username=\<username\>
 
 ```shell
 curl -i -u <username>:<password> 'http://localhost:8080/user/api/v1/findUser?username=obaas-admin'
 ```
 
 #### /user/api/v1/createUser
+
+When creating a user the following Roles are allowed: `ROLE_ADMIN` and `ROLE_USER`.
 
 ```shell
 curl -u <username>:<password> -i -X POST \
