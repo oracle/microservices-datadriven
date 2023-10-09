@@ -7,7 +7,6 @@ import static org.eclipse.microprofile.lra.annotation.ws.rs.LRA.LRA_HTTP_CONTEXT
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.logging.Logger;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,6 +25,7 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
+import lombok.extern.slf4j.Slf4j;
 
 import org.eclipse.microprofile.lra.annotation.ws.rs.LRA;
 
@@ -33,9 +33,9 @@ import io.narayana.lra.Current;
 
 @ApplicationScoped
 @Path("/")
+@Slf4j
 public class TransferService {
 
-    private static final Logger log = Logger.getLogger(TransferService.class.getSimpleName());
     public static final String TRANSFER_ID = "TRANSFER_ID";
     private URI withdrawUri;
     private URI depositUri;

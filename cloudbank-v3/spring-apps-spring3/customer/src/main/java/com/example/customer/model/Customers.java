@@ -14,6 +14,7 @@ import org.hibernate.annotations.Generated;
 
 import java.util.Date;
 
+@SuppressWarnings("deprecation")
 @Entity
 @Table(name = "CUSTOMERS")
 @Data

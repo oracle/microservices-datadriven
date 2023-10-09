@@ -3,8 +3,6 @@
 
 package com.example.accounts.services;
 
-import java.util.logging.Logger;
-
 import static org.eclipse.microprofile.lra.annotation.ws.rs.LRA.LRA_HTTP_CONTEXT_HEADER;
 import static org.eclipse.microprofile.lra.annotation.ws.rs.LRA.LRA_HTTP_ENDED_CONTEXT_HEADER;
 import static org.eclipse.microprofile.lra.annotation.ws.rs.LRA.LRA_HTTP_PARENT_CONTEXT_HEADER;
@@ -20,6 +18,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import lombok.extern.slf4j.Slf4j;
 
 import org.eclipse.microprofile.lra.annotation.AfterLRA;
 import org.eclipse.microprofile.lra.annotation.Compensate;
@@ -28,7 +27,6 @@ import org.eclipse.microprofile.lra.annotation.ParticipantStatus;
 import org.eclipse.microprofile.lra.annotation.Status;
 import org.eclipse.microprofile.lra.annotation.ws.rs.LRA;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.accounts.model.Account;
 import com.example.accounts.model.Journal;
@@ -36,8 +34,9 @@ import com.example.accounts.model.Journal;
 @RequestScoped
 @Path("/deposit")
 @Component
+@Slf4j
 public class DepositService {
-    private static final Logger log = Logger.getLogger(DepositService.class.getName());
+
     private final static String DEPOSIT = "DEPOSIT";
 
     /**

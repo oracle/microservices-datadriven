@@ -9,21 +9,22 @@ Please visit the Live Lab for more information.
    `mvn clean package -Dmaven.test.skip=true`
 
    ```text
-   [INFO] --- spring-boot:2.7.12:repackage (repackage) @ checks ---
-   [INFO] Replacing main artifact with repackaged archive
    [INFO] ------------------------------------------------------------------------
    [INFO] Reactor Summary for cloudbank 0.0.1-SNAPSHOT:
    [INFO]
-   [INFO] cloudbank .......................................... SUCCESS [  0.689 s]
-   [INFO] account ............................................ SUCCESS [  2.246 s]
-   [INFO] customer ........................................... SUCCESS [  0.686 s]
-   [INFO] creditscore ........................................ SUCCESS [  0.439 s]
-   [INFO] transfer ........................................... SUCCESS [  0.488 s]
-   [INFO] testrunner ......................................... SUCCESS [  0.440 s]
-   [INFO] checks ............................................. SUCCESS [  0.506 s]
+   [INFO] cloudbank .......................................... SUCCESS [  0.456 s]
+   [INFO] account ............................................ SUCCESS [  0.507 s]
+   [INFO] customer ........................................... SUCCESS [  0.079 s]
+   [INFO] creditscore ........................................ SUCCESS [  0.049 s]
+   [INFO] transfer ........................................... SUCCESS [  0.053 s]
+   [INFO] testrunner ......................................... SUCCESS [  0.050 s]
+   [INFO] checks ............................................. SUCCESS [  0.245 s]
    [INFO] ------------------------------------------------------------------------
    [INFO] BUILD SUCCESS
-   [INFO] ------------------------------------------------------------------------```
+   [INFO] ------------------------------------------------------------------------
+   [INFO] Total time:  1.633 s
+   [INFO] Finished at: 2023-10-09T09:34:43-05:00
+   [INFO] ------------------------------------------------------------------------
    ```
 
 ## Deploying Cloudbank
