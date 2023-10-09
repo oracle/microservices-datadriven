@@ -5,8 +5,9 @@ package com.example.customer.controller;
 
 import com.example.customer.model.Customers;
 import com.example.customer.repository.CustomersRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +17,9 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1")
+@Slf4j
 public class CustomerController {
     final CustomersRepository customersRepository;
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     public CustomerController(CustomersRepository customersRepository) {
         this.customersRepository = customersRepository;
