@@ -6,7 +6,6 @@ package com.example.transfer;
 import static org.eclipse.microprofile.lra.annotation.ws.rs.LRA.LRA_HTTP_CONTEXT_HEADER;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -23,10 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.oracle.microtx.springboot.lra.annotation.Compensate;
+import com.oracle.microtx.springboot.lra.annotation.Complete;
 import com.oracle.microtx.springboot.lra.annotation.LRA;
 
 import io.narayana.lra.Current;
-import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -159,6 +159,7 @@ public class TransferService {
     }
 
     @PostMapping("/confirm")
+    @Complete
     @LRA(value = LRA.Type.NOT_SUPPORTED)
     public ResponseEntity<String> confirm(@RequestHeader(TRANSFER_ID) String transferId) {
         log.info("Received confirm for transfer : " + transferId);
@@ -178,6 +179,7 @@ public class TransferService {
     }
 
     @PostMapping("/cancel")
+    @Compensate
     @LRA(value = LRA.Type.NOT_SUPPORTED, cancelOn = HttpStatus.OK)
     public ResponseEntity<String> cancel(@RequestHeader(TRANSFER_ID) String transferId) {
         log.info("Received cancel for transfer : " + transferId);
