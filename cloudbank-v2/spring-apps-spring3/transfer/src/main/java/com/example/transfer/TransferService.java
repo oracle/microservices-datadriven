@@ -3,7 +3,7 @@
 
 package com.example.transfer;
 
-import static org.eclipse.microprofile.lra.annotation.ws.rs.LRA.LRA_HTTP_CONTEXT_HEADER;
+import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_CONTEXT_HEADER;
 
 import java.net.URI;
 
@@ -26,7 +26,6 @@ import com.oracle.microtx.springboot.lra.annotation.Compensate;
 import com.oracle.microtx.springboot.lra.annotation.Complete;
 import com.oracle.microtx.springboot.lra.annotation.LRA;
 
-import io.narayana.lra.Current;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -98,7 +97,8 @@ public class TransferService {
     private String withdraw(long accountId, long amount) {
         log.info("withdraw accountId = " + accountId + ", amount = " + amount);
         
-        URI lraId = Current.peek();
+        //URI lraId = Current.peek();
+        String lraId = "MARK TODO";
         log.info("withdraw lraId = " + lraId);
         
         UriComponentsBuilder builder = UriComponentsBuilder.fromUri(withdrawUri)
@@ -123,7 +123,8 @@ public class TransferService {
     private String deposit(long accountId, long amount) {
         log.info("deposit accountId = " + accountId + ", amount = " + amount);
         
-        URI lraId = Current.peek();
+        //URI lraId = Current.peek();
+        String lraId = "MARK TODO";
         log.info("deposit lraId = " + lraId);
         
         UriComponentsBuilder builder = UriComponentsBuilder.fromUri(depositUri)

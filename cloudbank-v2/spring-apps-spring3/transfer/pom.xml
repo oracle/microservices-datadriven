@@ -48,7 +48,7 @@
 			<artifactId>microtx-lra-spring-boot-starter-jakarta</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-        <dependency>
+        <!-- <dependency>
             <groupId>org.jboss.narayana.rts</groupId>
             <artifactId>narayana-lra</artifactId>
             <version>${narayana-lra.version}</version>
@@ -57,7 +57,7 @@
             <groupId>jakarta.enterprise</groupId>
             <artifactId>jakarta.enterprise.cdi-api</artifactId>
             <version>${jakarta.enterprise.cdi-api.version}</version>
-        </dependency>
+        </dependency> -->
         <dependency>
 			<groupId>jakarta.inject</groupId>
 			<artifactId>jakarta.inject-api</artifactId>

@@ -16,6 +16,11 @@ spring:
         dialect: org.hibernate.dialect.Oracle12cDialect
         format_sql: true
     show-sql: true
+  microtx:
+    lra:
+      coordinator-url: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator
+      propagation-active: true
+      headers-propagation-prefix: "{x-b3-, oracle-tmm-, authorization, refresh-}"    
 
   liquibase:
     change-log: classpath:db/changelog/controller.yaml
