@@ -22,9 +22,9 @@ spring:
 
 account:
   deposit:
-    url: http://account.application:8080/deposit/deposit
+    url: http://account.application:8080/deposit
   withdraw:
-    url: http://account.application:8080/withdraw/withdraw
+    url: http://account.application:8080/withdraw
 transfer:
   cancel:
     url: http://transfer.application:8080/cancel

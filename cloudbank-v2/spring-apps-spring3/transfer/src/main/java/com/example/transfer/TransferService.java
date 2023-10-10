@@ -63,11 +63,11 @@ public class TransferService {
         String returnString = "";
 
         // perform the withdrawal
-        returnString += withdraw(fromAccount, amount);
+        returnString += withdraw(lraId, fromAccount, amount);
         log.info(returnString);
         if (returnString.contains("succeeded")) {
             // if it worked, perform the deposit
-            returnString += " " + deposit(toAccount, amount);
+            returnString += " " + deposit(lraId, toAccount, amount);
             log.info(returnString);
             if (returnString.contains("failed"))
                 isCompensate = true; // deposit failed
@@ -94,11 +94,8 @@ public class TransferService {
 
     }
 
-    private String withdraw(long accountId, long amount) {
+    private String withdraw(String lraId, long accountId, long amount) {
         log.info("withdraw accountId = " + accountId + ", amount = " + amount);
-        
-        //URI lraId = Current.peek();
-        String lraId = "MARK TODO";
         log.info("withdraw lraId = " + lraId);
         
         UriComponentsBuilder builder = UriComponentsBuilder.fromUri(withdrawUri)
@@ -120,11 +117,8 @@ public class TransferService {
 
     }
 
-    private String deposit(long accountId, long amount) {
+    private String deposit(String lraId, long accountId, long amount) {
         log.info("deposit accountId = " + accountId + ", amount = " + amount);
-        
-        //URI lraId = Current.peek();
-        String lraId = "MARK TODO";
         log.info("deposit lraId = " + lraId);
         
         UriComponentsBuilder builder = UriComponentsBuilder.fromUri(depositUri)

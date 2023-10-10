@@ -26,38 +26,12 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-            <!-- <exclusions>
-                <exclusion>
-                    <groupId>javax.ws.rs</groupId>
-                    <artifactId>jsr311-api</artifactId>
-                </exclusion>
-            </exclusions> -->
         </dependency>
-
-        <!-- <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jersey</artifactId>
-        </dependency> -->
-        <!-- <dependency>
-            <groupId>org.eclipse.microprofile.lra</groupId>
-            <artifactId>microprofile-lra-api</artifactId>
-            <version>${microprofile-lra-api.version}</version>
-        </dependency> -->
         <dependency>
 			<groupId>com.oracle.microtx.lra</groupId>
 			<artifactId>microtx-lra-spring-boot-starter-jakarta</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-        <!-- <dependency>
-            <groupId>org.jboss.narayana.rts</groupId>
-            <artifactId>narayana-lra</artifactId>
-            <version>${narayana-lra.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.enterprise</groupId>
-            <artifactId>jakarta.enterprise.cdi-api</artifactId>
-            <version>${jakarta.enterprise.cdi-api.version}</version>
-        </dependency> -->
         <dependency>
 			<groupId>jakarta.inject</groupId>
 			<artifactId>jakarta.inject-api</artifactId>
