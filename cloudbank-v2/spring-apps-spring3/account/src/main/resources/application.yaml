@@ -37,6 +37,17 @@ spring:
       min-pool-size: 10
       max-pool-size: 30
 
+eureka:
+  instance:
+    hostname: ${spring.application.name}
+    preferIpAddress: true
+  client:
+    service-url:
+      defaultZone: ${eureka.service-url}
+    fetch-registry: true
+    register-with-eureka: true
+    enabled: true
+
 lra:
   coordinator:
     url: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator

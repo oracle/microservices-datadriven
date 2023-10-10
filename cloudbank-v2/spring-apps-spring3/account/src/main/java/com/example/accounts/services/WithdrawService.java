@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,6 +28,7 @@ import com.oracle.microtx.springboot.lra.annotation.Status;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
+@RequestMapping("/withdraw")
 @Slf4j
 public class WithdrawService {
 
@@ -36,7 +38,7 @@ public class WithdrawService {
     * Reduce account balance by given amount and write journal entry re the same.
     * Both actions in same local tx
     */
-    @PostMapping("/withdraw")
+    @PostMapping
     @LRA(value = LRA.Type.MANDATORY, end = false)
     public ResponseEntity<String> withdraw(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId,
             @RequestParam("accountId") long accountId,

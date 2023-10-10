@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,6 +28,7 @@ import com.oracle.microtx.springboot.lra.annotation.Status;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
+@RequestMapping("/deposit")
 @Slf4j
 public class DepositService {
 
@@ -36,7 +38,7 @@ public class DepositService {
      * Write journal entry re deposit amount.
      * Do not increase actual bank account amount
      */
-    @PostMapping("/deposit")
+    @PostMapping
     @LRA(value = LRA.Type.MANDATORY, end = false)
     public ResponseEntity<String> deposit(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId,
                             @RequestParam("accountId") long accountId,

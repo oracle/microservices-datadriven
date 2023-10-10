@@ -14,7 +14,18 @@ spring:
       - "/rest/*"
       - "/actuator/*"
       - "/error/*"
-      
+
+eureka:
+  instance:
+    hostname: ${spring.application.name}
+    preferIpAddress: true
+  client:
+    service-url:
+      defaultZone: ${eureka.service-url}
+    fetch-registry: true
+    register-with-eureka: true
+    enabled: true
+
 account:
   deposit:
       url: http://account.application:8080/deposit/deposit
