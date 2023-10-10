@@ -15,6 +15,24 @@ spring:
       - "/actuator/*"
       - "/error/*"
 
+account:
+  deposit:
+    url: http://account.application:8080/deposit/deposit
+  withdraw:
+    url: http://account.application:8080/withdraw/withdraw
+transfer:
+  cancel:
+    url: http://transfer.application:8080/cancel
+    process:
+      url: http://transfer.application:8080/processcancel
+  confirm:
+    url: http://transfer.application:8080/confirm
+    process:
+      url: http://transfer.application:8080/processconfirm
+lra:
+  coordinator:
+    url: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator
+   
 eureka:
   instance:
     hostname: ${spring.application.name}
@@ -26,24 +44,6 @@ eureka:
     register-with-eureka: true
     enabled: true
 
-account:
-  deposit:
-      url: http://account.application:8080/deposit/deposit
-  withdraw:
-      url: http://account.application:8080/withdraw/withdraw
-transfer:
-  cancel:
-      url: http://transfer.application:8080/cancel
-      process:
-         url: http://transfer.application:8080/processcancel
-  confirm:
-      url: http://transfer.application:8080/confirm
-      process:
-         url: http://transfer.application:8080/processconfirm
-lra:
-  coordinator:
-    url: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator
-   
 management:
   endpoint:
     prometheus:

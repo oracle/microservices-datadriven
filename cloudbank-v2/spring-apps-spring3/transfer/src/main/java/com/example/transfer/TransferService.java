@@ -8,6 +8,7 @@ import static org.eclipse.microprofile.lra.annotation.ws.rs.LRA.LRA_HTTP_CONTEXT
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,15 +21,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.function.ServerRequest.Headers;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import jakarta.annotation.PostConstruct;
-import lombok.extern.slf4j.Slf4j;
 
 import com.oracle.microtx.springboot.lra.annotation.LRA;
 
 import io.narayana.lra.Current;
+import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/")
@@ -36,26 +35,13 @@ import io.narayana.lra.Current;
 public class TransferService {
 
     public static final String TRANSFER_ID = "TRANSFER_ID";
-    private URI withdrawUri;
-    private URI depositUri;
-    private URI transferCancelUri;
-    private URI transferConfirmUri;
-    private URI transferProcessCancelUri;
-    private URI transferProcessConfirmUri;
-
-    @PostConstruct
-    private void initController() {
-        try {
-            withdrawUri = new URI(ApplicationConfig.accountWithdrawUrl);
-            depositUri = new URI(ApplicationConfig.accountDepositUrl);
-            transferCancelUri = new URI(ApplicationConfig.transferCancelURL);
-            transferConfirmUri = new URI(ApplicationConfig.transferConfirmURL);
-            transferProcessCancelUri = new URI(ApplicationConfig.transferCancelProcessURL);
-            transferProcessConfirmUri = new URI(ApplicationConfig.transferConfirmProcessURL);
-        } catch (URISyntaxException ex) {
-            throw new IllegalStateException("Failed to initialize " + TransferService.class.getName(), ex);
-        }
-    }
+   
+    @Value("${account.withdraw.url}") URI withdrawUri;
+    @Value("${account.deposit.url}") URI depositUri;
+    @Value("${transfer.cancel.url}") URI transferCancelUri;
+    @Value("${transfer.cancel.process.url}") URI transferProcessCancelUri;
+    @Value("${transfer.confirm.url}") URI transferConfirmUri;
+    @Value("${transfer.confirm.process.url}") URI transferProcessConfirmUri;
 
     @GetMapping("/hello")
     public ResponseEntity<String> ping () {
