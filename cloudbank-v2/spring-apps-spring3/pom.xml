@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.4</version>
+        <version>3.1.3</version> <!-- Do NOT upgrade to 3.1.4, breaks native compilation -->
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -56,6 +56,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+        <!--
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-sleuth-zipkin</artifactId>
@@ -66,7 +67,7 @@
             <artifactId>spring-cloud-starter-sleuth</artifactId>
             <version>3.1.9</version>
         </dependency>
-
+        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
