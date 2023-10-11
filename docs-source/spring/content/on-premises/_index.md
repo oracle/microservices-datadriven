@@ -4,7 +4,7 @@ title: "On-Premises"
 
 # On-Premises Installation
 
-The Oracle Backend for Spring Boot is available to install On-Premises. The On-Premises installation includes both a _Desktop_ installation
+The Oracle Backend for Spring Boot and Microservices is available to install On-Premises. The On-Premises installation includes both a _Desktop_ installation
 and an _Estate_ installation.
 
 The _Desktop_ installation can be used to explore in a non-production environment, while the _Estate_ installation is targeted for the
@@ -12,7 +12,7 @@ production infrastructure.
 
 ## Prerequisites
 
-You must meet the following prerequisites to use the Oracle Backend for Spring Boot On-Premises. You need:
+You must meet the following prerequisites to use the Oracle Backend for Spring Boot and Microservices On-Premises. You need:
 
 * Access to Oracle Database Enterprise Edition 21.3.0.0
 * Access to a Container Repository
@@ -32,7 +32,7 @@ desktop system or software requirements. For example:
 
 ## Download
 
-Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip).
+Download [Oracle Backend for Spring Boot and Microservices](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip).
 
 ## Setup
 
