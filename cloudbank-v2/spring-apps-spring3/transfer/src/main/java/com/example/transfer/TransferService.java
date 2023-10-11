@@ -7,10 +7,9 @@ import static org.eclipse.microprofile.lra.annotation.ws.rs.LRA.LRA_HTTP_CONTEXT
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.logging.Logger;
 
 import jakarta.annotation.PostConstruct;
-import lombok.extern.slf4j.Slf4j;
-
 import javax.enterprise.context.ApplicationScoped;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -31,9 +30,9 @@ import io.narayana.lra.Current;
 
 @ApplicationScoped
 @Path("/")
-@Slf4j
 public class TransferService {
 
+    private static final Logger log = Logger.getLogger(TransferService.class.getSimpleName());
     public static final String TRANSFER_ID = "TRANSFER_ID";
     private URI withdrawUri;
     private URI depositUri;

@@ -13,7 +13,7 @@ The _Desktop_ installation can be used to explore a non-Production environment, 
 
 You must meet the following prerequisites to use the Oracle Backend for Parse Platform On-Premises. You need access to:
 
-* An Oracle Database Enterprise Edition 19.3.0.0
+* An Oracle Database Enterprise Edition 21.3.0.0
 * A Container Repository
 * A Kubernetes cluster
 * [Python 3+](https://www.python.org/)
@@ -54,33 +54,32 @@ The _Desktop_ installation provisions an Oracle Database into the Kubernetes clu
 
 After installing Podman:
 
-1. Log in to the Container Registry:
+1. Log in to the Container Registry: 
 
    `podman login container-registry.oracle.com`
+   
+2. Pull the database image: 
 
-2. Pull the database image:
-
-   `podman pull container-registry.oracle.com/database/enterprise:19.3.0.0`
-
-3. Pull the ORDS image:
+   `podman pull container-registry.oracle.com/database/enterprise:21.3.0.0`
+   
+3. Pull the ORDS image: 
 
    `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
 
 ### Defining the Parse Application (_Estate_  Installation)
 
-The application is defined in `ansible/vars/mbaas.yaml`. For example:
+The Parse application is defined in `ansible/vars/baas.yaml`. For example:
 
 ```yaml
 ---
-mbaas_edition: "COMMUNITY"
 app_name: "MYAPP"
 app_id: "PiITzsu3RCc499RRDOYOBgWnyAlMm6695r1536y1"
 master_key: "Q5CP7MHpoZhSwbk39XpHxamp4rJJ4F3vPZ3NZ7ee"
 dashboard_username: "ADMIN"
 dashboard_password: "OZ0-mSt-27Evb-Qy"
 storage: ""
-access_key: "N/A"
-private_key: "N/A"
+access_key: ""
+private_key: ""
 ...
 ```
 
@@ -88,17 +87,17 @@ You can use any arbitrary string as your `app_name`, `app_id`, and `master_key`.
 
 ### Defining the Database  (_Estate_  Installation)
 
-The database is defined in `ansible/roles/database/vars/main.yaml`. For example:
+The database is defined in `ansible/roles/database/vars/main.yaml`. For example:  
 
 ```yaml
 ---
-database_oracle_dbs: ["BAASPDB"]
-database_default_db: BAASPDB
-BAASPDB: # noqa: var-naming[pattern]
-  username: "PDBADMIN"
-  password: "Correct-horse-Battery-staple-35"
-  service: "(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=BAASPDB)))"
-  ocid: ""
+oracle_dbs: ['BAASPDB']
+default_db: BAASPDB
+BAASPDB:
+  username: 'PDBADMIN'
+  password: 'Correct-horse-Battery-staple-35'
+  service: '(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=BAASPDB)))'
+  ocid: ''
 ...
 ```
 
@@ -111,24 +110,25 @@ The Container Repository is defined in `ansible/roles/registry/vars/main.yaml`. 
 
 ```yaml
 ---
-registry_username: "oracle"
-registry_password: "Correct-horse-Battery-staple-35"
-registry_push_url: "docker.io/myorg"
-registry_push_auth:
+compartment_ocid: ''
+registry_username: 'oracle'
+registry_password: 'Correct-horse-Battery-staple-35'
+push_registry_url: 'docker.io/myorg'
+push_registry_auth:
   auths:
     docker.io/myorg:
-      auth: "b3JhY2xlOjdaUVgxLXhhbFR0NTJsS0VITlA0"
-registry_pull_url: "docker.io/myorg"
-registry_pull_auth:
+      auth: 'b3JhY2xlOjdaUVgxLXhhbFR0NTJsS0VITlA0'
+pull_registry_url: 'docker.io/myorg'
+pull_registry_auth:
   auths:
     docker.io/myorg:
-      auth: "b3JhY2xlOjdaUVgxLXhhbFR0NTJsS0VITlA0"
+      auth: 'b3JhY2xlOjdaUVgxLXhhbFR0NTJsS0VITlA0'
 ...
 ```
 
-Specify the URL or authentication credentials for your Container Repository in `registry_pull_url`, `registry_push_url`, `registry_username`, and `registry_password`.
+Specify the URL or authentication credentials for your Container Repository in `pull_registry_url`, `push_registry_url`, `registry_username`, and `registry_password`.  
 
-For the `registry_pull_auth` and `registry_push_auth` sections, manually log into your repository and copy the values found in created file, located in `$HOME/.config/containers/auth.json`
+For the `push_registry_auth` and `pull_registry_auth` sections, manually log into your repository and copy the values found in created file, located in `$HOME/.config/containers/auth.json`
 
 Why is there duplication between the push and pull URL's?  The push URL is used from the deployment machine while the pull URL is used inside the pods. If you
 have a private registry inside the Kubernetes cluster, these URL's could be different. This is the case for the _Desktop_ installation. The push URL

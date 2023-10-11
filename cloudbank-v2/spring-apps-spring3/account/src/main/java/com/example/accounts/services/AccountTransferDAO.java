@@ -6,6 +6,8 @@ package com.example.accounts.services;
 import javax.ws.rs.core.Response;
 
 import org.eclipse.microprofile.lra.annotation.ParticipantStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.example.accounts.model.Account;
@@ -13,11 +15,9 @@ import com.example.accounts.model.Journal;
 import com.example.accounts.repository.AccountRepository;
 import com.example.accounts.repository.JournalRepository;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Component
-@Slf4j
 public class AccountTransferDAO {
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private static AccountTransferDAO singleton;
     final AccountRepository accountRepository;

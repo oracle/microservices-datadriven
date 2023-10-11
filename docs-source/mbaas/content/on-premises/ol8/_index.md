@@ -12,29 +12,20 @@ Read [On-Premises](../index.md) and ensure that your desktop meets the minimum s
 
 ### Additional Operating System Packages
 
-As the `root` user, install the following operating system packages:
+Install the following operating system packages:
 
 ```bash
-dnf -y module install container-tools:ol8
-dnf -y install conntrack podman curl
-dnf -y install oracle-database-preinstall-21c
-dnf -y install langpacks-en
-dnf module install -y python39
+sudo dnf -y module install container-tools:ol8
+sudo dnf -y install conntrack podman curl
+sudo dnf -y install oracle-database-preinstall-21c
+sudo dnf -y install langpacks-en
+sudo dnf module install python39
 ```
 
 Set the default Python3 to Python 3.9:
 
 ```bash
-alternatives --set python3 /usr/bin/python3.9
-```
-
-### Install MiniKube
-
-As the `root` user, install minikube:
-
-```bash
-curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-install minikube-linux-amd64 /usr/local/bin/minikube
+sudo alternatives --set python3 /usr/bin/python3.9
 ```
 
 ### Create a Non-Root User
@@ -57,16 +48,23 @@ As the `obaas` user, take these steps:
 1. Log in to the Container Registry:
 
    `podman login container-registry.oracle.com`
-
+   
 2. Pull the database image:
 
-   `podman pull container-registry.oracle.com/database/enterprise:19.3.0.0`
-
+   `podman pull container-registry.oracle.com/database/enterprise:19.19.0.0`
+   
 3. Pull the ORDS image:
 
    `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
 
-### Start Minikube
+### Install and Start Minikube
+
+As the `root` user, process these commands:
+
+```bash
+curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+install minikube-linux-amd64 /usr/local/bin/minikube
+```
 
 As the `obaas` user, process these commands:
 
@@ -111,11 +109,18 @@ Assuming the source was unzipped to `~/obaas`, as the `obaas` user, run this com
 
 In order to push the images to the Container Registry in the Kubernetes cluster, open a new terminal and start a port-forward service.
 
-As the `obaas` user, run these commands:
+As the `obaas` user, run this command:
 
-```bash
-source ./activate.env
-kubectl port-forward service/private -n container-registry 5000:5000 &`
+`kubectl port-forward service/private -n container-registry 5000:5000 &`
+
+To test access to the registry, run this command:
+
+`curl -X GET -k https://localhost:5000/v2/_catalog`
+
+This `curl` results in the following:
+
+```text
+{"errors":[{"code":"UNAUTHORIZED","message":"authentication required","detail":[{"Type":"registry","Class":"","Name":"catalog","Action":"*"}]}]}
 ```
 
 ### Build the Images

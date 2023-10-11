@@ -3,6 +3,8 @@
 
 package com.example.accounts.services;
 
+import java.util.logging.Logger;
+
 import static org.eclipse.microprofile.lra.annotation.ws.rs.LRA.LRA_HTTP_CONTEXT_HEADER;
 import static org.eclipse.microprofile.lra.annotation.ws.rs.LRA.LRA_HTTP_ENDED_CONTEXT_HEADER;
 import static org.eclipse.microprofile.lra.annotation.ws.rs.LRA.LRA_HTTP_PARENT_CONTEXT_HEADER;
@@ -30,14 +32,11 @@ import org.springframework.stereotype.Component;
 import com.example.accounts.model.Account;
 import com.example.accounts.model.Journal;
 
-import lombok.extern.slf4j.Slf4j;
-
 @RequestScoped
 @Path("/deposit")
 @Component
-@Slf4j
 public class DepositService {
-
+    private static final Logger log = Logger.getLogger(DepositService.class.getName());
     private final static String DEPOSIT = "DEPOSIT";
 
     /**

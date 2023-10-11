@@ -4,17 +4,17 @@
 package com.example.creditscore.controller;
 
 import org.springframework.web.bind.annotation.*;
-
-import lombok.extern.slf4j.Slf4j;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1")
-@Slf4j
 public class CreditScoreController {
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping("/creditscore")
     public Map<String, String> getCreditScore() {

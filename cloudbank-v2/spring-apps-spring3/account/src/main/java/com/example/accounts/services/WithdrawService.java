@@ -7,6 +7,8 @@ import static org.eclipse.microprofile.lra.annotation.ws.rs.LRA.LRA_HTTP_CONTEXT
 import static org.eclipse.microprofile.lra.annotation.ws.rs.LRA.LRA_HTTP_ENDED_CONTEXT_HEADER;
 import static org.eclipse.microprofile.lra.annotation.ws.rs.LRA.LRA_HTTP_PARENT_CONTEXT_HEADER;
 
+import java.util.logging.Logger;
+
 import javax.enterprise.context.RequestScoped;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -30,14 +32,11 @@ import org.springframework.stereotype.Component;
 import com.example.accounts.model.Account;
 import com.example.accounts.model.Journal;
 
-import lombok.extern.slf4j.Slf4j;
-
 @RequestScoped
 @Path("/withdraw")
 @Component
-@Slf4j
 public class WithdrawService {
-
+    private static final Logger log = Logger.getLogger(WithdrawService.class.getName());
     public static final String WITHDRAW = "WITHDRAW";
 
     /**
