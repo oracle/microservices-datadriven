@@ -17,7 +17,11 @@ resources:
 
 The Oracle Backend for Spring Boot and Microservices includes an Oracle database. An instance of Oracle Autonomous Database Serverless is created during installation.
 
+<<<<<<< HEAD
 > **_NOTE:_** Oracle recommends that you install your own database(s) for your production applications, the database provisioned is used for Oracle Backend for Spring Boot metadata and can be used for developement.
+=======
+> **_NOTE:_** Oracle recommends that you install your own databases for your production applications. The database provisioned is used for Oracle Backend for Spring Boot metadata and can be used for developement.
+>>>>>>> origin/main
 
 If you chose the **Secure Access from Anywhere** option for your database during installation (or just accepted the default), then you can use the **Database Actions** web user interface to work with your database. If you chose the **Private** option, you need to use Bastion to access the database.
 
@@ -55,7 +59,11 @@ Process the following steps:
 
 1. Create a Dynamic Port Forwarding (SOCKS5) Session using the Bastion service.
 
+<<<<<<< HEAD
     Start with Autonomous Database (ADB) access that was created with private endpoint access only in accordance with security guide lines.  For ADB to run SQL commands, you need to establish a session between your local machine and ADB using the Bastion service.
+=======
+    Start with Autonomous Database (ADB) access that was created with private endpoint access only in accordance with security guidelines.  For ADB to run SQL commands, you need to establish a session between your local machine and ADB using the Bastion service.
+>>>>>>> origin/main
 
     A [Dynamic Port Forwarding (SOCKS5) Session](https://docs.oracle.com/en-us/iaas/Content/Bastion/Tasks/managingsessions.htm#) is created.
 

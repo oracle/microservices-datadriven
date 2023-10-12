@@ -27,9 +27,15 @@ Set the default Python3 to Python 3.9 by running this command:
 sudo alternatives --set python3 /usr/bin/python3.9
 ```
 
+<<<<<<< HEAD
 ### Install MiniKube
 
 As the `root` user, install minikube:
+=======
+### Install Minikube
+
+As the `root` user, install Minikube:
+>>>>>>> origin/main
 
 ```bash
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
@@ -65,7 +71,11 @@ As the `obaas` user, process these steps:
 
    `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
 
+<<<<<<< HEAD
 ### Start Minikube
+=======
+### Start MiniKube
+>>>>>>> origin/main
 
 As the `obaas` user, run these commands:
 
