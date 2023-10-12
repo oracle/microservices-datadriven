@@ -12,7 +12,7 @@ resources:
     title: "AZN User passwords"
 ---
 
-The Authorization Server is an engine to authenticate and authorize requests to various components in Oracle Backend for Spring Boot and Microservices. The end user can manages users using REST Endpoints.
+The Authorization Server is an engine to authenticate and authorize requests to various components in Oracle Backend for Spring Boot and Microservices. The end user can manage users using REST Endpoints.
 
 > **_NOTE:_** Oracle recommends that you change the default passwords for the default created users.
 
