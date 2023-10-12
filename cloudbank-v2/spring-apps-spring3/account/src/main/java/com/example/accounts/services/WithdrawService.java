@@ -3,38 +3,32 @@
 
 package com.example.accounts.services;
 
-import static org.eclipse.microprofile.lra.annotation.ws.rs.LRA.LRA_HTTP_CONTEXT_HEADER;
-import static org.eclipse.microprofile.lra.annotation.ws.rs.LRA.LRA_HTTP_ENDED_CONTEXT_HEADER;
-import static org.eclipse.microprofile.lra.annotation.ws.rs.LRA.LRA_HTTP_PARENT_CONTEXT_HEADER;
+import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_CONTEXT_HEADER;
+import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_ENDED_CONTEXT_HEADER;
+import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_PARENT_CONTEXT_HEADER;
 
-import javax.enterprise.context.RequestScoped;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import org.eclipse.microprofile.lra.annotation.AfterLRA;
-import org.eclipse.microprofile.lra.annotation.Compensate;
-import org.eclipse.microprofile.lra.annotation.Complete;
-import org.eclipse.microprofile.lra.annotation.ParticipantStatus;
-import org.eclipse.microprofile.lra.annotation.Status;
-import org.eclipse.microprofile.lra.annotation.ws.rs.LRA;
-import org.springframework.stereotype.Component;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.accounts.model.Account;
 import com.example.accounts.model.Journal;
+import com.oracle.microtx.springboot.lra.annotation.AfterLRA;
+import com.oracle.microtx.springboot.lra.annotation.Compensate;
+import com.oracle.microtx.springboot.lra.annotation.Complete;
+import com.oracle.microtx.springboot.lra.annotation.LRA;
+import com.oracle.microtx.springboot.lra.annotation.ParticipantStatus;
+import com.oracle.microtx.springboot.lra.annotation.Status;
 
 import lombok.extern.slf4j.Slf4j;
 
-@RequestScoped
-@Path("/withdraw")
-@Component
+@RestController
+@RequestMapping("/withdraw")
 @Slf4j
 public class WithdrawService {
 
@@ -44,13 +38,11 @@ public class WithdrawService {
     * Reduce account balance by given amount and write journal entry re the same.
     * Both actions in same local tx
     */
-    @POST
-    @Path("/withdraw")
-    @Produces(MediaType.APPLICATION_JSON)
+    @PostMapping
     @LRA(value = LRA.Type.MANDATORY, end = false)
-    public Response withdraw(@HeaderParam(LRA_HTTP_CONTEXT_HEADER) String lraId,
-            @QueryParam("accountId") long accountId,
-            @QueryParam("amount") long withdrawAmount) {
+    public ResponseEntity<String> withdraw(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId,
+            @RequestParam("accountId") long accountId,
+            @RequestParam("amount") long withdrawAmount) {
         log.info("withdraw " + withdrawAmount + " in account:" + accountId + " (lraId:" + lraId + ")...");
         Account account = AccountTransferDAO.instance().getAccountForAccountId(accountId);
         if (account == null) {
@@ -62,7 +54,7 @@ public class WithdrawService {
                             0,
                             lraId,
                             AccountTransferDAO.getStatusString(ParticipantStatus.Active)));
-            return Response.ok("withdraw failed: account does not exist").build();
+            return ResponseEntity.ok("withdraw failed: account does not exist");
         }
         if (account.getAccountBalance() < withdrawAmount) {
             log.info("withdraw failed: insufficient funds");
@@ -73,7 +65,7 @@ public class WithdrawService {
                             0,
                             lraId,
                             AccountTransferDAO.getStatusString(ParticipantStatus.Active)));
-            return Response.ok("withdraw failed: insufficient funds").build();
+            return ResponseEntity.ok("withdraw failed: insufficient funds");
         }
         log.info("withdraw current balance:" + account.getAccountBalance() +
                 " new balance:" + (account.getAccountBalance() - withdrawAmount));
@@ -86,33 +78,29 @@ public class WithdrawService {
                         withdrawAmount,
                         lraId,
                         AccountTransferDAO.getStatusString(ParticipantStatus.Active)));
-        return Response.ok("withdraw succeeded").build();
+        return ResponseEntity.ok("withdraw succeeded");
     }
 
     /**
     * Update LRA state. Do nothing else.
     */
-    @PUT
-    @Path("/complete")
-    @Produces(MediaType.APPLICATION_JSON)
+    @PutMapping("/complete")
     @Complete
-    public Response completeWork(@HeaderParam(LRA_HTTP_CONTEXT_HEADER) String lraId) throws Exception {
+    public ResponseEntity<String> completeWork(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) throws Exception {
         log.info("withdraw complete called for LRA : " + lraId);
         Journal journal = AccountTransferDAO.instance().getJournalForLRAid(lraId, WITHDRAW);
         journal.setLraState(AccountTransferDAO.getStatusString(ParticipantStatus.Completed));
         AccountTransferDAO.instance().saveJournal(journal);
-        return Response.ok(ParticipantStatus.Completed.name()).build();
+        return ResponseEntity.ok(ParticipantStatus.Completed.name());
     }
 
     /**
     * Read the journal and increase the balance by the previous withdraw amount
     * before the LRA
     */
-    @PUT
-    @Path("/compensate")
-    @Produces(MediaType.APPLICATION_JSON)
+    @PutMapping("/compensate")
     @Compensate
-    public Response compensateWork(@HeaderParam(LRA_HTTP_CONTEXT_HEADER) String lraId) throws Exception {
+    public ResponseEntity<String> compensateWork(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) throws Exception {
         log.info("Account withdraw compensate() called for LRA : " + lraId);
         Journal journal = AccountTransferDAO.instance().getJournalForLRAid(lraId, WITHDRAW);
         journal.setLraState(AccountTransferDAO.getStatusString(ParticipantStatus.Compensating));
@@ -123,29 +111,25 @@ public class WithdrawService {
         }
         journal.setLraState(AccountTransferDAO.getStatusString(ParticipantStatus.Compensated));
         AccountTransferDAO.instance().saveJournal(journal);
-        return Response.ok(ParticipantStatus.Compensated.name()).build();
+        return ResponseEntity.ok(ParticipantStatus.Compensated.name());
     }
 
-    @GET
-    @Path("/status")
-    @Produces(MediaType.TEXT_PLAIN)
+    @GetMapping(value = "/status", produces = "text/plain")
     @Status
-    public Response status(@HeaderParam(LRA_HTTP_CONTEXT_HEADER) String lraId,
-            @HeaderParam(LRA_HTTP_PARENT_CONTEXT_HEADER) String parentLRA) throws Exception {
+    public ResponseEntity<ParticipantStatus> status(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId,
+            @RequestHeader(LRA_HTTP_PARENT_CONTEXT_HEADER) String parentLRA) throws Exception {
         return AccountTransferDAO.instance().status(lraId, WITHDRAW);
     }
 
     /**
     * Delete journal entry for LRA
     */
-    @PUT
-    @Path("/after")
+    @PutMapping(value = "/after", consumes = "text/plain")
     @AfterLRA
-    @Consumes(MediaType.TEXT_PLAIN)
-    public Response afterLRA(@HeaderParam(LRA_HTTP_ENDED_CONTEXT_HEADER) String lraId, String status) throws Exception {
+    public ResponseEntity<String> afterLRA(@RequestHeader(LRA_HTTP_ENDED_CONTEXT_HEADER) String lraId, String status) throws Exception {
         log.info("After LRA Called : " + lraId);
         AccountTransferDAO.instance().afterLRA(lraId, status, WITHDRAW);
-        return Response.ok().build();
+        return ResponseEntity.ok("");
     }
 
 }

@@ -3,77 +3,59 @@
 
 package com.example.transfer;
 
-import static org.eclipse.microprofile.lra.annotation.ws.rs.LRA.LRA_HTTP_CONTEXT_HEADER;
+import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_CONTEXT_HEADER;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 
-import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import com.oracle.microtx.springboot.lra.annotation.Compensate;
+import com.oracle.microtx.springboot.lra.annotation.Complete;
+import com.oracle.microtx.springboot.lra.annotation.LRA;
+
 import lombok.extern.slf4j.Slf4j;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
-import javax.ws.rs.NotFoundException;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import org.eclipse.microprofile.lra.annotation.ws.rs.LRA;
-
-import io.narayana.lra.Current;
-
-@ApplicationScoped
-@Path("/")
+@RestController
+@RequestMapping("/")
 @Slf4j
 public class TransferService {
 
     public static final String TRANSFER_ID = "TRANSFER_ID";
-    private URI withdrawUri;
-    private URI depositUri;
-    private URI transferCancelUri;
-    private URI transferConfirmUri;
-    private URI transferProcessCancelUri;
-    private URI transferProcessConfirmUri;
+   
+    @Value("${account.withdraw.url}") URI withdrawUri;
+    @Value("${account.deposit.url}") URI depositUri;
+    @Value("${transfer.cancel.url}") URI transferCancelUri;
+    @Value("${transfer.cancel.process.url}") URI transferProcessCancelUri;
+    @Value("${transfer.confirm.url}") URI transferConfirmUri;
+    @Value("${transfer.confirm.process.url}") URI transferProcessConfirmUri;
 
-    @PostConstruct
-    private void initController() {
-        try {
-            withdrawUri = new URI(ApplicationConfig.accountWithdrawUrl);
-            depositUri = new URI(ApplicationConfig.accountDepositUrl);
-            transferCancelUri = new URI(ApplicationConfig.transferCancelURL);
-            transferConfirmUri = new URI(ApplicationConfig.transferConfirmURL);
-            transferProcessCancelUri = new URI(ApplicationConfig.transferCancelProcessURL);
-            transferProcessConfirmUri = new URI(ApplicationConfig.transferConfirmProcessURL);
-        } catch (URISyntaxException ex) {
-            throw new IllegalStateException("Failed to initialize " + TransferService.class.getName(), ex);
-        }
-    }
-
-    @GET
-    @Path("/hello")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response ping () throws NotFoundException {
+    @GetMapping("/hello")
+    public ResponseEntity<String> ping () {
         log.info("Say Hello!");
-        return Response.ok().build();   
+        return ResponseEntity.ok("");   
     }
 
-    @POST
-    @Path("/transfer")
-    @Produces(MediaType.APPLICATION_JSON)
+    @PostMapping("/transfer")
     @LRA(value = LRA.Type.REQUIRES_NEW, end = false)
-    public Response transfer(@QueryParam("fromAccount") long fromAccount,
-            @QueryParam("toAccount") long toAccount,
-            @QueryParam("amount") long amount,
-            @HeaderParam(LRA_HTTP_CONTEXT_HEADER) String lraId) {
+    public ResponseEntity<String> transfer(@RequestParam("fromAccount") long fromAccount,
+            @RequestParam("toAccount") long toAccount,
+            @RequestParam("amount") long amount,
+            @RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) {
         if (lraId == null) {
-            return Response.serverError().entity("Failed to create LRA").build();
+            return new ResponseEntity<>("Failed to create LRA", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         log.info("Started new LRA/transfer Id: " + lraId);
 
@@ -81,11 +63,11 @@ public class TransferService {
         String returnString = "";
 
         // perform the withdrawal
-        returnString += withdraw(fromAccount, amount);
+        returnString += withdraw(lraId, fromAccount, amount);
         log.info(returnString);
         if (returnString.contains("succeeded")) {
             // if it worked, perform the deposit
-            returnString += " " + deposit(toAccount, amount);
+            returnString += " " + deposit(lraId, toAccount, amount);
             log.info(returnString);
             if (returnString.contains("failed"))
                 isCompensate = true; // deposit failed
@@ -94,80 +76,121 @@ public class TransferService {
         log.info("LRA/transfer action will be " + (isCompensate ? "cancel" : "confirm"));
 
         // call complete or cancel based on outcome of previous actions
-        WebTarget webTarget = ClientBuilder.newClient().target(isCompensate ? transferCancelUri : transferConfirmUri);
-        webTarget.request().header(TRANSFER_ID, lraId)
-                .post(Entity.text("")).readEntity(String.class);
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.set(TRANSFER_ID, lraId);
+        HttpEntity<String> request = new HttpEntity<String>("", headers);
+
+        ResponseEntity<String> response = restTemplate.postForEntity(
+            (isCompensate ? transferCancelUri : transferConfirmUri).toString(), 
+            request, 
+            String.class);
+
+        returnString += response.getBody();
 
         // return status
-        return Response.ok("transfer status:" + returnString).build();
+        return ResponseEntity.ok("transfer status:" + returnString);
 
     }
 
-    private String withdraw(long accountId, long amount) {
+    private String withdraw(String lraId, long accountId, long amount) {
         log.info("withdraw accountId = " + accountId + ", amount = " + amount);
-        WebTarget webTarget = ClientBuilder.newClient().target(withdrawUri).path("/")
-                .queryParam("accountId", accountId)
-                .queryParam("amount", amount);
-        URI lraId = Current.peek();
         log.info("withdraw lraId = " + lraId);
-        String withdrawOutcome = webTarget.request().header(LRA_HTTP_CONTEXT_HEADER, lraId)
-                .post(Entity.text("")).readEntity(String.class);
-        return withdrawOutcome;
+        
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUri(withdrawUri)
+            .queryParam("accountId", accountId)
+            .queryParam("amount", amount);
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.set(LRA_HTTP_CONTEXT_HEADER, lraId.toString());
+        HttpEntity<String> request = new HttpEntity<String>("", headers);
+
+        ResponseEntity<String> response = restTemplate.postForEntity(
+            builder.buildAndExpand().toUri(), 
+            request, 
+            String.class);
+
+        return response.getBody();
+
     }
 
-    private String deposit(long accountId, long amount) {
+    private String deposit(String lraId, long accountId, long amount) {
         log.info("deposit accountId = " + accountId + ", amount = " + amount);
-        WebTarget webTarget = ClientBuilder.newClient().target(depositUri).path("/")
-                .queryParam("accountId", accountId)
-                .queryParam("amount", amount);
-        URI lraId = Current.peek();
         log.info("deposit lraId = " + lraId);
-        String depositOutcome = webTarget.request().header(LRA_HTTP_CONTEXT_HEADER, lraId)
-                .post(Entity.text("")).readEntity(String.class);
-        ;
-        return depositOutcome;
+        
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUri(depositUri)
+            .queryParam("accountId", accountId)
+            .queryParam("amount", amount);
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.set(LRA_HTTP_CONTEXT_HEADER, lraId.toString());
+        HttpEntity<String> request = new HttpEntity<String>("", headers);
+
+        ResponseEntity<String> response = restTemplate.postForEntity(
+            builder.buildAndExpand().toUri(), 
+            request, 
+            String.class);
+
+        return response.getBody();
     }
 
-    @POST
-    @Path("/processconfirm")
-    @Produces(MediaType.APPLICATION_JSON)
+    @PostMapping("/processconfirm")
     @LRA(value = LRA.Type.MANDATORY)
-    public Response processconfirm(@HeaderParam(LRA_HTTP_CONTEXT_HEADER) String lraId) throws NotFoundException {
+    public ResponseEntity<String> processconfirm(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) {
         log.info("Process confirm for transfer : " + lraId);
-        return Response.ok().build();
+        return ResponseEntity.ok("");
     }
 
-    @POST
-    @Path("/processcancel")
-    @Produces(MediaType.APPLICATION_JSON)
-    @LRA(value = LRA.Type.MANDATORY, cancelOn = Response.Status.OK)
-    public Response processcancel(@HeaderParam(LRA_HTTP_CONTEXT_HEADER) String lraId) throws NotFoundException {
+    @PostMapping("/processcancel")
+    @LRA(value = LRA.Type.MANDATORY, cancelOn = HttpStatus.OK)
+    public ResponseEntity<String> processcancel(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) {
         log.info("Process cancel for transfer : " + lraId);
-        return Response.ok().build();
+        return ResponseEntity.ok("");
     }
 
-    @POST
-    @Path("/confirm")
-    @Produces(MediaType.APPLICATION_JSON)
+    @PostMapping("/confirm")
+    @Complete
     @LRA(value = LRA.Type.NOT_SUPPORTED)
-    public Response confirm(@HeaderParam(TRANSFER_ID) String transferId) throws NotFoundException {
+    public ResponseEntity<String> confirm(@RequestHeader(TRANSFER_ID) String transferId) {
         log.info("Received confirm for transfer : " + transferId);
-        String confirmOutcome = ClientBuilder.newClient().target(transferProcessConfirmUri).request()
-                .header(LRA_HTTP_CONTEXT_HEADER, transferId)
-                .post(Entity.text("")).readEntity(String.class);
-        return Response.ok(confirmOutcome).build();
+        
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.set(LRA_HTTP_CONTEXT_HEADER, transferId);
+        HttpEntity<String> request = new HttpEntity<String>("", headers);
+
+        ResponseEntity<String> response = restTemplate.postForEntity(
+            transferProcessConfirmUri, 
+            request, 
+            String.class);
+                
+        return ResponseEntity.ok(response.getBody());
     }
 
-    @POST
-    @Path("/cancel")
-    @Produces(MediaType.APPLICATION_JSON)
-    @LRA(value = LRA.Type.NOT_SUPPORTED, cancelOn = Response.Status.OK)
-    public Response cancel(@HeaderParam(TRANSFER_ID) String transferId) throws NotFoundException {
+    @PostMapping("/cancel")
+    @Compensate
+    @LRA(value = LRA.Type.NOT_SUPPORTED, cancelOn = HttpStatus.OK)
+    public ResponseEntity<String> cancel(@RequestHeader(TRANSFER_ID) String transferId) {
         log.info("Received cancel for transfer : " + transferId);
-        String confirmOutcome = ClientBuilder.newClient().target(transferProcessCancelUri).request()
-                .header(LRA_HTTP_CONTEXT_HEADER, transferId)
-                .post(Entity.text("")).readEntity(String.class);
-        return Response.ok(confirmOutcome).build();
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.set(LRA_HTTP_CONTEXT_HEADER, transferId);
+        HttpEntity<String> request = new HttpEntity<String>("", headers);
+
+        ResponseEntity<String> response = restTemplate.postForEntity(
+            transferProcessCancelUri, 
+            request, 
+            String.class);
+                
+        return ResponseEntity.ok(response.getBody());
     }
 
 }
