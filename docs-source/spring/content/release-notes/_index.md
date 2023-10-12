@@ -10,8 +10,8 @@ Notes:
 
 * All Spring platform components upgraded to Spring Boot 3.x, Spring 6.x and Spring Cloud 2022.0.4 versions.
 * Spring Native (with GraalVM native image ahead of time compilation) is the default/recommended
-  deployment option for microservices.  JVM continues to be available as an option.
-* Loki and Promtail added for logging, Spring Boot dashboard updated to show metrics and logs on same dashboard.
+  deployment option for microservices. JVM continues to be available as an option.
+* Loki and Promtail added for logging, Spring Boot dashboard updated to show metrics and logs on the same dashboard.
 * Spring Authorization Server added, and preconfigured with default users (you supply passwords during installation,
   or they are generated).  
 * Various platform services and the CLI updated for authentication and authorization

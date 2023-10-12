@@ -68,7 +68,7 @@ To restart the plugin and proceed with setting the Kubernetes configuration file
 
 ### How to Access the Cluster
 
-Until you create a dedicated `ssh` tunnel to the Kubernetes cluster, and if you do not connect to Oracle Backend for Spring Boot and Microservices adminstrative
+Until you create a dedicated `ssh` tunnel to the Kubernetes cluster, and if you do not connect to Oracle Backend for Spring Boot and Microservices administrative
 services, you cannot browse resources included in the Oracle Backend for Spring Boot and Microservices deployment. To do this, follow these steps:
 
 1. Select the cluster and right-click, choosing **Set UID/PWD** menu item to insert credentials related to your user account. For example:
