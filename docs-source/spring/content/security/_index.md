@@ -10,14 +10,14 @@ The Oracle Backend for Spring Boot and Microservices has the following security 
 
 - The only "public" exposure is the Apache APISIX Gateway (note that the dashboard is not exposed publicly).
 
-- Services deployed to the platform are not exposed through the Apache APISIX Gateway automatically.  If you want to expose the service through the gateway, you must define a route in the Apache APISIX dashboard. [APISIX Gateway Documentation](../platform/apigw/_index.md)
+- Services deployed to the platform are not exposed through the Apache APISIX Gateway automatically.  If you want to expose the service through the gateway, you must define a route in the Apache APISIX dashboard. [APISIX Gateway Documentation](../platform/apigw)
 
 - The deployed platform services are using using self-signed certificates.
 
-- A customer application can only access services running in the platform using the Apache APISIX Gateway. [APISIX Gateway Documentation](../platform/apigw/_index.md)
+- A customer application can only access services running in the platform using the Apache APISIX Gateway. [APISIX Gateway Documentation](../platform/apigw)
 
 - The customer application can be secured using Spring Security (for example, Spring OAuth 2.0 Resource Server). An external authorization server is recommended (for example Okta or Auth0).
 
-- Oracle Backend for Spring Boot and Microservices provides a AuthZ server which is an engine to authenticate and authorize requests to various components in Oracle Backend for Spring Boot. The end user can manages users using REST Endpoints. [AuthZ Server Documentation](../security/azn-server/_index.md)
+- Oracle Backend for Spring Boot and Microservices provides a AuthZ server which is an engine to authenticate and authorize requests to various components in Oracle Backend for Spring Boot. The end user can manages users using REST Endpoints. [AuthZ Server Documentation](../security/azn-server)
 
-- Oracle Backend for Spring Boot and Microservices contains HashiCorp Vault to secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets, and other sensitive data. [HashiCorp Vault Documentation](../platform/vault/_index.md)
+- Oracle Backend for Spring Boot and Microservices contains HashiCorp Vault to secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets, and other sensitive data. [HashiCorp Vault Documentation](../platform/vault)
