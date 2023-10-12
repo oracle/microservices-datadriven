@@ -1,17 +1,14 @@
-# Application.yaml for creditscore service
-# Copyright (c) 2023, Oracle and/or its affiliates. 
-# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/ 
-
 spring:
   application:
-    name: creditscore
+    name: testrunner
   zipkin:
     base-url: ${zipkin.base-url}
 
-# Disables autoconfiguration for the refresh scope and associated features.
-  cloud:
-    refresh:
-      enabled: false
+oracle:
+  aq:
+    url: ${spring.datasource.url}
+    username: ${spring.datasource.username}
+    password: ${spring.datasource.password}
 
 eureka:
   instance:
