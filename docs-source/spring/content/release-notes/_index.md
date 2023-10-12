@@ -133,14 +133,18 @@ The following components were added:
 
 The following components were updated:
 
-| Component                    | New Version   | Replaced Version    |
-|------------------------------|---------------|---------------------|
-| Oracle Backend for Spring Boot and Microservices CLI | 0.2.3   | 0.1.0               |
-| cert-manager                 | 1.11.0        | 1.10.1              |
-| NGINX Ingress Controller     | 1.6.4         | 1.5.1               |
-| Jaeger Tracing               | 1.39.0        | 1.37.0              |
-| Apache APISIX                       | 3.1.1         | 2.15.1              |
-| Spring Boot Eureka service registry      | 2.0.1         | 2021.0.3            |
+| Component                                            | New Version | Replaced Version |
+|------------------------------------------------------|-------------|------------------|
+| Oracle Backend for Spring Boot and Microservices CLI | 0.2.3       | 0.1.0            |
+| cert-manager                                         | 1.11.0      | 1.10.1           |
+| NGINX Ingress Controller                             | 1.6.4       | 1.5.1            |
+| Jaeger Tracing                                       | 1.39.0      | 1.37.0           |
+| Apache APISIX                                        | 3.1.1       | 2.15.1           |
+| Spring Boot Eureka service registry                  | 2.0.1       | 2021.0.3         |
+| Oracle Transaction Manager for Microservices         | 22.3.2      | 22.3.1           |
+| Parse Server (optional)                              | 6.3.0       | 6.2.0            |
+| Parse Dashboard (optional)                           | 5.2.0       | 5.1.0            |
+
 
 There were no deprecations or removals.
 
