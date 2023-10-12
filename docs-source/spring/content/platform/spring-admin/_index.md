@@ -46,4 +46,4 @@ the applications:
     {{< img name="obaas-springadmin-svc-details" size="medium" lazy=false >}}
     <!-- spellchecker-enable -->
 
-Next, go to the [OBaaS CLI](../development/cli/) page to learn more.
+

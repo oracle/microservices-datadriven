@@ -2,8 +2,8 @@
 title: "Azure/OCI Multicloud Installation"
 ---
 
-The Oracle Backend for Spring Boot is available to install in Multicloud (Microsoft Azure (Azure) and Oracle Cloud Infrastructure (OCI)). This installation
-deploys the Oracle Backend for Spring Boot in Azure with an Oracle Autonomous Database running in OCI.
+The Oracle Backend for Spring Boot and Microservices is available to install in Multicloud (Microsoft Azure (Azure) and Oracle Cloud Infrastructure (OCI)). This installation
+deploys the Oracle Backend for Spring Boot and Microservices in Azure with an Oracle Autonomous Database running in OCI.
 
 ## Prerequisites
 
@@ -20,11 +20,11 @@ Watch this video for a quick overview of the setup process.
 
 ## Download
 
-Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-ebaas_latest.zip).
+Download [Oracle Backend for Spring Boot and Microservices](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-ebaas_latest.zip).
 
 ## Setup
 
-A few setup steps are required in both OCI and Azure to deploy the Oracle Backend for Spring Boot application.
+A few setup steps are required in both OCI and Azure to deploy the Oracle Backend for Spring Boot and Microservices application.
 
 ### OCI
 
@@ -53,7 +53,7 @@ The Multicloud installation is done using the Azure Cloud Shell. The following s
 
    ![Azure Cloud Shell Icon](AzureCloudShellIcon.png)
    
-3. Upload the [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-ebaas-platform_latest.zip) stack. For example:
+3. Upload the [Oracle Backend for Spring Boot and Microservices](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-ebaas-platform_latest.zip) stack. For example:
 
    ![Azure Upload](AzureUpload.png)
    
@@ -96,4 +96,3 @@ terraform plan -out=multicloud.plan
 terraform apply "multicloud.plan"
 ```
 
-Next, go to the [On-Premises](../on-premises/) page to learn more.
