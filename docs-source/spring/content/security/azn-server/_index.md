@@ -2,11 +2,17 @@
 title: "Authentication and Authorization Server"
 resources:
   - name: azn-server-arch
-    src: "azn-server-arch.svg"
+    src: "azn-server-arch.png"
     title: "Authorization Server Architecture"
+  - name: azn-stack-app-info
+    src: "azn-stack-app-info.png"
+    title: "Application Information"
+  - name: azn-passwords-console
+    src: "azn-passwords-console.png"
+    title: "AZN User passwords"
 ---
 
-The Authorization Server is an engine to authenticate and authorize requests to various components in Oracle Backend for Spring Boot. The end user can manages users using REST Endpoints.
+The Authorization Server is an engine to authenticate and authorize requests to various components in Oracle Backend for Spring Boot and Microservices. The end user can manages users using REST Endpoints.
 
 > **_NOTE:_** Oracle recommends that you change the default passwords for the default created users.
 
@@ -19,13 +25,21 @@ When deploying Oracle Backend for Spring Boot two users are created with the fol
 | obaas-admin   | ROLE_ADMIN, ROLE_USER |
 | obaas-user    | ROLE_USER             |
 
-All the users are stored in the database deployed when installing Oracle Backend for Spring Boot. The Roles determines what the user is allowed to do in the environment. The allowed roles are `ROLE_ADMIN` and `ROLE_USER`.
+All the users are stored in the database deployed when installing Oracle Backend for Spring Boot and Microservices. The Roles determines what the user is allowed to do in the environment. The allowed roles are `ROLE_ADMIN` and `ROLE_USER`.
 
-> **_NOTE:_** See each components documentation about the rules.
+> **_NOTE:_** See each components documentation about the roles and authorities.
 
-The assigned passwords can be viewed in the OCI Console (ORM homepage)
+The assigned passwords (either auto generated or provided by the installer) can be viewed in the OCI Console (ORM homepage). Click on **Application Information**.
 
-<< INSERT PICTURE >>
+<!-- spellchecker-disable -->
+{{< img name="azn-stack-app-info" >}}
+<!-- spellchecker-enable -->
+
+If you click on **Unlock** the password for the obaas-admin and obaas-user can be displayed.
+
+<!-- spellchecker-disable -->
+{{< img name="azn-passwords-console" >}}
+<!-- spellchecker-enable -->
 
 The passwords can also be obtained from k8s secrets using the `kubectl` command.
 
@@ -56,7 +70,7 @@ The following REST endpoints are available to manage users. The table lists whic
 
 ### User Management REST Endpoints
 
-In all examples below you need to replace `<username>:<password>` with your username and password. The examples are using `curl` to interact with the endpoints. They also requires that you have opened a tunnel on port 8080 to either the `azn-server` or `obaas-admin` service. For example
+In all examples below you need to replace `<username>:<password>` with your username and password. The examples are using `curl` to interact with the REST endpoints. They also requires that you have opened a tunnel on port 8080 to either the `azn-server` or `obaas-admin` service. For example
 
 ```shell
 kubectl port-forward -n obaas-admin svc/obaas-admin 8080
@@ -118,5 +132,5 @@ The following picture shows how the Authentication Server is used for AuthZ for 
 - GraalVM Compiler (GraalVM Native Compiler module)
 
 <!-- spellchecker-disable -->
-{{< img name="azn-server-arch" size="medium" lazy=false >}}
+{{< img name="azn-server-arch" >}}
 <!-- spellchecker-enable -->
