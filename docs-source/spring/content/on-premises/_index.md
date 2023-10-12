@@ -1,8 +1,6 @@
 ---
-title: "On-Premises"
+title: "On-Premises Installation"
 ---
-
-# On-Premises Installation
 
 The Oracle Backend for Spring Boot and Microservices is available to install On-Premises. The On-Premises installation includes both a _Desktop_ installation
 and an _Estate_ installation.
@@ -50,7 +48,7 @@ appropriate documentation for examples of installing and defining the _Desktop_ 
 
 The _Desktop_ playbook is run as part of the Configuration Management Playbook.
 
-## Download the Database or Oracle REST Data Services (ORDS) Images (_Desktop_  Installation)
+## Download the Database or Oracle REST Data Services (ORDS) Images (Desktop Installation)
 
 The _Desktop_ installation provisions an Oracle database to the Kubernetes cluster. The images must be downloaded
 from [Oracle's Container Registry](https://container-registry.oracle.com/) before continuing.
@@ -69,7 +67,7 @@ After installing Podman, process these steps:
 
    `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
 
-### Defining the Parse Application (_Estate_  Installation)
+### Defining the Parse Application (Estate Installation)
 
 The application is defined in `ansible/vars/ebaas.yaml`. For example:
 
@@ -92,7 +90,7 @@ oractl_user_password: "Correct-horse-Battery-staple-35"
 ...
 ```
 
-### Defining the Database (_Estate_  Installation)
+### Defining the Database (Estate Installation)
 
 The database is defined in `ansible/roles/database/vars/main.yaml`. For example:
 
@@ -112,7 +110,7 @@ The `oracle_dbs` and `default_db` key values should be the name of your Pluggabl
 name and Key/Values defining how to access the PDB. If using Mutual Transport Layer Security (mTLS) authentication, specify the
 full path of the wallet file.
 
-### Defining the Container Repository (_Estate_  Installation)
+### Defining the Container Repository (Estate Installation)
 
 The Container Repository is defined in `ansible/roles/registry/vars/main.yaml`. For example:
 

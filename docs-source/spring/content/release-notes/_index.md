@@ -11,7 +11,13 @@ Notes:
 * All Spring platform components upgraded to Spring Boot 3.x, Spring 6.x and Spring Cloud 2022.0.4 versions.
 * Spring Native (with GraalVM native image ahead of time compilation) is the default/recommended
   deployment option for microservices.  JVM continues to be available as an option.
-* TODO
+* Loki and Promtail added for logging, Spring Boot dashboard updated to show metrics and logs on same dashboard.
+* Spring Authorization Server added, and preconfigured with default users (you supply passwords during installation,
+  or they are generated).  
+* Various platform services and the CLI updated for authentication and authorization
+  using Spring Authorization Server.
+* Various platform services reconfigured for increased availability.
+* Various components updated.
 
 The following components were added:
 
@@ -27,10 +33,19 @@ The following components were updated:
 |-------------------------------------------------------------|---------------|---------------------|
 | Oracle Backend for Spring Boot and Microservices Visual Studio Code extension | 1.0.0         | 0.3.9               |
 | Oracle Backend for Spring Boot and Microservices CLI                          | 1.0.0         | 0.3.1               |
-| Grafana                                                     | 9.5.2         | x                   |
-| Spring Eureka Service Registry                              |               |                     |
-| Spring Config Server                                        |               |                     |
-| Spring Boot Admin                                           |               |                     |
+| Grafana                                                     | 9.5.2         | 9.2.5               |
+| Spring Eureka Service Registry                              | 2022.0.4      | 2021.0.3            |
+| Spring Config Server                                        | 2022.0.4      | 2021.0.3            |
+| Spring Boot Admin                                           | 3.1.3         | 2.7.5               |
+| cert-manager                                                | 1.12.3        | 1.11.0              |
+| NGINX Ingress Controller                                    | 1.8.1         | 1.6.4               |
+| Prometheus                                                  | 2.40.2        | 2.34.0              |
+| Open Telemetry Collector                                    | 0.86.0        | 0.66.0              |
+| Jaeger Tracing                                              | 1.45.0        | 1.39.0              |
+| APISIX API Gateway                                          | 3.4.0         | 3.2.0               |
+| Strimzi-Apache Kafka operator                               | 0.36.1        | 0.33.1              |
+| Apache Kafka                                                | 3.4.0 - 3.5.1 | 3.2.0 - 3.3.2       |
+| Oracle Database storage adapter for Parse (optional)        | 1.0.0         | 0.2.0               |
 
 There were no component deprecations or removals.
 

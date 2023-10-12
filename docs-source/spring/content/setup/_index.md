@@ -84,26 +84,26 @@ Oracle Backend for Spring Boot and Microservices setup installs the following co
 
 | Component                    | Version       | Description                                                                                 |
 |------------------------------|---------------|---------------------------------------------------------------------------------------------|
-| cert-manager                 | 1.11.0        | Automates the management of certificates.                                                   |
-| NGINX Ingress Controller     | 1.6.4         | Provides traffic management solution for cloud‑native applications in Kubernetes.           |
+| cert-manager                 | 1.12.3        | Automates the management of certificates.                                                   |
+| NGINX Ingress Controller     | 1.8.1         | Provides traffic management solution for cloud‑native applications in Kubernetes.           |
 | Prometheus                   | 2.40.2        | Provides event monitoring and alerts.                                                       |
 | Prometheus Operator          | 0.63.0        | Provides management for Prometheus monitoring tools.                                        |
-| OpenTelemetry Collector      | 0.66.0        | Collects process and export telemetry data.                                                 |
+| OpenTelemetry Collector      | 0.86.0        | Collects process and export telemetry data.                                                 |
 | Grafana                      | 9.2.5         | Provides the tool to examine, analyze, and monitor metrics.                                 |
-| Jaeger Tracing               | 1.39.0        | Provides distributed tracing system for monitoring and troubleshooting distributed systems. |
-| Apache APISIX                | 3.2.0         | Provides full lifecycle API management.                                                     |
-| Spring Boot Admin server     | 2.7.5         | Manages and monitors Spring Cloud applications.                                             |
-| Spring Cloud Config server   | 2.7.5         | Provides server-side support for an externalized configuration.                             |
-| Spring Eureka service registry | 3.1.4       | Provides service discovery capabilities.                                                    |
+| Jaeger Tracing               | 1.45.0        | Provides distributed tracing system for monitoring and troubleshooting distributed systems. |
+| Apache APISIX                | 3.4.0         | Provides full lifecycle API management.                                                     |
+| Spring Boot Admin server     | 3.1.3         | Manages and monitors Spring Cloud applications.                                             |
+| Spring Cloud Config server   | 2022.0.4      | Provides server-side support for an externalized configuration.                             |
+| Spring Eureka service registry | 2022.0.4       | Provides service discovery capabilities.                                                    |
 | HashiCorp Vault              | 1.14.0        | Provides a way to store and tightly control access to sensitive data.                       |
 | Oracle Database operator     | 1.0           | Helps reduce the time and complexity of deploying and managing Oracle databases.            |
 | Oracle Transaction Manager for Microservices | 22.3.1 | Manages distributed transactions to ensure consistency across Microservices.       |
-| Strimzi-Apache Kafka operator  | 0.33.1      | Manages Apache Kafka clusters.                                                              |
-| Apacha Kafka                 | 3.2.0 - 3.3.2 | Provides distributed event streaming.                                                       |
+| Strimzi-Apache Kafka operator  | 0.36.1      | Manages Apache Kafka clusters.                                                              |
+| Apacha Kafka                 | 3.4.0 - 3.5.1 | Provides distributed event streaming.                                                       |
 | Coherence                    | 3.2.11        | Provides in-memory data grid.                                                               |
 | Parse Server (optional)      | 6.2.0         | Provides backend services for mobile and web applications.                                  |
 | Parse Dashboard (optional)   | 5.1.0         | Provides web user interface for managing the Parse Server.                                  |
-| Oracle Database storage adapter for Parse  (optional) | 0.2.0    | Enables the Parse Server to store data in Oracle Database.              |
+| Oracle Database storage adapter for Parse  (optional) | 1.0.0    | Enables the Parse Server to store data in Oracle Database.              |
 | Conductor Server             | 3.13.2        | Provides a Microservice orchestration platform.                                             |
 
 
