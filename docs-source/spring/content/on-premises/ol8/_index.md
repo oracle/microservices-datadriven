@@ -27,9 +27,9 @@ Set the default Python3 to Python 3.9 by running this command:
 sudo alternatives --set python3 /usr/bin/python3.9
 ```
 
-### Install MiniKube
+### Install Minikube
 
-As the `root` user, install MiniKube:
+As the `root` user, install Minikube:
 
 ```bash
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64

@@ -49,14 +49,15 @@ To learn more about deploying and using Oracle Backend for Spring Boot and Micro
 
 ![](./cloudbank-hol.png)
 
-In the [CloudBank](https://bit.ly/CloudBankOnOBaaS) hands-on lab you can learn how to:
+In the [CloudBank](https://bit.ly/CloudBankOnOBaaS) hands-on lab, you can learn how to:
 
 - Install Oracle Backend for Spring Boot and Microservices.
 - Set up a development environment for Spring Boot.
-- Build Spring Boot microservices from scratch using Spring Web to create REST services.
+- Build Spring Boot microservices from scratch using Spring Web to create
+  Representational State Transfer (REST) services.
 - Use service discovery and client-side load balancing.
 - Use Spring Actuator to allow monitoring of services.
-- Create services that use asynchronous messaging (with JMS) instead of REST.
+- Create services that use asynchronous messaging with Java Message Service (JMS) instead of REST.
 - Implement the Saga pattern to manage data consistency across microservices.
 - Use the APISIX API Gateway to expose services to clients.
 - Extend a provided Flutter client to add a new "cloud cash" feature that uses the services you have built.
