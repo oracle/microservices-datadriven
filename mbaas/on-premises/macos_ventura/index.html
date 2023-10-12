@@ -68,7 +68,7 @@ brew install podman PODMAN_VERSION=$(podman -v |awk &#39;{print $NF}&#39;) sudo 
       "url" : "https://oracle.github.io/microservices-datadriven/mbaas/on-premises/macos_ventura/",
       "headline": "macOS Ventura (x86)",
       "description": "On-Premises Installation - macOS Ventura (x86) This is description of installing On-Premises on a macOS Ventura desktop.\nRead On-Premises and ensure that your desktop meets the minimum system requirements.\nInstall Podman To install Podman, process these commands:\nbrew install podman PODMAN_VERSION=$(podman -v |awk \u0027{print $NF}\u0027) sudo \/usr\/local\/Cellar\/podman\/${PODMAN_VERSION}\/bin\/podman-mac-helper install podman machine init --cpus 4 --disk-size 60 --memory 8192 --rootful --now podman system connection default podman-machine-default-root Download the Database\/Oracle REST Data Services (ORDS) Images The Desktop installation provisions an Oracle Database into the Kubernetes cluster.",
-      "wordCount" : "376",
+      "wordCount" : "380",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1405,9 +1405,9 @@ if (!doNotTrack) {
 </span></span><span class="line"><span class="cl">minikube start --cpus <span class="m">4</span> --memory max --container-runtime<span class="o">=</span>containerd
 </span></span><span class="line"><span class="cl">minikube addons <span class="nb">enable</span> ingress
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
-    <h3 id="download-oracle-backend-for-spring-boot">
-        Download Oracle Backend for Spring Boot
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/mbaas/on-premises/macos_ventura/#download-oracle-backend-for-spring-boot" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Download Oracle Backend for Spring Boot" aria-label="Anchor to: Download Oracle Backend for Spring Boot" href="#download-oracle-backend-for-spring-boot">
+    <h3 id="download-oracle-backend-for-spring-boot-and-microservices">
+        Download Oracle Backend for Spring Boot and Microservices
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/mbaas/on-premises/macos_ventura/#download-oracle-backend-for-spring-boot-and-microservices" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Download Oracle Backend for Spring Boot and Microservices" aria-label="Anchor to: Download Oracle Backend for Spring Boot and Microservices" href="#download-oracle-backend-for-spring-boot-and-microservices">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h3>
@@ -1470,9 +1470,9 @@ if (!doNotTrack) {
 <p><code>ansible-playbook ansible/images_build.yaml</code></p>
 <p>After the images are built and pushed, the tunnel is no longer required and can be stopped.</p>
 <div class="gdoc-page__anchorwrap">
-    <h3 id="deploy-oracle-backend-for-spring-boot">
-        Deploy Oracle Backend for Spring Boot
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/mbaas/on-premises/macos_ventura/#deploy-oracle-backend-for-spring-boot" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Deploy Oracle Backend for Spring Boot" aria-label="Anchor to: Deploy Oracle Backend for Spring Boot" href="#deploy-oracle-backend-for-spring-boot">
+    <h3 id="deploy-oracle-backend-for-spring-boot-and-microservices">
+        Deploy Oracle Backend for Spring Boot and Microservices
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/mbaas/on-premises/macos_ventura/#deploy-oracle-backend-for-spring-boot-and-microservices" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Deploy Oracle Backend for Spring Boot and Microservices" aria-label="Anchor to: Deploy Oracle Backend for Spring Boot and Microservices" href="#deploy-oracle-backend-for-spring-boot-and-microservices">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h3>
@@ -2084,7 +2084,7 @@ if (!doNotTrack) {
         
           <span class="gdoc-footer__item gdoc-footer__item--row">
             <a href="https://oss.oracle.com/licenses/upl/" class="gdoc-footer__link">
-              (C) 2022, Oracle and/or its affiliates
+              (C) 2022, 2023, Oracle and/or its affiliates
             </a>
           </span>
         

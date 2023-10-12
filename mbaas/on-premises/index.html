@@ -15,7 +15,7 @@
   <meta name="description" content="On-Premises Installation The Oracle Backend for Parse Platform is available to install On-Premises. The On-Premises installation includes both a Desktop installation and an Estate installation.
 The Desktop installation can be used to explore a non-Production environment, while the Estate installation is targeted for a Production infrastructure.
 Prerequisites You must meet the following prerequisites to use the Oracle Backend for Parse Platform On-Premises. You need access to:
-An Oracle Database Enterprise Edition 21." />
+An Oracle Database Enterprise Edition 19." />
 
     <title>On-Premises Installation | Oracle Backend for Parse Platform</title>
 
@@ -44,7 +44,7 @@ An Oracle Database Enterprise Edition 21." />
   <meta property="og:description" content="On-Premises Installation The Oracle Backend for Parse Platform is available to install On-Premises. The On-Premises installation includes both a Desktop installation and an Estate installation.
 The Desktop installation can be used to explore a non-Production environment, while the Estate installation is targeted for a Production infrastructure.
 Prerequisites You must meet the following prerequisites to use the Oracle Backend for Parse Platform On-Premises. You need access to:
-An Oracle Database Enterprise Edition 21." />
+An Oracle Database Enterprise Edition 19." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/mbaas/on-premises/" />
 
@@ -56,7 +56,7 @@ An Oracle Database Enterprise Edition 21." />
   <meta name="twitter:description" content="On-Premises Installation The Oracle Backend for Parse Platform is available to install On-Premises. The On-Premises installation includes both a Desktop installation and an Estate installation.
 The Desktop installation can be used to explore a non-Production environment, while the Estate installation is targeted for a Production infrastructure.
 Prerequisites You must meet the following prerequisites to use the Oracle Backend for Parse Platform On-Premises. You need access to:
-An Oracle Database Enterprise Edition 21." />
+An Oracle Database Enterprise Edition 19." />
 
 
   <script type="application/ld+json">
@@ -67,8 +67,8 @@ An Oracle Database Enterprise Edition 21." />
       "name": "On-Premises Installation",
       "url" : "https://oracle.github.io/microservices-datadriven/mbaas/on-premises/",
       "headline": "On-Premises Installation",
-      "description": "On-Premises Installation The Oracle Backend for Parse Platform is available to install On-Premises. The On-Premises installation includes both a Desktop installation and an Estate installation.\nThe Desktop installation can be used to explore a non-Production environment, while the Estate installation is targeted for a Production infrastructure.\nPrerequisites You must meet the following prerequisites to use the Oracle Backend for Parse Platform On-Premises. You need access to:\nAn Oracle Database Enterprise Edition 21.",
-      "wordCount" : "770",
+      "description": "On-Premises Installation The Oracle Backend for Parse Platform is available to install On-Premises. The On-Premises installation includes both a Desktop installation and an Estate installation.\nThe Desktop installation can be used to explore a non-Production environment, while the Estate installation is targeted for a Production infrastructure.\nPrerequisites You must meet the following prerequisites to use the Oracle Backend for Parse Platform On-Premises. You need access to:\nAn Oracle Database Enterprise Edition 19.",
+      "wordCount" : "772",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1343,7 +1343,7 @@ an <em>Estate</em> installation.</p>
 </div>
 <p>You must meet the following prerequisites to use the Oracle Backend for Parse Platform On-Premises. You need access to:</p>
 <ul>
-<li>An Oracle Database Enterprise Edition 21.3.0.0</li>
+<li>An Oracle Database Enterprise Edition 19.3.0.0</li>
 <li>A Container Repository</li>
 <li>A Kubernetes cluster</li>
 <li><a
@@ -1424,7 +1424,7 @@ installing and defining the <em>Desktop</em> installation.</p>
 </li>
 <li>
 <p>Pull the database image:</p>
-<p><code>podman pull container-registry.oracle.com/database/enterprise:21.3.0.0</code></p>
+<p><code>podman pull container-registry.oracle.com/database/enterprise:19.3.0.0</code></p>
 </li>
 <li>
 <p>Pull the ORDS image:</p>
@@ -1439,16 +1439,17 @@ installing and defining the <em>Desktop</em> installation.</p>
         </a>
     </h3>
 </div>
-<p>The Parse application is defined in <code>ansible/vars/baas.yaml</code>. For example:</p>
+<p>The application is defined in <code>ansible/vars/mbaas.yaml</code>. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nn">---</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">mbaas_edition</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;COMMUNITY&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">app_name</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;MYAPP&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">app_id</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;PiITzsu3RCc499RRDOYOBgWnyAlMm6695r1536y1&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">master_key</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;Q5CP7MHpoZhSwbk39XpHxamp4rJJ4F3vPZ3NZ7ee&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">dashboard_username</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;ADMIN&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">dashboard_password</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;OZ0-mSt-27Evb-Qy&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">storage</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">access_key</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">private_key</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">access_key</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;N/A&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">private_key</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;N/A&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
 </span></span></span></code></pre></div><p>You can use any arbitrary string as your <code>app_name</code>, <code>app_id</code>, and <code>master_key</code>. These are used by your clients to authenticate with the Parse Server.  It is recommended to specify a unique <code>dashboard_username</code> and <code>dashboard_password</code>.</p>
 <div class="gdoc-page__anchorwrap">
@@ -1461,13 +1462,13 @@ installing and defining the <em>Desktop</em> installation.</p>
 </div>
 <p>The database is defined in <code>ansible/roles/database/vars/main.yaml</code>. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nn">---</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">oracle_dbs</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s1">&#39;BAASPDB&#39;</span><span class="p">]</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">default_db</span><span class="p">:</span><span class="w"> </span><span class="l">BAASPDB</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">BAASPDB</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;PDBADMIN&#39;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;Correct-horse-Battery-staple-35&#39;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">service</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=BAASPDB)))&#39;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ocid</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">database_oracle_dbs</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;BAASPDB&#34;</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">database_default_db</span><span class="p">:</span><span class="w"> </span><span class="l">BAASPDB</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">BAASPDB: # noqa</span><span class="p">:</span><span class="w"> </span><span class="l">var-naming[pattern]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;PDBADMIN&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;Correct-horse-Battery-staple-35&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">service</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=BAASPDB)))&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ocid</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
 </span></span></span></code></pre></div><p>The <code>oracle_dbs</code> and <code>default_db</code> keys should be the name of your Pluggable Database (PDB).  These keys are followed by the PDB and keys defining how to
 access the PDB. If using Mutual Transport Layer Security (mTLS) authentication, specify the full path of the wallet file.</p>
@@ -1481,22 +1482,21 @@ access the PDB. If using Mutual Transport Layer Security (mTLS) authentication, 
 </div>
 <p>The Container Repository is defined in <code>ansible/roles/registry/vars/main.yaml</code>. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nn">---</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">compartment_ocid</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;&#39;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">registry_username</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;oracle&#39;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">registry_password</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;Correct-horse-Battery-staple-35&#39;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">push_registry_url</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;docker.io/myorg&#39;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">push_registry_auth</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">registry_username</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;oracle&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">registry_password</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;Correct-horse-Battery-staple-35&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">registry_push_url</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;docker.io/myorg&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">registry_push_auth</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">auths</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">docker.io/myorg</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">auth</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;b3JhY2xlOjdaUVgxLXhhbFR0NTJsS0VITlA0&#39;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">pull_registry_url</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;docker.io/myorg&#39;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">pull_registry_auth</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">auth</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;b3JhY2xlOjdaUVgxLXhhbFR0NTJsS0VITlA0&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">registry_pull_url</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;docker.io/myorg&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">registry_pull_auth</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">auths</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">docker.io/myorg</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">auth</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;b3JhY2xlOjdaUVgxLXhhbFR0NTJsS0VITlA0&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">auth</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;b3JhY2xlOjdaUVgxLXhhbFR0NTJsS0VITlA0&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
-</span></span></span></code></pre></div><p>Specify the URL or authentication credentials for your Container Repository in <code>pull_registry_url</code>, <code>push_registry_url</code>, <code>registry_username</code>, and <code>registry_password</code>.</p>
-<p>For the <code>push_registry_auth</code> and <code>pull_registry_auth</code> sections, manually log into your repository and copy the values found in created file, located in <code>$HOME/.config/containers/auth.json</code></p>
+</span></span></span></code></pre></div><p>Specify the URL or authentication credentials for your Container Repository in <code>registry_pull_url</code>, <code>registry_push_url</code>, <code>registry_username</code>, and <code>registry_password</code>.</p>
+<p>For the <code>registry_pull_auth</code> and <code>registry_push_auth</code> sections, manually log into your repository and copy the values found in created file, located in <code>$HOME/.config/containers/auth.json</code></p>
 <p>Why is there duplication between the push and pull URL&rsquo;s?  The push URL is used from the deployment machine while the pull URL is used inside the pods. If you
 have a private registry inside the Kubernetes cluster, these URL&rsquo;s could be different. This is the case for the <em>Desktop</em> installation. The push URL
 is <code>localhost:5000</code>, while the pull URL is <code>&lt;Registry Pod ClusterIP&gt;:5000</code>.</p>
@@ -2154,7 +2154,7 @@ needed.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x
         
           <span class="gdoc-footer__item gdoc-footer__item--row">
             <a href="https://oss.oracle.com/licenses/upl/" class="gdoc-footer__link">
-              (C) 2022, Oracle and/or its affiliates
+              (C) 2022, 2023, Oracle and/or its affiliates
             </a>
           </span>
         
