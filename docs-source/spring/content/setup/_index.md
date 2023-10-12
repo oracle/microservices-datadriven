@@ -227,10 +227,6 @@ To set up the OCI environment, process these steps:
    **Never** run a **Development** mode HashiCorp Vault Server in a production environment. It is insecure and will lose data on every restart (since it stores data in-memory). It is only intended for development or experimentation.
    {{< /hint >}}
 
-   <!-- spellchecker-disable -->
-   {{< img name="oci-private-template-create-stack-config-lb-vault" size="large" lazy=false >}}
-   <!-- spellchecker-enable -->
-
 1. Fill in the following Database options. If you check `Show Database Options`, you can modify the following values:
 
    - `Autonomous Database Network Access` : Choose the Autonomous Database network access. Choose between *SECURE_ACCESS* and *PRIVATE_ENDPOINT_ACCESS*.
