@@ -172,9 +172,9 @@ The parameters will be required are:
 
 3.  **Spring Binding Prefix** (Default: `spring.datasource`)
 
-4.  **Do you want to bind a schema? : [True]/[False]** (Default: **True**)
+4.  **Do you want to bind a schema? : [True]/[False]** (Default: `True`)
 
-5.  **Bind :[True]/[False]** (Default: **True**)
+5.  **Bind :[True]/[False]** (Default: `True`)
 
 6. **Service Port** (Default: `8080`)
 
@@ -184,9 +184,9 @@ The parameters will be required are:
 
 9. **Initial Replicas** (Default: `1`)
 
-10. **Redeploy?: [True]/[False]** (Default: **True**)
+10. **Redeploy?: [True]/[False]** (Default: `True`)
 
-11. **Add Health probe? : [True]/[False]** (Default: **True**)
+11. **Add Health probe? : [True]/[False]** (Default: `True`)
 
 
 ### Add service -> upload .jar
