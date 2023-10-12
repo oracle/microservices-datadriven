@@ -211,7 +211,7 @@ To set up the OCI environment, process these steps:
       {{< img name="oci-stack-lb-options" size="large" lazy=false >}}
       <!-- spellchecker-enable -->
 
-1. If you check the checkbox *Enable Vault in Production Mode* in the section **Vault Options** you will be installing HashiCorp in **Production** Mode otherwise the HashiCorp Vault be installed in **Developement** mode.
+1. If you check the checkbox *Enable Vault in Production Mode* in the section **Vault Options** you will be installing HashiCorp in **Production** mode otherwise the HashiCorp Vault be installed in **Developement** mode.
 
     Fill in the following Vault options. You have the option of creating a new OCI Vault or using an existing OCI Vault. The OCI Vault is only used in **Production** mode to auto-unseal the HashiCorp Vault (see documentation ...) Fill in the following information if you want to use an existing OCI Vault:
 
@@ -229,7 +229,7 @@ To set up the OCI environment, process these steps:
 
 1. In the **Database Options** section, you can modify the following Database options.
 
-   - `Autonomous Database Network Access` : Choose the Autonomous Database network access. Choose between *SECURE_ACCESS* and *PRIVATE_ENDPOINT_ACCESS*. **_NOTE:_** This option currently cannot be changed later.
+   - `Autonomous Database Network Access` : Choose the Autonomous Database network access. Choose between *SECURE_ACCESS* and *PRIVATE_ENDPOINT_ACCESS*. **NOTE:** This option currently cannot be changed later.
       - *SECURE_ACCESS* - Accessible from outside the Kubernetes Cluster.  Requires mTLS and can be restricted by IP or CIDR addresses.
       - *PRIVATE_ENDPOINT* - Accessible only from inside the Kubernetes Cluster or via a Bastion service.  Requires mTLS.
    - `ADB Access Control` : Comma separated list of CIDR blocks from which the ADB can be accessed. This only applies if *SECURE_ACCESS* was choosen. Default (and not recommended) is `0.0.0.0/0`. Oracle recommends that you set this variable to be as restrictive as possible.
@@ -243,7 +243,7 @@ To set up the OCI environment, process these steps:
       <!-- spellchecker-enable -->
 
 1. Now you can review the stack configuration and save the changes. Oracle recommends that you do not check the **Run apply** option. This
-   gives you the opportunity to run the "plan" first and check for issues. ** NEW IMAGE**
+   gives you the opportunity to run the "plan" first and check for issues. **NEW IMAGE**
 
    <!-- spellchecker-disable -->
    {{< img name="oci-private-template-create-stack-config-review" size="large" lazy=false >}}
