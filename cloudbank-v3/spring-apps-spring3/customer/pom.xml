@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2023, Oracle and/or its affiliates. -->
+<!-- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/ -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.example</groupId>
+        <artifactId>sample-spring-apps</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>customer</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>customer</name>
+    <description>Customer Application</description>
+
+    <properties>
+        <oracle-springboot-starter.version>3.1.0</oracle-springboot-starter.version>
+        <liquibase.version>4.23.1</liquibase.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+			<groupId>com.oracle.database.spring</groupId>
+			<artifactId>oracle-spring-boot-starter-ucp</artifactId>
+			<version>${oracle-springboot-starter.version}</version>
+            <type>pom</type>
+		</dependency>
+		<dependency>
+    		<groupId>com.oracle.database.spring</groupId>
+    		<artifactId>oracle-spring-boot-starter-wallet</artifactId>
+    		<version>${oracle-springboot-starter.version}</version>
+    		<type>pom</type>
+		</dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${liquibase.version}</version>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
