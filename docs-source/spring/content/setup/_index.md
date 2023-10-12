@@ -70,6 +70,12 @@ resources:
   - name: oci-stack-vault-options
     src: "oci-stack-vault-options.png"
     title: "HashiCorp Vault Options"
+  - name: azn-stack-app-info
+    src: "azn-stack-app-info.png"
+    title: "Access Information"
+  - name: oci-stack-app-info
+    src: "oci-stack-app-information.png"
+    title: "Detailed Access Information"
 ---
 
 Oracle Backend for Spring Boot and Microservices is available in the [OCI Marketplace](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911).
@@ -130,18 +136,24 @@ This video provides a quick overview of the setup process.
 
 {{< youtube rAi10TiUraE >}}
 
+Installing Oracle Backend for Spring Boot and Microservice takes approximately one hour to complete. The following steps are involved:
+
+- [Setup the OCI environment](#set-up-the-oci-environment)
+- [Setup of the Local Eenvironment](#set-up-the-local-machine)
+- [Access environment variables from the OCI Console](#access-information-and-passwords-from-the-oci-console)
+
 ## Set Up the OCI Environment
 
 To set up the OCI environment, process these steps:
 
 1. Go to the [OCI Marketplace listing for Oracle Backend for Spring Boot and Microservices](https://cloud.oracle.com/marketplace/application/138899911).
-    **NEW IMAGE**
+
     <!-- spellchecker-disable -->
     {{< img name="ebaas-mp-listing" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
-    Choose the target compartment, agree to the terms, and click **Launch Stack**.  This starts the wizard and creates the new stack. On the first page, choose a compartment to host your stack and select **Next**.
-    **NEW IMAGE**
+    Choose the target compartment, agree to the terms, and click **Launch Stack**.  This starts the wizard and creates the new stack. On the first page, choose a compartment to host your stack and select **Next** and Configure the variables for the infrastructure resources that this stack will create when you run the apply job for this execution plan.
+
     <!-- spellchecker-disable -->
     {{< img name="ebaas-stack-page1" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
@@ -151,6 +163,8 @@ To set up the OCI environment, process these steps:
     - `Compartment` : Select the compartment where you want to install Oracle Backend for Spring Boot and Microservices.
     - `Application Name` (optional) : A random pet name that will be used as the application name if left empty.
     - `Edition` : Select between *COMMUNITY* and *STANDARD* Edition.
+        - *COMMUNTIY* - for developers for quick start to testing Spring Boot Microservices with an integrated backend. Teams can start with the deployment and scale up as processing demand grows. Community support only.
+        - *STANDARD* - focused for pre-prod and production environments with an emphasis on deployment, scaling, and high availability. Oracle support is included with a Oracle Database support agreement. All features for developers are the same so start here if you’re porting an existing Spring Boot application stack and expect to get into production soon.
 
       <!-- spellchecker-disable -->
       {{< img name="oci-stack-app-name" size="large" lazy=false >}}
@@ -167,7 +181,7 @@ To set up the OCI environment, process these steps:
       {{< img name="oci-stack-passwords" size="large" lazy=false >}}
       <!-- spellchecker-enable -->
 
-1. If you check the checkbox *Enable Parse Platform* in the **Parse Server** section, fill in the following for the Parse Server:
+1. If you check the checkbox *Enable Parse Platform* in the **Parse Server** section a Parse Server will be installed. Fill in the following for the Parse Server:
 
    - `Application ID` (optional) : Leave blank to auto-generate.
    - `Server Master Key` (optional) : Leave blank to auto-generate.
@@ -182,7 +196,9 @@ To set up the OCI environment, process these steps:
 1. If you check the checkbox *Public Control Plane* in the **Public Control Plane Options**, you are enabling access from the `public` to the Control Plane:
   
    - `Public Control Plane` : This option allows access to the OKE Control Plane from the internet (public IP). If not selected, access can only be from a private virtual cloud network (VCN).
-   - `Control Plane Access Control` : Enter the CIDR block you want to give access to the Control Plane. Default (and not recommended) is `0.0.0.0/0`. Oracle recommends that you set this variable to be as restrictive as possible.
+   - `Control Plane Access Control` : Enter the CIDR block you want to give access to the Control Plane. Default (and not recommended) is `0.0.0.0/0`.
+
+   > **NOTE:** Oracle recommends that you set `Control Plane Access Control` to be as restrictive as possible
 
      <!-- spellchecker-disable -->
      {{< img name="oci-stack-control-plane" size="large" lazy=false >}}
@@ -202,10 +218,12 @@ To set up the OCI environment, process these steps:
 
    - `Enable Public Load Balancer` : This option allows access to the load balancer from the internet (public IP). If not
       selected, access can only be from a private VCN.
-   - `Public Load Balancer Access Control` : Enter the CIDR block you want to give access to the Load Blanacer. Default (and not recommended) is `0.0.0.0/0`. Oracle recommends that you set this variable to be as restrictive as possible.
+   - `Public Load Balancer Access Control` : Enter the CIDR block you want to give access to the Load Blanacer. Default (and not recommended) is `0.0.0.0/0`.
    - `Public Load Balancer Ports Exposed` : The ports exposed from the load balancer.
    - `Minimum bandwidth` : The minimum bandwidth that the load balancer can achieve.
    - `Maximum bandwidth` : The maximum bandwidth that the load balancer can achieve.
+
+   > **NOTE:** Oracle recommends that you set `Public Load Balancer Access Control` to be as restrictive as possible.
 
       <!-- spellchecker-disable -->
       {{< img name="oci-stack-lb-options" size="large" lazy=false >}}
@@ -232,18 +250,19 @@ To set up the OCI environment, process these steps:
    - `Autonomous Database Network Access` : Choose the Autonomous Database network access. Choose between *SECURE_ACCESS* and *PRIVATE_ENDPOINT_ACCESS*. **NOTE:** This option currently cannot be changed later.
       - *SECURE_ACCESS* - Accessible from outside the Kubernetes Cluster.  Requires mTLS and can be restricted by IP or CIDR addresses.
       - *PRIVATE_ENDPOINT* - Accessible only from inside the Kubernetes Cluster or via a Bastion service.  Requires mTLS.
-   - `ADB Access Control` : Comma separated list of CIDR blocks from which the ADB can be accessed. This only applies if *SECURE_ACCESS* was choosen. Default (and not recommended) is `0.0.0.0/0`. Oracle recommends that you set this variable to be as restrictive as possible.
+   - `ADB Access Control` : Comma separated list of CIDR blocks from which the ADB can be accessed. This only applies if *SECURE_ACCESS* was choosen. Default (and not recommended) is `0.0.0.0/0`.
    - `Autonomous Database ECPU Core Count` : Choose how many ECPU cores will be elastically allocated.
    - `Allow Autonomous Database OCPU Auto Scaling` : Enable auto scaling for the ADB ECPU core count (x3 ADB ECPU).
    - `Autonomous Database Data Storage Size` : Choose ADB Database Data Storage Size in gigabytes.
    - `Autonomous Database License Model` : The Autonomous Database license model.
 
+    > **NOTE:** Oracle recommends that you restrict by IP or CIDR addresses to be as restrictive as possible.
+
       <!-- spellchecker-disable -->
       {{< img name="oci-stack-db-options" size="large" lazy=false >}}
       <!-- spellchecker-enable -->
 
-1. Now you can review the stack configuration and save the changes. Oracle recommends that you do not check the **Run apply** option. This
-   gives you the opportunity to run the "plan" first and check for issues. **NEW IMAGE**
+1. Now you can review the stack configuration and save the changes. Oracle recommends that you do not check the **Run apply** option. This gives you the opportunity to run the "plan" first and check for issues. Click **Create**
 
    <!-- spellchecker-disable -->
    {{< img name="oci-private-template-create-stack-config-review" size="large" lazy=false >}}
@@ -255,28 +274,27 @@ To set up the OCI environment, process these steps:
 
    Oracle recommends that you test the plan before applying the stack in order to identify any issues before you start
    creating resources. Testing a plan does not create any actual resources. It is just an exercise to tell you what would
-   happen if you did apply the stack. **NEW IMAGE**
+   happen if you did apply the stack.
+
+   You can test the plan by clicking on **Plan** and reviewing the output. You can fix any issues (for example, you may find that you do not have enough quota for some resources) before proceeding.
 
    <!-- spellchecker-disable -->
    {{< img name="oci-stack-plan" size="large" lazy=false >}}
    <!-- spellchecker-enable -->
 
-1. You can test the plan by clicking on **Plan** and reviewing the output. You can fix any issues (for example, you may find that
-    you do not have enough quota for some resources) before proceeding. **NEW IMAGE**
-
-    When you are happy with the results of the test, you can apply the stack by clicking on **Apply**. This creates your Oracle Backend as a Service and Microservices for a Spring Cloud environment. This takes about 20 minutes to complete. Much of this time is spent provisioning the Kubernetes cluster, worker nodes, and database. You can watch the logs to follow the progress of the operation. **NEW IMAGE**
+1. When you are happy with the results of the test, you can apply the stack by clicking on **Apply**. This creates your Oracle Backend as a Service and Microservices for a Spring Cloud environment. This takes about 20 minutes to complete. Much of this time is spent provisioning the Kubernetes cluster, worker nodes, database and all the included services. You can watch the logs to follow the progress of the operation.
 
     <!-- spellchecker-disable -->
     {{< img name="oci-stack-apply" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
-1. The OCI Resource Manager applies your stack and generates the execution logs. The apply job takes approximately 45 minutes. **NEW IMAGE**
+1. The OCI Resource Manager applies your stack and generates the execution logs. The apply job takes approximately 45 minutes.
 
     <!-- spellchecker-disable -->
     {{< img name="oci-stack-apply-logs" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
-1. Collect the OKE access information by clicking on **Outputs**. **NEW IMAGE**
+1. When the **Apply** job finsishes you can collect the OKE access information by clicking on **Outputs**.
 
     <!-- spellchecker-disable -->
     {{< img name="oci-stack-outputs" size="large" lazy=false >}}
@@ -323,11 +341,27 @@ To set up the local machine, process these steps:
 
 1. Install the Oracle Backend for Spring Boot and Microservices command-line.
 
-   The Oracle Backend for Spring Boot and Microservices command-line interface, `oractl`, is available for Linux and Mac systems. Download the binary
-   that you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0) page and add it to
-   your PATH environment variable. You can rename the binary to remove the suffix.
+   The Oracle Backend for Spring Boot and Microservices command-line interface, `oractl`, is available for Linux and Mac systems. Download the binary that you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0) page and add it to your PATH environment variable. You can rename the binary to remove the suffix.
 
-   If your environment is a Linux or Mac machine, run `chmod +x` on the downloaded binary. Also, if your environment is a Mac, run the
-   following command. Otherwise, you get a security warning and the CLI does not work:
+   If your environment is a Linux or Mac machine, run `chmod +x` on the downloaded binary. Also, if your environment is a Mac, run the following command. Otherwise, you get a security warning and the CLI does not work:
 
    `sudo xattr -r -d com.apple.quarantine <downloaded-file>`
+
+## Access information and passwords from the OCI Console
+
+You can get the necessary access information from the OCI COnsole:
+
+- OKE Cluster Access information e.g. how to generate the kubeconfig information.
+- Oracle Backend for Spring Boot and Microservices Passwords.
+
+The assigned passwords (either auto generated or provided by the installer) can be viewed in the OCI Console (ORM homepage). Click on Application Information in the OCI ORM Stack.
+
+<!-- spellchecker-disable -->
+{{< img name="azn-stack-app-info" size="large" lazy=false >}}
+<!-- spellchecker-enable -->
+
+You will presented with a screen with the access information and passwords. **NOTE**: The passwords can also be accessed from the k8s secrets.
+
+<!-- spellchecker-disable -->
+{{< img name="oci-stack-app-info" size="large" lazy=false >}}
+<!-- spellchecker-enable -->
