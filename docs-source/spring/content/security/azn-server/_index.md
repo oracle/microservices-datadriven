@@ -18,14 +18,14 @@ The Authorization Server is an engine to authenticate and authorize requests to 
 
 ## Users & Roles
 
-When deploying Oracle Backend for Spring Boot two users are created with the following roles:
+When deploying Oracle Backend for Spring Boot and Microservices, two users are created with the following roles:
 
 | User Name     | Assigned Roles        |
 |---------------|-----------------------|
 | obaas-admin   | ROLE_ADMIN, ROLE_USER |
 | obaas-user    | ROLE_USER             |
 
-All the users are stored in the database deployed when installing Oracle Backend for Spring Boot and Microservices. The Roles determines what the user is allowed to do in the environment. The allowed roles are `ROLE_ADMIN` and `ROLE_USER`.
+All users are stored in the database are deployed when installing Oracle Backend for Spring Boot and Microservices. The roles determine what the user is allowed to do in the environment. The allowed roles are `ROLE_ADMIN` and `ROLE_USER`.
 
 > **_NOTE:_** See each components documentation about the roles and authorities.
 
@@ -35,7 +35,7 @@ The assigned passwords (either auto generated or provided by the installer) can 
 {{< img name="azn-stack-app-info" >}}
 <!-- spellchecker-enable -->
 
-If you click on **Unlock** the password for the obaas-admin and obaas-user can be displayed.
+If you click on **Unlock**, the password for the obaas-admin and obaas-user can be displayed.
 
 <!-- spellchecker-disable -->
 {{< img name="azn-passwords-console" >}}
@@ -57,7 +57,7 @@ kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.user}' | b
 
 ## User Management REST endpoints
 
-The following REST endpoints are available to manage users. The table lists which minimum required Role is needed to perform the operation.
+The following REST Endpoints are available to manage users. The table lists which minimum required role that is needed to perform the operation.
 
 | End point                                         | Method | Description                                     | Minimum required Role |
 |---------------------------------------------------|--------|-------------------------------------------------|-----------------------|
