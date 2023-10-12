@@ -94,18 +94,20 @@ Oracle Backend for Spring Boot and Microservices setup installs the following co
 | Apache APISIX                | 3.4.0         | Provides full lifecycle API management.                                                     |
 | Spring Boot Admin server     | 3.1.3         | Manages and monitors Spring Cloud applications.                                             |
 | Spring Cloud Config server   | 2022.0.4      | Provides server-side support for an externalized configuration.                             |
-| Spring Eureka service registry | 2022.0.4       | Provides service discovery capabilities.                                                    |
+| Spring Eureka service registry | 2022.0.4 (4.0.3)      | Provides service discovery capabilities.                                                    |
 | HashiCorp Vault              | 1.14.0        | Provides a way to store and tightly control access to sensitive data.                       |
-| Oracle Database operator     | 1.0           | Helps reduce the time and complexity of deploying and managing Oracle databases.            |
-| Oracle Transaction Manager for Microservices | 22.3.1 | Manages distributed transactions to ensure consistency across Microservices.       |
+| Oracle Database Operator     | 1.0           | Helps reduce the time and complexity of deploying and managing Oracle databases.            |
+| Oracle Transaction Manager for Microservices | 22.3.2 | Manages distributed transactions to ensure consistency across Microservices.       |
 | Strimzi-Apache Kafka operator  | 0.36.1      | Manages Apache Kafka clusters.                                                              |
 | Apacha Kafka                 | 3.4.0 - 3.5.1 | Provides distributed event streaming.                                                       |
 | Coherence                    | 3.2.11        | Provides in-memory data grid.                                                               |
-| Parse Server (optional)      | 6.2.0         | Provides backend services for mobile and web applications.                                  |
-| Parse Dashboard (optional)   | 5.1.0         | Provides web user interface for managing the Parse Server.                                  |
+| Parse Server (optional)      | 6.3.0         | Provides backend services for mobile and web applications.                                  |
+| Parse Dashboard (optional)   | 5.2.0         | Provides web user interface for managing the Parse Server.                                  |
 | Oracle Database storage adapter for Parse  (optional) | 1.0.0    | Enables the Parse Server to store data in Oracle Database.              |
 | Conductor Server             | 3.13.2        | Provides a Microservice orchestration platform.                                             |
-
+| Loki                         | 2.6.1     | Provides log aggregation and search. |
+| Promtail                     | 2.8.2     | Collects logs.                       |
+| Spring Authorization Server  | 2022.0.4  | Provides authentication and authorization for applications. |
 
 ## Overview of the Setup Process
 

@@ -18,6 +18,7 @@ dnf -y install conntrack podman curl
 dnf -y install oracle-database-preinstall-21c
 dnf -y install langpacks-en
 dnf module install -y python39
+dnf -y update
 ```
 
 Set the default Python3 to Python 3.9 by running this command:
