@@ -133,7 +133,7 @@ registry_pull_auth:
 
 Specify the URL or authentication credentials for your Container Repository in `registry_pull_url`, `registry_push_url`, `registry_username`, and `registry_password`.
 
-For the `registry_pull_auth` and `registry_push_auth` sections, manually log into your repository and copy the values found in created file, located in `$HOME/.config/containers/auth.json`
+For the `registry_pull_auth` and `registry_push_auth` sections, manually log into your repository and copy the values found in the created file, located in `$HOME/.config/containers/auth.json`
 
 There may be duplication between the push and pull URL's. The pull URL is used inside the Pods while the push URL is used from the
 deployment machine. If you have a private registry inside the Kubernetes cluster, these URL's could be different. This is the case for
@@ -155,9 +155,9 @@ source ./activate.env
 
 ### Desktop Playbook
 
-If this is an _Estate_ installation, the infrastructure should be manually defined as previously stated.
+If this is an _Estate_ installation, then the infrastructure should be manually defined as previously stated.
 
-If this is a _Desktop_ installation, run the Helper Playbook to define the infrastructure. For example:
+If this is a _Desktop_ installation, then run the Helper Playbook to define the infrastructure. For example:
 
 ```bash
 ansible-playbook ansible/desktop-apply.yaml
