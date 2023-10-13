@@ -574,7 +574,6 @@ The GraalVM Compile Commands are the following:
    ...
    ```
 
-
    1. Use the `compile` command to upload and automatically start the compilation, following this syntax:
 
    ```cmd
@@ -608,7 +607,7 @@ The GraalVM Compile Commands are the following:
 
     it should be previously compiled on the developer desktop with GraalVM 22.3 or above through an **mvn** command like:
 
-    ```code
+    ```cmd
     mvn -Pnative native:compile -Dmaven.test.skip=true
     ```
 
@@ -617,7 +616,7 @@ The GraalVM Compile Commands are the following:
      So, satisfied these pre-requisistes for the artifact to compile, this is an example of command output:
 
      ```cmd
-       oractl:>compile --artifact-path /Users/cdebari/demo-0.0.1-SNAPSHOT.jar
+     oractl:>compile --artifact-path /Users/cdebari/demo-0.0.1-SNAPSHOT.jar
        uploading: /Users/cdebari/demo-0.0.1-SNAPSHOT.jar
        filename: demo-0.0.1-SNAPSHOT.jar
        return: demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
@@ -633,6 +632,7 @@ The GraalVM Compile Commands are the following:
       it's the batch id generated that must be used to get logs, download the compiled file and purge the service instance. If omitted in that commands, it will considered the last batch by default.
 
    2. Use the `compile-logs` command to get the logs that show the compilation progress:
+
      ```cmd
        oractl:>help compile-logs
        NAME
