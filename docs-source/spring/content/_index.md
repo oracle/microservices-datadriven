@@ -16,20 +16,26 @@ Infrastructure (OCI) Container Engine for Kubernetes cluster (OKE cluster):
 - Apache APISIX API Gateway and Dashboard
 - Apache Kafka
 - Coherence
+- Conductor Server
 - Grafana
 - HashiCorp Vault
 - Jaeger
+- Apache Kafka
 - Loki
 - Netflix Conductor
 - OpenTelemetry Collector
 - Oracle Autonomous Database Serverless
+- Oracle Backend for Spring Boot Command Line Interface (CLI)
+- Oracle Backend for Spring Boot Visual Studio Code Plugin
 - Oracle Database Operator for Kubernetes (OraOperator or the operator)
 - Oracle Transaction Manager for Microservices (MicroTx)
+- Parse and Parse Dashboard (Optional)
 - Prometheus
 - Promtail
-- Spring Eureka service registry
 - Spring Boot Admin dashboard
 - Spring Cloud Config server
+- Spring Cloud Eureka service registry
+- Strimzi Kafka Operator
 
 Developers also have access to development or build time services and libraries including:
 
@@ -41,13 +47,14 @@ Developers also have access to development or build time services and libraries 
 - Spring Eureka service discovery client.
 - Spring Cloud OpenFeign.
 - OpenTelemetry Collector (including automatic instrumentation).
+- Spring Starters for Oracle UCP, Oracle Wallet, Oracle AQ and TXEventQ.
 
 ## Learn more, try it out with CloudBank!
 
 To learn more about deploying and using Oracle Backend for Spring Boot and Microservices, we recommend our
 [CloudBank](https://bit.ly/CloudBankOnOBaaS) self-paced, on-demand hands-on lab.
 
-![](./cloudbank-hol.png)
+![CloudBank LiveLab](./cloudbank-hol.png)
 
 In the [CloudBank](https://bit.ly/CloudBankOnOBaaS) hands-on lab, you can learn how to:
 
@@ -67,6 +74,3 @@ In the [CloudBank](https://bit.ly/CloudBankOnOBaaS) hands-on lab, you can learn 
 Check out [Oracle Backend for Parse Platform](https://oracle.github.io/microservices-datadriven/mbaas/)!
 {{< /hint >}}
 &nbsp;
-
-
-
