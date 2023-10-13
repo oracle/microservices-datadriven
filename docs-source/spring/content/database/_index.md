@@ -25,13 +25,19 @@ resources:
   - name: oci-adb-sqlcl-load-wallet
     src: "oci-adb-sqlcl-load-wallet.png"
     title: "Load the Wallet"
+  - name: oci-adb-show-tns
+    src: "oci-adb-show-tns.png"
+    title: "Load the Wallet"
+  - name: oci-adb-admin-connect
+    src: "oci-adb-admin-connect.png"
+    title: "Load the Wallet"
 ---
 
 The Oracle Backend for Spring Boot and Microservices includes an Oracle database. An instance of Oracle Autonomous Database Serverless is created during installation.
 
 If you selected the **PRIVATE_ENDPOINT** option, you need to use a Bastion to access the database.
 
-> **_NOTE:_** Oracle recommends that you install your own databases for your production applications. The database provisioned is used for Oracle Backend for Spring Boot metadata and can be used for development.
+> **_NOTE:_** Oracle recommends that you install your own databases,PDBs for your production applications. The database provisioned is used for Oracle Backend for Spring Boot metadata and can be used for development.
 
 ## Accessing the Database
 
@@ -85,12 +91,13 @@ You have to enter a password for the Wallet.
 
 ### Connect to the Oracle Autonomous Database using SQLcl
 
-1. Get the ADMIN user password from k8s secret
+1. Get the ADMIN user password from k8s secret. in the exa,ple below `calfdb` needs to be replaced with the name of database in the installation.
 
-    ````shell
-    kubectl get secret .... 
-    ``
-1. Open a terminal WIndow and start SQLcl with the `/nolog` option.
+    ```shell
+     kubectl -n application get secret calfdb-db-secrets -o jsonpath='{.data.db\.password}' | base64 -d
+    ```
+
+1. Open a terminal Window and start SQLcl with the `/nolog` option.
 
     ```shell
     sql /nolog
@@ -102,17 +109,28 @@ You have to enter a password for the Wallet.
     {{< img name="oci-adb-sqlcl-load-wallet" lazy=false >}}
     <!-- spellchecker-enable -->
 
-1. Connect as the ADMIN user to the database
+1. Get the TNS name connection names from the wallet by executing this command:
+
+    ```shell
+    show tns
+    ```
+    <!-- spellchecker-disable -->
+    {{< img name="oci-adb-show-tns" lazy=false >}}
+    <!-- spellchecker-enable -->
+
+1. Connect as the ADMIN user to the database using the password you obtained from the k8s secret previously.
 
     <!-- spellchecker-disable -->
-    {{< img name="oci-adb-sqlcl-load-wallet" lazy=false >}}
+    {{< img name="oci-adb-admin-connect" lazy=false >}}
     <!-- spellchecker-enable -->
+
+    You are now connected to the database that is provided when installing Oracle Backend for SPring Boot and Microservices on OCI.
+
+> **_NOTE:_** Oracle recommends that you install your own databases, PDBs for your production applications. The database provisioned is used for Oracle Backend for Spring Boot metadata and can be used for development.
 
 ## Accessing the Oracle Autonomous Database From a Local Machine using Database Wallet and SQLcl using a Bastion
 
 If **PRIVATE_ENDPOINT** was selected during installation you can access the database using the following steps.
-
-
 
 If you chose the **Private** option for database access during installation, the database is configured so that it is only accessible from
 the private Virtual Cloud Network (VCN), and access is only possible using the Bastion service provisioned during installation.
