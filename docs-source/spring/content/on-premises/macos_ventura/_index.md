@@ -1,6 +1,8 @@
-# On-Premises Installation - macOS Ventura (x86)
+---
+title: On-Premises Installation - macOS Ventura (x86)
+---
 
-This is a discussion of an installation on a macOS Venture desktop.
+This is a discussion of an installation on a macOS Ventura desktop.
 
 Read the [On-Premises](../../on-premises) documentation and ensure that your desktop meets the minimum system requirements.
 
@@ -50,9 +52,9 @@ If Minikube fails to start and returns this `Failed kubeconfig update: could not
 
 `mv ~/.kube ~/.kube.bak`
 
-### Download Oracle Backend for Spring Boot
+### Download Oracle Backend for Spring Boot and Microservices
 
-Download the [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip) and unzip into a new directory.
+Download the [Oracle Backend for Spring Boot and Microservices](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip) and unzip into a new directory.
 
 ### Install Ansible
 
@@ -99,7 +101,7 @@ Build and push the images to the Container Registry in the Kubernetes cluster by
 
 After the images are built and pushed, the tunnel is no longer required and can be stopped.
 
-### Deploy Oracle Backend for Spring Boot
+### Deploy Oracle Backend for Spring Boot and Microservices
 
 Deploy the database and Microservices by running this command:
 
@@ -112,4 +114,3 @@ Deploy the database and Microservices by running this command:
 If you are behind a virtual private network (VPN) or proxy, see https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/ for more details
 on additional tasks.
 
-Next, go to the [Oracle Linux 8 (x86)](../on-premises/ol8/) page to learn more.

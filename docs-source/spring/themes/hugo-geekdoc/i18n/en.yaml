@@ -36,7 +36,7 @@ posts_tagged_with: All posts tagged with '{{ . }}'
 
 footer_build_with: >
   Built with <svg class="gdoc-icon gdoc_heart"><use xlink:href="#gdoc_heart"></use></svg> by Oracle
-footer_legal_notice: (C) 2022, Oracle and/or its affiliates
+footer_legal_notice: (C) 2022, 2023, Oracle and/or its affiliates
 footer_privacy_policy: Privacy Policy
 footer_content_license_prefix: >
   Content licensed under Universal Permissive License

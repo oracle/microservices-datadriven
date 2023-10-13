@@ -27,9 +27,7 @@ resources:
     title: "Grafana Dashboard"
 ---
 
-# Metrics
-
-The Oracle Backend for Spring Boot metrics stack automates metrics aggregation and consists of Prometheus and Grafana components.
+The Oracle Backend for Spring Boot and Microservices metrics stack automates metrics aggregation and consists of Prometheus and Grafana components.
 Metrics sources expose system and application metrics. The Prometheus components retrieve and store the metrics and Grafana provides
 dashboards to visualize them.
 
@@ -107,8 +105,10 @@ into insightful graphs and visualizations. Take the following steps:
 3. Set up the Prometheus data source:
 
     a. At the lower left, click on the system setup symbol and choose **Data Sources**.
+
     b. Click on the second data source called **Prometheus** and in the address (be careful to get the address field, not the name field), change
-	   the address from <http://prometheus:9090> to <http://prometheus.prometheus.svc.cluster.local:9090>.
+      the address from <http://prometheus:9090> to <http://prometheus.prometheus.svc.cluster.local:9090>.
+      
     c. At the bottom of the page, click **Save & Test** and wait for 2-3 seconds for the green icon which indicates that the data source is working.
 
     <!-- spellchecker-disable -->
@@ -118,10 +118,15 @@ into insightful graphs and visualizations. Take the following steps:
 4. Set up the dashboard:
 
     a. In the upper left, find and click the **dasbhoards** link.
+
     b. Click on the blue button to the right to add a new dashboard. In the pull down menu, select **Import**.
-    c. In the field for the Grafana dashboard ID, paste this value: `10280` .
+
+    c. In the field for the Grafana dashboard ID, paste this value: `10280`.
+
     d. Click **Next**.
+
     e. In the data source field, select **Prometheus**.
+
     f. Click **Save**.
 
     <!-- spellchecker-disable -->
@@ -131,7 +136,9 @@ into insightful graphs and visualizations. Take the following steps:
 5. Navigate the Spring Boot dashboard:
 
     a. You should see the new dashboard in the list called **Spring Boot Dashboard 2.1**. Click on it to open.
+
     b. You should automatically see details for the Sample Applications in the dashboard.
+    
     c. Invoke the service. For example, use a `curl` command to create some traffic and observe the dashboard. You may need to repeat
 	   the `curl` command. There is a refresh symbol in the top right corner that enables automatic refresh every 5 seconds (or, for
 	   whatever length of time that you choose).

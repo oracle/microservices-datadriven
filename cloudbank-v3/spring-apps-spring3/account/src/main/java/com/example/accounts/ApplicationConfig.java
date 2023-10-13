@@ -4,17 +4,17 @@
 package com.example.accounts;
 
 import java.net.URISyntaxException;
-import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import io.narayana.lra.client.NarayanaLRAClient;
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration
+@Slf4j
 public class ApplicationConfig {
-    private static final Logger log = Logger.getLogger(ApplicationConfig.class.getName());
 
     public ApplicationConfig(@Value("${lra.coordinator.url}") String lraCoordinatorUrl) {
         log.info(NarayanaLRAClient.LRA_COORDINATOR_URL_KEY + " = " + lraCoordinatorUrl);

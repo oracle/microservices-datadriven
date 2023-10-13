@@ -3,11 +3,9 @@
 
 package com.example.accounts.services;
 
-import javax.ws.rs.core.Response;
+import com.oracle.microtx.springboot.lra.annotation.ParticipantStatus;
 
-import org.eclipse.microprofile.lra.annotation.ParticipantStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.example.accounts.model.Account;
@@ -15,9 +13,11 @@ import com.example.accounts.model.Journal;
 import com.example.accounts.repository.AccountRepository;
 import com.example.accounts.repository.JournalRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Component
+@Slf4j
 public class AccountTransferDAO {
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private static AccountTransferDAO singleton;
     final AccountRepository accountRepository;
@@ -83,12 +83,12 @@ public class AccountTransferDAO {
         accountRepository.save(account);
     }
 
-    public Response status(String lraId, String journalType) throws Exception {
+    public ResponseEntity<ParticipantStatus> status(String lraId, String journalType) throws Exception {
         Journal journal = getJournalForLRAid(lraId, journalType);
         if (AccountTransferDAO.getStatusFromString(journal.getLraState()).equals(ParticipantStatus.Compensated)) {
-            return Response.ok(ParticipantStatus.Compensated).build();
+            return ResponseEntity.ok(ParticipantStatus.Compensated);
         } else {
-            return Response.ok(ParticipantStatus.Completed).build();
+            return ResponseEntity.ok(ParticipantStatus.Completed);
         }
     }
 

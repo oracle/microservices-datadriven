@@ -11,7 +11,7 @@ This page acts as an index/aggregator for some of our featured content.
 {{< blog  
     author="corrado"
     date="7/25/2023"
-    title="Coding for Observability in the Oracle Backend for Spring Boot"
+    title="Coding for Observability in the Oracle Backend for Spring Boot and Microservices"
     link="https://medium.com/@corradodebari/coding-for-observability-in-the-oracle-backend-for-spring-boot-b920ae3e14f6"
     abstract="Corrado shows how to configure a Spring Boot application to allow Prometheus to collect metrics and show them in a Grafana dashboard."
 >}}
@@ -27,15 +27,15 @@ This page acts as an index/aggregator for some of our featured content.
 {{< blog  
     author="john"
     date="6/15/2023"
-    title="Oracle Backend for Spring Boot multi-cloud install on Azure"
+    title="Oracle Backend for Spring Boot and Microservices multi-cloud install on Azure"
     link="https://www.youtube.com/watch?v=IpWe12UYeJ4"
-    abstract="John shows us how to install Oracle Backend for Spring Boot on Azure."
+    abstract="John shows us how to install Oracle Backend for Spring Boot and Microservices on Azure."
 >}}
 
 {{< blog  
     author="corrado"
     date="6/5/2023"
-    title="How to use ChatGPT/OpenAI APIs from Oracle Backend for Spring Boot/Parse"
+    title="How to use ChatGPT/OpenAI APIs from Oracle Backend for Spring Boot and Microservices/Parse"
     link="https://medium.com/@corradodebari/how-to-use-chatgpt-openai-apis-from-oracle-backend-for-spring-boot-parse-5fcc0ffa4bcd"
     abstract="Corrado demonstrates how to use OpenAI APIs to provide AI application services to mobile clients through the Parse Platform."
 >}}
@@ -75,7 +75,7 @@ This page acts as an index/aggregator for some of our featured content.
 {{< blog  
     author="andy"
     date="5/17/2023"
-    title="Learn how to build and deploy a Spring Boot application to Oracle Backend for Spring Boot using Spring starters for UCP and Wallet"
+    title="Learn how to build and deploy a Spring Boot application to Oracle Backend for Spring Boot and Microservices using Spring starters for UCP and Wallet"
     link="https://mr-a.org/build-and-deploy-a-spring-boot-application-to-oracle-backend-for-spring-boot-using-spring-startes-for-ucp-and-wallet/"
     abstract="Andy shows us how to build a Phonebook application using Spring Boot with the Oracle Spring Boot Starters for Universal Connection Pools and wallet, and deploys the applications to the Oracle Backend for Spring Boot and tests it."
 >}}
@@ -107,9 +107,9 @@ This page acts as an index/aggregator for some of our featured content.
 {{< blog  
     author="andy"
     date="4/20/2023"
-    title="I have deployed Oracle Backend for Spring Boot (Developer preview). Now what?"
+    title="I have deployed Oracle Backend for Spring Boot and Microservices (Developer preview). Now what?"
     link="https://mr-a.org/i-have-deployed-oracle-backend-for-spring-boot-developer-preview-now-what/"
-    abstract="Andy shows us how easy it is to build a Spring Boot Phone Book application, deploy it to Oracle Backend for Spring Boot using the CLI, and create a route in APISIX Gateway to expose the REST endpoints."
+    abstract="Andy shows us how easy it is to build a Spring Boot Phone Book application, deploy it to Oracle Backend for Spring Boot and Microservices using the CLI, and create a route in APISIX Gateway to expose the REST endpoints."
 >}}
 
 {{< blog  
@@ -117,7 +117,7 @@ This page acts as an index/aggregator for some of our featured content.
     date="4/20/2023"
     title="Oracle Backend for Spring and Parse Video"
     link="https://mr-a.org/oracle-backend-for-spring-and-parse-video/"
-    abstract="This video introduces the Oracle Backend for Spring Boot (and Parse Platform) which makes it super easy to develop, run and manage Spring Boot microservices and mobile applications leveraging all the power of Oracle’s converged database."
+    abstract="This video introduces the Oracle Backend for Spring Boot and Microservices (and Parse Platform) which makes it super easy to develop, run and manage Spring Boot microservices and mobile applications leveraging all the power of Oracle’s converged database."
 >}}
 
 {{< blog  
@@ -141,7 +141,7 @@ This page acts as an index/aggregator for some of our featured content.
     date="4/6/2023"
     title="Introducing Cloud Bank"
     link="https://medium.com/oracledevs/introducing-cloud-bank-d3af56e1141f"
-    abstract="And introduction to the Cloud Bank sample application which showcases Spring Boot microservices, long running actions/sagas and a Flutter mobile application built with the Oracle Backend for Spring Boot."
+    abstract="And introduction to the Cloud Bank sample application which showcases Spring Boot microservices, long running actions/sagas and a Flutter mobile application built with the Oracle Backend for Spring Boot and Microservices."
 >}}
 
 {{< blog  
@@ -155,9 +155,9 @@ This page acts as an index/aggregator for some of our featured content.
 {{< blog  
     author="andy"
     date="3/25/2023"
-    title="Oracle Backend for Spring Boot is LIVE! (Developer Preview)"
+    title="Oracle Backend for Spring Boot and Microservices is LIVE! (Developer Preview)"
     link="https://mr-a.org/oracle-backend-for-spring-boot-is-live-developer-preview/"
-    abstract="An introduction to the Oracle Backend for Spring Boot."
+    abstract="An introduction to the Oracle Backend for Spring Boot and Microservices."
 >}}
 
 {{< blog  
@@ -197,7 +197,7 @@ This page acts as an index/aggregator for some of our featured content.
     date="12/21/2022"
     title="Two new Backend as a Service offerings live now!"
     link="https://redstack.wordpress.com/2022/12/21/two-new-backend-as-a-service-offerings-live-now/"
-    abstract="A brief announcement and introduction to our Developer Preview releases of Oracle Backend for Spring Boot and Parse Platform."
+    abstract="A brief announcement and introduction to our Developer Preview releases of Oracle Backend for Spring Boot and Microservices and Parse Platform."
 >}}
 
 {{< blog  
@@ -213,7 +213,7 @@ This page acts as an index/aggregator for some of our featured content.
     date="10/12/2022"
     title="Backend-as-a-Service (BaaS) and Oracle Database (Video) OCW Teaser"
     link="https://www.youtube.com/watch?v=9PIHjIjcBAY"
-    abstract="Erin Dawson, DevRel Communications Manager talks with Mark about the Oracle CloudWorld 2022 presentations and hands-on labs for Oracle Backend for Spring Boot and Parse Platform."
+    abstract="Erin Dawson, DevRel Communications Manager talks with Mark about the Oracle CloudWorld 2022 presentations and hands-on labs for Oracle Backend for Spring Boot and Microservices and Parse Platform."
 >}}
 
 {{< blog  
