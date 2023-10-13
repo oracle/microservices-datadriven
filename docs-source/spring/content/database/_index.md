@@ -13,37 +13,58 @@ resources:
   - name: oci-adb-download-wallet
     src: "oci-adb-download-wallet.png"
     title: "Download ADB client credential"
+  - name: oci-adb-select-db
+    src: "oci-adb-select-db.png"
+    title: "Select ADB Database"
 ---
 
 The Oracle Backend for Spring Boot and Microservices includes an Oracle database. An instance of Oracle Autonomous Database Serverless is created during installation.
 
-> **_NOTE:_** Oracle recommends that you install your own databases for your production applications. The database provisioned is used for Oracle Backend for Spring Boot metadata and can be used for developement.
+If you selected the **PRIVATE_ENDPOINT** option, you need to use a Bastion to access the database.
 
-If you chose the **Secure Access from Anywhere** option for your database during installation (or just accepted the default), then you can use the **Database Actions** web user interface to work with your database. If you chose the **Private** option, you need to use Bastion to access the database.
+> **_NOTE:_** Oracle recommends that you install your own databases for your production applications. The database provisioned is used for Oracle Backend for Spring Boot metadata and can be used for development.
 
-## Using Database Actions
+## Accessing the Database
 
-To work with data in the database, you can use the **Database Actions** web user interface, which can be accessed from the Oracle Cloud
-Infrastructure Console (OCI Console). The Oracle database is created in the same compartments as OCI Container Engine for Kubernetes (OKE).
-In the OCI Console, navigate to Oracle Autonomous Database (ADB) in the main menu and select the database with the application name that you
-configured during installation with the suffix `DB`. For example, `OBAASTSTPSDB`.
+> **_NOTE:_** Oracle recommends that you install SQLcl to access the database from a local machine. [SQLcl installation guide](https://www.oracle.com/database/sqldeveloper/technologies/sqlcl/). Other tools can be used but is not documented here.
+
+- [Using Database Actions from the OCI Console](#access-the-oracle-autonomous-database-using-database-actions)
+- [Local access using Database Wallet and SQLcl (**SECURE_ACCESS** installation)](#accessing-the-oracle-autonomous-database-from-a-local-machine-using-database-wallet-and-sqlcl)
+- [Local access using Wallet and SQLcl using a Bastion (**PRIVATE_ENDPOINT** installation)](#accessing-the-oracle-autonomous-database-from-a-local-machine-using-database-wallet-and-sqlcl-using-a-bastion)
+
+## Access the Oracle Autonomous Database using Database Actions
+
+You can use the **Database Actions** web user interface, which can be accessed from the Oracle Cloud Infrastructure Console (OCI Console) to access the database. The Oracle database is created in the compartment specified during installation of Oracle Backend for Spring Boot and Microservices.
+
+In the OCI Console, navigate to Oracle Autonomous Database (ADB) in the main menu.
 
 <!-- spellchecker-disable -->
-{{< img name="oci-adb-cloud-portal" size="medium" lazy=false >}}
+{{< img name="oci-adb-cloud-portal" size="large" lazy=false >}}
 <!-- spellchecker-enable -->
 
-Click on the link to access the **Database Details** page, and then click on **Database Actions**:
+Click on the link **Autonomous Transaction Processing**, and then select the database with the application name that you configured during installation with the suffix `DB`. In this example the Database name is `CALFDB` (make sure that you have selected the correct Compartment).
+
+<!-- spellchecker-disable -->
+{{< img name="oci-adb-select-db" size="large" lazy=false >}}
+<!-- spellchecker-enable -->
+
+Click on **Database Actions**. This opens the **Database Actions** page where you have access to many database functions, including the ability to work with data stored by Oracle Backend for Spring Boot and Microservices.
 
 <!-- spellchecker-disable -->
 {{< img name="oci-adb-cloud-portal-details" size="medium" lazy=false >}}
 <!-- spellchecker-enable -->
 
-This opens the **Database Actions** page where you have access to many database functions, including the ability to
-work with the schemas where your Oracle Backend for Spring Boot and Microservices data is stored.
+## Accessing the Oracle Autonomous Database From a Local Machine using Database Wallet and SQLcl
 
-## Accessing the Database From a Local Machine
+If **SECURE_ACCESS** was selected during installation you can access the database using the following steps.
 
-After creating the Oracle Backend for Spring Boot and Microservices environment, you have access to Oracle Autonomous Database. For example, you can access the `CONFIGSERVER.PROPERTIES` table where applications should add their properties. Also, each application can use the same database instance to host its data.
+### Download the Oracle Autonomous Database Wallet
+
+### Connect to the Oracle Autonomous Database
+
+## Accessing the Oracle Autonomous Database From a Local Machine using Database Wallet and SQLcl using a Bastion
+
+If **PRIVATE_ENDPOINT** was selected during installation you can access the database using the following steps.
 
 If you chose the **Secure Access from Anywhere** option for database access during installation (or accepted this default), then you must
 [download the wallet](https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/connect-download-wallet.html) to access the database from your local machine.
@@ -73,7 +94,7 @@ Process the following steps:
 
 1. Connect with the ADB instance using the Oracle SQL Developer Command Line (`SQLcl`) interface. With the tunnel established, you can connect to the ADB instance:
 
-    a. First, export the Oracle Net port by processing this commmand:
+    a. First, export the Oracle Net port by processing this command:
 
     ```shell
     export CUSTOM_JDBC="-Doracle.net.socksProxyHost=127.0.0.1 -Doracle.net.socksProxyPort=<PORT> -Doracle.net.socksRemoteDNS=true"
