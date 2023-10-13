@@ -16,6 +16,15 @@ resources:
   - name: oci-adb-select-db
     src: "oci-adb-select-db.png"
     title: "Select ADB Database"
+  - name: oci-adb-download-wallet
+    src: "oci-adb-download-wallet.png"
+    title: "Download the ADB Wallet"
+  - name: oci-adb-wallet-password
+    src: "oci-adb-wallet-password.png"
+    title: "Wallet Password"
+  - name: oci-adb-sqlcl-load-wallet
+    src: "oci-adb-sqlcl-load-wallet.png"
+    title: "Load the Wallet"
 ---
 
 The Oracle Backend for Spring Boot and Microservices includes an Oracle database. An instance of Oracle Autonomous Database Serverless is created during installation.
@@ -51,7 +60,7 @@ Click on the link **Autonomous Transaction Processing**, and then select the dat
 Click on **Database Actions**. This opens the **Database Actions** page where you have access to many database functions, including the ability to work with data stored by Oracle Backend for Spring Boot and Microservices.
 
 <!-- spellchecker-disable -->
-{{< img name="oci-adb-cloud-portal-details" size="medium" lazy=false >}}
+{{< img name="oci-adb-cloud-portal-details" size="large" lazy=false >}}
 <!-- spellchecker-enable -->
 
 ## Accessing the Oracle Autonomous Database From a Local Machine using Database Wallet and SQLcl
@@ -60,14 +69,50 @@ If **SECURE_ACCESS** was selected during installation you can access the databas
 
 ### Download the Oracle Autonomous Database Wallet
 
-### Connect to the Oracle Autonomous Database
+If you chose the **SECURE_ACCESS** option for database access during installation (or accepted this default), then you have to [download the wallet](https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/connect-download-wallet.html) to access the database from your local machine.
+
+The wallet can be downloaded from the OCI Console, by clicking **Database Connection**, followed by **Download Wallet**. Store the wallet in a safe place.
+
+<!-- spellchecker-disable -->
+{{< img name="oci-adb-download-wallet" lazy=false >}}
+<!-- spellchecker-enable -->
+
+You have to enter a password for the Wallet.
+
+<!-- spellchecker-disable -->
+{{< img name="oci-adb-wallet-password" lazy=false >}}
+<!-- spellchecker-enable -->
+
+### Connect to the Oracle Autonomous Database using SQLcl
+
+1. Get the ADMIN user password from k8s secret
+
+    ````shell
+    kubectl get secret .... 
+    ``
+1. Open a terminal WIndow and start SQLcl with the `/nolog` option.
+
+    ```shell
+    sql /nolog
+    ```
+
+1. Load the Wallet using the command `set cloudconfig...`. In this example the wallet name is Wallet_CALFDB.zip.
+
+    <!-- spellchecker-disable -->
+    {{< img name="oci-adb-sqlcl-load-wallet" lazy=false >}}
+    <!-- spellchecker-enable -->
+
+1. Connect as the ADMIN user to the database
+
+    <!-- spellchecker-disable -->
+    {{< img name="oci-adb-sqlcl-load-wallet" lazy=false >}}
+    <!-- spellchecker-enable -->
 
 ## Accessing the Oracle Autonomous Database From a Local Machine using Database Wallet and SQLcl using a Bastion
 
 If **PRIVATE_ENDPOINT** was selected during installation you can access the database using the following steps.
 
-If you chose the **Secure Access from Anywhere** option for database access during installation (or accepted this default), then you must
-[download the wallet](https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/connect-download-wallet.html) to access the database from your local machine.
+
 
 If you chose the **Private** option for database access during installation, the database is configured so that it is only accessible from
 the private Virtual Cloud Network (VCN), and access is only possible using the Bastion service provisioned during installation.
