@@ -47,7 +47,7 @@ Developers also have access to development or build time services and libraries 
 - Spring Eureka service discovery client.
 - Spring Cloud OpenFeign.
 - OpenTelemetry Collector (including automatic instrumentation).
-- Spring Starters for Oracle UCP, Oracle Wallet, Oracle AQ and TXEventQ.
+- Spring Starters for Oracle Universal Connection Pool (UCP), Oracle Wallet, Oracle Advanced Queuing (AQ), and Transactional Event Queues (TxEventQ).
 
 ## Learn more, try it out with CloudBank!
 
