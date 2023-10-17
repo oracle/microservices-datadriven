@@ -21,7 +21,7 @@
 		<narayana-lra.version>5.13.1.Final</narayana-lra.version>
 		<jakarta.enterprise.cdi-api.version>4.0.1</jakarta.enterprise.cdi-api.version>
 		<oracle-springboot-starter.version>3.1.0</oracle-springboot-starter.version>
-		<liquibase.version>4.23.1</liquibase.version>
+		<liquibase.version>4.24.0</liquibase.version>
 	</properties>
 
 	<dependencies>
@@ -50,6 +50,11 @@
     		<type>pom</type>
 		</dependency>
 		<dependency>
+			<groupId>org.liquibase</groupId>
+			<artifactId>liquibase-core</artifactId>
+			<version>${liquibase.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>com.oracle.microtx.lra</groupId>
 			<artifactId>microtx-lra-spring-boot-starter-jakarta</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
@@ -75,6 +80,16 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+                <groupId>org.graalvm.buildtools</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <configuration>
+                    <buildArgs combine.children="append">
+                        <buildArg>--bundle-create</buildArg>
+                        <buildArg>--dry-run</buildArg>
+                    </buildArgs>
+                </configuration>
+            </plugin>
 			<plugin>
 				<groupId>org.liquibase</groupId>
 				<artifactId>liquibase-maven-plugin</artifactId>
