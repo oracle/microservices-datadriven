@@ -25,10 +25,10 @@ spring:
   liquibase:
     change-log: classpath:db/changelog/controller.yaml
     url: ${spring.datasource.url}
-    user: ${spring.datasource.username}
-    password: ${spring.datasource.password}
+    user: ${liquibase.datasource.username}
+    password: ${liquibase.datasource.password}
     enabled: ${LIQUIBASE_ENABLED:true}
-    
+
   datasource:
     url: ${spring.datasource.url}
     username: ${spring.datasource.username}
