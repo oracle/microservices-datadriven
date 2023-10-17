@@ -21,7 +21,7 @@
 		<narayana-lra.version>5.13.1.Final</narayana-lra.version>
 		<jakarta.enterprise.cdi-api.version>4.0.1</jakarta.enterprise.cdi-api.version>
 		<oracle-springboot-starter.version>3.1.0</oracle-springboot-starter.version>
-		<liquibase.version>4.23.1</liquibase.version>
+		<liquibase.version>4.24.0</liquibase.version>
 	</properties>
 
 	<dependencies>
@@ -59,13 +59,13 @@
     		<version>${oracle-springboot-starter.version}</version>
     		<type>pom</type>
 		</dependency>
-		<!--
+
 		<dependency>
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
 			<version>${liquibase.version}</version>
 		</dependency>
-		-->
+
 		<dependency>
 			<groupId>org.eclipse.microprofile.lra</groupId>
 			<artifactId>microprofile-lra-api</artifactId>
