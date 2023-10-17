@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings("deprecation") // TODO: Needs to be removed
 @Configuration
 public class WebConfiguration implements WebMvcConfigurer {
 
