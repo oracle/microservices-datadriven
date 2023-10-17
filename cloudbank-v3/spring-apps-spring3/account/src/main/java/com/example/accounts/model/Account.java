@@ -15,6 +15,7 @@ import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
 import jakarta.persistence.Id;
 
+@SuppressWarnings("deprecation") // TODO: Needs to be removed
 @Data
 @NoArgsConstructor
 @Entity

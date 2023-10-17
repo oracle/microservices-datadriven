@@ -8,7 +8,6 @@ import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_ENDED_CO
 import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_PARENT_CONTEXT_HEADER;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -25,12 +24,6 @@ import com.oracle.microtx.springboot.lra.annotation.LRA;
 import com.oracle.microtx.springboot.lra.annotation.ParticipantStatus;
 import com.oracle.microtx.springboot.lra.annotation.Status;
 
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.HeaderParam;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController

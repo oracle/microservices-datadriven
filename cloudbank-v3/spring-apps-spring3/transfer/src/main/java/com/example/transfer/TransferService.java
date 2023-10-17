@@ -25,14 +25,6 @@ import com.oracle.microtx.springboot.lra.annotation.Compensate;
 import com.oracle.microtx.springboot.lra.annotation.Complete;
 import com.oracle.microtx.springboot.lra.annotation.LRA;
 
-import jakarta.ws.rs.HeaderParam;
-import jakarta.ws.rs.NotFoundException;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.WebTarget;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
