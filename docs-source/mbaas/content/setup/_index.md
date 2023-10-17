@@ -87,11 +87,11 @@ parse_master_key = <sensitive>
 
 ## TLS
 
-The Oracle Backend for Parse Platform is deployed with a sample "Self-Signed" certificate for TLS.  This results in an "Accept Risk" message when accessing the Parse Dashboard and the sample TLS certificate should not be used for Production deployments.
+The Oracle Backend for Parse Platform is deployed with a sample self-signed certificate for TLS.  This results in an "Accept Risk" message when accessing the Parse Dashboard and the sample TLS certificate should not be used for production deployments.
 
 ### Updating the TLS Certificate
 
-1. Ensure your DNS entry points to the IP Address specified in the `parse_dahsboard_uri` output.
+1. Ensure your DNS entry points to the IP address specified in the `parse_dashboard_uri` output.
 2. Obtain a new TLS certificate. In a production environment, the most common scenario is to use a public certificate that has been signed by a certificate authority.
 3. Create a new Kubernetes secret in the `ingress-nginx` namespace.  For example:
 
