@@ -6,24 +6,24 @@ Please visit the Live Lab for more information.
 
 ## Build cloudbank
 
-   `mvn clean package -Dmaven.test.skip=true`
+   `mvn clean package`
 
    ```text
    [INFO] ------------------------------------------------------------------------
    [INFO] Reactor Summary for cloudbank 0.0.1-SNAPSHOT:
    [INFO]
-   [INFO] cloudbank .......................................... SUCCESS [  0.456 s]
-   [INFO] account ............................................ SUCCESS [  0.507 s]
-   [INFO] customer ........................................... SUCCESS [  0.079 s]
-   [INFO] creditscore ........................................ SUCCESS [  0.049 s]
-   [INFO] transfer ........................................... SUCCESS [  0.053 s]
-   [INFO] testrunner ......................................... SUCCESS [  0.050 s]
-   [INFO] checks ............................................. SUCCESS [  0.245 s]
+   [INFO] cloudbank .......................................... SUCCESS [  0.413 s]
+   [INFO] account ............................................ SUCCESS [  2.173 s]
+   [INFO] customer ........................................... SUCCESS [  1.005 s]
+   [INFO] creditscore ........................................ SUCCESS [  0.833 s]
+   [INFO] transfer ........................................... SUCCESS [  0.608 s]
+   [INFO] testrunner ......................................... SUCCESS [  0.936 s]
+   [INFO] checks ............................................. SUCCESS [  0.956 s]
    [INFO] ------------------------------------------------------------------------
    [INFO] BUILD SUCCESS
    [INFO] ------------------------------------------------------------------------
-   [INFO] Total time:  1.633 s
-   [INFO] Finished at: 2023-10-09T09:34:43-05:00
+   [INFO] Total time:  7.185 s
+   [INFO] Finished at: 2023-10-17T12:21:17-05:00
    [INFO] ------------------------------------------------------------------------
    ```
 
@@ -31,21 +31,41 @@ Please visit the Live Lab for more information.
 
 1. Start the tunnel
 
-   `kpf -n obaas-admin svc/obaas-admin 8080`
+   ```shell
+   kubectl port-forward -n obaas-admin svc/obaas-admin 8080
+   ```
 
-1. Login
+1. Get the password for the `obaas-admin` user
 
    ```shell
+   kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.admin}' | base64 -d
+   ```
+
+1. Start `oractl` and Login
+
+   ```text
+   oractl
+    _   _           __    _    ___
+   / \ |_)  _.  _. (_    /  |   |
+   \_/ |_) (_| (_| __)   \_ |_ _|_
+   =============================================================================================================================
+   Application Name: Oracle Backend Platform :: Command Line Interface
+   Application Version: (1.0.0)
+   :: Spring Boot (v3.1.3) ::
+
+
    oractl:>connect
-   password (defaults to oractl):
-   using default value...
-   connect successful server version:0.3.0
+   username: obaas-admin
+   password: **************
+   obaas-cli: Successful connected.
+   oractl:>
    ```
 
 1. Create namespace
 
     ```shell
     oractl:>create --app-name cbv3
+    application/namespace created successfully and image pull secret (registry-auth) created successfully and database TNSAdmin/wallet secret created successfully
     ```
 
 1. Deploy account service
@@ -54,17 +74,26 @@ Please visit the Live Lab for more information.
 
       ```shell
       oractl:>bind --app-name cbv3 --service-name account
-      database password/servicePassword (defaults to Welcome12345): *************
-      Kubernetes secret for Datasource was created successfully.
+      Database/Service Password: *************
+      Schema {account} was successfully created and Kubernetes Secret {cbv3/account} was successfully created.
       ```
 
    1. deploy
 
       ```shell
-      oractl:>deploy --app-name cbv3 --service-name account --artifact-path account/target/account-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --redeploy true
-      uploading: account/target/account-0.0.1-SNAPSHOT.jarbuilding and pushing image...
-      creating deployment and service... successfully deployed
+      deploy --app-name cbv3 --service-name account --artifact-path account/target/account-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db obaasdevdb
+      uploading: account/target/account-0.0.1-SNAPSHOT.jar
+      building and pushing image...
+
+      creating deployment and service...
+      obaas-cli [deploy]: Application was successfully deployed.
       ```
+
+   1. Verify deployment success
+
+   ```shell
+   kubectl get log -n cbv3 svc/account
+   ```
 
 1. Deploy customer service
 
