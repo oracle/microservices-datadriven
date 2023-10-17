@@ -47,4 +47,3 @@ The API Specification can be found here:
 
 * [API Specification](https://conductor.netflix.com/apispec.html)
 
-Next, go to the [Spring Boot Admin](../spring-admin/) page to learn more.

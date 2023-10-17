@@ -1,10 +1,8 @@
 ---
-title: "On-Premises"
+title: "On-Premises Installation"
 ---
 
-# On-Premises Installation
-
-The Oracle Backend for Spring Boot is available to install On-Premises. The On-Premises installation includes both a _Desktop_ installation
+The Oracle Backend for Spring Boot and Microservices is available to install On-Premises. The On-Premises installation includes both a _Desktop_ installation
 and an _Estate_ installation.
 
 The _Desktop_ installation can be used to explore in a non-production environment, while the _Estate_ installation is targeted for the
@@ -12,7 +10,7 @@ production infrastructure.
 
 ## Prerequisites
 
-You must meet the following prerequisites to use the Oracle Backend for Spring Boot On-Premises. You need:
+You must meet the following prerequisites to use the Oracle Backend for Spring Boot and Microservices On-Premises. You need:
 
 * Access to Oracle Database Enterprise Edition 21.3.0.0
 * Access to a Container Repository
@@ -32,7 +30,7 @@ desktop system or software requirements. For example:
 
 ## Download
 
-Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip).
+Download [Oracle Backend for Spring Boot and Microservices](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip).
 
 ## Setup
 
@@ -50,38 +48,61 @@ appropriate documentation for examples of installing and defining the _Desktop_ 
 
 The _Desktop_ playbook is run as part of the Configuration Management Playbook.
 
-## Download the Database or Oracle REST Data Services (ORDS) Images (_Desktop_  Installation)
+## Download the Database or Oracle REST Data Services (ORDS) Images (Desktop Installation)
 
 The _Desktop_ installation provisions an Oracle database to the Kubernetes cluster. The images must be downloaded
 from [Oracle's Container Registry](https://container-registry.oracle.com/) before continuing.
 
 After installing Podman, process these steps:
 
-1. Log in to Oracle Cloud Infrastructure Registry (Container Registry). For example: 
+1. Log in to Oracle Cloud Infrastructure Registry (Container Registry). For example:
 
    `podman login container-registry.oracle.com`
-   
-2. Pull the database image. For example: 
 
-   `podman pull container-registry.oracle.com/database/enterprise:21.3.0.0`
-   
-3. Pull the ORDS image. For example: 
+2. Pull the database image. For example:
+
+   `podman pull container-registry.oracle.com/database/enterprise:19.3.0.0`
+
+3. Pull the ORDS image. For example:
 
    `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
 
-### Defining the Database (_Estate_  Installation)
+### Defining the Parse Application (Estate Installation)
 
-The database is defined in `ansible/roles/database/vars/main.yaml`. For example:  
+The application is defined in `ansible/vars/ebaas.yaml`. For example:
 
 ```yaml
 ---
-oracle_dbs: ['BAASPDB']
-default_db: BAASPDB
-BAASPDB:
-  username: 'PDBADMIN'
-  password: 'Correct-horse-Battery-staple-35'
-  service: '(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=BAASPDB)))'
-  ocid: ''
+---
+ebaas_edition: "COMMUNITY"
+vault: ""
+vault_key: ""
+vault_crypto_endpoint: ""
+vault_management_endpoint: ""
+vault_storage_account_name: "N/A"
+vault_storage_account_key: "N/A"
+vault_storage: ""
+vault_storage_lock: ""
+apisix_admin_password: "Correct-horse-Battery-staple-35"
+grafana_admin_password: "Correct-horse-Battery-staple-35"
+oractl_admin_password: "Correct-horse-Battery-staple-35"
+oractl_user_password: "Correct-horse-Battery-staple-35"
+...
+```
+
+### Defining the Database (Estate Installation)
+
+The database is defined in `ansible/roles/database/vars/main.yaml`. For example:
+
+```yaml
+---
+database_oracle_dbs: ["BAASPDB"]
+database_default_db: BAASPDB
+BAASPDB: # noqa: var-naming[pattern]
+  username: "PDBADMIN"
+  password: "Correct-horse-Battery-staple-35"
+  service: "(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=BAASPDB)))"
+  ocid: ""
 ...
 ```
 
@@ -89,31 +110,30 @@ The `oracle_dbs` and `default_db` key values should be the name of your Pluggabl
 name and Key/Values defining how to access the PDB. If using Mutual Transport Layer Security (mTLS) authentication, specify the
 full path of the wallet file.
 
-### Defining the Container Repository (_Estate_  Installation)
+### Defining the Container Repository (Estate Installation)
 
 The Container Repository is defined in `ansible/roles/registry/vars/main.yaml`. For example:
 
 ```yaml
 ---
-registry_username: 'oracle'
-registry_password: 'Correct-horse-Battery-staple-35'
-push_registry_url: 'docker.io/myorg'
-push_registry_auth:
+registry_username: "oracle"
+registry_password: "Correct-horse-Battery-staple-35"
+registry_push_url: "docker.io/myorg"
+registry_push_auth:
   auths:
     docker.io/myorg:
-      auth: 'b3JhY2xlOjdaUVgxLXhhbFR0NTJsS0VITlA0'
-pull_registry_url: 'docker.io/myorg'
-pull_registry_auth:
+      auth: "b3JhY2xlOjdaUVgxLXhhbFR0NTJsS0VITlA0"
+registry_pull_url: "docker.io/myorg"
+registry_pull_auth:
   auths:
     docker.io/myorg:
-      auth: 'b3JhY2xlOjdaUVgxLXhhbFR0NTJsS0VITlA0'
+      auth: "b3JhY2xlOjdaUVgxLXhhbFR0NTJsS0VITlA0"
 ...
 ```
-Specify the URL or authentication credentials for your Container Repository in `pull_registry_url`, `push_registry_url`, `registry_username`
-and `registry_password`.  
 
-For the `registry_auth` section, manually log in to your repository and copy the values found in the previously created file, which is often
-found in `$HOME/.config/containers/auth.json`
+Specify the URL or authentication credentials for your Container Repository in `registry_pull_url`, `registry_push_url`, `registry_username`, and `registry_password`.
+
+For the `registry_pull_auth` and `registry_push_auth` sections, manually log into your repository and copy the values found in the created file, located in `$HOME/.config/containers/auth.json`
 
 There may be duplication between the push and pull URL's. The pull URL is used inside the Pods while the push URL is used from the
 deployment machine. If you have a private registry inside the Kubernetes cluster, these URL's could be different. This is the case for
@@ -135,9 +155,9 @@ source ./activate.env
 
 ### Desktop Playbook
 
-If this is an _Estate_ installation, the infrastructure should be manually defined as previously stated.  
+If this is an _Estate_ installation, then the infrastructure should be manually defined as previously stated.
 
-If this is a _Desktop_ installation, run the Helper Playbook to define the infrastructure. For example:
+If this is a _Desktop_ installation, then run the Helper Playbook to define the infrastructure. For example:
 
 ```bash
 ansible-playbook ansible/desktop-apply.yaml
