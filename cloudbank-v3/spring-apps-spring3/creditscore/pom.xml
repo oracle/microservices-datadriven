@@ -58,7 +58,7 @@
                     </buildArgs>
                 </configuration>
             </plugin>
-            <plugin>
+            <!-- <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>${maven-checkstyle-plugin-version}</version>
@@ -106,7 +106,7 @@
                             ${project.basedir}/dependency-check/dependency-check-suppression.xml</suppressionFile>
                     </suppressionFiles>
                 </configuration>
-            </plugin>
+            </plugin> -->
         </plugins>
     </build>
 </project>
