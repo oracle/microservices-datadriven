@@ -14,25 +14,38 @@ spring:
       - "/rest/*"
       - "/actuator/*"
       - "/error/*"
-      
+  microtx:
+    lra:
+      coordinator-url: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator
+      propagation-active: true
+      headers-propagation-prefix: "{x-b3-, oracle-tmm-, authorization, refresh-}"
+
 account:
   deposit:
-      url: http://account.application:8080/deposit/deposit
+    url: http://account.application:8080/deposit
   withdraw:
-      url: http://account.application:8080/withdraw/withdraw
+    url: http://account.application:8080/withdraw
 transfer:
   cancel:
-      url: http://transfer.application:8080/cancel
-      process:
-         url: http://transfer.application:8080/processcancel
+    url: http://transfer.application:8080/cancel
+    process:
+      url: http://transfer.application:8080/processcancel
   confirm:
-      url: http://transfer.application:8080/confirm
-      process:
-         url: http://transfer.application:8080/processconfirm
-lra:
-  coordinator:
-    url: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator
-   
+    url: http://transfer.application:8080/confirm
+    process:
+      url: http://transfer.application:8080/processconfirm
+
+eureka:
+  instance:
+    hostname: ${spring.application.name}
+    preferIpAddress: true
+  client:
+    service-url:
+      defaultZone: ${eureka.service-url}
+    fetch-registry: true
+    register-with-eureka: true
+    enabled: true
+
 management:
   endpoint:
     prometheus:
@@ -53,3 +66,4 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
+      
