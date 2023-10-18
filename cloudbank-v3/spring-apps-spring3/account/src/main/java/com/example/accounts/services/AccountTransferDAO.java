@@ -20,6 +20,11 @@ public class AccountTransferDAO {
     final AccountRepository accountRepository;
     final JournalRepository journalRepository;
 
+    /**
+     * Initialize account and journal repository.
+     * @param accountRepository Account Repository
+     * @param journalRepository Journal Repository
+     */
     public AccountTransferDAO(AccountRepository accountRepository, JournalRepository journalRepository) {
         this.accountRepository = accountRepository;
         this.journalRepository = journalRepository;

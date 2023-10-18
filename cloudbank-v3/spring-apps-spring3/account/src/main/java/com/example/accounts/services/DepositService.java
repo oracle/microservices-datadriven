@@ -30,7 +30,7 @@ import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_PARENT_C
 @Slf4j
 public class DepositService {
 
-    private final static String DEPOSIT = "DEPOSIT";
+    private static String DEPOSIT = "DEPOSIT";
 
     /**
      * Write journal entry re deposit amount.
