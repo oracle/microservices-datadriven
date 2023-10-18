@@ -1,3 +1,6 @@
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl/ 
+
 import React, { useState, useRef } from "react";
 import "../Css/styles.css";
 import { Link, useLocation } from "react-router-dom";

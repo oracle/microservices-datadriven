@@ -1,3 +1,6 @@
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl/ 
+
 package com.example.dra;
 
 import java.sql.*;
@@ -6,7 +9,7 @@ public class SQLTuneExample {
     public static void main(String[] args) {
         String url = "jdbc:oracle:thin:@medicalrecordsdb_tp?tns_admin=C:/Oracle/atp";
         String username = "ADMIN";
-        String password = "Welcome12345";
+        String password = "xxx";
 
         Connection connection = null;
         CallableStatement callableStatement = null;

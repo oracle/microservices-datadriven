@@ -1,3 +1,6 @@
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl/ 
+
 import React, { useState, useEffect, useRef } from "react";
 import * as d3 from "d3";
 import "../Css/styles.css";

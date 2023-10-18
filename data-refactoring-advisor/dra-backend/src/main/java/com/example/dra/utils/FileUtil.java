@@ -1,3 +1,6 @@
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl/ 
+
 package com.example.dra.utils;
 
 import com.example.dra.bean.DatabaseDetails;
@@ -64,7 +67,7 @@ public class FileUtil {
         databaseDetails.setPort(1511);
         databaseDetails.setHostname("adb.us-ashburn-1.oraclecloud.com");
         databaseDetails.setUsername("ADMIN");
-        databaseDetails.setServiceName("bsenjiat5lmurtq_medicalrecordsdb_high.adb.oraclecloud.com");
+        databaseDetails.setServiceName("xxx_medicalrecordsdb_high.adb.oraclecloud.com");
         return databaseDetails;
     }
 }

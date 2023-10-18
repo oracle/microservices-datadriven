@@ -1,3 +1,6 @@
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl/ 
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -41,7 +44,6 @@ function CreateSTS() {
     };
 
     /*let response = await fetch(
-      //"http://129.158.219.41:8080/api/collectsqltuningset",
       "http://localhost:8080/api/collectsqltuningset",
       requestOptions
     );
@@ -55,9 +57,7 @@ function CreateSTS() {
     setLoading(true);
     //alert("Started Collecting STS for : " + sqlTuningSet);
     
-    await fetch(
-      //"http://129.158.219.41:8080/api/collectsqltuningset",
-      
+    await fetch(      
       "http://localhost:8080/api/collectsqltuningset",
       requestOptions
     ).then((response) => {

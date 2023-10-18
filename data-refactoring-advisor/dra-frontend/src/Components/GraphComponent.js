@@ -1,3 +1,6 @@
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl/ 
+
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Pagination from "react-responsive-pagination";
@@ -14,7 +17,6 @@ function GraphComponent() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          //"http://129.158.219.41:8080/api/getsqltuningsetlist"
           "http://localhost:8080/api/getsqltuningsetlist"
         );
         const result = await response.text();
@@ -40,7 +42,6 @@ function GraphComponent() {
       };
 
       let viewGraphResponse = await fetch(
-        //`http://129.158.219.41:8080/api/viewgraph?sqlSetName=${stsName}`,
         `http://localhost:8080/api/viewgraph?sqlSetName=${stsName}`,
         requestOptions
       );

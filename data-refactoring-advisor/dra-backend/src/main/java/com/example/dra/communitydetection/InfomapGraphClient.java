@@ -1,5 +1,7 @@
-package com.example.dra.communitydetection;
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl/ 
 
+package com.example.dra.communitydetection;
 
 import com.example.dra.ViewGraphResponse;
 import com.example.dra.entity.Nodes;
@@ -17,22 +19,19 @@ import java.util.concurrent.ExecutionException;
 
 public class InfomapGraphClient {
 
-
 	public void createGraph1(PgxSession session) {
-
-
 	}
 
 	public ViewGraphResponse createGraph(String stsName) throws ExecutionException, InterruptedException {
 		System.out.println("In createGraph Method");
 
 		AdbGraphClientConfiguration.AdbGraphClientConfigurationBuilder config = AdbGraphClientConfiguration.builder();
-		config.tenant("ocid1.tenancy.oc1..aaaaaaaabls4dzottlktt774tu3knax6crpozycjhrqpm73thfryxwlkmkba");
+		config.tenant("ocid1.tenancy.oc1..xxx");
 		config.database("medicalrecordsdb");
-		config.cloudDatabaseName("ocid1.autonomousdatabase.oc1.iad.anuwcljrq33dybyakudj7we7dhwckr7wioxeponx2ptjt4g7lyx4mdvvmqyq");
+		config.cloudDatabaseName("ocid1.autonomousdatabase.oc1.iad.xxx");
 		config.username("ADMIN");
-		config.password("Welcome123456");
-		config.endpoint("https://bsenjiat5lmurtq-medicalrecordsdb.adb.us-ashburn-1.oraclecloudapps.com/");
+		config.password("xxx");
+		config.endpoint("https://xxx-medicalrecordsdb.adb.us-ashburn-1.oraclecloudapps.com/");
 
 		var client = new AdbGraphClient(config.build());
 		System.out.println("Client Created using config");
