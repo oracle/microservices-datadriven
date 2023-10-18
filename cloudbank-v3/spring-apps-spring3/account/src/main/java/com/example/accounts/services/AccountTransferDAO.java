@@ -25,7 +25,7 @@ public class AccountTransferDAO {
         this.journalRepository = journalRepository;
         singleton = this;
         System.out.println("AccountTransferDAO accountsRepository = " + accountRepository 
-            + ", journalRepository = "+ journalRepository);
+            + ", journalRepository = " + journalRepository);
     }
 
     public static AccountTransferDAO instance() {
@@ -33,7 +33,7 @@ public class AccountTransferDAO {
     }
 
     /**
-     * Get status od LRA participant
+     * Get status od LRA participant.
      * @param status Status code
      * @return Returns status code
      */
@@ -58,6 +58,11 @@ public class AccountTransferDAO {
         }
     }
 
+    /**
+     * Get LRA Status from a string.
+     * @param statusString Status
+     * @return Participant Status
+     */
     public static ParticipantStatus getStatusFromString(String statusString) {
         switch (statusString) {
             case "Compensated":
@@ -84,6 +89,13 @@ public class AccountTransferDAO {
         accountRepository.save(account);
     }
 
+    /**
+     * TO-DO.
+     * @param lraId LRA Id
+     * @param journalType Journal Type
+     * @return Participant Status
+     * @throws Exception Exception
+     */
     public ResponseEntity<ParticipantStatus> status(String lraId, String journalType) throws Exception {
         Journal journal = getJournalForLRAid(lraId, journalType);
         if (AccountTransferDAO.getStatusFromString(journal.getLraState()).equals(ParticipantStatus.Compensated)) {
@@ -93,6 +105,13 @@ public class AccountTransferDAO {
         }
     }
 
+    /**
+     * Set status for a Journal Entry.
+     * @param lraId LRA Id
+     * @param status Status
+     * @param journalType Journal Type
+     * @throws Exception Exception
+     */
     public void afterLRA(String lraId, String status, String journalType) throws Exception {
         Journal journal = getJournalForLRAid(lraId, journalType);
         journal.setLraState(status);

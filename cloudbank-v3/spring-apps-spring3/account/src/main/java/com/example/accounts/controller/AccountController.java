@@ -33,11 +33,20 @@ public class AccountController {
         this.journalRepository = journalRepository;
     }
 
+    /**
+     * Get all Accounts.
+     * @return List off accounts
+     */
     @GetMapping("/accounts")
     public List<Account> getAllAccounts() {
         return accountRepository.findAll();
     }
 
+    /**
+     * Create an account.
+     * @param account Account object
+     * @return Http Status Code
+     */
     @PostMapping("/account")
     public ResponseEntity<Account> createAccount(@RequestBody Account account) {
         try {
@@ -48,6 +57,11 @@ public class AccountController {
         }
     }
 
+    /**
+     * Find an account by Account Id.
+     * @param accountId Account Id
+     * @return An account
+     */
     @GetMapping("/account/{accountId}")
     public ResponseEntity<Account> getAccountById(@PathVariable("accountId") long accountId) {
         Optional<Account> accountData = accountRepository.findById(accountId);
@@ -59,6 +73,11 @@ public class AccountController {
         }
     }
 
+    /**
+     * Find an account by customer Id.
+     * @param customerId Customer Id
+     * @return A list opf Account(s)
+     */
     @GetMapping("/account/getAccounts/{customerId}")
     public ResponseEntity<List<Account>> getAccountsByCustomerId(@PathVariable("customerId") String customerId) {
         try {
@@ -73,6 +92,11 @@ public class AccountController {
         }
     }
 
+    /**
+     * Delete an Account with specific Id.
+     * @param accountId Account ID
+     * @return HTTP Status Code
+     */
     @DeleteMapping("/account/{accountId}")
     public ResponseEntity<HttpStatus> deleteAccount(@PathVariable("accountId") long accountId) {
         try {
@@ -83,6 +107,11 @@ public class AccountController {
         }
     }
 
+    /**
+     * Get transactions (Journal) for an Account Id.
+     * @param accountId Account Id
+     * @return List of Journal object(s)
+     */
     @GetMapping("/account/{accountId}/transactions")
     public ResponseEntity<List<Journal>> getTransactions(@PathVariable("accountId") long accountId) {
         try {
@@ -97,6 +126,11 @@ public class AccountController {
         }
     }
 
+    /**
+     * Create a Journal entry.
+     * @param journalEntry Journal object
+     * @return HTTP Status Code
+     */
     @PostMapping("/account/journal")
     public ResponseEntity<Journal> postSimpleJournalEntry(@RequestBody Journal journalEntry) {
         try {
@@ -107,11 +141,21 @@ public class AccountController {
         }
     }
 
+    /**
+     * Find Journal entries by Account Id.
+     * @param accountId Account Id
+     * @return Journal object(s)
+     */
     @GetMapping("/account/{accountId}/journal")
     public List<Journal> getJournalEntriesForAccount(@PathVariable("accountId") long accountId) {
         return journalRepository.findJournalByAccountId(accountId);
     }
 
+    /**
+     * Clears the Journal Entry.
+     * @param journalId Journal Id
+     * @return HTTP Status Code
+     */
     @PostMapping("/account/journal/{journalId}/clear")
     public ResponseEntity<Journal> clearJournalEntry(@PathVariable long journalId) {
         try {
