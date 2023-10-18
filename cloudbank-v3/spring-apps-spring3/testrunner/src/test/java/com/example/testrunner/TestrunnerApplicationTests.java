@@ -1,3 +1,6 @@
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
 package com.example.testrunner;
 
 import org.junit.jupiter.api.Disabled;
@@ -8,8 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class TestrunnerApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
 
+    }
 }

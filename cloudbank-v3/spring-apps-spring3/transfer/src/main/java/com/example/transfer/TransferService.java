@@ -1,11 +1,14 @@
-// Copyright (c) 2023, Oracle and/or its affiliates. 
-// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/ 
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 package com.example.transfer;
 
-import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_CONTEXT_HEADER;
-
 import java.net.URI;
+
+import com.oracle.microtx.springboot.lra.annotation.Compensate;
+import com.oracle.microtx.springboot.lra.annotation.Complete;
+import com.oracle.microtx.springboot.lra.annotation.LRA;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -21,19 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.oracle.microtx.springboot.lra.annotation.Compensate;
-import com.oracle.microtx.springboot.lra.annotation.Complete;
-import com.oracle.microtx.springboot.lra.annotation.LRA;
-
-import jakarta.ws.rs.HeaderParam;
-import jakarta.ws.rs.NotFoundException;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
-import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.WebTarget;
-import lombok.extern.slf4j.Slf4j;
+import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_CONTEXT_HEADER;
 
 @RestController
 @RequestMapping("/")
@@ -49,12 +40,24 @@ public class TransferService {
     @Value("${transfer.confirm.url}") URI transferConfirmUri;
     @Value("${transfer.confirm.process.url}") URI transferProcessConfirmUri;
 
+    /**
+     * Ping method.
+     * @return Http OK.
+     */
     @GetMapping("/hello")
-    public ResponseEntity<String> ping () {
+    public ResponseEntity<String> ping() {
         log.info("Say Hello!");
         return ResponseEntity.ok("");
     }
 
+    /**
+     * Transfer amount between two accounts.
+     * @param fromAccount From an account
+     * @param toAccount To an account
+     * @param amount Amount to transfer
+     * @param lraId LRA Id
+     * @return TO-DO
+     */
     @PostMapping("/transfer")
     @LRA(value = LRA.Type.REQUIRES_NEW, end = false)
     public ResponseEntity<String> transfer(@RequestParam("fromAccount") long fromAccount,
@@ -76,10 +79,12 @@ public class TransferService {
             // if it worked, perform the deposit
             returnString += " " + deposit(lraId, toAccount, amount);
             log.info(returnString);
-            if (returnString.contains("failed"))
+            if (returnString.contains("failed")) {
                 isCompensate = true; // deposit failed
-        } else
+            }
+        } else {
             isCompensate = true; // withdraw failed
+        }
         log.info("LRA/transfer action will be " + (isCompensate ? "cancel" : "confirm"));
 
         // call complete or cancel based on outcome of previous actions
@@ -159,6 +164,11 @@ public class TransferService {
         return ResponseEntity.ok("");
     }
 
+    /**
+     * Confirm a transfer.
+     * @param transferId Transfer Id
+     * @return TO-DO
+     */
     @PostMapping("/confirm")
     @Complete
     @LRA(value = LRA.Type.NOT_SUPPORTED)
@@ -179,6 +189,11 @@ public class TransferService {
         return ResponseEntity.ok(response.getBody());
     }
 
+    /**
+     * Cancel a transfer.
+     * @param transferId Transfer Id
+     * @return TO-DO
+     */
     @PostMapping("/cancel")
     @Compensate
     @LRA(value = LRA.Type.NOT_SUPPORTED, cancelOn = HttpStatus.OK)

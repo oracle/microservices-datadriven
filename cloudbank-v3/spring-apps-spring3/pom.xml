@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.3</version>
+        <version>3.1.3</version> <!-- Do not upgrade, breaks native compile -->
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -35,6 +35,12 @@
         <java.version>17</java.version>
         <spring.boot.dependencies.version>3.1.3</spring.boot.dependencies.version>
         <spring-cloud.version>2022.0.4</spring-cloud.version>
+
+        <!-- Code quality tools -->
+        <maven-checkstyle-plugin-version>3.3.0</maven-checkstyle-plugin-version>
+        <checkstyle-version>10.12.2</checkstyle-version>
+        <checkstyle.config.location>${project.basedir}/checkstyle/checkstyle.xml</checkstyle.config.location>
+        <dependency-check-version>8.4.0</dependency-check-version>
     </properties>
 
     <dependencies>
@@ -110,6 +116,55 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven-checkstyle-plugin-version}</version>
+                <executions>
+                    <execution>
+                        <id>checkstyle</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <consoleOutput>true</consoleOutput>
+                            <configLocation>${checkstyle.config.location}</configLocation>
+                            <suppressionsLocation>${project.basedir}/checkstyle/suppressions.xml</suppressionsLocation>
+                            <failOnViolation>true</failOnViolation>
+                            <violationSeverity>warning</violationSeverity>
+                            <includeTestResources>true</includeTestResources>
+                            <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>${checkstyle-version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>${dependency-check-version}</version>
+                <configuration>
+                    <skip>${skip.dependency-check}</skip>
+                    <skipTestScope>true</skipTestScope>
+                    <failBuildOnCVSS>0</failBuildOnCVSS>
+                    <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
+                    <formats>
+                        <format>HTML</format>
+                        <format>CSV</format>
+                    </formats>
+                    <suppressionFiles>
+                        <suppressionFile>
+                            ${project.basedir}/dependency-check/dependency-check-suppression.xml</suppressionFile>
+                    </suppressionFiles>
                 </configuration>
             </plugin>
         </plugins>

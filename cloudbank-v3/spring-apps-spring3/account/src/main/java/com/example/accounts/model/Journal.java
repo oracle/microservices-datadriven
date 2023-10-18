@@ -1,5 +1,5 @@
-// Copyright (c) 2023, Oracle and/or its affiliates. 
-// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/ 
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 package com.example.accounts.model;
 
@@ -9,7 +9,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -40,6 +39,14 @@ public class Journal {
     @Column(name = "JOURNAL_AMOUNT")
     private long journalAmount;
 
+    /**
+     * Create Journal Object.
+     * @param journalType Journal Type
+     * @param accountId Account Id
+     * @param journalAmount Amount
+     * @param lraId LRA Id
+     * @param lraState State
+     */
     public Journal(String journalType, long accountId, long journalAmount, String lraId, String lraState) {
         this.journalType = journalType;
         this.accountId = accountId;
@@ -48,6 +55,12 @@ public class Journal {
         this.journalAmount = journalAmount;
     }
 
+    /**
+     * Create Journal object.
+     * @param journalType Journal Type
+     * @param accountId Account Id
+     * @param journalAmount Amount
+     */
     public Journal(String journalType, long accountId, long journalAmount) {
         this.journalType = journalType;
         this.accountId = accountId;

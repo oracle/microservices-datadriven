@@ -1,13 +1,12 @@
-// Copyright (c) 2023, Oracle and/or its affiliates. 
-// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/ 
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 package com.example.checks.controller;
 
-import org.springframework.jms.annotation.JmsListener;
-import org.springframework.stereotype.Component;
-
 import com.example.checks.service.AccountService;
 import com.example.testrunner.model.Clearance;
+import org.springframework.jms.annotation.JmsListener;
+import org.springframework.stereotype.Component;
 
 @Component
 public class ClearanceReceiver {
