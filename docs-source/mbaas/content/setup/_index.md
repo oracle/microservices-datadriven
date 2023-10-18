@@ -72,7 +72,7 @@ To start the installation, take the following steps:
 You can monitor the installation in the log. Installation takes approximately 20 minutes to complete.  Most of this time is spent provisioning
 the Kubernetes cluster, its nodes, and the database.
 
-When the installation is finished, some important information is included at the end of the log.  You need this information to access
+When the installation is finished, some important information is included at the end of the log. You need this information to access
 the newly created environment. For example:
 
 ```text
@@ -87,11 +87,11 @@ parse_master_key = <sensitive>
 
 ## TLS
 
-The Oracle Backend for Parse Platform is deployed with a sample self-signed certificate for TLS.  This results in an "Accept Risk" message when accessing the Parse Dashboard and the sample TLS certificate should not be used for production deployments.
+The Oracle Backend for Parse Platform is deployed with a sample self-signed certificate for Transport Layer Security (TLS). This results in an "Accept Risk" message when accessing the Parse Dashboard and the sample TLS certificate should not be used for production deployments.
 
 ### Updating the TLS Certificate
 
-1. Ensure your DNS entry points to the IP address specified in the `parse_dashboard_uri` output.
+1. Ensure your Domain Name System (DNS) entry points to the IP address specified in the `parse_dashboard_uri` output.
 2. Obtain a new TLS certificate. In a production environment, the most common scenario is to use a public certificate that has been signed by a certificate authority.
 3. Create a new Kubernetes secret in the `ingress-nginx` namespace.  For example:
 
