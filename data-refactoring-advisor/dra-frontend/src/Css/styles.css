@@ -1,0 +1,180 @@
+/* Copyright (c) 2023, Oracle and/or its affiliates. */
+/* Licensed under the Universal Permissive License v1.0 as shown at https://oss.oracle.com/licenses/upl/ */
+
+.grid {
+  display: grid;
+  grid-template-rows: 150px;
+}
+
+.grey-container {
+  height: 100vh;
+  background-image: url("../images/GreyPendulam.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  /* background: linear-gradient(to right, #0077be, #89ded4); */
+}
+
+.nav-menu {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #4db3cded;
+  /* background-color: #d92505e0; */
+
+  padding: 0 20px;
+  height: 85px;
+}
+
+.nav-item {
+  margin-left: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+}
+
+.nav-item:hover {
+  border-bottom: 2px solid white;
+}
+
+.active {
+  border-bottom: 3px solid white;
+}
+.parent-container {
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  height: auto;
+}
+
+.card-container {
+  position: relative;
+  display: contents;
+  flex-wrap: wrap;
+  max-width: 500px;
+  transform: rotate(45deg);
+}
+
+.card {
+  /* background-color: #41afca; */
+  background: linear-gradient(to right, #104e7a, #4db3cdf4);
+  text-shadow: 2px 2px 5px rgba(248, 5, 5, 0.893);
+
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 10px;
+  width: 200px;
+  height: 200px;
+  transform: rotate(0deg);
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+  color: #fff;
+  border-color: #fff;
+  box-shadow: 2px 20px 20px -5px #41afcab7,
+    4px 10px 10px -5px rgba(248, 5, 5, 0.893);
+}
+
+.card:hover {
+  transform: rotate(-45deg) scale(1.1);
+  background: linear-gradient(to right, #f5f2f2, #fefefe);
+  text-shadow: none;
+
+  /* background-color: #fff; */
+  border-color: #41afca;
+  color: #41afca;
+}
+
+.card.selected {
+  z-index: 1;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-container {
+  position: relative;
+}
+
+.modal {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: linear-gradient(to right, #4db3cdf4, #e4acaca5);
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 600px;
+  max-height: 80%;
+  overflow: auto;
+  color: #fefefe;
+  width: 90%;
+  max-height: 90%;
+  border-color: #fefefe;
+  text-align: center;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  font-family: Arial, sans-serif;
+}
+.auto {
+  border-color: #4db3cdf4;
+  background: linear-gradient(to right, #eebcbc, #71c4d8);
+  color: #4db3cdf4;
+  max-width: 500px;
+  max-height: 90%;
+  height: 500px;
+  width: 500px;
+}
+
+.modal-content h2 {
+  margin: 60px 60px 60px 60px;
+}
+
+.modal-content p {
+  margin-bottom: 0;
+}
+
+.modal-content button {
+  margin-top: 10px;
+}
+
+.spinner {
+  margin: 50px 230px auto;
+  width: 50px;
+  height: 50px;
+  border: 8px solid rgba(7, 105, 118, 0.648);
+  border-left-color: #faf8f8;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
