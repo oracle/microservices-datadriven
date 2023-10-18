@@ -15,14 +15,6 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>creditscore</name>
     <description>Creditscore Application</description>
-
-    <properties>
-        <!-- Code quality tools -->
-        <maven-checkstyle-plugin-version>3.3.0</maven-checkstyle-plugin-version>
-        <checkstyle-version>10.12.2</checkstyle-version>
-        <checkstyle.config.location>${project.basedir}/checkstyle/checkstyle.xml</checkstyle.config.location>
-        <dependency-check-version>8.4.0</dependency-check-version>
-    </properties>
     
     <reporting>
         <plugins>
@@ -58,55 +50,6 @@
                     </buildArgs>
                 </configuration>
             </plugin>
-            <!-- <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>${maven-checkstyle-plugin-version}</version>
-                <executions>
-                    <execution>
-                        <id>checkstyle</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                        <configuration>
-                            <consoleOutput>true</consoleOutput>
-                            <configLocation>${checkstyle.config.location}</configLocation>
-                            <suppressionsLocation>${project.basedir}/checkstyle/suppressions.xml</suppressionsLocation>
-                            <failOnViolation>true</failOnViolation>
-                            <violationSeverity>warning</violationSeverity>
-                            <includeTestResources>true</includeTestResources>
-                            <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.puppycrawl.tools</groupId>
-                        <artifactId>checkstyle</artifactId>
-                        <version>${checkstyle-version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.owasp</groupId>
-                <artifactId>dependency-check-maven</artifactId>
-                <version>${dependency-check-version}</version>
-                <configuration>
-                    <skip>${skip.dependency-check}</skip>
-                    <skipTestScope>true</skipTestScope>
-                    <failBuildOnCVSS>0</failBuildOnCVSS>
-                    <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
-                    <formats>
-                        <format>HTML</format>
-                        <format>CSV</format>
-                    </formats>
-                    <suppressionFiles>
-                        <suppressionFile>
-                            ${project.basedir}/dependency-check/dependency-check-suppression.xml</suppressionFile>
-                    </suppressionFiles>
-                </configuration>
-            </plugin> -->
         </plugins>
     </build>
 </project>
