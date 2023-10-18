@@ -76,7 +76,7 @@ public class CustomerController {
 
     /**
      * Create a customer
-     * @param customer  CUstomer object with the customer details
+     * @param customer  Customer object with the customer details
      * @return Returns a HTTP Status code
      */
     @PostMapping("/customer")
