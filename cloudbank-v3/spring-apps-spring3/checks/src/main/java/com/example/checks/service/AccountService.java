@@ -3,13 +3,11 @@
 
 package com.example.checks.service;
 
-import org.springframework.stereotype.Service;
-
+import lombok.RequiredArgsConstructor;
 import com.example.checks.clients.AccountClient;
 import com.example.checks.clients.Journal;
 import com.example.testrunner.model.Clearance;
-
-import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor

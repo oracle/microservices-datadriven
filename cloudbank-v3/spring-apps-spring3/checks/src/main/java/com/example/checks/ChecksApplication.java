@@ -4,7 +4,6 @@
 package com.example.checks;
 
 import jakarta.jms.ConnectionFactory;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
@@ -31,7 +30,11 @@ public class ChecksApplication {
         SpringApplication.run(ChecksApplication.class, args);
     }
 
-    @Bean // Serialize message content to json using TextMessage
+    /**
+     * Serialize message content to json using TextMessage.
+     * @return TO-DO
+     */
+    @Bean 
     public MessageConverter jacksonJmsMessageConverter() {
         MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
         converter.setTargetType(MessageType.TEXT);
@@ -39,6 +42,11 @@ public class ChecksApplication {
         return converter;
     }
 
+    /**
+     * TO-DO.
+     * @param connectionFactory TO-DO
+     * @return TO-DO
+     */
     @Bean
     public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory) {
         JmsTemplate jmsTemplate = new JmsTemplate();
@@ -47,6 +55,12 @@ public class ChecksApplication {
         return jmsTemplate;
     }
 
+    /**
+     * TO-DO.
+     * @param connectionFactory TO-DO
+     * @param configurer TO-DO
+     * @return TO-DO
+     */
     @Bean
     public JmsListenerContainerFactory<?> factory(ConnectionFactory connectionFactory,
                                                   DefaultJmsListenerContainerFactoryConfigurer configurer) {

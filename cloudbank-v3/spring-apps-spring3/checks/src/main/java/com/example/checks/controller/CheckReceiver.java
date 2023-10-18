@@ -3,12 +3,11 @@
 
 package com.example.checks.controller;
 
-import org.springframework.jms.annotation.JmsListener;
-import org.springframework.stereotype.Component;
-
 import com.example.checks.clients.Journal;
 import com.example.checks.service.AccountService;
 import com.example.testrunner.model.CheckDeposit;
+import org.springframework.jms.annotation.JmsListener;
+import org.springframework.stereotype.Component;
 
 @Component
 public class CheckReceiver {
