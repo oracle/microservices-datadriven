@@ -16,14 +16,19 @@ spring:
         dialect: org.hibernate.dialect.Oracle12cDialect
         format_sql: true
     show-sql: true
+  microtx:
+    lra:
+      coordinator-url: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator
+      propagation-active: true
+      headers-propagation-prefix: "{x-b3-, oracle-tmm-, authorization, refresh-}"   
 
   liquibase:
     change-log: classpath:db/changelog/controller.yaml
     url: ${spring.datasource.url}
-    user: ${spring.datasource.username}
-    password: ${spring.datasource.password}
+    user: ${liquibase.datasource.username}
+    password: ${liquibase.datasource.password}
     enabled: ${LIQUIBASE_ENABLED:true}
-    
+
   datasource:
     url: ${spring.datasource.url}
     username: ${spring.datasource.username}
@@ -37,6 +42,17 @@ spring:
       min-pool-size: 10
       max-pool-size: 30
 
+eureka:
+  instance:
+    hostname: ${spring.application.name}
+    preferIpAddress: true
+  client:
+    service-url:
+      defaultZone: ${eureka.service-url}
+    fetch-registry: true
+    register-with-eureka: true
+    enabled: true
+    
 lra:
   coordinator:
     url: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator
