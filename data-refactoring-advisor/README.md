@@ -17,16 +17,8 @@ It collects information about actual usage patterns (e.g. how often tables are j
 calculates the affinity of each pair of tables based on usage,
 and uses the InfoMap algorithm (in Graph Studio) to identify communities/clusters.
 
-```mermaid
-graph LR;
-    a-->b;
-    b-->c;
-    c-->d;
-    d-->e;
-    d-->b;
-    a(Capture workload statistics)
-    b(Calculate affinities)
-    c(Detect communities)
-    d(Adjust constraints and weights)
-    e(Convert schema)
-```
+The diagram below shows the basic flow:
+
+![](./dra-flowchart.png)
+
+More information can be found in the [Data Refactoring Advisor for Migrating a Monolith to Microservices](https://bit.ly/datarefactoringadvisor) Live Lab.
