@@ -3,10 +3,15 @@
 
 package com.example.accounts.services;
 
-import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_CONTEXT_HEADER;
-import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_ENDED_CONTEXT_HEADER;
-import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_PARENT_CONTEXT_HEADER;
-
+import com.example.accounts.model.Account;
+import com.example.accounts.model.Journal;
+import com.oracle.microtx.springboot.lra.annotation.AfterLRA;
+import com.oracle.microtx.springboot.lra.annotation.Compensate;
+import com.oracle.microtx.springboot.lra.annotation.Complete;
+import com.oracle.microtx.springboot.lra.annotation.LRA;
+import com.oracle.microtx.springboot.lra.annotation.ParticipantStatus;
+import com.oracle.microtx.springboot.lra.annotation.Status;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,16 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.accounts.model.Account;
-import com.example.accounts.model.Journal;
-import com.oracle.microtx.springboot.lra.annotation.AfterLRA;
-import com.oracle.microtx.springboot.lra.annotation.Compensate;
-import com.oracle.microtx.springboot.lra.annotation.Complete;
-import com.oracle.microtx.springboot.lra.annotation.LRA;
-import com.oracle.microtx.springboot.lra.annotation.ParticipantStatus;
-import com.oracle.microtx.springboot.lra.annotation.Status;
-
-import lombok.extern.slf4j.Slf4j;
+import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_CONTEXT_HEADER;
+import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_ENDED_CONTEXT_HEADER;
+import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_PARENT_CONTEXT_HEADER;
 
 @RestController
 @RequestMapping("/deposit")
@@ -43,8 +41,8 @@ public class DepositService {
     public ResponseEntity<String> deposit(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId,
                             @RequestParam("accountId") long accountId,
                             @RequestParam("amount") long depositAmount) {
-        log.info("...deposit " + depositAmount + " in account:" + accountId +
-                " (lraId:" + lraId + ") finished (in pending state)");
+        log.info("...deposit " + depositAmount + " in account:" + accountId 
+            + " (lraId:" + lraId + ") finished (in pending state)");
         Account account = AccountTransferDAO.instance().getAccountForAccountId(accountId);
         if (account == null) {
             log.info("deposit failed: account does not exist");
@@ -102,7 +100,8 @@ public class DepositService {
      */
     @PutMapping("/compensate")
     @Compensate
-    public ResponseEntity<String> compensateWork(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) throws Exception {
+    public ResponseEntity<String> compensateWork(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) 
+        throws Exception {
         log.info("deposit compensate called for LRA : " + lraId);
         Journal journal = AccountTransferDAO.instance().getJournalForLRAid(lraId, DEPOSIT);
         journal.setLraState(AccountTransferDAO.getStatusString(ParticipantStatus.Compensated));
@@ -111,7 +110,7 @@ public class DepositService {
     }
 
     /**
-     * Return status
+     * Return status.
      */
     @GetMapping(value = "/status", produces = "text/plain")
     @Status
@@ -121,11 +120,12 @@ public class DepositService {
     }
 
     /**
-     * Delete journal entry for LRA
+     * Delete journal entry for LRA.
      */
     @PutMapping(value = "/after", consumes = "text/plain")
     @AfterLRA
-    public ResponseEntity<String> afterLRA(@RequestHeader(LRA_HTTP_ENDED_CONTEXT_HEADER) String lraId, String status) throws Exception {
+    public ResponseEntity<String> afterLRA(@RequestHeader(LRA_HTTP_ENDED_CONTEXT_HEADER) String lraId, 
+        String status) throws Exception {
         log.info("After LRA Called : " + lraId);
         AccountTransferDAO.instance().afterLRA(lraId, status, DEPOSIT);
         return ResponseEntity.ok("");

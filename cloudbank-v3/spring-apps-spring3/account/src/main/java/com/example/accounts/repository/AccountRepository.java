@@ -5,12 +5,14 @@ package com.example.accounts.repository;
 
 import java.util.List;
 
+import com.example.accounts.model.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.accounts.model.Account;
+public interface AccountRepository extends JpaRepository<Account, Long> {
 
-public interface AccountRepository extends JpaRepository<Account, Long> {   
-    List<Account> findByAccountCustomerId(String customerId); 
-    List<Account> findAccountsByAccountNameContains (String accountName);
+    List<Account> findByAccountCustomerId(String customerId);
+
+    List<Account> findAccountsByAccountNameContains(String accountName);
+
     Account findByAccountId(long accountId);
 }

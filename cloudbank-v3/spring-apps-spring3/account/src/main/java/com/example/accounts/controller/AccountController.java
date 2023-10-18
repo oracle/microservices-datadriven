@@ -3,22 +3,23 @@
 
 package com.example.accounts.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import com.example.accounts.repository.AccountRepository;
-import com.example.accounts.repository.JournalRepository;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import com.example.accounts.model.Account;
 import com.example.accounts.model.Journal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import com.example.accounts.repository.AccountRepository;
+import com.example.accounts.repository.JournalRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import java.util.ArrayList;
-import java.util.Optional;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -40,8 +41,8 @@ public class AccountController {
     @PostMapping("/account")
     public ResponseEntity<Account> createAccount(@RequestBody Account account) {
         try {
-            Account _account = accountRepository.saveAndFlush(account);
-            return new ResponseEntity<>(_account, HttpStatus.CREATED);
+            Account newAccount = accountRepository.saveAndFlush(account);
+            return new ResponseEntity<>(newAccount, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -99,8 +100,8 @@ public class AccountController {
     @PostMapping("/account/journal")
     public ResponseEntity<Journal> postSimpleJournalEntry(@RequestBody Journal journalEntry) {
         try {
-            Journal _journalEntry = journalRepository.saveAndFlush(journalEntry);
-            return new ResponseEntity<>(_journalEntry, HttpStatus.CREATED);
+            Journal newJournalEntry = journalRepository.saveAndFlush(journalEntry);
+            return new ResponseEntity<>(newJournalEntry, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -116,10 +117,10 @@ public class AccountController {
         try {
             Optional<Journal> data = journalRepository.findById(journalId);
             if (data.isPresent()) {
-                Journal _journalEntry = data.get();
-                _journalEntry.setJournalType("DEPOSIT");
-                journalRepository.saveAndFlush(_journalEntry);
-                return new ResponseEntity<Journal>(_journalEntry, HttpStatus.OK);
+                Journal newJournalEntry = data.get();
+                newJournalEntry.setJournalType("DEPOSIT");
+                journalRepository.saveAndFlush(newJournalEntry);
+                return new ResponseEntity<Journal>(newJournalEntry, HttpStatus.OK);
             } else {
                 return new ResponseEntity<Journal>(new Journal(), HttpStatus.ACCEPTED);
             }

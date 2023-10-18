@@ -3,13 +3,16 @@
 
 package com.example.accounts.repository;
 
+import java.util.List;
+
 import com.example.accounts.model.Journal;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
 public interface JournalRepository extends JpaRepository<Journal, Long> {
+
     Journal findJournalByLraIdAndJournalType(String lraId, String journalType);
+
     List<Journal> findByAccountId(long accountId);
+
     List<Journal> findJournalByAccountId(long accountId);
 }

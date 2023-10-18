@@ -7,14 +7,6 @@ import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_CONTEXT_
 import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_ENDED_CONTEXT_HEADER;
 import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_PARENT_CONTEXT_HEADER;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.example.accounts.model.Account;
 import com.example.accounts.model.Journal;
 import com.oracle.microtx.springboot.lra.annotation.AfterLRA;
@@ -23,7 +15,13 @@ import com.oracle.microtx.springboot.lra.annotation.Complete;
 import com.oracle.microtx.springboot.lra.annotation.LRA;
 import com.oracle.microtx.springboot.lra.annotation.ParticipantStatus;
 import com.oracle.microtx.springboot.lra.annotation.Status;
-
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -66,8 +64,8 @@ public class WithdrawService {
                             AccountTransferDAO.getStatusString(ParticipantStatus.Active)));
             return ResponseEntity.ok("withdraw failed: insufficient funds");
         }
-        log.info("withdraw current balance:" + account.getAccountBalance() +
-                " new balance:" + (account.getAccountBalance() - withdrawAmount));
+        log.info("withdraw current balance:" + account.getAccountBalance() 
+            + " new balance:" + (account.getAccountBalance() - withdrawAmount));
         account.setAccountBalance(account.getAccountBalance() - withdrawAmount);
         AccountTransferDAO.instance().saveAccount(account);
         AccountTransferDAO.instance().saveJournal(
@@ -94,12 +92,13 @@ public class WithdrawService {
     }
 
     /**
-    * Read the journal and increase the balance by the previous withdraw amount
+    * Read the journal and increase the balance by the previous withdraw amount.
     * before the LRA
     */
     @PutMapping("/compensate")
     @Compensate
-    public ResponseEntity<String> compensateWork(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) throws Exception {
+    public ResponseEntity<String> compensateWork(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) 
+        throws Exception {
         log.info("Account withdraw compensate() called for LRA : " + lraId);
         Journal journal = AccountTransferDAO.instance().getJournalForLRAid(lraId, WITHDRAW);
         journal.setLraState(AccountTransferDAO.getStatusString(ParticipantStatus.Compensating));
@@ -120,11 +119,12 @@ public class WithdrawService {
     }
 
     /**
-    * Delete journal entry for LRA
+    * Delete journal entry for LRA.
     */
     @PutMapping(value = "/after", consumes = "text/plain")
     @AfterLRA
-    public ResponseEntity<String> afterLRA(@RequestHeader(LRA_HTTP_ENDED_CONTEXT_HEADER) String lraId, String status) throws Exception {
+    public ResponseEntity<String> afterLRA(@RequestHeader(LRA_HTTP_ENDED_CONTEXT_HEADER) String lraId, 
+        String status) throws Exception {
         log.info("After LRA Called : " + lraId);
         AccountTransferDAO.instance().afterLRA(lraId, status, WITHDRAW);
         return ResponseEntity.ok("");

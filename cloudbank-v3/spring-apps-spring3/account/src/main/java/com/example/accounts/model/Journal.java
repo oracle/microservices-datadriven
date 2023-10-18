@@ -39,6 +39,14 @@ public class Journal {
     @Column(name = "JOURNAL_AMOUNT")
     private long journalAmount;
 
+    /**
+     * Create Journal Object.
+     * @param journalType Journal Type
+     * @param accountId Account Id
+     * @param journalAmount Amount
+     * @param lraId LRA Id
+     * @param lraState State
+     */
     public Journal(String journalType, long accountId, long journalAmount, String lraId, String lraState) {
         this.journalType = journalType;
         this.accountId = accountId;
@@ -47,6 +55,12 @@ public class Journal {
         this.journalAmount = journalAmount;
     }
 
+    /**
+     * Create Journal object.
+     * @param journalType Journal Type
+     * @param accountId Account Id
+     * @param journalAmount Amount
+     */
     public Journal(String journalType, long accountId, long journalAmount) {
         this.journalType = journalType;
         this.accountId = accountId;

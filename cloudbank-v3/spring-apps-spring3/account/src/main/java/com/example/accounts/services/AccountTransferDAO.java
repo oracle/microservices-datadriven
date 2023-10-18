@@ -3,16 +3,14 @@
 
 package com.example.accounts.services;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-
 import com.example.accounts.model.Account;
 import com.example.accounts.model.Journal;
 import com.example.accounts.repository.AccountRepository;
 import com.example.accounts.repository.JournalRepository;
 import com.oracle.microtx.springboot.lra.annotation.ParticipantStatus;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
@@ -26,15 +24,19 @@ public class AccountTransferDAO {
         this.accountRepository = accountRepository;
         this.journalRepository = journalRepository;
         singleton = this;
-        System.out.println(
-                "AccountTransferDAO accountsRepository = " + accountRepository + ", journalRepository = "
-                        + journalRepository);
+        System.out.println("AccountTransferDAO accountsRepository = " + accountRepository 
+            + ", journalRepository = "+ journalRepository);
     }
 
     public static AccountTransferDAO instance() {
         return singleton;
     }
 
+    /**
+     * Get status od LRA participant
+     * @param status Status code
+     * @return Returns status code
+     */
     public static String getStatusString(ParticipantStatus status) {
         switch (status) {
             case Compensated:
@@ -99,15 +101,17 @@ public class AccountTransferDAO {
 
     Account getAccountForJournal(Journal journal) throws Exception {
         Account account = accountRepository.findByAccountId(journal.getAccountId());
-        if (account == null)
+        if (account == null) {
             throw new Exception("Invalid accountName:" + journal.getAccountId());
+        }
         return account;
     }
 
     Account getAccountForAccountId(long accountId) {
         Account account = accountRepository.findByAccountId(accountId);
-        if (account == null)
+        if (account == null) {
             return null;
+        }
         return account;
     }
 
