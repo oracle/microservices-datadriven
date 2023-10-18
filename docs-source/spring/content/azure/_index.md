@@ -29,7 +29,7 @@ A few setup steps are required in both OCI and Azure to deploy the Oracle Backen
 ### OCI
 
 The Multicloud installation provisions an Oracle Autonomous Database in OCI using
-the [Oracle Database Operator for Kubernetes (OraOperator)](https://github.com/oracle/oracle-database-operator).  
+the [Oracle Database Operator for Kubernetes (OraOperator)](https://github.com/oracle/oracle-database-operator).
 
 To allow the OraOperator access to OCI, an [API Key](https://docs.oracle.com/en-us/iaas/Content/API/Concepts/apisigningkey.htm) must be
 generated using these steps:
@@ -52,25 +52,28 @@ The Multicloud installation is done using the Azure Cloud Shell. The following s
 2. Open the Azure Cloud Shell. For example:
 
    ![Azure Cloud Shell Icon](AzureCloudShellIcon.png)
-   
+
 3. Upload the [Oracle Backend for Spring Boot and Microservices](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/azure-ebaas-platform_latest.zip) stack. For example:
 
    ![Azure Upload](AzureUpload.png)
-   
+
 4. Upload the API Private Key (`private_key.pem`).
 
 5. Unzip the stack to a directory called `obaas`. For example:
 
-   `unzip azure-ebaas-platform_latest.zip -d /tmp/obaas`
-	
+   `unzip azure-ebaas_latest.zip -d ~/obaas`
+
 6. Move the `private_key.pem` file to the `obaas` directory. For example:
 
-   `mv private_key.pem /tmp/obaas/`
-   
+   `mv private_key.pem ~/obaas/`
+
 7. Run the configuration Helper script using the values from the API Key. For example:
 
-   `cd /tmp/obaas`
-   `./obaas_configure.py`
+   ```bash
+   cd ~/obaas
+   ./obaas_configure.py
+   ```
+
    ![Azure Configure](AzureConfigure.png)
 
 
@@ -80,9 +83,9 @@ Install Ansible to run the Configuration Management Playbook.  The Helper script
 Ansible and some additional modules. For example:
 
 ```bash
-cd /tmp/obaas/ansible
-./setup_ansible.sh
-source ./activate.env
+cd ~/obaas/ansible
+./setup_ansible.sh /tmp
+source ./activate.env /tmp
 ```
 
 ## Deploy the Infrastructure
@@ -90,9 +93,8 @@ source ./activate.env
 From the Azure Cloud Shell, run these commands to deploy the infrastructure:
 
 ```bash
-cd /tmp/obaas
+cd ~/obaas
 terraform init
 terraform plan -out=multicloud.plan
 terraform apply "multicloud.plan"
 ```
-
