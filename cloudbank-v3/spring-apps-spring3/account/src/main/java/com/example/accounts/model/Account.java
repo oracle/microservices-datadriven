@@ -1,20 +1,22 @@
-// Copyright (c) 2023, Oracle and/or its affiliates. 
-// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/ 
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 package com.example.accounts.model;
 
 import java.util.Date;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
-import jakarta.persistence.Id;
 
+@SuppressWarnings("deprecation") // TODO: Needs to be removed
 @Data
 @NoArgsConstructor
 @Entity
@@ -45,6 +47,13 @@ public class Account {
     @Column(name = "ACCOUNT_BALANCE")
     private long accountBalance;
 
+    /**
+     * Create Account object.
+     * @param accountName Account name
+     * @param accountType Account Type
+     * @param accountOtherDetails Other details about account
+     * @param accountCustomerId Account Customer ID
+     */
     public Account(String accountName, String accountType, String accountOtherDetails, String accountCustomerId) {
         this.accountName = accountName;
         this.accountType = accountType;
