@@ -12,9 +12,9 @@
 <meta name="generator" content="Hugo 0.115.4">
 
 
-  <meta name="description" content="The Oracle Backend for Spring Boot and Microservices includes an Oracle database. An instance of Oracle Autonomous Database Serverless is created during installation.
-NOTE: Oracle recommends that you install your own databases for your production applications. The database provisioned is used for Oracle Backend for Spring Boot metadata and can be used for developement.
-If you chose the Secure Access from Anywhere option for your database during installation (or just accepted the default), then you can use the Database Actions web user interface to work with your database." />
+  <meta name="description" content="The Oracle Backend for Spring Boot and Microservices includes an Oracle database. An instance of Oracle Autonomous Database Serverless (ADB-S) is created during installation. The ADB-S is used for Oracle Backend for SPring Boot and Microservices metadata and Spring Cloud Config Server.
+If you selected the PRIVATE_ENDPOINT_ACCESS option, you need to use a Bastion to access the database.
+NOTE: Oracle recommends that you install your own database and PDBs for your production applications." />
 
     <title>Database Access | Oracle Backend for Spring Boot and Microservices</title>
 
@@ -40,9 +40,9 @@ If you chose the Secure Access from Anywhere option for your database during ins
     content="Database Access"
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot and Microservices" />
-  <meta property="og:description" content="The Oracle Backend for Spring Boot and Microservices includes an Oracle database. An instance of Oracle Autonomous Database Serverless is created during installation.
-NOTE: Oracle recommends that you install your own databases for your production applications. The database provisioned is used for Oracle Backend for Spring Boot metadata and can be used for developement.
-If you chose the Secure Access from Anywhere option for your database during installation (or just accepted the default), then you can use the Database Actions web user interface to work with your database." />
+  <meta property="og:description" content="The Oracle Backend for Spring Boot and Microservices includes an Oracle database. An instance of Oracle Autonomous Database Serverless (ADB-S) is created during installation. The ADB-S is used for Oracle Backend for SPring Boot and Microservices metadata and Spring Cloud Config Server.
+If you selected the PRIVATE_ENDPOINT_ACCESS option, you need to use a Bastion to access the database.
+NOTE: Oracle recommends that you install your own database and PDBs for your production applications." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/database/" />
 
@@ -51,9 +51,9 @@ If you chose the Secure Access from Anywhere option for your database during ins
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Database Access" />
-  <meta name="twitter:description" content="The Oracle Backend for Spring Boot and Microservices includes an Oracle database. An instance of Oracle Autonomous Database Serverless is created during installation.
-NOTE: Oracle recommends that you install your own databases for your production applications. The database provisioned is used for Oracle Backend for Spring Boot metadata and can be used for developement.
-If you chose the Secure Access from Anywhere option for your database during installation (or just accepted the default), then you can use the Database Actions web user interface to work with your database." />
+  <meta name="twitter:description" content="The Oracle Backend for Spring Boot and Microservices includes an Oracle database. An instance of Oracle Autonomous Database Serverless (ADB-S) is created during installation. The ADB-S is used for Oracle Backend for SPring Boot and Microservices metadata and Spring Cloud Config Server.
+If you selected the PRIVATE_ENDPOINT_ACCESS option, you need to use a Bastion to access the database.
+NOTE: Oracle recommends that you install your own database and PDBs for your production applications." />
 
 
   <script type="application/ld+json">
@@ -64,8 +64,8 @@ If you chose the Secure Access from Anywhere option for your database during ins
       "name": "Database Access",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/database/",
       "headline": "Database Access",
-      "description": "The Oracle Backend for Spring Boot and Microservices includes an Oracle database. An instance of Oracle Autonomous Database Serverless is created during installation.\nNOTE: Oracle recommends that you install your own databases for your production applications. The database provisioned is used for Oracle Backend for Spring Boot metadata and can be used for developement.\nIf you chose the Secure Access from Anywhere option for your database during installation (or just accepted the default), then you can use the Database Actions web user interface to work with your database.",
-      "wordCount" : "561",
+      "description": "The Oracle Backend for Spring Boot and Microservices includes an Oracle database. An instance of Oracle Autonomous Database Serverless (ADB-S) is created during installation. The ADB-S is used for Oracle Backend for SPring Boot and Microservices metadata and Spring Cloud Config Server.\nIf you selected the PRIVATE_ENDPOINT_ACCESS option, you need to use a Bastion to access the database.\nNOTE: Oracle recommends that you install your own database and PDBs for your production applications.",
+      "wordCount" : "1208",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1607,23 +1607,52 @@ if (!doNotTrack) {
     class="gdoc-markdown gdoc-markdown__align--left"
   >
     <h1>Database Access</h1>
-    <p>The Oracle Backend for Spring Boot and Microservices includes an Oracle database. An instance of Oracle Autonomous Database Serverless is created during installation.</p>
+    <p>The Oracle Backend for Spring Boot and Microservices includes an Oracle database. An instance of Oracle Autonomous Database Serverless (ADB-S) is created during installation. The ADB-S is used for Oracle Backend for SPring Boot and Microservices metadata and Spring Cloud Config Server.</p>
+<p>If you selected the <strong>PRIVATE_ENDPOINT_ACCESS</strong> option, you need to use a <a
+  class="gdoc-markdown__link"
+  href="#accessing-the-adb-s-from-a-local-machine-using-database-wallet-and-sqlcl-using-a-bastion"
+>Bastion</a> to access the database.</p>
 <blockquote>
-<p><strong><em>NOTE:</em></strong> Oracle recommends that you install your own databases for your production applications. The database provisioned is used for Oracle Backend for Spring Boot metadata and can be used for developement.</p>
+<p><strong>NOTE:</strong> Oracle recommends that you install your own database and PDBs for your production applications. The database provisioned is used for Oracle Backend for Spring Boot metadata and can be used for development.</p>
 </blockquote>
-<p>If you chose the <strong>Secure Access from Anywhere</strong> option for your database during installation (or just accepted the default), then you can use the <strong>Database Actions</strong> web user interface to work with your database. If you chose the <strong>Private</strong> option, you need to use Bastion to access the database.</p>
 <div class="gdoc-page__anchorwrap">
-    <h2 id="using-database-actions">
-        Using Database Actions
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/database/#using-database-actions" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Using Database Actions" aria-label="Anchor to: Using Database Actions" href="#using-database-actions">
+    <h2 id="accessing-the-database">
+        Accessing the Database
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/database/#accessing-the-database" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Accessing the Database" aria-label="Anchor to: Accessing the Database" href="#accessing-the-database">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>
 </div>
-<p>To work with data in the database, you can use the <strong>Database Actions</strong> web user interface, which can be accessed from the Oracle Cloud
-Infrastructure Console (OCI Console). The Oracle database is created in the same compartments as OCI Container Engine for Kubernetes (OKE).
-In the OCI Console, navigate to Oracle Autonomous Database (ADB) in the main menu and select the database with the application name that you
-configured during installation with the suffix <code>DB</code>. For example, <code>OBAASTSTPSDB</code>.</p>
+<blockquote>
+<p><strong><em>NOTE:</em></strong> Oracle recommends that you install SQLcl to access the database from a local machine. <a
+  class="gdoc-markdown__link"
+  href="https://www.oracle.com/database/sqldeveloper/technologies/sqlcl/"
+>SQLcl installation guide</a>. Other tools can be used but is not documented here.</p>
+</blockquote>
+<ul>
+<li><a
+  class="gdoc-markdown__link"
+  href="#access-the-oracle-adb-s-using-database-actions"
+>Using Database Actions from the OCI Console</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#accessing-the-adb-s-from-a-local-machine-using-database-wallet-and-sqlcl"
+>Local access using Database Wallet and SQLcl (<strong>SECURE_ACCESS</strong> installation)</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#accessing-the-adb-s-from-a-local-machine-using-database-wallet-and-sqlcl-using-a-bastion"
+>Local access using Wallet and SQLcl using a Bastion (<strong>PRIVATE_ENDPOINT_ACCESS</strong> installation)</a></li>
+</ul>
+<div class="gdoc-page__anchorwrap">
+    <h2 id="access-the-oracle-adb-s-using-database-actions">
+        Access the Oracle ADB-S using Database Actions
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/database/#access-the-oracle-adb-s-using-database-actions" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Access the Oracle ADB-S using Database Actions" aria-label="Anchor to: Access the Oracle ADB-S using Database Actions" href="#access-the-oracle-adb-s-using-database-actions">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>You can use the <strong>Database Actions</strong> web user interface, which can be accessed from the Oracle Cloud Infrastructure Console (OCI Console) to access the database. The Oracle database is created in the compartment specified during installation of Oracle Backend for Spring Boot and Microservices.</p>
+<p>In the OCI Console, navigate to Oracle Autonomous Database (ADB) in the main menu.</p>
 <!-- spellchecker-disable -->
 
   
@@ -1637,11 +1666,11 @@ configured during installation with the suffix <code>DB</code>. For example, <co
       <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-cloud-portal.png">
         <picture>
             <source
-                srcset="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-cloud-portal_hu0a81ffeafab24a7d12694cda6c1940c7_213389_1200x0_resize_box_3.png"
+                srcset="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-cloud-portal_hudd28f6d133f832430ec59ed4d73e80ce_131080_1800x0_resize_box_3.png"
 
             />
           <img
-                src="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-cloud-portal_hu0a81ffeafab24a7d12694cda6c1940c7_213389_1800x0_resize_box_3.png"
+                src="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-cloud-portal_hudd28f6d133f832430ec59ed4d73e80ce_131080_1800x0_resize_box_3.png"
               alt="Oracle Autonomous DB Cloud Portal"
           />
         </picture>
@@ -1653,7 +1682,37 @@ configured during installation with the suffix <code>DB</code>. For example, <co
   </div>
 
 <!-- spellchecker-enable -->
-<p>Click on the link to access the <strong>Database Details</strong> page, and then click on <strong>Database Actions</strong>:</p>
+<p>Click on the link <strong>Autonomous Transaction Processing</strong>, and then select the database with the application name that you configured during installation with the suffix <code>DB</code>. In this example the Database name is <code>CALFDB</code> (make sure that you have selected the correct Compartment).</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-select-db.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-select-db_hu6de06f060da74ffbb2243845b8327cc3_260035_1800x0_resize_box_3.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-select-db_hu6de06f060da74ffbb2243845b8327cc3_260035_1800x0_resize_box_3.png"
+              alt="Select ADB Database"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Select ADB Database
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<p>Click on <strong>Database Actions</strong>. This opens the <strong>Database Actions</strong> page where you have access to many database functions, including the ability to work with data stored by Oracle Backend for Spring Boot and Microservices.</p>
 <!-- spellchecker-disable -->
 
   
@@ -1667,11 +1726,11 @@ configured during installation with the suffix <code>DB</code>. For example, <co
       <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-cloud-portal-details.png">
         <picture>
             <source
-                srcset="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-cloud-portal-details_hu0a81ffeafab24a7d12694cda6c1940c7_169532_1200x0_resize_box_3.png"
+                srcset="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-cloud-portal-details_hu18e68d17660e153682e42b5dd874265f_153403_1800x0_resize_box_3.png"
 
             />
           <img
-                src="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-cloud-portal-details_hu0a81ffeafab24a7d12694cda6c1940c7_169532_1800x0_resize_box_3.png"
+                src="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-cloud-portal-details_hu18e68d17660e153682e42b5dd874265f_153403_1800x0_resize_box_3.png"
               alt="Oracle Autonomous DB Details"
           />
         </picture>
@@ -1683,34 +1742,387 @@ configured during installation with the suffix <code>DB</code>. For example, <co
   </div>
 
 <!-- spellchecker-enable -->
-<p>This opens the <strong>Database Actions</strong> page where you have access to many database functions, including the ability to
-work with the schemas where your Oracle Backend for Spring Boot and Microservices data is stored.</p>
 <div class="gdoc-page__anchorwrap">
-    <h2 id="accessing-the-database-from-a-local-machine">
-        Accessing the Database From a Local Machine
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/database/#accessing-the-database-from-a-local-machine" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Accessing the Database From a Local Machine" aria-label="Anchor to: Accessing the Database From a Local Machine" href="#accessing-the-database-from-a-local-machine">
+    <h2 id="accessing-the-adb-s-from-a-local-machine-using-database-wallet-and-sqlcl">
+        Accessing the ADB-S From a Local Machine using Database Wallet and SQLcl
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/database/#accessing-the-adb-s-from-a-local-machine-using-database-wallet-and-sqlcl" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Accessing the ADB-S From a Local Machine using Database Wallet and SQLcl" aria-label="Anchor to: Accessing the ADB-S From a Local Machine using Database Wallet and SQLcl" href="#accessing-the-adb-s-from-a-local-machine-using-database-wallet-and-sqlcl">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>
 </div>
-<p>After creating the Oracle Backend for Spring Boot and Microservices environment, you have access to Oracle Autonomous Database. For example, you can access the <code>CONFIGSERVER.PROPERTIES</code> table where applications should add their properties. Also, each application can use the same database instance to host its data.</p>
-<p>If you chose the <strong>Secure Access from Anywhere</strong> option for database access during installation (or accepted this default), then you must
-<a
+<p>If <strong>SECURE_ACCESS</strong> was selected during installation you can access the database using the following steps.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="download-the-adb-s-wallet">
+        Download the ADB-S Wallet
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/database/#download-the-adb-s-wallet" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Download the ADB-S Wallet" aria-label="Anchor to: Download the ADB-S Wallet" href="#download-the-adb-s-wallet">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>If you chose the <strong>SECURE_ACCESS</strong> option for database access during installation (or accepted this default), then you have to <a
   class="gdoc-markdown__link"
   href="https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/connect-download-wallet.html"
 >download the wallet</a> to access the database from your local machine.</p>
-<p>If you chose the <strong>Private</strong> option for database access during installation, the database is configured so that it is only accessible from
-the private Virtual Cloud Network (VCN), and access is only possible using the Bastion service provisioned during installation.</p>
-<p>Process the following steps:</p>
+<p>The wallet can be downloaded from the OCI Console, by clicking <strong>Database Connection</strong>, followed by <strong>Download Wallet</strong>. Store the wallet in a safe place.</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-download-wallet.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-download-wallet_hu14dbb03eeb2523f7c421c33f99029cac_239449_600x0_resize_box_3.png 600w, https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-download-wallet_hu14dbb03eeb2523f7c421c33f99029cac_239449_1200x0_resize_box_3.png 1200w" sizes="100vw"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-download-wallet_hu14dbb03eeb2523f7c421c33f99029cac_239449_1800x0_resize_box_3.png"
+              alt="Download ADB client credential"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Download ADB client credential
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<p>You have to enter a password for the Wallet.</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-wallet-password.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-wallet-password_hu2ef1293fd30c9fe38ccbeddda75e6979_95775_600x0_resize_box_3.png 600w, https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-wallet-password_hu2ef1293fd30c9fe38ccbeddda75e6979_95775_1200x0_resize_box_3.png 1200w" sizes="100vw"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-wallet-password_hu2ef1293fd30c9fe38ccbeddda75e6979_95775_1800x0_resize_box_3.png"
+              alt="Wallet Password"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Wallet Password
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<div class="gdoc-page__anchorwrap">
+    <h3 id="connect-to-the-adb-s-using-sqlcl">
+        Connect to the ADB-S using SQLcl
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/database/#connect-to-the-adb-s-using-sqlcl" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Connect to the ADB-S using SQLcl" aria-label="Anchor to: Connect to the ADB-S using SQLcl" href="#connect-to-the-adb-s-using-sqlcl">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
 <ol>
 <li>
-<p>Create a Dynamic Port Forwarding (SOCKS5) Session using the Bastion service.</p>
-<p>Start with Autonomous Database (ADB) access that was created with private endpoint access only in accordance with security guidelines.  For ADB to run SQL commands, you need to establish a session between your local machine and ADB using the Bastion service.</p>
-<p>A <a
+<p>Get the ADMIN user password from k8s secret. in the exa,ple below <code>calfdb</code> needs to be replaced with the name of database in the installation.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"> kubectl -n application get secret calfdb-db-secrets -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.data.db\.password}&#39;</span> <span class="p">|</span> base64 -d
+</span></span></code></pre></div></li>
+<li>
+<p>Open a terminal Window and start SQLcl with the <code>/nolog</code> option.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sql /nolog
+</span></span></code></pre></div></li>
+<li>
+<p>Load the Wallet using the command <code>set cloudconfig...</code>. In this example the wallet name is Wallet_CALFDB.zip.</p>
+ <!-- spellchecker-disable -->
+
+      
+      
+    
+    
+      <div class="flex justify-center">
+        <figure
+          class="gdoc-markdown__figure"
+        >
+          <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-sqlcl-load-wallet.png">
+            <picture>
+                <source
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-sqlcl-load-wallet_hu2aa2010e16abbacccfeaf1ac8150e47d_22506_1800x0_resize_box_3.png"
+    
+                />
+              <img
+                    src="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-sqlcl-load-wallet_hu2aa2010e16abbacccfeaf1ac8150e47d_22506_1800x0_resize_box_3.png"
+                  alt="Load the Wallet"
+              />
+            </picture>
+          </a>
+              <figcaption>
+                Load the Wallet
+              </figcaption>
+        </figure>
+      </div>
+
+ <!-- spellchecker-enable -->
+</li>
+<li>
+<p>Get the TNS name connection names from the wallet by executing this command:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">show tns
+</span></span></code></pre></div> <!-- spellchecker-disable -->
+
+      
+      
+    
+    
+      <div class="flex justify-center">
+        <figure
+          class="gdoc-markdown__figure"
+        >
+          <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-show-tns.png">
+            <picture>
+                <source
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-show-tns_hu709a6d7693f839cfe11d4e18bf0b06f9_40747_1800x0_resize_box_3.png"
+    
+                />
+              <img
+                    src="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-show-tns_hu709a6d7693f839cfe11d4e18bf0b06f9_40747_1800x0_resize_box_3.png"
+                  alt="Load the Wallet"
+              />
+            </picture>
+          </a>
+              <figcaption>
+                Load the Wallet
+              </figcaption>
+        </figure>
+      </div>
+
+ <!-- spellchecker-enable -->
+</li>
+<li>
+<p>Connect as the ADMIN user to the database using the password you obtained from the k8s secret previously using the command <code>connect</code> followed by <code>ADMIN</code>, password collected and the TNS Name.</p>
+ <!-- spellchecker-disable -->
+
+      
+      
+    
+    
+      <div class="flex justify-center">
+        <figure
+          class="gdoc-markdown__figure"
+        >
+          <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-admin-connect.png">
+            <picture>
+                <source
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-admin-connect_hua7df56d986555ba316273475778538e5_10657_1800x0_resize_box_3.png"
+    
+                />
+              <img
+                    src="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-admin-connect_hua7df56d986555ba316273475778538e5_10657_1800x0_resize_box_3.png"
+                  alt="Load the Wallet"
+              />
+            </picture>
+          </a>
+              <figcaption>
+                Load the Wallet
+              </figcaption>
+        </figure>
+      </div>
+
+ <!-- spellchecker-enable -->
+<p>You are now connected to the database that is provided when installing Oracle Backend for Spring Boot and Microservices on OCI.</p>
+</li>
+</ol>
+<blockquote>
+<p><strong><em>NOTE:</em></strong> Oracle recommends that you install your own databases, PDBs for your production applications. The database provisioned is used for Oracle Backend for Spring Boot metadata and can be used for development.</p>
+</blockquote>
+<div class="gdoc-page__anchorwrap">
+    <h2 id="accessing-the-adb-s-from-a-local-machine-using-database-wallet-and-sqlcl-using-a-bastion">
+        Accessing the ADB-S From a Local Machine using Database Wallet and SQLcl using a Bastion
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/database/#accessing-the-adb-s-from-a-local-machine-using-database-wallet-and-sqlcl-using-a-bastion" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Accessing the ADB-S From a Local Machine using Database Wallet and SQLcl using a Bastion" aria-label="Anchor to: Accessing the ADB-S From a Local Machine using Database Wallet and SQLcl using a Bastion" href="#accessing-the-adb-s-from-a-local-machine-using-database-wallet-and-sqlcl-using-a-bastion">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>If <strong>PRIVATE_ENDPOINT_ACCESS</strong> was selected during installation you can access the database using the following steps. You are going to need a Private Key pair to be able to use the Bastion Service to access the ADB-S.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="download-and-modify-the-wallet-the-adb-s-wallet-using-private-access">
+        Download and modify the Wallet the ADB-S Wallet using Private Access
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/database/#download-and-modify-the-wallet-the-adb-s-wallet-using-private-access" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Download and modify the Wallet the ADB-S Wallet using Private Access" aria-label="Anchor to: Download and modify the Wallet the ADB-S Wallet using Private Access" href="#download-and-modify-the-wallet-the-adb-s-wallet-using-private-access">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>If you chose the <strong>PRIVATE_ENDPOINT_ACCESS</strong> option for database access during installation (or accepted this default), then you have to <a
+  class="gdoc-markdown__link"
+  href="https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/connect-download-wallet.html"
+>download the wallet</a> to access the database from your local machine.</p>
+<ol>
+<li>
+<p>The wallet can be downloaded from the OCI Console, by clicking <strong>Database Connection</strong>, followed by <strong>Download Wallet</strong>. Store the wallet in a safe place.</p>
+ <!-- spellchecker-disable -->
+
+      
+      
+    
+    
+      <div class="flex justify-center">
+        <figure
+          class="gdoc-markdown__figure"
+        >
+          <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-download-wallet.png">
+            <picture>
+                <source
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-download-wallet_hu14dbb03eeb2523f7c421c33f99029cac_239449_1800x0_resize_box_3.png"
+    
+                />
+              <img
+                    src="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-download-wallet_hu14dbb03eeb2523f7c421c33f99029cac_239449_1800x0_resize_box_3.png"
+                  alt="Download ADB client credential"
+              />
+            </picture>
+          </a>
+              <figcaption>
+                Download ADB client credential
+              </figcaption>
+        </figure>
+      </div>
+
+ <!-- spellchecker-enable -->
+</li>
+<li>
+<p>You have to enter a password for the Wallet.</p>
+ <!-- spellchecker-disable -->
+
+      
+      
+    
+    
+      <div class="flex justify-center">
+        <figure
+          class="gdoc-markdown__figure"
+        >
+          <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-wallet-password.png">
+            <picture>
+                <source
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-wallet-password_hu2ef1293fd30c9fe38ccbeddda75e6979_95775_1800x0_resize_box_3.png"
+    
+                />
+              <img
+                    src="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-wallet-password_hu2ef1293fd30c9fe38ccbeddda75e6979_95775_1800x0_resize_box_3.png"
+                  alt="Wallet Password"
+              />
+            </picture>
+          </a>
+              <figcaption>
+                Wallet Password
+              </figcaption>
+        </figure>
+      </div>
+
+ <!-- spellchecker-enable -->
+</li>
+<li>
+<p>Go to the directory where you stored the Wallet and execute the following command. Replace <code>&lt;Wallet-File&gt;</code> with the name of your Wallet file including <code>.zip</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">zip -oq &lt;Wallet-File&gt; tnsnames.ora <span class="o">&amp;&amp;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  sed -i <span class="s1">&#39;&#39;</span> <span class="s1">&#39;s/host=[^)]*/host=localhost/&#39;</span> tnsnames.ora <span class="o">&amp;&amp;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  zip -uq &lt;Wallet-File&gt; tnsnames.ora
+</span></span></code></pre></div><blockquote>
+<p><strong><em>NOTE:</em></strong> On certain platforms you may need to use <code>unzip</code> instead of <code>zip</code> as the command.</p>
+</blockquote>
+</li>
+</ol>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="connect-to-the-adb-s-using-sqlcl-via-a-bastion">
+        Connect to the ADB-S using SQLcl via a Bastion
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/database/#connect-to-the-adb-s-using-sqlcl-via-a-bastion" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Connect to the ADB-S using SQLcl via a Bastion" aria-label="Anchor to: Connect to the ADB-S using SQLcl via a Bastion" href="#connect-to-the-adb-s-using-sqlcl-via-a-bastion">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<ol>
+<li>
+<p>Get the IP address of the deployed Autonomous Database. T=You can find the IP address in the OCI Console:</p>
+ <!-- spellchecker-disable -->
+
+      
+      
+    
+    
+      <div class="flex justify-center">
+        <figure
+          class="gdoc-markdown__figure"
+        >
+          <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-private-ip.png">
+            <picture>
+                <source
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-private-ip_hudd361d7112db4536ef2d45b8d9a8c267_885629_1800x0_resize_box_3.png"
+    
+                />
+              <img
+                    src="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-private-ip_hudd361d7112db4536ef2d45b8d9a8c267_885629_1800x0_resize_box_3.png"
+                  alt="ADB-S Private IP Address"
+              />
+            </picture>
+          </a>
+              <figcaption>
+                ADB-S Private IP Address
+              </figcaption>
+        </figure>
+      </div>
+
+ <!-- spellchecker-enable -->
+</li>
+<li>
+<p>Create a SSH Port Forwarding Session using the Bastion service.</p>
+<p>A Bastion service is deployed when selecting <strong>PRIVATE_ENDPOINT_ACCESS</strong> during installation. To access the Oracle Autonomous Database you need to create a session between your local machine and the Oracle Autonomous Database using the Bastion Service. <a
   class="gdoc-markdown__link"
   href="https://docs.oracle.com/en-us/iaas/Content/Bastion/Tasks/managingsessions.htm#"
->Dynamic Port Forwarding (SOCKS5) Session</a> is created.</p>
-<p>For example:</p>
+>Create a Dynamic Port Forwarding (SOCKS5) Session</a>.</p>
+<p>Select the Bastion Service in the <strong>Identity &amp; Security</strong> Menu:</p>
+ <!-- spellchecker-disable -->
+
+      
+      
+    
+    
+      <div class="flex justify-center">
+        <figure
+          class="gdoc-markdown__figure"
+        >
+          <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-bastion.png">
+            <picture>
+                <source
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-bastion_hu1c905e32ba76ca20a2ee4e8738aafb57_314639_600x0_resize_box_3.png 600w, https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-bastion_hu1c905e32ba76ca20a2ee4e8738aafb57_314639_1200x0_resize_box_3.png 1200w" sizes="100vw"
+    
+                />
+              <img
+                    src="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-bastion_hu1c905e32ba76ca20a2ee4e8738aafb57_314639_1800x0_resize_box_3.png"
+                  alt="Load the Wallet"
+              />
+            </picture>
+          </a>
+              <figcaption>
+                Load the Wallet
+              </figcaption>
+        </figure>
+      </div>
+
+ <!-- spellchecker-enable -->
+<p>Select the Bastion service for your deployment and click <strong>Create Session</strong>. This will bring up a dialog box where you need to fill in the values for your installation.</p>
+<ul>
+<li><code>Session Type</code> : Select <code>SSH port forwarding session</code>.</li>
+<li><code>Session Name</code> : Enter a name for the session.</li>
+<li><code>IP Address</code> : Enter the Private IP Address for the ADB-S.</li>
+<li><code>Port</code> : Enter <code>1522</code> as the port number</li>
+<li><code>SSH Key</code> : Add a Public SSH Key that will be used for the session.</li>
+</ul>
  <!-- spellchecker-disable -->
 
       
@@ -1724,7 +2136,7 @@ the private Virtual Cloud Network (VCN), and access is only possible using the B
           <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/database/oci-bastion-session-create.png">
             <picture>
                 <source
-                    srcset="https://oracle.github.io/microservices-datadriven/spring/database/oci-bastion-session-create_hu34b22c0de5a7de184b612596d2de8425_307323_1800x0_resize_box_3.png"
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/database/oci-bastion-session-create_hu34b22c0de5a7de184b612596d2de8425_307323_600x0_resize_box_3.png 600w, https://oracle.github.io/microservices-datadriven/spring/database/oci-bastion-session-create_hu34b22c0de5a7de184b612596d2de8425_307323_1200x0_resize_box_3.png 1200w" sizes="100vw"
     
                 />
               <img
@@ -1742,50 +2154,120 @@ the private Virtual Cloud Network (VCN), and access is only possible using the B
  <!-- spellchecker-enable -->
 </li>
 <li>
-<p>After the session is created, you can establish the tunnel with your ADB instance by issuing an <code>ssh</code> command that you obtain by clicking on the three dots symbol on right side of the created session. For example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ssh -i &lt;privateKey&gt; -N -D 127.0.0.1:&lt;localPort&gt; -p <span class="m">22</span> ocid1.bastionsession.oc1.phx....@host.bastion.us-phoenix-1.oci.oraclecloud.com
+<p>After the session is created, establish a SSH tunnel your your ADB instance by issuing an <code>ssh</code> command in a terminal window. The SSH is obtained obtain by clicking on the three dots symbol on right side of the created session in the OCI COnsole. The session will run until you close the terminal window.</p>
+<p>Replace <code>&lt;privateKey&gt;</code> with path to your Private Key and <code>&lt;localPort&gt;</code> with the local port you want to use. For example:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ssh -i &lt;privateKey&gt; -N -L &lt;localPort&gt;:10.113.0.28:1522 -p <span class="m">22</span> ocid1.bastionsession.oc1.....@host.bastion......
 </span></span></code></pre></div></li>
 <li>
-<p>Connect with the ADB instance using the Oracle SQL Developer Command Line (<code>SQLcl</code>) interface. With the tunnel established, you can connect to the ADB instance:</p>
-<p>a. First, export the Oracle Net port by processing this commmand:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">CUSTOM_JDBC</span><span class="o">=</span><span class="s2">&#34;-Doracle.net.socksProxyHost=127.0.0.1 -Doracle.net.socksProxyPort=&lt;PORT&gt; -Doracle.net.socksRemoteDNS=true&#34;</span>
-</span></span></code></pre></div><p>b. Download the ADB client credentials (wallet files). For example:
-<!-- spellchecker-disable -->
+<p>Get the ADMIN user password from k8s secret. in the exa,ple below <code>bluegilldb</code> needs to be replaced with the name of database in the installation.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"> kubectl -n application get secret bluegilldb-db-secrets -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.data.db\.password}&#39;</span> <span class="p">|</span> base64 -d
+</span></span></code></pre></div></li>
+<li>
+<p>Open a terminal Window and start SQLcl with the <code>/nolog</code> option.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sql /nolog
+</span></span></code></pre></div></li>
+<li>
+<p>Load the Wallet using the command <code>set cloudconfig...</code>. In this example the wallet name is Wallet_CALFDB.zip.</p>
+ <!-- spellchecker-disable -->
 
-         
-         
-       
-       
-         <div class="flex justify-center">
-           <figure
-             class="gdoc-markdown__figure"
-           >
-             <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-download-wallet.png">
-               <picture>
-                   <source
-                       srcset="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-download-wallet_huc241caf1daae923ec5f0e3438f90e082_937579_1200x0_resize_box_3.png"
-       
-                   />
-                 <img
-                       src="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-download-wallet_huc241caf1daae923ec5f0e3438f90e082_937579_1800x0_resize_box_3.png"
-                     alt="Download ADB client credential"
-                 />
-               </picture>
-             </a>
-                 <figcaption>
-                   Download ADB client credential
-                 </figcaption>
-           </figure>
-         </div>
+      
+      
+    
+    
+      <div class="flex justify-center">
+        <figure
+          class="gdoc-markdown__figure"
+        >
+          <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-sqlcl-load-wallet.png">
+            <picture>
+                <source
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-sqlcl-load-wallet_hu2aa2010e16abbacccfeaf1ac8150e47d_22506_1800x0_resize_box_3.png"
+    
+                />
+              <img
+                    src="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-sqlcl-load-wallet_hu2aa2010e16abbacccfeaf1ac8150e47d_22506_1800x0_resize_box_3.png"
+                  alt="Load the Wallet"
+              />
+            </picture>
+          </a>
+              <figcaption>
+                Load the Wallet
+              </figcaption>
+        </figure>
+      </div>
 
-<!-- spellchecker-enable --></p>
-<p>c. Connect with <code>SQLcl</code> by processing this command:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"> sql /nolog
-</span></span></code></pre></div><p>d. Connect to the database using the wallet:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">set</span><span class="w"> </span><span class="n">cloudconfig</span><span class="w"> </span><span class="o">&lt;</span><span class="n">WALLET</span><span class="o">&gt;</span><span class="p">.</span><span class="n">zip</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">connect</span><span class="w"> </span><span class="k">ADMIN</span><span class="o">@&lt;</span><span class="n">TNS_NAME</span><span class="o">&gt;</span><span class="w">
-</span></span></span></code></pre></div></li>
+ <!-- spellchecker-enable -->
+</li>
+<li>
+<p>Get the TNS name connection names from the wallet by executing this command:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">show tns
+</span></span></code></pre></div> <!-- spellchecker-disable -->
+
+      
+      
+    
+    
+      <div class="flex justify-center">
+        <figure
+          class="gdoc-markdown__figure"
+        >
+          <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-show-tns.png">
+            <picture>
+                <source
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-show-tns_hu709a6d7693f839cfe11d4e18bf0b06f9_40747_1800x0_resize_box_3.png"
+    
+                />
+              <img
+                    src="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-show-tns_hu709a6d7693f839cfe11d4e18bf0b06f9_40747_1800x0_resize_box_3.png"
+                  alt="Load the Wallet"
+              />
+            </picture>
+          </a>
+              <figcaption>
+                Load the Wallet
+              </figcaption>
+        </figure>
+      </div>
+
+ <!-- spellchecker-enable -->
+</li>
+<li>
+<p>Connect as the ADMIN user to the database using the password you obtained from the k8s secret previously using the command <code>connect</code> followed by <code>ADMIN</code>, password collected and the TNS Name.</p>
+ <!-- spellchecker-disable -->
+
+      
+      
+    
+    
+      <div class="flex justify-center">
+        <figure
+          class="gdoc-markdown__figure"
+        >
+          <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-admin-connect.png">
+            <picture>
+                <source
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-admin-connect_hua7df56d986555ba316273475778538e5_10657_1800x0_resize_box_3.png"
+    
+                />
+              <img
+                    src="https://oracle.github.io/microservices-datadriven/spring/database/oci-adb-admin-connect_hua7df56d986555ba316273475778538e5_10657_1800x0_resize_box_3.png"
+                  alt="Load the Wallet"
+              />
+            </picture>
+          </a>
+              <figcaption>
+                Load the Wallet
+              </figcaption>
+        </figure>
+      </div>
+
+ <!-- spellchecker-enable -->
+<p>You are now connected to the database that is provided when installing Oracle Backend for Spring Boot and Microservices on OCI.</p>
+</li>
 </ol>
+<blockquote>
+<p><strong><em>NOTE:</em></strong> Oracle recommends that you install your own databases, PDBs for your production applications. The database provisioned is used for Oracle Backend for Spring Boot metadata and can be used for development.</p>
+</blockquote>
 
   </article>
 

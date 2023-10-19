@@ -65,7 +65,7 @@ An account on Azure. An account on OCI." />
       "url" : "https://oracle.github.io/microservices-datadriven/spring/azure/",
       "headline": "Azure/OCI Multicloud Installation",
       "description": "The Oracle Backend for Spring Boot and Microservices is available to install in Multicloud (Microsoft Azure (Azure) and Oracle Cloud Infrastructure (OCI)). This installation deploys the Oracle Backend for Spring Boot and Microservices in Azure with an Oracle Autonomous Database running in OCI.\nPrerequisites You must meet the following prerequisites to use the Oracle Backend for Spring Boot Multicloud (Azure and OCI). You need:\nAn account on Azure. An account on OCI.",
-      "wordCount" : "388",
+      "wordCount" : "390",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1725,17 +1725,17 @@ and paste the configuration file snippet from the text box and save for later st
 </li>
 <li>
 <p>Unzip the stack to a directory called <code>obaas</code>. For example:</p>
-<p><code>unzip azure-ebaas-platform_latest.zip -d /tmp/obaas</code></p>
+<p><code>unzip azure-ebaas_latest.zip -d ~/obaas</code></p>
 </li>
 <li>
 <p>Move the <code>private_key.pem</code> file to the <code>obaas</code> directory. For example:</p>
-<p><code>mv private_key.pem /tmp/obaas/</code></p>
+<p><code>mv private_key.pem ~/obaas/</code></p>
 </li>
 <li>
 <p>Run the configuration Helper script using the values from the API Key. For example:</p>
-<p><code>cd /tmp/obaas</code>
-<code>./obaas_configure.py</code>
-<img
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> ~/obaas
+</span></span><span class="line"><span class="cl">./obaas_configure.py
+</span></span></code></pre></div><p><img
   src="AzureConfigure.png"
   alt="Azure Configure"
   
@@ -1752,9 +1752,9 @@ and paste the configuration file snippet from the text box and save for later st
 </div>
 <p>Install Ansible to run the Configuration Management Playbook.  The Helper script creates a Python virtual environment and installs
 Ansible and some additional modules. For example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> /tmp/obaas/ansible
-</span></span><span class="line"><span class="cl">./setup_ansible.sh
-</span></span><span class="line"><span class="cl"><span class="nb">source</span> ./activate.env
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> ~/obaas/ansible
+</span></span><span class="line"><span class="cl">./setup_ansible.sh /tmp
+</span></span><span class="line"><span class="cl"><span class="nb">source</span> ./activate.env /tmp
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h2 id="deploy-the-infrastructure">
         Deploy the Infrastructure
@@ -1764,7 +1764,7 @@ Ansible and some additional modules. For example:</p>
     </h2>
 </div>
 <p>From the Azure Cloud Shell, run these commands to deploy the infrastructure:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> /tmp/obaas
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> ~/obaas
 </span></span><span class="line"><span class="cl">terraform init
 </span></span><span class="line"><span class="cl">terraform plan -out<span class="o">=</span>multicloud.plan
 </span></span><span class="line"><span class="cl">terraform apply <span class="s2">&#34;multicloud.plan&#34;</span>
