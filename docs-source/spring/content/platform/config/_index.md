@@ -1,5 +1,5 @@
 ---
-title: "Config Server"
+title: "Spring Config Server"
 ---
 
 Oracle Backend for Spring Boot and Microservices includes Spring Cloud Config which provides server- and client-side support for externalized
