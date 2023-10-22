@@ -11,20 +11,19 @@ configuration in the Oracle Autonomous Database, so it easily supports labelled 
 environments, as well as being accessible to a wide range of tools for managing the content.
 Configuration is stored in the `CONFIGSERVER` schema in the `PROPERTIES` table.
 
-For example, the Spring Cloud Config client's Spring `application.yaml` configuration file could include:
+For example, the Spring Cloud Config client's Spring `application.yaml` configuration file could include ([Spring Cloud Config Documentation](https://spring.io/projects/spring-cloud-config)):
 
 ```yaml
 spring:
-  config:
-    import: optional:configserver:http://config-server.config-server.svc.cluster.local:8080
   application:
     name: application-a
-    config:
-      label: 23cbeta
-      profile: development
-```
 
-This example fetches data where the application is `application-a`, profile is `development` and the label is `23cbeta`.
+  profiles:
+    active: jdbc
+
+  config:
+    import: optional:configserver:http://config-server.config-server.svc.cluster.local:8080
+```
 
 Managing the data for the Spring Cloud Config server should be done using the CLI or via the REST API endpoints. If you prefer, you can also work directly with the `CONFIGSERVER.PROPERTIES` table in the database. ([Accessing the database](../../database/)).
 
