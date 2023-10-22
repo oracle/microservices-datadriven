@@ -334,6 +334,8 @@ Property(ies) successfully deleted.
 
 #### /srv/config/delete?service-profile=\<profile-name\>&service-profile=\<service-profile\>
 
+Delete all properties with a service profile.
+
 ```Shell
 curl -u <username>:<password> -s -X DELETE http://localhost:8080/srv/config/properties/delete? \
   service-name=application-d& \
