@@ -2,32 +2,22 @@
 title: "Spring Config Server"
 ---
 
-Oracle Backend for Spring Boot and Microservices includes Spring Cloud Config which provides server- and client-side support for externalized
-configurations in a distributed system. The Spring Cloud Config server provides a central place to manage external properties for applications
-across all environments.
+Oracle Backend for Spring Boot and Microservices includes Spring Cloud Config which provides server- and client-side support for externalized configurations in a distributed system. The Spring Cloud Config server provides a central place to manage external properties for applications across all environments.
 
 The Spring Cloud Config server is pre-configured to work with the Spring Boot Eureka service registry, and it is configured to store the
-configuration in the Oracle Autonomous Database, so it easily supports labelled versions of configuration
-environments, as well as being accessible to a wide range of tools for managing the content.
-Configuration is stored in the `CONFIGSERVER` schema in the `PROPERTIES` table.
+configuration in the Oracle Autonomous Database, so it easily supports labeled versions of configuration environments, as well as being accessible to a wide range of tools for managing the content. More details can be found here: ([Spring Cloud Config Documentation](https://spring.io/projects/spring-cloud-config)). 
 
-For example, the Spring Cloud Config client's Spring `application.yaml` configuration file could include ([Spring Cloud Config Documentation](https://spring.io/projects/spring-cloud-config)):
+When building applications using Spring Config Server For example, the Spring Cloud Config client's Spring `application.yaml` configuration file should include to access the deployed Spring Config Server.
 
 ```yaml
 spring:
-  application:
-    name: application-a
-
-  profiles:
-    active: jdbc
-
   config:
     import: optional:configserver:http://config-server.config-server.svc.cluster.local:8080
 ```
 
-Managing the data for the Spring Cloud Config server should be done using the CLI or via the REST API endpoints. If you prefer, you can also work directly with the `CONFIGSERVER.PROPERTIES` table in the database. ([Accessing the database](../../database/)).
+Configuration is stored in the `CONFIGSERVER` schema in the `PROPERTIES` table. Managing the data for the Spring Cloud Config server should be done using the CLI or via the REST API endpoints. If you prefer, you can also work directly with the `CONFIGSERVER.PROPERTIES` table in the database. How to access the database is documented here, ([Accessing the database](../../database/)).
 
-During setup of Oracle Backend for SPring Boot and Microservices the following data is loaded into `CONFIGSERVER.PROPERTIES`. This data can be deleted.
+During setup of Oracle Backend for Spring Boot and Microservices the following data is loaded into `CONFIGSERVER.PROPERTIES`. This data can be deleted.
 
 ```code
 | APPLICATION     | PROFILE        | LABEL    | PROP_KEY            | VALUE
@@ -106,7 +96,7 @@ Example of data returned:
 
 #### /srv/config/all?service-profile=\<profile-name\>
 
-Get all distinct services filtered on profile(service-profile).
+Get all distinct services filtered on profile (service-profile).
 
 ```shell
 curl -s http://localhost:8080/srv/config/all? \
@@ -127,7 +117,7 @@ Example of data returned:
 
 #### /srv/config/properties?service-name=\<service-name\>
 
-Get all properties for a service-name(application).
+Get all properties for a service-name (application).
 
 ```shell
 curl -s http://localhost:8080/srv/config/properties? \
@@ -183,7 +173,7 @@ Example of data returned:
 
 #### /srv/config/properties?service-name=\<service-name\>&service-label=\<service-label\>
 
-Get all properties for a service-name(application) filtered on service-label(label).
+Get all properties for a service-name (application) filtered on service-label (label).
 
 ```shell
 curl -s http://localhost:8080/srv/config/properties? \
@@ -220,7 +210,7 @@ Example of data returned:
 
 #### /srv/config/properties?service-name=\<service-name\>&service-label=\<service-label\>&service-profile=\<service-profile\>
 
-Get all properties for a service-name(application) filtered on service-profile(profile) and service-profile(profile).
+Get all properties for a service-name (application) filtered on service-profile (profile) and service-profile (profile).
 
 ```shell
 curl -s http://localhost:8080/srv/config/properties? \
@@ -258,7 +248,7 @@ Example of data returned:
 
 #### /srv/config/properties?service-name=\<service-name\>&service-label=\<service-label\>&service-profile=\<service-profile\>&property-key=\<property-key\>
 
-Get all properties for a service-name(application) filtered on service-profile(profile), service-profile(profile) and property-key(prop_key).
+Get all properties for a service-name (application) filtered on service-profile (profile), service-profile (profile) and property-key (prop_key).
 
 ```shell
 curl -s http://localhost:8080/srv/config/properties? \
