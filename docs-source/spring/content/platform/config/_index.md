@@ -6,7 +6,7 @@ Oracle Backend for Spring Boot and Microservices includes Spring Cloud Config wh
 
 The Spring Cloud Config server is pre-configured to work with the Spring Boot Eureka service registry, configured to store the Configuration in the Oracle Autonomous Database to support labeled versions of configuration environments as well as being accessible to a wide range of tools for managing the content. More details can be found here: ([Spring Cloud Config Documentation](https://spring.io/projects/spring-cloud-config)).
 
-When building applications using Spring Config Server, the Spring Cloud Config client's `application.yaml` configuration file must include access to information in the the deployed Spring Config Server:
+When building applications using Spring Config Server, the Spring Cloud Config client's `application.yaml` configuration file must include access information to the the deployed Spring Config Server:
 
 ```yaml
 spring:
