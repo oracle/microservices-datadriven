@@ -52,11 +52,13 @@ The following REST API endpoints are available to the Config Server entries. The
 
 ### Config Server REST API endpoints examples
 
-In all of the following examples, replace `<username>:<password>` with your username and password when necessary. ([Getting User information](../../security/azn-server/)). The examples are using `curl` to interact with the REST API endpoints. This also requires an open tunnel on port 8080 to either the `config-server` or `obaas-admin` service. For example:
+In all of the following examples, replace `<username>:<password>` with your username and password when necessary. ([Getting User information](../../security/azn-server/)). The examples are using `curl` to interact with the REST API endpoints. This also requires an open tunnel on port 8080 to either the `config-server` or `obaas-admin` service. Use the following command to start a tunnel to the `config-server` service:
 
 ```shell
-kubectl port-forward -n obaas-admin svc/obaas-admin 8080
+kubectl port-forward -n config-server svc/config-server 8080
 ```
+
+The output will be slightly different when using a tunnel to `obaas-admin`, the data will be included in the `"body"` section.
 
 #### /srv/config/all
 
@@ -98,8 +100,7 @@ Example of data returned:
 Get all distinct services filtered on profile (service-profile):
 
 ```shell
-curl -s http://localhost:8080/srv/config/all? \
-  service-profile=dev
+curl -s http://localhost:8080/srv/config/all\?service-profile\=dev
 ```
 
 Example of data returned:
@@ -119,8 +120,7 @@ Example of data returned:
 Get all properties for a service-name (application):
 
 ```shell
-curl -s http://localhost:8080/srv/config/properties? \
-  service-name=application-a
+curl -s http://localhost:8080/srv/config/properties\?service-name\=application-a
 ```
 
 Example of data returned:
@@ -175,9 +175,7 @@ Example of data returned:
 Get all properties for a service-name (application) filtered on service-label (label):
 
 ```shell
-curl -s http://localhost:8080/srv/config/properties? \
-  service-name=application-b& \
-  service-label=19c
+curl -s http://localhost:8080/srv/config/properties\?service-name\=application-b\&service-label\=19c
 ```
 
 Example of data returned:
@@ -212,10 +210,7 @@ Example of data returned:
 Get all properties for a service-name (application) filtered on service-label (label) and service-profile (profile):
 
 ```shell
-curl -s http://localhost:8080/srv/config/properties? \
-  service-name=application-b& \
-  service-label=19c& \
-  service-profile=production
+curl -s http://localhost:8080/srv/config/properties\?service-name\=application-b\&service-label\=19c\&service-profile\=production
 ```
 
 Example of data returned:
@@ -250,11 +245,7 @@ Example of data returned:
 Get all properties for a service-name (application) filtered on service-label (label), service-profile (profile) and property-key (prop_key):
 
 ```shell
-curl -s http://localhost:8080/srv/config/properties? \
-  service-name=application-c& \
-  service-label=23.4& \
-  service-profile=secret& \
-  property-key=txeventq
+curl -s http://localhost:8080/srv/config/properties\?service-name\=application-c\&service-label\=23.4\&service-profile\=secret\&property-key\=txeventq
 ```
 
 Example of data returned:
@@ -279,9 +270,9 @@ Example of data returned:
 Create a property:
 
 ```shell
-  curl -u <username>:<password> -s -X POST \
-    -d "service-name=application-d&service-label=1.0&service-profile=AI&property-key=url-to-host&property-value=hostname" \
-    http://localhost:8080/srv/config/property/add
+curl -u <username>:<password> -s -X POST \
+  -d "service-name=application-d&service-label=1.0&service-profile=AI&property-key=url-to-host&property-value=hostname" \
+  http://localhost:8080/srv/config/property/add
 ```
 
 Successful creation of a property returns:
@@ -311,8 +302,7 @@ Property successful modified.
 Delete all properties from a service (application):
 
 ```Shell
-curl -u <username>:<password> -s -X DELETE http://localhost:8080/srv/config/properties/delete? \
-  service-name=atael
+curl -u <username>:<password> -s -X DELETE http://localhost:8080/srv/config/properties/delete\?service-name\=atael
 ```
 
 Successful deletion of properties returns:
@@ -326,9 +316,7 @@ Property(ies) successfully deleted.
 Delete all properties with a service profile:
 
 ```Shell
-curl -u <username>:<password> -s -X DELETE http://localhost:8080/srv/config/properties/delete? \
-  service-name=application-d& \
-  service-profile=AI
+curl -u <username>:<password> -s -X DELETE http://localhost:8080/srv/config/properties/delete\?service-name\=application-d\&service-profile\=AI
 ```
 
 Successful deletion of properties returns:
@@ -342,10 +330,7 @@ Property(ies) successfully deleted.
 Delete all properties from a service with a profile and a label:
 
 ```Shell
-curl -u <username>:<password> -s -X DELETE http://localhost:8080/srv/config/properties/delete? \
-  service-name=application-a& \
-  service-profile=development& \
-  service-label=12c
+curl -u <username>:<password> -s -X DELETE http://localhost:8080/srv/config/properties/delete\?service-name\=application-a\&service-profile\=development\&service-label\=12c
 ```
 
 Successful deletion of properties returns:
@@ -359,11 +344,7 @@ Property(ies) successfully deleted.
 Delete all properties from a service with a profile and a label:
 
 ```Shell
-curl -u <username>:<password> -s -X DELETE http://localhost:8080/srv/config/properties/delete? \
-  service-name=application-b& \
-  service-profile=development& \
-  service-label=23cbeta& \
-  property-key=db-dev-name
+curl -u <username>:<password> -s -X DELETE http://localhost:8080/srv/config/properties/delete\?service-name\=application-b\&service-profile\=development\&service-label\=23cbeta\&property-key\=db-dev-name
 ```
 
 Successful delete of properties returns:
