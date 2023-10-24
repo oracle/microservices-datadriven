@@ -6,7 +6,7 @@ Oracle Backend for Spring Boot and Microservices includes Spring Cloud Config wh
 
 The Spring Cloud Config server is pre-configured to work with the Spring Boot Eureka service registry, configured to store the Configuration in the Oracle Autonomous Database to support labeled versions of configuration environments as well as being accessible to a wide range of tools for managing the content. More details can be found here: ([Spring Cloud Config Documentation](https://spring.io/projects/spring-cloud-config)).
 
-When building applications using Spring Config Server, the Spring Cloud Config client's `application.yaml` configuration file must include access information to the the deployed Spring Config Server:
+When building applications using Spring Config Server, the Spring Cloud Config client's `application.yaml` configuration file must include access information to the deployed Spring Config Server:
 
 ```yaml
 spring:
@@ -58,7 +58,7 @@ In all of the following examples, replace `<username>:<password>` with your user
 kubectl port-forward -n config-server svc/config-server 8080
 ```
 
-The output will be slightly different when using a tunnel to `obaas-admin`, the data will be included in the `"body"` section.
+The output will be slightly different when using a tunnel to `obaas-admin`. The data will be included in the `"body"` section.
 
 #### /srv/config/all
 
@@ -355,7 +355,7 @@ Property(ies) successfully deleted.
 
 ## Recreate test data
 
-The config server data can be created using the following SQL Statements:
+The config server data can be created using the following SQL statements:
 
 ```sql
 INSERT INTO CONFIGSERVER.PROPERTIES (APPLICATION, PROFILE, LABEL, PROP_KEY, VALUE) VALUES ('atael','dev','latest','test-property','This is the test-property value');
