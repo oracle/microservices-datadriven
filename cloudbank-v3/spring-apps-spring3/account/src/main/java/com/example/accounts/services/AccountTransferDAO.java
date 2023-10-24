@@ -1,18 +1,16 @@
-// Copyright (c) 2023, Oracle and/or its affiliates. 
-// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/ 
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 package com.example.accounts.services;
-
-import jakarta.ws.rs.core.Response;
-import lombok.extern.slf4j.Slf4j;
-
-import org.eclipse.microprofile.lra.annotation.ParticipantStatus;
-import org.springframework.stereotype.Component;
 
 import com.example.accounts.model.Account;
 import com.example.accounts.model.Journal;
 import com.example.accounts.repository.AccountRepository;
 import com.example.accounts.repository.JournalRepository;
+import com.oracle.microtx.springboot.lra.annotation.ParticipantStatus;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
@@ -22,19 +20,28 @@ public class AccountTransferDAO {
     final AccountRepository accountRepository;
     final JournalRepository journalRepository;
 
+    /**
+     * Initialize account and journal repository.
+     * @param accountRepository Account Repository
+     * @param journalRepository Journal Repository
+     */
     public AccountTransferDAO(AccountRepository accountRepository, JournalRepository journalRepository) {
         this.accountRepository = accountRepository;
         this.journalRepository = journalRepository;
         singleton = this;
-        System.out.println(
-                "AccountTransferDAO accountsRepository = " + accountRepository + ", journalRepository = "
-                        + journalRepository);
+        System.out.println("AccountTransferDAO accountsRepository = " + accountRepository 
+            + ", journalRepository = " + journalRepository);
     }
 
     public static AccountTransferDAO instance() {
         return singleton;
     }
 
+    /**
+     * Get status od LRA participant.
+     * @param status Status code
+     * @return Returns status code
+     */
     public static String getStatusString(ParticipantStatus status) {
         switch (status) {
             case Compensated:
@@ -56,6 +63,11 @@ public class AccountTransferDAO {
         }
     }
 
+    /**
+     * Get LRA Status from a string.
+     * @param statusString Status
+     * @return Participant Status
+     */
     public static ParticipantStatus getStatusFromString(String statusString) {
         switch (statusString) {
             case "Compensated":
@@ -82,15 +94,29 @@ public class AccountTransferDAO {
         accountRepository.save(account);
     }
 
-    public Response status(String lraId, String journalType) throws Exception {
+    /**
+     * TO-DO.
+     * @param lraId LRA Id
+     * @param journalType Journal Type
+     * @return Participant Status
+     * @throws Exception Exception
+     */
+    public ResponseEntity<ParticipantStatus> status(String lraId, String journalType) throws Exception {
         Journal journal = getJournalForLRAid(lraId, journalType);
         if (AccountTransferDAO.getStatusFromString(journal.getLraState()).equals(ParticipantStatus.Compensated)) {
-            return Response.ok(ParticipantStatus.Compensated).build();
+            return ResponseEntity.ok(ParticipantStatus.Compensated);
         } else {
-            return Response.ok(ParticipantStatus.Completed).build();
+            return ResponseEntity.ok(ParticipantStatus.Completed);
         }
     }
 
+    /**
+     * Set status for a Journal Entry.
+     * @param lraId LRA Id
+     * @param status Status
+     * @param journalType Journal Type
+     * @throws Exception Exception
+     */
     public void afterLRA(String lraId, String status, String journalType) throws Exception {
         Journal journal = getJournalForLRAid(lraId, journalType);
         journal.setLraState(status);
@@ -99,15 +125,17 @@ public class AccountTransferDAO {
 
     Account getAccountForJournal(Journal journal) throws Exception {
         Account account = accountRepository.findByAccountId(journal.getAccountId());
-        if (account == null)
+        if (account == null) {
             throw new Exception("Invalid accountName:" + journal.getAccountId());
+        }
         return account;
     }
 
     Account getAccountForAccountId(long accountId) {
         Account account = accountRepository.findByAccountId(accountId);
-        if (account == null)
+        if (account == null) {
             return null;
+        }
         return account;
     }
 

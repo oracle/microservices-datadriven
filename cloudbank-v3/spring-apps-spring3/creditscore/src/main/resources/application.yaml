@@ -8,6 +8,11 @@ spring:
   zipkin:
     base-url: ${zipkin.base-url}
 
+# Disables autoconfiguration for the refresh scope and associated features.
+  cloud:
+    refresh:
+      enabled: false
+
 eureka:
   instance:
     hostname: ${spring.application.name}

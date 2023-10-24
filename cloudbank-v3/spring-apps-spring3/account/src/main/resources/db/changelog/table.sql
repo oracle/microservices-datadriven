@@ -3,7 +3,7 @@
 --changeset gotsysdba:1
 --preconditions onFail:MARK_RAN onerror:MARK_RAN
 --precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM ACCOUNT.ACCOUNTS WHERE 1=2
-DROP TABLE ACCOUNT.ACCOUNTS;
+DROP TABLE ACCOUNT.ACCOUNTS CASCADE CONSTRAINTS;
 
 --changeset gotsysdba:2
 --preconditions onFail:MARK_RAN onerror:MARK_RAN

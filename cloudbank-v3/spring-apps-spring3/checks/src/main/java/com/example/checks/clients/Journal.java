@@ -1,3 +1,6 @@
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
 package com.example.checks.clients;
 
 import lombok.AllArgsConstructor;
@@ -15,6 +18,12 @@ public class Journal {
     private String lraState;
     private long journalAmount;
 
+    /**
+     * Create Journal object.
+     * @param journalType Journal Type
+     * @param accountId Account Id
+     * @param journalAmount Amount
+     */
     public Journal(String journalType, long accountId, long journalAmount) {
         this.journalType = journalType;
         this.accountId = accountId;

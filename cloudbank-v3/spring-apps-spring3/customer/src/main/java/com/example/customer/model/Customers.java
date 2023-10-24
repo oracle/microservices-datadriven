@@ -1,18 +1,18 @@
-// Copyright (c) 2023, Oracle and/or its affiliates. 
-// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/ 
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 package com.example.customer.model;
 
+import java.util.Date;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.Column;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenerationTime;
 import org.hibernate.annotations.Generated;
-
-import java.util.Date;
+import org.hibernate.annotations.GenerationTime;
 
 @SuppressWarnings("deprecation")
 @Entity
@@ -41,6 +41,14 @@ public class Customers {
     @Column(name = "PASSWORD")
     private String customerPassword;
 
+
+    /**
+     * Creates a  Customers object.
+     * @param customerId The Customer ID
+     * @param customerName The Customer Name
+     * @param customerEmail The Customer Email
+     * @param customerOtherDetails Other details about the customer
+     */
     public Customers(String customerId, String customerName, String customerEmail, String customerOtherDetails) {
         this.customerId = customerId;
         this.customerName = customerName;

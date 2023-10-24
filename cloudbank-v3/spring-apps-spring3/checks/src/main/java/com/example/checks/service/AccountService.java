@@ -1,12 +1,13 @@
-package com.example.checks.service;
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
-import org.springframework.stereotype.Service;
+package com.example.checks.service;
 
 import com.example.checks.clients.AccountClient;
 import com.example.checks.clients.Journal;
 import com.example.testrunner.model.Clearance;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor

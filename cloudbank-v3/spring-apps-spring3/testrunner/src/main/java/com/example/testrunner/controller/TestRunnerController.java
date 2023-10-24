@@ -1,5 +1,10 @@
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
 package com.example.testrunner.controller;
 
+import com.example.testrunner.model.CheckDeposit;
+import com.example.testrunner.model.Clearance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,9 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.example.testrunner.model.CheckDeposit;
-import com.example.testrunner.model.Clearance;
 
 @RestController
 @RequestMapping("/api/v1/testrunner")
