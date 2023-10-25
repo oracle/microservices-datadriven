@@ -353,9 +353,9 @@ Successful delete of properties returns:
 Property(ies) successfully deleted.
 ```
 
-## Recreate test data
+## Re-create test data
 
-The config server data can be created using the following SQL statements:
+The Config Server data can be created using the following SQL statements:
 
 ```sql
 INSERT INTO CONFIGSERVER.PROPERTIES (APPLICATION, PROFILE, LABEL, PROP_KEY, VALUE) VALUES ('atael','dev','latest','test-property','This is the test-property value');
