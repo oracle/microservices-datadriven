@@ -347,7 +347,7 @@ Delete all properties from a service with a profile and a label:
 curl -u <username>:<password> -s -X DELETE http://localhost:8080/srv/config/properties/delete\?service-name\=application-b\&service-profile\=development\&service-label\=23cbeta\&property-key\=db-dev-name
 ```
 
-Successful delete of properties returns:
+Successful deletion of properties returns:
 
 ```text
 Properties successfully deleted.
