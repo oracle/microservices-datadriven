@@ -294,7 +294,7 @@ curl -u <username>:<password> -s -X PUT \
 Successful update of a property returns:
 
 ```text
-Property successful modified.
+Property successfully modified.
 ```
 
 #### /srv/config/properties/delete?service-name\<service-name\>
@@ -308,7 +308,7 @@ curl -u <username>:<password> -s -X DELETE http://localhost:8080/srv/config/prop
 Successful deletion of properties returns:
 
 ```text
-Property(ies) successfully deleted.
+Properties successfully deleted.
 ```
 
 #### /srv/config/delete?service-profile=\<profile-name\>&service-profile=\<service-profile\>
@@ -322,7 +322,7 @@ curl -u <username>:<password> -s -X DELETE http://localhost:8080/srv/config/prop
 Successful deletion of properties returns:
 
 ```text
-Property(ies) successfully deleted.
+Properties successfully deleted.
 ```
 
 #### /srv/config/delete?service-profile=\<profile-name\>&service-profile=\<service-profile\>&service-label=\<service-label\>
@@ -336,7 +336,7 @@ curl -u <username>:<password> -s -X DELETE http://localhost:8080/srv/config/prop
 Successful deletion of properties returns:
 
 ```text
-Property(ies) successfully deleted.
+Properties successfully deleted.
 ```
 
 #### /srv/config/delete?service-profile=\<profile-name\>&service-profile=\<service-profile\>&service-label=\<service-label\>&property-key=\<property-key\>
@@ -350,7 +350,7 @@ curl -u <username>:<password> -s -X DELETE http://localhost:8080/srv/config/prop
 Successful delete of properties returns:
 
 ```text
-Property(ies) successfully deleted.
+Properties successfully deleted.
 ```
 
 ## Re-create test data
