@@ -561,11 +561,11 @@ The following is an example development workflow using the CLI:
          400 : "Couldn't find any property for submitted query."
          ```
 8. Use the `GraalVM Compile Commands` to:
-* upload a **.jar** file to the Oracle Backend for Spring Boot and Microservices and its GraalVM compiler service;
-* start a compilation of your microservice to produce an executable native file **.exec**;
-* get last logs available regarding a compilation in progress or terminated;
-* download the **.exec** file to deploy on the backend
-* purge files remaining after a compilation on remote GraalVM compiler service.
+* Upload a **.jar** file to the Oracle Backend for Spring Boot and Microservices and its GraalVM compiler service.
+* Start a compilation of your microservice to produce an executable native file **.exec**.
+* Retrieve the last logs available regarding a compilation in progress or terminated.
+* Download the **.exec** file to deploy on the backend.
+* Purge the files remaining after a compilation on the remote GraalVM compiler service.
 
 The GraalVM Compile Commands are the following:
 
@@ -573,18 +573,18 @@ The GraalVM Compile Commands are the following:
 oractl:>help 
    
 GraalVM Compile Commands
-       compile-download: Download compiled executable file
-       compile: Compile a service with GraalVM
-       compile-purge: Delete a launched job
-       compile-logs: Compilation progress
+       compile-download: Download the compiled executable file.
+       compile: Compile a service with GraalVM.
+       compile-purge: Delete a launched job.
+       compile-logs: Compilation progress.
 ```
 
-   1. Use the `compile` command to upload and automatically start compilation using the following syntax:
+   1. Use the `compile` command to upload and automatically start compilation using the following command:
 
 ```cmd
    oractl:>help compile
        NAME
-       compile - Compile a service with GraalVM
+       compile - Compile a service with GraalVM.
 
        SYNOPSIS
               compile [--artifact-path String] --help 
@@ -599,7 +599,7 @@ GraalVM Compile Commands
               [Optional]
 ```
 
-   Since the compilation of a .jar file via the tool `native-image` does not support cross-compilation, so it must be on the same kind of platform where the application will run, this service guarantees a compilation in the same Operating System and CPU type where the service it will be executed on the Kubernetes cluster.
+   Because the compilation of a .jar file using the tool `native-image` does not support cross-compilation, it must be on the same kind of platform where the application will run. This service guarantees a compilation in the same operating system and CPU type where the service will be executed on the Kubernetes cluster.
 
    The Spring Boot application **pom.xml** with the plugin:
 
@@ -616,7 +616,7 @@ The project should be compiled on the developer desktop with GraalVM version 22.
   mvn -Pnative native:compile -Dmaven.test.skip=true
 ```
 
-   This pre-compilation on your desktop needs to check if there are any issues on the libraries used in your Spring Boot microservice. In addition, your executable jar file must include AOT generated assets such as gnenerated classes and JSON hint files. For additional information, see [Converting Spring Boot Executable Jar] (https://docs.spring.io/spring-boot/docs/current/reference/html/native-image.html#native-image.advanced.converting-executable-jars).
+   This pre-compilation on your desktop needs to check if there are any issues on the libraries used in your Spring Boot microservice. In addition, your executable .jar file must include ahead-of-time (AOT) generated assets such as generated classes and JSON hint files. For additional information, see [Converting Spring Boot Executable Jar] (https://docs.spring.io/spring-boot/docs/current/reference/html/native-image.html#native-image.advanced.converting-executable-jars).
 
    The following is an example of the command output::
 
@@ -630,25 +630,25 @@ The project should be compiled on the developer desktop with GraalVM version 22.
        oractl:>
 ```
 
-   The following example shows the generated batch ID that must be used to retrieve the log files, download the compiled file, and purge the service instance:
+   The following example shows the generated batch ID that must be used to retrieve the log files, downloading the compiled file, and purging the service instance:
 
    **demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b**
 
-   If omitted, the last batch is considered by default.
+   If omitted, then the last batch is considered by default.
 
-   2. Use the `compile-logs` command to get the logs that show the compilation progress:
+   2. Use the `compile-logs` command to retrieve the logs that show the compilation progress. For example:
 
 ```cmd
 oractl:>help compile-logs
 NAME
-       compile-logs - Compilation progress
+       compile-logs - Compilation progress.
 
 SYNOPSIS
        compile-logs --batch String --help 
 
 OPTIONS
        --batch String
-       file ID returned from compile command. If not provided by default the last file
+       File ID returned from the compile command. If not provided by default, then the last file.
        [Optional]
 
        --help or -h 
@@ -673,7 +673,7 @@ OPTIONS
     ------------------------------------------------------------------------------------------------------------------------
 ```
 
-   If compile-logs returns a **Finished generating** message, download the **.exec** file. For example:
+   If the compile-logs commands returns a **Finished generating** message, then download the **.exec** file. For example:
 
 ```cmd
     CPU:  Enable more CPU features with '-march=native' for improved performance.
@@ -688,19 +688,19 @@ OPTIONS
    Compiling Complete.
 ```
 
-   3. Use the `compile-download` command to download the **.exec** file generated. For example:
+   3. Use the `compile-download` command to download the generated **.exec** file. For example:
 
 ```cmd
 oractl:>help compile-download
     NAME
-       compile-download - Download executable file compiled
+       compile-download - Download the compiled executable file.
 
     SYNOPSIS
        compile-download --batch String --help 
 
     OPTIONS
        --batch String
-       file ID to download as executable file. If not provided by default the last file compiled
+       File ID to download as the executable file. If not provided by default, then the last file compiled.
        [Optional]
 
        --help or -h 
@@ -717,19 +717,19 @@ oractl:>help compile-download
    /Users/cdebari/demo-0.0.1-SNAPSHOT.jar.exec
 ```
 
-   4. Use the `compile-purge` to delete all of the artifacts generated on the GraalVM compiler service after downloading the **.exec** file:
+   4. Use the `compile-purge` command to delete all of the artifacts generated on the GraalVM compiler service after downloading the **.exec** file:
 
 ```cmd
    oractl:>help compile-purge
    NAME
-       compile-purge - Delete a job launched
+       compile-purge - Delete a launched job.
 
    SYNOPSIS
        compile-purge --batch String --help 
 
    OPTIONS
        --batch String
-       file ID returned from compile command. If not provided by default the last file
+       file ID returned from compile command. If not provided by default, then the last file.
        [Optional]
 
        --help or -h 
