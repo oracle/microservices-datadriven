@@ -9,12 +9,12 @@ https://oss.oracle.com/licenses/upl. -->
     <parent>
         <artifactId>oracle-spring-boot-starters</artifactId>
         <groupId>com.oracle.database.spring</groupId>
-        <version>3.1.0</version>
+        <version>23.4.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>oracle-spring-boot-starter-wallet</artifactId>
-    <version>3.1.0</version>
+    <version>23.4.0</version>
     <packaging>pom</packaging>
 
     <name>Oracle Spring Boot Starter - Wallet</name>
