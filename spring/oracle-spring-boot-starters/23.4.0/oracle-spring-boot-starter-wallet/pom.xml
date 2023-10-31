@@ -53,17 +53,17 @@ https://oss.oracle.com/licenses/upl. -->
         <dependency>
             <groupId>com.oracle.database.security</groupId>
             <artifactId>oraclepki</artifactId>
-            <version>21.9.0.0</version>
+            <version>21.11.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.oracle.database.security</groupId>
             <artifactId>osdt_core</artifactId>
-            <version>21.9.0.0</version>
+            <version>21.11.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.oracle.database.security</groupId>
             <artifactId>osdt_cert</artifactId>
-            <version>21.9.0.0</version>
+            <version>21.11.0.0</version>
         </dependency>
     </dependencies>
 
