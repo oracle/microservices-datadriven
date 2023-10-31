@@ -3,22 +3,22 @@
 spring:
   application:
     name: customers
-  zipkin:
-    base-url: ${zipkin.base-url}
+  # zipkin:
+  #   base-url: ${zipkin.base-url}
   jpa:
     hibernate:
       ddl-auto: validate
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.Oracle12cDialect
+        dialect: org.hibernate.dialect.OracleDialect
         format_sql: true
-    show-sql: true
+    show-sql: false
     
   liquibase:
     change-log: classpath:db/changelog/controller.yaml
     url: ${spring.datasource.url}
-    user: ${spring.datasource.username}
-    password: ${spring.datasource.password}
+    user: ${liquibase.datasource.username}
+    password: ${liquibase.datasource.password}
     enabled: ${LIQUIBASE_ENABLED:true}
     
   datasource:
@@ -33,27 +33,28 @@ spring:
       initial-pool-size: 15
       min-pool-size: 10
       max-pool-size: 30
+      shared: true
 
-eureka:
-  instance:
-    hostname: ${spring.application.name}
-    preferIpAddress: true
-  client:
-    service-url:
-      defaultZone: ${eureka.service-url}
-    fetch-registry: true
-    register-with-eureka: true
-    enabled: true
+# eureka:
+#   instance:
+#     hostname: ${spring.application.name}
+#     preferIpAddress: true
+#   client:
+#     service-url:
+#       defaultZone: ${eureka.service-url}
+#     fetch-registry: true
+#     register-with-eureka: true
+#     enabled: true
 
-management:
-  endpoint:
-    health:
-      show-details: always
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  metrics:
-    tags:
-      application: ${spring.application.name}
+# management:
+#   endpoint:
+#     health:
+#       show-details: always
+#   endpoints:
+#     web:
+#       exposure:
+#         include: "*"
+#   metrics:
+#     tags:
+#       application: ${spring.application.name}
 

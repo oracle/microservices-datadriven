@@ -17,7 +17,7 @@
     <description>Customer Application</description>
 
     <properties>
-        <oracle-springboot-starter.version>3.1.0</oracle-springboot-starter.version>
+        <oracle-springboot-starter.version>23.4.0</oracle-springboot-starter.version>
         <liquibase.version>4.24.0</liquibase.version>
     </properties>
 
