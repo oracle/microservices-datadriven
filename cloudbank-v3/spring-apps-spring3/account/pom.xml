@@ -20,7 +20,7 @@
 		<microprofile-lra-api.version>1.0</microprofile-lra-api.version>
 		<narayana-lra.version>5.13.1.Final</narayana-lra.version>
 		<jakarta.enterprise.cdi-api.version>4.0.1</jakarta.enterprise.cdi-api.version>
-		<oracle-springboot-starter.version>3.1.0</oracle-springboot-starter.version>
+		<oracle-springboot-starter.version>23.4.0</oracle-springboot-starter.version>
 		<liquibase.version>4.24.0</liquibase.version>
 	</properties>
 

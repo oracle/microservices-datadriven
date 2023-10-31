@@ -8,7 +8,6 @@ import java.util.Optional;
 
 import com.example.customer.model.Customers;
 import com.example.customer.repository.CustomersRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1")
-@Slf4j
 public class CustomerController {
     final CustomersRepository customersRepository;
 
@@ -34,14 +32,12 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/customer")
     public List<Customers> findAll() {
-        log.info("CUSTOMER: findAll");
         return customersRepository.findAll();
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/customer/name/{customerName}")
     public List<Customers> findByCustomerByName(@PathVariable String customerName) {
-        log.info("CUSTOMER: findByCustomerByName");
         return customersRepository.findByCustomerNameIsContaining(customerName);
     }
 
@@ -53,7 +49,6 @@ public class CustomerController {
      */
     @GetMapping("/customer/{id}")
     public ResponseEntity<Customers> getCustomerById(@PathVariable("id") String id) {
-        log.info("CUSTOMER: getCustomerById");
         Optional<Customers> customerData = customersRepository.findById(id);
         try {
             return customerData.map(customers -> new ResponseEntity<>(customers, HttpStatus.OK))
@@ -70,7 +65,6 @@ public class CustomerController {
      */
     @GetMapping("/customer/byemail/{email}")
     public List<Customers> getCustomerByEmail(@PathVariable("email") String email) {
-        log.info("CUSTOMER: getCustomerByEmail");
         return customersRepository.findByCustomerEmailIsContaining(email);
     }
 
@@ -81,7 +75,6 @@ public class CustomerController {
      */
     @PostMapping("/customer")
     public ResponseEntity<Customers> createCustomer(@RequestBody Customers customer) {
-        log.info("CUSTOMER: createCustomer");
         try {
             Customers newCustomer = customersRepository.save(new Customers(
                     customer.getCustomerId(),
@@ -103,7 +96,6 @@ public class CustomerController {
      */
     @PutMapping("/customer/{id}")
     public ResponseEntity<Customers> updateCustomer(@PathVariable("id") String id, @RequestBody Customers customer) {
-        log.info("CUSTOMER: updateCustomer");
         Optional<Customers> customerData = customersRepository.findById(id);
         try {
             if (customerData.isPresent()) {
@@ -127,7 +119,6 @@ public class CustomerController {
      */
     @DeleteMapping("/customer/{customerId}")
     public ResponseEntity<HttpStatus> deleteCustomer(@PathVariable("customerId") String customerId) {
-        log.info("CUSTOMER: deleteCustomer");
         try {
             customersRepository.deleteById(customerId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -143,7 +134,6 @@ public class CustomerController {
      */
     @PostMapping("/customer/applyLoan/{amount}")
     public ResponseEntity<HttpStatus> applyForLoan(@PathVariable ("amount") long amount) {
-        log.info("CUSTOMER: applyForLoan");
         try {
             // Check Credit Rating
             // Amount vs Rating approval?
