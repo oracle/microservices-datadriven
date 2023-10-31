@@ -3,8 +3,8 @@
 spring:
   application:
     name: customers
-  # zipkin:
-  #   base-url: ${zipkin.base-url}
+  zipkin:
+    base-url: ${zipkin.base-url}
   jpa:
     hibernate:
       ddl-auto: validate
@@ -12,7 +12,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.OracleDialect
         format_sql: true
-    show-sql: false
+    show-sql: true
     
   liquibase:
     change-log: classpath:db/changelog/controller.yaml
