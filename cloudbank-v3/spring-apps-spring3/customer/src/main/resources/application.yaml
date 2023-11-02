@@ -2,7 +2,7 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/ 
 spring:
   application:
-    name: customers
+    name: customer
   zipkin:
     base-url: ${zipkin.base-url}
   jpa:
