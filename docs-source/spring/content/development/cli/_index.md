@@ -600,7 +600,7 @@ GraalVM Compile Commands
               [Optional]
 ```
 
-   Because the compilation of a **.jar** file using the tool `native-image` does not support cross-compilation, it must be on the same kind of platform where the application will run. This service guarantees a compilation in the same operating system and CPU type where the service will be executed on the Kubernetes cluster.
+   Because the compilation of a **.jar** file using the tool `native-image` does not support cross-compilation, it must be on the same platform where the application will run. This service guarantees a compilation in the same operating system and CPU type where the service will be executed on the Kubernetes cluster.
 
    The Spring Boot application **pom.xml** with the plugin:
 
