@@ -276,7 +276,9 @@ Please visit the Live Lab for more information.
 
 1. Verify pods are running
 
-   `kubectl get pods -n application`
+   ```shell
+   kubectl get pods -n application
+   ```
 
    ```text
    NAME                           READY   STATUS    RESTARTS   AGE
@@ -361,7 +363,7 @@ Please visit the Live Lab for more information.
 1. Test check service
 
    1. Port forward
-      
+
       `kubectl -n application port-forward svc/testrunner 8084:8080`
 
    1. Rest endpoint - deposit check
