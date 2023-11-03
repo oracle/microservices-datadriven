@@ -64,12 +64,6 @@
 			<plugin>
                 <groupId>org.graalvm.buildtools</groupId>
                 <artifactId>native-maven-plugin</artifactId>
-                <configuration>
-                    <buildArgs combine.children="append">
-                        <buildArg>--bundle-create</buildArg>
-                        <buildArg>--dry-run</buildArg>
-                    </buildArgs>
-                </configuration>
             </plugin>
 			<plugin>
 				<groupId>org.liquibase</groupId>
