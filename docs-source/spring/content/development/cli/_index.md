@@ -61,23 +61,23 @@ Service Commands
        deploy: Deploy a service.
 ```
 
-An application is a namespace encompassing related Microservices. For example, a "cloudbank" application may have "banktransfer" and
-"frauddetection" Microservices deployed within it.
+An application is a namespace encompassing related microservices. For example, a "cloudbank" application may have "banktransfer" and
+"frauddetection" microservices deployed within it.
 
-The `create` command results in the creation of an application namespace (Kubernetes *namespace*). The application namespace provides a mechanism for isolating groups of resources, especially the Microservices.
+The `create` command results in the creation of an application namespace (Kubernetes *namespace*). The application namespace provides a mechanism for isolating groups of resources, especially the microservices.
 
-The `delete` command results in the delete of an application namespace (Kubernetes *namespace*) completely or a specific Microservice. <ins>**Be carefully**</ins> because it is not possible rollback the components deleted.
+The `delete` command results in the complete deletion of an application namespace (Kubernetes *namespace*) or for a specific microservice. Ensure that you want to completely delete the application namespace. You cannot rollback the components once deleted.
 
 The `bind` command results in the automatic creation of a database schema for a given service or user and binds the information for that schema or
-database in the environment of the Microservice. The option of a prefix for the bound environment properties is also returned. For example, most
-Spring Boot Microservices use `spring.datasource`.
+database in the environment of the microservice. The option of a prefix for the bound environment properties is also returned. For example, most
+Spring Boot microservices use `spring.datasource`.
 
 The `deploy` command takes `service-name`, `app-name`, and `artifact-path` as the main arguments (`image-version` and `java-version` options are
-also provided). When the `deploy` command is issued, the Microservice JAR file is uploaded to the backend and a container image is created for
-the JAR or Microservice, and various Kubernetes resources such as **Deployment** and **Service** are also created. This is all done
-automatically to simplify the development process and the management of the Microservices by the backend.
+also provided). When the `deploy` command is issued, the microservice JAR file is uploaded to the backend and a container image is created for
+the JAR or microservice, and various Kubernetes resources such as **Deployment** and **Service** are also created. This is all done
+automatically to simplify the development process and the management of the microservices by the backend.
 
-The `list` command shows the details of the deployed Microservice.
+The `list` command shows the details of the deployed microservices.
 
 The `config` command can also be used to add, view, update, and delete configurations managed by the Spring Cloud Config server.
 
@@ -113,7 +113,7 @@ The following is an example development workflow using the CLI:
    obaas-cli: Successful connected.
    ```
 
-2. Use the `create` command to create an application namespace (Kubernetes *namespace*). The application namespace provides a mechanism for isolating groups of resources, especially the Microservices. Names of resources need to be unique within a application namespace, but not across application namespaces.
+2. Use the `create` command to create an application namespace (Kubernetes *namespace*). The application namespace provides a mechanism for isolating groups of resources, especially the microservices. Names of resources need to be unique within a application namespace, but not across application namespaces.
 
    ```cmd
    oractl:>help create
@@ -141,10 +141,9 @@ The following is an example development workflow using the CLI:
    application/namespace created successfully and image pull secret (registry-auth) created successfully and database TNSAdmin/wallet secret created successfully
    ```
 
+3. Use the `delete` command to delete an application namespace (Kubernetes *namespace*) completely or a specific microservice inside an application namespace.
 
-3. Use the `delete` command to delete an application namespace (Kubernetes *namespace*) completely or a specific Microservice inside an application namespace.
-
-    > ATTENTION: <ins>**Be carefully**</ins> because it is not possible rollback the components deleted.
+    > ATTENTION: Ensure that you want to completely delete the application namespace. You cannot rollback the components once deleted.
 
    ```cmd
    oractl:>help delete
@@ -236,8 +235,8 @@ The following is an example development workflow using the CLI:
        Schema {myserv} was successfully updated and Kubernetes Secret {myapp/myserv} was successfully updated.
        ```
 
-5. Use the `deploy` command to create, build, and push an image for the Microservice and create the necessary deployment, service,
-   and secret Kubernetes resources for the Microservice.
+5. Use the `deploy` command to create, build, and push an image for the microservice and create the necessary deployment, service,
+   and secret Kubernetes resources for the microservice.
 
    ```cmd
    oractl:>help deploy
@@ -315,7 +314,7 @@ The following is an example development workflow using the CLI:
    creating deployment and service... successfully deployed
    ```
 
-6. Use the `list` command to show details of the Microservice deployed in the previous step. For example:
+6. Use the `list` command to show details of the microservice deployed in the previous step. For example:
 
    ```cmd
    oractl:>help list
@@ -560,3 +559,181 @@ The following is an example development workflow using the CLI:
          oractl:>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
          400 : "Couldn't find any property for submitted query."
          ```
+
+8. Use the `GraalVM Compile Commands` to:
+
+* Upload a **.jar** file to the Oracle Backend for Spring Boot and microservices and its GraalVM compiler service.
+* Start a compilation of your microservice to produce an executable native **.exec** file.
+* Retrieve the last logs available regarding a compilation in progress or terminated.
+* Download the **.exec** file to deploy on the backend.
+* Purge the files remaining after a compilation on the remote GraalVM compiler service.
+
+The GraalVM Compile Commands are the following:
+
+```cmd
+oractl:>help 
+   
+GraalVM Compile Commands
+       compile-download: Download the compiled executable file.
+       compile: Compile a service with GraalVM.
+       compile-purge: Delete a launched job.
+       compile-logs: Compilation progress.
+```
+
+   1. Use the `compile` command to upload and automatically start compilation using the following command:
+
+```cmd
+   oractl:>help compile
+       NAME
+       compile - Compile a service with GraalVM.
+
+       SYNOPSIS
+              compile [--artifact-path String] --help 
+
+       OPTIONS
+              --artifact-path String
+              Service jar to compile location
+              [Mandatory]
+
+              --help or -h 
+              help for compile
+              [Optional]
+```
+
+   Because the compilation of a **.jar** file using the tool `native-image` does not support cross-compilation, it must be on the same platform where the application will run. This service guarantees a compilation in the same operating system and CPU type where the service will be executed on the Kubernetes cluster.
+
+   The Spring Boot application **pom.xml** with the plugin:
+
+```xml
+<plugin>
+       <groupId>org.graalvm.buildtools</groupId>
+       <artifactId>native-maven-plugin</artifactId>
+</plugin>
+```
+
+The project should be compiled on the developer desktop with GraalVM version 22.3 or later using an **mvn** command. For example:
+  
+```cmd
+  mvn -Pnative native:compile -Dmaven.test.skip=true
+```
+
+   This pre-compilation on your desktop checks if there are any issues on the libraries used in your Spring Boot microservice. In addition, your executable **.jar** file must include ahead-of-time (AOT) generated assets such as generated classes and JSON hint files. For additional information, see [Converting Spring Boot Executable Jar](https://docs.spring.io/spring-boot/docs/current/reference/html/native-image.html#native-image.advanced.converting-executable-jars).
+
+   The following is an example of the command output:
+
+```cmd
+     oractl:>compile --artifact-path /Users/cdebari/demo-0.0.1-SNAPSHOT.jar
+       uploading: /Users/cdebari/demo-0.0.1-SNAPSHOT.jar
+       filename: demo-0.0.1-SNAPSHOT.jar
+       return: demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
+       return: Shell script execution started on: demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
+       successfully start compilation of: demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
+       oractl:>
+```
+
+   The following example shows the generated batch ID that must be used to retrieve the log files, download the compiled file, and purge the service instance:
+
+   **demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b**
+
+   If omitted, then the last batch is considered by default.
+
+   2. Use the `compile-logs` command to retrieve the logs that show the compilation progress. For example:
+
+```cmd
+oractl:>help compile-logs
+NAME
+       compile-logs - Compilation progress.
+
+SYNOPSIS
+       compile-logs --batch String --help 
+
+OPTIONS
+       --batch String
+       File ID returned from the compile command. If not provided by default, then the last file compiled.
+       [Optional]
+
+       --help or -h 
+       help for compile-logs
+       [Optional]
+```
+
+   As previously mentioned, if the batch ID is not provided, then the logs of the most recently executed compilation are returned. For example:
+
+```cmd
+    oractl:>compile-logs
+
+    extracted: BOOT-INF/lib/spring-jcl-6.0.11.jar
+    extracted: BOOT-INF/lib/spring-boot-jarmode-layertools-3.1.2.jar
+    inflated: BOOT-INF/classpath.idx
+    inflated: BOOT-INF/layers.idx
+    ========================================================================================================================
+    GraalVM Native Image: Generating 'demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b.exec' (executable)...
+    ========================================================================================================================
+    For detailed information and explanations on the build output, visit:
+    https://github.com/oracle/graal/blob/master/docs/reference-manual/native-image/BuildOutput.md
+    ------------------------------------------------------------------------------------------------------------------------
+```
+
+   If the `compile-logs` commands returns a **Finished generating** message, then download the **.exec** file. For example:
+
+```cmd
+    CPU:  Enable more CPU features with '-march=native' for improved performance.
+    QBM:  Use the quick build mode ('-Ob') to speed up builds during development.
+   ------------------------------------------------------------------------------------------------------------------------
+                       155.3s (8.2% of total time) in 169 GCs | Peak RSS: 5.34GB | CPU load: 0.70
+   ------------------------------------------------------------------------------------------------------------------------
+   Produced artifacts:
+   /uploads/demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b.temp/demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b.exec (executable)
+   ========================================================================================================================
+   Finished generating 'demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b.exec' in 31m 30s.
+   Compiling Complete.
+```
+
+   3. Use the `compile-download` command to download the generated **.exec** file. For example:
+
+```cmd
+oractl:>help compile-download
+    NAME
+       compile-download - Download the compiled executable file.
+
+    SYNOPSIS
+       compile-download --batch String --help 
+
+    OPTIONS
+       --batch String
+       File ID to download as the executable file. If not provided by default, then the last file compiled.
+       [Optional]
+
+       --help or -h 
+       help for compile-download
+       [Optional]
+```
+
+   You can choose to use the batch ID if you need the last file compiled. The following example specifies the batch ID:
+
+```cmd
+   oractl:>compile-download --batch demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
+
+   File downloaded successfully to: 
+   /Users/cdebari/demo-0.0.1-SNAPSHOT.jar.exec
+```
+
+   4. Use the `compile-purge` command to delete all of the artifacts generated on the GraalVM compiler service after downloading the **.exec** file:
+
+```cmd
+   oractl:>help compile-purge
+   NAME
+       compile-purge - Delete a launched job.
+
+   SYNOPSIS
+       compile-purge --batch String --help 
+
+   OPTIONS
+       --batch String
+       File ID returned from compile command. If not provided by default, then the last file compiled.
+       [Optional]
+
+       --help or -h 
+       help for compile-purge
+       [Optional]
+```
