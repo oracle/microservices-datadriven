@@ -61,23 +61,23 @@ Service Commands
        deploy: Deploy a service.
 ```
 
-An application is a namespace encompassing related Microservices. For example, a "cloudbank" application may have "banktransfer" and
-"frauddetection" Microservices deployed within it.
+An application is a namespace encompassing related microservices. For example, a "cloudbank" application may have "banktransfer" and
+"frauddetection" microservices deployed within it.
 
-The `create` command results in the creation of an application namespace (Kubernetes *namespace*). The application namespace provides a mechanism for isolating groups of resources, especially the Microservices.
+The `create` command results in the creation of an application namespace (Kubernetes *namespace*). The application namespace provides a mechanism for isolating groups of resources, especially the microservices.
 
-The `delete` command results in the complete deletion of an application namespace (Kubernetes *namespace*) or for a specific Microservice. Ensure that you want to completely delete the application namespace. You cannot rollback the components once deleted.
+The `delete` command results in the complete deletion of an application namespace (Kubernetes *namespace*) or for a specific microservice. Ensure that you want to completely delete the application namespace. You cannot rollback the components once deleted.
 
 The `bind` command results in the automatic creation of a database schema for a given service or user and binds the information for that schema or
-database in the environment of the Microservice. The option of a prefix for the bound environment properties is also returned. For example, most
-Spring Boot Microservices use `spring.datasource`.
+database in the environment of the microservice. The option of a prefix for the bound environment properties is also returned. For example, most
+Spring Boot microservices use `spring.datasource`.
 
 The `deploy` command takes `service-name`, `app-name`, and `artifact-path` as the main arguments (`image-version` and `java-version` options are
-also provided). When the `deploy` command is issued, the Microservice JAR file is uploaded to the backend and a container image is created for
-the JAR or Microservice, and various Kubernetes resources such as **Deployment** and **Service** are also created. This is all done
-automatically to simplify the development process and the management of the Microservices by the backend.
+also provided). When the `deploy` command is issued, the microservice JAR file is uploaded to the backend and a container image is created for
+the JAR or microservice, and various Kubernetes resources such as **Deployment** and **Service** are also created. This is all done
+automatically to simplify the development process and the management of the microservices by the backend.
 
-The `list` command shows the details of the deployed Microservice.
+The `list` command shows the details of the deployed microservices.
 
 The `config` command can also be used to add, view, update, and delete configurations managed by the Spring Cloud Config server.
 
@@ -113,7 +113,7 @@ The following is an example development workflow using the CLI:
    obaas-cli: Successful connected.
    ```
 
-2. Use the `create` command to create an application namespace (Kubernetes *namespace*). The application namespace provides a mechanism for isolating groups of resources, especially the Microservices. Names of resources need to be unique within a application namespace, but not across application namespaces.
+2. Use the `create` command to create an application namespace (Kubernetes *namespace*). The application namespace provides a mechanism for isolating groups of resources, especially the microservices. Names of resources need to be unique within a application namespace, but not across application namespaces.
 
    ```cmd
    oractl:>help create
@@ -141,7 +141,7 @@ The following is an example development workflow using the CLI:
    application/namespace created successfully and image pull secret (registry-auth) created successfully and database TNSAdmin/wallet secret created successfully
    ```
 
-3. Use the `delete` command to delete an application namespace (Kubernetes *namespace*) completely or a specific Microservice inside an application namespace.
+3. Use the `delete` command to delete an application namespace (Kubernetes *namespace*) completely or a specific microservice inside an application namespace.
 
     > ATTENTION: Ensure that you want to completely delete the application namespace. You cannot rollback the components once deleted.
 
@@ -235,8 +235,8 @@ The following is an example development workflow using the CLI:
        Schema {myserv} was successfully updated and Kubernetes Secret {myapp/myserv} was successfully updated.
        ```
 
-5. Use the `deploy` command to create, build, and push an image for the Microservice and create the necessary deployment, service,
-   and secret Kubernetes resources for the Microservice.
+5. Use the `deploy` command to create, build, and push an image for the microservice and create the necessary deployment, service,
+   and secret Kubernetes resources for the microservice.
 
    ```cmd
    oractl:>help deploy
@@ -314,7 +314,7 @@ The following is an example development workflow using the CLI:
    creating deployment and service... successfully deployed
    ```
 
-6. Use the `list` command to show details of the Microservice deployed in the previous step. For example:
+6. Use the `list` command to show details of the microservice deployed in the previous step. For example:
 
    ```cmd
    oractl:>help list
@@ -562,7 +562,7 @@ The following is an example development workflow using the CLI:
 
 8. Use the `GraalVM Compile Commands` to:
 
-* Upload a **.jar** file to the Oracle Backend for Spring Boot and Microservices and its GraalVM compiler service.
+* Upload a **.jar** file to the Oracle Backend for Spring Boot and microservices and its GraalVM compiler service.
 * Start a compilation of your microservice to produce an executable native **.exec** file.
 * Retrieve the last logs available regarding a compilation in progress or terminated.
 * Download the **.exec** file to deploy on the backend.
