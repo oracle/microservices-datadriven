@@ -189,9 +189,9 @@ Please visit the Live Lab for more information.
 
    1. Verify deployment success
 
-         ```shell
-         kubectl logs -n application svc/testrunner
-         ```
+      ```shell
+      kubectl logs -n application svc/testrunner
+      ```
 
       Successful deployment should be look similar to this:
 
@@ -220,9 +220,9 @@ Please visit the Live Lab for more information.
 
    1. Verify deployment success
 
-         ```shell
-         kubectl logs -n application svc/transfer
-         ```
+      ```shell
+      kubectl logs -n application svc/transfer
+      ```
 
       Successful deployment should be look similar to this:
 
@@ -259,9 +259,9 @@ Please visit the Live Lab for more information.
 
    1. Verify deployment success
 
-         ```shell
-         kubectl logs -n application svc/checks
-         ```
+      ```shell
+      kubectl logs -n application svc/checks
+      ```
 
       Successful deployment should be look similar to this:
 
@@ -522,7 +522,7 @@ Please visit the Live Lab for more information.
       Output should look like this:
 
       ```text
-      transfer status:withdraw succeeded deposit succeedednull
+      transfer status:withdraw succeeded deposit succeeded
       ```
 
    1. Check accounts to see that the transfer have occurred:
