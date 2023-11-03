@@ -67,9 +67,6 @@ Please visit the Live Lab for more information.
 
       ```shell
       bind --app-name application --service-name account
-      ```
-
-      ```output
       oractl:>bind --app-name application --service-name account
       Database/Service Password: *************
       Schema {account} was successfully created and Kubernetes Secret {application/account} was successfully created.
