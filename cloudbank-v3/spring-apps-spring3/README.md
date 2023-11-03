@@ -61,27 +61,20 @@ Please visit the Live Lab for more information.
    oractl:>
    ```
 
-1. Create namespace
-
-    ```shell
-    oractl:>create --app-name cbv3
-    application/namespace created successfully and image pull secret (registry-auth) created successfully and database TNSAdmin/wallet secret created successfully
-    ```
-
 1. Deploy account service
 
    1. bind
 
       ```shell
-      oractl:>bind --app-name cbv3 --service-name account
+      oractl:>bind --app-name application --service-name account
       Database/Service Password: *************
-      Schema {account} was successfully created and Kubernetes Secret {cbv3/account} was successfully created.
+      Schema {account} was successfully created and Kubernetes Secret {application/account} was successfully created.
       ```
 
    1. deploy
 
       ```shell
-      deploy --app-name cbv3 --service-name account --artifact-path account/target/account-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
+      deploy --app-name application --service-name account --artifact-path account/target/account-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
       uploading: account/target/account-0.0.1-SNAPSHOT.jar
       building and pushing image...
 
@@ -92,7 +85,7 @@ Please visit the Live Lab for more information.
    1. Verify deployment success
 
       ```shell
-      kubectl logs -n cbv3 svc/account
+      kubectl logs -n application svc/account
       ```
 
       Successful deployment should be look similar to this:
@@ -110,7 +103,7 @@ Please visit the Live Lab for more information.
    1. bind
 
       ```shell
-      oractl:>bind --app-name cbv3 --service-name customer
+      oractl:>bind --app-name application --service-name customer
       database password/servicePassword (defaults to Welcome12345): *************
       Kubernetes secret for Datasource was created successfully.
       ```
@@ -118,7 +111,7 @@ Please visit the Live Lab for more information.
    1. deploy
 
       ```shell
-      oractl:>deploy --app-name cbv3 --service-name customer --artifact-path customer/target/customer-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
+      oractl:>deploy --app-name application --service-name customer --artifact-path customer/target/customer-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
       uploading: customer/target/customer-0.0.1-SNAPSHOT.jar
       building and pushing image...
       
@@ -129,7 +122,7 @@ Please visit the Live Lab for more information.
    1. Verify deployment success
 
          ```shell
-         kubectl logs -n cbv3 svc/customer
+         kubectl logs -n application svc/customer
          ```
 
       Successful deployment should be look similar to this:
@@ -147,7 +140,7 @@ Please visit the Live Lab for more information.
    1. deploy
 
       ```shell
-      oractl:>deploy --app-name cbv3 --service-name creditscore --artifact-path creditscore/target/creditscore-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+      oractl:>deploy --app-name application --service-name creditscore --artifact-path creditscore/target/creditscore-0.0.1-SNAPSHOT.jar --image-version 0.0.1
       uploading: creditscore/target/creditscore-0.0.1-SNAPSHOT.jar
       building and pushing image...
 
@@ -158,7 +151,7 @@ Please visit the Live Lab for more information.
    1. Verify deployment success
 
          ```shell
-         kubectl logs -n cbv3 svc/creditscore
+         kubectl logs -n application svc/creditscore
          ```
 
       Successful deployment should be look similar to this:
@@ -178,15 +171,15 @@ Please visit the Live Lab for more information.
    1. bind
 
          ```shell
-         oractl:>bind --app-name cbv3 --service-name testrunner --username account
+         oractl:>bind --app-name application --service-name testrunner --username account
          Database/Service Password: *************
-         Schema {account} was successfully Not_Modified and Kubernetes Secret {cbv3/testrunner} was successfully Created.
+         Schema {account} was successfully Not_Modified and Kubernetes Secret {application/testrunner} was successfully Created.
          ```
 
    1. deploy
 
          ```shell
-         oractl:>deploy --app-name cbv3 --service-name testrunner --artifact-path testrunner/target/testrunner-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+         oractl:>deploy --app-name application --service-name testrunner --artifact-path testrunner/target/testrunner-0.0.1-SNAPSHOT.jar --image-version 0.0.1
          uploading: testrunner/target/testrunner-0.0.1-SNAPSHOT.jar
          building and pushing image...
          
@@ -197,7 +190,7 @@ Please visit the Live Lab for more information.
    1. Verify deployment success
 
          ```shell
-         kubectl logs -n cbv3 svc/testrunner
+         kubectl logs -n application svc/testrunner
          ```
 
       Successful deployment should be look similar to this:
@@ -217,7 +210,7 @@ Please visit the Live Lab for more information.
    1. deploy
 
       ```shell
-      oractl:>deploy --app-name cbv3 --service-name transfer --artifact-path transfer/target/transfer-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+      oractl:>deploy --app-name application --service-name transfer --artifact-path transfer/target/transfer-0.0.1-SNAPSHOT.jar --image-version 0.0.1
       uploading: transfer/target/transfer-0.0.1-SNAPSHOT.jar
       building and pushing image...
       
@@ -228,7 +221,7 @@ Please visit the Live Lab for more information.
    1. Verify deployment success
 
          ```shell
-         kubectl logs -n cbv3 svc/transfer
+         kubectl logs -n application svc/transfer
          ```
 
       Successful deployment should be look similar to this:
@@ -248,15 +241,15 @@ Please visit the Live Lab for more information.
    1. bind
 
       ```shell
-      oractl:>bind --app-name cbv3 --service-name checks --username account
+      oractl:>bind --app-name application --service-name checks --username account
       Database/Service Password: *************
-      Schema {account} was successfully Not_Modified and Kubernetes Secret {cbv3/checks} was successfully Created.
+      Schema {account} was successfully Not_Modified and Kubernetes Secret {application/checks} was successfully Created.
       ```
 
    1. deploy
 
       ```shell
-      oractl:>deploy --app-name cbv3 --service-name checks --artifact-path checks/target/checks-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+      oractl:>deploy --app-name application --service-name checks --artifact-path checks/target/checks-0.0.1-SNAPSHOT.jar --image-version 0.0.1
       uploading: checks/target/checks-0.0.1-SNAPSHOT.jar
       building and pushing image...
       
@@ -267,7 +260,7 @@ Please visit the Live Lab for more information.
    1. Verify deployment success
 
          ```shell
-         kubectl logs -n cbv3 svc/checks
+         kubectl logs -n application svc/checks
          ```
 
       Successful deployment should be look similar to this:
@@ -283,7 +276,7 @@ Please visit the Live Lab for more information.
 
 1. Verify pods are running
 
-   `kubectl get pods -n cbv3`
+   `kubectl get pods -n application`
 
    ```text
    NAME                           READY   STATUS    RESTARTS   AGE
@@ -301,7 +294,7 @@ Please visit the Live Lab for more information.
 
    1. Port forward
 
-      `kubectl port-forward -n cbv3 svc/account 8081:8080`
+      `kubectl port-forward -n application svc/account 8081:8080`
 
    1. Rest endpoint
 
@@ -326,7 +319,7 @@ Please visit the Live Lab for more information.
 
    1. Port forward
 
-      `kubectl port-forward -n cbv3 svc/customer 8082:8080`
+      `kubectl port-forward -n application svc/customer 8082:8080`
 
    1. Rest endpoint
 
@@ -350,7 +343,7 @@ Please visit the Live Lab for more information.
 
    1. Port forward
 
-      `kubectl port-forward -n cbv3 svc/creditscore 8083:8080`
+      `kubectl port-forward -n application svc/creditscore 8083:8080`
 
    1. Rest endpoint
 
@@ -369,7 +362,7 @@ Please visit the Live Lab for more information.
 
    1. Port forward
       
-      `kubectl -n cbv3 port-forward svc/testrunner 8084:8080`
+      `kubectl -n application port-forward svc/testrunner 8084:8080`
 
    1. Rest endpoint - deposit check
 
@@ -387,7 +380,7 @@ Please visit the Live Lab for more information.
 
    1. Check logs
 
-      `kubectl -n cbv3 logs svc/checks`
+      `kubectl -n application logs svc/checks`
 
       Should contain:
 
@@ -431,7 +424,7 @@ Please visit the Live Lab for more information.
 
    1. Check logs
 
-      `kubectl -n cbv3 logs svc/checks`
+      `kubectl -n application logs svc/checks`
 
       Output should be similar to:
 
@@ -460,7 +453,7 @@ Please visit the Live Lab for more information.
 
    1. Port forward
 
-      `kubectl -n cbv3 port-forward svc/transfer 8085:8080`
+      `kubectl -n application port-forward svc/transfer 8085:8080`
 
    1. Check account balances
 
