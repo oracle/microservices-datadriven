@@ -66,7 +66,7 @@ Please visit the Live Lab for more information.
    1. bind
 
       ```shell
-      oractl:><copy>bind --app-name application --service-name account</copy>
+      oractl:>bind --app-name application --service-name account
       Database/Service Password: *************
       Schema {account} was successfully created and Kubernetes Secret {application/account} was successfully created.
       ```
@@ -74,7 +74,7 @@ Please visit the Live Lab for more information.
    1. deploy
 
       ```shell
-      deploy --app-name application --service-name account --artifact-path account/target/account-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
+      oractl:>deploy --app-name application --service-name account --artifact-path account/target/account-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
       uploading: account/target/account-0.0.1-SNAPSHOT.jar
       building and pushing image...
 
@@ -121,9 +121,9 @@ Please visit the Live Lab for more information.
 
    1. Verify deployment success
 
-         ```shell
-         kubectl logs -n application svc/customer
-         ```
+      ```shell
+      kubectl logs -n application svc/customer
+      ```
 
       Successful deployment should be look similar to this:
 
@@ -150,9 +150,9 @@ Please visit the Live Lab for more information.
 
    1. Verify deployment success
 
-         ```shell
-         kubectl logs -n application svc/creditscore
-         ```
+      ```shell
+      kubectl logs -n application svc/creditscore
+      ```
 
       Successful deployment should be look similar to this:
 
@@ -170,22 +170,22 @@ Please visit the Live Lab for more information.
 
    1. bind
 
-         ```shell
-         oractl:>bind --app-name application --service-name testrunner --username account
-         Database/Service Password: *************
-         Schema {account} was successfully Not_Modified and Kubernetes Secret {application/testrunner} was successfully Created.
-         ```
+      ```shell
+      oractl:>bind --app-name application --service-name testrunner --username account
+      Database/Service Password: *************
+      Schema {account} was successfully Not_Modified and Kubernetes Secret {application/testrunner} was successfully Created.
+      ```
 
    1. deploy
 
-         ```shell
-         oractl:>deploy --app-name application --service-name testrunner --artifact-path testrunner/target/testrunner-0.0.1-SNAPSHOT.jar --image-version 0.0.1
-         uploading: testrunner/target/testrunner-0.0.1-SNAPSHOT.jar
-         building and pushing image...
+      ```shell
+      oractl:>deploy --app-name application --service-name testrunner --artifact-path testrunner/target/testrunner-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+      uploading: testrunner/target/testrunner-0.0.1-SNAPSHOT.jar
+      building and pushing image...
          
-         creating deployment and service...
-         obaas-cli [deploy]: Application was successfully deployed.
-         ```
+      creating deployment and service...
+      obaas-cli [deploy]: Application was successfully deployed.
+      ```
 
    1. Verify deployment success
 
