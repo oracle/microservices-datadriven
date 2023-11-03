@@ -66,7 +66,7 @@ An application is a namespace encompassing related Microservices. For example, a
 
 The `create` command results in the creation of an application namespace (Kubernetes *namespace*). The application namespace provides a mechanism for isolating groups of resources, especially the Microservices.
 
-The `delete` command results in the delete of an application namespace (Kubernetes *namespace*) completely or a specific Microservice. **Be careful** because it is not possible rollback the components deleted.
+The `delete` command results in the complete deletion of an application namespace (Kubernetes *namespace*) or for a specific Microservice. Ensure that you want to completely delete the application namespace. You cannot rollback the components once deleted.
 
 The `bind` command results in the automatic creation of a database schema for a given service or user and binds the information for that schema or
 database in the environment of the Microservice. The option of a prefix for the bound environment properties is also returned. For example, most
@@ -143,7 +143,7 @@ The following is an example development workflow using the CLI:
 
 3. Use the `delete` command to delete an application namespace (Kubernetes *namespace*) completely or a specific Microservice inside an application namespace.
 
-    > ATTENTION: **Be careful** because it is not possible rollback the components deleted.
+    > ATTENTION: Ensure that you want to completely delete the application namespace. You cannot rollback the components once deleted.
 
    ```cmd
    oractl:>help delete
@@ -558,12 +558,12 @@ The following is an example development workflow using the CLI:
        
          oractl:>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
          400 : "Couldn't find any property for submitted query."
-        ```
+         ```
 
 8. Use the `GraalVM Compile Commands` to:
 
 * Upload a **.jar** file to the Oracle Backend for Spring Boot and Microservices and its GraalVM compiler service.
-* Start a compilation of your microservice to produce an executable native file **.exec**.
+* Start a compilation of your microservice to produce an executable native **.exec** file.
 * Retrieve the last logs available regarding a compilation in progress or terminated.
 * Download the **.exec** file to deploy on the backend.
 * Purge the files remaining after a compilation on the remote GraalVM compiler service.
