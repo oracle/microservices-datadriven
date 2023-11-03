@@ -66,7 +66,7 @@ An application is a namespace encompassing related Microservices. For example, a
 
 The `create` command results in the creation of an application namespace (Kubernetes *namespace*). The application namespace provides a mechanism for isolating groups of resources, especially the Microservices.
 
-The `delete` command results in the delete of an application namespace (Kubernetes *namespace*) completely or a specific Microservice. <ins>**Be carefully**</ins> because it is not possible rollback the components deleted.
+The `delete` command results in the delete of an application namespace (Kubernetes *namespace*) completely or a specific Microservice. **Be careful** because it is not possible rollback the components deleted.
 
 The `bind` command results in the automatic creation of a database schema for a given service or user and binds the information for that schema or
 database in the environment of the Microservice. The option of a prefix for the bound environment properties is also returned. For example, most
@@ -141,10 +141,9 @@ The following is an example development workflow using the CLI:
    application/namespace created successfully and image pull secret (registry-auth) created successfully and database TNSAdmin/wallet secret created successfully
    ```
 
-
 3. Use the `delete` command to delete an application namespace (Kubernetes *namespace*) completely or a specific Microservice inside an application namespace.
 
-    > ATTENTION: <ins>**Be carefully**</ins> because it is not possible rollback the components deleted.
+    > ATTENTION: **Be careful** because it is not possible rollback the components deleted.
 
    ```cmd
    oractl:>help delete
@@ -559,8 +558,10 @@ The following is an example development workflow using the CLI:
        
          oractl:>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
          400 : "Couldn't find any property for submitted query."
-         ```
+        ```
+
 8. Use the `GraalVM Compile Commands` to:
+
 * Upload a **.jar** file to the Oracle Backend for Spring Boot and Microservices and its GraalVM compiler service.
 * Start a compilation of your microservice to produce an executable native file **.exec**.
 * Retrieve the last logs available regarding a compilation in progress or terminated.
@@ -599,7 +600,7 @@ GraalVM Compile Commands
               [Optional]
 ```
 
-   Because the compilation of a .jar file using the tool `native-image` does not support cross-compilation, it must be on the same kind of platform where the application will run. This service guarantees a compilation in the same operating system and CPU type where the service will be executed on the Kubernetes cluster.
+   Because the compilation of a **.jar** file using the tool `native-image` does not support cross-compilation, it must be on the same kind of platform where the application will run. This service guarantees a compilation in the same operating system and CPU type where the service will be executed on the Kubernetes cluster.
 
    The Spring Boot application **pom.xml** with the plugin:
 
@@ -616,7 +617,7 @@ The project should be compiled on the developer desktop with GraalVM version 22.
   mvn -Pnative native:compile -Dmaven.test.skip=true
 ```
 
-   This pre-compilation on your desktop needs to check if there are any issues on the libraries used in your Spring Boot microservice. In addition, your executable .jar file must include ahead-of-time (AOT) generated assets such as generated classes and JSON hint files. For additional information, see [Converting Spring Boot Executable Jar] (https://docs.spring.io/spring-boot/docs/current/reference/html/native-image.html#native-image.advanced.converting-executable-jars).
+   This pre-compilation on your desktop checks if there are any issues on the libraries used in your Spring Boot microservice. In addition, your executable **.jar** file must include ahead-of-time (AOT) generated assets such as generated classes and JSON hint files. For additional information, see [Converting Spring Boot Executable Jar](https://docs.spring.io/spring-boot/docs/current/reference/html/native-image.html#native-image.advanced.converting-executable-jars).
 
    The following is an example of the command output:
 
@@ -656,7 +657,7 @@ OPTIONS
        [Optional]
 ```
 
-   As previously mentioned, if the batch ID is not provided, then the logs of the most recent executed compilation are returned. For example:
+   As previously mentioned, if the batch ID is not provided, then the logs of the most recently executed compilation are returned. For example:
 
 ```cmd
     oractl:>compile-logs
