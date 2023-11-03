@@ -61,27 +61,21 @@ Please visit the Live Lab for more information.
    oractl:>
    ```
 
-1. Create namespace
-
-    ```shell
-    oractl:>create --app-name cbv3
-    application/namespace created successfully and image pull secret (registry-auth) created successfully and database TNSAdmin/wallet secret created successfully
-    ```
-
 1. Deploy account service
 
    1. bind
 
       ```shell
-      oractl:>bind --app-name cbv3 --service-name account
+      bind --app-name application --service-name account
+      oractl:>bind --app-name application --service-name account
       Database/Service Password: *************
-      Schema {account} was successfully created and Kubernetes Secret {cbv3/account} was successfully created.
+      Schema {account} was successfully created and Kubernetes Secret {application/account} was successfully created.
       ```
 
    1. deploy
 
       ```shell
-      deploy --app-name cbv3 --service-name account --artifact-path account/target/account-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
+      oractl:>deploy --app-name application --service-name account --artifact-path account/target/account-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
       uploading: account/target/account-0.0.1-SNAPSHOT.jar
       building and pushing image...
 
@@ -92,7 +86,7 @@ Please visit the Live Lab for more information.
    1. Verify deployment success
 
       ```shell
-      kubectl logs -n cbv3 svc/account
+      kubectl logs -n application svc/account
       ```
 
       Successful deployment should be look similar to this:
@@ -110,7 +104,7 @@ Please visit the Live Lab for more information.
    1. bind
 
       ```shell
-      oractl:>bind --app-name cbv3 --service-name customer
+      oractl:>bind --app-name application --service-name customer
       database password/servicePassword (defaults to Welcome12345): *************
       Kubernetes secret for Datasource was created successfully.
       ```
@@ -118,7 +112,7 @@ Please visit the Live Lab for more information.
    1. deploy
 
       ```shell
-      oractl:>deploy --app-name cbv3 --service-name customer --artifact-path customer/target/customer-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
+      oractl:>deploy --app-name application --service-name customer --artifact-path customer/target/customer-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
       uploading: customer/target/customer-0.0.1-SNAPSHOT.jar
       building and pushing image...
       
@@ -128,9 +122,9 @@ Please visit the Live Lab for more information.
 
    1. Verify deployment success
 
-         ```shell
-         kubectl logs -n cbv3 svc/customer
-         ```
+      ```shell
+      kubectl logs -n application svc/customer
+      ```
 
       Successful deployment should be look similar to this:
 
@@ -147,7 +141,7 @@ Please visit the Live Lab for more information.
    1. deploy
 
       ```shell
-      oractl:>deploy --app-name cbv3 --service-name creditscore --artifact-path creditscore/target/creditscore-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+      oractl:>deploy --app-name application --service-name creditscore --artifact-path creditscore/target/creditscore-0.0.1-SNAPSHOT.jar --image-version 0.0.1
       uploading: creditscore/target/creditscore-0.0.1-SNAPSHOT.jar
       building and pushing image...
 
@@ -157,9 +151,9 @@ Please visit the Live Lab for more information.
 
    1. Verify deployment success
 
-         ```shell
-         kubectl logs -n cbv3 svc/creditscore
-         ```
+      ```shell
+      kubectl logs -n application svc/creditscore
+      ```
 
       Successful deployment should be look similar to this:
 
@@ -177,28 +171,28 @@ Please visit the Live Lab for more information.
 
    1. bind
 
-         ```shell
-         oractl:>bind --app-name cbv3 --service-name testrunner --username account
-         Database/Service Password: *************
-         Schema {account} was successfully Not_Modified and Kubernetes Secret {cbv3/testrunner} was successfully Created.
-         ```
+      ```shell
+      oractl:>bind --app-name application --service-name testrunner --username account
+      Database/Service Password: *************
+      Schema {account} was successfully Not_Modified and Kubernetes Secret {application/testrunner} was successfully Created.
+      ```
 
    1. deploy
 
-         ```shell
-         oractl:>deploy --app-name cbv3 --service-name testrunner --artifact-path testrunner/target/testrunner-0.0.1-SNAPSHOT.jar --image-version 0.0.1
-         uploading: testrunner/target/testrunner-0.0.1-SNAPSHOT.jar
-         building and pushing image...
+      ```shell
+      oractl:>deploy --app-name application --service-name testrunner --artifact-path testrunner/target/testrunner-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+      uploading: testrunner/target/testrunner-0.0.1-SNAPSHOT.jar
+      building and pushing image...
          
-         creating deployment and service...
-         obaas-cli [deploy]: Application was successfully deployed.
-         ```
+      creating deployment and service...
+      obaas-cli [deploy]: Application was successfully deployed.
+      ```
 
    1. Verify deployment success
 
-         ```shell
-         kubectl logs -n cbv3 svc/testrunner
-         ```
+      ```shell
+      kubectl logs -n application svc/testrunner
+      ```
 
       Successful deployment should be look similar to this:
 
@@ -217,7 +211,7 @@ Please visit the Live Lab for more information.
    1. deploy
 
       ```shell
-      oractl:>deploy --app-name cbv3 --service-name transfer --artifact-path transfer/target/transfer-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+      oractl:>deploy --app-name application --service-name transfer --artifact-path transfer/target/transfer-0.0.1-SNAPSHOT.jar --image-version 0.0.1
       uploading: transfer/target/transfer-0.0.1-SNAPSHOT.jar
       building and pushing image...
       
@@ -227,9 +221,9 @@ Please visit the Live Lab for more information.
 
    1. Verify deployment success
 
-         ```shell
-         kubectl logs -n cbv3 svc/transfer
-         ```
+      ```shell
+      kubectl logs -n application svc/transfer
+      ```
 
       Successful deployment should be look similar to this:
 
@@ -248,15 +242,15 @@ Please visit the Live Lab for more information.
    1. bind
 
       ```shell
-      oractl:>bind --app-name cbv3 --service-name checks --username account
+      oractl:>bind --app-name application --service-name checks --username account
       Database/Service Password: *************
-      Schema {account} was successfully Not_Modified and Kubernetes Secret {cbv3/checks} was successfully Created.
+      Schema {account} was successfully Not_Modified and Kubernetes Secret {application/checks} was successfully Created.
       ```
 
    1. deploy
 
       ```shell
-      oractl:>deploy --app-name cbv3 --service-name checks --artifact-path checks/target/checks-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+      oractl:>deploy --app-name application --service-name checks --artifact-path checks/target/checks-0.0.1-SNAPSHOT.jar --image-version 0.0.1
       uploading: checks/target/checks-0.0.1-SNAPSHOT.jar
       building and pushing image...
       
@@ -266,9 +260,9 @@ Please visit the Live Lab for more information.
 
    1. Verify deployment success
 
-         ```shell
-         kubectl logs -n cbv3 svc/checks
-         ```
+      ```shell
+      kubectl logs -n application svc/checks
+      ```
 
       Successful deployment should be look similar to this:
 
@@ -283,7 +277,11 @@ Please visit the Live Lab for more information.
 
 1. Verify pods are running
 
-   `kubectl get pods -n cbv3`
+   ```shell
+   kubectl get pods -n application
+   ```
+
+   Output should look similar to this:
 
    ```text
    NAME                           READY   STATUS    RESTARTS   AGE
@@ -301,11 +299,15 @@ Please visit the Live Lab for more information.
 
    1. Port forward
 
-      `kubectl port-forward -n cbv3 svc/account 8081:8080`
+      ```shell
+      kubectl port-forward -n application svc/account 8081:8080
+      ```
 
    1. Rest endpoint
 
-      `curl -s http://localhost:8081/api/v1/accounts | jq` or `http --body :8081/api/v1/accounts`
+      ```shell
+      curl -s http://localhost:8081/api/v1/accounts | jq
+      ```
 
       Should return:
 
@@ -326,11 +328,15 @@ Please visit the Live Lab for more information.
 
    1. Port forward
 
-      `kubectl port-forward -n cbv3 svc/customer 8082:8080`
+      ```shell
+      kubectl port-forward -n application svc/customer 8082:8080
+      ```
 
    1. Rest endpoint
 
-      `curl -s http://localhost:8082/api/v1/customer | jq` or `http --body :8081/api/v1/customer`
+      ```shell
+      curl -s http://localhost:8082/api/v1/customer | jq
+      ```
 
       Should return:
 
@@ -350,11 +356,15 @@ Please visit the Live Lab for more information.
 
    1. Port forward
 
-      `kubectl port-forward -n cbv3 svc/creditscore 8083:8080`
+      ```shell
+      kubectl port-forward -n application svc/creditscore 8083:8080
+      ``````
 
    1. Rest endpoint
 
-      `curl -s http://localhost:8083/api/v1/creditscore | jq` or `http --body :8081/api/v1/creditscore`
+      ```shell
+      curl -s http://localhost:8083/api/v1/creditscore | jq
+      ```
 
       Should return:
 
@@ -368,12 +378,17 @@ Please visit the Live Lab for more information.
 1. Test check service
 
    1. Port forward
-      
-      `kubectl -n cbv3 port-forward svc/testrunner 8084:8080`
+
+      ```shell
+      kubectl -n application port-forward svc/testrunner 8084:8080
+      ```
 
    1. Rest endpoint - deposit check
 
-      `curl -i -X POST -H 'Content-Type: application/json' -d '{"accountId": 2, "amount": 256}' http://localhost:8084/api/v1/testrunner/deposit`
+      ```shell
+      curl -i -X POST -H 'Content-Type: application/json' -d '{"accountId": 2, "amount": 256}' http://localhost:8084/api/v1/testrunner/deposit
+      ```
+
       Should return:
 
       ```text
@@ -387,7 +402,9 @@ Please visit the Live Lab for more information.
 
    1. Check logs
 
-      `kubectl -n cbv3 logs svc/checks`
+      ```shell
+      kubectl -n application logs svc/checks
+      ```
 
       Should contain:
 
@@ -431,7 +448,9 @@ Please visit the Live Lab for more information.
 
    1. Check logs
 
-      `kubectl -n cbv3 logs svc/checks`
+      ```shell
+      kubectl -n application logs svc/checks
+      ```
 
       Output should be similar to:
 
@@ -443,7 +462,9 @@ Please visit the Live Lab for more information.
 
    1. Check journal -- DEPOSIT
 
-      `curl -i http://localhost:8081/api/v1/account/2/journal`
+      ```shell
+      curl -i http://localhost:8081/api/v1/account/2/journal
+      ```
 
       Output should look like this -- DEPOSIT
 
@@ -460,9 +481,11 @@ Please visit the Live Lab for more information.
 
    1. Port forward
 
-      `kubectl -n cbv3 port-forward svc/transfer 8085:8080`
+      ```shell
+      kubectl -n application port-forward svc/transfer 8085:8080
+      ```
 
-   1. Check account balances
+   1. Check account balances. Note that the account numbers 1 and 2 can be different in your environment
 
       ```shell
       curl -s http://localhost:8081/api/v1/account/1 | jq ; curl -s http://localhost:8081/api/v1/account/2 | jq 
@@ -497,16 +520,56 @@ Please visit the Live Lab for more information.
       curl -X POST "http://localhost:8085/transfer?fromAccount=2&toAccount=1&amount=100"
       ```
 
-      Output due to namespace:
+      Output should look like this:
+
+      ```text
+      transfer status:withdraw succeeded deposit succeeded
+      ```
+
+   1. Check accounts to see that the transfer have occurred:
+
+      ```shell
+      curl -s http://localhost:8081/api/v1/account/1 | jq ; curl -s http://localhost:8081/api/v1/account/2 | jq 
+      ```
+
+      Output should be similar to this:
 
       ```json
-      {"timestamp":"2023-11-02T18:17:19.300+00:00","status":500,"error":"Internal Server Error","path":"/transfer"}
+      {
+      "accountId": 1,
+      "accountName": "Andy's checking",
+      "accountType": "CH",
+      "accountCustomerId": "qwertysdwr",
+      "accountOpenedDate": "2023-11-02T17:23:53.000+00:00",
+      "accountOtherDetails": "Account Info",
+      "accountBalance": 80
+      }
+      {
+      "accountId": 2,
+      "accountName": "Mark's CCard",
+      "accountType": "CC",
+      "accountCustomerId": "bkzLp8cozi",
+      "accountOpenedDate": "2023-11-02T17:23:53.000+00:00",
+      "accountOtherDetails": "Mastercard account",
+      "accountBalance": 900
+      }
       ```
 
-      Wrong namespace that's why. Feign for transfer service?
+   1. Check the log file to confirm
 
-      ```yaml
-      account:
-         deposit:
-            url: http://account.application:8080/deposit
+      ```shell
+      kubectl -n application logs svc/transfer
       ```
+
+   Output should look similar to this:
+
+   ```log
+   2023-11-03T18:09:06.468Z  INFO 1 --- [nio-8080-exec-1] com.example.transfer.TransferService     : Started new LRA/transfer Id: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/85ce2133-e891-4df4-b891-8456d2ed5558
+   2023-11-03T18:09:06.471Z  INFO 1 --- [nio-8080-exec-1] com.example.transfer.TransferService     : withdraw accountId = 2, amount = 100
+   2023-11-03T18:09:06.472Z  INFO 1 --- [nio-8080-exec-1] com.example.transfer.TransferService     : withdraw lraId = http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/85ce2133-e891-4df4-b891-8456d2ed5558
+   2023-11-03T18:09:07.507Z  INFO 1 --- [nio-8080-exec-1] com.example.transfer.TransferService     : withdraw succeeded
+   2023-11-03T18:09:07.507Z  INFO 1 --- [nio-8080-exec-1] com.example.transfer.TransferService     : deposit accountId = 1, amount = 100
+   2023-11-03T18:09:07.507Z  INFO 1 --- [nio-8080-exec-1] com.example.transfer.TransferService     : deposit lraId = http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/85ce2133-e891-4df4-b891-8456d2ed5558
+   2023-11-03T18:09:07.600Z  INFO 1 --- [nio-8080-exec-1] com.example.transfer.TransferService     : withdraw succeeded deposit succeeded
+   2023-11-03T18:09:07.601Z  INFO 1 --- [nio-8080-exec-1] com.example.transfer.TransferService     : LRA/transfer action will be confirm
+   ```
