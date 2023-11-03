@@ -66,7 +66,7 @@ Please visit the Live Lab for more information.
    1. bind
 
       ```shell
-      oractl:>bind --app-name application --service-name account
+      oractl:><copy>bind --app-name application --service-name account</copy>
       Database/Service Password: *************
       Schema {account} was successfully created and Kubernetes Secret {application/account} was successfully created.
       ```
@@ -280,6 +280,8 @@ Please visit the Live Lab for more information.
    kubectl get pods -n application
    ```
 
+   Output should look similar to this:
+
    ```text
    NAME                           READY   STATUS    RESTARTS   AGE
    account-6d7bcd9549-69wps       1/1     Running   0          21m
@@ -296,11 +298,15 @@ Please visit the Live Lab for more information.
 
    1. Port forward
 
-      `kubectl port-forward -n application svc/account 8081:8080`
+      ```shell
+      kubectl port-forward -n application svc/account 8081:8080
+      ```
 
    1. Rest endpoint
 
-      `curl -s http://localhost:8081/api/v1/accounts | jq` or `http --body :8081/api/v1/accounts`
+      ```shell
+      curl -s http://localhost:8081/api/v1/accounts | jq
+      ```
 
       Should return:
 
@@ -321,11 +327,15 @@ Please visit the Live Lab for more information.
 
    1. Port forward
 
-      `kubectl port-forward -n application svc/customer 8082:8080`
+      ```shell
+      kubectl port-forward -n application svc/customer 8082:8080
+      ```
 
    1. Rest endpoint
 
-      `curl -s http://localhost:8082/api/v1/customer | jq` or `http --body :8081/api/v1/customer`
+      ```shell
+      curl -s http://localhost:8082/api/v1/customer | jq
+      ```
 
       Should return:
 
@@ -345,11 +355,15 @@ Please visit the Live Lab for more information.
 
    1. Port forward
 
-      `kubectl port-forward -n application svc/creditscore 8083:8080`
+      ```shell
+      kubectl port-forward -n application svc/creditscore 8083:8080
+      ``````
 
    1. Rest endpoint
 
-      `curl -s http://localhost:8083/api/v1/creditscore | jq` or `http --body :8081/api/v1/creditscore`
+      ```shell
+      curl -s http://localhost:8083/api/v1/creditscore | jq
+      ```
 
       Should return:
 
@@ -364,11 +378,16 @@ Please visit the Live Lab for more information.
 
    1. Port forward
 
-      `kubectl -n application port-forward svc/testrunner 8084:8080`
+      ```shell
+      kubectl -n application port-forward svc/testrunner 8084:8080
+      ```
 
    1. Rest endpoint - deposit check
 
-      `curl -i -X POST -H 'Content-Type: application/json' -d '{"accountId": 2, "amount": 256}' http://localhost:8084/api/v1/testrunner/deposit`
+      ```shell
+      curl -i -X POST -H 'Content-Type: application/json' -d '{"accountId": 2, "amount": 256}' http://localhost:8084/api/v1/testrunner/deposit
+      ```
+
       Should return:
 
       ```text
@@ -382,7 +401,9 @@ Please visit the Live Lab for more information.
 
    1. Check logs
 
-      `kubectl -n application logs svc/checks`
+      ```shell
+      kubectl -n application logs svc/checks
+      ```
 
       Should contain:
 
@@ -426,7 +447,9 @@ Please visit the Live Lab for more information.
 
    1. Check logs
 
-      `kubectl -n application logs svc/checks`
+      ```shell
+      kubectl -n application logs svc/checks
+      ```
 
       Output should be similar to:
 
@@ -438,7 +461,9 @@ Please visit the Live Lab for more information.
 
    1. Check journal -- DEPOSIT
 
-      `curl -i http://localhost:8081/api/v1/account/2/journal`
+      ```shell
+      curl -i http://localhost:8081/api/v1/account/2/journal
+      ```
 
       Output should look like this -- DEPOSIT
 
@@ -455,9 +480,11 @@ Please visit the Live Lab for more information.
 
    1. Port forward
 
-      `kubectl -n application port-forward svc/transfer 8085:8080`
+      ```shell
+      kubectl -n application port-forward svc/transfer 8085:8080
+      ```
 
-   1. Check account balances
+   1. Check account balances. Note that the account numbers 1 and 2 can be different in your environment
 
       ```shell
       curl -s http://localhost:8081/api/v1/account/1 | jq ; curl -s http://localhost:8081/api/v1/account/2 | jq 
@@ -492,16 +519,56 @@ Please visit the Live Lab for more information.
       curl -X POST "http://localhost:8085/transfer?fromAccount=2&toAccount=1&amount=100"
       ```
 
-      Output due to namespace:
+      Output should look like this:
+
+      ```text
+      transfer status:withdraw succeeded deposit succeedednull
+      ```
+
+   1. Check accounts to see that the transfer have occurred:
+
+      ```shell
+      curl -s http://localhost:8081/api/v1/account/1 | jq ; curl -s http://localhost:8081/api/v1/account/2 | jq 
+      ```
+
+      Output should be similar to this:
 
       ```json
-      {"timestamp":"2023-11-02T18:17:19.300+00:00","status":500,"error":"Internal Server Error","path":"/transfer"}
+      {
+      "accountId": 1,
+      "accountName": "Andy's checking",
+      "accountType": "CH",
+      "accountCustomerId": "qwertysdwr",
+      "accountOpenedDate": "2023-11-02T17:23:53.000+00:00",
+      "accountOtherDetails": "Account Info",
+      "accountBalance": 80
+      }
+      {
+      "accountId": 2,
+      "accountName": "Mark's CCard",
+      "accountType": "CC",
+      "accountCustomerId": "bkzLp8cozi",
+      "accountOpenedDate": "2023-11-02T17:23:53.000+00:00",
+      "accountOtherDetails": "Mastercard account",
+      "accountBalance": 900
+      }
       ```
 
-      Wrong namespace that's why. Feign for transfer service?
+   1. Check the log file to confirm
 
-      ```yaml
-      account:
-         deposit:
-            url: http://account.application:8080/deposit
+      ```shell
+      kubectl -n application logs svc/transfer
       ```
+
+   Output should look similar to this:
+
+   ```log
+   2023-11-03T18:09:06.468Z  INFO 1 --- [nio-8080-exec-1] com.example.transfer.TransferService     : Started new LRA/transfer Id: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/85ce2133-e891-4df4-b891-8456d2ed5558
+   2023-11-03T18:09:06.471Z  INFO 1 --- [nio-8080-exec-1] com.example.transfer.TransferService     : withdraw accountId = 2, amount = 100
+   2023-11-03T18:09:06.472Z  INFO 1 --- [nio-8080-exec-1] com.example.transfer.TransferService     : withdraw lraId = http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/85ce2133-e891-4df4-b891-8456d2ed5558
+   2023-11-03T18:09:07.507Z  INFO 1 --- [nio-8080-exec-1] com.example.transfer.TransferService     : withdraw succeeded
+   2023-11-03T18:09:07.507Z  INFO 1 --- [nio-8080-exec-1] com.example.transfer.TransferService     : deposit accountId = 1, amount = 100
+   2023-11-03T18:09:07.507Z  INFO 1 --- [nio-8080-exec-1] com.example.transfer.TransferService     : deposit lraId = http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/85ce2133-e891-4df4-b891-8456d2ed5558
+   2023-11-03T18:09:07.600Z  INFO 1 --- [nio-8080-exec-1] com.example.transfer.TransferService     : withdraw succeeded deposit succeeded
+   2023-11-03T18:09:07.601Z  INFO 1 --- [nio-8080-exec-1] com.example.transfer.TransferService     : LRA/transfer action will be confirm
+   ```
