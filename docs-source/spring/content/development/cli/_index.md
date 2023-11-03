@@ -618,7 +618,7 @@ The project should be compiled on the developer desktop with GraalVM version 22.
 
    This pre-compilation on your desktop needs to check if there are any issues on the libraries used in your Spring Boot microservice. In addition, your executable .jar file must include ahead-of-time (AOT) generated assets such as generated classes and JSON hint files. For additional information, see [Converting Spring Boot Executable Jar] (https://docs.spring.io/spring-boot/docs/current/reference/html/native-image.html#native-image.advanced.converting-executable-jars).
 
-   The following is an example of the command output::
+   The following is an example of the command output:
 
 ```cmd
      oractl:>compile --artifact-path /Users/cdebari/demo-0.0.1-SNAPSHOT.jar
@@ -630,7 +630,7 @@ The project should be compiled on the developer desktop with GraalVM version 22.
        oractl:>
 ```
 
-   The following example shows the generated batch ID that must be used to retrieve the log files, downloading the compiled file, and purging the service instance:
+   The following example shows the generated batch ID that must be used to retrieve the log files, download the compiled file, and purge the service instance:
 
    **demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b**
 
@@ -648,7 +648,7 @@ SYNOPSIS
 
 OPTIONS
        --batch String
-       File ID returned from the compile command. If not provided by default, then the last file.
+       File ID returned from the compile command. If not provided by default, then the last file compiled.
        [Optional]
 
        --help or -h 
@@ -673,7 +673,7 @@ OPTIONS
     ------------------------------------------------------------------------------------------------------------------------
 ```
 
-   If the compile-logs commands returns a **Finished generating** message, then download the **.exec** file. For example:
+   If the `compile-logs` commands returns a **Finished generating** message, then download the **.exec** file. For example:
 
 ```cmd
     CPU:  Enable more CPU features with '-march=native' for improved performance.
@@ -708,7 +708,7 @@ oractl:>help compile-download
        [Optional]
 ```
 
-   You can choose to use the batch ID if you need the last compiled file. The following example specifies the batch ID:
+   You can choose to use the batch ID if you need the last file compiled. The following example specifies the batch ID:
 
 ```cmd
    oractl:>compile-download --batch demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
@@ -729,7 +729,7 @@ oractl:>help compile-download
 
    OPTIONS
        --batch String
-       file ID returned from compile command. If not provided by default, then the last file.
+       File ID returned from compile command. If not provided by default, then the last file compiled.
        [Optional]
 
        --help or -h 
