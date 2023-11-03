@@ -14,7 +14,7 @@
     <name>checks</name>
     <description>Check Processing Application</description>
     <properties>
-        <oracle-springboot-starter.version>3.1.0</oracle-springboot-starter.version>
+        <oracle-springboot-starter.version>23.4.0</oracle-springboot-starter.version>
     </properties>
     <dependencies>
         <dependency>
@@ -50,14 +50,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.graalvm.buildtools</groupId>

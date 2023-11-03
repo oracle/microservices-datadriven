@@ -21,7 +21,7 @@ main:
         ref: "/platform/apigw"
       - name: Service Discovery
         ref: "/platform/eureka"
-      - name: Configuration
+      - name: Spring Config Server
         ref: "/platform/config"
       - name: Workflow
         ref: "/platform/conductor"

@@ -10,15 +10,15 @@ spring:
       ddl-auto: validate
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.Oracle12cDialect
+        dialect: org.hibernate.dialect.OracleDialect
         format_sql: true
     show-sql: true
     
   liquibase:
     change-log: classpath:db/changelog/controller.yaml
     url: ${spring.datasource.url}
-    user: ${spring.datasource.username}
-    password: ${spring.datasource.password}
+    user: ${liquibase.datasource.username}
+    password: ${liquibase.datasource.password}
     enabled: ${LIQUIBASE_ENABLED:true}
     
   datasource:
@@ -33,6 +33,7 @@ spring:
       initial-pool-size: 15
       min-pool-size: 10
       max-pool-size: 30
+      shared: true
 
 eureka:
   instance:

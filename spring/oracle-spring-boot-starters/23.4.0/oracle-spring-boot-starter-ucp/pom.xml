@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2023, Oracle and/or its affiliates. -->
+<!-- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>oracle-spring-boot-starters</artifactId>
+        <groupId>com.oracle.database.spring</groupId>
+        <version>23.4.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>oracle-spring-boot-starter-ucp</artifactId>
+    <version>23.4.0</version>
+    <packaging>pom</packaging>
+
+    <name>Oracle Spring Boot Starter - UCP</name>
+    <description>Oracle's implementation of Spring Boot Starter for using with Oracle UCP</description>
+    <url>https://github.com/oracle/microservices-datadriven/tree/main/spring/oracle-spring-boot-starters/oracle-spring-boot-starter-ucp</url>
+
+    <organization>
+        <name>Oracle America, Inc.</name>
+        <url>http://www.oracle.com</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <name>Oracle</name>
+            <email>obaas_ww at oracle.com</email>
+            <organization>Oracle America, Inc.</organization>
+            <organizationUrl>http://www.oracle.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>Oracle Free Use Terms and Conditions (FUTC)</name>
+            <comments>
+                https://www.oracle.com/downloads/licenses/oracle-free-license.html
+            </comments>
+        </license>
+    </licenses>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc11</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ucp</artifactId>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+
+
+    <scm>
+        <connection>scm:git:git://github.com/oracle/microservices-datadriven.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:oracle/microservices-datadriven.git</developerConnection>
+        <url>https://github.com/oracle/microservices-datadriven/tree/main/spring/oracle-spring-boot-starters</url>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/oracle/microservices-datadriven/issues</url>
+    </issueManagement>
+</project>
