@@ -120,7 +120,7 @@ Oracle Backend for Spring Boot and Microservices setup installs the following co
 | Oracle Database Operator     | 1.0           | Helps reduce the time and complexity of deploying and managing Oracle databases.            |
 | Oracle Transaction Manager for Microservices | 22.3.2 | Manages distributed transactions to ensure consistency across Microservices.       |
 | Strimzi-Apache Kafka operator  | 0.36.1      | Manages Apache Kafka clusters.                                                              |
-| Apacha Kafka                 | 3.4.0 - 3.5.1 | Provides distributed event streaming.                                                       |
+| Apache Kafka                 | 3.4.0 - 3.5.1 | Provides distributed event streaming.                                                       |
 | Coherence                    | 3.2.11        | Provides in-memory data grid.                                                               |
 | Parse Server (optional)      | 6.3.0         | Provides backend services for mobile and web applications.                                  |
 | Parse Dashboard (optional)   | 5.2.0         | Provides web user interface for managing the Parse Server.                                  |
@@ -175,7 +175,7 @@ To set up the OCI environment, process these steps:
    - `APISIX Administrator Password` (optional) : Leave blank to auto-generate.
    - `Grafana Administrator Password` (optional) : Leave blank to auto-generate.
    - `ORACTL Administrator Password` optional) : Leave blank to auto-generate. This is the password for the `obaas-admin` user.
-   - `ORACTL User Password` (optional) : Leave blank to aout-generate. This is the password for the `obaas-user` user.
+   - `ORACTL User Password` (optional) : Leave blank to auto-generate. This is the password for the `obaas-user` user.
 
       <!-- spellchecker-disable -->
       {{< img name="oci-stack-passwords" size="large" lazy=false >}}
@@ -218,7 +218,7 @@ To set up the OCI environment, process these steps:
 
    - `Enable Public Load Balancer` : This option allows access to the load balancer from the internet (public IP). If not
       selected, access can only be from a private VCN.
-   - `Public Load Balancer Access Control` : Enter the CIDR block you want to give access to the Load Blanacer. Default (and not recommended) is `0.0.0.0/0`.
+   - `Public Load Balancer Access Control` : Enter the CIDR block you want to give access to the Load Balancer. Default (and not recommended) is `0.0.0.0/0`.
    - `Public Load Balancer Ports Exposed` : The ports exposed from the load balancer.
    - `Minimum bandwidth` : The minimum bandwidth that the load balancer can achieve.
    - `Maximum bandwidth` : The maximum bandwidth that the load balancer can achieve.
