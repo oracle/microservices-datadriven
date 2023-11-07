@@ -15,7 +15,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.OracleDialect
-        format_sql: true
+        # format_sql: true
     show-sql: true
     defer-datasource-initialization: true
 
