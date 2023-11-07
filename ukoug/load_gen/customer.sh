@@ -1,1 +1,1 @@
-k6 run creditscore.js --console-output creditscore.log --summary-export creditscore_summary.json
+k6 run customer.js --console-output customer.log --summary-export customer_summary.json
