@@ -1,0 +1,1 @@
+k6 run creditscore.js --console-output creditscore.log --summary-export creditscore_summary.json
