@@ -31,8 +31,7 @@ public class Customers {
     @Column(name = "CUSTOMER_EMAIL")
     private String customerEmail;
 
-    @Generated(GenerationTime.INSERT)
-    @Column(name = "DATE_BECAME_CUSTOMER", updatable = false, insertable = false)
+    @Column(name = "DATE_BECAME_CUSTOMER")
     private Date dateBecameCustomer;
 
     @Column(name = "CUSTOMER_OTHER_DETAILS")
@@ -40,7 +39,6 @@ public class Customers {
 
     @Column(name = "PASSWORD")
     private String customerPassword;
-
 
     /**
      * Creates a  Customers object.
