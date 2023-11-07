@@ -13,7 +13,7 @@ spring:
         dialect: org.hibernate.dialect.OracleDialect
         format_sql: true
     show-sql: true
-#    defer-datasource-initialization: true
+    defer-datasource-initialization: true
 
   sql:
     init:
