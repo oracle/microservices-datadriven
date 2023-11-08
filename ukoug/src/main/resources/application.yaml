@@ -5,7 +5,7 @@ spring:
     name: customer
   zipkin:
     base-url: ${zipkin.base-url}
-  # Disables autoconfiguration for the refresh scope and associated features.
+  # Disables autoconfiguration for the refresh scope and associated features. Fixes Eureka problem with native
   cloud:
     refresh:
       enabled: false
