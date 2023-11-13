@@ -12,9 +12,11 @@
 <meta name="generator" content="Hugo 0.115.4">
 
 
-  <meta name="description" content="Version 1.0.0, October 15, 2023 This is the first production release.
+  <meta name="description" content="Version 1.0.1, November 2, 2023 Notes:
+Bug fixes The following components were updated:
+Component New Version Replaced Version Oracle Backend for Spring Boot and Microservices Visual Studio Code extension 1.0.1 1.0.0 Oracle Backend for Spring Boot and Microservices CLI 1.0.1 1.0.0 Version 1.0.0, October 15, 2023 This is the first production release.
 Notes:
-All Spring platform components upgraded to Spring Boot 3.x, Spring 6.x and Spring Cloud 2022.0.4 versions. Spring Native (with GraalVM native image ahead of time compilation) is the default/recommended deployment option for microservices. JVM continues to be available as an option. Loki and Promtail added for logging, Spring Boot dashboard updated to show metrics and logs on the same dashboard." />
+All Spring platform components upgraded to Spring Boot 3.x, Spring 6.x and Spring Cloud 2022.0.4 versions. Spring Native (with GraalVM native image ahead of time compilation) is the default/recommended deployment option for microservices." />
 
     <title>Release Notes | Oracle Backend for Spring Boot and Microservices</title>
 
@@ -40,9 +42,11 @@ All Spring platform components upgraded to Spring Boot 3.x, Spring 6.x and Sprin
     content="Release Notes"
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot and Microservices" />
-  <meta property="og:description" content="Version 1.0.0, October 15, 2023 This is the first production release.
+  <meta property="og:description" content="Version 1.0.1, November 2, 2023 Notes:
+Bug fixes The following components were updated:
+Component New Version Replaced Version Oracle Backend for Spring Boot and Microservices Visual Studio Code extension 1.0.1 1.0.0 Oracle Backend for Spring Boot and Microservices CLI 1.0.1 1.0.0 Version 1.0.0, October 15, 2023 This is the first production release.
 Notes:
-All Spring platform components upgraded to Spring Boot 3.x, Spring 6.x and Spring Cloud 2022.0.4 versions. Spring Native (with GraalVM native image ahead of time compilation) is the default/recommended deployment option for microservices. JVM continues to be available as an option. Loki and Promtail added for logging, Spring Boot dashboard updated to show metrics and logs on the same dashboard." />
+All Spring platform components upgraded to Spring Boot 3.x, Spring 6.x and Spring Cloud 2022.0.4 versions. Spring Native (with GraalVM native image ahead of time compilation) is the default/recommended deployment option for microservices." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/release-notes/" />
 
@@ -51,9 +55,11 @@ All Spring platform components upgraded to Spring Boot 3.x, Spring 6.x and Sprin
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Release Notes" />
-  <meta name="twitter:description" content="Version 1.0.0, October 15, 2023 This is the first production release.
+  <meta name="twitter:description" content="Version 1.0.1, November 2, 2023 Notes:
+Bug fixes The following components were updated:
+Component New Version Replaced Version Oracle Backend for Spring Boot and Microservices Visual Studio Code extension 1.0.1 1.0.0 Oracle Backend for Spring Boot and Microservices CLI 1.0.1 1.0.0 Version 1.0.0, October 15, 2023 This is the first production release.
 Notes:
-All Spring platform components upgraded to Spring Boot 3.x, Spring 6.x and Spring Cloud 2022.0.4 versions. Spring Native (with GraalVM native image ahead of time compilation) is the default/recommended deployment option for microservices. JVM continues to be available as an option. Loki and Promtail added for logging, Spring Boot dashboard updated to show metrics and logs on the same dashboard." />
+All Spring platform components upgraded to Spring Boot 3.x, Spring 6.x and Spring Cloud 2022.0.4 versions. Spring Native (with GraalVM native image ahead of time compilation) is the default/recommended deployment option for microservices." />
 
 
   <script type="application/ld+json">
@@ -64,8 +70,8 @@ All Spring platform components upgraded to Spring Boot 3.x, Spring 6.x and Sprin
       "name": "Release Notes",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/release-notes/",
       "headline": "Release Notes",
-      "description": "Version 1.0.0, October 15, 2023 This is the first production release.\nNotes:\nAll Spring platform components upgraded to Spring Boot 3.x, Spring 6.x and Spring Cloud 2022.0.4 versions. Spring Native (with GraalVM native image ahead of time compilation) is the default\/recommended deployment option for microservices. JVM continues to be available as an option. Loki and Promtail added for logging, Spring Boot dashboard updated to show metrics and logs on the same dashboard.",
-      "wordCount" : "973",
+      "description": "Version 1.0.1, November 2, 2023 Notes:\nBug fixes The following components were updated:\nComponent New Version Replaced Version Oracle Backend for Spring Boot and Microservices Visual Studio Code extension 1.0.1 1.0.0 Oracle Backend for Spring Boot and Microservices CLI 1.0.1 1.0.0 Version 1.0.0, October 15, 2023 This is the first production release.\nNotes:\nAll Spring platform components upgraded to Spring Boot 3.x, Spring 6.x and Spring Cloud 2022.0.4 versions. Spring Native (with GraalVM native image ahead of time compilation) is the default\/recommended deployment option for microservices.",
+      "wordCount" : "1014",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -744,7 +750,7 @@ All Spring platform components upgraded to Spring Boot 3.x, Spring 6.x and Sprin
                   href="/microservices-datadriven/spring/platform/config"
                   class="gdoc-nav__entry"
                 >
-                  Configuration
+                  Spring Config Server
                 </a>
               </span>
               
@@ -1608,6 +1614,40 @@ if (!doNotTrack) {
   >
     <h1>Release Notes</h1>
     <div class="gdoc-page__anchorwrap">
+    <h2 id="version-101-november-2-2023">
+        Version 1.0.1, November 2, 2023
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/release-notes/#version-101-november-2-2023" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Version 1.0.1, November 2, 2023" aria-label="Anchor to: Version 1.0.1, November 2, 2023" href="#version-101-november-2-2023">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>Notes:</p>
+<ul>
+<li>Bug fixes</li>
+</ul>
+<p>The following components were updated:</p>
+<div class="table-wrap"> <table>
+<thead>
+<tr>
+<th>Component</th>
+<th>New Version</th>
+<th>Replaced Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oracle Backend for Spring Boot and Microservices Visual Studio Code extension</td>
+<td>1.0.1</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td>Oracle Backend for Spring Boot and Microservices CLI</td>
+<td>1.0.1</td>
+<td>1.0.0</td>
+</tr>
+</tbody>
+</table> </div>
+<div class="gdoc-page__anchorwrap">
     <h2 id="version-100-october-15-2023">
         Version 1.0.0, October 15, 2023
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/release-notes/#version-100-october-15-2023" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Version 1.0.0, October 15, 2023" aria-label="Anchor to: Version 1.0.0, October 15, 2023" href="#version-100-october-15-2023">

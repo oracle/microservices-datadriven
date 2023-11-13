@@ -12,8 +12,6 @@
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/azure/</loc>
   </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/spring/platform/config/</loc>
-  </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/database/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/getting-started/</loc>
@@ -51,6 +49,8 @@
     <loc>https://oracle.github.io/microservices-datadriven/spring/setup/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/platform/spring-admin/</loc>
+  </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/platform/config/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/tags/</loc>
   </url><url>
