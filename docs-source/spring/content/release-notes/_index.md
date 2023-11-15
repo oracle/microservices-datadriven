@@ -2,6 +2,19 @@
 title: "Release Notes"
 ---
 
+## Version 1.0.1, November 2, 2023
+
+Notes:
+
+* Bug fixes
+
+The following components were updated:
+
+| Component                                                                     | New Version   | Replaced Version    |
+|-------------------------------------------------------------------------------|---------------|---------------------|
+| Oracle Backend for Spring Boot and Microservices Visual Studio Code extension | 1.0.1         | 1.0.0               |
+| Oracle Backend for Spring Boot and Microservices CLI                          | 1.0.1         | 1.0.0               |
+
 ## Version 1.0.0, October 15, 2023
 
 This is the first production release.
@@ -144,7 +157,6 @@ The following components were updated:
 | Oracle Transaction Manager for Microservices         | 22.3.2      | 22.3.1           |
 | Parse Server (optional)                              | 6.3.0       | 6.2.0            |
 | Parse Dashboard (optional)                           | 5.2.0       | 5.1.0            |
-
 
 There were no deprecations or removals.
 

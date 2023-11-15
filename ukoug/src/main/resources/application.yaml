@@ -5,15 +5,24 @@ spring:
     name: customer
   zipkin:
     base-url: ${zipkin.base-url}
+  # Disables autoconfiguration for the refresh scope and associated features. Fixes Eureka problem with native
+  cloud:
+    refresh:
+      enabled: false
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.OracleDialect
-        format_sql: true
+        # format_sql: true
     show-sql: true
-    
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: always
+
   liquibase:
     change-log: classpath:db/changelog/controller.yaml
     url: ${spring.datasource.url}
@@ -33,7 +42,6 @@ spring:
       initial-pool-size: 15
       min-pool-size: 10
       max-pool-size: 30
-      shared: true
 
 eureka:
   instance:

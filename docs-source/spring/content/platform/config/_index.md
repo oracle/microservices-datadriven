@@ -6,6 +6,13 @@ Oracle Backend for Spring Boot and Microservices includes Spring Cloud Config wh
 
 The Spring Cloud Config server is pre-configured to work with the Spring Boot Eureka service registry, configured to store the Configuration in the Oracle Autonomous Database to support labeled versions of configuration environments as well as being accessible to a wide range of tools for managing the content. More details can be found here: ([Spring Cloud Config Documentation](https://spring.io/projects/spring-cloud-config)).
 
+* [Managing Config Server Data](#managing-config-server-data)
+* [Config Server REST API endpoints overview](#config-server-rest-api-endpoints-overview)
+  * [Config Server REST API endpoints examples](#config-server-rest-api-endpoints-examples)
+* [Re-create test data](#re-create-test-data)
+
+## Overview
+
 When building applications using Spring Config Server, the Spring Cloud Config client's `application.yaml` configuration file must include access information to the deployed Spring Config Server:
 
 ```yaml
@@ -36,6 +43,13 @@ During setup of Oracle Backend for Spring Boot and Microservices, the following 
 | application-c   | secret         | 23.4     | txenventq           | 23c-conn-string                   |
 | application-c   | secret         | 23.4     | txeventq            | 23c-kafka-name                    |
 ```
+
+## Managing Config Server Data
+
+Maintaining the Config Servers information can be done using the following methods:
+
+* Oracle Backend for Microservices CLI, *oractl*.
+* REST API endpoints exposed via *obaas-admin* and *config-server* services.
 
 ## Config Server REST API endpoints overview
 
