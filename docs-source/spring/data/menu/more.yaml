@@ -2,5 +2,5 @@ more:
   - name: "Read our blogs!"
     ref: "/blogs"
   - name: "Spring Boot Starters"
-    ref: "https://central.sonatype.com/namespace/com.oracle.database.spring"
-    external: true
+    ref: "/development/starters"
+    
