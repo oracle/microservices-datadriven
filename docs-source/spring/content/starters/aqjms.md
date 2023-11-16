@@ -37,6 +37,10 @@ two following beans:
 * A `MessageConverter` bean to map objects of your class representing the payload into a
   text based format (like JSON) that can be used in the actual messages.  
 
+**Note**: Any queues or topics that you want to use must be pre-created in the database.
+See [Sample Code](https://www.oracle.com/database/advanced-queuing/#rc30sample-code) for
+examples.
+
 ```java
 package com.example.aqjms;
 
@@ -120,3 +124,4 @@ details for the Oracle Database hosting the queues and topics.  If you wish to u
 one, you must use a named configuration, e.g., `spring.datasource.txeventq` and use Java
 configuration (as shown above for the UCP starter) and annotate the configuration with
 the standard Spring `@Qualifier` annotation, specifying the correct name, e.g., `txevevntq`.
+
