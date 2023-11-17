@@ -17,14 +17,13 @@ To add this starter to your project, add this Maven dependency:
     <groupId>com.oracle.database.spring</groupId>
     <artifactId>oracle-spring-boot-starter-aqjms</artifactId>
     <version>23.4.0</version>
-    <type>pom</type>
 </dependency>
 ```
 
 For Gradle projects, add this dependency:
 
 ```
-implementation 'com.oracle.database.spring:oracle-spring-boot-starter-aqjms:23.4.0:pom'
+implementation 'com.oracle.database.spring:oracle-spring-boot-starter-aqjms:23.4.0'
 ```
 
 To configure your application to use Oracle Transactional Event Queues or Oracle Advanced
