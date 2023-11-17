@@ -113,7 +113,7 @@
       </dependency>
       <dependency>
         <groupId>com.oracle.database.messaging</groupId>
-        <artifactId>aqapi</artifactId>
+        <artifactId>aqapi-jakarta</artifactId>
         <version>${oracledb-messaging}</version>
         <type>pom</type>
         <scope>import</scope>

@@ -4,8 +4,7 @@ spring:
   zipkin:
     base-url: ${zipkin.base-url}
 
-oracle:
-  aq:
+  datasource:
     url: ${spring.datasource.url}
     username: ${spring.datasource.username}
     password: ${spring.datasource.password}

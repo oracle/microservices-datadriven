@@ -13,7 +13,7 @@ spring:
       ddl-auto: validate
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.Oracle12cDialect
+        dialect: org.hibernate.dialect.OracleDialect
         format_sql: true
     show-sql: true
   microtx:
