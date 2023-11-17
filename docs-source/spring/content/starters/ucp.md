@@ -12,14 +12,13 @@ To add this starter to your project, add this Maven dependency:
     <groupId>com.oracle.database.spring</groupId>
     <artifactId>oracle-spring-boot-starter-ucp</artifactId>
     <version>23.4.0</version>
-    <type>pom</type>
 </dependency>
 ```
 
 For Gradle projects, add this dependency:
 
 ```
-implementation 'com.oracle.database.spring:oracle-spring-boot-starter-ucp:23.4.0:pom'
+implementation 'com.oracle.database.spring:oracle-spring-boot-starter-ucp:23.4.0'
 ```
 
 An Oracle data source is injected into your application and can be used normally. You must configure

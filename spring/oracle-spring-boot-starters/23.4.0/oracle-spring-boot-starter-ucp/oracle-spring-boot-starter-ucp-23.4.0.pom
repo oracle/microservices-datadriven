@@ -14,7 +14,6 @@
 
     <artifactId>oracle-spring-boot-starter-ucp</artifactId>
     <version>23.4.0</version>
-    <packaging>pom</packaging>
 
     <name>Oracle Spring Boot Starter - UCP</name>
     <description>Oracle's implementation of Spring Boot Starter for using with Oracle UCP</description>
