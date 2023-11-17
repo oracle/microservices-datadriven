@@ -23,7 +23,7 @@ implementation 'com.oracle.database.spring:oracle-spring-boot-starter-wallet:23.
 ```
 
 You need to provide the wallet to your application.  You can specify the location in the `spring.datasource.url`
-as shown below.
+as shown in the following example.
 
 ```
 jdbc:oracle:thin:@mydb_tp?TNS_ADMIN=/oracle/tnsadmin
@@ -31,6 +31,6 @@ jdbc:oracle:thin:@mydb_tp?TNS_ADMIN=/oracle/tnsadmin
 
 Note that the location specified in the `sqlnet.ora` must match the actual location of the file.
 
-If your service is deployed in Kubernetes, the wallet should be placed in a Kubernetes secret which
+If your service is deployed in Kubernetes, then the wallet should be placed in a Kubernetes secret which
 is mounted into the pod at the location specified by the `TNS_ADMIN` parameter in the URL.
 
