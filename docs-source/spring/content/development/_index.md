@@ -1,8 +1,8 @@
 This section provides information about how to develop and deploy Spring Boot applications
-with the Oracle Backend for Spring Boot. 
+with the Oracle Backend for Spring Boot and Microservices. 
 
 Spring Boot applications can be developed the normal way, with no special requirements, and
-be deployed into Oracle Backend for Spring Boot.  However, if you do opt-in to the platform
+be deployed into Oracle Backend for Spring Boot and Microservices.  However, if you do opt-in to the platform
 services provides and the CLI, you can shorten your development time and avoid unnecessary
 work.
 
@@ -17,7 +17,7 @@ to use:
   associated with the backend.
 - An APISIX API Gateway that can be used to expose service endpoints outside the Kubernetes
   cluster, to the public internet.  All standard APISIX features like traffic management, 
-  monitoring, authentication, etc., are available for use.
+  monitoring, authentication, and so on, are available for use.
 - Spring Eureka Service Registry for service discovery.  The API Gateway and monitoring
   services are pre-configured to use this registry for service discovery.
 - Spring Config Server to serve externalized configuration information to applications.
