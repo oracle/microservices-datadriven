@@ -1,6 +1,6 @@
 
 This page provides details on how to set up your development environment to work with
-Oracle Backend for Spring Boot. 
+Oracle Backend for Spring Boot and Microservices. 
 
 The following platforms are recommended for a development environment:
 
