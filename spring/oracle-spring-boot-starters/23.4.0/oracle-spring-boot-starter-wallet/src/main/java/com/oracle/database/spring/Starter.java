@@ -4,7 +4,7 @@
 package com.oracle.database.spring;
 
 /**
- * Oracle Spring Boot Starter for Universal Connection Pool.
+ * Oracle Spring Boot Starter for Wallet.
  */
 public class Starter {
     
