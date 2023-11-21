@@ -2,7 +2,7 @@
 title: "Project Structure"
 ---
 
-To take advantage of the built-in platform services, Oracle recommends that you consider
+To take advantage of the built-in platform services, Oracle recommends
 using the following project structure.
 
 Recommended versions:
@@ -13,7 +13,7 @@ Recommended versions:
 
 ### Dependencies
 
-Oracle recommends you add the following dependencies to your application so that it
+Oracle recommends adding the following dependencies to your application so that it
 can take advantage of the built-in platform services:
 
 ```xml
@@ -65,9 +65,9 @@ can take advantage of the built-in platform services:
 
 ### Spring Application Configuration
 
-Oracle recommends the following configuration to configure the application access to
-use the built-in services, including the Spring Eureka Service Registry and the
-observability tools.
+Oracle recommends the following configuration in order for the application access to
+use the built-in services, including the Spring Boot Eureka Service Registry and the
+observability tools:
 
 ```yaml
 spring:
@@ -100,13 +100,13 @@ management:
       application: ${spring.application.name}
 ```
 
-The variables in this configuration will be automatically injected to your deployment
+The variables in this configuration are automatically injected to your deployment
 and pods when you use the Oracle Backend for Spring Boot and Microservices CLI to deploy your application. 
 
 #### Data Sources
 
-If your application uses a data source, you should add the following configuration.  Note that this
-example shows JPA, if you are using JDBC you should use the appropriate configuration.
+If your application uses a data source, then add the following configuration.  Note that this
+example shows Java Persistence API (JPA), if you are using JDBC you should use the appropriate configuration.
 
 ```yaml
 spring:
@@ -133,12 +133,12 @@ spring:
       max-pool-size: 30
 ```
 
-The variables in this configuration will be automatically injected to your deployment
+The variables in this configuration are automatically injected to your deployment
 and pods when you use the Oracle Backend for Spring Boot and Microservices CLI to deploy your application. 
 
 #### Liquibase
 
-If you are using Liquibase to manage your database schema and data, you should
+If you are using Liquibase to manage your database schema and data, then you should
 add the following dependency:
 
 ```xml
@@ -155,7 +155,7 @@ add the following dependency:
 </dependencies>
 ```
 
-The following configuration should be added to your Spring application configuration:
+Add the following configuration to your Spring application configuration:
 
 ```yaml
 spring:  
@@ -167,10 +167,10 @@ spring:
     enabled: ${LIQUIBASE_ENABLED:true}
 ```
 
-The variables in this configuration will be automatically injected to your deployment
+The variables in this configuration are automatically injected to your deployment
 and pods when you use the Oracle Backend for Spring Boot and Microservices CLI to deploy your application. 
 When you use the `deploy` command, you must specify the `liquibase-db` parameter and
-provide a user with sufficient privileges, generally this will be to create and alter
+provide a user with sufficient privileges, generally this will be premissions to create and alter
 users and to grant roles and privileges.  If your service uses JMS, this use may also
 need execute permissions on `dbms.aq_adm`, `dbms.aq_in` and `dbms.aq_jms`.
 
@@ -178,7 +178,7 @@ need execute permissions on `dbms.aq_adm`, `dbms.aq_in` and `dbms.aq_jms`.
 #### Oracle Transaction Manager for Microservices
 
 If you are using Oracle Transaction Manager for Microservices (MicroTx) to manage
-data consistency across microservices' data stores, you should add the following
+data consistency across microservices data stores, then add the following
 dependency:
 
 ```xml
@@ -189,7 +189,7 @@ dependency:
 </dependency>
 ```
 
-The following configuration should be added to your Spring application configuration:
+Add the following configuration to your Spring application configuration:
 
 ```yaml
 spring:

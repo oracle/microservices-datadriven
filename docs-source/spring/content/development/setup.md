@@ -4,9 +4,9 @@ Oracle Backend for Spring Boot and Microservices.
 
 The following platforms are recommended for a development environment:
 
-- Windows 10 or 11, preferrably with Windows Subsystem for Linux 2
+- Microsoft Windows 10 or 11, preferrably with Windows Subsystem for Linux 2
 - macOS (11 or later recommended) on Intel or Apple silicon
-- Linux, for example Oracle Linux, Ubuntu, etc.
+- Linux, for example Oracle Linux, Ubuntu, and so on.
 
 The following tools are recommended for a development environment:
 
@@ -14,10 +14,10 @@ The following tools are recommended for a development environment:
 - Java Development Kit, for example Oracle, OpenJDK, or GraalVM 
 - Maven or Gradle for build and testing automation
 
-If you wish to test locally or offline, the following additional tools are recommended:
+If you wish to test locally or offline, then the following additional tools are recommended:
 
 - A container platform, for example Rancher Desktop
-- An Oracle Database (in a container)
+- An Oracle database (in a container)
 
 ## Integrated Development Environment
 
@@ -37,21 +37,21 @@ Oracle recommends the [Java SE Development Kit](https://www.oracle.com/java/tech
 or [GraalVM](https://www.graalvm.org/downloads/#). Java 17 or 21 are recommended, note that Spring Boot
 3.0 requires at least Java 17.  If you want to use JVM Virtual Threads, then Java 21 is recommended.
 
-**Note**: If you are using Spring Boot 2.x, Oracle encourages you to use at least Java 17, unless
+**Note**: If you are using Spring Boot 2.x, then Oracle encourages you to use at least Java 17, unless
 you have a specific reason to stay on Java 11. Refer to the [Spring Boot Support](https://spring.io/projects/spring-boot#support)
 page for information on support dates for Spring Boot 2.x.
 
 You can download the latest x64 Java 17 Development Kit from
 [this permalink](https://download.oracle.com/java/17/latest/jdk-17_linux-x64_bin.tar.gz).
 
-Decompress the archive in your chosen location, for example your home directory and then add it to your path:
+Decompress the archive in your chosen location (for example your home directory) and then add it to your path:
 
 ```bash
 export JAVA_HOME=$HOME/jdk-17.0.3
 export PATH=$JAVA_HOME/bin:$PATH
 ```
 
-You can verify it is installed with this command:
+Use the following command to verify it is installed:
 
 ```bash
 $ java -version
@@ -61,22 +61,23 @@ Java HotSpot(TM) 64-Bit Server VM (build 17.0.3+8-LTS-111, mixed mode, sharing)
 ```
 
 **Note: Native Images:** If you want to compile your Spring Boot microservices into native
-images (which was officially supported from Spring Boot 3.0), you must use GraalVM, which can be
+images (which was officially supported from Spring Boot 3.0), then you must use GraalVM, which can be
 downloaded [from here](https://www.graalvm.org/downloads/).
 
 ## Maven
 
-You can use either Maven or Gradle to build your Spring Boot applications. If you prefer Maven, follow the steps in this section. If you prefer Gradle, refer to the next section.
+You can use either Maven or Gradle to build your Spring Boot applications. If you prefer Maven, then
+follow the steps in this section. If you prefer Gradle, then refer to the next section.
 
 Download Maven from the [Apache Maven website](https://maven.apache.org/download.cgi).
 
-Decompress the archive in your chosen location, for example your home directory, and then add it to your path:
+Decompress the archive in your chosen location (for example your home directory) and then add it to your path:
 
 ```bash
 $ export PATH=$HOME/apache-maven-3.8.6/bin:$PATH
 ```
 
-You can verify it is installed with this command (note that your version may give slightly different output):
+Use the following command to verify it is installed (note that your version may give slightly different output):
 
 ```bash
 $ mvn -v
@@ -92,7 +93,7 @@ OS name: "linux", version: "5.10.102.1-microsoft-standard-wsl2", arch: "amd64", 
 Download Gradle using the [instructions on the Gradle website](https://gradle.org/install/).
 Spring Boot is compatible with Gradle version 7.5 or later.
 
-Run the command below to verify Gradle was installed correctly:
+Run the following command to verify that Gradle is installed correctly
 
 ```bash
 $ gradle -v
@@ -113,9 +114,9 @@ OS:           Linux 5.10.102.1-microsoft-standard-WSL2 amd64
 
 ## Oracle Database in a container for local testing
 
-If you want to run an instance of Oracle Database locally for development and testing, Oracle
+If you want to run an instance of Oracle Database locally for development and testing, then Oracle
 recommends Oracle Database 23c Free.  You can start the database in a container with this
-command, you should specify a secure password:
+command specifying a secure password:
 
 ```bash
 docker run --name free23c -d \
@@ -124,5 +125,13 @@ docker run --name free23c -d \
    container-registry.oracle.com/database/free:latest
 ```
 
-**Note**: If you are using testcontainers, Oracle encourages you to consider this alternative
-community maintained container image: `gvenzl/oracle-free:23.3-faststart`.
+**Note**: If you are using testcontainers, then add the following dependency to your application:
+
+```xml
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>oracle-free</artifactId>
+    <version>1.19.2</version>
+    <scope>test</scope>
+</dependency>
+```
