@@ -12,12 +12,11 @@
 <meta name="generator" content="Hugo 0.115.4">
 
 
-  <meta name="description" content="This is a discussion of an installation on a macOS Ventura desktop.
-Read the On-Premises documentation and ensure that your desktop meets the minimum system requirements.
-Install Podman To install Podman, process these commands:
-brew install podman PODMAN_VERSION=$(podman -v |awk &#39;{print $NF}&#39;) sudo /usr/local/Cellar/podman/${PODMAN_VERSION}/bin/podman-mac-helper install podman machine init --cpus 4 --disk-size 60 --memory 8192 --rootful --now podman system connection default podman-machine-default-root Download the Database or Oracle REST Data Services (ORDS) Images The Desktop installation provisions an Oracle database into the Kubernetes cluster." />
+  <meta name="description" content="Oracle provides a number of Spring Boot Starters that make it easy to use various Oracle technologies in Spring Boot projects.
+The Oracle Spring Boot Starters are available in Maven Central and include the following starters.
+Note: The versioning of starters was originally in line with the matching Spring Boot version, but starting in November, 2023, the version numbering scheme was changed to more closely align with Oracle Database version numbering." />
 
-    <title>On-Premises Installation - macOS Ventura (x86) | Oracle Backend for Spring Boot and Microservices</title>
+    <title>Oracle Spring Boot Starters | Oracle Backend for Spring Boot and Microservices</title>
 
     <link rel="icon" type="image/svg+xml" href="/microservices-datadriven/spring/favicon/favicon.svg" />
 <link
@@ -38,42 +37,40 @@ brew install podman PODMAN_VERSION=$(podman -v |awk &#39;{print $NF}&#39;) sudo 
     
   <meta
     property="og:title"
-    content="On-Premises Installation - macOS Ventura (x86)"
+    content="Oracle Spring Boot Starters"
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot and Microservices" />
-  <meta property="og:description" content="This is a discussion of an installation on a macOS Ventura desktop.
-Read the On-Premises documentation and ensure that your desktop meets the minimum system requirements.
-Install Podman To install Podman, process these commands:
-brew install podman PODMAN_VERSION=$(podman -v |awk &#39;{print $NF}&#39;) sudo /usr/local/Cellar/podman/${PODMAN_VERSION}/bin/podman-mac-helper install podman machine init --cpus 4 --disk-size 60 --memory 8192 --rootful --now podman system connection default podman-machine-default-root Download the Database or Oracle REST Data Services (ORDS) Images The Desktop installation provisions an Oracle database into the Kubernetes cluster." />
+  <meta property="og:description" content="Oracle provides a number of Spring Boot Starters that make it easy to use various Oracle technologies in Spring Boot projects.
+The Oracle Spring Boot Starters are available in Maven Central and include the following starters.
+Note: The versioning of starters was originally in line with the matching Spring Boot version, but starting in November, 2023, the version numbering scheme was changed to more closely align with Oracle Database version numbering." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/" />
+<meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/starters/" />
 
-<meta property="article:section" content="On Premises" />
+<meta property="article:section" content="Starters" />
 
 
   <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="On-Premises Installation - macOS Ventura (x86)" />
-  <meta name="twitter:description" content="This is a discussion of an installation on a macOS Ventura desktop.
-Read the On-Premises documentation and ensure that your desktop meets the minimum system requirements.
-Install Podman To install Podman, process these commands:
-brew install podman PODMAN_VERSION=$(podman -v |awk &#39;{print $NF}&#39;) sudo /usr/local/Cellar/podman/${PODMAN_VERSION}/bin/podman-mac-helper install podman machine init --cpus 4 --disk-size 60 --memory 8192 --rootful --now podman system connection default podman-machine-default-root Download the Database or Oracle REST Data Services (ORDS) Images The Desktop installation provisions an Oracle database into the Kubernetes cluster." />
+<meta name="twitter:title" content="Oracle Spring Boot Starters" />
+  <meta name="twitter:description" content="Oracle provides a number of Spring Boot Starters that make it easy to use various Oracle technologies in Spring Boot projects.
+The Oracle Spring Boot Starters are available in Maven Central and include the following starters.
+Note: The versioning of starters was originally in line with the matching Spring Boot version, but starting in November, 2023, the version numbering scheme was changed to more closely align with Oracle Database version numbering." />
 
 
   <script type="application/ld+json">
   {
       "@context": "http://schema.org",
       "@type": "TechArticle",
-      "articleSection": "On Premises",
-      "name": "On-Premises Installation - macOS Ventura (x86)",
-      "url" : "https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/",
-      "headline": "On-Premises Installation - macOS Ventura (x86)",
-      "description": "This is a discussion of an installation on a macOS Ventura desktop.\nRead the On-Premises documentation and ensure that your desktop meets the minimum system requirements.\nInstall Podman To install Podman, process these commands:\nbrew install podman PODMAN_VERSION=$(podman -v |awk \u0027{print $NF}\u0027) sudo \/usr\/local\/Cellar\/podman\/${PODMAN_VERSION}\/bin\/podman-mac-helper install podman machine init --cpus 4 --disk-size 60 --memory 8192 --rootful --now podman system connection default podman-machine-default-root Download the Database or Oracle REST Data Services (ORDS) Images The Desktop installation provisions an Oracle database into the Kubernetes cluster.",
-      "wordCount" : "393",
+      "articleSection": "Starters",
+      "name": "Oracle Spring Boot Starters",
+      "url" : "https://oracle.github.io/microservices-datadriven/spring/starters/",
+      "headline": "Oracle Spring Boot Starters",
+      "description": "Oracle provides a number of Spring Boot Starters that make it easy to use various Oracle technologies in Spring Boot projects.\nThe Oracle Spring Boot Starters are available in Maven Central and include the following starters.\nNote: The versioning of starters was originally in line with the matching Spring Boot version, but starting in November, 2023, the version numbering scheme was changed to more closely align with Oracle Database version numbering.",
+      "wordCount" : "118",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
           "@type": "WebPage",
-          "@id": "https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/"
+          "@id": "https://oracle.github.io/microservices-datadriven/spring/starters/"
       },
       "copyrightHolder" : "Oracle Backend for Spring Boot and Microservices",
       "copyrightYear" : "0001",
@@ -157,7 +154,7 @@ brew install podman PODMAN_VERSION=$(podman -v |awk &#39;{print $NF}&#39;) sudo 
   href="/microservices-datadriven/spring/custom.css"
   media="all"
 />
-  <link href="https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/" rel="canonical" type="text/html" />
+  <link href="https://oracle.github.io/microservices-datadriven/spring/starters/" rel="canonical" type="text/html" />
 
 <!-- Made with Geekdoc theme https://github.com/thegeeklab/hugo-geekdoc -->
 
@@ -465,7 +462,7 @@ brew install podman PODMAN_VERSION=$(podman -v |awk &#39;{print $NF}&#39;) sudo 
                 
                 <a
                   href="/microservices-datadriven/spring/on-premises/macos_ventura"
-                  class="gdoc-nav__entry is-active"
+                  class="gdoc-nav__entry"
                 >
                   MacOS Ventura (x86)
                 </a>
@@ -1410,7 +1407,7 @@ brew install podman PODMAN_VERSION=$(podman -v |awk &#39;{print $NF}&#39;) sudo 
                 
                 <a
                   href="/microservices-datadriven/spring/starters"
-                  class="gdoc-nav__entry"
+                  class="gdoc-nav__entry is-active"
                 >
                   Spring Boot Starters
                 </a>
@@ -1882,15 +1879,7 @@ if (!doNotTrack) {
     
   
   
-    
-    
-    
-    
-  
-  
-    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/' href='/microservices-datadriven/spring/'><span itemprop='name'>Oracle Backend for Spring Boot and Microservices</span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/on-premises/' href='/microservices-datadriven/spring/on-premises/'><span itemprop='name'>On-Premises Installation</span></a><meta itemprop='position' content='4' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>On-Premises Installation - macOS Ventura (x86)</span><meta itemprop='position' content='5' /></li>
-  
-
+    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/' href='/microservices-datadriven/spring/'><span itemprop='name'>Oracle Backend for Spring Boot and Microservices</span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>Oracle Spring Boot Starters</span><meta itemprop='position' content='4' /></li>
   
 
   
@@ -1906,171 +1895,30 @@ if (!doNotTrack) {
   <article
     class="gdoc-markdown gdoc-markdown__align--left"
   >
-    <h1>On-Premises Installation - macOS Ventura (x86)</h1>
-    <p>This is a discussion of an installation on a macOS Ventura desktop.</p>
-<p>Read the <a
+    <h1>Oracle Spring Boot Starters</h1>
+    <p>Oracle provides a number of Spring Boot Starters that make it easy to use various Oracle technologies in Spring Boot projects.</p>
+<p>The Oracle Spring Boot Starters are available in <a
   class="gdoc-markdown__link"
-  href="../../on-premises"
->On-Premises</a> documentation and ensure that your desktop meets the minimum system requirements.</p>
-<div class="gdoc-page__anchorwrap">
-    <h2 id="install">
-        Install
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/#install" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Install" aria-label="Anchor to: Install" href="#install">
-            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
-        </a>
-    </h2>
-</div>
-<div class="gdoc-page__anchorwrap">
-    <h3 id="podman">
-        Podman
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/#podman" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Podman" aria-label="Anchor to: Podman" href="#podman">
-            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
-        </a>
-    </h3>
-</div>
-<p>To install Podman, process these commands:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">brew install podman
-</span></span><span class="line"><span class="cl"><span class="nv">PODMAN_VERSION</span><span class="o">=</span><span class="k">$(</span>podman -v <span class="p">|</span>awk <span class="s1">&#39;{print $NF}&#39;</span><span class="k">)</span>
-</span></span><span class="line"><span class="cl">sudo /usr/local/Cellar/podman/<span class="si">${</span><span class="nv">PODMAN_VERSION</span><span class="si">}</span>/bin/podman-mac-helper install
-</span></span><span class="line"><span class="cl">podman machine init --cpus <span class="m">4</span> --disk-size <span class="m">60</span> --memory <span class="m">8192</span> --rootful --now
-</span></span><span class="line"><span class="cl">podman system connection default podman-machine-default-root
-</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
-    <h3 id="download-the-database-or-oracle-rest-data-services-ords-images">
-        Download the Database or Oracle REST Data Services (ORDS) Images
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/#download-the-database-or-oracle-rest-data-services-ords-images" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Download the Database or Oracle REST Data Services (ORDS) Images" aria-label="Anchor to: Download the Database or Oracle REST Data Services (ORDS) Images" href="#download-the-database-or-oracle-rest-data-services-ords-images">
-            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
-        </a>
-    </h3>
-</div>
-<p>The <em>Desktop</em> installation provisions an Oracle database into the Kubernetes cluster. The images must be downloaded
-from <a
-  class="gdoc-markdown__link"
-  href="https://container-registry.oracle.com/"
->Oracle Cloud Infrastructure Registry (Container Registry)</a> before continuing.</p>
-<ol>
-<li>
-<p>Log in to the Container Registry. For example:</p>
-<p><code>podman login container-registry.oracle.com</code></p>
-</li>
-<li>
-<p>Pull the database image. For example:</p>
-<p><code>podman pull container-registry.oracle.com/database/enterprise:21.3.0.0</code></p>
-</li>
-<li>
-<p>Pull the ORDS image. For example:</p>
-<p><code>podman pull container-registry.oracle.com/database/ords:21.4.2-gh</code></p>
-</li>
-</ol>
-<div class="gdoc-page__anchorwrap">
-    <h3 id="minikube">
-        Minikube
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/#minikube" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Minikube" aria-label="Anchor to: Minikube" href="#minikube">
-            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
-        </a>
-    </h3>
-</div>
-<p>To install Minikube, process these commands:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">brew install minikube
-</span></span><span class="line"><span class="cl">minikube config <span class="nb">set</span> driver podman
-</span></span><span class="line"><span class="cl">minikube start --cpus <span class="m">4</span> --memory max --container-runtime<span class="o">=</span>containerd
-</span></span><span class="line"><span class="cl">minikube addons <span class="nb">enable</span> ingress
-</span></span></code></pre></div><p>If Minikube fails to start and returns this <code>Failed kubeconfig update: could not read config</code> error, process this command and retry:</p>
-<p><code>mv ~/.kube ~/.kube.bak</code></p>
-<div class="gdoc-page__anchorwrap">
-    <h3 id="download-oracle-backend-for-spring-boot-and-microservices">
-        Download Oracle Backend for Spring Boot and Microservices
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/#download-oracle-backend-for-spring-boot-and-microservices" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Download Oracle Backend for Spring Boot and Microservices" aria-label="Anchor to: Download Oracle Backend for Spring Boot and Microservices" href="#download-oracle-backend-for-spring-boot-and-microservices">
-            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
-        </a>
-    </h3>
-</div>
-<p>Download the <a
-  class="gdoc-markdown__link"
-  href="https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip"
->Oracle Backend for Spring Boot and Microservices</a> and unzip into a new directory.</p>
-<div class="gdoc-page__anchorwrap">
-    <h3 id="install-ansible">
-        Install Ansible
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/#install-ansible" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Install Ansible" aria-label="Anchor to: Install Ansible" href="#install-ansible">
-            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
-        </a>
-    </h3>
-</div>
-<p>To install Ansible, process these commands:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./setup_ansible.sh
-</span></span><span class="line"><span class="cl"><span class="nb">source</span> ./activate.env
-</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
-    <h3 id="define-the-infrastructure">
-        Define the Infrastructure
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/#define-the-infrastructure" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Define the Infrastructure" aria-label="Anchor to: Define the Infrastructure" href="#define-the-infrastructure">
-            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
-        </a>
-    </h3>
-</div>
-<p>Use the Helper Playbook to define the infrastructure. This Playbook also:</p>
+  href="https://central.sonatype.com/namespace/com.oracle.database.spring"
+>Maven Central</a> and include
+the following starters.</p>
+<p><strong>Note</strong>: The versioning of starters was originally in line with the matching Spring Boot version, but starting in November, 2023, the version
+numbering scheme was changed to more closely align with Oracle Database version numbering.  The 23.4.0 starter is supported for Spring Boot 3.0
+and later (including 3.1, 3.2).  For Spring Boot 2.7.x users, use the matching 2.7.x version of the starter.</p>
 <ul>
-<li>Creates additional namespaces for the Container Registry and the database.</li>
-<li>Creates a private Container Registry in the Kubernetes cluster.</li>
-<li>Modifies the Microservices application to be desktop compatible.</li>
-</ul>
-<p>Run this command:</p>
-<p><code>ansible-playbook ansible/desktop_apply.yaml</code></p>
-<div class="gdoc-page__anchorwrap">
-    <h3 id="open-a-tunnel">
-        Open a Tunnel
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/#open-a-tunnel" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Open a Tunnel" aria-label="Anchor to: Open a Tunnel" href="#open-a-tunnel">
-            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
-        </a>
-    </h3>
-</div>
-<p>In order to push the images to the Container Registry in the Kubernetes cluster, open a new terminal and start a tunnel by running this command:</p>
-<p><code>minikube tunnel</code></p>
-<p>To test access to the registry, process this command:</p>
-<p><code>curl -X GET -k https://localhost:5000/v2/_catalog</code></p>
-<p>This <code>curl</code> command should result in the following:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">{&#34;errors&#34;:[{&#34;code&#34;:&#34;UNAUTHORIZED&#34;,&#34;message&#34;:&#34;authentication required&#34;,&#34;detail&#34;:[{&#34;Type&#34;:&#34;registry&#34;,&#34;Class&#34;:&#34;&#34;,&#34;Name&#34;:&#34;catalog&#34;,&#34;Action&#34;:&#34;*&#34;}]}]}
-</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
-    <h3 id="build-the-images">
-        Build the Images
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/#build-the-images" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Build the Images" aria-label="Anchor to: Build the Images" href="#build-the-images">
-            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
-        </a>
-    </h3>
-</div>
-<p>Build and push the images to the Container Registry in the Kubernetes cluster by running this command:</p>
-<p><code>ansible-playbook ansible/images_build.yaml</code></p>
-<p>After the images are built and pushed, the tunnel is no longer required and can be stopped.</p>
-<div class="gdoc-page__anchorwrap">
-    <h3 id="deploy-oracle-backend-for-spring-boot-and-microservices">
-        Deploy Oracle Backend for Spring Boot and Microservices
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/#deploy-oracle-backend-for-spring-boot-and-microservices" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Deploy Oracle Backend for Spring Boot and Microservices" aria-label="Anchor to: Deploy Oracle Backend for Spring Boot and Microservices" href="#deploy-oracle-backend-for-spring-boot-and-microservices">
-            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
-        </a>
-    </h3>
-</div>
-<p>Deploy the database and Microservices by running this command:</p>
-<p><code>ansible-playbook ansible/k8s_apply.yaml -t full</code></p>
-<div class="gdoc-page__anchorwrap">
-    <h2 id="notes">
-        Notes
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/#notes" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Notes" aria-label="Anchor to: Notes" href="#notes">
-            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
-        </a>
-    </h2>
-</div>
-<div class="gdoc-page__anchorwrap">
-    <h2 id="vpn-and-proxies">
-        VPN and Proxies
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/#vpn-and-proxies" class="gdoc-page__anchor clip flex align-center" title="Anchor to: VPN and Proxies" aria-label="Anchor to: VPN and Proxies" href="#vpn-and-proxies">
-            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
-        </a>
-    </h2>
-</div>
-<p>If you are behind a virtual private network (VPN) or proxy, see <a
+<li><a
   class="gdoc-markdown__link"
-  href="https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/"
->https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/</a> for more details
-on additional tasks.</p>
+  href="./ucp"
+>Oracle Spring Boot Starter for Universal Connection Pool</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="./wallet"
+>Oracle Spring Boot Starter for Wallet</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="./aqjms"
+>Oracle Spring Boot Starter for AQ/JMS</a></li>
+</ul>
 
   </article>
 
@@ -2183,9 +2031,6 @@ on additional tasks.</p>
       
 
       
-        
-        
-      
 
       
     
@@ -2207,9 +2052,6 @@ on additional tasks.</p>
       
       
 
-      
-        
-        
       
 
       
@@ -2700,6 +2542,9 @@ on additional tasks.</p>
       
 
       
+        
+        
+      
 
       
     
@@ -2725,6 +2570,9 @@ on additional tasks.</p>
       
       
 
+      
+        
+        
       
 
       
@@ -2892,11 +2740,11 @@ on additional tasks.</p>
     
       <a
         class="gdoc-page__nav--prev flex align-center"
-        href="/microservices-datadriven/spring/on-premises/"
-        title="On-Premises Installation"
+        href="/microservices-datadriven/spring/development/project/"
+        title="Project Structure"
       >
         <i class="gdoc-icon">gdoc_arrow_left_alt</i>
-        On-Premises Installation
+        Project Structure
       </a>
     
   </span>
@@ -2904,10 +2752,10 @@ on additional tasks.</p>
     
       <a
         class="gdoc-page__nav--next flex align-center"
-        href="/microservices-datadriven/spring/on-premises/ol8/"
-        title="OL8 (x86)"
+        href="/microservices-datadriven/spring/starters/ucp/"
+        title="UCP"
       >
-        OL8 (x86)
+        UCP
         <i class="gdoc-icon">gdoc_arrow_right_alt</i>
       </a>
     
