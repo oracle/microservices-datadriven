@@ -6,5 +6,28 @@
     <description>Recent content on Oracle Backend for Spring Boot and Microservices</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="https://oracle.github.io/microservices-datadriven/spring/development/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title></title>
+      <link>https://oracle.github.io/microservices-datadriven/spring/development/setup/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://oracle.github.io/microservices-datadriven/spring/development/setup/</guid>
+      <description>This page provides details on how to set up your development environment to work with Oracle Backend for Spring Boot and Microservices.
+The following platforms are recommended for a development environment:
+Microsoft Windows 10 or 11, preferrably with Windows Subsystem for Linux 2 macOS (11 or later recommended) on Intel or Apple silicon Linux, for example Oracle Linux, Ubuntu, and so on. The following tools are recommended for a development environment:</description>
+    </item>
+    
+    <item>
+      <title>Project Structure</title>
+      <link>https://oracle.github.io/microservices-datadriven/spring/development/project/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://oracle.github.io/microservices-datadriven/spring/development/project/</guid>
+      <description>To take advantage of the built-in platform services, Oracle recommends using the following project structure.
+Recommended versions:
+Spring Boot 3.1.5 Spring Cloud 2022.0.4 Java 17 or 21 Dependencies Oracle recommends adding the following dependencies to your application so that it can take advantage of the built-in platform services:
+&amp;lt;properties&amp;gt; &amp;lt;project.build.sourceEncoding&amp;gt;UTF-8&amp;lt;/project.build.sourceEncoding&amp;gt; &amp;lt;java.version&amp;gt;17&amp;lt;/java.version&amp;gt; &amp;lt;spring.boot.dependencies.version&amp;gt;3.1.5&amp;lt;/spring.boot.dependencies.version&amp;gt; &amp;lt;spring-cloud.version&amp;gt;2022.0.4&amp;lt;/spring-cloud.version&amp;gt; &amp;lt;/properties&amp;gt; &amp;lt;dependencies&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-web&amp;lt;/artifactId&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.boot&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-boot-starter-actuator&amp;lt;/artifactId&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;io.micrometer&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;micrometer-registry-prometheus&amp;lt;/artifactId&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.springframework.cloud&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;spring-cloud-starter-netflix-eureka-client&amp;lt;/artifactId&amp;gt; &amp;lt;/dependency&amp;gt; &amp;lt;/dependencies&amp;gt; &amp;lt;dependencyManagement&amp;gt; &amp;lt;dependencies&amp;gt; &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;org.</description>
+    </item>
+    
   </channel>
 </rss>
