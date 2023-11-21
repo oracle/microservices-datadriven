@@ -9,6 +9,46 @@ This page acts as an index/aggregator for some of our featured content.
 ![YouTube icon](./youtube.png)  &nbsp; And be sure to subscribe to our YouTube channel ["The Converged Database"](https://www.youtube.com/@theconvergeddatabase6236) for more great content!
 
 {{< blog  
+    author="mark"
+    date="11/21/2023"
+    title="Testing Spring Boot Applications with Testcontainers and Oracle"
+    link="https://lnkd.in/dmsX_TQW"
+    abstract="In this article, Mark shows us how to easily test your Spring Boot applications with a full Oracle 23c database, with only about a 10 second startup time, which is fast enough to use even in unit tests."
+>}}
+
+{{< blog  
+    author="mark"
+    date="11/13/2023"
+    title="Introducing the Oracle Database Observability Exporter"
+    link="https://www.linkedin.com/pulse/introducing-oracle-database-observability-exporter-mark-nelson-kbiye%3FtrackingId=j6wh7EH7GqvaM8SHpddaOA%253D%253D/?trackingId=j6wh7EH7GqvaM8SHpddaOA%3D%3D"
+    abstract="Learn about the new Oracle Database Observability Exporter which allows you to export metrics from the Oracle Database in the defacto standard Prometheus format, so that they can be ingested in Prometheus or a similar time series database and used to create dashboards in Grafana or a similar platform."
+>}}
+
+{{< blog  
+    author="doug"
+    date="10/27/2023"
+    title="Developing Mobile Apps with Oracle Free23c"
+    link="https://www.linkedin.com/pulse/developing-mobile-apps-oracle-free23c-doug-drechsel-9tc6e/"
+    abstract="Doug shows how to develop mobile applications using Oracle's MERN Stack locally."
+>}}
+
+{{< blog  
+    author="doug"
+    date="10/2/2023"
+    title="Using Oracle's MERN Stack to develop Mobile Applications"
+    link="https://www.youtube.com/watch?v=ou5Oao7hz6I"
+    abstract="In this video, Doug introduces Oracle's MERN Stack and then demonstrates how to build mobile applications using the Stack."
+>}}
+
+{{< blog  
+    author="doug"
+    date="9/25/2023"
+    title="Using GraphQL with Oracle's MERN Stack"
+    link="https://www.linkedin.com/pulse/using-graphql-oracles-mern-stack-doug-drechsel"
+    abstract="Doug introduces GraphQL and shows how to run simple queries using the GraphQL playground in the Parse dashboard."
+>}}
+
+{{< blog  
     author="corrado"
     date="7/25/2023"
     title="Coding for Observability in the Oracle Backend for Spring Boot and Microservices"
