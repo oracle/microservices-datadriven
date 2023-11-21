@@ -45,8 +45,15 @@ main:
     sub:
       - name: Authorization Server
         ref: "/security/azn-server"
-  - name: "Spring Boot Starters"
-    ref: "/development/starters"
+  - name: Development
+    ref: "/development"
+    sub:  
+      - name: Setup
+        ref: "/development/setup"
+      - name: Project Structure
+        ref: "/development/project"
+  - name: Spring Boot Starters
+    ref: "/starters"
     sub:
       - name: "UCP"
         ref: "/starters/ucp"
