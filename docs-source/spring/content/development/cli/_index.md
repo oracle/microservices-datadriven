@@ -245,7 +245,7 @@ The following is an example development workflow using the CLI:
 
    SYNOPSIS
        deploy --redeploy boolean --bind String --app-name String [--service-name String] [--image-version String] --service-profile String --port String --java-version String --add-health-probe boolean 
-       --liquibase-db String [--artifact-path String] --initial-replicas int --graalvm-native boolean --help
+          --liquibase-db String [--artifact-path String] --initial-replicas int --graalvm-native boolean --help
 
    OPTIONS
        --redeploy boolean
