@@ -64,13 +64,14 @@ The following REST Endpoints are available to manage users. The table lists whic
 | /user/api/v1/findUser                             | GET    | Find all users                                  | ROLE_ADMIN            |
 | /user/api/v1/findUser?username=\<username\>       | GET    | Find a user with the username \<username\>      | ROLE_ADMIN            |
 | /user/api/v1/createUser                           | POST   | Create a user                                   | ROLE_ADMIN            |
-| /user/api/v1/updatePassword                       | PUT    | Update a password for a user. A user with<br>Role ROLE_ADMIN can update any users password | ROLE_USER |
+| /user/api/v1/updatePassword                       | PUT    | Update a password for a user. A user with Role ROLE_ADMIN can update any users password | ROLE_USER |
+| /user/api/v1/changeRole                           | PUT    | Change role(s) for a user                       | ROLE_ADMIN            |
 | /user/api/v1/deleteUsername?username=\<username\> | DELETE | Delete a user with username \<username\>        | ROLE_ADMIN            |
 | /user/api/v1/deleteId?id=\<id\>                   | DELETE | Delete a user with the id \<id\>                | ROLE_ADMIN            |
 
 ### User Management REST Endpoints
 
-In all examples below you need to replace `<username>:<password>` with your username and password. The examples are using `curl` to interact with the REST endpoints. They also requires that you have opened a tunnel on port 8080 to either the `azn-server` or `obaas-admin` service. For example
+In all examples below you need to replace `<username>:<password>` with your username and password. The examples are using `curl` to interact with the REST endpoints. They also requires that you have opened a tunnel on port 8080 to either the `azn-server` or `obaas-admin` service. For example, this command opens a tunnel to the `obaas-admin` service.
 
 ```shell
 kubectl port-forward -n obaas-admin svc/obaas-admin 8080
@@ -104,8 +105,17 @@ curl -u <username>:<password> -i -X POST \
 ```shell
 curl -u <username>:<password> -i -X PUT \
     -H 'Content-Type: application/json' \
-    -d '{"username": "a-new-user", "password": "more-top-secret-password"}' \
+    -d '{"username": "current-user", "password": "more-top-secret-password"}' \
     http://localhost:8080/user/api/v1/updatePassword
+```
+
+#### /user/api/v1/changeRole
+
+```shell
+curl -u <username>:<password> -i -X PUT \
+    -H 'Content-Type: application/json' \
+    -d '{"username": "current-user", "roles": "changed-roles"}' \
+    http://localhost:8080/user/api/v1/changeRole
 ```
 
 #### /user/api/v1/deleteUsername?username=\<username\>
