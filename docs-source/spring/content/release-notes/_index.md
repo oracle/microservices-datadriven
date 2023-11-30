@@ -2,6 +2,18 @@
 title: "Release Notes"
 ---
 
+## Version 1.0.2, November XX, 2023
+
+Notes:
+
+* Bug Fixes
+* User Management using the CLI and REST Endpoints
+
+| Component                                                                     | New Version   | Replaced Version    |
+|-------------------------------------------------------------------------------|---------------|---------------------|
+| OpenTelemetry Collector | 0.86.0         | 0.90.0               |
+| Oracle Backend for Spring Boot and Microservices CLI                          | 1.0.2         | 1.0.1               |
+
 ## Version 1.0.1, November 2, 2023
 
 Notes:
