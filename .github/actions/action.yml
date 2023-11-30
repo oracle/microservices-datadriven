@@ -1,0 +1,56 @@
+name: 'Process Image'
+description: 'Dockerfile, Build, Push Images'
+inputs:
+  src_image:
+    description: Source Image
+    required: true
+  dst_image:
+    description: Destination Image
+    required: true
+  description:
+    description: Description of Image
+    required: true
+  push:
+    description: Boolean to push image (true) or just build (false)
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Set date and latest Tag
+      shell: bash
+      run: |
+        full_dst_image=${{ inputs.dst_image }}
+        now=$(date +'%Y.%m.%d')
+        echo "date=$now" >> $GITHUB_ENV
+        echo "date_dst_tag=$full_dst_image-${now//./}" >> $GITHUB_ENV
+        echo "latest_dst_tag=${full_dst_image%:*}:latest" >> $GITHUB_ENV
+
+    - name: Write Dockerfile
+      shell: bash
+      run: |
+        cat <<- EOF > ${{ runner.temp }}/Dockerfile
+        FROM ${{ inputs.src_image }}
+        LABEL org.opencontainers.image.source="https://github.com/${{ github.repository }}"
+        LABEL org.opencontainers.image.description="${{ inputs.description }}"
+        LABEL org.opencontainers.image.name="${{ inputs.dst_image }}"
+        LABEL org.opencontainers.image.version="${{ env.date }}"
+        RUN (microdnf update --refresh --nodocs --best || microdnf update --refresh --nodocs --nobest) && microdnf clean all
+        #RUN echo "Testing Update Functionality" > /image_digest
+        RUN rpm -qa | sort | sha256sum | awk '{print $1}' > /image_digest
+        EOF
+
+    - name: Build Image
+      uses: docker/build-push-action@v5
+      if: ${{ inputs.push == 'false' }}
+      with:
+        context: "${{ runner.temp }}"
+        push: false
+        tags: ${{ env.latest_dst_tag }}
+
+    - name: Build and Push Image
+      uses: docker/build-push-action@v5
+      if: ${{ inputs.push == 'true' }}
+      with:
+        context: "${{ runner.temp }}"
+        push: true
+        tags: ${{ env.latest_dst_tag }},${{ env.date_dst_tag }}
