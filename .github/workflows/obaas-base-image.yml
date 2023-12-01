@@ -27,7 +27,7 @@ jobs:
 
       - name: Get latest Image Software Digest
         run: |
-          latest_digest=$(docker run --rm --entrypoint cat ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:latest /image_digest)
+          latest_digest=$(docker run --rm --entrypoint cat ghcr.io/${{ github.repository }}/${{ env.dst_img }}:latest /image_digest)
           echo "Current Digest: $latest_digest"
           echo "latest_digest=$latest_digest" >> $GITHUB_ENV
         continue-on-error: true
@@ -37,7 +37,7 @@ jobs:
         uses: ./.github/actions/process-image
         with:
           src_image: container-registry.oracle.com/graalvm/native-image:${{ env.src_tag }}
-          dst_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ env.src_tag }}
+          dst_image: ghcr.io/${{ github.repository }}/${{ env.dst_img }}:${{ env.src_tag }}
           description: ${{ env.description }}
           push: true
 
@@ -51,7 +51,7 @@ jobs:
           docker run --rm ghcr.io/aquasecurity/trivy:latest image $TRIVY_DEFAULT $TRIVY_SCAN
           --username ${{ github.actor }}
           --password ${{ secrets.GITHUB_TOKEN }}
-          ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:latest
+          ghcr.io/${{ github.repository }}/${{ env.dst_img }}:latest
         continue-on-error: true
 
       - name: Update Existing Image
@@ -59,8 +59,8 @@ jobs:
         if: env.latest_digest != '' && steps.trivy_scan.outcome == 'failure'
         uses: ./.github/actions/process-image
         with:
-          src_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:latest
-          dst_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ env.src_tag }}
+          src_image: ghcr.io/${{ github.repository }}/${{ env.dst_img }}:latest
+          dst_image: ghcr.io/${{ github.repository }}/${{ env.dst_img }}:${{ env.src_tag }}
           description: ${{ env.description }}
           push: false
 
@@ -68,7 +68,7 @@ jobs:
         id: get_newest_digest
         if: steps.update_image.outcome != 'skipped'
         run: |
-          newest_digest=$(docker run --rm --entrypoint cat ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:latest /image_digest)
+          newest_digest=$(docker run --rm --entrypoint cat ghcr.io/${{ github.repository }}/${{ env.dst_img }}:latest /image_digest)
           echo "New Digest: $newest_digest"
           echo "newest_digest=$newest_digest" >> $GITHUB_ENV
 
@@ -76,7 +76,7 @@ jobs:
         if: steps.get_newest_digest.outcome != 'skipped' && env.latest_digest != env.newest_digest
         uses: ./.github/actions/process-image
         with:
-          src_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:latest
-          dst_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ env.src_tag }}
+          src_image: ghcr.io/${{ github.repository }}/${{ env.dst_img }}:latest
+          dst_image: ghcr.io/${{ github.repository }}/${{ env.dst_img }}:${{ env.src_tag }}
           description: ${{ env.description }}
           push: true
