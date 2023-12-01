@@ -11,7 +11,7 @@ Notes:
 
 | Component                                                                     | New Version   | Replaced Version    |
 |-------------------------------------------------------------------------------|---------------|---------------------|
-| OpenTelemetry Collector | 0.86.0         | 0.90.0               |
+| OpenTelemetry Collector | 0.90.0          | 0.86.0               |
 | Oracle Backend for Spring Boot and Microservices CLI                          | 1.0.2         | 1.0.1               |
 
 ## Version 1.0.1, November 2, 2023

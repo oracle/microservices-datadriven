@@ -109,7 +109,7 @@ Oracle Backend for Spring Boot and Microservices setup installs the following co
 | NGINX Ingress Controller     | 1.8.1         | Provides traffic management solution for cloud‑native applications in Kubernetes.           |
 | Prometheus                   | 2.40.2        | Provides event monitoring and alerts.                                                       |
 | Prometheus Operator          | 0.63.0        | Provides management for Prometheus monitoring tools.                                        |
-| OpenTelemetry Collector      | 0.86.0        | Collects process and export telemetry data.                                                 |
+| OpenTelemetry Collector      | 0.90.0        | Collects process and export telemetry data.                                                 |
 | Grafana                      | 9.2.5         | Provides the tool to examine, analyze, and monitor metrics.                                 |
 | Jaeger Tracing               | 1.45.0        | Provides distributed tracing system for monitoring and troubleshooting distributed systems. |
 | Apache APISIX                | 3.4.0         | Provides full lifecycle API management.                                                     |
