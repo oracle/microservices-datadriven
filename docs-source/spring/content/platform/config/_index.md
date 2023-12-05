@@ -18,7 +18,16 @@ When building applications using Spring Config Server, the Spring Cloud Config c
 ```yaml
 spring:
   config:
-    import: optional:configserver:http://config-server.config-server.svc.cluster.local:8080
+    import: optional:configserver:{${config.server.url}
+```
+
+You also need to add the following dependency to your Spring Boot application `pom.xml`:
+
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-config</artifactId>
+</dependency>
 ```
 
 Configuration is stored in the `CONFIGSERVER` schema in the `PROPERTIES` table. Managing the data for the Spring Cloud Config server should be done using the CLI or the REST API endpoints. If you prefer, you can also work directly with the `CONFIGSERVER.PROPERTIES` table in the database. How to access the database is documented here, ([Accessing the database](../../database/)).

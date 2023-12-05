@@ -2,16 +2,24 @@
 title: "Project Structure"
 ---
 
-To take advantage of the built-in platform services, Oracle recommends
-using the following project structure.
+To take advantage of the built-in platform services, Oracle recommends using the following project structure.
 
 Recommended versions:
 
-* Spring Boot 3.1.5
+* Spring Boot 3.1.6
 * Spring Cloud 2022.0.4
 * Java 17 or 21
 
-### Dependencies
+Table of Content:
+
+* [Dependencies](#dependencies)
+* [Spring Appplication Configuration](#spring-application-configuration)
+  * [Data Sources](#data-sources)
+  * [Liquibase](#liquibase)
+  * [Oracle Transaction Manager for Microservices](#oracle-transaction-manager-for-microservices)
+  * [Spring Config Server](#spring-config-server)
+
+## Dependencies
 
 Oracle recommends adding the following dependencies to your application so that it
 can take advantage of the built-in platform services:
@@ -20,7 +28,7 @@ can take advantage of the built-in platform services:
 <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>17</java.version>
-    <spring.boot.dependencies.version>3.1.5</spring.boot.dependencies.version>
+    <spring.boot.dependencies.version>3.1.6</spring.boot.dependencies.version>
     <spring-cloud.version>2022.0.4</spring-cloud.version>
 </properties>
 
@@ -63,11 +71,9 @@ can take advantage of the built-in platform services:
 </dependencyManagement>    
 ```
 
-### Spring Application Configuration
+## Spring Application Configuration
 
-Oracle recommends the following configuration in order for the application access to
-use the built-in services, including the Spring Boot Eureka Service Registry and the
-observability tools:
+Oracle recommends the following configuration in order for the application access to use the built-in services, including the Spring Boot Eureka Service Registry and the observability tools:
 
 ```yaml
 spring:
@@ -100,13 +106,11 @@ management:
       application: ${spring.application.name}
 ```
 
-The variables in this configuration are automatically injected to your deployment
-and pods when you use the Oracle Backend for Spring Boot and Microservices CLI to deploy your application. 
+The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Spring Boot and Microservices CLI to deploy your application.
 
-#### Data Sources
+### Data Sources
 
-If your application uses a data source, then add the following configuration.  Note that this
-example shows Java Persistence API (JPA), if you are using JDBC you should use the appropriate configuration.
+If your application uses a data source, then add the following configuration.  Note that this example shows Java Persistence API (JPA), if you are using JDBC you should use the appropriate configuration.
 
 ```yaml
 spring:
@@ -133,13 +137,11 @@ spring:
       max-pool-size: 30
 ```
 
-The variables in this configuration are automatically injected to your deployment
-and pods when you use the Oracle Backend for Spring Boot and Microservices CLI to deploy your application. 
+The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Spring Boot and Microservices CLI to deploy your application.
 
-#### Liquibase
+### Liquibase
 
-If you are using Liquibase to manage your database schema and data, then you should
-add the following dependency:
+If you are using Liquibase to manage your database schema and data, then you should add the following dependency:
 
 ```xml
 <properties>
@@ -168,14 +170,13 @@ spring:
 ```
 
 The variables in this configuration are automatically injected to your deployment
-and pods when you use the Oracle Backend for Spring Boot and Microservices CLI to deploy your application. 
+and pods when you use the Oracle Backend for Spring Boot and Microservices CLI to deploy your application.
 When you use the `deploy` command, you must specify the `liquibase-db` parameter and
-provide a user with sufficient privileges, generally this will be premissions to create and alter
+provide a user with sufficient privileges, generally this will be permissions to create and alter
 users and to grant roles and privileges.  If your service uses JMS, this use may also
 need execute permissions on `dbms.aq_adm`, `dbms.aq_in` and `dbms.aq_jms`.
 
-
-#### Oracle Transaction Manager for Microservices
+### Oracle Transaction Manager for Microservices
 
 If you are using Oracle Transaction Manager for Microservices (MicroTx) to manage
 data consistency across microservices data stores, then add the following
@@ -183,23 +184,42 @@ dependency:
 
 ```xml
 <dependency>
-     <groupId>com.oracle.microtx.lra</groupId>
-     <artifactId>microtx-lra-spring-boot-starter-3x</artifactId>
-     <version>23.4.1</version>
+    <groupId>com.oracle.microtx.lra</groupId>
+    <artifactId>microtx-lra-spring-boot-starter-3x</artifactId>
+    <version>23.4.1</version>
 </dependency>
 ```
 
-Add the following configuration to your Spring application configuration:
+Add the following configuration to your Spring application configuration. The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Spring Boot and Microservices CLI or the Visual Studio Code Extension to deploy your application.
 
 ```yaml
 spring:
   microtx:
     lra:
-      coordinator-url: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator
+      coordinator-url: ${MP_LRA_COORDINATOR_URL}
       propagation-active: true
       headers-propagation-prefix: "{x-b3-, oracle-tmm-, authorization, refresh-}"   
 
 lra:
   coordinator:
-    url: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator
+    url: ${MP_LRA_COORDINATOR_URL}
+```
+
+### Spring Config Server
+
+If you are using Spring Config Server to manage configurations, then add the following dependency:
+
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-config</artifactId>
+</dependency>
+```
+
+Add the following configuration to your Spring application configuration. The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Spring Boot and Microservices CLI or the Visual Studio Code Extension to deploy your application.
+
+```yaml
+spring:
+  config:
+    import=optional:configserver:${config.server.url}
 ```
