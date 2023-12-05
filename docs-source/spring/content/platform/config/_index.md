@@ -18,7 +18,7 @@ When building applications using Spring Config Server, the Spring Cloud Config c
 ```yaml
 spring:
   config:
-    import: optional:configserver:{${config.server.url}
+    import: optional:configserver:${config.server.url}
 ```
 
 You also need to add the following dependency to your Spring Boot application `pom.xml`:
