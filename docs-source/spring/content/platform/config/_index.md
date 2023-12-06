@@ -30,7 +30,7 @@ You also need to add the following dependency to your Spring Boot application `p
 </dependency>
 ```
 
-Configuration is stored in the `CONFIGSERVER` schema in the `PROPERTIES` table. Managing the data for the Spring Cloud Config server should be done using the CLI or the REST API endpoints. If you prefer, you can also work directly with the `CONFIGSERVER.PROPERTIES` table in the database. How to access the database is documented here, ([Accessing the database](../../database/)).
+The configuration is stored in the `CONFIGSERVER` schema in the `PROPERTIES` table. Managing the data for the Spring Cloud Config server should be done using the CLI or the REST API endpoints. If you prefer, you can also work directly with the `CONFIGSERVER.PROPERTIES` table in the database. How to access the database is documented here, ([Accessing the database](../../database/)).
 
 During setup of Oracle Backend for Spring Boot and Microservices, the following data is loaded into `CONFIGSERVER.PROPERTIES`. This data can be deleted.
 
@@ -49,7 +49,7 @@ During setup of Oracle Backend for Spring Boot and Microservices, the following 
 | application-b   | development    | 23cbeta  | db-dev-connection   | connectionstring-b-dev            |
 | application-c   | secret         | 23.4     | json-db             | 23c-json-db                       |
 | application-c   | secret         | 23.4     | json-sdb-conn       | 23c-mongo-conn                    |
-| application-c   | secret         | 23.4     | txenventq           | 23c-conn-string                   |
+| application-c   | secret         | 23.4     | txeventq           | 23c-conn-string                   |
 | application-c   | secret         | 23.4     | txeventq            | 23c-kafka-name                    |
 ```
 
@@ -393,6 +393,6 @@ INSERT INTO CONFIGSERVER.PROPERTIES (APPLICATION, PROFILE, LABEL, PROP_KEY, VALU
 INSERT INTO CONFIGSERVER.PROPERTIES (APPLICATION, PROFILE, LABEL, PROP_KEY, VALUE) VALUES ('application-b','development','23cbeta','db-dev-connection','connectionstring-b-dev');
 INSERT INTO CONFIGSERVER.PROPERTIES (APPLICATION, PROFILE, LABEL, PROP_KEY, VALUE) VALUES ('application-c','secret','23.4','json-db','23c-json-db');
 INSERT INTO CONFIGSERVER.PROPERTIES (APPLICATION, PROFILE, LABEL, PROP_KEY, VALUE) VALUES ('application-c','secret','23.4','json-sdb-conn','23c-mongo-conn');
-INSERT INTO CONFIGSERVER.PROPERTIES (APPLICATION, PROFILE, LABEL, PROP_KEY, VALUE) VALUES ('application-c','secret','23.4','txenventq','23c-conn-string');
+INSERT INTO CONFIGSERVER.PROPERTIES (APPLICATION, PROFILE, LABEL, PROP_KEY, VALUE) VALUES ('application-c','secret','23.4','txeventq','23c-conn-string');
 INSERT INTO CONFIGSERVER.PROPERTIES (APPLICATION, PROFILE, LABEL, PROP_KEY, VALUE) VALUES ('application-c','secret','23.4','txeventq','23c-kafka-name');
 ```

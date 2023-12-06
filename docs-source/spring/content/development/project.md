@@ -13,7 +13,7 @@ Recommended versions:
 Table of Content:
 
 * [Dependencies](#dependencies)
-* [Spring Appplication Configuration](#spring-application-configuration)
+* [Spring Application Configuration](#spring-application-configuration)
   * [Data Sources](#data-sources)
   * [Liquibase](#liquibase)
   * [Oracle Transaction Manager for Microservices](#oracle-transaction-manager-for-microservices)
@@ -21,8 +21,7 @@ Table of Content:
 
 ## Dependencies
 
-Oracle recommends adding the following dependencies to your application so that it
-can take advantage of the built-in platform services:
+Oracle recommends adding the following dependencies to your application so that it can take advantage of the built-in platform services. For example:
 
 ```xml
 <properties>
@@ -73,7 +72,7 @@ can take advantage of the built-in platform services:
 
 ## Spring Application Configuration
 
-Oracle recommends the following configuration in order for the application access to use the built-in services, including the Spring Boot Eureka Service Registry and the observability tools:
+Oracle recommends the following configuration in order for the application to access the built-in services, including the Spring Boot Eureka Service Registry and the observability tools:
 
 ```yaml
 spring:
@@ -110,7 +109,7 @@ The variables in this configuration are automatically injected to your deploymen
 
 ### Data Sources
 
-If your application uses a data source, then add the following configuration.  Note that this example shows Java Persistence API (JPA), if you are using JDBC you should use the appropriate configuration.
+If your application uses a data source, then add the following configuration.  Note that this example shows Java Persistence API (JPA). If you are using JDBC you should use the appropriate configuration. For example:
 
 ```yaml
 spring:
@@ -145,7 +144,7 @@ If you are using Liquibase to manage your database schema and data, then you sho
 
 ```xml
 <properties>
-    <liquibase.version>4.24.0</liquibase.version>
+    <liquibase.version>4.25.0</liquibase.version>
 </properties>
 
 <dependencies>
@@ -169,18 +168,11 @@ spring:
     enabled: ${LIQUIBASE_ENABLED:true}
 ```
 
-The variables in this configuration are automatically injected to your deployment
-and pods when you use the Oracle Backend for Spring Boot and Microservices CLI to deploy your application.
-When you use the `deploy` command, you must specify the `liquibase-db` parameter and
-provide a user with sufficient privileges, generally this will be permissions to create and alter
-users and to grant roles and privileges.  If your service uses JMS, this use may also
-need execute permissions on `dbms.aq_adm`, `dbms.aq_in` and `dbms.aq_jms`.
+The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Spring Boot and Microservices CLI to deploy your application. When you use the `deploy` command, you must specify the `liquibase-db` parameter and provide a user with sufficient privileges. Generally this will be permissions to create and alter users and to grant roles and privileges.  If your service uses Java Messaging Service (JMS), this use may also need execute permission on `dbms.aq_adm`, `dbms.aq_in` and `dbms.aq_jms`.
 
 ### Oracle Transaction Manager for Microservices
 
-If you are using Oracle Transaction Manager for Microservices (MicroTx) to manage
-data consistency across microservices data stores, then add the following
-dependency:
+If you are using Oracle Transaction Manager for Microservices (MicroTx) to manage data consistency across microservices data stores, then add the following dependency:
 
 ```xml
 <dependency>
@@ -190,7 +182,7 @@ dependency:
 </dependency>
 ```
 
-Add the following configuration to your Spring application configuration. The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Spring Boot and Microservices CLI or the Visual Studio Code Extension to deploy your application.
+Add the following configuration to your Spring application configuration. The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Spring Boot and Microservices CLI or the Visual Studio Code Extension to deploy your application. For example:
 
 ```yaml
 spring:
@@ -216,7 +208,7 @@ If you are using Spring Config Server to manage configurations, then add the fol
 </dependency>
 ```
 
-Add the following configuration to your Spring application configuration. The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Spring Boot and Microservices CLI or the Visual Studio Code Extension to deploy your application.
+Add the following configuration to your Spring application configuration. The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Spring Boot and Microservices CLI or the Visual Studio Code Extension to deploy your application. For example:
 
 ```yaml
 spring:
