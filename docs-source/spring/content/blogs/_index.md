@@ -9,7 +9,7 @@ This page acts as an index/aggregator for some of our featured content.
 ![YouTube icon](./youtube.png)  &nbsp; And be sure to subscribe to our YouTube channel ["The Converged Database"](https://www.youtube.com/@theconvergeddatabase6236) for more great content!
 
 {{< blog  
-    author="mark"
+    author="corrado"
     date="11/27/2023"
     title="Spring Boot: from Jar to production in 5 minutes"
     link="[https://lnkd.in/dmsX_TQW](https://www.linkedin.com/pulse/spring-boot-from-jar-production-5-minutes-corrado-de-bari-6gfdf)"
