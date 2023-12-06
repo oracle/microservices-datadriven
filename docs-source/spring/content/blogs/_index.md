@@ -10,9 +10,17 @@ This page acts as an index/aggregator for some of our featured content.
 
 {{< blog  
     author="corrado"
+    date="12/06/2023"
+    title="Boost your apps with GraalVM in the Oracle Backend for Spring Boot and Microservices"
+    link="https://www.linkedin.com/pulse/boost-your-apps-graalvm-oracle-backend-spring-boot-corrado-de-bari-qgwsf"
+    abstract="How to run your Spring Boot app in native way on the Oracle Backend for Spring Boot and Microservices and the benefits you'll gain."
+>}}
+
+{{< blog  
+    author="corrado"
     date="11/27/2023"
     title="Spring Boot: from Jar to production in 5 minutes"
-    link="[https://lnkd.in/dmsX_TQW](https://www.linkedin.com/pulse/spring-boot-from-jar-production-5-minutes-corrado-de-bari-6gfdf)"
+    link="https://www.linkedin.com/pulse/spring-boot-from-jar-production-5-minutes-corrado-de-bari-6gfdf"
     abstract="Step-by-step how to deploy your Spring Boot app with Oracle Autonomous as DB, tested and running locally, to the Oracle Backend for Spring Boot and Microservices."
 >}}
 
