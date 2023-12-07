@@ -10,7 +10,7 @@ Recommended versions:
 * Spring Cloud 2022.0.4
 * Java 17 or 21
 
-Table of Content:
+Table of Contents:
 
 * [Dependencies](#dependencies)
 * [Spring Application Configuration](#spring-application-configuration)
