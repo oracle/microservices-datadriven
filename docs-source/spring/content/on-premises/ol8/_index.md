@@ -166,8 +166,9 @@ Assuming the source was unzipped to `~/obaas`, run the following command as the 
 In order to push the images to the Container Registry in the Kubernetes cluster, open a new terminal and process this command while directly logged into the `obaas` user:
 
 ```bash
+cd ~/obaas
 source ./activate.env
-kubectl port-forward service/private -n container-registry 5000:5000 &`
+kubectl port-forward service/private -n container-registry 5000:5000  > /dev/null 2>&1 &`
 ```
 
 ### Build the Images
@@ -176,7 +177,11 @@ Build and push the images to the Container Registry in the Kubernetes cluster.
 
 Assuming the source was unzipped to `~/obaas`, run the following command as the `obaas` user:
 
-`ansible-playbook ~/obaas/ansible/images_build.yaml`
+```bash
+cd ~/obaas
+source ./activate.env
+ansible-playbook ~/obaas/ansible/images_build.yaml`
+```
 
 After the images are built and pushed, the port-forward is no longer required and can be stopped.
 
@@ -184,7 +189,11 @@ After the images are built and pushed, the port-forward is no longer required an
 
 Assuming the source was unzipped to `~/obaas`, run this command as the `obaas` user:
 
-`ansible-playbook ~/obaas/ansible/k8s_apply.yaml -t full`
+```bash
+cd ~/obaas
+source ./activate.env
+ansible-playbook ~/obaas/ansible/k8s_apply.yaml -t full
+```
 
 ## Notes
 
