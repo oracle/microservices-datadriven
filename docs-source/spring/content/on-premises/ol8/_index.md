@@ -14,17 +14,63 @@ Install additional operating system packages by executing these commands:
 
 ```bash
 dnf -y module install container-tools:ol8
-dnf -y install conntrack podman curl
+dnf -y install conntrack podman podman-docker curl libcgroup
 dnf -y install oracle-database-preinstall-21c
-dnf -y install langpacks-en
+dnf -y install langpacks-en shadow-utils
 dnf module install -y python39
-dnf -y update
+dnf -y upgrade
 ```
 
 Set the default Python3 to Python 3.9 by running this command:
 
 ```bash
 sudo alternatives --set python3 /usr/bin/python3.9
+```
+
+### Enable Control Groups Version 2
+
+In order to run in root-less mode, enable cgroup-v2:
+
+Create directories for systemd:
+
+```bash
+mkdir -p /etc/systemd/system/user@.service.d/
+mkdir -p /etc/systemd/system/user-.slice.d/
+```
+
+Create the cgroup systemd files:
+
+```bash
+cat > /etc/systemd/system/user@.service.d/delegate.conf << EOF
+[Service]
+Delegate=cpu cpuset io memory pids
+EOF
+
+cat > /etc/systemd/system/user-.slice.d/override.conf << EOF
+[Slice]
+Slice=user.slice
+
+CPUAccounting=yes
+MemoryAccounting=yes
+IOAccounting=yes
+TasksAccounting=yes
+EOF
+
+cat > /etc/systemd/system/user-0.slice << EOF
+[Unit]
+Before=systemd-logind.service
+[Slice]
+Slice=user.slice
+[Install]
+WantedBy=multi-user.target
+EOF
+```
+
+Enable cgroup-v2 and reboot:
+
+```bash
+grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=1"
+reboot
 ```
 
 ### Install Minikube
@@ -44,14 +90,16 @@ As `root`, process the following:
 
 ```bash
 useradd obaas
-echo "obaas ALL=(ALL) NOPASSWD: /bin/podman" >> /etc/sudoers
 ```
+
+The remaining steps require **direct login** as the `obaas` user without using `sudo` or `su`.  Depending on whether the system is remote or local, this can be achieved by giving the `obaas` user a password (e.g. `passwd`) or setting up ssh-key authentication to the `obaas` user.
 
 ### Download the Database or Oracle REST Data Services (ORDS) Images
 
 The _Desktop_ installation provisions an Oracle database into the Kubernetes cluster. The images must be downloaded
 from [Oracle Cloud Infrastructure Registry (Container Registry)](https://container-registry.oracle.com/) before continuing.
-As the `obaas` user, process these steps:
+
+While directly logged into the `obaas` user, process these steps:
 
 1. Log in to the Container Registry. For example:
 
@@ -65,14 +113,19 @@ As the `obaas` user, process these steps:
 
    `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
 
+#### Troubleshooting
+
+If the `podman pull` fails, navigate in a web browser to https://container-registry.oracle.com, click the "database" tile and select "enterprise".  On the right hand side of the page, if prompted, sign-in.  Select "Language" and accept the Terms.  Try the `podman pull` again.
+
 ### Start MiniKube
 
-As the `obaas` user, run these commands:
+While directly logged into the `obaas` user, run these commands:
 
 ```bash
 echo "PATH=\$PATH:/usr/sbin" >> ~/.bashrc
+minikube config set rootless true
 minikube config set driver podman
-minikube start --cpus max --memory 7900mb --disk-size='40g' --container-runtime=cri-o
+minikube start --cpus max --memory 7900mb --disk-size='40g' --container-runtime=containerd
 minikube addons enable ingress
 ```
 
@@ -80,7 +133,7 @@ minikube addons enable ingress
 
 Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip) and unzip into a new directory.
 
-As the `obaas` user, run these commands:
+While directly logged into the `obaas` user, run these commands:
 
 ```bash
 unzip onprem-ebaas_latest.zip -d ~/obaas
@@ -88,7 +141,7 @@ unzip onprem-ebaas_latest.zip -d ~/obaas
 
 ### Install Ansible
 
-As the `obaas` user, change to the source directory and install Ansible by running these commands:
+While directly logged into the `obaas` user, change to the source directory and install Ansible by running these commands:
 
 ```bash
 cd ~/obaas
@@ -110,10 +163,7 @@ Assuming the source was unzipped to `~/obaas`, run the following command as the 
 
 ### Open a Tunnel
 
-In order to push the images to the Container Registry in the Kubernetes cluster, open a new terminal and process this command
-as the `obaas` user:
-
-As the `obaas` user, run these commands:
+In order to push the images to the Container Registry in the Kubernetes cluster, open a new terminal and process this command while directly logged into the `obaas` user:
 
 ```bash
 source ./activate.env
@@ -141,8 +191,7 @@ Assuming the source was unzipped to `~/obaas`, run this command as the `obaas` u
 ### config-server and obaas-admin Pod Failures
 
 The Pods in the `config-server` and `obaas-admin` namespaces rely on the database that is created in
-the `oracle-database-operator-system`. During the initial provisioning, these Pods start well before the database is available
-resulting in initial failures. They resolve themselves once the database becomes available.
+the `oracle-database-operator-system`. During the initial provisioning, these Pods start well before the database is available resulting in initial failures. They resolve themselves once the database becomes available.
 
 You can check on the status of the database by running this command:
 
@@ -150,7 +199,6 @@ You can check on the status of the database by running this command:
 
 ### VPN and Proxies
 
-If you are behind a Virtual Private Network (VPN) or proxy, see https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/ for more
-details on additional tasks.
+If you are behind a Virtual Private Network (VPN) or proxy, see https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/ for more details on additional tasks.
 
 Next, go to the [Getting Started](../getting-started/) page to learn more.
