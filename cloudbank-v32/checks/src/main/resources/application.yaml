@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: checks
+  zipkin:
+    base-url: ${zipkin.base-url}
+
+  datasource:
+    url: ${spring.datasource.url}
+    username: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+
+eureka:
+  instance:
+    hostname: ${spring.application.name}
+    preferIpAddress: true
+  client:
+    service-url:
+      defaultZone: ${eureka.service-url}
+    fetch-registry: true
+    register-with-eureka: true
+    enabled: true
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    tags:
+      application: ${spring.application.name}
