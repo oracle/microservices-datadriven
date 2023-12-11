@@ -45,8 +45,8 @@
 		</dependency>
 		<dependency>
 			<groupId>com.oracle.microtx.lra</groupId>
-			<artifactId>microtx-lra-spring-boot-starter-jakarta</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<artifactId>microtx-lra-spring-boot-starter</artifactId>
+			<version>23.4.1</version>
 		</dependency>
 		<dependency>
 			<groupId>jakarta.inject</groupId>
