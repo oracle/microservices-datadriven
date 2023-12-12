@@ -125,7 +125,7 @@ While directly logged into the `obaas` user, run these commands:
 echo "PATH=\$PATH:/usr/sbin" >> ~/.bashrc
 minikube config set rootless true
 minikube config set driver podman
-minikube start --cpus max --memory 7900mb --disk-size='40g' --container-runtime=containerd
+minikube start --cpus max --memory max --disk-size='40g' --container-runtime=containerd
 minikube addons enable ingress
 ```
 
