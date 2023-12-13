@@ -27,6 +27,12 @@ Set the default Python3 to Python 3.9 by running this command:
 sudo alternatives --set python3 /usr/bin/python3.9
 ```
 
+Ensure IP Table module is loaded on reboots by running this command:
+
+```bash
+echo "ip_tables" > /etc/modules-load.d/ip-tables.conf
+```
+
 ### Enable Control Groups Version 2
 
 In order to run in root-less mode, enable cgroup-v2:
