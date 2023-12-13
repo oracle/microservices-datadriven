@@ -314,8 +314,15 @@ The following is an example development workflow using the CLI:
    binding resources... successful
    creating deployment and service... successfully deployed
    ```
+   
+   or, for native compiled microservices, add **--java-version container-registry.oracle.com/os/oraclelinux:7-slim** to have a compact image and **--graalvm-native** to specify the file provided is an executable .exec:
+   
+   ```cmd
+   oractl:>deploy --app-name cloudn --service-name account --artifact-path obaas/myserv/target/accounts-0.0.1-SNAPSHOT.jar.exec --image-version 0.0.1 --graalvm-native --java-version container-registry.oracle.com/os/oraclelinux:7-slim
+   ```
 
-6. Use the `list` command to show details of the microservice deployed in the previous step. For example:
+   
+7. Use the `list` command to show details of the microservice deployed in the previous step. For example:
 
    ```cmd
    oractl:>help list
@@ -358,7 +365,7 @@ The following is an example development workflow using the CLI:
    }name:myserv  kind:null
    ```
 
-7. Use the `config` command to view and update the configuration managed by the Spring Cloud Config server. More information about the configuration server can be found at this link: [Spring Config Server](../../platform/config/)
+8. Use the `config` command to view and update the configuration managed by the Spring Cloud Config server. More information about the configuration server can be found at this link: [Spring Config Server](../../platform/config/)
 
    ```cmd
    oractl:>help config
@@ -561,7 +568,7 @@ The following is an example development workflow using the CLI:
          400 : "Couldn't find any property for submitted query."
          ```
 
-8. Use the `GraalVM Compile Commands` to:
+9. Use the `GraalVM Compile Commands` to:
 
 * Upload a **.jar** file to the Oracle Backend for Spring Boot and microservices and its GraalVM compiler service.
 * Start a compilation of your microservice to produce an executable native **.exec** file.
