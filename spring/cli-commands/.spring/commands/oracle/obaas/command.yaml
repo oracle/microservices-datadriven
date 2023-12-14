@@ -1,0 +1,15 @@
+command:
+  description: Add OBaaS configuration to a Spring Boot project
+  options:
+    - name: starter-version
+      description: version of the starters to inject 
+      dataType: string
+      defaultValue: 23.4.0
+      inputType: text 
+      required: false
+    - name: include-liquibase
+      description: inject liquibase into the project 
+      dataType: bool
+      defaultValue: true
+      inputType: text
+      required: false
