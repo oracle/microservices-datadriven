@@ -14,8 +14,9 @@
 
   <meta name="description" content="To take advantage of the built-in platform services, Oracle recommends using the following project structure.
 Recommended versions:
-Spring Boot 3.1.5 Spring Cloud 2022.0.4 Java 17 or 21 Dependencies Oracle recommends adding the following dependencies to your application so that it can take advantage of the built-in platform services:
-&lt;properties&gt; &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt; &lt;java.version&gt;17&lt;/java.version&gt; &lt;spring.boot.dependencies.version&gt;3.1.5&lt;/spring.boot.dependencies.version&gt; &lt;spring-cloud.version&gt;2022.0.4&lt;/spring-cloud.version&gt; &lt;/properties&gt; &lt;dependencies&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;io.micrometer&lt;/groupId&gt; &lt;artifactId&gt;micrometer-registry-prometheus&lt;/artifactId&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt; &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt; &lt;/dependency&gt; &lt;/dependencies&gt; &lt;dependencyManagement&gt; &lt;dependencies&gt; &lt;dependency&gt; &lt;groupId&gt;org." />
+Spring Boot 3.1.6 Spring Cloud 2022.0.4 Java 17 or 21 Table of Contents:
+Dependencies Spring Application Configuration Data Sources Liquibase Oracle Transaction Manager for Microservices Spring Config Server Dependencies Oracle recommends adding the following dependencies to your application so that it can take advantage of the built-in platform services. For example:
+&lt;properties&gt; &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt; &lt;java." />
 
     <title>Project Structure | Oracle Backend for Spring Boot and Microservices</title>
 
@@ -43,8 +44,9 @@ Spring Boot 3.1.5 Spring Cloud 2022.0.4 Java 17 or 21 Dependencies Oracle recomm
   <meta property="og:site_name" content="Oracle Backend for Spring Boot and Microservices" />
   <meta property="og:description" content="To take advantage of the built-in platform services, Oracle recommends using the following project structure.
 Recommended versions:
-Spring Boot 3.1.5 Spring Cloud 2022.0.4 Java 17 or 21 Dependencies Oracle recommends adding the following dependencies to your application so that it can take advantage of the built-in platform services:
-&lt;properties&gt; &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt; &lt;java.version&gt;17&lt;/java.version&gt; &lt;spring.boot.dependencies.version&gt;3.1.5&lt;/spring.boot.dependencies.version&gt; &lt;spring-cloud.version&gt;2022.0.4&lt;/spring-cloud.version&gt; &lt;/properties&gt; &lt;dependencies&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;io.micrometer&lt;/groupId&gt; &lt;artifactId&gt;micrometer-registry-prometheus&lt;/artifactId&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt; &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt; &lt;/dependency&gt; &lt;/dependencies&gt; &lt;dependencyManagement&gt; &lt;dependencies&gt; &lt;dependency&gt; &lt;groupId&gt;org." />
+Spring Boot 3.1.6 Spring Cloud 2022.0.4 Java 17 or 21 Table of Contents:
+Dependencies Spring Application Configuration Data Sources Liquibase Oracle Transaction Manager for Microservices Spring Config Server Dependencies Oracle recommends adding the following dependencies to your application so that it can take advantage of the built-in platform services. For example:
+&lt;properties&gt; &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt; &lt;java." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/development/project/" />
 
@@ -55,8 +57,9 @@ Spring Boot 3.1.5 Spring Cloud 2022.0.4 Java 17 or 21 Dependencies Oracle recomm
 <meta name="twitter:title" content="Project Structure" />
   <meta name="twitter:description" content="To take advantage of the built-in platform services, Oracle recommends using the following project structure.
 Recommended versions:
-Spring Boot 3.1.5 Spring Cloud 2022.0.4 Java 17 or 21 Dependencies Oracle recommends adding the following dependencies to your application so that it can take advantage of the built-in platform services:
-&lt;properties&gt; &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt; &lt;java.version&gt;17&lt;/java.version&gt; &lt;spring.boot.dependencies.version&gt;3.1.5&lt;/spring.boot.dependencies.version&gt; &lt;spring-cloud.version&gt;2022.0.4&lt;/spring-cloud.version&gt; &lt;/properties&gt; &lt;dependencies&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt; &lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;io.micrometer&lt;/groupId&gt; &lt;artifactId&gt;micrometer-registry-prometheus&lt;/artifactId&gt; &lt;/dependency&gt; &lt;dependency&gt; &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt; &lt;artifactId&gt;spring-cloud-starter-netflix-eureka-client&lt;/artifactId&gt; &lt;/dependency&gt; &lt;/dependencies&gt; &lt;dependencyManagement&gt; &lt;dependencies&gt; &lt;dependency&gt; &lt;groupId&gt;org." />
+Spring Boot 3.1.6 Spring Cloud 2022.0.4 Java 17 or 21 Table of Contents:
+Dependencies Spring Application Configuration Data Sources Liquibase Oracle Transaction Manager for Microservices Spring Config Server Dependencies Oracle recommends adding the following dependencies to your application so that it can take advantage of the built-in platform services. For example:
+&lt;properties&gt; &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt; &lt;java." />
 
 
   <script type="application/ld+json">
@@ -67,8 +70,8 @@ Spring Boot 3.1.5 Spring Cloud 2022.0.4 Java 17 or 21 Dependencies Oracle recomm
       "name": "Project Structure",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/development/project/",
       "headline": "Project Structure",
-      "description": "To take advantage of the built-in platform services, Oracle recommends using the following project structure.\nRecommended versions:\nSpring Boot 3.1.5 Spring Cloud 2022.0.4 Java 17 or 21 Dependencies Oracle recommends adding the following dependencies to your application so that it can take advantage of the built-in platform services:\n\u003cproperties\u003e \u003cproject.build.sourceEncoding\u003eUTF-8\u003c\/project.build.sourceEncoding\u003e \u003cjava.version\u003e17\u003c\/java.version\u003e \u003cspring.boot.dependencies.version\u003e3.1.5\u003c\/spring.boot.dependencies.version\u003e \u003cspring-cloud.version\u003e2022.0.4\u003c\/spring-cloud.version\u003e \u003c\/properties\u003e \u003cdependencies\u003e \u003cdependency\u003e \u003cgroupId\u003eorg.springframework.boot\u003c\/groupId\u003e \u003cartifactId\u003espring-boot-starter-web\u003c\/artifactId\u003e \u003c\/dependency\u003e \u003cdependency\u003e \u003cgroupId\u003eorg.springframework.boot\u003c\/groupId\u003e \u003cartifactId\u003espring-boot-starter-actuator\u003c\/artifactId\u003e \u003c\/dependency\u003e \u003cdependency\u003e \u003cgroupId\u003eio.micrometer\u003c\/groupId\u003e \u003cartifactId\u003emicrometer-registry-prometheus\u003c\/artifactId\u003e \u003c\/dependency\u003e \u003cdependency\u003e \u003cgroupId\u003eorg.springframework.cloud\u003c\/groupId\u003e \u003cartifactId\u003espring-cloud-starter-netflix-eureka-client\u003c\/artifactId\u003e \u003c\/dependency\u003e \u003c\/dependencies\u003e \u003cdependencyManagement\u003e \u003cdependencies\u003e \u003cdependency\u003e \u003cgroupId\u003eorg.",
-      "wordCount" : "474",
+      "description": "To take advantage of the built-in platform services, Oracle recommends using the following project structure.\nRecommended versions:\nSpring Boot 3.1.6 Spring Cloud 2022.0.4 Java 17 or 21 Table of Contents:\nDependencies Spring Application Configuration Data Sources Liquibase Oracle Transaction Manager for Microservices Spring Config Server Dependencies Oracle recommends adding the following dependencies to your application so that it can take advantage of the built-in platform services. For example:\n\u003cproperties\u003e \u003cproject.build.sourceEncoding\u003eUTF-8\u003c\/project.build.sourceEncoding\u003e \u003cjava.",
+      "wordCount" : "606",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1907,28 +1910,56 @@ if (!doNotTrack) {
     class="gdoc-markdown gdoc-markdown__align--left"
   >
     <h1>Project Structure</h1>
-    <p>To take advantage of the built-in platform services, Oracle recommends
-using the following project structure.</p>
+    <p>To take advantage of the built-in platform services, Oracle recommends using the following project structure.</p>
 <p>Recommended versions:</p>
 <ul>
-<li>Spring Boot 3.1.5</li>
+<li>Spring Boot 3.1.6</li>
 <li>Spring Cloud 2022.0.4</li>
 <li>Java 17 or 21</li>
 </ul>
+<p>Table of Contents:</p>
+<ul>
+<li><a
+  class="gdoc-markdown__link"
+  href="#dependencies"
+>Dependencies</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#spring-application-configuration"
+>Spring Application Configuration</a>
+<ul>
+<li><a
+  class="gdoc-markdown__link"
+  href="#data-sources"
+>Data Sources</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#liquibase"
+>Liquibase</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#oracle-transaction-manager-for-microservices"
+>Oracle Transaction Manager for Microservices</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#spring-config-server"
+>Spring Config Server</a></li>
+</ul>
+</li>
+</ul>
 <div class="gdoc-page__anchorwrap">
-    <h3 id="dependencies">
+    <h2 id="dependencies">
         Dependencies
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/development/project/#dependencies" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Dependencies" aria-label="Anchor to: Dependencies" href="#dependencies">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
-    </h3>
+    </h2>
 </div>
-<p>Oracle recommends adding the following dependencies to your application so that it
-can take advantage of the built-in platform services:</p>
+<p>Oracle recommends adding the following dependencies to your application so that it can take advantage of the built-in platform services. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;properties&gt;</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&lt;project.build.sourceEncoding&gt;</span>UTF-8<span class="nt">&lt;/project.build.sourceEncoding&gt;</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&lt;java.version&gt;</span>17<span class="nt">&lt;/java.version&gt;</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&lt;spring.boot.dependencies.version&gt;</span>3.1.5<span class="nt">&lt;/spring.boot.dependencies.version&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;spring.boot.dependencies.version&gt;</span>3.1.6<span class="nt">&lt;/spring.boot.dependencies.version&gt;</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&lt;spring-cloud.version&gt;</span>2022.0.4<span class="nt">&lt;/spring-cloud.version&gt;</span>
 </span></span><span class="line"><span class="cl"><span class="nt">&lt;/properties&gt;</span>
 </span></span><span class="line"><span class="cl">
@@ -1970,16 +2001,14 @@ can take advantage of the built-in platform services:</p>
 </span></span><span class="line"><span class="cl">    <span class="nt">&lt;/dependencies&gt;</span>
 </span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependencyManagement&gt;</span>    
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
-    <h3 id="spring-application-configuration">
+    <h2 id="spring-application-configuration">
         Spring Application Configuration
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/development/project/#spring-application-configuration" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Spring Application Configuration" aria-label="Anchor to: Spring Application Configuration" href="#spring-application-configuration">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
-    </h3>
+    </h2>
 </div>
-<p>Oracle recommends the following configuration in order for the application access to
-use the built-in services, including the Spring Boot Eureka Service Registry and the
-observability tools:</p>
+<p>Oracle recommends the following configuration in order for the application to access the built-in services, including the Spring Boot Eureka Service Registry and the observability tools:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">spring</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">application</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">account</span><span class="w">
@@ -2008,18 +2037,16 @@ observability tools:</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">metrics</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">tags</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">application</span><span class="p">:</span><span class="w"> </span><span class="l">${spring.application.name}</span><span class="w">
-</span></span></span></code></pre></div><p>The variables in this configuration are automatically injected to your deployment
-and pods when you use the Oracle Backend for Spring Boot and Microservices CLI to deploy your application.</p>
+</span></span></span></code></pre></div><p>The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Spring Boot and Microservices CLI to deploy your application.</p>
 <div class="gdoc-page__anchorwrap">
-    <h4 id="data-sources">
+    <h3 id="data-sources">
         Data Sources
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/development/project/#data-sources" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Data Sources" aria-label="Anchor to: Data Sources" href="#data-sources">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
-    </h4>
+    </h3>
 </div>
-<p>If your application uses a data source, then add the following configuration.  Note that this
-example shows Java Persistence API (JPA), if you are using JDBC you should use the appropriate configuration.</p>
+<p>If your application uses a data source, then add the following configuration.  Note that this example shows Java Persistence API (JPA). If you are using JDBC you should use the appropriate configuration. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">spring</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">jpa</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">hibernate</span><span class="p">:</span><span class="w">
@@ -2042,20 +2069,18 @@ example shows Java Persistence API (JPA), if you are using JDBC you should use t
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">initial-pool-size</span><span class="p">:</span><span class="w"> </span><span class="m">15</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">min-pool-size</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">max-pool-size</span><span class="p">:</span><span class="w"> </span><span class="m">30</span><span class="w">
-</span></span></span></code></pre></div><p>The variables in this configuration are automatically injected to your deployment
-and pods when you use the Oracle Backend for Spring Boot and Microservices CLI to deploy your application.</p>
+</span></span></span></code></pre></div><p>The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Spring Boot and Microservices CLI to deploy your application.</p>
 <div class="gdoc-page__anchorwrap">
-    <h4 id="liquibase">
+    <h3 id="liquibase">
         Liquibase
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/development/project/#liquibase" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Liquibase" aria-label="Anchor to: Liquibase" href="#liquibase">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
-    </h4>
+    </h3>
 </div>
-<p>If you are using Liquibase to manage your database schema and data, then you should
-add the following dependency:</p>
+<p>If you are using Liquibase to manage your database schema and data, then you should add the following dependency:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;properties&gt;</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&lt;liquibase.version&gt;</span>4.24.0<span class="nt">&lt;/liquibase.version&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;liquibase.version&gt;</span>4.25.0<span class="nt">&lt;/liquibase.version&gt;</span>
 </span></span><span class="line"><span class="cl"><span class="nt">&lt;/properties&gt;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nt">&lt;dependencies&gt;</span>
@@ -2073,39 +2098,49 @@ add the following dependency:</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">user</span><span class="p">:</span><span class="w"> </span><span class="l">${liquibase.datasource.username}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="l">${liquibase.datasource.password}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l">${LIQUIBASE_ENABLED:true}</span><span class="w">
-</span></span></span></code></pre></div><p>The variables in this configuration are automatically injected to your deployment
-and pods when you use the Oracle Backend for Spring Boot and Microservices CLI to deploy your application.
-When you use the <code>deploy</code> command, you must specify the <code>liquibase-db</code> parameter and
-provide a user with sufficient privileges, generally this will be premissions to create and alter
-users and to grant roles and privileges.  If your service uses JMS, this use may also
-need execute permissions on <code>dbms.aq_adm</code>, <code>dbms.aq_in</code> and <code>dbms.aq_jms</code>.</p>
+</span></span></span></code></pre></div><p>The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Spring Boot and Microservices CLI to deploy your application. When you use the <code>deploy</code> command, you must specify the <code>liquibase-db</code> parameter and provide a user with sufficient privileges. Generally this will be permissions to create and alter users and to grant roles and privileges.  If your service uses Java Messaging Service (JMS), this use may also need execute permission on <code>dbms.aq_adm</code>, <code>dbms.aq_in</code> and <code>dbms.aq_jms</code>.</p>
 <div class="gdoc-page__anchorwrap">
-    <h4 id="oracle-transaction-manager-for-microservices">
+    <h3 id="oracle-transaction-manager-for-microservices">
         Oracle Transaction Manager for Microservices
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/development/project/#oracle-transaction-manager-for-microservices" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Oracle Transaction Manager for Microservices" aria-label="Anchor to: Oracle Transaction Manager for Microservices" href="#oracle-transaction-manager-for-microservices">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
-    </h4>
+    </h3>
 </div>
-<p>If you are using Oracle Transaction Manager for Microservices (MicroTx) to manage
-data consistency across microservices data stores, then add the following
-dependency:</p>
+<p>If you are using Oracle Transaction Manager for Microservices (MicroTx) to manage data consistency across microservices data stores, then add the following dependency:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
-</span></span><span class="line"><span class="cl">     <span class="nt">&lt;groupId&gt;</span>com.oracle.microtx.lra<span class="nt">&lt;/groupId&gt;</span>
-</span></span><span class="line"><span class="cl">     <span class="nt">&lt;artifactId&gt;</span>microtx-lra-spring-boot-starter-3x<span class="nt">&lt;/artifactId&gt;</span>
-</span></span><span class="line"><span class="cl">     <span class="nt">&lt;version&gt;</span>23.4.1<span class="nt">&lt;/version&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;groupId&gt;</span>com.oracle.microtx.lra<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;artifactId&gt;</span>microtx-lra-spring-boot-starter-3x<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;version&gt;</span>23.4.1<span class="nt">&lt;/version&gt;</span>
 </span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
-</span></span></code></pre></div><p>Add the following configuration to your Spring application configuration:</p>
+</span></span></code></pre></div><p>Add the following configuration to your Spring application configuration. The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Spring Boot and Microservices CLI or the Visual Studio Code Extension to deploy your application. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">spring</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">microtx</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">lra</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">coordinator-url</span><span class="p">:</span><span class="w"> </span><span class="l">http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">coordinator-url</span><span class="p">:</span><span class="w"> </span><span class="l">${MP_LRA_COORDINATOR_URL}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">propagation-active</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">headers-propagation-prefix</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;{x-b3-, oracle-tmm-, authorization, refresh-}&#34;</span><span class="w">   
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">lra</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">coordinator</span><span class="p">:</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l">http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">url</span><span class="p">:</span><span class="w"> </span><span class="l">${MP_LRA_COORDINATOR_URL}</span><span class="w">
+</span></span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h3 id="spring-config-server">
+        Spring Config Server
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/development/project/#spring-config-server" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Spring Config Server" aria-label="Anchor to: Spring Config Server" href="#spring-config-server">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>If you are using Spring Config Server to manage configurations, then add the following dependency:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;groupId&gt;</span>org.springframework.cloud<span class="nt">&lt;/groupId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;artifactId&gt;</span>spring-cloud-starter-config<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
+</span></span></code></pre></div><p>Add the following configuration to your Spring application configuration. The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Spring Boot and Microservices CLI or the Visual Studio Code Extension to deploy your application. For example:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">spring</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">config</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="l">import=optional:configserver:${config.server.url}</span><span class="w">
 </span></span></span></code></pre></div>
   </article>
 
