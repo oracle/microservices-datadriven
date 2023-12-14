@@ -68,7 +68,7 @@ User Name Assigned Roles obaas-admin ROLE_ADMIN, ROLE_USER obaas-user ROLE_USER 
       "url" : "https://oracle.github.io/microservices-datadriven/spring/security/azn-server/",
       "headline": "Authentication and Authorization Server",
       "description": "The Authorization Server is an engine to authenticate and authorize requests to various components in Oracle Backend for Spring Boot and Microservices. The end user can manage users using REST Endpoints.\nNOTE: Oracle recommends that you change the default passwords for the default created users.\nUsers \u0026 Roles When deploying Oracle Backend for Spring Boot and Microservices, two users are created with the following roles:\nUser Name Assigned Roles obaas-admin ROLE_ADMIN, ROLE_USER obaas-user ROLE_USER All users are stored in the database are deployed when installing Oracle Backend for Spring Boot and Microservices.",
-      "wordCount" : "482",
+      "wordCount" : "518",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -2047,8 +2047,14 @@ if (!doNotTrack) {
 <tr>
 <td>/user/api/v1/updatePassword</td>
 <td>PUT</td>
-<td>Update a password for a user. A user with<br>Role ROLE_ADMIN can update any users password</td>
+<td>Update a password for a user. A user with Role ROLE_ADMIN can update any users password</td>
 <td>ROLE_USER</td>
+</tr>
+<tr>
+<td>/user/api/v1/changeRole</td>
+<td>PUT</td>
+<td>Change role(s) for a user</td>
+<td>ROLE_ADMIN</td>
 </tr>
 <tr>
 <td>/user/api/v1/deleteUsername?username=&lt;username&gt;</td>
@@ -2072,7 +2078,7 @@ if (!doNotTrack) {
         </a>
     </h3>
 </div>
-<p>In all examples below you need to replace <code>&lt;username&gt;:&lt;password&gt;</code> with your username and password. The examples are using <code>curl</code> to interact with the REST endpoints. They also requires that you have opened a tunnel on port 8080 to either the <code>azn-server</code> or <code>obaas-admin</code> service. For example</p>
+<p>In all examples below you need to replace <code>&lt;username&gt;:&lt;password&gt;</code> with your username and password. The examples are using <code>curl</code> to interact with the REST endpoints. They also requires that you have opened a tunnel on port 8080 to either the <code>azn-server</code> or <code>obaas-admin</code> service. For example, this command opens a tunnel to the <code>obaas-admin</code> service.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl port-forward -n obaas-admin svc/obaas-admin <span class="m">8080</span>
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h4 id="userapiv1finduser">
@@ -2115,8 +2121,20 @@ if (!doNotTrack) {
 </div>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">curl -u &lt;username&gt;:&lt;password&gt; -i -X PUT <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    -H <span class="s1">&#39;Content-Type: application/json&#39;</span> <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -d <span class="s1">&#39;{&#34;username&#34;: &#34;a-new-user&#34;, &#34;password&#34;: &#34;more-top-secret-password&#34;}&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -d <span class="s1">&#39;{&#34;username&#34;: &#34;current-user&#34;, &#34;password&#34;: &#34;more-top-secret-password&#34;}&#39;</span> <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    http://localhost:8080/user/api/v1/updatePassword
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h4 id="userapiv1changerole">
+        /user/api/v1/changeRole
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/security/azn-server/#userapiv1changerole" class="gdoc-page__anchor clip flex align-center" title="Anchor to: /user/api/v1/changeRole" aria-label="Anchor to: /user/api/v1/changeRole" href="#userapiv1changerole">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">curl -u &lt;username&gt;:&lt;password&gt; -i -X PUT <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -H <span class="s1">&#39;Content-Type: application/json&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -d <span class="s1">&#39;{&#34;username&#34;: &#34;current-user&#34;, &#34;roles&#34;: &#34;changed-roles&#34;}&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    http://localhost:8080/user/api/v1/changeRole
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h4 id="userapiv1deleteusernameusernameusername">
         /user/api/v1/deleteUsername?username=&lt;username&gt;

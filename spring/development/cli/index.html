@@ -65,7 +65,7 @@ kubectl port-forward services/obaas-admin -n obaas-admin 8080:8080 Start the CLI
       "url" : "https://oracle.github.io/microservices-datadriven/spring/development/cli/",
       "headline": "OBaaS CLI",
       "description": "The Oracle Backend for Spring Boot and Microservices offers a command-line interface (CLI), oractl. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources that they use. Download the CLI here. The platform-specific binary can be renamed to oractl for convenience.\nUsing the CLI Expose the Oracle Backend for Spring Boot and Microservices Admin server that the CLI calls using this command:\nkubectl port-forward services\/obaas-admin -n obaas-admin 8080:8080 Start the CLI in interactive mode by running oractl from your terminal window.",
-      "wordCount" : "2699",
+      "wordCount" : "2735",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -2122,7 +2122,8 @@ and secret Kubernetes resources for the microservice.</p>
 </span></span><span class="line"><span class="cl">       deploy - Deploy a service.
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">SYNOPSIS
-</span></span><span class="line"><span class="cl">    deploy --redeploy boolean --bind String --app-name String [--service-name String] [--image-version String] --service-profile String --port String --java-version String --add-health-probe boolean --liquibase-db String [--artifact-path String] --initial-replicas int --graalvm-native boolean --help
+</span></span><span class="line"><span class="cl">    deploy --redeploy boolean --bind String --app-name String [--service-name String] [--image-version String] --service-profile String --port String --java-version String  
+</span></span><span class="line"><span class="cl">        --add-health-probe boolean  --liquibase-db String [--artifact-path String] --initial-replicas int --graalvm-native boolean --help
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">OPTIONS
 </span></span><span class="line"><span class="cl">    --redeploy boolean
@@ -2185,6 +2186,8 @@ and secret Kubernetes resources for the microservice.</p>
 </span></span><span class="line"><span class="cl">uploading: obaas/myserv/target/demo-0.0.1-SNAPSHOT.jar building and pushing image...
 </span></span><span class="line"><span class="cl">binding resources... successful
 </span></span><span class="line"><span class="cl">creating deployment and service... successfully deployed
+</span></span></code></pre></div><p>or, for native compiled microservices, add <strong>&ndash;java-version container-registry.oracle.com/os/oraclelinux:7-slim</strong> to have a compact image and <strong>&ndash;graalvm-native</strong> to specify the file provided is an executable .exec:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>deploy --app-name cloudn --service-name account --artifact-path obaas/myserv/target/accounts-0.0.1-SNAPSHOT.jar.exec --image-version 0.0.1 --graalvm-native --java-version container-registry.oracle.com/os/oraclelinux:7-slim
 </span></span></code></pre></div></li>
 <li>
 <p>Use the <code>list</code> command to show details of the microservice deployed in the previous step. For example:</p>
