@@ -20,7 +20,7 @@ useradd obaas
 
 ### Download Oracle Backend for Spring Boot and Microservices
 
-Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip) and unzip into a new directory.
+Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.1/onprem-ebaas_latest.zip) and unzip into a new directory.
 
 As the `obaas` user, run this command:
 
