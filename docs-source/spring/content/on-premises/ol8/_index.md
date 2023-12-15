@@ -6,87 +6,7 @@ This is an description of installing on a Oracle Linux 8 desktop.
 
 Read the [On-Premises](../../on-premises) documentation and ensure that your desktop meets the minimum system requirements.
 
-## Install
-
-### Additional Operating System Packages
-
-Install additional operating system packages by executing these commands:
-
-```bash
-dnf -y module install container-tools:ol8
-dnf -y install conntrack podman podman-docker curl libcgroup
-dnf -y install oracle-database-preinstall-21c
-dnf -y install langpacks-en shadow-utils
-dnf module install -y python39
-dnf -y upgrade
-```
-
-Set the default Python3 to Python 3.9 by running this command:
-
-```bash
-sudo alternatives --set python3 /usr/bin/python3.9
-```
-
-Ensure IP Table module is loaded on reboots by running this command:
-
-```bash
-echo "ip_tables" > /etc/modules-load.d/ip-tables.conf
-```
-
-### Enable Control Groups Version 2
-
-In order to run in root-less mode, enable cgroup-v2:
-
-Create directories for systemd:
-
-```bash
-mkdir -p /etc/systemd/system/user@.service.d/
-mkdir -p /etc/systemd/system/user-.slice.d/
-```
-
-Create the cgroup systemd files:
-
-```bash
-cat > /etc/systemd/system/user@.service.d/delegate.conf << EOF
-[Service]
-Delegate=cpu cpuset io memory pids
-EOF
-
-cat > /etc/systemd/system/user-.slice.d/override.conf << EOF
-[Slice]
-Slice=user.slice
-
-CPUAccounting=yes
-MemoryAccounting=yes
-IOAccounting=yes
-TasksAccounting=yes
-EOF
-
-cat > /etc/systemd/system/user-0.slice << EOF
-[Unit]
-Before=systemd-logind.service
-[Slice]
-Slice=user.slice
-[Install]
-WantedBy=multi-user.target
-EOF
-```
-
-Enable cgroup-v2 and reboot:
-
-```bash
-grubby --update-kernel=ALL --args="systemd.unified_cgroup_hierarchy=1"
-reboot
-```
-
-### Install Minikube
-
-As the `root` user, install Minikube:
-
-```bash
-curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-install minikube-linux-amd64 /usr/local/bin/minikube
-```
+## Setup
 
 ### Create a Non-Root User
 
@@ -97,6 +17,39 @@ As `root`, process the following:
 ```bash
 useradd obaas
 ```
+
+### Download Oracle Backend for Spring Boot and Microservices
+
+Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip) and unzip into a new directory.
+
+As the `obaas` user, run this command:
+
+```bash
+unzip onprem-ebaas_latest.zip -d ~/obaas
+```
+
+### Update the OS
+
+Assuming the source was unzipped to `~obaas/obaas`, as the `root` user, update the OS by running the `ol8_onprem.sh` script from the unzipped package:
+
+```bash
+~obaas/obaas/ol8_onprem.sh
+```
+
+This script will perform the following actions:
+
+* Install required OS Packages
+* Install Minikube
+* Set Python3 as the default ptyhon
+* Enable cgroup v2
+* Enable IP Tables
+* Update the container runtime configuration
+
+### Reboot
+
+After the OS has been updated, `reboot` the host.
+
+## Install
 
 The remaining steps require **direct login** as the `obaas` user without using `sudo` or `su`.  Depending on whether the system is remote or local, this can be achieved by giving the `obaas` user a password (e.g. `passwd`) or setting up ssh-key authentication to the `obaas` user.
 
@@ -128,21 +81,11 @@ If the `podman pull` fails, navigate in a web browser to https://container-regis
 While directly logged into the `obaas` user, run these commands:
 
 ```bash
-echo "PATH=\$PATH:/usr/sbin" >> ~/.bashrc
 minikube config set rootless true
 minikube config set driver podman
-minikube start --cpus max --memory max --disk-size='40g' --container-runtime=containerd
+minikube start --cpus max --memory 16G --disk-size='40g' --container-runtime=containerd
 minikube addons enable ingress
-```
-
-### Download Oracle Backend for Spring Boot and Microservices
-
-Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip) and unzip into a new directory.
-
-While directly logged into the `obaas` user, run these commands:
-
-```bash
-unzip onprem-ebaas_latest.zip -d ~/obaas
+echo "KUBECONFIG=~/.kube/config" >> ~/.bashrc
 ```
 
 ### Install Ansible
