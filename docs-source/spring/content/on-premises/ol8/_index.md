@@ -28,6 +28,22 @@ As the `obaas` user, run this command:
 unzip onprem-ebaas_latest.zip -d ~/obaas
 ```
 
+### Setup SSH-Key Access for obaas user
+
+Future access to the `obaas` user will require a direct login (not `sudo` or `su`).  To setup ssh-key access, as `obaas`:
+
+```bash
+mkdir ~/.ssh
+vi ~/.ssh/authorized_keys
+```
+
+Paste your client machines public key into the `~/.ssh/authorized_keys` file, and change the permissions:
+
+```bash
+chmod 700 .ssh
+chmod 600 .ssh/authorized_keys
+```
+
 ### Update the OS
 
 Assuming the source was unzipped to `~obaas/obaas`, as the `root` user, update the OS by running the `ol8_onprem.sh` script from the unzipped package:
@@ -61,28 +77,7 @@ As `root`:
 
 ## Install
 
-The remaining steps require **direct login** as the `obaas` user without using `sudo` or `su`.  This can be achieved by  setting up ssh-key authentication to the `obaas` user.
-
-### Example of SSH-Key Authentication
-
-The following is an example of setting up ssh-key access to the `obaas` user account.
-
-As `root`:
-
-```bash
-sudo su - obaas
-mkdir ~/.ssh
-vi ~/.ssh/authorized_keys
-```
-
-Paste your client machines public key into the `~/.ssh/authorized_keys` file, and change the permissions:
-
-```bash
-chmod 700 .ssh
-chmod 600 .ssh/authorized_keys
-```
-
-Completely exit the host and SSH back directly into the `obaas` user account: `ssh obaas@<host>`
+The remaining steps require **direct login** as the `obaas` user without using `sudo` or `su`.
 
 ### Download the Database or Oracle REST Data Services (ORDS) Images
 
