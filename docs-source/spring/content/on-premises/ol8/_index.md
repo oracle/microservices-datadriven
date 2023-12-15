@@ -179,7 +179,7 @@ ansible-playbook ~/obaas/ansible/k8s_apply.yaml -t full
 
 ### config-server and obaas-admin Pod Failures
 
-The Pods in the `config-server` and `obaas-admin` namespaces rely on the database that is created in
+The Pods in the `azn-server`, `config-server`, and `obaas-admin` namespaces rely on the database that is created in
 the `oracle-database-operator-system`. During the initial provisioning, these Pods start well before the database is available resulting in initial failures. They resolve themselves once the database becomes available.
 
 You can check on the status of the database by running this command:
