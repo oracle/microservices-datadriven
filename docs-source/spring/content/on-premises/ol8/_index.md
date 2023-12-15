@@ -45,13 +45,44 @@ This script will perform the following actions:
 * Enable IP Tables
 * Update the container runtime configuration
 
+### (Optional) OCI Host Filesystem
+
+If this is being installed on a OCI Compute instance, grow the filesystem:
+
+As `root`:
+
+```bash
+/usr/libexec/oci-growfs
+```
+
 ### Reboot
 
 After the OS has been updated, `reboot` the host.
 
 ## Install
 
-The remaining steps require **direct login** as the `obaas` user without using `sudo` or `su`.  Depending on whether the system is remote or local, this can be achieved by giving the `obaas` user a password (e.g. `passwd`) or setting up ssh-key authentication to the `obaas` user.
+The remaining steps require **direct login** as the `obaas` user without using `sudo` or `su`.  This can be achieved by  setting up ssh-key authentication to the `obaas` user.
+
+### Example of SSH-Key Authentication
+
+The following is an example of setting up ssh-key access to the `obaas` user account.
+
+As `root`:
+
+```bash
+sudo su - obaas
+mkdir ~/.ssh
+vi ~/.ssh/authorized_keys
+```
+
+Paste your client machines public key into the `~/.ssh/authorized_keys` file, and change the permissions:
+
+```bash
+chmod 700 .ssh
+chmod 600 .ssh/authorized_keys
+```
+
+Completely exit the host and SSH back directly into the `obaas` user account.
 
 ### Download the Database or Oracle REST Data Services (ORDS) Images
 
