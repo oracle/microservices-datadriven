@@ -57,7 +57,7 @@ As `root`:
 
 ### Reboot
 
-After the OS has been updated, `reboot` the host.
+**IMPORTANT** After the OS has been updated, `reboot` the host.
 
 ## Install
 
@@ -82,7 +82,7 @@ chmod 700 .ssh
 chmod 600 .ssh/authorized_keys
 ```
 
-Completely exit the host and SSH back directly into the `obaas` user account.
+Completely exit the host and SSH back directly into the `obaas` user account: `ssh obaas@<host>`
 
 ### Download the Database or Oracle REST Data Services (ORDS) Images
 
