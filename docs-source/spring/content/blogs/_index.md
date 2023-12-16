@@ -9,6 +9,22 @@ This page acts as an index/aggregator for some of our featured content.
 ![YouTube icon](./youtube.png)  &nbsp; And be sure to subscribe to our YouTube channel ["The Converged Database"](https://www.youtube.com/@theconvergeddatabase6236) for more great content!
 
 {{< blog  
+    author="corrado"
+    date="12/06/2023"
+    title="Boost your apps with GraalVM in the Oracle Backend for Spring Boot and Microservices"
+    link="https://www.linkedin.com/pulse/boost-your-apps-graalvm-oracle-backend-spring-boot-corrado-de-bari-qgwsf"
+    abstract="How to run your Spring Boot app in native way on the Oracle Backend for Spring Boot and Microservices and the benefits you'll gain."
+>}}
+
+{{< blog  
+    author="corrado"
+    date="11/27/2023"
+    title="Spring Boot: from Jar to production in 5 minutes"
+    link="https://www.linkedin.com/pulse/spring-boot-from-jar-production-5-minutes-corrado-de-bari-6gfdf"
+    abstract="Step-by-step how to deploy your Spring Boot app with Oracle Autonomous as DB, tested and running locally, to the Oracle Backend for Spring Boot and Microservices."
+>}}
+
+{{< blog  
     author="mark"
     date="11/21/2023"
     title="Testing Spring Boot Applications with Testcontainers and Oracle"
