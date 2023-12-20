@@ -138,7 +138,7 @@ Ask for Help
 
 ### create
 
-Use the `create` command to create an application namespace (Kubernetes *namespace*). The application namespace provides a mechanism for isolating groups of resources, especially the microservices. Names of resources need to be unique within a application namespace, but not across application namespaces.
+Use the `create` command to create an application namespace (Kubernetes *namespace*). The application namespace provides a mechanism for isolating groups of resources, especially the microservices. Names of resources need to be unique within an application namespace, but not across application namespaces.
 
 ```cmd
 oractl:>help delete
@@ -256,9 +256,9 @@ Ask for Help
        E-mail: obaas_ww@oracle.com
 ```
 
-   > ATTENTION: The `service-name` is mandatory and used as the name for the Schema/User to be created. If you want to use a different Schema/User from the `service-name`, you must also submit the`username`.
+   > ATTENTION: The `service-name` is mandatory and used as the name for the schema or user to be created. If you want to use a different schema or user from the `service-name`, you must also submit the `username`.
 
-   1. Use the `bind` or `bind create` command to **create** a database schema or user for the service.
+   1. Use the `bind` or `bind create` command to **create** a database schema or user for the service. For Example:
 
        ```cmd
        oractl:>bind create --app-name myapp --service-name myserv
@@ -266,7 +266,7 @@ Ask for Help
        Schema {myserv} was successfully created and Kubernetes Secret {myapp/myserv} was successfully created.
        ```
 
-   1. Use the `bind update` command to **update** a already created database schema or user for the service.
+   1. Use the `bind update` command to **update** an already created database schema or user for the service. For example:
 
        ```cmd
        oractl:>bind update --app-name myapp --service-name myserv
@@ -594,7 +594,7 @@ Ask for Help
 
    1. Use the `config delete` command to delete the application configuration from the Spring Cloud Config server using one of the following two options:
 
-       * Delete all configurations from a specific service using the filters `--service-name`, `--service-profile` and `--service-label`. The
+      1. Delete all configurations from a specific service using the filters `--service-name`, `--service-profile` and `--service-label`. The
        CLI tracks how many configurations are present in the Spring Cloud Config server and confirms the completed deletion. For example:
 
          ```cmd
@@ -602,7 +602,7 @@ Ask for Help
          [obaas] 7 property(ies) found, delete all (y/n)?:
          ```
 
-       * Delete a specific configuration using the parameters `--service-name`, `--service-label`, `--service-profile` and `--property-key`. For example:
+      1. Delete a specific configuration using the parameters `--service-name`, `--service-label`, `--service-profile` and `--property-key`. For example:
 
          ```cmd
          oractl:>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
@@ -823,4 +823,4 @@ GraalVM Compile Commands
 
 ## Logging
 
-The logfile for `oractl` on Mac/Unix machine is stored in the `$HOME/config/orctl` directory. The filename is `oractl-cli-history.log`
+The log file for `oractl` on Mac or Unix machine is stored in the `$HOME/config/orctl` directory. The file name is `oractl-cli-history.log`
