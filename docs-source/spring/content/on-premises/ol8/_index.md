@@ -30,40 +30,40 @@ unzip onprem-ebaas_latest.zip -d ~/obaas
 
 ### Setup SSH-Key Access for obaas user
 
-Future access to the `obaas` user will require a direct login (not `sudo` or `su`).  To setup ssh-key access, as `obaas`:
+Future access to the `obaas` user requires a direct login (not `sudo` or `su`).  To setup ssh-key access as `obaas`, run the following commands:
 
 ```bash
 mkdir ~/.ssh
 vi ~/.ssh/authorized_keys
 ```
 
-Paste your client machines public key into the `~/.ssh/authorized_keys` file, and change the permissions:
+Paste the public key of your client machines into the `~/.ssh/authorized_keys` file, and change the permissions as follows:
 
 ```bash
 chmod 700 .ssh
 chmod 600 .ssh/authorized_keys
 ```
 
-### Update the OS
+### Update the operating system
 
-Assuming the source was unzipped to `~obaas/obaas`, as the `root` user, update the OS by running the `ol8_onprem.sh` script from the unzipped package:
+Assuming the source was unzipped to `~obaas/obaas`, as the `root` user, update the operating system by running the `ol8_onprem.sh` script from the unzipped package:
 
 ```bash
 ~obaas/obaas/ol8_onprem.sh
 ```
 
-This script will perform the following actions:
+This script performs the following actions:
 
-* Install required OS Packages
+* Install required operating system Packages
 * Install Minikube
-* Set Python3 as the default ptyhon
+* Set Python3 as the default python
 * Enable cgroup v2
 * Enable IP Tables
 * Update the container runtime configuration
 
 ### (Optional) OCI Host Filesystem
 
-If this is being installed on a OCI Compute instance, grow the filesystem:
+If this is being installed on an OCI Compute instance, grow the filesystem:
 
 As `root`:
 
@@ -73,7 +73,7 @@ As `root`:
 
 ### Reboot
 
-**IMPORTANT** After the OS has been updated, `reboot` the host.
+**IMPORTANT** After the operating system has been updated, `reboot` the host.
 
 ## Install
 
@@ -81,8 +81,7 @@ The remaining steps require **direct login** as the `obaas` user without using `
 
 ### Download the Database or Oracle REST Data Services (ORDS) Images
 
-The _Desktop_ installation provisions an Oracle database into the Kubernetes cluster. The images must be downloaded
-from [Oracle Cloud Infrastructure Registry (Container Registry)](https://container-registry.oracle.com/) before continuing.
+The _Desktop_ installation provisions an Oracle database into the Kubernetes cluster. The images must be downloaded from [Oracle Cloud Infrastructure Registry (Container Registry)](https://container-registry.oracle.com/) before continuing.
 
 While directly logged into the `obaas` user, process these steps:
 
@@ -90,17 +89,17 @@ While directly logged into the `obaas` user, process these steps:
 
    `podman login container-registry.oracle.com`
 
-2. Pull the database image. For example:
+1. Pull the database image. For example:
 
    `podman pull container-registry.oracle.com/database/enterprise:19.3.0.0`
 
-3. Pull the ORDS image. For example:
+1. Pull the ORDS image. For example:
 
    `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
 
 #### Troubleshooting
 
-If the `podman pull` fails, navigate in a web browser to https://container-registry.oracle.com, click the "database" tile and select "enterprise".  On the right hand side of the page, if prompted, sign-in.  Select "Language" and accept the Terms.  Try the `podman pull` again.
+If the `podman pull` command fails, navigate in a web browser to [Oracle container registry](https://container-registry.oracle.com), click the "database" tile and select "enterprise".  On the right hand side of the page, if prompted, sign-in.  Select "Language" and accept the Terms.  Try the `podman pull` command again.
 
 ### Start MiniKube
 
@@ -138,7 +137,7 @@ Assuming the source was unzipped to `~/obaas`, run the following command as the 
 
 ### Open a Tunnel
 
-In order to push the images to the Container Registry in the Kubernetes cluster, open a new terminal and process this command while directly logged into the `obaas` user:
+In order to push the images to the Container Registry in the Kubernetes cluster, open a new terminal and process this command while being directly logged into the `obaas` user:
 
 ```bash
 cd ~/obaas
@@ -174,8 +173,7 @@ ansible-playbook ~/obaas/ansible/k8s_apply.yaml -t full
 
 ### config-server and obaas-admin Pod Failures
 
-The Pods in the `azn-server`, `config-server`, and `obaas-admin` namespaces rely on the database that is created in
-the `oracle-database-operator-system`. During the initial provisioning, these Pods start well before the database is available resulting in initial failures. They resolve themselves once the database becomes available.
+The Pods in the `azn-server`, `config-server`, and `obaas-admin` namespaces rely on the database that is created in the `oracle-database-operator-system`. During the initial provisioning, these Pods start well before the database is available resulting in initial failures. They resolve themselves once the database becomes available.
 
 You can check on the status of the database by running this command:
 
@@ -183,6 +181,6 @@ You can check on the status of the database by running this command:
 
 ### VPN and Proxies
 
-If you are behind a Virtual Private Network (VPN) or proxy, see https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/ for more details on additional tasks.
+If you are behind a Virtual Private Network (VPN) or proxy, see [Minikube Proxies and VPNs](https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/) for more details on additional tasks.
 
 Next, go to the [Getting Started](../getting-started/) page to learn more.
