@@ -14,8 +14,9 @@
 
   <meta name="description" content="This is an description of installing on a Oracle Linux 8 desktop.
 Read the On-Premises documentation and ensure that your desktop meets the minimum system requirements.
-Install Additional Operating System Packages Install additional operating system packages by executing these commands:
-dnf -y module install container-tools:ol8 dnf -y install conntrack podman curl dnf -y install oracle-database-preinstall-21c dnf -y install langpacks-en dnf module install -y python39 dnf -y update Set the default Python3 to Python 3." />
+Setup Create a Non-Root User Create a new user. While any user name can be created, the rest of this documentation refers to the non-root user as obaas:
+As root, process the following:
+useradd obaas Download Oracle Backend for Spring Boot and Microservices Download Oracle Backend for Spring Boot and unzip into a new directory." />
 
     <title>On-Premises Installation - Oracle Linux 8 (x86) | Oracle Backend for Spring Boot and Microservices</title>
 
@@ -43,8 +44,9 @@ dnf -y module install container-tools:ol8 dnf -y install conntrack podman curl d
   <meta property="og:site_name" content="Oracle Backend for Spring Boot and Microservices" />
   <meta property="og:description" content="This is an description of installing on a Oracle Linux 8 desktop.
 Read the On-Premises documentation and ensure that your desktop meets the minimum system requirements.
-Install Additional Operating System Packages Install additional operating system packages by executing these commands:
-dnf -y module install container-tools:ol8 dnf -y install conntrack podman curl dnf -y install oracle-database-preinstall-21c dnf -y install langpacks-en dnf module install -y python39 dnf -y update Set the default Python3 to Python 3." />
+Setup Create a Non-Root User Create a new user. While any user name can be created, the rest of this documentation refers to the non-root user as obaas:
+As root, process the following:
+useradd obaas Download Oracle Backend for Spring Boot and Microservices Download Oracle Backend for Spring Boot and unzip into a new directory." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/" />
 
@@ -55,8 +57,9 @@ dnf -y module install container-tools:ol8 dnf -y install conntrack podman curl d
 <meta name="twitter:title" content="On-Premises Installation - Oracle Linux 8 (x86)" />
   <meta name="twitter:description" content="This is an description of installing on a Oracle Linux 8 desktop.
 Read the On-Premises documentation and ensure that your desktop meets the minimum system requirements.
-Install Additional Operating System Packages Install additional operating system packages by executing these commands:
-dnf -y module install container-tools:ol8 dnf -y install conntrack podman curl dnf -y install oracle-database-preinstall-21c dnf -y install langpacks-en dnf module install -y python39 dnf -y update Set the default Python3 to Python 3." />
+Setup Create a Non-Root User Create a new user. While any user name can be created, the rest of this documentation refers to the non-root user as obaas:
+As root, process the following:
+useradd obaas Download Oracle Backend for Spring Boot and Microservices Download Oracle Backend for Spring Boot and unzip into a new directory." />
 
 
   <script type="application/ld+json">
@@ -67,8 +70,8 @@ dnf -y module install container-tools:ol8 dnf -y install conntrack podman curl d
       "name": "On-Premises Installation - Oracle Linux 8 (x86)",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/",
       "headline": "On-Premises Installation - Oracle Linux 8 (x86)",
-      "description": "This is an description of installing on a Oracle Linux 8 desktop.\nRead the On-Premises documentation and ensure that your desktop meets the minimum system requirements.\nInstall Additional Operating System Packages Install additional operating system packages by executing these commands:\ndnf -y module install container-tools:ol8 dnf -y install conntrack podman curl dnf -y install oracle-database-preinstall-21c dnf -y install langpacks-en dnf module install -y python39 dnf -y update Set the default Python3 to Python 3.",
-      "wordCount" : "567",
+      "description": "This is an description of installing on a Oracle Linux 8 desktop.\nRead the On-Premises documentation and ensure that your desktop meets the minimum system requirements.\nSetup Create a Non-Root User Create a new user. While any user name can be created, the rest of this documentation refers to the non-root user as obaas:\nAs root, process the following:\nuseradd obaas Download Oracle Backend for Spring Boot and Microservices Download Oracle Backend for Spring Boot and unzip into a new directory.",
+      "wordCount" : "729",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1913,42 +1916,14 @@ if (!doNotTrack) {
   href="../../on-premises"
 >On-Premises</a> documentation and ensure that your desktop meets the minimum system requirements.</p>
 <div class="gdoc-page__anchorwrap">
-    <h2 id="install">
-        Install
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#install" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Install" aria-label="Anchor to: Install" href="#install">
+    <h2 id="setup">
+        Setup
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#setup" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Setup" aria-label="Anchor to: Setup" href="#setup">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>
 </div>
 <div class="gdoc-page__anchorwrap">
-    <h3 id="additional-operating-system-packages">
-        Additional Operating System Packages
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#additional-operating-system-packages" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Additional Operating System Packages" aria-label="Anchor to: Additional Operating System Packages" href="#additional-operating-system-packages">
-            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
-        </a>
-    </h3>
-</div>
-<p>Install additional operating system packages by executing these commands:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">dnf -y module install container-tools:ol8
-</span></span><span class="line"><span class="cl">dnf -y install conntrack podman curl
-</span></span><span class="line"><span class="cl">dnf -y install oracle-database-preinstall-21c
-</span></span><span class="line"><span class="cl">dnf -y install langpacks-en
-</span></span><span class="line"><span class="cl">dnf module install -y python39
-</span></span><span class="line"><span class="cl">dnf -y update
-</span></span></code></pre></div><p>Set the default Python3 to Python 3.9 by running this command:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo alternatives --set python3 /usr/bin/python3.9
-</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
-    <h3 id="install-minikube">
-        Install Minikube
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#install-minikube" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Install Minikube" aria-label="Anchor to: Install Minikube" href="#install-minikube">
-            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
-        </a>
-    </h3>
-</div>
-<p>As the <code>root</code> user, install Minikube:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
-</span></span><span class="line"><span class="cl">install minikube-linux-amd64 /usr/local/bin/minikube
-</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="create-a-non-root-user">
         Create a Non-Root User
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#create-a-non-root-user" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Create a Non-Root User" aria-label="Anchor to: Create a Non-Root User" href="#create-a-non-root-user">
@@ -1959,8 +1934,83 @@ if (!doNotTrack) {
 <p>Create a new user. While any user name can be created, the rest of this documentation refers to the non-root user as <code>obaas</code>:</p>
 <p>As <code>root</code>, process the following:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">useradd obaas
-</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;obaas ALL=(ALL) NOPASSWD: /bin/podman&#34;</span> &gt;&gt; /etc/sudoers
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h3 id="download-oracle-backend-for-spring-boot-and-microservices">
+        Download Oracle Backend for Spring Boot and Microservices
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#download-oracle-backend-for-spring-boot-and-microservices" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Download Oracle Backend for Spring Boot and Microservices" aria-label="Anchor to: Download Oracle Backend for Spring Boot and Microservices" href="#download-oracle-backend-for-spring-boot-and-microservices">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>Download <a
+  class="gdoc-markdown__link"
+  href="https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.1/onprem-ebaas_latest.zip"
+>Oracle Backend for Spring Boot</a> and unzip into a new directory.</p>
+<p>As the <code>obaas</code> user, run this command:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">unzip onprem-ebaas_latest.zip -d ~/obaas
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h3 id="setup-ssh-key-access-for-obaas-user">
+        Setup SSH-Key Access for obaas user
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#setup-ssh-key-access-for-obaas-user" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Setup SSH-Key Access for obaas user" aria-label="Anchor to: Setup SSH-Key Access for obaas user" href="#setup-ssh-key-access-for-obaas-user">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>Future access to the <code>obaas</code> user requires a direct login (not <code>sudo</code> or <code>su</code>).  To setup ssh-key access as <code>obaas</code>, run the following commands:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkdir ~/.ssh
+</span></span><span class="line"><span class="cl">vi ~/.ssh/authorized_keys
+</span></span></code></pre></div><p>Paste the public key of your client machines into the <code>~/.ssh/authorized_keys</code> file, and change the permissions as follows:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">chmod <span class="m">700</span> .ssh
+</span></span><span class="line"><span class="cl">chmod <span class="m">600</span> .ssh/authorized_keys
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h3 id="update-the-operating-system">
+        Update the operating system
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#update-the-operating-system" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Update the operating system" aria-label="Anchor to: Update the operating system" href="#update-the-operating-system">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>Assuming the source was unzipped to <code>~obaas/obaas</code>, as the <code>root</code> user, update the operating system by running the <code>ol8_onprem.sh</code> script from the unzipped package:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">~obaas/obaas/ol8_onprem.sh
+</span></span></code></pre></div><p>This script performs the following actions:</p>
+<ul>
+<li>Install required operating system Packages</li>
+<li>Install Minikube</li>
+<li>Set Python3 as the default python</li>
+<li>Enable cgroup v2</li>
+<li>Enable IP Tables</li>
+<li>Update the container runtime configuration</li>
+</ul>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="optional-oci-host-filesystem">
+        (Optional) OCI Host Filesystem
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#optional-oci-host-filesystem" class="gdoc-page__anchor clip flex align-center" title="Anchor to: (Optional) OCI Host Filesystem" aria-label="Anchor to: (Optional) OCI Host Filesystem" href="#optional-oci-host-filesystem">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>If this is being installed on an OCI Compute instance, grow the filesystem:</p>
+<p>As <code>root</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">/usr/libexec/oci-growfs
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h3 id="reboot">
+        Reboot
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#reboot" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Reboot" aria-label="Anchor to: Reboot" href="#reboot">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p><strong>IMPORTANT</strong> After the operating system has been updated, <code>reboot</code> the host.</p>
+<div class="gdoc-page__anchorwrap">
+    <h2 id="install">
+        Install
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#install" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Install" aria-label="Anchor to: Install" href="#install">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>The remaining steps require <strong>direct login</strong> as the <code>obaas</code> user without using <code>sudo</code> or <code>su</code>.</p>
+<div class="gdoc-page__anchorwrap">
     <h3 id="download-the-database-or-oracle-rest-data-services-ords-images">
         Download the Database or Oracle REST Data Services (ORDS) Images
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#download-the-database-or-oracle-rest-data-services-ords-images" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Download the Database or Oracle REST Data Services (ORDS) Images" aria-label="Anchor to: Download the Database or Oracle REST Data Services (ORDS) Images" href="#download-the-database-or-oracle-rest-data-services-ords-images">
@@ -1968,12 +2018,11 @@ if (!doNotTrack) {
         </a>
     </h3>
 </div>
-<p>The <em>Desktop</em> installation provisions an Oracle database into the Kubernetes cluster. The images must be downloaded
-from <a
+<p>The <em>Desktop</em> installation provisions an Oracle database into the Kubernetes cluster. The images must be downloaded from <a
   class="gdoc-markdown__link"
   href="https://container-registry.oracle.com/"
->Oracle Cloud Infrastructure Registry (Container Registry)</a> before continuing.
-As the <code>obaas</code> user, process these steps:</p>
+>Oracle Cloud Infrastructure Registry (Container Registry)</a> before continuing.</p>
+<p>While directly logged into the <code>obaas</code> user, process these steps:</p>
 <ol>
 <li>
 <p>Log in to the Container Registry. For example:</p>
@@ -1989,6 +2038,18 @@ As the <code>obaas</code> user, process these steps:</p>
 </li>
 </ol>
 <div class="gdoc-page__anchorwrap">
+    <h4 id="troubleshooting">
+        Troubleshooting
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#troubleshooting" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Troubleshooting" aria-label="Anchor to: Troubleshooting" href="#troubleshooting">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>If the <code>podman pull</code> command fails, navigate in a web browser to <a
+  class="gdoc-markdown__link"
+  href="https://container-registry.oracle.com"
+>Oracle container registry</a>, click the &ldquo;database&rdquo; tile and select &ldquo;enterprise&rdquo;.  On the right hand side of the page, if prompted, sign-in.  Select &ldquo;Language&rdquo; and accept the Terms.  Try the <code>podman pull</code> command again.</p>
+<div class="gdoc-page__anchorwrap">
     <h3 id="start-minikube">
         Start MiniKube
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#start-minikube" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Start MiniKube" aria-label="Anchor to: Start MiniKube" href="#start-minikube">
@@ -1996,25 +2057,12 @@ As the <code>obaas</code> user, process these steps:</p>
         </a>
     </h3>
 </div>
-<p>As the <code>obaas</code> user, run these commands:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;PATH=\$PATH:/usr/sbin&#34;</span> &gt;&gt; ~/.bashrc
+<p>While directly logged into the <code>obaas</code> user, run these commands:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">minikube config <span class="nb">set</span> rootless <span class="nb">true</span>
 </span></span><span class="line"><span class="cl">minikube config <span class="nb">set</span> driver podman
-</span></span><span class="line"><span class="cl">minikube start --cpus max --memory 7900mb --disk-size<span class="o">=</span><span class="s1">&#39;40g&#39;</span> --container-runtime<span class="o">=</span>cri-o
+</span></span><span class="line"><span class="cl">minikube start --cpus max --memory 16G --disk-size<span class="o">=</span><span class="s1">&#39;40g&#39;</span> --container-runtime<span class="o">=</span>containerd
 </span></span><span class="line"><span class="cl">minikube addons <span class="nb">enable</span> ingress
-</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
-    <h3 id="download-oracle-backend-for-spring-boot-and-microservices">
-        Download Oracle Backend for Spring Boot and Microservices
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#download-oracle-backend-for-spring-boot-and-microservices" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Download Oracle Backend for Spring Boot and Microservices" aria-label="Anchor to: Download Oracle Backend for Spring Boot and Microservices" href="#download-oracle-backend-for-spring-boot-and-microservices">
-            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
-        </a>
-    </h3>
-</div>
-<p>Download <a
-  class="gdoc-markdown__link"
-  href="https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip"
->Oracle Backend for Spring Boot</a> and unzip into a new directory.</p>
-<p>As the <code>obaas</code> user, run these commands:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">unzip onprem-ebaas_latest.zip -d ~/obaas
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;KUBECONFIG=~/.kube/config&#34;</span> &gt;&gt; ~/.bashrc
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="install-ansible">
         Install Ansible
@@ -2023,7 +2071,7 @@ As the <code>obaas</code> user, process these steps:</p>
         </a>
     </h3>
 </div>
-<p>As the <code>obaas</code> user, change to the source directory and install Ansible by running these commands:</p>
+<p>While directly logged into the <code>obaas</code> user, change to the source directory and install Ansible by running these commands:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> ~/obaas
 </span></span><span class="line"><span class="cl">./setup_ansible.sh
 </span></span><span class="line"><span class="cl"><span class="nb">source</span> ./activate.env
@@ -2051,11 +2099,10 @@ As the <code>obaas</code> user, process these steps:</p>
         </a>
     </h3>
 </div>
-<p>In order to push the images to the Container Registry in the Kubernetes cluster, open a new terminal and process this command
-as the <code>obaas</code> user:</p>
-<p>As the <code>obaas</code> user, run these commands:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">source</span> ./activate.env
-</span></span><span class="line"><span class="cl">kubectl port-forward service/private -n container-registry 5000:5000 <span class="p">&amp;</span><span class="sb">`</span>
+<p>In order to push the images to the Container Registry in the Kubernetes cluster, open a new terminal and process this command while being directly logged into the <code>obaas</code> user:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> ~/obaas
+</span></span><span class="line"><span class="cl"><span class="nb">source</span> ./activate.env
+</span></span><span class="line"><span class="cl">kubectl port-forward service/private -n container-registry 5000:5000  &gt; /dev/null 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">&amp;</span>
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="build-the-images">
         Build the Images
@@ -2066,8 +2113,10 @@ as the <code>obaas</code> user:</p>
 </div>
 <p>Build and push the images to the Container Registry in the Kubernetes cluster.</p>
 <p>Assuming the source was unzipped to <code>~/obaas</code>, run the following command as the <code>obaas</code> user:</p>
-<p><code>ansible-playbook ~/obaas/ansible/images_build.yaml</code></p>
-<p>After the images are built and pushed, the port-forward is no longer required and can be stopped.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> ~/obaas
+</span></span><span class="line"><span class="cl"><span class="nb">source</span> ./activate.env
+</span></span><span class="line"><span class="cl">ansible-playbook ~/obaas/ansible/images_build.yaml
+</span></span></code></pre></div><p>After the images are built and pushed, the port-forward is no longer required and can be stopped.</p>
 <div class="gdoc-page__anchorwrap">
     <h3 id="deploy-microservices">
         Deploy Microservices
@@ -2077,8 +2126,10 @@ as the <code>obaas</code> user:</p>
     </h3>
 </div>
 <p>Assuming the source was unzipped to <code>~/obaas</code>, run this command as the <code>obaas</code> user:</p>
-<p><code>ansible-playbook ~/obaas/ansible/k8s_apply.yaml -t full</code></p>
-<div class="gdoc-page__anchorwrap">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> ~/obaas
+</span></span><span class="line"><span class="cl"><span class="nb">source</span> ./activate.env
+</span></span><span class="line"><span class="cl">ansible-playbook ~/obaas/ansible/k8s_apply.yaml -t full
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h2 id="notes">
         Notes
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/#notes" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Notes" aria-label="Anchor to: Notes" href="#notes">
@@ -2094,9 +2145,7 @@ as the <code>obaas</code> user:</p>
         </a>
     </h3>
 </div>
-<p>The Pods in the <code>config-server</code> and <code>obaas-admin</code> namespaces rely on the database that is created in
-the <code>oracle-database-operator-system</code>. During the initial provisioning, these Pods start well before the database is available
-resulting in initial failures. They resolve themselves once the database becomes available.</p>
+<p>The Pods in the <code>azn-server</code>, <code>config-server</code>, and <code>obaas-admin</code> namespaces rely on the database that is created in the <code>oracle-database-operator-system</code>. During the initial provisioning, these Pods start well before the database is available resulting in initial failures. They resolve themselves once the database becomes available.</p>
 <p>You can check on the status of the database by running this command:</p>
 <p><code>kubectl get singleinstancedatabase baas -n oracle-database-operator-system -o &quot;jsonpath={.status.status}&quot;</code></p>
 <div class="gdoc-page__anchorwrap">
@@ -2110,8 +2159,7 @@ resulting in initial failures. They resolve themselves once the database becomes
 <p>If you are behind a Virtual Private Network (VPN) or proxy, see <a
   class="gdoc-markdown__link"
   href="https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/"
->https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/</a> for more
-details on additional tasks.</p>
+>Minikube Proxies and VPNs</a> for more details on additional tasks.</p>
 <p>Next, go to the <a
   class="gdoc-markdown__link"
   href="../getting-started/"
