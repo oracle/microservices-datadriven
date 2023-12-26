@@ -49,11 +49,6 @@
 			<artifactId>microtx-lra-spring-boot-starter</artifactId>
 			<version>${oracle-microtx-starter.version}</version>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>jakarta.inject</groupId>-->
-<!--			<artifactId>jakarta.inject-api</artifactId>-->
-<!--			<version>2.0.1</version>-->
-<!--		</dependency>-->
 	</dependencies>
 
 	<build>
