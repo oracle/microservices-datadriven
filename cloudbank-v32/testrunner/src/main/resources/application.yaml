@@ -1,8 +1,10 @@
+# Copyright (c) 2023, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
 spring:
   application:
     name: testrunner
-  zipkin:
-    base-url: ${zipkin.base-url}
+
   datasource:
     url: ${spring.datasource.url}
     username: ${spring.datasource.username}
@@ -30,3 +32,24 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
+  tracing:
+    sampling:
+      probability: 1.0
+  info:
+    os:
+      enabled: true
+    env:
+      enabled: true
+    java:
+      enabled: true
+  zipkin:
+    tracing:
+      endpoint: http://jaegertracing-collector.observability:9411/api/v2/spans
+  otlp:
+    tracing:
+      endpoint: http://open-telemetry-opentelemetry-collector.open-telemetry:4317
+
+logging:
+  level:
+    root: INFO
+    com.example: DEBUG

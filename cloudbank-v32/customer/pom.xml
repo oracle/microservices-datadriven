@@ -19,6 +19,7 @@
     <properties>
         <oracle-springboot-starter.version>23.4.0</oracle-springboot-starter.version>
         <liquibase.version>4.25.1</liquibase.version>
+        <datasource-micrometer-spring-boot.version>1.0.2</datasource-micrometer-spring-boot.version>
     </properties>
 
     <dependencies>
@@ -42,6 +43,11 @@
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>${liquibase.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.ttddyy.observation</groupId>
+            <artifactId>datasource-micrometer-spring-boot</artifactId>
+            <version>${datasource-micrometer-spring-boot.version}</version>
         </dependency>
     </dependencies>
 
