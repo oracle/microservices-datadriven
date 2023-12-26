@@ -57,6 +57,30 @@
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing</artifactId>
+        </dependency>
+
+<!--        &lt;!&ndash;OpenTelemetry Tracer: Bridges the Micrometer Observation API to OpenTelemetry&ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>io.micrometer</groupId>-->
+<!--            <artifactId>micrometer-tracing-bridge-otel</artifactId>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash;Reporter/Zipkin with OpenTelemetry: Reports traces to Zipkin&ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>io.opentelemetry</groupId>-->
+<!--            <artifactId>opentelemetry-exporter-zipkin</artifactId>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; The Datasource Micrometer provides a Micrometer Tracing instrumentation for JDBC operations &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>net.ttddyy.observation</groupId>-->
+<!--            <artifactId>datasource-micrometer-spring-boot</artifactId>-->
+<!--            <version>1.0.2</version>-->
+<!--        </dependency>-->
+
+        <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>

@@ -15,7 +15,7 @@
 	<name>testrunner</name>
 	<description>Test Runner Application</description>
 	<properties>
-		<java.version>17</java.version>
+<!--		<java.version>17</java.version>-->
 		<oracle-springboot-starter.version>23.4.0</oracle-springboot-starter.version>
 	</properties>
 	<dependencies>
