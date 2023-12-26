@@ -17,22 +17,23 @@
     <description>Transfer Application</description>
 
     <properties>
-        <microprofile-lra-api.version>1.0</microprofile-lra-api.version>
-        <narayana-lra.version>5.13.1.Final</narayana-lra.version>
-        <jakarta.enterprise.cdi-api.version>4.0.1</jakarta.enterprise.cdi-api.version>
+<!--        <microprofile-lra-api.version>1.0</microprofile-lra-api.version>-->
+<!--        <narayana-lra.version>5.13.1.Final</narayana-lra.version>-->
+<!--        <jakarta.enterprise.cdi-api.version>4.0.1</jakarta.enterprise.cdi-api.version>-->
+        <oracle-microtx-starter.version>23.4.1</oracle-microtx-starter.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.oracle.microtx.lra</groupId>
             <artifactId>microtx-lra-spring-boot-starter</artifactId>
-            <version>23.4.1</version>
+            <version>${oracle-microtx-starter.version}</version>
         </dependency>
-        <dependency>
-            <groupId>jakarta.inject</groupId>
-			<artifactId>jakarta.inject-api</artifactId>
-			<version>2.0.1</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>jakarta.inject</groupId>-->
+<!--			<artifactId>jakarta.inject-api</artifactId>-->
+<!--			<version>2.0.1</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
