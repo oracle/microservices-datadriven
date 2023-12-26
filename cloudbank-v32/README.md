@@ -1,6 +1,8 @@
 # CloudBank Version 3.2
 
-Version 3.2 of CloudBank is under development. This document is also WIP.
+**Note:** this version will not work on the `1.1.0` version of OBaaS due to JIB problems. THe service `obaas-admin` must be modified to be able to deploy CloudBank version 3.2.
+
+Version 3.2 of CloudBank is under development. This document is WIP.
 
 ## Build CloudBank
 
