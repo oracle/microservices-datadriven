@@ -23,7 +23,7 @@ public class CreditScoreController {
      */
     @GetMapping("/creditscore")
     public Map<String, String> getCreditScore() {
-        log.info("CREDITSCORE: getCreditScore");
+        log.debug("CREDITSCORE: getCreditScore");
         int max = 900;
         int min = 500;
         SecureRandom secureRandom = new SecureRandom();

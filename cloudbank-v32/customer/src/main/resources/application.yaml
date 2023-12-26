@@ -3,8 +3,6 @@
 spring:
   application:
     name: customer
-  zipkin:
-    base-url: ${zipkin.base-url}
   jpa:
     hibernate:
       ddl-auto: validate
@@ -57,4 +55,23 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
-
+  tracing:
+    sampling:
+      probability: 1.0
+  info:
+    os:
+      enabled: true
+    env:
+      enabled: true
+    java:
+      enabled: true
+  zipkin:
+    tracing:
+      endpoint: http://jaegertracing-collector.observability:9411/api/v2/spans
+  otlp:
+    tracing:
+      endpoint: http://open-telemetry-opentelemetry-collector.open-telemetry:4317
+logging:
+  level:
+    root: INFO
+    com.example: DEBUG
