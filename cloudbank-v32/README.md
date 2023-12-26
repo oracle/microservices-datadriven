@@ -347,3 +347,26 @@ Version 3.2 of CloudBank is under development. This document is also WIP.
        2023-12-26T16:50:45.226Z  INFO 1 --- [transfer] [nio-8080-exec-1] [] com.example.transfer.TransferService     : Received confirm for transfer : http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/ea98ebae-2358-4dd1-9d7c-09f4550d7567
        2023-12-26T16:50:45.233Z  INFO 1 --- [transfer] [io-8080-exec-10] [] com.example.transfer.TransferService     : Process confirm for transfer : http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/ea98ebae-2358-4dd1-9d7c-09f4550d7567
        ```
+1. Check Eureka
+
+   1. Port forward
+
+      ```shell
+      kubectl -n eureka port-forward svc/eureka 8761
+      ```
+
+   1. Open http://localhost:8761 in a browser and verify that all services are registered
+
+      ![APISIX Dashboard Login](images/eureka.png  " ")
+
+1. Check Jaeger
+
+   1. Port forward
+
+      ```shell
+      kubectl -n observability port-forward svc/jaegertracing-query 16686
+      ```
+
+   1. Open http://localhost:16686 in a browser and verify that all services are registered
+
+   ALOT OF WORK TBD

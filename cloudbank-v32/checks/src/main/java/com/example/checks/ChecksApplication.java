@@ -22,7 +22,6 @@ import org.springframework.jms.support.converter.MessageType;
 @SpringBootApplication
 @EnableFeignClients
 @EnableJms
-// @EnableEurekaClient
 @EnableDiscoveryClient
 public class ChecksApplication {
 
