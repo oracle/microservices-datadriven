@@ -44,14 +44,19 @@ management:
       enabled: true
     java:
       enabled: true
-  zipkin:
-    tracing:
-      endpoint: http://jaegertracing-collector.observability:9411/api/v2/spans
-#  otlp:
+#  zipkin:
 #    tracing:
+#      endpoint: http://jaegertracing-collector.observability:9411/api/v2/spans
+  otlp:
+    tracing:
 #      endpoint: http://open-telemetry-opentelemetry-collector.open-telemetry:4317
+#      endpoint: http://open-telemetry-opentelemetry-collector.open-telemetry.svc.cluster.local:4318
 #      endpoint: http://open-telemetry-opentelemetry-collector.open-telemetry:4318/v1/traces
 #      endpoint: open-telemetry-opentelemetry-collector.open-telemetry:4317
+#      endpoint: http://open-telemetry-opentelemetry-collector.open-telemetry:4317/v1/traces
+#      endpoint: http://10.96.246.207:4318
+#      endpoint: http://10.96.246.207:4318/v1/traces <-- works
+      endpoint: http://open-telemetry-opentelemetry-collector.open-telemetry:4318/v1/traces
 #      endpoint: http://open-telemetry-opentelemetry-collector.open-telemetry:4317/v1/traces
 logging:
   level:
