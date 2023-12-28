@@ -71,11 +71,13 @@ management:
   zipkin:
     tracing:
       endpoint: http://jaegertracing-collector.observability:9411/api/v2/spans
-  otlp:
-    tracing:
-      endpoint: http://open-telemetry-opentelemetry-collector.open-telemetry:4317
+#  otlp:
+#    tracing:
+#      endpoint: http://open-telemetry-opentelemetry-collector.open-telemetry:4317
 
 logging:
   level:
     root: INFO
-    com.example: DEBUG
+    com.example: INFO
+  pattern:
+    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
