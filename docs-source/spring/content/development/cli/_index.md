@@ -7,15 +7,30 @@ microservices applications as well as bindings with the resources that they use.
 Download the CLI [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0).
 The platform-specific binary can be renamed to `oractl` for convenience.
 
+Table of Contents:
+
+* [Using the CLI](#using-the-cli)
+* [Available Commands](#available-commands)
+* [Logging Information](#logging)
+  * [Help](#help)
+  * [Connect to the backend](#connect)
+  * [Create application namespace](#create)
+  * [Delete application namespace](#delete)
+  * [Bind database schema/kubernetes secrets](#bind)
+  * [Deploy a service](#deploy)
+  * [List - show details about deployments](#list)
+  * [Manage config server data](#config)
+  * [GraalVM compile commands](#compile)
+
 ## Using the CLI
 
 1. Expose the Oracle Backend for Spring Boot and Microservices Admin server that the CLI calls using this command:
 
     ```cmd
-    kubectl port-forward services/obaas-admin -n obaas-admin 8080:8080
+    kubectl port-forward services/obaas-admin -n obaas-admin 8080
     ```
 
-2. Start the CLI in interactive mode by running `oractl` from your terminal window. For example:
+1. Start the CLI in interactive mode by running `oractl` from your terminal window. For example:
 
     ```cmd
     oractl
@@ -23,19 +38,19 @@ The platform-specific binary can be renamed to `oractl` for convenience.
 
 ## Available Commands
 
+### help
+
 Short descriptions for the available commands can be viewed by issuing the `help` command and detailed help for any individual
 commands can be viewed by issuing `help [command-name]`. For example:
 
 ```cmd
-oractl:>help
 AVAILABLE COMMANDS
 
 Admin Server Commands
-       connect: Connect to the Oracle Backend Administration Service.
+       connect: Connect to the OBaaS Spring Cloud admin console.
 
 Application/Namespace Commands
        create: Create an application/namespace.
-       delete: Delete a entire application/namespace or service.       
 
 Built-In Commands
        help: Display help about available commands
@@ -57,29 +72,28 @@ Informational Commands
 
 Service Commands
        bind: Create or Update a schema/user and bind it to service deployment.
+       delete: Delete a service or entire application/namespace.
        config: View and modify Service configuration.
        deploy: Deploy a service.
+
+Ask for Help
+       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+       E-mail: obaas_ww@oracle.com
 ```
 
-An application is a namespace encompassing related microservices. For example, a "cloudbank" application may have "banktransfer" and
-"frauddetection" microservices deployed within it.
+An application is a namespace encompassing related microservices. For example, a "cloudbank" application may have "banktransfer" and "frauddetection" microservices deployed within it.
 
-The `create` command results in the creation of an application namespace (Kubernetes *namespace*). The application namespace provides a mechanism for isolating groups of resources, especially the microservices.
+The [`create`](#create) command results in the creation of an application namespace (Kubernetes *namespace*). The application namespace provides a mechanism for isolating groups of resources, especially the microservices.
 
-The `delete` command results in the complete deletion of an application namespace (Kubernetes *namespace*) or for a specific microservice. Ensure that you want to completely delete the application namespace. You cannot rollback the components once deleted.
+The [`delete`](#delete) command results in the complete deletion of an application namespace (Kubernetes *namespace*) or for a specific microservice. Ensure that you want to completely delete the application namespace. You cannot rollback the components once deleted.
 
-The `bind` command results in the automatic creation of a database schema for a given service or user and binds the information for that schema or
-database in the environment of the microservice. The option of a prefix for the bound environment properties is also returned. For example, most
-Spring Boot microservices use `spring.datasource`.
+The [`bind`](#bind) command results in the automatic creation of a database schema for a given service or user and binds the information for that schema or database in the environment of the microservice. The option of a prefix for the bound environment properties is also returned. For example, most Spring Boot microservices use `spring.datasource`.
 
-The `deploy` command takes `service-name`, `app-name`, and `artifact-path` as the main arguments (`image-version` and `java-version` options are
-also provided). When the `deploy` command is issued, the microservice JAR file is uploaded to the backend and a container image is created for
-the JAR or microservice, and various Kubernetes resources such as **Deployment** and **Service** are also created. This is all done
-automatically to simplify the development process and the management of the microservices by the backend.
+The [`deploy`](#deploy) command takes `service-name`, `app-name`, and `artifact-path` as the main arguments (`image-version` and `java-version` options are also provided). When the `deploy` command is issued, the microservice JAR file is uploaded to the backend and a container image is created for the JAR or microservice, and various Kubernetes resources such as **Deployment** and **Service** are also created. This is all done automatically to simplify the development process and the management of the microservices by the backend.
 
-The `list` command shows the details of the deployed microservices.
+The [`list`](#list) command shows the details of the deployed microservices.
 
-The `config` command can also be used to add, view, update, and delete configurations managed by the Spring Cloud Config server.
+The [`config`](#config) command can also be used to add, view, update, and delete configurations managed by the Spring Cloud Config server.
 
 A common development workflow pattern is to `connect`, `change-password` (only if necessary), `create` (once per application or namespace), `config`, `bind` (only if necessary), `deploy`, and `list`.
 
@@ -87,20 +101,29 @@ Further development and redeployment of the service can then be repeated issuing
 
 The following is an example development workflow using the CLI:
 
-1. Use the `connect` command to connect your `oractl` CLI to the Oracle Backend Administration service:
+### connect
 
-   ```cmd
-   oractl:>help connect
-   NAME
-         connect - Connect to the OBaaS Spring Cloud admin console.
+Use the `connect` command to connect your `oractl` CLI to the Oracle Backend Administration service:
 
-   SYNOPSIS
-          connect --url String
+```cmd
+NAME
+       connect - Connect to the OBaaS Spring Cloud admin console.
 
-   OPTIONS
-          --url String
-          admin server URL
-          [Optional, default = http://localhost:8080]
+SYNOPSIS
+       connect --url String --help
+
+OPTIONS
+       --url String
+       admin server URL
+       [Optional, default = http://localhost:8080]
+
+       --help or -h
+       help for connect
+       [Optional]
+
+Ask for Help
+       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+       E-mail: obaas_ww@oracle.com
 
    ```
 
@@ -113,26 +136,31 @@ The following is an example development workflow using the CLI:
    obaas-cli: Successful connected.
    ```
 
-2. Use the `create` command to create an application namespace (Kubernetes *namespace*). The application namespace provides a mechanism for isolating groups of resources, especially the microservices. Names of resources need to be unique within a application namespace, but not across application namespaces.
+### create
 
-   ```cmd
-   oractl:>help create
-   NAME
-          create - Create an application/namespace.
+Use the `create` command to create an application namespace (Kubernetes *namespace*). The application namespace provides a mechanism for isolating groups of resources, especially the microservices. Names of resources need to be unique within an application namespace, but not across application namespaces.
 
-   SYNOPSIS
-          create [--app-name String] --help
+```cmd
+oractl:>help delete
+NAME
+       create - Create an application/namespace.
 
-   OPTIONS
-          --app-name String
-          application/namespace
-          [Mandatory]
+SYNOPSIS
+       create --app-name String --help
 
-          --help or -h
-          help for create
-          [Optional]
+OPTIONS
+       --app-name String
+       application/namespace
+       [Optional]
 
-   ```
+       --help or -h
+       help for create
+       [Optional]
+
+Ask for Help
+       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+       E-mail: obaas_ww@oracle.com
+```
 
    For example:
 
@@ -141,22 +169,23 @@ The following is an example development workflow using the CLI:
    application/namespace created successfully and image pull secret (registry-auth) created successfully and database TNSAdmin/wallet secret created successfully
    ```
 
-3. Use the `delete` command to delete an application namespace (Kubernetes *namespace*) completely or a specific microservice inside an application namespace.
+### delete
 
-    > ATTENTION: Ensure that you want to completely delete the application namespace. You cannot rollback the components once deleted.
+Use the `delete` command to delete an application namespace (Kubernetes *namespace*) completely or a specific microservice inside an application namespace.
 
-   ```cmd
-   oractl:>help delete
-   NAME
+> ATTENTION: Ensure that you want to completely delete the application namespace. You cannot rollback the components once deleted.
+
+```cmd
+NAME
        delete - Delete a service or entire application/namespace.
 
-   SYNOPSIS
+SYNOPSIS
        delete --app-name String --service-name String --image-version String --help
 
-   OPTIONS
+OPTIONS
        --app-name String
        application/namespace
-       [Mandatory]
+       [Optional]
 
        --service-name String
        Service Name
@@ -169,7 +198,11 @@ The following is an example development workflow using the CLI:
        --help or -h
        help for delete
        [Optional]
-   ```
+
+Ask for Help
+       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+       E-mail: obaas_ww@oracle.com
+```
 
    For example:
 
@@ -181,45 +214,51 @@ The following is an example development workflow using the CLI:
    obaas-cli [delete]: Application/Namespace [myapp] as successfully deleted
    ```
 
-4. Use the `bind` command to create and update a database schema or user for the service. These commands also create or update the Kubernetes secret and binding environment entries for the schema. These are set in the Kubernetes deployment created with the `deploy` command. For example:
+### bind
 
-   ```cmd
-   oractl:>help bind
-   NAME
-          bind - Create a schema/user and bind it to service deployment.
+Use the `bind` command to create and update a database schema or user for the service. These commands also create or update the Kubernetes secret and binding environment entries for the schema. These are set in the Kubernetes deployment created with the `deploy` command. For example:
 
-   SYNOPSIS
-          bind --action CommandConstants.BindActions --app-name String --service-name String --username String --binding-prefix String --help
+```cmd
+oractl:>help bind
+NAME
+       bind - Create or Update a schema/user and bind it to service deployment.
 
-   OPTIONS
-          --action CommandConstants.BindActions
-          possible actions: create or update. create is default.
-          [Optional, default = create]
+SYNOPSIS
+       bind --action CommandConstants.BindActions --app-name String --service-name String --username String --binding-prefix String --help
 
-          --app-name String
-          application/namespace
-          [Optional, default = application]
+OPTIONS
+       --action CommandConstants.BindActions
+       possible actions: create or update. create is default.
+       [Optional, default = create]
 
-          --service-name String
-          Service Name/Database User
-          [Mandatory]
+       --app-name String
+       application/namespace
+       [Optional, default = application]
 
-          --username String
-          Database User
-          [Optional]
+       --service-name String
+       Service Name (Default for database user if username is not provided)
+       [Optional]
 
-          --binding-prefix String
-          spring binding prefix
-          [Optional, default = spring.datasource]
+       --username String
+       Database User
+       [Optional]
 
-          --help or -h
-          help for bind
-          [Optional]
-   ```
+       --binding-prefix String
+       spring binding prefix
+       [Optional, default = spring.datasource]
 
-   > ATTENTION: The `service-name` is mandatory and used as the name for the Schema/User to be created. If you want to use a different Schema/User from the `service-name`, you must also submit the`username`.
+       --help or -h
+       help for bind
+       [Optional]
 
-   1. Use the `bind` or `bind create` command to **create** a database schema or user for the service.
+Ask for Help
+       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+       E-mail: obaas_ww@oracle.com
+```
+
+   > ATTENTION: The `service-name` is mandatory and used as the name for the schema or user to be created. If you want to use a different schema or user from the `service-name`, you must also submit the `username`.
+
+   1. Use the `bind` or `bind create` command to **create** a database schema or user for the service. For Example:
 
        ```cmd
        oractl:>bind create --app-name myapp --service-name myserv
@@ -227,7 +266,7 @@ The following is an example development workflow using the CLI:
        Schema {myserv} was successfully created and Kubernetes Secret {myapp/myserv} was successfully created.
        ```
 
-   2. Use the `bind update` command to **update** a already created database schema or user for the service.
+   1. Use the `bind update` command to **update** an already created database schema or user for the service. For example:
 
        ```cmd
        oractl:>bind update --app-name myapp --service-name myserv
@@ -235,19 +274,19 @@ The following is an example development workflow using the CLI:
        Schema {myserv} was successfully updated and Kubernetes Secret {myapp/myserv} was successfully updated.
        ```
 
-5. Use the `deploy` command to create, build, and push an image for the microservice and create the necessary deployment, service,
-   and secret Kubernetes resources for the microservice.
+### deploy
 
-   ```cmd
-   oractl:>help deploy
-   NAME
-          deploy - Deploy a service.
+Use the `deploy` command to create, build, and push an image for the microservice and create the necessary deployment, service, and secret Kubernetes resources for the microservice.
 
-   SYNOPSIS
-       deploy --redeploy boolean --bind String --app-name String [--service-name String] [--image-version String] --service-profile String --port String --java-version String  
-           --add-health-probe boolean  --liquibase-db String [--artifact-path String] --initial-replicas int --graalvm-native boolean --help
+```cmd
+oractl:>help deploy
+NAME
+       deploy - Deploy a service.
 
-   OPTIONS
+SYNOPSIS
+       deploy --redeploy boolean --bind String --app-name String [--service-name String] [--image-version String] --service-profile String --port String --java-version String --add-health-probe boolean --liquibase-db String [--artifact-path String] --initial-replicas int --graalvm-native boolean --help
+
+OPTIONS
        --redeploy boolean
        whether the service has already been deployed or not
        [Optional, default = false]
@@ -304,6 +343,9 @@ The following is an example development workflow using the CLI:
        help for deploy
        [Optional]
 
+Ask for Help
+       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+       E-mail: obaas_ww@oracle.com
    ```
 
    For example:
@@ -314,33 +356,42 @@ The following is an example development workflow using the CLI:
    binding resources... successful
    creating deployment and service... successfully deployed
    ```
-   
+
    or, for native compiled microservices, add **--java-version container-registry.oracle.com/os/oraclelinux:7-slim** to have a compact image and **--graalvm-native** to specify the file provided is an executable .exec:
-   
+
    ```cmd
    oractl:>deploy --app-name cloudn --service-name account --artifact-path obaas/myserv/target/accounts-0.0.1-SNAPSHOT.jar.exec --image-version 0.0.1 --graalvm-native --java-version container-registry.oracle.com/os/oraclelinux:7-slim
    ```
 
-   
-7. Use the `list` command to show details of the microservice deployed in the previous step. For example:
+### list
 
-   ```cmd
-   oractl:>help list
-   NAME
-          list - list/show details of application services.
+Use the `list` command to show details of the microservice deployed in the previous step. For example:
 
-   SYNOPSIS
-          list --app-name String --help
+```cmd
+oractl:>help list
+NAME
+       list - list/show details of application services.
 
-   OPTIONS
-          --app-name String
-          application/namespace
-          [Optional, default = application]
+SYNOPSIS
+       list --app-name String --help
 
-          --help or -h
-          help for list
-          [Optional]
+OPTIONS
+       --app-name String
+       application/namespace
+       [Optional, default = application]
 
+       --help or -h
+       help for list
+       [Optional]
+
+Ask for Help
+       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+       E-mail: obaas_ww@oracle.com
+```
+
+For example:
+
+```cmd
    oractl:>list --app-name myapp
    name:myserv-c46688645-r6lhl  status:class V1ContainerStatus {
        containerID: cri-o://6d10194c5058a8cf7ecbd5e745cebd5e44c5768c7df73053fa85f54af4b352b2
@@ -363,52 +414,57 @@ The following is an example development workflow using the CLI:
            waiting: null
        }
    }name:myserv  kind:null
-   ```
+```
 
-8. Use the `config` command to view and update the configuration managed by the Spring Cloud Config server. More information about the configuration server can be found at this link: [Spring Config Server](../../platform/config/)
+### config
 
-   ```cmd
-   oractl:>help config
-   NAME
-          config - View and modify Service configuration.
+Use the `config` command to view and update the configuration managed by the Spring Cloud Config server. More information about the configuration server can be found at this link: [Spring Config Server](../../platform/config/)
 
-   SYNOPSIS
-          config [--action CommandConstants.ConfigActions] --service-name String --service-label String --service-profile String --property-key String --property-value String --artifact-path String --help
+```cmd
+oractl:>help config
+NAME
+       config - View and modify Service configuration.
 
-   OPTIONS
-          --action CommandConstants.ConfigActions
-          possible actions: add, list, update, or delete
-          [Mandatory]
+SYNOPSIS
+       config [--action CommandConstants.ConfigActions] --service-name String --service-label String --service-profile String --property-key String --property-value String --artifact-path String --help
 
-          --service-name String
-          Service Name
-          [Optional]
+OPTIONS
+       --action CommandConstants.ConfigActions
+       possible actions: add, list, update, or delete
+       [Mandatory]
 
-          --service-label String
-          label for config
-          [Optional]
+       --service-name String
+       Service Name
+       [Optional]
 
-          --service-profile String
-          Application Profile
-          [Optional]
+       --service-label String
+       label for config
+       [Optional]
 
-          --property-key String
-          the property key for the config
-          [Optional]
+       --service-profile String
+       Service Profile
+       [Optional]
 
-          --property-value String
-          the value for the config
-          [Optional]
+       --property-key String
+       the property key for the config
+       [Optional]
 
-          --artifact-path String
-          the context
-          [Optional]
+       --property-value String
+       the value for the config
+       [Optional]
 
-          --help or -h
-          help for config
-          [Optional]
+       --artifact-path String
+       the context
+       [Optional]
 
-   ```
+       --help or -h
+       help for config
+       [Optional]
+
+Ask for Help
+       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+       E-mail: obaas_ww@oracle.com
+```
 
    1. Use the `config add` command to add the application configuration to the Spring Cloud Config server using one of the two following options:
 
@@ -458,7 +514,7 @@ The following is an example development workflow using the CLI:
        } ]
        ```
 
-   2. Use the `config list` command, without any parameters, to list the services that have at least one configuration inserted in the Spring Cloud Config server. For example:
+   1. Use the `config list` command, without any parameters, to list the services that have at least one configuration inserted in the Spring Cloud Config server. For example:
 
        ```cmd
        oractl:>config list
@@ -474,7 +530,7 @@ The following is an example development workflow using the CLI:
 
        ```
 
-   3. Use the `config list [parameters]` command to list the parameters using parameters as filters. For example:
+   1. Use the `config list [parameters]` command to list the parameters using parameters as filters. For example:
 
        * `--service-name` : Lists all of the parameters from the specified service.
        * `--service-label` : Filters by label.
@@ -497,7 +553,7 @@ The following is an example development workflow using the CLI:
        } ]
        ```
 
-   4. Use the `config update` command to update a specific configuration using the set of parameters:
+   1. Use the `config update` command to update a specific configuration using the set of parameters:
 
        * `--service-name`
        * `--service-label`
@@ -536,9 +592,9 @@ The following is an example development workflow using the CLI:
        } ]
        ```
 
-   5. Use the `config delete` command to delete the application configuration from the Spring Cloud Config server using one of the following two options:
+   1. Use the `config delete` command to delete the application configuration from the Spring Cloud Config server using one of the following two options:
 
-       * Delete all configurations from a specific service using the filters `--service-name`, `--service-profile` and `--service-label`. The
+      1. Delete all configurations from a specific service using the filters `--service-name`, `--service-profile` and `--service-label`. The
        CLI tracks how many configurations are present in the Spring Cloud Config server and confirms the completed deletion. For example:
 
          ```cmd
@@ -546,7 +602,7 @@ The following is an example development workflow using the CLI:
          [obaas] 7 property(ies) found, delete all (y/n)?:
          ```
 
-       * Delete a specific configuration using the parameters `--service-name`, `--service-label`, `--service-profile` and `--property-key`. For example:
+      1. Delete a specific configuration using the parameters `--service-name`, `--service-label`, `--service-profile` and `--property-key`. For example:
 
          ```cmd
          oractl:>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
@@ -568,7 +624,9 @@ The following is an example development workflow using the CLI:
          400 : "Couldn't find any property for submitted query."
          ```
 
-9. Use the `GraalVM Compile Commands` to:
+### compile
+
+Use the `GraalVM Compile Commands` to:
 
 * Upload a **.jar** file to the Oracle Backend for Spring Boot and microservices and its GraalVM compiler service.
 * Start a compilation of your microservice to produce an executable native **.exec** file.
@@ -588,86 +646,95 @@ GraalVM Compile Commands
        compile-logs: Compilation progress.
 ```
 
-   1. Use the `compile` command to upload and automatically start compilation using the following command:
+1. Use the `compile` command to upload and automatically start compilation using the following command:
 
-```cmd
-   oractl:>help compile
-       NAME
-       compile - Compile a service with GraalVM.
+    ```cmd
+    oractl:>help compile
+    NAME
+        compile - Compile a service with GraalVM
 
-       SYNOPSIS
-              compile [--artifact-path String] --help 
+    SYNOPSIS
+        compile [--artifact-path String] --help
 
-       OPTIONS
-              --artifact-path String
-              Service jar to compile location
-              [Mandatory]
+    OPTIONS
+        --artifact-path String
+        Service jar to compile location
+        [Mandatory]
 
-              --help or -h 
-              help for compile
-              [Optional]
-```
+        --help or -h
+        help for compile
+        [Optional]
 
-   Because the compilation of a **.jar** file using the tool `native-image` does not support cross-compilation, it must be on the same platform where the application will run. This service guarantees a compilation in the same operating system and CPU type where the service will be executed on the Kubernetes cluster.
 
-   The Spring Boot application **pom.xml** with the plugin:
+    Ask for Help
+        Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+        E-mail: obaas_ww@oracle.com
+    ```
 
-```xml
-<plugin>
-       <groupId>org.graalvm.buildtools</groupId>
-       <artifactId>native-maven-plugin</artifactId>
-</plugin>
-```
+    Because the compilation of a **.jar** file using the tool `native-image` does not support cross-compilation, it must be on the same platform where the application will run. This service guarantees a compilation in the same operating system and CPU type where the service will be executed on the Kubernetes cluster.
 
-The project should be compiled on the developer desktop with GraalVM version 22.3 or later using an **mvn** command. For example:
-  
-```cmd
-  mvn -Pnative native:compile -Dmaven.test.skip=true
-```
+    The Spring Boot application **pom.xml** with the plugin:
 
-   This pre-compilation on your desktop checks if there are any issues on the libraries used in your Spring Boot microservice. In addition, your executable **.jar** file must include ahead-of-time (AOT) generated assets such as generated classes and JSON hint files. For additional information, see [Converting Spring Boot Executable Jar](https://docs.spring.io/spring-boot/docs/current/reference/html/native-image.html#native-image.advanced.converting-executable-jars).
+    ```xml
+    <plugin>
+        <groupId>org.graalvm.buildtools</groupId>
+        <artifactId>native-maven-plugin</artifactId>
+    </plugin>
+    ```
 
-   The following is an example of the command output:
+    The project should be compiled on the developer desktop with GraalVM version 22.3 or later using an **mvn** command. For example:
 
-```cmd
-     oractl:>compile --artifact-path /Users/cdebari/demo-0.0.1-SNAPSHOT.jar
-       uploading: /Users/cdebari/demo-0.0.1-SNAPSHOT.jar
-       filename: demo-0.0.1-SNAPSHOT.jar
-       return: demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
-       return: Shell script execution started on: demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
-       successfully start compilation of: demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
-       oractl:>
-```
+    ```cmd
+    mvn -Pnative native:compile -Dmaven.test.skip=true
+    ```
 
-   The following example shows the generated batch ID that must be used to retrieve the log files, download the compiled file, and purge the service instance:
+    This pre-compilation on your desktop checks if there are any issues on the libraries used in your Spring Boot microservice. In addition, your executable **.jar** file must include ahead-of-time (AOT) generated assets such as generated classes and JSON hint files. For additional information, see [Converting Spring Boot Executable Jar](https://docs.spring.io/spring-boot/docs/current/reference/html/native-image.html#native-image.advanced.converting-executable-jars).
 
-   **demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b**
+    The following is an example of the command output:
 
-   If omitted, then the last batch is considered by default.
+    ```cmd
+    oractl:>compile --artifact-path /Users/cdebari/demo-0.0.1-SNAPSHOT.jar
+    uploading: /Users/cdebari/demo-0.0.1-SNAPSHOT.jar
+    filename: demo-0.0.1-SNAPSHOT.jar
+    return: demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
+    return: Shell script execution started on: demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
+    successfully start compilation of: demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
+    oractl:>
+    ```
 
-   2. Use the `compile-logs` command to retrieve the logs that show the compilation progress. For example:
+    The following example shows the generated batch ID that must be used to retrieve the log files, download the compiled file, and purge the service instance:
 
-```cmd
-oractl:>help compile-logs
-NAME
-       compile-logs - Compilation progress.
+    *demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b*
 
-SYNOPSIS
-       compile-logs --batch String --help 
+    If omitted, then the last batch is considered by default.
 
-OPTIONS
-       --batch String
-       File ID returned from the compile command. If not provided by default, then the last file compiled.
-       [Optional]
+1. Use the `compile-logs` command to retrieve the logs that show the compilation progress. For example:
 
-       --help or -h 
-       help for compile-logs
-       [Optional]
-```
+    ```cmd
+    oractl:>help compile-logs
+    NAME
+        compile-logs - Compilation progress.
 
-   As previously mentioned, if the batch ID is not provided, then the logs of the most recently executed compilation are returned. For example:
+    SYNOPSIS
+        compile-logs --batch String --help 
 
-```cmd
+    OPTIONS
+        --batch String
+        File ID returned from the compile command. If not provided by default, then the last file compiled.
+        [Optional]
+
+        --help or -h 
+        help for compile-logs
+        [Optional]
+
+    Ask for Help
+        Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+        E-mail: obaas_ww@oracle.com
+    ```
+
+    As previously mentioned, if the batch ID is not provided, then the logs of the most recently executed compilation are returned. For example:
+
+    ```cmd
     oractl:>compile-logs
 
     extracted: BOOT-INF/lib/spring-jcl-6.0.11.jar
@@ -680,68 +747,80 @@ OPTIONS
     For detailed information and explanations on the build output, visit:
     https://github.com/oracle/graal/blob/master/docs/reference-manual/native-image/BuildOutput.md
     ------------------------------------------------------------------------------------------------------------------------
-```
+    ```
 
-   If the `compile-logs` commands returns a **Finished generating** message, then download the **.exec** file. For example:
+    If the `compile-logs` commands returns a **Finished generating** message, then download the **.exec** file. For example:
 
-```cmd
+    ```cmd
     CPU:  Enable more CPU features with '-march=native' for improved performance.
     QBM:  Use the quick build mode ('-Ob') to speed up builds during development.
-   ------------------------------------------------------------------------------------------------------------------------
-                       155.3s (8.2% of total time) in 169 GCs | Peak RSS: 5.34GB | CPU load: 0.70
-   ------------------------------------------------------------------------------------------------------------------------
-   Produced artifacts:
-   /uploads/demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b.temp/demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b.exec (executable)
-   ========================================================================================================================
-   Finished generating 'demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b.exec' in 31m 30s.
-   Compiling Complete.
-```
+    ------------------------------------------------------------------------------------------------------------------------
+                    155.3s (8.2% of total time) in 169 GCs | Peak RSS: 5.34GB | CPU load: 0.70
+    ------------------------------------------------------------------------------------------------------------------------
+    Produced artifacts:
+    /uploads/demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b.temp/demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b.exec (executable)
+    ========================================================================================================================
+    Finished generating 'demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b.exec' in 31m 30s.
+    Compiling Complete.
+    ```
 
-   3. Use the `compile-download` command to download the generated **.exec** file. For example:
+1. Use the `compile-download` command to download the generated **.exec** file. For example:
 
-```cmd
-oractl:>help compile-download
+    ```cmd
+    oractl:>help compile-download
+        NAME
+        compile-download - Download the compiled executable file.
+
+        SYNOPSIS
+        compile-download --batch String --help 
+
+        OPTIONS
+        --batch String
+        File ID to download as the executable file. If not provided by default, then the last file compiled.
+        [Optional]
+
+        --help or -h 
+        help for compile-download
+        [Optional]
+
+    Ask for Help
+        Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+        E-mail: obaas_ww@oracle.com
+    ```
+
+    You can choose to use the batch ID if you need the last file compiled. The following example specifies the batch ID:
+
+    ```cmd
+    oractl:>compile-download --batch demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
+
+    File downloaded successfully to: 
+    /Users/cdebari/demo-0.0.1-SNAPSHOT.jar.exec
+    ```
+
+1. Use the `compile-purge` command to delete all of the artifacts generated on the GraalVM compiler service after downloading the **.exec** file:
+
+    ```cmd
+    oractl:>help compile-purge
     NAME
-       compile-download - Download the compiled executable file.
+        compile-purge - Delete a launched job.
 
     SYNOPSIS
-       compile-download --batch String --help 
+        compile-purge --batch String --help 
 
     OPTIONS
-       --batch String
-       File ID to download as the executable file. If not provided by default, then the last file compiled.
-       [Optional]
+        --batch String
+        File ID returned from compile command. If not provided by default, then the last file compiled.
+        [Optional]
 
-       --help or -h 
-       help for compile-download
-       [Optional]
-```
+        --help or -h 
+        help for compile-purge   
+        [Optional]
 
-   You can choose to use the batch ID if you need the last file compiled. The following example specifies the batch ID:
+        Ask for Help
+            Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+            E-mail: obaas_ww@oracle.com
+    ```
 
-```cmd
-   oractl:>compile-download --batch demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
+## Logging
 
-   File downloaded successfully to: 
-   /Users/cdebari/demo-0.0.1-SNAPSHOT.jar.exec
-```
-
-   4. Use the `compile-purge` command to delete all of the artifacts generated on the GraalVM compiler service after downloading the **.exec** file:
-
-```cmd
-   oractl:>help compile-purge
-   NAME
-       compile-purge - Delete a launched job.
-
-   SYNOPSIS
-       compile-purge --batch String --help 
-
-   OPTIONS
-       --batch String
-       File ID returned from compile command. If not provided by default, then the last file compiled.
-       [Optional]
-
-       --help or -h 
-       help for compile-purge
-       [Optional]
-```
+The log file for `oractl` on Mac or Unix machine is stored in the `$HOME/config/orctl` directory. The file name is `oractl-cli-history.log`
