@@ -16,7 +16,7 @@ spring:
     show-sql: true
   microtx:
     lra:
-      coordinator-url: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator
+      coordinator-url: ${MP_LRA_COORDINATOR_URL}
       propagation-active: true
       headers-propagation-prefix: "{x-b3-, oracle-tmm-, authorization, refresh-}"   
 
@@ -53,7 +53,7 @@ eureka:
     
 lra:
   coordinator:
-    url: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator
+    url: ${MP_LRA_COORDINATOR_URL}
 
 management:
   endpoint:
