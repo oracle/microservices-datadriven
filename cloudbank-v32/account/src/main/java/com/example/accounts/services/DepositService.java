@@ -103,6 +103,7 @@ public class DepositService {
     public ResponseEntity<String> compensateWork(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) 
         throws Exception {
         log.info("deposit compensate called for LRA : " + lraId);
+
         Journal journal = AccountTransferDAO.instance().getJournalForLRAid(lraId, DEPOSIT);
         journal.setLraState(AccountTransferDAO.getStatusString(ParticipantStatus.Compensated));
         AccountTransferDAO.instance().saveJournal(journal);
@@ -116,6 +117,8 @@ public class DepositService {
     @Status
     public ResponseEntity<ParticipantStatus> status(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId,
                            @RequestHeader(LRA_HTTP_PARENT_CONTEXT_HEADER) String parentLRA) throws Exception {
+        log.info("status called for LRA : " + lraId);
+
         return AccountTransferDAO.instance().status(lraId, DEPOSIT);
     }
 

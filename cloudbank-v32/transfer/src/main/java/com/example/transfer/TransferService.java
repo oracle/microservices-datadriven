@@ -103,7 +103,6 @@ public class TransferService {
 
         // return status
         return ResponseEntity.ok("transfer status:" + returnString);
-
     }
 
     private String withdraw(String lraId, long accountId, long amount) {

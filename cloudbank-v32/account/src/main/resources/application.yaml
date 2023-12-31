@@ -4,8 +4,8 @@
 spring:
   application:
     name: account
-  jersey:
-    type: filter
+#  jersey:
+#    type: filter
   jpa:
     hibernate:
       ddl-auto: validate
