@@ -29,7 +29,7 @@ public class AccountTransferDAO {
         this.accountRepository = accountRepository;
         this.journalRepository = journalRepository;
         singleton = this;
-        System.out.println("AccountTransferDAO accountsRepository = " + accountRepository 
+        log.info("AccountTransferDAO accountsRepository = " + accountRepository
             + ", journalRepository = " + journalRepository);
     }
 
@@ -43,24 +43,16 @@ public class AccountTransferDAO {
      * @return Returns status code
      */
     public static String getStatusString(ParticipantStatus status) {
-        switch (status) {
-            case Compensated:
-                return "Compensated";
-            case Completed:
-                return "Completed";
-            case FailedToCompensate:
-                return "Failed to Compensate";
-            case FailedToComplete:
-                return "Failed to Complete";
-            case Active:
-                return "Active";
-            case Compensating:
-                return "Compensating";
-            case Completing:
-                return "Completing";
-            default:
-                return "Unknown";
-        }
+        return switch (status) {
+            case Compensated -> "Compensated";
+            case Completed -> "Completed";
+            case FailedToCompensate -> "Failed to Compensate";
+            case FailedToComplete -> "Failed to Complete";
+            case Active -> "Active";
+            case Compensating -> "Compensating";
+            case Completing -> "Completing";
+            default -> "Unknown";
+        };
     }
 
     /**
@@ -69,24 +61,16 @@ public class AccountTransferDAO {
      * @return Participant Status
      */
     public static ParticipantStatus getStatusFromString(String statusString) {
-        switch (statusString) {
-            case "Compensated":
-                return ParticipantStatus.Compensated;
-            case "Completed":
-                return ParticipantStatus.Completed;
-            case "Failed to Compensate":
-                return ParticipantStatus.FailedToCompensate;
-            case "Failed to Complete":
-                return ParticipantStatus.FailedToComplete;
-            case "Active":
-                return ParticipantStatus.Active;
-            case "Compensating":
-                return ParticipantStatus.Compensating;
-            case "Completing":
-                return ParticipantStatus.Completing;
-            default:
-                return null;
-        }
+        return switch (statusString) {
+            case "Compensated" -> ParticipantStatus.Compensated;
+            case "Completed" -> ParticipantStatus.Completed;
+            case "Failed to Compensate" -> ParticipantStatus.FailedToCompensate;
+            case "Failed to Complete" -> ParticipantStatus.FailedToComplete;
+            case "Active" -> ParticipantStatus.Active;
+            case "Compensating" -> ParticipantStatus.Compensating;
+            case "Completing" -> ParticipantStatus.Completing;
+            default -> null;
+        };
     }
 
     public void saveAccount(Account account) {
@@ -111,7 +95,7 @@ public class AccountTransferDAO {
     }
 
     /**
-     * Set status for a Journal Entry.
+     * Update the LRA status in the journal table during the "after LRA" phase.
      * @param lraId LRA Id
      * @param status Status
      * @param journalType Journal Type
