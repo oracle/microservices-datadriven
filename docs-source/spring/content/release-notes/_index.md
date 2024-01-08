@@ -19,6 +19,8 @@ The following Components were updated:
 
 | Component                                                                     | New Version   | Replaced Version    |
 |-------------------------------------------------------------------------------|---------------|---------------------|
+| Apache Kafka | 3.6.1 | 3.5.1 |
+| Coherence Operator | 3.3.2 | 3.2.11 |
 | Conductor Server | 3.13.8 | 3.13.2 |
 | HashiCorp Vault | 1.15.2  | 1.14.0 |
 | Netflix Conductor | 3.13.8 | 3.13.2 |
@@ -30,6 +32,7 @@ The following Components were updated:
 | Spring Boot Admin dashboard | 3.2.0 |  3.1.3 |
 | Spring Cloud Config server | 2023.0.0 | 2022.0.4 |
 | Spring Cloud Eureka service registry | 2023.0.0 | 4.0.3 |
+| Strimzi-Apache Kafka operator | 0.39.0 | 0.36.1 |
 
 ## Version 1.0.1, November 2, 2023
 
