@@ -4,8 +4,8 @@
 spring:
   application:
     name: account
-  jersey:
-    type: filter
+#  jersey:
+#    type: filter
   jpa:
     hibernate:
       ddl-auto: validate
@@ -16,7 +16,7 @@ spring:
     show-sql: true
   microtx:
     lra:
-      coordinator-url: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator
+      coordinator-url: ${MP_LRA_COORDINATOR_URL}
       propagation-active: true
       headers-propagation-prefix: "{x-b3-, oracle-tmm-, authorization, refresh-}"   
 
@@ -53,7 +53,7 @@ eureka:
     
 lra:
   coordinator:
-    url: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator
+    url: ${MP_LRA_COORDINATOR_URL}
 
 management:
   endpoint:
@@ -76,12 +76,9 @@ management:
       enabled: true
     java:
       enabled: true
-  zipkin:
+  otlp:
     tracing:
-      endpoint: http://jaegertracing-collector.observability:9411/api/v2/spans
-#  otlp:
-#    tracing:
-#      endpoint: http://open-telemetry-opentelemetry-collector.open-telemetry:4317
+      endpoint: http://open-telemetry-opentelemetry-collector.open-telemetry:4318/v1/traces
 
 logging:
   level:
@@ -89,3 +86,4 @@ logging:
     com.example: INFO
   pattern:
     level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
+

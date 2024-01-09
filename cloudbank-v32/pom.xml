@@ -14,11 +14,11 @@
 
     <packaging>pom</packaging>
 
-    <name>cloudbank</name>
+    <name>CloudBank</name>
     <description>Sample application for Oracle Backend for Spring Boot</description>
 
     <groupId>com.example</groupId>
-    <artifactId>sample-spring-apps</artifactId>
+    <artifactId>cloudbank-apps</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <modules>
@@ -33,7 +33,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
-<!--        <spring.boot.dependencies.version>3.1.5</spring.boot.dependencies.version>-->
         <spring-cloud.version>2023.0.0</spring-cloud.version>
 
         <!-- Code quality tools -->
@@ -56,25 +55,17 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>io.micrometer</groupId>-->
-<!--            <artifactId>micrometer-tracing-bridge-otel</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>io.opentelemetry</groupId>-->
-<!--            <artifactId>opentelemetry-exporter-otlp</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>io.micrometer</groupId>-->
-<!--            <artifactId>micrometer-tracing</artifactId>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-tracing-bridge-brave</artifactId>
+            <artifactId>micrometer-tracing-bridge-otel</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.zipkin.reporter2</groupId>
-            <artifactId>zipkin-reporter-brave</artifactId>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-exporter-otlp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
