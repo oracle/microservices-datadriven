@@ -13,12 +13,13 @@ The following components were added:
 
 | Component                    | Version   | Description                          |
 |------------------------------|-----------|--------------------------------------|
-| Metrics Server | 0.64  | Source of container resource metrics for Kubernetes built-in autoscaling pipeline |
+| Metrics server | 0.64  | Source of container resource metrics for Kubernetes built-in autoscaling pipeline |
 
 The following Components were updated:
 
 | Component                                                                     | New Version   | Replaced Version    |
 |-------------------------------------------------------------------------------|---------------|---------------------|
+| APISIX API Gateway | 3.7.0 | 3.4.0 |
 | Apache Kafka | 3.6.1 | 3.5.1 |
 | Coherence Operator | 3.3.2 | 3.2.11 |
 | Conductor Server | 3.13.8 | 3.13.2 |
