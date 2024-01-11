@@ -29,6 +29,12 @@
             <type>pom</type>
         </dependency>
         <dependency>
+    		<groupId>com.oracle.database.spring</groupId>
+    		<artifactId>oracle-spring-boot-starter-wallet</artifactId>
+    		<version>${oracle-springboot-starter.version}</version>
+    		<type>pom</type>
+		</dependency>
+        <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
             <version>${liquibase.version}</version>
