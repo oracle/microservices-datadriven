@@ -27,7 +27,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_CONTEXT_HEADER;
 
 @RestController
-@RequestMapping("/")
 @Slf4j
 public class TransferService {
 
