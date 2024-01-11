@@ -35,6 +35,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
         <spring-cloud.version>2023.0.0</spring-cloud.version>
+        <org.springdoc-version>2.3.0</org.springdoc-version>
 
         <!-- Code quality tools -->
         <maven-checkstyle-plugin-version>3.3.0</maven-checkstyle-plugin-version>
@@ -80,6 +81,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>${org.springdoc-version}</version>
         </dependency>
     </dependencies>
 
