@@ -18,7 +18,7 @@ public interface CustomerService {
 
     Optional<Customer> findCustomerByEmail(String email);
 
-    void createCustomer(Customer customer);
+    int createCustomer(Customer customer);
 
     int updateCustomer(Customer customer);
 

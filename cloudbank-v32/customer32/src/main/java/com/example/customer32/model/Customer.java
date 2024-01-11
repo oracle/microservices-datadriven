@@ -3,5 +3,5 @@
 
 package com.example.customer32.model;
 
-public record Customer(String Id, String Name, String Email) {
+public record Customer(String id, String name, String email) {
 }
