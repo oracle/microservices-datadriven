@@ -19,9 +19,9 @@ curl http://localhost:9180/apisix/admin/routes \
     },
     "uri": "/api/v1/account*",
     "upstream": {
-        "service_name": "application/account:spring",
+        "service_name": "ACCOUNTS",
         "type": "roundrobin",
-        "discovery_type": "kubernetes"
+        "discovery_type": "eureka"
     },
     "plugins": {
         "zipkin": {

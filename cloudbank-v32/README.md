@@ -25,7 +25,7 @@ Version 3.2 of CloudBank is under development. This document and application is 
 [INFO] ------------------------------------------------------------------------
 ```
 
-## Deploying Cloudbank
+## Establish connection with ObaaS Admin service
 
 1. Start the tunnel
 
@@ -61,14 +61,38 @@ Version 3.2 of CloudBank is under development. This document and application is 
     oractl:>
     ```
 
-## Test Cloudbank Services
+## Deploy CloudBank
+
+CloudBank can be deployed using the `--script` command in `oractl`. CloudBank will be deployed in the namespace `cb32`.
+
+```text
+oractl:>script --file deploy-cmds/deploy-cb32.txt
+```
+
+The following commands are executed:
+
+```script
+create --app-name cb32
+bind --app-name cb32 --service-name account
+bind --app-name cb32 --service-name checks --username account
+bind --app-name cb32 --service-name customer
+bind --app-name cb32 --service-name testrunner --username account
+deploy --app-name cb32 --service-name account --artifact-path account/target/account-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
+deploy --app-name cb32 --service-name checks --artifact-path checks/target/checks-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+deploy --app-name cb32 --service-name customer --artifact-path customer/target/customer-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
+deploy --app-name cb32 --service-name creditscore --artifact-path creditscore/target/creditscore-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+deploy --app-name cb32 --service-name testrunner --artifact-path testrunner/target/testrunner-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+deploy --app-name cb32 --service-name transfer --artifact-path transfer/target/transfer-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+```
+
+## Test CloudBank Services
 
 1. Test account service
 
    1. Port forward
 
       ```shell
-      kubectl port-forward -n application svc/account 8081:8080
+      kubectl port-forward -n cb32 svc/account 8081:8080
       ```
 
    1. Rest endpoint
@@ -99,7 +123,7 @@ Version 3.2 of CloudBank is under development. This document and application is 
    1. Port forward
 
       ```shell
-      kubectl port-forward -n application svc/customer 8082:8080
+      kubectl port-forward -n cb32 svc/customer 8082:8080
       ```
 
    1. Rest endpoint
@@ -129,7 +153,7 @@ Version 3.2 of CloudBank is under development. This document and application is 
     1. Port forward
 
        ```shell
-       kubectl port-forward -n application svc/creditscore 8083:8080
+       kubectl port-forward -n cb32 svc/creditscore 8083:8080
        ``````
 
     1. Rest endpoint
@@ -152,7 +176,7 @@ Version 3.2 of CloudBank is under development. This document and application is 
     1. Port forward
 
        ```shell
-       kubectl -n application port-forward svc/testrunner 8084:8080
+       kubectl -n cb32 port-forward svc/testrunner 8084:8080
        ```
 
     1. Rest endpoint - deposit check. Make sure you use an existing account number
@@ -175,7 +199,7 @@ Version 3.2 of CloudBank is under development. This document and application is 
     1. Check service logs
 
          ```shell
-         kubectl -n application logs svc/checks
+         kubectl -n cb32 logs svc/checks
          ```
 
          Should contain:
@@ -221,7 +245,7 @@ Version 3.2 of CloudBank is under development. This document and application is 
     1. Check logs
 
        ```shell
-       kubectl -n application logs svc/checks
+       kubectl -n cb32 logs svc/checks
        ```
 
        Output should be similar to:
@@ -254,7 +278,7 @@ Version 3.2 of CloudBank is under development. This document and application is 
     1. Port forward
 
        ```shell
-       kubectl -n application port-forward svc/transfer 8085:8080
+       kubectl -n cb32 port-forward svc/transfer 8085:8080
        ```
 
     1. Check account balances. Note that the account numbers 21 and 22 can be different in your environment
@@ -330,7 +354,7 @@ Version 3.2 of CloudBank is under development. This document and application is 
     1. Check the log file to confirm
 
        ```shell
-       kubectl -n application logs svc/transfer
+       kubectl -n cb32 logs svc/transfer
        ```
 
        Output should look similar to this:

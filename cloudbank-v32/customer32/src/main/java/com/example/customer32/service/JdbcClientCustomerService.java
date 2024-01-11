@@ -3,24 +3,23 @@
 
 package com.example.customer32.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.example.customer32.model.Customer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
 @Slf4j
-public class JdbcTemplateCustomerService implements CustomerService {
+public class JdbcClientCustomerService implements CustomerService {
 
     private final JdbcClient jdbcClient;
 
-    public JdbcTemplateCustomerService(JdbcClient jdbcClient) {
+    public JdbcClientCustomerService(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
     }
 
@@ -33,7 +32,7 @@ public class JdbcTemplateCustomerService implements CustomerService {
 
     @Override
     public Optional<Customer> findByCustomerByName(String name) {
-        log.info("Name : " + name);
+        log.debug("Name : " + name);
         return jdbcClient.sql("select id, name, email from customers32 where name = :name")
                 .param("name", name)
                 .query(Customer.class)
@@ -42,7 +41,7 @@ public class JdbcTemplateCustomerService implements CustomerService {
 
     @Override
     public Optional<Customer> findCustomerById(String id) {
-        log.info("Id : " + id);
+        log.debug("Id : " + id);
         return jdbcClient.sql("select id, name, email from customers32 where id = :id")
                 .param("id", id)
                 .query(Customer.class)
@@ -51,7 +50,7 @@ public class JdbcTemplateCustomerService implements CustomerService {
 
     @Override
     public Optional<Customer> findCustomerByEmail(String email) {
-        log.info("Email " + email);
+        log.debug("Email " + email);
         return jdbcClient.sql("select id, name, email from customers32 where email = :email")
                 .param("email", email)
                 .query(Customer.class)
@@ -60,33 +59,30 @@ public class JdbcTemplateCustomerService implements CustomerService {
 
     @Override
     public void createCustomer(Customer customer) {
-        log.info("customer : " + customer);
+        log.debug("customer : " + customer);
         var newCustomer = jdbcClient.sql("insert into customers32(id, name, email) values (?,?,?)")
                 .params(List.of(customer.Id(), customer.Name(), customer.Email()))
                 .update();
-        log.info("newCust : " + newCustomer);
-        // if (updatedCustomer == 0) {
-        //     return new ResponseEntity<>(customer, HttpStatus.CREATED);
-        // } else {
-        //     return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
-        // }
+        log.debug("newCust : " + newCustomer);
     }
 
     @Override
-    public void updateCustomer(Customer customer) {
-        log.info("customer : " + customer);
+    public int updateCustomer(Customer customer) {
+        log.debug("customer : " + customer);
         var updCustomer = jdbcClient.sql("update customers32 set name = ?, email = ? where id = ?")
                 .params(List.of(customer.Name(), customer.Email(), customer.Id()))
                 .update();
-        log.info("updCust : " + updCustomer);
+        log.debug("updCust : " + updCustomer);
+        return updCustomer;
     }
 
     @Override
-    public void deleteCustomer(String id) {
-        log.info("Id :" + id);
+    public int deleteCustomer(String id) {
+        log.debug("Id :" + id);
         var delCustomer = jdbcClient.sql("delete from customers32 where id = :id")
                 .param("id", id)
                 .update();
         log.info("delCust : " + delCustomer);
+        return delCustomer;
     }
 }

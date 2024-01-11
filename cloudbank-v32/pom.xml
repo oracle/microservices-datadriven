@@ -23,11 +23,12 @@
 
     <modules>
         <module>account</module>
+        <module>checks</module>
         <module>customer</module>
+        <module>customer32</module>
         <module>creditscore</module>
         <module>transfer</module>
         <module>testrunner</module>
-        <module>checks</module>
     </modules>
 
     <properties>
