@@ -51,7 +51,7 @@
         <jms.version>2.0.1</jms.version>
         <jta.version>1.1</jta.version>
         <javax-transaction.version>1.3</javax-transaction.version>
-        <avro.version>1.11.0</avro.version>
+        <avro.version>1.11.3</avro.version>
         <okafka.version>0.8</okafka.version>
     </properties>
 
