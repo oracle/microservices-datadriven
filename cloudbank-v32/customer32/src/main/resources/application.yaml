@@ -3,12 +3,27 @@
 
 spring:
   application:
-    name: creditscore
+    name: customer32
 
-# Disables autoconfiguration for the refresh scope and associated features.
-  cloud:
-    refresh:
-      enabled: false
+  liquibase:
+    change-log: classpath:db/changelog/controller.yaml
+    url: ${spring.datasource.url}
+    user: ${liquibase.datasource.username}
+    password: ${liquibase.datasource.password}
+    enabled: ${LIQUIBASE_ENABLED:true}
+
+  datasource:
+    url: ${spring.datasource.url}
+    username: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    driver-class-name: oracle.jdbc.OracleDriver
+    type: oracle.ucp.jdbc.PoolDataSource
+    oracleucp:
+      connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
+      connection-pool-name: Customer32ConnectionPool
+      initial-pool-size: 15
+      min-pool-size: 10
+      max-pool-size: 30
 
 eureka:
   instance:
