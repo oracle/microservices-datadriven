@@ -82,10 +82,68 @@ Version 3.2 of CloudBank is under development. This document and application is 
 
 ## Deploy CloudBank
 
-CloudBank can be deployed using the `--script` command in `oractl`. CloudBank will be deployed in the namespace `cb32`.
+CloudBank can be deployed using the `--script` command in `oractl`. CloudBank will be deployed in the namespace `cb32`. You are going to be asked for passwords when the `bind` command executes.
 
 ```text
 oractl:>script --file deploy-cmds/deploy-cb32.txt
+```
+
+The output should look similar to this:
+
+```text
+application/namespace created successfully and image pull secret (registry-auth) created successfully and database TNSAdmin/wallet secret created successfully
+Database/Service Password: *************
+Schema {account} was successfully Created and Kubernetes Secret {cb32/account} was successfully Created.
+Database/Service Password: *************
+Schema {account} was successfully Not_Modified and Kubernetes Secret {cb32/checks} was successfully Created.
+Database/Service Password: *************
+Schema {customer} was successfully Created and Kubernetes Secret {cb32/customer} was successfully Created.
+Database/Service Password: *************
+Schema {customer} was successfully Not_Modified and Kubernetes Secret {cb32/customer32} was successfully Created.
+Database/Service Password: *************
+Schema {account} was successfully Not_Modified and Kubernetes Secret {cb32/testrunner} was successfully Created.
+uploading: account/target/account-0.0.1-SNAPSHOT.jar
+building and pushing image...
+
+creating deployment and service...
+obaas-cli [deploy]: Application was successfully deployed.
+NOTICE: service not accessible outside K8S
+uploading: checks/target/checks-0.0.1-SNAPSHOT.jar
+building and pushing image...
+
+creating deployment and service...
+obaas-cli [deploy]: Application was successfully deployed.
+NOTICE: service not accessible outside K8S
+uploading: customer/target/customer-0.0.1-SNAPSHOT.jar
+building and pushing image...
+
+creating deployment and service...
+obaas-cli [deploy]: Application was successfully deployed.
+NOTICE: service not accessible outside K8S
+uploading: customer32/target/customer32-0.0.1-SNAPSHOT.jar
+building and pushing image...
+
+creating deployment and service...
+obaas-cli [deploy]: Application was successfully deployed.
+NOTICE: service not accessible outside K8S
+uploading: creditscore/target/creditscore-0.0.1-SNAPSHOT.jar
+building and pushing image...
+
+creating deployment and service...
+obaas-cli [deploy]: Application was successfully deployed.
+NOTICE: service not accessible outside K8S
+uploading: testrunner/target/testrunner-0.0.1-SNAPSHOT.jar
+building and pushing image...
+
+creating deployment and service...
+obaas-cli [deploy]: Application was successfully deployed.
+NOTICE: service not accessible outside K8S
+uploading: transfer/target/transfer-0.0.1-SNAPSHOT.jar
+building and pushing image...
+
+creating deployment and service...
+obaas-cli [deploy]: Application was successfully deployed.
+NOTICE: service not accessible outside K8S
 ```
 
 The following commands are executed:
@@ -110,7 +168,9 @@ deploy --app-name cb32 --service-name transfer --artifact-path transfer/target/t
 
 All services has OpenAPI documentation and can be reached via the Swagger UI. For example after starting a port forward to anyone of the services you can got to the URL http://localhost:\<port\>/swagger-ui/index.html to see the documentation. Replace \<port\> with the port used in the port forward command.
 
-<<<<picture>>>>
+This is an example of the `customer32` application:
+
+![Eureka Dashboard Login](images/swagger-example.png  " ")
 
 ## Test CloudBank Services
 
@@ -426,6 +486,8 @@ All services has OpenAPI documentation and can be reached via the Swagger UI. Fo
        2023-12-26T16:50:45.233Z  INFO 1 --- [transfer] [io-8080-exec-10] [] com.example.transfer.TransferService     : Process confirm for transfer : http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/ea98ebae-2358-4dd1-9d7c-09f4550d7567
        ```
 
+## Observability and Tracing
+
 1. Check Eureka dashbaord
 
    1. Port forward
@@ -450,9 +512,18 @@ All services has OpenAPI documentation and can be reached via the Swagger UI. Fo
 
       ![Jaeger Dashboard Login](images/jaeger.png  " ")
 
-   1. Choose `customer32` Service and click... 
+   1. Choose `customer32` Service and click *Find Traces*
 
-<<<picture>>>>
+      ![Customer32](images/j-traces.png  " ")
 
-   1. Verify that the tracing occured
-<<<[picture>>>>]
+1. Check the Grafana Dashboard
+
+   1. Port forward
+
+      ```shell
+      kubectl -n grafana port-forward svc/grafana 7070:80
+      ```
+
+   1. Open <http://localhost:7070> in a browser and verify that all services are registered and you can see some data (you may have to select the dashboard you want to see)
+
+      ![Grafana](images/grafana-dashboard.png  " ")
