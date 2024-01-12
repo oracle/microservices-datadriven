@@ -67,10 +67,10 @@ public class JdbcClientCustomerService implements CustomerService {
     }
 
     @Override
-    public int updateCustomer(Customer customer) {
-        log.debug("customer : " + customer);
+    public int updateCustomer(Customer customer, String id) {
+        log.debug("customer : " + customer + " id " + id);
         var updCustomer = jdbcClient.sql("update customers32 set name = ?, email = ? where id = ?")
-                .params(List.of(customer.name(), customer.email(), customer.id()))
+                .params(List.of(customer.name(), customer.email(), id))
                 .update();
         return updCustomer;
     }

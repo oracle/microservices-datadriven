@@ -136,10 +136,10 @@ public class CustomerController {
      * @param customer Customer object to update.
      * @return Returns 200 if customer is updated else 204.
      */
-    @PutMapping("/customer")
+    @PutMapping("/customer/{id}")
     @Operation(summary = "Update a customer")
-    ResponseEntity<Object> updateCustomer(@RequestBody Customer customer) {
-        var retValue = customerService.updateCustomer(customer);
+    ResponseEntity<Object> updateCustomer(@RequestBody Customer customer, String id) {
+        var retValue = customerService.updateCustomer(customer, id);
         log.debug("updateCustomer -- retValue : " + retValue);
         if (retValue == 1) {
             return new ResponseEntity<>(null, HttpStatus.OK);

@@ -59,7 +59,7 @@ management:
       enabled: true
   otlp:
     tracing:
-      endpoint: http://open-telemetry-opentelemetry-collector.open-telemetry:4318/v1/traces
+      endpoint: ${otel.exporter.otlp.endpoint}
 
 logging:
   level:

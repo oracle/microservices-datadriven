@@ -50,10 +50,10 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     enabled: true
-    
-lra:
-  coordinator:
-    url: ${MP_LRA_COORDINATOR_URL}
+
+#lra:
+#  coordinator:
+#    url: ${MP_LRA_COORDINATOR_URL}
 
 management:
   endpoint:
@@ -78,7 +78,7 @@ management:
       enabled: true
   otlp:
     tracing:
-      endpoint: http://open-telemetry-opentelemetry-collector.open-telemetry:4318/v1/traces
+      endpoint: ${otel.exporter.otlp.endpoint}
 
 logging:
   level:

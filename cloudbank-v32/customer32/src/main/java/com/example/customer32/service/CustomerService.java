@@ -20,7 +20,7 @@ public interface CustomerService {
 
     int createCustomer(Customer customer);
 
-    int updateCustomer(Customer customer);
+    int updateCustomer(Customer customer, String id);
 
     int deleteCustomer(String id);
 

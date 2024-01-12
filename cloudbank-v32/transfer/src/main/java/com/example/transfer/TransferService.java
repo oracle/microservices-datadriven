@@ -18,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -107,7 +106,7 @@ public class TransferService {
     private String withdraw(String lraId, long accountId, long amount) {
         log.info("withdraw accountId = " + accountId + ", amount = " + amount);
         log.info("withdraw lraId = " + lraId);
-        
+
         UriComponentsBuilder builder = UriComponentsBuilder.fromUri(withdrawUri)
             .queryParam("accountId", accountId)
             .queryParam("amount", amount);
@@ -119,8 +118,8 @@ public class TransferService {
         HttpEntity<String> request = new HttpEntity<String>("", headers);
 
         ResponseEntity<String> response = restTemplate.postForEntity(
-            builder.buildAndExpand().toUri(), 
-            request, 
+            builder.buildAndExpand().toUri(),
+            request,
             String.class);
 
         return response.getBody();
@@ -129,7 +128,7 @@ public class TransferService {
     private String deposit(String lraId, long accountId, long amount) {
         log.info("deposit accountId = " + accountId + ", amount = " + amount);
         log.info("deposit lraId = " + lraId);
-        
+
         UriComponentsBuilder builder = UriComponentsBuilder.fromUri(depositUri)
             .queryParam("accountId", accountId)
             .queryParam("amount", amount);
@@ -141,8 +140,8 @@ public class TransferService {
         HttpEntity<String> request = new HttpEntity<String>("", headers);
 
         ResponseEntity<String> response = restTemplate.postForEntity(
-            builder.buildAndExpand().toUri(), 
-            request, 
+            builder.buildAndExpand().toUri(),
+            request,
             String.class);
 
         return response.getBody();
@@ -180,8 +179,8 @@ public class TransferService {
         HttpEntity<String> request = new HttpEntity<String>("", headers);
 
         ResponseEntity<String> response = restTemplate.postForEntity(
-            transferProcessConfirmUri, 
-            request, 
+            transferProcessConfirmUri,
+            request,
             String.class);
 
         return ResponseEntity.ok(response.getBody());
@@ -205,8 +204,8 @@ public class TransferService {
         HttpEntity<String> request = new HttpEntity<String>("", headers);
 
         ResponseEntity<String> response = restTemplate.postForEntity(
-            transferProcessCancelUri, 
-            request, 
+            transferProcessCancelUri,
+            request,
             String.class);
 
         return ResponseEntity.ok(response.getBody());
