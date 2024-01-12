@@ -26,24 +26,25 @@ Version 3.2 of CloudBank is under development. This document and application is 
 
    ```text
    [INFO] ------------------------------------------------------------------------
-   [INFO] Reactor Summary for cloudbank 0.0.1-SNAPSHOT:
-   [INFO] 
-   [INFO] cloudbank .......................................... SUCCESS [  0.734 s]
-   [INFO] account ............................................ SUCCESS [  2.511 s]
-   [INFO] customer ........................................... SUCCESS [  1.046 s]
-   [INFO] creditscore ........................................ SUCCESS [  0.815 s]
-   [INFO] transfer ........................................... SUCCESS [  0.427 s]
-   [INFO] testrunner ......................................... SUCCESS [  0.884 s]
-   [INFO] checks ............................................. SUCCESS [  0.912 s]
+   [INFO] Reactor Summary for CloudBank 0.0.1-SNAPSHOT:
+   [INFO]
+   [INFO] CloudBank .......................................... SUCCESS [  0.950 s]
+   [INFO] account ............................................ SUCCESS [  2.904 s]
+   [INFO] checks ............................................. SUCCESS [  1.168 s]
+   [INFO] customer ........................................... SUCCESS [  1.198 s]
+   [INFO] customer32 ......................................... SUCCESS [  1.133 s]
+   [INFO] creditscore ........................................ SUCCESS [  0.956 s]
+   [INFO] transfer ........................................... SUCCESS [  0.463 s]
+   [INFO] testrunner ......................................... SUCCESS [  1.009 s]
    [INFO] ------------------------------------------------------------------------
    [INFO] BUILD SUCCESS
    [INFO] ------------------------------------------------------------------------
-   [INFO] Total time:  7.586 s
-   [INFO] Finished at: 2023-12-25T17:50:52-06:00
+   [INFO] Total time:  10.160 s
+   [INFO] Finished at: 2024-01-12T10:41:10-06:00
    [INFO] ------------------------------------------------------------------------
    ```
 
-## Establish connection with ObaaS Admin service
+## Establish connection with OBaaS Admin service
 
 1. Start the tunnel
 
@@ -94,18 +95,26 @@ create --app-name cb32
 bind --app-name cb32 --service-name account
 bind --app-name cb32 --service-name checks --username account
 bind --app-name cb32 --service-name customer
+bind --app-name cb32 --service-name customer32 --username customer
 bind --app-name cb32 --service-name testrunner --username account
 deploy --app-name cb32 --service-name account --artifact-path account/target/account-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
 deploy --app-name cb32 --service-name checks --artifact-path checks/target/checks-0.0.1-SNAPSHOT.jar --image-version 0.0.1
 deploy --app-name cb32 --service-name customer --artifact-path customer/target/customer-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
+deploy --app-name cb32 --service-name customer32 --artifact-path customer32/target/customer32-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
 deploy --app-name cb32 --service-name creditscore --artifact-path creditscore/target/creditscore-0.0.1-SNAPSHOT.jar --image-version 0.0.1
 deploy --app-name cb32 --service-name testrunner --artifact-path testrunner/target/testrunner-0.0.1-SNAPSHOT.jar --image-version 0.0.1
 deploy --app-name cb32 --service-name transfer --artifact-path transfer/target/transfer-0.0.1-SNAPSHOT.jar --image-version 0.0.1
 ```
 
+## OpenAPI
+
+All services has OpenAPI documentation and can be reached via the Swagger UI. For example after starting a port forward to anyone of the services you can got to the URL http://localhost:\<port\>/swagger-ui/index.html to see the documentation. Replace \<port\> with the port used in the port forward command.
+
+<<<<picture>>>>
+
 ## Test CloudBank Services
 
-1. Test account service
+1. Test `account` service
 
    1. Port forward
 
@@ -136,7 +145,7 @@ deploy --app-name cb32 --service-name transfer --artifact-path transfer/target/t
       ]
       ```
 
-1. Test customer service
+1. Test `customer` service
 
    1. Port forward
 
@@ -144,7 +153,7 @@ deploy --app-name cb32 --service-name transfer --artifact-path transfer/target/t
       kubectl port-forward -n cb32 svc/customer 8082:8080
       ```
 
-   1. Rest endpoint
+   1. REST endpoint
 
       ```shell
       curl -s http://localhost:8082/api/v1/customer | jq
@@ -166,7 +175,34 @@ deploy --app-name cb32 --service-name transfer --artifact-path transfer/target/t
       ]
       ```
 
-1. Test creditscore service
+1. Test `customer32` service
+
+   1. Port forward
+
+      ```shell
+      kubectl port-forward -n cb32 svc/customer32 9000:8080
+      ```
+
+   1. REST endpoint
+
+      ```shell
+      curl -s http://localhost:8082/api/v1/customer | jq
+      ```
+
+      Should return:
+
+      ```json
+      [
+         {
+            "email": "andy@andy.com",
+            "id": "qwertysdwr",
+            "name": "Andy"
+         },
+        {...}
+      ]
+      ```
+
+1. Test `creditscore` service
 
     1. Port forward
 
@@ -174,7 +210,7 @@ deploy --app-name cb32 --service-name transfer --artifact-path transfer/target/t
        kubectl port-forward -n cb32 svc/creditscore 8083:8080
        ``````
 
-    1. Rest endpoint
+    1. REST endpoint
 
        ```shell
        curl -s http://localhost:8083/api/v1/creditscore | jq
@@ -189,7 +225,7 @@ deploy --app-name cb32 --service-name transfer --artifact-path transfer/target/t
        }
        ```
 
-1. Test check service
+1. Test `check` service
 
     1. Port forward
 
@@ -197,7 +233,7 @@ deploy --app-name cb32 --service-name transfer --artifact-path transfer/target/t
        kubectl -n cb32 port-forward svc/testrunner 8084:8080
        ```
 
-    1. Rest endpoint - deposit check. Make sure you use an existing account number
+    1. REST endpoint - deposit check. Make sure you use an existing account number
 
        ```shell
        curl -i -X POST -H 'Content-Type: application/json' -d '{"accountId": 2, "amount": 256}' http://localhost:8084/api/v1/testrunner/deposit
@@ -214,7 +250,7 @@ deploy --app-name cb32 --service-name transfer --artifact-path transfer/target/t
        {"accountId":21,"amount":256}
        ```
 
-    1. Check service logs
+    1. Check application log
 
          ```shell
          kubectl -n cb32 logs svc/checks
@@ -260,7 +296,7 @@ deploy --app-name cb32 --service-name transfer --artifact-path transfer/target/t
          {"journalId":7}
          ```
 
-    1. Check logs
+    1. Check application log
 
        ```shell
        kubectl -n cb32 logs svc/checks
@@ -369,7 +405,7 @@ deploy --app-name cb32 --service-name transfer --artifact-path transfer/target/t
        }
        ```
 
-    1. Check the log file to confirm
+    1. Check the application log to confirm
 
        ```shell
        kubectl -n cb32 logs svc/transfer
@@ -390,7 +426,7 @@ deploy --app-name cb32 --service-name transfer --artifact-path transfer/target/t
        2023-12-26T16:50:45.233Z  INFO 1 --- [transfer] [io-8080-exec-10] [] com.example.transfer.TransferService     : Process confirm for transfer : http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/ea98ebae-2358-4dd1-9d7c-09f4550d7567
        ```
 
-1. Check Eureka
+1. Check Eureka dashbaord
 
    1. Port forward
 
@@ -402,7 +438,7 @@ deploy --app-name cb32 --service-name transfer --artifact-path transfer/target/t
 
       ![Eureka Dashboard Login](images/eureka.png  " ")
 
-1. Check Jaeger
+1. Check Jaeger dashbaord
 
    1. Port forward
 
@@ -413,3 +449,10 @@ deploy --app-name cb32 --service-name transfer --artifact-path transfer/target/t
    1. Open <http://localhost:16686> in a browser and verify that all services are registered
 
       ![Jaeger Dashboard Login](images/jaeger.png  " ")
+
+   1. Choose `customer32` Service and click... 
+
+<<<picture>>>>
+
+   1. Verify that the tracing occured
+<<<[picture>>>>]
