@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping("/api/v1")
 @Slf4j
@@ -22,6 +24,7 @@ public class CreditScoreController {
      * @return Returns creditscore at current date
      */
     @GetMapping("/creditscore")
+    @Operation(summary = "Get a random creditscore at current date")
     public Map<String, String> getCreditScore() {
         log.debug("CREDITSCORE: getCreditScore");
         int max = 900;
