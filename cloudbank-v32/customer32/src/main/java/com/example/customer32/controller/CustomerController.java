@@ -26,7 +26,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @Slf4j
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v2")
 public class CustomerController {
 
     private final CustomerService customerService;

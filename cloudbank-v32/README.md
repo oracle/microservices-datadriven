@@ -4,26 +4,44 @@ Version 3.2 of CloudBank is under development. This document and application is 
 
 ## Build CloudBank
 
-`mvn clean package`
+1. Clone the source repository
 
-```text
-[INFO] ------------------------------------------------------------------------
-[INFO] Reactor Summary for cloudbank 0.0.1-SNAPSHOT:
-[INFO] 
-[INFO] cloudbank .......................................... SUCCESS [  0.734 s]
-[INFO] account ............................................ SUCCESS [  2.511 s]
-[INFO] customer ........................................... SUCCESS [  1.046 s]
-[INFO] creditscore ........................................ SUCCESS [  0.815 s]
-[INFO] transfer ........................................... SUCCESS [  0.427 s]
-[INFO] testrunner ......................................... SUCCESS [  0.884 s]
-[INFO] checks ............................................. SUCCESS [  0.912 s]
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time:  7.586 s
-[INFO] Finished at: 2023-12-25T17:50:52-06:00
-[INFO] ------------------------------------------------------------------------
-```
+   ```shell
+   git clone https://github.com/oracle/microservices-datadriven.git
+   ```
+
+1. Got to the `CloudBank` directory
+
+   ```shell
+   cd microservices-datadriven/cloudbank-v32
+   ```
+
+1. Build CloudBank
+
+   ```shell
+   mvn clean package
+   ```
+
+   Output should look similar to this:
+
+   ```text
+   [INFO] ------------------------------------------------------------------------
+   [INFO] Reactor Summary for cloudbank 0.0.1-SNAPSHOT:
+   [INFO] 
+   [INFO] cloudbank .......................................... SUCCESS [  0.734 s]
+   [INFO] account ............................................ SUCCESS [  2.511 s]
+   [INFO] customer ........................................... SUCCESS [  1.046 s]
+   [INFO] creditscore ........................................ SUCCESS [  0.815 s]
+   [INFO] transfer ........................................... SUCCESS [  0.427 s]
+   [INFO] testrunner ......................................... SUCCESS [  0.884 s]
+   [INFO] checks ............................................. SUCCESS [  0.912 s]
+   [INFO] ------------------------------------------------------------------------
+   [INFO] BUILD SUCCESS
+   [INFO] ------------------------------------------------------------------------
+   [INFO] Total time:  7.586 s
+   [INFO] Finished at: 2023-12-25T17:50:52-06:00
+   [INFO] ------------------------------------------------------------------------
+   ```
 
 ## Establish connection with ObaaS Admin service
 
