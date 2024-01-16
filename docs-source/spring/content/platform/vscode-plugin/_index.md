@@ -2,7 +2,7 @@
 title: "Oracle Backend for Spring Boot and Microservices Visual Studio Code Extension"
 ---
 
-**GA 1.0 - October, 2023**
+**GA 1.1.0 - February, 2024**
 
 Oracle Backend for Spring Boot and Microservices Visual Studio Code (VS Code) plugin is an extension to browse and deploy applications on the Oracle Backend for Spring Boot and Microservices platform. This plugin inspects the content of an Oracle Backend for Spring Boot and Microservices deployment, in terms of applications, services, and related configurations. It simplifies access to the installed platform services (like Grafana, Spring, Apache APISIX, Eureka, and Jaeger) creating `ssh` tunnels on-demand and providing access to their respective web administrator consoles. It adds credentials to access and bind services to the Oracle Database included in the Oracle Backend for Spring Boot and Microservices deployment. This plugin replicates the functionalities available in [OBaas CLI](../../development/cli) and simplifies access to Oracle Backend for Spring Boot and Microservices deployments from an integrated development environment (IDE) like VS Code.
 
@@ -18,7 +18,7 @@ You must have already installed and configured the following software which requ
 
 ## Installation
 
-1. Download the plug-in from [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0).
+1. Download the plug-in from [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.0).
 
 2. On the VS Code left menu bar, click on the **Extensions** symbol:
 
@@ -67,7 +67,7 @@ services, you cannot browse resources included in the Oracle Backend for Spring 
 
 1. Select the cluster and right-click, choosing **Set UID/PWD** menu item to insert credentials related to your user account. For example:
 
-   ![Credentials](./images/credentials.jpg)
+   ![Credentials](./images/credentials.png)
 
 2. Specify the **OBSBM Admin ID** for the Oracle Backend for Spring Boot and Microservices user for deployment. For example:
 
@@ -100,11 +100,6 @@ services, you cannot browse resources included in the Oracle Backend for Spring 
 			 The plugin tries to connect to the cluster on another local port.
 
 7. Select the cluster again and right-click **Connect**. This creates a session with the credentials set up in the first step.
-
-8. If your intention is to use the service provided by the Oracle Backend for Spring Boot and Microservice to compile the Spring Boot application via GraalVM and run a native service, you have to open another tunnel to the GraalVM compiler, choosing from the same menu used so far the **Create GraalVM tunnel** item. The final status should be as shown in this picture:
-
-   ![okTunnels](./images/graalvmtunnel.jpg)
-
 
 ### Explore Resources
 
