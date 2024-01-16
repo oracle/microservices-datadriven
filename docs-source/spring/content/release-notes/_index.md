@@ -2,6 +2,31 @@
 title: "Release Notes"
 ---
 
+## Version 1.1.0, February 2, 2024
+
+Notes: 
+
+* Platform components are updated to Spring Boot 3.2.1 versions.
+* A preview of a new "Spring Operations Center" feature is added.
+* xyz
+
+The following components were added:
+
+| Component                               | Version   | Description                                     |
+|-----------------------------------------|-----------|-------------------------------------------------|
+| Oracle Database Observability Exporter  | 1.1.2     | Provides observability for the Oracle Database. |
+
+The following components were updated:
+
+| Component                                                                     | New Version   | Replaced Version    |
+|-------------------------------------------------------------------------------|---------------|---------------------|
+| Oracle Backend for Spring Boot and Microservices Visual Studio Code extension | 1.1.0         | 1.0.1               |
+| Oracle Backend for Spring Boot and Microservices CLI                          | 1.1.0         | 1.0.1               |
+| Oracle Backend for Spring Boot and Microservices Visual Studio Code extension | 0.3.9         | 0.3.8               |
+| Oracle Transaction Manager for Microservices                                  | ?             | 22.3.2              |
+
+There were no component deprecations or removals.
+
 ## Version 1.0.1, November 2, 2023
 
 Notes:
