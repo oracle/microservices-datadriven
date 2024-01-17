@@ -3,6 +3,7 @@
 
 package com.example.accounts.controller;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -51,9 +53,14 @@ public class AccountController {
     public ResponseEntity<Account> createAccount(@RequestBody Account account) {
         try {
             Account newAccount = accountRepository.saveAndFlush(account);
-            return new ResponseEntity<>(newAccount, HttpStatus.CREATED);
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(newAccount.getAccountId())
+                    .toUri();
+            return ResponseEntity.created(location).build();
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(account, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

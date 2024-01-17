@@ -7,6 +7,7 @@ import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,7 @@ public class CreditScoreController {
      * @return Returns creditscore at current date
      */
     @GetMapping("/creditscore")
+    @Operation(summary = "Get a random creditscore at current date")
     public Map<String, String> getCreditScore() {
         log.debug("CREDITSCORE: getCreditScore");
         int max = 900;
