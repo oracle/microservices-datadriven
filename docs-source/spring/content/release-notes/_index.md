@@ -8,6 +8,8 @@ Notes:
 
 * Platform components are updated to Spring Boot 3.2.1 versions.
 * A preview of a new "Spring Operations Center" feature is added.
+* User Management using the CLI and REST Endpoints.
+* Bug fixes.
 * xyz
 
 The following components were added:
@@ -15,17 +17,28 @@ The following components were added:
 | Component                               | Version   | Description                                     |
 |-----------------------------------------|-----------|-------------------------------------------------|
 | Oracle Database Observability Exporter  | 1.1.2     | Provides observability for the Oracle Database. |
+| Metrics server | 0.64  | Source of container resource metrics for Kubernetes built-in autoscaling pipeline |
 
 The following components were updated:
 
 | Component                                                                     | New Version   | Replaced Version    |
 |-------------------------------------------------------------------------------|---------------|---------------------|
+| APISIX API Gateway | 3.8.0 | 3.4.0 |
+| Apache Kafka | 3.6.1 | 3.5.1 |
+| Coherence Operator | 3.3.2 | 3.2.11 |
+| Conductor Server | 3.13.8 | 3.13.2 |
+| HashiCorp Vault | 1.15.2  | 1.14.0 |
+| Netflix Conductor | 3.13.8 | 3.13.2 |
+| OpenTelemetry Collector | 0.91.0 | 0.86.0 |
 | Oracle Backend for Spring Boot and Microservices Visual Studio Code extension | 1.1.0         | 1.0.1               |
 | Oracle Backend for Spring Boot and Microservices CLI                          | 1.1.0         | 1.0.1               |
 | Oracle Backend for Spring Boot and Microservices Visual Studio Code extension | 0.3.9         | 0.3.8               |
-| Oracle Transaction Manager for Microservices                                  | ?             | 22.3.2              |
-
-There were no component deprecations or removals.
+| Oracle Transaction Manager for Microservices (MicroTx) | 23.4.1 | 22.3.2 |
+| Spring Authorization Server | 3.2.1 | 2.7.5 |
+| Spring Boot Admin dashboard | 3.2.0 |  3.1.3 |
+| Spring Cloud Config server | 2023.0.0 | 2022.0.4 |
+| Spring Cloud Eureka service registry | 2023.0.0 | 4.0.3 |
+| Strimzi-Apache Kafka operator | 0.39.0 | 0.36.1 |
 
 ## Version 1.0.1, November 2, 2023
 
