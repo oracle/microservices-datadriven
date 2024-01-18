@@ -108,7 +108,29 @@ The variables in this configuration are automatically injected to your deploymen
 
 ### Data Sources
 
-If your application uses a data source, then add the following configuration.  Note that this example shows Java Persistence API (JPA). If you are using JDBC you should use the appropriate configuration. For example:
+If your application uses an Oracle database as data source, then add the following to the 'pom.xml'. For more information about the [Oracle Spring Boot Starters](../starters/_index).
+
+```xml
+<dependency>
+  <groupId>com.oracle.database.spring</groupId>
+  <artifactId>oracle-spring-boot-starter-ucp</artifactId>
+  <version>23.4.0</version>
+  <type>pom</type>
+</dependency>
+```
+
+If the database requires a Wallet to access the database you must add the following to the `pom.xml` file:
+
+```xml
+<dependency>
+  <groupId>com.oracle.database.spring</groupId>
+  <artifactId>oracle-spring-boot-starter-wallet</artifactId>
+  <version>23.4.0</version>
+  <type>pom</type>
+</dependency>
+```
+
+ Add the following to application configuration. Note that this example shows Java Persistence API (JPA). If you are using JDBC you should use the appropriate configuration. For example:
 
 ```yaml
 spring:
