@@ -18,6 +18,8 @@ Table of Contents:
   * [Delete application namespace](#delete)
   * [Bind database schema/kubernetes secrets](#bind)
   * [Deploy a service](#deploy)
+  * [Create a horizontal pod autoscaler](#create-autoscaler)
+  * [Delete a horizontal pod autoscaler](#delete-autoscaler)
   * [List - show details about deployments](#list)
   * [Manage config server data](#config)
   * [GraalVM compile commands](#compile)
@@ -52,6 +54,10 @@ Admin Server Commands
 Application/Namespace Commands
        create: Create an application/namespace.
 
+Autoscaler Commands
+       create-autoscaler: Create an autoscaler.
+       delete-autoscaler: Delete an autoscaler.
+
 Built-In Commands
        help: Display help about available commands
        stacktrace: Display the full stacktrace of the last error.
@@ -76,6 +82,7 @@ Service Commands
        config: View and modify Service configuration.
        deploy: Deploy a service.
 
+
 Ask for Help
        Slack: https://oracledevs.slack.com/archives/C03ALDSV272
        E-mail: obaas_ww@oracle.com
@@ -90,6 +97,8 @@ The [`delete`](#delete) command results in the complete deletion of an applicati
 The [`bind`](#bind) command results in the automatic creation of a database schema for a given service or user and binds the information for that schema or database in the environment of the microservice. The option of a prefix for the bound environment properties is also returned. For example, most Spring Boot microservices use `spring.datasource`.
 
 The [`deploy`](#deploy) command takes `service-name`, `app-name`, and `artifact-path` as the main arguments (`image-version` and `java-version` options are also provided). When the `deploy` command is issued, the microservice JAR file is uploaded to the backend and a container image is created for the JAR or microservice, and various Kubernetes resources such as **Deployment** and **Service** are also created. This is all done automatically to simplify the development process and the management of the microservices by the backend.
+
+The [`create-autoscaler`](#create-autoscaler) and [`delete-autoscaler`](#delete-autoscaler) commands allow you to create and delete horizontal pod autoscalers for specific microservices.
 
 The [`list`](#list) command shows the details of the deployed microservices.
 
@@ -284,7 +293,7 @@ NAME
        deploy - Deploy a service.
 
 SYNOPSIS
-       deploy --redeploy boolean --bind String --app-name String [--service-name String] [--image-version String] --service-profile String --port String --java-version String --add-health-probe boolean --liquibase-db String [--artifact-path String] --initial-replicas int --graalvm-native boolean --help
+       deploy --redeploy boolean --bind String --app-name String [--service-name String] [--image-version String] --service-profile String --port String --java-version String --add-health-probe boolean --liquibase-db String [--artifact-path String] --initial-replicas int --cpu-request String --graalvm-native boolean --help
 
 OPTIONS
        --redeploy boolean
@@ -335,6 +344,10 @@ OPTIONS
        The initial number of replicas
        [Optional, default = 1]
 
+       --cpu-request String
+       The amount of CPU to request
+       [Optional, default = 500m]
+
        --graalvm-native boolean
        Artifact is a graalvm native compiled by Oracle Backend
        [Optional, default = false]
@@ -342,6 +355,7 @@ OPTIONS
        --help or -h
        help for deploy
        [Optional]
+
 
 Ask for Help
        Slack: https://oracledevs.slack.com/archives/C03ALDSV272
@@ -362,6 +376,104 @@ Ask for Help
    ```cmd
    oractl:>deploy --app-name cloudn --service-name account --artifact-path obaas/myserv/target/accounts-0.0.1-SNAPSHOT.jar.exec --image-version 0.0.1 --graalvm-native --java-version container-registry.oracle.com/os/oraclelinux:7-slim
    ```
+
+### create-autoscaler
+
+Use the `create-autoscaler` command to create a horizontal pod autoscaler for a microservice you have deployed.  You can specify the target scaling threshold using CPU percentage.  Note that your microservice must have its CPU request set in order to use the autoscaler.  It is set to `500m` (that is, half a core) by the `deploy` command if you did not override the default.
+
+```cmd
+oractl:>help create-autoscaler
+NAME
+       create-autoscaler - Create an autoscaler.
+
+SYNOPSIS
+       create-autoscaler --app-name String [--service-name String] --min-replicas int --max-replicas int --cpu-percent int --help
+
+OPTIONS
+       --app-name String
+       application/namespace
+       [Optional, default = application]
+
+       --service-name String
+       Service Name
+       [Mandatory]
+
+       --min-replicas int
+       The minimium number of replicas
+       [Optional, default = 1]
+
+       --max-replicas int
+       The maximum number of replicas
+       [Optional, default = 4]
+
+       --cpu-percent int
+       The CPU percent at which to scale
+       [Optional, default = 80]
+
+       --help or -h
+       help for create-autoscaler
+       [Optional]
+
+
+Ask for Help
+       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+       E-mail: obaas_ww@oracle.com
+```
+
+For example:
+
+```cmd
+oractl:>create-autoscaler --app-name application --service-name creditscore --cpu-percent 80 --min-replicas 2 --max-replicas 6
+obaas-cli [create-autoscaler]: Autoscaler was successfully created.
+```
+
+You can view the details of the autoscaler using `kubectl`, for example: 
+
+```cmd
+$ kubectl -n application get hpa
+NAME          REFERENCE                TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+creditscore   Deployment/creditscore   0%/80%    2         6         2          26s
+customer      Deployment/customer      4%/80%    2         6         2          26h
+
+```
+
+### delete-autoscaler
+
+Use the `delete-autoscaler` command to delete a horizontal pod autoscaler for a microservice you have deployed.
+
+```cmd
+oractl:>help delete-autoscaler
+NAME
+       delete-autoscaler - Delete an autoscaler.
+
+SYNOPSIS
+       delete-autoscaler --app-name String [--service-name String] --help
+
+OPTIONS
+       --app-name String
+       application/namespace
+       [Optional, default = application]
+
+       --service-name String
+       Service Name
+       [Mandatory]
+
+       --help or -h
+       help for delete-autoscaler
+       [Optional]
+
+
+Ask for Help
+       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+       E-mail: obaas_ww@oracle.com
+```
+
+For example:
+
+```cmd
+oractl:>delete-autoscaler --app-name application --service-name creditscore
+obaas-cli [delete-autoscaler]: Autoscaler was successfully deleted.
+```
 
 ### list
 
