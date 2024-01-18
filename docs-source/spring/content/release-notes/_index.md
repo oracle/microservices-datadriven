@@ -1,5 +1,7 @@
 ---
 title: "Release Notes"
+description: "Release notes for Oracle Backend for Spring Boot and Microservices including details of additions, updates, deprecations and removals in each release"
+keywords: "releasenotes additions updates deprecations removals springboot spring development microservices development oracle backend"
 ---
 
 ## Version 1.1.0, February 2, 2024

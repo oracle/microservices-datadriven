@@ -1,5 +1,7 @@
 ---
 title: "Setup"
+description: "Setup Oracle Backend for Spring Boot and Microservices"
+keywords: "setup install springboot spring development microservices development oracle backend"
 resources:
   - name: oci-private-templates
     src: "oci-private-templates.png"

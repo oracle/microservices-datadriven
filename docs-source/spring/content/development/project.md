@@ -1,5 +1,7 @@
 ---
 title: "Project Structure"
+description: "How to structure your Spring Boot application for deployment in Oracle Backend for Spring Boot and Microservices"
+keywords: "spring springboot microservices development oracle backend"
 ---
 
 To take advantage of the built-in platform services, Oracle recommends using the following project structure.

@@ -1,5 +1,7 @@
 ---
 title: "OBaaS CLI"
+description: "Command Line Interface for Oracle Backend for Spring Boot and Microservices"
+keywords: "cli tool deployment spring springboot microservices development oracle backend"
 ---
 
 The Oracle Backend for Spring Boot and Microservices offers a command-line interface (CLI), `oractl`. The CLI commands simplify the deployment of

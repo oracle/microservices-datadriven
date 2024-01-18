@@ -1,5 +1,7 @@
 ---
 title: "Service Discovery"
+description: "Service discovery with Spring Eureka Service Registry in Oracle Backend for Spring Boot and Microservices"
+keywords: "service discovery registry eureka springboot spring development microservices oracle backend"
 resources:
   - name: obaas-eureka-dashboard
     src: "obaas-eureka-dashboard.png"

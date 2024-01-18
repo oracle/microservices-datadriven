@@ -12,3 +12,17 @@
 {{- with $keywords }}
   <meta name="keywords" content="{{ delimit . "," }}" />
 {{- end }}
+
+{{ if .Page.Params.Noindex }}
+  <meta name="robots" content="noindex" />
+{{ else }}
+  <meta name="robots" content="index, follow" />
+{{ end }}
+
+<meta name="siteid" content="us" />
+<meta name="countryid" content="US" />
+<meta name="country" content="United States" />
+<meta name="Language" content="en" />
+
+
+

@@ -1,5 +1,7 @@
 ---
 title: "Vault"
+description: "Securing secrets with Vault in Oracle Backend for Spring Boot and Microservices"
+keywords: "vault secrets security springboot spring development microservices development oracle backend"
 resources:
   - name: vault-login
     src: "vault-login.png"

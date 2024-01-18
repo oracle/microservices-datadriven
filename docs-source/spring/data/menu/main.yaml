@@ -3,7 +3,7 @@ main:
     ref: "/setup"
   - name: "Multi-Cloud (OCI/Azure) Installation"
     ref: "/azure"
-  - name: "On-Premises Installation"
+  - name: "Custom Installations"
     ref: "/on-premises"
     sub:
       - name: "MacOS Ventura (x86)"

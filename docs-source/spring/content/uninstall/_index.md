@@ -1,6 +1,7 @@
 ---
 title: "Uninstall"
-description: Uninstall the Oracle BaaS from tenancy"
+description: "Uninstall Oracle Backend for Spring Boot and Microservices"
+keywords: "uninstall backend oracle springboot spring development microservices database"
 resources:
   - name: oci-stack-destroy
     src: "oci-stack-destroy.png"

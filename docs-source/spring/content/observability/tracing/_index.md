@@ -1,7 +1,8 @@
 ---
 title: "Jaeger Tracing"
 linkTitle: Jaeger Tracing
-description: "Configure Jaeger to capture application traces"
+description: "Tracing with Open Telemetry for Spring Boot applications with the Oracle Backend for Spring Boot and Microservices"
+keywords: "observability tracing opentelemetry spring springboot microservices development oracle backend"
 resources:
   - name: obaas-jaeger-ui
     src: "obaas-jaeger-ui.png"

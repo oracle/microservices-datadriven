@@ -1,5 +1,7 @@
 ---
 title: "Development"
+description: "How to develop and deploy Spring Boot applications with the Oracle Backend for Spring Boot and Microservices"
+keywords: "spring springboot microservices development oracle backend"
 ---
 
 This section provides information about how to develop and deploy Spring Boot applications with the Oracle Backend for Spring Boot and Microservices.

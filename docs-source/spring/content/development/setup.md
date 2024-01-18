@@ -1,3 +1,7 @@
+---
+description: "How to set up your development environment to build Spring Boot applications with the Oracle Backend for Spring Boot and Microservices"
+keywords: "development environment setup spring springboot microservices oracle backend java maven gradle ide tools"
+---
 
 This page provides details on how to set up your development environment to work with
 Oracle Backend for Spring Boot and Microservices. 

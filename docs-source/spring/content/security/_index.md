@@ -1,5 +1,7 @@
 ---
 title: "Security"
+description: "Security in Oracle Backend for Spring Boot and Microservices"
+keywords: "security authentication authorization encryption certificates springboot spring development microservices development oracle backend"
 ---
 
 The Oracle Backend for Spring Boot and Microservices has the following security characteristics:

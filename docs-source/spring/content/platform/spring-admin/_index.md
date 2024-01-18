@@ -1,5 +1,7 @@
 ---
 title: "Spring Boot Admin"
+description: "Using Spring Boot Admin to manage applications in Oracle Backend for Spring Boot and Microservices"
+keywords: "admin springboot spring development microservices development oracle backend"
 resources:
   - name: obaas-springadmin-apps
     src: "obaas-springadmin-apps.png"

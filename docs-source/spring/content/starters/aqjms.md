@@ -1,5 +1,7 @@
 ---
 title: "Oracle Spring Boot Starter for AQ/JMS"
+description: "Spring Boot Starters for Advanced Queueing, Transactional Event Queues using JMS in Oracle Database"
+keywords: "starter springboot jms aq txeventq queueing messaging asynchronous spring development microservices development oracle database"
 ---
 
 This starter provides support for Oracle Transactional Event Queues (TxEventQ) and Oracle Advanced Queuing (AQ)

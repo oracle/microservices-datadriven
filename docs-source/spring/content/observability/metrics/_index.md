@@ -1,5 +1,7 @@
 ---
 title: "Metrics"
+description: "Prometheus metrics and Grafana dashboards for Spring Boot applications with the Oracle Backend for Spring Boot and Microservices"
+keywords: "observability metrics prometheus grafana spring springboot microservices development oracle backend"
 resources:
   - name: metrics
     src: "metrics.png"

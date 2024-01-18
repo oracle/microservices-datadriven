@@ -1,5 +1,7 @@
 ---
 title: "Predefined Variables"
+description: "Predefined environment variables in Oracle Backend for Spring Boot and Microservices"
+keywords: "predfeined variables spring springboot microservices development oracle backend"
 ---
 
 When you deploy a Spring Boot application using the Oracle Backend for Spring Boot and Microservices CLI or Visual Code extension, a number of predefined environment variables will be injected into the pod definition. You may reference any of these variables in your application.
@@ -23,8 +25,8 @@ Variable name                          | Example value  | Notes
 `config.server.url`                    | `http://config-server.config-server.svc.cluster.local:8080` | This is the URL of the Spring Config Server provided by the platform.
 `liquibase.datasource.username`        | set to the key `db.username` in secret `admin-liquibasedb-secrets` | This sets the (admin) user that should be used to run Liquibase, if used in your service.
 `liquibase.datasource.password`        | set to the key `db.password` in secret `admin-liquibasedb-secrets` | This sets the (admin) user's password that should be used to run Liquibase, if used in your service.
-`spring.datasource.username`           | set to the key `db.username` in secret `customer32-db-secrets` | This sets the (regular) user for your applciation to use to connect to the database (if you use JPA or JDBC in your application).
-`spring.datasource.password`:          | set to the key `db.password` in secret `customer32-db-secrets` | This sets the (regular) user's password for your applciation to use to connect to the database (if you use JPA or JDBC in your application).
-`DB_SERVICE`                           | set to the key `db.service` in secret `customer32-db-secrets` | This sets the database service name (the TNS name) for your applciation to use to connect to the database (if you use JPA or JDBC in your application).
-`spring.datasource.url`                | `jdbc:oracle:thin:@$(DB_SERVICE)?TNS_ADMIN=/oracle/tnsadmin` | This sets the data source URL for your applciation to use to connect to the database (if you use JPA or JDBC in your application).
-`CONNECT_STRING`                       | `jdbc:oracle:thin:@$(DB_SERVICE)?TNS_ADMIN=/oracle/tnsadmin` | This sets the data source URL for your applciation to use to connect to the database (if you use JPA or JDBC in your application).
+`spring.datasource.username`           | set to the key `db.username` in secret `customer32-db-secrets` | This sets the (regular) user for your application to use to connect to the database (if you use JPA or JDBC in your application).
+`spring.datasource.password`:          | set to the key `db.password` in secret `customer32-db-secrets` | This sets the (regular) user's password for your application to use to connect to the database (if you use JPA or JDBC in your application).
+`DB_SERVICE`                           | set to the key `db.service` in secret `customer32-db-secrets` | This sets the database service name (the TNS name) for your application to use to connect to the database (if you use JPA or JDBC in your application).
+`spring.datasource.url`                | `jdbc:oracle:thin:@$(DB_SERVICE)?TNS_ADMIN=/oracle/tnsadmin` | This sets the data source URL for your application to use to connect to the database (if you use JPA or JDBC in your application).
+`CONNECT_STRING`                       | `jdbc:oracle:thin:@$(DB_SERVICE)?TNS_ADMIN=/oracle/tnsadmin` | This sets the data source URL for your application to use to connect to the database (if you use JPA or JDBC in your application).

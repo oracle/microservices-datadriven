@@ -1,5 +1,7 @@
 ---
 title: "Spring Config Server"
+description: "Externalized configuration using Spring Config Server in Oracle Backend for Spring Boot and Microservices"
+keywords: "config configserver springboot spring development microservices development oracle backend"
 ---
 
 Oracle Backend for Spring Boot and Microservices includes Spring Cloud Config which provides server- and client-side support for externalized configurations in a distributed system. The Spring Cloud Config server provides a central place to manage external properties for applications across all environments.

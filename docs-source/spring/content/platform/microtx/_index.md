@@ -1,5 +1,7 @@
 ---
 title: "MicroTx"
+description: "Transaction coordination and data consistency across microservices using MicroTx in Oracle Backend for Spring Boot and Microservices"
+keywords: "transactions xz lra tcc microtx consistency coordination orchestration springboot spring development microservices development oracle backend"
 ---
 
 [Oracle Transaction Manager for Microservices](https://www.oracle.com/database/transaction-manager-for-microservices/), also known as "MicroTx", simplifies application development and operations by enabling distributed transactions to ensure consistency across microservices deployed in Kubernetes.
