@@ -52,6 +52,8 @@ main:
         ref: "/development/setup"
       - name: Project Structure
         ref: "/development/project"
+      - name: Predefined Variables
+        ref: "/development/envvars"
   - name: Spring Boot Starters
     ref: "/starters"
     sub:
