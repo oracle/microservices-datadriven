@@ -19,7 +19,7 @@ curl http://localhost:9180/apisix/admin/routes \
     },
     "uri": "/api/v1/account*",
     "upstream": {
-        "service_name": "ACCOUNTS",
+        "service_name": "ACCOUNT",
         "type": "roundrobin",
         "discovery_type": "eureka"
     },
