@@ -30,9 +30,8 @@ The following components were updated:
 | HashiCorp Vault | 1.15.2  | 1.14.0 |
 | Netflix Conductor | 3.13.8 | 3.13.2 |
 | OpenTelemetry Collector | 0.91.0 | 0.86.0 |
-| Oracle Backend for Spring Boot and Microservices Visual Studio Code extension | 1.1.0         | 1.0.1               |
 | Oracle Backend for Spring Boot and Microservices CLI                          | 1.1.0         | 1.0.1               |
-| Oracle Backend for Spring Boot and Microservices Visual Studio Code extension | 0.3.9         | 0.3.8               |
+| Oracle Backend for Spring Boot and Microservices Visual Studio Code extension | 1.1.0         | 1.0.1               |
 | Oracle Transaction Manager for Microservices (MicroTx) | 23.4.1 | 22.3.2 |
 | Spring Authorization Server | 3.2.1 | 2.7.5 |
 | Spring Boot Admin dashboard | 3.2.0 |  3.1.3 |
