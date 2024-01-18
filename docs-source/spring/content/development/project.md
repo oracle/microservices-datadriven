@@ -8,8 +8,8 @@ To take advantage of the built-in platform services, Oracle recommends using the
 
 Recommended versions:
 
-* Spring Boot 3.1.6
-* Spring Cloud 2022.0.4
+* Spring Boot 3.2.x
+* Spring Cloud 2023.x.x
 * Java 17 or 21
 
 Table of Contents:
@@ -20,6 +20,7 @@ Table of Contents:
   * [Liquibase](#liquibase)
   * [Oracle Transaction Manager for Microservices](#oracle-transaction-manager-for-microservices)
   * [Spring Config Server](#spring-config-server)
+  * [Tracing](#tracing)
 
 ## Dependencies
 
@@ -29,8 +30,8 @@ Oracle recommends adding the following dependencies to your application so that 
 <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>17</java.version>
-    <spring.boot.dependencies.version>3.1.6</spring.boot.dependencies.version>
-    <spring-cloud.version>2022.0.4</spring-cloud.version>
+    <spring.boot.dependencies.version>3.2.1</spring.boot.dependencies.version>
+    <spring-cloud.version>2023.0.0</spring-cloud.version>
 </properties>
 
 <dependencies>
@@ -80,8 +81,6 @@ Oracle recommends the following configuration in order for the application to ac
 spring:
   application:
     name: account
-  zipkin:
-    base-url: ${zipkin.base-url}
 
 eureka:
   instance:
@@ -111,7 +110,29 @@ The variables in this configuration are automatically injected to your deploymen
 
 ### Data Sources
 
-If your application uses a data source, then add the following configuration.  Note that this example shows Java Persistence API (JPA). If you are using JDBC you should use the appropriate configuration. For example:
+If your application uses an Oracle database as data source, then add the following to the 'pom.xml'. For more information about the [Oracle Spring Boot Starters](../starters/_index).
+
+```xml
+<dependency>
+  <groupId>com.oracle.database.spring</groupId>
+  <artifactId>oracle-spring-boot-starter-ucp</artifactId>
+  <version>23.4.0</version>
+  <type>pom</type>
+</dependency>
+```
+
+If the database requires a Wallet to access the database you must add the following to the `pom.xml` file:
+
+```xml
+<dependency>
+  <groupId>com.oracle.database.spring</groupId>
+  <artifactId>oracle-spring-boot-starter-wallet</artifactId>
+  <version>23.4.0</version>
+  <type>pom</type>
+</dependency>
+```
+
+ Add the following to application configuration. Note that this example shows Java Persistence API (JPA). If you are using JDBC you should use the appropriate configuration. For example:
 
 ```yaml
 spring:
@@ -146,7 +167,7 @@ If you are using Liquibase to manage your database schema and data, then you sho
 
 ```xml
 <properties>
-    <liquibase.version>4.25.0</liquibase.version>
+    <liquibase.version>4.25.1</liquibase.version>
 </properties>
 
 <dependencies>
@@ -214,6 +235,67 @@ Add the following configuration to your Spring application configuration. The va
 
 ```yaml
 spring:
+  application:
+    name: <application name>
   config:
-    import=optional:configserver:${config.server.url}
+    import: optional:configserver:${config.server.url} 
+
+  cloud:
+     config:
+       label: <optional>
+       profile: <optional>
+       username: <A user with the role ROLE_USER>
+       password: <password>
+```
+
+## Tracing
+
+### Application Tracing
+
+To enable Open Telemetry (OTEL) tracing you need to add the following dependencies to the `pom/xml` file.
+
+```xml
+<dependency>
+    <groupId>io.micrometer</groupId>
+    <artifactId>micrometer-tracing-bridge-otel</artifactId>
+</dependency>
+<dependency>
+    <groupId>io.opentelemetry</groupId>
+    <artifactId>opentelemetry-exporter-otlp</artifactId>
+</dependency>
+<dependency>
+    <groupId>io.micrometer</groupId>
+    <artifactId>micrometer-tracing</artifactId>
+</dependency>
+```
+
+In addition add the following to the application configuration. The variable in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Spring Boot and Microservices CLI or the Visual Studio Code Extension to deploy your application. For example:
+
+```yaml
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  info:
+    os:
+      enabled: true
+    env:
+      enabled: true
+    java:
+      enabled: true
+  otlp:
+    tracing:
+      endpoint: ${otel.exporter.otlp.endpoint}
+```
+
+### Database tracing
+
+To get tracing for the database calls you need to add the following dependency to the `po.xml` file:
+
+```xml
+<dependency>
+    <groupId>net.ttddyy.observation</groupId>
+    <artifactId>datasource-micrometer-spring-boot</artifactId>
+    <version>$1.0.2</version>
+</dependency>
 ```
