@@ -18,8 +18,8 @@ Variable name                          | Example value  | Notes
 `eureka.client.register-with-eureka`   | `true`         | This tells the Eureka discovery client to register with the Eureka server.
 `eureka.client.fetch-registry`         | `true`         | This tells the Eureka discovery client to make a local copy of the registry by fetching it from the Eureka server.
 `eureka.client.service-url.defaultZone` | `http://eureka.eureka:8761/eureka` | This is the default zone for the Eureka discovery client.
-`zipkin.base-url`                      | `http://jaegertracing-collector.observability:9411` | This is the URL of the Zipkin-compatible trace collector which can be used by your application to send trace data to the platform.
-`otel.exporter.otlp.endpoint`          | `http://open-telemetry-opentelemetry-collector.open-telemetry:4317` | This is the URL of the OpenTelemetry (OTLP protocol) trace collector which can be used by your application to send trace data to the platform.
+`zipkin.base-url`                      | `http://jaegertracing-collector.observability.svc.cluster.local:9411/api/v2/spans` | This is the URL of the Zipkin-compatible trace collector which can be used by your application to send trace data to the platform.
+`otel.exporter.otlp.endpoint`          | `http://open-telemetry-opentelemetry-collector.open-telemetry:4318/v1/traces` | This is the URL of the OpenTelemetry (OTLP protocol) trace collector which can be used by your application to send trace data to the platform.
 `config.server.url`                    | `http://config-server.config-server.svc.cluster.local:8080` | This is the URL of the Spring Config Server provided by the platform.
 `liquibase.datasource.username`        | set to the key `db.username` in secret `admin-liquibasedb-secrets` | This sets the (admin) user that should be used to run Liquibase, if used in your service.
 `liquibase.datasource.password`        | set to the key `db.password` in secret `admin-liquibasedb-secrets` | This sets the (admin) user's password that should be used to run Liquibase, if used in your service.

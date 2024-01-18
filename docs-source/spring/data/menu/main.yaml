@@ -29,6 +29,8 @@ main:
         ref: "/platform/spring-admin"
       - name: OBaaS CLI
         ref: "/development/cli"
+      - name: MicroTx
+        ref: "/platform/microtx"
       - name: Vault
         ref: "/platform/vault"
       - name: VS Code plugin
