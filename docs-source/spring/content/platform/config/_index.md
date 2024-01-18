@@ -17,8 +17,17 @@ When building applications using Spring Config Server, the Spring Cloud Config c
 
 ```yaml
 spring:
+  application:
+    name: <application name>
   config:
-    import: optional:configserver:${config.server.url}
+    import: optional:configserver:${config.server.url} 
+
+  cloud:
+     config:
+       label: <optional>
+       profile: <optional>
+       username: <A user with the role ROLE_USER>
+       password: <password>
 ```
 
 You also need to add the following dependency to your Spring Boot application `pom.xml`:
