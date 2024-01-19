@@ -8,7 +8,7 @@ keywords: "release notes additions updates deprecations removals springboot spri
 
 Notes:
 
-* Recommended Spring Boot versions for user applications updated from 2.7.x to 3.2.x, and matching Java, Spring Cloud and Spring versions.
+* Recommended versions for user applications updated Spring Boot 3.2.x, Java 17 or 21, Spring 6.1 and Spring Cloud 2023.0.0, with limited backwards compatibility for Spring Boot 2.7.x.
 * Platform components are updated to Spring Boot 3.2.1 versions and matching Spring Cloud versions.
 * A preview of a new "Spring Operations Center" feature is added, including a web user interface and additional Grafana dashboards.
 * User Management using the CLI and REST Endpoints.
