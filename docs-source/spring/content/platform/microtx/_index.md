@@ -14,11 +14,11 @@ MicroTx supports the following consistency models:
 - Long Running Actions (LRA)
 - Try-Confirm/Cancel (TCC)
 
-The [CloudBank sample application](../../#learn-more-try-it-out-with-cloudbank) includes a "Transfer" service which demonstrates how to use MicroTx to implement the Saga pattern using the Eclipse Microprofile Long Running Actions specification. 
+The [CloudBank sample application](../../#learn-more-try-it-out-with-cloudbank) includes a "Transfer" service which demonstrates how to use MicroTx to implement the Saga pattern using the Eclipse Microprofile Long Running Actions specification.
 
 To use MicroTx in your Spring Boot applications, include the following dependency in your `pom.xml` or equivalent:
 
-```
+```xml
 <dependency>
     <groupId>com.oracle.microtx.lra</groupId>
     <artifactId>microtx-lra-spring-boot-starter-3x</artifactId>
@@ -28,7 +28,7 @@ To use MicroTx in your Spring Boot applications, include the following dependenc
 
 Add the following configuration to your Spring application configuration. The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Spring Boot and Microservices CLI or the Visual Studio Code Extension to deploy your application. For example:
 
-```
+```yaml
 spring:
   microtx:
     lra:
@@ -43,4 +43,4 @@ lra:
 
 ## Upgrading to the commercial version
 
-If you have licensed Oracle Transaction Manager for Microservices Enterprise Edition, please see the [documentation](https://docs.oracle.com/en/database/oracle/transaction-manager-for-microservices/23.4.1/index.html) for details of how to install and configure MicroTx.  Oracle recommnds that you perform a new installation rather than attempting to upgrade the provided MicroTx Free installation to the commercial version.
+If you have licensed Oracle Transaction Manager for Microservices Enterprise Edition, please see the [documentation](https://docs.oracle.com/en/database/oracle/transaction-manager-for-microservices/23.4.1/index.html) for details of how to install and configure MicroTx.  Oracle recommends that you perform a new installation rather than attempting to upgrade the provided MicroTx Free installation to the commercial version.

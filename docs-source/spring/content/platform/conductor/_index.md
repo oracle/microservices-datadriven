@@ -23,7 +23,7 @@ Documentation on Conductor can be found here:
     kubectl port-forward services/conductor-server -n conductor-server 8080:8080
     ```
 
-2. Access the Conductor server UI at this URL:
+1. Access the Conductor server UI at this URL:
 
     ```shell
     http://localhost:8080
@@ -33,7 +33,7 @@ Documentation on Conductor can be found here:
 {{< img name="conductor_server_ui" size="medium" lazy=false >}}
 <!-- spellchecker-enable -->
 
-3. Access the Swagger documentation at this URL:
+1. Access the Swagger documentation at this URL:
 
     ```shell
     http://localhost:8080/swagger-ui/index.html
@@ -48,4 +48,3 @@ Documentation on Conductor can be found here:
 The API Specification can be found here:
 
 * [API Specification](https://conductor.netflix.com/apispec.html)
-

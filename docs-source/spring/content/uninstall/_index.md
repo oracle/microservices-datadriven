@@ -31,5 +31,3 @@ The OCI Resource Manager uses the stack definition to destroy all resources. For
 
 The destroy job takes about 20 minutes to complete. Review the logs when the job is done to ensure that it completed successfully. If there are
 any errors, run the **Destroy** job again.
-
-

@@ -1,9 +1,10 @@
 ---
 title: "Oracle Spring Boot Starter for Universal Connection Pool"
+keywords: "starter springboot datasource ucp spring development microservices development oracle database"
 ---
 
 This starter provides a connection (data source) to an Oracle Database using Universal Connection Pool, which provides an efficient way
-to use database connections. 
+to use database connections.
 
 To add this starter to your project, add this Maven dependency:
 
@@ -17,7 +18,7 @@ To add this starter to your project, add this Maven dependency:
 
 For Gradle projects, add this dependency:
 
-```
+```gradle
 implementation 'com.oracle.database.spring:oracle-spring-boot-starter-ucp:23.4.0'
 ```
 
@@ -54,11 +55,9 @@ spring:
 ```
 
 The `spring.datasource.url` can be in the basic format (as previously shown), or in TNS format if your application
-uses Transparent Network Substrate (TNS). 
+uses Transparent Network Substrate (TNS).
 
-Note that the connections to the database use the `DEDICATED` server by default.  If you wish to use `SHARED`
-or `POOLED`, you can append that to the basic URL, or add it to the TNS names entry.  For example, to use 
-database resident pooled connections, you would change the URL shown in the previsou example to the following: 
+Note that the connections to the database use the `DEDICATED` server by default.  If you wish to use `SHARED` or `POOLED`, you can append that to the basic URL, or add it to the TNS names entry.  For example, to use database resident pooled connections, you would change the URL shown in the previous example to the following:
 
 ```yaml
   datasource:
@@ -67,7 +66,7 @@ database resident pooled connections, you would change the URL shown in the prev
 
 If you are using TNS, add `server=pooled` to the `connect_data`. For example:
 
-```
+```text
 mydb_tp = (description=
  (retry_count=20)
  (retry_delay=3)
@@ -100,4 +99,3 @@ public class DataSourceConfiguration {
     }
 }
 ```
-
