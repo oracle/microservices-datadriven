@@ -8,11 +8,19 @@ keywords: "release notes additions updates deprecations removals springboot spri
 
 Notes:
 
-* Platform components are updated to Spring Boot 3.2.1 versions.
-* A preview of a new "Spring Operations Center" feature is added.
+* Recommended Spring Boot versions for user applications updated from 2.7.x to 3.2.x, and matching Java, Spring Cloud and Spring versions.
+* Platform components are updated to Spring Boot 3.2.1 versions and matching Spring Cloud versions.
+* A preview of a new "Spring Operations Center" feature is added, including a web user interface and additional Grafana dashboards.
 * User Management using the CLI and REST Endpoints.
+* Added support for auto-scaling of Spring Boot applications deployed in the platform.
+* Changes to the custom installation to allow using existing resources including database, network and Kubernetes.
+* Various platform services updated to use Database Resident Connection Pooling to improve performance.
+* Improvements to collection of trace data using Open Telemetry, including migration to agentless approach,
+  uptake of Micrometer, and so on.
+* Improvements for Spring Native/GraalVM native image compilation of Spring Boot services.
+* Improvements to CLI to support scripting.
+* Various components updated to newer releases.
 * Bug fixes.
-* xyz
 
 The following components were added:
 
@@ -20,6 +28,7 @@ The following components were added:
 |-----------------------------------------|-----------|-------------------------------------------------|
 | Oracle Database Observability Exporter  | 1.1.2     | Provides observability for the Oracle Database. |
 | Metrics server | 0.64  | Source of container resource metrics for Kubernetes built-in autoscaling pipeline |
+| Kube State Metrics                      | 2.10.1    | Collects metrics for the Kubernetes cluster     |
 
 The following components were updated:
 
