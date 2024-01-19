@@ -212,23 +212,21 @@ Choosing this item menu, the parameters will be required are:
 
 2. **Service Name**  
 
-3. **Spring Binding Prefix** (Default: `spring.datasource`)
-
-4. **Do you want to bind a schema? : [True]/[False]** (Default: `True`)
-
-5. **Bind :[True]/[False]** (Default: `True`)
+3. **Bind [jms]** (Default: ``)
 
 6. **Service Port** (Default: `8080`)
 
 7. **Service Profile** (Default: `obaas`)
 
-8. **Image Version** (Default: `0.1`)
+8. **Image Version** (Default: `0.0.1`)
 
 9. **Initial Replicas** (Default: `1`)
 
-10. **Redeploy?: [True]/[False]** (Default: `True`)
+10. **CPU request [default = 500m]** (Default: `500m`)
 
-11. **Add Health probe? : [True]/[False]** (Default: `True`)
+11. **Redeploy?: [True]/[False]** (Default: `True`)
+
+12. **Add Health probe? : [True]/[False]** (Default: `True`)
 
 At the end of the parameters collection, a process, that includes the .exec file upload, building image and deploying, starts. It generates a sequence of messages showing the status. These messages end with "Service deployed successfully!" or "Deploy failed". The size and network constraints determine the amount of time for the process to terminate.
 
@@ -240,13 +238,11 @@ Choosing this item menu, selecting a single application, the parameters will be 
 
 1. A popup dialog box opens to select the local Spring Boot **.jar file**
 
-2. **Do you want to bind a schema? : [True]/[False]** (Default: `True`)
+2. **Service Name**
 
-3. **Service Name**
+3. **Bind [jms]** (Default: ``)
 
-4. **Spring Binding prefix** (Default: `spring.datasource`)
-
-5. **Image Version** (Default: `0.1`)
+5. **Image Version** (Default: `0.0.1`)
 
 6. **Java image** (Default: `ghcr.io/graalvm/jdk:ol7-java17-22.2.0`)
 
@@ -260,7 +256,9 @@ Choosing this item menu, selecting a single application, the parameters will be 
 
 11. **Initial Replicas** (Default: `1`)
 
-12. **Inform the database name for Liquibase**: username for Liquibase.
+12. **CPU request [default = 500m]** (Default: `500m`)
+
+13. **Inform the database name for Liquibase**: username for Liquibase.
 
 At the end of the parameters collection, a process, that includes the .jar upload, building image and deploying, starts. It generates a sequence of messages showing the status. These messages end with "Service deployed successfully!" or "Deploy failed". The size and network constraints determine the amount of time for the process to terminate.
 
@@ -280,12 +278,23 @@ This command removes the application and all the services included. At the end o
 ### Service level commands
 With a right click on a single service you will have the following commands:
 
+* **Create autoscaler**
+* **Delete autoscaler**
 * **Delete service**
 * **Publish service**
 
 as shown here:
 
    ![Service Commands](./images/servicecommands.jpg)
+
+#### Create autoscaler
+Create a Kubernetes autoscaler for the selected pod.
+1. **minReplicas** (Default: `1`)
+1. **maxReplicas** (Default: `1`)
+1. **cpuPercent** (Default: ``)
+
+#### Delete autoscaler
+Delete an existing autoscaler
 
 #### Delete service
 Selecting the service from the tree, under a specific application, you will remove the service deployment, and the active pods will be removed.
