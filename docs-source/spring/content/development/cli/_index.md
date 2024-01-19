@@ -48,17 +48,15 @@ Short descriptions for the available commands can be viewed by issuing the `help
 commands can be viewed by issuing `help [command-name]`. For example:
 
 ```cmd
+oractl:>help
 AVAILABLE COMMANDS
 
-Admin Server Commands
-       connect: Connect to the OBaaS Spring Cloud admin console.
-
 Application/Namespace Commands
-       create: Create an application/namespace.
+       * create: Create an application/namespace.
 
 Autoscaler Commands
-       create-autoscaler: Create an autoscaler.
-       delete-autoscaler: Delete an autoscaler.
+       * create-autoscaler: Create an autoscaler.
+       * delete-autoscaler: Delete an autoscaler.
 
 Built-In Commands
        help: Display help about available commands
@@ -70,20 +68,32 @@ Built-In Commands
        script: Read and execute commands from a file.
 
 GraalVM Compile Commands
-       compile-download: Download executable file compiled
-       compile: Compile a service with GraalVM
-       compile-purge: Delete a job launched
-       compile-logs: Compilation progress
+       * compile-download: Download executable file compiled
+       * compile: Compile a service with GraalVM
+       * compile-purge: Delete a job launched
+       * compile-logs: Compilation progress
+
+Identity and Access Management Service
+       * user list: Lists the users in your platform.
+       * user create: Creates a new user in your platform.
+       * user get: Gets the specified user’s information.
+       * user delete: Delete a user in your platform.
+       * user change-roles: Change the roles from the specified user.
+       connect: Connect to the OBaaS Admin Service.
+       * user change-password: Change password for the specified user.
 
 Informational Commands
-       list: list/show details of application services.
+       * list: list/show details of application services.
 
 Service Commands
-       bind: Create or Update a schema/user and bind it to service deployment.
-       delete: Delete a service or entire application/namespace.
-       config: View and modify Service configuration.
-       deploy: Deploy a service.
+       * bind: Create or Update a schema/user and bind it to service deployment.
+       * delete: Delete a service or entire application/namespace.
+       * config: View and modify Service configuration.
+       * deploy: Deploy a service.
 
+
+Commands marked with (*) are currently unavailable.
+Type `help <command>` to learn more.
 
 Ask for Help
        Slack: https://oracledevs.slack.com/archives/C03ALDSV272
@@ -295,13 +305,9 @@ NAME
        deploy - Deploy a service.
 
 SYNOPSIS
-       deploy --redeploy boolean --bind String --app-name String [--service-name String] [--image-version String] --service-profile String --port String --java-version String --add-health-probe boolean --liquibase-db String [--artifact-path String] --initial-replicas int --cpu-request String --graalvm-native boolean --help
+       deploy --bind String --app-name String [--service-name String] [--image-version String] --service-profile String --port String --java-version String --add-health-probe boolean --liquibase-db String [--artifact-path String] --initial-replicas int --cpu-request String --graalvm-native boolean --apigw boolean --route String --apikey String --help
 
 OPTIONS
-       --redeploy boolean
-       whether the service has already been deployed or not
-       [Optional, default = false]
-
        --bind String
        automatically create and bind resources. possible values are [jms]
        [Optional]
@@ -354,15 +360,31 @@ OPTIONS
        Artifact is a graalvm native compiled by Oracle Backend
        [Optional, default = false]
 
+       --apigw boolean
+       open routing through APISIX
+       [Optional, default = false]
+
+       --route String
+       set an APISIX route path
+       [Optional, default = /api/v1/]
+
+       --apikey String
+       set APISIX API_KEY
+       [Optional]
+
        --help or -h
        help for deploy
        [Optional]
 
 
+
+CURRENTLY UNAVAILABLE
+       you are not signedIn. Please sign in to be able to use this command!
+
 Ask for Help
        Slack: https://oracledevs.slack.com/archives/C03ALDSV272
        E-mail: obaas_ww@oracle.com
-   ```
+```
 
    For example:
 
