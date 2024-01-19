@@ -3,8 +3,7 @@ description: "How to set up your development environment to build Spring Boot ap
 keywords: "development environment setup spring springboot microservices oracle backend java maven gradle ide tools"
 ---
 
-This page provides details on how to set up your development environment to work with
-Oracle Backend for Spring Boot and Microservices. 
+This page provides details on how to set up your development environment to work with Oracle Backend for Spring Boot and Microservices.
 
 The following platforms are recommended for a development environment:
 
@@ -15,7 +14,7 @@ The following platforms are recommended for a development environment:
 The following tools are recommended for a development environment:
 
 - Integrated Development Environment, for example Visual Studio Code
-- Java Development Kit, for example Oracle, OpenJDK, or GraalVM 
+- Java Development Kit, for example Oracle, OpenJDK, or GraalVM
 - Maven or Gradle for build and testing automation
 
 If you wish to test locally or offline, then the following additional tools are recommended:

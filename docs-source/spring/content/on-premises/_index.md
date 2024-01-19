@@ -1,7 +1,7 @@
 ---
 title: "Custom Installations"
 description: "Custom installations of Oracle Backend for Spring Boot and Microservices"
-keywords: "installation onprem custom spring springboot microservices development oracle backend"
+keywords: "installation onprem on-premises custom spring springboot microservices development oracle backend"
 ---
 
 The Oracle Backend for Spring Boot and Microservices is available to install in your own "custom" environment, which may be an on-premises data center environment, a different cloud provider, or a developer's desktop.
@@ -22,7 +22,7 @@ When installing in a _non-production_ environment, for example a developer's des
 * 60 GB of free disk space (40 GB minikube and container images, 20 GB database)
 * Internet connection
 * [Minikube](https://minikube.sigs.k8s.io/docs/start/) or similar
-* [Podman](https://podman.io/getting-started/)[^1] or simliar
+* [Podman](https://podman.io/getting-started/)[^1] or similar
 * Oracle Single Sign-On (SSO) account to download the database image
 
 ## Download
@@ -178,7 +178,6 @@ Install the Microservices by running this command:
 ```bash
 ansible-playbook ansible/k8s_apply.yaml -t full
 ```
-
 
 ## Footnotes
 

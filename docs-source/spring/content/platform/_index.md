@@ -9,11 +9,11 @@ Oracle Backend for Spring Boot and Microservices includes a number of Spring pla
 
 For more details, read about:
 
-   - [API Gateway](./apigw)
-   - [Service Discovery](./eureka)
-   - [Configuration](./config)
-   - [Workflow](./conductor)
-   - [Spring Admin](./spring-admin)
-   - [Using the CLI](../development/cli)
-   - [MicroTx](./microtx)
-   - [Vault](./vault/)
+- [API Gateway](./apigw)
+- [Service Discovery](./eureka)
+- [Configuration](./config)
+- [Workflow](./conductor)
+- [Spring Admin](./spring-admin)
+- [Using the CLI](../development/cli)
+- [MicroTx](./microtx)
+- [Vault](./vault/)

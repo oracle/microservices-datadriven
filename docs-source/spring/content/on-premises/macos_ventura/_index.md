@@ -1,7 +1,7 @@
 ---
 title: Developer Installation - macOS Ventura (x86)
 description: "Custom installation on macOS for Oracle Backend for Spring Boot and Microservices"
-keywords: "installation macos ventura nonproduction development onprem custom spring springboot microservices development oracle backend"
+keywords: "installation macos ventura nonproduction development  on-premises custom spring springboot microservices development oracle backend"
 ---
 
 This is a discussion of a non-production (developer desktop) installation on a macOS Ventura desktop.
@@ -27,15 +27,15 @@ podman system connection default podman-machine-default-root
 The non-production installation provisions an Oracle database into the Kubernetes cluster. The images must be downloaded
 from [Oracle Cloud Infrastructure Registry (Container Registry)](https://container-registry.oracle.com/) before continuing.
 
-1. Log in to the Container Registry. For example: 
+1. Log in to the Container Registry. For example:
 
    `podman login container-registry.oracle.com`
 
-2. Pull the database image. For example: 
+2. Pull the database image. For example:
 
    `podman pull container-registry.oracle.com/database/enterprise:21.3.0.0`
 
-3. Pull the ORDS image. For example: 
+3. Pull the ORDS image. For example:
 
    `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
 
@@ -50,7 +50,7 @@ minikube start --cpus 4 --memory max --container-runtime=containerd
 minikube addons enable ingress
 ```
 
-If Minikube fails to start and returns this `Failed kubeconfig update: could not read config` error, process this command and retry: 
+If Minikube fails to start and returns this `Failed kubeconfig update: could not read config` error, process this command and retry:
 
 `mv ~/.kube ~/.kube.bak`
 
@@ -75,7 +75,7 @@ Use the Helper Playbook to define the infrastructure. This Playbook also:
 * Creates a private Container Registry in the Kubernetes cluster.
 * Modifies the Microservices application to be desktop compatible.
 
-Run this command: 
+Run this command:
 
 `ansible-playbook ansible/desktop_apply.yaml`
 
@@ -113,6 +113,4 @@ Deploy the database and Microservices by running this command:
 
 ## VPN and Proxies
 
-If you are behind a virtual private network (VPN) or proxy, see https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/ for more details
-on additional tasks.
-
+If you are behind a virtual private network (VPN) or proxy, see [minikube VPN or Proxy](https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/) for more details on additional tasks.
