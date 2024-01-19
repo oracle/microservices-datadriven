@@ -27,9 +27,141 @@ resources:
   - name: obaas-grafana-dashboard
     src: "obaas-grafana-dashboard.png"
     title: "Grafana Dashboard"
+  - name: db-dashboard
+    src: "db-dashboard.png"
+    title: "Oracle Database Dashboard"
+  - name: spring-boot-observability-dashboard
+    src: "spring-boot-observability-dashboard.png"
+    title: "Spring Boot Observablity Dashboard"
+  - name: spring-boot-stats-dashboard
+    src: "spring-boot-stats-dashboard.png"
+    title: "Spring Boot Statistics Dashboard"
+  - name: kube-state-metrics-dashboard
+    src: "kube-state-metrics-dashboard.png"
+    title: "Kube State Metrics Dashboard"
 ---
 
-The Oracle Backend for Spring Boot and Microservices metrics stack automates metrics aggregation and consists of Prometheus and Grafana components.
+Oracle Backend for Spring Boot and Microservices provides built-in platform services to collect metrics from system and application
+workloads and pre-built Grafana dashboards to view and explore those metrics. 
+
+## Pre-installed dashboards
+
+The following dashboards are pre-installed in Grafana:
+
+### Spring Boot Observability
+
+This dashboard ...
+
+<!-- spellchecker-disable -->
+{{< img name="spring-boot-observability-dashboard" size="medium" lazy=false >}}
+<!-- spellchecker-enable -->
+
+
+### Spring Boot Statistics
+
+This dashboard ...
+
+<!-- spellchecker-disable -->
+{{< img name="spring-boot-stats-dashboard" size="medium" lazy=false >}}
+<!-- spellchecker-enable -->
+
+### Oracle Database Dashboard
+
+This dashboard ...
+
+<!-- spellchecker-disable -->
+{{< img name="db-dashboard" size="medium" lazy=false >}}
+<!-- spellchecker-enable -->
+
+### Kube State Metrics Dashboard
+
+This dashboard ...
+
+<!-- spellchecker-disable -->
+{{< img name="kube-state-metrics-dashboard" size="medium" lazy=false >}}
+<!-- spellchecker-enable -->
+
+## How to have metrics collected for your applications 
+
+When you deploy an application with Oracle Backend for Spring Boot and Microservices CLI or
+Visual Code Extension, provided you included the Eureka Discovery Client and Actuator in your application,
+Prometheus will automatically find your application (using the service registry) and start
+collecting metrics.  These metrics will be included in both the Spring Boot Observability
+dashboard and the Spring Boot Statistic dashboard automatically.
+
+To include the Eureka Discovery client in your application, add the following dependencies
+to your Maven POM or equivalent:
+
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+```
+
+You must also add the following configuration to your Spring `application.yaml`:
+
+```yaml
+spring:
+  application:
+    name: my-app
+
+eureka:
+  instance:
+    hostname: ${spring.application.name}
+    preferIpAddress: true
+  client:
+    service-url:
+      defaultZone: ${eureka.service-url}
+    fetch-registry: true
+    register-with-eureka: true
+    enabled: true
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    tags:
+      application: ${spring.application.name}    
+```
+
+Alternatively, if you do not want to include the Eureka client, you can instead create
+a `ServiceMonitor` resource for your service. This must be created in the namespace where
+your application is deployed, and you must specify the correct port and the path for
+Spring Boot Actuator.  Your application must have Actuator and the `prometheus` endpoint
+enabled, as described above.
+
+```yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: my-app
+  name: my-app
+  namespace: application
+spec:
+  endpoints:
+  - interval: 20s
+    path: /actuator/prometheus
+    port: 8080
+  selector:
+    matchLabels:
+      app: my-app
+```
+
+## Something
+
+
+stack automates metrics aggregation and consists of Prometheus and Grafana components.
 Metrics sources expose system and application metrics. The Prometheus components retrieve and store the metrics and Grafana provides
 dashboards to visualize them.
 

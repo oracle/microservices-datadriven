@@ -1,7 +1,7 @@
 ---
 title: "Oracle Backend for Spring Boot and Microservices"
-description: "Oracle Backend for Spring Boot and Microservices makes it easy for developers to build, deploy and operate microservices in the cloud with Oracle Autonomous Database"
-keywords: "spring springboot microservices cloud oracle"
+description: "Spring SpringBoot Spring Boot"
+keywords: "spring springboot"
 ---
 
 Oracle Backend for Spring Boot and Microservices allows developers to build microservices in Spring Boot and provisions a "backend as a service" with
