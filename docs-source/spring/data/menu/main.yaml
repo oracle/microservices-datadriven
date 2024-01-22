@@ -69,6 +69,8 @@ main:
     ref: "/database"
   - name: Kubernetes Access
     ref: "/cluster-access"
+  - name: "Sample Application"
+    ref: "/sampleapp"
   - name: Uninstall
     ref: "/uninstall"
   - name: "Release Notes"
