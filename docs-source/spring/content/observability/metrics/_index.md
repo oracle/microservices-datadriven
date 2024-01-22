@@ -61,9 +61,7 @@ On this page, you will find the following topics:
 
 ## Overview
 
-Oracle Backend for Spring Boot and Microservices includes a number of pre-installed and
-pre-configured components to provide metrics for the platform itself and for your
-applications.
+Oracle Backend for Spring Boot and Microservices includes a number of pre-installed and pre-configured components to provide metrics for the platform itself and for your applications.
 
 The diagram below provides an overview of the components that play a role in metrics:
 
@@ -98,9 +96,7 @@ This dashboard provides details of one or more Spring Boot applications includin
 - The request rate per second over time, by path
 - Log messages from the service
 
-You may adjust the time period and to drill down into issues, and search the logs for particular messages.
-This dashboard is designed for Spring Boot 3.x applications.  Some features may work for Spring Boot
-2.x applications.
+You may adjust the time period and to drill down into issues, and search the logs for particular messages. This dashboard is designed for Spring Boot 3.x applications. Some features may work for Spring Boot 2.x applications.
 
 Here is an example of this dashboard displaying data for a simple application:
 
@@ -119,9 +115,7 @@ This dashboard provides more in-depth information about services including the f
 - HTTP request statistics
 - Logging (logback) statistics
 
-You may adjust the time period and to drill down into issues, and search the logs for particular messages.
-This dashboard is designed for Spring Boot 3.x applications.  Some features may work for Spring Boot
-2.x applications.
+You may adjust the time period and to drill down into issues, and search the logs for particular messages. This dashboard is designed for Spring Boot 3.x applications. Some features may work for Spring Boot 2.x applications.
 
 Here is an example of this dashboard displaying data for a simple application:
 
@@ -208,11 +202,7 @@ management:
       application: ${spring.application.name}    
 ```
 
-Alternatively, if you do not want to include the Eureka client, you can instead create
-a `ServiceMonitor` resource for your service. This must be created in the namespace where
-your application is deployed, and you must specify the correct port and the path for
-Spring Boot Actuator.  Your application must have Actuator and the `prometheus` endpoint
-enabled, as described above.
+Alternatively, if you do not want to include the Eureka client, you can instead create a `ServiceMonitor` resource for your service. This must be created in the namespace where your application is deployed, and you must specify the correct port and the path for Spring Boot Actuator. Your application must have Actuator and the `prometheus` endpoint enabled, as described above.
 
 Here is an example of a `ServiceMonitor` for an application:
 
@@ -236,8 +226,7 @@ spec:
 
 ## How to access Prometheus
 
-Prometheus is an open source monitoring and alerting system. Prometheus collects and stores metrics as time series data with the timestamp of
-the time that they are recorded, and optional Key/Value pairs called labels.
+Prometheus is an open source monitoring and alerting system. Prometheus collects and stores metrics as time series data with the timestamp of the time that they are recorded, and optional Key/Value pairs called labels.
 
 1. Expose the Prometheus user interface (UI) using this command:
 
@@ -255,7 +244,7 @@ the time that they are recorded, and optional Key/Value pairs called labels.
 
    * In the search bar, search for `application_ready_time_seconds` and click on **Execute**.
    * You should see metrics for the Sample Applications.
-   
+
    For example:
 
     <!-- spellchecker-disable -->
@@ -273,9 +262,7 @@ the time that they are recorded, and optional Key/Value pairs called labels.
 
 ## How to access Grafana
 
-[Grafana](https://grafana.com/docs/grafana/latest/introduction/) open source software enables you to query, visualize, alert, and explore your
-metrics, logs, and traces wherever they are stored. Grafana open source software provides tools that turn your time series database (TSDB) data
-into insightful graphs and visualizations. Take the following steps:
+[Grafana](https://grafana.com/docs/grafana/latest/introduction/) open source software enables you to query, visualize, alert, and explore your metrics, logs, and traces wherever they are stored. Grafana open source software provides tools that turn your time series database (TSDB) data into insightful graphs and visualizations. Take the following steps:
 
 1. Expose Grafana using this command:
 
@@ -300,4 +287,3 @@ into insightful graphs and visualizations. Take the following steps:
     <!-- spellchecker-disable -->
     {{< img name="obaas-grafana-login" size="small" lazy=false >}}
     <!-- spellchecker-enable -->
-

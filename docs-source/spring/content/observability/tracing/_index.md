@@ -13,6 +13,9 @@ resources:
   - name: obaas-jaeger-customer-trace-details
     src: "obaas-jaeger-customer-trace-details.png"
     title: "Jaeger Customer Tracing Details"
+  - name: overview
+    src: "otel-flow-simple.png"
+    title: "Overview"
 
 weight: 1
 draft: false
@@ -27,6 +30,10 @@ OpenTelemetry (Otel) is a collection of standardized vendor-agnostic tools, APIs
 OpenTracing is a vendor-neutral API for sending telemetry data over to an observability backend. The OpenCensus project provides a set of language-specific libraries that developers can use to instrument their code and send it to any supported backends. Otel uses the same concept of trace and span to represent the request flow across microservices as used by its predecessor projects.
 
 OpenTelemetry allows us to instrument, generate, and collect telemetry data, which helps in analyzing application behavior or performance. Telemetry data can include logs, metrics, and traces. We can either automatically or manually instrument the code for HTTP, DB calls, and more.
+
+<!-- spellchecker-disable -->
+{{< img name="overview" size="medium" lazy="false">}}
+<!-- spellchecker-enable -->
 
 ## How to enable tracing for your applications
 
@@ -55,7 +62,7 @@ To enable tracing for your application you must include the following dependenci
 </dependency>
 ```
 
-If you want to enable tracing for your database calls you must include the following dependency too. You can find the latest version [here](https://mvnrepository.com/artifact/net.ttddyy.observation/datasource-micrometer-spring-boot).
+If you want to enable tracing for your database calls (Micrometer observability instrumentation for JDBC DataSource) you must include the following dependency too. You can find the latest version [here](https://mvnrepository.com/artifact/net.ttddyy.observation/datasource-micrometer-spring-boot).
 
 ```xml
 <dependency>
@@ -65,6 +72,38 @@ If you want to enable tracing for your database calls you must include the follo
 </dependency>
 ```
 
+You must also add the following to your applications `application.yaml` file. 
+
+```yaml
+spring:
+  application:
+    name: customer
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  tracing:
+    sampling:
+      probability: 1.0
+  info:
+    os:
+      enabled: true
+    env:
+      enabled: true
+    java:
+      enabled: true
+  otlp:
+    tracing:
+      endpoint: ${otel.exporter.otlp.endpoint}
+```
 
 ## View Application Traces in Jaeger Web User Interface
 
@@ -76,28 +115,24 @@ Jaeger is a distributed tracing system used for monitoring and troubleshooting M
     kubectl -n observability port-forward svc/jaegertracing-query 16686:16686
     ```
 
-2. Open the Jaeger web user interface URL: <http://localhost:16686>
+1. Open the Jaeger web user interface URL: <http://localhost:16686>
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-jaeger-ui" size="medium" lazy=false >}}
     <!-- spellchecker-enable -->
 
-3. In the Jaeger web user interface, click the **Search** tab to find tracings using various search criteria. For example, to find
-   traces for the customer Microservice included in the Sample Applications:
+1. In the Jaeger web user interface, click the **Search** tab to find tracings using various search criteria. For example, to find traces for the customer Microservice included in the Sample Application:
 
-    a. If you deployed the [Sample Applications](../../sample-apps), exposing the customer service through the Apache APISIX Gateway and
-	   called it at least once, you can find traces for it in Jaeger.
-	   
-    b. Select the **Service** `customer` and the **Operation** `/api/v1/customers` .
-	
+    a. If you deployed the [Sample Applications](../../sample-apps) and have accessed the REST endpoints you can find traces for it in Jaeger. For example:
+
+    b. Select the **Service** `customer32` and the **Operation** `/api/v2/customers` .
+
     c. Click on **Find Traces**. Several traces appear (one for each time that you invoked the service).
         <!-- spellchecker-disable -->
         {{< img name="obaas-jaeger-customer-tracing" size="medium" lazy=false >}}
         <!-- spellchecker-enable -->
 
-    d. Click on any one of them to view the trace that includes multiple services and extends into Oracle Database and Oracle
-	   Advanced Queuing. For example:
+    d. Click on any one of them to view the trace that includes multiple services and extends into Oracle Database. For example:
         <!-- spellchecker-disable -->
         {{< img name="obaas-jaeger-customer-trace-details" size="medium" lazy=false >}}
         <!-- spellchecker-enable -->
-
