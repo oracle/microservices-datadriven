@@ -110,7 +110,7 @@ When the steps to create the tunnel are completed and you are connected to the b
 You see four top classes of resources that can be expanded in underlying items:
 
 * **applications** : The list of applications deployed and the holding services.
-* **ADB database** : In this release there is one Oracle Database in which the configurations and schemas related to deployed services are stored.
+* **Oracle DB** : In this release there is one Oracle Database in which the configurations and schemas related to deployed services are stored.
 * **platformServices** : The list of Oracle Backend for Spring Boot and Microservices deployed services, like Grafana, Spring, Apache APISIX, Eureka and Jaeger.
 * **oBaasConf** : The list of keys defined by the applications, stored in the Oracle Database, that are provisioned and available to share configurations information among services in each application.
 
@@ -224,9 +224,7 @@ Choosing this item menu, the parameters will be required are:
 
 10. **CPU request [default = 500m]** (Default: `500m`)
 
-11. **Redeploy?: [True]/[False]** (Default: `True`)
-
-12. **Add Health probe? : [True]/[False]** (Default: `True`)
+11. **Add Health probe? : [True]/[False]** (Default: `True`)
 
 At the end of the parameters collection, a process, that includes the .exec file upload, building image and deploying, starts. It generates a sequence of messages showing the status. These messages end with "Service deployed successfully!" or "Deploy failed". The size and network constraints determine the amount of time for the process to terminate.
 
@@ -246,23 +244,21 @@ Choosing this item menu, selecting a single application, the parameters will be 
 
 6. **Java image** (Default: `ghcr.io/graalvm/jdk:ol7-java17-22.2.0`)
 
-7. **is it a redeploy? : [True]/[False]** (Default: `True`)
+7. **Add Health probe? : [True]/[False]** (Default: `True`)
 
-8. **Add Health probe? : [True]/[False]** (Default: `True`)
+8. **Service Port** (Default: `8080`)
 
-9. **Service Port** (Default: `8080`)
+9. **Service Profile** (Default: `obaas`)
 
-10. **Service Profile** (Default: `obaas`)
+10. **Initial Replicas** (Default: `1`)
 
-11. **Initial Replicas** (Default: `1`)
+11. **CPU request [default = 500m]** (Default: `500m`)
 
-12. **CPU request [default = 500m]** (Default: `500m`)
-
-13. **Inform the database name for Liquibase**: username for Liquibase.
+12. **Inform the database name for Liquibase**: username for Liquibase.
 
 At the end of the parameters collection, a process, that includes the .jar upload, building image and deploying, starts. It generates a sequence of messages showing the status. These messages end with "Service deployed successfully!" or "Deploy failed". The size and network constraints determine the amount of time for the process to terminate.
 
-#### Bind a Service
+#### Bind a service
 This command create/update a user on the Oracle DB according the service name typed, or optionally to a different user schema, to which bind a Spring Boot microservice that will store data into the DB. It also store secrets with the user credentials into the application namespace, in order to inject them into the related pods. If the schema exists, it impose to change the user password will be stored in the namespace.
 The parameters required are:
 
@@ -319,7 +315,7 @@ A successful operation will return the Route ID recorded into the APISix, as sho
 This is a shortcut with a standard registration: to customize the route, or start from scratch, is suggested the usage of APISix console.
 
 
-## ADB Database
+## Oracle DB
 For each Oracle Backend for Spring Boot and Microservices, an Oracle Autonomous Transaction Processing database is provisioned on OCI to hold the schema for the Spring Boot services and backend's configuration details. The icon remembers the component deployed with the backend platform.
 
 ## platformServices
