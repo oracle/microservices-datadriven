@@ -90,11 +90,11 @@ The following dashboards are pre-installed in Grafana:
 
 This dashboard provides details of one or more Spring Boot applications including the following:
 
-- The number of HTTP requests received by the applicaiton 
+- The number of HTTP requests received by the application
 - A breakdown of which URL paths requests were received for
 - The average duration of requests by path
 - The number of exceptions encountered by the application
-- Details of 2xx (that is, successful) and 5xx (that is, excpetions) requests
+- Details of 2xx (that is, successful) and 5xx (that is, exceptions) requests
 - The request rate per second over time, by path
 - Log messages from the service
 
@@ -111,7 +111,7 @@ Here is an example of this dashboard displaying data for a simple application:
 
 ### Spring Boot Statistics
 
-This dashboard provides more indepth information about services including the following: 
+This dashboard provides more in-depth information about services including the following: 
 
 - JVM statistic like heap and non-heap memory usage, and details of garbage collection
 - Load average and open files
@@ -138,7 +138,7 @@ This dashboard provides details about the Oracle Database including:
 - Execute count
 - Wait time statistics by class
 
-Here is an example of this daashboard:
+Here is an example of this dashboard:
 
 <!-- spellchecker-disable -->
 {{< img name="db-dashboard" size="medium" lazy=false >}}
@@ -160,16 +160,11 @@ Here is an example of this dashboard:
 {{< img name="kube-state-metrics-dashboard" size="medium" lazy=false >}}
 <!-- spellchecker-enable -->
 
-## How to have metrics collected for your applications 
+## How to have metrics collected for your applications
 
-When you deploy an application with Oracle Backend for Spring Boot and Microservices CLI or
-Visual Code Extension, provided you included the Eureka Discovery Client and Actuator in your application,
-Prometheus will automatically find your application (using the service registry) and start
-collecting metrics.  These metrics will be included in both the Spring Boot Observability
-dashboard and the Spring Boot Statistic dashboard automatically.
+When you deploy an application with Oracle Backend for Spring Boot and Microservices CLI or Visual Code Extension, provided you included the Eureka Discovery Client and Actuator in your application, Prometheus will automatically find your application (using the service registry) and start collecting metrics. These metrics will be included in both the Spring Boot Observability dashboard and the Spring Boot Statistic dashboard automatically.
 
-To include the Eureka Discovery client in your application, add the following dependencies
-to your Maven POM or equivalent:
+To include the Eureka Discovery client in your application, add the following dependencies to your Maven POM or equivalent:
 
 ```xml
 <dependency>
@@ -299,7 +294,7 @@ into insightful graphs and visualizations. Take the following steps:
 
       > **NOTE:** If you do not have `base64`, leave off the last part (`| base64 -d`) in the command, then copy the output, and use this
 	  website to decode it: <https://www.base64decode.org/>.
-		
+
 	  If you did not set your own password during installation, then the auto-generated password will be a long string of characters that might be similar to `210BAqNzYkrcWjd58RKC2Xzerx9c0WkZi9LNsG4c`. For example:
 
     <!-- spellchecker-disable -->
