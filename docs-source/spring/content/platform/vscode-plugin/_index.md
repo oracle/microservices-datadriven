@@ -222,9 +222,7 @@ Choosing this item menu, the parameters will be required are:
 
 9. **Initial Replicas** (Default: `1`)
 
-10. **CPU request [default = 500m]** (Default: `500m`)
-
-11. **Add Health probe? : [True]/[False]** (Default: `True`)
+10. **Add Health probe? : [True]/[False]** (Default: `True`)
 
 At the end of the parameters collection, a process, that includes the .exec file upload, building image and deploying, starts. It generates a sequence of messages showing the status. These messages end with "Service deployed successfully!" or "Deploy failed". The size and network constraints determine the amount of time for the process to terminate.
 
@@ -252,9 +250,7 @@ Choosing this item menu, selecting a single application, the parameters will be 
 
 10. **Initial Replicas** (Default: `1`)
 
-11. **CPU request [default = 500m]** (Default: `500m`)
-
-12. **Inform the database name for Liquibase**: username for Liquibase.
+11. **Inform the database name for Liquibase**: username for Liquibase.
 
 At the end of the parameters collection, a process, that includes the .jar upload, building image and deploying, starts. It generates a sequence of messages showing the status. These messages end with "Service deployed successfully!" or "Deploy failed". The size and network constraints determine the amount of time for the process to terminate.
 
