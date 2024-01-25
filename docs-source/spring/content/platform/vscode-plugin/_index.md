@@ -282,8 +282,9 @@ as shown here:
 #### Create autoscaler
 Create a Kubernetes autoscaler for the selected pod.
 1. **minReplicas** (Default: `1`)
-1. **maxReplicas** (Default: `1`)
-1. **cpuPercent** (Default: ``)
+2. **maxReplicas** (Default: `1`)
+3. **cpuPercent** (Default: ``)
+4. **cpuRequest** (Default: `100m`)
 
 #### Delete autoscaler
 Delete an existing autoscaler
