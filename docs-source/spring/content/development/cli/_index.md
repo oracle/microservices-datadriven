@@ -1,17 +1,15 @@
 ---
-title: "OBaaS CLI"
+title: "OBaaS CLI (a.k.a. oractl)"
 ---
 
 The Oracle Backend for Spring Boot and Microservices offers a command-line interface (CLI), `oractl`. The CLI commands simplify the deployment of
 microservices applications as well as bindings with the resources that they use.
-Download the CLI [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0).
-The platform-specific binary can be renamed to `oractl` for convenience.
 
 Table of Contents:
 
+* [Installation](#installation)
 * [Using the CLI](#using-the-cli)
 * [Available Commands](#available-commands)
-* [Logging Information](#logging)
   * [Help](#help)
   * [Connect to the backend](#connect)
   * [Create application namespace](#create)
@@ -20,20 +18,76 @@ Table of Contents:
   * [Deploy a service](#deploy)
   * [List - show details about deployments](#list)
   * [Manage config server data](#config)
-  * [GraalVM compile commands](#compile)
+  * [GraalVM compile](#compile)
+  * [User Management](#user-management)
+* [Logging Information](#logging)
+
+## Installation
+
+1. OBaaS CLI is available for Linux on x64, macOS on x64 and AArch64, and Windows x64 architectures. Choose your operating system and proceed to the installation steps for your specific platform:
+
+   * [Linux x86](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.0/oractl-1.1.0-linux-x86)
+   * [macOS x86](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.0/oractl-1.1.0-macos-x86)
+   * [macOS AArch64](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.0/oractl-1.1.0-macos-aarch64)
+   * [Windows x86](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.0/oractl-1.1.0-windows-x86.exe)
+
+2. Change to directory where you want to install OBaaS CLI. The platform-specific binary can be renamed to `oractl` for convenience.
+
+    ```cmd
+    ❯ mv oractl-<version>-<os>-<architecture> /path/to/<obaas>/oractl
+    ```
+  
+    &nbsp;
+
+    ---
+
+    {{< hint type=[warning] icon=gdoc_info_outline
+        title="Remove the quarantine attribute (Required for macOS Catalina and later)" >}}
+    {{< /hint >}}
+
+    ```cmd
+    ❯ sudo xattr -r -d com.apple.quarantine /path/to/<obaas>/oractl
+    ```
+
+    ---
+
+3. Set the value of the `PATH` environment variable to the `oractl` directory:
+
+    ```cmd
+    ❯ export PATH=/path/to/<obaas>:$PATH
+    ```
+
+4. To check whether the installation was successful, run the `oractl -version` command.
 
 ## Using the CLI
 
-1. Expose the Oracle Backend for Spring Boot and Microservices Admin server that the CLI calls using this command:
+Once you have installed the CLI, you can run it by typing `oractl` and pressing Enter at the command line. But first you have to open a bridge with the OBaaS Admin Service. Follow the next steps to run `oractl`.
+
+1. Open a bridge with the OBaaS Admin Service using `kubectl` port-forward command:
 
     ```cmd
-    kubectl port-forward services/obaas-admin -n obaas-admin 8080
+    ❯ kubectl port-forward services/obaas-admin -n obaas-admin 8080
     ```
 
-1. Start the CLI in interactive mode by running `oractl` from your terminal window. For example:
+2. Running `oractl` without any arguments starts the CLI in interactive mode, OBaaS CLI header is displayed, and the prompt is made available, as follows:
 
     ```cmd
-    oractl
+       ❯ oractl
+        _   _           __    _    ___
+       / \ |_)  _.  _. (_    /  |   |
+       \_/ |_) (_| (_| __)   \_ |_ _|_
+       ========================================================================================
+
+       Application Name: Oracle Backend Platform :: Command Line Interface
+       Application Version: (1.1.0)
+       :: Spring Boot (v3.2.1) ::
+
+       Ask for help:
+
+       * Slack: <https://oracledevs.slack.com/archives/C03ALDSV272>
+       * email: <obaas_ww@oracle.com>
+
+       oractl:>
     ```
 
 ## Available Commands
@@ -44,13 +98,15 @@ Short descriptions for the available commands can be viewed by issuing the `help
 commands can be viewed by issuing `help [command-name]`. For example:
 
 ```cmd
+oractl:>help
 AVAILABLE COMMANDS
-
-Admin Server Commands
-       connect: Connect to the OBaaS Spring Cloud admin console.
 
 Application/Namespace Commands
        create: Create an application/namespace.
+
+Autoscaler Commands
+       create-autoscaler: Create an autoscaler.
+       delete-autoscaler: Delete an autoscaler.
 
 Built-In Commands
        help: Display help about available commands
@@ -67,6 +123,15 @@ GraalVM Compile Commands
        compile-purge: Delete a job launched
        compile-logs: Compilation progress
 
+Identity and Access Management Service
+       user list: Lists the users in your platform.
+       user create: Creates a new user in your platform.
+       user get: Gets the specified user’s information.
+       user delete: Delete a user in your platform.
+       user change-roles: Change the roles from the specified user.
+       connect: Connect to the OBaaS Admin Service.
+       user change-password: Change password for the specified user.
+
 Informational Commands
        list: list/show details of application services.
 
@@ -75,6 +140,7 @@ Service Commands
        delete: Delete a service or entire application/namespace.
        config: View and modify Service configuration.
        deploy: Deploy a service.
+
 
 Ask for Help
        Slack: https://oracledevs.slack.com/archives/C03ALDSV272
@@ -95,53 +161,54 @@ The [`list`](#list) command shows the details of the deployed microservices.
 
 The [`config`](#config) command can also be used to add, view, update, and delete configurations managed by the Spring Cloud Config server.
 
-A common development workflow pattern is to `connect`, `change-password` (only if necessary), `create` (once per application or namespace), `config`, `bind` (only if necessary), `deploy`, and `list`.
+A common development workflow pattern is to `connect`, `create` (once per application or namespace), `config`, `bind` (only if necessary), `deploy`, and `list`.
 
 Further development and redeployment of the service can then be repeated issuing the `deploy` and `list` commands.
 
-The following is an example development workflow using the CLI:
+The following is a comprehensive description of the OBaaS CLI commands:
 
 ### connect
 
 Use the `connect` command to connect your `oractl` CLI to the Oracle Backend Administration service:
 
 ```cmd
+oractl:>help connect
 NAME
-       connect - Connect to the OBaaS Spring Cloud admin console.
+       connect - Connect to the OBaaS Admin Service.
 
 SYNOPSIS
-       connect --url String --help
+       connect --server-url String --help
 
 OPTIONS
-       --url String
-       admin server URL
+       --server-url String
+       OBaaS Admin Service Endpoint.
        [Optional, default = http://localhost:8080]
 
        --help or -h
        help for connect
        [Optional]
 
+
 Ask for Help
        Slack: https://oracledevs.slack.com/archives/C03ALDSV272
        E-mail: obaas_ww@oracle.com
+```
 
-   ```
+For example:
 
-   For example:
-
-   ```cmd
-   oractl:>connect
-   username: obaas-admin
-   password: ********
-   obaas-cli: Successful connected.
-   ```
+```cmd
+oractl:>connect
+? username obaas-admin
+? password ****************
+Credentials successfully authenticated! obaas-admin -> welcome to OBaaS CLI.
+```
 
 ### create
 
 Use the `create` command to create an application namespace (Kubernetes *namespace*). The application namespace provides a mechanism for isolating groups of resources, especially the microservices. Names of resources need to be unique within an application namespace, but not across application namespaces.
 
 ```cmd
-oractl:>help delete
+oractl:>help create
 NAME
        create - Create an application/namespace.
 
@@ -162,12 +229,12 @@ Ask for Help
        E-mail: obaas_ww@oracle.com
 ```
 
-   For example:
+For example:
 
-   ```cmd
-   oractl:>create --app-name myapp
-   application/namespace created successfully and image pull secret (registry-auth) created successfully and database TNSAdmin/wallet secret created successfully
-   ```
+```cmd
+oractl:>create --app-name myapp
+application/namespace created successfully and image pull secret (registry-auth) created successfully and database TNSAdmin/wallet secret created successfully
+```
 
 ### delete
 
@@ -176,6 +243,7 @@ Use the `delete` command to delete an application namespace (Kubernetes *namespa
 > ATTENTION: Ensure that you want to completely delete the application namespace. You cannot rollback the components once deleted.
 
 ```cmd
+oractl:>help delete
 NAME
        delete - Delete a service or entire application/namespace.
 
@@ -820,6 +888,214 @@ GraalVM Compile Commands
             Slack: https://oracledevs.slack.com/archives/C03ALDSV272
             E-mail: obaas_ww@oracle.com
     ```
+
+### User Management
+
+Manage users let you store an unlimited amount of users and apply the access permission using roles into the OBaaS platform. A user role represents a specific set of tasks or responsibilities assigned to a group of users within the platform. Assigning user roles enables organizations to control the actions each user can perform in the system, streamlining their workflow.
+
+**OBaaS User Roles**
+
+<<< TODO >>>
+
+* ROLE_ADMIN: Users with this role usually have complete access rights, allowing them to manage all aspects of the application, such as adding new users, modifying settings, viewing and editing all content in the system.
+
+* ROLE_CONFIG_EDITOR: This role might be responsible for managing content created by other users, but may not have full administrative privileges like creating new accounts or changing global settings.
+
+* ROLE_USER: This role might be able to create content and view their own content, but not view or modify content created by others.
+
+#### Create users
+
+Use the `user create` command to add users to the OBaaS platform. This command requires the name of the user `username` and the user roles in a comma-separated list.
+
+```cmd
+oractl:>help user create
+NAME
+       user create - Creates a new user in your platform.
+
+SYNOPSIS
+       user create [--username String] --roles String --help
+
+OPTIONS
+       --username String
+       The name you assign to the user during creation. This is the user’s login for the CLI. The name must be unique across all users in the platform and cannot be changed.
+       [Mandatory]
+
+       --roles String
+       The user's role within the platform. A user must have up to three possible roles provided in a comma-separated list. [ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER].
+       [Optional, default = ROLE_USER]
+
+
+...
+
+```
+
+Example:
+
+```cmd
+oractl:>user create --username user1 --roles ROLE_ADMIN,ROLE_USER
+? password ****************
+obaas-cli [user create]: User [user1] as successfully created.
+```
+
+#### Delete User
+
+Use the `user delete` command to remove users from the OBaaS platform.
+
+```cmd
+oractl:>help user delete
+NAME
+       user delete - Delete a user in your platform.
+
+SYNOPSIS
+       user delete [--username String] --id int --help
+
+OPTIONS
+       --username String
+       The username you want to delete.
+       [Mandatory]
+
+       --id int
+       The user id from the user you want to delete.
+       [Optional, default = 0]
+
+...
+
+```
+
+Example:
+
+```cmd
+oractl:>user delete --username user1
+obaas-cli [user delete]: User [user1] as successfully deleted.
+````
+
+#### Obtain User details
+
+Use the `user get` command to obtain the user details registered on the OBaaS platform.
+
+```cmd
+oractl:>help user get
+NAME
+       user get - Gets the specified user’s information.
+
+SYNOPSIS
+       user get [--username String] --help
+
+OPTIONS
+       --username String
+       The username of the user.
+       [Mandatory]
+
+...
+
+```
+
+Example:
+
+```cmd
+oractl:>user get --username obaas-admin
+╔══╤═══════════╤═══════════════════════════════════════╗
+║Id│Username   │Roles                                  ║
+╠══╪═══════════╪═══════════════════════════════════════╣
+║2 │obaas-admin│ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER║
+╚══╧═══════════╧═══════════════════════════════════════╝
+```
+
+#### Change User Roles
+
+Use the `user change-roles` command to change the roles from a specific user registered on the OBaaS platform.
+
+```cmd
+oractl:>help user change-roles
+NAME
+       user change-roles - Change the roles from the specified user.
+
+SYNOPSIS
+       user change-roles [--username String] --roles String --help
+
+OPTIONS
+       --username String
+       The name you assign to the user during creation. This is the user’s login for the CLI.
+       [Mandatory]
+
+       --roles String
+       The user's role within the platform. A user must have up to three possible roles provided in a comma-separated list. [ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER].
+       [Optional, default = ROLE_USER]
+
+...
+
+```
+
+Example:
+
+```cmd
+oractl:>user change-roles --username user1 --roles ROLE_USER
+obaas-cli [user change-roles]: User [user1] roles were successfully updated.
+```
+
+#### Change User Password
+
+Use the `user change-password` command to change the password from a specific user registered on the OBaaS platform.
+
+```cmd
+oractl:>help user change-password
+NAME
+       user change-password - Change password for the specified user.
+
+SYNOPSIS
+       user change-password [--username String] --help
+
+OPTIONS
+       --username String
+       The username you want to change the password.
+       [Mandatory]
+
+...
+
+```
+
+Example:
+
+```cmd
+oractl:>user change-password --username user1
+? password ***********
+obaas-cli [user change-password]: User [user1] password was successfully updated.
+```
+
+#### List Users
+
+Use the `user list` command to obtain the comprehensive list of users registered on the OBaaS platform.
+
+```cmd
+oractl:>help user list
+NAME
+       user list - Lists the users in your platform.
+
+SYNOPSIS
+       user list --help
+
+...
+
+```
+
+Example:
+
+```cmd
+oractl:>user list
+╔══╤════════════════╤═══════════════════════════════════════╗
+║Id│Username        │Roles                                  ║
+╠══╪════════════════╪═══════════════════════════════════════╣
+║62│user1           │ROLE_USER                              ║
+╟──┼────────────────┼───────────────────────────────────────╢
+║1 │obaas-user      │ROLE_USER                              ║
+╟──┼────────────────┼───────────────────────────────────────╢
+║2 │obaas-admin     │ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER║
+╟──┼────────────────┼───────────────────────────────────────╢
+║3 │obaas-config    │ROLE_CONFIG_EDITOR,ROLE_USER           ║
+╟──┼────────────────┼───────────────────────────────────────╢
+║4 │obaas-user-test1│ROLE_USER                              ║
+╚══╧════════════════╧═══════════════════════════════════════╝
+```
 
 ## Logging
 
