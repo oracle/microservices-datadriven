@@ -895,13 +895,9 @@ Manage users let you store an unlimited amount of users and apply the access per
 
 **OBaaS User Roles**
 
-<<< TODO >>>
+* ROLE_ADMIN: Users with this role usually have complete access rights, allowing them to manage all aspects of the platform, such as adding new users, modifying settings, viewing and editing all content in the system.
 
-* ROLE_ADMIN: Users with this role usually have complete access rights, allowing them to manage all aspects of the application, such as adding new users, modifying settings, viewing and editing all content in the system.
-
-* ROLE_CONFIG_EDITOR: This role might be responsible for managing content created by other users, but may not have full administrative privileges like creating new accounts or changing global settings.
-
-* ROLE_USER: This role might be able to create content and view their own content, but not view or modify content created by others.
+* ROLE_USER: This role might be able to connect with OBaaS Admin Service, create and list for applications (namespaces); use bind command; deploy, list and scale workloads (services).
 
 #### Create users
 
@@ -921,7 +917,7 @@ OPTIONS
        [Mandatory]
 
        --roles String
-       The user's role within the platform. A user must have up to three possible roles provided in a comma-separated list. [ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER].
+       The user's role within the platform. A user must have up to three possible roles provided in a comma-separated list. [ROLE_ADMIN,ROLE_USER].
        [Optional, default = ROLE_USER]
 
 
@@ -997,7 +993,7 @@ oractl:>user get --username obaas-admin
 ╔══╤═══════════╤═══════════════════════════════════════╗
 ║Id│Username   │Roles                                  ║
 ╠══╪═══════════╪═══════════════════════════════════════╣
-║2 │obaas-admin│ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER║
+║2 │obaas-admin│ROLE_ADMIN,ROLE_USER                   ║
 ╚══╧═══════════╧═══════════════════════════════════════╝
 ```
 
@@ -1019,7 +1015,7 @@ OPTIONS
        [Mandatory]
 
        --roles String
-       The user's role within the platform. A user must have up to three possible roles provided in a comma-separated list. [ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER].
+       The user's role within the platform. A user must have up to three possible roles provided in a comma-separated list. [ROLE_ADMIN,ROLE_USER].
        [Optional, default = ROLE_USER]
 
 ...
@@ -1089,11 +1085,9 @@ oractl:>user list
 ╟──┼────────────────┼───────────────────────────────────────╢
 ║1 │obaas-user      │ROLE_USER                              ║
 ╟──┼────────────────┼───────────────────────────────────────╢
-║2 │obaas-admin     │ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER║
+║2 │obaas-admin     │ROLE_ADMIN,ROLE_USER                   ║
 ╟──┼────────────────┼───────────────────────────────────────╢
-║3 │obaas-config    │ROLE_CONFIG_EDITOR,ROLE_USER           ║
-╟──┼────────────────┼───────────────────────────────────────╢
-║4 │obaas-user-test1│ROLE_USER                              ║
+║3 │obaas-user-test1│ROLE_USER                              ║
 ╚══╧════════════════╧═══════════════════════════════════════╝
 ```
 
