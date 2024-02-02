@@ -1,5 +1,7 @@
 ---
 title: "Oracle Backend for Spring Boot and Microservices Visual Studio Code Extension"
+description: "Visual Studio Code extension for Oracle Backend for Spring Boot and Microservices"
+keywords: "vscode code visualstudio extension springboot spring development microservices development oracle backend"
 ---
 
 **GA 1.1.0 - February, 2024**

@@ -1,5 +1,7 @@
 ---
 title: "Oracle Spring Boot Starters"
+description: "Spring Boot Starters for Oracle Database"
+keywords: "starter springboot spring development microservices development oracle database"
 ---
 
 Oracle provides a number of Spring Boot Starters that make it easy to use various Oracle technologies in Spring Boot projects.

@@ -82,26 +82,25 @@ Version 3.2 of CloudBank is under development. This document and application is 
 
 ## Deploy CloudBank
 
-CloudBank can be deployed using the `--script` command in `oractl`. CloudBank will be deployed in the namespace `cb32`. You are going to be asked for passwords when the `bind` command executes.
+CloudBank can be deployed using the `--script` command in `oractl`. CloudBank will be deployed in the namespace `application`. You are going to be asked for passwords when the `bind` command executes.
 
 ```text
-oractl:>script --file deploy-cmds/deploy-cb32.txt
+oractl:>script --file deploy-cmds/deploy-cb.txt
 ```
 
 The output should look similar to this:
 
 ```text
-application/namespace created successfully and image pull secret (registry-auth) created successfully and database TNSAdmin/wallet secret created successfully
 Database/Service Password: *************
-Schema {account} was successfully Created and Kubernetes Secret {cb32/account} was successfully Created.
+Schema {account} was successfully Created and Kubernetes Secret {application/account} was successfully Created.
 Database/Service Password: *************
-Schema {account} was successfully Not_Modified and Kubernetes Secret {cb32/checks} was successfully Created.
+Schema {account} was successfully Not_Modified and Kubernetes Secret {application/checks} was successfully Created.
 Database/Service Password: *************
-Schema {customer} was successfully Created and Kubernetes Secret {cb32/customer} was successfully Created.
+Schema {customer} was successfully Created and Kubernetes Secret {application/customer} was successfully Created.
 Database/Service Password: *************
-Schema {customer} was successfully Not_Modified and Kubernetes Secret {cb32/customer32} was successfully Created.
+Schema {customer} was successfully Not_Modified and Kubernetes Secret {application/customer32} was successfully Created.
 Database/Service Password: *************
-Schema {account} was successfully Not_Modified and Kubernetes Secret {cb32/testrunner} was successfully Created.
+Schema {account} was successfully Not_Modified and Kubernetes Secret {application/testrunner} was successfully Created.
 uploading: account/target/account-0.0.1-SNAPSHOT.jar
 building and pushing image...
 
@@ -149,19 +148,38 @@ NOTICE: service not accessible outside K8S
 The following commands are executed:
 
 ```script
-create --app-name cb32
-bind --app-name cb32 --service-name account
-bind --app-name cb32 --service-name checks --username account
-bind --app-name cb32 --service-name customer
-bind --app-name cb32 --service-name customer32 --username customer
-bind --app-name cb32 --service-name testrunner --username account
-deploy --app-name cb32 --service-name account --artifact-path account/target/account-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
-deploy --app-name cb32 --service-name checks --artifact-path checks/target/checks-0.0.1-SNAPSHOT.jar --image-version 0.0.1
-deploy --app-name cb32 --service-name customer --artifact-path customer/target/customer-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
-deploy --app-name cb32 --service-name customer32 --artifact-path customer32/target/customer32-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
-deploy --app-name cb32 --service-name creditscore --artifact-path creditscore/target/creditscore-0.0.1-SNAPSHOT.jar --image-version 0.0.1
-deploy --app-name cb32 --service-name testrunner --artifact-path testrunner/target/testrunner-0.0.1-SNAPSHOT.jar --image-version 0.0.1
-deploy --app-name cb32 --service-name transfer --artifact-path transfer/target/transfer-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+bind --service-name account
+bind --service-name checks --username account
+bind --service-name customer
+bind --service-name customer32 --username customer
+bind --service-name testrunner --username account
+deploy --service-name account --artifact-path account/target/account-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
+deploy --service-name checks --artifact-path checks/target/checks-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+deploy --service-name customer --artifact-path customer/target/customer-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
+deploy --service-name customer32 --artifact-path customer32/target/customer32-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
+deploy --service-name creditscore --artifact-path creditscore/target/creditscore-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+deploy --service-name testrunner --artifact-path testrunner/target/testrunner-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+deploy --service-name transfer --artifact-path transfer/target/transfer-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+```
+
+## Optional - autoscaling
+
+Create autoscalers for CloudBank.
+
+```text
+oractl:>script --file deploy-cmds/autoscale-cmd.txt
+```
+
+The following commands are executed:
+
+```script
+create-autoscaler --service-name account --min-replicas 1 --max-replicas 4 --cpu-request 100m --cpu-percent 80 
+create-autoscaler --service-name checks --min-replicas 1 --max-replicas 4 --cpu-request 100m --cpu-percent 80
+create-autoscaler --service-name customer --min-replicas 1 --max-replicas 4 --cpu-request 100m --cpu-percent 80
+create-autoscaler --service-name customer32 --min-replicas 1 --max-replicas 4 --cpu-request 100m --cpu-percent 80
+create-autoscaler --service-name creditscore --min-replicas 1 --max-replicas 4 --cpu-request 100m --cpu-percent 80
+create-autoscaler --service-name testrunner --min-replicas 1 --max-replicas 4 --cpu-request 100m --cpu-percent 80
+create-autoscaler --service-name transfer --min-replicas 1 --max-replicas 4 --cpu-request 100m --cpu-percent 80
 ```
 
 ## OpenAPI
@@ -179,7 +197,7 @@ This is an example of the `customer32` application:
    1. Port forward
 
       ```shell
-      kubectl port-forward -n cb32 svc/account 8081:8080
+      kubectl port-forward -n application svc/account 8081:8080
       ```
 
    1. Rest endpoint
@@ -210,7 +228,7 @@ This is an example of the `customer32` application:
    1. Port forward
 
       ```shell
-      kubectl port-forward -n cb32 svc/customer 8082:8080
+      kubectl port-forward -n application svc/customer 8082:8080
       ```
 
    1. REST endpoint
@@ -240,13 +258,13 @@ This is an example of the `customer32` application:
    1. Port forward
 
       ```shell
-      kubectl port-forward -n cb32 svc/customer32 9000:8080
+      kubectl port-forward -n application svc/customer32 9000:8080
       ```
 
    1. REST endpoint
 
       ```shell
-      curl -s http://localhost:8082/api/v1/customer | jq
+      curl -s http://localhost:9000/api/v2/customer | jq
       ```
 
       Should return:
@@ -267,7 +285,7 @@ This is an example of the `customer32` application:
     1. Port forward
 
        ```shell
-       kubectl port-forward -n cb32 svc/creditscore 8083:8080
+       kubectl port-forward -n application svc/creditscore 8083:8080
        ``````
 
     1. REST endpoint
@@ -290,13 +308,13 @@ This is an example of the `customer32` application:
     1. Port forward
 
        ```shell
-       kubectl -n cb32 port-forward svc/testrunner 8084:8080
+       kubectl -n application port-forward svc/testrunner 8084:8080
        ```
 
     1. REST endpoint - deposit check. Make sure you use an existing account number
 
        ```shell
-       curl -i -X POST -H 'Content-Type: application/json' -d '{"accountId": 2, "amount": 256}' http://localhost:8084/api/v1/testrunner/deposit
+       curl -i -X POST -H 'Content-Type: application/json' -d '{"accountId": 21, "amount": 256}' http://localhost:8084/api/v1/testrunner/deposit
        ```
 
        Should return:
@@ -313,7 +331,7 @@ This is an example of the `customer32` application:
     1. Check application log
 
          ```shell
-         kubectl -n cb32 logs svc/checks
+         kubectl logs -n application svc/checks
          ```
 
          Should contain:
@@ -322,7 +340,7 @@ This is an example of the `customer32` application:
          Received deposit <CheckDeposit(accountId=21, amount=256)>
          ```
 
-    1. Check journal entries
+    1. Check journal entries. Replace '21' with the account number you used.
 
         ```shell
         curl -i http://localhost:8081/api/v1/account/21/journal
@@ -359,7 +377,7 @@ This is an example of the `customer32` application:
     1. Check application log
 
        ```shell
-       kubectl -n cb32 logs svc/checks
+       kubectl logs -n application svc/checks
        ```
 
        Output should be similar to:
@@ -392,7 +410,7 @@ This is an example of the `customer32` application:
     1. Port forward
 
        ```shell
-       kubectl -n cb32 port-forward svc/transfer 8085:8080
+       kubectl -n application port-forward svc/transfer 8085:8080
        ```
 
     1. Check account balances. Note that the account numbers 21 and 22 can be different in your environment
@@ -468,7 +486,7 @@ This is an example of the `customer32` application:
     1. Check the application log to confirm
 
        ```shell
-       kubectl -n cb32 logs svc/transfer
+       kubectl logs -n application svc/transfer
        ```
 
        Output should look similar to this:

@@ -1,5 +1,7 @@
 ---
 title: "API Gateway"
+description: "APISIX Gateway for API management in Oracle Backend for Spring Boot and Microservices"
+keywords: "api apisix gateway traffic deployment circuitbreaker spring springboot microservices oracle backend"
 resources:
   - name: obaas-apisix-k8s
     src: "obaas-apisix-k8s.png"
@@ -47,8 +49,7 @@ create a secure channel to `service/apisix-dashboard`. Process the following ste
     * username: `admin`
     * password: `admin`
 
-    **NOTE:** Oracle recommends that you change the default password when you log in the first time. Even though the dashboard is not
-	accessible externally, Oracle still recommends using strong passwords to maximize security.
+    **NOTE:** Oracle recommends that you change the default password when you log in the first time. Even though the dashboard is not accessible externally, Oracle still recommends using strong passwords to maximize security.
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-apisix-login" size="tiny" lazy=false >}}
@@ -62,17 +63,16 @@ API Gateway by processing these steps:
 
 1. Create a route to the service. For example:
 
-    a. In the Apache APISIX Dashboard, click **Routes** in the menu on the left side.
+    1. In the Apache APISIX Dashboard, click **Routes** in the menu on the left side.
 
       <!-- spellchecker-disable -->
       {{< img name="obaas-apisix-routes" size="medium" lazy=false >}}
       <!-- spellchecker-enable -->
 
-    b. Click **Create** to create a new route.
-    
-	c. Fill out the necessary details (anything not mentioned here can be left at the default value). For example, for the "slow service"
-       to be included in the [Sample Applications](../../sample-apps), provide these details:
-	   
+    1. Click **Create** to create a new route.
+
+    1. Fill out the necessary details (anything not mentioned here can be left at the default value). For example, for the "slow service" to be included in the [Sample Applications](../../sample-apps), provide these details:
+
       * name = slow
       * path = /fruit*
       * method = get, options
@@ -80,13 +80,7 @@ API Gateway by processing these steps:
       * discovery type = eureka
       * service name = SLOW (note that this is case sensitive, this is the key from the Eureka dashboard)
 
-        **NOTE:** The API Gateway is pre-configured with both "Eureka" and "Kubernetes" discovery types. For Eureka, the service name is the key used to
-		          deploy the service in Eureka, which is normally the value from `spring.application.name` in the Spring Boot configuration
-				  file (`src/main/resources/application.yaml`), in uppercase characters. For Kubernetes, the service name is in the
-				  format `namespace/service:port` where `namespace` is the Kubernetes namespace in which the Spring Boot application is deployed, `service` is
-				  the name of the Kubernetes service for that application, and `port` is the name of the port in that service. If you deployed your Spring Boot
-				  application with the Oracle Backend for Spring Boot and Microservices CLI, the port name will be `spring`. For example, an application called `slow-service` deployed
-				  in the `my-apps` namespace would be `my-apps/slow-service:spring`.
+        **NOTE:** The API Gateway is pre-configured with both "Eureka" and "Kubernetes" discovery types. For Eureka, the service name is the key used to deploy the service in Eureka, which is normally the value from `spring.application.name` in the Spring Boot configuration file (`src/main/resources/application.yaml`), in uppercase characters. For Kubernetes, the service name is in the format `namespace/service:port` where `namespace` is the Kubernetes namespace in which the Spring Boot application is deployed, `service` is the name of the Kubernetes service for that application, and `port` is the name of the port in that service. If you deployed your Spring Boot application with the Oracle Backend for Spring Boot and Microservices CLI, the port name will be `spring`. For example, an application called `slow-service` deployed in the `my-apps` namespace would be `my-apps/slow-service:spring`.
 
         <!-- spellchecker-disable -->
         {{< img name="obaas-apisix-routes-step1" size="medium" lazy=false >}}
@@ -100,7 +94,7 @@ API Gateway by processing these steps:
         {{< img name="obaas-apisix-routes-step3" size="medium" lazy=false >}}
         <!-- spellchecker-enable -->
         </br>
-    
+
     d. Save the route that you created.
         <!-- spellchecker-disable -->
         {{< img name="obaas-apisix-routes-step4" size="medium" lazy=false >}}
@@ -126,5 +120,3 @@ API Gateway by processing these steps:
       ```
 
       You should get "banana" or "fallback fruit is apple" back as the response.
-
-

@@ -1,5 +1,7 @@
 ---
 title: "Oracle Spring Boot Starter for AQ/JMS"
+description: "Spring Boot Starters for Advanced Queueing, Transactional Event Queues using JMS in Oracle Database"
+keywords: "starter springboot jms aq txeventq queueing messaging asynchronous spring development microservices development oracle database"
 ---
 
 This starter provides support for Oracle Transactional Event Queues (TxEventQ) and Oracle Advanced Queuing (AQ)
@@ -22,7 +24,7 @@ To add this starter to your project, add this Maven dependency:
 
 For Gradle projects, add this dependency:
 
-```
+```gradle
 implementation 'com.oracle.database.spring:oracle-spring-boot-starter-aqjms:23.4.0'
 ```
 
@@ -62,27 +64,27 @@ import org.springframework.jms.support.converter.MessageType;
 @EnableJms
 public class JmsSampleApplication {
 
-	@Bean
-	public JmsListenerContainerFactory<?> myFactory(ConnectionFactory connectionFactory,
-							DefaultJmsListenerContainerFactoryConfigurer configurer) {
-	  DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-	  // This provides all Boot's defaults to this factory, including the message converter
-	  configurer.configure(factory, connectionFactory);
-	  // You could override some of Boot's defaults here if necessary
-	  return factory;
-	}
+ @Bean
+ public JmsListenerContainerFactory<?> myFactory(ConnectionFactory connectionFactory,
+       DefaultJmsListenerContainerFactoryConfigurer configurer) {
+   DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+   // This provides all Boot's defaults to this factory, including the message converter
+   configurer.configure(factory, connectionFactory);
+   // You could override some of Boot's defaults here if necessary
+   return factory;
+ }
   
-	@Bean
-	public MessageConverter jacksonJmsMessageConverter() {
-	  MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
-	  converter.setTargetType(MessageType.TEXT);
-	  converter.setTypeIdPropertyName("_type");
-	  return converter;
-	}
+ @Bean
+ public MessageConverter jacksonJmsMessageConverter() {
+   MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+   converter.setTargetType(MessageType.TEXT);
+   converter.setTypeIdPropertyName("_type");
+   return converter;
+ }
   
-	public static void main(String[] args) {
-	  ConfigurableApplicationContext context = SpringApplication.run(JmsSampleApplication.class, args);
-	}
+ public static void main(String[] args) {
+   ConfigurableApplicationContext context = SpringApplication.run(JmsSampleApplication.class, args);
+ }
   
 }
 ```
@@ -123,4 +125,3 @@ details for the Oracle Database hosting the queues and topics.  If you wish to u
 configuration, you must use a named configuration, for example `spring.datasource.txeventq` and use Java
 configuration (as shown for the [UCP starter](./ucp)) and annotate the configuration with
 the standard Spring `@Qualifier` annotation, specifying the correct name, for example `txevevntq`.
-

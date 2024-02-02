@@ -1,5 +1,7 @@
 ---
 title: "Spring Boot Admin"
+description: "Using Spring Boot Admin to manage applications in Oracle Backend for Spring Boot and Microservices"
+keywords: "admin springboot spring development microservices development oracle backend"
 resources:
   - name: obaas-springadmin-apps
     src: "obaas-springadmin-apps.png"
@@ -29,8 +31,7 @@ the applications:
     * username: `admin`
     * password: `admin`
 
-    **NOTE:** Oracle recommends that you change the default password when you log in for the first time. Even though the dashboard is not
-	accessible externally, Oracle still recommends using strong passwords to maximize security.
+    **NOTE:** Oracle recommends that you change the default password when you log in for the first time. Even though the dashboard is not accessible externally, Oracle still recommends using strong passwords to maximize security.
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-springadmin-apps" size="medium" lazy=false >}}
@@ -45,5 +46,3 @@ the applications:
     <!-- spellchecker-disable -->
     {{< img name="obaas-springadmin-svc-details" size="medium" lazy=false >}}
     <!-- spellchecker-enable -->
-
-

@@ -1,5 +1,7 @@
 ---
-title: "On-Premises Installation - Oracle Linux 8 (x86)"
+title: "Developer Installation - Oracle Linux 8 (x86)"
+description: "Custom installation on Oracle Linux for Oracle Backend for Spring Boot and Microservices"
+keywords: "installation ol oraclelinux nonproduction development onprem custom spring springboot microservices development oracle backend"
 ---
 
 This is an description of installing on a Oracle Linux 8 desktop.
@@ -20,7 +22,7 @@ useradd obaas
 
 ### Download Oracle Backend for Spring Boot and Microservices
 
-Download [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.1/onprem-ebaas_latest.zip) and unzip into a new directory.
+Download the latest version of [Oracle Backend for Spring Boot](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.0/onprem-ebaas_latest.zip) and unzip into a new directory.
 
 As the `obaas` user, run this command:
 
@@ -81,7 +83,7 @@ The remaining steps require **direct login** as the `obaas` user without using `
 
 ### Download the Database or Oracle REST Data Services (ORDS) Images
 
-The _Desktop_ installation provisions an Oracle database into the Kubernetes cluster. The images must be downloaded from [Oracle Cloud Infrastructure Registry (Container Registry)](https://container-registry.oracle.com/) before continuing.
+The non-production installation provisions an Oracle database into the Kubernetes cluster. The images must be downloaded from [Oracle Cloud Infrastructure Registry (Container Registry)](https://container-registry.oracle.com/) before continuing.
 
 While directly logged into the `obaas` user, process these steps:
 

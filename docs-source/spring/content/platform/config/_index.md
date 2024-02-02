@@ -1,5 +1,7 @@
 ---
 title: "Spring Config Server"
+description: "Externalized configuration using Spring Config Server in Oracle Backend for Spring Boot and Microservices"
+keywords: "config configserver springboot spring development microservices development oracle backend"
 ---
 
 Oracle Backend for Spring Boot and Microservices includes Spring Cloud Config which provides server- and client-side support for externalized configurations in a distributed system. The Spring Cloud Config server provides a central place to manage external properties for applications across all environments.
@@ -17,8 +19,17 @@ When building applications using Spring Config Server, the Spring Cloud Config c
 
 ```yaml
 spring:
+  application:
+    name: <application name>
   config:
-    import: optional:configserver:${config.server.url}
+    import: optional:configserver:${config.server.url} 
+
+  cloud:
+     config:
+       label: <optional>
+       profile: <optional>
+       username: <A user with the role ROLE_USER>
+       password: <password>
 ```
 
 You also need to add the following dependency to your Spring Boot application `pom.xml`:

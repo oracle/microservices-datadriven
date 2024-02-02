@@ -1,5 +1,7 @@
 ---
 title: "Database Access"
+description: "Access the Oracle Autonomous Database in the backend where your Spring Boot microservices applications are deployed"
+keywords: "database autonomous oracle spring springboot microservices backend"
 resources:
   - name: oci-adb-cloud-portal
     src: "oci-adb-cloud-portal.png"

@@ -1,6 +1,7 @@
 ---
 title: "Uninstall"
-description: Uninstall the Oracle BaaS from tenancy"
+description: "Uninstall Oracle Backend for Spring Boot and Microservices"
+keywords: "uninstall backend oracle springboot spring development microservices database"
 resources:
   - name: oci-stack-destroy
     src: "oci-stack-destroy.png"
@@ -30,5 +31,3 @@ The OCI Resource Manager uses the stack definition to destroy all resources. For
 
 The destroy job takes about 20 minutes to complete. Review the logs when the job is done to ensure that it completed successfully. If there are
 any errors, run the **Destroy** job again.
-
-
