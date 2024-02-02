@@ -1,5 +1,7 @@
 ---
 title: "Getting Started"
+description: "Get started with Oracle Backend for Spring Boot and Microservices"
+keywords: "spring springboot microservices demos videos samples cloudbank development oracle backend"
 ---
 
 There are a number of demonstrations (videos) and hands-on labs (Live Lab) that show how to use Oracle Backend for Spring Boot and Microservices (Spring Boot) and

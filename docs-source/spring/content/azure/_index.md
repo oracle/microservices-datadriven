@@ -1,5 +1,7 @@
 ---
 title: "Azure/OCI Multicloud Installation"
+description: "Multi-cloud Spring Boot Backend on Azure makes it easy for developers to build, deploy and operate microservices in a multicloud environment with Oracle Autonomous Database"
+keywords: "spring springboot microservices multicloud azure oracle"
 ---
 
 The Oracle Backend for Spring Boot and Microservices is available to install in Multicloud (Microsoft Azure (Azure) and Oracle Cloud Infrastructure (OCI)). This installation

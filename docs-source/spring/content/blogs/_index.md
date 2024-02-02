@@ -1,5 +1,7 @@
 ---
 title: "Read our blogs!"
+description: "Read blog posts from the team that builds the Oracle Backend for Spring Boot and Microservices"
+keywords: "blogs team spring springboot microservices mobile oracle"
 ---
 
 Our team members post blog articles and other content on various sites including [Medium](https://medium.com/@mark.x.nelson), LinkedIn ([Corrado de Bari](https://www.linkedin.com/in/corradodebari/), [Doug Drechsel](https://www.linkedin.com/in/dougdrechsel/)), [RedStack](https://redstack.wordpress.com), [DZone](https://dzone.com/users/4571557/paulparkinson.html), [Andy Tael](https://mr-a.org) and the [Oracle Developers Blog](https://blogs.oracle.com/developers).

@@ -1,6 +1,54 @@
 ---
 title: "Release Notes"
+description: "Release notes for Oracle Backend for Spring Boot and Microservices including details of additions, updates, deprecations and removals in each release"
+keywords: "release notes additions updates deprecations removals springboot spring development microservices development oracle backend"
 ---
+
+## Version 1.1.0, February 2, 2024
+
+Notes:
+
+* Recommended versions for user applications updated Spring Boot 3.2.x, Java 17 or 21, Spring 6.1 and Spring Cloud 2023.0.0, with limited backwards compatibility for Spring Boot 2.7.x.
+* Platform components are updated to Spring Boot 3.2.1 versions and matching Spring Cloud versions.
+* A preview of a new "Spring Operations Center" feature is added, including a web user interface and additional Grafana dashboards.
+* User Management using the CLI and REST Endpoints.
+* Added support for auto-scaling of Spring Boot applications deployed in the platform.
+* Changes to the custom installation to allow using existing resources including database, network and Kubernetes.
+* Various platform services updated to use Database Resident Connection Pooling to improve performance.
+* Improvements to collection of trace data using Open Telemetry, including migration to agentless approach,
+  uptake of Micrometer, and so on.
+* Improvements for Spring Native/GraalVM native image compilation of Spring Boot services.
+* Improvements to CLI to support scripting.
+* Various components updated to newer releases.
+* Bug fixes.
+
+The following components were added:
+
+| Component                               | Version   | Description                                     |
+|-----------------------------------------|-----------|-------------------------------------------------|
+| Oracle Database Observability Exporter  | 1.1.2     | Provides observability for the Oracle Database. |
+| Metrics server | 0.64  | Source of container resource metrics for Kubernetes built-in autoscaling pipeline |
+| Kube State Metrics                      | 2.10.1    | Collects metrics for the Kubernetes cluster     |
+
+The following components were updated:
+
+| Component                                                                     | New Version   | Replaced Version    |
+|-------------------------------------------------------------------------------|---------------|---------------------|
+| APISIX API Gateway | 3.8.0 | 3.4.0 |
+| Apache Kafka | 3.6.1 | 3.5.1 |
+| Coherence Operator | 3.3.2 | 3.2.11 |
+| Conductor Server | 3.13.8 | 3.13.2 |
+| HashiCorp Vault | 1.15.2  | 1.14.0 |
+| Netflix Conductor | 3.13.8 | 3.13.2 |
+| OpenTelemetry Collector | 0.91.0 | 0.86.0 |
+| Oracle Backend for Spring Boot and Microservices CLI                          | 1.1.0         | 1.0.1               |
+| Oracle Backend for Spring Boot and Microservices Visual Studio Code extension | 1.1.0         | 1.0.1               |
+| Oracle Transaction Manager for Microservices (MicroTx) | 23.4.1 | 22.3.2 |
+| Spring Authorization Server | 3.2.1 | 2.7.5 |
+| Spring Boot Admin dashboard | 3.2.0 |  3.1.3 |
+| Spring Cloud Config server | 2023.0.0 | 2022.0.4 |
+| Spring Cloud Eureka service registry | 2023.0.0 | 4.0.3 |
+| Strimzi-Apache Kafka operator | 0.39.0 | 0.36.1 |
 
 ## Version 1.0.1, November 2, 2023
 

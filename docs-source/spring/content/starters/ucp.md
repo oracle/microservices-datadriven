@@ -1,5 +1,7 @@
 ---
 title: "Oracle Spring Boot Starter for Universal Connection Pool"
+description: "Spring Boot Starters for Universal Connection Pooling with Oracle Database"
+keywords: "starter ucp oracle database springboot spring development microservices development"
 ---
 
 This starter provides a connection (data source) to an Oracle Database using Universal Connection Pool, which provides an efficient way
@@ -17,7 +19,7 @@ To add this starter to your project, add this Maven dependency:
 
 For Gradle projects, add this dependency:
 
-```
+```gradle
 implementation 'com.oracle.database.spring:oracle-spring-boot-starter-ucp:23.4.0'
 ```
 

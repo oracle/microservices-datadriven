@@ -1,5 +1,7 @@
 ---
 title: "Kubernetes Access"
+description: "Access the Kubernetes cluster in the backend where your Spring Boot microservices applications are deployed"
+keywords: "kubernetes cluster spring springboot microservices oracle"
 resources:
   - name: oci-cloud-shell
     src: "oci-cloud-shell.png"

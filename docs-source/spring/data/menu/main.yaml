@@ -3,7 +3,7 @@ main:
     ref: "/setup"
   - name: "Multi-Cloud (OCI/Azure) Installation"
     ref: "/azure"
-  - name: "On-Premises Installation"
+  - name: "Custom Installations"
     ref: "/on-premises"
     sub:
       - name: "MacOS Ventura (x86)"
@@ -29,6 +29,8 @@ main:
         ref: "/platform/spring-admin"
       - name: OBaaS CLI
         ref: "/development/cli"
+      - name: MicroTx
+        ref: "/platform/microtx"
       - name: Vault
         ref: "/platform/vault"
       - name: VS Code plugin
@@ -52,6 +54,8 @@ main:
         ref: "/development/setup"
       - name: Project Structure
         ref: "/development/project"
+      - name: Predefined Variables
+        ref: "/development/envvars"
   - name: Spring Boot Starters
     ref: "/starters"
     sub:
@@ -65,6 +69,8 @@ main:
     ref: "/database"
   - name: Kubernetes Access
     ref: "/cluster-access"
+  - name: "Sample Application"
+    ref: "/sampleapp"
   - name: Uninstall
     ref: "/uninstall"
   - name: "Release Notes"

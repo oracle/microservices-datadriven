@@ -1,5 +1,7 @@
 ---
 title: "Oracle Spring Boot Starter for Wallet"
+description: "Spring Boot Starters for Oracle Database Wallet"
+keywords: "starter wallet mtls oracle database springboot spring development microservices development"
 ---
 
 This starter provides support for wallet-based authentication for Oracle Database connections.  It depends
@@ -17,14 +19,14 @@ To add this starter to your project, add this Maven dependency:
 
 For Gradle projects, add this dependency:
 
-```
+```gradle
 implementation 'com.oracle.database.spring:oracle-spring-boot-starter-wallet:23.4.0'
 ```
 
 You need to provide the wallet to your application.  You can specify the location in the `spring.datasource.url`
 as shown in the following example.
 
-```
+```text
 jdbc:oracle:thin:@mydb_tp?TNS_ADMIN=/oracle/tnsadmin
 ```
 

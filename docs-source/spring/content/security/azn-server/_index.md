@@ -1,5 +1,7 @@
 ---
 title: "Authentication and Authorization Server"
+description: "Authentication and authorization using Spring Authorization Server in Oracle Backend for Spring Boot and Microservices"
+keywords: "security authentication authorization springboot spring development microservices development oracle backend"
 resources:
   - name: azn-server-arch
     src: "azn-server-arch.png"
