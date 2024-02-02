@@ -4,8 +4,6 @@
   <url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/observability/tracing/</loc>
   </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/spring/development/</loc>
-  </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/development/setup/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/platform/apigw/</loc>
@@ -14,7 +12,15 @@
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/azure/</loc>
   </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/on-premises/</loc>
+  </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/database/</loc>
+  </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/</loc>
+  </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/</loc>
+  </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/development/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/getting-started/</loc>
   </url><url>
@@ -22,15 +28,11 @@
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/observability/metrics/</loc>
   </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/platform/microtx/</loc>
+  </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/development/cli/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/observability/</loc>
-  </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/spring/on-premises/</loc>
-  </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/</loc>
-  </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/</loc>
   </url><url>
@@ -46,11 +48,15 @@
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/platform/</loc>
   </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/development/envvars/</loc>
+  </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/development/project/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/blogs/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/release-notes/</loc>
+  </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/sampleapp/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/security/</loc>
   </url><url>

@@ -12,11 +12,20 @@
 <meta name="generator" content="Hugo 0.115.4">
 
 
-  <meta name="description" content="This starter provides support for wallet-based authentication for Oracle Database connections. It depends on the UCP starter.
-To add this starter to your project, add this Maven dependency:
-&lt;dependency&gt; &lt;groupId&gt;com.oracle.database.spring&lt;/groupId&gt; &lt;artifactId&gt;oracle-spring-boot-starter-wallet&lt;/artifactId&gt; &lt;version&gt;23.4.0&lt;/version&gt; &lt;/dependency&gt; For Gradle projects, add this dependency:
-implementation &#39;com.oracle.database.spring:oracle-spring-boot-starter-wallet:23.4.0&#39; You need to provide the wallet to your application. You can specify the location in the spring.datasource.url as shown in the following example.
-jdbc:oracle:thin:@mydb_tp?TNS_ADMIN=/oracle/tnsadmin Note that the location specified in the sqlnet." />
+  <meta name="description" content="Spring Boot Starters for Oracle Database Wallet" />
+  <meta name="keywords" content="starter,wallet,mtls,oracle,database,springboot,spring,development,microservices,development" />
+
+
+  <meta name="robots" content="index, follow" />
+
+
+<meta name="siteid" content="us" />
+<meta name="countryid" content="US" />
+<meta name="country" content="United States" />
+<meta name="Language" content="en" />
+
+
+
 
     <title>Oracle Spring Boot Starter for Wallet | Oracle Backend for Spring Boot and Microservices</title>
 
@@ -42,11 +51,7 @@ jdbc:oracle:thin:@mydb_tp?TNS_ADMIN=/oracle/tnsadmin Note that the location spec
     content="Oracle Spring Boot Starter for Wallet"
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot and Microservices" />
-  <meta property="og:description" content="This starter provides support for wallet-based authentication for Oracle Database connections. It depends on the UCP starter.
-To add this starter to your project, add this Maven dependency:
-&lt;dependency&gt; &lt;groupId&gt;com.oracle.database.spring&lt;/groupId&gt; &lt;artifactId&gt;oracle-spring-boot-starter-wallet&lt;/artifactId&gt; &lt;version&gt;23.4.0&lt;/version&gt; &lt;/dependency&gt; For Gradle projects, add this dependency:
-implementation &#39;com.oracle.database.spring:oracle-spring-boot-starter-wallet:23.4.0&#39; You need to provide the wallet to your application. You can specify the location in the spring.datasource.url as shown in the following example.
-jdbc:oracle:thin:@mydb_tp?TNS_ADMIN=/oracle/tnsadmin Note that the location specified in the sqlnet." />
+  <meta property="og:description" content="Spring Boot Starters for Oracle Database Wallet" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/starters/wallet/" />
 
@@ -55,11 +60,7 @@ jdbc:oracle:thin:@mydb_tp?TNS_ADMIN=/oracle/tnsadmin Note that the location spec
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Oracle Spring Boot Starter for Wallet" />
-  <meta name="twitter:description" content="This starter provides support for wallet-based authentication for Oracle Database connections. It depends on the UCP starter.
-To add this starter to your project, add this Maven dependency:
-&lt;dependency&gt; &lt;groupId&gt;com.oracle.database.spring&lt;/groupId&gt; &lt;artifactId&gt;oracle-spring-boot-starter-wallet&lt;/artifactId&gt; &lt;version&gt;23.4.0&lt;/version&gt; &lt;/dependency&gt; For Gradle projects, add this dependency:
-implementation &#39;com.oracle.database.spring:oracle-spring-boot-starter-wallet:23.4.0&#39; You need to provide the wallet to your application. You can specify the location in the spring.datasource.url as shown in the following example.
-jdbc:oracle:thin:@mydb_tp?TNS_ADMIN=/oracle/tnsadmin Note that the location specified in the sqlnet." />
+  <meta name="twitter:description" content="Spring Boot Starters for Oracle Database Wallet" />
 
 
   <script type="application/ld+json">
@@ -70,7 +71,7 @@ jdbc:oracle:thin:@mydb_tp?TNS_ADMIN=/oracle/tnsadmin Note that the location spec
       "name": "Oracle Spring Boot Starter for Wallet",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/starters/wallet/",
       "headline": "Oracle Spring Boot Starter for Wallet",
-      "description": "This starter provides support for wallet-based authentication for Oracle Database connections. It depends on the UCP starter.\nTo add this starter to your project, add this Maven dependency:\n\u003cdependency\u003e \u003cgroupId\u003ecom.oracle.database.spring\u003c\/groupId\u003e \u003cartifactId\u003eoracle-spring-boot-starter-wallet\u003c\/artifactId\u003e \u003cversion\u003e23.4.0\u003c\/version\u003e \u003c\/dependency\u003e For Gradle projects, add this dependency:\nimplementation \u0027com.oracle.database.spring:oracle-spring-boot-starter-wallet:23.4.0\u0027 You need to provide the wallet to your application. You can specify the location in the spring.datasource.url as shown in the following example.\njdbc:oracle:thin:@mydb_tp?TNS_ADMIN=\/oracle\/tnsadmin Note that the location specified in the sqlnet.",
+      "description": "Spring Boot Starters for Oracle Database Wallet",
       "wordCount" : "115",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
@@ -420,7 +421,7 @@ jdbc:oracle:thin:@mydb_tp?TNS_ADMIN=/oracle/tnsadmin Note that the location spec
                   href="/microservices-datadriven/spring/on-premises"
                   class="gdoc-nav__entry"
                 >
-                  On-Premises Installation
+                  Custom Installations
                 </a>
               </span>
               
@@ -927,6 +928,51 @@ jdbc:oracle:thin:@mydb_tp?TNS_ADMIN=/oracle/tnsadmin Note that the location spec
               <span class="flex">
                 
                 <a
+                  href="/microservices-datadriven/spring/platform/microtx"
+                  class="gdoc-nav__entry"
+                >
+                  MicroTx
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
                   href="/microservices-datadriven/spring/platform/vault"
                   class="gdoc-nav__entry"
                 >
@@ -1376,6 +1422,51 @@ jdbc:oracle:thin:@mydb_tp?TNS_ADMIN=/oracle/tnsadmin Note that the location spec
         
       </li>
     
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/development/envvars"
+                  class="gdoc-nav__entry"
+                >
+                  Predefined Variables
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
   </ul>
 
         
@@ -1692,6 +1783,51 @@ jdbc:oracle:thin:@mydb_tp?TNS_ADMIN=/oracle/tnsadmin Note that the location spec
               <span class="flex">
                 
                 <a
+                  href="/microservices-datadriven/spring/sampleapp"
+                  class="gdoc-nav__entry"
+                >
+                  Sample Application
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
                   href="/microservices-datadriven/spring/uninstall"
                   class="gdoc-nav__entry"
                 >
@@ -1919,11 +2055,11 @@ on the UCP starter.</p>
 </span></span><span class="line"><span class="cl">    <span class="nt">&lt;version&gt;</span>23.4.0<span class="nt">&lt;/version&gt;</span>
 </span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
 </span></span></code></pre></div><p>For Gradle projects, add this dependency:</p>
-<pre tabindex="0"><code>implementation &#39;com.oracle.database.spring:oracle-spring-boot-starter-wallet:23.4.0&#39;
-</code></pre><p>You need to provide the wallet to your application.  You can specify the location in the <code>spring.datasource.url</code>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-gradle" data-lang="gradle"><span class="line"><span class="cl"><span class="n">implementation</span> <span class="s1">&#39;com.oracle.database.spring:oracle-spring-boot-starter-wallet:23.4.0&#39;</span>
+</span></span></code></pre></div><p>You need to provide the wallet to your application.  You can specify the location in the <code>spring.datasource.url</code>
 as shown in the following example.</p>
-<pre tabindex="0"><code>jdbc:oracle:thin:@mydb_tp?TNS_ADMIN=/oracle/tnsadmin
-</code></pre><p>Note that the location specified in the <code>sqlnet.ora</code> must match the actual location of the file.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">jdbc:oracle:thin:@mydb_tp?TNS_ADMIN=/oracle/tnsadmin
+</span></span></code></pre></div><p>Note that the location specified in the <code>sqlnet.ora</code> must match the actual location of the file.</p>
 <p>If your service is deployed in Kubernetes, then the wallet should be placed in a Kubernetes secret which
 is mounted into the pod at the location specified by the <code>TNS_ADMIN</code> parameter in the URL.</p>
 
@@ -2316,116 +2452,6 @@ is mounted into the pod at the location specified by the <code>TNS_ADMIN</code> 
     
     
   
-
-    
-  
-    
-    
-
-    
-    
-      
-      
-      
-
-      
-        
-      
-      
-
-      
-
-      
-
-      
-    
-
-    
-    
-      
-  
-  
-
-  
-    
-    
-
-    
-    
-      
-      
-      
-
-      
-        
-      
-      
-
-      
-
-      
-
-      
-    
-
-    
-    
-  
-    
-    
-
-    
-    
-      
-      
-      
-
-      
-        
-      
-      
-
-      
-
-      
-
-      
-    
-
-    
-    
-  
-
-    
-  
-    
-    
-
-    
-    
-      
-      
-      
-
-      
-        
-      
-      
-
-      
-
-      
-
-      
-    
-
-    
-    
-      
-  
-  
-
-  
     
     
 
@@ -2584,6 +2610,164 @@ is mounted into the pod at the location specified by the <code>TNS_ADMIN</code> 
     
     
   
+
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+      
+  
+  
+
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+  
+
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+      
+  
+  
+
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+  
     
     
 
@@ -2639,6 +2823,30 @@ is mounted into the pod at the location specified by the <code>TNS_ADMIN</code> 
     
   
 
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
     
   
     

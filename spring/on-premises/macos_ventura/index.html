@@ -12,12 +12,22 @@
 <meta name="generator" content="Hugo 0.115.4">
 
 
-  <meta name="description" content="This is a discussion of an installation on a macOS Ventura desktop.
-Read the On-Premises documentation and ensure that your desktop meets the minimum system requirements.
-Install Podman To install Podman, process these commands:
-brew install podman PODMAN_VERSION=$(podman -v |awk &#39;{print $NF}&#39;) sudo /usr/local/Cellar/podman/${PODMAN_VERSION}/bin/podman-mac-helper install podman machine init --cpus 4 --disk-size 60 --memory 8192 --rootful --now podman system connection default podman-machine-default-root Download the Database or Oracle REST Data Services (ORDS) Images The Desktop installation provisions an Oracle database into the Kubernetes cluster." />
+  <meta name="description" content="Custom installation on macOS for Oracle Backend for Spring Boot and Microservices" />
+  <meta name="keywords" content="installation,macos,ventura,nonproduction,development,on-premises,custom,spring,springboot,microservices,development,oracle,backend" />
 
-    <title>On-Premises Installation - macOS Ventura (x86) | Oracle Backend for Spring Boot and Microservices</title>
+
+  <meta name="robots" content="index, follow" />
+
+
+<meta name="siteid" content="us" />
+<meta name="countryid" content="US" />
+<meta name="country" content="United States" />
+<meta name="Language" content="en" />
+
+
+
+
+    <title>Developer Installation - macOS Ventura (x86) | Oracle Backend for Spring Boot and Microservices</title>
 
     <link rel="icon" type="image/svg+xml" href="/microservices-datadriven/spring/favicon/favicon.svg" />
 <link
@@ -38,13 +48,10 @@ brew install podman PODMAN_VERSION=$(podman -v |awk &#39;{print $NF}&#39;) sudo 
     
   <meta
     property="og:title"
-    content="On-Premises Installation - macOS Ventura (x86)"
+    content="Developer Installation - macOS Ventura (x86)"
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot and Microservices" />
-  <meta property="og:description" content="This is a discussion of an installation on a macOS Ventura desktop.
-Read the On-Premises documentation and ensure that your desktop meets the minimum system requirements.
-Install Podman To install Podman, process these commands:
-brew install podman PODMAN_VERSION=$(podman -v |awk &#39;{print $NF}&#39;) sudo /usr/local/Cellar/podman/${PODMAN_VERSION}/bin/podman-mac-helper install podman machine init --cpus 4 --disk-size 60 --memory 8192 --rootful --now podman system connection default podman-machine-default-root Download the Database or Oracle REST Data Services (ORDS) Images The Desktop installation provisions an Oracle database into the Kubernetes cluster." />
+  <meta property="og:description" content="Custom installation on macOS for Oracle Backend for Spring Boot and Microservices" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/" />
 
@@ -52,11 +59,8 @@ brew install podman PODMAN_VERSION=$(podman -v |awk &#39;{print $NF}&#39;) sudo 
 
 
   <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="On-Premises Installation - macOS Ventura (x86)" />
-  <meta name="twitter:description" content="This is a discussion of an installation on a macOS Ventura desktop.
-Read the On-Premises documentation and ensure that your desktop meets the minimum system requirements.
-Install Podman To install Podman, process these commands:
-brew install podman PODMAN_VERSION=$(podman -v |awk &#39;{print $NF}&#39;) sudo /usr/local/Cellar/podman/${PODMAN_VERSION}/bin/podman-mac-helper install podman machine init --cpus 4 --disk-size 60 --memory 8192 --rootful --now podman system connection default podman-machine-default-root Download the Database or Oracle REST Data Services (ORDS) Images The Desktop installation provisions an Oracle database into the Kubernetes cluster." />
+<meta name="twitter:title" content="Developer Installation - macOS Ventura (x86)" />
+  <meta name="twitter:description" content="Custom installation on macOS for Oracle Backend for Spring Boot and Microservices" />
 
 
   <script type="application/ld+json">
@@ -64,11 +68,11 @@ brew install podman PODMAN_VERSION=$(podman -v |awk &#39;{print $NF}&#39;) sudo 
       "@context": "http://schema.org",
       "@type": "TechArticle",
       "articleSection": "On Premises",
-      "name": "On-Premises Installation - macOS Ventura (x86)",
+      "name": "Developer Installation - macOS Ventura (x86)",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/",
-      "headline": "On-Premises Installation - macOS Ventura (x86)",
-      "description": "This is a discussion of an installation on a macOS Ventura desktop.\nRead the On-Premises documentation and ensure that your desktop meets the minimum system requirements.\nInstall Podman To install Podman, process these commands:\nbrew install podman PODMAN_VERSION=$(podman -v |awk \u0027{print $NF}\u0027) sudo \/usr\/local\/Cellar\/podman\/${PODMAN_VERSION}\/bin\/podman-mac-helper install podman machine init --cpus 4 --disk-size 60 --memory 8192 --rootful --now podman system connection default podman-machine-default-root Download the Database or Oracle REST Data Services (ORDS) Images The Desktop installation provisions an Oracle database into the Kubernetes cluster.",
-      "wordCount" : "393",
+      "headline": "Developer Installation - macOS Ventura (x86)",
+      "description": "Custom installation on macOS for Oracle Backend for Spring Boot and Microservices",
+      "wordCount" : "402",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -417,7 +421,7 @@ brew install podman PODMAN_VERSION=$(podman -v |awk &#39;{print $NF}&#39;) sudo 
                   href="/microservices-datadriven/spring/on-premises"
                   class="gdoc-nav__entry"
                 >
-                  On-Premises Installation
+                  Custom Installations
                 </a>
               </span>
               
@@ -924,6 +928,51 @@ brew install podman PODMAN_VERSION=$(podman -v |awk &#39;{print $NF}&#39;) sudo 
               <span class="flex">
                 
                 <a
+                  href="/microservices-datadriven/spring/platform/microtx"
+                  class="gdoc-nav__entry"
+                >
+                  MicroTx
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
                   href="/microservices-datadriven/spring/platform/vault"
                   class="gdoc-nav__entry"
                 >
@@ -1373,6 +1422,51 @@ brew install podman PODMAN_VERSION=$(podman -v |awk &#39;{print $NF}&#39;) sudo 
         
       </li>
     
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/development/envvars"
+                  class="gdoc-nav__entry"
+                >
+                  Predefined Variables
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
   </ul>
 
         
@@ -1689,6 +1783,51 @@ brew install podman PODMAN_VERSION=$(podman -v |awk &#39;{print $NF}&#39;) sudo 
               <span class="flex">
                 
                 <a
+                  href="/microservices-datadriven/spring/sampleapp"
+                  class="gdoc-nav__entry"
+                >
+                  Sample Application
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
                   href="/microservices-datadriven/spring/uninstall"
                   class="gdoc-nav__entry"
                 >
@@ -1888,7 +2027,7 @@ if (!doNotTrack) {
     
   
   
-    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/' href='/microservices-datadriven/spring/'><span itemprop='name'>Oracle Backend for Spring Boot and Microservices</span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/on-premises/' href='/microservices-datadriven/spring/on-premises/'><span itemprop='name'>On-Premises Installation</span></a><meta itemprop='position' content='4' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>On-Premises Installation - macOS Ventura (x86)</span><meta itemprop='position' content='5' /></li>
+    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/' href='/microservices-datadriven/spring/'><span itemprop='name'>Oracle Backend for Spring Boot and Microservices</span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/on-premises/' href='/microservices-datadriven/spring/on-premises/'><span itemprop='name'>Custom Installations</span></a><meta itemprop='position' content='4' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>Developer Installation - macOS Ventura (x86)</span><meta itemprop='position' content='5' /></li>
   
 
   
@@ -1906,8 +2045,8 @@ if (!doNotTrack) {
   <article
     class="gdoc-markdown gdoc-markdown__align--left"
   >
-    <h1>On-Premises Installation - macOS Ventura (x86)</h1>
-    <p>This is a discussion of an installation on a macOS Ventura desktop.</p>
+    <h1>Developer Installation - macOS Ventura (x86)</h1>
+    <p>This is a discussion of a non-production (developer desktop) installation on a macOS Ventura desktop.</p>
 <p>Read the <a
   class="gdoc-markdown__link"
   href="../../on-premises"
@@ -1942,7 +2081,7 @@ if (!doNotTrack) {
         </a>
     </h3>
 </div>
-<p>The <em>Desktop</em> installation provisions an Oracle database into the Kubernetes cluster. The images must be downloaded
+<p>The non-production installation provisions an Oracle database into the Kubernetes cluster. The images must be downloaded
 from <a
   class="gdoc-markdown__link"
   href="https://container-registry.oracle.com/"
@@ -1984,9 +2123,9 @@ from <a
         </a>
     </h3>
 </div>
-<p>Download the <a
+<p>Download the latest version of <a
   class="gdoc-markdown__link"
-  href="https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-ebaas_latest.zip"
+  href="https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.0/onprem-ebaas_latest.zip"
 >Oracle Backend for Spring Boot and Microservices</a> and unzip into a new directory.</p>
 <div class="gdoc-page__anchorwrap">
     <h3 id="install-ansible">
@@ -2069,8 +2208,7 @@ from <a
 <p>If you are behind a virtual private network (VPN) or proxy, see <a
   class="gdoc-markdown__link"
   href="https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/"
->https://minikube.sigs.k8s.io/docs/handbook/vpn_and_proxy/</a> for more details
-on additional tasks.</p>
+>minikube VPN or Proxy</a> for more details on additional tasks.</p>
 
   </article>
 
@@ -2467,116 +2605,6 @@ on additional tasks.</p>
     
     
   
-
-    
-  
-    
-    
-
-    
-    
-      
-      
-      
-
-      
-        
-      
-      
-
-      
-
-      
-
-      
-    
-
-    
-    
-      
-  
-  
-
-  
-    
-    
-
-    
-    
-      
-      
-      
-
-      
-        
-      
-      
-
-      
-
-      
-
-      
-    
-
-    
-    
-  
-    
-    
-
-    
-    
-      
-      
-      
-
-      
-        
-      
-      
-
-      
-
-      
-
-      
-    
-
-    
-    
-  
-
-    
-  
-    
-    
-
-    
-    
-      
-      
-      
-
-      
-        
-      
-      
-
-      
-
-      
-
-      
-    
-
-    
-    
-      
-  
-  
-
-  
     
     
 
@@ -2735,6 +2763,61 @@ on additional tasks.</p>
     
     
   
+
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+      
+  
+  
+
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+  
     
     
 
@@ -2784,6 +2867,133 @@ on additional tasks.</p>
     
   
 
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+      
+  
+  
+
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+  
+
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
     
   
     
@@ -2893,10 +3103,10 @@ on additional tasks.</p>
       <a
         class="gdoc-page__nav--prev flex align-center"
         href="/microservices-datadriven/spring/on-premises/"
-        title="On-Premises Installation"
+        title="Custom Installations"
       >
         <i class="gdoc-icon">gdoc_arrow_left_alt</i>
-        On-Premises Installation
+        Custom Installations
       </a>
     
   </span>
