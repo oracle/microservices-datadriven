@@ -12,7 +12,20 @@
 <meta name="generator" content="Hugo 0.115.4">
 
 
-  <meta name="description" content="Oracle Backend for Spring Boot and Microservices includes the Spring Boot Eureka service registry, which is an application that stores information about client services or applications. Typically, each Microservice registers with the Eureka server at startup and the Eureka server maintains a list of all active instances of the service, including their ports and IP addresses. This information can be accessed by other services using a well-known key. This allows services to interact with each other without needing to know the other addresses at development or deployment time." />
+  <meta name="description" content="Service discovery with Spring Eureka Service Registry in Oracle Backend for Spring Boot and Microservices" />
+  <meta name="keywords" content="service,discovery,registry,eureka,springboot,spring,development,microservices,oracle,backend" />
+
+
+  <meta name="robots" content="index, follow" />
+
+
+<meta name="siteid" content="us" />
+<meta name="countryid" content="US" />
+<meta name="country" content="United States" />
+<meta name="Language" content="en" />
+
+
+
 
     <title>Service Discovery | Oracle Backend for Spring Boot and Microservices</title>
 
@@ -38,7 +51,7 @@
     content="Service Discovery"
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot and Microservices" />
-  <meta property="og:description" content="Oracle Backend for Spring Boot and Microservices includes the Spring Boot Eureka service registry, which is an application that stores information about client services or applications. Typically, each Microservice registers with the Eureka server at startup and the Eureka server maintains a list of all active instances of the service, including their ports and IP addresses. This information can be accessed by other services using a well-known key. This allows services to interact with each other without needing to know the other addresses at development or deployment time." />
+  <meta property="og:description" content="Service discovery with Spring Eureka Service Registry in Oracle Backend for Spring Boot and Microservices" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/platform/eureka/" />
 
@@ -47,7 +60,7 @@
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Service Discovery" />
-  <meta name="twitter:description" content="Oracle Backend for Spring Boot and Microservices includes the Spring Boot Eureka service registry, which is an application that stores information about client services or applications. Typically, each Microservice registers with the Eureka server at startup and the Eureka server maintains a list of all active instances of the service, including their ports and IP addresses. This information can be accessed by other services using a well-known key. This allows services to interact with each other without needing to know the other addresses at development or deployment time." />
+  <meta name="twitter:description" content="Service discovery with Spring Eureka Service Registry in Oracle Backend for Spring Boot and Microservices" />
 
 
   <script type="application/ld+json">
@@ -58,7 +71,7 @@
       "name": "Service Discovery",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/platform/eureka/",
       "headline": "Service Discovery",
-      "description": "Oracle Backend for Spring Boot and Microservices includes the Spring Boot Eureka service registry, which is an application that stores information about client services or applications. Typically, each Microservice registers with the Eureka server at startup and the Eureka server maintains a list of all active instances of the service, including their ports and IP addresses. This information can be accessed by other services using a well-known key. This allows services to interact with each other without needing to know the other addresses at development or deployment time.",
+      "description": "Service discovery with Spring Eureka Service Registry in Oracle Backend for Spring Boot and Microservices",
       "wordCount" : "190",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
@@ -408,7 +421,7 @@
                   href="/microservices-datadriven/spring/on-premises"
                   class="gdoc-nav__entry"
                 >
-                  On-Premises Installation
+                  Custom Installations
                 </a>
               </span>
               
@@ -915,6 +928,51 @@
               <span class="flex">
                 
                 <a
+                  href="/microservices-datadriven/spring/platform/microtx"
+                  class="gdoc-nav__entry"
+                >
+                  MicroTx
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
                   href="/microservices-datadriven/spring/platform/vault"
                   class="gdoc-nav__entry"
                 >
@@ -1364,6 +1422,51 @@
         
       </li>
     
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/development/envvars"
+                  class="gdoc-nav__entry"
+                >
+                  Predefined Variables
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
   </ul>
 
         
@@ -1680,6 +1783,51 @@
               <span class="flex">
                 
                 <a
+                  href="/microservices-datadriven/spring/sampleapp"
+                  class="gdoc-nav__entry"
+                >
+                  Sample Application
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
                   href="/microservices-datadriven/spring/uninstall"
                   class="gdoc-nav__entry"
                 >
@@ -1898,11 +2046,7 @@ if (!doNotTrack) {
     class="gdoc-markdown gdoc-markdown__align--left"
   >
     <h1>Service Discovery</h1>
-    <p>Oracle Backend for Spring Boot and Microservices includes the Spring Boot Eureka service registry, which is an application that stores information about
-client services or applications. Typically, each Microservice registers with the Eureka server at startup and the Eureka server maintains
-a list of all active instances of the service, including their ports and IP addresses. This information can be accessed by other services
-using a well-known key. This allows services to interact with each other without needing to know the other addresses at development or
-deployment time.</p>
+    <p>Oracle Backend for Spring Boot and Microservices includes the Spring Boot Eureka service registry, which is an application that stores information about client services or applications. Typically, each Microservice registers with the Eureka server at startup and the Eureka server maintains a list of all active instances of the service, including their ports and IP addresses. This information can be accessed by other services using a well-known key. This allows services to interact with each other without needing to know the other addresses at development or deployment time.</p>
 <div class="gdoc-page__anchorwrap">
     <h3 id="access-the-eureka-web-user-interface">
         Access the Eureka Web User Interface
@@ -1956,9 +2100,7 @@ deployment time.</p>
 <p>On the web page, you see all of the services registered with Eureka. If you deployed the <a
   class="gdoc-markdown__link"
   href="../../sample-apps"
->sample applications</a>,
-look for an entry called <strong>SLOW</strong>. The presence of this entry confirms that the application successfully registered itself with the
-service registry.</p>
+>sample applications</a>, look for an entry called <strong>SLOW</strong>. The presence of this entry confirms that the application successfully registered itself with the service registry.</p>
 </li>
 <li>
 <p>You should also see the <strong>CONFIG-SERVER</strong> and <strong>ADMIN-SERVER</strong> applications. These applications are deployed as part of the platform.</p>
@@ -2362,116 +2504,6 @@ service registry.</p>
     
     
   
-
-    
-  
-    
-    
-
-    
-    
-      
-      
-      
-
-      
-        
-      
-      
-
-      
-
-      
-
-      
-    
-
-    
-    
-      
-  
-  
-
-  
-    
-    
-
-    
-    
-      
-      
-      
-
-      
-        
-      
-      
-
-      
-
-      
-
-      
-    
-
-    
-    
-  
-    
-    
-
-    
-    
-      
-      
-      
-
-      
-        
-      
-      
-
-      
-
-      
-
-      
-    
-
-    
-    
-  
-
-    
-  
-    
-    
-
-    
-    
-      
-      
-      
-
-      
-        
-      
-      
-
-      
-
-      
-
-      
-    
-
-    
-    
-      
-  
-  
-
-  
     
     
 
@@ -2630,6 +2662,61 @@ service registry.</p>
     
     
   
+
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+      
+  
+  
+
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+  
     
     
 
@@ -2679,6 +2766,133 @@ service registry.</p>
     
   
 
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+      
+  
+  
+
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+  
+
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
     
   
     

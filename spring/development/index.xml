@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Oracle Backend for Spring Boot and Microservices</title>
+    <title>Development on Oracle Backend for Spring Boot and Microservices</title>
     <link>https://oracle.github.io/microservices-datadriven/spring/development/</link>
-    <description>Recent content on Oracle Backend for Spring Boot and Microservices</description>
+    <description>Recent content in Development on Oracle Backend for Spring Boot and Microservices</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="https://oracle.github.io/microservices-datadriven/spring/development/index.xml" rel="self" type="application/rss+xml" />
     <item>
@@ -18,6 +18,17 @@ Microsoft Windows 10 or 11, preferrably with Windows Subsystem for Linux 2 macOS
     </item>
     
     <item>
+      <title>Predefined Variables</title>
+      <link>https://oracle.github.io/microservices-datadriven/spring/development/envvars/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://oracle.github.io/microservices-datadriven/spring/development/envvars/</guid>
+      <description>When you deploy a Spring Boot application using the Oracle Backend for Spring Boot and Microservices CLI or Visual Code extension, a number of predefined environment variables will be injected into the pod definition. You may reference any of these variables in your application.
+The predefined variables are as follows:
+Variable name Example value Notes app.container.port 8080 This sets the listen port for the pod and service. The Spring Boot application will listen on this port.</description>
+    </item>
+    
+    <item>
       <title>Project Structure</title>
       <link>https://oracle.github.io/microservices-datadriven/spring/development/project/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
@@ -25,9 +36,9 @@ Microsoft Windows 10 or 11, preferrably with Windows Subsystem for Linux 2 macOS
       <guid>https://oracle.github.io/microservices-datadriven/spring/development/project/</guid>
       <description>To take advantage of the built-in platform services, Oracle recommends using the following project structure.
 Recommended versions:
-Spring Boot 3.1.6 Spring Cloud 2022.0.4 Java 17 or 21 Table of Contents:
-Dependencies Spring Application Configuration Data Sources Liquibase Oracle Transaction Manager for Microservices Spring Config Server Dependencies Oracle recommends adding the following dependencies to your application so that it can take advantage of the built-in platform services. For example:
-&amp;lt;properties&amp;gt; &amp;lt;project.build.sourceEncoding&amp;gt;UTF-8&amp;lt;/project.build.sourceEncoding&amp;gt; &amp;lt;java.</description>
+Spring Boot 3.2.x Spring Cloud 2023.x.x Java 17 or 21 Table of Contents:
+Dependencies Spring Application Configuration Data Sources Liquibase Oracle Transaction Manager for Microservices Spring Config Server Tracing Dependencies Oracle recommends adding the following dependencies to your application so that it can take advantage of the built-in platform services. For example:
+&amp;lt;properties&amp;gt; &amp;lt;project.</description>
     </item>
     
   </channel>
