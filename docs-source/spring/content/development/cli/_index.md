@@ -36,7 +36,6 @@ Table of Contents:
    * [macOS AArch64](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.0/oractl-1.1-macos-aarch64)
    * [Windows x86](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.0/oractl-1.1-windows-x86)
 
-
 2. Change to directory where you want to install CLI. The platform-specific binary can be renamed to `oractl` for convenience.
 
     ```cmd
@@ -57,13 +56,19 @@ Table of Contents:
 
     ---
 
-3. Set the value of the `PATH` environment variable to the `oractl` directory:
+3. In Linux-like systems, you must adjust the file permissions from `oractl` to allow its execution.
+
+    ```cmd
+    ❯ chmod a+x /path/to/<obaas>/oractl
+    ```
+
+4. Set the value of the `PATH` environment variable to the `oractl` directory:
 
     ```cmd
     ❯ export PATH=/path/to/<obaas>:$PATH
     ```
 
-4. To check whether the installation was successful, run the `oractl -version` command.
+5. To check whether the installation was successful, run the `oractl -version` command.
 
 ## Using the CLI
 
@@ -1017,7 +1022,9 @@ Manage users let you store an unlimited amount of users and apply the access per
 
 **User Roles**
 
-* ROLE_ADMIN: Users with this role usually have complete access rights, allowing them to manage all aspects of the platform, such as adding new users, modifying settings, viewing and editing all content in the system.
+* ROLE_ADMIN: Users with this role usually have complete access rights, allowing them to manage all platform aspects. Only a user with this role can create new users, search for registered users, change passwords and roles from the other users, and delete users.
+
+* ROLE_CONFIG_EDITOR: This role might be able to edit the Platform configurations. **Currently unused in the environment**.
 
 * ROLE_USER: This role might be able to connect with Admin Service, create and list for applications (namespaces); use bind command; deploy, list and scale workloads (services).
 
@@ -1035,11 +1042,11 @@ SYNOPSIS
 
 OPTIONS
        --username String
-       The name you assign to the user during creation. This is the user’s login for the CLI. The name must be unique across all users in the platform and cannot be changed.
+       The name you assign to the user during creation. This is the user’s login for the CLI and for the SOC UI, also. The name must be unique across all users in the platform and cannot be changed.
        [Mandatory]
 
        --roles String
-       The user's role within the platform. A user must have up to three possible roles provided in a comma-separated list. [ROLE_ADMIN,ROLE_USER].
+       The user's role within the platform. A user must have up to three possible roles provided in a comma-separated list. [ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER].
        [Optional, default = ROLE_USER]
 
 
@@ -1050,42 +1057,10 @@ OPTIONS
 Example:
 
 ```cmd
-oractl:>user create --username user1 --roles ROLE_ADMIN,ROLE_USER
+oractl:>user create --username obaas-user-test1 --roles ROLE_USER,ROLE_CONFIG_EDITOR
 ? password ****************
-obaas-cli [user create]: User [user1] as successfully created.
+obaas-cli [user create]: User [obaas-user-test1] as successfully created.
 ```
-
-#### Delete User
-
-Use the `user delete` command to remove users from the platform.
-
-```cmd
-oractl:>help user delete
-NAME
-       user delete - Delete a user in your platform.
-
-SYNOPSIS
-       user delete [--username String] --id int --help
-
-OPTIONS
-       --username String
-       The username you want to delete.
-       [Mandatory]
-
-       --id int
-       The user id from the user you want to delete.
-       [Optional, default = 0]
-
-...
-
-```
-
-Example:
-
-```cmd
-oractl:>user delete --username user1
-obaas-cli [user delete]: User [user1] as successfully deleted.
-````
 
 #### Obtain User details
 
@@ -1115,7 +1090,7 @@ oractl:>user get --username obaas-admin
 ╔══╤═══════════╤═══════════════════════════════════════╗
 ║Id│Username   │Roles                                  ║
 ╠══╪═══════════╪═══════════════════════════════════════╣
-║2 │obaas-admin│ROLE_ADMIN,ROLE_USER                   ║
+║2 │obaas-admin│ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER║
 ╚══╧═══════════╧═══════════════════════════════════════╝
 ```
 
@@ -1137,7 +1112,7 @@ OPTIONS
        [Mandatory]
 
        --roles String
-       The user's role within the platform. A user must have up to three possible roles provided in a comma-separated list. [ROLE_ADMIN,ROLE_USER].
+       The user's role within the platform. A user must have up to three possible roles provided in a comma-separated list. [ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER].
        [Optional, default = ROLE_USER]
 
 ...
@@ -1147,13 +1122,13 @@ OPTIONS
 Example:
 
 ```cmd
-oractl:>user change-roles --username user1 --roles ROLE_USER
-obaas-cli [user change-roles]: User [user1] roles were successfully updated.
+oractl:>user change-roles --username obaas-user-test1 --roles ROLE_USER
+obaas-cli [user change-roles]: User [obaas-user-test1] roles were successfully updated.
 ```
 
 #### Change User Password
 
-Use the `user change-password` command to change the password from a specific user registered on the platform.
+Use the `user change-password` command to change the password from a specific user registered on the platform. A user is allowed to change its password only. Only users with ROLE_ADMIN can change passwords from other users.
 
 ```cmd
 oractl:>help user change-password
@@ -1203,15 +1178,47 @@ oractl:>user list
 ╔══╤════════════════╤═══════════════════════════════════════╗
 ║Id│Username        │Roles                                  ║
 ╠══╪════════════════╪═══════════════════════════════════════╣
-║62│user1           │ROLE_USER                              ║
-╟──┼────────────────┼───────────────────────────────────────╢
 ║1 │obaas-user      │ROLE_USER                              ║
 ╟──┼────────────────┼───────────────────────────────────────╢
-║2 │obaas-admin     │ROLE_ADMIN,ROLE_USER                   ║
+║2 │obaas-admin     │ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER║
 ╟──┼────────────────┼───────────────────────────────────────╢
-║3 │obaas-user-test1│ROLE_USER                              ║
+║3 │obaas-config    │ROLE_CONFIG_EDITOR,ROLE_USER           ║
+╟──┼────────────────┼───────────────────────────────────────╢
+║4 │obaas-user-test1│ROLE_USER                              ║
 ╚══╧════════════════╧═══════════════════════════════════════╝
 ```
+
+#### Delete User
+
+Use the `user delete` command to remove users from the platform.
+
+```cmd
+oractl:>help user delete
+NAME
+       user delete - Delete a user in your platform.
+
+SYNOPSIS
+       user delete [--username String] --id int --help
+
+OPTIONS
+       --username String
+       The username you want to delete.
+       [Mandatory]
+
+       --id int
+       The user id from the user you want to delete.
+       [Optional, default = 0]
+
+...
+
+```
+
+Example:
+
+```cmd
+oractl:>user delete --username obaas-user-test1
+obaas-cli [user delete]: User [obaas-user-test1] as successfully deleted.
+````
 
 ## Logging
 
