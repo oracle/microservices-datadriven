@@ -68,8 +68,6 @@ Table of Contents:
     ❯ export PATH=/path/to/<obaas>:$PATH
     ```
 
-5. To check whether the installation was successful, run the `oractl -version` command.
-
 ## Using the CLI
 
 Once you have installed the CLI, you can run it by typing `oractl` and pressing Enter at the command line. But first you have to open a bridge with the with Oracle Backend for Spring Boot and Microservices Admin Service. Follow the next steps to run `oractl`.
