@@ -28,12 +28,14 @@ Table of Contents:
 
 ## Installation
 
-1. CLI is available for Linux on x64, macOS on x64 and AArch64, and Windows x64 architectures. Choose your operating system and proceed to the installation steps for your specific platform:
+1. CLI is available for Linux on x64 and AArch64, macOS on x64 and AArch64, and Windows x64 architectures. Choose your operating system and proceed to the installation steps for your specific platform:
 
-   * [Linux x86](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.0/oractl-1.1.0-linux-x86)
-   * [macOS x86](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.0/oractl-1.1.0-macos-x86)
-   * [macOS AArch64](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.0/oractl-1.1.0-macos-aarch64)
-   * [Windows x86](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.0/oractl-1.1.0-windows-x86.exe)
+   * [Linux x86](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.0/oractl-1.1-linux-x86)
+   * [Linux AArch64](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.0/oractl-1.1-linux-aarch64)
+   * [macOS x86](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.0/oractl-1.1-linux-x86)
+   * [macOS AArch64](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.0/oractl-1.1-macos-aarch64)
+   * [Windows x86](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.0/oractl-1.1-windows-x86)
+
 
 2. Change to directory where you want to install CLI. The platform-specific binary can be renamed to `oractl` for convenience.
 
