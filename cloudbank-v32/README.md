@@ -162,6 +162,28 @@ deploy --service-name testrunner --artifact-path testrunner/target/testrunner-0.
 deploy --service-name transfer --artifact-path transfer/target/transfer-0.0.1-SNAPSHOT.jar --image-version 0.0.1
 ```
 
+## Create APISIX Routes
+
+1. Get APISIX Gateway Admin Key
+
+    ```shell
+    <copy>kubectl -n apisix get configmap apisix -o yaml</copy>
+    ```
+
+1. Create tunnel to APISIX
+
+    ```shell
+    kubectl port-forward -n apisix svc/apisix-admin 9180
+    ```
+   
+1. Create routes
+
+    In the CloudBank directory run the following command. *NOTE*, you must add the API-KEY to the command
+
+    ````shell
+    cd apisix-routes; source ./create-all-routes.sh <YOUR-API-KEY>; cd ..
+    ```
+   
 ## Optional - autoscaling
 
 Create autoscalers for CloudBank.
@@ -192,18 +214,25 @@ This is an example of the `customer32` application:
 
 ## Test CloudBank Services
 
+1. Get the external IP address
+    
+    ```shell
+    kubectl -n ingress-nginx get service ingress-nginx-controller
+    ```
+   
+    Result. Make a note of the EXTERNAL-IP it will be used in the tests.
+2. 
+    ```text
+    NAME                       TYPE           CLUSTER-IP      EXTERNAL-IP       PORT(S)                      AGE
+    ingress-nginx-controller   LoadBalancer   10.96.172.148   146.235.207.230   80:31393/TCP,443:30506/TCP   158m
+    ```
+
 1. Test `account` service
-
-   1. Port forward
-
-      ```shell
-      kubectl port-forward -n application svc/account 8081:8080
-      ```
 
    1. Rest endpoint
 
       ```shell
-      curl -s http://localhost:8081/api/v1/accounts | jq
+      curl -s http://<EXTERNAL-IP>/api/v1/accounts | jq
       ```
 
       Should return:
@@ -213,7 +242,7 @@ This is an example of the `customer32` application:
         {
           "accountBalance": -20,
           "accountCustomerId": "qwertysdwr",
-          "accountId": 149,
+          "accountId": 1,
           "accountName": "Andy's checking",
           "accountOpenedDate": "2023-06-26T17:39:37.000+00:00",
           "accountOtherDetails": "Account Info",
@@ -225,16 +254,10 @@ This is an example of the `customer32` application:
 
 1. Test `customer` service
 
-   1. Port forward
-
-      ```shell
-      kubectl port-forward -n application svc/customer 8082:8080
-      ```
-
    1. REST endpoint
 
       ```shell
-      curl -s http://localhost:8082/api/v1/customer | jq
+      curl -s http://<EXTERNAL-IP>/api/v1/customer | jq
       ```
 
       Should return:
@@ -255,16 +278,10 @@ This is an example of the `customer32` application:
 
 1. Test `customer32` service
 
-   1. Port forward
-
-      ```shell
-      kubectl port-forward -n application svc/customer32 9000:8080
-      ```
-
    1. REST endpoint
 
       ```shell
-      curl -s http://localhost:9000/api/v2/customer | jq
+      curl -s http://<EXTERNAL-IP>/api/v2/customer | jq
       ```
 
       Should return:
@@ -282,16 +299,10 @@ This is an example of the `customer32` application:
 
 1. Test `creditscore` service
 
-    1. Port forward
-
-       ```shell
-       kubectl port-forward -n application svc/creditscore 8083:8080
-       ``````
-
     1. REST endpoint
 
        ```shell
-       curl -s http://localhost:8083/api/v1/creditscore | jq
+       curl -s http://<EXTERNAL-IP>/api/v1/creditscore | jq
        ```
 
        Should return:
@@ -305,16 +316,10 @@ This is an example of the `customer32` application:
 
 1. Test `check` service
 
-    1. Port forward
+    1. REST endpoint - deposit check. *NOTE*: Make sure you use an existing account number
 
        ```shell
-       kubectl -n application port-forward svc/testrunner 8084:8080
-       ```
-
-    1. REST endpoint - deposit check. Make sure you use an existing account number
-
-       ```shell
-       curl -i -X POST -H 'Content-Type: application/json' -d '{"accountId": 21, "amount": 256}' http://localhost:8084/api/v1/testrunner/deposit
+       curl -i -X POST -H 'Content-Type: application/json' -d '{"accountId": 1, "amount": 256}' http://<EXTERNAL-IP>/api/v1/testrunner/deposit
        ```
 
        Should return:
@@ -340,10 +345,10 @@ This is an example of the `customer32` application:
          Received deposit <CheckDeposit(accountId=21, amount=256)>
          ```
 
-    1. Check journal entries. Replace '21' with the account number you used.
+    1. Check journal entries. Replace '1' with the account number you used.
 
         ```shell
-        curl -i http://localhost:8081/api/v1/account/21/journal
+        curl -i http://<EXTERNAL-ID>/api/v1/account/1/journal
         ```
 
         output should be similar to:
@@ -360,7 +365,7 @@ This is an example of the `customer32` application:
     1. Clearance of check - Note the JournalID from earlier step
 
          ```shell
-         curl -i -X POST -H 'Content-Type: application/json' -d '{"journalId": 7}' http://localhost:8084/api/v1/testrunner/clear
+         curl -i -X POST -H 'Content-Type: application/json' -d '{"journalId": 7}' http://<EXTERNAL-ID>/api/v1/testrunner/clear
          ```
 
         output should be similar to:
@@ -391,7 +396,7 @@ This is an example of the `customer32` application:
     1. Check journal -- DEPOSIT
 
        ```shell
-       curl -i http://localhost:8081/api/v1/account/21/journal
+       curl -i http://<EXTERNAL-IP>/api/v1/account/21/journal
        ```
 
        Output should look like this -- DEPOSIT
@@ -407,23 +412,17 @@ This is an example of the `customer32` application:
 
 1. Run LRA Test Cases
 
-    1. Port forward
+    1. Check account balances. Note that the account numbers 1 and 2 can be different in your environment
 
        ```shell
-       kubectl -n application port-forward svc/transfer 8085:8080
+       curl -s http://<EXTERNAL-IP>/api/v1/account/1 | jq ; curl -s http://<EXTERNAL-IP>/api/v1/account/2 | jq 
        ```
 
-    1. Check account balances. Note that the account numbers 21 and 22 can be different in your environment
-
-       ```shell
-       curl -s http://localhost:8081/api/v1/account/21 | jq ; curl -s http://localhost:8081/api/v1/account/22 | jq 
-       ```
-
-       Output should be similar to this:
+       Output should be similar to this, make a note of the account balance:
 
        ```json
        {
-         "accountId": 21,
+         "accountId": 1,
          "accountName": "Andy's checking",
          "accountType": "CH",
          "accountCustomerId": "qwertysdwr",
@@ -432,7 +431,7 @@ This is an example of the `customer32` application:
          "accountBalance": -20
        },
        {
-         "accountId": 22,
+         "accountId": 2,
          "accountName": "Mark's CCard",
          "accountType": "CC",
          "accountCustomerId": "bkzLp8cozi",
@@ -445,7 +444,7 @@ This is an example of the `customer32` application:
     1. Perform transfer between two accounts. Note account numbers
 
        ```shell
-       curl -X POST "http://localhost:8085/transfer?fromAccount=22&toAccount=21&amount=100"
+       curl -X POST "http://<EXTERNAL-IP>/transfer?fromAccount=22&toAccount=21&amount=100"
        ```
 
        Output should look like this:
@@ -457,14 +456,14 @@ This is an example of the `customer32` application:
     1. Check accounts to see that the transfer have occurred
 
        ```shell
-       curl -s http://localhost:8081/api/v1/account/21 | jq ; curl -s http://localhost:8081/api/v1/account/22 | jq 
+       curl -s http://<EXTERNAL-IP>/api/v1/account/1 | jq ; curl -s http://<EXTERNAL-IP>/api/v1/account/2 | jq 
        ```
 
        Output should be similar to this:
 
        ```json
        {
-         "accountId": 21,
+         "accountId": 1,
          "accountName": "Andy's checking",
          "accountType": "CH",
          "accountCustomerId": "qwertysdwr",
@@ -473,7 +472,7 @@ This is an example of the `customer32` application:
          "accountBalance": 80
        },
        {
-         "accountId": 22,
+         "accountId": 2,
          "accountName": "Mark's CCard",
          "accountType": "CC",
          "accountCustomerId": "bkzLp8cozi",
