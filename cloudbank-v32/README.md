@@ -167,7 +167,7 @@ deploy --service-name transfer --artifact-path transfer/target/transfer-0.0.1-SN
 1. Get APISIX Gateway Admin Key
 
     ```shell
-    <copy>kubectl -n apisix get configmap apisix -o yaml</copy>
+    kubectl -n apisix get configmap apisix -o yaml
     ```
 
 1. Create tunnel to APISIX
@@ -183,7 +183,7 @@ deploy --service-name transfer --artifact-path transfer/target/transfer-0.0.1-SN
     ````shell
     cd apisix-routes; source ./create-all-routes.sh <YOUR-API-KEY>; cd ..
     ```
-   
+
 ## Optional - autoscaling
 
 Create autoscalers for CloudBank.
