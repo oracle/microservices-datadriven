@@ -991,7 +991,7 @@ Manage users allows you to create the platform users and assign the roles that g
   * Search for users.
   * Change password and roles for users.
 
-* `ROLE_CONFIG_EDITOR`: Users with this role are allowed to edit the platform configurations. **Currently unused in the environment**.
+* `ROLE_CONFIG_EDITOR`: Users with this role are allowed to edit the platform configurations. **Reserved for future use**.
 
 #### Create users
 
