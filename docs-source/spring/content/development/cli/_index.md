@@ -980,11 +980,11 @@ Manage users allows you to create the platform users and assign the roles that g
 
 **User Roles**
 
-* `ROLE_ADMIN`: Users with this role have complete access rights. Only a user with this role can create new users, search for registered users, change passwords and roles from the other users, and delete users.
+* `ROLE_ADMIN`: Users with this role have the access rights as a `ROLE_USER` and the right of `delete` applications. Also, only a user with this role can create new users, search for registered users, change passwords and roles from the other users, and delete users.
 
 * `ROLE_CONFIG_EDITOR`: This role is able to edit the platform configurations. **Currently unused in the environment**.
 
-* `ROLE_USER`: This role is be able to connect with Admin service, create and list for applications (namespaces); use bind command; deploy, list and scale workloads (services).
+* `ROLE_USER`: This role is be able to connect to the Admin service, create and list for applications (namespaces); use the [bind](#bind) command; deploy, list and scale workloads (services).
 
 #### Create users
 
@@ -1007,8 +1007,9 @@ OPTIONS
        The user's role within the platform. A user must have up to three possible roles provided in a comma-separated list. [ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER].
        [Optional, default = ROLE_USER]
 
-
-
+Ask for Help
+       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+       E-mail: obaas_ww@oracle.com
 ```
 
 For example, to create a user called `obaas-user-test1` with roles `ROLE_USER,ROLE_CONFIG_EDITOR`:
