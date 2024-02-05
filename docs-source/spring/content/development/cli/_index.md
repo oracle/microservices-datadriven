@@ -980,11 +980,11 @@ Manage users allows you to create the platform users and assign the roles that g
 
 **User Roles**
 
-* `ROLE_USER`: User with this role can:
+* `ROLE_USER`: Users with this role can:
   * Connect to the Admin Service.
   * Create and list applications (namespaces).
-  * Create and update a database schema for the service
-  * Deploy, list, and scale workloads (services)
+  * Create and update a database schema for the service.
+  * Deploy, list, and scale workloads (services).
 
 * `ROLE_ADMIN`: Users with this role have the same access rights as a `ROLE_USER` and additionally:
   * Create and delete users.
