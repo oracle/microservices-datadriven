@@ -105,6 +105,22 @@ management:
       endpoint: ${otel.exporter.otlp.endpoint}
 ```
 
+## How to enable tracing in APISIX routes
+
+The OpenTelemetry plugin is enabled by default in APISIX. To enable tracing for your routes add the following to the route configuration:
+
+```json
+"plugins": {
+    "opentelemetry": {
+        "sampler": {
+            "name": "always_on"
+        }
+    }
+}
+```
+
+For more configuration option for the OpenTelemetry plugin; [APISIX Documentation](https://apisix.apache.org/docs/apisix/plugins/opentelemetry/)
+
 ## View Application Traces in Jaeger Web User Interface
 
 Jaeger is a distributed tracing system used for monitoring and troubleshooting Microservices. For more information on Jaeger, see the [Jaeger website](https://www.jaegertracing.io/).
