@@ -36,7 +36,7 @@ Table of Contents:
 2. Start the CLI in interactive mode by running oractl from your terminal window. For example:
 
     ```bash
-       oractl
+    oractl
     ```
 
     As a result, the `oractl` prompt is displayed as follows:
@@ -980,11 +980,11 @@ Manage users allows you to create the platform users and assign the roles that g
 
 **User Roles**
 
-* `ROLE_ADMIN`: Users with this role have the access rights as a `ROLE_USER` and the right of `delete` applications. Also, only a user with this role can create new users, search for registered users, change passwords and roles from the other users, and delete users.
+* `ROLE_ADMIN`: Users with this role have the access rights as a `ROLE_USER` and the right of `delete` applications. Also, only a user with this role can create new users, search registered users, change passwords and roles from the other users, and delete users.
 
 * `ROLE_CONFIG_EDITOR`: This role is able to edit the platform configurations. **Currently unused in the environment**.
 
-* `ROLE_USER`: This role is be able to connect to the Admin service, create and list for applications (namespaces); use the [bind](#bind) command; deploy, list and scale workloads (services).
+* `ROLE_USER`: This role is be able to connect to the Admin service, create and list for applications (namespaces), create and update a database schema for the service, deploy, list and scale workloads (services).
 
 #### Create users
 
