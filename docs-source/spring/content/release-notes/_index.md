@@ -4,6 +4,14 @@ description: "Release notes for Oracle Backend for Spring Boot and Microservices
 keywords: "release notes additions updates deprecations removals springboot spring development microservices development oracle backend"
 ---
 
+## Version 1.1.1, February 9, 2024
+
+he following components were updated:
+
+| Component                                                                     | New Version   | Replaced Version    |
+|-------------------------------------------------------------------------------|---------------|---------------------|
+| OpenTelemetry Collector | 0.93.0 | 0.91.0 |
+
 ## Version 1.1.0, February 2, 2024
 
 Notes:
