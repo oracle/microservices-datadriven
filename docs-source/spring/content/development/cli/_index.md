@@ -42,21 +42,21 @@ Table of Contents:
     As a result, the `oractl` prompt is displayed as follows:
 
     ```bash
-        _   _           __    _    ___
-       / \ |_)  _.  _. (_    /  |   |
-       \_/ |_) (_| (_| __)   \_ |_ _|_
-       ========================================================================================
+     _   _           __    _    ___
+    / \ |_)  _.  _. (_    /  |   |
+    \_/ |_) (_| (_| __)   \_ |_ _|_
+    ========================================================================================
 
-       Application Name: Oracle Backend Platform :: Command Line Interface
-       Application Version: (1.1.0)
-       :: Spring Boot (v3.2.1) ::
+    Application Name: Oracle Backend Platform :: Command Line Interface
+    Application Version: (1.1.0)
+    :: Spring Boot (v3.2.1) ::
 
-       Ask for help:
+    Ask for help:
 
-       * Slack: <https://oracledevs.slack.com/archives/C03ALDSV272>
-       * email: <obaas_ww@oracle.com>
+    * Slack: <https://oracledevs.slack.com/archives/C03ALDSV272>
+    * email: <obaas_ww@oracle.com>
 
-       oractl:>
+    oractl:>
     ```
 
 ## Available Commands
@@ -980,11 +980,11 @@ Manage users allows you to create the platform users and assign the roles that g
 
 **User Roles**
 
-* `ROLE_ADMIN`: Users with this role have the access rights as a `ROLE_USER` and the right of `delete` applications. Also, only a user with this role can create new users, search registered users, change passwords and roles from the other users, and delete users.
+* `ROLE_ADMIN`: Users with this role have access rights as a `ROLE_USER` and the right to `delete` applications (namespaces). Also, only a user with this role can create new users, search registered users, change passwords and roles from the other users, and delete users.
 
-* `ROLE_CONFIG_EDITOR`: This role is able to edit the platform configurations. **Currently unused in the environment**.
+* `ROLE_CONFIG_EDITOR`: Users with this role are allowed to edit the platform configurations. **Currently unused in the environment**.
 
-* `ROLE_USER`: This role is be able to connect to the Admin service, create and list for applications (namespaces), create and update a database schema for the service, deploy, list and scale workloads (services).
+* `ROLE_USER`: Users with this role can connect to the Admin service, create and list applications (namespaces), create and update a database schema for the service, and deploy, list, and scale workloads (services).
 
 #### Create users
 
