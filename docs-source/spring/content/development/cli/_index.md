@@ -5,11 +5,10 @@ keywords: "cli tool deployment spring springboot microservices development oracl
 ---
 
 The Oracle Backend for Spring Boot and Microservices offers a command-line interface (CLI), `oractl`. The CLI commands simplify the deployment of
-microservices applications as well as bindings with the resources that they use.
+microservices applications as well as bindings with the resources that they use. Download the CLI [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.0). The platform-specific binary can be renamed to `oractl` for convenience.
 
 Table of Contents:
 
-* [Installation](#installation)
 * [Using the CLI](#using-the-cli)
 * [Available Commands](#available-commands)
   * [Help](#help)
@@ -26,62 +25,23 @@ Table of Contents:
   * [User Management](#user-management)  
 * [Logging Information](#logging)
 
-## Installation
-
-1. CLI is available for Linux on x64 and AArch64, macOS on x64 and AArch64, and Windows x64 architectures. Choose your operating system and proceed to the installation steps for your specific platform:
-
-   * [Linux x86](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.0/oractl-1.1-linux-x86)
-   * [Linux AArch64](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.0/oractl-1.1-linux-aarch64)
-   * [macOS x86](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.0/oractl-1.1-linux-x86)
-   * [macOS AArch64](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.0/oractl-1.1-macos-aarch64)
-   * [Windows x86](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.0/oractl-1.1-windows-x86)
-
-2. Change to directory where you want to install CLI. The platform-specific binary can be renamed to `oractl` for convenience.
-
-    ```cmd
-    ❯ mv oractl-<version>-<os>-<architecture> /path/to/<obaas>/oractl
-    ```
-  
-    &nbsp;
-
-    ---
-
-    {{< hint type=[warning] icon=gdoc_info_outline
-        title="Remove the quarantine attribute (Required for macOS Catalina and later)" >}}
-    {{< /hint >}}
-
-    ```cmd
-    ❯ sudo xattr -r -d com.apple.quarantine /path/to/<obaas>/oractl
-    ```
-
-    ---
-
-3. In Linux-like systems, you must adjust the file permissions from `oractl` to allow its execution.
-
-    ```cmd
-    ❯ chmod a+x /path/to/<obaas>/oractl
-    ```
-
-4. Set the value of the `PATH` environment variable to the `oractl` directory:
-
-    ```cmd
-    ❯ export PATH=/path/to/<obaas>:$PATH
-    ```
-
 ## Using the CLI
 
-Once you have installed the CLI, you can run it by typing `oractl` and pressing Enter at the command line. But first you have to open a bridge with the with Oracle Backend for Spring Boot and Microservices Admin Service. Follow the next steps to run `oractl`.
+1. Expose the Oracle Backend for Spring Boot and Microservices Admin server that the CLI calls using this command:
 
-1. Open a bridge with the Admin Service using `kubectl` port-forward command:
-
-    ```cmd
-    ❯ kubectl port-forward services/obaas-admin -n obaas-admin 8080
+    ```bash
+    kubectl port-forward services/obaas-admin -n obaas-admin 8080
     ```
 
-2. Running `oractl` without any arguments starts the CLI in interactive mode, CLI header is displayed, and the prompt is made available, as follows:
+2. Start the CLI in interactive mode by running oractl from your terminal window. For example:
 
-    ```cmd
-       ❯ oractl
+    ```bash
+       oractl
+    ```
+
+    As a result, the `oractl` prompt is displayed as follows:
+
+    ```bash
         _   _           __    _    ___
        / \ |_)  _.  _. (_    /  |   |
        \_/ |_) (_| (_| __)   \_ |_ _|_
@@ -106,7 +66,7 @@ Once you have installed the CLI, you can run it by typing `oractl` and pressing 
 Short descriptions for the available commands can be viewed by issuing the `help` command and detailed help for any individual
 commands can be viewed by issuing `help [command-name]`. For example:
 
-```cmd
+```bash
 oractl:>help
 AVAILABLE COMMANDS
 
@@ -176,13 +136,13 @@ A common development workflow pattern is to `connect`, `change-password` (only i
 
 Further development and redeployment of the service can then be repeated issuing the `deploy` and `list` commands.
 
-The following is a comprehensive description of the CLI commands:
+The following is a description of the CLI commands:
 
 ### connect
 
 Use the `connect` command to connect your `oractl` CLI to the Oracle Backend Administration service:
 
-```cmd
+```bash
 oractl:>help connect
 NAME
        connect - Connect to the OBaaS Spring Cloud admin console.
@@ -207,7 +167,7 @@ Ask for Help
 
 For example:
 
-```cmd
+```bash
 oractl:>connect
 ? username obaas-admin
 ? password ****************
@@ -218,7 +178,7 @@ Credentials successfully authenticated! obaas-admin -> welcome to OBaaS CLI.
 
 Use the `create` command to create an application namespace (Kubernetes *namespace*). The application namespace provides a mechanism for isolating groups of resources, especially the microservices. Names of resources need to be unique within an application namespace, but not across application namespaces.
 
-```cmd
+```bash
 oractl:>help create
 NAME
        create - Create an application/namespace.
@@ -242,7 +202,7 @@ Ask for Help
 
    For example:
 
-   ```cmd
+   ```bash
    oractl:>create --app-name myapp
    application/namespace created successfully and image pull secret (registry-auth) created successfully and database TNSAdmin/wallet secret created successfully
    ```
@@ -253,7 +213,7 @@ Use the `delete` command to delete an application namespace (Kubernetes *namespa
 
 > ATTENTION: Ensure that you want to completely delete the application namespace. You cannot rollback the components once deleted.
 
-```cmd
+```bash
 NAME
        delete - Delete a service or entire application/namespace.
 
@@ -284,7 +244,7 @@ Ask for Help
 
    For example:
 
-   ```cmd
+   ```bash
    oractl:>delete --app-name myapp
 
    obaas-cli [delete]: The Application/Namespace [myapp] will be removed, including all Services deployed. Do you confirm the complete deletion (y/n)?: y
@@ -296,7 +256,7 @@ Ask for Help
 
 Use the `bind` command to create and update a database schema or user for the service. These commands also create or update the Kubernetes secret and binding environment entries for the schema. These are set in the Kubernetes deployment created with the `deploy` command. For example:
 
-```cmd
+```bash
 oractl:>help bind
 NAME
        bind - Create or Update a schema/user and bind it to service deployment.
@@ -338,7 +298,7 @@ Ask for Help
 
    1. Use the `bind` or `bind create` command to **create** a database schema or user for the service. For Example:
 
-       ```cmd
+       ```bash
        oractl:>bind create --app-name myapp --service-name myserv
        Database/Service Password: ************
        Schema {myserv} was successfully created and Kubernetes Secret {myapp/myserv} was successfully created.
@@ -356,7 +316,7 @@ Ask for Help
 
 Use the `deploy` command to create, build, and push an image for the microservice and create the necessary deployment, service, and secret Kubernetes resources for the microservice.
 
-```cmd
+```bash
 oractl:>help deploy
 NAME
        deploy - Deploy a service.
@@ -445,7 +405,7 @@ Ask for Help
 
    For example:
 
-   ```cmd
+   ```bash
    oractl:>deploy --app-name myapp --service-name myserv --image-version 0.0.1 --port 8081 --bind jms --add-health-probe true --artifact-path obaas/myserv/target/demo-0.0.1-SNAPSHOT.jar
    uploading: obaas/myserv/target/demo-0.0.1-SNAPSHOT.jar building and pushing image...
    binding resources... successful
@@ -454,7 +414,7 @@ Ask for Help
 
    or, for native compiled microservices, add **--java-version container-registry.oracle.com/os/oraclelinux:7-slim** to have a compact image and **--graalvm-native** to specify the file provided is an executable .exec:
 
-   ```cmd
+   ```bash
    oractl:>deploy --app-name cloudn --service-name account --artifact-path obaas/myserv/target/accounts-0.0.1-SNAPSHOT.jar.exec --image-version 0.0.1 --graalvm-native --java-version container-registry.oracle.com/os/oraclelinux:7-slim
    ```
 
@@ -462,7 +422,7 @@ Ask for Help
 
 Use the `create-autoscaler` command to create a horizontal pod autoscaler for a microservice you have deployed.  You can specify the target scaling threshold using CPU percentage.  Note that your microservice must have its CPU request set in order to use the autoscaler.  It is set to `500m` (that is, half a core) by the `deploy` command if you did not override the default.
 
-```cmd
+```bash
 oractl:>help create-autoscaler
 NAME
        create-autoscaler - Create an autoscaler.
@@ -503,14 +463,14 @@ Ask for Help
 
 For example:
 
-```cmd
+```bash
 oractl:>create-autoscaler --app-name application --service-name creditscore --cpu-percent 80 --min-replicas 2 --max-replicas 6
 obaas-cli [create-autoscaler]: Autoscaler was successfully created.
 ```
 
 You can view the details of the autoscaler using `kubectl`, for example: 
 
-```cmd
+```bash
 $ kubectl -n application get hpa
 NAME          REFERENCE                TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
 creditscore   Deployment/creditscore   0%/80%    2         6         2          26s
@@ -522,7 +482,7 @@ customer      Deployment/customer      4%/80%    2         6         2          
 
 Use the `delete-autoscaler` command to delete a horizontal pod autoscaler for a microservice you have deployed.
 
-```cmd
+```bash
 oractl:>help delete-autoscaler
 NAME
        delete-autoscaler - Delete an autoscaler.
@@ -551,7 +511,7 @@ Ask for Help
 
 For example:
 
-```cmd
+```bash
 oractl:>delete-autoscaler --app-name application --service-name creditscore
 obaas-cli [delete-autoscaler]: Autoscaler was successfully deleted.
 ```
@@ -560,7 +520,7 @@ obaas-cli [delete-autoscaler]: Autoscaler was successfully deleted.
 
 Use the `list` command to show details of the microservice deployed in the previous step. For example:
 
-```cmd
+```bash
 oractl:>help list
 NAME
        list - list/show details of application services.
@@ -584,7 +544,7 @@ Ask for Help
 
 For example:
 
-```cmd
+```bash
    oractl:>list --app-name myapp
    name:myserv-c46688645-r6lhl  status:class V1ContainerStatus {
        containerID: cri-o://6d10194c5058a8cf7ecbd5e745cebd5e44c5768c7df73053fa85f54af4b352b2
@@ -613,7 +573,7 @@ For example:
 
 Use the `config` command to view and update the configuration managed by the Spring Cloud Config server. More information about the configuration server can be found at this link: [Spring Config Server](../../platform/config/)
 
-```cmd
+```bash
 oractl:>help config
 NAME
        config - View and modify Service configuration.
@@ -663,7 +623,7 @@ Ask for Help
 
       * Add a specific configuration using the set of parameters `--service-name`, `--service-label`, `--service-profile`, `--property-key`, and `--property-value`. For example:
 
-       ```cmd
+       ```bash
        oractl:>config add --service-name myserv --service-label 0.0.1 --service-profile default --property-key k1 --property-value value1
        Property added successfully.
        ```
@@ -682,7 +642,7 @@ Ask for Help
        }
        ```
 
-       ```cmd
+       ```bash
        oractl:>config add --artifact-path /obaas/myserv-properties.json
        2 property(s) added successfully.
        oractl:>config list --service-name myserv --service-profile obaas --service-label 0.0.1
@@ -709,7 +669,7 @@ Ask for Help
 
    1. Use the `config list` command, without any parameters, to list the services that have at least one configuration inserted in the Spring Cloud Config server. For example:
 
-       ```cmd
+       ```bash
        oractl:>config list
        [ {
        "name" : "apptest",
@@ -732,7 +692,7 @@ Ask for Help
 
        For example:
 
-       ```cmd
+       ```bash
        oractl:>config list --service-name myserv --service-profile default --service-label 0.0.1
        [ {
        "id" : 221,
@@ -756,7 +716,7 @@ Ask for Help
 
        For example:
 
-       ```cmd
+       ```bash
        oractl:>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key k1
        [ {
        "id" : 30,
@@ -790,14 +750,14 @@ Ask for Help
       1. Delete all configurations from a specific service using the filters `--service-name`, `--service-profile` and `--service-label`. The
        CLI tracks how many configurations are present in the Spring Cloud Config server and confirms the completed deletion. For example:
 
-         ```cmd
+         ```bash
          oractl:>config delete --service-name myserv
          [obaas] 7 property(ies) found, delete all (y/n)?:
          ```
 
       1. Delete a specific configuration using the parameters `--service-name`, `--service-label`, `--service-profile` and `--property-key`. For example:
 
-         ```cmd
+         ```bash
          oractl:>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
          [ {
                 "id" : 224,
@@ -829,7 +789,7 @@ Use the `GraalVM Compile Commands` to:
 
 The GraalVM Compile Commands are the following:
 
-```cmd
+```bash
 oractl:>help 
    
 GraalVM Compile Commands
@@ -841,7 +801,7 @@ GraalVM Compile Commands
 
 1. Use the `compile` command to upload and automatically start compilation using the following command:
 
-    ```cmd
+    ```bash
     oractl:>help compile
     NAME
         compile - Compile a service with GraalVM
@@ -877,7 +837,7 @@ GraalVM Compile Commands
 
     The project should be compiled on the developer desktop with GraalVM version 22.3 or later using an **mvn** command. For example:
 
-    ```cmd
+    ```bash
     mvn -Pnative native:compile -Dmaven.test.skip=true
     ```
 
@@ -885,7 +845,7 @@ GraalVM Compile Commands
 
     The following is an example of the command output:
 
-    ```cmd
+    ```bash
     oractl:>compile --artifact-path /Users/cdebari/demo-0.0.1-SNAPSHOT.jar
     uploading: /Users/cdebari/demo-0.0.1-SNAPSHOT.jar
     filename: demo-0.0.1-SNAPSHOT.jar
@@ -903,7 +863,7 @@ GraalVM Compile Commands
 
 1. Use the `compile-logs` command to retrieve the logs that show the compilation progress. For example:
 
-    ```cmd
+    ```bash
     oractl:>help compile-logs
     NAME
         compile-logs - Compilation progress.
@@ -927,7 +887,7 @@ GraalVM Compile Commands
 
     As previously mentioned, if the batch ID is not provided, then the logs of the most recently executed compilation are returned. For example:
 
-    ```cmd
+    ```bash
     oractl:>compile-logs
 
     extracted: BOOT-INF/lib/spring-jcl-6.0.11.jar
@@ -944,7 +904,7 @@ GraalVM Compile Commands
 
     If the `compile-logs` commands returns a **Finished generating** message, then download the **.exec** file. For example:
 
-    ```cmd
+    ```bash
     CPU:  Enable more CPU features with '-march=native' for improved performance.
     QBM:  Use the quick build mode ('-Ob') to speed up builds during development.
     ------------------------------------------------------------------------------------------------------------------------
@@ -959,7 +919,7 @@ GraalVM Compile Commands
 
 1. Use the `compile-download` command to download the generated **.exec** file. For example:
 
-    ```cmd
+    ```bash
     oractl:>help compile-download
         NAME
         compile-download - Download the compiled executable file.
@@ -983,7 +943,7 @@ GraalVM Compile Commands
 
     You can choose to use the batch ID if you need the last file compiled. The following example specifies the batch ID:
 
-    ```cmd
+    ```bash
     oractl:>compile-download --batch demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
 
     File downloaded successfully to: 
@@ -992,7 +952,7 @@ GraalVM Compile Commands
 
 1. Use the `compile-purge` command to delete all of the artifacts generated on the GraalVM compiler service after downloading the **.exec** file:
 
-    ```cmd
+    ```bash
     oractl:>help compile-purge
     NAME
         compile-purge - Delete a launched job.
@@ -1009,28 +969,28 @@ GraalVM Compile Commands
         help for compile-purge   
         [Optional]
 
-        Ask for Help
-            Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-            E-mail: obaas_ww@oracle.com
+    Ask for Help
+        Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+        E-mail: obaas_ww@oracle.com
     ```
 
 ### User Management
 
-Manage users let you store an unlimited amount of users and apply the access permission using roles into the platform. A user role represents a specific set of tasks or responsibilities assigned to a group of users within the platform. Assigning user roles enables organizations to control the actions each user can perform in the system, streamlining their workflow.
+Manage users allows you to create the platform users and assign the roles that give access permission to operate with the platform.
 
 **User Roles**
 
-* ROLE_ADMIN: Users with this role usually have complete access rights, allowing them to manage all platform aspects. Only a user with this role can create new users, search for registered users, change passwords and roles from the other users, and delete users.
+* `ROLE_ADMIN`: Users with this role have complete access rights. Only a user with this role can create new users, search for registered users, change passwords and roles from the other users, and delete users.
 
-* ROLE_CONFIG_EDITOR: This role might be able to edit the Platform configurations. **Currently unused in the environment**.
+* `ROLE_CONFIG_EDITOR`: This role is able to edit the platform configurations. **Currently unused in the environment**.
 
-* ROLE_USER: This role might be able to connect with Admin Service, create and list for applications (namespaces); use bind command; deploy, list and scale workloads (services).
+* `ROLE_USER`: This role is be able to connect with Admin service, create and list for applications (namespaces); use bind command; deploy, list and scale workloads (services).
 
 #### Create users
 
 Use the `user create` command to add users to the platform. This command requires the name of the user `username` and the user roles in a comma-separated list.
 
-```cmd
+```bash
 oractl:>help user create
 NAME
        user create - Creates a new user in your platform.
@@ -1048,13 +1008,12 @@ OPTIONS
        [Optional, default = ROLE_USER]
 
 
-...
 
 ```
 
-Example:
+For example, to create a user called `obaas-user-test1` with roles `ROLE_USER,ROLE_CONFIG_EDITOR`:
 
-```cmd
+```bash
 oractl:>user create --username obaas-user-test1 --roles ROLE_USER,ROLE_CONFIG_EDITOR
 ? password ****************
 obaas-cli [user create]: User [obaas-user-test1] as successfully created.
@@ -1064,7 +1023,7 @@ obaas-cli [user create]: User [obaas-user-test1] as successfully created.
 
 Use the `user get` command to obtain the user details registered on the platform.
 
-```cmd
+```bash
 oractl:>help user get
 NAME
        user get - Gets the specified user’s information.
@@ -1077,13 +1036,14 @@ OPTIONS
        The username of the user.
        [Mandatory]
 
-...
-
+Ask for Help
+       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+       E-mail: obaas_ww@oracle.com
 ```
 
-Example:
+For example, to list the details from the user called `obaas-admin`:
 
-```cmd
+```bash
 oractl:>user get --username obaas-admin
 ╔══╤═══════════╤═══════════════════════════════════════╗
 ║Id│Username   │Roles                                  ║
@@ -1096,7 +1056,7 @@ oractl:>user get --username obaas-admin
 
 Use the `user change-roles` command to change the roles from a specific user registered on the platform.
 
-```cmd
+```bash
 oractl:>help user change-roles
 NAME
        user change-roles - Change the roles from the specified user.
@@ -1113,13 +1073,14 @@ OPTIONS
        The user's role within the platform. A user must have up to three possible roles provided in a comma-separated list. [ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER].
        [Optional, default = ROLE_USER]
 
-...
-
+Ask for Help
+       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+       E-mail: obaas_ww@oracle.com
 ```
 
-Example:
+For example, to change the roles from a user called `obaas-user-test1` apply the role `ROLE_USER`:
 
-```cmd
+```bash
 oractl:>user change-roles --username obaas-user-test1 --roles ROLE_USER
 obaas-cli [user change-roles]: User [obaas-user-test1] roles were successfully updated.
 ```
@@ -1128,7 +1089,7 @@ obaas-cli [user change-roles]: User [obaas-user-test1] roles were successfully u
 
 Use the `user change-password` command to change the password from a specific user registered on the platform. A user is allowed to change its password only. Only users with ROLE_ADMIN can change passwords from other users.
 
-```cmd
+```bash
 oractl:>help user change-password
 NAME
        user change-password - Change password for the specified user.
@@ -1141,23 +1102,24 @@ OPTIONS
        The username you want to change the password.
        [Mandatory]
 
-...
-
+Ask for Help
+       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+       E-mail: obaas_ww@oracle.com
 ```
 
-Example:
+For example, to change the password from a user called `obaas-user-test1`:
 
-```cmd
-oractl:>user change-password --username user1
+```bash
+oractl:>user change-password --username obaas-user-test1
 ? password ***********
-obaas-cli [user change-password]: User [user1] password was successfully updated.
+obaas-cli [user change-password]: User [obaas-user-test1] password was successfully updated.
 ```
 
 #### List Users
 
-Use the `user list` command to obtain the comprehensive list of users registered on the platform.
+Use the `user list` command to obtain the list of users registered on the platform.
 
-```cmd
+```bash
 oractl:>help user list
 NAME
        user list - Lists the users in your platform.
@@ -1165,13 +1127,14 @@ NAME
 SYNOPSIS
        user list --help
 
-...
-
+Ask for Help
+       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+       E-mail: obaas_ww@oracle.com
 ```
 
-Example:
+For example, to list all registered users:
 
-```cmd
+```bash
 oractl:>user list
 ╔══╤════════════════╤═══════════════════════════════════════╗
 ║Id│Username        │Roles                                  ║
@@ -1190,7 +1153,9 @@ oractl:>user list
 
 Use the `user delete` command to remove users from the platform.
 
-```cmd
+> ATTENTION: Ensure that you want to completely delete the user. You cannot rollback the user profile once deleted.
+
+```bash
 oractl:>help user delete
 NAME
        user delete - Delete a user in your platform.
@@ -1207,13 +1172,14 @@ OPTIONS
        The user id from the user you want to delete.
        [Optional, default = 0]
 
-...
-
+Ask for Help
+       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+       E-mail: obaas_ww@oracle.com
 ```
 
-Example:
+For example, to delete a user called `obaas-user-test1`:
 
-```cmd
+```bash
 oractl:>user delete --username obaas-user-test1
 obaas-cli [user delete]: User [obaas-user-test1] as successfully deleted.
 ````
