@@ -47,7 +47,11 @@ create a secure channel to `service/apisix-dashboard`. Process the following ste
 2. Open the Apache APISIX Dashboard URL: <http://localhost:8080>
 
     * username: `admin`
-    * password: `admin`
+    * Password is retrieved using the following command:
+
+    ```shell
+    kubectl get secret -n apisix apisix-dashboard -o jsonpath='{.data.conf\.yaml}' | base64 -d | grep 'password:`
+    ```
 
     **NOTE:** Oracle recommends that you change the default password when you log in the first time. Even though the dashboard is not accessible externally, Oracle still recommends using strong passwords to maximize security.
 
@@ -57,9 +61,7 @@ create a secure channel to `service/apisix-dashboard`. Process the following ste
 
 ## Exposing a Spring Application Through the API Gateway and Load Balancer
 
-Once you have your application deployed and running, you may want to expose it to the outside world. Some applications may not need to be
-exposed if they are only called by other applications in the platform. To expose your application, create a "route" in the Apache APISIX
-API Gateway by processing these steps:
+Once you have your application deployed and running, you may want to expose it to the outside world. Some applications may not need to be exposed if they are only called by other applications in the platform. To expose your application, create a "route" in the Apache APISIX API Gateway by processing these steps:
 
 1. Create a route to the service. For example:
 
