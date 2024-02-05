@@ -12,8 +12,6 @@ main:
         ref: "/on-premises/ol8" 
   - name: Getting Started
     ref: "/getting-started"     
-  # - name: Sample Applications
-  #   ref: "/sample-apps"
   - name: Platform Services
     ref: "/platform"
     sub:
@@ -69,7 +67,7 @@ main:
     ref: "/database"
   - name: Kubernetes Access
     ref: "/cluster-access"
-  - name: "Sample Application"
+  - name: Sample Application
     ref: "/sampleapp"
   - name: Uninstall
     ref: "/uninstall"
