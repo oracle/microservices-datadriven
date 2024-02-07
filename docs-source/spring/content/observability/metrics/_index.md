@@ -276,7 +276,7 @@ Prometheus is an open source monitoring and alerting system. Prometheus collects
     * To get the password, run this command:
 
       ```shell
-      kubectl -n grafana get secret grafana -o jsonpath='{.data.admin-password}' | base64 -d
+      kubectl -n grafana get secret grafana-dashboard-authn -o jsonpath='{.data.password}' | base64 -d
       ```
 
       > **NOTE:** If you do not have `base64`, leave off the last part (`| base64 -d`) in the command, then copy the output, and use this
