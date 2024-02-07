@@ -405,7 +405,7 @@ This is an example of the `customer32` application:
     1. Check journal -- DEPOSIT
 
        ```shell
-       curl -i http://<EXTERNAL-IP>/api/v1/account/1/journal
+       curl -i http://<EXTERNAL-IP>/api/v1/account/21/journal
        ```
 
        Output should look like this -- DEPOSIT
@@ -453,7 +453,7 @@ This is an example of the `customer32` application:
     1. Perform transfer between two accounts. Note account numbers
 
        ```shell
-       curl -X POST "http://<EXTERNAL-IP>/transfer?fromAccount=2&toAccount=1&amount=100"
+       curl -X POST "http://<EXTERNAL-IP>/transfer?fromAccount=22&toAccount=21&amount=100"
        ```
 
        Output should look like this:
