@@ -37,7 +37,7 @@ public class CustomerController {
 
     /**
      * Find all customers.
-     * curl -i -X GET 'http://localhost:9090/api/v1/customer'
+     * curl -i -X GET 'http://localhost:9090/api/v2/customer'
      * @return All customers from CUSTOMERS32 table.
      */
     @GetMapping("/customer")
@@ -49,7 +49,7 @@ public class CustomerController {
 
     /**
      * Find a customer by name.
-     * curl -i -X GET 'http://localhost:9090/api/v1/customer/name/Walsh%20Group'
+     * curl -i -X GET 'http://localhost:9090/api/v2/customer/name/Walsh%20Group'
      * @param name Customer name.
      * @return Customer with the name from CUSTOMERS32 table if found and 200. If not 204.
      */
@@ -67,7 +67,7 @@ public class CustomerController {
 
     /**
      * Find customer by id.
-     * curl -i -X GET 'http://localhost:9090/api/v1/customer/mcoleiroj'
+     * curl -i -X GET 'http://localhost:9090/api/v2/customer/mcoleiroj'
      * @param id Customer id.
      * @return Customer with id from CUSTOMERS32 table if found and 200. If not 204.
      */
@@ -85,7 +85,7 @@ public class CustomerController {
 
     /**
      * Find customer by email.
-     * curl -i -X GET 'http://localhost:9090/api/v1/customer/email/cgoodhallj%40google.it'
+     * curl -i -X GET 'http://localhost:9090/api/v2/customer/email/cgoodhallj%40google.it'
      * @param email Customer email.
      * @return Customer with email from CUSTOMERS32 table if found and 201. If not 204.
      */
@@ -103,7 +103,7 @@ public class CustomerController {
 
     /**
      * Create a customer.
-     * curl -i -X POST 'http://localhost:9090/api/v1/customer' \                                                                                 1 ↵
+     * curl -i -X POST 'http://localhost:9090/api/v2/customer' \                                                                                 1 ↵
      * -H 'Content-Type: application/json' \
      * -d '{"id": "andyt", "name": "andytael", "email": "andy@andy.com"}'
      * @param customer Customer object.
@@ -130,7 +130,7 @@ public class CustomerController {
 
     /**
      * Update a customer.
-     * curl -i -X PUT 'http://localhost:9090/api/v1/customer' \
+     * curl -i -X PUT 'http://localhost:9090/api/v2/customer' \
      * -H 'Content-Type: application/json' \
      * -d '{"id": "wgeorgiev2r", "name": "andytael", "email": "andy@andy.com"}'
      * @param customer Customer object to update.
@@ -150,7 +150,7 @@ public class CustomerController {
 
     /**
      * Delete a customer.
-     * curl -i -X DELETE 'http://localhost:9090/api/v1/customer/andyt'
+     * curl -i -X DELETE 'http://localhost:9090/api/v2/customer/andyt'
      * @param id Customer id to delete.
      * @return 200 if customer is deleted else 204.
      */

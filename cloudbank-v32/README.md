@@ -206,11 +206,20 @@ create-autoscaler --service-name transfer --min-replicas 1 --max-replicas 4 --cp
 
 ## OpenAPI
 
-All services has OpenAPI documentation and can be reached via the Swagger UI. For example after starting a port forward to anyone of the services you can got to the URL http://localhost:\<port\>/swagger-ui/index.html to see the documentation. Replace \<port\> with the port used in the port forward command.
+All services have OpenAPI documentation and can be reached via the Swagger UI. For example after starting a port forward to anyone of the services you can the URL http://localhost:*port*/swagger-ui/index.html to see the documentation. Replace *port* with the port used in the port forward command.
+
+For example, to see the API documentation for the `customer32` application do the following:
+
+```shell
+kubectl port-forward -n application svc/customer32 8080
+```
+
+And open a browser window and go to [Swagger UI](http://localhost:8080)
+
 
 This is an example of the `customer32` application:
 
-![Eureka Dashboard Login](images/swagger-example.png  " ")
+![Swagger UI](images/swagger-example.png  " ")
 
 ## Test CloudBank Services
 
@@ -330,7 +339,7 @@ This is an example of the `customer32` application:
        Transfer-Encoding: chunked
        Date: Thu, 02 Nov 2023 18:02:06 GMT
 
-       {"accountId":21,"amount":256}
+       {"accountId":1,"amount":256}
        ```
 
     1. Check application log
@@ -342,7 +351,7 @@ This is an example of the `customer32` application:
          Should contain:
 
          ```log
-         Received deposit <CheckDeposit(accountId=21, amount=256)>
+         Received deposit <CheckDeposit(accountId=1, amount=256)>
          ```
 
     1. Check journal entries. Replace '1' with the account number you used.
@@ -359,7 +368,7 @@ This is an example of the `customer32` application:
         Transfer-Encoding: chunked
         Date: Thu, 02 Nov 2023 18:06:45 GMT
 
-        [{"journalId":7,"journalType":"PENDING","accountId":21,"lraId":"0","lraState":null,"journalAmount":256}]
+        [{"journalId":7,"journalType":"PENDING","accountId":1,"lraId":"0","lraState":null,"journalAmount":256}]
         ```
 
     1. Clearance of check - Note the JournalID from earlier step
@@ -396,7 +405,7 @@ This is an example of the `customer32` application:
     1. Check journal -- DEPOSIT
 
        ```shell
-       curl -i http://<EXTERNAL-IP>/api/v1/account/21/journal
+       curl -i http://<EXTERNAL-IP>/api/v1/account/1/journal
        ```
 
        Output should look like this -- DEPOSIT
@@ -407,7 +416,7 @@ This is an example of the `customer32` application:
        Transfer-Encoding: chunked
        Date: Thu, 02 Nov 2023 18:36:31 GMT
 
-       [{"journalId":7,"journalType":"DEPOSIT","accountId":21,"lraId":"0","lraState":null,"journalAmount":256}]`
+       [{"journalId":7,"journalType":"DEPOSIT","accountId":1,"lraId":"0","lraState":null,"journalAmount":256}]`
        ```
 
 1. Run LRA Test Cases
@@ -444,7 +453,7 @@ This is an example of the `customer32` application:
     1. Perform transfer between two accounts. Note account numbers
 
        ```shell
-       curl -X POST "http://<EXTERNAL-IP>/transfer?fromAccount=22&toAccount=21&amount=100"
+       curl -X POST "http://<EXTERNAL-IP>/transfer?fromAccount=2&toAccount=1&amount=100"
        ```
 
        Output should look like this:
@@ -492,10 +501,10 @@ This is an example of the `customer32` application:
 
        ```text
        2023-12-26T16:50:45.138Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : Started new LRA/transfer Id: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/ea98ebae-2358-4dd1-9d7c-09f4550d7567
-       2023-12-26T16:50:45.139Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : withdraw accountId = 22, amount = 100
+       2023-12-26T16:50:45.139Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : withdraw accountId = 2, amount = 100
        2023-12-26T16:50:45.139Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : withdraw lraId = http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/ea98ebae-2358-4dd1-9d7c-09f4550d7567
        2023-12-26T16:50:45.183Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : withdraw succeeded
-       2023-12-26T16:50:45.183Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : deposit accountId = 21, amount = 100
+       2023-12-26T16:50:45.183Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : deposit accountId = 1, amount = 100
        2023-12-26T16:50:45.183Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : deposit lraId = http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/ea98ebae-2358-4dd1-9d7c-09f4550d7567
        2023-12-26T16:50:45.216Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : withdraw succeeded deposit succeeded
        2023-12-26T16:50:45.216Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : LRA/transfer action will be confirm
