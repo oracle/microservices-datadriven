@@ -80,7 +80,7 @@ In the [CloudBank](https://bit.ly/CloudBankOnOBaaS) hands-on lab, you can learn 
 - Use the APISIX API Gateway to expose services to clients.
 - Extend a provided Flutter client to add a new "cloud cash" feature that uses the services you have built.
 
-# Need help?
+## Need help?
 
 We'd love to hear from you!  You can contact us in the
 [#oracle-db-microservices](https://oracledevs.slack.com/archives/C03ALDSV272) channel in the

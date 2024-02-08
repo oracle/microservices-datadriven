@@ -107,31 +107,33 @@ Oracle Backend for Spring Boot and Microservices setup installs the following co
 
 | Component                    | Version       | Description                                                                                 |
 |------------------------------|---------------|---------------------------------------------------------------------------------------------|
+| Apache APISIX                | 3.8.0         | Provides full lifecycle API management.                                                     |
+| Apache Kafka                 | 3.6.1 | Provides distributed event streaming.                                                       |
 | cert-manager                 | 1.12.3        | Automates the management of certificates.                                                   |
-| NGINX Ingress Controller     | 1.8.1         | Provides traffic management solution for cloud‑native applications in Kubernetes.           |
-| Prometheus                   | 2.40.2        | Provides event monitoring and alerts.                                                       |
-| Prometheus Operator          | 0.63.0        | Provides management for Prometheus monitoring tools.                                        |
-| OpenTelemetry Collector      | 0.90.0        | Collects process and export telemetry data.                                                 |
+| Coherence                    | 3.3.2        | Provides in-memory data grid.                                                               |
+| Conductor Server             | 3.13.8        | Provides a Microservice orchestration platform.                                             |
 | Grafana                      | 9.2.5         | Provides the tool to examine, analyze, and monitor metrics.                                 |
+| HashiCorp Vault              | 1.15.2        | Provides a way to store and tightly control access to sensitive data.                       |
 | Jaeger Tracing               | 1.45.0        | Provides distributed tracing system for monitoring and troubleshooting distributed systems. |
-| Apache APISIX                | 3.4.0         | Provides full lifecycle API management.                                                     |
-| Spring Boot Admin server     | 3.1.3         | Manages and monitors Spring Cloud applications.                                             |
-| Spring Cloud Config server   | 2022.0.4      | Provides server-side support for an externalized configuration.                             |
-| Spring Eureka service registry | 2022.0.4 (4.0.3)      | Provides service discovery capabilities.                                          |
-| HashiCorp Vault              | 1.14.0        | Provides a way to store and tightly control access to sensitive data.                       |
-| Oracle Database Operator     | 1.0           | Helps reduce the time and complexity of deploying and managing Oracle databases.            |
+| Kube State Metrics | 2.10.1 | Collects metrics for the Kubernetes cluster     |
+| Loki                         | 2.6.1     | Provides log aggregation and search. |
+| Metrics server | 0.64  | Source of container resource metrics for Kubernetes built-in autoscaling pipeline |
+| NGINX Ingress Controller     | 1.8.1         | Provides traffic management solution for cloud‑native applications in Kubernetes.           |
+| OpenTelemetry Collector      | 0.93.0        | Collects process and export telemetry data.                                                 |
 | Oracle Database Observability Exporter | 1.2.0 | Exposes Oracle Database metrics in standard Prometheus format.                            |
-| Oracle Transaction Manager for Microservices | 22.3.2 | Manages distributed transactions to ensure consistency across Microservices.       |
-| Strimzi-Apache Kafka operator  | 0.36.1      | Manages Apache Kafka clusters.                                                              |
-| Apache Kafka                 | 3.4.0 - 3.5.1 | Provides distributed event streaming.                                                       |
-| Coherence                    | 3.2.11        | Provides in-memory data grid.                                                               |
+| Oracle Database Operator     | 1.0           | Helps reduce the time and complexity of deploying and managing Oracle databases.            |
+| Oracle Database storage adapter for Parse  (optional) | 1.0.0    | Enables the Parse Server to store data in Oracle Database.              |
+| Oracle Transaction Manager for Microservices | 23.4.1 | Manages distributed transactions to ensure consistency across Microservices.       |
 | Parse Server (optional)      | 6.3.0         | Provides backend services for mobile and web applications.                                  |
 | Parse Dashboard (optional)   | 5.2.0         | Provides web user interface for managing the Parse Server.                                  |
-| Oracle Database storage adapter for Parse  (optional) | 1.0.0    | Enables the Parse Server to store data in Oracle Database.              |
-| Conductor Server             | 3.13.2        | Provides a Microservice orchestration platform.                                             |
-| Loki                         | 2.6.1     | Provides log aggregation and search. |
+| Prometheus                   | 2.40.2        | Provides event monitoring and alerts.                                                       |
+| Prometheus Operator          | 0.63.0        | Provides management for Prometheus monitoring tools.                                        |
 | Promtail                     | 2.8.2     | Collects logs.                       |
-| Spring Authorization Server  | 2022.0.4  | Provides authentication and authorization for applications. |
+| Spring Authorization Server  | 3.2.1  | Provides authentication and authorization for applications. |
+| Spring Boot Admin server     | 3.2.0         | Manages and monitors Spring Cloud applications.                                             |
+| Spring Cloud Config server   | 2023.0.0      | Provides server-side support for an externalized configuration.                             |
+| Spring Eureka service registry | 2023.0.0 | Provides service discovery capabilities.                                          |
+| Strimzi-Apache Kafka operator  | 0.36.1      | Manages Apache Kafka clusters.                                                              |
 
 ## Overview of the Setup Process
 
