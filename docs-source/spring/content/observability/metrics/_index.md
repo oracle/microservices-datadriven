@@ -32,7 +32,7 @@ resources:
     title: "Oracle Database Dashboard"
   - name: spring-boot-observability-dashboard
     src: "spring-boot-observability-dashboard.png"
-    title: "Spring Boot Observablity Dashboard"
+    title: "Spring Boot Observability Dashboard"
   - name: spring-boot-stats-dashboard
     src: "spring-boot-stats-dashboard.png"
     title: "Spring Boot Statistics Dashboard"
@@ -44,17 +44,16 @@ resources:
     title: "Observability Overview"
 ---
 
-Oracle Backend for Spring Boot and Microservices provides built-in platform services to collect metrics from system and application
-workloads and pre-built Grafana dashboards to view and explore those metrics. 
+Oracle Backend for Spring Boot and Microservices provides built-in platform services to collect metrics from system and application workloads and pre-built Grafana dashboards to view and explore those metrics.
 
-On this page, you will find the following topics: 
+On this page, you will find the following topics:
 
 - [Overview](#overview)
 - [Pre-installed dashboards](#pre-installed-dashboards)
-   - [Spring Boot Observability](#spring-boot-observability)
-   - [Spring Boot Statistics](#spring-boot-statistics)
-   - [Oracle Datbase Dashboard](#oracle-database-dashboard)
-   - [Kube State Metrics Dashboard](#kube-state-metrics-dashboard)
+  - [Spring Boot Observability](#spring-boot-observability)
+  - [Spring Boot Statistics](#spring-boot-statistics)
+  - [Oracle Database Dashboard](#oracle-database-dashboard)
+  - [Kube State Metrics Dashboard](#kube-state-metrics-dashboard)
 - [How to have metrics collected for your applications](#how-to-have-metrics-collected-for-your-applications)
 - [How to access Prometheus](#how-to-access-prometheus)
 - [How to access Grafana](#how-to-access-grafana)
@@ -67,18 +66,16 @@ The diagram below provides an overview of the components that play a role in met
 
 <!-- spellchecker-disable -->
 {{< img name="observability-overview" size="medium" lazy=false >}}
+
 <!-- spellchecker-enable -->
 
 In the diagram above:
 
-- You may deploy applications into the platform and to have metrics collected these must either register with the Spring Eureka
-  Service Registry or you must create Service Monitor resources for your applications.
+- You may deploy applications into the platform and to have metrics collected these must either register with the Spring Eureka Service Registry or you must create Service Monitor resources for your applications.
 - Prometheus is configured to auto-discover services that register with the service registry and collect metrics for them.
 - Prometheus is configured to collect metrics from application described by a Service Monitor.
-- The [Oracle Database Exporter](https://github.com/oracle/oracle-db-appdev-monitoring) and Kube State Metrics are pre-installed
-  and Prometheus is configured to collect metrics from them.
+- The [Oracle Database Exporter](https://github.com/oracle/oracle-db-appdev-monitoring) and Kube State Metrics are pre-installed and Prometheus is configured to collect metrics from them.
 - Grafana is pre-installed and populated with a set of dashboards (see below).  A Prometheus data source is pre-configured.  
-
 
 ## Pre-installed dashboards
 
@@ -104,10 +101,9 @@ Here is an example of this dashboard displaying data for a simple application:
 {{< img name="spring-boot-observability-dashboard" size="medium" lazy=false >}}
 <!-- spellchecker-enable -->
 
-
 ### Spring Boot Statistics
 
-This dashboard provides more in-depth information about services including the following: 
+This dashboard provides more in-depth information about services including the following:
 
 - JVM statistic like heap and non-heap memory usage, and details of garbage collection
 - Load average and open files
@@ -127,9 +123,12 @@ Here is an example of this dashboard displaying data for a simple application:
 
 This dashboard provides details about the Oracle Database including:
 
+- SGA and PGA size
 - Active sessions
 - User commits
 - Execute count
+- CPU count and platform
+- Top SQL
 - Wait time statistics by class
 
 Here is an example of this dashboard:
@@ -140,7 +139,7 @@ Here is an example of this dashboard:
 
 ### Kube State Metrics Dashboard
 
-This dashboard provides details of the Kubernetes cluster including: 
+This dashboard provides details of the Kubernetes cluster including:
 
 - Pod capacity and requests for CPU and memory
 - Node availability
@@ -242,8 +241,8 @@ Prometheus is an open source monitoring and alerting system. Prometheus collects
 
 3. In the Prometheus web user interface, search for metrics:
 
-   * In the search bar, search for `application_ready_time_seconds` and click on **Execute**.
-   * You should see metrics for the Sample Applications.
+   - In the search bar, search for `application_ready_time_seconds` and click on **Execute**.
+   - You should see metrics for the Sample Applications.
 
    For example:
 
@@ -253,8 +252,8 @@ Prometheus is an open source monitoring and alerting system. Prometheus collects
 
 4. In the Prometheus web user interface, **Status** allows you to view the targets being monitored by Prometheus:
 
-    * In the top menu, choose **Status** and then **Targets**.
-    * Notice that the targets "slow", "customer" and others are in **UP** status and others are in **DOWN** status.
+    - In the top menu, choose **Status** and then **Targets**.
+    - Notice that the targets "slow", "customer" and others are in **UP** status and others are in **DOWN** status.
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-prometheus-targets" size="large" lazy=false >}}
@@ -272,17 +271,16 @@ Prometheus is an open source monitoring and alerting system. Prometheus collects
 
 2. Open the Grafana web user interface URL: <http://localhost:8080>
 
-    * username: `admin`
-    * To get the password, run this command:
+    - username: `admin`
+    - To get the password, run this command:
 
       ```shell
       kubectl -n grafana get secret grafana-dashboard-authn -o jsonpath='{.data.password}' | base64 -d
       ```
 
-      > **NOTE:** If you do not have `base64`, leave off the last part (`| base64 -d`) in the command, then copy the output, and use this
-	  website to decode it: <https://www.base64decode.org/>.
+      > **NOTE:** If you do not have `base64`, leave off the last part (`| base64 -d`) in the command, then copy the output, and use this website to decode it: <https://www.base64decode.org/>.
 
-	  If you did not set your own password during installation, then the auto-generated password will be a long string of characters that might be similar to `210BAqNzYkrcWjd58RKC2Xzerx9c0WkZi9LNsG4c`. For example:
+    If you did not set your own password during installation, then the auto-generated password will be a long string of characters that might be similar to `210BAqNzYkrcWjd58RKC2Xzerx9c0WkZi9LNsG4c`. For example:
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-grafana-login" size="small" lazy=false >}}

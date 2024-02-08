@@ -72,7 +72,7 @@ If you want to enable tracing for your database calls (Micrometer observability 
 </dependency>
 ```
 
-You must also add the following to your applications `application.yaml` file. 
+You must also add the following to your applications `application.yaml` file.
 
 ```yaml
 spring:
@@ -104,6 +104,22 @@ management:
     tracing:
       endpoint: ${otel.exporter.otlp.endpoint}
 ```
+
+## How to enable tracing in APISIX routes
+
+The OpenTelemetry plugin is enabled by default in APISIX. To enable tracing for your routes add the following to the route configuration:
+
+```json
+"plugins": {
+    "opentelemetry": {
+        "sampler": {
+            "name": "always_on"
+        }
+    }
+}
+```
+
+For more configuration option for the OpenTelemetry plugin; [APISIX Documentation](https://apisix.apache.org/docs/apisix/plugins/opentelemetry/)
 
 ## View Application Traces in Jaeger Web User Interface
 

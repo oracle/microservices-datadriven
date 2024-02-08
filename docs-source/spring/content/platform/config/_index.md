@@ -60,7 +60,7 @@ During setup of Oracle Backend for Spring Boot and Microservices, the following 
 | application-b   | development    | 23cbeta  | db-dev-connection   | connectionstring-b-dev            |
 | application-c   | secret         | 23.4     | json-db             | 23c-json-db                       |
 | application-c   | secret         | 23.4     | json-sdb-conn       | 23c-mongo-conn                    |
-| application-c   | secret         | 23.4     | txeventq           | 23c-conn-string                   |
+| application-c   | secret         | 23.4     | txeventq            | 23c-conn-string                   |
 | application-c   | secret         | 23.4     | txeventq            | 23c-kafka-name                    |
 ```
 

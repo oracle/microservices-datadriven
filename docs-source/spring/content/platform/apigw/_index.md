@@ -32,11 +32,9 @@ resources:
 [Apache APISIX](https://apisix.apache.org) is an open source cloud native API platform that supports the full lifecycle of API management
 including publishing, traffic management, deployment strategies, and circuit breakers.
 
-## Deploy and Secure Sample Application APIs using Apache APISIX
+## Accessing Apache APISIX dashboard
 
-Oracle Backend for Spring Boot and Microservices deploys Apache APISIX Gateway and Dashboard in the `apisix` namespace. The gateway is exposed through the
-external load balancer and ingress controller. To access the Apache APISIX Dashboard, you must use the `kubectl port-forward` command to
-create a secure channel to `service/apisix-dashboard`. Process the following steps:
+Oracle Backend for Spring Boot and Microservices deploys Apache APISIX Gateway and Dashboard in the `apisix` namespace. The gateway is exposed through the external load balancer and ingress controller. To access the Apache APISIX Dashboard, you must use the `kubectl port-forward` command to create a secure channel to `service/apisix-dashboard`. Process the following steps:
 
 1. To expose the Apache APISIX Dashboard using this command:
 
@@ -47,7 +45,11 @@ create a secure channel to `service/apisix-dashboard`. Process the following ste
 2. Open the Apache APISIX Dashboard URL: <http://localhost:8080>
 
     * username: `admin`
-    * password: `admin`
+    * Password is retrieved using the following command:
+
+    ```shell
+    kubectl get secret -n apisix apisix-dashboard -o jsonpath='{.data.conf\.yaml}' | base64 -d | grep 'password:`
+    ```
 
     **NOTE:** Oracle recommends that you change the default password when you log in the first time. Even though the dashboard is not accessible externally, Oracle still recommends using strong passwords to maximize security.
 
@@ -55,11 +57,25 @@ create a secure channel to `service/apisix-dashboard`. Process the following ste
     {{< img name="obaas-apisix-login" size="tiny" lazy=false >}}
     <!-- spellchecker-enable -->
 
+## Enable tracing in APISIX routes
+
+The OpenTelemetry plugin is enabled by default in APISIX. To enable tracing for your routes add the following to the route configuration:
+
+```json
+"plugins": {
+    "opentelemetry": {
+        "sampler": {
+            "name": "always_on"
+        }
+    }
+}
+```
+
+For more configuration option for the OpenTelemetry plugin; [APISIX Documentation](https://apisix.apache.org/docs/apisix/plugins/opentelemetry/)
+
 ## Exposing a Spring Application Through the API Gateway and Load Balancer
 
-Once you have your application deployed and running, you may want to expose it to the outside world. Some applications may not need to be
-exposed if they are only called by other applications in the platform. To expose your application, create a "route" in the Apache APISIX
-API Gateway by processing these steps:
+Once you have your application deployed and running, you may want to expose it to the outside world. Some applications may not need to be exposed if they are only called by other applications in the platform. To expose your application, create a "route" in the Apache APISIX API Gateway by processing these steps:
 
 1. Create a route to the service. For example:
 
@@ -95,7 +111,7 @@ API Gateway by processing these steps:
         <!-- spellchecker-enable -->
         </br>
 
-    d. Save the route that you created.
+    1. Save the route that you created.
         <!-- spellchecker-disable -->
         {{< img name="obaas-apisix-routes-step4" size="medium" lazy=false >}}
         <!-- spellchecker-enable -->
@@ -107,13 +123,20 @@ API Gateway by processing these steps:
 
 2. Test a route to the service. For example:
 
-    a. Get the Apache APISIX Gateway external IP using this command:
+    1. Get the Apache APISIX Gateway external IP using this command:
 
       ```shell
       kubectl -n ingress-nginx get svc ingress-nginx-controller
       ```
 
-    b. Call the API using the Apache APISIX Gateway address plus path. For example:
+      The result of the command should look similar to this:
+
+      ```text
+      NAME                       TYPE           CLUSTER-IP      EXTERNAL-IP       PORT(S)                      AGE
+      ingress-nginx-controller   LoadBalancer   10.96.172.148   146.235.207.230   80:31393/TCP,443:30506/TCP   25h
+      ```
+
+    1. Call the API using the Apache APISIX Gateway address plus path. For example:
 
       ```shell
       curl http://APISIX_IP/fruit
