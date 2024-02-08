@@ -99,7 +99,7 @@ You must meet the following prerequisites to use Oracle Backend for Spring Boot 
 
   - The Kubernetes command-line interface (kubectl). [Installing kubectl documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
   - Oracle Cloud Infrastructure command-line interface (CLI). [Quickstart - Installing the CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#Quickstart).
-  - Oracle Backend for Spring Boot and Microservices command-line interface (oractl). [oractl Downloads](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0).
+  - Oracle Backend for Spring Boot and Microservices command-line interface (oractl). [Download oractl](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0).
 
 ## Summary of Components
 
@@ -117,9 +117,10 @@ Oracle Backend for Spring Boot and Microservices setup installs the following co
 | Apache APISIX                | 3.4.0         | Provides full lifecycle API management.                                                     |
 | Spring Boot Admin server     | 3.1.3         | Manages and monitors Spring Cloud applications.                                             |
 | Spring Cloud Config server   | 2022.0.4      | Provides server-side support for an externalized configuration.                             |
-| Spring Eureka service registry | 2022.0.4 (4.0.3)      | Provides service discovery capabilities.                                                    |
+| Spring Eureka service registry | 2022.0.4 (4.0.3)      | Provides service discovery capabilities.                                          |
 | HashiCorp Vault              | 1.14.0        | Provides a way to store and tightly control access to sensitive data.                       |
 | Oracle Database Operator     | 1.0           | Helps reduce the time and complexity of deploying and managing Oracle databases.            |
+| Oracle Database Observability Exporter | 1.2.0 | Exposes Oracle Database metrics in standard Prometheus format.                            |
 | Oracle Transaction Manager for Microservices | 22.3.2 | Manages distributed transactions to ensure consistency across Microservices.       |
 | Strimzi-Apache Kafka operator  | 0.36.1      | Manages Apache Kafka clusters.                                                              |
 | Apache Kafka                 | 3.4.0 - 3.5.1 | Provides distributed event streaming.                                                       |

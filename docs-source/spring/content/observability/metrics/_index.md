@@ -67,6 +67,7 @@ The diagram below provides an overview of the components that play a role in met
 
 <!-- spellchecker-disable -->
 {{< img name="observability-overview" size="medium" lazy=false >}}
+
 <!-- spellchecker-enable -->
 
 In the diagram above:
@@ -127,9 +128,12 @@ Here is an example of this dashboard displaying data for a simple application:
 
 This dashboard provides details about the Oracle Database including:
 
+- SGA and PGA size
 - Active sessions
 - User commits
 - Execute count
+- CPU count and platform
+- Top SQL
 - Wait time statistics by class
 
 Here is an example of this dashboard:
