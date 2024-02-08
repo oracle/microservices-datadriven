@@ -23,3 +23,31 @@ The Oracle Backend for Spring Boot and Microservices has the following security 
 - Oracle Backend for Spring Boot and Microservices provides an authorization server which is an engine to authenticate and authorize requests to various components in Oracle Backend for Spring Boot and Microservices. The end user can manage users using REST Endpoints. [AuthZ Server Documentation](../security/azn-server)
 
 - Oracle Backend for Spring Boot and Microservices contains HashiCorp Vault to secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets, and other sensitive data. [HashiCorp Vault Documentation](../platform/vault)
+
+
+## Transport Layer Security
+
+The Oracle Backend for Spring Boot and Microservices is deployed with a sample self-signed certificate for Transport Layer Security (TLS). This results in an "Accept Risk" message when accessing the Spring Operations Center or Grafana web user interfaces and the sample TLS certificate should not be used for production deployments.
+
+### Updating the TLS Certificate
+
+1. Ensure your Domain Name System (DNS) entry points to the IP address for the public load balancer.  You can check this address with this command, the address in the `EXTERNAL-IP` field is the public load balancer address:
+
+   ```bash
+   kubectl -n ingress-nginx get svc ingress-nginx-controller
+   ```
+
+2. Obtain a new TLS certificate. In a production environment, the most common scenario is to use a public certificate that has been signed by a certificate authority.
+3. Create a new Kubernetes secret in the `ingress-nginx` namespace.  For example:
+
+    ```bash
+    kubectl -n ingress-nginx create secret tls my-tls-cert --key new-tls.key --cert new-tls.crt
+    ```
+
+4. Modify the service definition to reference the new Kubernetes secret by changing the `service.beta.kubernetes.io/oci-load-balancer-tls-secret` annotation in the service configuration. For example:
+
+    ```bash
+    kubectl patch service ingress-nginx-controller -n ingress-nginx \
+        -p '{"metadata":{"annotations":{"service.beta.kubernetes.io/oci-load-balancer-tls-secret":"my-tls-cert"}}}' \
+        --type=merge
+    ```
