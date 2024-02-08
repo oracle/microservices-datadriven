@@ -6,7 +6,16 @@ keywords: "release notes additions updates deprecations removals springboot spri
 
 ## Version 1.1.1, February 9, 2024
 
-he following components were updated:
+This release adds the "Spring Operations Center" feature, adds or updates some Grafana dashboards, and includes
+other small updates and/or bug fixes.
+
+The following components were added:
+
+| Component                               | Version   | Description                                              |
+|-----------------------------------------|-----------|----------------------------------------------------------|
+| Spring Operations Center                | 1.1.1     | Provide operations capabilities for Spring applications. |
+
+The following components were updated:
 
 | Component                                                                     | New Version   | Replaced Version    |
 |-------------------------------------------------------------------------------|---------------|---------------------|

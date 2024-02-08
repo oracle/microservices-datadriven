@@ -262,7 +262,8 @@ NAME
        bind - Create or Update a schema/user and bind it to service deployment.
 
 SYNOPSIS
-       bind --action CommandConstants.BindActions --app-name String --service-name String --username String --binding-prefix String --help
+       bind --action CommandConstants.BindActions --app-name String --service-name String 
+       --username String --binding-prefix String --help
 
 OPTIONS
        --action CommandConstants.BindActions
@@ -322,7 +323,10 @@ NAME
        deploy - Deploy a service.
 
 SYNOPSIS
-       deploy --bind String --app-name String [--service-name String] [--image-version String] --service-profile String --port String --java-version String --add-health-probe boolean --liquibase-db String [--artifact-path String] --initial-replicas int --cpu-request String --graalvm-native boolean --apigw boolean --route String --apikey String --help
+       deploy --bind String --app-name String [--service-name String] [--image-version String] 
+       --service-profile String --port String --java-version String --add-health-probe boolean 
+       --liquibase-db String [--artifact-path String] --initial-replicas int 
+       --graalvm-native boolean --apigw boolean --route String --apikey String --help
 
 OPTIONS
        --bind String
@@ -369,10 +373,6 @@ OPTIONS
        The initial number of replicas
        [Optional, default = 1]
 
-       --cpu-request String
-       The amount of CPU to request
-       [Optional, default = 500m]
-
        --graalvm-native boolean
        Artifact is a graalvm native compiled by Oracle Backend
        [Optional, default = false]
@@ -406,7 +406,8 @@ Ask for Help
    For example:
 
    ```bash
-   oractl:>deploy --app-name myapp --service-name myserv --image-version 0.0.1 --port 8081 --bind jms --add-health-probe true --artifact-path obaas/myserv/target/demo-0.0.1-SNAPSHOT.jar
+   oractl:>deploy --app-name myapp --service-name myserv --image-version 0.0.1 --port 8081
+       --bind jms --add-health-probe true --artifact-path obaas/myserv/target/demo-0.0.1-SNAPSHOT.jar
    uploading: obaas/myserv/target/demo-0.0.1-SNAPSHOT.jar building and pushing image...
    binding resources... successful
    creating deployment and service... successfully deployed
@@ -415,7 +416,9 @@ Ask for Help
    or, for native compiled microservices, add **--java-version container-registry.oracle.com/os/oraclelinux:7-slim** to have a compact image and **--graalvm-native** to specify the file provided is an executable .exec:
 
    ```bash
-   oractl:>deploy --app-name cloudn --service-name account --artifact-path obaas/myserv/target/accounts-0.0.1-SNAPSHOT.jar.exec --image-version 0.0.1 --graalvm-native --java-version container-registry.oracle.com/os/oraclelinux:7-slim
+   oractl:>deploy --app-name cloudn --service-name account 
+     --artifact-path obaas/myserv/target/accounts-0.0.1-SNAPSHOT.jar.exec --image-version 0.0.1 
+     --graalvm-native --java-version container-registry.oracle.com/os/oraclelinux:7-slim
    ```
 
 ### create-autoscaler
@@ -428,7 +431,8 @@ NAME
        create-autoscaler - Create an autoscaler.
 
 SYNOPSIS
-       create-autoscaler --app-name String [--service-name String] --min-replicas int --max-replicas int --cpu-percent int --help
+       create-autoscaler --app-name String [--service-name String] --min-replicas int 
+         --max-replicas int --cpu-request String --cpu-percent int --help
 
 OPTIONS
        --app-name String
@@ -447,6 +451,10 @@ OPTIONS
        The maximum number of replicas
        [Optional, default = 4]
 
+       --cpu-request String
+       The amount of CPU to request
+       [Optional, default = 100m]
+
        --cpu-percent int
        The CPU percent at which to scale
        [Optional, default = 80]
@@ -456,6 +464,10 @@ OPTIONS
        [Optional]
 
 
+
+CURRENTLY UNAVAILABLE
+       you are not signedIn. Please sign in to be able to use this command!
+
 Ask for Help
        Slack: https://oracledevs.slack.com/archives/C03ALDSV272
        E-mail: obaas_ww@oracle.com
@@ -464,7 +476,8 @@ Ask for Help
 For example:
 
 ```bash
-oractl:>create-autoscaler --app-name application --service-name creditscore --cpu-percent 80 --min-replicas 2 --max-replicas 6
+oractl:>create-autoscaler --app-name application --service-name creditscore --cpu-percent 80 
+  --cpu-request 200m --min-replicas 2 --max-replicas 6
 obaas-cli [create-autoscaler]: Autoscaler was successfully created.
 ```
 
@@ -579,7 +592,8 @@ NAME
        config - View and modify Service configuration.
 
 SYNOPSIS
-       config [--action CommandConstants.ConfigActions] --service-name String --service-label String --service-profile String --property-key String --property-value String --artifact-path String --help
+       config [--action CommandConstants.ConfigActions] --service-name String --service-label String 
+       --service-profile String --property-key String --property-value String --artifact-path String --help
 
 OPTIONS
        --action CommandConstants.ConfigActions
@@ -624,7 +638,8 @@ Ask for Help
       * Add a specific configuration using the set of parameters `--service-name`, `--service-label`, `--service-profile`, `--property-key`, and `--property-value`. For example:
 
        ```bash
-       oractl:>config add --service-name myserv --service-label 0.0.1 --service-profile default --property-key k1 --property-value value1
+       oractl:>config add --service-name myserv --service-label 0.0.1 --service-profile default
+         --property-key k1 --property-value value1
        Property added successfully.
        ```
 
@@ -997,7 +1012,7 @@ Manage users allows you to create the platform users and assign the roles that g
 
 Use the `user create` command to add users to the platform. This command requires the name of the user `username` and the user roles in a comma-separated list.
 
-```bash
+```text
 oractl:>help user create
 NAME
        user create - Creates a new user in your platform.
@@ -1007,7 +1022,7 @@ SYNOPSIS
 
 OPTIONS
        --username String
-       The name you assign to the user during creation. This is the user’s login for the CLI and for the SOC UI, also. The name must be unique across all users in the platform and cannot be changed.
+       The name you assign to the user during creation. This is the user's login for the CLI and for the SOC UI, also. The name must be unique across all users in the platform and cannot be changed.
        [Mandatory]
 
        --roles String
@@ -1161,7 +1176,7 @@ oractl:>user list
 
 Use the `user delete` command to remove users from the platform.
 
-> ATTENTION: Ensure that you want to completely delete the user. You cannot rollback the user profile once deleted.
+> NOTE: User deletion is permanent and irreversable.
 
 ```bash
 oractl:>help user delete
