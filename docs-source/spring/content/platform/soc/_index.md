@@ -30,7 +30,7 @@ More capabilities will be added to this feature in future releases.
 The Spring Operations Center provides a web user interface to manage the Oracle Backend for Spring Boot and Microservices.
 This preview release includes the following capabilities:
 
-- View details about the configration and health of the environment
+- View details about the configuration and health of the environment
 - View details of workloads (Spring Boot applications) deployed in the environment
 - Easy one-click access to Grafana dashboards for applications
 - View details of users and roles defined in the Spring Authorization Server included in the environment
