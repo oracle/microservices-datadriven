@@ -9,8 +9,8 @@ Oracle Database and other infrastructure components that operate on multiple clo
 building, testing, and operating microservices platforms for reliable, secure, and scalable enterprise applications.
 
 &nbsp;
-{{< hint type=[warning] icon=gdoc_fire title="Version 1.1 (production) released February, 2024" >}}
- Oracle Backend for Spring Boot and Microservices Version 1.1 is now generally available and suitable
+{{< hint type=[warning] icon=gdoc_fire title="Version 1.1.1 (production) released February, 2024" >}}
+ Oracle Backend for Spring Boot and Microservices Version 1.1.1 is now generally available and suitable
  for production use.  This version supports and recommends Spring Boot 3.2.x, Spring 6.1 and Spring Cloud 2023.0.0,
  with limited backwards compatibility for Spring Boot 2.7.x.  
 {{< /hint >}}
@@ -38,6 +38,7 @@ Infrastructure (OCI) Container Engine for Kubernetes cluster (OKE cluster):
 - Oracle Backend for Spring Boot Command Line Interface (CLI)
 - Oracle Backend for Spring Boot Visual Studio Code Plugin
 - Oracle Database Operator for Kubernetes (OraOperator or the operator)
+- Oracle Database Observability Exporter
 - Oracle Transaction Manager for Microservices (MicroTx)
 - Parse and Parse Dashboard (Optional)
 - Prometheus
@@ -79,7 +80,7 @@ In the [CloudBank](https://bit.ly/CloudBankOnOBaaS) hands-on lab, you can learn 
 - Use the APISIX API Gateway to expose services to clients.
 - Extend a provided Flutter client to add a new "cloud cash" feature that uses the services you have built.
 
-# Need help?
+## Need help?
 
 We'd love to hear from you!  You can contact us in the
 [#oracle-db-microservices](https://oracledevs.slack.com/archives/C03ALDSV272) channel in the

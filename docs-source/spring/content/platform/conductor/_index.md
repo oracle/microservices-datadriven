@@ -8,8 +8,7 @@ resources:
   title: "Conductor UI Workflows"
 ---
 
-Oracle Backend as a Service for Spring Cloud includes the Netflix Conductor Server. Conductor is a popular workflow solution that
-works with Spring Boot Microservices and Oracle Database.
+Oracle Backend as a Service for Spring Cloud includes the Netflix Conductor Server. Conductor is a popular workflow solution that works with Spring Boot Microservices and Oracle Database.
 
 Documentation on Conductor can be found here:
 

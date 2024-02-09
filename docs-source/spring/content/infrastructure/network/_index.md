@@ -78,13 +78,12 @@ The following are minimum requirements for a BYO VCN:
 * *Public Subnet*
     * Minimum CIDR: `/30`
     * Route Table:
-        * Internet Gateway
+        * Internet Gateway to 0.0.0.0/0
 * *Private Subnet*
     * Minimum CIDR: `/29`
     * Route Table:
-        * Service Gateway
-        * NAT Gateway
-
+        * Service Gateway to "All `<Region>` Services in the Oracle Services Network"
+        * NAT Gateway to 0.0.0.0/0
 
 # OCI LoadBalancer TLS Certificate Setup
 

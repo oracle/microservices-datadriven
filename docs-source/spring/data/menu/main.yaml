@@ -12,11 +12,11 @@ main:
         ref: "/on-premises/ol8" 
   - name: Getting Started
     ref: "/getting-started"     
-  # - name: Sample Applications
-  #   ref: "/sample-apps"
   - name: Platform Services
     ref: "/platform"
     sub:
+      - name: Spring Operations Center
+        ref : "/platform/soc"
       - name: API Gateway
         ref: "/platform/apigw"
       - name: Service Discovery
