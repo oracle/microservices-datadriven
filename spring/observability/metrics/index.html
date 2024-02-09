@@ -72,7 +72,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/observability/metrics/",
       "headline": "Metrics",
       "description": "Prometheus metrics and Grafana dashboards for Spring Boot applications with the Oracle Backend for Spring Boot and Microservices",
-      "wordCount" : "1067",
+      "wordCount" : "1077",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -626,6 +626,51 @@
 
 
   <ul class="gdoc-nav__list">
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/platform/soc"
+                  class="gdoc-nav__entry"
+                >
+                  Spring Operations Center
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
     
       
       
@@ -2257,9 +2302,12 @@ and Prometheus is configured to collect metrics from them.</li>
 </div>
 <p>This dashboard provides details about the Oracle Database including:</p>
 <ul>
+<li>SGA and PGA size</li>
 <li>Active sessions</li>
 <li>User commits</li>
 <li>Execute count</li>
+<li>CPU count and platform</li>
+<li>Top SQL</li>
 <li>Wait time statistics by class</li>
 </ul>
 <p>Here is an example of this dashboard:</p>
@@ -2276,11 +2324,11 @@ and Prometheus is configured to collect metrics from them.</li>
       <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/observability/metrics/db-dashboard.png">
         <picture>
             <source
-                srcset="https://oracle.github.io/microservices-datadriven/spring/observability/metrics/db-dashboard_hu9b33617a0d7109c2399dfd53af11be70_170408_1200x0_resize_box_3.png"
+                srcset="https://oracle.github.io/microservices-datadriven/spring/observability/metrics/db-dashboard_hu46e6056d5f26533d1623e3a659973320_208705_1200x0_resize_box_3.png"
 
             />
           <img
-                src="https://oracle.github.io/microservices-datadriven/spring/observability/metrics/db-dashboard_hu9b33617a0d7109c2399dfd53af11be70_170408_1800x0_resize_box_3.png"
+                src="https://oracle.github.io/microservices-datadriven/spring/observability/metrics/db-dashboard_hu46e6056d5f26533d1623e3a659973320_208705_1800x0_resize_box_3.png"
               alt="Oracle Database Dashboard"
           />
         </picture>
@@ -2551,7 +2599,7 @@ and Prometheus is configured to collect metrics from them.</li>
 </li>
 <li>
 <p>To get the password, run this command:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl -n grafana get secret grafana -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.data.admin-password}&#39;</span> <span class="p">|</span> base64 -d
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl -n grafana get secret grafana-dashboard-authn -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.data.password}&#39;</span> <span class="p">|</span> base64 -d
 </span></span></code></pre></div><blockquote>
 <p><strong>NOTE:</strong> If you do not have <code>base64</code>, leave off the last part (<code>| base64 -d</code>) in the command, then copy the output, and use this
 website to decode it: <a
@@ -2790,6 +2838,30 @@ website to decode it: <a
   
   
 
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
   
     
     

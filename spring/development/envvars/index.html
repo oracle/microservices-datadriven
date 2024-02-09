@@ -72,7 +72,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/development/envvars/",
       "headline": "Predefined Variables",
       "description": "Predefined environment variables in Oracle Backend for Spring Boot and Microservices",
-      "wordCount" : "567",
+      "wordCount" : "602",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -626,6 +626,51 @@
 
 
   <ul class="gdoc-nav__list">
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/platform/soc"
+                  class="gdoc-nav__entry"
+                >
+                  Spring Operations Center
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
     
       
       
@@ -2048,117 +2093,48 @@ if (!doNotTrack) {
     <h1>Predefined Variables</h1>
     <p>When you deploy a Spring Boot application using the Oracle Backend for Spring Boot and Microservices CLI or Visual Code extension, a number of predefined environment variables will be injected into the pod definition. You may reference any of these variables in your application.</p>
 <p>The predefined variables are as follows:</p>
-<div class="table-wrap"> <table>
-<thead>
-<tr>
-<th>Variable name</th>
-<th>Example value</th>
-<th>Notes</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>app.container.port</code></td>
-<td><code>8080</code></td>
-<td>This sets the listen port for the pod and service.  The Spring Boot application will listen on this port.  The default is <code>8080</code>.  This can be set using the <code>--port</code> parameter on the <code>deploy</code> command in the CLI.</td>
-</tr>
-<tr>
-<td><code>spring.profiles.active</code></td>
-<td><code>default</code></td>
-<td>This sets the Spring profiles that will be active in the application.  The default value is <code>default</code>.  This can be changed set the <code>--service-profile</code> parameter on the <code>deploy</code> command in the CLI.</td>
-</tr>
-<tr>
-<td><code>spring.config.label</code></td>
-<td><code>0.0.1</code></td>
-<td>This is a label that can be used with Spring Config to look up externalized configuration from Spring Config Server, along with the application name and the profile.</td>
-</tr>
-<tr>
-<td><code>eureka.instance.preferIpAddress</code></td>
-<td><code>true</code></td>
-<td>This tells the Eureka discovery client to use the <code>preferIpAddress</code> setting.  This is required in Kubernetes so that service discover will work correctly.</td>
-</tr>
-<tr>
-<td><code>eureka.instance.hostname</code></td>
-<td><code>customer32.application</code></td>
-<td>This sets the hostname that Eureka will use for this application.</td>
-</tr>
-<tr>
-<td><code>MP_LRA_COORDINATOR_URL</code></td>
-<td><code>http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator</code></td>
-<td>This is the URL for the transaction manager which is required when using Eclipse Microprofile Long Running Actions in your application.</td>
-</tr>
-<tr>
-<td><code>MP_LRA_PARTICIPANT_URL</code></td>
-<td><code>http://customer32.application.svc.cluster.local:8080</code></td>
-<td>This is the participant URL which is required when using Eclipse Microprofile Long Running Actions in your application.</td>
-</tr>
-<tr>
-<td><code>eureka.client.register-with-eureka</code></td>
-<td><code>true</code></td>
-<td>This tells the Eureka discovery client to register with the Eureka server.</td>
-</tr>
-<tr>
-<td><code>eureka.client.fetch-registry</code></td>
-<td><code>true</code></td>
-<td>This tells the Eureka discovery client to make a local copy of the registry by fetching it from the Eureka server.</td>
-</tr>
-<tr>
-<td><code>eureka.client.service-url.defaultZone</code></td>
-<td><code>http://eureka.eureka:8761/eureka</code></td>
-<td>This is the default zone for the Eureka discovery client.</td>
-</tr>
-<tr>
-<td><code>zipkin.base-url</code></td>
-<td><code>http://jaegertracing-collector.observability.svc.cluster.local:9411/api/v2/spans</code></td>
-<td>This is the URL of the Zipkin-compatible trace collector which can be used by your application to send trace data to the platform.</td>
-</tr>
-<tr>
-<td><code>otel.exporter.otlp.endpoint</code></td>
-<td><code>http://open-telemetry-opentelemetry-collector.open-telemetry:4318/v1/traces</code></td>
-<td>This is the URL of the OpenTelemetry (OTLP protocol) trace collector which can be used by your application to send trace data to the platform.</td>
-</tr>
-<tr>
-<td><code>config.server.url</code></td>
-<td><code>http://config-server.config-server.svc.cluster.local:8080</code></td>
-<td>This is the URL of the Spring Config Server provided by the platform.</td>
-</tr>
-<tr>
-<td><code>liquibase.datasource.username</code></td>
-<td>set to the key <code>db.username</code> in secret <code>admin-liquibasedb-secrets</code></td>
-<td>This sets the (admin) user that should be used to run Liquibase, if used in your service.</td>
-</tr>
-<tr>
-<td><code>liquibase.datasource.password</code></td>
-<td>set to the key <code>db.password</code> in secret <code>admin-liquibasedb-secrets</code></td>
-<td>This sets the (admin) user&rsquo;s password that should be used to run Liquibase, if used in your service.</td>
-</tr>
-<tr>
-<td><code>spring.datasource.username</code></td>
-<td>set to the key <code>db.username</code> in secret <code>customer32-db-secrets</code></td>
-<td>This sets the (regular) user for your application to use to connect to the database (if you use JPA or JDBC in your application).</td>
-</tr>
-<tr>
-<td><code>spring.datasource.password</code>:</td>
-<td>set to the key <code>db.password</code> in secret <code>customer32-db-secrets</code></td>
-<td>This sets the (regular) user&rsquo;s password for your application to use to connect to the database (if you use JPA or JDBC in your application).</td>
-</tr>
-<tr>
-<td><code>DB_SERVICE</code></td>
-<td>set to the key <code>db.service</code> in secret <code>customer32-db-secrets</code></td>
-<td>This sets the database service name (the TNS name) for your application to use to connect to the database (if you use JPA or JDBC in your application).</td>
-</tr>
-<tr>
-<td><code>spring.datasource.url</code></td>
-<td><code>jdbc:oracle:thin:@$(DB_SERVICE)?TNS_ADMIN=/oracle/tnsadmin</code></td>
-<td>This sets the data source URL for your application to use to connect to the database (if you use JPA or JDBC in your application).</td>
-</tr>
-<tr>
-<td><code>CONNECT_STRING</code></td>
-<td><code>jdbc:oracle:thin:@$(DB_SERVICE)?TNS_ADMIN=/oracle/tnsadmin</code></td>
-<td>This sets the data source URL for your application to use to connect to the database (if you use JPA or JDBC in your application).</td>
-</tr>
-</tbody>
-</table> </div>
+<ul>
+<li><code>app.container.port</code>, for example <code>8080</code>.<br>
+This sets the listen port for the pod and service.  The Spring Boot application will listen on this port.  The default is <code>8080</code>.  This can be set using the <code>--port</code> parameter on the <code>deploy</code> command in the CLI.</li>
+<li><code>spring.profiles.active</code>, for example <code>default</code>.<br>
+This sets the Spring profiles that will be active in the application.  The default value is <code>default</code>.  This can be changed set the <code>--service-profile</code> parameter on the <code>deploy</code> command in the CLI.</li>
+<li><code>spring.config.label</code>, for example <code>0.0.1</code>.<br>
+This is a label that can be used with Spring Config to look up externalized configuration from Spring Config Server, along with the application name and the profile.</li>
+<li><code>eureka.instance.preferIpAddress</code>, for example <code>true</code>.<br>
+This tells the Eureka discovery client to use the <code>preferIpAddress</code> setting.  This is required in Kubernetes so that service discover will work correctly.</li>
+<li><code>eureka.instance.hostname</code>, for example <code>customer32.application</code>.<br>
+This sets the hostname that Eureka will use for this application.</li>
+<li><code>MP_LRA_COORDINATOR_URL</code>, for example <code>http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator</code>.<br>
+This is the URL for the transaction manager which is required when using Eclipse Microprofile Long Running Actions in your application.</li>
+<li><code>MP_LRA_PARTICIPANT_URL</code>, for example <code>http://customer32.application.svc.cluster.local:8080</code>.<br>
+This is the participant URL which is required when using Eclipse Microprofile Long Running Actions in your application.</li>
+<li><code>eureka.client.register-with-eureka</code>, for example <code>true</code>.<br>
+This tells the Eureka discovery client to register with the Eureka server.</li>
+<li><code>eureka.client.fetch-registry</code>, for example <code>true</code>.<br>
+This tells the Eureka discovery client to make a local copy of the registry by fetching it from the Eureka server.</li>
+<li><code>eureka.client.service-url.defaultZone</code>, for example <code>http://eureka.eureka:8761/eureka</code>.<br>
+This is the default zone for the Eureka discovery client.</li>
+<li><code>zipkin.base-url</code>, for example <code>http://jaegertracing-collector.observability.svc.cluster.local:9411/api/v2/spans</code>.<br>
+This is the URL of the Zipkin-compatible trace collector which can be used by your application to send trace data to the platform.</li>
+<li><code>otel.exporter.otlp.endpoint</code>, for example <code>http://open-telemetry-opentelemetry-collector.open-telemetry:4318/v1/traces</code>.<br>
+This is the URL of the OpenTelemetry (OTLP protocol) trace collector which can be used by your application to send trace data to the platform.</li>
+<li><code>config.server.url</code>, for example <code>http://config-server.config-server.svc.cluster.local:8080</code>.<br>
+This is the URL of the Spring Config Server provided by the platform.</li>
+<li><code>liquibase.datasource.username</code>, for example set to the key <code>db.username</code> in secret <code>admin-liquibasedb-secrets</code>.<br>
+This sets the (admin) user that should be used to run Liquibase, if used in your service.</li>
+<li><code>liquibase.datasource.password</code>, for example set to the key <code>db.password</code> in secret <code>admin-liquibasedb-secrets</code>.<br>
+This sets the (admin) user&rsquo;s password that should be used to run Liquibase, if used in your service.</li>
+<li><code>spring.datasource.username</code>, for example set to the key <code>db.username</code> in secret <code>customer32-db-secrets</code>.<br>
+This sets the (regular) user for your application to use to connect to the database (if you use JPA or JDBC in your application).</li>
+<li><code>spring.datasource.password</code>:, for example set to the key <code>db.password</code> in secret <code>customer32-db-secrets</code>.<br>
+This sets the (regular) user&rsquo;s password for your application to use to connect to the database (if you use JPA or JDBC in your application).</li>
+<li><code>DB_SERVICE</code>, for example set to the key <code>db.service</code> in secret <code>customer32-db-secrets</code>.<br>
+This sets the database service name (the TNS name) for your application to use to connect to the database (if you use JPA or JDBC in your application).</li>
+<li><code>spring.datasource.url</code>, for example <code>jdbc:oracle:thin:@$(DB_SERVICE)?TNS_ADMIN=/oracle/tnsadmin</code>.<br>
+This sets the data source URL for your application to use to connect to the database (if you use JPA or JDBC in your application).</li>
+<li><code>CONNECT_STRING</code>, for example <code>jdbc:oracle:thin:@$(DB_SERVICE)?TNS_ADMIN=/oracle/tnsadmin</code>.<br>
+This sets the data source URL for your application to use to connect to the database (if you use JPA or JDBC in your application).</li>
+</ul>
 
   </article>
 
@@ -2356,6 +2332,30 @@ if (!doNotTrack) {
   
   
 
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
   
     
     

@@ -25,7 +25,8 @@ Microsoft Windows 10 or 11, preferrably with Windows Subsystem for Linux 2 macOS
       <guid>https://oracle.github.io/microservices-datadriven/spring/development/envvars/</guid>
       <description>When you deploy a Spring Boot application using the Oracle Backend for Spring Boot and Microservices CLI or Visual Code extension, a number of predefined environment variables will be injected into the pod definition. You may reference any of these variables in your application.
 The predefined variables are as follows:
-Variable name Example value Notes app.container.port 8080 This sets the listen port for the pod and service. The Spring Boot application will listen on this port.</description>
+app.container.port, for example 8080.
+This sets the listen port for the pod and service. The Spring Boot application will listen on this port.</description>
     </item>
     
     <item>
