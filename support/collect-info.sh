@@ -33,7 +33,7 @@ kubectl get crd -o custom-columns="KIND:.kind,NAME:.metadata.name" --no-headers=
   kubectl get crd "$name" -o yaml >> all-resources.yaml
 done
 
-kubectl cluster-info dump > cluster-info-dump
+kubectl cluster-info dump -A > cluster-info-dump
 
 echo ''
 echo 'Data collection complete.  Please review the output before sharing'

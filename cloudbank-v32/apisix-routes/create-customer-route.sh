@@ -7,9 +7,9 @@ if [ $# -eq 0 ]; then
     exit 1
 fi
 
-curl http://localhost:9180/apisix/admin/routes \
+curl http://localhost:9180/apisix/admin/routes/1003 \
   -H "X-API-KEY: $1" \
-  -X POST \
+  -X PUT \
   -i \
   --data-binary @- << EOF
 {
@@ -18,17 +18,24 @@ curl http://localhost:9180/apisix/admin/routes \
         "version": "1.0" 
     },
     "uri": "/api/v1/customer*",
+    "methods": [
+      "GET",
+      "POST",
+      "PUT",
+      "DELETE",
+      "OPTIONS",
+      "HEAD"
+    ],
     "upstream": {
         "service_name": "CUSTOMER",
         "type": "roundrobin",
         "discovery_type": "eureka"
     },
     "plugins": {
-        "zipkin": {
-            "disable": false,
-            "endpoint": "http://jaegertracing-collector.observability.svc.cluster.local:9411/api/v2/spans",
-            "sample_ratio": 1,
-            "service_name": "APISIX"
+        "opentelemetry": {
+           "sampler": {
+               "name": "always_on"
+           }
         }
     }
 }
