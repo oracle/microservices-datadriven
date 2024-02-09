@@ -1,6 +1,8 @@
 # CloudBank Version 3.2
 
-Version 3.2 of CloudBank is under development. This document and application is WIP.
+**NOTE:** This document and application is WIP.
+
+To run Cloud Bank you need OBaaS version 1.1.1 [Oracle Backend for Spring Boot and Microservices](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911)
 
 ## Build CloudBank
 
@@ -10,7 +12,7 @@ Version 3.2 of CloudBank is under development. This document and application is 
    git clone https://github.com/oracle/microservices-datadriven.git
    ```
 
-1. Got to the `CloudBank` directory
+1. Got to the `cloudbank-v32` directory
 
    ```shell
    cd microservices-datadriven/cloudbank-v32
@@ -58,26 +60,26 @@ Version 3.2 of CloudBank is under development. This document and application is 
     kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.admin}' | base64 -d
     ```
 
-1. Start `oractl` and login.
+1. Start `oractl` from the `cloudbank-v32` directory and login as the `obaas-admin` user.
 
     ```text
-    _   _           __    _    ___
-    / \ |_)  _.  _. (_    /  |   |
-    \_/ |_) (_| (_| __)   \_ |_ _|_
-    ========================================================================================
-    Application Name: Oracle Backend Platform :: Command Line Interface
-    Application Version: (1.1.0)
-    :: Spring Boot (v3.2.0) :: 
-    
-    Ask for help:
-    - Slack: https://oracledevs.slack.com/archives/C03ALDSV272 
-    - email: obaas_ww@oracle.com
+      _   _           __    _    ___
+   / \ |_)  _.  _. (_    /  |   |
+   \_/ |_) (_| (_| __)   \_ |_ _|_
+   ========================================================================================
+   Application Name: Oracle Backend Platform :: Command Line Interface
+   Application Version: (1.1.1)
+   :: Spring Boot (v3.2.1) ::
 
-    oractl:>connect
-    username: obaas-admin
-    password: **************
-    obaas-cli: Successful connected.
-    oractl:>
+   Ask for help:
+      - Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+      - email: obaas_ww@oracle.com
+
+   oractl:>connect
+   ? username obaas-admin
+   ? password *************
+   Credentials successfully authenticated! obaas-admin -> welcome to OBaaS CLI.
+   oractl:>
     ```
 
 ## Deploy CloudBank
@@ -175,7 +177,7 @@ deploy --service-name transfer --artifact-path transfer/target/transfer-0.0.1-SN
     ```shell
     kubectl port-forward -n apisix svc/apisix-admin 9180
     ```
-   
+
 1. Create routes
 
     In the CloudBank directory run the following command. *NOTE*, you must add the API-KEY to the command
@@ -216,7 +218,6 @@ kubectl port-forward -n application svc/customer32 8080
 
 And open a browser window and go to [Swagger UI](http://localhost:8080)
 
-
 This is an example of the `customer32` application:
 
 ![Swagger UI](images/swagger-example.png  " ")
@@ -224,14 +225,15 @@ This is an example of the `customer32` application:
 ## Test CloudBank Services
 
 1. Get the external IP address
-    
+
     ```shell
     kubectl -n ingress-nginx get service ingress-nginx-controller
     ```
-   
+
     Result. Make a note of the EXTERNAL-IP it will be used in the tests.
-2. 
-    ```text
+2.
+
+   ```text
     NAME                       TYPE           CLUSTER-IP      EXTERNAL-IP       PORT(S)                      AGE
     ingress-nginx-controller   LoadBalancer   10.96.172.148   146.235.207.230   80:31393/TCP,443:30506/TCP   158m
     ```
