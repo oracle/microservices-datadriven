@@ -11,7 +11,7 @@ The **standard installation** will provision a new Virtual Cloud Network (VCN) w
 
 # Network Infrastructure Overview
 
-![OCI Network Infrastructure](network_infra.png "OCI Network Infrastructure")
+![OCI Network Infrastructure](images/network_infra.png "OCI Network Infrastructure")
 
 ## OCI Network Infrastructure
 
@@ -78,13 +78,45 @@ The following are minimum requirements for a BYO VCN:
 * *Public Subnet*
     * Minimum CIDR: `/30`
     * Route Table:
-        * Internet Gateway to 0.0.0.0/0
+        * Internet Gateway to `0.0.0.0/0`
 * *Private Subnet*
     * Minimum CIDR: `/29`
     * Route Table:
         * Service Gateway to "All `<Region>` Services in the Oracle Services Network"
-        * NAT Gateway to 0.0.0.0/0
+        * NAT Gateway to `0.0.0.0/0`
+
+## Setup
+
+During the configuration of the Oracle Backend for Spring Boot and Microservices, ensure that the **Edition** is set to **Standard**:
+
+![Standard Edition](../images/standard_edition.png "Standard Edition")
+
+Tick the "Bring Your Own Virtual Network" checkbox and fill in the appropriate values for the VCN Compartment and Name, Public Subnet Compartment and Name, and Private Subnet and Name:
+
+![BYO VCN](images/byo_vcn.png "BYO VCN")
 
 # OCI LoadBalancer TLS Certificate Setup
 
-In OCI, example self-signed certificates are used for TLS communications.  The self-signed certificates should be replaced with certificates signed by a publicly trusted certificate authority (CA) 
+In OCI, example self-signed certificates are used for TLS communication to the Load Balancer.  The self-signed certificates should be replaced with certificates signed by a publicly trusted certificate authority (CA).
+
+## Setup
+
+1. Ensure your Domain Name System (DNS) entry points to the public IP address associated with the `service/ingress-nginx-controller` in the `ingress-nginx` namespace:
+
+    ![LoadBalancer IP](images/lb_ip.png "LoadBalancer IP")
+
+2. Obtain a new TLS certificate. In a production environment, the most common scenario is to use a public certificate that has been signed by a certificate authority.
+
+3. Create a new Kubernetes secret in the `ingress-nginx` namespace.  For example:
+
+    ```bash
+    kubectl -n ingress-nginx create secret tls my-tls-cert --key new-tls.key --cert new-tls.crt
+    ```
+
+4. Modify the service definition to reference the new Kubernetes secret by changing the `service.beta.kubernetes.io/oci-load-balancer-tls-secret` annotation in the service configuration. For example:
+
+    ```bash
+    kubectl patch service ingress-nginx-controller -n ingress-nginx \
+        -p '{"metadata":{"annotations":{"service.beta.kubernetes.io/oci-load-balancer-tls-secret":"my-tls-cert"}}}' \
+        --type=merge
+    ```
