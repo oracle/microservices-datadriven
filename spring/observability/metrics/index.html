@@ -72,7 +72,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/observability/metrics/",
       "headline": "Metrics",
       "description": "Prometheus metrics and Grafana dashboards for Spring Boot applications with the Oracle Backend for Spring Boot and Microservices",
-      "wordCount" : "1077",
+      "wordCount" : "1111",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -2091,8 +2091,7 @@ if (!doNotTrack) {
     class="gdoc-markdown gdoc-markdown__align--left"
   >
     <h1>Metrics</h1>
-    <p>Oracle Backend for Spring Boot and Microservices provides built-in platform services to collect metrics from system and application
-workloads and pre-built Grafana dashboards to view and explore those metrics.</p>
+    <p>Oracle Backend for Spring Boot and Microservices provides built-in platform services to collect metrics from system and application workloads and pre-built Grafana dashboards to view and explore those metrics.</p>
 <p>On this page, you will find the following topics:</p>
 <ul>
 <li><a
@@ -2115,11 +2114,15 @@ workloads and pre-built Grafana dashboards to view and explore those metrics.</p
 <li><a
   class="gdoc-markdown__link"
   href="#oracle-database-dashboard"
->Oracle Datbase Dashboard</a></li>
+>Oracle Database Dashboard</a></li>
 <li><a
   class="gdoc-markdown__link"
   href="#kube-state-metrics-dashboard"
 >Kube State Metrics Dashboard</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#apache-apisix-dashboard"
+>Apache APISIX DashBoard</a></li>
 </ul>
 </li>
 <li><a
@@ -2176,15 +2179,13 @@ workloads and pre-built Grafana dashboards to view and explore those metrics.</p
 <!-- spellchecker-enable -->
 <p>In the diagram above:</p>
 <ul>
-<li>You may deploy applications into the platform and to have metrics collected these must either register with the Spring Eureka
-Service Registry or you must create Service Monitor resources for your applications.</li>
+<li>You may deploy applications into the platform and to have metrics collected these must either register with the Spring Eureka Service Registry or you must create Service Monitor resources for your applications.</li>
 <li>Prometheus is configured to auto-discover services that register with the service registry and collect metrics for them.</li>
 <li>Prometheus is configured to collect metrics from application described by a Service Monitor.</li>
 <li>The <a
   class="gdoc-markdown__link"
   href="https://github.com/oracle/oracle-db-appdev-monitoring"
->Oracle Database Exporter</a> and Kube State Metrics are pre-installed
-and Prometheus is configured to collect metrics from them.</li>
+>Oracle Database Exporter</a> and Kube State Metrics are pre-installed and Prometheus is configured to collect metrics from them.</li>
 <li>Grafana is pre-installed and populated with a set of dashboards (see below).  A Prometheus data source is pre-configured.</li>
 </ul>
 <div class="gdoc-page__anchorwrap">
@@ -2234,12 +2235,12 @@ and Prometheus is configured to collect metrics from them.</li>
             />
           <img
                 src="https://oracle.github.io/microservices-datadriven/spring/observability/metrics/spring-boot-observability-dashboard_huc4ee6457e4dcff04bc2e93df8583865c_258279_1800x0_resize_box_3.png"
-              alt="Spring Boot Observablity Dashboard"
+              alt="Spring Boot Observability Dashboard"
           />
         </picture>
       </a>
           <figcaption>
-            Spring Boot Observablity Dashboard
+            Spring Boot Observability Dashboard
           </figcaption>
     </figure>
   </div>
@@ -2381,6 +2382,50 @@ and Prometheus is configured to collect metrics from them.</li>
       </a>
           <figcaption>
             Kube State Metrics Dashboard
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<div class="gdoc-page__anchorwrap">
+    <h3 id="apache-apisix-dashboard">
+        Apache APISIX Dashboard
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/observability/metrics/#apache-apisix-dashboard" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Apache APISIX Dashboard" aria-label="Anchor to: Apache APISIX Dashboard" href="#apache-apisix-dashboard">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>This dashboard provides details of the APISIX API Gateway including:</p>
+<ul>
+<li>Total Requests</li>
+<li>NGINX Connection State</li>
+<li>Etcd modifications</li>
+</ul>
+<p>Here is an example of this dashboard:</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/observability/metrics/apache-apisix-dashboard.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/observability/metrics/apache-apisix-dashboard_huaf1fb89a76f039f055d5e91125d5a8fd_130718_1200x0_resize_box_3.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/observability/metrics/apache-apisix-dashboard_huaf1fb89a76f039f055d5e91125d5a8fd_130718_1800x0_resize_box_3.png"
+              alt="Apache APISIX Observability Dashboard"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Apache APISIX Observability Dashboard
           </figcaption>
     </figure>
   </div>
@@ -2601,15 +2646,14 @@ and Prometheus is configured to collect metrics from them.</li>
 <p>To get the password, run this command:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl -n grafana get secret grafana-dashboard-authn -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.data.password}&#39;</span> <span class="p">|</span> base64 -d
 </span></span></code></pre></div><blockquote>
-<p><strong>NOTE:</strong> If you do not have <code>base64</code>, leave off the last part (<code>| base64 -d</code>) in the command, then copy the output, and use this
-website to decode it: <a
+<p><strong>NOTE:</strong> If you do not have <code>base64</code>, leave off the last part (<code>| base64 -d</code>) in the command, then copy the output, and use this website to decode it: <a
   class="gdoc-markdown__link"
   href="https://www.base64decode.org/"
 >https://www.base64decode.org/</a>.</p>
 </blockquote>
-<p>If you did not set your own password during installation, then the auto-generated password will be a long string of characters that might be similar to <code>210BAqNzYkrcWjd58RKC2Xzerx9c0WkZi9LNsG4c</code>. For example:</p>
 </li>
 </ul>
+<p>If you did not set your own password during installation, then the auto-generated password will be a long string of characters that might be similar to <code>210BAqNzYkrcWjd58RKC2Xzerx9c0WkZi9LNsG4c</code>. For example:</p>
  <!-- spellchecker-disable -->
 
       

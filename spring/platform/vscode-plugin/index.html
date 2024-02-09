@@ -72,7 +72,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/platform/vscode-plugin/",
       "headline": "Oracle Backend for Spring Boot and Microservices Visual Studio Code Extension",
       "description": "Visual Studio Code extension for Oracle Backend for Spring Boot and Microservices",
-      "wordCount" : "2600",
+      "wordCount" : "2528",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -2091,7 +2091,7 @@ if (!doNotTrack) {
     class="gdoc-markdown gdoc-markdown__align--left"
   >
     <h1>Oracle Backend for Spring Boot and Microservices Visual Studio Code Extension</h1>
-    <p><strong>GA 1.0 - October, 2023</strong></p>
+    <p><strong>GA 1.1.1 - February, 2024</strong></p>
 <p>Oracle Backend for Spring Boot and Microservices Visual Studio Code (VS Code) plugin is an extension to browse and deploy applications on the Oracle Backend for Spring Boot and Microservices platform. This plugin inspects the content of an Oracle Backend for Spring Boot and Microservices deployment, in terms of applications, services, and related configurations. It simplifies access to the installed platform services (like Grafana, Spring, Apache APISIX, Eureka, and Jaeger) creating <code>ssh</code> tunnels on-demand and providing access to their respective web administrator consoles. It adds credentials to access and bind services to the Oracle Database included in the Oracle Backend for Spring Boot and Microservices deployment. This plugin replicates the functionalities available in <a
   class="gdoc-markdown__link"
   href="../../development/cli"
@@ -2129,7 +2129,7 @@ if (!doNotTrack) {
 <li>
 <p>Download the plug-in from <a
   class="gdoc-markdown__link"
-  href="https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0"
+  href="https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.0"
 >here</a>.</p>
 </li>
 <li>
@@ -2216,7 +2216,7 @@ services, you cannot browse resources included in the Oracle Backend for Spring 
 <li>
 <p>Select the cluster and right-click, choosing <strong>Set UID/PWD</strong> menu item to insert credentials related to your user account. For example:</p>
 <p><img
-  src="./images/credentials.jpg"
+  src="./images/credentials.png"
   alt="Credentials"
   
 /></p>
@@ -2273,14 +2273,6 @@ The plugin tries to connect to the cluster on another local port.</p>
 <li>
 <p>Select the cluster again and right-click <strong>Connect</strong>. This creates a session with the credentials set up in the first step.</p>
 </li>
-<li>
-<p>If your intention is to use the service provided by the Oracle Backend for Spring Boot and Microservice to compile the Spring Boot application via GraalVM and run a native service, you have to open another tunnel to the GraalVM compiler, choosing from the same menu used so far the <strong>Create GraalVM tunnel</strong> item. The final status should be as shown in this picture:</p>
-<p><img
-  src="./images/graalvmtunnel.jpg"
-  alt="okTunnels"
-  
-/></p>
-</li>
 </ol>
 <div class="gdoc-page__anchorwrap">
     <h3 id="explore-resources">
@@ -2299,7 +2291,7 @@ The plugin tries to connect to the cluster on another local port.</p>
 <p>You see four top classes of resources that can be expanded in underlying items:</p>
 <ul>
 <li><strong>applications</strong> : The list of applications deployed and the holding services.</li>
-<li><strong>ADB database</strong> : In this release there is one Oracle Database in which the configurations and schemas related to deployed services are stored.</li>
+<li><strong>Oracle DB</strong> : In this release there is one Oracle Database in which the configurations and schemas related to deployed services are stored.</li>
 <li><strong>platformServices</strong> : The list of Oracle Backend for Spring Boot and Microservices deployed services, like Grafana, Spring, Apache APISIX, Eureka and Jaeger.</li>
 <li><strong>oBaasConf</strong> : The list of keys defined by the applications, stored in the Oracle Database, that are provisioned and available to share configurations information among services in each application.</li>
 </ul>
@@ -2488,13 +2480,7 @@ Choosing this item menu, the parameters will be required are:</p>
 <p><strong>Service Name</strong></p>
 </li>
 <li>
-<p><strong>Spring Binding Prefix</strong> (Default: <code>spring.datasource</code>)</p>
-</li>
-<li>
-<p><strong>Do you want to bind a schema? : [True]/[False]</strong> (Default: <code>True</code>)</p>
-</li>
-<li>
-<p><strong>Bind :[True]/[False]</strong> (Default: <code>True</code>)</p>
+<p><strong>Bind [jms]</strong> (Default: ``)</p>
 </li>
 <li>
 <p><strong>Service Port</strong> (Default: <code>8080</code>)</p>
@@ -2503,13 +2489,10 @@ Choosing this item menu, the parameters will be required are:</p>
 <p><strong>Service Profile</strong> (Default: <code>obaas</code>)</p>
 </li>
 <li>
-<p><strong>Image Version</strong> (Default: <code>0.1</code>)</p>
+<p><strong>Image Version</strong> (Default: <code>0.0.1</code>)</p>
 </li>
 <li>
 <p><strong>Initial Replicas</strong> (Default: <code>1</code>)</p>
-</li>
-<li>
-<p><strong>Redeploy?: [True]/[False]</strong> (Default: <code>True</code>)</p>
 </li>
 <li>
 <p><strong>Add Health probe? : [True]/[False]</strong> (Default: <code>True</code>)</p>
@@ -2531,22 +2514,16 @@ Choosing this item menu, selecting a single application, the parameters will be 
 <p>A popup dialog box opens to select the local Spring Boot <strong>.jar file</strong></p>
 </li>
 <li>
-<p><strong>Do you want to bind a schema? : [True]/[False]</strong> (Default: <code>True</code>)</p>
-</li>
-<li>
 <p><strong>Service Name</strong></p>
 </li>
 <li>
-<p><strong>Spring Binding prefix</strong> (Default: <code>spring.datasource</code>)</p>
+<p><strong>Bind [jms]</strong> (Default: ``)</p>
 </li>
 <li>
-<p><strong>Image Version</strong> (Default: <code>0.1</code>)</p>
+<p><strong>Image Version</strong> (Default: <code>0.0.1</code>)</p>
 </li>
 <li>
 <p><strong>Java image</strong> (Default: <code>ghcr.io/graalvm/jdk:ol7-java17-22.2.0</code>)</p>
-</li>
-<li>
-<p><strong>is it a redeploy? : [True]/[False]</strong> (Default: <code>True</code>)</p>
 </li>
 <li>
 <p><strong>Add Health probe? : [True]/[False]</strong> (Default: <code>True</code>)</p>
@@ -2567,8 +2544,8 @@ Choosing this item menu, selecting a single application, the parameters will be 
 <p>At the end of the parameters collection, a process, that includes the .jar upload, building image and deploying, starts. It generates a sequence of messages showing the status. These messages end with &ldquo;Service deployed successfully!&rdquo; or &ldquo;Deploy failed&rdquo;. The size and network constraints determine the amount of time for the process to terminate.</p>
 <div class="gdoc-page__anchorwrap">
     <h4 id="bind-a-service">
-        Bind a Service
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/vscode-plugin/#bind-a-service" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Bind a Service" aria-label="Anchor to: Bind a Service" href="#bind-a-service">
+        Bind a service
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/vscode-plugin/#bind-a-service" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Bind a service" aria-label="Anchor to: Bind a service" href="#bind-a-service">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h4>
@@ -2601,6 +2578,8 @@ The parameters required are:</p>
 </div>
 <p>With a right click on a single service you will have the following commands:</p>
 <ul>
+<li><strong>Create autoscaler</strong></li>
+<li><strong>Delete autoscaler</strong></li>
 <li><strong>Delete service</strong></li>
 <li><strong>Publish service</strong></li>
 </ul>
@@ -2610,6 +2589,30 @@ The parameters required are:</p>
   alt="Service Commands"
   
 /></p>
+<div class="gdoc-page__anchorwrap">
+    <h4 id="create-autoscaler">
+        Create autoscaler
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/vscode-plugin/#create-autoscaler" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Create autoscaler" aria-label="Anchor to: Create autoscaler" href="#create-autoscaler">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>Create a Kubernetes autoscaler for the selected pod.</p>
+<ol>
+<li><strong>minReplicas</strong> (Default: <code>1</code>)</li>
+<li><strong>maxReplicas</strong> (Default: <code>1</code>)</li>
+<li><strong>cpuPercent</strong> (Default: ``)</li>
+<li><strong>cpuRequest</strong> (Default: <code>100m</code>)</li>
+</ol>
+<div class="gdoc-page__anchorwrap">
+    <h4 id="delete-autoscaler">
+        Delete autoscaler
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/vscode-plugin/#delete-autoscaler" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Delete autoscaler" aria-label="Anchor to: Delete autoscaler" href="#delete-autoscaler">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>Delete an existing autoscaler</p>
 <div class="gdoc-page__anchorwrap">
     <h4 id="delete-service">
         Delete service
@@ -2644,9 +2647,9 @@ You can get the AdminKey from the APISix configmap, using a kubectl command:</p>
 /></p>
 <p>This is a shortcut with a standard registration: to customize the route, or start from scratch, is suggested the usage of APISix console.</p>
 <div class="gdoc-page__anchorwrap">
-    <h2 id="adb-database">
-        ADB Database
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/vscode-plugin/#adb-database" class="gdoc-page__anchor clip flex align-center" title="Anchor to: ADB Database" aria-label="Anchor to: ADB Database" href="#adb-database">
+    <h2 id="oracle-db">
+        Oracle DB
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/vscode-plugin/#oracle-db" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Oracle DB" aria-label="Anchor to: Oracle DB" href="#oracle-db">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>

@@ -72,7 +72,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/security/",
       "headline": "Security",
       "description": "Security in Oracle Backend for Spring Boot and Microservices",
-      "wordCount" : "279",
+      "wordCount" : "460",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -2125,6 +2125,42 @@ if (!doNotTrack) {
 >HashiCorp Vault Documentation</a></p>
 </li>
 </ul>
+<div class="gdoc-page__anchorwrap">
+    <h2 id="transport-layer-security">
+        Transport Layer Security
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/security/#transport-layer-security" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Transport Layer Security" aria-label="Anchor to: Transport Layer Security" href="#transport-layer-security">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>The Oracle Backend for Spring Boot and Microservices is deployed with a sample self-signed certificate for Transport Layer Security (TLS). This results in an &ldquo;Accept Risk&rdquo; message when accessing the Spring Operations Center or Grafana web user interfaces and the sample TLS certificate should not be used for production deployments.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="updating-the-tls-certificate">
+        Updating the TLS Certificate
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/security/#updating-the-tls-certificate" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Updating the TLS Certificate" aria-label="Anchor to: Updating the TLS Certificate" href="#updating-the-tls-certificate">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<ol>
+<li>
+<p>Ensure your Domain Name System (DNS) entry points to the IP address for the public load balancer.  You can check this address with this command, the address in the <code>EXTERNAL-IP</code> field is the public load balancer address:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl -n ingress-nginx get svc ingress-nginx-controller
+</span></span></code></pre></div></li>
+<li>
+<p>Obtain a new TLS certificate. In a production environment, the most common scenario is to use a public certificate that has been signed by a certificate authority.</p>
+</li>
+<li>
+<p>Create a new Kubernetes secret in the <code>ingress-nginx</code> namespace.  For example:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl -n ingress-nginx create secret tls my-tls-cert --key new-tls.key --cert new-tls.crt
+</span></span></code></pre></div></li>
+<li>
+<p>Modify the service definition to reference the new Kubernetes secret by changing the <code>service.beta.kubernetes.io/oci-load-balancer-tls-secret</code> annotation in the service configuration. For example:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl patch service ingress-nginx-controller -n ingress-nginx <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    -p <span class="s1">&#39;{&#34;metadata&#34;:{&#34;annotations&#34;:{&#34;service.beta.kubernetes.io/oci-load-balancer-tls-secret&#34;:&#34;my-tls-cert&#34;}}}&#39;</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    --type<span class="o">=</span>merge
+</span></span></code></pre></div></li>
+</ol>
 
   </article>
 

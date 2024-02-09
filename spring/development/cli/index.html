@@ -2565,7 +2565,7 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
 </span></span><span class="line"><span class="cl">binding resources... successful
 </span></span><span class="line"><span class="cl">creating deployment and service... successfully deployed
 </span></span></code></pre></div><p>or, for native compiled microservices, add <strong>&ndash;java-version container-registry.oracle.com/os/oraclelinux:7-slim</strong> to have a compact image and <strong>&ndash;graalvm-native</strong> to specify the file provided is an executable .exec:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;deploy --app-name cloudn --service-name account 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;deploy --app-name myapp --service-name account 
 </span></span><span class="line"><span class="cl">  --artifact-path obaas/myserv/target/accounts-0.0.1-SNAPSHOT.jar.exec --image-version 0.0.1 
 </span></span><span class="line"><span class="cl">  --graalvm-native --java-version container-registry.oracle.com/os/oraclelinux:7-slim
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
@@ -3284,7 +3284,7 @@ CLI tracks how many configurations are present in the Spring Cloud Config server
 </div>
 <p>Use the <code>user delete</code> command to remove users from the platform.</p>
 <blockquote>
-<p>NOTE: User deletion is permanent and irreversable.</p>
+<p>NOTE: User deletion is permanent and irreversible.</p>
 </blockquote>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;help user delete
 </span></span><span class="line"><span class="cl">NAME
