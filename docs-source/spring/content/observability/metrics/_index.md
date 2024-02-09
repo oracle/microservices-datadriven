@@ -42,6 +42,9 @@ resources:
   - name: observability-overview
     src: "observability-overview.png"
     title: "Observability Overview"
+  - name: apache-apisix-dashboard
+    src: "apache-apisix-dashboard.png"
+    title: "Apache APISIX Observability Dashboard"
 ---
 
 Oracle Backend for Spring Boot and Microservices provides built-in platform services to collect metrics from system and application workloads and pre-built Grafana dashboards to view and explore those metrics.
@@ -54,6 +57,7 @@ On this page, you will find the following topics:
   - [Spring Boot Statistics](#spring-boot-statistics)
   - [Oracle Database Dashboard](#oracle-database-dashboard)
   - [Kube State Metrics Dashboard](#kube-state-metrics-dashboard)
+  - [Apache APISIX DashBoard](#apache-apisix-dashboard)
 - [How to have metrics collected for your applications](#how-to-have-metrics-collected-for-your-applications)
 - [How to access Prometheus](#how-to-access-prometheus)
 - [How to access Grafana](#how-to-access-grafana)
@@ -151,6 +155,20 @@ Here is an example of this dashboard:
 
 <!-- spellchecker-disable -->
 {{< img name="kube-state-metrics-dashboard" size="medium" lazy=false >}}
+<!-- spellchecker-enable -->
+
+### Apache APISIX Dashboard
+
+This dashboard provides details of the APISIX API Gateway including:
+
+- Total Requests
+- NGINX Connection State
+- Etcd modifications
+
+Here is an example of this dashboard:
+
+<!-- spellchecker-disable -->
+{{< img name="apache-apisix-dashboard" size="medium" lazy=false >}}
 <!-- spellchecker-enable -->
 
 ## How to have metrics collected for your applications
