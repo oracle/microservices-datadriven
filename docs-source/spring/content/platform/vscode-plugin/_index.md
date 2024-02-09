@@ -4,7 +4,7 @@ description: "Visual Studio Code extension for Oracle Backend for Spring Boot an
 keywords: "vscode code visualstudio extension springboot spring development microservices development oracle backend"
 ---
 
-**GA 1.1.0 - February, 2024**
+**GA 1.1.1 - February, 2024**
 
 Oracle Backend for Spring Boot and Microservices Visual Studio Code (VS Code) plugin is an extension to browse and deploy applications on the Oracle Backend for Spring Boot and Microservices platform. This plugin inspects the content of an Oracle Backend for Spring Boot and Microservices deployment, in terms of applications, services, and related configurations. It simplifies access to the installed platform services (like Grafana, Spring, Apache APISIX, Eureka, and Jaeger) creating `ssh` tunnels on-demand and providing access to their respective web administrator consoles. It adds credentials to access and bind services to the Oracle Database included in the Oracle Backend for Spring Boot and Microservices deployment. This plugin replicates the functionalities available in [OBaas CLI](../../development/cli) and simplifies access to Oracle Backend for Spring Boot and Microservices deployments from an integrated development environment (IDE) like VS Code.
 
