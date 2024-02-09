@@ -1,8 +1,11 @@
 ---
-title: "Database Access"
-description: "Access the Oracle Autonomous Database in the backend where your Spring Boot microservices applications are deployed"
+title: "Database Infrastructure"
+description: "The Oracle Database and Oracle Backend for Spring Boot and Microservices"
 keywords: "database autonomous oracle spring springboot microservices backend"
 resources:
+  - name: oci-adb-s_config
+    src: "images/oci-adb-s_config.png"
+    title: "Oracle Autonomous DB Marketplace Configuration"
   - name: oci-adb-cloud-portal
     src: "oci-adb-cloud-portal.png"
     title: "Oracle Autonomous DB Cloud Portal"
@@ -41,13 +44,47 @@ resources:
     title: "ADB-S Private IP Address"
 ---
 
-The Oracle Backend for Spring Boot and Microservices includes an Oracle database. An instance of Oracle Autonomous Database Serverless (ADB-S) is created during installation. The ADB-S is used for Oracle Backend for SPring Boot and Microservices metadata and Spring Cloud Config Server.
+The Oracle Backend for Spring Boot and Microservices use the Oracle Database as a persistent data store for metadata and the Spring Cloud Config Server.  This documentation will refer to this database as the **Metadata Database**.
+
+> **NOTE:** Oracle recommends that you install an addition Container Database (CDB) and Pluggable Databases (PDBs) for your production applications inline with the Database-Per-Service pattern.  This document will refer to these databases as the **Application Database**.  
+
+For Cloud Installations, you can either have the [installation provision](#autonomous-database-serverless---stack-installation) an Oracle Autonomous Database - Shared (ADB-S) in Oracle Cloud Infrastructure or [bring your own Oracle Database](#bring-your-own-database) for the **Metadata Database**.
+
+When performing a Custom Installation, you will need to [bring your own Oracle Database](#bring-your-own-database) for the **Metadata Database**.
+
+
+## ADB-S Metadata Database
+
+In cloud environments, including multi-cloud, the Oracle Backend for Spring Boot and Microservices can include an ADB-S for the Metadata Database as part of the installation. This section outlines its configuration and methods of access.
+
+* [Configuration](#configuring-the-adb-s-stack)
+  * [Oracle Cloud Infrastructure Marketplace](#oracle-cloud-infrastructure-oci-marketplace)
+  * [Multi-Cloud](#multi-cloud)
+* [Access](#accessing-the-adb-s-stack)
+  * [Database Actions](#access-the-oracle-adb-s-using-database-actions)
+  * [Remote Client - Secure Access](#accessing-the-adb-s-from-a-local-machine-using-database-wallet-and-sqlcl)
+  * [Remote Client - Private Endpoint](#accessing-the-adb-s-from-a-local-machine-using-database-wallet-and-sqlcl-using-a-bastion)
+
+### Configuring the ADB-S Metadata Database
+
+Configuration of the ADB-S Metadata Database depends on the method of installation:
+
+* [Oracle Cloud Infrastructure Marketplace](#oracle-cloud-infrastructure-oci-marketplace)
+* [Multi-Cloud](#multi-cloud)
+
+#### Oracle Cloud Infrastructure (OCI) Marketplace
+
+During the installation of the Oracle Backend for Spring Boot and Microservices via the OCI Marketplace, there are a number of configuration variables for the ADB-S Metadata Database.  
+
+![Oracle Autonomous DB Marketplace Configuration](images/oci-adb-s_config.png "Oracle Autonomous DB Marketplace Configuration")
+
+The default values 
+
+#### Multi-Cloud
 
 If you selected the **PRIVATE_ENDPOINT_ACCESS** option, you need to use a [Bastion](#accessing-the-adb-s-from-a-local-machine-using-database-wallet-and-sqlcl-using-a-bastion) to access the database.
 
-> **NOTE:** Oracle recommends that you install your own database and PDBs for your production applications. The database provisioned is used for Oracle Backend for Spring Boot metadata and can be used for development.
-
-## Accessing the Database
+### Accessing the ADB-S Metadata Database
 
 > **_NOTE:_** Oracle recommends that you install SQLcl to access the database from a local machine. [SQLcl installation guide](https://www.oracle.com/database/sqldeveloper/technologies/sqlcl/). Other tools can be used but is not documented here.
 
@@ -55,7 +92,7 @@ If you selected the **PRIVATE_ENDPOINT_ACCESS** option, you need to use a [Basti
 - [Local access using Database Wallet and SQLcl (**SECURE_ACCESS** installation)](#accessing-the-adb-s-from-a-local-machine-using-database-wallet-and-sqlcl)
 - [Local access using Wallet and SQLcl using a Bastion (**PRIVATE_ENDPOINT_ACCESS** installation)](#accessing-the-adb-s-from-a-local-machine-using-database-wallet-and-sqlcl-using-a-bastion)
 
-## Access the Oracle ADB-S using Database Actions
+### Access the Oracle ADB-S using Database Actions
 
 You can use the **Database Actions** web user interface, which can be accessed from the Oracle Cloud Infrastructure Console (OCI Console) to access the database. The Oracle database is created in the compartment specified during installation of Oracle Backend for Spring Boot and Microservices.
 
@@ -77,11 +114,11 @@ Click on **Database Actions**. This opens the **Database Actions** page where yo
 {{< img name="oci-adb-cloud-portal-details" size="large" lazy=false >}}
 <!-- spellchecker-enable -->
 
-## Accessing the ADB-S From a Local Machine using Database Wallet and SQLcl
+### Accessing the ADB-S From a Local Machine using Database Wallet and SQLcl
 
 If **SECURE_ACCESS** was selected during installation you can access the database using the following steps.
 
-### Download the ADB-S Wallet
+#### Download the ADB-S Wallet
 
 If you chose the **SECURE_ACCESS** option for database access during installation (or accepted this default), then you have to [download the wallet](https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/connect-download-wallet.html) to access the database from your local machine.
 
@@ -97,7 +134,7 @@ You have to enter a password for the Wallet.
 {{< img name="oci-adb-wallet-password" lazy=false >}}
 <!-- spellchecker-enable -->
 
-### Connect to the ADB-S using SQLcl
+#### Connect to the ADB-S using SQLcl
 
 1. Get the ADMIN user password from k8s secret. in the exa,ple below `calfdb` needs to be replaced with the name of database in the installation.
 
@@ -136,11 +173,11 @@ You have to enter a password for the Wallet.
 
 > **_NOTE:_** Oracle recommends that you install your own databases, PDBs for your production applications. The database provisioned is used for Oracle Backend for Spring Boot metadata and can be used for development.
 
-## Accessing the ADB-S From a Local Machine using Database Wallet and SQLcl using a Bastion
+### Accessing the ADB-S From a Local Machine using Database Wallet and SQLcl using a Bastion
 
 If **PRIVATE_ENDPOINT_ACCESS** was selected during installation you can access the database using the following steps. You are going to need a Private Key pair to be able to use the Bastion Service to access the ADB-S.
 
-### Download and modify the Wallet the ADB-S Wallet using Private Access
+#### Download and modify the Wallet the ADB-S Wallet using Private Access
 
 If you chose the **PRIVATE_ENDPOINT_ACCESS** option for database access during installation (or accepted this default), then you have to [download the wallet](https://docs.oracle.com/en/cloud/paas/autonomous-database/adbsa/connect-download-wallet.html) to access the database from your local machine.
 
@@ -166,7 +203,7 @@ If you chose the **PRIVATE_ENDPOINT_ACCESS** option for database access during i
 
     > **_NOTE:_** On certain platforms you may need to use `unzip` instead of `zip` as the command.
 
-### Connect to the ADB-S using SQLcl via a Bastion
+#### Connect to the ADB-S using SQLcl via a Bastion
 
 1. Get the IP address of the deployed Autonomous Database. T=You can find the IP address in the OCI Console:
 
@@ -240,3 +277,8 @@ If you chose the **PRIVATE_ENDPOINT_ACCESS** option for database access during i
     You are now connected to the database that is provided when installing Oracle Backend for Spring Boot and Microservices on OCI.
 
 > **_NOTE:_** Oracle recommends that you install your own databases, PDBs for your production applications. The database provisioned is used for Oracle Backend for Spring Boot metadata and can be used for development.
+
+
+## Bring Your Own Database
+
+### BYODB Prerequisites
