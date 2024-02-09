@@ -4,8 +4,6 @@
   <url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/observability/tracing/</loc>
   </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/spring/development/setup/</loc>
-  </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/platform/apigw/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/security/azn-server/</loc>
@@ -21,6 +19,8 @@
     <loc>https://oracle.github.io/microservices-datadriven/spring/on-premises/ol8/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/development/</loc>
+  </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/development/setup/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/getting-started/</loc>
   </url><url>

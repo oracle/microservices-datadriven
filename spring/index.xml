@@ -7,14 +7,14 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="https://oracle.github.io/microservices-datadriven/spring/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title></title>
+      <title>Development Environment Setup</title>
       <link>https://oracle.github.io/microservices-datadriven/spring/development/setup/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://oracle.github.io/microservices-datadriven/spring/development/setup/</guid>
       <description>This page provides details on how to set up your development environment to work with Oracle Backend for Spring Boot and Microservices.
 The following platforms are recommended for a development environment:
-Microsoft Windows 10 or 11, preferrably with Windows Subsystem for Linux 2 macOS (11 or later recommended) on Intel or Apple silicon Linux, for example Oracle Linux, Ubuntu, and so on. The following tools are recommended for a development environment:</description>
+Microsoft Windows 10 or 11, preferably with Windows Subsystem for Linux 2 macOS (11 or later recommended) on Intel or Apple silicon Linux, for example Oracle Linux, Ubuntu, and so on. The following tools are recommended for a development environment:</description>
     </item>
     
     <item>

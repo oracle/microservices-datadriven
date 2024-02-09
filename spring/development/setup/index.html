@@ -27,7 +27,7 @@
 
 
 
-    <title>Setup | Oracle Backend for Spring Boot and Microservices</title>
+    <title>Development Environment Setup | Oracle Backend for Spring Boot and Microservices</title>
 
     <link rel="icon" type="image/svg+xml" href="/microservices-datadriven/spring/favicon/favicon.svg" />
 <link
@@ -48,7 +48,7 @@
     
   <meta
     property="og:title"
-    content="Setup"
+    content="Development Environment Setup"
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot and Microservices" />
   <meta property="og:description" content="How to set up your development environment to build Spring Boot applications with the Oracle Backend for Spring Boot and Microservices" />
@@ -59,7 +59,7 @@
 
 
   <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="Setup" />
+<meta name="twitter:title" content="Development Environment Setup" />
   <meta name="twitter:description" content="How to set up your development environment to build Spring Boot applications with the Oracle Backend for Spring Boot and Microservices" />
 
 
@@ -68,9 +68,9 @@
       "@context": "http://schema.org",
       "@type": "TechArticle",
       "articleSection": "Development",
-      "name": "Setup",
+      "name": "Development Environment Setup",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/development/setup/",
-      "headline": "Setup",
+      "headline": "Development Environment Setup",
       "description": "How to set up your development environment to build Spring Boot applications with the Oracle Backend for Spring Boot and Microservices",
       "wordCount" : "637",
       "inLanguage": "en",
@@ -2072,7 +2072,7 @@ if (!doNotTrack) {
     
   
   
-    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/' href='/microservices-datadriven/spring/'><span itemprop='name'>Oracle Backend for Spring Boot and Microservices</span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/development/' href='/microservices-datadriven/spring/development/'><span itemprop='name'>Development</span></a><meta itemprop='position' content='4' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>Setup</span><meta itemprop='position' content='5' /></li>
+    <li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/' href='/microservices-datadriven/spring/'><span itemprop='name'>Oracle Backend for Spring Boot and Microservices</span></a><meta itemprop='position' content='3' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><a itemscope itemtype='https://schema.org/WebPage' itemprop='item' itemid='/microservices-datadriven/spring/development/' href='/microservices-datadriven/spring/development/'><span itemprop='name'>Development</span></a><meta itemprop='position' content='4' /></li><li> / </li><li itemprop='itemListElement' itemscope itemtype='https://schema.org/ListItem'><span itemprop='name'>Development Environment Setup</span><meta itemprop='position' content='5' /></li>
   
 
   
@@ -2090,11 +2090,11 @@ if (!doNotTrack) {
   <article
     class="gdoc-markdown gdoc-markdown__align--left"
   >
-    <h1>Setup</h1>
+    <h1>Development Environment Setup</h1>
     <p>This page provides details on how to set up your development environment to work with Oracle Backend for Spring Boot and Microservices.</p>
 <p>The following platforms are recommended for a development environment:</p>
 <ul>
-<li>Microsoft Windows 10 or 11, preferrably with Windows Subsystem for Linux 2</li>
+<li>Microsoft Windows 10 or 11, preferably with Windows Subsystem for Linux 2</li>
 <li>macOS (11 or later recommended) on Intel or Apple silicon</li>
 <li>Linux, for example Oracle Linux, Ubuntu, and so on.</li>
 </ul>
@@ -2120,8 +2120,7 @@ if (!doNotTrack) {
 <p>Oracle recommends Visual Studio Code, which you can download <a
   class="gdoc-markdown__link"
   href="https://code.visualstudio.com/"
->here</a>, and
-the following extensions to make it easier to write and build your code:</p>
+>here</a>, and the following extensions to make it easier to write and build your code:</p>
 <ul>
 <li><a
   class="gdoc-markdown__link"
@@ -2136,8 +2135,7 @@ the following extensions to make it easier to write and build your code:</p>
   href="https://marketplace.visualstudio.com/items?itemName=Oracle.oracledevtools"
 >Oracle Developer Tools</a></li>
 </ul>
-<p>You can install these by opening the extensions tab (Ctrl-Shift-X or equivalent) and using the
-search bar at the top to find and install them.</p>
+<p>You can install these by opening the extensions tab (Ctrl-Shift-X or equivalent) and using the search bar at the top to find and install them.</p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="java-development-kit">
         Java Development Kit
@@ -2149,18 +2147,14 @@ search bar at the top to find and install them.</p>
 <p>Oracle recommends the <a
   class="gdoc-markdown__link"
   href="https://www.oracle.com/java/technologies/downloads/#java17"
->Java SE Development Kit</a>
-or <a
+>Java SE Development Kit</a> or <a
   class="gdoc-markdown__link"
   href="https://www.graalvm.org/downloads/#"
->GraalVM</a>. Java 17 or 21 are recommended, note that Spring Boot
-3.0 requires at least Java 17.  If you want to use JVM Virtual Threads, then Java 21 is recommended.</p>
-<p><strong>Note</strong>: If you are using Spring Boot 2.x, then Oracle encourages you to use at least Java 17, unless
-you have a specific reason to stay on Java 11. Refer to the <a
+>GraalVM</a>. Java 17 or 21 are recommended, note that Spring Boot 3.0 requires at least Java 17. If you want to use JVM Virtual Threads, then Java 21 is required.</p>
+<p><strong>Note</strong>: If you are using Spring Boot 2.x, then Oracle encourages you to use at least Java 17, unless you have a specific reason to stay on Java 11. Refer to the <a
   class="gdoc-markdown__link"
   href="https://spring.io/projects/spring-boot#support"
->Spring Boot Support</a>
-page for information on support dates for Spring Boot 2.x.</p>
+>Spring Boot Support</a> page for information on support dates for Spring Boot 2.x.</p>
 <p>You can download the latest x64 Java 17 Development Kit from
 <a
   class="gdoc-markdown__link"
@@ -2188,8 +2182,7 @@ downloaded <a
         </a>
     </h2>
 </div>
-<p>You can use either Maven or Gradle to build your Spring Boot applications. If you prefer Maven, then
-follow the steps in this section. If you prefer Gradle, then refer to the next section.</p>
+<p>You can use either Maven or Gradle to build your Spring Boot applications. If you prefer Maven, then follow the steps in this section. If you prefer Gradle, then refer to the next section.</p>
 <p>Download Maven from the <a
   class="gdoc-markdown__link"
   href="https://maven.apache.org/download.cgi"
@@ -2214,8 +2207,7 @@ follow the steps in this section. If you prefer Gradle, then refer to the next s
 <p>Download Gradle using the <a
   class="gdoc-markdown__link"
   href="https://gradle.org/install/"
->instructions on the Gradle website</a>.
-Spring Boot is compatible with Gradle version 7.5 or later.</p>
+>instructions on the Gradle website</a>. Spring Boot is compatible with Gradle version 7.5 or later.</p>
 <p>Run the following command to verify that Gradle is installed correctly</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ gradle -v
 </span></span><span class="line"><span class="cl">
@@ -2239,8 +2231,7 @@ Spring Boot is compatible with Gradle version 7.5 or later.</p>
         </a>
     </h2>
 </div>
-<p>If you want to run an instance of Oracle Database locally for development and testing, then Oracle
-recommends Oracle Database 23c Free.  You can start the database in a container with this
+<p>If you want to run an instance of Oracle Database locally for development and testing, then Oracle recommends Oracle Database 23c Free.  You can start the database in a container with this
 command specifying a secure password:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker run --name free23c -d <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>   -p 1521:1521 <span class="se">\

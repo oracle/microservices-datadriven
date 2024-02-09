@@ -72,7 +72,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/platform/soc/",
       "headline": "Spring Operations Center",
       "description": "Using Spring Operations Center to manage applications in Oracle Backend for Spring Boot and Microservices",
-      "wordCount" : "1",
+      "wordCount" : "581",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -2091,7 +2091,264 @@ if (!doNotTrack) {
     class="gdoc-markdown gdoc-markdown__align--left"
   >
     <h1>Spring Operations Center</h1>
-    <p>TODO</p>
+    <p>Oracle Backend for Spring Boot and Microservices version 1.1.1 includes a preview of a new feature called &ldquo;Spring Operations Center&rdquo;.
+More capabilities will be added to this feature in future releases.</p>
+<p>The Spring Operations Center provides a web user interface to manage the Oracle Backend for Spring Boot and Microservices.
+This preview release includes the following capabilities:</p>
+<ul>
+<li>View details about the configuration and health of the environment</li>
+<li>View details of workloads (Spring Boot applications) deployed in the environment</li>
+<li>Easy one-click access to Grafana dashboards for applications</li>
+<li>View details of users and roles defined in the Spring Authorization Server included in the environment</li>
+<li>Easy one-click access to Grafana dashboards for the Kubernetes cluster and the Oracle Database</li>
+</ul>
+<p><strong>Note:</strong> More capabilities will be added to this feature in future releases.</p>
+<p>To access the Spring Operations Center, obtain the public IP address for your environment using this command:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ kubectl -n ingress-nginx get service ingress-nginx-controller
+</span></span><span class="line"><span class="cl">NAME                       TYPE           CLUSTER-IP      EXTERNAL-IP       PORT<span class="o">(</span>S<span class="o">)</span>                      AGE
+</span></span><span class="line"><span class="cl">ingress-nginx-controller   LoadBalancer   10.96.172.148   100.200.100.200   80:31393/TCP,443:30506/TCP   158m
+</span></span></code></pre></div><p>Use the <code>EXTERNAL-IP</code> from the results and open a browser to https://100.200.100.200/soc to access the login page.</p>
+<p><strong>Note</strong>: If you installed with self-signed certificates, which is the default, you will see a browser warning message and
+will have to click on &ldquo;Accept risk&rdquo; or similar. For information about replacing the self-signed certificate with a
+production certicate, refer to <a
+  class="gdoc-markdown__link"
+  href="../../security#transport-layer-security"
+>Transport Layer Security</a></p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-login-page.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-login-page_hu8e6b7278ea375089358fb7837b760be4_54741_1200x0_resize_box_3.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-login-page_hu8e6b7278ea375089358fb7837b760be4_54741_1800x0_resize_box_3.png"
+              alt="SOC Login Page"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            SOC Login Page
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<p>Login using the <code>obaas-admin</code> user (or another user if you have created one) and the password
+that you set during installation.  If you did not set a password, one was auto-generated for you and can be
+obtain with this command:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ kubectl get secret -n azn-server oractl-passwords -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.data.admin}&#39;</span> <span class="p">|</span> base64 -d
+</span></span></code></pre></div><p>After logging in, you will see the SOC Dashboard.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="the-dashboard">
+        The Dashboard
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#the-dashboard" class="gdoc-page__anchor clip flex align-center" title="Anchor to: The Dashboard" aria-label="Anchor to: The Dashboard" href="#the-dashboard">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>The Spring Operations Center Dashboard provides information about the overall state of the environment including:</p>
+<ul>
+<li>The version and platform the environment is running on</li>
+<li>The configuration and sizing of the Kubernetes cluster</li>
+<li>The configuration and sizing of the Database instance</li>
+<li>Easy one-click access to Grafana dashboards to see detailed status of the Kubernetes cluster and Database instance</li>
+<li>The overall system health status</li>
+<li>How many applications are deployed in the environment</li>
+</ul>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-dashboard.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-dashboard_hu51d8ccbef82aaac00513d37ac73fc87e_114943_1200x0_resize_box_3.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-dashboard_hu51d8ccbef82aaac00513d37ac73fc87e_114943_1800x0_resize_box_3.png"
+              alt="SOC Dashboard"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            SOC Dashboard
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<div class="gdoc-page__anchorwrap">
+    <h3 id="manage-namespaces">
+        Manage Namespaces
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#manage-namespaces" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Manage Namespaces" aria-label="Anchor to: Manage Namespaces" href="#manage-namespaces">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>The Manage Namespaces screen is accessible from the <em>Workloads</em> menu, and allows you to view and manage the namespaces
+that are configured for Spring Boot application deployments.  Note that this does not show you all namespaces in the
+Kubernetes cluster, just those that have be specifically configured for Spring Boot workloads, meaning they have
+the necessary secrets for pulling images, accessing the database, and so on.</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-namespaces.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-namespaces_hu0f1ba9f70dc1cc77888fb119012f1171_70735_1200x0_resize_box_3.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-namespaces_hu0f1ba9f70dc1cc77888fb119012f1171_70735_1800x0_resize_box_3.png"
+              alt="SOC Manage Namespaces screen"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            SOC Manage Namespaces screen
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<p>Clicking on a namespace will allow you to drill down into that namespace and see the workloads (Spring Boot applications)
+deployed there.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="manage-workloads">
+        Manage Workloads
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#manage-workloads" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Manage Workloads" aria-label="Anchor to: Manage Workloads" href="#manage-workloads">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>The Manage Workloads screen shows the workloads (Spring Boot applications) deployed in a specific namespace, including
+the status of each workload, and how many replicas are currently running and desired.</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-workloads.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-workloads_hu409282d7462355245f113f699dc4dbe6_75548_1200x0_resize_box_3.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-workloads_hu409282d7462355245f113f699dc4dbe6_75548_1800x0_resize_box_3.png"
+              alt="SOC Manage Workloads screen"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            SOC Manage Workloads screen
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<p>You can click on the &ldquo;open&rdquo; link in the Dashboard column to open the Spring Boot Statistics Grafana dashboard for any workload listed in the table.  Note that you may need to authenticate to Grafana the first time.</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-grafana-link.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-grafana-link_hub1cea41a1d72bec60113f65ff7fd997e_147041_1200x0_resize_box_3.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-grafana-link_hub1cea41a1d72bec60113f65ff7fd997e_147041_1800x0_resize_box_3.png"
+              alt="Grafana Dashboard for Workload"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Grafana Dashboard for Workload
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<p>More details of this dashboard can be found <a
+  class="gdoc-markdown__link"
+  href="../../observability/metrics/#spring-boot-statistics"
+>here</a>.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="manage-identity">
+        Manage Identity
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#manage-identity" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Manage Identity" aria-label="Anchor to: Manage Identity" href="#manage-identity">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>The Manage Identity screen is accessible from the Security menu and allows you to view information
+about the users and roles defined in the Spring Authorization Server included in the platform.</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-identity.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-identity_hu23d3737d32255f317882d64133b04d71_66011_1200x0_resize_box_3.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-identity_hu23d3737d32255f317882d64133b04d71_66011_1800x0_resize_box_3.png"
+              alt="SOC Manage Identity screen"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            SOC Manage Identity screen
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
 
   </article>
 
