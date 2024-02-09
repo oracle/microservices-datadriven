@@ -416,7 +416,7 @@ Ask for Help
    or, for native compiled microservices, add **--java-version container-registry.oracle.com/os/oraclelinux:7-slim** to have a compact image and **--graalvm-native** to specify the file provided is an executable .exec:
 
    ```bash
-   oractl:>deploy --app-name cloudn --service-name account 
+   oractl:>deploy --app-name myapp --service-name account 
      --artifact-path obaas/myserv/target/accounts-0.0.1-SNAPSHOT.jar.exec --image-version 0.0.1 
      --graalvm-native --java-version container-registry.oracle.com/os/oraclelinux:7-slim
    ```
@@ -481,7 +481,7 @@ oractl:>create-autoscaler --app-name application --service-name creditscore --cp
 obaas-cli [create-autoscaler]: Autoscaler was successfully created.
 ```
 
-You can view the details of the autoscaler using `kubectl`, for example: 
+You can view the details of the autoscaler using `kubectl`, for example:
 
 ```bash
 $ kubectl -n application get hpa
@@ -1176,7 +1176,7 @@ oractl:>user list
 
 Use the `user delete` command to remove users from the platform.
 
-> NOTE: User deletion is permanent and irreversable.
+> NOTE: User deletion is permanent and irreversible.
 
 ```bash
 oractl:>help user delete

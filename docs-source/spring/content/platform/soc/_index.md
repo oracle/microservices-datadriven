@@ -23,6 +23,7 @@ resources:
     title: "SOC Manage Identity screen"
 ---
 
+
 Oracle Backend for Spring Boot and Microservices version 1.1.1 includes a preview of a new feature called "Spring Operations Center".
 More capabilities will be added to this feature in future releases.
 
@@ -35,7 +36,9 @@ This preview release includes the following capabilities:
 - View details of users and roles defined in the Spring Authorization Server included in the environment
 - Easy one-click access to Grafana dashboards for the Kubernetes cluster and the Oracle Database
 
-To access the Spring Operations Center, obtain the public IP address for your environment using this command: 
+**Note:** More capabilities will be added to this feature in future releases.
+
+To access the Spring Operations Center, obtain the public IP address for your environment using this command:
 
 ```bash
 $ kubectl -n ingress-nginx get service ingress-nginx-controller
@@ -78,8 +81,6 @@ The Spring Operations Center Dashboard provides information about the overall st
 {{< img name="soc-dashboard" size="medium" lazy=false >}}
 <!-- spellchecker-enable -->
 
-
-
 ### Manage Namespaces
 
 The Manage Namespaces screen is accessible from the *Workloads* menu, and allows you to view and manage the namespaces
@@ -103,8 +104,7 @@ the status of each workload, and how many replicas are currently running and des
 {{< img name="soc-manage-workloads" size="medium" lazy=false >}}
 <!-- spellchecker-enable -->
 
-You can click on the "open" link in the Dashboard column to open the Spring Boot Statistics Grafana dashboard for any
-workload listed in the table.  Note that you may need to authenticate to Grafana the first time.
+You can click on the "open" link in the Dashboard column to open the Spring Boot Statistics Grafana dashboard for any workload listed in the table.  Note that you may need to authenticate to Grafana the first time.
 
 <!-- spellchecker-disable -->
 {{< img name="soc-grafana-link" size="medium" lazy=false >}}

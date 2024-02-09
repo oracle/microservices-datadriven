@@ -51,3 +51,4 @@ The Oracle Backend for Spring Boot and Microservices is deployed with a sample s
         -p '{"metadata":{"annotations":{"service.beta.kubernetes.io/oci-load-balancer-tls-secret":"my-tls-cert"}}}' \
         --type=merge
     ```
+

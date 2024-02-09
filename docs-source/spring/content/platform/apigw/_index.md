@@ -32,10 +32,9 @@ resources:
 [Apache APISIX](https://apisix.apache.org) is an open source cloud native API platform that supports the full lifecycle of API management
 including publishing, traffic management, deployment strategies, and circuit breakers.
 
-## Accessing Apache APISIX dashboard 
+## Accessing Apache APISIX dashboard
 
-Oracle Backend for Spring Boot and Microservices deploys Apache APISIX Gateway and Dashboard in the `apisix` namespace. The gateway is exposed through the
-external load balancer and ingress controller. To access the Apache APISIX Dashboard, you must use the `kubectl port-forward` command to create a secure channel to `service/apisix-dashboard`. Process the following steps:
+Oracle Backend for Spring Boot and Microservices deploys Apache APISIX Gateway and Dashboard in the `apisix` namespace. The gateway is exposed through the external load balancer and ingress controller. To access the Apache APISIX Dashboard, you must use the `kubectl port-forward` command to create a secure channel to `service/apisix-dashboard`. Process the following steps:
 
 1. To expose the Apache APISIX Dashboard using this command:
 

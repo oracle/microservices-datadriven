@@ -4,8 +4,7 @@ description: "Spring Boot Starters for Universal Connection Pooling with Oracle 
 keywords: "starter ucp oracle database springboot spring development microservices development"
 ---
 
-This starter provides a connection (data source) to an Oracle Database using Universal Connection Pool, which provides an efficient way
-to use database connections. 
+This starter provides a connection (data source) to an Oracle Database using Universal Connection Pool, which provides an efficient way to use database connections.
 
 To add this starter to your project, add this Maven dependency:
 
@@ -23,13 +22,9 @@ For Gradle projects, add this dependency:
 implementation 'com.oracle.database.spring:oracle-spring-boot-starter-ucp:23.4.0'
 ```
 
-An Oracle data source is injected into your application and can be used normally. You must configure
-the data source as shown below, and you should also add either Spring Data JDBC or Spring Data JPA to your project.
+An Oracle data source is injected into your application and can be used normally. You must configure the data source as shown below, and you should also add either Spring Data JDBC or Spring Data JPA to your project.
 
-To configure the data source, provide a `spring.datasource` object in your Spring `application.yaml`,
-or equivalent, as shown in the following example.  The `oracleucp` entry is optional, and can be used
-to fine tune the configuration of the connection pool, if desired.  For details of available settings,
-refer to the [JavaDoc](https://docs.oracle.com/en/database/oracle/oracle-database/21/jjuar/oracle/ucp/jdbc/UCPDataSource.html).
+To configure the data source, provide a `spring.datasource` object in your Spring `application.yaml`, or equivalent, as shown in the following example.  The `oracleucp` entry is optional, and can be used to fine tune the configuration of the connection pool, if desired.  For details of available settings, refer to the [JavaDoc](https://docs.oracle.com/en/database/oracle/oracle-database/21/jjuar/oracle/ucp/jdbc/UCPDataSource.html).
 
 ```yaml
 spring:
@@ -55,12 +50,9 @@ spring:
       max-pool-size: 30
 ```
 
-The `spring.datasource.url` can be in the basic format (as previously shown), or in TNS format if your application
-uses Transparent Network Substrate (TNS). 
+The `spring.datasource.url` can be in the basic format (as previously shown), or in TNS format if your application uses Transparent Network Substrate (TNS).
 
-Note that the connections to the database use the `DEDICATED` server by default.  If you wish to use `SHARED`
-or `POOLED`, you can append that to the basic URL, or add it to the TNS names entry.  For example, to use 
-database resident pooled connections, you would change the URL shown in the previsou example to the following: 
+Note that the connections to the database use the `DEDICATED` server by default. If you wish to use `SHARED` or `POOLED`, you can append that to the basic URL, or add it to the TNS names entry. For example, to use database resident pooled connections, you would change the URL shown in the previous example to the following:
 
 ```yaml
   datasource:
@@ -69,7 +61,7 @@ database resident pooled connections, you would change the URL shown in the prev
 
 If you are using TNS, add `server=pooled` to the `connect_data`. For example:
 
-```
+```text
 mydb_tp = (description=
  (retry_count=20)
  (retry_delay=3)
@@ -102,4 +94,3 @@ public class DataSourceConfiguration {
     }
 }
 ```
-

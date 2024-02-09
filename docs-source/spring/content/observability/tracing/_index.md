@@ -72,7 +72,7 @@ If you want to enable tracing for your database calls (Micrometer observability 
 </dependency>
 ```
 
-You must also add the following to your applications `application.yaml` file. 
+You must also add the following to your applications `application.yaml` file.
 
 ```yaml
 spring:
