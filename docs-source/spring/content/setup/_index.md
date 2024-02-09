@@ -110,7 +110,7 @@ Oracle Backend for Spring Boot and Microservices setup installs the following co
 | Apache APISIX                | 3.8.0         | Provides full lifecycle API management.                                                     |
 | Apache Kafka                 | 3.6.1 | Provides distributed event streaming.                                                       |
 | cert-manager                 | 1.12.3        | Automates the management of certificates.                                                   |
-| Coherence                    | 3.3.2        | Provides in-memory data grid.                                                               |
+| Coherence Operator           | 3.3.2        | Provides in-memory data grid.                                                               |
 | Conductor Server             | 3.13.8        | Provides a Microservice orchestration platform.                                             |
 | Grafana                      | 9.2.5         | Provides the tool to examine, analyze, and monitor metrics.                                 |
 | HashiCorp Vault              | 1.15.2        | Provides a way to store and tightly control access to sensitive data.                       |
