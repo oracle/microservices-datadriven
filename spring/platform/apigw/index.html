@@ -72,7 +72,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/platform/apigw/",
       "headline": "API Gateway",
       "description": "APISIX Gateway for API management in Oracle Backend for Spring Boot and Microservices",
-      "wordCount" : "519",
+      "wordCount" : "600",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -626,6 +626,51 @@
 
 
   <ul class="gdoc-nav__list">
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/platform/soc"
+                  class="gdoc-nav__entry"
+                >
+                  Spring Operations Center
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
     
       
       
@@ -2052,16 +2097,15 @@ if (!doNotTrack) {
 >Apache APISIX</a> is an open source cloud native API platform that supports the full lifecycle of API management
 including publishing, traffic management, deployment strategies, and circuit breakers.</p>
 <div class="gdoc-page__anchorwrap">
-    <h2 id="deploy-and-secure-sample-application-apis-using-apache-apisix">
-        Deploy and Secure Sample Application APIs using Apache APISIX
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/apigw/#deploy-and-secure-sample-application-apis-using-apache-apisix" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Deploy and Secure Sample Application APIs using Apache APISIX" aria-label="Anchor to: Deploy and Secure Sample Application APIs using Apache APISIX" href="#deploy-and-secure-sample-application-apis-using-apache-apisix">
+    <h2 id="accessing-apache-apisix-dashboard">
+        Accessing Apache APISIX dashboard
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/apigw/#accessing-apache-apisix-dashboard" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Accessing Apache APISIX dashboard" aria-label="Anchor to: Accessing Apache APISIX dashboard" href="#accessing-apache-apisix-dashboard">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h2>
 </div>
 <p>Oracle Backend for Spring Boot and Microservices deploys Apache APISIX Gateway and Dashboard in the <code>apisix</code> namespace. The gateway is exposed through the
-external load balancer and ingress controller. To access the Apache APISIX Dashboard, you must use the <code>kubectl port-forward</code> command to
-create a secure channel to <code>service/apisix-dashboard</code>. Process the following steps:</p>
+external load balancer and ingress controller. To access the Apache APISIX Dashboard, you must use the <code>kubectl port-forward</code> command to create a secure channel to <code>service/apisix-dashboard</code>. Process the following steps:</p>
 <ol>
 <li>
 <p>To expose the Apache APISIX Dashboard using this command:</p>
@@ -2074,9 +2118,10 @@ create a secure channel to <code>service/apisix-dashboard</code>. Process the fo
 >http://localhost:8080</a></p>
 <ul>
 <li>username: <code>admin</code></li>
-<li>password: <code>admin</code></li>
+<li>Password is retrieved using the following command:</li>
 </ul>
-<p><strong>NOTE:</strong> Oracle recommends that you change the default password when you log in the first time. Even though the dashboard is not accessible externally, Oracle still recommends using strong passwords to maximize security.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl get secret -n apisix apisix-dashboard -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.data.conf\.yaml}&#39;</span> <span class="p">|</span> base64 -d <span class="p">|</span> grep <span class="err">&#39;</span>password:<span class="sb">`</span>
+</span></span></code></pre></div><p><strong>NOTE:</strong> Oracle recommends that you change the default password when you log in the first time. Even though the dashboard is not accessible externally, Oracle still recommends using strong passwords to maximize security.</p>
  <!-- spellchecker-disable -->
 
       
@@ -2109,6 +2154,26 @@ create a secure channel to <code>service/apisix-dashboard</code>. Process the fo
 </li>
 </ol>
 <div class="gdoc-page__anchorwrap">
+    <h2 id="enable-tracing-in-apisix-routes">
+        Enable tracing in APISIX routes
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/apigw/#enable-tracing-in-apisix-routes" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Enable tracing in APISIX routes" aria-label="Anchor to: Enable tracing in APISIX routes" href="#enable-tracing-in-apisix-routes">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>The OpenTelemetry plugin is enabled by default in APISIX. To enable tracing for your routes add the following to the route configuration:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="s2">&#34;plugins&#34;</span><span class="err">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;opentelemetry&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;sampler&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;always_on&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>For more configuration option for the OpenTelemetry plugin; <a
+  class="gdoc-markdown__link"
+  href="https://apisix.apache.org/docs/apisix/plugins/opentelemetry/"
+>APISIX Documentation</a></p>
+<div class="gdoc-page__anchorwrap">
     <h2 id="exposing-a-spring-application-through-the-api-gateway-and-load-balancer">
         Exposing a Spring Application Through the API Gateway and Load Balancer
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/apigw/#exposing-a-spring-application-through-the-api-gateway-and-load-balancer" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Exposing a Spring Application Through the API Gateway and Load Balancer" aria-label="Anchor to: Exposing a Spring Application Through the API Gateway and Load Balancer" href="#exposing-a-spring-application-through-the-api-gateway-and-load-balancer">
@@ -2116,9 +2181,7 @@ create a secure channel to <code>service/apisix-dashboard</code>. Process the fo
         </a>
     </h2>
 </div>
-<p>Once you have your application deployed and running, you may want to expose it to the outside world. Some applications may not need to be
-exposed if they are only called by other applications in the platform. To expose your application, create a &ldquo;route&rdquo; in the Apache APISIX
-API Gateway by processing these steps:</p>
+<p>Once you have your application deployed and running, you may want to expose it to the outside world. Some applications may not need to be exposed if they are only called by other applications in the platform. To expose your application, create a &ldquo;route&rdquo; in the Apache APISIX API Gateway by processing these steps:</p>
 <ol>
 <li>
 <p>Create a route to the service. For example:</p>
@@ -2276,8 +2339,9 @@ API Gateway by processing these steps:</p>
 </br>
 </li>
 </ul>
-<p>d. Save the route that you created.
-<!-- spellchecker-disable -->
+<ol>
+<li>Save the route that you created.
+ <!-- spellchecker-disable -->
 
           
           
@@ -2305,10 +2369,10 @@ API Gateway by processing these steps:</p>
             </figure>
           </div>
 
-<!-- spellchecker-enable -->
-</br>
-<!-- spellchecker-disable -->
-
+ <!-- spellchecker-enable -->
+ </br>
+ <!-- spellchecker-disable -->
+ 
           
           
         
@@ -2335,14 +2399,23 @@ API Gateway by processing these steps:</p>
             </figure>
           </div>
 
-<!-- spellchecker-enable -->
-</br></p>
+ <!-- spellchecker-enable -->
+ </br>
+</li>
+</ol>
 </li>
 <li>
 <p>Test a route to the service. For example:</p>
-<p>a. Get the Apache APISIX Gateway external IP using this command:</p>
+<ol>
+<li>Get the Apache APISIX Gateway external IP using this command:</li>
+</ol>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl -n ingress-nginx get svc ingress-nginx-controller
-</span></span></code></pre></div><p>b. Call the API using the Apache APISIX Gateway address plus path. For example:</p>
+</span></span></code></pre></div><p>The result of the command should look similar to this:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">NAME                       TYPE           CLUSTER-IP      EXTERNAL-IP       PORT(S)                      AGE
+</span></span><span class="line"><span class="cl">ingress-nginx-controller   LoadBalancer   10.96.172.148   146.235.207.230   80:31393/TCP,443:30506/TCP   25h
+</span></span></code></pre></div><ol>
+<li>Call the API using the Apache APISIX Gateway address plus path. For example:</li>
+</ol>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">curl http://APISIX_IP/fruit
 </span></span></code></pre></div><p>You should get &ldquo;banana&rdquo; or &ldquo;fallback fruit is apple&rdquo; back as the response.</p>
 </li>
@@ -2544,6 +2617,30 @@ API Gateway by processing these steps:</p>
   
   
 
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
   
     
     
@@ -3240,11 +3337,11 @@ API Gateway by processing these steps:</p>
     
       <a
         class="gdoc-page__nav--prev flex align-center"
-        href="/microservices-datadriven/spring/platform/"
-        title="Platform Services"
+        href="/microservices-datadriven/spring/platform/soc/"
+        title="Spring Operations Center"
       >
         <i class="gdoc-icon">gdoc_arrow_left_alt</i>
-        Platform Services
+        Spring Operations Center
       </a>
     
   </span>

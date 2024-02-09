@@ -72,7 +72,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/observability/tracing/",
       "headline": "Tracing",
       "description": "Tracing with Open Telemetry for Spring Boot applications with the Oracle Backend for Spring Boot and Microservices",
-      "wordCount" : "468",
+      "wordCount" : "518",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -626,6 +626,51 @@
 
 
   <ul class="gdoc-nav__list">
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/platform/soc"
+                  class="gdoc-nav__entry"
+                >
+                  Spring Operations Center
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
     
       
       
@@ -2167,6 +2212,26 @@ if (!doNotTrack) {
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">tracing</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">endpoint</span><span class="p">:</span><span class="w"> </span><span class="l">${otel.exporter.otlp.endpoint}</span><span class="w">
 </span></span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h2 id="how-to-enable-tracing-in-apisix-routes">
+        How to enable tracing in APISIX routes
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/observability/tracing/#how-to-enable-tracing-in-apisix-routes" class="gdoc-page__anchor clip flex align-center" title="Anchor to: How to enable tracing in APISIX routes" aria-label="Anchor to: How to enable tracing in APISIX routes" href="#how-to-enable-tracing-in-apisix-routes">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>The OpenTelemetry plugin is enabled by default in APISIX. To enable tracing for your routes add the following to the route configuration:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="s2">&#34;plugins&#34;</span><span class="err">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;opentelemetry&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;sampler&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;always_on&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>For more configuration option for the OpenTelemetry plugin; <a
+  class="gdoc-markdown__link"
+  href="https://apisix.apache.org/docs/apisix/plugins/opentelemetry/"
+>APISIX Documentation</a></p>
+<div class="gdoc-page__anchorwrap">
     <h2 id="view-application-traces-in-jaeger-web-user-interface">
         View Application Traces in Jaeger Web User Interface
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/observability/tracing/#view-application-traces-in-jaeger-web-user-interface" class="gdoc-page__anchor clip flex align-center" title="Anchor to: View Application Traces in Jaeger Web User Interface" aria-label="Anchor to: View Application Traces in Jaeger Web User Interface" href="#view-application-traces-in-jaeger-web-user-interface">
@@ -2484,6 +2549,30 @@ if (!doNotTrack) {
   
   
 
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
   
     
     

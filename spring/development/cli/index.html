@@ -72,7 +72,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/development/cli/",
       "headline": "OBaaS CLI",
       "description": "Command Line Interface for Oracle Backend for Spring Boot and Microservices",
-      "wordCount" : "3357",
+      "wordCount" : "4144",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -626,6 +626,51 @@
 
 
   <ul class="gdoc-nav__list">
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/platform/soc"
+                  class="gdoc-nav__entry"
+                >
+                  Spring Operations Center
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
     
       
       
@@ -2047,12 +2092,10 @@ if (!doNotTrack) {
   >
     <h1>OBaaS CLI</h1>
     <p>The Oracle Backend for Spring Boot and Microservices offers a command-line interface (CLI), <code>oractl</code>. The CLI commands simplify the deployment of
-microservices applications as well as bindings with the resources that they use.
-Download the CLI <a
+microservices applications as well as bindings with the resources that they use. Download the CLI <a
   class="gdoc-markdown__link"
-  href="https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0"
->here</a>.
-The platform-specific binary can be renamed to <code>oractl</code> for convenience.</p>
+  href="https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.0"
+>here</a>. The platform-specific binary can be renamed to <code>oractl</code> for convenience.</p>
 <p>Table of Contents:</p>
 <ul>
 <li><a
@@ -2062,11 +2105,7 @@ The platform-specific binary can be renamed to <code>oractl</code> for convenien
 <li><a
   class="gdoc-markdown__link"
   href="#available-commands"
->Available Commands</a></li>
-<li><a
-  class="gdoc-markdown__link"
-  href="#logging"
->Logging Information</a>
+>Available Commands</a>
 <ul>
 <li><a
   class="gdoc-markdown__link"
@@ -2112,8 +2151,16 @@ The platform-specific binary can be renamed to <code>oractl</code> for convenien
   class="gdoc-markdown__link"
   href="#compile"
 >GraalVM compile commands</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#user-management"
+>User Management</a></li>
 </ul>
 </li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#logging"
+>Logging Information</a></li>
 </ul>
 <div class="gdoc-page__anchorwrap">
     <h2 id="using-the-cli">
@@ -2126,11 +2173,27 @@ The platform-specific binary can be renamed to <code>oractl</code> for convenien
 <ol>
 <li>
 <p>Expose the Oracle Backend for Spring Boot and Microservices Admin server that the CLI calls using this command:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">kubectl port-forward services/obaas-admin -n obaas-admin 8080
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl port-forward services/obaas-admin -n obaas-admin <span class="m">8080</span>
 </span></span></code></pre></div></li>
 <li>
-<p>Start the CLI in interactive mode by running <code>oractl</code> from your terminal window. For example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl
+<p>Start the CLI in interactive mode by running oractl from your terminal window. For example:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl
+</span></span></code></pre></div><p>As a result, the <code>oractl</code> prompt is displayed as follows:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"> _   _           __    _    ___
+</span></span><span class="line"><span class="cl">/ <span class="se">\ </span><span class="p">|</span>_<span class="o">)</span>  _.  _. <span class="o">(</span>_    /  <span class="p">|</span>   <span class="p">|</span>
+</span></span><span class="line"><span class="cl"><span class="se">\_</span>/ <span class="p">|</span>_<span class="o">)</span> <span class="o">(</span>_<span class="p">|</span> <span class="o">(</span>_<span class="p">|</span> __<span class="o">)</span>   <span class="se">\_</span> <span class="p">|</span>_ _<span class="p">|</span><span class="nv">_</span>
+</span></span><span class="line"><span class="cl"><span class="o">========================================================================================</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Application Name: Oracle Backend Platform :: Command Line Interface
+</span></span><span class="line"><span class="cl">Application Version: <span class="o">(</span>1.1.0<span class="o">)</span>
+</span></span><span class="line"><span class="cl">:: Spring Boot <span class="o">(</span>v3.2.1<span class="o">)</span> ::
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Ask <span class="k">for</span> help:
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">* Slack: &lt;https://oracledevs.slack.com/archives/C03ALDSV272&gt;
+</span></span><span class="line"><span class="cl">* email: &lt;obaas_ww@oracle.com&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">oractl:&gt;
 </span></span></code></pre></div></li>
 </ol>
 <div class="gdoc-page__anchorwrap">
@@ -2151,54 +2214,51 @@ The platform-specific binary can be renamed to <code>oractl</code> for convenien
 </div>
 <p>Short descriptions for the available commands can be viewed by issuing the <code>help</code> command and detailed help for any individual
 commands can be viewed by issuing <code>help [command-name]</code>. For example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;help
 </span></span><span class="line"><span class="cl">AVAILABLE COMMANDS
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">Application/Namespace Commands
-</span></span><span class="line"><span class="cl">       * create: Create an application/namespace.
+</span></span><span class="line"><span class="cl">       create: Create an application/namespace.
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">Autoscaler Commands
-</span></span><span class="line"><span class="cl">       * create-autoscaler: Create an autoscaler.
-</span></span><span class="line"><span class="cl">       * delete-autoscaler: Delete an autoscaler.
+</span></span><span class="line"><span class="cl">       create-autoscaler: Create an autoscaler.
+</span></span><span class="line"><span class="cl">       delete-autoscaler: Delete an autoscaler.
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">Built-In Commands
-</span></span><span class="line"><span class="cl">       help: Display help about available commands
+</span></span><span class="line"><span class="cl">       help: Display <span class="nb">help</span> about available commands
 </span></span><span class="line"><span class="cl">       stacktrace: Display the full stacktrace of the last error.
 </span></span><span class="line"><span class="cl">       clear: Clear the shell screen.
 </span></span><span class="line"><span class="cl">       quit, exit: Exit the shell.
-</span></span><span class="line"><span class="cl">       history: Display or save the history of previously run commands
+</span></span><span class="line"><span class="cl">       history: Display or save the <span class="nb">history</span> of previously run commands
 </span></span><span class="line"><span class="cl">       version: Show version info
 </span></span><span class="line"><span class="cl">       script: Read and execute commands from a file.
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">GraalVM Compile Commands
-</span></span><span class="line"><span class="cl">       * compile-download: Download executable file compiled
-</span></span><span class="line"><span class="cl">       * compile: Compile a service with GraalVM
-</span></span><span class="line"><span class="cl">       * compile-purge: Delete a job launched
-</span></span><span class="line"><span class="cl">       * compile-logs: Compilation progress
+</span></span><span class="line"><span class="cl">       compile-download: Download executable file compiled
+</span></span><span class="line"><span class="cl">       compile: Compile a service with GraalVM
+</span></span><span class="line"><span class="cl">       compile-purge: Delete a job launched
+</span></span><span class="line"><span class="cl">       compile-logs: Compilation progress
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">Identity and Access Management Service
-</span></span><span class="line"><span class="cl">       * user list: Lists the users in your platform.
-</span></span><span class="line"><span class="cl">       * user create: Creates a new user in your platform.
-</span></span><span class="line"><span class="cl">       * user get: Gets the specified user’s information.
-</span></span><span class="line"><span class="cl">       * user delete: Delete a user in your platform.
-</span></span><span class="line"><span class="cl">       * user change-roles: Change the roles from the specified user.
+</span></span><span class="line"><span class="cl">       user list: Lists the users in your platform.
+</span></span><span class="line"><span class="cl">       user create: Creates a new user in your platform.
+</span></span><span class="line"><span class="cl">       user get: Gets the specified user’s information.
+</span></span><span class="line"><span class="cl">       user delete: Delete a user in your platform.
+</span></span><span class="line"><span class="cl">       user change-roles: Change the roles from the specified user.
 </span></span><span class="line"><span class="cl">       connect: Connect to the OBaaS Admin Service.
-</span></span><span class="line"><span class="cl">       * user change-password: Change password for the specified user.
+</span></span><span class="line"><span class="cl">       user change-password: Change password <span class="k">for</span> the specified user.
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">Informational Commands
-</span></span><span class="line"><span class="cl">       * list: list/show details of application services.
+</span></span><span class="line"><span class="cl">       list: list/show details of application services.
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">Service Commands
-</span></span><span class="line"><span class="cl">       * bind: Create or Update a schema/user and bind it to service deployment.
-</span></span><span class="line"><span class="cl">       * delete: Delete a service or entire application/namespace.
-</span></span><span class="line"><span class="cl">       * config: View and modify Service configuration.
-</span></span><span class="line"><span class="cl">       * deploy: Deploy a service.
+</span></span><span class="line"><span class="cl">       bind: Create or Update a schema/user and <span class="nb">bind</span> it to service deployment.
+</span></span><span class="line"><span class="cl">       delete: Delete a service or entire application/namespace.
+</span></span><span class="line"><span class="cl">       config: View and modify Service configuration.
+</span></span><span class="line"><span class="cl">       deploy: Deploy a service.
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">Commands marked with (*) are currently unavailable.
-</span></span><span class="line"><span class="cl"><span class="k">Type</span> `help <span class="p">&lt;</span>command<span class="p">&gt;</span>` to learn more.
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">Ask for Help
+</span></span><span class="line"><span class="cl">Ask <span class="k">for</span> Help
 </span></span><span class="line"><span class="cl">       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
 </span></span><span class="line"><span class="cl">       E-mail: obaas_ww@oracle.com
 </span></span></code></pre></div><p>An application is a namespace encompassing related microservices. For example, a &ldquo;cloudbank&rdquo; application may have &ldquo;banktransfer&rdquo; and &ldquo;frauddetection&rdquo; microservices deployed within it.</p>
@@ -2235,7 +2295,7 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
 ><code>config</code></a> command can also be used to add, view, update, and delete configurations managed by the Spring Cloud Config server.</p>
 <p>A common development workflow pattern is to <code>connect</code>, <code>change-password</code> (only if necessary), <code>create</code> (once per application or namespace), <code>config</code>, <code>bind</code> (only if necessary), <code>deploy</code>, and <code>list</code>.</p>
 <p>Further development and redeployment of the service can then be repeated issuing the <code>deploy</code> and <code>list</code> commands.</p>
-<p>The following is an example development workflow using the CLI:</p>
+<p>The following is a description of the CLI commands:</p>
 <div class="gdoc-page__anchorwrap">
     <h3 id="connect">
         connect
@@ -2245,7 +2305,8 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
     </h3>
 </div>
 <p>Use the <code>connect</code> command to connect your <code>oractl</code> CLI to the Oracle Backend Administration service:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">NAME
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;help connect
+</span></span><span class="line"><span class="cl">NAME
 </span></span><span class="line"><span class="cl">       connect - Connect to the OBaaS Spring Cloud admin console.
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">SYNOPSIS
@@ -2254,20 +2315,20 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
 </span></span><span class="line"><span class="cl">OPTIONS
 </span></span><span class="line"><span class="cl">       --url String
 </span></span><span class="line"><span class="cl">       admin server URL
-</span></span><span class="line"><span class="cl">       [Optional, default = http://localhost:8080]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional, <span class="nv">default</span> <span class="o">=</span> http://localhost:8080<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --help or -h
-</span></span><span class="line"><span class="cl">       help for connect
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       <span class="nb">help</span> <span class="k">for</span> connect
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">Ask for Help
+</span></span><span class="line"><span class="cl">Ask <span class="k">for</span> Help
 </span></span><span class="line"><span class="cl">       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
 </span></span><span class="line"><span class="cl">       E-mail: obaas_ww@oracle.com
 </span></span></code></pre></div><p>For example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>connect
-</span></span><span class="line"><span class="cl">username: obaas-admin
-</span></span><span class="line"><span class="cl">password: ********
-</span></span><span class="line"><span class="cl">obaas-cli: Successful connected.
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;connect
+</span></span><span class="line"><span class="cl">? username obaas-admin
+</span></span><span class="line"><span class="cl">? password ****************
+</span></span><span class="line"><span class="cl">Credentials successfully authenticated! obaas-admin -&gt; welcome to OBaaS CLI.
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="create">
         create
@@ -2277,7 +2338,7 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
     </h3>
 </div>
 <p>Use the <code>create</code> command to create an application namespace (Kubernetes <em>namespace</em>). The application namespace provides a mechanism for isolating groups of resources, especially the microservices. Names of resources need to be unique within an application namespace, but not across application namespaces.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help delete
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;help create
 </span></span><span class="line"><span class="cl">NAME
 </span></span><span class="line"><span class="cl">       create - Create an application/namespace.
 </span></span><span class="line"><span class="cl">
@@ -2287,18 +2348,18 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
 </span></span><span class="line"><span class="cl">OPTIONS
 </span></span><span class="line"><span class="cl">       --app-name String
 </span></span><span class="line"><span class="cl">       application/namespace
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --help or -h
-</span></span><span class="line"><span class="cl">       help for create
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       <span class="nb">help</span> <span class="k">for</span> create
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">Ask for Help
+</span></span><span class="line"><span class="cl">Ask <span class="k">for</span> Help
 </span></span><span class="line"><span class="cl">       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
 </span></span><span class="line"><span class="cl">       E-mail: obaas_ww@oracle.com
 </span></span></code></pre></div><p>For example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>create --app-name myapp
-</span></span><span class="line"><span class="cl">application/namespace created successfully and image pull secret (registry-auth) created successfully and database TNSAdmin/wallet secret created successfully
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;create --app-name myapp
+</span></span><span class="line"><span class="cl">application/namespace created successfully and image pull secret <span class="o">(</span>registry-auth<span class="o">)</span> created successfully and database TNSAdmin/wallet secret created successfully
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="delete">
         delete
@@ -2311,7 +2372,7 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
 <blockquote>
 <p>ATTENTION: Ensure that you want to completely delete the application namespace. You cannot rollback the components once deleted.</p>
 </blockquote>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">NAME
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">NAME
 </span></span><span class="line"><span class="cl">       delete - Delete a service or entire application/namespace.
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">SYNOPSIS
@@ -2320,29 +2381,29 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
 </span></span><span class="line"><span class="cl">OPTIONS
 </span></span><span class="line"><span class="cl">       --app-name String
 </span></span><span class="line"><span class="cl">       application/namespace
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --service-name String
 </span></span><span class="line"><span class="cl">       Service Name
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --image-version String
 </span></span><span class="line"><span class="cl">       Image Version
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --help or -h
-</span></span><span class="line"><span class="cl">       help for delete
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       <span class="nb">help</span> <span class="k">for</span> delete
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">Ask for Help
+</span></span><span class="line"><span class="cl">Ask <span class="k">for</span> Help
 </span></span><span class="line"><span class="cl">       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
 </span></span><span class="line"><span class="cl">       E-mail: obaas_ww@oracle.com
 </span></span></code></pre></div><p>For example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>delete --app-name myapp
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;delete --app-name myapp
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">obaas-cli [delete]: The Application/Namespace [myapp] will be removed, including all Services deployed. Do you confirm the complete deletion (y/n)?: y
+</span></span><span class="line"><span class="cl">obaas-cli <span class="o">[</span>delete<span class="o">]</span>: The Application/Namespace <span class="o">[</span>myapp<span class="o">]</span> will be removed, including all Services deployed. Do you confirm the <span class="nb">complete</span> deletion <span class="o">(</span>y/n<span class="o">)</span>?: y
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">obaas-cli [delete]: Application/Namespace [myapp] as successfully deleted
+</span></span><span class="line"><span class="cl">obaas-cli <span class="o">[</span>delete<span class="o">]</span>: Application/Namespace <span class="o">[</span>myapp<span class="o">]</span> as successfully deleted
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="bind">
         bind
@@ -2352,39 +2413,40 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
     </h3>
 </div>
 <p>Use the <code>bind</code> command to create and update a database schema or user for the service. These commands also create or update the Kubernetes secret and binding environment entries for the schema. These are set in the Kubernetes deployment created with the <code>deploy</code> command. For example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help bind
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;help <span class="nb">bind</span>
 </span></span><span class="line"><span class="cl">NAME
-</span></span><span class="line"><span class="cl">       bind - Create or Update a schema/user and bind it to service deployment.
+</span></span><span class="line"><span class="cl">       <span class="nb">bind</span> - Create or Update a schema/user and <span class="nb">bind</span> it to service deployment.
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">SYNOPSIS
-</span></span><span class="line"><span class="cl">       bind --action CommandConstants.BindActions --app-name String --service-name String --username String --binding-prefix String --help
+</span></span><span class="line"><span class="cl">       <span class="nb">bind</span> --action CommandConstants.BindActions --app-name String --service-name String 
+</span></span><span class="line"><span class="cl">       --username String --binding-prefix String --help
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">OPTIONS
 </span></span><span class="line"><span class="cl">       --action CommandConstants.BindActions
 </span></span><span class="line"><span class="cl">       possible actions: create or update. create is default.
-</span></span><span class="line"><span class="cl">       [Optional, default = create]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional, <span class="nv">default</span> <span class="o">=</span> create<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --app-name String
 </span></span><span class="line"><span class="cl">       application/namespace
-</span></span><span class="line"><span class="cl">       [Optional, default = application]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional, <span class="nv">default</span> <span class="o">=</span> application<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --service-name String
-</span></span><span class="line"><span class="cl">       Service Name (Default for database user if username is not provided)
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       Service Name <span class="o">(</span>Default <span class="k">for</span> database user <span class="k">if</span> username is not provided<span class="o">)</span>
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --username String
 </span></span><span class="line"><span class="cl">       Database User
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --binding-prefix String
 </span></span><span class="line"><span class="cl">       spring binding prefix
-</span></span><span class="line"><span class="cl">       [Optional, default = spring.datasource]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional, <span class="nv">default</span> <span class="o">=</span> spring.datasource<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --help or -h
-</span></span><span class="line"><span class="cl">       help for bind
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       <span class="nb">help</span> <span class="k">for</span> <span class="nb">bind</span>
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">Ask for Help
+</span></span><span class="line"><span class="cl">Ask <span class="k">for</span> Help
 </span></span><span class="line"><span class="cl">       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
 </span></span><span class="line"><span class="cl">       E-mail: obaas_ww@oracle.com
 </span></span></code></pre></div><blockquote>
@@ -2393,9 +2455,9 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
 <ol>
 <li>
 <p>Use the <code>bind</code> or <code>bind create</code> command to <strong>create</strong> a database schema or user for the service. For Example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>bind create --app-name myapp --service-name myserv
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;bind create --app-name myapp --service-name myserv
 </span></span><span class="line"><span class="cl">Database/Service Password: ************
-</span></span><span class="line"><span class="cl">Schema {myserv} was successfully created and Kubernetes Secret {myapp/myserv} was successfully created.
+</span></span><span class="line"><span class="cl">Schema <span class="o">{</span>myserv<span class="o">}</span> was successfully created and Kubernetes Secret <span class="o">{</span>myapp/myserv<span class="o">}</span> was successfully created.
 </span></span></code></pre></div></li>
 <li>
 <p>Use the <code>bind update</code> command to <strong>update</strong> an already created database schema or user for the service. For example:</p>
@@ -2413,97 +2475,99 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
     </h3>
 </div>
 <p>Use the <code>deploy</code> command to create, build, and push an image for the microservice and create the necessary deployment, service, and secret Kubernetes resources for the microservice.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help deploy
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;help deploy
 </span></span><span class="line"><span class="cl">NAME
 </span></span><span class="line"><span class="cl">       deploy - Deploy a service.
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">SYNOPSIS
-</span></span><span class="line"><span class="cl">       deploy --bind String --app-name String [--service-name String] [--image-version String] --service-profile String --port String --java-version String --add-health-probe boolean --liquibase-db String [--artifact-path String] --initial-replicas int --cpu-request String --graalvm-native boolean --apigw boolean --route String --apikey String --help
+</span></span><span class="line"><span class="cl">       deploy --bind String --app-name String <span class="o">[</span>--service-name String<span class="o">]</span> <span class="o">[</span>--image-version String<span class="o">]</span> 
+</span></span><span class="line"><span class="cl">       --service-profile String --port String --java-version String --add-health-probe boolean 
+</span></span><span class="line"><span class="cl">       --liquibase-db String <span class="o">[</span>--artifact-path String<span class="o">]</span> --initial-replicas int 
+</span></span><span class="line"><span class="cl">       --graalvm-native boolean --apigw boolean --route String --apikey String --help
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">OPTIONS
 </span></span><span class="line"><span class="cl">       --bind String
-</span></span><span class="line"><span class="cl">       automatically create and bind resources. possible values are [jms]
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       automatically create and <span class="nb">bind</span> resources. possible values are <span class="o">[</span>jms<span class="o">]</span>
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --app-name String
 </span></span><span class="line"><span class="cl">       application/namespace
-</span></span><span class="line"><span class="cl">       [Optional, default = application]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional, <span class="nv">default</span> <span class="o">=</span> application<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --service-name String
 </span></span><span class="line"><span class="cl">       Service Name
-</span></span><span class="line"><span class="cl">       [Mandatory]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Mandatory<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --image-version String
 </span></span><span class="line"><span class="cl">       Image Version
-</span></span><span class="line"><span class="cl">       [Mandatory]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Mandatory<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --service-profile String
 </span></span><span class="line"><span class="cl">       Service Profile
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --port String
 </span></span><span class="line"><span class="cl">       Service Port
-</span></span><span class="line"><span class="cl">       [Optional, default = 8080]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional, <span class="nv">default</span> <span class="o">=</span> 8080<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --java-version String
-</span></span><span class="line"><span class="cl">       Java Base Image [ghcr.io/graalvm/jdk:ol9-java17-22.3.1]
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       Java Base Image <span class="o">[</span>ghcr.io/graalvm/jdk:ol9-java17-22.3.1<span class="o">]</span>
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --add-health-probe boolean
 </span></span><span class="line"><span class="cl">       Inject or not Health probes to service.
-</span></span><span class="line"><span class="cl">       [Optional, default = false]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional, <span class="nv">default</span> <span class="o">=</span> false<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --liquibase-db String
-</span></span><span class="line"><span class="cl">       Inform the database name for Liquibase.
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       Inform the database name <span class="k">for</span> Liquibase.
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --artifact-path String
 </span></span><span class="line"><span class="cl">       Service jar/exe location
-</span></span><span class="line"><span class="cl">       [Mandatory]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Mandatory<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --initial-replicas int
 </span></span><span class="line"><span class="cl">       The initial number of replicas
-</span></span><span class="line"><span class="cl">       [Optional, default = 1]
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">       --cpu-request String
-</span></span><span class="line"><span class="cl">       The amount of CPU to request
-</span></span><span class="line"><span class="cl">       [Optional, default = 500m]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional, <span class="nv">default</span> <span class="o">=</span> 1<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --graalvm-native boolean
 </span></span><span class="line"><span class="cl">       Artifact is a graalvm native compiled by Oracle Backend
-</span></span><span class="line"><span class="cl">       [Optional, default = false]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional, <span class="nv">default</span> <span class="o">=</span> false<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --apigw boolean
 </span></span><span class="line"><span class="cl">       open routing through APISIX
-</span></span><span class="line"><span class="cl">       [Optional, default = false]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional, <span class="nv">default</span> <span class="o">=</span> false<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --route String
-</span></span><span class="line"><span class="cl">       <span class="k">set</span> <span class="nv">an APISIX route path</span>
-</span></span><span class="line"><span class="cl">       [Optional, default = /api/v1/]
+</span></span><span class="line"><span class="cl">       <span class="nb">set</span> an APISIX route path
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional, <span class="nv">default</span> <span class="o">=</span> /api/v1/<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --apikey String
-</span></span><span class="line"><span class="cl">       <span class="k">set</span> <span class="nv">APISIX API_KEY</span>
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       <span class="nb">set</span> APISIX API_KEY
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --help or -h
-</span></span><span class="line"><span class="cl">       help for deploy
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       <span class="nb">help</span> <span class="k">for</span> deploy
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">CURRENTLY UNAVAILABLE
 </span></span><span class="line"><span class="cl">       you are not signedIn. Please sign in to be able to use this command!
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">Ask for Help
+</span></span><span class="line"><span class="cl">Ask <span class="k">for</span> Help
 </span></span><span class="line"><span class="cl">       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
 </span></span><span class="line"><span class="cl">       E-mail: obaas_ww@oracle.com
 </span></span></code></pre></div><p>For example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>deploy --app-name myapp --service-name myserv --image-version 0.0.1 --port 8081 --bind jms --add-health-probe true --artifact-path obaas/myserv/target/demo-0.0.1-SNAPSHOT.jar
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;deploy --app-name myapp --service-name myserv --image-version 0.0.1 --port <span class="m">8081</span>
+</span></span><span class="line"><span class="cl">    --bind jms --add-health-probe <span class="nb">true</span> --artifact-path obaas/myserv/target/demo-0.0.1-SNAPSHOT.jar
 </span></span><span class="line"><span class="cl">uploading: obaas/myserv/target/demo-0.0.1-SNAPSHOT.jar building and pushing image...
 </span></span><span class="line"><span class="cl">binding resources... successful
 </span></span><span class="line"><span class="cl">creating deployment and service... successfully deployed
 </span></span></code></pre></div><p>or, for native compiled microservices, add <strong>&ndash;java-version container-registry.oracle.com/os/oraclelinux:7-slim</strong> to have a compact image and <strong>&ndash;graalvm-native</strong> to specify the file provided is an executable .exec:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>deploy --app-name cloudn --service-name account --artifact-path obaas/myserv/target/accounts-0.0.1-SNAPSHOT.jar.exec --image-version 0.0.1 --graalvm-native --java-version container-registry.oracle.com/os/oraclelinux:7-slim
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;deploy --app-name cloudn --service-name account 
+</span></span><span class="line"><span class="cl">  --artifact-path obaas/myserv/target/accounts-0.0.1-SNAPSHOT.jar.exec --image-version 0.0.1 
+</span></span><span class="line"><span class="cl">  --graalvm-native --java-version container-registry.oracle.com/os/oraclelinux:7-slim
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="create-autoscaler">
         create-autoscaler
@@ -2513,50 +2577,60 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
     </h3>
 </div>
 <p>Use the <code>create-autoscaler</code> command to create a horizontal pod autoscaler for a microservice you have deployed.  You can specify the target scaling threshold using CPU percentage.  Note that your microservice must have its CPU request set in order to use the autoscaler.  It is set to <code>500m</code> (that is, half a core) by the <code>deploy</code> command if you did not override the default.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help create-autoscaler
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;help create-autoscaler
 </span></span><span class="line"><span class="cl">NAME
 </span></span><span class="line"><span class="cl">       create-autoscaler - Create an autoscaler.
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">SYNOPSIS
-</span></span><span class="line"><span class="cl">       create-autoscaler --app-name String [--service-name String] --min-replicas int --max-replicas int --cpu-percent int --help
+</span></span><span class="line"><span class="cl">       create-autoscaler --app-name String <span class="o">[</span>--service-name String<span class="o">]</span> --min-replicas int 
+</span></span><span class="line"><span class="cl">         --max-replicas int --cpu-request String --cpu-percent int --help
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">OPTIONS
 </span></span><span class="line"><span class="cl">       --app-name String
 </span></span><span class="line"><span class="cl">       application/namespace
-</span></span><span class="line"><span class="cl">       [Optional, default = application]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional, <span class="nv">default</span> <span class="o">=</span> application<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --service-name String
 </span></span><span class="line"><span class="cl">       Service Name
-</span></span><span class="line"><span class="cl">       [Mandatory]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Mandatory<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --min-replicas int
 </span></span><span class="line"><span class="cl">       The minimium number of replicas
-</span></span><span class="line"><span class="cl">       [Optional, default = 1]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional, <span class="nv">default</span> <span class="o">=</span> 1<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --max-replicas int
 </span></span><span class="line"><span class="cl">       The maximum number of replicas
-</span></span><span class="line"><span class="cl">       [Optional, default = 4]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional, <span class="nv">default</span> <span class="o">=</span> 4<span class="o">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       --cpu-request String
+</span></span><span class="line"><span class="cl">       The amount of CPU to request
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional, <span class="nv">default</span> <span class="o">=</span> 100m<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --cpu-percent int
 </span></span><span class="line"><span class="cl">       The CPU percent at which to scale
-</span></span><span class="line"><span class="cl">       [Optional, default = 80]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional, <span class="nv">default</span> <span class="o">=</span> 80<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --help or -h
-</span></span><span class="line"><span class="cl">       help for create-autoscaler
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       <span class="nb">help</span> <span class="k">for</span> create-autoscaler
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">Ask for Help
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">CURRENTLY UNAVAILABLE
+</span></span><span class="line"><span class="cl">       you are not signedIn. Please sign in to be able to use this command!
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Ask <span class="k">for</span> Help
 </span></span><span class="line"><span class="cl">       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
 </span></span><span class="line"><span class="cl">       E-mail: obaas_ww@oracle.com
 </span></span></code></pre></div><p>For example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>create-autoscaler --app-name application --service-name creditscore --cpu-percent 80 --min-replicas 2 --max-replicas 6
-</span></span><span class="line"><span class="cl">obaas-cli [create-autoscaler]: Autoscaler was successfully created.
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;create-autoscaler --app-name application --service-name creditscore --cpu-percent <span class="m">80</span> 
+</span></span><span class="line"><span class="cl">  --cpu-request 200m --min-replicas <span class="m">2</span> --max-replicas <span class="m">6</span>
+</span></span><span class="line"><span class="cl">obaas-cli <span class="o">[</span>create-autoscaler<span class="o">]</span>: Autoscaler was successfully created.
 </span></span></code></pre></div><p>You can view the details of the autoscaler using <code>kubectl</code>, for example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">$ kubectl -n application get hpa
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ kubectl -n application get hpa
 </span></span><span class="line"><span class="cl">NAME          REFERENCE                TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
-</span></span><span class="line"><span class="cl">creditscore   Deployment/creditscore   0<span class="nv">%/80%</span>    2         6         2          26s
-</span></span><span class="line"><span class="cl">customer      Deployment/customer      4<span class="nv">%/80%</span>    2         6         2          26h
+</span></span><span class="line"><span class="cl">creditscore   Deployment/creditscore   0%/80%    <span class="m">2</span>         <span class="m">6</span>         <span class="m">2</span>          26s
+</span></span><span class="line"><span class="cl">customer      Deployment/customer      4%/80%    <span class="m">2</span>         <span class="m">6</span>         <span class="m">2</span>          26h
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="delete-autoscaler">
         delete-autoscaler
@@ -2566,33 +2640,33 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
     </h3>
 </div>
 <p>Use the <code>delete-autoscaler</code> command to delete a horizontal pod autoscaler for a microservice you have deployed.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help delete-autoscaler
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;help delete-autoscaler
 </span></span><span class="line"><span class="cl">NAME
 </span></span><span class="line"><span class="cl">       delete-autoscaler - Delete an autoscaler.
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">SYNOPSIS
-</span></span><span class="line"><span class="cl">       delete-autoscaler --app-name String [--service-name String] --help
+</span></span><span class="line"><span class="cl">       delete-autoscaler --app-name String <span class="o">[</span>--service-name String<span class="o">]</span> --help
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">OPTIONS
 </span></span><span class="line"><span class="cl">       --app-name String
 </span></span><span class="line"><span class="cl">       application/namespace
-</span></span><span class="line"><span class="cl">       [Optional, default = application]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional, <span class="nv">default</span> <span class="o">=</span> application<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --service-name String
 </span></span><span class="line"><span class="cl">       Service Name
-</span></span><span class="line"><span class="cl">       [Mandatory]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Mandatory<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --help or -h
-</span></span><span class="line"><span class="cl">       help for delete-autoscaler
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       <span class="nb">help</span> <span class="k">for</span> delete-autoscaler
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">Ask for Help
+</span></span><span class="line"><span class="cl">Ask <span class="k">for</span> Help
 </span></span><span class="line"><span class="cl">       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
 </span></span><span class="line"><span class="cl">       E-mail: obaas_ww@oracle.com
 </span></span></code></pre></div><p>For example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>delete-autoscaler --app-name application --service-name creditscore
-</span></span><span class="line"><span class="cl">obaas-cli [delete-autoscaler]: Autoscaler was successfully deleted.
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;delete-autoscaler --app-name application --service-name creditscore
+</span></span><span class="line"><span class="cl">obaas-cli <span class="o">[</span>delete-autoscaler<span class="o">]</span>: Autoscaler was successfully deleted.
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="list">
         list
@@ -2602,7 +2676,7 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
     </h3>
 </div>
 <p>Use the <code>list</code> command to show details of the microservice deployed in the previous step. For example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help list
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;help list
 </span></span><span class="line"><span class="cl">NAME
 </span></span><span class="line"><span class="cl">       list - list/show details of application services.
 </span></span><span class="line"><span class="cl">
@@ -2612,38 +2686,38 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
 </span></span><span class="line"><span class="cl">OPTIONS
 </span></span><span class="line"><span class="cl">       --app-name String
 </span></span><span class="line"><span class="cl">       application/namespace
-</span></span><span class="line"><span class="cl">       [Optional, default = application]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional, <span class="nv">default</span> <span class="o">=</span> application<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --help or -h
-</span></span><span class="line"><span class="cl">       help for list
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       <span class="nb">help</span> <span class="k">for</span> list
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">Ask for Help
+</span></span><span class="line"><span class="cl">Ask <span class="k">for</span> Help
 </span></span><span class="line"><span class="cl">       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
 </span></span><span class="line"><span class="cl">       E-mail: obaas_ww@oracle.com
 </span></span></code></pre></div><p>For example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">   oractl:<span class="p">&gt;</span>list --app-name myapp
-</span></span><span class="line"><span class="cl">   name:myserv-c46688645-r6lhl  status:class V1ContainerStatus {
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">   oractl:&gt;list --app-name myapp
+</span></span><span class="line"><span class="cl">   name:myserv-c46688645-r6lhl  status:class V1ContainerStatus <span class="o">{</span>
 </span></span><span class="line"><span class="cl">       containerID: cri-o://6d10194c5058a8cf7ecbd5e745cebd5e44c5768c7df73053fa85f54af4b352b2
-</span></span><span class="line"><span class="cl">       image: <span class="p">&lt;</span>region<span class="p">&gt;</span>.ocir.io/<span class="p">&lt;</span>tenancy<span class="p">&gt;</span>/obaas03/myapp-myserv:0.0.1
-</span></span><span class="line"><span class="cl">       imageID: <span class="p">&lt;</span>region<span class="p">&gt;</span>.ocir.io/<span class="p">&lt;</span>tenancy<span class="p">&gt;</span>/obaas03/myapp-myserv@sha256:99d4bbe42ceef97497105218594ea19a9e9869c75f48bdfdc1a2f2aec33b503c
-</span></span><span class="line"><span class="cl">       lastState: class V1ContainerState {
+</span></span><span class="line"><span class="cl">       image: &lt;region&gt;.ocir.io/&lt;tenancy&gt;/obaas03/myapp-myserv:0.0.1
+</span></span><span class="line"><span class="cl">       imageID: &lt;region&gt;.ocir.io/&lt;tenancy&gt;/obaas03/myapp-myserv@sha256:99d4bbe42ceef97497105218594ea19a9e9869c75f48bdfdc1a2f2aec33b503c
+</span></span><span class="line"><span class="cl">       lastState: class V1ContainerState <span class="o">{</span>
 </span></span><span class="line"><span class="cl">           running: null
 </span></span><span class="line"><span class="cl">           terminated: null
 </span></span><span class="line"><span class="cl">           waiting: null
-</span></span><span class="line"><span class="cl">       }
+</span></span><span class="line"><span class="cl">       <span class="o">}</span>
 </span></span><span class="line"><span class="cl">       name: myserv
-</span></span><span class="line"><span class="cl">       ready: true
-</span></span><span class="line"><span class="cl">       restartCount: 0
-</span></span><span class="line"><span class="cl">       started: true
-</span></span><span class="line"><span class="cl">       state: class V1ContainerState {
-</span></span><span class="line"><span class="cl">           running: class V1ContainerStateRunning {
+</span></span><span class="line"><span class="cl">       ready: <span class="nb">true</span>
+</span></span><span class="line"><span class="cl">       restartCount: <span class="m">0</span>
+</span></span><span class="line"><span class="cl">       started: <span class="nb">true</span>
+</span></span><span class="line"><span class="cl">       state: class V1ContainerState <span class="o">{</span>
+</span></span><span class="line"><span class="cl">           running: class V1ContainerStateRunning <span class="o">{</span>
 </span></span><span class="line"><span class="cl">               startedAt: 2023-04-13T01:00:51Z
-</span></span><span class="line"><span class="cl">           }
+</span></span><span class="line"><span class="cl">           <span class="o">}</span>
 </span></span><span class="line"><span class="cl">           terminated: null
 </span></span><span class="line"><span class="cl">           waiting: null
-</span></span><span class="line"><span class="cl">       }
-</span></span><span class="line"><span class="cl">   }name:myserv  kind:null
+</span></span><span class="line"><span class="cl">       <span class="o">}</span>
+</span></span><span class="line"><span class="cl">   <span class="o">}</span>name:myserv  kind:null
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="config">
         config
@@ -2656,47 +2730,48 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
   class="gdoc-markdown__link"
   href="../../platform/config/"
 >Spring Config Server</a></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help config
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;help config
 </span></span><span class="line"><span class="cl">NAME
 </span></span><span class="line"><span class="cl">       config - View and modify Service configuration.
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">SYNOPSIS
-</span></span><span class="line"><span class="cl">       config [--action CommandConstants.ConfigActions] --service-name String --service-label String --service-profile String --property-key String --property-value String --artifact-path String --help
+</span></span><span class="line"><span class="cl">       config <span class="o">[</span>--action CommandConstants.ConfigActions<span class="o">]</span> --service-name String --service-label String 
+</span></span><span class="line"><span class="cl">       --service-profile String --property-key String --property-value String --artifact-path String --help
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">OPTIONS
 </span></span><span class="line"><span class="cl">       --action CommandConstants.ConfigActions
 </span></span><span class="line"><span class="cl">       possible actions: add, list, update, or delete
-</span></span><span class="line"><span class="cl">       [Mandatory]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Mandatory<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --service-name String
 </span></span><span class="line"><span class="cl">       Service Name
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --service-label String
-</span></span><span class="line"><span class="cl">       label for config
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       label <span class="k">for</span> config
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --service-profile String
 </span></span><span class="line"><span class="cl">       Service Profile
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --property-key String
-</span></span><span class="line"><span class="cl">       the property key for the config
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       the property key <span class="k">for</span> the config
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --property-value String
-</span></span><span class="line"><span class="cl">       the value for the config
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       the value <span class="k">for</span> the config
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --artifact-path String
 </span></span><span class="line"><span class="cl">       the context
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">       --help or -h
-</span></span><span class="line"><span class="cl">       help for config
-</span></span><span class="line"><span class="cl">       [Optional]
+</span></span><span class="line"><span class="cl">       <span class="nb">help</span> <span class="k">for</span> config
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">Ask for Help
+</span></span><span class="line"><span class="cl">Ask <span class="k">for</span> Help
 </span></span><span class="line"><span class="cl">       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
 </span></span><span class="line"><span class="cl">       E-mail: obaas_ww@oracle.com
 </span></span></code></pre></div><ol>
@@ -2705,7 +2780,8 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
 <ul>
 <li>Add a specific configuration using the set of parameters <code>--service-name</code>, <code>--service-label</code>, <code>--service-profile</code>, <code>--property-key</code>, and <code>--property-value</code>. For example:</li>
 </ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config add --service-name myserv --service-label 0.0.1 --service-profile default --property-key k1 --property-value value1
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;config add --service-name myserv --service-label 0.0.1 --service-profile default
+</span></span><span class="line"><span class="cl">  --property-key k1 --property-value value1
 </span></span><span class="line"><span class="cl">Property added successfully.
 </span></span></code></pre></div><ul>
 <li>Add a set of configurations based on a configuration file using these commands:</li>
@@ -2719,10 +2795,10 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
 </span></span><span class="line"><span class="cl">       <span class="nt">&#34;spring.datasource.url&#34;</span><span class="p">:</span> <span class="s2">&#34;jdbc:oracle:thin:@$(db.service)?TNS_ADMIN=/oracle/tnsadmin&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config add --artifact-path /obaas/myserv-properties.json
-</span></span><span class="line"><span class="cl">2 property(s) added successfully.
-</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config list --service-name myserv --service-profile obaas --service-label 0.0.1
-</span></span><span class="line"><span class="cl">[ {
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;config add --artifact-path /obaas/myserv-properties.json
+</span></span><span class="line"><span class="cl"><span class="m">2</span> property<span class="o">(</span>s<span class="o">)</span> added successfully.
+</span></span><span class="line"><span class="cl">oractl:&gt;config list --service-name myserv --service-profile obaas --service-label 0.0.1
+</span></span><span class="line"><span class="cl"><span class="o">[</span> <span class="o">{</span>
 </span></span><span class="line"><span class="cl">       <span class="s2">&#34;id&#34;</span> : 222,
 </span></span><span class="line"><span class="cl">       <span class="s2">&#34;application&#34;</span> : <span class="s2">&#34;myserv&#34;</span>,
 </span></span><span class="line"><span class="cl">       <span class="s2">&#34;profile&#34;</span> : <span class="s2">&#34;obaas&#34;</span>,
@@ -2731,29 +2807,29 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
 </span></span><span class="line"><span class="cl">       <span class="s2">&#34;value&#34;</span> : <span class="s2">&#34;oracle.jdbc.OracleDriver&#34;</span>,
 </span></span><span class="line"><span class="cl">       <span class="s2">&#34;createdOn&#34;</span> : <span class="s2">&#34;2023-04-13T01:29:38.000+00:00&#34;</span>,
 </span></span><span class="line"><span class="cl">       <span class="s2">&#34;createdBy&#34;</span> : <span class="s2">&#34;CONFIGSERVER&#34;</span>
-</span></span><span class="line"><span class="cl">}, {
+</span></span><span class="line"><span class="cl"><span class="o">}</span>, <span class="o">{</span>
 </span></span><span class="line"><span class="cl">       <span class="s2">&#34;id&#34;</span> : 223,
 </span></span><span class="line"><span class="cl">       <span class="s2">&#34;application&#34;</span> : <span class="s2">&#34;myserv&#34;</span>,
 </span></span><span class="line"><span class="cl">       <span class="s2">&#34;profile&#34;</span> : <span class="s2">&#34;obaas&#34;</span>,
 </span></span><span class="line"><span class="cl">       <span class="s2">&#34;label&#34;</span> : <span class="s2">&#34;0.0.1&#34;</span>,
 </span></span><span class="line"><span class="cl">       <span class="s2">&#34;propKey&#34;</span> : <span class="s2">&#34;spring.datasource.url&#34;</span>,
-</span></span><span class="line"><span class="cl">       <span class="s2">&#34;value&#34;</span> : <span class="s2">&#34;jdbc:oracle:thin:@$(db.service)?TNS_ADMIN=/oracle/tnsadmin&#34;</span>,
+</span></span><span class="line"><span class="cl">       <span class="s2">&#34;value&#34;</span> : <span class="s2">&#34;jdbc:oracle:thin:@</span><span class="k">$(</span>db.service<span class="k">)</span><span class="s2">?TNS_ADMIN=/oracle/tnsadmin&#34;</span>,
 </span></span><span class="line"><span class="cl">       <span class="s2">&#34;createdOn&#34;</span> : <span class="s2">&#34;2023-04-13T01:29:38.000+00:00&#34;</span>,
 </span></span><span class="line"><span class="cl">       <span class="s2">&#34;createdBy&#34;</span> : <span class="s2">&#34;CONFIGSERVER&#34;</span>
-</span></span><span class="line"><span class="cl">} ]
+</span></span><span class="line"><span class="cl"><span class="o">}</span> <span class="o">]</span>
 </span></span></code></pre></div></li>
 <li>
 <p>Use the <code>config list</code> command, without any parameters, to list the services that have at least one configuration inserted in the Spring Cloud Config server. For example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config list
-</span></span><span class="line"><span class="cl">[ {
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;config list
+</span></span><span class="line"><span class="cl"><span class="o">[</span> <span class="o">{</span>
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;name&#34;</span> : <span class="s2">&#34;apptest&#34;</span>,
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;label&#34;</span> : <span class="s2">&#34;&#34;</span>,
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;profile&#34;</span> : <span class="s2">&#34;&#34;</span>
-</span></span><span class="line"><span class="cl">}, {
+</span></span><span class="line"><span class="cl"><span class="o">}</span>, <span class="o">{</span>
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;name&#34;</span> : <span class="s2">&#34;myapp&#34;</span>,
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;label&#34;</span> : <span class="s2">&#34;&#34;</span>,
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;profile&#34;</span> : <span class="s2">&#34;&#34;</span>
-</span></span><span class="line"><span class="cl">}, […]
+</span></span><span class="line"><span class="cl"><span class="o">}</span>, <span class="o">[</span>…<span class="o">]</span>
 </span></span></code></pre></div></li>
 <li>
 <p>Use the <code>config list [parameters]</code> command to list the parameters using parameters as filters. For example:</p>
@@ -2764,8 +2840,8 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
 <li><code>--property-key</code> : Lists a specific parameter filter by key.</li>
 </ul>
 <p>For example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config list --service-name myserv --service-profile default --service-label 0.0.1
-</span></span><span class="line"><span class="cl">[ {
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;config list --service-name myserv --service-profile default --service-label 0.0.1
+</span></span><span class="line"><span class="cl"><span class="o">[</span> <span class="o">{</span>
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;id&#34;</span> : 221,
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;application&#34;</span> : <span class="s2">&#34;myserv&#34;</span>,
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;profile&#34;</span> : <span class="s2">&#34;default&#34;</span>,
@@ -2774,7 +2850,7 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;value&#34;</span> : <span class="s2">&#34;value1&#34;</span>,
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;createdOn&#34;</span> : <span class="s2">&#34;2023-04-13T01:10:16.000+00:00&#34;</span>,
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;createdBy&#34;</span> : <span class="s2">&#34;CONFIGSERVER&#34;</span>
-</span></span><span class="line"><span class="cl">} ]
+</span></span><span class="line"><span class="cl"><span class="o">}</span> <span class="o">]</span>
 </span></span></code></pre></div></li>
 <li>
 <p>Use the <code>config update</code> command to update a specific configuration using the set of parameters:</p>
@@ -2786,8 +2862,8 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
 <li><code>--property-value</code></li>
 </ul>
 <p>For example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key k1
-</span></span><span class="line"><span class="cl">[ {
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key k1
+</span></span><span class="line"><span class="cl"><span class="o">[</span> <span class="o">{</span>
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;id&#34;</span> : 30,
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;application&#34;</span> : <span class="s2">&#34;myserv&#34;</span>,
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;profile&#34;</span> : <span class="s2">&#34;obaas&#34;</span>,
@@ -2796,13 +2872,13 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;value&#34;</span> : <span class="s2">&#34;value1&#34;</span>,
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;createdOn&#34;</span> : <span class="s2">&#34;2023-03-23T18:02:29.000+00:00&#34;</span>,
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;createdBy&#34;</span> : <span class="s2">&#34;CONFIGSERVER&#34;</span>
-</span></span><span class="line"><span class="cl">} ]
+</span></span><span class="line"><span class="cl"><span class="o">}</span> <span class="o">]</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config update --service-name myserv --service-profile obaas --service-label 0.1 --property-key k1 --property-value value1Updated
+</span></span><span class="line"><span class="cl">oractl:&gt;config update --service-name myserv --service-profile obaas --service-label 0.1 --property-key k1 --property-value value1Updated
 </span></span><span class="line"><span class="cl">Property successful modified.
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key k1
-</span></span><span class="line"><span class="cl">[ {
+</span></span><span class="line"><span class="cl">oractl:&gt;config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key k1
+</span></span><span class="line"><span class="cl"><span class="o">[</span> <span class="o">{</span>
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;id&#34;</span> : 30,
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;application&#34;</span> : <span class="s2">&#34;myserv&#34;</span>,
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;profile&#34;</span> : <span class="s2">&#34;obaas&#34;</span>,
@@ -2811,7 +2887,7 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;value&#34;</span> : <span class="s2">&#34;value1Updated&#34;</span>,
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;createdOn&#34;</span> : <span class="s2">&#34;2023-03-23T18:02:29.000+00:00&#34;</span>,
 </span></span><span class="line"><span class="cl"><span class="s2">&#34;createdBy&#34;</span> : <span class="s2">&#34;CONFIGSERVER&#34;</span>
-</span></span><span class="line"><span class="cl">} ]
+</span></span><span class="line"><span class="cl"><span class="o">}</span> <span class="o">]</span>
 </span></span></code></pre></div></li>
 <li>
 <p>Use the <code>config delete</code> command to delete the application configuration from the Spring Cloud Config server using one of the following two options:</p>
@@ -2819,13 +2895,13 @@ commands can be viewed by issuing <code>help [command-name]</code>. For example:
 <li>
 <p>Delete all configurations from a specific service using the filters <code>--service-name</code>, <code>--service-profile</code> and <code>--service-label</code>. The
 CLI tracks how many configurations are present in the Spring Cloud Config server and confirms the completed deletion. For example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config delete --service-name myserv
-</span></span><span class="line"><span class="cl">[obaas] 7 property(ies) found, delete all (y/n)?:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;config delete --service-name myserv
+</span></span><span class="line"><span class="cl"><span class="o">[</span>obaas<span class="o">]</span> <span class="m">7</span> property<span class="o">(</span>ies<span class="o">)</span> found, delete all <span class="o">(</span>y/n<span class="o">)</span>?:
 </span></span></code></pre></div></li>
 <li>
 <p>Delete a specific configuration using the parameters <code>--service-name</code>, <code>--service-label</code>, <code>--service-profile</code> and <code>--property-key</code>. For example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
-</span></span><span class="line"><span class="cl">[ {
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
+</span></span><span class="line"><span class="cl"><span class="o">[</span> <span class="o">{</span>
 </span></span><span class="line"><span class="cl">       <span class="s2">&#34;id&#34;</span> : 224,
 </span></span><span class="line"><span class="cl">       <span class="s2">&#34;application&#34;</span> : <span class="s2">&#34;myserv&#34;</span>,
 </span></span><span class="line"><span class="cl">       <span class="s2">&#34;profile&#34;</span> : <span class="s2">&#34;obaas&#34;</span>,
@@ -2834,13 +2910,13 @@ CLI tracks how many configurations are present in the Spring Cloud Config server
 </span></span><span class="line"><span class="cl">       <span class="s2">&#34;value&#34;</span> : <span class="s2">&#34;value2&#34;</span>,
 </span></span><span class="line"><span class="cl">       <span class="s2">&#34;createdOn&#34;</span> : <span class="s2">&#34;2023-04-13T01:52:11.000+00:00&#34;</span>,
 </span></span><span class="line"><span class="cl">       <span class="s2">&#34;createdBy&#34;</span> : <span class="s2">&#34;CONFIGSERVER&#34;</span>
-</span></span><span class="line"><span class="cl">} ]
+</span></span><span class="line"><span class="cl"><span class="o">}</span> <span class="o">]</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config delete --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
-</span></span><span class="line"><span class="cl">[obaas] property successfully deleted.
+</span></span><span class="line"><span class="cl">oractl:&gt;config delete --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
+</span></span><span class="line"><span class="cl"><span class="o">[</span>obaas<span class="o">]</span> property successfully deleted.
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
-</span></span><span class="line"><span class="cl">400 : <span class="s2">&#34;Couldn&#39;t find any property for submitted query.&#34;</span>
+</span></span><span class="line"><span class="cl">oractl:&gt;config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
+</span></span><span class="line"><span class="cl"><span class="m">400</span> : <span class="s2">&#34;Couldn&#39;t find any property for submitted query.&#34;</span>
 </span></span></code></pre></div></li>
 </ol>
 </li>
@@ -2862,7 +2938,7 @@ CLI tracks how many configurations are present in the Spring Cloud Config server
 <li>Purge the files remaining after a compilation on the remote GraalVM compiler service.</li>
 </ul>
 <p>The GraalVM Compile Commands are the following:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help 
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;help 
 </span></span><span class="line"><span class="cl">   
 </span></span><span class="line"><span class="cl">GraalVM Compile Commands
 </span></span><span class="line"><span class="cl">       compile-download: Download the compiled executable file.
@@ -2872,24 +2948,24 @@ CLI tracks how many configurations are present in the Spring Cloud Config server
 </span></span></code></pre></div><ol>
 <li>
 <p>Use the <code>compile</code> command to upload and automatically start compilation using the following command:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help compile
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;help compile
 </span></span><span class="line"><span class="cl">NAME
 </span></span><span class="line"><span class="cl">    compile - Compile a service with GraalVM
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">SYNOPSIS
-</span></span><span class="line"><span class="cl">    compile [--artifact-path String] --help
+</span></span><span class="line"><span class="cl">    compile <span class="o">[</span>--artifact-path String<span class="o">]</span> --help
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">OPTIONS
 </span></span><span class="line"><span class="cl">    --artifact-path String
 </span></span><span class="line"><span class="cl">    Service jar to compile location
-</span></span><span class="line"><span class="cl">    [Mandatory]
+</span></span><span class="line"><span class="cl">    <span class="o">[</span>Mandatory<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    --help or -h
-</span></span><span class="line"><span class="cl">    help for compile
-</span></span><span class="line"><span class="cl">    [Optional]
+</span></span><span class="line"><span class="cl">    <span class="nb">help</span> <span class="k">for</span> compile
+</span></span><span class="line"><span class="cl">    <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">Ask for Help
+</span></span><span class="line"><span class="cl">Ask <span class="k">for</span> Help
 </span></span><span class="line"><span class="cl">    Slack: https://oracledevs.slack.com/archives/C03ALDSV272
 </span></span><span class="line"><span class="cl">    E-mail: obaas_ww@oracle.com
 </span></span></code></pre></div><p>Because the compilation of a <strong>.jar</strong> file using the tool <code>native-image</code> does not support cross-compilation, it must be on the same platform where the application will run. This service guarantees a compilation in the same operating system and CPU type where the service will be executed on the Kubernetes cluster.</p>
@@ -2899,17 +2975,17 @@ CLI tracks how many configurations are present in the Spring Cloud Config server
 </span></span><span class="line"><span class="cl">    <span class="nt">&lt;artifactId&gt;</span>native-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
 </span></span><span class="line"><span class="cl"><span class="nt">&lt;/plugin&gt;</span>
 </span></span></code></pre></div><p>The project should be compiled on the developer desktop with GraalVM version 22.3 or later using an <strong>mvn</strong> command. For example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">mvn -Pnative native:compile -Dmaven.test.skip=true
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mvn -Pnative native:compile -Dmaven.test.skip<span class="o">=</span><span class="nb">true</span>
 </span></span></code></pre></div><p>This pre-compilation on your desktop checks if there are any issues on the libraries used in your Spring Boot microservice. In addition, your executable <strong>.jar</strong> file must include ahead-of-time (AOT) generated assets such as generated classes and JSON hint files. For additional information, see <a
   class="gdoc-markdown__link"
   href="https://docs.spring.io/spring-boot/docs/current/reference/html/native-image.html#native-image.advanced.converting-executable-jars"
 >Converting Spring Boot Executable Jar</a>.</p>
 <p>The following is an example of the command output:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>compile --artifact-path /Users/cdebari/demo-0.0.1-SNAPSHOT.jar
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;compile --artifact-path /Users/cdebari/demo-0.0.1-SNAPSHOT.jar
 </span></span><span class="line"><span class="cl">uploading: /Users/cdebari/demo-0.0.1-SNAPSHOT.jar
 </span></span><span class="line"><span class="cl">filename: demo-0.0.1-SNAPSHOT.jar
-</span></span><span class="line"><span class="cl">return: demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
-</span></span><span class="line"><span class="cl">return: Shell script execution started on: demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
+</span></span><span class="line"><span class="cl"><span class="k">return</span>: demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
+</span></span><span class="line"><span class="cl"><span class="k">return</span>: Shell script execution started on: demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
 </span></span><span class="line"><span class="cl">successfully start compilation of: demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
 </span></span><span class="line"><span class="cl">oractl:&gt;
 </span></span></code></pre></div><p>The following example shows the generated batch ID that must be used to retrieve the log files, download the compiled file, and purge the service instance:</p>
@@ -2918,7 +2994,7 @@ CLI tracks how many configurations are present in the Spring Cloud Config server
 </li>
 <li>
 <p>Use the <code>compile-logs</code> command to retrieve the logs that show the compilation progress. For example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help compile-logs
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;help compile-logs
 </span></span><span class="line"><span class="cl">NAME
 </span></span><span class="line"><span class="cl">    compile-logs - Compilation progress.
 </span></span><span class="line"><span class="cl">
@@ -2927,44 +3003,44 @@ CLI tracks how many configurations are present in the Spring Cloud Config server
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">OPTIONS
 </span></span><span class="line"><span class="cl">    --batch String
-</span></span><span class="line"><span class="cl">    File ID returned from the compile command. If not provided by default, then the last file compiled.
-</span></span><span class="line"><span class="cl">    [Optional]
+</span></span><span class="line"><span class="cl">    File ID returned from the compile command. If not provided by default, <span class="k">then</span> the last file compiled.
+</span></span><span class="line"><span class="cl">    <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    --help or -h 
-</span></span><span class="line"><span class="cl">    help for compile-logs
-</span></span><span class="line"><span class="cl">    [Optional]
+</span></span><span class="line"><span class="cl">    <span class="nb">help</span> <span class="k">for</span> compile-logs
+</span></span><span class="line"><span class="cl">    <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">Ask for Help
+</span></span><span class="line"><span class="cl">Ask <span class="k">for</span> Help
 </span></span><span class="line"><span class="cl">    Slack: https://oracledevs.slack.com/archives/C03ALDSV272
 </span></span><span class="line"><span class="cl">    E-mail: obaas_ww@oracle.com
 </span></span></code></pre></div><p>As previously mentioned, if the batch ID is not provided, then the logs of the most recently executed compilation are returned. For example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>compile-logs
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;compile-logs
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">extracted: BOOT-INF/lib/spring-jcl-6.0.11.jar
 </span></span><span class="line"><span class="cl">extracted: BOOT-INF/lib/spring-boot-jarmode-layertools-3.1.2.jar
 </span></span><span class="line"><span class="cl">inflated: BOOT-INF/classpath.idx
 </span></span><span class="line"><span class="cl">inflated: BOOT-INF/layers.idx
-</span></span><span class="line"><span class="cl">========================================================================================================================
-</span></span><span class="line"><span class="cl">GraalVM Native Image: Generating &#39;demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b.exec&#39; (executable)...
-</span></span><span class="line"><span class="cl">========================================================================================================================
-</span></span><span class="line"><span class="cl"><span class="k">For</span> detailed information and explanations on the build output, visit:
+</span></span><span class="line"><span class="cl"><span class="o">========================================================================================================================</span>
+</span></span><span class="line"><span class="cl">GraalVM Native Image: Generating <span class="s1">&#39;demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b.exec&#39;</span> <span class="o">(</span>executable<span class="o">)</span>...
+</span></span><span class="line"><span class="cl"><span class="o">========================================================================================================================</span>
+</span></span><span class="line"><span class="cl">For detailed information and explanations on the build output, visit:
 </span></span><span class="line"><span class="cl">https://github.com/oracle/graal/blob/master/docs/reference-manual/native-image/BuildOutput.md
 </span></span><span class="line"><span class="cl">------------------------------------------------------------------------------------------------------------------------
 </span></span></code></pre></div><p>If the <code>compile-logs</code> commands returns a <strong>Finished generating</strong> message, then download the <strong>.exec</strong> file. For example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">CPU:  Enable more CPU features with &#39;-march=native&#39; for improved performance.
-</span></span><span class="line"><span class="cl">QBM:  Use the quick build mode (&#39;-Ob&#39;) to speed up builds during development.
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">CPU:  Enable more CPU features with <span class="s1">&#39;-march=native&#39;</span> <span class="k">for</span> improved performance.
+</span></span><span class="line"><span class="cl">QBM:  Use the quick build mode <span class="o">(</span><span class="s1">&#39;-Ob&#39;</span><span class="o">)</span> to speed up builds during development.
 </span></span><span class="line"><span class="cl">------------------------------------------------------------------------------------------------------------------------
-</span></span><span class="line"><span class="cl">                155.3s (8.2% of total time) in 169 GCs <span class="p">|</span> Peak RSS: 5.34GB <span class="p">|</span> CPU load: 0.70
+</span></span><span class="line"><span class="cl">                155.3s <span class="o">(</span>8.2% of total <span class="nb">time</span><span class="o">)</span> in <span class="m">169</span> GCs <span class="p">|</span> Peak RSS: 5.34GB <span class="p">|</span> CPU load: 0.70
 </span></span><span class="line"><span class="cl">------------------------------------------------------------------------------------------------------------------------
 </span></span><span class="line"><span class="cl">Produced artifacts:
-</span></span><span class="line"><span class="cl">/uploads/demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b.temp/demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b.exec (executable)
-</span></span><span class="line"><span class="cl">========================================================================================================================
-</span></span><span class="line"><span class="cl">Finished generating &#39;demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b.exec&#39; in 31m 30s.
+</span></span><span class="line"><span class="cl">/uploads/demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b.temp/demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b.exec <span class="o">(</span>executable<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">========================================================================================================================</span>
+</span></span><span class="line"><span class="cl">Finished generating <span class="s1">&#39;demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b.exec&#39;</span> in 31m 30s.
 </span></span><span class="line"><span class="cl">Compiling Complete.
 </span></span></code></pre></div></li>
 <li>
 <p>Use the <code>compile-download</code> command to download the generated <strong>.exec</strong> file. For example:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help compile-download
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;help compile-download
 </span></span><span class="line"><span class="cl">    NAME
 </span></span><span class="line"><span class="cl">    compile-download - Download the compiled executable file.
 </span></span><span class="line"><span class="cl">
@@ -2973,25 +3049,25 @@ CLI tracks how many configurations are present in the Spring Cloud Config server
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    OPTIONS
 </span></span><span class="line"><span class="cl">    --batch String
-</span></span><span class="line"><span class="cl">    File ID to download as the executable file. If not provided by default, then the last file compiled.
-</span></span><span class="line"><span class="cl">    [Optional]
+</span></span><span class="line"><span class="cl">    File ID to download as the executable file. If not provided by default, <span class="k">then</span> the last file compiled.
+</span></span><span class="line"><span class="cl">    <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    --help or -h 
-</span></span><span class="line"><span class="cl">    help for compile-download
-</span></span><span class="line"><span class="cl">    [Optional]
+</span></span><span class="line"><span class="cl">    <span class="nb">help</span> <span class="k">for</span> compile-download
+</span></span><span class="line"><span class="cl">    <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">Ask for Help
+</span></span><span class="line"><span class="cl">Ask <span class="k">for</span> Help
 </span></span><span class="line"><span class="cl">    Slack: https://oracledevs.slack.com/archives/C03ALDSV272
 </span></span><span class="line"><span class="cl">    E-mail: obaas_ww@oracle.com
 </span></span></code></pre></div><p>You can choose to use the batch ID if you need the last file compiled. The following example specifies the batch ID:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>compile-download --batch demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;compile-download --batch demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">File downloaded successfully to: 
 </span></span><span class="line"><span class="cl">/Users/cdebari/demo-0.0.1-SNAPSHOT.jar.exec
 </span></span></code></pre></div></li>
 <li>
 <p>Use the <code>compile-purge</code> command to delete all of the artifacts generated on the GraalVM compiler service after downloading the <strong>.exec</strong> file:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">oractl:<span class="p">&gt;</span>help compile-purge
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;help compile-purge
 </span></span><span class="line"><span class="cl">NAME
 </span></span><span class="line"><span class="cl">    compile-purge - Delete a launched job.
 </span></span><span class="line"><span class="cl">
@@ -3000,19 +3076,239 @@ CLI tracks how many configurations are present in the Spring Cloud Config server
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">OPTIONS
 </span></span><span class="line"><span class="cl">    --batch String
-</span></span><span class="line"><span class="cl">    File ID returned from compile command. If not provided by default, then the last file compiled.
-</span></span><span class="line"><span class="cl">    [Optional]
+</span></span><span class="line"><span class="cl">    File ID returned from compile command. If not provided by default, <span class="k">then</span> the last file compiled.
+</span></span><span class="line"><span class="cl">    <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    --help or -h 
-</span></span><span class="line"><span class="cl">    help for compile-purge   
-</span></span><span class="line"><span class="cl">    [Optional]
+</span></span><span class="line"><span class="cl">    <span class="nb">help</span> <span class="k">for</span> compile-purge   
+</span></span><span class="line"><span class="cl">    <span class="o">[</span>Optional<span class="o">]</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    Ask for Help
-</span></span><span class="line"><span class="cl">        Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-</span></span><span class="line"><span class="cl">        E-mail: obaas_ww@oracle.com
+</span></span><span class="line"><span class="cl">Ask <span class="k">for</span> Help
+</span></span><span class="line"><span class="cl">    Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+</span></span><span class="line"><span class="cl">    E-mail: obaas_ww@oracle.com
 </span></span></code></pre></div></li>
 </ol>
 <div class="gdoc-page__anchorwrap">
+    <h3 id="user-management">
+        User Management
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/development/cli/#user-management" class="gdoc-page__anchor clip flex align-center" title="Anchor to: User Management" aria-label="Anchor to: User Management" href="#user-management">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>Manage users allows you to create the platform users and assign the roles that give access permission to operate with the platform.</p>
+<p><strong>User Roles</strong></p>
+<ul>
+<li>
+<p><code>ROLE_USER</code>: Users with this role can:</p>
+<ul>
+<li>Connect to the Admin Service.</li>
+<li>Create and list applications (namespaces).</li>
+<li>Create and update a database schema for the service.</li>
+<li>Deploy, list, and scale workloads (services).</li>
+</ul>
+</li>
+<li>
+<p><code>ROLE_ADMIN</code>: Users with this role have the same access rights as a <code>ROLE_USER</code> and additionally:</p>
+<ul>
+<li>Create and delete users.</li>
+<li>Search for users.</li>
+<li>Change password and roles for users.</li>
+</ul>
+</li>
+<li>
+<p><code>ROLE_CONFIG_EDITOR</code>: Users with this role are allowed to edit the platform configurations. <strong>Reserved for future use</strong>.</p>
+</li>
+</ul>
+<div class="gdoc-page__anchorwrap">
+    <h4 id="create-users">
+        Create users
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/development/cli/#create-users" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Create users" aria-label="Anchor to: Create users" href="#create-users">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>Use the <code>user create</code> command to add users to the platform. This command requires the name of the user <code>username</code> and the user roles in a comma-separated list.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">oractl:&gt;help user create
+</span></span><span class="line"><span class="cl">NAME
+</span></span><span class="line"><span class="cl">       user create - Creates a new user in your platform.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">SYNOPSIS
+</span></span><span class="line"><span class="cl">       user create [--username String] --roles String --help
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">OPTIONS
+</span></span><span class="line"><span class="cl">       --username String
+</span></span><span class="line"><span class="cl">       The name you assign to the user during creation. This is the user&#39;s login for the CLI and for the SOC UI, also. The name must be unique across all users in the platform and cannot be changed.
+</span></span><span class="line"><span class="cl">       [Mandatory]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       --roles String
+</span></span><span class="line"><span class="cl">       The user&#39;s role within the platform. A user must have up to three possible roles provided in a comma-separated list. [ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER].
+</span></span><span class="line"><span class="cl">       [Optional, default = ROLE_USER]
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Ask for Help
+</span></span><span class="line"><span class="cl">       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+</span></span><span class="line"><span class="cl">       E-mail: obaas_ww@oracle.com
+</span></span></code></pre></div><p>For example, to create a user called <code>obaas-user-test1</code> with roles <code>ROLE_USER,ROLE_CONFIG_EDITOR</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;user create --username obaas-user-test1 --roles ROLE_USER,ROLE_CONFIG_EDITOR
+</span></span><span class="line"><span class="cl">? password ****************
+</span></span><span class="line"><span class="cl">obaas-cli <span class="o">[</span>user create<span class="o">]</span>: User <span class="o">[</span>obaas-user-test1<span class="o">]</span> as successfully created.
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h4 id="obtain-user-details">
+        Obtain User details
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/development/cli/#obtain-user-details" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Obtain User details" aria-label="Anchor to: Obtain User details" href="#obtain-user-details">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>Use the <code>user get</code> command to obtain the user details registered on the platform.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;help user get
+</span></span><span class="line"><span class="cl">NAME
+</span></span><span class="line"><span class="cl">       user get - Gets the specified user’s information.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">SYNOPSIS
+</span></span><span class="line"><span class="cl">       user get <span class="o">[</span>--username String<span class="o">]</span> --help
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">OPTIONS
+</span></span><span class="line"><span class="cl">       --username String
+</span></span><span class="line"><span class="cl">       The username of the user.
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Mandatory<span class="o">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Ask <span class="k">for</span> Help
+</span></span><span class="line"><span class="cl">       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+</span></span><span class="line"><span class="cl">       E-mail: obaas_ww@oracle.com
+</span></span></code></pre></div><p>For example, to list the details from the user called <code>obaas-admin</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;user get --username obaas-admin
+</span></span><span class="line"><span class="cl">╔══╤═══════════╤═══════════════════════════════════════╗
+</span></span><span class="line"><span class="cl">║Id│Username   │Roles                                  ║
+</span></span><span class="line"><span class="cl">╠══╪═══════════╪═══════════════════════════════════════╣
+</span></span><span class="line"><span class="cl">║2 │obaas-admin│ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER║
+</span></span><span class="line"><span class="cl">╚══╧═══════════╧═══════════════════════════════════════╝
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h4 id="change-user-roles">
+        Change User Roles
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/development/cli/#change-user-roles" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Change User Roles" aria-label="Anchor to: Change User Roles" href="#change-user-roles">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>Use the <code>user change-roles</code> command to change the roles from a specific user registered on the platform.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;help user change-roles
+</span></span><span class="line"><span class="cl">NAME
+</span></span><span class="line"><span class="cl">       user change-roles - Change the roles from the specified user.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">SYNOPSIS
+</span></span><span class="line"><span class="cl">       user change-roles <span class="o">[</span>--username String<span class="o">]</span> --roles String --help
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">OPTIONS
+</span></span><span class="line"><span class="cl">       --username String
+</span></span><span class="line"><span class="cl">       The name you assign to the user during creation. This is the user’s login <span class="k">for</span> the CLI.
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Mandatory<span class="o">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       --roles String
+</span></span><span class="line"><span class="cl">       The user<span class="err">&#39;</span>s role within the platform. A user must have up to three possible roles provided in a comma-separated list. <span class="o">[</span>ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER<span class="o">]</span>.
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional, <span class="nv">default</span> <span class="o">=</span> ROLE_USER<span class="o">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Ask <span class="k">for</span> Help
+</span></span><span class="line"><span class="cl">       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+</span></span><span class="line"><span class="cl">       E-mail: obaas_ww@oracle.com
+</span></span></code></pre></div><p>For example, to change the roles from a user called <code>obaas-user-test1</code> apply the role <code>ROLE_USER</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;user change-roles --username obaas-user-test1 --roles ROLE_USER
+</span></span><span class="line"><span class="cl">obaas-cli <span class="o">[</span>user change-roles<span class="o">]</span>: User <span class="o">[</span>obaas-user-test1<span class="o">]</span> roles were successfully updated.
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h4 id="change-user-password">
+        Change User Password
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/development/cli/#change-user-password" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Change User Password" aria-label="Anchor to: Change User Password" href="#change-user-password">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>Use the <code>user change-password</code> command to change the password from a specific user registered on the platform. A user is allowed to change its password only. Only users with ROLE_ADMIN can change passwords from other users.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;help user change-password
+</span></span><span class="line"><span class="cl">NAME
+</span></span><span class="line"><span class="cl">       user change-password - Change password <span class="k">for</span> the specified user.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">SYNOPSIS
+</span></span><span class="line"><span class="cl">       user change-password <span class="o">[</span>--username String<span class="o">]</span> --help
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">OPTIONS
+</span></span><span class="line"><span class="cl">       --username String
+</span></span><span class="line"><span class="cl">       The username you want to change the password.
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Mandatory<span class="o">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Ask <span class="k">for</span> Help
+</span></span><span class="line"><span class="cl">       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+</span></span><span class="line"><span class="cl">       E-mail: obaas_ww@oracle.com
+</span></span></code></pre></div><p>For example, to change the password from a user called <code>obaas-user-test1</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;user change-password --username obaas-user-test1
+</span></span><span class="line"><span class="cl">? password ***********
+</span></span><span class="line"><span class="cl">obaas-cli <span class="o">[</span>user change-password<span class="o">]</span>: User <span class="o">[</span>obaas-user-test1<span class="o">]</span> password was successfully updated.
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h4 id="list-users">
+        List Users
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/development/cli/#list-users" class="gdoc-page__anchor clip flex align-center" title="Anchor to: List Users" aria-label="Anchor to: List Users" href="#list-users">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>Use the <code>user list</code> command to obtain the list of users registered on the platform.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;help user list
+</span></span><span class="line"><span class="cl">NAME
+</span></span><span class="line"><span class="cl">       user list - Lists the users in your platform.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">SYNOPSIS
+</span></span><span class="line"><span class="cl">       user list --help
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Ask <span class="k">for</span> Help
+</span></span><span class="line"><span class="cl">       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+</span></span><span class="line"><span class="cl">       E-mail: obaas_ww@oracle.com
+</span></span></code></pre></div><p>For example, to list all registered users:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;user list
+</span></span><span class="line"><span class="cl">╔══╤════════════════╤═══════════════════════════════════════╗
+</span></span><span class="line"><span class="cl">║Id│Username        │Roles                                  ║
+</span></span><span class="line"><span class="cl">╠══╪════════════════╪═══════════════════════════════════════╣
+</span></span><span class="line"><span class="cl">║1 │obaas-user      │ROLE_USER                              ║
+</span></span><span class="line"><span class="cl">╟──┼────────────────┼───────────────────────────────────────╢
+</span></span><span class="line"><span class="cl">║2 │obaas-admin     │ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER║
+</span></span><span class="line"><span class="cl">╟──┼────────────────┼───────────────────────────────────────╢
+</span></span><span class="line"><span class="cl">║3 │obaas-config    │ROLE_CONFIG_EDITOR,ROLE_USER           ║
+</span></span><span class="line"><span class="cl">╟──┼────────────────┼───────────────────────────────────────╢
+</span></span><span class="line"><span class="cl">║4 │obaas-user-test1│ROLE_USER                              ║
+</span></span><span class="line"><span class="cl">╚══╧════════════════╧═══════════════════════════════════════╝
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h4 id="delete-user">
+        Delete User
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/development/cli/#delete-user" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Delete User" aria-label="Anchor to: Delete User" href="#delete-user">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>Use the <code>user delete</code> command to remove users from the platform.</p>
+<blockquote>
+<p>NOTE: User deletion is permanent and irreversable.</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;help user delete
+</span></span><span class="line"><span class="cl">NAME
+</span></span><span class="line"><span class="cl">       user delete - Delete a user in your platform.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">SYNOPSIS
+</span></span><span class="line"><span class="cl">       user delete <span class="o">[</span>--username String<span class="o">]</span> --id int --help
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">OPTIONS
+</span></span><span class="line"><span class="cl">       --username String
+</span></span><span class="line"><span class="cl">       The username you want to delete.
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Mandatory<span class="o">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       --id int
+</span></span><span class="line"><span class="cl">       The user id from the user you want to delete.
+</span></span><span class="line"><span class="cl">       <span class="o">[</span>Optional, <span class="nv">default</span> <span class="o">=</span> 0<span class="o">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Ask <span class="k">for</span> Help
+</span></span><span class="line"><span class="cl">       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+</span></span><span class="line"><span class="cl">       E-mail: obaas_ww@oracle.com
+</span></span></code></pre></div><p>For example, to delete a user called <code>obaas-user-test1</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl:&gt;user delete --username obaas-user-test1
+</span></span><span class="line"><span class="cl">obaas-cli <span class="o">[</span>user delete<span class="o">]</span>: User <span class="o">[</span>obaas-user-test1<span class="o">]</span> as successfully deleted.
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h2 id="logging">
         Logging
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/development/cli/#logging" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Logging" aria-label="Anchor to: Logging" href="#logging">
@@ -3218,6 +3514,30 @@ CLI tracks how many configurations are present in the Spring Cloud Config server
   
   
 
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
   
     
     
