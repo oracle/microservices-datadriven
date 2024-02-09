@@ -180,11 +180,13 @@ deploy --service-name transfer --artifact-path transfer/target/transfer-0.0.1-SN
 
 1. Create routes
 
-    In the CloudBank directory run the following command. *NOTE*, you must add the API-KEY to the command
+    In the CloudBank directory run the following command. *NOTE*, you must add the API-KEY to the command.
 
     ````shell
     (cd apisix-routes; source ./create-all-routes.sh <YOUR-API-KEY>)
     ```
+   
+
 
 ## Optional - autoscaling
 
