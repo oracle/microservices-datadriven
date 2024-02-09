@@ -4,7 +4,7 @@ description: "Visual Studio Code extension for Oracle Backend for Spring Boot an
 keywords: "vscode code visualstudio extension springboot spring development microservices development oracle backend"
 ---
 
-**GA 1.0 - October, 2023**
+**GA 1.1.1 - February, 2024**
 
 Oracle Backend for Spring Boot and Microservices Visual Studio Code (VS Code) plugin is an extension to browse and deploy applications on the Oracle Backend for Spring Boot and Microservices platform. This plugin inspects the content of an Oracle Backend for Spring Boot and Microservices deployment, in terms of applications, services, and related configurations. It simplifies access to the installed platform services (like Grafana, Spring, Apache APISIX, Eureka, and Jaeger) creating `ssh` tunnels on-demand and providing access to their respective web administrator consoles. It adds credentials to access and bind services to the Oracle Database included in the Oracle Backend for Spring Boot and Microservices deployment. This plugin replicates the functionalities available in [OBaas CLI](../../development/cli) and simplifies access to Oracle Backend for Spring Boot and Microservices deployments from an integrated development environment (IDE) like VS Code.
 
@@ -20,7 +20,7 @@ You must have already installed and configured the following software which requ
 
 ## Installation
 
-1. Download the plug-in from [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0).
+1. Download the plug-in from [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.0).
 
 2. On the VS Code left menu bar, click on the **Extensions** symbol:
 
@@ -69,7 +69,7 @@ services, you cannot browse resources included in the Oracle Backend for Spring 
 
 1. Select the cluster and right-click, choosing **Set UID/PWD** menu item to insert credentials related to your user account. For example:
 
-   ![Credentials](./images/credentials.jpg)
+   ![Credentials](./images/credentials.png)
 
 2. Specify the **OBSBM Admin ID** for the Oracle Backend for Spring Boot and Microservices user for deployment. For example:
 
@@ -103,11 +103,6 @@ services, you cannot browse resources included in the Oracle Backend for Spring 
 
 7. Select the cluster again and right-click **Connect**. This creates a session with the credentials set up in the first step.
 
-8. If your intention is to use the service provided by the Oracle Backend for Spring Boot and Microservice to compile the Spring Boot application via GraalVM and run a native service, you have to open another tunnel to the GraalVM compiler, choosing from the same menu used so far the **Create GraalVM tunnel** item. The final status should be as shown in this picture:
-
-   ![okTunnels](./images/graalvmtunnel.jpg)
-
-
 ### Explore Resources
 
 When the steps to create the tunnel are completed and you are connected to the backend, it is possible to expand and **Refresh** the tree related to the deployment. For example:
@@ -117,7 +112,7 @@ When the steps to create the tunnel are completed and you are connected to the b
 You see four top classes of resources that can be expanded in underlying items:
 
 * **applications** : The list of applications deployed and the holding services.
-* **ADB database** : In this release there is one Oracle Database in which the configurations and schemas related to deployed services are stored.
+* **Oracle DB** : In this release there is one Oracle Database in which the configurations and schemas related to deployed services are stored.
 * **platformServices** : The list of Oracle Backend for Spring Boot and Microservices deployed services, like Grafana, Spring, Apache APISIX, Eureka and Jaeger.
 * **oBaasConf** : The list of keys defined by the applications, stored in the Oracle Database, that are provisioned and available to share configurations information among services in each application.
 
@@ -219,23 +214,17 @@ Choosing this item menu, the parameters will be required are:
 
 2. **Service Name**  
 
-3. **Spring Binding Prefix** (Default: `spring.datasource`)
-
-4. **Do you want to bind a schema? : [True]/[False]** (Default: `True`)
-
-5. **Bind :[True]/[False]** (Default: `True`)
+3. **Bind [jms]** (Default: ``)
 
 6. **Service Port** (Default: `8080`)
 
 7. **Service Profile** (Default: `obaas`)
 
-8. **Image Version** (Default: `0.1`)
+8. **Image Version** (Default: `0.0.1`)
 
 9. **Initial Replicas** (Default: `1`)
 
-10. **Redeploy?: [True]/[False]** (Default: `True`)
-
-11. **Add Health probe? : [True]/[False]** (Default: `True`)
+10. **Add Health probe? : [True]/[False]** (Default: `True`)
 
 At the end of the parameters collection, a process, that includes the .exec file upload, building image and deploying, starts. It generates a sequence of messages showing the status. These messages end with "Service deployed successfully!" or "Deploy failed". The size and network constraints determine the amount of time for the process to terminate.
 
@@ -247,31 +236,27 @@ Choosing this item menu, selecting a single application, the parameters will be 
 
 1. A popup dialog box opens to select the local Spring Boot **.jar file**
 
-2. **Do you want to bind a schema? : [True]/[False]** (Default: `True`)
+2. **Service Name**
 
-3. **Service Name**
+3. **Bind [jms]** (Default: ``)
 
-4. **Spring Binding prefix** (Default: `spring.datasource`)
-
-5. **Image Version** (Default: `0.1`)
+5. **Image Version** (Default: `0.0.1`)
 
 6. **Java image** (Default: `ghcr.io/graalvm/jdk:ol7-java17-22.2.0`)
 
-7. **is it a redeploy? : [True]/[False]** (Default: `True`)
+7. **Add Health probe? : [True]/[False]** (Default: `True`)
 
-8. **Add Health probe? : [True]/[False]** (Default: `True`)
+8. **Service Port** (Default: `8080`)
 
-9. **Service Port** (Default: `8080`)
+9. **Service Profile** (Default: `obaas`)
 
-10. **Service Profile** (Default: `obaas`)
+10. **Initial Replicas** (Default: `1`)
 
-11. **Initial Replicas** (Default: `1`)
-
-12. **Inform the database name for Liquibase**: username for Liquibase.
+11. **Inform the database name for Liquibase**: username for Liquibase.
 
 At the end of the parameters collection, a process, that includes the .jar upload, building image and deploying, starts. It generates a sequence of messages showing the status. These messages end with "Service deployed successfully!" or "Deploy failed". The size and network constraints determine the amount of time for the process to terminate.
 
-#### Bind a Service
+#### Bind a service
 This command create/update a user on the Oracle DB according the service name typed, or optionally to a different user schema, to which bind a Spring Boot microservice that will store data into the DB. It also store secrets with the user credentials into the application namespace, in order to inject them into the related pods. If the schema exists, it impose to change the user password will be stored in the namespace.
 The parameters required are:
 
@@ -287,12 +272,24 @@ This command removes the application and all the services included. At the end o
 ### Service level commands
 With a right click on a single service you will have the following commands:
 
+* **Create autoscaler**
+* **Delete autoscaler**
 * **Delete service**
 * **Publish service**
 
 as shown here:
 
    ![Service Commands](./images/servicecommands.jpg)
+
+#### Create autoscaler
+Create a Kubernetes autoscaler for the selected pod.
+1. **minReplicas** (Default: `1`)
+2. **maxReplicas** (Default: `1`)
+3. **cpuPercent** (Default: ``)
+4. **cpuRequest** (Default: `100m`)
+
+#### Delete autoscaler
+Delete an existing autoscaler
 
 #### Delete service
 Selecting the service from the tree, under a specific application, you will remove the service deployment, and the active pods will be removed.
@@ -317,7 +314,7 @@ A successful operation will return the Route ID recorded into the APISix, as sho
 This is a shortcut with a standard registration: to customize the route, or start from scratch, is suggested the usage of APISix console.
 
 
-## ADB Database
+## Oracle DB
 For each Oracle Backend for Spring Boot and Microservices, an Oracle Autonomous Transaction Processing database is provisioned on OCI to hold the schema for the Spring Boot services and backend's configuration details. The icon remembers the component deployed with the backend platform.
 
 ## platformServices
