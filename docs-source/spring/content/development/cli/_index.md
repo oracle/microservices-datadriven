@@ -5,7 +5,7 @@ keywords: "cli tool deployment spring springboot microservices development oracl
 ---
 
 The Oracle Backend for Spring Boot and Microservices offers a command-line interface (CLI), `oractl`. The CLI commands simplify the deployment of
-microservices applications as well as bindings with the resources that they use. Download the CLI [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.0). The platform-specific binary can be renamed to `oractl` for convenience.
+microservices applications as well as bindings with the resources that they use. Download the CLI [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.1). The platform-specific binary can be renamed to `oractl` for convenience.
 
 Table of Contents:
 
