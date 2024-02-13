@@ -1,0 +1,10 @@
+
+#
+#  You must update the URI to match your Oracle Database instance - the USER, PASSWORD, HOSTNAME, and region need to be udpated.
+#
+
+spring:
+  data:
+    mongodb:
+      uri: 'mongodb://USER:PASSWORD@HOSTNAME-MONGO1.adb.us-phoenix-1.oraclecloudapps.com:27017/USER?authMechanism=PLAIN&authSource=$external&ssl=true&retryWrites=false&loadBalanced=true'
+      database: 'USER'
