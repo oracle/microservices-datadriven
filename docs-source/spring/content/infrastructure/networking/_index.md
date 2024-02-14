@@ -85,13 +85,20 @@ The following are minimum requirements for a BYO VCN:
         * Service Gateway to "All `<Region>` Services in the Oracle Services Network"
         * NAT Gateway to `0.0.0.0/0`
 
-## Setup
+## Configuration
 
 During the configuration of the Oracle Backend for Spring Boot and Microservices, ensure that the **Edition** is set to **Standard**:
 
 ![Standard Edition](../images/standard_edition.png "Standard Edition")
 
 Tick the "Bring Your Own Virtual Network" checkbox and fill in the appropriate values for the VCN Compartment and Name, Public Subnet Compartment and Name, and Private Subnet and Name:
+
+   - `Virtual Cloud Network Compartment` : The compartment of the existing VCN.
+   - `Virtual Cloud Network (VCN)` : The VCN name.
+   - `Private Subnet Compartment` : The compartment of the existing Private Subnet in the VCN.
+   - `Private Subnet` : The Private Subnet name.
+   - `Public Subnet Compartment` : The compartment of the existing Public Subnet in the VCN.
+   - `Public Subnet` : The Public Subnet name.
 
 ![BYO VCN](images/byo_vcn.png "BYO VCN")
 

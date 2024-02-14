@@ -51,6 +51,9 @@ resources:
   - name: oci-stack-db-options
     src: "oci-stack-db-options.png"
     title: "Database Options"
+  - name: oci-stack-byodb-options
+    src: "oci-stack-byodb-options.png"
+    title: "Bring your Own Database Options - Standard Edition"
   - name: oci-stack-parse-options
     src: "oci-stack-parse-options.png"
     title: "Parse Server Options"
@@ -209,18 +212,11 @@ To set up the OCI environment, process these steps:
 
 1. (*Standard Edition Only*) If you check the checkbox *Bring Your Own Virtual Cloud Network* in the **Network Options** section you can use an existing Virtual Cloud Network.  This is required to Bring Your Own Database (*Standard Edition Only*).
 
-    > **NOTE:** For more information on the network requirements and topology of the Oracle Backend for Spring Boot and Microservices, please review the [Network](./infrastructure/network) documentation.
-
-   - `Virtual Cloud Network Compartment` : The compartment of the existing VCN.
-   - `Virtual Cloud Network (VCN)` : The VCN name.
-   - `Private Subnet Compartment` : The compartment of the existing Private Subnet in the VCN.
-   - `Private Subnet` : The Private Subnet name.
-   - `Public Subnet Compartment` : The compartment of the existing Public Subnet in the VCN.
-   - `Public Subnet` : The Public Subnet name.
-
       <!-- spellchecker-disable -->
       {{< img name="oci-stack-network-options" size="large" lazy=false >}}
       <!-- spellchecker-enable -->
+
+    > For more information on the network requirements and topology of the Oracle Backend for Spring Boot and Microservices including the options for *Bring Your Own Virtual Cloud Network*, please review the [Networking](../infrastructure/networking) documentation.
 
 1. In the **Kubernetes Cluster Options** section, fill in the following for the OKE Cluster Options:
 
@@ -270,6 +266,14 @@ To set up the OCI environment, process these steps:
       <!-- spellchecker-disable -->
       {{< img name="oci-stack-db-options" size="large" lazy=false >}}
       <!-- spellchecker-enable -->
+
+1. (*Standard Edition Only*) If *Bring Your Own Virtual Cloud Network* has been selected in the **Network Options** section, then you have the option to *Bring Your Own Database* in the section **Database Options**.
+
+      <!-- spellchecker-disable -->
+      {{< img name="oci-stack-byodb-options" size="large" lazy=false >}}
+      <!-- spellchecker-enable -->
+
+    > For more information on the *Bring Your Own Database* option for the Oracle Backend for Spring Boot and Microservices including the required values, please review the [Database](../infrastructure/database) documentation.
 
 1. (*Standard Edition Only*) If you check the checkbox *Enable Vault in Production Mode* in the section **Vault Options** you will be installing HashiCorp in **Production** mode otherwise the HashiCorp Vault be installed in **Development** mode.
 
@@ -343,7 +347,7 @@ To set up the local machine, process these steps:
 
 1. Set up cluster access.
 
-   To access a cluster, use the `kubectl` command-line interface that is installed (see the [Kubernetes access](./cluster-access)) locally.
+   To access a cluster, use the `kubectl` command-line interface that is installed (see the [Kubernetes access](../cluster-access)) locally.
    If you have not already done so, do the following:
 
 1. Install the `kubectl` command-line interface (see the [kubectl documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/)).
