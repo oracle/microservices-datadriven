@@ -10,6 +10,5 @@ fi
 source ./create-accounts-route.sh $1
 source ./create-creditscore-route.sh $1
 source ./create-customer-route.sh $1
-source ./create-customer32-route.sh $1
 source ./create-testrunner-route.sh $1
 source ./create-transfer-route.sh $1
