@@ -38,7 +38,7 @@ resources:
     title: "Create Stack Apply Logs"
   - name: oci-stack-additional-options
     src: "oci-stack-additional-options.png"
-    title: "Create Stack Addtional Options - Standard Edition"
+    title: "Create Stack Additional Options - Standard Edition"
   - name: oci-stack-oke-options
     src: "oci-stack-oke-options.png"
     title: "Create Stack OKE Options"
@@ -175,7 +175,7 @@ To set up the OCI environment, process these steps:
     - `Compartment` : Select the compartment where you want to install Oracle Backend for Spring Boot and Microservices.
     - `Application Name` (optional) : A random pet name that will be used as the application name if left empty.
     - `Edition` : Select between *COMMUNITY* and *STANDARD* Edition.
-        - *COMMUNTIY* - for developers for quick start to testing Spring Boot Microservices with an integrated backend. Teams can start with the deployment and scale up as processing demand grows. Community support only.
+        - *COMMUNITY* - for developers for quick start to testing Spring Boot Microservices with an integrated backend. Teams can start with the deployment and scale up as processing demand grows. Community support only.
         - *STANDARD* - focused for pre-prod and production environments with an emphasis on deployment, scaling, and high availability. Oracle support is included with a Oracle Database support agreement. All features for developers are the same so start here if you’re porting an existing Spring Boot application stack and expect to get into production soon.
 
         | Edition   | Parse Platform | BYO VCN      | BYO Database     | Production Vault | Registry Scanning |
@@ -291,7 +291,7 @@ To set up the OCI environment, process these steps:
    **Never** run a **Development** mode HashiCorp Vault Server in a production environment. It is insecure and will lose data on every restart (since it stores data in-memory). It is only intended for development or experimentation.
    {{< /hint >}}
 
-1. (*Standard Edition Only*) If you check the checkbox *Enable Container Registry Vulnerability Scanning* in the section **Additional Options** you will enable the automatic Vaulnerability Scanning on images stored in the Oracle Container Registry.
+1. (*Standard Edition Only*) If you check the checkbox *Enable Container Registry Vulnerability Scanning* in the section **Additional Options** you will enable the automatic Vulnerability Scanning on images stored in the Oracle Container Registry.
 
       <!-- spellchecker-disable -->
       {{< img name="oci-stack-additional-options" size="large" lazy=false >}}

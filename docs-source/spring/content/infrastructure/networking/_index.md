@@ -33,7 +33,7 @@ An external Load Balancer is used in conjunction with Ingress resources to expos
 
 #### Kubernetes API Endpoint
 
-The Kubernetes API Endpoint, within the Control Plane, is used to manage the Kubernetes Cluster as well as providing access to Kuberenetes services that are not exposed to the Load Balancer via Port Forwarding.  Ingress to the Endpoint is restricted to port `6443` and should be further restricted by CIDR (default: `0.0.0.0/0`).
+The Kubernetes API Endpoint, within the Control Plane, is used to manage the Kubernetes Cluster as well as providing access to Kubernetes services that are not exposed to the Load Balancer via Port Forwarding.  Ingress to the Endpoint is restricted to port `6443` and should be further restricted by CIDR (default: `0.0.0.0/0`).
 
 In Oracle Cloud Infrastructure (OCI), the Oracle Kubernetes Engine (OKE) Control Plane is allowed egress to OCI services via port `443`.  Access to these services are required for the OKE Managed Control Plane.
 
@@ -43,7 +43,7 @@ The private subnet isolates its resources from direct external access.  Ingress 
 
 Egress to the Internet is provided by a NAT Gateway, while Egress to other Cloud Services (such as a Container Repository) is provided by a Service Gateway.
 
-The CIDR of the Private Subnet is dependent on the number of Kubernete Work Nodes and other resources, such as databases.  It is recommended to specify a CIDR providing at least six usable IP Addresses (`/29`).
+The CIDR of the Private Subnet is dependent on the number of Kubernetes Work Nodes and other resources, such as databases.  It is recommended to specify a CIDR providing at least six usable IP Addresses (`/29`).
 
 ICMP traffic is allowed between the Public and Private Subnets for resource discovery. 
 
@@ -53,15 +53,15 @@ The Worker Nodes are allowed to communicate with other Worker Nodes on all ports
 
 #### Worker Nodes and Load Balancer
 
-The Woker Nodes and Load Balancer are allowed to communicate on port `10256` for Health Check/Availability purposes and ports `30000-32767` for forwarding external internet access to exposed services.
+The Worker Nodes and Load Balancer are allowed to communicate on port `10256` for Health Check/Availability purposes and ports `30000-32767` for forwarding external internet access to exposed services.
 
-#### Worker Nodes and Kuberenetes API Endpoint
+#### Worker Nodes and Kubernetes API Endpoint
 
 Worker Nodes are allowed to communicate with the API Endpoint on port `6443`.
 
 #### Worker Nodes and Control Plane
 
-The Kuberenetes Control Plane is allowed to communicate to Worker Nodes on all ports.  The Worker Nodes are allowed to communicate with the Control Plane on port `12250`.
+The Kubernetes Control Plane is allowed to communicate to Worker Nodes on all ports.  The Worker Nodes are allowed to communicate with the Control Plane on port `12250`.
 
 #### Oracle Database
 
