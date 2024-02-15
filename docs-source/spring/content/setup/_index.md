@@ -216,7 +216,7 @@ To set up the OCI environment, process these steps:
       {{< img name="oci-stack-network-options" size="large" lazy=false >}}
       <!-- spellchecker-enable -->
 
-    > For more information on the network requirements and topology of the Oracle Backend for Spring Boot and Microservices including the options for *Bring Your Own Virtual Cloud Network*, please review the [Networking](../infrastructure/networking) documentation.
+    > For more information on the network requirements and topology of the Oracle Backend for Spring Boot and Microservices including the options for *Bring Your Own Virtual Cloud Network*, please see the [Networking](../infrastructure/networking) documentation.
 
 1. In the **Kubernetes Cluster Options** section, fill in the following for the OKE Cluster Options:
 

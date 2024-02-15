@@ -5,7 +5,7 @@ keywords: "network spring springboot microservices oracle"
 ---
 The Oracle Backend for Spring Boot and Microservices has specific networking requirements to ensure resource communication while providing security through isolation and networking rules.  
 
-The **standard installation** will provision a new Virtual Cloud Network (VCN) with the required subnets all networking rules to get started using the Oracle Backend for Spring Boot and Microservices quickly.  To use an existing VCN, please follow the [Bring Your Own VCN](#bring-your-own-oci-vcn) instructions.
+The **standard installation** will provision a new Virtual Cloud Network (VCN) with the required subnets and all networking rules to get you started using the Oracle Backend for Spring Boot and Microservices quickly.  To use an existing VCN, please follow the [Bring Your Own VCN](#bring-your-own-oci-vcn) instructions.
 
 > For **custom installations**, including On-Premises, it is the responsibility of the customer to ensure network access controls to provide both operational access and security.  The Oracle Cloud Infrastructure (OCI) **standard installation** setup can be used as a general template.
 
@@ -15,21 +15,23 @@ The **standard installation** will provision a new Virtual Cloud Network (VCN) w
 
 ## OCI Network Infrastructure
 
-All infrastructure resources are split between two subnets: one public and one private subnet with access restricted by Network Security Groups (Firewalls).  All access is blocked by default with specific IP and Port opened, as documented below, for proper operation.
+All infrastructure resources are split between two subnets: one public and one private subnet with access restricted by Network Security Groups (Firewalls).  All access is blocked by default with specific IP and port opened, as documented below, for proper operation.
 
 > Note minimum CIDRs are based on an Oracle Cloud Infrastructure (OCI) deployments.  Other cloud vendors reserve usable IPs within a CIDR reducing the usable IPs that can be used by the infrastructure.
 
 ### Public Subnet
 
-The public subnet allows external access to the Oracle Backend for Spring Boot and Microservices resources.  Ingress/Egress to the Public Subnet and from the Internet is provided by an Internet Gateway.
+The public subnet allows external access to the Oracle Backend for Spring Boot and Microservices resources.  Ingress/Egress to the public subnet and from the Internet is provided by an Internet Gateway.
 
-At a minimum, the public subnet requires two usable IP Addresses (`/30`).
+At a minimum, the public subnet requires two usable IP Addresses.  In OCI this equates to a 30-bit network identifier (`/30`).
 
-ICMP traffic is allowed between the Public and Private Subnets for resource discovery. 
+ICMP traffic is allowed between the public and private Subnets for resource discovery.
+
+> **NOTE**: Resources within the public subnet are not inherently accessible from the internet.  The public subnet *allows* the resources in it to obtain a public IP address, however assigning a public IP is not required.  When a public IP is not assigned to the resource, it is only accessible from within the subnet itself.  All access to resources in the public subnet are restricted by configurable Network Security Groups (Firewalls). 
 
 #### Load Balancer
 
-An external Load Balancer is used in conjunction with Ingress resources to expose Services to the internet.  Ingress to the Load Balancer should be restricted by CIDR and Ports (default: `0.0.0.0/0`; `80`,`443`).  All TLS communications terminate at the LoadBalancer.  For more information on the certificate for TLS, please follow [OCI Load Balancer TLS Certificate Setup](#oci-loadbalancer-tls-certificate-setup).
+An external Load Balancer is used in conjunction with Ingress resources to expose Services to the internet.  Ingress to the Load Balancer should be restricted by CIDR and ports (default: `0.0.0.0/0`; `80`,`443`).  All TLS communications terminate at the LoadBalancer.  For more information on the certificate for TLS, please see [OCI Load Balancer TLS Certificate Setup](#oci-loadbalancer-tls-certificate-setup).
 
 #### Kubernetes API Endpoint
 
@@ -39,17 +41,17 @@ In Oracle Cloud Infrastructure (OCI), the Oracle Kubernetes Engine (OKE) Control
 
 ### Private Subnet
 
-The private subnet isolates its resources from direct external access.  Ingress to resources in the private subnet is restricted to the Load Balancer and Kubernetes API Endpoint via specific Network Security Group (Firewall) rules.  Optionally, a Bastion Service, within the Private subnet, can provide additional non-restricted access to the resources in the Private Network.
+The private subnet isolates its resources from direct external access by prohibiting the allocation of public IP address to those resources.  Ingress to resources in the private subnet is restricted to the Load Balancer and Kubernetes API Endpoint via specific Network Security Group (Firewall) rules.  Optionally, a Bastion Service, within the Private subnet, can provide additional non-restricted access to the resources in the private subnet.
 
 Egress to the Internet is provided by a NAT Gateway, while Egress to other Cloud Services (such as a Container Repository) is provided by a Service Gateway.
 
-The CIDR of the Private Subnet is dependent on the number of Kubernetes Work Nodes and other resources, such as databases.  It is recommended to specify a CIDR providing at least six usable IP Addresses (`/29`).
+The CIDR of the Private Subnet is dependent on the number of Kubernetes Work Nodes and other resources, such as databases.  It is recommended to specify a CIDR providing at least six usable IP Addresses.  In OCI, this equates to a 29-bit network identifier (`/29`).
 
-ICMP traffic is allowed between the Public and Private Subnets for resource discovery. 
+ICMP traffic is allowed between the public and private subnets for resource discovery. 
 
 #### Kubernetes Worker Nodes
 
-The Worker Nodes are allowed to communicate with other Worker Nodes on all ports.
+The worker nodes are allowed to communicate with other worker nodes on all ports.
 
 #### Worker Nodes and Load Balancer
 
@@ -65,7 +67,7 @@ The Kubernetes Control Plane is allowed to communicate to Worker Nodes on all po
 
 #### Oracle Database
 
-It is recommended to place Oracle Databases inside the Private Subnet.  Worker Nodes and the Oracle Database will be allowed to communicate freely within the Private Subnet.
+It is recommended to place the Oracle Databases inside the Private Subnet.  Worker Nodes and the Oracle Database will be allowed to communicate freely within the Private Subnet.
 
 When using the Oracle Autonomous Database (ADB), it can either be placed in the Private Subnet with a *Private Endpoint*, or outside the Virtual Cloud Network with *Secured Access*.  When the ADB is configured for *Secured Access*, access is allowed from the Virtual Cloud Network and additional, configurable IPs.
 
@@ -91,14 +93,14 @@ During the configuration of the Oracle Backend for Spring Boot and Microservices
 
 ![Standard Edition](../images/standard_edition.png "Standard Edition")
 
-Tick the "Bring Your Own Virtual Network" checkbox and fill in the appropriate values for the VCN Compartment and Name, Public Subnet Compartment and Name, and Private Subnet and Name:
+Tick the "Bring Your Own Virtual Network" checkbox and fill in the appropriate values for the VCN Compartment/Name, Public Subnet Compartment/Name, and Private Subnet Compartment/Name:
 
    - `Virtual Cloud Network Compartment` : The compartment of the existing VCN.
    - `Virtual Cloud Network (VCN)` : The VCN name.
    - `Private Subnet Compartment` : The compartment of the existing Private Subnet in the VCN.
-   - `Private Subnet` : The Private Subnet name.
+   - `Private Subnet` : The Private Subnet name (this will automatically translate the name to an OCID).
    - `Public Subnet Compartment` : The compartment of the existing Public Subnet in the VCN.
-   - `Public Subnet` : The Public Subnet name.
+   - `Public Subnet` : The Public Subnet name (this will automatically translate the name to an OCID).
 
 ![BYO VCN](images/byo_vcn.png "BYO VCN")
 

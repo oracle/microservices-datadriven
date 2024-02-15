@@ -4,9 +4,11 @@ description: "Database Options and Configuration"
 keywords: "database spring springboot microservices oracle"
 
 ---
-The Oracle Backend for Spring Boot and Microservices use the Oracle Database as a persistent data store for metadata and the Spring Cloud Config Server.  This documentation will refer to this database as the **Metadata Database**.
+The Oracle Backend for Spring Boot and Microservices uses the Oracle Database as a persistent data store for metadata and the Spring Cloud Config Server.  This documentation will refer to this database as the **Metadata Database**.
 
 > **NOTE:** Oracle recommends that you install an addition Container Database (CDB) and Pluggable Databases (PDBs) for your production applications inline with the Database-Per-Service pattern.  This document will refer to these databases as the [**Application Database**](#application-databases).  
+
+By default, the Oracle Autonomous Database - Shared (ADB-S) is used for the  **Metadata Database**, however, there are other options including Bring Your Own (BYO).
 
 The following chart presents the options for the Metadata Database, based on the installation type:
 
@@ -16,16 +18,16 @@ The following chart presents the options for the Metadata Database, based on the
 | OCI Standard  | ✓     | ✓          | ✓          |                   | ✓            |
 | Custom        | ✓     | ✓          | ✓          | ✓                 | ✓            |
 
-> For **custom installations**, including On-Premises, it is the responsibility of the customer to ensure network access controls to provide both operational access and security.  The Oracle Cloud Infrastructure (OCI) [Networking](../networking) setup can be used as a general template.
+> For **custom installations**, including on-premises, it is the responsibility of the user to ensure network access controls to provide both operational access and security.  The Oracle Cloud Infrastructure (OCI) [Networking](../networking) setup can be used as a general template.
 
 # Bring Your Own Database - Standard Edition
 
-Using the **Standard Edition** you can use a pre-created Oracle Database for the Oracle Backend for Spring Boot and Microservices **Metadata Database**.  
+If you select the **Standard Edition** during installation, you can use a pre-created Oracle Database for the Oracle Backend for Spring Boot and Microservices **Metadata Database**.  
 
-The following are minimum requirements for a BYO Oracle Database:
+The following are the minimum requirements for a BYO Oracle Database:
 
 * Version: 19c+
-* Network Access to the Database Listener
+* Bring Your Own Network with access to the Database Listener
 * Database User with appropriate privileges (see below)
 
 ## Database User Privileges
@@ -35,7 +37,7 @@ The database user for the the Oracle Backend for Spring Boot and Microservices *
 It is recommended to create a user, in this example, named `OBAAS` with a default tablespace of `DATA`:
 
 ```sql
-CREATE USER OBAAS IDENTIFIED BY "Sup3r_St0ng_P4s5w0rd!";
+CREATE USER OBAAS IDENTIFIED BY "Welcome_12345";
 ALTER USER OBAAS QUOTA UNLIMITED ON DATA;
 GRANT ALTER USER TO OBAAS;
 GRANT CREATE USER TO OBAAS;
@@ -66,12 +68,12 @@ GRANT CREATE TABLE TO OBAAS WITH ADMIN OPTION;
 
 1. Enable and Configure *Bring Your Own Virtual Network*
 
-1. Tick the Bring Your Own Database" checkbox and, depending on the *Bring Your Own Database - Type*, provide the appropriate values.
+1. Tick the "Bring Your Own Database" checkbox and, depending on the *Bring Your Own Database - Type*, provide the appropriate values.
 
-### ADB-S
+### Autonomous Database - Shared (ADB-S)
 
    - `BYO ADB-S Compartment` : The compartment of the existing ADB-S.
-   - `Bring Your Own Database - Autonomous Database` : The ADB-S name.
+   - `Bring Your Own Database - Autonomous Database` : The ADB-S name (this will automatically translate the name to an OCID).
    - `Bring Your Own Database - Username` : The existing database user with the appropriate privileges.
    - `Bring Your Own Database - Password` : The password for the existing database user.
 
