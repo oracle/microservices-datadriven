@@ -14,9 +14,9 @@ The following chart presents the options for the Metadata Database, based on the
 
 | Installation  | ADB-S | BYO ADB-S  | BYO BaseDB | BYO Containerized | BYO External |
 |---------------|-------|------------|------------|-------------------|--------------|
-| OCI Community | ✓     |            |            |                   |              |
-| OCI Standard  | ✓     | ✓          | ✓          |                   | ✓            |
-| Custom        | ✓     | ✓          | ✓          | ✓                 | ✓            |
+| OCI Community | x     |            |            |                   |              |
+| OCI Standard  | x     | x          | x          |                   | x            |
+| Custom        | x     | x          | x          | x                 | x            |
 
 > For **custom installations**, including on-premises, it is the responsibility of the user to ensure network access controls to provide both operational access and security.  The Oracle Cloud Infrastructure (OCI) [Networking](../networking) setup can be used as a general template.
 

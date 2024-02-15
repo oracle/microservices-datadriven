@@ -176,12 +176,12 @@ To set up the OCI environment, process these steps:
     - `Application Name` (optional) : A random pet name that will be used as the application name if left empty.
     - `Edition` : Select between *COMMUNITY* and *STANDARD* Edition.
         - *COMMUNITY* - for developers for quick start to testing Spring Boot Microservices with an integrated backend. Teams can start with the deployment and scale up as processing demand grows. Community support only.
-        - *STANDARD* - focused for pre-prod and production environments with an emphasis on deployment, scaling, and high availability. Oracle support is included with a Oracle Database support agreement. All features for developers are the same so start here if you’re porting an existing Spring Boot application stack and expect to get into production soon.
+        - *STANDARD* - focused for pre-prod and production environments with an emphasis on deployment, scaling, and high availability. Oracle support is included with a Oracle Database support agreement. All features for developers are the same so start here if you’re porting an existing Spring Boot application stack and expect to get into production soon.  This edition allows for additional Bring Your Own (BYO) capabilities.
 
-        | Edition   | Parse Platform | BYO VCN      | BYO Database     | Production Vault | Registry Scanning |
+        | Edition   | Parse Platform | BYO Network  | BYO Database     | Production Vault | Registry Scanning |
         |-----------|----------------|--------------|------------------|------------------| ------------------|
-        | Community | ✓              |              |                  |                  |                   |
-        | Standard  | ✓              | ✓            | ✓                | ✓                | ✓                 |
+        | Community | x              |              |                  |                  |                   |
+        | Standard  | x              | x            | x                | x                | x                 |
 
       <!-- spellchecker-disable -->
       {{< img name="oci-stack-app-name" size="large" lazy=false >}}
