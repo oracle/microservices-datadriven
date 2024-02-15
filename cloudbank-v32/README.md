@@ -32,7 +32,6 @@ Version 3.2 of CloudBank is under development. This document and application is 
    [INFO] account ............................................ SUCCESS [  2.904 s]
    [INFO] checks ............................................. SUCCESS [  1.168 s]
    [INFO] customer ........................................... SUCCESS [  1.198 s]
-   [INFO] customer32 ......................................... SUCCESS [  1.133 s]
    [INFO] creditscore ........................................ SUCCESS [  0.956 s]
    [INFO] transfer ........................................... SUCCESS [  0.463 s]
    [INFO] testrunner ......................................... SUCCESS [  1.009 s]
@@ -98,8 +97,6 @@ Schema {account} was successfully Not_Modified and Kubernetes Secret {applicatio
 Database/Service Password: *************
 Schema {customer} was successfully Created and Kubernetes Secret {application/customer} was successfully Created.
 Database/Service Password: *************
-Schema {customer} was successfully Not_Modified and Kubernetes Secret {application/customer32} was successfully Created.
-Database/Service Password: *************
 Schema {account} was successfully Not_Modified and Kubernetes Secret {application/testrunner} was successfully Created.
 uploading: account/target/account-0.0.1-SNAPSHOT.jar
 building and pushing image...
@@ -114,12 +111,6 @@ creating deployment and service...
 obaas-cli [deploy]: Application was successfully deployed.
 NOTICE: service not accessible outside K8S
 uploading: customer/target/customer-0.0.1-SNAPSHOT.jar
-building and pushing image...
-
-creating deployment and service...
-obaas-cli [deploy]: Application was successfully deployed.
-NOTICE: service not accessible outside K8S
-uploading: customer32/target/customer32-0.0.1-SNAPSHOT.jar
 building and pushing image...
 
 creating deployment and service...
@@ -151,12 +142,10 @@ The following commands are executed:
 bind --service-name account
 bind --service-name checks --username account
 bind --service-name customer
-bind --service-name customer32 --username customer
 bind --service-name testrunner --username account
 deploy --service-name account --artifact-path account/target/account-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
 deploy --service-name checks --artifact-path checks/target/checks-0.0.1-SNAPSHOT.jar --image-version 0.0.1
 deploy --service-name customer --artifact-path customer/target/customer-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
-deploy --service-name customer32 --artifact-path customer32/target/customer32-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
 deploy --service-name creditscore --artifact-path creditscore/target/creditscore-0.0.1-SNAPSHOT.jar --image-version 0.0.1
 deploy --service-name testrunner --artifact-path testrunner/target/testrunner-0.0.1-SNAPSHOT.jar --image-version 0.0.1
 deploy --service-name transfer --artifact-path transfer/target/transfer-0.0.1-SNAPSHOT.jar --image-version 0.0.1
@@ -198,7 +187,6 @@ The following commands are executed:
 create-autoscaler --service-name account --min-replicas 1 --max-replicas 4 --cpu-request 100m --cpu-percent 80 
 create-autoscaler --service-name checks --min-replicas 1 --max-replicas 4 --cpu-request 100m --cpu-percent 80
 create-autoscaler --service-name customer --min-replicas 1 --max-replicas 4 --cpu-request 100m --cpu-percent 80
-create-autoscaler --service-name customer32 --min-replicas 1 --max-replicas 4 --cpu-request 100m --cpu-percent 80
 create-autoscaler --service-name creditscore --min-replicas 1 --max-replicas 4 --cpu-request 100m --cpu-percent 80
 create-autoscaler --service-name testrunner --min-replicas 1 --max-replicas 4 --cpu-request 100m --cpu-percent 80
 create-autoscaler --service-name transfer --min-replicas 1 --max-replicas 4 --cpu-request 100m --cpu-percent 80
@@ -272,27 +260,6 @@ This is an example of the `customer32` application:
           "customerPassword": "SuperSecret",
           "dateBecameCustomer": "2023-11-02T17:30:12.000+00:00"
         },
-        {...}
-      ]
-      ```
-
-1. Test `customer32` service
-
-   1. REST endpoint
-
-      ```shell
-      curl -s http://<EXTERNAL-IP>/api/v2/customer | jq
-      ```
-
-      Should return:
-
-      ```json
-      [
-         {
-            "email": "andy@andy.com",
-            "id": "qwertysdwr",
-            "name": "Andy"
-         },
         {...}
       ]
       ```
@@ -529,9 +496,9 @@ This is an example of the `customer32` application:
 
       ![Jaeger Dashboard Login](images/jaeger.png  " ")
 
-   1. Choose `customer32` Service and click *Find Traces*
+   1. Choose `customer` Service and click *Find Traces*
 
-      ![Customer32](images/j-traces.png  " ")
+      ![Customer](images/j-traces.png  " ")
 
 1. Check the Grafana Dashboard
 
