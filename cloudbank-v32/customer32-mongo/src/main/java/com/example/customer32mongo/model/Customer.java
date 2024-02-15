@@ -4,7 +4,9 @@
 package com.example.customer32mongo.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document("customers")
 public class Customer {
     
     @Id

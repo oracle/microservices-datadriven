@@ -1,4 +1,4 @@
-## Example of "customer32" reimplemented to use the Oracle Database API for MongoDB
+# Example of "customer32" reimplemented to use the Oracle Database API for MongoDB
 
 This directory provides an example of the [customer32](../customer32/) service reimplmented using [Oracle Database API for MongoDB](https://docs.oracle.com/en-us/iaas/autonomous-database-serverless/doc/mongo-using-oracle-database-api-mongodb.html) and [Spring Data MongoDB](https://docs.spring.io/spring-data/mongodb/reference/index.html).
 
@@ -20,21 +20,21 @@ Once that configuration is done, you can run the application using `mvn spring-b
 
 - Create a customer
 
-    ```
+    ```shell
     curl -i -X POST -H 'Content-Type: application/json' \
       -d '{"name":"Bob Jones","email":"bob@job.com"}' \
       http://localhost:8080/api/v1mongo/customer
     ```
 
 - List customers
-    
-    ```
-    curl http://localhost:8080/api/v1mongo/customer|jq .
+
+    ```shell
+    curl -s http://localhost:8080/api/v1mongo/customer | jq .
     ```
 
 - Update a customer - make sure you use the correct ID from the output of the previous example
 
-    ```
+    ```shell
     curl -i -X PUT -H 'Content-Type: application/json' \
       -d '{"name":"Bob Jackson","email":"bob@jackson.com"}' \
       http://localhost:8080/api/v1mongo/customer/65cb9ad3d0538471e9fb5f27
@@ -42,11 +42,11 @@ Once that configuration is done, you can run the application using `mvn spring-b
 
 - Find a customer by email
 
-    ```
+    ```shell
     curl -i http://localhost:8080/api/v1mongo/customer/email/bob@jackson.com
     ```
 
-### Notes on the MongoDB connection
+## Notes on the MongoDB connection
 
 Please refer to the [Spring Data MongoDB documentation](https://docs.spring.io/spring-data/mongodb/reference/mongodb/configuration.html) for details of how to configure the connection and database.  
 
