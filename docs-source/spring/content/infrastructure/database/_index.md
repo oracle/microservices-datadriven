@@ -8,7 +8,7 @@ The Oracle Backend for Spring Boot and Microservices uses the Oracle Database as
 
 > **NOTE:** Oracle recommends that you install an addition Container Database (CDB) and Pluggable Databases (PDBs) for your production applications inline with the Database-Per-Service pattern.  This document will refer to these databases as the [**Application Database**](#application-databases).  
 
-By default, the Oracle Autonomous Database - Shared (ADB-S) is used for the  **Metadata Database**, however, there are other options including Bring Your Own (BYO).
+By default, the Oracle Autonomous Database - Serverless (ADB-S) is used for the  **Metadata Database**, however, there are other options including Bring Your Own (BYO).
 
 The following chart presents the options for the Metadata Database, based on the installation type:
 
@@ -55,6 +55,12 @@ GRANT UPDATE ANY TABLE TO OBAAS;
 GRANT CREATE ANY SEQUENCE TO OBAAS;
 GRANT SELECT ANY SEQUENCE TO OBAAS;
 GRANT CREATE ANY TRIGGER TO OBAAS;
+-- Additional Application
+GRANT AQ_USER_ROLE TO OBAAS WITH ADMIN OPTION;
+GRANT EXECUTE ON DBMS_AQ TO OBAAS WITH GRANT OPTION;
+GRANT EXECUTE ON DBMS_AQADM TO OBAAS WITH GRANT OPTION;
+GRANT EXECUTE ON DBMS_AQIN TO OBAAS WITH GRANT OPTION;
+GRANT EXECUTE ON DBMS_AQJMS_INTERNAL TO OBAAS WITH GRANT OPTION;
 -- Additional for PARSE
 GRANT SODA_APP TO OBAAS WITH ADMIN OPTION;
 GRANT CREATE TABLE TO OBAAS WITH ADMIN OPTION;
@@ -70,7 +76,7 @@ GRANT CREATE TABLE TO OBAAS WITH ADMIN OPTION;
 
 1. Tick the "Bring Your Own Database" checkbox and, depending on the *Bring Your Own Database - Type*, provide the appropriate values.
 
-### Autonomous Database - Shared (ADB-S)
+### Autonomous Database - Serverless (ADB-S)
 
    - `BYO ADB-S Compartment` : The compartment of the existing ADB-S.
    - `Bring Your Own Database - Autonomous Database` : The ADB-S name (this will automatically translate the name to an OCID).
