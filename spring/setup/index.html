@@ -72,7 +72,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/setup/",
       "headline": "Setup",
       "description": "Setup Oracle Backend for Spring Boot and Microservices",
-      "wordCount" : "2295",
+      "wordCount" : "2546",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1714,6 +1714,119 @@
       <li>
         
         
+          <span class="flex">Infrastructure</span>
+        
+
+        
+          
+  
+  
+
+
+  <ul class="gdoc-nav__list">
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/infrastructure/networking"
+                  class="gdoc-nav__entry"
+                >
+                  Networking
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
+                  href="/microservices-datadriven/spring/infrastructure/database"
+                  class="gdoc-nav__entry"
+                >
+                  Database
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
+  </ul>
+
+        
+      </li>
+    
+      
+      
+
+
+      <li>
+        
+        
           
           
           
@@ -2398,9 +2511,39 @@ if (!doNotTrack) {
 <li>
 <p><code>Edition</code> : Select between <em>COMMUNITY</em> and <em>STANDARD</em> Edition.</p>
 <ul>
-<li><em>COMMUNTIY</em> - for developers for quick start to testing Spring Boot Microservices with an integrated backend. Teams can start with the deployment and scale up as processing demand grows. Community support only.</li>
-<li><em>STANDARD</em> - focused for pre-prod and production environments with an emphasis on deployment, scaling, and high availability. Oracle support is included with a Oracle Database support agreement. All features for developers are the same so start here if you’re porting an existing Spring Boot application stack and expect to get into production soon.</li>
+<li><em>COMMUNITY</em> - for developers for quick start to testing Spring Boot Microservices with an integrated backend. Teams can start with the deployment and scale up as processing demand grows. Community support only.</li>
+<li><em>STANDARD</em> - focused for pre-prod and production environments with an emphasis on deployment, scaling, and high availability. Oracle support is included with a Oracle Database support agreement. All features for developers are the same so start here if you’re porting an existing Spring Boot application stack and expect to get into production soon.  This edition allows for additional Bring Your Own (BYO) capabilities.</li>
 </ul>
+<div class="table-wrap"> <table>
+<thead>
+<tr>
+<th>Edition</th>
+<th>Parse Platform</th>
+<th>BYO Network</th>
+<th>BYO Database</th>
+<th>Production Vault</th>
+<th>Registry Scanning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Community</td>
+<td>x</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Standard</td>
+<td>x</td>
+<td>x</td>
+<td>x</td>
+<td>x</td>
+<td>x</td>
+</tr>
+</tbody>
+</table> </div>
 <!-- spellchecker-disable -->
 
         
@@ -2428,6 +2571,55 @@ if (!doNotTrack) {
                 </figcaption>
           </figure>
         </div>
+
+<!-- spellchecker-enable -->
+</li>
+</ul>
+</li>
+<li>
+<p>If you check the checkbox <em>Enable Parse Platform</em> in the <strong>Parse Server</strong> section a Parse Server will be installed. Fill in the following for the Parse Server:</p>
+<ul>
+<li>
+<p><code>Application ID</code> (optional) : Leave blank to auto-generate.</p>
+</li>
+<li>
+<p><code>Server Master Key</code> (optional) : Leave blank to auto-generate.</p>
+</li>
+<li>
+<p><code>Dashboard Username</code> : The user name of the user to whom access to the dashboard is granted.</p>
+</li>
+<li>
+<p><code>Dashboard Password</code> (optional) : The password of the dashboard user (a minimum of 12 characters). Leave blank to auto-generate.</p>
+</li>
+<li>
+<p><code>Enable Parse S3 Storage</code> : Check the checkbox to enable Parse Server S3 Adaptor and create a S3 compatible Object Storage Bucket.</p>
+<!-- spellchecker-disable -->
+
+       
+       
+     
+     
+       <div class="flex justify-center">
+         <figure
+           class="gdoc-markdown__figure"
+         >
+           <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-parse-options.png">
+             <picture>
+                 <source
+                     srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-parse-options_hu52e94b16a05c6f4f082fc7e8f072d0bd_64785_1800x0_resize_box_3.png"
+     
+                 />
+               <img
+                     src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-parse-options_hu52e94b16a05c6f4f082fc7e8f072d0bd_64785_1800x0_resize_box_3.png"
+                   alt="Parse Server Options"
+               />
+             </picture>
+           </a>
+               <figcaption>
+                 Parse Server Options
+               </figcaption>
+         </figure>
+       </div>
 
 <!-- spellchecker-enable -->
 </li>
@@ -2480,62 +2672,54 @@ if (!doNotTrack) {
 </ul>
 </li>
 <li>
-<p>If you check the checkbox <em>Enable Parse Platform</em> in the <strong>Parse Server</strong> section a Parse Server will be installed. Fill in the following for the Parse Server:</p>
-<ul>
-<li>
-<p><code>Application ID</code> (optional) : Leave blank to auto-generate.</p>
-</li>
-<li>
-<p><code>Server Master Key</code> (optional) : Leave blank to auto-generate.</p>
-</li>
-<li>
-<p><code>Enable Parse S3 Storage</code> : Check the checkbox to enable Parse Server S3 Adaptor and create a S3 compatible Object Storage Bucket.</p>
-</li>
-<li>
-<p><code>Dashboard Username</code> : The user name of the user to whom access to the dashboard is granted.</p>
-</li>
-<li>
-<p><code>Dashboard Password</code> (optional) : The password of the dashboard user (a minimum of 12 characters). Leave blank to auto-generate.</p>
-<!-- spellchecker-disable -->
+<p>(<em>Standard Edition Only</em>) If you check the checkbox <em>Bring Your Own Virtual Cloud Network</em> in the <strong>Network Options</strong> section you can use an existing Virtual Cloud Network.  This is required to Bring Your Own Database (<em>Standard Edition Only</em>).</p>
+   <!-- spellchecker-disable -->
 
-       
-       
-     
-     
-       <div class="flex justify-center">
-         <figure
-           class="gdoc-markdown__figure"
-         >
-           <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-parse-options.png">
-             <picture>
-                 <source
-                     srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-parse-options_hu59a905d817e9bd573b696e1e372aba5f_62038_1800x0_resize_box_3.png"
-     
-                 />
-               <img
-                     src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-parse-options_hu59a905d817e9bd573b696e1e372aba5f_62038_1800x0_resize_box_3.png"
-                   alt="Parse Server Options"
-               />
-             </picture>
-           </a>
-               <figcaption>
-                 Parse Server Options
-               </figcaption>
-         </figure>
-       </div>
+        
+        
+      
+      
+        <div class="flex justify-center">
+          <figure
+            class="gdoc-markdown__figure"
+          >
+            <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-network-options.png">
+              <picture>
+                  <source
+                      srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-network-options_hu51d1b75d87d2435a1875f279aeb7c8ea_15090_1800x0_resize_box_3.png"
+      
+                  />
+                <img
+                      src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-network-options_hu51d1b75d87d2435a1875f279aeb7c8ea_15090_1800x0_resize_box_3.png"
+                    alt="Network Options - Standard Edition"
+                />
+              </picture>
+            </a>
+                <figcaption>
+                  Network Options - Standard Edition
+                </figcaption>
+          </figure>
+        </div>
 
-<!-- spellchecker-enable -->
-</li>
-</ul>
+   <!-- spellchecker-enable -->
+<blockquote>
+<p>For more information on the network requirements and topology of the Oracle Backend for Spring Boot and Microservices including the options for <em>Bring Your Own Virtual Cloud Network</em>, please see the <a
+  class="gdoc-markdown__link"
+  href="../infrastructure/networking"
+>Networking</a> documentation.</p>
+</blockquote>
 </li>
 <li>
-<p>If you check the checkbox <em>Public Control Plane</em> in the <strong>Public Control Plane Options</strong>, you are enabling access from the <code>public</code> to the Control Plane:</p>
+<p>In the <strong>Kubernetes Cluster Options</strong> section, fill in the following for the OKE Cluster Options:</p>
 <ul>
-<li><code>Public Control Plane</code> : This option allows access to the OKE Control Plane from the internet (public IP). If not selected, access can only be from a private virtual cloud network (VCN).</li>
-<li><code>Control Plane Access Control</code> : Enter the CIDR block you want to give access to the Control Plane. Default (and not recommended) is <code>0.0.0.0/0</code>.</li>
+<li><code>Public API Endpoint?</code> : This option allows access to the OKE Control Plane API Endpoint from the internet (public IP). If not selected, access can only be from a private virtual cloud network (VCN).</li>
+<li><code>API Endpoint Access Control</code> : Enter the CIDR block you want to give access to the Control Plane API. Default (and not recommended) is <code>0.0.0.0/0</code>.</li>
+<li><code>Node Pool Workers</code> : The number of Kubernetes worker nodes (virtual machines) attached to the OKE cluster.</li>
+<li><code>Node Pool Worker Shape</code> : The shape of the node pool workers.</li>
+<li><code>Node Workers OCPU</code> : The initial number of Oracle Compute Units (OCPUs) for the node pool workers.</li>
 </ul>
 <blockquote>
-<p><strong>NOTE:</strong> Oracle recommends that you set <code>Control Plane Access Control</code> to be as restrictive as possible</p>
+<p><strong>NOTE:</strong> Oracle recommends that you set <code>API Endpoint Access Control</code> to be as restrictive as possible</p>
 </blockquote>
   <!-- spellchecker-disable -->
 
@@ -2547,68 +2731,25 @@ if (!doNotTrack) {
          <figure
            class="gdoc-markdown__figure"
          >
-           <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-control-plane.png">
+           <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-oke-options.png">
              <picture>
                  <source
-                     srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-control-plane_hu88315cef7ab5301f10651d5937ba9b50_25147_1800x0_resize_box_3.png"
+                     srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-oke-options_hu772b3a3ec65c500bd733cc1171ecbfe0_53800_1800x0_resize_box_3.png"
      
                  />
                <img
-                     src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-control-plane_hu88315cef7ab5301f10651d5937ba9b50_25147_1800x0_resize_box_3.png"
-                   alt="OKE Control Plane Access"
+                     src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-oke-options_hu772b3a3ec65c500bd733cc1171ecbfe0_53800_1800x0_resize_box_3.png"
+                   alt="Create Stack OKE Options"
                />
              </picture>
            </a>
                <figcaption>
-                 OKE Control Plane Access
+                 Create Stack OKE Options
                </figcaption>
          </figure>
        </div>
 
   <!-- spellchecker-enable -->
-</li>
-<li>
-<p>In the <strong>Node Pool</strong> section, fill in the following for the OKE Node Pools:</p>
-<ul>
-<li>
-<p><code>Node Pool Workers</code> : The number of Kubernetes worker nodes (virtual machines) attached to the OKE cluster.</p>
-</li>
-<li>
-<p><code>Node Pool Worker Shape</code> : The shape of the node pool workers.</p>
-</li>
-<li>
-<p><code>Node Workers OCPU</code> : The initial number of Oracle Compute Units (OCPUs) for the node pool workers.</p>
- <!-- spellchecker-disable -->
-
-        
-        
-      
-      
-        <div class="flex justify-center">
-          <figure
-            class="gdoc-markdown__figure"
-          >
-            <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-node-pool.png">
-              <picture>
-                  <source
-                      srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-node-pool_hu622d5fd09c01d6ef372ff8c68dde8c66_32484_1800x0_resize_box_3.png"
-      
-                  />
-                <img
-                      src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-node-pool_hu622d5fd09c01d6ef372ff8c68dde8c66_32484_1800x0_resize_box_3.png"
-                    alt="Node Pool Information"
-                />
-              </picture>
-            </a>
-                <figcaption>
-                  Node Pool Information
-                </figcaption>
-          </figure>
-        </div>
-
- <!-- spellchecker-enable -->
-</li>
-</ul>
 </li>
 <li>
 <p>In the <strong>Load Balancers Options</strong> section, fill in the following for the Load Balancers options:</p>
@@ -2654,7 +2795,96 @@ selected, access can only be from a private VCN.</li>
    <!-- spellchecker-enable -->
 </li>
 <li>
-<p>If you check the checkbox <em>Enable Vault in Production Mode</em> in the section <strong>Vault Options</strong> you will be installing HashiCorp in <strong>Production</strong> mode otherwise the HashiCorp Vault be installed in <strong>Development</strong> mode.</p>
+<p>In the <strong>Database Options</strong> section, you can modify the following Database options.</p>
+<ul>
+<li><code>Autonomous Database Compute Model</code> : Choose either ECPU (default) or OCPU compute model for the ADB.</li>
+<li><code>Autonomous Database Network Access</code> : Choose the Autonomous Database network access. Choose between <em>SECURE_ACCESS</em> and <em>PRIVATE_ENDPOINT_ACCESS</em>. <strong>NOTE:</strong> This option currently cannot be changed later.
+<ul>
+<li><em>SECURE_ACCESS</em> - Accessible from outside the Kubernetes Cluster.  Requires mTLS and can be restricted by IP or CIDR addresses.</li>
+<li><em>PRIVATE_ENDPOINT_ACCESS</em> - Accessible only from inside the Kubernetes Cluster or via a Bastion service.  Requires mTLS.</li>
+</ul>
+</li>
+<li><code>ADB Access Control</code> : Comma separated list of CIDR blocks from which the ADB can be accessed. This only applies if <em>SECURE_ACCESS</em> was chosen. Default (and not recommended) is <code>0.0.0.0/0</code>.</li>
+<li><code>Autonomous Database CPU Core Count</code> : Choose how many CPU cores will be elastically allocated.</li>
+<li><code>Allow Autonomous Database CPU Auto Scaling</code> : Enable auto scaling for the ADB CPU core count (x3 ADB CPU).</li>
+<li><code>Autonomous Database Data Storage Size</code> : Choose ADB Database Data Storage Size in gigabytes (ECPU) or terabytes (OCPU).</li>
+<li><code>Allow Autonomous Database Storage Auto Scaling</code> : Allow the ADB storage to automatically scale.</li>
+<li><code>Autonomous Database License Model</code> : The Autonomous Database license model.</li>
+<li><code>Create an Object Storage Bucket for ADB</code> : Create a Object Storage bucket, with the appropriate access policies, for the ADB.</li>
+</ul>
+<blockquote>
+<p><strong>NOTE:</strong> Oracle recommends that you restrict by IP or CIDR addresses to be as restrictive as possible.</p>
+</blockquote>
+   <!-- spellchecker-disable -->
+
+        
+        
+      
+      
+        <div class="flex justify-center">
+          <figure
+            class="gdoc-markdown__figure"
+          >
+            <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-db-options.png">
+              <picture>
+                  <source
+                      srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-db-options_hu7723c5082830cc8bbf3dfa09f635dae1_93370_1800x0_resize_box_3.png"
+      
+                  />
+                <img
+                      src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-db-options_hu7723c5082830cc8bbf3dfa09f635dae1_93370_1800x0_resize_box_3.png"
+                    alt="Database Options"
+                />
+              </picture>
+            </a>
+                <figcaption>
+                  Database Options
+                </figcaption>
+          </figure>
+        </div>
+
+   <!-- spellchecker-enable -->
+</li>
+<li>
+<p>(<em>Standard Edition Only</em>) If <em>Bring Your Own Virtual Cloud Network</em> has been selected in the <strong>Network Options</strong> section, then you have the option to <em>Bring Your Own Database</em> in the section <strong>Database Options</strong>.</p>
+   <!-- spellchecker-disable -->
+
+        
+        
+      
+      
+        <div class="flex justify-center">
+          <figure
+            class="gdoc-markdown__figure"
+          >
+            <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-byodb-options.png">
+              <picture>
+                  <source
+                      srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-byodb-options_hu4a0d531cc3f0154ed051f168533fa750_13162_1800x0_resize_box_3.png"
+      
+                  />
+                <img
+                      src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-byodb-options_hu4a0d531cc3f0154ed051f168533fa750_13162_1800x0_resize_box_3.png"
+                    alt="Bring your Own Database Options - Standard Edition"
+                />
+              </picture>
+            </a>
+                <figcaption>
+                  Bring your Own Database Options - Standard Edition
+                </figcaption>
+          </figure>
+        </div>
+
+   <!-- spellchecker-enable -->
+<blockquote>
+<p>For more information on the <em>Bring Your Own Database</em> option for the Oracle Backend for Spring Boot and Microservices including the required values, please review the <a
+  class="gdoc-markdown__link"
+  href="../infrastructure/database"
+>Database</a> documentation.</p>
+</blockquote>
+</li>
+<li>
+<p>(<em>Standard Edition Only</em>) If you check the checkbox <em>Enable Vault in Production Mode</em> in the section <strong>Vault Options</strong> you will be installing HashiCorp in <strong>Production</strong> mode otherwise the HashiCorp Vault be installed in <strong>Development</strong> mode.</p>
 <p>Fill in the following Vault options. You have the option of creating a new OCI Vault or using an existing OCI Vault. The OCI Vault is only used in <strong>Production</strong> mode to auto-unseal the HashiCorp Vault (see documentation &hellip;) Fill in the following information if you want to use an existing OCI Vault:</p>
 <ul>
 <li>
@@ -2683,12 +2913,12 @@ selected, access can only be from a private VCN.</li>
                   />
                 <img
                       src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-vault-options_hu0da1cce79d99da582cf867dbf64e5011_40031_1800x0_resize_box_3.png"
-                    alt="HashiCorp Vault Options"
+                    alt="HashiCorp Vault Options - Standard Edition"
                 />
               </picture>
             </a>
                 <figcaption>
-                  HashiCorp Vault Options
+                  HashiCorp Vault Options - Standard Edition
                 </figcaption>
           </figure>
         </div>
@@ -2709,23 +2939,7 @@ selected, access can only be from a private VCN.</li>
 
 </li>
 <li>
-<p>In the <strong>Database Options</strong> section, you can modify the following Database options.</p>
-<ul>
-<li><code>Autonomous Database Network Access</code> : Choose the Autonomous Database network access. Choose between <em>SECURE_ACCESS</em> and <em>PRIVATE_ENDPOINT_ACCESS</em>. <strong>NOTE:</strong> This option currently cannot be changed later.
-<ul>
-<li><em>SECURE_ACCESS</em> - Accessible from outside the Kubernetes Cluster.  Requires mTLS and can be restricted by IP or CIDR addresses.</li>
-<li><em>PRIVATE_ENDPOINT</em> - Accessible only from inside the Kubernetes Cluster or via a Bastion service.  Requires mTLS.</li>
-</ul>
-</li>
-<li><code>ADB Access Control</code> : Comma separated list of CIDR blocks from which the ADB can be accessed. This only applies if <em>SECURE_ACCESS</em> was chosen. Default (and not recommended) is <code>0.0.0.0/0</code>.</li>
-<li><code>Autonomous Database ECPU Core Count</code> : Choose how many ECPU cores will be elastically allocated.</li>
-<li><code>Allow Autonomous Database OCPU Auto Scaling</code> : Enable auto scaling for the ADB ECPU core count (x3 ADB ECPU).</li>
-<li><code>Autonomous Database Data Storage Size</code> : Choose ADB Database Data Storage Size in gigabytes.</li>
-<li><code>Autonomous Database License Model</code> : The Autonomous Database license model.</li>
-</ul>
-<blockquote>
-<p><strong>NOTE:</strong> Oracle recommends that you restrict by IP or CIDR addresses to be as restrictive as possible.</p>
-</blockquote>
+<p>(<em>Standard Edition Only</em>) If you check the checkbox <em>Enable Container Registry Vulnerability Scanning</em> in the section <strong>Additional Options</strong> you will enable the automatic Vulnerability Scanning on images stored in the Oracle Container Registry.</p>
    <!-- spellchecker-disable -->
 
         
@@ -2736,20 +2950,20 @@ selected, access can only be from a private VCN.</li>
           <figure
             class="gdoc-markdown__figure"
           >
-            <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-db-options.png">
+            <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-additional-options.png">
               <picture>
                   <source
-                      srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-db-options_hubac01b0607a2395dd128405a9c708d5f_75429_1800x0_resize_box_3.png"
+                      srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-additional-options_hue2e2508cd216969ddcc09b9aa801a504_12734_1800x0_resize_box_3.png"
       
                   />
                 <img
-                      src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-db-options_hubac01b0607a2395dd128405a9c708d5f_75429_1800x0_resize_box_3.png"
-                    alt="Database Options"
+                      src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-additional-options_hue2e2508cd216969ddcc09b9aa801a504_12734_1800x0_resize_box_3.png"
+                    alt="Create Stack Additional Options - Standard Edition"
                 />
               </picture>
             </a>
                 <figcaption>
-                  Database Options
+                  Create Stack Additional Options - Standard Edition
                 </figcaption>
           </figure>
         </div>
@@ -2968,7 +3182,7 @@ happen if you did apply the stack.</p>
 <p>Set up cluster access.</p>
 <p>To access a cluster, use the <code>kubectl</code> command-line interface that is installed (see the <a
   class="gdoc-markdown__link"
-  href="./cluster-access"
+  href="../cluster-access"
 >Kubernetes access</a>) locally.
 If you have not already done so, do the following:</p>
 </li>
@@ -3008,7 +3222,7 @@ If you have not already done so, do the following:</p>
 <p>Install the Oracle Backend for Spring Boot and Microservices command-line.</p>
 <p>The Oracle Backend for Spring Boot and Microservices command-line interface, <code>oractl</code>, is available for Linux and Mac systems. Download the binary that you want from the <a
   class="gdoc-markdown__link"
-  href="https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0"
+  href="https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.1"
 >Releases</a> page and add it to your PATH environment variable. You can rename the binary to remove the suffix.</p>
 <p>If your environment is a Linux or Mac machine, run <code>chmod +x</code> on the downloaded binary. Also, if your environment is a Mac, run the following command. Otherwise, you get a security warning and the CLI does not work:</p>
 <p><code>sudo xattr -r -d com.apple.quarantine &lt;downloaded-file&gt;</code></p>
@@ -3822,6 +4036,70 @@ If you have not already done so, do the following:</p>
 
     
     
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+  
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+  
+
+    
+  
+    
+    
+
+    
+    
+
+    
+    
+      
+  
+  
+
   
     
     
