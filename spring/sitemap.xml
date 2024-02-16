@@ -12,6 +12,8 @@
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/on-premises/</loc>
   </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/infrastructure/database/</loc>
+  </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/database/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/on-premises/macos_ventura/</loc>
@@ -24,11 +26,15 @@
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/getting-started/</loc>
   </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/infrastructure/</loc>
+  </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/cluster-access/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/observability/metrics/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/platform/microtx/</loc>
+  </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/infrastructure/networking/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/development/cli/</loc>
   </url><url>
