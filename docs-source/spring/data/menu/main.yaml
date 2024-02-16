@@ -64,7 +64,13 @@ main:
       - name: "Wallet"
         ref: "/starters/wallet"
       - name: "AQ/JMS"
-        ref: "/starters/aqjms"        
+        ref: "/starters/aqjms"
+  - name: Infrastructure
+    sub:
+      - name: "Networking"
+        ref: "/infrastructure/networking"
+      - name: "Database"
+        ref: "/infrastructure/database"   
   - name: Database Access
     ref: "/database"
   - name: Kubernetes Access

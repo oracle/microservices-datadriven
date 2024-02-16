@@ -36,6 +36,12 @@ resources:
   - name: oci-stack-apply-logs
     src: "oci-stack-apply-logs.png"
     title: "Create Stack Apply Logs"
+  - name: oci-stack-additional-options
+    src: "oci-stack-additional-options.png"
+    title: "Create Stack Additional Options - Standard Edition"
+  - name: oci-stack-oke-options
+    src: "oci-stack-oke-options.png"
+    title: "Create Stack OKE Options"
   - name: oci-stack-outputs
     src: "oci-stack-outputs.png"
     title: "Create Stack Outputs"
@@ -45,6 +51,9 @@ resources:
   - name: oci-stack-db-options
     src: "oci-stack-db-options.png"
     title: "Database Options"
+  - name: oci-stack-byodb-options
+    src: "oci-stack-byodb-options.png"
+    title: "Bring your Own Database Options - Standard Edition"
   - name: oci-stack-parse-options
     src: "oci-stack-parse-options.png"
     title: "Parse Server Options"
@@ -60,24 +69,22 @@ resources:
   - name: oci-stack-passwords
     src: "oci-stack-passwords.png"
     title: "Administrator Passwords"
-  - name: oci-stack-control-plane
-    src: "oci-stack-control-plane.png"
-    title: "OKE Control Plane Access"
-  - name: oci-stack-node-pool
-    src: "oci-stack-node-pool.png"
-    title: "Node Pool Information"
   - name: oci-stack-lb-options
     src: "oci-stack-lb-options.png"
     title: "Load Balancer Options"
   - name: oci-stack-vault-options
     src: "oci-stack-vault-options.png"
-    title: "HashiCorp Vault Options"
+    title: "HashiCorp Vault Options - Standard Edition"
   - name: azn-stack-app-info
     src: "azn-stack-app-info.png"
     title: "Access Information"
   - name: oci-stack-app-info
     src: "oci-stack-app-information.png"
     title: "Detailed Access Information"
+  - name: oci-stack-network-options
+    src: "oci-stack-network-options.png"
+    title: "Network Options - Standard Edition"
+
 ---
 
 Oracle Backend for Spring Boot and Microservices is available in the [OCI Marketplace](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911).
@@ -168,12 +175,29 @@ To set up the OCI environment, process these steps:
     - `Compartment` : Select the compartment where you want to install Oracle Backend for Spring Boot and Microservices.
     - `Application Name` (optional) : A random pet name that will be used as the application name if left empty.
     - `Edition` : Select between *COMMUNITY* and *STANDARD* Edition.
-        - *COMMUNTIY* - for developers for quick start to testing Spring Boot Microservices with an integrated backend. Teams can start with the deployment and scale up as processing demand grows. Community support only.
-        - *STANDARD* - focused for pre-prod and production environments with an emphasis on deployment, scaling, and high availability. Oracle support is included with a Oracle Database support agreement. All features for developers are the same so start here if you’re porting an existing Spring Boot application stack and expect to get into production soon.
+        - *COMMUNITY* - for developers for quick start to testing Spring Boot Microservices with an integrated backend. Teams can start with the deployment and scale up as processing demand grows. Community support only.
+        - *STANDARD* - focused for pre-prod and production environments with an emphasis on deployment, scaling, and high availability. Oracle support is included with a Oracle Database support agreement. All features for developers are the same so start here if you’re porting an existing Spring Boot application stack and expect to get into production soon.  This edition allows for additional Bring Your Own (BYO) capabilities.
+
+        | Edition   | Parse Platform | BYO Network  | BYO Database     | Production Vault | Registry Scanning |
+        |-----------|----------------|--------------|------------------|------------------| ------------------|
+        | Community | x              |              |                  |                  |                   |
+        | Standard  | x              | x            | x                | x                | x                 |
 
       <!-- spellchecker-disable -->
       {{< img name="oci-stack-app-name" size="large" lazy=false >}}
       <!-- spellchecker-enable -->
+
+1. If you check the checkbox *Enable Parse Platform* in the **Parse Server** section a Parse Server will be installed. Fill in the following for the Parse Server:
+
+   - `Application ID` (optional) : Leave blank to auto-generate.
+   - `Server Master Key` (optional) : Leave blank to auto-generate.
+   - `Dashboard Username` : The user name of the user to whom access to the dashboard is granted.
+   - `Dashboard Password` (optional) : The password of the dashboard user (a minimum of 12 characters). Leave blank to auto-generate.
+   - `Enable Parse S3 Storage` : Check the checkbox to enable Parse Server S3 Adaptor and create a S3 compatible Object Storage Bucket.
+
+     <!-- spellchecker-disable -->
+     {{< img name="oci-stack-parse-options" size="large" lazy=false >}}
+     <!-- spellchecker-enable -->
 
 1. If you check the checkbox *Set Administrator Passwords* in the **Administrator Passwords** section you have the option to fill in the following passwords (if not they are autogenerated):
 
@@ -186,38 +210,27 @@ To set up the OCI environment, process these steps:
       {{< img name="oci-stack-passwords" size="large" lazy=false >}}
       <!-- spellchecker-enable -->
 
-1. If you check the checkbox *Enable Parse Platform* in the **Parse Server** section a Parse Server will be installed. Fill in the following for the Parse Server:
+1. (*Standard Edition Only*) If you check the checkbox *Bring Your Own Virtual Cloud Network* in the **Network Options** section you can use an existing Virtual Cloud Network.  This is required to Bring Your Own Database (*Standard Edition Only*).
 
-   - `Application ID` (optional) : Leave blank to auto-generate.
-   - `Server Master Key` (optional) : Leave blank to auto-generate.
-   - `Enable Parse S3 Storage` : Check the checkbox to enable Parse Server S3 Adaptor and create a S3 compatible Object Storage Bucket.
-   - `Dashboard Username` : The user name of the user to whom access to the dashboard is granted.
-   - `Dashboard Password` (optional) : The password of the dashboard user (a minimum of 12 characters). Leave blank to auto-generate.
+      <!-- spellchecker-disable -->
+      {{< img name="oci-stack-network-options" size="large" lazy=false >}}
+      <!-- spellchecker-enable -->
 
-     <!-- spellchecker-disable -->
-     {{< img name="oci-stack-parse-options" size="large" lazy=false >}}
-     <!-- spellchecker-enable -->
+    > For more information on the network requirements and topology of the Oracle Backend for Spring Boot and Microservices including the options for *Bring Your Own Virtual Cloud Network*, please see the [Networking](../infrastructure/networking) documentation.
 
-1. If you check the checkbox *Public Control Plane* in the **Public Control Plane Options**, you are enabling access from the `public` to the Control Plane:
-  
-   - `Public Control Plane` : This option allows access to the OKE Control Plane from the internet (public IP). If not selected, access can only be from a private virtual cloud network (VCN).
-   - `Control Plane Access Control` : Enter the CIDR block you want to give access to the Control Plane. Default (and not recommended) is `0.0.0.0/0`.
+1. In the **Kubernetes Cluster Options** section, fill in the following for the OKE Cluster Options:
 
-   > **NOTE:** Oracle recommends that you set `Control Plane Access Control` to be as restrictive as possible
-
-     <!-- spellchecker-disable -->
-     {{< img name="oci-stack-control-plane" size="large" lazy=false >}}
-     <!-- spellchecker-enable -->
-
-1. In the **Node Pool** section, fill in the following for the OKE Node Pools:
-
+   - `Public API Endpoint?` : This option allows access to the OKE Control Plane API Endpoint from the internet (public IP). If not selected, access can only be from a private virtual cloud network (VCN).
+   - `API Endpoint Access Control` : Enter the CIDR block you want to give access to the Control Plane API. Default (and not recommended) is `0.0.0.0/0`.
    - `Node Pool Workers` : The number of Kubernetes worker nodes (virtual machines) attached to the OKE cluster.
    - `Node Pool Worker Shape` : The shape of the node pool workers.
    - `Node Workers OCPU` : The initial number of Oracle Compute Units (OCPUs) for the node pool workers.
 
-      <!-- spellchecker-disable -->
-      {{< img name="oci-stack-node-pool" size="large" lazy=false >}}
-      <!-- spellchecker-enable -->
+   > **NOTE:** Oracle recommends that you set `API Endpoint Access Control` to be as restrictive as possible
+
+     <!-- spellchecker-disable -->
+     {{< img name="oci-stack-oke-options" size="large" lazy=false >}}
+     <!-- spellchecker-enable -->
 
 1. In the **Load Balancers Options** section, fill in the following for the Load Balancers options:
 
@@ -234,7 +247,35 @@ To set up the OCI environment, process these steps:
       {{< img name="oci-stack-lb-options" size="large" lazy=false >}}
       <!-- spellchecker-enable -->
 
-1. If you check the checkbox *Enable Vault in Production Mode* in the section **Vault Options** you will be installing HashiCorp in **Production** mode otherwise the HashiCorp Vault be installed in **Development** mode.
+1. In the **Database Options** section, you can modify the following Database options.
+
+   - `Autonomous Database Compute Model` : Choose either ECPU (default) or OCPU compute model for the ADB.
+   - `Autonomous Database Network Access` : Choose the Autonomous Database network access. Choose between *SECURE_ACCESS* and *PRIVATE_ENDPOINT_ACCESS*. **NOTE:** This option currently cannot be changed later.
+      - *SECURE_ACCESS* - Accessible from outside the Kubernetes Cluster.  Requires mTLS and can be restricted by IP or CIDR addresses.
+      - *PRIVATE_ENDPOINT_ACCESS* - Accessible only from inside the Kubernetes Cluster or via a Bastion service.  Requires mTLS.
+   - `ADB Access Control` : Comma separated list of CIDR blocks from which the ADB can be accessed. This only applies if *SECURE_ACCESS* was chosen. Default (and not recommended) is `0.0.0.0/0`.
+   - `Autonomous Database CPU Core Count` : Choose how many CPU cores will be elastically allocated.
+   - `Allow Autonomous Database CPU Auto Scaling` : Enable auto scaling for the ADB CPU core count (x3 ADB CPU).
+   - `Autonomous Database Data Storage Size` : Choose ADB Database Data Storage Size in gigabytes (ECPU) or terabytes (OCPU).
+   - `Allow Autonomous Database Storage Auto Scaling` : Allow the ADB storage to automatically scale.
+   - `Autonomous Database License Model` : The Autonomous Database license model.
+   - `Create an Object Storage Bucket for ADB` : Create a Object Storage bucket, with the appropriate access policies, for the ADB.
+
+    > **NOTE:** Oracle recommends that you restrict by IP or CIDR addresses to be as restrictive as possible.
+
+      <!-- spellchecker-disable -->
+      {{< img name="oci-stack-db-options" size="large" lazy=false >}}
+      <!-- spellchecker-enable -->
+
+1. (*Standard Edition Only*) If *Bring Your Own Virtual Cloud Network* has been selected in the **Network Options** section, then you have the option to *Bring Your Own Database* in the section **Database Options**.
+
+      <!-- spellchecker-disable -->
+      {{< img name="oci-stack-byodb-options" size="large" lazy=false >}}
+      <!-- spellchecker-enable -->
+
+    > For more information on the *Bring Your Own Database* option for the Oracle Backend for Spring Boot and Microservices including the required values, please review the [Database](../infrastructure/database) documentation.
+
+1. (*Standard Edition Only*) If you check the checkbox *Enable Vault in Production Mode* in the section **Vault Options** you will be installing HashiCorp in **Production** mode otherwise the HashiCorp Vault be installed in **Development** mode.
 
     Fill in the following Vault options. You have the option of creating a new OCI Vault or using an existing OCI Vault. The OCI Vault is only used in **Production** mode to auto-unseal the HashiCorp Vault (see documentation ...) Fill in the following information if you want to use an existing OCI Vault:
 
@@ -250,21 +291,10 @@ To set up the OCI environment, process these steps:
    **Never** run a **Development** mode HashiCorp Vault Server in a production environment. It is insecure and will lose data on every restart (since it stores data in-memory). It is only intended for development or experimentation.
    {{< /hint >}}
 
-1. In the **Database Options** section, you can modify the following Database options.
-
-   - `Autonomous Database Network Access` : Choose the Autonomous Database network access. Choose between *SECURE_ACCESS* and *PRIVATE_ENDPOINT_ACCESS*. **NOTE:** This option currently cannot be changed later.
-      - *SECURE_ACCESS* - Accessible from outside the Kubernetes Cluster.  Requires mTLS and can be restricted by IP or CIDR addresses.
-      - *PRIVATE_ENDPOINT* - Accessible only from inside the Kubernetes Cluster or via a Bastion service.  Requires mTLS.
-   - `ADB Access Control` : Comma separated list of CIDR blocks from which the ADB can be accessed. This only applies if *SECURE_ACCESS* was chosen. Default (and not recommended) is `0.0.0.0/0`.
-   - `Autonomous Database ECPU Core Count` : Choose how many ECPU cores will be elastically allocated.
-   - `Allow Autonomous Database OCPU Auto Scaling` : Enable auto scaling for the ADB ECPU core count (x3 ADB ECPU).
-   - `Autonomous Database Data Storage Size` : Choose ADB Database Data Storage Size in gigabytes.
-   - `Autonomous Database License Model` : The Autonomous Database license model.
-
-    > **NOTE:** Oracle recommends that you restrict by IP or CIDR addresses to be as restrictive as possible.
+1. (*Standard Edition Only*) If you check the checkbox *Enable Container Registry Vulnerability Scanning* in the section **Additional Options** you will enable the automatic Vulnerability Scanning on images stored in the Oracle Container Registry.
 
       <!-- spellchecker-disable -->
-      {{< img name="oci-stack-db-options" size="large" lazy=false >}}
+      {{< img name="oci-stack-additional-options" size="large" lazy=false >}}
       <!-- spellchecker-enable -->
 
 1. Now you can review the stack configuration and save the changes. Oracle recommends that you do not check the **Run apply** option. This gives you the opportunity to run the "plan" first and check for issues. Click **Create**
@@ -317,7 +347,7 @@ To set up the local machine, process these steps:
 
 1. Set up cluster access.
 
-   To access a cluster, use the `kubectl` command-line interface that is installed (see the [Kubernetes access](./cluster-access)) locally.
+   To access a cluster, use the `kubectl` command-line interface that is installed (see the [Kubernetes access](../cluster-access)) locally.
    If you have not already done so, do the following:
 
 1. Install the `kubectl` command-line interface (see the [kubectl documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/)).
@@ -346,7 +376,7 @@ To set up the local machine, process these steps:
 
 1. Install the Oracle Backend for Spring Boot and Microservices command-line.
 
-   The Oracle Backend for Spring Boot and Microservices command-line interface, `oractl`, is available for Linux and Mac systems. Download the binary that you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0) page and add it to your PATH environment variable. You can rename the binary to remove the suffix.
+   The Oracle Backend for Spring Boot and Microservices command-line interface, `oractl`, is available for Linux and Mac systems. Download the binary that you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.1) page and add it to your PATH environment variable. You can rename the binary to remove the suffix.
 
    If your environment is a Linux or Mac machine, run `chmod +x` on the downloaded binary. Also, if your environment is a Mac, run the following command. Otherwise, you get a security warning and the CLI does not work:
 
