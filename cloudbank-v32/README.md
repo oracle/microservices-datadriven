@@ -1,6 +1,8 @@
 # CloudBank Version 3.2
 
-Version 3.2 of CloudBank is under development. This document and application is WIP.
+**NOTE:** This document and application is WIP.
+
+To run Cloud Bank you need OBaaS version 1.1.1 [Oracle Backend for Spring Boot and Microservices](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911)
 
 ## Build CloudBank
 
@@ -10,7 +12,7 @@ Version 3.2 of CloudBank is under development. This document and application is 
    git clone https://github.com/oracle/microservices-datadriven.git
    ```
 
-1. Got to the `CloudBank` directory
+1. Got to the `CloudBank-v32` directory
 
    ```shell
    cd microservices-datadriven/cloudbank-v32
@@ -57,25 +59,23 @@ Version 3.2 of CloudBank is under development. This document and application is 
     kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.admin}' | base64 -d
     ```
 
-1. Start `oractl` and login.
+1. Start `oractl` from the `cloudbank-v32` directory and login as the `obaas-admin` user.
 
     ```text
-    _   _           __    _    ___
+        _   _           __    _    ___
     / \ |_)  _.  _. (_    /  |   |
     \_/ |_) (_| (_| __)   \_ |_ _|_
     ========================================================================================
     Application Name: Oracle Backend Platform :: Command Line Interface
-    Application Version: (1.1.0)
-    :: Spring Boot (v3.2.0) :: 
-    
+    Application Version: (1.1.1)
+    :: Spring Boot (v3.2.1) ::
     Ask for help:
-    - Slack: https://oracledevs.slack.com/archives/C03ALDSV272 
-    - email: obaas_ww@oracle.com
-
+        - Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+        - email: obaas_ww@oracle.com
     oractl:>connect
-    username: obaas-admin
-    password: **************
-    obaas-cli: Successful connected.
+    ? username obaas-admin
+    ? password *************
+    Credentials successfully authenticated! obaas-admin -> welcome to OBaaS CLI.
     oractl:>
     ```
 
@@ -164,13 +164,13 @@ deploy --service-name transfer --artifact-path transfer/target/transfer-0.0.1-SN
     ```shell
     kubectl port-forward -n apisix svc/apisix-admin 9180
     ```
-   
+
 1. Create routes
 
     In the CloudBank directory run the following command. *NOTE*, you must add the API-KEY to the command
 
     ````shell
-    cd apisix-routes; source ./create-all-routes.sh <YOUR-API-KEY>; cd ..
+    (cd apisix-routes; source ./create-all-routes.sh <YOUR-API-KEY>)
     ```
 
 ## Optional - autoscaling
@@ -194,22 +194,29 @@ create-autoscaler --service-name transfer --min-replicas 1 --max-replicas 4 --cp
 
 ## OpenAPI
 
-All services has OpenAPI documentation and can be reached via the Swagger UI. For example after starting a port forward to anyone of the services you can got to the URL http://localhost:\<port\>/swagger-ui/index.html to see the documentation. Replace \<port\> with the port used in the port forward command.
+All services have OpenAPI documentation and can be reached via the Swagger UI. For example after starting a port forward to anyone of the services you can the URL http://localhost:*port*/swagger-ui/index.html to see the documentation. Replace *port* with the port used in the port forward command.
+For example, to see the API documentation for the `customer32` application do the following:
+
+```shell
+kubectl port-forward -n application svc/customer32 8080
+```
+
+And open a browser window and go to [Swagger UI](http://localhost:8080)
 
 This is an example of the `customer32` application:
 
-![Eureka Dashboard Login](images/swagger-example.png  " ")
+![Swagger UI](images/swagger-example.png  " ")
 
 ## Test CloudBank Services
 
 1. Get the external IP address
-    
+
     ```shell
     kubectl -n ingress-nginx get service ingress-nginx-controller
     ```
-   
+
     Result. Make a note of the EXTERNAL-IP it will be used in the tests.
-2. 
+
     ```text
     NAME                       TYPE           CLUSTER-IP      EXTERNAL-IP       PORT(S)                      AGE
     ingress-nginx-controller   LoadBalancer   10.96.172.148   146.235.207.230   80:31393/TCP,443:30506/TCP   158m
@@ -297,7 +304,7 @@ This is an example of the `customer32` application:
        Transfer-Encoding: chunked
        Date: Thu, 02 Nov 2023 18:02:06 GMT
 
-       {"accountId":21,"amount":256}
+       {"accountId":1,"amount":256}
        ```
 
     1. Check application log
@@ -309,7 +316,7 @@ This is an example of the `customer32` application:
          Should contain:
 
          ```log
-         Received deposit <CheckDeposit(accountId=21, amount=256)>
+         Received deposit <CheckDeposit(accountId=1, amount=256)>
          ```
 
     1. Check journal entries. Replace '1' with the account number you used.
@@ -326,7 +333,7 @@ This is an example of the `customer32` application:
         Transfer-Encoding: chunked
         Date: Thu, 02 Nov 2023 18:06:45 GMT
 
-        [{"journalId":7,"journalType":"PENDING","accountId":21,"lraId":"0","lraState":null,"journalAmount":256}]
+        [{"journalId":7,"journalType":"PENDING","accountId":1,"lraId":"0","lraState":null,"journalAmount":256}]
         ```
 
     1. Clearance of check - Note the JournalID from earlier step
@@ -363,7 +370,7 @@ This is an example of the `customer32` application:
     1. Check journal -- DEPOSIT
 
        ```shell
-       curl -i http://<EXTERNAL-IP>/api/v1/account/21/journal
+       curl -i http://<EXTERNAL-IP>/api/v1/account/1/journal
        ```
 
        Output should look like this -- DEPOSIT
@@ -374,7 +381,7 @@ This is an example of the `customer32` application:
        Transfer-Encoding: chunked
        Date: Thu, 02 Nov 2023 18:36:31 GMT
 
-       [{"journalId":7,"journalType":"DEPOSIT","accountId":21,"lraId":"0","lraState":null,"journalAmount":256}]`
+       [{"journalId":7,"journalType":"DEPOSIT","accountId":1,"lraId":"0","lraState":null,"journalAmount":256}]`
        ```
 
 1. Run LRA Test Cases
@@ -411,7 +418,7 @@ This is an example of the `customer32` application:
     1. Perform transfer between two accounts. Note account numbers
 
        ```shell
-       curl -X POST "http://<EXTERNAL-IP>/transfer?fromAccount=22&toAccount=21&amount=100"
+       curl -X POST "http://<EXTERNAL-IP>/transfer?fromAccount=2&toAccount=1&amount=100"
        ```
 
        Output should look like this:
@@ -459,10 +466,10 @@ This is an example of the `customer32` application:
 
        ```text
        2023-12-26T16:50:45.138Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : Started new LRA/transfer Id: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/ea98ebae-2358-4dd1-9d7c-09f4550d7567
-       2023-12-26T16:50:45.139Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : withdraw accountId = 22, amount = 100
+       2023-12-26T16:50:45.139Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : withdraw accountId = 2, amount = 100
        2023-12-26T16:50:45.139Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : withdraw lraId = http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/ea98ebae-2358-4dd1-9d7c-09f4550d7567
        2023-12-26T16:50:45.183Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : withdraw succeeded
-       2023-12-26T16:50:45.183Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : deposit accountId = 21, amount = 100
+       2023-12-26T16:50:45.183Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : deposit accountId = 1, amount = 100
        2023-12-26T16:50:45.183Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : deposit lraId = http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/ea98ebae-2358-4dd1-9d7c-09f4550d7567
        2023-12-26T16:50:45.216Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : withdraw succeeded deposit succeeded
        2023-12-26T16:50:45.216Z  INFO 1 --- [transfer] [nio-8080-exec-9] [] com.example.transfer.TransferService     : LRA/transfer action will be confirm

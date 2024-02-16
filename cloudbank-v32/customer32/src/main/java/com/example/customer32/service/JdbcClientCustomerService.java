@@ -59,7 +59,7 @@ public class JdbcClientCustomerService implements CustomerService {
 
     @Override
     public int createCustomer(Customer customer) {
-        log.debug("customer : " + customer);
+        log.debug("createCustomer : " + customer);
         var newCustomer = jdbcClient.sql("insert into customers32(id, name, email) values (?,?,?)")
                 .params(List.of(customer.id(), customer.name(), customer.email()))
                 .update();
@@ -68,7 +68,7 @@ public class JdbcClientCustomerService implements CustomerService {
 
     @Override
     public int updateCustomer(Customer customer, String id) {
-        log.debug("customer : " + customer + " id " + id);
+        log.debug("updateCustomer : " + customer + " id " + id);
         var updCustomer = jdbcClient.sql("update customers32 set name = ?, email = ? where id = ?")
                 .params(List.of(customer.name(), customer.email(), id))
                 .update();
