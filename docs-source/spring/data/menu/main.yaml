@@ -77,6 +77,8 @@ main:
     ref: "/cluster-access"
   - name: Sample Application
     ref: "/sampleapp"
+  - name: Upgrade
+    ref: "/upgrade"
   - name: Uninstall
     ref: "/uninstall"
   - name: "Release Notes"
