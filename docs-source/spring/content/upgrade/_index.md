@@ -15,7 +15,7 @@ There are various methods to perform an upgrade including:
 
 # In-Place Marketplace Upgrade
 
-The in-place Marketplace upgrade can be performed when there has been no external modifications of the infrastructure after the original installation of the Markplace stack; or you wish to reconcile the infrastructure back to the delivered Marketplace infrastructure.
+The in-place Marketplace upgrade can be performed when there has been no external modifications of the infrastructure after the original installation of the Marketplace stack; or you wish to reconcile the infrastructure back to the delivered Marketplace infrastructure.
 
 The in-place method will both modify the infrastructure and patch/upgrade the delivered Oracle Backend for Spring Boot and Microservices applications. 
 
@@ -70,7 +70,7 @@ Depending on the Oracle Database that was used during the initial installation, 
 
 * [Oracle Autonomous Database](https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/clone-autonomous-database.html)
 * [Oracle BaseDB](https://docs.oracle.com/en-us/iaas/base-database/doc/clone-db-system.html)
-* On-Premesis options include:
+* On-Premises options include:
     * [PDB Clone](https://docs.oracle.com/en/database/oracle/oracle-database/21/multi/cloning-a-pdb.html)
     * [RMAN Duplicate](https://docs.oracle.com/en-us/iaas/Content/Database/Tasks/mig-rman-duplicate-active-database.htm)
     * [Datapump](https://docs.oracle.com/en/database/oracle/oracle-database/19/sutil/oracle-data-pump-overview.html)
@@ -95,7 +95,7 @@ Unzip the `custom-ebaas_latest.zip` file.
 
 ## Define the Infrastructure
 
-From the orignal installation source, copy the following infrastructure definitions, where they exist, to the new release source:
+From the original installation source, copy the following infrastructure definitions, where they exist, to the new release source:
 
 * ansible/roles/common/vars/main.yaml
 * ansible/roles/registry/vars/main.yaml
@@ -109,7 +109,7 @@ From the unzipped source, run the following commands:
 
 ```bash
 ./setup_ansible.sh
-source actvate.env
+source activate.env
 ansible-playbook ansible/k8s_apply.yaml -t full
 ```
 
@@ -129,14 +129,14 @@ Depending on the Oracle Database that was used during the initial installation, 
 
 * [Oracle Autonomous Database](https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/clone-autonomous-database.html)
 * [Oracle BaseDB](https://docs.oracle.com/en-us/iaas/base-database/doc/clone-db-system.html)
-* On-Premesis options include:
+* On-Premises options include:
     * [PDB Clone](https://docs.oracle.com/en/database/oracle/oracle-database/21/multi/cloning-a-pdb.html)
     * [RMAN Duplicate](https://docs.oracle.com/en-us/iaas/Content/Database/Tasks/mig-rman-duplicate-active-database.htm)
     * [Datapump](https://docs.oracle.com/en/database/oracle/oracle-database/19/sutil/oracle-data-pump-overview.html)
 
 ## Update the Infrastructure
 
-From the orignal installation source, copy the following infrastructure definitions, where they exist, to the new release source:
+From the original installation source, copy the following infrastructure definitions, where they exist, to the new release source:
 
 * ansible/roles/common/vars/main.yaml
 * ansible/roles/registry/vars/main.yaml
@@ -152,7 +152,7 @@ From the unzipped source, run the following commands:
 
 ```bash
 ./setup_ansible.sh
-source actvate.env
+source activate.env
 ansible-playbook ansible/k8s_apply.yaml -t full
 ```
 
