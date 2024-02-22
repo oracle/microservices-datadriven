@@ -22,7 +22,7 @@ The in-place method will both modify the infrastructure and patch/upgrade the de
 
 This method is recommended for development deployments, or after testing the upgrade using the [Out-of-Place Upgrade](#out-of-place-marketplace-upgrade) for production deployments.
 
-> **Warning**: to ensure no unintentional outage or infrastructure destruction; do not directly apply the upgrade stack.  Plan and review the actions that will be performed prior to its application. Reach out for support if there are any concerns about the actions that will be undertaken by the upgrade process.
+> **Warning**: to ensure no unintentional outage or infrastructure destruction; do not directly apply the upgrade stack.  Plan and review the actions that will be performed prior to its application.  If in doubt about the potential loss of data or infrastructure, opt for the Out-of-Place method.
 
 ## Download the Marketplace Upgrade Stack
 
