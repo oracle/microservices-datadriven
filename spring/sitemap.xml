@@ -80,6 +80,8 @@
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/uninstall/</loc>
   </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/upgrade/</loc>
+  </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/platform/vault/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/platform/conductor/</loc>
