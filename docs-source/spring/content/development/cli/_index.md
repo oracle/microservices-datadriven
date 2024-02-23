@@ -9,6 +9,7 @@ microservices applications as well as bindings with the resources that they use.
 
 Table of Contents:
 
+* [Installing the CLI](#installing-the-cli)
 * [Using the CLI](#using-the-cli)
 * [Available Commands](#available-commands)
   * [Help](#help)
@@ -24,6 +25,28 @@ Table of Contents:
   * [GraalVM compile commands](#compile)
   * [User Management](#user-management)  
 * [Logging Information](#logging)
+
+## Installing the CLI
+
+The Oracle Backend for Spring Boot CLI is used to configure your backend and to deploy your Spring Boot applications to the backend.
+
+1. Download the Oracle Backend for Spring Boot and Microservices CLI `oractl`
+
+   Download the CLI from [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.1)
+
+1. Rename the downloaded file to `oractl`
+
+1. Add `oractl` to PATH variable
+
+   You need to make sure it is executable and add it to your PATH environment variable.
+
+    ```shell
+    <copy>
+    chmod +x oractl
+    export PATH=/path/to/oractl:$PATH</copy>
+    ```
+
+**NOTE:** If environment is a Mac you need run the following command `sudo xattr -r -d com.apple.quarantine <downloaded-file>` otherwise will you get a security warning and the CLI will not work.
 
 ## Using the CLI
 
@@ -41,22 +64,20 @@ Table of Contents:
 
     As a result, the `oractl` prompt is displayed as follows:
 
-    ```bash
-     _   _           __    _    ___
-    / \ |_)  _.  _. (_    /  |   |
-    \_/ |_) (_| (_| __)   \_ |_ _|_
-    ========================================================================================
+    ```text
+       _   _           __    _    ___
+      / \ |_)  _.  _. (_    /  |   |
+      \_/ |_) (_| (_| __)   \_ |_ _|_
+      ========================================================================================
+      Application Name: Oracle Backend Platform :: Command Line Interface
+      Application Version: (1.1.1)
+      :: Spring Boot (v3.2.1) ::
 
-    Application Name: Oracle Backend Platform :: Command Line Interface
-    Application Version: (1.1.0)
-    :: Spring Boot (v3.2.1) ::
+      Ask for help:
+      - Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+      - email: obaas_ww@oracle.com
 
-    Ask for help:
-
-    * Slack: <https://oracledevs.slack.com/archives/C03ALDSV272>
-    * email: <obaas_ww@oracle.com>
-
-    oractl:>
+      oractl:>
     ```
 
 ## Available Commands

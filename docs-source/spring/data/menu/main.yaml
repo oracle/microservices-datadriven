@@ -81,5 +81,7 @@ main:
     ref: "/upgrade"
   - name: Uninstall
     ref: "/uninstall"
+  - name: Support
+    ref: "/support"
   - name: "Release Notes"
     ref: "/release-notes"
