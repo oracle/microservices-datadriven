@@ -106,7 +106,8 @@ You must meet the following prerequisites to use Oracle Backend for Spring Boot 
 
   - The Kubernetes command-line interface (kubectl). [Installing kubectl documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
   - Oracle Cloud Infrastructure command-line interface (CLI). [Quickstart - Installing the CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#Quickstart).
-  - Oracle Backend for Spring Boot and Microservices command-line interface (oractl). [Download oractl](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.0.0).
+  - Oracle Backend for Spring Boot and Microservices command-line interface (oractl). [Download oractl](https://github.com/oracle/microservices-datadriven/releases).
+  - [OPTIONAL]Oracle Backend for Spring Boot and Microservices VS Code Extension. [Download VS Code Extension](https://github.com/oracle/microservices-datadriven/releases).
 
 ## Summary of Components
 
