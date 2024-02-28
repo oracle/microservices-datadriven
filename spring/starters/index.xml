@@ -5,28 +5,41 @@
     <link>https://oracle.github.io/microservices-datadriven/spring/starters/</link>
     <description>Recent content in Oracle Spring Boot Starters on Oracle Backend for Spring Boot and Microservices</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <atom:link href="https://oracle.github.io/microservices-datadriven/spring/starters/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language><atom:link href="https://oracle.github.io/microservices-datadriven/spring/starters/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Oracle Spring Boot Starter for AQ/JMS</title>
       <link>https://oracle.github.io/microservices-datadriven/spring/starters/aqjms/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
       <guid>https://oracle.github.io/microservices-datadriven/spring/starters/aqjms/</guid>
-      <description>This starter provides support for Oracle Transactional Event Queues (TxEventQ) and Oracle Advanced Queuing (AQ) as Java Message Service (JMS) providers. It depends on the Universal Connection Pool (UCP) starter.&#xA;Note: By default, the data Source and JMS Connection Factory that the starter injects into your application share the same database transaction. This means that you can start a transaction, read from a queue, perform an update operation, and then commit or rollback that whole unit of work, including the message consumption.</description>
+      <description>This starter provides support for Oracle Transactional Event Queues (TxEventQ) and Oracle Advanced Queuing (AQ) as Java Message Service (JMS) providers. It depends on the Universal Connection Pool (UCP) starter.
+Note: By default, the data Source and JMS Connection Factory that the starter injects into your application share the same database transaction. This means that you can start a transaction, read from a queue, perform an update operation, and then commit or rollback that whole unit of work, including the message consumption.</description>
     </item>
+    
     <item>
       <title>Oracle Spring Boot Starter for Universal Connection Pool</title>
       <link>https://oracle.github.io/microservices-datadriven/spring/starters/ucp/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
       <guid>https://oracle.github.io/microservices-datadriven/spring/starters/ucp/</guid>
-      <description>This starter provides a connection (data source) to an Oracle Database using Universal Connection Pool, which provides an efficient way to use database connections.&#xA;To add this starter to your project, add this Maven dependency:&#xA;&amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.oracle.database.spring&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;oracle-spring-boot-starter-ucp&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;23.4.0&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; For Gradle projects, add this dependency:&#xA;implementation &amp;#39;com.oracle.database.spring:oracle-spring-boot-starter-ucp:23.4.0&amp;#39; An Oracle data source is injected into your application and can be used normally. You must configure the data source as shown below, and you should also add either Spring Data JDBC or Spring Data JPA to your project.</description>
+      <description>This starter provides a connection (data source) to an Oracle Database using Universal Connection Pool, which provides an efficient way to use database connections.
+To add this starter to your project, add this Maven dependency:
+&amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.oracle.database.spring&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;oracle-spring-boot-starter-ucp&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;23.4.0&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; For Gradle projects, add this dependency:
+implementation &amp;#39;com.oracle.database.spring:oracle-spring-boot-starter-ucp:23.4.0&amp;#39; An Oracle data source is injected into your application and can be used normally. You must configure the data source as shown below, and you should also add either Spring Data JDBC or Spring Data JPA to your project.</description>
     </item>
+    
     <item>
       <title>Oracle Spring Boot Starter for Wallet</title>
       <link>https://oracle.github.io/microservices-datadriven/spring/starters/wallet/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
       <guid>https://oracle.github.io/microservices-datadriven/spring/starters/wallet/</guid>
-      <description>This starter provides support for wallet-based authentication for Oracle Database connections. It depends on the UCP starter.&#xA;To add this starter to your project, add this Maven dependency:&#xA;&amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.oracle.database.spring&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;oracle-spring-boot-starter-wallet&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;23.4.0&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; For Gradle projects, add this dependency:&#xA;implementation &amp;#39;com.oracle.database.spring:oracle-spring-boot-starter-wallet:23.4.0&amp;#39; You need to provide the wallet to your application. You can specify the location in the spring.datasource.url as shown in the following example.&#xA;jdbc:oracle:thin:@mydb_tp?TNS_ADMIN=/oracle/tnsadmin Note that the location specified in the sqlnet.</description>
+      <description>This starter provides support for wallet-based authentication for Oracle Database connections. It depends on the UCP starter.
+To add this starter to your project, add this Maven dependency:
+&amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.oracle.database.spring&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;oracle-spring-boot-starter-wallet&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;23.4.0&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; For Gradle projects, add this dependency:
+implementation &amp;#39;com.oracle.database.spring:oracle-spring-boot-starter-wallet:23.4.0&amp;#39; You need to provide the wallet to your application. You can specify the location in the spring.datasource.url as shown in the following example.
+jdbc:oracle:thin:@mydb_tp?TNS_ADMIN=/oracle/tnsadmin Note that the location specified in the sqlnet.</description>
     </item>
+    
   </channel>
 </rss>
