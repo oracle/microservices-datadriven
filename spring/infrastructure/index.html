@@ -9,9 +9,12 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.123.1">
+<meta name="generator" content="Hugo 0.123.4">
 
 
+  <meta name="description" content="Infrastructure Details Considerations The following points are considered when designing the infrastructure:
+Performance The ability to scale both vertically on all tiers and horizontally on the web tier. Resources should be able automatically scale vertically based unpredictable, changing workloads.
+Security The database should not be accessible directly from the internet. Data should be encrypted at rest and, when traversing networks, in motion. The Kubernetes control plane and worker nodes should not be accessible directly from the internet." />
 
 
   <meta name="robots" content="index, follow" />
@@ -49,6 +52,9 @@
     content="Infrastructure"
   />
   <meta property="og:site_name" content="Oracle Backend for Spring Boot and Microservices" />
+  <meta property="og:description" content="Infrastructure Details Considerations The following points are considered when designing the infrastructure:
+Performance The ability to scale both vertically on all tiers and horizontally on the web tier. Resources should be able automatically scale vertically based unpredictable, changing workloads.
+Security The database should not be accessible directly from the internet. Data should be encrypted at rest and, when traversing networks, in motion. The Kubernetes control plane and worker nodes should not be accessible directly from the internet." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/spring/infrastructure/" />
 
@@ -57,6 +63,9 @@
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Infrastructure" />
+  <meta name="twitter:description" content="Infrastructure Details Considerations The following points are considered when designing the infrastructure:
+Performance The ability to scale both vertically on all tiers and horizontally on the web tier. Resources should be able automatically scale vertically based unpredictable, changing workloads.
+Security The database should not be accessible directly from the internet. Data should be encrypted at rest and, when traversing networks, in motion. The Kubernetes control plane and worker nodes should not be accessible directly from the internet." />
 
 
   <script type="application/ld+json">
@@ -67,7 +76,8 @@
       "name": "Infrastructure",
       "url" : "https://oracle.github.io/microservices-datadriven/spring/infrastructure/",
       "headline": "Infrastructure",
-      "wordCount" : "0",
+      "description": "Infrastructure Details Considerations The following points are considered when designing the infrastructure:\nPerformance The ability to scale both vertically on all tiers and horizontally on the web tier. Resources should be able automatically scale vertically based unpredictable, changing workloads.\nSecurity The database should not be accessible directly from the internet. Data should be encrypted at rest and, when traversing networks, in motion. The Kubernetes control plane and worker nodes should not be accessible directly from the internet.",
+      "wordCount" : "1024",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -2071,6 +2081,51 @@
               <span class="flex">
                 
                 <a
+                  href="/microservices-datadriven/spring/support"
+                  class="gdoc-nav__entry"
+                >
+                  Support
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
                   href="/microservices-datadriven/spring/release-notes"
                   class="gdoc-nav__entry"
                 >
@@ -2236,7 +2291,263 @@ if (!doNotTrack) {
     class="gdoc-markdown gdoc-markdown__align--left"
   >
     <h1>Infrastructure</h1>
-    
+    <div class="gdoc-page__anchorwrap">
+    <h1 id="infrastructure-details">
+        Infrastructure Details
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#infrastructure-details" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Infrastructure Details" aria-label="Anchor to: Infrastructure Details" href="#infrastructure-details">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h1>
+</div>
+<p><img
+  src="infra_diagram.png"
+  alt="Infrastructure"
+  title="Overall Infrastructure"
+/></p>
+<div class="gdoc-page__anchorwrap">
+    <h2 id="considerations">
+        Considerations
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#considerations" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Considerations" aria-label="Anchor to: Considerations" href="#considerations">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>The following points are considered when designing the infrastructure:</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="performance">
+        Performance
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#performance" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Performance" aria-label="Anchor to: Performance" href="#performance">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>The ability to scale both vertically on all tiers and horizontally on the web tier.   Resources should be able automatically scale vertically based unpredictable, changing workloads.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="security">
+        Security
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#security" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Security" aria-label="Anchor to: Security" href="#security">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>The database should not be accessible directly from the internet.   Data should be encrypted at rest and, when traversing networks, in motion.  The Kubernetes control plane and worker nodes should not be accessible directly from the internet.</p>
+<p>A Bastion Service should be use for directly accessing the Database and Kubernetes when required.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="availability">
+        Availability
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#availability" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Availability" aria-label="Anchor to: Availability" href="#availability">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>Remove a single point of failure by introducing redundancy via Availability and Fault Domains and native ADB solutions.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="extensibility-and-flexibility">
+        Extensibility and Flexibility
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#extensibility-and-flexibility" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Extensibility and Flexibility" aria-label="Anchor to: Extensibility and Flexibility" href="#extensibility-and-flexibility">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>Designed to seamlessly cater for the addition or removal of resources, capabilities and/or functionality.</p>
+<hr>
+<div class="gdoc-page__anchorwrap">
+    <h2 id="components">
+        Components
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#components" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Components" aria-label="Anchor to: Components" href="#components">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>The infrastructure has the following components:</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="region">
+        Region
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#region" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Region" aria-label="Anchor to: Region" href="#region">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>An Oracle Cloud Infrastructure region is a localized geographic area that contains one or more data centres, called availability domains.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="availability-domains">
+        Availability domains
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#availability-domains" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Availability domains" aria-label="Anchor to: Availability domains" href="#availability-domains">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>Availability domains are stand-alone, independent data centres within a region.  The physical resources in each availability domain are isolated from the resources in the other availability domains, which provides fault tolerance.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="fault-domains">
+        Fault domains
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#fault-domains" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Fault domains" aria-label="Anchor to: Fault domains" href="#fault-domains">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>A fault domain is a grouping of hardware and infrastructure within an availability domain.  Each availability domain has three fault domains with independent power and hardware.  Applications can tolerate physical server failure, system maintenance, and power failures inside a fault domain.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="virtual-cloud-network-vcn-public-and-private-subnets">
+        Virtual cloud network (VCN), Public and Private Subnets
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#virtual-cloud-network-vcn-public-and-private-subnets" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Virtual cloud network (VCN), Public and Private Subnets" aria-label="Anchor to: Virtual cloud network (VCN), Public and Private Subnets" href="#virtual-cloud-network-vcn-public-and-private-subnets">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>A VCN is a customizable, software-defined network.  Like traditional data centre networks, VCNs give complete control over the network environment.  A VCN can have multiple non-overlapping CIDR blocks which can be segmented into subnets.  A subnet can be public or private.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="service-gateway">
+        Service gateway
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#service-gateway" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Service gateway" aria-label="Anchor to: Service gateway" href="#service-gateway">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>The service gateway provides access from a VCN to other services, such as Oracle Cloud Infrastructure Object Storage. The traffic from the VCN to the Oracle service travels over the Oracle network fabric and never traverses the internet.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="security-listnetwork-security-group-nsg">
+        Security List/Network Security Group (NSG)
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#security-listnetwork-security-group-nsg" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Security List/Network Security Group (NSG)" aria-label="Anchor to: Security List/Network Security Group (NSG)" href="#security-listnetwork-security-group-nsg">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>For each subnet, Security Lists and/or Network Security Groups are used to specify the source, destination, and type of traffic that must be allowed in and out of the subnet.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="load-balancer">
+        Load Balancer
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#load-balancer" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Load Balancer" aria-label="Anchor to: Load Balancer" href="#load-balancer">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>The Oracle Cloud Infrastructure Load Balancing service provides automated traffic distribution from a single entry point to one or multiple servers in the back end.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="bastion-services">
+        Bastion Services
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#bastion-services" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Bastion Services" aria-label="Anchor to: Bastion Services" href="#bastion-services">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>The Bastion as a Service provides restricted and time-limited secure access to the ORDS Server(s) and the Autonomous Data Warehouse.  These resources do not have public endpoints and require strict resource access controls.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="autonomous-transaction-processing-database-atp">
+        Autonomous Transaction Processing Database (ATP)
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#autonomous-transaction-processing-database-atp" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Autonomous Transaction Processing Database (ATP)" aria-label="Anchor to: Autonomous Transaction Processing Database (ATP)" href="#autonomous-transaction-processing-database-atp">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>By default, Autonomous Databases are highly available, incorporating a multi-node configuration to protect against localized hardware failures that do not require fast disaster recovery.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="container-engine-for-kubernetes">
+        Container Engine for Kubernetes
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#container-engine-for-kubernetes" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Container Engine for Kubernetes" aria-label="Anchor to: Container Engine for Kubernetes" href="#container-engine-for-kubernetes">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>Oracle Cloud Infrastructure Container Engine for Kubernetes is a fully managed, scalable, and highly available service that you can use to deploy your containerized applications to the cloud. You specify the compute resources that your applications require, and Container Engine for Kubernetes provisions them on Oracle Cloud Infrastructure in an existing tenancy. Container Engine for Kubernetes uses Kubernetes to automate the deployment, scaling, and management of containerized applications across clusters of hosts.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="control-plane-services--pods">
+        Control Plane Services &amp; Pods
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#control-plane-services--pods" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Control Plane Services &amp; Pods" aria-label="Anchor to: Control Plane Services &amp; Pods" href="#control-plane-services--pods">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>The Control Plane manages the worker nodes and the Pods in the Kubernetes cluster. The worker nodes run the containerized applications. Every cluster has at least one worker node. The worker node(s) host the Pods that are the components of the application workload.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="object-storage">
+        Object Storage
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#object-storage" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Object Storage" aria-label="Anchor to: Object Storage" href="#object-storage">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>Object Storage offers reliable and cost-efficient data durability, it provides quick access to large amounts of structured and unstructured data of any content type, including database data, analytic data, images, videos and more. We recommend using standard storage to ingest data from external sources because applications and users can access it quickly. You can build a lifecycle policy to move the data from standard storage to archive storage when it’s no longer required to be accessed frequently.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="registry">
+        Registry
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#registry" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Registry" aria-label="Anchor to: Registry" href="#registry">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<div class="gdoc-page__anchorwrap">
+    <h2 id="oracle-cloud-infrastructure-registry-is-an-oracle-managed-registry-that-enables-you-to-simplify-your-development-to-production-workflow-registry-makes-it-easy-for-you-to-store-share-and-manage-development-artifacts-like-docker-images-the-highly-available-and-scalable-architecture-of-oracle-cloud-infrastructure-ensures-that-you-can-deploy-and-manage-your-applications-reliably">
+        Oracle Cloud Infrastructure Registry is an Oracle-managed registry that enables you to simplify your development-to-production workflow. Registry makes it easy for you to store, share, and manage development artifacts, like Docker images. The highly available and scalable architecture of Oracle Cloud Infrastructure ensures that you can deploy and manage your applications reliably.
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#oracle-cloud-infrastructure-registry-is-an-oracle-managed-registry-that-enables-you-to-simplify-your-development-to-production-workflow-registry-makes-it-easy-for-you-to-store-share-and-manage-development-artifacts-like-docker-images-the-highly-available-and-scalable-architecture-of-oracle-cloud-infrastructure-ensures-that-you-can-deploy-and-manage-your-applications-reliably" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Oracle Cloud Infrastructure Registry is an Oracle-managed registry that enables you to simplify your development-to-production workflow. Registry makes it easy for you to store, share, and manage development artifacts, like Docker images. The highly available and scalable architecture of Oracle Cloud Infrastructure ensures that you can deploy and manage your applications reliably." aria-label="Anchor to: Oracle Cloud Infrastructure Registry is an Oracle-managed registry that enables you to simplify your development-to-production workflow. Registry makes it easy for you to store, share, and manage development artifacts, like Docker images. The highly available and scalable architecture of Oracle Cloud Infrastructure ensures that you can deploy and manage your applications reliably." href="#oracle-cloud-infrastructure-registry-is-an-oracle-managed-registry-that-enables-you-to-simplify-your-development-to-production-workflow-registry-makes-it-easy-for-you-to-store-share-and-manage-development-artifacts-like-docker-images-the-highly-available-and-scalable-architecture-of-oracle-cloud-infrastructure-ensures-that-you-can-deploy-and-manage-your-applications-reliably">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<div class="gdoc-page__anchorwrap">
+    <h2 id="recommendations">
+        Recommendations
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#recommendations" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Recommendations" aria-label="Anchor to: Recommendations" href="#recommendations">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>Requirements might differ or change from the architecture proposed.  Use the following recommendations as a starting point to adjusting the architecture; changes may impact pricing:</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="dedicated-networking-chargeable">
+        Dedicated Networking (Chargeable)
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#dedicated-networking-chargeable" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Dedicated Networking (Chargeable)" aria-label="Anchor to: Dedicated Networking (Chargeable)" href="#dedicated-networking-chargeable">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>Access to/from an On-Premise data centre will require additional networking configuration including but not limited to FastConnect and Dynamic Routing Gateways.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="security-zones-free">
+        Security Zones (Free)
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#security-zones-free" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Security Zones (Free)" aria-label="Anchor to: Security Zones (Free)" href="#security-zones-free">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>For resources that require maximum security, Oracle recommends to use security zones.  A security zone is a compartment associated with an Oracle-defined recipe of security policies that are based on best practices.  For example, the resources in a security zone must not be accessible from the public internet and they must be encrypted using customer-managed keys.  When creating or updating resources in a security zone, OCI validates the operations against the policies in the security-zone recipe, and denies operations that violate any of the policies.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="web-application-firewall-chargeable">
+        Web Application Firewall (Chargeable)
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#web-application-firewall-chargeable" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Web Application Firewall (Chargeable)" aria-label="Anchor to: Web Application Firewall (Chargeable)" href="#web-application-firewall-chargeable">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>Web Application Firewall (WAF) protects applications from malicious and unwanted internet traffic. WAF can protect any internet facing endpoint, providing consistent rule enforcement across a customer&rsquo;s applications.  WAF provides the ability to create and manage rules for internet threats including Cross-Site Scripting (XSS), SQL Injection and other OWASP-defined vulnerabilities. Unwanted bots can be mitigated while tactically allowed desirable bots to enter. Access rules can limit based on geography or the signature of the request.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="atp-cpu-auto-scaling-chargeable">
+        ATP CPU Auto-Scaling (Chargeable)
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#atp-cpu-auto-scaling-chargeable" class="gdoc-page__anchor clip flex align-center" title="Anchor to: ATP CPU Auto-Scaling (Chargeable)" aria-label="Anchor to: ATP CPU Auto-Scaling (Chargeable)" href="#atp-cpu-auto-scaling-chargeable">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>It is recommend to leave auto-scaling enabled; this will allow the increase and decrease of the databases CPU and I/O resources.  Use Apache JMeter to load test functional behaviour and measure the performance.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="autonomous-data-guard-chargeable">
+        Autonomous Data Guard (Chargeable)
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#autonomous-data-guard-chargeable" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Autonomous Data Guard (Chargeable)" aria-label="Anchor to: Autonomous Data Guard (Chargeable)" href="#autonomous-data-guard-chargeable">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>Autonomous Data Guard monitors the primary database and if the Autonomous Database instance goes down, then the standby instance assumes the role of the primary instance adding additional fault tolerance.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="data-catalog-chargeable">
+        Data Catalog (Chargeable)
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/#data-catalog-chargeable" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Data Catalog (Chargeable)" aria-label="Anchor to: Data Catalog (Chargeable)" href="#data-catalog-chargeable">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>OCI Data Catalog is a fully managed, self-service data discovery and governance solution for your enterprise data. Data Catalog provides a single collaborative environment to manage technical, business, and operational metadata.</p>
+
   </article>
 
 
@@ -3225,6 +3536,30 @@ if (!doNotTrack) {
     
     
   
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+  
 
 
 
@@ -3254,7 +3589,7 @@ if (!doNotTrack) {
         
           <span class="gdoc-footer__item gdoc-footer__item--row">
             <a href="https://oss.oracle.com/licenses/upl/" class="gdoc-footer__link">
-              (C) 2022, 2023, Oracle and/or its affiliates
+              (C) 2022, 2024, Oracle and/or its affiliates
             </a>
           </span>
         

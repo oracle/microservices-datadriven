@@ -9,7 +9,7 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.123.1">
+<meta name="generator" content="Hugo 0.123.4">
 
 
   <meta name="description" content="Command Line Interface for Oracle Backend for Spring Boot and Microservices" />
@@ -72,7 +72,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/development/cli/",
       "headline": "OBaaS CLI",
       "description": "Command Line Interface for Oracle Backend for Spring Boot and Microservices",
-      "wordCount" : "4144",
+      "wordCount" : "4253",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -2076,6 +2076,51 @@
               <span class="flex">
                 
                 <a
+                  href="/microservices-datadriven/spring/support"
+                  class="gdoc-nav__entry"
+                >
+                  Support
+                </a>
+              </span>
+              
+            </label>
+          
+        
+
+        
+      </li>
+    
+      
+      
+
+
+      <li>
+        
+        
+          
+          
+          
+          
+          
+          
+          
+
+          
+          
+
+          
+            <input
+              type="checkbox"
+              
+                class="hidden"
+              
+            />
+            <label
+              
+            >
+              <span class="flex">
+                
+                <a
                   href="/microservices-datadriven/spring/release-notes"
                   class="gdoc-nav__entry"
                 >
@@ -2258,6 +2303,10 @@ microservices applications as well as bindings with the resources that they use.
 <ul>
 <li><a
   class="gdoc-markdown__link"
+  href="#installing-the-cli"
+>Installing the CLI</a></li>
+<li><a
+  class="gdoc-markdown__link"
   href="#using-the-cli"
 >Using the CLI</a></li>
 <li><a
@@ -2321,6 +2370,35 @@ microservices applications as well as bindings with the resources that they use.
 >Logging Information</a></li>
 </ul>
 <div class="gdoc-page__anchorwrap">
+    <h2 id="installing-the-cli">
+        Installing the CLI
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/development/cli/#installing-the-cli" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Installing the CLI" aria-label="Anchor to: Installing the CLI" href="#installing-the-cli">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>The Oracle Backend for Spring Boot CLI is used to configure your backend and to deploy your Spring Boot applications to the backend.</p>
+<ol>
+<li>
+<p>Download the Oracle Backend for Spring Boot and Microservices CLI <code>oractl</code></p>
+<p>Download the CLI from <a
+  class="gdoc-markdown__link"
+  href="https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.1"
+>here</a></p>
+</li>
+<li>
+<p>Rename the downloaded file to <code>oractl</code></p>
+</li>
+<li>
+<p>Add <code>oractl</code> to PATH variable</p>
+<p>You need to make sure it is executable and add it to your PATH environment variable.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">&lt;copy&gt;
+</span></span><span class="line"><span class="cl">chmod +x oractl
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span>/path/to/oractl:<span class="nv">$PATH</span>&lt;/copy&gt;
+</span></span></code></pre></div></li>
+</ol>
+<p><strong>NOTE:</strong> If environment is a Mac you need run the following command <code>sudo xattr -r -d com.apple.quarantine &lt;downloaded-file&gt;</code> otherwise will you get a security warning and the CLI will not work.</p>
+<div class="gdoc-page__anchorwrap">
     <h2 id="using-the-cli">
         Using the CLI
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/development/cli/#using-the-cli" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Using the CLI" aria-label="Anchor to: Using the CLI" href="#using-the-cli">
@@ -2337,21 +2415,19 @@ microservices applications as well as bindings with the resources that they use.
 <p>Start the CLI in interactive mode by running oractl from your terminal window. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">oractl
 </span></span></code></pre></div><p>As a result, the <code>oractl</code> prompt is displayed as follows:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"> _   _           __    _    ___
-</span></span><span class="line"><span class="cl">/ <span class="se">\ </span><span class="p">|</span>_<span class="o">)</span>  _.  _. <span class="o">(</span>_    /  <span class="p">|</span>   <span class="p">|</span>
-</span></span><span class="line"><span class="cl"><span class="se">\_</span>/ <span class="p">|</span>_<span class="o">)</span> <span class="o">(</span>_<span class="p">|</span> <span class="o">(</span>_<span class="p">|</span> __<span class="o">)</span>   <span class="se">\_</span> <span class="p">|</span>_ _<span class="p">|</span><span class="nv">_</span>
-</span></span><span class="line"><span class="cl"><span class="o">========================================================================================</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">   _   _           __    _    ___
+</span></span><span class="line"><span class="cl">  / \ |_)  _.  _. (_    /  |   |
+</span></span><span class="line"><span class="cl">  \_/ |_) (_| (_| __)   \_ |_ _|_
+</span></span><span class="line"><span class="cl">  ========================================================================================
+</span></span><span class="line"><span class="cl">  Application Name: Oracle Backend Platform :: Command Line Interface
+</span></span><span class="line"><span class="cl">  Application Version: (1.1.1)
+</span></span><span class="line"><span class="cl">  :: Spring Boot (v3.2.1) ::
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">Application Name: Oracle Backend Platform :: Command Line Interface
-</span></span><span class="line"><span class="cl">Application Version: <span class="o">(</span>1.1.0<span class="o">)</span>
-</span></span><span class="line"><span class="cl">:: Spring Boot <span class="o">(</span>v3.2.1<span class="o">)</span> ::
+</span></span><span class="line"><span class="cl">  Ask for help:
+</span></span><span class="line"><span class="cl">  - Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+</span></span><span class="line"><span class="cl">  - email: obaas_ww@oracle.com
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">Ask <span class="k">for</span> help:
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">* Slack: &lt;https://oracledevs.slack.com/archives/C03ALDSV272&gt;
-</span></span><span class="line"><span class="cl">* email: &lt;obaas_ww@oracle.com&gt;
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">oractl:&gt;
+</span></span><span class="line"><span class="cl">  oractl:&gt;
 </span></span></code></pre></div></li>
 </ol>
 <div class="gdoc-page__anchorwrap">
@@ -4470,6 +4546,30 @@ CLI tracks how many configurations are present in the Spring Cloud Config server
     
     
   
+    
+    
+
+    
+    
+      
+      
+      
+
+      
+        
+      
+      
+
+      
+
+      
+
+      
+    
+
+    
+    
+  
 
 
 
@@ -4517,7 +4617,7 @@ CLI tracks how many configurations are present in the Spring Cloud Config server
         
           <span class="gdoc-footer__item gdoc-footer__item--row">
             <a href="https://oss.oracle.com/licenses/upl/" class="gdoc-footer__link">
-              (C) 2022, 2023, Oracle and/or its affiliates
+              (C) 2022, 2024, Oracle and/or its affiliates
             </a>
           </span>
         
