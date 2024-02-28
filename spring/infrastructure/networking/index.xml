@@ -5,7 +5,6 @@
     <link>https://oracle.github.io/microservices-datadriven/spring/infrastructure/networking/</link>
     <description>Recent content in Networking on Oracle Backend for Spring Boot and Microservices</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <atom:link href="https://oracle.github.io/microservices-datadriven/spring/infrastructure/networking/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language><atom:link href="https://oracle.github.io/microservices-datadriven/spring/infrastructure/networking/index.xml" rel="self" type="application/rss+xml" />
   </channel>
 </rss>
