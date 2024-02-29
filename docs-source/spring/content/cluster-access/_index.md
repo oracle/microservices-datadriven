@@ -1,12 +1,14 @@
 ---
 title: "Kubernetes Access"
+description: "Access the Kubernetes cluster in the backend where your Spring Boot microservices applications are deployed"
+keywords: "kubernetes cluster spring springboot microservices oracle"
 resources:
   - name: oci-cloud-shell
     src: "oci-cloud-shell.png"
     title: "OCI Cloud Shell icon"
 ---
 
-The Oracle Backend for Spring Boot setup creates a Kubernetes cluster where the server and dashboard components are deployed. At the end
+The Oracle Backend for Spring Boot and Microservices setup creates a Kubernetes cluster where the server and dashboard components are deployed. At the end
 of setup, you are provided with a command in the log for the apply job to create a Kubernetes configuration file to access that cluster:
 
 {{< hint type=[tip] icon=gdoc_check title=Tip >}}
@@ -96,5 +98,3 @@ kube-system       proxymux-client-vpnh7                       1/1     Running   
 .........
 user@cloudshell:~ (us-ashburn-1)$
 ```
-
-Next, go to the [Uninstall](../uninstall/) page to learn about uninstalling Oracle Backend for Spring Boot.

@@ -1,0 +1,68 @@
+# Copyright (c) 2023, Oracle and/or its affiliates. 
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/ 
+spring:
+  application:
+    name: customer
+  zipkin:
+    base-url: ${zipkin.base-url}
+  # Disables autoconfiguration for the refresh scope and associated features. Fixes Eureka problem with native
+  cloud:
+    refresh:
+      enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.OracleDialect
+        # format_sql: true
+    show-sql: true
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: always
+
+  liquibase:
+    change-log: classpath:db/changelog/controller.yaml
+    url: ${spring.datasource.url}
+    user: ${liquibase.datasource.username}
+    password: ${liquibase.datasource.password}
+    enabled: ${LIQUIBASE_ENABLED:true}
+    
+  datasource:
+    url: ${spring.datasource.url}
+    username: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    driver-class-name: oracle.jdbc.OracleDriver
+    type: oracle.ucp.jdbc.PoolDataSource
+    oracleucp:
+      connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
+      connection-pool-name: CustomerConnectionPool
+      initial-pool-size: 15
+      min-pool-size: 10
+      max-pool-size: 30
+
+eureka:
+  instance:
+    hostname: ${spring.application.name}
+    preferIpAddress: true
+  client:
+    service-url:
+      defaultZone: ${eureka.service-url}
+    fetch-registry: true
+    register-with-eureka: true
+    enabled: true
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    tags:
+      application: ${spring.application.name}
+

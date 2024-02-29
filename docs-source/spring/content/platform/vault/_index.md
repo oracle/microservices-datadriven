@@ -1,5 +1,7 @@
 ---
 title: "Vault"
+description: "Securing secrets with Vault in Oracle Backend for Spring Boot and Microservices"
+keywords: "vault secrets security springboot spring development microservices development oracle backend"
 resources:
   - name: vault-login
     src: "vault-login.png"
@@ -21,7 +23,7 @@ resources:
     title: "Vault Show Secret"
 ---
 
-Oracle Backend as a Service for Spring Cloud includes [HashiCorp Vault](https://www.vaultproject.io/) to secure, store and tightly control
+Oracle Backend as a Service for Spring Cloud and Microservices includes [HashiCorp Vault](https://www.vaultproject.io/) to secure, store and tightly control
 access to tokens, passwords, certificates, encryption keys for protecting secrets, and other sensitive data using a user interface (UI),
 command-line interface (CLI), or Hypertext Transfer Protocol (HTTP) API. The Vault can be deployed in two different ways. See
 the [Setup](../../setup/):
@@ -318,5 +320,3 @@ To access the Vault, process these steps:
       <!-- spellchecker-disable -->
       {{< img name="vault-show-secret" size="medium" lazy=false >}}
       <!-- spellchecker-enable -->
-
-Next, go to the [VS Code Plugin](../platform/vscode-plugin/) page to learn more.

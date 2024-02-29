@@ -3,7 +3,7 @@ main:
     ref: "/setup"
   - name: "Multi-Cloud (OCI/Azure) Installation"
     ref: "/azure"
-  - name: "On-Premises Installation"
+  - name: "Custom Installations"
     ref: "/on-premises"
     sub:
       - name: "MacOS Ventura (x86)"
@@ -12,16 +12,16 @@ main:
         ref: "/on-premises/ol8" 
   - name: Getting Started
     ref: "/getting-started"     
-  - name: Sample Applications
-    ref: "/sample-apps"
   - name: Platform Services
     ref: "/platform"
     sub:
+      - name: Spring Operations Center
+        ref : "/platform/soc"
       - name: API Gateway
         ref: "/platform/apigw"
       - name: Service Discovery
         ref: "/platform/eureka"
-      - name: Configuration
+      - name: Spring Config Server
         ref: "/platform/config"
       - name: Workflow
         ref: "/platform/conductor"
@@ -29,6 +29,8 @@ main:
         ref: "/platform/spring-admin"
       - name: OBaaS CLI
         ref: "/development/cli"
+      - name: MicroTx
+        ref: "/platform/microtx"
       - name: Vault
         ref: "/platform/vault"
       - name: VS Code plugin
@@ -42,11 +44,44 @@ main:
         ref: "/observability/tracing"
   - name: Security
     ref: "/security"
+    sub:
+      - name: Authorization Server
+        ref: "/security/azn-server"
+  - name: Development
+    ref: "/development"
+    sub:  
+      - name: Setup
+        ref: "/development/setup"
+      - name: Project Structure
+        ref: "/development/project"
+      - name: Predefined Variables
+        ref: "/development/envvars"
+  - name: Spring Boot Starters
+    ref: "/starters"
+    sub:
+      - name: "UCP"
+        ref: "/starters/ucp"
+      - name: "Wallet"
+        ref: "/starters/wallet"
+      - name: "AQ/JMS"
+        ref: "/starters/aqjms"
+  - name: Infrastructure
+    sub:
+      - name: "Networking"
+        ref: "/infrastructure/networking"
+      - name: "Database"
+        ref: "/infrastructure/database"   
   - name: Database Access
     ref: "/database"
   - name: Kubernetes Access
     ref: "/cluster-access"
+  - name: Sample Application
+    ref: "/sampleapp"
+  - name: Upgrade
+    ref: "/upgrade"
   - name: Uninstall
     ref: "/uninstall"
+  - name: Support
+    ref: "/support"
   - name: "Release Notes"
     ref: "/release-notes"

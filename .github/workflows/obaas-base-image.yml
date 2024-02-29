@@ -1,0 +1,82 @@
+name: "Build OBaaS Base Image"
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+env:
+  src_tag: 17-muslib-ol8
+  dst_img: graalvm-native-image-obaas
+  description: "Oracle GraalVM for JDK 17 and OBaaS."
+jobs:
+  obaas-image:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: .github
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get latest Image Software Digest
+        run: |
+          latest_digest=$(docker run --rm --entrypoint cat ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:latest /image_digest)
+          echo "Current Digest: $latest_digest"
+          echo "latest_digest=$latest_digest" >> $GITHUB_ENV
+        continue-on-error: true
+
+      - name: Create New Image
+        if: env.latest_digest == ''
+        uses: ./.github/actions/process-image
+        with:
+          src_image: container-registry.oracle.com/graalvm/native-image:${{ env.src_tag }}
+          dst_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ env.src_tag }}
+          description: ${{ env.description }}
+          push: true
+
+      - name: Run Trivy Vulnerability Scanner
+        id: trivy_scan
+        if: env.latest_digest != ''
+        env:
+          TRIVY_DEFAULT: "--format table --ignore-unfixed --exit-code 1"
+          TRIVY_SCAN: "--severity CRITICAL,HIGH --vuln-type os,library"
+        run: >
+          docker run --rm ghcr.io/aquasecurity/trivy:latest image $TRIVY_DEFAULT $TRIVY_SCAN
+          --username ${{ github.actor }}
+          --password ${{ secrets.GITHUB_TOKEN }}
+          ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:latest
+        continue-on-error: true
+
+      - name: Update Existing Image
+        id: update_image
+        if: env.latest_digest != '' && steps.trivy_scan.outcome == 'failure'
+        uses: ./.github/actions/process-image
+        with:
+          src_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:latest
+          dst_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ env.src_tag }}
+          description: ${{ env.description }}
+          push: false
+
+      - name: Get newest Image Software Digest
+        id: get_newest_digest
+        if: steps.update_image.outcome != 'skipped'
+        run: |
+          newest_digest=$(docker run --rm --entrypoint cat ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:latest /image_digest)
+          echo "New Digest: $newest_digest"
+          echo "newest_digest=$newest_digest" >> $GITHUB_ENV
+
+      - name: Push Updated Image
+        if: steps.get_newest_digest.outcome != 'skipped' && env.latest_digest != env.newest_digest
+        uses: ./.github/actions/process-image
+        with:
+          src_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:latest
+          dst_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ env.src_tag }}
+          description: ${{ env.description }}
+          push: true

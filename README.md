@@ -13,14 +13,19 @@ deliver agile application development practices. However, the data-driven nature
 of enterprise applications has made building, deploying, and maintaining
 microservices complex.
 
-| Sample | Description |
-| :----- | :---------- |
-| [`grabdish`](./grabdish) | Mobile food delivery application sample code |
+## Documentation
 
-## Resources
-
-* [Building Microservices with Oracle Converged Database Workshop][Workshop]
-* [Blogs][Blogs]
+* [Oracle Backend for Spring Boot and Microservices](http://bit.ly/oraclespringboot)
+* [Oracle Backend for Parse Platform](https://bit.ly/oraclembaas) (Oracle's "MERN" stack)
+* [CloudBank Live Lab](https://bit.ly/CloudBankOnOBaaS) - Building an App with Spring Boot
+  and Mobile APIs with Oracle Database and Kubernetes
+* [Kubernetes for DBAs Live Lab](http://bit.ly/KubernetesForDBAs)
+<!-- * [Oracle Spring Boot Starters](https://oracle.github.io/microservices-datadriven/spring/starters/) -->
+* [Data Refactoring Advisor](./data-refactoring-advisor/README.md)
+* [Data Refactoring Advisor for Migrating a Monolith to Microservices Live Lab](https://bit.ly/datarefactoringadvisor)
+* [Building Microservices with Oracle Converged Database Live Lab][Workshop]
+* [Read our blogs](https://oracle.github.io/microservices-datadriven/spring/blogs)
+* [Sample code for Oracle Transactional Event Queues](./code-teq)
 
 ## Contributing
 
@@ -32,7 +37,7 @@ Please consult the [security guide](./SECURITY.md) for our responsible security 
 
 ## License
 
-Copyright (c) 2021, 2023 Oracle and/or its affiliates.
+Copyright (c) 2021, 2023, Oracle and/or its affiliates.
 
 Licensed under the Universal Permissive License v 1.0 as shown at <https://oss.oracle.com/licenses/upl>.
 
@@ -41,4 +46,3 @@ Licensed under the Universal Permissive License v 1.0 as shown at <https://oss.o
 [Workshops]: https://apexapps.oracle.com/pls/apex/dbpm/r/livelabs/livelabs-workshop-cards?p100_role=12&p100_focus_area=35&me=126
 [DRC]: https://developer.oracle.com
 [Workshop]: https://bit.ly/bettermicroservices
-[Blogs]: https://blogs.oracle.com/developers/authors/Blog-Author/CORE18EB69239F2845558809929771DB8EFA/paulparkinson
