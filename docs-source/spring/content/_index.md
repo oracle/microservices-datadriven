@@ -84,7 +84,7 @@ In the [CloudBank](https://bit.ly/CloudBankOnOBaaS) hands-on lab, you can learn 
 ## Need help?
 
 We'd love to hear from you!  You can contact us in the
-[#oracle-db-microservices](https://oracledevs.slack.com/archives/C03ALDSV272) channel in the
+[#oracle-db-microservices](https://oracledevs.slack.com/archives/C06L9CDGR6Z) channel in the
 Oracle Developers slack workspace, or [open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).
 
 &nbsp;
