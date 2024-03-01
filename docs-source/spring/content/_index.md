@@ -1,6 +1,6 @@
 ---
 title: "Oracle Backend for Spring Boot and Microservices"
-description: "Oracle Backend for Spring Boot and Microservices"
+description: "Spring and Spring Boot"
 keywords: "spring springboot microservices development oracle backend"
 ---
 
