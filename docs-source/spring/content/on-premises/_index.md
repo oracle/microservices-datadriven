@@ -27,7 +27,7 @@ When installing in a _non-production_ environment, for example a developer's des
 
 ## Download
 
-Download the latest release of [Oracle Backend for Spring Boot and Microservices](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.1/onprem-ebaas_latest.zip).
+Download the latest release of [Oracle Backend for Spring Boot and Microservices](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.2/onprem-ebaas_latest.zip).
 
 ## Setup
 

@@ -24,7 +24,7 @@ resources:
 ---
 
 
-Oracle Backend for Spring Boot and Microservices version 1.1.1 includes a preview of a new feature called "Spring Operations Center".
+Oracle Backend for Spring Boot and Microservices version 1.1.2 includes a preview of a new feature called "Spring Operations Center".
 More capabilities will be added to this feature in future releases.
 
 The Spring Operations Center provides a web user interface to manage the Oracle Backend for Spring Boot and Microservices.

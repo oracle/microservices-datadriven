@@ -22,7 +22,7 @@ Watch this video for a quick overview of the setup process.
 
 ## Download
 
-Download [Oracle Backend for Spring Boot and Microservices](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.1/azure-ebaas_latest.zip).
+Download [Oracle Backend for Spring Boot and Microservices](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.2/azure-ebaas_latest.zip).
 
 ## Setup
 
@@ -55,7 +55,7 @@ The Multicloud installation is done using the Azure Cloud Shell. The following s
 
    ![Azure Cloud Shell Icon](AzureCloudShellIcon.png)
 
-3. Upload the [Oracle Backend for Spring Boot and Microservices](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.1/azure-ebaas-platform_latest.zip) stack. For example:
+3. Upload the [Oracle Backend for Spring Boot and Microservices](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.2/azure-ebaas-platform_latest.zip) stack. For example:
 
    ![Azure Upload](AzureUpload.png)
 
@@ -77,7 +77,6 @@ The Multicloud installation is done using the Azure Cloud Shell. The following s
    ```
 
    ![Azure Configure](AzureConfigure.png)
-
 
 ## Install Ansible
 
