@@ -9,8 +9,8 @@ Oracle Database and other infrastructure components that operate on multiple clo
 building, testing, and operating microservices platforms for reliable, secure, and scalable enterprise applications.
 
 &nbsp;
-{{< hint type=[warning] icon=gdoc_fire title="Version 1.1.1 (production) released February, 2024" >}}
- Oracle Backend for Spring Boot and Microservices Version 1.1.1 is now generally available and suitable
+{{< hint type=[warning] icon=gdoc_fire title="Version 1.1.2 (production) released March, 2024" >}}
+ Oracle Backend for Spring Boot and Microservices Version 1.1.2 is now generally available and suitable
  for production use.  This version supports and recommends Spring Boot 3.2.x, Spring 6.1 and Spring Cloud 2023.0.0,
  with limited backwards compatibility for Spring Boot 2.7.x.  
 {{< /hint >}}
@@ -46,6 +46,7 @@ Infrastructure (OCI) Container Engine for Kubernetes cluster (OKE cluster):
 - Spring Boot Admin dashboard
 - Spring Cloud Config server
 - Spring Cloud Eureka service registry
+- Spring Operations Center
 - Strimzi Kafka Operator
 
 Developers also have access to development or build time services and libraries including:
