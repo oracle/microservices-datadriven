@@ -1,4 +1,10 @@
-# Infrastructure Details
+---
+title: "Infrastructure"
+description: "Infrastructure Oracle Backend for SPring Boot and Microservices"
+keywords: "infrastructure spring springboot microservices development oracle backend"
+---
+
+## Infrastructure Architecture
 
 ![Infrastructure](infra_diagram.png "Overall Infrastructure")
 
@@ -81,7 +87,6 @@ Object Storage offers reliable and cost-efficient data durability, it provides q
 ### Registry
 
 Oracle Cloud Infrastructure Registry is an Oracle-managed registry that enables you to simplify your development-to-production workflow. Registry makes it easy for you to store, share, and manage development artifacts, like Docker images. The highly available and scalable architecture of Oracle Cloud Infrastructure ensures that you can deploy and manage your applications reliably.
----
 
 ## Recommendations
 
@@ -101,7 +106,7 @@ Web Application Firewall (WAF) protects applications from malicious and unwanted
 
 ### ATP CPU Auto-Scaling (Chargeable)
 
-It is recommend to leave auto-scaling enabled; this will allow the increase and decrease of the databases CPU and I/O resources.  Use Apache JMeter to load test functional behaviour and measure the performance.
+It is recommend to leave auto-scaling enabled; this will allow the increase and decrease of the databases CPU and I/O resources.  Use Apache JMeter to load test functional behavior and measure the performance.
 
 ### Autonomous Data Guard (Chargeable)
 
@@ -109,4 +114,4 @@ Autonomous Data Guard monitors the primary database and if the Autonomous Databa
 
 ### Data Catalog (Chargeable)
 
-OCI Data Catalog is a fully managed, self-service data discovery and governance solution for your enterprise data. Data Catalog provides a single collaborative environment to manage technical, business, and operational metadata.
+OCI Data Catalog is a fully managed, self-service data discovery and governance solution for your enterprise data. Data Catalog provides a single collaborative environment to manage technical, business, and operational metadata
