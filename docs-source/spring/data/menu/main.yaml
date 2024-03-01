@@ -66,6 +66,7 @@ main:
       - name: "AQ/JMS"
         ref: "/starters/aqjms"
   - name: Infrastructure
+    ref: "/infrastructure"
     sub:
       - name: "Networking"
         ref: "/infrastructure/networking"
