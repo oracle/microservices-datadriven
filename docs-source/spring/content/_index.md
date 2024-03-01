@@ -24,7 +24,7 @@ In addition to an Oracle Autonomous Database Serverless instance, the following 
 Infrastructure (OCI) Container Engine for Kubernetes cluster (OKE cluster):
 
 - [Apache APISIX API Gateway and Dashboard](platform/apigw/)
-- Apache Kafka
+- [Apache Kafka](https://kafka.apache.org/)
 - [Grafana](observability/metrics/)
 - [HashiCorp Vault](platform/vault/)
 - [Jaeger](observability/tracing/)
