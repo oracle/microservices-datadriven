@@ -8,8 +8,11 @@ resources:
     title: "OCI Cloud Shell icon"
 ---
 
-The Oracle Backend for Spring Boot and Microservices setup creates a Kubernetes cluster where the server and dashboard components are deployed. At the end
-of setup, you are provided with a command in the log for the apply job to create a Kubernetes configuration file to access that cluster:
+The Oracle Backend for Spring Boot and Microservices requires a Kubernetes cluster where the components are deployed.  You can bring your own cluster or, in OCI, have a [Oracle Kubernetes Engine](https://www.oracle.com/uk/cloud/cloud-native/container-engine-kubernetes/) (OKE) deployed for you.  
+
+## OKE Access
+
+At the end of setup, you are provided with a command in the log for the apply job to create a Kubernetes configuration file to access that cluster:
 
 {{< hint type=[tip] icon=gdoc_check title=Tip >}}
 For more information about working with the Kubernetes cluster, see [Setting Up Cluster Access](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm#localdownload) in the Oracle Cloud Infrastructure documentation.
@@ -98,3 +101,33 @@ kube-system       proxymux-client-vpnh7                       1/1     Running   
 .........
 user@cloudshell:~ (us-ashburn-1)$
 ```
+
+## Manually Scaling OKE
+
+To add additional nodes to the OKE cluster, the Marketplace installation stack can be re-applied after increasing the number of worker nodes.
+
+> **NOTE**: If changes to the infrastructure were made outside the stack, re-applying the stack may revert those changes back to their original values.  It is important to *PLAN* and review the proposed changes before running *APPLY*.  This will ensure there are no unintentional modifications to the infrastructure.
+
+1. In OCI, navigate to Developer Services -> Resource Manager -> Stacks
+![OCI Navigate Stacks](images/navigate_stacks.png "OCI Navigate Stacks")
+
+2. Ensure the compartment is set to where the Marketplace Stack was deployed, and Select the stack.
+![OCI Select Stack](images/select_stack.png "OCI Select Stack")
+
+3. Edit the Stack and Click Next
+![OCI Edit Stack](images/edit_stack.png "OCI Edit Stack")
+
+4. Increase the Node Pool Workers
+![OCI Increase Workers](images/update_node_pool_workers.png "OCI Increase Workers")
+
+5. Click Next and Save Changes
+![OCI Save Changes](images/save_changes.png "OCI Save Changes")
+
+6. Run Plan
+![OCI Plan Changes](images/plan.png "OCI Plan Changes")
+
+7. Carefully review the proposed changes
+![OCI Plan Output](images/plan_output.png "OCI Plan Output")
+
+8. Run Apply after reviewing the proposed changes
+![OCI Apply Changes](images/apply.png "OCI Apply Changes")
