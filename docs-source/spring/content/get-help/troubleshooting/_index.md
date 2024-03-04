@@ -16,6 +16,6 @@ SELECT USERNAME, LOCK_DATE, PROFILE FROM DBA_USERS
    AND ORACLE_MAINTAINED<>'Y';
 ```
 
-Unlock the account by running: `ALTER USER <USERNAME> ACCOUNT UNLOCK;'
+Unlock the account by running: `ALTER USER <USERNAME> ACCOUNT UNLOCK;`
 
 If the account continues to be locked, evaluate the password being used by the service and changes appropriately.

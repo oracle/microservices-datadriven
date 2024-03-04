@@ -85,8 +85,6 @@ main:
   - name: Get Help
     ref: "/get-help"
     sub:
-      - name: "Support"
-        ref: "/get-help/support"
       - name: "Troubleshooting"
         ref: "/get-help/troubleshooting"
   - name: "Release Notes"
