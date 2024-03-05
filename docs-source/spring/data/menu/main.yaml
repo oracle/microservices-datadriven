@@ -71,18 +71,21 @@ main:
       - name: "Networking"
         ref: "/infrastructure/networking"
       - name: "Database"
-        ref: "/infrastructure/database"   
+        ref: "/infrastructure/database"  
+      - name: "Kubernetes"
+        ref: "/infrastructure/kubernetes" 
   - name: Database Access
     ref: "/database"
-  - name: Kubernetes Access
-    ref: "/cluster-access"
   - name: Sample Application
     ref: "/sampleapp"
   - name: Upgrade
     ref: "/upgrade"
   - name: Uninstall
     ref: "/uninstall"
-  - name: Support
-    ref: "/support"
+  - name: Get Help
+    ref: "/get-help"
+    sub:
+      - name: "Troubleshooting"
+        ref: "/get-help/troubleshooting"
   - name: "Release Notes"
     ref: "/release-notes"
