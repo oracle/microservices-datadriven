@@ -109,11 +109,11 @@ The Oracle Backend for Parse Platform is deployed with a sample self-signed cert
 
 ## S3 Storage
 
-During the initial Marketplace installation, the option to enable a S3 Compatible [Object Storage](https://www.oracle.com/uk/cloud/storage/object-storage/) bucket for external storage.  This option can be enabled or disabled by amending the installed Marketplace stack.
+During the initial Marketplace installation, there is an option to enable a S3 Compatible [Object Storage](https://www.oracle.com/uk/cloud/storage/object-storage/) bucket for external storage.  This option can be enabled or disabled by editing and applying the installed Marketplace stack.
 
 > **NOTE**: If changes to the infrastructure were made outside the stack, re-applying the stack may revert those changes back to their original values.  It is important to *PLAN* and review the proposed changes before running *APPLY*.  This will ensure there are no unintentional modifications to the infrastructure.
 
-1. In OCI, navigate to Developer Services -> Resource Manager -> Stacks
+1. In the OCI Console, navigate to Developer Services -> Resource Manager -> Stacks
 ![OCI Navigate Stacks](images/navigate_stacks.png "OCI Navigate Stacks")
 
 2. Ensure the compartment is set to where the Marketplace Stack was deployed, and Select the stack.

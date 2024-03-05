@@ -12,7 +12,7 @@ The Oracle Backend for Spring Boot and Microservices requires a Kubernetes clust
 
 ## OKE Access
 
-At the end of setup, you are provided with a command in the log for the apply job to create a Kubernetes configuration file to access that cluster:
+At the end of setup, you are provided with a command in the log of the apply job to create a Kubernetes configuration file to access that cluster:
 
 {{< hint type=[tip] icon=gdoc_check title=Tip >}}
 For more information about working with the Kubernetes cluster, see [Setting Up Cluster Access](https://docs.oracle.com/en-us/iaas/Content/ContEng/Tasks/contengdownloadkubeconfigfile.htm#localdownload) in the Oracle Cloud Infrastructure documentation.
@@ -108,7 +108,7 @@ To add additional nodes to the OKE cluster, the Marketplace installation stack c
 
 > **NOTE**: If changes to the infrastructure were made outside the stack, re-applying the stack may revert those changes back to their original values.  It is important to *PLAN* and review the proposed changes before running *APPLY*.  This will ensure there are no unintentional modifications to the infrastructure.
 
-1. In OCI, navigate to Developer Services -> Resource Manager -> Stacks
+1. In the OCI Console, navigate to Developer Services -> Resource Manager -> Stacks
 ![OCI Navigate Stacks](images/navigate_stacks.png "OCI Navigate Stacks")
 
 2. Ensure the compartment is set to where the Marketplace Stack was deployed, and Select the stack.
