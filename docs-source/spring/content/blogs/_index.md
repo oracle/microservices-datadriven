@@ -38,7 +38,7 @@ This page acts as an index/aggregator for some of our featured content.
     author="mark"
     date="11/13/2023"
     title="Introducing the Oracle Database Observability Exporter"
-    link="https://www.linkedin.com/pulse/introducing-oracle-database-observability-exporter-mark-nelson-kbiye%3FtrackingId=j6wh7EH7GqvaM8SHpddaOA%253D%253D/?trackingId=j6wh7EH7GqvaM8SHpddaOA%3D%3D"
+    link="https://www.linkedin.com/pulse/introducing-oracle-database-observability-exporter-mark-nelson-kbiye"
     abstract="Learn about the new Oracle Database Observability Exporter which allows you to export metrics from the Oracle Database in the defacto standard Prometheus format, so that they can be ingested in Prometheus or a similar time series database and used to create dashboards in Grafana or a similar platform."
 >}}
 
