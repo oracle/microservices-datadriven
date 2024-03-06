@@ -24,11 +24,13 @@
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/development/setup/</loc>
   </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/get-help/</loc>
+  </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/getting-started/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/infrastructure/</loc>
   </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/spring/cluster-access/</loc>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/infrastructure/kubernetes/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/observability/metrics/</loc>
   </url><url>
@@ -76,9 +78,9 @@
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/platform/soc/</loc>
   </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/spring/support/</loc>
-  </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/tags/</loc>
+  </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/get-help/troubleshooting/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/uninstall/</loc>
   </url><url>
