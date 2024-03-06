@@ -320,3 +320,7 @@ To access the Vault, process these steps:
       <!-- spellchecker-disable -->
       {{< img name="vault-show-secret" size="medium" lazy=false >}}
       <!-- spellchecker-enable -->
+
+## HashiCorp Vault Grafana Dashboard
+
+A preinstalled Garafana dashboard is provided. [More Information](../../observability/metrics/)
