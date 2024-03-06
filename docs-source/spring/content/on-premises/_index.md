@@ -10,7 +10,7 @@ The Oracle Backend for Spring Boot and Microservices is available to install in 
 
 You must meet the following prerequisites to use the Oracle Backend for Spring Boot and Microservices On-Premises. You need:
 
-* Access to Oracle Database Enterprise Edition 21.3.0.0
+* Access to Oracle Database Enterprise Edition 19.3.0.0
 * Access to a Container Repository
 * Access to a Kubernetes cluster
 * [Python 3+](https://www.python.org/)
