@@ -18,6 +18,11 @@ The Authorization Server is an engine to authenticate and authorize requests to 
 
 > **_NOTE:_** Oracle recommends that you change the default passwords for the default created users.
 
+- [Users & Roles](#users--roles)
+- [User Management REST endpoints overview](#user-management-rest-endpoints-overview)
+  - [User Management REST Endpoints](#user-management-rest-endpoints)
+- [Architecture](#architecture)
+
 ## Users & Roles
 
 When deploying Oracle Backend for Spring Boot and Microservices, two users are created with the following roles:
@@ -57,7 +62,7 @@ For `obaas-user`:
 kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.user}' | base64 -d
 ```
 
-## User Management REST endpoints
+## User Management REST endpoints overview
 
 The following REST Endpoints are available to manage users. The table lists which minimum required role that is needed to perform the operation.
 

@@ -21,6 +21,9 @@ resources:
   - name: vault-show-secret
     src: "vault-show-secret.png"
     title: "Vault Show Secret"
+  - name: vault-grafana
+    src: "vault-grafana.png"
+    title: "Vault Grafana Dashboard"
 ---
 
 Oracle Backend as a Service for Spring Cloud and Microservices includes [HashiCorp Vault](https://www.vaultproject.io/) to secure, store and tightly control
@@ -304,6 +307,10 @@ To access the Vault, process these steps:
 
 ## Audit logs
 
+{{< hint type=[important] icon=gdoc_check title=Important >}}
+Audit logging is **blocking**, if the file is bigger than allowed space HashiCorp Vault will stop taking requests.
+{{< /hint >}}
+
 If you deployed Oracle Backend for Spring Boot and Microservices using `STANDARD` edition, HashiCorp Vault will be deployed in `production` mode and you have the option of turing on audit logs. **Note**, you must be authenticated to turn on audit logs.
 
 To turn on audit logs execute the following command:
@@ -335,3 +342,10 @@ kubectl exec pod/vault-0 -n vault -it -- vault audit disable file
 Learn how to query audit logs [here](https://developer.hashicorp.com/vault/tutorials/monitoring/query-audit-device-logs).
 
 ## Grafana dashboard for HashiCorp Vault
+
+Oracle Backend for Spring Boot and Microservices includes a [Grafana dashboard for HashiCorp Vault](../../observability/metrics/).
+
+<!-- spellchecker-disable -->
+{{< img name="vault-grafana" size="medium" lazy=false >}}
+<!-- spellchecker-enable -->
+

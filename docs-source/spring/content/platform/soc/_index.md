@@ -38,6 +38,14 @@ This preview release includes the following capabilities:
 
 **Note:** More capabilities will be added to this feature in future releases.
 
+- [Accessing Spring Operations Center](#accessing-spring-operations-center)
+- [The Dashboard](#the-dashboard)
+  - [Manage Namespaces](#manage-namespaces)
+  - [Manage Workloads](#manage-workloads)
+  - [Manage Identity](#manage-identity)
+
+## Accessing Spring Operations Center
+
 To access the Spring Operations Center, obtain the public IP address for your environment using this command:
 
 ```bash
@@ -50,7 +58,7 @@ Use the `EXTERNAL-IP` from the results and open a browser to https://100.200.100
 
 **Note**: If you installed with self-signed certificates, which is the default, you will see a browser warning message and
 will have to click on "Accept risk" or similar. For information about replacing the self-signed certificate with a
-production certicate, refer to [Transport Layer Security](../../security#transport-layer-security)
+production certificate, refer to [Transport Layer Security](../../security#transport-layer-security)
 
 <!-- spellchecker-disable -->
 {{< img name="soc-login-page" size="medium" lazy=false >}}
@@ -58,7 +66,7 @@ production certicate, refer to [Transport Layer Security](../../security#transpo
 
 Login using the `obaas-admin` user (or another user if you have created one) and the password
 that you set during installation.  If you did not set a password, one was auto-generated for you and can be
-obtain with this command: 
+obtain with this command:
 
 ```bash
 $ kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.admin}' | base64 -d
@@ -66,7 +74,7 @@ $ kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.admin}' 
 
 After logging in, you will see the SOC Dashboard.
 
-### The Dashboard
+## The Dashboard
 
 The Spring Operations Center Dashboard provides information about the overall state of the environment including:
 
@@ -98,7 +106,7 @@ deployed there.
 ### Manage Workloads
 
 The Manage Workloads screen shows the workloads (Spring Boot applications) deployed in a specific namespace, including
-the status of each workload, and how many replicas are currently running and desired. 
+the status of each workload, and how many replicas are currently running and desired.
 
 <!-- spellchecker-disable -->
 {{< img name="soc-manage-workloads" size="medium" lazy=false >}}
