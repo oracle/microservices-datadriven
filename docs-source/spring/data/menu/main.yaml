@@ -17,9 +17,9 @@ main:
     sub:
       - name: Spring Operations Center
         ref : "/platform/soc"
-      - name: API Gateway
+      - name: Apache APISIX Gateway
         ref: "/platform/apigw"
-      - name: Service Discovery
+      - name: Eureka Service Discovery
         ref: "/platform/eureka"
       - name: Spring Config Server
         ref: "/platform/config"

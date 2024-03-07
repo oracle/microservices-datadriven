@@ -1,5 +1,5 @@
 ---
-title: "Service Discovery"
+title: "Eureka Service Discovery"
 description: "Service discovery with Spring Eureka Service Registry in Oracle Backend for Spring Boot and Microservices"
 keywords: "service discovery registry eureka springboot spring development microservices oracle backend"
 resources:
@@ -17,7 +17,7 @@ To access the Eureka web user interface, process these steps:
 1. Expose the Eureka web user interface using this command:
 
     ```shell
-    kubectl port-forward -n eureka svc/eureka 8761:8761
+    kubectl port-forward -n eureka svc/eureka 8761
     ```
 
 2. Open the Eureka web user interface URL <http://localhost:8761>
