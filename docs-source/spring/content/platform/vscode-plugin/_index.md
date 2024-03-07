@@ -4,7 +4,7 @@ description: "Visual Studio Code extension for Oracle Backend for Spring Boot an
 keywords: "vscode code visualstudio extension springboot spring development microservices development oracle backend"
 ---
 
-## GA 1.1.2 - March, 2024
+## GA 1.1.3 - March, 2024
 
 "Oracle Backend for Spring Boot and Microservices" is a VS Code extension to browse and deploy applications on the Oracle Backend for Spring Boot and Microservices platform. This plugin allows to inspect the content of an Oracle Backend for Spring Boot deployment, in terms of applications, services and related configurations. It simplifies the access to the Platform Services installed, like Grafana, Spring, Apisix, Eureka and Jaeger creating ssh tunnels on-demand, and providing access to their respective web admin consoles. It allows to add credentials to access and bind services to the Oracle Autonomous DB included into Oracle Backend for Spring Boot and Microservices deployment. This plug-in replicates the functionalities available in [OBaas CLI](../../development/cli) and simplify the access to Oracle Backend for Spring Boot and Microservices deployments from a development IDE like VS Code.
 
@@ -20,7 +20,7 @@ You must have already installed and configured the following software which requ
 
 ## Installation
 
-1. Download the plug-in from [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.2).
+1. Download the plug-in from [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.3).
 
 2. On the VS Code left menu bar, click on the **Extensions** symbol:
 

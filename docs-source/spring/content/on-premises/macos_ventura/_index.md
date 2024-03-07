@@ -56,7 +56,7 @@ If Minikube fails to start and returns this `Failed kubeconfig update: could not
 
 ### Download Oracle Backend for Spring Boot and Microservices
 
-Download the latest version of [Oracle Backend for Spring Boot and Microservices](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.2/onprem-ebaas_latest.zip) and unzip into a new directory.
+Download the latest version of [Oracle Backend for Spring Boot and Microservices](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.3/onprem-ebaas_latest.zip) and unzip into a new directory.
 
 ### Install Ansible
 
