@@ -1,6 +1,6 @@
 ---
-title: "Vault"
-description: "Securing secrets with Vault in Oracle Backend for Spring Boot and Microservices"
+title: "HashiCorp Vault"
+description: "Securing secrets with HashiCorp Vault in Oracle Backend for Spring Boot and Microservices"
 keywords: "vault secrets security springboot spring development microservices development oracle backend"
 resources:
   - name: vault-login
