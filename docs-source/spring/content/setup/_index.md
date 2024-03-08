@@ -187,9 +187,7 @@ To set up the OCI environment, process these steps:
         - *STANDARD* - focused for pre-prod and production environments with an emphasis on deployment, scaling, and high availability. Oracle support is included with a Oracle Database support agreement. All features for developers are the same so start here if you’re porting an existing Spring Boot application stack and expect to get into production soon.  This edition allows for additional Bring Your Own (BYO) capabilities.
     - `Existing Authorization Token` (optional) - Enter an existing Authorization token. The token is used by the cluster to pull images from the Oracle Container Registry. If left empty the token will be created.
 
-
       **WARNING:** Deletion or expiration of the token will result in the failure to pull images later.  Also you must have one free OCI auth token (note that the maximum is two per user). You can *NOT* use someone elses token.
-
 
     | Edition   | Parse Platform | BYO Network  | BYO Database     | Production Vault | Registry Scanning |
     |-----------|----------------|--------------|------------------|------------------| ------------------|

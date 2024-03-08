@@ -61,7 +61,7 @@ On this page, you will find the following topics:
   - [Oracle Database Dashboard](#oracle-database-dashboard)
   - [Kube State Metrics Dashboard](#kube-state-metrics-dashboard)
   - [Apache APISIX DashBoard](#apache-apisix-dashboard)
-  - [HashiCorp Vault Dashoard](#hashicorp-vault-dashboard)
+  - [HashiCorp Vault Dashboard](#hashicorp-vault-dashboard)
 - [How to have metrics collected for your applications](#how-to-have-metrics-collected-for-your-applications)
 - [How to access Prometheus](#how-to-access-prometheus)
 - [How to access Grafana](#how-to-access-grafana)
