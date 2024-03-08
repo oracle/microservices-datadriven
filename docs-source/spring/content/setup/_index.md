@@ -185,16 +185,18 @@ To set up the OCI environment, process these steps:
     - `Edition` : Select between *COMMUNITY* and *STANDARD* Edition.
         - *COMMUNITY* - for developers for quick start to testing Spring Boot Microservices with an integrated backend. Teams can start with the deployment and scale up as processing demand grows. Community support only.
         - *STANDARD* - focused for pre-prod and production environments with an emphasis on deployment, scaling, and high availability. Oracle support is included with a Oracle Database support agreement. All features for developers are the same so start here if you’re porting an existing Spring Boot application stack and expect to get into production soon.  This edition allows for additional Bring Your Own (BYO) capabilities.
-    - `Existing Authorization Token` (optional) - Enter an existing Authorization token. If left empty the token will be created. **NOTE:** You must have one free OCI auth token (note that the maximum is two per user). You can *NOT* use someone elses token.
+    - `Existing Authorization Token` (optional) - Enter an existing Authorization token. The token is used by the cluster to pull images from the Oracle Container Registry. If left empty the token will be created.
 
-        | Edition   | Parse Platform | BYO Network  | BYO Database     | Production Vault | Registry Scanning |
-        |-----------|----------------|--------------|------------------|------------------| ------------------|
-        | Community | x              |              |                  |                  |                   |
-        | Standard  | x              | x            | x                | x                | x                 |
+    **WARNING**: Deletion or expiration of the token will result in the failure to pull images later.  Also You must have one free OCI auth token (note that the maximum is two per user). You can *NOT* use someone elses token.
 
-      <!-- spellchecker-disable -->
-      {{< img name="oci-stack-app-name" size="large" lazy=false >}}
-      <!-- spellchecker-enable -->
+    | Edition   | Parse Platform | BYO Network  | BYO Database     | Production Vault | Registry Scanning |
+    |-----------|----------------|--------------|------------------|------------------| ------------------|
+    | Community | x              |              |                  |                  |                   |
+    | Standard  | x              | x            | x                | x                | x                 |
+
+    <!-- spellchecker-disable -->
+    {{< img name="oci-stack-app-name" size="large" lazy=false >}}
+    <!-- spellchecker-enable -->
 
 1. If you check the checkbox *Enable Parse Platform* in the **Parse Server** section a Parse Server will be installed. Fill in the following for the Parse Server:
 
