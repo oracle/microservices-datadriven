@@ -17,9 +17,9 @@ main:
     sub:
       - name: Spring Operations Center
         ref : "/platform/soc"
-      - name: Apache APISIX Gateway
+      - name: API Gateway
         ref: "/platform/apigw"
-      - name: Eureka Service Discovery
+      - name: Service Discovery
         ref: "/platform/eureka"
       - name: Spring Config Server
         ref: "/platform/config"
@@ -31,7 +31,7 @@ main:
         ref: "/development/cli"
       - name: MicroTx
         ref: "/platform/microtx"
-      - name: HashiCorp Vault
+      - name: Vault
         ref: "/platform/vault"
       - name: VS Code plugin
         ref: "/platform/vscode-plugin"

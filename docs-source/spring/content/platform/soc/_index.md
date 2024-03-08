@@ -64,9 +64,7 @@ production certificate, refer to [Transport Layer Security](../../security#trans
 {{< img name="soc-login-page" size="medium" lazy=false >}}
 <!-- spellchecker-enable -->
 
-Login using the `obaas-admin` user (or another user if you have created one) and the password
-that you set during installation.  If you did not set a password, one was auto-generated for you and can be
-obtain with this command:
+Login using the `obaas-admin` user (or another user if you have created one) and the password that you set during installation.  If you did not set a password, one was auto-generated for you and can be obtained with this command:
 
 ```bash
 $ kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.admin}' | base64 -d
@@ -91,10 +89,7 @@ The Spring Operations Center Dashboard provides information about the overall st
 
 ### Manage Namespaces
 
-The Manage Namespaces screen is accessible from the *Workloads* menu, and allows you to view and manage the namespaces
-that are configured for Spring Boot application deployments.  Note that this does not show you all namespaces in the
-Kubernetes cluster, just those that have be specifically configured for Spring Boot workloads, meaning they have
-the necessary secrets for pulling images, accessing the database, and so on.
+The Manage Namespaces screen is accessible from the *Workloads* menu, and allows you to view and manage the namespaces that are configured for Spring Boot application deployments.  Note that this does not show you all namespaces in the Kubernetes cluster, just those that have be specifically configured for Spring Boot workloads, meaning they have the necessary secrets for pulling images, accessing the database, and so on.
 
 <!-- spellchecker-disable -->
 {{< img name="soc-manage-namespaces" size="medium" lazy=false >}}

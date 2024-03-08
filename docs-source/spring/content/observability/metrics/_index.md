@@ -181,7 +181,7 @@ This dashboard provides details of the HashiCorp Vault including:
 
 - Health and seal status
 - Number of secrets
-- Number of Operations
+- Number of operations
 
 Here is an example of this dashboard:
 
