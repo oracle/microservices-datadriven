@@ -1,6 +1,6 @@
 ---
-title: "API Gateway"
-description: "APISIX Gateway for API management in Oracle Backend for Spring Boot and Microservices"
+title: "Apache APISIX Gateway"
+description: "Apache APISIX Gateway for API management in Oracle Backend for Spring Boot and Microservices"
 keywords: "api apisix gateway traffic deployment circuitbreaker spring springboot microservices oracle backend"
 resources:
   - name: obaas-apisix-k8s

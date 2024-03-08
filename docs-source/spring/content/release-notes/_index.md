@@ -4,6 +4,15 @@ description: "Release notes for Oracle Backend for Spring Boot and Microservices
 keywords: "release notes additions updates deprecations removals springboot spring development microservices development oracle backend"
 ---
 
+## Version 1.1.3, March 8, 2024
+
+This release includes small updates and/or bug fixes. No components were upgraded.
+
+The following functionality was added:
+
+* HashiCorp Vault Grafana dashboard.
+* HashiCorp Vault audit logging capability.
+
 ## Version 1.1.2, March 1, 2024
 
 This release includes small updates and/or bug fixes and some additional functionality to SOC UI. No components were added or upgraded.

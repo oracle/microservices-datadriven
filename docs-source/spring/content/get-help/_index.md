@@ -21,7 +21,7 @@ Two utilities will help Oracle diagnose and fix issues you may experience.
 
 ### Baseline
 
-The [baseline script](https://github.com/oracle/microservices-datadriven/blob/main/support/baseline) will collect non-sensitive information about your cluster and can be used to compare the current cluster state with a baseline state.  This will help to quickly identify any discrepancies between a stable deployment and the current deployments.
+The [baseline command (Linux only)](https://raw.githubusercontent.com/oracle/microservices-datadriven/main/support/baseline) will collect non-sensitive information about your cluster and can be used to compare the current cluster state with a baseline state.  This will help to quickly identify any discrepancies between a stable deployment and the current deployments.
 
 The baseline utility can be run in one of three modes:
 

@@ -5,7 +5,7 @@ keywords: "cli tool deployment spring springboot microservices development oracl
 ---
 
 The Oracle Backend for Spring Boot and Microservices offers a command-line interface (CLI), `oractl`. The CLI commands simplify the deployment of
-microservices applications as well as bindings with the resources that they use. Download the CLI [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.2). The platform-specific binary can be renamed to `oractl` for convenience.
+microservices applications as well as bindings with the resources that they use. Download the CLI [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.3). The platform-specific binary can be renamed to `oractl` for convenience.
 
 Table of Contents:
 
@@ -32,7 +32,7 @@ The Oracle Backend for Spring Boot CLI is used to configure your backend and to 
 
 1. Download the Oracle Backend for Spring Boot and Microservices CLI `oractl`
 
-   Download the CLI from [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.2)
+   Download the CLI from [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.3)
 
 1. Rename the downloaded file to `oractl`
 
@@ -70,7 +70,7 @@ The Oracle Backend for Spring Boot CLI is used to configure your backend and to 
       \_/ |_) (_| (_| __)   \_ |_ _|_
       ========================================================================================
       Application Name: Oracle Backend Platform :: Command Line Interface
-      Application Version: (1.1.2)
+      Application Version: (1.1.3)
       :: Spring Boot (v3.2.1) ::
 
       Ask for help:
