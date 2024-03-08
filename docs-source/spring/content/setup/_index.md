@@ -89,6 +89,13 @@ resources:
 
 Oracle Backend for Spring Boot and Microservices is available in the [OCI Marketplace](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911).
 
+- [Prerequisites](#prerequisites)
+- [Summary of Components](#summary-of-components)
+- [Overview of the Setup Process](#overview-of-the-setup-process)
+- [Set Up the OCI Environment](#set-up-the-oci-environment)
+- [Set Up the Local Machine](#set-up-the-local-machine)
+- [Access information and passwords from the OCI Console](#access-information-and-passwords-from-the-oci-console)
+
 ## Prerequisites
 
 You must meet the following prerequisites to use Oracle Backend for Spring Boot and Microservices. You need:
@@ -178,6 +185,7 @@ To set up the OCI environment, process these steps:
     - `Edition` : Select between *COMMUNITY* and *STANDARD* Edition.
         - *COMMUNITY* - for developers for quick start to testing Spring Boot Microservices with an integrated backend. Teams can start with the deployment and scale up as processing demand grows. Community support only.
         - *STANDARD* - focused for pre-prod and production environments with an emphasis on deployment, scaling, and high availability. Oracle support is included with a Oracle Database support agreement. All features for developers are the same so start here if you’re porting an existing Spring Boot application stack and expect to get into production soon.  This edition allows for additional Bring Your Own (BYO) capabilities.
+    - `Existing Authorization Token` (optional) - Enter an existing Authorization token. If left empty the token will be created. **NOTE:** You must have one free OCI auth token (note that the maximum is two per user). You can *NOT* use someone elses token.
 
         | Edition   | Parse Platform | BYO Network  | BYO Database     | Production Vault | Registry Scanning |
         |-----------|----------------|--------------|------------------|------------------| ------------------|
