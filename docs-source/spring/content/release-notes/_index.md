@@ -6,7 +6,12 @@ keywords: "release notes additions updates deprecations removals springboot spri
 
 ## Version 1.1.3, March 8, 2024
 
-WHAT'S NEW?
+This release includes small updates and/or bug fixes. No components were upgraded.
+
+The following functionality was added:
+
+* HashiCorp Vault Grafana dashboard.
+* HashiCorp Vault audit logging capability.
 
 ## Version 1.1.2, March 1, 2024
 
