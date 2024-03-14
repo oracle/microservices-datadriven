@@ -36,6 +36,9 @@ curl http://localhost:9180/apisix/admin/routes/1001 \
            "sampler": {
                "name": "always_on"
            }
+        },
+        "prometheus": {
+            "prefer_name": true
         }
     }
 }
