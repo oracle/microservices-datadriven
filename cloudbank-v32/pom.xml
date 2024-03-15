@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.2</version>
+        <version>3.2.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -34,13 +34,22 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
         <spring-cloud.version>2023.0.0</spring-cloud.version>
-        <org.springdoc-version>2.3.0</org.springdoc-version>
+        <org.springdoc-version>2.4.0</org.springdoc-version>
+
+        <opentelemetry-exporter-otlp.version>1.36.0</opentelemetry-exporter-otlp.version>
+        <micrometer-tracing-bridge-otel.version>1.2.4</micrometer-tracing-bridge-otel.version>
+        <micrometer-core.version>1.12.4</micrometer-core.version>
+        <lombok.version>1.18.30</lombok.version>
+        <oracle-springboot-starter.version>23.4.0</oracle-springboot-starter.version>
+		<oracle-microtx-starter.version>23.4.1</oracle-microtx-starter.version>
+		<liquibase.version>4.26.0</liquibase.version>
+		<datasource-micrometer-spring-boot.version>1.0.3</datasource-micrometer-spring-boot.version>
 
         <!-- Code quality tools -->
-        <maven-checkstyle-plugin-version>3.3.0</maven-checkstyle-plugin-version>
-        <checkstyle-version>10.12.2</checkstyle-version>
+        <maven-checkstyle-plugin-version>3.3.1</maven-checkstyle-plugin-version>
+        <checkstyle-version>10.14.1</checkstyle-version>
         <checkstyle.config.location>${project.basedir}/checkstyle/checkstyle.xml</checkstyle.config.location>
-        <dependency-check-version>8.4.0</dependency-check-version>
+        <dependency-check-version>9.0.9</dependency-check-version>
     </properties>
 
     <dependencies>
@@ -52,25 +61,29 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+        <!-- Core module of Micrometer -->
         <dependency>
             <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-prometheus</artifactId>
+            <artifactId>micrometer-core</artifactId>
+            <version>${micrometer-core.version}</version>
         </dependency>
         <!-- Adds the Tracer Implementation -->
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-tracing-bridge-otel</artifactId>
+            <version>${micrometer-tracing-bridge-otel.version}</version>
         </dependency>
         <!-- Adds an exporter to store the traces -->
-        <dependency>
+        <!-- <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-exporter-otlp</artifactId>
-        </dependency>
+            <version>${opentelemetry-exporter-otlp.version}</version>
+        </dependency> -->
         <!-- Adds the Tracing API -->
-        <dependency>
+        <!-- <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-tracing</artifactId>
-        </dependency>
+        </dependency> -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
@@ -78,6 +91,8 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+            <optional>true</optional>
+            <version>${lombok.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

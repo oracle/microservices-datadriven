@@ -14,11 +14,11 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>customer32</name>
     <description>Customer Application using JDBCClient</description>
-    <properties>
+    <!-- <properties>
         <oracle-springboot-starter.version>23.4.0</oracle-springboot-starter.version>
         <liquibase.version>4.25.1</liquibase.version>
         <datasource-micrometer-spring-boot.version>1.0.3</datasource-micrometer-spring-boot.version>
-    </properties>
+    </properties> -->
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
