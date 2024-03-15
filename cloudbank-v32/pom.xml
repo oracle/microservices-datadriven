@@ -36,8 +36,6 @@
         <spring-cloud.version>2023.0.0</spring-cloud.version>
         <org.springdoc-version>2.4.0</org.springdoc-version>
 
-        <opentelemetry-exporter-otlp.version>1.36.0</opentelemetry-exporter-otlp.version>
-        <micrometer-tracing-bridge-otel.version>1.2.4</micrometer-tracing-bridge-otel.version>
         <micrometer-core.version>1.12.4</micrometer-core.version>
         <lombok.version>1.18.30</lombok.version>
         <oracle-springboot-starter.version>23.4.0</oracle-springboot-starter.version>
@@ -71,19 +69,13 @@
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-tracing-bridge-otel</artifactId>
-            <version>${micrometer-tracing-bridge-otel.version}</version>
         </dependency>
         <!-- Adds an exporter to store the traces -->
-        <!-- <dependency>
+        <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-exporter-otlp</artifactId>
-            <version>${opentelemetry-exporter-otlp.version}</version>
-        </dependency> -->
-        <!-- Adds the Tracing API -->
-        <!-- <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-tracing</artifactId>
-        </dependency> -->
+        </dependency>
+        <!-- Eureka client-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
