@@ -13,9 +13,9 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>checks</name>
     <description>Check Processing Application</description>
-    <properties>
+    <!-- <properties>
         <oracle-springboot-starter.version>23.4.0</oracle-springboot-starter.version>
-    </properties>
+    </properties> -->
     <dependencies>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
