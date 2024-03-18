@@ -40,8 +40,8 @@ communicate with your cluster.
 A Helper Playbook has been provided for non-production installations to assist in defining the infrastructure.  Review the
 appropriate documentation for examples of installing and defining the non-production installation. For example:
 
-* [macOS Ventura (x86)](macos_ventura/_index.md)
-* [Oracle Linux 8 (x86)](ol8/_index.md)
+* [macOS Ventura (x86)](../on-premises/macos_ventura/)
+* [Oracle Linux 8 (x86)](../on-premises/ol8/)
 
 The non-production playbook is run as part of the Configuration Management Playbook.
 
