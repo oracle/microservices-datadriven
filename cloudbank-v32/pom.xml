@@ -65,6 +65,11 @@
             <artifactId>micrometer-core</artifactId>
             <version>${micrometer-core.version}</version>
         </dependency>
+        <!-- Prometheues-->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
         <!-- Adds the Tracer Implementation -->
         <dependency>
             <groupId>io.micrometer</groupId>
@@ -74,6 +79,11 @@
         <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-exporter-otlp</artifactId>
+        </dependency>
+        <!-- Adds the Tracing API -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-tracing</artifactId>
         </dependency>
         <!-- Eureka client-->
         <dependency>
