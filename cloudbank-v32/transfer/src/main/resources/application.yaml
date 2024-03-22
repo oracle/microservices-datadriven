@@ -73,5 +73,3 @@ logging:
   level:
     root: INFO
     com.example: INFO
-  pattern:
-    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
