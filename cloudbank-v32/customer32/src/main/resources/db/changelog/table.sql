@@ -1,11 +1,11 @@
 -- liquibase formatted sql
 
---changeset atael:1
+--changeset customer32:1
 --preconditions onFail:MARK_RAN onerror:MARK_RAN
 --precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM CUSTOMER.CUSTOMERS32 WHERE 1=2
 DROP TABLE CUSTOMER.CUSTOMERS32;
 
---changeset atael:2
+--changeset customer32:2
 CREATE TABLE CUSTOMER.CUSTOMERS32 (
     ID VARCHAR2 (20),
     NAME VARCHAR2 (40),

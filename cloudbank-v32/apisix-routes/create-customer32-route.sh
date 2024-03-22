@@ -17,6 +17,7 @@ curl http://localhost:9180/apisix/admin/routes/1002 \
     "labels": {
         "version": "1.0"
     },
+    "desc": "CUSTOMER32 Service",
     "uri": "/api/v2/customer*",
     "methods": [
       "GET",

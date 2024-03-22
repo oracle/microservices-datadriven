@@ -17,6 +17,7 @@ curl http://localhost:9180/apisix/admin/routes/1000 \
     "labels": { 
         "version": "1.0" 
     },
+    "desc": "ACCOUNT Service",
     "uri": "/api/v1/account*",
     "methods": [
       "GET",

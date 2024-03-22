@@ -1,11 +1,11 @@
 -- liquibase formatted sql
 
---changeset gotsysdbax:1
+--changeset customer:1
 --preconditions onFail:MARK_RAN onerror:MARK_RAN
 --precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM CUSTOMER.CUSTOMERS WHERE 1=2
 DROP TABLE CUSTOMER.CUSTOMERS;
 
---changeset gotsysdbax:2
+--changeset customer:2
 CREATE TABLE CUSTOMER.CUSTOMERS (
     CUSTOMER_ID VARCHAR2 (20),
     CUSTOMER_NAME VARCHAR2 (40),

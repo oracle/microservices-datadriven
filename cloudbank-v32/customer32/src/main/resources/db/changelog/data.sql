@@ -1,6 +1,6 @@
 -- liquibase formatted sql
 
--- changeset atael:1 runAlways:true
+-- changeset customer32:1 runAlways:true
 TRUNCATE TABLE CUSTOMER.CUSTOMERS32 DROP STORAGE;
 
 INSERT INTO CUSTOMER.CUSTOMERS32 (ID, NAME, EMAIL) VALUES ('qwertysdwr','Andy','andy@andy.com');

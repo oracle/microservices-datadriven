@@ -3,8 +3,6 @@
 
 package com.example.accounts.model;
 
-import java.util.Date;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,10 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Generated;
-import org.hibernate.annotations.GenerationTime;
 
-@SuppressWarnings("deprecation") // TODO: Needs to be removed
 @Data
 @NoArgsConstructor
 @Entity
@@ -36,11 +31,7 @@ public class Account {
     
     @Column(name = "CUSTOMER_ID")
     private String accountCustomerId;
-    
-    @Generated(GenerationTime.INSERT)
-    @Column(name = "ACCOUNT_OPENED_DATE", updatable = false, insertable = false)
-    private Date accountOpenedDate;
-    
+
     @Column(name = "ACCOUNT_OTHER_DETAILS")
     private String accountOtherDetails;
     

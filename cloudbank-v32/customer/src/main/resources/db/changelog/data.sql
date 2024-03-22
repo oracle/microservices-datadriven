@@ -1,6 +1,6 @@
 -- liquibase formatted sql
 
--- changeset gotsysdba:1 runAlways:true
+-- changeset customer:1 runAlways:true
 TRUNCATE TABLE CUSTOMER.CUSTOMERS;
 
 INSERT INTO CUSTOMER.CUSTOMERS (CUSTOMER_ID,CUSTOMER_NAME,CUSTOMER_EMAIL,CUSTOMER_OTHER_DETAILS,PASSWORD,ROLE) 
