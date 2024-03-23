@@ -4,6 +4,9 @@
 spring:
   application:
     name: creditscore
+  threads:
+    virtual:
+      enabled: true
 
 # Disables autoconfiguration for the refresh scope and associated features.
   cloud:

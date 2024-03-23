@@ -11,6 +11,9 @@ spring:
         dialect: org.hibernate.dialect.OracleDialect
         format_sql: true
     show-sql: true
+  threads:
+    virtual:
+      enabled: true
     
   liquibase:
     change-log: classpath:db/changelog/controller.yaml
