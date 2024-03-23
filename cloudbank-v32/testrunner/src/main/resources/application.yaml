@@ -4,6 +4,9 @@
 spring:
   application:
     name: testrunner
+  threads:
+    virtual:
+      enabled: true
 
   datasource:
     url: ${spring.datasource.url}
