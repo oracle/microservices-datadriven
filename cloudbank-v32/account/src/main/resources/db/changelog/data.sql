@@ -1,6 +1,6 @@
 -- liquibase formatted sql
 
--- changeset gotsysdba:1 runAlways:true
+-- changeset account:1 runAlways:true
 DELETE FROM ACCOUNT.JOURNAL;
 TRUNCATE TABLE ACCOUNT.ACCOUNTS;
 
