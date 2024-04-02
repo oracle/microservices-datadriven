@@ -9,7 +9,7 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.124.0">
+<meta name="generator" content="Hugo 0.124.1">
 
 
   <meta name="description" content="Apache APISIX Gateway for API management in Oracle Backend for Spring Boot and Microservices" />
@@ -72,7 +72,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/platform/apigw/",
       "headline": "Apache APISIX Gateway",
       "description": "Apache APISIX Gateway for API management in Oracle Backend for Spring Boot and Microservices",
-      "wordCount" : "600",
+      "wordCount" : "601",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -2409,7 +2409,7 @@ including publishing, traffic management, deployment strategies, and circuit bre
 <li>username: <code>admin</code></li>
 <li>Password is retrieved using the following command:</li>
 </ul>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl get secret -n apisix apisix-dashboard -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.data.conf\.yaml}&#39;</span> <span class="p">|</span> base64 -d <span class="p">|</span> grep <span class="err">&#39;</span>password:<span class="sb">`</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl get secret -n apisix apisix-dashboard -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.data.conf\.yaml}&#39;</span> <span class="p">|</span> base64 -d <span class="p">|</span> grep <span class="s1">&#39;password:&#39;</span><span class="p">;</span> <span class="nb">echo</span>
 </span></span></code></pre></div><p><strong>NOTE:</strong> Oracle recommends that you change the default password when you log in the first time. Even though the dashboard is not accessible externally, Oracle still recommends using strong passwords to maximize security.</p>
  <!-- spellchecker-disable -->
 
