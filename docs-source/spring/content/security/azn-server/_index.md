@@ -53,13 +53,13 @@ The passwords can also be obtained from k8s secrets using the `kubectl` command.
 For `obaas-admin`:
 
 ```shell
-kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.admin}' | base64 -d
+kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.admin}' | base64 -d; echo
 ```
 
 For `obaas-user`:
 
 ```shell
-kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.user}' | base64 -d
+kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.user}' | base64 -d; echo
 ```
 
 ## User Management REST endpoints overview
@@ -68,6 +68,7 @@ The following REST Endpoints are available to manage users. The table lists whic
 
 | End point                                         | Method | Description                                     | Minimum required Role |
 |---------------------------------------------------|--------|-------------------------------------------------|-----------------------|
+| /user/api/v1/connect                              | GET    | Authorize                                       | All Roles             |
 | /user/api/v1/findUser                             | GET    | Find all users                                  | ROLE_ADMIN            |
 | /user/api/v1/findUser?username=\<username\>       | GET    | Find a user with the username \<username\>      | ROLE_ADMIN            |
 | /user/api/v1/createUser                           | POST   | Create a user                                   | ROLE_ADMIN            |

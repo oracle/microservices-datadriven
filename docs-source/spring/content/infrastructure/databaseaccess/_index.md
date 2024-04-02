@@ -102,7 +102,7 @@ You have to enter a password for the Wallet.
 1. Get the ADMIN user password from k8s secret. in the exa,ple below `calfdb` needs to be replaced with the name of database in the installation.
 
     ```shell
-     kubectl -n application get secret calfdb-db-secrets -o jsonpath='{.data.db\.password}' | base64 -d
+     kubectl -n application get secret calfdb-db-secrets -o jsonpath='{.data.db\.password}' | base64 -d; echo
     ```
 
 1. Open a terminal Window and start SQLcl with the `/nolog` option.
@@ -207,7 +207,7 @@ If you chose the **PRIVATE_ENDPOINT_ACCESS** option for database access during i
 1. Get the ADMIN user password from k8s secret. in the exa,ple below `bluegilldb` needs to be replaced with the name of database in the installation.
 
     ```shell
-     kubectl -n application get secret bluegilldb-db-secrets -o jsonpath='{.data.db\.password}' | base64 -d
+     kubectl -n application get secret bluegilldb-db-secrets -o jsonpath='{.data.db\.password}' | base64 -d; echo
     ```
 
 1. Open a terminal Window and start SQLcl with the `/nolog` option.
