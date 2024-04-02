@@ -9,7 +9,7 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.124.0">
+<meta name="generator" content="Hugo 0.124.1">
 
 
   <meta name="description" content="Authentication and authorization using Spring Authorization Server in Oracle Backend for Spring Boot and Microservices" />
@@ -72,7 +72,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/security/azn-server/",
       "headline": "Authentication and Authorization Server",
       "description": "Authentication and authorization using Spring Authorization Server in Oracle Backend for Spring Boot and Microservices",
-      "wordCount" : "532",
+      "wordCount" : "539",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -2499,9 +2499,9 @@ if (!doNotTrack) {
 <!-- spellchecker-enable -->
 <p>The passwords can also be obtained from k8s secrets using the <code>kubectl</code> command.</p>
 <p>For <code>obaas-admin</code>:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl get secret -n azn-server oractl-passwords -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.data.admin}&#39;</span> <span class="p">|</span> base64 -d
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl get secret -n azn-server oractl-passwords -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.data.admin}&#39;</span> <span class="p">|</span> base64 -d<span class="p">;</span> <span class="nb">echo</span>
 </span></span></code></pre></div><p>For <code>obaas-user</code>:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl get secret -n azn-server oractl-passwords -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.data.user}&#39;</span> <span class="p">|</span> base64 -d
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl get secret -n azn-server oractl-passwords -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.data.user}&#39;</span> <span class="p">|</span> base64 -d<span class="p">;</span> <span class="nb">echo</span>
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h2 id="user-management-rest-endpoints-overview">
         User Management REST endpoints overview
@@ -2521,6 +2521,12 @@ if (!doNotTrack) {
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>/user/api/v1/connect</td>
+<td>GET</td>
+<td>Authorize</td>
+<td>All Roles</td>
+</tr>
 <tr>
 <td>/user/api/v1/findUser</td>
 <td>GET</td>

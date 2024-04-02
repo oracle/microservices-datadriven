@@ -9,7 +9,7 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.124.0">
+<meta name="generator" content="Hugo 0.124.1">
 
 
   <meta name="description" content="Prometheus metrics and Grafana dashboards for Spring Boot applications with the Oracle Backend for Spring Boot and Microservices" />
@@ -72,7 +72,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/observability/metrics/",
       "headline": "Metrics",
       "description": "Prometheus metrics and Grafana dashboards for Spring Boot applications with the Oracle Backend for Spring Boot and Microservices",
-      "wordCount" : "1147",
+      "wordCount" : "1148",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -2982,7 +2982,7 @@ if (!doNotTrack) {
 </li>
 <li>
 <p>To get the password, run this command:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl -n grafana get secret grafana-dashboard-authn -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.data.password}&#39;</span> <span class="p">|</span> base64 -d
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">kubectl -n grafana get secret grafana-dashboard-authn -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.data.password}&#39;</span> <span class="p">|</span> base64 -d<span class="p">;</span> <span class="nb">echo</span>
 </span></span></code></pre></div><blockquote>
 <p><strong>NOTE:</strong> If you do not have <code>base64</code>, leave off the last part (<code>| base64 -d</code>) in the command, then copy the output, and use this website to decode it: <a
   class="gdoc-markdown__link"

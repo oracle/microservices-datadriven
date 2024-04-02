@@ -9,7 +9,7 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.124.0">
+<meta name="generator" content="Hugo 0.124.1">
 
 
   <meta name="description" content="Access the Oracle Autonomous Database in the backend where your Spring Boot microservices applications are deployed" />
@@ -72,7 +72,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/infrastructure/databaseaccess/",
       "headline": "Database Access",
       "description": "Access the Oracle Autonomous Database in the backend where your Spring Boot microservices applications are deployed",
-      "wordCount" : "1208",
+      "wordCount" : "1210",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -2608,7 +2608,7 @@ if (!doNotTrack) {
 <ol>
 <li>
 <p>Get the ADMIN user password from k8s secret. in the exa,ple below <code>calfdb</code> needs to be replaced with the name of database in the installation.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"> kubectl -n application get secret calfdb-db-secrets -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.data.db\.password}&#39;</span> <span class="p">|</span> base64 -d
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"> kubectl -n application get secret calfdb-db-secrets -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.data.db\.password}&#39;</span> <span class="p">|</span> base64 -d<span class="p">;</span> <span class="nb">echo</span>
 </span></span></code></pre></div></li>
 <li>
 <p>Open a terminal Window and start SQLcl with the <code>/nolog</code> option.</p>
@@ -2934,7 +2934,7 @@ if (!doNotTrack) {
 </span></span></code></pre></div></li>
 <li>
 <p>Get the ADMIN user password from k8s secret. in the exa,ple below <code>bluegilldb</code> needs to be replaced with the name of database in the installation.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"> kubectl -n application get secret bluegilldb-db-secrets -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.data.db\.password}&#39;</span> <span class="p">|</span> base64 -d
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"> kubectl -n application get secret bluegilldb-db-secrets -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.data.db\.password}&#39;</span> <span class="p">|</span> base64 -d<span class="p">;</span> <span class="nb">echo</span>
 </span></span></code></pre></div></li>
 <li>
 <p>Open a terminal Window and start SQLcl with the <code>/nolog</code> option.</p>
