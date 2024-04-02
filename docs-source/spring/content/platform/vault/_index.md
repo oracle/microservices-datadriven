@@ -81,7 +81,7 @@ The following Vault services are enabled during deployment. Other services can b
 `root` tokens have the `root` policy attached to them. `root` tokens can do anything in Vault and are useful in **Development** mode but should be restricted in **Production** mode. In fact, the Vault team recommends that `root` tokens only be used for the initial setup. Be sure to save the initial `root` token in a secure way. For example:
 
 ```shell
-kubectl get secret vault-root-token -n vault --template="{{index .data \"root.token\" | base64decode}}"
+kubectl get secret vault-root-token -n vault --template="{{index .data \"root.token\" | base64decode}}"; echo
 ```
 
 {{< hint type=[warning] icon=gdoc_check title=Warning >}}
@@ -103,23 +103,23 @@ It is **very important** that recovery keys are saved in multiple places. Losing
 To extract the five recovery keys, use the following commands:
 
 ``` shell
-% kubectl get secret vault-recovery-keys -n vault --template="{{index .data \"recovery.key.1\" }}"
+% kubectl get secret vault-recovery-keys -n vault --template="{{index .data \"recovery.key.1\" }}"; echo
 ```
 
 ```shell
-% kubectl get secret vault-recovery-keys -n vault --template="{{index .data \"recovery.key.2\" }}"
+% kubectl get secret vault-recovery-keys -n vault --template="{{index .data \"recovery.key.2\" }}"; echo
 ```
 
 ```shell
-% kubectl get secret vault-recovery-keys -n vault --template="{{index .data \"recovery.key.3\" }}"
+% kubectl get secret vault-recovery-keys -n vault --template="{{index .data \"recovery.key.3\" }}"; echo
 ```
 
 ```shell
-% kubectl get secret vault-recovery-keys -n vault --template="{{index .data \"recovery.key.4\" }}"
+% kubectl get secret vault-recovery-keys -n vault --template="{{index .data \"recovery.key.4\" }}"; echo
 ```
 
 ```shell
-% kubectl get secret vault-recovery-keys -n vault --template="{{index .data \"recovery.key.5\" }}"
+% kubectl get secret vault-recovery-keys -n vault --template="{{index .data \"recovery.key.5\" }}"; echo
 ```
 
 ## Accessing Vault Using kubectl
@@ -162,7 +162,7 @@ To extract the five recovery keys, use the following commands:
     Get the token with this command:
 
     ```shell
-    kubectl get secret vault-root-token -n vault --template="{{index .data \"root.token\" | base64decode}}"
+    kubectl get secret vault-root-token -n vault --template="{{index .data \"root.token\" | base64decode}}"; echo
     ```
 
     Log in to the Vault and provide the token with this command:
@@ -288,7 +288,7 @@ To access the Vault, process these steps:
     To interact with the Vault in **Production** mode, you need to log in using a token that is stored in a K8s Secret. Get the token by running the following command. The output is the `root` token. It is **very important** that the token is saved in multiple places. Losing the token can result in loss of access to the Vault. In **Development** mode, the `root` token is `root`. For example:
 
     ```shell
-    kubectl get secret vault-root-token -n vault --template="{{index .data \"root.token\" | base64decode}}"
+    kubectl get secret vault-root-token -n vault --template="{{index .data \"root.token\" | base64decode}}"; echo
     ```
 
 1. Open the Vault web user interface URL: <https://localhost:8200>
