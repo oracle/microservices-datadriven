@@ -1,23 +1,23 @@
 -- liquibase formatted sql
 
---changeset gotsysdba:1
+--changeset account:1
 --preconditions onFail:MARK_RAN onerror:MARK_RAN
 --precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM ACCOUNT.ACCOUNTS WHERE 1=2
 DROP TABLE ACCOUNT.ACCOUNTS CASCADE CONSTRAINTS;
 
---changeset gotsysdba:2
+--changeset account:2
 --preconditions onFail:MARK_RAN onerror:MARK_RAN
 --precondition-sql-check expectedResult:0 SELECT COUNT(*) FROM ACCOUNT.JOURNAL WHERE 1=2
-DROP TABLE ACCOUNT.JOURNAL;
+DROP TABLE ACCOUNT.JOURNAL CASCADE CONSTRAINTS;
 
---changeset gotsysdba:3
+--changeset account:3
 CREATE TABLE ACCOUNT.ACCOUNTS (
                                   ACCOUNT_ID NUMBER GENERATED ALWAYS AS IDENTITY (START WITH 1 CACHE 20),
                                   ACCOUNT_NAME VARCHAR2(40) NOT NULL,
                                   ACCOUNT_TYPE VARCHAR2(2) CHECK (ACCOUNT_TYPE IN ('CH', 'SA', 'CC', 'LO')),
                                   CUSTOMER_ID VARCHAR2 (20),
                                   ACCOUNT_OPENED_DATE DATE DEFAULT SYSDATE NOT NULL,
-                                  ACCOUNT_OTHER_DETAILS VARCHAR2(4000),
+                                  ACCOUNT_OTHER_DETAILS VARCHAR2(256),
                                   ACCOUNT_BALANCE NUMBER
 ) LOGGING;
 ALTER TABLE ACCOUNT.ACCOUNTS ADD CONSTRAINT ACCOUNTS_PK PRIMARY KEY (ACCOUNT_ID) USING INDEX LOGGING;
