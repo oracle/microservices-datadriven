@@ -171,6 +171,12 @@ Run the Desktop Helper Playbook to define the infrastructure. For example:
 ansible-playbook ansible/desktop-apply.yaml
 ```
 
+### Copy kubeconfig
+
+For the desktop installation, this step will have been performed by the Desktop Helper playbook.
+
+Copy the kubeconfig file to `ansible/roles/kubernetes/files`
+
 ### Build and Push Images to the Container Repository
 
 For the desktop installation, start a new terminal and tunnel or port-forward to the Minikube cluster.  Refer to the specific platform details for more information.
