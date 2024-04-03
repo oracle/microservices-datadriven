@@ -67,7 +67,7 @@ production certificate, refer to [Transport Layer Security](../../security#trans
 Login using the `obaas-admin` user (or another user if you have created one) and the password that you set during installation.  If you did not set a password, one was auto-generated for you and can be obtained with this command:
 
 ```bash
-$ kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.admin}' | base64 -d
+$ kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.admin}' | base64 -d; echo
 ```
 
 After logging in, you will see the SOC Dashboard.
