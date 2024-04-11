@@ -35,13 +35,12 @@ A custom installation consists of defining the infrastructure followed by runnin
 
 For a custom installation, you need to have a Kubernetes cluster and the `kubectl` command-line interface must be configured to communicate with your cluster.
 
-A Helper Playbook has been provided for desktop installations to assist in defining a known infrastructure.  Review the
-appropriate documentation for examples of installing and defining the desktop installation:
+A Helper Playbook has been provided for desktop installations to assist in defining a specific infrastructure consisting of podman and minikube as outlined in the example documentation:
 
 * [macOS Ventura (x86)](../on-premises/macos_ventura/)
 * [Oracle Linux 8 (x86)](../on-premises/ol8/)
 
-The desktop playbook is run as part of the Configuration Management Playbook.
+If your infrastructure does not match that defined in the above examples, do not run the Helper Playbook.
 
 ## Download the Database or Oracle REST Data Services (ORDS) Images (Desktop Installation)
 
