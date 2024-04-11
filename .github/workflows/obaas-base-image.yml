@@ -39,8 +39,8 @@ jobs:
         if: env.latest_digest == ''
         uses: ./.github/actions/process-image
         with:
-          src_image: container-registry.oracle.com/graalvm/native-image:${{ matrix.base_version }}-${{ src_tag_suffix }}
-          dst_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ matrix.base_version }}-${{ src_tag_suffix }}
+          src_image: container-registry.oracle.com/graalvm/native-image:${{ matrix.base_version }}-${{ env.src_tag_suffix }}
+          dst_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ matrix.base_version }}-${{ env.src_tag_suffix }}
           description: ${{ env.description }}
           push: true
 
@@ -63,7 +63,7 @@ jobs:
         uses: ./.github/actions/process-image
         with:
           src_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ matrix.base_version }}
-          dst_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ matrix.base_version }}-${{ src_tag_suffix }}
+          dst_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ matrix.base_version }}-${{ env.src_tag_suffix }}
           description: ${{ env.description }}
           push: false
 
@@ -80,6 +80,6 @@ jobs:
         uses: ./.github/actions/process-image
         with:
           src_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ matrix.base_version }}
-          dst_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ matrix.base_version }}-${{ src_tag_suffix }}
+          dst_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ matrix.base_version }}-${{ env.src_tag_suffix }}
           description: ${{ env.description }}
           push: true
