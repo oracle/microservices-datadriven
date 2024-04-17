@@ -9,14 +9,14 @@ grant execute on DBMS_RESOURCE_MANAGER to tolldemo;
 grant select_catalog_role to tolldemo;
 grant select on sys.aq$_queue_shards to tolldemo;
 grant select on user_queue_partition_assignment_table to tolldemo;
-exec  dbms_teqk.AQ$_GRANT_PRIV_FOR_REPL('TOLLDEMO');
+--exec  dbms_teqk.AQ$_GRANT_PRIV_FOR_REPL('TOLLDEMO');
 commit;
 
 connect tolldemo/Welcome12345
 
 begin
-  dbms_awadm.create_sharded_queue (queue_name => 'TollGate', multiple_consumers => true);
-  dbms_awadm.set_queue_parameter(tname, 'KEY_BASED_ENQUEUE', 2);
-  dbms_awadm.set_queue_parameter(tname, 'SHARD_NUM', 5);
-  dbms_awadm.start_queue(tname) ;
+  dbms_aqadm.create_transactional_event_queue (queue_name => 'TollGate', multiple_consumers => true);
+  dbms_aqadm.set_queue_parameter(tname, 'KEY_BASED_ENQUEUE', 2);
+  dbms_aqadm.set_queue_parameter(tname, 'SHARD_NUM', 5);
+  dbms_aqadm.start_queue(tname) ;
 end;

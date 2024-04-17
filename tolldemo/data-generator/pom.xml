@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>label-generator</artifactId>
+	<artifactId>data-generator</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>label-generator</name>
+	<name>data-generator</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>21</java.version>
