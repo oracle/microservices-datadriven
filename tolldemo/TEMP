@@ -1,0 +1,7 @@
+
+
+  DBMS_AQADM.create_sharded_queue (queue_name => tname, multiple_consumers => TRUE);
+  DBMS_AQADM.SET_QUEUE_PARAMETER(tname, 'KEY_BASED_ENQUEUE', 2);
+  DBMS_AQADM.SET_QUEUE_PARAMETER(tname, 'SHARD_NUM', pcount);
+  DBMS_AQADM.START_QUEUE(tname) ;
+
