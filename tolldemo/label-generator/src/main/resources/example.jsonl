@@ -1,0 +1,19 @@
+{
+    "labelsSet": [{ "name": "type" }],
+    "annotationFormat": "SINGLE_LABEL",
+    "datasetFormatDetails": { "formatType": "TEXT" }
+}
+  
+{
+  "sourceDetails": { "path": "<Path of text record file>" },
+  "annotations": [
+    {
+      "entities": [
+        {
+          "entityType": "GENERIC",
+          "labels": [{ "type": "sedan" }]
+        }
+      ]
+    }
+  ]
+}
