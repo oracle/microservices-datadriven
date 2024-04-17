@@ -15,8 +15,8 @@ commit;
 connect tolldemo/Welcome12345
 
 begin
-  dbms_awadm.create_sharded_queue (queue_name => 'TollGate', multiple_consumers => true);
-  dbms_awadm.set_queue_parameter(tname, 'KEY_BASED_ENQUEUE', 2);
-  dbms_awadm.set_queue_parameter(tname, 'SHARD_NUM', 5);
-  dbms_awadm.start_queue(tname) ;
+  dbms_aqadm.create_sharded_queue (queue_name => 'TollGate', multiple_consumers => true);
+  dbms_aqadm.set_queue_parameter(tname, 'KEY_BASED_ENQUEUE', 2);
+  dbms_aqadm.set_queue_parameter(tname, 'SHARD_NUM', 5);
+  dbms_aqadm.start_queue(tname) ;
 end;
