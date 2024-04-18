@@ -28,12 +28,12 @@ public class TollreaderApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDateTime now = LocalDateTime.now();
+		String dateTimeString = now.format(formatter);
 
 		for (int i = 0; i < 10; i++) {
 			Thread.sleep(1000);
 
-			LocalDateTime now = LocalDateTime.now();
-			String dateTimeString = now.format(formatter);
 			Integer licNumber = random.nextInt(maxNumber - minNumber) + minNumber;
 			Integer tagId = random.nextInt(maxNumber - minNumber) + minNumber;
 			Integer accountNumber = random.nextInt(maxNumber - minNumber) + minNumber;
@@ -50,8 +50,27 @@ public class TollreaderApplication implements CommandLineRunner {
 			.build();
 
 			System.out.println(data);
+			//  sendTollData(data);
 
 		}
+
+		// public String sendTollData (JsonObject data) {
+		// 	return null;
+		// }
+
+		// private void sendMessage (JsonObject data) {
+
+		// 	return null;
+		// 	// Send message using Kafka API
+
+		// }
+
+//   2  dbms_aqadm.create_transactional_event_queue (queue_name => 'TollGate', multiple_consumers => true);
+//   3  dbms_aqadm.set_queue_parameter('TollGate', 'KEY_BASED_ENQUEUE', 2);
+//   4  dbms_aqadm.set_queue_parameter('TollGate', 'SHARD_NUM', 5);
+//   5  dbms_aqadm.start_queue('TollGate');
+//   6  end;
+//   7* /
 
 	}
 

@@ -4,6 +4,7 @@ public enum CarType {
     SUV("SUV"),
     PICKUP("PICKUP"),
     HATCHBACK("HATCHBACK"),
+    SEDAN("SEDAN"),
     OTHER("OTHER");
 
     private String carType;
