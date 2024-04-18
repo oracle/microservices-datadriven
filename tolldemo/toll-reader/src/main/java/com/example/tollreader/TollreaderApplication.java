@@ -6,6 +6,8 @@ import jakarta.jms.ConnectionFactory;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.security.SecureRandom;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,6 +18,7 @@ import org.springframework.jms.support.converter.MappingJackson2MessageConverter
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 
+
 @EnableJms
 @SpringBootApplication
 public class TollreaderApplication implements CommandLineRunner {
@@ -24,6 +27,9 @@ public class TollreaderApplication implements CommandLineRunner {
 	private static final Integer minNumber = 10000;
 	private static final Integer maxNumber = 99999;
 
+	@Autowired
+    private static JmsTemplate jmsTemplate;
+	
 	private static <T extends Enum<?>> T randomEnum(Class<T> clazz) {
 		int x = random.nextInt(clazz.getEnumConstants().length);
 		return clazz.getEnumConstants()[x];
@@ -32,6 +38,10 @@ public class TollreaderApplication implements CommandLineRunner {
 	public static void main(String[] args) {
 		SpringApplication.run(TollreaderApplication.class, args);
 	}
+
+	private static void sendMessage(JsonObject tolldata) {
+        jmsTemplate.convertAndSend("TollGate", tolldata);
+    }
 
 	// Can I move this to a different class? service, component?
 	@Bean
@@ -65,7 +75,6 @@ public class TollreaderApplication implements CommandLineRunner {
 			Integer accountNumber = random.nextInt(maxNumber - minNumber) + minNumber;
 			String state = randomEnum(State.class).toString();
 			String carType = randomEnum(CarType.class).toString();
-			// System.out.println(now);
 
 			JsonObject data = Json.createObjectBuilder()
 			.add("accountnumber", accountNumber) // This could be looked up in the DB from the tagId?
@@ -76,20 +85,9 @@ public class TollreaderApplication implements CommandLineRunner {
 			.build();
 
 			System.out.println(data);
-			//  sendTollData(data);
+			sendMessage(data);
 
 		}
-
-		// public String sendTollData (JsonObject data) {
-		// 	return null;
-		// }
-
-		// private void sendMessage (JsonObject data) {
-
-		// 	return null;
-		// 	// Send message using Kafka API
-
-		// }
 
 //   2  dbms_aqadm.create_transactional_event_queue (queue_name => 'TollGate', multiple_consumers => true);
 //   3  dbms_aqadm.set_queue_parameter('TollGate', 'KEY_BASED_ENQUEUE', 2);
