@@ -48,14 +48,16 @@ public class TollreaderApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		// System.out.println("Args: " + args[0] + " " + args.length);
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDateTime now = LocalDateTime.now();
 		String dateTimeString = now.format(formatter);
+		
 		Integer sleepTime = 1000;
 		if (args.length > 0 && !args[0].isBlank()) {
 			sleepTime = Integer.parseInt(args[0]);
 		}
+
+		log.info("Sleeptime :" + sleepTime.toString());
 
 		while (true) {
 			Thread.sleep(sleepTime);
