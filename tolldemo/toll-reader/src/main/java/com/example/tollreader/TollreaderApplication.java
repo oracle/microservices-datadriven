@@ -24,66 +24,66 @@ import org.springframework.jms.core.MessageCreator;
 @Slf4j
 public class TollreaderApplication implements CommandLineRunner {
 
-	private static final SecureRandom random = new SecureRandom();
-	private static final Integer minNumber = 10000;
-	private static final Integer maxNumber = 99999;
+  private static final SecureRandom random = new SecureRandom();
+  private static final Integer minNumber = 10000;
+  private static final Integer maxNumber = 99999;
 
-	@Autowired
-	private JmsTemplate jmsTemplate;
+  @Autowired
+  private JmsTemplate jmsTemplate;
 
-	private static <T extends Enum<?>> T randomEnum(Class<T> clazz) {
-		int x = random.nextInt(clazz.getEnumConstants().length);
-		return clazz.getEnumConstants()[x];
-	}
+  private static <T extends Enum<?>> T randomEnum(Class<T> clazz) {
+    int x = random.nextInt(clazz.getEnumConstants().length);
+    return clazz.getEnumConstants()[x];
+  }
 
-	private void sendMessage(JsonObject tolldata) {
-		jmsTemplate.send("TollGate", new MessageCreator() {
-			@Override
-			public Message createMessage(Session session) throws JMSException {
-				return session.createTextMessage(tolldata.toString());
-			}
+  private void sendMessage(JsonObject tolldata) {
+    jmsTemplate.send("TollGate", new MessageCreator() {
+      @Override
+      public Message createMessage(Session session) throws JMSException {
+        return session.createTextMessage(tolldata.toString());
+      }
 
-		});
-	}
+    });
+  }
 
-	@Override
-	public void run(String... args) throws Exception {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		LocalDateTime now = LocalDateTime.now();
-		String dateTimeString = now.format(formatter);
-		
-		Integer sleepTime = 1000;
-		if (args.length > 0 && !args[0].isBlank()) {
-			sleepTime = Integer.parseInt(args[0]);
-		}
+  @Override
+  public void run(String... args) throws Exception {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    LocalDateTime now = LocalDateTime.now();
+    String dateTimeString = now.format(formatter);
 
-		log.info("Sleeptime :" + sleepTime.toString());
+    Integer sleepTime = 1000;
+    if (args.length > 0 && !args[0].isBlank()) {
+      sleepTime = Integer.parseInt(args[0]);
+    }
 
-		while (true) {
-			Thread.sleep(sleepTime);
+    log.info("Sleeptime :" + sleepTime.toString());
 
-			Integer licNumber = random.nextInt(maxNumber - minNumber) + minNumber;
-			Integer tagId = random.nextInt(maxNumber - minNumber) + minNumber;
-			Integer accountNumber = random.nextInt(maxNumber - minNumber) + minNumber;
-			String state = randomEnum(State.class).toString();
-			String carType = randomEnum(CarType.class).toString();
+    while (true) {
+      Thread.sleep(sleepTime);
 
-			JsonObject data = Json.createObjectBuilder()
-				.add("accountnumber", accountNumber) // This could be looked up in the DB from the tagId?
-				.add("license-plate", state + "-" + licNumber.toString()) // This could be looked up in the DB from the tagId?
-				.add("cartype", carType) // This could be looked up in the DB from the tagId?
-				.add("tagid", tagId)
-				.add("timestamp", dateTimeString)
-				.build();
+      Integer licNumber = random.nextInt(maxNumber - minNumber) + minNumber;
+      Integer tagId = random.nextInt(maxNumber - minNumber) + minNumber;
+      Integer accountNumber = random.nextInt(maxNumber - minNumber) + minNumber;
+      String state = randomEnum(State.class).toString();
+      String carType = randomEnum(CarType.class).toString();
 
-			log.info("Toll Data :" + data.toString());
-			sendMessage(data);
+      JsonObject data = Json.createObjectBuilder()
+          .add("accountnumber", accountNumber) // This could be looked up in the DB from the tagId?
+          .add("license-plate", state + "-" + licNumber.toString()) // This could be looked up in the DB from the tagId?
+          .add("cartype", carType) // This could be looked up in the DB from the tagId?
+          .add("tagid", tagId)
+          .add("timestamp", dateTimeString)
+          .build();
 
-		}
-	}
+      log.info("Toll Data :" + data.toString());
+      sendMessage(data);
 
-	public static void main(String[] args) {
-		SpringApplication.run(TollreaderApplication.class, args);
-	}
+    }
+  }
+
+  public static void main(String[] args) {
+    SpringApplication.run(TollreaderApplication.class, args);
+  }
 
 }
