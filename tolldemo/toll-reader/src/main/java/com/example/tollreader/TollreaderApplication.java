@@ -2,13 +2,21 @@ package com.example.tollreader;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
+import jakarta.jms.ConnectionFactory;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.security.SecureRandom;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.jms.annotation.EnableJms;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
+import org.springframework.jms.support.converter.MessageConverter;
+import org.springframework.jms.support.converter.MessageType;
 
+@EnableJms
 @SpringBootApplication
 public class TollreaderApplication implements CommandLineRunner {
 
@@ -24,6 +32,24 @@ public class TollreaderApplication implements CommandLineRunner {
 	public static void main(String[] args) {
 		SpringApplication.run(TollreaderApplication.class, args);
 	}
+
+	// Can I move this to a different class? service, component?
+	@Bean
+    public MessageConverter jacksonJmsMessageConverter() {
+        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+        converter.setTargetType(MessageType.TEXT);
+        converter.setTypeIdPropertyName("_type");
+        return converter;
+    }
+
+	// Can I move this to a different class? service, component?
+    @Bean
+    public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory) {
+        JmsTemplate jmsTemplate = new JmsTemplate();
+        jmsTemplate.setConnectionFactory(connectionFactory);
+        jmsTemplate.setMessageConverter(jacksonJmsMessageConverter());
+        return jmsTemplate;
+    }
 
 	@Override
 	public void run(String... args) throws Exception {

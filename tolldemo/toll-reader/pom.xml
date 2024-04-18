@@ -38,8 +38,14 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-    
+
 		<dependency>
+			<groupId>com.oracle.database.spring</groupId>
+			<artifactId>oracle-spring-boot-starter-aqjms</artifactId>
+			<version>23.4.0</version>
+		</dependency>
+    
+		<!-- <dependency>
 			<groupId>com.oracle.database.messaging</groupId>
 			<artifactId>okafka</artifactId>
 			<version>23.2.0.0</version>
@@ -48,7 +54,7 @@
 		<dependency>
 			<groupId>org.springframework.kafka</groupId>
 			<artifactId>spring-kafka</artifactId>
-		</dependency>
+		</dependency> -->
 	</dependencies>
 
 	<build>
