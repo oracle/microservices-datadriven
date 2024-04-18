@@ -36,6 +36,8 @@ public class TollreaderApplication implements CommandLineRunner {
     return clazz.getEnumConstants()[x];
   }
 
+  // Why supresswarnings?
+  @SuppressWarnings("null")
   private void sendMessage(JsonObject tolldata) {
     jmsTemplate.send("TollGate", new MessageCreator() {
       @Override
