@@ -18,6 +18,12 @@ import org.springframework.jms.support.converter.MappingJackson2MessageConverter
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 
+// dbms_aqadm.create_transactional_event_queue (queue_name => 'TollGate', multiple_consumers => true);
+// dbms_aqadm.set_queue_parameter('TollGate', 'KEY_BASED_ENQUEUE', 2);
+// dbms_aqadm.set_queue_parameter('TollGate', 'SHARD_NUM', 5);
+// dbms_aqadm.start_queue('TollGate');
+// end;
+// /
 
 @EnableJms
 @SpringBootApplication
@@ -28,38 +34,34 @@ public class TollreaderApplication implements CommandLineRunner {
 	private static final Integer maxNumber = 99999;
 
 	@Autowired
-    private static JmsTemplate jmsTemplate;
+    private JmsTemplate jmsTemplate;
 	
 	private static <T extends Enum<?>> T randomEnum(Class<T> clazz) {
 		int x = random.nextInt(clazz.getEnumConstants().length);
 		return clazz.getEnumConstants()[x];
 	}
 
-	public static void main(String[] args) {
-		SpringApplication.run(TollreaderApplication.class, args);
-	}
-
-	private static void sendMessage(JsonObject tolldata) {
+	private void sendMessage(JsonObject tolldata) {
         jmsTemplate.convertAndSend("TollGate", tolldata);
     }
 
 	// Can I move this to a different class? service, component?
-	@Bean
-    public MessageConverter jacksonJmsMessageConverter() {
-        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
-        converter.setTargetType(MessageType.TEXT);
-        converter.setTypeIdPropertyName("_type");
-        return converter;
-    }
+	// @Bean
+    // public MessageConverter jacksonJmsMessageConverter() {
+    //     MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+    //     converter.setTargetType(MessageType.TEXT);
+    //     converter.setTypeIdPropertyName("_type");
+    //     return converter;
+    // }
 
-	// Can I move this to a different class? service, component?
-    @Bean
-    public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory) {
-        JmsTemplate jmsTemplate = new JmsTemplate();
-        jmsTemplate.setConnectionFactory(connectionFactory);
-        jmsTemplate.setMessageConverter(jacksonJmsMessageConverter());
-        return jmsTemplate;
-    }
+	// // Can I move this to a different class? service, component?
+    // @Bean
+    // public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory) {
+    //     JmsTemplate jmsTemplate = new JmsTemplate();
+    //     jmsTemplate.setConnectionFactory(connectionFactory);
+    //     jmsTemplate.setMessageConverter(jacksonJmsMessageConverter());
+    //     return jmsTemplate;
+    // }
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -88,14 +90,10 @@ public class TollreaderApplication implements CommandLineRunner {
 			sendMessage(data);
 
 		}
+	}
 
-//   2  dbms_aqadm.create_transactional_event_queue (queue_name => 'TollGate', multiple_consumers => true);
-//   3  dbms_aqadm.set_queue_parameter('TollGate', 'KEY_BASED_ENQUEUE', 2);
-//   4  dbms_aqadm.set_queue_parameter('TollGate', 'SHARD_NUM', 5);
-//   5  dbms_aqadm.start_queue('TollGate');
-//   6  end;
-//   7* /
-
+	public static void main(String[] args) {
+		SpringApplication.run(TollreaderApplication.class, args);
 	}
 
 }
