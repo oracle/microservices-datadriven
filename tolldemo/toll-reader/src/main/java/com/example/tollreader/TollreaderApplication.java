@@ -5,6 +5,8 @@ import jakarta.jms.Message;
 import jakarta.jms.Session;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
+import lombok.extern.slf4j.Slf4j;
+
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
 import java.security.SecureRandom;
@@ -19,6 +21,7 @@ import org.springframework.jms.core.MessageCreator;
 
 @EnableJms
 @SpringBootApplication
+@Slf4j
 public class TollreaderApplication implements CommandLineRunner {
 
 	private static final SecureRandom random = new SecureRandom();
@@ -34,10 +37,7 @@ public class TollreaderApplication implements CommandLineRunner {
 	}
 
 	private void sendMessage(JsonObject tolldata) {
-		// jmsTemplate.convertAndSend("TollGate", tolldata);
 		jmsTemplate.send("TollGate", new MessageCreator() {
-
-			@SuppressWarnings("null")
 			@Override
 			public Message createMessage(Session session) throws JMSException {
 				return session.createTextMessage(tolldata.toString());
@@ -53,12 +53,11 @@ public class TollreaderApplication implements CommandLineRunner {
 		LocalDateTime now = LocalDateTime.now();
 		String dateTimeString = now.format(formatter);
 		Integer sleepTime = 1000;
-		Integer numRecords = 100000;
 		if (args.length > 0 && !args[0].isBlank()) {
 			sleepTime = Integer.parseInt(args[0]);
 		}
 
-		for (int i = 0; i < numRecords; i++) {
+		while (true) {
 			Thread.sleep(sleepTime);
 
 			Integer licNumber = random.nextInt(maxNumber - minNumber) + minNumber;
@@ -75,7 +74,7 @@ public class TollreaderApplication implements CommandLineRunner {
 				.add("timestamp", dateTimeString)
 				.build();
 
-			System.out.println(data);
+			log.info("Toll Data :" + data.toString());
 			sendMessage(data);
 
 		}
