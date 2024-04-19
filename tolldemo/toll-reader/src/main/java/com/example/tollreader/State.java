@@ -52,7 +52,7 @@ public enum State {
   MO("Missouri"),
   WY("Wyoming");
 
-  private String state;
+  private final String state;
 
   private State(String state) {
     this.state = state;

@@ -7,7 +7,7 @@ public enum CarType {
   SEDAN("SEDAN"),
   OTHER("OTHER");
 
-  private String carType;
+  private final String carType;
 
   private CarType(String carType) {
     this.carType = carType;

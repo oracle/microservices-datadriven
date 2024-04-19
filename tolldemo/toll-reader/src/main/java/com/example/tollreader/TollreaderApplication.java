@@ -54,23 +54,23 @@ public class TollreaderApplication implements CommandLineRunner {
     LocalDateTime now = LocalDateTime.now();
     String dateTimeString = now.format(formatter);
 
-    Integer sleepTime = 1000;
+    int sleepTime = 1000;
     if (args.length > 0 && !args[0].isBlank()) {
       sleepTime = Integer.parseInt(args[0]);
     }
 
-    log.info("Sleeptime :" + sleepTime.toString());
+    log.info("Sleeptime :" + Integer.toString(sleepTime));
 
     while (true) {
-      Integer licNumber = random.nextInt(maxNumber - minNumber) + minNumber;
-      Integer tagId = random.nextInt(maxNumber - minNumber) + minNumber;
-      Integer accountNumber = random.nextInt(maxNumber - minNumber) + minNumber;
+      int licNumber = random.nextInt(maxNumber - minNumber) + minNumber;
+      int tagId = random.nextInt(maxNumber - minNumber) + minNumber;
+      int accountNumber = random.nextInt(maxNumber - minNumber) + minNumber;
       String state = randomEnum(State.class).toString();
       String carType = randomEnum(CarType.class).toString();
 
       JsonObject data = Json.createObjectBuilder()
           .add("accountnumber", accountNumber) // This could be looked up in the DB from the tagId?
-          .add("license-plate", state + "-" + licNumber.toString()) // This could be looked up in the DB from the tagId?
+          .add("license-plate", state + "-" + Integer.toString(licNumber)) // This could be looked up in the DB from the tagId?
           .add("cartype", carType) // This could be looked up in the DB from the tagId?
           .add("tagid", tagId)
           .add("timestamp", dateTimeString)
