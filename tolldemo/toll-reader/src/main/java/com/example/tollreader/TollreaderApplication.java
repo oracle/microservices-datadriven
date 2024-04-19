@@ -62,8 +62,6 @@ public class TollreaderApplication implements CommandLineRunner {
     log.info("Sleeptime :" + sleepTime.toString());
 
     while (true) {
-      Thread.sleep(sleepTime);
-
       Integer licNumber = random.nextInt(maxNumber - minNumber) + minNumber;
       Integer tagId = random.nextInt(maxNumber - minNumber) + minNumber;
       Integer accountNumber = random.nextInt(maxNumber - minNumber) + minNumber;
@@ -80,7 +78,7 @@ public class TollreaderApplication implements CommandLineRunner {
 
       log.info("Toll Data :" + data.toString());
       sendMessage(data);
-
+      Thread.sleep(sleepTime);
     }
   }
 
