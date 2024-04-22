@@ -24,7 +24,7 @@ resources:
 ---
 
 
-Oracle Backend for Spring Boot and Microservices version 1.1.1 includes a preview of a new feature called "Spring Operations Center".
+Oracle Backend for Spring Boot and Microservices version 1.1.3 includes a preview of a new feature called "Spring Operations Center".
 More capabilities will be added to this feature in future releases.
 
 The Spring Operations Center provides a web user interface to manage the Oracle Backend for Spring Boot and Microservices.
@@ -38,6 +38,14 @@ This preview release includes the following capabilities:
 
 **Note:** More capabilities will be added to this feature in future releases.
 
+- [Accessing Spring Operations Center](#accessing-spring-operations-center)
+- [The Dashboard](#the-dashboard)
+  - [Manage Namespaces](#manage-namespaces)
+  - [Manage Workloads](#manage-workloads)
+  - [Manage Identity](#manage-identity)
+
+## Accessing Spring Operations Center
+
 To access the Spring Operations Center, obtain the public IP address for your environment using this command:
 
 ```bash
@@ -50,23 +58,21 @@ Use the `EXTERNAL-IP` from the results and open a browser to https://100.200.100
 
 **Note**: If you installed with self-signed certificates, which is the default, you will see a browser warning message and
 will have to click on "Accept risk" or similar. For information about replacing the self-signed certificate with a
-production certicate, refer to [Transport Layer Security](../../security#transport-layer-security)
+production certificate, refer to [Transport Layer Security](../../security#transport-layer-security)
 
 <!-- spellchecker-disable -->
 {{< img name="soc-login-page" size="medium" lazy=false >}}
 <!-- spellchecker-enable -->
 
-Login using the `obaas-admin` user (or another user if you have created one) and the password
-that you set during installation.  If you did not set a password, one was auto-generated for you and can be
-obtain with this command: 
+Login using the `obaas-admin` user (or another user if you have created one) and the password that you set during installation.  If you did not set a password, one was auto-generated for you and can be obtained with this command:
 
 ```bash
-$ kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.admin}' | base64 -d
+$ kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.admin}' | base64 -d; echo
 ```
 
 After logging in, you will see the SOC Dashboard.
 
-### The Dashboard
+## The Dashboard
 
 The Spring Operations Center Dashboard provides information about the overall state of the environment including:
 
@@ -83,10 +89,7 @@ The Spring Operations Center Dashboard provides information about the overall st
 
 ### Manage Namespaces
 
-The Manage Namespaces screen is accessible from the *Workloads* menu, and allows you to view and manage the namespaces
-that are configured for Spring Boot application deployments.  Note that this does not show you all namespaces in the
-Kubernetes cluster, just those that have be specifically configured for Spring Boot workloads, meaning they have
-the necessary secrets for pulling images, accessing the database, and so on.
+The Manage Namespaces screen is accessible from the *Workloads* menu, and allows you to view and manage the namespaces that are configured for Spring Boot application deployments.  Note that this does not show you all namespaces in the Kubernetes cluster, just those that have be specifically configured for Spring Boot workloads, meaning they have the necessary secrets for pulling images, accessing the database, and so on.
 
 <!-- spellchecker-disable -->
 {{< img name="soc-manage-namespaces" size="medium" lazy=false >}}
@@ -98,7 +101,7 @@ deployed there.
 ### Manage Workloads
 
 The Manage Workloads screen shows the workloads (Spring Boot applications) deployed in a specific namespace, including
-the status of each workload, and how many replicas are currently running and desired. 
+the status of each workload, and how many replicas are currently running and desired.
 
 <!-- spellchecker-disable -->
 {{< img name="soc-manage-workloads" size="medium" lazy=false >}}

@@ -18,6 +18,11 @@ The Authorization Server is an engine to authenticate and authorize requests to 
 
 > **_NOTE:_** Oracle recommends that you change the default passwords for the default created users.
 
+- [Users & Roles](#users--roles)
+- [User Management REST endpoints overview](#user-management-rest-endpoints-overview)
+  - [User Management REST Endpoints](#user-management-rest-endpoints)
+- [Architecture](#architecture)
+
 ## Users & Roles
 
 When deploying Oracle Backend for Spring Boot and Microservices, two users are created with the following roles:
@@ -48,21 +53,22 @@ The passwords can also be obtained from k8s secrets using the `kubectl` command.
 For `obaas-admin`:
 
 ```shell
-kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.admin}' | base64 -d
+kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.admin}' | base64 -d; echo
 ```
 
 For `obaas-user`:
 
 ```shell
-kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.user}' | base64 -d
+kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.user}' | base64 -d; echo
 ```
 
-## User Management REST endpoints
+## User Management REST endpoints overview
 
 The following REST Endpoints are available to manage users. The table lists which minimum required role that is needed to perform the operation.
 
 | End point                                         | Method | Description                                     | Minimum required Role |
 |---------------------------------------------------|--------|-------------------------------------------------|-----------------------|
+| /user/api/v1/connect                              | GET    | Authorize                                       | All Roles             |
 | /user/api/v1/findUser                             | GET    | Find all users                                  | ROLE_ADMIN            |
 | /user/api/v1/findUser?username=\<username\>       | GET    | Find a user with the username \<username\>      | ROLE_ADMIN            |
 | /user/api/v1/createUser                           | POST   | Create a user                                   | ROLE_ADMIN            |

@@ -66,22 +66,26 @@ main:
       - name: "AQ/JMS"
         ref: "/starters/aqjms"
   - name: Infrastructure
+    ref: "/infrastructure"
     sub:
       - name: "Networking"
         ref: "/infrastructure/networking"
       - name: "Database"
-        ref: "/infrastructure/database"   
-  - name: Database Access
-    ref: "/database"
-  - name: Kubernetes Access
-    ref: "/cluster-access"
+        ref: "/infrastructure/database"
+      - name: Database Access
+        ref: "/infrastructure/databaseaccess"
+      - name: "Kubernetes Access"
+        ref: "/infrastructure/kubernetes" 
   - name: Sample Application
     ref: "/sampleapp"
   - name: Upgrade
     ref: "/upgrade"
   - name: Uninstall
     ref: "/uninstall"
-  - name: Support
-    ref: "/support"
+  - name: Get Help
+    ref: "/get-help"
+    sub:
+      - name: "Troubleshooting"
+        ref: "/get-help/troubleshooting"
   - name: "Release Notes"
     ref: "/release-notes"

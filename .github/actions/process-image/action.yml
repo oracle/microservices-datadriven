@@ -16,14 +16,15 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Set date and latest Tag
+    - name: Set date and version Tag
       shell: bash
       run: |
         full_dst_image=${{ inputs.dst_image }}
+        full_dst_tag=${full_dst_image#*:}
         now=$(date +'%Y.%m.%d')
         echo "date=$now" >> $GITHUB_ENV
         echo "date_dst_tag=$full_dst_image-${now//./}" >> $GITHUB_ENV
-        echo "latest_dst_tag=${full_dst_image%:*}:latest" >> $GITHUB_ENV
+        echo "version_dst_tag=${full_dst_image%:*}:${full_dst_tag%%-*}" >> $GITHUB_ENV
 
     - name: Write Dockerfile
       shell: bash
@@ -45,7 +46,7 @@ runs:
       with:
         context: "${{ runner.temp }}"
         push: false
-        tags: ${{ env.latest_dst_tag }}
+        tags: ${{ env.version_dst_tag }}
 
     - name: Build and Push Image
       uses: docker/build-push-action@v5
@@ -53,4 +54,4 @@ runs:
       with:
         context: "${{ runner.temp }}"
         push: true
-        tags: ${{ env.latest_dst_tag }},${{ env.date_dst_tag }}
+        tags: ${{ env.version_dst_tag }},${{ env.date_dst_tag }}

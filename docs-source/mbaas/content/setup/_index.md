@@ -107,4 +107,34 @@ The Oracle Backend for Parse Platform is deployed with a sample self-signed cert
         --type=merge
     ```
 
+## S3 Storage
+
+During the initial Marketplace installation, there is an option to enable a S3 Compatible [Object Storage](https://www.oracle.com/uk/cloud/storage/object-storage/) bucket for external storage.  This option can be enabled or disabled by editing and applying the installed Marketplace stack.
+
+> **NOTE**: If changes to the infrastructure were made outside the stack, re-applying the stack may revert those changes back to their original values.  It is important to *PLAN* and review the proposed changes before running *APPLY*.  This will ensure there are no unintentional modifications to the infrastructure.
+
+1. In the OCI Console, navigate to Developer Services -> Resource Manager -> Stacks
+![OCI Navigate Stacks](images/navigate_stacks.png "OCI Navigate Stacks")
+
+2. Ensure the compartment is set to where the Marketplace Stack was deployed, and Select the stack.
+![OCI Select Stack](images/select_stack.png "OCI Select Stack")
+
+3. Edit the Stack and Click Next
+![OCI Edit Stack](images/edit_stack.png "OCI Edit Stack")
+
+4. Enable/Disable the S3 Storage
+![OCI S3 Storage](images/s3_storage.png "OCI S3 Storage")
+
+5. Click Next and Save Changes
+![OCI Save Changes](images/save_changes.png "OCI Save Changes")
+
+6. Run Plan
+![OCI Plan Changes](images/plan.png "OCI Plan Changes")
+
+7. Carefully review the proposed changes
+![OCI Plan Output](images/plan_output.png "OCI Plan Output")
+
+8. Run Apply after reviewing the proposed changes
+![OCI Apply Changes](images/apply.png "OCI Apply Changes")
+
 Next, go to the [Microsoft Azure/OCI Multicloud Installation](../azure/) page to learn how to use the newly installed environment.

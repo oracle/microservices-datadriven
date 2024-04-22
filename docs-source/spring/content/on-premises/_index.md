@@ -10,7 +10,7 @@ The Oracle Backend for Spring Boot and Microservices is available to install in 
 
 You must meet the following prerequisites to use the Oracle Backend for Spring Boot and Microservices On-Premises. You need:
 
-* Access to Oracle Database Enterprise Edition 21.3.0.0
+* Access to Oracle Database Enterprise Edition 19.3.0.0
 * Access to a Container Repository
 * Access to a Kubernetes cluster
 * [Python 3+](https://www.python.org/)
@@ -27,7 +27,7 @@ When installing in a _non-production_ environment, for example a developer's des
 
 ## Download
 
-Download the latest release of [Oracle Backend for Spring Boot and Microservices](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.1/onprem-ebaas_latest.zip).
+Download the latest release of [Oracle Backend for Spring Boot and Microservices](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.3/onprem-ebaas_latest.zip).
 
 ## Setup
 
@@ -40,8 +40,8 @@ communicate with your cluster.
 A Helper Playbook has been provided for non-production installations to assist in defining the infrastructure.  Review the
 appropriate documentation for examples of installing and defining the non-production installation. For example:
 
-* [macOS Ventura (x86)](macos_ventura/_index.md)
-* [Oracle Linux 8 (x86)](ol8/_index.md)
+* [macOS Ventura (x86)](../on-premises/macos_ventura/)
+* [Oracle Linux 8 (x86)](../on-premises/ol8/)
 
 The non-production playbook is run as part of the Configuration Management Playbook.
 

@@ -2,7 +2,7 @@
 
 **NOTE:** This document and application is WIP.
 
-To run Cloud Bank you need OBaaS version 1.1.1 [Oracle Backend for Spring Boot and Microservices](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911)
+To run Cloud Bank you need OBaaS version 1.1.3 [Oracle Backend for Spring Boot and Microservices](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911)
 
 ## Build CloudBank
 
@@ -169,7 +169,7 @@ deploy --service-name transfer --artifact-path transfer/target/transfer-0.0.1-SN
 
     In the CloudBank directory run the following command. *NOTE*, you must add the API-KEY to the command
 
-    ````shell
+    ```shell
     (cd apisix-routes; source ./create-all-routes.sh <YOUR-API-KEY>)
     ```
 
@@ -333,13 +333,13 @@ This is an example of the `customer32` application:
         Transfer-Encoding: chunked
         Date: Thu, 02 Nov 2023 18:06:45 GMT
 
-        [{"journalId":7,"journalType":"PENDING","accountId":1,"lraId":"0","lraState":null,"journalAmount":256}]
+        [{"journalId":1,"journalType":"PENDING","accountId":1,"lraId":"0","lraState":null,"journalAmount":256}]
         ```
 
     1. Clearance of check - Note the JournalID from earlier step
 
          ```shell
-         curl -i -X POST -H 'Content-Type: application/json' -d '{"journalId": 7}' http://<EXTERNAL-ID>/api/v1/testrunner/clear
+         curl -i -X POST -H 'Content-Type: application/json' -d '{"journalId": 1}' http://<EXTERNAL-ID>/api/v1/testrunner/clear
          ```
 
         output should be similar to:
@@ -350,7 +350,7 @@ This is an example of the `customer32` application:
          Transfer-Encoding: chunked
          Date: Thu, 02 Nov 2023 18:09:17 GMT
 
-         {"journalId":7}
+         {"journalId":1}
          ```
 
     1. Check application log
@@ -381,7 +381,7 @@ This is an example of the `customer32` application:
        Transfer-Encoding: chunked
        Date: Thu, 02 Nov 2023 18:36:31 GMT
 
-       [{"journalId":7,"journalType":"DEPOSIT","accountId":1,"lraId":"0","lraState":null,"journalAmount":256}]`
+       [{"journalId":1,"journalType":"DEPOSIT","accountId":1,"lraId":"0","lraState":null,"journalAmount":256}]`
        ```
 
 1. Run LRA Test Cases

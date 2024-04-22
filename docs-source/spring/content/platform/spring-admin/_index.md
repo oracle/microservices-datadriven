@@ -23,25 +23,18 @@ the applications:
 1. Expose the Spring Boot Admin dashboard using this command:
 
     ```shell
-    kubectl -n admin-server port-forward svc/admin-server 8989:8989
+    kubectl -n admin-server port-forward svc/admin-server 8989
     ```
 
-2. Open the Spring Boot Admin dashboard URL: <http://localhost:8989>
-
-    * username: `admin`
-    * password: `admin`
-
-    **NOTE:** Oracle recommends that you change the default password when you log in for the first time. Even though the dashboard is not accessible externally, Oracle still recommends using strong passwords to maximize security.
+1. Open the Spring Boot Admin dashboard URL: <http://localhost:8989>
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-springadmin-apps" size="medium" lazy=false >}}
     <!-- spellchecker-enable -->
 
-3. On the web page, navigate to the **Applications** tab:
+    On the dashboard you will see all the internal services registered with Eureka. If you have deployed the sample application [CloudBank](https://github.com/oracle/microservices-datadriven/tree/main/cloudbank-v32) or done the [LiveLab for Oracle Backend for Spring Boot and Microservices](http://bit.ly/CloudBankOnOBaaS) you will see those services.
 
-    * If you deployed the [Sample Applications](../../sample-apps), find and click the **SLOW** entry to expand it.
-    * Click on the instance of the service.
-    * Notice that you can see details about the service instance, metrics, configuration, and so on.
+    If you click (expand) an application and click on the instance of service you will details about the service instance, metrics, configuration, and so on,
 
     <!-- spellchecker-disable -->
     {{< img name="obaas-springadmin-svc-details" size="medium" lazy=false >}}

@@ -1,6 +1,6 @@
 ---
-title: "API Gateway"
-description: "APISIX Gateway for API management in Oracle Backend for Spring Boot and Microservices"
+title: "Apache APISIX Gateway"
+description: "Apache APISIX Gateway for API management in Oracle Backend for Spring Boot and Microservices"
 keywords: "api apisix gateway traffic deployment circuitbreaker spring springboot microservices oracle backend"
 resources:
   - name: obaas-apisix-k8s
@@ -48,7 +48,7 @@ Oracle Backend for Spring Boot and Microservices deploys Apache APISIX Gateway a
     * Password is retrieved using the following command:
 
     ```shell
-    kubectl get secret -n apisix apisix-dashboard -o jsonpath='{.data.conf\.yaml}' | base64 -d | grep 'password:`
+    kubectl get secret -n apisix apisix-dashboard -o jsonpath='{.data.conf\.yaml}' | base64 -d | grep 'password:'; echo
     ```
 
     **NOTE:** Oracle recommends that you change the default password when you log in the first time. Even though the dashboard is not accessible externally, Oracle still recommends using strong passwords to maximize security.

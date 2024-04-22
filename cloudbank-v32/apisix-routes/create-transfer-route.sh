@@ -17,6 +17,7 @@ curl http://localhost:9180/apisix/admin/routes/1005 \
     "labels": {
         "version": "1.0"
     },
+    "desc": "TRANSFER Service",
     "uri": "/transfer*",
     "methods": [
       "GET",
@@ -36,6 +37,9 @@ curl http://localhost:9180/apisix/admin/routes/1005 \
            "sampler": {
                "name": "always_on"
            }
+        },
+        "prometheus": {
+            "prefer_name": true
         }
     }
 }

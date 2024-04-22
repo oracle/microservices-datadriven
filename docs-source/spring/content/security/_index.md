@@ -24,7 +24,6 @@ The Oracle Backend for Spring Boot and Microservices has the following security 
 
 - Oracle Backend for Spring Boot and Microservices contains HashiCorp Vault to secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets, and other sensitive data. [HashiCorp Vault Documentation](../platform/vault)
 
-
 ## Transport Layer Security
 
 The Oracle Backend for Spring Boot and Microservices is deployed with a sample self-signed certificate for Transport Layer Security (TLS). This results in an "Accept Risk" message when accessing the Spring Operations Center or Grafana web user interfaces and the sample TLS certificate should not be used for production deployments.
@@ -51,4 +50,3 @@ The Oracle Backend for Spring Boot and Microservices is deployed with a sample s
         -p '{"metadata":{"annotations":{"service.beta.kubernetes.io/oci-load-balancer-tls-secret":"my-tls-cert"}}}' \
         --type=merge
     ```
-
