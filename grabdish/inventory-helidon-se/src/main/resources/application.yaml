@@ -6,7 +6,7 @@ db:
   url: jdbc:oracle:thin:@//localhost:1521/INVENTORY
   #url: jdbc:oracle:thin:@inventorydb_medium?TNS_ADMIN=$path_to_wallet
   user: java_inventory
-  password: Welcome-1234X#0
+  password:
   class: oracle.jdbc.pool.OracleDataSource
   #failoverEnabled: false
   #initialPoolSize: 4
