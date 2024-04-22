@@ -1,4 +1,5 @@
-FROM oraclelinux:7-slim
+# FROM oraclelinux:7-slim
+FROM container-registry.oracle.com/os/oraclelinux:7-slim
 
 ARG release=19
 ARG update=9
@@ -11,8 +12,7 @@ RUN  yum -y install oracle-release-el7 && \
 WORKDIR /app
 COPY inventory/requirements.txt .
 RUN yum install -y tar && \
-    yum install -y python36 \
-    yum install -y python36-oci-sdk && \
+    yum install -y python36 && \
     rm -rf /var/cache/yum && \
     python3.6 -m pip install -U pip setuptools && \
     python3.6 -m pip install -r requirements.txt

@@ -14,13 +14,13 @@ if [ -z "$DOCKER_REGISTRY" ]; then
     exit 1
 fi
 
-if [ -z "$INVENTORY_PDB_NAME" ]; then
-    echo "INVENTORY_PDB_NAME not set. Will get it with state_get"
-  export INVENTORY_PDB_NAME=$(state_get INVENTORY_DB_NAME)
+if [ -z "$INVENTORY_DB_NAME" ]; then
+    echo "INVENTORY_DB_NAME not set. Will get it with state_get"
+  export INVENTORY_DB_NAME=$(state_get INVENTORY_DB_NAME)
 fi
 
-if [ -z "$INVENTORY_PDB_NAME" ]; then
-    echo "Error: INVENTORY_PDB_NAME env variable needs to be set!"
+if [ -z "$INVENTORY_DB_NAME" ]; then
+    echo "Error: INVENTORY_DB_NAME env variable needs to be set!"
     exit 1
 fi
 
@@ -29,25 +29,25 @@ kubectl delete configmap db-metrics-inventorypdb-exporter-config -n msdataworksh
 kubectl create configmap db-metrics-inventorypdb-exporter-config --from-file=db-metrics-inventorypdb-exporter-metrics.toml -n msdataworkshop
 echo
 echo create db-metrics-exporter deployment and service...
-export CURRENTTIME=$( date '+%F_%H:%M:%S' )
+export CURRENTTIME=generated
 echo CURRENTTIME is $CURRENTTIME  ...this will be appended to generated deployment yaml
 
 cp db-metrics-exporter-deployment.yaml db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
 
-sed -e  "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml > /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
-mv -- /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
+#sed -e  "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml > /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
+#mv -- /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
 sed -e  "s|%EXPORTER_NAME%|inventorypdb|g" db-metrics-exporter-inventorypdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
-sed -e  "s|%PDB_NAME%|${INVENTORY_PDB_NAME}|g" db-metrics-exporter-inventorypdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
+sed -e  "s|%PDB_NAME%|${INVENTORY_DB_NAME}|g" db-metrics-exporter-inventorypdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
-sed -e  "s|%USER%|INVENTORYUSER|g" db-metrics-exporter-inventorypdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
+sed -e  "s|%USER%|admin|g" db-metrics-exporter-inventorypdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
-sed -e  "s|%OCI_REGION%|${OCI_REGION}|g" db-metrics-exporter-inventorypdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
+sed -e  "s|%db-wallet-secret%|inventory-db-tns-admin-secret|g" db-metrics-exporter-inventorypdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
 mv -- /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
-sed -e  "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" db-metrics-exporter-inventorypdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
-mv -- /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
-sed -e  "s|%DATA_SOURCE_NAME_URL%|inventoryurl|g" db-metrics-exporter-inventorypdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
-mv -- /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
+#sed -e  "s|${OCI_REGION-}|${OCI_REGION}|g" db-metrics-exporter-inventorypdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
+#mv -- /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
+#sed -e  "s|${VAULT_SECRET_OCID-}|${VAULT_SECRET_OCID}|g" db-metrics-exporter-inventorypdb-deployment-${CURRENTTIME}.yaml > /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
+#mv -- /tmp/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml
 
 if [ -z "$1" ]; then
     kubectl apply -f $SCRIPT_DIR/db-metrics-exporter-inventorypdb-deployment-$CURRENTTIME.yaml -n msdataworkshop

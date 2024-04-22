@@ -1,0 +1,21 @@
+#!/bin/bash
+# Copyright (c) 2021 Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
+# Fail on error
+set -eu
+
+if ! state_get KAFKA_SETUP; then
+  echo "ERROR: Kafka infrastructure should be setting up!"
+  exit
+fi
+
+# Start Kafka Infrastructure
+cd "$LAB_HOME"/cloud-setup/confluent-kafka
+./docker-compose up -d
+
+# Connect Kafka Broker to Lab network
+echo "Connecting Kafka broker on network $(state_get LAB_KAFKA_NETWORK)"
+docker network connect $(state_get LAB_KAFKA_NETWORK) broker
+
+state_set_done KAFKA_RUNNING

@@ -334,7 +334,7 @@ fi
 
 # Get Order DB OCID
 while ! state_done ORDER_DB_OCID; do
-  ORDER_DB_OCID=`oci db autonomous-database list --compartment-id "$(cat state/COMPARTMENT_OCID)" --query 'join('"' '"',data[?"display-name"=='"'ORDERDB'"'].id)' --raw-output`
+  ORDER_DB_OCID=`oci db autonomous-database list --compartment-id "$(state_get COMPARTMENT_OCID)" --query 'join('"' '"',data[?"display-name"=='"'ORDERDB'"'].id)' --raw-output`
   if [[ "$ORDER_DB_OCID" =~ ocid1.autonomousdatabase* ]]; then
     state_set ORDER_DB_OCID "$ORDER_DB_OCID"
   else
@@ -346,7 +346,7 @@ done
 
 # Get Inventory DB OCID
 while ! state_done INVENTORY_DB_OCID; do
-  INVENTORY_DB_OCID=`oci db autonomous-database list --compartment-id "$(cat state/COMPARTMENT_OCID)" --query 'join('"' '"',data[?"display-name"=='"'INVENTORYDB'"'].id)' --raw-output`
+  INVENTORY_DB_OCID=`oci db autonomous-database list --compartment-id "$(state_get COMPARTMENT_OCID)" --query 'join('"' '"',data[?"display-name"=='"'INVENTORYDB'"'].id)' --raw-output`
   if [[ "$INVENTORY_DB_OCID" =~ ocid1.autonomousdatabase* ]]; then
     state_set INVENTORY_DB_OCID "$INVENTORY_DB_OCID"
   else

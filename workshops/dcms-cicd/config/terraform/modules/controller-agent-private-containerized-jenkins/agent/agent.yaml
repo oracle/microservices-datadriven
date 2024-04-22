@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+
+  jenkins:
+    container_name: jenkins-agent
+    restart: always
+    build: .
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - JENKINS_SECRET=${JENKINS_SECRET}
+      - JENKINS_URL=${JENKINS_URL}
+      - JENKINS_AGENT_NAME=${JENKINS_AGENT_NAME}

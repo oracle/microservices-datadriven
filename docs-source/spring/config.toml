@@ -1,0 +1,35 @@
+baseURL = 'https://oracle.github.io/microservices-datadriven/spring/'
+languageCode = 'en-us'
+title = 'Oracle Backend for Spring Boot and Microservices'
+theme = "hugo-geekdoc"
+
+pluralizeListTitles = false
+
+# Geekdoc required configuration
+pygmentsUseClasses = true
+pygmentsCodeFences = true
+disablePathToLower = true
+
+# Required if you want to render robots.txt template
+enableRobotsTXT = true
+
+# analytics
+googleAnalytics = "G-Z0MVCJ4T39"
+
+# menu configuration
+[params]
+  geekdocMenuBundle = true
+  geekdocCollapseAllSections = true
+  geekdocLegalNotice = "https://oss.oracle.com/licenses/upl/"  
+
+# Needed for mermaid shortcodes
+[markup]
+  [markup.goldmark.renderer]
+    # Needed for mermaid shortcode
+    unsafe = true
+  [markup.tableOfContents]
+    startLevel = 1
+    endLevel = 9
+
+[taxonomies]
+   tag = "tags"

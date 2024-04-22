@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright (c) 2022, Oracle and/or its affiliates. -->
+<!-- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>sample-spring-apps</artifactId>
+    <packaging>pom</packaging>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <modules>
+        <module>clients</module>
+        <module>customer</module>
+        <module>fraud</module>
+        <module>notification</module>
+        <module>aq</module>
+        <module>banka</module>
+        <module>bankb</module>
+        <module>slow_service</module>
+        <module>aqjms_sample</module>
+        <module>aqjms-jakarta_sample</module>
+    </modules>
+
+    <name>sample-spring-apps</name>
+    <description>Sample application for Oracle Backend for Spring Boot</description>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>17</java.version>
+        <java.image.name>jdk</java.image.name>
+        <graalvm.build.number>22.3.0</graalvm.build.number>
+        <os.version>ol9</os.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <spring.boot.dependencies.version>2.6.6</spring.boot.dependencies.version>
+        <spring.cloud.version>2021.0.1</spring.cloud.version>
+        <jib-maven-plugin.version>3.3.1</jib-maven-plugin.version>
+        <container.registry>iad.ocir.io/maacloud/atest</container.registry>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring.boot.dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring.cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-sleuth-zipkin</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring.boot.dependencies.version}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>com.google.cloud.tools</groupId>
+                    <artifactId>jib-maven-plugin</artifactId>
+                    <version>${jib-maven-plugin.version}</version>
+                    <configuration>
+                        <containerizingMode>packaged</containerizingMode>
+                        <from>
+                            <!-- <image>phx.ocir.io/maacloud/mark/openjdk:17</image> -->
+                            <image>ghcr.io/graalvm/${java.image.name}:${os.version}-java${java.version}-${graalvm.build.number}</image>
+                            <!-- <platforms>
+                                <platform>
+                                    <architecture>arm64</architecture>
+                                    <os>${os.version}</os>
+                                </platform>
+                                <platform>
+                                    <architecture>amd64</architecture>
+                                    <os>${os.version}</os>
+                                </platform>
+                            </platforms> -->
+                        </from>
+                        <to>    
+                            <image>${container.registry}/${project.artifactId}</image>
+                            <tags><tag>${project.version}</tag></tags>
+                        </to>
+                        <!-- <to>
+                            <tags>
+                                <tag>latest</tag>
+                            </tags>
+                        </to> -->
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <source>17</source>
+                    <target>17</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

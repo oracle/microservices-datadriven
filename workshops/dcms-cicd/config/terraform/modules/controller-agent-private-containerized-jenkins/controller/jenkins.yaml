@@ -1,0 +1,26 @@
+version: '3'
+
+volumes:
+  jenkins_home:
+  jenkinsRef:
+
+services:
+
+  jenkins:
+    container_name: jenkins-docker
+    restart: always
+    privileged: true
+    build: .
+    ports:
+      - 80:8080
+      - 50000:50000
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - jenkinsRef:/usr/share/jenkins/ref
+      - "./casc.yaml:/jenkins/config/casc.yaml"
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - JAVA_OPTS="-Djenkins.install.runSetupWizard=false"
+      - JENKINS_ADMIN_ID=${jenkins_user}
+      - JENKINS_ADMIN_PASSWORD=${jenkins_password}
+      - CASC_JENKINS_CONFIG=/jenkins/config/casc.yaml

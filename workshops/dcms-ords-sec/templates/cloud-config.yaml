@@ -1,0 +1,153 @@
+#cloud-config 
+output: {all: '| tee -a /var/log/cloud-init-ords.log'}
+package_upgrade: false
+packages:
+  - ksh
+  - yum-cron
+  - [jdk-17, ${jdk_version}]
+  - [ords, ${ords_version}] 
+  - [sqlcl, ${sqlcl_version}]
+write_files:
+- path: /etc/ords.conf.custom
+  permissions: '0644'
+  content: |
+    APP_VM_OPTS=-Xms4096m
+    ORDS_BASE=/opt/oracle/ords
+    ORDS_CONFIG=/home/oracle/ords/config
+  append: false
+  defer: true
+- path: /home/oracle/ords/config/databases/default/pool.xml
+  permissions: '0644'
+  content: |
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+    <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+    <properties>
+    <entry key="db.connectionType">customurl</entry>
+    <entry key="db.customURL">jdbc:oracle:thin:@${db_conn}</entry>
+    <entry key="db.username">ORDS_PUBLIC_USER_OCI</entry>
+    <entry key="plsql.gateway.mode">proxied</entry>
+    </properties>
+  append: false
+  defer: true
+- path: /home/oracle/ords/config/global/settings.xml
+  permissions: '0644'
+  content: |
+    <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+    <properties>
+    <comment>Default created by IaC</comment>
+    <entry key="database.api.enabled">true</entry>
+    <entry key="feature.sdw">true</entry>
+    <entry key="jdbc.InitialLimit">10</entry>
+    <entry key="jdbc.MaxLimit">100</entry>
+    <entry key="restEnabledSql.active">true</entry>
+    <entry key="security.httpsHeaderCheck">X-Forwarded-Proto: https</entry>
+    <entry key="standalone.context.path">/ords</entry>
+    <entry key="standalone.http.port">8080</entry>
+    <entry key="standalone.static.context.path">/i</entry>
+    <entry key="security.credentials.file">/home/oracle/ords/config/global/credentials</entry>
+    </properties>
+  append: false
+  defer: true
+- path: /home/oracle/ords/setup.sql
+  permissions: '0755'
+  content: |
+    set serveroutput on size 99999 feedback off timing on linesize 180 echo on
+    whenever sqlerror continue
+    DECLARE
+      L_USER	VARCHAR2(255);
+    BEGIN
+      BEGIN
+        SELECT USERNAME INTO L_USER FROM DBA_USERS WHERE USERNAME='ORDS_PUBLIC_USER_OCI';
+        execute immediate 'ALTER USER "ORDS_PUBLIC_USER_OCI" IDENTIFIED BY "&1"';
+      EXCEPTION WHEN NO_DATA_FOUND THEN
+        execute immediate 'CREATE USER "ORDS_PUBLIC_USER_OCI" IDENTIFIED BY "&1"';
+      END;
+      BEGIN
+        SELECT USERNAME INTO L_USER FROM DBA_USERS WHERE USERNAME='ORDS_PLSQL_GATEWAY_OCI';
+        execute immediate 'ALTER USER "ORDS_PLSQL_GATEWAY_OCI" IDENTIFIED BY "&1"';
+      EXCEPTION WHEN NO_DATA_FOUND THEN
+        execute immediate 'CREATE USER "ORDS_PLSQL_GATEWAY_OCI" IDENTIFIED BY "&1"';
+      END;
+    END;    
+    /
+    GRANT CONNECT TO ORDS_PUBLIC_USER_OCI;
+    ALTER USER ORDS_PUBLIC_USER_OCI PROFILE ORA_APP_PROFILE;
+    GRANT CONNECT TO ORDS_PLSQL_GATEWAY_OCI;
+    ALTER USER ORDS_PLSQL_GATEWAY_OCI PROFILE ORA_APP_PROFILE;
+    ALTER USER ORDS_PLSQL_GATEWAY_OCI GRANT CONNECT THROUGH ORDS_PUBLIC_USER_OCI;
+    BEGIN
+      ORDS_ADMIN.PROVISION_RUNTIME_ROLE (
+        p_user => 'ORDS_PUBLIC_USER_OCI',
+        p_proxy_enabled_schemas => TRUE
+      );
+    END;
+    /
+    BEGIN
+      ORDS_ADMIN.CONFIG_PLSQL_GATEWAY (
+        p_runtime_user => 'ORDS_PUBLIC_USER_OCI',
+        p_plsql_gateway_user => 'ORDS_PLSQL_GATEWAY_OCI'
+      );
+    END;
+    /
+    DECLARE
+      L_CDN  VARCHAR2(255);
+    BEGIN
+      SELECT images_version INTO L_CDN 
+        FROM APEX_PATCHES
+       where is_bundle_patch = 'Yes'
+       order by patch_version desc
+       fetch first 1 rows only;
+      apex_instance_admin.set_parameter(
+          p_parameter => 'IMAGE_PREFIX',
+          p_value     => 'https://static.oracle.com/cdn/apex/'||L_CDN||'/' 
+      );      
+      commit;
+    END;
+    /
+    BEGIN
+        apex_instance_admin.set_parameter('RESTRICT_DEV_HEADER', 'APEX-Public-Access');
+        commit;
+    END;
+    /
+    -- The below is used to ensure ADMIN password in tfstate isn't a usable password
+    -- To replace the instance run: "terraform apply -replace=random_password.autonomous_database_password"
+    ALTER USER ADMIN PASSWORD EXPIRE;
+    QUIT
+  append: false
+  defer: true
+- path: /home/oracle/ords/setup.sh
+  permissions: '0755'
+  content: |
+    #!/bin/env ksh
+    typeset -rx ORDS_CONFIG="/home/oracle/ords/config"
+    typeset -r ADMIN_PASS="$1"
+    typeset -r ADB_CONSTR="$2"
+
+    # Generate a password for the ORDS users (loop to avoid entropy too low issues)
+    for i in {1..10}; do
+      typeset ords_pwd=$(pwmake 80)
+      if (( $? == 0 )) && [[ -n $ords_pwd ]]; then
+        break
+      fi
+    done
+
+    # Create the password wallet file
+    ords config secret --password-stdin db.password <<< "$ords_pwd"
+
+    # Setup the ORDS user
+    sql admin/"$ADMIN_PASS"@"$ADB_CONSTR" @/home/oracle/ords/setup.sql $ords_pwd
+
+    # Post Setup
+    systemctl stop firewalld.service
+    firewall-offline-cmd --zone=public --add-port 8080/tcp
+    systemctl start firewalld.service
+    chown -R oracle:oinstall /home/oracle
+    /bin/cp /etc/ords.conf.custom /etc/ords.conf
+    systemctl enable ords.service
+    systemctl restart ords.service
+    
+  append: false
+  defer: true
+runcmd:
+  - /home/oracle/ords/setup.sh '${db_password}' '${db_conn}'

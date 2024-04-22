@@ -1,0 +1,19 @@
+[
+  {"style":"fusion","name":"Fusion","description":"Feel like something exotic? Sample the wonders of Fusion Cuisine!","image":"/sushi","menu":[
+    {"id":2000,"item":"Makizushi","price":15.99},
+    {"id":2001,"item":"Miso Soup","price":18.99},
+    {"id":2002,"item":"Yakitori","price":21.99},
+    {"id":2003,"item":"Tempura","price":19.99},
+    {"id":2004,"item":"Ramen","price":15.99},
+    {"id":2005,"item":"Sashimi","price":15.99},
+    {"id":2006,"item":"Oden","price":15.99},
+    {"id":2007,"item":"Soba","price":25.99},
+    {"id":2008,"item":"Nato","price":18.99},
+    {"id":2009,"item":"Udon","price":15.99},
+    {"id":2010,"item":"Kaiseki","price":17.99},
+    {"id":2011,"item":"Sukiyaki","price":21.99},
+    {"id":2012,"item":"Curry Rice","price":20.99}
+    ]},
+  {"style":"pizza","name":"Pizza","description":"It may not be a Friday but you can still say yes to pizza!","image":"/pizza"},
+  {"style":"burger","name":"Burgers","description":"Sometimes you just need junk food right? ","image":"/burger"}
+]

@@ -8,6 +8,7 @@ package io.helidon.data.examples;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -43,6 +44,7 @@ public class InventoryResource {
     static String pwSecretFromK8s = System.getenv("dbpassword");
     static String inventoryuser = "INVENTORYUSER";
     static String inventorypw;
+    static final String queueOwner =   System.getenv("queueowner");
     static final String orderQueueName =   System.getenv("orderqueuename");
     static final String inventoryQueueName =  System.getenv("inventoryqueuename");
     static boolean crashAfterOrderMessageReceived;
@@ -56,8 +58,7 @@ public class InventoryResource {
     }
     
     public InventoryResource() {
-        client = ClientBuilder.newBuilder()
-                .build();
+        client = ClientBuilder.newBuilder().build();
     }
 
     @Inject
@@ -81,7 +82,7 @@ public class InventoryResource {
         try (Connection connection  = atpInventoryPDB.getConnection()) { //fail if connection is not successful rather than go into listening loop
             System.out.println("InventoryResource.init connection:" + connection);
         }
-        listenForMessages();
+        new Thread(new InventoryServiceOrderEventConsumer(this)).start();
     }
 
     Tracer getTracer() {
@@ -92,16 +93,77 @@ public class InventoryResource {
         return metricRegistry;
     }
 
-    @Path("/listenForMessages")
+
+    // begin supplier service
+
+    @Path("/addInventory")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public Response listenForMessages()  {
-        new Thread(new InventoryServiceOrderEventConsumer(this)).start();
-        final Response returnValue = Response.ok()
-                .entity("now listening for messages...")
+    public Response  addInventory(@QueryParam("itemid") String itemid) {
+        String response;
+        System.out.println("SupplierService.addInventory itemid:" + itemid);
+        try {
+            Connection conn = atpInventoryPDB.getConnection();
+            conn.createStatement().execute(
+                    "UPDATE inventory SET inventorycount = inventorycount + 1 where inventoryid = '" + itemid + "'");
+            response = getInventoryCount(itemid, conn);
+        } catch (SQLException ex) {
+            response = ex.getMessage();
+        }
+        return Response.ok()
+                .entity(response)
                 .build();
-        return returnValue;
     }
+
+    @Path("/removeInventory")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response  removeInventory(@QueryParam("itemid") String itemid) {
+        String response;
+        System.out.println("SupplierService.removeInventory itemid:" + itemid);
+        try (Connection conn = atpInventoryPDB.getConnection()) {
+            conn.createStatement().execute(
+                    "UPDATE inventory SET inventorycount = inventorycount - 1 where inventoryid = '" + itemid + "'");
+            response = getInventoryCount(itemid, conn);
+        } catch (SQLException ex) {
+            response = ex.getMessage();
+        }
+        return Response.ok()
+                .entity(response)
+                .build();
+    }
+
+    @Path("/getInventoryCount")
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response  getInventoryCount(@QueryParam("itemid") String itemid) {
+        String response;
+        System.out.println("SupplierService.getInventoryCount itemid:" + itemid);
+        try (Connection conn = atpInventoryPDB.getConnection()) {
+            response = getInventoryCount(itemid, conn);
+        } catch (SQLException ex) {
+            response = ex.getMessage();
+        }
+        return Response.ok()
+                .entity(response)
+                .build();
+    }
+
+    private String getInventoryCount(String itemid, Connection conn) throws SQLException {
+        ResultSet resultSet = conn.createStatement().executeQuery(
+                "select inventorycount from inventory  where inventoryid = '" + itemid + "'");
+        int inventorycount;
+        if (resultSet.next()) {
+            inventorycount = resultSet.getInt("inventorycount");
+            System.out.println("SupplierService.getInventoryCount inventorycount:" + inventorycount);
+        } else inventorycount = 0;
+        conn.close();
+        return "inventorycount for " + itemid + " is now " + inventorycount;
+    }
+
+    //end supplier service
+
+
 
     @Path("/crashAfterOrderMessageReceived")
     @GET

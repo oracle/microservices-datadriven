@@ -1,0 +1,60 @@
+spring:
+  applications:
+    name: kafka-consumer
+  profiles:
+    active: kubernetes
+  cloud:
+    kubernetes:
+      reload:
+        enabled: true
+        mode: POLLING
+        period: 2000
+      config:
+        name: kafka-consumer-config
+        namespace: lab
+
+logging:
+  level:
+    org:
+      springframework: INFO
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      enabled: true
+    restart:
+      enabled: true
+    info:
+      enabled: true
+
+kafka-server-config:
+  bootstrap-servers: broker:29092
+  #schema-registry-url-key:
+  #schema-registry-url:
+
+kafka-topic-config:
+  topic-name: KAFKA_TOPIC_NAME
+  num-of-partitions: 3
+  replication-factor: 1
+
+kafka-consumer-config:
+  key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  consumer-group-id: groupid
+  auto-offset-reset: earliest
+  #specific-avro-reader-key: specific.avro.reader
+  #specific-avro-reader: true
+  batch-listener: true
+  auto-startup: true
+  concurrency-level: 3
+  session-timeout-ms: 10000
+  heartbeat-interval-ms: 3000
+  max-poll-interval-ms: 300000
+  max-poll-records: 500
+  max-partition-fetch-bytes-default: 1048576
+  max-partition-fetch-bytes-boost-factor: 1
+  poll-timeout-ms: 150

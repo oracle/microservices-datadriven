@@ -1,12 +1,13 @@
 terraform {
   required_providers {
     oci = {
-      source = "hashicorp/oci"
-      version = "4.42.0"
+      source  = "oracle/oci"
+      version = "~> 5"
     }
   }
+  required_version = "~> 1.2"
 }
 
 provider "oci" {
-  region           = var.ociRegionIdentifier
+  region = var.ociRegionIdentifier
 }

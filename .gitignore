@@ -1,3 +1,10 @@
+# Temporary Builds
+grabdish/inventory-micronaut/build/
+
+# Deployment artifacts
+.deployed/
+.deployed/*.yaml
+
 # Compiled class file
 *.class
 
@@ -477,3 +484,38 @@ $RECYCLE.BIN/
 #!.vscode/tasks.json
 #!.vscode/launch.json
 #!.vscode/extensions.json
+
+##
+## Gradle
+##
+.gradle/
+.gradle/*
+
+## Workshops / Event Mesh - TEQ - Kafka 
+##
+## Local JVM
+##
+workshops/eventmesh-teq-kafka/.java-version
+
+## Remove Deploy Dir -- K8s Deployment artifacts
+workshops/eventmesh-teq-kafka/**/deploy/
+
+## Remove Other Local project stuffs
+workshops/eventmesh-teq-kafka/cloud-setup/database/
+workshops/eventmesh-teq-kafka/cloud-setup/terraform_dbsystem/
+workshops/eventmesh-teq-kafka/wallet/
+workshops/oracleAQ/aqJava/.project
+workshops/oracleAQ/aqJava/.classpath
+workshops/oracleAQ/qJava/.classpath
+workshops/oracleAQ/qJava/.factorypath
+workshops/oracleAQ/qJava/.project
+*.prefs
+
+# Flutter/Dart plugins
+.flutter*
+*pubspec*
+package*
+.dart*
+
+# GraalVM stuff
+*.nib

@@ -3,6 +3,7 @@
 ## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 
+set -eu
 IMAGE_NAME=inventory-micronaut
 IMAGE_VERSION=0.1
 

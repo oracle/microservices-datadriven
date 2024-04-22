@@ -1,0 +1,27 @@
+<div>
+    <table border="0" width="100%">
+        <tr>
+            <td width="120px"><img src="{{ .Get "author" }}.png" width="90px" /></td>
+            <td>
+                <p><b><a href="{{ .Get "link" }}">{{ .Get "title" }}</a></b><br />
+                {{ .Get "abstract" }}</p>
+                <p><i>{{ with .Params.author }}
+                  {{
+                     cond (eq . "mark") "Mark Nelson"
+                     (cond (eq . "andy") "Andy Tael" 
+                     (cond (eq . "john") "John Lathouwers"
+                     (cond (eq . "doug") "Doug Drechsel"
+                     (cond (eq . "corrado") "Corrado de Bari"
+                     (cond (eq . "mayank") "Mayank Tayal"
+                     (cond (eq . "praveen") "Praveen Hiremath"
+                     (cond (eq . "paul") "Paul Parkinson"
+                     (cond (eq . "paulo") "Paulo Simoes"
+                     (cond (eq . "sanjay") "Sanjay Goil"
+                     "")))))))))
+                  }}
+                {{ end }} - {{ .Get "date" }}</i></p>
+            </td>
+        </tr>
+    </table>
+   
+</div>

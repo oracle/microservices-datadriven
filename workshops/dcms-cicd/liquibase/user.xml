@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog 
+	xmlns="http://www.liquibase.org/xml/ns/dbchangelog" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:n0="http://www.oracle.com/xml/ns/dbchangelog-ext" 
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog 
+	http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+	<changeSet id="create_${schema}" labels="create_${schema}" author="john" failOnError="false">
+		<n0:runOracleScript objectName="SCRIPT" objectType="USER" ownerName="ADMIN" sourceType="STRING">
+			<n0:source><![CDATA[				
+				DECLARE
+					L_USER	VARCHAR2(255);
+				BEGIN
+					SELECT USERNAME INTO L_USER FROM DBA_USERS WHERE USERNAME='${schema}';
+				EXCEPTION WHEN NO_DATA_FOUND THEN
+					execute immediate 'CREATE USER ${schema} IDENTIFIED BY ${password}';
+				END;
+				/
+			]]></n0:source>
+		</n0:runOracleScript>
+		<rollback>drop user ${schema} cascade;</rollback>
+	</changeSet>
+</databaseChangeLog>

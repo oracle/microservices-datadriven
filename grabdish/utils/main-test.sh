@@ -11,11 +11,6 @@ if test -z "$GRABDISH_HOME"; then
   exit
 fi
 
-if ! state_done SETUP_VERIFIED; then
-  echo "TEST_LOG_FAILED: Setup is incomplete"
-  exit
-fi
-
 # Check TEST_UI_PASSWORD is set
 export TEST_UI_PASSWORD=`kubectl get secret frontendadmin -n msdataworkshop --template={{.data.password}} | base64 --decode`
 
@@ -52,7 +47,7 @@ done
 # Get the frontend URL
 RETRIES=0
 while ! state_done FRONTEND_URL; do
-  IP=$(kubectl -n ingress-nginx get svc ingress-nginx-controller -o "go-template={{range .status.loadBalancer.ingress}}{{or .ip .hostname}}{{end}}")
+  IP=$(kubectl -n msdataworkshop get svc ingress-nginx-controller -o "go-template={{range .status.loadBalancer.ingress}}{{or .ip .hostname}}{{end}}")
   if [[ "$IP" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
     state_set FRONTEND_URL "https://$IP"
   else
@@ -100,10 +95,10 @@ logpodnotail inventory > $GRABDISH_LOG/testlog-inventory-from-Walkthrough
 # POLYGLOT
 echo "TEST_LOG: #### Testing Lab3: Polyglot"
 # Deploy each inventory service and perform functional test
-while ! $(state_get NON_JAVA_BUILDS); do
-  sleep 10
-  echo "Waiting for NON_JAVA_BUILDS"
-done
+#while ! $(state_get NON_JAVA_BUILDS); do
+#  sleep 10
+#  echo "Waiting for NON_JAVA_BUILDS"
+#done
 
 utils/polyglot-test.sh
 echo writing log to $GRABDISH_LOG/testlog-frontend-from-polyglot

@@ -1,0 +1,13 @@
+#!/bin/bash
+# Copyright (c) 2021 Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
+container_name=${1}
+number_of_lines=${2:-10}
+
+if [ -z "${container_name}" ]; then
+  echo "ERROR: Microservice container name should not be empty!"
+  exit 2
+fi
+
+docker logs --tail "${number_of_lines}" "${container_name}"

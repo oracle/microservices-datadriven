@@ -1,0 +1,72 @@
+##
+# Copyright (c) 2021 Oracle and/or its affiliates.
+#
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+##
+
+server:
+  port : 8080
+
+spring:
+  applications:
+    name: okafka-producer
+  profiles:
+    active: kubernetes
+  cloud:
+    kubernetes:
+      reload:
+        enabled: true
+        mode: POLLING
+        period: 2000
+      config:
+        name: okafka-producer-config
+        namespace: lab
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      enabled: true
+    restart:
+      enabled: true
+    info:
+      enabled: true
+
+logging:
+  level:
+    root: INFO
+    org:
+      springframework: INFO
+    com:
+      oracle:
+        developers:
+          txeventq:
+            okafka: INFO
+
+okafka-server-config:
+  oracle-instance-name: LAB_DB_SVC
+  oracle-service-name: SERVICE_NAME
+  oracle-net-tns_admin: /home/appuser/wallet
+  tns-alias: LAB_DB_SVC
+  security-protocol: SSL
+  bootstrap-servers: BOOTSTRAP_SRV
+
+okafka-topic-config:
+  topic-name: TXEVENTQ_TOPIC_NAME
+  num-of-partitions: 3
+  replication-factor: 1
+
+okafka-producer-config:
+  key-serializer-class: org.oracle.okafka.common.serialization.StringSerializer
+  value-serializer-class: org.oracle.okafka.common.serialization.StringSerializer
+  compression-type: snappy
+  acks: all
+  batch-size: 200
+  batch-size-boost-factor: 100
+  linger-ms: 100
+  request-timeout-ms: 60000
+  retry-count: 5
+  buffer-memory: 335544

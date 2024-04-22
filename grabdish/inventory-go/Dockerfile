@@ -17,7 +17,7 @@ RUN wget https://download.oracle.com/otn_software/linux/instantclient/193000/ins
 
 RUN cd /lib
 RUN ln -s /lib64/* /lib
-RUN ln -s libnsl.so.2 /usr/lib/libnsl.so.1
+RUN ln -s libnsl.so.3 /usr/lib/libnsl.so.1
 RUN ln -s /lib/libc.so.6 /usr/lib/libresolv.so.2
 
 COPY --from=builder /go/bin/inventory-go /usr/lib/inventory-go

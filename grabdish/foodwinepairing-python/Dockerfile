@@ -1,44 +1,30 @@
-FROM ubuntu:18.04
+# FROM oraclelinux:7-slim
+FROM container-registry.oracle.com/os/oraclelinux:7-slim
 
 ARG release=19
 ARG update=9
 
+RUN  yum -y install oracle-release-el7 && \
+     yum-config-manager --enable ol7_oracle_instantclient && \
+     yum -y install oracle-instantclient${release}.${update}-basiclite && \
+     yum install -y oracle-epel-release-el7
+
 WORKDIR /app
 COPY foodwinepairing/requirements.txt .
 
-# Update apt packages
-RUN apt update
-RUN apt upgrade -y
-
-# Install python 3.7
-RUN apt install software-properties-common -y
-RUN add-apt-repository ppa:deadsnakes/ppa
-RUN apt install python3.7 -y
-
-# Make python 3.7 the default
-RUN echo "alias python=python3.7" >> ~/.bashrc
-RUN export PATH=${PATH}:/usr/bin/python3.7
-RUN /bin/bash -c "source ~/.bashrc"
-
-# Add 3.7 to the available alternatives
-RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.7 1
-
-# Set python3.7 as the default python
-RUN update-alternatives --set python /usr/bin/python3.7
-
-# Install pip
-RUN apt install python3-pip -y
-RUN python -m pip install --upgrade pip
+RUN yum install -y tar && \
+    yum install -y python36 && \
+    rm -rf /var/cache/yum && \
+    python3.6 -m pip install -U pip setuptools
 
 #wine-pairing dependencies
-RUN python -m pip install -U gensim
-RUN python -m pip install -U scikit-learn
-RUN python -m pip install -U pandas
-RUN python -m pip install -U numpy
-RUN python -m pip install -U nltk
-RUN python -m pip install -U matplotlib
-RUN python -m pip install -U ipython
-RUN python -m pip install -r requirements.txt
+RUN python3.6 -m pip install -U gensim==4.1.2 && \
+	python3.6 -m pip install -U scikit-learn && \
+	python3.6 -m pip install -U pandas && \
+	python3.6 -m pip install -U nltk && \
+	python3.6 -m pip install -U matplotlib && \
+	python3.6 -m pip install -U ipython && \
+	python3.6 -m pip install -r requirements.txt
 
 #to locate if/where gunicorn is
 RUN find / -name "gunicorn"

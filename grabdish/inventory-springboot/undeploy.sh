@@ -3,6 +3,5 @@
 ## Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 
-echo delete inventory-springboot deployment...
-
-kubectl delete deployment inventory-springboot -n msdataworkshop
+# See docs/Deploy.md for details
+k8s-undeploy

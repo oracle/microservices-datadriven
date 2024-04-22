@@ -36,9 +36,9 @@ sed -e "s|%DOCKER_REGISTRY%|${DOCKER_REGISTRY}|g" inventory-micronaut-native-ima
 mv -- /tmp/inventory-micronaut-native-image-deployment-$CURRENTTIME.yaml inventory-micronaut-native-image-deployment-$CURRENTTIME.yaml
 sed -e "s|%INVENTORY_PDB_NAME%|${INVENTORY_PDB_NAME}|g" inventory-micronaut-native-image-deployment-$CURRENTTIME.yaml > /tmp/inventory-micronaut-native-image-deployment-$CURRENTTIME.yaml
 mv -- /tmp/inventory-micronaut-native-image-deployment-$CURRENTTIME.yaml inventory-micronaut-native-image-deployment-$CURRENTTIME.yaml
-sed -e "s|%OCI_REGION%|${OCI_REGION}|g" inventory-micronaut-native-image-deployment-${CURRENTTIME}.yaml > /tmp/inventory-micronaut-native-image-deployment-$CURRENTTIME.yaml
+sed -e "s|${OCI_REGION-}|${OCI_REGION}|g" inventory-micronaut-native-image-deployment-${CURRENTTIME}.yaml > /tmp/inventory-micronaut-native-image-deployment-$CURRENTTIME.yaml
 mv -- /tmp/inventory-micronaut-native-image-deployment-$CURRENTTIME.yaml inventory-micronaut-native-image-deployment-$CURRENTTIME.yaml
-sed -e "s|%VAULT_SECRET_OCID%|${VAULT_SECRET_OCID}|g" inventory-micronaut-native-image-deployment-${CURRENTTIME}.yaml > /tmp/inventory-micronaut-native-image-deployment-$CURRENTTIME.yaml
+sed -e "s|${VAULT_SECRET_OCID-}|${VAULT_SECRET_OCID}|g" inventory-micronaut-native-image-deployment-${CURRENTTIME}.yaml > /tmp/inventory-micronaut-native-image-deployment-$CURRENTTIME.yaml
 mv -- /tmp/inventory-micronaut-native-image-deployment-$CURRENTTIME.yaml inventory-micronaut-native-image-deployment-$CURRENTTIME.yaml
 
 if [ -z "$1" ]; then
