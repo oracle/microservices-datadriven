@@ -13,4 +13,3 @@ variable "kubernetes_version" {
   type        = string
   default     = "v1.29.1"
 }
-
