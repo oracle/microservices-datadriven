@@ -11,6 +11,30 @@ This page acts as an index/aggregator for some of our featured content.
 ![YouTube icon](./youtube.png)  &nbsp; And be sure to subscribe to our YouTube channel ["The Converged Database"](https://www.youtube.com/@theconvergeddatabase6236) for more great content!
 
 {{< blog  
+    author="mark"
+    date="4/17/2024"
+    title="Oracle Database Observabilty"
+    link="https://www.linkedin.com/pulse/oracle-database-observability-mark-nelson-nh2pe"
+    abstract="An update on the Oracle Database metrics (Prometheus) exporter to coincide with the 1.2.1 release."
+>}}
+
+{{< blog  
+    author="doug"
+    date="4/8/2024"
+    title="Full Stack Development with Oracle 23c"
+    link="https://www.youtube.com/watch?v=BuVgPYWpVMs"
+    abstract="Doug gives an end to end demo of full stack development using the new Oracle 23c Database and the 'OWEN' stack."
+>}}
+
+{{< blog  
+    author="corrado"
+    date="2/7/2024"
+    title="Oracle Autonomous DB ‘Select AI’ and Spring Boot to talk with your DB"
+    link="https://www.linkedin.com/pulse/oracle-autonomus-db-select-ai-spring-boot-talk-your-corrado-de-bari-zjcyf"
+    abstract="Learn about the new Select AI feature that allows Autonomous Database to use generative AI with Large Language Models (LLMs) to convert the user’s input text into Oracle SQL. Select AI processes the natural language prompt, supplements the prompt with metadata, and then generates and runs a SQL query."
+>}}
+
+{{< blog  
     author="corrado"
     date="12/06/2023"
     title="Boost your apps with GraalVM in the Oracle Backend for Spring Boot and Microservices"
