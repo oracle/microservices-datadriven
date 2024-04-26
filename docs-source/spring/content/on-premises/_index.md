@@ -15,7 +15,7 @@ You must meet the following prerequisites to use the Oracle Backend for Spring B
 * Access to a Kubernetes cluster
 * [Python 3+](https://www.python.org/)
 
-When installing in a _non-production_ environment, for example a developer's desktop, the previously mentioned pre-requisites may be met through an additional setup task, but there are additional desktop system or software requirements. For example:
+When installing in a _desktop_ environment, for example a developer's desktop, the previously mentioned pre-requisites may be met through an additional setup task, but there are additional desktop system or software requirements. For example:
 
 * 2 CPUs or more
 * 8 GB of free memory
@@ -31,23 +31,20 @@ Download the latest release of [Oracle Backend for Spring Boot and Microservices
 
 ## Setup
 
-A custom installation, whether production or non-production, consists of defining the infrastructure followed by running the Configuration
-Management Playbook to build images and deploy the Microservices.
+A custom installation consists of defining the infrastructure followed by running the Configuration Management Playbook to build images and deploy the Microservices.
 
-For a production installation, you need to have a Kubernetes cluster and the `kubectl` command-line interface must be configured to
-communicate with your cluster.
+For a custom installation, you need to have a Kubernetes cluster and the `kubectl` command-line interface must be configured to communicate with your cluster.
 
-A Helper Playbook has been provided for non-production installations to assist in defining the infrastructure.  Review the
-appropriate documentation for examples of installing and defining the non-production installation. For example:
+A Helper Playbook has been provided for desktop installations to assist in defining a specific infrastructure consisting of podman and minikube as outlined in the example documentation:
 
 * [macOS Ventura (x86)](../on-premises/macos_ventura/)
 * [Oracle Linux 8 (x86)](../on-premises/ol8/)
 
-The non-production playbook is run as part of the Configuration Management Playbook.
+If your infrastructure does not match that defined in the above examples, do not run the Helper Playbook.
 
 ## Download the Database or Oracle REST Data Services (ORDS) Images (Desktop Installation)
 
-The non-production installation provisions an Oracle database to the Kubernetes cluster. The images must be downloaded
+The desktop installation provisions an Oracle database to the Kubernetes cluster. The images must be downloaded
 from [Oracle's Container Registry](https://container-registry.oracle.com/) before continuing.
 
 After installing Podman, process these steps:
@@ -64,12 +61,11 @@ After installing Podman, process these steps:
 
    `podman pull container-registry.oracle.com/database/ords:21.4.2-gh`
 
-### Defining the Parse Application (Production Installation)
+### Defining the Application
 
 The application is defined in `ansible/vars/ebaas.yaml`. For example:
 
 ```yaml
----
 ---
 ebaas_edition: "COMMUNITY"
 vault: ""
@@ -87,7 +83,9 @@ oractl_user_password: "Correct-horse-Battery-staple-35"
 ...
 ```
 
-### Defining the Database (Production Installation)
+Create the `ansible/vars/ebaas.yaml` file, setting values as required.  If this is a desktop installation, this file will be created for you by the Desktop Helper playbook.
+
+### Defining the Database
 
 The database is defined in `ansible/roles/database/vars/main.yaml`. For example:
 
@@ -98,16 +96,23 @@ database_default_db: BAASPDB
 BAASPDB: # noqa: var-naming[pattern]
   username: "PDBADMIN"
   password: "Correct-horse-Battery-staple-35"
+  type: "EXTERNAL"
   service: "(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=BAASPDB)))"
   ocid: ""
 ...
 ```
 
-The `oracle_dbs` and `default_db` key values should be the name of your Pluggable Database (PDB). These are followed by the PDB
-name and Key/Values defining how to access the PDB. If using Mutual Transport Layer Security (mTLS) authentication, specify the
-full path of the wallet file.
+Create the `ansible/roles/database/vars/main.yaml` file, setting values as required.  If this is a desktop installation, this file will be created for you by the Desktop Helper playbook.
 
-### Defining the Container Repository (Production Installation)
+The `database_oracle_dbs` and `database_default_db` key values should be the name of your Pluggable Database (PDB). These are followed by the PDB name and Key/Values defining how to access the PDB.
+
+The `type` can be either:
+
+* **EXTERNAL**: A Pre-existing Oracle Database.  Define `service` and leave `ocid` blank.
+* **ADB-S**: A Pre-Existing Oracle Autonomous Serverless (ADB-S) database; provide the `ocid` for the ADB-S.  Leave `service` blank.
+* **SIDB_CONTAINER**: This will create a 19c containerized database inside the Kubernetes Cluster as part of the deployment.  Leave `ocid` and `service` blank.
+
+### Defining the Container Repository
 
 The Container Repository is defined in `ansible/roles/registry/vars/main.yaml`. For example:
 
@@ -127,6 +132,8 @@ registry_pull_auth:
       auth: "b3JhY2xlOjdaUVgxLXhhbFR0NTJsS0VITlA0"
 ...
 ```
+
+Create the `ansible/roles/registry/vars/main.yaml` file, setting values as required.  If this is a desktop installation, this file will be created for you by the Desktop Helper playbook.
 
 Specify the URL or authentication credentials for your Container Repository in `registry_pull_url`, `registry_push_url`, `registry_username`, and `registry_password`.
 
@@ -150,20 +157,28 @@ and installs Ansible along with other additional modules. For example:
 source ./activate.env
 ```
 
-### Non-production Playbook
+### Desktop Helper Playbook
 
-If this is a production installation, then the infrastructure should be manually defined as previously stated.
+If this is a desktop installation, then a Helper Playbook can be used to help define the infrastructure.  **Note** that this playbook should only be run if following the desktop installation examples:
 
-If this is a non-production installation, then run the Helper Playbook to define the infrastructure. For example:
+* [macOS Ventura (x86)](../on-premises/macos_ventura/)
+* [Oracle Linux 8 (x86)](../on-premises/ol8/)
+
+Run the Desktop Helper Playbook to define the infrastructure. For example:
 
 ```bash
 ansible-playbook ansible/desktop-apply.yaml
 ```
 
+### Copy kubeconfig
+
+For the desktop installation, this step will have been performed by the Desktop Helper playbook.
+
+Copy the kubeconfig file to `ansible/roles/kubernetes/files`
+
 ### Build and Push Images to the Container Repository
 
-For the non-production installation, start a new terminal and tunnel or port-forward to the Minikube cluster.  Refer to the specific platform
-details for more information.
+For the desktop installation, start a new terminal and tunnel or port-forward to the Minikube cluster.  Refer to the specific platform details for more information.
 
 For both installations, run the Images Playbook on the original terminal. For example:
 
