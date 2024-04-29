@@ -1,6 +1,8 @@
 package com.example.queuereader.controller;
 
 import com.example.queuereader.model.TollData;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jms.annotation.JmsListener;
@@ -15,7 +17,11 @@ public class TollReaderReceiver {
     @JmsListener(destination = "TollGate")
     public void receiveTollData(String tollData) {
         log.info("Received message {}", tollData);
-        TollData tollData1 = objectMapper.convertValue(tollData, TollData.class);
-
+        try {
+            JsonNode tollDataJson = objectMapper.readTree(tollData);
+            log.info(String.valueOf(tollDataJson));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 }
