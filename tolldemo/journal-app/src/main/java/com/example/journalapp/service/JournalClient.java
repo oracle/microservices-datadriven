@@ -29,11 +29,20 @@ public class JournalClient implements JournalService {
         return null;
     }
 
+
+    //create table if not exists journal (
+//        journal_id varchar2(128) not null,
+//tag_id varchar2(64),
+//license_plate varchar2(10),
+//vehicle_type varchar2(10),
+//toll_date date
+//);
+
     @Override
     public int saveJournal(Journal journal) {
         log.info("Saving journal {}", journal);
-        var newJournal = jdbcClient.sql("insert into journal(tagId, licensePlate, vehicleType, date)")
-                .params(List.of(journal.tagId(), journal.licensePlate(), journal.date()))
+        var newJournal = jdbcClient.sql("insert into journal(journal_id, tag_id, license_plate, vehicle_type, toll_date)")
+                .params(List.of(journal.journalId(), journal.tagId(), journal.licensePlate(), journal.vehicleType(), journal.tollDate()))
                 .update();
         return newJournal;
     }

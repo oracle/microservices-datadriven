@@ -23,6 +23,8 @@ public class JournalController {
         this.journalService = journalService;
     }
 
+//    curl -i POST http://localhost:8080/api/v1/journal -H 'Content-Type: application/json' \
+//    -d '{"tagId": "tagid", "licensePlate": "licplate", "vehicleType": "vtype", "date": "date"}'
     @PostMapping("/journal")
     ResponseEntity<?> createJournal(@RequestBody Journal journal) {
         log.info("Creating journal {}", journal);
@@ -31,7 +33,7 @@ public class JournalController {
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path("/{id}")
-                    .buildAndExpand(journal.id())
+                    .buildAndExpand(journal.journalId())
                     .toUri();
             log.info("Successfully created journal {}", location);
             return ResponseEntity.created(location).build();
