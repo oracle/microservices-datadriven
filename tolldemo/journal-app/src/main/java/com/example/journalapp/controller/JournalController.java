@@ -1,8 +1,11 @@
 package com.example.journalapp.controller;
 
 import com.example.journalapp.model.Journal;
-import com.example.journalapp.service.JournalService;
+//import com.example.journalapp.model.JournalJDBC;
+import com.example.journalapp.repository.JournalRepository;
+//import com.example.journalapp.service.JournalService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,29 +20,27 @@ import java.net.URI;
 @RequestMapping("api/v1")
 public class JournalController {
 
-    private final JournalService journalService;
+    final JournalRepository journalRepository;
 
-    public JournalController(JournalService journalService) {
-        this.journalService = journalService;
+    public JournalController(JournalRepository journalRepository) {
+        this.journalRepository = journalRepository;
     }
 
-//    curl -X POST http://localhost:8080/api/v1/journal \
-//    -H 'Content-Type: application/json' \
-//    -d '{"journalId": "jid", "tagId": "tagid", "licensePlate": "licplate", "vehicleType": "vtype", "tollDate": "date"}'
+    // http POST :8080/api/v1/journal tagId=tagid licensePlate=licplate vehicleType=vtype tollDate=tdate
     @PostMapping("/journal")
-    ResponseEntity<?> createJournal(@RequestBody Journal journal) {
+    public ResponseEntity<Journal> createAccount(@RequestBody Journal journal) {
         log.info("Creating journal {}", journal);
-        var retValue = journalService.saveJournal(journal);
-        if (retValue == 1) {
+        try {
+            Journal newJournal = journalRepository.saveAndFlush(journal);
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
                     .path("/{id}")
-                    .buildAndExpand(journal.journalId())
+                    .buildAndExpand(newJournal.getJournalId())
                     .toUri();
             log.info("Successfully created journal {}", location);
             return ResponseEntity.created(location).build();
-        } else {
-            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return new ResponseEntity<>(journal, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

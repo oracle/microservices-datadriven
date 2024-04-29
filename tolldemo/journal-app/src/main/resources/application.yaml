@@ -4,6 +4,9 @@ spring:
   threads:
     virtual:
       enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
 
   datasource:
     url: jdbc:oracle:thin:@//localhost:1521/orclpdb1

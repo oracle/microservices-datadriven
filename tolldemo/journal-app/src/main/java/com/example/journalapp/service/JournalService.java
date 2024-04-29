@@ -1,14 +1,14 @@
 package com.example.journalapp.service;
 
-import com.example.journalapp.model.Journal;
+import com.example.journalapp.model.JournalJDBC;
 
 import java.util.List;
 
 public interface JournalService {
 
-    List<Journal> getAllJournals();
-    Journal getJournalById(Long id);
-    int saveJournal(Journal journal);
+    List<JournalJDBC> getAllJournals();
+    JournalJDBC getJournalById(Long id);
+    int saveJournal(JournalJDBC journal);
     void deleteJournalById(Long id);
 
 }

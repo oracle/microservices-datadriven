@@ -1,13 +1,34 @@
 package com.example.journalapp.model;
 
-public record Journal(String journalId, String tagId, String licensePlate, String vehicleType, String tollDate) {
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "JOURNAL")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class Journal {
+
+    @Id
+    @Column(name = "JOURNAL_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer journalId;
+    @Column(name = "TAG_ID")
+    private String tagId;
+    @Column(name = "LICENSE_PLATE")
+    private String licensePlate;
+    @Column(name = "VEHICLE_TYPE")
+    private String vehicleType;
+    @Column(name = "TOLL_DATE")
+    private String tollDate;
+
 }
 
-//
-//create table if not exists journal (
-//        journal_id varchar2(128) not null,
-//tag_id varchar2(64),
-//license_plate varchar2(10),
-//vehicle_type varchar2(10),
-//toll_date date
-//);
