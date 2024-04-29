@@ -23,8 +23,9 @@ public class JournalController {
         this.journalService = journalService;
     }
 
-//    curl -i POST http://localhost:8080/api/v1/journal -H 'Content-Type: application/json' \
-//    -d '{"tagId": "tagid", "licensePlate": "licplate", "vehicleType": "vtype", "date": "date"}'
+//    curl -X POST http://localhost:8080/api/v1/journal \
+//    -H 'Content-Type: application/json' \
+//    -d '{"journalId": "jid", "tagId": "tagid", "licensePlate": "licplate", "vehicleType": "vtype", "tollDate": "date"}'
     @PostMapping("/journal")
     ResponseEntity<?> createJournal(@RequestBody Journal journal) {
         log.info("Creating journal {}", journal);
