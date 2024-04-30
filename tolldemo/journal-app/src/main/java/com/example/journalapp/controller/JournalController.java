@@ -26,7 +26,7 @@ public class JournalController {
         this.journalRepository = journalRepository;
     }
 
-    // http POST :8080/api/v1/journal tagId=tagid licensePlate=licplate vehicleType=vtype tollDate=tdate
+    // http POST :8080/api/v1/journal tagId=tagid accountNumber=acctnum licensePlate=licplate vehicleType=vtype tollDate=tdate
     @PostMapping("/journal")
     public ResponseEntity<Journal> createAccount(@RequestBody Journal journal) {
         log.info("Creating journal {}", journal);

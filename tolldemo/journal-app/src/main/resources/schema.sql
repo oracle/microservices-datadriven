@@ -9,4 +9,4 @@ create table if not exists journal (
     toll_date varchar2(25)
 );
 
-ALTER TABLE journal ADD CONSTRAINT jounral_PK PRIMARY KEY (journal_id) USING INDEX LOGGING;
+ALTER TABLE journal ADD CONSTRAINT journal_PK PRIMARY KEY (journal_id) USING INDEX LOGGING;

@@ -18,3 +18,5 @@ spring:
       min-pool-size: 10
       max-pool-size: 30
 
+server:
+  port: 7070

@@ -27,6 +27,9 @@ public class MessageTaskExecutor implements Lifecycle {
     private boolean running = false;
     private int delay = 1000;
 
+    @Autowired
+    private JmsTemplate jmsTemplate;
+
 	public MessageTaskExecutor(TaskExecutor taskExecutor) {
 		this.taskExecutor = taskExecutor;
 	}
@@ -60,16 +63,13 @@ public class MessageTaskExecutor implements Lifecycle {
             this.delay = delay;
         }
 
-        @Autowired
-        private JmsTemplate jmsTemplate;
+
 
         private static <T extends Enum<?>> T randomEnum(Class<T> clazz) {
             int x = random.nextInt(clazz.getEnumConstants().length);
             return clazz.getEnumConstants()[x];
         }
 
-        // Why supresswarnings?  -- it's your ide making it required
-        @SuppressWarnings("null")
         private void sendMessage(JsonObject tolldata) {
             jmsTemplate.send("TollGate", new MessageCreator() {
                 @Override
@@ -88,14 +88,14 @@ public class MessageTaskExecutor implements Lifecycle {
                 int tagId = random.nextInt(maxNumber - minNumber) + minNumber;
                 int accountNumber = random.nextInt(maxNumber - minNumber) + minNumber;
                 String state = randomEnum(State.class).toString();
-                String carType = randomEnum(CarType.class).toString();
+                String vehicleType = randomEnum(CarType.class).toString();
 
                 JsonObject data = Json.createObjectBuilder()
-                    .add("accountnumber", accountNumber) // This could be looked up in the DB from the tagId?
-                    .add("license-plate", state + "-" + Integer.toString(licNumber)) // This could be looked up in the DB from the tagId?
-                    .add("cartype", carType) // This could be looked up in the DB from the tagId?
-                    .add("tagid", tagId)
-                    .add("timestamp", dateTimeString)
+                    .add("accountNumber", accountNumber) // This could be looked up in the DB from the tagId?
+                    .add("licensePlate", state + "-" + Integer.toString(licNumber)) // This could be looked up in the DB from the tagId?
+                    .add("vehicleType", vehicleType) // This could be looked up in the DB from the tagId?
+                    .add("tagId", tagId)
+                    .add("tollDate", dateTimeString)
                     .build();
 
                 log.info("Toll Data :" + data.toString());
