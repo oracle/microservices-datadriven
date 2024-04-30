@@ -116,7 +116,7 @@
 08210	Cape May Court House
 08212	Cape May Point
 07072	Carlstadt
-08069	Carney's Point
+08069	Carneys Point
 07008	Carteret
 08018	Cedar Brook
 07009	Cedar Grove
@@ -828,7 +828,7 @@
 07512	Totowa
 07082	Towaco
 07052	Town Center
-08243	Townsend's Inlet
+08243	Townsends Inlet
 07879	Tranquility
 08600	Trenton
 08601	Trenton

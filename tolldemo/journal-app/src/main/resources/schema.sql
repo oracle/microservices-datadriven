@@ -10,3 +10,31 @@ create table if not exists journal (
 );
 
 ALTER TABLE journal ADD CONSTRAINT journal_PK PRIMARY KEY (journal_id) USING INDEX LOGGING;
+
+drop table if exists customer cascade constraints;
+
+create table if not exists customer (
+    customer_id varchar2(256),
+    account_number varchar2(256),
+    first_name varchar2(256),
+    last_name varchar2(256),
+    address varchar2(256),
+    city varchar2(256),
+    zipcode varchar2(256)
+);
+
+alter table customer add constraint customer_pk primary key(customer_id) using index logging;
+
+drop table if exists vehicle cascade constraints;
+
+create table if not exists vehicle (
+    vehicle_id varchar2(256),
+    customer_id varchar2(256),
+    tag_id varchar2(256),
+    state varchar2(256),
+    license_plate varchar2(256),
+    vehicle_type varchar2(256),
+    image varchar2(256)
+);
+
+alter table vehicle add constraint vehicle_pk primary key(vehicle_id) using index logging;
