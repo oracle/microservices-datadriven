@@ -24,12 +24,13 @@ public class TollReaderReceiver {
     @JmsListener(destination = "TollGate")
     public void receiveTollData(String tollData) {
         log.info("Received message {}", tollData);
-        try {
-            JsonNode tollDataJson = objectMapper.readTree(tollData);
-            log.info(String.valueOf(tollDataJson));
-            journalService.journal(tollDataJson);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+//        try {
+            // JsonNode tollDataJson = objectMapper.readTree(tollData);
+            // log.info(String.valueOf(tollDataJson));
+            // journalService.journal(new TollData());
+            log.info(tollData.toString());
+//        } catch (JsonProcessingException e) {
+//            e.printStackTrace();
+//        }
     }
 }

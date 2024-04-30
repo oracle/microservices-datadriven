@@ -21,6 +21,8 @@ public class Journal {
     @Column(name = "JOURNAL_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer journalId;
+    @Column(name = "ACCOUNT_NUMBER")
+    private String accountNumber;
     @Column(name = "TAG_ID")
     private String tagId;
     @Column(name = "LICENSE_PLATE")
