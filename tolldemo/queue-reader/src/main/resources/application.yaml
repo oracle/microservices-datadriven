@@ -1,4 +1,3 @@
-
 spring:
   application:
     name: queue-reader
@@ -7,9 +6,9 @@ spring:
       enabled: true
 
   datasource:
-    url: jdbc:oracle:thin:@//localhost:1521/orclpdb1
-    username: tolldemo
-    password: Welcome12345
+    url: ${spring.datasource.url}
+    username: ${spring.datasource.username}
+    password: ${spring.datasource.password}
     driver-class-name: oracle.jdbc.OracleDriver
     type: oracle.ucp.jdbc.PoolDataSource
     oracleucp:
@@ -18,5 +17,4 @@ spring:
       initial-pool-size: 15
       min-pool-size: 10
       max-pool-size: 30
-server:
-  port: 9090
+
