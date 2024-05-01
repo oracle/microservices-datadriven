@@ -1,3 +1,4 @@
+# mvn clean spring-boot:run -Dspring-boot.run.profiles=local
 spring:
   application:
     name: journal-app
@@ -9,9 +10,9 @@ spring:
       ddl-auto: validate
 
   datasource:
-    url: ${spring.datasource.url}
-    username: ${spring.datasource.username}
-    password: ${spring.datasource.password}
+    url: jdbc:oracle:thin:@//localhost:1521/orclpdb1
+    username: tolldemo
+    password: Welcome12345
     driver-class-name: oracle.jdbc.OracleDriver
     type: oracle.ucp.jdbc.PoolDataSource
     oracleucp:

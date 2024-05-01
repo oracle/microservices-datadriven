@@ -1,3 +1,6 @@
+// Copyright (c) 2024, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
 package com.example.tollreader;
 
 import java.security.SecureRandom;
@@ -5,12 +8,16 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.Lifecycle;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Component;
+
+import com.example.tollreader.data.Customer;
+import com.example.tollreader.data.DataBean;
+import com.example.tollreader.data.Vehicle;
 
 import jakarta.jms.JMSException;
 import jakarta.jms.Message;
@@ -27,9 +34,15 @@ public class MessageTaskExecutor implements Lifecycle {
     private boolean running = false;
     private int delay = 1000;
 
-	public MessageTaskExecutor(TaskExecutor taskExecutor) {
-		this.taskExecutor = taskExecutor;
-	}
+    @Autowired
+    private ConfigurableApplicationContext context;
+
+    @Autowired
+    private JmsTemplate jmsTemplate;
+
+    public MessageTaskExecutor(TaskExecutor taskExecutor) {
+        this.taskExecutor = taskExecutor;
+    }
 
     public void start() {
         running = true;
@@ -41,7 +54,7 @@ public class MessageTaskExecutor implements Lifecycle {
         running = false;
         log.info("stopped sending messages");
     }
-    
+
     public boolean isRunning() {
         return running;
     }
@@ -53,23 +66,13 @@ public class MessageTaskExecutor implements Lifecycle {
     private class MessageSenderTask implements Runnable {
         private int delay = 1000;
         private static final SecureRandom random = new SecureRandom();
-        private static final Integer minNumber = 10000;
-        private static final Integer maxNumber = 99999;
+        private static final Integer minCost = 1;
+        private static final Integer maxCost = 5;
 
         public MessageSenderTask(int delay) {
             this.delay = delay;
         }
 
-        @Autowired
-        private JmsTemplate jmsTemplate;
-
-        private static <T extends Enum<?>> T randomEnum(Class<T> clazz) {
-            int x = random.nextInt(clazz.getEnumConstants().length);
-            return clazz.getEnumConstants()[x];
-        }
-
-        // Why supresswarnings?  -- it's your ide making it required
-        @SuppressWarnings("null")
         private void sendMessage(JsonObject tolldata) {
             jmsTemplate.send("TollGate", new MessageCreator() {
                 @Override
@@ -83,35 +86,41 @@ public class MessageTaskExecutor implements Lifecycle {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDateTime now = LocalDateTime.now();
             String dateTimeString = now.format(formatter);
+            int tollCost = random.nextInt(maxCost - minCost) + minCost;
 
-                int licNumber = random.nextInt(maxNumber - minNumber) + minNumber;
-                int tagId = random.nextInt(maxNumber - minNumber) + minNumber;
-                int accountNumber = random.nextInt(maxNumber - minNumber) + minNumber;
-                String state = randomEnum(State.class).toString();
-                String carType = randomEnum(CarType.class).toString();
+            DataBean dataBean = (DataBean) context.getBean("dataBean");
+            Vehicle v = dataBean.getVehicles().get(random.nextInt(dataBean.getVehicles().size()));
+            Customer c = dataBean.getCustomer(v.getCustomerId());
 
-                JsonObject data = Json.createObjectBuilder()
-                    .add("accountnumber", accountNumber) // This could be looked up in the DB from the tagId?
-                    .add("license-plate", state + "-" + Integer.toString(licNumber)) // This could be looked up in the DB from the tagId?
-                    .add("cartype", carType) // This could be looked up in the DB from the tagId?
-                    .add("tagid", tagId)
-                    .add("timestamp", dateTimeString)
+            String licNumber = v.getLicensePlate();
+            String tagId = v.getTagId();
+            String accountNumber = c.getAccountNumber();
+            String state = v.getState();
+            String vehicleType = v.getVehicleType();
+
+            JsonObject data = Json.createObjectBuilder()
+                    .add("accountNumber", accountNumber) // This could be looked up in the DB from the tagId?
+                    .add("licensePlate", state + "-" + licNumber) // This could be looked up in the DB from the tagId?
+                    .add("vehicleType", vehicleType) // This could be looked up in the DB from the tagId?
+                    .add("tagId", tagId)
+                    .add("tollDate", dateTimeString)
+                    .add("tollCost", tollCost)
                     .build();
 
-                log.info("Toll Data :" + data.toString());
-                sendMessage(data);
-            }
-            
+            log.info("Toll Data :" + data.toString());
+            sendMessage(data);
+        }
 
-            public void run() {
-                while (isRunning()) {
+        public void run() {
+            while (isRunning()) {
                 try {
                     // wait first so we always wait even if sendMessage() fails
                     Thread.sleep(delay);
                     sendMessage();
-                } catch (Exception ignore) {}
+                } catch (Exception ignore) {
+                }
             }
-        }  
+        }
     }
 
 }
