@@ -6,7 +6,8 @@ spring:
       enabled: true
 
   datasource:
-    url: jdbc:oracle:thin:@//localhost:1521/orclpdb1
+    #url: jdbc:oracle:thin:@//localhost:1521/orclpdb1
+    url: jdbc:oracle:thin:@//172.17.0.2:1521/freepdb1
     username: tolldemo
     password: Welcome12345
     driver-class-name: oracle.jdbc.OracleDriver
@@ -17,6 +18,15 @@ spring:
       initial-pool-size: 15
       min-pool-size: 10
       max-pool-size: 30
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.OracleDialect
+        format_sql: true
+    show-sql: true
 
 server:
   port: 7070

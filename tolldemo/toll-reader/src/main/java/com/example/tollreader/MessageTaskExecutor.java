@@ -6,11 +6,16 @@ import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.Lifecycle;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Component;
+
+import com.example.tollreader.data.Customer;
+import com.example.tollreader.data.DataBean;
+import com.example.tollreader.data.Vehicle;
 
 import jakarta.jms.JMSException;
 import jakarta.jms.Message;
@@ -26,6 +31,9 @@ public class MessageTaskExecutor implements Lifecycle {
     private TaskExecutor taskExecutor;
     private boolean running = false;
     private int delay = 1000;
+
+    @Autowired
+    private ConfigurableApplicationContext context;
 
     @Autowired
     private JmsTemplate jmsTemplate;
@@ -84,15 +92,19 @@ public class MessageTaskExecutor implements Lifecycle {
             LocalDateTime now = LocalDateTime.now();
             String dateTimeString = now.format(formatter);
 
-                int licNumber = random.nextInt(maxNumber - minNumber) + minNumber;
-                int tagId = random.nextInt(maxNumber - minNumber) + minNumber;
-                int accountNumber = random.nextInt(maxNumber - minNumber) + minNumber;
-                String state = randomEnum(State.class).toString();
-                String vehicleType = randomEnum(CarType.class).toString();
+            DataBean dataBean = (DataBean) context.getBean("dataBean");
+            Vehicle v = dataBean.getVehicles().get(random.nextInt(dataBean.getVehicles().size()));
+            Customer c = dataBean.getCustomer(v.getCustomerId());
+
+                String licNumber = v.getLicensePlate();
+                String tagId = v.getTagId();
+                String accountNumber = c.getAccountNumber();
+                String state = v.getState();
+                String vehicleType = v.getVehicleType();
 
                 JsonObject data = Json.createObjectBuilder()
                     .add("accountNumber", accountNumber) // This could be looked up in the DB from the tagId?
-                    .add("licensePlate", state + "-" + Integer.toString(licNumber)) // This could be looked up in the DB from the tagId?
+                    .add("licensePlate", state + "-" + licNumber) // This could be looked up in the DB from the tagId?
                     .add("vehicleType", vehicleType) // This could be looked up in the DB from the tagId?
                     .add("tagId", tagId)
                     .add("tollDate", dateTimeString)
