@@ -1,3 +1,6 @@
+// Copyright (c) 2024, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
 package com.example.tollreader;
 
 import java.security.SecureRandom;
@@ -5,7 +8,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.Lifecycle;
 import org.springframework.core.task.TaskExecutor;
@@ -64,17 +66,12 @@ public class MessageTaskExecutor implements Lifecycle {
     private class MessageSenderTask implements Runnable {
         private int delay = 1000;
         private static final SecureRandom random = new SecureRandom();
-        // private static final Integer minNumber = 10000;
-        // private static final Integer maxNumber = 99999;
+        private static final Integer minCost = 1;
+        private static final Integer maxCost = 5;
 
         public MessageSenderTask(int delay) {
             this.delay = delay;
         }
-
-        // private static <T extends Enum<?>> T randomEnum(Class<T> clazz) {
-        //     int x = random.nextInt(clazz.getEnumConstants().length);
-        //     return clazz.getEnumConstants()[x];
-        // }
 
         private void sendMessage(JsonObject tolldata) {
             jmsTemplate.send("TollGate", new MessageCreator() {
@@ -89,6 +86,7 @@ public class MessageTaskExecutor implements Lifecycle {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDateTime now = LocalDateTime.now();
             String dateTimeString = now.format(formatter);
+            int tollCost = random.nextInt(maxCost - minCost) + minCost;
 
             DataBean dataBean = (DataBean) context.getBean("dataBean");
             Vehicle v = dataBean.getVehicles().get(random.nextInt(dataBean.getVehicles().size()));
@@ -106,6 +104,7 @@ public class MessageTaskExecutor implements Lifecycle {
                     .add("vehicleType", vehicleType) // This could be looked up in the DB from the tagId?
                     .add("tagId", tagId)
                     .add("tollDate", dateTimeString)
+                    .add("tollCost", tollCost)
                     .build();
 
             log.info("Toll Data :" + data.toString());

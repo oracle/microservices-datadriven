@@ -1,9 +1,10 @@
+// Copyright (c) 2024, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
 package com.example.journalapp.controller;
 
 import com.example.journalapp.model.Journal;
-//import com.example.journalapp.model.JournalJDBC;
 import com.example.journalapp.repository.JournalRepository;
-//import com.example.journalapp.service.JournalService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class JournalController {
         this.journalRepository = journalRepository;
     }
 
-    // http POST :8080/api/v1/journal tagId=tagid accountNumber=acctnum licensePlate=licplate vehicleType=vtype tollDate=tdate
+    // http POST :8080/api/v1/journal tagId=tagid accountNumber=acctnum licensePlate=licplate vehicleType=vtype tollDate=tdate tollCost=1
     @PostMapping("/journal")
     public ResponseEntity<Journal> createAccount(@RequestBody Journal journal) {
         log.info("Creating journal {}", journal);
