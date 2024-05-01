@@ -6,8 +6,8 @@ spring:
       enabled: true
 
   datasource:
-    #url: jdbc:oracle:thin:@//localhost:1521/orclpdb1
-    url: jdbc:oracle:thin:@//172.17.0.2:1521/freepdb1
+    url: jdbc:oracle:thin:@//localhost:1521/orclpdb1
+    # url: jdbc:oracle:thin:@//172.17.0.2:1521/freepdb1
     username: tolldemo
     password: Welcome12345
     driver-class-name: oracle.jdbc.OracleDriver

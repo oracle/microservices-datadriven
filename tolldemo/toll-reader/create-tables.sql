@@ -1,8 +1,8 @@
 
-drop table vehicle;
-drop table customer;
+drop table if exists vehicle cascade constraints;
+drop table if exists customer cascade constraints;
 
-create table customer (
+create table if not exists customer (
     customer_id varchar2(42) primary key not null, 
     account_number varchar2(42),
     first_name varchar2(32), 
@@ -12,7 +12,7 @@ create table customer (
     zipcode varchar2(6)
 );
 
-create table vehicle (
+create table if not exists vehicle (
     vehicle_id varchar2(42) primary key not null,  
     customer_id varchar2(42), 
     tag_id varchar2(42), 

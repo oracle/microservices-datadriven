@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
+// import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.Lifecycle;
 import org.springframework.core.task.TaskExecutor;
@@ -38,9 +38,9 @@ public class MessageTaskExecutor implements Lifecycle {
     @Autowired
     private JmsTemplate jmsTemplate;
 
-	public MessageTaskExecutor(TaskExecutor taskExecutor) {
-		this.taskExecutor = taskExecutor;
-	}
+    public MessageTaskExecutor(TaskExecutor taskExecutor) {
+        this.taskExecutor = taskExecutor;
+    }
 
     public void start() {
         running = true;
@@ -52,7 +52,7 @@ public class MessageTaskExecutor implements Lifecycle {
         running = false;
         log.info("stopped sending messages");
     }
-    
+
     public boolean isRunning() {
         return running;
     }
@@ -64,19 +64,17 @@ public class MessageTaskExecutor implements Lifecycle {
     private class MessageSenderTask implements Runnable {
         private int delay = 1000;
         private static final SecureRandom random = new SecureRandom();
-        private static final Integer minNumber = 10000;
-        private static final Integer maxNumber = 99999;
+        // private static final Integer minNumber = 10000;
+        // private static final Integer maxNumber = 99999;
 
         public MessageSenderTask(int delay) {
             this.delay = delay;
         }
 
-
-
-        private static <T extends Enum<?>> T randomEnum(Class<T> clazz) {
-            int x = random.nextInt(clazz.getEnumConstants().length);
-            return clazz.getEnumConstants()[x];
-        }
+        // private static <T extends Enum<?>> T randomEnum(Class<T> clazz) {
+        //     int x = random.nextInt(clazz.getEnumConstants().length);
+        //     return clazz.getEnumConstants()[x];
+        // }
 
         private void sendMessage(JsonObject tolldata) {
             jmsTemplate.send("TollGate", new MessageCreator() {
@@ -96,13 +94,13 @@ public class MessageTaskExecutor implements Lifecycle {
             Vehicle v = dataBean.getVehicles().get(random.nextInt(dataBean.getVehicles().size()));
             Customer c = dataBean.getCustomer(v.getCustomerId());
 
-                String licNumber = v.getLicensePlate();
-                String tagId = v.getTagId();
-                String accountNumber = c.getAccountNumber();
-                String state = v.getState();
-                String vehicleType = v.getVehicleType();
+            String licNumber = v.getLicensePlate();
+            String tagId = v.getTagId();
+            String accountNumber = c.getAccountNumber();
+            String state = v.getState();
+            String vehicleType = v.getVehicleType();
 
-                JsonObject data = Json.createObjectBuilder()
+            JsonObject data = Json.createObjectBuilder()
                     .add("accountNumber", accountNumber) // This could be looked up in the DB from the tagId?
                     .add("licensePlate", state + "-" + licNumber) // This could be looked up in the DB from the tagId?
                     .add("vehicleType", vehicleType) // This could be looked up in the DB from the tagId?
@@ -110,20 +108,20 @@ public class MessageTaskExecutor implements Lifecycle {
                     .add("tollDate", dateTimeString)
                     .build();
 
-                log.info("Toll Data :" + data.toString());
-                sendMessage(data);
-            }
-            
+            log.info("Toll Data :" + data.toString());
+            sendMessage(data);
+        }
 
-            public void run() {
-                while (isRunning()) {
+        public void run() {
+            while (isRunning()) {
                 try {
                     // wait first so we always wait even if sendMessage() fails
                     Thread.sleep(delay);
                     sendMessage();
-                } catch (Exception ignore) {}
+                } catch (Exception ignore) {
+                }
             }
-        }  
+        }
     }
 
 }

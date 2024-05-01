@@ -1,6 +1,6 @@
 package com.example.queuereader.controller;
 
-import com.example.queuereader.model.TollData;
+// import com.example.queuereader.model.TollData;
 import com.example.queuereader.service.JournalService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
