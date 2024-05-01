@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 @EnableJms
 @SpringBootApplication
 @Slf4j
+@EnableDiscoveryClient
 public class TollreaderApplication {
 
   private static ConfigurableApplicationContext context;
