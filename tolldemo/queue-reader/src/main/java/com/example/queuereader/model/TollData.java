@@ -15,4 +15,5 @@ public class TollData {
     private String licensePlate;
     private String carType;
     private String timeStamp;
+    private String detectedCarType;
 }
