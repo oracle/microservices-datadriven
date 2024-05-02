@@ -1,7 +1,7 @@
 # mvn clean spring-boot:run -Dspring-boot.run.profiles=local
 spring:
   application:
-    name: queue-reader
+    name: queue-reader 
 
   datasource:
     url: jdbc:oracle:thin:@//172.17.0.2:1521/freepdb1
