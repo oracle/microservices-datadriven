@@ -2,12 +2,9 @@
 spring:
   application:
     name: queue-reader
-  threads:
-    virtual:
-      enabled: true
 
   datasource:
-    url: jdbc:oracle:thin:@//localhost:1521/orclpdb1
+    url: jdbc:oracle:thin:@//172.17.0.2:1521/freepdb1
     username: tolldemo
     password: Welcome12345
     driver-class-name: oracle.jdbc.OracleDriver
@@ -20,3 +17,9 @@ spring:
       max-pool-size: 30
 server:
   port: 9090
+
+oracle:
+  aq:
+    url: jdbc:oracle:thin:@//172.17.0.2:1521/freepdb1
+    username: tolldemo
+    password: Welcome12345
