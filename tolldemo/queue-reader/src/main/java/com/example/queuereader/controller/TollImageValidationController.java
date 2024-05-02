@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.queuereader.service.AIVisionService;
-import com.oracle.bmc.aivision.responses.AnalyzeImageResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,9 +23,9 @@ public class TollImageValidationController {
     }
 
     @PostMapping("/analyze")
-    public ResponseEntity<AnalyzeImageResponse> analyzeImage(@RequestBody String imageUrl) {
+    public ResponseEntity<String> analyzeImage(@RequestBody String imageUrl) {
         log.info("imageUrl = " + imageUrl);        
-        AnalyzeImageResponse response = service.analyzeImage(imageUrl);
+        String response = service.analyzeImage(imageUrl);
         if (response == null) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -3,7 +3,6 @@ package com.example.queuereader.service;
 import org.springframework.stereotype.Service;
 
 import com.example.queuereader.client.AIVisionClient;
-import com.oracle.bmc.aivision.responses.AnalyzeImageResponse;
 
 @Service
 public class AIVisionService {
@@ -14,7 +13,7 @@ public class AIVisionService {
         this.client = client;
     }
 
-    public AnalyzeImageResponse analyzeImage(String imageUrl) {
+    public String analyzeImage(String imageUrl) {
         return client.analyzeImage(imageUrl);
     }
 
