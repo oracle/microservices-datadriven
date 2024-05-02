@@ -36,5 +36,7 @@ public class Journal {
     private String tollDate;
     @Column(name = "TOLL_COST")
     private Integer tollCost;
+    @Column(name = "DETECTED_VEHICLE_TYPE")
+    private String detectedVehicleType;
 
 }

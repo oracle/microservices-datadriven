@@ -7,5 +7,6 @@ create table if not exists journal (
     license_plate varchar2(10),
     vehicle_type varchar2(10),
     toll_date varchar2(25),
-    toll_cost number
+    toll_cost number,
+    detected_vehicle_type varchar2(10)
 );

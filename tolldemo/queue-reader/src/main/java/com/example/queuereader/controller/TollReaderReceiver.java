@@ -3,10 +3,13 @@
 
 package com.example.queuereader.controller;
 
+import com.example.queuereader.service.AIVisionService;
 import com.example.queuereader.service.JournalService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
@@ -18,9 +21,11 @@ public class TollReaderReceiver {
     ObjectMapper objectMapper = new ObjectMapper();
 
     private JournalService journalService;
+    private AIVisionService aiVisionService;
 
-    public TollReaderReceiver(JournalService journalService) {
+    public TollReaderReceiver(JournalService journalService, AIVisionService aiVisionService) {
         this.journalService = journalService;
+        this.aiVisionService = aiVisionService;
     }
 
     @JmsListener(destination = "TollGate")
@@ -29,7 +34,14 @@ public class TollReaderReceiver {
         try {
             JsonNode tollDataJson = objectMapper.readTree(tollData);
             log.info(String.valueOf(tollDataJson));
-            journalService.journal(tollDataJson);
+            // call ai vision model to detect vehicle type
+            String aiResult = aiVisionService.analyzeImage(tollDataJson.get("image").asText());
+            log.info("result from ai (type,confidence): " + aiResult);
+            String detectedVehicleType = aiResult.split(",")[0];
+            // add the detected vehicle type
+            JsonNode updatedTollDataJson = (JsonNode) ((ObjectNode)tollDataJson).put("detectedVehicleType", detectedVehicleType);
+
+            journalService.journal(updatedTollDataJson);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
