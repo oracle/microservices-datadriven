@@ -5,6 +5,7 @@ package com.example.tollreader;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.jms.annotation.EnableJms;
 import com.example.tollreader.data.DataBean;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @EnableJms
 @SpringBootApplication
 @Slf4j
+@EnableDiscoveryClient
 public class TollreaderApplication {
 
   private static ConfigurableApplicationContext context;
