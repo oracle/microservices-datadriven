@@ -1,4 +1,4 @@
-create user tolldemo identified by Welcome12345;
+create user tolldemo identified by "WelcomE-12345#";
 grant resource, connect, unlimited tablespace to tolldemo;
 grant execute on dbms_aq to tolldemo;
 grant execute on dbms_aqadm to tolldemo;
