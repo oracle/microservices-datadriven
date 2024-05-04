@@ -97,6 +97,7 @@ public class MessageTaskExecutor implements Lifecycle {
             String accountNumber = c.getAccountNumber();
             String state = v.getState();
             String vehicleType = v.getVehicleType();
+            String image = v.getPhotoFilename();
 
             JsonObject data = Json.createObjectBuilder()
                     .add("accountNumber", accountNumber) // This could be looked up in the DB from the tagId?
@@ -105,6 +106,7 @@ public class MessageTaskExecutor implements Lifecycle {
                     .add("tagId", tagId)
                     .add("tollDate", dateTimeString)
                     .add("tollCost", tollCost)
+                    .add("image", image)
                     .build();
 
             log.info("Toll Data :" + data.toString());
