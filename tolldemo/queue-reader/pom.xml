@@ -58,16 +58,19 @@
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-tracing-bridge-otel</artifactId>
+            <version>1.2.5</version>
         </dependency>
         <!-- Adds an exporter to store the traces -->
         <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-exporter-otlp</artifactId>
+            <version>1.37.0</version>
         </dependency>
         <!-- Adds the Tracing API -->
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-tracing</artifactId>
+            <version>1.2.5</version>
         </dependency>
         <!-- Eureka client-->
         <dependency>
