@@ -1,9 +1,6 @@
 spring:
   application:
     name: queue-reader
-  threads:
-    virtual:
-      enabled: true
 
   datasource:
     url: ${spring.datasource.url}
@@ -18,3 +15,8 @@ spring:
       min-pool-size: 10
       max-pool-size: 30
 
+oracle:
+  aq:
+    url: ${spring.datasource.url}
+    username: ${spring.datasource.username}
+    password: ${spring.datasource.password}
