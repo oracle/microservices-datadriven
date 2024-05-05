@@ -4,6 +4,9 @@
 package com.example.queuereader.client;
 
 import com.fasterxml.jackson.databind.JsonNode;
+
+import io.micrometer.core.annotation.Timed;
+
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

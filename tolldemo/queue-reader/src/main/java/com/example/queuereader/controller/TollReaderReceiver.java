@@ -12,6 +12,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Tags;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -32,14 +35,17 @@ public class TollReaderReceiver {
     public TollReaderReceiver(
         JournalService journalService, 
         AIVisionService aiVisionService,
-        CustomerDataService customerDataService
+        CustomerDataService customerDataService,
+        MeterRegistry registry
     ) {
         this.journalService = journalService;
         this.aiVisionService = aiVisionService;
         this.customerDataService = customerDataService;
+        registry.timer("process.toll.read", Tags.empty());
     }
 
     @JmsListener(destination = "TollGate")
+    @Timed(value = "process.toll.read")
     public void receiveTollData(String tollData) {
         log.info("Received message {}", tollData);
         try {

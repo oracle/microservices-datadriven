@@ -1,13 +1,11 @@
 package com.example.queuereader.client;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.oracle.bmc.ConfigFileReader;
 import com.oracle.bmc.aivision.AIServiceVisionClient;
 import com.oracle.bmc.aivision.model.AnalyzeImageDetails;
 import com.oracle.bmc.aivision.model.ImageClassificationFeature;
@@ -15,8 +13,6 @@ import com.oracle.bmc.aivision.model.Label;
 import com.oracle.bmc.aivision.model.ObjectStorageImageDetails;
 import com.oracle.bmc.aivision.requests.AnalyzeImageRequest;
 import com.oracle.bmc.aivision.responses.AnalyzeImageResponse;
-import com.oracle.bmc.auth.AuthenticationDetailsProvider;
-import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
 import com.oracle.bmc.auth.InstancePrincipalsAuthenticationDetailsProvider;
 
 import lombok.extern.slf4j.Slf4j;

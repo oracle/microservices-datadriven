@@ -64,10 +64,10 @@
             <version>${micrometer-core.version}</version>
         </dependency> -->
         <!-- Prometheues-->
-        <!-- <dependency>
+        <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
-        </dependency> -->
+        </dependency>
         <!-- Adds the Tracer Implementation -->
         <!-- <dependency>
             <groupId>io.micrometer</groupId>
