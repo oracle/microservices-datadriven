@@ -9,25 +9,29 @@ import com.example.queuereader.client.JournalClient;
 //import lombok.RequiredArgsConstructor;
 import com.fasterxml.jackson.databind.JsonNode;
 
-import io.micrometer.core.annotation.Timed;
-import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tags;
+import io.micrometer.core.instrument.Timer;
+import io.micrometer.prometheus.PrometheusMeterRegistry;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
 public class JournalService {
 
-    public JournalService(MeterRegistry registry, JournalClient journalClient) {
+    private Timer timer;
+
+    public JournalService(PrometheusMeterRegistry registry, JournalClient journalClient) {
         this.journalClient = journalClient;
-        registry.timer("journal", Tags.empty());
+        timer = registry.timer("journal", Tags.empty());
     }
  
     private final JournalClient journalClient;
 
-    @Timed(value = "journal")
     public void journal(JsonNode tollData) {
+        Timer.Sample sample = Timer.start();
         log.info("Journal data: {}", tollData);
         journalClient.journal(tollData);
+        timer.record(() -> sample.stop(timer) / 1_000_000);
+
     }
 }

@@ -13,8 +13,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import io.micrometer.core.annotation.Timed;
-import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tags;
+import io.micrometer.core.instrument.Timer;
+import io.micrometer.prometheus.PrometheusMeterRegistry;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -31,22 +32,23 @@ public class TollReaderReceiver {
     private JournalService journalService;
     private AIVisionService aiVisionService;
     private CustomerDataService customerDataService;
+    private Timer timer;
 
     public TollReaderReceiver(
         JournalService journalService, 
         AIVisionService aiVisionService,
         CustomerDataService customerDataService,
-        MeterRegistry registry
+        PrometheusMeterRegistry registry
     ) {
         this.journalService = journalService;
         this.aiVisionService = aiVisionService;
         this.customerDataService = customerDataService;
-        registry.timer("process.toll.read", Tags.empty());
+        timer = registry.timer("process.toll.read", Tags.empty());
     }
 
     @JmsListener(destination = "TollGate")
-    @Timed(value = "process.toll.read")
     public void receiveTollData(String tollData) {
+        Timer.Sample sample = Timer.start();
         log.info("Received message {}", tollData);
         try {
             JsonNode tollDataJson = objectMapper.readTree(tollData);
@@ -69,7 +71,6 @@ public class TollReaderReceiver {
                 log.info("Details match, proceeding...");
             } else {
                 log.info("Details do not match - so ignoring this message");
-                return;
             }
 
             // call ai vision model to detect vehicle type
@@ -83,6 +84,8 @@ public class TollReaderReceiver {
             journalService.journal(updatedTollDataJson);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+        } finally {
+            timer.record(() -> sample.stop(timer) / 1_000_000);
         }
     }
 }
