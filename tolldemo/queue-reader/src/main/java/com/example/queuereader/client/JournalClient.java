@@ -8,7 +8,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "journal", url = "http://localhost:8080")
+@FeignClient(name = "journal", url = "http://journal-app:8080")
 public interface JournalClient {
 
     @PostMapping("/api/v1/journal")

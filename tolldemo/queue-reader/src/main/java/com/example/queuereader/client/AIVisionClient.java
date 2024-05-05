@@ -17,6 +17,7 @@ import com.oracle.bmc.aivision.requests.AnalyzeImageRequest;
 import com.oracle.bmc.aivision.responses.AnalyzeImageResponse;
 import com.oracle.bmc.auth.AuthenticationDetailsProvider;
 import com.oracle.bmc.auth.ConfigFileAuthenticationDetailsProvider;
+import com.oracle.bmc.auth.InstancePrincipalsAuthenticationDetailsProvider;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,16 +26,24 @@ import lombok.extern.slf4j.Slf4j;
 public class AIVisionClient {
 
     public String analyzeImage(String imageUrl) {
-        ConfigFileReader.ConfigFile configFile = null;
+        // ConfigFileReader.ConfigFile configFile = null;
+        // try {
+        //     configFile = ConfigFileReader.parseDefault();
+        // } catch (IOException ioe) {
+        //     return null;
+        // }
+        // AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
+        final InstancePrincipalsAuthenticationDetailsProvider provider;
         try {
-            configFile = ConfigFileReader.parseDefault();
-        } catch (IOException ioe) {
+            provider = InstancePrincipalsAuthenticationDetailsProvider.builder().build();
+        } catch (Exception e) {
+            log.error("Could not create Instance Principal Auth Provider", e);
             return null;
         }
-        AuthenticationDetailsProvider provider = new ConfigFileAuthenticationDetailsProvider(configFile);
+
         AIServiceVisionClient client = AIServiceVisionClient.builder().build(provider);
 
-        String objectName = "cars-images/htsngg9tpc-2/" + imageUrl;
+        String objectName = "cars-images/" + imageUrl;
         log.info("object name: " + objectName);
 
         AnalyzeImageDetails analyzeImageDetails = AnalyzeImageDetails.builder()
