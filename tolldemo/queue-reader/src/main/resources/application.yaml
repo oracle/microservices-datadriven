@@ -33,6 +33,6 @@ management:
     tags:
       application: ${spring.application.name}    
 
-server:
-  tomcat:
-    max-threads: 10
+# server:
+#   tomcat:
+#     max-threads: 10

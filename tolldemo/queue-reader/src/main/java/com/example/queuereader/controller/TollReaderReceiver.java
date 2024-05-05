@@ -52,7 +52,7 @@ public class TollReaderReceiver {
 
     @JmsListener(destination = "TollGate")
     public void receiveTollData(String tollData) {
-        counter.count();
+        counter.increment();
         Timer.Sample sample = Timer.start();
         log.info("Received message {}", tollData);
         try {
