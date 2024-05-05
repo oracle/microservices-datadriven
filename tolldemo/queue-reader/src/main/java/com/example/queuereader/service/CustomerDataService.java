@@ -21,7 +21,7 @@ public class CustomerDataService {
         this.jdbcTemplate = jdbcTemplate;
     }
     
-
+    // slower query
     final String accountDetailsQuery = 
     "select c.customer_id, c.account_number, c.first_name, c.last_name, c.address, c.city, c.zipcode, "
     + "v.vehicle_id, v.tag_id, v.state, v.license_plate, v.vehicle_type "
@@ -31,6 +31,18 @@ public class CustomerDataService {
     + "  select '%'||customer_id||'%' "
     + "  from vehicle "
     + "  where license_plate like '%XXXXXX%'"
+    + ")";
+
+    // faster query
+    final String fasterAccountDetailsQuery = 
+    "select c.customer_id, c.account_number, c.first_name, c.last_name, c.address, c.city, c.zipcode, "
+    + "v.vehicle_id, v.tag_id, v.state, v.license_plate, v.vehicle_type "
+    + "from customer c, vehicle v " 
+    + "where c.customer_id = v.customer_id "
+    + "and c.customer_id = ("
+    + "  select customer_id "
+    + "  from vehicle "
+    + "  where license_plate = 'XXXXXX'"
     + ")";
 
 
