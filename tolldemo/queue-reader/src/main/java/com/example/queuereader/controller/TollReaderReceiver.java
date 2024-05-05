@@ -3,14 +3,23 @@
 
 package com.example.queuereader.controller;
 
+import com.example.queuereader.model.AccountDetails;
 import com.example.queuereader.service.AIVisionService;
+import com.example.queuereader.service.CustomerDataService;
 import com.example.queuereader.service.JournalService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.Tags;
+import io.micrometer.core.instrument.Timer;
+import io.micrometer.prometheus.PrometheusMeterRegistry;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
+
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
@@ -22,19 +31,50 @@ public class TollReaderReceiver {
 
     private JournalService journalService;
     private AIVisionService aiVisionService;
+    private CustomerDataService customerDataService;
+    private Timer timer;
 
-    public TollReaderReceiver(JournalService journalService, AIVisionService aiVisionService) {
+    public TollReaderReceiver(
+        JournalService journalService, 
+        AIVisionService aiVisionService,
+        CustomerDataService customerDataService,
+        PrometheusMeterRegistry registry
+    ) {
         this.journalService = journalService;
         this.aiVisionService = aiVisionService;
+        this.customerDataService = customerDataService;
+        timer = registry.timer("process.toll.read", Tags.empty());
     }
 
     @JmsListener(destination = "TollGate")
     public void receiveTollData(String tollData) {
+        Timer.Sample sample = Timer.start();
         log.info("Received message {}", tollData);
         try {
             JsonNode tollDataJson = objectMapper.readTree(tollData);
             log.info(String.valueOf(tollDataJson));
+
+            // check account
+            log.info("Check that the tag, licensePlate and accountNumber match up");
+            String tagId = tollDataJson.get("tagId").asText();
+            String accountId = tollDataJson.get("accountNumber").asText();
+            String licensePlate = tollDataJson.get("licensePlate").asText().split("-")[1];
+
+            List<AccountDetails> accountDetails = customerDataService.getAccountDetails(licensePlate);
+            boolean found = false;
+            for (AccountDetails a : accountDetails) {
+                if (a.getAccountNumber().equalsIgnoreCase(accountId) && a.getTagId().equalsIgnoreCase(tagId)) {
+                    found = true; 
+                }
+            }
+            if (found) {
+                log.info("Details match, proceeding...");
+            } else {
+                log.info("Details do not match - so ignoring this message");
+            }
+
             // call ai vision model to detect vehicle type
+            log.info("Call the Vision AI Service to check if the vehicle photo matches the registration...");
             String aiResult = aiVisionService.analyzeImage(tollDataJson.get("image").asText());
             log.info("result from ai (type,confidence): " + aiResult);
             String detectedVehicleType = aiResult.split(",")[0];
@@ -44,6 +84,8 @@ public class TollReaderReceiver {
             journalService.journal(updatedTollDataJson);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
+        } finally {
+            timer.record(() -> sample.stop(timer) / 1_000_000);
         }
     }
 }
