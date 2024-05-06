@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Tags;
 import io.micrometer.core.instrument.Timer;
 import io.micrometer.prometheus.PrometheusMeterRegistry;
@@ -20,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
+import org.apache.tomcat.util.modeler.Registry;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
@@ -33,6 +35,7 @@ public class TollReaderReceiver {
     private AIVisionService aiVisionService;
     private CustomerDataService customerDataService;
     private Timer timer;
+    private Counter counter;
 
     public TollReaderReceiver(
         JournalService journalService, 
@@ -44,10 +47,12 @@ public class TollReaderReceiver {
         this.aiVisionService = aiVisionService;
         this.customerDataService = customerDataService;
         timer = registry.timer("process.toll.read", Tags.empty());
+        counter = registry.counter("toll.messages.count", Tags.empty());
     }
 
     @JmsListener(destination = "TollGate")
     public void receiveTollData(String tollData) {
+        counter.increment();
         Timer.Sample sample = Timer.start();
         log.info("Received message {}", tollData);
         try {
@@ -58,9 +63,10 @@ public class TollReaderReceiver {
             log.info("Check that the tag, licensePlate and accountNumber match up");
             String tagId = tollDataJson.get("tagId").asText();
             String accountId = tollDataJson.get("accountNumber").asText();
-            String licensePlate = tollDataJson.get("licensePlate").asText().split("-")[1];
+            String licensePlate = tollDataJson.get("licensePlate").asText();
+            String vehicleType = tollDataJson.get("vehicleType").asText();
 
-            List<AccountDetails> accountDetails = customerDataService.getAccountDetails(licensePlate);
+            List<AccountDetails> accountDetails = customerDataService.getAccountDetails(licensePlate, vehicleType);
             boolean found = false;
             for (AccountDetails a : accountDetails) {
                 if (a.getAccountNumber().equalsIgnoreCase(accountId) && a.getTagId().equalsIgnoreCase(tagId)) {
@@ -85,7 +91,7 @@ public class TollReaderReceiver {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         } finally {
-            timer.record(() -> sample.stop(timer) / 1_000_000);
+            timer.record(() -> sample.stop(timer) / 1_000);
         }
     }
 }
