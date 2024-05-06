@@ -86,7 +86,7 @@ sudo rpm -i https://yum.oracle.com/repo/OracleLinux/OL8/oracle/instantclient/x86
 sudo rpm -i https://yum.oracle.com/repo/OracleLinux/OL8/oracle/instantclient/x86_64/getPackage/oracle-instantclient19.11-tools-19.11.0.0.0-1.x86_64.rpm
 
 curl -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.2.0/graalvm-ce-java11-linux-aarch64-20.2.0.tar.gz | tar xz
-  ~/graalvm-ce-java11-20.1.0/bin/gu install native-image
+  ~/graalvm-ce-java11-20.2.0/bin/gu install native-image
 
 
 #Post Provisioning
