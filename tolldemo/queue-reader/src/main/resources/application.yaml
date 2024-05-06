@@ -1,6 +1,16 @@
 spring:
   application:
     name: queue-reader
+  # zipkin:
+  #   base-url: http://jaegertracing-collector.observability.svc.cluster.local:9411/api/v2/spans
+  sleuth:  
+    otel:  
+      exporter:  
+        otlp:  
+          endpoint: ${otel.exporter.otlp.endpoint}
+          protocol: http/protobuf
+      config:
+        trace-id-ratio-based: 1.0
 
   datasource:
     url: ${spring.datasource.url}
@@ -31,7 +41,32 @@ management:
         include: "*"
   metrics:
     tags:
-      application: ${spring.application.name}    
+      application: ${spring.application.name}
+  # tracing:
+  #   sampling:
+  #     probability: 1.0
+  # info:
+  #   os:
+  #     enabled: true
+  #   env:
+  #     enabled: true
+  #   java:
+  #     enabled: true
+  # otlp:
+  #   tracing:
+  #     endpoint: ${otel.exporter.otlp.endpoint}
+ 
+
+# eureka:
+#   instance:
+#     hostname: ${spring.application.name}
+#     preferIpAddress: true
+#   client:
+#     service-url:
+#       defaultZone: ${eureka.service-url}
+#     fetch-registry: true
+#     register-with-eureka: true
+#     enabled: true
 
 # server:
 #   tomcat:

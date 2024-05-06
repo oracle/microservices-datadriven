@@ -17,8 +17,8 @@
         <java.version>11</java.version>
         <spring-cloud.version>2021.0.8</spring-cloud.version>
         <oracle-springboot-starter.version>2.7.12</oracle-springboot-starter.version>
-        <!-- <micrometer-core.version>1.12.5</micrometer-core.version>
-        <datasource-micrometer-spring-boot.version>1.0.3</datasource-micrometer-spring-boot.version> -->
+        <micrometer-core.version>1.12.5</micrometer-core.version>
+        <datasource-micrometer-spring-boot.version>1.0.3</datasource-micrometer-spring-boot.version>
     </properties>
     <dependencies>
         <dependency>
@@ -57,6 +57,35 @@
             <artifactId>jackson-core</artifactId>
             <version>2.17.0</version>
         </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-sleuth</artifactId>
+            <version>3.1.11</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.cloud</groupId>
+                    <artifactId>spring-cloud-sleuth-brave</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-sleuth-otel-autoconfigure</artifactId>
+            <version>1.1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-exporter-otlp-trace</artifactId>
+            <version>1.14.0</version>
+        </dependency>
+        <!-- <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-okhttp</artifactId>
+            <version>1.42.1</version>
+        </dependency> -->
+
          <!-- Core module of Micrometer -->
         <!-- <dependency>
             <groupId>io.micrometer</groupId>
@@ -129,6 +158,13 @@
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-sleuth-otel-dependencies</artifactId>
+                <version>1.1.4</version>
+                <scope>import</scope>
+                <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>com.oracle.oci.sdk</groupId>
