@@ -57,34 +57,20 @@
             <artifactId>jackson-core</artifactId>
             <version>2.17.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-sleuth</artifactId>
-            <version>3.1.11</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.cloud</groupId>
-                    <artifactId>spring-cloud-sleuth-brave</artifactId>
-                </exclusion>
-            </exclusions>
+            <artifactId>spring-cloud-sleuth-zipkin</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-sleuth-otel-autoconfigure</artifactId>
-            <version>1.1.4</version>
-        </dependency>
-        <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-exporter-otlp-trace</artifactId>
-            <version>1.14.0</version>
-        </dependency>
-        <!-- <dependency>
-            <groupId>io.grpc</groupId>
-            <artifactId>grpc-okhttp</artifactId>
-            <version>1.42.1</version>
-        </dependency> -->
+            <artifactId>spring-cloud-starter-zipkin</artifactId>
+  			<version>2.2.8.RELEASE</version>
+		</dependency>
 
          <!-- Core module of Micrometer -->
         <!-- <dependency>
@@ -92,11 +78,7 @@
             <artifactId>micrometer-core</artifactId>
             <version>${micrometer-core.version}</version>
         </dependency> -->
-        <!-- Prometheues-->
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-registry-prometheus</artifactId>
-        </dependency>
+
         <!-- Adds the Tracer Implementation -->
         <!-- <dependency>
             <groupId>io.micrometer</groupId>
@@ -158,13 +140,6 @@
                 <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-sleuth-otel-dependencies</artifactId>
-                <version>1.1.4</version>
-                <scope>import</scope>
-                <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>com.oracle.oci.sdk</groupId>
