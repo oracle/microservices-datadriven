@@ -9,16 +9,22 @@ import org.springframework.stereotype.Service;
 
 import com.example.queuereader.model.AccountDetails;
 
+import io.micrometer.core.instrument.Tags;
+import io.micrometer.core.instrument.Timer;
+import io.micrometer.prometheus.PrometheusMeterRegistry;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
 public class CustomerDataService {
 
+    private Timer timer;
+
     private final JdbcTemplate jdbcTemplate;
 
-    public CustomerDataService(JdbcTemplate jdbcTemplate) {
+    public CustomerDataService(JdbcTemplate jdbcTemplate, PrometheusMeterRegistry registry) {
         this.jdbcTemplate = jdbcTemplate;
+        timer = registry.timer("get.account.details", Tags.empty());
     }
     
     // slower query
@@ -50,6 +56,7 @@ public class CustomerDataService {
     public List<AccountDetails> getAccountDetails(String licensePlate, String vehicleType) {
         List<AccountDetails> result = new ArrayList<AccountDetails>();
         long startTime = System.currentTimeMillis();
+        Timer.Sample sample = Timer.start();
         jdbcTemplate.query(accountDetailsQuery.replace("XXXXXX", licensePlate).replace("TTTTTT", vehicleType),
         (rs, rowNum) -> new AccountDetails(
             rs.getString("customer_id"),
@@ -66,6 +73,7 @@ public class CustomerDataService {
             rs.getString("vehicle_type")
         )).forEach(accountDetails -> result.add(accountDetails));
         long endTime = System.currentTimeMillis();
+        timer.record(() -> sample.stop(timer) / 1_000_000);
         log.info("The query took " + (endTime - startTime) + "ms");
 
         log.info("returning " + result.size() + " account detail rows");
