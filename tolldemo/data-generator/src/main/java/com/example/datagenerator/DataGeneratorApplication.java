@@ -1,3 +1,6 @@
+// Copyright (c) 2024, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
 package com.example.datagenerator;
 
 import java.io.BufferedReader;
@@ -6,7 +9,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
+// import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
