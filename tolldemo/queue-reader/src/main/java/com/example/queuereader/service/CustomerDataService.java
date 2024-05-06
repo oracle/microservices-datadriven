@@ -49,7 +49,7 @@ public class CustomerDataService {
     + "and c.customer_id = ("
     + "  select customer_id "
     + "  from vehicle "
-    + "  where license_plate = 'XXXXXX'"
+    + "  where license_plate = regexp_replace('XXXXXX', '[A-Z]+-', 1, 1)"
     + ")";
 
 
