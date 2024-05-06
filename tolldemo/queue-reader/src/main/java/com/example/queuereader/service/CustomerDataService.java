@@ -73,7 +73,7 @@ public class CustomerDataService {
             rs.getString("vehicle_type")
         )).forEach(accountDetails -> result.add(accountDetails));
         long endTime = System.currentTimeMillis();
-        timer.record(() -> sample.stop(timer) / 1_000_000);
+        timer.record(() -> sample.stop(timer) / 1_000);
         log.info("The query took " + (endTime - startTime) + "ms");
 
         log.info("returning " + result.size() + " account detail rows");

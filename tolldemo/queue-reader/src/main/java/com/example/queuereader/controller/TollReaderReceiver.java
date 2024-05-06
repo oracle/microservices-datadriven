@@ -91,7 +91,7 @@ public class TollReaderReceiver {
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         } finally {
-            timer.record(() -> sample.stop(timer) / 1_000_000);
+            timer.record(() -> sample.stop(timer) / 1_000);
         }
     }
 }

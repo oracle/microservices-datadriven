@@ -31,7 +31,7 @@ public class JournalService {
         Timer.Sample sample = Timer.start();
         log.info("Journal data: {}", tollData);
         journalClient.journal(tollData);
-        timer.record(() -> sample.stop(timer) / 1_000_000);
+        timer.record(() -> sample.stop(timer) / 1_000);
 
     }
 }
