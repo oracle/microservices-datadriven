@@ -63,9 +63,10 @@ public class TollReaderReceiver {
             log.info("Check that the tag, licensePlate and accountNumber match up");
             String tagId = tollDataJson.get("tagId").asText();
             String accountId = tollDataJson.get("accountNumber").asText();
-            String licensePlate = tollDataJson.get("licensePlate").asText().split("-")[1];
+            String licensePlate = tollDataJson.get("licensePlate").asText();
+            String vehicleType = tollDataJson.get("vehicleType").asText();
 
-            List<AccountDetails> accountDetails = customerDataService.getAccountDetails(licensePlate);
+            List<AccountDetails> accountDetails = customerDataService.getAccountDetails(licensePlate, vehicleType);
             boolean found = false;
             for (AccountDetails a : accountDetails) {
                 if (a.getAccountNumber().equalsIgnoreCase(accountId) && a.getTagId().equalsIgnoreCase(tagId)) {

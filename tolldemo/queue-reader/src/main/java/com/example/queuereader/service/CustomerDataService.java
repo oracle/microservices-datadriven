@@ -23,14 +23,15 @@ public class CustomerDataService {
     
     // slower query
     final String accountDetailsQuery = 
-    "select c.customer_id, c.account_number, c.first_name, c.last_name, c.address, c.city, c.zipcode, "
+    "select /*+ ORDERED_PREDICATES */ c.customer_id, c.account_number, c.first_name, c.last_name, c.address, c.city, c.zipcode, "
     + "v.vehicle_id, v.tag_id, v.state, v.license_plate, v.vehicle_type "
     + "from customer c, vehicle v " 
     + "where c.customer_id like '%'||v.customer_id||'%' "
     + "and c.customer_id like ("
-    + "  select '%'||customer_id||'%' "
+    + "  select /*+ ORDERED_PREDICATES */ '%'||customer_id||'%' "
     + "  from vehicle "
-    + "  where license_plate like '%XXXXXX%'"
+    + "  where vehicle_type = 'TTTTTT' "
+    + "  and license_plate like '%'|| remove_state('XXXXXX') || '%'"
     + ")";
 
     // faster query
@@ -46,10 +47,10 @@ public class CustomerDataService {
     + ")";
 
 
-    public List<AccountDetails> getAccountDetails(String licensePlate) {
+    public List<AccountDetails> getAccountDetails(String licensePlate, String vehicleType) {
         List<AccountDetails> result = new ArrayList<AccountDetails>();
         long startTime = System.currentTimeMillis();
-        jdbcTemplate.query(accountDetailsQuery.replace("XXXXXX", licensePlate),
+        jdbcTemplate.query(accountDetailsQuery.replace("XXXXXX", licensePlate).replace("TTTTTT", vehicleType),
         (rs, rowNum) -> new AccountDetails(
             rs.getString("customer_id"),
             rs.getString("account_number"),
