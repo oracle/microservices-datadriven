@@ -19,6 +19,15 @@ begin
   dbms_aqadm.start_queue(tname) ;
 end;
 
+-- dodgy bodgy sql slower downer
+create or replace function remove_state(plate in varchar2)
+return varchar2
+is
+begin
+  dbms_lock.sleep(dbms_random.value(0.004,0.005));
+  return regexp_replace(plate, '[A-Z]+-', '', 1, 1);
+end;
+
 -- Helper SQL
 -- select msg_id, utl_raw.cast_to_varchar2(dbms_lob.substr(user_data)), msg_state from aq$tollgate;
 
