@@ -12,14 +12,14 @@ OS_NAME=$(uname)
 # https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-17.0.9/graalvm-community-jdk-17.0.9_linux-aarch64_bin.tar.gz
 if ! test -d ~/graalvm-community-jdk-"${GRAALVM_VERSION}"; then
   echo "$(date): Installing community-jdk-${GRAALVM_VERSION}"
-  (cd ~ && curl -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-"${GRAALVM_VERSION}"/graalvm-community-jdk-17.0.9_"${OS_NAME}"-aarch64.tar.gz | tar xz)
+  (cd ~ && curl -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-"${GRAALVM_VERSION}"/graalvm-community-jdk-17.0.9_"${OS_NAME}"-aarch64_bin.tar.gz | tar xz)
 #  mv graalvm-ce-java11-${GRAALVM_VERSION} ~/
 fi
 
 if ! [[ $OS_NAME == *"darwin"* ]]; then
   # Assume linux
-  ~/graalvm-community-jdk-"${GRAALVM_VERSION}+9.1"/bin/gu install native-image
-  export JAVA_HOME=~/graalvm-ce-java11-${GRAALVM_VERSION}
+  ~/graalvm-community-openjdk-"${GRAALVM_VERSION}+9.1"/bin/gu install native-image
+  export JAVA_HOME=~/graalvm-community-openjdk-${GRAALVM_VERSION}+9.1
 fi
 # else
 #   # We are on Mac doing local dev
