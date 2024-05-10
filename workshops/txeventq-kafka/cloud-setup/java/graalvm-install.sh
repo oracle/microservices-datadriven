@@ -33,8 +33,8 @@ echo "$(date): PATH ${PATH}"
 
 if ! state_done CONTAINER_ENG_SETUP; then
   echo "$(date): GraalVM for JDK 17 Community 17.0.9"
-  docker pull ghcr.io/graalvm/graalvm-ce:ol8-java11 --quiet
-  state_set CONTAINER_ENG_SETUP "ghcr.io/graalvm/graalvm-ce:ol8-java11"
+  docker pull docker pull ghcr.io/graalvm/graalvm-community:17.0.9 --quiet
+  state_set CONTAINER_ENG_SETUP "docker pull ghcr.io/graalvm/graalvm-community:17.0.9"
   echo
 fi
 
