@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright (c) 2021 Oracle and/or its affiliates.
+# Copyright (c) 2021, 2024, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Fail on error
@@ -9,9 +9,9 @@ GRAALVM_VERSION=${1:-"17.0.9"}
 OS_NAME=$(uname)
 
 # Install GraalVM
-# https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-17.0.9/graalvm-community-jdk-17.0.9_linux-aarch64_bin.tar.gz
+# https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-17.0.9/17.0.9-17.0.9_linux-aarch64_bin.tar.gz
 if ! test -d ~/graalvm-community-jdk-"${GRAALVM_VERSION}"; then
-  echo "$(date): Installing graalvm-ce-java11-${GRAALVM_VERSION}"
+  echo "$(date): Installing community-jdk-${GRAALVM_VERSION}"
   (cd ~ && curl -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-"${GRAALVM_VERSION}"/graalvm-community-jdk-17.0.9_"${OS_NAME}"-aarch64-"${GRAALVM_VERSION}".tar.gz | tar xz)
 #  mv graalvm-ce-java11-${GRAALVM_VERSION} ~/
 fi
@@ -33,7 +33,7 @@ echo "$(date): PATH ${PATH}"
 
 if ! state_done CONTAINER_ENG_SETUP; then
   echo "$(date): GraalVM for JDK 17 Community 17.0.9"
-  docker pull docker pull ghcr.io/graalvm/graalvm-community:17.0.9 --quiet
+  docker pull ghcr.io/graalvm/graalvm-community:17.0.9 --quiet
   state_set CONTAINER_ENG_SETUP "docker pull ghcr.io/graalvm/graalvm-community:17.0.9"
   echo
 fi

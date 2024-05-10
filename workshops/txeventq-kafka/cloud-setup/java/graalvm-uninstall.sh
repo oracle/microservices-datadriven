@@ -1,20 +1,20 @@
 #!/bin/bash
-# Copyright (c) 2021 Oracle and/or its affiliates.
+# Copyright (c) 2021, 2024, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Fail on error
 set -e
 
-GRAALVM_VERSION=${1:-"22.2.0"}
+GRAALVM_VERSION=${1:-"17.0.9"}
 
 if ! state_get GRAALVM_INSTALLED; then
   exit 1
 fi
 
 # Uninstall GraalVM
-if test -d ~/graalvm-ce-java11-"${GRAALVM_VERSION}"; then
-  echo "$(date): Uninstalling graalvm-ce-java11-${GRAALVM_VERSION} local installation."
-  rm -rf ~/graalvm-ce-java11-"${GRAALVM_VERSION}"
+if test -d ~/community-jdk-"${GRAALVM_VERSION}"; then
+  echo "$(date): Uninstalling community-jdk-${GRAALVM_VERSION} local installation."
+  rm -rf ~/community-jdk-"${GRAALVM_VERSION}"
 fi
 
 # Uninstall GraalVM Image
