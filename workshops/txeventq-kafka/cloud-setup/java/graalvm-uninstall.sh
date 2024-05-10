@@ -14,7 +14,7 @@ fi
 # Uninstall GraalVM
 if test -d ~/community-jdk-"${GRAALVM_VERSION}"; then
   echo "$(date): Uninstalling community-jdk-${GRAALVM_VERSION} local installation."
-  rm -rf ~/community-jdk-"${GRAALVM_VERSION}"
+  rm -rf ~/community-jdk-"${GRAALVM_VERSION}+9.1"
 fi
 
 # Uninstall GraalVM Image

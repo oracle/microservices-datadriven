@@ -9,10 +9,10 @@ GRAALVM_VERSION=${1:-"17.0.9"}
 OS_NAME=$(uname)
 
 # Install GraalVM
-# https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-17.0.9/17.0.9-17.0.9_linux-aarch64_bin.tar.gz
+# https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-17.0.9/graalvm-community-jdk-17.0.9_linux-aarch64_bin.tar.gz
 if ! test -d ~/graalvm-community-jdk-"${GRAALVM_VERSION}"; then
   echo "$(date): Installing community-jdk-${GRAALVM_VERSION}"
-  (cd ~ && curl -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-"${GRAALVM_VERSION}"/graalvm-community-jdk-17.0.9_"${OS_NAME}"-aarch64-"${GRAALVM_VERSION}".tar.gz | tar xz)
+  (cd ~ && curl -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-"${GRAALVM_VERSION}"/graalvm-community-jdk-17.0.9_"${OS_NAME}"-aarch64.tar.gz | tar xz)
 #  mv graalvm-ce-java11-${GRAALVM_VERSION} ~/
 fi
 
