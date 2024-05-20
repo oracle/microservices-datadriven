@@ -1,0 +1,65 @@
+spring:
+  application:
+    name: queue-reader
+  zipkin:
+    base-url: http://jaegertracing-collector.observability.svc.cluster.local:9411/api/v2/spans
+
+  datasource:
+    url: ${spring.datasource.url}
+    username: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    driver-class-name: oracle.jdbc.OracleDriver
+    type: oracle.ucp.jdbc.PoolDataSource
+    oracleucp:
+      connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
+      connection-pool-name: QueueReaderAppConnectionPool
+      initial-pool-size: 15
+      min-pool-size: 10
+      max-pool-size: 30
+
+oracle:
+  aq:
+    url: ${spring.datasource.url}
+    username: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  tracing:
+    sampling:
+      probability: 1.0
+  info:
+    os:
+      enabled: true
+    env:
+      enabled: true
+    java:
+      enabled: true
+  otlp:
+    tracing:
+      endpoint: ${otel.exporter.otlp.endpoint}
+ 
+
+# eureka:
+#   instance:
+#     hostname: ${spring.application.name}
+#     preferIpAddress: true
+#   client:
+#     service-url:
+#       defaultZone: ${eureka.service-url}
+#     fetch-registry: true
+#     register-with-eureka: true
+#     enabled: true
+
+# server:
+#   tomcat:
+#     max-threads: 10

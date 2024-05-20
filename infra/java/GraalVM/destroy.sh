@@ -12,8 +12,8 @@ fi
 
 
 # Install Graal
-if test -d ~/graalvm-ce-java11-20.1.0; then
-  rm -rf ~/graalvm-ce-java11-20.1.0
+if test -d ~/graalvm-ce-java11-20.2.0; then
+  rm -rf ~/graalvm-ce-java11-20.2.0
 fi
 
 

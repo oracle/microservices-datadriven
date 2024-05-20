@@ -1,0 +1,25 @@
+# mvn clean spring-boot:run -Dspring-boot.run.profiles=local
+spring:
+  application:
+    name: queue-reader 
+
+  datasource:
+    url: jdbc:oracle:thin:@//172.17.0.2:1521/freepdb1
+    username: tolldemo
+    password: Welcome12345
+    driver-class-name: oracle.jdbc.OracleDriver
+    type: oracle.ucp.jdbc.PoolDataSource
+    oracleucp:
+      connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
+      connection-pool-name: QueueReaderAppConnectionPool
+      initial-pool-size: 15
+      min-pool-size: 10
+      max-pool-size: 30
+server:
+  port: 9090
+
+oracle:
+  aq:
+    url: jdbc:oracle:thin:@//172.17.0.2:1521/freepdb1
+    username: tolldemo
+    password: Welcome12345

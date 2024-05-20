@@ -1,0 +1,64 @@
+spring:
+  application:
+    name: tollreader
+  threads:
+    virtual:
+      enabled: true
+
+  datasource:
+    url: ${spring.datasource.url}
+    username: ${spring.datasource.username}
+    password: ${spring.datasource.password}
+    driver-class-name: oracle.jdbc.OracleDriver
+    type: oracle.ucp.jdbc.PoolDataSource
+    oracleucp:
+      connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
+      connection-pool-name: TollReaderConnectionPool
+      initial-pool-size: 15
+      min-pool-size: 10
+      max-pool-size: 30
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.OracleDialect
+        format_sql: true
+    show-sql: true
+
+eureka:
+  instance:
+    hostname: ${spring.application.name}
+    preferIpAddress: true
+  client:
+    service-url:
+      defaultZone: ${eureka.service-url}
+    fetch-registry: true
+    register-with-eureka: true
+    enabled: true
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  tracing:
+    sampling:
+      probability: 1.0
+  info:
+    os:
+      enabled: true
+    env:
+      enabled: true
+    java:
+      enabled: true
+  otlp:
+    tracing:
+      endpoint: ${otel.exporter.otlp.endpoint}
