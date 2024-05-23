@@ -3,6 +3,9 @@
 spring:
   application:
     name: customer
+  threads:
+    virtual:
+      enabled: true
   jpa:
     hibernate:
       ddl-auto: validate

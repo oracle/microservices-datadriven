@@ -4,7 +4,9 @@
 spring:
   application:
     name: customer32
-
+  threads:
+    virtual:
+      enabled: true
   liquibase:
     change-log: classpath:db/changelog/controller.yaml
     url: ${spring.datasource.url}
