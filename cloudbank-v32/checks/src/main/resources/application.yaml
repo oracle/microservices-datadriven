@@ -4,7 +4,9 @@
 spring:
   application:
     name: checks
-
+  threads:
+    virtual:
+      enabled: true
   datasource:
     url: ${spring.datasource.url}
     username: ${spring.datasource.username}

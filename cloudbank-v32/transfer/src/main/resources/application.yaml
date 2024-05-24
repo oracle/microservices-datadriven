@@ -17,7 +17,9 @@ spring:
       coordinator-url: ${MP_LRA_COORDINATOR_URL}
       propagation-active: true
       headers-propagation-prefix: "{x-b3-, oracle-tmm-, authorization, refresh-}"
-
+  threads:
+    virtual:
+      enabled: true
 account:
   deposit:
     url: http://account.application:8080/deposit
