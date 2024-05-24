@@ -5,16 +5,16 @@
 # Fail on error
 set -e
 
-GRAALVM_VERSION=${1:-"17.0.9"}
+GRAALVM_VERSION=${1:-"21"}
 
 if ! state_get GRAALVM_INSTALLED; then
   exit 1
 fi
 
 # Uninstall GraalVM
-if test -d ~/graalvm-community-openjdk-"${GRAALVM_VERSION}+9.1"; then
-  echo "$(date): Uninstalling graalvm-community-openjdk-${GRAALVM_VERSION} local installation."
-  rm -rf ~/graalvm-community-openjdk-"${GRAALVM_VERSION}+9.1"
+if ! test -d ~/graalvm-jdk-"${GRAALVM_VERSION}"; then
+  echo "$(date): Uninstalling Oracle GraalVM ${GRAALVM_VERSION} local installation."
+  rm -rf ~/graalvm-jdk-"${GRAALVM_VERSION}"
 fi
 
 # Uninstall GraalVM Image

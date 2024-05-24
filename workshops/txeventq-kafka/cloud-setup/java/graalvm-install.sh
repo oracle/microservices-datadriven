@@ -5,36 +5,40 @@
 # Fail on error
 set -eu
 
-GRAALVM_VERSION=${1:-"17.0.9"}
-OS_NAME=$(uname)
+GRAALVM_VERSION=${1:-"21"}
+OS_NAME="$(uname -s | tr '[:upper:]' '[:lower:]')"
+MACHINE_ARCH=$(uname -p)
 
-# Install GraalVM
-# https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-17.0.9/graalvm-community-jdk-17.0.9_linux-aarch64_bin.tar.gz
-if ! test -d ~/graalvm-community-jdk-"${GRAALVM_VERSION}"; then
-  echo "$(date): Installing community-jdk-${GRAALVM_VERSION}"
-  (cd ~ && curl -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-"${GRAALVM_VERSION}"/graalvm-community-jdk-17.0.9_"${OS_NAME}"-aarch64_bin.tar.gz | tar xz)
-#  mv graalvm-ce-java11-${GRAALVM_VERSION} ~/
+if [[ $OS_NAME == *"darwin"* ]] && [[ $MACHINE_ARCH == *"arm"* ]]; then
+  OS_NAME=macos
+  MACHINE_ARCH=aarch64
 fi
 
-if ! [[ $OS_NAME == *"darwin"* ]]; then
-  # Assume linux
-  ~/graalvm-community-openjdk-"${GRAALVM_VERSION}+9.1"/bin/gu install native-image
-  export JAVA_HOME=~/graalvm-community-openjdk-${GRAALVM_VERSION}+9.1
+# Install Oracle GraalVM
+# https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_linux-aarch64_bin.tar.gz
+# https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_macos-aarch64_bin.tar.gz
+
+if ! test -d ~/graalvm-jdk-"${GRAALVM_VERSION}"; then
+  echo "$(date): Installing Oracle GraalVM ${GRAALVM_VERSION}"
+  (cd ~ && wget -q https://download.oracle.com/graalvm/"${GRAALVM_VERSION}"/latest/graalvm-jdk-"${GRAALVM_VERSION}"_"${OS_NAME}"-"${MACHINE_ARCH}"_bin.tar.gz)
+  tar xzf graalvm-jdk-"${GRAALVM_VERSION}"_"${OS_NAME}"-"${MACHINE_ARCH}"_bin.tar.gz
+  rm graalvm-jdk-"${GRAALVM_VERSION}"_"${OS_NAME}"-"${MACHINE_ARCH}"_bin.tar.gz
+  mv graalvm-jdk-${GRAALVM_VERSION}* ~/graalvm-jdk-"${GRAALVM_VERSION}"
+  export JAVA_HOME=~/graalvm-jdk-"${GRAALVM_VERSION}"
 fi
-# else
-#   # We are on Mac doing local dev
-#   ~/graalvm-ce-java11-"${GRAALVM_VERSION}"/Contents/Home/bin/gu install native-image
-#   export JAVA_HOME=~/graalvm-ce-java11-${GRAALVM_VERSION}/Contents/Home;
-#   echo "$(date): JAVA_HOME ${JAVA_HOME}"
-# fi
+
+if [[ $OS_NAME == *"darwin"* ]]; then
+  export JAVA_HOME=$JAVA_HOME/Contents/Home
+fi
+echo "$(date): JAVA_HOME ${JAVA_HOME}"
 
 export PATH=$JAVA_HOME/bin/:$PATH
 echo "$(date): PATH ${PATH}"
 
 if ! state_done CONTAINER_ENG_SETUP; then
-  echo "$(date): GraalVM for JDK 17 Community 17.0.9"
-  docker pull ghcr.io/graalvm/graalvm-community:17.0.9 --quiet
-  state_set CONTAINER_ENG_SETUP "docker pull ghcr.io/graalvm/graalvm-community:17.0.9"
+  echo "$(date): Oracle GraalVM ${GRAALVM_VERSION}"
+  docker pull container-registry.oracle.com/graalvm/jdk:${GRAALVM_VERSION} --quiet
+  state_set CONTAINER_ENG_SETUP "container-registry.oracle.com/graalvm/jdk:${GRAALVM_VERSION}"
   echo
 fi
 

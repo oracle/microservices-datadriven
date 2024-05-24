@@ -27,14 +27,13 @@ cd "$LAB_HOME" || exit
 echo "LAB_HOME: $LAB_HOME"
 
 # Java Home
-GRAALVM_VERSION=${1:-"17.0.9"}
-OS_NAME=$(uname)
-if ! [[ $OS_NAME == *"darwin"* ]]; then
-  # Assume linux
-  export JAVA_HOME=~/graalvm-ce-java11-${GRAALVM_VERSION}
-else
+GRAALVM_VERSION=${1:-"21"}
+OS_NAME="$(uname -s | tr '[:upper:]' '[:lower:]')"
+export JAVA_HOME=~/graalvm-jdk-"${GRAALVM_VERSION}"
+
+if [[ $OS_NAME == *"darwin"* ]]; then
   # We are on Mac doing local dev
-  export JAVA_HOME=~/graalvm-ce-java11-${GRAALVM_VERSION}/Contents/Home;
+  export JAVA_HOME=$JAVA_HOME/Contents/Home
 fi
 export PATH=$JAVA_HOME/bin/:$PATH
 
