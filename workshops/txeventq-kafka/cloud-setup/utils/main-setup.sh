@@ -181,14 +181,8 @@ if ! state_get PROVISIONING; then
   fi
 fi
 
-# Get Namespace
-while ! state_done NAMESPACE; do
-  NAMESPACE=$(oci os ns get --compartment-id "$(state_get COMPARTMENT_OCID)" --query "data" --raw-output)
-  state_set NAMESPACE "$NAMESPACE"
-done
-
 # Install GraalVM
-GRAALVM_VERSION="17.0.9"
+GRAALVM_VERSION="21"
 if ! state_get GRAALVM_INSTALLED; then
   if ps -ef | grep "$LAB_HOME/cloud-setup/java/graalvm-install.sh" | grep -v grep; then
     echo "$LAB_HOME/cloud-setup/java/graalvm-install.sh is already running"
@@ -254,6 +248,12 @@ if ! state_done PROVISIONING; then
   done
   echo
 fi
+
+# Get Namespace
+while ! state_done NAMESPACE; do
+  NAMESPACE=$(oci os ns get --compartment-id "$(state_get COMPARTMENT_OCID)" --query "data" --raw-output)
+  state_set NAMESPACE "$NAMESPACE"
+done
 
 # Get Lab DB OCID
 while ! state_done LAB_DB_OCID; do
