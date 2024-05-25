@@ -21,9 +21,9 @@ fi
 if ! test -d ~/graalvm-jdk-"${GRAALVM_VERSION}"; then
   echo "$(date): Installing Oracle GraalVM ${GRAALVM_VERSION}"
   (cd ~ && wget -q https://download.oracle.com/graalvm/"${GRAALVM_VERSION}"/latest/graalvm-jdk-"${GRAALVM_VERSION}"_"${OS_NAME}"-"${MACHINE_ARCH}"_bin.tar.gz)
-  tar xzf graalvm-jdk-"${GRAALVM_VERSION}"_"${OS_NAME}"-"${MACHINE_ARCH}"_bin.tar.gz
-  rm graalvm-jdk-"${GRAALVM_VERSION}"_"${OS_NAME}"-"${MACHINE_ARCH}"_bin.tar.gz
-  mv graalvm-jdk-${GRAALVM_VERSION}* ~/graalvm-jdk-"${GRAALVM_VERSION}"
+  tar xzf ~/graalvm-jdk-"${GRAALVM_VERSION}"_"${OS_NAME}"-"${MACHINE_ARCH}"_bin.tar.gz
+  rm ~/graalvm-jdk-"${GRAALVM_VERSION}"_"${OS_NAME}"-"${MACHINE_ARCH}"_bin.tar.gz
+  mv ~/graalvm-jdk-${GRAALVM_VERSION}* ~/graalvm-jdk-"${GRAALVM_VERSION}"
   export JAVA_HOME=~/graalvm-jdk-"${GRAALVM_VERSION}"
 fi
 
