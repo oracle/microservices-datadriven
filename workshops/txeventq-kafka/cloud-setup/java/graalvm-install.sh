@@ -9,14 +9,16 @@ GRAALVM_VERSION=${1:-"17"}
 OS_NAME="$(uname -s | tr '[:upper:]' '[:lower:]')"
 MACHINE_ARCH=$(uname -p)
 
-if [[ $OS_NAME == *"darwin"* ]] && [[ $MACHINE_ARCH == *"arm"* ]]; then
+if [[ $OS_NAME == *"linux"* ]] && [[ $MACHINE_ARCH == *"x86_64"* ]]; then
+  MACHINE_ARCH=x64
+elif [[ $OS_NAME == *"darwin"* ]] && [[ $MACHINE_ARCH == *"arm"* ]]; then
   OS_NAME=macos
   MACHINE_ARCH=aarch64
 fi
 
 # Install Oracle GraalVM
-# https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_linux-aarch64_bin.tar.gz
-# https://download.oracle.com/graalvm/21/latest/graalvm-jdk-21_macos-aarch64_bin.tar.gz
+# https://download.oracle.com/graalvm/17/latest/graalvm-jdk-17_linux-x64_bin.tar.gz
+# https://download.oracle.com/graalvm/17/latest/graalvm-jdk-17_linux-aarch64_bin.tar.gz
 
 if ! test -d ~/graalvm-jdk-"${GRAALVM_VERSION}"; then
   echo "$(date): Installing Oracle GraalVM ${GRAALVM_VERSION}"
