@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright (c) 2021 Oracle and/or its affiliates.
+# Copyright (c) 2021, 2024 Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Fail on error
@@ -183,8 +183,13 @@ fi
 
 # Get Namespace
 while ! state_done NAMESPACE; do
-  NAMESPACE=$(oci os ns get --compartment-id "$(state_get COMPARTMENT_OCID)" --query "data" --raw-output)
-  state_set NAMESPACE "$NAMESPACE"
+  NAMESPACE=$(oci os ns get --compartment-id "$(state_get COMPARTMENT_OCID)" --query "data" --raw-output 2>&1)
+  # Check the return code
+  if [[ $? == 0 ]]; then
+      # All went well!
+      echo "$(date): ${NAMESPACE}"
+      state_set NAMESPACE "$NAMESPACE"
+  fi
 done
 
 # Install GraalVM
