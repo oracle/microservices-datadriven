@@ -3,7 +3,7 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Fail on error
-set -eu
+# set -eu
 
 # Wait for Lab DB OCID
 while ! state_done LAB_DB_OCID; do

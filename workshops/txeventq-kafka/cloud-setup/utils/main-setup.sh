@@ -3,7 +3,7 @@
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 # Fail on error
-set -e
+#set -e
 
 function db_password_valid() {
   local password=$1
