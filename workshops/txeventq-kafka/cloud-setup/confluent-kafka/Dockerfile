@@ -1,5 +1,8 @@
+# Copyright (c) 2021, 2024 Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
+
 ARG CP_VERSION=0.5.0
-ARG KAFKA_CONNECT_VERSION=7.0.1
+ARG KAFKA_CONNECT_VERSION=7.0.14
 
 ARG BASE_PREFIX=confluentinc 
 ARG CONNECT_IMAGE=cp-kafka-connect
