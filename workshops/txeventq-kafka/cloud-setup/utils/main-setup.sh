@@ -193,7 +193,7 @@ while ! state_done NAMESPACE; do
 done
 
 # Install GraalVM
-GRAALVM_VERSION="21"
+GRAALVM_VERSION="17"
 if ! state_get GRAALVM_INSTALLED; then
   if ps -ef | grep "$LAB_HOME/cloud-setup/java/graalvm-install.sh" | grep -v grep; then
     echo "$LAB_HOME/cloud-setup/java/graalvm-install.sh is already running"
