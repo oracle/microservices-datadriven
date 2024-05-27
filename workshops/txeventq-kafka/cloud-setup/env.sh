@@ -27,7 +27,7 @@ cd "$LAB_HOME" || exit
 echo "LAB_HOME: $LAB_HOME"
 
 # Java Home
-GRAALVM_VERSION=${1:-"21"}
+GRAALVM_VERSION=${1:-"17"}
 OS_NAME="$(uname -s | tr '[:upper:]' '[:lower:]')"
 export JAVA_HOME=~/graalvm-jdk-"${GRAALVM_VERSION}"
 

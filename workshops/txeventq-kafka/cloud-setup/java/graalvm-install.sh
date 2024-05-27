@@ -5,7 +5,7 @@
 # Fail on error
 set -eu
 
-GRAALVM_VERSION=${1:-"21"}
+GRAALVM_VERSION=${1:-"17"}
 OS_NAME="$(uname -s | tr '[:upper:]' '[:lower:]')"
 MACHINE_ARCH=$(uname -p)
 
