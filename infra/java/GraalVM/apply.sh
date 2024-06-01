@@ -15,7 +15,7 @@ fi
 if ! test -d ~/graalvm-ce-java11-20.2.0; then
   cd $MY_STATE
   OS_NAME=`uname`
-  curl -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.1.0/graalvm-ce-java11-${OS_NAME}-amd64-20.1.0.tar.gz | tar xz
+  curl -sL https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-20.2.0/graalvm-ce-java11-${OS_NAME}-aarch64-20.2.0.tar.gz | tar xz
   mv graalvm-ce-java11-20.2.0 ~/
 fi
 
