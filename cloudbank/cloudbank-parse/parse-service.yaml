@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: parse-service
+  labels:
+    app.kubernetes.io/name: parse-service
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: "Cluster"
+  ports:
+    - name: server-http
+      port: 1337
+      targetPort: 1337
+  selector:
+    app: parse-server
