@@ -21,20 +21,22 @@ resources:
   - name: soc-manage-identity
     src: "soc-manage-identity.png"
     title: "SOC Manage Identity screen"
+  - name: soc-diag-data
+    src: "soc-diag-data.png"
+    title: "Diagnostic Data"
 ---
 
 
-Oracle Backend for Spring Boot and Microservices version 1.1.3 includes a preview of a new feature called "Spring Operations Center".
-More capabilities will be added to this feature in future releases.
+Oracle Backend for Spring Boot and Microservices version includes "Spring Operations Center". More capabilities will be added to this feature in future releases.
 
-The Spring Operations Center provides a web user interface to manage the Oracle Backend for Spring Boot and Microservices.
-This preview release includes the following capabilities:
+The Spring Operations Center provides a web user interface to manage the Oracle Backend for Spring Boot and Microservices. This release includes the following capabilities:
 
 - View details about the configuration and health of the environment
-- View details of workloads (Spring Boot applications) deployed in the environment
+- Manage and deploy workloads (Spring Boot applications) deployed in the environment
 - Easy one-click access to Grafana dashboards for applications
-- View details of users and roles defined in the Spring Authorization Server included in the environment
-- Easy one-click access to Grafana dashboards for the Kubernetes cluster and the Oracle Database
+- Manage users and roles defined in the Spring Authorization Server included in the environment
+- Easy one-click access to Grafana dashboards for the Kubernetes cluster, the applications and the Oracle Database
+- Collect diagnostic data for support
 
 **Note:** More capabilities will be added to this feature in future releases.
 
@@ -49,12 +51,17 @@ This preview release includes the following capabilities:
 To access the Spring Operations Center, obtain the public IP address for your environment using this command:
 
 ```bash
-$ kubectl -n ingress-nginx get service ingress-nginx-controller
-NAME                       TYPE           CLUSTER-IP      EXTERNAL-IP       PORT(S)                      AGE
-ingress-nginx-controller   LoadBalancer   10.96.172.148   100.200.100.200   80:31393/TCP,443:30506/TCP   158m
+kubectl -n ingress-nginx get service ingress-nginx-controller
 ```
 
-Use the `EXTERNAL-IP` from the results and open a browser to https://100.200.100.200/soc to access the login page.
+The output will be similar to this:
+
+```text
+NAME                       TYPE           CLUSTER-IP      EXTERNAL-IP       PORT(S)                      AGE
+ingress-nginx-controller   LoadBalancer   10.96.172.148   xxx.xxx.xxx.xxx   80:31393/TCP,443:30506/TCP   158m
+```
+
+Use the `EXTERNAL-IP` from the results and open a browser to https://xxx.xxx.xxx.xxx/soc to access the login page.
 
 **Note**: If you installed with self-signed certificates, which is the default, you will see a browser warning message and
 will have to click on "Accept risk" or similar. For information about replacing the self-signed certificate with a
@@ -67,7 +74,7 @@ production certificate, refer to [Transport Layer Security](../../security#trans
 Login using the `obaas-admin` user (or another user if you have created one) and the password that you set during installation.  If you did not set a password, one was auto-generated for you and can be obtained with this command:
 
 ```bash
-$ kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.admin}' | base64 -d; echo
+kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.admin}' | base64 -d; echo
 ```
 
 After logging in, you will see the SOC Dashboard.
@@ -122,4 +129,12 @@ about the users and roles defined in the Spring Authorization Server included in
 
 <!-- spellchecker-disable -->
 {{< img name="soc-manage-identity" size="medium" lazy=false >}}
+<!-- spellchecker-enable -->
+
+### Collect Diagnostic Data
+
+The Collect Diagnostic Data is accessible from the Settings Menu and allows you to collect and download diagnostic data about your installation and platform. Verify its contents for any sensitive information before submitting with any support request.
+
+<!-- spellchecker-disable -->
+{{< img name="soc-diag-data" size="medium" lazy=false >}}
 <!-- spellchecker-enable -->
