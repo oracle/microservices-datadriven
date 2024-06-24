@@ -4,9 +4,7 @@ description: "Spring and Spring Boot"
 keywords: "spring springboot microservices development oracle backend"
 ---
 
-Oracle Backend for Spring Boot and Microservices allows developers to build microservices in Spring Boot and provisions a "backend as a service" with
-Oracle Database and other infrastructure components that operate on multiple clouds. Oracle Backend for Spring Boot and Microservices vastly simplifies the task of
-building, testing, and operating microservices platforms for reliable, secure, and scalable enterprise applications.
+Oracle Backend for Spring Boot and Microservices allows developers to build microservices in Spring Boot and provisions a "backend as a service" with Oracle Database and other infrastructure components that operate on multiple clouds. Oracle Backend for Spring Boot and Microservices vastly simplifies the task of building, testing, and operating microservices platforms for reliable, secure, and scalable enterprise applications.
 
 &nbsp;
 {{< hint type=[warning] icon=gdoc_fire title="Version 1.2.0 (production) released June, 2024" >}}
