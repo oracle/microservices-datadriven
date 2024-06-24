@@ -139,8 +139,6 @@ Oracle Backend for Spring Boot and Microservices setup installs the following co
 | Oracle Database Operator     | 1.0           | Helps reduce the time and complexity of deploying and managing Oracle databases.            |
 | Oracle Database storage adapter for Parse  (optional) | 1.0.0    | Enables the Parse Server to store data in Oracle Database.              |
 | Oracle Transaction Manager for Microservices | 23.4.2 | Manages distributed transactions to ensure consistency across Microservices.       |
-| Parse Server (optional)      | 6.3.0         | Provides backend services for mobile and web applications.                                  |
-| Parse Dashboard (optional)   | 5.2.0         | Provides web user interface for managing the Parse Server.                                  |
 | Prometheus                   | 2.52.0        | Provides event monitoring and alerts.                                                       |
 | Prometheus Operator          | 0.74.0        | Provides management for Prometheus monitoring tools.                                        |
 | Promtail                     | 2.8.2     | Collects logs.                       |

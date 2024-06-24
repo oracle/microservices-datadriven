@@ -37,7 +37,7 @@ The following components were updated:
 | HashiCorp Vault | 1.16.1 | 1.15.2 |
 
 {{< hint type=[warning] icon=gdoc_fire title="Deprecation Notice" >}}
-The following components are deprecated and will be removed in a future release:
+The following components are deprecated and are removed from this release:
 
 * Oracle Database Storage Adapter for Parse
 * Parse Server
