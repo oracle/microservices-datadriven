@@ -12,6 +12,7 @@ This release includes:
 * Spring Boot upgrade to 3.3.0 and Spring Cloud 2023.0.2 for internal components.
 * Oracle Backend for Spring Boot and Microservices are running Java 21 with Virtual Threads enabled.
 * oractl is compiled using Java 21 and Virtual Threads.
+* Openshift support
 
 The following components were updated:
 
