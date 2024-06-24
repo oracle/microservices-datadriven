@@ -113,6 +113,113 @@ You must meet the following prerequisites to use Oracle Backend for Spring Boot 
   - Oracle Backend for Spring Boot and Microservices command-line interface (oractl). [Download oractl](https://github.com/oracle/microservices-datadriven/releases).
   - [OPTIONAL]Oracle Backend for Spring Boot and Microservices VS Code Extension. [Download VS Code Extension](https://github.com/oracle/microservices-datadriven/releases).
 
+## OCI policies
+
+The following policies needs to be in place to be able to install Oracle Backend for SPring Boot and Microservices. Top level and their dependencies listed.
+
+### Oracle Container Engine for Kubernetes
+
+```text
+Allow group `<group-name>` to manage cluster-family in `<location>`
+├── Allow group `<group-name>` to inspect compartments in `<location>`
+├── Allow group `<group-name>` to read virtual-network-family in `<location>`
+├── Allow group `<group-name>` to use network-security-groups in `<location>`
+├── Allow group `<group-name>` to use private-ips in `<location>`
+├── Allow group `<group-name>` to use subnets in `<location>`
+├── Allow group `<group-name>` to use vnics in `<location>`
+├── Allow group `<group-name>` to manage cluster-node-pools in `<location>`
+├── Allow group `<group-name>` to manage instance-family in `<location>`
+└── Allow group `<group-name>` to manage public-ips in `<location>`
+```
+
+### VCN
+
+```text
+Allow group `<group-name>` to manage vcns in `<location>`
+├── Allow group `<group-name>` to manage route-tables in `<location>`
+├── Allow group `<group-name>` to manage-security-lists in `<location>`
+├── Allow group `<group-name>` to manage-dhcp-options in `<location>`
+
+
+Allow group `<group-name>` to manage vcns in `<location>`
+Allow group `<group-name>` to manage route-tables in `<location>`
+Allow group `<group-name>` to manage security-lists in `<location>`
+Allow group `<group-name>` to manage dhcp-options in `<location>`
+Allow group `<group-name>` to manage nat-gateways in `<location>`
+Allow group `<group-name>` to manage service-gateways in `<location>`
+Allow group `<group-name>` to manage network-security-groups in `<location>`
+Allow group `<group-name>` to manage subnets in `<location>`
+```
+
+### Container Registry
+
+```text
+Allow group `<group-name>` to manage repos in `<location>`
+```
+
+### Object Storage
+
+```text
+Allow group `<group-name>` to read objectstorage-namespaces in `<location>`
+Allow group `<group-name>` to manage objects in `<location>`
+└── Allow group `<group-name>` to manage buckets in `<location>`
+```
+
+### Autonomous Database
+
+```text
+Allow group `<group-name>` to manage autonomous-database-family in `<location>`
+```
+
+### Vault
+
+When Vault is in Use
+
+```text
+Allow group `<group-name>` to manage vaults in `<location>`
+Allow group `<group-name>` to manage keys in `<location>`
+└── Allow group `<group-name>` to use vaults in `<location>` [^1]
+```
+
+[^1] Superceeded by **manage vaults**
+
+#### Additional Vault
+
+To allow Container Engine for Kubernetes to access Vault via Groups:
+
+```text
+Allow group `<group-name>` to manage policies in `<location>`
+Allow group `<group-name>` to manage tag-namespaces in `<location>`
+Allow group `<group-name>` to manage dynamic-groups in `<location>`
+Allow group `<group-name>` to manage secret-family in `<location>`
+```
+
+### Oracle Resource Manager
+
+```text
+Allow group `<group-name>` to read orm-template in `<location>`
+Allow group `<group-name>` to use orm-stacks in `<location>`
+└── Allow group `<group-name>` to manage orm-jobs in `<location>`
+Allow group `<group-name>` to manage orm-private-endpoints in `<location>`
+```
+
+#### Additional Oracle Resource Manager
+
+To allow building ORM Stacks:
+
+```text
+allow group `<group-name>` to manage orm-template in `<group-name>`
+allow group `<group-name>` to manage orm-stacks in `<group-name>`
+```
+
+### Cloud Shell
+
+For workshops:
+
+```text
+Allow group `<group-name>` to use cloud-shell in `<location>`
+```
+
 ## Summary of Components
 
 Oracle Backend for Spring Boot and Microservices setup installs the following components:
