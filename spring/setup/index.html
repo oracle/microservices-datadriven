@@ -9,7 +9,7 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.123.6">
+<meta name="generator" content="Hugo 0.127.0">
 
 
   <meta name="description" content="Setup Oracle Backend for Spring Boot and Microservices" />
@@ -72,7 +72,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/setup/",
       "headline": "Setup",
       "description": "Setup Oracle Backend for Spring Boot and Microservices",
-      "wordCount" : "2660",
+      "wordCount" : "2890",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -2315,16 +2315,25 @@
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-Z0MVCJ4T39', { 'anonymize_ip': false });
-}
-</script>
+  
+    
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-Z0MVCJ4T39');
+        }
+      </script>
+    
+  
+
 
 
 
@@ -2448,6 +2457,120 @@ if (!doNotTrack) {
 </li>
 </ul>
 <div class="gdoc-page__anchorwrap">
+    <h2 id="oci-policies">
+        OCI policies
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/setup/#oci-policies" class="gdoc-page__anchor clip flex align-center" title="Anchor to: OCI policies" aria-label="Anchor to: OCI policies" href="#oci-policies">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>The following policies needs to be in place to be able to install Oracle Backend for Spring Boot and Microservices. Top level and their dependencies listed.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="oracle-container-engine-for-kubernetes">
+        Oracle Container Engine for Kubernetes
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/setup/#oracle-container-engine-for-kubernetes" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Oracle Container Engine for Kubernetes" aria-label="Anchor to: Oracle Container Engine for Kubernetes" href="#oracle-container-engine-for-kubernetes">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Allow group `&lt;group-name&gt;` to manage cluster-family in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">├── Allow group `&lt;group-name&gt;` to inspect compartments in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">├── Allow group `&lt;group-name&gt;` to read virtual-network-family in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">├── Allow group `&lt;group-name&gt;` to use network-security-groups in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">├── Allow group `&lt;group-name&gt;` to use private-ips in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">├── Allow group `&lt;group-name&gt;` to use subnets in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">├── Allow group `&lt;group-name&gt;` to use vnics in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">├── Allow group `&lt;group-name&gt;` to manage cluster-node-pools in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">├── Allow group `&lt;group-name&gt;` to manage instance-family in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">└── Allow group `&lt;group-name&gt;` to manage public-ips in `&lt;location&gt;`
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h3 id="vcn">
+        VCN
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/setup/#vcn" class="gdoc-page__anchor clip flex align-center" title="Anchor to: VCN" aria-label="Anchor to: VCN" href="#vcn">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Allow group `&lt;group-name&gt;` to manage vcns in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">├── Allow group `&lt;group-name&gt;` to manage route-tables in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">├── Allow group `&lt;group-name&gt;` to manage-security-lists in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">├── Allow group `&lt;group-name&gt;` to manage-dhcp-options in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Allow group `&lt;group-name&gt;` to manage vcns in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">Allow group `&lt;group-name&gt;` to manage route-tables in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">Allow group `&lt;group-name&gt;` to manage security-lists in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">Allow group `&lt;group-name&gt;` to manage dhcp-options in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">Allow group `&lt;group-name&gt;` to manage nat-gateways in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">Allow group `&lt;group-name&gt;` to manage service-gateways in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">Allow group `&lt;group-name&gt;` to manage network-security-groups in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">Allow group `&lt;group-name&gt;` to manage subnets in `&lt;location&gt;`
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h3 id="container-registry">
+        Container Registry
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/setup/#container-registry" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Container Registry" aria-label="Anchor to: Container Registry" href="#container-registry">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Allow group `&lt;group-name&gt;` to manage repos in `&lt;location&gt;`
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h3 id="object-storage">
+        Object Storage
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/setup/#object-storage" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Object Storage" aria-label="Anchor to: Object Storage" href="#object-storage">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Allow group `&lt;group-name&gt;` to read objectstorage-namespaces in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">Allow group `&lt;group-name&gt;` to manage objects in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">└── Allow group `&lt;group-name&gt;` to manage buckets in `&lt;location&gt;`
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h3 id="autonomous-database">
+        Autonomous Database
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/setup/#autonomous-database" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Autonomous Database" aria-label="Anchor to: Autonomous Database" href="#autonomous-database">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Allow group `&lt;group-name&gt;` to manage autonomous-database-family in `&lt;location&gt;`
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h3 id="vault">
+        Vault
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/setup/#vault" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Vault" aria-label="Anchor to: Vault" href="#vault">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>If you deploy Oracle Backend for Spring Boot and Microservices <strong>STANDARD</strong> edition you need the following policies.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Allow group `&lt;group-name&gt;` to manage vaults in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">Allow group `&lt;group-name&gt;` to manage keys in `&lt;location&gt;`
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h4 id="additional-vault">
+        Additional Vault
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/setup/#additional-vault" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Additional Vault" aria-label="Anchor to: Additional Vault" href="#additional-vault">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>To allow Container Engine for Kubernetes to access Vault via Groups:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Allow group `&lt;group-name&gt;` to manage policies in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">Allow group `&lt;group-name&gt;` to manage tag-namespaces in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">Allow group `&lt;group-name&gt;` to manage dynamic-groups in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">Allow group `&lt;group-name&gt;` to manage secret-family in `&lt;location&gt;`
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h3 id="oracle-resource-manager">
+        Oracle Resource Manager
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/setup/#oracle-resource-manager" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Oracle Resource Manager" aria-label="Anchor to: Oracle Resource Manager" href="#oracle-resource-manager">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Allow group `&lt;group-name&gt;` to read orm-template in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">Allow group `&lt;group-name&gt;` to use orm-stacks in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">└── Allow group `&lt;group-name&gt;` to manage orm-jobs in `&lt;location&gt;`
+</span></span><span class="line"><span class="cl">Allow group `&lt;group-name&gt;` to manage orm-private-endpoints in `&lt;location&gt;`
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h2 id="summary-of-components">
         Summary of Components
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/setup/#summary-of-components" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Summary of Components" aria-label="Anchor to: Summary of Components" href="#summary-of-components">
@@ -2467,12 +2590,12 @@ if (!doNotTrack) {
 <tbody>
 <tr>
 <td>Apache APISIX</td>
-<td>3.8.0</td>
+<td>3.9.1</td>
 <td>Provides full lifecycle API management.</td>
 </tr>
 <tr>
 <td>Apache Kafka</td>
-<td>3.6.1</td>
+<td>3.7.0</td>
 <td>Provides distributed event streaming.</td>
 </tr>
 <tr>
@@ -2482,7 +2605,7 @@ if (!doNotTrack) {
 </tr>
 <tr>
 <td>Coherence Operator</td>
-<td>3.3.2</td>
+<td>3.3.4</td>
 <td>Provides in-memory data grid.</td>
 </tr>
 <tr>
@@ -2492,17 +2615,17 @@ if (!doNotTrack) {
 </tr>
 <tr>
 <td>Grafana</td>
-<td>9.2.5</td>
+<td>10.4.1</td>
 <td>Provides the tool to examine, analyze, and monitor metrics.</td>
 </tr>
 <tr>
 <td>HashiCorp Vault</td>
-<td>1.15.2</td>
+<td>1.16.1</td>
 <td>Provides a way to store and tightly control access to sensitive data.</td>
 </tr>
 <tr>
 <td>Jaeger Tracing</td>
-<td>1.45.0</td>
+<td>1.53.0</td>
 <td>Provides distributed tracing system for monitoring and troubleshooting distributed systems.</td>
 </tr>
 <tr>
@@ -2517,22 +2640,22 @@ if (!doNotTrack) {
 </tr>
 <tr>
 <td>Metrics server</td>
-<td>0.64</td>
+<td>0.7.0</td>
 <td>Source of container resource metrics for Kubernetes built-in autoscaling pipeline</td>
 </tr>
 <tr>
 <td>NGINX Ingress Controller</td>
-<td>1.8.1</td>
+<td>1.10.1</td>
 <td>Provides traffic management solution for cloud‑native applications in Kubernetes.</td>
 </tr>
 <tr>
 <td>OpenTelemetry Collector</td>
-<td>0.93.0</td>
+<td>0.101.0</td>
 <td>Collects process and export telemetry data.</td>
 </tr>
 <tr>
 <td>Oracle Database Observability Exporter</td>
-<td>1.2.0</td>
+<td>1.2.1</td>
 <td>Exposes Oracle Database metrics in standard Prometheus format.</td>
 </tr>
 <tr>
@@ -2541,33 +2664,18 @@ if (!doNotTrack) {
 <td>Helps reduce the time and complexity of deploying and managing Oracle databases.</td>
 </tr>
 <tr>
-<td>Oracle Database storage adapter for Parse  (optional)</td>
-<td>1.0.0</td>
-<td>Enables the Parse Server to store data in Oracle Database.</td>
-</tr>
-<tr>
 <td>Oracle Transaction Manager for Microservices</td>
-<td>23.4.1</td>
+<td>23.4.2</td>
 <td>Manages distributed transactions to ensure consistency across Microservices.</td>
 </tr>
 <tr>
-<td>Parse Server (optional)</td>
-<td>6.3.0</td>
-<td>Provides backend services for mobile and web applications.</td>
-</tr>
-<tr>
-<td>Parse Dashboard (optional)</td>
-<td>5.2.0</td>
-<td>Provides web user interface for managing the Parse Server.</td>
-</tr>
-<tr>
 <td>Prometheus</td>
-<td>2.40.2</td>
+<td>2.52.0</td>
 <td>Provides event monitoring and alerts.</td>
 </tr>
 <tr>
 <td>Prometheus Operator</td>
-<td>0.63.0</td>
+<td>0.74.0</td>
 <td>Provides management for Prometheus monitoring tools.</td>
 </tr>
 <tr>
@@ -2577,22 +2685,22 @@ if (!doNotTrack) {
 </tr>
 <tr>
 <td>Spring Authorization Server</td>
-<td>3.2.1</td>
+<td>3.3.0</td>
 <td>Provides authentication and authorization for applications.</td>
 </tr>
 <tr>
 <td>Spring Boot Admin server</td>
-<td>3.2.0</td>
+<td>3.3.1</td>
 <td>Manages and monitors Spring Cloud applications.</td>
 </tr>
 <tr>
 <td>Spring Cloud Config server</td>
-<td>2023.0.0</td>
+<td>4.1.2</td>
 <td>Provides server-side support for an externalized configuration.</td>
 </tr>
 <tr>
 <td>Spring Eureka service registry</td>
-<td>2023.0.0</td>
+<td>4.1.2</td>
 <td>Provides service discovery capabilities.</td>
 </tr>
 <tr>
@@ -2612,9 +2720,12 @@ if (!doNotTrack) {
 </div>
 <p>This video provides a quick overview of the setup process.</p>
 
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-  <iframe src="https://www.youtube.com/embed/rAi10TiUraE" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
-</div>
+
+    
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/rAi10TiUraE?autoplay=0&controls=1&end=0&loop=0&mute=0&start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
+      ></iframe>
+    </div>
 
 <p>Installing Oracle Backend for Spring Boot and Microservice takes approximately one hour to complete. The following steps are involved:</p>
 <ul>
@@ -2659,11 +2770,11 @@ if (!doNotTrack) {
           <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/ebaas-mp-listing.png">
             <picture>
                 <source
-                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/ebaas-mp-listing_hudd670c3ae7751be4ac91ddcc8b9a3dd7_474312_1800x0_resize_box_3.png"
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/ebaas-mp-listing_huff253c0b831fecf95d25f04d5e115815_579193_1800x0_resize_box_3.png"
     
                 />
               <img
-                    src="https://oracle.github.io/microservices-datadriven/spring/setup/ebaas-mp-listing_hudd670c3ae7751be4ac91ddcc8b9a3dd7_474312_1800x0_resize_box_3.png"
+                    src="https://oracle.github.io/microservices-datadriven/spring/setup/ebaas-mp-listing_huff253c0b831fecf95d25f04d5e115815_579193_1800x0_resize_box_3.png"
                   alt="Marketplace Listing"
               />
             </picture>
@@ -2731,7 +2842,6 @@ if (!doNotTrack) {
 <thead>
 <tr>
 <th>Edition</th>
-<th>Parse Platform</th>
 <th>BYO Network</th>
 <th>BYO Database</th>
 <th>Production Vault</th>
@@ -2741,7 +2851,6 @@ if (!doNotTrack) {
 <tbody>
 <tr>
 <td>Community</td>
-<td>x</td>
 <td></td>
 <td></td>
 <td></td>
@@ -2749,7 +2858,6 @@ if (!doNotTrack) {
 </tr>
 <tr>
 <td>Standard</td>
-<td>x</td>
 <td>x</td>
 <td>x</td>
 <td>x</td>
@@ -2786,55 +2894,6 @@ if (!doNotTrack) {
       </div>
 
  <!-- spellchecker-enable -->
-</li>
-<li>
-<p>If you check the checkbox <em>Enable Parse Platform</em> in the <strong>Parse Server</strong> section a Parse Server will be installed. Fill in the following for the Parse Server:</p>
-<ul>
-<li>
-<p><code>Application ID</code> (optional) : Leave blank to auto-generate.</p>
-</li>
-<li>
-<p><code>Server Master Key</code> (optional) : Leave blank to auto-generate.</p>
-</li>
-<li>
-<p><code>Dashboard Username</code> : The user name of the user to whom access to the dashboard is granted.</p>
-</li>
-<li>
-<p><code>Dashboard Password</code> (optional) : The password of the dashboard user (a minimum of 12 characters). Leave blank to auto-generate.</p>
-</li>
-<li>
-<p><code>Enable Parse S3 Storage</code> : Check the checkbox to enable Parse Server S3 Adaptor and create a S3 compatible Object Storage Bucket.</p>
-<!-- spellchecker-disable -->
-
-       
-       
-     
-     
-       <div class="flex justify-center">
-         <figure
-           class="gdoc-markdown__figure"
-         >
-           <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-parse-options.png">
-             <picture>
-                 <source
-                     srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-parse-options_hu52e94b16a05c6f4f082fc7e8f072d0bd_64785_1800x0_resize_box_3.png"
-     
-                 />
-               <img
-                     src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-parse-options_hu52e94b16a05c6f4f082fc7e8f072d0bd_64785_1800x0_resize_box_3.png"
-                   alt="Parse Server Options"
-               />
-             </picture>
-           </a>
-               <figcaption>
-                 Parse Server Options
-               </figcaption>
-         </figure>
-       </div>
-
-<!-- spellchecker-enable -->
-</li>
-</ul>
 </li>
 <li>
 <p>If you check the checkbox <em>Set Administrator Passwords</em> in the <strong>Administrator Passwords</strong> section you have the option to fill in the following passwords (if not they are autogenerated):</p>

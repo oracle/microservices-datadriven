@@ -9,7 +9,7 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.123.6">
+<meta name="generator" content="Hugo 0.127.0">
 
 
   <meta name="description" content="Release notes for Oracle Backend for Spring Boot and Microservices including details of additions, updates, deprecations and removals in each release" />
@@ -72,7 +72,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/release-notes/",
       "headline": "Release Notes",
       "description": "Release notes for Oracle Backend for Spring Boot and Microservices including details of additions, updates, deprecations and removals in each release",
-      "wordCount" : "1431",
+      "wordCount" : "1604",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -2315,16 +2315,25 @@
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-Z0MVCJ4T39', { 'anonymize_ip': false });
-}
-</script>
+  
+    
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-Z0MVCJ4T39');
+        }
+      </script>
+    
+  
+
 
 
 
@@ -2374,6 +2383,140 @@ if (!doNotTrack) {
   >
     <h1>Release Notes</h1>
     <div class="gdoc-page__anchorwrap">
+    <h2 id="version-120-june-14th-2024">
+        Version 1.2.0, June 14th, 2024
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/release-notes/#version-120-june-14th-2024" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Version 1.2.0, June 14th, 2024" aria-label="Anchor to: Version 1.2.0, June 14th, 2024" href="#version-120-june-14th-2024">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>This release includes:</p>
+<ul>
+<li>Additional functionality to Spring Operations Center UI (SOC UI).</li>
+<li>Spring Boot upgrade to 3.3.0 and Spring Cloud 2023.0.2 for internal components.</li>
+<li>Oracle Backend for Spring Boot and Microservices are running Java 21 with Virtual Threads enabled.</li>
+<li>oractl is compiled using Java 21 and Virtual Threads.</li>
+<li>Openshift support</li>
+</ul>
+<p>The following components were updated:</p>
+<div class="table-wrap"> <table>
+<thead>
+<tr>
+<th>Component</th>
+<th>New Version</th>
+<th>Replaced Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Spring Boot Admin server</td>
+<td>3.3.1</td>
+<td>3.2.0</td>
+</tr>
+<tr>
+<td>APISIX API Gateway</td>
+<td>3.9.1</td>
+<td>3.8.0</td>
+</tr>
+<tr>
+<td>Spring Authorization Server</td>
+<td>3.3.0</td>
+<td>3.2.1</td>
+</tr>
+<tr>
+<td>Coherence Operator</td>
+<td>3.3.4</td>
+<td>3.3.2</td>
+</tr>
+<tr>
+<td>Spring Cloud Config server</td>
+<td>4.1.2</td>
+<td>2023.0.0</td>
+</tr>
+<tr>
+<td>Spring Eureka service registry</td>
+<td>4.1.2</td>
+<td>2023.0.0</td>
+</tr>
+<tr>
+<td>Grafana</td>
+<td>10.4.1</td>
+<td>9.2.5</td>
+</tr>
+<tr>
+<td>iNGINX Ingress Controller</td>
+<td>1.10.0</td>
+<td>1.8.1</td>
+</tr>
+<tr>
+<td>Apache Kafka</td>
+<td>3.7.0</td>
+<td>3.6.1</td>
+</tr>
+<tr>
+<td>Metrics server</td>
+<td>0.7.0</td>
+<td>0.6.4</td>
+</tr>
+<tr>
+<td>Jaeger Tracing</td>
+<td>1.53.0</td>
+<td>1.51.0</td>
+</tr>
+<tr>
+<td>OpenTelemetry Collector</td>
+<td>0.101.0</td>
+<td>0.93.0</td>
+</tr>
+<tr>
+<td>Oracle Database Observability Exporter</td>
+<td>1.2.1</td>
+<td>1.2.0</td>
+</tr>
+<tr>
+<td>Oracle Transaction Manager for Microservices</td>
+<td>23.4.2</td>
+<td>23.4.1</td>
+</tr>
+<tr>
+<td>Prometheus</td>
+<td>2.52.0</td>
+<td>2.47.1</td>
+</tr>
+<tr>
+<td>Prometheus Operator</td>
+<td>0.74.0</td>
+<td>0.63.0</td>
+</tr>
+<tr>
+<td>Spring Operations Center</td>
+<td>1.2.0</td>
+<td>1.1.3</td>
+</tr>
+<tr>
+<td>HashiCorp Vault</td>
+<td>1.16.1</td>
+<td>1.15.2</td>
+</tr>
+</tbody>
+</table> </div>
+
+
+
+
+
+<blockquote class="gdoc-hint [warning]">
+  <div class="gdoc-hint__title flex align-center"><svg class="gdoc-icon gdoc_fire"><use xlink:href="#gdoc_fire"></use></svg>
+      <span>Deprecation Notice</span></div>
+  <div class="gdoc-hint__text"><p>The following components are deprecated and are removed from this release:</p>
+<ul>
+<li>Oracle Database Storage Adapter for Parse</li>
+<li>Parse Server</li>
+<li>Parse Dashboard</li>
+</ul></div>
+</blockquote>
+
+<div class="gdoc-page__anchorwrap">
     <h2 id="version-113-march-8-2024">
         Version 1.1.3, March 8, 2024
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/release-notes/#version-113-march-8-2024" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Version 1.1.3, March 8, 2024" aria-label="Anchor to: Version 1.1.3, March 8, 2024" href="#version-113-march-8-2024">

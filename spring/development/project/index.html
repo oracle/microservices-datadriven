@@ -9,7 +9,7 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.123.6">
+<meta name="generator" content="Hugo 0.127.0">
 
 
   <meta name="description" content="How to structure your Spring Boot application for deployment in Oracle Backend for Spring Boot and Microservices" />
@@ -2315,16 +2315,25 @@
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-Z0MVCJ4T39', { 'anonymize_ip': false });
-}
-</script>
+  
+    
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-Z0MVCJ4T39');
+        }
+      </script>
+    
+  
+
 
 
 
@@ -2384,9 +2393,9 @@ if (!doNotTrack) {
     <p>To take advantage of the built-in platform services, Oracle recommends using the following project structure.</p>
 <p>Recommended versions:</p>
 <ul>
-<li>Spring Boot 3.2.x</li>
+<li>Spring Boot 3.3.x</li>
 <li>Spring Cloud 2023.x.x</li>
-<li>Java 17 or 21</li>
+<li>Java 21 (or 17)</li>
 </ul>
 <p>Table of Contents:</p>
 <ul>
@@ -2433,9 +2442,9 @@ if (!doNotTrack) {
 <p>Oracle recommends adding the following dependencies to your application so that it can take advantage of the built-in platform services. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;properties&gt;</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&lt;project.build.sourceEncoding&gt;</span>UTF-8<span class="nt">&lt;/project.build.sourceEncoding&gt;</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&lt;java.version&gt;</span>17<span class="nt">&lt;/java.version&gt;</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&lt;spring.boot.dependencies.version&gt;</span>3.2.1<span class="nt">&lt;/spring.boot.dependencies.version&gt;</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&lt;spring-cloud.version&gt;</span>2023.0.0<span class="nt">&lt;/spring-cloud.version&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;java.version&gt;</span>21<span class="nt">&lt;/java.version&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;spring.boot.dependencies.version&gt;</span>3.3.1<span class="nt">&lt;/spring.boot.dependencies.version&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;spring-cloud.version&gt;</span>2023.0.2<span class="nt">&lt;/spring-cloud.version&gt;</span>
 </span></span><span class="line"><span class="cl"><span class="nt">&lt;/properties&gt;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nt">&lt;dependencies&gt;</span>
@@ -2570,7 +2579,7 @@ if (!doNotTrack) {
 </div>
 <p>If you are using Liquibase to manage your database schema and data, then you should add the following dependency:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;properties&gt;</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&lt;liquibase.version&gt;</span>4.25.1<span class="nt">&lt;/liquibase.version&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;liquibase.version&gt;</span>4.28.0<span class="nt">&lt;/liquibase.version&gt;</span>
 </span></span><span class="line"><span class="cl"><span class="nt">&lt;/properties&gt;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nt">&lt;dependencies&gt;</span>
@@ -2600,8 +2609,8 @@ if (!doNotTrack) {
 <p>If you are using Oracle Transaction Manager for Microservices (MicroTx) to manage data consistency across microservices data stores, then add the following dependency:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&lt;groupId&gt;</span>com.oracle.microtx.lra<span class="nt">&lt;/groupId&gt;</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&lt;artifactId&gt;</span>microtx-lra-spring-boot-starter-3x<span class="nt">&lt;/artifactId&gt;</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&lt;version&gt;</span>23.4.1<span class="nt">&lt;/version&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;artifactId&gt;</span>microtx-lra-spring-boot-starter<span class="nt">&lt;/artifactId&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;version&gt;</span>24.2.1<span class="nt">&lt;/version&gt;</span>
 </span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
 </span></span></code></pre></div><p>Add the following configuration to your Spring application configuration. The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Spring Boot and Microservices CLI or the Visual Studio Code Extension to deploy your application. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">spring</span><span class="p">:</span><span class="w">
@@ -2696,7 +2705,7 @@ if (!doNotTrack) {
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&lt;groupId&gt;</span>net.ttddyy.observation<span class="nt">&lt;/groupId&gt;</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&lt;artifactId&gt;</span>datasource-micrometer-spring-boot<span class="nt">&lt;/artifactId&gt;</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&lt;version&gt;</span>$1.0.2<span class="nt">&lt;/version&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;version&gt;</span>1.0.3<span class="nt">&lt;/version&gt;</span>
 </span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
 </span></span></code></pre></div>
   </article>

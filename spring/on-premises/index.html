@@ -9,7 +9,7 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.123.6">
+<meta name="generator" content="Hugo 0.127.0">
 
 
   <meta name="description" content="Custom installations of Oracle Backend for Spring Boot and Microservices" />
@@ -72,7 +72,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/on-premises/",
       "headline": "Custom Installations",
       "description": "Custom installations of Oracle Backend for Spring Boot and Microservices",
-      "wordCount" : "757",
+      "wordCount" : "908",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -2315,16 +2315,25 @@
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-Z0MVCJ4T39', { 'anonymize_ip': false });
-}
-</script>
+  
+    
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-Z0MVCJ4T39');
+        }
+      </script>
+    
+  
+
 
 
 
@@ -2392,7 +2401,7 @@ if (!doNotTrack) {
   href="https://www.python.org/"
 >Python 3+</a></li>
 </ul>
-<p>When installing in a <em>non-production</em> environment, for example a developer&rsquo;s desktop, the previously mentioned pre-requisites may be met through an additional setup task, but there are additional desktop system or software requirements. For example:</p>
+<p>When installing in a <em>desktop</em> environment, for example a developer&rsquo;s desktop, the previously mentioned pre-requisites may be met through an additional setup task, but there are additional desktop system or software requirements. For example:</p>
 <ul>
 <li>2 CPUs or more</li>
 <li>8 GB of free memory</li>
@@ -2428,12 +2437,9 @@ if (!doNotTrack) {
         </a>
     </h2>
 </div>
-<p>A custom installation, whether production or non-production, consists of defining the infrastructure followed by running the Configuration
-Management Playbook to build images and deploy the Microservices.</p>
-<p>For a production installation, you need to have a Kubernetes cluster and the <code>kubectl</code> command-line interface must be configured to
-communicate with your cluster.</p>
-<p>A Helper Playbook has been provided for non-production installations to assist in defining the infrastructure.  Review the
-appropriate documentation for examples of installing and defining the non-production installation. For example:</p>
+<p>A custom installation consists of defining the infrastructure followed by running the Configuration Management Playbook to build images and deploy the Microservices.</p>
+<p>For a custom installation, you need to have a Kubernetes cluster and the <code>kubectl</code> command-line interface must be configured to communicate with your cluster.</p>
+<p>A Helper Playbook has been provided for desktop installations to assist in defining a specific infrastructure consisting of podman and minikube as outlined in the example documentation:</p>
 <ul>
 <li><a
   class="gdoc-markdown__link"
@@ -2444,7 +2450,7 @@ appropriate documentation for examples of installing and defining the non-produc
   href="../on-premises/ol8/"
 >Oracle Linux 8 (x86)</a></li>
 </ul>
-<p>The non-production playbook is run as part of the Configuration Management Playbook.</p>
+<p>If your infrastructure does not match that defined in the above examples, do not run the Helper Playbook.</p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="download-the-database-or-oracle-rest-data-services-ords-images-desktop-installation">
         Download the Database or Oracle REST Data Services (ORDS) Images (Desktop Installation)
@@ -2453,7 +2459,7 @@ appropriate documentation for examples of installing and defining the non-produc
         </a>
     </h2>
 </div>
-<p>The non-production installation provisions an Oracle database to the Kubernetes cluster. The images must be downloaded
+<p>The desktop installation provisions an Oracle database to the Kubernetes cluster. The images must be downloaded
 from <a
   class="gdoc-markdown__link"
   href="https://container-registry.oracle.com/"
@@ -2474,16 +2480,15 @@ from <a
 </li>
 </ol>
 <div class="gdoc-page__anchorwrap">
-    <h3 id="defining-the-parse-application-production-installation">
-        Defining the Parse Application (Production Installation)
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#defining-the-parse-application-production-installation" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Defining the Parse Application (Production Installation)" aria-label="Anchor to: Defining the Parse Application (Production Installation)" href="#defining-the-parse-application-production-installation">
+    <h3 id="defining-the-application">
+        Defining the Application
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#defining-the-application" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Defining the Application" aria-label="Anchor to: Defining the Application" href="#defining-the-application">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h3>
 </div>
 <p>The application is defined in <code>ansible/vars/ebaas.yaml</code>. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nn">---</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">---</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">ebaas_edition</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;COMMUNITY&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">vault</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">vault_key</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
@@ -2498,10 +2503,11 @@ from <a
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">oractl_admin_password</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;Correct-horse-Battery-staple-35&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">oractl_user_password</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;Correct-horse-Battery-staple-35&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
-</span></span></span></code></pre></div><div class="gdoc-page__anchorwrap">
-    <h3 id="defining-the-database-production-installation">
-        Defining the Database (Production Installation)
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#defining-the-database-production-installation" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Defining the Database (Production Installation)" aria-label="Anchor to: Defining the Database (Production Installation)" href="#defining-the-database-production-installation">
+</span></span></span></code></pre></div><p>Create the <code>ansible/vars/ebaas.yaml</code> file, setting values as required.  If this is a desktop installation, this file will be created for you by the Desktop Helper playbook.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="defining-the-database">
+        Defining the Database
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#defining-the-database" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Defining the Database" aria-label="Anchor to: Defining the Database" href="#defining-the-database">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h3>
@@ -2513,16 +2519,22 @@ from <a
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">BAASPDB: # noqa</span><span class="p">:</span><span class="w"> </span><span class="l">var-naming[pattern]</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">username</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;PDBADMIN&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">password</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;Correct-horse-Battery-staple-35&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;EXTERNAL&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">service</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;(DESCRIPTION=(ADDRESS=(PROTOCOL=tcp)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=BAASPDB)))&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ocid</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
-</span></span></span></code></pre></div><p>The <code>oracle_dbs</code> and <code>default_db</code> key values should be the name of your Pluggable Database (PDB). These are followed by the PDB
-name and Key/Values defining how to access the PDB. If using Mutual Transport Layer Security (mTLS) authentication, specify the
-full path of the wallet file.</p>
+</span></span></span></code></pre></div><p>Create the <code>ansible/roles/database/vars/main.yaml</code> file, setting values as required.  If this is a desktop installation, this file will be created for you by the Desktop Helper playbook.</p>
+<p>The <code>database_oracle_dbs</code> and <code>database_default_db</code> key values should be the name of your Pluggable Database (PDB). These are followed by the PDB name and Key/Values defining how to access the PDB.</p>
+<p>The <code>type</code> can be either:</p>
+<ul>
+<li><strong>EXTERNAL</strong>: A Pre-existing Oracle Database.  Define <code>service</code> and leave <code>ocid</code> blank.</li>
+<li><strong>ADB-S</strong>: A Pre-Existing Oracle Autonomous Serverless (ADB-S) database; provide the <code>ocid</code> for the ADB-S.  Leave <code>service</code> blank.</li>
+<li><strong>SIDB_CONTAINER</strong>: This will create a 19c containerized database inside the Kubernetes Cluster as part of the deployment.  Leave <code>ocid</code> and <code>service</code> blank.</li>
+</ul>
 <div class="gdoc-page__anchorwrap">
-    <h3 id="defining-the-container-repository-production-installation">
-        Defining the Container Repository (Production Installation)
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#defining-the-container-repository-production-installation" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Defining the Container Repository (Production Installation)" aria-label="Anchor to: Defining the Container Repository (Production Installation)" href="#defining-the-container-repository-production-installation">
+    <h3 id="defining-the-container-repository">
+        Defining the Container Repository
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#defining-the-container-repository" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Defining the Container Repository" aria-label="Anchor to: Defining the Container Repository" href="#defining-the-container-repository">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h3>
@@ -2542,7 +2554,8 @@ full path of the wallet file.</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">docker.io/myorg</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">auth</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;b3JhY2xlOjdaUVgxLXhhbFR0NTJsS0VITlA0&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
-</span></span></span></code></pre></div><p>Specify the URL or authentication credentials for your Container Repository in <code>registry_pull_url</code>, <code>registry_push_url</code>, <code>registry_username</code>, and <code>registry_password</code>.</p>
+</span></span></span></code></pre></div><p>Create the <code>ansible/roles/registry/vars/main.yaml</code> file, setting values as required.  If this is a desktop installation, this file will be created for you by the Desktop Helper playbook.</p>
+<p>Specify the URL or authentication credentials for your Container Repository in <code>registry_pull_url</code>, <code>registry_push_url</code>, <code>registry_username</code>, and <code>registry_password</code>.</p>
 <p>For the <code>registry_pull_auth</code> and <code>registry_push_auth</code> sections, manually log into your repository and copy the values found in the created file, located in <code>$HOME/.config/containers/auth.json</code></p>
 <p>There may be duplication between the push and pull URL&rsquo;s. The pull URL is used inside the Pods while the push URL is used from the
 deployment machine. If you have a private registry inside the Kubernetes cluster, these URL&rsquo;s could be different. This is the case for
@@ -2569,17 +2582,37 @@ and installs Ansible along with other additional modules. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./setup_ansible.sh
 </span></span><span class="line"><span class="cl"><span class="nb">source</span> ./activate.env
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
-    <h3 id="non-production-playbook">
-        Non-production Playbook
-        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#non-production-playbook" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Non-production Playbook" aria-label="Anchor to: Non-production Playbook" href="#non-production-playbook">
+    <h3 id="desktop-helper-playbook">
+        Desktop Helper Playbook
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#desktop-helper-playbook" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Desktop Helper Playbook" aria-label="Anchor to: Desktop Helper Playbook" href="#desktop-helper-playbook">
             <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
         </a>
     </h3>
 </div>
-<p>If this is a production installation, then the infrastructure should be manually defined as previously stated.</p>
-<p>If this is a non-production installation, then run the Helper Playbook to define the infrastructure. For example:</p>
+<p>If this is a desktop installation, then a Helper Playbook can be used to help define the infrastructure.  <strong>Note</strong> that this playbook should only be run if following the desktop installation examples:</p>
+<ul>
+<li><a
+  class="gdoc-markdown__link"
+  href="../on-premises/macos_ventura/"
+>macOS Ventura (x86)</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="../on-premises/ol8/"
+>Oracle Linux 8 (x86)</a></li>
+</ul>
+<p>Run the Desktop Helper Playbook to define the infrastructure. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ansible-playbook ansible/desktop-apply.yaml
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h3 id="copy-kubeconfig">
+        Copy kubeconfig
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#copy-kubeconfig" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Copy kubeconfig" aria-label="Anchor to: Copy kubeconfig" href="#copy-kubeconfig">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>For the desktop installation, this step will have been performed by the Desktop Helper playbook.</p>
+<p>Copy the kubeconfig file to <code>ansible/roles/kubernetes/files</code></p>
+<div class="gdoc-page__anchorwrap">
     <h3 id="build-and-push-images-to-the-container-repository">
         Build and Push Images to the Container Repository
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/on-premises/#build-and-push-images-to-the-container-repository" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Build and Push Images to the Container Repository" aria-label="Anchor to: Build and Push Images to the Container Repository" href="#build-and-push-images-to-the-container-repository">
@@ -2587,8 +2620,7 @@ and installs Ansible along with other additional modules. For example:</p>
         </a>
     </h3>
 </div>
-<p>For the non-production installation, start a new terminal and tunnel or port-forward to the Minikube cluster.  Refer to the specific platform
-details for more information.</p>
+<p>For the desktop installation, start a new terminal and tunnel or port-forward to the Minikube cluster.  Refer to the specific platform details for more information.</p>
 <p>For both installations, run the Images Playbook on the original terminal. For example:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ansible-playbook ansible/images_build.yaml
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">

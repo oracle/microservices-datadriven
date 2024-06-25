@@ -4,7 +4,7 @@
     <title>Development on Oracle Backend for Spring Boot and Microservices</title>
     <link>https://oracle.github.io/microservices-datadriven/spring/development/</link>
     <description>Recent content in Development on Oracle Backend for Spring Boot and Microservices</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en-us</language>
     <atom:link href="https://oracle.github.io/microservices-datadriven/spring/development/index.xml" rel="self" type="application/rss+xml" />
     <item>
@@ -26,7 +26,7 @@
       <link>https://oracle.github.io/microservices-datadriven/spring/development/project/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/spring/development/project/</guid>
-      <description>To take advantage of the built-in platform services, Oracle recommends using the following project structure.&#xA;Recommended versions:&#xA;Spring Boot 3.2.x Spring Cloud 2023.x.x Java 17 or 21 Table of Contents:&#xA;Dependencies Spring Application Configuration Data Sources Liquibase Oracle Transaction Manager for Microservices Spring Config Server Tracing Dependencies Oracle recommends adding the following dependencies to your application so that it can take advantage of the built-in platform services. For example:&#xA;&amp;lt;properties&amp;gt; &amp;lt;project.</description>
+      <description>To take advantage of the built-in platform services, Oracle recommends using the following project structure.&#xA;Recommended versions:&#xA;Spring Boot 3.3.x Spring Cloud 2023.x.x Java 21 (or 17) Table of Contents:&#xA;Dependencies Spring Application Configuration Data Sources Liquibase Oracle Transaction Manager for Microservices Spring Config Server Tracing Dependencies Oracle recommends adding the following dependencies to your application so that it can take advantage of the built-in platform services. For example:&#xA;&amp;lt;properties&amp;gt; &amp;lt;project.</description>
     </item>
   </channel>
 </rss>
