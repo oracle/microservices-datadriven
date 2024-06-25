@@ -115,7 +115,7 @@ You must meet the following prerequisites to use Oracle Backend for Spring Boot 
 
 ## OCI policies
 
-The following policies needs to be in place to be able to install Oracle Backend for SPring Boot and Microservices. Top level and their dependencies listed.
+The following policies needs to be in place to be able to install Oracle Backend for Spring Boot and Microservices. Top level and their dependencies listed.
 
 ### Oracle Container Engine for Kubernetes
 
@@ -173,15 +173,13 @@ Allow group `<group-name>` to manage autonomous-database-family in `<location>`
 
 ### Vault
 
-When Vault is in Use
+If you deploy Oracle Backend for Spring Boot and Microservices **STANDARD** edtion you need the following policies.
 
 ```text
 Allow group `<group-name>` to manage vaults in `<location>`
 Allow group `<group-name>` to manage keys in `<location>`
-└── Allow group `<group-name>` to use vaults in `<location>` [^1]
+└── Allow group `<group-name>` to use vaults in `<location>`
 ```
-
-[^1] Superceeded by **manage vaults**
 
 #### Additional Vault
 
@@ -201,23 +199,6 @@ Allow group `<group-name>` to read orm-template in `<location>`
 Allow group `<group-name>` to use orm-stacks in `<location>`
 └── Allow group `<group-name>` to manage orm-jobs in `<location>`
 Allow group `<group-name>` to manage orm-private-endpoints in `<location>`
-```
-
-#### Additional Oracle Resource Manager
-
-To allow building ORM Stacks:
-
-```text
-allow group `<group-name>` to manage orm-template in `<group-name>`
-allow group `<group-name>` to manage orm-stacks in `<group-name>`
-```
-
-### Cloud Shell
-
-For workshops:
-
-```text
-Allow group `<group-name>` to use cloud-shell in `<location>`
 ```
 
 ## Summary of Components
