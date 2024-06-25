@@ -8,9 +8,9 @@ To take advantage of the built-in platform services, Oracle recommends using the
 
 Recommended versions:
 
-* Spring Boot 3.2.x
+* Spring Boot 3.3.x
 * Spring Cloud 2023.x.x
-* Java 17 or 21
+* Java 21 (or 17)
 
 Table of Contents:
 
@@ -29,9 +29,9 @@ Oracle recommends adding the following dependencies to your application so that 
 ```xml
 <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>17</java.version>
-    <spring.boot.dependencies.version>3.2.1</spring.boot.dependencies.version>
-    <spring-cloud.version>2023.0.0</spring-cloud.version>
+    <java.version>21</java.version>
+    <spring.boot.dependencies.version>3.3.1</spring.boot.dependencies.version>
+    <spring-cloud.version>2023.0.2</spring-cloud.version>
 </properties>
 
 <dependencies>
@@ -167,7 +167,7 @@ If you are using Liquibase to manage your database schema and data, then you sho
 
 ```xml
 <properties>
-    <liquibase.version>4.25.1</liquibase.version>
+    <liquibase.version>4.28.0</liquibase.version>
 </properties>
 
 <dependencies>
@@ -200,8 +200,8 @@ If you are using Oracle Transaction Manager for Microservices (MicroTx) to manag
 ```xml
 <dependency>
     <groupId>com.oracle.microtx.lra</groupId>
-    <artifactId>microtx-lra-spring-boot-starter-3x</artifactId>
-    <version>23.4.1</version>
+    <artifactId>microtx-lra-spring-boot-starter</artifactId>
+    <version>24.2.1</version>
 </dependency>
 ```
 
@@ -296,6 +296,6 @@ To get tracing for the database calls you need to add the following dependency t
 <dependency>
     <groupId>net.ttddyy.observation</groupId>
     <artifactId>datasource-micrometer-spring-boot</artifactId>
-    <version>$1.0.2</version>
+    <version>1.0.3</version>
 </dependency>
 ```

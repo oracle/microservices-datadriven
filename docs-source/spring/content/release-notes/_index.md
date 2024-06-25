@@ -12,6 +12,7 @@ This release includes:
 * Spring Boot upgrade to 3.3.0 and Spring Cloud 2023.0.2 for internal components.
 * Oracle Backend for Spring Boot and Microservices are running Java 21 with Virtual Threads enabled.
 * oractl is compiled using Java 21 and Virtual Threads.
+* Openshift support
 
 The following components were updated:
 
@@ -37,7 +38,7 @@ The following components were updated:
 | HashiCorp Vault | 1.16.1 | 1.15.2 |
 
 {{< hint type=[warning] icon=gdoc_fire title="Deprecation Notice" >}}
-The following components are deprecated and will be removed in a future release:
+The following components are deprecated and are removed from this release:
 
 * Oracle Database Storage Adapter for Parse
 * Parse Server
