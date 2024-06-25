@@ -4,13 +4,11 @@ description: "Spring and Spring Boot"
 keywords: "spring springboot microservices development oracle backend"
 ---
 
-Oracle Backend for Spring Boot and Microservices allows developers to build microservices in Spring Boot and provisions a "backend as a service" with
-Oracle Database and other infrastructure components that operate on multiple clouds. Oracle Backend for Spring Boot and Microservices vastly simplifies the task of
-building, testing, and operating microservices platforms for reliable, secure, and scalable enterprise applications.
+Oracle Backend for Spring Boot and Microservices allows developers to build microservices in Spring Boot and provisions a "backend as a service" with Oracle Database and other infrastructure components that operate on multiple clouds. Oracle Backend for Spring Boot and Microservices vastly simplifies the task of building, testing, and operating microservices platforms for reliable, secure, and scalable enterprise applications.
 
 &nbsp;
-{{< hint type=[warning] icon=gdoc_fire title="Version 1.1.3 (production) released March, 2024" >}}
- Oracle Backend for Spring Boot and Microservices Version 1.1.3 is now generally available and suitable for production use.  This version supports and recommends Spring Boot 3.2.x, Spring 6.1 and Spring Cloud 2023.0.0, with limited backwards compatibility for Spring Boot 2.7.x.  
+{{< hint type=[warning] icon=gdoc_fire title="Version 1.2.0 (production) released June, 2024" >}}
+ Oracle Backend for Spring Boot and Microservices Version 1.2.0 is now generally available and suitable for production use. This version supports and recommends Spring Boot 3.2.x, Spring 6.1 and Spring Cloud 2023.0.x, with limited backwards compatibility for Spring Boot 2.7.x.  
 {{< /hint >}}
 &nbsp;
 
@@ -37,7 +35,6 @@ Infrastructure (OCI) Container Engine for Kubernetes cluster (OKE cluster):
 - [Oracle Database Operator for Kubernetes (OraOperator or the operator)](https://github.com/oracle/oracle-database-operator)
 - Oracle Database Observability Exporter
 - [Oracle Transaction Manager for Microservices (MicroTx)](platform/microtx/)
-- Parse and Parse Dashboard (Optional)
 - [Prometheus](observability/metrics/)
 - Promtail
 - [Spring Boot Admin dashboard](platform/spring-admin/)
@@ -83,10 +80,3 @@ In the [CloudBank](https://bit.ly/CloudBankOnOBaaS) hands-on lab, you can learn 
 We'd love to hear from you!  You can contact us in the
 [#oracle-db-microservices](https://oracledevs.slack.com/archives/C06L9CDGR6Z) channel in the
 Oracle Developers slack workspace, or [open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).
-
-&nbsp;
-{{< hint type=[warning] icon=gdoc_fire title="Interested in Mobile or web apps too?" >}}
-Check out [Oracle Backend for Parse Platform](https://oracle.github.io/microservices-datadriven/mbaas/) - our "MERN"
-stack for Oracle Database!  Available as an optional component in Oracle Backend for Spring Boot and Microservices.
-{{< /hint >}}
-&nbsp;

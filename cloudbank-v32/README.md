@@ -2,7 +2,7 @@
 
 **NOTE:** This document and application is WIP.
 
-To run Cloud Bank you need OBaaS version 1.1.3 [Oracle Backend for Spring Boot and Microservices](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911)
+To run Cloud Bank you need OBaaS version 1.2.0 [Oracle Backend for Spring Boot and Microservices](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911) and Java 21 installed.
 
 ## Build CloudBank
 
@@ -215,7 +215,7 @@ This is an example of the `customer32` application:
     kubectl -n ingress-nginx get service ingress-nginx-controller
     ```
 
-    Result. Make a note of the EXTERNAL-IP it will be used in the tests.
+    Result. Create a variable called IP with the value of the EXTERNAL-IP it will be used in the tests.
 
     ```text
     NAME                       TYPE           CLUSTER-IP      EXTERNAL-IP       PORT(S)                      AGE
@@ -227,7 +227,7 @@ This is an example of the `customer32` application:
    1. Rest endpoint
 
       ```shell
-      curl -s http://<EXTERNAL-IP>/api/v1/accounts | jq
+      curl -s http://$IP/api/v1/accounts | jq
       ```
 
       Should return:
@@ -252,7 +252,7 @@ This is an example of the `customer32` application:
    1. REST endpoint
 
       ```shell
-      curl -s http://<EXTERNAL-IP>/api/v1/customer | jq
+      curl -s http://$IP/api/v1/customer | jq
       ```
 
       Should return:
@@ -276,7 +276,7 @@ This is an example of the `customer32` application:
     1. REST endpoint
 
        ```shell
-       curl -s http://<EXTERNAL-IP>/api/v1/creditscore | jq
+       curl -s http://$IP/api/v1/creditscore | jq
        ```
 
        Should return:
@@ -293,7 +293,7 @@ This is an example of the `customer32` application:
     1. REST endpoint - deposit check. *NOTE*: Make sure you use an existing account number
 
        ```shell
-       curl -i -X POST -H 'Content-Type: application/json' -d '{"accountId": 1, "amount": 256}' http://<EXTERNAL-IP>/api/v1/testrunner/deposit
+       curl -i -X POST -H 'Content-Type: application/json' -d '{"accountId": 1, "amount": 256}' http://$IP/api/v1/testrunner/deposit
        ```
 
        Should return:
@@ -322,7 +322,7 @@ This is an example of the `customer32` application:
     1. Check journal entries. Replace '1' with the account number you used.
 
         ```shell
-        curl -i http://<EXTERNAL-ID>/api/v1/account/1/journal
+        curl -i http://$IP/api/v1/account/1/journal
         ```
 
         output should be similar to:
@@ -339,7 +339,7 @@ This is an example of the `customer32` application:
     1. Clearance of check - Note the JournalID from earlier step
 
          ```shell
-         curl -i -X POST -H 'Content-Type: application/json' -d '{"journalId": 1}' http://<EXTERNAL-ID>/api/v1/testrunner/clear
+         curl -i -X POST -H 'Content-Type: application/json' -d '{"journalId": 1}' http://$IP/api/v1/testrunner/clear
          ```
 
         output should be similar to:
@@ -370,7 +370,7 @@ This is an example of the `customer32` application:
     1. Check journal -- DEPOSIT
 
        ```shell
-       curl -i http://<EXTERNAL-IP>/api/v1/account/1/journal
+       curl -i http://$IP/api/v1/account/1/journal
        ```
 
        Output should look like this -- DEPOSIT
@@ -389,7 +389,7 @@ This is an example of the `customer32` application:
     1. Check account balances. Note that the account numbers 1 and 2 can be different in your environment
 
        ```shell
-       curl -s http://<EXTERNAL-IP>/api/v1/account/1 | jq ; curl -s http://<EXTERNAL-IP>/api/v1/account/2 | jq 
+       curl -s http://$IP/api/v1/account/1 | jq ; curl -s http://$IP/api/v1/account/2 | jq 
        ```
 
        Output should be similar to this, make a note of the account balance:
@@ -418,7 +418,7 @@ This is an example of the `customer32` application:
     1. Perform transfer between two accounts. Note account numbers
 
        ```shell
-       curl -X POST "http://<EXTERNAL-IP>/transfer?fromAccount=2&toAccount=1&amount=100"
+       curl -X POST "http://$IP/transfer?fromAccount=2&toAccount=1&amount=100"
        ```
 
        Output should look like this:
@@ -430,7 +430,7 @@ This is an example of the `customer32` application:
     1. Check accounts to see that the transfer have occurred
 
        ```shell
-       curl -s http://<EXTERNAL-IP>/api/v1/account/1 | jq ; curl -s http://<EXTERNAL-IP>/api/v1/account/2 | jq 
+       curl -s http://$IP/api/v1/account/1 | jq ; curl -s http://$IP/api/v1/account/2 | jq 
        ```
 
        Output should be similar to this:
@@ -515,6 +515,6 @@ This is an example of the `customer32` application:
       kubectl -n grafana port-forward svc/grafana 7070:80
       ```
 
-   1. Open <http://localhost:7070> in a browser and verify that all services are registered and you can see some data (you may have to select the dashboard you want to see)
+   1. Open <http://localhost:7070/grafana/> in a browser and verify that all services are registered and you can see some data (you may have to select the dashboard you want to see)
 
       ![Grafana](images/grafana-dashboard.png  " ")

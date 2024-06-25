@@ -1,6 +1,12 @@
 
 # Oracle Backend for Parse Platform - Developer Preview
 
+&nbsp;
+{{< hint type=[warning] icon=gdoc_fire title="Deprecation Notice" >}}
+Oracle Database Storage Adapter for Parse has been upstreamed to the Parse community, and this Developer Preview is deprecated. You can see an example of how Parse Platform can be used to build backends with Oracle Database using the storage adapter [here](https://www.linkedin.com/pulse/developing-mobile-apps-oracle-free23c-doug-drechsel-9tc6e/).
+{{< /hint >}}
+&nbsp;
+
 Oracle Backend for Parse Platform deploys mobile applications using Parse mobile APIs, and provisions an Oracle Backend as a Service (OBaaS)
 with Oracle Database and other infrastructure components that operate on multiple clouds. This service vastly simplifies the task of building, testing,
 and operating a mobile application development platform for reliable, secure, and scalable enterprise applications. This version includes an Oracle Database storage adapter

@@ -12,3 +12,6 @@ spring:
     mongodb:
       uri: 'mongodb://USER:PASSWORD@HOSTNAME-MONGO1.adb.us-phoenix-1.oraclecloudapps.com:27017/USER?authMechanism=PLAIN&authSource=$external&ssl=true&retryWrites=false&loadBalanced=true'
       database: 'USER'
+  threads:
+    virtual:
+      enabled: true

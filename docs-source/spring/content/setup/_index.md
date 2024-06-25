@@ -54,9 +54,6 @@ resources:
   - name: oci-stack-byodb-options
     src: "oci-stack-byodb-options.png"
     title: "Bring your Own Database Options - Standard Edition"
-  - name: oci-stack-parse-options
-    src: "oci-stack-parse-options.png"
-    title: "Parse Server Options"
   - name: oci-stack-app-name
     src: "oci-stack-app-name.png"
     title: "Compartment, Application and Edition"
@@ -116,38 +113,122 @@ You must meet the following prerequisites to use Oracle Backend for Spring Boot 
   - Oracle Backend for Spring Boot and Microservices command-line interface (oractl). [Download oractl](https://github.com/oracle/microservices-datadriven/releases).
   - [OPTIONAL]Oracle Backend for Spring Boot and Microservices VS Code Extension. [Download VS Code Extension](https://github.com/oracle/microservices-datadriven/releases).
 
+## OCI policies
+
+The following policies needs to be in place to be able to install Oracle Backend for Spring Boot and Microservices. Top level and their dependencies listed.
+
+### Oracle Container Engine for Kubernetes
+
+```text
+Allow group `<group-name>` to manage cluster-family in `<location>`
+├── Allow group `<group-name>` to inspect compartments in `<location>`
+├── Allow group `<group-name>` to read virtual-network-family in `<location>`
+├── Allow group `<group-name>` to use network-security-groups in `<location>`
+├── Allow group `<group-name>` to use private-ips in `<location>`
+├── Allow group `<group-name>` to use subnets in `<location>`
+├── Allow group `<group-name>` to use vnics in `<location>`
+├── Allow group `<group-name>` to manage cluster-node-pools in `<location>`
+├── Allow group `<group-name>` to manage instance-family in `<location>`
+└── Allow group `<group-name>` to manage public-ips in `<location>`
+```
+
+### VCN
+
+```text
+Allow group `<group-name>` to manage vcns in `<location>`
+├── Allow group `<group-name>` to manage route-tables in `<location>`
+├── Allow group `<group-name>` to manage-security-lists in `<location>`
+├── Allow group `<group-name>` to manage-dhcp-options in `<location>`
+
+
+Allow group `<group-name>` to manage vcns in `<location>`
+Allow group `<group-name>` to manage route-tables in `<location>`
+Allow group `<group-name>` to manage security-lists in `<location>`
+Allow group `<group-name>` to manage dhcp-options in `<location>`
+Allow group `<group-name>` to manage nat-gateways in `<location>`
+Allow group `<group-name>` to manage service-gateways in `<location>`
+Allow group `<group-name>` to manage network-security-groups in `<location>`
+Allow group `<group-name>` to manage subnets in `<location>`
+```
+
+### Container Registry
+
+```text
+Allow group `<group-name>` to manage repos in `<location>`
+```
+
+### Object Storage
+
+```text
+Allow group `<group-name>` to read objectstorage-namespaces in `<location>`
+Allow group `<group-name>` to manage objects in `<location>`
+└── Allow group `<group-name>` to manage buckets in `<location>`
+```
+
+### Autonomous Database
+
+```text
+Allow group `<group-name>` to manage autonomous-database-family in `<location>`
+```
+
+### Vault
+
+If you deploy Oracle Backend for Spring Boot and Microservices **STANDARD** edition you need the following policies.
+
+```text
+Allow group `<group-name>` to manage vaults in `<location>`
+Allow group `<group-name>` to manage keys in `<location>`
+```
+
+#### Additional Vault
+
+To allow Container Engine for Kubernetes to access Vault via Groups:
+
+```text
+Allow group `<group-name>` to manage policies in `<location>`
+Allow group `<group-name>` to manage tag-namespaces in `<location>`
+Allow group `<group-name>` to manage dynamic-groups in `<location>`
+Allow group `<group-name>` to manage secret-family in `<location>`
+```
+
+### Oracle Resource Manager
+
+```text
+Allow group `<group-name>` to read orm-template in `<location>`
+Allow group `<group-name>` to use orm-stacks in `<location>`
+└── Allow group `<group-name>` to manage orm-jobs in `<location>`
+Allow group `<group-name>` to manage orm-private-endpoints in `<location>`
+```
+
 ## Summary of Components
 
 Oracle Backend for Spring Boot and Microservices setup installs the following components:
 
 | Component                    | Version       | Description                                                                                 |
 |------------------------------|---------------|---------------------------------------------------------------------------------------------|
-| Apache APISIX                | 3.8.0         | Provides full lifecycle API management.                                                     |
-| Apache Kafka                 | 3.6.1 | Provides distributed event streaming.                                                       |
+| Apache APISIX                | 3.9.1         | Provides full lifecycle API management.                                                     |
+| Apache Kafka                 | 3.7.0 | Provides distributed event streaming.                                                       |
 | cert-manager                 | 1.12.3        | Automates the management of certificates.                                                   |
-| Coherence Operator           | 3.3.2        | Provides in-memory data grid.                                                               |
+| Coherence Operator           | 3.3.4        | Provides in-memory data grid.                                                               |
 | Conductor Server             | 3.13.8        | Provides a Microservice orchestration platform.                                             |
-| Grafana                      | 9.2.5         | Provides the tool to examine, analyze, and monitor metrics.                                 |
-| HashiCorp Vault              | 1.15.2        | Provides a way to store and tightly control access to sensitive data.                       |
-| Jaeger Tracing               | 1.45.0        | Provides distributed tracing system for monitoring and troubleshooting distributed systems. |
+| Grafana                      | 10.4.1         | Provides the tool to examine, analyze, and monitor metrics.                                 |
+| HashiCorp Vault              | 1.16.1        | Provides a way to store and tightly control access to sensitive data.                       |
+| Jaeger Tracing               | 1.53.0        | Provides distributed tracing system for monitoring and troubleshooting distributed systems. |
 | Kube State Metrics | 2.10.1 | Collects metrics for the Kubernetes cluster     |
 | Loki                         | 2.6.1     | Provides log aggregation and search. |
-| Metrics server | 0.64  | Source of container resource metrics for Kubernetes built-in autoscaling pipeline |
-| NGINX Ingress Controller     | 1.8.1         | Provides traffic management solution for cloud‑native applications in Kubernetes.           |
-| OpenTelemetry Collector      | 0.93.0        | Collects process and export telemetry data.                                                 |
-| Oracle Database Observability Exporter | 1.2.0 | Exposes Oracle Database metrics in standard Prometheus format.                            |
+| Metrics server | 0.7.0  | Source of container resource metrics for Kubernetes built-in autoscaling pipeline |
+| NGINX Ingress Controller     | 1.10.1         | Provides traffic management solution for cloud‑native applications in Kubernetes.           |
+| OpenTelemetry Collector      | 0.101.0        | Collects process and export telemetry data.                                                 |
+| Oracle Database Observability Exporter | 1.2.1 | Exposes Oracle Database metrics in standard Prometheus format.                            |
 | Oracle Database Operator     | 1.0           | Helps reduce the time and complexity of deploying and managing Oracle databases.            |
-| Oracle Database storage adapter for Parse  (optional) | 1.0.0    | Enables the Parse Server to store data in Oracle Database.              |
-| Oracle Transaction Manager for Microservices | 23.4.1 | Manages distributed transactions to ensure consistency across Microservices.       |
-| Parse Server (optional)      | 6.3.0         | Provides backend services for mobile and web applications.                                  |
-| Parse Dashboard (optional)   | 5.2.0         | Provides web user interface for managing the Parse Server.                                  |
-| Prometheus                   | 2.40.2        | Provides event monitoring and alerts.                                                       |
-| Prometheus Operator          | 0.63.0        | Provides management for Prometheus monitoring tools.                                        |
+| Oracle Transaction Manager for Microservices | 23.4.2 | Manages distributed transactions to ensure consistency across Microservices.       |
+| Prometheus                   | 2.52.0        | Provides event monitoring and alerts.                                                       |
+| Prometheus Operator          | 0.74.0        | Provides management for Prometheus monitoring tools.                                        |
 | Promtail                     | 2.8.2     | Collects logs.                       |
-| Spring Authorization Server  | 3.2.1  | Provides authentication and authorization for applications. |
-| Spring Boot Admin server     | 3.2.0         | Manages and monitors Spring Cloud applications.                                             |
-| Spring Cloud Config server   | 2023.0.0      | Provides server-side support for an externalized configuration.                             |
-| Spring Eureka service registry | 2023.0.0 | Provides service discovery capabilities.                                          |
+| Spring Authorization Server  | 3.3.0  | Provides authentication and authorization for applications. |
+| Spring Boot Admin server     | 3.3.1         | Manages and monitors Spring Cloud applications.                                             |
+| Spring Cloud Config server   | 4.1.2      | Provides server-side support for an externalized configuration.                             |
+| Spring Eureka service registry | 4.1.2 | Provides service discovery capabilities.                                          |
 | Strimzi-Apache Kafka operator  | 0.36.1      | Manages Apache Kafka clusters.                                                              |
 
 ## Overview of the Setup Process
@@ -189,26 +270,14 @@ To set up the OCI environment, process these steps:
 
       **WARNING:** Deletion or expiration of the token will result in the failure to pull images later.  Also you must have one free OCI auth token (note that the maximum is two per user). You can *NOT* use someone elses token.
 
-    | Edition   | Parse Platform | BYO Network  | BYO Database     | Production Vault | Registry Scanning |
-    |-----------|----------------|--------------|------------------|------------------| ------------------|
-    | Community | x              |              |                  |                  |                   |
-    | Standard  | x              | x            | x                | x                | x                 |
+    | Edition   | BYO Network  | BYO Database     | Production Vault | Registry Scanning |
+    |-----------|--------------|------------------|------------------| ------------------|
+    | Community |              |                  |                  |                   |
+    | Standard  | x            | x                | x                | x                 |
 
     <!-- spellchecker-disable -->
     {{< img name="oci-stack-app-name" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
-
-1. If you check the checkbox *Enable Parse Platform* in the **Parse Server** section a Parse Server will be installed. Fill in the following for the Parse Server:
-
-   - `Application ID` (optional) : Leave blank to auto-generate.
-   - `Server Master Key` (optional) : Leave blank to auto-generate.
-   - `Dashboard Username` : The user name of the user to whom access to the dashboard is granted.
-   - `Dashboard Password` (optional) : The password of the dashboard user (a minimum of 12 characters). Leave blank to auto-generate.
-   - `Enable Parse S3 Storage` : Check the checkbox to enable Parse Server S3 Adaptor and create a S3 compatible Object Storage Bucket.
-
-     <!-- spellchecker-disable -->
-     {{< img name="oci-stack-parse-options" size="large" lazy=false >}}
-     <!-- spellchecker-enable -->
 
 1. If you check the checkbox *Set Administrator Passwords* in the **Administrator Passwords** section you have the option to fill in the following passwords (if not they are autogenerated):
 

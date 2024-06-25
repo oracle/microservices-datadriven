@@ -4,6 +4,47 @@ description: "Release notes for Oracle Backend for Spring Boot and Microservices
 keywords: "release notes additions updates deprecations removals springboot spring development microservices development oracle backend"
 ---
 
+## Version 1.2.0, June 14th, 2024
+
+This release includes:
+
+* Additional functionality to Spring Operations Center UI (SOC UI).
+* Spring Boot upgrade to 3.3.0 and Spring Cloud 2023.0.2 for internal components.
+* Oracle Backend for Spring Boot and Microservices are running Java 21 with Virtual Threads enabled.
+* oractl is compiled using Java 21 and Virtual Threads.
+* Openshift support
+
+The following components were updated:
+
+| Component                                             | New Version   | Replaced Version    |
+|-------------------------------------------------------|---------------|---------------------|
+| Spring Boot Admin server | 3.3.1 | 3.2.0 |
+| APISIX API Gateway | 3.9.1 | 3.8.0 |
+| Spring Authorization Server | 3.3.0 | 3.2.1 |
+| Coherence Operator	| 3.3.4 | 3.3.2 |
+| Spring Cloud Config server | 4.1.2 | 2023.0.0 |
+| Spring Eureka service registry | 4.1.2 | 2023.0.0 |
+| Grafana | 10.4.1 | 9.2.5 |
+| iNGINX Ingress Controller| 1.10.0 | 1.8.1 |
+| Apache Kafka | 3.7.0 | 3.6.1 |
+| Metrics server | 0.7.0 | 0.6.4 |
+| Jaeger Tracing | 1.53.0 | 1.51.0 |
+| OpenTelemetry Collector | 0.101.0 | 0.93.0 |
+| Oracle Database Observability Exporter | 1.2.1 | 1.2.0 |
+| Oracle Transaction Manager for Microservices	 | 23.4.2 | 23.4.1 |
+| Prometheus | 2.52.0 | 2.47.1 |
+| Prometheus Operator | 0.74.0 | 0.63.0 |
+| Spring Operations Center | 1.2.0 | 1.1.3 |
+| HashiCorp Vault | 1.16.1 | 1.15.2 |
+
+{{< hint type=[warning] icon=gdoc_fire title="Deprecation Notice" >}}
+The following components are deprecated and are removed from this release:
+
+* Oracle Database Storage Adapter for Parse
+* Parse Server
+* Parse Dashboard
+{{< /hint >}}
+
 ## Version 1.1.3, March 8, 2024
 
 This release includes small updates and/or bug fixes. No components were upgraded.

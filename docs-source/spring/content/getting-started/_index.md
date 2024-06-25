@@ -4,12 +4,11 @@ description: "Get started with Oracle Backend for Spring Boot and Microservices"
 keywords: "spring springboot microservices demos videos samples cloudbank development oracle backend"
 ---
 
-There are a number of demonstrations (videos) and hands-on labs (Live Lab) that show how to use Oracle Backend for Spring Boot and Microservices (Spring Boot) and
-Oracle Backend for Parse Platform (Parse Platform).
+There are a number of demonstrations (videos) and hands-on labs (Live Lab) that show how to use Oracle Backend for Spring Boot and Microservices (Spring Boot).
 
 ## Prerequisites
 
-* [Deployed Oracle Backend for Spring Boot and Microservices](../setup/) (and Parse Platform)
+* [Deployed Oracle Backend for Spring Boot and Microservices](../setup/).
 
 ## Introduction Video
 
@@ -30,14 +29,13 @@ Watch this video for more information.
 [In this workshop (~ 2 hours)](https://bit.ly/CloudBankOnOBaaS), you learn how to build Microservices using Spring Boot and deploy
 them to the Oracle Backend for Spring Boot and Microservices. You learn about accessing the database using the Java Persistence API (JPA), service
 discovery, exposing services with the API Gateway, managing transactions across Microservices, workflow, and using observability tools
-to monitor your services and diagnose issues. You also learn about building a web and mobile user interface for your services using
-Flutter and Parse Platform.
+to monitor your services and diagnose issues.
 
 If you have already deployed Oracle Backend for Spring Boot and Microservices, you can skip Lab 1 (Provision an Instance).
 
 ## More Learning
 
-There are more channels to learn about Oracle Backend for Spring Boot and Microservices (and Parse Platform):
+There are more channels to learn about Oracle Backend for Spring Boot and Microservices:
 
 * [Check out our blogs](../blogs/)
 * [Join our Youtube Channel](https://bit.ly/convergeddatabase)
