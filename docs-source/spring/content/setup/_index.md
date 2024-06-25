@@ -173,12 +173,11 @@ Allow group `<group-name>` to manage autonomous-database-family in `<location>`
 
 ### Vault
 
-If you deploy Oracle Backend for Spring Boot and Microservices **STANDARD** edtion you need the following policies.
+If you deploy Oracle Backend for Spring Boot and Microservices **STANDARD** edition you need the following policies.
 
 ```text
 Allow group `<group-name>` to manage vaults in `<location>`
 Allow group `<group-name>` to manage keys in `<location>`
-└── Allow group `<group-name>` to use vaults in `<location>`
 ```
 
 #### Additional Vault
