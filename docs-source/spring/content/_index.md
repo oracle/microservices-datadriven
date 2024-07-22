@@ -47,6 +47,7 @@ Developers also have access to development or build time services and libraries 
 
 - A command-line interface [(CLI)](development/cli/) to manage service deployment and configuration, including database schema management.
 - [Visual Studio Code (VS Code) plugin](platform/vscode-plugin/) to manage service deployment and configuration.
+- [Spring CLI](https://spring.io/projects/spring-cli) support for project creation.
 - Spring Data (Java Persistence API (JPA) and Oracle JDBC) to access Oracle Database.
 - Oracle Java Database Connectivity (Oracle JDBC) drivers.
 - [Spring Cloud Config client](platform/config/).

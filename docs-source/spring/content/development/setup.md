@@ -17,6 +17,7 @@ The following tools are recommended for a development environment:
 - Integrated Development Environment, for example Visual Studio Code
 - Java Development Kit, for example Oracle, OpenJDK, or GraalVM
 - Maven or Gradle for build and testing automation
+- Spring CLI (optional) for project creation
 
 If you wish to test locally or offline, then the following additional tools are recommended:
 
@@ -107,6 +108,26 @@ Ant:          Apache Ant(TM) version 1.10.11 compiled on July 10 2021
 JVM:          17.0.3 (Oracle Corporation 17.0.3+8-LTS-111)
 OS:           Linux 5.10.102.1-microsoft-standard-WSL2 amd64
 ```
+
+## Spring CLI for project creation
+
+You can create projects with [Spring CLI](https://spring.io/projects/spring-cli).  To use this
+feature, install Spring CLI following the instructions provided in that repository, and then
+import the Oracle Project Catalog as follows:
+
+```bash
+spring project catalog add --name oracle --url https://github.com/oracle/spring-cloud-oci/tree/obaas-starter/database/spring-cli/catalog
+```
+
+To create a new project, for example called `test2` with specific Maven group and artifact IDs,
+use a command similar to this, substituting your desired coordinates:
+
+```bash
+spring boot new --name test2 --from obaas --group-id com.example --artifact-id test2 --version 0.0.1
+```
+
+Review the `README` file in the created project for details of next steps.
+
 
 ## Oracle Database in a container for local testing
 
