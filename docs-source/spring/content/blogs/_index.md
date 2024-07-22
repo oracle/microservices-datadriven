@@ -11,6 +11,14 @@ This page acts as an index/aggregator for some of our featured content.
 ![YouTube icon](./youtube.png)  &nbsp; And be sure to subscribe to our YouTube channel ["The Converged Database"](https://www.youtube.com/@theconvergeddatabase6236) for more great content!
 
 {{< blog  
+    author="aniket"
+    date="7/22/2024"
+    title="Blowing Up Database Monoliths"
+    link="https://www.linkedin.com/pulse/blowing-up-database-monoliths-aniket-tiwari-qsuzf/"
+    abstract="A deep dive into Data Recfactoring Advisor - an innovative method to refactor monolithic database schema for microservices."
+>}}
+
+{{< blog  
     author="mark"
     date="4/17/2024"
     title="Oracle Database Observabilty"
