@@ -49,3 +49,9 @@ Oracle’s Graph Studio is a powerful tool designed to create, query, and analyz
 We create a notebook in Graph Studio for running Community Detection. A notebook is used to run queries against a graph. 
 
 [Run Community Detection with a Notebook](./community-detection/README.md)
+
+## 6. Refactor Communities
+
+Look at the communities found and determine if improvements can be made to bounded context scope
+
+[Refactor Communties](./refactor-communities/README.md)
