@@ -9,7 +9,7 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.127.0">
+<meta name="generator" content="Hugo 0.123.6">
 
 
   <meta name="description" content="How to set up your development environment to build Spring Boot applications with the Oracle Backend for Spring Boot and Microservices" />
@@ -72,7 +72,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/development/setup/",
       "headline": "Development Environment Setup",
       "description": "How to set up your development environment to build Spring Boot applications with the Oracle Backend for Spring Boot and Microservices",
-      "wordCount" : "637",
+      "wordCount" : "738",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -2315,25 +2315,16 @@
 
 
 
-  
-    
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
-      <script>
-        var doNotTrack = false;
-        if ( false ) {
-          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
-          var doNotTrack = (dnt == "1" || dnt == "yes");
-        }
-        if (!doNotTrack) {
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-Z0MVCJ4T39');
-        }
-      </script>
-    
-  
-
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-Z0MVCJ4T39', { 'anonymize_ip': false });
+}
+</script>
 
 
 
@@ -2402,6 +2393,7 @@
 <li>Integrated Development Environment, for example Visual Studio Code</li>
 <li>Java Development Kit, for example Oracle, OpenJDK, or GraalVM</li>
 <li>Maven or Gradle for build and testing automation</li>
+<li>Spring CLI (optional) for project creation</li>
 </ul>
 <p>If you wish to test locally or offline, then the following additional tools are recommended:</p>
 <ul>
@@ -2523,6 +2515,25 @@ downloaded <a
 </span></span><span class="line"><span class="cl">JVM:          17.0.3 <span class="o">(</span>Oracle Corporation 17.0.3+8-LTS-111<span class="o">)</span>
 </span></span><span class="line"><span class="cl">OS:           Linux 5.10.102.1-microsoft-standard-WSL2 amd64
 </span></span></code></pre></div><div class="gdoc-page__anchorwrap">
+    <h2 id="spring-cli-for-project-creation">
+        Spring CLI for project creation
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/development/setup/#spring-cli-for-project-creation" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Spring CLI for project creation" aria-label="Anchor to: Spring CLI for project creation" href="#spring-cli-for-project-creation">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>You can create projects with <a
+  class="gdoc-markdown__link"
+  href="https://spring.io/projects/spring-cli"
+>Spring CLI</a>.  To use this
+feature, install Spring CLI following the instructions provided in that repository, and then
+import the Oracle Project Catalog as follows:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">spring project catalog add --name oracle --url https://github.com/oracle/spring-cloud-oci/tree/obaas-starter/database/spring-cli/catalog
+</span></span></code></pre></div><p>To create a new project, for example called <code>test2</code> with specific Maven group and artifact IDs,
+use a command similar to this, substituting your desired coordinates:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">spring boot new --name test2 --from obaas --group-id com.example --artifact-id test2 --version 0.0.1
+</span></span></code></pre></div><p>Review the <code>README</code> file in the created project for details of next steps.</p>
+<div class="gdoc-page__anchorwrap">
     <h2 id="oracle-database-in-a-container-for-local-testing">
         Oracle Database in a container for local testing
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/development/setup/#oracle-database-in-a-container-for-local-testing" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Oracle Database in a container for local testing" aria-label="Anchor to: Oracle Database in a container for local testing" href="#oracle-database-in-a-container-for-local-testing">
