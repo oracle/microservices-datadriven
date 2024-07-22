@@ -55,3 +55,9 @@ We create a notebook in Graph Studio for running Community Detection. A notebook
 Look at the communities found and determine if improvements can be made to bounded context scope
 
 [Refactor Communties](./refactor-communities/README.md)
+
+## 7. Create Virtual PDBs using JSON Duality Views
+
+Define an Service API using JSON Duality Views for quick micro service development
+
+[Virtual PDBs](./virtualpdb/README.md)
