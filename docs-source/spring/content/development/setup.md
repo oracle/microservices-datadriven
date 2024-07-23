@@ -131,11 +131,11 @@ Review the `README` file in the created project for details of next steps.
 
 ## Oracle Database in a container for local testing
 
-If you want to run an instance of Oracle Database locally for development and testing, then Oracle recommends Oracle Database 23c Free.  You can start the database in a container with this
+If you want to run an instance of Oracle Database locally for development and testing, then Oracle recommends Oracle Database 23ai Free.  You can start the database in a container with this
 command specifying a secure password:
 
 ```bash
-docker run --name free23c -d \
+docker run --name free23ai -d \
    -p 1521:1521 \
    -e ORACLE_PWD=Welcome12345 \
    container-registry.oracle.com/database/free:latest
@@ -147,7 +147,7 @@ docker run --name free23c -d \
 <dependency>
     <groupId>org.testcontainers</groupId>
     <artifactId>oracle-free</artifactId>
-    <version>1.19.2</version>
+    <version>1.20.0</version>
     <scope>test</scope>
 </dependency>
 ```
