@@ -116,7 +116,7 @@ feature, install Spring CLI following the instructions provided in that reposito
 import the Oracle Project Catalog as follows:
 
 ```bash
-spring project catalog add --name oracle --url https://github.com/oracle/spring-cloud-oci/tree/obaas-starter/database/spring-cli/catalog
+spring project catalog add --name oracle --url https://github.com/oracle/spring-cloud-oci/tree/main/database/spring-cli/catalog
 ```
 
 To create a new project, for example called `test2` with specific Maven group and artifact IDs,
