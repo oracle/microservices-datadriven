@@ -33,16 +33,17 @@ Here are some key use cases and benefits of JSON Duality Views:
 These JSON Duality Views can define a new API set (`Virtual PDB`) that can be accessed only by members of the service team.
 
 
-## Write an API
+## Course Catalog Service
 
 Staying with the CourseCatalog Service
 
-Here is an API, a JSON Duality view that gets all courses for a department
+Here is an API, a JSON Duality view that gets all courses for a department. 
+It is a read only view. It is created by the owner of the `SCHEMA`, most likely the Database Administrator. In this case, the College user.
 
 ```
 CREATE OR REPLACE JSON RELATIONAL DUALITY VIEW department_courses_view AS
 SELECT JSON {
-  ‘_id’: d.DepartmentID,
+  '_id': d.DepartmentID,
   'DepartmentName': d.DepartmentName,
   'CollegeID': d.CollegeID,
   'Courses': (
@@ -60,30 +61,129 @@ SELECT JSON {
     WHERE c.DepartmentID = d.DepartmentID
   )
 }
-FROM Departments d WITH INSERT UPDATE DELETE;
+FROM Departments d;
 ```
 
 A collection of views like these, oriented towards the course catalog tables, would become the API for the  course catalog service team.  
 
-View definition would be controlled by Admin therefore having control of the surface area exposed to each service team.
-
-
 ## Enforcing Isolation
 
-Use Standard Role Based Access Control.
+View definition would be controlled by Admin therefore having control of the surface area exposed to each service team.
+
+Using Standard Role Based Access Control, the Database Adninistrator would define a service team role and then grant permission to work with JSON Duality Views.  The API surface area would be the set of views exposed by the DBA.
+
+The role `CourseCatalogDeveloper` would be associated with all the developers on the service team thereby enforcing isolation.
 
 ```
+### As ADMIN
 ### Create Service Team Role
 CREATE ROLE CourseCatalogDeveloper
 
 ### Grant the SELECTs to that ROLE
-GRANT SELECT ON Courses to CourseCatalogDeveloper
-GRANT SELECT ON Departments to CourseCatalogDeveloper
+GRANT SELECT ON GRANT SELECT ON College.department_courses_view to CourseCatalogDeveloper
 
-### then grant the role to the user
-GRANT CourseCatalogDeveloper TO user_name;
+### then grant the role to the user coursedev
+GRANT CourseCatalogDeveloper TO coursedev;
 ```
 
+Now, the coursedev user can attach to the database and run queries on the view
+
+## Running Read Only Queries using the JSON Duality View 
+
+User `COURSEDEV` has Role of `CourseCatalogDeveloper` and can now access the JSON Duality View department_courses_view.
+
+Get all departments with their courses:
+
+Note the schema prefix
+
+![all_dept_courses](../images/getalldeptcourses.png)
+
+
+Get a specific department by ID:
+
+![dept_by_id](../images/getdeptbyid.png)
+
+Find departments by name:
+
+![dept_by_name](../images/getdeptbyname.png)
+
+Find courses with more than 3 credits:
+
+![dept_by_name](../images/bycredits3.png)
+
+
+## Student Service
+
+Another community defined was StudentInfo comprised of the following tables
+
+- Addresses
+- Transcripts
+- StudentFinances
+- Students
+- StudentCourses
+
+This time, create a JSON Duality View that allows insert, update and delete on the Students table
+
+Again, create the view as the owner of the schema `College`
+
+```
+CREATE OR REPLACE JSON RELATIONAL DUALITY VIEW students_view AS
+  SELECT json {
+    '_id'    : s.StudentID,
+    'FirstName'    : s.FirstName,
+    'LastName'     : s.LastName,
+    'DateOfBirth'  : s.DateOfBirth,
+    'Gender'       : s.Gender,
+    'Email'        : s.Email,
+    'PhoneNumber'  : s.PhoneNumber
+  }
+  FROM Students s WITH INSERT UPDATE DELETE;
+```
+
+Appending the view with `WITH INSERT UPDATE DELETE` is what makes this view writable
+
+
+## Enforcing Isolation
+
+Using Standard Role Based Access Control, the Database Adninistrator would define a service team role and then grant permission to work with JSON Duality Views.  The API surface area would be the set of views exposed by the DBA.
+
+The role `StudentDeveloper` would be associated with all the developers on the service team thereby enforcing isolation.
+
+```
+### As ADMIN
+### Create Service Team Role
+CREATE ROLE StudentDeveloper;
+
+### Grant the SELECTs to that ROLE
+GRANT SELECT ON College.students_view to StudentDeveloper
+
+## Grant Writable Perms
+GRANT INSERT ON College.students_view to StudentDeveloper
+GRANT UPDATE ON College.students_view to StudentDeveloper
+GRANT DELETE ON College.students_view to StudentDeveloper
+
+### then grant the role to the user studentdev
+GRANT StudentDeveloper TO studentdev;
+```
+Now, the studentdev user can attach to the database and run CRUD operations on the view
+
+## Running CRUD Queries using the JSON Duality View 
+
+Insert a New Student:
+
+![insert_student](../images/insertstudent.png)
+
+Update a Student:
+
+![update_student](../images/updtstudent.png)
+
+Delete a Student:
+
+![delete_student](../images/deletestudent.png)
+
+Try to access a Course View:
+
+![stay_in_your_lane](../images/permerror.png)
 
 
 ## Summary
