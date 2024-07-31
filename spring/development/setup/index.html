@@ -2541,9 +2541,9 @@ use a command similar to this, substituting your desired coordinates:</p>
         </a>
     </h2>
 </div>
-<p>If you want to run an instance of Oracle Database locally for development and testing, then Oracle recommends Oracle Database 23c Free.  You can start the database in a container with this
+<p>If you want to run an instance of Oracle Database locally for development and testing, then Oracle recommends Oracle Database 23ai Free.  You can start the database in a container with this
 command specifying a secure password:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker run --name free23c -d <span class="se">\
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker run --name free23ai -d <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>   -p 1521:1521 <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>   -e <span class="nv">ORACLE_PWD</span><span class="o">=</span>Welcome12345 <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>   container-registry.oracle.com/database/free:latest
@@ -2551,7 +2551,7 @@ command specifying a secure password:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;dependency&gt;</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&lt;groupId&gt;</span>org.testcontainers<span class="nt">&lt;/groupId&gt;</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&lt;artifactId&gt;</span>oracle-free<span class="nt">&lt;/artifactId&gt;</span>
-</span></span><span class="line"><span class="cl">    <span class="nt">&lt;version&gt;</span>1.19.2<span class="nt">&lt;/version&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;version&gt;</span>1.20.0<span class="nt">&lt;/version&gt;</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&lt;scope&gt;</span>test<span class="nt">&lt;/scope&gt;</span>
 </span></span><span class="line"><span class="cl"><span class="nt">&lt;/dependency&gt;</span>
 </span></span></code></pre></div>
