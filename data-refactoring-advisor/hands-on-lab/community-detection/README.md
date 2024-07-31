@@ -33,7 +33,7 @@ in the picture below, select java-pgx as the interpreter used in a new paragraph
 // Load StudentFaculty Graph
 var graph = session.getGraph("STUDENTFACULTY");
 if (graph == null) {
-    graph = session.readGraphByName("STUDENTFACULTY", GraphSource.PG_VIEW);
+    graph = session.readGraphByName("STUDENTFACULTY", GraphSource.PG_SQL);
 }
 if(graph !=null) {
     out.println("Graph " + graph.getName() + " has " + graph.getNumVertices() + " vertices and " + graph.getNumEdges() + " edges.");
