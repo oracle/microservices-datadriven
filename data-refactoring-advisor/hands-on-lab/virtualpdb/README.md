@@ -84,6 +84,9 @@ GRANT SELECT ON GRANT SELECT ON College.department_courses_view to CourseCatalog
 
 ### then grant the role to the user coursedev
 GRANT CourseCatalogDeveloper TO coursedev;
+
+### Make the new role a default role
+ALTER USER COURSEDEV DEFAULT ROLE ALL;
 ```
 
 Now, the coursedev user can attach to the database and run queries on the view
@@ -164,6 +167,9 @@ GRANT DELETE ON College.students_view to StudentDeveloper
 
 ### then grant the role to the user studentdev
 GRANT StudentDeveloper TO studentdev;
+
+### Make the new role a default role
+ALTER USER STUDENTDEV DEFAULT ROLE ALL;
 ```
 Now, the studentdev user can attach to the database and run CRUD operations on the view
 
