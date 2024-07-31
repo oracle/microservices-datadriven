@@ -11,6 +11,38 @@ This page acts as an index/aggregator for some of our featured content.
 ![YouTube icon](./youtube.png)  &nbsp; And be sure to subscribe to our YouTube channel ["The Converged Database"](https://www.youtube.com/@theconvergeddatabase6236) for more great content!
 
 {{< blog  
+    author="anders"
+    date="7/31/2024"
+    title="Use OCI Object Storage data as Spring Boot Resources"
+    link="https://medium.com/@anders.swanson.93/use-oci-object-storage-data-as-spring-boot-resources-2f5a440f73c2"
+    abstract="Spring Resources are a great way to load data into our Spring Boot applications. In this article, Anders shows us how to use OCI Object Storage as a resource provider with Spring Cloud Oracle."
+>}}
+
+{{< blog  
+    author="mark"
+    date="7/30/2024"
+    title="Building Spring Boot apps with Spring Cloud Oracle"
+    link="https://www.linkedin.com/pulse/building-spring-boot-apps-cloud-oracle-mark-nelson-bp2be/"
+    abstract="A fully worked example of how to build microservices with Spring Cloud Oracle, including using the OCI Generative AI service to build a simple chatbot, using OCI Queue service to implement asynchronous communication between services, and using the Spring Boot Starter for UCP to access the Oracle Database."
+>}}
+
+{{< blog  
+    author="anders"
+    date="7/30/2024"
+    title="Connect Spring Mail with OCI Email Delivery Service"
+    link="https://medium.com/@anders.swanson.93/connect-spring-mail-with-oci-email-delivery-service-e24accb62ad1"
+    abstract="Anders shows us how to use Spring Cloud Oracle to use the OCI Email Delivery Service in our Spring Boot apps."
+>}}
+
+{{< blog  
+    author="anders"
+    date="7/30/2024"
+    title="Inject OCI Vault Secrets into Spring Apps"
+    link="https://medium.com/@anders.swanson.93/inject-oci-vault-secrets-into-spring-apps-ce29536d0e0d"
+    abstract="Demonstrates how to easily use OCI Vault as a Spring property source with Spring Cloud Oracle."
+>}}
+
+{{< blog  
     author="aniket"
     date="7/22/2024"
     title="Blowing Up Database Monoliths"
