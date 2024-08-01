@@ -81,22 +81,23 @@ GRANT CREATE TABLE TO OBAAS WITH ADMIN OPTION;
 
 ### Autonomous Database - Serverless (ADB-S)
 
-   - `BYO ADB-S Compartment` : The compartment of the existing ADB-S.
-   - `Bring Your Own Database - Autonomous Database` : The ADB-S name (this will automatically translate the name to an OCID).
-   - `Bring Your Own Database - Username` : The existing database user with the appropriate privileges.
-   - `Bring Your Own Database - Password` : The password for the existing database user.
+* `BYO ADB-S Compartment` : The compartment of the existing ADB-S.
+* `Bring Your Own Database - Autonomous Database` : The ADB-S name (this will automatically translate the name to an OCID).
+* `Bring Your Own Database - Username` : The existing database user with the appropriate privileges.
+* `Bring Your Own Database - Password` : The password for the existing database user.
 
-        ![Bring Your Own Database - ADB-S](./images/byo-db-adb-s.png "Bring Your Own Database - ADB-S")
+    ![Bring Your Own Database - ADB-S](./images/byo-db-adb-s.png "Bring Your Own Database - ADB-S")
 
 ### Other
 
-   - `Bring Your Own Database - Connect String` : The connect string for the database (PDB) in Long Format.
-   - `Bring Your Own Database - Username` : The existing database user with the appropriate privileges.
-   - `Bring Your Own Database - Password` : The password for the existing database user.
+* `Bring Your Own Database - Connect String` : The connect string for the database (PDB) in Long Format.
+* `Bring Your Own Database - Username` : The existing database user with the appropriate privileges.
+* `Bring Your Own Database - Password` : The password for the existing database user.
 
-        ![Bring Your Own Database - Other](./images/byo-db-other.png "Bring Your Own Database - Other")
+    ![Bring Your Own Database - Other](./images/byo-db-other.png "Bring Your Own Database - Other")
 
    The *Connect String* should be in Long Format, for example:
+
    ```bash
    (DESCRIPTION=(ADDRESS=(host=oracle://somedb.example.com)(protocol=TCP)(port=1521))
       (CONNECT_DATA=(SERVICE_NAME=orclpdb)))
@@ -107,6 +108,7 @@ GRANT CREATE TABLE TO OBAAS WITH ADMIN OPTION;
 Oracle recommends that additional pluggable databases are used for your applications, following the database-per-service microservice pattern.  However, the **Metadata Database** can be used, especially for development purposes, with a schema-per-service model.
 
 The [Oracle Database Operator for Kubernetes](https://github.com/oracle/oracle-database-operator) is provided with the Oracle Backend for Spring Boot and Microservices and can be used:
+
 * Bind to additional ADB-S
 * Bind to an OCI BaseDB and create PDBs
 * Create a Single Instance Container Database in the Kubernetes Cluster
