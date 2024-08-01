@@ -75,6 +75,8 @@ GRANT CREATE TABLE TO OBAAS WITH ADMIN OPTION;
 
 1. Enable and Configure *Bring Your Own Virtual Network*
 
+    ![Own Virtual Network](./images/byo-vcn.png)
+
 1. Tick the "Bring Your Own Database" checkbox and, depending on the *Bring Your Own Database - Type*, provide the appropriate values.
 
 ### Autonomous Database - Serverless (ADB-S)
