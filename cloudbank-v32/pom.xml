@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.0</version>
+        <version>3.3.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -33,15 +33,15 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>21</java.version>
-        <spring-cloud.version>2023.0.1</spring-cloud.version>
+        <spring-cloud.version>2023.0.3</spring-cloud.version>
         <org.springdoc-version>2.4.0</org.springdoc-version>
 
-        <micrometer-core.version>1.13.0</micrometer-core.version>
-        <lombok.version>1.18.32</lombok.version>
+        <micrometer-core.version>1.13.2</micrometer-core.version>
+        <lombok.version>1.18.34</lombok.version>
         <oracle-springboot-starter.version>23.4.0</oracle-springboot-starter.version>
-		<oracle-microtx-starter.version>23.4.2</oracle-microtx-starter.version>
-		<liquibase.version>4.28.0</liquibase.version>
-		<datasource-micrometer-spring-boot.version>1.0.3</datasource-micrometer-spring-boot.version>
+		<oracle-microtx-starter.version>24.2.1</oracle-microtx-starter.version>
+		<liquibase.version>4.29.1</liquibase.version>
+		<datasource-micrometer-spring-boot.version>1.0.5</datasource-micrometer-spring-boot.version>
 
         <!-- Code quality tools -->
         <maven-checkstyle-plugin-version>3.3.1</maven-checkstyle-plugin-version>
