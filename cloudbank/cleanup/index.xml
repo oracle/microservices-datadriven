@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cleanup :: CloudBank</title>
+    <link>https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/index.html</link>
+    <description>This is a new chapter.</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Introduction</title>
+      <link>https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/intro/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/intro/index.html</guid>
+      <description>When you have finished this Live module you may wish to clean up the resources you created. If so, you may complete the steps in this optional module.&#xA;Estimated module Time: 20 minutes&#xA;Quick walk through on how to clean up the module environment.&#xA;Objectives In this workshop, you will learn how to:&#xA;Clean up your instance of the Oracle Backend for Spring Boot and Microservices and other resources you created during this Live module Prerequisites This module assumes you have:</description>
+    </item>
+    <item>
+      <title>Uninstall</title>
+      <link>https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/uninstall/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/uninstall/index.html</guid>
+      <description>The Oracle Backend for Spring Boot and Microservices environment was deployed using ORM and Terraform. The uninstall will use OCI Resource Manager (ORM) to Destroy the stack.&#xA;Navigate to OCI Resource Manager Stacks&#xA;Make sure you choose the Compartment where you installed Oracle Backend for Spring Boot and Microservices. Click on the Stack Name (which will be different from the screenshot)&#xA;After picking the stack. Click destroy. NOTE This will stop all resources and remove the Oracle Backend for Spring Boot and Microservices environment.</description>
+    </item>
+  </channel>
+</rss>
