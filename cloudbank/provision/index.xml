@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Provision an Instance :: CloudBank</title>
+    <link>https://oracle.github.io/microservices-datadriven/cloudbank/provision/index.html</link>
+    <description>This is a new chapter.</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="https://oracle.github.io/microservices-datadriven/cloudbank/provision/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Introduction</title>
+      <link>https://oracle.github.io/microservices-datadriven/cloudbank/provision/intro/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://oracle.github.io/microservices-datadriven/cloudbank/provision/intro/index.html</guid>
+      <description>This module walks you through the steps to provision an instance of the Oracle Backend for Spring Boot and Microservices.&#xA;Estimated Time: 30 minutes&#xA;About Oracle Backend for Spring Boot and Microservices Oracle Backend for Spring Boot and Microservices allows developers to build microservices in Spring Boot and provision a backend as a service with the Oracle Database and other infrastructure components that operate on multiple clouds. This service vastly simplifies the task of building, testing, and operating microservices platforms for reliable, secure, and scalable enterprise applications.</description>
+    </item>
+    <item>
+      <title>Install on OCI</title>
+      <link>https://oracle.github.io/microservices-datadriven/cloudbank/provision/install/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://oracle.github.io/microservices-datadriven/cloudbank/provision/install/index.html</guid>
+      <description>The Oracle Backend for Spring Boot and Microservices can be installed from OCI Marketplace.&#xA;Note: Oracle Backend for Spring Boot and Microservices can also be installed on-premises or in other clouds.&#xA;Access the Oracle Cloud Infrastructure Marketplace listing&#xA;Open the OCI Marketplace listing, as shown in the image below:&#xA;Click on the Get App button.&#xA;Log into your Oracle Cloud Infrastructure account&#xA;You will be taken to a Sign-In page. Choose they type of account you have and click on the Sign In button.</description>
+    </item>
+    <item>
+      <title>Verify Installation</title>
+      <link>https://oracle.github.io/microservices-datadriven/cloudbank/provision/verify/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://oracle.github.io/microservices-datadriven/cloudbank/provision/verify/index.html</guid>
+      <description>Check the logs for errors&#xA;Scroll down to the bottom of the log to see the outcome. If there was an error during installation, details will be included at the end of the log. The most common errors are due to insufficient quota for some resource. If you get an error about insufficient quota, you may need to clean up unused resources or request a quota increase for the affected resource.</description>
+    </item>
+  </channel>
+</rss>

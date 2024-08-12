@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.123.6">
+    <meta name="generator" content="Relearn 6.1.1+tip">
+    <meta name="description" content="The Oracle Backend for Spring Boot and Microservices includes an Oracle Database. An instance of an Oracle Autonomous Database (Shared) is created during installation.
+To access the database from a local machine you need to download the wallet and configure SQLcl to use the downloaded wallet.
+Download the Wallet Login into the OCI Console. Oracle Cloud
+Navigate to Autonomous Transaction Processing.
+Make sure that you have the right compartment selected and click on the database name.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Database Access :: CloudBank">
+    <meta name="twitter:description" content="The Oracle Backend for Spring Boot and Microservices includes an Oracle Database. An instance of an Oracle Autonomous Database (Shared) is created during installation.
+To access the database from a local machine you need to download the wallet and configure SQLcl to use the downloaded wallet.
+Download the Wallet Login into the OCI Console. Oracle Cloud
+Navigate to Autonomous Transaction Processing.
+Make sure that you have the right compartment selected and click on the database name.">
+    <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/cloudbank/devenv/db-access/index.html">
+    <meta property="og:site_name" content="CloudBank">
+    <meta property="og:title" content="Database Access :: CloudBank">
+    <meta property="og:description" content="The Oracle Backend for Spring Boot and Microservices includes an Oracle Database. An instance of an Oracle Autonomous Database (Shared) is created during installation.
+To access the database from a local machine you need to download the wallet and configure SQLcl to use the downloaded wallet.
+Download the Wallet Login into the OCI Console. Oracle Cloud
+Navigate to Autonomous Transaction Processing.
+Make sure that you have the right compartment selected and click on the database name.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Developer Environment">
+    <meta itemprop="name" content="Database Access :: CloudBank">
+    <meta itemprop="description" content="The Oracle Backend for Spring Boot and Microservices includes an Oracle Database. An instance of an Oracle Autonomous Database (Shared) is created during installation.
+To access the database from a local machine you need to download the wallet and configure SQLcl to use the downloaded wallet.
+Download the Wallet Login into the OCI Console. Oracle Cloud
+Navigate to Autonomous Transaction Processing.
+Make sure that you have the right compartment selected and click on the database name.">
+    <meta itemprop="wordCount" content="448">
+    <title>Database Access :: CloudBank</title>
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1723487095" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1723487095" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1723487095" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1723487095" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1723487095" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1723487095" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1723487095" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1723487095" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1723487095" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme-auto.css?1723487095" rel="stylesheet" id="R-variant-style">
+    <link href="/microservices-datadriven/cloudbank/css/chroma-auto.css?1723487095" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/microservices-datadriven/cloudbank/css/variant.css?1723487095" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/print.css?1723487095" rel="stylesheet" media="print">
+    <script src="/microservices-datadriven/cloudbank/js/variant.js?1723487095"></script>
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..\/..\/..';
+      window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
+      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1723487095";
+      // variant stuff
+      window.variants && variants.init( [ 'auto' ] );
+      // translations
+      window.T_Copy_to_clipboard = `Copy to clipboard`;
+      window.T_Copied_to_clipboard = `Copied to clipboard!`;
+      window.T_Copy_link_to_clipboard = `Copy link to clipboard`;
+      window.T_Link_copied_to_clipboard = `Copied link to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+    </script>
+  </head>
+  <body class="mobile-support html" data-url="/microservices-datadriven/cloudbank/devenv/db-access/index.html">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar">
+        <div class="topbar-wrapper">
+          <div class="topbar-sidebar-divider"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide"><button class="topbar-control" onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button>
+            </div>
+            <div class="topbar-button topbar-button-toc" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-list-alt"></i></button>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper"><nav class="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#download-the-wallet">Download the Wallet</a></li>
+        <li><a href="#access-the-database-using-sqlcl-and-the-wallet">Access the Database using SQLcl and the Wallet</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="/microservices-datadriven/cloudbank/index.html"><span itemprop="name">CloudBank</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="/microservices-datadriven/cloudbank/devenv/index.html"><span itemprop="name">Developer Environment</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><span itemprop="name">Database Access</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-prev" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show"><a class="topbar-control" href="/microservices-datadriven/cloudbank/devenv/sqlcl/index.html" title="Install SQLcl (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a>
+            </div>
+            <div class="topbar-button topbar-button-next" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show"><a class="topbar-control" href="/microservices-datadriven/cloudbank/devenv/ide-plugin/index.html" title="Install IDE Plugin (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a>
+            </div>
+            <div class="topbar-button topbar-button-more" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable default" tabindex="-1">
+        <div class="flex-block-wrapper">
+          <article class="default">
+            <header class="headline">
+            </header>
+
+<h1 id="database-access">Database Access</h1>
+
+<p>The Oracle Backend for Spring Boot and Microservices includes an Oracle Database. An instance of an Oracle Autonomous Database (Shared) is created during installation.</p>
+<p>To access the database from a local machine you need to download the wallet and configure <code>SQLcl</code> to use the downloaded wallet.</p>
+<h3 id="download-the-wallet">Download the Wallet</h3>
+<ol>
+<li>
+<p>Login into the OCI Console. <a href="https://cloud.oracle.com/" rel="external" target="_blank">Oracle Cloud</a></p>
+</li>
+<li>
+<p>Navigate to Autonomous Transaction Processing.</p>
+<p><a href="#R-image-f844d759147a2a33d34ee0fb22d7133b" class="lightbox-link"><img alt="Autonomous Transaction Processing" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/atp-menu.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-f844d759147a2a33d34ee0fb22d7133b"><img alt="Autonomous Transaction Processing" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/atp-menu.png" title=" "></a></p>
+</li>
+<li>
+<p>Make sure that you have the right compartment selected and click on the database name. The database name is composed  by the application name you gave during install with the suffix of <code>DB</code>. In the picture below the Application Name is <code>CBANK</code> so the database name is <code>CBANKDB</code>. If you didn&rsquo;t provide an Application name, the database will name will be a random pet name with the suffix <code>DB</code> in the compartment you deployed application.</p>
+<p><a href="#R-image-74c4b824a3736cdfbe79cff6f7e97a22" class="lightbox-link"><img alt="Choose ATB Database" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/choose-atp.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-74c4b824a3736cdfbe79cff6f7e97a22"><img alt="Choose ATB Database" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/choose-atp.png" title=" "></a></p>
+</li>
+<li>
+<p>Click Database Connection to retrieve the Wallet.</p>
+<p><a href="#R-image-9e04958503097fd8a934b1c8b2969e20" class="lightbox-link"><img alt="Database Connection" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/db-connection.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-9e04958503097fd8a934b1c8b2969e20"><img alt="Database Connection" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/db-connection.png" title=" "></a></p>
+</li>
+<li>
+<p>Click Download Wallet to download the Wallet.</p>
+<p><a href="#R-image-c12159629048e142ef187a20e41c9013" class="lightbox-link"><img alt="Download Wallet" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/download-wallet.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-c12159629048e142ef187a20e41c9013"><img alt="Download Wallet" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/download-wallet.png" title=" "></a></p>
+</li>
+<li>
+<p>You will need to provide a password for the Wallet. Make a note of where the wallet is located you&rsquo;ll be needing it when connection to the Database.</p>
+<p><a href="#R-image-31032e4a83c4dd1ef7a471c2480f721f" class="lightbox-link"><img alt="Wallet Password" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/wallet-password.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-31032e4a83c4dd1ef7a471c2480f721f"><img alt="Wallet Password" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/wallet-password.png" title=" "></a></p>
+</li>
+<li>
+<p>Close the Database Connection Dialog Box</p>
+<p><a href="#R-image-f39109f30311e59fc834850475466bf0" class="lightbox-link"><img alt="Close Dialog Box" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/close-dialog-box.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-f39109f30311e59fc834850475466bf0"><img alt="Close Dialog Box" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/close-dialog-box.png" title=" "></a></p>
+</li>
+</ol>
+<h3 id="access-the-database-using-sqlcl-and-the-wallet">Access the Database using SQLcl and the Wallet</h3>
+<ol>
+<li>
+<p>Obtain the ADMIN password</p>
+<p>To get the ADMIN password for the database you need to read a k8s secret. Replace the <code>cbankdb</code> with the Database name for you deployment in the command below. The name is composed by the Application Name you gave during deployment with the suffix <code>DB</code>. If you didn&rsquo;t provide an Application name, the database will name will be a random pet name with the suffix <code>DB</code> in the compartment you deployed application. Get the password using this command:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl -n application get secret cbankdb-db-secrets -o jsonpath<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;{.data.db\.password}&#39;</span> | base64 -d</span></span></code></pre></div></li>
+<li>
+<p>Start <code>SQLcl</code> and connect to the Database:</p>
+<p>Start SQLcl using the following command:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ sql /nolog
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>SQLcl: Release 22.4 Production on Fri Mar <span style="color:#ae81ff">03</span> 10:33:33 <span style="color:#ae81ff">2023</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Copyright <span style="color:#f92672">(</span>c<span style="color:#f92672">)</span> 1982, 2023, Oracle.  All rights reserved.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>SQL&gt;</span></span></code></pre></div><p>Run the following command to load the wallet. Make sure you use the right location and name of the wallet</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SQL</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">set</span> cloudconfig <span style="color:#f92672">/</span>path<span style="color:#f92672">/</span><span style="color:#66d9ef">to</span><span style="color:#f92672">/</span>wallet<span style="color:#f92672">/</span>wallet_name.zip</span></span></code></pre></div><p>Display the TNS Entries by executing the following command. The TNS Entries will be different for your deployment.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SQL</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">show</span> tns
+</span></span><span style="display:flex;"><span>CLOUD CONFIG <span style="color:#66d9ef">set</span> <span style="color:#66d9ef">to</span>: <span style="color:#f92672">/</span>path<span style="color:#f92672">/</span><span style="color:#66d9ef">to</span><span style="color:#f92672">/</span>wallet<span style="color:#f92672">/</span>wallet_name.zip
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>TNS Lookup Locations
+</span></span><span style="display:flex;"><span><span style="color:#75715e">--------------------
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>TNS Locations Used
+</span></span><span style="display:flex;"><span><span style="color:#75715e">------------------
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#ae81ff">1</span>. <span style="color:#f92672">/</span>path<span style="color:#f92672">/</span><span style="color:#66d9ef">to</span><span style="color:#f92672">/</span>wallet<span style="color:#f92672">/</span>wallet_name.zip
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">2</span>.  <span style="color:#f92672">/</span>Users<span style="color:#f92672">/</span>atael
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Available TNS Entries
+</span></span><span style="display:flex;"><span><span style="color:#75715e">---------------------
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>CBANKDB_HIGH
+</span></span><span style="display:flex;"><span>CBANKDB_LOW
+</span></span><span style="display:flex;"><span>CBANKDB_MEDIUM
+</span></span><span style="display:flex;"><span>CBANKDB_TP
+</span></span><span style="display:flex;"><span>CBANKDB_TPURGENT
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">SQL</span><span style="color:#f92672">&gt;</span></span></span></code></pre></div><p>Connect to the Database using this command. Replace the <code>ADMIN-PASSWORD</code> with the password obtained from the k8s secret and replace <code>TNS-ENTRY</code> with your database name followed by <code>_TP</code>. In this example it would be <code>CBANKDB_TP</code></p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SQL</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">connect</span> <span style="color:#66d9ef">ADMIN</span><span style="color:#f92672">/</span><span style="color:#66d9ef">ADMIN</span><span style="color:#f92672">-</span>PASSWORD<span style="color:#f92672">@</span>TNS<span style="color:#f92672">-</span>ENTRY
+</span></span><span style="display:flex;"><span>Connected.</span></span></code></pre></div><p>You can now close the connection or leave it open as you are going to need it in later Labs.</p>
+</li>
+</ol>
+
+            <footer class="footline">
+            </footer>
+          </article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation">
+        <div id="R-header" class="default-animation">
+<img src="https://oracle.github.io/microservices-datadriven/cloudbank//cloudbank-logo.png" height="100px">
+        </div>
+
+        <search>
+          <div class="searchbox default-animation">
+            <i class="fas fa-search" title="Search (CTRL+ALT+f)"></i>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-times" title="Clear search"></i></button>
+          </div>
+        </search>
+        <script>
+          var contentLangs=['en'];
+        </script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1723487095" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1723487095" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1723487095" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1723487095" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1723487095" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1723487095" defer></script>
+      </div>
+      <div id="R-homelinks" class="default-animation homelinks">
+        <ul>
+          <li><a class="padding" href="/microservices-datadriven/cloudbank/index.html"><i class="fa-fw fas fa-home"></i> Home</a></li>
+        </ul>
+        <hr class="padding">
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div id="R-topics">
+          <ul class="enlarge morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/provision/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/index.html">Provision an Instance</a><ul id="R-subsections-c4dad079c96d7a5f54ae00022bcdf7a9" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/provision/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/intro/index.html">Introduction</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/provision/install/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/install/index.html">Install on OCI</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/provision/verify/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/verify/index.html">Verify Installation</a></li></ul></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/index.html" class="parent "><a class="padding" href="/microservices-datadriven/cloudbank/devenv/index.html">Developer Environment</a><ul id="R-subsections-2fffb9f659e25ea05f48554f2d40267b" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/intro/index.html">Introduction</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/ide/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/ide/index.html">Install IDE</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/jdk/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/jdk/index.html">Install JDK</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/maven/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/maven/index.html">Install Maven</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/oractl/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/oractl/index.html">Install CLI</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/kubectl/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/kubectl/index.html">Install Kubectl and OCI CLI</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/kubectl-config/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/kubectl-config/index.html">Configure Kubectl</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/sqlcl/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/sqlcl/index.html">Install SQLcl</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/db-access/index.html" class="active"><a class="padding" href="/microservices-datadriven/cloudbank/devenv/db-access/index.html">Database Access</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/ide-plugin/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/ide-plugin/index.html">Install IDE Plugin</a></li></ul></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/account/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/index.html">Account Microservice</a><ul id="R-subsections-76e28dbc741f507e3fb0c19b5c4edf13" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/account/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/intro/index.html">Introduction</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/account/create-project/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/create-project/index.html">Create Project</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/account/first-service/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/first-service/index.html">Implement First Service</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/account/prepare-database/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/prepare-database/index.html">Prepare Database Objects</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/account/jpa/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/jpa/index.html">Use Spring Data JPA</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/account/cr-accounts/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/cr-accounts/index.html">Query and Create Accounts</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/account/extra-endpoints/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/extra-endpoints/index.html">Extra Account Endpoints</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/account/deploy/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/deploy/index.html">Deploy Account Service</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/account/expose/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/expose/index.html">Expose using APISIX</a></li></ul></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/check/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/index.html">Check Processing</a><ul id="R-subsections-2e52f5710292dcaa7e94f0ed85216aa3" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/check/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/intro/index.html">Introduction</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/check/learn/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/learn/index.html">Learn about the scenario</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/check/update-account/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/update-account/index.html">Add Journal to the Account service</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/check/create-queues/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/create-queues/index.html">Create Queues in the Database</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/check/create-testrunner/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/create-testrunner/index.html">Create the Test Runner Microservice</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/check/check-processing/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/check-processing/index.html">Create the Check Processing Microservice</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/check/test/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/test/index.html">Test the end-to-end flow</a></li></ul></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/saga/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/index.html">Manage Sagas</a><ul id="R-subsections-68e46fa1c2f619d718e34efdb238a235" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/saga/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/intro/index.html">Introduction</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/saga/learn/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/learn/index.html">Learn about the Saga pattern</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/saga/learn-lra/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/learn-lra/index.html">Learn about Long Running Actions</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/saga/prepare/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/prepare/index.html">Prepare the Account service</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/saga/deposit/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/deposit/index.html">Create the Deposit service</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/saga/dao/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/dao/index.html">Create a Data Access Object</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/saga/business-logic/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/business-logic/index.html">Implement business logic</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/saga/withdraw-service/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/withdraw-service/index.html">Create the Withdrawal service</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/saga/transfer-service/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/transfer-service/index.html">Create the Transfer service</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/saga/deploy/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/deploy/index.html">Deploy services</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/saga/test/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/test/index.html">Run LRA test cases</a></li></ul></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/index.html">Deploy with the CLI</a><ul id="R-subsections-700415e649763a5591d9524d38ddb106" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/intro/index.html">Introduction</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/get-code/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/get-code/index.html">Get the sample code</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/build/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/build/index.html">Build CloudBank</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/deploy/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/deploy/index.html">Deploy CloudBank</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/create-routes/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/create-routes/index.html">Create APISIX routes</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/verify/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/verify/index.html">Verify the deployment</a></li></ul></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/index.html">Deploy with an IDE</a><ul id="R-subsections-97c3d292d2b014877ffb07154d1cf214" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/intro/index.html">Introduction</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/get-code/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/get-code/index.html">Get the sample code</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/build/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/build/index.html">Build CloudBank</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/using-vscode/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/using-vscode/index.html">Using the VS Code plugin</a></li></ul></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/backend/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/index.html">Explore the Backend</a><ul id="R-subsections-9a5cf8da07713c78ee52a8d0397cb806" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/backend/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/intro/index.html">Introduction</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/backend/k8s/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/k8s/index.html">Explore Kubernetes</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/backend/database/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/database/index.html">Explore Oracle Autonomous Database</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/backend/admin/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/admin/index.html">Explore Spring Admin</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/backend/eureka/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/eureka/index.html">Explore Eureka Service Registry</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/backend/apisix/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/apisix/index.html">Explore APISIX API Gateway</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/backend/config/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/config/index.html">Explore Spring Config Server</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/backend/grafana/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/grafana/index.html">Explore Grafana</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/backend/jaeger/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/jaeger/index.html">Explore Jaeger</a></li></ul></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/index.html">Cleanup</a><ul id="R-subsections-2a114b4f7d7c1e92ed8ef74b99ba5d82" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/intro/index.html">Introduction</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/uninstall/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/uninstall/index.html">Uninstall</a></li></ul></li>
+          </ul>
+        </div>
+        <div id="R-shortcuts">
+          <div class="nav-title padding">More</div>
+          <ul class="space">
+            <li><a class="padding" href="https://github.com/oracle/microservices-datadriven"><i class='fa-fw fab fa-github'></i> GitHub repo</a></li>
+            <li><a class="padding" href="https://bit.ly/oraclespringboot"><i class='fa-fw fas fa-bookmark'></i> Oracle Backend for Spring Boot and Microservices</a></li>
+            <li><a class="padding" href="https://github.com/oracle/spring-cloud-oracle"><i class='fa-fw fas fa-bookmark'></i> Spring Cloud Oracle</a></li>
+            <li><a class="padding" href="/microservices-datadriven/cloudbank/more/credits/index.html"><i class='fa-fw fas fa-bullhorn'></i> Credits</a></li>
+          </ul>
+        </div>
+        <div class="padding footermargin footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter"></div>
+        <div id="R-menu-footer">
+          <hr class="padding default-animation footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter">
+          <div id="R-prefooter" class="footerLangSwitch footerVariantSwitch footerVisitedLinks">
+            <ul>
+              <li id="R-select-language-container" class="footerLangSwitch">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-language"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <label class="a11y-only" for="R-select-language">Language</label>
+                    <select id="R-select-language" onchange="location = this.querySelector( this.value ).dataset.url;">
+                      <option id="R-select-language-en" value="#R-select-language-en" data-url="/microservices-datadriven/cloudbank/devenv/db-access/index.html" lang="en-us" selected></option>
+                    </select>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </li>
+              <li id="R-select-variant-container" class="footerVariantSwitch">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-paint-brush"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <label class="a11y-only" for="R-select-variant">Theme</label>
+                    <select id="R-select-variant" onchange="window.variants && variants.changeVariant( this.value );">
+                      <option id="R-select-variant-auto" value="auto" selected>Auto</option>
+                    </select>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+                <script>window.variants && variants.markSelectedVariant();</script>
+              </li>
+              <li class="footerVisitedLinks">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-history"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <button onclick="clearHistory();">Clear History</button>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div id="R-footer" class="footerFooter showFooter">
+	    <p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://www.oracle.com/">Oracle</a></p>
+		<p>Copyright &copy; 2022, 2024, <br>Oracle and/or its affiliates</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1723487095" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1723487095" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1723487095" defer></script>
+  </body>
+</html>

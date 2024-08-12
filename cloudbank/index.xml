@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>CloudBank</title>
+    <link>https://oracle.github.io/microservices-datadriven/cloudbank/index.html</link>
+    <description>Welcome to CloudBank - an on-demand, self-paced learning resource you can use to learn about developing microservices with Spring Boot and deploying, running and managing them with Oracle Backend for Spring Boot and Microservices.&#xA;You can follow through from beginning to end, or you can start at any module that you are interested in.&#xA;What you will need To complete the modules you will need docker-compose to run the backend and Oracle Database containers - you can use Docker Desktop, Rancher Desktop, Podman Desktop or similar.</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="https://oracle.github.io/microservices-datadriven/cloudbank/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Provision an Instance</title>
+      <link>https://oracle.github.io/microservices-datadriven/cloudbank/provision/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://oracle.github.io/microservices-datadriven/cloudbank/provision/index.html</guid>
+      <description>This is a new chapter.</description>
+    </item>
+    <item>
+      <title>Developer Environment</title>
+      <link>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/index.html</guid>
+      <description>xyz</description>
+    </item>
+    <item>
+      <title>Account Microservice</title>
+      <link>https://oracle.github.io/microservices-datadriven/cloudbank/account/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://oracle.github.io/microservices-datadriven/cloudbank/account/index.html</guid>
+      <description>This is a new chapter.</description>
+    </item>
+    <item>
+      <title>Check Processing</title>
+      <link>https://oracle.github.io/microservices-datadriven/cloudbank/check/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://oracle.github.io/microservices-datadriven/cloudbank/check/index.html</guid>
+      <description>This is a new chapter.</description>
+    </item>
+    <item>
+      <title>Manage Sagas</title>
+      <link>https://oracle.github.io/microservices-datadriven/cloudbank/saga/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://oracle.github.io/microservices-datadriven/cloudbank/saga/index.html</guid>
+      <description>This is a new chapter.</description>
+    </item>
+    <item>
+      <title>Deploy with the CLI</title>
+      <link>https://oracle.github.io/microservices-datadriven/cloudbank/deploy-cli/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://oracle.github.io/microservices-datadriven/cloudbank/deploy-cli/index.html</guid>
+      <description>This is a new chapter.</description>
+    </item>
+    <item>
+      <title>Deploy with an IDE</title>
+      <link>https://oracle.github.io/microservices-datadriven/cloudbank/deploy-ide/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://oracle.github.io/microservices-datadriven/cloudbank/deploy-ide/index.html</guid>
+      <description>This is a new chapter.</description>
+    </item>
+    <item>
+      <title>Explore the Backend</title>
+      <link>https://oracle.github.io/microservices-datadriven/cloudbank/backend/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://oracle.github.io/microservices-datadriven/cloudbank/backend/index.html</guid>
+      <description>This is a new chapter.</description>
+    </item>
+    <item>
+      <title>Cleanup</title>
+      <link>https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/index.html</guid>
+      <description>This is a new chapter.</description>
+    </item>
+  </channel>
+</rss>
