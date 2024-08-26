@@ -1,7 +1,7 @@
 +++
 archetype = "page"
 title = "Verify Installation"
-weight = 2
+weight = 5
 +++
 
 

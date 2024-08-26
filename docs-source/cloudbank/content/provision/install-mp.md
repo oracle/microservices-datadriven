@@ -1,7 +1,7 @@
 +++
 archetype = "page"
-title = "Install on OCI"
-weight = 2
+title = "Install from OCI Marketplace"
+weight = 4
 +++
 
 The Oracle Backend for Spring Boot and Microservices can be installed from OCI Marketplace.

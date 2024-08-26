@@ -1,7 +1,7 @@
 +++
 archetype = "chapter"
 title = "Cleanup"
-weight = 9
+weight = 10
 +++
 
 This is a new chapter.
