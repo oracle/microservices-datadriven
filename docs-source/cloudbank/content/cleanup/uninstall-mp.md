@@ -1,9 +1,10 @@
 +++
 archetype = "page"
-title = "Uninstall"
-weight = 2
+title = "OCI Marketplace Uninstall"
+weight = 4
 +++
 
+> **Note:** These steps apply only if you chose the option to install the full stack from OCI Marketplace.
 
 The Oracle Backend for Spring Boot and Microservices environment was deployed using ORM and Terraform.  The uninstall will use OCI Resource Manager (ORM) to Destroy the stack.
 

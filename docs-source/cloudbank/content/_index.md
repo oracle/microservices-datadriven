@@ -41,7 +41,7 @@ CloudBank contains the following modules:
   This module walks you through building your very first microservice using Spring Boot.
   It assumes no prior knowledge of Spring Boot, so its a great place to start if you
   have not used Spring Boot before. This module demonstrates how to build a service
-  with a *synchronous* API implmented as REST endpoints using Spring Web MVC, and how to
+  with a *synchronous* API implemented as REST endpoints using Spring Web MVC, and how to
   store data in Oracle Database using Spring Data JPA.
 * **Module 4: Build the Check Processing Microservices**  
   In this module, you will build microservices that use *asynchronous* messaging
@@ -70,7 +70,7 @@ CloudBank contains the following modules:
 * **Module 9: Explore the Backend Platform**  
   This module will take you on a guided tour through the Oracle Backend for
   Spring Boot and Microservices platform. You will learn about the platform
-  services and observability tools that are provided out-of-the=box
+  services and observability tools that are provided out-of-the-box.
 * **Module 10: Cleanup**
   This module demonstrates how to clean up any resources created when
   you provisioned an instance of Oracle Backend for Spring Boot and Microservices
