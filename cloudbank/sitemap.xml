@@ -49,7 +49,7 @@
     <loc>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/ide/index.html</loc>
   </url>
   <url>
-    <loc>https://oracle.github.io/microservices-datadriven/cloudbank/provision/install/index.html</loc>
+    <loc>https://oracle.github.io/microservices-datadriven/cloudbank/provision/install-local/index.html</loc>
   </url>
   <url>
     <loc>https://oracle.github.io/microservices-datadriven/cloudbank/saga/learn/index.html</loc>
@@ -58,10 +58,7 @@
     <loc>https://oracle.github.io/microservices-datadriven/cloudbank/check/learn/index.html</loc>
   </url>
   <url>
-    <loc>https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/uninstall/index.html</loc>
-  </url>
-  <url>
-    <loc>https://oracle.github.io/microservices-datadriven/cloudbank/provision/verify/index.html</loc>
+    <loc>https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/uninstall-local/index.html</loc>
   </url>
   <url>
     <loc>https://oracle.github.io/microservices-datadriven/cloudbank/account/index.html</loc>
@@ -79,10 +76,16 @@
     <loc>https://oracle.github.io/microservices-datadriven/cloudbank/backend/database/index.html</loc>
   </url>
   <url>
+    <loc>https://oracle.github.io/microservices-datadriven/cloudbank/provision/install-free-trial/index.html</loc>
+  </url>
+  <url>
     <loc>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/jdk/index.html</loc>
   </url>
   <url>
     <loc>https://oracle.github.io/microservices-datadriven/cloudbank/saga/learn-lra/index.html</loc>
+  </url>
+  <url>
+    <loc>https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/uninstall-free-trial/index.html</loc>
   </url>
   <url>
     <loc>https://oracle.github.io/microservices-datadriven/cloudbank/deploy-ide/using-vscode/index.html</loc>
@@ -103,7 +106,13 @@
     <loc>https://oracle.github.io/microservices-datadriven/cloudbank/account/first-service/index.html</loc>
   </url>
   <url>
+    <loc>https://oracle.github.io/microservices-datadriven/cloudbank/provision/install-mp/index.html</loc>
+  </url>
+  <url>
     <loc>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/maven/index.html</loc>
+  </url>
+  <url>
+    <loc>https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/uninstall-mp/index.html</loc>
   </url>
   <url>
     <loc>https://oracle.github.io/microservices-datadriven/cloudbank/saga/prepare/index.html</loc>
@@ -130,13 +139,13 @@
     <loc>https://oracle.github.io/microservices-datadriven/cloudbank/account/prepare-database/index.html</loc>
   </url>
   <url>
+    <loc>https://oracle.github.io/microservices-datadriven/cloudbank/springai/index.html</loc>
+  </url>
+  <url>
     <loc>https://oracle.github.io/microservices-datadriven/cloudbank/saga/dao/index.html</loc>
   </url>
   <url>
     <loc>https://oracle.github.io/microservices-datadriven/cloudbank/check/check-processing/index.html</loc>
-  </url>
-  <url>
-    <loc>https://oracle.github.io/microservices-datadriven/cloudbank/deploy-cli/index.html</loc>
   </url>
   <url>
     <loc>https://oracle.github.io/microservices-datadriven/cloudbank/backend/apisix/index.html</loc>
@@ -154,7 +163,7 @@
     <loc>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/kubectl-config/index.html</loc>
   </url>
   <url>
-    <loc>https://oracle.github.io/microservices-datadriven/cloudbank/deploy-ide/index.html</loc>
+    <loc>https://oracle.github.io/microservices-datadriven/cloudbank/deploy-cli/index.html</loc>
   </url>
   <url>
     <loc>https://oracle.github.io/microservices-datadriven/cloudbank/backend/config/index.html</loc>
@@ -172,19 +181,16 @@
     <loc>https://oracle.github.io/microservices-datadriven/cloudbank/saga/withdraw-service/index.html</loc>
   </url>
   <url>
-    <loc>https://oracle.github.io/microservices-datadriven/cloudbank/backend/grafana/index.html</loc>
+    <loc>https://oracle.github.io/microservices-datadriven/cloudbank/deploy-ide/index.html</loc>
   </url>
   <url>
-    <loc>https://oracle.github.io/microservices-datadriven/cloudbank/backend/index.html</loc>
+    <loc>https://oracle.github.io/microservices-datadriven/cloudbank/backend/grafana/index.html</loc>
   </url>
   <url>
     <loc>https://oracle.github.io/microservices-datadriven/cloudbank/account/extra-endpoints/index.html</loc>
   </url>
   <url>
     <loc>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/sqlcl/index.html</loc>
-  </url>
-  <url>
-    <loc>https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/index.html</loc>
   </url>
   <url>
     <loc>https://oracle.github.io/microservices-datadriven/cloudbank/saga/transfer-service/index.html</loc>
@@ -197,6 +203,12 @@
   </url>
   <url>
     <loc>https://oracle.github.io/microservices-datadriven/cloudbank/backend/jaeger/index.html</loc>
+  </url>
+  <url>
+    <loc>https://oracle.github.io/microservices-datadriven/cloudbank/backend/index.html</loc>
+  </url>
+  <url>
+    <loc>https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/index.html</loc>
   </url>
   <url>
     <loc>https://oracle.github.io/microservices-datadriven/cloudbank/saga/deploy/index.html</loc>

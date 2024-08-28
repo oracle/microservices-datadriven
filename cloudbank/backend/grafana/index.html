@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.123.6">
+    <meta name="generator" content="Hugo 0.133.1">
     <meta name="generator" content="Relearn 6.1.1+tip">
     <meta name="description" content="Grafana provides an easy way to access the metrics collected in the backend and to view them in dashboards. It can be used to monitor performance, as well as to identify and analyze problems and to create alerts.
 Explore the pre-installed Spring Boot Dashboard
@@ -33,25 +33,26 @@ Get the password for the Grafana admin user using this command (your output will
 $ kubectl -n grafana get secret grafana -o jsonpath=&#39;{.data.admin-password}&#39; | base64 -d fusHDM7xdwJXyUM2bLmydmN1V6b3IyPVRUxDtqu7Start the tunnel using this command.">
     <meta itemprop="wordCount" content="200">
     <title>Explore Grafana :: CloudBank</title>
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1723487095" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1723487095" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1723487095" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1723487095" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1723487095" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1723487095" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1723487095" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1723487095" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1723487095" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-auto.css?1723487095" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-auto.css?1723487095" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/variant.css?1723487095" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1723487095" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1723487095"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1724866676" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1724866676" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1724866676" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1724866676" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1724866676" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1724866676" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1724866676" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1724866676" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1724866676" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1724866676" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1724866676" rel="stylesheet" id="R-variant-style">
+    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1724866676" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/microservices-datadriven/cloudbank/css/variant.css?1724866676" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/print.css?1724866676" rel="stylesheet" media="print">
+    <script src="/microservices-datadriven/cloudbank/js/variant.js?1724866676"></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
-      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1723487095";
+      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1724866676";
       // variant stuff
-      window.variants && variants.init( [ 'auto' ] );
+      window.variants && variants.init( [ 'zen-light' ] );
       // translations
       window.T_Copy_to_clipboard = `Copy to clipboard`;
       window.T_Copied_to_clipboard = `Copied to clipboard!`;
@@ -117,18 +118,18 @@ $ kubectl -n grafana get secret grafana -o jsonpath=&#39;{.data.admin-password}&
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl -n grafana get secret grafana -o jsonpath<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;{.data.admin-password}&#39;</span> | base64 -d
 </span></span><span style="display:flex;"><span>fusHDM7xdwJXyUM2bLmydmN1V6b3IyPVRUxDtqu7</span></span></code></pre></div><p>Start the tunnel using this command.  You can run this in the background if you prefer.</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl -n grafana port-forward svc/grafana 8080:80</span></span></code></pre></div><p>Open a web browser to <a href="http://localhost:8080/grafana/" rel="external" target="_blank">http://localhost:8080/grafana/</a> to view the Grafana web user interface.  It will appear similar to the image below.  Log in with the username <strong>admin</strong> and the password you just got.</p>
-<p><a href="#R-image-c106809097a1e92561c969e38902880a" class="lightbox-link"><img alt="Grafana Sign-in" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-grafana-signin.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-c106809097a1e92561c969e38902880a"><img alt="Grafana Sign-in" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-grafana-signin.png" title=" "></a></p>
+<p><a href="#R-image-8a4c1ef8c65a1f4107034d1ad9a52287" class="lightbox-link"><img alt="Grafana Sign-in" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-grafana-signin.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-8a4c1ef8c65a1f4107034d1ad9a52287"><img alt="Grafana Sign-in" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-grafana-signin.png" title=" "></a></p>
 <p>After signing in you will get to the Grafana homepage.</p>
-<p><a href="#R-image-3c57583dd7d36d8de52ab03c3067db6a" class="lightbox-link"><img alt="picture" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-grafana-home-page.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-3c57583dd7d36d8de52ab03c3067db6a"><img alt="picture" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-grafana-home-page.png" title=" "></a></p>
+<p><a href="#R-image-37261f95378c79932bbdbeca5ebedc22" class="lightbox-link"><img alt="picture" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-grafana-home-page.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-37261f95378c79932bbdbeca5ebedc22"><img alt="picture" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-grafana-home-page.png" title=" "></a></p>
 <p>On the left, click on Dashboards to set the list of pre-installed dashboards.</p>
-<p><a href="#R-image-9155e7fd2ac9f14b35880121adaaebd4" class="lightbox-link"><img alt="Grafana Dashboards" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-grafana-dashboards.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-9155e7fd2ac9f14b35880121adaaebd4"><img alt="Grafana Dashboards" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-grafana-dashboards.png" title=" "></a></p>
+<p><a href="#R-image-c925917ac20edfe09112f6683b462a18" class="lightbox-link"><img alt="Grafana Dashboards" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-grafana-dashboards.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-c925917ac20edfe09112f6683b462a18"><img alt="Grafana Dashboards" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-grafana-dashboards.png" title=" "></a></p>
 <p>click on the link to <strong>Spring Boot 3.x Statistics</strong> to see Spring Boot information.</p>
 <p>The Spring Boot Dashboard looks like the image below.  Use the <strong>Instance</strong> selector at the top to choose which microservice you wish to view information for.</p>
-<p><a href="#R-image-a33261feb718dace31c5c419cbb454c4" class="lightbox-link"><img alt="picture" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-grafana-spring-dashboard.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-a33261feb718dace31c5c419cbb454c4"><img alt="picture" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-grafana-spring-dashboard.png" title=" "></a></p>
+<p><a href="#R-image-9fd1d250aa4d617630b9dafe91b03cdb" class="lightbox-link"><img alt="picture" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-grafana-spring-dashboard.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-9fd1d250aa4d617630b9dafe91b03cdb"><img alt="picture" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-grafana-spring-dashboard.png" title=" "></a></p>
 <p>Feel free to explore the other dashboards that are preinstalled.</p>
 </li>
 </ol>
@@ -157,12 +158,12 @@ $ kubectl -n grafana get secret grafana -o jsonpath=&#39;{.data.admin-password}&
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1723487095" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1723487095" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1723487095" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1723487095" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1723487095" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1723487095" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1724866676" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1724866676" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1724866676" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1724866676" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1724866676" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1724866676" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -175,8 +176,9 @@ $ kubectl -n grafana get secret grafana -o jsonpath=&#39;{.data.admin-password}&
           <ul class="enlarge morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/provision/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/index.html">Provision an Instance</a><ul id="R-subsections-c4dad079c96d7a5f54ae00022bcdf7a9" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/provision/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/intro/index.html">Introduction</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/provision/install/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/install/index.html">Install on OCI</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/provision/verify/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/verify/index.html">Verify Installation</a></li></ul></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/provision/install-local/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/install-local/index.html">Install locally</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/provision/install-free-trial/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/install-free-trial/index.html">Install in OCI Free Tier</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/provision/install-mp/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/install-mp/index.html">Install from OCI Marketplace</a></li></ul></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/devenv/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/index.html">Developer Environment</a><ul id="R-subsections-2fffb9f659e25ea05f48554f2d40267b" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/devenv/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/devenv/ide/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/ide/index.html">Install IDE</a></li>
@@ -218,6 +220,7 @@ $ kubectl -n grafana get secret grafana -o jsonpath=&#39;{.data.admin-password}&
           <li data-nav-id="/microservices-datadriven/cloudbank/saga/transfer-service/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/transfer-service/index.html">Create the Transfer service</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/saga/deploy/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/deploy/index.html">Deploy services</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/saga/test/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/test/index.html">Run LRA test cases</a></li></ul></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/springai/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/springai/index.html">CloudBank AI Assistant</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/index.html">Deploy with the CLI</a><ul id="R-subsections-700415e649763a5591d9524d38ddb106" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/get-code/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/get-code/index.html">Get the sample code</a></li>
@@ -242,7 +245,9 @@ $ kubectl -n grafana get secret grafana -o jsonpath=&#39;{.data.admin-password}&
           <li data-nav-id="/microservices-datadriven/cloudbank/backend/jaeger/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/jaeger/index.html">Explore Jaeger</a></li></ul></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/index.html">Cleanup</a><ul id="R-subsections-2a114b4f7d7c1e92ed8ef74b99ba5d82" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/intro/index.html">Introduction</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/uninstall/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/uninstall/index.html">Uninstall</a></li></ul></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/uninstall-local/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/uninstall-local/index.html">Local cleanup</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/uninstall-free-trial/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/uninstall-free-trial/index.html">OCI Free Tier Cleanup</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/uninstall-mp/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/uninstall-mp/index.html">OCI Marketplace Uninstall</a></li></ul></li>
           </ul>
         </div>
         <div id="R-shortcuts">
@@ -279,7 +284,7 @@ $ kubectl -n grafana get secret grafana -o jsonpath=&#39;{.data.admin-password}&
                   <div class="control-style">
                     <label class="a11y-only" for="R-select-variant">Theme</label>
                     <select id="R-select-variant" onchange="window.variants && variants.changeVariant( this.value );">
-                      <option id="R-select-variant-auto" value="auto" selected>Auto</option>
+                      <option id="R-select-variant-zen-light" value="zen-light" selected>Zen Light</option>
                     </select>
                   </div>
                   <div class="clear"></div>
@@ -305,8 +310,8 @@ $ kubectl -n grafana get secret grafana -o jsonpath=&#39;{.data.admin-password}&
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1723487095" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1723487095" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1723487095" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1724866676" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1724866676" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1724866676" defer></script>
   </body>
 </html>

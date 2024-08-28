@@ -3,7 +3,7 @@
   <channel>
     <title>Developer Environment :: CloudBank</title>
     <link>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/index.html</link>
-    <description>xyz</description>
+    <description>This module guides you through setting up the tools required for a Spring Boot developer.</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <atom:link href="https://oracle.github.io/microservices-datadriven/cloudbank/devenv/index.xml" rel="self" type="application/rss+xml" />
@@ -75,7 +75,7 @@
       <link>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/ide-plugin/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/ide-plugin/index.html</guid>
-      <description>If you plan to do the optional part of Lab. 5, you need to install in VS Code the Oracle Backend for Spring Boot and Microservices VS Code plugin. It is an extension to browse and deploy applications on the Oracle Backend for Spring Boot and Microservices platform. This plugin allows to inspect the content of an Oracle Backend for Spring Boot and Microservices deployment, in terms of applications, services and related configurations.</description>
+      <description>Some modules contain optional parts which show you how to do deployments and configuration with the IDE plugins instead of using the CLI. If you plan to do those optional parts, you need to install the VS Code extension forOracle Backend for Spring Boot and Microservices. It is an extension to browse and deploy applications on the Oracle Backend for Spring Boot and Microservices platform. This plugin allows to inspect the content of an Oracle Backend for Spring Boot and Microservices deployment, in terms of applications, services and related configurations.</description>
     </item>
   </channel>
 </rss>

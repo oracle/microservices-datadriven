@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.123.6">
+    <meta name="generator" content="Hugo 0.133.1">
     <meta name="generator" content="Relearn 6.1.1+tip">
     <meta name="description" content="Create a project to hold your Account service. In this lab, you will use the Spring Initialzr directly from Visual Studio Code, however it is also possible to use Spring Initialzr online and download a zip file with the generated project.
 Create the project
@@ -29,25 +29,26 @@ Create the project
 In Visual Studio Code, press Ctrl&#43;Shift&#43;P (Cmd&#43;Shift&#43;P on a Mac) to access the command window. Start typing “Spring Init” and you will see a number of options to create a Spring project, as shown in the image below.">
     <meta itemprop="wordCount" content="613">
     <title>Create Project :: CloudBank</title>
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1723487095" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1723487095" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1723487095" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1723487095" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1723487095" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1723487095" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1723487095" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1723487095" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1723487095" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-auto.css?1723487095" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-auto.css?1723487095" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/variant.css?1723487095" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1723487095" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1723487095"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1724866676" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1724866676" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1724866676" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1724866676" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1724866676" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1724866676" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1724866676" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1724866676" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1724866676" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1724866676" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1724866676" rel="stylesheet" id="R-variant-style">
+    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1724866676" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/microservices-datadriven/cloudbank/css/variant.css?1724866676" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/print.css?1724866676" rel="stylesheet" media="print">
+    <script src="/microservices-datadriven/cloudbank/js/variant.js?1724866676"></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
-      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1723487095";
+      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1724866676";
       // variant stuff
-      window.variants && variants.init( [ 'auto' ] );
+      window.variants && variants.init( [ 'zen-light' ] );
       // translations
       window.T_Copy_to_clipboard = `Copy to clipboard`;
       window.T_Copied_to_clipboard = `Copied to clipboard!`;
@@ -112,87 +113,87 @@ In Visual Studio Code, press Ctrl&#43;Shift&#43;P (Cmd&#43;Shift&#43;P on a Mac)
 <p>In Visual Studio Code, press Ctrl+Shift+P (Cmd+Shift+P on a Mac) to access the command window. Start typing &ldquo;Spring Init&rdquo; and you will see a number of options to create a Spring project, as shown in the image below.  Select the option to <strong>Create a Maven Project</strong>.</p>
 </li>
 </ol>
-<p><a href="#R-image-b961eeb2b888f47c76d5be9257a343e8" class="lightbox-link"><img alt="Start Spring Initializr" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-init-1.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-b961eeb2b888f47c76d5be9257a343e8"><img alt="Start Spring Initializr" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-init-1.png" title=" "></a></p>
+<p><a href="#R-image-31c0cff65bacdd02cfed94cf468e4499" class="lightbox-link"><img alt="Start Spring Initializr" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-init-1.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-31c0cff65bacdd02cfed94cf468e4499"><img alt="Start Spring Initializr" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-init-1.png" title=" "></a></p>
 <ol>
 <li>
 <p>Select the Spring Boot Version</p>
 <p>You will be presented with a list of available Spring Boot versions. Choose <strong>3.2.2</strong> (or the latest 3.2.x version available).</p>
 </li>
 </ol>
-<p><a href="#R-image-17b03e015ca7a096c95d7841b209bfd6" class="lightbox-link"><img alt="Specify Spring Boot version" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-init-2.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-17b03e015ca7a096c95d7841b209bfd6"><img alt="Specify Spring Boot version" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-init-2.png" title=" "></a></p>
+<p><a href="#R-image-65be701b1a2801a661803dbaeaf247a5" class="lightbox-link"><img alt="Specify Spring Boot version" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-init-2.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-65be701b1a2801a661803dbaeaf247a5"><img alt="Specify Spring Boot version" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-init-2.png" title=" "></a></p>
 <ol>
 <li>
 <p>Choose Group ID.</p>
 <p>You will be asked for the Maven Group ID for this new project, you can use <strong>com.example</strong> (the default value).</p>
 </li>
 </ol>
-<p><a href="#R-image-3e3e3483b404a37a728b952b3140ec62" class="lightbox-link"><img alt="Group ID" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-init-4.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-3e3e3483b404a37a728b952b3140ec62"><img alt="Group ID" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-init-4.png" title=" "></a></p>
+<p><a href="#R-image-c9b03714abf2321986a1e8796681cb47" class="lightbox-link"><img alt="Group ID" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-init-4.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-c9b03714abf2321986a1e8796681cb47"><img alt="Group ID" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-init-4.png" title=" "></a></p>
 <ol>
 <li>
 <p>Choose Artifact ID.</p>
 <p>You will be asked for the Maven Artifact ID for this new project, enter <strong>account</strong>.</p>
 </li>
 </ol>
-<p><a href="#R-image-349ea1776fcdabeadac10038d4b6f4ac" class="lightbox-link"><img alt="Artifact ID" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-init-5.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-349ea1776fcdabeadac10038d4b6f4ac"><img alt="Artifact ID" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-init-5.png" title=" "></a></p>
+<p><a href="#R-image-9eaa60ac50db7cb34b5a691dea8b3964" class="lightbox-link"><img alt="Artifact ID" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-init-5.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-9eaa60ac50db7cb34b5a691dea8b3964"><img alt="Artifact ID" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-init-5.png" title=" "></a></p>
 <ol>
 <li>
 <p>Select Packaging Type</p>
 <p>You will be asked what type of packaging you want for this new project, select <strong>JAR</strong> from the list of options.</p>
 </li>
 </ol>
-<p><a href="#R-image-b21f8c60e57443b0df5281c897ee4e1b" class="lightbox-link"><img alt="Specify packaging type" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-init-6.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-b21f8c60e57443b0df5281c897ee4e1b"><img alt="Specify packaging type" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-init-6.png" title=" "></a></p>
+<p><a href="#R-image-7dc59fecf4238558621d7e46d904210e" class="lightbox-link"><img alt="Specify packaging type" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-init-6.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-7dc59fecf4238558621d7e46d904210e"><img alt="Specify packaging type" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-init-6.png" title=" "></a></p>
 <ol>
 <li>
 <p>Choose Java Version</p>
 <p>Next, you will be asked what version of Java to use. Select <strong>21</strong> from the list of options.</p>
-<p><a href="#R-image-c12afe5cb52eb9ea74493084ac0a2d0a" class="lightbox-link"><img alt="Specify Java version" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-init-7.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-c12afe5cb52eb9ea74493084ac0a2d0a"><img alt="Specify Java version" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-init-7.png" title=" "></a></p>
+<p><a href="#R-image-f3df58ea8e32b8522fa606e4e1dc375f" class="lightbox-link"><img alt="Specify Java version" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-init-7.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-f3df58ea8e32b8522fa606e4e1dc375f"><img alt="Specify Java version" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-init-7.png" title=" "></a></p>
 </li>
 <li>
 <p>Add Spring Boot dependencies</p>
 <p>Now you will have the opportunity to add the Spring Boot dependencies your project needs. For now just add <strong>Spring Web</strong>, which will let us write some REST services.  We will add more later as we need them.  After you add Spring Web, click on the option to continue with the selected dependencies.</p>
 </li>
 </ol>
-<p><a href="#R-image-d883bc6e565e95ab2ca219242ff2bb2d" class="lightbox-link"><img alt="Choose dependencies" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-init-8.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-d883bc6e565e95ab2ca219242ff2bb2d"><img alt="Choose dependencies" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-init-8.png" title=" "></a></p>
+<p><a href="#R-image-529955f998503bc58f8f43eb6b6a9f3f" class="lightbox-link"><img alt="Choose dependencies" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-init-8.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-529955f998503bc58f8f43eb6b6a9f3f"><img alt="Choose dependencies" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-init-8.png" title=" "></a></p>
 <ol>
 <li>Continue with the selected dependencies</li>
 </ol>
 <p>After you add Spring Web, click on the option to continue with the selected dependencies.</p>
-<p><a href="#R-image-03417afb933703e45d8d0eb6cf696ba4" class="lightbox-link"><img alt="Create Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-init-12.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-03417afb933703e45d8d0eb6cf696ba4"><img alt="Create Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-init-12.png" title=" "></a></p>
+<p><a href="#R-image-446b6c29fe7091ea0e9a553c6afa91ac" class="lightbox-link"><img alt="Create Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-init-12.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-446b6c29fe7091ea0e9a553c6afa91ac"><img alt="Create Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-init-12.png" title=" "></a></p>
 <ol>
 <li>
 <p>Select where to save the project</p>
 <p>You will be asked where to save the project. Note that this needs to be an existing location. You may wish to create a directory in another terminal if you do not have a suitable location. Enter the directory to save the project in and press <strong>Enter</strong>.</p>
 </li>
 </ol>
-<p><a href="#R-image-e9e20b65811a270638fed4fba4c44fcb" class="lightbox-link"><img alt="Project directory" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-init-9.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-e9e20b65811a270638fed4fba4c44fcb"><img alt="Project directory" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-init-9.png" title=" "></a></p>
+<p><a href="#R-image-7baffc0c66dbe2e350ffa3f161480343" class="lightbox-link"><img alt="Project directory" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-init-9.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-7baffc0c66dbe2e350ffa3f161480343"><img alt="Project directory" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-init-9.png" title=" "></a></p>
 <ol>
 <li>
 <p>Open the generated project</p>
 <p>Now the Spring Initializr will create a new project based on your selections and place it in the directory you specified. This will only take a few moments to complete. You will a message in the bottom right corner of Visual Studio Code telling you it is complete. Click on the <strong>Open</strong> button in that message to open your new project in Visual Studio Code.</p>
 </li>
 </ol>
-<p><a href="#R-image-5019617af0b235caf48c65c4ade811f7" class="lightbox-link"><img alt="Project generated" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-init-10.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-5019617af0b235caf48c65c4ade811f7"><img alt="Project generated" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-init-10.png" title=" "></a></p>
+<p><a href="#R-image-83ee4fb204b16f8fafc39eb4ef25304d" class="lightbox-link"><img alt="Project generated" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-init-10.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-83ee4fb204b16f8fafc39eb4ef25304d"><img alt="Project generated" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-init-10.png" title=" "></a></p>
 <ol>
 <li>When asked if you want to Enable null Analysis for this project press <strong>Enable</strong>.</li>
 </ol>
-<p><a href="#R-image-8aeae82461099ededff67fb8beb70c27" class="lightbox-link"><img alt="Enable" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-init-13.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-8aeae82461099ededff67fb8beb70c27"><img alt="Enable" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-init-13.png" title=" "></a></p>
+<p><a href="#R-image-438009ed444df0a49fe812d955d5c827" class="lightbox-link"><img alt="Enable" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-init-13.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-438009ed444df0a49fe812d955d5c827"><img alt="Enable" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-init-13.png" title=" "></a></p>
 <ol>
 <li>
 <p>Explore the project</p>
 <p>Explore the new project. You should find the main Spring Boot application class and your Spring Boot <code>application.properties</code> file as shown in the image below.</p>
-<p><a href="#R-image-0d6b80f175ed1fcc98ddbc310474cb69" class="lightbox-link"><img alt="Ihe new project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-init-11.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-0d6b80f175ed1fcc98ddbc310474cb69"><img alt="Ihe new project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-init-11.png" title=" "></a></p>
+<p><a href="#R-image-9b71047c58bd47def9542c5a602a1ff8" class="lightbox-link"><img alt="Ihe new project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-init-11.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-9b71047c58bd47def9542c5a602a1ff8"><img alt="Ihe new project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-init-11.png" title=" "></a></p>
 </li>
 <li>
 <p>Remove some files (Optional)</p>
@@ -232,12 +233,12 @@ In Visual Studio Code, press Ctrl&#43;Shift&#43;P (Cmd&#43;Shift&#43;P on a Mac)
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1723487095" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1723487095" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1723487095" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1723487095" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1723487095" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1723487095" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1724866676" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1724866676" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1724866676" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1724866676" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1724866676" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1724866676" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -250,8 +251,9 @@ In Visual Studio Code, press Ctrl&#43;Shift&#43;P (Cmd&#43;Shift&#43;P on a Mac)
           <ul class="enlarge morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/provision/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/index.html">Provision an Instance</a><ul id="R-subsections-c4dad079c96d7a5f54ae00022bcdf7a9" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/provision/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/intro/index.html">Introduction</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/provision/install/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/install/index.html">Install on OCI</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/provision/verify/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/verify/index.html">Verify Installation</a></li></ul></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/provision/install-local/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/install-local/index.html">Install locally</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/provision/install-free-trial/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/install-free-trial/index.html">Install in OCI Free Tier</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/provision/install-mp/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/install-mp/index.html">Install from OCI Marketplace</a></li></ul></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/devenv/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/index.html">Developer Environment</a><ul id="R-subsections-2fffb9f659e25ea05f48554f2d40267b" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/devenv/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/devenv/ide/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/ide/index.html">Install IDE</a></li>
@@ -293,6 +295,7 @@ In Visual Studio Code, press Ctrl&#43;Shift&#43;P (Cmd&#43;Shift&#43;P on a Mac)
           <li data-nav-id="/microservices-datadriven/cloudbank/saga/transfer-service/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/transfer-service/index.html">Create the Transfer service</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/saga/deploy/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/deploy/index.html">Deploy services</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/saga/test/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/test/index.html">Run LRA test cases</a></li></ul></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/springai/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/springai/index.html">CloudBank AI Assistant</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/index.html">Deploy with the CLI</a><ul id="R-subsections-700415e649763a5591d9524d38ddb106" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/get-code/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/get-code/index.html">Get the sample code</a></li>
@@ -317,7 +320,9 @@ In Visual Studio Code, press Ctrl&#43;Shift&#43;P (Cmd&#43;Shift&#43;P on a Mac)
           <li data-nav-id="/microservices-datadriven/cloudbank/backend/jaeger/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/jaeger/index.html">Explore Jaeger</a></li></ul></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/index.html">Cleanup</a><ul id="R-subsections-2a114b4f7d7c1e92ed8ef74b99ba5d82" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/intro/index.html">Introduction</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/uninstall/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/uninstall/index.html">Uninstall</a></li></ul></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/uninstall-local/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/uninstall-local/index.html">Local cleanup</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/uninstall-free-trial/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/uninstall-free-trial/index.html">OCI Free Tier Cleanup</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/uninstall-mp/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/uninstall-mp/index.html">OCI Marketplace Uninstall</a></li></ul></li>
           </ul>
         </div>
         <div id="R-shortcuts">
@@ -354,7 +359,7 @@ In Visual Studio Code, press Ctrl&#43;Shift&#43;P (Cmd&#43;Shift&#43;P on a Mac)
                   <div class="control-style">
                     <label class="a11y-only" for="R-select-variant">Theme</label>
                     <select id="R-select-variant" onchange="window.variants && variants.changeVariant( this.value );">
-                      <option id="R-select-variant-auto" value="auto" selected>Auto</option>
+                      <option id="R-select-variant-zen-light" value="zen-light" selected>Zen Light</option>
                     </select>
                   </div>
                   <div class="clear"></div>
@@ -380,8 +385,8 @@ In Visual Studio Code, press Ctrl&#43;Shift&#43;P (Cmd&#43;Shift&#43;P on a Mac)
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1723487095" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1723487095" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1723487095" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1724866676" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1724866676" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1724866676" defer></script>
   </body>
 </html>
