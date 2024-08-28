@@ -29,7 +29,7 @@ This option allows you to run Oracle Backend for Spring Boot and Microservices i
 
    * Navigate to the **Custom Instances** page by opening the main menu using the "hamburger" icon ( {{% icon icon="fa-solid fa-bars" %}} )  in the top left corner of the console and searching for "image":
 
-    ![Custom Instance import](../images/install-free-tier-3.png " ")
+      ![Custom Instance import](../images/install-free-tier-3.png " ")
 
    * Click on the **Import image** button.
 
@@ -43,9 +43,9 @@ This option allows you to run Oracle Backend for Spring Boot and Microservices i
 
    * Click on the **Import image** button to start the import.  
 
-    ![Custom Instance import](../images/install-free-tier-7.png " ")
+      ![Custom Instance import](../images/install-free-tier-7.png " ")
 
-   Note that it might take approximately 10 to 15 minutes to complete the import. You can see the progress on the **Custom image details** page that will be displayed.
+      > **Note:**  that it might take approximately 10 to 15 minutes to complete the import. You can see the progress on the **Custom image details** page that will be displayed.
 
 1. Create a compute instance
 
@@ -56,11 +56,11 @@ This option allows you to run Oracle Backend for Spring Boot and Microservices i
    * Navigate to the **Compute Instances** page by clicking on the link on the home page of the OCI Console or opening the main menu using the "hamburger" icon ( {{% icon icon="fa-solid fa-bars" %}} )  in the top left corner of the console and searching for
      "instance":
 
-    ![Instances](../images/install-free-tier-1.png " ")
+      ![Instances](../images/install-free-tier-1.png " ")
 
    * Create a Compute Instance by clicking on the **Create instance** button.
 
-   * Enter a name for the instance, for example `obaas-instance`
+   * Enter a name for the instance, for example *obaas-instance*.
 
    * Scroll down to the **Image and shape** section and click on the **Change Image** button to edit the details.
 
@@ -68,17 +68,17 @@ This option allows you to run Oracle Backend for Spring Boot and Microservices i
 
         > **Note:** The image will not show up until the import is completed.
 
-    ![Custom image selected](../images/install-free-tier-4.png " ")
+      ![Custom image selected](../images/install-free-tier-4.png " ")
 
      Click on the **Select image** button to confirm your choice.
 
    * Click on the **Change shape** button to choose the shape of your instance.  Oracle recommends 2 OCPUs and 32 GB of memory to run this CloudBank environment.
 
-    ![Shape selected](../images/install-free-tier-6.png " ")
+      ![Shape selected](../images/install-free-tier-6.png " ")
 
      Click on the **Select shape** button to confirm your choice.
 
-   * Leave the default values in the `Primary VNIC Section`. By doing so a virtual network and subnets will be created for you.
+   * Leave the default values in the **Primary VNIC Section**. By doing so a virtual network and subnets will be created for you.
 
    * In the **SSH Keys** section, make sure you provide SSH keys so you can log into your instance. You may provide an existing public key if you have one, or generate new keys.
 
