@@ -17,6 +17,7 @@ The following tools are recommended for a development environment:
 - Integrated Development Environment, for example Visual Studio Code
 - Java Development Kit, for example Oracle, OpenJDK, or GraalVM
 - Maven or Gradle for build and testing automation
+- Spring CLI (optional) for project creation
 
 If you wish to test locally or offline, then the following additional tools are recommended:
 
@@ -108,13 +109,33 @@ JVM:          17.0.3 (Oracle Corporation 17.0.3+8-LTS-111)
 OS:           Linux 5.10.102.1-microsoft-standard-WSL2 amd64
 ```
 
+## Spring CLI for project creation
+
+You can create projects with [Spring CLI](https://spring.io/projects/spring-cli).  To use this
+feature, install Spring CLI following the instructions provided in that repository, and then
+import the Oracle Project Catalog as follows:
+
+```bash
+spring project catalog add --name oracle --url https://github.com/oracle/spring-cloud-oci/tree/main/database/spring-cli/catalog
+```
+
+To create a new project, for example called `test2` with specific Maven group and artifact IDs,
+use a command similar to this, substituting your desired coordinates:
+
+```bash
+spring boot new --name test2 --from obaas --group-id com.example --artifact-id test2 --version 0.0.1
+```
+
+Review the `README` file in the created project for details of next steps.
+
+
 ## Oracle Database in a container for local testing
 
-If you want to run an instance of Oracle Database locally for development and testing, then Oracle recommends Oracle Database 23c Free.  You can start the database in a container with this
+If you want to run an instance of Oracle Database locally for development and testing, then Oracle recommends Oracle Database 23ai Free.  You can start the database in a container with this
 command specifying a secure password:
 
 ```bash
-docker run --name free23c -d \
+docker run --name free23ai -d \
    -p 1521:1521 \
    -e ORACLE_PWD=Welcome12345 \
    container-registry.oracle.com/database/free:latest
@@ -126,7 +147,7 @@ docker run --name free23c -d \
 <dependency>
     <groupId>org.testcontainers</groupId>
     <artifactId>oracle-free</artifactId>
-    <version>1.19.2</version>
+    <version>1.20.0</version>
     <scope>test</scope>
 </dependency>
 ```

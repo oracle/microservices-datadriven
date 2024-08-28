@@ -65,11 +65,11 @@ create_db() {
     WALLET_PASSWORD="$db_pwd"
     umask 22
 
-    # Create ATP- #21c always free
+    # Create ATP- #23ai always free
     umask 177
     echo '{"adminPassword": "'"$DB_PASSWORD"'"}' >temp_params
     umask 22
-    oci db autonomous-database create -c ${COMPARTMENT_OCID} --db-name ${DB_NAME} --display-name ${DB_NAME} --db-workload OLTP --is-free-tier true --cpu-core-count 1 --data-storage-size-in-tbs 1 --db-version "21c" --wait-for-state AVAILABLE --wait-interval-seconds 5 --from-json "file://temp_params"
+    oci db autonomous-database create -c ${COMPARTMENT_OCID} --db-name ${DB_NAME} --display-name ${DB_NAME} --db-workload OLTP --is-free-tier true --cpu-core-count 1 --data-storage-size-in-tbs 1 --db-version "23ai" --wait-for-state AVAILABLE --wait-interval-seconds 5 --from-json "file://temp_params"
     rm temp_params
 }
 

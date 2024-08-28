@@ -1,0 +1,4 @@
+kubelet-arg:
+  - "eviction-minimum-reclaim=imagefs.available=2%,nodefs.available=2%"
+  - "eviction-hard=memory.available<500Mi,nodefs.available<500Mi"
+  

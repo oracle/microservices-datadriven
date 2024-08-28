@@ -1,0 +1,1825 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 2.53.1
+    helm-version: 25.24.1
+    oracle/edition: 'COMMUNITY'
+  name: prometheus
+  namespace: prometheus
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 2.53.1
+    helm-version: 25.24.1
+    oracle/edition: 'COMMUNITY'
+  name: prometheus
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  - nodes/proxy
+  - services
+  - endpoints
+  - pods
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - extensions
+  resources:
+  - ingresses
+  verbs:
+  - get
+  - list
+  - watch
+- nonResourceURLs:
+  - /metrics
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 2.53.1
+    helm-version: 25.24.1
+    oracle/edition: 'COMMUNITY'
+  name: prometheus
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: prometheus
+subjects:
+- kind: ServiceAccount
+  name: prometheus
+  namespace: prometheus
+---
+apiVersion: v1
+data:
+  url: http://eureka-0.eureka.eureka.svc.cluster.local:8761/eureka
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 2.53.1
+    helm-version: 25.24.1
+    oracle/edition: 'COMMUNITY'
+  name: eureka-server
+  namespace: prometheus
+---
+apiVersion: v1
+data:
+  prometheus.rules: |-
+    groups:
+    - name: Pod Memory Alert
+      rules:
+        - alert: High Pod Memory
+          expr: sum(container_memory_usage_bytes) > 1
+          for: 1m
+          labels:
+            severity: slack
+          annotations:
+            summary: High Memory Usage
+    - name: PromtailEmbeddedExporter
+      rules:
+        - alert: PromtailRequestErrors
+          expr: 100 *
+            sum(rate(promtail_request_duration_seconds_count{status_code=~"5..|failed"}[1m]))
+            by (namespace, job, route, instance) /
+            sum(rate(promtail_request_duration_seconds_count[1m])) by (namespace,
+            job, route, instance) > 10
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Promtail request errors (instance {{ $labels.instance }})
+            description: >-
+              The {{ $labels.job }} {{ $labels.route }} is experiencing {{ printf $value }}% errors.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PromtailRequestLatency
+          expr: histogram_quantile(0.99,
+            sum(rate(promtail_request_duration_seconds_bucket[5m])) by (le)) > 1
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Promtail request latency (instance {{ $labels.instance }})
+            description: >-
+              The {{ $labels.job }} {{ $labels.route }} is experiencing {{ printf $value }}s 99th percentile latency.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+    - name: LokiEmbeddedExporter
+      rules:
+        - alert: LokiProcessTooManyRestarts
+          expr: changes(process_start_time_seconds{job=~".*loki.*"}[15m]) > 2
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: Loki process too many restarts (instance {{ $labels.instance }})
+            description: |-
+              A loki process had too many restarts (target {{ $labels.instance }})
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: LokiRequestErrors
+          expr: 100 *
+            sum(rate(loki_request_duration_seconds_count{status_code=~"5.."}[1m]))
+            by (namespace, job, route) /
+            sum(rate(loki_request_duration_seconds_count[1m])) by (namespace, job,
+            route) > 10
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: Loki request errors (instance {{ $labels.instance }})
+            description: >-
+              The {{ $labels.job }} and {{ $labels.route }} are experiencing
+              errors
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: LokiRequestPanic
+          expr: sum(increase(loki_panic_total[10m])) by (namespace, job) > 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Loki request panic (instance {{ $labels.instance }})
+            description: >-
+              The {{ $labels.job }} is experiencing {{ printf $value }}% increase of panics
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: LokiRequestLatency
+          expr: (histogram_quantile(0.99,
+            sum(rate(loki_request_duration_seconds_bucket{route!~"(?i).*tail.*"}[5m]))
+            by (le)))  > 1
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: Loki request latency (instance {{ $labels.instance }})
+            description: >-
+              The {{ $labels.job }} {{ $labels.route }} is experiencing {{ printf $value }}s 99th percentile latency
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+    - name: EmbeddedExporter
+      rules:
+        - alert: PrometheusJobMissing
+          expr: absent(up{job="prometheus"})
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: Prometheus job missing (instance {{ $labels.instance }})
+            description: |-
+              A Prometheus job has disappeared
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusTargetMissing
+          expr: up == 0
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Prometheus target missing (instance {{ $labels.instance }})
+            description: |-
+              A Prometheus target has disappeared. An exporter might be crashed.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusAllTargetsMissing
+          expr: sum by (job) (up) == 0
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Prometheus all targets missing (instance {{ $labels.instance }})
+            description: |-
+              A Prometheus job does not have living target anymore.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusTargetMissingWithWarmupTime
+          expr: sum by (instance, job) ((up == 0) * on (instance) group_right(job)
+            (node_time_seconds - node_boot_time_seconds > 600))
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Prometheus target missing with warmup time (instance {{
+              $labels.instance }})
+            description: >-
+              Allow a job time to start up (10 minutes) before alerting that it's
+              down.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusConfigurationReloadFailure
+          expr: prometheus_config_last_reload_successful != 1
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: Prometheus configuration reload failure (instance {{ $labels.instance
+              }})
+            description: |-
+              Prometheus configuration reload error
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusTooManyRestarts
+          expr: changes(process_start_time_seconds{job=~"prometheus|pushgateway|alertmanager"}[15m])
+            > 2
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: Prometheus too many restarts (instance {{ $labels.instance }})
+            description: >-
+              Prometheus has restarted more than twice in the last 15 minutes. It
+              might be crashlooping.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusAlertmanagerJobMissing
+          expr: absent(up{job="alertmanager"})
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: Prometheus AlertManager job missing (instance {{ $labels.instance }})
+            description: |-
+              A Prometheus AlertManager job has disappeared
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusAlertmanagerConfigurationReloadFailure
+          expr: alertmanager_config_last_reload_successful != 1
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: Prometheus AlertManager configuration reload failure (instance {{
+              $labels.instance }})
+            description: |-
+              AlertManager configuration reload error
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusAlertmanagerConfigNotSynced
+          expr: count(count_values("config_hash", alertmanager_config_hash)) > 1
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: Prometheus AlertManager config not synced (instance {{ $labels.instance
+              }})
+            description: |-
+              Configurations of AlertManager cluster instances are out of sync
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusAlertmanagerE2eDeadManSwitch
+          expr: vector(1)
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Prometheus AlertManager E2E dead man switch (instance {{
+              $labels.instance }})
+            description: >-
+              Prometheus DeadManSwitch is an always-firing alert. It's used as an
+              end-to-end test of Prometheus through the Alertmanager.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusNotConnectedToAlertmanager
+          expr: prometheus_notifications_alertmanagers_discovered < 1
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Prometheus not connected to alertmanager (instance {{ $labels.instance
+              }})
+            description: |-
+              Prometheus cannot connect the alertmanager
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusRuleEvaluationFailures
+          expr: increase(prometheus_rule_evaluation_failures_total[3m]) > 0
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Prometheus rule evaluation failures (instance {{ $labels.instance }})
+            description: >-
+              Prometheus encountered {{ $value }} rule evaluation failures,
+              leading to potentially ignored alerts.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusTemplateTextExpansionFailures
+          expr: increase(prometheus_template_text_expansion_failures_total[3m]) > 0
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Prometheus template text expansion failures (instance {{
+              $labels.instance }})
+            description: |-
+              Prometheus encountered {{ $value }} template text expansion failures
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusRuleEvaluationSlow
+          expr: prometheus_rule_group_last_duration_seconds >
+            prometheus_rule_group_interval_seconds
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: Prometheus rule evaluation slow (instance {{ $labels.instance }})
+            description: >-
+              Prometheus rule evaluation took more time than the scheduled
+              interval. It indicates a slower storage backend access or too
+              complex query.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusNotificationsBacklog
+          expr: min_over_time(prometheus_notifications_queue_length[10m]) > 0
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: Prometheus notifications backlog (instance {{ $labels.instance }})
+            description: |-
+              The Prometheus notification queue has not been empty for 10 minutes
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusAlertmanagerNotificationFailing
+          expr: rate(alertmanager_notifications_failed_total[1m]) > 0
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Prometheus AlertManager notification failing (instance {{
+              $labels.instance }})
+            description: |-
+              Alertmanager is failing sending notifications
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusTargetEmpty
+          expr: prometheus_sd_discovered_targets == 0
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Prometheus target empty (instance {{ $labels.instance }})
+            description: |-
+              Prometheus has no target in service discovery
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusTargetScrapingSlow
+          expr: prometheus_target_interval_length_seconds{quantile="0.9"} / on (interval,
+            instance, job)
+            prometheus_target_interval_length_seconds{quantile="0.5"} > 1.05
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: Prometheus target scraping slow (instance {{ $labels.instance }})
+            description: >-
+              Prometheus is scraping exporters slowly since it exceeded the
+              requested interval time. Your Prometheus server is
+              under-provisioned.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusLargeScrape
+          expr: increase(prometheus_target_scrapes_exceeded_sample_limit_total[10m]) > 10
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: Prometheus large scrape (instance {{ $labels.instance }})
+            description: |-
+              Prometheus has many scrapes that exceed the sample limit
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusTargetScrapeDuplicate
+          expr: increase(prometheus_target_scrapes_sample_duplicate_timestamp_total[5m]) >
+            0
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: Prometheus target scrape duplicate (instance {{ $labels.instance }})
+            description: >-
+              Prometheus has many samples rejected due to duplicate timestamps
+              but different values
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusTsdbCheckpointCreationFailures
+          expr: increase(prometheus_tsdb_checkpoint_creations_failed_total[1m]) > 0
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Prometheus TSDB checkpoint creation failures (instance {{
+              $labels.instance }})
+            description: |-
+              Prometheus encountered {{ $value }} checkpoint creation failures
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusTsdbCheckpointDeletionFailures
+          expr: increase(prometheus_tsdb_checkpoint_deletions_failed_total[1m]) > 0
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Prometheus TSDB checkpoint deletion failures (instance {{
+              $labels.instance }})
+            description: |-
+              Prometheus encountered {{ $value }} checkpoint deletion failures
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusTsdbCompactionsFailed
+          expr: increase(prometheus_tsdb_compactions_failed_total[1m]) > 0
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Prometheus TSDB compactions failed (instance {{ $labels.instance }})
+            description: |-
+              Prometheus encountered {{ $value }} TSDB compactions failures
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusTsdbHeadTruncationsFailed
+          expr: increase(prometheus_tsdb_head_truncations_failed_total[1m]) > 0
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Prometheus TSDB head truncations failed (instance {{ $labels.instance
+              }})
+            description: |-
+              Prometheus encountered {{ $value }} TSDB head truncation failures
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusTsdbReloadFailures
+          expr: increase(prometheus_tsdb_reloads_failures_total[1m]) > 0
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Prometheus TSDB reload failures (instance {{ $labels.instance }})
+            description: |-
+              Prometheus encountered {{ $value }} TSDB reload failures
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusTsdbWalCorruptions
+          expr: increase(prometheus_tsdb_wal_corruptions_total[1m]) > 0
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Prometheus TSDB WAL corruptions (instance {{ $labels.instance }})
+            description: |-
+              Prometheus encountered {{ $value }} TSDB WAL corruptions
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusTsdbWalTruncationsFailed
+          expr: increase(prometheus_tsdb_wal_truncations_failed_total[1m]) > 0
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Prometheus TSDB WAL truncations failed (instance {{ $labels.instance
+              }})
+            description: |-
+              Prometheus encountered {{ $value }} TSDB WAL truncation failures
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: PrometheusTimeseriesCardinality
+          expr: label_replace(count by(__name__) ({__name__=~".+"}), "name", "$1",
+            "__name__", "(.+)") > 10000
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: Prometheus timeseries cardinality (instance {{ $labels.instance }})
+            description: >-
+              The "{{ $labels.name }}" timeseries cardinality is getting very
+              high: {{ $value }}
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+    - name: KubestateExporter
+      rules:
+        - alert: KubernetesNodeNotReady
+          expr: kube_node_status_condition{condition="Ready",status="true"} == 0
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: Kubernetes Node ready (node {{ $labels.node }})
+            description: |-
+              Node {{ $labels.node }} has been unready for a long time
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesNodeMemoryPressure
+          expr: kube_node_status_condition{condition="MemoryPressure",status="true"} == 1
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: Kubernetes memory pressure (node {{ $labels.node }})
+            description: |-
+              Node {{ $labels.node }} has MemoryPressure condition
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesNodeDiskPressure
+          expr: kube_node_status_condition{condition="DiskPressure",status="true"} == 1
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: Kubernetes disk pressure (node {{ $labels.node }})
+            description: |-
+              Node {{ $labels.node }} has DiskPressure condition
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesNodeNetworkUnavailable
+          expr: kube_node_status_condition{condition="NetworkUnavailable",status="true"}
+            == 1
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: Kubernetes Node network unavailable (instance {{ $labels.instance }})
+            description: |-
+              Node {{ $labels.node }} has NetworkUnavailable condition
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesNodeOutOfPodCapacity
+          expr: sum by (node) ((kube_pod_status_phase{phase="Running"} == 1) + on(uid)
+            group_left(node) (0 * kube_pod_info{pod_template_hash=""})) / sum by
+            (node) (kube_node_status_allocatable{resource="pods"}) * 100 > 90
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: Kubernetes Node out of pod capacity (instance {{ $labels.instance }})
+            description: |-
+              Node {{ $labels.node }} is out of pod capacity
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesContainerOomKiller
+          expr: (kube_pod_container_status_restarts_total -
+            kube_pod_container_status_restarts_total offset 10m >= 1) and ignoring
+            (reason)
+            min_over_time(kube_pod_container_status_last_terminated_reason{reason="OOMKilled"}[10m])
+            == 1
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: Kubernetes container oom killer ({{ $labels.namespace }}/{{ $labels.pod
+              }}:{{ $labels.container }})
+            description: >-
+              Container {{ $labels.container }} in pod {{ $labels.namespace }}/{{
+              $labels.pod }} has been OOMKilled {{ $value }} times in the last 10
+              minutes.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesJobFailed
+          expr: kube_job_status_failed > 0
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: Kubernetes Job failed ({{ $labels.namespace }}/{{ $labels.job_name }})
+            description: >-
+              Job {{ $labels.namespace }}/{{ $labels.job_name }} failed to
+              complete
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesCronjobSuspended
+          expr: kube_cronjob_spec_suspend != 0
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: Kubernetes CronJob suspended ({{ $labels.namespace }}/{{
+              $labels.cronjob }})
+            description: |-
+              CronJob {{ $labels.namespace }}/{{ $labels.cronjob }} is suspended
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesPersistentvolumeclaimPending
+          expr: kube_persistentvolumeclaim_status_phase{phase="Pending"} == 1
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: Kubernetes PersistentVolumeClaim pending ({{ $labels.namespace }}/{{
+              $labels.persistentvolumeclaim }})
+            description: >-
+              PersistentVolumeClaim {{ $labels.namespace }}/{{
+              $labels.persistentvolumeclaim }} is pending
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesVolumeOutOfDiskSpace
+          expr: kubelet_volume_stats_available_bytes / kubelet_volume_stats_capacity_bytes
+            * 100 < 10
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: Kubernetes Volume out of disk space (instance {{ $labels.instance }})
+            description: |-
+              Volume is almost full (< 10% left)
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesVolumeFullInFourDays
+          expr: predict_linear(kubelet_volume_stats_available_bytes[6h:5m], 4 * 24 * 3600)
+            < 0
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Kubernetes Volume full in four days (instance {{ $labels.instance }})
+            description: >-
+              Volume under {{ $labels.namespace }}/{{
+              $labels.persistentvolumeclaim }} is expected to fill up within four
+              days. Currently {{ $value | humanize }}% is available.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesPersistentvolumeError
+          expr: kube_persistentvolume_status_phase{phase=~"Failed|Pending",
+            job="kube-state-metrics"} > 0
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Kubernetes PersistentVolumeClaim pending ({{ $labels.namespace }}/{{
+              $labels.persistentvolumeclaim }})
+            description: |-
+              Persistent volume {{ $labels.persistentvolume }} is in bad state
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesStatefulsetDown
+          expr: kube_statefulset_replicas != kube_statefulset_status_replicas_ready > 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: Kubernetes StatefulSet down ({{ $labels.namespace }}/{{
+              $labels.statefulset }})
+            description: >-
+              StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} went
+              down
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesHpaScaleInability
+          expr: (kube_horizontalpodautoscaler_spec_max_replicas -
+            kube_horizontalpodautoscaler_status_desired_replicas) * on
+            (horizontalpodautoscaler,namespace)
+            (kube_horizontalpodautoscaler_status_condition{condition="ScalingLimited",
+            status="true"} == 1) == 0
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: Kubernetes HPA scale inability (instance {{ $labels.instance }})
+            description: >-
+              HPA {{ $labels.namespace }}/{{ $labels.horizontalpodautoscaler }}
+              is unable to scale
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesHpaMetricsUnavailability
+          expr: kube_horizontalpodautoscaler_status_condition{status="false",
+            condition="ScalingActive"} == 1
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: Kubernetes HPA metrics unavailability (instance {{ $labels.instance }})
+            description: >-
+              HPA {{ $labels.namespace }}/{{ $labels.horizontalpodautoscaler }}
+              is unable to collect metrics
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesHpaScaleMaximum
+          expr: (kube_horizontalpodautoscaler_status_desired_replicas >=
+            kube_horizontalpodautoscaler_spec_max_replicas) and
+            (kube_horizontalpodautoscaler_spec_max_replicas > 1) and
+            (kube_horizontalpodautoscaler_spec_min_replicas !=
+            kube_horizontalpodautoscaler_spec_max_replicas)
+          for: 2m
+          labels:
+            severity: info
+          annotations:
+            summary: Kubernetes HPA scale maximum (instance {{ $labels.instance }})
+            description: >-
+              HPA {{ $labels.namespace }}/{{ $labels.horizontalpodautoscaler }}
+              has hit maximum number of desired pods
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesHpaUnderutilized
+          expr: max(quantile_over_time(0.5,
+            kube_horizontalpodautoscaler_status_desired_replicas[1d]) ==
+            kube_horizontalpodautoscaler_spec_min_replicas) by
+            (horizontalpodautoscaler) > 3
+          for: 0m
+          labels:
+            severity: info
+          annotations:
+            summary: Kubernetes HPA underutilized (instance {{ $labels.instance }})
+            description: >-
+              HPA {{ $labels.namespace }}/{{ $labels.horizontalpodautoscaler }}
+              is constantly at minimum replicas for 50% of the time. Potential
+              cost saving here.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesPodNotHealthy
+          expr: sum by (namespace, pod)
+            (kube_pod_status_phase{phase=~"Pending|Unknown|Failed"}) > 0
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: Kubernetes Pod not healthy ({{ $labels.namespace }}/{{ $labels.pod }})
+            description: >-
+              Pod {{ $labels.namespace }}/{{ $labels.pod }} has been in a
+              non-running state for longer than 15 minutes.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesPodCrashLooping
+          expr: increase(kube_pod_container_status_restarts_total[1m]) > 3
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: Kubernetes pod crash looping ({{ $labels.namespace }}/{{ $labels.pod
+              }})
+            description: |-
+              Pod {{ $labels.namespace }}/{{ $labels.pod }} is crash looping
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesReplicasetReplicasMismatch
+          expr: kube_replicaset_spec_replicas != kube_replicaset_status_ready_replicas
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: Kubernetes ReplicasSet mismatch ({{ $labels.namespace }}/{{
+              $labels.replicaset }})
+            description: >-
+              ReplicaSet {{ $labels.namespace }}/{{ $labels.replicaset }}
+              replicas mismatch
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesDeploymentReplicasMismatch
+          expr: kube_deployment_spec_replicas != kube_deployment_status_replicas_available
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: Kubernetes Deployment replicas mismatch ({{ $labels.namespace }}/{{
+              $labels.deployment }})
+            description: >-
+              Deployment {{ $labels.namespace }}/{{ $labels.deployment }}
+              replicas mismatch
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesStatefulsetReplicasMismatch
+          expr: kube_statefulset_status_replicas_ready != kube_statefulset_status_replicas
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: Kubernetes StatefulSet replicas mismatch (instance {{ $labels.instance
+              }})
+            description: |-
+              StatefulSet does not match the expected number of replicas.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesDeploymentGenerationMismatch
+          expr: kube_deployment_status_observed_generation !=
+            kube_deployment_metadata_generation
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: Kubernetes Deployment generation mismatch ({{ $labels.namespace }}/{{
+              $labels.deployment }})
+            description: >-
+              Deployment {{ $labels.namespace }}/{{ $labels.deployment }} has
+              failed but has not been rolled back.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesStatefulsetGenerationMismatch
+          expr: kube_statefulset_status_observed_generation !=
+            kube_statefulset_metadata_generation
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: Kubernetes StatefulSet generation mismatch ({{ $labels.namespace }}/{{
+              $labels.statefulset }})
+            description: >-
+              StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }} has
+              failed but has not been rolled back.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesStatefulsetUpdateNotRolledOut
+          expr: max without (revision) (kube_statefulset_status_current_revision unless
+            kube_statefulset_status_update_revision) * (kube_statefulset_replicas
+            != kube_statefulset_status_replicas_updated)
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: Kubernetes StatefulSet update not rolled out ({{ $labels.namespace
+              }}/{{ $labels.statefulset }})
+            description: >-
+              StatefulSet {{ $labels.namespace }}/{{ $labels.statefulset }}
+              update has not been rolled out.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesDaemonsetRolloutStuck
+          expr: kube_daemonset_status_number_ready /
+            kube_daemonset_status_desired_number_scheduled * 100 < 100 or
+            kube_daemonset_status_desired_number_scheduled -
+            kube_daemonset_status_current_number_scheduled > 0
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: Kubernetes DaemonSet rollout stuck ({{ $labels.namespace }}/{{
+              $labels.daemonset }})
+            description: >-
+              Some Pods of DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset
+              }} are not scheduled or not ready
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesDaemonsetMisscheduled
+          expr: kube_daemonset_status_number_misscheduled > 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: Kubernetes DaemonSet misscheduled ({{ $labels.namespace }}/{{
+              $labels.daemonset }})
+            description: >-
+              Some Pods of DaemonSet {{ $labels.namespace }}/{{ $labels.daemonset
+              }} are running where they are not supposed to run
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesCronjobTooLong
+          expr: time() - kube_cronjob_next_schedule_time > 3600
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: Kubernetes CronJob too long ({{ $labels.namespace }}/{{ $labels.cronjob
+              }})
+            description: >-
+              CronJob {{ $labels.namespace }}/{{ $labels.cronjob }} is taking
+              more than 1h to complete.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesJobSlowCompletion
+          expr: kube_job_spec_completions - kube_job_status_succeeded -
+            kube_job_status_failed > 0
+          for: 12h
+          labels:
+            severity: critical
+          annotations:
+            summary: Kubernetes job slow completion ({{ $labels.namespace }}/{{
+              $labels.job_name }})
+            description: >-
+              Kubernetes Job {{ $labels.namespace }}/{{ $labels.job_name }} did
+              not complete in time.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesApiServerErrors
+          expr: sum(rate(apiserver_request_total{job="apiserver",code=~"(?:5..)"}[1m])) by
+            (instance, job) /
+            sum(rate(apiserver_request_total{job="apiserver"}[1m])) by (instance,
+            job) * 100 > 3
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: Kubernetes API server errors (instance {{ $labels.instance }})
+            description: |-
+              Kubernetes API server is experiencing high error rate
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesApiClientErrors
+          expr: (sum(rate(rest_client_requests_total{code=~"(4|5).."}[1m])) by (instance,
+            job) / sum(rate(rest_client_requests_total[1m])) by (instance, job)) *
+            100 > 1
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: Kubernetes API client errors (instance {{ $labels.instance }})
+            description: |-
+              Kubernetes API client is experiencing high error rate
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesClientCertificateExpiresNextWeek
+          expr: apiserver_client_certificate_expiration_seconds_count{job="apiserver"} > 0
+            and histogram_quantile(0.01, sum by (job, le)
+            (rate(apiserver_client_certificate_expiration_seconds_bucket{job="apiserver"}[5m])))
+            < 7*24*60*60
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: Kubernetes client certificate expires next week (instance {{
+              $labels.instance }})
+            description: >-
+              A client certificate used to authenticate to the apiserver is
+              expiring next week.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesClientCertificateExpiresSoon
+          expr: apiserver_client_certificate_expiration_seconds_count{job="apiserver"} > 0
+            and histogram_quantile(0.01, sum by (job, le)
+            (rate(apiserver_client_certificate_expiration_seconds_bucket{job="apiserver"}[5m])))
+            < 24*60*60
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Kubernetes client certificate expires soon (instance {{
+              $labels.instance }})
+            description: >-
+              A client certificate used to authenticate to the apiserver is
+              expiring in less than 24.0 hours.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: KubernetesApiServerLatency
+          expr: histogram_quantile(0.99,
+            sum(rate(apiserver_request_duration_seconds_bucket{verb!~"(?:CONNECT|WATCHLIST|WATCH|PROXY)"}
+            [10m])) WITHOUT (subresource)) > 1
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: Kubernetes API server latency (instance {{ $labels.instance }})
+            description: >-
+              Kubernetes API server has a 99th percentile latency of {{ $value }}
+              seconds for {{ $labels.verb }} {{ $labels.resource }}.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+    - name: JvmExporter
+      rules:
+        - alert: JvmMemoryFillingUp
+          expr: (sum by (instance)(jvm_memory_used_bytes{area="heap"}) / sum by
+            (instance)(jvm_memory_max_bytes{area="heap"})) * 100 > 80
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: JVM memory filling up (instance {{ $labels.instance }})
+            description: |-
+              JVM memory is filling up (> 80%)
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+    - name: GoogleCadvisor
+      rules:
+        - alert: ContainerKilled
+          expr: time() - container_last_seen > 60
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: Container killed (instance {{ $labels.instance }})
+            description: |-
+              A container has disappeared
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: ContainerAbsent
+          expr: absent(container_last_seen)
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: Container absent (instance {{ $labels.instance }})
+            description: |-
+              A container is absent for 5 min
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: ContainerHighCpuUtilization
+          expr: (sum(rate(container_cpu_usage_seconds_total{container!=""}[5m])) by (pod,
+            container) /
+            sum(container_spec_cpu_quota{container!=""}/container_spec_cpu_period{container!=""})
+            by (pod, container) * 100) > 80
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: Container High CPU utilization (instance {{ $labels.instance }})
+            description: |-
+              Container CPU utilization is above 80%
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: ContainerHighMemoryUsage
+          expr: (sum(container_memory_working_set_bytes{name!=""}) BY (instance, name) /
+            sum(container_spec_memory_limit_bytes > 0) BY (instance, name) * 100)
+            > 80
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: Container High Memory usage (instance {{ $labels.instance }})
+            description: |-
+              Container Memory usage is above 80%
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: ContainerVolumeUsage
+          expr: (1 - (sum(container_fs_inodes_free{name!=""}) BY (instance) /
+            sum(container_fs_inodes_total) BY (instance))) * 100 > 80
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: Container Volume usage (instance {{ $labels.instance }})
+            description: |-
+              Container Volume usage is above 80%
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: ContainerHighThrottleRate
+          expr: sum(increase(container_cpu_cfs_throttled_periods_total{container!=""}[5m]))
+            by (container, pod, namespace) /
+            sum(increase(container_cpu_cfs_periods_total[5m])) by (container, pod,
+            namespace) > ( 25 / 100 )
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: Container high throttle rate (instance {{ $labels.instance }})
+            description: |-
+              Container is being throttled
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: ContainerLowCpuUtilization
+          expr: (sum(rate(container_cpu_usage_seconds_total{container!=""}[5m])) by (pod,
+            container) /
+            sum(container_spec_cpu_quota{container!=""}/container_spec_cpu_period{container!=""})
+            by (pod, container) * 100) < 20
+          for: 7d
+          labels:
+            severity: info
+          annotations:
+            summary: Container Low CPU utilization (instance {{ $labels.instance }})
+            description: >-
+              Container CPU utilization is under 20% for 1 week. Consider
+              reducing the allocated CPU.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: ContainerLowMemoryUsage
+          expr: (sum(container_memory_working_set_bytes{name!=""}) BY (instance, name) /
+            sum(container_spec_memory_limit_bytes > 0) BY (instance, name) * 100)
+            < 20
+          for: 7d
+          labels:
+            severity: info
+          annotations:
+            summary: Container Low Memory usage (instance {{ $labels.instance }})
+            description: >-
+              Container Memory usage is under 20% for 1 week. Consider reducing
+              the allocated memory.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+    - name: NodeExporter
+      rules:
+        - alert: HostOutOfMemory
+          expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 10) *
+            on(instance) group_left (nodename) node_uname_info{nodename=~".+"}
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: Host out of memory (instance {{ $labels.instance }})
+            description: |-
+              Node memory is filling up (< 10% left)
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostMemoryUnderMemoryPressure
+          expr: (rate(node_vmstat_pgmajfault[1m]) > 1000) * on(instance) group_left
+            (nodename) node_uname_info{nodename=~".+"}
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: Host memory under memory pressure (instance {{ $labels.instance }})
+            description: >-
+              The node is under heavy memory pressure. High rate of major page
+              faults
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostMemoryIsUnderutilized
+          expr: (100 - (avg_over_time(node_memory_MemAvailable_bytes[30m]) /
+            node_memory_MemTotal_bytes * 100) < 20) * on(instance) group_left
+            (nodename) node_uname_info{nodename=~".+"}
+          for: 1w
+          labels:
+            severity: info
+          annotations:
+            summary: Host Memory is underutilized (instance {{ $labels.instance }})
+            description: >-
+              Node memory is < 20% for 1 week. Consider reducing memory space.
+              (instance {{ $labels.instance }})
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostUnusualNetworkThroughputIn
+          expr: (sum by (instance) (rate(node_network_receive_bytes_total[2m])) / 1024 /
+            1024 > 100) * on(instance) group_left (nodename)
+            node_uname_info{nodename=~".+"}
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: Host unusual network throughput in (instance {{ $labels.instance }})
+            description: >-
+              Host network interfaces are probably receiving too much data (> 100
+              MB/s)
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostUnusualNetworkThroughputOut
+          expr: (sum by (instance) (rate(node_network_transmit_bytes_total[2m])) / 1024 /
+            1024 > 100) * on(instance) group_left (nodename)
+            node_uname_info{nodename=~".+"}
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: Host unusual network throughput out (instance {{ $labels.instance }})
+            description: >-
+              Host network interfaces are probably sending too much data (> 100
+              MB/s)
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostUnusualDiskReadRate
+          expr: (sum by (instance) (rate(node_disk_read_bytes_total[2m])) / 1024 / 1024 >
+            50) * on(instance) group_left (nodename)
+            node_uname_info{nodename=~".+"}
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: Host unusual disk read rate (instance {{ $labels.instance }})
+            description: |-
+              Disk is probably reading too much data (> 50 MB/s)
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostUnusualDiskWriteRate
+          expr: (sum by (instance) (rate(node_disk_written_bytes_total[2m])) / 1024 / 1024
+            > 50) * on(instance) group_left (nodename)
+            node_uname_info{nodename=~".+"}
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: Host unusual disk write rate (instance {{ $labels.instance }})
+            description: |-
+              Disk is probably writing too much data (> 50 MB/s)
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostOutOfDiskSpace
+          expr: ((node_filesystem_avail_bytes * 100) / node_filesystem_size_bytes < 10 and
+            ON (instance, device, mountpoint) node_filesystem_readonly == 0) *
+            on(instance) group_left (nodename) node_uname_info{nodename=~".+"}
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: Host out of disk space (instance {{ $labels.instance }})
+            description: |-
+              Disk is almost full (< 10% left)
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostDiskWillFillIn24Hours
+          expr: ((node_filesystem_avail_bytes * 100) / node_filesystem_size_bytes < 10 and
+            ON (instance, device, mountpoint)
+            predict_linear(node_filesystem_avail_bytes{fstype!~"tmpfs"}[1h], 24 *
+            3600) < 0 and ON (instance, device, mountpoint)
+            node_filesystem_readonly == 0) * on(instance) group_left (nodename)
+            node_uname_info{nodename=~".+"}
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: Host disk will fill in 24 hours (instance {{ $labels.instance }})
+            description: >-
+              Filesystem is predicted to run out of space within the next 24
+              hours at current write rate
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostOutOfInodes
+          expr: (node_filesystem_files_free{fstype!="msdosfs"} /
+            node_filesystem_files{fstype!="msdosfs"} * 100 < 10 and ON (instance,
+            device, mountpoint) node_filesystem_readonly == 0) * on(instance)
+            group_left (nodename) node_uname_info{nodename=~".+"}
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: Host out of inodes (instance {{ $labels.instance }})
+            description: |-
+              Disk is almost running out of available inodes (< 10% left)
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostFilesystemDeviceError
+          expr: node_filesystem_device_error == 1
+          for: 2m
+          labels:
+            severity: critical
+          annotations:
+            summary: Host filesystem device error (instance {{ $labels.instance }})
+            description: >-
+              {{ $labels.instance }}: Device error with the {{ $labels.mountpoint
+              }} filesystem
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostInodesWillFillIn24Hours
+          expr: (node_filesystem_files_free{fstype!="msdosfs"} /
+            node_filesystem_files{fstype!="msdosfs"} * 100 < 10 and
+            predict_linear(node_filesystem_files_free{fstype!="msdosfs"}[1h], 24 *
+            3600) < 0 and ON (instance, device, mountpoint)
+            node_filesystem_readonly{fstype!="msdosfs"} == 0) * on(instance)
+            group_left (nodename) node_uname_info{nodename=~".+"}
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: Host inodes will fill in 24 hours (instance {{ $labels.instance }})
+            description: >-
+              Filesystem is predicted to run out of inodes within the next 24
+              hours at current write rate
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostUnusualDiskReadLatency
+          expr: (rate(node_disk_read_time_seconds_total[1m]) /
+            rate(node_disk_reads_completed_total[1m]) > 0.1 and
+            rate(node_disk_reads_completed_total[1m]) > 0) * on(instance)
+            group_left (nodename) node_uname_info{nodename=~".+"}
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: Host unusual disk read latency (instance {{ $labels.instance }})
+            description: |-
+              Disk latency is growing (read operations > 100ms)
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostUnusualDiskWriteLatency
+          expr: (rate(node_disk_write_time_seconds_total[1m]) /
+            rate(node_disk_writes_completed_total[1m]) > 0.1 and
+            rate(node_disk_writes_completed_total[1m]) > 0) * on(instance)
+            group_left (nodename) node_uname_info{nodename=~".+"}
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: Host unusual disk write latency (instance {{ $labels.instance }})
+            description: |-
+              Disk latency is growing (write operations > 100ms)
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostHighCpuLoad
+          expr: (sum by (instance) (avg by (mode, instance)
+            (rate(node_cpu_seconds_total{mode!="idle"}[2m]))) > 0.8) *
+            on(instance) group_left (nodename) node_uname_info{nodename=~".+"}
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: Host high CPU load (instance {{ $labels.instance }})
+            description: |-
+              CPU load is > 80%
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostCpuIsUnderutilized
+          expr: (100 - (rate(node_cpu_seconds_total{mode="idle"}[30m]) * 100) < 20) *
+            on(instance) group_left (nodename) node_uname_info{nodename=~".+"}
+          for: 1w
+          labels:
+            severity: info
+          annotations:
+            summary: Host CPU is underutilized (instance {{ $labels.instance }})
+            description: |-
+              CPU load is < 20% for 1 week. Consider reducing the number of CPUs.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostCpuStealNoisyNeighbor
+          expr: (avg by(instance) (rate(node_cpu_seconds_total{mode="steal"}[5m])) * 100 >
+            10) * on(instance) group_left (nodename)
+            node_uname_info{nodename=~".+"}
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: Host CPU steal noisy neighbor (instance {{ $labels.instance }})
+            description: >-
+              CPU steal is > 10%. A noisy neighbor is killing VM performances or
+              a spot instance may be out of credit.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostCpuHighIowait
+          expr: (avg by (instance) (rate(node_cpu_seconds_total{mode="iowait"}[5m])) * 100
+            > 10) * on(instance) group_left (nodename)
+            node_uname_info{nodename=~".+"}
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: Host CPU high iowait (instance {{ $labels.instance }})
+            description: >-
+              CPU iowait > 10%. A high iowait means that you are disk or network
+              bound.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostUnusualDiskIo
+          expr: (rate(node_disk_io_time_seconds_total[1m]) > 0.5) * on(instance)
+            group_left (nodename) node_uname_info{nodename=~".+"}
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: Host unusual disk IO (instance {{ $labels.instance }})
+            description: >-
+              Time spent in IO is too high on {{ $labels.instance }}. Check
+              storage for issues.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostContextSwitching
+          expr: ((rate(node_context_switches_total[5m])) / (count without(cpu, mode)
+            (node_cpu_seconds_total{mode="idle"})) > 10000) * on(instance)
+            group_left (nodename) node_uname_info{nodename=~".+"}
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: Host context switching (instance {{ $labels.instance }})
+            description: |-
+              Context switching is growing on the node (> 10000 / CPU / s)
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostSwapIsFillingUp
+          expr: ((1 - (node_memory_SwapFree_bytes / node_memory_SwapTotal_bytes)) * 100 >
+            80) * on(instance) group_left (nodename)
+            node_uname_info{nodename=~".+"}
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: Host swap is filling up (instance {{ $labels.instance }})
+            description: |-
+              Swap is filling up (>80%)
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostSystemdServiceCrashed
+          expr: (node_systemd_unit_state{state="failed"} == 1) * on(instance) group_left
+            (nodename) node_uname_info{nodename=~".+"}
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: Host systemd service crashed (instance {{ $labels.instance }})
+            description: |-
+              systemd service crashed
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostPhysicalComponentTooHot
+          expr: ((node_hwmon_temp_celsius * ignoring(label) group_left(instance, job,
+            node, sensor) node_hwmon_sensor_label{label!="tctl"} > 75)) *
+            on(instance) group_left (nodename) node_uname_info{nodename=~".+"}
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: Host physical component too hot (instance {{ $labels.instance }})
+            description: |-
+              Physical hardware component too hot
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostNodeOvertemperatureAlarm
+          expr: (node_hwmon_temp_crit_alarm_celsius == 1) * on(instance) group_left
+            (nodename) node_uname_info{nodename=~".+"}
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Host node overtemperature alarm (instance {{ $labels.instance }})
+            description: |-
+              Physical node temperature alarm triggered
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostRaidArrayGotInactive
+          expr: (node_md_state{state="inactive"} > 0) * on(instance) group_left (nodename)
+            node_uname_info{nodename=~".+"}
+          for: 0m
+          labels:
+            severity: critical
+          annotations:
+            summary: Host RAID array got inactive (instance {{ $labels.instance }})
+            description: >-
+              RAID array {{ $labels.device }} is in a degraded state due to one
+              or more disk failures. The number of spare drives is insufficient to
+              fix the issue automatically.
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostRaidDiskFailure
+          expr: (node_md_disks{state="failed"} > 0) * on(instance) group_left (nodename)
+            node_uname_info{nodename=~".+"}
+          for: 2m
+          labels:
+            severity: warning
+          annotations:
+            summary: Host RAID disk failure (instance {{ $labels.instance }})
+            description: >-
+              At least one device in RAID array on {{ $labels.instance }} failed.
+              Array {{ $labels.md_device }} needs attention and possibly a disk
+              swap
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostKernelVersionDeviations
+          expr: (count(sum(label_replace(node_uname_info, "kernel", "$1", "release",
+            "([0-9]+.[0-9]+.[0-9]+).*")) by (kernel)) > 1) * on(instance)
+            group_left (nodename) node_uname_info{nodename=~".+"}
+          for: 6h
+          labels:
+            severity: warning
+          annotations:
+            summary: Host kernel version deviations (instance {{ $labels.instance }})
+            description: |-
+              Different kernel versions are running
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+        - alert: HostOomKillDetected
+          expr: (increase(node_vmstat_oom_kill[1m]) > 0) * on(instance) group_left
+            (nodename) node_uname_info{nodename=~".+"}
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: Host OOM kill detected (instance {{ $labels.instance }})
+            description: |-
+              OOM kill detected
+                VALUE = {{ $value }}
+                LABELS = {{ $labels }}
+  prometheus.yml: "global:\n  scrape_interval: 5s\n  evaluation_interval: 5s\nrule_files:\n
+    \ - /etc/prometheus/prometheus.rules\nalerting:\n  alertmanagers:\n  - scheme:
+    http\n    static_configs:\n    - targets:\n      - \"alertmanager-operated.alertmanager.svc:9093\"\nscrape_configs:\n
+    \ - job_name: 'node-exporter'\n    kubernetes_sd_configs:\n      - role: endpoints\n
+    \   relabel_configs:\n    - source_labels: [__meta_kubernetes_endpoints_name]\n
+    \     regex: 'node-exporter'\n      action: keep\n  - job_name: vault\n    metrics_path:
+    /v1/sys/metrics\n    params:\n      format: ['prometheus']\n    scheme: http\n
+    \   tls_config:\n      ca_file: /certs/tls.crt\n    static_configs:\n    - targets:
+    ['vault.vault.svc.cluster.local:8200']\n  - job_name: 'kubernetes-apiservers'\n
+    \   kubernetes_sd_configs:\n    - role: endpoints\n    scheme: https\n    tls_config:\n
+    \     ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt\n    bearer_token_file:
+    /var/run/secrets/kubernetes.io/serviceaccount/token\n    relabel_configs:\n    -
+    source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]\n
+    \     action: keep\n      regex: default;kubernetes;https\n  - job_name: 'kubernetes-nodes'\n
+    \   scheme: https\n    tls_config:\n      ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt\n
+    \   bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token\n    kubernetes_sd_configs:\n
+    \   - role: node\n    relabel_configs:\n    - action: labelmap\n      regex: __meta_kubernetes_node_label_(.+)\n
+    \   - target_label: __address__\n      replacement: kubernetes.default.svc:443\n
+    \   - source_labels: [__meta_kubernetes_node_name]\n      regex: (.+)\n      target_label:
+    __metrics_path__\n      replacement: /api/v1/nodes/${1}/proxy/metrics\n  - job_name:
+    'kubernetes-pods'\n    kubernetes_sd_configs:\n    - role: pod\n    relabel_configs:\n
+    \   - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_scrape]\n
+    \     action: keep\n      regex: true\n    - source_labels: [__meta_kubernetes_pod_annotation_prometheus_io_path]\n
+    \     action: replace\n      target_label: __metrics_path__\n      regex: (.+)\n
+    \   - source_labels: [__address__, __meta_kubernetes_pod_annotation_prometheus_io_port]\n
+    \     action: replace\n      regex: ([^:]+)(?::\\d+)?;(\\d+)\n      replacement:
+    $1:$2\n      target_label: __address__\n    - action: labelmap\n      regex: __meta_kubernetes_pod_label_(.+)\n
+    \   - source_labels: [__meta_kubernetes_namespace]\n      action: replace\n      target_label:
+    kubernetes_namespace\n    - source_labels: [__meta_kubernetes_pod_name]\n      action:
+    replace\n      target_label: kubernetes_pod_name\n  - job_name: 'kube-state-metrics'\n
+    \   static_configs:\n      - targets: ['kube-state-metrics.kube-state-metrics.svc.cluster.local:8080']\n
+    \ - job_name: 'kubernetes-cadvisor'\n    scheme: https\n    tls_config:\n      ca_file:
+    /var/run/secrets/kubernetes.io/serviceaccount/ca.crt\n    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token\n
+    \   kubernetes_sd_configs:\n    - role: node\n    relabel_configs:\n    - action:
+    labelmap\n      regex: __meta_kubernetes_node_label_(.+)\n    - target_label:
+    __address__\n      replacement: kubernetes.default.svc:443\n    - source_labels:
+    [__meta_kubernetes_node_name]\n      regex: (.+)\n      target_label: __metrics_path__\n
+    \     replacement: /api/v1/nodes/${1}/proxy/metrics/cadvisor\n  - job_name: 'kubernetes-service-endpoints'\n
+    \   kubernetes_sd_configs:\n    - role: endpoints\n    relabel_configs:\n    -
+    source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]\n      action:
+    keep\n      regex: true\n    - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scheme]\n
+    \     action: replace\n      target_label: __scheme__\n      regex: (https?)\n
+    \   - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_path]\n
+    \     action: replace\n      target_label: __metrics_path__\n      regex: (.+)\n
+    \   - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]\n
+    \     action: replace\n      target_label: __address__\n      regex: ([^:]+)(?::\\d+)?;(\\d+)\n
+    \     replacement: $1:$2\n    - action: labelmap\n      regex: __meta_kubernetes_service_label_(.+)\n
+    \   - source_labels: [__meta_kubernetes_namespace]\n      action: replace\n      target_label:
+    kubernetes_namespace\n    - source_labels: [__meta_kubernetes_service_name]\n
+    \     action: replace\n      target_label: kubernetes_name\n  # Discover Eureka
+    services to scrape.\n  - job_name: \"eureka\"\n    # Scrape Eureka itself to discover
+    new services.\n    eureka_sd_configs:\n      - server: http://eureka.eureka.svc.cluster.local:8761/eureka\n
+    \   relabel_configs:\n    metrics_path: \"/actuator/prometheus\"\n  # Oracle DB
+    Exporter\n  - job_name: 'oracle-db-exporter'\n    metrics_path: '/metrics'\n    scrape_interval:
+    15s\n    scrape_timeout: 10s\n    static_configs:\n    - targets: \n      - metrics-exporter.oracle-database-exporter.svc.cluster.local:9161\n
+    \ # Apache APISIX    \n  - job_name: \"apisix\"\n    metrics_path: \"/apisix/prometheus/metrics\"\n
+    \   static_configs:\n      - targets: [ \"apisix-prometheus-metrics.apisix.svc.cluster.local:9091\"
+    ]"
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 2.53.1
+    helm-version: 25.24.1
+    name: prometheus-server-conf
+    oracle/edition: 'COMMUNITY'
+  name: prometheus-server-conf
+  namespace: prometheus
+---
+apiVersion: v1
+data:
+  ca.csr: |
+    LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJRG1UQ0NBZ0VDQVFBd0
+    lqRWdNQjRHQTFVRUF3d1hRbUZqYTJWdVpDQmhjeUJoSUZObGNuWnBZMlVnUTBFdwpnZ0dp
+    TUEwR0NTcUdTSWIzRFFFQkFRVUFBNElCandBd2dnR0tBb0lCZ1FEQk9xVXJNdXViRVRFeW
+    Y1YzIxSEFlCjVKaDhMQ0dwcHUyUnprOGYzQXFIaU5sNHZSSURtVnlBVlRpYzdjN1crOTJW
+    Wk50QjYvaWtDekFYT3NDZkhjS3AKZ3gxaWliSW90WHZXWERYUkZiTnpsVjEyWFZTMFFoMV
+    lxV293QU8vc3M1dU5icFVSOEhxL28vbEkvc04vYXBhcgpaeUJVWnhLU1dzODRGZ1hudlJO
+    cFZJL2xQZVAyVGh4TTA5Tmd4dWxPdFNzNUFjbUMwbllpUmZhbDZMbVJVUWpKClo2WXN6Sz
+    c5NWlVVHkvZ0xKOFNhWTZIVVhKZm9hOE44cWdsU2NaSWt5dGQrYTF3cjVIc0plUHg0anB2
+    cEd5ZVYKdWFNeGduUkd6Umd1djJ0VGtkMmhOcWxPR3FFRE1FTFRYcUw2Vmo1T0dGcW9wdE
+    RmTG1ybWllTUZwYzVlSEZjegozS2QyY2FvTzB0ZHFtQW9FTmdmenR6eDJVdURnS2ZnazZL
+    bFdlTmpML0xqVjJwUGd5ZytrTkQvZ1V6dllwaHl5Cm5sZ0p3TGJOVHZzQzY1OE1GOGY1ZS
+    t2YklqaW54QnhwNmRJUkdKK2JnYk9ORTFISWY2c1BzNDBpVEp5Q3VjNlUKM3VGQXdrL05I
+    ZE5pWExuVzBRVW1XRjg4eTJFT1E5THhid1dtM3VvUlZSY0NBd0VBQWFBeU1EQUdDU3FHU0
+    liMwpEUUVKRGpFak1DRXdEZ1lEVlIwUEFRSC9CQVFEQWdJRU1BOEdBMVVkRXdFQi93UUZN
+    QU1CQWY4d0RRWUpLb1pJCmh2Y05BUUVMQlFBRGdnR0JBQUFVT09QTW9kZlZ4bUFkWjlaaW
+    FnVHRPcjNPZVBKem9pY2svVEt4Wll5OEJBNysKdlVBNGNhWnhXb0pBSDFYV2h6UDUwNEJ2
+    di9BbnhUa0pRNG1FODRFdW13amJsWCtsczk2WFdaY09JOThzbzVSdgpuczcrTDVQQUtwYX
+    ltV0t2eU54VDlvc2pLQXFEQm8xWllBZWlXUU9IayszOTgraGNHZlVhTm1MclRDTTFrVlhG
+    Ci9Kc2xwSTR5bVNhcGFWanlhRjVaVGdjZ2JGZTN6SHNaZzVVZy9CUFk0eXFhOFo3M3I2cW
+    9SZVMzMExiQUpEYlEKbU5YZUJvc1c0MFNRZmpqMDBlTmZoaHA2MXlkM3ZMdlFzQVlHOWxy
+    M1hlenArRlpNZ1BGUVh1TTdPMGlXRGRlZQphWE9QMnZWSU02Z0lONjM3TWlzaVNubEJjaU
+    JNc0tCMWhUMDlaUUxZWTFHNVFBSW5ucTN2UUkzQWg4RWNhLzhsClA4TVpWR0U1T29tM0xZ
+    NTYyNTlxbStxazdXZm04SlhzcU43ZHBhZ0RIYWl4R2l4bU4rbnZnWUJabU1DdFR3T3IKKz
+    dtN1hiQnBTVTV2eC9WOElGckljN1l0ZXNLOFpBT3NUNVhkV0NURlhreHQxWGtWNUx6ZUJk
+    RkdtaDJYY05DagpEOUNubUNGZDJQcElvTlE4Z0E9PQotLS0tLUVORCBDRVJUSUZJQ0FURS
+    BSRVFVRVNULS0tLS0K
+  ca.pem: |
+    LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUVGRENDQW55Z0F3SUJBZ0lVYmp5cX
+    RQVFg0UFBISUFsV0dRN1dIRWplWm9rd0RRWUpLb1pJaHZjTkFRRUwKQlFBd0lqRWdNQjRH
+    QTFVRUF3d1hRbUZqYTJWdVpDQmhjeUJoSUZObGNuWnBZMlVnUTBFd0hoY05NalF3T0RFMA
+    pNakl5TWpRMFdoY05NelF3T0RFek1qSXlNalEwV2pBaU1TQXdIZ1lEVlFRRERCZENZV05y
+    Wlc1a0lHRnpJR0VnClUyVnlkbWxqWlNCRFFUQ0NBYUl3RFFZSktvWklodmNOQVFFQkJRQU
+    RnZ0dQQURDQ0FZb0NnZ0dCQU1FNnBTc3kKNjVzUk1USi9semJVY0I3a21Id3NJYW1tN1pI
+    T1R4L2NDb2VJMlhpOUVnT1pYSUJWT0p6dHp0YjczWlZrMjBIcgorS1FMTUJjNndKOGR3cW
+    1ESFdLSnNpaTFlOVpjTmRFVnMzT1ZYWFpkVkxSQ0hWaXBhakFBNyt5em00MXVsUkh3CmVy
+    K2orVWordzM5cWxxdG5JRlJuRXBKYXp6Z1dCZWU5RTJsVWorVTk0L1pPSEV6VDAyREc2VT
+    YxS3prQnlZTFMKZGlKRjlxWG91WkZSQ01sbnBpek1ydjNtSlJQTCtBc254SnBqb2RSY2wr
+    aHJ3M3lxQ1ZKeGtpVEsxMzVyWEN2awpld2w0L0hpT20ra2JKNVc1b3pHQ2RFYk5HQzYvYT
+    FPUjNhRTJxVTRhb1FNd1F0TmVvdnBXUGs0WVdxaW0wTjh1CmF1YUo0d1dsemw0Y1Z6UGNw
+    M1p4cWc3UzEycVlDZ1EyQi9PM1BIWlM0T0FwK0NUb3FWWjQyTXY4dU5YYWsrREsKRDZRMF
+    ArQlRPOWltSExLZVdBbkF0czFPK3dMcm53d1h4L2w3NjlzaU9LZkVIR25wMGhFWW41dUJz
+    NDBUVWNoLwpxdyt6alNKTW5JSzV6cFRlNFVEQ1Q4MGQwMkpjdWRiUkJTWllYenpMWVE1RD
+    B2RnZCYWJlNmhGVkZ3SURBUUFCCm8wSXdRREFPQmdOVkhROEJBZjhFQkFNQ0FnUXdEd1lE
+    VlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVUKME80SmFyaFBkK1U0cTBvY3FERS
+    tEZzZtN2Vjd0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dHQkFNREg4eGUxT1l3NQpwZzBRSWxR
+    dVNDbzhLYlJFWjE3RVY0aTV3YnYyUlhQN0pVZlFLV3RFaEpoRjh4NlZvbGlCRkl2RzRkak
+    I5QndSCk02eENONmFBT2MyaXQvdy91aXZHWVVFOWVCL1JhOTJqRjlzdnR0NHlYT0h3cWFI
+    ZHhwSmYyMElpd09oakUyRnYKVFEzMTZjVFFYM1gxN1BKK3NzenNZRCsyVU5DR1ZoVDlRLy
+    t5TmQrUFpUclp5ck5McGpuVGVxMDVBamVoQkF5Uwpka0gwLzd2dzhWeUhValFQdW93a1ZT
+    aC9maDA4Z2RRSEJwODJLQ3lXcElxTVAzdFNxYlphTW1jaW5SME5maHl1CnBVcHZiVEhDMH
+    NWQm0rbDNvQkFWaktlMmk5NTM5SjVUSS9vUnBZejFjUkd0czYrZXlLVElxYW16WnVPYVEy
+    dnAKdXNXUy95TEZxYlY4RklhMThXWDExN3N1ekhhVmRMQitIamJSVksrQjRMZ0xHU3huQW
+    xQU2h2VG5tVm1KelpFdwpjOUJlNnRCOTNHbkR1NGRWRHh4T215T0Q2UVlYRmQ3Y2JGMFRR
+    b3hNYjNHU1d0aG1UczIwNmFLaXYvdFZpdjA4CllVMVRldGFKOU8xTDk3NEtLdVJCbUltZF
+    hKWko2SnBCV3J6dWJTcFNXak80T0hneW01N0twdz09Ci0tLS0tRU5EIENFUlRJRklDQVRF
+    LS0tLS0K
+  tls.crt: |
+    LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUZBVENDQTJtZ0F3SUJBZ0lVYkxlL2
+    RhblhJRFBtcTV4MWUrMnlSRWd2ZU1Jd0RRWUpLb1pJaHZjTkFRRUwKQlFBd0lqRWdNQjRH
+    QTFVRUF3d1hRbUZqYTJWdVpDQmhjeUJoSUZObGNuWnBZMlVnUTBFd0hoY05NalF3T0RFMA
+    pNakl5TWpRMVdoY05NalV3T0RFMU1qSXlNalExV2pCK01Rc3dDUVlEVlFRR0V3SkhRakVQ
+    TUEwR0ExVUVDQXdHClRHOXVaRzl1TVE4d0RRWURWUVFIREFaTWIyNWtiMjR4SkRBaUJnTl
+    ZCQW9NRzA5eVlXTnNaU0JDWVdOclpXNWsKSUdGeklHRWdVMlZ5ZG1salpURVRNQkVHQTFV
+    RUN3d0tRWFYwYjIxaGRHbHZiakVTTUJBR0ExVUVBd3dKYkc5agpZV3hvYjNOME1JSUJvak
+    FOQmdrcWhraUc5dzBCQVFFRkFBT0NBWThBTUlJQmlnS0NBWUVBd1RxbEt6THJteEV4Ck1u
+    K1hOdFJ3SHVTWWZDd2hxYWJ0a2M1UEg5d0toNGpaZUwwU0E1bGNnRlU0bk8zTzF2dmRsV1
+    RiUWV2NHBBc3cKRnpyQW54M0NxWU1kWW9teUtMVjcxbHcxMFJXemM1VmRkbDFVdEVJZFdL
+    bHFNQUR2N0xPYmpXNlZFZkI2djZQNQpTUDdEZjJxV3EyY2dWR2NTa2xyUE9CWUY1NzBUYV
+    ZTUDVUM2o5azRjVE5QVFlNYnBUclVyT1FISmd0SjJJa1gyCnBlaTVrVkVJeVdlbUxNeXUv
+    ZVlsRTh2NEN5ZkVtbU9oMUZ5WDZHdkRmS29KVW5HU0pNclhmbXRjSytSN0NYajgKZUk2Yj
+    ZSc25sYm1qTVlKMFJzMFlMcjlyVTVIZG9UYXBUaHFoQXpCQzAxNmkrbFkrVGhoYXFLYlEz
+    eTVxNW9uagpCYVhPWGh4WE05eW5kbkdxRHRMWGFwZ0tCRFlIODdjOGRsTGc0Q240Sk9pcF
+    Zuall5L3k0MWRxVDRNb1BwRFEvCjRGTTcyS1ljc3A1WUNjQzJ6VTc3QXV1ZkRCZkgrWHZy
+    MnlJNHA4UWNhZW5TRVJpZm00R3pqUk5SeUgrckQ3T04KSWt5Y2dybk9sTjdoUU1KUHpSM1
+    RZbHk1MXRFRkpsaGZQTXRoRGtQUzhXOEZwdDdxRVZVWEFnTUJBQUdqZ2RJdwpnYzh3Z1l3
+    R0ExVWRFUVNCaERDQmdZY0Vmd0FBQVlJSmJHOWpZV3hvYjNOMGdocHdjbWwyWVhSbExtTn
+    ZiblJoCmFXNWxjaTF5WldkcGMzUnllWUlzY0hKcGRtRjBaUzVqYjI1MFlXbHVaWEl0Y21W
+    bmFYTjBjbmt1YzNaakxtTnMKZFhOMFpYSXViRzlqWVd5Q0pIWmhkV3gwTFdGamRHbDJaUz
+    UyWVhWc2RDNXpkbU11WTJ4MWMzUmxjaTVzYjJOaApiREFkQmdOVkhRNEVGZ1FVME80SmFy
+    aFBkK1U0cTBvY3FERStEZzZtN2Vjd0h3WURWUjBqQkJnd0ZvQVUwTzRKCmFyaFBkK1U0cT
+    BvY3FERStEZzZtN2Vjd0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dHQkFKbHFROFRkN0pEWmxJ
+    NmIKdENlUUo5Ynk2U1Y3L3drU3g5NndqeDEzZ2N3VGl4dFN2dnlrWlMvUUxWbW1LcnlHWX
+    BnWkdKdHc3VFZObTF0cApRMUI0R0ZqTllCMGsyV0doRlltbzBHOU5WNHh5b1l3WHphdW5r
+    a2pDZmkraDFBdnAvcVFYdWVHbGlnek1OajhlCjZnSXhDVi9iQUsxNlNBZmtIazlFVjdJbD
+    RlRTNGbTV0TU0zM256aFdkWGpsdzdnNldZakVsUldKSG1yNm4vVjQKeWdkbE05UC9HSzEr
+    QU1qOHVJZDlMeWdyU3EybUtOVlBYVVJEM0JXeXF0VXh5b2VTSCs0eHpZeTBYNkE3SGZnUw
+    p2ZVlGd0dxdEc5M1dZd2Z5b3oyYklvcC93MXVmRTNxTlB4dEtKa3lIek9Ca1VXU3ltanJB
+    N2RkcUZGSXQ5VU9qCm9RUVNSaHEzTStZRXltOUlqZy9pOVI4eE5nOXg5NUVtTkxsbm1pej
+    VTMkZKek1RQUtORERYamhVTFRidDZQTDUKd1BKb0FRcUJKSklWVjJtWEVTRCtzdWsrdlFv
+    QnpDZXN0WmVUbmFVN25rRWFTeDlMenNHODhkSVdnZCtMOE9wSApwaENZelhHOTJicnIvVk
+    RQbk1aUlVSV2NvbWU1WjhVSU9jWVVCdUU5S0xZdHFBQUdJdz09Ci0tLS0tRU5EIENFUlRJ
+    RklDQVRFLS0tLS0K
+  tls.csr: |
+    LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJRVp6Q0NBczhDQVFBd2
+    ZqRUxNQWtHQTFVRUJoTUNSMEl4RHpBTkJnTlZCQWdNQmt4dmJtUnZiakVQTUEwRwpBMVVF
+    Qnd3R1RHOXVaRzl1TVNRd0lnWURWUVFLREJ0UGNtRmpiR1VnUW1GamEyVnVaQ0JoY3lCaE
+    lGTmxjblpwClkyVXhFekFSQmdOVkJBc01Da0YxZEc5dFlYUnBiMjR4RWpBUUJnTlZCQU1N
+    Q1d4dlkyRnNhRzl6ZERDQ0FhSXcKRFFZSktvWklodmNOQVFFQkJRQURnZ0dQQURDQ0FZb0
+    NnZ0dCQU1FNnBTc3k2NXNSTVRKL2x6YlVjQjdrbUh3cwpJYW1tN1pIT1R4L2NDb2VJMlhp
+    OUVnT1pYSUJWT0p6dHp0YjczWlZrMjBIcitLUUxNQmM2d0o4ZHdxbURIV0tKCnNpaTFlOV
+    pjTmRFVnMzT1ZYWFpkVkxSQ0hWaXBhakFBNyt5em00MXVsUkh3ZXIraitVait3MzlxbHF0
+    bklGUm4KRXBKYXp6Z1dCZWU5RTJsVWorVTk0L1pPSEV6VDAyREc2VTYxS3prQnlZTFNkaU
+    pGOXFYb3VaRlJDTWxucGl6TQpydjNtSlJQTCtBc254SnBqb2RSY2wraHJ3M3lxQ1ZKeGtp
+    VEsxMzVyWEN2a2V3bDQvSGlPbStrYko1VzVvekdDCmRFYk5HQzYvYTFPUjNhRTJxVTRhb1
+    FNd1F0TmVvdnBXUGs0WVdxaW0wTjh1YXVhSjR3V2x6bDRjVnpQY3AzWngKcWc3UzEycVlD
+    Z1EyQi9PM1BIWlM0T0FwK0NUb3FWWjQyTXY4dU5YYWsrREtENlEwUCtCVE85aW1ITEtlV0
+    FuQQp0czFPK3dMcm53d1h4L2w3NjlzaU9LZkVIR25wMGhFWW41dUJzNDBUVWNoL3F3K3pq
+    U0pNbklLNXpwVGU0VURDClQ4MGQwMkpjdWRiUkJTWllYenpMWVE1RDB2RnZCYWJlNmhGVk
+    Z3SURBUUFCb0lHak1JR2dCZ2txaGtpRzl3MEIKQ1E0eGdaSXdnWTh3Z1l3R0ExVWRFUVNC
+    aERDQmdZY0Vmd0FBQVlJSmJHOWpZV3hvYjNOMGdocHdjbWwyWVhSbApMbU52Ym5SaGFXNW
+    xjaTF5WldkcGMzUnllWUlzY0hKcGRtRjBaUzVqYjI1MFlXbHVaWEl0Y21WbmFYTjBjbmt1
+    CmMzWmpMbU5zZFhOMFpYSXViRzlqWVd5Q0pIWmhkV3gwTFdGamRHbDJaUzUyWVhWc2RDNX
+    pkbU11WTJ4MWMzUmwKY2k1c2IyTmhiREFOQmdrcWhraUc5dzBCQVFzRkFBT0NBWUVBTGdw
+    U2lzek1oR25sTFMxQ2IvbFdUeWFuUzM5cgpvU1dmREVVUWZ0dHk2ZUl0SjBreU1lbU00Y1
+    lTRWxIYmNTVG1hOEtNZ2xVNytjblR6a3dvWng4ZDdwdFJQRThGCnZIWDZrSGh2akdDY3dE
+    R0FmZjhiaEZ4dTV2bkUxbG92M1l2cVRTYmVpWFNhS2JIWXZvcXlsT1VTZ3c1UmlRdngKK1
+    prU1llZkl4bjdyVVVDVkJsdVNwNkN1cWhWQnVJeURMUXlHcUlMQTR3OGdLbGtzOGtPN0Vk
+    RU1XSmZWd0RTSQpJTkpwbFJMWFphK0ZoOVp2UVcwN09oS3NjeXByWUVjU295SjJNeWxnal
+    JIQVJwRnNhV2pIWFd1TUxaampsUE9SCnRRT2UvT0NSQ3dUcGlHQXBudFlKQkh0eDBMTzdD
+    cjBBbGlYb25pWXFzT0ZtVU84R2hxdXlDbEZCN0JIMXhnREYKa2RQNHF6Z245YndOOEgyRG
+    FsRlpNV29mZENFV0puaG1hbkEvWjBzRXkzMFpUczF1U0c1N2lhWmFhVVM2QkIzZgpENURv
+    NTM5WVNOMkNTdSs3T3dPbVRadTJQOUtuUmVpY0ZNOS9FOXM3cFVQZ09GQ0h0cVZWTWVXVE
+    4zLzg4SnhuCnh4aWJ4QUhYTGJEV1hreldZelJJT3pwWFU3UlVWWDBkRm0yVwotLS0tLUVO
+    RCBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0K
+  tls.key: |
+    LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlHNHdJQkFBS0NBWUVBd1RxbE
+    t6THJteEV4TW4rWE50UndIdVNZZkN3aHFhYnRrYzVQSDl3S2g0alplTDBTCkE1bGNnRlU0
+    bk8zTzF2dmRsV1RiUWV2NHBBc3dGenJBbngzQ3FZTWRZb215S0xWNzFsdzEwUld6YzVWZG
+    RsMVUKdEVJZFdLbHFNQUR2N0xPYmpXNlZFZkI2djZQNVNQN0RmMnFXcTJjZ1ZHY1NrbHJQ
+    T0JZRjU3MFRhVlNQNVQzago5azRjVE5QVFlNYnBUclVyT1FISmd0SjJJa1gycGVpNWtWRU
+    l5V2VtTE15dS9lWWxFOHY0Q3lmRW1tT2gxRnlYCjZHdkRmS29KVW5HU0pNclhmbXRjSytS
+    N0NYajhlSTZiNlJzbmxibWpNWUowUnMwWUxyOXJVNUhkb1RhcFRocWgKQXpCQzAxNmkrbF
+    krVGhoYXFLYlEzeTVxNW9uakJhWE9YaHhYTTl5bmRuR3FEdExYYXBnS0JEWUg4N2M4ZGxM
+    Zwo0Q240Sk9pcFZuall5L3k0MWRxVDRNb1BwRFEvNEZNNzJLWWNzcDVZQ2NDMnpVNzdBdX
+    VmREJmSCtYdnIyeUk0CnA4UWNhZW5TRVJpZm00R3pqUk5SeUgrckQ3T05Ja3ljZ3JuT2xO
+    N2hRTUpQelIzVFlseTUxdEVGSmxoZlBNdGgKRGtQUzhXOEZwdDdxRVZVWEFnTUJBQUVDZ2
+    dHQURUOEVuUERXcjBDcHkyUENiVTNPM3k5SWpML3h2Q2JuV1B3aQo5eDk4ZS9kcEFScVBw
+    ajR0MWRaWEZUQkZqUDM0YzE5VjhJVHovSkE2Y2IwNHF5KzlGOUJzZys3RjVIM2NkQllmCm
+    ZQL1hMTVhyMXZZUVI4aDkwOXJPbnJwOFlydWFudTF2dS8vQ1Ntbzc1K3gwWVJoZ3o4czRC
+    TkUwRFdNUVJZWUMKVFovcjVCS1o4ckIxZE5NUitaVDVMcG5lMnpoc01zZVQ2dFh4VWVsOT
+    ZRMjFKWk1WTThsWk01cFhKMWRPNmd2WApnSWJ2WVZpOGVwOEdXRGFGcGl3a2kzUk1Vbkt5
+    aUpyenFqU01Cc2ZGbFQrOHNnbThjVEYvcWIwNTFIcUlubVNSCnE2K0pmS1djZzA0SUlueX
+    FyZDZKNWZQUW9EcUdXbEpzNVp0bElWYlhOVnlxYkhzR2Y3ZnhqZlYxVWFHWnBocTUKaFhu
+    OGM0MUNMV3dGZWliTSt5RDRRYThVY0p2ZW9NZzhUYnFFZ3o0QWJPY014MHo4aitvYVBZUT
+    lpRTVlZVE0bwpWcGNsdFVlRW9xOXp1NTlubmUvQ3luRDZ4WWFERThHNFh3VlNVV1JrL0Ft
+    SWVYVlYySWtOK3RZbm1aRHFPL1hMClpTQXloczJuQXNKTy9yL3E5R3dKMWprUjVTS3hBb0
+    hCQU9PUWkvR2twY3gzdmZjMWNmNlRzSjRaRFk1VTF6ME4KYjZHWEsvV01ZRnpDRjhjZ1hW
+    V3pxS3doeHY0VXZZeDBjUXd2d1hoUDkwTkNoalNrYk43N0NQMit4WG03cms3SwpBSEZnMj
+    NUOUpsbEFFTnRUNmlBTGVDblllK21QajRjeWpoYXNyZFBzODRuUlJwK2hmOWtjeVBYN3FG
+    K09WTFlYCklvWEdoMkNML21tQ3VsMzNjYTFWZEhvWlZQQmkrVmQzNlpmdUZUcW5WZlUydj
+    A2SHNvN1l2WU5jeFFrTmdrRHQKY1dHbFlmMFZtS3R2Z0gzbDljRUFDclkwZ29oSDJUOVd6
+    UUtCd1FEWlg4RmlZL0k1TGZrZWl1NVRkd2JQN3ZGTwp0L09oRWt1ZVRFdGJYcFIzclNScG
+    Q4N2ZuM3dKVDFXcm44RjhOWHlkSkhzcjVTdnB0YmxYM283bkdLQmY2b2JTCmFTTWVrbVdQ
+    QkszcjA1d2NxcFZUSms1WExsQjJRckxEY29kNDk2VFhMU2NwMXZFbkM1VWtLRVpLdWswZE
+    ZqTEkKVk80b24wZTJSOWtQdjlCTXgyOGhyL29NY3hzZGpKbmZmMThwYVY2ejMvbzVISmlr
+    cFlzaVRHemcwZkw5U1ErbQpXMjVBaHFCbnFWekdSSUR2d0FGN0tpYzBqd1BRbmJpK1VMU2
+    NzM01DZ2NFQTAvZVBNdzFQVm81dXh6YmtNT0oyCjBEeTcwTWtjR0FWTTV2SitBdUczM0k3
+    NlFRUFhqSDJsYm5pajk0VndMY1ZFaTdwcjl0cGRraXdFQUVMc0dpTXcKODlKZjlRMHB4c0
+    FIKzVQaHR5NGFLMll1alcyemxoZTQzUm1HQ2o4cnpSMzlGZ2ZRZnFlbkRjZCtoakNUZXJP
+    QwpTUVlaaHJCNEhZaWRJb2lURHc0M2N5Wk8zRG9oaS9nZVg2RDY2bEwydUUrOHFVVWVSeD
+    BaUnlpd3Q4QlVSUlNFCktqa2VXMWxXNjQyQVlCa0JsaEVvdlA5R2EzN3BFOVlySkI3ek8y
+    ZlpaMU05QW9IQURyOGVRV3lDWERxd01kQS8KQnM2R1djamQrZmNrd2dLWnVxMTJWMFo5VC
+    9raEJUNnBmQ1kzcGZJSjM5REFzWXAzWDdtLzJXUjhyQ2cxNEs0cQpoNmIyQ2t2QXhibDRO
+    blM4Q3czSU5yMXVVOHVHd2ROUmNUeWxITUM5bStERExBT3czU0FsRGdPVTdJOHVtUHRhCm
+    VXdFdHK2tMbk9lV0dJOWxzQW9Ed2J2RGg5SG55aU5FRldBaHNNbC9EdGgzUGpuMXdNSXJH
+    WURGSWpaUTBBemIKUGcxQUxNcXVFeDBVeDYvYVplM3BhMUh1WlZWalJGWEJ2eUVNb3pSdi
+    tnbERsM1hkQW9IQU5oeWNKY1lGSjJQaAp4ZkNTSDAxR3VTL3dNUnBqandQcjN1U0xzQ1pr
+    d0l6TVJhTk15YXRhSE1oYVE5eHQxVG95WDdKMmZMWVJJYU5TCm4wbDRWVU81RkYzeVJtZF
+    k3YS9zTVkvT0p0SXp1aHErTmlZNGNtZHlkd1lVTHRpRS8zWHNaUDA2MjJnbEdRay8KVlNt
+    c2lpb0M4TklTM0s5UFYwamZNYXJxd3hLdEI5RGNLTTFJV3Z3Wnc5enNPQ01YUUQ5VzlVdF
+    F1bXBBRVQwKwp3NFFQRzhMQUVGVmxKN1hKZngzUVNCYVJicGRRcnNaOUUxUmxwOFM3YkJp
+    V0VOdENPUGlyCi0tLS0tRU5EIFJTQSBQUklWQVRFIEtFWS0tLS0tCg==
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 2.53.1
+    helm-version: 25.24.1
+    oracle/edition: 'COMMUNITY'
+  name: tls-certificate
+  namespace: prometheus
+type: kubernetes.io/tls
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 2.53.1
+    helm-version: 25.24.1
+    oracle/edition: 'COMMUNITY'
+  name: prometheus
+  namespace: prometheus
+spec:
+  ports:
+  - name: web
+    port: 9090
+  selector:
+    app.kubernetes.io/name: prometheus-server
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: prometheus-server
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 2.53.1
+    helm-version: 25.24.1
+    oracle/edition: 'COMMUNITY'
+  name: prometheus
+  namespace: prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: prometheus-server
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: prometheus-server
+    spec:
+      containers:
+      - args:
+        - --storage.tsdb.retention.time=12h
+        - --config.file=/etc/prometheus/prometheus.yml
+        - --storage.tsdb.path=/prometheus/
+        env:
+        - name: EUREKA_SERVER_ADDRESS
+          valueFrom:
+            configMapKeyRef:
+              key: url
+              name: eureka-server
+        image: quay.io/prometheus/prometheus:v2.52.0
+        imagePullPolicy: IfNotPresent
+        name: prometheus
+        ports:
+        - containerPort: 9090
+        resources:
+          limits:
+            cpu: 1
+            memory: 1Gi
+          requests:
+            cpu: 100m
+            memory: 500M
+        volumeMounts:
+        - mountPath: /etc/prometheus/
+          name: prometheus-config-volume
+        - mountPath: /prometheus/
+          name: prometheus-storage-volume
+        - mountPath: /certs
+          name: certs-vol
+          readOnly: true
+      serviceAccountName: prometheus
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: prometheus-server-conf
+        name: prometheus-config-volume
+      - emptyDir: {}
+        name: prometheus-storage-volume
+      - name: certs-vol
+        secret:
+          secretName: tls-certificate
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 2.53.1
+    helm-version: 25.24.1
+    oracle/edition: 'COMMUNITY'
+    team: frontend
+  name: prometheus
+  namespace: prometheus
+spec:
+  endpoints:
+  - port: web
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: prometheus-server
