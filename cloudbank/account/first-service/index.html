@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.123.6">
+    <meta name="generator" content="Hugo 0.133.1">
     <meta name="generator" content="Relearn 6.1.1+tip">
     <meta name="description" content="Implement the first simple endpoint
 Create AccountController.java Create a new directory in the directory src/main/java/com/example/accounts called controller. In that new directory, create a new Java file called AccountController.java. When prompted for the type, choose class.
@@ -33,25 +33,26 @@ Your new file should look like this:
 package com.example.accounts.controller; public class AccountController { } Add the RestController annotation Add the RestController annotation to this class to tell Spring Boot that we want this class to expose REST services.">
     <meta itemprop="wordCount" content="371">
     <title>Implement First Service :: CloudBank</title>
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1723487095" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1723487095" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1723487095" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1723487095" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1723487095" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1723487095" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1723487095" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1723487095" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1723487095" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-auto.css?1723487095" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-auto.css?1723487095" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/variant.css?1723487095" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1723487095" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1723487095"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1724866676" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1724866676" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1724866676" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1724866676" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1724866676" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1724866676" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1724866676" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1724866676" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1724866676" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1724866676" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1724866676" rel="stylesheet" id="R-variant-style">
+    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1724866676" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/microservices-datadriven/cloudbank/css/variant.css?1724866676" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/print.css?1724866676" rel="stylesheet" media="print">
+    <script src="/microservices-datadriven/cloudbank/js/variant.js?1724866676"></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
-      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1723487095";
+      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1724866676";
       // variant stuff
-      window.variants && variants.init( [ 'auto' ] );
+      window.variants && variants.init( [ 'zen-light' ] );
       // translations
       window.T_Copy_to_clipboard = `Copy to clipboard`;
       window.T_Copied_to_clipboard = `Copied to clipboard!`;
@@ -191,12 +192,12 @@ package com.example.accounts.controller; public class AccountController { } Add 
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1723487095" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1723487095" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1723487095" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1723487095" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1723487095" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1723487095" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1724866676" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1724866676" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1724866676" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1724866676" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1724866676" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1724866676" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -209,8 +210,9 @@ package com.example.accounts.controller; public class AccountController { } Add 
           <ul class="enlarge morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/provision/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/index.html">Provision an Instance</a><ul id="R-subsections-c4dad079c96d7a5f54ae00022bcdf7a9" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/provision/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/intro/index.html">Introduction</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/provision/install/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/install/index.html">Install on OCI</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/provision/verify/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/verify/index.html">Verify Installation</a></li></ul></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/provision/install-local/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/install-local/index.html">Install locally</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/provision/install-free-trial/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/install-free-trial/index.html">Install in OCI Free Tier</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/provision/install-mp/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/install-mp/index.html">Install from OCI Marketplace</a></li></ul></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/devenv/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/index.html">Developer Environment</a><ul id="R-subsections-2fffb9f659e25ea05f48554f2d40267b" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/devenv/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/devenv/ide/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/ide/index.html">Install IDE</a></li>
@@ -252,6 +254,7 @@ package com.example.accounts.controller; public class AccountController { } Add 
           <li data-nav-id="/microservices-datadriven/cloudbank/saga/transfer-service/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/transfer-service/index.html">Create the Transfer service</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/saga/deploy/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/deploy/index.html">Deploy services</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/saga/test/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/test/index.html">Run LRA test cases</a></li></ul></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/springai/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/springai/index.html">CloudBank AI Assistant</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/index.html">Deploy with the CLI</a><ul id="R-subsections-700415e649763a5591d9524d38ddb106" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/get-code/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/get-code/index.html">Get the sample code</a></li>
@@ -276,7 +279,9 @@ package com.example.accounts.controller; public class AccountController { } Add 
           <li data-nav-id="/microservices-datadriven/cloudbank/backend/jaeger/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/jaeger/index.html">Explore Jaeger</a></li></ul></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/index.html">Cleanup</a><ul id="R-subsections-2a114b4f7d7c1e92ed8ef74b99ba5d82" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/intro/index.html">Introduction</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/uninstall/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/uninstall/index.html">Uninstall</a></li></ul></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/uninstall-local/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/uninstall-local/index.html">Local cleanup</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/uninstall-free-trial/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/uninstall-free-trial/index.html">OCI Free Tier Cleanup</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/uninstall-mp/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/uninstall-mp/index.html">OCI Marketplace Uninstall</a></li></ul></li>
           </ul>
         </div>
         <div id="R-shortcuts">
@@ -313,7 +318,7 @@ package com.example.accounts.controller; public class AccountController { } Add 
                   <div class="control-style">
                     <label class="a11y-only" for="R-select-variant">Theme</label>
                     <select id="R-select-variant" onchange="window.variants && variants.changeVariant( this.value );">
-                      <option id="R-select-variant-auto" value="auto" selected>Auto</option>
+                      <option id="R-select-variant-zen-light" value="zen-light" selected>Zen Light</option>
                     </select>
                   </div>
                   <div class="clear"></div>
@@ -339,8 +344,8 @@ package com.example.accounts.controller; public class AccountController { } Add 
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1723487095" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1723487095" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1723487095" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1724866676" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1724866676" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1724866676" defer></script>
   </body>
 </html>

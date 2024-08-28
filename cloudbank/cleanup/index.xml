@@ -3,7 +3,7 @@
   <channel>
     <title>Cleanup :: CloudBank</title>
     <link>https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/index.html</link>
-    <description>This is a new chapter.</description>
+    <description>This module demonstrates how to clean up any resources created when you provisioned an instance of Oracle Backend for Spring Boot and Microservices on Oracle Cloud Infrastructure (OCI) or on your local machine in containers.</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <atom:link href="https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/index.xml" rel="self" type="application/rss+xml" />
@@ -15,11 +15,25 @@
       <description>When you have finished this Live module you may wish to clean up the resources you created. If so, you may complete the steps in this optional module.&#xA;Estimated module Time: 20 minutes&#xA;Quick walk through on how to clean up the module environment.&#xA;Objectives In this workshop, you will learn how to:&#xA;Clean up your instance of the Oracle Backend for Spring Boot and Microservices and other resources you created during this Live module Prerequisites This module assumes you have:</description>
     </item>
     <item>
-      <title>Uninstall</title>
-      <link>https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/uninstall/index.html</link>
+      <title>Local cleanup</title>
+      <link>https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/uninstall-local/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/uninstall/index.html</guid>
-      <description>The Oracle Backend for Spring Boot and Microservices environment was deployed using ORM and Terraform. The uninstall will use OCI Resource Manager (ORM) to Destroy the stack.&#xA;Navigate to OCI Resource Manager Stacks&#xA;Make sure you choose the Compartment where you installed Oracle Backend for Spring Boot and Microservices. Click on the Stack Name (which will be different from the screenshot)&#xA;After picking the stack. Click destroy. NOTE This will stop all resources and remove the Oracle Backend for Spring Boot and Microservices environment.</description>
+      <guid>https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/uninstall-local/index.html</guid>
+      <description> Note: These steps apply only if you chose the option to install in a local container.&#xA;Stop the local container using this command:&#xA;docker stop obaas Note: If you want to use the environment again later, stop at this step. You can restart it later with the command docker start obaas.&#xA;Remove the local container using this command:&#xA;docker rm obaas </description>
+    </item>
+    <item>
+      <title>OCI Free Tier Cleanup</title>
+      <link>https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/uninstall-free-trial/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/uninstall-free-trial/index.html</guid>
+      <description>Note: These steps apply only if you chose the option to install in OCI Free Tier.&#xA;Login into your OCI Free Trail account.&#xA;Delete the Compute Instance.&#xA;Select the compartment where you installed the Compute instance in the drop down box on the left hand side of the OCI Console.&#xA;Navigate to the Compute Instances page by clicking on the link on the home page of the OCI Console or opening the main menu using the “hamburger” icon ( ) in the top left corner of the console and searching for “instance”:</description>
+    </item>
+    <item>
+      <title>OCI Marketplace Uninstall</title>
+      <link>https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/uninstall-mp/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/uninstall-mp/index.html</guid>
+      <description>Note: These steps apply only if you chose the option to install the full stack from OCI Marketplace.&#xA;The Oracle Backend for Spring Boot and Microservices environment was deployed using ORM and Terraform. The uninstall will use OCI Resource Manager (ORM) to Destroy the stack.&#xA;Navigate to OCI Resource Manager Stacks&#xA;Make sure you choose the Compartment where you installed Oracle Backend for Spring Boot and Microservices. Click on the Stack Name (which will be different from the screenshot)</description>
     </item>
   </channel>
 </rss>
