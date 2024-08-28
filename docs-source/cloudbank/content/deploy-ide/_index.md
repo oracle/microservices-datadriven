@@ -1,7 +1,9 @@
 +++
 archetype = "chapter"
 title = "Deploy with an IDE"
-weight = 7
+weight = 8
 +++
 
-This is a new chapter.
+In this module, you will learn how to deploy the full CloudBank application
+to Oracle Backend for Spring Boot and Microservices using one of the
+IDE plugins - for Visual Studio Code or IntelliJ. 
