@@ -38,12 +38,12 @@ with adequeate resources for development and testing, but minimizes the resource
    * Choose the option to **Import from an Object Storage URL** and provide the following URL in the **Object Storage URL** field: 
 
      ```
-     https://objectstorage.us-ashburn-1.oraclecloud.com/p/CYxkc4U3SgQBEqMfwX22BpxLibop5nFEvtE1hEzzL4AZ2L6VpytGDb4poqP7QeEj/n/maacloud/b/cloudbank-public/o/cloudbank-4.0.0
+     https://objectstorage.us-ashburn-1.oraclecloud.com/p/oSwRpU_9v5NGzkJ-P0qKzT1ZN-Y9lJZu1aXO_2N-rkGdJs-hKJt10bRk9TxsCceF/n/maacloud/b/cloudbank-public/o/obaas-1.3.0-2
      ```
 
    * (Important) Under **Image type** choose the **OCI** option.
 
-   * Click on the **Import image** button to start the import.  Note that it might take approximately twenty minutes to complete the import. 
+   * Click on the **Import image** button to start the import.  Note that it might take approximately five to ten minutes to complete the import. 
      You can see the progress on the **Custom image details** page that will be displayed.
 
      > **Note:** While you are waiting for the import to complete, this is a great time to go ahead to the next module **Developer Environment**. You can return here after you have completed that module and the import will probably be finished.
@@ -95,20 +95,20 @@ with adequeate resources for development and testing, but minimizes the resource
 
    * You will be asked to confirm the authenticity of your SSH keys, enter `yes`.
 
-   * Change directory into the `obaas` directory and start up the environment using the provided script:
-
-     ```bash
-     cd obaas
-     ./obaas.sh
-     ```
-
-     This script will prstart a Kubernetes cluster in a container (using k3s) and deploy Oracle Backend
+   * The environment will start automatically, including a Kubernetes cluster in a container (using k3s), Oracle Backend
      for Spring Boot and Microservices and an Oracle Database instance inside that cluster. It will take
      approximately six minutes for all of the containers to reach ready/running state. You can watch the
      progress using this command:
 
      ```bash
-     watch KUBECONFIG=$(pwd)/k3s_data/kubeconfig/kubeconfig.yaml kubectl get pod -A
+     watch kubectl get pod -A
+     ```
+
+     > **Note:** Should you require access to it, the `kubeconfig` file for your cluster is located at this location:
+
+     
+     ```bash
+     /home/ubuntu/obbas/k3s_data/kubeconfig/kubeconfig.yaml
      ```
 
      When the environment is fully started, the output will appear similar to this: 
@@ -121,8 +121,6 @@ with adequeate resources for development and testing, but minimizes the resource
    * On your local machine, open a browser and navigate to the [Spring Operations Center](https://localhost:1433/soc).
 
    * Log in using the pre-defined user `obaas-admin` and password `Welcome-12345`.
-
-    
 
     > **Note:** Since this is a development environment with no DNS name, it is configured with self-signed certificates. Your browser will warn you about the connection security.
 
