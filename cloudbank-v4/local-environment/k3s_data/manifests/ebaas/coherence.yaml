@@ -1,0 +1,472 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 3.3.5
+    oracle/edition: 'COMMUNITY'
+  name: coherence
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 3.3.5
+    control-plane: coherence
+    oracle/edition: 'COMMUNITY'
+  name: coherence-operator-service-account
+  namespace: coherence
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 3.3.5
+    oracle/edition: 'COMMUNITY'
+  name: coherence-operator-leader-election-role
+  namespace: coherence
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+- apiGroups:
+  - ""
+  resources:
+  - events
+  verbs:
+  - create
+  - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 3.3.5
+    control-plane: coherence
+    oracle/edition: 'COMMUNITY'
+  name: coherence-operator-crd-webhook-install-role
+rules:
+- apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - customresourcedefinitions
+  verbs:
+  - create
+  - delete
+  - get
+  - update
+- apiGroups:
+  - admissionregistration.k8s.io
+  resources:
+  - mutatingwebhookconfigurations
+  - validatingwebhookconfigurations
+  verbs:
+  - create
+  - delete
+  - get
+  - update
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 3.3.5
+    oracle/edition: 'COMMUNITY'
+  name: coherence-operator-manager-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  - endpoints
+  - events
+  - pods
+  - pods/exec
+  - secrets
+  - services
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - apps
+  resources:
+  - statefulsets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - batch
+  resources:
+  - jobs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - cert-manager.io
+  resources:
+  - certificates
+  - issuers
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - coherence.oracle.com
+  resources:
+  - coherence
+  - coherence/finalizers
+  - coherence/status
+  - coherencejob
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - monitoring.coreos.com
+  resources:
+  - servicemonitors
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 3.3.5
+    control-plane: coherence
+    oracle/edition: 'COMMUNITY'
+  name: coherence-operator-node-viewer-role
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  verbs:
+  - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 3.3.5
+    oracle/edition: 'COMMUNITY'
+  name: coherence-operator-leader-election-rolebinding
+  namespace: coherence
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: coherence-operator-leader-election-role
+subjects:
+- kind: ServiceAccount
+  name: coherence-operator-service-account
+  namespace: coherence
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 3.3.5
+    control-plane: coherence
+    oracle/edition: 'COMMUNITY'
+  name: coherence-operator-crd-webhook-install-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: coherence-operator-crd-webhook-install-role
+subjects:
+- kind: ServiceAccount
+  name: coherence-operator-service-account
+  namespace: coherence
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 3.3.5
+    control-plane: coherence
+    oracle/edition: 'COMMUNITY'
+  name: coherence-operator-manager-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: coherence-operator-manager-role
+subjects:
+- kind: ServiceAccount
+  name: coherence-operator-service-account
+  namespace: coherence
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 3.3.5
+    control-plane: coherence
+    oracle/edition: 'COMMUNITY'
+  name: coherence-operator-node-viewer-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: coherence-operator-node-viewer-role
+subjects:
+- kind: ServiceAccount
+  name: coherence-operator-service-account
+  namespace: coherence
+---
+apiVersion: v1
+data:
+  COHERENCE_IMAGE: ghcr.io/oracle/coherence-ce:24.03.1
+  OPERATOR_IMAGE: ghcr.io/oracle/coherence-operator:3.3.5
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 3.3.5
+    oracle/edition: 'COMMUNITY'
+  name: coherence-operator-env-vars
+  namespace: coherence
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 3.3.5
+    oracle/edition: 'COMMUNITY'
+  name: coherence-operator-coherence-webhook-server-cert
+  namespace: coherence
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: rest
+    app.kubernetes.io/instance: coherence-operator-rest
+    app.kubernetes.io/name: coherence-operator
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 3.3.5
+    control-plane: coherence
+    oracle/edition: 'COMMUNITY'
+  name: coherence-operator-rest
+  namespace: coherence
+spec:
+  ports:
+  - name: http-rest
+    port: 8000
+    targetPort: operator
+  selector:
+    app.kubernetes.io/component: manager
+    app.kubernetes.io/instance: coherence-operator-manager
+    app.kubernetes.io/name: coherence-operator
+    app.kubernetes.io/version: 3.3.5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: webhook
+    app.kubernetes.io/instance: coherence-operator-webhook
+    app.kubernetes.io/name: coherence-operator
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 3.3.5
+    control-plane: coherence
+    oracle/edition: 'COMMUNITY'
+  name: coherence-operator-webhook
+  namespace: coherence
+spec:
+  ports:
+  - name: https-webhook
+    port: 443
+    targetPort: webhook-server
+  selector:
+    app.kubernetes.io/component: manager
+    app.kubernetes.io/instance: coherence-operator-manager
+    app.kubernetes.io/name: coherence-operator
+    app.kubernetes.io/version: 3.3.5
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: manager
+    app.kubernetes.io/instance: coherence-operator-manager
+    app.kubernetes.io/name: coherence-operator
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 3.3.5
+    control-plane: coherence
+    oracle/edition: 'COMMUNITY'
+  name: coherence-operator-controller-manager
+  namespace: coherence
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      control-plane: coherence
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: manager
+        app.kubernetes.io/instance: coherence-operator-manager
+        app.kubernetes.io/name: coherence-operator
+        app.kubernetes.io/part-of: coherence-operator
+        app.kubernetes.io/version: 3.3.5
+        control-plane: coherence
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: coherence-operator-manager
+                  app.kubernetes.io/name: coherence-operator
+                  app.kubernetes.io/version: 3.3.5
+                  control-plane: coherence
+              topologyKey: topology.kubernetes.io/zone
+            weight: 50
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: coherence-operator-manager
+                  app.kubernetes.io/name: coherence-operator
+                  app.kubernetes.io/version: 3.3.5
+                  control-plane: coherence
+              topologyKey: oci.oraclecloud.com/fault-domain
+            weight: 10
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/instance: coherence-operator-manager
+                  app.kubernetes.io/name: coherence-operator
+                  app.kubernetes.io/version: 3.3.5
+                  control-plane: coherence
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+      - args:
+        - operator
+        - --enable-leader-election
+        command:
+        - /files/runner
+        env:
+        - name: OPERATOR_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: OPERATOR_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: WEBHOOK_SERVICE
+          value: coherence-operator-webhook
+        - name: WEBHOOK_SECRET
+          value: coherence-operator-coherence-webhook-server-cert
+        - name: SERVICE_NAME
+          value: coherence-operator-rest
+        - name: CERT_TYPE
+          value: self-signed
+        envFrom:
+        - configMapRef:
+            name: coherence-operator-env-vars
+            optional: true
+        image: ghcr.io/oracle/coherence-operator:3.3.5
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /healthz
+            port: health
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        name: manager
+        ports:
+        - containerPort: 8000
+          name: operator
+          protocol: TCP
+        - containerPort: 9443
+          name: webhook-server
+          protocol: TCP
+        - containerPort: 8080
+          name: metrics
+          protocol: TCP
+        - containerPort: 8088
+          name: health
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /readyz
+            port: health
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        volumeMounts:
+        - mountPath: /tmp/k8s-webhook-server/serving-certs
+          name: cert
+          readOnly: true
+      serviceAccountName: coherence-operator-service-account
+      terminationGracePeriodSeconds: 10
+      volumes:
+      - name: cert
+        secret:
+          defaultMode: 420
+          optional: true
+          secretName: coherence-operator-coherence-webhook-server-cert

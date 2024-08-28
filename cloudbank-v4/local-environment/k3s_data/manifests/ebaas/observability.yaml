@@ -1,0 +1,235 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.53.0
+    helm-version: 3.0.10
+    oracle/edition: 'COMMUNITY'
+  name: observability
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/component: all-in-one
+    app.kubernetes.io/instance: jaegertracing
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: jaeger
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.53.0
+    helm-version: 3.0.10
+    helm.sh/chart: jaeger-3.0.10
+    oracle/edition: 'COMMUNITY'
+  name: jaegertracing
+  namespace: observability
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: service-agent
+    app.kubernetes.io/instance: jaegertracing
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: jaeger
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.53.0
+    helm-version: 3.0.10
+    helm.sh/chart: jaeger-3.0.10
+    oracle/edition: 'COMMUNITY'
+  name: jaegertracing-agent
+  namespace: observability
+spec:
+  clusterIP: None
+  ports:
+  - name: zk-compact-trft
+    port: 5775
+    protocol: UDP
+    targetPort: 0
+  - name: config-rest
+    port: 5778
+    targetPort: 0
+  - name: jg-compact-trft
+    port: 6831
+    protocol: UDP
+    targetPort: 0
+  - name: jg-binary-trft
+    port: 6832
+    protocol: UDP
+    targetPort: 0
+  selector:
+    app.kubernetes.io/component: all-in-one
+    app.kubernetes.io/instance: jaegertracing
+    app.kubernetes.io/name: jaeger
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: service-collector
+    app.kubernetes.io/instance: jaegertracing
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: jaeger
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.53.0
+    helm-version: 3.0.10
+    helm.sh/chart: jaeger-3.0.10
+    oracle/edition: 'COMMUNITY'
+  name: jaegertracing-collector
+  namespace: observability
+spec:
+  clusterIP: None
+  ports:
+  - appProtocol: http
+    name: http-zipkin
+    port: 9411
+    targetPort: 0
+  - appProtocol: grpc
+    name: grpc-http
+    port: 14250
+    targetPort: 0
+  - name: c-tchan-trft
+    port: 14267
+    targetPort: 0
+  - appProtocol: http
+    name: http-c-binary-trft
+    port: 14268
+    targetPort: 0
+  - appProtocol: grpc
+    name: otlp-grpc
+    port: 4317
+    targetPort: 0
+  - appProtocol: http
+    name: otlp-http
+    port: 4318
+    targetPort: 0
+  selector:
+    app.kubernetes.io/component: all-in-one
+    app.kubernetes.io/instance: jaegertracing
+    app.kubernetes.io/name: jaeger
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: service-query
+    app.kubernetes.io/instance: jaegertracing
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: jaeger
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.53.0
+    helm-version: 3.0.10
+    helm.sh/chart: jaeger-3.0.10
+    oracle/edition: 'COMMUNITY'
+  name: jaegertracing-query
+  namespace: observability
+spec:
+  clusterIP: None
+  ports:
+  - name: http-query
+    port: 16686
+    targetPort: 16686
+  - name: grpc-query
+    port: 16685
+    targetPort: 16685
+  selector:
+    app.kubernetes.io/component: all-in-one
+    app.kubernetes.io/instance: jaegertracing
+    app.kubernetes.io/name: jaeger
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: all-in-one
+    app.kubernetes.io/instance: jaegertracing
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: jaeger
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.53.0
+    helm-version: 3.0.10
+    helm.sh/chart: jaeger-3.0.10
+    oracle/edition: 'COMMUNITY'
+    prometheus.io/port: "14269"
+    prometheus.io/scrape: "true"
+  name: jaegertracing
+  namespace: observability
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: all-in-one
+      app.kubernetes.io/instance: jaegertracing
+      app.kubernetes.io/name: jaeger
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: "14269"
+        prometheus.io/scrape: "true"
+      labels:
+        app.kubernetes.io/component: all-in-one
+        app.kubernetes.io/instance: jaegertracing
+        app.kubernetes.io/name: jaeger
+    spec:
+      containers:
+      - args: null
+        env:
+        - name: SPAN_STORAGE_TYPE
+          value: memory
+        - name: COLLECTOR_ZIPKIN_HOST_PORT
+          value: :9411
+        - name: JAEGER_DISABLED
+          value: "false"
+        - name: COLLECTOR_OTLP_ENABLED
+          value: "true"
+        image: jaegertracing/all-in-one:1.53.0
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 5
+          httpGet:
+            path: /
+            port: 14269
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 15
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: jaeger
+        ports:
+        - containerPort: 5775
+          protocol: UDP
+        - containerPort: 6831
+          protocol: UDP
+        - containerPort: 6832
+          protocol: UDP
+        - containerPort: 5778
+          protocol: TCP
+        - containerPort: 16686
+          protocol: TCP
+        - containerPort: 16685
+          protocol: TCP
+        - containerPort: 9411
+          protocol: TCP
+        - containerPort: 4317
+          protocol: TCP
+        - containerPort: 4318
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: 14269
+            scheme: HTTP
+          initialDelaySeconds: 1
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        volumeMounts: null
+      securityContext:
+        fsGroup: 10001
+        runAsGroup: 10001
+        runAsUser: 10001
+      serviceAccountName: jaegertracing
+      volumes: null

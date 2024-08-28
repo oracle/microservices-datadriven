@@ -1,0 +1,948 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.17.2
+    helm-version: 0.28.1
+    oracle/edition: 'COMMUNITY'
+  name: vault
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.17.2
+    helm-version: 0.28.1
+    helm.sh/chart: vault-0.28.1
+    oracle/edition: 'COMMUNITY'
+  name: vault
+  namespace: vault
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault-agent-injector
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.17.2
+    helm-version: 0.28.1
+    oracle/edition: 'COMMUNITY'
+  name: vault-agent-injector
+  namespace: vault
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault-agent-injector
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.17.2
+    helm-version: 0.28.1
+    oracle/edition: 'COMMUNITY'
+  name: vault-agent-injector-clusterrole
+rules:
+- apiGroups:
+  - admissionregistration.k8s.io
+  resources:
+  - mutatingwebhookconfigurations
+  verbs:
+  - get
+  - list
+  - watch
+  - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault-agent-injector
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.17.2
+    helm-version: 0.28.1
+    oracle/edition: 'COMMUNITY'
+  name: vault-agent-injector-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: vault-agent-injector-clusterrole
+subjects:
+- kind: ServiceAccount
+  name: vault-agent-injector
+  namespace: vault
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.17.2
+    helm-version: 0.28.1
+    helm.sh/chart: vault-0.28.1
+    oracle/edition: 'COMMUNITY'
+  name: vault-server-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:auth-delegator
+subjects:
+- kind: ServiceAccount
+  name: vault
+  namespace: vault
+---
+apiVersion: v1
+data:
+  list-audit-devices: |-
+    path "/sys/audit"
+    {
+      capabilities = ["read", "sudo"]
+    }
+  manage-audit-devices: |-
+    path "/sys/audit/*"
+    {
+      capabilities = ["create", "read", "update", "delete", "list", "sudo"]
+    }
+  prometheus-metrics: |-
+    path "/sys/metrics" {
+      capabilities = ["read", "list"]
+    }
+  read-update-usage-metrics-config: "path \"/sys/internal/counters/config\" \n{\n
+    \ capabilities = [\"read\", \"update\"]\n}"
+  retrieve-usage-metrics: "path \"/sys/internal/counters/activity\" \n{\n  capabilities
+    = [\"read\"]\n}"
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.17.2
+    helm-version: 0.28.1
+    name: policies
+    oracle/edition: 'COMMUNITY'
+  name: policies
+  namespace: vault
+---
+apiVersion: v1
+data:
+  ca.csr: |
+    LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJRG1UQ0NBZ0VDQVFBd0
+    lqRWdNQjRHQTFVRUF3d1hRbUZqYTJWdVpDQmhjeUJoSUZObGNuWnBZMlVnUTBFdwpnZ0dp
+    TUEwR0NTcUdTSWIzRFFFQkFRVUFBNElCandBd2dnR0tBb0lCZ1FEQk9xVXJNdXViRVRFeW
+    Y1YzIxSEFlCjVKaDhMQ0dwcHUyUnprOGYzQXFIaU5sNHZSSURtVnlBVlRpYzdjN1crOTJW
+    Wk50QjYvaWtDekFYT3NDZkhjS3AKZ3gxaWliSW90WHZXWERYUkZiTnpsVjEyWFZTMFFoMV
+    lxV293QU8vc3M1dU5icFVSOEhxL28vbEkvc04vYXBhcgpaeUJVWnhLU1dzODRGZ1hudlJO
+    cFZJL2xQZVAyVGh4TTA5Tmd4dWxPdFNzNUFjbUMwbllpUmZhbDZMbVJVUWpKClo2WXN6Sz
+    c5NWlVVHkvZ0xKOFNhWTZIVVhKZm9hOE44cWdsU2NaSWt5dGQrYTF3cjVIc0plUHg0anB2
+    cEd5ZVYKdWFNeGduUkd6Umd1djJ0VGtkMmhOcWxPR3FFRE1FTFRYcUw2Vmo1T0dGcW9wdE
+    RmTG1ybWllTUZwYzVlSEZjegozS2QyY2FvTzB0ZHFtQW9FTmdmenR6eDJVdURnS2ZnazZL
+    bFdlTmpML0xqVjJwUGd5ZytrTkQvZ1V6dllwaHl5Cm5sZ0p3TGJOVHZzQzY1OE1GOGY1ZS
+    t2YklqaW54QnhwNmRJUkdKK2JnYk9ORTFISWY2c1BzNDBpVEp5Q3VjNlUKM3VGQXdrL05I
+    ZE5pWExuVzBRVW1XRjg4eTJFT1E5THhid1dtM3VvUlZSY0NBd0VBQWFBeU1EQUdDU3FHU0
+    liMwpEUUVKRGpFak1DRXdEZ1lEVlIwUEFRSC9CQVFEQWdJRU1BOEdBMVVkRXdFQi93UUZN
+    QU1CQWY4d0RRWUpLb1pJCmh2Y05BUUVMQlFBRGdnR0JBQUFVT09QTW9kZlZ4bUFkWjlaaW
+    FnVHRPcjNPZVBKem9pY2svVEt4Wll5OEJBNysKdlVBNGNhWnhXb0pBSDFYV2h6UDUwNEJ2
+    di9BbnhUa0pRNG1FODRFdW13amJsWCtsczk2WFdaY09JOThzbzVSdgpuczcrTDVQQUtwYX
+    ltV0t2eU54VDlvc2pLQXFEQm8xWllBZWlXUU9IayszOTgraGNHZlVhTm1MclRDTTFrVlhG
+    Ci9Kc2xwSTR5bVNhcGFWanlhRjVaVGdjZ2JGZTN6SHNaZzVVZy9CUFk0eXFhOFo3M3I2cW
+    9SZVMzMExiQUpEYlEKbU5YZUJvc1c0MFNRZmpqMDBlTmZoaHA2MXlkM3ZMdlFzQVlHOWxy
+    M1hlenArRlpNZ1BGUVh1TTdPMGlXRGRlZQphWE9QMnZWSU02Z0lONjM3TWlzaVNubEJjaU
+    JNc0tCMWhUMDlaUUxZWTFHNVFBSW5ucTN2UUkzQWg4RWNhLzhsClA4TVpWR0U1T29tM0xZ
+    NTYyNTlxbStxazdXZm04SlhzcU43ZHBhZ0RIYWl4R2l4bU4rbnZnWUJabU1DdFR3T3IKKz
+    dtN1hiQnBTVTV2eC9WOElGckljN1l0ZXNLOFpBT3NUNVhkV0NURlhreHQxWGtWNUx6ZUJk
+    RkdtaDJYY05DagpEOUNubUNGZDJQcElvTlE4Z0E9PQotLS0tLUVORCBDRVJUSUZJQ0FURS
+    BSRVFVRVNULS0tLS0K
+  ca.pem: |
+    LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUVGRENDQW55Z0F3SUJBZ0lVYmp5cX
+    RQVFg0UFBISUFsV0dRN1dIRWplWm9rd0RRWUpLb1pJaHZjTkFRRUwKQlFBd0lqRWdNQjRH
+    QTFVRUF3d1hRbUZqYTJWdVpDQmhjeUJoSUZObGNuWnBZMlVnUTBFd0hoY05NalF3T0RFMA
+    pNakl5TWpRMFdoY05NelF3T0RFek1qSXlNalEwV2pBaU1TQXdIZ1lEVlFRRERCZENZV05y
+    Wlc1a0lHRnpJR0VnClUyVnlkbWxqWlNCRFFUQ0NBYUl3RFFZSktvWklodmNOQVFFQkJRQU
+    RnZ0dQQURDQ0FZb0NnZ0dCQU1FNnBTc3kKNjVzUk1USi9semJVY0I3a21Id3NJYW1tN1pI
+    T1R4L2NDb2VJMlhpOUVnT1pYSUJWT0p6dHp0YjczWlZrMjBIcgorS1FMTUJjNndKOGR3cW
+    1ESFdLSnNpaTFlOVpjTmRFVnMzT1ZYWFpkVkxSQ0hWaXBhakFBNyt5em00MXVsUkh3CmVy
+    K2orVWordzM5cWxxdG5JRlJuRXBKYXp6Z1dCZWU5RTJsVWorVTk0L1pPSEV6VDAyREc2VT
+    YxS3prQnlZTFMKZGlKRjlxWG91WkZSQ01sbnBpek1ydjNtSlJQTCtBc254SnBqb2RSY2wr
+    aHJ3M3lxQ1ZKeGtpVEsxMzVyWEN2awpld2w0L0hpT20ra2JKNVc1b3pHQ2RFYk5HQzYvYT
+    FPUjNhRTJxVTRhb1FNd1F0TmVvdnBXUGs0WVdxaW0wTjh1CmF1YUo0d1dsemw0Y1Z6UGNw
+    M1p4cWc3UzEycVlDZ1EyQi9PM1BIWlM0T0FwK0NUb3FWWjQyTXY4dU5YYWsrREsKRDZRMF
+    ArQlRPOWltSExLZVdBbkF0czFPK3dMcm53d1h4L2w3NjlzaU9LZkVIR25wMGhFWW41dUJz
+    NDBUVWNoLwpxdyt6alNKTW5JSzV6cFRlNFVEQ1Q4MGQwMkpjdWRiUkJTWllYenpMWVE1RD
+    B2RnZCYWJlNmhGVkZ3SURBUUFCCm8wSXdRREFPQmdOVkhROEJBZjhFQkFNQ0FnUXdEd1lE
+    VlIwVEFRSC9CQVV3QXdFQi96QWRCZ05WSFE0RUZnUVUKME80SmFyaFBkK1U0cTBvY3FERS
+    tEZzZtN2Vjd0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dHQkFNREg4eGUxT1l3NQpwZzBRSWxR
+    dVNDbzhLYlJFWjE3RVY0aTV3YnYyUlhQN0pVZlFLV3RFaEpoRjh4NlZvbGlCRkl2RzRkak
+    I5QndSCk02eENONmFBT2MyaXQvdy91aXZHWVVFOWVCL1JhOTJqRjlzdnR0NHlYT0h3cWFI
+    ZHhwSmYyMElpd09oakUyRnYKVFEzMTZjVFFYM1gxN1BKK3NzenNZRCsyVU5DR1ZoVDlRLy
+    t5TmQrUFpUclp5ck5McGpuVGVxMDVBamVoQkF5Uwpka0gwLzd2dzhWeUhValFQdW93a1ZT
+    aC9maDA4Z2RRSEJwODJLQ3lXcElxTVAzdFNxYlphTW1jaW5SME5maHl1CnBVcHZiVEhDMH
+    NWQm0rbDNvQkFWaktlMmk5NTM5SjVUSS9vUnBZejFjUkd0czYrZXlLVElxYW16WnVPYVEy
+    dnAKdXNXUy95TEZxYlY4RklhMThXWDExN3N1ekhhVmRMQitIamJSVksrQjRMZ0xHU3huQW
+    xQU2h2VG5tVm1KelpFdwpjOUJlNnRCOTNHbkR1NGRWRHh4T215T0Q2UVlYRmQ3Y2JGMFRR
+    b3hNYjNHU1d0aG1UczIwNmFLaXYvdFZpdjA4CllVMVRldGFKOU8xTDk3NEtLdVJCbUltZF
+    hKWko2SnBCV3J6dWJTcFNXak80T0hneW01N0twdz09Ci0tLS0tRU5EIENFUlRJRklDQVRF
+    LS0tLS0K
+  tls.crt: |
+    LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUZBVENDQTJtZ0F3SUJBZ0lVYkxlL2
+    RhblhJRFBtcTV4MWUrMnlSRWd2ZU1Jd0RRWUpLb1pJaHZjTkFRRUwKQlFBd0lqRWdNQjRH
+    QTFVRUF3d1hRbUZqYTJWdVpDQmhjeUJoSUZObGNuWnBZMlVnUTBFd0hoY05NalF3T0RFMA
+    pNakl5TWpRMVdoY05NalV3T0RFMU1qSXlNalExV2pCK01Rc3dDUVlEVlFRR0V3SkhRakVQ
+    TUEwR0ExVUVDQXdHClRHOXVaRzl1TVE4d0RRWURWUVFIREFaTWIyNWtiMjR4SkRBaUJnTl
+    ZCQW9NRzA5eVlXTnNaU0JDWVdOclpXNWsKSUdGeklHRWdVMlZ5ZG1salpURVRNQkVHQTFV
+    RUN3d0tRWFYwYjIxaGRHbHZiakVTTUJBR0ExVUVBd3dKYkc5agpZV3hvYjNOME1JSUJvak
+    FOQmdrcWhraUc5dzBCQVFFRkFBT0NBWThBTUlJQmlnS0NBWUVBd1RxbEt6THJteEV4Ck1u
+    K1hOdFJ3SHVTWWZDd2hxYWJ0a2M1UEg5d0toNGpaZUwwU0E1bGNnRlU0bk8zTzF2dmRsV1
+    RiUWV2NHBBc3cKRnpyQW54M0NxWU1kWW9teUtMVjcxbHcxMFJXemM1VmRkbDFVdEVJZFdL
+    bHFNQUR2N0xPYmpXNlZFZkI2djZQNQpTUDdEZjJxV3EyY2dWR2NTa2xyUE9CWUY1NzBUYV
+    ZTUDVUM2o5azRjVE5QVFlNYnBUclVyT1FISmd0SjJJa1gyCnBlaTVrVkVJeVdlbUxNeXUv
+    ZVlsRTh2NEN5ZkVtbU9oMUZ5WDZHdkRmS29KVW5HU0pNclhmbXRjSytSN0NYajgKZUk2Yj
+    ZSc25sYm1qTVlKMFJzMFlMcjlyVTVIZG9UYXBUaHFoQXpCQzAxNmkrbFkrVGhoYXFLYlEz
+    eTVxNW9uagpCYVhPWGh4WE05eW5kbkdxRHRMWGFwZ0tCRFlIODdjOGRsTGc0Q240Sk9pcF
+    Zuall5L3k0MWRxVDRNb1BwRFEvCjRGTTcyS1ljc3A1WUNjQzJ6VTc3QXV1ZkRCZkgrWHZy
+    MnlJNHA4UWNhZW5TRVJpZm00R3pqUk5SeUgrckQ3T04KSWt5Y2dybk9sTjdoUU1KUHpSM1
+    RZbHk1MXRFRkpsaGZQTXRoRGtQUzhXOEZwdDdxRVZVWEFnTUJBQUdqZ2RJdwpnYzh3Z1l3
+    R0ExVWRFUVNCaERDQmdZY0Vmd0FBQVlJSmJHOWpZV3hvYjNOMGdocHdjbWwyWVhSbExtTn
+    ZiblJoCmFXNWxjaTF5WldkcGMzUnllWUlzY0hKcGRtRjBaUzVqYjI1MFlXbHVaWEl0Y21W
+    bmFYTjBjbmt1YzNaakxtTnMKZFhOMFpYSXViRzlqWVd5Q0pIWmhkV3gwTFdGamRHbDJaUz
+    UyWVhWc2RDNXpkbU11WTJ4MWMzUmxjaTVzYjJOaApiREFkQmdOVkhRNEVGZ1FVME80SmFy
+    aFBkK1U0cTBvY3FERStEZzZtN2Vjd0h3WURWUjBqQkJnd0ZvQVUwTzRKCmFyaFBkK1U0cT
+    BvY3FERStEZzZtN2Vjd0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dHQkFKbHFROFRkN0pEWmxJ
+    NmIKdENlUUo5Ynk2U1Y3L3drU3g5NndqeDEzZ2N3VGl4dFN2dnlrWlMvUUxWbW1LcnlHWX
+    BnWkdKdHc3VFZObTF0cApRMUI0R0ZqTllCMGsyV0doRlltbzBHOU5WNHh5b1l3WHphdW5r
+    a2pDZmkraDFBdnAvcVFYdWVHbGlnek1OajhlCjZnSXhDVi9iQUsxNlNBZmtIazlFVjdJbD
+    RlRTNGbTV0TU0zM256aFdkWGpsdzdnNldZakVsUldKSG1yNm4vVjQKeWdkbE05UC9HSzEr
+    QU1qOHVJZDlMeWdyU3EybUtOVlBYVVJEM0JXeXF0VXh5b2VTSCs0eHpZeTBYNkE3SGZnUw
+    p2ZVlGd0dxdEc5M1dZd2Z5b3oyYklvcC93MXVmRTNxTlB4dEtKa3lIek9Ca1VXU3ltanJB
+    N2RkcUZGSXQ5VU9qCm9RUVNSaHEzTStZRXltOUlqZy9pOVI4eE5nOXg5NUVtTkxsbm1pej
+    VTMkZKek1RQUtORERYamhVTFRidDZQTDUKd1BKb0FRcUJKSklWVjJtWEVTRCtzdWsrdlFv
+    QnpDZXN0WmVUbmFVN25rRWFTeDlMenNHODhkSVdnZCtMOE9wSApwaENZelhHOTJicnIvVk
+    RQbk1aUlVSV2NvbWU1WjhVSU9jWVVCdUU5S0xZdHFBQUdJdz09Ci0tLS0tRU5EIENFUlRJ
+    RklDQVRFLS0tLS0K
+  tls.csr: |
+    LS0tLS1CRUdJTiBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0KTUlJRVp6Q0NBczhDQVFBd2
+    ZqRUxNQWtHQTFVRUJoTUNSMEl4RHpBTkJnTlZCQWdNQmt4dmJtUnZiakVQTUEwRwpBMVVF
+    Qnd3R1RHOXVaRzl1TVNRd0lnWURWUVFLREJ0UGNtRmpiR1VnUW1GamEyVnVaQ0JoY3lCaE
+    lGTmxjblpwClkyVXhFekFSQmdOVkJBc01Da0YxZEc5dFlYUnBiMjR4RWpBUUJnTlZCQU1N
+    Q1d4dlkyRnNhRzl6ZERDQ0FhSXcKRFFZSktvWklodmNOQVFFQkJRQURnZ0dQQURDQ0FZb0
+    NnZ0dCQU1FNnBTc3k2NXNSTVRKL2x6YlVjQjdrbUh3cwpJYW1tN1pIT1R4L2NDb2VJMlhp
+    OUVnT1pYSUJWT0p6dHp0YjczWlZrMjBIcitLUUxNQmM2d0o4ZHdxbURIV0tKCnNpaTFlOV
+    pjTmRFVnMzT1ZYWFpkVkxSQ0hWaXBhakFBNyt5em00MXVsUkh3ZXIraitVait3MzlxbHF0
+    bklGUm4KRXBKYXp6Z1dCZWU5RTJsVWorVTk0L1pPSEV6VDAyREc2VTYxS3prQnlZTFNkaU
+    pGOXFYb3VaRlJDTWxucGl6TQpydjNtSlJQTCtBc254SnBqb2RSY2wraHJ3M3lxQ1ZKeGtp
+    VEsxMzVyWEN2a2V3bDQvSGlPbStrYko1VzVvekdDCmRFYk5HQzYvYTFPUjNhRTJxVTRhb1
+    FNd1F0TmVvdnBXUGs0WVdxaW0wTjh1YXVhSjR3V2x6bDRjVnpQY3AzWngKcWc3UzEycVlD
+    Z1EyQi9PM1BIWlM0T0FwK0NUb3FWWjQyTXY4dU5YYWsrREtENlEwUCtCVE85aW1ITEtlV0
+    FuQQp0czFPK3dMcm53d1h4L2w3NjlzaU9LZkVIR25wMGhFWW41dUJzNDBUVWNoL3F3K3pq
+    U0pNbklLNXpwVGU0VURDClQ4MGQwMkpjdWRiUkJTWllYenpMWVE1RDB2RnZCYWJlNmhGVk
+    Z3SURBUUFCb0lHak1JR2dCZ2txaGtpRzl3MEIKQ1E0eGdaSXdnWTh3Z1l3R0ExVWRFUVNC
+    aERDQmdZY0Vmd0FBQVlJSmJHOWpZV3hvYjNOMGdocHdjbWwyWVhSbApMbU52Ym5SaGFXNW
+    xjaTF5WldkcGMzUnllWUlzY0hKcGRtRjBaUzVqYjI1MFlXbHVaWEl0Y21WbmFYTjBjbmt1
+    CmMzWmpMbU5zZFhOMFpYSXViRzlqWVd5Q0pIWmhkV3gwTFdGamRHbDJaUzUyWVhWc2RDNX
+    pkbU11WTJ4MWMzUmwKY2k1c2IyTmhiREFOQmdrcWhraUc5dzBCQVFzRkFBT0NBWUVBTGdw
+    U2lzek1oR25sTFMxQ2IvbFdUeWFuUzM5cgpvU1dmREVVUWZ0dHk2ZUl0SjBreU1lbU00Y1
+    lTRWxIYmNTVG1hOEtNZ2xVNytjblR6a3dvWng4ZDdwdFJQRThGCnZIWDZrSGh2akdDY3dE
+    R0FmZjhiaEZ4dTV2bkUxbG92M1l2cVRTYmVpWFNhS2JIWXZvcXlsT1VTZ3c1UmlRdngKK1
+    prU1llZkl4bjdyVVVDVkJsdVNwNkN1cWhWQnVJeURMUXlHcUlMQTR3OGdLbGtzOGtPN0Vk
+    RU1XSmZWd0RTSQpJTkpwbFJMWFphK0ZoOVp2UVcwN09oS3NjeXByWUVjU295SjJNeWxnal
+    JIQVJwRnNhV2pIWFd1TUxaampsUE9SCnRRT2UvT0NSQ3dUcGlHQXBudFlKQkh0eDBMTzdD
+    cjBBbGlYb25pWXFzT0ZtVU84R2hxdXlDbEZCN0JIMXhnREYKa2RQNHF6Z245YndOOEgyRG
+    FsRlpNV29mZENFV0puaG1hbkEvWjBzRXkzMFpUczF1U0c1N2lhWmFhVVM2QkIzZgpENURv
+    NTM5WVNOMkNTdSs3T3dPbVRadTJQOUtuUmVpY0ZNOS9FOXM3cFVQZ09GQ0h0cVZWTWVXVE
+    4zLzg4SnhuCnh4aWJ4QUhYTGJEV1hreldZelJJT3pwWFU3UlVWWDBkRm0yVwotLS0tLUVO
+    RCBDRVJUSUZJQ0FURSBSRVFVRVNULS0tLS0K
+  tls.key: |
+    LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlHNHdJQkFBS0NBWUVBd1RxbE
+    t6THJteEV4TW4rWE50UndIdVNZZkN3aHFhYnRrYzVQSDl3S2g0alplTDBTCkE1bGNnRlU0
+    bk8zTzF2dmRsV1RiUWV2NHBBc3dGenJBbngzQ3FZTWRZb215S0xWNzFsdzEwUld6YzVWZG
+    RsMVUKdEVJZFdLbHFNQUR2N0xPYmpXNlZFZkI2djZQNVNQN0RmMnFXcTJjZ1ZHY1NrbHJQ
+    T0JZRjU3MFRhVlNQNVQzago5azRjVE5QVFlNYnBUclVyT1FISmd0SjJJa1gycGVpNWtWRU
+    l5V2VtTE15dS9lWWxFOHY0Q3lmRW1tT2gxRnlYCjZHdkRmS29KVW5HU0pNclhmbXRjSytS
+    N0NYajhlSTZiNlJzbmxibWpNWUowUnMwWUxyOXJVNUhkb1RhcFRocWgKQXpCQzAxNmkrbF
+    krVGhoYXFLYlEzeTVxNW9uakJhWE9YaHhYTTl5bmRuR3FEdExYYXBnS0JEWUg4N2M4ZGxM
+    Zwo0Q240Sk9pcFZuall5L3k0MWRxVDRNb1BwRFEvNEZNNzJLWWNzcDVZQ2NDMnpVNzdBdX
+    VmREJmSCtYdnIyeUk0CnA4UWNhZW5TRVJpZm00R3pqUk5SeUgrckQ3T05Ja3ljZ3JuT2xO
+    N2hRTUpQelIzVFlseTUxdEVGSmxoZlBNdGgKRGtQUzhXOEZwdDdxRVZVWEFnTUJBQUVDZ2
+    dHQURUOEVuUERXcjBDcHkyUENiVTNPM3k5SWpML3h2Q2JuV1B3aQo5eDk4ZS9kcEFScVBw
+    ajR0MWRaWEZUQkZqUDM0YzE5VjhJVHovSkE2Y2IwNHF5KzlGOUJzZys3RjVIM2NkQllmCm
+    ZQL1hMTVhyMXZZUVI4aDkwOXJPbnJwOFlydWFudTF2dS8vQ1Ntbzc1K3gwWVJoZ3o4czRC
+    TkUwRFdNUVJZWUMKVFovcjVCS1o4ckIxZE5NUitaVDVMcG5lMnpoc01zZVQ2dFh4VWVsOT
+    ZRMjFKWk1WTThsWk01cFhKMWRPNmd2WApnSWJ2WVZpOGVwOEdXRGFGcGl3a2kzUk1Vbkt5
+    aUpyenFqU01Cc2ZGbFQrOHNnbThjVEYvcWIwNTFIcUlubVNSCnE2K0pmS1djZzA0SUlueX
+    FyZDZKNWZQUW9EcUdXbEpzNVp0bElWYlhOVnlxYkhzR2Y3ZnhqZlYxVWFHWnBocTUKaFhu
+    OGM0MUNMV3dGZWliTSt5RDRRYThVY0p2ZW9NZzhUYnFFZ3o0QWJPY014MHo4aitvYVBZUT
+    lpRTVlZVE0bwpWcGNsdFVlRW9xOXp1NTlubmUvQ3luRDZ4WWFERThHNFh3VlNVV1JrL0Ft
+    SWVYVlYySWtOK3RZbm1aRHFPL1hMClpTQXloczJuQXNKTy9yL3E5R3dKMWprUjVTS3hBb0
+    hCQU9PUWkvR2twY3gzdmZjMWNmNlRzSjRaRFk1VTF6ME4KYjZHWEsvV01ZRnpDRjhjZ1hW
+    V3pxS3doeHY0VXZZeDBjUXd2d1hoUDkwTkNoalNrYk43N0NQMit4WG03cms3SwpBSEZnMj
+    NUOUpsbEFFTnRUNmlBTGVDblllK21QajRjeWpoYXNyZFBzODRuUlJwK2hmOWtjeVBYN3FG
+    K09WTFlYCklvWEdoMkNML21tQ3VsMzNjYTFWZEhvWlZQQmkrVmQzNlpmdUZUcW5WZlUydj
+    A2SHNvN1l2WU5jeFFrTmdrRHQKY1dHbFlmMFZtS3R2Z0gzbDljRUFDclkwZ29oSDJUOVd6
+    UUtCd1FEWlg4RmlZL0k1TGZrZWl1NVRkd2JQN3ZGTwp0L09oRWt1ZVRFdGJYcFIzclNScG
+    Q4N2ZuM3dKVDFXcm44RjhOWHlkSkhzcjVTdnB0YmxYM283bkdLQmY2b2JTCmFTTWVrbVdQ
+    QkszcjA1d2NxcFZUSms1WExsQjJRckxEY29kNDk2VFhMU2NwMXZFbkM1VWtLRVpLdWswZE
+    ZqTEkKVk80b24wZTJSOWtQdjlCTXgyOGhyL29NY3hzZGpKbmZmMThwYVY2ejMvbzVISmlr
+    cFlzaVRHemcwZkw5U1ErbQpXMjVBaHFCbnFWekdSSUR2d0FGN0tpYzBqd1BRbmJpK1VMU2
+    NzM01DZ2NFQTAvZVBNdzFQVm81dXh6YmtNT0oyCjBEeTcwTWtjR0FWTTV2SitBdUczM0k3
+    NlFRUFhqSDJsYm5pajk0VndMY1ZFaTdwcjl0cGRraXdFQUVMc0dpTXcKODlKZjlRMHB4c0
+    FIKzVQaHR5NGFLMll1alcyemxoZTQzUm1HQ2o4cnpSMzlGZ2ZRZnFlbkRjZCtoakNUZXJP
+    QwpTUVlaaHJCNEhZaWRJb2lURHc0M2N5Wk8zRG9oaS9nZVg2RDY2bEwydUUrOHFVVWVSeD
+    BaUnlpd3Q4QlVSUlNFCktqa2VXMWxXNjQyQVlCa0JsaEVvdlA5R2EzN3BFOVlySkI3ek8y
+    ZlpaMU05QW9IQURyOGVRV3lDWERxd01kQS8KQnM2R1djamQrZmNrd2dLWnVxMTJWMFo5VC
+    9raEJUNnBmQ1kzcGZJSjM5REFzWXAzWDdtLzJXUjhyQ2cxNEs0cQpoNmIyQ2t2QXhibDRO
+    blM4Q3czSU5yMXVVOHVHd2ROUmNUeWxITUM5bStERExBT3czU0FsRGdPVTdJOHVtUHRhCm
+    VXdFdHK2tMbk9lV0dJOWxzQW9Ed2J2RGg5SG55aU5FRldBaHNNbC9EdGgzUGpuMXdNSXJH
+    WURGSWpaUTBBemIKUGcxQUxNcXVFeDBVeDYvYVplM3BhMUh1WlZWalJGWEJ2eUVNb3pSdi
+    tnbERsM1hkQW9IQU5oeWNKY1lGSjJQaAp4ZkNTSDAxR3VTL3dNUnBqandQcjN1U0xzQ1pr
+    d0l6TVJhTk15YXRhSE1oYVE5eHQxVG95WDdKMmZMWVJJYU5TCm4wbDRWVU81RkYzeVJtZF
+    k3YS9zTVkvT0p0SXp1aHErTmlZNGNtZHlkd1lVTHRpRS8zWHNaUDA2MjJnbEdRay8KVlNt
+    c2lpb0M4TklTM0s5UFYwamZNYXJxd3hLdEI5RGNLTTFJV3Z3Wnc5enNPQ01YUUQ5VzlVdF
+    F1bXBBRVQwKwp3NFFQRzhMQUVGVmxKN1hKZngzUVNCYVJicGRRcnNaOUUxUmxwOFM3YkJp
+    V0VOdENPUGlyCi0tLS0tRU5EIFJTQSBQUklWQVRFIEtFWS0tLS0tCg==
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.17.2
+    helm-version: 0.28.1
+    oracle/edition: 'COMMUNITY'
+  name: tls-certificate
+  namespace: vault
+type: kubernetes.io/tls
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: vault-config
+  namespace: vault
+stringData:
+  config.hcl: |-
+    disable_mlock = true
+    storage "inmem" {}
+    telemetry {
+      disable_hostname = true
+      prometheus_retention_time = "12h"
+    }
+type: Opaque
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.17.2
+    helm-version: 0.28.1
+    helm.sh/chart: vault-0.28.1
+    oracle/edition: 'COMMUNITY'
+  name: vault
+  namespace: vault
+spec:
+  ports:
+  - name: https
+    port: 8200
+    targetPort: 8200
+  - name: https-internal
+    port: 8201
+    targetPort: 8201
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/name: vault
+    component: server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault-agent-injector
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.17.2
+    helm-version: 0.28.1
+    oracle/edition: 'COMMUNITY'
+  name: vault-agent-injector-svc
+  namespace: vault
+spec:
+  ports:
+  - name: https
+    port: 443
+    targetPort: 8080
+  selector:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/name: vault-agent-injector
+    component: webhook
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.17.2
+    helm-version: 0.28.1
+    helm.sh/chart: vault-0.28.1
+    oracle/edition: 'COMMUNITY'
+    vault-internal: "true"
+  name: vault-internal
+  namespace: vault
+spec:
+  clusterIP: None
+  ports:
+  - name: https
+    port: 8200
+    targetPort: 8200
+  - name: https-internal
+    port: 8201
+    targetPort: 8201
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/name: vault
+    component: server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault-ui
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.17.2
+    helm-version: 0.28.1
+    helm.sh/chart: vault-0.28.1
+    oracle/edition: 'COMMUNITY'
+  name: vault-ui
+  namespace: vault
+spec:
+  ports:
+  - name: https
+    port: 8200
+    targetPort: 8200
+  publishNotReadyAddresses: true
+  selector:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/name: vault
+    component: server
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault-agent-injector
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.17.2
+    component: webhook
+    helm-version: 0.28.1
+    oracle/edition: 'COMMUNITY'
+  name: vault-agent-injector
+  namespace: vault
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: vault
+      app.kubernetes.io/name: vault-agent-injector
+      component: webhook
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: vault
+        app.kubernetes.io/name: vault-agent-injector
+        component: webhook
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app.kubernetes.io/instance: vault
+                app.kubernetes.io/name: vault-agent-injector
+                component: webhook
+            topologyKey: kubernetes.io/hostname
+      containers:
+      - args:
+        - agent-inject
+        - 2>&1
+        env:
+        - name: AGENT_INJECT_LISTEN
+          value: :8080
+        - name: AGENT_INJECT_LOG_LEVEL
+          value: info
+        - name: AGENT_INJECT_VAULT_ADDR
+          value: https://vault.vault.svc:8200
+        - name: AGENT_INJECT_VAULT_AUTH_PATH
+          value: auth/kubernetes
+        - name: AGENT_INJECT_VAULT_IMAGE
+          value: docker.io/hashicorp/vault:1.17.2
+        - name: AGENT_INJECT_TLS_CERT_FILE
+          value: /etc/webhook/certs/tls.crt
+        - name: AGENT_INJECT_TLS_KEY_FILE
+          value: /etc/webhook/certs/tls.key
+        - name: AGENT_INJECT_LOG_FORMAT
+          value: standard
+        - name: AGENT_INJECT_REVOKE_ON_SHUTDOWN
+          value: "false"
+        - name: AGENT_INJECT_CPU_REQUEST
+          value: 250m
+        - name: AGENT_INJECT_CPU_LIMIT
+          value: 500m
+        - name: AGENT_INJECT_MEM_REQUEST
+          value: 64Mi
+        - name: AGENT_INJECT_MEM_LIMIT
+          value: 128Mi
+        - name: AGENT_INJECT_DEFAULT_TEMPLATE
+          value: map
+        - name: AGENT_INJECT_TEMPLATE_CONFIG_EXIT_ON_RETRY_FAILURE
+          value: "true"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        image: docker.io/hashicorp/vault-k8s:1.4.2
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          failureThreshold: 2
+          httpGet:
+            path: /health/ready
+            port: 8080
+            scheme: HTTPS
+          initialDelaySeconds: 5
+          periodSeconds: 2
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: sidecar-injector
+        readinessProbe:
+          failureThreshold: 2
+          httpGet:
+            path: /health/ready
+            port: 8080
+            scheme: HTTPS
+          initialDelaySeconds: 5
+          periodSeconds: 2
+          successThreshold: 1
+          timeoutSeconds: 5
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        startupProbe:
+          failureThreshold: 12
+          httpGet:
+            path: /health/ready
+            port: 8080
+            scheme: HTTPS
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 5
+        volumeMounts:
+        - mountPath: /etc/webhook/certs
+          name: webhook-certs
+          readOnly: true
+      hostNetwork: false
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 100
+      serviceAccountName: vault-agent-injector
+      volumes:
+      - name: webhook-certs
+        secret:
+          secretName: injector-tls
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.17.2
+    helm-version: 0.28.1
+    oracle/edition: 'COMMUNITY'
+  name: vault
+  namespace: vault
+spec:
+  podManagementPolicy: Parallel
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: vault
+      app.kubernetes.io/name: vault
+      component: server
+  serviceName: vault-internal
+  template:
+    metadata:
+      annotations: null
+      labels:
+        app.kubernetes.io/instance: vault
+        app.kubernetes.io/name: vault
+        component: server
+        helm.sh/chart: vault-0.28.1
+    spec:
+      containers:
+      - args:
+        - |
+          /usr/local/bin/docker-entrypoint.sh vault server -dev -dev-listen-address='[::]:8200' -non-interactive
+        command:
+        - /bin/sh
+        - -ec
+        env:
+        - name: HOST_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: VAULT_K8S_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: VAULT_K8S_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: VAULT_ADDR
+          value: https://127.0.0.1:8200
+        - name: VAULT_API_ADDR
+          value: https://$(POD_IP):8200
+        - name: SKIP_CHOWN
+          value: "true"
+        - name: SKIP_SETCAP
+          value: "true"
+        - name: HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: VAULT_CLUSTER_ADDR
+          value: https://$(HOSTNAME).vault-internal:8201
+        - name: HOME
+          value: /home/vault
+        - name: VAULT_LOG_LEVEL
+          value: error
+        - name: VAULT_LOG_FORMAT
+          value: standard
+        - name: VAULT_DEV_ROOT_TOKEN_ID
+          value: root
+        - name: VAULT_DEV_LISTEN_ADDRESS
+          value: '[::]:8200'
+        - name: VAULT_ADDR
+          value: http://localhost:8200
+        - name: VAULT_CACERT
+          value: /vault/listener-tls/ca.pem
+        - name: VAULT_CLIENT_CERT
+          value: /vault/listener-tls/tls.crt
+        - name: VAULT_CLIENT_KEY
+          value: /vault/listener-tls/tls.key
+        - name: VAULT_SKIP_VERIFY
+          value: "false"
+        image: docker.io/hashicorp/vault:1.17.2
+        imagePullPolicy: IfNotPresent
+        lifecycle:
+          preStop:
+            exec:
+              command:
+              - /bin/sh
+              - -c
+              - sleep 5 && kill -SIGTERM $(pidof vault)
+        name: vault
+        ports:
+        - containerPort: 8200
+          name: https
+        - containerPort: 8201
+          name: https-internal
+        - containerPort: 8202
+          name: https-rep
+        securityContext:
+          allowPrivilegeEscalation: false
+        volumeMounts:
+        - mountPath: /vault/userconfig/vault-config
+          name: vault-config
+          readOnly: true
+        - mountPath: /vault/listener-tls
+          name: vault-listener-tls
+          readOnly: true
+        - mountPath: /policies
+          name: policies
+          readOnly: true
+        - mountPath: /home/vault
+          name: home
+      hostNetwork: false
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsNonRoot: true
+        runAsUser: 100
+      serviceAccountName: vault
+      terminationGracePeriodSeconds: 10
+      volumes:
+      - name: vault-config
+        secret:
+          defaultMode: 420
+          secretName: vault-config
+      - name: vault-listener-tls
+        secret:
+          defaultMode: 420
+          secretName: tls-certificate
+      - configMap:
+          defaultMode: 420
+          name: policies
+        name: policies
+      - emptyDir: {}
+        name: home
+  updateStrategy:
+    type: OnDelete
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.17.2
+    helm-version: 0.28.1
+    oracle/edition: 'COMMUNITY'
+  name: injector-certificate
+  namespace: vault
+spec:
+  commonName: Agent Inject Cert
+  dnsNames:
+  - vault-agent-injector-svc
+  - vault-agent-injector-svc.vault
+  - vault-agent-injector-svc.vault.svc
+  duration: 24h
+  issuerRef:
+    name: injector-ca-issuer
+  renewBefore: 144m
+  secretName: injector-tls
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.17.2
+    helm-version: 0.28.1
+    oracle/edition: 'COMMUNITY'
+  name: injector-selfsigned-ca
+  namespace: vault
+spec:
+  commonName: Agent Inject CA
+  duration: 87660h
+  isCA: true
+  issuerRef:
+    group: cert-manager.io
+    kind: Issuer
+    name: selfsigned
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  secretName: injector-ca-secret
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.17.2
+    helm-version: 0.28.1
+    oracle/edition: 'COMMUNITY'
+  name: injector-ca-issuer
+  namespace: vault
+spec:
+  ca:
+    secretName: injector-ca-secret
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.17.2
+    helm-version: 0.28.1
+    oracle/edition: 'COMMUNITY'
+  name: selfsigned
+  namespace: vault
+spec:
+  selfSigned: {}
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.17.2
+    helm-version: 0.28.1
+    helm.sh/chart: vault-0.28.1
+    oracle/edition: 'COMMUNITY'
+    release: prometheus
+  name: vault
+  namespace: vault
+spec:
+  endpoints:
+  - interval: 30s
+    params:
+      format:
+      - prometheus
+    path: /v1/sys/metrics
+    port: https
+    scheme: https
+    scrapeTimeout: 10s
+    tlsConfig:
+      insecureSkipVerify: true
+  namespaceSelector:
+    matchNames:
+    - vault
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: vault
+      app.kubernetes.io/name: vault
+      vault-internal: "true"
+# ---
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#   annotations:
+#     helm.sh/hook: test
+#   labels:
+#     app.kubernetes.io/part-of: ebaas
+#     app.kubernetes.io/version: 1.17.2
+#     helm-version: 0.28.1
+#     oracle/edition: 'COMMUNITY'
+#   name: vault-server-test
+#   namespace: vault
+# spec:
+#   containers:
+#   - command:
+#     - /bin/sh
+#     - -c
+#     - |
+#       echo "Checking for sealed info in 'vault status' output"
+#       ATTEMPTS=10
+#       n=0
+#       until [ "$n" -ge $ATTEMPTS ]
+#       do
+#         echo "Attempt" $n...
+#         vault status -format yaml | grep -E '^sealed: (true|false)' && break
+#         n=$((n+1))
+#         sleep 5
+#       done
+#       if [ $n -ge $ATTEMPTS ]; then
+#         echo "timed out looking for sealed info in 'vault status' output"
+#         exit 1
+#       fi
+
+#       exit 0
+#     env:
+#     - name: VAULT_ADDR
+#       value: https://vault.vault.svc:8200
+#     - name: VAULT_ADDR
+#       value: http://localhost:8200
+#     - name: VAULT_CACERT
+#       value: /vault/listener-tls/ca.pem
+#     - name: VAULT_CLIENT_CERT
+#       value: /vault/listener-tls/tls.crt
+#     - name: VAULT_CLIENT_KEY
+#       value: /vault/listener-tls/tls.key
+#     - name: VAULT_SKIP_VERIFY
+#       value: "false"
+#     image: docker.io/hashicorp/vault:1.17.2
+#     imagePullPolicy: IfNotPresent
+#     name: vault-server-test
+#     volumeMounts:
+#     - mountPath: /vault/userconfig/vault-config
+#       name: vault-config
+#       readOnly: true
+#     - mountPath: /vault/listener-tls
+#       name: vault-listener-tls
+#       readOnly: true
+#     - mountPath: /policies
+#       name: policies
+#       readOnly: true
+#   restartPolicy: Never
+#   volumes:
+#   - name: vault-config
+#     secret:
+#       defaultMode: 420
+#       secretName: vault-config
+#   - name: vault-listener-tls
+#     secret:
+#       defaultMode: 420
+#       secretName: tls-certificate
+#   - configMap:
+#       defaultMode: 420
+#       name: policies
+#     name: policies
+---
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  annotations:
+    cert-manager.io/inject-ca-from: vault/injector-certificate
+  labels:
+    app.kubernetes.io/instance: vault
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vault-agent-injector
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 1.17.2
+    helm-version: 0.28.1
+    oracle/edition: 'COMMUNITY'
+  name: vault-agent-injector-cfg
+webhooks:
+- admissionReviewVersions:
+  - v1
+  - v1beta1
+  clientConfig:
+    caBundle: ""
+    service:
+      name: vault-agent-injector-svc
+      namespace: vault
+      path: /mutate
+  failurePolicy: Ignore
+  matchPolicy: Exact
+  name: vault.hashicorp.com
+  objectSelector:
+    matchExpressions:
+    - key: app.kubernetes.io/name
+      operator: NotIn
+      values:
+      - vault-agent-injector
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    resources:
+    - pods
+    scope: Namespaced
+  sideEffects: None
+  timeoutSeconds: 30

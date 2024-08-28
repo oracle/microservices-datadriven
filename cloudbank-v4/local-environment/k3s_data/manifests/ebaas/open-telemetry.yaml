@@ -1,0 +1,240 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 0.105.0
+    helm-version: 0.99.0
+    oracle/edition: 'COMMUNITY'
+  name: open-telemetry
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  labels:
+    app.kubernetes.io/instance: open-telemetry
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: opentelemetry-collector
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 0.105.0
+    helm-version: 0.99.0
+    helm.sh/chart: opentelemetry-collector-0.99.0
+    oracle/edition: 'COMMUNITY'
+  name: open-telemetry-opentelemetry-collector
+  namespace: open-telemetry
+---
+apiVersion: v1
+data:
+  relay: |
+    exporters:
+      debug:
+        verbosity: basic
+      otlp/jaeger:
+        endpoint: jaegertracing-collector.observability.svc.cluster.local:4317
+        tls:
+          insecure: true
+    extensions:
+      health_check:
+        endpoint: ${env:MY_POD_IP}:13133
+      memory_ballast: {}
+    processors:
+      memory_limiter:
+        check_interval: 5s
+        limit_percentage: 80
+        spike_limit_percentage: 25
+    receivers:
+      jaeger:
+        protocols:
+          grpc:
+            endpoint: ${env:MY_POD_IP}:14250
+          thrift_compact:
+            endpoint: ${env:MY_POD_IP}:6831
+          thrift_http:
+            endpoint: ${env:MY_POD_IP}:14268
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
+      prometheus:
+        config:
+          scrape_configs:
+          - job_name: opentelemetry-collector
+            scrape_interval: 10s
+            static_configs:
+            - targets:
+              - ${env:MY_POD_IP}:8888
+      zipkin:
+        endpoint: ${env:MY_POD_IP}:9411
+    service:
+      extensions:
+      - health_check
+      - memory_ballast
+      pipelines:
+        traces:
+          exporters:
+          - otlp/jaeger
+          processors: []
+          receivers:
+          - otlp
+      telemetry:
+        metrics:
+          address: ${env:MY_POD_IP}:8888
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/instance: open-telemetry
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: opentelemetry-collector
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 0.105.0
+    helm-version: 0.99.0
+    helm.sh/chart: opentelemetry-collector-0.99.0
+    oracle/edition: 'COMMUNITY'
+  name: open-telemetry-opentelemetry-collector
+  namespace: open-telemetry
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: open-telemetry
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: opentelemetry-collector
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 0.105.0
+    component: standalone-collector
+    helm-version: 0.99.0
+    helm.sh/chart: opentelemetry-collector-0.99.0
+    oracle/edition: 'COMMUNITY'
+  name: open-telemetry-opentelemetry-collector
+  namespace: open-telemetry
+spec:
+  internalTrafficPolicy: Cluster
+  ports:
+  - name: jaeger-compact
+    port: 6831
+    protocol: UDP
+    targetPort: 6831
+  - name: jaeger-grpc
+    port: 14250
+    protocol: TCP
+    targetPort: 14250
+  - name: jaeger-thrift
+    port: 14268
+    protocol: TCP
+    targetPort: 14268
+  - appProtocol: grpc
+    name: otlp
+    port: 4317
+    protocol: TCP
+    targetPort: 4317
+  - name: otlp-http
+    port: 4318
+    protocol: TCP
+    targetPort: 4318
+  - name: zipkin
+    port: 9411
+    protocol: TCP
+    targetPort: 9411
+  selector:
+    app.kubernetes.io/instance: open-telemetry
+    app.kubernetes.io/name: opentelemetry-collector
+    component: standalone-collector
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/instance: open-telemetry
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: opentelemetry-collector
+    app.kubernetes.io/part-of: ebaas
+    app.kubernetes.io/version: 0.105.0
+    helm-version: 0.99.0
+    helm.sh/chart: opentelemetry-collector-0.99.0
+    oracle/edition: 'COMMUNITY'
+  name: open-telemetry-opentelemetry-collector
+  namespace: open-telemetry
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: open-telemetry
+      app.kubernetes.io/name: opentelemetry-collector
+      component: standalone-collector
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        checksum/config: f1242549edf3c776255cc5177a51a80c9e953642969e62627b639c1309e68d7f
+      labels:
+        app.kubernetes.io/instance: open-telemetry
+        app.kubernetes.io/name: opentelemetry-collector
+        component: standalone-collector
+    spec:
+      containers:
+      - args:
+        - --config=/conf/relay.yaml
+        command:
+        - /otelcol-contrib
+        env:
+        - name: MY_POD_IP
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: status.podIP
+        - name: GOMEMLIMIT
+          value: 409MiB
+        image: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.105.0
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 13133
+        name: opentelemetry-collector
+        ports:
+        - containerPort: 6831
+          name: jaeger-compact
+          protocol: UDP
+        - containerPort: 14250
+          name: jaeger-grpc
+          protocol: TCP
+        - containerPort: 14268
+          name: jaeger-thrift
+          protocol: TCP
+        - containerPort: 4317
+          name: otlp
+          protocol: TCP
+        - containerPort: 4318
+          name: otlp-http
+          protocol: TCP
+        - containerPort: 9411
+          name: zipkin
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 13133
+        resources:
+          limits:
+            cpu: 256m
+            memory: 512Mi
+        securityContext: {}
+        volumeMounts:
+        - mountPath: /conf
+          name: opentelemetry-collector-configmap
+      hostNetwork: false
+      securityContext: {}
+      serviceAccountName: open-telemetry-opentelemetry-collector
+      volumes:
+      - configMap:
+          items:
+          - key: relay
+            path: relay.yaml
+          name: open-telemetry-opentelemetry-collector
+        name: opentelemetry-collector-configmap
