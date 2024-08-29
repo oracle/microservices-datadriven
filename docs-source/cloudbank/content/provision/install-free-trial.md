@@ -8,6 +8,8 @@ This option allows you to run Oracle Backend for Spring Boot and Microservices i
 
    > **Note:** You only need to choose one of the three deployment options - local, OCI Free Tier or OCI Marketplace.
 
+You can also use this approach in any regular commercial Oracle Cloud Tenancy - just skip the first step and start at step 2!   
+
 1. Get an Oracle Cloud Free Tier account
 
    If you do not already have one, you can obtain an Oracle Cloud Free Tier account as follows:
