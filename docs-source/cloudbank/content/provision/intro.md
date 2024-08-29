@@ -27,17 +27,17 @@ Regardless of which option you choose, the remainder of the modules will be virt
 
 In this lab, you will:
 
-* Provision an instance of Oracle Backend for Spring Boot and Microservices, either locally or in the cloud.
+- Provision an instance of Oracle Backend for Spring Boot and Microservices, either locally or in the cloud.
 
 ### Prerequisites
 
 This module assumes you have either:
 
-* An Oracle Cloud account in a tenancy with sufficient quota and privileges to create:
-  * An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes
-  * A VCN with at least two public IP’s available
-  * A public load balancer
-  * An Oracle Autonomous Database - Shared instance
-  * At least one free OCI Auth Token (note that the maximum is two per user), or
-* An Oracle Cloud Free Tier account, or
-* A local machine with enough memory (64GB recommneded) to run the environment locally.
+- An Oracle Cloud account in a tenancy with sufficient quota and privileges to create:
+  - An OCI Container Engine for Kubernetes cluster, plus a node pool with three worker nodes
+  - A VCN with at least two public IP’s available
+  - A public load balancer
+  - An Oracle Autonomous Database - Shared instance
+  - At least one free OCI Auth Token (note that the maximum is two per user), or
+- An Oracle Cloud Free Tier account, or
+- A local machine with enough memory (64GB recommended) to run the environment locally.

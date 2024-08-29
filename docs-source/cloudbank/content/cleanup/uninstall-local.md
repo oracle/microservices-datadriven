@@ -6,8 +6,6 @@ weight = 2
 
 > **Note:** These steps apply only if you chose the option to install in a local container.
 
-
-
 1. Stop the local container using this command:
 
    ```bash
@@ -21,4 +19,3 @@ weight = 2
    ```bash
    docker rm obaas
    ```
-

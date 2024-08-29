@@ -7,15 +7,15 @@ weight = 2
 
 This option allows you to run Oracle Backend for Spring Boot and Microservices in a containerized
 environment on your local machine.  This option is recommended if you do have enough
-free capacity on your local machine to run the environment, a minimum of 64GB RAM and 80GB free disk are recommneded.
-This option provides an environment with adequeate resources for development and testing, but
+free capacity on your local machine to run the environment, a minimum of 64GB RAM and 80GB free disk are recommended.
+This option provides an environment with adequate resources for development and testing, but
 is not suitable for a production-sized deployment or performance testing.
 
    > **Note:** You only need to choose one of the three deployment options - local, OCI Free Tier or OCI Marketplace.
 
 1. Prerequisites
 
-   The following prerequisites are required to run the local environment: 
+   The following prerequisites are required to run the local environment:
 
    * A container runtime environment such as Docker Desktop, Rancher Desktop or Podman Desktop.
    * The ability to run a BASH script, or to read one and run equivalent commands in your environment.
@@ -38,12 +38,12 @@ is not suitable for a production-sized deployment or performance testing.
 1. Start the environment
 
    * Run the provided script to start the environment, including a Kubernetes cluster in a container (using k3s), Oracle Backend
-     for Spring Boot and Microservices and an Oracle Database instance inside that cluster. 
+     for Spring Boot and Microservices and an Oracle Database instance inside that cluster.
 
      ```bash
      ./obaas.sh
      ```  
-     
+
    * It will take approximately six to ten minutes (depending on the size of your machine) for all of the containers
      to reach ready/running state. You can watch the progress using this command:
 
@@ -53,10 +53,9 @@ is not suitable for a production-sized deployment or performance testing.
 
      > **Note:** You will need to provide the `KUBECONFIG` variable as shown, or export it in your shell, each time you wish to run a `kubectl` command to access the cluster.
 
-     When the environment is fully started, the output will appear similar to this: 
+     When the environment is fully started, the output will appear similar to this:
 
-     ![Completed startup](../images/install-free-tier-2.png " ")     
-
+     ![Completed startup](../images/install-free-tier-2.png " ")
 
 1. Verify access to web user interfaces
 
@@ -71,4 +70,4 @@ is not suitable for a production-sized deployment or performance testing.
 
    * The Spring Operations Center main dashboard will appear similar to this:
 
-     ![Spring Operations Center](../images/install-free-tier-5.png " ")     
+     ![Spring Operations Center](../images/install-free-tier-5.png " ")
