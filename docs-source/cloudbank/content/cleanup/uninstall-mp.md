@@ -31,4 +31,3 @@ If the Terraform Destroy job fails, re-run the Destroy job again after a few min
 Even after the Destroy job has finished there will be one resource left in the tenancy/compartment and that is an OCI Vault. The Vault is on `PENDING DELETION` mode.
 
    ![OCI Vault](../images/vault.png " ")
-

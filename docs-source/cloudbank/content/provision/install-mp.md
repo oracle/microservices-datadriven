@@ -8,6 +8,10 @@ The Oracle Backend for Spring Boot and Microservices can be installed from OCI M
 
 > **Note:** You only need to choose one of the three deployment options - local, OCI Free Tier or OCI Marketplace.
 
+This option installs a "production-sized" environment which includes an Oracle Compute Engine for Kubernetes ("OKE")
+cluster and an Oracle Autonomous Database instance.  If you want to use a smaller, development/test-sized environment
+that only requires a single OCI Compute Instance, please use the "Free Tier" option instead.
+
 1. Access the Oracle Cloud Infrastructure Marketplace listing
 
     Open the [OCI Marketplace listing](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911), as shown in the image below:
