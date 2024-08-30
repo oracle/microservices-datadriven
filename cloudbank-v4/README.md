@@ -1,8 +1,8 @@
-# CloudBank Version 3.2
+# CloudBank Version 4 - 8/30/24
 
 **NOTE:** This document and application is WIP.
 
-To run Cloud Bank you need OBaaS version 1.2.0 [Oracle Backend for Spring Boot and Microservices](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911) and Java 21 installed.
+To run Cloud Bank you need OBaaS version 1.3.0 [Oracle Backend for Spring Boot and Microservices](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911) and Java 21 installed.
 
 ## Build CloudBank
 
@@ -12,10 +12,10 @@ To run Cloud Bank you need OBaaS version 1.2.0 [Oracle Backend for Spring Boot a
    git clone https://github.com/oracle/microservices-datadriven.git
    ```
 
-1. Got to the `CloudBank-v32` directory
+1. Got to the `cloudBank-v4` directory
 
    ```shell
-   cd microservices-datadriven/cloudbank-v32
+   cd microservices-datadriven/cloudbank-v4
    ```
 
 1. Build CloudBank
@@ -40,8 +40,8 @@ To run Cloud Bank you need OBaaS version 1.2.0 [Oracle Backend for Spring Boot a
    [INFO] ------------------------------------------------------------------------
    [INFO] BUILD SUCCESS
    [INFO] ------------------------------------------------------------------------
-   [INFO] Total time:  10.160 s
-   [INFO] Finished at: 2024-01-12T10:41:10-06:00
+   [INFO] Total time:  9.437 s
+   [INFO] Finished at: 2024-08-30T10:57:14-05:00]
    [INFO] ------------------------------------------------------------------------
    ```
 
@@ -67,8 +67,8 @@ To run Cloud Bank you need OBaaS version 1.2.0 [Oracle Backend for Spring Boot a
     \_/ |_) (_| (_| __)   \_ |_ _|_
     ========================================================================================
     Application Name: Oracle Backend Platform :: Command Line Interface
-    Application Version: (1.1.1)
-    :: Spring Boot (v3.2.1) ::
+    Application Version: (1.3.0)
+    :: Spring Boot (v3.3.3) ::
     Ask for help:
         - Slack: https://oracledevs.slack.com/archives/C03ALDSV272
         - email: obaas_ww@oracle.com
@@ -84,7 +84,7 @@ To run Cloud Bank you need OBaaS version 1.2.0 [Oracle Backend for Spring Boot a
 CloudBank can be deployed using the `--script` command in `oractl`. CloudBank will be deployed in the namespace `application`. You are going to be asked for passwords when the `bind` command executes.
 
 ```text
-oractl:>script --file deploy-cmds/deploy-cb.txt
+oractl:>script --file deploy-cmds/deploy-cb-java21.txt
 ```
 
 The output should look similar to this:
