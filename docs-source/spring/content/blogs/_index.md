@@ -12,6 +12,30 @@ This page acts as an index/aggregator for some of our featured content.
 
 {{< blog  
     author="anders"
+    date="8/30/2024"
+    title="Connect to Oracle NoSQL database with Spring Data"
+    link="https://medium.com/@anders.swanson.93/oracle-nosql-database-with-spring-data-1edd2c23749a"
+    abstract="The Spring Data for Oracle NoSQL Database module integrates Spring Boot applications and Oracle NoSQL Database, enabling developers to access their tables with the familiar Spring Data API. With support for repository-style data access layers and automatic query generation, Spring Data for Oracle NoSQL Database simplifies your development process and enhances productivity when working with Oracle NoSQL Databases from Spring Boot applications."
+>}}
+
+{{< blog  
+    author="anders"
+    date="8/29/2024"
+    title="Microservice messaging with Spring Cloud Stream Binder for Oracle Database TxEventQ"
+    link="https://medium.com/@anders.swanson.93/spring-cloud-stream-binder-for-oracle-database-txeventq-baa405ba4505"
+    abstract="Spring Cloud Stream is a Java framework designed for building event-driven microservices backed by a scalable, fault-tolerant messaging systems. The Oracle Database Transactional Event Queues (TxEventQ) stream binder implementation allows developers to leverage Oracle’s database messaging platform within the Spring Cloud Stream ecosystem, all while keeping your data within the converged database."
+>}}
+
+{{< blog  
+    author="anders"
+    date="8/6/2024"
+    title="Connect Oracle Autonomous Database to Spring Boot"
+    link="https://medium.com/@anders.swanson.93/oracle-autonomous-database-with-spring-boot-1e71cdd8b59e"
+    abstract="It's easy to integrate Oracle Autonomous Database into your Spring Boot apps. In this article, concrete examples are provided for using Spring with Oracle Autonomous Database."
+>}}
+
+{{< blog  
+    author="anders"
     date="7/31/2024"
     title="Use OCI Object Storage data as Spring Boot Resources"
     link="https://medium.com/@anders.swanson.93/use-oci-object-storage-data-as-spring-boot-resources-2f5a440f73c2"
