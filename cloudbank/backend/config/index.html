@@ -21,24 +21,24 @@
     <meta itemprop="description" content="The Spring Config Server can be used to store configuration information for Spring Boot applications, so that the configuration can be injected at runtime. It organized the configuration into properties, which are essentially key/value pairs. Each property can be assigned to an application, a moduleel, and a profile. This allows a running application to be configured based on metadata which it will send to the Spring Config Server to obtain the right configuration data.">
     <meta itemprop="wordCount" content="170">
     <title>Explore Spring Config Server :: CloudBank</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1724866676" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1724866676" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1724866676" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1724866676" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1724866676" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1724866676" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1724866676" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1724866676" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1724866676" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1724866676" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1724866676" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1724866676" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/variant.css?1724866676" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1724866676" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1724866676"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1725045071" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1725045071" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1725045071" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1725045071" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1725045071" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1725045071" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1725045071" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1725045071" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1725045071" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1725045071" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1725045071" rel="stylesheet" id="R-variant-style">
+    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1725045071" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/microservices-datadriven/cloudbank/css/variant.css?1725045071" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/print.css?1725045071" rel="stylesheet" media="print">
+    <script src="/microservices-datadriven/cloudbank/js/variant.js?1725045071"></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
-      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1724866676";
+      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1725045071";
       // variant stuff
       window.variants && variants.init( [ 'zen-light' ] );
       // translations
@@ -104,8 +104,8 @@
 <li>
 <p>Look at the configuration data</p>
 <p>Execute the query below by pasting it into the SQL worksheet in Database Actions (which you learned how to open in Task 2 above) and clicking on the green circle &ldquo;play&rdquo; icon.  This query shows the externalized configuration data stored by the Spring Config Server.</p>
-<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> configserver.properties</span></span></code></pre></div><p><a href="#R-image-20e88e590136290ece774dec57cc05a2" class="lightbox-link"><img alt="Configuration data" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-config-server-table.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-20e88e590136290ece774dec57cc05a2"><img alt="Configuration data" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-config-server-table.png" title=" "></a></p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">select</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">from</span> configserver.properties</span></span></code></pre></div><p><a href="#R-image-e060b2508667cb0da66c77ef6448cffd" class="lightbox-link"><img alt="Configuration data" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-config-server-table.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-e060b2508667cb0da66c77ef6448cffd"><img alt="Configuration data" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-config-server-table.png" title=" "></a></p>
 <p>In this example you can see there is an application called <code>fraud</code>, which has two configuration properties for the profile <code>kube</code> and moduleel <code>latest</code>.</p>
 </li>
 </ol>
@@ -134,12 +134,12 @@
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1724866676" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1724866676" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1724866676" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1724866676" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1724866676" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1724866676" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1725045071" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1725045071" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1725045071" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1725045071" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1725045071" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1725045071" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -286,8 +286,8 @@
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1724866676" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1724866676" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1724866676" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1725045071" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1725045071" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1725045071" defer></script>
   </body>
 </html>
