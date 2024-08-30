@@ -17,3 +17,5 @@ For more details, read about:
 - [Using the CLI](../development/cli)
 - [MicroTx](./microtx)
 - [Vault](./vault/)
+- [VS Code Plugin](./vscode-plugin)
+- [IntelliJ Plugin](./intellij-plugin)
