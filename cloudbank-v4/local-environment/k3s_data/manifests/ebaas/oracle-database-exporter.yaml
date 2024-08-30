@@ -1,0 +1,274 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    app.kubernetes.io/name: oracle-database-exporter
+    app.kubernetes.io/part-of: database
+    app.kubernetes.io/version: 1.3.1
+  name: oracle-database-exporter
+---
+apiVersion: v1
+data:
+  custom-metrics.toml: |
+    # reserved for future use
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/name: oracle-database-exporter
+    app.kubernetes.io/part-of: database
+    app.kubernetes.io/version: 1.3.1
+  name: db-exporter-custom-metrics
+  namespace: oracle-database-exporter
+---
+apiVersion: v1
+data:
+  promtail.yaml: "server:\n  http_listen_port: 9080\n  grpc_listen_port: 0\npositions:\n
+    \ filename: /tmp/positions.yaml\nclients: \n  - url: http://loki.grafana.svc.cluster.local:3100/loki/api/v1/push\nscrape_configs:\n
+    \ - job_name:  \"alert-log\" \n    static_configs: \n      - targets: \n          -
+    localhost \n        labels:\n          app: \"metrics-exporter\"\n          __path__:
+    /log/alert.log\n"
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/name: oracle-database-exporter
+    app.kubernetes.io/part-of: database
+    app.kubernetes.io/version: 1.3.1
+  name: promtail-sidecar-config-map
+  namespace: oracle-database-exporter
+---
+apiVersion: v1
+data:
+  db.name: QkFBUw==
+  db.password: V2VsY29tZS0xMjM0NQ==
+  db.service: ZnJlZXBkYjE=
+  db.username: U1lTVEVN
+  secret: eyJwYXNzd29yZCI6IldlbGNvbWUtMTIzNDUiLCAidXNlcm5hbWUiOiJTWVNURU0ifQ==
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/name: oracle-database-exporter
+    app.kubernetes.io/part-of: database
+    app.kubernetes.io/version: 1.3.1
+  name: baas-db-secrets
+  namespace: oracle-database-exporter
+type: Opaque
+---
+apiVersion: v1
+data:
+  tnsnames.ora: QkFBUz0oZGVzY3JpcHRpb249IChyZXRyeV9jb3VudD0yMCkocmV0cnlfZGVsYXk9MykoYWRkcmVzcz0ocHJvdG9jb2w9dGNwKShwb3J0PTE1MjEpKGhvc3Q9ZnJlZS5vcmFjbGUtZGF0YWJhc2Utb3BlcmF0b3Itc3lzdGVtLnN2Yy5jbHVzdGVyLmxvY2FsKSkoY29ubmVjdF9kYXRhPShzZXJ2aWNlX25hbWU9ZnJlZXBkYjEpKSkKQkFBU19UUD0oZGVzY3JpcHRpb249IChyZXRyeV9jb3VudD0yMCkocmV0cnlfZGVsYXk9MykoYWRkcmVzcz0ocHJvdG9jb2w9dGNwKShwb3J0PTE1MjEpKGhvc3Q9ZnJlZS5vcmFjbGUtZGF0YWJhc2Utb3BlcmF0b3Itc3lzdGVtLnN2Yy5jbHVzdGVyLmxvY2FsKSkoY29ubmVjdF9kYXRhPShzZXJ2aWNlX25hbWU9ZnJlZXBkYjEpKSkKQkFBU19MT1c9KGRlc2NyaXB0aW9uPSAocmV0cnlfY291bnQ9MjApKHJldHJ5X2RlbGF5PTMpKGFkZHJlc3M9KHByb3RvY29sPXRjcCkocG9ydD0xNTIxKShob3N0PWZyZWUub3JhY2xlLWRhdGFiYXNlLW9wZXJhdG9yLXN5c3RlbS5zdmMuY2x1c3Rlci5sb2NhbCkpKGNvbm5lY3RfZGF0YT0oc2VydmljZV9uYW1lPWZyZWVwZGIxKSkpCkJBQVNfSElHSD0oZGVzY3JpcHRpb249IChyZXRyeV9jb3VudD0yMCkocmV0cnlfZGVsYXk9MykoYWRkcmVzcz0ocHJvdG9jb2w9dGNwKShwb3J0PTE1MjEpKGhvc3Q9ZnJlZS5vcmFjbGUtZGF0YWJhc2Utb3BlcmF0b3Itc3lzdGVtLnN2Yy5jbHVzdGVyLmxvY2FsKSkoY29ubmVjdF9kYXRhPShzZXJ2aWNlX25hbWU9ZnJlZXBkYjEpKSkKZnJlZXBkYjE9KGRlc2NyaXB0aW9uPSAocmV0cnlfY291bnQ9MjApKHJldHJ5X2RlbGF5PTMpKGFkZHJlc3M9KHByb3RvY29sPXRjcCkocG9ydD0xNTIxKShob3N0PWZyZWUub3JhY2xlLWRhdGFiYXNlLW9wZXJhdG9yLXN5c3RlbS5zdmMuY2x1c3Rlci5sb2NhbCkpKGNvbm5lY3RfZGF0YT0oc2VydmljZV9uYW1lPWZyZWVwZGIxKSkpCmZyZWVwZGIxX1RQPShkZXNjcmlwdGlvbj0gKHJldHJ5X2NvdW50PTIwKShyZXRyeV9kZWxheT0zKShhZGRyZXNzPShwcm90b2NvbD10Y3ApKHBvcnQ9MTUyMSkoaG9zdD1mcmVlLm9yYWNsZS1kYXRhYmFzZS1vcGVyYXRvci1zeXN0ZW0uc3ZjLmNsdXN0ZXIubG9jYWwpKShjb25uZWN0X2RhdGE9KHNlcnZpY2VfbmFtZT1mcmVlcGRiMSkpKQpmcmVlcGRiMV9MT1c9KGRlc2NyaXB0aW9uPSAocmV0cnlfY291bnQ9MjApKHJldHJ5X2RlbGF5PTMpKGFkZHJlc3M9KHByb3RvY29sPXRjcCkocG9ydD0xNTIxKShob3N0PWZyZWUub3JhY2xlLWRhdGFiYXNlLW9wZXJhdG9yLXN5c3RlbS5zdmMuY2x1c3Rlci5sb2NhbCkpKGNvbm5lY3RfZGF0YT0oc2VydmljZV9uYW1lPWZyZWVwZGIxKSkpCmZyZWVwZGIxX0hJR0g9KGRlc2NyaXB0aW9uPSAocmV0cnlfY291bnQ9MjApKHJldHJ5X2RlbGF5PTMpKGFkZHJlc3M9KHByb3RvY29sPXRjcCkocG9ydD0xNTIxKShob3N0PWZyZWUub3JhY2xlLWRhdGFiYXNlLW9wZXJhdG9yLXN5c3RlbS5zdmMuY2x1c3Rlci5sb2NhbCkpKGNvbm5lY3RfZGF0YT0oc2VydmljZV9uYW1lPWZyZWVwZGIxKSkpCkJBQVNfcG9vbGVkID0gKGRlc2NyaXB0aW9uPSAgKHJldHJ5X2NvdW50PTIwKShyZXRyeV9kZWxheT0zKShhZGRyZXNzPShwcm90b2NvbD10Y3ApKHBvcnQ9MTUyMSkoaG9zdD1mcmVlLm9yYWNsZS1kYXRhYmFzZS1vcGVyYXRvci1zeXN0ZW0uc3ZjLmNsdXN0ZXIubG9jYWwpKShjb25uZWN0X2RhdGE9KHNlcnZpY2VfbmFtZT1mcmVlcGRiMSkoc2VydmVyPXBvb2xlZCkpKQpCQUFTX1RQX3Bvb2xlZCA9IChkZXNjcmlwdGlvbj0gIChyZXRyeV9jb3VudD0yMCkocmV0cnlfZGVsYXk9MykoYWRkcmVzcz0ocHJvdG9jb2w9dGNwKShwb3J0PTE1MjEpKGhvc3Q9ZnJlZS5vcmFjbGUtZGF0YWJhc2Utb3BlcmF0b3Itc3lzdGVtLnN2Yy5jbHVzdGVyLmxvY2FsKSkoY29ubmVjdF9kYXRhPShzZXJ2aWNlX25hbWU9ZnJlZXBkYjEpKHNlcnZlcj1wb29sZWQpKSkKQkFBU19MT1dfcG9vbGVkID0gKGRlc2NyaXB0aW9uPSAgKHJldHJ5X2NvdW50PTIwKShyZXRyeV9kZWxheT0zKShhZGRyZXNzPShwcm90b2NvbD10Y3ApKHBvcnQ9MTUyMSkoaG9zdD1mcmVlLm9yYWNsZS1kYXRhYmFzZS1vcGVyYXRvci1zeXN0ZW0uc3ZjLmNsdXN0ZXIubG9jYWwpKShjb25uZWN0X2RhdGE9KHNlcnZpY2VfbmFtZT1mcmVlcGRiMSkoc2VydmVyPXBvb2xlZCkpKQpCQUFTX0hJR0hfcG9vbGVkID0gKGRlc2NyaXB0aW9uPSAgKHJldHJ5X2NvdW50PTIwKShyZXRyeV9kZWxheT0zKShhZGRyZXNzPShwcm90b2NvbD10Y3ApKHBvcnQ9MTUyMSkoaG9zdD1mcmVlLm9yYWNsZS1kYXRhYmFzZS1vcGVyYXRvci1zeXN0ZW0uc3ZjLmNsdXN0ZXIubG9jYWwpKShjb25uZWN0X2RhdGE9KHNlcnZpY2VfbmFtZT1mcmVlcGRiMSkoc2VydmVyPXBvb2xlZCkpKQpmcmVlcGRiMV9wb29sZWQgPSAoZGVzY3JpcHRpb249ICAocmV0cnlfY291bnQ9MjApKHJldHJ5X2RlbGF5PTMpKGFkZHJlc3M9KHByb3RvY29sPXRjcCkocG9ydD0xNTIxKShob3N0PWZyZWUub3JhY2xlLWRhdGFiYXNlLW9wZXJhdG9yLXN5c3RlbS5zdmMuY2x1c3Rlci5sb2NhbCkpKGNvbm5lY3RfZGF0YT0oc2VydmljZV9uYW1lPWZyZWVwZGIxKShzZXJ2ZXI9cG9vbGVkKSkpCmZyZWVwZGIxX1RQX3Bvb2xlZCA9IChkZXNjcmlwdGlvbj0gIChyZXRyeV9jb3VudD0yMCkocmV0cnlfZGVsYXk9MykoYWRkcmVzcz0ocHJvdG9jb2w9dGNwKShwb3J0PTE1MjEpKGhvc3Q9ZnJlZS5vcmFjbGUtZGF0YWJhc2Utb3BlcmF0b3Itc3lzdGVtLnN2Yy5jbHVzdGVyLmxvY2FsKSkoY29ubmVjdF9kYXRhPShzZXJ2aWNlX25hbWU9ZnJlZXBkYjEpKHNlcnZlcj1wb29sZWQpKSkKZnJlZXBkYjFfTE9XX3Bvb2xlZCA9IChkZXNjcmlwdGlvbj0gIChyZXRyeV9jb3VudD0yMCkocmV0cnlfZGVsYXk9MykoYWRkcmVzcz0ocHJvdG9jb2w9dGNwKShwb3J0PTE1MjEpKGhvc3Q9ZnJlZS5vcmFjbGUtZGF0YWJhc2Utb3BlcmF0b3Itc3lzdGVtLnN2Yy5jbHVzdGVyLmxvY2FsKSkoY29ubmVjdF9kYXRhPShzZXJ2aWNlX25hbWU9ZnJlZXBkYjEpKHNlcnZlcj1wb29sZWQpKSkKZnJlZXBkYjFfSElHSF9wb29sZWQgPSAoZGVzY3JpcHRpb249ICAocmV0cnlfY291bnQ9MjApKHJldHJ5X2RlbGF5PTMpKGFkZHJlc3M9KHByb3RvY29sPXRjcCkocG9ydD0xNTIxKShob3N0PWZyZWUub3JhY2xlLWRhdGFiYXNlLW9wZXJhdG9yLXN5c3RlbS5zdmMuY2x1c3Rlci5sb2NhbCkpKGNvbm5lY3RfZGF0YT0oc2VydmljZV9uYW1lPWZyZWVwZGIxKShzZXJ2ZXI9cG9vbGVkKSkp
+kind: Secret
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: '{"apiVersion":"v1","data":{"tnsnames.ora":"QkFBUz0oZGVzY3JpcHRpb249IChyZXRyeV9jb3VudD0yMCkocmV0cnlfZGVsYXk9MykoYWRkcmVzcz0ocHJvdG9jb2w9dGNwKShwb3J0PTE1MjEpKGhvc3Q9ZnJlZS5vcmFjbGUtZGF0YWJhc2Utb3BlcmF0b3Itc3lzdGVtLnN2Yy5jbHVzdGVyLmxvY2FsKSkoY29ubmVjdF9kYXRhPShzZXJ2aWNlX25hbWU9ZnJlZXBkYjEpKSkKQkFBU19UUD0oZGVzY3JpcHRpb249IChyZXRyeV9jb3VudD0yMCkocmV0cnlfZGVsYXk9MykoYWRkcmVzcz0ocHJvdG9jb2w9dGNwKShwb3J0PTE1MjEpKGhvc3Q9ZnJlZS5vcmFjbGUtZGF0YWJhc2Utb3BlcmF0b3Itc3lzdGVtLnN2Yy5jbHVzdGVyLmxvY2FsKSkoY29ubmVjdF9kYXRhPShzZXJ2aWNlX25hbWU9ZnJlZXBkYjEpKSkKQkFBU19MT1c9KGRlc2NyaXB0aW9uPSAocmV0cnlfY291bnQ9MjApKHJldHJ5X2RlbGF5PTMpKGFkZHJlc3M9KHByb3RvY29sPXRjcCkocG9ydD0xNTIxKShob3N0PWZyZWUub3JhY2xlLWRhdGFiYXNlLW9wZXJhdG9yLXN5c3RlbS5zdmMuY2x1c3Rlci5sb2NhbCkpKGNvbm5lY3RfZGF0YT0oc2VydmljZV9uYW1lPWZyZWVwZGIxKSkpCkJBQVNfSElHSD0oZGVzY3JpcHRpb249IChyZXRyeV9jb3VudD0yMCkocmV0cnlfZGVsYXk9MykoYWRkcmVzcz0ocHJvdG9jb2w9dGNwKShwb3J0PTE1MjEpKGhvc3Q9ZnJlZS5vcmFjbGUtZGF0YWJhc2Utb3BlcmF0b3Itc3lzdGVtLnN2Yy5jbHVzdGVyLmxvY2FsKSkoY29ubmVjdF9kYXRhPShzZXJ2aWNlX25hbWU9ZnJlZXBkYjEpKSkKZnJlZXBkYjE9KGRlc2NyaXB0aW9uPSAocmV0cnlfY291bnQ9MjApKHJldHJ5X2RlbGF5PTMpKGFkZHJlc3M9KHByb3RvY29sPXRjcCkocG9ydD0xNTIxKShob3N0PWZyZWUub3JhY2xlLWRhdGFiYXNlLW9wZXJhdG9yLXN5c3RlbS5zdmMuY2x1c3Rlci5sb2NhbCkpKGNvbm5lY3RfZGF0YT0oc2VydmljZV9uYW1lPWZyZWVwZGIxKSkpCmZyZWVwZGIxX1RQPShkZXNjcmlwdGlvbj0gKHJldHJ5X2NvdW50PTIwKShyZXRyeV9kZWxheT0zKShhZGRyZXNzPShwcm90b2NvbD10Y3ApKHBvcnQ9MTUyMSkoaG9zdD1mcmVlLm9yYWNsZS1kYXRhYmFzZS1vcGVyYXRvci1zeXN0ZW0uc3ZjLmNsdXN0ZXIubG9jYWwpKShjb25uZWN0X2RhdGE9KHNlcnZpY2VfbmFtZT1mcmVlcGRiMSkpKQpmcmVlcGRiMV9MT1c9KGRlc2NyaXB0aW9uPSAocmV0cnlfY291bnQ9MjApKHJldHJ5X2RlbGF5PTMpKGFkZHJlc3M9KHByb3RvY29sPXRjcCkocG9ydD0xNTIxKShob3N0PWZyZWUub3JhY2xlLWRhdGFiYXNlLW9wZXJhdG9yLXN5c3RlbS5zdmMuY2x1c3Rlci5sb2NhbCkpKGNvbm5lY3RfZGF0YT0oc2VydmljZV9uYW1lPWZyZWVwZGIxKSkpCmZyZWVwZGIxX0hJR0g9KGRlc2NyaXB0aW9uPSAocmV0cnlfY291bnQ9MjApKHJldHJ5X2RlbGF5PTMpKGFkZHJlc3M9KHByb3RvY29sPXRjcCkocG9ydD0xNTIxKShob3N0PWZyZWUub3JhY2xlLWRhdGFiYXNlLW9wZXJhdG9yLXN5c3RlbS5zdmMuY2x1c3Rlci5sb2NhbCkpKGNvbm5lY3RfZGF0YT0oc2VydmljZV9uYW1lPWZyZWVwZGIxKSkp"},"kind":"Secret","metadata":{"labels":{"app":"baas"},"name":"baas-tns-admin","namespace":"oracle-database-operator-system"},"type":"Opaque"}'
+  creationTimestamp: "2024-08-19T17:38:17Z"
+  labels:
+    app: baas
+    app.kubernetes.io/name: oracle-database-exporter
+    app.kubernetes.io/part-of: database
+    app.kubernetes.io/version: 1.3.1
+  managedFields:
+  - apiVersion: v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:data:
+        .: {}
+        f:tnsnames.ora: {}
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:kubectl.kubernetes.io/last-applied-configuration: {}
+        f:labels:
+          .: {}
+          f:app: {}
+      f:type: {}
+    manager: OpenAPI-Generator
+    operation: Update
+    time: "2024-08-19T17:38:17Z"
+  name: baas-tns-admin
+  namespace: oracle-database-exporter
+type: Opaque
+---
+apiVersion: v1
+data:
+  .dockerconfigjson: |
+    eyJhdXRocyI6IHsibG9jYWxob3N0OjMwMTAwL2ViYWFzIjogeyJhdXRoIjogIllXUnRhVz
+    Q2VjJWc1kyOXRaUzB4TWpNME5RPT0ifX19
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/name: oracle-database-exporter
+    app.kubernetes.io/part-of: database
+    app.kubernetes.io/version: 1.3.1
+  name: registry-auth
+  namespace: oracle-database-exporter
+type: kubernetes.io/dockerconfigjson
+---
+apiVersion: v1
+data:
+  registry.compartment: Ti9B
+  registry.password: V2VsY29tZS0xMjM0NQ==
+  registry.pull_url: bG9jYWxob3N0OjMwMTAwL2ViYWFz
+  registry.push_url: |
+    Y29udGFpbmVyLXJlZ2lzdHJ5LmNvbnRhaW5lci1yZWdpc3RyeS5zdmMuY2x1c3Rlci5sb2
+    NhbDo1MDAwL2ViYWFz
+  registry.username: YWRtaW4=
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/name: oracle-database-exporter
+    app.kubernetes.io/part-of: database
+    app.kubernetes.io/version: 1.3.1
+  name: registry-login
+  namespace: oracle-database-exporter
+type: Opaque
+---
+apiVersion: v1
+data:
+  .dockerconfigjson: |
+    eyJhdXRocyI6IHsibG9jYWxob3N0OjMwMTAwL2ViYWFzIjogeyJhdXRoIjogIllXUnRhVz
+    Q2VjJWc1kyOXRaUzB4TWpNME5RPT0ifX19
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/name: oracle-database-exporter
+    app.kubernetes.io/part-of: database
+    app.kubernetes.io/version: 1.3.1
+  name: registry-pull-auth
+  namespace: oracle-database-exporter
+type: kubernetes.io/dockerconfigjson
+---
+apiVersion: v1
+data:
+  .dockerconfigjson: |
+    eyJhdXRocyI6IHsiY29udGFpbmVyLXJlZ2lzdHJ5LmNvbnRhaW5lci1yZWdpc3RyeS5zdm
+    MuY2x1c3Rlci5sb2NhbDo1MDAwL2ViYWFzIjogeyJhdXRoIjogIllXUnRhVzQ2VjJWc1ky
+    OXRaUzB4TWpNME5RPT0ifX19
+kind: Secret
+metadata:
+  labels:
+    app.kubernetes.io/name: oracle-database-exporter
+    app.kubernetes.io/part-of: database
+    app.kubernetes.io/version: 1.3.1
+  name: registry-push-auth
+  namespace: oracle-database-exporter
+type: kubernetes.io/dockerconfigjson
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: metrics-exporter
+    app.kubernetes.io/name: oracle-database-exporter
+    app.kubernetes.io/part-of: database
+    app.kubernetes.io/version: 1.3.1
+    release: stable
+  name: metrics-exporter
+  namespace: oracle-database-exporter
+spec:
+  ports:
+  - name: metrics
+    port: 9161
+    targetPort: 9161
+  selector:
+    app: metrics-exporter
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: oracle-database-exporter
+    app.kubernetes.io/part-of: database
+    app.kubernetes.io/version: 1.3.1
+  name: metrics-exporter
+  namespace: oracle-database-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: metrics-exporter
+  template:
+    metadata:
+      labels:
+        app: metrics-exporter
+        app.kubernetes.io/name: oracle-database-exporter
+        app.kubernetes.io/part-of: database
+        app.kubernetes.io/version: 1.3.1
+    spec:
+      containers:
+      - args:
+        - --log.level=info
+        command:
+        - /oracledb_exporter
+        env:
+        - name: ORACLE_HOME
+          value: /lib/oracle/21/client64/lib
+        - name: TNS_ADMIN
+          value: ${ORACLE_HOME}/network/admin
+        - name: DB_USERNAME
+          value: ADMIN
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: db.password
+              name: 'baas-db-secrets'
+        - name: DB_CONNECT_STRING
+          value: 'baas_tp'
+        image: container-registry.oracle.com/database/observability-exporter:1.3.1
+        imagePullPolicy: IfNotPresent
+        name: metrics-exporter
+        ports:
+        - containerPort: 8080
+        resources:
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 250m
+            memory: 64Mi
+        volumeMounts:
+        - mountPath: /lib/oracle/21/client64/lib/network/admin
+          name: tns-admin
+        - mountPath: /log
+          name: alert-log
+      - args:
+        - -config.file=/etc/promtail/promtail.yaml
+        image: grafana/promtail
+        name: promtail
+        volumeMounts:
+        - mountPath: /etc/promtail
+          name: config
+        - mountPath: /log
+          name: alert-log
+      imagePullSecrets:
+      - name: registry-pull-auth
+      restartPolicy: Always
+      volumes:
+      - emtpyDir:
+          sizeLimit: 500Mi
+        name: alert-log
+      - configMap:
+          name: promtail-sidecar-config-map
+        name: config
+      - name: tns-admin
+        secret:
+          secretName: 'baas-tns-admin'
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    app: metrics-exporter
+    app.kubernetes.io/name: oracle-database-exporter
+    app.kubernetes.io/part-of: database
+    app.kubernetes.io/version: 1.3.1
+    release: stable
+  name: prometheus-metrics-exporter
+  namespace: oracle-database-exporter
+spec:
+  endpoints:
+  - interval: 20s
+    port: metrics
+  selector:
+    matchLabels:
+      app: metrics-exporter
