@@ -62,21 +62,22 @@ To run Cloud Bank you need OBaaS version 1.3.0 [Oracle Backend for Spring Boot a
 1. Start `oractl` from the `cloudbank-v4` directory and login as the `obaas-admin` user.
 
     ```text
-        _   _           __    _    ___
-    / \ |_)  _.  _. (_    /  |   |
-    \_/ |_) (_| (_| __)   \_ |_ _|_
-    ========================================================================================
-    Application Name: Oracle Backend Platform :: Command Line Interface
-    Application Version: (1.3.0)
-    :: Spring Boot (v3.3.3) ::
-    Ask for help:
-        - Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-        - email: obaas_ww@oracle.com
-    oractl:>connect
-    ? username obaas-admin
-    ? password *************
-    Credentials successfully authenticated! obaas-admin -> welcome to OBaaS CLI.
-    oractl:>
+       _   _           __    _    ___
+      / \ |_)  _.  _. (_    /  |   |
+      \_/ |_) (_| (_| __)   \_ |_ _|_
+      ========================================================================================
+      Application Name: Oracle Backend Platform :: Command Line Interface
+      Application Version: (1.3.0)
+      :: Spring Boot (v3.3.3) ::
+
+      Ask for help:
+         - Slack: https://oracledevs.slack.com/archives/C06L9CDGR6Z
+         - email: obaas_ww@oracle.com
+
+      oractl:>connect
+      ? username obaas-admin
+      ? password *************
+      obaas-admin -> Welcome!
     ```
 
 ## Deploy CloudBank
