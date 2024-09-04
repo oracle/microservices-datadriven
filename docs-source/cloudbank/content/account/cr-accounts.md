@@ -111,7 +111,7 @@ weight = 7
 
     Now we want to create an endpoint to create a new account.  Open `AccountController.java` and add a new `createAccount` method.  This method should return `ResponseEntity<Account>` this will allow you to return the account object, but also gives you access to set headers, status code and so on.  The method needs to take an `Account` as an argument.  Add the `RequestBody` annotation to the argument to tell Spring Boot that the input data will be in the HTTP request's body.
 
-    Inside the method, you should use the `saveAndFlush` method on the JPA Repository to save a new instance of `Account` in the database.  The `saveAndFlush` method returns the created object.  If the save was successful, return the created object and set the HTTP Status Code to 201 (Created).  If there is an error, set the HTTP Status Code to 500 (Internal Server Error).
+    Inside the method, you should use the `saveAndFlush` method on the JPA Repository to save a new instance of `Account` in the database.  The `saveAndFlush` method returns the created object.  If the save was successful, return the URI to the created object and set the HTTP Status Code to 201 (Created). If the object already exists set the HTTP Status code to 409 (Conflict). If there is an error, set the HTTP Status Code to 500 (Internal Server Error).
 
     Here's what the new method (and imports) should look like:
 
@@ -130,16 +130,22 @@ weight = 7
     
     @PostMapping("/account")
     public ResponseEntity<Account> createAccount(@RequestBody Account account) {
-        try {
-            Account newAccount = accountRepository.saveAndFlush(account);
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(newAccount.getAccountId())
-                    .toUri();
-            return ResponseEntity.created(location).build();
-        } catch (Exception e) {
-            return new ResponseEntity<>(account, HttpStatus.INTERNAL_SERVER_ERROR);
+        boolean exists = accountRepository.existsById(account.getAccountId());
+
+        if (!exists) {
+            try {
+                Account newAccount = accountRepository.saveAndFlush(account);
+                URI location = ServletUriComponentsBuilder
+                        .fromCurrentRequest()
+                        .path("/{id}")
+                        .buildAndExpand(newAccount.getAccountId())
+                        .toUri();
+                return ResponseEntity.created(location).build();
+            } catch (Exception e) {
+                return new ResponseEntity<>(account, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            return new ResponseEntity<>(account, HttpStatus.CONFLICT);
         }
     }
     ```
