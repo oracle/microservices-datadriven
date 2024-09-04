@@ -250,7 +250,7 @@ This is an example of the `customer32` application:
 
 1. Test `customer` service
 
-   1. REST endpoint
+   1. GET REST endpoint.
 
       ```shell
       curl -s http://$IP/api/v1/customer | jq
@@ -270,6 +270,21 @@ This is an example of the `customer32` application:
         },
         {...}
       ]
+      ```
+
+   1. POST endpoint to create a customer.
+
+      ```shell
+      curl -i -X POST 'http://$IP/api/v1/customer' -H 'Content-Type: application/json' -d '{"customerId": "bobsmith", "customerName": "Bob Smith", "customerEmail": "bob@smith.com"}'
+      ```
+
+      Should return the URI of the created object:
+
+      ```text
+      HTTP/1.1 201
+      Location: http://localhost:8080/api/v1/customer/bobsmith
+      Content-Length: 0
+      Date: Tue, 03 Sep 2024 21:01:25 GMT
       ```
 
 1. Test `creditscore` service

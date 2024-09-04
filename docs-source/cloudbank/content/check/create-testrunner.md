@@ -264,8 +264,8 @@ Next, you will create the "Test Runner" microservice which you will use to simul
     \_/ |_) (_| (_| __)   \_ |_ _|_
     ========================================================================================
       Application Name: Oracle Backend Platform :: Command Line Interface
-      Application Version: (1.2.0)
-      :: Spring Boot (v3.3.0) ::
+      Application Version: (1.3.0)
+      :: Spring Boot (v3.3.3) ::
 
       Ask for help:
       - Slack: https://oracledevs.slack.com/archives/C03ALDSV272
