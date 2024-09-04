@@ -275,7 +275,7 @@ This is an example of the `customer32` application:
    1. POST endpoint to create a customer.
 
       ```shell
-      curl -i -X POST 'http://$IP/api/v1/customer' -H 'Content-Type: application/json' -d '{"customerId": "bobsmith", "customerName": "Bob SMith", "customerEmail": "bob@smith.com"}'
+      curl -i -X POST 'http://$IP/api/v1/customer' -H 'Content-Type: application/json' -d '{"customerId": "bobsmith", "customerName": "Bob Smith", "customerEmail": "bob@smith.com"}'
       ```
 
       Should return the URI of the created object:
