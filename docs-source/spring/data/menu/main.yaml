@@ -72,6 +72,8 @@ main:
         ref: "/infrastructure/networking"
       - name: "Database"
         ref: "/infrastructure/database"
+      - name: "GPUs"
+        ref: "/infrastructure/gpu"
       - name: Database Access
         ref: "/infrastructure/databaseaccess"
       - name: "Kubernetes Access"

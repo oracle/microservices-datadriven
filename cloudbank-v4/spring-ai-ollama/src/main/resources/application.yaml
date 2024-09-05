@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: chat
+  ai:
+    ollama:
+      base-url: http://ollama.ollama.svc.cluster.local:11434
+      chat:
+        enabled: true
+        options:
+          model: llama3
