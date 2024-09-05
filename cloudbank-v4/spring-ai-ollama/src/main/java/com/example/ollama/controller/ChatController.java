@@ -35,7 +35,7 @@ public class ChatController {
             .build()
         ));
 
-        return response.toString();
+        return response.getResult().toString();
         
     }
     
