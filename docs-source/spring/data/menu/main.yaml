@@ -9,9 +9,9 @@ main:
       - name: "MacOS Ventura (x86)"
         ref: "/on-premises/macos_ventura"
       - name: "OL8 (x86)"
-        ref: "/on-premises/ol8" 
+        ref: "/on-premises/ol8"
   - name: Getting Started
-    ref: "/getting-started"     
+    ref: "/getting-started"
   - name: Platform Services
     ref: "/platform"
     sub:
@@ -35,9 +35,11 @@ main:
         ref: "/platform/vault"
       - name: VS Code plugin
         ref: "/platform/vscode-plugin"
+      - name: IntelliJ plugin
+        ref: "/platform/intellij-plugin"
   - name: Observability
     ref: "/observability"
-    sub: 
+    sub:
       - name: Metrics
         ref: "/observability/metrics"
       - name: Tracing
@@ -49,7 +51,7 @@ main:
         ref: "/security/azn-server"
   - name: Development
     ref: "/development"
-    sub:  
+    sub:
       - name: Setup
         ref: "/development/setup"
       - name: Project Structure
@@ -75,7 +77,7 @@ main:
       - name: Database Access
         ref: "/infrastructure/databaseaccess"
       - name: "Kubernetes Access"
-        ref: "/infrastructure/kubernetes" 
+        ref: "/infrastructure/kubernetes"
   - name: Sample Application
     ref: "/sampleapp"
   - name: Upgrade
