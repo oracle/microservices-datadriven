@@ -15,6 +15,28 @@ It works by helping users refactor the data access layer, transitioning from a m
 ![monoMicro](./images/monoMicro.png)
 
 
+## University Database
+
+In this simple scenario, an existing University database schema will be used. Using Oracle Graph Studio, community detection will be run on the existing schema to identify potential bounded contexts. However, the Node and Edge tables need to be populated first.
+
+## Quick Start
+
+Create and load the Node and Edges tables from a .csv file
+
+[Quick Start Table Load](./quickstart/README.md)
+
+## Create Graph with Graph Studio
+
+Oracle’s Graph Studio is a powerful tool designed to create, query, and analyze graphs from tables within your Autonomous Database, simplifying graph analytics.
+
+[Create Graph with Graph Studio](./create-graph/README.md)
+
+## Run Community Detection with a Notebook
+
+We create a notebook in Graph Studio for running Community Detection. A notebook is used to run algorithms and queries against a graph. 
+
+[Run Community Detection with a Notebook](./community-detection/README.md)
+
 ## 1. User Permissions
 
 Have ADMIN apply the [following grants](./user-perms/README.md) to the user capturing workload in a SQL Tuning Set
@@ -38,17 +60,9 @@ These tables are essential for applying community detection algorithms like Info
 
 [Create Graph Tables](./create-graph-tables/README.md)
 
-## 4. Create Graph with Graph Studio
 
-Oracle’s Graph Studio is a powerful tool designed to create, query, and analyze graphs from tables within your Autonomous Database, simplifying graph analytics.
 
-[Create Graph with Graph Studio](./create-graph/README.md)
 
-## 5. Run Community Detection with a Notebook
-
-We create a notebook in Graph Studio for running Community Detection. A notebook is used to run queries against a graph. 
-
-[Run Community Detection with a Notebook](./community-detection/README.md)
 
 ## 6. Refactor Communities
 
