@@ -7,8 +7,8 @@ keywords: "spring springboot microservices development oracle backend"
 Oracle Backend for Spring Boot and Microservices allows developers to build microservices in Spring Boot and provisions a "backend as a service" with Oracle Database and other infrastructure components that operate on multiple clouds. Oracle Backend for Spring Boot and Microservices vastly simplifies the task of building, testing, and operating microservices platforms for reliable, secure, and scalable enterprise applications.
 
 &nbsp;
-{{< hint type=[warning] icon=gdoc_fire title="Version 1.2.0 (production) released June, 2024" >}}
- Oracle Backend for Spring Boot and Microservices Version 1.2.0 is now generally available and suitable for production use. This version supports and recommends Spring Boot 3.2.x, Spring 6.1 and Spring Cloud 2023.0.x, with limited backwards compatibility for Spring Boot 2.7.x.  
+{{< hint type=[warning] icon=gdoc_fire title="Version 1.3.0 (production) released Spetember, 2024" >}}
+ Oracle Backend for Spring Boot and Microservices Version 1.3.0 is now generally available and suitable for production use. This version supports and recommends Spring Boot 3.3.x, 3.2.x, Spring 6.1 and Spring Cloud 2023.0.x, with limited backwards compatibility for Spring Boot 2.7.x.  
 {{< /hint >}}
 &nbsp;
 

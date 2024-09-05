@@ -4,6 +4,37 @@ description: "Release notes for Oracle Backend for Spring Boot and Microservices
 keywords: "release notes additions updates deprecations removals springboot spring development microservices development oracle backend"
 ---
 
+## Version 1.3.0, September 5th, 2024
+
+This release include:
+
+- IntelliJ Plugin
+- Optional GPU node pool
+- Local install for development purposes
+- OCI Free Tier install for development purposes
+- Spring Operations Center (SOC) UI updates
+- Cloudbank version 4
+- Addition of Alertmanager
+- Version upgrades of components, see documentation for details
+- Bug fixes
+
+The following components were updated:
+
+| Component                                             | New Version   | Replaced Version    |
+|-------------------------------------------------------|---------------|---------------------|
+| Spring Boot Admin Server | 3.3.3 | 3.3.1 |
+| alertmanager| v0.67.1 | |
+| Coherence Operator |	3.3.5 | 3.3.4 |
+| Spring Cloud Config server |	4.1.3 | 4.1.2 |
+| Spring Authorization Server | 3.3.3 | 3.3.0 |
+| Spring Eureka service registry | 4.1.3 | 4.1.2 |
+| Grafana	| 11.1.4 | 10.4.1 |
+| Apache Kafka |	3.8.0 | 3.7.0 |
+| OpenTelemetry Collector |	0.107.0 | 0.101.0 |
+| Oracle Database Observability Exporter |	1.3.1 | 1.2.1 |
+| Oracle Transaction Manager for Microservices | 24.2.1 | 23.4.2 |
+| Hashicorp Vault |	1.17.2 | 1.16.1 |
+
 ## Version 1.2.0, June 14th, 2024
 
 This release includes:
