@@ -6,376 +6,110 @@ keywords: "intellij plugin ide springboot spring development microservices devel
 
 ## GA 1.3.0 - September, 2024
 
-Oracle Backend for Spring Boot and Microservices is an IntelliJ plugin to browse, deploy, and modify applications on the Oracle Backend for Spring Boot and Microservices (OBaaS) platform. The plugin allows users to inspect  plugin allows to inspect the content of an Oracle Backend for Spring Boot deployment, in terms of applications, services and related configurations. It simplifies the access to the Platform Services installed, like Grafana, Spring, Apisix, Eureka and Jaeger creating ssh tunnels on-demand, and providing access to their respective web admin consoles. It allows to add credentials to access and bind services to the Oracle Autonomous DB included into Oracle Backend for Spring Boot and Microservices deployment. This plug-in replicates the functionalities available in [OBaas CLI](../../development/cli) and simplify the access to Oracle Backend for Spring Boot and Microservices deployments from a development IDE like VS Code.
+Oracle Backend for Spring Boot and Microservices (OBaaS) is an IntelliJ plugin to browse, deploy, and modify workloads on the Oracle Backend for Spring Boot and Microservices (OBaaS) platform.This plug-in implements the functionalities available in the [OBaas CLI](../../development/cli), simplifying  access to Oracle Backend for Spring Boot and Microservices deployments from an IntelliJ IDE. 
+
+The plug-in allows access to the OBaaS platform services, including the Grafana, Spring, APISIX, Eureka and Jaeger web admin consoles. Additionally, you may create and bind workloads to your  Oracle Backend for Spring Boot and Microservices database deployment. Users may inspect OBaaS deployment namespaces, workloads, and related configuration.
 
 See the Oracle Free Use Terms and Conditions [License](https://oss.oracle.com/licenses/upl/)
 
 ## Prerequisites
 
-* An operational OBaaS deployment, as configured through platform [Setup](../../setup/).
-* Access to the Kubernetes cluster where OBaaS is deployed.
+* An operational OBaaS deployment, as configured through platform [setup](../../setup/).
+* Access to a Kubernetes cluster where OBaaS is deployed from your IntelliJ IDE.
 
 ## Installation
 
 1. Download the IntelliJ plugin .zip file from [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.3.0).
 
-2. On the IntelliJ Settings plugins page, click the "gear" icon and select **Install Plugin from Disk...**
+2. On the IntelliJ Settings plugins page, click the "gear" icon and select **Install Plugin from Disk...**. Browse your filesystem for the IntelliJ plugin .zip file, and select it.
 
     ![plugin-intell](./images/install-from-disk.png)
 
-3. Click **OK** and restart IntelliJ to load the OBaaS plugin.
+3. Click **OK**, and restart your IDE to load the OBaaS plugin.
 
 4. If you do not see the OBaaS icon on your IDE's toolbar, navigate to View -> Tool Windows, and select "OBaaS" to add it to your IDE's tool window bar.
 
-## Configuring OBaaS Connection
+## Configuring the OBaaS Connection
 
 1. Open the plugin tool window by clicking the "OBaaS" icon on the IntelliJ tool bar, and click the "wrench" icon to open the OBaaS connection settings.
 
-    ![Extensions list](./images/open-settings.png)
+    ![open-settings](./images/open-settings.png)
 
 2. Enter the OBaaS username, password, kubeconfig for the Kubernetes cluster, and the local port the OBaaS admin tunnel will bind to. The default kubeconfig and context may already be selected.
 
-   ![Extensions list](./images/settings.png)
+   ![plugin-settings](./images/settings.png)
 
-3. When you're done, click "Test Connection" to verify the OBaaS connectivity. 
+3. When you're done, click "Test Connection" to verify the OBaaS connectivity. If you've configured your kubeconfig and OBaaS credentials correctly, you should see a connection successful message:
 
-After selecting the plugin from the left menu bar, the Oracle Backend for Spring Boot and Microservices VS Code plugin asks you to specify the full path for the
-Kubernetes configuration file. For example:
+    ![test-connection](./images/test-connection.png)
 
-![kubeConfig](./images/getKubeConfig.jpg)
+### Managing OBaaS Connection States
 
-By default, it shows the path in the user's `Home` directory `.kube/config` in which `kubectl` stores all of the information regarding the
-configured K8s clusters. You can set the full path of another Kubernetes configuration file. If the file is correctly loaded, the plugin
-shows the list of contexts available from which you can select one:
+To refresh the OBaaS connection, click the "Refresh" button at the top of the OBaaS tool window.
 
-![kubeContextList](./images/choseContext.jpg)
+To cancel all active connections, click the red "Close Connections" button at the top of the OBaaS tool window.
 
-If successful, you should see a tree view with one node and the selected context. For example:
+## Explore OBaaS Resources
 
-![onenode](./images/onenode.jpg)
+Once you are connected to OBaaS, click on the context node in the tool window tree to view OBaaS resources in your cluster.
 
-If the file path has not been correctly set, it returns an error message. For example:
+- OBaaS namespaces are shown in the "namespaces" section, each namespace containing a list of applications.
+- Links to platform service dashboards are shown in the "platform services" section.
+- Configuration properties are listed in the "configuration" section.
 
-![kubeFileError](./images/reloadWindowError.jpg)
+![explore-resources](./images/explore-resources.png)
 
-To restart the plugin and proceed with setting the Kubernetes configuration file, execute a window reload in the command palette:
+## Working with namespaces and workloads
+   
+### Create a new namespace
 
-![kubeReload](./images/reloadWindow.jpg)
+To create a new namespace, right click on the namespace and select "Add Namespace". 
 
-### How to Access the Cluster
+![add-namespace](./images/add-namespace.png)
 
-Until you create a dedicated `ssh` tunnel to the Kubernetes cluster, and if you do not connect to Oracle Backend for Spring Boot and Microservices administrative
-services, you cannot browse resources included in the Oracle Backend for Spring Boot and Microservices deployment. To do this, follow these steps:
+After you click OK, the namespace will be created and appear in the namespace list in a few moments.
 
-1. Select the cluster and right-click, choosing **Set UID/PWD** menu item to insert credentials related to your user account. For example:
+![namespace-created](./images/namespace-created.png)
 
-   ![Credentials](./images/credentials.png)
+You can delete a namespace by right clicking on that namespace, and selecting "Delete Namespace". When a namespace is deleted, all applications in the namespace will also be deleted.
 
-2. Specify the **OBSBM Admin ID** for the Oracle Backend for Spring Boot and Microservices user for deployment. For example:
+### Deploying workloads into namespaces
 
-   ![Credentials](./images/admin.jpg)
+To deploy a workload into a namespace, right click that namespace and select "Add Workload -> Upload .jar" for JVM workloads or "Add Workload -> Upload .exec" for GraalVM native workloads.
 
-3. On the top menu, the Oracle Backend for Spring Boot and Microservices administrator **OBSBM Admin password** is required. For example:
+On the Add Workload form, enter workload data.
+- Database username will default to the workload name if not specified, and is used for JMS TxEventQ authentication.
 
-   ![Credentials](./images/password.jpg)
+![upload-jar](./images/upload-jar.png)
 
-4. Two dialog boxes confirm that the credentials have been set correctly. For example:
+When you click OK, the JAR/exec file will be uploaded to OBaaS, an image is built, and the workload deployed to the cluster namespace. The task duration will vary depending on the size of the upload file and your network connection for upload.
 
-   ![confirmCredentials](./images/confirm.jpg)
+### Workload autoscalers
 
-   **NOTE:** If you do not process these steps and try to expand the Kubernetes context, you receive this informational message:
+To create an autoscaler for a workload, right-click the workload and select "Create Autoscaler". Autoscalers are configured on workload CPU, and specify minimum and maximum scale replicas.
 
-   ![setCredentials](./images/oractlCred.jpg)
+![create-autoscaler](./images/create-autoscaler.png)
 
-5. Select the cluster again and right-click on **Create Admin tunnel**. VS Code opens two new terminal that tries to open two tunnels to the Kubernetes cluster on a local port, for the KubeProxy on port 7080 and to Backend starting from `8080`. For example:
+You may also deletea workload's autoscaler from the workload context menu.
 
-   ![Tunnel](./images/tunnel.jpg)
+### Publishing workloads
 
-6. Before proceeding to the connection, wait until the tunnel are established and the terminals show a message similar to this:
+A workload can be published on an APISIX route by right-clicking the workload, providing the APISIX admin key and the desired route.
 
-   ![okTunnel](./images/oktunnel.jpg)
+![publish-workload](./images/publish-workload.png)
 
-   **NOTE:** If the K8s cluster is not related to an Oracle Backend for Spring Boot and Microservices deployment, the tunnel creation fails, because it will look for the **services/obaas-admin** in the namespace **obaas-admin**. In this case, execute a window reload to chose another cluster from the command palette. If you have any problem with the connection, start another tunnel. The plugin tries to connect to the cluster on another local port.
+## Accessing OBaaS Platform Services
 
-7. Select the cluster again and right-click **Connect**. This creates a session with the credentials set up in the first step.
+To access the web console of an OBaaS platform service (Grafana, Spring Admin, APISIX, Eureka, or Jaeger), right-click on the service's name under the "platform services" section and click "Connect".
 
-### Explore Resources
+![platform-services](./images/platform-services.png)
 
-When the steps to create the tunnel are completed and you are connected to the backend, it is possible to expand and **Refresh** the tree related to the deployment. For example:
+Once the connection is complete, click the "Open console" link on the completion message to navigate to the service's web console.
 
-   ![Browse](./images/browse.jpg)
+![grafana-connect](./images/grafana-connect.png)
 
-You see four top classes of resources that can be expanded in underlying items:
+## Configuration Properties
 
-* **applications** : The list of applications deployed and the holding services.
-* **Oracle DB** : In this release there is one Oracle Database in which the configurations and schemas related to deployed services are stored.
-* **platformServices** : The list of Oracle Backend for Spring Boot and Microservices deployed services, like Grafana, Spring, Apache APISIX, Eureka and Jaeger.
-* **oBaasConf** : The list of keys defined by the applications, stored in the Oracle Database, that are provisioned and available to share configurations information among services in each application.
+Workload configuration can be browsed and edited through the "configuration" section. To add a new configuration property, right-click either the top-level configuration section or a specific configuration node.
 
-## Applications
-
-Let's look at the operations that you can do on Applications root item of the browse tree:
-
-1. Open the list by clicking on the arrow to the left of **applications**:
-
-   ![Applications](./images/applications.jpg)
-
-2. Expand the application you are interested to see the list of included services:
-
-   ![Application](./images/application.jpg)
-
-### Applications level commands
-
-At the root level, right-click on **applications**, you have the following list of commands available right-clicking on the line:
-
- ![AddApp](./images/addapplication.jpg)
-
-* **Add application**
-* **Compilation progress**
-* **Compile .jar in .exec**
-* **Download compiled file in .exec**
-* **Purge compilation files**
-
-#### Add application
-
-With this option you can create a Kubernetes namespace will hold single Spring Boot microservice. It will be prompted the name of the application:
-
-![AppName](./images/appName.jpg)
-
-With this operation will be injected in the namespace a set of Secrets needed to run the microservices will be deployed.
-
-#### Compilation progress
-
-If it has been started a compilation with the command **Compile .jar in .exec**, you will see the tail of logs collected during the jar file compilation with GraalVM, in a single windows pane. You can re-submit the command to see the progress, as shown here:
-
-![CompilationProgress](./images/compilationprogress.jpg)
-
-If the compilation process is over successfully, you will see something like this:
-
-![CompilationOver](./images/compilationover.jpg)
-
-#### Compile .jar in .exec
-
-This option allows you to upload a .jar file to the Oracle Backend for Spring Boot and Microservices to a GraalVM compiler service. This service will start a compilation of your microservice in a native file, that it will be executed without JVM support.
-Since the compilation of a .jar file via the tool `native-image` does not support cross-compilation, so it must be on the same kind of platform where the application will run, this service guarantees a compilation in the same Operating System and CPU type where the service it will be executed on the Kubernetes cluster.
-The Spring Boot application **pom.xml** with the plugin:
-
-```xml
-<plugin>
-    <groupId>org.graalvm.buildtools</groupId>
-    <artifactId>native-maven-plugin</artifactId>
-</plugin>
-```
-
-it should be previously compiled on the developer desktop with GraalVM 22.3 or above through an **mvn** command like:
-
-`mvn -Pnative native:compile -Dmaven.test.skip=true`
-
-This pre-compilation on your desktop needs not only to check if there are any issues on libraries used in your Spring Boot microservice but also, as you can read [here](https://docs.spring.io/spring-boot/docs/current/reference/html/native-image.html#native-image.advanced.converting-executable-jars), your executable jar file must include AOT generated assets such as generated classes and JSON hint files.
-
-As soon as you upload the .jar file, the process will start showing these messages:
-
-![Compilation](./images/compilation.jpg)
-
-#### Download compiled file in .exec
-
-If the compilation progress report a "**Finished generating '...**" message, you can download locally the **.exec** file to be used to deploy a new microservice under an application namespace. It will be only required to choose a directory in which to save the file.
-
-**NOTE**: if you'll ask to download a file before the compilation is over, you will have a message like this:
-
-![Download failed](./images/compiledownloadfailed.jpg)
-
-#### Purge compilation files
-
-After you have compiled and downloaded the executable file, it's a good practice to purge files created on the compilation service before proceeding to other compilations. This command will delete the files related to the latest compilation.
-
-### Application level commands
-
-Expanding a single application, in which you are interested to see the list of included services, you will see a tree like in this picture:
-
-![Application](./images/application.jpg)
-
-To show the updated list, click on the **Refresh** button to the right of **application**.
-
-Right-clicking on each application, you can:
-
-* **Add native service -> upload .exec**
-* **Add service -> upload .jar**
-* **Bind a service**
-* **Delete application**
-
-as shown here:
-
-![Application Menu](./images/applicationmenu.jpg)
-
-#### Add native service -> upload .exec
-
-The VS Code command palette prompts for the required parameters to upload an executable file coming from a compilation done with the service offered by Oracle Backend for Spring Boot and Microservices. At the end of compilation process, you can download the **.exec** file and use it to create a native executable Spring Boot microservices on the backend platform.
-Choosing this item menu, the parameters will be required are:
-
-1. A popup dialog box opens to select the local Spring Boot **.exec** file, that will be the only type that you can select:
-
-    ![execfiles](./images/execfiles.jpg)
-
-1. **Service Name**  
-
-1. **Bind [jms]** (Default: ``)
-
-1. **Service Port** (Default: `8080`)
-
-1. **Service Profile** (Default: `obaas`)
-
-1. **Image Version** (Default: `0.0.1`)
-
-1. **Initial Replicas** (Default: `1`)
-
-1. **Add Health probe? : [True]/[False]** (Default: `True`)
-
-At the end of the parameters collection, a process, that includes the .exec file upload, building image and deploying, starts. It generates a sequence of messages showing the status. These messages end with "Service deployed successfully!" or "Deploy failed". The size and network constraints determine the amount of time for the process to terminate.
-
-#### Add service -> upload .jar
-
-The **Add -> upload .jar** command uploads a Spring Boot Microservice to an application packaged as a **.jar** file.
-Choosing this item menu, selecting a single application, the parameters will be required are:
-
-1. A popup dialog box opens to select the local Spring Boot **.jar file**
-
-1. **Service Name**
-
-1. **Bind [jms]** (Default: ``)
-
-1. **Image Version** (Default: `0.0.1`)
-
-1. **Java image** (Default: `ghcr.io/graalvm/jdk:ol7-java17-22.2.0`)
-
-1. **Add Health probe? : [True]/[False]** (Default: `True`)
-
-1. **Service Port** (Default: `8080`)
-
-1. **Service Profile** (Default: `obaas`)
-
-1. **Initial Replicas** (Default: `1`)
-
-1. **Inform the database name for Liquibase**: username for Liquibase.
-
-At the end of the parameters collection, a process, that includes the .jar upload, building image and deploying, starts. It generates a sequence of messages showing the status. These messages end with "Service deployed successfully!" or "Deploy failed". The size and network constraints determine the amount of time for the process to terminate.
-
-#### Bind a service
-
-This command create/update a user on the Oracle DB according the service name typed, or optionally to a different user schema, to which bind a Spring Boot microservice that will store data into the DB. It also store secrets with the user credentials into the application namespace, in order to inject them into the related pods. If the schema exists, it impose to change the user password will be stored in the namespace.
-The parameters required are:
-
-1. **Service Name:**
-2. **DB User (optional):**
-3. **DB User Password:**
-4. **Spring Binding Prefix (optional):** (Default: `spring.datasource`)
-5. **Update? [True]/[False]** (Default: `True`)
-
-#### Delete Application
-
-This command removes the application and all the services included. At the end of process, you see one of two messages: "Delete successful" or "Delete application failed!". Refresh the tree at **applications** level to show the current application list. The termination of Pods and applications isn't a synchronous operation. You may have to refresh more than one time for a clean view.
-
-### Service level commands
-
-With a right click on a single service you will have the following commands:
-
-* **Create autoscaler**
-* **Delete autoscaler**
-* **Delete service**
-* **Publish service**
-
-as shown here:
-
-   ![Service Commands](./images/servicecommands.jpg)
-
-#### Create autoscaler
-
-Create a Kubernetes autoscaler for the selected pod.
-
-* **minReplicas** (Default: `1`)
-* **maxReplicas** (Default: `1`)
-* **cpuPercent** (Default: ``)
-* **cpuRequest** (Default: `100m`)
-
-#### Delete autoscaler
-
-Delete an existing autoscaler
-
-#### Delete service
-
-Selecting the service from the tree, under a specific application, you will remove the service deployment, and the active pods will be removed.
-
-#### Publish service
-
-This command creates a route in the APISix Gateway available in the Oracle Backend for Spring Boot and Microservices, in order to expose on Internet the selected service. To be performed, this command requires the APISix AdminKey, and a port-forward to the APISix engine.
-
-You can get the AdminKey from the APISix configmap, using a kubectl command:
-
-   `kubectl -n apisix get configmap apisix -o yaml`
-
-looking for the `-name: "admin"` key.
-
-The parameters you have to provide are:
-
-1. **APISix AdminKey:**
-1. **Url base path:** (Default: `/api/v1/`). This path will be automatically appended by the service name to create the route accessible from an url like: `http(s)://[LB_IP]/api/v1/[servicename]*`
-
-A successful operation will return the Route ID recorded into the APISix, as shown in this example:
-
-![Route ID](./images/servicepublishedid.jpg)
-
-This is a shortcut with a standard registration: to customize the route, or start from scratch, is suggested the usage of APISix console.
-
-## Oracle DB
-
-For each Oracle Backend for Spring Boot and Microservices, an Oracle Autonomous Transaction Processing database is provisioned on OCI to hold the schema for the Spring Boot services and backend's configuration details. The icon remembers the component deployed with the backend platform.
-
-## platformServices
-
-The **platformServices** option can be expanded to show the services available in the Oracle Backend for Spring Boot and Microservices platform. For each service,
-right-click on the symbol to open an `ssh` tunnel to the service, on a specific local port that is automatically chosen. A link opens in the
-default web browser for the administrator console of each platform service.
-
-   ![Apisix](./images/grafana.jpg)
-
-For example, by right-clicking on **grafana monitor**, a tunnel will be opened with a message holding a button to open a web browser on the administrator's Grafana console. For example:
-
-   ![GrafanaWeb](./images/grafana-browser.jpg)
-
-The **apisix console** shows one more command compared with the others, that allows you to open a tunnel to the engine, that is listening on a different port than the console. This enable the **Publish service** command available on each service.
-
-   ![Apisix Commands](./images/apisixcommands.jpg)
-
-**NOTE:** If the port is already used or the connection times out, right clicking again it will automatically open on another port.
-
-## oBaasConf Configuration
-
-With Oracle Backend for Spring Boot and Microservices, developers can store the metadata and configurations to share among Pods in an
-application. The VS Code plugin can browse the content of this Key/Values store and add, update and delete keys as needed.
-
-Expand **oBaasConf configuration** to see the applications that are deployed and, expanding each of them, the Key/Value pair.
-For example:
-
-   ![Configurations](./images/configurations.jpg)
-
-Hover the mouse over each Key/Value pair to see the other metadata related to the key: **profile** and **label**, as shown here:
-
-   ![detailConf](./images/detailsConf.jpg)
-
-You can process the following operations:
-
-* **Add key** : By right-clicking **oBaasConf configuration** or one of the **service-conf** options in the VS Code command palette, you will set the following key parameters:
-
-   1. **service name** (mandatory)
-   1. **label**
-   1. **profile**
-   1. **propKey**
-   1. **value**
-
-   Click on **Refresh** button to see the new key added.
-
-   **NOTE:** You can add configuration properties for a service that is not yet deployed. In some cases, it is mandatory to prepare properties before deploying services in order to correctly start them.
-
-* **Edit key** : Right-click on a selected key in the VS Code command palette to update the current content of **Value**.
-
-* **Delete key** : Right-click on a selected key to delete it.
+A property is associated with a given configuration service, and may have a label, profile, key, and value.
