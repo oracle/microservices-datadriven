@@ -78,7 +78,7 @@ You can delete a namespace by right clicking on that namespace, and selecting "D
 To deploy a workload into a namespace, right click that namespace and select "Add Workload -> Upload .jar" for JVM workloads or "Add Workload -> Upload .exec" for GraalVM native workloads.
 
 On the Add Workload form, enter workload data.
-- Database username will default to the workload name if not specified, and is used for Java Message Service Transaction Event Queue authentication.
+- Database username will default to the workload name if not specified, and is used for Java Message Service Transactional Event Queue authentication.
 
 ![upload-jar](./images/upload-jar.png)
 
