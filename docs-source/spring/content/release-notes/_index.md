@@ -24,14 +24,14 @@ The following components were updated:
 |-------------------------------------------------------|---------------|---------------------|
 | Spring Boot Admin Server | 3.3.3 | 3.3.1 |
 | Alertmanager| v0.67.1 | |
-| Coherence Operator |	3.3.5 | 3.3.4 |
-| Spring Cloud Config server |	4.1.3 | 4.1.2 |
+| Coherence Operator |3.3.5 | 3.3.4 |
+| Spring Cloud Config server | 4.1.3 | 4.1.2 |
 | Spring Authorization Server | 3.3.3 | 3.3.0 |
 | Spring Eureka service registry | 4.1.3 | 4.1.2 |
 | Grafana	| 11.1.4 | 10.4.1 |
-| Apache Kafka |	3.8.0 | 3.7.0 |
+| Apache Kafka | 3.8.0 | 3.7.0 |
 | OpenTelemetry Collector |	0.107.0 | 0.101.0 |
-| Oracle Database Observability Exporter |	1.3.1 | 1.2.1 |
+| Oracle Database Observability Exporter | 1.3.1 | 1.2.1 |
 | Oracle Transaction Manager for Microservices | 24.2.1 | 23.4.2 |
 | Hashicorp Vault |	1.17.2 | 1.16.1 |
 
