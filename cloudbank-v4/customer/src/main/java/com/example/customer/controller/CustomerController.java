@@ -3,11 +3,13 @@
 
 package com.example.customer.controller;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
 import com.example.customer.model.Customers;
 import com.example.customer.repository.CustomersRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/api/v1")
+@Slf4j
 public class CustomerController {
     final CustomersRepository customersRepository;
 
@@ -44,6 +48,7 @@ public class CustomerController {
 
     /**
      * Get Customer with specific ID.
+     *
      * @param id The CustomerId
      * @return If the customers is found, a customer and HTTP Status code.
      */
@@ -60,6 +65,7 @@ public class CustomerController {
 
     /**
      * Get customer that contains an email.
+     *
      * @param email of the customer
      * @return Returns a customer if found
      */
@@ -70,27 +76,40 @@ public class CustomerController {
 
     /**
      * Create a customer.
-     * @param customer  Customer object with the customer details
-     * @return Returns a HTTP Status code
+     *
+     * @param customer Customer object with the customer details.
+     * @return Returns HTTP Status code or the URI of the created object.
      */
     @PostMapping("/customer")
     public ResponseEntity<Customers> createCustomer(@RequestBody Customers customer) {
-        try {
-            Customers newCustomer = customersRepository.save(new Customers(
-                    customer.getCustomerId(),
-                    customer.getCustomerName(),
-                    customer.getCustomerEmail(),
-                    customer.getCustomerOtherDetails()));
-            return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
+        boolean exists = customersRepository.existsById(customer.getCustomerId());
 
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        if (!exists) {
+            try {
+                Customers newCustomer = customersRepository.saveAndFlush(new Customers(
+                        customer.getCustomerId(),
+                        customer.getCustomerName(),
+                        customer.getCustomerEmail(),
+                        customer.getCustomerOtherDetails()));
+
+                URI location = ServletUriComponentsBuilder
+                        .fromCurrentRequest()
+                        .path("/{id}")
+                        .buildAndExpand(newCustomer.getCustomerId())
+                        .toUri();
+                return ResponseEntity.created(location).build();
+            } catch (Exception e) {
+                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            return new ResponseEntity<>(customer, HttpStatus.CONFLICT);
         }
     }
 
     /**
      * Update a specific Customer (ID).
-     * @param id The id of the customer
+     *
+     * @param id       The id of the customer
      * @param customer A customer object
      * @return A Http Status code
      */
@@ -114,6 +133,7 @@ public class CustomerController {
 
     /**
      * Delete a specific customer (ID).
+     *
      * @param customerId the Id of the customer to be deleted
      * @return A Http Status code
      */
@@ -129,11 +149,12 @@ public class CustomerController {
 
     /**
      * Method isn't implemented.
+     *
      * @param amount Loan amount
      * @return A Http Status
      */
     @PostMapping("/customer/applyLoan/{amount}")
-    public ResponseEntity<HttpStatus> applyForLoan(@PathVariable ("amount") long amount) {
+    public ResponseEntity<HttpStatus> applyForLoan(@PathVariable("amount") long amount) {
         try {
             // Check Credit Rating
             // Amount vs Rating approval?

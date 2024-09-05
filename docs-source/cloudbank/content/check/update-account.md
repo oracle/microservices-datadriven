@@ -113,11 +113,16 @@ Starting with the account service that you built in the previous lab, you will t
     
     @PostMapping("/account/journal")
     public ResponseEntity<Journal> postSimpleJournalEntry(@RequestBody Journal journalEntry) {
-        try {
-            Journal _journalEntry = journalRepository.saveAndFlush(journalEntry);
-            return new ResponseEntity<>(_journalEntry, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        boolean exists = journalRepository.existsById(journalEntry.getJournalId());
+        if (!exists) {
+            try {
+                Journal newJournalEntry = journalRepository.saveAndFlush(journalEntry);
+                return new ResponseEntity<>(newJournalEntry, HttpStatus.CREATED);
+            } catch (Exception e) {
+                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            return new ResponseEntity<>(journalEntry, HttpStatus.CONFLICT);
         }
     }
     ```
@@ -195,8 +200,8 @@ Starting with the account service that you built in the previous lab, you will t
     \_/ |_) (_| (_| __)   \_ |_ _|_
     ========================================================================================
       Application Name: Oracle Backend Platform :: Command Line Interface
-      Application Version: (1.2.0)
-      :: Spring Boot (v3.3.0) ::
+      Application Version: (1.3.0)
+      :: Spring Boot (v3.3.3) ::
       
       Ask for help:
       - Slack: https://oracledevs.slack.com/archives/C03ALDSV272 
