@@ -37,6 +37,7 @@ public class AccountController {
 
     /**
      * Get all Accounts.
+     *
      * @return List off accounts
      */
     @GetMapping("/accounts")
@@ -46,26 +47,34 @@ public class AccountController {
 
     /**
      * Create an account.
-     * @param account Account object
-     * @return Http Status Code
+     *
+     * @param account Account object.
+     * @return Returns HTTP Status code or the URI of the created object.
      */
     @PostMapping("/account")
     public ResponseEntity<Account> createAccount(@RequestBody Account account) {
-        try {
-            Account newAccount = accountRepository.saveAndFlush(account);
-            URI location = ServletUriComponentsBuilder
-                    .fromCurrentRequest()
-                    .path("/{id}")
-                    .buildAndExpand(newAccount.getAccountId())
-                    .toUri();
-            return ResponseEntity.created(location).build();
-        } catch (Exception e) {
-            return new ResponseEntity<>(account, HttpStatus.INTERNAL_SERVER_ERROR);
+        boolean exists = accountRepository.existsById(account.getAccountId());
+
+        if (!exists) {
+            try {
+                Account newAccount = accountRepository.saveAndFlush(account);
+                URI location = ServletUriComponentsBuilder
+                        .fromCurrentRequest()
+                        .path("/{id}")
+                        .buildAndExpand(newAccount.getAccountId())
+                        .toUri();
+                return ResponseEntity.created(location).build();
+            } catch (Exception e) {
+                return new ResponseEntity<>(account, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            return new ResponseEntity<>(account, HttpStatus.CONFLICT);
         }
     }
 
     /**
      * Find an account by Account Id.
+     *
      * @param accountId Account Id
      * @return An account
      */
@@ -82,6 +91,7 @@ public class AccountController {
 
     /**
      * Find an account by customer Id.
+     *
      * @param customerId Customer Id
      * @return A list opf Account(s)
      */
@@ -101,6 +111,7 @@ public class AccountController {
 
     /**
      * Delete an Account with specific Id.
+     *
      * @param accountId Account ID
      * @return HTTP Status Code
      */
@@ -116,6 +127,7 @@ public class AccountController {
 
     /**
      * Get transactions (Journal) for an Account Id.
+     *
      * @param accountId Account Id
      * @return List of Journal object(s)
      */
@@ -135,21 +147,28 @@ public class AccountController {
 
     /**
      * Create a Journal entry.
+     *
      * @param journalEntry Journal object
      * @return HTTP Status Code
      */
     @PostMapping("/account/journal")
     public ResponseEntity<Journal> postSimpleJournalEntry(@RequestBody Journal journalEntry) {
-        try {
-            Journal newJournalEntry = journalRepository.saveAndFlush(journalEntry);
-            return new ResponseEntity<>(newJournalEntry, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        boolean exists = journalRepository.existsById(journalEntry.getJournalId());
+        if (!exists) {
+            try {
+                Journal newJournalEntry = journalRepository.saveAndFlush(journalEntry);
+                return new ResponseEntity<>(newJournalEntry, HttpStatus.CREATED);
+            } catch (Exception e) {
+                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            return new ResponseEntity<>(journalEntry, HttpStatus.CONFLICT);
         }
     }
 
     /**
      * Find Journal entries by Account Id.
+     *
      * @param accountId Account Id
      * @return Journal object(s)
      */
@@ -160,12 +179,14 @@ public class AccountController {
 
     /**
      * Clears the Journal Entry.
+     *
      * @param journalId Journal Id
      * @return HTTP Status Code
      */
     @PostMapping("/account/journal/{journalId}/clear")
     public ResponseEntity<Journal> clearJournalEntry(@PathVariable long journalId) {
         try {
+            boolean exists = journalRepository.existsById(journalId);
             Optional<Journal> data = journalRepository.findById(journalId);
             if (data.isPresent()) {
                 Journal newJournalEntry = data.get();
