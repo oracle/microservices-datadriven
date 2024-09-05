@@ -23,7 +23,7 @@ The following components were updated:
 | Component                                             | New Version   | Replaced Version    |
 |-------------------------------------------------------|---------------|---------------------|
 | Spring Boot Admin Server | 3.3.3 | 3.3.1 |
-| alertmanager| v0.67.1 | |
+| Alertmanager| v0.67.1 | |
 | Coherence Operator |	3.3.5 | 3.3.4 |
 | Spring Cloud Config server |	4.1.3 | 4.1.2 |
 | Spring Authorization Server | 3.3.3 | 3.3.0 |
