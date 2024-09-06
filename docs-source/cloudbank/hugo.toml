@@ -1,6 +1,6 @@
 baseURL = 'https://oracle.github.io/microservices-datadriven/cloudbank/'
 languageCode = 'en-us'
-title = 'CloudBank'
+title = 'CloudBank AI'
 theme = 'hugo-theme-relearn'
 
 [params]
