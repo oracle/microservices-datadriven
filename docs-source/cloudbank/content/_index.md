@@ -1,10 +1,11 @@
 +++
 archetype = "home"
-title = "CloudBank"
+title = "CloudBank AI"
 +++
 
-Welcome to CloudBank - an on-demand, self-paced learning resource you can use
-to learn about developing microservices with [Spring Boot](https://spring.io/projects/spring-boot) 
+Welcome to CloudBank AI - an on-demand, self-paced learning resource you can use
+to learn about developing microservices with [Spring Boot](https://spring.io/projects/spring-boot)
+and [Spring Cloud Oracle](https://github.com/oracle/spring-cloud-oracle)
 and deploying, running and managing them with [Oracle Backend for Spring Boot and Microservices](https://bit.ly/oraclespringboot).
 
 You can follow through from beginning to end, or you can start at any module that you are interested in.
@@ -57,8 +58,6 @@ CloudBank contains the following modules:
   This modules introduces [Spring AI](https://github.com/spring-projects/spring-ai)
   and explores how it can be used to build a CloudBank AI Assistant (chatbot) that will
   allow users to interact with CloudBank using a chat-based interface.
-  In this module, you will learn about Retrieval Augmented Generation, Vector
-  Database and AI Agents.
 * **Module 7: Deploying the full CloudBank Application using the CLI**  
   In this module, you will learn how to deploy the full CloudBank application
   to Oracle Backend for Spring Boot and Microservices using the CLI.
