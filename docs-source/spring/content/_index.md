@@ -15,11 +15,11 @@ If you are building Spring Boot applications with Oracle Database, you should al
 ## Try it out with CloudBank AI
 
 To learn more about deploying and using Oracle Backend for Spring Boot and Microservices, we recommend our
-[CloudBank AI](https://bit.ly/CloudBankAI) self-paced, on-demand hands-on lab.
+[CloudBank AI](https://bit.ly/cloudbankAI) self-paced, on-demand hands-on lab.
 
 ![CloudBank AI](./cloudbank-hol.png)
 
-In the [CloudBank AI](https://bit.ly/CloudBankAI) hands-on lab, you can learn how to:
+In the [CloudBank AI](https://bit.ly/cloudbankAI) hands-on lab, you can learn how to:
 
 - Install Oracle Backend for Spring Boot and Microservices.
 - Set up a development environment for Spring Boot.
