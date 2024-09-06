@@ -137,67 +137,67 @@ WHERE n.COMMUNITY = 3
 
 **What it does**
 
-This PGQL (Property Graph Query Language) query is performing a specific selection operation on the CERNER graph. Let's break it down:
+This PGQL (Property Graph Query Language) query is performing a specific selection operation on the UNIVERSITYSCHEMA graph. Let's break it down:
 
     SELECT n:
         This part specifies that we want to return entire node objects.
-    FROM CERNER:
-        This indicates that we're querying the graph named CERNER.
+    FROM UNIVERSITYSCHEMA:
+        This indicates that we're querying the graph named UNIVERSITYSCHEMA.
     MATCH (n):
         This matches all nodes in the graph.
-    WHERE n.COMMUNITY = 99:
-        This is a filter condition that selects only the nodes where the COMMUNITY property is equal to 99.
+    WHERE n.COMMUNITY = 3:
+        This is a filter condition that selects only the nodes where the COMMUNITY property is equal to 3.
 
 What this query does:
 
-    It considers all nodes in the CERNER graph.
-    It filters these nodes to include only those where the COMMUNITY property is exactly 99.
+    It considers all nodes in the UNIVERSITYSCHEMA graph.
+    It filters these nodes to include only those where the COMMUNITY property is exactly 3.
     It returns these nodes as the result set.
 
-In essence, this query is answering the question: "Which nodes in the CERNER graph belong to community 99?"The result will be a set of node objects, each representing a node in the graph that has its COMMUNITY property set to 99. This can be useful for:
+In essence, this query is answering the question: "Which nodes in the UNIVERSITYSCHEMA graph belong to community 3?"The result will be a set of node objects, each representing a node in the graph that has its COMMUNITY property set to 3. This can be useful for:
 
     Examining all nodes in a specific community.
     Understanding the composition of a particular community.
     Preparing for further analysis or operations on nodes within this specific community.
 
-Each returned node (n) will include all its properties and can be used for further inspection or processing in your application.Remember that if there are no nodes with COMMUNITY equal to 99, this query will return an empty result set.
+Each returned node (n) will include all its properties and can be used for further inspection or processing in your application.Remember that if there are no nodes with COMMUNITY equal to 3, this query will return an empty result set.
 
 ![List Nodes](../images/listNodes.png)
 
 ## Show the Community Graph
 
 ```
-SELECT n,e,m FROM MATCH (n) -[e]-> (m) ON CERNER WHERE n.COMMUNITY = 3 and m.COMMUNITY = 3
+SELECT n,e,m FROM MATCH (n) -[e]-> (m) ON UNIVERSITYSCHEMA WHERE n.COMMUNITY = 3 and m.COMMUNITY = 3
 ```
 
 **What it does**
 
-This PGQL (Property Graph Query Language) query performs a specific operation on the CERNER graph. Let's break it down:
+This PGQL (Property Graph Query Language) query performs a specific operation on the UNIVERSITYSCHEMA graph. Let's break it down:
 
     SELECT n, e, m:
         This selects the source node (n), the edge (e), and the target node (m) for each match.
-    FROM MATCH (n) -[e]-> (m) ON CERNER:
-        This specifies the graph pattern to match in the CERNER graph.
+    FROM MATCH (n) -[e]-> (m) ON UNIVERSITYSCHEMA:
+        This specifies the graph pattern to match in the UNIVERSITYSCHEMA graph.
         It looks for any node (n) connected by an outgoing edge (e) to another node (m).
-    WHERE n.COMMUNITY = 99 and m.COMMUNITY = 99:
+    WHERE n.COMMUNITY = 3 and m.COMMUNITY = 3:
         This adds a condition to filter the matches.
 
 What this query does:
 
-    It searches the CERNER graph for pairs of nodes that are directly connected by an edge.
-    It only considers nodes where the COMMUNITY property is equal to 99 for both the source node (n) and the target node (m).
+    It searches the UNIVERSITYSCHEMA graph for pairs of nodes that are directly connected by an edge.
+    It only considers nodes where the COMMUNITY property is equal to 3 for both the source node (n) and the target node (m).
     For each matching pair, it returns:
         The source node (n)
         The edge connecting them (e)
         The target node (m)
 
-In essence, this query is answering the question: "What are all the connections between nodes within community 99?"This query is useful for:
+In essence, this query is answering the question: "What are all the connections between nodes within community 3?"This query is useful for:
 
-    Examining the internal structure of community 99.
+    Examining the internal structure of community 3.
     Identifying all relationships between nodes within this specific community.
-    Potentially visualizing or analyzing the subgraph formed by nodes in community 99.
+    Potentially visualizing or analyzing the subgraph formed by nodes in community 3.
 
-The results will show all the internal connections within community 99, allowing you to see how nodes in this community are related to each other. This can be valuable for understanding the cohesion and structure within a specific community in your graph.
+The results will show all the internal connections within community 3, allowing you to see how nodes in this community are related to each other. This can be valuable for understanding the cohesion and structure within a specific community in your graph.
 
 ![Community3](../images/comm3.png)
 
@@ -212,12 +212,12 @@ WHERE id(n) = 'NODES(ROLES)'
 
 **What it does**
 
-This PGQL (Property Graph Query Language) query is performing a specific lookup operation on the CERNER graph. Let's break it down:
+This PGQL (Property Graph Query Language) query is performing a specific lookup operation on the UNIVERSITYSCHEMA graph. Let's break it down:
 
     SELECT n.COMMUNITY:
         This specifies that we want to return the COMMUNITY property of the matched node.
-    FROM CERNER:
-        This indicates that we're querying the graph named CERNER.
+    FROM UNIVERSITYSCHEMA:
+        This indicates that we're querying the graph named UNIVERSITYSCHEMA.
     MATCH (n):
         This matches a node in the graph.
     WHERE id(n) = 'NODES(ROLES)':
@@ -225,11 +225,11 @@ This PGQL (Property Graph Query Language) query is performing a specific lookup 
 
 What this query does:
 
-    It looks for a specific node in the CERNER graph that has the ID 'NODES(ROLES)'.
+    It looks for a specific node in the UNIVERSITYSCHEMA graph that has the ID 'NODES(ROLES)'.
     Once it finds this node, it retrieves the value of the COMMUNITY property for this node.
     It returns this COMMUNITY value as the result.
 
-In essence, this query is answering the question: "What community does the node with ID 'NODES(ROLES)' belong to in the CERNER graph?"This query is useful for:
+In essence, this query is answering the question: "What community does the node with ID 'NODES(ROLES)' belong to in the UNIVERSITYSCHEMA graph?"This query is useful for:
 
     Quickly determining the community assignment of a specific, known node.
     Potentially as part of a larger operation where you need to know the community of a particular entity (in this case, likely a roles node).
@@ -256,12 +256,12 @@ WHERE id(n) = 'NODES(FACULTY)'
 **What it does**
 
 
-This PGQL (Property Graph Query Language) query is performing a specific operation on the CERNER graph. Let's break it down:
+This PGQL (Property Graph Query Language) query is performing a specific operation on the UNIVERSITYSCHEMA graph. Let's break it down:
 
     SELECT e:
         This specifies that we want to return the edge(s) that match our criteria.
-    FROM CERNER:
-        This indicates that we're querying the graph named CERNER.
+    FROM UNIVERSITYSCHEMA:
+        This indicates that we're querying the graph named UNIVERSITYSCHEMA.
     MATCH (o) <-[e]- (n):
         This defines the graph pattern we're looking for:
             (n): A source node
@@ -272,14 +272,14 @@ This PGQL (Property Graph Query Language) query is performing a specific operati
 
 What this query does:
 
-    It starts by identifying a specific node in the CERNER graph that has the ID 'NODES(FACULTY)'. This is likely a node representing a personnel or staff member.
+    It starts by identifying a specific node in the UNIVERSITYSCHEMA graph that has the ID 'NODES(FACULTY)'. This is a node representing a faculty member.
     From this node, it looks for all outgoing edges (which appear as incoming edges to other nodes).
     It returns these edges as the result.
 
-In essence, this query is answering the question: "What are all the relationships (edges) originating from the node representing personnel (FACULTY) in the CERNER graph?"This query is useful for:
+In essence, this query is answering the question: "What are all the relationships (edges) originating from the node representing FACULTY in the UNIVERSITYSCHEMA graph?"This query is useful for:
 
-    Identifying all connections or relationships that a specific personnel node has with other nodes in the graph.
-    Understanding the role or interactions of this personnel within the system represented by the graph.
+    Identifying all connections or relationships that a specific FACULTY node has with other nodes in the graph.
+    Understanding the role or interactions of this FACULTY within the system represented by the graph.
     Potentially as part of a larger analysis of staff connections or responsibilities.
 
 The result will be a set of edge objects. Each edge object typically includes:
@@ -300,12 +300,12 @@ FROM UNIVERSITYSCHEMA
 MATCH (o) -[e]-> (n)
 WHERE id(n) = 'NODES(FACULTY)'
 ```
-This PGQL (Property Graph Query Language) query is performing a specific operation on the CERNER graph. Let's break it down:
+This PGQL (Property Graph Query Language) query is performing a specific operation on the UNIVERSITYSCHEMA graph. Let's break it down:
 
     SELECT e:
         This specifies that we want to return the edge(s) that match our criteria.
-    FROM CERNER:
-        This indicates that we're querying the graph named CERNER.
+    FROM UNIVERSITYSCHEMA:
+        This indicates that we're querying the graph named UNIVERSITYSCHEMA.
     MATCH (o) <-[e]- (n):
         This defines the graph pattern we're looking for:
             (n): A source node
@@ -316,15 +316,15 @@ This PGQL (Property Graph Query Language) query is performing a specific operati
 
 What this query does:
 
-    It starts by identifying a specific node in the CERNER graph that has the ID 'NODES(FACULTY)'. This is likely a node representing a personnel or staff member.
+    It starts by identifying a specific node in the UNIVERSITYSCHEMA graph that has the ID 'NODES(FACULTY)'. This is a node representing a FACULTY member.
     From this node, it looks for all incoming edges (which appear as outgoing edges to other nodes).
     It returns these edges as the result.
 
-In essence, this query is answering the question: What nodes are connected to (pointing to) the Faculty node in the CERNER graph, and what are these connections? This query is useful for:
+In essence, this query is answering the question: What nodes are connected to (pointing to) the Faculty node in the UNIVERSITYSCHEMA graph, and what are these connections? This query is useful for:
 
-    Identifying all entities in the graph that have a relationship with either personnel or a specific person.
+    Identifying all entities in the graph that have a relationship with a specific faculty.
     Understanding the incoming connections to these two specific nodes.
-    Potentially analyzing the context or relationships surrounding personnel entities in the system.
+    Potentially analyzing the context or relationships surrounding faculty entities in the system.
 
 The result will be a set of edge objects. Each edge object typically includes:
 
@@ -332,6 +332,6 @@ The result will be a set of edge objects. Each edge object typically includes:
     The nature of these connections (the properties of the edges)
     The specific properties of both the source and target nodes
 
-This type of query is often used when you want to explore the immediate context or "neighborhood" of specific, important nodes in your graph. It can provide insights into how personnel and person entities are referenced or connected within the broader system represented by the CERNER graph.
+This type of query is often used when you want to explore the immediate context or "neighborhood" of specific, important nodes in your graph. It can provide insights into how faculty entities are referenced or connected within the broader system represented by the UNIVERSITYSCHEMA graph.
 
 ![find node comm id](../images/incoming.png)
