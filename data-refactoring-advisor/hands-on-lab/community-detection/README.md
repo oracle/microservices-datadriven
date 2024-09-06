@@ -1,12 +1,6 @@
 # Run Community Detection using a NoteBook
 
-Create a Notebook using Graph Studio, click `Create`
-
-![Create New Notebook](../images/createNotebook.png)
-
-Give a Name and Description and click `Create`
-
-![Notebook Info](../images/newNotebookInfo.png)
+The [Graph Studio Notebook](https://docs.oracle.com/en/cloud/paas/autonomous-database/csgru/work-notebooks-graph-studio.html) is designed to simplify the process of exploring, analyzing, and visualizing graph data, making it accessible to developers, analysts, and data scientists without requiring extensive graph expertise. It integrates seamlessly with other features of Graph Studio, providing a comprehensive environment for graph-based data analysis and application development.
 
 A notebook is used to run queries against a graph
 
@@ -20,6 +14,18 @@ For this notebook example, two graph query languages will be used
 
 [pgql-pgx](https://docs.oracle.com/en/cloud/paas/autonomous-database/csgru/pgql-pgx-interpreter.html) refers to using PGQL (the query language) with PGX, allowing users to query graphs using PGQL syntax within the PGX environment.
 
+In this example, community detection is run against the graph. It will identify the communities contain the tables with high join activity.
+
+Create a Notebook using Graph Studio, click `Create`
+
+![Create New Notebook](../images/createNotebook.png)
+
+Give a Name and Description and click `Create`
+
+![Notebook Info](../images/newNotebookInfo.png)
+
+
+
 in the picture below, select java-pgx as the interpreter used in a new paragraph
 
 ![Diff Query Languages](../images/pgx.png)
@@ -30,10 +36,10 @@ in the picture below, select java-pgx as the interpreter used in a new paragraph
 ![Notebook Graph Load](../images/notebookGraphLoad.png)
 
 ```
-// Load StudentFaculty Graph
-var graph = session.getGraph("STUDENTFACULTY");
+// Load University Schema Graph
+var graph = session.getGraph("UNIVERSITYSCHEMA");
 if (graph == null) {
-    graph = session.readGraphByName("STUDENTFACULTY", GraphSource.PG_SQL);
+    graph = session.readGraphByName("UNIVERSITYSCHEMA", GraphSource.PG_SQL);
 }
 if(graph !=null) {
     out.println("Graph " + graph.getName() + " has " + graph.getNumVertices() + " vertices and " + graph.getNumEdges() + " edges.");
@@ -50,6 +56,10 @@ session.getGraphs();
 ```
 
 ## Render Graph using pgql-pgx
+
+Select pgql-pgx as the interpreter used in a new paragraph
+
+![Rendered Graph](../images/selectpgql.png)
 
 Create a pgl-pgx paragraph, update GRAPH_NAME and run
 
@@ -112,78 +122,57 @@ Switch to pgql-pgx
 ```
 /* How many communities did it detect? */
 
-SELECT COUNT(DISTINCT N.COMMUNITY) AS NUM_COMMUNITIES FROM MATCH (n)  ON STUDENTFACULTYWORKLOAD
+SELECT COUNT(DISTINCT N.COMMUNITY) AS NUM_COMMUNITIES FROM MATCH (n)  ON UNIVERSITYSCHEMA
 ```
 
 6 communities detected, lets see what we have
 
-## View Community Graph
+## List Communities and Number of Nodes in Each
 
-Basically run the same graph command we did before community detection and get the same graph
+![Number of Communities](../images/commNodes.png)
 
-![Good Graph](../images/goodGraph.png)
+```
+/* List communities and number of nodes */
+SELECT n.COMMUNITY, COUNT(*) AS COMMUNITY_COUNT
+FROM UNIVERSITYSCHEMA
+MATCH (n)
+WHERE n.COMMUNITY IS NOT NULL
+GROUP BY n.COMMUNITY
+ORDER BY COMMUNITY_COUNT DESC
+```
 
-To view the communities, we need to define a new vertices based on communityID
+## View Communities
 
-Go into Settings/Highlight and click `New Highlight`
+Look at Community 3
 
-![New Highlight](../images/newHighlight.png)
+![Community3](../images/comm3.png)
 
+```
+SELECT n,e,m FROM MATCH (n) -[e]-> (m) ON UNIVERSITYSCHEMA WHERE n.COMMUNITY = 3 and m.COMMUNITY = 3
+```
 
-Values for the New Vertex
+Could be a Faculty/Staff Service Bounded Context
 
-![Vertex1](../images/vertex1.png)
-![Vertex2](../images/vertex2.png)
+Look ar Community 0
 
-Save the vertex and the graph should start using the new Vertex. See it in the legend on the right hand side.
+![Community0](../images/comm0.png)
 
-![Vertex2](../images/finalWeightedGraph.png)
+```
+SELECT n,e,m FROM MATCH (n) -[e]-> (m) ON UNIVERSITYSCHEMA WHERE n.COMMUNITY = 0 and m.COMMUNITY = 0
+```
 
-And there are the 6 communities.
+This could be a StudentInfo Bounded Context
 
-**Community 1**
+## Summary
 
- Publications
+In this exercise, we
 
- FacultyCredentials
+1. Loaded data that represented Join Activity into a Nodes and Edges table
+2. Turned that data into a graph
+3. Ran algorithms and Queries on that graph to identify comminities
 
+These communities could represent the surface area of a bounded context. And in turn, that bounded context could define the API set for a micro service.
 
-**Community 2**
+## Defining a VirtualBoundedContext
 
-Committees
-
-CommitteeMembers
-
-
-**Community 3**
-
-Faculty
-
-FacultyCourses
-
-Courses
-
-StudentCourses
-
-Students
-
-**Community 4**
-
-Colleges
-
-Departments
-
-Majors
-
-StudentMajors
-
-**Community 5**
-
-Addresses
-
-Transcripts
-
-StudentFinances
-
-
-If those communities were to map to a service, what would they be?  Could the communities be made better be modifying an edge condition?
+Define a [Virtual Bounded Context](../virtualpdb/README.md) using [JSON Relational Duality Views](https://www.oracle.com/database/json-relational-duality/)

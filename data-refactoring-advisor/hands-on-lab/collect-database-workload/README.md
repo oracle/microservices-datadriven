@@ -479,7 +479,8 @@ The output of this query will show the name of each SQL Tuning Set and the corre
 
 ## Summary
 
-The SQL Tuning Set is populated with data from collecting the statements found in the cursor cache.  Next step, create a graph from the data
+The SQL Tuning Set is populated with data from collecting the statements found in the cursor cache.  
+Next step, create [Nodes and Edges tables](../create-graph-tables/README.md)
 
 
 
