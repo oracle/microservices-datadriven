@@ -83,4 +83,6 @@ These tables are essential for applying community detection algorithms like Info
 
 Define an Service API using JSON Duality Views for quick micro service development
 
-[Virtual PDBs](./virtualpdb/README.md)
+[What are Virtual PDBs](./virtualpdb/README.md)
+
+[SpringBoot example using JSON Duality Views](https://medium.com/@anders.swanson.93/transform-your-spring-boot-application-with-oracle-json-relational-duality-views-d8084113f825)
