@@ -6,11 +6,33 @@ keywords: "spring springboot microservices development oracle backend"
 
 Oracle Backend for Spring Boot and Microservices allows developers to build microservices in Spring Boot and provisions a "backend as a service" with Oracle Database and other infrastructure components that operate on multiple clouds. Oracle Backend for Spring Boot and Microservices vastly simplifies the task of building, testing, and operating microservices platforms for reliable, secure, and scalable enterprise applications.
 
-&nbsp;
 {{< hint type=[warning] icon=gdoc_fire title="Version 1.3.0 (production) released September, 2024" >}}
  Oracle Backend for Spring Boot and Microservices Version 1.3.0 is now generally available and suitable for production use. This version supports and recommends Spring Boot 3.3.x, 3.2.x, Spring 6.1 and Spring Cloud 2023.0.x, with limited backwards compatibility for Spring Boot 2.7.x.  
 {{< /hint >}}
-&nbsp;
+
+If you are building Spring Boot applications with Oracle Database, you should also check out [Spring Cloud Oracle](https://github.com/oracle/spring-cloud-oracle) which is the home of a number of the components used in Oracle Backend for Spring Boot and Microservices, and which you can also use in your own applications!
+
+## Try it out with CloudBank AI
+
+To learn more about deploying and using Oracle Backend for Spring Boot and Microservices, we recommend our
+[CloudBank AI](https://bit.ly/CloudBankAI) self-paced, on-demand hands-on lab.
+
+![CloudBank AI](./cloudbank-hol.png)
+
+In the [CloudBank AI](https://bit.ly/CloudBankAI) hands-on lab, you can learn how to:
+
+- Install Oracle Backend for Spring Boot and Microservices.
+- Set up a development environment for Spring Boot.
+- Build Spring Boot microservices from scratch using Spring Web to create
+  Representational State Transfer (REST) services.
+- Use service discovery and client-side load balancing.
+- Use Spring Actuator to allow monitoring of services.
+- Create services that use asynchronous messaging with Java Message Service (JMS) instead of REST.
+- Implement the Saga pattern to manage data consistency across microservices.
+- Use the APISIX API Gateway to expose services to clients.
+- Build a conversational chatbot using Spring AI and self-host LLMs with Ollama.
+
+## Learn more
 
 To learn more, watch this short introductory video:
 
@@ -57,25 +79,7 @@ Developers also have access to development or build time services and libraries 
 - [OpenTelemetry Collector (including automatic instrumentation)](observability/tracing/).
 - [Spring Starters for Oracle Universal Connection Pool (UCP), Oracle Wallet, Oracle Advanced Queuing (AQ), and Transactional Event Queues (TxEventQ)](starters/).
 
-## Learn more, try it out with CloudBank!
 
-To learn more about deploying and using Oracle Backend for Spring Boot and Microservices, we recommend our
-[CloudBank](https://bit.ly/CloudBankOnOBaaS) self-paced, on-demand hands-on lab.
-
-![CloudBank LiveLab](./cloudbank-hol.png)
-
-In the [CloudBank](https://bit.ly/CloudBankOnOBaaS) hands-on lab, you can learn how to:
-
-- Install Oracle Backend for Spring Boot and Microservices.
-- Set up a development environment for Spring Boot.
-- Build Spring Boot microservices from scratch using Spring Web to create
-  Representational State Transfer (REST) services.
-- Use service discovery and client-side load balancing.
-- Use Spring Actuator to allow monitoring of services.
-- Create services that use asynchronous messaging with Java Message Service (JMS) instead of REST.
-- Implement the Saga pattern to manage data consistency across microservices.
-- Use the APISIX API Gateway to expose services to clients.
-- Extend a provided Flutter client to add a new "cloud cash" feature that uses the services you have built.
 
 ## Need help?
 
