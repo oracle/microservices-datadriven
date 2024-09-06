@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.133.1">
+    <meta name="generator" content="Hugo 0.123.6">
     <meta name="generator" content="Relearn 6.1.1+tip">
     <meta name="description" content="To be able to access the CLoudBank services from the public internet we need expose the services via the Apache APISIX gateway. We’re going to do that using scripts.
 Get APISIX Gateway Admin Key
@@ -11,14 +11,14 @@ You are going to need the Admin Key for the APISIX Gateway to configure the rout
 kubectl -n apisix get configmap apisix -o yamlLook for the key: information in the admin_key section and save it.">
     <meta name="author" content="">
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Create APISIX routes :: CloudBank">
+    <meta name="twitter:title" content="Create APISIX routes :: CloudBank AI">
     <meta name="twitter:description" content="To be able to access the CLoudBank services from the public internet we need expose the services via the Apache APISIX gateway. We’re going to do that using scripts.
 Get APISIX Gateway Admin Key
 You are going to need the Admin Key for the APISIX Gateway to configure the route. It is stored in a k8s ConfigMap. Run the command and make a note of the admin key.
 kubectl -n apisix get configmap apisix -o yamlLook for the key: information in the admin_key section and save it.">
     <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/cloudbank/deploy-cli/create-routes/index.html">
-    <meta property="og:site_name" content="CloudBank">
-    <meta property="og:title" content="Create APISIX routes :: CloudBank">
+    <meta property="og:site_name" content="CloudBank AI">
+    <meta property="og:title" content="Create APISIX routes :: CloudBank AI">
     <meta property="og:description" content="To be able to access the CLoudBank services from the public internet we need expose the services via the Apache APISIX gateway. We’re going to do that using scripts.
 Get APISIX Gateway Admin Key
 You are going to need the Admin Key for the APISIX Gateway to configure the route. It is stored in a k8s ConfigMap. Run the command and make a note of the admin key.
@@ -26,31 +26,31 @@ kubectl -n apisix get configmap apisix -o yamlLook for the key: information in t
     <meta property="og:locale" content="en_us">
     <meta property="og:type" content="article">
     <meta property="article:section" content="Deploy with the CLI">
-    <meta itemprop="name" content="Create APISIX routes :: CloudBank">
+    <meta itemprop="name" content="Create APISIX routes :: CloudBank AI">
     <meta itemprop="description" content="To be able to access the CLoudBank services from the public internet we need expose the services via the Apache APISIX gateway. We’re going to do that using scripts.
 Get APISIX Gateway Admin Key
 You are going to need the Admin Key for the APISIX Gateway to configure the route. It is stored in a k8s ConfigMap. Run the command and make a note of the admin key.
 kubectl -n apisix get configmap apisix -o yamlLook for the key: information in the admin_key section and save it.">
     <meta itemprop="wordCount" content="310">
-    <title>Create APISIX routes :: CloudBank</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1725045071" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1725045071" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1725045071" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1725045071" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1725045071" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1725045071" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1725045071" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1725045071" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1725045071" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1725045071" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1725045071" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1725045071" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/variant.css?1725045071" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1725045071" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1725045071"></script>
+    <title>Create APISIX routes :: CloudBank AI</title>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1725631905" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1725631905" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1725631905" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1725631905" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1725631905" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1725631905" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1725631905" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1725631905" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1725631905" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1725631905" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1725631905" rel="stylesheet" id="R-variant-style">
+    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1725631905" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/microservices-datadriven/cloudbank/css/variant.css?1725631905" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/print.css?1725631905" rel="stylesheet" media="print">
+    <script src="/microservices-datadriven/cloudbank/js/variant.js?1725631905"></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
-      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1725045071";
+      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1725631905";
       // variant stuff
       window.variants && variants.init( [ 'zen-light' ] );
       // translations
@@ -81,7 +81,7 @@ kubectl -n apisix get configmap apisix -o yamlLook for the key: information in t
             </div>
           </div>
           <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li
-            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="/microservices-datadriven/cloudbank/index.html"><span itemprop="name">CloudBank</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="/microservices-datadriven/cloudbank/index.html"><span itemprop="name">CloudBank AI</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li
             itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="/microservices-datadriven/cloudbank/deploy-cli/index.html"><span itemprop="name">Deploy with the CLI</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li
             itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><span itemprop="name">Create APISIX routes</span><meta itemprop="position" content="3"></li>
           </ol>
@@ -172,14 +172,14 @@ kubectl -n apisix get configmap apisix -o yamlLook for the key: information in t
 </span></span><span style="display:flex;"><span>Forwarding from 127.0.0.1:7070 -&gt; <span style="color:#ae81ff">9000</span>
 </span></span><span style="display:flex;"><span>Forwarding from <span style="color:#f92672">[</span>::1<span style="color:#f92672">]</span>:7070 -&gt; <span style="color:#ae81ff">9000</span></span></span></code></pre></div><p>Open a web browser to <a href="http://localhost:7070" rel="external" target="_blank">http://localhost:7070</a> to view the APISIX Dashboard web user interface.  It will appear similar to the image below.</p>
 <p>If prompted to login, login with username <code>admin</code> and the password you got from the k8s secret earlier. Note that Oracle strongly recommends that you change the password, even though this interface is not accessible outside the cluster without a tunnel.</p>
-<p><a href="#R-image-c059f8ffccfaa7a558fabc8c72cfa6be" class="lightbox-link"><img alt="APISIX Dashboard Login" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/apisix-login.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-c059f8ffccfaa7a558fabc8c72cfa6be"><img alt="APISIX Dashboard Login" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/apisix-login.png" title=" "></a></p>
+<p><a href="#R-image-818a76e3bf6a06f244caaf706af7b539" class="lightbox-link"><img alt="APISIX Dashboard Login" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/apisix-login.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-818a76e3bf6a06f244caaf706af7b539"><img alt="APISIX Dashboard Login" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/apisix-login.png" title=" "></a></p>
 <p>Click the routes menu item to see the routes you created in step three.</p>
-<p><a href="#R-image-3abeb9dd97a702ae1eecfcf7a1c51c96" class="lightbox-link"><img alt="APISIX Routes" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/apisix-route.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-3abeb9dd97a702ae1eecfcf7a1c51c96"><img alt="APISIX Routes" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/apisix-route.png" title=" "></a></p>
+<p><a href="#R-image-00ac3e017b26035de671641530bbcfe4" class="lightbox-link"><img alt="APISIX Routes" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/apisix-route.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-00ac3e017b26035de671641530bbcfe4"><img alt="APISIX Routes" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/apisix-route.png" title=" "></a></p>
 <p>Verify that you have three routes created</p>
-<p><a href="#R-image-e26987f2cc87b65d8363604293d7da0b" class="lightbox-link"><img alt="APISIX Route Details" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/apisix-route-details.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-e26987f2cc87b65d8363604293d7da0b"><img alt="APISIX Route Details" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/apisix-route-details.png" title=" "></a></p>
+<p><a href="#R-image-ba501cb043fcdbed70fca2f9b8d863ad" class="lightbox-link"><img alt="APISIX Route Details" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/apisix-route-details.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-ba501cb043fcdbed70fca2f9b8d863ad"><img alt="APISIX Route Details" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/apisix-route-details.png" title=" "></a></p>
 </li>
 </ol>
 </li>
@@ -209,12 +209,12 @@ kubectl -n apisix get configmap apisix -o yamlLook for the key: information in t
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1725045071" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1725045071" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1725045071" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1725045071" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1725045071" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1725045071" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1725631905" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1725631905" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1725631905" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1725631905" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1725631905" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1725631905" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -271,7 +271,8 @@ kubectl -n apisix get configmap apisix -o yamlLook for the key: information in t
           <li data-nav-id="/microservices-datadriven/cloudbank/saga/transfer-service/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/transfer-service/index.html">Create the Transfer service</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/saga/deploy/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/deploy/index.html">Deploy services</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/saga/test/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/test/index.html">Run LRA test cases</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/springai/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/springai/index.html">CloudBank AI Assistant</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/springai/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/springai/index.html">CloudBank AI Assistant</a><ul id="R-subsections-010a88853c155279dea049cae3232240" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/springai/simple-chat/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/springai/simple-chat/index.html">A simple ChatBot</a></li></ul></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/index.html" class="parent "><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/index.html">Deploy with the CLI</a><ul id="R-subsections-700415e649763a5591d9524d38ddb106" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/get-code/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/get-code/index.html">Get the sample code</a></li>
@@ -361,8 +362,8 @@ kubectl -n apisix get configmap apisix -o yamlLook for the key: information in t
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1725045071" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1725045071" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1725045071" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1725631905" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1725631905" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1725631905" defer></script>
   </body>
 </html>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>CloudBank</title>
+    <title>CloudBank AI</title>
     <link>https://oracle.github.io/microservices-datadriven/cloudbank/index.html</link>
-    <description>Welcome to CloudBank - an on-demand, self-paced learning resource you can use to learn about developing microservices with Spring Boot and deploying, running and managing them with Oracle Backend for Spring Boot and Microservices.&#xA;You can follow through from beginning to end, or you can start at any module that you are interested in.&#xA;What you will need To complete the modules you will somewhere to run Oracle Backend for Spring Boot and Microservices.</description>
+    <description>Welcome to CloudBank AI - an on-demand, self-paced learning resource you can use to learn about developing microservices with Spring Boot and deploying, running and managing them with Oracle Backend for Spring Boot and Microservices.&#xA;You can follow through from beginning to end, or you can start at any module that you are interested in.&#xA;What you will need To complete the modules you will somewhere to run Oracle Backend for Spring Boot and Microservices.</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <atom:link href="https://oracle.github.io/microservices-datadriven/cloudbank/index.xml" rel="self" type="application/rss+xml" />
@@ -47,7 +47,7 @@
       <link>https://oracle.github.io/microservices-datadriven/cloudbank/springai/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/cloudbank/springai/index.html</guid>
-      <description>This modules introduces Spring AI and explores how it can be used to build a CloudBank AI Assistant (chatbot) that will allow users to interact with CloudBank using a chat-based interface. In this module, you will learn about Retrieval Augmented Generation, Vector Database and AI Agents.</description>
+      <description>This modules introduces Spring AI and explores how it can be used to build a CloudBank AI Assistant (chatbot) that will allow users to interact with CloudBank using a chat-based interface.&#xA;Coming Soon: We will be updating this module to help you learn about Retrieval Augmented Generation, Vector Database and AI Agents.</description>
     </item>
     <item>
       <title>Deploy with the CLI</title>

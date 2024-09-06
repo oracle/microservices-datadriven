@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Provision an Instance :: CloudBank</title>
+    <title>Provision an Instance :: CloudBank AI</title>
     <link>https://oracle.github.io/microservices-datadriven/cloudbank/provision/index.html</link>
     <description>This module guides you through provisioning an Oracle Backend for Spring Boot environment either on your local machine, in the Oracle Cloud Free Tier, or in a commercial Oracle Cloud Tenancy.</description>
     <generator>Hugo</generator>

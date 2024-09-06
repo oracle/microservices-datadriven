@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Manage Sagas :: CloudBank</title>
+    <title>Manage Sagas :: CloudBank AI</title>
     <link>https://oracle.github.io/microservices-datadriven/cloudbank/saga/index.html</link>
     <description>This module introduces the Saga pattern, a very important pattern that helps us manage data consistency across microservices. We will explore the Long Running Action specification, one implementation of the Saga pattern, and then build a Transfer microservice that will manage funds transfers using a saga.</description>
     <generator>Hugo</generator>
