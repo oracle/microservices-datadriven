@@ -1,6 +1,6 @@
 spring:
   application:
-    name: chat
+    name: chatbot
   ai:
     ollama:
       base-url: http://ollama.ollama.svc.cluster.local:11434
