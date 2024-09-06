@@ -21,34 +21,45 @@ In this simple scenario, an existing University database schema will be used. Us
 
 ## Quick Start
 
-Create and load the Node and Edges tables from a .csv file
+### 1. Create and load the Node and Edges tables from a .csv file
 
 [Quick Start Table Load](./quickstart/README.md)
 
-## Create Graph with Graph Studio
+### 2. Create Graph with Graph Studio
 
 Oracle’s Graph Studio is a powerful tool designed to create, query, and analyze graphs from tables within your Autonomous Database, simplifying graph analytics.
 
 [Create Graph with Graph Studio](./create-graph/README.md)
 
-## Run Community Detection with a Notebook
+### 3. Run Community Detection with a Notebook
 
 We create a notebook in Graph Studio for running Community Detection. A notebook is used to run algorithms and queries against a graph. 
 
 [Run Community Detection with a Notebook](./community-detection/README.md)
 
-## 1. User Permissions
+### 4. Medical Records Database
+
+
+### 5. PGQL-pgx Cheat Sheet
+
+
+
+## Run Community Detection on your Database
+
+The following documents how to create the Nodes and Edges tables on your database.  Once complete, run Community Detectiobs as described above in the Quick Start
+
+### 1. User Permissions
 
 Have ADMIN apply the [following grants](./user-perms/README.md) to the user capturing workload in a SQL Tuning Set
 
-## 2. Collect Database Workload
+### 2. Collect Database Workload
 
 To begin optimizing an existing application, the initial task involves gathering the workload based upon the SQL statements being run against the database instance. For applications utilizing an Oracle database and accessing tables through SQL queries, a recommended approach is to analyze how the application interacts with these tables. SQL Tuning Sets serve as a valuable tool for capturing and providing detailed access pattern data, once they are correctly configured by following the steps outlined below.
 
 
 [Collect Database Workload with a SQL Tuning Set](./collect-database-workload/README.md)
 
-## 3. Create Graph Tables
+### 3. Create Graph Tables
 
  To facilitate community detection analysis, we need to set up two key metadata tables.
 
@@ -62,15 +73,7 @@ These tables are essential for applying community detection algorithms like Info
 
 
 
-
-
-## 6. Refactor Communities
-
-Look at the communities found and determine if improvements can be made to bounded context scope
-
-[Refactor Communties](./refactor-communities/README.md)
-
-## 7. Create Virtual PDBs using JSON Duality Views
+## Create Virtual PDBs using JSON Duality Views
 
 Define an Service API using JSON Duality Views for quick micro service development
 
