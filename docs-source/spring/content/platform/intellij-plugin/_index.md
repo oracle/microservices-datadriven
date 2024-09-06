@@ -29,6 +29,10 @@ See the Oracle Free Use Terms and Conditions [License](https://oss.oracle.com/li
 
 4. If you do not see the Oracle Backend for Spring Boot and Microservices icon on your IDE's toolbar, navigate to View -> Tool Windows, and select "OBaaS" to add it to your IDE's tool window bar.
 
+### Proxy Configuration
+
+If you are connecting to your Kubernetes cluster through a proxy server, configure your IntelliJ proxy settings from Settings -> Proxy. Th Oracle Backend for Spring Boot and Microservices will use your IntelliJ system proxy settings to connect to your Kubernetes cluster.
+
 ## Configuring the Oracle Backend for Spring Boot and Microservices Connection
 
 1. Open the plugin tool window by clicking the "OBaaS" icon on the IntelliJ tool bar, and click the "wrench" icon to open the Oracle Backend for Spring Boot and Microservices connection settings.
@@ -42,6 +46,20 @@ See the Oracle Free Use Terms and Conditions [License](https://oss.oracle.com/li
 3. When you're done, click "Test Connection" to verify the Oracle Backend for Spring Boot and Microservices connectivity. If you've configured your kubeconfig and Oracle Backend for Spring Boot and Microservices credentials correctly, you should see a connection successful message:
 
     ![test-connection](./images/test-connection.png)
+
+### Known issue with Kubernetes authentication
+
+If you are using a Kubeconfig shell exec config to authenticate to your Kubernetes cluster from the Oracle Backend for Spring Boot and Microservices, you may need to provide the full path to the authenticating binary:
+
+```yaml
+users:
+- name: my-user
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1beta1
+       # Provide the full path to the authenticating binary here
+      command: /usr/local/bin/oci
+```
 
 ### Managing Oracle Backend for Spring Boot and Microservices Connection States
 
