@@ -298,4 +298,4 @@ Node populated. View created. Create the EDGES Table.
     ```
 
 
-Congratulations! You have successfully populated the tables used to create the graph.  Next Step, create a graph
+Congratulations! You have successfully populated the tables used to create the graph.  Next Step, [Create a Graph](../create-graph/README.md) 

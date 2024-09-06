@@ -39,6 +39,10 @@ We create a notebook in Graph Studio for running Community Detection. A notebook
 
 ### 4. Medical Records Database
 
+The University Schema was small example.  How does this process work against a larger database? How about a medical records database with 211 vertices and 615 edges.
+
+[Medical Records Database](./medical-data/README.md)
+
 
 ### 5. PGQL-pgx Cheat Sheet
 
