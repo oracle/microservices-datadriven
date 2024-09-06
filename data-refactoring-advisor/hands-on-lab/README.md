@@ -44,9 +44,11 @@ The University Schema was small example.  How does this process work against a l
 [Medical Records Database](./medical-data/README.md)
 
 
-### 5. PGQL-pgx Cheat Sheet
+### 5. PGQL Cheat Sheet
 
+A collection of common PGQL queries for working with communities explained
 
+[PGQL Cheat Sheet](./pgql/README.md)
 
 ## Run Community Detection on your Database
 
