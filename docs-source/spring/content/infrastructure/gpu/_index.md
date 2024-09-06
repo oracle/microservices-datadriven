@@ -99,17 +99,6 @@ which provides a comprehensive platform for building enterprise-level applicatio
 
 ### Using LLMs hosted by Ollama in your Spring application
 
-A Kubernetes service named 'ollama' with port 11434 will be created so that your
-applications can talk to models hosted by Ollama.
-
-
-
-```bash
-$ curl -X POST -d 'what is spring boot?'  http://localhost:8080/chat
-Handling connection for 8080
-Generation[assistantMessage=AssistantMessage [messageType=ASSISTANT, toolCalls=[], textContent=A popular question!
-
-Spring Boot is an open-source Java-based framework that provides a simple and efficient way to build web applications, RESTful APIs, and microservices. It's built on top of the Spring Framework, but with a more streamlined and opinionated approach.
-
-...
-```
+Our self-paced hands-on example **CloudBank AI** includes an example of how
+to [build a simple chatbot](https://oracle.github.io/microservices-datadriven/cloudbank/springai/simple-chat)
+using Spring AI and Ollama.

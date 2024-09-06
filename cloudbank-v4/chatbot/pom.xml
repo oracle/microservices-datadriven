@@ -15,10 +15,10 @@ https://oss.oracle.com/licenses/upl/ -->
     </parent>
     
     <groupId>com.example</groupId>
-    <artifactId>ollama</artifactId>
+    <artifactId>chatbot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>customer</name>
-    <description>Customer Application</description>
+    <name>chatbot</name>
+    <description>A Simple ChatBot Application</description>
 
     <dependencies>
         <dependency>
