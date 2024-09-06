@@ -33,24 +33,24 @@ datasource: url: ${spring.datasource.url} username: ${spring.datasource.username
 When you deploy the application to the backend, you want it to register with the Eureka Service Registry so that it can be discovered by other services including the APISIX API Gateway, so that we can easily expose it outside the cluster.">
     <meta itemprop="wordCount" content="1691">
     <title>Deploy Account Service :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1725631905" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1725631905" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1725631905" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1725631905" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1725631905" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1725631905" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1725631905" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1725631905" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1725631905" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1725631905" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1725631905" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1725631905" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/variant.css?1725631905" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1725631905" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1725631905"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1725640716" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1725640716" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1725640716" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1725640716" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1725640716" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1725640716" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1725640716" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1725640716" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1725640716" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1725640716" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1725640716" rel="stylesheet" id="R-variant-style">
+    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1725640716" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/microservices-datadriven/cloudbank/css/variant.css?1725640716" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/print.css?1725640716" rel="stylesheet" media="print">
+    <script src="/microservices-datadriven/cloudbank/js/variant.js?1725640716"></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
-      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1725631905";
+      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1725640716";
       // variant stuff
       window.variants && variants.init( [ 'zen-light' ] );
       // translations
@@ -233,8 +233,8 @@ When you deploy the application to the backend, you want it to register with the
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl -n eureka port-forward svc/eureka <span style="color:#ae81ff">8761</span></span></span></code></pre></div><p>Open a web browser to <a href="http://localhost:8761" rel="external" target="_blank">Eureka Dashboard</a> to vew the Eureka Server dashboard web user interface. It will look similar to this. Note that the <code>ACCOUNT</code> application you have built has registered with Eureka.</p>
 </li>
 </ol>
-<p><a href="#R-image-a408600b4713c871e0a1c92366a7d504" class="lightbox-link"><img alt="Eureka Server Web Interface" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/eureka-dashboard.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-a408600b4713c871e0a1c92366a7d504"><img alt="Eureka Server Web Interface" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/eureka-dashboard.png" title=" "></a></p>
+<p><a href="#R-image-07e4dfd3180fd5cf4fa4fc7061fee63c" class="lightbox-link"><img alt="Eureka Server Web Interface" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/eureka-dashboard.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-07e4dfd3180fd5cf4fa4fc7061fee63c"><img alt="Eureka Server Web Interface" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/eureka-dashboard.png" title=" "></a></p>
 <h2 id="task-8-expose-the-account-service-using-the-apisix-api-gateway">Task 8: Expose the account service using the APISIX API Gateway</h2>
 <p>Now that the account service is deployed, you need to expose it through the API Gateway so that clients will be able to access it.  This is done by creating a &ldquo;route&rdquo; in APISIX Dashboard.</p>
 <ol>
@@ -248,24 +248,24 @@ When you deploy the application to the backend, you want it to register with the
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl -n apisix port-forward svc/apisix-dashboard 8090:80</span></span></code></pre></div><p>Open a web browser to <a href="http://localhost:8090" rel="external" target="_blank">APISIX Dashboard</a> to view the APISIX Dashboard web user interface.  It will appear similar to the image below.</p>
 <p>If prompted to login, login with username <code>admin</code> and the password you retrieved earlier. Note that Oracle strongly recommends that you change the password, even though this interface is not accessible outside the cluster without a tunnel.</p>
 <p>Open the <strong>routes</strong> page from the left hand side menu.  You will not have any routes yet.</p>
-<p><a href="#R-image-82042f7f865f49005d818d9b84264bb1" class="lightbox-link"><img alt="APISIX Dashboard route list" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-apisix-route-list.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-82042f7f865f49005d818d9b84264bb1"><img alt="APISIX Dashboard route list" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-apisix-route-list.png" title=" "></a></p>
+<p><a href="#R-image-2741da26c8368566697edc48223749de" class="lightbox-link"><img alt="APISIX Dashboard route list" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-apisix-route-list.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-2741da26c8368566697edc48223749de"><img alt="APISIX Dashboard route list" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-apisix-route-list.png" title=" "></a></p>
 </li>
 <li>
 <p>Create the route</p>
 <p>Click on the <strong>Create</strong> button to start creating a route.  The <strong>Create route</strong> page will appear. Enter <code>account</code> in the <strong>Name</strong> field:</p>
-<p><a href="#R-image-69b398e1c598f72d3568e31c062d98b0" class="lightbox-link"><img alt="APISIX Create route" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-apisix-create-route-1.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-69b398e1c598f72d3568e31c062d98b0"><img alt="APISIX Create route" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-apisix-create-route-1.png" title=" "></a></p>
+<p><a href="#R-image-1df356e2fd3b941bb42672b170e6e9d5" class="lightbox-link"><img alt="APISIX Create route" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-apisix-create-route-1.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-1df356e2fd3b941bb42672b170e6e9d5"><img alt="APISIX Create route" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-apisix-create-route-1.png" title=" "></a></p>
 <p>Scroll down to the <strong>Request Basic Define</strong> section.  Set the <strong>Path</strong> to <code>/api/v1/account*</code>.  This tells APISIX API Gateway that any incoming request for that URL path (on any host or just IP address) should use this route.  In the <strong>HTTP Method</strong> select <code>GET</code>, <code>POST</code>, <code>DELETE</code>, and <code>OPTIONS</code>.  The first three you will recall using directly in the implementation of the account service during this lab.  User interfaces and other clients will often send an <code>OPTIONS</code> request before a &ldquo;real&rdquo; request to see if the service exists and check headers and so on, so it is a good practice to allow <code>OPTIONS</code> as well.</p>
-<p><a href="#R-image-dd2cd6e1b4878841342488a1cb400fed" class="lightbox-link"><img alt="APISIX Create route" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-apisix-create-route-2.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-dd2cd6e1b4878841342488a1cb400fed"><img alt="APISIX Create route" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-apisix-create-route-2.png" title=" "></a></p>
+<p><a href="#R-image-9fcef4f7706e09ce70a6fe9e8e1461c3" class="lightbox-link"><img alt="APISIX Create route" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-apisix-create-route-2.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-9fcef4f7706e09ce70a6fe9e8e1461c3"><img alt="APISIX Create route" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-apisix-create-route-2.png" title=" "></a></p>
 <p>Click on the <strong>Next</strong> button to move to the <strong>Define API Backend Server</strong> page.  On this page you configure where to route requests to. In the <strong>Upstream Type</strong> field, select <strong>Service Discovery</strong>.  Then in the <strong>Discovery Type</strong> field, select <strong>Eureka</strong>.  In the <strong>Service Name</strong> field enter <code>ACCOUNT</code>.  This tells APISIX to lookup the service in Spring Eureka Service Registry with the key <code>ACCOUNT</code> and route requests to that service using a Round Robin algorithm to distribute requests.</p>
-<p><a href="#R-image-e6752dd8f3401d26af37504a1ae3702f" class="lightbox-link"><img alt="APISIX Create route" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-apisix-create-route-3.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-e6752dd8f3401d26af37504a1ae3702f"><img alt="APISIX Create route" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-apisix-create-route-3.png" title=" "></a></p>
+<p><a href="#R-image-b0a3ae0ddd98c6b20d6984f53ed444da" class="lightbox-link"><img alt="APISIX Create route" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-apisix-create-route-3.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-b0a3ae0ddd98c6b20d6984f53ed444da"><img alt="APISIX Create route" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-apisix-create-route-3.png" title=" "></a></p>
 <p>Click on <strong>Next</strong> to go to the <strong>Plugin Config</strong> page.  You will not add any plugins right now.  You may wish to browse through the list of available plugins on this page.  When you are ready, click on <strong>Next</strong> to go to the <strong>Preview</strong> page.  Check the details and then click on <strong>Submit</strong> to create the route.</p>
 <p>When you return to the route list page, you will see your new <code>account</code> route in the list now.</p>
-<p><a href="#R-image-f7c8cb54d8b42b36add634dece19e7f1" class="lightbox-link"><img alt="APISIX Route Created" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-apisix-route-created.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-f7c8cb54d8b42b36add634dece19e7f1"><img alt="APISIX Route Created" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-apisix-route-created.png" title=" "></a></p>
+<p><a href="#R-image-3167b85c41a061e3371a3eb68a0fce28" class="lightbox-link"><img alt="APISIX Route Created" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-apisix-route-created.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-3167b85c41a061e3371a3eb68a0fce28"><img alt="APISIX Route Created" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-apisix-route-created.png" title=" "></a></p>
 </li>
 <li>
 <p>Verify the account service</p>
@@ -334,12 +334,12 @@ When you deploy the application to the backend, you want it to register with the
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1725631905" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1725631905" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1725631905" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1725631905" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1725631905" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1725631905" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1725640716" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1725640716" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1725640716" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1725640716" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1725640716" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1725640716" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -487,8 +487,8 @@ When you deploy the application to the backend, you want it to register with the
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1725631905" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1725631905" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1725631905" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1725640716" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1725640716" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1725640716" defer></script>
   </body>
 </html>
