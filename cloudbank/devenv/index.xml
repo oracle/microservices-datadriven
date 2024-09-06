@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Developer Environment :: CloudBank</title>
+    <title>Developer Environment :: CloudBank AI</title>
     <link>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/index.html</link>
     <description>This module guides you through setting up the tools required for a Spring Boot developer.</description>
     <generator>Hugo</generator>
