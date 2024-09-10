@@ -202,33 +202,34 @@ Allow group `<group-name>` to manage orm-private-endpoints in `<location>`
 
 ## Summary of Components
 
-Oracle Backend for Spring Boot and Microservices setup installs the following components:
+Oracle Backend for Spring Boot and Microservices setup installs the following components.
 
 | Component                    | Version       | Description                                                                                 |
 |------------------------------|---------------|---------------------------------------------------------------------------------------------|
+| Alertmanager | v0.067.1 | Alertmanager |
 | Apache APISIX                | 3.9.1         | Provides full lifecycle API management.                                                     |
-| Apache Kafka                 | 3.7.0 | Provides distributed event streaming.                                                       |
+| Apache Kafka                 | 3.8.0 | Provides distributed event streaming.                                                       |
 | cert-manager                 | 1.12.3        | Automates the management of certificates.                                                   |
-| Coherence Operator           | 3.3.4        | Provides in-memory data grid.                                                               |
+| Coherence Operator           | 3.3.5        | Provides in-memory data grid.                                                               |
 | Conductor Server             | 3.13.8        | Provides a Microservice orchestration platform.                                             |
-| Grafana                      | 10.4.1         | Provides the tool to examine, analyze, and monitor metrics.                                 |
-| HashiCorp Vault              | 1.16.1        | Provides a way to store and tightly control access to sensitive data.                       |
+| Grafana                      | 11.1.4         | Provides the tool to examine, analyze, and monitor metrics.                                 |
+| HashiCorp Vault              | 1.17.2        | Provides a way to store and tightly control access to sensitive data.                       |
 | Jaeger Tracing               | 1.53.0        | Provides distributed tracing system for monitoring and troubleshooting distributed systems. |
 | Kube State Metrics | 2.10.1 | Collects metrics for the Kubernetes cluster     |
 | Loki                         | 2.6.1     | Provides log aggregation and search. |
 | Metrics server | 0.7.0  | Source of container resource metrics for Kubernetes built-in autoscaling pipeline |
 | NGINX Ingress Controller     | 1.10.1         | Provides traffic management solution for cloud‑native applications in Kubernetes.           |
-| OpenTelemetry Collector      | 0.101.0        | Collects process and export telemetry data.                                                 |
-| Oracle Database Observability Exporter | 1.2.1 | Exposes Oracle Database metrics in standard Prometheus format.                            |
-| Oracle Database Operator     | 1.0           | Helps reduce the time and complexity of deploying and managing Oracle databases.            |
-| Oracle Transaction Manager for Microservices | 23.4.2 | Manages distributed transactions to ensure consistency across Microservices.       |
+| OpenTelemetry Collector      | 0.107.0        | Collects process and export telemetry data.                                                 |
+| Oracle Database Observability Exporter | 1.3.1 | Exposes Oracle Database metrics in standard Prometheus format.                            |
+| Oracle Database Operator     | 1.1.0          | Helps reduce the time and complexity of deploying and managing Oracle databases.            |
+| Oracle Transaction Manager for Microservices | 24.2.1 | Manages distributed transactions to ensure consistency across Microservices.       |
 | Prometheus                   | 2.52.0        | Provides event monitoring and alerts.                                                       |
 | Prometheus Operator          | 0.74.0        | Provides management for Prometheus monitoring tools.                                        |
 | Promtail                     | 2.8.2     | Collects logs.                       |
-| Spring Authorization Server  | 3.3.0  | Provides authentication and authorization for applications. |
-| Spring Boot Admin server     | 3.3.1         | Manages and monitors Spring Cloud applications.                                             |
-| Spring Cloud Config server   | 4.1.2      | Provides server-side support for an externalized configuration.                             |
-| Spring Eureka service registry | 4.1.2 | Provides service discovery capabilities.                                          |
+| Spring Authorization Server  | 3.3.3  | Provides authentication and authorization for applications. |
+| Spring Boot Admin server     | 3.3.3         | Manages and monitors Spring Cloud applications.                                             |
+| Spring Cloud Config server   | 4.1.3      | Provides server-side support for an externalized configuration.                             |
+| Spring Eureka service registry | 4.1.3 | Provides service discovery capabilities.                                          |
 | Strimzi-Apache Kafka operator  | 0.36.1      | Manages Apache Kafka clusters.                                                              |
 
 ## Overview of the Setup Process
@@ -285,6 +286,7 @@ To set up the OCI environment, process these steps:
    - `Grafana Administrator Password` (optional) : Leave blank to auto-generate.
    - `ORACTL Administrator Password` optional) : Leave blank to auto-generate. This is the password for the `obaas-admin` user.
    - `ORACTL User Password` (optional) : Leave blank to auto-generate. This is the password for the `obaas-user` user.
+   - `Alertmanager Administrator Password` (optional) : Leave blank to auto-generate. This is the admin password for the alertmanager.
 
       <!-- spellchecker-disable -->
       {{< img name="oci-stack-passwords" size="large" lazy=false >}}
@@ -305,6 +307,8 @@ To set up the OCI environment, process these steps:
    - `Node Pool Workers` : The number of Kubernetes worker nodes (virtual machines) attached to the OKE cluster.
    - `Node Pool Worker Shape` : The shape of the node pool workers.
    - `Node Workers OCPU` : The initial number of Oracle Compute Units (OCPUs) for the node pool workers.
+
+   If you check the box `Deploy GPU Node Pool` a node pool with GPU will be created with the size of `GPU Node Pool Workers` (default 1) and the shape `Node Pool Worker Shape` (default VM.GPU.A10.1). **NOTE:** Make sure that the tenancy you are deploying to have resources to do so.
 
    > **NOTE:** Oracle recommends that you set `API Endpoint Access Control` to be as restrictive as possible
 
