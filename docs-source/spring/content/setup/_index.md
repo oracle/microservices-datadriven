@@ -308,7 +308,7 @@ To set up the OCI environment, process these steps:
    - `Node Pool Worker Shape` : The shape of the node pool workers.
    - `Node Workers OCPU` : The initial number of Oracle Compute Units (OCPUs) for the node pool workers.
 
-   If you check the box `Deploy GPU Node Pool` a node pool with GPU will be created with the size of `GPU Node Pool Workers` (default 1) and the shape `Node Pool Worker Shape` (default VM.GPU.A10.1). **NOTE:** Make sure that the tenancy you are deploying to have resources to do so.
+   If you check the box `Deploy GPU Node Pool` a node pool with GPU will be created with the size of `GPU Node Pool Workers` (default 1) and the shape `Node Pool Worker Shape` (default VM.GPU.A10.1). **NOTE:** Make sure that the tenancy you are deploying to has resources to do so.
 
    > **NOTE:** Oracle recommends that you set `API Endpoint Access Control` to be as restrictive as possible
 
