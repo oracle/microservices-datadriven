@@ -9,7 +9,7 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.123.6">
+<meta name="generator" content="Hugo 0.134.2">
 
 
   <meta name="description" content="Using Spring Operations Center to manage applications in Oracle Backend for Spring Boot and Microservices" />
@@ -72,7 +72,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/platform/soc/",
       "headline": "Spring Operations Center",
       "description": "Using Spring Operations Center to manage applications in Oracle Backend for Spring Boot and Microservices",
-      "wordCount" : "641",
+      "wordCount" : "1218",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -2405,17 +2405,20 @@
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-Z0MVCJ4T39', { 'anonymize_ip': false });
-}
-</script>
-
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-Z0MVCJ4T39');
+        }
+      </script>
 
 
 
@@ -2471,7 +2474,7 @@ if (!doNotTrack) {
     class="gdoc-markdown gdoc-markdown__align--left"
   >
     <h1>Spring Operations Center</h1>
-    <p>Oracle Backend for Spring Boot and Microservices version includes &ldquo;Spring Operations Center&rdquo;. More capabilities will be added to this feature in future releases.</p>
+    <p>Oracle Backend for Spring Boot and Microservices includes &ldquo;Spring Operations Center&rdquo;. More capabilities will be added to this feature in future releases.</p>
 <p>The Spring Operations Center provides a web user interface to manage the Oracle Backend for Spring Boot and Microservices. This release includes the following capabilities:</p>
 <ul>
 <li>View details about the configuration and health of the environment</li>
@@ -2489,25 +2492,167 @@ if (!doNotTrack) {
 >Accessing Spring Operations Center</a></li>
 <li><a
   class="gdoc-markdown__link"
+  href="#login-screen"
+>Login Screen</a>
+<ul>
+<li><a
+  class="gdoc-markdown__link"
+  href="#forgot-password"
+>Forgot Password</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#reset-password"
+>Reset Password</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#forgot-username"
+>Forgot Username</a></li>
+</ul>
+</li>
+<li><a
+  class="gdoc-markdown__link"
   href="#the-dashboard"
 >The Dashboard</a>
 <ul>
 <li><a
   class="gdoc-markdown__link"
   href="#manage-namespaces"
->Manage Namespaces</a></li>
+>Manage Namespaces</a>
+<ul>
+<li><a
+  class="gdoc-markdown__link"
+  href="#create-namespace"
+>Create Namespace</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#delete-namespaces"
+>Delete Namespace(s)</a></li>
+</ul>
+</li>
 <li><a
   class="gdoc-markdown__link"
   href="#manage-workloads"
->Manage Workloads</a></li>
+>Manage Workloads</a>
+<ul>
+<li><a
+  class="gdoc-markdown__link"
+  href="#create-workload"
+>Create Workload</a>
+<ul>
+<li><a
+  class="gdoc-markdown__link"
+  href="#service-details"
+>Service Details</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#database-details"
+>Database Details</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#bind-resources"
+>Bind resources</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#apisix-route"
+>APISIX route</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#upload-workload-binary"
+>Upload workload binary</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#progress-screen"
+>Progress screen</a></li>
+</ul>
+</li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#delete-workloads"
+>Delete Workload(s)</a></li>
+</ul>
+</li>
 <li><a
   class="gdoc-markdown__link"
   href="#manage-identity"
->Manage Identity</a></li>
+>Manage Identity</a>
+<ul>
+<li><a
+  class="gdoc-markdown__link"
+  href="#create-user"
+>Create User</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#change-password"
+>Change Password</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#change-roles"
+>Change Roles</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#delete-users"
+>Delete User(s)</a></li>
+</ul>
+</li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#collect-diagnostic-data"
+>Collect Diagnostic Data</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#alerts"
+>Alerts</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#usage-reporting"
+>Usage Reporting</a></li>
 </ul>
 </li>
 </ul>
 <div class="gdoc-page__anchorwrap">
+    <h3 id="smtp-settings">
+        SMTP Settings
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#smtp-settings" class="gdoc-page__anchor clip flex align-center" title="Anchor to: SMTP Settings" aria-label="Anchor to: SMTP Settings" href="#smtp-settings">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>The Spring Operations Center can send emails for following operations:</p>
+<ul>
+<li><a
+  class="gdoc-markdown__link"
+  href="#forgot-password"
+>Forgot Password</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#reset-password"
+>Reset Password</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#forgot-username"
+>Forgot Username</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#create-user"
+>Create User</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#change-password"
+>Change Password</a></li>
+<li><a
+  class="gdoc-markdown__link"
+  href="#change-roles"
+>Change Roles</a></li>
+</ul>
+<p>It is required to configure a SMTP secret as follows for the email functionality to work.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"> kubectl -n obaas-admin create secret generic smtp-secret <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    --from-literal<span class="o">=</span><span class="nv">SMTP_USER</span><span class="o">=</span>&lt;smtp-server-user&gt; <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    --from-literal<span class="o">=</span><span class="nv">SMTP_PASSWORD</span><span class="o">=</span>&lt;smtp-server-password&gt; <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    --from-literal<span class="o">=</span><span class="nv">SMTP_HOST</span><span class="o">=</span>&lt;smtp-server-address&gt; <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    --from-literal<span class="o">=</span><span class="nv">SMTP_PORT</span><span class="o">=</span>&lt;smtp-server-port&gt; <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    --from-literal<span class="o">=</span><span class="nv">SMTP_SECURE</span><span class="o">=</span>&lt;true-if-tls-port&gt; <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    --from-literal<span class="o">=</span><span class="nv">SMTP_FROM</span><span class="o">=</span>&lt;from-email-address&gt;
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h2 id="accessing-spring-operations-center">
         Accessing Spring Operations Center
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#accessing-spring-operations-center" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Accessing Spring Operations Center" aria-label="Anchor to: Accessing Spring Operations Center" href="#accessing-spring-operations-center">
@@ -2530,6 +2675,14 @@ production certificate, refer to <a
   class="gdoc-markdown__link"
   href="../../security#transport-layer-security"
 >Transport Layer Security</a></p>
+<div class="gdoc-page__anchorwrap">
+    <h2 id="login-screen">
+        Login Screen
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#login-screen" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Login Screen" aria-label="Anchor to: Login Screen" href="#login-screen">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h2>
+</div>
 <!-- spellchecker-disable -->
 
   
@@ -2543,11 +2696,11 @@ production certificate, refer to <a
       <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-login-page.png">
         <picture>
             <source
-                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-login-page_hu8219b4d25b9170787bff05cfc5fdfc28_85614_1200x0_resize_box_3.png"
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-login-page_hu11708330946556820889.png"
 
             />
           <img
-                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-login-page_hu8219b4d25b9170787bff05cfc5fdfc28_85614_1800x0_resize_box_3.png"
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-login-page_hu8771658358949769478.png"
               alt="SOC Login Page"
           />
         </picture>
@@ -2559,9 +2712,151 @@ production certificate, refer to <a
   </div>
 
 <!-- spellchecker-enable -->
-<p>Login using the <code>obaas-admin</code> user (or another user if you have created one) and the password that you set during installation.  If you did not set a password, one was auto-generated for you and can be obtained with this command:</p>
+<p>Login using the <code>obaas-admin</code> user (or another user if you have created one) and the password that you set during installation. If you did not set a password, one was auto-generated for you and can be obtained with this command:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl get secret -n azn-server oractl-passwords -o <span class="nv">jsonpath</span><span class="o">=</span><span class="s1">&#39;{.data.admin}&#39;</span> <span class="p">|</span> base64 -d<span class="p">;</span> <span class="nb">echo</span>
-</span></span></code></pre></div><p>After logging in, you will see the SOC Dashboard.</p>
+</span></span></code></pre></div><p>Login page also provides link to retrieve username, get a one-time password and reset password.</p>
+<div class="gdoc-page__anchorwrap">
+    <h3 id="forgot-password">
+        Forgot Password
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#forgot-password" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Forgot Password" aria-label="Anchor to: Forgot Password" href="#forgot-password">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>Click on &ldquo;Forgot Password&rdquo; to generate a One-time password which will be sent to your email (if configured)</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-forgot-passwd.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-forgot-passwd_hu18266633771483878689.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-forgot-passwd_hu14643933769155341629.png"
+              alt="Forgot Password"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Forgot Password
+          </figcaption>
+    </figure>
+  </div>
+
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-reset-psswd-otp.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-reset-psswd-otp_hu5855743950740944056.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-reset-psswd-otp_hu11086744969631795510.png"
+              alt="One-time password confirmation"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            One-time password confirmation
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<div class="gdoc-page__anchorwrap">
+    <h3 id="reset-password">
+        Reset Password
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#reset-password" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Reset Password" aria-label="Anchor to: Reset Password" href="#reset-password">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>The One-time password must be reset using the &ldquo;Reset Password&rdquo; link.</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-reset-psswd.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-reset-psswd_hu6717342567836279976.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-reset-psswd_hu6060811212853293068.png"
+              alt="Reset Password"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Reset Password
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<div class="gdoc-page__anchorwrap">
+    <h3 id="forgot-username">
+        Forgot Username
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#forgot-username" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Forgot Username" aria-label="Anchor to: Forgot Username" href="#forgot-username">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>Click the &ldquo;Forgot Username&rdquo; link to retrieve username in an Email.</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-forgot-username.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-forgot-username_hu117659941191149412.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-forgot-username_hu11284961902749921583.png"
+              alt="Forgot Username"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Forgot Username
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<p>After logging in, you will see the SOC Dashboard.</p>
 <div class="gdoc-page__anchorwrap">
     <h2 id="the-dashboard">
         The Dashboard
@@ -2592,11 +2887,11 @@ production certificate, refer to <a
       <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-dashboard.png">
         <picture>
             <source
-                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-dashboard_hu8219b4d25b9170787bff05cfc5fdfc28_186305_1200x0_resize_box_3.png"
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-dashboard_hu15249650375857335628.png"
 
             />
           <img
-                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-dashboard_hu8219b4d25b9170787bff05cfc5fdfc28_186305_1800x0_resize_box_3.png"
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-dashboard_hu16894144510379770238.png"
               alt="SOC Dashboard"
           />
         </picture>
@@ -2616,7 +2911,7 @@ production certificate, refer to <a
         </a>
     </h3>
 </div>
-<p>The Manage Namespaces screen is accessible from the <em>Workloads</em> menu, and allows you to view and manage the namespaces that are configured for Spring Boot application deployments.  Note that this does not show you all namespaces in the Kubernetes cluster, just those that have be specifically configured for Spring Boot workloads, meaning they have the necessary secrets for pulling images, accessing the database, and so on.</p>
+<p>The Manage Namespaces screen is accessible from the <em>Workloads</em> menu, and allows you to view and manage the namespaces that are configured for Spring Boot application deployments. Note that this does not show you all namespaces in the Kubernetes cluster, just those that have be specifically configured for Spring Boot workloads, meaning they have the necessary secrets for pulling images, accessing the database, and so on.</p>
 <!-- spellchecker-disable -->
 
   
@@ -2630,11 +2925,11 @@ production certificate, refer to <a
       <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-namespaces.png">
         <picture>
             <source
-                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-namespaces_hu7d34c16700614a25ec3a80fc7052182c_270824_1200x0_resize_box_3.png"
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-namespaces_hu8078518064070749650.png"
 
             />
           <img
-                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-namespaces_hu7d34c16700614a25ec3a80fc7052182c_270824_1800x0_resize_box_3.png"
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-namespaces_hu11828629066548906547.png"
               alt="SOC Manage Namespaces screen"
           />
         </picture>
@@ -2648,6 +2943,82 @@ production certificate, refer to <a
 <!-- spellchecker-enable -->
 <p>Clicking on a namespace will allow you to drill down into that namespace and see the workloads (Spring Boot applications)
 deployed there.</p>
+<div class="gdoc-page__anchorwrap">
+    <h4 id="create-namespace">
+        Create Namespace
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#create-namespace" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Create Namespace" aria-label="Anchor to: Create Namespace" href="#create-namespace">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>You can click on the &ldquo;CREATE&rdquo; button to create a new namespace.</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-create-ns.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-create-ns_hu9565928645972321461.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-create-ns_hu14238068788507245577.png"
+              alt="Create Namespace"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Create Namespace
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<div class="gdoc-page__anchorwrap">
+    <h4 id="delete-namespaces">
+        Delete Namespace(s)
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#delete-namespaces" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Delete Namespace(s)" aria-label="Anchor to: Delete Namespace(s)" href="#delete-namespaces">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>To delete one or more of the namesapces, select from the grid and click &ldquo;DELETE&rdquo; button.</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-delete-ns.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-delete-ns_hu2884930723578673923.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-delete-ns_hu1215958690113870774.png"
+              alt="Delete Namespace"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Delete Namespace
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
 <div class="gdoc-page__anchorwrap">
     <h3 id="manage-workloads">
         Manage Workloads
@@ -2671,11 +3042,11 @@ the status of each workload, and how many replicas are currently running and des
       <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-workloads.png">
         <picture>
             <source
-                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-workloads_hu7d34c16700614a25ec3a80fc7052182c_287332_1200x0_resize_box_3.png"
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-workloads_hu5553740006193201989.png"
 
             />
           <img
-                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-workloads_hu7d34c16700614a25ec3a80fc7052182c_287332_1800x0_resize_box_3.png"
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-workloads_hu2057266187740532040.png"
               alt="SOC Manage Workloads screen"
           />
         </picture>
@@ -2687,7 +3058,7 @@ the status of each workload, and how many replicas are currently running and des
   </div>
 
 <!-- spellchecker-enable -->
-<p>You can click on the &ldquo;open&rdquo; link in the Dashboard column to open the Spring Boot Statistics Grafana dashboard for any workload listed in the table.  Note that you may need to authenticate to Grafana the first time.</p>
+<p>You can click on the &ldquo;open&rdquo; link in the Dashboard column to open the Spring Boot Statistics Grafana dashboard for any workload listed in the table. Note that you may need to authenticate to Grafana the first time.</p>
 <!-- spellchecker-disable -->
 
   
@@ -2701,11 +3072,11 @@ the status of each workload, and how many replicas are currently running and des
       <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-grafana-link.png">
         <picture>
             <source
-                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-grafana-link_hu66927c2239f951e49f6fd2181596d033_359616_1200x0_resize_box_3.png"
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-grafana-link_hu5705999113144415312.png"
 
             />
           <img
-                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-grafana-link_hu66927c2239f951e49f6fd2181596d033_359616_1800x0_resize_box_3.png"
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-grafana-link_hu3733664947709663796.png"
               alt="Grafana Dashboard for Workload"
           />
         </picture>
@@ -2722,6 +3093,292 @@ the status of each workload, and how many replicas are currently running and des
   href="../../observability/metrics/#spring-boot-statistics"
 >here</a>.</p>
 <div class="gdoc-page__anchorwrap">
+    <h4 id="create-workload">
+        Create Workload
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#create-workload" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Create Workload" aria-label="Anchor to: Create Workload" href="#create-workload">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>You can click on the &ldquo;CREATE&rdquo; button to start the workload deployment wizard where you can provide configuration detail of the workload and upload workload binary. The wizard will have following screens:</p>
+<div class="gdoc-page__anchorwrap">
+    <h5 id="service-details">
+        Service Details
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#service-details" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Service Details" aria-label="Anchor to: Service Details" href="#service-details">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h5>
+</div>
+<p>Provide basic details of the workload such as</p>
+<ul>
+<li>Name</li>
+<li>Version</li>
+<li>Spring profile to use</li>
+<li>Service Port</li>
+<li>Deployment replicas</li>
+<li>Java Base Image to be used or to use the default</li>
+<li>Name of database schema</li>
+<li>Whether to inject health probe and</li>
+<li>If needs to be deployed as a GraalVM native binary</li>
+</ul>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-create-workload-details.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-create-workload-details_hu3438136195255472822.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-create-workload-details_hu11660874634909219893.png"
+              alt="Workload Details"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Workload Details
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<div class="gdoc-page__anchorwrap">
+    <h5 id="database-details">
+        Database Details
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#database-details" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Database Details" aria-label="Anchor to: Database Details" href="#database-details">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h5>
+</div>
+<p>Provide credentials of database schema and optional Spring binding prefix to be used.</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-create-workload-db.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-create-workload-db_hu16694907593124151020.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-create-workload-db_hu16955410980241645664.png"
+              alt="Database Details"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Database Details
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<div class="gdoc-page__anchorwrap">
+    <h5 id="bind-resources">
+        Bind resources
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#bind-resources" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Bind resources" aria-label="Anchor to: Bind resources" href="#bind-resources">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h5>
+</div>
+<p>Optionally bind a JMS AQ Event Queue to the workload.</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-create-workload-bind.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-create-workload-bind_hu8965151042546232506.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-create-workload-bind_hu16655383543115723809.png"
+              alt="Bind AQ JMS Event Queue"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Bind AQ JMS Event Queue
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<div class="gdoc-page__anchorwrap">
+    <h5 id="apisix-route">
+        APISIX route
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#apisix-route" class="gdoc-page__anchor clip flex align-center" title="Anchor to: APISIX route" aria-label="Anchor to: APISIX route" href="#apisix-route">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h5>
+</div>
+<p>Specify APISIX route for the workload.</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-create-workload-route.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-create-workload-route_hu3798274624880991140.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-create-workload-route_hu15076346332229568151.png"
+              alt="APISIX Route"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            APISIX Route
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<div class="gdoc-page__anchorwrap">
+    <h5 id="upload-workload-binary">
+        Upload workload binary
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#upload-workload-binary" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Upload workload binary" aria-label="Anchor to: Upload workload binary" href="#upload-workload-binary">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h5>
+</div>
+<p>Upload the workload jar/binary.</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-create-workload-upload.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-create-workload-upload_hu13782616908813442241.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-create-workload-upload_hu7974266918751860410.png"
+              alt="Upload workload binary"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Upload workload binary
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<div class="gdoc-page__anchorwrap">
+    <h5 id="progress-screen">
+        Progress screen
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#progress-screen" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Progress screen" aria-label="Anchor to: Progress screen" href="#progress-screen">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h5>
+</div>
+<p>Next screen will show the progress of workload deployment and associated configurations being created in the cluster.</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-create-workload-progress.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-create-workload-progress_hu3329893043149858677.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-create-workload-progress_hu9905521273169148038.png"
+              alt="Finish"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Finish
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<div class="gdoc-page__anchorwrap">
+    <h4 id="delete-workloads">
+        Delete Workload(s)
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#delete-workloads" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Delete Workload(s)" aria-label="Anchor to: Delete Workload(s)" href="#delete-workloads">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>To delete one or more workload, select and click &ldquo;DELETE&rdquo;.</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-delete-workload.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-delete-workload_hu16727290493268886818.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-delete-workload_hu10542986155300836137.png"
+              alt="Delete Workload"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Delete Workload
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<div class="gdoc-page__anchorwrap">
     <h3 id="manage-identity">
         Manage Identity
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#manage-identity" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Manage Identity" aria-label="Anchor to: Manage Identity" href="#manage-identity">
@@ -2729,8 +3386,7 @@ the status of each workload, and how many replicas are currently running and des
         </a>
     </h3>
 </div>
-<p>The Manage Identity screen is accessible from the Security menu and allows you to view information
-about the users and roles defined in the Spring Authorization Server included in the platform.</p>
+<p>The Manage Identity screen is accessible from the Security menu and allows you to view and edit information about the users and roles defined in the Spring Authorization Server included in the platform.</p>
 <!-- spellchecker-disable -->
 
   
@@ -2744,17 +3400,169 @@ about the users and roles defined in the Spring Authorization Server included in
       <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-identity.png">
         <picture>
             <source
-                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-identity_hu23d3737d32255f317882d64133b04d71_66011_1200x0_resize_box_3.png"
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-identity_hu17904241854248586619.png"
 
             />
           <img
-                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-identity_hu23d3737d32255f317882d64133b04d71_66011_1800x0_resize_box_3.png"
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-identity_hu4549801360944439358.png"
               alt="SOC Manage Identity screen"
           />
         </picture>
       </a>
           <figcaption>
             SOC Manage Identity screen
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<div class="gdoc-page__anchorwrap">
+    <h4 id="create-user">
+        Create User
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#create-user" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Create User" aria-label="Anchor to: Create User" href="#create-user">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>You can click &ldquo;CREATE&rdquo; to create a new user and specify the password, roles and email.</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-identity-create-user.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-identity-create-user_hu14817944720638273638.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-identity-create-user_hu14887071696341069965.png"
+              alt="Create User"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Create User
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<div class="gdoc-page__anchorwrap">
+    <h4 id="change-password">
+        Change Password
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#change-password" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Change Password" aria-label="Anchor to: Change Password" href="#change-password">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>You can select a user and click &ldquo;CHANGE PASSWORD&rdquo; to change password.</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-identity-chg-psswd.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-identity-chg-psswd_hu10471200828420578600.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-identity-chg-psswd_hu8739669937757896053.png"
+              alt="Change Password"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Change Password
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<div class="gdoc-page__anchorwrap">
+    <h4 id="change-roles">
+        Change Roles
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#change-roles" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Change Roles" aria-label="Anchor to: Change Roles" href="#change-roles">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>You can select a user and click &ldquo;CHANGE ROLES&rdquo; to add/remove roles.</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-identity-chg-role.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-identity-chg-role_hu15499544234491365966.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-manage-identity-chg-role_hu15343778687929914756.png"
+              alt="Change Roles"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Change Roles
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<div class="gdoc-page__anchorwrap">
+    <h4 id="delete-users">
+        Delete User(s)
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#delete-users" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Delete User(s)" aria-label="Anchor to: Delete User(s)" href="#delete-users">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h4>
+</div>
+<p>You can select one or more users and click &ldquo;DELETE&rdquo; to delete selected user(s).</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-delete-user.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-delete-user_hu2371791394782111476.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-delete-user_hu13819358163136484914.png"
+              alt="Delete User"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Delete User
           </figcaption>
     </figure>
   </div>
@@ -2782,11 +3590,11 @@ about the users and roles defined in the Spring Authorization Server included in
       <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-diag-data.png">
         <picture>
             <source
-                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-diag-data_hue7d2f41113110275ddc0e16373a9aa6f_115565_1200x0_resize_box_3.png"
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-diag-data_hu6676469287073424088.png"
 
             />
           <img
-                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-diag-data_hue7d2f41113110275ddc0e16373a9aa6f_115565_1800x0_resize_box_3.png"
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-diag-data_hu2214586806224642614.png"
               alt="Diagnostic Data"
           />
         </picture>
@@ -2798,6 +3606,89 @@ about the users and roles defined in the Spring Authorization Server included in
   </div>
 
 <!-- spellchecker-enable -->
+<div class="gdoc-page__anchorwrap">
+    <h3 id="alerts">
+        Alerts
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#alerts" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Alerts" aria-label="Anchor to: Alerts" href="#alerts">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>You can see preview of alerts from Alertmanager in Spring Operations Center. Clicking on an alert navigates to the Alertmanager UI. You can close individual alerts or click &ldquo;Dismiss All&rdquo; to close all the alerts. To re-enable the alerts, click &ldquo;Show All Alerts&rdquo; from the &ldquo;Settings&rdquo; menu.</p>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-alerts.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-alerts_hu6064877794156755686.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-alerts_hu8405004890811816059.png"
+              alt="Alerts"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Alerts
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+<div class="gdoc-page__anchorwrap">
+    <h3 id="usage-reporting">
+        Usage Reporting
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/platform/soc/#usage-reporting" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Usage Reporting" aria-label="Anchor to: Usage Reporting" href="#usage-reporting">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>The Spring Operations Center can send basic install details to Oracle on a periodic basis, To enable that, click on the &ldquo;AGREE&rdquo; button on the notification or &ldquo;CLOSE&rdquo; to mute the notification. The details will include</p>
+<ul>
+<li>Memory, CPU count, nodes and version of the Kubernetes cluster</li>
+<li>Overall health status of the OBaaS platform</li>
+<li>Version of the OBaaS platform</li>
+<li>Database details such as name, CPU count and memory details</li>
+</ul>
+<!-- spellchecker-disable -->
+
+  
+  
+
+
+  <div class="flex justify-center">
+    <figure
+      class="gdoc-markdown__figure"
+    >
+      <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-heartbeat.png">
+        <picture>
+            <source
+                srcset="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-heartbeat_hu2534229641956772890.png"
+
+            />
+          <img
+                src="https://oracle.github.io/microservices-datadriven/spring/platform/soc/soc-heartbeat_hu15797143025549645786.png"
+              alt="Usage Reporting"
+          />
+        </picture>
+      </a>
+          <figcaption>
+            Usage Reporting
+          </figcaption>
+    </figure>
+  </div>
+
+<!-- spellchecker-enable -->
+
   </article>
 
 

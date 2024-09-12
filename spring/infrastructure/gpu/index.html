@@ -9,7 +9,7 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.123.6">
+<meta name="generator" content="Hugo 0.134.2">
 
 
   <meta name="description" content="GPUs for AI workload" />
@@ -2405,17 +2405,20 @@
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-Z0MVCJ4T39', { 'anonymize_ip': false });
-}
-</script>
-
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-Z0MVCJ4T39');
+        }
+      </script>
 
 
 
@@ -2471,12 +2474,7 @@ if (!doNotTrack) {
     class="gdoc-markdown gdoc-markdown__align--left"
   >
     <h1>GPUs for AI</h1>
-    <p>Oracle Backend for Spring Boot and Microservices provides an option during installation to provision a set
-of Kubernetes nodes with NVIDIA A10 GPUs that are suitable for running AI workloads.  If you choose that option during
-installation, you may also specify how many nodes are provisioned.  The GPU nodes will be in a separate
-Node Pool to the normal CPU nodes, which allows you to scale it independently of the CPU nodes.
-They are also labeled so that you can target appropriate workloads to them using node selectors
-and/or affinity rules.</p>
+    <p>Oracle Backend for Spring Boot and Microservices provides an option during installation to provision a set of Kubernetes nodes with NVIDIA A10 GPUs that are suitable for running AI workloads.  If you choose that option during installation, you may also specify how many nodes are provisioned.  The GPU nodes will be in a separate Node Pool to the normal CPU nodes, which allows you to scale it independently of the CPU nodes. They are also labeled so that you can target appropriate workloads to them using node selectors and/or affinity rules.</p>
 <p>To view a list of nodes in your cluster with a GPU, you can use this command:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ kubectl get nodes -l <span class="s1">&#39;node.kubernetes.io/instance-type=VM.GPU.A10.1&#39;</span>
 </span></span><span class="line"><span class="cl">NAME           STATUS   ROLES   AGE     VERSION
@@ -2489,11 +2487,8 @@ and/or affinity rules.</p>
         </a>
     </h2>
 </div>
-<p>One very common use for GPU nodes is to run a self-hosted Large Language Model (LLM)
-such as <code>llama3</code> for inferencing or <code>nomic-embed-text</code> for embedding.</p>
-<p>Companies often want to self-host an LLM to avoid sending private or sensitive data
-outside of their organization to a third-party provider, or to have more control over
-the costs of running the LLM and assocatied infrastructure.</p>
+<p>One very common use for GPU nodes is to run a self-hosted Large Language Model (LLM) such as <code>llama3</code> for inferencing or <code>nomic-embed-text</code> for embedding.</p>
+<p>Companies often want to self-host an LLM to avoid sending private or sensitive data outside of their organization to a third-party provider, or to have more control over the costs of running the LLM and associated infrastructure.</p>
 <p>One excellent way to self-host LLMs is to use <a
   class="gdoc-markdown__link"
   href="https://ollama.com/"
@@ -2509,9 +2504,7 @@ the costs of running the LLM and assocatied infrastructure.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">helm repo update
 </span></span></code></pre></div></li>
 <li>
-<p>Create a <code>values.yaml</code> file to configure how Ollama should be installed, including
-which node(s) to run it on.  Here is an example that will run Ollama on a GPU node
-and will pull the <code>llama3</code> model.</p>
+<p>Create a <code>values.yaml</code> file to configure how Ollama should be installed, including which node(s) to run it on.  Here is an example that will run Ollama on a GPU node and will pull the <code>llama3</code> model.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">ollama</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">gpu</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
@@ -2523,8 +2516,7 @@ and will pull the <code>llama3</code> model.</p>
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">node.kubernetes.io/instance-type</span><span class="p">:</span><span class="w"> </span><span class="l">VM.GPU.A10.1</span><span class="w">
 </span></span></span></code></pre></div></li>
 </ol>
-<p>For more information on how to configure Ollama using the helm chart, refer to
-<a
+<p>For more information on how to configure Ollama using the helm chart, refer to <a
   class="gdoc-markdown__link"
   href="https://artifacthub.io/packages/helm/ollama-helm/ollama"
 >its documentation</a>.</p>
@@ -2546,19 +2538,16 @@ and will pull the <code>llama3</code> model.</p>
         </a>
     </h3>
 </div>
-<p>You can interact with Ollama using the provided command line tool, called <code>ollama</code>.
-For example, to list the available models, use the <code>ollama ls</code> command:</p>
+<p>You can interact with Ollama using the provided command line tool, called <code>ollama</code>. For example, to list the available models, use the <code>ollama ls</code> command:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl -n ollama <span class="nb">exec</span> svc/ollama -- ollama ls
 </span></span><span class="line"><span class="cl">NAME            ID              SIZE    MODIFIED
 </span></span><span class="line"><span class="cl">llama3:latest   365c0bd3c000    4.7 GB  <span class="m">2</span> minutes ago
 </span></span></code></pre></div><p>To ask the LLM a question, you can use the <code>ollama run</code> command:</p>
-<pre tabindex="0"><code>$ kubectl -n ollama exec svc/ollama -- ollama run llama3 &#34;what is spring boot?&#34;
-Spring Boot is an open-source Java-based framework that simplifies the development
-of web applications and microservices. It&#39;s a subset of the larger Spring ecosystem,
-which provides a comprehensive platform for building enterprise-level applications.
-
-...
-</code></pre><div class="gdoc-page__anchorwrap">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ kubectl -n ollama <span class="nb">exec</span> svc/ollama -- ollama run llama3 <span class="s2">&#34;what is spring boot?&#34;</span>
+</span></span><span class="line"><span class="cl">Spring Boot is an open-source Java-based framework that simplifies the development of web applications and microservices. It<span class="err">&#39;</span>s a subset of the larger Spring ecosystem, which provides a comprehensive platform <span class="k">for</span> building enterprise-level applications.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">...
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="using-llms-hosted-by-ollama-in-your-spring-application">
         Using LLMs hosted by Ollama in your Spring application
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/infrastructure/gpu/#using-llms-hosted-by-ollama-in-your-spring-application" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Using LLMs hosted by Ollama in your Spring application" aria-label="Anchor to: Using LLMs hosted by Ollama in your Spring application" href="#using-llms-hosted-by-ollama-in-your-spring-application">
@@ -2566,12 +2555,10 @@ which provides a comprehensive platform for building enterprise-level applicatio
         </a>
     </h3>
 </div>
-<p>Our self-paced hands-on example <strong>CloudBank AI</strong> includes an example of how
-to <a
+<p>Our self-paced hands-on example <strong>CloudBank AI</strong> includes an example of how to <a
   class="gdoc-markdown__link"
   href="https://oracle.github.io/microservices-datadriven/cloudbank/springai/simple-chat"
->build a simple chatbot</a>
-using Spring AI and Ollama.</p>
+>build a simple chatbot</a> using Spring AI and Ollama.</p>
 
   </article>
 
