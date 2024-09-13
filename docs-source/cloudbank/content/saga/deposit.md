@@ -13,29 +13,29 @@ The Deposit service will process deposits into bank accounts.  In this task, you
 
   Start by setting up endpoints and methods with the appropriate annotations.  You will implement the logic for each of these methods shortly.  Here is the class definition and all the imports you will need in this section, plus the logger and a constant `DEPOSIT` you will use later.  Notice that the class has the `@RequestScoped` annotation which tells Spring to create an instance of this class for each HTTP request (as opposed to for a whole session for example), the Spring Boot `@Component` annotation which marks this class as a bean that Spring can inject as a dependency when needed, and the `@Path` annotation to set the URL path for these endpoints.
 
-    ```java
-    package com.example.accounts.services;
+```java
+package com.example.accounts.services;
 
-    import com.example.accounts.model.Account;
-    import com.example.accounts.model.Journal;
+import com.example.accounts.model.Account;
+import com.example.accounts.model.Journal;
 
-    import lombok.extern.slf4j.Slf4j;
+import lombok.extern.slf4j.Slf4j;
 
-    import org.springframework.web.bind.annotation.RequestMapping;
-    import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-    import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_CONTEXT_HEADER;
-    import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_ENDED_CONTEXT_HEADER;
-    import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_PARENT_CONTEXT_HEADER;
+import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_CONTEXT_HEADER;
+import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_ENDED_CONTEXT_HEADER;
+import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_PARENT_CONTEXT_HEADER;
 
-    @RestController
-    @RequestMapping("/deposit")
-    @Slf4j
-    public class DepositService {
+@RestController
+@RequestMapping("/deposit")
+@Slf4j
+public class DepositService {
 
-      private final static String DEPOSIT = "DEPOSIT";
-    }
-    ```
+  private final static String DEPOSIT = "DEPOSIT";
+}
+```
 
 1. Create the LRA entry point
 
