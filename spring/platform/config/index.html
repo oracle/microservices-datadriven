@@ -9,7 +9,7 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.123.6">
+<meta name="generator" content="Hugo 0.134.2">
 
 
   <meta name="description" content="Externalized configuration using Spring Config Server in Oracle Backend for Spring Boot and Microservices" />
@@ -2405,17 +2405,20 @@
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-Z0MVCJ4T39', { 'anonymize_ip': false });
-}
-</script>
-
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-Z0MVCJ4T39');
+        }
+      </script>
 
 
 
@@ -2567,52 +2570,52 @@ if (!doNotTrack) {
 </div>
 <p>The following REST API endpoints are available to the Config Server entries. The table lists which minimum required role is needed to perform the operation. &lsquo;N/A&rsquo; in the following table indicates that the endpoint does not require authentication to be accessed.</p>
 <div class="table-wrap"> <table>
-<thead>
-<tr>
-<th>End point</th>
-<th>Method</th>
-<th>Description</th>
-<th>Minimum Required Role</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>/srv/config/all</td>
-<td>GET</td>
-<td>Get all distinct properties for a service (application)</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>/srv/config/properties</td>
-<td>GET</td>
-<td>Get all distinct properties with filters (see examples)</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>/srv/config/properties/add</td>
-<td>POST</td>
-<td>Create properties from a file</td>
-<td>ROLE_USER</td>
-</tr>
-<tr>
-<td>/srv/config/property/add</td>
-<td>POST</td>
-<td>Create a property</td>
-<td>ROLE_USER</td>
-</tr>
-<tr>
-<td>/srv/config/property/update</td>
-<td>PUT</td>
-<td>Update a property</td>
-<td>ROLE_USER</td>
-</tr>
-<tr>
-<td>/srv/config/properties/delete</td>
-<td>DELETE</td>
-<td>Delete properties with filters (see examples)</td>
-<td>ROLE_ADMIN</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: left">End point</th>
+          <th style="text-align: left">Method</th>
+          <th style="text-align: left">Description</th>
+          <th style="text-align: left">Minimum Required Role</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: left">/srv/config/all</td>
+          <td style="text-align: left">GET</td>
+          <td style="text-align: left">Get all distinct properties for a service (application)</td>
+          <td style="text-align: left">N/A</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">/srv/config/properties</td>
+          <td style="text-align: left">GET</td>
+          <td style="text-align: left">Get all distinct properties with filters (see examples)</td>
+          <td style="text-align: left">N/A</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">/srv/config/properties/add</td>
+          <td style="text-align: left">POST</td>
+          <td style="text-align: left">Create properties from a file</td>
+          <td style="text-align: left">ROLE_USER</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">/srv/config/property/add</td>
+          <td style="text-align: left">POST</td>
+          <td style="text-align: left">Create a property</td>
+          <td style="text-align: left">ROLE_USER</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">/srv/config/property/update</td>
+          <td style="text-align: left">PUT</td>
+          <td style="text-align: left">Update a property</td>
+          <td style="text-align: left">ROLE_USER</td>
+      </tr>
+      <tr>
+          <td style="text-align: left">/srv/config/properties/delete</td>
+          <td style="text-align: left">DELETE</td>
+          <td style="text-align: left">Delete properties with filters (see examples)</td>
+          <td style="text-align: left">ROLE_ADMIN</td>
+      </tr>
+  </tbody>
 </table> </div>
 <div class="gdoc-page__anchorwrap">
     <h3 id="config-server-rest-api-endpoints-examples">
