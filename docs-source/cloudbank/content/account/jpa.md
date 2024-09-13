@@ -7,31 +7,30 @@ weight = 6
 
 1. Add Spring Data JPA to the Account service and configure it to access the database
 
-  Spring Data JPA allows our Spring Boot application to easily use the database.  It uses simple Java POJOs to represent the data model and provides a lot of out-of-the-box features which means there is a lot less boilerplate code to be written.
+   Spring Data JPA allows our Spring Boot application to easily use the database.  It uses simple Java POJOs to represent the data model and provides a lot of out-of-the-box features which means there is a lot less boilerplate code to be written.
 
-  To add Spring Data JPA and the Oracle Database drivers to your project, open the Maven POM (`pom.xml`) and add these extra dependencies for Spring Data JPA, Oracle Spring Boot Starters for Oracle Database UCP (Universal Connection Pool) and Wallet:
+   To add Spring Data JPA and the Oracle Database drivers to your project, open the Maven POM (`pom.xml`) and add these extra dependencies for Spring Data JPA, Oracle Spring Boot Starters for Oracle Database UCP (Universal Connection Pool) and Wallet:
 
-    ```xml
-    
-    <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-data-jpa</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>com.oracle.database.spring</groupId>
-        <artifactId>oracle-spring-boot-starter-ucp</artifactId>
-        <version>23.4.0</version>
-    </dependency>
-        <dependency>
-        <groupId>com.oracle.database.spring</groupId>
-        <artifactId>oracle-spring-boot-starter-wallet</artifactId>
-        <version>23.4.0</version>
-    </dependency>
-    ```
+   ```xml
+   <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+   </dependency>
+   <dependency>
+      <groupId>com.oracle.database.spring</groupId>
+      <artifactId>oracle-spring-boot-starter-ucp</artifactId>
+      <version>23.4.0</version>
+   </dependency>
+      <dependency>
+      <groupId>com.oracle.database.spring</groupId>
+      <artifactId>oracle-spring-boot-starter-wallet</artifactId>
+      <version>23.4.0</version>
+   </dependency>
+   ```
 
-  Visual Studio code will display a notification in the bottom right corner and ask if it should update the project based on the change you just made.  You should select **Yes** or **Always** to this notification.  Doing so will ensure that the auto-completion will have access to the classes in the new dependency that you just added.
+   Visual Studio code will display a notification in the bottom right corner and ask if it should update the project based on the change you just made.  You should select **Yes** or **Always** to this notification.  Doing so will ensure that the auto-completion will have access to the classes in the new dependency that you just added.
 
-  ![Updated Project](../images/obaas-updated-pom.png " ")
+   ![Updated Project](../images/obaas-updated-pom.png " ")
 
 1. Configure JPA Datasource
 
