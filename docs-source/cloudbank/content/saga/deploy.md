@@ -13,19 +13,19 @@ The services are now completed, and you are ready to deploy them to the Oracle B
 
   To build a JAR file from the Account application, issue this command in the `account` directory.  Then issue the same command from the `transfer` directory to build the Transfer application into a JAR file too.
 
-     ```shell
-    $ mvn clean package -DskipTests
-    ```
+ ```shell
+$ mvn clean package -DskipTests
+```
 
   You will now have a JAR file for each application, as can be seen with this command (the command needs to be executed in the `parent` directory for the Account and Transfer applications):
 
-    ```shell
-    $ find . -name \*SNAPSHOT.jar
-    ./testrunner/target/testrunner-0.0.1-SNAPSHOT.jar
-    ./checks/target/checks-0.0.1-SNAPSHOT.jar
-    ./transfer/target/transfer-0.0.1-SNAPSHOT.jar
-    ./accounts/target/accounts-0.0.1-SNAPSHOT.jar
-    ```
+```shell
+$ find . -name \*SNAPSHOT.jar
+./testrunner/target/testrunner-0.0.1-SNAPSHOT.jar
+./checks/target/checks-0.0.1-SNAPSHOT.jar
+./transfer/target/transfer-0.0.1-SNAPSHOT.jar
+./accounts/target/accounts-0.0.1-SNAPSHOT.jar
+```
 
 1. Deploy the Account and Transfer applications
 
@@ -35,64 +35,64 @@ The services are now completed, and you are ready to deploy them to the Oracle B
 
   Start a tunnel using this command:
 
-    ```shell
-    $ kubectl -n obaas-admin port-forward svc/obaas-admin 8080:8080
-    ```
-  
+```shell
+$ kubectl -n obaas-admin port-forward svc/obaas-admin 8080:8080
+```
+
   Start the Oracle Backend for Spring Boot and Microservices CLI (*oractl*) in the `parent` directory using this command:
 
-    ```shell
-    $ oractl
-     _   _           __    _    ___
-    / \ |_)  _.  _. (_    /  |   |
-    \_/ |_) (_| (_| __)   \_ |_ _|_
-    ========================================================================================
-      Application Name: Oracle Backend Platform :: Command Line Interface
-      Application Version: (1.3.0)
-      :: Spring Boot (v3.3.3) ::
+```shell
+$ oractl
+ _   _           __    _    ___
+/ \ |_)  _.  _. (_    /  |   |
+\_/ |_) (_| (_| __)   \_ |_ _|_
+========================================================================================
+  Application Name: Oracle Backend Platform :: Command Line Interface
+  Application Version: (1.3.0)
+  :: Spring Boot (v3.3.3) ::
 
-      Ask for help:
-      - Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-      - email: obaas_ww@oracle.com
+  Ask for help:
+  - Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+  - email: obaas_ww@oracle.com
 
-    oractl:>
-    ```
+oractl:>
+```
 
   Obtain the `obaas-admin` password by executing this command:
 
-    ```shell
-    kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.admin}' | base64 -d
-    ```
+```shell
+kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.admin}' | base64 -d
+```
 
   Connect to the Oracle Backend for Spring Boot and Microservices admin service using this command.  Use `obaas-admin` as the username and the password you obtained in the previous step.
 
-    ```shell
-    oractl> connect
-    username: obaas-admin
-    password: **************
-    Credentials successfully authenticated! obaas-admin -> welcome to OBaaS CLI.
-    oractl:>
-    ```
+```shell
+oractl> connect
+username: obaas-admin
+password: **************
+Credentials successfully authenticated! obaas-admin -> welcome to OBaaS CLI.
+oractl:>
+```
 
   Run this command to deploy your account service, make sure you provide the correct path to your JAR files.
 
-    ```shell
-    oractl:> deploy --app-name application --service-name account --artifact-path /path/to/accounts-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
-    uploading: account/target/accounts-0.0.1-SNAPSHOT.jar
-    building and pushing image...
-    creating deployment and service... successfully deployed
-    oractl:>
-    ```
+```shell
+oractl:> deploy --app-name application --service-name account --artifact-path /path/to/accounts-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
+uploading: account/target/accounts-0.0.1-SNAPSHOT.jar
+building and pushing image...
+creating deployment and service... successfully deployed
+oractl:>
+```
 
    Run this command to deploy the transfer service, make sure you provide the correct path to your JAR files.
 
-    ```shell
-    oractl:> deploy --app-name application --service-name transfer --artifact-path /path/to/transfer-0.0.1-SNAPSHOT.jar --image-version 0.0.1
-    uploading: transfer/target/transfer-0.0.1-SNAPSHOT.jar
-    building and pushing image...
-    creating deployment and service... successfully deployed
-    oractl:>
-    ```
+```shell
+oractl:> deploy --app-name application --service-name transfer --artifact-path /path/to/transfer-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+uploading: transfer/target/transfer-0.0.1-SNAPSHOT.jar
+building and pushing image...
+creating deployment and service... successfully deployed
+oractl:>
+```
 
    Your applications are now deployed in the backend.
 
