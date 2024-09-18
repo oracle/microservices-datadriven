@@ -96,10 +96,10 @@ You can also use this approach in any regular commercial Oracle Cloud Tenancy - 
    * Log into the compute instance using SSH, for example:
 
      ```bash
-     ssh -i <path and filename of private key> -L 1443:localhost:443 ubuntu@207.211.186.88 
+     ssh -i <path and filename of private key> -L 8080:localhost:8080 ubuntu@207.211.186.88
      ```
 
-     You will need to use the IP address of your instance in this command. Note that the example command also creates a port forward so that you will be able to access various Web UI's from your local machine.
+     You will need to use the IP address of your instance in this command. Note that the example command also creates a port forward so that you will be able to access various endpoints from your local machine if you create a Kubernetes port-forward on port 8080 inside the instance.
 
    * You will be asked to confirm the authenticity of your SSH keys, enter `yes`.
 
@@ -119,9 +119,25 @@ You can also use this approach in any regular commercial Oracle Cloud Tenancy - 
 
      ![Completed startup](../images/install-free-tier-2.png " ")
 
+1. Configure access to the instance from your local machine
+
+   * On your local machine, open a browser and find your public IPv4 address using a serivce like [ShowMyIP](https://www.showmyip.com/).
+
+   * In the OCI Console, when viewing your compute instance, click on the link for the subnet in the **Prinary VNIC** section.
+
+   * On the subnet page, click on the link for the Default Security List.
+
+   * Click on the **Add Ingress Rules** button to create a new Ingress Rule.
+
+   * Complete the form by specifying the **Source CIDR**.  Make this as specific as possible, ideally just your one machine by specifying the IP address you just collected with the suffix `/32` added.  Set the **Destination Port Range** to `443`, and add a description if you wish.  The completed form should look like this (in this example your machine's IP address was `1.2.3.4`):
+
+     ![Add Ingress Rule](../images/add-ingress-rule.png " ")
+
+   * Click the **Add Ingress Rules** button to save the new rule.
+
 1. Verify access to web user interfaces
 
-   * On your local machine, open a browser and navigate to the [Spring Operations Center](https://localhost:1443/soc).
+   * On your local machine, open a browser and navigate to the Spring Operations Center using the IP address of your instance, for example, if you instance is `1.2.3.4`, then the address will be `https://1.2.3.4/soc`.
 
    * Log in using the pre-defined user `obaas-admin` and password `Welcome-12345`.
 

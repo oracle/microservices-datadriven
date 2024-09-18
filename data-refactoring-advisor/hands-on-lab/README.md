@@ -15,18 +15,57 @@ It works by helping users refactor the data access layer, transitioning from a m
 ![monoMicro](./images/monoMicro.png)
 
 
-## 1. User Permissions
+## University Database
+
+In this simple scenario, an existing University database schema will be used. Using Oracle Graph Studio, community detection will be run on the existing schema to identify potential bounded contexts. However, the Node and Edge tables need to be populated first.
+
+## Quick Start
+
+### 1. Create and load the Node and Edges tables from a .csv file
+
+[Quick Start Table Load](./quickstart/README.md)
+
+### 2. Create Graph with Graph Studio
+
+Oracle’s Graph Studio is a powerful tool designed to create, query, and analyze graphs from tables within your Autonomous Database, simplifying graph analytics.
+
+[Create Graph with Graph Studio](./create-graph/README.md)
+
+### 3. Run Community Detection with a Notebook
+
+We create a notebook in Graph Studio for running Community Detection. A notebook is used to run algorithms and queries against a graph. 
+
+[Run Community Detection with a Notebook](./community-detection/README.md)
+
+### 4. Medical Records Database
+
+The University Schema was small example.  How does this process work against a larger database? How about a medical records database with 211 vertices and 615 edges.
+
+[Medical Records Database](./medical-data/README.md)
+
+
+### 5. PGQL Cheat Sheet
+
+A collection of common PGQL queries for working with communities explained
+
+[PGQL Cheat Sheet](./pgql/README.md)
+
+## Run Community Detection on your Database
+
+The following documents how to create the Nodes and Edges tables on your database.  Once complete, run Community Detectiobs as described above in the Quick Start
+
+### 1. User Permissions
 
 Have ADMIN apply the [following grants](./user-perms/README.md) to the user capturing workload in a SQL Tuning Set
 
-## 2. Collect Database Workload
+### 2. Collect Database Workload
 
 To begin optimizing an existing application, the initial task involves gathering the workload based upon the SQL statements being run against the database instance. For applications utilizing an Oracle database and accessing tables through SQL queries, a recommended approach is to analyze how the application interacts with these tables. SQL Tuning Sets serve as a valuable tool for capturing and providing detailed access pattern data, once they are correctly configured by following the steps outlined below.
 
 
 [Collect Database Workload with a SQL Tuning Set](./collect-database-workload/README.md)
 
-## 3. Create Graph Tables
+### 3. Create Graph Tables
 
  To facilitate community detection analysis, we need to set up two key metadata tables.
 
@@ -38,26 +77,12 @@ These tables are essential for applying community detection algorithms like Info
 
 [Create Graph Tables](./create-graph-tables/README.md)
 
-## 4. Create Graph with Graph Studio
 
-Oracle’s Graph Studio is a powerful tool designed to create, query, and analyze graphs from tables within your Autonomous Database, simplifying graph analytics.
 
-[Create Graph with Graph Studio](./create-graph/README.md)
-
-## 5. Run Community Detection with a Notebook
-
-We create a notebook in Graph Studio for running Community Detection. A notebook is used to run queries against a graph. 
-
-[Run Community Detection with a Notebook](./community-detection/README.md)
-
-## 6. Refactor Communities
-
-Look at the communities found and determine if improvements can be made to bounded context scope
-
-[Refactor Communties](./refactor-communities/README.md)
-
-## 7. Create Virtual PDBs using JSON Duality Views
+## Create Virtual PDBs using JSON Duality Views
 
 Define an Service API using JSON Duality Views for quick micro service development
 
-[Virtual PDBs](./virtualpdb/README.md)
+[What are Virtual PDBs](./virtualpdb/README.md)
+
+[SpringBoot example using JSON Duality Views](https://medium.com/@anders.swanson.93/transform-your-spring-boot-application-with-oracle-json-relational-duality-views-d8084113f825)
