@@ -1,1 +1,0 @@
-k6 run customer.js --console-output customer.log --summary-export customer_summary.json
