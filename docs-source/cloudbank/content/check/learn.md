@@ -4,9 +4,9 @@ title = "Learn about the scenario"
 weight = 2
 +++
 
-In the previous lab, you created an Account service that includes endpoints to create and query accounts, lookup accounts for a given customer, and so on.  In this module you will extend that service to add some new endpoints to allow recording bank transactions, in this case check deposits, in the account journal.
+In the previous module, you created an Account service that includes endpoints to create and query accounts, lookup accounts for a given customer, and so on.  In this module you will extend that service to add some new endpoints to allow recording bank transactions, in this case check deposits, in the account journal.
 
-In this lab, we will assume that customers can deposit a check at an Automated Teller Machine (ATM) by typing in the check amount, placing the check into a deposit envelope and then inserting that envelope into the ATM.  When this occurs, the ATM will send a "deposit" message with details of the check deposit.  You will record this as a "pending" deposit in the account journal.
+In this module, we will assume that customers can deposit a check at an Automated Teller Machine (ATM) by typing in the check amount, placing the check into a deposit envelope and then inserting that envelope into the ATM.  When this occurs, the ATM will send a "deposit" message with details of the check deposit.  You will record this as a "pending" deposit in the account journal.
 
 ![Deposit check](../images/deposit-check.png " ")
 

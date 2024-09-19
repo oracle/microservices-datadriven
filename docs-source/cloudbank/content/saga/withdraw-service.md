@@ -9,7 +9,7 @@ Next, you need to implement the withdraw service, which will be the second parti
 
 1. Implement the **withdraw** service
 
-  Create a new Java file called `WithdrawService.java` in `src/main/java/com/example/accounts/services`. This service is very similar to the deposit service, and no new concepts are introduced here. Here is the code for this service:
+   Create a new Java file called `WithdrawService.java` in `src/main/java/com/example/accounts/services`. This service is very similar to the deposit service, and no new concepts are introduced here. Here is the code for this service:
 
     ```java
     

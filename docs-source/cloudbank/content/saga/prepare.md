@@ -8,7 +8,7 @@ You will update the Account service that you built in the previous module to add
 
 1. Add new dependencies to the Maven POM
 
-  Open the `pom.xml` in your `accounts` project and add these new dependency to the list. It will add support for the LRA client libraries.
+   Open the `pom.xml` in your `accounts` project and add these new dependency to the list. It will add support for the LRA client libraries.
 
     ```xml
       
@@ -22,7 +22,7 @@ You will update the Account service that you built in the previous module to add
 
 1. Update the Spring Boot application configuration file
 
-  Update your Account service's Spring Boot configuration file, `application.yaml` in `src/main/resources`. Add a new `lra` section with the URL for the LRA coordinator. The URL shown here is for the Oracle Transaction Manager for Microservices that was installed as part of the Oracle Backend for Spring Boot and Microservices. **Note**: This URL is from the point of view of a service running it the same Kubernetes cluster.  
+   Update your Account service's Spring Boot configuration file, `application.yaml` in `src/main/resources`. Add a new `lra` section with the URL for the LRA coordinator. The URL shown here is for the Oracle Transaction Manager for Microservices that was installed as part of the Oracle Backend for Spring Boot and Microservices. **Note**: This URL is from the point of view of a service running it the same Kubernetes cluster.  
 
     ```yaml
     
@@ -36,7 +36,7 @@ You will update the Account service that you built in the previous module to add
 
 1. Check the Journal repository and model
 
-  Create a new Java file called Journal.java in src/main/com/example/accounts/model to define the model for the journal table. There are no new concepts in this class, so here is the code:
+   Create a new Java file called Journal.java in `src/main/com/example/accounts/model` to define the model for the journal table. There are no new concepts in this class, so here is the code:
 
     ```java
     package com.example.accounts.model;
@@ -94,7 +94,7 @@ You will update the Account service that you built in the previous module to add
     }
     ```
 
-  Open the file called `JournalRepository.java` in `src/main/java/com/example/accounts/repository` and add one JPA method `findJournalByLraIdAndJournalType()` to the interface. Here is the code:
+   Open the file called `JournalRepository.java` in `src/main/java/com/example/accounts/repository` and add one JPA method `findJournalByLraIdAndJournalType()` to the interface. Here is the code:
 
     ```java
     package com.example.accounts.repository;
@@ -112,4 +112,4 @@ You will update the Account service that you built in the previous module to add
     }
     ```
 
-  That completes the JPA configuration.
+   That completes the JPA configuration.

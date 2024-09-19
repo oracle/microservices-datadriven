@@ -9,13 +9,13 @@ Now you can test the full end-to-end flow for the Check Processing scenario.
 
 1. Simulate a check deposit
 
-  The Test Runner service is not exposed outside your Kubernetes cluster, so you must create a port-forwarding tunnel to access it.  Create a tunnel using this command:
+   The Test Runner service is not exposed outside your Kubernetes cluster, so you must create a port-forwarding tunnel to access it.  Create a tunnel using this command:
 
     ```shell
     $ kubectl -n application port-forward svc/testrunner 8084:8080
     ```
 
-   Simulate a check being deposited at the ATM using the Test Runner service:
+    Simulate a check being deposited at the ATM using the Test Runner service:
 
     ```shell
     $ curl -i -X POST -H 'Content-Type: application/json' -d '{"accountId": 2, "amount": 256}' http://localhost:8084/api/v1/testrunner/deposit
@@ -30,7 +30,7 @@ Now you can test the full end-to-end flow for the Check Processing scenario.
 
 1. Check the logs for the Check Processing service
 
-  Check the logs for the Check Processing service using this command.  You should see a log message indicating that the message was received and processed:
+   Check the logs for the Check Processing service using this command.  You should see a log message indicating that the message was received and processed:
 
     ```shell
     $ kubectl -n application logs svc/checks
@@ -41,7 +41,7 @@ Now you can test the full end-to-end flow for the Check Processing scenario.
 
 1. Check the journal entries for this account
 
-  In the next commands, you need to provide the correct IP address for the API Gateway in your backend environment.  You can find the IP address using this command, you need the one listed in the **`EXTERNAL-IP`** column:
+   In the next commands, you need to provide the correct IP address for the API Gateway in your backend environment.  You can find the IP address using this command, you need the one listed in the **`EXTERNAL-IP`** column:
 
     ```shell
     $ kubectl -n ingress-nginx get service ingress-nginx-controller
@@ -49,7 +49,7 @@ Now you can test the full end-to-end flow for the Check Processing scenario.
     ingress-nginx-controller   LoadBalancer   10.123.10.127   100.20.30.40  80:30389/TCP,443:30458/TCP   13d
     ```
 
-  Use this command to retrieve the journal entries for this account.  Your output may contain more entries.  Find the entry corresponding to the deposit you just simulated (it was for $256) and note the `journalId` - you will need it in the next step:
+   Use this command to retrieve the journal entries for this account.  Your output may contain more entries.  Find the entry corresponding to the deposit you just simulated (it was for $256) and note the `journalId` - you will need it in the next step:
 
     ```shell
     $ curl -i http://[EXTERNAL-IP]/api/v1/account/2/journal
@@ -64,7 +64,7 @@ Now you can test the full end-to-end flow for the Check Processing scenario.
 
 1. Simulate the Back Office clearance of that check
 
-  Using the `journalId` you received in the output of the previous command (in this example it is `6`), update and then run this command to simulate the Back Office clearing that check:
+   Using the `journalId` you received in the output of the previous command (in this example it is `6`), update and then run this command to simulate the Back Office clearing that check:
 
     ```shell
     $ curl -i -X POST -H 'Content-Type: application/json' -d '{"journalId": 6}' http://localhost:8084/api/v1/testrunner/clear
@@ -79,7 +79,7 @@ Now you can test the full end-to-end flow for the Check Processing scenario.
 
 1. Check the logs for the Check Processing service
 
-  Check the logs for the Check Processing service using this command.  You should see a log message indicating that the message was received and processed:
+   Check the logs for the Check Processing service using this command.  You should see a log message indicating that the message was received and processed:
 
     ```shell
     $ kubectl -n application logs svc/checks
@@ -90,7 +90,7 @@ Now you can test the full end-to-end flow for the Check Processing scenario.
 
 1. Retrieve the journal entries again
 
-  Retrieve the journal entries again to confirm the `PENDING` entry was updated to a `DEPOSIT`:
+   Retrieve the journal entries again to confirm the `PENDING` entry was updated to a `DEPOSIT`:
 
     ```shell
     $ curl -i http://[EXTERNAL-IP]/api/v1/account/2/journal
@@ -103,4 +103,4 @@ Now you can test the full end-to-end flow for the Check Processing scenario.
     [{"journalId":6,"journalType":"DEPOSIT","accountId":2,"lraId":"0","lraState":null,"journalAmount":256}]
     ```
 
-  That completes this lab, congratulations, you learned how to use JMS to create loosely coupled services that process asynchronous messages, and also how to use service discovery with OpenFeign.
+   That completes this lab, congratulations, you learned how to use JMS to create loosely coupled services that process asynchronous messages, and also how to use service discovery with OpenFeign.

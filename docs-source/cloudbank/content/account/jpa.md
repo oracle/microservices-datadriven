@@ -38,22 +38,22 @@ weight = 6
 
     1. Unzip the Wallet you downloaded in the Setup module (Lab 2)
 
-      ```shell
-      $ unzip /path/to/wallet/wallet_name.zip
-      ```
+       ```shell
+       $ unzip /path/to/wallet/wallet_name.zip
+       ```
 
     1. Edit the `sqlnet.ora` file so that the section `(DIRECTORY="?/network/admin")` matches the full path to the directory where you unzipped the Wallet, for example:
 
-      ```text
-      WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="/path/to/unzipped/wallet")))
-      ```
+       ```text
+       WALLET_LOCATION = (SOURCE = (METHOD = file) (METHOD_DATA = (DIRECTORY="/path/to/unzipped/wallet")))
+       ```
 
     1. Get the TNS Entry connection string using this command. Remember the name of the entry as you'll need it in the next steps. In the sample below it is `cbankdb_tp`.
 
-      ```shell
-      $ grep "_tp =" /path/to/unzipped/wallet/tnsnames.ora | cut -d"=" -f 1
-      cbankdb_tp
-      ```
+       ```shell
+       $ grep "_tp =" /path/to/unzipped/wallet/tnsnames.ora | cut -d"=" -f 1
+       cbankdb_tp
+       ```
 
       You will find a file called `application.properties` in the `src/main/resources` directory in your project.  You can use either properties format or YAML format for this file.  In this lab, you will use YAML.  Rename the file to `application.yaml` and then add this content to the file. Make sure that you modify the url to contain the path to the wallet and the name of the TNS entry you collected earlier.
 

@@ -8,9 +8,9 @@ The Data Access Object pattern is considered a best practice, and it allows sepa
 
 1. Create the DAO class
 
-  Create a new Java file called `AccountTransferDAO.java` in `src/main/java/com/example/accounts/services`.  This class will contain common data access methods that are needed by multiple participants.  You will implement this class using the singleton pattern so that there will only be one instance of this class.
+   Create a new Java file called `AccountTransferDAO.java` in `src/main/java/com/example/accounts/services`.  This class will contain common data access methods that are needed by multiple participants.  You will implement this class using the singleton pattern so that there will only be one instance of this class.
 
-  Here is the code to set up the class and implement the singleton pattern:
+   Here is the code to set up the class and implement the singleton pattern:
 
     ```java
     package com.example.accounts.services;
@@ -55,7 +55,7 @@ The Data Access Object pattern is considered a best practice, and it allows sepa
 
 1. Create a method to get the LRA status as a String
 
-  Create a `getStatusString` method which can be used to get a String representation of the LRA participant status.
+   Create a `getStatusString` method which can be used to get a String representation of the LRA participant status.
 
     ```java
     /**
@@ -79,7 +79,7 @@ The Data Access Object pattern is considered a best practice, and it allows sepa
 
 1. Create a method to get the LRA status from a String
 
-  Create a `getStatusFromString` method to convert back from the String to the enum.
+   Create a `getStatusFromString` method to convert back from the String to the enum.
 
     ```java
     /**
@@ -103,7 +103,7 @@ The Data Access Object pattern is considered a best practice, and it allows sepa
 
 1. Create a method to save an account
 
-  Create a method to save an account in the account repository.
+   Create a method to save an account in the account repository.
 
     ```java
     public void saveAccount(Account account) {
@@ -112,7 +112,7 @@ The Data Access Object pattern is considered a best practice, and it allows sepa
     }
     ```
 
-  Create a method to return the correct HTTP Status Code for an LRA status.
+   Create a method to return the correct HTTP Status Code for an LRA status.
 
     ```java
     
@@ -136,7 +136,7 @@ The Data Access Object pattern is considered a best practice, and it allows sepa
 
 1. Create a method to update the LRA status in the journal
 
-  Create a method to update the LRA status in the journal table during the "after LRA" phase.
+   Create a method to update the LRA status in the journal table during the "after LRA" phase.
 
     ```java
     /**
@@ -155,7 +155,7 @@ The Data Access Object pattern is considered a best practice, and it allows sepa
 
 1. Create methods to manage accounts
 
-  Create a method to get the account for a given account ID.
+   Create a method to get the account for a given account ID.
 
     ```java
     Account getAccountForAccountId(long accountId) {
@@ -166,7 +166,7 @@ The Data Access Object pattern is considered a best practice, and it allows sepa
     }
     ```
 
-  Create a method to get the account that is related to a journal entry.
+   Create a method to get the account that is related to a journal entry.
 
     ```java
     Account getAccountForJournal(Journal journal) throws Exception {
@@ -176,7 +176,7 @@ The Data Access Object pattern is considered a best practice, and it allows sepa
     }
     ```
 
-  Update `AccountRepository.java` in `src/main/java/com/example/accounts/repositories` to add these extra JPA methods.  Your updated file should look like this:
+   Update `AccountRepository.java` in `src/main/java/com/example/accounts/repositories` to add these extra JPA methods.  Your updated file should look like this:
 
     ```java
     package com.example.accounts.repository;
@@ -196,7 +196,7 @@ The Data Access Object pattern is considered a best practice, and it allows sepa
 
 1. Create methods to manage the journal
 
-  Back in the `AccountTransferDAO`, create a method to get the journal entry for a given LRA.
+   Back in the `AccountTransferDAO`, create a method to get the journal entry for a given LRA.
 
     ```java
     
@@ -211,7 +211,7 @@ The Data Access Object pattern is considered a best practice, and it allows sepa
     }
     ```
 
-  Create a method to save a journal entry.
+   Create a method to save a journal entry.
 
     ```java
     public void saveJournal(Journal journal) {
