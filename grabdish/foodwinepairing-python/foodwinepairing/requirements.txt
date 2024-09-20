@@ -1,5 +1,0 @@
-###### Requirements without Version Specifiers ######`
-Flask_restful               # req for app.py
-gunicorn                    # req for config.py
-simplejson                  # req for app.py
-cx_Oracle                   # req for app.py
