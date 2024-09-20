@@ -8,7 +8,7 @@ resources:
     title: "OCI Cloud Shell icon"
 ---
 
-The Oracle Backend for Spring Boot and Microservices requires a Kubernetes cluster where the components are deployed.  You can bring your own cluster or, in OCI, have a [Oracle Kubernetes Engine](https://www.oracle.com/uk/cloud/cloud-native/container-engine-kubernetes/) (OKE) deployed for you.  
+The Oracle Backend for Microservices and AI requires a Kubernetes cluster where the components are deployed.  You can bring your own cluster or, in OCI, have a [Oracle Kubernetes Engine](https://www.oracle.com/uk/cloud/cloud-native/container-engine-kubernetes/) (OKE) deployed for you.  
 
 ## OKE Access
 

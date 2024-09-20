@@ -41,7 +41,7 @@ resources:
     title: "ADB-S Private IP Address"
 ---
 
-The Oracle Backend for Spring Boot and Microservices includes an Oracle database. An instance of Oracle Autonomous Database Serverless (ADB-S) is created during installation. The ADB-S is used for Oracle Backend for SPring Boot and Microservices metadata and Spring Cloud Config Server.
+The Oracle Backend for Microservices and AI includes an Oracle database. An instance of Oracle Autonomous Database Serverless (ADB-S) is created during installation. The ADB-S is used for Oracle Backend for Microservices and AI metadata and Spring Cloud Config Server.
 
 If you selected the **PRIVATE_ENDPOINT_ACCESS** option, you need to use a [Bastion](#accessing-the-adb-s-from-a-local-machine-using-database-wallet-and-sqlcl-using-a-bastion) to access the database.
 
@@ -57,7 +57,7 @@ If you selected the **PRIVATE_ENDPOINT_ACCESS** option, you need to use a [Basti
 
 ## Access the Oracle ADB-S using Database Actions
 
-You can use the **Database Actions** web user interface, which can be accessed from the Oracle Cloud Infrastructure Console (OCI Console) to access the database. The Oracle database is created in the compartment specified during installation of Oracle Backend for Spring Boot and Microservices.
+You can use the **Database Actions** web user interface, which can be accessed from the Oracle Cloud Infrastructure Console (OCI Console) to access the database. The Oracle database is created in the compartment specified during installation of Oracle Backend for Microservices and AI.
 
 In the OCI Console, navigate to Oracle Autonomous Database (ADB) in the main menu.
 
@@ -71,7 +71,7 @@ Click on the link **Autonomous Transaction Processing**, and then select the dat
 {{< img name="oci-adb-select-db" size="large" lazy=false >}}
 <!-- spellchecker-enable -->
 
-Click on **Database Actions**. This opens the **Database Actions** page where you have access to many database functions, including the ability to work with data stored by Oracle Backend for Spring Boot and Microservices.
+Click on **Database Actions**. This opens the **Database Actions** page where you have access to many database functions, including the ability to work with data stored by Oracle Backend for Microservices and AI.
 
 <!-- spellchecker-disable -->
 {{< img name="oci-adb-cloud-portal-details" size="large" lazy=false >}}
@@ -132,7 +132,7 @@ You have to enter a password for the Wallet.
     {{< img name="oci-adb-admin-connect" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
-    You are now connected to the database that is provided when installing Oracle Backend for Spring Boot and Microservices on OCI.
+    You are now connected to the database that is provided when installing Oracle Backend for Microservices and AI on OCI.
 
 > **_NOTE:_** Oracle recommends that you install your own databases, PDBs for your production applications. The database provisioned is used for Oracle Backend for Spring Boot metadata and can be used for development.
 
@@ -237,6 +237,6 @@ If you chose the **PRIVATE_ENDPOINT_ACCESS** option for database access during i
     {{< img name="oci-adb-admin-connect" size="large" lazy=false >}}
     <!-- spellchecker-enable -->
 
-    You are now connected to the database that is provided when installing Oracle Backend for Spring Boot and Microservices on OCI.
+    You are now connected to the database that is provided when installing Oracle Backend for Microservices and AI on OCI.
 
 > **_NOTE:_** Oracle recommends that you install your own databases, PDBs for your production applications. The database provisioned is used for Oracle Backend for Spring Boot metadata and can be used for development.

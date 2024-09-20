@@ -1,12 +1,12 @@
 ---
 title: "MicroTx"
-description: "Transaction coordination and data consistency across microservices using MicroTx in Oracle Backend for Spring Boot and Microservices"
+description: "Transaction coordination and data consistency across microservices using MicroTx in Oracle Backend for Microservices and AI"
 keywords: "transactions xz lra tcc microtx consistency coordination orchestration springboot spring development microservices development oracle backend"
 ---
 
 [Oracle Transaction Manager for Microservices](https://www.oracle.com/database/transaction-manager-for-microservices/), also known as "MicroTx", simplifies application development and operations by enabling distributed transactions to ensure consistency across microservices deployed in Kubernetes.
 
-Oracle Backend for Spring Boot and Microservices includes the free version of MicroTx, which has all of the functionality of the commercial version, but limits the number of transactions and only persists data in memory.  It is recommended for evaluations and application development purposes.
+Oracle Backend for Microservices and AI includes the free version of MicroTx, which has all of the functionality of the commercial version, but limits the number of transactions and only persists data in memory.  It is recommended for evaluations and application development purposes.
 
 MicroTx supports the following consistency models:
 
@@ -26,7 +26,7 @@ To use MicroTx in your Spring Boot applications, include the following dependenc
 </dependency>
 ```
 
-Add the following configuration to your Spring application configuration. The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Spring Boot and Microservices CLI or the Visual Studio Code Extension to deploy your application. For example:
+Add the following configuration to your Spring application configuration. The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Microservices and AI CLI or the Visual Studio Code Extension to deploy your application. For example:
 
 ```yaml
 spring:

@@ -1,14 +1,14 @@
 ---
 title: "Custom Installations"
-description: "Custom installations of Oracle Backend for Spring Boot and Microservices"
+description: "Custom installations of Oracle Backend for Microservices and AI"
 keywords: "installation onprem on-premises custom spring springboot microservices development oracle backend"
 ---
 
-The Oracle Backend for Spring Boot and Microservices is available to install in your own "custom" environment, which may be an on-premises data center environment, a different cloud provider, or a developer's desktop.
+The Oracle Backend for Microservices and AI is available to install in your own "custom" environment, which may be an on-premises data center environment, a different cloud provider, or a developer's desktop.
 
 ## Prerequisites
 
-You must meet the following prerequisites to use the Oracle Backend for Spring Boot and Microservices On-Premises. You need:
+You must meet the following prerequisites to use the Oracle Backend for Microservices and AI On-Premises. You need:
 
 * Access to Oracle Database Enterprise Edition 19.3.0.0
 * Access to a Container Repository
@@ -27,7 +27,7 @@ When installing in a _desktop_ environment, for example a developer's desktop, t
 
 ## Download
 
-Download the latest release of [Oracle Backend for Spring Boot and Microservices](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.3/onprem-ebaas_latest.zip).
+Download the latest release of [Oracle Backend for Microservices and AI](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.1.3/onprem-ebaas_latest.zip).
 
 ## Setup
 

@@ -1,6 +1,6 @@
 baseURL = 'https://oracle.github.io/microservices-datadriven/spring/'
 languageCode = 'en-us'
-title = 'Oracle Backend for Spring Boot and Microservices'
+title = 'Oracle Backend for Microservices and AI'
 theme = "hugo-geekdoc"
 
 pluralizeListTitles = false

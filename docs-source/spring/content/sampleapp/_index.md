@@ -1,6 +1,6 @@
 ---
 title: "Sample Application - CloudBank"
-description: "Sample application for Oracle Backend for Spring Boot and Microservices"
+description: "Sample application for Oracle Backend for Microservices and AI"
 keywords: "springboot spring development microservices development oracle backend"
 ---
 

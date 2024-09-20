@@ -1,6 +1,6 @@
 ---
 title: "Metrics"
-description: "Prometheus metrics and Grafana dashboards for Spring Boot applications with the Oracle Backend for Spring Boot and Microservices"
+description: "Prometheus metrics and Grafana dashboards for Spring Boot applications with the Oracle Backend for Microservices and AI"
 keywords: "observability metrics prometheus grafana spring springboot microservices development oracle backend"
 resources:
   - name: metrics
@@ -50,7 +50,7 @@ resources:
     title: "Apache APISIX Observability Dashboard"
 ---
 
-Oracle Backend for Spring Boot and Microservices provides built-in platform services to collect metrics from system and application workloads and pre-built Grafana dashboards to view and explore those metrics.
+Oracle Backend for Microservices and AI provides built-in platform services to collect metrics from system and application workloads and pre-built Grafana dashboards to view and explore those metrics.
 
 On this page, you will find the following topics:
 
@@ -68,7 +68,7 @@ On this page, you will find the following topics:
 
 ## Overview
 
-Oracle Backend for Spring Boot and Microservices includes a number of pre-installed and pre-configured components to provide metrics for the platform itself and for your applications.
+Oracle Backend for Microservices and AI includes a number of pre-installed and pre-configured components to provide metrics for the platform itself and for your applications.
 
 The diagram below provides an overview of the components that play a role in metrics:
 
@@ -191,7 +191,7 @@ Here is an example of this dashboard:
 
 ## How to have metrics collected for your applications
 
-When you deploy an application with Oracle Backend for Spring Boot and Microservices CLI or Visual Code Extension, provided you included the Eureka Discovery Client and Actuator in your application, Prometheus will automatically find your application (using the service registry) and start collecting metrics. These metrics will be included in both the Spring Boot Observability dashboard and the Spring Boot Statistic dashboard automatically.
+When you deploy an application with Oracle Backend for Microservices and AI CLI or Visual Code Extension, provided you included the Eureka Discovery Client and Actuator in your application, Prometheus will automatically find your application (using the service registry) and start collecting metrics. These metrics will be included in both the Spring Boot Observability dashboard and the Spring Boot Statistic dashboard automatically.
 
 To include the Eureka Discovery client in your application, add the following dependencies to your Maven POM or equivalent:
 

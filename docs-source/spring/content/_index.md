@@ -1,28 +1,28 @@
 ---
-title: "Oracle Backend for Spring Boot and Microservices"
-description: "Spring and Spring Boot"
-keywords: "spring springboot microservices development oracle backend"
+title: "Oracle Backend for Microservices and AI"
+description: "Helidon, Spring and Spring Boot"
+keywords: "spring springboot microservices development oracle backend helidon"
 ---
 
-Oracle Backend for Spring Boot and Microservices allows developers to build microservices in Spring Boot and provisions a "backend as a service" with Oracle Database and other infrastructure components that operate on multiple clouds. Oracle Backend for Spring Boot and Microservices vastly simplifies the task of building, testing, and operating microservices platforms for reliable, secure, and scalable enterprise applications.
+Oracle Backend for Microservices and AI allows developers to build microservices in Helidon and/or Spring Boot and provisions a "backend as a service" with Oracle Database and other infrastructure components that operate on multiple clouds. Oracle Backend for Microservices and AI vastly simplifies the task of building, testing, and operating microservices platforms for reliable, secure, and scalable enterprise applications.
 
 {{< hint type=[warning] icon=gdoc_fire title="Version 1.3.0 (production) released September, 2024" >}}
- Oracle Backend for Spring Boot and Microservices Version 1.3.0 is now generally available and suitable for production use. This version supports and recommends Spring Boot 3.3.x, 3.2.x, Spring 6.1 and Spring Cloud 2023.0.x, with limited backwards compatibility for Spring Boot 2.7.x.  
+ Oracle Backend for Microservices and AI Version 1.3.0 is now generally available and suitable for production use. This version supports and recommends Helidon 4.1.1, Spring Boot 3.3.x, 3.2.x, Spring 6.1 and Spring Cloud 2023.0.x, with limited backwards compatibility for Spring Boot 2.7.x.  
 {{< /hint >}}
 
-If you are building Spring Boot applications with Oracle Database, you should also check out [Spring Cloud Oracle](https://github.com/oracle/spring-cloud-oracle) which is the home of a number of the components used in Oracle Backend for Spring Boot and Microservices, and which you can also use in your own applications!
+If you are building Spring Boot applications with Oracle Database, you should also check out [Spring Cloud Oracle](https://github.com/oracle/spring-cloud-oracle) which is the home of a number of the components used in Oracle Backend for Microservices and AI, and which you can also use in your own applications!
 
 ## Try it out with CloudBank AI
 
-To learn more about deploying and using Oracle Backend for Spring Boot and Microservices, we recommend our
+To learn more about deploying and using Oracle Backend for Microservices and AI, we recommend our
 [CloudBank AI](https://bit.ly/cloudbankAI) self-paced, on-demand hands-on lab.
 
 ![CloudBank AI](./cloudbank-hol.png)
 
 In the [CloudBank AI](https://bit.ly/cloudbankAI) hands-on lab, you can learn how to:
 
-- Install Oracle Backend for Spring Boot and Microservices.
-- Set up a development environment for Spring Boot.
+- Install Oracle Backend for Microservices and AI.
+- Set up a development environment for Helidon and/or Spring Boot.
 - Build Spring Boot microservices from scratch using Spring Web to create
   Representational State Transfer (REST) services.
 - Use service discovery and client-side load balancing.

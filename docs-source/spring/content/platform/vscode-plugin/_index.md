@@ -1,18 +1,18 @@
 ---
-title: "Oracle Backend for Spring Boot and Microservices Visual Studio Code Extension"
-description: "Visual Studio Code extension for Oracle Backend for Spring Boot and Microservices"
+title: "Oracle Backend for Microservices and AI Visual Studio Code Extension"
+description: "Visual Studio Code extension for Oracle Backend for Microservices and AI"
 keywords: "vscode code visualstudio extension springboot spring development microservices development oracle backend"
 ---
 
 ## GA 1.1.3 - March, 2024
 
-"Oracle Backend for Spring Boot and Microservices" is a VS Code extension to browse and deploy applications on the Oracle Backend for Spring Boot and Microservices platform. This plugin allows to inspect the content of an Oracle Backend for Spring Boot deployment, in terms of applications, services and related configurations. It simplifies the access to the Platform Services installed, like Grafana, Spring, Apisix, Eureka and Jaeger creating ssh tunnels on-demand, and providing access to their respective web admin consoles. It allows to add credentials to access and bind services to the Oracle Autonomous DB included into Oracle Backend for Spring Boot and Microservices deployment. This plug-in replicates the functionalities available in [OBaas CLI](../../development/cli) and simplify the access to Oracle Backend for Spring Boot and Microservices deployments from a development IDE like VS Code.
+"Oracle Backend for Microservices and AI" is a VS Code extension to browse and deploy applications on the Oracle Backend for Microservices and AI platform. This plugin allows to inspect the content of an Oracle Backend for Spring Boot deployment, in terms of applications, services and related configurations. It simplifies the access to the Platform Services installed, like Grafana, Spring, Apisix, Eureka and Jaeger creating ssh tunnels on-demand, and providing access to their respective web admin consoles. It allows to add credentials to access and bind services to the Oracle Autonomous DB included into Oracle Backend for Microservices and AI deployment. This plug-in replicates the functionalities available in [OBaas CLI](../../development/cli) and simplify the access to Oracle Backend for Microservices and AI deployments from a development IDE like VS Code.
 
 See the Oracle Free Use Terms and Conditions [License](https://oss.oracle.com/licenses/upl/)
 
 ## Prerequisites
 
-You must have already installed and configured the following software which required for the Oracle Backend for Spring Boot and Microservices [Setup](../../setup/):
+You must have already installed and configured the following software which required for the Oracle Backend for Microservices and AI [Setup](../../setup/):
 
 * Kubernetes command-line interface (`kubectl`)
 * Oracle Cloud Infrastructure command-line interface
@@ -33,13 +33,13 @@ You must have already installed and configured the following software which requ
 4. Restart VS Code to make the plugin fully operational.
 
 5. If you do not see the plugin in the left menu bar, with the Oracle logo (as shown here), click on **Additional Views** to select
-   the **Oracle Backend for Spring Boot and Microservices**:
+   the **Oracle Backend for Microservices and AI**:
 
     ![Additional](images/additional.jpg)
 
 ## Using VS Code Plugin
 
-After selecting the plugin from the left menu bar, the Oracle Backend for Spring Boot and Microservices VS Code plugin asks you to specify the full path for the
+After selecting the plugin from the left menu bar, the Oracle Backend for Microservices and AI VS Code plugin asks you to specify the full path for the
 Kubernetes configuration file. For example:
 
 ![kubeConfig](./images/getKubeConfig.jpg)
@@ -64,18 +64,18 @@ To restart the plugin and proceed with setting the Kubernetes configuration file
 
 ### How to Access the Cluster
 
-Until you create a dedicated `ssh` tunnel to the Kubernetes cluster, and if you do not connect to Oracle Backend for Spring Boot and Microservices administrative
-services, you cannot browse resources included in the Oracle Backend for Spring Boot and Microservices deployment. To do this, follow these steps:
+Until you create a dedicated `ssh` tunnel to the Kubernetes cluster, and if you do not connect to Oracle Backend for Microservices and AI administrative
+services, you cannot browse resources included in the Oracle Backend for Microservices and AI deployment. To do this, follow these steps:
 
 1. Select the cluster and right-click, choosing **Set UID/PWD** menu item to insert credentials related to your user account. For example:
 
    ![Credentials](./images/credentials.png)
 
-2. Specify the **OBSBM Admin ID** for the Oracle Backend for Spring Boot and Microservices user for deployment. For example:
+2. Specify the **OBSBM Admin ID** for the Oracle Backend for Microservices and AI user for deployment. For example:
 
    ![Credentials](./images/admin.jpg)
 
-3. On the top menu, the Oracle Backend for Spring Boot and Microservices administrator **OBSBM Admin password** is required. For example:
+3. On the top menu, the Oracle Backend for Microservices and AI administrator **OBSBM Admin password** is required. For example:
 
    ![Credentials](./images/password.jpg)
 
@@ -95,7 +95,7 @@ services, you cannot browse resources included in the Oracle Backend for Spring 
 
    ![okTunnel](./images/oktunnel.jpg)
 
-   **NOTE:** If the K8s cluster is not related to an Oracle Backend for Spring Boot and Microservices deployment, the tunnel creation fails, because it will look for the **services/obaas-admin** in the namespace **obaas-admin**. In this case, execute a window reload to chose another cluster from the command palette. If you have any problem with the connection, start another tunnel. The plugin tries to connect to the cluster on another local port.
+   **NOTE:** If the K8s cluster is not related to an Oracle Backend for Microservices and AI deployment, the tunnel creation fails, because it will look for the **services/obaas-admin** in the namespace **obaas-admin**. In this case, execute a window reload to chose another cluster from the command palette. If you have any problem with the connection, start another tunnel. The plugin tries to connect to the cluster on another local port.
 
 7. Select the cluster again and right-click **Connect**. This creates a session with the credentials set up in the first step.
 
@@ -109,7 +109,7 @@ You see four top classes of resources that can be expanded in underlying items:
 
 * **applications** : The list of applications deployed and the holding services.
 * **Oracle DB** : In this release there is one Oracle Database in which the configurations and schemas related to deployed services are stored.
-* **platformServices** : The list of Oracle Backend for Spring Boot and Microservices deployed services, like Grafana, Spring, Apache APISIX, Eureka and Jaeger.
+* **platformServices** : The list of Oracle Backend for Microservices and AI deployed services, like Grafana, Spring, Apache APISIX, Eureka and Jaeger.
 * **oBaasConf** : The list of keys defined by the applications, stored in the Oracle Database, that are provisioned and available to share configurations information among services in each application.
 
 ## Applications
@@ -156,7 +156,7 @@ If the compilation process is over successfully, you will see something like thi
 
 #### Compile .jar in .exec
 
-This option allows you to upload a .jar file to the Oracle Backend for Spring Boot and Microservices to a GraalVM compiler service. This service will start a compilation of your microservice in a native file, that it will be executed without JVM support.
+This option allows you to upload a .jar file to the Oracle Backend for Microservices and AI to a GraalVM compiler service. This service will start a compilation of your microservice in a native file, that it will be executed without JVM support.
 Since the compilation of a .jar file via the tool `native-image` does not support cross-compilation, so it must be on the same kind of platform where the application will run, this service guarantees a compilation in the same Operating System and CPU type where the service it will be executed on the Kubernetes cluster.
 The Spring Boot application **pom.xml** with the plugin:
 
@@ -210,7 +210,7 @@ as shown here:
 
 #### Add native service -> upload .exec
 
-The VS Code command palette prompts for the required parameters to upload an executable file coming from a compilation done with the service offered by Oracle Backend for Spring Boot and Microservices. At the end of compilation process, you can download the **.exec** file and use it to create a native executable Spring Boot microservices on the backend platform.
+The VS Code command palette prompts for the required parameters to upload an executable file coming from a compilation done with the service offered by Oracle Backend for Microservices and AI. At the end of compilation process, you can download the **.exec** file and use it to create a native executable Spring Boot microservices on the backend platform.
 Choosing this item menu, the parameters will be required are:
 
 1. A popup dialog box opens to select the local Spring Boot **.exec** file, that will be the only type that you can select:
@@ -307,7 +307,7 @@ Selecting the service from the tree, under a specific application, you will remo
 
 #### Publish service
 
-This command creates a route in the APISix Gateway available in the Oracle Backend for Spring Boot and Microservices, in order to expose on Internet the selected service. To be performed, this command requires the APISix AdminKey, and a port-forward to the APISix engine.
+This command creates a route in the APISix Gateway available in the Oracle Backend for Microservices and AI, in order to expose on Internet the selected service. To be performed, this command requires the APISix AdminKey, and a port-forward to the APISix engine.
 
 You can get the AdminKey from the APISix configmap, using a kubectl command:
 
@@ -328,11 +328,11 @@ This is a shortcut with a standard registration: to customize the route, or star
 
 ## Oracle DB
 
-For each Oracle Backend for Spring Boot and Microservices, an Oracle Autonomous Transaction Processing database is provisioned on OCI to hold the schema for the Spring Boot services and backend's configuration details. The icon remembers the component deployed with the backend platform.
+For each Oracle Backend for Microservices and AI, an Oracle Autonomous Transaction Processing database is provisioned on OCI to hold the schema for the Spring Boot services and backend's configuration details. The icon remembers the component deployed with the backend platform.
 
 ## platformServices
 
-The **platformServices** option can be expanded to show the services available in the Oracle Backend for Spring Boot and Microservices platform. For each service,
+The **platformServices** option can be expanded to show the services available in the Oracle Backend for Microservices and AI platform. For each service,
 right-click on the symbol to open an `ssh` tunnel to the service, on a specific local port that is automatically chosen. A link opens in the
 default web browser for the administrator console of each platform service.
 
@@ -350,7 +350,7 @@ The **apisix console** shows one more command compared with the others, that all
 
 ## oBaasConf Configuration
 
-With Oracle Backend for Spring Boot and Microservices, developers can store the metadata and configurations to share among Pods in an
+With Oracle Backend for Microservices and AI, developers can store the metadata and configurations to share among Pods in an
 application. The VS Code plugin can browse the content of this Key/Values store and add, update and delete keys as needed.
 
 Expand **oBaasConf configuration** to see the applications that are deployed and, expanding each of them, the Key/Value pair.

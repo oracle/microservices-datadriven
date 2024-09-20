@@ -1,7 +1,7 @@
 ---
 title: "Tracing"
 linkTitle: Tracing
-description: "Tracing with Open Telemetry for Spring Boot applications with the Oracle Backend for Spring Boot and Microservices"
+description: "Tracing with Open Telemetry for Spring Boot applications with the Oracle Backend for Microservices and AI"
 keywords: "observability tracing opentelemetry spring springboot microservices development oracle backend"
 resources:
   - name: obaas-jaeger-ui

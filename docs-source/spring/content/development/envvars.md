@@ -1,10 +1,10 @@
 ---
 title: "Predefined Variables"
-description: "Predefined environment variables in Oracle Backend for Spring Boot and Microservices"
+description: "Predefined environment variables in Oracle Backend for Microservices and AI"
 keywords: "predefined variables spring springboot microservices development oracle backend"
 ---
 
-When you deploy a Spring Boot application using the Oracle Backend for Spring Boot and Microservices CLI or Visual Code extension, a number of predefined environment variables will be injected into the pod definition. You may reference any of these variables in your application.
+When you deploy a Spring Boot application using the Oracle Backend for Microservices and AI CLI or Visual Code extension, a number of predefined environment variables will be injected into the pod definition. You may reference any of these variables in your application.
 
 The predefined variables are as follows:
 
