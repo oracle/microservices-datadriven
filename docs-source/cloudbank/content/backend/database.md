@@ -4,11 +4,11 @@ title = "Explore Oracle Autonomous Database"
 weight = 3
 +++
 
-Oracle Backend for Spring Boot and Microservices includes an Oracle Autonomous Database instance.  You can manage and access the database from the OCI Console.
+Oracle Backend for Microservices and AI includes an Oracle Autonomous Database instance.  You can manage and access the database from the OCI Console.
 
 1. View details of the Oracle Autonomous Database
 
-   In the OCI Console, in the main ("hamburger") menu navigate to the **Oracle Database** category and then **Oracle Autonomous Database**.  Make sure you have the correct region selected (in the top right corner) and the compartment where you installed Oracle Backend for Spring Boot and Microservices (on the left hand side pull down list).  You will a list of Oracle Autonomous Database instances (you will probably only have one):
+   In the OCI Console, in the main ("hamburger") menu navigate to the **Oracle Database** category and then **Oracle Autonomous Database**.  Make sure you have the correct region selected (in the top right corner) and the compartment where you installed Oracle Backend for Microservices and AI (on the left hand side pull down list).  You will a list of Oracle Autonomous Database instances (you will probably only have one):
 
    ![List of Oracle Autonomous Database instances](../images/obaas-adb-1.png " ")
 
@@ -20,7 +20,7 @@ Oracle Backend for Spring Boot and Microservices includes an Oracle Autonomous D
 
    ![Manage scaling](../images/obaas-adb-2a.png " ")
 
-2. Explore Oracle Backend for Spring Boot and Microservices database objects
+2. Explore Oracle Backend for Microservices and AI database objects
 
    Click on the **Database Actions** button and select SQL to open a SQL Worksheet.  
 

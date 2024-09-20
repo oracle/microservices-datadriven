@@ -14,7 +14,7 @@ Create a project to hold your Account service.  In this lab, you will use the Sp
 
 1. Select the Spring Boot Version
 
-   You will be presented with a list of available Spring Boot versions. Choose **3.2.2** (or the latest 3.2.x version available).
+   You will be presented with a list of available Spring Boot versions. Choose **3.3.4** (or the latest 3.3.x version available).
 
   ![Specify Spring Boot version](../images/obaas-spring-init-2.png " ")
 

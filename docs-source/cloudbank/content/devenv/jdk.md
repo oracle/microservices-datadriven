@@ -4,8 +4,7 @@ title = "Install JDK"
 weight = 3
 +++
 
-Oracle recommends the [Java SE Development Kit](https://www.oracle.com/java/technologies/downloads/#java21).
-Themoduleis using Spring Boot 3.3.x so Java 21 is required.
+Oracle recommends the [Java SE Development Kit](https://www.oracle.com/java/technologies/downloads/#java21). The modules are using Spring Boot 3.3.x so Java 21 is required.
 
 1. Download and install the Java Development Kit
 

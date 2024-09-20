@@ -4,13 +4,13 @@ title = "Install CLI"
 weight = 5
 +++
 
-The Oracle Backend for Spring Boot CLI (*oractl*) is used to configure your backend and to deploy your Spring Boot applications to the backend.
+The Oracle Backend for Microservices and AI CLI (*oractl*) is used to configure your backend and to deploy your Spring Boot applications to the backend.
 
-1. Download the Oracle Backend for Spring Boot and Microservices CLI
+1. Download the Oracle Backend for Microservices and AI CLI
 
    Download the CLI from [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.2.0)
 
-2. Install the Oracle Backend for Spring Boot and Microservices CLI
+2. Install the Oracle Backend for Microservices and AI CLI
 
    To install the CLI, you just need to make sure it is executable and add it to your PATH environment variable.
 
@@ -42,4 +42,3 @@ The Oracle Backend for Spring Boot CLI (*oractl*) is used to configure your back
 
       Build Version: 1.3.0
       ```
-

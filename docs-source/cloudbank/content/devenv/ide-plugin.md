@@ -4,7 +4,7 @@ title = "Install IDE Plugin"
 weight = 10
 +++
 
-Some modules contain optional parts which show you how to do deployments and configuration with the IDE plugins instead of using the CLI.  If you plan to do those optional parts, you need to install the VS Code extension forOracle Backend for Spring Boot and Microservices. It is an extension to browse and deploy applications on the Oracle Backend for Spring Boot and Microservices platform. This plugin allows to inspect the content of an Oracle Backend for Spring Boot and Microservices deployment, in terms of applications, services and related configurations.
+Some modules contain optional parts which show you how to do deployments and configuration with the IDE plugins instead of using the CLI.  If you plan to do those optional parts, you need to install the VS Code extension for Oracle Backend for Microservices and AI. It is an extension to browse and deploy applications on the Oracle Backend for Microservices and AI platform. This plugin allows to inspect the content of an Oracle Backend for Microservices and AI deployment, in terms of applications, services and related configurations.
 
 1. Download the plug-in from [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.2.0).
 
@@ -26,5 +26,4 @@ Some modules contain optional parts which show you how to do deployments and con
 
     ![Additional](../images/additional.png " ")
 
-   click on **Additional Views** menu to select the **Oracle Backend for Spring Boot and Microservices**.
-
+   click on **Additional Views** menu to select the **Oracle Backend for Microservices and AI**.

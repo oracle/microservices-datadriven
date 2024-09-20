@@ -173,7 +173,7 @@ Starting with the account service that you built in the previous lab, you will t
 
    The service is now ready to deploy to the backend.
 
-1. Get the password for the `obaas-admin` user. The `obaas-admin` user is the equivalent of the admin or root user in the Oracle Backend for Spring Boot and Microservices backend.
+1. Get the password for the `obaas-admin` user. The `obaas-admin` user is the equivalent of the admin or root user in the Oracle Backend for Microservices and AI backend.
 
    Execute the following command to get the password:
 
@@ -183,7 +183,7 @@ Starting with the account service that you built in the previous lab, you will t
 
 1. Prepare the backend for deployment
 
-   The Oracle Backend for Spring Boot and Microservices admin service is not exposed outside the Kubernetes cluster by default. Oracle recommends using a **kubectl** port forwarding tunnel to establish a secure connection to the admin service.
+   The Oracle Backend for Microservices and AI admin service is not exposed outside the Kubernetes cluster by default. Oracle recommends using a **kubectl** port forwarding tunnel to establish a secure connection to the admin service.
 
    Start a tunnel (unless you already have the tunnel running from previous labs) using this command:
 
@@ -191,7 +191,7 @@ Starting with the account service that you built in the previous lab, you will t
     $ kubectl -n obaas-admin port-forward svc/obaas-admin 8080
     ```
 
-   Start the Oracle Backend for Spring Boot and Microservices CLI (*oractl*) using this command:
+   Start the Oracle Backend for Microservices and AI CLI (*oractl*) using this command:
 
     ```shell
     $ oractl
@@ -210,7 +210,7 @@ Starting with the account service that you built in the previous lab, you will t
       oractl:>
     ```
 
-   Connect to the Oracle Backend for Spring Boot and Microservices admin service using the `connect` command. Enter `obaas-admin` and the username and use the password you collected earlier.
+   Connect to the Oracle Backend for Microservices and AI admin service using the `connect` command. Enter `obaas-admin` and the username and use the password you collected earlier.
 
     ```shell
     oractl:>connect
@@ -222,10 +222,10 @@ Starting with the account service that you built in the previous lab, you will t
 
 1. Deploy the account service
 
-   You will now deploy your account service to the Oracle Backend for Spring Boot and Microservices using the CLI. Run this command to redeploy your service, make sure you provide the correct path to your JAR file. **Note** that this command may take 1-3 minutes to complete:
+   You will now deploy your account service to the Oracle Backend for Microservices and AI using the CLI. Run this command to redeploy your service, make sure you provide the correct path to your JAR file. **Note** that this command may take 1-3 minutes to complete:
 
     ```shell
-    oractl:> deploy --app-name application --service-name account --artifact-path /path/to/account-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+    oractl:> deploy --app-name application --service-name account --artifact-path /path/to/account-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --java-version ghcr.io/oracle/graalvm-native-image-obaas:21
     uploading: account/target/account-0.0.1-SNAPSHOT.jarbuilding and pushing image...
     creating deployment and service... successfully deployed
     oractl:>

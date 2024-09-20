@@ -4,13 +4,13 @@ title = "Introduction"
 weight = 1
 +++
 
-This module walks you through the steps to provision an instance of the Oracle Backend for Spring Boot and Microservices.
+This module walks you through the steps to provision an instance of the Oracle Backend for Microservices and AI.
 
 Estimated Time: 30 minutes
 
-### About Oracle Backend for Spring Boot and Microservices
+### About Oracle Backend for Microservices and AI
 
-Oracle Backend for Spring Boot and Microservices allows developers to build microservices in Spring Boot and provision a backend as a service with the Oracle Database and other infrastructure components that operate on multiple clouds. This service vastly simplifies the task of building, testing, and operating microservices platforms for reliable, secure, and scalable enterprise applications.
+Oracle Backend for Microservices and AI allows developers to build microservices in Spring Boot and provision a backend as a service with the Oracle Database and other infrastructure components that operate on multiple clouds. This service vastly simplifies the task of building, testing, and operating microservices platforms for reliable, secure, and scalable enterprise applications.
 
 This module provides three options for running the environment:
 
@@ -27,7 +27,7 @@ Regardless of which option you choose, the remainder of the modules will be virt
 
 In this lab, you will:
 
-- Provision an instance of Oracle Backend for Spring Boot and Microservices, either locally or in the cloud.
+- Provision an instance of Oracle Backend for Microservices and AI, either locally or in the cloud.
 
 ### Prerequisites
 

@@ -5,11 +5,11 @@ weight = 4
 +++
 
 
-Oracle Backend for Spring Boot and Microservices includes Spring Admin which provides a web user interface for managing and monitoring Spring applications.
+Oracle Backend for Microservices and AI includes Spring Admin which provides a web user interface for managing and monitoring Spring applications.
 
 1. Connect to Spring Admin
 
-   Oracle Backend for Spring Boot and Microservices does not expose management interfaces outside the Kubernetes cluster for improved security.  Oracle recommends you access these interfaces using **kubectl** port forwarding, which creates an encrypted tunnel from your client machine to the cluster to access a specific service in the cluster.
+   Oracle Backend for Microservices and AI does not expose management interfaces outside the Kubernetes cluster for improved security.  Oracle recommends you access these interfaces using **kubectl** port forwarding, which creates an encrypted tunnel from your client machine to the cluster to access a specific service in the cluster.
 
    Open a tunnel to the Spring Admin server using this command:
 

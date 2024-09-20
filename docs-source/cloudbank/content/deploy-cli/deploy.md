@@ -16,7 +16,7 @@ weight = 4
 
 1. Start a tunnel to the backend service.
 
-    The Oracle Backend for Spring Boot and Microservices admin service is not exposed outside the Kubernetes cluster by default. Use kubectl to start a port forwarding tunnel to establish a secure connection to the admin service.
+    The Oracle Backend for Microservices and AI admin service is not exposed outside the Kubernetes cluster by default. Use kubectl to start a port forwarding tunnel to establish a secure connection to the admin service.
 
     Start a tunnel using this command:
 
@@ -26,9 +26,9 @@ weight = 4
     Forwarding from [::1]:8080 -> 8080
     ```
 
-1. Start the Oracle Backend for Spring Boot and Microservices CLI *oractl*
+1. Start the Oracle Backend for Microservices and AI CLI *oractl*
 
-    Open a new terminal Window or Tab and start the Oracle Backend for Spring Boot and Microservices CLI (*oractl*) using this command:
+    Open a new terminal Window or Tab and start the Oracle Backend for Microservices and AI CLI (*oractl*) using this command:
 
     ```shell
     $ oractl
@@ -47,9 +47,9 @@ weight = 4
     oractl:>
     ```
 
-1. Connect to the Oracle Backend for Spring Boot and Microservices admin service called *obaas-admin*
+1. Connect to the Oracle Backend for Microservices and AI admin service called *obaas-admin*
 
-    Connect to the Oracle Backend for Spring Boot and Microservices admin service using this command. Use thr password you obtained is Step 1.
+    Connect to the Oracle Backend for Microservices and AI admin service using this command. Use thr password you obtained is Step 1.
 
     ```shell
     oractl> connect
@@ -72,7 +72,7 @@ weight = 4
     * Creates or updates a k8s secret with the provided user credentials.
     * Creates a Database Schema with the provided user credentials.
 
-    > What happens when you use the Oracle Backend for Spring Boot and Microservices CLI  (*oractl*) **deploy** command? When you run the `deploy` command, *oractl* does several things for you:
+    > What happens when you use the Oracle Backend for Microservices and AI (*oractl*) **deploy** command? When you run the `deploy` command, *oractl* does several things for you:
 
     * Uploads the JAR file to server side
     * Builds a container image and push it to the OCI Registry
