@@ -1,11 +1,11 @@
 ---
 title: "Platform Services"
-description: "Platform Services included in Oracle Backend for Spring Boot and Microservices"
+description: "Platform Services included in Oracle Backend for Microservices and AI"
 keywords: "platform api apisix eureka config workflow vault spring springboot microservices development oracle backend"
 Noindex: true
 ---
 
-Oracle Backend for Spring Boot and Microservices includes a number of Spring platform components that provide services to applications deployed to the platform.
+Oracle Backend for Microservices and AI includes a number of Spring platform components that provide services to applications deployed to the platform.
 
 For more details, read about:
 

@@ -4,7 +4,7 @@ description: "GPUs for AI workload"
 keywords: "gpu ollama llm spring springboot microservices oracle"
 ---
 
-Oracle Backend for Spring Boot and Microservices provides an option during installation to provision a set of Kubernetes nodes with NVIDIA A10 GPUs that are suitable for running AI workloads.  If you choose that option during installation, you may also specify how many nodes are provisioned.  The GPU nodes will be in a separate Node Pool to the normal CPU nodes, which allows you to scale it independently of the CPU nodes. They are also labeled so that you can target appropriate workloads to them using node selectors and/or affinity rules.
+Oracle Backend for Microservices and AI provides an option during installation to provision a set of Kubernetes nodes with NVIDIA A10 GPUs that are suitable for running AI workloads.  If you choose that option during installation, you may also specify how many nodes are provisioned.  The GPU nodes will be in a separate Node Pool to the normal CPU nodes, which allows you to scale it independently of the CPU nodes. They are also labeled so that you can target appropriate workloads to them using node selectors and/or affinity rules.
 
 To view a list of nodes in your cluster with a GPU, you can use this command:
 

@@ -1,10 +1,10 @@
 ---
 title: "OBaaS CLI"
-description: "Command Line Interface for Oracle Backend for Spring Boot and Microservices"
+description: "Command Line Interface for Oracle Backend for Microservices and AI"
 keywords: "cli tool deployment spring springboot microservices development oracle backend"
 ---
 
-The Oracle Backend for Spring Boot and Microservices offers a command-line interface (CLI), `oractl`. The CLI commands simplify the deployment of
+The Oracle Backend for Microservices and AI offers a command-line interface (CLI), `oractl`. The CLI commands simplify the deployment of
 microservices applications as well as bindings with the resources that they use. Download the CLI [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.3). The platform-specific binary can be renamed to `oractl` for convenience.
 
 Table of Contents:
@@ -30,7 +30,7 @@ Table of Contents:
 
 The Oracle Backend for Spring Boot CLI is used to configure your backend and to deploy your Spring Boot applications to the backend.
 
-1. Download the Oracle Backend for Spring Boot and Microservices CLI `oractl`
+1. Download the Oracle Backend for Microservices and AI CLI `oractl`
 
    Download the CLI from [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.3)
 
@@ -50,7 +50,7 @@ The Oracle Backend for Spring Boot CLI is used to configure your backend and to 
 
 ## Using the CLI
 
-1. Expose the Oracle Backend for Spring Boot and Microservices Admin server that the CLI calls using this command:
+1. Expose the Oracle Backend for Microservices and AI Admin server that the CLI calls using this command:
 
     ```bash
     kubectl port-forward services/obaas-admin -n obaas-admin 8080
@@ -817,7 +817,7 @@ Ask for Help
 
 Use the `GraalVM Compile Commands` to:
 
-* Upload a **.jar** file to the Oracle Backend for Spring Boot and microservices and its GraalVM compiler service.
+* Upload a **.jar** file to the Oracle Backend for Microservices and AI and its GraalVM compiler service.
 * Start a compilation of your microservice to produce an executable native **.exec** file.
 * Retrieve the last logs available regarding a compilation in progress or terminated.
 * Download the **.exec** file to deploy on the backend.

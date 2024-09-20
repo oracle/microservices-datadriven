@@ -1,6 +1,6 @@
 ---
 title: "Workflow"
-description: "Workflow for microservices orchestration using Netflix OSS Conductor in Oracle Backend for Spring Boot and Microservices"
+description: "Workflow for microservices orchestration using Netflix OSS Conductor in Oracle Backend for Microservices and AI"
 keywords: "workflow conductor orchestration netflix development spring springboot microservices development oracle backend"
 resources:
 - name: conductor_ui_workflows
@@ -8,7 +8,7 @@ resources:
   title: "Conductor UI Workflows"
 ---
 
-Oracle Backend for Spring Boot and Microservices includes the Netflix Conductor Server. Conductor is a popular workflow solution that works with Spring Boot Microservices and Oracle Database.
+Oracle Backend for Microservices and AI includes the Netflix Conductor Server. Conductor is a popular workflow solution that works with Spring Boot Microservices and Oracle Database.
 
 Documentation on Conductor can be found here:
 

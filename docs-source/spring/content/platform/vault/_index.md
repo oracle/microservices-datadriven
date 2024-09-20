@@ -1,6 +1,6 @@
 ---
 title: "HashiCorp Vault"
-description: "Securing secrets with HashiCorp Vault in Oracle Backend for Spring Boot and Microservices"
+description: "Securing secrets with HashiCorp Vault in Oracle Backend for Microservices and AI"
 keywords: "vault secrets security springboot spring development microservices development oracle backend"
 resources:
   - name: vault-login
@@ -311,7 +311,7 @@ To access the Vault, process these steps:
 Audit logging is **blocking**, if the file is bigger than allowed space HashiCorp Vault will stop taking requests.
 {{< /hint >}}
 
-If you deployed Oracle Backend for Spring Boot and Microservices using `STANDARD` edition, HashiCorp Vault will be deployed in `production` mode and you have the option of turing on audit logs. **Note**, you must be authenticated to turn on audit logs.
+If you deployed Oracle Backend for Microservices and AI using `STANDARD` edition, HashiCorp Vault will be deployed in `production` mode and you have the option of turing on audit logs. **Note**, you must be authenticated to turn on audit logs.
 
 To turn on audit logs execute the following command:
 
@@ -343,7 +343,7 @@ Learn how to query audit logs [here](https://developer.hashicorp.com/vault/tutor
 
 ## Grafana dashboard for HashiCorp Vault
 
-Oracle Backend for Spring Boot and Microservices includes a [Grafana dashboard for HashiCorp Vault](../../observability/metrics/).
+Oracle Backend for Microservices and AI includes a [Grafana dashboard for HashiCorp Vault](../../observability/metrics/).
 
 <!-- spellchecker-disable -->
 {{< img name="vault-grafana" size="medium" lazy=false >}}

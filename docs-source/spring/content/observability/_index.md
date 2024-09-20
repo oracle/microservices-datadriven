@@ -1,11 +1,11 @@
 ---
 title: "Observability"
 Noindex: true
-description: "Observability for Spring Boot applications with the Oracle Backend for Spring Boot and Microservices"
+description: "Observability for Spring Boot applications with the Oracle Backend for Microservices and AI"
 keywords: "observability metrics tracing spring springboot microservices development oracle backend"
 ---
 
-Oracle Backend for Spring Boot and Microservices includes a number of common open source components to provide application observability including Prometheus, Grafana, Jaeger, and OpenTelemetry Collector.
+Oracle Backend for Microservices and AI includes a number of common open source components to provide application observability including Prometheus, Grafana, Jaeger, and OpenTelemetry Collector.
 
 For more details, read the following:
 

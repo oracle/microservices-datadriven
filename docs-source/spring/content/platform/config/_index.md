@@ -1,10 +1,10 @@
 ---
 title: "Spring Config Server"
-description: "Externalized configuration using Spring Config Server in Oracle Backend for Spring Boot and Microservices"
+description: "Externalized configuration using Spring Config Server in Oracle Backend for Microservices and AI"
 keywords: "config configserver springboot spring development microservices development oracle backend"
 ---
 
-Oracle Backend for Spring Boot and Microservices includes Spring Cloud Config which provides server- and client-side support for externalized configurations in a distributed system. The Spring Cloud Config server provides a central place to manage external properties for applications across all environments.
+Oracle Backend for Microservices and AI includes Spring Cloud Config which provides server- and client-side support for externalized configurations in a distributed system. The Spring Cloud Config server provides a central place to manage external properties for applications across all environments.
 
 The Spring Cloud Config server is pre-configured to work with the Spring Boot Eureka service registry, configured to store the Configuration in the Oracle Autonomous Database to support labeled versions of configuration environments as well as being accessible to a wide range of tools for managing the content. More details can be found here: ([Spring Cloud Config Documentation](https://spring.io/projects/spring-cloud-config)).
 
@@ -43,7 +43,7 @@ You also need to add the following dependency to your Spring Boot application `p
 
 The configuration is stored in the `CONFIGSERVER` schema in the `PROPERTIES` table. Managing the data for the Spring Cloud Config server should be done using the CLI or the REST API endpoints. If you prefer, you can also work directly with the `CONFIGSERVER.PROPERTIES` table in the database. How to access the database is documented here, ([Accessing the database](../../database/)).
 
-During setup of Oracle Backend for Spring Boot and Microservices, the following data is loaded into `CONFIGSERVER.PROPERTIES`. This data can be deleted.
+During setup of Oracle Backend for Microservices and AI, the following data is loaded into `CONFIGSERVER.PROPERTIES`. This data can be deleted.
 
 ```code
 | APPLICATION     | PROFILE        | LABEL    | PROP_KEY            | VALUE

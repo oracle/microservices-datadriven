@@ -1,6 +1,6 @@
 ---
 title: "Setup"
-description: "Setup Oracle Backend for Spring Boot and Microservices"
+description: "Setup Oracle Backend for Microservices and AI"
 keywords: "setup install springboot spring development microservices development oracle backend"
 resources:
   - name: oci-private-templates
@@ -84,7 +84,7 @@ resources:
 
 ---
 
-Oracle Backend for Spring Boot and Microservices is available in the [OCI Marketplace](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911).
+Oracle Backend for Microservices and AI is available in the [OCI Marketplace](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911).
 
 - [Prerequisites](#prerequisites)
 - [Summary of Components](#summary-of-components)
@@ -95,7 +95,7 @@ Oracle Backend for Spring Boot and Microservices is available in the [OCI Market
 
 ## Prerequisites
 
-You must meet the following prerequisites to use Oracle Backend for Spring Boot and Microservices. You need:
+You must meet the following prerequisites to use Oracle Backend for Microservices and AI. You need:
 
 - An Oracle Cloud Infrastructure (OCI) account in a tenancy with sufficient quota to create the following:
 
@@ -110,12 +110,12 @@ You must meet the following prerequisites to use Oracle Backend for Spring Boot 
 
   - The Kubernetes command-line interface (kubectl). [Installing kubectl documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
   - Oracle Cloud Infrastructure command-line interface (CLI). [Quickstart - Installing the CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#Quickstart).
-  - Oracle Backend for Spring Boot and Microservices command-line interface (oractl). [Download oractl](https://github.com/oracle/microservices-datadriven/releases).
-  - [OPTIONAL]Oracle Backend for Spring Boot and Microservices VS Code Extension. [Download VS Code Extension](https://github.com/oracle/microservices-datadriven/releases).
+  - Oracle Backend for Microservices and AI command-line interface (oractl). [Download oractl](https://github.com/oracle/microservices-datadriven/releases).
+  - [OPTIONAL]Oracle Backend for Microservices and AI VS Code Extension. [Download VS Code Extension](https://github.com/oracle/microservices-datadriven/releases).
 
 ## OCI policies
 
-The following policies needs to be in place to be able to install Oracle Backend for Spring Boot and Microservices. Top level and their dependencies listed.
+The following policies needs to be in place to be able to install Oracle Backend for Microservices and AI. Top level and their dependencies listed.
 
 ### Oracle Container Engine for Kubernetes
 
@@ -173,7 +173,7 @@ Allow group `<group-name>` to manage autonomous-database-family in `<location>`
 
 ### Vault
 
-If you deploy Oracle Backend for Spring Boot and Microservices **STANDARD** edition you need the following policies.
+If you deploy Oracle Backend for Microservices and AI **STANDARD** edition you need the following policies.
 
 ```text
 Allow group `<group-name>` to manage vaults in `<location>`
@@ -202,7 +202,7 @@ Allow group `<group-name>` to manage orm-private-endpoints in `<location>`
 
 ## Summary of Components
 
-Oracle Backend for Spring Boot and Microservices setup installs the following components.
+Oracle Backend for Microservices and AI setup installs the following components.
 
 | Component                    | Version       | Description                                                                                 |
 |------------------------------|---------------|---------------------------------------------------------------------------------------------|
@@ -248,7 +248,7 @@ Installing Oracle Backend for Spring Boot and Microservice takes approximately o
 
 To set up the OCI environment, process these steps:
 
-1. Go to the [OCI Marketplace listing for Oracle Backend for Spring Boot and Microservices](https://cloud.oracle.com/marketplace/application/138899911).
+1. Go to the [OCI Marketplace listing for Oracle Backend for Microservices and AI](https://cloud.oracle.com/marketplace/application/138899911).
 
     <!-- spellchecker-disable -->
     {{< img name="ebaas-mp-listing" size="large" lazy=false >}}
@@ -262,7 +262,7 @@ To set up the OCI environment, process these steps:
 
 1. In the **Backend as A Service** Section, fill in the following configuration variables as needed and select **Next**:
 
-    - `Compartment` : Select the compartment where you want to install Oracle Backend for Spring Boot and Microservices.
+    - `Compartment` : Select the compartment where you want to install Oracle Backend for Microservices and AI.
     - `Application Name` (optional) : A random pet name that will be used as the application name if left empty.
     - `Edition` : Select between *COMMUNITY* and *STANDARD* Edition.
         - *COMMUNITY* - for developers for quick start to testing Spring Boot Microservices with an integrated backend. Teams can start with the deployment and scale up as processing demand grows. Community support only.
@@ -298,7 +298,7 @@ To set up the OCI environment, process these steps:
       {{< img name="oci-stack-network-options" size="large" lazy=false >}}
       <!-- spellchecker-enable -->
 
-    > For more information on the network requirements and topology of the Oracle Backend for Spring Boot and Microservices including the options for *Bring Your Own Virtual Cloud Network*, please see the [Networking](../infrastructure/networking) documentation.
+    > For more information on the network requirements and topology of the Oracle Backend for Microservices and AI including the options for *Bring Your Own Virtual Cloud Network*, please see the [Networking](../infrastructure/networking) documentation.
 
 1. In the **Kubernetes Cluster Options** section, fill in the following for the OKE Cluster Options:
 
@@ -357,7 +357,7 @@ To set up the OCI environment, process these steps:
       {{< img name="oci-stack-byodb-options" size="large" lazy=false >}}
       <!-- spellchecker-enable -->
 
-    > For more information on the *Bring Your Own Database* option for the Oracle Backend for Spring Boot and Microservices including the required values, please review the [Database](../infrastructure/database) documentation.
+    > For more information on the *Bring Your Own Database* option for the Oracle Backend for Microservices and AI including the required values, please review the [Database](../infrastructure/database) documentation.
 
 1. (*Standard Edition Only*) If you check the checkbox *Enable Vault in Production Mode* in the section **Vault Options** you will be installing HashiCorp in **Production** mode otherwise the HashiCorp Vault be installed in **Development** mode.
 
@@ -458,9 +458,9 @@ To set up the local machine, process these steps:
 
    b. Configure the Oracle Cloud Infrastructure CLI. See [Configuring the CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliconfigure.htm#Configuring_the_CLI).
 
-1. Install the Oracle Backend for Spring Boot and Microservices command-line.
+1. Install the Oracle Backend for Microservices and AI command-line.
 
-   The Oracle Backend for Spring Boot and Microservices command-line interface, `oractl`, is available for Linux and Mac systems. Download the binary that you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.3) page and add it to your PATH environment variable. You can rename the binary to remove the suffix.
+   The Oracle Backend for Microservices and AI command-line interface, `oractl`, is available for Linux and Mac systems. Download the binary that you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.3) page and add it to your PATH environment variable. You can rename the binary to remove the suffix.
 
    If your environment is a Linux or Mac machine, run `chmod +x` on the downloaded binary. Also, if your environment is a Mac, run the following command. Otherwise, you get a security warning and the CLI does not work:
 
@@ -471,7 +471,7 @@ To set up the local machine, process these steps:
 You can get the necessary access information from the OCI COnsole:
 
 - OKE Cluster Access information e.g. how to generate the kubeconfig information.
-- Oracle Backend for Spring Boot and Microservices Passwords.
+- Oracle Backend for Microservices and AI Passwords.
 
 The assigned passwords (either auto generated or provided by the installer) can be viewed in the OCI Console (ORM homepage). Click on Application Information in the OCI ORM Stack.
 

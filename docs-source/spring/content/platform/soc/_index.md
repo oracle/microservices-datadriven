@@ -1,6 +1,6 @@
 ---
 title: "Spring Operations Center"
-description: "Using Spring Operations Center to manage applications in Oracle Backend for Spring Boot and Microservices"
+description: "Using Spring Operations Center to manage applications in Oracle Backend for Microservices and AI"
 keywords: "soc operations admin springboot spring development microservices development oracle backend"
 resources:
   - name: soc-login-page
@@ -86,9 +86,9 @@ resources:
     title: "Alerts"
 ---
 
-Oracle Backend for Spring Boot and Microservices includes "Spring Operations Center". More capabilities will be added to this feature in future releases.
+Oracle Backend for Microservices and AI includes "Spring Operations Center". More capabilities will be added to this feature in future releases.
 
-The Spring Operations Center provides a web user interface to manage the Oracle Backend for Spring Boot and Microservices. This release includes the following capabilities:
+The Spring Operations Center provides a web user interface to manage the Oracle Backend for Microservices and AI. This release includes the following capabilities:
 
 - View details about the configuration and health of the environment
 - Manage and deploy workloads (Spring Boot applications) deployed in the environment
