@@ -5,7 +5,7 @@ weight = 1
 +++
 
 
-Now that you know how to build a Spring Boot microservice and deploy it to the Oracle Backend for Spring Boot and Microservices, this module will guide you through deploying all the CloudBank services and exploring the runtime and management capabilities of the platform. **NOTE:** The full CloudBank leverages more features than you have built so far such as monitoring, tracing etc. You will see those features in the module "Explore The Backend Platform".
+Now that you know how to build a Spring Boot microservice and deploy it to the Oracle Backend for Microservices and AI, this module will guide you through deploying all the CloudBank services and exploring the runtime and management capabilities of the platform. **NOTE:** The full CloudBank leverages more features than you have built so far such as monitoring, tracing etc. You will see those features in the module "Explore The Backend Platform".
 
 Estimated module Time: 30 minutes
 
@@ -17,7 +17,7 @@ Quick walk through on how to deploy full CloudBank application.
 
 In this module, you will:
 
-* Deploy the full CloudBank sample application into your Oracle Backend for Spring Boot and Microservices instance
+* Deploy the full CloudBank sample application into your Oracle Backend for Microservices and AI instance
 
 ### Prerequisites
 

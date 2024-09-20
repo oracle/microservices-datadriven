@@ -4,7 +4,7 @@ title = "Install in OCI Free Tier"
 weight = 3
 +++
 
-This option allows you to run Oracle Backend for Spring Boot and Microservices in a containerized environment inside a single OCI Compute Instance.  This option is good if you do not have enough free capacity on your local machine to run the environment, and if you do not have or want to use the resources required for a full production-sized deployment.  This option provides an environment with adequate resources for development and testing, but minimizes the resource usage and costs.
+This option allows you to run Oracle Backend for Microservices and AI in a containerized environment inside a single OCI Compute Instance.  This option is good if you do not have enough free capacity on your local machine to run the environment, and if you do not have or want to use the resources required for a full production-sized deployment.  This option provides an environment with adequate resources for development and testing, but minimizes the resource usage and costs.
 
    > **Note:** You only need to choose one of the three deployment options - local, OCI Free Tier or OCI Marketplace.
 
@@ -86,7 +86,7 @@ You can also use this approach in any regular commercial Oracle Cloud Tenancy - 
 
    * Click on the **Create** button to create the instance.  The instance and the virtual network will be started, this will take a few moments.  
 
-1. Start Oracle Backend for Spring Boot and Microservices
+1. Start Oracle Backend for Microservices and AI
 
    * Note the Public IP Address of your newly created instance in the **Instance access** section of the **Instance details** page
      that is displayed.
@@ -103,7 +103,7 @@ You can also use this approach in any regular commercial Oracle Cloud Tenancy - 
 
    * You will be asked to confirm the authenticity of your SSH keys, enter `yes`.
 
-   * The environment will start automatically, including a Kubernetes cluster in a container (using k3s), Oracle Backend for Spring Boot and Microservices and an Oracle Database instance inside that cluster. It will take approximately six minutes for all of the containers to reach ready/running state. You can watch the progress using this command:
+   * The environment will start automatically, including a Kubernetes cluster in a container (using k3s), Oracle Backend for Microservices and AI and an Oracle Database instance inside that cluster. It will take approximately six minutes for all of the containers to reach ready/running state. You can watch the progress using this command:
 
      ```bash
      watch kubectl get pod -A

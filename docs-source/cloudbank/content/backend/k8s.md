@@ -5,7 +5,7 @@ weight = 2
 +++
 
 
-Oracle Backend for Spring Boot and Microservices includes a number of platform services which are deployed into the Oracle Container Engine for Kubernetes cluster.  You configured **kubectl** to access your cluster in an earlier module.  In this task, you will explore the services deployed in the Kubernetes cluster.  A detailed explanation of Kubernetes concepts is beyond the scope of this course.
+Oracle Backend for Microservices and AI includes a number of platform services which are deployed into the Oracle Container Engine for Kubernetes cluster.  You configured **kubectl** to access your cluster in an earlier module.  In this task, you will explore the services deployed in the Kubernetes cluster.  A detailed explanation of Kubernetes concepts is beyond the scope of this course.
 
 1. Explore namespaces
 
@@ -56,7 +56,7 @@ Oracle Backend for Spring Boot and Microservices includes a number of platform s
       * `grafana` contains Grafana which can be used to monitor and manage your environment
       * `ingress-nginx` contains the NGINX ingress controller which is used to manage external access to the cluster
       * `kafka` contains a three-node Kafka cluster that can be used by your application
-      * `obaas-admin` contains the Oracle Backend for Spring Boot and Microservices administration server that manages deployment of your services
+      * `obaas-admin` contains the Oracle Backend for Microservices and AI administration server that manages deployment of your services
       * `observability` contains Jaeger tracing which is used for viewing distributed traces
       * `open-telemetry` contains the Open Telemetry Collector which is used to collect distributed tracing information for your services
       * `oracle-database-operator-system` contains the Oracle Database Operator for Kubernetes which can be used to manage Oracle Databases in Kubernetes environments
@@ -121,7 +121,7 @@ Oracle Backend for Spring Boot and Microservices includes a number of platform s
 
    Sensitive information in Kubernetes is often kept in secrets that are mounted into the pods at runtime.  This means that the container images do not need to have the sensitive information stored in them.  It also helps with deploying to different environments where sensitive information like URLs and credentials for databases changes based on the environment.
 
-   Oracle Backend for Spring Boot and Microservices creates a number of secrets for you so that your applications can securely access the Oracle Autonomous Database instance.  Review the secrets in the pre-created `application` namespace using this command. **Note**, the name of the secrets will be different in your environment depending on the application name you gave when deploying the application.
+   Oracle Backend for Microservices and AI creates a number of secrets for you so that your applications can securely access the Oracle Autonomous Database instance.  Review the secrets in the pre-created `application` namespace using this command. **Note**, the name of the secrets will be different in your environment depending on the application name you gave when deploying the application.
 
     ```shell
     $ kubectl -n application get secret
@@ -167,5 +167,4 @@ Oracle Backend for Spring Boot and Microservices includes a number of platform s
       type: Opaque
     ```
 
-   When you deploy a Spring Boot microservice application into Oracle Backend for Spring Boot and Microservices, the pods that are created will have the values from this secret injected as environment variables that are referenced from the `application.yaml` to connect to the database.  The `xxxxxx-tns-admin` secret will be mounted in the pod to provide access to the configuration and keystores to allow your application to authenticate to the database.
-
+   When you deploy a Spring Boot microservice application into Oracle Backend for Microservices and AI, the pods that are created will have the values from this secret injected as environment variables that are referenced from the `application.yaml` to connect to the database.  The `xxxxxx-tns-admin` secret will be mounted in the pod to provide access to the configuration and keystores to allow your application to authenticate to the database.

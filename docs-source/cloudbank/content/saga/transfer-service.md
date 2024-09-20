@@ -21,7 +21,7 @@ Now, you will create another new Spring Boot microservice application and implem
 
    ![Maven Project](../images/maven-project.png " ")
 
-   Specify `3.3.1` as the Spring Boot version.
+   Specify `3.3.4` as the Spring Boot version.
 
    ![Spring Boot Version](../images/spring-boot-version.png " ")
 

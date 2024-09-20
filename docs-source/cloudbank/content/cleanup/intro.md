@@ -17,12 +17,11 @@ Quick walk through on how to clean up the module environment.
 
 In this workshop, you will learn how to:
 
-* Clean up your instance of the Oracle Backend for Spring Boot and Microservices and other resources you created during this Live module
+* Clean up your instance of the Oracle Backend for Microservices and AI and other resources you created during this Live module
 
 ### Prerequisites
 
 This module assumes you have:
 
 * An Oracle account
-* Have successfully or partially completed module 1 (Provision an instance of Oracle Backend for Spring Boot and Microservices)
-
+* Have successfully or partially completed module 1 (Provision an instance of Oracle Backend for Microservices and AI)

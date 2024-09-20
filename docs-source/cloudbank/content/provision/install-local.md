@@ -5,11 +5,7 @@ weight = 2
 +++
 
 
-This option allows you to run Oracle Backend for Spring Boot and Microservices in a containerized
-environment on your local machine.  This option is recommended if you do have enough
-free capacity on your local machine to run the environment, a minimum of 64GB RAM and 80GB free disk are recommended.
-This option provides an environment with adequate resources for development and testing, but
-is not suitable for a production-sized deployment or performance testing.
+This option allows you to run Oracle Backend for Microservices and AI in a containerized environment on your local machine.  This option is recommended if you do have enough free capacity on your local machine to run the environment, a minimum of 64GB RAM and 80GB free disk are recommended. This option provides an environment with adequate resources for development and testing, but is not suitable for a production-sized deployment or performance testing.
 
    > **Note:** You only need to choose one of the three deployment options - local, OCI Free Tier or OCI Marketplace.
 

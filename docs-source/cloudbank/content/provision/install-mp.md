@@ -4,7 +4,7 @@ title = "Install from OCI Marketplace"
 weight = 4
 +++
 
-The Oracle Backend for Spring Boot and Microservices can be installed from OCI Marketplace.
+The Oracle Backend for Microservices and AI can be installed from OCI Marketplace.
 
 > **Note:** You only need to choose one of the three deployment options - local, OCI Free Tier or OCI Marketplace.
 
@@ -46,7 +46,7 @@ that only requires a single OCI Compute Instance, please use the "Free Tier" opt
 
 1. In the **Backend as A Service** Section, fill in the following configuration variables as needed and select **Next**:
 
-    * `Compartment` : Select the compartment where you want to install Oracle Backend for Spring Boot and Microservices.
+    * `Compartment` : Select the compartment where you want to install Oracle Backend for Microservices and AI.
     * `Application Name` (optional) : A random pet name that will be used as the application name if left empty.
     * `Edition` : Select *COMMUNITY* Edition. Standard edition will give more options for the installation but those are not required or used in this LiveLab.
     * `Existing Authorization Token` : Leave blank.

@@ -91,5 +91,5 @@ Now that the account service is deployed, you need to expose it through the API 
     }
     ```
 
-    Your service is deployed in the Oracle Backend for Spring Boot and Microservices environment and using the Oracle Autonomous Database instance associated with the backend.
+    Your service is deployed in the Oracle Backend for Microservices and AI environment and using the Oracle Autonomous Database instance associated with the backend.
 

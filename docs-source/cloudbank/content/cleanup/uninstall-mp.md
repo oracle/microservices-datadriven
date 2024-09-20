@@ -6,17 +6,17 @@ weight = 4
 
 > **Note:** These steps apply only if you chose the option to install the full stack from OCI Marketplace.
 
-The Oracle Backend for Spring Boot and Microservices environment was deployed using ORM and Terraform.  The uninstall will use OCI Resource Manager (ORM) to Destroy the stack.
+The Oracle Backend for Microservices and AI environment was deployed using ORM and Terraform.  The uninstall will use OCI Resource Manager (ORM) to Destroy the stack.
 
 1. Navigate to OCI Resource Manager Stacks
 
    ![OCI ORM](../images/orm-stacks.png " ")
 
-2. Make sure you choose the Compartment where you installed Oracle Backend for Spring Boot and Microservices. Click on the Stack Name (which will be different from the screenshot)
+2. Make sure you choose the Compartment where you installed Oracle Backend for Microservices and AI. Click on the Stack Name (which will be different from the screenshot)
 
    ![Select Stack](../images/pick-stack.png " ")
 
-3. After picking the stack. Click destroy. **NOTE** This will stop all resources and remove the Oracle Backend for Spring Boot and Microservices environment. The only way to get it back is to re-deploy the stack
+3. After picking the stack. Click destroy. **NOTE** This will stop all resources and remove the Oracle Backend for Microservices and AI environment. The only way to get it back is to re-deploy the stack
 
    ![Destroy Stack](../images/destroy-stack.png " ")
 

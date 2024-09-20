@@ -10,12 +10,7 @@ and Ollama.
 > **Note:** The example below can also be run on a regular CPU if you are using an
   environment where a GPU is not available, it will just be slower.
 
-Oracle Backend for Spring Boot and Microservices provides an option during installation to provision a set
-of Kubernetes nodes with NVIDIA A10 GPUs that are suitable for running AI workloads.  If you choose that option during
-installation, you may also specify how many nodes are provisioned.  The GPU nodes will be in a separate
-Node Pool to the normal CPU nodes, which allows you to scale it independently of the CPU nodes.
-They are also labeled so that you can target appropriate workloads to them using node selectors
-and/or affinity rules.
+Oracle Backend for Microservices and AI provides an option during installation to provision a set of Kubernetes nodes with NVIDIA A10 GPUs that are suitable for running AI workloads.  If you choose that option during installation, you may also specify how many nodes are provisioned.  The GPU nodes will be in a separate Node Pool to the normal CPU nodes, which allows you to scale it independently of the CPU nodes. They are also labeled so that you can target appropriate workloads to them using node selectors and/or affinity rules.
 
 To view a list of nodes in your cluster with a GPU, you can use this command: 
 
@@ -137,7 +132,7 @@ create a simple chat bot.
         <parent>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-parent</artifactId>
-            <version>3.3.3</version>
+            <version>3.3.4</version>
             <relativePath/> <!-- lookup parent from repository -->
         </parent>
         
@@ -155,7 +150,7 @@ create a simple chat bot.
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
-                <version>3.3.3</version>
+                <version>3.3.4</version>
             </dependency>
         </dependencies>
 
@@ -337,7 +332,7 @@ create a simple chat bot.
 
 1. Prepare the backend for deployment
 
-    The Oracle Backend for Spring Boot and Microservices admin service is not exposed outside the Kubernetes cluster by default. Oracle recommends using a **kubectl** port forwarding tunnel to establish a secure connection to the admin service.
+    The Oracle Backend for Microservices and AI admin service is not exposed outside the Kubernetes cluster by default. Oracle recommends using a **kubectl** port forwarding tunnel to establish a secure connection to the admin service.
 
     Start a tunnel using this command in a new terminal window:
 
@@ -345,13 +340,13 @@ create a simple chat bot.
     $ kubectl -n obaas-admin port-forward svc/obaas-admin 8080
     ```
 
-    Get the password for the `obaas-admin` user. The `obaas-admin` user is the equivalent of the admin or root user in the Oracle Backend for Spring Boot and Microservices backend.
+    Get the password for the `obaas-admin` user. The `obaas-admin` user is the equivalent of the admin or root user in the Oracle Backend for Microservices and AI backend.
 
     ```shell
     $ kubectl get secret -n azn-server  oractl-passwords -o jsonpath='{.data.admin}' | base64 -d
     ```
 
-    Start the Oracle Backend for Spring Boot and Microservices CLI (*oractl*) in a new terminal window using this command:
+    Start the Oracle Backend for Microservices and AI CLI (*oractl*) in a new terminal window using this command:
 
     ```shell
     $ oractl
@@ -370,7 +365,7 @@ create a simple chat bot.
     oractl:>
     ```
 
-    Connect to the Oracle Backend for Spring Boot and Microservices admin service using the `connect` command. Enter `obaas-admin` and the username and use the password you collected earlier.
+    Connect to the Oracle Backend for Microservices and AI admin service using the `connect` command. Enter `obaas-admin` and the username and use the password you collected earlier.
 
     ```shell
     oractl> connect
@@ -382,10 +377,10 @@ create a simple chat bot.
 
 1. Deploy the cahtbot
 
-    You will now deploy your cahtbot to the Oracle Backend for Spring Boot and Microservices using the CLI.  You will deploy into the `application` namespace, and the service name will be `chatbot`.  Run this command to deploy your service, make sure you provide the correct path to your JAR file.  **Note** that this command may take 1-3 minutes to complete:
+    You will now deploy your cahtbot to the Oracle Backend for Microservices and AI using the CLI.  You will deploy into the `application` namespace, and the service name will be `chatbot`.  Run this command to deploy your service, make sure you provide the correct path to your JAR file.  **Note** that this command may take 1-3 minutes to complete:
 
     ```shell
-    oractl:> deploy --app-name application --service-name chatbot --artifact-path /path/to/chatbot-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+    oractl:> deploy --app-name application --service-name chatbot --artifact-path /path/to/chatbot-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --java-version ghcr.io/oracle/graalvm-native-image-obaas:21
     uploading: /Users/atael/tmp/cloudbank/chatbot/target/chatbot-0.0.1-SNAPSHOT.jar
     building and pushing image...
 
@@ -395,7 +390,7 @@ create a simple chat bot.
     oractl:>
     ```
 
-    > What happens when you use the Oracle Backend for Spring Boot and Microservices CLI (*oractl*) **deploy** command? When you run the **deploy** command, the Oracle Backend for Spring Boot and Microservices CLI does several things for you:
+    > What happens when you use the Oracle Backend for Microservices and AI CLI (*oractl*) **deploy** command? When you run the **deploy** command, the OOracle Backend for Microservices and AI CLI does several things for you:
 
     * Uploads the JAR file to server side
     * Builds a container image and push it to the OCI Registry

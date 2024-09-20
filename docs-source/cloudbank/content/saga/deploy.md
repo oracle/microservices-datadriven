@@ -5,7 +5,7 @@ weight = 10
 +++
  
 
-The services are now completed, and you are ready to deploy them to the Oracle Backend for Spring Boot and Microservices.
+The services are now completed, and you are ready to deploy them to the Oracle Backend for Microservices and AI.
 
 > **Note**: You already created the Kubernetes secrets necessary for the account service to access the Oracle Autonomous Database in a previous module, and the `transfer` service does not need access to the database. You also created the journal table that is needed by the update account application in the previous module.
 
@@ -29,9 +29,9 @@ The services are now completed, and you are ready to deploy them to the Oracle B
 
 1. Deploy the Account and Transfer applications
 
-   You will now deploy your updated account application and new transfer application to the Oracle Backend for Spring Boot and Microservices using the CLI.  You will deploy into the `application` namespace, and the service names will be `account` and `transfer` respectively.  
+   You will now deploy your updated account application and new transfer application to the Oracle Backend for Microservices and AI using the CLI.  You will deploy into the `application` namespace, and the service names will be `account` and `transfer` respectively.  
 
-   The Oracle Backend for Spring Boot and Microservices admin service is not exposed outside of the Kubernetes cluster by default. Oracle recommends using a **kubectl** port forwarding tunnel to establish a secure connection to the admin service.
+   The Oracle Backend for Microservices and AI admin service is not exposed outside of the Kubernetes cluster by default. Oracle recommends using a **kubectl** port forwarding tunnel to establish a secure connection to the admin service.
 
    Start a tunnel using this command:
 
@@ -39,7 +39,7 @@ The services are now completed, and you are ready to deploy them to the Oracle B
     $ kubectl -n obaas-admin port-forward svc/obaas-admin 8080:8080
     ```
   
-   Start the Oracle Backend for Spring Boot and Microservices CLI (*oractl*) in the `parent` directory using this command:
+   Start the Oracle Backend for Microservices and AI CLI (*oractl*) in the `parent` directory using this command:
 
     ```shell
     $ oractl
@@ -64,7 +64,7 @@ The services are now completed, and you are ready to deploy them to the Oracle B
     kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.admin}' | base64 -d
     ```
 
-   Connect to the Oracle Backend for Spring Boot and Microservices admin service using this command.  Use `obaas-admin` as the username and the password you obtained in the previous step.
+   Connect to the Oracle Backend for Microservices and AI admin service using this command.  Use `obaas-admin` as the username and the password you obtained in the previous step.
 
     ```shell
     oractl> connect
@@ -77,7 +77,7 @@ The services are now completed, and you are ready to deploy them to the Oracle B
    Run this command to deploy your account service, make sure you provide the correct path to your JAR files.
 
     ```shell
-    oractl:> deploy --app-name application --service-name account --artifact-path /path/to/accounts-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
+    oractl:> deploy --app-name application --service-name account --artifact-path /path/to/accounts-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin --java-version ghcr.io/oracle/graalvm-native-image-obaas:21
     uploading: account/target/accounts-0.0.1-SNAPSHOT.jar
     building and pushing image...
     creating deployment and service... successfully deployed
@@ -87,7 +87,7 @@ The services are now completed, and you are ready to deploy them to the Oracle B
    Run this command to deploy the transfer service, make sure you provide the correct path to your JAR files.
 
     ```shell
-    oractl:> deploy --app-name application --service-name transfer --artifact-path /path/to/transfer-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+    oractl:> deploy --app-name application --service-name transfer --artifact-path /path/to/transfer-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --java-version ghcr.io/oracle/graalvm-native-image-obaas:21
     uploading: transfer/target/transfer-0.0.1-SNAPSHOT.jar
     building and pushing image...
     creating deployment and service... successfully deployed

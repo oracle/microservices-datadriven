@@ -7,7 +7,7 @@ weight = 9
 
 1. Prepare the data source configuration for deployment
 
-    Update the data source configuration in your `src/main/resources/application.yaml` as shown in the example below.  This will cause the service to read the correct database details that will be injected into its pod by the Oracle Backend for Spring Boot and Microservices.
+    Update the data source configuration in your `src/main/resources/application.yaml` as shown in the example below.  This will cause the service to read the correct database details that will be injected into its pod by the Oracle Backend for Microservices and AI.
 
     ```yaml
     datasource:
@@ -100,7 +100,7 @@ weight = 9
 
 1. Prepare the backend for deployment
 
-    The Oracle Backend for Spring Boot and Microservices admin service is not exposed outside the Kubernetes cluster by default. Oracle recommends using a **kubectl** port forwarding tunnel to establish a secure connection to the admin service.
+    The Oracle Backend for Microservices and AI admin service is not exposed outside the Kubernetes cluster by default. Oracle recommends using a **kubectl** port forwarding tunnel to establish a secure connection to the admin service.
 
     Start a tunnel using this command in a new terminal window:
 
@@ -108,13 +108,13 @@ weight = 9
     $ kubectl -n obaas-admin port-forward svc/obaas-admin 8080
     ```
 
-    Get the password for the `obaas-admin` user. The `obaas-admin` user is the equivalent of the admin or root user in the Oracle Backend for Spring Boot and Microservices backend.
+    Get the password for the `obaas-admin` user. The `obaas-admin` user is the equivalent of the admin or root user in the Oracle Backend for Microservices and AI backend.
 
     ```shell
     $ kubectl get secret -n azn-server  oractl-passwords -o jsonpath='{.data.admin}' | base64 -d
     ```
 
-    Start the Oracle Backend for Spring Boot and Microservices CLI (*oractl*) in a new terminal window using this command:
+    Start the Oracle Backend for Microservices and AI CLI (*oractl*) in a new terminal window using this command:
 
     ```shell
     $ oractl
@@ -133,7 +133,7 @@ weight = 9
     oractl:>
     ```
 
-    Connect to the Oracle Backend for Spring Boot and Microservices admin service using the `connect` command. Enter `obaas-admin` and the username and use the password you collected earlier.
+    Connect to the Oracle Backend for Microservices and AI admin service using the `connect` command. Enter `obaas-admin` and the username and use the password you collected earlier.
 
     ```shell
     oractl> connect
@@ -143,7 +143,7 @@ weight = 9
     oractl:>
     ```
 
-    Create a database "binding" by tunning this command.  Enter the password (`Welcome1234##`) when prompted.  This will create a Kubernetes secret in the `application` namespace called `account-db-secrets` which contains the username (`account`), password, and URL to connect to the Oracle Autonomous Database instance associated with the Oracle Backend for Spring Boot and Microservices.
+    Create a database "binding" by tunning this command.  Enter the password (`Welcome1234##`) when prompted.  This will create a Kubernetes secret in the `application` namespace called `account-db-secrets` which contains the username (`account`), password, and URL to connect to the Oracle Autonomous Database instance associated with the Oracle Backend for Microservices and AI.
 
     ```shell
     oractl:> bind --app-name application --service-name account
@@ -156,10 +156,10 @@ weight = 9
 
 1. Deploy the account service
 
-    You will now deploy your account service to the Oracle Backend for Spring Boot and Microservices using the CLI.  You will deploy into the `application` namespace, and the service name will be `account`.  Run this command to deploy your service, make sure you provide the correct path to your JAR file.  **Note** that this command may take 1-3 minutes to complete:
+    You will now deploy your account service to the Oracle Backend for Microservices and AI using the CLI.  You will deploy into the `application` namespace, and the service name will be `account`.  Run this command to deploy your service, make sure you provide the correct path to your JAR file.  **Note** that this command may take 1-3 minutes to complete:
 
     ```shell
-    oractl:> deploy --app-name application --service-name account --artifact-path /path/to/accounts-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+    oractl:> deploy --app-name application --service-name account --artifact-path /path/to/accounts-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --java-version ghcr.io/oracle/graalvm-native-image-obaas:21
     uploading: /Users/atael/tmp/cloudbank/accounts/target/accounts-0.0.1-SNAPSHOT.jar
     building and pushing image...
 
@@ -169,7 +169,7 @@ weight = 9
     oractl:>
     ```
 
-    > What happens when you use the Oracle Backend for Spring Boot and Microservices CLI (*oractl*) **deploy** command? When you run the **deploy** command, the Oracle Backend for Spring Boot and Microservices CLI does several things for you:
+    > What happens when you use the Oracle Backend for Microservices and AI CLI (*oractl*) **deploy** command? When you run the **deploy** command, the Oracle Backend for Microservices and AI CLI does several things for you:
 
     * Uploads the JAR file to server side
     * Builds a container image and push it to the OCI Registry

@@ -21,7 +21,7 @@ Next, you will create the "Test Runner" microservice which you will use to simul
 
    ![Maven Project](../images/maven-project.png " ")
 
-   Specify `3.3.1` as the Spring Boot version.
+   Specify `3.3.4` as the Spring Boot version.
 
    ![Spring Boot Version](../images/spring-boot-version.png " ")
 
@@ -241,7 +241,7 @@ Next, you will create the "Test Runner" microservice which you will use to simul
 
 1. Prepare the backend for deployment
 
-   The Oracle Backend for Spring Boot and Microservices admin service is not exposed outside the Kubernetes cluster by default. Oracle recommends using a **kubectl** port forwarding tunnel to establish a secure connection to the admin service.
+   The Oracle Backend for Microservices and AI admin service is not exposed outside the Kubernetes cluster by default. Oracle recommends using a **kubectl** port forwarding tunnel to establish a secure connection to the admin service.
 
     Start a tunnel using this command in a new terminal window:
 
@@ -249,13 +249,13 @@ Next, you will create the "Test Runner" microservice which you will use to simul
     $ kubectl -n obaas-admin port-forward svc/obaas-admin 8080
     ```
 
-   Get the password for the `obaas-admin` user. The `obaas-admin` user is the equivalent of the admin or root user in the Oracle Backend for Spring Boot and Microservices backend.
+   Get the password for the `obaas-admin` user. The `obaas-admin` user is the equivalent of the admin or root user in the Oracle Backend for Microservices and AI backend.
 
     ```shell
     $ kubectl get secret -n azn-server  oractl-passwords -o jsonpath='{.data.admin}' | base64 -d
     ```
 
-   Start the Oracle Backend for Spring Boot and Microservices CLI (*oractl*) in a new terminal window using this command:
+   Start the Oracle Backend for Microservices and AI CLI (*oractl*) in a new terminal window using this command:
 
     ```shell
     $ oractl
@@ -274,7 +274,7 @@ Next, you will create the "Test Runner" microservice which you will use to simul
     oractl:>
     ```
 
-    Connect to the Oracle Backend for Spring Boot and Microservices admin service using the `connect` command. Enter `obaas-admin` and the username and use the password you collected earlier.
+    Connect to the Oracle Backend for Microservices and AI admin service using the `connect` command. Enter `obaas-admin` and the username and use the password you collected earlier.
 
     ```shell
     oractl> connect
@@ -294,10 +294,10 @@ Next, you will create the "Test Runner" microservice which you will use to simul
 
 1. Deploy the Test Runner service
 
-   You will now deploy your Test Runner service to the Oracle Backend for Spring Boot and Microservices using the CLI. Run this command to deploy your service, make sure you provide the correct path to your JAR file. **Note** that this command may take 1-3 minutes to complete:
+   You will now deploy your Test Runner service to the Oracle Backend for Microservices and AI using the CLI. Run this command to deploy your service, make sure you provide the correct path to your JAR file. **Note** that this command may take 1-3 minutes to complete:
 
     ```shell
-    oractl:> deploy --app-name application --service-name testrunner --artifact-path /path/to/testrunner-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+    oractl:> deploy --app-name application --service-name testrunner --artifact-path /path/to/testrunner-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --java-version ghcr.io/oracle/graalvm-native-image-obaas:21
     uploading: testrunner/target/testrunner-0.0.1-SNAPSHOT.jarbuilding and pushing image...
     creating deployment and service... successfully deployed
     oractl:>

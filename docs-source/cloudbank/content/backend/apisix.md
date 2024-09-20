@@ -4,7 +4,7 @@ title = "Explore APISIX API Gateway"
 weight = 6
 +++
 
-Oracle Backend for Spring Boot and Microservices includes APISIX API Gateway to manage which services are made available outside the Kubernetes cluster.  APISIX allows you to manage many aspects of the services' APIs including authentication, logging, which HTTP methods are accepted, what URL paths are exposed, and also includes capabilities like rewriting, filtering, traffic management and has a rich plugin ecosystem to enhance it with additional capabilities.  You can manage the APISIX API Gateway using the APISIX Dashboard.
+Oracle Backend for Microservices and AI includes APISIX API Gateway to manage which services are made available outside the Kubernetes cluster.  APISIX allows you to manage many aspects of the services' APIs including authentication, logging, which HTTP methods are accepted, what URL paths are exposed, and also includes capabilities like rewriting, filtering, traffic management and has a rich plugin ecosystem to enhance it with additional capabilities.  You can manage the APISIX API Gateway using the APISIX Dashboard.
 
 1. Access the APISIX Dashboard
 

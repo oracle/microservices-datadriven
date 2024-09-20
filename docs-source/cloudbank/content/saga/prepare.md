@@ -15,14 +15,14 @@ You will update the Account service that you built in the previous module to add
       <dependency>
         <groupId>com.oracle.microtx.lra</groupId>
         <artifactId>microtx-lra-spring-boot-starter</artifactId>
-        <version>23.4.2</version>
+        <version>24.2.1</version>
       </dependency>
       
       ```
 
 1. Update the Spring Boot application configuration file
 
-   Update your Account service's Spring Boot configuration file, `application.yaml` in `src/main/resources`. Add a new `lra` section with the URL for the LRA coordinator. The URL shown here is for the Oracle Transaction Manager for Microservices that was installed as part of the Oracle Backend for Spring Boot and Microservices. **Note**: This URL is from the point of view of a service running it the same Kubernetes cluster.  
+   Update your Account service's Spring Boot configuration file, `application.yaml` in `src/main/resources`. Add a new `lra` section with the URL for the LRA coordinator. The URL shown here is for the Oracle Transaction Manager for Microservices that was installed as part of the Oracle Backend for Microservices and AI. **Note**: This URL is from the point of view of a service running it the same Kubernetes cluster.  
 
     ```yaml
     

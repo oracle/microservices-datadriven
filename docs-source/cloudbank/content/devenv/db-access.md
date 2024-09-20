@@ -4,11 +4,11 @@ title = "Database Access"
 weight = 9
 +++
 
-The Oracle Backend for Spring Boot and Microservices includes an Oracle Database. An instance of an Oracle Autonomous Database (Shared) is created during installation.
+The Oracle Backend for Microservices and AI includes an Oracle Database. An instance of an Oracle Autonomous Database (Shared) is created during installation.
 
 To access the database from a local machine you need to download the wallet and configure `SQLcl` to use the downloaded wallet.
 
-### Download the Wallet
+## Download the Wallet
 
 1. Login into the OCI Console. [Oracle Cloud](https://cloud.oracle.com/)
 
@@ -36,7 +36,7 @@ To access the database from a local machine you need to download the wallet and 
 
    ![Close Dialog Box](../images/close-dialog-box.png " ")
 
-### Access the Database using SQLcl and the Wallet
+## Access the Database using SQLcl and the Wallet
 
 1. Obtain the ADMIN password
 

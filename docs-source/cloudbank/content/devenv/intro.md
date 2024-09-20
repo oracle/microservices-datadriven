@@ -5,7 +5,7 @@ weight = 1
 +++
 
 
-This module walks you through setting up your development environment to work with Oracle Backend for Spring Boot and Microservices.
+This module walks you through setting up your development environment to work with Oracle Backend for Microservices and AI.
 
 Estimated time: 20 minutes
 
@@ -32,7 +32,7 @@ If you wish to test locally or offline, the following additional tools are recom
 
 In this module, you will:
 
-- Install the tools needed to develop and deploy applications using Oracle Backend for Spring Boot and Microservices
+- Install the tools needed to develop and deploy applications using Oracle Backend for Microservices and AI.
 
 ### Prerequisites
 

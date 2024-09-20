@@ -4,7 +4,7 @@ title = "Using the VS Code plugin"
 weight = 3
 +++
 
-1. If you have done the optional **Task 11** of **Lab. 2**, you could proceed doing the activities from **Task 3** to **Task 5** using **Oracle Backend for Spring Boot VS Code plugin**.
+1. If you have done the optional **Task 11** of **Lab. 2**, you could proceed doing the activities from **Task 3** to **Task 5** using **Oracle Backend for Microservices and AI VS Code plugin**.
     If you don't see the plugin in the left bar, with the Oracle logo, as shown here:
 
     ![Additional](../images/additional.png " ")
@@ -34,7 +34,7 @@ weight = 3
 
 2. How to access to cluster
 
-    Until you create a dedicated ssh tunnel to the Kubernetes cluster, and you don't connect to Oracle Backend for Spring Boot admin services, you will not be able to browse resources included into the Oracle Backend for Spring Boot deployment. To do this, follow these steps:
+    Until you create a dedicated ssh tunnel to the Kubernetes cluster, and you don't connect to Oracle Backend for Microservices and AI admin services, you will not be able to browse resources included into the Oracle Backend for Microservices and AI deployment. To do this, follow these steps:
 
     * Obtain the `obaas-admin` password by executing the following command in a terminal window to get the `obaas-admin` password:
 
@@ -46,7 +46,7 @@ weight = 3
 
         ![Credentials](../images/credentials.png " ")
 
-    * Enter the username *obaas-admin* for the Oracle Backend for Spring Boot.
+    * Enter the username *obaas-admin* for the Oracle Backend for Microservices and AI.
 
         ![Username](../images/username.png " ")
 
@@ -74,7 +74,7 @@ weight = 3
 
         ![okTunnel](../images/oktunnel.png " ")
 
-        **NOTE**: if the K8s cluster it's not related to an Oracle Backend for Spring Boot deployment, the tunnel creation will fail. In this case in command palette execute a window reload too chose another cluster. If you have any problem in connection, you could start another tunnel: the plugin will try on another local port to connect to the cluster.
+        **NOTE**: if the K8s cluster it's not related to an Oracle Backend for Microservices and AI deployment, the tunnel creation will fail. In this case in command palette execute a window reload too chose another cluster. If you have any problem in connection, you could start another tunnel: the plugin will try on another local port to connect to the cluster.
 
     * Again select the cluster and by clicking the right mouse button choose **Connect** menu item. This will create a session with credentials set at the first step.
 
@@ -89,7 +89,7 @@ weight = 3
     You'll see four top classes of resources that can be exploded in underlying items:
     * **applications**: the list of applications deployed and the services holding
     * **Oracle DB**: in this release we have one Database in which are stored configuration and schema related to services deployed
-    * **platformServices**: the list of Oracle Backend for Spring Boot deployed services, like Grafana, Spring, Apisix, Eureka and Jaeger.
+    * **platformServices**: the list of Oracle Backend for Microservices and AI deployed services, like Grafana, Spring, Apisix, Eureka and Jaeger.
     * **oBaasConf**: the list of keys defined by application, stored in the ADB provisioned and available to share configuration information among services in each application.
 
     Let's go to show the operations you can do on each item of browse tree.

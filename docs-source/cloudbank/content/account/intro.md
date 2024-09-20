@@ -20,7 +20,7 @@ In this lab, you will:
 * Prepare objects in the Oracle Database using SQLcl
 * Use Spring Data JPA to allow your microservice to use the data in the Oracle database
 * Create REST services to allow clients to perform create, read, update, and delete operations on accounts
-* Deploy your microservice into the backend (Oracle Backend for Spring Boot and Microservices)
+* Deploy your microservice into the backend (Oracle Backend for Microservices and AI)
 
 ### Prerequisites (Optional)
 
