@@ -24,7 +24,7 @@ weight = 9
 
     ```xml
     
-    <spring-cloud.version>2023.0.0</spring-cloud.version>
+    <spring-cloud.version>2023.0.3</spring-cloud.version>
     
     ```
 
