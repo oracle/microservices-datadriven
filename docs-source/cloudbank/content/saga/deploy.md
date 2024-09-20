@@ -11,13 +11,13 @@ The services are now completed, and you are ready to deploy them to the Oracle B
 
 1. Build the Account and Transfer applications into JAR files
 
-  To build a JAR file from the Account application, issue this command in the `account` directory.  Then issue the same command from the `transfer` directory to build the Transfer application into a JAR file too.
+   To build a JAR file from the Account application, issue this command in the `account` directory.  Then issue the same command from the `transfer` directory to build the Transfer application into a JAR file too.
 
      ```shell
     $ mvn clean package -DskipTests
     ```
 
-  You will now have a JAR file for each application, as can be seen with this command (the command needs to be executed in the `parent` directory for the Account and Transfer applications):
+   You will now have a JAR file for each application, as can be seen with this command (the command needs to be executed in the `parent` directory for the Account and Transfer applications):
 
     ```shell
     $ find . -name \*SNAPSHOT.jar
@@ -29,17 +29,17 @@ The services are now completed, and you are ready to deploy them to the Oracle B
 
 1. Deploy the Account and Transfer applications
 
-  You will now deploy your updated account application and new transfer application to the Oracle Backend for Spring Boot and Microservices using the CLI.  You will deploy into the `application` namespace, and the service names will be `account` and `transfer` respectively.  
+   You will now deploy your updated account application and new transfer application to the Oracle Backend for Spring Boot and Microservices using the CLI.  You will deploy into the `application` namespace, and the service names will be `account` and `transfer` respectively.  
 
-  The Oracle Backend for Spring Boot and Microservices admin service is not exposed outside of the Kubernetes cluster by default. Oracle recommends using a **kubectl** port forwarding tunnel to establish a secure connection to the admin service.
+   The Oracle Backend for Spring Boot and Microservices admin service is not exposed outside of the Kubernetes cluster by default. Oracle recommends using a **kubectl** port forwarding tunnel to establish a secure connection to the admin service.
 
-  Start a tunnel using this command:
+   Start a tunnel using this command:
 
     ```shell
     $ kubectl -n obaas-admin port-forward svc/obaas-admin 8080:8080
     ```
   
-  Start the Oracle Backend for Spring Boot and Microservices CLI (*oractl*) in the `parent` directory using this command:
+   Start the Oracle Backend for Spring Boot and Microservices CLI (*oractl*) in the `parent` directory using this command:
 
     ```shell
     $ oractl
@@ -58,13 +58,13 @@ The services are now completed, and you are ready to deploy them to the Oracle B
     oractl:>
     ```
 
-  Obtain the `obaas-admin` password by executing this command:
+   Obtain the `obaas-admin` password by executing this command:
 
     ```shell
     kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.admin}' | base64 -d
     ```
 
-  Connect to the Oracle Backend for Spring Boot and Microservices admin service using this command.  Use `obaas-admin` as the username and the password you obtained in the previous step.
+   Connect to the Oracle Backend for Spring Boot and Microservices admin service using this command.  Use `obaas-admin` as the username and the password you obtained in the previous step.
 
     ```shell
     oractl> connect
@@ -74,7 +74,7 @@ The services are now completed, and you are ready to deploy them to the Oracle B
     oractl:>
     ```
 
-  Run this command to deploy your account service, make sure you provide the correct path to your JAR files.
+   Run this command to deploy your account service, make sure you provide the correct path to your JAR files.
 
     ```shell
     oractl:> deploy --app-name application --service-name account --artifact-path /path/to/accounts-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin

@@ -7,7 +7,7 @@ weight = 4
 
 1. Create the queues
 
-  Connect to the database as the `ADMIN` user and execute the following statements to give the `account` user the necessary permissions to use queues. **Note**: module 2, Task 9 provided details on how to connect to the database.
+   Connect to the database as the `ADMIN` user and execute the following statements to give the `account` user the necessary permissions to use queues. **Note**: module 2, Task 9 provided details on how to connect to the database.
 
     ```sql
     grant execute on dbms_aq to account;
@@ -16,7 +16,7 @@ weight = 4
     commit;
     ```
 
-  Now connect as the `account` user and create the queues by executing these statements (replace `[TNS-ENTRY]` with your environment information). You can get the TNS Entries by executing `SHOW TNS` in the sql shell:
+   Now connect as the `account` user and create the queues by executing these statements (replace `[TNS-ENTRY]` with your environment information). You can get the TNS Entries by executing `SHOW TNS` in the sql shell:
 
     ```sql
     connect account/Welcome1234##@[TNS-ENTRY];
@@ -44,4 +44,4 @@ weight = 4
     /
     ```
 
-  You have created two queues named `deposits` and `clearances`. Both of them use the JMS `TextMessage` format for the payload.
+   You have created two queues named `deposits` and `clearances`. Both of them use the JMS `TextMessage` format for the payload.

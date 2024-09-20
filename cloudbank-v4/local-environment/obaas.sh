@@ -32,7 +32,7 @@ docker cp ./txeventq-privs.sql obaas:/var/lib/rancher/k3s/storage/startup-script
 
 echo "Import images (first time will download them, and will wait a few seconds for cluster to be up)"
 if [ ! -f $(pwd)/image_archive/images.tar ]; then
-  wget -o $(pwd)/image_archive/images.tar https://bit.ly/obaas-image-archive
+  wget -O $(pwd)/image_archive/images.tar https://bit.ly/obaas-image-archive
 fi
 sleep 10
 docker exec -ti obaas ctr images import /image_archive/images.tar

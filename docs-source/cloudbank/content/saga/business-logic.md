@@ -10,7 +10,7 @@ The deposit service will be responsible for depositing funds into accounts. It w
 
 1. Implement the business logic for the **deposit** method.
 
-  This method should write a journal entry for the deposit, but should not update the account balance.  Here is the code for this method:
+   This method should write a journal entry for the deposit, but should not update the account balance.  Here is the code for this method:
 
     ```java
     
@@ -55,7 +55,7 @@ The deposit service will be responsible for depositing funds into accounts. It w
 
 1. Implement the **complete** method
 
-  This method should update the LRA status to **completing**, update the account balance, change the bank transaction (journal entry) status from pending to completed and the set the LRA status too **completed**.  Here is the code for this method:
+   This method should update the LRA status to **completing**, update the account balance, change the bank transaction (journal entry) status from pending to completed and the set the LRA status too **completed**.  Here is the code for this method:
 
     ```java
     
@@ -88,7 +88,7 @@ The deposit service will be responsible for depositing funds into accounts. It w
 
 1. Implement the **compensate** method
 
-  This method should update both the deposit record in the journal and the LRA status too **compensated**.  Here is the code for this method:
+   This method should update both the deposit record in the journal and the LRA status too **compensated**.  Here is the code for this method:
 
     ```java
     
@@ -110,7 +110,7 @@ The deposit service will be responsible for depositing funds into accounts. It w
 
 1. Implement the **status** method
 
-  This method returns the LRA status.  Here is the code for this method:
+   This method returns the LRA status.  Here is the code for this method:
 
     ```java
     
@@ -130,7 +130,7 @@ The deposit service will be responsible for depositing funds into accounts. It w
 
 1. Implement the **after LRA** method
 
-  This method should perform any steps necessary to finalize or clean up after the LRA.  In this case, all you need to do is update the status of the deposit entry in the journal.  Here is the code for this method:
+   This method should perform any steps necessary to finalize or clean up after the LRA.  In this case, all you need to do is update the status of the deposit entry in the journal.  Here is the code for this method:
 
     ```java
     

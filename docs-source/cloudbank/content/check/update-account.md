@@ -8,7 +8,7 @@ Starting with the account service that you built in the previous lab, you will t
 
 1. Create the Journal model
 
-  Create a new Java file in `src/main/java/com/example/accounts/model` called `Journal.java`. In this class you can define the fields that make up the journal.  Note that you created the Journal table in the previous lab. You will not use the `lraId` and `lraState` fields until a later lab. To simplify this lab, create an additional constructor that defaults those fields to suitable values. Your new class should look like this:
+   Create a new Java file in `src/main/java/com/example/accounts/model` called `Journal.java`. In this class you can define the fields that make up the journal.  Note that you created the Journal table in the previous lab. You will not use the `lraId` and `lraState` fields until a later lab. To simplify this lab, create an additional constructor that defaults those fields to suitable values. Your new class should look like this:
 
     ```java
     package com.example.account.model;
@@ -68,7 +68,7 @@ Starting with the account service that you built in the previous lab, you will t
 
 1. Create the Journal repository
 
-  Create a new Java file in `src/main/java/com/example/account/repository` called `JournalRepository.java`. This should be an interface that extends `JpaRepository` and you will need to define a method to find journal entries by `accountId`. Your interface should look like this:
+   Create a new Java file in `src/main/java/com/example/account/repository` called `JournalRepository.java`. This should be an interface that extends `JpaRepository` and you will need to define a method to find journal entries by `accountId`. Your interface should look like this:
 
     ```java
     package com.example.account.repository;
@@ -86,7 +86,7 @@ Starting with the account service that you built in the previous lab, you will t
 
 1. Update the `AccountController` constructor
 
-  Update the constructor for `AccountController` so that both the repositories are injected.  You will need to create a variable to hold each.  Your updated constructor should look like this:
+   Update the constructor for `AccountController` so that both the repositories are injected.  You will need to create a variable to hold each.  Your updated constructor should look like this:
 
     ```java
     import com.example.repository.JournalRepository;
@@ -104,7 +104,7 @@ Starting with the account service that you built in the previous lab, you will t
 
 1. Add new method to POST entries to the journal
 
-  Add a new HTTP POST endpoint in the `AccountController.java` class. The method accepts a journal entry in the request body and saves it into the database. Your new method should look like this:
+   Add a new HTTP POST endpoint in the `AccountController.java` class. The method accepts a journal entry in the request body and saves it into the database. Your new method should look like this:
 
     ```java
     import com.example.model.Journal;
@@ -129,7 +129,7 @@ Starting with the account service that you built in the previous lab, you will t
 
 1. Add new method to get journal entries
 
-  Add a new HTTP GET endpoint in the `AccountController.java` class to get a list of journal entries for a given `accountId`. Your new method should look like this:
+   Add a new HTTP GET endpoint in the `AccountController.java` class to get a list of journal entries for a given `accountId`. Your new method should look like this:
 
     ```java
     import com.example.account.repository.JournalRepository;
@@ -142,7 +142,7 @@ Starting with the account service that you built in the previous lab, you will t
 
 1. Add new method to update an existing journal entry
 
-  Add a new HTTP POST endpoint to update and existing journal entry to a cleared deposit.  To do this, you set the `journalType` field to `DEPOSIT`.  Your method should accept the `journalId` as a path variable.  If the specified journal entry does not exist, return a 202 (Accepted) to indicate the message was received but there was nothing to do.  Returning a 404 (Not found) would cause an error and the message would get requeued and reprocessed, which we don't want.  Your new method should look like this:
+   Add a new HTTP POST endpoint to update and existing journal entry to a cleared deposit.  To do this, you set the `journalType` field to `DEPOSIT`.  Your method should accept the `journalId` as a path variable.  If the specified journal entry does not exist, return a 202 (Accepted) to indicate the message was received but there was nothing to do.  Returning a 404 (Not found) would cause an error and the message would get requeued and reprocessed, which we don't want.  Your new method should look like this:
 
     ```java
     @PostMapping("/account/journal/{journalId}/clear")
@@ -165,17 +165,17 @@ Starting with the account service that you built in the previous lab, you will t
 
 1. Build a JAR file for deployment
 
-  Run the following command to build the JAR file.  Note that you will need to skip tests now, since you updated the `application.yaml` and it no longer points to your local test database instance.
+   Run the following command to build the JAR file.  Note that you will need to skip tests now, since you updated the `application.yaml` and it no longer points to your local test database instance.
 
     ```shell
     $ mvn clean package -DskipTests
     ```
 
-  The service is now ready to deploy to the backend.
+   The service is now ready to deploy to the backend.
 
 1. Get the password for the `obaas-admin` user. The `obaas-admin` user is the equivalent of the admin or root user in the Oracle Backend for Spring Boot and Microservices backend.
 
-  Execute the following command to get the password:
+   Execute the following command to get the password:
 
     ```shell
     $ kubectl get secret -n azn-server  oractl-passwords -o jsonpath='{.data.admin}' | base64 -d
@@ -183,15 +183,15 @@ Starting with the account service that you built in the previous lab, you will t
 
 1. Prepare the backend for deployment
 
-  The Oracle Backend for Spring Boot and Microservices admin service is not exposed outside the Kubernetes cluster by default. Oracle recommends using a **kubectl** port forwarding tunnel to establish a secure connection to the admin service.
+   The Oracle Backend for Spring Boot and Microservices admin service is not exposed outside the Kubernetes cluster by default. Oracle recommends using a **kubectl** port forwarding tunnel to establish a secure connection to the admin service.
 
-  Start a tunnel (unless you already have the tunnel running from previous labs) using this command:
+   Start a tunnel (unless you already have the tunnel running from previous labs) using this command:
 
     ```shell
     $ kubectl -n obaas-admin port-forward svc/obaas-admin 8080
     ```
 
-  Start the Oracle Backend for Spring Boot and Microservices CLI (*oractl*) using this command:
+   Start the Oracle Backend for Spring Boot and Microservices CLI (*oractl*) using this command:
 
     ```shell
     $ oractl
@@ -210,7 +210,7 @@ Starting with the account service that you built in the previous lab, you will t
       oractl:>
     ```
 
-  Connect to the Oracle Backend for Spring Boot and Microservices admin service using the `connect` command. Enter `obaas-admin` and the username and use the password you collected earlier.
+   Connect to the Oracle Backend for Spring Boot and Microservices admin service using the `connect` command. Enter `obaas-admin` and the username and use the password you collected earlier.
 
     ```shell
     oractl:>connect
@@ -222,7 +222,7 @@ Starting with the account service that you built in the previous lab, you will t
 
 1. Deploy the account service
 
-  You will now deploy your account service to the Oracle Backend for Spring Boot and Microservices using the CLI. Run this command to redeploy your service, make sure you provide the correct path to your JAR file. **Note** that this command may take 1-3 minutes to complete:
+   You will now deploy your account service to the Oracle Backend for Spring Boot and Microservices using the CLI. Run this command to redeploy your service, make sure you provide the correct path to your JAR file. **Note** that this command may take 1-3 minutes to complete:
 
     ```shell
     oractl:> deploy --app-name application --service-name account --artifact-path /path/to/account-0.0.1-SNAPSHOT.jar --image-version 0.0.1
@@ -233,7 +233,7 @@ Starting with the account service that you built in the previous lab, you will t
 
 1. Verify the new endpoints in the account service
 
-  In the next three commands, you need to provide the correct IP address for the API Gateway in your backend environment.  You can find the IP address using this command, you need the one listed in the **`EXTERNAL-IP`** column:
+   In the next three commands, you need to provide the correct IP address for the API Gateway in your backend environment.  You can find the IP address using this command, you need the one listed in the **`EXTERNAL-IP`** column:
 
     ```shell
     $ kubectl -n ingress-nginx get service ingress-nginx-controller
@@ -241,7 +241,7 @@ Starting with the account service that you built in the previous lab, you will t
     ingress-nginx-controller   LoadBalancer   10.123.10.127   100.20.30.40  80:30389/TCP,443:30458/TCP   13d
     ```
 
-  Test the create journal entry endpoint (make sure you use an `accountId` that exits in your database) with this command, use the IP address for your API Gateway.
+   Test the create journal entry endpoint (make sure you use an `accountId` that exits in your database) with this command, use the IP address for your API Gateway.
 
     ```shell
     $ curl -i -X POST \
@@ -257,9 +257,9 @@ Starting with the account service that you built in the previous lab, you will t
     {"journalId":1,"journalType":"PENDING","accountId":2,"lraId":"0","lraState":"","journalAmount":100}
     ```
 
-  Notice that the response contains a `journalId` which you will need in a later command, and that the `journalType` is `PENDING`.
+   Notice that the response contains a `journalId` which you will need in a later command, and that the `journalType` is `PENDING`.
 
-  Test the get journal entries endpoint with this command, use the IP address for your API Gateway and the same `accountId` as in the previous step. Your output may be different:
+   Test the get journal entries endpoint with this command, use the IP address for your API Gateway and the same `accountId` as in the previous step. Your output may be different:
 
     ```shell
     $ curl -i http://[EXTERNAL-IP]/api/v1/account/[accountId]/journal
@@ -271,7 +271,7 @@ Starting with the account service that you built in the previous lab, you will t
     [{"journalId":1,"journalType":"PENDING","accountId":2,"lraId":"0","lraState":null,"journalAmount":100}]
     ```
 
-  Test the update/clear journal entry endpoint with this command, use the IP address for your API Gateway and the `journalId` from the first command's response:
+   Test the update/clear journal entry endpoint with this command, use the IP address for your API Gateway and the `journalId` from the first command's response:
 
     ```shell
     $ curl -i -X POST http://[EXTERNAL-IP]/api/v1/account/journal/[journalId]/clear
@@ -284,5 +284,5 @@ Starting with the account service that you built in the previous lab, you will t
     {"journalId":1,"journalType":"DEPOSIT","accountId":2,"lraId":"0","lraState":null,"journalAmount":100}
     ```
 
-  That completes the updates for the Account service.
+   That completes the updates for the Account service.
 

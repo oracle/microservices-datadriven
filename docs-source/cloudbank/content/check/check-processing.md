@@ -8,57 +8,57 @@ Next, you will create the "Check Processing" microservice which you will receive
 
 1. Create a new Java Project for the `checks` service.
 
-  In the Explorer of VS Code open `Java Project` and click the **plus** sign to add a Java Project to your workspace.
+   In the Explorer of VS Code open `Java Project` and click the **plus** sign to add a Java Project to your workspace.
 
-  ![Add Java Project](../images/add_java_project.png " ")
+   ![Add Java Project](../images/add_java_project.png " ")
 
-  Select Spring Boot Project.
+   Select Spring Boot Project.
 
-  ![Spring Boot Project](../images/spring-boot-prj.png " ")
+   ![Spring Boot Project](../images/spring-boot-prj.png " ")
 
-  Select Maven Project.
+   Select Maven Project.
 
-  ![Maven Project](../images/maven-project.png " ")
+   ![Maven Project](../images/maven-project.png " ")
 
-  Specify `3.3.1` as the Spring Boot version.
+   Specify `3.3.1` as the Spring Boot version.
 
-  ![Spring Boot Version](../images/spring-boot-version.png " ")
+   ![Spring Boot Version](../images/spring-boot-version.png " ")
 
-  Use `com.example` as the Group Id.
+   Use `com.example` as the Group Id.
 
-  ![Group Id](../images/group-id.png " ")
+   ![Group Id](../images/group-id.png " ")
 
-  Enter `checks` as the Artifact Id.
+   Enter `checks` as the Artifact Id.
 
-  ![Artifact Id](../images/artifact-id-checks.png " ")
+   ![Artifact Id](../images/artifact-id-checks.png " ")
 
-  Use `JAR` as the Packaging Type.
+   Use `JAR` as the Packaging Type.
 
-  ![Packaging Type](../images/packaging-type.png " ")
+   ![Packaging Type](../images/packaging-type.png " ")
 
-  Select Java version `21`.
+   Select Java version `21`.
 
-  ![Java Version](../images/java-version.png " ")
+   ![Java Version](../images/java-version.png " ")
 
-  Search for `Spring Web`, `Lombok`, `Feign` and `Eureka Client`. When all are selected press **Enter**.
+   Search for `Spring Web`, `Lombok`, `Feign` and `Eureka Client`. When all are selected press **Enter**.
 
-  ![Search for Spring Web](../images/checks-dependencies.png " ")
+   ![Search for Spring Web](../images/checks-dependencies.png " ")
 
-  Press **Enter** to continue and create the Java Project
+   Press **Enter** to continue and create the Java Project
 
-  ![Create Project](../images/create-project.png " ")
+   ![Create Project](../images/create-project.png " ")
 
-  Select the `root` location for your project e.g. side by side with the `checks`, `testrunner` and `account` projects.
+   Select the `root` location for your project e.g. side by side with the `checks`, `testrunner` and `account` projects.
 
-  ![Project Location](../images/project-location.png " ")
+   ![Project Location](../images/project-location.png " ")
 
-  When the project opens click **Add to Workspace**
+   When the project opens click **Add to Workspace**
 
-  ![Add to Workspace](../images/add-to-workspace.png " ")
+   ![Add to Workspace](../images/add-to-workspace.png " ")
 
 1. Update the `pom.xml` file for Oracle Spring Boot Starters
 
-  It is very similar to the POM for the account and test runner services, however the dependencies are slightly different.  This service will use the "Web" Spring Boot Starter which will allow it to expose REST endpoints and make REST calls to other services. It also uses the two Oracle Spring Boot Starters for UCP and Wallet to access the database. You will also add the Eureka client and [OpenFeign](https://spring.io/projects/spring-cloud-openfeign) dependencies to allow service discovery and client side load balancing. Open the `pom.xml` and add the following to the `pom.xml`:
+   It is very similar to the POM for the account and test runner services, however the dependencies are slightly different.  This service will use the "Web" Spring Boot Starter which will allow it to expose REST endpoints and make REST calls to other services. It also uses the two Oracle Spring Boot Starters for UCP and Wallet to access the database. You will also add the Eureka client and [OpenFeign](https://spring.io/projects/spring-cloud-openfeign) dependencies to allow service discovery and client side load balancing. Open the `pom.xml` and add the following to the `pom.xml`:
 
     ```xml
     
@@ -77,7 +77,7 @@ Next, you will create the "Check Processing" microservice which you will receive
 
 1. Create the Spring Boot application YAML file
 
-  In the `checks` project, rename the file called `application.properties` to `application.yaml` located in the `src/main/resources`. This will be the Spring Boot application configuration file. Add the following content:
+   In the `checks` project, rename the file called `application.properties` to `application.yaml` located in the `src/main/resources`. This will be the Spring Boot application configuration file. Add the following content:
 
     ```yaml
     spring:
@@ -101,11 +101,11 @@ Next, you will create the "Check Processing" microservice which you will receive
         enabled: true
     ```
 
-  This is the Spring Boot application YAML file, which contains the configuration information for this service.  In this case, you need to provide the application name and the connection details for the database hosting the queues and the information for the Eureka server as the checks application will use a Feign client.
+   This is the Spring Boot application YAML file, which contains the configuration information for this service.  In this case, you need to provide the application name and the connection details for the database hosting the queues and the information for the Eureka server as the checks application will use a Feign client.
 
 1. Create the main Spring Application class
 
-  In the `checks` directory, create a new directory called `src/main/java/com/example/checks` and in that directory, create a new Java file called `ChecksApplication.java` with this content.  This is a standard Spring Boot main class, notice the `SpringBootApplication` annotation on the class.  It also has the `EnableJms` annotation which tells Spring Boot to enable JMS functionality in this application.  The `main` method is a normal Spring Boot main method:
+   In the `checks` directory, create a new directory called `src/main/java/com/example/checks` and in that directory, create a new Java file called `ChecksApplication.java` with this content.  This is a standard Spring Boot main class, notice the `SpringBootApplication` annotation on the class.  It also has the `EnableJms` annotation which tells Spring Boot to enable JMS functionality in this application.  The `main` method is a normal Spring Boot main method:
 
     ```java
     package com.example.checks;
@@ -163,15 +163,15 @@ Next, you will create the "Check Processing" microservice which you will receive
     }
     ```  
 
-  As in the Test Runner service, you will also need the `MessageConverter` and `JmsTemplate` beans.  You will also need an additional bean in this service, the `JmsListenerConnectionFactory`.  This bean will be used to create listeners that receive messages from JMS queues.  Note that the JMS `ConnectionFactory` is injected as in the Test Runner service.
+   As in the Test Runner service, you will also need the `MessageConverter` and `JmsTemplate` beans.  You will also need an additional bean in this service, the `JmsListenerConnectionFactory`.  This bean will be used to create listeners that receive messages from JMS queues.  Note that the JMS `ConnectionFactory` is injected as in the Test Runner service.
 
 1. Create the model classes
 
-  Create a directory called `src/main/java/com/example/testrunner/model` and in that directory create the two model classes.  
+   Create a directory called `src/main/java/com/example/testrunner/model` and in that directory create the two model classes.  
 
-  **Note**: These are in the `testrunner` package, not the `checks` package!  The classes used for serialization and deserialization of the messages need to be the same so that the `MessageConverter` knows what to do.
+   **Note**: These are in the `testrunner` package, not the `checks` package!  The classes used for serialization and deserialization of the messages need to be the same so that the `MessageConverter` knows what to do.
 
-  First, `CheckDeposit.java` with this content:
+   First, `CheckDeposit.java` with this content:
 
     ```java
     package com.example.testrunner.model;
@@ -195,7 +195,7 @@ Next, you will create the "Check Processing" microservice which you will receive
     }
     ```
 
-  And then, `Clearance.java` with this content:
+   And then, `Clearance.java` with this content:
 
     ```java
     package com.example.testrunner.model;
@@ -220,10 +220,10 @@ Next, you will create the "Check Processing" microservice which you will receive
 
 1. Create the OpenFeign clients
 
-  > **OpenFeign**
-  > In this step you will use OpenFeign to create a client.  OpenFeign allows you to look up an instance of a service from the Spring Eureka Service Registry using its key/identifier, and will create a client for you to call endpoints on that service.  It also provides client-side load balancing.  This allows you to easily create REST clients without needing to know the address of the service or how many instances are running.
+   > **OpenFeign**
+   > In this step you will use OpenFeign to create a client.  OpenFeign allows you to look up an instance of a service from the Spring Eureka Service Registry using its key/identifier, and will create a client for you to call endpoints on that service.  It also provides client-side load balancing.  This allows you to easily create REST clients without needing to know the address of the service or how many instances are running.
 
-  Create a directory called `src/main/java/com/example/checks/clients` and in this directory create a new Java interface called `AccountClient.java` to define the OpenFeign client for the account service. Here is the content:
+   Create a directory called `src/main/java/com/example/checks/clients` and in this directory create a new Java interface called `AccountClient.java` to define the OpenFeign client for the account service. Here is the content:
 
     ```java
     package com.example.checks.clients;
@@ -245,9 +245,9 @@ Next, you will create the "Check Processing" microservice which you will receive
     }
     ```
 
-  In the interface, you define methods for each of the endpoints you want to be able to call.  As you see, you specify the request type with an annotation, the endpoint path, and you can specify path variables and the body type.  You will need to define the `Journal` class.
+   In the interface, you define methods for each of the endpoints you want to be able to call.  As you see, you specify the request type with an annotation, the endpoint path, and you can specify path variables and the body type.  You will need to define the `Journal` class.
 
-  In the same directory, create a Java class called `Journal.java` with the following content:
+   In the same directory, create a Java class called `Journal.java` with the following content:
 
     ```java
     package com.example.checks.clients;
@@ -277,11 +277,11 @@ Next, you will create the "Check Processing" microservice which you will receive
     }
     ```
 
-  **Note**:  The `lraId` and `lraState` field are set to reasonable default values, since we are not going to be using those fields in this lab.
+   **Note**:  The `lraId` and `lraState` field are set to reasonable default values, since we are not going to be using those fields in this lab.
 
 1. Create the services
 
-  Next, you will create a service to implement the methods defined in the OpenFeign client interface.  Create a directory called `src/main/java/com/example/checks/service` and in that directory create a Java class called `AccountService.java` with this content.  The services are very simple, you just need to use the `accountClient` to call the appropriate endpoint on the Account service and pass through the data. **Note** the `AccountClient` will be injected by Spring Boot because of the `RequiredArgsConstructor` annotation, which saves some boilerplate constructor code:
+   Next, you will create a service to implement the methods defined in the OpenFeign client interface.  Create a directory called `src/main/java/com/example/checks/service` and in that directory create a Java class called `AccountService.java` with this content.  The services are very simple, you just need to use the `accountClient` to call the appropriate endpoint on the Account service and pass through the data. **Note** the `AccountClient` will be injected by Spring Boot because of the `RequiredArgsConstructor` annotation, which saves some boilerplate constructor code:
 
     ```java
     package com.example.checks.service;
@@ -313,9 +313,9 @@ Next, you will create the "Check Processing" microservice which you will receive
 
 1. Create the Check Receiver controller
 
-  This controller will receive messages on the `deposits` JMS queue and process them by calling the `journal` method in the `AccountService` that you just created, which will make a REST POST to the Account service, which in turn will write the journal entry into the accounts' database.
+   This controller will receive messages on the `deposits` JMS queue and process them by calling the `journal` method in the `AccountService` that you just created, which will make a REST POST to the Account service, which in turn will write the journal entry into the accounts' database.
 
-  Create a directory called `src/main/java/com/example/checks/controller` and in that directory, create a new Java class called `CheckReceiver.java` with the following content.  You will need to inject an instance of the `AccountService` (in this example the constructor is provided, so you can compare to the annotation used previously). Implement a method to receive and process the messages. To receive messages from the queues, use the `JmsListener` annotation and provide the queue and factory names. This method should call the `journal` method on the `AccountService` and pass through the necessary data.  Also, notice that you need to add the `Component` annotation to the class so that Spring Boot will load an instance of it into the application:
+   Create a directory called `src/main/java/com/example/checks/controller` and in that directory, create a new Java class called `CheckReceiver.java` with the following content.  You will need to inject an instance of the `AccountService` (in this example the constructor is provided, so you can compare to the annotation used previously). Implement a method to receive and process the messages. To receive messages from the queues, use the `JmsListener` annotation and provide the queue and factory names. This method should call the `journal` method on the `AccountService` and pass through the necessary data.  Also, notice that you need to add the `Component` annotation to the class so that Spring Boot will load an instance of it into the application:
 
     ```java
     package com.example.checks.controller;
@@ -350,7 +350,7 @@ Next, you will create the "Check Processing" microservice which you will receive
 
 1. Create the Clearance Receiver controller
 
-  In the same directory, create another Java class called `ClearanceReceiver.java` with the following content.  This is very similar to the previous controller, but listens to the `clearances` queue instead, and calls the `clear` method on the `AccountService`:
+   In the same directory, create another Java class called `ClearanceReceiver.java` with the following content.  This is very similar to the previous controller, but listens to the `clearances` queue instead, and calls the `clear` method on the `AccountService`:
 
     ```java
     package com.example.checks.controller;
@@ -386,31 +386,31 @@ Next, you will create the "Check Processing" microservice which you will receive
 
 1. Build a JAR file for deployment
 
-  Run the following command to build the JAR file.
+   Run the following command to build the JAR file.
 
     ```shell
     $ mvn clean package -DskipTests
     ```
 
-  The service is now ready to deploy to the backend.
+   The service is now ready to deploy to the backend.
 
 1. Prepare the backend for deployment
 
-  The Oracle Backend for Spring Boot and Microservices admin service is not exposed outside the Kubernetes cluster by default. Oracle recommends using a **kubectl** port forwarding tunnel to establish a secure connection to the admin service.
+   The Oracle Backend for Spring Boot and Microservices admin service is not exposed outside the Kubernetes cluster by default. Oracle recommends using a **kubectl** port forwarding tunnel to establish a secure connection to the admin service.
 
-  Start a tunnel using this command in a new terminal window:
+   Start a tunnel using this command in a new terminal window:
 
     ```shell
     $ kubectl -n obaas-admin port-forward svc/obaas-admin 8080
     ```
 
-  Get the password for the `obaas-admin` user. The `obaas-admin` user is the equivalent of the admin or root user in the Oracle Backend for Spring Boot and Microservices backend.
+   Get the password for the `obaas-admin` user. The `obaas-admin` user is the equivalent of the admin or root user in the Oracle Backend for Spring Boot and Microservices backend.
 
     ```shell
     $ kubectl get secret -n azn-server  oractl-passwords -o jsonpath='{.data.admin}' | base64 -d
     ```
 
-  Start the Oracle Backend for Spring Boot and Microservices CLI (*oractl*) in a new terminal window using this command:
+   Start the Oracle Backend for Spring Boot and Microservices CLI (*oractl*) in a new terminal window using this command:
 
     ```shell
     $ oractl
@@ -429,7 +429,7 @@ Next, you will create the "Check Processing" microservice which you will receive
     oractl:>
     ```
 
-  Connect to the Oracle Backend for Spring Boot and Microservices admin service using the `connect` command. Enter `obaas-admin` and the username and use the password you collected earlier.
+   Connect to the Oracle Backend for Spring Boot and Microservices admin service using the `connect` command. Enter `obaas-admin` and the username and use the password you collected earlier.
 
     ```shell
     oractl> connect
@@ -441,7 +441,7 @@ Next, you will create the "Check Processing" microservice which you will receive
 
 1. Create a binding for the Check service
 
-  Create a binding so the Check service can access the Oracle Autonomous Database as the `account` user. Run this command to create the binding, and type in the password for the `account` user when prompted. The password is `Welcome1234##`:
+   Create a binding so the Check service can access the Oracle Autonomous Database as the `account` user. Run this command to create the binding, and type in the password for the `account` user when prompted. The password is `Welcome1234##`:
 
     ```shell
     oractl:> bind --app-name application --service-name checks --username account
@@ -449,7 +449,7 @@ Next, you will create the "Check Processing" microservice which you will receive
 
 1. Deploy the Check service
 
-  You will now deploy your Check service to the Oracle Backend for Spring Boot and Microservices using the CLI. Run this command to deploy your service, make sure you provide the correct path to your JAR file. **Note** that this command may take 1-3 minutes to complete:
+   You will now deploy your Check service to the Oracle Backend for Spring Boot and Microservices using the CLI. Run this command to deploy your service, make sure you provide the correct path to your JAR file. **Note** that this command may take 1-3 minutes to complete:
 
     ```shell
     oractl:> deploy --app-name application --service-name checks --artifact-path /path/to/checks-0.0.1-SNAPSHOT.jar --image-version 0.0.1
@@ -458,11 +458,11 @@ Next, you will create the "Check Processing" microservice which you will receive
     oractl:>
     ```
 
-  You can close the port forwarding session for the CLI now (just type a Ctrl+C in its console window).
+   You can close the port forwarding session for the CLI now (just type a Ctrl+C in its console window).
 
 1. Testing the service
 
-  Since you had messages already sitting on the queues, the service should process those as soon as it starts.  You can check the service logs to see the log messages indicating this happened using this command:
+   Since you had messages already sitting on the queues, the service should process those as soon as it starts.  You can check the service logs to see the log messages indicating this happened using this command:
 
     ```shell
     $ kubectl -n application logs svc/checks
@@ -472,5 +472,5 @@ Next, you will create the "Check Processing" microservice which you will receive
     ( ... lines omitted ...)
     ```
 
-  You can also look at the journal table in the database to see the results.
+   You can also look at the journal table in the database to see the results.
 

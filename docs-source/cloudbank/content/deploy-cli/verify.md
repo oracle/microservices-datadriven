@@ -224,7 +224,7 @@ weight = 6
             The output should look like this (with your accountId):
 
             ```log
-            `HTTP/1.1 200
+            HTTP/1.1 200
             Content-Type: application/json
             Transfer-Encoding: chunked
             Date: Thu, 02 Nov 2023 18:36:31 GMT
