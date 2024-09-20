@@ -1,6 +1,6 @@
 ---
 title: "Project Structure"
-description: "How to structure your Spring Boot application for deployment in Oracle Backend for Spring Boot and Microservices"
+description: "How to structure your Spring Boot application for deployment in Oracle Backend for Microservices and AI"
 keywords: "spring springboot microservices development oracle backend"
 ---
 
@@ -106,7 +106,7 @@ management:
       application: ${spring.application.name}
 ```
 
-The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Spring Boot and Microservices CLI to deploy your application.
+The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Microservices and AI CLI to deploy your application.
 
 ### Data Sources
 
@@ -159,7 +159,7 @@ spring:
       max-pool-size: 30
 ```
 
-The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Spring Boot and Microservices CLI to deploy your application.
+The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Microservices and AI CLI to deploy your application.
 
 ### Liquibase
 
@@ -191,7 +191,7 @@ spring:
     enabled: ${LIQUIBASE_ENABLED:true}
 ```
 
-The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Spring Boot and Microservices CLI to deploy your application. When you use the `deploy` command, you must specify the `liquibase-db` parameter and provide a user with sufficient privileges. Generally this will be permissions to create and alter users and to grant roles and privileges.  If your service uses Java Messaging Service (JMS), this use may also need execute permission on `dbms.aq_adm`, `dbms.aq_in` and `dbms.aq_jms`.
+The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Microservices and AI CLI to deploy your application. When you use the `deploy` command, you must specify the `liquibase-db` parameter and provide a user with sufficient privileges. Generally this will be permissions to create and alter users and to grant roles and privileges.  If your service uses Java Messaging Service (JMS), this use may also need execute permission on `dbms.aq_adm`, `dbms.aq_in` and `dbms.aq_jms`.
 
 ### Oracle Transaction Manager for Microservices
 
@@ -205,7 +205,7 @@ If you are using Oracle Transaction Manager for Microservices (MicroTx) to manag
 </dependency>
 ```
 
-Add the following configuration to your Spring application configuration. The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Spring Boot and Microservices CLI or the Visual Studio Code Extension to deploy your application. For example:
+Add the following configuration to your Spring application configuration. The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Microservices and AI CLI or the Visual Studio Code Extension to deploy your application. For example:
 
 ```yaml
 spring:
@@ -231,7 +231,7 @@ If you are using Spring Config Server to manage configurations, then add the fol
 </dependency>
 ```
 
-Add the following configuration to your Spring application configuration. The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Spring Boot and Microservices CLI or the Visual Studio Code Extension to deploy your application. For example:
+Add the following configuration to your Spring application configuration. The variables in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Microservices and AI CLI or the Visual Studio Code Extension to deploy your application. For example:
 
 ```yaml
 spring:
@@ -269,7 +269,7 @@ To enable Open Telemetry (OTEL) tracing you need to add the following dependenci
 </dependency>
 ```
 
-In addition add the following to the application configuration. The variable in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Spring Boot and Microservices CLI or the Visual Studio Code Extension to deploy your application. For example:
+In addition add the following to the application configuration. The variable in this configuration are automatically injected to your deployment and pods when you use the Oracle Backend for Microservices and AI CLI or the Visual Studio Code Extension to deploy your application. For example:
 
 ```yaml
 management:

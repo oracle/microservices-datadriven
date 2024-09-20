@@ -1,6 +1,6 @@
 ---
 title: "Apache APISIX Gateway"
-description: "Apache APISIX Gateway for API management in Oracle Backend for Spring Boot and Microservices"
+description: "Apache APISIX Gateway for API management in Oracle Backend for Microservices and AI"
 keywords: "api apisix gateway traffic deployment circuitbreaker spring springboot microservices oracle backend"
 resources:
   - name: obaas-apisix-k8s
@@ -34,7 +34,7 @@ including publishing, traffic management, deployment strategies, and circuit bre
 
 ## Accessing Apache APISIX dashboard
 
-Oracle Backend for Spring Boot and Microservices deploys Apache APISIX Gateway and Dashboard in the `apisix` namespace. The gateway is exposed through the external load balancer and ingress controller. To access the Apache APISIX Dashboard, you must use the `kubectl port-forward` command to create a secure channel to `service/apisix-dashboard`. Process the following steps:
+Oracle Backend for Microservices and AI deploys Apache APISIX Gateway and Dashboard in the `apisix` namespace. The gateway is exposed through the external load balancer and ingress controller. To access the Apache APISIX Dashboard, you must use the `kubectl port-forward` command to create a secure channel to `service/apisix-dashboard`. Process the following steps:
 
 1. To expose the Apache APISIX Dashboard using this command:
 
@@ -96,7 +96,7 @@ Once you have your application deployed and running, you may want to expose it t
       * discovery type = eureka
       * service name = SLOW (note that this is case sensitive, this is the key from the Eureka dashboard)
 
-        **NOTE:** The API Gateway is pre-configured with both "Eureka" and "Kubernetes" discovery types. For Eureka, the service name is the key used to deploy the service in Eureka, which is normally the value from `spring.application.name` in the Spring Boot configuration file (`src/main/resources/application.yaml`), in uppercase characters. For Kubernetes, the service name is in the format `namespace/service:port` where `namespace` is the Kubernetes namespace in which the Spring Boot application is deployed, `service` is the name of the Kubernetes service for that application, and `port` is the name of the port in that service. If you deployed your Spring Boot application with the Oracle Backend for Spring Boot and Microservices CLI, the port name will be `spring`. For example, an application called `slow-service` deployed in the `my-apps` namespace would be `my-apps/slow-service:spring`.
+        **NOTE:** The API Gateway is pre-configured with both "Eureka" and "Kubernetes" discovery types. For Eureka, the service name is the key used to deploy the service in Eureka, which is normally the value from `spring.application.name` in the Spring Boot configuration file (`src/main/resources/application.yaml`), in uppercase characters. For Kubernetes, the service name is in the format `namespace/service:port` where `namespace` is the Kubernetes namespace in which the Spring Boot application is deployed, `service` is the name of the Kubernetes service for that application, and `port` is the name of the port in that service. If you deployed your Spring Boot application with the Oracle Backend for Microservices and AI CLI, the port name will be `spring`. For example, an application called `slow-service` deployed in the `my-apps` namespace would be `my-apps/slow-service:spring`.
 
         <!-- spellchecker-disable -->
         {{< img name="obaas-apisix-routes-step1" size="medium" lazy=false >}}

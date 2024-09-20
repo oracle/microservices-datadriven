@@ -1,9 +1,9 @@
 ---
 title: "Upgrade"
-description: "Upgrade the Oracle Backend for Spring Boot and Microservices"
+description: "Upgrade the Oracle Backend for Microservices and AI"
 keywords: "upgrade spring springboot spring development microservices development oracle backend"
 ---
-The world of Microservices moves fast.  In order to keep up with new software versions and provide additional features, regular updates and patches are provided for the Oracle Backend for Spring Boot and Microservices.  
+The world of Microservices moves fast.  In order to keep up with new software versions and provide additional features, regular updates and patches are provided for the Oracle Backend for Microservices and AI.  
 
 Depending on the original installation method and the state of your infrastructure, these patches and upgrades can either be preformed in-place or out-of-place. Oracle recommends, despite which option you choose, to have a backup of your applications and database in order to recover from any unintentional loss.
 
@@ -18,7 +18,7 @@ There are various methods to perform an upgrade including:
 
 The in-place Marketplace upgrade can be performed when there has been no external modifications of the infrastructure after the original installation of the Marketplace stack; or you wish to reconcile the infrastructure back to the delivered Marketplace infrastructure.
 
-The in-place method will both modify the infrastructure and patch/upgrade the delivered Oracle Backend for Spring Boot and Microservices applications.
+The in-place method will both modify the infrastructure and patch/upgrade the delivered Oracle Backend for Microservices and AI applications.
 
 This method is recommended for development deployments, or after testing the upgrade using the [Out-of-Place Upgrade](#out-of-place-marketplace-upgrade) for production deployments.
 
@@ -59,9 +59,9 @@ Generally, any proposed destruction of the Database or Kubernetes cluster should
 
 # Out-of-Place Marketplace Upgrade
 
-The out-of-place Marketplace upgrade can be used when manual changes to the original infrastructure have been made after the initial installation of the Oracle Backend for Spring Boot and Microservices. It is the recommended Marketplace method for production installations as it allows you to test the upgrade prior to go live, while leaving the old infrastructure in place for rollbacks.
+The out-of-place Marketplace upgrade can be used when manual changes to the original infrastructure have been made after the initial installation of the Oracle Backend for Microservices and AI. It is the recommended Marketplace method for production installations as it allows you to test the upgrade prior to go live, while leaving the old infrastructure in place for rollbacks.
 
-> The out-of-place method deliver new infrastructure and Oracle Backend for Spring Boot and Microservices applications. You will need to migrate your applications to the new platform.
+> The out-of-place method deliver new infrastructure and Oracle Backend for Microservices and AI applications. You will need to migrate your applications to the new platform.
 
 Follow the [instructions](../setup/) to install the latest Marketplace version.
 
@@ -86,7 +86,7 @@ Follow the [uninstall guide](../uninstall/) to clean up the old Marketplace inst
 
 # Custom In-Place Upgrade
 
-The Custom In-Place upgrade can be applied to any existing installation of the Oracle Backend for Spring Boot and Microservices. It will not modify any infrastructure and only apply changes to existing and install new Oracle Backend for Spring Boot and Microservices applications.
+The Custom In-Place upgrade can be applied to any existing installation of the Oracle Backend for Microservices and AI. It will not modify any infrastructure and only apply changes to existing and install new Oracle Backend for Microservices and AI applications.
 
 ## Download the Latest Installation
 

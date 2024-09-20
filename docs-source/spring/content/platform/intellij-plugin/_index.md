@@ -1,21 +1,21 @@
 ---
-title: "Oracle Backend for Spring Boot and Microservices IntelliJ Plugin"
-description: "IntelliJ Plugin for Oracle Backend for Spring Boot and Microservices"
+title: "Oracle Backend for Microservices and AI IntelliJ Plugin"
+description: "IntelliJ Plugin for Oracle Backend for Microservices and AI"
 keywords: "intellij plugin ide springboot spring development microservices development oracle backend"
 ---
 
 ## GA 1.3.0 - September, 2024
 
-Oracle Backend for Spring Boot and Microservices (OBaaS) is an IntelliJ plugin to browse, deploy, and modify workloads on the Oracle Backend for Spring Boot and Microservices platform.This plug-in implements the functionalities available in the [Oracle Backend for Spring Boot and Microservices CLI](../../development/cli), simplifying  access to Oracle Backend for Spring Boot and Microservices deployments from an IntelliJ IDE. 
+Oracle Backend for Microservices and AI (OBaaS) is an IntelliJ plugin to browse, deploy, and modify workloads on the Oracle Backend for Microservices and AI platform.This plug-in implements the functionalities available in the [Oracle Backend for Microservices and AI CLI](../../development/cli), simplifying  access to Oracle Backend for Microservices and AI deployments from an IntelliJ IDE. 
 
-The plug-in allows access to the Oracle Backend for Spring Boot and Microservices platform services, including the Grafana, Spring, APISIX, Eureka and Jaeger web admin consoles. Additionally, you may create and bind workloads to your  Oracle Backend for Spring Boot and Microservices database deployment. Users may inspect Oracle Backend for Spring Boot and Microservices deployment namespaces, workloads, and related configuration.
+The plug-in allows access to the Oracle Backend for Microservices and AI platform services, including the Grafana, Spring, APISIX, Eureka and Jaeger web admin consoles. Additionally, you may create and bind workloads to your  Oracle Backend for Microservices and AI database deployment. Users may inspect Oracle Backend for Microservices and AI deployment namespaces, workloads, and related configuration.
 
 See the Oracle Free Use Terms and Conditions [License](https://oss.oracle.com/licenses/upl/)
 
 ## Prerequisites
 
-* An operational Oracle Backend for Spring Boot and Microservices deployment, as configured through platform [setup](../../setup/).
-* Access to a Kubernetes cluster where Oracle Backend for Spring Boot and Microservices is deployed from your IntelliJ IDE.
+* An operational Oracle Backend for Microservices and AI deployment, as configured through platform [setup](../../setup/).
+* Access to a Kubernetes cluster where Oracle Backend for Microservices and AI is deployed from your IntelliJ IDE.
 
 ## Installation
 
@@ -25,31 +25,31 @@ See the Oracle Free Use Terms and Conditions [License](https://oss.oracle.com/li
 
     ![plugin-intell](./images/install-from-disk.png)
 
-3. Click **OK**, and restart your IDE to load the Oracle Backend for Spring Boot and Microservices plugin.
+3. Click **OK**, and restart your IDE to load the Oracle Backend for Microservices and AI plugin.
 
-4. If you do not see the Oracle Backend for Spring Boot and Microservices icon on your IDE's toolbar, navigate to View -> Tool Windows, and select "OBaaS" to add it to your IDE's tool window bar.
+4. If you do not see the Oracle Backend for Microservices and AI icon on your IDE's toolbar, navigate to View -> Tool Windows, and select "OBaaS" to add it to your IDE's tool window bar.
 
 ### Proxy Configuration
 
-If you are connecting to your Kubernetes cluster through a proxy server, configure your IntelliJ proxy settings from Settings -> Proxy. Th Oracle Backend for Spring Boot and Microservices will use your IntelliJ system proxy settings to connect to your Kubernetes cluster.
+If you are connecting to your Kubernetes cluster through a proxy server, configure your IntelliJ proxy settings from Settings -> Proxy. Th Oracle Backend for Microservices and AI will use your IntelliJ system proxy settings to connect to your Kubernetes cluster.
 
-## Configuring the Oracle Backend for Spring Boot and Microservices Connection
+## Configuring the Oracle Backend for Microservices and AI Connection
 
-1. Open the plugin tool window by clicking the "OBaaS" icon on the IntelliJ tool bar, and click the "wrench" icon to open the Oracle Backend for Spring Boot and Microservices connection settings.
+1. Open the plugin tool window by clicking the "OBaaS" icon on the IntelliJ tool bar, and click the "wrench" icon to open the Oracle Backend for Microservices and AI connection settings.
 
     ![open-settings](./images/open-settings.png)
 
-2. Enter the Oracle Backend for Spring Boot and Microservices username, password, kubeconfig for the Kubernetes cluster, and the local port the Oracle Backend for Spring Boot and Microservices admin tunnel will bind to. The default kubeconfig and context may already be selected.
+2. Enter the Oracle Backend for Microservices and AI username, password, kubeconfig for the Kubernetes cluster, and the local port the Oracle Backend for Microservices and AI admin tunnel will bind to. The default kubeconfig and context may already be selected.
 
    ![plugin-settings](./images/settings.png)
 
-3. When you're done, click "Test Connection" to verify the Oracle Backend for Spring Boot and Microservices connectivity. If you've configured your kubeconfig and Oracle Backend for Spring Boot and Microservices credentials correctly, you should see a connection successful message:
+3. When you're done, click "Test Connection" to verify the Oracle Backend for Microservices and AI connectivity. If you've configured your kubeconfig and Oracle Backend for Microservices and AI credentials correctly, you should see a connection successful message:
 
     ![test-connection](./images/test-connection.png)
 
 ### Known issue with Kubernetes authentication
 
-If you are using a Kubeconfig shell exec config to authenticate to your Kubernetes cluster from the Oracle Backend for Spring Boot and Microservices, you may need to provide the full path to the authenticating binary:
+If you are using a Kubeconfig shell exec config to authenticate to your Kubernetes cluster from the Oracle Backend for Microservices and AI, you may need to provide the full path to the authenticating binary:
 
 ```yaml
 users:
@@ -61,17 +61,17 @@ users:
       command: /usr/local/bin/oci
 ```
 
-### Managing Oracle Backend for Spring Boot and Microservices Connection States
+### Managing Oracle Backend for Microservices and AI Connection States
 
-To refresh the Oracle Backend for Spring Boot and Microservices connection, click the "Refresh" button at the top of the Oracle Backend for Spring Boot and Microservices tool window.
+To refresh the Oracle Backend for Microservices and AI connection, click the "Refresh" button at the top of the Oracle Backend for Microservices and AI tool window.
 
-To cancel all active connections, click the red "Close Connections" button at the top of the Oracle Backend for Spring Boot and Microservices tool window.
+To cancel all active connections, click the red "Close Connections" button at the top of the Oracle Backend for Microservices and AI tool window.
 
-## Explore Oracle Backend for Spring Boot and Microservices Resources
+## Explore Oracle Backend for Microservices and AI Resources
 
-Once you are connected to Oracle Backend for Spring Boot and Microservices, click on the context node in the tool window tree to view Oracle Backend for Spring Boot and Microservices resources in your cluster.
+Once you are connected to Oracle Backend for Microservices and AI, click on the context node in the tool window tree to view Oracle Backend for Microservices and AI resources in your cluster.
 
-- Oracle Backend for Spring Boot and Microservices namespaces are shown in the "namespaces" section, each namespace containing a list of applications.
+- Oracle Backend for Microservices and AI namespaces are shown in the "namespaces" section, each namespace containing a list of applications.
 - Links to platform service dashboards are shown in the "platform services" section.
 - Configuration properties are listed in the "configuration" section.
 
@@ -100,7 +100,7 @@ On the Add Workload form, enter workload data.
 
 ![upload-jar](./images/upload-jar.png)
 
-When you click OK, the JAR/exec file will be uploaded to Oracle Backend for Spring Boot and Microservices, an image is built, and the workload deployed to the cluster namespace. The task duration will vary depending on the size of the upload file and your network connection for upload.
+When you click OK, the JAR/exec file will be uploaded to Oracle Backend for Microservices and AI, an image is built, and the workload deployed to the cluster namespace. The task duration will vary depending on the size of the upload file and your network connection for upload.
 
 ### Workload autoscalers
 
@@ -116,9 +116,9 @@ A workload can be published on an APISIX route by right-clicking the workload, p
 
 ![publish-workload](./images/publish-workload.png)
 
-## Accessing Oracle Backend for Spring Boot and Microservices Platform Services
+## Accessing Oracle Backend for Microservices and AI Platform Services
 
-To access the web console of an Oracle Backend for Spring Boot and Microservices platform service (Grafana, Spring Admin, APISIX, Eureka, or Jaeger), right-click on the service's name under the "platform services" section and click "Connect".
+To access the web console of an Oracle Backend for Microservices and AI platform service (Grafana, Spring Admin, APISIX, Eureka, or Jaeger), right-click on the service's name under the "platform services" section and click "Connect".
 
 ![platform-services](./images/platform-services.png)
 

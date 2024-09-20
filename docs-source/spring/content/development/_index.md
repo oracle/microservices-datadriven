@@ -1,12 +1,12 @@
 ---
 title: "Development"
-description: "How to develop and deploy Spring Boot applications with the Oracle Backend for Spring Boot and Microservices"
+description: "How to develop and deploy Spring Boot applications with the Oracle Backend for Microservices and AI"
 keywords: "spring springboot microservices development oracle backend"
 ---
 
-This section provides information about how to develop and deploy Spring Boot applications with the Oracle Backend for Spring Boot and Microservices.
+This section provides information about how to develop and deploy Spring Boot applications with the Oracle Backend for Microservices and AI.
 
-Spring Boot applications can be developed with no special requirements and be deployed into Oracle Backend for Spring Boot and Microservices.  However, if you do opt-in to the platform services provided and the CLI, you can shorten your development time and avoid unnecessary work.
+Spring Boot applications can be developed with no special requirements and be deployed into Oracle Backend for Microservices and AI.  However, if you do opt-in to the platform services provided and the CLI, you can shorten your development time and avoid unnecessary work.
 
 Oracle Backend for Spring Boot provides the following services that applications can use:
 

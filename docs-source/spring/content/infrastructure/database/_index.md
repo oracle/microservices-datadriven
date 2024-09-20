@@ -4,7 +4,7 @@ description: "Database Options and Configuration"
 keywords: "database spring springboot microservices oracle"
 
 ---
-The Oracle Backend for Spring Boot and Microservices uses the Oracle Database as a persistent data store for metadata and the Spring Cloud Config Server.  This documentation will refer to this database as the **Metadata Database**.
+The Oracle Backend for Microservices and AI uses the Oracle Database as a persistent data store for metadata and the Spring Cloud Config Server.  This documentation will refer to this database as the **Metadata Database**.
 
 > **NOTE:** Oracle recommends that you install an addition Container Database (CDB) and Pluggable Databases (PDBs) for your production applications inline with the Database-Per-Service pattern.  This document will refer to these databases as the [**Application Database**](#application-databases).  
 
@@ -22,7 +22,7 @@ The following chart presents the options for the Metadata Database, based on the
 
 # Bring Your Own Database - Standard Edition
 
-If you select the **Standard Edition** during installation, you can use a pre-created Oracle Database for the Oracle Backend for Spring Boot and Microservices **Metadata Database**.  
+If you select the **Standard Edition** during installation, you can use a pre-created Oracle Database for the Oracle Backend for Microservices and AI **Metadata Database**.  
 
 The following are the minimum requirements for a BYO Oracle Database:
 
@@ -32,7 +32,7 @@ The following are the minimum requirements for a BYO Oracle Database:
 
 ## Database User Privileges
 
-The database user for the the Oracle Backend for Spring Boot and Microservices **Metadata Database** is used to create other users and allow them to proxy through this user for database access.  While the `SYSTEM` or `ADMIN` (for ADB-S) will work, they are over-privileged and should not be used in production environments.
+The database user for the the Oracle Backend for Microservices and AI **Metadata Database** is used to create other users and allow them to proxy through this user for database access.  While the `SYSTEM` or `ADMIN` (for ADB-S) will work, they are over-privileged and should not be used in production environments.
 
 It is recommended to create a user, in this example, named `OBAAS` with a default tablespace of `DATA`:
 
@@ -69,7 +69,7 @@ GRANT CREATE TABLE TO OBAAS WITH ADMIN OPTION;
 
 ## Configuration
 
-1. During the configuration of the Oracle Backend for Spring Boot and Microservices, ensure that the **Edition** is set to **Standard**:
+1. During the configuration of the Oracle Backend for Microservices and AI, ensure that the **Edition** is set to **Standard**:
 
     ![Standard Edition](../images/standard_edition.png "Standard Edition")
 
@@ -107,7 +107,7 @@ GRANT CREATE TABLE TO OBAAS WITH ADMIN OPTION;
 
 Oracle recommends that additional pluggable databases are used for your applications, following the database-per-service microservice pattern.  However, the **Metadata Database** can be used, especially for development purposes, with a schema-per-service model.
 
-The [Oracle Database Operator for Kubernetes](https://github.com/oracle/oracle-database-operator) is provided with the Oracle Backend for Spring Boot and Microservices and can be used:
+The [Oracle Database Operator for Kubernetes](https://github.com/oracle/oracle-database-operator) is provided with the Oracle Backend for Microservices and AI and can be used:
 
 * Bind to additional ADB-S
 * Bind to an OCI BaseDB and create PDBs

@@ -3,9 +3,9 @@ title: "Networking"
 description: "Networking Options and Configuration"
 keywords: "network spring springboot microservices oracle"
 ---
-The Oracle Backend for Spring Boot and Microservices has specific networking requirements to ensure resource communication while providing security through isolation and networking rules.  
+The Oracle Backend for Microservices and AI has specific networking requirements to ensure resource communication while providing security through isolation and networking rules.  
 
-The **standard installation** will provision a new Virtual Cloud Network (VCN) with the required subnets and all networking rules to get you started using the Oracle Backend for Spring Boot and Microservices quickly.  To use an existing VCN, please follow the [Bring Your Own VCN](#bring-your-own-oci-vcn) instructions.
+The **standard installation** will provision a new Virtual Cloud Network (VCN) with the required subnets and all networking rules to get you started using the Oracle Backend for Microservices and AI quickly.  To use an existing VCN, please follow the [Bring Your Own VCN](#bring-your-own-oci-vcn) instructions.
 
 > For **custom installations**, including On-Premises, it is the responsibility of the customer to ensure network access controls to provide both operational access and security.  The Oracle Cloud Infrastructure (OCI) **standard installation** setup can be used as a general template.
 
@@ -21,7 +21,7 @@ All infrastructure resources are split between two subnets: one public and one p
 
 ### Public Subnet
 
-The public subnet allows external access to the Oracle Backend for Spring Boot and Microservices resources.  Ingress/Egress to the public subnet and from the Internet is provided by an Internet Gateway.
+The public subnet allows external access to the Oracle Backend for Microservices and AI resources.  Ingress/Egress to the public subnet and from the Internet is provided by an Internet Gateway.
 
 At a minimum, the public subnet requires two usable IP Addresses.  In OCI this equates to a 30-bit network identifier (`/30`).
 
@@ -73,7 +73,7 @@ When using the Oracle Autonomous Database (ADB), it can either be placed in the 
 
 # Bring Your Own OCI VCN
 
-Using the **Standard Edition** you can use a pre-created VCN for the Oracle Backend for Spring Boot and Microservices resources.  
+Using the **Standard Edition** you can use a pre-created VCN for the Oracle Backend for Microservices and AI resources.  
 
 The following are minimum requirements for a BYO VCN:
 
@@ -89,7 +89,7 @@ The following are minimum requirements for a BYO VCN:
 
 ## Configuration
 
-During the configuration of the Oracle Backend for Spring Boot and Microservices, ensure that the **Edition** is set to **Standard**:
+During the configuration of the Oracle Backend for Microservices and AI, ensure that the **Edition** is set to **Standard**:
 
 ![Standard Edition](../images/standard_edition.png "Standard Edition")
 

@@ -1,6 +1,6 @@
 ---
 title: "Authentication and Authorization Server"
-description: "Authentication and authorization using Spring Authorization Server in Oracle Backend for Spring Boot and Microservices"
+description: "Authentication and authorization using Spring Authorization Server in Oracle Backend for Microservices and AI"
 keywords: "security authentication authorization springboot spring development microservices development oracle backend"
 resources:
   - name: azn-server-arch
@@ -14,7 +14,7 @@ resources:
     title: "AZN User passwords"
 ---
 
-The Authorization Server is an engine to authenticate and authorize requests to various components in Oracle Backend for Spring Boot and Microservices. The end user can manage users using REST Endpoints.
+The Authorization Server is an engine to authenticate and authorize requests to various components in Oracle Backend for Microservices and AI. The end user can manage users using REST Endpoints.
 
 > **_NOTE:_** Oracle recommends that you change the default passwords for the default created users.
 
@@ -25,14 +25,14 @@ The Authorization Server is an engine to authenticate and authorize requests to 
 
 ## Users & Roles
 
-When deploying Oracle Backend for Spring Boot and Microservices, two users are created with the following roles:
+When deploying Oracle Backend for Microservices and AI, two users are created with the following roles:
 
 | User Name     | Assigned Roles        |
 |---------------|-----------------------|
 | obaas-admin   | ROLE_ADMIN, ROLE_USER |
 | obaas-user    | ROLE_USER             |
 
-All users are stored in the database are deployed when installing Oracle Backend for Spring Boot and Microservices. The roles determine what the user is allowed to do in the environment. The allowed roles are `ROLE_ADMIN` and `ROLE_USER`.
+All users are stored in the database are deployed when installing Oracle Backend for Microservices and AI. The roles determine what the user is allowed to do in the environment. The allowed roles are `ROLE_ADMIN` and `ROLE_USER`.
 
 > **_NOTE:_** See each components documentation about the roles and authorities.
 

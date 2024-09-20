@@ -1,9 +1,9 @@
 ---
 title: "Troubleshooting"
-description: "Troubleshoot Oracle Backend for Spring Boot and Microservices"
+description: "Troubleshoot Oracle Backend for Microservices and AI"
 keywords: "support backend oracle springboot spring development microservices database"
 ---
-If experiencing issues with the Oracle Backend for Spring Boot and Microservices; check here for known issues and resolutions.
+If experiencing issues with the Oracle Backend for Microservices and AI; check here for known issues and resolutions.
 
 # ORA-28000: The account is locked
 

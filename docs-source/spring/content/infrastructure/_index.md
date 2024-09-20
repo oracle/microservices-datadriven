@@ -1,6 +1,6 @@
 ---
 title: "Infrastructure"
-description: "Infrastructure Oracle Backend for SPring Boot and Microservices"
+description: "Infrastructure Oracle Backend for Microservices and AI"
 keywords: "infrastructure spring springboot microservices development oracle backend"
 ---
 
