@@ -23,26 +23,26 @@ The deposit service will be responsible for depositing funds into accounts. It w
     <meta itemprop="name" content="Implement business logic :: CloudBank AI">
     <meta itemprop="description" content="In this secion, you will implement the deposit service’s business logic.
 The deposit service will be responsible for depositing funds into accounts. It will be an LRA participant, and so it will need to implement the LRA lifecycle actions like complete, compensate, and so on. A significant amount of the logic will be shared with the withdrawal service, so you will also create a separate class for that shared logic, following the Data Access Object pattern, to keep the business layer separate from the persistence layer.">
-    <meta itemprop="wordCount" content="571">
+    <meta itemprop="wordCount" content="560">
     <title>Implement business logic :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1726239047" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726239047" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726239047" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1726239047" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726239047" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726239047" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1726239047" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1726239047" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1726239047" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1726239047" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1726239047" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1726239047" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/variant.css?1726239047" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1726239047" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1726239047"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1726843375" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726843375" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726843375" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1726843375" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726843375" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726843375" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1726843375" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1726843375" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1726843375" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1726843375" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1726843375" rel="stylesheet" id="R-variant-style">
+    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1726843375" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/microservices-datadriven/cloudbank/css/variant.css?1726843375" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/print.css?1726843375" rel="stylesheet" media="print">
+    <script src="/microservices-datadriven/cloudbank/js/variant.js?1726843375"></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
-      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1726239047";
+      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1726843375";
       // variant stuff
       window.variants && variants.init( [ 'zen-light' ] );
       // translations
@@ -105,146 +105,120 @@ The deposit service will be responsible for depositing funds into accounts. It w
 <p>In this secion, you will implement the deposit service&rsquo;s business logic.</p>
 <p>The deposit service will be responsible for depositing funds into accounts. It will be an LRA participant, and so it will need to implement the LRA lifecycle actions like complete, compensate, and so on. A significant amount of the logic will be shared with the withdrawal service, so you will also create a separate class for that shared logic, following the Data Access Object pattern, to keep the business layer separate from the persistence layer.</p>
 <ol>
-<li>Implement the business logic for the <strong>deposit</strong> method.</li>
-</ol>
+<li>
+<p>Implement the business logic for the <strong>deposit</strong> method.</p>
 <p>This method should write a journal entry for the deposit, but should not update the account balance.  Here is the code for this method:</p>
-<pre><code>```java
-
-/**
- * Write journal entry re deposit amount.
- * Do not increase actual bank account amount
- */
-@PostMapping
-@LRA(value = LRA.Type.MANDATORY, end = false)
-public ResponseEntity&lt;String&gt; deposit(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId,
-        @RequestParam(&quot;accountId&quot;) long accountId,
-        @RequestParam(&quot;amount&quot;) long depositAmount) {
-    log.info(&quot;...deposit &quot; + depositAmount + &quot; in account:&quot; + accountId 
-        + &quot; (lraId:&quot; + lraId + &quot;) finished (in pending state)&quot;);
-    Account account = AccountTransferDAO.instance().getAccountForAccountId(accountId);
-    if (account == null) {
-      log.info(&quot;deposit failed: account does not exist&quot;);
-      AccountTransferDAO.instance().saveJournal(
-        new Journal(
-            DEPOSIT, 
-            accountId, 
-            0, 
-            lraId,
-            AccountTransferDAO.getStatusString(ParticipantStatus.Active)
-        )
-      );
-      return ResponseEntity.ok(&quot;deposit failed: account does not exist&quot;);
-    }
-    AccountTransferDAO.instance().saveJournal(
-      new Journal(
-          DEPOSIT, 
-          accountId, 
-          depositAmount, 
-          lraId,
-          AccountTransferDAO.getStatusString(ParticipantStatus.Active)
-      )
-    );
-    return ResponseEntity.ok(&quot;deposit succeeded&quot;);
-}
-
-```
-</code></pre>
-<ol>
-<li>Implement the <strong>complete</strong> method</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Write journal entry re deposit amount.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Do not increase actual bank account amount
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@PostMapping</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@LRA</span>(value <span style="color:#f92672">=</span> LRA.<span style="color:#a6e22e">Type</span>.<span style="color:#a6e22e">MANDATORY</span>, end <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> ResponseEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">deposit</span>(<span style="color:#a6e22e">@RequestHeader</span>(LRA_HTTP_CONTEXT_HEADER) String lraId,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">@RequestParam</span>(<span style="color:#e6db74">&#34;accountId&#34;</span>) <span style="color:#66d9ef">long</span> accountId,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">@RequestParam</span>(<span style="color:#e6db74">&#34;amount&#34;</span>) <span style="color:#66d9ef">long</span> depositAmount) {
+</span></span><span style="display:flex;"><span>    log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;...deposit &#34;</span> <span style="color:#f92672">+</span> depositAmount <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; in account:&#34;</span> <span style="color:#f92672">+</span> accountId 
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; (lraId:&#34;</span> <span style="color:#f92672">+</span> lraId <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;) finished (in pending state)&#34;</span>);
+</span></span><span style="display:flex;"><span>    Account account <span style="color:#f92672">=</span> AccountTransferDAO.<span style="color:#a6e22e">instance</span>().<span style="color:#a6e22e">getAccountForAccountId</span>(accountId);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (account <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>      log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;deposit failed: account does not exist&#34;</span>);
+</span></span><span style="display:flex;"><span>      AccountTransferDAO.<span style="color:#a6e22e">instance</span>().<span style="color:#a6e22e">saveJournal</span>(
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">new</span> Journal(
+</span></span><span style="display:flex;"><span>            DEPOSIT, 
+</span></span><span style="display:flex;"><span>            accountId, 
+</span></span><span style="display:flex;"><span>            0, 
+</span></span><span style="display:flex;"><span>            lraId,
+</span></span><span style="display:flex;"><span>            AccountTransferDAO.<span style="color:#a6e22e">getStatusString</span>(ParticipantStatus.<span style="color:#a6e22e">Active</span>)
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>      );
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> ResponseEntity.<span style="color:#a6e22e">ok</span>(<span style="color:#e6db74">&#34;deposit failed: account does not exist&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    AccountTransferDAO.<span style="color:#a6e22e">instance</span>().<span style="color:#a6e22e">saveJournal</span>(
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">new</span> Journal(
+</span></span><span style="display:flex;"><span>          DEPOSIT, 
+</span></span><span style="display:flex;"><span>          accountId, 
+</span></span><span style="display:flex;"><span>          depositAmount, 
+</span></span><span style="display:flex;"><span>          lraId,
+</span></span><span style="display:flex;"><span>          AccountTransferDAO.<span style="color:#a6e22e">getStatusString</span>(ParticipantStatus.<span style="color:#a6e22e">Active</span>)
+</span></span><span style="display:flex;"><span>      )
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ResponseEntity.<span style="color:#a6e22e">ok</span>(<span style="color:#e6db74">&#34;deposit succeeded&#34;</span>);
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></li>
+<li>
+<p>Implement the <strong>complete</strong> method</p>
 <p>This method should update the LRA status to <strong>completing</strong>, update the account balance, change the bank transaction (journal entry) status from pending to completed and the set the LRA status too <strong>completed</strong>.  Here is the code for this method:</p>
-<pre><code>```java
-
-/**
- * Increase balance amount as recorded in journal during deposit call.
- * Update LRA state to ParticipantStatus.Completed.
- */
-@PutMapping(&quot;/complete&quot;)
-@Complete
-public ResponseEntity&lt;String&gt; completeWork(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) throws Exception {
-    log.info(&quot;deposit complete called for LRA : &quot; + lraId);
-
-    // get the journal and account...
-    Journal journal = AccountTransferDAO.instance().getJournalForLRAid(lraId, DEPOSIT);
-    Account account = AccountTransferDAO.instance().getAccountForJournal(journal);
-
-    // set this LRA participant's status to completing...
-    journal.setLraState(AccountTransferDAO.getStatusString(ParticipantStatus.Completing));
-
-    // update the account balance and journal entry...
-    account.setAccountBalance(account.getAccountBalance() + journal.getJournalAmount());
-    AccountTransferDAO.instance().saveAccount(account);
-    journal.setLraState(AccountTransferDAO.getStatusString(ParticipantStatus.Completed));
-    AccountTransferDAO.instance().saveJournal(journal);
-
-    // set this LRA participant's status to complete...
-    return ResponseEntity.ok(ParticipantStatus.Completed.name());
-}
-```  
-</code></pre>
-<ol>
-<li>Implement the <strong>compensate</strong> method</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Increase balance amount as recorded in journal during deposit call.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Update LRA state to ParticipantStatus.Completed.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@PutMapping</span>(<span style="color:#e6db74">&#34;/complete&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Complete</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> ResponseEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">completeWork</span>(<span style="color:#a6e22e">@RequestHeader</span>(LRA_HTTP_CONTEXT_HEADER) String lraId) <span style="color:#66d9ef">throws</span> Exception {
+</span></span><span style="display:flex;"><span>    log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;deposit complete called for LRA : &#34;</span> <span style="color:#f92672">+</span> lraId);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// get the journal and account...</span>
+</span></span><span style="display:flex;"><span>    Journal journal <span style="color:#f92672">=</span> AccountTransferDAO.<span style="color:#a6e22e">instance</span>().<span style="color:#a6e22e">getJournalForLRAid</span>(lraId, DEPOSIT);
+</span></span><span style="display:flex;"><span>    Account account <span style="color:#f92672">=</span> AccountTransferDAO.<span style="color:#a6e22e">instance</span>().<span style="color:#a6e22e">getAccountForJournal</span>(journal);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// set this LRA participant&#39;s status to completing...</span>
+</span></span><span style="display:flex;"><span>    journal.<span style="color:#a6e22e">setLraState</span>(AccountTransferDAO.<span style="color:#a6e22e">getStatusString</span>(ParticipantStatus.<span style="color:#a6e22e">Completing</span>));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// update the account balance and journal entry...</span>
+</span></span><span style="display:flex;"><span>    account.<span style="color:#a6e22e">setAccountBalance</span>(account.<span style="color:#a6e22e">getAccountBalance</span>() <span style="color:#f92672">+</span> journal.<span style="color:#a6e22e">getJournalAmount</span>());
+</span></span><span style="display:flex;"><span>    AccountTransferDAO.<span style="color:#a6e22e">instance</span>().<span style="color:#a6e22e">saveAccount</span>(account);
+</span></span><span style="display:flex;"><span>    journal.<span style="color:#a6e22e">setLraState</span>(AccountTransferDAO.<span style="color:#a6e22e">getStatusString</span>(ParticipantStatus.<span style="color:#a6e22e">Completed</span>));
+</span></span><span style="display:flex;"><span>    AccountTransferDAO.<span style="color:#a6e22e">instance</span>().<span style="color:#a6e22e">saveJournal</span>(journal);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// set this LRA participant&#39;s status to complete...</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ResponseEntity.<span style="color:#a6e22e">ok</span>(ParticipantStatus.<span style="color:#a6e22e">Completed</span>.<span style="color:#a6e22e">name</span>());
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></li>
+<li>
+<p>Implement the <strong>compensate</strong> method</p>
 <p>This method should update both the deposit record in the journal and the LRA status too <strong>compensated</strong>.  Here is the code for this method:</p>
-<pre><code>```java
-
-/**
- * Update LRA state to ParticipantStatus.Compensated.
- */
-@PutMapping(&quot;/compensate&quot;)
-@Compensate
-public ResponseEntity&lt;String&gt; compensateWork(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) 
-    throws Exception {
-    log.info(&quot;deposit compensate called for LRA : &quot; + lraId);
-
-    Journal journal = AccountTransferDAO.instance().getJournalForLRAid(lraId, DEPOSIT);
-    journal.setLraState(AccountTransferDAO.getStatusString(ParticipantStatus.Compensated));
-    AccountTransferDAO.instance().saveJournal(journal);
-    return ResponseEntity.ok(ParticipantStatus.Compensated.name());
-}
-```
-</code></pre>
-<ol>
-<li>Implement the <strong>status</strong> method</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Update LRA state to ParticipantStatus.Compensated.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@PutMapping</span>(<span style="color:#e6db74">&#34;/compensate&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Compensate</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> ResponseEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">compensateWork</span>(<span style="color:#a6e22e">@RequestHeader</span>(LRA_HTTP_CONTEXT_HEADER) String lraId) 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">throws</span> Exception {
+</span></span><span style="display:flex;"><span>    log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;deposit compensate called for LRA : &#34;</span> <span style="color:#f92672">+</span> lraId);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Journal journal <span style="color:#f92672">=</span> AccountTransferDAO.<span style="color:#a6e22e">instance</span>().<span style="color:#a6e22e">getJournalForLRAid</span>(lraId, DEPOSIT);
+</span></span><span style="display:flex;"><span>    journal.<span style="color:#a6e22e">setLraState</span>(AccountTransferDAO.<span style="color:#a6e22e">getStatusString</span>(ParticipantStatus.<span style="color:#a6e22e">Compensated</span>));
+</span></span><span style="display:flex;"><span>    AccountTransferDAO.<span style="color:#a6e22e">instance</span>().<span style="color:#a6e22e">saveJournal</span>(journal);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ResponseEntity.<span style="color:#a6e22e">ok</span>(ParticipantStatus.<span style="color:#a6e22e">Compensated</span>.<span style="color:#a6e22e">name</span>());
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></li>
+<li>
+<p>Implement the <strong>status</strong> method</p>
 <p>This method returns the LRA status.  Here is the code for this method:</p>
-<pre><code>```java
-
-/**
- * Return status.
- */
-@GetMapping(value = &quot;/status&quot;, produces = &quot;text/plain&quot;)
-@Status
-public ResponseEntity&lt;ParticipantStatus&gt; status(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId,
-                       @RequestHeader(LRA_HTTP_PARENT_CONTEXT_HEADER) String parentLRA) throws Exception {
-    log.info(&quot;status called for LRA : &quot; + lraId);
-
-    return AccountTransferDAO.instance().status(lraId, DEPOSIT);
-}
-
-```
-</code></pre>
-<ol>
-<li>Implement the <strong>after LRA</strong> method</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Return status.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@GetMapping</span>(value <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;/status&#34;</span>, produces <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;text/plain&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Status</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> ResponseEntity<span style="color:#f92672">&lt;</span>ParticipantStatus<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">status</span>(<span style="color:#a6e22e">@RequestHeader</span>(LRA_HTTP_CONTEXT_HEADER) String lraId,
+</span></span><span style="display:flex;"><span>                       <span style="color:#a6e22e">@RequestHeader</span>(LRA_HTTP_PARENT_CONTEXT_HEADER) String parentLRA) <span style="color:#66d9ef">throws</span> Exception {
+</span></span><span style="display:flex;"><span>    log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;status called for LRA : &#34;</span> <span style="color:#f92672">+</span> lraId);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> AccountTransferDAO.<span style="color:#a6e22e">instance</span>().<span style="color:#a6e22e">status</span>(lraId, DEPOSIT);
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></li>
+<li>
+<p>Implement the <strong>after LRA</strong> method</p>
 <p>This method should perform any steps necessary to finalize or clean up after the LRA.  In this case, all you need to do is update the status of the deposit entry in the journal.  Here is the code for this method:</p>
-<pre><code>```java
-
-/**
- * Delete journal entry for LRA.
- */
-@PutMapping(value = &quot;/after&quot;, consumes = &quot;text/plain&quot;)
-@AfterLRA
-public ResponseEntity&lt;String&gt; afterLRA(@RequestHeader(LRA_HTTP_ENDED_CONTEXT_HEADER) String lraId, 
-    String status) throws Exception {
-    log.info(&quot;After LRA Called : &quot; + lraId);
-    AccountTransferDAO.instance().afterLRA(lraId, status, DEPOSIT);
-    return ResponseEntity.ok(&quot;&quot;);
-}
-
-```
-</code></pre>
-<p>That completes the implementation of the deposit service.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Delete journal entry for LRA.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@PutMapping</span>(value <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;/after&#34;</span>, consumes <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;text/plain&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@AfterLRA</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> ResponseEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">afterLRA</span>(<span style="color:#a6e22e">@RequestHeader</span>(LRA_HTTP_ENDED_CONTEXT_HEADER) String lraId, 
+</span></span><span style="display:flex;"><span>    String status) <span style="color:#66d9ef">throws</span> Exception {
+</span></span><span style="display:flex;"><span>    log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;After LRA Called : &#34;</span> <span style="color:#f92672">+</span> lraId);
+</span></span><span style="display:flex;"><span>    AccountTransferDAO.<span style="color:#a6e22e">instance</span>().<span style="color:#a6e22e">afterLRA</span>(lraId, status, DEPOSIT);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ResponseEntity.<span style="color:#a6e22e">ok</span>(<span style="color:#e6db74">&#34;&#34;</span>);
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div><p>That completes the implementation of the deposit service.</p>
+</li>
+</ol>
 
             <footer class="footline">
             </footer>
@@ -270,12 +244,12 @@ public ResponseEntity&lt;String&gt; afterLRA(@RequestHeader(LRA_HTTP_ENDED_CONTE
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1726239047" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1726843375" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -423,8 +397,8 @@ public ResponseEntity&lt;String&gt; afterLRA(@RequestHeader(LRA_HTTP_ENDED_CONTE
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1726239047" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1726239047" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1726239047" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1726843375" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1726843375" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1726843375" defer></script>
   </body>
 </html>

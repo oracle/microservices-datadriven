@@ -6,7 +6,8 @@
     <meta name="generator" content="Hugo 0.123.6">
     <meta name="generator" content="Relearn 6.1.1+tip">
     <meta name="description" content="Next, you will create the “Test Runner” microservice which you will use to simulate the ATM and Back Office. This service will send messages to the queues that you just created.
-Create a new Java Project for the transfer service. In the Explorer of VS Code open Java Project and click the plus sign to add a Java Project to your workspace.
+Create a new Java Project for the transfer service.
+In the Explorer of VS Code open Java Project and click the plus sign to add a Java Project to your workspace.
 Select Spring Boot Project.
 Select Maven Project.
 Specify 3.">
@@ -14,7 +15,8 @@ Specify 3.">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Create the Test Runner Microservice :: CloudBank AI">
     <meta name="twitter:description" content="Next, you will create the “Test Runner” microservice which you will use to simulate the ATM and Back Office. This service will send messages to the queues that you just created.
-Create a new Java Project for the transfer service. In the Explorer of VS Code open Java Project and click the plus sign to add a Java Project to your workspace.
+Create a new Java Project for the transfer service.
+In the Explorer of VS Code open Java Project and click the plus sign to add a Java Project to your workspace.
 Select Spring Boot Project.
 Select Maven Project.
 Specify 3.">
@@ -22,7 +24,8 @@ Specify 3.">
     <meta property="og:site_name" content="CloudBank AI">
     <meta property="og:title" content="Create the Test Runner Microservice :: CloudBank AI">
     <meta property="og:description" content="Next, you will create the “Test Runner” microservice which you will use to simulate the ATM and Back Office. This service will send messages to the queues that you just created.
-Create a new Java Project for the transfer service. In the Explorer of VS Code open Java Project and click the plus sign to add a Java Project to your workspace.
+Create a new Java Project for the transfer service.
+In the Explorer of VS Code open Java Project and click the plus sign to add a Java Project to your workspace.
 Select Spring Boot Project.
 Select Maven Project.
 Specify 3.">
@@ -31,30 +34,31 @@ Specify 3.">
     <meta property="article:section" content="Check Processing">
     <meta itemprop="name" content="Create the Test Runner Microservice :: CloudBank AI">
     <meta itemprop="description" content="Next, you will create the “Test Runner” microservice which you will use to simulate the ATM and Back Office. This service will send messages to the queues that you just created.
-Create a new Java Project for the transfer service. In the Explorer of VS Code open Java Project and click the plus sign to add a Java Project to your workspace.
+Create a new Java Project for the transfer service.
+In the Explorer of VS Code open Java Project and click the plus sign to add a Java Project to your workspace.
 Select Spring Boot Project.
 Select Maven Project.
 Specify 3.">
-    <meta itemprop="wordCount" content="1616">
+    <meta itemprop="wordCount" content="1563">
     <title>Create the Test Runner Microservice :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1726239047" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726239047" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726239047" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1726239047" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726239047" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726239047" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1726239047" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1726239047" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1726239047" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1726239047" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1726239047" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1726239047" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/variant.css?1726239047" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1726239047" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1726239047"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1726843375" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726843375" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726843375" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1726843375" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726843375" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726843375" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1726843375" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1726843375" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1726843375" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1726843375" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1726843375" rel="stylesheet" id="R-variant-style">
+    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1726843375" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/microservices-datadriven/cloudbank/css/variant.css?1726843375" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/print.css?1726843375" rel="stylesheet" media="print">
+    <script src="/microservices-datadriven/cloudbank/js/variant.js?1726843375"></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
-      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1726239047";
+      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1726843375";
       // variant stuff
       window.variants && variants.init( [ 'zen-light' ] );
       // translations
@@ -116,353 +120,269 @@ Specify 3.">
 
 <p>Next, you will create the &ldquo;Test Runner&rdquo; microservice which you will use to simulate the ATM and Back Office.  This service will send messages to the queues that you just created.</p>
 <ol>
-<li>Create a new Java Project for the <code>transfer</code> service.</li>
-</ol>
+<li>
+<p>Create a new Java Project for the <code>transfer</code> service.</p>
 <p>In the Explorer of VS Code open <code>Java Project</code> and click the <strong>plus</strong> sign to add a Java Project to your workspace.</p>
-<p><a href="#R-image-3d1f6d7119e128f4de03031a87a6ace6" class="lightbox-link"><img alt="Add Java Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/add_java_project.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-3d1f6d7119e128f4de03031a87a6ace6"><img alt="Add Java Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/add_java_project.png" title=" "></a></p>
+<p><a href="#R-image-1d913d93247163bb126228fe0cdee6a1" class="lightbox-link"><img alt="Add Java Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/add_java_project.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-1d913d93247163bb126228fe0cdee6a1"><img alt="Add Java Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/add_java_project.png" title=" "></a></p>
 <p>Select Spring Boot Project.</p>
-<p><a href="#R-image-5de1a18b697d62fc8958355966b35b7c" class="lightbox-link"><img alt="Spring Boot Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/spring-boot-prj.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-5de1a18b697d62fc8958355966b35b7c"><img alt="Spring Boot Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/spring-boot-prj.png" title=" "></a></p>
+<p><a href="#R-image-36020803345c60ec04896c162294ca7e" class="lightbox-link"><img alt="Spring Boot Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/spring-boot-prj.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-36020803345c60ec04896c162294ca7e"><img alt="Spring Boot Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/spring-boot-prj.png" title=" "></a></p>
 <p>Select Maven Project.</p>
-<p><a href="#R-image-376118dd049d6e9a5551fcd33721c0be" class="lightbox-link"><img alt="Maven Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/maven-project.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-376118dd049d6e9a5551fcd33721c0be"><img alt="Maven Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/maven-project.png" title=" "></a></p>
+<p><a href="#R-image-d61dc4f4dcf463e1acd9b3038d4043d9" class="lightbox-link"><img alt="Maven Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/maven-project.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-d61dc4f4dcf463e1acd9b3038d4043d9"><img alt="Maven Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/maven-project.png" title=" "></a></p>
 <p>Specify <code>3.3.1</code> as the Spring Boot version.</p>
-<p><a href="#R-image-70eff221c55e8621ea196a3c55c30a83" class="lightbox-link"><img alt="Spring Boot Version" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/spring-boot-version.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-70eff221c55e8621ea196a3c55c30a83"><img alt="Spring Boot Version" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/spring-boot-version.png" title=" "></a></p>
+<p><a href="#R-image-ba4d98627077a45d1397d04035af767f" class="lightbox-link"><img alt="Spring Boot Version" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/spring-boot-version.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-ba4d98627077a45d1397d04035af767f"><img alt="Spring Boot Version" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/spring-boot-version.png" title=" "></a></p>
 <p>Use <code>com.example</code> as the Group Id.</p>
-<p><a href="#R-image-72b5e2dd12ff43e2b33649d7973b2dea" class="lightbox-link"><img alt="Group Id" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/group-id.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-72b5e2dd12ff43e2b33649d7973b2dea"><img alt="Group Id" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/group-id.png" title=" "></a></p>
+<p><a href="#R-image-118fd09edb405c89f05e7495b79cde06" class="lightbox-link"><img alt="Group Id" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/group-id.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-118fd09edb405c89f05e7495b79cde06"><img alt="Group Id" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/group-id.png" title=" "></a></p>
 <p>Enter <code>testrunner</code> as the Artifact Id.</p>
-<p><a href="#R-image-13d906699a05ac376acdfce8719704ef" class="lightbox-link"><img alt="Artifact Id" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/artifact-id-testrunner.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-13d906699a05ac376acdfce8719704ef"><img alt="Artifact Id" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/artifact-id-testrunner.png" title=" "></a></p>
+<p><a href="#R-image-8e6535eb2f86fed55e54d2e6d543cf23" class="lightbox-link"><img alt="Artifact Id" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/artifact-id-testrunner.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-8e6535eb2f86fed55e54d2e6d543cf23"><img alt="Artifact Id" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/artifact-id-testrunner.png" title=" "></a></p>
 <p>Use <code>JAR</code> as the Packaging Type.</p>
-<p><a href="#R-image-f379e83677565a7dfa255b62a32eb88d" class="lightbox-link"><img alt="Packaging Type" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/packaging-type.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-f379e83677565a7dfa255b62a32eb88d"><img alt="Packaging Type" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/packaging-type.png" title=" "></a></p>
+<p><a href="#R-image-202257614eec95e0ffb746acd997e7b5" class="lightbox-link"><img alt="Packaging Type" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/packaging-type.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-202257614eec95e0ffb746acd997e7b5"><img alt="Packaging Type" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/packaging-type.png" title=" "></a></p>
 <p>Select Java version <code>21</code>.</p>
-<p><a href="#R-image-2dbdb5de464c9c40abe0016530ee8983" class="lightbox-link"><img alt="Java Version" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/java-version.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-2dbdb5de464c9c40abe0016530ee8983"><img alt="Java Version" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/java-version.png" title=" "></a></p>
+<p><a href="#R-image-8dd4bc73e80b940ef6fd08888d6fb3f9" class="lightbox-link"><img alt="Java Version" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/java-version.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-8dd4bc73e80b940ef6fd08888d6fb3f9"><img alt="Java Version" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/java-version.png" title=" "></a></p>
 <p>Search for <code>Spring Web</code> and press <strong>Enter</strong></p>
-<p><a href="#R-image-b16e9702354d8650af688f24990959bd" class="lightbox-link"><img alt="Search for Spring Web" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/search-spring-web.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-b16e9702354d8650af688f24990959bd"><img alt="Search for Spring Web" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/search-spring-web.png" title=" "></a></p>
+<p><a href="#R-image-29d2e68ae58aeef2a551c0f714a6bf37" class="lightbox-link"><img alt="Search for Spring Web" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/search-spring-web.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-29d2e68ae58aeef2a551c0f714a6bf37"><img alt="Search for Spring Web" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/search-spring-web.png" title=" "></a></p>
 <p>Press <strong>Enter</strong> to continue and create the Java Project</p>
-<p><a href="#R-image-031974b4582ca558f2127529873f1537" class="lightbox-link"><img alt="Create Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/create-project.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-031974b4582ca558f2127529873f1537"><img alt="Create Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/create-project.png" title=" "></a></p>
+<p><a href="#R-image-b564931aab8d463b7c772616961ce3bf" class="lightbox-link"><img alt="Create Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/create-project.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-b564931aab8d463b7c772616961ce3bf"><img alt="Create Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/create-project.png" title=" "></a></p>
 <p>Select the <code>root</code> location for your project e.g. side by side with the <code>account</code> project.</p>
-<p><a href="#R-image-bb5c6f117d74f3bd4604f4b1ca93ba47" class="lightbox-link"><img alt="Project Location" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/project-location.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-bb5c6f117d74f3bd4604f4b1ca93ba47"><img alt="Project Location" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/project-location.png" title=" "></a></p>
+<p><a href="#R-image-e112211648208cc136dfbccb178a1fff" class="lightbox-link"><img alt="Project Location" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/project-location.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-e112211648208cc136dfbccb178a1fff"><img alt="Project Location" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/project-location.png" title=" "></a></p>
 <p>When the project opens click <strong>Add to Workspace</strong></p>
-<p><a href="#R-image-3f04a1b918c064b995c80e524659905e" class="lightbox-link"><img alt="Add to Workspace" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/add-to-workspace.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-3f04a1b918c064b995c80e524659905e"><img alt="Add to Workspace" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/add-to-workspace.png" title=" "></a></p>
-<ol>
-<li>Modify the <code>pom.xml</code> file</li>
-</ol>
+<p><a href="#R-image-dc291a254138dd20184af07fb8dace83" class="lightbox-link"><img alt="Add to Workspace" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/add-to-workspace.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-dc291a254138dd20184af07fb8dace83"><img alt="Add to Workspace" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/add-to-workspace.png" title=" "></a></p>
+</li>
+<li>
+<p>Modify the <code>pom.xml</code> file</p>
 <p>Open the <code>pom.xml</code> file in the <code>testrunner</code> project. This service will use the &ldquo;Web&rdquo; Spring Boot Starter which will allow it to expose REST endpoints and make REST calls to other services. It also uses the two Oracle Spring Boot Starters for UCP and Wallet to access the database: Add the following to the pom.xml:</p>
-<pre><code>```xml
-  
-  &lt;dependency&gt;
-    &lt;groupId&gt;com.oracle.database.spring&lt;/groupId&gt;
-    &lt;artifactId&gt;oracle-spring-boot-starter-aqjms&lt;/artifactId&gt;
-    &lt;version&gt;23.4.0&lt;/version&gt;
-  &lt;/dependency&gt;
-  &lt;dependency&gt;
-    &lt;groupId&gt;com.oracle.database.spring&lt;/groupId&gt;
-    &lt;artifactId&gt;oracle-spring-boot-starter-wallet&lt;/artifactId&gt;
-    &lt;type&gt;pom&lt;/type&gt;
-    &lt;version&gt;23.4.0&lt;/version&gt;
-  &lt;/dependency&gt;
-  &lt;dependency&gt;
-    &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
-    &lt;artifactId&gt;lombok&lt;/artifactId&gt;
-  &lt;/dependency&gt;
-```
-</code></pre>
-<ol>
-<li>Create the Spring Boot application YAML file</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span>  <span style="color:#f92672">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;groupId&gt;</span>com.oracle.database.spring<span style="color:#f92672">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;artifactId&gt;</span>oracle-spring-boot-starter-aqjms<span style="color:#f92672">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;version&gt;</span>23.4.0<span style="color:#f92672">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;groupId&gt;</span>com.oracle.database.spring<span style="color:#f92672">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;artifactId&gt;</span>oracle-spring-boot-starter-wallet<span style="color:#f92672">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;type&gt;</span>pom<span style="color:#f92672">&lt;/type&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;version&gt;</span>23.4.0<span style="color:#f92672">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;groupId&gt;</span>org.projectlombok<span style="color:#f92672">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;artifactId&gt;</span>lombok<span style="color:#f92672">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;/dependency&gt;</span></span></span></code></pre></div></li>
+<li>
+<p>Create the Spring Boot application YAML file</p>
 <p>In the <code>testrunner</code> project, rename the file called <code>application.properties</code> to <code>application.yaml</code> located in the <code>src/main/resources</code>. This will be the Spring Boot application configuration file:</p>
-<pre><code>```yaml
-spring:
-  application:
-    name: testrunner
-
-  datasource:
-    url: ${spring.datasource.url}
-    username: ${spring.datasource.username}
-    password: ${spring.datasource.password}
-```
-</code></pre>
-<p>This is the Spring Boot application YAML file, which contains the configuration information for this service.  In this case, you only need to provide the application name and the connection details for the database hosting the queues.</p>
-<ol>
-<li>Create the main Spring Application class</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">spring</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">application</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">testrunner</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">datasource</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">url</span>: <span style="color:#ae81ff">${spring.datasource.url}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">username</span>: <span style="color:#ae81ff">${spring.datasource.username}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">password</span>: <span style="color:#ae81ff">${spring.datasource.password}</span></span></span></code></pre></div><p>This is the Spring Boot application YAML file, which contains the configuration information for this service.  In this case, you only need to provide the application name and the connection details for the database hosting the queues.</p>
+</li>
+<li>
+<p>Create the main Spring Application class</p>
 <p>In the <code>testrunner</code> directory, open the Java file called <code>TestrunnerApplication.java</code> and add this content. This is a standard Spring Boot main class, notice the <code>@SpringBootApplication</code> annotation on the class.  It also has the <code>@EnableJms</code> annotation which tells Spring Boot to enable JMS functionality in this application. The <code>main</code> method is a normal Spring Boot main method:</p>
-<pre><code>```java
-
-package com.example.testrunner;
-
-import jakarta.jms.ConnectionFactory;
-
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.jms.annotation.EnableJms;
-import org.springframework.jms.core.JmsTemplate;
-import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
-import org.springframework.jms.support.converter.MessageConverter;
-import org.springframework.jms.support.converter.MessageType;
-
-@SpringBootApplication
-@EnableJms
-public class TestrunnerApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(TestrunnerApplication.class, args);
-    }
-
-    // Serialize message content to json using TextMessage
-    @Bean 
-    public MessageConverter jacksonJmsMessageConverter() {
-        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
-        converter.setTargetType(MessageType.TEXT);
-        converter.setTypeIdPropertyName(&quot;_type&quot;);
-        return converter;
-    }
-
-    @Bean 
-    public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory) {
-        JmsTemplate jmsTemplate = new JmsTemplate();
-        jmsTemplate.setConnectionFactory(connectionFactory);
-        jmsTemplate.setMessageConverter(jacksonJmsMessageConverter());
-        return jmsTemplate;
-    }
-
-}
-
-```
-</code></pre>
-<p>In addition to the standard parts of a Spring Boot application class, you will add two beans that will be needed in this service.  First, you need a <code>MessageConverter</code> bean so that you can convert a Java object (POJO) into JSON format, and vice versa. This bean will be used to serialize and deserialize the objects you need to write onto the queues.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f92672">package</span> com.example.testrunner;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> jakarta.jms.ConnectionFactory;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.boot.SpringApplication;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.context.annotation.Bean;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.jms.annotation.EnableJms;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.jms.core.JmsTemplate;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.jms.support.converter.MappingJackson2MessageConverter;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.jms.support.converter.MessageConverter;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.jms.support.converter.MessageType;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@SpringBootApplication</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@EnableJms</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TestrunnerApplication</span> {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">main</span>(String<span style="color:#f92672">[]</span> args) {
+</span></span><span style="display:flex;"><span>        SpringApplication.<span style="color:#a6e22e">run</span>(TestrunnerApplication.<span style="color:#a6e22e">class</span>, args);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Serialize message content to json using TextMessage</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> MessageConverter <span style="color:#a6e22e">jacksonJmsMessageConverter</span>() {
+</span></span><span style="display:flex;"><span>        MappingJackson2MessageConverter converter <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> MappingJackson2MessageConverter();
+</span></span><span style="display:flex;"><span>        converter.<span style="color:#a6e22e">setTargetType</span>(MessageType.<span style="color:#a6e22e">TEXT</span>);
+</span></span><span style="display:flex;"><span>        converter.<span style="color:#a6e22e">setTypeIdPropertyName</span>(<span style="color:#e6db74">&#34;_type&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> converter;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span> 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> JmsTemplate <span style="color:#a6e22e">jmsTemplate</span>(ConnectionFactory connectionFactory) {
+</span></span><span style="display:flex;"><span>        JmsTemplate jmsTemplate <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> JmsTemplate();
+</span></span><span style="display:flex;"><span>        jmsTemplate.<span style="color:#a6e22e">setConnectionFactory</span>(connectionFactory);
+</span></span><span style="display:flex;"><span>        jmsTemplate.<span style="color:#a6e22e">setMessageConverter</span>(jacksonJmsMessageConverter());
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> jmsTemplate;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div><p>In addition to the standard parts of a Spring Boot application class, you will add two beans that will be needed in this service.  First, you need a <code>MessageConverter</code> bean so that you can convert a Java object (POJO) into JSON format, and vice versa. This bean will be used to serialize and deserialize the objects you need to write onto the queues.</p>
 <p>The second bean you need is a <code>JmsTemplate</code>. This is a standard Spring JMS bean that is used to access JMS functionality.  You will use this bean to enqueue messages. Notice that this bean is configured to use the <code>MessageConverter</code> bean and that the JMS <code>ConnectionFactory</code> is injected. The Oracle Spring Boot Starter for AQ/JMS will create the JMS <code>ConnectionFactory</code> for you.</p>
 <p><strong>Note</strong>: The Oracle Spring Boot Starter for AQ/JMS will also inject a JDBC <code>Connection</code> bean which shares the same database transaction with the JMS <code>ConnectionFactory</code>. This is not needed in this lab.  The shared transaction enables you to write methods which can perform both JMS and JPA operations in an atomic transaction, which can be very helpful in some use cases and can dramatically reduce the amount of code needed to handle situations like duplicate message delivery or lost messages.</p>
-<ol>
-<li>Create the model classes</li>
-</ol>
+</li>
+<li>
+<p>Create the model classes</p>
 <p>Create a new directory called <code>src/main/java/com/example/testrunner/model</code> and in this directory create two Java files. First, <code>CheckDeposit.java</code> with this content. This class will be used to simulate the ATM sending the &ldquo;deposit&rdquo; notification:</p>
-<pre><code>```java
-package com.example.testrunner.model;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class CheckDeposit {
-    private long accountId;
-    private long amount;
-}
-```
-</code></pre>
-<p>Next, <code>Clearance.java</code> with this content. This class will be used to simulate the Back Office sending the &ldquo;clearance&rdquo; notification:</p>
-<pre><code>```java
-package com.example.testrunner.model;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class Clearance {
-    private long journalId;
-}   
-```
-</code></pre>
-<ol>
-<li>Create the controller</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f92672">package</span> com.example.testrunner.model;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> lombok.AllArgsConstructor;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> lombok.Data;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> lombok.NoArgsConstructor;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Data</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@AllArgsConstructor</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@NoArgsConstructor</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CheckDeposit</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">long</span> accountId;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">long</span> amount;
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div><p>Next, <code>Clearance.java</code> with this content. This class will be used to simulate the Back Office sending the &ldquo;clearance&rdquo; notification:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f92672">package</span> com.example.testrunner.model;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> lombok.AllArgsConstructor;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> lombok.Data;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> lombok.NoArgsConstructor;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Data</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@AllArgsConstructor</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@NoArgsConstructor</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Clearance</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">long</span> journalId;
+</span></span><span style="display:flex;"><span>}   </span></span></code></pre></div></li>
+<li>
+<p>Create the controller</p>
 <p>Create a new directory called <code>src/main/java/com/example/testrunner/controller</code> and in this directory create a new Java file called <code>TestRunnerController.java</code> with the following content. This class will have the <code>RestController</code> annotation so that it can expose REST APIs that you can call to trigger the simulation of the ATM and Back Office notifications. It will need the <code>JmsTemplate</code> to access JMS functionality, this can be injected with the <code>AutoWired</code> annotation. Create two methods, one to send each notification:</p>
-<pre><code>```java
-package com.example.testrunner.controller;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.jms.core.JmsTemplate;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.example.testrunner.model.CheckDeposit;
-import com.example.testrunner.model.Clearance;
-
-@RestController
-@RequestMapping(&quot;/api/v1/testrunner&quot;)
-public class TestRunnerController {
-
-    @Autowired
-    private JmsTemplate jmsTemplate;
-    
-    @PostMapping(&quot;/deposit&quot;)
-    public ResponseEntity&lt;CheckDeposit&gt; depositCheck(@RequestBody CheckDeposit deposit) {       
-        jmsTemplate.convertAndSend(&quot;deposits&quot;, deposit);
-        return new ResponseEntity&lt;CheckDeposit&gt;(deposit, HttpStatus.CREATED);
-    }
-
-    @PostMapping(&quot;/clear&quot;)
-    public ResponseEntity&lt;Clearance&gt; clearCheck(@RequestBody Clearance clearance) {
-        jmsTemplate.convertAndSend(&quot;clearances&quot;, clearance);
-        return new ResponseEntity&lt;Clearance&gt;(clearance, HttpStatus.CREATED);
-    }
-
-}
-```
-</code></pre>
-<ol>
-<li>Build a JAR file for deployment</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f92672">package</span> com.example.testrunner.controller;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.beans.factory.annotation.Autowired;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.http.HttpStatus;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.http.ResponseEntity;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.jms.core.JmsTemplate;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.web.bind.annotation.PostMapping;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.web.bind.annotation.RequestBody;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.web.bind.annotation.RequestMapping;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.web.bind.annotation.RestController;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> com.example.testrunner.model.CheckDeposit;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> com.example.testrunner.model.Clearance;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@RestController</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@RequestMapping</span>(<span style="color:#e6db74">&#34;/api/v1/testrunner&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TestRunnerController</span> {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Autowired</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> JmsTemplate jmsTemplate;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@PostMapping</span>(<span style="color:#e6db74">&#34;/deposit&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> ResponseEntity<span style="color:#f92672">&lt;</span>CheckDeposit<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">depositCheck</span>(<span style="color:#a6e22e">@RequestBody</span> CheckDeposit deposit) {       
+</span></span><span style="display:flex;"><span>        jmsTemplate.<span style="color:#a6e22e">convertAndSend</span>(<span style="color:#e6db74">&#34;deposits&#34;</span>, deposit);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> ResponseEntity<span style="color:#f92672">&lt;</span>CheckDeposit<span style="color:#f92672">&gt;</span>(deposit, HttpStatus.<span style="color:#a6e22e">CREATED</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@PostMapping</span>(<span style="color:#e6db74">&#34;/clear&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> ResponseEntity<span style="color:#f92672">&lt;</span>Clearance<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">clearCheck</span>(<span style="color:#a6e22e">@RequestBody</span> Clearance clearance) {
+</span></span><span style="display:flex;"><span>        jmsTemplate.<span style="color:#a6e22e">convertAndSend</span>(<span style="color:#e6db74">&#34;clearances&#34;</span>, clearance);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> ResponseEntity<span style="color:#f92672">&lt;</span>Clearance<span style="color:#f92672">&gt;</span>(clearance, HttpStatus.<span style="color:#a6e22e">CREATED</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></li>
+<li>
+<p>Build a JAR file for deployment</p>
 <p>Run the following command to build the JAR file.</p>
-<pre><code>```shell
-$ mvn clean package -DskipTests
-```
-</code></pre>
-<p>The service is now ready to deploy to the backend.</p>
-<ol>
-<li>Prepare the backend for deployment</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ mvn clean package -DskipTests</span></span></code></pre></div><p>The service is now ready to deploy to the backend.</p>
+</li>
+<li>
+<p>Prepare the backend for deployment</p>
 <p>The Oracle Backend for Spring Boot and Microservices admin service is not exposed outside the Kubernetes cluster by default. Oracle recommends using a <strong>kubectl</strong> port forwarding tunnel to establish a secure connection to the admin service.</p>
-<pre><code>Start a tunnel using this command in a new terminal window:
-
-```shell
-$ kubectl -n obaas-admin port-forward svc/obaas-admin 8080
-```
-</code></pre>
-<p>Get the password for the <code>obaas-admin</code> user. The <code>obaas-admin</code> user is the equivalent of the admin or root user in the Oracle Backend for Spring Boot and Microservices backend.</p>
-<pre><code>```shell
-$ kubectl get secret -n azn-server  oractl-passwords -o jsonpath='{.data.admin}' | base64 -d
-```
-</code></pre>
-<p>Start the Oracle Backend for Spring Boot and Microservices CLI (<em>oractl</em>) in a new terminal window using this command:</p>
-<pre><code>```shell
-$ oractl
- _   _           __    _    ___
-/ \ |_)  _.  _. (_    /  |   |
-\_/ |_) (_| (_| __)   \_ |_ _|_
-========================================================================================
-  Application Name: Oracle Backend Platform :: Command Line Interface
-  Application Version: (1.3.0)
-  :: Spring Boot (v3.3.3) ::
-
-  Ask for help:
-  - Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-  - email: obaas_ww@oracle.com
-
-oractl:&gt;
-```
-
-Connect to the Oracle Backend for Spring Boot and Microservices admin service using the `connect` command. Enter `obaas-admin` and the username and use the password you collected earlier.
-
-```shell
-oractl&gt; connect
-username: obaas-admin
-password: **************
-Credentials successfully authenticated! obaas-admin -&gt; welcome to OBaaS CLI.
-oractl:&gt;
-```
-</code></pre>
-<ol>
-<li>Create a binding for the Test Runner service</li>
-</ol>
+<p>Start a tunnel using this command in a new terminal window:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl -n obaas-admin port-forward svc/obaas-admin <span style="color:#ae81ff">8080</span></span></span></code></pre></div><p>Get the password for the <code>obaas-admin</code> user. The <code>obaas-admin</code> user is the equivalent of the admin or root user in the Oracle Backend for Spring Boot and Microservices backend.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl get secret -n azn-server  oractl-passwords -o jsonpath<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;{.data.admin}&#39;</span> | base64 -d</span></span></code></pre></div><p>Start the Oracle Backend for Spring Boot and Microservices CLI (<em>oractl</em>) in a new terminal window using this command:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ oractl
+</span></span><span style="display:flex;"><span> _   _           __    _    ___
+</span></span><span style="display:flex;"><span>/ <span style="color:#ae81ff">\ </span>|_<span style="color:#f92672">)</span>  _.  _. <span style="color:#f92672">(</span>_    /  |   |
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">\_</span>/ |_<span style="color:#f92672">)</span> <span style="color:#f92672">(</span>_| <span style="color:#f92672">(</span>_| __<span style="color:#f92672">)</span>   <span style="color:#ae81ff">\_</span> |_ _|_
+</span></span><span style="display:flex;"><span><span style="color:#f92672">========================================================================================</span>
+</span></span><span style="display:flex;"><span>  Application Name: Oracle Backend Platform :: Command Line Interface
+</span></span><span style="display:flex;"><span>  Application Version: <span style="color:#f92672">(</span>1.3.0<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  :: Spring Boot <span style="color:#f92672">(</span>v3.3.3<span style="color:#f92672">)</span> ::
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  Ask <span style="color:#66d9ef">for</span> help:
+</span></span><span style="display:flex;"><span>  - Slack: https://oracledevs.slack.com/archives/C03ALDSV272
+</span></span><span style="display:flex;"><span>  - email: obaas_ww@oracle.com
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>oractl:&gt;</span></span></code></pre></div><p>Connect to the Oracle Backend for Spring Boot and Microservices admin service using the <code>connect</code> command. Enter <code>obaas-admin</code> and the username and use the password you collected earlier.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>oractl&gt; connect
+</span></span><span style="display:flex;"><span>username: obaas-admin
+</span></span><span style="display:flex;"><span>password: **************
+</span></span><span style="display:flex;"><span>Credentials successfully authenticated! obaas-admin -&gt; welcome to OBaaS CLI.
+</span></span><span style="display:flex;"><span>oractl:&gt;</span></span></code></pre></div></li>
+<li>
+<p>Create a binding for the Test Runner service</p>
 <p>Create a binding so the Test Runner service can access the Oracle Autonomous Database as the <code>account</code> user. Run this command to create the binding, and type in the password for the <code>account</code> user when prompted. The password is <code>Welcome1234##</code>:</p>
-<pre><code>```shell
-oractl:&gt; bind --app-name application --service-name testrunner --username account
-```
-</code></pre>
-<ol>
-<li>Deploy the Test Runner service</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>oractl:&gt; bind --app-name application --service-name testrunner --username account</span></span></code></pre></div></li>
+<li>
+<p>Deploy the Test Runner service</p>
 <p>You will now deploy your Test Runner service to the Oracle Backend for Spring Boot and Microservices using the CLI. Run this command to deploy your service, make sure you provide the correct path to your JAR file. <strong>Note</strong> that this command may take 1-3 minutes to complete:</p>
-<pre><code>```shell
-oractl:&gt; deploy --app-name application --service-name testrunner --artifact-path /path/to/testrunner-0.0.1-SNAPSHOT.jar --image-version 0.0.1
-uploading: testrunner/target/testrunner-0.0.1-SNAPSHOT.jarbuilding and pushing image...
-creating deployment and service... successfully deployed
-oractl:&gt;
-```
-
-You can close the port forwarding session for the CLI now (just type a Ctrl+C in its console window).
-</code></pre>
-<ol>
-<li>Check that the <code>testrunner</code> service is running</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>oractl:&gt; deploy --app-name application --service-name testrunner --artifact-path /path/to/testrunner-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+</span></span><span style="display:flex;"><span>uploading: testrunner/target/testrunner-0.0.1-SNAPSHOT.jarbuilding and pushing image...
+</span></span><span style="display:flex;"><span>creating deployment and service... successfully deployed
+</span></span><span style="display:flex;"><span>oractl:&gt;</span></span></code></pre></div><p>You can close the port forwarding session for the CLI now (just type a Ctrl+C in its console window).</p>
+</li>
+<li>
+<p>Check that the <code>testrunner</code> service is running</p>
 <p>Verify that the testrunner application is up and running by running this command:</p>
-<pre><code>```shell
-$ kubectl logs -n application svc/testrunner
-```
-</code></pre>
-<p>The output should be similar to this, look for <code>Started TestrunnerApplication</code></p>
-<pre><code>```text
-2023-06-02 15:18:39.620  INFO 1 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1806 ms
-2023-06-02 15:18:40.915  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
-2023-06-02 15:18:40.938  INFO 1 --- [           main] c.e.testrunner.TestrunnerApplication     : Started TestrunnerApplication in 4.174 seconds (JVM running for 5.237)
-```
-</code></pre>
-<ol>
-<li>Test the endpoints</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl logs -n application svc/testrunner</span></span></code></pre></div><p>The output should be similar to this, look for <code>Started TestrunnerApplication</code></p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>2023-06-02 15:18:39.620  INFO 1 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1806 ms
+</span></span><span style="display:flex;"><span>2023-06-02 15:18:40.915  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path &#39;&#39;
+</span></span><span style="display:flex;"><span>2023-06-02 15:18:40.938  INFO 1 --- [           main] c.e.testrunner.TestrunnerApplication     : Started TestrunnerApplication in 4.174 seconds (JVM running for 5.237)</span></span></code></pre></div></li>
+<li>
+<p>Test the endpoints</p>
 <p>The Test Runner service is not exposed outside your Kubernetes cluster, so you must create a port-forwarding tunnel to access it. Create a tunnel using this command:</p>
-<pre><code>```shell
-$ kubectl -n application port-forward svc/testrunner 8084:8080
-```
-</code></pre>
-<p>Call the deposit endpoint to send a deposit notification using this command:</p>
-<pre><code>```shell
-$ curl -i -X POST -H 'Content-Type: application/json' -d '{&quot;accountId&quot;: 2, &quot;amount&quot;: 200}' http://localhost:8084/api/v1/testrunner/deposit
-HTTP/1.1 201
-Date: Wed, 31 May 2023 15:11:55 GMT
-Content-Type: application/json
-Transfer-Encoding: chunked
-Connection: keep-alive
-
-{&quot;accountId&quot;:2,&quot;amount&quot;:200}
-```
-</code></pre>
-<p>Call the clear endpoint to send a clearance notification using this command. Note that you can use any <code>journalId</code> since there is nothing receiving and processing these messages yet:</p>
-<pre><code>```shell
-$ curl -i -X POST -H 'Content-Type: application/json' -d '{&quot;journalId&quot;: 4}' http://localhost:8084/api/v1/testrunner/clear
-HTTP/1.1 201
-Date: Wed, 31 May 2023 15:12:54 GMT
-Content-Type: application/json
-Transfer-Encoding: chunked
-Connection: keep-alive
-
-{&quot;journalId&quot;:4}
-```
-</code></pre>
-<ol>
-<li>Verify the expected messages are on the queues</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl -n application port-forward svc/testrunner 8084:8080</span></span></code></pre></div><p>Call the deposit endpoint to send a deposit notification using this command:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ curl -i -X POST -H <span style="color:#e6db74">&#39;Content-Type: application/json&#39;</span> -d <span style="color:#e6db74">&#39;{&#34;accountId&#34;: 2, &#34;amount&#34;: 200}&#39;</span> http://localhost:8084/api/v1/testrunner/deposit
+</span></span><span style="display:flex;"><span>HTTP/1.1 <span style="color:#ae81ff">201</span>
+</span></span><span style="display:flex;"><span>Date: Wed, <span style="color:#ae81ff">31</span> May <span style="color:#ae81ff">2023</span> 15:11:55 GMT
+</span></span><span style="display:flex;"><span>Content-Type: application/json
+</span></span><span style="display:flex;"><span>Transfer-Encoding: chunked
+</span></span><span style="display:flex;"><span>Connection: keep-alive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span><span style="color:#e6db74">&#34;accountId&#34;</span>:2,<span style="color:#e6db74">&#34;amount&#34;</span>:200<span style="color:#f92672">}</span></span></span></code></pre></div><p>Call the clear endpoint to send a clearance notification using this command. Note that you can use any <code>journalId</code> since there is nothing receiving and processing these messages yet:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ curl -i -X POST -H <span style="color:#e6db74">&#39;Content-Type: application/json&#39;</span> -d <span style="color:#e6db74">&#39;{&#34;journalId&#34;: 4}&#39;</span> http://localhost:8084/api/v1/testrunner/clear
+</span></span><span style="display:flex;"><span>HTTP/1.1 <span style="color:#ae81ff">201</span>
+</span></span><span style="display:flex;"><span>Date: Wed, <span style="color:#ae81ff">31</span> May <span style="color:#ae81ff">2023</span> 15:12:54 GMT
+</span></span><span style="display:flex;"><span>Content-Type: application/json
+</span></span><span style="display:flex;"><span>Transfer-Encoding: chunked
+</span></span><span style="display:flex;"><span>Connection: keep-alive
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span><span style="color:#e6db74">&#34;journalId&#34;</span>:4<span style="color:#f92672">}</span></span></span></code></pre></div></li>
+<li>
+<p>Verify the expected messages are on the queues</p>
 <p>Connect to the database as the <code>account</code> (password <code>Welcome12343##</code>) and issue this SQL statement to check the payloads of the messages on the deposits queue:</p>
-<pre><code>```sql
-SQL&gt; select qt.user_data.text_vc from deposits_qt qt;
-
-USER_DATA.TEXT_VC
-_______________________________
-{&quot;accountId&quot;:2,&quot;amount&quot;:200}
-```
-</code></pre>
-<p>Issue this SQL statement to check the payloads of the messages on the clearances queue:</p>
-<pre><code>```sql
-SQL&gt; select qt.user_data.text_vc from clearances_qt qt;
-
-USER_DATA.TEXT_VC
-____________________
-{&quot;journalId&quot;:4}
-```
-</code></pre>
-<p>hat completes the Test Runner service. Next, you will build the Check Processing service which will receive these messages and process them.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SQL</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> qt.user_data.text_vc <span style="color:#66d9ef">from</span> deposits_qt qt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>USER_DATA.TEXT_VC
+</span></span><span style="display:flex;"><span>_______________________________
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">{</span><span style="color:#e6db74">&#34;accountId&#34;</span>:<span style="color:#ae81ff">2</span>,<span style="color:#e6db74">&#34;amount&#34;</span>:<span style="color:#ae81ff">200</span><span style="color:#960050;background-color:#1e0010">}</span></span></span></code></pre></div><p>Issue this SQL statement to check the payloads of the messages on the clearances queue:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">SQL</span><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">select</span> qt.user_data.text_vc <span style="color:#66d9ef">from</span> clearances_qt qt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>USER_DATA.TEXT_VC
+</span></span><span style="display:flex;"><span>____________________
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">{</span><span style="color:#e6db74">&#34;journalId&#34;</span>:<span style="color:#ae81ff">4</span><span style="color:#960050;background-color:#1e0010">}</span></span></span></code></pre></div><p>That completes the Test Runner service. Next, you will build the Check Processing service which will receive these messages and process them.</p>
+</li>
+</ol>
 
             <footer class="footline">
             </footer>
@@ -488,12 +408,12 @@ ____________________
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1726239047" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1726843375" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -641,8 +561,8 @@ ____________________
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1726239047" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1726239047" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1726239047" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1726843375" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1726843375" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1726843375" defer></script>
   </body>
 </html>

@@ -40,7 +40,7 @@
       <link>https://oracle.github.io/microservices-datadriven/cloudbank/account/jpa/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/cloudbank/account/jpa/index.html</guid>
-      <description>Add Spring Data JPA to the Account service and configure it to access the database Spring Data JPA allows our Spring Boot application to easily use the database. It uses simple Java POJOs to represent the data model and provides a lot of out-of-the-box features which means there is a lot less boilerplate code to be written.&#xA;To add Spring Data JPA and the Oracle Database drivers to your project, open the Maven POM (pom.</description>
+      <description>Add Spring Data JPA to the Account service and configure it to access the database&#xA;Spring Data JPA allows our Spring Boot application to easily use the database. It uses simple Java POJOs to represent the data model and provides a lot of out-of-the-box features which means there is a lot less boilerplate code to be written.&#xA;To add Spring Data JPA and the Oracle Database drivers to your project, open the Maven POM (pom.</description>
     </item>
     <item>
       <title>Query and Create Accounts</title>

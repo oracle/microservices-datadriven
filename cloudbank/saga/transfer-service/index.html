@@ -6,43 +6,47 @@
     <meta name="generator" content="Hugo 0.123.6">
     <meta name="generator" content="Relearn 6.1.1+tip">
     <meta name="description" content="Now, you will create another new Spring Boot microservice application and implement the Transfer Service. This service will initiate the LRA and act as the logical coordinator - it will call the deposit and withdraw services you just implemented to effect the transfer to process the Cloud Cash Payment.
-Create a new Java Project for the transfer service. In the Explorer of VS Code open Java Project and click the plus sign to add a Java Project to your workspace.">
+Create a new Java Project for the transfer service.
+In the Explorer of VS Code open Java Project and click the plus sign to add a Java Project to your workspace.">
     <meta name="author" content="">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Create the Transfer service :: CloudBank AI">
     <meta name="twitter:description" content="Now, you will create another new Spring Boot microservice application and implement the Transfer Service. This service will initiate the LRA and act as the logical coordinator - it will call the deposit and withdraw services you just implemented to effect the transfer to process the Cloud Cash Payment.
-Create a new Java Project for the transfer service. In the Explorer of VS Code open Java Project and click the plus sign to add a Java Project to your workspace.">
+Create a new Java Project for the transfer service.
+In the Explorer of VS Code open Java Project and click the plus sign to add a Java Project to your workspace.">
     <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/cloudbank/saga/transfer-service/index.html">
     <meta property="og:site_name" content="CloudBank AI">
     <meta property="og:title" content="Create the Transfer service :: CloudBank AI">
     <meta property="og:description" content="Now, you will create another new Spring Boot microservice application and implement the Transfer Service. This service will initiate the LRA and act as the logical coordinator - it will call the deposit and withdraw services you just implemented to effect the transfer to process the Cloud Cash Payment.
-Create a new Java Project for the transfer service. In the Explorer of VS Code open Java Project and click the plus sign to add a Java Project to your workspace.">
+Create a new Java Project for the transfer service.
+In the Explorer of VS Code open Java Project and click the plus sign to add a Java Project to your workspace.">
     <meta property="og:locale" content="en_us">
     <meta property="og:type" content="article">
     <meta property="article:section" content="Manage Sagas">
     <meta itemprop="name" content="Create the Transfer service :: CloudBank AI">
     <meta itemprop="description" content="Now, you will create another new Spring Boot microservice application and implement the Transfer Service. This service will initiate the LRA and act as the logical coordinator - it will call the deposit and withdraw services you just implemented to effect the transfer to process the Cloud Cash Payment.
-Create a new Java Project for the transfer service. In the Explorer of VS Code open Java Project and click the plus sign to add a Java Project to your workspace.">
-    <meta itemprop="wordCount" content="1390">
+Create a new Java Project for the transfer service.
+In the Explorer of VS Code open Java Project and click the plus sign to add a Java Project to your workspace.">
+    <meta itemprop="wordCount" content="1371">
     <title>Create the Transfer service :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1726239047" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726239047" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726239047" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1726239047" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726239047" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726239047" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1726239047" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1726239047" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1726239047" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1726239047" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1726239047" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1726239047" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/variant.css?1726239047" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1726239047" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1726239047"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1726843375" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726843375" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726843375" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1726843375" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726843375" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726843375" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1726843375" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1726843375" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1726843375" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1726843375" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1726843375" rel="stylesheet" id="R-variant-style">
+    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1726843375" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/microservices-datadriven/cloudbank/css/variant.css?1726843375" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/print.css?1726843375" rel="stylesheet" media="print">
+    <script src="/microservices-datadriven/cloudbank/js/variant.js?1726843375"></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
-      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1726239047";
+      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1726843375";
       // variant stuff
       window.variants && variants.init( [ 'zen-light' ] );
       // translations
@@ -104,361 +108,317 @@ Create a new Java Project for the transfer service. In the Explorer of VS Code o
 
 <p>Now, you will create another new Spring Boot microservice application and implement the Transfer Service.  This service will initiate the LRA and act as the logical coordinator - it will call the deposit and withdraw services you just implemented to effect the transfer to process the Cloud Cash Payment.</p>
 <ol>
-<li>Create a new Java Project for the <code>transfer</code> service.</li>
-</ol>
+<li>
+<p>Create a new Java Project for the <code>transfer</code> service.</p>
 <p>In the Explorer of VS Code open <code>Java Project</code> and click the <strong>plus</strong> sign to add a Java Project to your workspace.</p>
-<p><a href="#R-image-832592cce5d9266976443d93af9f2f6c" class="lightbox-link"><img alt="Add Java Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/add_java_project.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-832592cce5d9266976443d93af9f2f6c"><img alt="Add Java Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/add_java_project.png" title=" "></a></p>
+<p><a href="#R-image-26f350723d86210bf0a8b24f05e70b59" class="lightbox-link"><img alt="Add Java Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/add_java_project.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-26f350723d86210bf0a8b24f05e70b59"><img alt="Add Java Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/add_java_project.png" title=" "></a></p>
 <p>Select Spring Boot Project.</p>
-<p><a href="#R-image-eb13ecf20318b74bb0c9c40258ad15dd" class="lightbox-link"><img alt="Spring Boot Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/spring-boot-prj.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-eb13ecf20318b74bb0c9c40258ad15dd"><img alt="Spring Boot Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/spring-boot-prj.png" title=" "></a></p>
+<p><a href="#R-image-ac2ce228f5fd5ad592ba1b15f13cad7b" class="lightbox-link"><img alt="Spring Boot Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/spring-boot-prj.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-ac2ce228f5fd5ad592ba1b15f13cad7b"><img alt="Spring Boot Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/spring-boot-prj.png" title=" "></a></p>
 <p>Select Maven Project.</p>
-<p><a href="#R-image-ede08a352415e88aaa4b14db478210ce" class="lightbox-link"><img alt="Maven Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/maven-project.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-ede08a352415e88aaa4b14db478210ce"><img alt="Maven Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/maven-project.png" title=" "></a></p>
+<p><a href="#R-image-46fbe444f507b8b8c6ae11f50014cc44" class="lightbox-link"><img alt="Maven Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/maven-project.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-46fbe444f507b8b8c6ae11f50014cc44"><img alt="Maven Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/maven-project.png" title=" "></a></p>
 <p>Specify <code>3.3.1</code> as the Spring Boot version.</p>
-<p><a href="#R-image-6ebec38568bc9fae29c889886c1b328d" class="lightbox-link"><img alt="Spring Boot Version" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/spring-boot-version.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-6ebec38568bc9fae29c889886c1b328d"><img alt="Spring Boot Version" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/spring-boot-version.png" title=" "></a></p>
+<p><a href="#R-image-cfb7c3f22d0052723c6d580ed0e888fb" class="lightbox-link"><img alt="Spring Boot Version" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/spring-boot-version.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-cfb7c3f22d0052723c6d580ed0e888fb"><img alt="Spring Boot Version" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/spring-boot-version.png" title=" "></a></p>
 <p>Use <code>com.example</code> as the Group Id.</p>
-<p><a href="#R-image-7aefeb9dc47693d89ffe54695b4c9df8" class="lightbox-link"><img alt="Group Id" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/group-id.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-7aefeb9dc47693d89ffe54695b4c9df8"><img alt="Group Id" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/group-id.png" title=" "></a></p>
+<p><a href="#R-image-898d295d5b665b5cb98ae2b9898be5f0" class="lightbox-link"><img alt="Group Id" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/group-id.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-898d295d5b665b5cb98ae2b9898be5f0"><img alt="Group Id" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/group-id.png" title=" "></a></p>
 <p>Enter <code>transfer</code> as the Artifact Id.</p>
-<p><a href="#R-image-4064b7b12dd14e94d07d2f47e0f88ef6" class="lightbox-link"><img alt="Artifact Id" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/artifact-id-transfer.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-4064b7b12dd14e94d07d2f47e0f88ef6"><img alt="Artifact Id" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/artifact-id-transfer.png" title=" "></a></p>
+<p><a href="#R-image-fde5fc9174e92b4aa8460f1f4edb259a" class="lightbox-link"><img alt="Artifact Id" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/artifact-id-transfer.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-fde5fc9174e92b4aa8460f1f4edb259a"><img alt="Artifact Id" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/artifact-id-transfer.png" title=" "></a></p>
 <p>Use <code>JAR</code> as the Packaging Type.</p>
-<p><a href="#R-image-70fe9f81d560be5703b45aafd84df996" class="lightbox-link"><img alt="Packaging Type" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/packaging-type.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-70fe9f81d560be5703b45aafd84df996"><img alt="Packaging Type" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/packaging-type.png" title=" "></a></p>
+<p><a href="#R-image-ece111f6031695c33d46decb2cac6e89" class="lightbox-link"><img alt="Packaging Type" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/packaging-type.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-ece111f6031695c33d46decb2cac6e89"><img alt="Packaging Type" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/packaging-type.png" title=" "></a></p>
 <p>Select Java version <code>21</code>.</p>
-<p><a href="#R-image-74aeb1fc5d706f46db09cb4031cbd68c" class="lightbox-link"><img alt="Java Version" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/java-version.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-74aeb1fc5d706f46db09cb4031cbd68c"><img alt="Java Version" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/java-version.png" title=" "></a></p>
+<p><a href="#R-image-a1e373246051625c4a51d540b43416c7" class="lightbox-link"><img alt="Java Version" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/java-version.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-a1e373246051625c4a51d540b43416c7"><img alt="Java Version" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/java-version.png" title=" "></a></p>
 <p>Search for <code>Spring Web</code> and press <strong>Enter</strong></p>
-<p><a href="#R-image-2a20d0a9cb8d25e632b3ee4194c4354a" class="lightbox-link"><img alt="Search for Spring Web" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/search-spring-web.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-2a20d0a9cb8d25e632b3ee4194c4354a"><img alt="Search for Spring Web" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/search-spring-web.png" title=" "></a></p>
+<p><a href="#R-image-e745fedb958fe4c2bf36586e40df967e" class="lightbox-link"><img alt="Search for Spring Web" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/search-spring-web.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-e745fedb958fe4c2bf36586e40df967e"><img alt="Search for Spring Web" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/search-spring-web.png" title=" "></a></p>
 <p>Press <strong>Enter</strong> to continue and create the Java Project</p>
-<p><a href="#R-image-6c06c1655533e1aacca8f48acaa30ae4" class="lightbox-link"><img alt="Create Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/create-project.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-6c06c1655533e1aacca8f48acaa30ae4"><img alt="Create Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/create-project.png" title=" "></a></p>
+<p><a href="#R-image-196c5b3023f8b027e93ebc5d42e65f45" class="lightbox-link"><img alt="Create Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/create-project.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-196c5b3023f8b027e93ebc5d42e65f45"><img alt="Create Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/create-project.png" title=" "></a></p>
 <p>Select the <code>root</code> location for your project e.g. side by side with the <code>checks</code>, <code>testrunner</code> and <code>accounts</code> projects.</p>
-<p><a href="#R-image-e3948f7288d2144d465c29cc81c96f79" class="lightbox-link"><img alt="Project Location" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/project-location.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-e3948f7288d2144d465c29cc81c96f79"><img alt="Project Location" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/project-location.png" title=" "></a></p>
+<p><a href="#R-image-6ed377245649fed1fb33a5cc4379b473" class="lightbox-link"><img alt="Project Location" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/project-location.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-6ed377245649fed1fb33a5cc4379b473"><img alt="Project Location" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/project-location.png" title=" "></a></p>
 <p>When the project opens click <strong>Add to Workspace</strong></p>
-<p><a href="#R-image-4b08dd5f9e35f4be09046bc0c7a4b21d" class="lightbox-link"><img alt="Add to Workspace" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/add-to-workspace.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-4b08dd5f9e35f4be09046bc0c7a4b21d"><img alt="Add to Workspace" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/add-to-workspace.png" title=" "></a></p>
-<ol>
-<li>Add MicroTX  and Lombok to the <code>pom.xml</code> file</li>
-</ol>
+<p><a href="#R-image-4fd300f3a5582a570e151676f6180329" class="lightbox-link"><img alt="Add to Workspace" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/add-to-workspace.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-4fd300f3a5582a570e151676f6180329"><img alt="Add to Workspace" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/add-to-workspace.png" title=" "></a></p>
+</li>
+<li>
+<p>Add MicroTX  and Lombok to the <code>pom.xml</code> file</p>
 <p>Open the <code>pom.xml</code> file in the <code>transfer</code> project. Add the following to the pom.xml:</p>
-<pre><code>```xml
-
-&lt;dependency&gt;
-  &lt;groupId&gt;com.oracle.microtx.lra&lt;/groupId&gt;
-  &lt;artifactId&gt;microtx-lra-spring-boot-starter&lt;/artifactId&gt;
-  &lt;version&gt;23.4.2&lt;/version&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-  &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
-  &lt;artifactId&gt;lombok&lt;/artifactId&gt;
-&lt;/dependency&gt;
-```
-</code></pre>
-<ol>
-<li>Create the Spring Boot application configuration</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#f92672">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;groupId&gt;</span>com.oracle.microtx.lra<span style="color:#f92672">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;artifactId&gt;</span>microtx-lra-spring-boot-starter<span style="color:#f92672">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;version&gt;</span>23.4.2<span style="color:#f92672">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;groupId&gt;</span>org.projectlombok<span style="color:#f92672">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&lt;artifactId&gt;</span>lombok<span style="color:#f92672">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/dependency&gt;</span></span></span></code></pre></div></li>
+<li>
+<p>Create the Spring Boot application configuration</p>
 <p>In the <code>transfer</code> project, rename the file called <code>application.properties</code> to <code>application.yaml</code> located in the <code>src/main/resources</code>. This will be the Spring Boot application configuration file. In this file you need to configure the endpoints for the LRA participants and coordinator.</p>
-<pre><code>```yaml
-
-spring:
-  application:
-    name: transfer
-
-  mvc:
-    enforced-prefixes:
-      - /actuator
-      - /rest
-    url-mappings:
-      - &quot;/rest/*&quot;
-      - &quot;/actuator/*&quot;
-      - &quot;/error/*&quot;
-
-  microtx:
-    lra:
-      coordinator-url: ${MP_LRA_COORDINATOR_URL}
-      propagation-active: true
-      headers-propagation-prefix: &quot;{x-b3-, oracle-tmm-, authorization, refresh-}&quot;
-
-account:
-  deposit:
-    url: http://account.application:8080/deposit
-  withdraw:
-    url: http://account.application:8080/withdraw
-transfer:
-  cancel:
-    url: http://transfer.application:8080/cancel
-    process:
-      url: http://transfer.application:8080/processcancel
-  confirm:
-    url: http://transfer.application:8080/confirm
-    process:
-      url: http://transfer.application:8080/processconfirm
-
-```
-</code></pre>
-<ol>
-<li>Create the Transfer service</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">spring</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">application</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">transfer</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">mvc</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">enforced-prefixes</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">/actuator</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">/rest</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">url-mappings</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;/rest/*&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;/actuator/*&#34;</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#e6db74">&#34;/error/*&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">microtx</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">lra</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">coordinator-url</span>: <span style="color:#ae81ff">${MP_LRA_COORDINATOR_URL}</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">propagation-active</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">headers-propagation-prefix</span>: <span style="color:#e6db74">&#34;{x-b3-, oracle-tmm-, authorization, refresh-}&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">account</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">deposit</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">url</span>: <span style="color:#ae81ff">http://account.application:8080/deposit</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">withdraw</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">url</span>: <span style="color:#ae81ff">http://account.application:8080/withdraw</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">transfer</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">cancel</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">url</span>: <span style="color:#ae81ff">http://transfer.application:8080/cancel</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">process</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">url</span>: <span style="color:#ae81ff">http://transfer.application:8080/processcancel</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">confirm</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">url</span>: <span style="color:#ae81ff">http://transfer.application:8080/confirm</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">process</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">url</span>: <span style="color:#ae81ff">http://transfer.application:8080/processconfirm</span></span></span></code></pre></div></li>
+<li>
+<p>Create the Transfer service</p>
 <p>You are now ready to implement the main logic for the Cloud Cash Payment/transfer LRA.  You will implement this in a new Java file called <code>TransferService.java</code> in <code>src/main/java/com/example/transfer</code>.  Here are the imports you will need for this class and the member variables.  Note that this class has the <code>@RestController</code> and <code>@RequestMapping</code> annotations, as you saw previously in the Account project, to set up the URL context root for the service.</p>
-<pre><code>```java
-
-package com.example.transfer;
-
-import java.net.URI;
-
-import com.oracle.microtx.springboot.lra.annotation.Compensate;
-import com.oracle.microtx.springboot.lra.annotation.Complete;
-import com.oracle.microtx.springboot.lra.annotation.LRA;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_CONTEXT_HEADER;
-
-@RestController
-@RequestMapping(&quot;/&quot;)
-@Slf4j
-public class TransferService {
-
-    public static final String TRANSFER_ID = &quot;TRANSFER_ID&quot;;
-
-    @Value(&quot;${account.withdraw.url}&quot;) URI withdrawUri;
-    @Value(&quot;${account.deposit.url}&quot;) URI depositUri;
-    @Value(&quot;${transfer.cancel.url}&quot;) URI transferCancelUri;
-    @Value(&quot;${transfer.cancel.process.url}&quot;) URI transferProcessCancelUri;
-    @Value(&quot;${transfer.confirm.url}&quot;) URI transferConfirmUri;
-    @Value(&quot;${transfer.confirm.process.url}&quot;) URI transferProcessConfirmUri;
-
-
-}
-```
-</code></pre>
-<ol>
-<li>Create the <strong>transfer</strong> endpoint</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f92672">package</span> com.example.transfer;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> java.net.URI;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> com.oracle.microtx.springboot.lra.annotation.Compensate;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> com.oracle.microtx.springboot.lra.annotation.Complete;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> com.oracle.microtx.springboot.lra.annotation.LRA;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> lombok.extern.slf4j.Slf4j;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.beans.factory.annotation.Value;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.http.HttpEntity;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.http.HttpHeaders;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.http.HttpStatus;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.http.MediaType;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.http.ResponseEntity;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.web.bind.annotation.PostMapping;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.web.bind.annotation.RequestHeader;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.web.bind.annotation.RequestMapping;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.web.bind.annotation.RequestParam;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.web.bind.annotation.RestController;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.web.client.RestTemplate;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.web.util.UriComponentsBuilder;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import static</span> com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_CONTEXT_HEADER;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@RestController</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@RequestMapping</span>(<span style="color:#e6db74">&#34;/&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Slf4j</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TransferService</span> {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">final</span> String TRANSFER_ID <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;TRANSFER_ID&#34;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Value</span>(<span style="color:#e6db74">&#34;${account.withdraw.url}&#34;</span>) URI withdrawUri;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Value</span>(<span style="color:#e6db74">&#34;${account.deposit.url}&#34;</span>) URI depositUri;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Value</span>(<span style="color:#e6db74">&#34;${transfer.cancel.url}&#34;</span>) URI transferCancelUri;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Value</span>(<span style="color:#e6db74">&#34;${transfer.cancel.process.url}&#34;</span>) URI transferProcessCancelUri;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Value</span>(<span style="color:#e6db74">&#34;${transfer.confirm.url}&#34;</span>) URI transferConfirmUri;
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Value</span>(<span style="color:#e6db74">&#34;${transfer.confirm.process.url}&#34;</span>) URI transferProcessConfirmUri;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></li>
+<li>
+<p>Create the <strong>transfer</strong> endpoint</p>
 <p>This is the main entry point for the LRA.  When a client calls this method, a new LRA will be started.  The <code>@LRA</code> annotation with the <code>value</code> property set to <code>LRA.Type.REQUIRES_NEW</code> instructs the interceptors/filters to contact Oracle Transaction Manager for Microservices to start a new LRA instance and obtain the LRA ID, which will be injected into the <code>LRA_HTTP_CONTEXT_HEADER</code> HTTP header. Note that the <code>end</code> property is set to <code>false</code> which means there will be other actions and participants before the LRA is completed.</p>
 <p>This method will accept three parameters from the caller, in JSON format in the HTTP body: <code>fromAccount</code> is the account from which the funds are to be withdrawn, <code>toAccount</code> is the account into which the funds are to be deposited, and <code>amount</code> is the amount to transfer.</p>
 <p>In the method body, you should first check if the <code>lraId</code> was set.  If it is null, that indicates that there was some error trying to create the new LRA instance, and you should return an error response and stop.</p>
 <p>After that, you want to perform the withdrawal, check if it worked, and if so, perform the deposit, and then check if that worked, and if so &ldquo;complete&rdquo; the LRA.  If there were any failures, compensate the LRA.</p>
-<pre><code>```java
-
-/**
- * Transfer amount between two accounts.
- * @param fromAccount From an account
- * @param toAccount To an account
- * @param amount Amount to transfer
- * @param lraId LRA Id
- * @return TO-DO
- */
-@PostMapping(&quot;/transfer&quot;)
-@LRA(value = LRA.Type.REQUIRES_NEW, end = false)
-public ResponseEntity&lt;String&gt; transfer(@RequestParam(&quot;fromAccount&quot;) long fromAccount,
-        @RequestParam(&quot;toAccount&quot;) long toAccount,
-        @RequestParam(&quot;amount&quot;) long amount,
-        @RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) {
-    if (lraId == null) {
-        return new ResponseEntity&lt;&gt;(&quot;Failed to create LRA&quot;, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-    log.info(&quot;Started new LRA/transfer Id: &quot; + lraId);
-
-    boolean isCompensate = false;
-    String returnString = &quot;&quot;;
-
-    // perform the withdrawal
-    returnString += withdraw(lraId, fromAccount, amount);
-    log.info(returnString);
-    if (returnString.contains(&quot;succeeded&quot;)) {
-        // if it worked, perform the deposit
-        returnString += &quot; &quot; + deposit(lraId, toAccount, amount);
-        log.info(returnString);
-        if (returnString.contains(&quot;failed&quot;)) {
-            isCompensate = true; // deposit failed
-        }
-    } else {
-        isCompensate = true; // withdraw failed
-    }
-    log.info(&quot;LRA/transfer action will be &quot; + (isCompensate ? &quot;cancel&quot; : &quot;confirm&quot;));
-
-    // call complete or cancel based on outcome of previous actions
-    RestTemplate restTemplate = new RestTemplate();
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.TEXT_PLAIN);
-    headers.set(TRANSFER_ID, lraId);
-    HttpEntity&lt;String&gt; request = new HttpEntity&lt;String&gt;(&quot;&quot;, headers);
-
-    ResponseEntity&lt;String&gt; response = restTemplate.postForEntity(
-        (isCompensate ? transferCancelUri : transferConfirmUri).toString(), 
-        request, 
-        String.class);
-
-    returnString += response.getBody();
-
-    // return status
-    return ResponseEntity.ok(&quot;transfer status:&quot; + returnString);
-}
-```
-</code></pre>
-<ol>
-<li>Create a method to perform the withdrawal</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Transfer amount between two accounts.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @param fromAccount From an account
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @param toAccount To an account
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @param amount Amount to transfer
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @param lraId LRA Id
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @return TO-DO
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@PostMapping</span>(<span style="color:#e6db74">&#34;/transfer&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@LRA</span>(value <span style="color:#f92672">=</span> LRA.<span style="color:#a6e22e">Type</span>.<span style="color:#a6e22e">REQUIRES_NEW</span>, end <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> ResponseEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">transfer</span>(<span style="color:#a6e22e">@RequestParam</span>(<span style="color:#e6db74">&#34;fromAccount&#34;</span>) <span style="color:#66d9ef">long</span> fromAccount,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">@RequestParam</span>(<span style="color:#e6db74">&#34;toAccount&#34;</span>) <span style="color:#66d9ef">long</span> toAccount,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">@RequestParam</span>(<span style="color:#e6db74">&#34;amount&#34;</span>) <span style="color:#66d9ef">long</span> amount,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">@RequestHeader</span>(LRA_HTTP_CONTEXT_HEADER) String lraId) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (lraId <span style="color:#f92672">==</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> ResponseEntity<span style="color:#f92672">&lt;&gt;</span>(<span style="color:#e6db74">&#34;Failed to create LRA&#34;</span>, HttpStatus.<span style="color:#a6e22e">INTERNAL_SERVER_ERROR</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;Started new LRA/transfer Id: &#34;</span> <span style="color:#f92672">+</span> lraId);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">boolean</span> isCompensate <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>;
+</span></span><span style="display:flex;"><span>    String returnString <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// perform the withdrawal</span>
+</span></span><span style="display:flex;"><span>    returnString <span style="color:#f92672">+=</span> withdraw(lraId, fromAccount, amount);
+</span></span><span style="display:flex;"><span>    log.<span style="color:#a6e22e">info</span>(returnString);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (returnString.<span style="color:#a6e22e">contains</span>(<span style="color:#e6db74">&#34;succeeded&#34;</span>)) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// if it worked, perform the deposit</span>
+</span></span><span style="display:flex;"><span>        returnString <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34; &#34;</span> <span style="color:#f92672">+</span> deposit(lraId, toAccount, amount);
+</span></span><span style="display:flex;"><span>        log.<span style="color:#a6e22e">info</span>(returnString);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (returnString.<span style="color:#a6e22e">contains</span>(<span style="color:#e6db74">&#34;failed&#34;</span>)) {
+</span></span><span style="display:flex;"><span>            isCompensate <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>; <span style="color:#75715e">// deposit failed</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>        isCompensate <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span>; <span style="color:#75715e">// withdraw failed</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;LRA/transfer action will be &#34;</span> <span style="color:#f92672">+</span> (isCompensate <span style="color:#f92672">?</span> <span style="color:#e6db74">&#34;cancel&#34;</span> : <span style="color:#e6db74">&#34;confirm&#34;</span>));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// call complete or cancel based on outcome of previous actions</span>
+</span></span><span style="display:flex;"><span>    RestTemplate restTemplate <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> RestTemplate();
+</span></span><span style="display:flex;"><span>    HttpHeaders headers <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HttpHeaders();
+</span></span><span style="display:flex;"><span>    headers.<span style="color:#a6e22e">setContentType</span>(MediaType.<span style="color:#a6e22e">TEXT_PLAIN</span>);
+</span></span><span style="display:flex;"><span>    headers.<span style="color:#a6e22e">set</span>(TRANSFER_ID, lraId);
+</span></span><span style="display:flex;"><span>    HttpEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> request <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HttpEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span>(<span style="color:#e6db74">&#34;&#34;</span>, headers);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    ResponseEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> response <span style="color:#f92672">=</span> restTemplate.<span style="color:#a6e22e">postForEntity</span>(
+</span></span><span style="display:flex;"><span>        (isCompensate <span style="color:#f92672">?</span> transferCancelUri : transferConfirmUri).<span style="color:#a6e22e">toString</span>(), 
+</span></span><span style="display:flex;"><span>        request, 
+</span></span><span style="display:flex;"><span>        String.<span style="color:#a6e22e">class</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    returnString <span style="color:#f92672">+=</span> response.<span style="color:#a6e22e">getBody</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// return status</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ResponseEntity.<span style="color:#a6e22e">ok</span>(<span style="color:#e6db74">&#34;transfer status:&#34;</span> <span style="color:#f92672">+</span> returnString);
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></li>
+<li>
+<p>Create a method to perform the withdrawal</p>
 <p>This method should perform the withdrawal by calling the Withdraw service in the Account Spring Boot application.  The <code>lraId</code>, <code>accountId</code> and <code>amount</code> need to be passed to the service, and you must set the <code>LRA_HTTP_CONTEXT_HEADER</code> to the LRA ID.</p>
-<pre><code>```java
-
-private String withdraw(String lraId, long accountId, long amount) {
-    log.info(&quot;withdraw accountId = &quot; + accountId + &quot;, amount = &quot; + amount);
-    log.info(&quot;withdraw lraId = &quot; + lraId);
-    
-    UriComponentsBuilder builder = UriComponentsBuilder.fromUri(withdrawUri)
-        .queryParam(&quot;accountId&quot;, accountId)
-        .queryParam(&quot;amount&quot;, amount);
-
-    RestTemplate restTemplate = new RestTemplate();
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.TEXT_PLAIN);
-    headers.set(LRA_HTTP_CONTEXT_HEADER, lraId.toString());
-    HttpEntity&lt;String&gt; request = new HttpEntity&lt;String&gt;(&quot;&quot;, headers);
-
-    ResponseEntity&lt;String&gt; response = restTemplate.postForEntity(
-        builder.buildAndExpand().toUri(), 
-        request, 
-        String.class);
-
-    return response.getBody();
-}
-```
-</code></pre>
-<ol>
-<li>Create a method to perform the deposit</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">private</span> String <span style="color:#a6e22e">withdraw</span>(String lraId, <span style="color:#66d9ef">long</span> accountId, <span style="color:#66d9ef">long</span> amount) {
+</span></span><span style="display:flex;"><span>    log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;withdraw accountId = &#34;</span> <span style="color:#f92672">+</span> accountId <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;, amount = &#34;</span> <span style="color:#f92672">+</span> amount);
+</span></span><span style="display:flex;"><span>    log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;withdraw lraId = &#34;</span> <span style="color:#f92672">+</span> lraId);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    UriComponentsBuilder builder <span style="color:#f92672">=</span> UriComponentsBuilder.<span style="color:#a6e22e">fromUri</span>(withdrawUri)
+</span></span><span style="display:flex;"><span>        .<span style="color:#a6e22e">queryParam</span>(<span style="color:#e6db74">&#34;accountId&#34;</span>, accountId)
+</span></span><span style="display:flex;"><span>        .<span style="color:#a6e22e">queryParam</span>(<span style="color:#e6db74">&#34;amount&#34;</span>, amount);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    RestTemplate restTemplate <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> RestTemplate();
+</span></span><span style="display:flex;"><span>    HttpHeaders headers <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HttpHeaders();
+</span></span><span style="display:flex;"><span>    headers.<span style="color:#a6e22e">setContentType</span>(MediaType.<span style="color:#a6e22e">TEXT_PLAIN</span>);
+</span></span><span style="display:flex;"><span>    headers.<span style="color:#a6e22e">set</span>(LRA_HTTP_CONTEXT_HEADER, lraId.<span style="color:#a6e22e">toString</span>());
+</span></span><span style="display:flex;"><span>    HttpEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> request <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HttpEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span>(<span style="color:#e6db74">&#34;&#34;</span>, headers);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    ResponseEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> response <span style="color:#f92672">=</span> restTemplate.<span style="color:#a6e22e">postForEntity</span>(
+</span></span><span style="display:flex;"><span>        builder.<span style="color:#a6e22e">buildAndExpand</span>().<span style="color:#a6e22e">toUri</span>(), 
+</span></span><span style="display:flex;"><span>        request, 
+</span></span><span style="display:flex;"><span>        String.<span style="color:#a6e22e">class</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> response.<span style="color:#a6e22e">getBody</span>();
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></li>
+<li>
+<p>Create a method to perform the deposit</p>
 <p>This method is similar the previous one, no new concepts are introduced here.</p>
-<pre><code>```java
-
-private String deposit(String lraId, long accountId, long amount) {
-    log.info(&quot;deposit accountId = &quot; + accountId + &quot;, amount = &quot; + amount);
-    log.info(&quot;deposit lraId = &quot; + lraId);
-    
-    UriComponentsBuilder builder = UriComponentsBuilder.fromUri(depositUri)
-        .queryParam(&quot;accountId&quot;, accountId)
-        .queryParam(&quot;amount&quot;, amount);
-
-    RestTemplate restTemplate = new RestTemplate();
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.TEXT_PLAIN);
-    headers.set(LRA_HTTP_CONTEXT_HEADER, lraId.toString());
-    HttpEntity&lt;String&gt; request = new HttpEntity&lt;String&gt;(&quot;&quot;, headers);
-
-    ResponseEntity&lt;String&gt; response = restTemplate.postForEntity(
-        builder.buildAndExpand().toUri(), 
-        request, 
-        String.class);
-
-    return response.getBody();
-}
-```
-</code></pre>
-<ol>
-<li>Create a method to process the confirm action for this participant</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">private</span> String <span style="color:#a6e22e">deposit</span>(String lraId, <span style="color:#66d9ef">long</span> accountId, <span style="color:#66d9ef">long</span> amount) {
+</span></span><span style="display:flex;"><span>    log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;deposit accountId = &#34;</span> <span style="color:#f92672">+</span> accountId <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;, amount = &#34;</span> <span style="color:#f92672">+</span> amount);
+</span></span><span style="display:flex;"><span>    log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;deposit lraId = &#34;</span> <span style="color:#f92672">+</span> lraId);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    UriComponentsBuilder builder <span style="color:#f92672">=</span> UriComponentsBuilder.<span style="color:#a6e22e">fromUri</span>(depositUri)
+</span></span><span style="display:flex;"><span>        .<span style="color:#a6e22e">queryParam</span>(<span style="color:#e6db74">&#34;accountId&#34;</span>, accountId)
+</span></span><span style="display:flex;"><span>        .<span style="color:#a6e22e">queryParam</span>(<span style="color:#e6db74">&#34;amount&#34;</span>, amount);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    RestTemplate restTemplate <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> RestTemplate();
+</span></span><span style="display:flex;"><span>    HttpHeaders headers <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HttpHeaders();
+</span></span><span style="display:flex;"><span>    headers.<span style="color:#a6e22e">setContentType</span>(MediaType.<span style="color:#a6e22e">TEXT_PLAIN</span>);
+</span></span><span style="display:flex;"><span>    headers.<span style="color:#a6e22e">set</span>(LRA_HTTP_CONTEXT_HEADER, lraId.<span style="color:#a6e22e">toString</span>());
+</span></span><span style="display:flex;"><span>    HttpEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> request <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HttpEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span>(<span style="color:#e6db74">&#34;&#34;</span>, headers);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    ResponseEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> response <span style="color:#f92672">=</span> restTemplate.<span style="color:#a6e22e">postForEntity</span>(
+</span></span><span style="display:flex;"><span>        builder.<span style="color:#a6e22e">buildAndExpand</span>().<span style="color:#a6e22e">toUri</span>(), 
+</span></span><span style="display:flex;"><span>        request, 
+</span></span><span style="display:flex;"><span>        String.<span style="color:#a6e22e">class</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> response.<span style="color:#a6e22e">getBody</span>();
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></li>
+<li>
+<p>Create a method to process the confirm action for this participant</p>
 <p>This participant does not need to take any actions for the confirm action, so just return a successful response.</p>
-<pre><code>```java
-
-@PostMapping(&quot;/processconfirm&quot;)
-@LRA(value = LRA.Type.MANDATORY)
-public ResponseEntity&lt;String&gt; processconfirm(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) {
-    log.info(&quot;Process confirm for transfer : &quot; + lraId);
-    return ResponseEntity.ok(&quot;&quot;);
-}
-```
-</code></pre>
-<ol>
-<li>Create a method to process the cancel action for this participant</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@PostMapping</span>(<span style="color:#e6db74">&#34;/processconfirm&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@LRA</span>(value <span style="color:#f92672">=</span> LRA.<span style="color:#a6e22e">Type</span>.<span style="color:#a6e22e">MANDATORY</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> ResponseEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">processconfirm</span>(<span style="color:#a6e22e">@RequestHeader</span>(LRA_HTTP_CONTEXT_HEADER) String lraId) {
+</span></span><span style="display:flex;"><span>    log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;Process confirm for transfer : &#34;</span> <span style="color:#f92672">+</span> lraId);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ResponseEntity.<span style="color:#a6e22e">ok</span>(<span style="color:#e6db74">&#34;&#34;</span>);
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></li>
+<li>
+<p>Create a method to process the cancel action for this participant</p>
 <p>This participant does not need to take any actions for the cancel action, so just return a successful response.</p>
-<pre><code>```java
-
-@PostMapping(&quot;/processcancel&quot;)
-@LRA(value = LRA.Type.MANDATORY, cancelOn = HttpStatus.OK)
-public ResponseEntity&lt;String&gt; processcancel(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) {
-    log.info(&quot;Process cancel for transfer : &quot; + lraId);
-    return ResponseEntity.ok(&quot;&quot;);
-}
-```
-</code></pre>
-<ol>
-<li>Create the confirm and cancel methods</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@PostMapping</span>(<span style="color:#e6db74">&#34;/processcancel&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@LRA</span>(value <span style="color:#f92672">=</span> LRA.<span style="color:#a6e22e">Type</span>.<span style="color:#a6e22e">MANDATORY</span>, cancelOn <span style="color:#f92672">=</span> HttpStatus.<span style="color:#a6e22e">OK</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> ResponseEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">processcancel</span>(<span style="color:#a6e22e">@RequestHeader</span>(LRA_HTTP_CONTEXT_HEADER) String lraId) {
+</span></span><span style="display:flex;"><span>    log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;Process cancel for transfer : &#34;</span> <span style="color:#f92672">+</span> lraId);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ResponseEntity.<span style="color:#a6e22e">ok</span>(<span style="color:#e6db74">&#34;&#34;</span>);
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></li>
+<li>
+<p>Create the confirm and cancel methods</p>
 <p>The logic demonstrated in these two methods would probably be in a client in a real-life LRA, but is included here for instructional purposes and convenience.</p>
 <p>The <code>transfer</code> method makes a REST call to confirm (or cancel) at the end of its processing.  The confirm or cancel method suspends the LRA (using the <code>NOT_SUPPORTED</code> <code>value</code> in the <code>@LRA</code> annotation). Then the confirm or cancel method will make a REST call to <code>processconfirm</code> or <code>processcancel</code> which import the LRA with their <code>MANDATORY</code> annotation and then implicitly end the LRA accordingly upon returning.</p>
-<pre><code>```java
-
-/**
- * Confirm a transfer.
- * @param transferId Transfer Id
- * @return TO-DO
- */
-@PostMapping(&quot;/confirm&quot;)
-@Complete
-@LRA(value = LRA.Type.NOT_SUPPORTED)
-public ResponseEntity&lt;String&gt; confirm(@RequestHeader(TRANSFER_ID) String transferId) {
-    log.info(&quot;Received confirm for transfer : &quot; + transferId);
-
-    RestTemplate restTemplate = new RestTemplate();
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.TEXT_PLAIN);
-    headers.set(LRA_HTTP_CONTEXT_HEADER, transferId);
-    HttpEntity&lt;String&gt; request = new HttpEntity&lt;String&gt;(&quot;&quot;, headers);
-
-    ResponseEntity&lt;String&gt; response = restTemplate.postForEntity(
-        transferProcessConfirmUri, 
-        request, 
-        String.class);
-
-    return ResponseEntity.ok(response.getBody());
-}
-
-/**
- * Cancel a transfer.
- * @param transferId Transfer Id
- * @return TO-DO
- */
-@PostMapping(&quot;/cancel&quot;)
-@Compensate
-@LRA(value = LRA.Type.NOT_SUPPORTED, cancelOn = HttpStatus.OK)
-public ResponseEntity&lt;String&gt; cancel(@RequestHeader(TRANSFER_ID) String transferId) {
-    log.info(&quot;Received cancel for transfer : &quot; + transferId);
-
-    RestTemplate restTemplate = new RestTemplate();
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.TEXT_PLAIN);
-    headers.set(LRA_HTTP_CONTEXT_HEADER, transferId);
-    HttpEntity&lt;String&gt; request = new HttpEntity&lt;String&gt;(&quot;&quot;, headers);
-
-    ResponseEntity&lt;String&gt; response = restTemplate.postForEntity(
-        transferProcessCancelUri, 
-        request, 
-        String.class);
-
-    return ResponseEntity.ok(response.getBody());
-}
-```
-</code></pre>
-<p>That completes the Transfer service and application.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Confirm a transfer.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @param transferId Transfer Id
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @return TO-DO
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@PostMapping</span>(<span style="color:#e6db74">&#34;/confirm&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Complete</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@LRA</span>(value <span style="color:#f92672">=</span> LRA.<span style="color:#a6e22e">Type</span>.<span style="color:#a6e22e">NOT_SUPPORTED</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> ResponseEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">confirm</span>(<span style="color:#a6e22e">@RequestHeader</span>(TRANSFER_ID) String transferId) {
+</span></span><span style="display:flex;"><span>    log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;Received confirm for transfer : &#34;</span> <span style="color:#f92672">+</span> transferId);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    RestTemplate restTemplate <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> RestTemplate();
+</span></span><span style="display:flex;"><span>    HttpHeaders headers <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HttpHeaders();
+</span></span><span style="display:flex;"><span>    headers.<span style="color:#a6e22e">setContentType</span>(MediaType.<span style="color:#a6e22e">TEXT_PLAIN</span>);
+</span></span><span style="display:flex;"><span>    headers.<span style="color:#a6e22e">set</span>(LRA_HTTP_CONTEXT_HEADER, transferId);
+</span></span><span style="display:flex;"><span>    HttpEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> request <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HttpEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span>(<span style="color:#e6db74">&#34;&#34;</span>, headers);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    ResponseEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> response <span style="color:#f92672">=</span> restTemplate.<span style="color:#a6e22e">postForEntity</span>(
+</span></span><span style="display:flex;"><span>        transferProcessConfirmUri, 
+</span></span><span style="display:flex;"><span>        request, 
+</span></span><span style="display:flex;"><span>        String.<span style="color:#a6e22e">class</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ResponseEntity.<span style="color:#a6e22e">ok</span>(response.<span style="color:#a6e22e">getBody</span>());
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Cancel a transfer.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @param transferId Transfer Id
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * @return TO-DO
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@PostMapping</span>(<span style="color:#e6db74">&#34;/cancel&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Compensate</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@LRA</span>(value <span style="color:#f92672">=</span> LRA.<span style="color:#a6e22e">Type</span>.<span style="color:#a6e22e">NOT_SUPPORTED</span>, cancelOn <span style="color:#f92672">=</span> HttpStatus.<span style="color:#a6e22e">OK</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> ResponseEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">cancel</span>(<span style="color:#a6e22e">@RequestHeader</span>(TRANSFER_ID) String transferId) {
+</span></span><span style="display:flex;"><span>    log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;Received cancel for transfer : &#34;</span> <span style="color:#f92672">+</span> transferId);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    RestTemplate restTemplate <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> RestTemplate();
+</span></span><span style="display:flex;"><span>    HttpHeaders headers <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HttpHeaders();
+</span></span><span style="display:flex;"><span>    headers.<span style="color:#a6e22e">setContentType</span>(MediaType.<span style="color:#a6e22e">TEXT_PLAIN</span>);
+</span></span><span style="display:flex;"><span>    headers.<span style="color:#a6e22e">set</span>(LRA_HTTP_CONTEXT_HEADER, transferId);
+</span></span><span style="display:flex;"><span>    HttpEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> request <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> HttpEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span>(<span style="color:#e6db74">&#34;&#34;</span>, headers);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    ResponseEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> response <span style="color:#f92672">=</span> restTemplate.<span style="color:#a6e22e">postForEntity</span>(
+</span></span><span style="display:flex;"><span>        transferProcessCancelUri, 
+</span></span><span style="display:flex;"><span>        request, 
+</span></span><span style="display:flex;"><span>        String.<span style="color:#a6e22e">class</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ResponseEntity.<span style="color:#a6e22e">ok</span>(response.<span style="color:#a6e22e">getBody</span>());
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div><p>That completes the Transfer service and application.</p>
+</li>
+</ol>
 
             <footer class="footline">
             </footer>
@@ -484,12 +444,12 @@ public ResponseEntity&lt;String&gt; cancel(@RequestHeader(TRANSFER_ID) String tr
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1726239047" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1726843375" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -637,8 +597,8 @@ public ResponseEntity&lt;String&gt; cancel(@RequestHeader(TRANSFER_ID) String tr
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1726239047" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1726239047" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1726239047" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1726843375" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1726843375" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1726843375" defer></script>
   </body>
 </html>

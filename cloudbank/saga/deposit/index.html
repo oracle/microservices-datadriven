@@ -6,43 +6,47 @@
     <meta name="generator" content="Hugo 0.123.6">
     <meta name="generator" content="Relearn 6.1.1+tip">
     <meta name="description" content="The Deposit service will process deposits into bank accounts. In this task, you will create the basic structure for this service and learn about the endpoints required for an LRA participant, what HTTP Methods they process, the annotations used to define them and so on. You will implement the actual business logic in a later task.
-Create the Deposit service and scaffold methods Create a new directory in src/main/java/com/example/accounts called services and in that directory create a new Java file called DepositService.">
+Create the Deposit service and scaffold methods
+Create a new directory in src/main/java/com/example/accounts called services and in that directory create a new Java file called DepositService.">
     <meta name="author" content="">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Create the Deposit service :: CloudBank AI">
     <meta name="twitter:description" content="The Deposit service will process deposits into bank accounts. In this task, you will create the basic structure for this service and learn about the endpoints required for an LRA participant, what HTTP Methods they process, the annotations used to define them and so on. You will implement the actual business logic in a later task.
-Create the Deposit service and scaffold methods Create a new directory in src/main/java/com/example/accounts called services and in that directory create a new Java file called DepositService.">
+Create the Deposit service and scaffold methods
+Create a new directory in src/main/java/com/example/accounts called services and in that directory create a new Java file called DepositService.">
     <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/cloudbank/saga/deposit/index.html">
     <meta property="og:site_name" content="CloudBank AI">
     <meta property="og:title" content="Create the Deposit service :: CloudBank AI">
     <meta property="og:description" content="The Deposit service will process deposits into bank accounts. In this task, you will create the basic structure for this service and learn about the endpoints required for an LRA participant, what HTTP Methods they process, the annotations used to define them and so on. You will implement the actual business logic in a later task.
-Create the Deposit service and scaffold methods Create a new directory in src/main/java/com/example/accounts called services and in that directory create a new Java file called DepositService.">
+Create the Deposit service and scaffold methods
+Create a new directory in src/main/java/com/example/accounts called services and in that directory create a new Java file called DepositService.">
     <meta property="og:locale" content="en_us">
     <meta property="og:type" content="article">
     <meta property="article:section" content="Manage Sagas">
     <meta itemprop="name" content="Create the Deposit service :: CloudBank AI">
     <meta itemprop="description" content="The Deposit service will process deposits into bank accounts. In this task, you will create the basic structure for this service and learn about the endpoints required for an LRA participant, what HTTP Methods they process, the annotations used to define them and so on. You will implement the actual business logic in a later task.
-Create the Deposit service and scaffold methods Create a new directory in src/main/java/com/example/accounts called services and in that directory create a new Java file called DepositService.">
-    <meta itemprop="wordCount" content="5551">
+Create the Deposit service and scaffold methods
+Create a new directory in src/main/java/com/example/accounts called services and in that directory create a new Java file called DepositService.">
+    <meta itemprop="wordCount" content="908">
     <title>Create the Deposit service :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1726239047" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726239047" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726239047" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1726239047" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726239047" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726239047" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1726239047" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1726239047" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1726239047" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1726239047" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1726239047" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1726239047" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/variant.css?1726239047" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1726239047" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1726239047"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1726843375" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726843375" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726843375" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1726843375" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726843375" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726843375" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1726843375" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1726843375" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1726843375" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1726843375" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1726843375" rel="stylesheet" id="R-variant-style">
+    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1726843375" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/microservices-datadriven/cloudbank/css/variant.css?1726843375" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/print.css?1726843375" rel="stylesheet" media="print">
+    <script src="/microservices-datadriven/cloudbank/js/variant.js?1726843375"></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
-      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1726239047";
+      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1726843375";
       // variant stuff
       window.variants && variants.init( [ 'zen-light' ] );
       // translations
@@ -67,18 +71,7 @@ Create the Deposit service and scaffold methods Create a new directory in src/ma
             </div>
             <div class="topbar-button topbar-button-toc" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-list-alt"></i></button>
               <div class="topbar-content">
-                <div class="topbar-content-wrapper"><nav class="TableOfContents">
-  <ul>
-    <li><a href="#task-5-create-an-accounttransfer-data-access-object">Task 5: Create an Account/Transfer Data Access Object</a></li>
-    <li><a href="#task-6-implement-the-deposit-services-business-logic">Task 6: Implement the deposit service&rsquo;s business logic</a></li>
-    <li><a href="#task-7-create-the-withdraw-service">Task 7: Create the Withdraw service</a></li>
-    <li><a href="#task-8-create-the-transfer-service">Task 8: Create the Transfer Service</a></li>
-    <li><a href="#task-9-deploy-the-account-and-transfer-services-to-the-backend">Task 9: Deploy the Account and Transfer services to the backend</a></li>
-    <li><a href="#task-10-run-lra-test-cases">Task 10: Run LRA test cases</a></li>
-    <li><a href="#learn-more">Learn More</a></li>
-    <li><a href="#acknowledgements">Acknowledgements</a></li>
-  </ul>
-</nav>
+                <div class="topbar-content-wrapper"> 
                 </div>
               </div>
             </div>
@@ -115,1217 +108,113 @@ Create the Deposit service and scaffold methods Create a new directory in src/ma
 
 <p>The Deposit service will process deposits into bank accounts.  In this task, you will create the basic structure for this service and learn about the endpoints required for an LRA participant, what HTTP Methods they process, the annotations used to define them and so on.  You will implement the actual business logic in a later task.</p>
 <ol>
-<li>Create the Deposit service and scaffold methods</li>
-</ol>
+<li>
+<p>Create the Deposit service and scaffold methods</p>
 <p>Create a new directory in <code>src/main/java/com/example/accounts</code> called <code>services</code> and in that directory create a new Java file called <code>DepositService.java</code>.  This will be a Spring Boot component where you will implement the deposit operations.  Since the LRA library we are using only works with JAX-RS, you will be using JAX-RS annotations in this service, as opposed to the Spring Boot &ldquo;web&rdquo; REST annotations that you used in the previous module.  You can mix and match these styles in a single Spring Boot microservice application.</p>
 <p>Start by setting up endpoints and methods with the appropriate annotations.  You will implement the logic for each of these methods shortly.  Here is the class definition and all the imports you will need in this section, plus the logger and a constant <code>DEPOSIT</code> you will use later.  Notice that the class has the <code>@RequestScoped</code> annotation which tells Spring to create an instance of this class for each HTTP request (as opposed to for a whole session for example), the Spring Boot <code>@Component</code> annotation which marks this class as a bean that Spring can inject as a dependency when needed, and the <code>@Path</code> annotation to set the URL path for these endpoints.</p>
-<pre><code>```java
-package com.example.accounts.services;
-
-import com.example.accounts.model.Account;
-import com.example.accounts.model.Journal;
-
-import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_CONTEXT_HEADER;
-import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_ENDED_CONTEXT_HEADER;
-import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_PARENT_CONTEXT_HEADER;
-
-@RestController
-@RequestMapping(&quot;/deposit&quot;)
-@Slf4j
-public class DepositService {
-
-  private final static String DEPOSIT = &quot;DEPOSIT&quot;;
-}
-```
-</code></pre>
-<ol>
-<li>Create the LRA entry point</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f92672">package</span> com.example.accounts.services;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> com.example.accounts.model.Account;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> com.example.accounts.model.Journal;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> lombok.extern.slf4j.Slf4j;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.web.bind.annotation.RequestMapping;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.web.bind.annotation.RestController;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import static</span> com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_CONTEXT_HEADER;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import static</span> com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_ENDED_CONTEXT_HEADER;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import static</span> com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_PARENT_CONTEXT_HEADER;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@RestController</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@RequestMapping</span>(<span style="color:#e6db74">&#34;/deposit&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Slf4j</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DepositService</span> {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> <span style="color:#66d9ef">static</span> String DEPOSIT <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;DEPOSIT&#34;</span>;
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></li>
+<li>
+<p>Create the LRA entry point</p>
 <p>The first method you need will be the main entry point, the <code>deposit()</code> method.  This will have the <code>@POST</code> annotation so that it will respond to the HTTP POST method. And, it has the <code>@LRA</code> annotation.</p>
 <p>In the <code>@LRA</code> annotation, which marks this as an LRA participant, the <code>value</code> property is set to <code>LRA.Type.MANDATORY</code> which means that this method will refuse to perform any work unless it is part of an LRA. The <code>end</code> property is set to <code>false</code> which means that successful completion of this method does not in and of itself constitute successful completion of the LRA, in other words, this method expects that it will not be the only participant in the LRA.</p>
 <p>The LRA coordinator will pass the LRA ID to this method (and any other participants) in an HTTP header.  Notice that the first argument of the method extracts that header and maps it to <code>lraId</code>. The other two arguments are mapped to HTTP Query parameters which identify the account and amount to deposit.  For now, this method will just return a response with the HTTP Status Code set to 200 (OK). You will implement the actual business logic shortly.</p>
-<pre><code>```java
-
-/**
- * Write journal entry re deposit amount.
- * Do not increase actual bank account amount
- */
-@PostMapping
-@LRA(value = LRA.Type.MANDATORY, end = false)
-public ResponseEntity&lt;String&gt; deposit(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId,
-        @RequestParam(&quot;accountId&quot;) long accountId,
-        @RequestParam(&quot;amount&quot;) long depositAmount) {
-
-    log.info(&quot;...deposit &quot; + depositAmount + &quot; in account:&quot; + accountId
-            + &quot; (lraId:&quot; + lraId + &quot;) finished (in pending state)&quot;);
-
-    return null;
-}
-
-```
-</code></pre>
-<ol>
-<li>Create the LRA complete endpoint</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Write journal entry re deposit amount.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Do not increase actual bank account amount
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@PostMapping</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@LRA</span>(value <span style="color:#f92672">=</span> LRA.<span style="color:#a6e22e">Type</span>.<span style="color:#a6e22e">MANDATORY</span>, end <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> ResponseEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">deposit</span>(<span style="color:#a6e22e">@RequestHeader</span>(LRA_HTTP_CONTEXT_HEADER) String lraId,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">@RequestParam</span>(<span style="color:#e6db74">&#34;accountId&#34;</span>) <span style="color:#66d9ef">long</span> accountId,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">@RequestParam</span>(<span style="color:#e6db74">&#34;amount&#34;</span>) <span style="color:#66d9ef">long</span> depositAmount) {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;...deposit &#34;</span> <span style="color:#f92672">+</span> depositAmount <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; in account:&#34;</span> <span style="color:#f92672">+</span> accountId
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34; (lraId:&#34;</span> <span style="color:#f92672">+</span> lraId <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;) finished (in pending state)&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></li>
+<li>
+<p>Create the LRA complete endpoint</p>
 <p>Each LRA participant needs a &ldquo;complete&rdquo; endpoint.  This <code>completeWork</code> method implements that endpoint, as declared by the <code>@Complete</code> annotation. Note that this response to the HTTP PUT method and extracts the <code>lraId</code> from an HTTP header as in the previous method.</p>
-<pre><code>```java
-
-/**
- * Increase balance amount as recorded in journal during deposit call.
- * Update LRA state to ParticipantStatus.Completed.
- */
-@PutMapping(&quot;/complete&quot;)
-@Complete
-public ResponseEntity&lt;String&gt; completeWork(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) throws Exception {
-
-    log.info(&quot;deposit complete called for LRA : &quot; + lraId);
-
-    return null;
-}
-
-```
-</code></pre>
-<ol>
-<li>Create the LRA compensate endpoint</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Increase balance amount as recorded in journal during deposit call.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Update LRA state to ParticipantStatus.Completed.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@PutMapping</span>(<span style="color:#e6db74">&#34;/complete&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Complete</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> ResponseEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">completeWork</span>(<span style="color:#a6e22e">@RequestHeader</span>(LRA_HTTP_CONTEXT_HEADER) String lraId) <span style="color:#66d9ef">throws</span> Exception {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;deposit complete called for LRA : &#34;</span> <span style="color:#f92672">+</span> lraId);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></li>
+<li>
+<p>Create the LRA compensate endpoint</p>
 <p>Next, you need a compensation endpoint.  This <code>compensateWork</code> method is similar to the previous methods and is marked with the <code>@Compensate</code> annotation to mark it as the compensation handler for this participant. Note that this response to the HTTP PUT method and extracts the <code>lraId</code> from an HTTP header as in the previous method.</p>
-<pre><code>```java
-
-/**
- * Update LRA state to ParticipantStatus.Compensated.
- */
-@PutMapping(&quot;/compensate&quot;)
-@Compensate
-public ResponseEntity&lt;String&gt; compensateWork(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId)
-        throws Exception {
-
-    log.info(&quot;deposit compensate called for LRA : &quot; + lraId);
-
-    return null;
-}
-
-```
-</code></pre>
-<ol>
-<li>Create the LRA status endpoint</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Update LRA state to ParticipantStatus.Compensated.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@PutMapping</span>(<span style="color:#e6db74">&#34;/compensate&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Compensate</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> ResponseEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">compensateWork</span>(<span style="color:#a6e22e">@RequestHeader</span>(LRA_HTTP_CONTEXT_HEADER) String lraId)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">throws</span> Exception {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;deposit compensate called for LRA : &#34;</span> <span style="color:#f92672">+</span> lraId);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>;
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></li>
+<li>
+<p>Create the LRA status endpoint</p>
 <p>Next, you need to provide a status endpoint. This must respond to the HTTP GET method and extracts the <code>lraId</code> from an HTTP header as in the previous method. You can ignore the error <code>AccountTransferDAO</code> for now, we build that class in the next section.</p>
-<pre><code>```java
-
-/**
- * Return status.
- */
-@GetMapping(value = &quot;/status&quot;, produces = &quot;text/plain&quot;)
-@Status
-public ResponseEntity&lt;ParticipantStatus&gt; status(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId,
-        @RequestHeader(LRA_HTTP_PARENT_CONTEXT_HEADER) String parentLRA) throws Exception {
-
-    log.info(&quot;status called for LRA : &quot; + lraId);
-    
-    return AccountTransferDAO.instance().status(lraId, DEPOSIT);
-}
-
-```
-</code></pre>
-<ol>
-<li>Create the &ldquo;after&rdquo; LRA endpoint</li>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Return status.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@GetMapping</span>(value <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;/status&#34;</span>, produces <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;text/plain&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Status</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> ResponseEntity<span style="color:#f92672">&lt;</span>ParticipantStatus<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">status</span>(<span style="color:#a6e22e">@RequestHeader</span>(LRA_HTTP_CONTEXT_HEADER) String lraId,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">@RequestHeader</span>(LRA_HTTP_PARENT_CONTEXT_HEADER) String parentLRA) <span style="color:#66d9ef">throws</span> Exception {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;status called for LRA : &#34;</span> <span style="color:#f92672">+</span> lraId);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> AccountTransferDAO.<span style="color:#a6e22e">instance</span>().<span style="color:#a6e22e">status</span>(lraId, DEPOSIT);
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></li>
+<li>
+<p>Create the &ldquo;after&rdquo; LRA endpoint</p>
+<p>Finally, you need an &ldquo;after LRA&rdquo; endpoint that implements any clean up logic that needs to be run after the completion of the LRA. This method is called regardless of the outcome of the LRA and must respond to the HTTP PUT method and is marked with the <code>@AfterLRA</code> annotation.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#75715e">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> * Delete journal entry for LRA.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@PutMapping</span>(value <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;/after&#34;</span>, consumes <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;text/plain&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@AfterLRA</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> ResponseEntity<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">afterLRA</span>(<span style="color:#a6e22e">@RequestHeader</span>(LRA_HTTP_ENDED_CONTEXT_HEADER) String lraId,
+</span></span><span style="display:flex;"><span>        String status) <span style="color:#66d9ef">throws</span> Exception {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    log.<span style="color:#a6e22e">info</span>(<span style="color:#e6db74">&#34;After LRA Called : &#34;</span> <span style="color:#f92672">+</span> lraId);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    AccountTransferDAO.<span style="color:#a6e22e">instance</span>().<span style="color:#a6e22e">afterLRA</span>(lraId, status, DEPOSIT);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ResponseEntity.<span style="color:#a6e22e">ok</span>(<span style="color:#e6db74">&#34;&#34;</span>);
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div></li>
 </ol>
-<p>Finally, you need an &ldquo;after LRA&rdquo; endpoint that implements any clean up logic that needs to be run after the completion of the LRA. This method is called regardless of the outcome of the LRA and must respond to the HTTP PUT method and is marked with the <code>@AfterLRA</code> annotation. <em><strong>IS THIS TRUE consumes = &ldquo;text/plain&rdquo;</strong></em></p>
-<pre><code>```java
-
-/**
- * Delete journal entry for LRA.
- */
-@PutMapping(value = &quot;/after&quot;, consumes = &quot;text/plain&quot;)
-@AfterLRA
-public ResponseEntity&lt;String&gt; afterLRA(@RequestHeader(LRA_HTTP_ENDED_CONTEXT_HEADER) String lraId,
-        String status) throws Exception {
-
-    log.info(&quot;After LRA Called : &quot; + lraId);
-
-    AccountTransferDAO.instance().afterLRA(lraId, status, DEPOSIT);
-    return ResponseEntity.ok(&quot;&quot;);
-}
-
-```
-</code></pre>
-<h2 id="task-5-create-an-accounttransfer-data-access-object">Task 5: Create an Account/Transfer Data Access Object</h2>
-<p>The Data Access Object pattern is considered a best practice, and it allows separation of business logic from the persistence layer. In this task, you will create an Account Data Access Object (DAO) that hides the complexity of the persistence layer logic from the business layer services. Additionally, it establishes methods that can be reused by each business layer service that needs to operate on accounts - in this module there will be two such services - deposit and withdraw.</p>
-<ol>
-<li>Create the DAO class</li>
-</ol>
-<p>Create a new Java file called <code>AccountTransferDAO.java</code> in <code>src/main/java/com/example/accounts/services</code>.  This class will contain common data access methods that are needed by multiple participants.  You will implement this class using the singleton pattern so that there will only be one instance of this class.</p>
-<p>Here is the code to set up the class and implement the singleton pattern:</p>
-<pre><code>```java
-package com.example.accounts.services;
-
-import com.example.accounts.model.Account;
-import com.example.accounts.model.Journal;
-import com.example.accounts.repository.AccountRepository;
-import com.example.accounts.repository.JournalRepository;
-import com.oracle.microtx.springboot.lra.annotation.ParticipantStatus;
-
-import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-
-@Component
-public class AccountTransferDAO {
-
-    private static AccountTransferDAO singleton;
-    final AccountRepository accountRepository;
-    final JournalRepository journalRepository;
-
-    /**
-    * Initialize account and journal repository.
-    * @param accountRepository Account Repository
-    * @param journalRepository Journal Repository
-    */
-    public AccountTransferDAO(AccountRepository accountRepository, JournalRepository journalRepository) {
-        this.accountRepository = accountRepository;
-        this.journalRepository = journalRepository;
-        singleton = this;
-        log.info(&quot;AccountTransferDAO accountsRepository = &quot; + accountRepository 
-            + &quot;, journalRepository = &quot; + journalRepository);
-    }
-
-    public static AccountTransferDAO instance() {
-        return singleton;
-    }
-
-}
-```
-</code></pre>
-<ol>
-<li>Create a method to get the LRA status as a String</li>
-</ol>
-<p>Create a <code>getStatusString</code> method which can be used to get a String representation of the LRA participant status.</p>
-<pre><code>```java
-/**
- * Get status od LRA participant.
- * @param status Status code
- * @return Returns status code
- */
-public static String getStatusString(ParticipantStatus status) {
-    return switch (status) {
-        case Compensated -&gt; &quot;Compensated&quot;;
-        case Completed -&gt; &quot;Completed&quot;;
-        case FailedToCompensate -&gt; &quot;Failed to Compensate&quot;;
-        case FailedToComplete -&gt; &quot;Failed to Complete&quot;;
-        case Active -&gt; &quot;Active&quot;;
-        case Compensating -&gt; &quot;Compensating&quot;;
-        case Completing -&gt; &quot;Completing&quot;;
-        default -&gt; &quot;Unknown&quot;;
-    };
-}
-```
-</code></pre>
-<ol>
-<li>Create a method to get the LRA status from a String</li>
-</ol>
-<p>Create a <code>getStatusFromString</code> method to convert back from the String to the enum.</p>
-<pre><code>```java
-/**
- * Get LRA Status from a string.
- * @param statusString Status
- * @return Participant Status
- */
-public static ParticipantStatus getStatusFromString(String statusString) {
-    return switch (statusString) {
-        case &quot;Compensated&quot; -&gt; ParticipantStatus.Compensated;
-        case &quot;Completed&quot; -&gt; ParticipantStatus.Completed;
-        case &quot;Failed to Compensate&quot; -&gt; ParticipantStatus.FailedToCompensate;
-        case &quot;Failed to Complete&quot; -&gt; ParticipantStatus.FailedToComplete;
-        case &quot;Active&quot; -&gt; ParticipantStatus.Active;
-        case &quot;Compensating&quot; -&gt; ParticipantStatus.Compensating;
-        case &quot;Completing&quot; -&gt; ParticipantStatus.Completing;
-        default -&gt; null;
-    };
-}
-```
-</code></pre>
-<ol>
-<li>Create a method to save an account</li>
-</ol>
-<p>Create a method to save an account in the account repository.</p>
-<pre><code>```java
-public void saveAccount(Account account) {
-    log.info(&quot;saveAccount account&quot; + account.getAccountId() + &quot; account&quot; + account.getAccountBalance());
-    accountRepository.save(account);
-}
-```
-</code></pre>
-<p>Create a method to return the correct HTTP Status Code for an LRA status.</p>
-<pre><code>```java
-
-/**
- * Return the correct HTTP Status Code for an LRA status
- * @param lraId LRA Id
- * @param journalType Journal Type
- * @return Participant Status
- * @throws Exception Exception
- */
-public ResponseEntity&lt;ParticipantStatus&gt; status(String lraId, String journalType) throws Exception {
-    Journal journal = getJournalForLRAid(lraId, journalType);
-    if (AccountTransferDAO.getStatusFromString(journal.getLraState()).equals(ParticipantStatus.Compensated)) {
-        return ResponseEntity.ok(ParticipantStatus.Compensated);
-    } else {
-        return ResponseEntity.ok(ParticipantStatus.Completed);
-    }
-}
-
-```
-</code></pre>
-<ol>
-<li>Create a method to update the LRA status in the journal</li>
-</ol>
-<p>Create a method to update the LRA status in the journal table during the &ldquo;after LRA&rdquo; phase.</p>
-<pre><code>```java
-/**
- * Update the LRA status in the journal table during the &quot;after LRA&quot; phase.
- * @param lraId LRA Id
- * @param status Status
- * @param journalType Journal Type
- * @throws Exception Exception
- */
-public void afterLRA(String lraId, String status, String journalType) throws Exception {
-    Journal journal = getJournalForLRAid(lraId, journalType);
-    journal.setLraState(status);
-    journalRepository.save(journal);
-}
-```
-</code></pre>
-<ol>
-<li>Create methods to manage accounts</li>
-</ol>
-<p>Create a method to get the account for a given account ID.</p>
-<pre><code>```java
-Account getAccountForAccountId(long accountId) {
-    Account account = accountRepository.findByAccountId(accountId);
-    if (account == null)
-        return null;
-    return account;
-}
-```
-</code></pre>
-<p>Create a method to get the account that is related to a journal entry.</p>
-<pre><code>```java
-Account getAccountForJournal(Journal journal) throws Exception {
-    Account account = accountRepository.findByAccountId(journal.getAccountId());
-    if (account == null) throw new Exception(&quot;Invalid accountName:&quot; + journal.getAccountId());
-    return account;
-}
-```
-</code></pre>
-<p>Update <code>AccountRepository.java</code> in <code>src/main/java/com/example/accounts/repositories</code> to add these extra JPA methods.  Your updated file should look like this:</p>
-<pre><code>```java
-package com.example.accounts.repository;
-
-import java.util.List;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.example.accounts.model.Account;
-
-public interface AccountRepository extends JpaRepository&lt;Account, Long&gt; {   
-    List&lt;Account&gt; findByAccountCustomerId(String customerId); 
-    List&lt;Account&gt; findAccountsByAccountNameContains (String accountName);
-    Account findByAccountId(long accountId);
-}
-```
-</code></pre>
-<ol>
-<li>Create methods to manage the journal</li>
-</ol>
-<p>Back in the <code>AccountTransferDAO</code>, create a method to get the journal entry for a given LRA.</p>
-<pre><code>```java
-
-Journal getJournalForLRAid(String lraId, String journalType) throws Exception {
-    Journal journal = journalRepository.findJournalByLraIdAndJournalType(lraId, journalType);
-    if (journal == null) {
-        journalRepository.save(new Journal(&quot;unknown&quot;, -1, 0, lraId,
-                AccountTransferDAO.getStatusString(ParticipantStatus.FailedToComplete)));
-        throw new Exception(&quot;Journal entry does not exist for lraId:&quot; + lraId);
-    }
-    return journal;
-}
-```
-</code></pre>
-<p>Create a method to save a journal entry.</p>
-<pre><code>```java
-public void saveJournal(Journal journal) {
-    journalRepository.save(journal);
-}
-
-```
-</code></pre>
-<p>This completes the Data Access Object, now you can start implementing the actual business logic for the services.</p>
-<h2 id="task-6-implement-the-deposit-services-business-logic">Task 6: Implement the deposit service&rsquo;s business logic</h2>
-<p>The deposit service will be responsible for depositing funds into accounts. It will be an LRA participant, and so it will need to implement the LRA lifecycle actions like complete, compensate, and so on. A significant amount of the logic will be shared with the withdrawal service, so you will also create a separate class for that shared logic, following the Data Access Object pattern, to keep the business layer separate from the persistence layer.</p>
-<ol>
-<li>Implement the business logic for the <strong>deposit</strong> method.</li>
-</ol>
-<p>This method should write a journal entry for the deposit, but should not update the account balance.  Here is the code for this method:</p>
-<pre><code>```java
-
-/**
- * Write journal entry re deposit amount.
- * Do not increase actual bank account amount
- */
-@PostMapping
-@LRA(value = LRA.Type.MANDATORY, end = false)
-public ResponseEntity&lt;String&gt; deposit(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId,
-        @RequestParam(&quot;accountId&quot;) long accountId,
-        @RequestParam(&quot;amount&quot;) long depositAmount) {
-    log.info(&quot;...deposit &quot; + depositAmount + &quot; in account:&quot; + accountId 
-        + &quot; (lraId:&quot; + lraId + &quot;) finished (in pending state)&quot;);
-    Account account = AccountTransferDAO.instance().getAccountForAccountId(accountId);
-    if (account == null) {
-      log.info(&quot;deposit failed: account does not exist&quot;);
-      AccountTransferDAO.instance().saveJournal(
-        new Journal(
-            DEPOSIT, 
-            accountId, 
-            0, 
-            lraId,
-            AccountTransferDAO.getStatusString(ParticipantStatus.Active)
-        )
-      );
-      return ResponseEntity.ok(&quot;deposit failed: account does not exist&quot;);
-    }
-    AccountTransferDAO.instance().saveJournal(
-      new Journal(
-          DEPOSIT, 
-          accountId, 
-          depositAmount, 
-          lraId,
-          AccountTransferDAO.getStatusString(ParticipantStatus.Active)
-      )
-    );
-    return ResponseEntity.ok(&quot;deposit succeeded&quot;);
-}
-
-```
-</code></pre>
-<ol>
-<li>Implement the <strong>complete</strong> method</li>
-</ol>
-<p>This method should update the LRA status to <strong>completing</strong>, update the account balance, change the bank transaction (journal entry) status from pending to completed and the set the LRA status too <strong>completed</strong>.  Here is the code for this method:</p>
-<pre><code>```java
-
-/**
- * Increase balance amount as recorded in journal during deposit call.
- * Update LRA state to ParticipantStatus.Completed.
- */
-@PutMapping(&quot;/complete&quot;)
-@Complete
-public ResponseEntity&lt;String&gt; completeWork(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) throws Exception {
-    log.info(&quot;deposit complete called for LRA : &quot; + lraId);
-
-    // get the journal and account...
-    Journal journal = AccountTransferDAO.instance().getJournalForLRAid(lraId, DEPOSIT);
-    Account account = AccountTransferDAO.instance().getAccountForJournal(journal);
-
-    // set this LRA participant's status to completing...
-    journal.setLraState(AccountTransferDAO.getStatusString(ParticipantStatus.Completing));
-
-    // update the account balance and journal entry...
-    account.setAccountBalance(account.getAccountBalance() + journal.getJournalAmount());
-    AccountTransferDAO.instance().saveAccount(account);
-    journal.setLraState(AccountTransferDAO.getStatusString(ParticipantStatus.Completed));
-    AccountTransferDAO.instance().saveJournal(journal);
-
-    // set this LRA participant's status to complete...
-    return ResponseEntity.ok(ParticipantStatus.Completed.name());
-}
-```  
-</code></pre>
-<ol>
-<li>Implement the <strong>compensate</strong> method</li>
-</ol>
-<p>This method should update both the deposit record in the journal and the LRA status too <strong>compensated</strong>.  Here is the code for this method:</p>
-<pre><code>```java
-
-/**
- * Update LRA state to ParticipantStatus.Compensated.
- */
-@PutMapping(&quot;/compensate&quot;)
-@Compensate
-public ResponseEntity&lt;String&gt; compensateWork(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) 
-    throws Exception {
-    log.info(&quot;deposit compensate called for LRA : &quot; + lraId);
-
-    Journal journal = AccountTransferDAO.instance().getJournalForLRAid(lraId, DEPOSIT);
-    journal.setLraState(AccountTransferDAO.getStatusString(ParticipantStatus.Compensated));
-    AccountTransferDAO.instance().saveJournal(journal);
-    return ResponseEntity.ok(ParticipantStatus.Compensated.name());
-}
-```
-</code></pre>
-<ol>
-<li>Implement the <strong>status</strong> method</li>
-</ol>
-<p>This method returns the LRA status.  Here is the code for this method:</p>
-<pre><code>```java
-
-/**
- * Return status.
- */
-@GetMapping(value = &quot;/status&quot;, produces = &quot;text/plain&quot;)
-@Status
-public ResponseEntity&lt;ParticipantStatus&gt; status(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId,
-                       @RequestHeader(LRA_HTTP_PARENT_CONTEXT_HEADER) String parentLRA) throws Exception {
-    log.info(&quot;status called for LRA : &quot; + lraId);
-
-    return AccountTransferDAO.instance().status(lraId, DEPOSIT);
-}
-
-```
-</code></pre>
-<ol>
-<li>Implement the <strong>after LRA</strong> method</li>
-</ol>
-<p>This method should perform any steps necessary to finalize or clean up after the LRA.  In this case, all you need to do is update the status of the deposit entry in the journal.  Here is the code for this method:</p>
-<pre><code>```java
-
-/**
- * Delete journal entry for LRA.
- */
-@PutMapping(value = &quot;/after&quot;, consumes = &quot;text/plain&quot;)
-@AfterLRA
-public ResponseEntity&lt;String&gt; afterLRA(@RequestHeader(LRA_HTTP_ENDED_CONTEXT_HEADER) String lraId, 
-    String status) throws Exception {
-    log.info(&quot;After LRA Called : &quot; + lraId);
-    AccountTransferDAO.instance().afterLRA(lraId, status, DEPOSIT);
-    return ResponseEntity.ok(&quot;&quot;);
-}
-
-```
-</code></pre>
-<p>That completes the implementation of the deposit service.</p>
-<h2 id="task-7-create-the-withdraw-service">Task 7: Create the Withdraw service</h2>
-<p>Next, you need to implement the withdraw service, which will be the second participant in the transfer LRA.</p>
-<ol>
-<li>Implement the <strong>withdraw</strong> service</li>
-</ol>
-<p>Create a new Java file called <code>WithdrawService.java</code> in <code>src/main/java/com/example/accounts/services</code>. This service is very similar to the deposit service, and no new concepts are introduced here. Here is the code for this service:</p>
-<pre><code>```java
-
-package com.example.accounts.services;
-
-import com.example.accounts.model.Account;
-import com.example.accounts.model.Journal;
-import com.oracle.microtx.springboot.lra.annotation.AfterLRA;
-import com.oracle.microtx.springboot.lra.annotation.Compensate;
-import com.oracle.microtx.springboot.lra.annotation.Complete;
-import com.oracle.microtx.springboot.lra.annotation.LRA;
-import com.oracle.microtx.springboot.lra.annotation.ParticipantStatus;
-import com.oracle.microtx.springboot.lra.annotation.Status;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_CONTEXT_HEADER;
-import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_ENDED_CONTEXT_HEADER;
-import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_PARENT_CONTEXT_HEADER;
-
-
-@RestController
-@RequestMapping(&quot;/withdraw&quot;)
-@Slf4j
-public class WithdrawService {
-
-    public static final String WITHDRAW = &quot;WITHDRAW&quot;;
-
-    /**
-    * Reduce account balance by given amount and write journal entry re the same.
-    * Both actions in same local tx
-    */
-    @PostMapping
-    @LRA(value = LRA.Type.MANDATORY, end = false)
-    public ResponseEntity&lt;String&gt; withdraw(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId,
-            @RequestParam(&quot;accountId&quot;) long accountId,
-            @RequestParam(&quot;amount&quot;) long withdrawAmount) {
-        log.info(&quot;withdraw &quot; + withdrawAmount + &quot; in account:&quot; + accountId + &quot; (lraId:&quot; + lraId + &quot;)...&quot;);
-        Account account = AccountTransferDAO.instance().getAccountForAccountId(accountId);
-        if (account == null) {
-            log.info(&quot;withdraw failed: account does not exist&quot;);
-            AccountTransferDAO.instance().saveJournal(
-                    new Journal(
-                            WITHDRAW,
-                            accountId,
-                            0,
-                            lraId,
-                            AccountTransferDAO.getStatusString(ParticipantStatus.Active)));
-            return ResponseEntity.ok(&quot;withdraw failed: account does not exist&quot;);
-        }
-        if (account.getAccountBalance() &lt; withdrawAmount) {
-            log.info(&quot;withdraw failed: insufficient funds&quot;);
-            AccountTransferDAO.instance().saveJournal(
-                    new Journal(
-                            WITHDRAW,
-                            accountId,
-                            0,
-                            lraId,
-                            AccountTransferDAO.getStatusString(ParticipantStatus.Active)));
-            return ResponseEntity.ok(&quot;withdraw failed: insufficient funds&quot;);
-        }
-        log.info(&quot;withdraw current balance:&quot; + account.getAccountBalance() 
-            + &quot; new balance:&quot; + (account.getAccountBalance() - withdrawAmount));
-        account.setAccountBalance(account.getAccountBalance() - withdrawAmount);
-        AccountTransferDAO.instance().saveAccount(account);
-        AccountTransferDAO.instance().saveJournal(
-                new Journal(
-                        WITHDRAW,
-                        accountId,
-                        withdrawAmount,
-                        lraId,
-                        AccountTransferDAO.getStatusString(ParticipantStatus.Active)));
-        return ResponseEntity.ok(&quot;withdraw succeeded&quot;);
-    }
-
-    /**
-    * Update LRA state. Do nothing else.
-    */
-    @PutMapping(&quot;/complete&quot;)
-    @Complete
-    public ResponseEntity&lt;String&gt; completeWork(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) throws Exception {
-        log.info(&quot;withdraw complete called for LRA : &quot; + lraId);
-        Journal journal = AccountTransferDAO.instance().getJournalForLRAid(lraId, WITHDRAW);
-        journal.setLraState(AccountTransferDAO.getStatusString(ParticipantStatus.Completed));
-        AccountTransferDAO.instance().saveJournal(journal);
-        return ResponseEntity.ok(ParticipantStatus.Completed.name());
-    }
-
-    /**
-    * Read the journal and increase the balance by the previous withdraw amount.
-    * before the LRA
-    */
-    @PutMapping(&quot;/compensate&quot;)
-    @Compensate
-    public ResponseEntity&lt;String&gt; compensateWork(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) 
-        throws Exception {
-        log.info(&quot;Account withdraw compensate() called for LRA : &quot; + lraId);
-        Journal journal = AccountTransferDAO.instance().getJournalForLRAid(lraId, WITHDRAW);
-        journal.setLraState(AccountTransferDAO.getStatusString(ParticipantStatus.Compensating));
-        Account account = AccountTransferDAO.instance().getAccountForAccountId(journal.getAccountId());
-        if (account != null) {
-            account.setAccountBalance(account.getAccountBalance() + journal.getJournalAmount());
-            AccountTransferDAO.instance().saveAccount(account);
-        }
-        journal.setLraState(AccountTransferDAO.getStatusString(ParticipantStatus.Compensated));
-        AccountTransferDAO.instance().saveJournal(journal);
-        return ResponseEntity.ok(ParticipantStatus.Compensated.name());
-    }
-
-    @Status
-    public ResponseEntity&lt;ParticipantStatus&gt; status(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId,
-            @RequestHeader(LRA_HTTP_PARENT_CONTEXT_HEADER) String parentLRA) throws Exception {
-        return AccountTransferDAO.instance().status(lraId, WITHDRAW);
-    }
-
-    /**
-    * Delete journal entry for LRA.
-    */
-    @PutMapping(value = &quot;/after&quot;, consumes = &quot;text/plain&quot;)
-    @AfterLRA
-    public ResponseEntity&lt;String&gt; afterLRA(@RequestHeader(LRA_HTTP_ENDED_CONTEXT_HEADER) String lraId, 
-        String status) throws Exception {
-        log.info(&quot;After LRA Called : &quot; + lraId);
-        AccountTransferDAO.instance().afterLRA(lraId, status, WITHDRAW);
-        return ResponseEntity.ok(&quot;&quot;);
-    }
-
-}
-```  
-</code></pre>
-<p>That completes the implementation of the deposit service, and with that you are also done with the modifications for the Account Spring Boot microservice application to allow it to participate int he LRA.  Next, you will create the Transfer Spring Boot microservice application.</p>
-<h2 id="task-8-create-the-transfer-service">Task 8: Create the Transfer Service</h2>
-<p>Now, you will create another new Spring Boot microservice application and implement the Transfer Service.  This service will initiate the LRA and act as the logical coordinator - it will call the deposit and withdraw services you just implemented to effect the transfer to process the Cloud Cash Payment.</p>
-<ol>
-<li>Create a new Java Project for the <code>transfer</code> service.</li>
-</ol>
-<p>In the Explorer of VS Code open <code>Java Project</code> and click the <strong>plus</strong> sign to add a Java Project to your workspace.</p>
-<p><a href="#R-image-b990aa9a2abd17da0cba7d5d30861bf4" class="lightbox-link"><img alt="Add Java Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/add_java_project.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-b990aa9a2abd17da0cba7d5d30861bf4"><img alt="Add Java Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/add_java_project.png" title=" "></a></p>
-<p>Select Spring Boot Project.</p>
-<p><a href="#R-image-3800b3beb70257d9a6a342b87dbd86ee" class="lightbox-link"><img alt="Spring Boot Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/spring-boot-prj.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-3800b3beb70257d9a6a342b87dbd86ee"><img alt="Spring Boot Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/spring-boot-prj.png" title=" "></a></p>
-<p>Select Maven Project.</p>
-<p><a href="#R-image-88c8d5582e9b0a2ca2e88fa3fac7e299" class="lightbox-link"><img alt="Maven Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/maven-project.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-88c8d5582e9b0a2ca2e88fa3fac7e299"><img alt="Maven Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/maven-project.png" title=" "></a></p>
-<p>Specify <code>3.3.1</code> as the Spring Boot version.</p>
-<p><a href="#R-image-430c839a361e30a14ca6ff144c12024e" class="lightbox-link"><img alt="Spring Boot Version" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/spring-boot-version.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-430c839a361e30a14ca6ff144c12024e"><img alt="Spring Boot Version" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/spring-boot-version.png" title=" "></a></p>
-<p>Use <code>com.example</code> as the Group Id.</p>
-<p><a href="#R-image-ab9654bf471d878bba66415a389aed27" class="lightbox-link"><img alt="Group Id" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/group-id.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-ab9654bf471d878bba66415a389aed27"><img alt="Group Id" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/group-id.png" title=" "></a></p>
-<p>Enter <code>transfer</code> as the Artifact Id.</p>
-<p><a href="#R-image-325f4f390b0362e8ee605c9e52ea7ddb" class="lightbox-link"><img alt="Artifact Id" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/artifact-id-transfer.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-325f4f390b0362e8ee605c9e52ea7ddb"><img alt="Artifact Id" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/artifact-id-transfer.png" title=" "></a></p>
-<p>Use <code>JAR</code> as the Packaging Type.</p>
-<p><a href="#R-image-d2c687d1b70c3896ee2509c73e7025bd" class="lightbox-link"><img alt="Packaging Type" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/packaging-type.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-d2c687d1b70c3896ee2509c73e7025bd"><img alt="Packaging Type" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/packaging-type.png" title=" "></a></p>
-<p>Select Java version <code>21</code>.</p>
-<p><a href="#R-image-32a548a547c6275e11ee367a2ad24607" class="lightbox-link"><img alt="Java Version" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/java-version.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-32a548a547c6275e11ee367a2ad24607"><img alt="Java Version" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/java-version.png" title=" "></a></p>
-<p>Search for <code>Spring Web</code> and press <strong>Enter</strong></p>
-<p><a href="#R-image-52aaa091060c52619afd9de762fa4eb6" class="lightbox-link"><img alt="Search for Spring Web" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/search-spring-web.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-52aaa091060c52619afd9de762fa4eb6"><img alt="Search for Spring Web" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/search-spring-web.png" title=" "></a></p>
-<p>Press <strong>Enter</strong> to continue and create the Java Project</p>
-<p><a href="#R-image-80ebdb73158c4fd22b5050256f21d202" class="lightbox-link"><img alt="Create Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/create-project.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-80ebdb73158c4fd22b5050256f21d202"><img alt="Create Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/create-project.png" title=" "></a></p>
-<p>Select the <code>root</code> location for your project e.g. side by side with the <code>checks</code>, <code>testrunner</code> and <code>accounts</code> projects.</p>
-<p><a href="#R-image-bf5f0883bd6985644cdf6d67dca05b64" class="lightbox-link"><img alt="Project Location" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/project-location.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-bf5f0883bd6985644cdf6d67dca05b64"><img alt="Project Location" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/project-location.png" title=" "></a></p>
-<p>When the project opens click <strong>Add to Workspace</strong></p>
-<p><a href="#R-image-ea0dab27a0c368f971f908b9546b3b66" class="lightbox-link"><img alt="Add to Workspace" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/add-to-workspace.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-ea0dab27a0c368f971f908b9546b3b66"><img alt="Add to Workspace" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/add-to-workspace.png" title=" "></a></p>
-<ol>
-<li>Add MicroTX  and Lombok to the <code>pom.xml</code> file</li>
-</ol>
-<p>Open the <code>pom.xml</code> file in the <code>transfer</code> project. Add the following to the pom.xml:</p>
-<pre><code>```xml
-
-&lt;dependency&gt;
-  &lt;groupId&gt;com.oracle.microtx.lra&lt;/groupId&gt;
-  &lt;artifactId&gt;microtx-lra-spring-boot-starter&lt;/artifactId&gt;
-  &lt;version&gt;23.4.2&lt;/version&gt;
-&lt;/dependency&gt;
-&lt;dependency&gt;
-  &lt;groupId&gt;org.projectlombok&lt;/groupId&gt;
-  &lt;artifactId&gt;lombok&lt;/artifactId&gt;
-&lt;/dependency&gt;
-```
-</code></pre>
-<ol>
-<li>Create the Spring Boot application configuration</li>
-</ol>
-<p>In the <code>transfer</code> project, rename the file called <code>application.properties</code> to <code>application.yaml</code> located in the <code>src/main/resources</code>. This will be the Spring Boot application configuration file. In this file you need to configure the endpoints for the LRA participants and coordinator.</p>
-<pre><code>```yaml
-
-spring:
-  application:
-    name: transfer
-
-  mvc:
-    enforced-prefixes:
-      - /actuator
-      - /rest
-    url-mappings:
-      - &quot;/rest/*&quot;
-      - &quot;/actuator/*&quot;
-      - &quot;/error/*&quot;
-
-  microtx:
-    lra:
-      coordinator-url: ${MP_LRA_COORDINATOR_URL}
-      propagation-active: true
-      headers-propagation-prefix: &quot;{x-b3-, oracle-tmm-, authorization, refresh-}&quot;
-
-account:
-  deposit:
-    url: http://account.application:8080/deposit
-  withdraw:
-    url: http://account.application:8080/withdraw
-transfer:
-  cancel:
-    url: http://transfer.application:8080/cancel
-    process:
-      url: http://transfer.application:8080/processcancel
-  confirm:
-    url: http://transfer.application:8080/confirm
-    process:
-      url: http://transfer.application:8080/processconfirm
-
-```
-</code></pre>
-<ol>
-<li>Create the Transfer service</li>
-</ol>
-<p>You are now ready to implement the main logic for the Cloud Cash Payment/transfer LRA.  You will implement this in a new Java file called <code>TransferService.java</code> in <code>src/main/java/com/example/transfer</code>.  Here are the imports you will need for this class and the member variables.  Note that this class has the <code>@RestController</code> and <code>@RequestMapping</code> annotations, as you saw previously in the Account project, to set up the URL context root for the service.</p>
-<pre><code>```java
-
-package com.example.transfer;
-
-import java.net.URI;
-
-import com.oracle.microtx.springboot.lra.annotation.Compensate;
-import com.oracle.microtx.springboot.lra.annotation.Complete;
-import com.oracle.microtx.springboot.lra.annotation.LRA;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_CONTEXT_HEADER;
-
-@RestController
-@RequestMapping(&quot;/&quot;)
-@Slf4j
-public class TransferService {
-
-    public static final String TRANSFER_ID = &quot;TRANSFER_ID&quot;;
-
-    @Value(&quot;${account.withdraw.url}&quot;) URI withdrawUri;
-    @Value(&quot;${account.deposit.url}&quot;) URI depositUri;
-    @Value(&quot;${transfer.cancel.url}&quot;) URI transferCancelUri;
-    @Value(&quot;${transfer.cancel.process.url}&quot;) URI transferProcessCancelUri;
-    @Value(&quot;${transfer.confirm.url}&quot;) URI transferConfirmUri;
-    @Value(&quot;${transfer.confirm.process.url}&quot;) URI transferProcessConfirmUri;
-
-
-}
-```
-</code></pre>
-<ol>
-<li>Create the <strong>transfer</strong> endpoint</li>
-</ol>
-<p>This is the main entry point for the LRA.  When a client calls this method, a new LRA will be started.  The <code>@LRA</code> annotation with the <code>value</code> property set to <code>LRA.Type.REQUIRES_NEW</code> instructs the interceptors/filters to contact Oracle Transaction Manager for Microservices to start a new LRA instance and obtain the LRA ID, which will be injected into the <code>LRA_HTTP_CONTEXT_HEADER</code> HTTP header. Note that the <code>end</code> property is set to <code>false</code> which means there will be other actions and participants before the LRA is completed.</p>
-<p>This method will accept three parameters from the caller, in JSON format in the HTTP body: <code>fromAccount</code> is the account from which the funds are to be withdrawn, <code>toAccount</code> is the account into which the funds are to be deposited, and <code>amount</code> is the amount to transfer.</p>
-<p>In the method body, you should first check if the <code>lraId</code> was set.  If it is null, that indicates that there was some error trying to create the new LRA instance, and you should return an error response and stop.</p>
-<p>After that, you want to perform the withdrawal, check if it worked, and if so, perform the deposit, and then check if that worked, and if so &ldquo;complete&rdquo; the LRA.  If there were any failures, compensate the LRA.</p>
-<pre><code>```java
-
-/**
- * Transfer amount between two accounts.
- * @param fromAccount From an account
- * @param toAccount To an account
- * @param amount Amount to transfer
- * @param lraId LRA Id
- * @return TO-DO
- */
-@PostMapping(&quot;/transfer&quot;)
-@LRA(value = LRA.Type.REQUIRES_NEW, end = false)
-public ResponseEntity&lt;String&gt; transfer(@RequestParam(&quot;fromAccount&quot;) long fromAccount,
-        @RequestParam(&quot;toAccount&quot;) long toAccount,
-        @RequestParam(&quot;amount&quot;) long amount,
-        @RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) {
-    if (lraId == null) {
-        return new ResponseEntity&lt;&gt;(&quot;Failed to create LRA&quot;, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-    log.info(&quot;Started new LRA/transfer Id: &quot; + lraId);
-
-    boolean isCompensate = false;
-    String returnString = &quot;&quot;;
-
-    // perform the withdrawal
-    returnString += withdraw(lraId, fromAccount, amount);
-    log.info(returnString);
-    if (returnString.contains(&quot;succeeded&quot;)) {
-        // if it worked, perform the deposit
-        returnString += &quot; &quot; + deposit(lraId, toAccount, amount);
-        log.info(returnString);
-        if (returnString.contains(&quot;failed&quot;)) {
-            isCompensate = true; // deposit failed
-        }
-    } else {
-        isCompensate = true; // withdraw failed
-    }
-    log.info(&quot;LRA/transfer action will be &quot; + (isCompensate ? &quot;cancel&quot; : &quot;confirm&quot;));
-
-    // call complete or cancel based on outcome of previous actions
-    RestTemplate restTemplate = new RestTemplate();
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.TEXT_PLAIN);
-    headers.set(TRANSFER_ID, lraId);
-    HttpEntity&lt;String&gt; request = new HttpEntity&lt;String&gt;(&quot;&quot;, headers);
-
-    ResponseEntity&lt;String&gt; response = restTemplate.postForEntity(
-        (isCompensate ? transferCancelUri : transferConfirmUri).toString(), 
-        request, 
-        String.class);
-
-    returnString += response.getBody();
-
-    // return status
-    return ResponseEntity.ok(&quot;transfer status:&quot; + returnString);
-}
-```
-</code></pre>
-<ol>
-<li>Create a method to perform the withdrawal</li>
-</ol>
-<p>This method should perform the withdrawal by calling the Withdraw service in the Account Spring Boot application.  The <code>lraId</code>, <code>accountId</code> and <code>amount</code> need to be passed to the service, and you must set the <code>LRA_HTTP_CONTEXT_HEADER</code> to the LRA ID.</p>
-<pre><code>```java
-
-private String withdraw(String lraId, long accountId, long amount) {
-    log.info(&quot;withdraw accountId = &quot; + accountId + &quot;, amount = &quot; + amount);
-    log.info(&quot;withdraw lraId = &quot; + lraId);
-    
-    UriComponentsBuilder builder = UriComponentsBuilder.fromUri(withdrawUri)
-        .queryParam(&quot;accountId&quot;, accountId)
-        .queryParam(&quot;amount&quot;, amount);
-
-    RestTemplate restTemplate = new RestTemplate();
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.TEXT_PLAIN);
-    headers.set(LRA_HTTP_CONTEXT_HEADER, lraId.toString());
-    HttpEntity&lt;String&gt; request = new HttpEntity&lt;String&gt;(&quot;&quot;, headers);
-
-    ResponseEntity&lt;String&gt; response = restTemplate.postForEntity(
-        builder.buildAndExpand().toUri(), 
-        request, 
-        String.class);
-
-    return response.getBody();
-}
-```
-</code></pre>
-<ol>
-<li>Create a method to perform the deposit</li>
-</ol>
-<p>This method is similar the previous one, no new concepts are introduced here.</p>
-<pre><code>```java
-
-private String deposit(String lraId, long accountId, long amount) {
-    log.info(&quot;deposit accountId = &quot; + accountId + &quot;, amount = &quot; + amount);
-    log.info(&quot;deposit lraId = &quot; + lraId);
-    
-    UriComponentsBuilder builder = UriComponentsBuilder.fromUri(depositUri)
-        .queryParam(&quot;accountId&quot;, accountId)
-        .queryParam(&quot;amount&quot;, amount);
-
-    RestTemplate restTemplate = new RestTemplate();
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.TEXT_PLAIN);
-    headers.set(LRA_HTTP_CONTEXT_HEADER, lraId.toString());
-    HttpEntity&lt;String&gt; request = new HttpEntity&lt;String&gt;(&quot;&quot;, headers);
-
-    ResponseEntity&lt;String&gt; response = restTemplate.postForEntity(
-        builder.buildAndExpand().toUri(), 
-        request, 
-        String.class);
-
-    return response.getBody();
-}
-```
-</code></pre>
-<ol>
-<li>Create a method to process the confirm action for this participant</li>
-</ol>
-<p>This participant does not need to take any actions for the confirm action, so just return a successful response.</p>
-<pre><code>```java
-
-@PostMapping(&quot;/processconfirm&quot;)
-@LRA(value = LRA.Type.MANDATORY)
-public ResponseEntity&lt;String&gt; processconfirm(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) {
-    log.info(&quot;Process confirm for transfer : &quot; + lraId);
-    return ResponseEntity.ok(&quot;&quot;);
-}
-```
-</code></pre>
-<ol>
-<li>Create a method to process the cancel action for this participant</li>
-</ol>
-<p>This participant does not need to take any actions for the cancel action, so just return a successful response.</p>
-<pre><code>```java
-
-@PostMapping(&quot;/processcancel&quot;)
-@LRA(value = LRA.Type.MANDATORY, cancelOn = HttpStatus.OK)
-public ResponseEntity&lt;String&gt; processcancel(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) {
-    log.info(&quot;Process cancel for transfer : &quot; + lraId);
-    return ResponseEntity.ok(&quot;&quot;);
-}
-```
-</code></pre>
-<ol>
-<li>Create the confirm and cancel methods</li>
-</ol>
-<p>The logic demonstrated in these two methods would probably be in a client in a real-life LRA, but is included here for instructional purposes and convenience.</p>
-<p>The <code>transfer</code> method makes a REST call to confirm (or cancel) at the end of its processing.  The confirm or cancel method suspends the LRA (using the <code>NOT_SUPPORTED</code> <code>value</code> in the <code>@LRA</code> annotation). Then the confirm or cancel method will make a REST call to <code>processconfirm</code> or <code>processcancel</code> which import the LRA with their <code>MANDATORY</code> annotation and then implicitly end the LRA accordingly upon returning.</p>
-<pre><code>```java
-
-/**
- * Confirm a transfer.
- * @param transferId Transfer Id
- * @return TO-DO
- */
-@PostMapping(&quot;/confirm&quot;)
-@Complete
-@LRA(value = LRA.Type.NOT_SUPPORTED)
-public ResponseEntity&lt;String&gt; confirm(@RequestHeader(TRANSFER_ID) String transferId) {
-    log.info(&quot;Received confirm for transfer : &quot; + transferId);
-
-    RestTemplate restTemplate = new RestTemplate();
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.TEXT_PLAIN);
-    headers.set(LRA_HTTP_CONTEXT_HEADER, transferId);
-    HttpEntity&lt;String&gt; request = new HttpEntity&lt;String&gt;(&quot;&quot;, headers);
-
-    ResponseEntity&lt;String&gt; response = restTemplate.postForEntity(
-        transferProcessConfirmUri, 
-        request, 
-        String.class);
-
-    return ResponseEntity.ok(response.getBody());
-}
-
-/**
- * Cancel a transfer.
- * @param transferId Transfer Id
- * @return TO-DO
- */
-@PostMapping(&quot;/cancel&quot;)
-@Compensate
-@LRA(value = LRA.Type.NOT_SUPPORTED, cancelOn = HttpStatus.OK)
-public ResponseEntity&lt;String&gt; cancel(@RequestHeader(TRANSFER_ID) String transferId) {
-    log.info(&quot;Received cancel for transfer : &quot; + transferId);
-
-    RestTemplate restTemplate = new RestTemplate();
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.TEXT_PLAIN);
-    headers.set(LRA_HTTP_CONTEXT_HEADER, transferId);
-    HttpEntity&lt;String&gt; request = new HttpEntity&lt;String&gt;(&quot;&quot;, headers);
-
-    ResponseEntity&lt;String&gt; response = restTemplate.postForEntity(
-        transferProcessCancelUri, 
-        request, 
-        String.class);
-
-    return ResponseEntity.ok(response.getBody());
-}
-```
-</code></pre>
-<p>That completes the Transfer service and application.</p>
-<h2 id="task-9-deploy-the-account-and-transfer-services-to-the-backend">Task 9: Deploy the Account and Transfer services to the backend</h2>
-<p>The services are now completed, and you are ready to deploy them to the Oracle Backend for Spring Boot and Microservices.</p>
-<blockquote>
-<p><strong>Note</strong>: You already created the Kubernetes secrets necessary for the account service to access the Oracle Autonomous Database in a previous module, and the <code>transfer</code> service does not need access to the database. You also created the journal table that is needed by the update account application in the previous module.</p>
-</blockquote>
-<ol>
-<li>Build the Account and Transfer applications into JAR files</li>
-</ol>
-<p>To build a JAR file from the Account application, issue this command in the <code>account</code> directory.  Then issue the same command from the <code>transfer</code> directory to build the Transfer application into a JAR file too.</p>
-<pre><code> ```shell
-$ mvn clean package -DskipTests
-```
-</code></pre>
-<p>You will now have a JAR file for each application, as can be seen with this command (the command needs to be executed in the <code>parent</code> directory for the Account and Transfer applications):</p>
-<pre><code>```shell
-$ find . -name \*SNAPSHOT.jar
-./testrunner/target/testrunner-0.0.1-SNAPSHOT.jar
-./checks/target/checks-0.0.1-SNAPSHOT.jar
-./transfer/target/transfer-0.0.1-SNAPSHOT.jar
-./accounts/target/accounts-0.0.1-SNAPSHOT.jar
-```
-</code></pre>
-<ol>
-<li>Deploy the Account and Transfer applications</li>
-</ol>
-<p>You will now deploy your updated account application and new transfer application to the Oracle Backend for Spring Boot and Microservices using the CLI.  You will deploy into the <code>application</code> namespace, and the service names will be <code>account</code> and <code>transfer</code> respectively.</p>
-<p>The Oracle Backend for Spring Boot and Microservices admin service is not exposed outside of the Kubernetes cluster by default. Oracle recommends using a <strong>kubectl</strong> port forwarding tunnel to establish a secure connection to the admin service.</p>
-<p>Start a tunnel using this command:</p>
-<pre><code>```shell
-$ kubectl -n obaas-admin port-forward svc/obaas-admin 8080:8080
-```
-</code></pre>
-<p>Start the Oracle Backend for Spring Boot and Microservices CLI (<em>oractl</em>) in the <code>parent</code> directory using this command:</p>
-<pre><code>```shell
-$ oractl
- _   _           __    _    ___
-/ \ |_)  _.  _. (_    /  |   |
-\_/ |_) (_| (_| __)   \_ |_ _|_
-========================================================================================
-  Application Name: Oracle Backend Platform :: Command Line Interface
-  Application Version: (1.3.0)
-  :: Spring Boot (v3.3.3) ::
-
-  Ask for help:
-  - Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-  - email: obaas_ww@oracle.com
-
-oractl:&gt;
-```
-</code></pre>
-<p>Obtain the <code>obaas-admin</code> password by executing this command:</p>
-<pre><code>```shell
-kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.admin}' | base64 -d
-```
-</code></pre>
-<p>Connect to the Oracle Backend for Spring Boot and Microservices admin service using this command.  Use <code>obaas-admin</code> as the username and the password you obtained in the previous step.</p>
-<pre><code>```shell
-oractl&gt; connect
-username: obaas-admin
-password: **************
-Credentials successfully authenticated! obaas-admin -&gt; welcome to OBaaS CLI.
-oractl:&gt;
-```
-</code></pre>
-<p>Run this command to deploy your account service, make sure you provide the correct path to your JAR files.</p>
-<pre><code>```shell
-oractl:&gt; deploy --app-name application --service-name account --artifact-path /path/to/accounts-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --liquibase-db admin
-uploading: account/target/accounts-0.0.1-SNAPSHOT.jar
-building and pushing image...
-creating deployment and service... successfully deployed
-oractl:&gt;
-```
-</code></pre>
-<p>Run this command to deploy the transfer service, make sure you provide the correct path to your JAR files.</p>
-<pre><code>```shell
-oractl:&gt; deploy --app-name application --service-name transfer --artifact-path /path/to/transfer-0.0.1-SNAPSHOT.jar --image-version 0.0.1
-uploading: transfer/target/transfer-0.0.1-SNAPSHOT.jar
-building and pushing image...
-creating deployment and service... successfully deployed
-oractl:&gt;
-```
-</code></pre>
-<p>Your applications are now deployed in the backend.</p>
-<h2 id="task-10-run-lra-test-cases">Task 10: Run LRA test cases</h2>
-<p>Now you can test your LRA to verify it performs correctly under various circumstances.</p>
-<ol>
-<li>Start a tunnel to access the transfer service</li>
-</ol>
-<p>Since the transfer service is not exposed outside the Kubernetes cluster, you will need to start a <strong>kubectl</strong> port forwarding tunnel to access its endpoints.</p>
-<pre><code>&gt; **Note**: If you prefer, you can create a route in the APISIX API Gateway to expose the service.  The service will normally only be invoked from within the cluster, so you did not create a route for it.  However, you have learned how to create routes, so you may do that if you prefer.
-
-Run this command to start the tunnel:
-
-```shell
-$ kubectl -n application port-forward svc/transfer 7000:8080
-```
-</code></pre>
-<p>Now the transfer service will be accessible at <a href="http://localhost:7000/api/v1/transfer" rel="external" target="_blank">http://localhost:7000/api/v1/transfer</a>.</p>
-<ol>
-<li>Check the starting account balances</li>
-</ol>
-<p>In several of the next few commands, you need to provide the correct IP address for the API Gateway in your backend environment.  Not the ones that use <code>localhost</code>, just those where the example uses <code>100.20.30.40</code> as the address. You can find the IP address using this command, you need the one listed in the <code>EXTERNAL-IP</code> column:</p>
-<pre><code>```shell
-$ kubectl -n ingress-nginx get service ingress-nginx-controller
-NAME                       TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
-ingress-nginx-controller   LoadBalancer   10.123.10.127   100.20.30.40  80:30389/TCP,443:30458/TCP   13d
-```
-</code></pre>
-<p>Before you start, check the balances of the two accounts that you will be transferring money between using this command (make sure you are using the EXTERNAL-IP of your environment). Note that these accounts were created in an earlier step.</p>
-<pre><code>```shell
-$ curl -s http://100.20.30.40/api/v1/account/1 | jq ; curl -s http://100.20.30.40/api/v1/account/2 | jq
-{
-    &quot;accountId&quot;: 1,
-    &quot;accountName&quot;: &quot;Andy's checking&quot;,
-    &quot;accountType&quot;: &quot;CH&quot;,
-    &quot;accountCustomerId&quot;: &quot;abcDe7ged&quot;,
-    &quot;accountOpenedDate&quot;: &quot;2023-03-06T13:56:43.000+00:00&quot;,
-    &quot;accountOtherDetails&quot;: &quot;Account Info&quot;,
-    &quot;accountBalance&quot;: -20
-}
-{
-    &quot;accountId&quot;: 2,
-    &quot;accountName&quot;: &quot;Mark's CCard&quot;,
-    &quot;accountType&quot;: &quot;CC&quot;,
-    &quot;accountCustomerId&quot;: &quot;bkzLp8cozi&quot;,
-    &quot;accountOpenedDate&quot;: &quot;2023-03-06T13:56:44.000+00:00&quot;,
-    &quot;accountOtherDetails&quot;: &quot;Mastercard account&quot;,
-    &quot;accountBalance&quot;: 1000
-}
-```
-</code></pre>
-<p>Note that account 1 has -$20 in this example, and account 2 has $1,000.  Your results may be different.</p>
-<ol>
-<li>Perform a transfer that should succeed</li>
-</ol>
-<p>Run this command to perform a transfer that should succeed.  Note that both accounts exist and the amount of the transfer is less than the balance of the source account.</p>
-<pre><code>```shell
-$ curl -X POST &quot;http://localhost:7000/transfer?fromAccount=2&amp;toAccount=1&amp;amount=100&quot;
-transfer status:withdraw succeeded deposit succeeded
-```  
-</code></pre>
-<p>Check the two accounts again to confirm the transfer behaved as expected:</p>
-<pre><code>```shell
-$ curl -s http://100.20.30.40/api/v1/account/1 | jq ; curl -s http://100.20.30.40/api/v1/account/2 | jq
-{
-    &quot;accountId&quot;: 1,
-    &quot;accountName&quot;: &quot;Andy's checking&quot;,
-    &quot;accountType&quot;: &quot;CH&quot;,
-    &quot;accountCustomerId&quot;: &quot;abcDe7ged&quot;,
-    &quot;accountOpenedDate&quot;: &quot;2023-03-06T13:56:43.000+00:00&quot;,
-    &quot;accountOtherDetails&quot;: &quot;Account Info&quot;,
-    &quot;accountBalance&quot;: 80
-}
-{
-    &quot;accountId&quot;: 2,
-    &quot;accountName&quot;: &quot;Mark's CCard&quot;,
-    &quot;accountType&quot;: &quot;CC&quot;,
-    &quot;accountCustomerId&quot;: &quot;bkzLp8cozi&quot;,
-    &quot;accountOpenedDate&quot;: &quot;2023-03-06T13:56:44.000+00:00&quot;,
-    &quot;accountOtherDetails&quot;: &quot;Mastercard account&quot;,
-    &quot;accountBalance&quot;: 900
-}
-```
-</code></pre>
-<p>Notice that account 2 now has only $900 and account 1 has $80.  So the $100 was successfully transferred as expected.</p>
-<ol>
-<li>Perform a transfer that should fail due to insufficient funds in the source account</li>
-</ol>
-<p>Run this command to attempt to transfer $100,000 from account 2 to account 1.  This should fail because account 2 does not have enough funds.</p>
-<pre><code>```shell
-$ curl -X POST &quot;http://localhost:7000/transfer?fromAccount=2&amp;toAccount=1&amp;amount=100000&quot;
-transfer status:withdraw failed: insufficient funds
-```
-</code></pre>
-<ol>
-<li>Perform a transfer that should fail due to the destination account not existing.</li>
-</ol>
-<p>Execute the following command to perform a <code>failed</code> transfer:</p>
-<pre><code>```shell
-$ curl -X POST &quot;http://localhost:7000/transfer?fromAccount=2&amp;toAccount=6799999&amp;amount=100&quot;
-transfer status:withdraw succeeded deposit failed: account does not exist%  
-```
-</code></pre>
-<ol>
-<li>Access the applications logs to verify what happened in each case</li>
-</ol>
-<p>Access the Transfer application log with this command.  Your output will be different:</p>
-<pre><code>```shell
-$ kubectl -n application logs svc/transfer
-2023-03-04 21:52:12.421  INFO 1 --- [nio-8080-exec-3] TransferService                          : Started new LRA/transfer Id: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/18a093ef-beb6-4065-bb6c-b9328c8bb3e5
-2023-03-04 21:52:12.422  INFO 1 --- [nio-8080-exec-3] TransferService                          : withdraw accountId = 2, amount = 100
-2023-03-04 21:52:12.426  INFO 1 --- [nio-8080-exec-3] TransferService                          : withdraw lraId = http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/18a093ef-beb6-4065-bb6c-b9328c8bb3e5
-2023-03-04 21:52:12.615  INFO 1 --- [nio-8080-exec-3] TransferService                          : withdraw succeeded
-2023-03-04 21:52:12.616  INFO 1 --- [nio-8080-exec-3] TransferService                          : deposit accountId = 6799999, amount = 100
-2023-03-04 21:52:12.619  INFO 1 --- [nio-8080-exec-3] TransferService                          : deposit lraId = http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/18a093ef-beb6-4065-bb6c-b9328c8bb3e5
-2023-03-04 21:52:12.726  INFO 1 --- [nio-8080-exec-3] TransferService                          : withdraw succeeded deposit failed: account does not exist
-2023-03-04 21:52:12.726  INFO 1 --- [nio-8080-exec-3] TransferService                          : LRA/transfer action will be cancel
-2023-03-04 21:52:12.757  INFO 1 --- [nio-8080-exec-1] TransferService                          : Received cancel for transfer : http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/18a093ef-beb6-4065-bb6c-b9328c8bb3e5
-2023-03-04 21:52:12.817  INFO 1 --- [nio-8080-exec-2] TransferService                          : Process cancel for transfer : http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/18a093ef-beb6-4065-bb6c-b9328c8bb3e5
-```
-</code></pre>
-<p>In the example output above you can see one what happened during that last test you ran a moment ago.  Notice that the LRA started, the withdrawal succeeded, then the deposit failed because the account did not exist.  Then you can see that the next action is cancel, and then the LRA being canceled/compensated.</p>
-<p>In this module you have learned about the Saga pattern by implementing an account transfer scenarios.
-You did this by implementing the long running activity, including <code>transfer</code> and <code>account</code> services that connect to a coordinator, according to the Long Running Action specification.</p>
-<h2 id="learn-more">Learn More</h2>
-<ul>
-<li><a href="https://bit.ly/oraclespringboot" rel="external" target="_blank">Oracle Backend for Spring Boot and Microservices</a></li>
-<li><a href="https://www.oracle.com/database/transaction-manager-for-microservices/" rel="external" target="_blank">Oracle Transaction Manager for Microservices</a></li>
-<li><a href="https://microservices.io/patterns/data/saga.html" rel="external" target="_blank">Saga pattern</a></li>
-<li><a href="https://download.eclipse.org/microprofile/microprofile-lra-1.0-M1/microprofile-lra-spec.html" rel="external" target="_blank">Long Running Action</a></li>
-</ul>
-<h2 id="acknowledgements">Acknowledgements</h2>
-<ul>
-<li><strong>Author</strong> - Paul Parkinson, Mark Nelson, Andy Tael, Developer Evangelists, Oracle Database</li>
-<li><strong>Contributors</strong> - <a href="var:contributors" rel="external" target="_blank"></a></li>
-<li><strong>Last Updated By/Date</strong> - Andy Tael, July 2024</li>
-</ul>
 
             <footer class="footline">
             </footer>
@@ -1351,12 +240,12 @@ You did this by implementing the long running activity, including <code>transfer
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1726239047" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1726843375" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -1504,8 +393,8 @@ You did this by implementing the long running activity, including <code>transfer
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1726239047" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1726239047" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1726239047" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1726843375" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1726843375" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1726843375" defer></script>
   </body>
 </html>
