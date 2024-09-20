@@ -6,47 +6,51 @@
     <meta name="generator" content="Hugo 0.123.6">
     <meta name="generator" content="Relearn 6.1.1+tip">
     <meta name="description" content="Now you can test your LRA to verify it performs correctly under various circumstances.
-Start a tunnel to access the transfer service Since the transfer service is not exposed outside the Kubernetes cluster, you will need to start a kubectl port forwarding tunnel to access its endpoints.
-&gt; **Note**: If you prefer, you can create a route in the APISIX API Gateway to expose the service. The service will normally only be invoked from within the cluster, so you did not create a route for it.">
+Start a tunnel to access the transfer service
+Since the transfer service is not exposed outside the Kubernetes cluster, you will need to start a kubectl port forwarding tunnel to access its endpoints.
+Note: If you prefer, you can create a route in the APISIX API Gateway to expose the service. The service will normally only be invoked from within the cluster, so you did not create a route for it.">
     <meta name="author" content="">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Run LRA test cases :: CloudBank AI">
     <meta name="twitter:description" content="Now you can test your LRA to verify it performs correctly under various circumstances.
-Start a tunnel to access the transfer service Since the transfer service is not exposed outside the Kubernetes cluster, you will need to start a kubectl port forwarding tunnel to access its endpoints.
-&gt; **Note**: If you prefer, you can create a route in the APISIX API Gateway to expose the service. The service will normally only be invoked from within the cluster, so you did not create a route for it.">
+Start a tunnel to access the transfer service
+Since the transfer service is not exposed outside the Kubernetes cluster, you will need to start a kubectl port forwarding tunnel to access its endpoints.
+Note: If you prefer, you can create a route in the APISIX API Gateway to expose the service. The service will normally only be invoked from within the cluster, so you did not create a route for it.">
     <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/cloudbank/saga/test/index.html">
     <meta property="og:site_name" content="CloudBank AI">
     <meta property="og:title" content="Run LRA test cases :: CloudBank AI">
     <meta property="og:description" content="Now you can test your LRA to verify it performs correctly under various circumstances.
-Start a tunnel to access the transfer service Since the transfer service is not exposed outside the Kubernetes cluster, you will need to start a kubectl port forwarding tunnel to access its endpoints.
-&gt; **Note**: If you prefer, you can create a route in the APISIX API Gateway to expose the service. The service will normally only be invoked from within the cluster, so you did not create a route for it.">
+Start a tunnel to access the transfer service
+Since the transfer service is not exposed outside the Kubernetes cluster, you will need to start a kubectl port forwarding tunnel to access its endpoints.
+Note: If you prefer, you can create a route in the APISIX API Gateway to expose the service. The service will normally only be invoked from within the cluster, so you did not create a route for it.">
     <meta property="og:locale" content="en_us">
     <meta property="og:type" content="article">
     <meta property="article:section" content="Manage Sagas">
     <meta itemprop="name" content="Run LRA test cases :: CloudBank AI">
     <meta itemprop="description" content="Now you can test your LRA to verify it performs correctly under various circumstances.
-Start a tunnel to access the transfer service Since the transfer service is not exposed outside the Kubernetes cluster, you will need to start a kubectl port forwarding tunnel to access its endpoints.
-&gt; **Note**: If you prefer, you can create a route in the APISIX API Gateway to expose the service. The service will normally only be invoked from within the cluster, so you did not create a route for it.">
-    <meta itemprop="wordCount" content="801">
+Start a tunnel to access the transfer service
+Since the transfer service is not exposed outside the Kubernetes cluster, you will need to start a kubectl port forwarding tunnel to access its endpoints.
+Note: If you prefer, you can create a route in the APISIX API Gateway to expose the service. The service will normally only be invoked from within the cluster, so you did not create a route for it.">
+    <meta itemprop="wordCount" content="778">
     <title>Run LRA test cases :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1726239047" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726239047" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726239047" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1726239047" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726239047" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726239047" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1726239047" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1726239047" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1726239047" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1726239047" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1726239047" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1726239047" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/variant.css?1726239047" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1726239047" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1726239047"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1726843375" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726843375" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726843375" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1726843375" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726843375" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726843375" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1726843375" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1726843375" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1726843375" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1726843375" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1726843375" rel="stylesheet" id="R-variant-style">
+    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1726843375" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/microservices-datadriven/cloudbank/css/variant.css?1726843375" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/print.css?1726843375" rel="stylesheet" media="print">
+    <script src="/microservices-datadriven/cloudbank/js/variant.js?1726843375"></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
-      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1726239047";
+      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1726843375";
       // variant stuff
       window.variants && variants.init( [ 'zen-light' ] );
       // translations
@@ -108,122 +112,92 @@ Start a tunnel to access the transfer service Since the transfer service is not 
 
 <p>Now you can test your LRA to verify it performs correctly under various circumstances.</p>
 <ol>
-<li>Start a tunnel to access the transfer service</li>
-</ol>
+<li>
+<p>Start a tunnel to access the transfer service</p>
 <p>Since the transfer service is not exposed outside the Kubernetes cluster, you will need to start a <strong>kubectl</strong> port forwarding tunnel to access its endpoints.</p>
-<pre><code>&gt; **Note**: If you prefer, you can create a route in the APISIX API Gateway to expose the service.  The service will normally only be invoked from within the cluster, so you did not create a route for it.  However, you have learned how to create routes, so you may do that if you prefer.
-
-Run this command to start the tunnel:
-
-```shell
-$ kubectl -n application port-forward svc/transfer 7000:8080
-```
-</code></pre>
-<p>Now the transfer service will be accessible at <a href="http://localhost:7000/api/v1/transfer" rel="external" target="_blank">http://localhost:7000/api/v1/transfer</a>.</p>
-<ol>
-<li>Check the starting account balances</li>
-</ol>
+<blockquote>
+<p><strong>Note</strong>: If you prefer, you can create a route in the APISIX API Gateway to expose the service.  The service will normally only be invoked from within the cluster, so you did not create a route for it.  However, you have learned how to create routes, so you may do that if you prefer.</p>
+</blockquote>
+<p>Run this command to start the tunnel:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl -n application port-forward svc/transfer 7000:8080</span></span></code></pre></div><p>Now the transfer service will be accessible at <a href="http://localhost:7000/api/v1/transfer" rel="external" target="_blank">http://localhost:7000/api/v1/transfer</a>.</p>
+</li>
+<li>
+<p>Check the starting account balances</p>
 <p>In several of the next few commands, you need to provide the correct IP address for the API Gateway in your backend environment.  Not the ones that use <code>localhost</code>, just those where the example uses <code>100.20.30.40</code> as the address. You can find the IP address using this command, you need the one listed in the <code>EXTERNAL-IP</code> column:</p>
-<pre><code>```shell
-$ kubectl -n ingress-nginx get service ingress-nginx-controller
-NAME                       TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
-ingress-nginx-controller   LoadBalancer   10.123.10.127   100.20.30.40  80:30389/TCP,443:30458/TCP   13d
-```
-</code></pre>
-<p>Before you start, check the balances of the two accounts that you will be transferring money between using this command (make sure you are using the EXTERNAL-IP of your environment). Note that these accounts were created in an earlier step.</p>
-<pre><code>```shell
-$ curl -s http://100.20.30.40/api/v1/account/1 | jq ; curl -s http://100.20.30.40/api/v1/account/2 | jq
-{
-    &quot;accountId&quot;: 1,
-    &quot;accountName&quot;: &quot;Andy's checking&quot;,
-    &quot;accountType&quot;: &quot;CH&quot;,
-    &quot;accountCustomerId&quot;: &quot;abcDe7ged&quot;,
-    &quot;accountOpenedDate&quot;: &quot;2023-03-06T13:56:43.000+00:00&quot;,
-    &quot;accountOtherDetails&quot;: &quot;Account Info&quot;,
-    &quot;accountBalance&quot;: -20
-}
-{
-    &quot;accountId&quot;: 2,
-    &quot;accountName&quot;: &quot;Mark's CCard&quot;,
-    &quot;accountType&quot;: &quot;CC&quot;,
-    &quot;accountCustomerId&quot;: &quot;bkzLp8cozi&quot;,
-    &quot;accountOpenedDate&quot;: &quot;2023-03-06T13:56:44.000+00:00&quot;,
-    &quot;accountOtherDetails&quot;: &quot;Mastercard account&quot;,
-    &quot;accountBalance&quot;: 1000
-}
-```
-</code></pre>
-<p>Note that account 1 has -$20 in this example, and account 2 has $1,000.  Your results may be different.</p>
-<ol>
-<li>Perform a transfer that should succeed</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl -n ingress-nginx get service ingress-nginx-controller
+</span></span><span style="display:flex;"><span>NAME                       TYPE           CLUSTER-IP      EXTERNAL-IP   PORT<span style="color:#f92672">(</span>S<span style="color:#f92672">)</span>                      AGE
+</span></span><span style="display:flex;"><span>ingress-nginx-controller   LoadBalancer   10.123.10.127   100.20.30.40  80:30389/TCP,443:30458/TCP   13d</span></span></code></pre></div><p>Before you start, check the balances of the two accounts that you will be transferring money between using this command (make sure you are using the EXTERNAL-IP of your environment). Note that these accounts were created in an earlier step.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ curl -s http://100.20.30.40/api/v1/account/1 | jq ; curl -s http://100.20.30.40/api/v1/account/2 | jq
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountId&#34;</span>: 1,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountName&#34;</span>: <span style="color:#e6db74">&#34;Andy&#39;s checking&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountType&#34;</span>: <span style="color:#e6db74">&#34;CH&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountCustomerId&#34;</span>: <span style="color:#e6db74">&#34;abcDe7ged&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountOpenedDate&#34;</span>: <span style="color:#e6db74">&#34;2023-03-06T13:56:43.000+00:00&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountOtherDetails&#34;</span>: <span style="color:#e6db74">&#34;Account Info&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountBalance&#34;</span>: -20
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountId&#34;</span>: 2,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountName&#34;</span>: <span style="color:#e6db74">&#34;Mark&#39;s CCard&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountType&#34;</span>: <span style="color:#e6db74">&#34;CC&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountCustomerId&#34;</span>: <span style="color:#e6db74">&#34;bkzLp8cozi&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountOpenedDate&#34;</span>: <span style="color:#e6db74">&#34;2023-03-06T13:56:44.000+00:00&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountOtherDetails&#34;</span>: <span style="color:#e6db74">&#34;Mastercard account&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountBalance&#34;</span>: <span style="color:#ae81ff">1000</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span></span></span></code></pre></div><p>Note that account 1 has -$20 in this example, and account 2 has $1,000.  Your results may be different.</p>
+</li>
+<li>
+<p>Perform a transfer that should succeed</p>
 <p>Run this command to perform a transfer that should succeed.  Note that both accounts exist and the amount of the transfer is less than the balance of the source account.</p>
-<pre><code>```shell
-$ curl -X POST &quot;http://localhost:7000/transfer?fromAccount=2&amp;toAccount=1&amp;amount=100&quot;
-transfer status:withdraw succeeded deposit succeeded
-```  
-</code></pre>
-<p>Check the two accounts again to confirm the transfer behaved as expected:</p>
-<pre><code>```shell
-$ curl -s http://100.20.30.40/api/v1/account/1 | jq ; curl -s http://100.20.30.40/api/v1/account/2 | jq
-{
-    &quot;accountId&quot;: 1,
-    &quot;accountName&quot;: &quot;Andy's checking&quot;,
-    &quot;accountType&quot;: &quot;CH&quot;,
-    &quot;accountCustomerId&quot;: &quot;abcDe7ged&quot;,
-    &quot;accountOpenedDate&quot;: &quot;2023-03-06T13:56:43.000+00:00&quot;,
-    &quot;accountOtherDetails&quot;: &quot;Account Info&quot;,
-    &quot;accountBalance&quot;: 80
-}
-{
-    &quot;accountId&quot;: 2,
-    &quot;accountName&quot;: &quot;Mark's CCard&quot;,
-    &quot;accountType&quot;: &quot;CC&quot;,
-    &quot;accountCustomerId&quot;: &quot;bkzLp8cozi&quot;,
-    &quot;accountOpenedDate&quot;: &quot;2023-03-06T13:56:44.000+00:00&quot;,
-    &quot;accountOtherDetails&quot;: &quot;Mastercard account&quot;,
-    &quot;accountBalance&quot;: 900
-}
-```
-</code></pre>
-<p>Notice that account 2 now has only $900 and account 1 has $80.  So the $100 was successfully transferred as expected.</p>
-<ol>
-<li>Perform a transfer that should fail due to insufficient funds in the source account</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ curl -X POST <span style="color:#e6db74">&#34;http://localhost:7000/transfer?fromAccount=2&amp;toAccount=1&amp;amount=100&#34;</span>
+</span></span><span style="display:flex;"><span>transfer status:withdraw succeeded deposit succeeded</span></span></code></pre></div><p>Check the two accounts again to confirm the transfer behaved as expected:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ curl -s http://100.20.30.40/api/v1/account/1 | jq ; curl -s http://100.20.30.40/api/v1/account/2 | jq
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountId&#34;</span>: 1,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountName&#34;</span>: <span style="color:#e6db74">&#34;Andy&#39;s checking&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountType&#34;</span>: <span style="color:#e6db74">&#34;CH&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountCustomerId&#34;</span>: <span style="color:#e6db74">&#34;abcDe7ged&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountOpenedDate&#34;</span>: <span style="color:#e6db74">&#34;2023-03-06T13:56:43.000+00:00&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountOtherDetails&#34;</span>: <span style="color:#e6db74">&#34;Account Info&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountBalance&#34;</span>: <span style="color:#ae81ff">80</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountId&#34;</span>: 2,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountName&#34;</span>: <span style="color:#e6db74">&#34;Mark&#39;s CCard&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountType&#34;</span>: <span style="color:#e6db74">&#34;CC&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountCustomerId&#34;</span>: <span style="color:#e6db74">&#34;bkzLp8cozi&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountOpenedDate&#34;</span>: <span style="color:#e6db74">&#34;2023-03-06T13:56:44.000+00:00&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountOtherDetails&#34;</span>: <span style="color:#e6db74">&#34;Mastercard account&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;accountBalance&#34;</span>: <span style="color:#ae81ff">900</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span></span></span></code></pre></div><p>Notice that account 2 now has only $900 and account 1 has $80.  So the $100 was successfully transferred as expected.</p>
+</li>
+<li>
+<p>Perform a transfer that should fail due to insufficient funds in the source account</p>
 <p>Run this command to attempt to transfer $100,000 from account 2 to account 1.  This should fail because account 2 does not have enough funds.</p>
-<pre><code>```shell
-$ curl -X POST &quot;http://localhost:7000/transfer?fromAccount=2&amp;toAccount=1&amp;amount=100000&quot;
-transfer status:withdraw failed: insufficient funds
-```
-</code></pre>
-<ol>
-<li>Perform a transfer that should fail due to the destination account not existing.</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ curl -X POST <span style="color:#e6db74">&#34;http://localhost:7000/transfer?fromAccount=2&amp;toAccount=1&amp;amount=100000&#34;</span>
+</span></span><span style="display:flex;"><span>transfer status:withdraw failed: insufficient funds</span></span></code></pre></div></li>
+<li>
+<p>Perform a transfer that should fail due to the destination account not existing.</p>
 <p>Execute the following command to perform a <code>failed</code> transfer:</p>
-<pre><code>```shell
-$ curl -X POST &quot;http://localhost:7000/transfer?fromAccount=2&amp;toAccount=6799999&amp;amount=100&quot;
-transfer status:withdraw succeeded deposit failed: account does not exist%  
-```
-</code></pre>
-<ol>
-<li>Access the applications logs to verify what happened in each case</li>
-</ol>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ curl -X POST <span style="color:#e6db74">&#34;http://localhost:7000/transfer?fromAccount=2&amp;toAccount=6799999&amp;amount=100&#34;</span>
+</span></span><span style="display:flex;"><span>transfer status:withdraw succeeded deposit failed: account does not exist%  </span></span></code></pre></div></li>
+<li>
+<p>Access the applications logs to verify what happened in each case</p>
 <p>Access the Transfer application log with this command.  Your output will be different:</p>
-<pre><code>```shell
-$ kubectl -n application logs svc/transfer
-2023-03-04 21:52:12.421  INFO 1 --- [nio-8080-exec-3] TransferService                          : Started new LRA/transfer Id: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/18a093ef-beb6-4065-bb6c-b9328c8bb3e5
-2023-03-04 21:52:12.422  INFO 1 --- [nio-8080-exec-3] TransferService                          : withdraw accountId = 2, amount = 100
-2023-03-04 21:52:12.426  INFO 1 --- [nio-8080-exec-3] TransferService                          : withdraw lraId = http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/18a093ef-beb6-4065-bb6c-b9328c8bb3e5
-2023-03-04 21:52:12.615  INFO 1 --- [nio-8080-exec-3] TransferService                          : withdraw succeeded
-2023-03-04 21:52:12.616  INFO 1 --- [nio-8080-exec-3] TransferService                          : deposit accountId = 6799999, amount = 100
-2023-03-04 21:52:12.619  INFO 1 --- [nio-8080-exec-3] TransferService                          : deposit lraId = http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/18a093ef-beb6-4065-bb6c-b9328c8bb3e5
-2023-03-04 21:52:12.726  INFO 1 --- [nio-8080-exec-3] TransferService                          : withdraw succeeded deposit failed: account does not exist
-2023-03-04 21:52:12.726  INFO 1 --- [nio-8080-exec-3] TransferService                          : LRA/transfer action will be cancel
-2023-03-04 21:52:12.757  INFO 1 --- [nio-8080-exec-1] TransferService                          : Received cancel for transfer : http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/18a093ef-beb6-4065-bb6c-b9328c8bb3e5
-2023-03-04 21:52:12.817  INFO 1 --- [nio-8080-exec-2] TransferService                          : Process cancel for transfer : http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/18a093ef-beb6-4065-bb6c-b9328c8bb3e5
-```
-</code></pre>
-<p>In the example output above you can see one what happened during that last test you ran a moment ago.  Notice that the LRA started, the withdrawal succeeded, then the deposit failed because the account did not exist.  Then you can see that the next action is cancel, and then the LRA being canceled/compensated.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl -n application logs svc/transfer
+</span></span><span style="display:flex;"><span>2023-03-04 21:52:12.421  INFO <span style="color:#ae81ff">1</span> --- <span style="color:#f92672">[</span>nio-8080-exec-3<span style="color:#f92672">]</span> TransferService                          : Started new LRA/transfer Id: http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/18a093ef-beb6-4065-bb6c-b9328c8bb3e5
+</span></span><span style="display:flex;"><span>2023-03-04 21:52:12.422  INFO <span style="color:#ae81ff">1</span> --- <span style="color:#f92672">[</span>nio-8080-exec-3<span style="color:#f92672">]</span> TransferService                          : withdraw accountId <span style="color:#f92672">=</span> 2, amount <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span>2023-03-04 21:52:12.426  INFO <span style="color:#ae81ff">1</span> --- <span style="color:#f92672">[</span>nio-8080-exec-3<span style="color:#f92672">]</span> TransferService                          : withdraw lraId <span style="color:#f92672">=</span> http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/18a093ef-beb6-4065-bb6c-b9328c8bb3e5
+</span></span><span style="display:flex;"><span>2023-03-04 21:52:12.615  INFO <span style="color:#ae81ff">1</span> --- <span style="color:#f92672">[</span>nio-8080-exec-3<span style="color:#f92672">]</span> TransferService                          : withdraw succeeded
+</span></span><span style="display:flex;"><span>2023-03-04 21:52:12.616  INFO <span style="color:#ae81ff">1</span> --- <span style="color:#f92672">[</span>nio-8080-exec-3<span style="color:#f92672">]</span> TransferService                          : deposit accountId <span style="color:#f92672">=</span> 6799999, amount <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span>2023-03-04 21:52:12.619  INFO <span style="color:#ae81ff">1</span> --- <span style="color:#f92672">[</span>nio-8080-exec-3<span style="color:#f92672">]</span> TransferService                          : deposit lraId <span style="color:#f92672">=</span> http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/18a093ef-beb6-4065-bb6c-b9328c8bb3e5
+</span></span><span style="display:flex;"><span>2023-03-04 21:52:12.726  INFO <span style="color:#ae81ff">1</span> --- <span style="color:#f92672">[</span>nio-8080-exec-3<span style="color:#f92672">]</span> TransferService                          : withdraw succeeded deposit failed: account does not exist
+</span></span><span style="display:flex;"><span>2023-03-04 21:52:12.726  INFO <span style="color:#ae81ff">1</span> --- <span style="color:#f92672">[</span>nio-8080-exec-3<span style="color:#f92672">]</span> TransferService                          : LRA/transfer action will be cancel
+</span></span><span style="display:flex;"><span>2023-03-04 21:52:12.757  INFO <span style="color:#ae81ff">1</span> --- <span style="color:#f92672">[</span>nio-8080-exec-1<span style="color:#f92672">]</span> TransferService                          : Received cancel <span style="color:#66d9ef">for</span> transfer : http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/18a093ef-beb6-4065-bb6c-b9328c8bb3e5
+</span></span><span style="display:flex;"><span>2023-03-04 21:52:12.817  INFO <span style="color:#ae81ff">1</span> --- <span style="color:#f92672">[</span>nio-8080-exec-2<span style="color:#f92672">]</span> TransferService                          : Process cancel <span style="color:#66d9ef">for</span> transfer : http://otmm-tcs.otmm.svc.cluster.local:9000/api/v1/lra-coordinator/18a093ef-beb6-4065-bb6c-b9328c8bb3e5</span></span></code></pre></div><p>In the example output above you can see one what happened during that last test you ran a moment ago.  Notice that the LRA started, the withdrawal succeeded, then the deposit failed because the account did not exist.  Then you can see that the next action is cancel, and then the LRA being canceled/compensated.</p>
+</li>
+</ol>
 <p>In this module you have learned about the Saga pattern by implementing an account transfer scenarios.
 You did this by implementing the long running activity, including <code>transfer</code> and <code>account</code> services that connect to a coordinator, according to the Long Running Action specification.</p>
 
@@ -251,12 +225,12 @@ You did this by implementing the long running activity, including <code>transfer
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1726239047" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1726239047" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1726843375" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -404,8 +378,8 @@ You did this by implementing the long running activity, including <code>transfer
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1726239047" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1726239047" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1726239047" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1726843375" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1726843375" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1726843375" defer></script>
   </body>
 </html>

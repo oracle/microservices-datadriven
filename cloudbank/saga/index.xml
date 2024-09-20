@@ -33,14 +33,14 @@
       <link>https://oracle.github.io/microservices-datadriven/cloudbank/saga/prepare/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/cloudbank/saga/prepare/index.html</guid>
-      <description>You will update the Account service that you built in the previous module to add some new endpoints to perform deposits and withdrawals. These new endpoints will be LRA participants.&#xA;Add new dependencies to the Maven POM Open the pom.xml in your accounts project and add these new dependency to the list. It will add support for the LRA client libraries.&#xA;```xml &lt;dependency&gt; &lt;groupId&gt;com.oracle.microtx.lra&lt;/groupId&gt; &lt;artifactId&gt;microtx-lra-spring-boot-starter&lt;/artifactId&gt; &lt;version&gt;23.4.2&lt;/version&gt; &lt;/dependency&gt; ``` Update the Spring Boot application configuration file Update your Account service’s Spring Boot configuration file, application.</description>
+      <description>You will update the Account service that you built in the previous module to add some new endpoints to perform deposits and withdrawals. These new endpoints will be LRA participants.&#xA;Add new dependencies to the Maven POM&#xA;Open the pom.xml in your accounts project and add these new dependency to the list. It will add support for the LRA client libraries.&#xA;&lt;dependency&gt; &lt;groupId&gt;com.oracle.microtx.lra&lt;/groupId&gt; &lt;artifactId&gt;microtx-lra-spring-boot-starter&lt;/artifactId&gt; &lt;version&gt;23.4.2&lt;/version&gt; &lt;/dependency&gt; Update the Spring Boot application configuration file</description>
     </item>
     <item>
       <title>Create the Deposit service</title>
       <link>https://oracle.github.io/microservices-datadriven/cloudbank/saga/deposit/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/cloudbank/saga/deposit/index.html</guid>
-      <description>The Deposit service will process deposits into bank accounts. In this task, you will create the basic structure for this service and learn about the endpoints required for an LRA participant, what HTTP Methods they process, the annotations used to define them and so on. You will implement the actual business logic in a later task.&#xA;Create the Deposit service and scaffold methods Create a new directory in src/main/java/com/example/accounts called services and in that directory create a new Java file called DepositService.</description>
+      <description>The Deposit service will process deposits into bank accounts. In this task, you will create the basic structure for this service and learn about the endpoints required for an LRA participant, what HTTP Methods they process, the annotations used to define them and so on. You will implement the actual business logic in a later task.&#xA;Create the Deposit service and scaffold methods&#xA;Create a new directory in src/main/java/com/example/accounts called services and in that directory create a new Java file called DepositService.</description>
     </item>
     <item>
       <title>Create a Data Access Object</title>
@@ -61,14 +61,14 @@
       <link>https://oracle.github.io/microservices-datadriven/cloudbank/saga/withdraw-service/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/cloudbank/saga/withdraw-service/index.html</guid>
-      <description>Next, you need to implement the withdraw service, which will be the second participant in the transfer LRA.&#xA;Implement the withdraw service Create a new Java file called WithdrawService.java in src/main/java/com/example/accounts/services. This service is very similar to the deposit service, and no new concepts are introduced here. Here is the code for this service:&#xA;```java package com.example.accounts.services; import com.example.accounts.model.Account; import com.example.accounts.model.Journal; import com.oracle.microtx.springboot.lra.annotation.AfterLRA; import com.oracle.microtx.springboot.lra.annotation.Compensate; import com.oracle.microtx.springboot.lra.annotation.Complete; import com.oracle.microtx.springboot.lra.annotation.LRA; import com.</description>
+      <description>Next, you need to implement the withdraw service, which will be the second participant in the transfer LRA.&#xA;Implement the withdraw service&#xA;Create a new Java file called WithdrawService.java in src/main/java/com/example/accounts/services. This service is very similar to the deposit service, and no new concepts are introduced here. Here is the code for this service:&#xA;package com.example.accounts.services; import com.example.accounts.model.Account; import com.example.accounts.model.Journal; import com.oracle.microtx.springboot.lra.annotation.AfterLRA; import com.oracle.microtx.springboot.lra.annotation.Compensate; import com.oracle.microtx.springboot.lra.annotation.Complete; import com.oracle.microtx.springboot.lra.annotation.LRA; import com.oracle.microtx.springboot.lra.annotation.ParticipantStatus; import com.</description>
     </item>
     <item>
       <title>Create the Transfer service</title>
       <link>https://oracle.github.io/microservices-datadriven/cloudbank/saga/transfer-service/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/cloudbank/saga/transfer-service/index.html</guid>
-      <description>Now, you will create another new Spring Boot microservice application and implement the Transfer Service. This service will initiate the LRA and act as the logical coordinator - it will call the deposit and withdraw services you just implemented to effect the transfer to process the Cloud Cash Payment.&#xA;Create a new Java Project for the transfer service. In the Explorer of VS Code open Java Project and click the plus sign to add a Java Project to your workspace.</description>
+      <description>Now, you will create another new Spring Boot microservice application and implement the Transfer Service. This service will initiate the LRA and act as the logical coordinator - it will call the deposit and withdraw services you just implemented to effect the transfer to process the Cloud Cash Payment.&#xA;Create a new Java Project for the transfer service.&#xA;In the Explorer of VS Code open Java Project and click the plus sign to add a Java Project to your workspace.</description>
     </item>
     <item>
       <title>Deploy services</title>
@@ -82,7 +82,7 @@
       <link>https://oracle.github.io/microservices-datadriven/cloudbank/saga/test/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/cloudbank/saga/test/index.html</guid>
-      <description>Now you can test your LRA to verify it performs correctly under various circumstances.&#xA;Start a tunnel to access the transfer service Since the transfer service is not exposed outside the Kubernetes cluster, you will need to start a kubectl port forwarding tunnel to access its endpoints.&#xA;&gt; **Note**: If you prefer, you can create a route in the APISIX API Gateway to expose the service. The service will normally only be invoked from within the cluster, so you did not create a route for it.</description>
+      <description>Now you can test your LRA to verify it performs correctly under various circumstances.&#xA;Start a tunnel to access the transfer service&#xA;Since the transfer service is not exposed outside the Kubernetes cluster, you will need to start a kubectl port forwarding tunnel to access its endpoints.&#xA;Note: If you prefer, you can create a route in the APISIX API Gateway to expose the service. The service will normally only be invoked from within the cluster, so you did not create a route for it.</description>
     </item>
   </channel>
 </rss>
