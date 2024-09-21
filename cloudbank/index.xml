@@ -3,7 +3,7 @@
   <channel>
     <title>CloudBank AI</title>
     <link>https://oracle.github.io/microservices-datadriven/cloudbank/index.html</link>
-    <description>Welcome to CloudBank AI - an on-demand, self-paced learning resource you can use to learn about developing microservices with Spring Boot and Spring Cloud Oracle and deploying, running and managing them with Oracle Backend for Spring Boot and Microservices.&#xA;You can follow through from beginning to end, or you can start at any module that you are interested in.&#xA;What you will need To complete the modules you will somewhere to run Oracle Backend for Spring Boot and Microservices.</description>
+    <description>Welcome to CloudBank AI - an on-demand, self-paced learning resource you can use to learn about developing microservices with Spring Boot and Spring Cloud Oracle and deploying, running and managing them with Oracle Backend for Microservices and AI.&#xA;You can follow through from beginning to end, or you can start at any module that you are interested in.&#xA;What you will need To complete the modules you will somewhere to run Oracle Backend for Microservices and AI. The instructions in the Module 1 provide three alternatives:</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <atom:link href="https://oracle.github.io/microservices-datadriven/cloudbank/index.xml" rel="self" type="application/rss+xml" />
@@ -12,7 +12,7 @@
       <link>https://oracle.github.io/microservices-datadriven/cloudbank/provision/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/cloudbank/provision/index.html</guid>
-      <description>This module guides you through provisioning an Oracle Backend for Spring Boot environment either on your local machine, in the Oracle Cloud Free Tier, or in a commercial Oracle Cloud Tenancy.</description>
+      <description>This module guides you through provisioning an Oracle Backend for Microservices and AI environment either on your local machine, in the Oracle Cloud Free Tier, or in a commercial Oracle Cloud Tenancy.</description>
     </item>
     <item>
       <title>Developer Environment</title>
@@ -54,14 +54,14 @@
       <link>https://oracle.github.io/microservices-datadriven/cloudbank/deploy-cli/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/cloudbank/deploy-cli/index.html</guid>
-      <description>In this module, you will learn how to deploy the full CloudBank application to Oracle Backend for Spring Boot and Microservices using the CLI. If you prefer to use an IDE, skip this module and go to the next module instead.</description>
+      <description>In this module, you will learn how to deploy the full CloudBank application to Oracle Backend for Microservices and AI using the CLI. If you prefer to use an IDE, skip this module and go to the next module instead.</description>
     </item>
     <item>
       <title>Deploy with an IDE</title>
       <link>https://oracle.github.io/microservices-datadriven/cloudbank/deploy-ide/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/cloudbank/deploy-ide/index.html</guid>
-      <description>In this module, you will learn how to deploy the full CloudBank application to Oracle Backend for Spring Boot and Microservices using one of the IDE plugins - for Visual Studio Code or IntelliJ.</description>
+      <description>In this module, you will learn how to deploy the full CloudBank application to Oracle Backend for Microservices and AI using one of the IDE plugins - for Visual Studio Code or IntelliJ.</description>
     </item>
     <item>
       <title>Explore the Backend</title>
@@ -75,7 +75,7 @@
       <link>https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/cloudbank/cleanup/index.html</guid>
-      <description>This module demonstrates how to clean up any resources created when you provisioned an instance of Oracle Backend for Spring Boot and Microservices on Oracle Cloud Infrastructure (OCI) or on your local machine in containers.</description>
+      <description>This module demonstrates how to clean up any resources created when you provisioned an instance of Oracle Backend for Microservices and AI on Oracle Cloud Infrastructure (OCI) or on your local machine in containers.</description>
     </item>
   </channel>
 </rss>

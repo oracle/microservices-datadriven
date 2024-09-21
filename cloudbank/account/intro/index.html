@@ -3,23 +3,23 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.123.6">
+    <meta name="generator" content="Hugo 0.134.3">
     <meta name="generator" content="Relearn 6.1.1+tip">
-    <meta name="description" content="This module walks you through the steps to build a Spring Boot microservice from scratch, and to deploy it into the Oracle Backend for SpringBoot and Microservices. In this lab, we will build the “Account” microservice. In the next lab, the remaining Cloud Bank microservices will be provided for you.
+    <meta name="description" content="This module walks you through the steps to build a Spring Boot microservice from scratch, and to deploy it into the Oracle Backend for Microservices and AI. In this lab, we will build the “Account” microservice. In the next lab, the remaining Cloud Bank microservices will be provided for you.
 Estimated Time: 20 minutes
 Quick walk through on how to build an account microservice.
 Objectives In this lab, you will:">
     <meta name="author" content="">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Introduction :: CloudBank AI">
-    <meta name="twitter:description" content="This module walks you through the steps to build a Spring Boot microservice from scratch, and to deploy it into the Oracle Backend for SpringBoot and Microservices. In this lab, we will build the “Account” microservice. In the next lab, the remaining Cloud Bank microservices will be provided for you.
+    <meta name="twitter:description" content="This module walks you through the steps to build a Spring Boot microservice from scratch, and to deploy it into the Oracle Backend for Microservices and AI. In this lab, we will build the “Account” microservice. In the next lab, the remaining Cloud Bank microservices will be provided for you.
 Estimated Time: 20 minutes
 Quick walk through on how to build an account microservice.
 Objectives In this lab, you will:">
     <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/cloudbank/account/intro/index.html">
     <meta property="og:site_name" content="CloudBank AI">
     <meta property="og:title" content="Introduction :: CloudBank AI">
-    <meta property="og:description" content="This module walks you through the steps to build a Spring Boot microservice from scratch, and to deploy it into the Oracle Backend for SpringBoot and Microservices. In this lab, we will build the “Account” microservice. In the next lab, the remaining Cloud Bank microservices will be provided for you.
+    <meta property="og:description" content="This module walks you through the steps to build a Spring Boot microservice from scratch, and to deploy it into the Oracle Backend for Microservices and AI. In this lab, we will build the “Account” microservice. In the next lab, the remaining Cloud Bank microservices will be provided for you.
 Estimated Time: 20 minutes
 Quick walk through on how to build an account microservice.
 Objectives In this lab, you will:">
@@ -27,30 +27,30 @@ Objectives In this lab, you will:">
     <meta property="og:type" content="article">
     <meta property="article:section" content="Account Microservice">
     <meta itemprop="name" content="Introduction :: CloudBank AI">
-    <meta itemprop="description" content="This module walks you through the steps to build a Spring Boot microservice from scratch, and to deploy it into the Oracle Backend for SpringBoot and Microservices. In this lab, we will build the “Account” microservice. In the next lab, the remaining Cloud Bank microservices will be provided for you.
+    <meta itemprop="description" content="This module walks you through the steps to build a Spring Boot microservice from scratch, and to deploy it into the Oracle Backend for Microservices and AI. In this lab, we will build the “Account” microservice. In the next lab, the remaining Cloud Bank microservices will be provided for you.
 Estimated Time: 20 minutes
 Quick walk through on how to build an account microservice.
 Objectives In this lab, you will:">
-    <meta itemprop="wordCount" content="148">
+    <meta itemprop="wordCount" content="147">
     <title>Introduction :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1726843375" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726843375" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726843375" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1726843375" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726843375" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726843375" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1726843375" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1726843375" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1726843375" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1726843375" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1726843375" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1726843375" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/variant.css?1726843375" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1726843375" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1726843375"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1726941295" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726941295" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726941295" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1726941295" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726941295" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726941295" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1726941295" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1726941295" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1726941295" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1726941295" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1726941295" rel="stylesheet" id="R-variant-style">
+    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1726941295" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/microservices-datadriven/cloudbank/css/variant.css?1726941295" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/print.css?1726941295" rel="stylesheet" media="print">
+    <script src="/microservices-datadriven/cloudbank/js/variant.js?1726941295"></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
-      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1726843375";
+      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1726941295";
       // variant stuff
       window.variants && variants.init( [ 'zen-light' ] );
       // translations
@@ -119,7 +119,7 @@ Objectives In this lab, you will:">
 
 <h1 id="introduction">Introduction</h1>
 
-<p>This module walks you through the steps to build a Spring Boot microservice from scratch, and to deploy it into the Oracle Backend for SpringBoot and Microservices.  In this lab, we will build the &ldquo;Account&rdquo; microservice.  In the next lab, the remaining Cloud Bank microservices will be provided for you.</p>
+<p>This module walks you through the steps to build a Spring Boot microservice from scratch, and to deploy it into the Oracle Backend for Microservices and AI.  In this lab, we will build the &ldquo;Account&rdquo; microservice.  In the next lab, the remaining Cloud Bank microservices will be provided for you.</p>
 <p>Estimated Time: 20 minutes</p>
 <p>Quick walk through on how to build an account microservice.</p>
 <p><a href="videohub:1_qijspt83" rel="external" target="_blank"></a></p>
@@ -130,7 +130,7 @@ Objectives In this lab, you will:">
 <li>Prepare objects in the Oracle Database using SQLcl</li>
 <li>Use Spring Data JPA to allow your microservice to use the data in the Oracle database</li>
 <li>Create REST services to allow clients to perform create, read, update, and delete operations on accounts</li>
-<li>Deploy your microservice into the backend (Oracle Backend for Spring Boot and Microservices)</li>
+<li>Deploy your microservice into the backend (Oracle Backend for Microservices and AI)</li>
 </ul>
 <h3 id="prerequisites-optional">Prerequisites (Optional)</h3>
 <p>This module assumes you have:</p>
@@ -163,12 +163,12 @@ Objectives In this lab, you will:">
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1726843375" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1726843375" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1726843375" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1726843375" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1726843375" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1726941295" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1726941295" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1726941295" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1726941295" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1726941295" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1726941295" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -316,8 +316,8 @@ Objectives In this lab, you will:">
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1726843375" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1726843375" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1726843375" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1726941295" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1726941295" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1726941295" defer></script>
   </body>
 </html>

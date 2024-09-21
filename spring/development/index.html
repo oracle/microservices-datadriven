@@ -9,7 +9,7 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.123.6">
+<meta name="generator" content="Hugo 0.134.3">
 
 
   <meta name="description" content="How to develop and deploy Spring Boot applications with the Oracle Backend for Microservices and AI" />
@@ -72,7 +72,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/development/",
       "headline": "Development",
       "description": "How to develop and deploy Spring Boot applications with the Oracle Backend for Microservices and AI",
-      "wordCount" : "344",
+      "wordCount" : "346",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -2405,17 +2405,20 @@
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-Z0MVCJ4T39', { 'anonymize_ip': false });
-}
-</script>
-
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-Z0MVCJ4T39');
+        }
+      </script>
 
 
 
@@ -2465,7 +2468,7 @@ if (!doNotTrack) {
     <h1>Development</h1>
     <p>This section provides information about how to develop and deploy Spring Boot applications with the Oracle Backend for Microservices and AI.</p>
 <p>Spring Boot applications can be developed with no special requirements and be deployed into Oracle Backend for Microservices and AI.  However, if you do opt-in to the platform services provided and the CLI, you can shorten your development time and avoid unnecessary work.</p>
-<p>Oracle Backend for Spring Boot provides the following services that applications can use:</p>
+<p>Oracle Backend for Microservices and AI provides the following services that applications can use:</p>
 <ul>
 <li>An Oracle Autonomous Database instance in which applications can manage relational, document, spatial, graph and other types of data, can use Transactional Event Queues for messaging and events using Java Message Service (JMS), Apache Kafka or Representational State Transfer (REST) interfaces, and even run machine learning (ML) models.</li>
 <li>A Kubernetes cluster in which applications can run with namespaces pre-configured with Kubernetes Secrets and ConfigMaps for access to the Oracle Autonomous Database instance associated with the backend.</li>
@@ -2476,7 +2479,7 @@ if (!doNotTrack) {
 <li>Hashicorp Vault for storing sensitive information.</li>
 <li>Spring Admin for monitoring your services.</li>
 <li>Prometheus and Grafana for collecting and visualizing metrics and for alerting.</li>
-<li>Jaeger and Open Telemetry (OTEL) for distributed tracing. Applications deployed to the Oracle Backend for Spring Boot may use Jaeger or OTEL for distributed tracing. See the <a
+<li>Jaeger and Open Telemetry (OTEL) for distributed tracing. Applications deployed to the Oracle Backend for Microservices and AI may use Jaeger or OTEL for distributed tracing. See the <a
   class="gdoc-markdown__link"
   href="envvars"
 >Environment Variables page</a> for variables that can be used.</li>

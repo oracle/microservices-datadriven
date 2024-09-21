@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.123.6">
+    <meta name="generator" content="Hugo 0.134.3">
     <meta name="generator" content="Relearn 6.1.1+tip">
     <meta name="description" content="Now, you will create another new Spring Boot microservice application and implement the Transfer Service. This service will initiate the LRA and act as the logical coordinator - it will call the deposit and withdraw services you just implemented to effect the transfer to process the Cloud Cash Payment.
 Create a new Java Project for the transfer service.
@@ -29,24 +29,24 @@ Create a new Java Project for the transfer service.
 In the Explorer of VS Code open Java Project and click the plus sign to add a Java Project to your workspace.">
     <meta itemprop="wordCount" content="1371">
     <title>Create the Transfer service :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1726843375" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726843375" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726843375" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1726843375" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726843375" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726843375" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1726843375" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1726843375" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1726843375" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1726843375" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1726843375" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1726843375" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/variant.css?1726843375" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1726843375" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1726843375"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1726941295" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726941295" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726941295" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1726941295" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726941295" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726941295" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1726941295" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1726941295" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1726941295" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1726941295" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1726941295" rel="stylesheet" id="R-variant-style">
+    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1726941295" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/microservices-datadriven/cloudbank/css/variant.css?1726941295" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/print.css?1726941295" rel="stylesheet" media="print">
+    <script src="/microservices-datadriven/cloudbank/js/variant.js?1726941295"></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
-      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1726843375";
+      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1726941295";
       // variant stuff
       window.variants && variants.init( [ 'zen-light' ] );
       // translations
@@ -111,41 +111,41 @@ In the Explorer of VS Code open Java Project and click the plus sign to add a Ja
 <li>
 <p>Create a new Java Project for the <code>transfer</code> service.</p>
 <p>In the Explorer of VS Code open <code>Java Project</code> and click the <strong>plus</strong> sign to add a Java Project to your workspace.</p>
-<p><a href="#R-image-26f350723d86210bf0a8b24f05e70b59" class="lightbox-link"><img alt="Add Java Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/add_java_project.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-26f350723d86210bf0a8b24f05e70b59"><img alt="Add Java Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/add_java_project.png" title=" "></a></p>
+<p><a href="#R-image-779d787b73950b0e7b625cdec1658122" class="lightbox-link"><img alt="Add Java Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/add_java_project.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-779d787b73950b0e7b625cdec1658122"><img alt="Add Java Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/add_java_project.png" title=" "></a></p>
 <p>Select Spring Boot Project.</p>
-<p><a href="#R-image-ac2ce228f5fd5ad592ba1b15f13cad7b" class="lightbox-link"><img alt="Spring Boot Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/spring-boot-prj.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-ac2ce228f5fd5ad592ba1b15f13cad7b"><img alt="Spring Boot Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/spring-boot-prj.png" title=" "></a></p>
+<p><a href="#R-image-ab256a7b322fcc3c632aadee9850f11b" class="lightbox-link"><img alt="Spring Boot Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/spring-boot-prj.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-ab256a7b322fcc3c632aadee9850f11b"><img alt="Spring Boot Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/spring-boot-prj.png" title=" "></a></p>
 <p>Select Maven Project.</p>
-<p><a href="#R-image-46fbe444f507b8b8c6ae11f50014cc44" class="lightbox-link"><img alt="Maven Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/maven-project.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-46fbe444f507b8b8c6ae11f50014cc44"><img alt="Maven Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/maven-project.png" title=" "></a></p>
-<p>Specify <code>3.3.1</code> as the Spring Boot version.</p>
-<p><a href="#R-image-cfb7c3f22d0052723c6d580ed0e888fb" class="lightbox-link"><img alt="Spring Boot Version" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/spring-boot-version.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-cfb7c3f22d0052723c6d580ed0e888fb"><img alt="Spring Boot Version" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/spring-boot-version.png" title=" "></a></p>
+<p><a href="#R-image-1ed3b3044e765f5bbfdac857eca19b44" class="lightbox-link"><img alt="Maven Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/maven-project.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-1ed3b3044e765f5bbfdac857eca19b44"><img alt="Maven Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/maven-project.png" title=" "></a></p>
+<p>Specify <code>3.3.4</code> as the Spring Boot version.</p>
+<p><a href="#R-image-a7e0cda5e2b0eb9b56410b55ecd85731" class="lightbox-link"><img alt="Spring Boot Version" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/spring-boot-version.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-a7e0cda5e2b0eb9b56410b55ecd85731"><img alt="Spring Boot Version" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/spring-boot-version.png" title=" "></a></p>
 <p>Use <code>com.example</code> as the Group Id.</p>
-<p><a href="#R-image-898d295d5b665b5cb98ae2b9898be5f0" class="lightbox-link"><img alt="Group Id" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/group-id.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-898d295d5b665b5cb98ae2b9898be5f0"><img alt="Group Id" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/group-id.png" title=" "></a></p>
+<p><a href="#R-image-95fb0a49b37609a0677609718a36edcf" class="lightbox-link"><img alt="Group Id" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/group-id.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-95fb0a49b37609a0677609718a36edcf"><img alt="Group Id" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/group-id.png" title=" "></a></p>
 <p>Enter <code>transfer</code> as the Artifact Id.</p>
-<p><a href="#R-image-fde5fc9174e92b4aa8460f1f4edb259a" class="lightbox-link"><img alt="Artifact Id" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/artifact-id-transfer.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-fde5fc9174e92b4aa8460f1f4edb259a"><img alt="Artifact Id" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/artifact-id-transfer.png" title=" "></a></p>
+<p><a href="#R-image-4690e0c55422a7f76ea62e5c3c465835" class="lightbox-link"><img alt="Artifact Id" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/artifact-id-transfer.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-4690e0c55422a7f76ea62e5c3c465835"><img alt="Artifact Id" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/artifact-id-transfer.png" title=" "></a></p>
 <p>Use <code>JAR</code> as the Packaging Type.</p>
-<p><a href="#R-image-ece111f6031695c33d46decb2cac6e89" class="lightbox-link"><img alt="Packaging Type" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/packaging-type.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-ece111f6031695c33d46decb2cac6e89"><img alt="Packaging Type" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/packaging-type.png" title=" "></a></p>
+<p><a href="#R-image-dca03024542ca24e176835cd9b095d99" class="lightbox-link"><img alt="Packaging Type" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/packaging-type.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-dca03024542ca24e176835cd9b095d99"><img alt="Packaging Type" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/packaging-type.png" title=" "></a></p>
 <p>Select Java version <code>21</code>.</p>
-<p><a href="#R-image-a1e373246051625c4a51d540b43416c7" class="lightbox-link"><img alt="Java Version" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/java-version.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-a1e373246051625c4a51d540b43416c7"><img alt="Java Version" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/java-version.png" title=" "></a></p>
+<p><a href="#R-image-64430a58ef68c0f877f389952d5c8484" class="lightbox-link"><img alt="Java Version" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/java-version.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-64430a58ef68c0f877f389952d5c8484"><img alt="Java Version" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/java-version.png" title=" "></a></p>
 <p>Search for <code>Spring Web</code> and press <strong>Enter</strong></p>
-<p><a href="#R-image-e745fedb958fe4c2bf36586e40df967e" class="lightbox-link"><img alt="Search for Spring Web" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/search-spring-web.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-e745fedb958fe4c2bf36586e40df967e"><img alt="Search for Spring Web" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/search-spring-web.png" title=" "></a></p>
+<p><a href="#R-image-b6cb5277609177e99671f2dc0c94c223" class="lightbox-link"><img alt="Search for Spring Web" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/search-spring-web.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-b6cb5277609177e99671f2dc0c94c223"><img alt="Search for Spring Web" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/search-spring-web.png" title=" "></a></p>
 <p>Press <strong>Enter</strong> to continue and create the Java Project</p>
-<p><a href="#R-image-196c5b3023f8b027e93ebc5d42e65f45" class="lightbox-link"><img alt="Create Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/create-project.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-196c5b3023f8b027e93ebc5d42e65f45"><img alt="Create Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/create-project.png" title=" "></a></p>
+<p><a href="#R-image-6b28e9c0efcd1b1ef4aab24ecf7e882a" class="lightbox-link"><img alt="Create Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/create-project.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-6b28e9c0efcd1b1ef4aab24ecf7e882a"><img alt="Create Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/create-project.png" title=" "></a></p>
 <p>Select the <code>root</code> location for your project e.g. side by side with the <code>checks</code>, <code>testrunner</code> and <code>accounts</code> projects.</p>
-<p><a href="#R-image-6ed377245649fed1fb33a5cc4379b473" class="lightbox-link"><img alt="Project Location" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/project-location.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-6ed377245649fed1fb33a5cc4379b473"><img alt="Project Location" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/project-location.png" title=" "></a></p>
+<p><a href="#R-image-e53c08590f965d39b0fe904c7541571d" class="lightbox-link"><img alt="Project Location" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/project-location.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-e53c08590f965d39b0fe904c7541571d"><img alt="Project Location" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/project-location.png" title=" "></a></p>
 <p>When the project opens click <strong>Add to Workspace</strong></p>
-<p><a href="#R-image-4fd300f3a5582a570e151676f6180329" class="lightbox-link"><img alt="Add to Workspace" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/add-to-workspace.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-4fd300f3a5582a570e151676f6180329"><img alt="Add to Workspace" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/add-to-workspace.png" title=" "></a></p>
+<p><a href="#R-image-268850816296756849fba7ec6022e3b8" class="lightbox-link"><img alt="Add to Workspace" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/add-to-workspace.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-268850816296756849fba7ec6022e3b8"><img alt="Add to Workspace" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/add-to-workspace.png" title=" "></a></p>
 </li>
 <li>
 <p>Add MicroTX  and Lombok to the <code>pom.xml</code> file</p>
@@ -444,12 +444,12 @@ In the Explorer of VS Code open Java Project and click the plus sign to add a Ja
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1726843375" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1726843375" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1726843375" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1726843375" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1726843375" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1726941295" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1726941295" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1726941295" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1726941295" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1726941295" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1726941295" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -597,8 +597,8 @@ In the Explorer of VS Code open Java Project and click the plus sign to add a Ja
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1726843375" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1726843375" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1726843375" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1726941295" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1726941295" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1726941295" defer></script>
   </body>
 </html>
