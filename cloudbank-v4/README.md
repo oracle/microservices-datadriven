@@ -2,7 +2,7 @@
 
 **NOTE:** This document and application is WIP.
 
-To run Cloud Bank you need OBaaS version 1.3.0 [Oracle Backend for Spring Boot and Microservices](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911) and Java 21 installed.
+To run Cloud Bank you need OBaaS version 1.3.0 [Oracle Backend for Microservices and AI](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911) and Java 21 installed.
 
 ## Build CloudBank
 

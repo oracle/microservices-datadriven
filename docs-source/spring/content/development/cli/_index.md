@@ -28,7 +28,7 @@ Table of Contents:
 
 ## Installing the CLI
 
-The Oracle Backend for Spring Boot CLI is used to configure your backend and to deploy your Spring Boot applications to the backend.
+Oracle Backend for Microservices and AI CLI is used to configure your backend and to deploy your Spring Boot applications to the backend.
 
 1. Download the Oracle Backend for Microservices and AI CLI `oractl`
 

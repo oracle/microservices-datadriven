@@ -238,7 +238,7 @@ This video provides a quick overview of the setup process.
 
 {{< youtube rAi10TiUraE >}}
 
-Installing Oracle Backend for Spring Boot and Microservice takes approximately one hour to complete. The following steps are involved:
+Installing Oracle Backend for Microservices and AI and Microservice takes approximately one hour to complete. The following steps are involved:
 
 - [Setup the OCI environment](#set-up-the-oci-environment)
 - [Setup of the Local Environment](#set-up-the-local-machine)

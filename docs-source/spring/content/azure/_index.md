@@ -9,7 +9,7 @@ deploys the Oracle Backend for Microservices and AI in Azure with an Oracle Auto
 
 ## Prerequisites
 
-You must meet the following prerequisites to use the Oracle Backend for Spring Boot Multicloud (Azure and OCI). You need:
+You must meet the following prerequisites to use the Oracle Backend for Microservices and AI Multicloud (Azure and OCI). You need:
 
 * An account on Azure.
 * An account on OCI.

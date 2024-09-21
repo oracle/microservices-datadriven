@@ -1,6 +1,6 @@
 # Example of Spring application using the JDBCClient and Oracle database starters
 
-This application runs on [Oracle Backend for Spring Boot and Microservices](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911). 
+This application runs on [Oracle Backend for Microservices and AIs](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911). 
 
 **NOTE:** The application assumes that the `customer` application has been deployed as it shares the same user in the database.
 
@@ -8,7 +8,7 @@ This application runs on [Oracle Backend for Spring Boot and Microservices](http
 
 In the `customer32` directory execute `mvn clean package`.
 
-## Deploy the application to Oracle Backend for Spring Boot and Microservices
+## Deploy the application to Oracle Backend for Microservices and AI
 
 1. Create a tunnel to the OBaaS admin service
 

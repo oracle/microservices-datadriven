@@ -15,7 +15,7 @@
     <packaging>pom</packaging>
 
     <name>CloudBank</name>
-    <description>Sample application for Oracle Backend for Spring Boot</description>
+    <description>Sample application for Oracle Backend for Microservices and AI</description>
 
     <groupId>com.example</groupId>
     <artifactId>cloudbank-apps</artifactId>

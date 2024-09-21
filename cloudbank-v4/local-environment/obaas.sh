@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "This script will start up Oracle Backend for Spring Boot and Microservices in a local container"
+echo "This script will start up Oracle Backend for Oracle Backend for Microservices and AI in a local container"
 echo "Not recommended for machines with less than 64GB RAM"
 
 echo "Create network (ignore failure if already exists)"

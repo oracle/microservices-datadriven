@@ -4,7 +4,7 @@ title = "Introduction"
 weight = 1
 +++
 
-This module walks you through the steps to build a Spring Boot microservice from scratch, and to deploy it into the Oracle Backend for SpringBoot and Microservices.  In this lab, we will build the "Account" microservice.  In the next lab, the remaining Cloud Bank microservices will be provided for you.
+This module walks you through the steps to build a Spring Boot microservice from scratch, and to deploy it into the Oracle Backend for Microservices and AI.  In this lab, we will build the "Account" microservice.  In the next lab, the remaining Cloud Bank microservices will be provided for you.
 
 Estimated Time: 20 minutes
 

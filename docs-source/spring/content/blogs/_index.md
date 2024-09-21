@@ -1,6 +1,6 @@
 ---
 title: "Read our blogs!"
-description: "Read blog posts from the team that builds the Oracle Backend for Spring Boot and Microservices"
+description: "Read blog posts from the team that builds the Oracle Backend for Microservices and AI"
 keywords: "blogs team spring springboot microservices mobile oracle"
 ---
 
