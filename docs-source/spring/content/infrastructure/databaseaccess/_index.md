@@ -45,7 +45,7 @@ The Oracle Backend for Microservices and AI includes an Oracle database. An inst
 
 If you selected the **PRIVATE_ENDPOINT_ACCESS** option, you need to use a [Bastion](#accessing-the-adb-s-from-a-local-machine-using-database-wallet-and-sqlcl-using-a-bastion) to access the database.
 
-> **NOTE:** Oracle recommends that you install your own database and PDBs for your production applications. The database provisioned is used for Oracle Backend for Spring Boot metadata and can be used for development.
+> **NOTE:** Oracle recommends that you install your own database and PDBs for your production applications. The database provisioned is used for Oracle Backend for Microservices and AI metadata and can be used for development.
 
 ## Accessing the Database
 
@@ -134,7 +134,7 @@ You have to enter a password for the Wallet.
 
     You are now connected to the database that is provided when installing Oracle Backend for Microservices and AI on OCI.
 
-> **_NOTE:_** Oracle recommends that you install your own databases, PDBs for your production applications. The database provisioned is used for Oracle Backend for Spring Boot metadata and can be used for development.
+> **_NOTE:_** Oracle recommends that you install your own databases, PDBs for your production applications. The database provisioned is used for Oracle Backend for Microservices and AI metadata and can be used for development.
 
 ## Accessing the ADB-S From a Local Machine using Database Wallet and SQLcl using a Bastion
 
@@ -239,4 +239,4 @@ If you chose the **PRIVATE_ENDPOINT_ACCESS** option for database access during i
 
     You are now connected to the database that is provided when installing Oracle Backend for Microservices and AI on OCI.
 
-> **_NOTE:_** Oracle recommends that you install your own databases, PDBs for your production applications. The database provisioned is used for Oracle Backend for Spring Boot metadata and can be used for development.
+> **_NOTE:_** Oracle recommends that you install your own databases, PDBs for your production applications. The database provisioned is used for Oracle Backend for Microservices and AI metadata and can be used for development.

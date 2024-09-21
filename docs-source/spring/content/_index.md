@@ -51,8 +51,8 @@ Infrastructure (OCI) Container Engine for Kubernetes cluster (OKE cluster):
 - [Netflix Conductor](platform/conductor/)
 - [OpenTelemetry Collector](observability/tracing/)
 - [Oracle Autonomous Database Serverless](database/)
-- [Oracle Backend for Spring Boot Command Line Interface (CLI)](development/cli/)
-- [Oracle Backend for Spring Boot Visual Studio Code Plugin](platform/vscode-plugin/)
+- [Oracle Backend for Microservices and AI Command Line Interface (CLI)](development/cli/)
+- [Oracle Backend for Microservices and AI Visual Studio Code Plugin](platform/vscode-plugin/)
 - [Oracle Coherence](https://docs.oracle.com/en/middleware/standalone/coherence/)
 - [Oracle Database Operator for Kubernetes (OraOperator or the operator)](https://github.com/oracle/oracle-database-operator)
 - Oracle Database Observability Exporter
