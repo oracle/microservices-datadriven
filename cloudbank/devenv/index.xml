@@ -12,7 +12,7 @@
       <link>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/intro/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/intro/index.html</guid>
-      <description>This module walks you through setting up your development environment to work with Oracle Backend for Spring Boot and Microservices.&#xA;Estimated time: 20 minutes&#xA;Recommended Development Environment platforms and tools The following platforms are recommended for a development environment:&#xA;Windows 10 or 11, preferably with Windows Subsystem for Linux 2 macOS (11 or later recommended) on Intel or Apple silicon Linux, e.g., Oracle Linux, Ubuntu, etc. The following tools are recommended for a development environment:</description>
+      <description>This module walks you through setting up your development environment to work with Oracle Backend for Microservices and AI.&#xA;Estimated time: 20 minutes&#xA;Recommended Development Environment platforms and tools The following platforms are recommended for a development environment:&#xA;Windows 10 or 11, preferably with Windows Subsystem for Linux 2 macOS (11 or later recommended) on Intel or Apple silicon Linux, e.g., Oracle Linux, Ubuntu, etc. The following tools are recommended for a development environment:</description>
     </item>
     <item>
       <title>Install IDE</title>
@@ -26,7 +26,7 @@
       <link>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/jdk/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/jdk/index.html</guid>
-      <description>Oracle recommends the Java SE Development Kit. Themoduleis using Spring Boot 3.3.x so Java 21 is required.&#xA;Download and install the Java Development Kit&#xA;Download the latest x64 Java 21 Development Kit from Java SE Development Kit.&#xA;Decompress the archive in your chosen location, e.g., your home directory and then add it to your path (the exact version of Java might differ in your environment):&#xA;export JAVA_HOME=$HOME/jdk-21.0.3 export PATH=$JAVA_HOME/bin:$PATH Verify the installation</description>
+      <description>Oracle recommends the Java SE Development Kit. The modules are using Spring Boot 3.3.x so Java 21 is required.&#xA;Download and install the Java Development Kit&#xA;Download the latest x64 Java 21 Development Kit from Java SE Development Kit.&#xA;Decompress the archive in your chosen location, e.g., your home directory and then add it to your path (the exact version of Java might differ in your environment):&#xA;export JAVA_HOME=$HOME/jdk-21.0.3 export PATH=$JAVA_HOME/bin:$PATH Verify the installation</description>
     </item>
     <item>
       <title>Install Maven</title>
@@ -40,14 +40,14 @@
       <link>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/oractl/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/oractl/index.html</guid>
-      <description>The Oracle Backend for Spring Boot CLI (oractl) is used to configure your backend and to deploy your Spring Boot applications to the backend.&#xA;Download the Oracle Backend for Spring Boot and Microservices CLI&#xA;Download the CLI from here&#xA;Install the Oracle Backend for Spring Boot and Microservices CLI&#xA;To install the CLI, you just need to make sure it is executable and add it to your PATH environment variable.</description>
+      <description>The Oracle Backend for Microservices and AI CLI (oractl) is used to configure your backend and to deploy your Spring Boot applications to the backend.&#xA;Download the Oracle Backend for Microservices and AI CLI&#xA;Download the CLI from here&#xA;Install the Oracle Backend for Microservices and AI CLI&#xA;To install the CLI, you just need to make sure it is executable and add it to your PATH environment variable.&#xA;chmod +x oractl export PATH=/path/to/oractl:$PATHNOTE: If environment is a Mac you need run the following command sudo xattr -r -d com.apple.quarantine &lt;downloaded-file&gt; otherwise will you get a security warning and the CLI will not work.</description>
     </item>
     <item>
       <title>Install Kubectl and OCI CLI</title>
       <link>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/kubectl/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/kubectl/index.html</guid>
-      <description>In later labs, you will look various resources in the Kubernetes cluster and access some of them using port forwarding (tunneling). To do this, you will need to install kubectl on your machine, and since Oracle Container Engine for Kubernetes uses token based authentication for kubectl access, you will also need to install the OCI CLI so that kubectl can obtain the necessary token.&#xA;Install kubectl&#xA;Install kubectl from the Kubernetes website.</description>
+      <description>In later labs, you will look various resources in the Kubernetes cluster and access some of them using port forwarding (tunneling). To do this, you will need to install kubectl on your machine, and since Oracle Container Engine for Kubernetes uses token based authentication for kubectl access, you will also need to install the OCI CLI so that kubectl can obtain the necessary token.&#xA;Install kubectl&#xA;Install kubectl from the Kubernetes website. Click on the link for your operating system and follow the instructions to complete the installation. As mentioned in the instructions, you can use this command to verify the installation, and you can ignore the warning since we are just checking the installation was successful (your output may be slightly different):</description>
     </item>
     <item>
       <title>Configure Kubectl</title>
@@ -68,14 +68,14 @@
       <link>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/db-access/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/db-access/index.html</guid>
-      <description>The Oracle Backend for Spring Boot and Microservices includes an Oracle Database. An instance of an Oracle Autonomous Database (Shared) is created during installation.&#xA;To access the database from a local machine you need to download the wallet and configure SQLcl to use the downloaded wallet.&#xA;Download the Wallet Login into the OCI Console. Oracle Cloud&#xA;Navigate to Autonomous Transaction Processing.&#xA;Make sure that you have the right compartment selected and click on the database name.</description>
+      <description>The Oracle Backend for Microservices and AI includes an Oracle Database. An instance of an Oracle Autonomous Database (Shared) is created during installation.&#xA;To access the database from a local machine you need to download the wallet and configure SQLcl to use the downloaded wallet.&#xA;Download the Wallet Login into the OCI Console. Oracle Cloud&#xA;Navigate to Autonomous Transaction Processing.</description>
     </item>
     <item>
       <title>Install IDE Plugin</title>
       <link>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/ide-plugin/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/ide-plugin/index.html</guid>
-      <description>Some modules contain optional parts which show you how to do deployments and configuration with the IDE plugins instead of using the CLI. If you plan to do those optional parts, you need to install the VS Code extension forOracle Backend for Spring Boot and Microservices. It is an extension to browse and deploy applications on the Oracle Backend for Spring Boot and Microservices platform. This plugin allows to inspect the content of an Oracle Backend for Spring Boot and Microservices deployment, in terms of applications, services and related configurations.</description>
+      <description>Some modules contain optional parts which show you how to do deployments and configuration with the IDE plugins instead of using the CLI. If you plan to do those optional parts, you need to install the VS Code extension for Oracle Backend for Microservices and AI. It is an extension to browse and deploy applications on the Oracle Backend for Microservices and AI platform. This plugin allows to inspect the content of an Oracle Backend for Microservices and AI deployment, in terms of applications, services and related configurations.</description>
     </item>
   </channel>
 </rss>

@@ -3,50 +3,50 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.123.6">
+    <meta name="generator" content="Hugo 0.134.3">
     <meta name="generator" content="Relearn 6.1.1+tip">
     <meta name="description" content="Starting with the account service that you built in the previous lab, you will the JPA model and repository for the journal and some new endpoints.
 Create the Journal model
-Create a new Java file in src/main/java/com/example/accounts/model called Journal.java. In this class you can define the fields that make up the journal. Note that you created the Journal table in the previous lab. You will not use the lraId and lraState fields until a later lab.">
+Create a new Java file in src/main/java/com/example/accounts/model called Journal.java. In this class you can define the fields that make up the journal. Note that you created the Journal table in the previous lab. You will not use the lraId and lraState fields until a later lab. To simplify this lab, create an additional constructor that defaults those fields to suitable values. Your new class should look like this:">
     <meta name="author" content="">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Add Journal to the Account service :: CloudBank AI">
     <meta name="twitter:description" content="Starting with the account service that you built in the previous lab, you will the JPA model and repository for the journal and some new endpoints.
 Create the Journal model
-Create a new Java file in src/main/java/com/example/accounts/model called Journal.java. In this class you can define the fields that make up the journal. Note that you created the Journal table in the previous lab. You will not use the lraId and lraState fields until a later lab.">
+Create a new Java file in src/main/java/com/example/accounts/model called Journal.java. In this class you can define the fields that make up the journal. Note that you created the Journal table in the previous lab. You will not use the lraId and lraState fields until a later lab. To simplify this lab, create an additional constructor that defaults those fields to suitable values. Your new class should look like this:">
     <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/cloudbank/check/update-account/index.html">
     <meta property="og:site_name" content="CloudBank AI">
     <meta property="og:title" content="Add Journal to the Account service :: CloudBank AI">
     <meta property="og:description" content="Starting with the account service that you built in the previous lab, you will the JPA model and repository for the journal and some new endpoints.
 Create the Journal model
-Create a new Java file in src/main/java/com/example/accounts/model called Journal.java. In this class you can define the fields that make up the journal. Note that you created the Journal table in the previous lab. You will not use the lraId and lraState fields until a later lab.">
+Create a new Java file in src/main/java/com/example/accounts/model called Journal.java. In this class you can define the fields that make up the journal. Note that you created the Journal table in the previous lab. You will not use the lraId and lraState fields until a later lab. To simplify this lab, create an additional constructor that defaults those fields to suitable values. Your new class should look like this:">
     <meta property="og:locale" content="en_us">
     <meta property="og:type" content="article">
     <meta property="article:section" content="Check Processing">
     <meta itemprop="name" content="Add Journal to the Account service :: CloudBank AI">
     <meta itemprop="description" content="Starting with the account service that you built in the previous lab, you will the JPA model and repository for the journal and some new endpoints.
 Create the Journal model
-Create a new Java file in src/main/java/com/example/accounts/model called Journal.java. In this class you can define the fields that make up the journal. Note that you created the Journal table in the previous lab. You will not use the lraId and lraState fields until a later lab.">
-    <meta itemprop="wordCount" content="1219">
+Create a new Java file in src/main/java/com/example/accounts/model called Journal.java. In this class you can define the fields that make up the journal. Note that you created the Journal table in the previous lab. You will not use the lraId and lraState fields until a later lab. To simplify this lab, create an additional constructor that defaults those fields to suitable values. Your new class should look like this:">
+    <meta itemprop="wordCount" content="1216">
     <title>Add Journal to the Account service :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1726843375" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726843375" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726843375" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1726843375" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726843375" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726843375" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1726843375" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1726843375" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1726843375" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1726843375" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1726843375" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1726843375" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/variant.css?1726843375" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1726843375" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1726843375"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1726941295" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726941295" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726941295" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1726941295" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726941295" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726941295" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1726941295" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1726941295" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1726941295" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1726941295" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1726941295" rel="stylesheet" id="R-variant-style">
+    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1726941295" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/microservices-datadriven/cloudbank/css/variant.css?1726941295" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/print.css?1726941295" rel="stylesheet" media="print">
+    <script src="/microservices-datadriven/cloudbank/js/variant.js?1726941295"></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
-      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1726843375";
+      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1726941295";
       // variant stuff
       window.variants && variants.init( [ 'zen-light' ] );
       // translations
@@ -247,14 +247,14 @@ Create a new Java file in src/main/java/com/example/accounts/model called Journa
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ mvn clean package -DskipTests</span></span></code></pre></div><p>The service is now ready to deploy to the backend.</p>
 </li>
 <li>
-<p>Get the password for the <code>obaas-admin</code> user. The <code>obaas-admin</code> user is the equivalent of the admin or root user in the Oracle Backend for Spring Boot and Microservices backend.</p>
+<p>Get the password for the <code>obaas-admin</code> user. The <code>obaas-admin</code> user is the equivalent of the admin or root user in the Oracle Backend for Microservices and AI backend.</p>
 <p>Execute the following command to get the password:</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl get secret -n azn-server  oractl-passwords -o jsonpath<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;{.data.admin}&#39;</span> | base64 -d</span></span></code></pre></div></li>
 <li>
 <p>Prepare the backend for deployment</p>
-<p>The Oracle Backend for Spring Boot and Microservices admin service is not exposed outside the Kubernetes cluster by default. Oracle recommends using a <strong>kubectl</strong> port forwarding tunnel to establish a secure connection to the admin service.</p>
+<p>The Oracle Backend for Microservices and AI admin service is not exposed outside the Kubernetes cluster by default. Oracle recommends using a <strong>kubectl</strong> port forwarding tunnel to establish a secure connection to the admin service.</p>
 <p>Start a tunnel (unless you already have the tunnel running from previous labs) using this command:</p>
-<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl -n obaas-admin port-forward svc/obaas-admin <span style="color:#ae81ff">8080</span></span></span></code></pre></div><p>Start the Oracle Backend for Spring Boot and Microservices CLI (<em>oractl</em>) using this command:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl -n obaas-admin port-forward svc/obaas-admin <span style="color:#ae81ff">8080</span></span></span></code></pre></div><p>Start the Oracle Backend for Microservices and AI CLI (<em>oractl</em>) using this command:</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ oractl
 </span></span><span style="display:flex;"><span> _   _           __    _    ___
 </span></span><span style="display:flex;"><span>/ <span style="color:#ae81ff">\ </span>|_<span style="color:#f92672">)</span>  _.  _. <span style="color:#f92672">(</span>_    /  |   |
@@ -268,7 +268,7 @@ Create a new Java file in src/main/java/com/example/accounts/model called Journa
 </span></span><span style="display:flex;"><span>  - Slack: https://oracledevs.slack.com/archives/C03ALDSV272 
 </span></span><span style="display:flex;"><span>  - email: obaas_ww@oracle.com
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  oractl:&gt;</span></span></code></pre></div><p>Connect to the Oracle Backend for Spring Boot and Microservices admin service using the <code>connect</code> command. Enter <code>obaas-admin</code> and the username and use the password you collected earlier.</p>
+</span></span><span style="display:flex;"><span>  oractl:&gt;</span></span></code></pre></div><p>Connect to the Oracle Backend for Microservices and AI admin service using the <code>connect</code> command. Enter <code>obaas-admin</code> and the username and use the password you collected earlier.</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>oractl:&gt;connect
 </span></span><span style="display:flex;"><span>? username obaas-admin
 </span></span><span style="display:flex;"><span>? password *************
@@ -276,8 +276,8 @@ Create a new Java file in src/main/java/com/example/accounts/model called Journa
 </span></span><span style="display:flex;"><span>oractl:&gt;</span></span></code></pre></div></li>
 <li>
 <p>Deploy the account service</p>
-<p>You will now deploy your account service to the Oracle Backend for Spring Boot and Microservices using the CLI. Run this command to redeploy your service, make sure you provide the correct path to your JAR file. <strong>Note</strong> that this command may take 1-3 minutes to complete:</p>
-<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>oractl:&gt; deploy --app-name application --service-name account --artifact-path /path/to/account-0.0.1-SNAPSHOT.jar --image-version 0.0.1
+<p>You will now deploy your account service to the Oracle Backend for Microservices and AI using the CLI. Run this command to redeploy your service, make sure you provide the correct path to your JAR file. <strong>Note</strong> that this command may take 1-3 minutes to complete:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>oractl:&gt; deploy --app-name application --service-name account --artifact-path /path/to/account-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --java-version ghcr.io/oracle/graalvm-native-image-obaas:21
 </span></span><span style="display:flex;"><span>uploading: account/target/account-0.0.1-SNAPSHOT.jarbuilding and pushing image...
 </span></span><span style="display:flex;"><span>creating deployment and service... successfully deployed
 </span></span><span style="display:flex;"><span>oractl:&gt;</span></span></code></pre></div></li>
@@ -341,12 +341,12 @@ Create a new Java file in src/main/java/com/example/accounts/model called Journa
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1726843375" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1726843375" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1726843375" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1726843375" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1726843375" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1726843375" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1726941295" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1726941295" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1726941295" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1726941295" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1726941295" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1726941295" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -494,8 +494,8 @@ Create a new Java file in src/main/java/com/example/accounts/model called Journa
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1726843375" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1726843375" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1726843375" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1726941295" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1726941295" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1726941295" defer></script>
   </body>
 </html>
