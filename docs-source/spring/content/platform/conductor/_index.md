@@ -1,17 +1,18 @@
 ---
 title: "Workflow"
+description: "Workflow for microservices orchestration using Netflix OSS Conductor in Oracle Backend for Microservices and AI"
+keywords: "workflow conductor orchestration netflix development spring springboot microservices development oracle backend"
 resources:
 - name: conductor_ui_workflows
   src: "conductor_ui_workflows.png"
   title: "Conductor UI Workflows"
 ---
 
-Oracle Backend as a Service for Spring Cloud includes the Netflix Conductor Server. Conductor is a popular workflow solution that
-works with Spring Boot Microservices and Oracle Database.
+Oracle Backend for Microservices and AI includes the Netflix Conductor Server. Conductor is a popular workflow solution that works with Spring Boot Microservices and Oracle Database.
 
 Documentation on Conductor can be found here:
 
-* [Netflix Conductor Documentation](https://conductor.netflix.com/)
+* [Conductor OSS Documentation](https://docs.conductor-oss.org)
 
 ## Accessing the Server User Interface (UI)
 
@@ -21,7 +22,7 @@ Documentation on Conductor can be found here:
     kubectl port-forward services/conductor-server -n conductor-server 8080:8080
     ```
 
-2. Access the Conductor server UI at this URL:
+1. Access the Conductor server UI at this URL:
 
     ```shell
     http://localhost:8080
@@ -31,7 +32,7 @@ Documentation on Conductor can be found here:
 {{< img name="conductor_server_ui" size="medium" lazy=false >}}
 <!-- spellchecker-enable -->
 
-3. Access the Swagger documentation at this URL:
+1. Access the Swagger documentation at this URL:
 
     ```shell
     http://localhost:8080/swagger-ui/index.html
@@ -45,6 +46,4 @@ Documentation on Conductor can be found here:
 
 The API Specification can be found here:
 
-* [API Specification](https://conductor.netflix.com/apispec.html)
-
-Next, go to the [Spring Boot Admin](../spring-admin/) page to learn more.
+* [API Specification](https://docs.conductor-oss.org/documentation/api/index.html)

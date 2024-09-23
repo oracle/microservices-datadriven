@@ -516,3 +516,7 @@ workshops/oracleAQ/qJava/.project
 *pubspec*
 package*
 .dart*
+
+# GraalVM stuff
+*.nib
+docs-source/**/public

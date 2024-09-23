@@ -49,7 +49,7 @@ minikube start --cpus 4 --memory max --container-runtime=containerd
 minikube addons enable ingress
 ```
 
-### Download Oracle Backend for Spring Boot
+### Download Oracle Backend for Spring Boot and Microservices
 
 Download the [Oracle Backend for Parse Server](https://github.com/oracle/microservices-datadriven/releases/download/OBAAS-1.0.0/onprem-mbaas_latest.zip) and unzip into a new directory.
 
@@ -100,7 +100,7 @@ Build and push the images to the Container Registry in the Kubernetes cluster by
 
 After the images are built and pushed, the tunnel is no longer required and can be stopped.
 
-### Deploy Oracle Backend for Spring Boot
+### Deploy Oracle Backend for Spring Boot and Microservices
 
 Deploy the database and Microservices by running this command:
 

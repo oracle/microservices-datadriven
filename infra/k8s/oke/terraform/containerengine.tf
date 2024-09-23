@@ -3,14 +3,14 @@
 
 resource "oci_containerengine_cluster" "oke" {
   #Required
-  compartment_id     = var.ociCompartmentOcid
+  compartment_id = var.ociCompartmentOcid
   endpoint_config {
     is_public_ip_enabled = "true"
     nsg_ids = [
     ]
     subnet_id = oci_core_subnet.endpoint.id
   }
-  kubernetes_version = "v1.26.2"
+  kubernetes_version = var.kubernetes_version
   name               = "grabdish"
   vcn_id             = data.oci_core_vcn.vcn.id
   #Optional
@@ -37,7 +37,7 @@ resource "oci_containerengine_cluster" "oke" {
 resource "oci_containerengine_node_pool" "okell_node_pool" {
   cluster_id         = oci_containerengine_cluster.oke.id
   compartment_id     = var.ociCompartmentOcid
-  kubernetes_version = "v1.26.2"
+  kubernetes_version = var.kubernetes_version
   name               = "Pool"
   node_shape         = "VM.Standard.E2.1"
   node_config_details {
@@ -58,8 +58,8 @@ data "oci_containerengine_node_pool_option" "okell_node_pool_option" {
 }
 
 locals {
-  all_sources = data.oci_containerengine_node_pool_option.okell_node_pool_option.sources
-  oracle_linux_images = [for source in local.all_sources : source.image_id if length(regexall("Oracle-Linux-[0-9]*.[0-9]*-20[0-9]*",source.source_name)) > 0]
+  all_sources         = data.oci_containerengine_node_pool_option.okell_node_pool_option.sources
+  oracle_linux_images = [for source in local.all_sources : source.image_id if length(regexall("Oracle-Linux-[0-9]*.[0-9]*-20[0-9]*", source.source_name)) > 0]
 }
 
 output "oke_ocid" {
