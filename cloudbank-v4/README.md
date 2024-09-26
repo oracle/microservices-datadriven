@@ -1,4 +1,4 @@
-# CloudBank Version 4 - 8/30/24
+# CloudBank Version 4 - 9/26/24
 
 **NOTE:** This document and application is WIP.
 
@@ -195,8 +195,7 @@ create-autoscaler --service-name transfer --min-replicas 1 --max-replicas 4 --cp
 
 ## OpenAPI
 
-All services have OpenAPI documentation and can be reached via the Swagger UI. For example after starting a port forward to anyone of the services you can the URL http://localhost:*port*/swagger-ui/index.html to see the documentation. Replace *port* with the port used in the port forward command.
-For example, to see the API documentation for the `customer32` application do the following:
+All services have OpenAPI documentation and can be reached via the Swagger UI. For example after starting a port forward to anyone of the services you can the URL ![OPenAPI](http://localhost:*port*/)swagger-ui/index.html to see the documentation. Replace *port* with the port used in the port forward command. For example, to see the API documentation for the `customer32` application do the following:
 
 ```shell
 kubectl port-forward -n application svc/customer32 8080
@@ -216,7 +215,7 @@ This is an example of the `customer32` application:
     kubectl -n ingress-nginx get service ingress-nginx-controller
     ```
 
-    Result. Create a variable called IP with the value of the EXTERNAL-IP it will be used in the tests.
+    Result. Create a variable called IP with the value of the **EXTERNAL-IP** it will be used in the tests.
 
     ```text
     NAME                       TYPE           CLUSTER-IP      EXTERNAL-IP       PORT(S)                      AGE
@@ -275,7 +274,7 @@ This is an example of the `customer32` application:
    1. POST endpoint to create a customer.
 
       ```shell
-      curl -i -X POST 'http://$IP/api/v1/customer' -H 'Content-Type: application/json' -d '{"customerId": "bobsmith", "customerName": "Bob Smith", "customerEmail": "bob@smith.com"}'
+      curl -i -X POST -H 'Content-Type: application/json' -d '{"customerId": "bobsmith", "customerName": "Bob Smith", "customerEmail": "bob@smith.com"}' http://$IP/api/v1/customer
       ```
 
       Should return the URI of the created object:
@@ -495,7 +494,29 @@ This is an example of the `customer32` application:
 
 ## Observability and Tracing
 
-1. Check Eureka dashbaord
+1. Check the ServiceOPS Center
+
+   1. Get the external IP
+
+      ```shell
+      kubectl -n ingress-nginx get service ingress-nginx-controller
+      ```
+
+   1. Get the *obaas-admin* user password
+
+      ```shell
+      kubectl get secret  -n azn-server oractl-passwords -o jsonpath='{.data.admin}' | base64 -d
+      ```
+
+   1. Login into [ServiceOPS Dashboard](https://EXTERNAL-IP/soc)
+
+      ![ServiceOPS Login](images/serviceops_login.png  " ")
+
+   1. Explore the dashboard
+
+      ![ServiceOPS Dashboard](images/serviceops_dashboard.png  " ")
+
+1. Check Eureka dashboard
 
    1. Port forward
 
@@ -503,11 +524,23 @@ This is an example of the `customer32` application:
       kubectl -n eureka port-forward svc/eureka 8761
       ```
 
-   1. Open <http://localhost:8761> in a browser and verify that all services are registered
+   1. Open [Eureka Dashboard](http://localhost:8761) in a browser and verify that all services are registered
 
-      ![Eureka Dashboard Login](images/eureka.png  " ")
+      ![Eureka Dashboard](images/eureka.png  " ")
 
-1. Check Jaeger dashbaord
+1. Check Admin Server dashboard
+
+   1. Port forward
+
+      ```shell
+      kubectl port-forward -n admin-server svc/admin-server 8989
+      ```
+
+   1. Open [Admin Server Dashboard](http://localhost:8989) in a browser and verify that all services are registered
+
+      ![Admin Server Dashboard](images/admin_server.png  " ")
+
+1. Check Jaeger dashboard
 
    1. Port forward
 
@@ -515,9 +548,9 @@ This is an example of the `customer32` application:
       kubectl -n observability port-forward svc/jaegertracing-query 16686
       ```
 
-   1. Open <http://localhost:16686> in a browser and verify that all services are registered
+   1. Open [Jaeger Dashboard](http://localhost:16686) in a browser and verify that all services are registered
 
-      ![Jaeger Dashboard Login](images/jaeger.png  " ")
+      ![Jaeger Dashboard](images/jaeger.png  " ")
 
    1. Choose `customer` Service and click *Find Traces*
 
@@ -525,12 +558,54 @@ This is an example of the `customer32` application:
 
 1. Check the Grafana Dashboard
 
+   1, Get the *admin* password for Grafana
+
+      ```shell
+      kubectl get secret -n grafana grafana-dashboard-authn -o jsonpath='{.data.password}' | base64 -d
+      ```
+
    1. Port forward
 
       ```shell
       kubectl -n grafana port-forward svc/grafana 7070:80
       ```
 
-   1. Open <http://localhost:7070/grafana/> in a browser and verify that all services are registered and you can see some data (you may have to select the dashboard you want to see)
+   1. Open [Grafana Login](http://localhost:7070/grafana/) in a browser and login with the username *admin* and the password you have retrieved.
+
+      ![Grafana Login](images/grafana_login.png  " ")
+
+   1. Explore the pre-installed dashboards.
 
       ![Grafana](images/grafana-dashboard.png  " ")
+
+1. Check Prometheus dashboard
+
+   1. Port forward
+
+      ```shell
+      kubectl port-forward -n prometheus svc/prometheus 9090
+      ```
+
+   1. Open [Prometheus Dashboard](http://localhost:9090)
+
+      ![Prometheus Dashboard](images/prometheus.png  " ")
+
+   1. Select `application_ready_time_seconds` in the search bar and click *Execute*. You should get a table back with some data about the cloudbank application deployed.
+
+      ![Prometheus DAta](images/prom_data.png  " ")
+
+1. Check Hashicorp Vault dashboard (Development mode)
+
+   1. Port forward
+
+      ```shell
+      kubectl port-forward -n vault svc/vault 8200
+      ```
+
+   1. Open [Hashicorp Vault Login](https://localhost:8200) and login using the Token method with the `root`
+
+      ![Vault Login](images/vault_login.png  " ")
+
+   1. You should now see the Hashicorp Vault dashboard
+
+      ![Vault Dashboard](images/vault_dashboard.png  " ")
