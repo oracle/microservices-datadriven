@@ -15,7 +15,7 @@ main:
   - name: Platform Services
     ref: "/platform"
     sub:
-      - name: Spring Operations Center
+      - name: ServiceOps Center
         ref : "/platform/soc"
       - name: API Gateway
         ref: "/platform/apigw"
