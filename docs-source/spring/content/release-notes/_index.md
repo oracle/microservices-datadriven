@@ -12,7 +12,7 @@ This release include:
 - Optional GPU node pool
 - Local install for development purposes
 - OCI Free Tier install for development purposes
-- Spring Operations Center (SOC) UI updates
+- ServiceOps Center (SOC) UI updates
 - Cloudbank version 4
 - Addition of Alertmanager
 - Version upgrades of components, see documentation for details
@@ -39,7 +39,7 @@ The following components were updated:
 
 This release includes:
 
-* Additional functionality to Spring Operations Center UI (SOC UI).
+* Additional functionality to ServiceOps Center UI (SOC UI).
 * Spring Boot upgrade to 3.3.0 and Spring Cloud 2023.0.2 for internal components.
 * Oracle Backend for Microservices and AI are running Java 21 with Virtual Threads enabled.
 * oractl is compiled using Java 21 and Virtual Threads.
@@ -65,7 +65,7 @@ The following components were updated:
 | Oracle Transaction Manager for Microservices	 | 23.4.2 | 23.4.1 |
 | Prometheus | 2.52.0 | 2.47.1 |
 | Prometheus Operator | 0.74.0 | 0.63.0 |
-| Spring Operations Center | 1.2.0 | 1.1.3 |
+| ServiceOps Center | 1.2.0 | 1.1.3 |
 | HashiCorp Vault | 1.16.1 | 1.15.2 |
 
 {{< hint type=[warning] icon=gdoc_fire title="Deprecation Notice" >}}
@@ -91,14 +91,14 @@ This release includes small updates and/or bug fixes and some additional functio
 
 ## Version 1.1.1, February 9, 2024
 
-This release adds the "Spring Operations Center" feature, adds or updates some Grafana dashboards, and includes
+This release adds the "ServiceOps Center" feature, adds or updates some Grafana dashboards, and includes
 other small updates and/or bug fixes.
 
 The following components were added:
 
 | Component                               | Version   | Description                                              |
 |-----------------------------------------|-----------|----------------------------------------------------------|
-| Spring Operations Center                | 1.1.1     | Provide operations capabilities for Spring applications. |
+| ServiceOps Center                | 1.1.1     | Provide operations capabilities for Spring applications. |
 
 The following components were updated:
 
@@ -112,7 +112,7 @@ Notes:
 
 * Recommended versions for user applications updated Spring Boot 3.2.x, Java 17 or 21, Spring 6.1 and Spring Cloud 2023.0.0, with limited backwards compatibility for Spring Boot 2.7.x.
 * Platform components are updated to Spring Boot 3.2.1 versions and matching Spring Cloud versions.
-* A preview of a new "Spring Operations Center" feature is added, including a web user interface and additional Grafana dashboards.
+* A preview of a new "ServiceOps Center" feature is added, including a web user interface and additional Grafana dashboards.
 * User Management using the CLI and REST Endpoints.
 * Added support for auto-scaling of Spring Boot applications deployed in the platform.
 * Changes to the custom installation to allow using existing resources including database, network and Kubernetes.
