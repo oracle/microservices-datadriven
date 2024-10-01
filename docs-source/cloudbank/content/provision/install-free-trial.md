@@ -121,7 +121,7 @@ You can also use this approach in any regular commercial Oracle Cloud Tenancy - 
 
 1. Configure access to the instance from your local machine
 
-   * On your local machine, open a browser and find your public IPv4 address using a serivce like [ShowMyIP](https://www.showmyip.com/).
+   * On your local machine, open a browser and find your public IPv4 address using a service like [ShowMyIP](https://www.showmyip.com/).
 
    * In the OCI Console, when viewing your compute instance, click on the link for the subnet in the **Prinary VNIC** section.
 
@@ -151,63 +151,68 @@ You can also use this approach in any regular commercial Oracle Cloud Tenancy - 
 
 1. DB Access & setup
 
-   * Connected in ssh on you instance, let's look for the db pod with the command: is `kubectl get pods --all-namespaces`. In the `oracle-database-operator-system` then the address namespace, look for a pods like `free-XXXX`.
+   * Connect to your instance (using SSH), find the database pod with the following command: `kubectl get pods --all-namespaces`.
 
-   * Access to DB instance with:
-   `kubectl exec -it  -n oracle-database-operator-system free-XXXX -- /bin/sh`
+      In the `oracle-database-operator-systemthen the address` namespace, look for a pods like `free-XXXX`.
 
-   * Let's login as sysdba to create the user account it will be used in Module 3:  
+   * Access to DB instance with the following command: `kubectl exec -it  -n oracle-database-operator-system free-XXXX -- /bin/sh`
 
-   ```sql
-   sqlplus / as sysdba
-   ALTER SESSION SET CONTAINER = freepdb1;    
-   CREATE TABLESPACE users DATAFILE '/opt/oracle/oradata/FREE/FREEPDB1/users.dbf'  SIZE 100M AUTOEXTEND ON NEXT 10M MAXSIZE 500M;
-   CREATE USER account IDENTIFIED BY Welcome1234## DEFAULT TABLESPACE users TEMPORARY TABLESPACE temp;
-   ```
+   * Login as sysdba to create the user `account` that will be used in Module 3:  
+
+      ```sql
+      sqlplus / as sysdba
+      ALTER SESSION SET CONTAINER = freepdb1;    
+      CREATE TABLESPACE users DATAFILE '/opt/oracle/oradata/FREE/FREEPDB1/users.dbf'  SIZE 100M AUTOEXTEND ON NEXT 10M MAXSIZE 500M;
+      CREATE USER account IDENTIFIED BY Welcome1234## DEFAULT TABLESPACE users TEMPORARY TABLESPACE temp;
+      ```
 
    This step replaces the steps from 1 to 4 in the task **Account Microservices/Prepare Database Objects**.  
    In the step 5 of [Prepare Database Objects](../../content/account/prepare-database.md), skip the command: `create user account identified by "Welcome1234##";` and execute all the rest, since the user account has been already created.
 
-   If, for any reason, you need to access the db from an ssh connection, these are the commands to get uid/pwd and execute pl/sql commands:
-    
-   ```sh
-   #to get <UID>:
-   kubectl -n application get secret baas-db-secrets -o jsonpath='{.data.db\.password}' | base64 -d
-   #to get <PWD>:
-   kubectl -n application get secret baas-db-secrets -o jsonpath='{.data.db\.username}' | base64 -d
-   #for pl/sql:
-   kubectl exec -n oracle-database-operator-system free-tfl4e -ti -- sqlplus <UDI>/<PWD>@localhost:1521/freepdb1
-   ```
+      If you need to access the db from an ssh connection, these are the commands to get `username` and `password`:
+
+      ```bash
+      #to get <UID>:
+      kubectl -n application get secret baas-db-secrets -o jsonpath='{.data.db\.password}' | base64 -d
+      #to get <PWD>:
+      kubectl -n application get secret baas-db-secrets -o jsonpath='{.data.db\.username}' | base64 -d
+      #for pl/sql:
+      kubectl exec -n oracle-database-operator-system free-tfl4e -ti -- sqlplus <UDI>/<PWD>@localhost:1521/freepdb1
+      ```
 
 1. Kubernetes access from own desktop
 
-  * With an ssh on the compute node, execute:
+    * On the compute node (logged in using SSH), execute the following command:
 
-  ```sh
-  kubectl config view --minify --context=default --flatten > /home/ubuntu/context-config.yaml
-  ```
+        ```sh
+        kubectl config view --minify --context=default --flatten > /home/ubuntu/context-config.yaml
+        ```
 
   * download the YAML configuration file on your desktop in <YOUR_DESKTOP_DIR>, using `scp` with the reference to <YOUR_PRIVATE_KEY.key>:
 
-  ```sh
-  scp -i <YOUR_PRIVATE_KEY.key> ubuntu@<YOUR_VM_IP>:/home/ubuntu/context-config.yaml <YOUR_DESKTOP_DIR>/context-config.yaml 
-  ```
+        ```sh
+        scp -i <YOUR_PRIVATE_KEY.key> ubuntu@<VM_IP>:/home/ubuntu/context-config.yaml <YOUR_DIR>/context-config.yaml 
+        ```
 
-  * in the `context-config.yaml` locate the `server` entry:
-  ```yaml
-  ...
-  - cluster:
-    certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJlRENDQVIyZ0F3SUJBZ0lCQURBS0JnZ3Foa2pPUFFRREFqQWpNU0V3SHdZRFZRUUREQmhyTTNNdGM...
-    server: https://127.0.0.1:6443
-  name: default
- ...
- ```
+    * In the `context-config.yaml` locate the `server` entry:
 
- * add an **Add Ingress Rules** in the VCN security list belonging with your VM for the `6443` port, to allow the `kubectl` connection from your desktop.
+        ```yaml
+        ...
+        - cluster:
+          certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJlRENDQVIyZ0F3SUJBZ0lCQURBS0JnZ3Foa2pPUFFRREFqQWpNU0V3SHdZRFZRUUREQmhyTTNNdGM...
+          server: https://127.0.0.1:6443
+        name: default
+        ...
+        ```
 
- * on your desktop create an alias and register in your shell profile, or digit as you prefer the commands included, to use the context to connect the remote Kubernets, overcoming the issue on certificate created originally on the VM:
- ```sh
- alias k='export KUBECONFIG=<YOUR_DESKTOP_DIR>/context-config.yaml; kubectl --insecure-skip-tls-verify'
- ```
- In this way, any other `kubectl` commands in the rest of documentation can be executed as well, simply replacing `kubectl` with `k` if you are using the provisioning procedure shown so far.
+        and change with <YOUR_DIR>.
 
+    * Add an **Add Ingress Rules** in the VCN security list belonging with your VM for the `6443` port, to allow the `kubectl` connection from your desktop.
+
+    * On your desktop create an alias, to use the downloaded context to connect the remote Kubernetes, resolving the certificate issue:
+
+        ```sh
+        alias k='export KUBECONFIG=<YOUR_DIR>/context-config.yaml; kubectl --insecure-skip-tls-verify'
+        ```
+
+        In this way, any other `kubectl` commands in the rest of documentation can be executed as well, simply replacing `kubectl` with `k` if you are using the provisioning procedure shown so far.
