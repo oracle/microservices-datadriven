@@ -153,7 +153,7 @@ You can also use this approach in any regular commercial Oracle Cloud Tenancy - 
 
    * Connect to your instance (using SSH), find the database pod with the following command: `kubectl get pods --all-namespaces`.
 
-      In the `oracle-database-operator-systemthen the address` namespace, look for a pods like `free-XXXX`.
+      In the `oracle-database-operator-system` namespace, look for a pods like `free-XXXX`.
 
    * Access to DB instance with the following command: `kubectl exec -it  -n oracle-database-operator-system free-XXXX -- /bin/sh`
 
@@ -166,7 +166,7 @@ You can also use this approach in any regular commercial Oracle Cloud Tenancy - 
       CREATE USER account IDENTIFIED BY Welcome1234## DEFAULT TABLESPACE users TEMPORARY TABLESPACE temp;
       ```
 
-   This step replaces the steps from 1 to 4 in the task **Account Microservices/Prepare Database Objects**.  
+   This step replaces the steps from 1 to 4 in the task [**Account Microservices/Prepare Database Objects**](../../content/account/prepare-database.md).  
    In the step 5 of [Prepare Database Objects](../../content/account/prepare-database.md), skip the command: `create user account identified by "Welcome1234##";` and execute all the rest, since the user account has been already created.
 
       If you need to access the db from an ssh connection, these are the commands to get `username` and `password`:
@@ -177,7 +177,7 @@ You can also use this approach in any regular commercial Oracle Cloud Tenancy - 
       #to get <PWD>:
       kubectl -n application get secret baas-db-secrets -o jsonpath='{.data.db\.username}' | base64 -d
       #for pl/sql:
-      kubectl exec -n oracle-database-operator-system free-tfl4e -ti -- sqlplus <UDI>/<PWD>@localhost:1521/freepdb1
+      kubectl exec -n oracle-database-operator-system free-<XXXX> -ti -- sqlplus <UDI>/<PWD>@localhost:1521/freepdb1
       ```
 
 1. Kubernetes access from own desktop
@@ -188,7 +188,7 @@ You can also use this approach in any regular commercial Oracle Cloud Tenancy - 
         kubectl config view --minify --context=default --flatten > /home/ubuntu/context-config.yaml
         ```
 
-  * download the YAML configuration file on your desktop in <YOUR_DESKTOP_DIR>, using `scp` with the reference to <YOUR_PRIVATE_KEY.key>:
+    * download the YAML configuration file on your desktop in <YOUR_DESKTOP_DIR>, using `scp` with the reference to <YOUR_PRIVATE_KEY.key>:
 
         ```sh
         scp -i <YOUR_PRIVATE_KEY.key> ubuntu@<VM_IP>:/home/ubuntu/context-config.yaml <YOUR_DIR>/context-config.yaml 
