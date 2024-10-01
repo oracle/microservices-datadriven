@@ -188,7 +188,7 @@ You can also use this approach in any regular commercial Oracle Cloud Tenancy - 
         kubectl config view --minify --context=default --flatten > /home/ubuntu/context-config.yaml
         ```
 
-    * download the YAML configuration file on your desktop in <YOUR_DESKTOP_DIR>, using `scp` with the reference to <YOUR_PRIVATE_KEY.key>:
+    * download the YAML configuration file on your desktop in <YOUR_DIR>, using `scp` with the reference to <YOUR_PRIVATE_KEY.key>:
 
         ```sh
         scp -i <YOUR_PRIVATE_KEY.key> ubuntu@<VM_IP>:/home/ubuntu/context-config.yaml <YOUR_DIR>/context-config.yaml 
