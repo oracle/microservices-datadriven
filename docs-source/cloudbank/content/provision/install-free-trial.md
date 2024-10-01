@@ -151,7 +151,7 @@ You can also use this approach in any regular commercial Oracle Cloud Tenancy - 
 
 1. DB Access & setup
 
-   * Connected in ssh on you instance, let's look for the db pod with the command: is `kubectl get pods --all-namespaces`. In the `oracle-database-operator-systemthen the address` namespace, look for a pods like `free-XXXX`.
+   * Connected in ssh on you instance, let's look for the db pod with the command: is `kubectl get pods --all-namespaces`. In the `oracle-database-operator-system` then the address namespace, look for a pods like `free-XXXX`.
 
    * Access to DB instance with:
    `kubectl exec -it  -n oracle-database-operator-system free-XXXX -- /bin/sh`
@@ -166,7 +166,7 @@ You can also use this approach in any regular commercial Oracle Cloud Tenancy - 
    ```
 
    This step replaces the steps from 1 to 4 in the task **Account Microservices/Prepare Database Objects**.  
-   In the step 5 of **Prepare Database Objects**, skip the command: `create user account identified by "Welcome1234##";` and execute all the rest, since the user account has been already created.
+   In the step 5 of [Prepare Database Objects](../../content/account/prepare-database.md), skip the command: `create user account identified by "Welcome1234##";` and execute all the rest, since the user account has been already created.
 
    If, for any reason, you need to access the db from an ssh connection, these are the commands to get uid/pwd and execute pl/sql commands:
     
@@ -187,7 +187,7 @@ You can also use this approach in any regular commercial Oracle Cloud Tenancy - 
   kubectl config view --minify --context=default --flatten > /home/ubuntu/context-config.yaml
   ```
 
-  * download the YAML configuration file on your desktop:
+  * download the YAML configuration file on your desktop in <YOUR_DESKTOP_DIR>, using `scp` with the reference to <YOUR_PRIVATE_KEY.key>:
 
   ```sh
   scp -i <YOUR_PRIVATE_KEY.key> ubuntu@<YOUR_VM_IP>:/home/ubuntu/context-config.yaml <YOUR_DESKTOP_DIR>/context-config.yaml 
@@ -202,8 +202,6 @@ You can also use this approach in any regular commercial Oracle Cloud Tenancy - 
   name: default
  ...
  ```
- 
- and change with <YOUR_DESKTOP_DIR>.
 
  * add an **Add Ingress Rules** in the VCN security list belonging with your VM for the `6443` port, to allow the `kubectl` connection from your desktop.
 
