@@ -1,6 +1,6 @@
 ---
-title: "Spring Operations Center"
-description: "Using Spring Operations Center to manage applications in Oracle Backend for Microservices and AI"
+title: "ServiceOps Center"
+description: "Using ServiceOps Center to manage applications in Oracle Backend for Microservices and AI"
 keywords: "soc operations admin springboot spring development microservices development oracle backend"
 resources:
   - name: soc-login-page
@@ -86,20 +86,18 @@ resources:
     title: "Alerts"
 ---
 
-Oracle Backend for Microservices and AI includes "Spring Operations Center". More capabilities will be added to this feature in future releases.
-
-The Spring Operations Center provides a web user interface to manage the Oracle Backend for Microservices and AI. This release includes the following capabilities:
+Oracle Backend for Microservices and AI includes "ServiceOps Center". The ServiceOps Center provides a web user interface to manage the Oracle Backend for Microservices and AI. This release includes the following capabilities:
 
 - View details about the configuration and health of the environment
-- Manage and deploy workloads (Spring Boot applications) deployed in the environment
+- Manage and deploy workloads/microservices deployed in the environment
 - Easy one-click access to Grafana dashboards for applications
-- Manage users and roles defined in the Spring Authorization Server included in the environment
+- Manage users and roles defined in the Authorization Server included in the environment
 - Easy one-click access to Grafana dashboards for the Kubernetes cluster, the applications and the Oracle Database
 - Collect diagnostic data for support
 
 **Note:** More capabilities will be added to this feature in future releases.
 
-- [Accessing Spring Operations Center](#accessing-spring-operations-center)
+- [Accessing ServiceOps Center](#accessing-serviceops-center)
 - [Login Screen](#login-screen)
   - [Forgot Password](#forgot-password)
   - [Reset Password](#reset-password)
@@ -121,6 +119,7 @@ The Spring Operations Center provides a web user interface to manage the Oracle 
     - [Create User](#create-user)
     - [Change Password](#change-password)
     - [Change Roles](#change-roles)
+    - [Change Email](#change-email)
     - [Delete User(s)](#delete-users)
   - [Collect Diagnostic Data](#collect-diagnostic-data)
   - [Alerts](#alerts)
@@ -128,7 +127,7 @@ The Spring Operations Center provides a web user interface to manage the Oracle 
 
 ### SMTP Settings
 
-The Spring Operations Center can send emails for following operations:
+The ServiceOps Center can send emails for following operations:
 
 - [Forgot Password](#forgot-password)
 - [Reset Password](#reset-password)
@@ -136,6 +135,7 @@ The Spring Operations Center can send emails for following operations:
 - [Create User](#create-user)
 - [Change Password](#change-password)
 - [Change Roles](#change-roles)
+- [Change Email](#change-email)
 
 It is required to configure a SMTP secret as follows for the email functionality to work.
 
@@ -149,9 +149,9 @@ It is required to configure a SMTP secret as follows for the email functionality
     --from-literal=SMTP_FROM=<from-email-address>
 ```
 
-## Accessing Spring Operations Center
+## Accessing ServiceOps Center
 
-To access the Spring Operations Center, obtain the public IP address for your environment using this command:
+To access the ServiceOps Center, obtain the public IP address for your environment using this command:
 
 ```bash
 kubectl -n ingress-nginx get service ingress-nginx-controller
@@ -222,7 +222,7 @@ After logging in, you will see the SOC Dashboard.
 
 ## The Dashboard
 
-The Spring Operations Center Dashboard provides information about the overall state of the environment including:
+The ServiceOps Center Dashboard provides information about the overall state of the environment including:
 
 - The version and platform the environment is running on
 - The configuration and sizing of the Kubernetes cluster
@@ -239,7 +239,7 @@ The Spring Operations Center Dashboard provides information about the overall st
 
 ### Manage Namespaces
 
-The Manage Namespaces screen is accessible from the _Workloads_ menu, and allows you to view and manage the namespaces that are configured for Spring Boot application deployments. Note that this does not show you all namespaces in the Kubernetes cluster, just those that have be specifically configured for Spring Boot workloads, meaning they have the necessary secrets for pulling images, accessing the database, and so on.
+The Manage Namespaces screen is accessible from the _Workloads_ menu, and allows you to view and manage the namespaces that are configured for microservice deployments. Note that this does not show you all namespaces in the Kubernetes cluster, just those that have be specifically configured for workloads, meaning they have the necessary secrets for pulling images, accessing the database, and so on.
 
 <!-- spellchecker-disable -->
 
@@ -247,7 +247,7 @@ The Manage Namespaces screen is accessible from the _Workloads_ menu, and allows
 
 <!-- spellchecker-enable -->
 
-Clicking on a namespace will allow you to drill down into that namespace and see the workloads (Spring Boot applications)
+Clicking on a namespace will allow you to drill down into that namespace and see the workloads/microservices
 deployed there.
 
 #### Create Namespace
@@ -272,7 +272,7 @@ To delete one or more of the namesapces, select from the grid and click "DELETE"
 
 ### Manage Workloads
 
-The Manage Workloads screen shows the workloads (Spring Boot applications) deployed in a specific namespace, including
+The Manage Workloads screen shows the workloads/microservices deployed in a specific namespace, including
 the status of each workload, and how many replicas are currently running and desired.
 
 <!-- spellchecker-disable -->
@@ -378,7 +378,7 @@ To delete one or more workload, select and click "DELETE".
 
 ### Manage Identity
 
-The Manage Identity screen is accessible from the Security menu and allows you to view and edit information about the users and roles defined in the Spring Authorization Server included in the platform.
+The Manage Identity screen is accessible from the Security menu and allows you to view and edit information about the users and roles defined in the Authorization Server included in the platform.
 
 <!-- spellchecker-disable -->
 
@@ -416,6 +416,16 @@ You can select a user and click "CHANGE ROLES" to add/remove roles.
 
 <!-- spellchecker-enable -->
 
+#### Change Email
+
+You can select a user and click "CHANGE EMAIL" to change Email.
+
+<!-- spellchecker-disable -->
+
+{{< img name="soc-manage-identity-chg-email" size="medium" lazy=false >}}
+
+<!-- spellchecker-enable -->
+
 #### Delete User(s)
 
 You can select one or more users and click "DELETE" to delete selected user(s).
@@ -438,7 +448,7 @@ The Collect Diagnostic Data is accessible from the Settings Menu and allows you 
 
 ### Alerts
 
-You can see preview of alerts from Alertmanager in Spring Operations Center. Clicking on an alert navigates to the Alertmanager UI. You can close individual alerts or click "Dismiss All" to close all the alerts. To re-enable the alerts, click "Show All Alerts" from the "Settings" menu.
+You can see preview of alerts from Alertmanager in ServiceOps Center. Clicking on an alert navigates to the Alertmanager UI. You can close individual alerts or click "Dismiss All" to close all the alerts. To re-enable the alerts, click "Show All Alerts" from the "Settings" menu.
 
 <!-- spellchecker-disable -->
 
@@ -448,7 +458,7 @@ You can see preview of alerts from Alertmanager in Spring Operations Center. Cli
 
 ### Usage Reporting
 
-The Spring Operations Center can send basic install details to Oracle on a periodic basis, To enable that, click on the "AGREE" button on the notification or "CLOSE" to mute the notification. The details will include
+The ServiceOps Center can send basic install details to Oracle on a periodic basis, To enable that, click on the "AGREE" button on the notification or "CLOSE" to mute the notification. The details will include
 
 - Memory, CPU count, nodes and version of the Kubernetes cluster
 - Overall health status of the OBaaS platform
