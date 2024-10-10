@@ -12,7 +12,7 @@
   "dependencies": {
     "@parse/react-native": "^0.0.1-alpha.18",
     "geolib": "^3.3.3",
-    "parse": "^3.4.2",
+    "parse": "^3.5.1",
     "react": "17.0.2",
     "react-native": "0.68.0",
     "react-native-geolocation-service": "^5.3.0-beta.4"
