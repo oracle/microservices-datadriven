@@ -62,7 +62,7 @@ Infrastructure (OCI) Container Engine for Kubernetes cluster (OKE cluster):
 - [Spring Boot Admin dashboard](platform/spring-admin/)
 - [Spring Cloud Config server](platform/config/)
 - [Spring Cloud Eureka service registry](platform/eureka/)
-- [Spring Operations Center](platform/soc/)
+- [ServiceOps Center](platform/soc/)
 - Strimzi Kafka Operator
 
 Developers also have access to development or build time services and libraries including:
