@@ -23,6 +23,7 @@
 
     <modules>
         <module>account</module>
+        <module>chatbot</module>
         <module>checks</module>
         <module>customer</module>
         <module>creditscore</module>
