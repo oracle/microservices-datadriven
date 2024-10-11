@@ -30,7 +30,7 @@ TNS_WALLET_STR="(MY_WALLET_DIRECTORY="$TNS_ADMIN")"
 #Create compartment
 ROOT_COMPARTMENT_OCID=$(oci iam compartment list --all --compartment-id-in-subtree true --access-level ACCESSIBLE --include-root --raw-output --query "data[?contains(\"id\",'tenancy')].id | [0]")
 
-if [[ -z $(oci iam compartment list --all | jq -r ".data[] | select(.name == \"${COMPARTMENT}\") | .id") ]]; then
+if [[ -z $(oci iam compartment list --all --compartment-id-in-subtree true | jq -r ".data[] | select(.name == \"${COMPARTMENT}\") | .id") ]]; then
     oci iam compartment create --name ${COMPARTMENT} -c ${ROOT_COMPARTMENT_OCID} --description "Oracle Advanced Queue workflow" --wait-for-state ACTIVE
     echo "COMPARTMENT '${COMPARTMENT}' CREATED."
 else
