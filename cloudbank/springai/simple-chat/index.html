@@ -3,50 +3,50 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.134.3">
+    <meta name="generator" content="Hugo 0.135.0">
     <meta name="generator" content="Relearn 6.1.1+tip">
-    <meta name="description" content="In this module, you will learn how to build a simple chat bot using Spring AI and Ollama.
+    <meta name="description" content="In this module, you will learn how to build a simple chatbot using Spring AI and Ollama.
 Note: The example below can also be run on a regular CPU if you are using an environment where a GPU is not available, it will just be slower.
 Oracle Backend for Microservices and AI provides an option during installation to provision a set of Kubernetes nodes with NVIDIA A10 GPUs that are suitable for running AI workloads. If you choose that option during installation, you may also specify how many nodes are provisioned. The GPU nodes will be in a separate Node Pool to the normal CPU nodes, which allows you to scale it independently of the CPU nodes. They are also labeled so that you can target appropriate workloads to them using node selectors and/or affinity rules.">
     <meta name="author" content="">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="A simple ChatBot :: CloudBank AI">
-    <meta name="twitter:description" content="In this module, you will learn how to build a simple chat bot using Spring AI and Ollama.
+    <meta name="twitter:description" content="In this module, you will learn how to build a simple chatbot using Spring AI and Ollama.
 Note: The example below can also be run on a regular CPU if you are using an environment where a GPU is not available, it will just be slower.
 Oracle Backend for Microservices and AI provides an option during installation to provision a set of Kubernetes nodes with NVIDIA A10 GPUs that are suitable for running AI workloads. If you choose that option during installation, you may also specify how many nodes are provisioned. The GPU nodes will be in a separate Node Pool to the normal CPU nodes, which allows you to scale it independently of the CPU nodes. They are also labeled so that you can target appropriate workloads to them using node selectors and/or affinity rules.">
     <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/cloudbank/springai/simple-chat/index.html">
     <meta property="og:site_name" content="CloudBank AI">
     <meta property="og:title" content="A simple ChatBot :: CloudBank AI">
-    <meta property="og:description" content="In this module, you will learn how to build a simple chat bot using Spring AI and Ollama.
+    <meta property="og:description" content="In this module, you will learn how to build a simple chatbot using Spring AI and Ollama.
 Note: The example below can also be run on a regular CPU if you are using an environment where a GPU is not available, it will just be slower.
 Oracle Backend for Microservices and AI provides an option during installation to provision a set of Kubernetes nodes with NVIDIA A10 GPUs that are suitable for running AI workloads. If you choose that option during installation, you may also specify how many nodes are provisioned. The GPU nodes will be in a separate Node Pool to the normal CPU nodes, which allows you to scale it independently of the CPU nodes. They are also labeled so that you can target appropriate workloads to them using node selectors and/or affinity rules.">
     <meta property="og:locale" content="en_us">
     <meta property="og:type" content="article">
     <meta property="article:section" content="CloudBank AI Assistant">
     <meta itemprop="name" content="A simple ChatBot :: CloudBank AI">
-    <meta itemprop="description" content="In this module, you will learn how to build a simple chat bot using Spring AI and Ollama.
+    <meta itemprop="description" content="In this module, you will learn how to build a simple chatbot using Spring AI and Ollama.
 Note: The example below can also be run on a regular CPU if you are using an environment where a GPU is not available, it will just be slower.
 Oracle Backend for Microservices and AI provides an option during installation to provision a set of Kubernetes nodes with NVIDIA A10 GPUs that are suitable for running AI workloads. If you choose that option during installation, you may also specify how many nodes are provisioned. The GPU nodes will be in a separate Node Pool to the normal CPU nodes, which allows you to scale it independently of the CPU nodes. They are also labeled so that you can target appropriate workloads to them using node selectors and/or affinity rules.">
-    <meta itemprop="wordCount" content="1645">
+    <meta itemprop="wordCount" content="1672">
     <title>A simple ChatBot :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1726941295" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726941295" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1726941295" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1726941295" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726941295" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1726941295" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1726941295" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1726941295" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1726941295" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1726941295" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1726941295" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1726941295" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/variant.css?1726941295" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1726941295" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1726941295"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1728660085" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1728660085" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1728660085" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1728660085" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1728660085" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1728660085" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1728660085" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1728660085" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1728660085" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1728660085" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1728660085" rel="stylesheet" id="R-variant-style">
+    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1728660085" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/microservices-datadriven/cloudbank/css/variant.css?1728660085" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/print.css?1728660085" rel="stylesheet" media="print">
+    <script src="/microservices-datadriven/cloudbank/js/variant.js?1728660085"></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
-      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1726941295";
+      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1728660085";
       // variant stuff
       window.variants && variants.init( [ 'zen-light' ] );
       // translations
@@ -76,7 +76,7 @@ Oracle Backend for Microservices and AI provides an option during installation t
     <li>
       <ul>
         <li><a href="#running-a-large-language-model-on-your-gpu-nodes">Running a Large Language Model on your GPU nodes</a></li>
-        <li><a href="#verifying-your-ollama-deployment">Verifying your Ollama deployment</a></li>
+        <li><a href="#test-your-ollama-deployment">Test your Ollama deployment</a></li>
         <li><a href="#using-llms-hosted-by-ollama-in-your-spring-application">Using LLMs hosted by Ollama in your Spring application</a></li>
         <li><a href="#deploy-your-application">Deploy your application</a></li>
         <li><a href="#use-your-application">Use your application</a></li>
@@ -118,22 +118,17 @@ Oracle Backend for Microservices and AI provides an option during installation t
 
 <h1 id="a-simple-chatbot">A simple ChatBot</h1>
 
-<p>In this module, you will learn how to build a simple chat bot using Spring AI
-and Ollama.</p>
+<p>In this module, you will learn how to build a simple chatbot using Spring AI and Ollama.</p>
 <blockquote>
-<p><strong>Note:</strong> The example below can also be run on a regular CPU if you are using an
-environment where a GPU is not available, it will just be slower.</p>
+<p><strong>Note:</strong> The example below can also be run on a regular CPU if you are using an environment where a GPU is not available, it will just be slower.</p>
 </blockquote>
-<p>Oracle Backend for Microservices and AI provides an option during installation to provision a set of Kubernetes nodes with NVIDIA A10 GPUs that are suitable for running AI workloads.  If you choose that option during installation, you may also specify how many nodes are provisioned.  The GPU nodes will be in a separate Node Pool to the normal CPU nodes, which allows you to scale it independently of the CPU nodes. They are also labeled so that you can target appropriate workloads to them using node selectors and/or affinity rules.</p>
+<p>Oracle Backend for Microservices and AI provides an option during installation to provision a set of Kubernetes nodes with NVIDIA A10 GPUs that are suitable for running AI workloads. If you choose that option during installation, you may also specify how many nodes are provisioned. The GPU nodes will be in a separate Node Pool to the normal CPU nodes, which allows you to scale it independently of the CPU nodes. They are also labeled so that you can target appropriate workloads to them using node selectors and/or affinity rules.</p>
 <p>To view a list of nodes in your cluster with a GPU, you can use this command:</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ kubectl get nodes -l <span style="color:#e6db74">&#39;node.kubernetes.io/instance-type=VM.GPU.A10.1&#39;</span>
 </span></span><span style="display:flex;"><span>NAME           STATUS   ROLES   AGE     VERSION
 </span></span><span style="display:flex;"><span>10.22.33.45    Ready    node    2m44s   v1.30.1</span></span></code></pre></div><h3 id="running-a-large-language-model-on-your-gpu-nodes">Running a Large Language Model on your GPU nodes</h3>
-<p>One very common use for GPU nodes is to run a self-hosted Large Language Model (LLM)
-such as <code>llama3</code> for inferencing or <code>nomic-embed-text</code> for embedding.</p>
-<p>Companies often want to self-host an LLM to avoid sending private or sensitive data
-outside of their organization to a third-party provider, or to have more control over
-the costs of running the LLM and assocatied infrastructure.</p>
+<p>One very common use for GPU nodes is to run a self-hosted Large Language Model (LLM) such as <code>llama3</code> for inferencing or <code>nomic-embed-text</code> for embedding.</p>
+<p>Companies often want to self-host an LLM to avoid sending private or sensitive data  outside their organization to a third-party provider, or to have more control over the costs of running the LLM and associated infrastructure.</p>
 <p>One excellent way to self-host LLMs is to use <a href="https://ollama.com/" rel="external" target="_blank">Ollama</a>.</p>
 <p>To install Ollama on your GPU nodes, you can use the following commands:</p>
 <ol>
@@ -144,7 +139,7 @@ the costs of running the LLM and assocatied infrastructure.</p>
 <p>Update your helm repositories:</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>helm repo update</span></span></code></pre></div></li>
 <li>
-<p>Create a <code>values.yaml</code> file to configure how Ollama should be installed, including
+<p>Create a <code>ollama-values.yaml</code> file to configure how Ollama should be installed, including
 which node(s) to run it on.  Here is an example that will run Ollama on a GPU node
 and will pull the <code>llama3</code> model.</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">ollama</span>:
@@ -171,8 +166,13 @@ and will pull the <code>llama3</code> model.</p>
 <li>
 <p>Deploy Ollama using the helm chart:</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>helm install ollama ollama-helm/ollama --namespace ollama  --values ollama-values.yaml</span></span></code></pre></div></li>
+<li>
+<p>You can verify the deployment with the following command:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl get pods -n ollama -w</span></span></code></pre></div><p>When the pod has the status <code>Running</code> the deployment is completed.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>NAME                      READY   STATUS    RESTARTS   AGE
+</span></span><span style="display:flex;"><span>ollama-659c88c6b8-kmdb9   0/1     Running   0          84s</span></span></code></pre></div></li>
 </ol>
-<h3 id="verifying-your-ollama-deployment">Verifying your Ollama deployment</h3>
+<h3 id="test-your-ollama-deployment">Test your Ollama deployment</h3>
 <p>You can interact with Ollama using the provided command line tool, called <code>ollama</code>.
 For example, to list the available models, use the <code>ollama ls</code> command:</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl -n ollama exec svc/ollama -- ollama ls
@@ -187,7 +187,7 @@ For example, to list the available models, use the <code>ollama ls</code> comman
 <p>A Kubernetes service named &lsquo;ollama&rsquo; with port 11434 will be created so that your
 applications can talk to models hosted by Ollama.</p>
 <p>Now, you will create a simple Spring AI application that uses Llama3 to
-create a simple chat bot.</p>
+create a simple chatbot.</p>
 <blockquote>
 <p><strong>Note:</strong> The sample code used in this module is available <a href="https://github.com/oracle/microservices-datadriven/tree/main/cloudbank-v4/chatbot" rel="external" target="_blank">here</a>.</p>
 </blockquote>
@@ -266,19 +266,13 @@ create a simple chat bot.</p>
 </span></span><span style="display:flex;"><span>         <span style="color:#f92672">&lt;/plugins&gt;</span>
 </span></span><span style="display:flex;"><span>     <span style="color:#f92672">&lt;/build&gt;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span> <span style="color:#f92672">&lt;/project&gt;</span></span></span></code></pre></div><p>Note that this is very simliar to the Maven POM files you have created in previous
-modules.  <a href="https://github.com/spring-projects/spring-ai" rel="external" target="_blank">Spring AI</a> is currently
-approaching it&rsquo;s 1.0.0 release, so you need to enable access to the milestone and
-snapshot repositories to use it.  You will see the <code>repositories</code> section in the
-POM file above does that.</p>
-<p>The <code>spring-ai-bom</code> was added in the <code>dependencyManagement</code> section to make it easy
-to select the correct versions of various dependencies.</p>
-<p>Finally, a dependency for <code>spring-ai-ollama-spring-boot-starter</code> was added. This
-provides access to the Spring AI Ollama functionality and auto-configuration.</p>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">&lt;/project&gt;</span></span></span></code></pre></div><p>Note that this is very similar to the Maven POM files you have created in previous modules.  <a href="https://github.com/spring-projects/spring-ai" rel="external" target="_blank">Spring AI</a> is currently approaching its 1.0.0 release, so you need to enable access to the milestone and snapshot repositories to use it.  You will see the <code>repositories</code> section in the POM file above does that.</p>
+<p>The <code>spring-ai-bom</code> was added in the <code>dependencyManagement</code> section to make it easy to select the correct versions of various dependencies.</p>
+<p>Finally, a dependency for <code>spring-ai-ollama-spring-boot-starter</code> was added. This provides access to the Spring AI Ollama functionality and autoconfiguration.</p>
 </li>
 <li>
 <p>Configure access to your Ollama deployment</p>
-<p>To configure access the Ollama, create a Spring application conifguration file
+<p>To configure access the Ollama, create a Spring application configuration file
 called <code>src/main/resources/application.yaml</code> with the following content:</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">spring</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">application</span>:
@@ -352,19 +346,11 @@ the following content:</p>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>}</span></span></code></pre></div><p>In this class, you have a <code>RestController</code>, which you are likely familiar with
-from previous modules, and a <code>PostMapping</code> to create an HTTP POST endpoint.</p>
-<p>The <code>chat()</code> method reads a question from the HTTP body, makes a call to Ollama
-using the Llama3 model to get a response and then returns the text part of the
-response to the user in the HTTP body.</p>
-<p>Notice that a <code>ChatModel</code> is injected into this controller to provide access
-to Ollama&rsquo;s chat interface.</p>
-<p>You may also notice that we set the temperature to 0.4.  Temperature is a parameter
-of LLMs that controls how creative the answer will be.  Lower numbers (approaching
-zero) will tend to produce less creative answers, whereas higher numbers will tend
-to produce more creative answers.</p>
-<p>LLMs are not deterministic, so you will tend to get a different answer each time
-you ask them the same question, unless the temperature is very low.</p>
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div><p>In this class, you have a <code>RestController</code>, which you are likely familiar with  from previous modules, and a <code>PostMapping</code> to create an HTTP POST endpoint.</p>
+<p>The <code>chat()</code> method reads a question from the HTTP body, makes a call to Ollama using the Llama3 model to get a response and then returns the text part of the response to the user in the HTTP body.</p>
+<p>Notice that a <code>ChatModel</code> is injected into this controller to provide access to Ollama&rsquo;s chat interface.</p>
+<p>You may also notice that we set the temperature to 0.4.  Temperature is a parameter of LLMs that controls how creative the answer will be.  Lower numbers (approaching zero) will tend to produce less creative answers, whereas higher numbers will tend to produce more creative answers.</p>
+<p>LLMs are not deterministic, so you will tend to get a different answer each time you ask them the same question, unless the temperature is very low.</p>
 </li>
 </ol>
 <h3 id="deploy-your-application">Deploy your application</h3>
@@ -400,15 +386,14 @@ you ask them the same question, unless the temperature is very low.</p>
 </span></span><span style="display:flex;"><span>Credentials successfully authenticated! obaas-admin -&gt; welcome to OBaaS CLI.
 </span></span><span style="display:flex;"><span>oractl:&gt;</span></span></code></pre></div></li>
 <li>
-<p>Deploy the cahtbot</p>
-<p>You will now deploy your cahtbot to the Oracle Backend for Microservices and AI using the CLI.  You will deploy into the <code>application</code> namespace, and the service name will be <code>chatbot</code>.  Run this command to deploy your service, make sure you provide the correct path to your JAR file.  <strong>Note</strong> that this command may take 1-3 minutes to complete:</p>
+<p>Deploy the chatbot</p>
+<p>You will now deploy your chatbot to the Oracle Backend for Microservices and AI using the CLI.  You will deploy into the <code>application</code> namespace, and the service name will be <code>chatbot</code>.  Run this command to deploy your service, make sure you provide the correct path to your JAR file.  <strong>Note</strong> that this command may take 1-3 minutes to complete:</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>oractl:&gt; deploy --app-name application --service-name chatbot --artifact-path /path/to/chatbot-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --java-version ghcr.io/oracle/graalvm-native-image-obaas:21
 </span></span><span style="display:flex;"><span>uploading: /Users/atael/tmp/cloudbank/chatbot/target/chatbot-0.0.1-SNAPSHOT.jar
 </span></span><span style="display:flex;"><span>building and pushing image...
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>creating deployment and service...
 </span></span><span style="display:flex;"><span>obaas-cli <span style="color:#f92672">[</span>deploy<span style="color:#f92672">]</span>: Application was successfully deployed
-</span></span><span style="display:flex;"><span>NOTICE: service not accessible outside K8S
 </span></span><span style="display:flex;"><span>oractl:&gt;</span></span></code></pre></div><blockquote>
 <p>What happens when you use the Oracle Backend for Microservices and AI CLI (<em>oractl</em>) <strong>deploy</strong> command? When you run the <strong>deploy</strong> command, the OOracle Backend for Microservices and AI CLI does several things for you:</p>
 </blockquote>
@@ -435,7 +420,7 @@ you ask them the same question, unless the temperature is very low.</p>
 </span></span><span style="display:flex;"><span>A popular question!
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>Spring Boot is an open-source Java-based framework that provides a simple and efficient way to build web applications, RESTful APIs, and microservices. It<span style="color:#960050;background-color:#1e0010">&#39;</span>s built on top of the Spring  Framework, but with a more streamlined and opinionated approach.
-</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>...
 </span></span><span style="display:flex;"><span>...</span></span></code></pre></div></li>
 </ol>
 
@@ -463,12 +448,12 @@ you ask them the same question, unless the temperature is very low.</p>
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1726941295" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1726941295" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1726941295" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1726941295" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1726941295" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1726941295" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1728660085" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1728660085" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1728660085" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1728660085" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1728660085" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1728660085" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -533,7 +518,8 @@ you ask them the same question, unless the temperature is very low.</p>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/build/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/build/index.html">Build CloudBank</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/deploy/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/deploy/index.html">Deploy CloudBank</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/create-routes/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/create-routes/index.html">Create APISIX routes</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/verify/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/verify/index.html">Verify the deployment</a></li></ul></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/verify/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/verify/index.html">Verify the deployment</a></li>
+          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/chatbot/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/chatbot/index.html">Deploy the optional chatbot</a></li></ul></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/index.html">Deploy with an IDE</a><ul id="R-subsections-97c3d292d2b014877ffb07154d1cf214" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/get-code/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/get-code/index.html">Get the sample code</a></li>
@@ -616,8 +602,8 @@ you ask them the same question, unless the temperature is very low.</p>
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1726941295" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1726941295" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1726941295" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1728660085" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1728660085" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1728660085" defer></script>
   </body>
 </html>
