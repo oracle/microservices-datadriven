@@ -3,8 +3,7 @@
 
 package com.example.chatbot.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.Prompt;
@@ -12,6 +11,8 @@ import org.springframework.ai.ollama.api.OllamaModel;
 import org.springframework.ai.ollama.api.OllamaOptions;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/chat")
@@ -23,6 +24,11 @@ public class ChatController {
         this.chatModel = chatModel;
     }
 
+    /**
+     * Returns a chatresponse on a provided question.
+     * @param question Question asked.
+     * @return Chatresponse content.
+     */
     @PostMapping
     public String chat(@RequestBody String question) {
         
@@ -30,7 +36,7 @@ public class ChatController {
             new Prompt(question,
                 OllamaOptions.builder()
                 .withModel(OllamaModel.LLAMA3)
-                .withTemperature(0.4f)
+                .withTemperature(0.4d)
                 .build()
         ));
 

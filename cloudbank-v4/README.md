@@ -27,22 +27,23 @@ To run Cloud Bank you need OBaaS version 1.3.0 [Oracle Backend for Microservices
    Output should look similar to this:
 
    ```text
-   [INFO] ------------------------------------------------------------------------
-   [INFO] Reactor Summary for CloudBank 0.0.1-SNAPSHOT:
-   [INFO]
-   [INFO] CloudBank .......................................... SUCCESS [  0.950 s]
-   [INFO] account ............................................ SUCCESS [  2.904 s]
-   [INFO] checks ............................................. SUCCESS [  1.168 s]
-   [INFO] customer ........................................... SUCCESS [  1.198 s]
-   [INFO] creditscore ........................................ SUCCESS [  0.956 s]
-   [INFO] transfer ........................................... SUCCESS [  0.463 s]
-   [INFO] testrunner ......................................... SUCCESS [  1.009 s]
-   [INFO] ------------------------------------------------------------------------
-   [INFO] BUILD SUCCESS
-   [INFO] ------------------------------------------------------------------------
-   [INFO] Total time:  9.437 s
-   [INFO] Finished at: 2024-08-30T10:57:14-05:00]
-   [INFO] ------------------------------------------------------------------------
+    [INFO] ------------------------------------------------------------------------
+    [INFO] Reactor Summary for CloudBank 0.0.1-SNAPSHOT:
+    [INFO]
+    [INFO] CloudBank .......................................... SUCCESS [  0.975 s]
+    [INFO] account ............................................ SUCCESS [  3.489 s]
+    [INFO] chatbot ............................................ SUCCESS [  0.995 s]
+    [INFO] checks ............................................. SUCCESS [  1.518 s]
+    [INFO] customer ........................................... SUCCESS [  1.410 s]
+    [INFO] creditscore ........................................ SUCCESS [  1.170 s]
+    [INFO] transfer ........................................... SUCCESS [  0.623 s]
+    [INFO] testrunner ......................................... SUCCESS [  1.220 s]
+    [INFO] ------------------------------------------------------------------------
+    [INFO] BUILD SUCCESS
+    [INFO] ------------------------------------------------------------------------
+    [INFO] Total time:  11.817 s
+    [INFO] Finished at: 2024-10-10T13:49:51-05:00
+    [INFO] ------------------------------------------------------------------------
    ```
 
 ## Establish connection with OBaaS Admin service
@@ -67,14 +68,14 @@ To run Cloud Bank you need OBaaS version 1.3.0 [Oracle Backend for Microservices
       \_/ |_) (_| (_| __)   \_ |_ _|_
       ========================================================================================
       Application Name: Oracle Backend Platform :: Command Line Interface
-      Application Version: (1.3.0)
+      Application Version: (1.3.1)
       :: Spring Boot (v3.3.3) ::
 
       Ask for help:
          - Slack: https://oracledevs.slack.com/archives/C06L9CDGR6Z
          - email: obaas_ww@oracle.com
 
-      oractl:>connect
+      oractl:>init connect
       ? username obaas-admin
       ? password *************
       obaas-admin -> Welcome!
@@ -82,7 +83,7 @@ To run Cloud Bank you need OBaaS version 1.3.0 [Oracle Backend for Microservices
 
 ## Deploy CloudBank
 
-CloudBank can be deployed using the `--script` command in `oractl`. CloudBank will be deployed in the namespace `application`. You are going to be asked for passwords when the `bind` command executes.
+CloudBank can be deployed using the `--script` command in `oractl`. CloudBank will be deployed in the namespace `application`. You are going to be asked for passwords when the `bind` command executes. **NOTE:** This will *NOT* deploy the chatbot service as it's an optional infrastructure deployment.
 
 ```text
 oractl:>script --file deploy-cmds/deploy-cb-java21.txt
@@ -152,6 +153,51 @@ deploy --service-name testrunner --artifact-path testrunner/target/testrunner-0.
 deploy --service-name transfer --artifact-path transfer/target/transfer-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --java-version ghcr.io/oracle/graalvm-native-image-obaas:21
 ```
 
+## Deploy **optional** Chatbot
+
+If you have deployed OBaas with a GPU cluster and installed Ollama on the GPU cluster [Install Ollama](https://oracle.github.io/microservices-datadriven/cloudbank/springai/simple-chat/index.html) you can deploy the `chatbot` service.
+
+> Note if you already have a running session with `oractl` you can skip step 1-3.
+
+1. Start the tunnel
+
+    ```shell
+    kubectl port-forward -n obaas-admin svc/obaas-admin 8080
+    ```
+
+1. Get the password for the `obaas-admin` user
+
+    ```shell
+    kubectl get secret -n azn-server oractl-passwords -o jsonpath='{.data.admin}' | base64 -d
+    ```
+
+1. Start `oractl` from the `cloudbank-v4` directory and login as the `obaas-admin` user.
+
+1. Run the following command in `oractl`:
+
+    ```shell
+    deploy --service-name chatbot --artifact-path chatbot/target/chatbot-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --java-version ghcr.io/oracle/graalvm-native-image-obaas:21
+    ```
+
+1. Start a tunnel to the `chatbot` application
+
+    ```shell
+    kubectl -n application port-forward svc/chatbot 7575:8080
+   ```
+   
+1. Test the `chatbot` application.
+
+    ```shell
+    curl -X POST -d 'what is spring boot?'  http://localhost:7575/chat
+    ```
+    The command should return something similar to this:
+
+    ```text
+    A popular question!
+
+    Spring Boot is an open-source Java-based framework that provides a simple and efficient wait to build web applications, RESTful APIs, and microservices. It's built on top of the Spring  Framework, but with a more streamlined and opinionated approach.
+    ```
+   
 ## Create APISIX Routes
 
 1. Get APISIX Gateway Admin Key

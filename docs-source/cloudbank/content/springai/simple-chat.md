@@ -4,13 +4,11 @@ title = "A simple ChatBot"
 weight = 1
 +++
 
-In this module, you will learn how to build a simple chat bot using Spring AI
-and Ollama.  
+In this module, you will learn how to build a simple chatbot using Spring AI and Ollama.  
 
-> **Note:** The example below can also be run on a regular CPU if you are using an
-  environment where a GPU is not available, it will just be slower.
+> **Note:** The example below can also be run on a regular CPU if you are using an environment where a GPU is not available, it will just be slower.
 
-Oracle Backend for Microservices and AI provides an option during installation to provision a set of Kubernetes nodes with NVIDIA A10 GPUs that are suitable for running AI workloads.  If you choose that option during installation, you may also specify how many nodes are provisioned.  The GPU nodes will be in a separate Node Pool to the normal CPU nodes, which allows you to scale it independently of the CPU nodes. They are also labeled so that you can target appropriate workloads to them using node selectors and/or affinity rules.
+Oracle Backend for Microservices and AI provides an option during installation to provision a set of Kubernetes nodes with NVIDIA A10 GPUs that are suitable for running AI workloads. If you choose that option during installation, you may also specify how many nodes are provisioned. The GPU nodes will be in a separate Node Pool to the normal CPU nodes, which allows you to scale it independently of the CPU nodes. They are also labeled so that you can target appropriate workloads to them using node selectors and/or affinity rules.
 
 To view a list of nodes in your cluster with a GPU, you can use this command: 
 
@@ -22,12 +20,9 @@ NAME           STATUS   ROLES   AGE     VERSION
 
 ### Running a Large Language Model on your GPU nodes
 
-One very common use for GPU nodes is to run a self-hosted Large Language Model (LLM)
-such as `llama3` for inferencing or `nomic-embed-text` for embedding.
+One very common use for GPU nodes is to run a self-hosted Large Language Model (LLM) such as `llama3` for inferencing or `nomic-embed-text` for embedding.
 
-Companies often want to self-host an LLM to avoid sending private or sensitive data
-outside of their organization to a third-party provider, or to have more control over
-the costs of running the LLM and assocatied infrastructure.
+Companies often want to self-host an LLM to avoid sending private or sensitive data  outside their organization to a third-party provider, or to have more control over the costs of running the LLM and associated infrastructure.
 
 One excellent way to self-host LLMs is to use [Ollama](https://ollama.com/).
 
@@ -45,7 +40,7 @@ To install Ollama on your GPU nodes, you can use the following commands:
     helm repo update
     ```
 
-1. Create a `values.yaml` file to configure how Ollama should be installed, including
+1. Create a `ollama-values.yaml` file to configure how Ollama should be installed, including
    which node(s) to run it on.  Here is an example that will run Ollama on a GPU node
    and will pull the `llama3` model.
 
@@ -85,8 +80,20 @@ To install Ollama on your GPU nodes, you can use the following commands:
     ```bash
     helm install ollama ollama-helm/ollama --namespace ollama  --values ollama-values.yaml
     ```
+1. You can verify the deployment with the following command:
 
-### Verifying your Ollama deployment
+   ```bash
+   kubectl get pods -n ollama -w
+   ```
+   
+   When the pod has the status `Running` the deployment is completed.
+
+   ```text
+   NAME                      READY   STATUS    RESTARTS   AGE
+   ollama-659c88c6b8-kmdb9   0/1     Running   0          84s
+   ```
+   
+### Test your Ollama deployment
 
 You can interact with Ollama using the provided command line tool, called `ollama`.
 For example, to list the available models, use the `ollama ls` command:
@@ -114,7 +121,7 @@ A Kubernetes service named 'ollama' with port 11434 will be created so that your
 applications can talk to models hosted by Ollama.
 
 Now, you will create a simple Spring AI application that uses Llama3 to
-create a simple chat bot.
+create a simple chatbot.
 
 > **Note:** The sample code used in this module is available [here](https://github.com/oracle/microservices-datadriven/tree/main/cloudbank-v4/chatbot).
 
@@ -197,21 +204,15 @@ create a simple chat bot.
     </project>
    ```
 
-   Note that this is very simliar to the Maven POM files you have created in previous
-   modules.  [Spring AI](https://github.com/spring-projects/spring-ai) is currently
-   approaching it's 1.0.0 release, so you need to enable access to the milestone and
-   snapshot repositories to use it.  You will see the `repositories` section in the
-   POM file above does that. 
+   Note that this is very similar to the Maven POM files you have created in previous modules.  [Spring AI](https://github.com/spring-projects/spring-ai) is currently approaching its 1.0.0 release, so you need to enable access to the milestone and snapshot repositories to use it.  You will see the `repositories` section in the POM file above does that. 
 
-   The `spring-ai-bom` was added in the `dependencyManagement` section to make it easy
-   to select the correct versions of various dependencies.
+   The `spring-ai-bom` was added in the `dependencyManagement` section to make it easy to select the correct versions of various dependencies.
 
-   Finally, a dependency for `spring-ai-ollama-spring-boot-starter` was added. This
-   provides access to the Spring AI Ollama functionality and auto-configuration. 
+   Finally, a dependency for `spring-ai-ollama-spring-boot-starter` was added. This provides access to the Spring AI Ollama functionality and autoconfiguration. 
 
 1. Configure access to your Ollama deployment
 
-   To configure access the Ollama, create a Spring application conifguration file
+   To configure access the Ollama, create a Spring application configuration file
    called `src/main/resources/application.yaml` with the following content:
 
     ```yaml
@@ -300,23 +301,15 @@ create a simple chat bot.
     }
     ```
 
-    In this class, you have a `RestController`, which you are likely familiar with
-    from previous modules, and a `PostMapping` to create an HTTP POST endpoint.
+    In this class, you have a `RestController`, which you are likely familiar with  from previous modules, and a `PostMapping` to create an HTTP POST endpoint.
 
-    The `chat()` method reads a question from the HTTP body, makes a call to Ollama
-    using the Llama3 model to get a response and then returns the text part of the
-    response to the user in the HTTP body.
+    The `chat()` method reads a question from the HTTP body, makes a call to Ollama using the Llama3 model to get a response and then returns the text part of the response to the user in the HTTP body.
 
-    Notice that a `ChatModel` is injected into this controller to provide access
-    to Ollama's chat interface.
+    Notice that a `ChatModel` is injected into this controller to provide access to Ollama's chat interface.
 
-    You may also notice that we set the temperature to 0.4.  Temperature is a parameter
-    of LLMs that controls how creative the answer will be.  Lower numbers (approaching
-    zero) will tend to produce less creative answers, whereas higher numbers will tend
-    to produce more creative answers.
+    You may also notice that we set the temperature to 0.4.  Temperature is a parameter of LLMs that controls how creative the answer will be.  Lower numbers (approaching zero) will tend to produce less creative answers, whereas higher numbers will tend to produce more creative answers.
 
-    LLMs are not deterministic, so you will tend to get a different answer each time
-    you ask them the same question, unless the temperature is very low.
+    LLMs are not deterministic, so you will tend to get a different answer each time you ask them the same question, unless the temperature is very low.
 
 ### Deploy your application
 
@@ -375,9 +368,9 @@ create a simple chat bot.
     oractl:>
     ```
 
-1. Deploy the cahtbot
+1. Deploy the chatbot
 
-    You will now deploy your cahtbot to the Oracle Backend for Microservices and AI using the CLI.  You will deploy into the `application` namespace, and the service name will be `chatbot`.  Run this command to deploy your service, make sure you provide the correct path to your JAR file.  **Note** that this command may take 1-3 minutes to complete:
+    You will now deploy your chatbot to the Oracle Backend for Microservices and AI using the CLI.  You will deploy into the `application` namespace, and the service name will be `chatbot`.  Run this command to deploy your service, make sure you provide the correct path to your JAR file.  **Note** that this command may take 1-3 minutes to complete:
 
     ```shell
     oractl:> deploy --app-name application --service-name chatbot --artifact-path /path/to/chatbot-0.0.1-SNAPSHOT.jar --image-version 0.0.1 --java-version ghcr.io/oracle/graalvm-native-image-obaas:21
@@ -386,7 +379,6 @@ create a simple chat bot.
 
     creating deployment and service...
     obaas-cli [deploy]: Application was successfully deployed
-    NOTICE: service not accessible outside K8S
     oractl:>
     ```
 
@@ -419,6 +411,6 @@ The simplest way to verify the application is to use a kubectl tunnel to access 
     A popular question!
     
     Spring Boot is an open-source Java-based framework that provides a simple and efficient way to build web applications, RESTful APIs, and microservices. It's built on top of the Spring  Framework, but with a more streamlined and opinionated approach.
-    
+    ...
     ...
     ```

@@ -12,15 +12,15 @@ Download a copy of the CloudBank sample application.
     Create a local clone of the CloudBank source repository using this command.
 
     ```shell
-    git clone -b OBAAS-1.2.0 https://github.com/oracle/microservices-datadriven.git
+    git clone https://github.com/oracle/microservices-datadriven.git
     ```
 
     > **Note**: If you do not have **git** installed on your machine, you can download a zip file of the source code from [GitHub](https://github.com/oracle/microservices-datadriven) and unzip it on your machine instead.
 
-    The source code for the CloudBank application will be in the `microservices-datadriven` directory you just created, in the `cloudbank-v32` subdirectory.
+    The source code for the CloudBank application will be in the `microservices-datadriven` directory you just created, in the `cloudbank-v4` subdirectory.
 
     ```shell
-    cd microservices-datadriven/cloudbank-v32
+    cd microservices-datadriven/cloudbank-v4
     ```
 
     This directory will be referred to as the `root` directory for CloudBank in this module.
