@@ -39,7 +39,7 @@ weight = 3
     * Obtain the `obaas-admin` password by executing the following command in a terminal window to get the `obaas-admin` password:
 
         ```shell
-        $ <copy>kubectl get secret -n azn-server  oractl-passwords -o jsonpath='{.data.admin}' | base64 -d</copy>
+        kubectl get secret -n azn-server  oractl-passwords -o jsonpath='{.data.admin}' | base64 -d
         ```
 
     * Right-click on the cluster name and select **Set UID/PWD**:
@@ -173,7 +173,7 @@ weight = 3
     * **Service Name** : `account`
     * **Bind [jms]** : ``
     * **Image Version**:  `0.0.1`
-    * **Java Image**: leave default `ghcr.io/graalvm/jdk:ol7-java17-22.2.0`
+    * **Java Image**: `ghcr.io/oracle/graalvm-native-image-obaas:21`
     * **Add Health probe?**: **False**
     * **Service Port**: leave default `8080`
     * **Service Profile**: leave default `obaas`
@@ -199,7 +199,7 @@ weight = 3
         * **Service Name** : `checks`
         * **Bind [jms]** : ``
         * **Image Version**:  `0.0.1`
-        * **Java Image**: leave default `ghcr.io/graalvm/jdk:ol7-java17-22.2.0`
+        * **Java Image**: ghcr.io/oracle/graalvm-native-image-obaas:21`
         * **Add Health probe?**: **False**
         * **Service Port**: leave default `8080`
         * **Service Profile**: leave default `obaas`
@@ -211,7 +211,7 @@ weight = 3
         * **Service Name** : `customer`
         * **Bind [jms]** : ``
         * **Image Version**:  `0.0.1`
-        * **Java Image**: leave default `ghcr.io/graalvm/jdk:ol7-java17-22.2.0`
+        * **Java Image**: `ghcr.io/oracle/graalvm-native-image-obaas:21`
         * **Add Health probe?**: **False**
         * **Service Port**: leave default `8080`
         * **Service Profile**: leave default `obaas`
@@ -223,7 +223,7 @@ weight = 3
         * **Service Name** : `creditscore`
         * **Bind [jms]** : ``
         * **Image Version**:  `0.0.1`
-        * **Java Image**: leave default `ghcr.io/graalvm/jdk:ol7-java17-22.2.0`
+        * **Java Image**: `ghcr.io/oracle/graalvm-native-image-obaas:21`
         * **Add Health probe?**: **False**
         * **Service Port**: leave default `8080`
         * **Service Profile**: leave default `obaas`
@@ -235,7 +235,7 @@ weight = 3
         * **Service Name** : `testrunner`
         * **Bind [jms]** : ``
         * **Image Version**:  `0.0.1`
-        * **Java Image**: leave default `ghcr.io/graalvm/jdk:ol7-java17-22.2.0`
+        * **Java Image**: `ghcr.io/oracle/graalvm-native-image-obaas:21`
         * **Add Health probe?**: **False**
         * **Service Port**: leave default `8080`
         * **Service Profile**: leave default `obaas`
@@ -247,7 +247,7 @@ weight = 3
         * **Service Name** : `transfer`
         * **Bind [jms]** : ``
         * **Image Version**:  `0.0.1`
-        * **Java Image**: leave default `ghcr.io/graalvm/jdk:ol7-java17-22.2.0`
+        * **Java Image**: `ghcr.io/oracle/graalvm-native-image-obaas:21`
         * **Add Health probe?**: **False**
         * **Service Port**: leave default `8080`
         * **Service Profile**: leave default `obaas`
