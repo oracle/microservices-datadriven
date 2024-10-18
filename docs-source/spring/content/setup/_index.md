@@ -230,7 +230,7 @@ Oracle Backend for Microservices and AI setup installs the following components.
 | Spring Boot Admin server     | 3.3.3         | Manages and monitors Spring Cloud applications.                                             |
 | Spring Cloud Config server   | 4.1.3      | Provides server-side support for an externalized configuration.                             |
 | Spring Eureka service registry | 4.1.3 | Provides service discovery capabilities.                                          |
-| Strimzi-Apache Kafka operator  | 0.36.1      | Manages Apache Kafka clusters.                                                              |
+| Strimzi-Apache Kafka operator  | 0.43.0      | Manages Apache Kafka clusters.                                                              |
 
 ## Overview of the Setup Process
 

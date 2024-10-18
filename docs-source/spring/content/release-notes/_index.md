@@ -34,6 +34,7 @@ The following components were updated:
 | Oracle Database Observability Exporter | 1.3.1 | 1.2.1 |
 | Oracle Transaction Manager for Microservices | 24.2.1 | 23.4.2 |
 | Hashicorp Vault |	1.17.2 | 1.16.1 |
+| Strimzi-Apache Kafka operator  | 0.43.0 | 0.41.0 | 
 
 ## Version 1.2.0, June 14th, 2024
 
@@ -67,6 +68,7 @@ The following components were updated:
 | Prometheus Operator | 0.74.0 | 0.63.0 |
 | ServiceOps Center | 1.2.0 | 1.1.3 |
 | HashiCorp Vault | 1.16.1 | 1.15.2 |
+| Strimzi-Apache Kafka operator  | 0.41.0 | 0.39.0 | 
 
 {{< hint type=[warning] icon=gdoc_fire title="Deprecation Notice" >}}
 The following components are deprecated and are removed from this release:
