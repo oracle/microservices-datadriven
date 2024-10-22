@@ -4,9 +4,16 @@ description: "Release notes for Oracle Backend for Microservices and AI includin
 keywords: "release notes additions updates deprecations removals springboot spring development microservices development oracle backend"
 ---
 
+## Version 1.3.1, October 23rd, 2024
+
+This release includes the following changes:
+
+- Added Oracle Autonomous Database 23ai as the default option for the database on OCI deployments, 19c still available as an option
+- Added the Oracle AI Microservices Sandbox as a developer preview feature
+
 ## Version 1.3.0, September 5th, 2024
 
-This release include:
+This release includes:
 
 - IntelliJ Plugin
 - Optional GPU node pool
