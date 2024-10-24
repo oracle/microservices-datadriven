@@ -9,7 +9,7 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.134.3">
+<meta name="generator" content="Hugo 0.123.6">
 
 
   <meta name="description" content="Database Options and Configuration" />
@@ -661,7 +661,7 @@
                   href="/microservices-datadriven/spring/platform/soc"
                   class="gdoc-nav__entry"
                 >
-                  Spring Operations Center
+                  ServiceOps Center
                 </a>
               </span>
               
@@ -2405,20 +2405,17 @@
 
 
 
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
-      <script>
-        var doNotTrack = false;
-        if ( false ) {
-          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
-          var doNotTrack = (dnt == "1" || dnt == "yes");
-        }
-        if (!doNotTrack) {
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-Z0MVCJ4T39');
-        }
-      </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-Z0MVCJ4T39', { 'anonymize_ip': false });
+}
+</script>
+
 
 
 
@@ -2484,42 +2481,42 @@
 <p>By default, the Oracle Autonomous Database - Serverless (ADB-S) is used for the  <strong>Metadata Database</strong>, however, there are other options including Bring Your Own (BYO).</p>
 <p>The following chart presents the options for the Metadata Database, based on the installation type:</p>
 <div class="table-wrap"> <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Installation</th>
-          <th style="text-align: left">ADB-S</th>
-          <th style="text-align: left">BYO ADB-S</th>
-          <th style="text-align: left">BYO BaseDB</th>
-          <th style="text-align: left">BYO Containerized</th>
-          <th style="text-align: left">BYO External</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">OCI Community</td>
-          <td style="text-align: left">x</td>
-          <td style="text-align: left"></td>
-          <td style="text-align: left"></td>
-          <td style="text-align: left"></td>
-          <td style="text-align: left"></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">OCI Standard</td>
-          <td style="text-align: left">x</td>
-          <td style="text-align: left">x</td>
-          <td style="text-align: left">x</td>
-          <td style="text-align: left"></td>
-          <td style="text-align: left">x</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Custom</td>
-          <td style="text-align: left">x</td>
-          <td style="text-align: left">x</td>
-          <td style="text-align: left">x</td>
-          <td style="text-align: left">x</td>
-          <td style="text-align: left">x</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Installation</th>
+<th>ADB-S</th>
+<th>BYO ADB-S</th>
+<th>BYO BaseDB</th>
+<th>BYO Containerized</th>
+<th>BYO External</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OCI Community</td>
+<td>x</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>OCI Standard</td>
+<td>x</td>
+<td>x</td>
+<td>x</td>
+<td></td>
+<td>x</td>
+</tr>
+<tr>
+<td>Custom</td>
+<td>x</td>
+<td>x</td>
+<td>x</td>
+<td>x</td>
+<td>x</td>
+</tr>
+</tbody>
 </table> </div>
 <blockquote>
 <p>For <strong>custom installations</strong>, including on-premises, it is the responsibility of the user to ensure network access controls to provide both operational access and security.  The Oracle Cloud Infrastructure (OCI) <a

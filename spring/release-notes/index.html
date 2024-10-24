@@ -9,7 +9,7 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.134.3">
+<meta name="generator" content="Hugo 0.123.6">
 
 
   <meta name="description" content="Release notes for Oracle Backend for Microservices and AI including details of additions, updates, deprecations and removals in each release" />
@@ -72,7 +72,7 @@
       "url" : "https://oracle.github.io/microservices-datadriven/spring/release-notes/",
       "headline": "Release Notes",
       "description": "Release notes for Oracle Backend for Microservices and AI including details of additions, updates, deprecations and removals in each release",
-      "wordCount" : "1702",
+      "wordCount" : "1749",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -661,7 +661,7 @@
                   href="/microservices-datadriven/spring/platform/soc"
                   class="gdoc-nav__entry"
                 >
-                  Spring Operations Center
+                  ServiceOps Center
                 </a>
               </span>
               
@@ -2405,20 +2405,17 @@
 
 
 
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
-      <script>
-        var doNotTrack = false;
-        if ( false ) {
-          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
-          var doNotTrack = (dnt == "1" || dnt == "yes");
-        }
-        if (!doNotTrack) {
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-Z0MVCJ4T39');
-        }
-      </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-Z0MVCJ4T39', { 'anonymize_ip': false });
+}
+</script>
+
 
 
 
@@ -2467,6 +2464,19 @@
   >
     <h1>Release Notes</h1>
     <div class="gdoc-page__anchorwrap">
+    <h2 id="version-131-october-23rd-2024">
+        Version 1.3.1, October 23rd, 2024
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/release-notes/#version-131-october-23rd-2024" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Version 1.3.1, October 23rd, 2024" aria-label="Anchor to: Version 1.3.1, October 23rd, 2024" href="#version-131-october-23rd-2024">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>This release includes the following changes:</p>
+<ul>
+<li>Added Oracle Autonomous Database 23ai as the default option for the database on OCI deployments, 19c still available as an option</li>
+<li>Added the Oracle AI Microservices Sandbox as a developer preview feature</li>
+</ul>
+<div class="gdoc-page__anchorwrap">
     <h2 id="version-130-september-5th-2024">
         Version 1.3.0, September 5th, 2024
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/release-notes/#version-130-september-5th-2024" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Version 1.3.0, September 5th, 2024" aria-label="Anchor to: Version 1.3.0, September 5th, 2024" href="#version-130-september-5th-2024">
@@ -2474,13 +2484,13 @@
         </a>
     </h2>
 </div>
-<p>This release include:</p>
+<p>This release includes:</p>
 <ul>
 <li>IntelliJ Plugin</li>
 <li>Optional GPU node pool</li>
 <li>Local install for development purposes</li>
 <li>OCI Free Tier install for development purposes</li>
-<li>Spring Operations Center (SOC) UI updates</li>
+<li>ServiceOps Center (SOC) UI updates</li>
 <li>Cloudbank version 4</li>
 <li>Addition of Alertmanager</li>
 <li>Version upgrades of components, see documentation for details</li>
@@ -2488,75 +2498,80 @@
 </ul>
 <p>The following components were updated:</p>
 <div class="table-wrap"> <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Component</th>
-          <th style="text-align: left">New Version</th>
-          <th style="text-align: left">Replaced Version</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">Spring Boot Admin Server</td>
-          <td style="text-align: left">3.3.3</td>
-          <td style="text-align: left">3.3.1</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Alertmanager</td>
-          <td style="text-align: left">v0.67.1</td>
-          <td style="text-align: left"></td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Coherence Operator</td>
-          <td style="text-align: left">3.3.5</td>
-          <td style="text-align: left">3.3.4</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Spring Cloud Config server</td>
-          <td style="text-align: left">4.1.3</td>
-          <td style="text-align: left">4.1.2</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Spring Authorization Server</td>
-          <td style="text-align: left">3.3.3</td>
-          <td style="text-align: left">3.3.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Spring Eureka service registry</td>
-          <td style="text-align: left">4.1.3</td>
-          <td style="text-align: left">4.1.2</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Grafana</td>
-          <td style="text-align: left">11.1.4</td>
-          <td style="text-align: left">10.4.1</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Apache Kafka</td>
-          <td style="text-align: left">3.8.0</td>
-          <td style="text-align: left">3.7.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">OpenTelemetry Collector</td>
-          <td style="text-align: left">0.107.0</td>
-          <td style="text-align: left">0.101.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Oracle Database Observability Exporter</td>
-          <td style="text-align: left">1.3.1</td>
-          <td style="text-align: left">1.2.1</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Oracle Transaction Manager for Microservices</td>
-          <td style="text-align: left">24.2.1</td>
-          <td style="text-align: left">23.4.2</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Hashicorp Vault</td>
-          <td style="text-align: left">1.17.2</td>
-          <td style="text-align: left">1.16.1</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Component</th>
+<th>New Version</th>
+<th>Replaced Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Spring Boot Admin Server</td>
+<td>3.3.3</td>
+<td>3.3.1</td>
+</tr>
+<tr>
+<td>Alertmanager</td>
+<td>v0.67.1</td>
+<td></td>
+</tr>
+<tr>
+<td>Coherence Operator</td>
+<td>3.3.5</td>
+<td>3.3.4</td>
+</tr>
+<tr>
+<td>Spring Cloud Config server</td>
+<td>4.1.3</td>
+<td>4.1.2</td>
+</tr>
+<tr>
+<td>Spring Authorization Server</td>
+<td>3.3.3</td>
+<td>3.3.0</td>
+</tr>
+<tr>
+<td>Spring Eureka service registry</td>
+<td>4.1.3</td>
+<td>4.1.2</td>
+</tr>
+<tr>
+<td>Grafana</td>
+<td>11.1.4</td>
+<td>10.4.1</td>
+</tr>
+<tr>
+<td>Apache Kafka</td>
+<td>3.8.0</td>
+<td>3.7.0</td>
+</tr>
+<tr>
+<td>OpenTelemetry Collector</td>
+<td>0.107.0</td>
+<td>0.101.0</td>
+</tr>
+<tr>
+<td>Oracle Database Observability Exporter</td>
+<td>1.3.1</td>
+<td>1.2.1</td>
+</tr>
+<tr>
+<td>Oracle Transaction Manager for Microservices</td>
+<td>24.2.1</td>
+<td>23.4.2</td>
+</tr>
+<tr>
+<td>Hashicorp Vault</td>
+<td>1.17.2</td>
+<td>1.16.1</td>
+</tr>
+<tr>
+<td>Strimzi-Apache Kafka operator</td>
+<td>0.43.0</td>
+<td>0.41.0</td>
+</tr>
+</tbody>
 </table> </div>
 <div class="gdoc-page__anchorwrap">
     <h2 id="version-120-june-14th-2024">
@@ -2568,7 +2583,7 @@
 </div>
 <p>This release includes:</p>
 <ul>
-<li>Additional functionality to Spring Operations Center UI (SOC UI).</li>
+<li>Additional functionality to ServiceOps Center UI (SOC UI).</li>
 <li>Spring Boot upgrade to 3.3.0 and Spring Cloud 2023.0.2 for internal components.</li>
 <li>Oracle Backend for Microservices and AI are running Java 21 with Virtual Threads enabled.</li>
 <li>oractl is compiled using Java 21 and Virtual Threads.</li>
@@ -2576,105 +2591,110 @@
 </ul>
 <p>The following components were updated:</p>
 <div class="table-wrap"> <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Component</th>
-          <th style="text-align: left">New Version</th>
-          <th style="text-align: left">Replaced Version</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">Spring Boot Admin server</td>
-          <td style="text-align: left">3.3.1</td>
-          <td style="text-align: left">3.2.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">APISIX API Gateway</td>
-          <td style="text-align: left">3.9.1</td>
-          <td style="text-align: left">3.8.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Spring Authorization Server</td>
-          <td style="text-align: left">3.3.0</td>
-          <td style="text-align: left">3.2.1</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Coherence Operator</td>
-          <td style="text-align: left">3.3.4</td>
-          <td style="text-align: left">3.3.2</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Spring Cloud Config server</td>
-          <td style="text-align: left">4.1.2</td>
-          <td style="text-align: left">2023.0.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Spring Eureka service registry</td>
-          <td style="text-align: left">4.1.2</td>
-          <td style="text-align: left">2023.0.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Grafana</td>
-          <td style="text-align: left">10.4.1</td>
-          <td style="text-align: left">9.2.5</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">iNGINX Ingress Controller</td>
-          <td style="text-align: left">1.10.0</td>
-          <td style="text-align: left">1.8.1</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Apache Kafka</td>
-          <td style="text-align: left">3.7.0</td>
-          <td style="text-align: left">3.6.1</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Metrics server</td>
-          <td style="text-align: left">0.7.0</td>
-          <td style="text-align: left">0.6.4</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Jaeger Tracing</td>
-          <td style="text-align: left">1.53.0</td>
-          <td style="text-align: left">1.51.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">OpenTelemetry Collector</td>
-          <td style="text-align: left">0.101.0</td>
-          <td style="text-align: left">0.93.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Oracle Database Observability Exporter</td>
-          <td style="text-align: left">1.2.1</td>
-          <td style="text-align: left">1.2.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Oracle Transaction Manager for Microservices</td>
-          <td style="text-align: left">23.4.2</td>
-          <td style="text-align: left">23.4.1</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Prometheus</td>
-          <td style="text-align: left">2.52.0</td>
-          <td style="text-align: left">2.47.1</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Prometheus Operator</td>
-          <td style="text-align: left">0.74.0</td>
-          <td style="text-align: left">0.63.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Spring Operations Center</td>
-          <td style="text-align: left">1.2.0</td>
-          <td style="text-align: left">1.1.3</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">HashiCorp Vault</td>
-          <td style="text-align: left">1.16.1</td>
-          <td style="text-align: left">1.15.2</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Component</th>
+<th>New Version</th>
+<th>Replaced Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Spring Boot Admin server</td>
+<td>3.3.1</td>
+<td>3.2.0</td>
+</tr>
+<tr>
+<td>APISIX API Gateway</td>
+<td>3.9.1</td>
+<td>3.8.0</td>
+</tr>
+<tr>
+<td>Spring Authorization Server</td>
+<td>3.3.0</td>
+<td>3.2.1</td>
+</tr>
+<tr>
+<td>Coherence Operator</td>
+<td>3.3.4</td>
+<td>3.3.2</td>
+</tr>
+<tr>
+<td>Spring Cloud Config server</td>
+<td>4.1.2</td>
+<td>2023.0.0</td>
+</tr>
+<tr>
+<td>Spring Eureka service registry</td>
+<td>4.1.2</td>
+<td>2023.0.0</td>
+</tr>
+<tr>
+<td>Grafana</td>
+<td>10.4.1</td>
+<td>9.2.5</td>
+</tr>
+<tr>
+<td>iNGINX Ingress Controller</td>
+<td>1.10.0</td>
+<td>1.8.1</td>
+</tr>
+<tr>
+<td>Apache Kafka</td>
+<td>3.7.0</td>
+<td>3.6.1</td>
+</tr>
+<tr>
+<td>Metrics server</td>
+<td>0.7.0</td>
+<td>0.6.4</td>
+</tr>
+<tr>
+<td>Jaeger Tracing</td>
+<td>1.53.0</td>
+<td>1.51.0</td>
+</tr>
+<tr>
+<td>OpenTelemetry Collector</td>
+<td>0.101.0</td>
+<td>0.93.0</td>
+</tr>
+<tr>
+<td>Oracle Database Observability Exporter</td>
+<td>1.2.1</td>
+<td>1.2.0</td>
+</tr>
+<tr>
+<td>Oracle Transaction Manager for Microservices</td>
+<td>23.4.2</td>
+<td>23.4.1</td>
+</tr>
+<tr>
+<td>Prometheus</td>
+<td>2.52.0</td>
+<td>2.47.1</td>
+</tr>
+<tr>
+<td>Prometheus Operator</td>
+<td>0.74.0</td>
+<td>0.63.0</td>
+</tr>
+<tr>
+<td>ServiceOps Center</td>
+<td>1.2.0</td>
+<td>1.1.3</td>
+</tr>
+<tr>
+<td>HashiCorp Vault</td>
+<td>1.16.1</td>
+<td>1.15.2</td>
+</tr>
+<tr>
+<td>Strimzi-Apache Kafka operator</td>
+<td>0.41.0</td>
+<td>0.39.0</td>
+</tr>
+</tbody>
 </table> </div>
 
 
@@ -2723,41 +2743,41 @@
         </a>
     </h2>
 </div>
-<p>This release adds the &ldquo;Spring Operations Center&rdquo; feature, adds or updates some Grafana dashboards, and includes
+<p>This release adds the &ldquo;ServiceOps Center&rdquo; feature, adds or updates some Grafana dashboards, and includes
 other small updates and/or bug fixes.</p>
 <p>The following components were added:</p>
 <div class="table-wrap"> <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Component</th>
-          <th style="text-align: left">Version</th>
-          <th style="text-align: left">Description</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">Spring Operations Center</td>
-          <td style="text-align: left">1.1.1</td>
-          <td style="text-align: left">Provide operations capabilities for Spring applications.</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Component</th>
+<th>Version</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ServiceOps Center</td>
+<td>1.1.1</td>
+<td>Provide operations capabilities for Spring applications.</td>
+</tr>
+</tbody>
 </table> </div>
 <p>The following components were updated:</p>
 <div class="table-wrap"> <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Component</th>
-          <th style="text-align: left">New Version</th>
-          <th style="text-align: left">Replaced Version</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">OpenTelemetry Collector</td>
-          <td style="text-align: left">0.93.0</td>
-          <td style="text-align: left">0.91.0</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Component</th>
+<th>New Version</th>
+<th>Replaced Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OpenTelemetry Collector</td>
+<td>0.93.0</td>
+<td>0.91.0</td>
+</tr>
+</tbody>
 </table> </div>
 <div class="gdoc-page__anchorwrap">
     <h2 id="version-110-february-2-2024">
@@ -2771,7 +2791,7 @@ other small updates and/or bug fixes.</p>
 <ul>
 <li>Recommended versions for user applications updated Spring Boot 3.2.x, Java 17 or 21, Spring 6.1 and Spring Cloud 2023.0.0, with limited backwards compatibility for Spring Boot 2.7.x.</li>
 <li>Platform components are updated to Spring Boot 3.2.1 versions and matching Spring Cloud versions.</li>
-<li>A preview of a new &ldquo;Spring Operations Center&rdquo; feature is added, including a web user interface and additional Grafana dashboards.</li>
+<li>A preview of a new &ldquo;ServiceOps Center&rdquo; feature is added, including a web user interface and additional Grafana dashboards.</li>
 <li>User Management using the CLI and REST Endpoints.</li>
 <li>Added support for auto-scaling of Spring Boot applications deployed in the platform.</li>
 <li>Changes to the custom installation to allow using existing resources including database, network and Kubernetes.</li>
@@ -2785,117 +2805,117 @@ uptake of Micrometer, and so on.</li>
 </ul>
 <p>The following components were added:</p>
 <div class="table-wrap"> <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Component</th>
-          <th style="text-align: left">Version</th>
-          <th style="text-align: left">Description</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">Oracle Database Observability Exporter</td>
-          <td style="text-align: left">1.1.2</td>
-          <td style="text-align: left">Provides observability for the Oracle Database.</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Metrics server</td>
-          <td style="text-align: left">0.64</td>
-          <td style="text-align: left">Source of container resource metrics for Kubernetes built-in autoscaling pipeline</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Kube State Metrics</td>
-          <td style="text-align: left">2.10.1</td>
-          <td style="text-align: left">Collects metrics for the Kubernetes cluster</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Component</th>
+<th>Version</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oracle Database Observability Exporter</td>
+<td>1.1.2</td>
+<td>Provides observability for the Oracle Database.</td>
+</tr>
+<tr>
+<td>Metrics server</td>
+<td>0.64</td>
+<td>Source of container resource metrics for Kubernetes built-in autoscaling pipeline</td>
+</tr>
+<tr>
+<td>Kube State Metrics</td>
+<td>2.10.1</td>
+<td>Collects metrics for the Kubernetes cluster</td>
+</tr>
+</tbody>
 </table> </div>
 <p>The following components were updated:</p>
 <div class="table-wrap"> <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Component</th>
-          <th style="text-align: left">New Version</th>
-          <th style="text-align: left">Replaced Version</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">APISIX API Gateway</td>
-          <td style="text-align: left">3.8.0</td>
-          <td style="text-align: left">3.4.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Apache Kafka</td>
-          <td style="text-align: left">3.6.1</td>
-          <td style="text-align: left">3.5.1</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Coherence Operator</td>
-          <td style="text-align: left">3.3.2</td>
-          <td style="text-align: left">3.2.11</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Conductor Server</td>
-          <td style="text-align: left">3.13.8</td>
-          <td style="text-align: left">3.13.2</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">HashiCorp Vault</td>
-          <td style="text-align: left">1.15.2</td>
-          <td style="text-align: left">1.14.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Netflix Conductor</td>
-          <td style="text-align: left">3.13.8</td>
-          <td style="text-align: left">3.13.2</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">OpenTelemetry Collector</td>
-          <td style="text-align: left">0.91.0</td>
-          <td style="text-align: left">0.86.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Oracle Backend for Microservices and AI CLI</td>
-          <td style="text-align: left">1.1.0</td>
-          <td style="text-align: left">1.0.1</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Oracle Backend for Microservices and AI Visual Studio Code extension</td>
-          <td style="text-align: left">1.1.0</td>
-          <td style="text-align: left">1.0.1</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Oracle Transaction Manager for Microservices (MicroTx)</td>
-          <td style="text-align: left">23.4.1</td>
-          <td style="text-align: left">22.3.2</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Spring Authorization Server</td>
-          <td style="text-align: left">3.2.1</td>
-          <td style="text-align: left">2.7.5</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Spring Boot Admin dashboard</td>
-          <td style="text-align: left">3.2.0</td>
-          <td style="text-align: left">3.1.3</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Spring Cloud Config server</td>
-          <td style="text-align: left">2023.0.0</td>
-          <td style="text-align: left">2022.0.4</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Spring Cloud Eureka service registry</td>
-          <td style="text-align: left">2023.0.0</td>
-          <td style="text-align: left">4.0.3</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Strimzi-Apache Kafka operator</td>
-          <td style="text-align: left">0.39.0</td>
-          <td style="text-align: left">0.36.1</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Component</th>
+<th>New Version</th>
+<th>Replaced Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>APISIX API Gateway</td>
+<td>3.8.0</td>
+<td>3.4.0</td>
+</tr>
+<tr>
+<td>Apache Kafka</td>
+<td>3.6.1</td>
+<td>3.5.1</td>
+</tr>
+<tr>
+<td>Coherence Operator</td>
+<td>3.3.2</td>
+<td>3.2.11</td>
+</tr>
+<tr>
+<td>Conductor Server</td>
+<td>3.13.8</td>
+<td>3.13.2</td>
+</tr>
+<tr>
+<td>HashiCorp Vault</td>
+<td>1.15.2</td>
+<td>1.14.0</td>
+</tr>
+<tr>
+<td>Netflix Conductor</td>
+<td>3.13.8</td>
+<td>3.13.2</td>
+</tr>
+<tr>
+<td>OpenTelemetry Collector</td>
+<td>0.91.0</td>
+<td>0.86.0</td>
+</tr>
+<tr>
+<td>Oracle Backend for Microservices and AI CLI</td>
+<td>1.1.0</td>
+<td>1.0.1</td>
+</tr>
+<tr>
+<td>Oracle Backend for Microservices and AI Visual Studio Code extension</td>
+<td>1.1.0</td>
+<td>1.0.1</td>
+</tr>
+<tr>
+<td>Oracle Transaction Manager for Microservices (MicroTx)</td>
+<td>23.4.1</td>
+<td>22.3.2</td>
+</tr>
+<tr>
+<td>Spring Authorization Server</td>
+<td>3.2.1</td>
+<td>2.7.5</td>
+</tr>
+<tr>
+<td>Spring Boot Admin dashboard</td>
+<td>3.2.0</td>
+<td>3.1.3</td>
+</tr>
+<tr>
+<td>Spring Cloud Config server</td>
+<td>2023.0.0</td>
+<td>2022.0.4</td>
+</tr>
+<tr>
+<td>Spring Cloud Eureka service registry</td>
+<td>2023.0.0</td>
+<td>4.0.3</td>
+</tr>
+<tr>
+<td>Strimzi-Apache Kafka operator</td>
+<td>0.39.0</td>
+<td>0.36.1</td>
+</tr>
+</tbody>
 </table> </div>
 <div class="gdoc-page__anchorwrap">
     <h2 id="version-101-november-2-2023">
@@ -2911,25 +2931,25 @@ uptake of Micrometer, and so on.</li>
 </ul>
 <p>The following components were updated:</p>
 <div class="table-wrap"> <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Component</th>
-          <th style="text-align: left">New Version</th>
-          <th style="text-align: left">Replaced Version</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">Oracle Backend for Microservices and AI Visual Studio Code extension</td>
-          <td style="text-align: left">1.0.1</td>
-          <td style="text-align: left">1.0.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Oracle Backend for Microservices and AI CLI</td>
-          <td style="text-align: left">1.0.1</td>
-          <td style="text-align: left">1.0.0</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Component</th>
+<th>New Version</th>
+<th>Replaced Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oracle Backend for Microservices and AI Visual Studio Code extension</td>
+<td>1.0.1</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td>Oracle Backend for Microservices and AI CLI</td>
+<td>1.0.1</td>
+<td>1.0.0</td>
+</tr>
+</tbody>
 </table> </div>
 <div class="gdoc-page__anchorwrap">
     <h2 id="version-100-october-15-2023">
@@ -2955,117 +2975,117 @@ using Spring Authorization Server.</li>
 </ul>
 <p>The following components were added:</p>
 <div class="table-wrap"> <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Component</th>
-          <th style="text-align: left">Version</th>
-          <th style="text-align: left">Description</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">Loki</td>
-          <td style="text-align: left">2.6.1</td>
-          <td style="text-align: left">Provides log aggregation and search.</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Promtail</td>
-          <td style="text-align: left">2.8.2</td>
-          <td style="text-align: left">Collects logs.</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Spring Authorization Server</td>
-          <td style="text-align: left">2022.0.4</td>
-          <td style="text-align: left">Provides authentication and authorization for applications.</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Component</th>
+<th>Version</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Loki</td>
+<td>2.6.1</td>
+<td>Provides log aggregation and search.</td>
+</tr>
+<tr>
+<td>Promtail</td>
+<td>2.8.2</td>
+<td>Collects logs.</td>
+</tr>
+<tr>
+<td>Spring Authorization Server</td>
+<td>2022.0.4</td>
+<td>Provides authentication and authorization for applications.</td>
+</tr>
+</tbody>
 </table> </div>
 <p>The following components were updated:</p>
 <div class="table-wrap"> <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Component</th>
-          <th style="text-align: left">New Version</th>
-          <th style="text-align: left">Replaced Version</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">Oracle Backend for Microservices and AI Visual Studio Code extension</td>
-          <td style="text-align: left">1.0.0</td>
-          <td style="text-align: left">0.3.9</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Oracle Backend for Microservices and AI CLI</td>
-          <td style="text-align: left">1.0.0</td>
-          <td style="text-align: left">0.3.1</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Grafana</td>
-          <td style="text-align: left">9.5.2</td>
-          <td style="text-align: left">9.2.5</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Spring Eureka Service Registry</td>
-          <td style="text-align: left">2022.0.4</td>
-          <td style="text-align: left">2021.0.3</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Spring Config Server</td>
-          <td style="text-align: left">2022.0.4</td>
-          <td style="text-align: left">2021.0.3</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Spring Boot Admin</td>
-          <td style="text-align: left">3.1.3</td>
-          <td style="text-align: left">2.7.5</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">cert-manager</td>
-          <td style="text-align: left">1.12.3</td>
-          <td style="text-align: left">1.11.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">NGINX Ingress Controller</td>
-          <td style="text-align: left">1.8.1</td>
-          <td style="text-align: left">1.6.4</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Prometheus</td>
-          <td style="text-align: left">2.40.2</td>
-          <td style="text-align: left">2.34.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Open Telemetry Collector</td>
-          <td style="text-align: left">0.86.0</td>
-          <td style="text-align: left">0.66.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Jaeger Tracing</td>
-          <td style="text-align: left">1.45.0</td>
-          <td style="text-align: left">1.39.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">APISIX API Gateway</td>
-          <td style="text-align: left">3.4.0</td>
-          <td style="text-align: left">3.2.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Strimzi-Apache Kafka operator</td>
-          <td style="text-align: left">0.36.1</td>
-          <td style="text-align: left">0.33.1</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Apache Kafka</td>
-          <td style="text-align: left">3.4.0 - 3.5.1</td>
-          <td style="text-align: left">3.2.0 - 3.3.2</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Oracle Database storage adapter for Parse (optional)</td>
-          <td style="text-align: left">1.0.0</td>
-          <td style="text-align: left">0.2.0</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Component</th>
+<th>New Version</th>
+<th>Replaced Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oracle Backend for Microservices and AI Visual Studio Code extension</td>
+<td>1.0.0</td>
+<td>0.3.9</td>
+</tr>
+<tr>
+<td>Oracle Backend for Microservices and AI CLI</td>
+<td>1.0.0</td>
+<td>0.3.1</td>
+</tr>
+<tr>
+<td>Grafana</td>
+<td>9.5.2</td>
+<td>9.2.5</td>
+</tr>
+<tr>
+<td>Spring Eureka Service Registry</td>
+<td>2022.0.4</td>
+<td>2021.0.3</td>
+</tr>
+<tr>
+<td>Spring Config Server</td>
+<td>2022.0.4</td>
+<td>2021.0.3</td>
+</tr>
+<tr>
+<td>Spring Boot Admin</td>
+<td>3.1.3</td>
+<td>2.7.5</td>
+</tr>
+<tr>
+<td>cert-manager</td>
+<td>1.12.3</td>
+<td>1.11.0</td>
+</tr>
+<tr>
+<td>NGINX Ingress Controller</td>
+<td>1.8.1</td>
+<td>1.6.4</td>
+</tr>
+<tr>
+<td>Prometheus</td>
+<td>2.40.2</td>
+<td>2.34.0</td>
+</tr>
+<tr>
+<td>Open Telemetry Collector</td>
+<td>0.86.0</td>
+<td>0.66.0</td>
+</tr>
+<tr>
+<td>Jaeger Tracing</td>
+<td>1.45.0</td>
+<td>1.39.0</td>
+</tr>
+<tr>
+<td>APISIX API Gateway</td>
+<td>3.4.0</td>
+<td>3.2.0</td>
+</tr>
+<tr>
+<td>Strimzi-Apache Kafka operator</td>
+<td>0.36.1</td>
+<td>0.33.1</td>
+</tr>
+<tr>
+<td>Apache Kafka</td>
+<td>3.4.0 - 3.5.1</td>
+<td>3.2.0 - 3.3.2</td>
+</tr>
+<tr>
+<td>Oracle Database storage adapter for Parse (optional)</td>
+<td>1.0.0</td>
+<td>0.2.0</td>
+</tr>
+</tbody>
 </table> </div>
 <p>There were no component deprecations or removals.</p>
 <div class="gdoc-page__anchorwrap">
@@ -3082,62 +3102,62 @@ using Spring Authorization Server.</li>
 </ul>
 <p>The following components were added:</p>
 <div class="table-wrap"> <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Component</th>
-          <th style="text-align: left">Version</th>
-          <th style="text-align: left">Description</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">Coherence</td>
-          <td style="text-align: left">3.2.11</td>
-          <td style="text-align: left">Provides in-memory data grid.</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Component</th>
+<th>Version</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Coherence</td>
+<td>3.2.11</td>
+<td>Provides in-memory data grid.</td>
+</tr>
+</tbody>
 </table> </div>
 <p>The following components were updated:</p>
 <div class="table-wrap"> <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Component</th>
-          <th style="text-align: left">New Version</th>
-          <th style="text-align: left">Replaced Version</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">Oracle Backend for Microservices and AI Visual Studio Code extension</td>
-          <td style="text-align: left">0.3.9</td>
-          <td style="text-align: left">0.3.8</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">HashiCorp Vault</td>
-          <td style="text-align: left">1.14.0</td>
-          <td style="text-align: left">v1.11.3</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Oracle Database Operator for Kubernetes</td>
-          <td style="text-align: left">1.0</td>
-          <td style="text-align: left">0.6.1</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Parse Server</td>
-          <td style="text-align: left">6.2.0</td>
-          <td style="text-align: left">5.2.7</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Parse Dashboard</td>
-          <td style="text-align: left">5.1.0</td>
-          <td style="text-align: left">5.0.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Oracle Transaction Manager for Microservices</td>
-          <td style="text-align: left">22.3.2</td>
-          <td style="text-align: left">22.3.1</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Component</th>
+<th>New Version</th>
+<th>Replaced Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oracle Backend for Microservices and AI Visual Studio Code extension</td>
+<td>0.3.9</td>
+<td>0.3.8</td>
+</tr>
+<tr>
+<td>HashiCorp Vault</td>
+<td>1.14.0</td>
+<td>v1.11.3</td>
+</tr>
+<tr>
+<td>Oracle Database Operator for Kubernetes</td>
+<td>1.0</td>
+<td>0.6.1</td>
+</tr>
+<tr>
+<td>Parse Server</td>
+<td>6.2.0</td>
+<td>5.2.7</td>
+</tr>
+<tr>
+<td>Parse Dashboard</td>
+<td>5.1.0</td>
+<td>5.0.0</td>
+</tr>
+<tr>
+<td>Oracle Transaction Manager for Microservices</td>
+<td>22.3.2</td>
+<td>22.3.1</td>
+</tr>
+</tbody>
 </table> </div>
 <p>There were no component deprecations or removals.</p>
 <div class="gdoc-page__anchorwrap">
@@ -3156,25 +3176,25 @@ using Spring Authorization Server.</li>
 <p>No components were added.</p>
 <p>The following components were updated:</p>
 <div class="table-wrap"> <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Component</th>
-          <th style="text-align: left">New Version</th>
-          <th style="text-align: left">Replaced Version</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">Oracle Backend for Microservices and AI CLI</td>
-          <td style="text-align: left">0.3.1</td>
-          <td style="text-align: left">0.3.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Oracle Backend for Microservices and AI Visual Studio Code extension</td>
-          <td style="text-align: left">0.3.8</td>
-          <td style="text-align: left">0.3.7</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Component</th>
+<th>New Version</th>
+<th>Replaced Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oracle Backend for Microservices and AI CLI</td>
+<td>0.3.1</td>
+<td>0.3.0</td>
+</tr>
+<tr>
+<td>Oracle Backend for Microservices and AI Visual Studio Code extension</td>
+<td>0.3.8</td>
+<td>0.3.7</td>
+</tr>
+</tbody>
 </table> </div>
 <p>There were no component deprecations or removals.</p>
 <div class="gdoc-page__anchorwrap">
@@ -3193,37 +3213,37 @@ using Spring Authorization Server.</li>
 </ul>
 <p>The following components were added:</p>
 <div class="table-wrap"> <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Component</th>
-          <th style="text-align: left">New Version</th>
-          <th style="text-align: left">Description</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">Oracle Backend for Microservices and AI Visual Studio Code extension</td>
-          <td style="text-align: left">0.3.7</td>
-          <td style="text-align: left">Allows Visual Studio Code users to manage the platform, deployments and configuration.</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Component</th>
+<th>New Version</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oracle Backend for Microservices and AI Visual Studio Code extension</td>
+<td>0.3.7</td>
+<td>Allows Visual Studio Code users to manage the platform, deployments and configuration.</td>
+</tr>
+</tbody>
 </table> </div>
 <p>The following components were updated:</p>
 <div class="table-wrap"> <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Component</th>
-          <th style="text-align: left">New Version</th>
-          <th style="text-align: left">Replaced Version</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">Oracle Backend for Microservices and AI CLI</td>
-          <td style="text-align: left">0.3.0</td>
-          <td style="text-align: left">0.1.0</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Component</th>
+<th>New Version</th>
+<th>Replaced Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oracle Backend for Microservices and AI CLI</td>
+<td>0.3.0</td>
+<td>0.1.0</td>
+</tr>
+</tbody>
 </table> </div>
 <p>There were no component deprecations or removals.</p>
 <div class="gdoc-page__anchorwrap">
@@ -3242,92 +3262,92 @@ using Spring Authorization Server.</li>
 </ul>
 <p>The following components were added:</p>
 <div class="table-wrap"> <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Component</th>
-          <th style="text-align: left">Version</th>
-          <th style="text-align: left">Description</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">Oracle Database Operator for Kubernetes</td>
-          <td style="text-align: left">0.6.1</td>
-          <td style="text-align: left">Helps reduce the time and complexity of deploying and managing Oracle databases.</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Parse Server</td>
-          <td style="text-align: left">5.2.7</td>
-          <td style="text-align: left">Provides backend services for mobile and web applications.</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Parse Dashboard</td>
-          <td style="text-align: left">5.0.0</td>
-          <td style="text-align: left">Uses a web user interface for managing Parse Server.</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Oracle Database Adapter for Parse Server</td>
-          <td style="text-align: left">0.2.0</td>
-          <td style="text-align: left">Enables the Parse Server to store data in an Oracle database.</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Component</th>
+<th>Version</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oracle Database Operator for Kubernetes</td>
+<td>0.6.1</td>
+<td>Helps reduce the time and complexity of deploying and managing Oracle databases.</td>
+</tr>
+<tr>
+<td>Parse Server</td>
+<td>5.2.7</td>
+<td>Provides backend services for mobile and web applications.</td>
+</tr>
+<tr>
+<td>Parse Dashboard</td>
+<td>5.0.0</td>
+<td>Uses a web user interface for managing Parse Server.</td>
+</tr>
+<tr>
+<td>Oracle Database Adapter for Parse Server</td>
+<td>0.2.0</td>
+<td>Enables the Parse Server to store data in an Oracle database.</td>
+</tr>
+</tbody>
 </table> </div>
 <p>The following components were updated:</p>
 <div class="table-wrap"> <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Component</th>
-          <th style="text-align: left">New Version</th>
-          <th style="text-align: left">Replaced Version</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">Oracle Backend for Microservices and AI CLI</td>
-          <td style="text-align: left">0.2.3</td>
-          <td style="text-align: left">0.1.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">cert-manager</td>
-          <td style="text-align: left">1.11.0</td>
-          <td style="text-align: left">1.10.1</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">NGINX Ingress Controller</td>
-          <td style="text-align: left">1.6.4</td>
-          <td style="text-align: left">1.5.1</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Jaeger Tracing</td>
-          <td style="text-align: left">1.39.0</td>
-          <td style="text-align: left">1.37.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Apache APISIX</td>
-          <td style="text-align: left">3.1.1</td>
-          <td style="text-align: left">2.15.1</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Spring Boot Eureka service registry</td>
-          <td style="text-align: left">2.0.1</td>
-          <td style="text-align: left">2021.0.3</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Oracle Transaction Manager for Microservices</td>
-          <td style="text-align: left">22.3.2</td>
-          <td style="text-align: left">22.3.1</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Parse Server (optional)</td>
-          <td style="text-align: left">6.3.0</td>
-          <td style="text-align: left">6.2.0</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Parse Dashboard (optional)</td>
-          <td style="text-align: left">5.2.0</td>
-          <td style="text-align: left">5.1.0</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Component</th>
+<th>New Version</th>
+<th>Replaced Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oracle Backend for Microservices and AI CLI</td>
+<td>0.2.3</td>
+<td>0.1.0</td>
+</tr>
+<tr>
+<td>cert-manager</td>
+<td>1.11.0</td>
+<td>1.10.1</td>
+</tr>
+<tr>
+<td>NGINX Ingress Controller</td>
+<td>1.6.4</td>
+<td>1.5.1</td>
+</tr>
+<tr>
+<td>Jaeger Tracing</td>
+<td>1.39.0</td>
+<td>1.37.0</td>
+</tr>
+<tr>
+<td>Apache APISIX</td>
+<td>3.1.1</td>
+<td>2.15.1</td>
+</tr>
+<tr>
+<td>Spring Boot Eureka service registry</td>
+<td>2.0.1</td>
+<td>2021.0.3</td>
+</tr>
+<tr>
+<td>Oracle Transaction Manager for Microservices</td>
+<td>22.3.2</td>
+<td>22.3.1</td>
+</tr>
+<tr>
+<td>Parse Server (optional)</td>
+<td>6.3.0</td>
+<td>6.2.0</td>
+</tr>
+<tr>
+<td>Parse Dashboard (optional)</td>
+<td>5.2.0</td>
+<td>5.1.0</td>
+</tr>
+</tbody>
 </table> </div>
 <p>There were no deprecations or removals.</p>
 <div class="gdoc-page__anchorwrap">
@@ -3340,30 +3360,30 @@ using Spring Authorization Server.</li>
 </div>
 <p>The following components were added:</p>
 <div class="table-wrap"> <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Component</th>
-          <th style="text-align: left">Version</th>
-          <th style="text-align: left">Description</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">Oracle Transaction Manager for Microservices</td>
-          <td style="text-align: left">22.3.1</td>
-          <td style="text-align: left">Manages distributed transactions to ensure consistency across Microservices.</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Strimzi-Apache Kafka Operator</td>
-          <td style="text-align: left">0.33.1</td>
-          <td style="text-align: left">Manages Apache Kafka clusters.</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Apacha Kafka</td>
-          <td style="text-align: left">3.2.0 - 3.3.2</td>
-          <td style="text-align: left">Allows distributed event streaming.</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Component</th>
+<th>Version</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oracle Transaction Manager for Microservices</td>
+<td>22.3.1</td>
+<td>Manages distributed transactions to ensure consistency across Microservices.</td>
+</tr>
+<tr>
+<td>Strimzi-Apache Kafka Operator</td>
+<td>0.33.1</td>
+<td>Manages Apache Kafka clusters.</td>
+</tr>
+<tr>
+<td>Apacha Kafka</td>
+<td>3.2.0 - 3.3.2</td>
+<td>Allows distributed event streaming.</td>
+</tr>
+</tbody>
 </table> </div>
 <p>There were no deprecations or removals.</p>
 <div class="gdoc-page__anchorwrap">
@@ -3376,35 +3396,35 @@ using Spring Authorization Server.</li>
 </div>
 <p>The following components were added:</p>
 <div class="table-wrap"> <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Component</th>
-          <th style="text-align: left">Version</th>
-          <th style="text-align: left">Description</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">HashiCorp Vault</td>
-          <td style="text-align: left">v1.11.3</td>
-          <td style="text-align: left">Provides a way to store and tightly control access to sensitive data.</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Oracle Backend for Microservices and AI CLI</td>
-          <td style="text-align: left">0.1.0</td>
-          <td style="text-align: left">Provides a command-line interface to manage application deployment and configuration.</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Netflix Conductor OSS</td>
-          <td style="text-align: left">3.13.2</td>
-          <td style="text-align: left">Provides workflow orchestration for Microservices.</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">On-premises installer</td>
-          <td style="text-align: left">0.1.0</td>
-          <td style="text-align: left">Allows installation of a self-hosted stack.</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Component</th>
+<th>Version</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HashiCorp Vault</td>
+<td>v1.11.3</td>
+<td>Provides a way to store and tightly control access to sensitive data.</td>
+</tr>
+<tr>
+<td>Oracle Backend for Microservices and AI CLI</td>
+<td>0.1.0</td>
+<td>Provides a command-line interface to manage application deployment and configuration.</td>
+</tr>
+<tr>
+<td>Netflix Conductor OSS</td>
+<td>3.13.2</td>
+<td>Provides workflow orchestration for Microservices.</td>
+</tr>
+<tr>
+<td>On-premises installer</td>
+<td>0.1.0</td>
+<td>Allows installation of a self-hosted stack.</td>
+</tr>
+</tbody>
 </table> </div>
 <p>There were no deprecations or removals.</p>
 <div class="gdoc-page__anchorwrap">
@@ -3417,70 +3437,70 @@ using Spring Authorization Server.</li>
 </div>
 <p>This release includes the following components:</p>
 <div class="table-wrap"> <table>
-  <thead>
-      <tr>
-          <th style="text-align: left">Component</th>
-          <th style="text-align: left">Version</th>
-          <th style="text-align: left">Description</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: left">cert-manager</td>
-          <td style="text-align: left">1.10.1</td>
-          <td style="text-align: left">Automates the management of certificates.</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">NGINX Ingress Controller</td>
-          <td style="text-align: left">1.5.1</td>
-          <td style="text-align: left">Provides a traffic management solution for cloud native applications in Kubernetes.</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Prometheus</td>
-          <td style="text-align: left">2.40.2</td>
-          <td style="text-align: left">Provides event monitoring and alerting.</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Prometheus operator</td>
-          <td style="text-align: left">0.60.1</td>
-          <td style="text-align: left">Provides management for Prometheus monitoring tools.</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">OpenTelemetry Collector</td>
-          <td style="text-align: left">0.66.0</td>
-          <td style="text-align: left">Collects process and export telemetry data.</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Grafana</td>
-          <td style="text-align: left">9.2.5</td>
-          <td style="text-align: left">Examines, analyzes, and monitors metrics.</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Jaeger Tracing</td>
-          <td style="text-align: left">1.37.0</td>
-          <td style="text-align: left">Provides a distributed tracing system for monitoring and troubleshooting distributed systems.</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Apache APISIX</td>
-          <td style="text-align: left">2.15.1</td>
-          <td style="text-align: left">Provides full lifecycle API management.</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Spring Cloud Admin server</td>
-          <td style="text-align: left">2.7.5</td>
-          <td style="text-align: left">Manages and monitors Spring Boot applications.</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Spring Cloud Config server</td>
-          <td style="text-align: left">2.7.5</td>
-          <td style="text-align: left">Provides server-side support for externalized configuration.</td>
-      </tr>
-      <tr>
-          <td style="text-align: left">Spring Boot Eureka service registry</td>
-          <td style="text-align: left">2021.0.3</td>
-          <td style="text-align: left">Provides service discovery capabilities.</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th>Component</th>
+<th>Version</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cert-manager</td>
+<td>1.10.1</td>
+<td>Automates the management of certificates.</td>
+</tr>
+<tr>
+<td>NGINX Ingress Controller</td>
+<td>1.5.1</td>
+<td>Provides a traffic management solution for cloud native applications in Kubernetes.</td>
+</tr>
+<tr>
+<td>Prometheus</td>
+<td>2.40.2</td>
+<td>Provides event monitoring and alerting.</td>
+</tr>
+<tr>
+<td>Prometheus operator</td>
+<td>0.60.1</td>
+<td>Provides management for Prometheus monitoring tools.</td>
+</tr>
+<tr>
+<td>OpenTelemetry Collector</td>
+<td>0.66.0</td>
+<td>Collects process and export telemetry data.</td>
+</tr>
+<tr>
+<td>Grafana</td>
+<td>9.2.5</td>
+<td>Examines, analyzes, and monitors metrics.</td>
+</tr>
+<tr>
+<td>Jaeger Tracing</td>
+<td>1.37.0</td>
+<td>Provides a distributed tracing system for monitoring and troubleshooting distributed systems.</td>
+</tr>
+<tr>
+<td>Apache APISIX</td>
+<td>2.15.1</td>
+<td>Provides full lifecycle API management.</td>
+</tr>
+<tr>
+<td>Spring Cloud Admin server</td>
+<td>2.7.5</td>
+<td>Manages and monitors Spring Boot applications.</td>
+</tr>
+<tr>
+<td>Spring Cloud Config server</td>
+<td>2.7.5</td>
+<td>Provides server-side support for externalized configuration.</td>
+</tr>
+<tr>
+<td>Spring Boot Eureka service registry</td>
+<td>2021.0.3</td>
+<td>Provides service discovery capabilities.</td>
+</tr>
+</tbody>
 </table> </div>
 
   </article>

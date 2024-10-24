@@ -9,7 +9,7 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.134.3">
+<meta name="generator" content="Hugo 0.123.6">
 
 
   <meta name="description" content="Helidon, Spring and Spring Boot" />
@@ -633,7 +633,7 @@
                   href="/microservices-datadriven/spring/platform/soc"
                   class="gdoc-nav__entry"
                 >
-                  Spring Operations Center
+                  ServiceOps Center
                 </a>
               </span>
               
@@ -2377,20 +2377,17 @@
 
 
 
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
-      <script>
-        var doNotTrack = false;
-        if ( false ) {
-          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
-          var doNotTrack = (dnt == "1" || dnt == "yes");
-        }
-        if (!doNotTrack) {
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-Z0MVCJ4T39');
-        }
-      </script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
+<script>
+var doNotTrack = false;
+if (!doNotTrack) {
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+	gtag('config', 'G-Z0MVCJ4T39', { 'anonymize_ip': false });
+}
+</script>
+
 
 
 
@@ -2447,6 +2444,41 @@
   href="https://github.com/oracle/spring-cloud-oracle"
 >Spring Cloud Oracle</a> which is the home of a number of the components used in Oracle Backend for Microservices and AI, and which you can also use in your own applications!</p>
 <div class="gdoc-page__anchorwrap">
+    <h2 id="new-developer-preview-feature---oracle-ai-microservices-sandbox">
+        New Developer Preview Feature - Oracle AI Microservices Sandbox
+        <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/#new-developer-preview-feature---oracle-ai-microservices-sandbox" class="gdoc-page__anchor clip flex align-center" title="Anchor to: New Developer Preview Feature - Oracle AI Microservices Sandbox" aria-label="Anchor to: New Developer Preview Feature - Oracle AI Microservices Sandbox" href="#new-developer-preview-feature---oracle-ai-microservices-sandbox">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h2>
+</div>
+<p>Oracle Backend for Microservices and AI Version 1.3.1 introduces <a
+  class="gdoc-markdown__link"
+  href="https://github.com/oracle-samples/oaim-sandbox"
+>Oracle AI Microservices Sandbox</a> as a <em>Developer Preview</em> feature.</p>
+<p>The Oracle AI Microservices Sandbox provides a streamlined environment where developers and data scientists can explore the potential of Generative Artificial Intelligence (GenAI) combined with Retrieval-Augmented Generation (RAG) capabilities. By integrating Oracle Database 23ai AI Vector Search, the Sandbox enables users to enhance existing Large Language Models (LLMs) through RAG.</p>
+<p>It provides a &ldquo;sandbox&rdquo; for experimentation and iteration, allowing you to easily optimize a chatbot/RAG use case by exploring different models, chunking strategies, vector similarity algorithms, prompts, model parameters, memory, re-ranking, and evaluation.</p>
+<p><img
+  src="./ai-microservices-sandbox.png"
+  alt="AI Microservices Sandbox"
+  
+/></p>
+<p>This feature is provided as a &ldquo;developer preview&rdquo; meaning it is provided for developers to experiment with, without any formal support, but with the expectation that it may become a formal feature in a future release.  You may open issues in GitHub and best-effort assistance will be provided.  Please be aware that this feature is under development, and not yet considered stable.  Functionality, interfaces, etc., may change in non-backwards compatible ways.</p>
+<p>For more information about this developer preview feature, please visit:</p>
+<ul>
+<li>the <a
+  class="gdoc-markdown__link"
+  href="https://github.com/oracle-samples/oaim-sandbox"
+>GitHub repo</a></li>
+<li>the <a
+  class="gdoc-markdown__link"
+  href="https://oracle-samples.github.io/oaim-sandbox/"
+>documentation</a></li>
+<li>this OCI Cloud Coaching session titled <a
+  class="gdoc-markdown__link"
+  href="https://www.youtube.com/watch?v=oG9MPCpwUlU"
+>Building a real chatbot with Oracle Database 23ai</a>, (video) which includes discussion of the background concepts and a demonstration of this feature</li>
+</ul>
+<div class="gdoc-page__anchorwrap">
     <h2 id="try-it-out-with-cloudbank-ai">
         Try it out with CloudBank AI
         <a data-clipboard-text="https://oracle.github.io/microservices-datadriven/spring/#try-it-out-with-cloudbank-ai" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Try it out with CloudBank AI" aria-label="Anchor to: Try it out with CloudBank AI" href="#try-it-out-with-cloudbank-ai">
@@ -2490,12 +2522,9 @@ Representational State Transfer (REST) services.</li>
 </div>
 <p>To learn more, watch this short introductory video:</p>
 
-
-    
-    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/3MQy89oo894?autoplay=0&controls=1&end=0&loop=0&mute=0&start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
-      ></iframe>
-    </div>
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe src="https://www.youtube.com/embed/3MQy89oo894" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
+</div>
 
 <p>In addition to an Oracle Autonomous Database Serverless instance, the following software components are deployed in an Oracle Cloud
 Infrastructure (OCI) Container Engine for Kubernetes cluster (OKE cluster):</p>
@@ -2578,7 +2607,7 @@ Infrastructure (OCI) Container Engine for Kubernetes cluster (OKE cluster):</p>
 <li><a
   class="gdoc-markdown__link"
   href="platform/soc/"
->Spring Operations Center</a></li>
+>ServiceOps Center</a></li>
 <li>Strimzi Kafka Operator</li>
 </ul>
 <p>Developers also have access to development or build time services and libraries including:</p>
