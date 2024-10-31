@@ -1,4 +1,4 @@
-// Copyright (c) 2022, Oracle and/or its affiliates.
+// Copyright (c) 2022, 2024, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
 
 // This is an example of how to consume a message from a TEQ using Java.
@@ -6,47 +6,49 @@
 
 package com.oracle.example;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
-import javax.jms.JMSException;
-import javax.jms.Session;
-import javax.jms.Topic;
-import javax.jms.TopicConnection;
-import javax.jms.TopicConnectionFactory;
-import javax.jms.TopicSession;
+import jakarta.jms.JMSException;
+import jakarta.jms.Session;
+import jakarta.jms.Topic;
+import jakarta.jms.TopicConnection;
+import jakarta.jms.TopicConnectionFactory;
 
 import oracle.AQ.AQException;
-import oracle.jms.AQjmsFactory;
-import oracle.jms.AQjmsSession;
-import oracle.jms.AQjmsTextMessage;
-import oracle.jms.AQjmsTopicSubscriber;
-import oracle.ucp.jdbc.PoolDataSource;
-import oracle.ucp.jdbc.PoolDataSourceFactory;
+import oracle.jakarta.jms.AQjmsFactory;
+import oracle.jakarta.jms.AQjmsSession;
+import oracle.jakarta.jms.AQjmsTextMessage;
+import oracle.jakarta.jms.AQjmsTopicSubscriber;
+import oracle.jdbc.pool.OracleDataSource;
 
-public class ConsumeTEQ {
+public class ConsumeTxEventQ {
 
-    private static String username = "pdbadmin";
-    private static String url = "jdbc:oracle:thin:@//localhost:1521/pdb1";
-    private static String topicName = "my_teq";
+    private static final String username = "testuser";
+    private static final String url = "jdbc:oracle:thin:@//localhost:1521/freepdb1";
+    private static final String password = "Welcome12345";
+    private static final String topicName = "my_jms_teq";
 
     public static void main(String[] args) throws AQException, SQLException, JMSException {
 
-        // create a topic session
-        PoolDataSource ds = PoolDataSourceFactory.getPoolDataSource();
-        ds.setConnectionFactoryClassName("oracle.jdbc.pool.OracleDataSource");
+        // Create DB connection
+        OracleDataSource ds = new OracleDataSource();
         ds.setURL(url);
         ds.setUser(username);
-        ds.setPassword(System.getenv("DB_PASSWORD"));
+        ds.setPassword(password);
+        Connection con = ds.getConnection();
+        if (con != null) {
+            System.out.println("Connected!");
+        }
 
         // create a JMS topic connection and session
         TopicConnectionFactory tcf = AQjmsFactory.getTopicConnectionFactory(ds);
         TopicConnection conn = tcf.createTopicConnection();
         conn.start();
-        TopicSession session = 
-           (AQjmsSession) conn.createSession(true, Session.AUTO_ACKNOWLEDGE);
+        var session = (AQjmsSession) conn.createSession(true, Session.AUTO_ACKNOWLEDGE);
 
         // create a subscriber on the topic
-        Topic topic = ((AQjmsSession) session).getTopic(username, topicName);
+        Topic topic = session.getTopic(username, topicName);
         AQjmsTopicSubscriber subscriber = 
            (AQjmsTopicSubscriber) session.createDurableSubscriber(topic, "my_subscriber");
 
