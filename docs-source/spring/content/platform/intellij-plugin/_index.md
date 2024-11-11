@@ -4,6 +4,10 @@ description: "IntelliJ Plugin for Oracle Backend for Microservices and AI"
 keywords: "intellij plugin ide springboot spring development microservices development oracle backend"
 ---
 
+## GA 1.3.1 - October, 2024
+
+General updates.
+
 ## GA 1.3.0 - September, 2024
 
 Oracle Backend for Microservices and AI (OBaaS) is an IntelliJ plugin to browse, deploy, and modify workloads on the Oracle Backend for Microservices and AI platform.This plug-in implements the functionalities available in the [Oracle Backend for Microservices and AI CLI](../../development/cli), simplifying  access to Oracle Backend for Microservices and AI deployments from an IntelliJ IDE. 
@@ -19,7 +23,7 @@ See the Oracle Free Use Terms and Conditions [License](https://oss.oracle.com/li
 
 ## Installation
 
-1. Download the IntelliJ plugin ZIP file from [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.3.0).
+1. Download the IntelliJ plugin ZIP file from [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.3.1).
 
 2. On the IntelliJ Settings plugins page, click the "gear" icon and select **Install Plugin from Disk...**. Browse your filesystem for the IntelliJ plugin ZIP file, and select it.
 

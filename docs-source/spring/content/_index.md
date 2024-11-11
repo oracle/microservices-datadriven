@@ -6,7 +6,7 @@ keywords: "spring springboot microservices development oracle backend helidon"
 
 Oracle Backend for Microservices and AI allows developers to build microservices in Helidon and/or Spring Boot and provisions a "backend as a service" with Oracle Database and other infrastructure components that operate on multiple clouds. Oracle Backend for Microservices and AI vastly simplifies the task of building, testing, and operating microservices platforms for reliable, secure, and scalable enterprise applications.
 
-{{< hint type=[warning] icon=gdoc_fire title="Version 1.3.0 (production) released September, 2024" >}}
+{{< hint type=[warning] icon=gdoc_fire title="Version 1.3.1 (production) released September, 2024" >}}
  Oracle Backend for Microservices and AI Version 1.3.0 is now generally available and suitable for production use. This version supports and recommends Helidon 4.1.1, Spring Boot 3.3.x, 3.2.x, Spring 6.1 and Spring Cloud 2023.0.x, with limited backwards compatibility for Spring Boot 2.7.x.  
 {{< /hint >}}
 
