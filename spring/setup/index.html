@@ -9,7 +9,7 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.123.6">
+<meta name="generator" content="Hugo 0.138.0">
 
 
   <meta name="description" content="Setup Oracle Backend for Microservices and AI" />
@@ -2405,17 +2405,20 @@
 
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
-<script>
-var doNotTrack = false;
-if (!doNotTrack) {
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-Z0MVCJ4T39', { 'anonymize_ip': false });
-}
-</script>
-
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0MVCJ4T39"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-Z0MVCJ4T39');
+        }
+      </script>
 
 
 
@@ -2661,140 +2664,140 @@ if (!doNotTrack) {
 </div>
 <p>Oracle Backend for Microservices and AI setup installs the following components.</p>
 <div class="table-wrap"> <table>
-<thead>
-<tr>
-<th>Component</th>
-<th>Version</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Alertmanager</td>
-<td>v0.067.1</td>
-<td>Alertmanager</td>
-</tr>
-<tr>
-<td>Apache APISIX</td>
-<td>3.9.1</td>
-<td>Provides full lifecycle API management.</td>
-</tr>
-<tr>
-<td>Apache Kafka</td>
-<td>3.8.0</td>
-<td>Provides distributed event streaming.</td>
-</tr>
-<tr>
-<td>cert-manager</td>
-<td>1.12.3</td>
-<td>Automates the management of certificates.</td>
-</tr>
-<tr>
-<td>Coherence Operator</td>
-<td>3.3.5</td>
-<td>Provides in-memory data grid.</td>
-</tr>
-<tr>
-<td>Conductor Server</td>
-<td>3.13.8</td>
-<td>Provides a Microservice orchestration platform.</td>
-</tr>
-<tr>
-<td>Grafana</td>
-<td>11.1.4</td>
-<td>Provides the tool to examine, analyze, and monitor metrics.</td>
-</tr>
-<tr>
-<td>HashiCorp Vault</td>
-<td>1.17.2</td>
-<td>Provides a way to store and tightly control access to sensitive data.</td>
-</tr>
-<tr>
-<td>Jaeger Tracing</td>
-<td>1.53.0</td>
-<td>Provides distributed tracing system for monitoring and troubleshooting distributed systems.</td>
-</tr>
-<tr>
-<td>Kube State Metrics</td>
-<td>2.10.1</td>
-<td>Collects metrics for the Kubernetes cluster</td>
-</tr>
-<tr>
-<td>Loki</td>
-<td>2.6.1</td>
-<td>Provides log aggregation and search.</td>
-</tr>
-<tr>
-<td>Metrics server</td>
-<td>0.7.0</td>
-<td>Source of container resource metrics for Kubernetes built-in autoscaling pipeline</td>
-</tr>
-<tr>
-<td>NGINX Ingress Controller</td>
-<td>1.10.1</td>
-<td>Provides traffic management solution for cloud‑native applications in Kubernetes.</td>
-</tr>
-<tr>
-<td>OpenTelemetry Collector</td>
-<td>0.107.0</td>
-<td>Collects process and export telemetry data.</td>
-</tr>
-<tr>
-<td>Oracle Database Observability Exporter</td>
-<td>1.3.1</td>
-<td>Exposes Oracle Database metrics in standard Prometheus format.</td>
-</tr>
-<tr>
-<td>Oracle Database Operator</td>
-<td>1.1.0</td>
-<td>Helps reduce the time and complexity of deploying and managing Oracle databases.</td>
-</tr>
-<tr>
-<td>Oracle Transaction Manager for Microservices</td>
-<td>24.2.1</td>
-<td>Manages distributed transactions to ensure consistency across Microservices.</td>
-</tr>
-<tr>
-<td>Prometheus</td>
-<td>2.52.0</td>
-<td>Provides event monitoring and alerts.</td>
-</tr>
-<tr>
-<td>Prometheus Operator</td>
-<td>0.74.0</td>
-<td>Provides management for Prometheus monitoring tools.</td>
-</tr>
-<tr>
-<td>Promtail</td>
-<td>2.8.2</td>
-<td>Collects logs.</td>
-</tr>
-<tr>
-<td>Spring Authorization Server</td>
-<td>3.3.3</td>
-<td>Provides authentication and authorization for applications.</td>
-</tr>
-<tr>
-<td>Spring Boot Admin server</td>
-<td>3.3.3</td>
-<td>Manages and monitors Spring Cloud applications.</td>
-</tr>
-<tr>
-<td>Spring Cloud Config server</td>
-<td>4.1.3</td>
-<td>Provides server-side support for an externalized configuration.</td>
-</tr>
-<tr>
-<td>Spring Eureka service registry</td>
-<td>4.1.3</td>
-<td>Provides service discovery capabilities.</td>
-</tr>
-<tr>
-<td>Strimzi-Apache Kafka operator</td>
-<td>0.43.0</td>
-<td>Manages Apache Kafka clusters.</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Component</th>
+          <th>Version</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Alertmanager</td>
+          <td>v0.067.1</td>
+          <td>Alertmanager</td>
+      </tr>
+      <tr>
+          <td>Apache APISIX</td>
+          <td>3.9.1</td>
+          <td>Provides full lifecycle API management.</td>
+      </tr>
+      <tr>
+          <td>Apache Kafka</td>
+          <td>3.8.0</td>
+          <td>Provides distributed event streaming.</td>
+      </tr>
+      <tr>
+          <td>cert-manager</td>
+          <td>1.12.3</td>
+          <td>Automates the management of certificates.</td>
+      </tr>
+      <tr>
+          <td>Coherence Operator</td>
+          <td>3.3.5</td>
+          <td>Provides in-memory data grid.</td>
+      </tr>
+      <tr>
+          <td>Conductor Server</td>
+          <td>3.13.8</td>
+          <td>Provides a Microservice orchestration platform.</td>
+      </tr>
+      <tr>
+          <td>Grafana</td>
+          <td>11.1.4</td>
+          <td>Provides the tool to examine, analyze, and monitor metrics.</td>
+      </tr>
+      <tr>
+          <td>HashiCorp Vault</td>
+          <td>1.17.2</td>
+          <td>Provides a way to store and tightly control access to sensitive data.</td>
+      </tr>
+      <tr>
+          <td>Jaeger Tracing</td>
+          <td>1.53.0</td>
+          <td>Provides distributed tracing system for monitoring and troubleshooting distributed systems.</td>
+      </tr>
+      <tr>
+          <td>Kube State Metrics</td>
+          <td>2.10.1</td>
+          <td>Collects metrics for the Kubernetes cluster</td>
+      </tr>
+      <tr>
+          <td>Loki</td>
+          <td>2.6.1</td>
+          <td>Provides log aggregation and search.</td>
+      </tr>
+      <tr>
+          <td>Metrics server</td>
+          <td>0.7.0</td>
+          <td>Source of container resource metrics for Kubernetes built-in autoscaling pipeline</td>
+      </tr>
+      <tr>
+          <td>NGINX Ingress Controller</td>
+          <td>1.10.1</td>
+          <td>Provides traffic management solution for cloud‑native applications in Kubernetes.</td>
+      </tr>
+      <tr>
+          <td>OpenTelemetry Collector</td>
+          <td>0.107.0</td>
+          <td>Collects process and export telemetry data.</td>
+      </tr>
+      <tr>
+          <td>Oracle Database Observability Exporter</td>
+          <td>1.3.1</td>
+          <td>Exposes Oracle Database metrics in standard Prometheus format.</td>
+      </tr>
+      <tr>
+          <td>Oracle Database Operator</td>
+          <td>1.1.0</td>
+          <td>Helps reduce the time and complexity of deploying and managing Oracle databases.</td>
+      </tr>
+      <tr>
+          <td>Oracle Transaction Manager for Microservices</td>
+          <td>24.2.1</td>
+          <td>Manages distributed transactions to ensure consistency across Microservices.</td>
+      </tr>
+      <tr>
+          <td>Prometheus</td>
+          <td>2.52.0</td>
+          <td>Provides event monitoring and alerts.</td>
+      </tr>
+      <tr>
+          <td>Prometheus Operator</td>
+          <td>0.74.0</td>
+          <td>Provides management for Prometheus monitoring tools.</td>
+      </tr>
+      <tr>
+          <td>Promtail</td>
+          <td>2.8.2</td>
+          <td>Collects logs.</td>
+      </tr>
+      <tr>
+          <td>Spring Authorization Server</td>
+          <td>3.3.3</td>
+          <td>Provides authentication and authorization for applications.</td>
+      </tr>
+      <tr>
+          <td>Spring Boot Admin server</td>
+          <td>3.3.3</td>
+          <td>Manages and monitors Spring Cloud applications.</td>
+      </tr>
+      <tr>
+          <td>Spring Cloud Config server</td>
+          <td>4.1.3</td>
+          <td>Provides server-side support for an externalized configuration.</td>
+      </tr>
+      <tr>
+          <td>Spring Eureka service registry</td>
+          <td>4.1.3</td>
+          <td>Provides service discovery capabilities.</td>
+      </tr>
+      <tr>
+          <td>Strimzi-Apache Kafka operator</td>
+          <td>0.43.0</td>
+          <td>Manages Apache Kafka clusters.</td>
+      </tr>
+  </tbody>
 </table> </div>
 <div class="gdoc-page__anchorwrap">
     <h2 id="overview-of-the-setup-process">
@@ -2806,9 +2809,12 @@ if (!doNotTrack) {
 </div>
 <p>This video provides a quick overview of the setup process.</p>
 
-<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
-  <iframe src="https://www.youtube.com/embed/rAi10TiUraE" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
-</div>
+
+    
+    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+      <iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen="allowfullscreen" loading="eager" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/rAi10TiUraE?autoplay=0&controls=1&end=0&loop=0&mute=0&start=0" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" title="YouTube video"
+      ></iframe>
+    </div>
 
 <p>Installing Oracle Backend for Microservices and AI and Microservice takes approximately one hour to complete. The following steps are involved:</p>
 <ul>
@@ -2853,11 +2859,11 @@ if (!doNotTrack) {
           <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/ebaas-mp-listing.png">
             <picture>
                 <source
-                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/ebaas-mp-listing_huceaa619f2baedcb34096dd3857ed053a_543541_1800x0_resize_box_3.png"
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/ebaas-mp-listing_hu11790042925610869628.png"
     
                 />
               <img
-                    src="https://oracle.github.io/microservices-datadriven/spring/setup/ebaas-mp-listing_huceaa619f2baedcb34096dd3857ed053a_543541_1800x0_resize_box_3.png"
+                    src="https://oracle.github.io/microservices-datadriven/spring/setup/ebaas-mp-listing_hu11790042925610869628.png"
                   alt="Marketplace Listing"
               />
             </picture>
@@ -2883,11 +2889,11 @@ if (!doNotTrack) {
           <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/ebaas-stack-page1.png">
             <picture>
                 <source
-                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/ebaas-stack-page1_hu97ebd743cfee473a6c03a51a0dafe458_137046_1800x0_resize_box_3.png"
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/ebaas-stack-page1_hu14548690001243376053.png"
     
                 />
               <img
-                    src="https://oracle.github.io/microservices-datadriven/spring/setup/ebaas-stack-page1_hu97ebd743cfee473a6c03a51a0dafe458_137046_1800x0_resize_box_3.png"
+                    src="https://oracle.github.io/microservices-datadriven/spring/setup/ebaas-stack-page1_hu14548690001243376053.png"
                   alt="Create Stack"
               />
             </picture>
@@ -2922,31 +2928,31 @@ if (!doNotTrack) {
 </li>
 </ul>
 <div class="table-wrap"> <table>
-<thead>
-<tr>
-<th>Edition</th>
-<th>BYO Network</th>
-<th>BYO Database</th>
-<th>Production Vault</th>
-<th>Registry Scanning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Community</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>Standard</td>
-<td>x</td>
-<td>x</td>
-<td>x</td>
-<td>x</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Edition</th>
+          <th>BYO Network</th>
+          <th>BYO Database</th>
+          <th>Production Vault</th>
+          <th>Registry Scanning</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Community</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>Standard</td>
+          <td>x</td>
+          <td>x</td>
+          <td>x</td>
+          <td>x</td>
+      </tr>
+  </tbody>
 </table> </div>
  <!-- spellchecker-disable -->
 
@@ -2961,11 +2967,11 @@ if (!doNotTrack) {
           <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-app-name.png">
             <picture>
                 <source
-                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-app-name_hucb46473f627ce9d719b33d28aea167f6_45096_1800x0_resize_box_3.png"
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-app-name_hu13705965502919322644.png"
     
                 />
               <img
-                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-app-name_hucb46473f627ce9d719b33d28aea167f6_45096_1800x0_resize_box_3.png"
+                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-app-name_hu13705965502919322644.png"
                   alt="Compartment, Application and Edition"
               />
             </picture>
@@ -3008,11 +3014,11 @@ if (!doNotTrack) {
             <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-passwords.png">
               <picture>
                   <source
-                      srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-passwords_hu2abe76a557fc3f7b7dcb5bfccfd8b69d_86265_1800x0_resize_box_3.png"
+                      srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-passwords_hu6444024544097202294.png"
       
                   />
                 <img
-                      src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-passwords_hu2abe76a557fc3f7b7dcb5bfccfd8b69d_86265_1800x0_resize_box_3.png"
+                      src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-passwords_hu6444024544097202294.png"
                     alt="Administrator Passwords"
                 />
               </picture>
@@ -3042,11 +3048,11 @@ if (!doNotTrack) {
             <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-network-options.png">
               <picture>
                   <source
-                      srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-network-options_hu51d1b75d87d2435a1875f279aeb7c8ea_15090_1800x0_resize_box_3.png"
+                      srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-network-options_hu13727829610107968496.png"
       
                   />
                 <img
-                      src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-network-options_hu51d1b75d87d2435a1875f279aeb7c8ea_15090_1800x0_resize_box_3.png"
+                      src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-network-options_hu13727829610107968496.png"
                     alt="Network Options - Standard Edition"
                 />
               </picture>
@@ -3091,11 +3097,11 @@ if (!doNotTrack) {
            <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-oke-options.png">
              <picture>
                  <source
-                     srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-oke-options_hud0dea92e33046e5df9ae617794adbdcb_67055_1800x0_resize_box_3.png"
+                     srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-oke-options_hu4674629773118055677.png"
      
                  />
                <img
-                     src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-oke-options_hud0dea92e33046e5df9ae617794adbdcb_67055_1800x0_resize_box_3.png"
+                     src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-oke-options_hu4674629773118055677.png"
                    alt="Create Stack OKE Options"
                />
              </picture>
@@ -3134,11 +3140,11 @@ selected, access can only be from a private VCN.</li>
             <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-lb-options.png">
               <picture>
                   <source
-                      srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-lb-options_hua1ec6a2dcdd8b600296a48adca6e774e_53493_1800x0_resize_box_3.png"
+                      srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-lb-options_hu17057138284272078309.png"
       
                   />
                 <img
-                      src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-lb-options_hua1ec6a2dcdd8b600296a48adca6e774e_53493_1800x0_resize_box_3.png"
+                      src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-lb-options_hu17057138284272078309.png"
                     alt="Load Balancer Options"
                 />
               </picture>
@@ -3185,11 +3191,11 @@ selected, access can only be from a private VCN.</li>
             <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-db-options.png">
               <picture>
                   <source
-                      srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-db-options_hu7723c5082830cc8bbf3dfa09f635dae1_93370_1800x0_resize_box_3.png"
+                      srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-db-options_hu4087256215662016721.png"
       
                   />
                 <img
-                      src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-db-options_hu7723c5082830cc8bbf3dfa09f635dae1_93370_1800x0_resize_box_3.png"
+                      src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-db-options_hu4087256215662016721.png"
                     alt="Database Options"
                 />
               </picture>
@@ -3217,11 +3223,11 @@ selected, access can only be from a private VCN.</li>
             <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-byodb-options.png">
               <picture>
                   <source
-                      srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-byodb-options_hu4a0d531cc3f0154ed051f168533fa750_13162_1800x0_resize_box_3.png"
+                      srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-byodb-options_hu2490177336190337549.png"
       
                   />
                 <img
-                      src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-byodb-options_hu4a0d531cc3f0154ed051f168533fa750_13162_1800x0_resize_box_3.png"
+                      src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-byodb-options_hu2490177336190337549.png"
                     alt="Bring your Own Database Options - Standard Edition"
                 />
               </picture>
@@ -3265,11 +3271,11 @@ selected, access can only be from a private VCN.</li>
             <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-vault-options.png">
               <picture>
                   <source
-                      srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-vault-options_hu0da1cce79d99da582cf867dbf64e5011_40031_1800x0_resize_box_3.png"
+                      srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-vault-options_hu8711272008020098519.png"
       
                   />
                 <img
-                      src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-vault-options_hu0da1cce79d99da582cf867dbf64e5011_40031_1800x0_resize_box_3.png"
+                      src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-vault-options_hu8711272008020098519.png"
                     alt="HashiCorp Vault Options - Standard Edition"
                 />
               </picture>
@@ -3310,11 +3316,11 @@ selected, access can only be from a private VCN.</li>
             <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-additional-options.png">
               <picture>
                   <source
-                      srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-additional-options_hue2e2508cd216969ddcc09b9aa801a504_12734_1800x0_resize_box_3.png"
+                      srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-additional-options_hu6812991306620696038.png"
       
                   />
                 <img
-                      src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-additional-options_hue2e2508cd216969ddcc09b9aa801a504_12734_1800x0_resize_box_3.png"
+                      src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-additional-options_hu6812991306620696038.png"
                     alt="Create Stack Additional Options - Standard Edition"
                 />
               </picture>
@@ -3342,11 +3348,11 @@ selected, access can only be from a private VCN.</li>
          <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-private-template-create-stack-config-review.png">
            <picture>
                <source
-                   srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-private-template-create-stack-config-review_hu2a785eeaaabae6c4d5ad776357c52506_135816_1800x0_resize_box_3.png"
+                   srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-private-template-create-stack-config-review_hu13291556440516116987.png"
    
                />
              <img
-                   src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-private-template-create-stack-config-review_hu2a785eeaaabae6c4d5ad776357c52506_135816_1800x0_resize_box_3.png"
+                   src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-private-template-create-stack-config-review_hu13291556440516116987.png"
                  alt="Create Stack Wizard Config Review"
              />
            </picture>
@@ -3379,11 +3385,11 @@ happen if you did apply the stack.</p>
          <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-plan.png">
            <picture>
                <source
-                   srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-plan_hu6b5e255a6ee9df6b7f12f9f240a25171_913475_1800x0_resize_box_3.png"
+                   srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-plan_hu13860847263852685125.png"
    
                />
              <img
-                   src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-plan_hu6b5e255a6ee9df6b7f12f9f240a25171_913475_1800x0_resize_box_3.png"
+                   src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-plan_hu13860847263852685125.png"
                  alt="Create Stack Plan"
              />
            </picture>
@@ -3411,11 +3417,11 @@ happen if you did apply the stack.</p>
           <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-apply.png">
             <picture>
                 <source
-                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-apply_hu41bb4d0f297c161f249769afe8e01ecf_1038458_1800x0_resize_box_3.png"
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-apply_hu6504732522639008374.png"
     
                 />
               <img
-                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-apply_hu41bb4d0f297c161f249769afe8e01ecf_1038458_1800x0_resize_box_3.png"
+                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-apply_hu6504732522639008374.png"
                   alt="Create Stack Apply"
               />
             </picture>
@@ -3443,11 +3449,11 @@ happen if you did apply the stack.</p>
           <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-apply-logs.png">
             <picture>
                 <source
-                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-apply-logs_hu82e573da16b7cfc4d7854ccb3ce2e7b3_990141_1800x0_resize_box_3.png"
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-apply-logs_hu4888412378210632116.png"
     
                 />
               <img
-                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-apply-logs_hu82e573da16b7cfc4d7854ccb3ce2e7b3_990141_1800x0_resize_box_3.png"
+                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-apply-logs_hu4888412378210632116.png"
                   alt="Create Stack Apply Logs"
               />
             </picture>
@@ -3475,11 +3481,11 @@ happen if you did apply the stack.</p>
           <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-outputs.png">
             <picture>
                 <source
-                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-outputs_hu9eeba989186f579fdf27164e27201c32_761605_1800x0_resize_box_3.png"
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-outputs_hu10778976842460439744.png"
     
                 />
               <img
-                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-outputs_hu9eeba989186f579fdf27164e27201c32_761605_1800x0_resize_box_3.png"
+                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-outputs_hu10778976842460439744.png"
                   alt="Create Stack Outputs"
               />
             </picture>
@@ -3507,11 +3513,11 @@ happen if you did apply the stack.</p>
           <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-output-oke.png">
             <picture>
                 <source
-                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-output-oke_hu4150e8308f592b1ffd691ae2b45c7c20_974862_1800x0_resize_box_3.png"
+                    srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-output-oke_hu3873450322786000725.png"
     
                 />
               <img
-                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-output-oke_hu4150e8308f592b1ffd691ae2b45c7c20_974862_1800x0_resize_box_3.png"
+                    src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-output-oke_hu3873450322786000725.png"
                   alt="Get Kube Config Cmd"
               />
             </picture>
@@ -3579,7 +3585,7 @@ If you have not already done so, do the following:</p>
 <p>Install the Oracle Backend for Microservices and AI command-line.</p>
 <p>The Oracle Backend for Microservices and AI command-line interface, <code>oractl</code>, is available for Linux and Mac systems. Download the binary that you want from the <a
   class="gdoc-markdown__link"
-  href="https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.3"
+  href="https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.3.1"
 >Releases</a> page and add it to your PATH environment variable. You can rename the binary to remove the suffix.</p>
 <p>If your environment is a Linux or Mac machine, run <code>chmod +x</code> on the downloaded binary. Also, if your environment is a Mac, run the following command. Otherwise, you get a security warning and the CLI does not work:</p>
 <p><code>sudo xattr -r -d com.apple.quarantine &lt;downloaded-file&gt;</code></p>
@@ -3612,11 +3618,11 @@ If you have not already done so, do the following:</p>
       <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/azn-stack-app-info.png">
         <picture>
             <source
-                srcset="https://oracle.github.io/microservices-datadriven/spring/setup/azn-stack-app-info_hu50b84d0b9126d94d01bba5bdae59ddfe_631168_1800x0_resize_box_3.png"
+                srcset="https://oracle.github.io/microservices-datadriven/spring/setup/azn-stack-app-info_hu5513320884270473897.png"
 
             />
           <img
-                src="https://oracle.github.io/microservices-datadriven/spring/setup/azn-stack-app-info_hu50b84d0b9126d94d01bba5bdae59ddfe_631168_1800x0_resize_box_3.png"
+                src="https://oracle.github.io/microservices-datadriven/spring/setup/azn-stack-app-info_hu5513320884270473897.png"
               alt="Access Information"
           />
         </picture>
@@ -3642,11 +3648,11 @@ If you have not already done so, do the following:</p>
       <a class="gdoc-markdown__link--raw" href="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-app-information.png">
         <picture>
             <source
-                srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-app-information_hu9a4fd47f8cbdf07bbf9886833e6b56c7_413124_1800x0_resize_box_3.png"
+                srcset="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-app-information_hu1181031325393138594.png"
 
             />
           <img
-                src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-app-information_hu9a4fd47f8cbdf07bbf9886833e6b56c7_413124_1800x0_resize_box_3.png"
+                src="https://oracle.github.io/microservices-datadriven/spring/setup/oci-stack-app-information_hu1181031325393138594.png"
               alt="Detailed Access Information"
           />
         </picture>
