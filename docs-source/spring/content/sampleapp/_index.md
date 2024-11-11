@@ -4,7 +4,7 @@ description: "Sample application for Oracle Backend for Microservices and AI"
 keywords: "springboot spring development microservices development oracle backend"
 ---
 
-**Oracle** recommends that you use the [CloudBank LiveLab](http://bit.ly/CloudBankOnOBaaS) to learn how to use Oracle Backed for Spring Boot and Microservices. The LiveLab has the following Outline:
+**Oracle** recommends that you use the [CloudBank LiveLab](https://bit.ly/cloudbankAI) to learn how to use Oracle Backed for Spring Boot and Microservices. The LiveLab has the following Outline:
 
 - Provision an Instance
 - Setup your Development Environment
@@ -17,4 +17,4 @@ keywords: "springboot spring development microservices development oracle backen
 - Extend the Mobile Application
 - Cleanup
 
-The CloudBank source code is provided [here](https://github.com/oracle/microservices-datadriven/tree/main/cloudbank-v32), this repository also contains more services.
+The CloudBank source code is provided [here](https://github.com/oracle/microservices-datadriven/tree/main/cloudbank-v4), this repository also contains more services.

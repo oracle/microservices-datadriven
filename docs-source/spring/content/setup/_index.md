@@ -460,7 +460,7 @@ To set up the local machine, process these steps:
 
 1. Install the Oracle Backend for Microservices and AI command-line.
 
-   The Oracle Backend for Microservices and AI command-line interface, `oractl`, is available for Linux and Mac systems. Download the binary that you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.3) page and add it to your PATH environment variable. You can rename the binary to remove the suffix.
+   The Oracle Backend for Microservices and AI command-line interface, `oractl`, is available for Linux and Mac systems. Download the binary that you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.3.1) page and add it to your PATH environment variable. You can rename the binary to remove the suffix.
 
    If your environment is a Linux or Mac machine, run `chmod +x` on the downloaded binary. Also, if your environment is a Mac, run the following command. Otherwise, you get a security warning and the CLI does not work:
 
