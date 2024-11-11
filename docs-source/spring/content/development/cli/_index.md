@@ -5,7 +5,7 @@ keywords: "cli tool deployment spring springboot microservices development oracl
 ---
 
 The Oracle Backend for Microservices and AI offers a command-line interface (CLI), `oractl`. The CLI commands simplify the deployment of
-microservices applications as well as bindings with the resources that they use. Download the CLI [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.3). The platform-specific binary can be renamed to `oractl` for convenience.
+microservices applications as well as bindings with the resources that they use. Download the CLI [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.3.1). The platform-specific binary can be renamed to `oractl` for convenience.
 
 Table of Contents:
 
@@ -32,7 +32,7 @@ Oracle Backend for Microservices and AI CLI is used to configure your backend an
 
 1. Download the Oracle Backend for Microservices and AI CLI `oractl`
 
-   Download the CLI from [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.1.3)
+   Download the CLI from [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.3.1)
 
 1. Rename the downloaded file to `oractl`
 
@@ -66,18 +66,18 @@ Oracle Backend for Microservices and AI CLI is used to configure your backend an
 
     ```text
        _   _           __    _    ___
-      / \ |_)  _.  _. (_    /  |   |
-      \_/ |_) (_| (_| __)   \_ |_ _|_
-      ========================================================================================
-      Application Name: Oracle Backend Platform :: Command Line Interface
-      Application Version: (1.1.3)
-      :: Spring Boot (v3.2.1) ::
+       / \ |_)  _.  _. (_    /  |   |
+       \_/ |_) (_| (_| __)   \_ |_ _|_
+       ========================================================================================
+       Application Name: Oracle Backend Platform :: Command Line Interface
+       Application Version: (1.3.1)
+       :: Spring Boot (v3.3.3) ::
 
-      Ask for help:
-      - Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-      - email: obaas_ww@oracle.com
+       Ask for help:
+       - Slack: https://oracledevs.slack.com/archives/C06L9CDGR6Z
+       - email: obaas_ww@oracle.com
 
-      oractl:>
+       oractl:>
     ```
 
 ## Available Commands
