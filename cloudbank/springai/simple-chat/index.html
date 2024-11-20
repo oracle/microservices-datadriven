@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <meta name="generator" content="Hugo 0.138.0">
-    <meta name="generator" content="Relearn 6.1.1+tip">
+    <meta name="generator" content="Relearn 7.1.1+ab4197f3113afa9a7d17bed69dbef6c0e75a4921">
     <meta name="description" content="In this module, you will learn how to build a simple chatbot using Spring AI and Ollama.
 Note: The example below can also be run on a regular CPU if you are using an environment where a GPU is not available, it will just be slower.
 Oracle Backend for Microservices and AI provides an option during installation to provision a set of Kubernetes nodes with NVIDIA A10 GPUs that are suitable for running AI workloads. If you choose that option during installation, you may also specify how many nodes are provisioned. The GPU nodes will be in a separate Node Pool to the normal CPU nodes, which allows you to scale it independently of the CPU nodes. They are also labeled so that you can target appropriate workloads to them using node selectors and/or affinity rules.">
@@ -27,26 +27,26 @@ Oracle Backend for Microservices and AI provides an option during installation t
     <meta itemprop="description" content="In this module, you will learn how to build a simple chatbot using Spring AI and Ollama.
 Note: The example below can also be run on a regular CPU if you are using an environment where a GPU is not available, it will just be slower.
 Oracle Backend for Microservices and AI provides an option during installation to provision a set of Kubernetes nodes with NVIDIA A10 GPUs that are suitable for running AI workloads. If you choose that option during installation, you may also specify how many nodes are provisioned. The GPU nodes will be in a separate Node Pool to the normal CPU nodes, which allows you to scale it independently of the CPU nodes. They are also labeled so that you can target appropriate workloads to them using node selectors and/or affinity rules.">
-    <meta itemprop="wordCount" content="1672">
+    <meta itemprop="wordCount" content="1685">
     <title>A simple ChatBot :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1732114206" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1732114206" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1732114206" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1732114206" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1732114206" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1732114206" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1732114206" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1732114206" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1732114206" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1732114206" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1732114206" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1732114206" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/variant.css?1732114206" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1732114206" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1732114206"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1732117029" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1732117029" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1732117029" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1732117029" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1732117029" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1732117029" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1732117029" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1732117029" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1732117029" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1732117029" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1732117029" rel="stylesheet" id="R-variant-style">
+    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1732117029" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/microservices-datadriven/cloudbank/css/print.css?1732117029" rel="stylesheet" media="print">
+    <script src="/microservices-datadriven/cloudbank/js/variant.js?1732117029"></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
-      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1732114206";
+      window.relearn.disableAnchorCopy=false;
+      window.relearn.disableAnchorScrolling=false;
       // variant stuff
       window.variants && variants.init( [ 'zen-light' ] );
       // translations
@@ -59,6 +59,20 @@ Oracle Backend for Microservices and AI provides an option during installation t
       window.T_No_results_found = `No results found for "{0}"`;
       window.T_N_results_found = `{1} results found for "{0}"`;
     </script>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-7HWQVTJ803"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-7HWQVTJ803');
+        }
+      </script>
   </head>
   <body class="mobile-support html" data-url="/microservices-datadriven/cloudbank/springai/simple-chat/index.html">
     <div id="R-body" class="default-animation">
@@ -71,7 +85,8 @@ Oracle Backend for Microservices and AI provides an option during installation t
             </div>
             <div class="topbar-button topbar-button-toc" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-list-alt"></i></button>
               <div class="topbar-content">
-                <div class="topbar-content-wrapper"><nav class="TableOfContents">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
   <ul>
     <li>
       <ul>
@@ -110,11 +125,11 @@ Oracle Backend for Microservices and AI provides an option during installation t
         </div>
       </nav>
       <div id="R-main-overlay"></div>
-      <main id="R-body-inner" class="highlightable default" tabindex="-1">
+      <main id="R-body-inner" class="highlightable springai" tabindex="-1">
         <div class="flex-block-wrapper">
-          <article class="default">
-            <header class="headline">
-            </header>
+<article class="default">
+  <header class="headline">
+  </header>
 
 <h1 id="a-simple-chatbot">A simple ChatBot</h1>
 
@@ -126,7 +141,8 @@ Oracle Backend for Microservices and AI provides an option during installation t
 <p>To view a list of nodes in your cluster with a GPU, you can use this command:</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ kubectl get nodes -l <span style="color:#e6db74">&#39;node.kubernetes.io/instance-type=VM.GPU.A10.1&#39;</span>
 </span></span><span style="display:flex;"><span>NAME           STATUS   ROLES   AGE     VERSION
-</span></span><span style="display:flex;"><span>10.22.33.45    Ready    node    2m44s   v1.30.1</span></span></code></pre></div><h3 id="running-a-large-language-model-on-your-gpu-nodes">Running a Large Language Model on your GPU nodes</h3>
+</span></span><span style="display:flex;"><span>10.22.33.45    Ready    node    2m44s   v1.30.1</span></span></code></pre></div>
+<h3 id="running-a-large-language-model-on-your-gpu-nodes">Running a Large Language Model on your GPU nodes</h3>
 <p>One very common use for GPU nodes is to run a self-hosted Large Language Model (LLM) such as <code>llama3</code> for inferencing or <code>nomic-embed-text</code> for embedding.</p>
 <p>Companies often want to self-host an LLM to avoid sending private or sensitive data  outside their organization to a third-party provider, or to have more control over the costs of running the LLM and associated infrastructure.</p>
 <p>One excellent way to self-host LLMs is to use <a href="https://ollama.com/" rel="external" target="_blank">Ollama</a>.</p>
@@ -134,10 +150,12 @@ Oracle Backend for Microservices and AI provides an option during installation t
 <ol>
 <li>
 <p>Add the Ollama helm repository:</p>
-<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>helm repo add ollama-helm https://otwld.github.io/ollama-helm/</span></span></code></pre></div></li>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>helm repo add ollama-helm https://otwld.github.io/ollama-helm/</span></span></code></pre></div>
+</li>
 <li>
 <p>Update your helm repositories:</p>
-<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>helm repo update</span></span></code></pre></div></li>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>helm repo update</span></span></code></pre></div>
+</li>
 <li>
 <p>Create a <code>ollama-values.yaml</code> file to configure how Ollama should be installed, including
 which node(s) to run it on.  Here is an example that will run Ollama on a GPU node
@@ -150,7 +168,8 @@ and will pull the <code>llama3</code> model.</p>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">models</span>:
 </span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">llama3</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">nodeSelector</span>:
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">node.kubernetes.io/instance-type</span>: <span style="color:#ae81ff">VM.GPU.A10.1</span></span></span></code></pre></div><p>For more information on how to configure Ollama using the helm chart, refer to
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">node.kubernetes.io/instance-type</span>: <span style="color:#ae81ff">VM.GPU.A10.1</span></span></span></code></pre></div>
+<p>For more information on how to configure Ollama using the helm chart, refer to
 <a href="https://artifacthub.io/packages/helm/ollama-helm/ollama" rel="external" target="_blank">its documentation</a>.</p>
 <blockquote>
 <p><strong>Note:</strong> If you are using an environment where no GPU is available, you can run this on a CPU by changing the <code>values.yaml</code> file to the following:</p>
@@ -159,31 +178,38 @@ and will pull the <code>llama3</code> model.</p>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">gpu</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">enabled</span>: <span style="color:#66d9ef">false</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">models</span>:
-</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">llama3</span></span></span></code></pre></div></li>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">llama3</span></span></span></code></pre></div>
+</li>
 <li>
 <p>Create a namespace to deploy Ollama in:</p>
-<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl create ns ollama</span></span></code></pre></div></li>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl create ns ollama</span></span></code></pre></div>
+</li>
 <li>
 <p>Deploy Ollama using the helm chart:</p>
-<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>helm install ollama ollama-helm/ollama --namespace ollama  --values ollama-values.yaml</span></span></code></pre></div></li>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>helm install ollama ollama-helm/ollama --namespace ollama  --values ollama-values.yaml</span></span></code></pre></div>
+</li>
 <li>
 <p>You can verify the deployment with the following command:</p>
-<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl get pods -n ollama -w</span></span></code></pre></div><p>When the pod has the status <code>Running</code> the deployment is completed.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl get pods -n ollama -w</span></span></code></pre></div>
+<p>When the pod has the status <code>Running</code> the deployment is completed.</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>NAME                      READY   STATUS    RESTARTS   AGE
-</span></span><span style="display:flex;"><span>ollama-659c88c6b8-kmdb9   0/1     Running   0          84s</span></span></code></pre></div></li>
+</span></span><span style="display:flex;"><span>ollama-659c88c6b8-kmdb9   0/1     Running   0          84s</span></span></code></pre></div>
+</li>
 </ol>
 <h3 id="test-your-ollama-deployment">Test your Ollama deployment</h3>
 <p>You can interact with Ollama using the provided command line tool, called <code>ollama</code>.
 For example, to list the available models, use the <code>ollama ls</code> command:</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl -n ollama exec svc/ollama -- ollama ls
 </span></span><span style="display:flex;"><span>NAME            ID              SIZE    MODIFIED
-</span></span><span style="display:flex;"><span>llama3:latest   365c0bd3c000    4.7 GB  <span style="color:#ae81ff">2</span> minutes ago</span></span></code></pre></div><p>To ask the LLM a question, you can use the <code>ollama run</code> command:</p>
+</span></span><span style="display:flex;"><span>llama3:latest   365c0bd3c000    4.7 GB  <span style="color:#ae81ff">2</span> minutes ago</span></span></code></pre></div>
+<p>To ask the LLM a question, you can use the <code>ollama run</code> command:</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ kubectl -n ollama exec svc/ollama -- ollama run llama3 <span style="color:#e6db74">&#34;what is spring boot?&#34;</span>
 </span></span><span style="display:flex;"><span>Spring Boot is an open-source Java-based framework that simplifies the development
 </span></span><span style="display:flex;"><span>of web applications and microservices. It<span style="color:#960050;background-color:#1e0010">&#39;</span>s a subset of the larger Spring ecosystem,
 </span></span><span style="display:flex;"><span>which provides a comprehensive platform <span style="color:#66d9ef">for</span> building enterprise-level applications.
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>...</span></span></code></pre></div><h3 id="using-llms-hosted-by-ollama-in-your-spring-application">Using LLMs hosted by Ollama in your Spring application</h3>
+</span></span><span style="display:flex;"><span>...</span></span></code></pre></div>
+<h3 id="using-llms-hosted-by-ollama-in-your-spring-application">Using LLMs hosted by Ollama in your Spring application</h3>
 <p>A Kubernetes service named &lsquo;ollama&rsquo; with port 11434 will be created so that your
 applications can talk to models hosted by Ollama.</p>
 <p>Now, you will create a simple Spring AI application that uses Llama3 to
@@ -266,7 +292,8 @@ create a simple chatbot.</p>
 </span></span><span style="display:flex;"><span>         <span style="color:#f92672">&lt;/plugins&gt;</span>
 </span></span><span style="display:flex;"><span>     <span style="color:#f92672">&lt;/build&gt;</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span> <span style="color:#f92672">&lt;/project&gt;</span></span></span></code></pre></div><p>Note that this is very similar to the Maven POM files you have created in previous modules.  <a href="https://github.com/spring-projects/spring-ai" rel="external" target="_blank">Spring AI</a> is currently approaching its 1.0.0 release, so you need to enable access to the milestone and snapshot repositories to use it.  You will see the <code>repositories</code> section in the POM file above does that.</p>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">&lt;/project&gt;</span></span></span></code></pre></div>
+<p>Note that this is very similar to the Maven POM files you have created in previous modules.  <a href="https://github.com/spring-projects/spring-ai" rel="external" target="_blank">Spring AI</a> is currently approaching its 1.0.0 release, so you need to enable access to the milestone and snapshot repositories to use it.  You will see the <code>repositories</code> section in the POM file above does that.</p>
 <p>The <code>spring-ai-bom</code> was added in the <code>dependencyManagement</code> section to make it easy to select the correct versions of various dependencies.</p>
 <p>Finally, a dependency for <code>spring-ai-ollama-spring-boot-starter</code> was added. This provides access to the Spring AI Ollama functionality and autoconfiguration.</p>
 </li>
@@ -283,7 +310,8 @@ called <code>src/main/resources/application.yaml</code> with the following conte
 </span></span><span style="display:flex;"><span>      <span style="color:#f92672">chat</span>:
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">enabled</span>: <span style="color:#66d9ef">true</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#f92672">options</span>:
-</span></span><span style="display:flex;"><span>          <span style="color:#f92672">model</span>: <span style="color:#ae81ff">llama3</span></span></span></code></pre></div><p>Note that you are providing the URL to access the Ollama instance that you just
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">model</span>: <span style="color:#ae81ff">llama3</span></span></span></code></pre></div>
+<p>Note that you are providing the URL to access the Ollama instance that you just
 deployed in your cluster.  You also need to tell Spring AI to enable chat and
 which model to use.</p>
 </li>
@@ -303,7 +331,8 @@ the following content:</p>
 </span></span><span style="display:flex;"><span>        SpringApplication.<span style="color:#a6e22e">run</span>(ChatbotApplication.<span style="color:#a6e22e">class</span>, args);
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>}</span></span></code></pre></div><p>This is a very standard main class which you are likely familiar with from previous modules.</p>
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<p>This is a very standard main class which you are likely familiar with from previous modules.</p>
 </li>
 <li>
 <p>Create the Chat Controller</p>
@@ -346,7 +375,8 @@ the following content:</p>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>}</span></span></code></pre></div><p>In this class, you have a <code>RestController</code>, which you are likely familiar with  from previous modules, and a <code>PostMapping</code> to create an HTTP POST endpoint.</p>
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<p>In this class, you have a <code>RestController</code>, which you are likely familiar with  from previous modules, and a <code>PostMapping</code> to create an HTTP POST endpoint.</p>
 <p>The <code>chat()</code> method reads a question from the HTTP body, makes a call to Ollama using the Llama3 model to get a response and then returns the text part of the response to the user in the HTTP body.</p>
 <p>Notice that a <code>ChatModel</code> is injected into this controller to provide access to Ollama&rsquo;s chat interface.</p>
 <p>You may also notice that we set the temperature to 0.4.  Temperature is a parameter of LLMs that controls how creative the answer will be.  Lower numbers (approaching zero) will tend to produce less creative answers, whereas higher numbers will tend to produce more creative answers.</p>
@@ -358,14 +388,17 @@ the following content:</p>
 <li>
 <p>Build a JAR file for deployment</p>
 <p>Run the following command to build the JAR file (it will also remove any earlier builds).</p>
-<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ mvn clean package</span></span></code></pre></div><p>The service is now ready to deploy to the backend.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ mvn clean package</span></span></code></pre></div>
+<p>The service is now ready to deploy to the backend.</p>
 </li>
 <li>
 <p>Prepare the backend for deployment</p>
 <p>The Oracle Backend for Microservices and AI admin service is not exposed outside the Kubernetes cluster by default. Oracle recommends using a <strong>kubectl</strong> port forwarding tunnel to establish a secure connection to the admin service.</p>
 <p>Start a tunnel using this command in a new terminal window:</p>
-<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl -n obaas-admin port-forward svc/obaas-admin <span style="color:#ae81ff">8080</span></span></span></code></pre></div><p>Get the password for the <code>obaas-admin</code> user. The <code>obaas-admin</code> user is the equivalent of the admin or root user in the Oracle Backend for Microservices and AI backend.</p>
-<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl get secret -n azn-server  oractl-passwords -o jsonpath<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;{.data.admin}&#39;</span> | base64 -d</span></span></code></pre></div><p>Start the Oracle Backend for Microservices and AI CLI (<em>oractl</em>) in a new terminal window using this command:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl -n obaas-admin port-forward svc/obaas-admin <span style="color:#ae81ff">8080</span></span></span></code></pre></div>
+<p>Get the password for the <code>obaas-admin</code> user. The <code>obaas-admin</code> user is the equivalent of the admin or root user in the Oracle Backend for Microservices and AI backend.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl get secret -n azn-server  oractl-passwords -o jsonpath<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;{.data.admin}&#39;</span> | base64 -d</span></span></code></pre></div>
+<p>Start the Oracle Backend for Microservices and AI CLI (<em>oractl</em>) in a new terminal window using this command:</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ oractl
 </span></span><span style="display:flex;"><span> _   _           __    _    ___
 </span></span><span style="display:flex;"><span>/ <span style="color:#ae81ff">\ </span>|_<span style="color:#f92672">)</span>  _.  _. <span style="color:#f92672">(</span>_    /  |   |
@@ -379,12 +412,14 @@ the following content:</p>
 </span></span><span style="display:flex;"><span>  - Slack: https://oracledevs.slack.com/archives/C03ALDSV272
 </span></span><span style="display:flex;"><span>  - email: obaas_ww@oracle.com
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>oractl:&gt;</span></span></code></pre></div><p>Connect to the Oracle Backend for Microservices and AI admin service using the <code>connect</code> command. Enter <code>obaas-admin</code> and the username and use the password you collected earlier.</p>
+</span></span><span style="display:flex;"><span>oractl:&gt;</span></span></code></pre></div>
+<p>Connect to the Oracle Backend for Microservices and AI admin service using the <code>connect</code> command. Enter <code>obaas-admin</code> and the username and use the password you collected earlier.</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>oractl&gt; connect
 </span></span><span style="display:flex;"><span>username: obaas-admin
 </span></span><span style="display:flex;"><span>password: **************
 </span></span><span style="display:flex;"><span>Credentials successfully authenticated! obaas-admin -&gt; welcome to OBaaS CLI.
-</span></span><span style="display:flex;"><span>oractl:&gt;</span></span></code></pre></div></li>
+</span></span><span style="display:flex;"><span>oractl:&gt;</span></span></code></pre></div>
+</li>
 <li>
 <p>Deploy the chatbot</p>
 <p>You will now deploy your chatbot to the Oracle Backend for Microservices and AI using the CLI.  You will deploy into the <code>application</code> namespace, and the service name will be <code>chatbot</code>.  Run this command to deploy your service, make sure you provide the correct path to your JAR file.  <strong>Note</strong> that this command may take 1-3 minutes to complete:</p>
@@ -394,7 +429,8 @@ the following content:</p>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>creating deployment and service...
 </span></span><span style="display:flex;"><span>obaas-cli <span style="color:#f92672">[</span>deploy<span style="color:#f92672">]</span>: Application was successfully deployed
-</span></span><span style="display:flex;"><span>oractl:&gt;</span></span></code></pre></div><blockquote>
+</span></span><span style="display:flex;"><span>oractl:&gt;</span></span></code></pre></div>
+<blockquote>
 <p>What happens when you use the Oracle Backend for Microservices and AI CLI (<em>oractl</em>) <strong>deploy</strong> command? When you run the <strong>deploy</strong> command, the OOracle Backend for Microservices and AI CLI does several things for you:</p>
 </blockquote>
 <ul>
@@ -412,7 +448,8 @@ the following content:</p>
 <li>
 <p>Create a tunnel to access the application</p>
 <p>Start a tunnel using this command:</p>
-<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl -n application port-forward svc/chatbot <span style="color:#ae81ff">8080</span> &amp;</span></span></code></pre></div></li>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>kubectl -n application port-forward svc/chatbot <span style="color:#ae81ff">8080</span> &amp;</span></span></code></pre></div>
+</li>
 <li>
 <p>Test your application</p>
 <p>Make a POST request through the tunnel to ask the chatbot a question:</p>
@@ -421,12 +458,13 @@ the following content:</p>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>Spring Boot is an open-source Java-based framework that provides a simple and efficient way to build web applications, RESTful APIs, and microservices. It<span style="color:#960050;background-color:#1e0010">&#39;</span>s built on top of the Spring  Framework, but with a more streamlined and opinionated approach.
 </span></span><span style="display:flex;"><span>...
-</span></span><span style="display:flex;"><span>...</span></span></code></pre></div></li>
+</span></span><span style="display:flex;"><span>...</span></span></code></pre></div>
+</li>
 </ol>
 
-            <footer class="footline">
-            </footer>
-          </article>
+  <footer class="footline">
+  </footer>
+</article>
         </div>
       </main>
     </div>
@@ -436,24 +474,26 @@ the following content:</p>
         <div id="R-header" class="default-animation">
 <img src="https://oracle.github.io/microservices-datadriven/cloudbank//cloudbank-logo.png" height="100px">
         </div>
-
-        <search>
+        <script>
+          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1732117029";
+        </script>
+        <search><form action="/microservices-datadriven/cloudbank/search/index.html" method="get">
           <div class="searchbox default-animation">
-            <i class="fas fa-search" title="Search (CTRL+ALT+f)"></i>
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-search"></i></button>
             <label class="a11y-only" for="R-search-by">Search</label>
             <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
             <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-times" title="Clear search"></i></button>
           </div>
-        </search>
+        </form></search>
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1732114206" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1732114206" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1732114206" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1732114206" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1732114206" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1732114206" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1732117029" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1732117029" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1732117029" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1732117029" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1732117029" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1732117029" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -462,93 +502,28 @@ the following content:</p>
         <hr class="padding">
       </div>
       <div id="R-content-wrapper" class="highlightable">
-        <div id="R-topics">
+        <div id="R-shortcutmenu-home" class="R-sidebarmenu">
           <ul class="enlarge morespace collapsible-menu">
-          <li data-nav-id="/microservices-datadriven/cloudbank/provision/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/index.html">Provision an Instance</a><ul id="R-subsections-d15a91382297ed8c59e53e6fe8c7ef12" class="morespace collapsible-menu">
-          <li data-nav-id="/microservices-datadriven/cloudbank/provision/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/intro/index.html">Introduction</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/provision/install-local/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/install-local/index.html">Install locally</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/provision/install-free-trial/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/install-free-trial/index.html">Install in OCI Free Tier</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/provision/install-mp/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/install-mp/index.html">Install from OCI Marketplace</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/index.html">Developer Environment</a><ul id="R-subsections-71c72576199178272f58fda8ee0a71bc" class="morespace collapsible-menu">
-          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/intro/index.html">Introduction</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/ide/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/ide/index.html">Install IDE</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/jdk/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/jdk/index.html">Install JDK</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/maven/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/maven/index.html">Install Maven</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/oractl/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/oractl/index.html">Install CLI</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/kubectl/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/kubectl/index.html">Install Kubectl and OCI CLI</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/kubectl-config/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/kubectl-config/index.html">Configure Kubectl</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/sqlcl/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/sqlcl/index.html">Install SQLcl</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/db-access/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/db-access/index.html">Database Access</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/ide-plugin/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/ide-plugin/index.html">Install IDE Plugin</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/account/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/index.html">Account Microservice</a><ul id="R-subsections-297506c69418289ebb1b23af7a20b8d0" class="morespace collapsible-menu">
-          <li data-nav-id="/microservices-datadriven/cloudbank/account/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/intro/index.html">Introduction</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/account/create-project/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/create-project/index.html">Create Project</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/account/first-service/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/first-service/index.html">Implement First Service</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/account/prepare-database/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/prepare-database/index.html">Prepare Database Objects</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/account/jpa/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/jpa/index.html">Use Spring Data JPA</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/account/cr-accounts/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/cr-accounts/index.html">Query and Create Accounts</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/account/extra-endpoints/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/extra-endpoints/index.html">Extra Account Endpoints</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/account/deploy/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/deploy/index.html">Deploy Account Service</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/account/expose/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/expose/index.html">Expose using APISIX</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/check/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/index.html">Check Processing</a><ul id="R-subsections-545d7597d6fe139006a28ee9b7c5db9a" class="morespace collapsible-menu">
-          <li data-nav-id="/microservices-datadriven/cloudbank/check/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/intro/index.html">Introduction</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/check/learn/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/learn/index.html">Learn about the scenario</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/check/update-account/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/update-account/index.html">Add Journal to the Account service</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/check/create-queues/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/create-queues/index.html">Create Queues in the Database</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/check/create-testrunner/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/create-testrunner/index.html">Create the Test Runner Microservice</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/check/check-processing/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/check-processing/index.html">Create the Check Processing Microservice</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/check/test/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/test/index.html">Test the end-to-end flow</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/saga/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/index.html">Manage Sagas</a><ul id="R-subsections-23bfcebeaf0b86f72be53ca2a243ff8b" class="morespace collapsible-menu">
-          <li data-nav-id="/microservices-datadriven/cloudbank/saga/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/intro/index.html">Introduction</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/saga/learn/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/learn/index.html">Learn about the Saga pattern</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/saga/learn-lra/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/learn-lra/index.html">Learn about Long Running Actions</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/saga/prepare/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/prepare/index.html">Prepare the Account service</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/saga/deposit/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/deposit/index.html">Create the Deposit service</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/saga/dao/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/dao/index.html">Create a Data Access Object</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/saga/business-logic/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/business-logic/index.html">Implement business logic</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/saga/withdraw-service/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/withdraw-service/index.html">Create the Withdrawal service</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/saga/transfer-service/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/transfer-service/index.html">Create the Transfer service</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/saga/deploy/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/deploy/index.html">Deploy services</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/saga/test/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/test/index.html">Run LRA test cases</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/springai/index.html" class="parent "><a class="padding" href="/microservices-datadriven/cloudbank/springai/index.html">CloudBank AI Assistant</a><ul id="R-subsections-7e583279b613f75326f4c0b22a2a8f79" class="morespace collapsible-menu">
-          <li data-nav-id="/microservices-datadriven/cloudbank/springai/simple-chat/index.html" class="active"><a class="padding" href="/microservices-datadriven/cloudbank/springai/simple-chat/index.html">A simple ChatBot</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/index.html">Deploy with the CLI</a><ul id="R-subsections-1a8c94631eb6a61746be7678e1e870a7" class="morespace collapsible-menu">
-          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/intro/index.html">Introduction</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/get-code/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/get-code/index.html">Get the sample code</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/build/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/build/index.html">Build CloudBank</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/deploy/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/deploy/index.html">Deploy CloudBank</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/create-routes/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/create-routes/index.html">Create APISIX routes</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/verify/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/verify/index.html">Verify the deployment</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/chatbot/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/chatbot/index.html">Deploy the optional chatbot</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/index.html">Deploy with an IDE</a><ul id="R-subsections-f29fa6561ce1d7cc31476e2a5d95f6d7" class="morespace collapsible-menu">
-          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/intro/index.html">Introduction</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/get-code/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/get-code/index.html">Get the sample code</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/build/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/build/index.html">Build CloudBank</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/using-vscode/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/using-vscode/index.html">Using the VS Code plugin</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/backend/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/index.html">Explore the Backend</a><ul id="R-subsections-466e7772eedba37a22e3eecc16db31d6" class="morespace collapsible-menu">
-          <li data-nav-id="/microservices-datadriven/cloudbank/backend/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/intro/index.html">Introduction</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/backend/k8s/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/k8s/index.html">Explore Kubernetes</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/backend/database/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/database/index.html">Explore Oracle Autonomous Database</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/backend/admin/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/admin/index.html">Explore Spring Admin</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/backend/eureka/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/eureka/index.html">Explore Eureka Service Registry</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/backend/apisix/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/apisix/index.html">Explore APISIX API Gateway</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/backend/config/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/config/index.html">Explore Spring Config Server</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/backend/grafana/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/grafana/index.html">Explore Grafana</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/backend/jaeger/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/jaeger/index.html">Explore Jaeger</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/index.html">Cleanup</a><ul id="R-subsections-78cee329a7e0f3a21536c947863c8b2e" class="morespace collapsible-menu">
-          <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/intro/index.html">Introduction</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/uninstall-local/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/uninstall-local/index.html">Local cleanup</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/uninstall-free-trial/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/uninstall-free-trial/index.html">OCI Free Tier Cleanup</a></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/uninstall-mp/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/uninstall-mp/index.html">OCI Marketplace Uninstall</a></li></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/cloudbank/provision/index.html"><a class="padding" href="/microservices-datadriven/cloudbank/provision/index.html">Provision an Instance</a><ul id="R-subsections-d6947c2d1078796b2bfd976ebc0e0264" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/cloudbank/devenv/index.html"><a class="padding" href="/microservices-datadriven/cloudbank/devenv/index.html">Developer Environment</a><ul id="R-subsections-559c2972a719279af6301d7032063e64" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/cloudbank/account/index.html"><a class="padding" href="/microservices-datadriven/cloudbank/account/index.html">Account Microservice</a><ul id="R-subsections-af4a17527840af40a6cda3fc650af51b" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/cloudbank/check/index.html"><a class="padding" href="/microservices-datadriven/cloudbank/check/index.html">Check Processing</a><ul id="R-subsections-159f69b312555d5f0055ca241e6721e2" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/cloudbank/saga/index.html"><a class="padding" href="/microservices-datadriven/cloudbank/saga/index.html">Manage Sagas</a><ul id="R-subsections-dfd968a77748ad1f1a28d6a9118be66e" class="collapsible-menu"></ul></li>
+            <li class="parent " data-nav-id="/microservices-datadriven/cloudbank/springai/index.html"><a class="padding" href="/microservices-datadriven/cloudbank/springai/index.html">CloudBank AI Assistant</a><ul id="R-subsections-868fb0154339332ae87e7c98e3fa9bee" class="collapsible-menu">
+            <li class="active " data-nav-id="/microservices-datadriven/cloudbank/springai/simple-chat/index.html"><a class="padding" href="/microservices-datadriven/cloudbank/springai/simple-chat/index.html">A simple ChatBot</a></li></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/index.html"><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/index.html">Deploy with the CLI</a><ul id="R-subsections-b839a8f6f0f5efd1be94b7f9da9e78d1" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/index.html"><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/index.html">Deploy with an IDE</a><ul id="R-subsections-fd584c0da8f22ebe818df94300151866" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/cloudbank/backend/index.html"><a class="padding" href="/microservices-datadriven/cloudbank/backend/index.html">Explore the Backend</a><ul id="R-subsections-f948b454f68385a53d2483b3c80424ae" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/cloudbank/cleanup/index.html"><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/index.html">Cleanup</a><ul id="R-subsections-6d9c3a2633de07dcbf4491d943578384" class="collapsible-menu"></ul></li>
           </ul>
         </div>
-        <div id="R-shortcuts">
+        <div id="R-shortcutmenu-shortcuts" class="R-sidebarmenu">
           <div class="nav-title padding">More</div>
-          <ul class="space">
-            <li><a class="padding" href="https://github.com/oracle/microservices-datadriven"><i class='fa-fw fab fa-github'></i> GitHub repo</a></li>
-            <li><a class="padding" href="https://bit.ly/oraclespringboot"><i class='fa-fw fas fa-bookmark'></i> Oracle Backend for Spring Boot and Microservices</a></li>
-            <li><a class="padding" href="https://github.com/oracle/spring-cloud-oracle"><i class='fa-fw fas fa-bookmark'></i> Spring Cloud Oracle</a></li>
-            <li><a class="padding" href="/microservices-datadriven/cloudbank/more/credits/index.html"><i class='fa-fw fas fa-bullhorn'></i> Credits</a></li>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="https://github.com/oracle/microservices-datadriven"><a class="padding" href="https://github.com/oracle/microservices-datadriven" target="_blank"><i class='fa-fw fab fa-github'></i> GitHub repo</a></li>
+            <li class="" data-nav-id="https://bit.ly/oraclespringboot"><a class="padding" href="https://bit.ly/oraclespringboot" target="_blank"><i class='fa-fw fas fa-bookmark'></i> Oracle Backend for Spring Boot and Microservices</a></li>
+            <li class="" data-nav-id="https://github.com/oracle/spring-cloud-oracle"><a class="padding" href="https://github.com/oracle/spring-cloud-oracle" target="_blank"><i class='fa-fw fas fa-bookmark'></i> Spring Cloud Oracle</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/cloudbank/more/credits/"><a class="padding" href="/microservices-datadriven/cloudbank/more/credits/"><i class='fa-fw fas fa-bullhorn'></i> Credits</a></li>
           </ul>
         </div>
         <div class="padding footermargin footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter"></div>
@@ -602,8 +577,8 @@ the following content:</p>
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1732114206" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1732114206" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1732114206" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1732117029" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1732117029" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1732117029" defer></script>
   </body>
 </html>
