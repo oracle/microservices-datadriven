@@ -3,6 +3,9 @@ languageCode = 'en-us'
 title = 'CloudBank AI'
 theme = 'hugo-theme-relearn'
 
+# analytics
+googleAnalytics = "G-7HWQVTJ803"
+
 [params]
   headingPre = 'Module'
   themeVariant = 'zen-light'
