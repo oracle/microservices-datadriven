@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.135.0">
+    <meta name="generator" content="Hugo 0.138.0">
     <meta name="generator" content="Relearn 6.1.1+tip">
     <meta name="description" content="When you adopt microservices architecture and start to apply the patterns, you rapidly run into a situation where you have a business transaction that spans across multiple services.
 Database per service The Database per service pattern is a generally accepted best practice which dictates that each service must have its own “database” and that the only way other services can access its data is through its public API. This helps to create loose coupling between services, which in turn makes it easier to evolve them independently and prevents the creation of a web of dependencies that make application changes increasingly difficult over time. In reality, this pattern may be implemented with database containers, or even schema within one database with strong security isolation, to prevent the proliferation of database instances and the associated management and maintenance cost explosion.">
@@ -25,24 +25,24 @@ Database per service The Database per service pattern is a generally accepted be
 Database per service The Database per service pattern is a generally accepted best practice which dictates that each service must have its own “database” and that the only way other services can access its data is through its public API. This helps to create loose coupling between services, which in turn makes it easier to evolve them independently and prevents the creation of a web of dependencies that make application changes increasingly difficult over time. In reality, this pattern may be implemented with database containers, or even schema within one database with strong security isolation, to prevent the proliferation of database instances and the associated management and maintenance cost explosion.">
     <meta itemprop="wordCount" content="356">
     <title>Learn about the Saga pattern :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1728660085" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1728660085" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1728660085" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1728660085" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1728660085" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1728660085" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1728660085" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1728660085" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1728660085" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1728660085" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1728660085" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1728660085" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/variant.css?1728660085" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1728660085" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1728660085"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1732114206" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1732114206" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1732114206" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1732114206" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1732114206" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1732114206" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1732114206" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1732114206" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1732114206" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1732114206" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1732114206" rel="stylesheet" id="R-variant-style">
+    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1732114206" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/microservices-datadriven/cloudbank/css/variant.css?1732114206" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/print.css?1732114206" rel="stylesheet" media="print">
+    <script src="/microservices-datadriven/cloudbank/js/variant.js?1732114206"></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
-      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1728660085";
+      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1732114206";
       // variant stuff
       window.variants && variants.init( [ 'zen-light' ] );
       // translations
@@ -157,12 +157,12 @@ Database per service The Database per service pattern is a generally accepted be
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1728660085" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1728660085" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1728660085" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1728660085" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1728660085" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1728660085" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1732114206" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1732114206" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1732114206" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1732114206" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1732114206" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1732114206" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -173,12 +173,12 @@ Database per service The Database per service pattern is a generally accepted be
       <div id="R-content-wrapper" class="highlightable">
         <div id="R-topics">
           <ul class="enlarge morespace collapsible-menu">
-          <li data-nav-id="/microservices-datadriven/cloudbank/provision/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/index.html">Provision an Instance</a><ul id="R-subsections-c4dad079c96d7a5f54ae00022bcdf7a9" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/provision/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/index.html">Provision an Instance</a><ul id="R-subsections-d15a91382297ed8c59e53e6fe8c7ef12" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/provision/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/provision/install-local/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/install-local/index.html">Install locally</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/provision/install-free-trial/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/install-free-trial/index.html">Install in OCI Free Tier</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/provision/install-mp/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/install-mp/index.html">Install from OCI Marketplace</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/index.html">Developer Environment</a><ul id="R-subsections-2fffb9f659e25ea05f48554f2d40267b" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/index.html">Developer Environment</a><ul id="R-subsections-71c72576199178272f58fda8ee0a71bc" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/devenv/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/devenv/ide/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/ide/index.html">Install IDE</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/devenv/jdk/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/jdk/index.html">Install JDK</a></li>
@@ -189,7 +189,7 @@ Database per service The Database per service pattern is a generally accepted be
           <li data-nav-id="/microservices-datadriven/cloudbank/devenv/sqlcl/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/sqlcl/index.html">Install SQLcl</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/devenv/db-access/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/db-access/index.html">Database Access</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/devenv/ide-plugin/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/ide-plugin/index.html">Install IDE Plugin</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/account/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/index.html">Account Microservice</a><ul id="R-subsections-76e28dbc741f507e3fb0c19b5c4edf13" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/account/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/index.html">Account Microservice</a><ul id="R-subsections-297506c69418289ebb1b23af7a20b8d0" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/account/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/account/create-project/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/create-project/index.html">Create Project</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/account/first-service/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/first-service/index.html">Implement First Service</a></li>
@@ -199,7 +199,7 @@ Database per service The Database per service pattern is a generally accepted be
           <li data-nav-id="/microservices-datadriven/cloudbank/account/extra-endpoints/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/extra-endpoints/index.html">Extra Account Endpoints</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/account/deploy/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/deploy/index.html">Deploy Account Service</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/account/expose/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/expose/index.html">Expose using APISIX</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/check/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/index.html">Check Processing</a><ul id="R-subsections-2e52f5710292dcaa7e94f0ed85216aa3" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/check/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/index.html">Check Processing</a><ul id="R-subsections-545d7597d6fe139006a28ee9b7c5db9a" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/check/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/check/learn/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/learn/index.html">Learn about the scenario</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/check/update-account/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/update-account/index.html">Add Journal to the Account service</a></li>
@@ -207,7 +207,7 @@ Database per service The Database per service pattern is a generally accepted be
           <li data-nav-id="/microservices-datadriven/cloudbank/check/create-testrunner/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/create-testrunner/index.html">Create the Test Runner Microservice</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/check/check-processing/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/check-processing/index.html">Create the Check Processing Microservice</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/check/test/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/test/index.html">Test the end-to-end flow</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/saga/index.html" class="parent "><a class="padding" href="/microservices-datadriven/cloudbank/saga/index.html">Manage Sagas</a><ul id="R-subsections-68e46fa1c2f619d718e34efdb238a235" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/saga/index.html" class="parent "><a class="padding" href="/microservices-datadriven/cloudbank/saga/index.html">Manage Sagas</a><ul id="R-subsections-23bfcebeaf0b86f72be53ca2a243ff8b" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/saga/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/saga/learn/index.html" class="active"><a class="padding" href="/microservices-datadriven/cloudbank/saga/learn/index.html">Learn about the Saga pattern</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/saga/learn-lra/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/learn-lra/index.html">Learn about Long Running Actions</a></li>
@@ -219,9 +219,9 @@ Database per service The Database per service pattern is a generally accepted be
           <li data-nav-id="/microservices-datadriven/cloudbank/saga/transfer-service/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/transfer-service/index.html">Create the Transfer service</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/saga/deploy/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/deploy/index.html">Deploy services</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/saga/test/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/test/index.html">Run LRA test cases</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/springai/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/springai/index.html">CloudBank AI Assistant</a><ul id="R-subsections-010a88853c155279dea049cae3232240" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/springai/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/springai/index.html">CloudBank AI Assistant</a><ul id="R-subsections-7e583279b613f75326f4c0b22a2a8f79" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/springai/simple-chat/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/springai/simple-chat/index.html">A simple ChatBot</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/index.html">Deploy with the CLI</a><ul id="R-subsections-700415e649763a5591d9524d38ddb106" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/index.html">Deploy with the CLI</a><ul id="R-subsections-1a8c94631eb6a61746be7678e1e870a7" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/get-code/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/get-code/index.html">Get the sample code</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/build/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/build/index.html">Build CloudBank</a></li>
@@ -229,12 +229,12 @@ Database per service The Database per service pattern is a generally accepted be
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/create-routes/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/create-routes/index.html">Create APISIX routes</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/verify/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/verify/index.html">Verify the deployment</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/chatbot/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/chatbot/index.html">Deploy the optional chatbot</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/index.html">Deploy with an IDE</a><ul id="R-subsections-97c3d292d2b014877ffb07154d1cf214" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/index.html">Deploy with an IDE</a><ul id="R-subsections-f29fa6561ce1d7cc31476e2a5d95f6d7" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/get-code/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/get-code/index.html">Get the sample code</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/build/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/build/index.html">Build CloudBank</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/using-vscode/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/using-vscode/index.html">Using the VS Code plugin</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/backend/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/index.html">Explore the Backend</a><ul id="R-subsections-9a5cf8da07713c78ee52a8d0397cb806" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/backend/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/index.html">Explore the Backend</a><ul id="R-subsections-466e7772eedba37a22e3eecc16db31d6" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/backend/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/backend/k8s/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/k8s/index.html">Explore Kubernetes</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/backend/database/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/database/index.html">Explore Oracle Autonomous Database</a></li>
@@ -244,7 +244,7 @@ Database per service The Database per service pattern is a generally accepted be
           <li data-nav-id="/microservices-datadriven/cloudbank/backend/config/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/config/index.html">Explore Spring Config Server</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/backend/grafana/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/grafana/index.html">Explore Grafana</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/backend/jaeger/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/jaeger/index.html">Explore Jaeger</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/index.html">Cleanup</a><ul id="R-subsections-2a114b4f7d7c1e92ed8ef74b99ba5d82" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/index.html">Cleanup</a><ul id="R-subsections-78cee329a7e0f3a21536c947863c8b2e" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/uninstall-local/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/uninstall-local/index.html">Local cleanup</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/uninstall-free-trial/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/uninstall-free-trial/index.html">OCI Free Tier Cleanup</a></li>
@@ -311,8 +311,8 @@ Database per service The Database per service pattern is a generally accepted be
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1728660085" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1728660085" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1728660085" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1732114206" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1732114206" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1732114206" defer></script>
   </body>
 </html>
