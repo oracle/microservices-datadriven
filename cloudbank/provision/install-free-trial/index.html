@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.135.0">
+    <meta name="generator" content="Hugo 0.138.0">
     <meta name="generator" content="Relearn 6.1.1+tip">
     <meta name="description" content="This option allows you to run Oracle Backend for Microservices and AI in a containerized environment inside a single OCI Compute Instance. This option is good if you do not have enough free capacity on your local machine to run the environment, and if you do not have or want to use the resources required for a full production-sized deployment. This option provides an environment with adequate resources for development and testing, but minimizes the resource usage and costs.">
     <meta name="author" content="">
@@ -19,26 +19,26 @@
     <meta property="article:section" content="Provision an Instance">
     <meta itemprop="name" content="Install in OCI Free Tier :: CloudBank AI">
     <meta itemprop="description" content="This option allows you to run Oracle Backend for Microservices and AI in a containerized environment inside a single OCI Compute Instance. This option is good if you do not have enough free capacity on your local machine to run the environment, and if you do not have or want to use the resources required for a full production-sized deployment. This option provides an environment with adequate resources for development and testing, but minimizes the resource usage and costs.">
-    <meta itemprop="wordCount" content="1221">
+    <meta itemprop="wordCount" content="1573">
     <title>Install in OCI Free Tier :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1728660085" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1728660085" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1728660085" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1728660085" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1728660085" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1728660085" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1728660085" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1728660085" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1728660085" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1728660085" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1728660085" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1728660085" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/variant.css?1728660085" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1728660085" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1728660085"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1732114206" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1732114206" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1732114206" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1732114206" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1732114206" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1732114206" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1732114206" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1732114206" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1732114206" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1732114206" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1732114206" rel="stylesheet" id="R-variant-style">
+    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1732114206" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/microservices-datadriven/cloudbank/css/variant.css?1732114206" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/print.css?1732114206" rel="stylesheet" media="print">
+    <script src="/microservices-datadriven/cloudbank/js/variant.js?1732114206"></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
-      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1728660085";
+      window.index_js_url="/microservices-datadriven/cloudbank/index.search.js?1732114206";
       // variant stuff
       window.variants && variants.init( [ 'zen-light' ] );
       // translations
@@ -129,8 +129,8 @@
 </li>
 <li>
 <p>Navigate to the <strong>Custom Instances</strong> page by opening the main menu using the &ldquo;hamburger&rdquo; icon ( <i class="fa-solid fa-bars"></i> )  in the top left corner of the console and searching for &ldquo;image&rdquo;:</p>
-<p><a href="#R-image-76754b0fcf7981406e193bd1699a7389" class="lightbox-link"><img alt="Custom Instance import" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-3.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-76754b0fcf7981406e193bd1699a7389"><img alt="Custom Instance import" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-3.png" title=" "></a></p>
+<p><a href="#R-image-5c663fd3327a29ab277681ea3256818a" class="lightbox-link"><img alt="Custom Instance import" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-3.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-5c663fd3327a29ab277681ea3256818a"><img alt="Custom Instance import" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-3.png" title=" "></a></p>
 </li>
 <li>
 <p>Click on the <strong>Import image</strong> button.</p>
@@ -143,8 +143,8 @@
 </li>
 <li>
 <p>Click on the <strong>Import image</strong> button to start the import.</p>
-<p><a href="#R-image-3b21cdd58cebf25ad0fa1ab5f06e05e4" class="lightbox-link"><img alt="Custom Instance import" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-7.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-3b21cdd58cebf25ad0fa1ab5f06e05e4"><img alt="Custom Instance import" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-7.png" title=" "></a></p>
+<p><a href="#R-image-acdd2ba4d65da06b07bc5637e265be81" class="lightbox-link"><img alt="Custom Instance import" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-7.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-acdd2ba4d65da06b07bc5637e265be81"><img alt="Custom Instance import" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-7.png" title=" "></a></p>
 <blockquote>
 <p><strong>Note:</strong>  that it might take approximately 10 to 15 minutes to complete the import. You can see the progress on the <strong>Custom image details</strong> page that will be displayed.</p>
 </blockquote>
@@ -163,8 +163,8 @@
 <li>
 <p>Navigate to the <strong>Compute Instances</strong> page by clicking on the link on the home page of the OCI Console or opening the main menu using the &ldquo;hamburger&rdquo; icon ( <i class="fa-solid fa-bars"></i> )  in the top left corner of the console and searching for
 &ldquo;instance&rdquo;:</p>
-<p><a href="#R-image-b125474a572da7cbf2057b2ec0e4d1c1" class="lightbox-link"><img alt="Instances" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-1.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-b125474a572da7cbf2057b2ec0e4d1c1"><img alt="Instances" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-1.png" title=" "></a></p>
+<p><a href="#R-image-aa7f3547f983ba63b32c727a802e3ba4" class="lightbox-link"><img alt="Instances" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-1.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-aa7f3547f983ba63b32c727a802e3ba4"><img alt="Instances" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-1.png" title=" "></a></p>
 </li>
 <li>
 <p>Create a Compute Instance by clicking on the <strong>Create instance</strong> button.</p>
@@ -180,14 +180,14 @@
 <blockquote>
 <p><strong>Note:</strong> The image will not show up until the import is completed.</p>
 </blockquote>
-<p><a href="#R-image-5efb9ebd1ddae15f70b68f4c7e77179a" class="lightbox-link"><img alt="Custom image selected" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-4.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-5efb9ebd1ddae15f70b68f4c7e77179a"><img alt="Custom image selected" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-4.png" title=" "></a></p>
+<p><a href="#R-image-6777f84a0f076e5551551e429edeec24" class="lightbox-link"><img alt="Custom image selected" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-4.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-6777f84a0f076e5551551e429edeec24"><img alt="Custom image selected" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-4.png" title=" "></a></p>
 <p>Click on the <strong>Select image</strong> button to confirm your choice.</p>
 </li>
 <li>
 <p>Click on the <strong>Change shape</strong> button to choose the shape of your instance.  Oracle recommends 2 OCPUs and 32 GB of memory to run this CloudBank environment.</p>
-<p><a href="#R-image-f835a44150a4533de21fd5053a383d3f" class="lightbox-link"><img alt="Shape selected" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-6.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-f835a44150a4533de21fd5053a383d3f"><img alt="Shape selected" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-6.png" title=" "></a></p>
+<p><a href="#R-image-68e6ae648a403ca6f2f7d77604f16e82" class="lightbox-link"><img alt="Shape selected" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-6.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-68e6ae648a403ca6f2f7d77604f16e82"><img alt="Shape selected" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-6.png" title=" "></a></p>
 <p>Click on the <strong>Select shape</strong> button to confirm your choice.</p>
 </li>
 <li>
@@ -207,8 +207,8 @@
 <li>
 <p>Note the Public IP Address of your newly created instance in the <strong>Instance access</strong> section of the <strong>Instance details</strong> page
 that is displayed.</p>
-<p><a href="#R-image-bf212ade58b41d604b91719ea10c55b6" class="lightbox-link"><img alt="Shape selected" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-8.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-bf212ade58b41d604b91719ea10c55b6"><img alt="Shape selected" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-8.png" title=" "></a></p>
+<p><a href="#R-image-2d6be5a6a9c7d12673176430bd85bdde" class="lightbox-link"><img alt="Shape selected" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-8.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-2d6be5a6a9c7d12673176430bd85bdde"><img alt="Shape selected" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-8.png" title=" "></a></p>
 </li>
 <li>
 <p>Log into the compute instance using SSH, for example:</p>
@@ -223,8 +223,8 @@ that is displayed.</p>
 <p><strong>Note:</strong> Should you require access to it, the <code>kubeconfig</code> file for your cluster is located at this location:</p>
 </blockquote>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>/home/ubuntu/obaas/k3s_data/kubeconfig/kubeconfig.yaml</span></span></code></pre></div><p>When the environment is fully started, the output will appear similar to this:</p>
-<p><a href="#R-image-5a578d2b9876acb2a3800f209fa2a627" class="lightbox-link"><img alt="Completed startup" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-2.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-5a578d2b9876acb2a3800f209fa2a627"><img alt="Completed startup" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-2.png" title=" "></a></p>
+<p><a href="#R-image-a5c631934fe7573463c6a77ce92e9fe5" class="lightbox-link"><img alt="Completed startup" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-2.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-a5c631934fe7573463c6a77ce92e9fe5"><img alt="Completed startup" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-2.png" title=" "></a></p>
 </li>
 </ul>
 </li>
@@ -232,7 +232,7 @@ that is displayed.</p>
 <p>Configure access to the instance from your local machine</p>
 <ul>
 <li>
-<p>On your local machine, open a browser and find your public IPv4 address using a serivce like <a href="https://www.showmyip.com/" rel="external" target="_blank">ShowMyIP</a>.</p>
+<p>On your local machine, open a browser and find your public IPv4 address using a service like <a href="https://www.showmyip.com/" rel="external" target="_blank">ShowMyIP</a>.</p>
 </li>
 <li>
 <p>In the OCI Console, when viewing your compute instance, click on the link for the subnet in the <strong>Prinary VNIC</strong> section.</p>
@@ -245,8 +245,8 @@ that is displayed.</p>
 </li>
 <li>
 <p>Complete the form by specifying the <strong>Source CIDR</strong>.  Make this as specific as possible, ideally just your one machine by specifying the IP address you just collected with the suffix <code>/32</code> added.  Set the <strong>Destination Port Range</strong> to <code>443</code>, and add a description if you wish.  The completed form should look like this (in this example your machine&rsquo;s IP address was <code>1.2.3.4</code>):</p>
-<p><a href="#R-image-6c2b5d08535f46fc4f3fbf63cb2aaad0" class="lightbox-link"><img alt="Add Ingress Rule" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/add-ingress-rule.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-6c2b5d08535f46fc4f3fbf63cb2aaad0"><img alt="Add Ingress Rule" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/add-ingress-rule.png" title=" "></a></p>
+<p><a href="#R-image-7d60401bdee120d44cc17683011275f8" class="lightbox-link"><img alt="Add Ingress Rule" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/add-ingress-rule.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-7d60401bdee120d44cc17683011275f8"><img alt="Add Ingress Rule" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/add-ingress-rule.png" title=" "></a></p>
 </li>
 <li>
 <p>Click the <strong>Add Ingress Rules</strong> button to save the new rule.</p>
@@ -272,8 +272,61 @@ that is displayed.</p>
 </li>
 <li>
 <p>The Spring Operations Center main dashboard will appear similar to this:</p>
-<p><a href="#R-image-e17e1f3b7304bbdc93f06b71c2d67538" class="lightbox-link"><img alt="Spring Operations Center" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-5.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-e17e1f3b7304bbdc93f06b71c2d67538"><img alt="Spring Operations Center" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-5.png" title=" "></a></p>
+<p><a href="#R-image-ad08958118e492f407c0688c9847a8d0" class="lightbox-link"><img alt="Spring Operations Center" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-5.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-ad08958118e492f407c0688c9847a8d0"><img alt="Spring Operations Center" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-5.png" title=" "></a></p>
+</li>
+</ul>
+</li>
+<li>
+<p>DB Access &amp; setup</p>
+<ul>
+<li>
+<p>Connect to your instance (using SSH), find the database pod with the following command: <code>kubectl get pods --all-namespaces</code>.</p>
+<p>In the <code>oracle-database-operator-system</code> namespace, look for a pods like <code>free-XXXX</code>.</p>
+</li>
+<li>
+<p>Access to DB instance with the following command: <code>kubectl exec -it  -n oracle-database-operator-system free-XXXX -- /bin/sh</code></p>
+</li>
+<li>
+<p>Login as sysdba to create the user <code>account</code> that will be used in Module 3:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span>sqlplus <span style="color:#f92672">/</span> <span style="color:#66d9ef">as</span> sysdba
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">ALTER</span> <span style="color:#66d9ef">SESSION</span> <span style="color:#66d9ef">SET</span> CONTAINER <span style="color:#f92672">=</span> freepdb1;    
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> TABLESPACE users DATAFILE <span style="color:#e6db74">&#39;/opt/oracle/oradata/FREE/FREEPDB1/users.dbf&#39;</span>  <span style="color:#66d9ef">SIZE</span> <span style="color:#ae81ff">100</span>M AUTOEXTEND <span style="color:#66d9ef">ON</span> <span style="color:#66d9ef">NEXT</span> <span style="color:#ae81ff">10</span>M MAXSIZE <span style="color:#ae81ff">500</span>M;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">CREATE</span> <span style="color:#66d9ef">USER</span> account IDENTIFIED <span style="color:#66d9ef">BY</span> Welcome1234<span style="color:#f92672">##</span> <span style="color:#66d9ef">DEFAULT</span> TABLESPACE users <span style="color:#66d9ef">TEMPORARY</span> TABLESPACE temp;</span></span></code></pre></div></li>
+</ul>
+<p>This step replaces the steps from 1 to 4 in the task <a href="/microservices-datadriven/cloudbank/account/prepare-database/index.html"><strong>Account Microservices/Prepare Database Objects</strong></a>.<br>
+In the step 5 of <a href="/microservices-datadriven/cloudbank/account/prepare-database/index.html">Prepare Database Objects</a>, skip the command: <code>create user account identified by &quot;Welcome1234##&quot;;</code> and execute all the rest, since the user account has been already created.</p>
+<p>If you need to access the db from an ssh connection, these are the commands to get <code>username</code> and <code>password</code>:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#to get &lt;UID&gt;:</span>
+</span></span><span style="display:flex;"><span>kubectl -n application get secret baas-db-secrets -o jsonpath<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;{.data.db\.password}&#39;</span> | base64 -d
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#to get &lt;PWD&gt;:</span>
+</span></span><span style="display:flex;"><span>kubectl -n application get secret baas-db-secrets -o jsonpath<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;{.data.db\.username}&#39;</span> | base64 -d
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#for pl/sql:</span>
+</span></span><span style="display:flex;"><span>kubectl exec -n oracle-database-operator-system free-&lt;XXXX&gt; -ti -- sqlplus &lt;UDI&gt;/&lt;PWD&gt;@localhost:1521/freepdb1</span></span></code></pre></div></li>
+<li>
+<p>Kubernetes access from own desktop</p>
+<ul>
+<li>
+<p>On the compute node (logged in using SSH), execute the following command:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>kubectl config view --minify --context<span style="color:#f92672">=</span>default --flatten &gt; /home/ubuntu/context-config.yaml</span></span></code></pre></div></li>
+<li>
+<p>download the YAML configuration file on your desktop in &lt;YOUR_DIR&gt;, using <code>scp</code> with the reference to &lt;YOUR_PRIVATE_KEY.key&gt;:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>scp -i &lt;YOUR_PRIVATE_KEY.key&gt; ubuntu@&lt;VM_IP&gt;:/home/ubuntu/context-config.yaml &lt;YOUR_DIR&gt;/context-config.yaml </span></span></code></pre></div></li>
+<li>
+<p>In the <code>context-config.yaml</code> locate the <code>server</code> entry:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">cluster</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">certificate-authority-data</span>: <span style="color:#ae81ff">LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJlRENDQVIyZ0F3SUJBZ0lCQURBS0JnZ3Foa2pPUFFRREFqQWpNU0V3SHdZRFZRUUREQmhyTTNNdGM...</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">server</span>: <span style="color:#ae81ff">https://127.0.0.1:6443</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">name</span>: <span style="color:#ae81ff">default</span>
+</span></span><span style="display:flex;"><span>...</span></span></code></pre></div><p>and change with &lt;YOUR_DIR&gt;.</p>
+</li>
+<li>
+<p>Add an <strong>Add Ingress Rules</strong> in the VCN security list belonging with your VM for the <code>6443</code> port, to allow the <code>kubectl</code> connection from your desktop.</p>
+</li>
+<li>
+<p>On your desktop create an alias, to use the downloaded context to connect the remote Kubernetes, resolving the certificate issue:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>alias k<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;export KUBECONFIG=&lt;YOUR_DIR&gt;/context-config.yaml; kubectl --insecure-skip-tls-verify&#39;</span></span></span></code></pre></div><p>In this way, any other <code>kubectl</code> commands in the rest of documentation can be executed as well, simply replacing <code>kubectl</code> with <code>k</code> if you are using the provisioning procedure shown so far.</p>
 </li>
 </ul>
 </li>
@@ -303,12 +356,12 @@ that is displayed.</p>
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1728660085" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1728660085" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1728660085" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1728660085" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1728660085" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1728660085" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1732114206" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1732114206" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1732114206" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1732114206" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1732114206" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1732114206" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -319,12 +372,12 @@ that is displayed.</p>
       <div id="R-content-wrapper" class="highlightable">
         <div id="R-topics">
           <ul class="enlarge morespace collapsible-menu">
-          <li data-nav-id="/microservices-datadriven/cloudbank/provision/index.html" class="parent "><a class="padding" href="/microservices-datadriven/cloudbank/provision/index.html">Provision an Instance</a><ul id="R-subsections-c4dad079c96d7a5f54ae00022bcdf7a9" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/provision/index.html" class="parent "><a class="padding" href="/microservices-datadriven/cloudbank/provision/index.html">Provision an Instance</a><ul id="R-subsections-d15a91382297ed8c59e53e6fe8c7ef12" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/provision/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/provision/install-local/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/install-local/index.html">Install locally</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/provision/install-free-trial/index.html" class="active"><a class="padding" href="/microservices-datadriven/cloudbank/provision/install-free-trial/index.html">Install in OCI Free Tier</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/provision/install-mp/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/provision/install-mp/index.html">Install from OCI Marketplace</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/index.html">Developer Environment</a><ul id="R-subsections-2fffb9f659e25ea05f48554f2d40267b" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/devenv/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/index.html">Developer Environment</a><ul id="R-subsections-71c72576199178272f58fda8ee0a71bc" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/devenv/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/devenv/ide/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/ide/index.html">Install IDE</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/devenv/jdk/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/jdk/index.html">Install JDK</a></li>
@@ -335,7 +388,7 @@ that is displayed.</p>
           <li data-nav-id="/microservices-datadriven/cloudbank/devenv/sqlcl/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/sqlcl/index.html">Install SQLcl</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/devenv/db-access/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/db-access/index.html">Database Access</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/devenv/ide-plugin/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/devenv/ide-plugin/index.html">Install IDE Plugin</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/account/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/index.html">Account Microservice</a><ul id="R-subsections-76e28dbc741f507e3fb0c19b5c4edf13" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/account/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/index.html">Account Microservice</a><ul id="R-subsections-297506c69418289ebb1b23af7a20b8d0" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/account/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/account/create-project/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/create-project/index.html">Create Project</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/account/first-service/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/first-service/index.html">Implement First Service</a></li>
@@ -345,7 +398,7 @@ that is displayed.</p>
           <li data-nav-id="/microservices-datadriven/cloudbank/account/extra-endpoints/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/extra-endpoints/index.html">Extra Account Endpoints</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/account/deploy/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/deploy/index.html">Deploy Account Service</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/account/expose/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/account/expose/index.html">Expose using APISIX</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/check/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/index.html">Check Processing</a><ul id="R-subsections-2e52f5710292dcaa7e94f0ed85216aa3" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/check/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/index.html">Check Processing</a><ul id="R-subsections-545d7597d6fe139006a28ee9b7c5db9a" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/check/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/check/learn/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/learn/index.html">Learn about the scenario</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/check/update-account/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/update-account/index.html">Add Journal to the Account service</a></li>
@@ -353,7 +406,7 @@ that is displayed.</p>
           <li data-nav-id="/microservices-datadriven/cloudbank/check/create-testrunner/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/create-testrunner/index.html">Create the Test Runner Microservice</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/check/check-processing/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/check-processing/index.html">Create the Check Processing Microservice</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/check/test/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/check/test/index.html">Test the end-to-end flow</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/saga/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/index.html">Manage Sagas</a><ul id="R-subsections-68e46fa1c2f619d718e34efdb238a235" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/saga/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/index.html">Manage Sagas</a><ul id="R-subsections-23bfcebeaf0b86f72be53ca2a243ff8b" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/saga/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/saga/learn/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/learn/index.html">Learn about the Saga pattern</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/saga/learn-lra/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/learn-lra/index.html">Learn about Long Running Actions</a></li>
@@ -365,9 +418,9 @@ that is displayed.</p>
           <li data-nav-id="/microservices-datadriven/cloudbank/saga/transfer-service/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/transfer-service/index.html">Create the Transfer service</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/saga/deploy/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/deploy/index.html">Deploy services</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/saga/test/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/saga/test/index.html">Run LRA test cases</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/springai/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/springai/index.html">CloudBank AI Assistant</a><ul id="R-subsections-010a88853c155279dea049cae3232240" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/springai/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/springai/index.html">CloudBank AI Assistant</a><ul id="R-subsections-7e583279b613f75326f4c0b22a2a8f79" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/springai/simple-chat/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/springai/simple-chat/index.html">A simple ChatBot</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/index.html">Deploy with the CLI</a><ul id="R-subsections-700415e649763a5591d9524d38ddb106" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/index.html">Deploy with the CLI</a><ul id="R-subsections-1a8c94631eb6a61746be7678e1e870a7" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/get-code/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/get-code/index.html">Get the sample code</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/build/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/build/index.html">Build CloudBank</a></li>
@@ -375,12 +428,12 @@ that is displayed.</p>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/create-routes/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/create-routes/index.html">Create APISIX routes</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/verify/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/verify/index.html">Verify the deployment</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-cli/chatbot/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-cli/chatbot/index.html">Deploy the optional chatbot</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/index.html">Deploy with an IDE</a><ul id="R-subsections-97c3d292d2b014877ffb07154d1cf214" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/index.html">Deploy with an IDE</a><ul id="R-subsections-f29fa6561ce1d7cc31476e2a5d95f6d7" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/get-code/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/get-code/index.html">Get the sample code</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/build/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/build/index.html">Build CloudBank</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/deploy-ide/using-vscode/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/deploy-ide/using-vscode/index.html">Using the VS Code plugin</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/backend/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/index.html">Explore the Backend</a><ul id="R-subsections-9a5cf8da07713c78ee52a8d0397cb806" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/backend/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/index.html">Explore the Backend</a><ul id="R-subsections-466e7772eedba37a22e3eecc16db31d6" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/backend/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/backend/k8s/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/k8s/index.html">Explore Kubernetes</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/backend/database/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/database/index.html">Explore Oracle Autonomous Database</a></li>
@@ -390,7 +443,7 @@ that is displayed.</p>
           <li data-nav-id="/microservices-datadriven/cloudbank/backend/config/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/config/index.html">Explore Spring Config Server</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/backend/grafana/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/grafana/index.html">Explore Grafana</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/backend/jaeger/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/backend/jaeger/index.html">Explore Jaeger</a></li></ul></li>
-          <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/index.html">Cleanup</a><ul id="R-subsections-2a114b4f7d7c1e92ed8ef74b99ba5d82" class="morespace collapsible-menu">
+          <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/index.html">Cleanup</a><ul id="R-subsections-78cee329a7e0f3a21536c947863c8b2e" class="morespace collapsible-menu">
           <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/intro/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/intro/index.html">Introduction</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/uninstall-local/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/uninstall-local/index.html">Local cleanup</a></li>
           <li data-nav-id="/microservices-datadriven/cloudbank/cleanup/uninstall-free-trial/index.html" class=""><a class="padding" href="/microservices-datadriven/cloudbank/cleanup/uninstall-free-trial/index.html">OCI Free Tier Cleanup</a></li>
@@ -457,8 +510,8 @@ that is displayed.</p>
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1728660085" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1728660085" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1728660085" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1732114206" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1732114206" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1732114206" defer></script>
   </body>
 </html>
