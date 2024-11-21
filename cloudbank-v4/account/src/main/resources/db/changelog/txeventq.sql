@@ -1,6 +1,6 @@
 -- liquibase formatted sql
 
---changeset atael:1
+--changeset account:1
 grant execute on dbms_aq to account;
 grant execute on dbms_aqadm to account;
 grant execute on dbms_aqin to account;
@@ -13,7 +13,7 @@ grant execute on dbms_aqjms_internal to account;
 --rollback revoke dbms_aqjms from ACCOUNT;
 --rollback revoke dbms_aqjms_internal from ACCOUNT;
 
---changeset atael:2 endDelimiter:/
+--changeset account:2 endDelimiter:/
 begin
     -- deposits
     begin

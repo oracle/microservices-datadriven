@@ -39,7 +39,7 @@
 
         <micrometer-core.version>1.13.2</micrometer-core.version>
         <lombok.version>1.18.34</lombok.version>
-        <oracle-springboot-starter.version>23.4.0</oracle-springboot-starter.version>
+        <oracle-springboot-starter.version>24.3.0</oracle-springboot-starter.version>
 		<oracle-microtx-starter.version>24.2.1</oracle-microtx-starter.version>
 		<liquibase.version>4.29.1</liquibase.version>
 		<datasource-micrometer-spring-boot.version>1.0.5</datasource-micrometer-spring-boot.version>
