@@ -1,0 +1,32 @@
+baseURL = 'https://oracle.github.io/microservices-datadriven/transactional-event-queues/'
+languageCode = 'en-us'
+title = 'Transactional Event Queues'
+theme = 'hugo-theme-relearn'
+
+[params]
+  headingPre = 'Module'
+  themeVariant = 'zen-light'
+
+[outputs]
+  home = ['html', 'rss', 'search']
+
+[[menu.Shortcuts]]
+name = "<i class='fa-fw fab fa-github'></i> GitHub repo"
+identifier = "ds"
+url = "https://github.com/oracle/microservices-datadriven"
+weight = 10
+
+[[menu.Shortcuts]]
+name = "<i class='fa-fw fas fa-bookmark'></i> Oracle Backend for Spring Boot and Microservices"
+url = "https://bit.ly/oraclespringboot"
+weight = 11
+
+[[menu.Shortcuts]]
+name = "<i class='fa-fw fas fa-bookmark'></i> Spring Cloud Oracle"
+url = "https://github.com/oracle/spring-cloud-oracle"
+weight = 12
+
+[[menu.Shortcuts]]
+name = "<i class='fa-fw fas fa-bullhorn'></i> Credits"
+url = "more/credits/"
+weight = 30
