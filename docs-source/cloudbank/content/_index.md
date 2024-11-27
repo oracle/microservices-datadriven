@@ -22,7 +22,7 @@ To complete the modules you will somewhere to run Oracle Backend for Microservic
 
 Regardless of which option you choose, the remainder of the modules will be virtually identical.  
 
-You will need a Java SDK and either Maven or Gradle to build your applicaitons. An IDE is not strictly required,
+You will need a Java SDK and either Maven or Gradle to build your applications. An IDE is not strictly required,
 but you will have a better overall experience if you use one.  We recommend Visual Studio Code or IntelliJ.
 
 ### Modules
