@@ -22,6 +22,10 @@
 			<version>${oracle-springboot-starter.version}</version>
 		</dependency>
 		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+		<dependency>
 			<groupId>com.oracle.database.spring</groupId>
 			<artifactId>oracle-spring-boot-starter-wallet</artifactId>
 			<type>pom</type>
