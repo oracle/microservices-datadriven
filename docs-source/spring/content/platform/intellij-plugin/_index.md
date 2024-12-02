@@ -35,7 +35,7 @@ See the Oracle Free Use Terms and Conditions [License](https://oss.oracle.com/li
 
 ### Proxy Configuration
 
-If you are connecting to your Kubernetes cluster through a proxy server, configure your IntelliJ proxy settings from Settings -> Proxy. Th Oracle Backend for Microservices and AI will use your IntelliJ system proxy settings to connect to your Kubernetes cluster.
+If you are connecting to your Kubernetes cluster through a proxy server, configure your IntelliJ proxy settings from Settings -> Proxy. The Oracle Backend for Microservices and AI will use your IntelliJ system proxy settings to connect to your Kubernetes cluster.
 
 ## Configuring the Oracle Backend for Microservices and AI Connection
 
@@ -78,6 +78,7 @@ Once you are connected to Oracle Backend for Microservices and AI, click on the 
 - Oracle Backend for Microservices and AI namespaces are shown in the "namespaces" section, each namespace containing a list of applications.
 - Links to platform service dashboards are shown in the "platform services" section.
 - Configuration properties are listed in the "configuration" section.
+- Platform images built with OBaaS.
 
 ![explore-resources](./images/explore-resources.png)
 
@@ -91,28 +92,67 @@ To create a new namespace, right click on the namespace and select "Add Namespac
 
 After you click OK, the namespace will be created and appear in the namespace list in a few moments.
 
-![namespace-created](./images/namespace-created.png)
+![namespace-created](./images/new-namespace.png)
 
 You can delete a namespace by right clicking on that namespace, and selecting "Delete Namespace". When a namespace is deleted, all applications in the namespace will also be deleted.
 
-### Deploying workloads into namespaces
+### Creating a datastore to bind workloads to the database
 
-To deploy a workload into a namespace, right click that namespace and select "Add Workload -> Upload .jar" for JVM workloads or "Add Workload -> Upload .exec" for GraalVM native workloads.
+All OBaaS workloads that connect to the database require a datastore reference, or binding. Each datastore represents an Oracle Database user, and one or more workloads may be bound to the same datastore.
 
-On the Add Workload form, enter workload data.
-- Database username will default to the workload name if not specified, and is used for Java Message Service Transactional Event Queue authentication.
+To create a datastore, right click a namespace and click "Add Datastore".
 
-![upload-jar](./images/upload-jar.png)
+![add-datastore](./images/add-datastore.png)
 
-When you click OK, the JAR/exec file will be uploaded to Oracle Backend for Microservices and AI, an image is built, and the workload deployed to the cluster namespace. The task duration will vary depending on the size of the upload file and your network connection for upload.
+Enter a datastore ID, username, and password, and then click OK to create the datastore. The username and password must be valid for Oracle Database. 
 
-### Workload autoscalers
+![datastore-dialogue](./images/datastore-dialogue.png)
 
-To create an autoscaler for a workload, right-click the workload and select "Create Autoscaler". Autoscalers are configured on workload CPU, and specify minimum and maximum scale replicas.
+The new datastore `my-ds` should be visible as a red database icon in the `my-app` namespace. Once a datastore is created, you may right-click that datastore to delete it, or to update the datastore password. Note that password updates may require a workload restart to resume database connectivity.
 
-![create-autoscaler](./images/create-autoscaler.png)
+![new-datastore](./images/new-datastore.png)
 
-You may also deletea workload's autoscaler from the workload context menu.
+### Creating a workload
+
+To deploy a workload into a namespace, right click that namespace and select "Add Workload".
+
+![add-workload](./images/add-workload.png)
+
+On the Add Workload form, you'll be prompted to enter information about the workload.
+
+- Name: The name or ID of the workload.
+- Profile: The active Spring profile.
+- Initial Replicas: How many replicas of the workload to create.
+- Port: The workload's application port.
+- Add health probe: Whether to add liveness and readiness probes.
+- CPU Request: How much CPU to request for the workload. 500m = 1/2 core.
+- Image version: The version or tag of the workload image.
+- Workload artifact: Path to the workload's JAR or native binary on your system.
+- Base image: The base image used when building the workload image.
+- Datastore: the datastore to use for database connectivity.
+- Liquibase username: Optional username for Liquibase scripts.
+
+Note that you may leave the datastore dropdown blank if your workload does not require access to the database.
+
+![workload-dialogue](./images/workload-dialogue.png)
+
+When you click OK, the JAR or binary file will be uploaded to Oracle Backend for Microservices and AI, an image is built, and the workload deployed to the cluster namespace. The task duration will vary depending on the size of the upload file and your network connection for upload.
+
+Once the task is complete, the workload will appear under the namespace it was created in. If you bound your workload to a datastore, an icon representing that binding will appear under the workload.
+
+![new-workload](./images/new-workload.png)
+
+Once a workload has been created, it can be updated or deleted by right-clicking that workload and selecting "Update Workload" or "Delete Workload". 
+
+For Update, if you do not specify a new base image and workload artifact, only the workload's parameters, such as Replicas, will be updated.
+
+### Autoscaling workloads
+
+To create an autoscaler for a workload, right-click the workload and select "Autoscaling". Autoscalers are configured on the workload's percent CPU utilization, specifying minimum and maximum autoscaling replicas.
+
+![create-autoscaler](./images/autoscaling.png))
+
+To update an autoscaler, click right-click a workload and select "Autoscaling" again. The same form will appear, allowing you to edit values. You may also delete a workload's autoscaler from the workload context menu.
 
 ### Publishing workloads
 
@@ -135,3 +175,7 @@ Once the connection is complete, click the "Open console" link on the completion
 Workload configuration can be browsed and edited through the "configuration" section. To add a new configuration property, right-click either the top-level configuration section or a specific configuration node.
 
 A property is associated with a given configuration service, and may have a label, profile, key, and value.
+
+## Platform Images
+
+Successfully created platform images can be browsed through the "platform images" section. These images are informational references to built images, not images from container registry.
