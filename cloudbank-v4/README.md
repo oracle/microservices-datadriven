@@ -428,7 +428,7 @@ This is an example of the `customer32` application:
        ...
        ```
 
-    1. Check journal -- DEPOSIT
+    1. Check journal -- DEPOSIT. Replace '1' with the account number you used.
 
        ```shell
        curl -i http://$IP/api/v1/account/1/journal
