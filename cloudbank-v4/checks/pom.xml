@@ -26,13 +26,17 @@
         <dependency>
             <groupId>com.oracle.database.spring</groupId>
             <artifactId>oracle-spring-boot-starter-wallet</artifactId>
-            <type>pom</type>
             <version>${oracle-springboot-starter.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
+            <artifactId>spring-boot-starter-data-jdbc</artifactId>
         </dependency>
+        <dependency>
+			<groupId>com.oracle.database.spring</groupId>
+			<artifactId>oracle-spring-boot-starter-ucp</artifactId>
+			<version>${oracle-springboot-starter.version}</version>
+		</dependency>
     </dependencies>
 
     <build>

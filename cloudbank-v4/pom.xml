@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright (c) 2023, Oracle and/or its affiliates. -->
+<!-- Copyright (c) 2023, 2024, Oracle and/or its affiliates. -->
 <!-- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -37,12 +37,12 @@
         <spring-cloud.version>2023.0.4</spring-cloud.version>
         <org.springdoc-version>2.4.0</org.springdoc-version>
 
-        <micrometer-core.version>1.13.2</micrometer-core.version>
-        <lombok.version>1.18.34</lombok.version>
-        <oracle-springboot-starter.version>23.4.0</oracle-springboot-starter.version>
-		<oracle-microtx-starter.version>24.2.1</oracle-microtx-starter.version>
-		<liquibase.version>4.29.1</liquibase.version>
-		<datasource-micrometer-spring-boot.version>1.0.5</datasource-micrometer-spring-boot.version>
+        <micrometer-core.version>1.14.1</micrometer-core.version>
+        <lombok.version>1.18.36</lombok.version>
+        <oracle-springboot-starter.version>24.4.0</oracle-springboot-starter.version>
+		<oracle-microtx-starter.version>24.2.2</oracle-microtx-starter.version>
+		<liquibase.version>4.30.0</liquibase.version>
+		<datasource-micrometer-spring-boot.version>1.0.6</datasource-micrometer-spring-boot.version>
 
         <!-- Code quality tools -->
         <maven-checkstyle-plugin-version>3.3.1</maven-checkstyle-plugin-version>
