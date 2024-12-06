@@ -9,8 +9,8 @@ Oracle Database Transactional Event Queues (TxEventQ) is a high-performance mess
 This module will cover the following key topics:
 
 ## Core Concepts
+- Queues and topics
 - Enqueue/Dequeue vs. Publish/Subscribe models
-- Queues, topics, and Dead Letter Queues (DLQ)
 - Payload types: RAW, ADT, JSON, and JMS
 
 ## Queue Management
