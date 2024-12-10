@@ -42,6 +42,7 @@ jobs:
           dst_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ matrix.base_version }}
           description: ${{ env.description }}
           push: true
+          pkg_command: dnf
 
       - name: Run Trivy Vulnerability Scanner
         id: trivy_scan
