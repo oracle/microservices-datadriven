@@ -13,6 +13,10 @@ inputs:
   push:
     description: Boolean to push image (true) or just build (false)
     required: true
+  pkg_command:
+    description: Package manager command to run during updates (eg microdnf)
+    required: false
+    default: microdnf
 runs:
   using: "composite"
   steps:
@@ -35,7 +39,7 @@ runs:
         LABEL org.opencontainers.image.description="${{ inputs.description }}"
         LABEL org.opencontainers.image.name="${{ inputs.dst_image }}"
         LABEL org.opencontainers.image.version="${{ env.date }}"
-        RUN (microdnf update --refresh --nodocs --best || microdnf update --refresh --nodocs --nobest) && microdnf clean all
+        RUN (${{ inputs.pkg_command }} update --refresh --nodocs --best || ${{ inputs.pkg_command }} update --refresh --nodocs --nobest) && ${{ inputs.pkg_command }} clean all
         #RUN echo "Testing Update Functionality" > /image_digest
         RUN rpm -qa | sort | sha256sum | awk '{print $1}' > /image_digest
         EOF
