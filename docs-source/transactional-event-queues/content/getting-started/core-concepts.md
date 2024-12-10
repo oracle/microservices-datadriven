@@ -6,6 +6,14 @@ weight = 1
 
 This section provides the basic concepts of Transactional Event Queues, including the difference between queues and topics, how to create queues using SQL, and the available message payload types.
 
+* [What are queues and topics?](#what-are-queues-and-topics)
+* [Message Payload Types](#message-payload-types)
+  * [DBMS_AQADM.JMS_TYPE](#dbms_aqadmjms_type)
+  * [Raw](#raw)
+  * [JSON](#json)
+  * [Object](#object)
+  * [Kafka Message Payloads](#kafka-message-payloads)
+
 ### What are queues and topics?
 
 Queues and topics both provide high-throughput, asynchronous application communication, but have a few key differences that are relevant for developers and architects.
