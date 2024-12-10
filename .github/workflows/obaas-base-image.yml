@@ -1,4 +1,4 @@
-name: "Build OBaaS Base Image"
+name: "Build OBaaS Base Image OpenJDK"
 on:
   schedule:
     - cron: "0 0 * * *"
