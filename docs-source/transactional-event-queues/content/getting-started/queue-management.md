@@ -96,6 +96,34 @@ end;
 /
 ```
 
+The `DBMS_AQADM.PURGE_QUEUE` procedure is used to clear messages from a queue.
+
+```sql
+begin
+    dbms_aqadm.purge_queue(
+        queue_name => 'my_queue'
+    );
+end;
+/
+```
+
+To view the current queues in the user schema, query the `user_queues` table.
+
+```sql
+select * from user_queues;
+```
+
+You should see queue data similar to the following, for the queues available on your specific database schema.
+
+| NAME             | QUEUE_TABLE      | QID  | QUEUE_TYPE     | MAX_RETRIES | RETRY_DELAY | ENQUEUE_ENABLED | DEQUEUE_ENABLED | RETENTION | USER_COMMENT | NETWORK_NAME | SHARDED | QUEUE_CATEGORY           | RECIPIENTS |
+|------------------|------------------|------|---------------|-------------|-------------|-----------------|-----------------|-----------|--------------|--------------|---------|-------------------------|------------|
+| JSON_QUEUE       | JSON_QUEUE       | 72604 | NORMAL_QUEUE   | 5           | 0           | YES             | YES             | 0         | null         | null         | TRUE    | Transactional Event Queue | SINGLE    |
+| CUSTOM_TYPE_QUEUE| CUSTOM_TYPE_QUEUE| 72535 | NORMAL_QUEUE   | 5           | 0           | YES             | YES             | 0         | null         | null         | TRUE    | Transactional Event Queue | SINGLE    |
+| MY_QUEUE         | MY_QUEUE         | 73283 | NORMAL_QUEUE   | 5           | 0           | YES             | YES             | 0         | null         | null         | TRUE    | Transactional Event Queue | SINGLE    |
+
+
+
+
 #### Kafka APIs
 
 You can use standard Kafka APIs to create a topic with the [Kafka Java Client for Oracle Database Transactional Event Queues](https://github.com/oracle/okafka). The following code configures connection properties for Oracle Database and creates a topic using the [`org.oracle.okafka.clients.admin.AdminClient` class](https://mvnrepository.com/artifact/com.oracle.database.messaging/okafka), which implements the `org.apache.kafka.clients.admin.Admin` interface.

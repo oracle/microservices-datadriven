@@ -46,6 +46,11 @@ Transactional Event Queues support various [message payload types](https://docs.
 
 Understanding these payload types is crucial for designing efficient and effective messaging solutions. The choice of payload type impacts how you interact with the queue, the kind of data you can store, and how that data is processed. Let's explore the available payload types and their use cases.
 
+> Attempting to produce a message of the wrong payload type may result in the following error:
+> 
+> 
+> **ORA-25207: enqueue failed, queue <schema>.<queue> is disabled from enqueueing**
+
 #### DBMS_AQADM.JMS_TYPE
 
 The JMS (Java Message Service) payload type is ideal for applications using JMS, as it provides a highly scalable API for asynchronous messaging.
