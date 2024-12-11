@@ -20,8 +20,9 @@ This module will cover the following key topics:
 
 ## Message Operations
 - Producing and consuming messages
-- Implementing message selectors and rules
-- Handling message delay, expiration, and priority
+- Message expiry and exception queues
+- Message Delay
+- Message Priority
 
 ## Advanced Features
 - Transactional messaging: Combining messaging and DML in a single transaction
