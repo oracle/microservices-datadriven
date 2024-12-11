@@ -6,6 +6,21 @@ weight = 3
 
 This section explains message operations using queues, topics, and different programming interfaces (SQL, Java, Spring JMS, and more). You’ll learn how to enqueue, dequeue, and manage messages effectively.
 
+* [Enqueue and Dequeue, or Produce and Consume](#enqueue-and-dequeue-or-produce-and-consume)
+  * [Queues](#queues)
+  * [Topics](#topics)
+* [Enqueuing and Dequeuing with SQL](#enqueuing-and-dequeuing-with-sql)
+  * [Kafka Producers and Consumers](#kafka-producers-and-consumers)
+    * [Kafka Producer](#kafka-producer)
+    * [Kafka Consumer](#kafka-consumer)
+  * [Enqueuing and Dequeuing with JMS](#enqueuing-and-dequeuing-with-jms)
+    * [JMS APIs](#jms-apis)
+    * [Spring JMS](#spring-jms)
+    * [Message Operations in Other Languages and APIs](#message-operations-in-other-languages-and-apis)
+* [Message Expiry and Exception Queues](#message-expiry-and-exception-queues)
+* [Message Delay](#message-delay)
+* [Message Priority](#message-priority)
+
 ### Enqueue and Dequeue, or Produce and Consume
 
 #### Queues
