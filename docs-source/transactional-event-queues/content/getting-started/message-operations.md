@@ -45,7 +45,7 @@ declare
     message json;
     body varchar2(200) := '{"content": "my first message"}';
 begin
-    select json(body) into message from dual;
+    select json(body) into message;
     dbms_aq.enqueue(
         queue_name => 'json_queue',
         enqueue_options => enqueue_options,
@@ -111,7 +111,7 @@ props.put("security.protocol", "SSL");
 // Your database server 
 props.put("bootstrap.servers", "my-db-server");
 // Path to directory containing ojdbc.properties
-// If using Oracle Wallet, this directory must contain the unzipped wallet
+// If using Oracle Wallet, this directory must contain the unzipped wallet (such as in sqlnet.ora)
 props.put("oracle.net.tns_admin", "/my/path/");
 
 props.put("enable.idempotence", "true");
@@ -171,7 +171,7 @@ props.put("security.protocol", "SSL");
 // Your database server 
 props.put("bootstrap.servers", "my-db-server");
 // Path to directory containing ojdbc.properties
-// If using Oracle Wallet, this directory must contain the unzipped wallet
+// If using Oracle Wallet, this directory must contain the unzipped wallet (such as in sqlnet.ora)
 props.put("oracle.net.tns_admin", "/my/path/");
 
 props.put("group.id" , "MY_CONSUMER_GROUP");
