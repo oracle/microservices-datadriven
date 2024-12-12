@@ -11,19 +11,22 @@ Table of Contents:
 
 * [Installing the CLI](#installing-the-cli)
 * [Using the CLI](#using-the-cli)
-* [Available Commands](#available-commands)
+* [Command Concepts](#command-concepts)
+* [Workflow Example](#workflow-example)
+* [Available Command Groups](#available-commands)
   * [Help](#help)
   * [Connect to the backend](#connect)
-  * [Create application namespace](#create)
-  * [Delete application namespace](#delete)
-  * [Bind database schema/kubernetes secrets](#bind)
-  * [Deploy a service](#deploy)
-  * [Create a horizontal pod autoscaler](#create-autoscaler)
-  * [Delete a horizontal pod autoscaler](#delete-autoscaler)
-  * [List - show details about deployments](#list)
-  * [Manage config server data](#config)
-  * [GraalVM compile commands](#compile)
-  * [User Management](#user-management)  
+  * [Manage Artifact](#artifact)
+  * [Manage Binding](#binding)
+  * [Manage Configuration](#bind)
+  * [Manage Datastore](#deploy)
+  * [Manage Identity](#create-autoscaler)
+  * [Manage Image](#delete-autoscaler)
+  * [Manage Namespace](#list)
+  * [Manage Telemetry](#config)
+  * [Manage Workload](#compile)
+  * [ServerInfo](#user-management) 
+* [Get Passwords](#get-passwords) 
 * [Logging Information](#logging)
 
 ## Installing the CLI
@@ -79,6 +82,96 @@ Oracle Backend for Microservices and AI CLI is used to configure your backend an
 
        oractl:>
     ```
+       
+## Command Concepts 
+
+The following describes the different resources handled by the client:
+
+* Artifacts - An artifact is a microservice JAR file uploaded to the backend. It is written to persistent storage1.
+
+* Binding - A schema/user that is bound to a service deployment.
+
+* Configuration - Application configurations managed by the Spring Cloud Config server.
+
+* Datastore - Creates a database user and generates a secret in the app namespace containing that user and password8.
+
+* Identity - Handles user management.
+
+* Image - Manages image creation from artifacts.
+
+* Namespace - An application namespace (Kubernetes namespace). The application namespace provides a mechanism for isolating groups of resources, especially the microservices.
+
+* Telemetry - TBD
+
+* Workload - Creates a Kubernetes deployment and service
+
+## Workflow Example
+
+Following is a worflow example deploying the Spring services that makeup the CloudBank backend.
+
+Create the namespace for the CloudBank application
+```
+namespace create --namespace application
+```
+Create the datastore for the Account and Customer microservices
+```
+datastore create --namespace application --username account --id account
+datastore create --namespace application --username customer --id customer
+```
+Upload the Spring microservice jars
+```
+artifact create --namespace application --workload account --imageVersion 0.0.1 --file /Users/devusr/microservices-datadriven/cloudbank-v4/account/target/account-0.0.1-SNAPSHOT.jar
+
+artifact create --namespace application --workload checks --imageVersion 0.0.1 --file /Users/devusr/microservices-datadriven/cloudbank-v4/checks/target/checks-0.0.1-SNAPSHOT.jar
+
+artifact create --namespace application --workload customer --imageVersion 0.0.1 --file /Users/devusr/microservices-datadriven/cloudbank-v4/customer/target/customer-0.0.1-SNAPSHOT.jar
+
+artifact create --namespace application --workload creditscore --imageVersion 0.0.1 --file /Users/devusr/microservices-datadriven/cloudbank-v4/creditscore/target/creditscore-0.0.1-SNAPSHOT.jar
+
+artifact create --namespace application --workload transfer --imageVersion 0.0.1 --file /Users/devusr/microservices-datadriven/cloudbank-v4/transfer/target/transfer-0.0.1-SNAPSHOT.jar
+```
+Create images from the artifacts
+
+The default base image is ghcr.io/oracle/openjdk-image-obaas:21
+```
+image create --namespace application --workload account --imageVersion 0.0.1
+
+image create --namespace application --workload checks --imageVersion 0.0.1
+
+image create --namespace application --workload customer --imageVersion 0.0.1 
+
+image create --namespace application --workload creditscore --imageVersion 0.0.1 
+
+image create --namespace application --workload transfer --imageVersion 0.0.1 
+```
+
+Create a workload for the images
+```
+workload create --namespace application --imageVersion 0.0.1 --id account --liquibaseDB admin --cpuRequest 100m
+workload create --namespace application --imageVersion 0.0.1 --id checks --cpuRequest 100m
+workload create --namespace application --imageVersion 0.0.1 --id customer --liquibaseDB admin --cpuRequest 100m
+workload create --namespace application --imageVersion 0.0.1 --id creditscore --cpuRequest 100m
+workload create --namespace application --imageVersion 0.0.1 --id transfer --cpuRequest 100m
+```
+
+Create a binding between the workload and the datastore
+```
+binding create --namespace application --datastore account --workload account
+binding create --namespace application --datastore customer --workload customer
+binding create --namespace application --datastore account --workload checks
+```
+
+Verify success
+```
+serverversion
+namespace list
+datastore list --namespace application
+artifact list
+image list
+binding list --namespace application
+workload list --namespace application
+```
+
 
 ## Available Commands
 
@@ -91,12 +184,18 @@ commands can be viewed by issuing `help [command-name]`. For example:
 oractl:>help
 AVAILABLE COMMANDS
 
-Application/Namespace Commands
-       create: Create an application/namespace.
+Artifact
+       artifact list: Lists the artifacts in your platform.
+       artifact create: Creates a new artifact in your platform.
+       artifact delete: Delete an artifact in your platform.
+       artifact deleteByWorkload: Delete an artifact in your platform by workload.
 
-Autoscaler Commands
-       create-autoscaler: Create an autoscaler.
-       delete-autoscaler: Delete an autoscaler.
+Binding
+       binding list: Lists bindings for a given namespace.
+       binding update: Update a specific binding for a given namespace.
+       binding delete: Delete a specific binding for a given namespace.
+       binding create: Create a binding in a given namespace.
+       binding get: Get a specific binding for a given namespace.
 
 Built-In Commands
        help: Display help about available commands
@@ -107,29 +206,62 @@ Built-In Commands
        version: Show version info
        script: Read and execute commands from a file.
 
-GraalVM Compile Commands
-       compile-download: Download executable file compiled
-       compile: Compile a service with GraalVM
-       compile-purge: Delete a job launched
-       compile-logs: Compilation progress
+Configuration
+       configuration delete: Delete a specific configuration key.
+       configuration create: Create a configuration.
+       configuration get: Get a specific configuration by name.
+       configuration update: Update a configuration.
+       configuration list: Lists all configuration.
 
-Identity and Access Management Service
-       user list: Lists the users in your platform.
+Datastore
+       datastore list: Lists datastores for a given namespace.
+       datastore update: Update a specific datastore for a given namespace.
+       datastore create: Create a datastore in a given namespace.
+       datastore delete: Delete a specific datastore for a given namespace.
+       datastore get: Get a specific datastore for a given namespace.
+
+Identity
+       user list: Lists all the users in your platform.
        user create: Creates a new user in your platform.
-       user get: Gets the specified user’s information.
+       user get: get a user on your platform.
        user delete: Delete a user in your platform.
        user change-roles: Change the roles from the specified user.
+       user change-password: Change password for the specified user. 
+
+Image
+       image get: Get a specific image on your platform.
+       image list: Lists all the images in your platform.
+       image create: Creates a new image in your platform.
+       image delete: Delete an image in your platform.
+
+Initialization
        connect: Connect to the OBaaS Admin Service.
-       user change-password: Change password for the specified user.
 
-Informational Commands
-       list: list/show details of application services.
+Namespace
+       namespace create: Creates a new namespace in your platform.
+       namespace delete: Delete a namespace in your platform.
+       namespace update: Update the namespace secrets.
+       namespace list: Lists the namespaces in your platform.
 
-Service Commands
-       bind: Create or Update a schema/user and bind it to service deployment.
-       delete: Delete a service or entire application/namespace.
-       config: View and modify Service configuration.
-       deploy: Deploy a service.
+Server Version
+       serverversion: Get obaas admin server version.
+
+Telemetry
+       telemetry-consent update: Update the platforms telemetry consent.
+       telemetry-consent list: Lists the platforms telemetry consent status.
+       telemetry-consent create: Create a telemetry consent record.
+
+Workload
+       autoscaler delete: Delete an autoscaler for a specific workload in a given namespace.
+       workload create: Create a workload in a given namespace.
+       workload delete: Delete a specific workload for a given namespace.
+       workload update: Update a specific workload for a given namespace.
+       autoscaler create: Create an autoscaler for a specific workload in a given namespace.
+       workload getImage: Get the image for a specific workload in a given namespace.
+       workload list: Lists workloads for a given namespace.
+       workload get: Get a specific workload for a given namespace.
+       autoscaler list: Lists autoscalers for a given workload in a given namespace.
+       autoscaler update: Update an autoscaler for a specific workload in a given namespace.
 
 
 Ask for Help
@@ -137,29 +269,9 @@ Ask for Help
        E-mail: obaas_ww@oracle.com
 ```
 
-An application is a namespace encompassing related microservices. For example, a "cloudbank" application may have "banktransfer" and "frauddetection" microservices deployed within it.
-
-The [`create`](#create) command results in the creation of an application namespace (Kubernetes *namespace*). The application namespace provides a mechanism for isolating groups of resources, especially the microservices.
-
-The [`delete`](#delete) command results in the complete deletion of an application namespace (Kubernetes *namespace*) or for a specific microservice. Ensure that you want to completely delete the application namespace. You cannot rollback the components once deleted.
-
-The [`bind`](#bind) command results in the automatic creation of a database schema for a given service or user and binds the information for that schema or database in the environment of the microservice. The option of a prefix for the bound environment properties is also returned. For example, most Spring Boot microservices use `spring.datasource`.
-
-The [`deploy`](#deploy) command takes `service-name`, `app-name`, and `artifact-path` as the main arguments (`image-version` and `java-version` options are also provided). When the `deploy` command is issued, the microservice JAR file is uploaded to the backend and a container image is created for the JAR or microservice, and various Kubernetes resources such as **Deployment** and **Service** are also created. This is all done automatically to simplify the development process and the management of the microservices by the backend.
-
-The [`create-autoscaler`](#create-autoscaler) and [`delete-autoscaler`](#delete-autoscaler) commands allow you to create and delete horizontal pod autoscalers for specific microservices.
-
-The [`list`](#list) command shows the details of the deployed microservices.
-
-The [`config`](#config) command can also be used to add, view, update, and delete configurations managed by the Spring Cloud Config server.
-
-A common development workflow pattern is to `connect`, `change-password` (only if necessary), `create` (once per application or namespace), `config`, `bind` (only if necessary), `deploy`, and `list`.
-
-Further development and redeployment of the service can then be repeated issuing the `deploy` and `list` commands.
-
 The following is a description of the CLI commands:
 
-### connect
+## Connect
 
 Use the `connect` command to connect your `oractl` CLI to the Oracle Backend Administration service:
 
@@ -192,45 +304,158 @@ For example:
 oractl:>connect
 ? username obaas-admin
 ? password ****************
-Credentials successfully authenticated! obaas-admin -> welcome to OBaaS CLI.
+obaas-admin -> Welcome!
 ```
 
-### create
+## Artifact
 
-Use the `create` command to create an application namespace (Kubernetes *namespace*). The application namespace provides a mechanism for isolating groups of resources, especially the microservices. Names of resources need to be unique within an application namespace, but not across application namespaces.
+An artifact is Spring microservice JAR file that is uploaded to the platform. 
 
+
+### artifact create
 ```bash
-oractl:>help create
+oractl:>help artifact create
 NAME
-       create - Create an application/namespace.
+       artifact create - Creates a new artifact in your platform.
 
 SYNOPSIS
-       create --app-name String --help
+       artifact create [--namespace String] [--workload String] [--imageVersion String] --nativeImage boolean --path String [--file String] --help 
 
 OPTIONS
-       --app-name String
-       application/namespace
+       --namespace String
+       The namespace the artifact will be created in.
+       [Mandatory]
+
+       --workload String
+       The workload name for the artifact.
+       [Mandatory]
+
+       --imageVersion String
+       The version  of the artifact.
+       [Mandatory]
+
+       --nativeImage boolean
+       Whether to create a native artifact.
+       [Optional, default = false]
+
+       --path String
+       Artifact Path.
        [Optional]
 
-       --help or -h
-       help for create
+       --file String
+       Jar file used for Artifact Creation.
+       [Mandatory]
+
+       --help or -h 
+       help for artifact create
        [Optional]
 
-Ask for Help
-       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-       E-mail: obaas_ww@oracle.com
 ```
 
    For example:
 
    ```bash
-   oractl:>create --app-name myapp
-   application/namespace created successfully and image pull secret (registry-auth) created successfully and database TNSAdmin/wallet secret created successfully
+oractl:>artifact create --namespace myapp --workload account  --imageVersion 1.0.0 --file /Users/devuser/account.jar
+obaas-cli [artifact create]: Artifact [account:1.0.0] was successfully created.
    ```
 
-### delete
+### artifact list
+```bash
+oractl:>help artifact list
+NAME
+       artifact list - Lists the artifacts in your platform.
 
-Use the `delete` command to delete an application namespace (Kubernetes *namespace*) completely or a specific microservice inside an application namespace.
+SYNOPSIS
+       artifact list --help 
+
+OPTIONS
+       --help or -h 
+       help for artifact list
+       [Optional]
+
+```
+
+   For example:
+
+   ```
+   oractl:>artifact list
+╔══╤═════════╤════════╤════════╤══════╤══════════════════════════════════════════════════════╗
+║ID│Namespace│Workload│Artifact│Native│Path                                                  ║
+║  │         │        │Version │Image │                                                      ║
+╠══╪═════════╪════════╪════════╪══════╪══════════════════════════════════════════════════════╣
+║6 │myapp    │account │1.0.0   │false │/app/upload-dir/myapp/account/target/account-1.0.0.jar║
+╚══╧═════════╧════════╧════════╧══════╧══════════════════════════════════════════════════════╝
+
+   ```
+
+### artifact delete
+```bash
+oractl:>help artifact delete
+NAME
+       artifact delete - Delete an artifact in your platform.
+
+SYNOPSIS
+       artifact delete [--artifactId String] --help 
+
+OPTIONS
+       --artifactId String
+       The ID of the artifact you want to delete.
+       [Mandatory]
+
+       --help or -h 
+       help for artifact delete
+       [Optional]
+```
+
+For example:
+
+```
+oractl:>artifact delete --artifactId 6
+obaas-cli [artifact delete]: Artifact [6] was successfully deleted.
+```
+
+### artifact deleteByWorkload
+```bash
+oractl:>help artifact deleteByWorkload
+NAME
+       artifact deleteByWorkload - Delete an artifact in your platform by workload.
+
+SYNOPSIS
+       artifact deleteByWorkload [--namespace String] [--workload String] [--artifactVersion String] --help 
+
+OPTIONS
+       --namespace String
+       The namespace the artifact will be deleted in.
+       [Mandatory]
+
+       --workload String
+       The workload name for the artifact.
+       [Mandatory]
+
+       --artifactVersion String
+       The version  of the artifact.
+       [Mandatory]
+
+       --help or -h 
+       help for artifact deleteByWorkload
+       [Optional]
+
+```
+
+For example:
+```
+oractl:>artifact deleteByWorkload --namespace myapp --workload account --artifactVersion 1.0.0
+obaas-cli [artifact delete]: Artifact [account:1.0.0] was successfully deleted.
+```
+
+
+## Binding
+
+A binding liks the datastore to a workload.
+
+# ALL BELOW IS FROM PREVIOUS AND WILL BE DELETED
+# EXCEPT FOR LOGGING
+
 
 > ATTENTION: Ensure that you want to completely delete the application namespace. You cannot rollback the components once deleted.
 
@@ -1227,6 +1452,10 @@ For example, to delete a user called `obaas-user-test1`:
 oractl:>user delete --username obaas-user-test1
 obaas-cli [user delete]: User [obaas-user-test1] as successfully deleted.
 ````
+
+## Get Passwords
+
+Commands to get the various systme generated passwords
 
 ## Logging
 
