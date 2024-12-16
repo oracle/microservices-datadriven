@@ -82,7 +82,7 @@ Oracle Backend for Microservices and AI CLI is used to configure your backend an
 
 1. Download the Oracle Backend for Microservices and AI CLI `oractl`
 
-   Download the CLI from [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.3.1)
+   Download the CLI from [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.4.0)
 
 1. Rename the downloaded file to `oractl`
 
@@ -120,8 +120,8 @@ Oracle Backend for Microservices and AI CLI is used to configure your backend an
        \_/ |_) (_| (_| __)   \_ |_ _|_
        ========================================================================================
        Application Name: Oracle Backend Platform :: Command Line Interface
-       Application Version: (1.3.1)
-       :: Spring Boot (v3.3.3) ::
+       Application Version: (1.4.0)
+       :: Spring Boot (v3.3.6) ::
 
        Ask for help:
        - Slack: https://oracledevs.slack.com/archives/C06L9CDGR6Z
