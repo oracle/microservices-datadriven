@@ -17,16 +17,63 @@ Table of Contents:
   * [Help](#help)
   * [Connect to the backend](#connect)
   * [Manage Artifact](#artifact)
+    * [artifact create](#artifact-create)
+    * [artifact list](#artifact-list)
+    * [artifact delete](#artifact-delete)
+    * [artifact deleteByWorkload](#artifact-deletebyworkload)
+  * [Manage AutoScaler](#autoscaler)
+    * [autoscaler create](#autoscaler-create)
+    * [autoscaler list](#autoscaler-list)
+    * [autoscaler update](#autoscaler-update)
+    * [autoscaler delete](#autoscaler-delete)
   * [Manage Binding](#binding)
-  * [Manage Configuration](#bind)
-  * [Manage Datastore](#deploy)
-  * [Manage Identity](#create-autoscaler)
-  * [Manage Image](#delete-autoscaler)
-  * [Manage Namespace](#list)
-  * [Manage Telemetry](#config)
-  * [Manage Workload](#compile)
-  * [ServerInfo](#user-management) 
-* [Get Passwords](#get-passwords) 
+    * [binding create](#binding-create)
+    * [binding list](#binding-list)
+    * [binding get](#binding-get)
+    * [binding update](#binding-update)
+    * [binding delete](#binding-delete)
+  * [Manage Configuration](#configuration)
+    * [configuration create](#configuration-create)
+    * [configuration list](#configuration-list)
+    * [configuration get](#configuration-get)
+    * [configuration update](#configuration-update)
+    * [configuration delete](#configuration-delete)
+  * [Manage Datastore](#datastore)
+    * [datastore create](#datastore-create)
+    * [datastore list](#datatore-list)
+    * [datastore get](#datastore-get)
+    * [datastore update](#datastore-update)
+    * [datastore delete](#datastore-delete)
+  * [Manage Identity](#identity)
+    * [user create](#user-create)
+    * [user list](#user-list)
+    * [user get](#user-get)
+    * [user delete](#user-delete)
+    * [user change-password](#user-change-password)
+    * [user change-roles](#user-change-roles)
+  * [Manage Image](#image)
+    * [image create](#image-create)
+    * [image list](#image-list)
+    * [image get](#image-get)
+    * [image delete](#image-delete)
+    * [image deleteByWorkload](#image-deletebyworkload)
+  * [Manage Namespace](#namespace)
+    * [namespace create](#namespace-create)
+    * [namespace list](#namespace-list)
+    * [namespace update](#namespace-update)
+    * [namespace delete](#namespace-delete)
+  * [Manage Telemetry](#telemetry)
+    * [telemetry-consent create](#telemetry-consent-create)
+    * [telemetry-consent list](#telemetry-consent-list)
+    * [telemetry-consent update](#telemetry-consent-update)
+  * [Manage Workload](#workload)
+    * [workload create](#workload-create)
+    * [workload list](#workload-list)
+    * [workload get](#workload-get)
+    * [workload getImage](#workload-getimage)
+    * [workload update](#workload-update)
+    * [workload delete](#workload-delete)
+  * [Server Version](#server-version) 
 * [Logging Information](#logging)
 
 ## Installing the CLI
@@ -87,23 +134,25 @@ Oracle Backend for Microservices and AI CLI is used to configure your backend an
 
 The following describes the different resources handled by the client:
 
-* Artifacts - An artifact is a microservice JAR file uploaded to the backend. It is written to persistent storage1.
+* Artifacts - An artifact, for example a JAR file, that can be used to run a workload.  Artifacts are built into images.
 
-* Binding - A schema/user that is bound to a service deployment.
+* Autoscaler - adjust pod replicas in response to workload demands.
 
-* Configuration - Application configurations managed by the Spring Cloud Config server.
+* Binding - A binding associates a datastore with a workload.
 
-* Datastore - Creates a database user and generates a secret in the app namespace containing that user and password8.
+* Configuration - A configuration property which can be injected into a workload. Identified by name, label and profile.
 
-* Identity - Handles user management.
+* Datastore - A data store, for example a pluggable database or a schema/user in a database instance, which can be used by a workload.  Can be shared by multiple workloads, although this is only recommended for truly shared resources like queues/topics used for asynchronous communications between microservices.  In most normal cases, a datastore should only be associated with one workload, in keeping with the "database per service" pattern.
 
-* Image - Manages image creation from artifacts.
+* Identity - APIs related to identity (users, roles, etc.) are collected in this group.
 
-* Namespace - An application namespace (Kubernetes namespace). The application namespace provides a mechanism for isolating groups of resources, especially the microservices.
+* Image - A container image which can be used to run an workload. Built from an artifact and a base image.
 
-* Telemetry - TBD
+* Namespace - A Kubernetes namespace in which workloads can be deployed.
 
-* Workload - Creates a Kubernetes deployment and service
+* Telemetry - APIs for managing consent (opt-in) for sending telemetry data to Oracle.
+
+* Workload - A Spring Boot application which can be deployed in the platform. Is associated with an artifact and an image, which have their own separate lifecycles.
 
 ## Workflow Example
 
@@ -132,7 +181,7 @@ artifact create --namespace application --workload transfer --imageVersion 0.0.1
 ```
 Create images from the artifacts
 
-The default base image is ghcr.io/oracle/openjdk-image-obaas:21
+
 ```
 image create --namespace application --workload account --imageVersion 0.0.1
 
@@ -309,7 +358,7 @@ obaas-admin -> Welcome!
 
 ## Artifact
 
-An artifact is Spring microservice JAR file that is uploaded to the platform. 
+An artifact, for example a JAR file, that can be used to run a workload.  Artifacts are built into images.
 
 
 ### artifact create
@@ -448,1014 +497,1433 @@ oractl:>artifact deleteByWorkload --namespace myapp --workload account --artifac
 obaas-cli [artifact delete]: Artifact [account:1.0.0] was successfully deleted.
 ```
 
+## AutoScaler
+
+adjust pod replicas in response to workload demands
+
+### autoscaler create
+```bash
+oractl:>help autoscaler create
+NAME
+       autoscaler create - Create an autoscaler for a specific workload in a given namespace.
+
+SYNOPSIS
+       autoscaler create [--namespace String] [--workloadID String] [--minimumReplicas Integer] [--maximumReplicas Integer] [--cpuPercent Integer] --help 
+
+OPTIONS
+       --namespace String
+       The namespace to create the workload in.
+       [Mandatory]
+
+       --workloadID String
+       The id of the workload.
+       [Mandatory]
+
+       --minimumReplicas Integer
+       Minimum replicas for workload.
+       [Mandatory]
+
+       --maximumReplicas Integer
+       Maximum Replicas for workload.
+       [Mandatory]
+
+       --cpuPercent Integer
+       Indicates the average CPU utilization threshold that triggers scaling of pods.
+       [Mandatory]
+
+       --help or -h 
+       help for autoscaler create
+       [Optional]
+```
+For example:
+```bash
+oractl:>autoscaler create --namespace myapp --workloadID account --minimumReplicas 1 --maximumReplicas 5 --cpuPercent 65
+obaas-cli [autoscaler create]: Autoscaler [account] was successfully created.
+```
+
+### autoscaler list
+```bash
+oractl:>help autoscaler list
+NAME
+       autoscaler list - Lists autoscalers for a given workload in a given namespace.
+
+SYNOPSIS
+       autoscaler list [--namespace String] [--workloadID String] --help 
+
+OPTIONS
+       --namespace String
+       The namespace to query workloads from.
+       [Mandatory]
+
+       --workloadID String
+       The id of the workload.
+       [Mandatory]
+
+       --help or -h 
+       help for autoscaler list
+       [Optional]
+```
+For example:
+```bash
+oractl:>autoscaler list --namespace myapp --workloadID accounts
+╔═══════════╤═══════════╤══════════╗
+║Minimum    │Maximum    │CPUPercent║
+║Replicas   │Replicas   │          ║
+╠═══════════╪═══════════╪══════════╣
+║1          │5          │65        ║
+╚═══════════╧═══════════╧══════════╝
+```
+
+### autoscaler update
+```bash
+oractl:>help autoscaler update
+NAME
+       autoscaler update - Update an autoscaler for a specific workload in a given namespace.
+
+SYNOPSIS
+       autoscaler update [--namespace String] [--workloadID String] [--minimumReplicas Integer] [--maximumReplicas Integer] [--cpuPercent Integer] --help 
+
+OPTIONS
+       --namespace String
+       The namespace to create the workload in.
+       [Mandatory]
+
+       --workloadID String
+       The id of the workload.
+       [Mandatory]
+
+       --minimumReplicas Integer
+       Minimum replicas for workload.
+       [Mandatory]
+
+       --maximumReplicas Integer
+       Maximum Replicas for workload.
+       [Mandatory]
+
+       --cpuPercent Integer
+       Indicates the average CPU utilization threshold that triggers scaling of pods.
+       [Mandatory]
+
+       --help or -h 
+       help for autoscaler update
+       [Optional]
+```
+For example:
+```bash
+oractl:>autoscaler update --namespace myapp --workloadID account --minimumReplicas 2 --maximumReplicas 3 --cpuPercent 75
+obaas-cli [autoscaler update]: Autoscaler [account] was successfully updated.
+```
+
+### autoscaler delete
+```bash
+oractl:>help autoscaler delete
+NAME
+       autoscaler delete - Delete an autoscaler for a specific workload in a given namespace.
+
+SYNOPSIS
+       autoscaler delete [--namespace String] [--workloadID String] --help 
+
+OPTIONS
+       --namespace String
+       The namespace of the workload.
+       [Mandatory]
+
+       --workloadID String
+       The workload id that has the autoscaler to be deleted.
+       [Mandatory]
+
+       --help or -h 
+       help for autoscaler delete
+       [Optional]
+```
+For example:
+```bash
+oractl:>autoscaler delete --namespace myapp --workloadID accounts
+obaas-cli [autoscaler delete]: Autoscaler [accounts] was successfully deleted.
+```
 
 ## Binding
 
-A binding liks the datastore to a workload.
+A binding associates a datastore with a workload.
 
-# ALL BELOW IS FROM PREVIOUS AND WILL BE DELETED
-# EXCEPT FOR LOGGING
-
-
-> ATTENTION: Ensure that you want to completely delete the application namespace. You cannot rollback the components once deleted.
-
+### binding create
 ```bash
+oractl:>help binding create
 NAME
-       delete - Delete a service or entire application/namespace.
+       binding create - Create a binding in a given namespace.
 
 SYNOPSIS
-       delete --app-name String --service-name String --image-version String --help
+       binding create [--namespace String] [--workload String] [--datastore String] --help 
 
 OPTIONS
-       --app-name String
-       application/namespace
-       [Optional]
+       --namespace String
+       The namespace to create the binding in.
+       [Mandatory]
 
-       --service-name String
-       Service Name
-       [Optional]
+       --workload String
+       The workload id.
+       [Mandatory]
 
-       --image-version String
-       Image Version
-       [Optional]
+       --datastore String
+       The datastore id.
+       [Mandatory]
 
-       --help or -h
-       help for delete
+       --help or -h 
+       help for binding create
        [Optional]
-
-Ask for Help
-       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-       E-mail: obaas_ww@oracle.com
+```
+For example:
+```bind
+oractl:>binding create --namespace myapp --workload accounts --datastore mydatastore
+obaas-cli [binding create]: Binding [accounts] was successfully created.
 ```
 
-   For example:
-
-   ```bash
-   oractl:>delete --app-name myapp
-
-   obaas-cli [delete]: The Application/Namespace [myapp] will be removed, including all Services deployed. Do you confirm the complete deletion (y/n)?: y
-   
-   obaas-cli [delete]: Application/Namespace [myapp] as successfully deleted
-   ```
-
-### bind
-
-Use the `bind` command to create and update a database schema or user for the service. These commands also create or update the Kubernetes secret and binding environment entries for the schema. These are set in the Kubernetes deployment created with the `deploy` command. For example:
-
+### binding list
 ```bash
-oractl:>help bind
+oractl:>binding create --namespace myapp --workload accounts --datastore mydatastore
+obaas-cli [binding create]: Binding [accounts] was successfully created.
+oractl:>help binding list
 NAME
-       bind - Create or Update a schema/user and bind it to service deployment.
+       binding list - Lists bindings for a given namespace.
 
 SYNOPSIS
-       bind --action CommandConstants.BindActions --app-name String --service-name String 
-       --username String --binding-prefix String --help
+       binding list [--namespace String] --help 
 
 OPTIONS
-       --action CommandConstants.BindActions
-       possible actions: create or update. create is default.
-       [Optional, default = create]
+       --namespace String
+       The namespace to query bindings from.
+       [Mandatory]
 
-       --app-name String
-       application/namespace
-       [Optional, default = application]
-
-       --service-name String
-       Service Name (Default for database user if username is not provided)
+       --help or -h 
+       help for binding list
        [Optional]
+```
+For example:
+```bash
+oractl:>binding list --namespace myapp
+╔════════╤═══════════╗
+║Workload│Datastore  ║
+╠════════╪═══════════╣
+║accounts│mydatastore║
+╚════════╧═══════════╝
+```
+
+### binding get
+```bash
+oractl:>help binding get
+NAME
+       binding get - Get a specific binding for a given namespace.
+
+SYNOPSIS
+       binding get [--namespace String] [--workload String] --help 
+
+OPTIONS
+       --namespace String
+       The namespace to query the binding from.
+       [Mandatory]
+
+       --workload String
+       The workload id.
+       [Mandatory]
+
+       --help or -h 
+       help for binding get
+       [Optional]
+```
+For example:
+```bash
+oractl:>binding get --namespace myapp --workload account
+╔════════╤═══════════╗
+║Workload│Datastore  ║
+╠════════╪═══════════╣
+║account │mydatastore║
+╚════════╧═══════════╝
+
+```
+
+### binding update
+```bash
+oractl:>help binding update
+NAME
+       binding update - Update a specific binding for a given namespace.
+
+SYNOPSIS
+       binding update [--namespace String] [--workload String] [--datastore String] --help 
+
+OPTIONS
+       --namespace String
+       The namespace to update the datastore in.
+       [Mandatory]
+
+       --workload String
+       The workload id.
+       [Mandatory]
+
+       --datastore String
+       The datastore id.
+       [Mandatory]
+
+       --help or -h 
+       help for binding update
+       [Optional]
+```
+For example:
+```bash
+oractl:>binding update --namespace myapp --workload account --datastore newdatastore
+obaas-cli [binding update]: Binding [account] was successfully updated.
+```
+
+### binding delete
+```bash
+oractl:>help binding delete
+NAME
+       binding delete - Delete a specific binding for a given namespace.
+
+SYNOPSIS
+       binding delete [--namespace String] [--workload String] --help 
+
+OPTIONS
+       --namespace String
+       The namespace to delete the binding in.
+       [Mandatory]
+
+       --workload String
+       The workload id.
+       [Mandatory]
+
+       --help or -h 
+       help for binding delete
+       [Optional]
+```
+For example:
+```bash
+oractl:>binding delete --namespace myapp --workload account
+obaas-cli [binding delete]: Binding [account] was successfully deleted.
+```
+
+
+## Configuration
+
+A configuration property which can be injected into a workload. Identified by name, label and profile.
+
+### configuration create
+```bash
+oractl:>help configuration create
+NAME
+       configuration create - Create a configuration.
+
+SYNOPSIS
+       configuration create [--name String] [--profile String] [--label String] [--key String] [--value String] --help 
+
+OPTIONS
+       --name String
+       The name of the configuration.
+       [Mandatory]
+
+       --profile String
+       The configuration profile.
+       [Mandatory]
+
+       --label String
+       The configuration label.
+       [Mandatory]
+
+       --key String
+       The configuration key.
+       [Mandatory]
+
+       --value String
+       The configuration value.
+       [Mandatory]
+
+       --help or -h 
+       help for configuration create
+       [Optional]
+```
+For example:
+```bash
+oractl:>configuration create --name accountconfig --profile development --label 23beta --key debuglogging --value debug
+obaas-cli [configuration create]: Configuration [accountconfig] was successfully created.
+```
+
+### configuration list
+```bash
+oractl:>help configuration list
+NAME
+       configuration list - Lists all configuration.
+
+SYNOPSIS
+       configuration list --help 
+
+OPTIONS
+       --help or -h 
+       help for configuration list
+       [Optional]
+```
+For example:
+```bash
+oractl:>configuration list
+╔═════════════╗
+║Name         ║
+╠═════════════╣
+║accountconfig║
+╟─────────────╢
+║application-a║
+╚═════════════╝
+```
+
+### configuration get
+```bash
+oractl:>help configuration get
+NAME
+       configuration get - Get a specific configuration by name.
+
+SYNOPSIS
+       configuration get [--name String] --help 
+
+OPTIONS
+       --name String
+       The name of the configuration.
+       [Mandatory]
+
+       --help or -h 
+       help for configuration get
+       [Optional]
+```
+For example:
+```bash
+oractl:>configuration get --name accountconfig
+╔═════════════╤═══════════╤══════╤════════════╤═════╗
+║Name         │Profile    │Label │Key         │Value║
+╠═════════════╪═══════════╪══════╪════════════╪═════╣
+║accountconfig│development│23beta│debuglogging│debug║
+╚═════════════╧═══════════╧══════╧════════════╧═════╝
+```
+
+### configuration update
+```bash
+oractl:>help configuration update
+NAME
+       configuration update - Update a configuration.
+
+SYNOPSIS
+       configuration update [--name String] [--profile String] [--label String] [--key String] [--value String] --help 
+
+OPTIONS
+       --name String
+       The name of the configuration.
+       [Mandatory]
+
+       --profile String
+       The configuration profile.
+       [Mandatory]
+
+       --label String
+       The configuration label.
+       [Mandatory]
+
+       --key String
+       The configuration key.
+       [Mandatory]
+
+       --value String
+       The configuration value.
+       [Mandatory]
+
+       --help or -h 
+       help for configuration update
+       [Optional]
+```
+For example:
+```bash
+oractl:>configuration update --name accountconfig --profile development --label 23beta --key debuglogging --value info
+obaas-cli [configuration update]: Configuration [accountconfig] was successfully updated.
+```
+
+### configuration delete
+```bash
+oractl:>help configuration delete
+NAME
+       configuration delete - Delete a specific configuration key.
+
+SYNOPSIS
+       configuration delete [--name String] [--profile String] [--label String] [--key String] [--value String] --help 
+
+OPTIONS
+       --name String
+       The name of the configuration.
+       [Mandatory]
+
+       --profile String
+       The configuration profile.
+       [Mandatory]
+
+       --label String
+       The configuration label.
+       [Mandatory]
+
+       --key String
+       The configuration key.
+       [Mandatory]
+
+       --value String
+       The configuration value.
+       [Mandatory]
+
+       --help or -h 
+       help for configuration delete
+       [Optional]
+```
+For example:
+```bash
+oractl:>configuration delete --name accountconfig --profile development --label 23beta --key debuglogging --value info
+obaas-cli [configuration delete]: Configuration [accountconfig] was successfully deleted.
+```
+
+
+## DataStore
+
+A data store, for example a pluggable database or a schema/user in a database instance, which can be used by a workload.  Can be shared by multiple workloads, although this is only recommended for truly shared resources like queues/topics used for asynchronous communications between microservices.  In most normal cases, a datastore should only be associated with one workload, in keeping with the "database per service" pattern.
+
+
+### datastore create
+```bash
+oractl:>help datastore create
+NAME
+       datastore create - Create a datastore in a given namespace.
+
+SYNOPSIS
+       datastore create [--namespace String] [--username String] [--id String] --help 
+
+OPTIONS
+       --namespace String
+       The namespace to create the datastore in.
+       [Mandatory]
 
        --username String
-       Database User
+       The datastore username.
+       [Mandatory]
+
+       --id String
+       The datastore id.
+       [Mandatory]
+
+       --help or -h 
+       help for datastore create
        [Optional]
 
-       --binding-prefix String
-       spring binding prefix
-       [Optional, default = spring.datasource]
-
-       --help or -h
-       help for bind
-       [Optional]
-
-Ask for Help
-       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-       E-mail: obaas_ww@oracle.com
 ```
 
-   > ATTENTION: The `service-name` is mandatory and used as the name for the schema or user to be created. If you want to use a different schema or user from the `service-name`, you must also submit the `username`.
-
-   1. Use the `bind` or `bind create` command to **create** a database schema or user for the service. For Example:
-
-       ```bash
-       oractl:>bind create --app-name myapp --service-name myserv
-       Database/Service Password: ************
-       Schema {myserv} was successfully created and Kubernetes Secret {myapp/myserv} was successfully created.
-       ```
-
-   1. Use the `bind update` command to **update** an already created database schema or user for the service. For example:
-
-       ```cmd
-       oractl:>bind update --app-name myapp --service-name myserv
-       Database/Service Password: ************
-       Schema {myserv} was successfully updated and Kubernetes Secret {myapp/myserv} was successfully updated.
-       ```
-
-### deploy
-
-Use the `deploy` command to create, build, and push an image for the microservice and create the necessary deployment, service, and secret Kubernetes resources for the microservice.
-
+For example:
 ```bash
-oractl:>help deploy
-NAME
-       deploy - Deploy a service.
-
-SYNOPSIS
-       deploy --bind String --app-name String [--service-name String] [--image-version String] 
-       --service-profile String --port String --java-version String --add-health-probe boolean 
-       --liquibase-db String [--artifact-path String] --initial-replicas int 
-       --graalvm-native boolean --apigw boolean --route String --apikey String --help
-
-OPTIONS
-       --bind String
-       automatically create and bind resources. possible values are [jms]
-       [Optional]
-
-       --app-name String
-       application/namespace
-       [Optional, default = application]
-
-       --service-name String
-       Service Name
-       [Mandatory]
-
-       --image-version String
-       Image Version
-       [Mandatory]
-
-       --service-profile String
-       Service Profile
-       [Optional]
-
-       --port String
-       Service Port
-       [Optional, default = 8080]
-
-       --java-version String
-       Java Base Image [ghcr.io/graalvm/jdk:ol9-java17-22.3.1]
-       [Optional]
-
-       --add-health-probe boolean
-       Inject or not Health probes to service.
-       [Optional, default = false]
-
-       --liquibase-db String
-       Inform the database name for Liquibase.
-       [Optional]
-
-       --artifact-path String
-       Service jar/exe location
-       [Mandatory]
-
-       --initial-replicas int
-       The initial number of replicas
-       [Optional, default = 1]
-
-       --graalvm-native boolean
-       Artifact is a graalvm native compiled by Oracle Backend
-       [Optional, default = false]
-
-       --apigw boolean
-       open routing through APISIX
-       [Optional, default = false]
-
-       --route String
-       set an APISIX route path
-       [Optional, default = /api/v1/]
-
-       --apikey String
-       set APISIX API_KEY
-       [Optional]
-
-       --help or -h
-       help for deploy
-       [Optional]
-
-
-
-CURRENTLY UNAVAILABLE
-       you are not signedIn. Please sign in to be able to use this command!
-
-Ask for Help
-       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-       E-mail: obaas_ww@oracle.com
+oractl:>datastore create --namespace myapp --username account --id account
+? password ************
+obaas-cli [datastore create]: Datastore [account] was successfully created.
 ```
 
-   For example:
-
-   ```bash
-   oractl:>deploy --app-name myapp --service-name myserv --image-version 0.0.1 --port 8081
-       --bind jms --add-health-probe true --artifact-path obaas/myserv/target/demo-0.0.1-SNAPSHOT.jar
-   uploading: obaas/myserv/target/demo-0.0.1-SNAPSHOT.jar building and pushing image...
-   binding resources... successful
-   creating deployment and service... successfully deployed
-   ```
-
-   or, for native compiled microservices, add **--java-version container-registry.oracle.com/os/oraclelinux:7-slim** to have a compact image and **--graalvm-native** to specify the file provided is an executable .exec:
-
-   ```bash
-   oractl:>deploy --app-name myapp --service-name account 
-     --artifact-path obaas/myserv/target/accounts-0.0.1-SNAPSHOT.jar.exec --image-version 0.0.1 
-     --graalvm-native --java-version container-registry.oracle.com/os/oraclelinux:7-slim
-   ```
-
-### create-autoscaler
-
-Use the `create-autoscaler` command to create a horizontal pod autoscaler for a microservice you have deployed.  You can specify the target scaling threshold using CPU percentage.  Note that your microservice must have its CPU request set in order to use the autoscaler.  It is set to `500m` (that is, half a core) by the `deploy` command if you did not override the default.
-
+### datatore list
 ```bash
-oractl:>help create-autoscaler
+oractl:>help datastore list
 NAME
-       create-autoscaler - Create an autoscaler.
+       datastore list - Lists datastores for a given namespace.
 
 SYNOPSIS
-       create-autoscaler --app-name String [--service-name String] --min-replicas int 
-         --max-replicas int --cpu-request String --cpu-percent int --help
+       datastore list [--namespace String] --help 
 
 OPTIONS
-       --app-name String
-       application/namespace
-       [Optional, default = application]
-
-       --service-name String
-       Service Name
+       --namespace String
+       The namespace to query datastores from.
        [Mandatory]
 
-       --min-replicas int
-       The minimium number of replicas
-       [Optional, default = 1]
-
-       --max-replicas int
-       The maximum number of replicas
-       [Optional, default = 4]
-
-       --cpu-request String
-       The amount of CPU to request
-       [Optional, default = 100m]
-
-       --cpu-percent int
-       The CPU percent at which to scale
-       [Optional, default = 80]
-
-       --help or -h
-       help for create-autoscaler
+       --help or -h 
+       help for datastore list
        [Optional]
 
+```
 
+For example:
+```
+oractl:>datastore list --namespace myapp
+╔════════════╤════════╗
+║Datastore ID│Username║
+╠════════════╪════════╣
+║account     │account ║
+╟────────────┼────────╢
+║mydatastore │dbuser  ║
+╚════════════╧════════╝
+```
 
-CURRENTLY UNAVAILABLE
-       you are not signedIn. Please sign in to be able to use this command!
+### datastore get
+```bash
+oractl:>help datastore get
+NAME
+       datastore get - Get a specific datastore for a given namespace.
 
-Ask for Help
-       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-       E-mail: obaas_ww@oracle.com
+SYNOPSIS
+       datastore get [--namespace String] [--id String] --help 
+
+OPTIONS
+       --namespace String
+       The namespace to query the datastore from.
+       [Mandatory]
+
+       --id String
+       The datastore id.
+       [Mandatory]
+
+       --help or -h 
+       help for datastore get
+       [Optional]
+
+```
+
+For example:
+```bash
+oractl:>datastore get --namespace myapp --id account
+╔════════════╤════════╗
+║Datastore ID│Username║
+╠════════════╪════════╣
+║account     │account ║
+╚════════════╧════════╝
+```
+
+### datastore update
+```bash
+oractl:>help datastore update
+NAME
+       datastore update - Update a specific datastore for a given namespace.
+
+SYNOPSIS
+       datastore update [--namespace String] [--id String] --help 
+
+OPTIONS
+       --namespace String
+       The namespace to update the datastore in.
+       [Mandatory]
+
+       --id String
+       The datastore id.
+       [Mandatory]
+
+       --help or -h 
+       help for datastore update
+       [Optional]
+
 ```
 
 For example:
 
 ```bash
-oractl:>create-autoscaler --app-name application --service-name creditscore --cpu-percent 80 
-  --cpu-request 200m --min-replicas 2 --max-replicas 6
-obaas-cli [create-autoscaler]: Autoscaler was successfully created.
+oractl:>datastore update --namespace myapp --id account
+? password *************
+obaas-cli [datastore update]: Datastore [account] was successfully updated.
 ```
 
-You can view the details of the autoscaler using `kubectl`, for example:
-
+### datastore delete
 ```bash
-$ kubectl -n application get hpa
-NAME          REFERENCE                TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
-creditscore   Deployment/creditscore   0%/80%    2         6         2          26s
-customer      Deployment/customer      4%/80%    2         6         2          26h
-
-```
-
-### delete-autoscaler
-
-Use the `delete-autoscaler` command to delete a horizontal pod autoscaler for a microservice you have deployed.
-
-```bash
-oractl:>help delete-autoscaler
+oractl:>help datastore delete
 NAME
-       delete-autoscaler - Delete an autoscaler.
+       datastore delete - Delete a specific datastore for a given namespace.
 
 SYNOPSIS
-       delete-autoscaler --app-name String [--service-name String] --help
+       datastore delete [--namespace String] [--id String] --help 
 
 OPTIONS
-       --app-name String
-       application/namespace
-       [Optional, default = application]
-
-       --service-name String
-       Service Name
+       --namespace String
+       The namespace to delete the datastore from.
        [Mandatory]
 
-       --help or -h
-       help for delete-autoscaler
+       --id String
+       The datastore id.
+       [Mandatory]
+
+       --help or -h 
+       help for datastore delete
        [Optional]
-
-
-Ask for Help
-       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-       E-mail: obaas_ww@oracle.com
 ```
 
 For example:
 
 ```bash
-oractl:>delete-autoscaler --app-name application --service-name creditscore
-obaas-cli [delete-autoscaler]: Autoscaler was successfully deleted.
+oractl:>datastore delete --namespace myapp --id account
+obaas-cli [datastore delete]: Datastore [account] was successfully deleted.
 ```
 
-### list
+## Identity
 
-Use the `list` command to show details of the microservice deployed in the previous step. For example:
+APIs related to identity (users, roles, etc.) are collected in this group.
 
+### user create
 ```bash
-oractl:>help list
-NAME
-       list - list/show details of application services.
-
-SYNOPSIS
-       list --app-name String --help
-
-OPTIONS
-       --app-name String
-       application/namespace
-       [Optional, default = application]
-
-       --help or -h
-       help for list
-       [Optional]
-
-Ask for Help
-       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-       E-mail: obaas_ww@oracle.com
-```
-
-For example:
-
-```bash
-   oractl:>list --app-name myapp
-   name:myserv-c46688645-r6lhl  status:class V1ContainerStatus {
-       containerID: cri-o://6d10194c5058a8cf7ecbd5e745cebd5e44c5768c7df73053fa85f54af4b352b2
-       image: <region>.ocir.io/<tenancy>/obaas03/myapp-myserv:0.0.1
-       imageID: <region>.ocir.io/<tenancy>/obaas03/myapp-myserv@sha256:99d4bbe42ceef97497105218594ea19a9e9869c75f48bdfdc1a2f2aec33b503c
-       lastState: class V1ContainerState {
-           running: null
-           terminated: null
-           waiting: null
-       }
-       name: myserv
-       ready: true
-       restartCount: 0
-       started: true
-       state: class V1ContainerState {
-           running: class V1ContainerStateRunning {
-               startedAt: 2023-04-13T01:00:51Z
-           }
-           terminated: null
-           waiting: null
-       }
-   }name:myserv  kind:null
-```
-
-### config
-
-Use the `config` command to view and update the configuration managed by the Spring Cloud Config server. More information about the configuration server can be found at this link: [Spring Config Server](../../platform/config/)
-
-```bash
-oractl:>help config
-NAME
-       config - View and modify Service configuration.
-
-SYNOPSIS
-       config [--action CommandConstants.ConfigActions] --service-name String --service-label String 
-       --service-profile String --property-key String --property-value String --artifact-path String --help
-
-OPTIONS
-       --action CommandConstants.ConfigActions
-       possible actions: add, list, update, or delete
-       [Mandatory]
-
-       --service-name String
-       Service Name
-       [Optional]
-
-       --service-label String
-       label for config
-       [Optional]
-
-       --service-profile String
-       Service Profile
-       [Optional]
-
-       --property-key String
-       the property key for the config
-       [Optional]
-
-       --property-value String
-       the value for the config
-       [Optional]
-
-       --artifact-path String
-       the context
-       [Optional]
-
-       --help or -h
-       help for config
-       [Optional]
-
-Ask for Help
-       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-       E-mail: obaas_ww@oracle.com
-```
-
-   1. Use the `config add` command to add the application configuration to the Spring Cloud Config server using one of the two following options:
-
-      * Add a specific configuration using the set of parameters `--service-name`, `--service-label`, `--service-profile`, `--property-key`, and `--property-value`. For example:
-
-       ```bash
-       oractl:>config add --service-name myserv --service-label 0.0.1 --service-profile default
-         --property-key k1 --property-value value1
-       Property added successfully.
-       ```
-
-      * Add a set of configurations based on a configuration file using these commands:
-
-       ```json
-       {
-       "application": "myserv",
-       "profile": "obaas",
-       "label": "0.0.1",
-       "properties": {
-              "spring.datasource.driver-class-name": "oracle.jdbc.OracleDriver",
-              "spring.datasource.url": "jdbc:oracle:thin:@$(db.service)?TNS_ADMIN=/oracle/tnsadmin"
-       }
-       }
-       ```
-
-       ```bash
-       oractl:>config add --artifact-path /obaas/myserv-properties.json
-       2 property(s) added successfully.
-       oractl:>config list --service-name myserv --service-profile obaas --service-label 0.0.1
-       [ {
-              "id" : 222,
-              "application" : "myserv",
-              "profile" : "obaas",
-              "label" : "0.0.1",
-              "propKey" : "spring.datasource.driver-class-name",
-              "value" : "oracle.jdbc.OracleDriver",
-              "createdOn" : "2023-04-13T01:29:38.000+00:00",
-              "createdBy" : "CONFIGSERVER"
-       }, {
-              "id" : 223,
-              "application" : "myserv",
-              "profile" : "obaas",
-              "label" : "0.0.1",
-              "propKey" : "spring.datasource.url",
-              "value" : "jdbc:oracle:thin:@$(db.service)?TNS_ADMIN=/oracle/tnsadmin",
-              "createdOn" : "2023-04-13T01:29:38.000+00:00",
-              "createdBy" : "CONFIGSERVER"
-       } ]
-       ```
-
-   1. Use the `config list` command, without any parameters, to list the services that have at least one configuration inserted in the Spring Cloud Config server. For example:
-
-       ```bash
-       oractl:>config list
-       [ {
-       "name" : "apptest",
-       "label" : "",
-       "profile" : ""
-       }, {
-       "name" : "myapp",
-       "label" : "",
-       "profile" : ""
-       }, […]
-
-       ```
-
-   1. Use the `config list [parameters]` command to list the parameters using parameters as filters. For example:
-
-       * `--service-name` : Lists all of the parameters from the specified service.
-       * `--service-label` : Filters by label.
-       * `--service-profile` : Filters by profile.
-       * `--property-key` : Lists a specific parameter filter by key.
-
-       For example:
-
-       ```bash
-       oractl:>config list --service-name myserv --service-profile default --service-label 0.0.1
-       [ {
-       "id" : 221,
-       "application" : "myserv",
-       "profile" : "default",
-       "label" : "0.0.1",
-       "propKey" : "k1",
-       "value" : "value1",
-       "createdOn" : "2023-04-13T01:10:16.000+00:00",
-       "createdBy" : "CONFIGSERVER"
-       } ]
-       ```
-
-   1. Use the `config update` command to update a specific configuration using the set of parameters:
-
-       * `--service-name`
-       * `--service-label`
-       * `--service-profile`
-       * `--property-key`
-       * `--property-value`
-
-       For example:
-
-       ```bash
-       oractl:>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key k1
-       [ {
-       "id" : 30,
-       "application" : "myserv",
-       "profile" : "obaas",
-       "label" : "0.1",
-       "propKey" : "k1",
-       "value" : "value1",
-       "createdOn" : "2023-03-23T18:02:29.000+00:00",
-       "createdBy" : "CONFIGSERVER"
-       } ]
-
-       oractl:>config update --service-name myserv --service-profile obaas --service-label 0.1 --property-key k1 --property-value value1Updated
-       Property successful modified.
-
-       oractl:>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key k1
-       [ {
-       "id" : 30,
-       "application" : "myserv",
-       "profile" : "obaas",
-       "label" : "0.1",
-       "propKey" : "k1",
-       "value" : "value1Updated",
-       "createdOn" : "2023-03-23T18:02:29.000+00:00",
-       "createdBy" : "CONFIGSERVER"
-       } ]
-       ```
-
-   1. Use the `config delete` command to delete the application configuration from the Spring Cloud Config server using one of the following two options:
-
-      1. Delete all configurations from a specific service using the filters `--service-name`, `--service-profile` and `--service-label`. The
-       CLI tracks how many configurations are present in the Spring Cloud Config server and confirms the completed deletion. For example:
-
-         ```bash
-         oractl:>config delete --service-name myserv
-         [obaas] 7 property(ies) found, delete all (y/n)?:
-         ```
-
-      1. Delete a specific configuration using the parameters `--service-name`, `--service-label`, `--service-profile` and `--property-key`. For example:
-
-         ```bash
-         oractl:>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
-         [ {
-                "id" : 224,
-                "application" : "myserv",
-                "profile" : "obaas",
-                "label" : "0.1",
-                "propKey" : "ktest2",
-                "value" : "value2",
-                "createdOn" : "2023-04-13T01:52:11.000+00:00",
-                "createdBy" : "CONFIGSERVER"
-         } ]
-       
-         oractl:>config delete --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
-         [obaas] property successfully deleted.
-       
-         oractl:>config list --service-name myserv --service-profile obaas --service-label 0.1 --property-key ktest2
-         400 : "Couldn't find any property for submitted query."
-         ```
-
-### compile
-
-Use the `GraalVM Compile Commands` to:
-
-* Upload a **.jar** file to the Oracle Backend for Microservices and AI and its GraalVM compiler service.
-* Start a compilation of your microservice to produce an executable native **.exec** file.
-* Retrieve the last logs available regarding a compilation in progress or terminated.
-* Download the **.exec** file to deploy on the backend.
-* Purge the files remaining after a compilation on the remote GraalVM compiler service.
-
-The GraalVM Compile Commands are the following:
-
-```bash
-oractl:>help 
-   
-GraalVM Compile Commands
-       compile-download: Download the compiled executable file.
-       compile: Compile a service with GraalVM.
-       compile-purge: Delete a launched job.
-       compile-logs: Compilation progress.
-```
-
-1. Use the `compile` command to upload and automatically start compilation using the following command:
-
-    ```bash
-    oractl:>help compile
-    NAME
-        compile - Compile a service with GraalVM
-
-    SYNOPSIS
-        compile [--artifact-path String] --help
-
-    OPTIONS
-        --artifact-path String
-        Service jar to compile location
-        [Mandatory]
-
-        --help or -h
-        help for compile
-        [Optional]
-
-
-    Ask for Help
-        Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-        E-mail: obaas_ww@oracle.com
-    ```
-
-    Because the compilation of a **.jar** file using the tool `native-image` does not support cross-compilation, it must be on the same platform where the application will run. This service guarantees a compilation in the same operating system and CPU type where the service will be executed on the Kubernetes cluster.
-
-    The Spring Boot application **pom.xml** with the plugin:
-
-    ```xml
-    <plugin>
-        <groupId>org.graalvm.buildtools</groupId>
-        <artifactId>native-maven-plugin</artifactId>
-    </plugin>
-    ```
-
-    The project should be compiled on the developer desktop with GraalVM version 22.3 or later using an **mvn** command. For example:
-
-    ```bash
-    mvn -Pnative native:compile -Dmaven.test.skip=true
-    ```
-
-    This pre-compilation on your desktop checks if there are any issues on the libraries used in your Spring Boot microservice. In addition, your executable **.jar** file must include ahead-of-time (AOT) generated assets such as generated classes and JSON hint files. For additional information, see [Converting Spring Boot Executable Jar](https://docs.spring.io/spring-boot/docs/current/reference/html/native-image.html#native-image.advanced.converting-executable-jars).
-
-    The following is an example of the command output:
-
-    ```bash
-    oractl:>compile --artifact-path /Users/cdebari/demo-0.0.1-SNAPSHOT.jar
-    uploading: /Users/cdebari/demo-0.0.1-SNAPSHOT.jar
-    filename: demo-0.0.1-SNAPSHOT.jar
-    return: demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
-    return: Shell script execution started on: demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
-    successfully start compilation of: demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
-    oractl:>
-    ```
-
-    The following example shows the generated batch ID that must be used to retrieve the log files, download the compiled file, and purge the service instance:
-
-    *demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b*
-
-    If omitted, then the last batch is considered by default.
-
-1. Use the `compile-logs` command to retrieve the logs that show the compilation progress. For example:
-
-    ```bash
-    oractl:>help compile-logs
-    NAME
-        compile-logs - Compilation progress.
-
-    SYNOPSIS
-        compile-logs --batch String --help 
-
-    OPTIONS
-        --batch String
-        File ID returned from the compile command. If not provided by default, then the last file compiled.
-        [Optional]
-
-        --help or -h 
-        help for compile-logs
-        [Optional]
-
-    Ask for Help
-        Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-        E-mail: obaas_ww@oracle.com
-    ```
-
-    As previously mentioned, if the batch ID is not provided, then the logs of the most recently executed compilation are returned. For example:
-
-    ```bash
-    oractl:>compile-logs
-
-    extracted: BOOT-INF/lib/spring-jcl-6.0.11.jar
-    extracted: BOOT-INF/lib/spring-boot-jarmode-layertools-3.1.2.jar
-    inflated: BOOT-INF/classpath.idx
-    inflated: BOOT-INF/layers.idx
-    ========================================================================================================================
-    GraalVM Native Image: Generating 'demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b.exec' (executable)...
-    ========================================================================================================================
-    For detailed information and explanations on the build output, visit:
-    https://github.com/oracle/graal/blob/master/docs/reference-manual/native-image/BuildOutput.md
-    ------------------------------------------------------------------------------------------------------------------------
-    ```
-
-    If the `compile-logs` commands returns a **Finished generating** message, then download the **.exec** file. For example:
-
-    ```bash
-    CPU:  Enable more CPU features with '-march=native' for improved performance.
-    QBM:  Use the quick build mode ('-Ob') to speed up builds during development.
-    ------------------------------------------------------------------------------------------------------------------------
-                    155.3s (8.2% of total time) in 169 GCs | Peak RSS: 5.34GB | CPU load: 0.70
-    ------------------------------------------------------------------------------------------------------------------------
-    Produced artifacts:
-    /uploads/demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b.temp/demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b.exec (executable)
-    ========================================================================================================================
-    Finished generating 'demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b.exec' in 31m 30s.
-    Compiling Complete.
-    ```
-
-1. Use the `compile-download` command to download the generated **.exec** file. For example:
-
-    ```bash
-    oractl:>help compile-download
-        NAME
-        compile-download - Download the compiled executable file.
-
-        SYNOPSIS
-        compile-download --batch String --help 
-
-        OPTIONS
-        --batch String
-        File ID to download as the executable file. If not provided by default, then the last file compiled.
-        [Optional]
-
-        --help or -h 
-        help for compile-download
-        [Optional]
-
-    Ask for Help
-        Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-        E-mail: obaas_ww@oracle.com
-    ```
-
-    You can choose to use the batch ID if you need the last file compiled. The following example specifies the batch ID:
-
-    ```bash
-    oractl:>compile-download --batch demo-0.0.1-SNAPSHOT.jar_24428206-7d71-423f-8ef5-7d779977535b
-
-    File downloaded successfully to: 
-    /Users/cdebari/demo-0.0.1-SNAPSHOT.jar.exec
-    ```
-
-1. Use the `compile-purge` command to delete all of the artifacts generated on the GraalVM compiler service after downloading the **.exec** file:
-
-    ```bash
-    oractl:>help compile-purge
-    NAME
-        compile-purge - Delete a launched job.
-
-    SYNOPSIS
-        compile-purge --batch String --help 
-
-    OPTIONS
-        --batch String
-        File ID returned from compile command. If not provided by default, then the last file compiled.
-        [Optional]
-
-        --help or -h 
-        help for compile-purge   
-        [Optional]
-
-    Ask for Help
-        Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-        E-mail: obaas_ww@oracle.com
-    ```
-
-### User Management
-
-Manage users allows you to create the platform users and assign the roles that give access permission to operate with the platform.
-
-**User Roles**
-
-* `ROLE_USER`: Users with this role can:
-  * Connect to the Admin Service.
-  * Create and list applications (namespaces).
-  * Create and update a database schema for the service.
-  * Deploy, list, and scale workloads (services).
-
-* `ROLE_ADMIN`: Users with this role have the same access rights as a `ROLE_USER` and additionally:
-  * Create and delete users.
-  * Search for users.
-  * Change password and roles for users.
-
-* `ROLE_CONFIG_EDITOR`: Users with this role are allowed to edit the platform configurations. **Reserved for future use**.
-
-#### Create users
-
-Use the `user create` command to add users to the platform. This command requires the name of the user `username` and the user roles in a comma-separated list.
-
-```text
 oractl:>help user create
 NAME
        user create - Creates a new user in your platform.
 
 SYNOPSIS
-       user create [--username String] --roles String --help
+       user create [--username String] --roles String --help 
 
 OPTIONS
        --username String
-       The name you assign to the user during creation. This is the user's login for the CLI and for the SOC UI, also. The name must be unique across all users in the platform and cannot be changed.
+       The name you assign to the user during creation. This is the user's login for the CLI. The name must be unique across all users in the platform and cannot be changed.
        [Mandatory]
 
        --roles String
-       The user's role within the platform. A user must have up to three possible roles provided in a comma-separated list. [ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER].
+       The user's role within the platform. A user must have up to three possible roles provided in a comma-separated list. [ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER,ROLE_SOC_USER].
        [Optional, default = ROLE_USER]
 
-Ask for Help
-       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-       E-mail: obaas_ww@oracle.com
+       --help or -h 
+       help for user create
+       [Optional]
 ```
-
-For example, to create a user called `obaas-user-test1` with roles `ROLE_USER,ROLE_CONFIG_EDITOR`:
-
+For example:
 ```bash
-oractl:>user create --username obaas-user-test1 --roles ROLE_USER,ROLE_CONFIG_EDITOR
-? password ****************
-obaas-cli [user create]: User [obaas-user-test1] as successfully created.
+oractl:>user create --username devuser --roles ROLE_CONFIG_EDITOR,ROLE_USER
+? password ************
+obaas-cli [user create]: User [devuser] was successfully created.
 ```
 
-#### Obtain User details
+### user list
+```bash
+oractl:>help user list
+NAME
+       user list - Lists all the users in your platform.
 
-Use the `user get` command to obtain the user details registered on the platform.
+SYNOPSIS
+       user list --help 
 
+OPTIONS
+       --help or -h 
+       help for user list
+       [Optional]
+```
+For example:
+```bash
+oractl:>user list
+╔════════════╤═════════════════════════════════════════════════════╗
+║Username    │Roles                                                ║
+╠════════════╪═════════════════════════════════════════════════════╣
+║devuser     │ROLE_CONFIG_EDITOR,ROLE_USER                         ║
+╟────────────┼─────────────────────────────────────────────────────╢
+║obaas-user  │ROLE_USER                                            ║
+╟────────────┼─────────────────────────────────────────────────────╢
+║obaas-admin │ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER,ROLE_SOC_USER║
+╟────────────┼─────────────────────────────────────────────────────╢
+║obaas-config│ROLE_CONFIG_EDITOR,ROLE_USER                         ║
+╚════════════╧═════════════════════════════════════════════════════╝
+```
+
+### user get
 ```bash
 oractl:>help user get
 NAME
-       user get - Gets the specified user’s information.
+       user get - get a user on your platform.
 
 SYNOPSIS
-       user get [--username String] --help
+       user get [--username String] --help 
 
 OPTIONS
        --username String
-       The username of the user.
+       The username you want to retrieve.
        [Mandatory]
 
-Ask for Help
-       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-       E-mail: obaas_ww@oracle.com
+       --help or -h 
+       help for user get
+       [Optional]
 ```
-
-For example, to list the details from the user called `obaas-admin`:
-
+For example:
 ```bash
-oractl:>user get --username obaas-admin
-╔══╤═══════════╤═══════════════════════════════════════╗
-║Id│Username   │Roles                                  ║
-╠══╪═══════════╪═══════════════════════════════════════╣
-║2 │obaas-admin│ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER║
-╚══╧═══════════╧═══════════════════════════════════════╝
+oractl:>user get --username devuser
+╔════════╤════════════════════════════╗
+║Username│Roles                       ║
+╠════════╪════════════════════════════╣
+║devuser │ROLE_CONFIG_EDITOR,ROLE_USER║
+╚════════╧════════════════════════════╝
 ```
 
-#### Change User Roles
-
-Use the `user change-roles` command to change the roles from a specific user registered on the platform.
-
-```bash
-oractl:>help user change-roles
-NAME
-       user change-roles - Change the roles from the specified user.
-
-SYNOPSIS
-       user change-roles [--username String] --roles String --help
-
-OPTIONS
-       --username String
-       The name you assign to the user during creation. This is the user’s login for the CLI.
-       [Mandatory]
-
-       --roles String
-       The user's role within the platform. A user must have up to three possible roles provided in a comma-separated list. [ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER].
-       [Optional, default = ROLE_USER]
-
-Ask for Help
-       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-       E-mail: obaas_ww@oracle.com
-```
-
-For example, to change the roles from a user called `obaas-user-test1` apply the role `ROLE_USER`:
-
-```bash
-oractl:>user change-roles --username obaas-user-test1 --roles ROLE_USER
-obaas-cli [user change-roles]: User [obaas-user-test1] roles were successfully updated.
-```
-
-#### Change User Password
-
-Use the `user change-password` command to change the password from a specific user registered on the platform. A user is allowed to change its password only. Only users with ROLE_ADMIN can change passwords from other users.
-
+### user change-password
 ```bash
 oractl:>help user change-password
 NAME
-       user change-password - Change password for the specified user.
+       user change-password - Change password for the specified user. 
 
 SYNOPSIS
-       user change-password [--username String] --help
+       user change-password [--username String] --help 
 
 OPTIONS
        --username String
        The username you want to change the password.
        [Mandatory]
 
-Ask for Help
-       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-       E-mail: obaas_ww@oracle.com
+       --help or -h 
+       help for user change-password
+       [Optional]
+```
+For example:
+```bash
+oractl:>user change-password --username devuser
+? password **************
+obaas-cli [user update]: User [devuser] was successfully updated.
 ```
 
-For example, to change the password from a user called `obaas-user-test1`:
-
+### user change-roles
 ```bash
-oractl:>user change-password --username obaas-user-test1
-? password ***********
-obaas-cli [user change-password]: User [obaas-user-test1] password was successfully updated.
-```
-
-#### List Users
-
-Use the `user list` command to obtain the list of users registered on the platform.
-
-```bash
-oractl:>help user list
+oractl:>help user change-roles
 NAME
-       user list - Lists the users in your platform.
+       user change-roles - Change the roles from the specified user.
 
 SYNOPSIS
-       user list --help
+       user change-roles [--username String] --roles String --help 
 
-Ask for Help
-       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-       E-mail: obaas_ww@oracle.com
+OPTIONS
+       --username String
+       The name you assign to the user during creation. This is the user's login for the CLI.
+       [Mandatory]
+
+       --roles String
+       The user's role within the platform. A user must have up to three possible roles provided in a comma-separated list. [ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER].
+       [Optional, default = ROLE_USER]
+
+       --help or -h 
+       help for user change-roles
+       [Optional]
 ```
-
-For example, to list all registered users:
-
+For example:
 ```bash
-oractl:>user list
-╔══╤════════════════╤═══════════════════════════════════════╗
-║Id│Username        │Roles                                  ║
-╠══╪════════════════╪═══════════════════════════════════════╣
-║1 │obaas-user      │ROLE_USER                              ║
-╟──┼────────────────┼───────────────────────────────────────╢
-║2 │obaas-admin     │ROLE_ADMIN,ROLE_CONFIG_EDITOR,ROLE_USER║
-╟──┼────────────────┼───────────────────────────────────────╢
-║3 │obaas-config    │ROLE_CONFIG_EDITOR,ROLE_USER           ║
-╟──┼────────────────┼───────────────────────────────────────╢
-║4 │obaas-user-test1│ROLE_USER                              ║
-╚══╧════════════════╧═══════════════════════════════════════╝
+oractl:>user change-roles --username devuser --roles ROLE_USER
+obaas-cli [user update]: User [devuser] was successfully updated.
 ```
 
-#### Delete User
-
-Use the `user delete` command to remove users from the platform.
-
-> NOTE: User deletion is permanent and irreversible.
-
+### user delete
 ```bash
 oractl:>help user delete
 NAME
        user delete - Delete a user in your platform.
 
 SYNOPSIS
-       user delete [--username String] --id int --help
+       user delete [--username String] --help 
 
 OPTIONS
        --username String
        The username you want to delete.
        [Mandatory]
 
-       --id int
-       The user id from the user you want to delete.
-       [Optional, default = 0]
-
-Ask for Help
-       Slack: https://oracledevs.slack.com/archives/C03ALDSV272
-       E-mail: obaas_ww@oracle.com
+       --help or -h 
+       help for user delete
+       [Optional]
+```
+For example:
+```bash
+oractl:>user delete --username devuser
+obaas-cli [user delete]: User [devuser] was successfully deleted.
 ```
 
-For example, to delete a user called `obaas-user-test1`:
+## Image
 
+A container image which can be used to run an workload. Built from an artifact and a base image.
+The default base image is ghcr.io/oracle/openjdk-image-obaas:21
+
+### image create
 ```bash
-oractl:>user delete --username obaas-user-test1
-obaas-cli [user delete]: User [obaas-user-test1] as successfully deleted.
-````
+oractl:>help image create
+NAME
+       image create - Creates a new image in your platform.
 
-## Get Passwords
+SYNOPSIS
+       image create [--namespace String] [--workload String] [--imageVersion String] --baseImage String --nativeImage Boolean --help 
 
-Commands to get the various systme generated passwords
+OPTIONS
+       --namespace String
+       The namespace for the image. 
+       [Mandatory]
+
+       --workload String
+       The workload name of the artifact for image creation. 
+       [Mandatory]
+
+       --imageVersion String
+       The version of the artifact for image creation.
+       [Mandatory]
+
+       --baseImage String
+       The java version used for image creation.
+       [Optional, default = ghcr.io/oracle/openjdk-image-obaas:21]
+
+       --nativeImage Boolean
+       Whether to create a native artifact.
+       [Optional, default = false]
+
+       --help or -h 
+       help for image create
+       [Optional]
+
+```
+For example:
+```bash
+oractl:>image create --namespace myapp --workload account --imageVersion 1.1.0
+obaas-cli [image create]: Image [account:1.1.0] was successfully created.
+```
+
+### image list
+```bash
+oractl:>help image list
+NAME
+       image list - Lists all the images in your platform.
+
+SYNOPSIS
+       image list --help 
+
+OPTIONS
+       --help or -h 
+       help for image list
+       [Optional]
+```
+For example:
+```
+oractl:>image list
+╔══╤═══════════════════════════════════════════════════╤═════════════════════════════════════╤═══════════╤════════╤═════════════════════════════╤═══════╗
+║ID│Name                                               │BaseImage                            │Namespace  │Workload│Created                      │Status ║
+╠══╪═══════════════════════════════════════════════════╪═════════════════════════════════════╪═══════════╪════════╪═════════════════════════════╪═══════╣
+║10│iad.ocir.io/maacloud/calf/application-account:0.0.1│ghcr.io/oracle/openjdk-image-obaas:21│application│account │2024-12-13T14:31:58.041+00:00│FAILED ║
+╟──┼───────────────────────────────────────────────────┼─────────────────────────────────────┼───────────┼────────┼─────────────────────────────┼───────╢
+║11│iad.ocir.io/maacloud/calf/myapp-account:0.0.1      │ghcr.io/oracle/openjdk-image-obaas:21│myapp      │account │2024-12-13T14:32:22.436+00:00│FAILED ║
+╟──┼───────────────────────────────────────────────────┼─────────────────────────────────────┼───────────┼────────┼─────────────────────────────┼───────╢
+║12│iad.ocir.io/maacloud/calf/myapp-account:1.1.0      │ghcr.io/oracle/openjdk-image-obaas:21│myapp      │account │2024-12-13T14:42:19.462+00:00│CREATED║
+╚══╧═══════════════════════════════════════════════════╧═════════════════════════════════════╧═══════════╧════════╧═════════════════════════════╧═══════╝
+```
+
+### image get
+```bash
+oractl:>help image get
+NAME
+       image get - Get a specific image on your platform.
+
+SYNOPSIS
+       image get [--imageId String] --help 
+
+OPTIONS
+       --imageId String
+       The ID of the image you want to retrieve.
+       [Mandatory]
+
+       --help or -h 
+       help for image get
+       [Optional]
+
+```
+For example:
+```bash
+oractl:>image get --imageId 12
+╔══╤═════════════════════════════════════════════╤═════════════════════════════════════╤═════════╤════════╤═════════════════════════════╤═══════╗
+║ID│Name                                         │BaseImage                            │Namespace│Workload│Created                      │Status ║
+╠══╪═════════════════════════════════════════════╪═════════════════════════════════════╪═════════╪════════╪═════════════════════════════╪═══════╣
+║12│iad.ocir.io/maacloud/calf/myapp-account:1.1.0│ghcr.io/oracle/openjdk-image-obaas:21│myapp    │account │2024-12-13T14:42:19.462+00:00│CREATED║
+╚══╧═════════════════════════════════════════════╧═════════════════════════════════════╧═════════╧════════╧═════════════════════════════╧═══════╝
+```
+
+### image delete
+```bash
+oractl:>help image delete
+NAME
+       image delete - Delete an image in your platform.
+
+SYNOPSIS
+       image delete [--imageId String] --help 
+
+OPTIONS
+       --imageId String
+       The ID of the image you want to delete.
+       [Mandatory]
+
+       --help or -h 
+       help for image delete
+       [Optional]
+
+```
+For example:
+```bash
+oractl:>image delete --imageId 10
+obaas-cli [image delete]: Image [10] was successfully deleted.
+```
+
+### image deleteByWorkload
+```bash
+oractl:>help image deleteByWorkload
+NAME
+       image deleteByWorkload - Delete an image in your platform by workload.
+
+SYNOPSIS
+       image deleteByWorkload [--namespace String] [--workload String] --help 
+
+OPTIONS
+       --namespace String
+       The namespace the image will be deleted in.
+       [Mandatory]
+
+       --workload String
+       The workload name for the image.
+       [Mandatory]
+
+       --help or -h 
+       help for image deleteByWorkload
+       [Optional]
+```
+For example:
+```bash
+oractl:>image deleteByWorkload --namespace myapp --workload account
+obaas-cli [image delete]: Image [account] was successfully deleted.
+```
+
+## Namespace
+
+A Kubernetes namespace in which workloads can be deployed.
+
+### namespace create
+```bash
+oractl:>help namespace create
+NAME
+       namespace create - Creates a new namespace in your platform.
+
+SYNOPSIS
+       namespace create [--namespace String] --help 
+
+OPTIONS
+       --namespace String
+       The name for the new namespace in your platform. 
+       [Mandatory]
+
+       --help or -h 
+       help for namespace create
+       [Optional]
+
+```
+
+For example:
+```
+oractl:>namespace create --namespace application
+obaas-cli [namespace create]: Namespace [application] was successfully created.
+```
+
+### namespace list
+```bash
+oractl:>help namespace list
+NAME
+       namespace list - Lists the namespaces in your platform.
+
+SYNOPSIS
+       namespace list --help 
+
+OPTIONS
+       --help or -h 
+       help for namespace list
+       [Optional]
+
+```
+
+For example:
+```bash
+oractl:>namespace list
+╔═══════════╗
+║Namespace  ║
+╠═══════════╣
+║application║
+╟───────────╢
+║myapp      ║
+╚═══════════╝
+```  
+
+### namespace update
+```bash
+oractl:>help namespace update
+NAME
+       namespace update - Update the namespace secrets.
+
+SYNOPSIS
+       namespace update [--namespace String] --help 
+
+OPTIONS
+       --namespace String
+       The namespace you want to update.
+       [Mandatory]
+
+       --help or -h 
+       help for namespace update
+       [Optional]
+
+```
+
+For example:
+```bash
+oractl:>namespace update --namespace application
+obaas-cli [namespace update]: Namespace [application] was successfully updated.
+```
+
+### namespace delete
+```bash
+oractl:>help namespace delete
+NAME
+       namespace delete - Delete a namespace in your platform.
+
+SYNOPSIS
+       namespace delete [--namespace String] --help 
+
+OPTIONS
+       --namespace String
+       The namespace you want to delete.
+       [Mandatory]
+
+       --help or -h 
+       help for namespace delete
+       [Optional]
+```
+
+For example
+```bash
+oractl:>namespace delete --namespace application
+obaas-cli [namespace delete]: Namespace [application] was successfully deleted.
+```
+
+## Telemetry
+
+APIs for managing consent (opt-in) for sending telemetry data to Oracle.
+
+### telemetry-consent create
+```bash
+oractl:>help telemetry-consent create
+NAME
+       telemetry-consent create - Create a telemetry consent record.
+
+SYNOPSIS
+       telemetry-consent create --consented boolean --help 
+
+OPTIONS
+       --consented boolean
+       The value of the telemetry consent.
+       [Optional, default = false]
+
+       --help or -h 
+       help for telemetry-consent create
+       [Optional]
+```
+For example:
+```bash
+oractl:>telemetry-consent create --consented true
+obaas-cli [telemetry-consent create]: Telemetry-consent [true] was successfully created.
+```
+
+### telemetry-consent list
+```
+oractl:>help telemetry-consent list
+NAME
+       telemetry-consent list - Lists the platforms telemetry consent status.
+
+SYNOPSIS
+       telemetry-consent list --help 
+
+OPTIONS
+       --help or -h 
+       help for telemetry-consent list
+       [Optional]
+```
+For example:
+```bash
+oractl:>telemetry-consent list
+╔═════════╤═════════════════════════════╗
+║Consented│Timestamp                    ║
+╠═════════╪═════════════════════════════╣
+║true     │2024-12-16T17:32:07.038+00:00║
+╚═════════╧═════════════════════════════╝
+```
+
+### telemetry-consent update
+```bash
+oractl:>help telemetry-consent update
+NAME
+       telemetry-consent update - Update the platforms telemetry consent.
+
+SYNOPSIS
+       telemetry-consent update --consented boolean --help 
+
+OPTIONS
+       --consented boolean
+       The value of the telemetry consent.
+       [Optional, default = false]
+
+       --help or -h 
+       help for telemetry-consent update
+       [Optional]
+```
+For example:
+```bash
+oractl:>telemetry-consent update --consented false
+obaas-cli [telemetry-consent update]: Telemetry-consent [false] was successfully updated.
+```
+
+## Workload
+
+A Spring Boot application which can be deployed in the platform. Is associated with an artifact and an image, which have their own separate lifecycles.
+
+### workload create
+```bash
+oractl:>help workload create
+NAME
+       workload create - Create a workload in a given namespace.
+
+SYNOPSIS
+       workload create [--namespace String] [--id String] --profile String [--imageVersion String] --cpuRequest String --port int --addHealthProbe boolean --liquibaseDB String --initialReplicas int --help 
+
+OPTIONS
+       --namespace String
+       The namespace to create the workload in.
+       [Mandatory]
+
+       --id String
+       The id of the workload.
+       [Mandatory]
+
+       --profile String
+       The workload profile.
+       [Optional, default = obaas]
+
+       --imageVersion String
+       The workload image version.
+       [Mandatory]
+
+       --cpuRequest String
+       The workload cpu request.
+       [Optional, default = 500m]
+
+       --port int
+       Port workload listens on.
+       [Optional, default = 8080]
+
+       --addHealthProbe boolean
+       The workload cpu request.
+       [Optional, default = false]
+
+       --liquibaseDB String
+       The workload liquibase database.
+       [Optional]
+
+       --initialReplicas int
+       Initial workload replicas.
+       [Optional, default = 1]
+
+       --help or -h 
+       help for workload create
+       [Optional]
+```
+For example:
+```bash
+oractl:>workload create --namespace myapp --imageVersion 1.1.0  --id account
+obaas-cli [workload create]: Workload [account] was successfully created.
+```
+
+### workload list
+```bash
+oractl:>help workload list
+NAME
+       workload list - Lists workloads for a given namespace.
+
+SYNOPSIS
+       workload list [--namespace String] --help 
+
+OPTIONS
+       --namespace String
+       The namespace to query workloads from.
+       [Mandatory]
+
+       --help or -h 
+       help for workload list
+       [Optional]
+```
+For example:
+```bash
+oractl:>workload list --namespace myapp
+╔════════╤════════╤═══════╤══════════╤════╤══════════════╤═══════════════╤═══════════╗
+║Workload│Workload│Profile│CPURequest│Port│addHealthProbe│initialReplicas│liquibaseDB║
+║ID      │Version │       │          │    │              │               │           ║
+╠════════╪════════╪═══════╪══════════╪════╪══════════════╪═══════════════╪═══════════╣
+║account │1.1.0   │obaas  │500m      │8080│false         │1              │           ║
+╚════════╧════════╧═══════╧══════════╧════╧══════════════╧═══════════════╧═══════════╝
+```
+
+### workload get
+```bash
+oractl:>help workload get
+NAME
+       workload get - Get a specific workload for a given namespace.
+
+SYNOPSIS
+       workload get [--namespace String] [--id String] --help 
+
+OPTIONS
+       --namespace String
+       The namespace to query the workload from.
+       [Mandatory]
+
+       --id String
+       The workload id.
+       [Mandatory]
+
+       --help or -h 
+       help for workload get
+       [Optional]
+```
+For example:
+```bash
+oractl:>workload get --namespace myapp --id account
+╔════════╤════════╤═══════╤══════════╤════╤══════════════╤═══════════════╤═══════════╗
+║Workload│Workload│Profile│CPURequest│Port│addHealthProbe│initialReplicas│liquibaseDB║
+║ID      │Version │       │          │    │              │               │           ║
+╠════════╪════════╪═══════╪══════════╪════╪══════════════╪═══════════════╪═══════════╣
+║account │1.1.0   │obaas  │500m      │8080│false         │1              │           ║
+╚════════╧════════╧═══════╧══════════╧════╧══════════════╧═══════════════╧═══════════╝
+```
+
+### workload update
+```bash
+oractl:>help workload update
+NAME
+       workload update - Update a specific workload for a given namespace.
+
+SYNOPSIS
+       workload update [--namespace String] [--id String] --profile String [--imageVersion String] --cpuRequest String --port Integer --addHealthProbe Boolean --liquibaseDB String --initialReplicas Integer --help 
+
+OPTIONS
+       --namespace String
+       The namespace to create the workload in.
+       [Mandatory]
+
+       --id String
+       The id of the workload.
+       [Mandatory]
+
+       --profile String
+       The workload profile.
+       [Optional]
+
+       --imageVersion String
+       The workload image version.
+       [Mandatory]
+
+       --cpuRequest String
+       The workload cpu request.
+       [Optional]
+
+       --port Integer
+       Port workload listens on.
+       [Optional]
+
+       --addHealthProbe Boolean
+       The workload cpu request.
+       [Optional]
+
+       --liquibaseDB String
+       The workload liquibase database.
+       [Optional]
+
+       --initialReplicas Integer
+       Initial workload replicas.
+       [Optional]
+
+       --help or -h 
+       help for workload update
+       [Optional]
+```
+For example:
+```bash
+oractl:>workload update --namespace myapp --id account --imageVersion 1.1.0 --addHealthProbe true
+obaas-cli [workload update]: Workload [account] was successfully updated.
+```
+
+### workload getImage
+```bash
+oractl:>help workload getImage
+NAME
+       workload getImage - Get the image for a specific workload in a given namespace.
+
+SYNOPSIS
+       workload getImage [--namespace String] [--id String] --help 
+
+OPTIONS
+       --namespace String
+       The namespace to query the workload from.
+       [Mandatory]
+
+       --id String
+       The workload id.
+       [Mandatory]
+
+       --help or -h 
+       help for workload getImage
+       [Optional]
+```
+For example:
+```bash
+oractl:>workload getImage --namespace myapp --id account
+╔═════╤══════════════════════════════════════════════╤═════════════════════════════════════╤════════╤═════════╤═════════════════════════════╤═══════╗
+║Image│Image Name                                    │Base Image                           │Workload│Namespace│Created                      │Status ║
+║ID   │                                              │                                     │        │         │                             │       ║
+╠═════╪══════════════════════════════════════════════╪═════════════════════════════════════╪════════╪═════════╪═════════════════════════════╪═══════╣
+║14   │iad.ocir.io/maacloud/calf/myapp-account:1.1.0 │ghcr.io/oracle/openjdk-image-obaas:21│account │myapp    │2024-12-13T16:07:40.529+00:00│CREATED║
+╚═════╧══════════════════════════════════════════════╧═════════════════════════════════════╧════════╧═════════╧═════════════════════════════╧═══════╝
+```
+
+### workload delete
+```bash
+oractl:>help workload delete
+NAME
+       workload delete - Delete a specific workload for a given namespace.
+
+SYNOPSIS
+       workload delete [--namespace String] [--id String] --help 
+
+OPTIONS
+       --namespace String
+       The namespace to delete the workload from.
+       [Mandatory]
+
+       --id String
+       The workload id.
+       [Mandatory]
+
+       --help or -h 
+       help for workload delete
+       [Optional]
+```
+For example:
+```bash
+oractl:>workload delete --namespace myapp --id account
+obaas-cli [workload delete]: Workload [account] was successfully deleted.
+```
+
+## Server Version
+```bash
+oractl:>help serverversion
+NAME
+       serverversion - Get obaas admin server version.
+
+SYNOPSIS
+       serverversion --help 
+
+OPTIONS
+       --help or -h 
+       help for serverversion
+       [Optional]
+
+```
+For example:
+```bash
+oractl:>serverversion
+╔═══════╗
+║Version║
+╠═══════╣
+║1.4.0  ║
+╚═══════╝
+
+```
+
+
 
 ## Logging
 
