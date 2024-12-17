@@ -82,15 +82,15 @@ end;
 /
 ```
 
-Use the [`DBMS_AQADM.STOP_QUEUE` procedure](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQADM.html#GUID-14EADFE9-D7C3-472D-895D-861BB5570EED) to stop a queue. A queue must be stopped before it can be dropped using the [`DBMS_AQADM.DROP_QUEUE` procedure](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQADM.html#GUID-167A1A71-C8CB-48B4-B1B0-C98825BDE25F).
+Use the [`DBMS_AQADM.ALTER_TRANSACTIONAL_EVENT_QUEUE` procedure](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQADM.html#GUID-260ED3E1-9959-4033-8B00-FD911424DFBB) to modify an existing queue. This procedure can be used to change queue retries, comment the queue, modify queue properties, and change the queue's replication mode.
+
+The following SQL script adds a comment to an existing queue.
 
 ```sql
 begin
-    dbms_aqadm.stop_queue(
-        queue_name => 'my_queue'
-    );
-    dbms_aqadm.drop_queue(
-        queue_name => 'my_queue'
+    dbms_aqadm.alter_transactional_event_queue(
+        queue_name => 'my_queue',
+        comment    => 'just for testing'
     );
 end;
 /
@@ -101,6 +101,20 @@ The `DBMS_AQADM.PURGE_QUEUE` procedure is used to clear messages from a queue.
 ```sql
 begin
     dbms_aqadm.purge_queue(
+        queue_name => 'my_queue'
+    );
+end;
+/
+```
+
+Use the [`DBMS_AQADM.STOP_QUEUE` procedure](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQADM.html#GUID-14EADFE9-D7C3-472D-895D-861BB5570EED) to stop a queue. A queue must be stopped before it can be dropped using the [`DBMS_AQADM.DROP_TRANSACTIONAL_EVENT_QUEUE` procedure](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQADM.html#GUID-99A161DB-85C7-439A-A85C-A7BEEBD0288F).
+
+```sql
+begin
+    dbms_aqadm.stop_queue(
+        queue_name => 'my_queue'
+    );
+    dbms_aqadm.drop_transactional_event_queue(
         queue_name => 'my_queue'
     );
 end;
