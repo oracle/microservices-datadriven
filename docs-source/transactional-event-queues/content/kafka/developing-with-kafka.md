@@ -4,12 +4,12 @@ title = "Developing With Kafka APIs"
 weight = 2
 +++
 
-This section provides developer-friendly examples using [Kafka Java Client for Oracle Database Transactional Event Queues](https://github.com/oracle/okafka). You'll learn how to authenticate to Oracle Database, create topics, produce messages, and consume messages using Java Kafka clients.
+This section provides developer-friendly examples using the [Kafka Java Client for Oracle Database Transactional Event Queues](https://github.com/oracle/okafka). The Kafka Java client implements Kafka client interfaces, allowing you to use familiar Kafka Java APIs with Oracle Database Transactional Event Queues. You'll learn how to authenticate to Oracle Database, create topics, produce messages, and consume messages using Java Kafka clients.
 
 
 ## Kafka Java Client for Oracle Database Transactional Event Queues
 
-Add the [Kafka Java Client for Oracle Database Transactional Event Queues dependency](https://central.sonatype.com/artifact/com.oracle.database.messaging/okafka) to your Maven project:
+To get started using the client, add the [Kafka Java Client for Oracle Database Transactional Event Queues dependency](https://central.sonatype.com/artifact/com.oracle.database.messaging/okafka) to your project. If you're using Maven:
 
 ```xml
 <dependency>
@@ -27,7 +27,7 @@ implementation "com.oracle.database.messaging:okafka:${okafkaVersion}"
 
 ### Authenticating to Oracle Database
 
-Database authentication for Kafka clients uses Java `Properties` objects, configured with Oracle Database specific properties for database service name, wallet location, and more.
+To authenticate to Oracle Database with the Kafka clients, configure a Java `Properties` object with Oracle Database-specific properties for service name, wallet location, and more.
 
 The configured `Properties` objects are passed to Kafka Java Client for Oracle Database Transactional Event Queues implementations for Oracle Database authentication. We'll use these authentication samples as a base for creating Kafka Java cilents in follow up examples.
 
@@ -162,7 +162,7 @@ The Kafka Java Client for Oracle Database Transactional Event Queues provides fu
 
 ### Custom Serializers
 
-Kafka clients handle complex message payloads using custom serializers to convert objects to and from binary message data, allowing automatic binary-object conversions. We'll implement a serializer and deserializer for Oracle Database's native binary JSON format, [OSON](https://docs.oracle.com/en/database/oracle/oracle-database/23/adjsn/overview-json-oracle-database.html#GUID-D7BCE045-EF6D-47E9-9BB2-30C01933248E) as an example. Producers and consumers configured with the OSON serializer/deserializer will be able to read and write OSON data using Java objects.
+Kafka clients handle complex message payloads using custom serializers to convert objects to and from binary message data, allowing automatic binary-object conversions. We'll implement a serializer and deserializer for Oracle Database's native binary JSON format, [OSON](https://docs.oracle.com/en/database/oracle/oracle-database/23/adjsn/overview-json-oracle-database.html#GUID-D7BCE045-EF6D-47E9-9BB2-30C01933248E), as an example. Producers and consumers configured with the OSON serializer/deserializer will be able to read and write OSON data using Java objects.
 
 To add necessary Oracle JSON dependencies to your project, use the Oracle JSON Collections Starter Maven package:
 
