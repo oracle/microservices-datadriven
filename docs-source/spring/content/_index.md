@@ -61,7 +61,6 @@ Infrastructure (OCI) Container Engine for Kubernetes cluster (OKE cluster):
 - [Apache APISIX API Gateway and Dashboard](platform/apigw/)
 - [Apache Kafka](https://kafka.apache.org/)
 - [Grafana](observability/metrics/)
-- [HashiCorp Vault](platform/vault/)
 - [Jaeger](observability/tracing/)
 - [Apache Kafka](https://kafka.apache.org)
 - Loki

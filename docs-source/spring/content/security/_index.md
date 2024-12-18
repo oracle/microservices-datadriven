@@ -22,8 +22,6 @@ The Oracle Backend for Microservices and AI has the following security character
 
 - Oracle Backend for Microservices and AI provides an authorization server which is an engine to authenticate and authorize requests to various components in Oracle Backend for Microservices and AI. The end user can manage users using REST Endpoints. [AuthZ Server Documentation](../security/azn-server)
 
-- Oracle Backend for Microservices and AI contains HashiCorp Vault to secure, store and tightly control access to tokens, passwords, certificates, encryption keys for protecting secrets, and other sensitive data. [HashiCorp Vault Documentation](../platform/vault)
-
 ## Transport Layer Security
 
 The Oracle Backend for Microservices and AI is deployed with a sample self-signed certificate for Transport Layer Security (TLS). This results in an "Accept Risk" message when accessing the ServiceOps Center or Grafana web user interfaces and the sample TLS certificate should not be used for production deployments.

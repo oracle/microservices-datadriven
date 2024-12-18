@@ -71,7 +71,7 @@ resources:
     title: "Load Balancer Options"
   - name: oci-stack-vault-options
     src: "oci-stack-vault-options.png"
-    title: "HashiCorp Vault Options - Standard Edition"
+    title: "Standard Edition"
   - name: azn-stack-app-info
     src: "azn-stack-app-info.png"
     title: "Access Information"
@@ -110,8 +110,9 @@ You must meet the following prerequisites to use Oracle Backend for Microservice
 
   - The Kubernetes command-line interface (kubectl). [Installing kubectl documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
   - Oracle Cloud Infrastructure command-line interface (CLI). [Quickstart - Installing the CLI](https://docs.oracle.com/en-us/iaas/Content/API/SDKDocs/cliinstall.htm#Quickstart).
-  - Oracle Backend for Microservices and AI command-line interface (oractl). [Download oractl](https://github.com/oracle/microservices-datadriven/releases).
-  - [OPTIONAL]Oracle Backend for Microservices and AI VS Code Extension. [Download VS Code Extension](https://github.com/oracle/microservices-datadriven/releases).
+  - Oracle Backend for Microservices and AI command-line interface (oractl). [Download oractl](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.4.0).
+  - [OPTIONAL]Oracle Backend for Microservices and AI VS Code Extension. [Download VS Code Extension](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.4.0).
+  - [OPTIONAL]Oracle Backend for Microservices and AI IntelliJ plugin. [Download VS Code Extension](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.4.0).
 
 ## OCI policies
 
@@ -213,7 +214,6 @@ Oracle Backend for Microservices and AI setup installs the following components.
 | Coherence Operator           | 3.3.5        | Provides in-memory data grid.                                                               |
 | Conductor Server             | 3.13.8        | Provides a Microservice orchestration platform.                                             |
 | Grafana                      | 11.1.4         | Provides the tool to examine, analyze, and monitor metrics.                                 |
-| HashiCorp Vault              | 1.17.2        | Provides a way to store and tightly control access to sensitive data.                       |
 | Jaeger Tracing               | 1.53.0        | Provides distributed tracing system for monitoring and troubleshooting distributed systems. |
 | Kube State Metrics | 2.10.1 | Collects metrics for the Kubernetes cluster     |
 | Loki                         | 2.6.1     | Provides log aggregation and search. |

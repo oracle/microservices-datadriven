@@ -11,6 +11,7 @@ keywords: "springboot spring development microservices development oracle backen
 - Build the Account Microservice
 - Build Check Processing Microservice that uses JMS and TXEventQ
 - Manage Saga Transactions across Microservices
+- Build a simple ChatBot
 - Deploy the full CloudBank Application using the CLI
 - Deploy the full CloudBank Application using the VS Code Extension
 - Explore the Backend Platform
