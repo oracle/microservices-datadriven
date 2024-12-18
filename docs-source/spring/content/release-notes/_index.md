@@ -4,6 +4,13 @@ description: "Release notes for Oracle Backend for Microservices and AI includin
 keywords: "release notes additions updates deprecations removals springboot spring development microservices development oracle backend"
 ---
 
+## Version 1.4.0, TBD
+
+This release removes the following components:
+
+- Prometheus Operator
+- Hashicorp Vault
+
 ## Version 1.3.1, October 23rd, 2024
 
 This release includes the following changes:

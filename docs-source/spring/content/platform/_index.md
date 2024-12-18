@@ -16,6 +16,5 @@ For more details, read about:
 - [Spring Admin](./spring-admin)
 - [Using the CLI](../development/cli)
 - [MicroTx](./microtx)
-- [Vault](./vault/)
 - [VS Code Plugin](./vscode-plugin)
 - [IntelliJ Plugin](./intellij-plugin)

@@ -16,7 +16,6 @@ Oracle Backend for Microservices and AI provides the following services that app
 * Spring Boot Eureka Service Registry for service discovery.  The API Gateway and monitoring services are pre-configured to use this registry for service discovery.
 * Spring Cloud Config Server to serve externalized configuration information to applications. This stores the configuration data in the Oracle Autonomous Database instance associated with the backend.
 * Netflix Conductor OSS for running workflows to orchestrate your services.
-* Hashicorp Vault for storing sensitive information.
 * Spring Admin for monitoring your services.
 * Prometheus and Grafana for collecting and visualizing metrics and for alerting.
 * Jaeger and Open Telemetry (OTEL) for distributed tracing. Applications deployed to the Oracle Backend for Microservices and AI may use Jaeger or OTEL for distributed tracing. See the [Environment Variables page](envvars) for variables that can be used.
