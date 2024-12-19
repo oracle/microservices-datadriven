@@ -25,6 +25,8 @@ Or, if you're using Gradle:
 implementation "com.oracle.database.messaging:okafka:${okafkaVersion}"
 ```
 
+The database user should  have appropriate permissions to create topics, produce and consume messages. See the [Kafka permissions](../getting-started/queue-management.md#permissions-for-users-of-kafka-apis) section for recommended database permissions.
+
 ### Authenticating to Oracle Database
 
 To authenticate to Oracle Database with the Kafka clients, configure a Java `Properties` object with Oracle Database-specific properties for service name, wallet location, and more.

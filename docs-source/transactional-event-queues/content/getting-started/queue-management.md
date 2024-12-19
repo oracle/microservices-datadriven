@@ -38,7 +38,7 @@ grant execute on dbms_teqk to testuser;
 
 #### Permissions for Users of Kafka APIs
 
-If your database user is interacting with Transactional Event Queues via Kafka APIs and the [Kafka Java Client for Oracle Database Transactional Event Queues](https://github.com/oracle/okafka), the following permissions are recommended for users managing topics:
+If your database user is interacting with Transactional Event Queues via Kafka APIs and the [Kafka Java Client for Oracle Database Transactional Event Queues](https://github.com/oracle/okafka), the following permissions are recommended for users managing topics and messages:
 
 ```sql
 grant resource, connect, unlimited tablespace to testuser;
