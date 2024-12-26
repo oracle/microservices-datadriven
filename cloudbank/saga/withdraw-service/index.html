@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article">
-  <head>
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/microservices-datadriven/cloudbank/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=microservices-datadriven/cloudbank/livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.138.0">
-    <meta name="generator" content="Relearn 7.1.1+ab4197f3113afa9a7d17bed69dbef6c0e75a4921">
+    <meta name="generator" content="Hugo 0.140.1">
+    <meta name="generator" content="Relearn 7.2.1">
     <meta name="description" content="Next, you need to implement the withdraw service, which will be the second participant in the transfer LRA.
 Implement the withdraw service
 Create a new Java file called WithdrawService.java in src/main/java/com/example/accounts/services. This service is very similar to the deposit service, and no new concepts are introduced here. Here is the code for this service:
@@ -16,7 +16,7 @@ package com.example.accounts.services; import com.example.accounts.model.Account
 Implement the withdraw service
 Create a new Java file called WithdrawService.java in src/main/java/com/example/accounts/services. This service is very similar to the deposit service, and no new concepts are introduced here. Here is the code for this service:
 package com.example.accounts.services; import com.example.accounts.model.Account; import com.example.accounts.model.Journal; import com.oracle.microtx.springboot.lra.annotation.AfterLRA; import com.oracle.microtx.springboot.lra.annotation.Compensate; import com.oracle.microtx.springboot.lra.annotation.Complete; import com.oracle.microtx.springboot.lra.annotation.LRA; import com.oracle.microtx.springboot.lra.annotation.ParticipantStatus; import com.oracle.microtx.springboot.lra.annotation.Status; import lombok.extern.slf4j.Slf4j; import org.springframework.http.ResponseEntity; import org.springframework.web.bind.annotation.PostMapping; import org.springframework.web.bind.annotation.PutMapping; import org.springframework.web.bind.annotation.RequestHeader; import org.springframework.web.bind.annotation.RequestMapping; import org.springframework.web.bind.annotation.RequestParam; import org.springframework.web.bind.annotation.RestController; import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_CONTEXT_HEADER; import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_ENDED_CONTEXT_HEADER; import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_PARENT_CONTEXT_HEADER; @RestController @RequestMapping(&#34;/withdraw&#34;) @Slf4j public class WithdrawService { public static final String WITHDRAW = &#34;WITHDRAW&#34;; /** * Reduce account balance by given amount and write journal entry re the same. * Both actions in same local tx */ @PostMapping @LRA(value = LRA.Type.MANDATORY, end = false) public ResponseEntity&lt;String&gt; withdraw(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId, @RequestParam(&#34;accountId&#34;) long accountId, @RequestParam(&#34;amount&#34;) long withdrawAmount) { log.info(&#34;withdraw &#34; &#43; withdrawAmount &#43; &#34; in account:&#34; &#43; accountId &#43; &#34; (lraId:&#34; &#43; lraId &#43; &#34;)...&#34;); Account account = AccountTransferDAO.instance().getAccountForAccountId(accountId); if (account == null) { log.info(&#34;withdraw failed: account does not exist&#34;); AccountTransferDAO.instance().saveJournal( new Journal( WITHDRAW, accountId, 0, lraId, AccountTransferDAO.getStatusString(ParticipantStatus.Active))); return ResponseEntity.ok(&#34;withdraw failed: account does not exist&#34;); } if (account.getAccountBalance() &lt; withdrawAmount) { log.info(&#34;withdraw failed: insufficient funds&#34;); AccountTransferDAO.instance().saveJournal( new Journal( WITHDRAW, accountId, 0, lraId, AccountTransferDAO.getStatusString(ParticipantStatus.Active))); return ResponseEntity.ok(&#34;withdraw failed: insufficient funds&#34;); } log.info(&#34;withdraw current balance:&#34; &#43; account.getAccountBalance() &#43; &#34; new balance:&#34; &#43; (account.getAccountBalance() - withdrawAmount)); account.setAccountBalance(account.getAccountBalance() - withdrawAmount); AccountTransferDAO.instance().saveAccount(account); AccountTransferDAO.instance().saveJournal( new Journal( WITHDRAW, accountId, withdrawAmount, lraId, AccountTransferDAO.getStatusString(ParticipantStatus.Active))); return ResponseEntity.ok(&#34;withdraw succeeded&#34;); } /** * Update LRA state. Do nothing else. */ @PutMapping(&#34;/complete&#34;) @Complete public ResponseEntity&lt;String&gt; completeWork(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) throws Exception { log.info(&#34;withdraw complete called for LRA : &#34; &#43; lraId); Journal journal = AccountTransferDAO.instance().getJournalForLRAid(lraId, WITHDRAW); journal.setLraState(AccountTransferDAO.getStatusString(ParticipantStatus.Completed)); AccountTransferDAO.instance().saveJournal(journal); return ResponseEntity.ok(ParticipantStatus.Completed.name()); } /** * Read the journal and increase the balance by the previous withdraw amount. * before the LRA */ @PutMapping(&#34;/compensate&#34;) @Compensate public ResponseEntity&lt;String&gt; compensateWork(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) throws Exception { log.info(&#34;Account withdraw compensate() called for LRA : &#34; &#43; lraId); Journal journal = AccountTransferDAO.instance().getJournalForLRAid(lraId, WITHDRAW); journal.setLraState(AccountTransferDAO.getStatusString(ParticipantStatus.Compensating)); Account account = AccountTransferDAO.instance().getAccountForAccountId(journal.getAccountId()); if (account != null) { account.setAccountBalance(account.getAccountBalance() &#43; journal.getJournalAmount()); AccountTransferDAO.instance().saveAccount(account); } journal.setLraState(AccountTransferDAO.getStatusString(ParticipantStatus.Compensated)); AccountTransferDAO.instance().saveJournal(journal); return ResponseEntity.ok(ParticipantStatus.Compensated.name()); } @Status public ResponseEntity&lt;ParticipantStatus&gt; status(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId, @RequestHeader(LRA_HTTP_PARENT_CONTEXT_HEADER) String parentLRA) throws Exception { return AccountTransferDAO.instance().status(lraId, WITHDRAW); } /** * Delete journal entry for LRA. */ @PutMapping(value = &#34;/after&#34;, consumes = &#34;text/plain&#34;) @AfterLRA public ResponseEntity&lt;String&gt; afterLRA(@RequestHeader(LRA_HTTP_ENDED_CONTEXT_HEADER) String lraId, String status) throws Exception { log.info(&#34;After LRA Called : &#34; &#43; lraId); AccountTransferDAO.instance().afterLRA(lraId, status, WITHDRAW); return ResponseEntity.ok(&#34;&#34;); } } That completes the implementation of the deposit service, and with that you are also done with the modifications for the Account Spring Boot microservice application to allow it to participate int he LRA. Next, you will create the Transfer Spring Boot microservice application.">
-    <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/cloudbank/saga/withdraw-service/index.html">
+    <meta property="og:url" content="http://localhost:1313/microservices-datadriven/cloudbank/saga/withdraw-service/index.html">
     <meta property="og:site_name" content="CloudBank AI">
     <meta property="og:title" content="Create the Withdrawal service :: CloudBank AI">
     <meta property="og:description" content="Next, you need to implement the withdraw service, which will be the second participant in the transfer LRA.
@@ -33,26 +33,49 @@ Create a new Java file called WithdrawService.java in src/main/java/com/example/
 package com.example.accounts.services; import com.example.accounts.model.Account; import com.example.accounts.model.Journal; import com.oracle.microtx.springboot.lra.annotation.AfterLRA; import com.oracle.microtx.springboot.lra.annotation.Compensate; import com.oracle.microtx.springboot.lra.annotation.Complete; import com.oracle.microtx.springboot.lra.annotation.LRA; import com.oracle.microtx.springboot.lra.annotation.ParticipantStatus; import com.oracle.microtx.springboot.lra.annotation.Status; import lombok.extern.slf4j.Slf4j; import org.springframework.http.ResponseEntity; import org.springframework.web.bind.annotation.PostMapping; import org.springframework.web.bind.annotation.PutMapping; import org.springframework.web.bind.annotation.RequestHeader; import org.springframework.web.bind.annotation.RequestMapping; import org.springframework.web.bind.annotation.RequestParam; import org.springframework.web.bind.annotation.RestController; import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_CONTEXT_HEADER; import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_ENDED_CONTEXT_HEADER; import static com.oracle.microtx.springboot.lra.annotation.LRA.LRA_HTTP_PARENT_CONTEXT_HEADER; @RestController @RequestMapping(&#34;/withdraw&#34;) @Slf4j public class WithdrawService { public static final String WITHDRAW = &#34;WITHDRAW&#34;; /** * Reduce account balance by given amount and write journal entry re the same. * Both actions in same local tx */ @PostMapping @LRA(value = LRA.Type.MANDATORY, end = false) public ResponseEntity&lt;String&gt; withdraw(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId, @RequestParam(&#34;accountId&#34;) long accountId, @RequestParam(&#34;amount&#34;) long withdrawAmount) { log.info(&#34;withdraw &#34; &#43; withdrawAmount &#43; &#34; in account:&#34; &#43; accountId &#43; &#34; (lraId:&#34; &#43; lraId &#43; &#34;)...&#34;); Account account = AccountTransferDAO.instance().getAccountForAccountId(accountId); if (account == null) { log.info(&#34;withdraw failed: account does not exist&#34;); AccountTransferDAO.instance().saveJournal( new Journal( WITHDRAW, accountId, 0, lraId, AccountTransferDAO.getStatusString(ParticipantStatus.Active))); return ResponseEntity.ok(&#34;withdraw failed: account does not exist&#34;); } if (account.getAccountBalance() &lt; withdrawAmount) { log.info(&#34;withdraw failed: insufficient funds&#34;); AccountTransferDAO.instance().saveJournal( new Journal( WITHDRAW, accountId, 0, lraId, AccountTransferDAO.getStatusString(ParticipantStatus.Active))); return ResponseEntity.ok(&#34;withdraw failed: insufficient funds&#34;); } log.info(&#34;withdraw current balance:&#34; &#43; account.getAccountBalance() &#43; &#34; new balance:&#34; &#43; (account.getAccountBalance() - withdrawAmount)); account.setAccountBalance(account.getAccountBalance() - withdrawAmount); AccountTransferDAO.instance().saveAccount(account); AccountTransferDAO.instance().saveJournal( new Journal( WITHDRAW, accountId, withdrawAmount, lraId, AccountTransferDAO.getStatusString(ParticipantStatus.Active))); return ResponseEntity.ok(&#34;withdraw succeeded&#34;); } /** * Update LRA state. Do nothing else. */ @PutMapping(&#34;/complete&#34;) @Complete public ResponseEntity&lt;String&gt; completeWork(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) throws Exception { log.info(&#34;withdraw complete called for LRA : &#34; &#43; lraId); Journal journal = AccountTransferDAO.instance().getJournalForLRAid(lraId, WITHDRAW); journal.setLraState(AccountTransferDAO.getStatusString(ParticipantStatus.Completed)); AccountTransferDAO.instance().saveJournal(journal); return ResponseEntity.ok(ParticipantStatus.Completed.name()); } /** * Read the journal and increase the balance by the previous withdraw amount. * before the LRA */ @PutMapping(&#34;/compensate&#34;) @Compensate public ResponseEntity&lt;String&gt; compensateWork(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) throws Exception { log.info(&#34;Account withdraw compensate() called for LRA : &#34; &#43; lraId); Journal journal = AccountTransferDAO.instance().getJournalForLRAid(lraId, WITHDRAW); journal.setLraState(AccountTransferDAO.getStatusString(ParticipantStatus.Compensating)); Account account = AccountTransferDAO.instance().getAccountForAccountId(journal.getAccountId()); if (account != null) { account.setAccountBalance(account.getAccountBalance() &#43; journal.getJournalAmount()); AccountTransferDAO.instance().saveAccount(account); } journal.setLraState(AccountTransferDAO.getStatusString(ParticipantStatus.Compensated)); AccountTransferDAO.instance().saveJournal(journal); return ResponseEntity.ok(ParticipantStatus.Compensated.name()); } @Status public ResponseEntity&lt;ParticipantStatus&gt; status(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId, @RequestHeader(LRA_HTTP_PARENT_CONTEXT_HEADER) String parentLRA) throws Exception { return AccountTransferDAO.instance().status(lraId, WITHDRAW); } /** * Delete journal entry for LRA. */ @PutMapping(value = &#34;/after&#34;, consumes = &#34;text/plain&#34;) @AfterLRA public ResponseEntity&lt;String&gt; afterLRA(@RequestHeader(LRA_HTTP_ENDED_CONTEXT_HEADER) String lraId, String status) throws Exception { log.info(&#34;After LRA Called : &#34; &#43; lraId); AccountTransferDAO.instance().afterLRA(lraId, status, WITHDRAW); return ResponseEntity.ok(&#34;&#34;); } } That completes the implementation of the deposit service, and with that you are also done with the modifications for the Account Spring Boot microservice application to allow it to participate int he LRA. Next, you will create the Transfer Spring Boot microservice application.">
     <meta itemprop="wordCount" content="453">
     <title>Create the Withdrawal service :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1732117029" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1732117029" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1732117029" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1732117029" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1732117029" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1732117029" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1732117029" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1732117029" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1732117029" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1732117029" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1732117029" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1732117029" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1732117029" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1732117029"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1735243025" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1735243025" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1735243025" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1735243025" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1735243025" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1735243025" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1735243025" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/format-html.css?1735243025" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
-      window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
+      window.relearn.absBaseUri='http:\/\/localhost:1313\/microservices-datadriven\/cloudbank';
+      window.relearn.min = ``;
       window.relearn.disableAnchorCopy=false;
       window.relearn.disableAnchorScrolling=false;
       // variant stuff
-      window.variants && variants.init( [ 'zen-light' ] );
+      window.relearn.themevariants = [ 'zen-light' ];
+      window.relearn.customvariantname = "my-custom-variant";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        var select = document.querySelector("#R-select-variant");
+        if (select) {
+          select.value = variant;
+        }
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( variant == window.relearn.customvariantname ){
+        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
       // translations
       window.T_Copy_to_clipboard = `Copy to clipboard`;
       window.T_Copied_to_clipboard = `Copied to clipboard!`;
@@ -274,10 +297,10 @@ package com.example.accounts.services; import com.example.accounts.model.Account
       <div id="R-header-topbar" class="default-animation"></div>
       <div id="R-header-wrapper" class="default-animation">
         <div id="R-header" class="default-animation">
-<img src="https://oracle.github.io/microservices-datadriven/cloudbank//cloudbank-logo.png" height="100px">
+<img src="http://localhost:1313/microservices-datadriven/cloudbank//cloudbank-logo.png" height="100px">
         </div>
         <script>
-          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1732117029";
+          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1735243025";
         </script>
         <search><form action="/microservices-datadriven/cloudbank/search/index.html" method="get">
           <div class="searchbox default-animation">
@@ -290,12 +313,12 @@ package com.example.accounts.services; import com.example.accounts.model.Account
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1732117029" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1735243025" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1735243025" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1735243025" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1735243025" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1735243025" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1735243025" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -362,13 +385,13 @@ package com.example.accounts.services; import com.example.accounts.model.Account
                   <span>&nbsp;</span>
                   <div class="control-style">
                     <label class="a11y-only" for="R-select-variant">Theme</label>
-                    <select id="R-select-variant" onchange="window.variants && variants.changeVariant( this.value );">
+                    <select id="R-select-variant" onchange="window.relearn.changeVariant( this.value );">
                       <option id="R-select-variant-zen-light" value="zen-light" selected>Zen Light</option>
                     </select>
                   </div>
                   <div class="clear"></div>
                 </div>
-                <script>window.variants && variants.markSelectedVariant();</script>
+                <script>window.relearn.markVariant();</script>
               </li>
               <li class="footerVisitedLinks">
                 <div class="padding menu-control">
@@ -389,8 +412,8 @@ package com.example.accounts.services; import com.example.accounts.model.Account
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1732117029" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1732117029" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1732117029" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1735243025" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1735243025" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1735243025" defer></script>
   </body>
 </html>

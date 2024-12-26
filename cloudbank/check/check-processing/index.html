@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article">
-  <head>
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/microservices-datadriven/cloudbank/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=microservices-datadriven/cloudbank/livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.138.0">
-    <meta name="generator" content="Relearn 7.1.1+ab4197f3113afa9a7d17bed69dbef6c0e75a4921">
+    <meta name="generator" content="Hugo 0.140.1">
+    <meta name="generator" content="Relearn 7.2.1">
     <meta name="description" content="Next, you will create the “Check Processing” microservice which you will receive messages from the ATM and Back Office and process them by calling the appropriate endpoints on the Account service. This service will also introduce the use of service discovery using OpenFeign clients.
 Create a new Java Project for the checks service.
 In the Explorer of VS Code open Java Project and click the plus sign to add a Java Project to your workspace.">
@@ -14,7 +14,7 @@ In the Explorer of VS Code open Java Project and click the plus sign to add a Ja
     <meta name="twitter:description" content="Next, you will create the “Check Processing” microservice which you will receive messages from the ATM and Back Office and process them by calling the appropriate endpoints on the Account service. This service will also introduce the use of service discovery using OpenFeign clients.
 Create a new Java Project for the checks service.
 In the Explorer of VS Code open Java Project and click the plus sign to add a Java Project to your workspace.">
-    <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/cloudbank/check/check-processing/index.html">
+    <meta property="og:url" content="http://localhost:1313/microservices-datadriven/cloudbank/check/check-processing/index.html">
     <meta property="og:site_name" content="CloudBank AI">
     <meta property="og:title" content="Create the Check Processing Microservice :: CloudBank AI">
     <meta property="og:description" content="Next, you will create the “Check Processing” microservice which you will receive messages from the ATM and Back Office and process them by calling the appropriate endpoints on the Account service. This service will also introduce the use of service discovery using OpenFeign clients.
@@ -29,26 +29,49 @@ Create a new Java Project for the checks service.
 In the Explorer of VS Code open Java Project and click the plus sign to add a Java Project to your workspace.">
     <meta itemprop="wordCount" content="1950">
     <title>Create the Check Processing Microservice :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1732117029" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1732117029" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1732117029" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1732117029" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1732117029" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1732117029" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1732117029" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1732117029" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1732117029" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1732117029" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1732117029" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1732117029" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1732117029" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1732117029"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1735243025" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1735243025" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1735243025" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1735243025" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1735243025" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1735243025" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1735243025" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/format-html.css?1735243025" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
-      window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
+      window.relearn.absBaseUri='http:\/\/localhost:1313\/microservices-datadriven\/cloudbank';
+      window.relearn.min = ``;
       window.relearn.disableAnchorCopy=false;
       window.relearn.disableAnchorScrolling=false;
       // variant stuff
-      window.variants && variants.init( [ 'zen-light' ] );
+      window.relearn.themevariants = [ 'zen-light' ];
+      window.relearn.customvariantname = "my-custom-variant";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        var select = document.querySelector("#R-select-variant");
+        if (select) {
+          select.value = variant;
+        }
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( variant == window.relearn.customvariantname ){
+        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
       // translations
       window.T_Copy_to_clipboard = `Copy to clipboard`;
       window.T_Copied_to_clipboard = `Copied to clipboard!`;
@@ -125,41 +148,41 @@ In the Explorer of VS Code open Java Project and click the plus sign to add a Ja
 <li>
 <p>Create a new Java Project for the <code>checks</code> service.</p>
 <p>In the Explorer of VS Code open <code>Java Project</code> and click the <strong>plus</strong> sign to add a Java Project to your workspace.</p>
-<p><a href="#R-image-78b75fa2f24ed412f105e1323b1d33dd" class="lightbox-link"><img alt="Add Java Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/add_java_project.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-78b75fa2f24ed412f105e1323b1d33dd"><img alt="Add Java Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/add_java_project.png" title=" "></a></p>
+<p><a href="#R-image-42a9ba828d17cd1ecfa196501f79aefc" class="lightbox-link"><img alt="Add Java Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/add_java_project.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-42a9ba828d17cd1ecfa196501f79aefc"><img alt="Add Java Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/add_java_project.png" title=" "></a></p>
 <p>Select Spring Boot Project.</p>
-<p><a href="#R-image-49ba7e43ad8954d7ae02b91c0df45e29" class="lightbox-link"><img alt="Spring Boot Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/spring-boot-prj.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-49ba7e43ad8954d7ae02b91c0df45e29"><img alt="Spring Boot Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/spring-boot-prj.png" title=" "></a></p>
+<p><a href="#R-image-53b0fff5e25323c5be4f0ac210d6096d" class="lightbox-link"><img alt="Spring Boot Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/spring-boot-prj.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-53b0fff5e25323c5be4f0ac210d6096d"><img alt="Spring Boot Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/spring-boot-prj.png" title=" "></a></p>
 <p>Select Maven Project.</p>
-<p><a href="#R-image-9042a77f3d9ac02ab4ae4d2faa09ddce" class="lightbox-link"><img alt="Maven Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/maven-project.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-9042a77f3d9ac02ab4ae4d2faa09ddce"><img alt="Maven Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/maven-project.png" title=" "></a></p>
+<p><a href="#R-image-8ad9116fa89ecdb96c0c2221c8621324" class="lightbox-link"><img alt="Maven Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/maven-project.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-8ad9116fa89ecdb96c0c2221c8621324"><img alt="Maven Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/maven-project.png" title=" "></a></p>
 <p>Specify <code>3.3.4</code> as the Spring Boot version.</p>
-<p><a href="#R-image-e7ab66918db6de9273f1323262802497" class="lightbox-link"><img alt="Spring Boot Version" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/spring-boot-version.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-e7ab66918db6de9273f1323262802497"><img alt="Spring Boot Version" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/spring-boot-version.png" title=" "></a></p>
+<p><a href="#R-image-9d1b6e921a9bf243288db58a12829ee1" class="lightbox-link"><img alt="Spring Boot Version" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/spring-boot-version.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-9d1b6e921a9bf243288db58a12829ee1"><img alt="Spring Boot Version" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/spring-boot-version.png" title=" "></a></p>
 <p>Use <code>com.example</code> as the Group Id.</p>
-<p><a href="#R-image-dc887a1d9d8e6bd6ce89493868ffbb3d" class="lightbox-link"><img alt="Group Id" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/group-id.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-dc887a1d9d8e6bd6ce89493868ffbb3d"><img alt="Group Id" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/group-id.png" title=" "></a></p>
+<p><a href="#R-image-351c24817c72936d89dc8a67ebee78f5" class="lightbox-link"><img alt="Group Id" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/group-id.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-351c24817c72936d89dc8a67ebee78f5"><img alt="Group Id" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/group-id.png" title=" "></a></p>
 <p>Enter <code>checks</code> as the Artifact Id.</p>
-<p><a href="#R-image-5be031c9c31d443ffbd6e7949801781c" class="lightbox-link"><img alt="Artifact Id" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/artifact-id-checks.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-5be031c9c31d443ffbd6e7949801781c"><img alt="Artifact Id" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/artifact-id-checks.png" title=" "></a></p>
+<p><a href="#R-image-4cb1f133e895669ea507dfe2ffb2e255" class="lightbox-link"><img alt="Artifact Id" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/artifact-id-checks.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-4cb1f133e895669ea507dfe2ffb2e255"><img alt="Artifact Id" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/artifact-id-checks.png" title=" "></a></p>
 <p>Use <code>JAR</code> as the Packaging Type.</p>
-<p><a href="#R-image-d58a44e34edd50e2f1e1a86205753184" class="lightbox-link"><img alt="Packaging Type" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/packaging-type.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-d58a44e34edd50e2f1e1a86205753184"><img alt="Packaging Type" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/packaging-type.png" title=" "></a></p>
+<p><a href="#R-image-66fe686af298ddc1ac7f67d63833bb3e" class="lightbox-link"><img alt="Packaging Type" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/packaging-type.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-66fe686af298ddc1ac7f67d63833bb3e"><img alt="Packaging Type" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/packaging-type.png" title=" "></a></p>
 <p>Select Java version <code>21</code>.</p>
-<p><a href="#R-image-c65a5ee0ba90b0420931351f05c53fbb" class="lightbox-link"><img alt="Java Version" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/java-version.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-c65a5ee0ba90b0420931351f05c53fbb"><img alt="Java Version" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/java-version.png" title=" "></a></p>
+<p><a href="#R-image-6710170a72b17ff5c9d21253116a0918" class="lightbox-link"><img alt="Java Version" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/java-version.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-6710170a72b17ff5c9d21253116a0918"><img alt="Java Version" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/java-version.png" title=" "></a></p>
 <p>Search for <code>Spring Web</code>, <code>Lombok</code>, <code>Feign</code> and <code>Eureka Client</code>. When all are selected press <strong>Enter</strong>.</p>
-<p><a href="#R-image-d4a30f72afe1be3ea6b02dd05efa73fa" class="lightbox-link"><img alt="Search for Spring Web" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/checks-dependencies.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-d4a30f72afe1be3ea6b02dd05efa73fa"><img alt="Search for Spring Web" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/checks-dependencies.png" title=" "></a></p>
+<p><a href="#R-image-7fcaad586514a0af4b28dfe503298c0c" class="lightbox-link"><img alt="Search for Spring Web" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/checks-dependencies.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-7fcaad586514a0af4b28dfe503298c0c"><img alt="Search for Spring Web" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/checks-dependencies.png" title=" "></a></p>
 <p>Press <strong>Enter</strong> to continue and create the Java Project</p>
-<p><a href="#R-image-d90f35d0c0fc87b2291be89299ceb16d" class="lightbox-link"><img alt="Create Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/create-project.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-d90f35d0c0fc87b2291be89299ceb16d"><img alt="Create Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/create-project.png" title=" "></a></p>
+<p><a href="#R-image-8172fae228f1418fce33e6ad155f5ad0" class="lightbox-link"><img alt="Create Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/create-project.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-8172fae228f1418fce33e6ad155f5ad0"><img alt="Create Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/create-project.png" title=" "></a></p>
 <p>Select the <code>root</code> location for your project e.g. side by side with the <code>checks</code>, <code>testrunner</code> and <code>account</code> projects.</p>
-<p><a href="#R-image-1175eb27fed3b31a0c23176f48d560ef" class="lightbox-link"><img alt="Project Location" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/project-location.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-1175eb27fed3b31a0c23176f48d560ef"><img alt="Project Location" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/project-location.png" title=" "></a></p>
+<p><a href="#R-image-dda690ca52cc54c33bd7962d47c32b83" class="lightbox-link"><img alt="Project Location" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/project-location.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-dda690ca52cc54c33bd7962d47c32b83"><img alt="Project Location" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/project-location.png" title=" "></a></p>
 <p>When the project opens click <strong>Add to Workspace</strong></p>
-<p><a href="#R-image-78487364ff7e079739d1f89dd41d2190" class="lightbox-link"><img alt="Add to Workspace" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/add-to-workspace.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-78487364ff7e079739d1f89dd41d2190"><img alt="Add to Workspace" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/add-to-workspace.png" title=" "></a></p>
+<p><a href="#R-image-40b05ac0bb707b406397dfb55e9a1259" class="lightbox-link"><img alt="Add to Workspace" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/add-to-workspace.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-40b05ac0bb707b406397dfb55e9a1259"><img alt="Add to Workspace" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/add-to-workspace.png" title=" "></a></p>
 </li>
 <li>
 <p>Update the <code>pom.xml</code> file for Oracle Spring Boot Starters</p>
@@ -520,10 +543,10 @@ In this step you will use OpenFeign to create a client.  OpenFeign allows you to
       <div id="R-header-topbar" class="default-animation"></div>
       <div id="R-header-wrapper" class="default-animation">
         <div id="R-header" class="default-animation">
-<img src="https://oracle.github.io/microservices-datadriven/cloudbank//cloudbank-logo.png" height="100px">
+<img src="http://localhost:1313/microservices-datadriven/cloudbank//cloudbank-logo.png" height="100px">
         </div>
         <script>
-          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1732117029";
+          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1735243025";
         </script>
         <search><form action="/microservices-datadriven/cloudbank/search/index.html" method="get">
           <div class="searchbox default-animation">
@@ -536,12 +559,12 @@ In this step you will use OpenFeign to create a client.  OpenFeign allows you to
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1732117029" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1735243025" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1735243025" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1735243025" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1735243025" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1735243025" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1735243025" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -604,13 +627,13 @@ In this step you will use OpenFeign to create a client.  OpenFeign allows you to
                   <span>&nbsp;</span>
                   <div class="control-style">
                     <label class="a11y-only" for="R-select-variant">Theme</label>
-                    <select id="R-select-variant" onchange="window.variants && variants.changeVariant( this.value );">
+                    <select id="R-select-variant" onchange="window.relearn.changeVariant( this.value );">
                       <option id="R-select-variant-zen-light" value="zen-light" selected>Zen Light</option>
                     </select>
                   </div>
                   <div class="clear"></div>
                 </div>
-                <script>window.variants && variants.markSelectedVariant();</script>
+                <script>window.relearn.markVariant();</script>
               </li>
               <li class="footerVisitedLinks">
                 <div class="padding menu-control">
@@ -631,8 +654,8 @@ In this step you will use OpenFeign to create a client.  OpenFeign allows you to
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1732117029" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1732117029" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1732117029" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1735243025" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1735243025" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1735243025" defer></script>
   </body>
 </html>

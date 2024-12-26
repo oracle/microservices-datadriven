@@ -1,4 +1,158 @@
-:root[data-r-output-format='print'] {
+@media screen {
+:root:not([data-r-output-format='print']):not([data-r-theme-variant='my-custom-variant']):not([data-r-theme-variant='zen-light']),
+:root:not([data-r-output-format='print'])[data-r-theme-variant='zen-light'] {
+&:root {
+  /* zen-light */
+  --PRIMARY-color: rgba(26, 115, 232, 1); /* brand primary color */
+  --SECONDARY-color: rgba(26, 115, 232, 1); /* brand secondary color */
+
+  --MAIN-TOPBAR-BORDER-color: rgba(210, 210, 210, 1); /* border color between topbar and content */
+  --MAIN-LINK-HOVER-color: rgba(32, 40, 145, 1); /* hoverd link color of content */
+  --MAIN-BG-color: rgba(255, 255, 255, 1); /* background color of content */
+  --MAIN-TEXT-color: rgba(0, 0, 0, 1); /* text color of content and h1 titles */
+  --MAIN-TITLES-TEXT-color: rgba(16, 16, 16, 1); /* text color of h2-h6 titles and transparent box titles */
+
+  --CODE-theme: relearn-light; /* name of the chroma stylesheet file */
+  --CODE-BLOCK-color: rgba(39, 40, 34, 1); /* fallback text color of block code; should be adjusted to your selected chroma style */
+  --CODE-BLOCK-BG-color: rgba(250, 250, 250, 1); /* fallback background color of block code; should be adjusted to your selected chroma style */
+  --CODE-BLOCK-BORDER-color: rgba(210, 210, 210, 1); /* border color of block code */
+  --CODE-INLINE-color: rgba(94, 94, 94, 1); /* text color of inline code */
+  --CODE-INLINE-BG-color: rgba(255, 250, 233, 1); /* background color of inline code */
+  --CODE-INLINE-BORDER-color: rgba(248, 232, 200, 1); /* border color of inline code */
+
+  --BROWSER-theme: light; /* name of the theme for browser scrollbars of the main section */
+  --MERMAID-theme: default; /* name of the default Mermaid theme for this variant, can be overridden in hugo.toml */
+  --OPENAPI-theme: light; /* name of the default OpenAPI theme for this variant, can be overridden in hugo.toml */
+  --OPENAPI-CODE-theme: idea; /* name of the default OpenAPI code theme for this variant, can be overridden in hugo.toml */
+
+  --MENU-BORDER-color: rgba(210, 210, 210, 1); /* border color between menu and content */
+  --MENU-TOPBAR-BORDER-color: rgba(247, 247, 247, 1); /* border color of vertical line between menu and topbar */
+  --MENU-TOPBAR-SEPARATOR-color: rgba(210, 210, 210, 1); /* separator color of vertical line between menu and topbar */
+  --MENU-HEADER-BG-color: transparent; /* background color of menu header */
+  --MENU-HEADER-BORDER-color: transparent; /* border color between menu header and menu */
+  --MENU-HEADER-SEPARATOR-color: rgba(210, 210, 210, 0.66); /* separator color between menu header and menu */
+
+  --MENU-HOME-LINK-color: rgba(64, 64, 64, 1); /* home button color if configured */
+  --MENU-HOME-LINK-HOVER-color: rgba(26, 115, 232, 1); /* hoverd home button color if configured */
+
+  --MENU-SEARCH-color: rgba(26, 115, 232, 1); /* text and icon color of search box */
+  --MENU-SEARCH-BG-color: rgba(255, 255, 255, 1); /* background color of search box */
+  --MENU-SEARCH-BORDER-color: rgba(210, 210, 210, 0.66); /* border color of search box */
+
+  --MENU-SECTIONS-BG-color: rgba(134, 134, 134, 0.066); /* background of the menu; this is NOT just a color value but can be a complete CSS background definition including gradients, etc. */
+  --MENU-SECTIONS-ACTIVE-BG-color: transparent; /* background color of the active menu section */
+  --MENU-SECTIONS-LINK-color: rgba(16, 16, 16, 1); /* link color of menu topics */
+  --MENU-SECTIONS-LINK-HOVER-color: rgba(26, 115, 232, 1); /* hoverd link color of menu topics */
+  --MENU-SECTION-ACTIVE-CATEGORY-color: rgba(26, 115, 232, 1); /* text color of the displayed menu topic */
+  --MENU-SECTION-ACTIVE-CATEGORY-BG-color: rgba(255, 255, 255, 1); /* background color of the displayed menu topic */
+  --MENU-SECTION-SEPARATOR-color: rgba(210, 210, 210, 0.66); /* separator color between menu sections and menu footer */
+
+  --BOX-CAPTION-color: rgba(255, 255, 255, 1); /* text color of colored box titles */
+  --BOX-BG-color: rgba(255, 255, 255, 0.833); /* background color of colored boxes */
+  --BOX-TEXT-color: rgba(16, 16, 16, 1); /* text color of colored box content */
+
+  --BOX-GREY-color: rgba(210, 210, 210, 1); /* background color of grey boxes */
+}
+
+body a#R-logo,
+body a#R-logo:hover,
+body #R-logo svg,
+body #R-logo svg * {
+  color: var(--MENU-HOME-LINK-color);
+  fill: var(--MENU-HOME-LINK-color) !important;
+}
+
+/* based on monokailight */
+/* Background */ .bg { color: #272822; background-color: #fafafa; }
+/* PreWrapper */ .chroma { color: #272822; background-color: #fafafa; }
+/* Other */ .chroma .x {  }
+/* Error */ .chroma .err { color: #960050; }
+/* CodeLine */ .chroma .cl {  }
+/* LineLink */ .chroma .lnlinks { outline: none; text-decoration: none; color: inherit }
+/* LineTableTD */ .chroma .lntd { vertical-align: top; padding: 0; margin: 0; border: 0; }
+/* LineTable */ .chroma .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0; }
+/* LineHighlight */ .chroma .hl { background-color: #e1e1e1 }
+/* LineNumbersTable */ .chroma .lnt { white-space: pre; -webkit-user-select: none; user-select: none; margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: #7f7f7f }
+/* LineNumbers */ .chroma .ln { white-space: pre; -webkit-user-select: none; user-select: none; margin-right: 0.4em; padding: 0 0.4em 0 0.4em;color: #7f7f7f }
+/* Line */ .chroma .line { display: flex; }
+/* Keyword */ .chroma .k { color: #00a8c8 }
+/* KeywordConstant */ .chroma .kc { color: #00a8c8 }
+/* KeywordDeclaration */ .chroma .kd { color: #00a8c8 }
+/* KeywordNamespace */ .chroma .kn { color: #f92672 }
+/* KeywordPseudo */ .chroma .kp { color: #00a8c8 }
+/* KeywordReserved */ .chroma .kr { color: #00a8c8 }
+/* KeywordType */ .chroma .kt { color: #00a8c8 }
+/* Name */ .chroma .n { color: #111111 }
+/* NameAttribute */ .chroma .na { color: #75af00 }
+/* NameBuiltin */ .chroma .nb { color: #111111 }
+/* NameBuiltinPseudo */ .chroma .bp { color: #111111 }
+/* NameClass */ .chroma .nc { color: #75af00 }
+/* NameConstant */ .chroma .no { color: #00a8c8 }
+/* NameDecorator */ .chroma .nd { color: #75af00 }
+/* NameEntity */ .chroma .ni { color: #111111 }
+/* NameException */ .chroma .ne { color: #75af00 }
+/* NameFunction */ .chroma .nf { color: #75af00 }
+/* NameFunctionMagic */ .chroma .fm { color: #111111 }
+/* NameLabel */ .chroma .nl { color: #111111 }
+/* NameNamespace */ .chroma .nn { color: #111111 }
+/* NameOther */ .chroma .nx { color: #75af00 }
+/* NameProperty */ .chroma .py { color: #111111 }
+/* NameTag */ .chroma .nt { color: #f92672 }
+/* NameVariable */ .chroma .nv { color: #111111 }
+/* NameVariableClass */ .chroma .vc { color: #111111 }
+/* NameVariableGlobal */ .chroma .vg { color: #111111 }
+/* NameVariableInstance */ .chroma .vi { color: #111111 }
+/* NameVariableMagic */ .chroma .vm { color: #111111 }
+/* Literal */ .chroma .l { color: #ae81ff }
+/* LiteralDate */ .chroma .ld { color: #d88200 }
+/* LiteralString */ .chroma .s { color: #d88200 }
+/* LiteralStringAffix */ .chroma .sa { color: #d88200 }
+/* LiteralStringBacktick */ .chroma .sb { color: #d88200 }
+/* LiteralStringChar */ .chroma .sc { color: #d88200 }
+/* LiteralStringDelimiter */ .chroma .dl { color: #d88200 }
+/* LiteralStringDoc */ .chroma .sd { color: #d88200 }
+/* LiteralStringDouble */ .chroma .s2 { color: #d88200 }
+/* LiteralStringEscape */ .chroma .se { color: #8045ff }
+/* LiteralStringHeredoc */ .chroma .sh { color: #d88200 }
+/* LiteralStringInterpol */ .chroma .si { color: #d88200 }
+/* LiteralStringOther */ .chroma .sx { color: #d88200 }
+/* LiteralStringRegex */ .chroma .sr { color: #d88200 }
+/* LiteralStringSingle */ .chroma .s1 { color: #d88200 }
+/* LiteralStringSymbol */ .chroma .ss { color: #d88200 }
+/* LiteralNumber */ .chroma .m { color: #ae81ff }
+/* LiteralNumberBin */ .chroma .mb { color: #ae81ff }
+/* LiteralNumberFloat */ .chroma .mf { color: #ae81ff }
+/* LiteralNumberHex */ .chroma .mh { color: #ae81ff }
+/* LiteralNumberInteger */ .chroma .mi { color: #ae81ff }
+/* LiteralNumberIntegerLong */ .chroma .il { color: #ae81ff }
+/* LiteralNumberOct */ .chroma .mo { color: #ae81ff }
+/* Operator */ .chroma .o { color: #f92672 }
+/* OperatorWord */ .chroma .ow { color: #f92672 }
+/* Punctuation */ .chroma .p { color: #111111 }
+/* Comment */ .chroma .c { color: #a7a187 }
+/* CommentHashbang */ .chroma .ch { color: #a7a187 }
+/* CommentMultiline */ .chroma .cm { color: #a7a187 }
+/* CommentSingle */ .chroma .c1 { color: #a7a187 }
+/* CommentSpecial */ .chroma .cs { color: #a7a187 }
+/* CommentPreproc */ .chroma .cp { color: #a7a187 }
+/* CommentPreprocFile */ .chroma .cpf { color: #a7a187 }
+/* Generic */ .chroma .g {  }
+/* GenericDeleted */ .chroma .gd {  }
+/* GenericEmph */ .chroma .ge { font-style: italic }
+/* GenericError */ .chroma .gr {  }
+/* GenericHeading */ .chroma .gh {  }
+/* GenericInserted */ .chroma .gi {  }
+/* GenericOutput */ .chroma .go {  }
+/* GenericPrompt */ .chroma .gp {  }
+/* GenericStrong */ .chroma .gs { font-weight: bold }
+/* GenericSubheading */ .chroma .gu {  }
+/* GenericTraceback */ .chroma .gt {  }
+/* GenericUnderline */ .chroma .gl {  }
+/* TextWhitespace */ .chroma .w {  }
+
+}
+}
+@media print {
 &:root {
   /* relearn-light */
   --PRIMARY-color: rgba(125, 201, 3, 1); /* brand primary color */
@@ -131,6 +285,7 @@
 /* TextWhitespace */ .chroma .w {  }
 
 }
+@media print {
 #R-sidebar {
   display: none;
 }
@@ -329,4 +484,6 @@ article {
 
 #R-body #R-body-inner > .flex-block-wrapper article.narrow > .article-subheading {
   margin-top: 0;
+}
+
 }

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article">
-  <head>
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head><script src="/microservices-datadriven/cloudbank/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=microservices-datadriven/cloudbank/livereload" data-no-instant defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.138.0">
-    <meta name="generator" content="Relearn 7.1.1+ab4197f3113afa9a7d17bed69dbef6c0e75a4921">
+    <meta name="generator" content="Hugo 0.140.1">
+    <meta name="generator" content="Relearn 7.2.1">
     <meta name="description" content="Add Spring Data JPA to the Account service and configure it to access the database
 Spring Data JPA allows our Spring Boot application to easily use the database. It uses simple Java POJOs to represent the data model and provides a lot of out-of-the-box features which means there is a lot less boilerplate code to be written.
 To add Spring Data JPA and the Oracle Database drivers to your project, open the Maven POM (pom.xml) and add these extra dependencies for Spring Data JPA, Oracle Spring Boot Starters for Oracle Database UCP (Universal Connection Pool) and Wallet:">
@@ -14,7 +14,7 @@ To add Spring Data JPA and the Oracle Database drivers to your project, open the
     <meta name="twitter:description" content="Add Spring Data JPA to the Account service and configure it to access the database
 Spring Data JPA allows our Spring Boot application to easily use the database. It uses simple Java POJOs to represent the data model and provides a lot of out-of-the-box features which means there is a lot less boilerplate code to be written.
 To add Spring Data JPA and the Oracle Database drivers to your project, open the Maven POM (pom.xml) and add these extra dependencies for Spring Data JPA, Oracle Spring Boot Starters for Oracle Database UCP (Universal Connection Pool) and Wallet:">
-    <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/cloudbank/account/jpa/index.html">
+    <meta property="og:url" content="http://localhost:1313/microservices-datadriven/cloudbank/account/jpa/index.html">
     <meta property="og:site_name" content="CloudBank AI">
     <meta property="og:title" content="Use Spring Data JPA :: CloudBank AI">
     <meta property="og:description" content="Add Spring Data JPA to the Account service and configure it to access the database
@@ -29,26 +29,49 @@ Spring Data JPA allows our Spring Boot application to easily use the database. I
 To add Spring Data JPA and the Oracle Database drivers to your project, open the Maven POM (pom.xml) and add these extra dependencies for Spring Data JPA, Oracle Spring Boot Starters for Oracle Database UCP (Universal Connection Pool) and Wallet:">
     <meta itemprop="wordCount" content="1275">
     <title>Use Spring Data JPA :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1732117029" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1732117029" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1732117029" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1732117029" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1732117029" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1732117029" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1732117029" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1732117029" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1732117029" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1732117029" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1732117029" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1732117029" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1732117029" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1732117029"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1735243025" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1735243025" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1735243025" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1735243025" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1735243025" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1735243025" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1735243025" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/format-html.css?1735243025" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
-      window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
+      window.relearn.absBaseUri='http:\/\/localhost:1313\/microservices-datadriven\/cloudbank';
+      window.relearn.min = ``;
       window.relearn.disableAnchorCopy=false;
       window.relearn.disableAnchorScrolling=false;
       // variant stuff
-      window.variants && variants.init( [ 'zen-light' ] );
+      window.relearn.themevariants = [ 'zen-light' ];
+      window.relearn.customvariantname = "my-custom-variant";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        var select = document.querySelector("#R-select-variant");
+        if (select) {
+          select.value = variant;
+        }
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( variant == window.relearn.customvariantname ){
+        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
       // translations
       window.T_Copy_to_clipboard = `Copy to clipboard`;
       window.T_Copied_to_clipboard = `Copied to clipboard!`;
@@ -140,8 +163,8 @@ To add Spring Data JPA and the Oracle Database drivers to your project, open the
 </span></span><span style="display:flex;"><span>   <span style="color:#f92672">&lt;version&gt;</span>23.4.0<span style="color:#f92672">&lt;/version&gt;</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/dependency&gt;</span></span></span></code></pre></div>
 <p>Visual Studio code will display a notification in the bottom right corner and ask if it should update the project based on the change you just made.  You should select <strong>Yes</strong> or <strong>Always</strong> to this notification.  Doing so will ensure that the auto-completion will have access to the classes in the new dependency that you just added.</p>
-<p><a href="#R-image-220ac505014f9d57d3cfbb352efacfcb" class="lightbox-link"><img alt="Updated Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-updated-pom.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-220ac505014f9d57d3cfbb352efacfcb"><img alt="Updated Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-updated-pom.png" title=" "></a></p>
+<p><a href="#R-image-cdbfb6400dfb702e037f5199959b7e74" class="lightbox-link"><img alt="Updated Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-updated-pom.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-cdbfb6400dfb702e037f5199959b7e74"><img alt="Updated Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-updated-pom.png" title=" "></a></p>
 </li>
 <li>
 <p>Configure JPA Datasource</p>
@@ -221,8 +244,8 @@ To add Spring Data JPA and the Oracle Database drivers to your project, open the
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;artifactId&gt;</span>lombok<span style="color:#f92672">&lt;/artifactId&gt;</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/dependency&gt;</span></span></span></code></pre></div>
 <p>Visual Studio code will display a notification in the bottom right corner and ask if it should update the project based on the change you just made.  You should select <strong>Yes</strong> or <strong>Always</strong> to this notification.  Doing so will ensure that the auto-completion will have access to the classes in the new dependency that you just added.</p>
-<p><a href="#R-image-e41e8f99ce2cf289b6753044bed91f44" class="lightbox-link"><img alt="Updated Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-updated-pom.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-e41e8f99ce2cf289b6753044bed91f44"><img alt="Updated Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-updated-pom.png" title=" "></a></p>
+<p><a href="#R-image-62ad7da9c290862edda628915ced29e4" class="lightbox-link"><img alt="Updated Project" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-updated-pom.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-62ad7da9c290862edda628915ced29e4"><img alt="Updated Project" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-updated-pom.png" title=" "></a></p>
 <p>Add the <code>Data</code> and <code>NoArgsConstructor</code> Lombok annotations to your <code>Account</code> class.  <code>@Data</code> generates all the boilerplate that is normally associated with simple POJOs and beans: getters for all fields, setters for all non-final fields, and appropriate <code>toString</code>, <code>equals</code> and <code>hashCode</code> implementations that involve the fields of the class, and a constructor that initializes all final fields, as well as all non-final fields with no initializer that have been marked with <code>@NonNull</code>, in order to ensure the field is never null.  The <code>NoArgsConstructor</code> creates a constructor with no arguments.</p>
 <p>Also add the JPA <code>Entity</code> and <code>Table</code> annotations to the class and set the <code>Table</code>&rsquo;s <code>name</code> property to <code>accounts</code>.  These tell JPA that this object will be mapped to a table in the database called <code>accounts</code>. Your class should now look like this:</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f92672">package</span> com.example.accounts.model;
@@ -304,10 +327,10 @@ To add Spring Data JPA and the Oracle Database drivers to your project, open the
       <div id="R-header-topbar" class="default-animation"></div>
       <div id="R-header-wrapper" class="default-animation">
         <div id="R-header" class="default-animation">
-<img src="https://oracle.github.io/microservices-datadriven/cloudbank//cloudbank-logo.png" height="100px">
+<img src="http://localhost:1313/microservices-datadriven/cloudbank//cloudbank-logo.png" height="100px">
         </div>
         <script>
-          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1732117029";
+          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1735243025";
         </script>
         <search><form action="/microservices-datadriven/cloudbank/search/index.html" method="get">
           <div class="searchbox default-animation">
@@ -320,12 +343,12 @@ To add Spring Data JPA and the Oracle Database drivers to your project, open the
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1732117029" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1735243025" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1735243025" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1735243025" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1735243025" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1735243025" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1735243025" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -390,13 +413,13 @@ To add Spring Data JPA and the Oracle Database drivers to your project, open the
                   <span>&nbsp;</span>
                   <div class="control-style">
                     <label class="a11y-only" for="R-select-variant">Theme</label>
-                    <select id="R-select-variant" onchange="window.variants && variants.changeVariant( this.value );">
+                    <select id="R-select-variant" onchange="window.relearn.changeVariant( this.value );">
                       <option id="R-select-variant-zen-light" value="zen-light" selected>Zen Light</option>
                     </select>
                   </div>
                   <div class="clear"></div>
                 </div>
-                <script>window.variants && variants.markSelectedVariant();</script>
+                <script>window.relearn.markVariant();</script>
               </li>
               <li class="footerVisitedLinks">
                 <div class="padding menu-control">
@@ -417,8 +440,8 @@ To add Spring Data JPA and the Oracle Database drivers to your project, open the
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1732117029" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1732117029" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1732117029" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1735243025" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1735243025" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1735243025" defer></script>
   </body>
 </html>
