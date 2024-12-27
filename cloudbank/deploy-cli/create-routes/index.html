@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article">
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.138.0">
-    <meta name="generator" content="Relearn 7.1.1+ab4197f3113afa9a7d17bed69dbef6c0e75a4921">
+    <meta name="generator" content="Hugo 0.140.1">
+    <meta name="generator" content="Relearn 7.2.1+f1701957c30daae7cd133bec5a7968480563ce9f">
     <meta name="description" content="To be able to access the CLoudBank services from the public internet we need expose the services via the Apache APISIX gateway. We’re going to do that using scripts.
 Get APISIX Gateway Admin Key
 You are going to need the Admin Key for the APISIX Gateway to configure the route. It is stored in a k8s ConfigMap. Run the command and make a note of the admin key.
@@ -33,26 +33,49 @@ You are going to need the Admin Key for the APISIX Gateway to configure the rout
 kubectl -n apisix get configmap apisix -o yaml Look for the key: information in the admin_key section and save it. You’ll be needing it later in this module.">
     <meta itemprop="wordCount" content="313">
     <title>Create APISIX routes :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1732117029" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1732117029" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1732117029" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1732117029" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1732117029" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1732117029" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1732117029" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1732117029" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1732117029" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1732117029" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1732117029" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1732117029" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1732117029" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1732117029"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1735316701" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1735316701" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1735316701" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1735316701" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1735316701" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1735316701" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme.min.css?1735316701" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/format-html.min.css?1735316701" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
+      window.relearn.min = `.min`;
       window.relearn.disableAnchorCopy=false;
       window.relearn.disableAnchorScrolling=false;
       // variant stuff
-      window.variants && variants.init( [ 'zen-light' ] );
+      window.relearn.themevariants = [ 'zen-light' ];
+      window.relearn.customvariantname = "my-custom-variant";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        var select = document.querySelector("#R-select-variant");
+        if (select) {
+          select.value = variant;
+        }
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( variant == window.relearn.customvariantname ){
+        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
       // translations
       window.T_Copy_to_clipboard = `Copy to clipboard`;
       window.T_Copied_to_clipboard = `Copied to clipboard!`;
@@ -192,14 +215,14 @@ kubectl -n apisix get configmap apisix -o yaml Look for the key: information in 
 </span></span><span style="display:flex;"><span>Forwarding from <span style="color:#f92672">[</span>::1<span style="color:#f92672">]</span>:7070 -&gt; <span style="color:#ae81ff">9000</span></span></span></code></pre></div>
 <p>Open a web browser to <a href="http://localhost:7070" rel="external" target="_blank">http://localhost:7070</a> to view the APISIX Dashboard web user interface.  It will appear similar to the image below.</p>
 <p>If prompted to login, login with username <code>admin</code> and the password you got from the k8s secret earlier. Note that Oracle strongly recommends that you change the password, even though this interface is not accessible outside the cluster without a tunnel.</p>
-<p><a href="#R-image-e3ab1c1d701b163773e4f806a5fc1889" class="lightbox-link"><img alt="APISIX Dashboard Login" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/apisix-login.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-e3ab1c1d701b163773e4f806a5fc1889"><img alt="APISIX Dashboard Login" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/apisix-login.png" title=" "></a></p>
+<p><a href="#R-image-784d71fbf77aba4f00ed0ef4315969e1" class="lightbox-link"><img alt="APISIX Dashboard Login" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/apisix-login.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-784d71fbf77aba4f00ed0ef4315969e1"><img alt="APISIX Dashboard Login" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/apisix-login.png" title=" "></a></p>
 <p>Click the routes menu item to see the routes you created in step three.</p>
-<p><a href="#R-image-67d060f2552e894743189cc2391af437" class="lightbox-link"><img alt="APISIX Routes" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/apisix-route.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-67d060f2552e894743189cc2391af437"><img alt="APISIX Routes" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/apisix-route.png" title=" "></a></p>
+<p><a href="#R-image-772c1a63f96097e672496799926eca2c" class="lightbox-link"><img alt="APISIX Routes" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/apisix-route.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-772c1a63f96097e672496799926eca2c"><img alt="APISIX Routes" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/apisix-route.png" title=" "></a></p>
 <p>Verify that you have three routes created</p>
-<p><a href="#R-image-b6e12d2714f53935ccbbd69616640332" class="lightbox-link"><img alt="APISIX Route Details" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/apisix-route-details.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-b6e12d2714f53935ccbbd69616640332"><img alt="APISIX Route Details" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/apisix-route-details.png" title=" "></a></p>
+<p><a href="#R-image-5b27d515b35b922abd2e8669adc3a1c2" class="lightbox-link"><img alt="APISIX Route Details" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/apisix-route-details.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-5b27d515b35b922abd2e8669adc3a1c2"><img alt="APISIX Route Details" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/apisix-route-details.png" title=" "></a></p>
 </li>
 </ol>
 </li>
@@ -218,7 +241,7 @@ kubectl -n apisix get configmap apisix -o yaml Look for the key: information in 
 <img src="https://oracle.github.io/microservices-datadriven/cloudbank//cloudbank-logo.png" height="100px">
         </div>
         <script>
-          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1732117029";
+          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1735316701";
         </script>
         <search><form action="/microservices-datadriven/cloudbank/search/index.html" method="get">
           <div class="searchbox default-animation">
@@ -231,12 +254,12 @@ kubectl -n apisix get configmap apisix -o yaml Look for the key: information in 
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1732117029" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1735316701" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1735316701" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1735316701" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1735316701" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1735316701" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1735316701" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -299,13 +322,13 @@ kubectl -n apisix get configmap apisix -o yaml Look for the key: information in 
                   <span>&nbsp;</span>
                   <div class="control-style">
                     <label class="a11y-only" for="R-select-variant">Theme</label>
-                    <select id="R-select-variant" onchange="window.variants && variants.changeVariant( this.value );">
+                    <select id="R-select-variant" onchange="window.relearn.changeVariant( this.value );">
                       <option id="R-select-variant-zen-light" value="zen-light" selected>Zen Light</option>
                     </select>
                   </div>
                   <div class="clear"></div>
                 </div>
-                <script>window.variants && variants.markSelectedVariant();</script>
+                <script>window.relearn.markVariant();</script>
               </li>
               <li class="footerVisitedLinks">
                 <div class="padding menu-control">
@@ -326,8 +349,8 @@ kubectl -n apisix get configmap apisix -o yaml Look for the key: information in 
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1732117029" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1732117029" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1732117029" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1735316701" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1735316701" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1735316701" defer></script>
   </body>
 </html>

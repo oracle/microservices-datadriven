@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article">
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.138.0">
-    <meta name="generator" content="Relearn 7.1.1+ab4197f3113afa9a7d17bed69dbef6c0e75a4921">
+    <meta name="generator" content="Hugo 0.140.1">
+    <meta name="generator" content="Relearn 7.2.1+f1701957c30daae7cd133bec5a7968480563ce9f">
     <meta name="description" content="The Oracle Backend for Microservices and AI can be installed from OCI Marketplace.
 Note: You only need to choose one of the three deployment options - local, OCI Free Tier or OCI Marketplace.
 This option installs a “production-sized” environment which includes an Oracle Compute Engine for Kubernetes (“OKE”) cluster and an Oracle Autonomous Database instance. If you want to use a smaller, development/test-sized environment that only requires a single OCI Compute Instance, please use the “Free Tier” option instead.">
@@ -29,26 +29,49 @@ Note: You only need to choose one of the three deployment options - local, OCI F
 This option installs a “production-sized” environment which includes an Oracle Compute Engine for Kubernetes (“OKE”) cluster and an Oracle Autonomous Database instance. If you want to use a smaller, development/test-sized environment that only requires a single OCI Compute Instance, please use the “Free Tier” option instead.">
     <meta itemprop="wordCount" content="1554">
     <title>Install from OCI Marketplace :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1732117029" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1732117029" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1732117029" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1732117029" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1732117029" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1732117029" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1732117029" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1732117029" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1732117029" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1732117029" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1732117029" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1732117029" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1732117029" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1732117029"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1735316701" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1735316701" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1735316701" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1735316701" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1735316701" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1735316701" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme.min.css?1735316701" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/format-html.min.css?1735316701" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
+      window.relearn.min = `.min`;
       window.relearn.disableAnchorCopy=false;
       window.relearn.disableAnchorScrolling=false;
       // variant stuff
-      window.variants && variants.init( [ 'zen-light' ] );
+      window.relearn.themevariants = [ 'zen-light' ];
+      window.relearn.customvariantname = "my-custom-variant";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        var select = document.querySelector("#R-select-variant");
+        if (select) {
+          select.value = variant;
+        }
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( variant == window.relearn.customvariantname ){
+        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
       // translations
       window.T_Copy_to_clipboard = `Copy to clipboard`;
       window.T_Copied_to_clipboard = `Copied to clipboard!`;
@@ -140,22 +163,22 @@ that only requires a single OCI Compute Instance, please use the &ldquo;Free Tie
 <li>
 <p>Access the Oracle Cloud Infrastructure Marketplace listing</p>
 <p>Open the <a href="https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911" rel="external" target="_blank">OCI Marketplace listing</a>, as shown in the image below:</p>
-<p><a href="#R-image-f9cbe41c499a3842807ddcd8caf87a28" class="lightbox-link"><img alt="OCI Marketplace listing" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-mp-listing.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-f9cbe41c499a3842807ddcd8caf87a28"><img alt="OCI Marketplace listing" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-mp-listing.png" title=" "></a></p>
+<p><a href="#R-image-7408f9a9a6c499a346ce5a3b828bc92e" class="lightbox-link"><img alt="OCI Marketplace listing" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-mp-listing.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-7408f9a9a6c499a346ce5a3b828bc92e"><img alt="OCI Marketplace listing" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-mp-listing.png" title=" "></a></p>
 <p>Click on the <strong>Get App</strong> button.</p>
 </li>
 <li>
 <p>Log into your Oracle Cloud Infrastructure account</p>
 <p>You will be taken to a Sign-In page. Choose they type of account you have and click on the <strong>Sign In</strong> button. If you did not create an account in the <strong>Get Started</strong> lab, you can do so now using the <strong>Sign Up</strong> button.</p>
-<p><a href="#R-image-2f5226b95349969ce35e3e820a264d2c" class="lightbox-link"><img alt="Sign In page" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-install-app.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-2f5226b95349969ce35e3e820a264d2c"><img alt="Sign In page" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-install-app.png" title=" "></a></p>
+<p><a href="#R-image-01416a6d964d137c3d7fcc7fce1b8108" class="lightbox-link"><img alt="Sign In page" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-install-app.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-01416a6d964d137c3d7fcc7fce1b8108"><img alt="Sign In page" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-install-app.png" title=" "></a></p>
 <p>Sign in to your account as you normally do, using Single Sign-On or Direct Sign-In.</p>
 </li>
 <li>
 <p>Choose the region and compartment</p>
 <p>In the next screen you can choose the region using the pull down in the top right hand corner, and then choose the compartment you want to install into.</p>
-<p><a href="#R-image-aa612c6fb6f0e673fe40101705201e8e" class="lightbox-link"><img alt="Install screen" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-install-2.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-aa612c6fb6f0e673fe40101705201e8e"><img alt="Install screen" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-install-2.png" title=" "></a></p>
+<p><a href="#R-image-0abfd4d841e4f21e54b370a52354825e" class="lightbox-link"><img alt="Install screen" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-install-2.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-0abfd4d841e4f21e54b370a52354825e"><img alt="Install screen" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-install-2.png" title=" "></a></p>
 <p>Review the terms and restrictions, and then click on the checkbox to accept them. Then, click on <strong>Launch Stack</strong>,</p>
 <blockquote>
 <p><strong>Note:</strong> This version of CloudBank is tested with <strong>version 1.3.0</strong>. Earlier versions may not contain all features used and you may see errors.</p>
@@ -164,8 +187,8 @@ that only requires a single OCI Compute Instance, please use the &ldquo;Free Tie
 <li>
 <p>Review the <strong>Create Stack</strong> page</p>
 <p>Review the details on the <strong>Create Stack</strong> page. You may wish to update the <strong>Name</strong> or add tags. When you are ready, click on <strong>Next</strong>.</p>
-<p><a href="#R-image-886d52f9b3e72e6a42b871d2feb4a9f7" class="lightbox-link"><img alt="Create stack screen" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-create-stack.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-886d52f9b3e72e6a42b871d2feb4a9f7"><img alt="Create stack screen" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-create-stack.png" title=" "></a></p>
+<p><a href="#R-image-e047ce0d61792facf9f0dde85f8ff7a2" class="lightbox-link"><img alt="Create stack screen" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-create-stack.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-e047ce0d61792facf9f0dde85f8ff7a2"><img alt="Create stack screen" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-create-stack.png" title=" "></a></p>
 </li>
 <li>
 <p>In the <strong>Backend as A Service</strong> Section, fill in the following configuration variables as needed and select <strong>Next</strong>:</p>
@@ -175,8 +198,8 @@ that only requires a single OCI Compute Instance, please use the &ldquo;Free Tie
 <li><code>Edition</code> : Select <em>COMMUNITY</em> Edition. Standard edition will give more options for the installation but those are not required or used in this LiveLab.</li>
 <li><code>Existing Authorization Token</code> : Leave blank.</li>
 </ul>
-<p><a href="#R-image-67ae9a90d6ca6183265ebccea2b9f390" class="lightbox-link"><img alt="Backend as A Service" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/oci-stack-app-name.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-67ae9a90d6ca6183265ebccea2b9f390"><img alt="Backend as A Service" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/oci-stack-app-name.png" title=" "></a></p>
+<p><a href="#R-image-54fb7f505df728a8484945ff7e16e176" class="lightbox-link"><img alt="Backend as A Service" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/oci-stack-app-name.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-54fb7f505df728a8484945ff7e16e176"><img alt="Backend as A Service" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/oci-stack-app-name.png" title=" "></a></p>
 </li>
 <li>
 <p>If you check the checkbox <em>Set Administrator Passwords</em> in the <strong>Administrator Passwords</strong> section you have the option to fill in the following passwords (if not they are autogenerated):</p>
@@ -186,8 +209,8 @@ that only requires a single OCI Compute Instance, please use the &ldquo;Free Tie
 <li><code>ORACTL Administrator Password</code> (optional) : Leave blank to auto-generate. This is the password for the <code>obaas-admin</code> user.</li>
 <li><code>ORACTL User Password</code> (optional) : Leave blank to auto-generate. This is the password for the <code>obaas-user</code> user.</li>
 </ul>
-<p><a href="#R-image-eae9b84f7dd55f6663bed9d4f511d1de" class="lightbox-link"><img alt="Passwords" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/oci-stack-passwords.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-eae9b84f7dd55f6663bed9d4f511d1de"><img alt="Passwords" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/oci-stack-passwords.png" title=" "></a></p>
+<p><a href="#R-image-8e5672734a6bbe830eb9678dce34267e" class="lightbox-link"><img alt="Passwords" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/oci-stack-passwords.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-8e5672734a6bbe830eb9678dce34267e"><img alt="Passwords" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/oci-stack-passwords.png" title=" "></a></p>
 </li>
 <li>
 <p>In the <strong>Kubernetes Cluster Options</strong>. fill in the following for the OKE Clusters Options:</p>
@@ -201,8 +224,8 @@ that only requires a single OCI Compute Instance, please use the &ldquo;Free Tie
 <blockquote>
 <p><strong>NOTE:</strong> Oracle recommends that you set <code>Control Plane Access Control</code> to be as restrictive as possible</p>
 </blockquote>
-<p><a href="#R-image-07d9d4dfa132893a1b8ab693db84fe87" class="lightbox-link"><img alt="Public Control Plane" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/oci-stack-k8s-options.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-07d9d4dfa132893a1b8ab693db84fe87"><img alt="Public Control Plane" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/oci-stack-k8s-options.png" title=" "></a></p>
+<p><a href="#R-image-89ed0c30e4414872e548253fc11bba0c" class="lightbox-link"><img alt="Public Control Plane" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/oci-stack-k8s-options.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-89ed0c30e4414872e548253fc11bba0c"><img alt="Public Control Plane" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/oci-stack-k8s-options.png" title=" "></a></p>
 </li>
 <li>
 <p>In the <strong>Load Balancers Options</strong> section, leave the default values.</p>
@@ -217,8 +240,8 @@ selected, access can only be from a private VCN.</li>
 <blockquote>
 <p><strong>NOTE:</strong> Oracle recommends that you set <code>Public Load Balancer Access Control</code> to be as restrictive as possible.</p>
 </blockquote>
-<p><a href="#R-image-2da5d7e75fac5442c75a5d35a6ea880e" class="lightbox-link"><img alt="Load Balancer" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/oci-stack-lb-options.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-2da5d7e75fac5442c75a5d35a6ea880e"><img alt="Load Balancer" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/oci-stack-lb-options.png" title=" "></a></p>
+<p><a href="#R-image-6d2cf447aeba4199e754171e8d46afec" class="lightbox-link"><img alt="Load Balancer" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/oci-stack-lb-options.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-6d2cf447aeba4199e754171e8d46afec"><img alt="Load Balancer" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/oci-stack-lb-options.png" title=" "></a></p>
 </li>
 <li>
 <p>In the <strong>Database Options</strong> section, leave the default values.</p>
@@ -235,8 +258,8 @@ selected, access can only be from a private VCN.</li>
 <blockquote>
 <p><strong>NOTE:</strong> Oracle recommends that you restrict by IP or CIDR addresses to be as restrictive as possible.</p>
 </blockquote>
-<p><a href="#R-image-e75c45329fa9df31342128a56143bc64" class="lightbox-link"><img alt="Database Options" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/oci-stack-db-options.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-e75c45329fa9df31342128a56143bc64"><img alt="Database Options" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/oci-stack-db-options.png" title=" "></a></p>
+<p><a href="#R-image-7a53553d9bff2e4ea1bb242c27021baf" class="lightbox-link"><img alt="Database Options" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/oci-stack-db-options.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-7a53553d9bff2e4ea1bb242c27021baf"><img alt="Database Options" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/oci-stack-db-options.png" title=" "></a></p>
 </li>
 <li>
 <p>Click <strong>Next</strong> to review your choices.</p>
@@ -244,14 +267,14 @@ selected, access can only be from a private VCN.</li>
 <li>
 <p>Complete the <strong>Review</strong> page</p>
 <p>Review the details on the <strong>Review</strong> page. Check the box next to <strong>Run Apply</strong>. When you are ready, click on <strong>Create</strong>.</p>
-<p><a href="#R-image-61c0e430dc3b8d697baedeb225b4174e" class="lightbox-link"><img alt="Review screen" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-create-stack-3.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-61c0e430dc3b8d697baedeb225b4174e"><img alt="Review screen" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-create-stack-3.png" title=" "></a></p>
+<p><a href="#R-image-e52dcefe6aef1f506e37536f1705e294" class="lightbox-link"><img alt="Review screen" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-create-stack-3.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-e52dcefe6aef1f506e37536f1705e294"><img alt="Review screen" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-create-stack-3.png" title=" "></a></p>
 </li>
 <li>
 <p>Review the apply screen</p>
 <p>The stack will now be applied. On the <strong>Apply</strong> screen (see below) you can monitor the progress of the installation in the <strong>Logs</strong> box. The installation should take about 30 minutes to complete. This includes the time needed to create your Oracle Autonomous Database instance, your Oracle Container Engine for Kubernetes cluster and install the various components of the stack into the Kubernetes cluster.</p>
-<p><a href="#R-image-d8a98f03e6d265e43cc95f7d161019cb" class="lightbox-link"><img alt="Stack apply screen" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-apply.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-d8a98f03e6d265e43cc95f7d161019cb"><img alt="Stack apply screen" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-apply.png" title=" "></a></p>
+<p><a href="#R-image-6db1ae277d70812700f3e6f9007772d4" class="lightbox-link"><img alt="Stack apply screen" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-apply.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-6db1ae277d70812700f3e6f9007772d4"><img alt="Stack apply screen" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-apply.png" title=" "></a></p>
 <blockquote>
 <p><strong>Note</strong>: While you are waiting for the installation to complete is a great time to start setting up your development environment (see the next lab). You can come back here where you are done to check the installation completed successfully.</p>
 </blockquote>
@@ -274,8 +297,8 @@ selected, access can only be from a private VCN.</li>
 </span></span><span style="display:flex;"><span>oractl_admin_password = &lt;sensitive&gt;
 </span></span><span style="display:flex;"><span>oractl_user_password = &lt;sensitive&gt;</span></span></code></pre></div>
 <p>To get the sensitive information you need to click on the <strong>Application Information</strong> tab, and click on <em>unlock</em> or <em>show</em> to display the values:</p>
-<p><a href="#R-image-a0cf25b1d5ccf8571524c6c4b428459f" class="lightbox-link"><img alt="Output screen" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-outputs.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-a0cf25b1d5ccf8571524c6c4b428459f"><img alt="Output screen" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-outputs.png" title=" "></a></p>
+<p><a href="#R-image-a83e2e405b8eaf7cd3d25d630b6a1d7f" class="lightbox-link"><img alt="Output screen" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-outputs.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-a83e2e405b8eaf7cd3d25d630b6a1d7f"><img alt="Output screen" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-outputs.png" title=" "></a></p>
 <blockquote>
 <p><strong>Note</strong>: Keep a copy of the values, you will need these in later labs.</p>
 </blockquote>
@@ -284,8 +307,8 @@ selected, access can only be from a private VCN.</li>
 <p>Verify you can access the Kubernetes cluster</p>
 <p>In later labs, you will look at various resources in Kubernetes. You will need a Kubernetes configuration file to access the cluster. For now, accessing the cluster from OCI Cloud Shell will be sufficient to verify the installation.</p>
 <p>Open the OCI Cloud Shell by clicking on the icon next to the region in the top right corner of the console and then clicking on <strong>Cloud Shell</strong>.</p>
-<p><a href="#R-image-3d768656b394360465ea57585c9dd06f" class="lightbox-link"><img alt="Open OCI CLoud Shell" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-cloud-shell.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-3d768656b394360465ea57585c9dd06f"><img alt="Open OCI CLoud Shell" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-cloud-shell.png" title=" "></a></p>
+<p><a href="#R-image-8a5378b9d44f6d85ed2e2eb351c610b9" class="lightbox-link"><img alt="Open OCI CLoud Shell" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-cloud-shell.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-8a5378b9d44f6d85ed2e2eb351c610b9"><img alt="Open OCI CLoud Shell" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-cloud-shell.png" title=" "></a></p>
 <p>Run the command provided at the end of your installation log or the information from the <strong>Application Information</strong> tab,to obtain the Kubernetes configuration file.  The command will be similar to this:</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>oci ce cluster create-kubeconfig --cluster-id ocid1.cluster.oc1.i..... --region us-ashburn-1 --token-version 2.0.0 --kube-endpoint PUBLIC_ENDPOINT --file $HOME/.kube/config</span></span></code></pre></div>
 <p>Check that you can access the cluster using this command:</p>
@@ -330,7 +353,7 @@ selected, access can only be from a private VCN.</li>
 <img src="https://oracle.github.io/microservices-datadriven/cloudbank//cloudbank-logo.png" height="100px">
         </div>
         <script>
-          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1732117029";
+          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1735316701";
         </script>
         <search><form action="/microservices-datadriven/cloudbank/search/index.html" method="get">
           <div class="searchbox default-animation">
@@ -343,12 +366,12 @@ selected, access can only be from a private VCN.</li>
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1732117029" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1735316701" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1735316701" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1735316701" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1735316701" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1735316701" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1735316701" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -408,13 +431,13 @@ selected, access can only be from a private VCN.</li>
                   <span>&nbsp;</span>
                   <div class="control-style">
                     <label class="a11y-only" for="R-select-variant">Theme</label>
-                    <select id="R-select-variant" onchange="window.variants && variants.changeVariant( this.value );">
+                    <select id="R-select-variant" onchange="window.relearn.changeVariant( this.value );">
                       <option id="R-select-variant-zen-light" value="zen-light" selected>Zen Light</option>
                     </select>
                   </div>
                   <div class="clear"></div>
                 </div>
-                <script>window.variants && variants.markSelectedVariant();</script>
+                <script>window.relearn.markVariant();</script>
               </li>
               <li class="footerVisitedLinks">
                 <div class="padding menu-control">
@@ -435,8 +458,8 @@ selected, access can only be from a private VCN.</li>
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1732117029" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1732117029" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1732117029" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1735316701" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1735316701" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1735316701" defer></script>
   </body>
 </html>

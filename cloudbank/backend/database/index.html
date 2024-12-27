@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article">
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.138.0">
-    <meta name="generator" content="Relearn 7.1.1+ab4197f3113afa9a7d17bed69dbef6c0e75a4921">
+    <meta name="generator" content="Hugo 0.140.1">
+    <meta name="generator" content="Relearn 7.2.1+f1701957c30daae7cd133bec5a7968480563ce9f">
     <meta name="description" content="Oracle Backend for Microservices and AI includes an Oracle Autonomous Database instance. You can manage and access the database from the OCI Console.
 View details of the Oracle Autonomous Database
 In the OCI Console, in the main (“hamburger”) menu navigate to the Oracle Database category and then Oracle Autonomous Database. Make sure you have the correct region selected (in the top right corner) and the compartment where you installed Oracle Backend for Microservices and AI (on the left hand side pull down list). You will a list of Oracle Autonomous Database instances (you will probably only have one):">
@@ -29,26 +29,49 @@ View details of the Oracle Autonomous Database
 In the OCI Console, in the main (“hamburger”) menu navigate to the Oracle Database category and then Oracle Autonomous Database. Make sure you have the correct region selected (in the top right corner) and the compartment where you installed Oracle Backend for Microservices and AI (on the left hand side pull down list). You will a list of Oracle Autonomous Database instances (you will probably only have one):">
     <meta itemprop="wordCount" content="366">
     <title>Explore Oracle Autonomous Database :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1732117029" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1732117029" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1732117029" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1732117029" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1732117029" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1732117029" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1732117029" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1732117029" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1732117029" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1732117029" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1732117029" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1732117029" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1732117029" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1732117029"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1735316701" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1735316701" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1735316701" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1735316701" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1735316701" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1735316701" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme.min.css?1735316701" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/format-html.min.css?1735316701" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
+      window.relearn.min = `.min`;
       window.relearn.disableAnchorCopy=false;
       window.relearn.disableAnchorScrolling=false;
       // variant stuff
-      window.variants && variants.init( [ 'zen-light' ] );
+      window.relearn.themevariants = [ 'zen-light' ];
+      window.relearn.customvariantname = "my-custom-variant";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        var select = document.querySelector("#R-select-variant");
+        if (select) {
+          select.value = variant;
+        }
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( variant == window.relearn.customvariantname ){
+        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
       // translations
       window.T_Copy_to_clipboard = `Copy to clipboard`;
       window.T_Copied_to_clipboard = `Copied to clipboard!`;
@@ -125,31 +148,31 @@ In the OCI Console, in the main (“hamburger”) menu navigate to the Oracle Da
 <li>
 <p>View details of the Oracle Autonomous Database</p>
 <p>In the OCI Console, in the main (&ldquo;hamburger&rdquo;) menu navigate to the <strong>Oracle Database</strong> category and then <strong>Oracle Autonomous Database</strong>.  Make sure you have the correct region selected (in the top right corner) and the compartment where you installed Oracle Backend for Microservices and AI (on the left hand side pull down list).  You will a list of Oracle Autonomous Database instances (you will probably only have one):</p>
-<p><a href="#R-image-2701258aa39e1d279ea343122c6060e4" class="lightbox-link"><img alt="List of Oracle Autonomous Database instances" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-adb-1.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-2701258aa39e1d279ea343122c6060e4"><img alt="List of Oracle Autonomous Database instances" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-adb-1.png" title=" "></a></p>
+<p><a href="#R-image-ea5c8260b1eaf86f8d2fe48cee1b3563" class="lightbox-link"><img alt="List of Oracle Autonomous Database instances" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-adb-1.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-ea5c8260b1eaf86f8d2fe48cee1b3563"><img alt="List of Oracle Autonomous Database instances" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-adb-1.png" title=" "></a></p>
 <p>Click on the database name link to view more information about that instance.  ON this page, you can see important information about your Oracle Autonomous Database instance, and you can manage backups, access and so on.  You can also click on the <strong>Performance Hub</strong> button to access information about the performance of your database instance.</p>
-<p><a href="#R-image-1278757708bee919364b37e7226f86c1" class="lightbox-link"><img alt="Details of Oracle Autonomous Database instance" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-adb-2.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-1278757708bee919364b37e7226f86c1"><img alt="Details of Oracle Autonomous Database instance" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-adb-2.png" title=" "></a></p>
+<p><a href="#R-image-89bcd04fd236fe1892a20c89ef536534" class="lightbox-link"><img alt="Details of Oracle Autonomous Database instance" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-adb-2.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-89bcd04fd236fe1892a20c89ef536534"><img alt="Details of Oracle Autonomous Database instance" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-adb-2.png" title=" "></a></p>
 <p>You can manage scaling from here by clicking on the <strong>Manage resource allocation</strong> button which will open this form where you can adjust the ECPU and storage for the Autonomous Database instance.</p>
-<p><a href="#R-image-b9aff6382854f536bf77e2f3a26b1717" class="lightbox-link"><img alt="Manage scaling" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-adb-2a.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-b9aff6382854f536bf77e2f3a26b1717"><img alt="Manage scaling" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-adb-2a.png" title=" "></a></p>
+<p><a href="#R-image-bdd547957694db3731048bf3f3258d1d" class="lightbox-link"><img alt="Manage scaling" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-adb-2a.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-bdd547957694db3731048bf3f3258d1d"><img alt="Manage scaling" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-adb-2a.png" title=" "></a></p>
 </li>
 <li>
 <p>Explore Oracle Backend for Microservices and AI database objects</p>
 <p>Click on the <strong>Database Actions</strong> button and select SQL to open a SQL Worksheet.</p>
-<p><a href="#R-image-56ac10a4143e787ca1c37d190b245716" class="lightbox-link"><img alt="SQL" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/db-action-sql.png" style=" height: auto; width: auto;"></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-56ac10a4143e787ca1c37d190b245716"><img alt="SQL" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/db-action-sql.png"></a></p>
+<p><a href="#R-image-ab2bf9ca20a06d74b4f16a4ab2081137" class="lightbox-link"><img alt="SQL" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/db-action-sql.png" style=" height: auto; width: auto;"></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-ab2bf9ca20a06d74b4f16a4ab2081137"><img alt="SQL" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/db-action-sql.png"></a></p>
 <p>Depending on choices you made during installation, you may go straight to SQL Worksheet, or you may need to enter credentials first.  If you are prompted to login, use the username <code>ADMIN</code> and obtain the password from Kubernetes with this command (make sure to change the secret name to match the name you chose during installation):</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$  kubectl -n application get secret obaasdevdb-db-secrets -o jsonpath<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;{.data.db\.password}&#39;</span> | base64 -d</span></span></code></pre></div>
-<p><a href="#R-image-fd4b0dbb059af935e000627ac6b9846e" class="lightbox-link"><img alt="Database Actions login page" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-adb-3.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-fd4b0dbb059af935e000627ac6b9846e"><img alt="Database Actions login page" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-adb-3.png" title=" "></a></p>
+<p><a href="#R-image-d9028237bc948320d508685f5468fcb9" class="lightbox-link"><img alt="Database Actions login page" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-adb-3.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-d9028237bc948320d508685f5468fcb9"><img alt="Database Actions login page" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-adb-3.png" title=" "></a></p>
 <p>In the SQL Worksheet, you can the first pull down list in the <strong>Navigator</strong> on the left hand side to see the users and schema in the database.  Choose the <strong>CONFIGSERVER</strong> user to view tables (or other objects) for that user.  This is the user associated with the Spring Config Server.</p>
 <p>Execute this query to view tables associated with various Spring Boot services and the CloudBank:</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">select</span> <span style="color:#66d9ef">owner</span>, <span style="color:#66d9ef">table_name</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">from</span> dba_tables
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">where</span> <span style="color:#66d9ef">owner</span> <span style="color:#66d9ef">in</span> (<span style="color:#e6db74">&#39;ACCOUNT&#39;</span>, <span style="color:#e6db74">&#39;CUSTOMER&#39;</span>, <span style="color:#e6db74">&#39;CONFIGSERVER&#39;</span>, <span style="color:#e6db74">&#39;AZNSERVER&#39;</span>)</span></span></code></pre></div>
-<p><a href="#R-image-0f3d14570fa80e5998e6ab3dcb4a7208" class="lightbox-link"><img alt="Tables associated with Spring Boot services" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-adb-5.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-0f3d14570fa80e5998e6ab3dcb4a7208"><img alt="Tables associated with Spring Boot services" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-adb-5.png" title=" "></a></p>
+<p><a href="#R-image-e7481661f19778d3aa265a7d855b1787" class="lightbox-link"><img alt="Tables associated with Spring Boot services" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-adb-5.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-e7481661f19778d3aa265a7d855b1787"><img alt="Tables associated with Spring Boot services" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-adb-5.png" title=" "></a></p>
 <p>Feel free to explore some of these tables to see the data.</p>
 </li>
 </ol>
@@ -167,7 +190,7 @@ In the OCI Console, in the main (“hamburger”) menu navigate to the Oracle Da
 <img src="https://oracle.github.io/microservices-datadriven/cloudbank//cloudbank-logo.png" height="100px">
         </div>
         <script>
-          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1732117029";
+          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1735316701";
         </script>
         <search><form action="/microservices-datadriven/cloudbank/search/index.html" method="get">
           <div class="searchbox default-animation">
@@ -180,12 +203,12 @@ In the OCI Console, in the main (“hamburger”) menu navigate to the Oracle Da
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1732117029" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1735316701" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1735316701" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1735316701" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1735316701" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1735316701" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1735316701" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -250,13 +273,13 @@ In the OCI Console, in the main (“hamburger”) menu navigate to the Oracle Da
                   <span>&nbsp;</span>
                   <div class="control-style">
                     <label class="a11y-only" for="R-select-variant">Theme</label>
-                    <select id="R-select-variant" onchange="window.variants && variants.changeVariant( this.value );">
+                    <select id="R-select-variant" onchange="window.relearn.changeVariant( this.value );">
                       <option id="R-select-variant-zen-light" value="zen-light" selected>Zen Light</option>
                     </select>
                   </div>
                   <div class="clear"></div>
                 </div>
-                <script>window.variants && variants.markSelectedVariant();</script>
+                <script>window.relearn.markVariant();</script>
               </li>
               <li class="footerVisitedLinks">
                 <div class="padding menu-control">
@@ -277,8 +300,8 @@ In the OCI Console, in the main (“hamburger”) menu navigate to the Oracle Da
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1732117029" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1732117029" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1732117029" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1735316701" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1735316701" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1735316701" defer></script>
   </body>
 </html>
