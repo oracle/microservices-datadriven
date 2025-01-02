@@ -16,7 +16,7 @@ The Oracle Spring Boot Starter for AQ/JMS simplifies TxEventQ integration with S
 
 ## Spring Boot Starter for Kafka Java Client for Oracle Database Transactional Event Queues
 
-The Kafka Java Client for TxEventQ Spring Boot Starter pulls in all necessary dependencies to work with TxEventQ's [Kafka Java API](https://github.com/oracle/okafka) using Spring Boot.
+The Kafka Java Client for Oracle Database Transactional Event Queues Spring Boot Starter pulls in all necessary dependencies to work with Transactional Event Queues [Kafka Java API](https://github.com/oracle/okafka) using Spring Boot.
 
 ## TxEventQ Spring Cloud Stream Binder
 

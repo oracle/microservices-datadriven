@@ -15,7 +15,6 @@ This section explains message operations using queues, topics, and different pro
     * [Kafka Consumer](#kafka-consumer)
   * [Enqueuing and Dequeuing with JMS](#enqueuing-and-dequeuing-with-jms)
     * [JMS APIs](#jms-apis)
-    * [Spring JMS](#spring-jms)
     * [Message Operations in Other Languages and APIs](#message-operations-in-other-languages-and-apis)
 * [Message Expiry and Exception Queues](#message-expiry-and-exception-queues)
 * [Message Delay](#message-delay)
@@ -260,82 +259,6 @@ try (Connection conn = cf.createConnection()) {
     if (msg != null && msg instanceof TextMessage) {
         TextMessage textMsg = (TextMessage) msg;
         System.out.println("Received message: " + textMsg.getText());
-    }
-}
-```
-
-##### Spring JMS
-
-To configure Spring JMS to use Oracle Database Transactional Event Queues, you'll need to ensure your Spring datasource configuration is setup for Oracle Database:
-
-```yaml
-spring:
-  datasource:
-    username: ${USERNAME}
-    password: ${PASSWORD}
-    url: ${JDBC_URL}
-
-    # Set these to use UCP over Hikari.
-    driver-class-name: oracle.jdbc.OracleDriver
-    type: oracle.ucp.jdbc.PoolDataSourceImpl
-    oracleucp:
-      initial-pool-size: 1
-      min-pool-size: 1
-      max-pool-size: 30
-      connection-pool-name: UCPSampleApplication
-      connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
-```
-
-Additionally, you should define a JMS ConnectionFactory bean using the AQjmsFactory class. The presence of the ConnectionFactory bean ensures Spring JMS uses Oracle Database Transactional Event Queues as the JMS provider for message operations.
-
-```java
-@Bean
-public ConnectionFactory aqJmsConnectionFactory(DataSource ds) throws JMSException {
-    return AQjmsFactory.getConnectionFactory(ds);
-}
-```
-
-The following Spring JMS Producer class makes use of Spring’s JMSTemplate, which is available via autowiring. The JMSTemplate class provides a simple API for working with JMS — here we use the convertAndSend method to produce messages to a queue.
-
-The JMSTemplate class provides a variety of JMS functionality, and may also be used to receive messages.
-
-```java
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.jms.core.JmsTemplate;
-import org.springframework.stereotype.Component;
-
-@Component
-public class Producer {
-    private final JmsTemplate jmsTemplate;
-    private final String queueName;
-
-    public Producer(JmsTemplate jmsTemplate,
-                    @Value("${txeventq.queue.name:testqueue}") String queueName) {
-        this.jmsTemplate = jmsTemplate;
-        this.queueName = queueName;
-    }
-
-    public void enqueue(String message) {
-        jmsTemplate.convertAndSend(queueName, message);
-    }
-}
-```
-
-The following Spring JMS Consumer class uses Spring’s @JmsListener annotation to set up a message receiver for a given queue — in this case, a queue named “testqueue”. The basic consumer prints each message it receives to stdout.
-
-```java
-import java.util.concurrent.CountDownLatch;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.jms.annotation.JmsListener;
-import org.springframework.stereotype.Component;
-
-@Component
-public class Consumer {
-    
-    @JmsListener(destination = "${txeventq.queue.name:testqueue}", id = "sampleConsumer")
-    public void receiveMessage(String message) {
-        System.out.printf("Received message: %s%n", message);
     }
 }
 ```

@@ -4,7 +4,7 @@ title = "Kafka Connectors"
 weight = 3
 +++
 
-This section provides examples using Kafka connectors to connect Oracle Database Transactional Event Queues with other data and messaging systems, like [Apache Kafka](https://github.com/oracle/okafka/tree/master/connectors).
+This section introduces Kafka connectors to connect Oracle Database Transactional Event Queues with other data and messaging systems, like [Apache Kafka](https://github.com/oracle/okafka/tree/master/connectors) topics.
 
 ## Kafka Connectors
 
