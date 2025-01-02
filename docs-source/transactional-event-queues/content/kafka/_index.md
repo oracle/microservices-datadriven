@@ -46,3 +46,7 @@ Oracle offers a Kafka connector for TxeventQ, enabling seamless integration of m
 ## Transactional Messaging
 
 One of TxEventQ's unique features is its ability to combine messaging and database operations within a single transaction. This capability, often referred to as the "transactional outbox" pattern, ensures data consistency across microservices. We'll explore this pattern through the Kafka Java Client for Oracle Database Transactional Event Queues.
+
+## Spring Boot Integration
+
+Spring Boot integration is supported through the [Kafka Java Client for Oracle Database Transactional Event Queues' Spring Boot Starter](https://central.sonatype.com/artifact/com.oracle.database.spring/oracle-spring-boot-starter-okafka). You can read more about the starter in the [Spring Boot Kafka section](../spring-boot/kafka.md).
