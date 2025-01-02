@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article">
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.138.0">
-    <meta name="generator" content="Relearn 7.1.1+ab4197f3113afa9a7d17bed69dbef6c0e75a4921">
+    <meta name="generator" content="Hugo 0.140.1">
+    <meta name="generator" content="Relearn 7.2.1+f1701957c30daae7cd133bec5a7968480563ce9f">
     <meta name="description" content="Note: These steps apply only if you chose the option to install in OCI Free Tier.
 Login into your OCI Free Trail account.
 Delete the Compute Instance.
@@ -37,26 +37,49 @@ Select the compartment where you installed the Compute instance in the drop down
 Navigate to the Compute Instances page by clicking on the link on the home page of the OCI Console or opening the main menu using the “hamburger” icon ( ) in the top left corner of the console and searching for “instance”:">
     <meta itemprop="wordCount" content="403">
     <title>OCI Free Tier Cleanup :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1732117029" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1732117029" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1732117029" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1732117029" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1732117029" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1732117029" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1732117029" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1732117029" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1732117029" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1732117029" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1732117029" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1732117029" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1732117029" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1732117029"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1735316701" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1735316701" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1735316701" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1735316701" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1735316701" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1735316701" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme.min.css?1735316701" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/format-html.min.css?1735316701" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
+      window.relearn.min = `.min`;
       window.relearn.disableAnchorCopy=false;
       window.relearn.disableAnchorScrolling=false;
       // variant stuff
-      window.variants && variants.init( [ 'zen-light' ] );
+      window.relearn.themevariants = [ 'zen-light' ];
+      window.relearn.customvariantname = "my-custom-variant";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        var select = document.querySelector("#R-select-variant");
+        if (select) {
+          select.value = variant;
+        }
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( variant == window.relearn.customvariantname ){
+        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
       // translations
       window.T_Copy_to_clipboard = `Copy to clipboard`;
       window.T_Copied_to_clipboard = `Copied to clipboard!`;
@@ -144,21 +167,21 @@ Navigate to the Compute Instances page by clicking on the link on the home page 
 <li>
 <p>Navigate to the <strong>Compute Instances</strong> page by clicking on the link on the home page of the OCI Console or opening the main menu using the &ldquo;hamburger&rdquo; icon ( <i class="fa-solid fa-bars"></i> )  in the top left corner of the console and searching for
 &ldquo;instance&rdquo;:</p>
-<p><a href="#R-image-3ea1aed21b5e544adbfe94b801dfc7cc" class="lightbox-link"><img alt="Instances" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/cleanup-free-tier-2.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-3ea1aed21b5e544adbfe94b801dfc7cc"><img alt="Instances" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/cleanup-free-tier-2.png" title=" "></a></p>
+<p><a href="#R-image-4baa5f1911975f54c7f439c0ac16c2fe" class="lightbox-link"><img alt="Instances" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/cleanup-free-tier-2.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-4baa5f1911975f54c7f439c0ac16c2fe"><img alt="Instances" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/cleanup-free-tier-2.png" title=" "></a></p>
 </li>
 <li>
 <p>Click on the <strong>compute instance name</strong>. The name of your instance will be different than the example below.</p>
-<p><a href="#R-image-1574b851fc9d6dd1c1f528dc0dccd10e" class="lightbox-link"><img alt="Select Compute Instance" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/cleanup-free-tier-3.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-1574b851fc9d6dd1c1f528dc0dccd10e"><img alt="Select Compute Instance" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/cleanup-free-tier-3.png" title=" "></a></p>
+<p><a href="#R-image-1870e5cc48d5457e34e435f552060948" class="lightbox-link"><img alt="Select Compute Instance" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/cleanup-free-tier-3.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-1870e5cc48d5457e34e435f552060948"><img alt="Select Compute Instance" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/cleanup-free-tier-3.png" title=" "></a></p>
 </li>
 <li>
 <p>Click on the <strong>Terminate</strong> button.</p>
 </li>
 <li>
 <p>In the Terminate Instance dialog box it is <strong>VERY</strong> important that you select <em>Permanently delete the attached boot volume</em>.</p>
-<p><a href="#R-image-ba4f3ec692238b37cba10343a9a9ea58" class="lightbox-link"><img alt="Terminate Instance" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/cleanup-free-tier-4.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-ba4f3ec692238b37cba10343a9a9ea58"><img alt="Terminate Instance" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/cleanup-free-tier-4.png" title=" "></a></p>
+<p><a href="#R-image-74eab9a052f32e084f74a546d76ad235" class="lightbox-link"><img alt="Terminate Instance" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/cleanup-free-tier-4.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-74eab9a052f32e084f74a546d76ad235"><img alt="Terminate Instance" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/cleanup-free-tier-4.png" title=" "></a></p>
 <p>The instance will now be terminated. This process will take a few minutes. When the status of the instance changes to <strong>terminated</strong> you can move on to the next step.</p>
 </li>
 </ul>
@@ -171,13 +194,13 @@ Navigate to the Compute Instances page by clicking on the link on the home page 
 </li>
 <li>
 <p>Navigate to the <strong>Custom Instances</strong> page by opening the main menu using the &ldquo;hamburger&rdquo; icon ( <i class="fa-solid fa-bars"></i> )  in the top left corner of the console and searching for &ldquo;image&rdquo;:</p>
-<p><a href="#R-image-d6d5554a20dbe7c695e53b7b97040072" class="lightbox-link"><img alt="Custom Image" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/cleanup-free-tier-1.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-d6d5554a20dbe7c695e53b7b97040072"><img alt="Custom Image" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/cleanup-free-tier-1.png" title=" "></a></p>
+<p><a href="#R-image-324e438c57e7552f96c3afec332b0a4e" class="lightbox-link"><img alt="Custom Image" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/cleanup-free-tier-1.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-324e438c57e7552f96c3afec332b0a4e"><img alt="Custom Image" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/cleanup-free-tier-1.png" title=" "></a></p>
 </li>
 <li>
 <p>Clock in the <strong>three little dots</strong> on the right hand side of table and select <strong>Delete</strong>. And confirm by clicking the <strong>Delete</strong> button in the dialog box.</p>
-<p><a href="#R-image-0146b8a1ab0a417e154c95af1c53a838" class="lightbox-link"><img alt="Custom Image Delete" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/cleanup-free-tier-5.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-0146b8a1ab0a417e154c95af1c53a838"><img alt="Custom Image Delete" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/cleanup-free-tier-5.png" title=" "></a></p>
+<p><a href="#R-image-6dc66fab6d20d7ed49a3999c5dbb727a" class="lightbox-link"><img alt="Custom Image Delete" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/cleanup-free-tier-5.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-6dc66fab6d20d7ed49a3999c5dbb727a"><img alt="Custom Image Delete" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/cleanup-free-tier-5.png" title=" "></a></p>
 <p>The custom image you created is now deleted.</p>
 </li>
 </ul>
@@ -191,21 +214,21 @@ Navigate to the Compute Instances page by clicking on the link on the home page 
 <li>
 <p>Navigate to the <strong>Virtual cloud networks</strong> page by clicking on the link on the home page of the OCI Console or opening the main menu using the &ldquo;hamburger&rdquo; icon ( <i class="fa-solid fa-bars"></i> )  in the top left corner of the console and searching for
 &ldquo;instance&rdquo;:</p>
-<p><a href="#R-image-fbfbeae5d1f82a6c24a6665c03e67667" class="lightbox-link"><img alt="Virtual Cloud Network" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/cleanup-free-tier-6.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-fbfbeae5d1f82a6c24a6665c03e67667"><img alt="Virtual Cloud Network" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/cleanup-free-tier-6.png" title=" "></a></p>
+<p><a href="#R-image-b5e1a42da303674a242831c33a945114" class="lightbox-link"><img alt="Virtual Cloud Network" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/cleanup-free-tier-6.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-b5e1a42da303674a242831c33a945114"><img alt="Virtual Cloud Network" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/cleanup-free-tier-6.png" title=" "></a></p>
 </li>
 <li>
 <p>Click on the <strong>network</strong> name.</p>
-<p><a href="#R-image-eb1e881790cbb5b522f539342e020718" class="lightbox-link"><img alt="Virtual Cloud Network Name" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/cleanup-free-tier-7.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-eb1e881790cbb5b522f539342e020718"><img alt="Virtual Cloud Network Name" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/cleanup-free-tier-7.png" title=" "></a></p>
+<p><a href="#R-image-031654904533e01a2d6204a444a40fcd" class="lightbox-link"><img alt="Virtual Cloud Network Name" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/cleanup-free-tier-7.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-031654904533e01a2d6204a444a40fcd"><img alt="Virtual Cloud Network Name" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/cleanup-free-tier-7.png" title=" "></a></p>
 </li>
 <li>
 <p>Click on the <strong>Delete</strong> button.</p>
 </li>
 <li>
 <p>In the <strong>Delete Virtual Cloud Network</strong> dialog box, it is <strong>important</strong> that you select <strong>Specific Compartment</strong> and the compartment where you installed the VCN. Otherwise the scan will can all the compartments in the tenancy. Click on the <strong>Scan</strong> button.</p>
-<p><a href="#R-image-f89a311dcb07b8e8fc4ecbbf0a2634b3" class="lightbox-link"><img alt="Virtual Cloud Network Name" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/cleanup-free-tier-8.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-f89a311dcb07b8e8fc4ecbbf0a2634b3"><img alt="Virtual Cloud Network Name" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/cleanup-free-tier-8.png" title=" "></a></p>
+<p><a href="#R-image-fdb294be4fa13973e50ee1d56acb5813" class="lightbox-link"><img alt="Virtual Cloud Network Name" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/cleanup-free-tier-8.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-fdb294be4fa13973e50ee1d56acb5813"><img alt="Virtual Cloud Network Name" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/cleanup-free-tier-8.png" title=" "></a></p>
 </li>
 <li>
 <p>When the scan is complete, click on the <strong>Delete All</strong> button. Click the <strong>Close</strong> button when the deletion is complete.</p>
@@ -228,7 +251,7 @@ Navigate to the Compute Instances page by clicking on the link on the home page 
 <img src="https://oracle.github.io/microservices-datadriven/cloudbank//cloudbank-logo.png" height="100px">
         </div>
         <script>
-          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1732117029";
+          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1735316701";
         </script>
         <search><form action="/microservices-datadriven/cloudbank/search/index.html" method="get">
           <div class="searchbox default-animation">
@@ -241,12 +264,12 @@ Navigate to the Compute Instances page by clicking on the link on the home page 
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1732117029" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1732117029" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1735316701" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1735316701" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1735316701" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1735316701" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1735316701" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1735316701" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -306,13 +329,13 @@ Navigate to the Compute Instances page by clicking on the link on the home page 
                   <span>&nbsp;</span>
                   <div class="control-style">
                     <label class="a11y-only" for="R-select-variant">Theme</label>
-                    <select id="R-select-variant" onchange="window.variants && variants.changeVariant( this.value );">
+                    <select id="R-select-variant" onchange="window.relearn.changeVariant( this.value );">
                       <option id="R-select-variant-zen-light" value="zen-light" selected>Zen Light</option>
                     </select>
                   </div>
                   <div class="clear"></div>
                 </div>
-                <script>window.variants && variants.markSelectedVariant();</script>
+                <script>window.relearn.markVariant();</script>
               </li>
               <li class="footerVisitedLinks">
                 <div class="padding menu-control">
@@ -333,8 +356,8 @@ Navigate to the Compute Instances page by clicking on the link on the home page 
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1732117029" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1732117029" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1732117029" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1735316701" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1735316701" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1735316701" defer></script>
   </body>
 </html>
