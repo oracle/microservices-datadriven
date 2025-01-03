@@ -6,9 +6,9 @@ weight = 4
 
 Oracle TxEventQ offers powerful performance tuning and monitoring capabilities. This module explores advanced techniques for optimizing queue performance and enhancing observability.
 
-## TxEventQ Metrics
+## TxEventQ Administrative Views
 
-TxEventQ provides several comprehensive views for monitoring performance, including insights to message cache statistics, partition level metrics, and subscriber load. This module will dive into accessing and understanding these database views and their content.
+TxEventQ provides [administrative views](https://docs.oracle.com/en/database/oracle/oracle-database/23/adque/aq-messaging-gateway-views.html#GUID-B86548B9-55B7-4CCE-8B85-FE902B948BE5) for monitoring performance, including insights to message cache statistics, partition level metrics, and subscriber load. This module will dive into accessing and understanding these database views and their content.
 
 ## Oracle Database Metrics Exporter
 
