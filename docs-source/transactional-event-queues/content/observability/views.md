@@ -16,7 +16,7 @@ Provides information about cached event stream partitions. Queries may group on 
 
 ### [V$EQ_CROSS_INSTANCE_JOBS](https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_CROSS_INSTANCE_JOBS.html#REFRN-GUID-AF791906-80CB-49FB-9873-6330F3748972)
 
-The `V$EQ_CROSS_INSTANCE_JOBS` view in Oracle Database provides information about TxEventQ cross-instance jobs. This view is crucial for monitoring and managing message forwarding across different instances in a database cluster. This view is crucial for monitoring and managing message forwarding across different instances in a database cluster. The view offers comprehensive data about each job, including:
+The `V$EQ_CROSS_INSTANCE_JOBS` view provides information about TxEventQ cross-instance jobs. This view is crucial for monitoring and managing message forwarding across different instances in a database cluster. This view is crucial for monitoring and managing message forwarding across different instances in a database cluster. The view offers comprehensive data about each job, including:
 
 - Job ID
 - Source schema and queue name
