@@ -25,7 +25,7 @@ Or, set the `CUSTOM_METRICS` environment variable to point to custom metric file
 CUSTOM_METRICS=txeventq-metrics.toml
 ```
 
-To add more TxEventQ metrics, you can create a custom metrics file based on the views described in the [TxEventQ Metrics](./metrics.md) section and then provide that file to the database exporter.
+To add more TxEventQ metrics, you can create a custom metrics file based on the views described in the [TxEventQ Administrative Views](./views.md) section and then provide that file to the database exporter.
 
 ## Sample Grafana Dashboard
 
