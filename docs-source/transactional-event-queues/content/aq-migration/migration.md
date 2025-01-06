@@ -1,12 +1,23 @@
 +++
 archetype = "page"
-title = "AQ Migration
+title = "AQ Migration"
 weight = 1
 +++
 
 This section covers the use of the [DBMS_AQMIGTOOL](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQMIGTOOL.html) package for migrating Advanced Queuing (AQ) classic queues to TxEventQ. 
 
 Users of AQ are recommended to migrate to TxEventQ for increased support, performance, and access to new database features. It is recommended to read through the document fully before attempting migration.
+
+* [DBMS_AQMIGTOOL Overview](#dbms_aqmigtool-overview)
+* [Migration Workflow](#migration-workflow)
+  * [Checking Compatibility](#checking-compatibility)
+  * [Initiating Migration](#initiating-migration)
+  * [Checking Migration Status](#checking-migration-status)
+  * [Commit the Migration](#commit-the-migration)
+  * [Checking and Handling Migration Errors](#checking-and-handling-migration-errors)
+  * [Cancelling and Recovering Migration](#cancelling-and-recovering-migration)
+* [Limitations and Workarounds](#limitations-and-workarounds)
+
 
 ## DBMS_AQMIGTOOL Overview
 
@@ -17,17 +28,11 @@ The migration tool interface provides the following functionalities:
   - DBMS_AQMIGTOOL.INTERACTIVE (Default): Enqueue and dequeue operations are allowed, and the user must commit the migration. 
   - DBMS_AQMIGTOOL.OFFLINE: Only dequeue operations are allowed during migration, which can help in draining the AQ. 
   - DBMS_AQMIGTOOL.ONLY_DEFINITION: A TxEventQ copy is made from the AQ configuration, and messages are not migrated. Both the AQ and TxEventQ remain in the system after migration is committed with separate message streams. This option is recommended for users who prefer a more manual or custom migration.
-
 - Users may decide to commit the migration or revert to AQ via the migration interface.
-
 - During migration, in-flight messages can be tracked by viewing messages not in the PROCESSED state for both the AQ and TxEventQ.
-
 - A migration history is recorded for all queues.
-
 - Users may optionally purge old AQ messages if they wish to discard the data after migration.
-
 - AQ Migration supports both rolling upgrades and Oracle GoldenGate (OGG) replication.
-
 - During online migrations, it is safe for applications to continue enqueue/dequeue operations as normal.
 
 ## Migration Workflow
