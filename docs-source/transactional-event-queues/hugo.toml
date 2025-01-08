@@ -3,6 +3,8 @@ languageCode = 'en-us'
 title = 'Transactional Event Queues'
 theme = 'hugo-theme-relearn'
 
+ignoreLogs = ['warning-goldmark-raw-html']
+
 [params]
   headingPre = 'Module'
   themeVariant = 'zen-light'
