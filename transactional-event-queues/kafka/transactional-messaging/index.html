@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.140.1">
+    <meta name="generator" content="Relearn 7.3.1">
+    <meta name="description" content="This section provides a detailed walkthrough of transactional messaging using the Kafka Java Client for Oracle Database Transactional Event Queues. You’ll learn how to run, commit, and abort database transactions while using Kafka producers and consumers for transactional messaging.
+Kafka Example The KafkaProducer and KafkaConsumer classes implemented by the Kafka Java Client for Oracle Transactional Event Queues provide functionality for transactional messaging, allowing developers to run database queries within a produce or consume transaction.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Transactional Messaging :: Transactional Event Queues">
+    <meta name="twitter:description" content="This section provides a detailed walkthrough of transactional messaging using the Kafka Java Client for Oracle Database Transactional Event Queues. You’ll learn how to run, commit, and abort database transactions while using Kafka producers and consumers for transactional messaging.
+Kafka Example The KafkaProducer and KafkaConsumer classes implemented by the Kafka Java Client for Oracle Transactional Event Queues provide functionality for transactional messaging, allowing developers to run database queries within a produce or consume transaction.">
+    <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/transactional-event-queues/kafka/transactional-messaging/index.html">
+    <meta property="og:site_name" content="Transactional Event Queues">
+    <meta property="og:title" content="Transactional Messaging :: Transactional Event Queues">
+    <meta property="og:description" content="This section provides a detailed walkthrough of transactional messaging using the Kafka Java Client for Oracle Database Transactional Event Queues. You’ll learn how to run, commit, and abort database transactions while using Kafka producers and consumers for transactional messaging.
+Kafka Example The KafkaProducer and KafkaConsumer classes implemented by the Kafka Java Client for Oracle Transactional Event Queues provide functionality for transactional messaging, allowing developers to run database queries within a produce or consume transaction.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Kafka APIs">
+    <meta itemprop="name" content="Transactional Messaging :: Transactional Event Queues">
+    <meta itemprop="description" content="This section provides a detailed walkthrough of transactional messaging using the Kafka Java Client for Oracle Database Transactional Event Queues. You’ll learn how to run, commit, and abort database transactions while using Kafka producers and consumers for transactional messaging.
+Kafka Example The KafkaProducer and KafkaConsumer classes implemented by the Kafka Java Client for Oracle Transactional Event Queues provide functionality for transactional messaging, allowing developers to run database queries within a produce or consume transaction.">
+    <meta itemprop="wordCount" content="650">
+    <title>Transactional Messaging :: Transactional Event Queues</title>
+    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736354172" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736354172" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736354172" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736354172" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..\/..\/..';
+      window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/transactional-event-queues';
+      window.relearn.min = `.min`;
+      window.relearn.disableAnchorCopy=false;
+      window.relearn.disableAnchorScrolling=false;
+      // variant stuff
+      window.relearn.themevariants = [ 'zen-light' ];
+      window.relearn.customvariantname = "my-custom-variant";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        var select = document.querySelector("#R-select-variant");
+        if (select) {
+          select.value = variant;
+        }
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( variant == window.relearn.customvariantname ){
+        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+      // translations
+      window.T_Copy_to_clipboard = `Copy to clipboard`;
+      window.T_Copied_to_clipboard = `Copied to clipboard!`;
+      window.T_Copy_link_to_clipboard = `Copy link to clipboard`;
+      window.T_Link_copied_to_clipboard = `Copied link to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+    </script>
+  </head>
+  <body class="mobile-support html" data-url="/microservices-datadriven/transactional-event-queues/kafka/transactional-messaging/index.html">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar">
+        <div class="topbar-wrapper">
+          <div class="topbar-sidebar-divider"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide"><button class="topbar-control" onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button>
+            </div>
+            <div class="topbar-button topbar-button-toc" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-list-alt"></i></button>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#kafka-example">Kafka Example</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="/microservices-datadriven/transactional-event-queues/index.html"><span itemprop="name">Transactional Event Queues</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="/microservices-datadriven/transactional-event-queues/kafka/index.html"><span itemprop="name">Kafka APIs</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><span itemprop="name">Transactional Messaging</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-prev" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show"><a class="topbar-control" href="/microservices-datadriven/transactional-event-queues/kafka/kafka-connectors/index.html" title="Kafka Connectors (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a>
+            </div>
+            <div class="topbar-button topbar-button-next" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show"><a class="topbar-control" href="/microservices-datadriven/transactional-event-queues/spring-boot/index.html" title="Spring Boot Integration (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a>
+            </div>
+            <div class="topbar-button topbar-button-more" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable kafka" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="transactional-messaging">Transactional Messaging</h1>
+
+<p>This section provides a detailed walkthrough of transactional messaging using the <a href="https://github.com/oracle/okafka" rel="external" target="_blank">Kafka Java Client for Oracle Database Transactional Event Queues</a>. You&rsquo;ll learn how to run, commit, and abort database transactions while using Kafka producers and consumers for transactional messaging.</p>
+<h3 id="kafka-example">Kafka Example</h3>
+<p>The KafkaProducer and KafkaConsumer classes implemented by the <a href="https://github.com/oracle/okafka" rel="external" target="_blank">Kafka Java Client for Oracle Transactional Event Queues</a> provide functionality for transactional messaging, allowing developers to run database queries within a produce or consume transaction.</p>
+<h4 id="transactional-produce">Transactional Produce</h4>
+<p>To configure a transactional producer, configure the org.oracle.okafka.clients.producer.KafkaProducer class with the <code>oracle.transactional.producer=true</code> property.</p>
+<p>Once the producer instance is created, initialize database transactions with the <code>producer.initTransactions()</code> method.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>Properties props <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Properties();
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Use your database service name</span>
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;oracle.service.name&#34;</span>, <span style="color:#e6db74">&#34;freepdb1&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Choose PLAINTEXT or SSL as appropriate for your database connection</span>
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;security.protocol&#34;</span>, <span style="color:#e6db74">&#34;SSL&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Your database server</span>
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;bootstrap.servers&#34;</span>, <span style="color:#e6db74">&#34;my-db-server&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Path to directory containing ojdbc.properties</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// If using Oracle Wallet, this directory must contain the unzipped wallet (such as in sqlnet.ora)</span>
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;oracle.net.tns_admin&#34;</span>, <span style="color:#e6db74">&#34;/my/path/&#34;</span>);
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;enable.idempotence&#34;</span>, <span style="color:#e6db74">&#34;true&#34;</span>);
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;key.serializer&#34;</span>, <span style="color:#e6db74">&#34;org.apache.kafka.common.serialization.StringSerializer&#34;</span>);
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;value.serializer&#34;</span>, <span style="color:#e6db74">&#34;org.apache.kafka.common.serialization.StringSerializer&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Enable Transactional messaging with the producer</span>
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;oracle.transactional.producer&#34;</span>, <span style="color:#e6db74">&#34;true&#34;</span>);
+</span></span><span style="display:flex;"><span>KafkaProducer<span style="color:#f92672">&lt;</span>String, String<span style="color:#f92672">&gt;</span> producer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> KafkaProducer<span style="color:#f92672">&lt;&gt;</span>(
+</span></span><span style="display:flex;"><span>    producerProps
+</span></span><span style="display:flex;"><span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Initialize the producer for database transactions</span>
+</span></span><span style="display:flex;"><span>producer.<span style="color:#a6e22e">initTransactions</span>();</span></span></code></pre></div>
+<h5 id="producer-methods">Producer Methods</h5>
+<ul>
+<li>To start a database transaction, use the <code>producer.beginTransaction()</code> method.</li>
+<li>To commit the transaction, use the <code>producer.commitTransaction()</code> method.</li>
+<li>To retrieve the current database connection within the transaction, use the <code>producer.getDBConnection()</code> method.</li>
+<li>To abort the transaction, use the <code>producer.abortTransaction()</code> method.</li>
+</ul>
+<h5 id="transactional-produce-example">Transactional Produce Example</h5>
+<p>The following Java method takes in input record and processes it using a transactional producer. On error, the transaction is aborted and neither the DML nor topic produce are committed to the database. Assume the <code>processRecord</code> method does some DML operation with the record, like inserting or updating a table.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">produce</span>(String record) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 1. Begin the current transaction</span>
+</span></span><span style="display:flex;"><span>    producer.<span style="color:#a6e22e">beginTransaction</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 2. Create the producer record and prepare to send it to a topic</span>
+</span></span><span style="display:flex;"><span>        ProducerRecord<span style="color:#f92672">&lt;</span>String, String<span style="color:#f92672">&gt;</span> pr <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> ProducerRecord<span style="color:#f92672">&lt;&gt;</span>(
+</span></span><span style="display:flex;"><span>                topic,
+</span></span><span style="display:flex;"><span>                Integer.<span style="color:#a6e22e">toString</span>(idx),
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">record</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">);</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">producer</span>.<span style="color:#a6e22e">send</span>(pr);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 3. Use the record in a database query</span>
+</span></span><span style="display:flex;"><span>        processRecord(record, conn);
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">catch</span> (Exception e) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 4. On error, abort the transaction</span>
+</span></span><span style="display:flex;"><span>        System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;Error processing record&#34;</span>, e);
+</span></span><span style="display:flex;"><span>        producer.<span style="color:#a6e22e">abortTransaction</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 5. Once complete, commit the transaction</span>
+</span></span><span style="display:flex;"><span>    producer.<span style="color:#a6e22e">commitTransaction</span>();
+</span></span><span style="display:flex;"><span>    System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;Processed record&#34;</span>);
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<h4 id="transactional-consume">Transactional Consume</h4>
+<p>To configure a transactional consumer, configure a org.oracle.okafka.clients.consumer.KafkaConsumer class with <code>auto.commit=false</code>. Disabling auto-commit will allow great control of database transactions through the <code>commitSync()</code> and <code>commitAsync()</code> methods.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>Properties props <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Properties();
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Use your database service name</span>
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;oracle.service.name&#34;</span>, <span style="color:#e6db74">&#34;freepdb1&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Choose PLAINTEXT or SSL as appropriate for your database connection</span>
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;security.protocol&#34;</span>, <span style="color:#e6db74">&#34;SSL&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Your database server</span>
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;bootstrap.servers&#34;</span>, <span style="color:#e6db74">&#34;my-db-server&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Path to directory containing ojdbc.properties</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// If using Oracle Wallet, this directory must contain the unzipped wallet (such as in sqlnet.ora)</span>
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;oracle.net.tns_admin&#34;</span>, <span style="color:#e6db74">&#34;/my/path/&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;group.id&#34;</span> , <span style="color:#e6db74">&#34;MY_CONSUMER_GROUP&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Set auto-commit to false for direct transaction management.</span>
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;enable.auto.commit&#34;</span>,<span style="color:#e6db74">&#34;false&#34;</span>);
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;max.poll.records&#34;</span>, 2000);
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;key.deserializer&#34;</span>, <span style="color:#e6db74">&#34;org.apache.kafka.common.serialization.StringDeserializer&#34;</span>);
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;value.deserializer&#34;</span>, <span style="color:#e6db74">&#34;org.apache.kafka.common.serialization.StringDeserializer&#34;</span>);
+</span></span><span style="display:flex;"><span>KafkaConsumer<span style="color:#f92672">&lt;</span>String, String<span style="color:#f92672">&gt;</span> consumer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> KafkaConsumer<span style="color:#f92672">&lt;&gt;</span>(props);</span></span></code></pre></div>
+<h5 id="consumer-methods">Consumer Methods</h5>
+<ul>
+<li>To retrieve the current database connection within the transaction, use the <code>consumer.getDBConnection()</code> method.</li>
+<li>To commit the current transaction synchronously, use the <code>consumer.commitSync()</code> method.</li>
+<li>To commit the current transaction asynchronously, use the <code>consumer.commitAsync()</code> method.</li>
+</ul>
+<h5 id="transactional-consume-example">Transactional Consume Example</h5>
+<p>The following Java method demonstrates how to use a KafkaConsumer for transactional messaging. Assume the <code>processRecord</code> method does some DML operation with the record, like inserting or updating a table.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">consumer</span>.<span style="color:#a6e22e">subscribe</span>(List.<span style="color:#a6e22e">of</span>(<span style="color:#e6db74">&#34;topic1&#34;</span>));
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> (<span style="color:#66d9ef">true</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">try</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// 1. Poll a batch of records from the subscribed topics</span>
+</span></span><span style="display:flex;"><span>            ConsumerRecords<span style="color:#f92672">&lt;</span>String, String<span style="color:#f92672">&gt;</span> records <span style="color:#f92672">=</span> consumer.<span style="color:#a6e22e">poll</span>(
+</span></span><span style="display:flex;"><span>                    Duration.<span style="color:#a6e22e">ofMillis</span>(100)
+</span></span><span style="display:flex;"><span>            );
+</span></span><span style="display:flex;"><span>            System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;Consumed records: &#34;</span> <span style="color:#f92672">+</span> records.<span style="color:#a6e22e">count</span>());
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// 2. Get the current transaction&#39;s database connection</span>
+</span></span><span style="display:flex;"><span>            Connection conn <span style="color:#f92672">=</span> consumer.<span style="color:#a6e22e">getDBConnection</span>();
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> (ConsumerRecord<span style="color:#f92672">&lt;</span>String, String<span style="color:#f92672">&gt;</span> record : records) {
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e">// 3. Do some DML with the record and connection</span>
+</span></span><span style="display:flex;"><span>                processRecord(record, conn);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// 4. Do a blocking commit on the current batch of records. For non-blocking, use commitAsync()</span>
+</span></span><span style="display:flex;"><span>            consumer.<span style="color:#a6e22e">commitSync</span>();
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">catch</span> (Exception e) {
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// 5. Since auto-commit is disabled, transactions are not</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// committed when commitSync() is not called.</span>
+</span></span><span style="display:flex;"><span>            System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;Unexpected error processing records. Aborting transaction!&#34;</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation">
+        <div id="R-header" class="default-animation">
+<img src="https://oracle.github.io/microservices-datadriven/transactional-event-queues//txeventq.png" height="100px">
+        </div>
+        <script>
+          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736354172";
+        </script>
+        <search><form action="/microservices-datadriven/transactional-event-queues/search/index.html" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+        <script>
+          var contentLangs=['en'];
+        </script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736354172" defer></script>
+      </div>
+      <div id="R-homelinks" class="default-animation homelinks">
+        <ul>
+          <li><a class="padding" href="/microservices-datadriven/transactional-event-queues/index.html"><i class="fa-fw fas fa-home"></i> Home</a></li>
+        </ul>
+        <hr class="padding">
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div id="R-shortcutmenu-home" class="R-sidebarmenu">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/getting-started/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/getting-started/index.html">Getting Started</a><ul id="R-subsections-87c0363912f379e0725cbe1d504c985c" class="collapsible-menu"></ul></li>
+            <li class="parent " data-nav-id="/microservices-datadriven/transactional-event-queues/kafka/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/kafka/index.html">Kafka APIs</a><ul id="R-subsections-d52caaae11e51c78d1067d1cd66f8e2c" class="collapsible-menu">
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/kafka/concepts/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/kafka/concepts/index.html">Kafka and TxEventQ Concepts</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/kafka/developing-with-kafka/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/kafka/developing-with-kafka/index.html">Developing With Kafka APIs</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/kafka/kafka-connectors/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/kafka/kafka-connectors/index.html">Kafka Connectors</a></li>
+            <li class="active " data-nav-id="/microservices-datadriven/transactional-event-queues/kafka/transactional-messaging/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/kafka/transactional-messaging/index.html">Transactional Messaging</a></li></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/spring-boot/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/spring-boot/index.html">Spring Boot Integration</a><ul id="R-subsections-bb4332c9282cf194277661b1ff0e2aba" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/observability/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/observability/index.html">Performance and Observability</a><ul id="R-subsections-12c019d652c4753c0102c3d7c1b1aa94" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/aq-migration/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/aq-migration/index.html">Migrating From AQ</a><ul id="R-subsections-2d75d5e9d6442ae61e611785710400a6" class="collapsible-menu"></ul></li>
+          </ul>
+        </div>
+        <div id="R-shortcutmenu-shortcuts" class="R-sidebarmenu">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="https://github.com/oracle/microservices-datadriven"><a class="padding" href="https://github.com/oracle/microservices-datadriven" target="_blank"><i class='fa-fw fab fa-github'></i> GitHub repo</a></li>
+            <li class="" data-nav-id="https://bit.ly/OracleAI-microservices"><a class="padding" href="https://bit.ly/OracleAI-microservices" target="_blank"><i class='fa-fw fas fa-bookmark'></i> Oracle Backend for Microservices and AI</a></li>
+            <li class="" data-nav-id="https://github.com/oracle/spring-cloud-oracle"><a class="padding" href="https://github.com/oracle/spring-cloud-oracle" target="_blank"><i class='fa-fw fas fa-bookmark'></i> Spring Cloud Oracle</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/more/credits/"><a class="padding" href="/microservices-datadriven/transactional-event-queues/more/credits/"><i class='fa-fw fas fa-bullhorn'></i> Credits</a></li>
+          </ul>
+        </div>
+        <div class="padding footermargin footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter"></div>
+        <div id="R-menu-footer">
+          <hr class="padding default-animation footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter">
+          <div id="R-prefooter" class="footerLangSwitch footerVariantSwitch footerVisitedLinks">
+            <ul>
+              <li id="R-select-language-container" class="footerLangSwitch">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-language"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <label class="a11y-only" for="R-select-language">Language</label>
+                    <select id="R-select-language" onchange="location = this.querySelector( this.value ).dataset.url;">
+                      <option id="R-select-language-en" value="#R-select-language-en" data-url="/microservices-datadriven/transactional-event-queues/kafka/transactional-messaging/index.html" lang="en-us" selected></option>
+                    </select>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </li>
+              <li id="R-select-variant-container" class="footerVariantSwitch">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-paint-brush"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <label class="a11y-only" for="R-select-variant">Theme</label>
+                    <select id="R-select-variant" onchange="window.relearn.changeVariant( this.value );">
+                      <option id="R-select-variant-zen-light" value="zen-light" selected>Zen Light</option>
+                    </select>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+                <script>window.relearn.markVariant();</script>
+              </li>
+              <li class="footerVisitedLinks">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-history"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <button onclick="clearHistory();">Clear History</button>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div id="R-footer" class="footerFooter showFooter">
+	    <p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://www.oracle.com/">Oracle</a></p>
+		<p>Copyright &copy; 2022, 2024, <br>Oracle and/or its affiliates</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736354172" defer></script>
+  </body>
+</html>

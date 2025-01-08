@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.140.1">
+    <meta name="generator" content="Relearn 7.3.1">
+    <meta name="description" content="This section provides the basic concepts of Transactional Event Queues, including the difference between queues and topics, how to create queues using SQL, and the available message payload types.
+What are queues and topics? Message Payload Types DBMS_AQADM.JMS_TYPE Raw JSON Object Kafka Message Payloads What are queues and topics? Queues and topics both provide high-throughput, asynchronous application communication, but have a few key differences that are relevant for developers and architects.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Core Concepts :: Transactional Event Queues">
+    <meta name="twitter:description" content="This section provides the basic concepts of Transactional Event Queues, including the difference between queues and topics, how to create queues using SQL, and the available message payload types.
+What are queues and topics? Message Payload Types DBMS_AQADM.JMS_TYPE Raw JSON Object Kafka Message Payloads What are queues and topics? Queues and topics both provide high-throughput, asynchronous application communication, but have a few key differences that are relevant for developers and architects.">
+    <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/transactional-event-queues/getting-started/core-concepts/index.html">
+    <meta property="og:site_name" content="Transactional Event Queues">
+    <meta property="og:title" content="Core Concepts :: Transactional Event Queues">
+    <meta property="og:description" content="This section provides the basic concepts of Transactional Event Queues, including the difference between queues and topics, how to create queues using SQL, and the available message payload types.
+What are queues and topics? Message Payload Types DBMS_AQADM.JMS_TYPE Raw JSON Object Kafka Message Payloads What are queues and topics? Queues and topics both provide high-throughput, asynchronous application communication, but have a few key differences that are relevant for developers and architects.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Getting Started">
+    <meta itemprop="name" content="Core Concepts :: Transactional Event Queues">
+    <meta itemprop="description" content="This section provides the basic concepts of Transactional Event Queues, including the difference between queues and topics, how to create queues using SQL, and the available message payload types.
+What are queues and topics? Message Payload Types DBMS_AQADM.JMS_TYPE Raw JSON Object Kafka Message Payloads What are queues and topics? Queues and topics both provide high-throughput, asynchronous application communication, but have a few key differences that are relevant for developers and architects.">
+    <meta itemprop="wordCount" content="802">
+    <title>Core Concepts :: Transactional Event Queues</title>
+    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736354172" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736354172" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736354172" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736354172" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..\/..\/..';
+      window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/transactional-event-queues';
+      window.relearn.min = `.min`;
+      window.relearn.disableAnchorCopy=false;
+      window.relearn.disableAnchorScrolling=false;
+      // variant stuff
+      window.relearn.themevariants = [ 'zen-light' ];
+      window.relearn.customvariantname = "my-custom-variant";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        var select = document.querySelector("#R-select-variant");
+        if (select) {
+          select.value = variant;
+        }
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( variant == window.relearn.customvariantname ){
+        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+      // translations
+      window.T_Copy_to_clipboard = `Copy to clipboard`;
+      window.T_Copied_to_clipboard = `Copied to clipboard!`;
+      window.T_Copy_link_to_clipboard = `Copy link to clipboard`;
+      window.T_Link_copied_to_clipboard = `Copied link to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+    </script>
+  </head>
+  <body class="mobile-support html" data-url="/microservices-datadriven/transactional-event-queues/getting-started/core-concepts/index.html">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar">
+        <div class="topbar-wrapper">
+          <div class="topbar-sidebar-divider"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide"><button class="topbar-control" onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button>
+            </div>
+            <div class="topbar-button topbar-button-toc" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-list-alt"></i></button>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#what-are-queues-and-topics">What are queues and topics?</a></li>
+        <li><a href="#message-payload-types">Message Payload Types</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="/microservices-datadriven/transactional-event-queues/index.html"><span itemprop="name">Transactional Event Queues</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="/microservices-datadriven/transactional-event-queues/getting-started/index.html"><span itemprop="name">Getting Started</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><span itemprop="name">Core Concepts</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-prev" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show"><a class="topbar-control" href="/microservices-datadriven/transactional-event-queues/getting-started/index.html" title="Getting Started (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a>
+            </div>
+            <div class="topbar-button topbar-button-next" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show"><a class="topbar-control" href="/microservices-datadriven/transactional-event-queues/getting-started/queue-management/index.html" title="Queue Management (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a>
+            </div>
+            <div class="topbar-button topbar-button-more" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable getting-started" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="core-concepts">Core Concepts</h1>
+
+<p>This section provides the basic concepts of Transactional Event Queues, including the difference between queues and topics, how to create queues using SQL, and the available message payload types.</p>
+<ul>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/core-concepts/index.html#what-are-queues-and-topics">What are queues and topics?</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/core-concepts/index.html#message-payload-types">Message Payload Types</a>
+<ul>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/core-concepts/index.html#dbms_aqadmjms_type">DBMS_AQADM.JMS_TYPE</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/core-concepts/index.html#raw">Raw</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/core-concepts/index.html#json">JSON</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/core-concepts/index.html#object">Object</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/core-concepts/index.html#kafka-message-payloads">Kafka Message Payloads</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="what-are-queues-and-topics">What are queues and topics?</h3>
+<p>Queues and topics both provide high-throughput, asynchronous application communication, but have a few key differences that are relevant for developers and architects.</p>
+<p>When using queues, messages follow a send/receive model that allows exactly one consumer. Once the message is consumed, it is discarded after a configurable interval. In contrast, topics may have multiple consumers for each message, and the message is persisted for as long as specified.</p>
+<p>Queues work best for applications that expect to dequeue messages to a single consumer. If you plan to broadcast messages to multiple consumers, or require message replay, you should use topics. In general, topics provide greater flexibility for event-streaming applications due to the ability of consumers to independently consume or replay messages, and the database&rsquo;s capability of persisting the message for a specified duration.</p>
+<p>The following SQL script uses the <code>DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE</code> procedure to create a topic by setting the <code>multiple_consumers</code> parameter to <code>true</code>. You can find the full parameter definition for the <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQADM.html#GUID-93B0FF90-5045-4437-A9C4-B7541BEBE573" rel="external" target="_blank"><code>DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE</code> procedure here</a>.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>    dbms_aqadm.create_transactional_event_queue(
+</span></span><span style="display:flex;"><span>            queue_name         <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_queue&#39;</span>,
+</span></span><span style="display:flex;"><span>            queue_payload_type <span style="color:#f92672">=&gt;</span> DBMS_AQADM.JMS_TYPE,
+</span></span><span style="display:flex;"><span>            multiple_consumers <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- Start the queue
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    dbms_aqadm.start_queue(
+</span></span><span style="display:flex;"><span>            queue_name         <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_queue&#39;</span>
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<h3 id="message-payload-types">Message Payload Types</h3>
+<p>Transactional Event Queues support various <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQ.html#GUID-56E78CA6-3EB0-44C9-AEB7-F13A5A077D73" rel="external" target="_blank">message payload types</a>, allowing flexibility in how data is structured and stored within the queue. The payload type determines the format and structure of the messages that can be enqueued and dequeued. When creating a Transactional Event Queue, you may specify one of these payload types, each offering different benefits depending on your application&rsquo;s needs and data characteristics. Note that if not specified, <code>DBMS_AQADM.JMS_TYPE</code> is the default payload type.</p>
+<p>Understanding these payload types is crucial for designing efficient and effective messaging solutions. The choice of payload type impacts how you interact with the queue, the kind of data you can store, and how that data is processed. Let&rsquo;s explore the available payload types and their use cases.</p>
+<blockquote>
+<p>Attempting to produce a message of the wrong payload type may result in the following error:</p>
+<p><strong>ORA-25207: enqueue failed, queue <!-- raw HTML omitted -->.<!-- raw HTML omitted --> is disabled from enqueueing</strong></p>
+</blockquote>
+<h4 id="dbms_aqadmjms_type">DBMS_AQADM.JMS_TYPE</h4>
+<p>The JMS (Java Message Service) payload type is ideal for applications using JMS, as it provides a highly scalable API for asynchronous messaging.</p>
+<p>The following script creates and starts a Transactional Event Queue using <code>DBMS_AQADM.JMS_TYPE</code> as the payload type, which is the default payload type.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#75715e">-- Create a Transactional Event Queue
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>    dbms_aqadm.create_transactional_event_queue(
+</span></span><span style="display:flex;"><span>            queue_name         <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_queue&#39;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">-- Payload can be RAW, JSON, DBMS_AQADM.JMS_TYPE, or an object type.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            <span style="color:#75715e">-- Default is DBMS_AQADM.JMS_TYPE.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            queue_payload_type <span style="color:#f92672">=&gt;</span> DBMS_AQADM.JMS_TYPE,
+</span></span><span style="display:flex;"><span>            multiple_consumers <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- Start the queue
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    dbms_aqadm.start_queue(
+</span></span><span style="display:flex;"><span>            queue_name         <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_queue&#39;</span>
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<h4 id="raw">Raw</h4>
+<p>When using the RAW type, the Transactional Event Queue backing table will be created with a <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/adque/glossary.html#GUID-E0E22C6A-42AE-41CF-A021-5CB63BABB48E" rel="external" target="_blank">Large Object (LOB)</a> column 32k in size for binary messages.</p>
+<p>RAW payloads are suitable for unstructured binary data that does not fit into predefined schemas, or for simple, lightweight messages. While RAW payloads offer flexibility and efficiency, they may require additional application level processing to interpret the binary data.</p>
+<p>The following SQL script creates a Transactional Event Queue using the RAW payload type.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>  dbms_aqadm.create_transactional_event_queue(
+</span></span><span style="display:flex;"><span>    queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;json_queue&#39;</span>,
+</span></span><span style="display:flex;"><span>    queue_payload_type <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;RAW&#39;</span>
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  dbms_aqadm.start_queue(
+</span></span><span style="display:flex;"><span>    queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;json_queue&#39;</span>
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<h4 id="json">JSON</h4>
+<p>The JSON payload type stores the JSON message data in a post-parse binary format, allowing fast access to nested JSON values. It&rsquo;s recommended to use the JSON payload type if you&rsquo;re working with document data or other unstructured JSON.</p>
+<p>The following SQL script creates a Transactional Event Queue using the JSON payload type.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>  dbms_aqadm.create_transactional_event_queue(
+</span></span><span style="display:flex;"><span>    queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;json_queue&#39;</span>,
+</span></span><span style="display:flex;"><span>    queue_payload_type <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;JSON&#39;</span>
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  dbms_aqadm.start_queue(
+</span></span><span style="display:flex;"><span>    queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;json_queue&#39;</span>
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<h4 id="object">Object</h4>
+<p>For structured, complex messages, you may choose to set the payload type as a custom object type that was defined using <code>create type</code>. Object types must reside in the same schema as the queue/topic, and the structure of each message must exactly match the payload type.</p>
+<p>The following SQL script defines a custom object type, and then creates a Transactional Event Queue using that type.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#75715e">-- Define the payload type
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">type</span> my_message <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">object</span> (
+</span></span><span style="display:flex;"><span>  id number,
+</span></span><span style="display:flex;"><span>  subject varchar2(<span style="color:#ae81ff">100</span>),
+</span></span><span style="display:flex;"><span>  body    varchar2(<span style="color:#ae81ff">2000</span>)
+</span></span><span style="display:flex;"><span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">-- Create and start a queue using the custom payload type
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>    dbms_aqadm.create_transactional_event_queue(
+</span></span><span style="display:flex;"><span>            queue_name         <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;custom_type_queue&#39;</span>,
+</span></span><span style="display:flex;"><span>            queue_payload_type <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_message&#39;</span>
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- Start the queue
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    dbms_aqadm.start_queue(
+</span></span><span style="display:flex;"><span>            queue_name         <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;custom_type_queue&#39;</span>
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<h4 id="kafka-message-payloads">Kafka Message Payloads</h4>
+<p>Topics created using the Kafka APIs for Transactional Event Queues use a Kafka message payload type, and so specifying the payload type is not necessary. Additionally, topics created using Kafka APIs should also be managed, produced and consumed from using the appropriate Kafka APIs.</p>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation">
+        <div id="R-header" class="default-animation">
+<img src="https://oracle.github.io/microservices-datadriven/transactional-event-queues//txeventq.png" height="100px">
+        </div>
+        <script>
+          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736354172";
+        </script>
+        <search><form action="/microservices-datadriven/transactional-event-queues/search/index.html" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+        <script>
+          var contentLangs=['en'];
+        </script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736354172" defer></script>
+      </div>
+      <div id="R-homelinks" class="default-animation homelinks">
+        <ul>
+          <li><a class="padding" href="/microservices-datadriven/transactional-event-queues/index.html"><i class="fa-fw fas fa-home"></i> Home</a></li>
+        </ul>
+        <hr class="padding">
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div id="R-shortcutmenu-home" class="R-sidebarmenu">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="parent " data-nav-id="/microservices-datadriven/transactional-event-queues/getting-started/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/getting-started/index.html">Getting Started</a><ul id="R-subsections-87c0363912f379e0725cbe1d504c985c" class="collapsible-menu">
+            <li class="active " data-nav-id="/microservices-datadriven/transactional-event-queues/getting-started/core-concepts/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/getting-started/core-concepts/index.html">Core Concepts</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/getting-started/queue-management/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/getting-started/queue-management/index.html">Queue Management</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html">Message Operations</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/getting-started/advanced-features/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/getting-started/advanced-features/index.html">Advanced Features</a></li></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/kafka/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/kafka/index.html">Kafka APIs</a><ul id="R-subsections-d52caaae11e51c78d1067d1cd66f8e2c" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/spring-boot/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/spring-boot/index.html">Spring Boot Integration</a><ul id="R-subsections-bb4332c9282cf194277661b1ff0e2aba" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/observability/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/observability/index.html">Performance and Observability</a><ul id="R-subsections-12c019d652c4753c0102c3d7c1b1aa94" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/aq-migration/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/aq-migration/index.html">Migrating From AQ</a><ul id="R-subsections-2d75d5e9d6442ae61e611785710400a6" class="collapsible-menu"></ul></li>
+          </ul>
+        </div>
+        <div id="R-shortcutmenu-shortcuts" class="R-sidebarmenu">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="https://github.com/oracle/microservices-datadriven"><a class="padding" href="https://github.com/oracle/microservices-datadriven" target="_blank"><i class='fa-fw fab fa-github'></i> GitHub repo</a></li>
+            <li class="" data-nav-id="https://bit.ly/OracleAI-microservices"><a class="padding" href="https://bit.ly/OracleAI-microservices" target="_blank"><i class='fa-fw fas fa-bookmark'></i> Oracle Backend for Microservices and AI</a></li>
+            <li class="" data-nav-id="https://github.com/oracle/spring-cloud-oracle"><a class="padding" href="https://github.com/oracle/spring-cloud-oracle" target="_blank"><i class='fa-fw fas fa-bookmark'></i> Spring Cloud Oracle</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/more/credits/"><a class="padding" href="/microservices-datadriven/transactional-event-queues/more/credits/"><i class='fa-fw fas fa-bullhorn'></i> Credits</a></li>
+          </ul>
+        </div>
+        <div class="padding footermargin footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter"></div>
+        <div id="R-menu-footer">
+          <hr class="padding default-animation footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter">
+          <div id="R-prefooter" class="footerLangSwitch footerVariantSwitch footerVisitedLinks">
+            <ul>
+              <li id="R-select-language-container" class="footerLangSwitch">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-language"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <label class="a11y-only" for="R-select-language">Language</label>
+                    <select id="R-select-language" onchange="location = this.querySelector( this.value ).dataset.url;">
+                      <option id="R-select-language-en" value="#R-select-language-en" data-url="/microservices-datadriven/transactional-event-queues/getting-started/core-concepts/index.html" lang="en-us" selected></option>
+                    </select>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </li>
+              <li id="R-select-variant-container" class="footerVariantSwitch">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-paint-brush"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <label class="a11y-only" for="R-select-variant">Theme</label>
+                    <select id="R-select-variant" onchange="window.relearn.changeVariant( this.value );">
+                      <option id="R-select-variant-zen-light" value="zen-light" selected>Zen Light</option>
+                    </select>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+                <script>window.relearn.markVariant();</script>
+              </li>
+              <li class="footerVisitedLinks">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-history"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <button onclick="clearHistory();">Clear History</button>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div id="R-footer" class="footerFooter showFooter">
+	    <p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://www.oracle.com/">Oracle</a></p>
+		<p>Copyright &copy; 2022, 2024, <br>Oracle and/or its affiliates</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736354172" defer></script>
+  </body>
+</html>

@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.140.1">
+    <meta name="generator" content="Relearn 7.3.1">
+    <meta name="description" content="This section explains message operations using queues, topics, and different programming interfaces (SQL, Java, Spring JMS, and more). You’ll learn how to enqueue, dequeue, and manage messages effectively.
+Enqueue and Dequeue, or Produce and Consume Queues Topics Enqueuing and Dequeuing with SQL Kafka Producers and Consumers Kafka Producer Kafka Consumer Enqueuing and Dequeuing with JMS JMS APIs Message Operations in Other Languages and APIs Message Expiry and Exception Queues Message Delay Message Priority Enqueue and Dequeue, or Produce and Consume Queues When working with queues, the preferred terms for adding and retrieving messages from Transactional Event Queues are enqueue and dequeue.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Message Operations :: Transactional Event Queues">
+    <meta name="twitter:description" content="This section explains message operations using queues, topics, and different programming interfaces (SQL, Java, Spring JMS, and more). You’ll learn how to enqueue, dequeue, and manage messages effectively.
+Enqueue and Dequeue, or Produce and Consume Queues Topics Enqueuing and Dequeuing with SQL Kafka Producers and Consumers Kafka Producer Kafka Consumer Enqueuing and Dequeuing with JMS JMS APIs Message Operations in Other Languages and APIs Message Expiry and Exception Queues Message Delay Message Priority Enqueue and Dequeue, or Produce and Consume Queues When working with queues, the preferred terms for adding and retrieving messages from Transactional Event Queues are enqueue and dequeue.">
+    <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html">
+    <meta property="og:site_name" content="Transactional Event Queues">
+    <meta property="og:title" content="Message Operations :: Transactional Event Queues">
+    <meta property="og:description" content="This section explains message operations using queues, topics, and different programming interfaces (SQL, Java, Spring JMS, and more). You’ll learn how to enqueue, dequeue, and manage messages effectively.
+Enqueue and Dequeue, or Produce and Consume Queues Topics Enqueuing and Dequeuing with SQL Kafka Producers and Consumers Kafka Producer Kafka Consumer Enqueuing and Dequeuing with JMS JMS APIs Message Operations in Other Languages and APIs Message Expiry and Exception Queues Message Delay Message Priority Enqueue and Dequeue, or Produce and Consume Queues When working with queues, the preferred terms for adding and retrieving messages from Transactional Event Queues are enqueue and dequeue.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Getting Started">
+    <meta itemprop="name" content="Message Operations :: Transactional Event Queues">
+    <meta itemprop="description" content="This section explains message operations using queues, topics, and different programming interfaces (SQL, Java, Spring JMS, and more). You’ll learn how to enqueue, dequeue, and manage messages effectively.
+Enqueue and Dequeue, or Produce and Consume Queues Topics Enqueuing and Dequeuing with SQL Kafka Producers and Consumers Kafka Producer Kafka Consumer Enqueuing and Dequeuing with JMS JMS APIs Message Operations in Other Languages and APIs Message Expiry and Exception Queues Message Delay Message Priority Enqueue and Dequeue, or Produce and Consume Queues When working with queues, the preferred terms for adding and retrieving messages from Transactional Event Queues are enqueue and dequeue.">
+    <meta itemprop="wordCount" content="1498">
+    <title>Message Operations :: Transactional Event Queues</title>
+    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736354172" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736354172" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736354172" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736354172" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..\/..\/..';
+      window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/transactional-event-queues';
+      window.relearn.min = `.min`;
+      window.relearn.disableAnchorCopy=false;
+      window.relearn.disableAnchorScrolling=false;
+      // variant stuff
+      window.relearn.themevariants = [ 'zen-light' ];
+      window.relearn.customvariantname = "my-custom-variant";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        var select = document.querySelector("#R-select-variant");
+        if (select) {
+          select.value = variant;
+        }
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( variant == window.relearn.customvariantname ){
+        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+      // translations
+      window.T_Copy_to_clipboard = `Copy to clipboard`;
+      window.T_Copied_to_clipboard = `Copied to clipboard!`;
+      window.T_Copy_link_to_clipboard = `Copy link to clipboard`;
+      window.T_Link_copied_to_clipboard = `Copied link to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+    </script>
+  </head>
+  <body class="mobile-support html" data-url="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar">
+        <div class="topbar-wrapper">
+          <div class="topbar-sidebar-divider"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide"><button class="topbar-control" onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button>
+            </div>
+            <div class="topbar-button topbar-button-toc" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-list-alt"></i></button>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#enqueue-and-dequeue-or-produce-and-consume">Enqueue and Dequeue, or Produce and Consume</a></li>
+        <li><a href="#enqueuing-and-dequeuing-with-sql">Enqueuing and Dequeuing with SQL</a></li>
+        <li><a href="#message-expiry-and-exception-queues">Message Expiry and Exception Queues</a></li>
+        <li><a href="#message-delay">Message Delay</a></li>
+        <li><a href="#message-priority">Message Priority</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="/microservices-datadriven/transactional-event-queues/index.html"><span itemprop="name">Transactional Event Queues</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="/microservices-datadriven/transactional-event-queues/getting-started/index.html"><span itemprop="name">Getting Started</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><span itemprop="name">Message Operations</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-prev" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show"><a class="topbar-control" href="/microservices-datadriven/transactional-event-queues/getting-started/queue-management/index.html" title="Queue Management (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a>
+            </div>
+            <div class="topbar-button topbar-button-next" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show"><a class="topbar-control" href="/microservices-datadriven/transactional-event-queues/getting-started/advanced-features/index.html" title="Advanced Features (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a>
+            </div>
+            <div class="topbar-button topbar-button-more" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable getting-started" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="message-operations">Message Operations</h1>
+
+<p>This section explains message operations using queues, topics, and different programming interfaces (SQL, Java, Spring JMS, and more). You’ll learn how to enqueue, dequeue, and manage messages effectively.</p>
+<ul>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html#enqueue-and-dequeue-or-produce-and-consume">Enqueue and Dequeue, or Produce and Consume</a>
+<ul>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html#queues">Queues</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html#topics">Topics</a></li>
+</ul>
+</li>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html#enqueuing-and-dequeuing-with-sql">Enqueuing and Dequeuing with SQL</a>
+<ul>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html#kafka-producers-and-consumers">Kafka Producers and Consumers</a>
+<ul>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html#kafka-producer">Kafka Producer</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html#kafka-consumer">Kafka Consumer</a></li>
+</ul>
+</li>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html#enqueuing-and-dequeuing-with-jms">Enqueuing and Dequeuing with JMS</a>
+<ul>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html#jms-apis">JMS APIs</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html#message-operations-in-other-languages-and-apis">Message Operations in Other Languages and APIs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html#message-expiry-and-exception-queues">Message Expiry and Exception Queues</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html#message-delay">Message Delay</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html#message-priority">Message Priority</a></li>
+</ul>
+<h3 id="enqueue-and-dequeue-or-produce-and-consume">Enqueue and Dequeue, or Produce and Consume</h3>
+<h4 id="queues">Queues</h4>
+<p>When working with queues, the preferred terms for adding and retrieving messages from Transactional Event Queues are <strong>enqueue</strong> and <strong>dequeue</strong>.</p>
+<h4 id="topics">Topics</h4>
+<p>When using topics, the preferred terms are <strong>produce</strong> and <strong>consume</strong>. A service that writes data to a topic is called a <strong>producer</strong>, and a service that reads data from a topic is called a <strong>consumer</strong>.</p>
+<h3 id="enqueuing-and-dequeuing-with-sql">Enqueuing and Dequeuing with SQL</h3>
+<blockquote>
+<p>To write data to a queue, the queue must be both created and started. See <a href="/microservices-datadriven/transactional-event-queues/getting-started/queue-management/index.html#creating-starting-and-stopping-queues">Queue Management</a> for creating and starting queues.</p>
+</blockquote>
+<p>The following SQL script enqueues a message for a queue with the JSON payload type:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">declare</span>
+</span></span><span style="display:flex;"><span>    enqueue_options dbms_aq.enqueue_options_t;
+</span></span><span style="display:flex;"><span>    message_properties dbms_aq.message_properties_t;
+</span></span><span style="display:flex;"><span>    msg_id raw(<span style="color:#ae81ff">16</span>);
+</span></span><span style="display:flex;"><span>    message json;
+</span></span><span style="display:flex;"><span>    body varchar2(<span style="color:#ae81ff">200</span>) :<span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;{&#34;content&#34;: &#34;my first message&#34;}&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">select</span> json(body) <span style="color:#66d9ef">into</span> message;
+</span></span><span style="display:flex;"><span>    dbms_aq.enqueue(
+</span></span><span style="display:flex;"><span>        queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;json_queue&#39;</span>,
+</span></span><span style="display:flex;"><span>        enqueue_options <span style="color:#f92672">=&gt;</span> enqueue_options,
+</span></span><span style="display:flex;"><span>        message_properties <span style="color:#f92672">=&gt;</span> message_properties,
+</span></span><span style="display:flex;"><span>        payload <span style="color:#f92672">=&gt;</span> message,
+</span></span><span style="display:flex;"><span>        msgid <span style="color:#f92672">=&gt;</span> msg_id
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<p>Next, we&rsquo;ll dequeue the message and print it to the console:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">declare</span>
+</span></span><span style="display:flex;"><span>    dequeue_options dbms_aq.dequeue_options_t;
+</span></span><span style="display:flex;"><span>    message_properties dbms_aq.message_properties_t;
+</span></span><span style="display:flex;"><span>    msg_id raw(<span style="color:#ae81ff">16</span>);
+</span></span><span style="display:flex;"><span>    message json;
+</span></span><span style="display:flex;"><span>    message_buffer varchar2(<span style="color:#ae81ff">500</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>    dequeue_options.navigation :<span style="color:#f92672">=</span> dbms_aq.first_message;
+</span></span><span style="display:flex;"><span>    dequeue_options.wait :<span style="color:#f92672">=</span> dbms_aq.no_wait;
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    dbms_aq.dequeue(
+</span></span><span style="display:flex;"><span>        queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;json_queue&#39;</span>,
+</span></span><span style="display:flex;"><span>        dequeue_options <span style="color:#f92672">=&gt;</span> dequeue_options,
+</span></span><span style="display:flex;"><span>        message_properties <span style="color:#f92672">=&gt;</span> message_properties,
+</span></span><span style="display:flex;"><span>        payload <span style="color:#f92672">=&gt;</span> message,
+</span></span><span style="display:flex;"><span>        msgid <span style="color:#f92672">=&gt;</span> msg_id
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">select</span> json_value(message, <span style="color:#e6db74">&#39;$.content&#39;</span>) <span style="color:#66d9ef">into</span> message_buffer;
+</span></span><span style="display:flex;"><span>    dbms_output.put_line(<span style="color:#e6db74">&#39;message: &#39;</span> <span style="color:#f92672">||</span> message_buffer);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<p>You may also query a message&rsquo;s content by ID from the underlying queue table:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">select</span> q.user_data <span style="color:#66d9ef">from</span> json_queue q
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">where</span> msgid <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;&lt;msg id&gt;&#39;</span>; <span style="color:#75715e">-- Query using the message ID
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">-- {&#34;content&#34;:&#34;my first message&#34;}</span></span></span></code></pre></div>
+<h4 id="kafka-producers-and-consumers">Kafka Producers and Consumers</h4>
+<blockquote>
+<p>To produce or consume topic data, the topic must be created. See <a href="/microservices-datadriven/transactional-event-queues/getting-started/queue-management/index.html#kafka-apis">Queue Management</a> for a topic creation example.</p>
+</blockquote>
+<h5 id="kafka-producer">Kafka Producer</h5>
+<p>The following Java snippet creates an org.oracle.okafka.clients.producer.KafkaProducer instance capable of producing data to Transactional Event Queue topics. Note the use of Oracle Database connection properties, and Kafka producer-specific properties like <code>enable.idempotence</code> and <code>key.serializer</code>.</p>
+<p>The org.oracle.okafka.clients.producer.KafkaProducer class implements the org.apache.kafka.clients.producer.Producer interface, allowing it to be used in place of a Kafka Java client producer.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>Properties props <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Properties();
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Use your database service name</span>
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;oracle.service.name&#34;</span>, <span style="color:#e6db74">&#34;freepdb1&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Choose PLAINTEXT or SSL as appropriate for your database connection</span>
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;security.protocol&#34;</span>, <span style="color:#e6db74">&#34;SSL&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Your database server </span>
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;bootstrap.servers&#34;</span>, <span style="color:#e6db74">&#34;my-db-server&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Path to directory containing ojdbc.properties</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// If using Oracle Wallet, this directory must contain the unzipped wallet (such as in sqlnet.ora)</span>
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;oracle.net.tns_admin&#34;</span>, <span style="color:#e6db74">&#34;/my/path/&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;enable.idempotence&#34;</span>, <span style="color:#e6db74">&#34;true&#34;</span>);
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;key.serializer&#34;</span>, <span style="color:#e6db74">&#34;org.apache.kafka.common.serialization.StringSerializer&#34;</span>);
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;value.serializer&#34;</span>, <span style="color:#e6db74">&#34;org.apache.kafka.common.serialization.StringSerializer&#34;</span>);
+</span></span><span style="display:flex;"><span>Producer<span style="color:#f92672">&lt;</span>String, String<span style="color:#f92672">&gt;</span> okafkaProducer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> KafkaProducer<span style="color:#f92672">&lt;&gt;</span>(props);</span></span></code></pre></div>
+<p>The following Java class produces a stream of messages to a topic, using the <a href="https://github.com/oracle/okafka" rel="external" target="_blank">Kafka Java Client for Oracle Database Transactional Event Queues</a>. Note that the implementation does not use any Oracle-specific classes, only Kafka interfaces. This allows developers to drop in a org.oracle.okafka.clients.producer.KafkaProducer instance without code changes.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f92672">import</span> java.util.stream.Stream;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.apache.kafka.clients.producer.Producer;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.apache.kafka.clients.producer.ProducerRecord;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SampleProducer</span><span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">implements</span> Runnable, AutoCloseable {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Producer<span style="color:#f92672">&lt;</span>String, T<span style="color:#f92672">&gt;</span> producer;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> String topic;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Stream<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> inputs;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">SampleProducer</span>(Producer<span style="color:#f92672">&lt;</span>String, T<span style="color:#f92672">&gt;</span> producer, String topic, Stream<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> inputs) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">producer</span> <span style="color:#f92672">=</span> producer;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">topic</span> <span style="color:#f92672">=</span> topic;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">inputs</span> <span style="color:#f92672">=</span> inputs;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span>() {
+</span></span><span style="display:flex;"><span>        inputs.<span style="color:#a6e22e">forEach</span>(t <span style="color:#f92672">-&gt;</span> {
+</span></span><span style="display:flex;"><span>            System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;Produced record: &#34;</span> <span style="color:#f92672">+</span> t);
+</span></span><span style="display:flex;"><span>            producer.<span style="color:#a6e22e">send</span>(<span style="color:#66d9ef">new</span> ProducerRecord<span style="color:#f92672">&lt;&gt;</span>(topic, t));
+</span></span><span style="display:flex;"><span>        });
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">close</span>() <span style="color:#66d9ef">throws</span> Exception {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">producer</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>            producer.<span style="color:#a6e22e">close</span>();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<h5 id="kafka-consumer">Kafka Consumer</h5>
+<p>The following Java snippet creates an org.oracle.okafka.clients.consumer.KafkaConsumer instance capable of records from Transactional Event Queue topics. Note the use of Oracle Database connection properties, and Kafka consumer-specific properties like <code>group.id</code> and <code>max.poll.records</code>.</p>
+<p>The org.oracle.okafka.clients.consumer.KafkaConsume class implements the org.apache.kafka.clients.consumer.Consumer interface, allowing it to be used in place of a Kafka Java client consumer.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>Properties props <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Properties();
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Use your database service name</span>
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;oracle.service.name&#34;</span>, <span style="color:#e6db74">&#34;freepdb1&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Choose PLAINTEXT or SSL as appropriate for your database connection</span>
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;security.protocol&#34;</span>, <span style="color:#e6db74">&#34;SSL&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Your database server </span>
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;bootstrap.servers&#34;</span>, <span style="color:#e6db74">&#34;my-db-server&#34;</span>);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Path to directory containing ojdbc.properties</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// If using Oracle Wallet, this directory must contain the unzipped wallet (such as in sqlnet.ora)</span>
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;oracle.net.tns_admin&#34;</span>, <span style="color:#e6db74">&#34;/my/path/&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;group.id&#34;</span> , <span style="color:#e6db74">&#34;MY_CONSUMER_GROUP&#34;</span>);
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;enable.auto.commit&#34;</span>,<span style="color:#e6db74">&#34;false&#34;</span>);
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;max.poll.records&#34;</span>, 2000);
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;key.deserializer&#34;</span>, <span style="color:#e6db74">&#34;org.apache.kafka.common.serialization.StringDeserializer&#34;</span>);
+</span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;value.deserializer&#34;</span>, <span style="color:#e6db74">&#34;org.apache.kafka.common.serialization.StringDeserializer&#34;</span>);
+</span></span><span style="display:flex;"><span>Consumer<span style="color:#f92672">&lt;</span>String, String<span style="color:#f92672">&gt;</span> okafkaConsumer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> KafkaConsumer<span style="color:#f92672">&lt;&gt;</span>(props);</span></span></code></pre></div>
+<p>The following Java class consumes messages to a topic, using the <a href="https://github.com/oracle/okafka" rel="external" target="_blank">Kafka Java Client for Oracle Database Transactional Event Queues</a>. Like the producer example, the consumer only does not use any Oracle classes, only Kafka interfaces.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f92672">import</span> java.time.Duration;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> java.util.List;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.apache.kafka.clients.consumer.Consumer;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.apache.kafka.clients.consumer.ConsumerRecords;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SampleConsumer</span><span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">implements</span> Runnable, AutoCloseable {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> Consumer<span style="color:#f92672">&lt;</span>String, T<span style="color:#f92672">&gt;</span> consumer;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> String topic;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">SampleConsumer</span>(Consumer<span style="color:#f92672">&lt;</span>String, T<span style="color:#f92672">&gt;</span> consumer, String topic) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">consumer</span> <span style="color:#f92672">=</span> consumer;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">topic</span> <span style="color:#f92672">=</span> topic;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">run</span>() {
+</span></span><span style="display:flex;"><span>        consumer.<span style="color:#a6e22e">subscribe</span>(List.<span style="color:#a6e22e">of</span>(topic));
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (<span style="color:#66d9ef">true</span>) {
+</span></span><span style="display:flex;"><span>            ConsumerRecords<span style="color:#f92672">&lt;</span>String, T<span style="color:#f92672">&gt;</span> records <span style="color:#f92672">=</span> consumer.<span style="color:#a6e22e">poll</span>(Duration.<span style="color:#a6e22e">ofMillis</span>(100));
+</span></span><span style="display:flex;"><span>            System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;Consumed records: &#34;</span> <span style="color:#f92672">+</span> records.<span style="color:#a6e22e">count</span>());
+</span></span><span style="display:flex;"><span>            processRecords(records);
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// Commit records when done processing.</span>
+</span></span><span style="display:flex;"><span>            consumer.<span style="color:#a6e22e">commitAsync</span>();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">processRecords</span>(ConsumerRecords<span style="color:#f92672">&lt;</span>String, T<span style="color:#f92672">&gt;</span> records) {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// Application implementation of record processing.</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">close</span>() <span style="color:#66d9ef">throws</span> Exception {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (consumer <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span>) {
+</span></span><span style="display:flex;"><span>            consumer.<span style="color:#a6e22e">close</span>();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<h4 id="enqueuing-and-dequeuing-with-jms">Enqueuing and Dequeuing with JMS</h4>
+<p>JMS (Java Message Service) provides a standard way to enqueue and dequeue messages. This section shows how to use plain Java JMS APIs and Spring JMS integration using the <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/jajms/index.html" rel="external" target="_blank"><code>oracle.jms</code> Java package</a> and the <a href="https://mvnrepository.com/artifact/com.oracle.database.spring/oracle-spring-boot-starter-aqjms" rel="external" target="_blank">Oracle Spring Boot Starter for AqJms</a>.</p>
+<h5 id="jms-apis">JMS APIs</h5>
+<p>The AQJmsFactory class is used to create a JMS ConnectionFactory, from a Java DataSource or connection parameters. Once configured, the JMS ConnectionFactory instance can be used with standard JMS APIs to produce and consume messages.</p>
+<p>The following Java snippet uses a JMS ConnectionFactory to produce a text message.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>DataSource ds <span style="color:#f92672">=</span> <span style="color:#75715e">// Configure the Oracle Database DataSource according to your database connection information</span>
+</span></span><span style="display:flex;"><span>ConnectionFactory cf <span style="color:#f92672">=</span> AQjmsFactory.<span style="color:#a6e22e">getConnectionFactory</span>(ds);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">try</span> (Connection conn <span style="color:#f92672">=</span> cf.<span style="color:#a6e22e">createConnection</span>()) {
+</span></span><span style="display:flex;"><span>    Session session <span style="color:#f92672">=</span> conn.<span style="color:#a6e22e">createSession</span>();
+</span></span><span style="display:flex;"><span>    Queue myQueue <span style="color:#f92672">=</span> session.<span style="color:#a6e22e">createQueue</span>(<span style="color:#e6db74">&#34;my_queue&#34;</span>);
+</span></span><span style="display:flex;"><span>    MessageProducer producer <span style="color:#f92672">=</span> session.<span style="color:#a6e22e">createProducer</span>(myQueue);
+</span></span><span style="display:flex;"><span>    producer.<span style="color:#a6e22e">send</span>(session.<span style="color:#a6e22e">createTextMessage</span>(<span style="color:#e6db74">&#34;Hello World&#34;</span>));
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<p>The following Java snippet uses a JMS ConnectionFactory to consume a text message.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>DataSource ds <span style="color:#f92672">=</span> <span style="color:#75715e">// Configure the Oracle Database DataSource according to your database connection information</span>
+</span></span><span style="display:flex;"><span>ConnectionFactory cf <span style="color:#f92672">=</span> AQjmsFactory.<span style="color:#a6e22e">getConnectionFactory</span>(ds);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">try</span> (Connection conn <span style="color:#f92672">=</span> cf.<span style="color:#a6e22e">createConnection</span>()) {
+</span></span><span style="display:flex;"><span>    Session session <span style="color:#f92672">=</span> conn.<span style="color:#a6e22e">createSession</span>();
+</span></span><span style="display:flex;"><span>    Queue myQueue <span style="color:#f92672">=</span> session.<span style="color:#a6e22e">createQueue</span>(<span style="color:#e6db74">&#34;my_queue&#34;</span>);
+</span></span><span style="display:flex;"><span>    MessageConsumer consumer <span style="color:#f92672">=</span> session.<span style="color:#a6e22e">createConsumer</span>(queue);
+</span></span><span style="display:flex;"><span>    conn.<span style="color:#a6e22e">start</span>();
+</span></span><span style="display:flex;"><span>    Message msg <span style="color:#f92672">=</span> consumer.<span style="color:#a6e22e">receive</span>(10000); <span style="color:#75715e">// Wait for 10 seconds</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (msg <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> msg <span style="color:#66d9ef">instanceof</span> TextMessage) {
+</span></span><span style="display:flex;"><span>        TextMessage textMsg <span style="color:#f92672">=</span> (TextMessage) msg;
+</span></span><span style="display:flex;"><span>        System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;Received message: &#34;</span> <span style="color:#f92672">+</span> textMsg.<span style="color:#a6e22e">getText</span>());
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<h5 id="message-operations-in-other-languages-and-apis">Message Operations in Other Languages and APIs</h5>
+<p>For Python, Javascript, .NET, and ORDS, refer to the respective documentation for code samples:</p>
+<ul>
+<li><a href="https://python-oracledb.readthedocs.io/en/latest/api_manual/aq.html#aq" rel="external" target="_blank">Python</a></li>
+<li><a href="https://node-oracledb.readthedocs.io/en/latest/api_manual/aq.html" rel="external" target="_blank">JavaScript</a></li>
+<li><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/odpnt/aq-classes.html#ODPNT-GUID-4DBB419A-BCE1-467C-BA28-3611F3E012C" rel="external" target="_blank">.NET</a></li>
+<li><a href="https://docs.oracle.com/en/database/oracle/oracle-rest-data-services/24.3/orrst/api-oracle-transactional-event-queues.html" rel="external" target="_blank">ORDS REST APIs</a></li>
+</ul>
+<h3 id="message-expiry-and-exception-queues">Message Expiry and Exception Queues</h3>
+<p>When enqueuing a message, you can specify an expiration time using the <code>expiration</code> attribute of the message_properties object. This sets the number of seconds during which the message is available for dequeuing.
+Messages that exceed their expiration time are automatically moved to an exception queue for further processing or inspection (including queries or dequeue operations). The exception queue contains any expired or failed messages, and uses the same underlying table as the main queue.</p>
+<p>The following SQL script creates a queue for JMS payloads, and an associated <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQADM.html#GUID-D18BF6B8-01F2-4E39-BD05-41E3B5A97C07" rel="external" target="_blank">exception queue</a> for failed or expired messages.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>    dbms_aqadm.create_transactional_event_queue(
+</span></span><span style="display:flex;"><span>            queue_name         <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_queue&#39;</span>,
+</span></span><span style="display:flex;"><span>            multiple_consumers <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>    dbms_aqadm.start_queue(
+</span></span><span style="display:flex;"><span>            queue_name         <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_queue&#39;</span>
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>    dbms_aqadm.create_eq_exception_queue(
+</span></span><span style="display:flex;"><span>        queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_queue&#39;</span>,
+</span></span><span style="display:flex;"><span>        exception_queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_queue_eq&#39;</span>
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;</span></span></code></pre></div>
+<p>The following SQL script enqueues a JMS payload, configuring the expiry time so that after 60 seconds, the message is moved to the exception queue.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">declare</span>
+</span></span><span style="display:flex;"><span>    enqueue_options dbms_aq.enqueue_options_t;
+</span></span><span style="display:flex;"><span>    message_properties dbms_aq.message_properties_t;
+</span></span><span style="display:flex;"><span>    message_handle raw(<span style="color:#ae81ff">16</span>);
+</span></span><span style="display:flex;"><span>    message sys.aq$_jms_text_message;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>    message :<span style="color:#f92672">=</span> sys.aq$_jms_text_message.construct();
+</span></span><span style="display:flex;"><span>    message.set_text(<span style="color:#e6db74">&#39;this is my message&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    message_properties.expiration :<span style="color:#f92672">=</span> <span style="color:#ae81ff">60</span>; <span style="color:#75715e">-- message expires in 60 seconds
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    dbms_aq.enqueue(
+</span></span><span style="display:flex;"><span>        queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_queue&#39;</span>,
+</span></span><span style="display:flex;"><span>        enqueue_options <span style="color:#f92672">=&gt;</span> enqueue_options,
+</span></span><span style="display:flex;"><span>        message_properties <span style="color:#f92672">=&gt;</span> message_properties,
+</span></span><span style="display:flex;"><span>        payload <span style="color:#f92672">=&gt;</span> message,
+</span></span><span style="display:flex;"><span>        msgid <span style="color:#f92672">=&gt;</span> message_handle
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">commit</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<h3 id="message-delay">Message Delay</h3>
+<p>When enqueuing a message, you can specify a delay (in seconds) before the message becomes available for dequeuing. Message delay allows you to schedule messages to be available for consumers after a specified time, and is configured using the <code>delay</code> attribute of the message_properties object.</p>
+<p>When enqueuing delayed messages, the <code>DELIVERY_TIME</code> column will be configured with the date the message is available for consumers.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">declare</span>
+</span></span><span style="display:flex;"><span>    enqueue_options dbms_aq.enqueue_options_t;
+</span></span><span style="display:flex;"><span>    message_properties dbms_aq.message_properties_t;
+</span></span><span style="display:flex;"><span>    message_handle raw(<span style="color:#ae81ff">16</span>);
+</span></span><span style="display:flex;"><span>    message sys.aq$_jms_text_message;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>    message :<span style="color:#f92672">=</span> sys.aq$_jms_text_message.construct();
+</span></span><span style="display:flex;"><span>    message.set_text(<span style="color:#e6db74">&#39;this is my message&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    message_properties.delay :<span style="color:#f92672">=</span> <span style="color:#ae81ff">7</span><span style="color:#f92672">*</span><span style="color:#ae81ff">24</span><span style="color:#f92672">*</span><span style="color:#ae81ff">60</span><span style="color:#f92672">*</span><span style="color:#ae81ff">60</span>; <span style="color:#75715e">-- Delay for 1 week
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    dbms_aq.enqueue(
+</span></span><span style="display:flex;"><span>            queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_queue&#39;</span>,
+</span></span><span style="display:flex;"><span>            enqueue_options <span style="color:#f92672">=&gt;</span> enqueue_options,
+</span></span><span style="display:flex;"><span>            message_properties <span style="color:#f92672">=&gt;</span> message_properties,
+</span></span><span style="display:flex;"><span>            payload <span style="color:#f92672">=&gt;</span> message,
+</span></span><span style="display:flex;"><span>            msgid <span style="color:#f92672">=&gt;</span> message_handle
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">commit</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<h3 id="message-priority">Message Priority</h3>
+<p>When enqueuing a message, you can specify its priority using the priority attribute of the message_properties object. This attribute allows you to control the order in which messages are dequeued. The lower a message&rsquo;s priority number, the higher the message&rsquo;s precedence for consumers.</p>
+<p>When enqueuing prioritized messages, the <code>PRIORITY</code> column in the queue table will be populated with the priority number.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">declare</span>
+</span></span><span style="display:flex;"><span>    enqueue_options dbms_aq.enqueue_options_t;
+</span></span><span style="display:flex;"><span>    message_properties dbms_aq.message_properties_t;
+</span></span><span style="display:flex;"><span>    message_handle raw(<span style="color:#ae81ff">16</span>);
+</span></span><span style="display:flex;"><span>    message sys.aq$_jms_text_message;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>    message :<span style="color:#f92672">=</span> sys.aq$_jms_text_message.construct();
+</span></span><span style="display:flex;"><span>    message.set_text(<span style="color:#e6db74">&#39;this is my message&#39;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    message_properties.priority :<span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; <span style="color:#75715e">-- A lower number indicates higher priority
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    dbms_aq.enqueue(
+</span></span><span style="display:flex;"><span>            queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_queue&#39;</span>,
+</span></span><span style="display:flex;"><span>            enqueue_options <span style="color:#f92672">=&gt;</span> enqueue_options,
+</span></span><span style="display:flex;"><span>            message_properties <span style="color:#f92672">=&gt;</span> message_properties,
+</span></span><span style="display:flex;"><span>            payload <span style="color:#f92672">=&gt;</span> message,
+</span></span><span style="display:flex;"><span>            msgid <span style="color:#f92672">=&gt;</span> message_handle
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">commit</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation">
+        <div id="R-header" class="default-animation">
+<img src="https://oracle.github.io/microservices-datadriven/transactional-event-queues//txeventq.png" height="100px">
+        </div>
+        <script>
+          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736354172";
+        </script>
+        <search><form action="/microservices-datadriven/transactional-event-queues/search/index.html" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+        <script>
+          var contentLangs=['en'];
+        </script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736354172" defer></script>
+      </div>
+      <div id="R-homelinks" class="default-animation homelinks">
+        <ul>
+          <li><a class="padding" href="/microservices-datadriven/transactional-event-queues/index.html"><i class="fa-fw fas fa-home"></i> Home</a></li>
+        </ul>
+        <hr class="padding">
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div id="R-shortcutmenu-home" class="R-sidebarmenu">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="parent " data-nav-id="/microservices-datadriven/transactional-event-queues/getting-started/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/getting-started/index.html">Getting Started</a><ul id="R-subsections-87c0363912f379e0725cbe1d504c985c" class="collapsible-menu">
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/getting-started/core-concepts/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/getting-started/core-concepts/index.html">Core Concepts</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/getting-started/queue-management/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/getting-started/queue-management/index.html">Queue Management</a></li>
+            <li class="active " data-nav-id="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html">Message Operations</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/getting-started/advanced-features/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/getting-started/advanced-features/index.html">Advanced Features</a></li></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/kafka/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/kafka/index.html">Kafka APIs</a><ul id="R-subsections-d52caaae11e51c78d1067d1cd66f8e2c" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/spring-boot/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/spring-boot/index.html">Spring Boot Integration</a><ul id="R-subsections-bb4332c9282cf194277661b1ff0e2aba" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/observability/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/observability/index.html">Performance and Observability</a><ul id="R-subsections-12c019d652c4753c0102c3d7c1b1aa94" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/aq-migration/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/aq-migration/index.html">Migrating From AQ</a><ul id="R-subsections-2d75d5e9d6442ae61e611785710400a6" class="collapsible-menu"></ul></li>
+          </ul>
+        </div>
+        <div id="R-shortcutmenu-shortcuts" class="R-sidebarmenu">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="https://github.com/oracle/microservices-datadriven"><a class="padding" href="https://github.com/oracle/microservices-datadriven" target="_blank"><i class='fa-fw fab fa-github'></i> GitHub repo</a></li>
+            <li class="" data-nav-id="https://bit.ly/OracleAI-microservices"><a class="padding" href="https://bit.ly/OracleAI-microservices" target="_blank"><i class='fa-fw fas fa-bookmark'></i> Oracle Backend for Microservices and AI</a></li>
+            <li class="" data-nav-id="https://github.com/oracle/spring-cloud-oracle"><a class="padding" href="https://github.com/oracle/spring-cloud-oracle" target="_blank"><i class='fa-fw fas fa-bookmark'></i> Spring Cloud Oracle</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/more/credits/"><a class="padding" href="/microservices-datadriven/transactional-event-queues/more/credits/"><i class='fa-fw fas fa-bullhorn'></i> Credits</a></li>
+          </ul>
+        </div>
+        <div class="padding footermargin footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter"></div>
+        <div id="R-menu-footer">
+          <hr class="padding default-animation footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter">
+          <div id="R-prefooter" class="footerLangSwitch footerVariantSwitch footerVisitedLinks">
+            <ul>
+              <li id="R-select-language-container" class="footerLangSwitch">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-language"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <label class="a11y-only" for="R-select-language">Language</label>
+                    <select id="R-select-language" onchange="location = this.querySelector( this.value ).dataset.url;">
+                      <option id="R-select-language-en" value="#R-select-language-en" data-url="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html" lang="en-us" selected></option>
+                    </select>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </li>
+              <li id="R-select-variant-container" class="footerVariantSwitch">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-paint-brush"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <label class="a11y-only" for="R-select-variant">Theme</label>
+                    <select id="R-select-variant" onchange="window.relearn.changeVariant( this.value );">
+                      <option id="R-select-variant-zen-light" value="zen-light" selected>Zen Light</option>
+                    </select>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+                <script>window.relearn.markVariant();</script>
+              </li>
+              <li class="footerVisitedLinks">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-history"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <button onclick="clearHistory();">Clear History</button>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div id="R-footer" class="footerFooter showFooter">
+	    <p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://www.oracle.com/">Oracle</a></p>
+		<p>Copyright &copy; 2022, 2024, <br>Oracle and/or its affiliates</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736354172" defer></script>
+  </body>
+</html>

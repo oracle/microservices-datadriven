@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.140.1">
+    <meta name="generator" content="Relearn 7.3.1">
+    <meta name="description" content="This section covers the use of the DBMS_AQMIGTOOL package for migrating Advanced Queuing (AQ) classic queues to TxEventQ.
+Users of AQ are recommended to migrate to TxEventQ for increased support, performance, and access to new database features. It is recommended to read through the document fully before attempting migration.
+DBMS_AQMIGTOOL Overview Migration Workflow Checking Compatibility Initiating Migration Checking Migration Status Commit the Migration Checking and Handling Migration Errors Cancelling and Recovering Migration Limitations and Workarounds DBMS_AQMIGTOOL Overview The migration tool interface provides the following functionalities:">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="AQ Migration :: Transactional Event Queues">
+    <meta name="twitter:description" content="This section covers the use of the DBMS_AQMIGTOOL package for migrating Advanced Queuing (AQ) classic queues to TxEventQ.
+Users of AQ are recommended to migrate to TxEventQ for increased support, performance, and access to new database features. It is recommended to read through the document fully before attempting migration.
+DBMS_AQMIGTOOL Overview Migration Workflow Checking Compatibility Initiating Migration Checking Migration Status Commit the Migration Checking and Handling Migration Errors Cancelling and Recovering Migration Limitations and Workarounds DBMS_AQMIGTOOL Overview The migration tool interface provides the following functionalities:">
+    <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/transactional-event-queues/aq-migration/migration/index.html">
+    <meta property="og:site_name" content="Transactional Event Queues">
+    <meta property="og:title" content="AQ Migration :: Transactional Event Queues">
+    <meta property="og:description" content="This section covers the use of the DBMS_AQMIGTOOL package for migrating Advanced Queuing (AQ) classic queues to TxEventQ.
+Users of AQ are recommended to migrate to TxEventQ for increased support, performance, and access to new database features. It is recommended to read through the document fully before attempting migration.
+DBMS_AQMIGTOOL Overview Migration Workflow Checking Compatibility Initiating Migration Checking Migration Status Commit the Migration Checking and Handling Migration Errors Cancelling and Recovering Migration Limitations and Workarounds DBMS_AQMIGTOOL Overview The migration tool interface provides the following functionalities:">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Migrating From AQ">
+    <meta itemprop="name" content="AQ Migration :: Transactional Event Queues">
+    <meta itemprop="description" content="This section covers the use of the DBMS_AQMIGTOOL package for migrating Advanced Queuing (AQ) classic queues to TxEventQ.
+Users of AQ are recommended to migrate to TxEventQ for increased support, performance, and access to new database features. It is recommended to read through the document fully before attempting migration.
+DBMS_AQMIGTOOL Overview Migration Workflow Checking Compatibility Initiating Migration Checking Migration Status Commit the Migration Checking and Handling Migration Errors Cancelling and Recovering Migration Limitations and Workarounds DBMS_AQMIGTOOL Overview The migration tool interface provides the following functionalities:">
+    <meta itemprop="wordCount" content="1271">
+    <title>AQ Migration :: Transactional Event Queues</title>
+    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736354172" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736354172" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736354172" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736354172" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..\/..\/..';
+      window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/transactional-event-queues';
+      window.relearn.min = `.min`;
+      window.relearn.disableAnchorCopy=false;
+      window.relearn.disableAnchorScrolling=false;
+      // variant stuff
+      window.relearn.themevariants = [ 'zen-light' ];
+      window.relearn.customvariantname = "my-custom-variant";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        var select = document.querySelector("#R-select-variant");
+        if (select) {
+          select.value = variant;
+        }
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( variant == window.relearn.customvariantname ){
+        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+      // translations
+      window.T_Copy_to_clipboard = `Copy to clipboard`;
+      window.T_Copied_to_clipboard = `Copied to clipboard!`;
+      window.T_Copy_link_to_clipboard = `Copy link to clipboard`;
+      window.T_Link_copied_to_clipboard = `Copied link to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+    </script>
+  </head>
+  <body class="mobile-support html" data-url="/microservices-datadriven/transactional-event-queues/aq-migration/migration/index.html">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar">
+        <div class="topbar-wrapper">
+          <div class="topbar-sidebar-divider"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide"><button class="topbar-control" onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button>
+            </div>
+            <div class="topbar-button topbar-button-toc" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-list-alt"></i></button>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#dbms_aqmigtool-overview">DBMS_AQMIGTOOL Overview</a></li>
+    <li><a href="#migration-workflow">Migration Workflow</a>
+      <ul>
+        <li><a href="#checking-compatibility">Checking Compatibility</a></li>
+        <li><a href="#initiating-migration">Initiating Migration</a></li>
+        <li><a href="#checking-migration-status">Checking Migration Status</a></li>
+        <li><a href="#commit-the-migration">Commit the Migration</a></li>
+        <li><a href="#checking-and-handling-migration-errors">Checking and Handling Migration Errors</a></li>
+        <li><a href="#cancelling-and-recovering-migration">Cancelling and Recovering Migration</a></li>
+      </ul>
+    </li>
+    <li><a href="#limitations-and-workarounds">Limitations and Workarounds</a></li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="/microservices-datadriven/transactional-event-queues/index.html"><span itemprop="name">Transactional Event Queues</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="/microservices-datadriven/transactional-event-queues/aq-migration/index.html"><span itemprop="name">Migrating From AQ</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><span itemprop="name">AQ Migration</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-prev" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show"><a class="topbar-control" href="/microservices-datadriven/transactional-event-queues/aq-migration/index.html" title="Migrating From AQ (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a>
+            </div>
+            <div class="topbar-button topbar-button-next" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show"><span class="topbar-control"><i class="fa-fw fas fa-chevron-right"></i></span>
+            </div>
+            <div class="topbar-button topbar-button-more" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable aq-migration" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="aq-migration">AQ Migration</h1>
+
+<p>This section covers the use of the <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQMIGTOOL.html" rel="external" target="_blank">DBMS_AQMIGTOOL</a> package for migrating Advanced Queuing (AQ) classic queues to TxEventQ.</p>
+<p>Users of AQ are recommended to migrate to TxEventQ for increased support, performance, and access to new database features. It is recommended to read through the document fully before attempting migration.</p>
+<ul>
+<li><a href="/microservices-datadriven/transactional-event-queues/aq-migration/migration/index.html#dbms_aqmigtool-overview">DBMS_AQMIGTOOL Overview</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/aq-migration/migration/index.html#migration-workflow">Migration Workflow</a>
+<ul>
+<li><a href="/microservices-datadriven/transactional-event-queues/aq-migration/migration/index.html#checking-compatibility">Checking Compatibility</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/aq-migration/migration/index.html#initiating-migration">Initiating Migration</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/aq-migration/migration/index.html#checking-migration-status">Checking Migration Status</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/aq-migration/migration/index.html#commit-the-migration">Commit the Migration</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/aq-migration/migration/index.html#checking-and-handling-migration-errors">Checking and Handling Migration Errors</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/aq-migration/migration/index.html#cancelling-and-recovering-migration">Cancelling and Recovering Migration</a></li>
+</ul>
+</li>
+<li><a href="/microservices-datadriven/transactional-event-queues/aq-migration/migration/index.html#limitations-and-workarounds">Limitations and Workarounds</a></li>
+</ul>
+<h2 id="dbms_aqmigtool-overview">DBMS_AQMIGTOOL Overview</h2>
+<p>The migration tool interface provides the following functionalities:</p>
+<ul>
+<li>Migration may be performed in AUTOMATIC, INTERACTIVE, OFFLINE, or ONLY_DEFINITION mode, each mode providing specific use cases and benefits.
+<ul>
+<li>DBMS_AQMIGTOOL.AUTOMATIC: Enqueue and dequeue operations are allowed during migration, and a background job will commit the migration once the AQ is empty and no unsupported features are detected.</li>
+<li>DBMS_AQMIGTOOL.INTERACTIVE (Default): Enqueue and dequeue operations are allowed, and the user must commit the migration.</li>
+<li>DBMS_AQMIGTOOL.OFFLINE: Only dequeue operations are allowed during migration, which can help in draining the AQ.</li>
+<li>DBMS_AQMIGTOOL.ONLY_DEFINITION: A TxEventQ copy is made from the AQ configuration, and messages are not migrated. Both the AQ and TxEventQ remain in the system after migration is committed with separate message streams. This option is recommended for users who prefer a more manual or custom migration.</li>
+</ul>
+</li>
+<li>Users may decide to commit the migration or revert to AQ via the migration interface.</li>
+<li>During migration, in-flight messages can be tracked by viewing messages not in the PROCESSED state for both the AQ and TxEventQ.</li>
+<li>A migration history is recorded for all queues.</li>
+<li>Users may optionally purge old AQ messages if they wish to discard the data after migration.</li>
+<li>AQ Migration supports both rolling upgrades and Oracle GoldenGate (OGG) replication.</li>
+<li>During online migrations, it is safe for applications to continue enqueue/dequeue operations as normal.</li>
+</ul>
+<h2 id="migration-workflow">Migration Workflow</h2>
+<ol>
+<li>
+<p>Check compatibility of migration and review the <a href="/microservices-datadriven/transactional-event-queues/aq-migration/migration/index.html#limitations-and-workarounds">limitations and workarounds</a>.</p>
+</li>
+<li>
+<p>Start the migration with the DBMS_AQMIGTOOL.INIT_MIGRATION procedure, which creates an interim TxEventQ by copying the AQ&rsquo;s configuration, including payload type, rules, subscribers, privileges, notifications, and more. Administrative queue changes (<code>alter queue</code>) are restricted until the migration is completed or canceled.</p>
+</li>
+<li>
+<p>During migration, queue messages transition to the TxEventQ. New messages go to TxEventQ, and dequeue requests go to AQ until it is drained of messages at which point dequeue requests switch to TxEventQ. Migration status can be monitored and any errors addressed or rolled back.</p>
+</li>
+<li>
+<p>Once the AQ is drained or purged, the DBMS_AQMIGTOOL.COMMIT_MIGRATION procedure drops the AQ and renames the interim TxEventQ to the AQ&rsquo;s name, ensuring application compatibility.</p>
+<ol>
+<li>If using DBMS_AQMIGTOOL.AUTOMATIC migration mode, commit is not required.</li>
+</ol>
+</li>
+</ol>
+<p>In the event of an error the prevents migration from continuing, AQ migration may be cancelled and the in-flight messages restored to the AQ without data loss.</p>
+<h3 id="checking-compatibility">Checking Compatibility</h3>
+<p>The <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQMIGTOOL.html#GUID-6DE10CAB-63DA-49F9-A29B-682050DAEA80" rel="external" target="_blank">CHECK_MIGRATION_TO_TXEVENTQ</a> procedure is used to verify an AQ is suitable for migration to TxEventQ and should be run before any migration is attempted.</p>
+<p>The following SQL script creates a migration report for the AQ <code>my_queue</code> and prints the count of events in the migration report. If all features are supported, the <code>migration_report</code> will be empty.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">declare</span>
+</span></span><span style="display:flex;"><span>  migration_report sys.TxEventQ_MigReport_Array :<span style="color:#f92672">=</span> sys.TxEventQ_MigReport_Array();
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>  DBMS_AQMIGTOOL.CHECK_MIGRATION_TO_TXEVENTQ(<span style="color:#e6db74">&#39;testuser&#39;</span>, <span style="color:#e6db74">&#39;my_queue&#39;</span>, migration_report);
+</span></span><span style="display:flex;"><span>  dbms_output.put_line(<span style="color:#e6db74">&#39;Migration report unsupported events count: &#39;</span> <span style="color:#f92672">||</span> migration_report.<span style="color:#66d9ef">COUNT</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<p>If the output is similar to &ldquo;Migration report unsupported events count: 0&rdquo;, then it is safe to initiate the migration.</p>
+<h3 id="initiating-migration">Initiating Migration</h3>
+<p>The <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQMIGTOOL.html#GUID-4D2A3314-9ADF-43DE-9201-74A8F9DB03FE" rel="external" target="_blank">INIT_MIGRATION</a> procedure is used to begin AQ migration to TxEventQ. The <code>mig_mode</code> parameter is used to control the migration type and defaults to <code>DBMS_AQMIGTOOL.INTERACTIVE</code> which allows both enqueue and dequeue during migration. A full description of <code>mig_mode</code> options is available in the procedure documentation.</p>
+<p>The following SQL script starts migration for the AQ <code>my_queue</code> in the <code>testuser</code> schema. Once migration starts, an interim TxEventQ will be created named <code>my_queue_m</code> the includes a copy of the existing AQ configuration.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>  DBMS_AQMIGTOOL.INIT_MIGRATION(
+</span></span><span style="display:flex;"><span>    cqschema <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;testuser&#39;</span>,
+</span></span><span style="display:flex;"><span>    cqname   <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_queue&#39;</span>
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<p><code>INIT_MIGRATION</code> is non-blocking may be executed concurrently on multiple queues. If <code>DBMS_AQMIGTOOL.INTERACTIVE</code> is used as the migration mode, messages may be enqueued and dequeued during migration.</p>
+<h3 id="checking-migration-status">Checking Migration Status</h3>
+<p>While migration is occurring, dequeue will pull from the AQ until it is empty, at which point it will switch to the TxEventQ.</p>
+<p>The following SQL statement uses the <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQMIGTOOL.html#GUID-FECA1B81-8C0E-4ACA-B878-EFD558B33843" rel="external" target="_blank">CHECK_MIGRATED_MESSAGES</a> procedure to print the count of remaining <code>READY</code> state messages in the AQ and the count messages migrated to TxEventQ. Once the <code>aq_msg_cnt</code> reaches zero, the AQ has been fully drained and the migration can be committed. If we attempt to commit the migration before the AQ is drained of <code>READY</code> state messages, an exception will be raised.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">declare</span>
+</span></span><span style="display:flex;"><span>  migrated_q_msg_cnt number :<span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>  aq_msg_cnt         number :<span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>  DBMS_AQMIGTOOL.CHECK_MIGRATED_MESSAGES(
+</span></span><span style="display:flex;"><span>    cqschema                  <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;testuser&#39;</span>,
+</span></span><span style="display:flex;"><span>    cqname                    <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_queue&#39;</span>,
+</span></span><span style="display:flex;"><span>    txeventq_migrated_message <span style="color:#f92672">=&gt;</span> migrated_q_msg_cnt,
+</span></span><span style="display:flex;"><span>    cq_pending_messages       <span style="color:#f92672">=&gt;</span> aq_msg_cnt
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span>  dbms_output.put_line(<span style="color:#e6db74">&#39;AQ ready state message count: &#39;</span> <span style="color:#f92672">||</span> aq_msg_cnt);
+</span></span><span style="display:flex;"><span>  dbms_output.put_line(<span style="color:#e6db74">&#39;Migrated TxEventQ message count: &#39;</span> <span style="color:#f92672">||</span> migrated_q_msg_cnt);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<p>The <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/USER_TXEVENTQ_MIGRATION_STATUS.html#REFRN-GUID-07BAF678-A893-4616-B559-E78E90EE1972" rel="external" target="_blank">USER_TXEVENTQ_MIGRATION_STATUS</a> view is used to check the status of in-process migrations for all queues owned by the current user. Queue information, migration status, and error events are available in this view.</p>
+<h3 id="commit-the-migration">Commit the Migration</h3>
+<p>Once the count of <code>READY</code> state messages in the AQ reach zero, the <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQMIGTOOL.html#GUID-6E7611A4-0702-4090-B8F8-BA5BDA3E1144" rel="external" target="_blank">COMMIT_MIGRATION</a> procedure is used to finalize the migration operation.</p>
+<p>The following SQL script commits the migration for the <code>my_queue</code> queue in the <code>testuser</code> schema. Once the migration is committed, <code>my_queue</code> becomes a TxEventQ.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>  DBMS_AQMIGTOOL.COMMIT_MIGRATION(
+</span></span><span style="display:flex;"><span>    cqschema <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;testuser&#39;</span>,
+</span></span><span style="display:flex;"><span>    cqname   <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_queue&#39;</span>
+</span></span><span style="display:flex;"><span>  );
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<p>If you wish to purge all messages from the AQ rather than dequeuing them, the <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQMIGTOOL.html#GUID-DFE7E6F6-0143-4998-A970-3A90800AFCB0" rel="external" target="_blank">PURGE_QUEUE_MESSAGES</a> procedure can be used to empty the queue.</p>
+<p>The following SQL script purges messages from the <code>my_queue</code> queue in the <code>testuser</code> schema, allowing migration commit without dequeuing the AQ.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>    DBMS_AQMIGTOOL.PURGE_QUEUE_MESSAGES(
+</span></span><span style="display:flex;"><span>        cqschema <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;testuser&#39;</span>,
+</span></span><span style="display:flex;"><span>        cqname   <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_queue&#39;</span>
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;</span></span></code></pre></div>
+<h3 id="checking-and-handling-migration-errors">Checking and Handling Migration Errors</h3>
+<p>If you encounter an error during AQ migration or are using an AQ feature that is unsupported in TxEventQ, the <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQMIGTOOL.html#GUID-F6318675-B7B7-4F2A-B0D1-2DC287C6A0EA" rel="external" target="_blank">CHECK_STATUS</a> procedure can be used to query the current migration status and report any errors.</p>
+<p>The following SQL script checks the migration status of the <code>my_queue</code> queue. In the event of migration incompatibilities, application changes may be required before continuing migration.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">declare</span>
+</span></span><span style="display:flex;"><span>    mig_STATUS    VARCHAR2(<span style="color:#ae81ff">128</span>);
+</span></span><span style="display:flex;"><span>    mig_comments  VARCHAR2(<span style="color:#ae81ff">1024</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>    DBMS_AQMIGTOOL.CHECK_STATUS(
+</span></span><span style="display:flex;"><span>        cqschema                 <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;testuser&#39;</span>,
+</span></span><span style="display:flex;"><span>        cqname                   <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_queue&#39;</span>,
+</span></span><span style="display:flex;"><span>        status                   <span style="color:#f92672">=&gt;</span> mig_STATUS,
+</span></span><span style="display:flex;"><span>        migration_comment        <span style="color:#f92672">=&gt;</span> mig_comments
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>    dbms_output.put_line(<span style="color:#e6db74">&#39;Migration Status: &#39;</span> <span style="color:#f92672">||</span> mig_STATUS);
+</span></span><span style="display:flex;"><span>    dbms_output.put_line(<span style="color:#e6db74">&#39;Migration comments: &#39;</span> <span style="color:#f92672">||</span> mig_comments);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<p>Example of an error output due to unsupported TxEventQ enqueue operations:</p>
+<div class="highlight wrap-code"><pre tabindex="0"><code>Migration Status: Compatibility Error: Transformation in Enq Unsupported Feature
+Migration comments: Unsupported parameter in Enqueue</code></pre></div>
+<h3 id="cancelling-and-recovering-migration">Cancelling and Recovering Migration</h3>
+<p>The <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQMIGTOOL.html#GUID-A3C934C4-7827-407B-ABE2-F3842D3A6267" rel="external" target="_blank">CANCEL_MIGRATION</a> procedure is used to cancel an in-progress migration. Use <code>DBMS_AQMIGTOOL.RESTORE</code> as the cancellation mode (default) to preserve messages during cancellation.</p>
+<p>The following SQL script cancels migration for the AQ <code>my_queue</code> in the <code>testuser</code> schema:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>    DBMS_AQMIGTOOL.CANCEL_MIGRATION(
+</span></span><span style="display:flex;"><span>        cqschema <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;testuser&#39;</span>, 
+</span></span><span style="display:flex;"><span>        cqname <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_queue&#39;</span>, 
+</span></span><span style="display:flex;"><span>        cancelmode <span style="color:#f92672">=&gt;</span> DBMS_AQMIGTOOL.RESTORE
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<p>The <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQMIGTOOL.html#GUID-755EEB52-BFAE-4FEA-A933-07546D72DD98" rel="external" target="_blank">RECOVER_MIGRATION</a> procedure can be used to restore a migration to the nearest safe point, either before or after the execution of DBMS_AQMIGTOOL.CANCEL_MIGRATION, DBMS_AQMIGTOOL.COMMIT_MIGRATION, or DBMS_AQMIGTOOL.INIT_MIGRATION.</p>
+<p>The following SQL script recovers migration to the nearest safe point, and outputs the recovery message:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">declare</span>
+</span></span><span style="display:flex;"><span>    recovery_message  VARCHAR2(<span style="color:#ae81ff">1024</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>    DBMS_AQMIGTOOL.RECOVER_MIGRATION(
+</span></span><span style="display:flex;"><span>        cqschema          <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;testuser&#39;</span>,
+</span></span><span style="display:flex;"><span>        cqname            <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_queue&#39;</span>,
+</span></span><span style="display:flex;"><span>        recovery_message  <span style="color:#f92672">=&gt;</span> recovery_message
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>    dbms_output.put_line(<span style="color:#e6db74">&#39;Recovery message: &#39;</span> <span style="color:#f92672">||</span> recovery_message);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<h2 id="limitations-and-workarounds">Limitations and Workarounds</h2>
+<p>The following features are unsupported in TxEventQ, and should be mitigated before migration:</p>
+<ul>
+<li>Queue Retry Delay: Set <code>retry_delay</code> to zero using DBMS_AQADM.ALTER_QUEUE.</li>
+<li>Message transactions on enqueue/dequeue: Move the transformation to the application layer.</li>
+<li>Multi-queue listeners: Implement single queue listening with dequeue browse.</li>
+<li>Priority values outside the range 0-9: Adjust priority values to the range 0-9.</li>
+</ul>
+<p>The following features do support migration. Applications using these features must be modified before migration:</p>
+<ul>
+<li>Message grouping.</li>
+<li>Sequence deviation and relative message id.</li>
+<li>Message recipient lists.</li>
+</ul>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation">
+        <div id="R-header" class="default-animation">
+<img src="https://oracle.github.io/microservices-datadriven/transactional-event-queues//txeventq.png" height="100px">
+        </div>
+        <script>
+          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736354172";
+        </script>
+        <search><form action="/microservices-datadriven/transactional-event-queues/search/index.html" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+        <script>
+          var contentLangs=['en'];
+        </script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736354172" defer></script>
+      </div>
+      <div id="R-homelinks" class="default-animation homelinks">
+        <ul>
+          <li><a class="padding" href="/microservices-datadriven/transactional-event-queues/index.html"><i class="fa-fw fas fa-home"></i> Home</a></li>
+        </ul>
+        <hr class="padding">
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div id="R-shortcutmenu-home" class="R-sidebarmenu">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/getting-started/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/getting-started/index.html">Getting Started</a><ul id="R-subsections-87c0363912f379e0725cbe1d504c985c" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/kafka/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/kafka/index.html">Kafka APIs</a><ul id="R-subsections-d52caaae11e51c78d1067d1cd66f8e2c" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/spring-boot/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/spring-boot/index.html">Spring Boot Integration</a><ul id="R-subsections-bb4332c9282cf194277661b1ff0e2aba" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/observability/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/observability/index.html">Performance and Observability</a><ul id="R-subsections-12c019d652c4753c0102c3d7c1b1aa94" class="collapsible-menu"></ul></li>
+            <li class="parent " data-nav-id="/microservices-datadriven/transactional-event-queues/aq-migration/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/aq-migration/index.html">Migrating From AQ</a><ul id="R-subsections-2d75d5e9d6442ae61e611785710400a6" class="collapsible-menu">
+            <li class="active " data-nav-id="/microservices-datadriven/transactional-event-queues/aq-migration/migration/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/aq-migration/migration/index.html">AQ Migration</a></li></ul></li>
+          </ul>
+        </div>
+        <div id="R-shortcutmenu-shortcuts" class="R-sidebarmenu">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="https://github.com/oracle/microservices-datadriven"><a class="padding" href="https://github.com/oracle/microservices-datadriven" target="_blank"><i class='fa-fw fab fa-github'></i> GitHub repo</a></li>
+            <li class="" data-nav-id="https://bit.ly/OracleAI-microservices"><a class="padding" href="https://bit.ly/OracleAI-microservices" target="_blank"><i class='fa-fw fas fa-bookmark'></i> Oracle Backend for Microservices and AI</a></li>
+            <li class="" data-nav-id="https://github.com/oracle/spring-cloud-oracle"><a class="padding" href="https://github.com/oracle/spring-cloud-oracle" target="_blank"><i class='fa-fw fas fa-bookmark'></i> Spring Cloud Oracle</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/more/credits/"><a class="padding" href="/microservices-datadriven/transactional-event-queues/more/credits/"><i class='fa-fw fas fa-bullhorn'></i> Credits</a></li>
+          </ul>
+        </div>
+        <div class="padding footermargin footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter"></div>
+        <div id="R-menu-footer">
+          <hr class="padding default-animation footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter">
+          <div id="R-prefooter" class="footerLangSwitch footerVariantSwitch footerVisitedLinks">
+            <ul>
+              <li id="R-select-language-container" class="footerLangSwitch">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-language"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <label class="a11y-only" for="R-select-language">Language</label>
+                    <select id="R-select-language" onchange="location = this.querySelector( this.value ).dataset.url;">
+                      <option id="R-select-language-en" value="#R-select-language-en" data-url="/microservices-datadriven/transactional-event-queues/aq-migration/migration/index.html" lang="en-us" selected></option>
+                    </select>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </li>
+              <li id="R-select-variant-container" class="footerVariantSwitch">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-paint-brush"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <label class="a11y-only" for="R-select-variant">Theme</label>
+                    <select id="R-select-variant" onchange="window.relearn.changeVariant( this.value );">
+                      <option id="R-select-variant-zen-light" value="zen-light" selected>Zen Light</option>
+                    </select>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+                <script>window.relearn.markVariant();</script>
+              </li>
+              <li class="footerVisitedLinks">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-history"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <button onclick="clearHistory();">Clear History</button>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div id="R-footer" class="footerFooter showFooter">
+	    <p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://www.oracle.com/">Oracle</a></p>
+		<p>Copyright &copy; 2022, 2024, <br>Oracle and/or its affiliates</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736354172" defer></script>
+  </body>
+</html>

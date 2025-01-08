@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Migrating From AQ :: Transactional Event Queues</title>
+    <link>https://oracle.github.io/microservices-datadriven/transactional-event-queues/aq-migration/index.html</link>
+    <description>Oracle Database 23ai includes a migration path from Advanced Queuing (AQ) to Transactional Event Queues (TxEventQ), to take advantage of enhanced performance and scalability for event-driven architectures.&#xA;The DBMS_AQMIGTOOL package facilitates a smooth migration process, designed to be non-disruptive and allowing the parallel operation of AQ and TxEventQ during the transition, enabling a smooth cut-over with minimal downtime for your applications.&#xA;The migration from AQ to TxEventQ is suitable for various scenarios:</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="https://oracle.github.io/microservices-datadriven/transactional-event-queues/aq-migration/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AQ Migration</title>
+      <link>https://oracle.github.io/microservices-datadriven/transactional-event-queues/aq-migration/migration/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://oracle.github.io/microservices-datadriven/transactional-event-queues/aq-migration/migration/index.html</guid>
+      <description>This section covers the use of the DBMS_AQMIGTOOL package for migrating Advanced Queuing (AQ) classic queues to TxEventQ.&#xA;Users of AQ are recommended to migrate to TxEventQ for increased support, performance, and access to new database features. It is recommended to read through the document fully before attempting migration.&#xA;DBMS_AQMIGTOOL Overview Migration Workflow Checking Compatibility Initiating Migration Checking Migration Status Commit the Migration Checking and Handling Migration Errors Cancelling and Recovering Migration Limitations and Workarounds DBMS_AQMIGTOOL Overview The migration tool interface provides the following functionalities:</description>
+    </item>
+  </channel>
+</rss>

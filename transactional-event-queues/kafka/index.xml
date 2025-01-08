@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Kafka APIs :: Transactional Event Queues</title>
+    <link>https://oracle.github.io/microservices-datadriven/transactional-event-queues/kafka/index.html</link>
+    <description>Oracle Database Transactional Event Queues (TxEventQ) offers comprehensive integration with Apache Kafka, providing developers with a powerful and flexible messaging platform. This module explores the synergy between TxEventQ and Kafka, covering essential concepts and practical implementations. In this module, we’ll refer to queues as topics when working with TxEventQ and Kafka.&#xA;Throughout this module, we’ll explore practical examples using Java code and SQLcl commands to demonstrate:&#xA;Creating and managing topics using Kafka APIs with TxEventQ Producing and consuming messages using Kafka client libraries Implementing transactional messaging with database operations Utilizing Kafka REST APIs for TxEventQ message handling Configuring and using Kafka connectors for TxEventQ By the end of this module, you’ll have a comprehensive understanding of how to leverage Oracle TxEventQ’s Kafka compatibility features to build robust, scalable, and event-driven applications.</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="https://oracle.github.io/microservices-datadriven/transactional-event-queues/kafka/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kafka and TxEventQ Concepts</title>
+      <link>https://oracle.github.io/microservices-datadriven/transactional-event-queues/kafka/concepts/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://oracle.github.io/microservices-datadriven/transactional-event-queues/kafka/concepts/index.html</guid>
+      <description>This section describes the architectural concepts of Oracle Database Transactional Event Queues in the context of Apache Kafka APIs. When working with Kafka APIs, we’ll refer to queues as topics.&#xA;Kafka Brokers or a Database Server? Topics, Producers, and Consumers Partitions and Ordering Partition Keys Message Offsets Message Commits Kafka Brokers or a Database Server? When using Oracle Database Transactional Event Queues with Kafka APIs, the database server assumes the role of the Kafka Broker, eliminating the need for an additional messaging system to produce and consume data.</description>
+    </item>
+    <item>
+      <title>Developing With Kafka APIs</title>
+      <link>https://oracle.github.io/microservices-datadriven/transactional-event-queues/kafka/developing-with-kafka/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://oracle.github.io/microservices-datadriven/transactional-event-queues/kafka/developing-with-kafka/index.html</guid>
+      <description>This section provides developer-friendly examples using the Kafka Java Client for Oracle Database Transactional Event Queues. The Kafka Java client implements Kafka client interfaces, allowing you to use familiar Kafka Java APIs with Oracle Database Transactional Event Queues. You’ll learn how to authenticate to Oracle Database, create topics, produce messages, and consume messages using Java Kafka clients.&#xA;Kafka Java Client for Oracle Database Transactional Event Queues To get started using the client, add the Kafka Java Client for Oracle Database Transactional Event Queues dependency to your project. If you’re using Maven:</description>
+    </item>
+    <item>
+      <title>Kafka Connectors</title>
+      <link>https://oracle.github.io/microservices-datadriven/transactional-event-queues/kafka/kafka-connectors/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://oracle.github.io/microservices-datadriven/transactional-event-queues/kafka/kafka-connectors/index.html</guid>
+      <description>This section introduces Kafka connectors to connect Oracle Database Transactional Event Queues with other data and messaging systems, like Apache Kafka topics.&#xA;Kafka Connectors The Kafka connectors for Oracle Database Transactional Event Queues provide the capability to sync message data to/from Kafka topics.&#xA;The Sink Connector reads from Kafka and publishes messages to Oracle Database Transactional Event Queues. The Source Connector that reads from an Oracle Database Transactional Event Queues topic and publishes messages to a Kafka topic.</description>
+    </item>
+    <item>
+      <title>Transactional Messaging</title>
+      <link>https://oracle.github.io/microservices-datadriven/transactional-event-queues/kafka/transactional-messaging/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://oracle.github.io/microservices-datadriven/transactional-event-queues/kafka/transactional-messaging/index.html</guid>
+      <description>This section provides a detailed walkthrough of transactional messaging using the Kafka Java Client for Oracle Database Transactional Event Queues. You’ll learn how to run, commit, and abort database transactions while using Kafka producers and consumers for transactional messaging.&#xA;Kafka Example The KafkaProducer and KafkaConsumer classes implemented by the Kafka Java Client for Oracle Transactional Event Queues provide functionality for transactional messaging, allowing developers to run database queries within a produce or consume transaction.</description>
+    </item>
+  </channel>
+</rss>

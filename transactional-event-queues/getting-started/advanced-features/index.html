@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.140.1">
+    <meta name="generator" content="Relearn 7.3.1">
+    <meta name="description" content="This section explains advanced features of Transactional Event Queues, including transactional messaging, message propagation between queues and the database, and error handling.
+Transactional Messaging: Combine Messaging with Database Queries SQL Example Message Propagation Queue to Queue Message Propagation Stopping Queue Propagation Using Database Links Error Handling Transactional Messaging: Combine Messaging with Database Queries Enqueue and dequeue operations occur within database transactions, allowing developers to combine database queries (DML) with messaging operations. This is particularly useful when the message contains data relevant to other tables or services within your schema.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Advanced Features :: Transactional Event Queues">
+    <meta name="twitter:description" content="This section explains advanced features of Transactional Event Queues, including transactional messaging, message propagation between queues and the database, and error handling.
+Transactional Messaging: Combine Messaging with Database Queries SQL Example Message Propagation Queue to Queue Message Propagation Stopping Queue Propagation Using Database Links Error Handling Transactional Messaging: Combine Messaging with Database Queries Enqueue and dequeue operations occur within database transactions, allowing developers to combine database queries (DML) with messaging operations. This is particularly useful when the message contains data relevant to other tables or services within your schema.">
+    <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/transactional-event-queues/getting-started/advanced-features/index.html">
+    <meta property="og:site_name" content="Transactional Event Queues">
+    <meta property="og:title" content="Advanced Features :: Transactional Event Queues">
+    <meta property="og:description" content="This section explains advanced features of Transactional Event Queues, including transactional messaging, message propagation between queues and the database, and error handling.
+Transactional Messaging: Combine Messaging with Database Queries SQL Example Message Propagation Queue to Queue Message Propagation Stopping Queue Propagation Using Database Links Error Handling Transactional Messaging: Combine Messaging with Database Queries Enqueue and dequeue operations occur within database transactions, allowing developers to combine database queries (DML) with messaging operations. This is particularly useful when the message contains data relevant to other tables or services within your schema.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Getting Started">
+    <meta itemprop="name" content="Advanced Features :: Transactional Event Queues">
+    <meta itemprop="description" content="This section explains advanced features of Transactional Event Queues, including transactional messaging, message propagation between queues and the database, and error handling.
+Transactional Messaging: Combine Messaging with Database Queries SQL Example Message Propagation Queue to Queue Message Propagation Stopping Queue Propagation Using Database Links Error Handling Transactional Messaging: Combine Messaging with Database Queries Enqueue and dequeue operations occur within database transactions, allowing developers to combine database queries (DML) with messaging operations. This is particularly useful when the message contains data relevant to other tables or services within your schema.">
+    <meta itemprop="wordCount" content="731">
+    <title>Advanced Features :: Transactional Event Queues</title>
+    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736354172" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736354172" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736354172" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736354172" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..\/..\/..';
+      window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/transactional-event-queues';
+      window.relearn.min = `.min`;
+      window.relearn.disableAnchorCopy=false;
+      window.relearn.disableAnchorScrolling=false;
+      // variant stuff
+      window.relearn.themevariants = [ 'zen-light' ];
+      window.relearn.customvariantname = "my-custom-variant";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        var select = document.querySelector("#R-select-variant");
+        if (select) {
+          select.value = variant;
+        }
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( variant == window.relearn.customvariantname ){
+        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+      // translations
+      window.T_Copy_to_clipboard = `Copy to clipboard`;
+      window.T_Copied_to_clipboard = `Copied to clipboard!`;
+      window.T_Copy_link_to_clipboard = `Copy link to clipboard`;
+      window.T_Link_copied_to_clipboard = `Copied link to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+    </script>
+  </head>
+  <body class="mobile-support html" data-url="/microservices-datadriven/transactional-event-queues/getting-started/advanced-features/index.html">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar">
+        <div class="topbar-wrapper">
+          <div class="topbar-sidebar-divider"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide"><button class="topbar-control" onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button>
+            </div>
+            <div class="topbar-button topbar-button-toc" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-list-alt"></i></button>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#transactional-messaging-combine-messaging-with-database-queries">Transactional Messaging: Combine Messaging with Database Queries</a>
+      <ul>
+        <li><a href="#sql-example">SQL Example</a></li>
+      </ul>
+    </li>
+    <li><a href="#message-propagation">Message Propagation</a>
+      <ul>
+        <li></li>
+      </ul>
+    </li>
+    <li><a href="#error-handling">Error Handling</a></li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="/microservices-datadriven/transactional-event-queues/index.html"><span itemprop="name">Transactional Event Queues</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="/microservices-datadriven/transactional-event-queues/getting-started/index.html"><span itemprop="name">Getting Started</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><span itemprop="name">Advanced Features</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-prev" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show"><a class="topbar-control" href="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html" title="Message Operations (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a>
+            </div>
+            <div class="topbar-button topbar-button-next" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show"><a class="topbar-control" href="/microservices-datadriven/transactional-event-queues/kafka/index.html" title="Kafka APIs (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a>
+            </div>
+            <div class="topbar-button topbar-button-more" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable getting-started" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="advanced-features">Advanced Features</h1>
+
+<p>This section explains advanced features of Transactional Event Queues, including transactional messaging, message propagation between queues and the database, and error handling.</p>
+<ul>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/advanced-features/index.html#transactional-messaging-combine-messaging-with-database-queries">Transactional Messaging: Combine Messaging with Database Queries</a>
+<ul>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/advanced-features/index.html#sql-example">SQL Example</a></li>
+</ul>
+</li>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/advanced-features/index.html#message-propagation">Message Propagation</a>
+<ul>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/advanced-features/index.html#queue-to-queue-message-propagation">Queue to Queue Message Propagation</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/advanced-features/index.html#stopping-queue-propagation">Stopping Queue Propagation</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/advanced-features/index.html#using-database-links">Using Database Links</a></li>
+</ul>
+</li>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/advanced-features/index.html#error-handling">Error Handling</a></li>
+</ul>
+<h2 id="transactional-messaging-combine-messaging-with-database-queries">Transactional Messaging: Combine Messaging with Database Queries</h2>
+<p>Enqueue and dequeue operations occur within database transactions, allowing developers to combine database queries (DML) with messaging operations. This is particularly useful when the message contains data relevant to other tables or services within your schema.</p>
+<h3 id="sql-example">SQL Example</h3>
+<p>In the following example, a DML operation (an <code>INSERT</code> query) is combined with an enqueue operation in the same transaction. If the enqueue operation fails, the <code>INSERT</code> is rolled back. The orders table serves as the example.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> orders (
+</span></span><span style="display:flex;"><span>    id number <span style="color:#66d9ef">generated</span> always <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">identity</span> <span style="color:#66d9ef">primary</span> <span style="color:#66d9ef">key</span>,
+</span></span><span style="display:flex;"><span>    product_id number <span style="color:#66d9ef">not</span> <span style="color:#66d9ef">null</span>,
+</span></span><span style="display:flex;"><span>    quantity number <span style="color:#66d9ef">not</span> <span style="color:#66d9ef">null</span>,
+</span></span><span style="display:flex;"><span>    order_date date <span style="color:#66d9ef">default</span> sysdate
+</span></span><span style="display:flex;"><span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">declare</span>
+</span></span><span style="display:flex;"><span>    enqueue_options dbms_aq.enqueue_options_t;
+</span></span><span style="display:flex;"><span>    message_properties dbms_aq.message_properties_t;
+</span></span><span style="display:flex;"><span>    msg_id raw(<span style="color:#ae81ff">16</span>);
+</span></span><span style="display:flex;"><span>    message json;
+</span></span><span style="display:flex;"><span>    body varchar2(<span style="color:#ae81ff">200</span>) :<span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;{&#34;product_id&#34;: 1, &#34;quantity&#34;: 5}&#39;</span>;
+</span></span><span style="display:flex;"><span>    product_id number;
+</span></span><span style="display:flex;"><span>    quantity number;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- Convert the JSON string to a JSON object
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    message :<span style="color:#f92672">=</span> json(body);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- Extract product_id and quantity from the JSON object
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    product_id :<span style="color:#f92672">=</span> json_value(message, <span style="color:#e6db74">&#39;$.product_id&#39;</span> returning number);
+</span></span><span style="display:flex;"><span>    quantity :<span style="color:#f92672">=</span> json_value(message, <span style="color:#e6db74">&#39;$.quantity&#39;</span> returning number);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- Insert data into the orders table
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> orders (product_id, quantity)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">values</span> (product_id, quantity);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- Enqueue the message
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    dbms_aq.enqueue(
+</span></span><span style="display:flex;"><span>            queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;json_queue&#39;</span>,
+</span></span><span style="display:flex;"><span>            enqueue_options <span style="color:#f92672">=&gt;</span> enqueue_options,
+</span></span><span style="display:flex;"><span>            message_properties <span style="color:#f92672">=&gt;</span> message_properties,
+</span></span><span style="display:flex;"><span>            payload <span style="color:#f92672">=&gt;</span> message,
+</span></span><span style="display:flex;"><span>            msgid <span style="color:#f92672">=&gt;</span> msg_id
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">commit</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<blockquote>
+<p>Note: The same pattern applies to the <code>dbms_aq.dequeue</code> procedure, allowing developers to perform DML operations within dequeue transactions.</p>
+</blockquote>
+<h2 id="message-propagation">Message Propagation</h2>
+<p>Messages can be propagated within the same database or across a <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/CREATE-DATABASE-LINK.html" rel="external" target="_blank">database link</a> to different queues or topics. Message propagation is useful for workflows that require message processing d by different consumers or for event-driven actions that need to trigger subsequent processes.</p>
+<h4 id="queue-to-queue-message-propagation">Queue to Queue Message Propagation</h4>
+<p>Create and start two queues. <code>source</code> will be the source queue, and <code>dest</code> will be the propagated destination queue.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>    dbms_aqadm.create_transactional_event_queue(
+</span></span><span style="display:flex;"><span>        queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;source&#39;</span>,
+</span></span><span style="display:flex;"><span>        queue_payload_type <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;JSON&#39;</span>,
+</span></span><span style="display:flex;"><span>        multiple_consumers <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>    dbms_aqadm.create_transactional_event_queue(
+</span></span><span style="display:flex;"><span>        queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;dest&#39;</span>,
+</span></span><span style="display:flex;"><span>        queue_payload_type <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;JSON&#39;</span>,
+</span></span><span style="display:flex;"><span>        multiple_consumers <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>    dbms_aqadm.start_queue(
+</span></span><span style="display:flex;"><span>        queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;source&#39;</span>
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>    dbms_aqadm.start_queue(
+</span></span><span style="display:flex;"><span>        queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;dest&#39;</span>
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<p>Schedule message propagation so messages from <code>source</code> are propagated to <code>dest</code>, using <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQADM.html#GUID-E97FCD3F-D96B-4B01-A57F-23AC9A110A0D" rel="external" target="_blank"><code>DBMS_AQADM.SCHEDULE_PROPAGATION</code> procedure</a>.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>    dbms_aqadm.schedule_propagation(
+</span></span><span style="display:flex;"><span>        queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;source&#39;</span>,
+</span></span><span style="display:flex;"><span>        destination_queue <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;dest&#39;</span>
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<p>Let&rsquo;s enqueue a message into <code>source</code>. We expect this message to be propagated to <code>dest</code>:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">declare</span>
+</span></span><span style="display:flex;"><span>    enqueue_options dbms_aq.enqueue_options_t;
+</span></span><span style="display:flex;"><span>    message_properties dbms_aq.message_properties_t;
+</span></span><span style="display:flex;"><span>    msg_id raw(<span style="color:#ae81ff">16</span>);
+</span></span><span style="display:flex;"><span>    message json;
+</span></span><span style="display:flex;"><span>    body varchar2(<span style="color:#ae81ff">200</span>) :<span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;{&#34;content&#34;: &#34;this message is propagated!&#34;}&#39;</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">select</span> json(body) <span style="color:#66d9ef">into</span> message;
+</span></span><span style="display:flex;"><span>    dbms_aq.enqueue(
+</span></span><span style="display:flex;"><span>        queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;source&#39;</span>,
+</span></span><span style="display:flex;"><span>        enqueue_options <span style="color:#f92672">=&gt;</span> enqueue_options,
+</span></span><span style="display:flex;"><span>        message_properties <span style="color:#f92672">=&gt;</span> message_properties,
+</span></span><span style="display:flex;"><span>        payload <span style="color:#f92672">=&gt;</span> message,
+</span></span><span style="display:flex;"><span>        msgid <span style="color:#f92672">=&gt;</span> msg_id
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">commit</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<p>If propagation does not occur, check the <code>JOB_QUEUE_PROCESSES</code> parameter and ensure its value is high enough. If the value is very low, you may need to update it with a larger value:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">system</span> <span style="color:#66d9ef">set</span> job_queue_processes<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>;</span></span></code></pre></div>
+<h4 id="stopping-queue-propagation">Stopping Queue Propagation</h4>
+<p>You can stop propagation using the DBMS_AQADM.STOP_PROPAGATION procedures:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>    dbms_aqadm.unschedule_propagation(
+</span></span><span style="display:flex;"><span>        queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;source&#39;</span>,
+</span></span><span style="display:flex;"><span>        destination_queue <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;dest&#39;</span>
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<p>Your can view queue subscribers and propagation schedules from the respective <code>DBA_QUEUE_SCHEDULES</code> and <code>DBA_QUEUE_SUBSCRIBERS</code> system views. These views are helpful for debugging propagation issues, including error messages and schedule status.</p>
+<h4 id="using-database-links">Using Database Links</h4>
+<p>To propagate messages between databases, a <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/CREATE-DATABASE-LINK.html" rel="external" target="_blank">database link</a> from the local database to the remote database must be created. The  subscribe and propagation commands must be altered to use the database link.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>    dbms_aqadm.schedule_propagation(
+</span></span><span style="display:flex;"><span>        queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;source&#39;</span>,
+</span></span><span style="display:flex;"><span>        destination <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;&lt;database link&gt;.&lt;schema name&gt;&#39;</span>, <span style="color:#75715e">-- replace with your database link and schema name,
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        destination_queue <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;dest&#39;</span>
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<h2 id="error-handling">Error Handling</h2>
+<p>Error handling is a critical component of message processing, ensuring malformed or otherwise unprocessable messages are handled correctly. Depending on the message payload and exception, an appropriate action should be taken to either replay, discard, or otherwise process the failed message. If a message cannot be dequeued due to errors, it may be moved to the <a href="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html#message-expiry-and-exception-queues">exception queue</a>, if one exists.</p>
+<p>For errors on procedures like enqueue you may also use the standard SQL exception mechanisms:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">declare</span>
+</span></span><span style="display:flex;"><span>    dequeue_options dbms_aq.dequeue_options_t;
+</span></span><span style="display:flex;"><span>    message_properties dbms_aq.message_properties_t;
+</span></span><span style="display:flex;"><span>    msg_id raw(<span style="color:#ae81ff">16</span>);
+</span></span><span style="display:flex;"><span>    message json;
+</span></span><span style="display:flex;"><span>    message_buffer varchar2(<span style="color:#ae81ff">500</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>    dequeue_options.navigation :<span style="color:#f92672">=</span> dbms_aq.first_message;
+</span></span><span style="display:flex;"><span>    dequeue_options.wait :<span style="color:#f92672">=</span> dbms_aq.no_wait;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    dbms_aq.dequeue(
+</span></span><span style="display:flex;"><span>        queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;json_queue&#39;</span>,
+</span></span><span style="display:flex;"><span>        dequeue_options <span style="color:#f92672">=&gt;</span> dequeue_options,
+</span></span><span style="display:flex;"><span>        message_properties <span style="color:#f92672">=&gt;</span> message_properties,
+</span></span><span style="display:flex;"><span>        payload <span style="color:#f92672">=&gt;</span> message,
+</span></span><span style="display:flex;"><span>        msgid <span style="color:#f92672">=&gt;</span> msg_id
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">select</span> json_value(message, <span style="color:#e6db74">&#39;$.content&#39;</span>) <span style="color:#66d9ef">into</span> message_buffer;
+</span></span><span style="display:flex;"><span>    dbms_output.put_line(<span style="color:#e6db74">&#39;message: &#39;</span> <span style="color:#f92672">||</span> message_buffer);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">exception</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">when</span> others <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>        dbms_output.put_line(<span style="color:#e6db74">&#39;error dequeuing message: &#39;</span> <span style="color:#f92672">||</span> sqlerrm);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation">
+        <div id="R-header" class="default-animation">
+<img src="https://oracle.github.io/microservices-datadriven/transactional-event-queues//txeventq.png" height="100px">
+        </div>
+        <script>
+          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736354172";
+        </script>
+        <search><form action="/microservices-datadriven/transactional-event-queues/search/index.html" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+        <script>
+          var contentLangs=['en'];
+        </script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736354172" defer></script>
+      </div>
+      <div id="R-homelinks" class="default-animation homelinks">
+        <ul>
+          <li><a class="padding" href="/microservices-datadriven/transactional-event-queues/index.html"><i class="fa-fw fas fa-home"></i> Home</a></li>
+        </ul>
+        <hr class="padding">
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div id="R-shortcutmenu-home" class="R-sidebarmenu">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="parent " data-nav-id="/microservices-datadriven/transactional-event-queues/getting-started/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/getting-started/index.html">Getting Started</a><ul id="R-subsections-87c0363912f379e0725cbe1d504c985c" class="collapsible-menu">
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/getting-started/core-concepts/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/getting-started/core-concepts/index.html">Core Concepts</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/getting-started/queue-management/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/getting-started/queue-management/index.html">Queue Management</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html">Message Operations</a></li>
+            <li class="active " data-nav-id="/microservices-datadriven/transactional-event-queues/getting-started/advanced-features/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/getting-started/advanced-features/index.html">Advanced Features</a></li></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/kafka/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/kafka/index.html">Kafka APIs</a><ul id="R-subsections-d52caaae11e51c78d1067d1cd66f8e2c" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/spring-boot/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/spring-boot/index.html">Spring Boot Integration</a><ul id="R-subsections-bb4332c9282cf194277661b1ff0e2aba" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/observability/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/observability/index.html">Performance and Observability</a><ul id="R-subsections-12c019d652c4753c0102c3d7c1b1aa94" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/aq-migration/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/aq-migration/index.html">Migrating From AQ</a><ul id="R-subsections-2d75d5e9d6442ae61e611785710400a6" class="collapsible-menu"></ul></li>
+          </ul>
+        </div>
+        <div id="R-shortcutmenu-shortcuts" class="R-sidebarmenu">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="https://github.com/oracle/microservices-datadriven"><a class="padding" href="https://github.com/oracle/microservices-datadriven" target="_blank"><i class='fa-fw fab fa-github'></i> GitHub repo</a></li>
+            <li class="" data-nav-id="https://bit.ly/OracleAI-microservices"><a class="padding" href="https://bit.ly/OracleAI-microservices" target="_blank"><i class='fa-fw fas fa-bookmark'></i> Oracle Backend for Microservices and AI</a></li>
+            <li class="" data-nav-id="https://github.com/oracle/spring-cloud-oracle"><a class="padding" href="https://github.com/oracle/spring-cloud-oracle" target="_blank"><i class='fa-fw fas fa-bookmark'></i> Spring Cloud Oracle</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/more/credits/"><a class="padding" href="/microservices-datadriven/transactional-event-queues/more/credits/"><i class='fa-fw fas fa-bullhorn'></i> Credits</a></li>
+          </ul>
+        </div>
+        <div class="padding footermargin footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter"></div>
+        <div id="R-menu-footer">
+          <hr class="padding default-animation footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter">
+          <div id="R-prefooter" class="footerLangSwitch footerVariantSwitch footerVisitedLinks">
+            <ul>
+              <li id="R-select-language-container" class="footerLangSwitch">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-language"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <label class="a11y-only" for="R-select-language">Language</label>
+                    <select id="R-select-language" onchange="location = this.querySelector( this.value ).dataset.url;">
+                      <option id="R-select-language-en" value="#R-select-language-en" data-url="/microservices-datadriven/transactional-event-queues/getting-started/advanced-features/index.html" lang="en-us" selected></option>
+                    </select>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </li>
+              <li id="R-select-variant-container" class="footerVariantSwitch">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-paint-brush"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <label class="a11y-only" for="R-select-variant">Theme</label>
+                    <select id="R-select-variant" onchange="window.relearn.changeVariant( this.value );">
+                      <option id="R-select-variant-zen-light" value="zen-light" selected>Zen Light</option>
+                    </select>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+                <script>window.relearn.markVariant();</script>
+              </li>
+              <li class="footerVisitedLinks">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-history"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <button onclick="clearHistory();">Clear History</button>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div id="R-footer" class="footerFooter showFooter">
+	    <p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://www.oracle.com/">Oracle</a></p>
+		<p>Copyright &copy; 2022, 2024, <br>Oracle and/or its affiliates</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736354172" defer></script>
+  </body>
+</html>
