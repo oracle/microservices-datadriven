@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.140.1">
+    <meta name="generator" content="Relearn 7.3.1">
+    <meta name="description" content="Spring Cloud Stream is a Java framework that is designed for building event-driven microservices backed by a scalable, fault-tolerant messaging system. The Oracle Database Transactional Event Queues stream binder implementation allows developers to leverage Oracle’s database messaging platform within the Spring Cloud Stream ecosystem.
+This section covers the key features of the Spring Cloud Stream Binder for Oracle Database Transactional Event Queues and getting started examples for developers.
+Key Features of the Transactional Event Queues Stream Binder The Spring Cloud Stream Binder for Oracle Database Transactional Event Queues provides a high-throughput, reliable messaging platform built directly into the database.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Spring Cloud Stream Binder :: Transactional Event Queues">
+    <meta name="twitter:description" content="Spring Cloud Stream is a Java framework that is designed for building event-driven microservices backed by a scalable, fault-tolerant messaging system. The Oracle Database Transactional Event Queues stream binder implementation allows developers to leverage Oracle’s database messaging platform within the Spring Cloud Stream ecosystem.
+This section covers the key features of the Spring Cloud Stream Binder for Oracle Database Transactional Event Queues and getting started examples for developers.
+Key Features of the Transactional Event Queues Stream Binder The Spring Cloud Stream Binder for Oracle Database Transactional Event Queues provides a high-throughput, reliable messaging platform built directly into the database.">
+    <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/transactional-event-queues/spring-boot/stream-binder/index.html">
+    <meta property="og:site_name" content="Transactional Event Queues">
+    <meta property="og:title" content="Spring Cloud Stream Binder :: Transactional Event Queues">
+    <meta property="og:description" content="Spring Cloud Stream is a Java framework that is designed for building event-driven microservices backed by a scalable, fault-tolerant messaging system. The Oracle Database Transactional Event Queues stream binder implementation allows developers to leverage Oracle’s database messaging platform within the Spring Cloud Stream ecosystem.
+This section covers the key features of the Spring Cloud Stream Binder for Oracle Database Transactional Event Queues and getting started examples for developers.
+Key Features of the Transactional Event Queues Stream Binder The Spring Cloud Stream Binder for Oracle Database Transactional Event Queues provides a high-throughput, reliable messaging platform built directly into the database.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Spring Boot Integration">
+    <meta itemprop="name" content="Spring Cloud Stream Binder :: Transactional Event Queues">
+    <meta itemprop="description" content="Spring Cloud Stream is a Java framework that is designed for building event-driven microservices backed by a scalable, fault-tolerant messaging system. The Oracle Database Transactional Event Queues stream binder implementation allows developers to leverage Oracle’s database messaging platform within the Spring Cloud Stream ecosystem.
+This section covers the key features of the Spring Cloud Stream Binder for Oracle Database Transactional Event Queues and getting started examples for developers.
+Key Features of the Transactional Event Queues Stream Binder The Spring Cloud Stream Binder for Oracle Database Transactional Event Queues provides a high-throughput, reliable messaging platform built directly into the database.">
+    <meta itemprop="wordCount" content="804">
+    <title>Spring Cloud Stream Binder :: Transactional Event Queues</title>
+    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736354172" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736354172" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736354172" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736354172" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..\/..\/..';
+      window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/transactional-event-queues';
+      window.relearn.min = `.min`;
+      window.relearn.disableAnchorCopy=false;
+      window.relearn.disableAnchorScrolling=false;
+      // variant stuff
+      window.relearn.themevariants = [ 'zen-light' ];
+      window.relearn.customvariantname = "my-custom-variant";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        var select = document.querySelector("#R-select-variant");
+        if (select) {
+          select.value = variant;
+        }
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( variant == window.relearn.customvariantname ){
+        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+      // translations
+      window.T_Copy_to_clipboard = `Copy to clipboard`;
+      window.T_Copied_to_clipboard = `Copied to clipboard!`;
+      window.T_Copy_link_to_clipboard = `Copy link to clipboard`;
+      window.T_Link_copied_to_clipboard = `Copied link to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+    </script>
+  </head>
+  <body class="mobile-support html" data-url="/microservices-datadriven/transactional-event-queues/spring-boot/stream-binder/index.html">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar">
+        <div class="topbar-wrapper">
+          <div class="topbar-sidebar-divider"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide"><button class="topbar-control" onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button>
+            </div>
+            <div class="topbar-button topbar-button-toc" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-list-alt"></i></button>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#key-features-of-the-transactional-event-queues-stream-binder">Key Features of the Transactional Event Queues Stream Binder</a></li>
+    <li><a href="#configuring-the-transactional-event-queues-stream-binder">Configuring the Transactional Event Queues Stream Binder</a>
+      <ul>
+        <li><a href="#project-dependencies">Project Dependencies</a></li>
+        <li><a href="#stream-binder-permissions">Stream Binder Permissions</a></li>
+        <li><a href="#stream-binder-database-connection">Stream Binder Database Connection</a></li>
+      </ul>
+    </li>
+    <li><a href="#suppliers-functions-and-consumers">Suppliers, Functions and Consumers</a>
+      <ul>
+        <li><a href="#supplier-implementation">Supplier Implementation</a></li>
+        <li><a href="#configure-beans-with-spring-cloud-stream">Configure Beans with Spring Cloud Stream</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="/microservices-datadriven/transactional-event-queues/index.html"><span itemprop="name">Transactional Event Queues</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="/microservices-datadriven/transactional-event-queues/spring-boot/index.html"><span itemprop="name">Spring Boot Integration</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><span itemprop="name">Spring Cloud Stream Binder</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-prev" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show"><a class="topbar-control" href="/microservices-datadriven/transactional-event-queues/spring-boot/kafka/index.html" title="Kafka Starter (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a>
+            </div>
+            <div class="topbar-button topbar-button-next" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show"><a class="topbar-control" href="/microservices-datadriven/transactional-event-queues/observability/index.html" title="Performance and Observability (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a>
+            </div>
+            <div class="topbar-button topbar-button-more" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable spring-boot" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="spring-cloud-stream-binder">Spring Cloud Stream Binder</h1>
+
+<p><a href="https://spring.io/projects/spring-cloud-stream" rel="external" target="_blank">Spring Cloud Stream</a> is a Java framework that is designed for building event-driven microservices backed by a scalable, fault-tolerant messaging system. The <a href="https://github.com/oracle/spring-cloud-oracle/tree/main/database/spring-cloud-stream-binder-oracle-txeventq" rel="external" target="_blank">Oracle Database Transactional Event Queues stream binder implementation</a> allows developers to leverage Oracle’s database messaging platform within the Spring Cloud Stream ecosystem.</p>
+<p>This section covers the key features of the Spring Cloud Stream Binder for Oracle Database Transactional Event Queues and getting started examples for developers.</p>
+<h2 id="key-features-of-the-transactional-event-queues-stream-binder">Key Features of the Transactional Event Queues Stream Binder</h2>
+<p>The Spring Cloud Stream Binder for Oracle Database Transactional Event Queues provides a high-throughput, reliable messaging platform built directly into the database.</p>
+<ul>
+<li>Real-time messaging with multiple publishers, consumers, and topics — all with a simple functional interface.</li>
+<li>Convergence of data: Your messaging infrastructure integrates directly with the database, eliminating the need for external brokers.</li>
+<li>Integration with Spring Cloud Stream provides an interface that&rsquo;s easy-to-use and quick to get started.</li>
+</ul>
+<h2 id="configuring-the-transactional-event-queues-stream-binder">Configuring the Transactional Event Queues Stream Binder</h2>
+<p>In this section, we&rsquo;ll cover how to configure the Transactional Event Queues Stream Binder for a Spring Boot project.</p>
+<h3 id="project-dependencies">Project Dependencies</h3>
+<p>To start developing with the Stream Binder, add the <a href="https://central.sonatype.com/artifact/com.oracle.database.spring.cloud-stream-binder/spring-cloud-stream-binder-oracle-txeventq" rel="external" target="_blank">spring-cloud-stream-binder-oracle-txeventq</a> dependency to your Maven project:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#f92672">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;groupId&gt;</span>com.oracle.database.spring.cloud-stream-binder<span style="color:#f92672">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;artifactId&gt;</span>spring-cloud-stream-binder-oracle-txeventq<span style="color:#f92672">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;version&gt;</span>${txeventq-stream-binder.version}<span style="color:#f92672">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/dependency&gt;</span></span></span></code></pre></div>
+<p>For Gradle users, add the following dependency to your project:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span>implementation <span style="color:#e6db74">&#34;com.oracle.database.spring.cloud-stream-binder:spring-cloud-stream-binder-oracle-txeventq:${txeventqStreamBinderVersion}&#34;</span></span></span></code></pre></div>
+<h3 id="stream-binder-permissions">Stream Binder Permissions</h3>
+<p>The database user producing/consuming events with the Stream Binder requires the following database permissions. Modify the username and tablespace grant as appropriate for your application:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> unlimited tablespace <span style="color:#66d9ef">to</span> testuser;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> select_catalog_role <span style="color:#66d9ef">to</span> testuser;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">execute</span> <span style="color:#66d9ef">on</span> dbms_aq <span style="color:#66d9ef">to</span> testuser;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">execute</span> <span style="color:#66d9ef">on</span> dbms_aqadm <span style="color:#66d9ef">to</span> testuser;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">execute</span> <span style="color:#66d9ef">on</span> dbms_aqin <span style="color:#66d9ef">to</span> testuser;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">execute</span> <span style="color:#66d9ef">on</span> dbms_aqjms_internal <span style="color:#66d9ef">to</span> testuser;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">execute</span> <span style="color:#66d9ef">on</span> dbms_teqk <span style="color:#66d9ef">to</span> testuser;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">execute</span> <span style="color:#66d9ef">on</span> DBMS_RESOURCE_MANAGER <span style="color:#66d9ef">to</span> testuser;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">on</span> sys.aq$_queue_shards <span style="color:#66d9ef">to</span> testuser;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">select</span> <span style="color:#66d9ef">on</span> user_queue_partition_assignment_table <span style="color:#66d9ef">to</span> testuser;</span></span></code></pre></div>
+<h3 id="stream-binder-database-connection">Stream Binder Database Connection</h3>
+<p>The Stream Binder uses a standard JDBC connection to produce and consume messages. With YAML-style Spring application properties, it&rsquo;ll look something like this:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">spring</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">datasource</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">username</span>: <span style="color:#ae81ff">${USERNAME}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">password</span>: <span style="color:#ae81ff">${PASSWORD}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">url</span>: <span style="color:#ae81ff">${JDBC_URL}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">driver-class-name</span>: <span style="color:#ae81ff">oracle.jdbc.OracleDriver</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">type</span>: <span style="color:#ae81ff">oracle.ucp.jdbc.PoolDataSourceImpl</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">oracleucp</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">initial-pool-size</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">min-pool-size</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">max-pool-size</span>: <span style="color:#ae81ff">30</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">connection-pool-name</span>: <span style="color:#ae81ff">StreamBinderSample</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">connection-factory-class-name</span>: <span style="color:#ae81ff">oracle.jdbc.pool.OracleDataSource</span></span></span></code></pre></div>
+<h2 id="suppliers-functions-and-consumers">Suppliers, Functions and Consumers</h2>
+<p>Spring Cloud Stream uses Java suppliers, functions, and consumers to abstract references to the underlying messaging system (in this case, Transactional Event Queues). To illustrate how this works, we&rsquo;ll create a basic Supplier, Function, and Consumer with Spring Cloud Stream.</p>
+<p>Our example workflow will use three functional interfaces:</p>
+<ul>
+<li>A Supplier that streams a phrase word-by-word</li>
+<li>A Function that processes each word from supplier and capitalizes it</li>
+<li>A Consumer that receives each capitalized word from the function and prints it to <code>stdout</code></li>
+</ul>
+<p>Once we&rsquo;ve implemented the Java interfaces, we&rsquo;ll wire them together with Spring Cloud Stream.</p>
+<h3 id="supplier-implementation">Supplier Implementation</h3>
+<p>The following Supplier implementation supplies a phrase word-by-word, indicating when it has processed the whole phrase.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f92672">import</span> java.util.concurrent.atomic.AtomicBoolean;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> java.util.concurrent.atomic.AtomicInteger;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> java.util.function.Supplier;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">WordSupplier</span> <span style="color:#66d9ef">implements</span> Supplier<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> String<span style="color:#f92672">[]</span> words;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> AtomicInteger idx <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> AtomicInteger(0);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> AtomicBoolean done <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> AtomicBoolean(<span style="color:#66d9ef">false</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">WordSupplier</span>(String phrase) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">words</span> <span style="color:#f92672">=</span> phrase.<span style="color:#a6e22e">split</span>(<span style="color:#e6db74">&#34; &#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Override</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> String <span style="color:#a6e22e">get</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> idx.<span style="color:#a6e22e">getAndAccumulate</span>(words.<span style="color:#a6e22e">length</span>, (x, y) <span style="color:#f92672">-&gt;</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (x <span style="color:#f92672">&lt;</span> words.<span style="color:#a6e22e">length</span> <span style="color:#f92672">-</span> 1) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> x <span style="color:#f92672">+</span> 1;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            done.<span style="color:#a6e22e">set</span>(<span style="color:#66d9ef">true</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> 0;
+</span></span><span style="display:flex;"><span>        });
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> words<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">boolean</span> <span style="color:#a6e22e">done</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> done.<span style="color:#a6e22e">get</span>();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<p>Next, let’s add Spring beans for our Supplier, a Function, and a Consumer. The <code>toUpperCase</code> Function takes a string and capitalizes it, and the <code>stdoutConsumer</code> Consumer prints each string it receives to <code>stdout</code>.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f92672">import</span> java.util.function.Consumer;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> java.util.function.Function;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.beans.factory.annotation.Value;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.context.annotation.Bean;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.context.annotation.Configuration;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Configuration</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">StreamConfiguration</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Input phrase for the producer</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Value</span>(<span style="color:#e6db74">&#34;${phrase}&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> String phrase;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Function, Capitalizes each input</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Function<span style="color:#f92672">&lt;</span>String, String<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">toUpperCase</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> String::toUpperCase;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Consumer, Prints each input</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> Consumer<span style="color:#f92672">&lt;</span>String<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">stdoutConsumer</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> s <span style="color:#f92672">-&gt;</span> System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;Consumed: &#34;</span> <span style="color:#f92672">+</span> s);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Supplier, WordSupplier</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> WordSupplier <span style="color:#a6e22e">wordSupplier</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">new</span> WordSupplier(phrase);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<h3 id="configure-beans-with-spring-cloud-stream">Configure Beans with Spring Cloud Stream</h3>
+<p>Returning to the application properties, let’s configure the Spring Cloud Stream bindings for each bean defined previously.</p>
+<p>In our binding configuration, the <code>wordSupplier</code> Supplier has the <code>toUpperCase</code> Function as a destination, and the <code>stdoutConsumer</code> Consumer reads from toUpperCase. The result of this acyclic configuration is that each word from the phrase is converted to uppercase and sent to stdout.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#75715e"># Input phrase for the wordSupplier</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">phrase</span>: <span style="color:#e6db74">&#34;Spring Cloud Stream simplifies event-driven microservices with powerful messaging capabilities.&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">spring</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">cloud</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">stream</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">bindings</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">wordSupplier-out-0</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># wordSupplier output</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">destination</span>: <span style="color:#ae81ff">toUpperCase-in-0</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">group</span>: <span style="color:#ae81ff">t1</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">producer</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">required-groups</span>:
+</span></span><span style="display:flex;"><span>              - <span style="color:#ae81ff">t1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">stdoutConsumer-in-0</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#75715e"># stdoutConsumer input</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">destination</span>: <span style="color:#ae81ff">toUpperCase-out-0</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#f92672">group</span>: <span style="color:#ae81ff">t1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">function</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># defines the stream flow, toUppercase bridges</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e"># wordSupplier and stdoutConsumer</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">definition</span>: <span style="color:#ae81ff">wordSupplier;toUpperCase;stdoutConsumer</span></span></span></code></pre></div>
+<p>If you’ve added the prior code to a Spring Boot application, you should see the following messages sent to <code>stdout</code> when it is run:</p>
+<div class="highlight wrap-code"><pre tabindex="0"><code>Consumed: SPRING
+Consumed: CLOUD
+Consumed: STREAM
+Consumed: SIMPLIFIES
+Consumed: EVENT-DRIVEN
+Consumed: MICROSERVICES
+Consumed: WITH
+Consumed: POWERFUL
+Consumed: MESSAGING
+Consumed: CAPABILITIES.</code></pre></div>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation">
+        <div id="R-header" class="default-animation">
+<img src="https://oracle.github.io/microservices-datadriven/transactional-event-queues//txeventq.png" height="100px">
+        </div>
+        <script>
+          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736354172";
+        </script>
+        <search><form action="/microservices-datadriven/transactional-event-queues/search/index.html" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+        <script>
+          var contentLangs=['en'];
+        </script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736354172" defer></script>
+      </div>
+      <div id="R-homelinks" class="default-animation homelinks">
+        <ul>
+          <li><a class="padding" href="/microservices-datadriven/transactional-event-queues/index.html"><i class="fa-fw fas fa-home"></i> Home</a></li>
+        </ul>
+        <hr class="padding">
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div id="R-shortcutmenu-home" class="R-sidebarmenu">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/getting-started/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/getting-started/index.html">Getting Started</a><ul id="R-subsections-87c0363912f379e0725cbe1d504c985c" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/kafka/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/kafka/index.html">Kafka APIs</a><ul id="R-subsections-d52caaae11e51c78d1067d1cd66f8e2c" class="collapsible-menu"></ul></li>
+            <li class="parent " data-nav-id="/microservices-datadriven/transactional-event-queues/spring-boot/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/spring-boot/index.html">Spring Boot Integration</a><ul id="R-subsections-bb4332c9282cf194277661b1ff0e2aba" class="collapsible-menu">
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/spring-boot/jms/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/spring-boot/jms/index.html">Spring JMS</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/spring-boot/kafka/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/spring-boot/kafka/index.html">Kafka Starter</a></li>
+            <li class="active " data-nav-id="/microservices-datadriven/transactional-event-queues/spring-boot/stream-binder/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/spring-boot/stream-binder/index.html">Spring Cloud Stream Binder</a></li></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/observability/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/observability/index.html">Performance and Observability</a><ul id="R-subsections-12c019d652c4753c0102c3d7c1b1aa94" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/aq-migration/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/aq-migration/index.html">Migrating From AQ</a><ul id="R-subsections-2d75d5e9d6442ae61e611785710400a6" class="collapsible-menu"></ul></li>
+          </ul>
+        </div>
+        <div id="R-shortcutmenu-shortcuts" class="R-sidebarmenu">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="https://github.com/oracle/microservices-datadriven"><a class="padding" href="https://github.com/oracle/microservices-datadriven" target="_blank"><i class='fa-fw fab fa-github'></i> GitHub repo</a></li>
+            <li class="" data-nav-id="https://bit.ly/OracleAI-microservices"><a class="padding" href="https://bit.ly/OracleAI-microservices" target="_blank"><i class='fa-fw fas fa-bookmark'></i> Oracle Backend for Microservices and AI</a></li>
+            <li class="" data-nav-id="https://github.com/oracle/spring-cloud-oracle"><a class="padding" href="https://github.com/oracle/spring-cloud-oracle" target="_blank"><i class='fa-fw fas fa-bookmark'></i> Spring Cloud Oracle</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/more/credits/"><a class="padding" href="/microservices-datadriven/transactional-event-queues/more/credits/"><i class='fa-fw fas fa-bullhorn'></i> Credits</a></li>
+          </ul>
+        </div>
+        <div class="padding footermargin footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter"></div>
+        <div id="R-menu-footer">
+          <hr class="padding default-animation footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter">
+          <div id="R-prefooter" class="footerLangSwitch footerVariantSwitch footerVisitedLinks">
+            <ul>
+              <li id="R-select-language-container" class="footerLangSwitch">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-language"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <label class="a11y-only" for="R-select-language">Language</label>
+                    <select id="R-select-language" onchange="location = this.querySelector( this.value ).dataset.url;">
+                      <option id="R-select-language-en" value="#R-select-language-en" data-url="/microservices-datadriven/transactional-event-queues/spring-boot/stream-binder/index.html" lang="en-us" selected></option>
+                    </select>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </li>
+              <li id="R-select-variant-container" class="footerVariantSwitch">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-paint-brush"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <label class="a11y-only" for="R-select-variant">Theme</label>
+                    <select id="R-select-variant" onchange="window.relearn.changeVariant( this.value );">
+                      <option id="R-select-variant-zen-light" value="zen-light" selected>Zen Light</option>
+                    </select>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+                <script>window.relearn.markVariant();</script>
+              </li>
+              <li class="footerVisitedLinks">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-history"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <button onclick="clearHistory();">Clear History</button>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div id="R-footer" class="footerFooter showFooter">
+	    <p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://www.oracle.com/">Oracle</a></p>
+		<p>Copyright &copy; 2022, 2024, <br>Oracle and/or its affiliates</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736354172" defer></script>
+  </body>
+</html>

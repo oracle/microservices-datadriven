@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.140.1">
+    <meta name="generator" content="Relearn 7.3.1">
+    <meta name="description" content="Java Message Service (JMS) is an API that provides a standardized way for Java applications to create, send, receive, and read messages in messaging systems. Spring JMS uses idiomatic APIs to produce and consume messages with JMS, using the JMSTemplate class and @JMSListener annotations for producers and consumers, respectively.
+In this section, we’ll implement a producer/consumer example using Spring JMS with Oracle Database Transactional Event Queues JMS APIs.
+Project Dependencies Configure Permissions and Create a JMS Queue Connect Spring JMS to Oracle Database JMSTemplate Producer Receive messages with @JMSListener Project Dependencies To start developing with the Spring JMS for Oracle Database Transactional Event Queues, add the oracle-spring-boot-starter-aqjms dependency to your Maven project, along with Spring Boot JDBC:">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Spring JMS :: Transactional Event Queues">
+    <meta name="twitter:description" content="Java Message Service (JMS) is an API that provides a standardized way for Java applications to create, send, receive, and read messages in messaging systems. Spring JMS uses idiomatic APIs to produce and consume messages with JMS, using the JMSTemplate class and @JMSListener annotations for producers and consumers, respectively.
+In this section, we’ll implement a producer/consumer example using Spring JMS with Oracle Database Transactional Event Queues JMS APIs.
+Project Dependencies Configure Permissions and Create a JMS Queue Connect Spring JMS to Oracle Database JMSTemplate Producer Receive messages with @JMSListener Project Dependencies To start developing with the Spring JMS for Oracle Database Transactional Event Queues, add the oracle-spring-boot-starter-aqjms dependency to your Maven project, along with Spring Boot JDBC:">
+    <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/transactional-event-queues/spring-boot/jms/index.html">
+    <meta property="og:site_name" content="Transactional Event Queues">
+    <meta property="og:title" content="Spring JMS :: Transactional Event Queues">
+    <meta property="og:description" content="Java Message Service (JMS) is an API that provides a standardized way for Java applications to create, send, receive, and read messages in messaging systems. Spring JMS uses idiomatic APIs to produce and consume messages with JMS, using the JMSTemplate class and @JMSListener annotations for producers and consumers, respectively.
+In this section, we’ll implement a producer/consumer example using Spring JMS with Oracle Database Transactional Event Queues JMS APIs.
+Project Dependencies Configure Permissions and Create a JMS Queue Connect Spring JMS to Oracle Database JMSTemplate Producer Receive messages with @JMSListener Project Dependencies To start developing with the Spring JMS for Oracle Database Transactional Event Queues, add the oracle-spring-boot-starter-aqjms dependency to your Maven project, along with Spring Boot JDBC:">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Spring Boot Integration">
+    <meta itemprop="name" content="Spring JMS :: Transactional Event Queues">
+    <meta itemprop="description" content="Java Message Service (JMS) is an API that provides a standardized way for Java applications to create, send, receive, and read messages in messaging systems. Spring JMS uses idiomatic APIs to produce and consume messages with JMS, using the JMSTemplate class and @JMSListener annotations for producers and consumers, respectively.
+In this section, we’ll implement a producer/consumer example using Spring JMS with Oracle Database Transactional Event Queues JMS APIs.
+Project Dependencies Configure Permissions and Create a JMS Queue Connect Spring JMS to Oracle Database JMSTemplate Producer Receive messages with @JMSListener Project Dependencies To start developing with the Spring JMS for Oracle Database Transactional Event Queues, add the oracle-spring-boot-starter-aqjms dependency to your Maven project, along with Spring Boot JDBC:">
+    <meta itemprop="wordCount" content="547">
+    <title>Spring JMS :: Transactional Event Queues</title>
+    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736354172" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736354172" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736354172" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736354172" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..\/..\/..';
+      window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/transactional-event-queues';
+      window.relearn.min = `.min`;
+      window.relearn.disableAnchorCopy=false;
+      window.relearn.disableAnchorScrolling=false;
+      // variant stuff
+      window.relearn.themevariants = [ 'zen-light' ];
+      window.relearn.customvariantname = "my-custom-variant";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        var select = document.querySelector("#R-select-variant");
+        if (select) {
+          select.value = variant;
+        }
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( variant == window.relearn.customvariantname ){
+        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+      // translations
+      window.T_Copy_to_clipboard = `Copy to clipboard`;
+      window.T_Copied_to_clipboard = `Copied to clipboard!`;
+      window.T_Copy_link_to_clipboard = `Copy link to clipboard`;
+      window.T_Link_copied_to_clipboard = `Copied link to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+    </script>
+  </head>
+  <body class="mobile-support html" data-url="/microservices-datadriven/transactional-event-queues/spring-boot/jms/index.html">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar">
+        <div class="topbar-wrapper">
+          <div class="topbar-sidebar-divider"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide"><button class="topbar-control" onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button>
+            </div>
+            <div class="topbar-button topbar-button-toc" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-list-alt"></i></button>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#project-dependencies">Project Dependencies</a></li>
+    <li><a href="#configure-permissions-and-create-a-jms-queue">Configure Permissions and Create a JMS Queue</a></li>
+    <li><a href="#connect-spring-jms-to-oracle-database">Connect Spring JMS to Oracle Database</a></li>
+    <li><a href="#jmstemplate-producer">JMSTemplate Producer</a></li>
+    <li><a href="#receive-messages-with-jmslistener">Receive messages with @JMSListener</a></li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="/microservices-datadriven/transactional-event-queues/index.html"><span itemprop="name">Transactional Event Queues</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="/microservices-datadriven/transactional-event-queues/spring-boot/index.html"><span itemprop="name">Spring Boot Integration</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><span itemprop="name">Spring JMS</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-prev" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show"><a class="topbar-control" href="/microservices-datadriven/transactional-event-queues/spring-boot/index.html" title="Spring Boot Integration (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a>
+            </div>
+            <div class="topbar-button topbar-button-next" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show"><a class="topbar-control" href="/microservices-datadriven/transactional-event-queues/spring-boot/kafka/index.html" title="Kafka Starter (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a>
+            </div>
+            <div class="topbar-button topbar-button-more" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable spring-boot" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="spring-jms">Spring JMS</h1>
+
+<p>Java Message Service (JMS) is an API that provides a standardized way for Java applications to create, send, receive, and read messages in messaging systems. <a href="https://spring.io/guides/gs/messaging-jms" rel="external" target="_blank">Spring JMS</a> uses idiomatic APIs to produce and consume messages with JMS, using the JMSTemplate class and @JMSListener annotations for producers and consumers, respectively.</p>
+<p>In this section, we’ll implement a producer/consumer example using Spring JMS with Oracle Database Transactional Event Queues JMS APIs.</p>
+<ul>
+<li><a href="/microservices-datadriven/transactional-event-queues/spring-boot/jms/index.html#project-dependencies">Project Dependencies</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/spring-boot/jms/index.html#configure-permissions-and-create-a-jms-queue">Configure Permissions and Create a JMS Queue</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/spring-boot/jms/index.html#connect-spring-jms-to-oracle-database">Connect Spring JMS to Oracle Database</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/spring-boot/jms/index.html#jmstemplate-producer">JMSTemplate Producer</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/spring-boot/jms/index.html#receive-messages-with-jmslistener">Receive messages with @JMSListener</a></li>
+</ul>
+<h2 id="project-dependencies">Project Dependencies</h2>
+<p>To start developing with the Spring JMS for Oracle Database Transactional Event Queues, add the <a href="https://central.sonatype.com/artifact/com.oracle.database.spring/oracle-spring-boot-starter-aqjms" rel="external" target="_blank">oracle-spring-boot-starter-aqjms</a> dependency to your Maven project, along with Spring Boot JDBC:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#f92672">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;groupId&gt;</span>org.springframework.boot<span style="color:#f92672">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;artifactId&gt;</span>spring-boot-starter-data-jdbc<span style="color:#f92672">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;version&gt;</span>${spring-boot.version}<span style="color:#f92672">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/dependency&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;groupId&gt;</span>com.oracle.database.spring<span style="color:#f92672">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;artifactId&gt;</span>oracle-spring-boot-starter-aqjms<span style="color:#f92672">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&lt;version&gt;</span>${oracle-database-starters.version}<span style="color:#f92672">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/dependency&gt;</span></span></span></code></pre></div>
+<p>For Gradle users, add the following dependency to your project:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span>implementation <span style="color:#e6db74">&#34;org.springframework.boot:spring-boot-starter-data-jdbc:${springBootVersion}&#34;</span>
+</span></span><span style="display:flex;"><span>implementation <span style="color:#e6db74">&#34;com.oracle.database.spring:oracle-spring-boot-starter-aqjms:${oracleDatabaseStartersVersion}&#34;</span></span></span></code></pre></div>
+<h2 id="configure-permissions-and-create-a-jms-queue">Configure Permissions and Create a JMS Queue</h2>
+<p>The following SQL script grants the necessary permissions to use Transactional Event Queues with JMS to a database user, and then creates a Transactional Event Queue with a <a href="/microservices-datadriven/transactional-event-queues/getting-started/core-concepts/index.html#dbms_aqadmjms_type">JMS Payload Type</a> for use by that user. We’ll dynamically invoke this script in our test later on, and it is provided here for reference purposes.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> aq_user_role <span style="color:#66d9ef">to</span> testuser;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">execute</span> <span style="color:#66d9ef">on</span> dbms_aq <span style="color:#66d9ef">to</span> testuser;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">execute</span> <span style="color:#66d9ef">on</span> dbms_aqadm <span style="color:#66d9ef">to</span> testuser;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">execute</span> <span style="color:#66d9ef">ON</span> dbms_aqin <span style="color:#66d9ef">TO</span> testuser;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">execute</span> <span style="color:#66d9ef">ON</span> dbms_aqjms <span style="color:#66d9ef">TO</span> testuser;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">execute</span> <span style="color:#66d9ef">on</span> dbms_teqk <span style="color:#66d9ef">to</span> testuser;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- Create a JMS queue
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    dbms_aqadm.create_transactional_event_queue(
+</span></span><span style="display:flex;"><span>            queue_name         <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;testuser.testqueue&#39;</span>,
+</span></span><span style="display:flex;"><span>            queue_payload_type <span style="color:#f92672">=&gt;</span> DBMS_AQADM.JMS_TYPE,
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">-- FALSE means queues can only have one consumer for each message. This is the default.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#75715e">-- TRUE means queues created in the table can have multiple consumers for each message.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            multiple_consumers <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- Start the queue
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    dbms_aqadm.start_queue(
+</span></span><span style="display:flex;"><span>            queue_name         <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;testuser.testqueue&#39;</span>
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<h2 id="connect-spring-jms-to-oracle-database">Connect Spring JMS to Oracle Database</h2>
+<p>Spring JMS with Oracle Database Transactional Event Queues uses a standard Oracle Database JDBC connection to produce and consume messages. To configure this with YAML-style Spring datasource properties, it&rsquo;ll look something like this (<code>src/main/resources/application.yaml</code>):</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">spring</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">datasource</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">username</span>: <span style="color:#ae81ff">${USERNAME}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">password</span>: <span style="color:#ae81ff">${PASSWORD}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">url</span>: <span style="color:#ae81ff">${JDBC_URL}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">driver-class-name</span>: <span style="color:#ae81ff">oracle.jdbc.OracleDriver</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">type</span>: <span style="color:#ae81ff">oracle.ucp.jdbc.PoolDataSourceImpl</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">oracleucp</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">initial-pool-size</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">min-pool-size</span>: <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">max-pool-size</span>: <span style="color:#ae81ff">30</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">connection-pool-name</span>: <span style="color:#ae81ff">UCPSampleApplication</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">connection-factory-class-name</span>: <span style="color:#ae81ff">oracle.jdbc.pool.OracleDataSource</span></span></span></code></pre></div>
+<p>Additionally, you should define a JMS ConnectionFactory bean using the AQjmsFactory class. The presence of the ConnectionFactory bean ensures Spring JMS uses Oracle Database Transactional Event Queues as the JMS provider for message operations.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#a6e22e">@Bean</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> ConnectionFactory <span style="color:#a6e22e">aqJmsConnectionFactory</span>(DataSource ds) <span style="color:#66d9ef">throws</span> JMSException {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> AQjmsFactory.<span style="color:#a6e22e">getConnectionFactory</span>(ds);
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<h2 id="jmstemplate-producer">JMSTemplate Producer</h2>
+<p>The Spring JMSTemplate bean provides an interface for JMS operations, including producing and consuming messages. The following class uses the <code>jmsTemplate.convertAndSend()</code> method to produce a message to a queue.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.beans.factory.annotation.Value;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.jms.core.JmsTemplate;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.stereotype.Component;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Component</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Producer</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> JmsTemplate jmsTemplate;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">final</span> String queueName;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#a6e22e">Producer</span>(JmsTemplate jmsTemplate,
+</span></span><span style="display:flex;"><span>                    <span style="color:#a6e22e">@Value</span>(<span style="color:#e6db74">&#34;${txeventq.queue.name:testqueue}&#34;</span>) String queueName) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">jmsTemplate</span> <span style="color:#f92672">=</span> jmsTemplate;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">queueName</span> <span style="color:#f92672">=</span> queueName;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">enqueue</span>(String message) {
+</span></span><span style="display:flex;"><span>        jmsTemplate.<span style="color:#a6e22e">convertAndSend</span>(queueName, message);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<h2 id="receive-messages-with-jmslistener">Receive messages with @JMSListener</h2>
+<p>The <code>@JMSListener</code> annotation may be applied to a method to configure a receiver for messages from a JMS queue.</p>
+<p>The following class uses the @JMSListener annotation to read messages from a queue named <code>testqueue</code>, printing each message to stdout.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.beans.factory.annotation.Value;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.jms.annotation.JmsListener;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.springframework.stereotype.Component;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">@Component</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Consumer</span> {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">@JmsListener</span>(destination <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;${txeventq.queue.name:testqueue}&#34;</span>, id <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;sampleConsumer&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">receiveMessage</span>(String message) {
+</span></span><span style="display:flex;"><span>        System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">printf</span>(<span style="color:#e6db74">&#34;Received message: %s%n&#34;</span>, message);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation">
+        <div id="R-header" class="default-animation">
+<img src="https://oracle.github.io/microservices-datadriven/transactional-event-queues//txeventq.png" height="100px">
+        </div>
+        <script>
+          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736354172";
+        </script>
+        <search><form action="/microservices-datadriven/transactional-event-queues/search/index.html" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+        <script>
+          var contentLangs=['en'];
+        </script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736354172" defer></script>
+      </div>
+      <div id="R-homelinks" class="default-animation homelinks">
+        <ul>
+          <li><a class="padding" href="/microservices-datadriven/transactional-event-queues/index.html"><i class="fa-fw fas fa-home"></i> Home</a></li>
+        </ul>
+        <hr class="padding">
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div id="R-shortcutmenu-home" class="R-sidebarmenu">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/getting-started/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/getting-started/index.html">Getting Started</a><ul id="R-subsections-87c0363912f379e0725cbe1d504c985c" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/kafka/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/kafka/index.html">Kafka APIs</a><ul id="R-subsections-d52caaae11e51c78d1067d1cd66f8e2c" class="collapsible-menu"></ul></li>
+            <li class="parent " data-nav-id="/microservices-datadriven/transactional-event-queues/spring-boot/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/spring-boot/index.html">Spring Boot Integration</a><ul id="R-subsections-bb4332c9282cf194277661b1ff0e2aba" class="collapsible-menu">
+            <li class="active " data-nav-id="/microservices-datadriven/transactional-event-queues/spring-boot/jms/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/spring-boot/jms/index.html">Spring JMS</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/spring-boot/kafka/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/spring-boot/kafka/index.html">Kafka Starter</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/spring-boot/stream-binder/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/spring-boot/stream-binder/index.html">Spring Cloud Stream Binder</a></li></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/observability/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/observability/index.html">Performance and Observability</a><ul id="R-subsections-12c019d652c4753c0102c3d7c1b1aa94" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/aq-migration/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/aq-migration/index.html">Migrating From AQ</a><ul id="R-subsections-2d75d5e9d6442ae61e611785710400a6" class="collapsible-menu"></ul></li>
+          </ul>
+        </div>
+        <div id="R-shortcutmenu-shortcuts" class="R-sidebarmenu">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="https://github.com/oracle/microservices-datadriven"><a class="padding" href="https://github.com/oracle/microservices-datadriven" target="_blank"><i class='fa-fw fab fa-github'></i> GitHub repo</a></li>
+            <li class="" data-nav-id="https://bit.ly/OracleAI-microservices"><a class="padding" href="https://bit.ly/OracleAI-microservices" target="_blank"><i class='fa-fw fas fa-bookmark'></i> Oracle Backend for Microservices and AI</a></li>
+            <li class="" data-nav-id="https://github.com/oracle/spring-cloud-oracle"><a class="padding" href="https://github.com/oracle/spring-cloud-oracle" target="_blank"><i class='fa-fw fas fa-bookmark'></i> Spring Cloud Oracle</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/more/credits/"><a class="padding" href="/microservices-datadriven/transactional-event-queues/more/credits/"><i class='fa-fw fas fa-bullhorn'></i> Credits</a></li>
+          </ul>
+        </div>
+        <div class="padding footermargin footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter"></div>
+        <div id="R-menu-footer">
+          <hr class="padding default-animation footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter">
+          <div id="R-prefooter" class="footerLangSwitch footerVariantSwitch footerVisitedLinks">
+            <ul>
+              <li id="R-select-language-container" class="footerLangSwitch">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-language"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <label class="a11y-only" for="R-select-language">Language</label>
+                    <select id="R-select-language" onchange="location = this.querySelector( this.value ).dataset.url;">
+                      <option id="R-select-language-en" value="#R-select-language-en" data-url="/microservices-datadriven/transactional-event-queues/spring-boot/jms/index.html" lang="en-us" selected></option>
+                    </select>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </li>
+              <li id="R-select-variant-container" class="footerVariantSwitch">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-paint-brush"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <label class="a11y-only" for="R-select-variant">Theme</label>
+                    <select id="R-select-variant" onchange="window.relearn.changeVariant( this.value );">
+                      <option id="R-select-variant-zen-light" value="zen-light" selected>Zen Light</option>
+                    </select>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+                <script>window.relearn.markVariant();</script>
+              </li>
+              <li class="footerVisitedLinks">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-history"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <button onclick="clearHistory();">Clear History</button>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div id="R-footer" class="footerFooter showFooter">
+	    <p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://www.oracle.com/">Oracle</a></p>
+		<p>Copyright &copy; 2022, 2024, <br>Oracle and/or its affiliates</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736354172" defer></script>
+  </body>
+</html>

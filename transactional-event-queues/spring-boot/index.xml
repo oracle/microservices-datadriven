@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Spring Boot Integration :: Transactional Event Queues</title>
+    <link>https://oracle.github.io/microservices-datadriven/transactional-event-queues/spring-boot/index.html</link>
+    <description>Oracle Transactional Event Queues (TxEventQ) features several Spring Boot integrations, allowing application developers to work with TxEventQ using common Spring idioms and starters. This module explores the various integration points and best practices for leveraging TxEventQ within the Spring ecosystem.&#xA;Spring Boot Starter for AQ/JMS The Oracle Spring Boot Starter for AQ/JMS simplifies TxEventQ integration with Spring and JMS. Key features include:&#xA;Automatic configuration of JMS ConnectionFactory Support for transactional message processing Easy setup with Maven or Gradle dependencies Spring Boot Starter for Kafka Java Client for Oracle Database Transactional Event Queues The Kafka Java Client for Oracle Database Transactional Event Queues Spring Boot Starter pulls in all necessary dependencies to work with Transactional Event Queues Kafka Java API using Spring Boot.</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="https://oracle.github.io/microservices-datadriven/transactional-event-queues/spring-boot/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Spring JMS</title>
+      <link>https://oracle.github.io/microservices-datadriven/transactional-event-queues/spring-boot/jms/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://oracle.github.io/microservices-datadriven/transactional-event-queues/spring-boot/jms/index.html</guid>
+      <description>Java Message Service (JMS) is an API that provides a standardized way for Java applications to create, send, receive, and read messages in messaging systems. Spring JMS uses idiomatic APIs to produce and consume messages with JMS, using the JMSTemplate class and @JMSListener annotations for producers and consumers, respectively.&#xA;In this section, we’ll implement a producer/consumer example using Spring JMS with Oracle Database Transactional Event Queues JMS APIs.&#xA;Project Dependencies Configure Permissions and Create a JMS Queue Connect Spring JMS to Oracle Database JMSTemplate Producer Receive messages with @JMSListener Project Dependencies To start developing with the Spring JMS for Oracle Database Transactional Event Queues, add the oracle-spring-boot-starter-aqjms dependency to your Maven project, along with Spring Boot JDBC:</description>
+    </item>
+    <item>
+      <title>Kafka Starter</title>
+      <link>https://oracle.github.io/microservices-datadriven/transactional-event-queues/spring-boot/kafka/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://oracle.github.io/microservices-datadriven/transactional-event-queues/spring-boot/kafka/index.html</guid>
+      <description>This section provides information on getting started using the Kafka Java Client for Oracle Database Transactional Event Queues from a Spring Boot application.&#xA;You can learn more about the Kafka APIs of Oracle Database Transactional Event Queues in the Kafka chapter.&#xA;Project Dependencies The Kafka Java Client for Oracle Database Transactional Event Queues Spring Boot Starter pulls in all necessary dependencies for developers to work with Transactional Event Queues’ Kafka Java API using Spring Boot.</description>
+    </item>
+    <item>
+      <title>Spring Cloud Stream Binder</title>
+      <link>https://oracle.github.io/microservices-datadriven/transactional-event-queues/spring-boot/stream-binder/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://oracle.github.io/microservices-datadriven/transactional-event-queues/spring-boot/stream-binder/index.html</guid>
+      <description>Spring Cloud Stream is a Java framework that is designed for building event-driven microservices backed by a scalable, fault-tolerant messaging system. The Oracle Database Transactional Event Queues stream binder implementation allows developers to leverage Oracle’s database messaging platform within the Spring Cloud Stream ecosystem.&#xA;This section covers the key features of the Spring Cloud Stream Binder for Oracle Database Transactional Event Queues and getting started examples for developers.&#xA;Key Features of the Transactional Event Queues Stream Binder The Spring Cloud Stream Binder for Oracle Database Transactional Event Queues provides a high-throughput, reliable messaging platform built directly into the database.</description>
+    </item>
+  </channel>
+</rss>

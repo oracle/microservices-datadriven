@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.140.1">
+    <meta name="generator" content="Relearn 7.3.1">
+    <meta name="description" content="Performance tuning is critical for ensuring the efficiency, reliability, and responsiveness of TxEventQ event processing. As systems scale and the volume of events increases, poor optimizations can lead to latency, bottlenecks, or even system failures. By applying the techniques described in this section, TxEventQ administrators can significantly enhance throughput, reduce latency, and improve the stability of event driven applications.
+Partitioning/Sharding and Multiple Consumers Creating a Partitioned Kafka Topic Message Cache Tuning System Parameters DB_BLOCK_SIZE JAVA_POOL_SIZE OPEN_CURSORS PGA_AGGREGATE_TARGET PROCESSES SESSIONS SGA_TARGET STREAMS_POOL_SIZE Partitioning/Sharding and Multiple Consumers Oracle Database automatically manages the partitions (also known as shards) of a queue, which corresponds to a table partition. When messages are enqueued, each message is routed to a specific partition of the queue. Messages within a partition maintain a strict, session-level ordering.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Performance Tuning :: Transactional Event Queues">
+    <meta name="twitter:description" content="Performance tuning is critical for ensuring the efficiency, reliability, and responsiveness of TxEventQ event processing. As systems scale and the volume of events increases, poor optimizations can lead to latency, bottlenecks, or even system failures. By applying the techniques described in this section, TxEventQ administrators can significantly enhance throughput, reduce latency, and improve the stability of event driven applications.
+Partitioning/Sharding and Multiple Consumers Creating a Partitioned Kafka Topic Message Cache Tuning System Parameters DB_BLOCK_SIZE JAVA_POOL_SIZE OPEN_CURSORS PGA_AGGREGATE_TARGET PROCESSES SESSIONS SGA_TARGET STREAMS_POOL_SIZE Partitioning/Sharding and Multiple Consumers Oracle Database automatically manages the partitions (also known as shards) of a queue, which corresponds to a table partition. When messages are enqueued, each message is routed to a specific partition of the queue. Messages within a partition maintain a strict, session-level ordering.">
+    <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/transactional-event-queues/observability/tuning/index.html">
+    <meta property="og:site_name" content="Transactional Event Queues">
+    <meta property="og:title" content="Performance Tuning :: Transactional Event Queues">
+    <meta property="og:description" content="Performance tuning is critical for ensuring the efficiency, reliability, and responsiveness of TxEventQ event processing. As systems scale and the volume of events increases, poor optimizations can lead to latency, bottlenecks, or even system failures. By applying the techniques described in this section, TxEventQ administrators can significantly enhance throughput, reduce latency, and improve the stability of event driven applications.
+Partitioning/Sharding and Multiple Consumers Creating a Partitioned Kafka Topic Message Cache Tuning System Parameters DB_BLOCK_SIZE JAVA_POOL_SIZE OPEN_CURSORS PGA_AGGREGATE_TARGET PROCESSES SESSIONS SGA_TARGET STREAMS_POOL_SIZE Partitioning/Sharding and Multiple Consumers Oracle Database automatically manages the partitions (also known as shards) of a queue, which corresponds to a table partition. When messages are enqueued, each message is routed to a specific partition of the queue. Messages within a partition maintain a strict, session-level ordering.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Performance and Observability">
+    <meta itemprop="name" content="Performance Tuning :: Transactional Event Queues">
+    <meta itemprop="description" content="Performance tuning is critical for ensuring the efficiency, reliability, and responsiveness of TxEventQ event processing. As systems scale and the volume of events increases, poor optimizations can lead to latency, bottlenecks, or even system failures. By applying the techniques described in this section, TxEventQ administrators can significantly enhance throughput, reduce latency, and improve the stability of event driven applications.
+Partitioning/Sharding and Multiple Consumers Creating a Partitioned Kafka Topic Message Cache Tuning System Parameters DB_BLOCK_SIZE JAVA_POOL_SIZE OPEN_CURSORS PGA_AGGREGATE_TARGET PROCESSES SESSIONS SGA_TARGET STREAMS_POOL_SIZE Partitioning/Sharding and Multiple Consumers Oracle Database automatically manages the partitions (also known as shards) of a queue, which corresponds to a table partition. When messages are enqueued, each message is routed to a specific partition of the queue. Messages within a partition maintain a strict, session-level ordering.">
+    <meta itemprop="wordCount" content="1274">
+    <title>Performance Tuning :: Transactional Event Queues</title>
+    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736354172" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736354172" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736354172" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736354172" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..\/..\/..';
+      window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/transactional-event-queues';
+      window.relearn.min = `.min`;
+      window.relearn.disableAnchorCopy=false;
+      window.relearn.disableAnchorScrolling=false;
+      // variant stuff
+      window.relearn.themevariants = [ 'zen-light' ];
+      window.relearn.customvariantname = "my-custom-variant";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        var select = document.querySelector("#R-select-variant");
+        if (select) {
+          select.value = variant;
+        }
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( variant == window.relearn.customvariantname ){
+        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+      // translations
+      window.T_Copy_to_clipboard = `Copy to clipboard`;
+      window.T_Copied_to_clipboard = `Copied to clipboard!`;
+      window.T_Copy_link_to_clipboard = `Copy link to clipboard`;
+      window.T_Link_copied_to_clipboard = `Copied link to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+    </script>
+  </head>
+  <body class="mobile-support html" data-url="/microservices-datadriven/transactional-event-queues/observability/tuning/index.html">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar">
+        <div class="topbar-wrapper">
+          <div class="topbar-sidebar-divider"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide"><button class="topbar-control" onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button>
+            </div>
+            <div class="topbar-button topbar-button-toc" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-list-alt"></i></button>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#partitioningsharding-and-multiple-consumers">Partitioning/Sharding and Multiple Consumers</a>
+      <ul>
+        <li><a href="#creating-a-partitioned-kafka-topic">Creating a Partitioned Kafka Topic</a></li>
+        <li><a href="#message-cache">Message Cache</a></li>
+      </ul>
+    </li>
+    <li><a href="#tuning-system-parameters">Tuning System Parameters</a>
+      <ul>
+        <li><a href="#db_block_sizehttpsdocsoraclecomendatabaseoracleoracle-database23refrndb_block_sizehtml"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/DB_BLOCK_SIZE.html">DB_BLOCK_SIZE</a></a></li>
+        <li><a href="#java_pool_sizehttpsdocsoraclecomendatabaseoracleoracle-database23refrnjava_pool_sizehtml"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/JAVA_POOL_SIZE.html">JAVA_POOL_SIZE</a></a></li>
+        <li><a href="#open_cursorshttpsdocsoraclecomendatabaseoracleoracle-database23refrnopen_cursorshtml"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/OPEN_CURSORS.html">OPEN_CURSORS</a></a></li>
+        <li><a href="#pga_aggregate_targethttpsdocsoraclecomendatabaseoracleoracle-database23refrnpga_aggregate_targethtml"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/PGA_AGGREGATE_TARGET.html">PGA_AGGREGATE_TARGET</a></a></li>
+        <li><a href="#processeshttpsdocsoraclecomendatabaseoracleoracle-database23refrnprocesseshtml"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/PROCESSES.html">PROCESSES</a></a></li>
+        <li><a href="#sessionshttpsdocsoraclecomendatabaseoracleoracle-database23refrnsessionshtml"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/SESSIONS.html">SESSIONS</a></a></li>
+        <li><a href="#sga_targethttpsdocsoraclecomendatabaseoracleoracle-database23refrnsga_targethtml"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/SGA_TARGET.html">SGA_TARGET</a></a></li>
+        <li><a href="#streams_pool_sizehttpsdocsoraclecomendatabaseoracleoracle-database23refrnstreams_pool_sizehtml"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/STREAMS_POOL_SIZE.html">STREAMS_POOL_SIZE</a></a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="/microservices-datadriven/transactional-event-queues/index.html"><span itemprop="name">Transactional Event Queues</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="/microservices-datadriven/transactional-event-queues/observability/index.html"><span itemprop="name">Performance and Observability</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><span itemprop="name">Performance Tuning</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-prev" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show"><a class="topbar-control" href="/microservices-datadriven/transactional-event-queues/observability/exporter/index.html" title="Database Monitoring Exporter (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a>
+            </div>
+            <div class="topbar-button topbar-button-next" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show"><a class="topbar-control" href="/microservices-datadriven/transactional-event-queues/aq-migration/index.html" title="Migrating From AQ (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a>
+            </div>
+            <div class="topbar-button topbar-button-more" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable observability" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="performance-tuning">Performance Tuning</h1>
+
+<p>Performance tuning is critical for ensuring the efficiency, reliability, and responsiveness of TxEventQ event processing. As systems scale and the volume of events increases, poor optimizations can lead to latency, bottlenecks, or even system failures. By applying the techniques described in this section, TxEventQ administrators can significantly enhance throughput, reduce latency, and improve the stability of event driven applications.</p>
+<ul>
+<li><a href="/microservices-datadriven/transactional-event-queues/observability/tuning/index.html#partitioningsharding-and-multiple-consumers">Partitioning/Sharding and Multiple Consumers</a>
+<ul>
+<li><a href="/microservices-datadriven/transactional-event-queues/observability/tuning/index.html#creating-a-partitioned-kafka-topic">Creating a Partitioned Kafka Topic</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/observability/tuning/index.html#message-cache">Message Cache</a></li>
+</ul>
+</li>
+<li><a href="/microservices-datadriven/transactional-event-queues/observability/tuning/index.html#tuning-system-parameters">Tuning System Parameters</a>
+<ul>
+<li><a href="/microservices-datadriven/transactional-event-queues/observability/tuning/index.html#db_block_size">DB_BLOCK_SIZE</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/observability/tuning/index.html#java_pool_size">JAVA_POOL_SIZE</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/observability/tuning/index.html#open_cursors">OPEN_CURSORS</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/observability/tuning/index.html#pga_aggregate_target">PGA_AGGREGATE_TARGET</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/observability/tuning/index.html#processes">PROCESSES</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/observability/tuning/index.html#sessions">SESSIONS</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/observability/tuning/index.html#sga_target">SGA_TARGET</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/observability/tuning/index.html#streams_pool_size">STREAMS_POOL_SIZE</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="partitioningsharding-and-multiple-consumers">Partitioning/Sharding and Multiple Consumers</h2>
+<p>Oracle Database automatically manages the partitions (also known as shards) of a queue, which corresponds to a table partition. When messages are enqueued, each message is routed to a specific partition of the queue. Messages within a partition maintain a strict, session-level ordering.</p>
+<p>As queue volume fluctuates, partitions may be dynamically created as necessary, such as when the queue table expands due to a message backlog. Once all messages are dequeued and no longer needed, the partition is truncated and made available for reuse. A higher number of partitions per queue improves dequeue performance through consumer parallelization, but requires additional memory and database resources.</p>
+<p>If you wish to manually set the number of partitions for a queue, you may do so using the <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQADM.html#GUID-E592137F-BB8E-49A2-80C2-C055358566C9" rel="external" target="_blank">SET_QUEUE_PARAMETER</a> procedure. The following SQL script creates a queue, and configures it to have 5 partitions/shards and key based enqueue. Key based enqueue lets producers route messages to a specific shard by providing a message key at enqueue time.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>    dbms_aqadm.create_transactional_event_queue(
+</span></span><span style="display:flex;"><span>            queue_name         <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;partitioned_queue&#39;</span>,
+</span></span><span style="display:flex;"><span>            queue_payload_type <span style="color:#f92672">=&gt;</span> DBMS_AQADM.JMS_TYPE,
+</span></span><span style="display:flex;"><span>            multiple_consumers <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- Set the queue to have 5 partitions/shards
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    dbms_aqadm.set_queue_parameter(<span style="color:#e6db74">&#39;partitioned_queue&#39;</span>, <span style="color:#e6db74">&#39;SHARD_NUM&#39;</span>, <span style="color:#ae81ff">5</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- The partition/shard for enqueued messages is determined by the message key
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    dbms_aqadm.set_queue_parameter(<span style="color:#e6db74">&#39;partitioned_queue&#39;</span>, <span style="color:#e6db74">&#39;KEY_BASED_ENQUEUE&#39;</span>, <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- Start the queue
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    dbms_aqadm.start_queue(
+</span></span><span style="display:flex;"><span>            queue_name         <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;partitioned_queue&#39;</span>
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<p>It is recommended to avoid creating global indexes on the partitioned table that backs a queue. Local indexes are generally not recommended either and may result in performance degradation.</p>
+<h3 id="creating-a-partitioned-kafka-topic">Creating a Partitioned Kafka Topic</h3>
+<p>The following Java snippet creates a TxEventQ topic with 5 partitions using the <a href="https://github.com/oracle/okafka" rel="external" target="_blank">Kafka Java Client for Oracle Database Transactional Event Queues</a>. The <code>my_topic</code> topic may have up to 5 distinct consumer threads per consumer group, increasing parallelization.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>Properties props <span style="color:#f92672">=</span> <span style="color:#75715e">// Oracle Database connection properties</span>
+</span></span><span style="display:flex;"><span>NewTopic topic <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> NewTopic(<span style="color:#e6db74">&#34;my_topic&#34;</span>, 5, (<span style="color:#66d9ef">short</span>) 1);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">try</span> (Admin admin <span style="color:#f92672">=</span> AdminClient.<span style="color:#a6e22e">create</span>(props)) {
+</span></span><span style="display:flex;"><span>    admin.<span style="color:#a6e22e">createTopics</span>(Collections.<span style="color:#a6e22e">singletonList</span>(topic))
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">all</span>()
+</span></span><span style="display:flex;"><span>            .<span style="color:#a6e22e">get</span>();
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">catch</span> (ExecutionException <span style="color:#f92672">|</span> InterruptedException e) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Handle topic creation exception</span>
+</span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
+<p>Note that you can use as many producers per topic as required, though it is recommended to ensure consumers are capable of consuming messages <em>at least</em> as fast as they are produced to avoid creating a message backlog and decreasing message throughput. For additional resources and examples related to developing with Kafka APIs for TxEventQ, see the <a href="/microservices-datadriven/transactional-event-queues/kafka/index.html">Kafka chapter</a>.</p>
+<h3 id="message-cache">Message Cache</h3>
+<p>TxEventQ includes a specialized message cache that allows administrators to balance <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/dbiad/db_sga.html" rel="external" target="_blank">System Global Area (SGA)</a> usage and queue performance. Management of TxEventQ&rsquo;s SGA usage benefits throughput, reduces latency, and allows greater concurrency. When paired with partitioning, message caching reduces the need for certain queries, DML operations, and indexes. The cache is most effective when consumers can keep up with producers, and when it is large enough to store the messages (including payloads) for all consumers and producers for using TxEventQ.</p>
+<p>The message cache uses the Oracle Database Streams pool. You can fine-tune the memory allocation for the Streams pool using the DBMS_AQADM <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQADM.html#GUID-773FA544-1450-4A9E-BAA7-08ACF059D3EB" rel="external" target="_blank">SET_MIN_STREAMS_POOL</a> and <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQADM.html#GUID-9375E6C8-1BC0-4E45-8045-143927DD751C" rel="external" target="_blank">SET_MAX_STREAMS_POOL</a> procedures.</p>
+<h2 id="tuning-system-parameters">Tuning System Parameters</h2>
+<p>System parameters can be modified as appropriate for your database installation and event volume to improve TxEventQ performance. This section describes key parameters for optimizing TxEventQ and provides a refresher on working with system parameters.</p>
+<p>To update a system parameter, use the <code>ALTER SYSTEM</code> command. The following statement sets the SGA_TARGET parameter to 2 GB.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">alter</span> <span style="color:#66d9ef">system</span> <span style="color:#66d9ef">set</span> sga_target <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span><span style="color:#66d9ef">G</span> <span style="color:#66d9ef">scope</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">both</span>;</span></span></code></pre></div>
+<p>The scope of a parameter may be MEMORY, SPFILE, or BOTH:</p>
+<ul>
+<li>MEMORY: changes are applied to the running instance without updating the parameter file.</li>
+<li>SPFILE: changes are applied to the parameter file and are available on the next restart.</li>
+<li>BOTH: changes are applied dynamically to the running instance, updating both memory and the parameter file.</li>
+</ul>
+<p>The following query retrieves the current value of the SGA_TARGET parameter:</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">select</span> name, value, isdefault, issys_modifiable, ismodified
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">from</span>   v$parameter
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">where</span>  name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;sga_target&#39;</span>;</span></span></code></pre></div>
+<h3 id="db_block_sizehttpsdocsoraclecomendatabaseoracleoracle-database23refrndb_block_sizehtml"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/DB_BLOCK_SIZE.html" rel="external" target="_blank">DB_BLOCK_SIZE</a></h3>
+<p>The default block size of 8k is recommended. The block size of a database cannot be changed after database creation.</p>
+<h3 id="java_pool_sizehttpsdocsoraclecomendatabaseoracleoracle-database23refrnjava_pool_sizehtml"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/JAVA_POOL_SIZE.html" rel="external" target="_blank">JAVA_POOL_SIZE</a></h3>
+<p>The JAVA_POOL_SIZE parameter specifies the size (in bytes) of the Java pool, used by the Java memory manager for Java-related operations like method and class definitions, and Java objects during execution. If the SGA_TARGET is not set, it defaults to 24 MB. JAVA_POOL_SIZE is modifiable via ALTER SYSTEM, and its range depends on the operating system.</p>
+<h3 id="open_cursorshttpsdocsoraclecomendatabaseoracleoracle-database23refrnopen_cursorshtml"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/OPEN_CURSORS.html" rel="external" target="_blank">OPEN_CURSORS</a></h3>
+<p>The OPEN_CURSORS parameter defines the maximum number of open cursors a session can have in Oracle. The default value is 50, and it can be adjusted between 0 and 65535. If you are running a large amount of producers and consumers, it’s essential to set this value high enough to avoid running out of cursors. You can modify OPEN_CURSORS using the ALTER SYSTEM command.</p>
+<h3 id="pga_aggregate_targethttpsdocsoraclecomendatabaseoracleoracle-database23refrnpga_aggregate_targethtml"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/PGA_AGGREGATE_TARGET.html" rel="external" target="_blank">PGA_AGGREGATE_TARGET</a></h3>
+<p>The PGA_AGGREGATE_TARGET parameter specifies the target total memory available for the Program Global Area (PGA), which is used by server processes for tasks like sorting and joining. The default is 10 MB or 20% of the SGA size, whichever is greater. It is modifiable and helps optimize SQL operations by adjusting memory for working areas. When set to 0, it changes memory management to manual.</p>
+<p>To set a hard limit for aggregate PGA memory, use the PGA_AGGREGATE_LIMIT parameter.</p>
+<h3 id="processeshttpsdocsoraclecomendatabaseoracleoracle-database23refrnprocesseshtml"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/PROCESSES.html" rel="external" target="_blank">PROCESSES</a></h3>
+<p>The PROCESSES parameter specifies the maximum number of operating system user processes that can simultaneously connect to the database. It is essential for managing background processes, such as locks, job queues, and parallel execution. Workloads with a large number of producers and consumers may require adjustments to this parameter. Adjusting this value may require reevaluating related parameters like SESSIONS and TRANSACTIONS.</p>
+<h3 id="sessionshttpsdocsoraclecomendatabaseoracleoracle-database23refrnsessionshtml"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/SESSIONS.html" rel="external" target="_blank">SESSIONS</a></h3>
+<p>The SESSIONS parameter defines the maximum number of sessions that can be created in an Oracle database. It is calculated as (1.5 * PROCESSES) + 22 by default and can be modified within a range of 1 to 65,536. It impacts the number of concurrent users and background processes. For Pluggable Databases (PDBs), the SESSIONS parameter is adjustable but cannot exceed the root container&rsquo;s value. You should adjust the number based on your expected connections and background processes, including queue workloads.</p>
+<h3 id="sga_targethttpsdocsoraclecomendatabaseoracleoracle-database23refrnsga_targethtml"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/SGA_TARGET.html" rel="external" target="_blank">SGA_TARGET</a></h3>
+<p>The SGA_TARGET parameter specifies the total size of the Shared Global Area (SGA) in Oracle, allowing automatic memory management of its components like the buffer cache, shared pool, and others. Its value can range from 64 MB to SGA_MAX_SIZE. It is modifiable via ALTER SYSTEM. If set to zero, SGA autotuning is disabled. Systems that make heavy using of message queueing should configure SGA_TARGET to an appropriately large value to get the most out of queue <a href="/microservices-datadriven/transactional-event-queues/observability/tuning/index.html#message-cache">message caching</a>.</p>
+<p>If SGA_TARGET is specified, then the following memory pools are automatically sized:</p>
+<ul>
+<li>Buffer cache (DB_CACHE_SIZE)</li>
+<li>Shared pool (SHARED_POOL_SIZE)</li>
+<li>Large pool (LARGE_POOL_SIZE)</li>
+<li>Java pool (JAVA_POOL_SIZE)</li>
+<li>Streams pool (STREAMS_POOL_SIZE)</li>
+<li>Data transfer cache (DATA_TRANSFER_CACHE_SIZE)</li>
+</ul>
+<h3 id="streams_pool_sizehttpsdocsoraclecomendatabaseoracleoracle-database23refrnstreams_pool_sizehtml"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/STREAMS_POOL_SIZE.html" rel="external" target="_blank">STREAMS_POOL_SIZE</a></h3>
+<p>The STREAMS_POOL_SIZE parameter defines the size of the Streams pool, a shared memory area used for TxEventQ and other database features. If SGA_TARGET and STREAMS_POOL_SIZE are both nonzero, Oracle Database Automatic Shared Memory Management uses this value as a minimum for the Streams pool.</p>
+<p>If both the STREAMS_POOL_SIZE and the SGA_TARGET parameters are set to 0, then the first request for Streams pool memory will transfer 10% of the buffer cache shared pool is transferred to the Streams pool.</p>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation">
+        <div id="R-header" class="default-animation">
+<img src="https://oracle.github.io/microservices-datadriven/transactional-event-queues//txeventq.png" height="100px">
+        </div>
+        <script>
+          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736354172";
+        </script>
+        <search><form action="/microservices-datadriven/transactional-event-queues/search/index.html" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+        <script>
+          var contentLangs=['en'];
+        </script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736354172" defer></script>
+      </div>
+      <div id="R-homelinks" class="default-animation homelinks">
+        <ul>
+          <li><a class="padding" href="/microservices-datadriven/transactional-event-queues/index.html"><i class="fa-fw fas fa-home"></i> Home</a></li>
+        </ul>
+        <hr class="padding">
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div id="R-shortcutmenu-home" class="R-sidebarmenu">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/getting-started/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/getting-started/index.html">Getting Started</a><ul id="R-subsections-87c0363912f379e0725cbe1d504c985c" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/kafka/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/kafka/index.html">Kafka APIs</a><ul id="R-subsections-d52caaae11e51c78d1067d1cd66f8e2c" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/spring-boot/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/spring-boot/index.html">Spring Boot Integration</a><ul id="R-subsections-bb4332c9282cf194277661b1ff0e2aba" class="collapsible-menu"></ul></li>
+            <li class="parent " data-nav-id="/microservices-datadriven/transactional-event-queues/observability/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/observability/index.html">Performance and Observability</a><ul id="R-subsections-12c019d652c4753c0102c3d7c1b1aa94" class="collapsible-menu">
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/observability/views/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/observability/views/index.html">TxEventQ Administrative Views</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/observability/exporter/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/observability/exporter/index.html">Database Monitoring Exporter</a></li>
+            <li class="active " data-nav-id="/microservices-datadriven/transactional-event-queues/observability/tuning/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/observability/tuning/index.html">Performance Tuning</a></li></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/aq-migration/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/aq-migration/index.html">Migrating From AQ</a><ul id="R-subsections-2d75d5e9d6442ae61e611785710400a6" class="collapsible-menu"></ul></li>
+          </ul>
+        </div>
+        <div id="R-shortcutmenu-shortcuts" class="R-sidebarmenu">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="https://github.com/oracle/microservices-datadriven"><a class="padding" href="https://github.com/oracle/microservices-datadriven" target="_blank"><i class='fa-fw fab fa-github'></i> GitHub repo</a></li>
+            <li class="" data-nav-id="https://bit.ly/OracleAI-microservices"><a class="padding" href="https://bit.ly/OracleAI-microservices" target="_blank"><i class='fa-fw fas fa-bookmark'></i> Oracle Backend for Microservices and AI</a></li>
+            <li class="" data-nav-id="https://github.com/oracle/spring-cloud-oracle"><a class="padding" href="https://github.com/oracle/spring-cloud-oracle" target="_blank"><i class='fa-fw fas fa-bookmark'></i> Spring Cloud Oracle</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/more/credits/"><a class="padding" href="/microservices-datadriven/transactional-event-queues/more/credits/"><i class='fa-fw fas fa-bullhorn'></i> Credits</a></li>
+          </ul>
+        </div>
+        <div class="padding footermargin footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter"></div>
+        <div id="R-menu-footer">
+          <hr class="padding default-animation footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter">
+          <div id="R-prefooter" class="footerLangSwitch footerVariantSwitch footerVisitedLinks">
+            <ul>
+              <li id="R-select-language-container" class="footerLangSwitch">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-language"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <label class="a11y-only" for="R-select-language">Language</label>
+                    <select id="R-select-language" onchange="location = this.querySelector( this.value ).dataset.url;">
+                      <option id="R-select-language-en" value="#R-select-language-en" data-url="/microservices-datadriven/transactional-event-queues/observability/tuning/index.html" lang="en-us" selected></option>
+                    </select>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </li>
+              <li id="R-select-variant-container" class="footerVariantSwitch">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-paint-brush"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <label class="a11y-only" for="R-select-variant">Theme</label>
+                    <select id="R-select-variant" onchange="window.relearn.changeVariant( this.value );">
+                      <option id="R-select-variant-zen-light" value="zen-light" selected>Zen Light</option>
+                    </select>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+                <script>window.relearn.markVariant();</script>
+              </li>
+              <li class="footerVisitedLinks">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-history"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <button onclick="clearHistory();">Clear History</button>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div id="R-footer" class="footerFooter showFooter">
+	    <p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://www.oracle.com/">Oracle</a></p>
+		<p>Copyright &copy; 2022, 2024, <br>Oracle and/or its affiliates</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736354172" defer></script>
+  </body>
+</html>

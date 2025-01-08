@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="generator" content="Hugo 0.140.1">
+    <meta name="generator" content="Relearn 7.3.1">
+    <meta name="description" content="Oracle Database provides administrative views for collecting metrics on TxEventQ topics and queues. In this section, you’ll learn about each view and its use by database administrators for queue performance monitoring.
+TxEventQ Views Find the list of TxEventQ administrative views and their column definitions in the Oracle Database TxEventQ documentation. Views may be joined and grouped across queries to compose custom metrics and insights about queues and subscribers.
+V$EQ_CACHED_PARTITIONS Provides information about cached event stream partitions. Queries may group on identifiers like QUEUE id or EVENT_STREAM_ID.">
+    <meta name="author" content="">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="TxEventQ Administrative Views :: Transactional Event Queues">
+    <meta name="twitter:description" content="Oracle Database provides administrative views for collecting metrics on TxEventQ topics and queues. In this section, you’ll learn about each view and its use by database administrators for queue performance monitoring.
+TxEventQ Views Find the list of TxEventQ administrative views and their column definitions in the Oracle Database TxEventQ documentation. Views may be joined and grouped across queries to compose custom metrics and insights about queues and subscribers.
+V$EQ_CACHED_PARTITIONS Provides information about cached event stream partitions. Queries may group on identifiers like QUEUE id or EVENT_STREAM_ID.">
+    <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/transactional-event-queues/observability/views/index.html">
+    <meta property="og:site_name" content="Transactional Event Queues">
+    <meta property="og:title" content="TxEventQ Administrative Views :: Transactional Event Queues">
+    <meta property="og:description" content="Oracle Database provides administrative views for collecting metrics on TxEventQ topics and queues. In this section, you’ll learn about each view and its use by database administrators for queue performance monitoring.
+TxEventQ Views Find the list of TxEventQ administrative views and their column definitions in the Oracle Database TxEventQ documentation. Views may be joined and grouped across queries to compose custom metrics and insights about queues and subscribers.
+V$EQ_CACHED_PARTITIONS Provides information about cached event stream partitions. Queries may group on identifiers like QUEUE id or EVENT_STREAM_ID.">
+    <meta property="og:locale" content="en_us">
+    <meta property="og:type" content="article">
+    <meta property="article:section" content="Performance and Observability">
+    <meta itemprop="name" content="TxEventQ Administrative Views :: Transactional Event Queues">
+    <meta itemprop="description" content="Oracle Database provides administrative views for collecting metrics on TxEventQ topics and queues. In this section, you’ll learn about each view and its use by database administrators for queue performance monitoring.
+TxEventQ Views Find the list of TxEventQ administrative views and their column definitions in the Oracle Database TxEventQ documentation. Views may be joined and grouped across queries to compose custom metrics and insights about queues and subscribers.
+V$EQ_CACHED_PARTITIONS Provides information about cached event stream partitions. Queries may group on identifiers like QUEUE id or EVENT_STREAM_ID.">
+    <meta itemprop="wordCount" content="644">
+    <title>TxEventQ Administrative Views :: Transactional Event Queues</title>
+    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736354172" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736354172" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736354172" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736354172" rel="stylesheet" id="R-format-style">
+    <script>
+      window.relearn = window.relearn || {};
+      window.relearn.relBasePath='..\/..';
+      window.relearn.relBaseUri='..\/..\/..\/..';
+      window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/transactional-event-queues';
+      window.relearn.min = `.min`;
+      window.relearn.disableAnchorCopy=false;
+      window.relearn.disableAnchorScrolling=false;
+      // variant stuff
+      window.relearn.themevariants = [ 'zen-light' ];
+      window.relearn.customvariantname = "my-custom-variant";
+      window.relearn.changeVariant = function(variant) {
+        var oldVariant = document.documentElement.dataset.rThemeVariant;
+        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        document.documentElement.dataset.rThemeVariant = variant;
+        if (oldVariant != variant) {
+          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
+        }
+      }
+      window.relearn.markVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
+        var select = document.querySelector("#R-select-variant");
+        if (select) {
+          select.value = variant;
+        }
+      }
+      window.relearn.initVariant = function() {
+        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
+        if( variant == window.relearn.customvariantname ){
+        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
+          variant = window.relearn.themevariants[0];
+          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
+        }
+        document.documentElement.dataset.rThemeVariant = variant;
+      }
+      window.relearn.initVariant();
+      window.relearn.markVariant();
+      // translations
+      window.T_Copy_to_clipboard = `Copy to clipboard`;
+      window.T_Copied_to_clipboard = `Copied to clipboard!`;
+      window.T_Copy_link_to_clipboard = `Copy link to clipboard`;
+      window.T_Link_copied_to_clipboard = `Copied link to clipboard!`;
+      window.T_Reset_view = `Reset view`;
+      window.T_View_reset = `View reset!`;
+      window.T_No_results_found = `No results found for "{0}"`;
+      window.T_N_results_found = `{1} results found for "{0}"`;
+    </script>
+  </head>
+  <body class="mobile-support html" data-url="/microservices-datadriven/transactional-event-queues/observability/views/index.html">
+    <div id="R-body" class="default-animation">
+      <div id="R-body-overlay"></div>
+      <nav id="R-topbar">
+        <div class="topbar-wrapper">
+          <div class="topbar-sidebar-divider"></div>
+          <div class="topbar-area topbar-area-start" data-area="start">
+            <div class="topbar-button topbar-button-sidebar" data-content-empty="disable" data-width-s="show" data-width-m="hide" data-width-l="hide"><button class="topbar-control" onclick="toggleNav()" type="button" title="Menu (CTRL&#43;ALT&#43;n)"><i class="fa-fw fas fa-bars"></i></button>
+            </div>
+            <div class="topbar-button topbar-button-toc" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="Table of Contents (CTRL&#43;ALT&#43;t)"><i class="fa-fw fas fa-list-alt"></i></button>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+<nav class="TableOfContents">
+  <ul>
+    <li><a href="#txeventq-views">TxEventQ Views</a>
+      <ul>
+        <li><a href="#veq_cached_partitionshttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_cached_partitionshtmlrefrn-guid-8c196a4e-bde7-4e9f-81f7-cadae601ed14"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_CACHED_PARTITIONS.html#REFRN-GUID-8C196A4E-BDE7-4E9F-81F7-CADAE601ED14">V$EQ_CACHED_PARTITIONS</a></a></li>
+        <li><a href="#veq_cross_instance_jobshttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_cross_instance_jobshtmlrefrn-guid-af791906-80cb-49fb-9873-6330f3748972"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_CROSS_INSTANCE_JOBS.html#REFRN-GUID-AF791906-80CB-49FB-9873-6330F3748972">V$EQ_CROSS_INSTANCE_JOBS</a></a></li>
+        <li><a href="#veq_dequeue_sessions">V$EQ_DEQUEUE_SESSIONS</a></li>
+        <li><a href="#veq_inactive_partitionshttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_inactive_partitionshtmlrefrn-guid-3e8e6f0f-6cf4-4e81-b597-8142bf7aee83"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_INACTIVE_PARTITIONS.html#REFRN-GUID-3E8E6F0F-6CF4-4E81-B597-8142BF7AEE83">V$EQ_INACTIVE_PARTITIONS</a></a></li>
+        <li><a href="#veq_message_cachehttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_message_cachehtmlrefrn-guid-64d1d700-b4c5-4f53-bd3c-725b19dbb7cb"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_MESSAGE_CACHE.html#REFRN-GUID-64D1D700-B4C5-4F53-BD3C-725B19DBB7CB">V$EQ_MESSAGE_CACHE</a></a></li>
+        <li><a href="#veq_message_cache_advicehttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_message_cache_advicehtmlrefrn-guid-787e7ab6-13e1-4aeb-a077-7eea961fe103"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_MESSAGE_CACHE_ADVICE.html#REFRN-GUID-787E7AB6-13E1-4AEB-A077-7EEA961FE103">V$EQ_MESSAGE_CACHE_ADVICE</a></a></li>
+        <li><a href="#veq_message_cache_stathttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_message_cache_stathtmlrefrn-guid-267c40da-bca3-46c4-9115-e2cd8a676d96"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_MESSAGE_CACHE_STAT.html#REFRN-GUID-267C40DA-BCA3-46C4-9115-E2CD8A676D96">V$EQ_MESSAGE_CACHE_STAT</a></a></li>
+        <li><a href="#veq_nondur_subscriberhttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_nondur_subscriberhtmlrefrn-guid-6fa0c1a8-fc9a-4eb6-97df-948664a9b552"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_NONDUR_SUBSCRIBER.html#REFRN-GUID-6FA0C1A8-FC9A-4EB6-97DF-948664A9B552">V$EQ_NONDUR_SUBSCRIBER</a></a></li>
+        <li><a href="#veq_nondur_subscriber_lwmhttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_nondur_subscriber_lwmhtmlrefrn-guid-98d91cb7-5ea3-47eb-90d3-a8bf0047d3b8"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_NONDUR_SUBSCRIBER_LWM.html#REFRN-GUID-98D91CB7-5EA3-47EB-90D3-A8BF0047D3B8">V$EQ_NONDUR_SUBSCRIBER_LWM</a></a></li>
+        <li><a href="#veq_partition_statshttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_partition_statshtmlrefrn-guid-4ea74e81-4664-436e-b58a-0857ddbd81f7"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_PARTITION_STATS.html#REFRN-GUID-4EA74E81-4664-436E-B58A-0857DDBD81F7">V$EQ_PARTITION_STATS</a></a></li>
+        <li><a href="#veq_remote_dequeue_affinityhttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_remote_dequeue_affinityhtmlrefrn-guid-92daa4f3-c3e6-4fae-85ab-db4c538a633b"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_REMOTE_DEQUEUE_AFFINITY.html#REFRN-GUID-92DAA4F3-C3E6-4FAE-85AB-DB4C538A633B">V$EQ_REMOTE_DEQUEUE_AFFINITY</a></a></li>
+        <li><a href="#veq_subscriber_loadhttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_subscriber_loadhtmlrefrn-guid-65d1942e-ab78-4b1a-9aa8-e76690ea50ad"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_SUBSCRIBER_LOAD.html#REFRN-GUID-65D1942E-AB78-4B1A-9AA8-E76690EA50AD">V$EQ_SUBSCRIBER_LOAD</a></a></li>
+        <li><a href="#veq_subscriber_stathttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_subscriber_stathtmlrefrn-guid-229be296-bd6b-47c4-9164-4e850d1f9e1a"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_SUBSCRIBER_STAT.html#REFRN-GUID-229BE296-BD6B-47C4-9164-4E850D1F9E1A">V$EQ_SUBSCRIBER_STAT</a></a></li>
+        <li><a href="#veq_uncached_partitionshttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_uncached_partitionshtmlrefrn-guid-fa912e56-cd06-4882-980b-8a92465bf086"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_UNCACHED_PARTITIONS.html#REFRN-GUID-FA912E56-CD06-4882-980B-8A92465BF086">V$EQ_UNCACHED_PARTITIONS</a></a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ol class="topbar-breadcrumbs breadcrumbs highlightable" itemscope itemtype="http://schema.org/BreadcrumbList"><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="/microservices-datadriven/transactional-event-queues/index.html"><span itemprop="name">Transactional Event Queues</span></a><meta itemprop="position" content="1">&nbsp;>&nbsp;</li><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><a itemprop="item" href="/microservices-datadriven/transactional-event-queues/observability/index.html"><span itemprop="name">Performance and Observability</span></a><meta itemprop="position" content="2">&nbsp;>&nbsp;</li><li
+            itemscope itemtype="https://schema.org/ListItem" itemprop="itemListElement"><span itemprop="name">TxEventQ Administrative Views</span><meta itemprop="position" content="3"></li>
+          </ol>
+          <div class="topbar-area topbar-area-end" data-area="end">
+            <div class="topbar-button topbar-button-prev" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show"><a class="topbar-control" href="/microservices-datadriven/transactional-event-queues/observability/index.html" title="Performance and Observability (🡐)"><i class="fa-fw fas fa-chevron-left"></i></a>
+            </div>
+            <div class="topbar-button topbar-button-next" data-content-empty="disable" data-width-s="show" data-width-m="show" data-width-l="show"><a class="topbar-control" href="/microservices-datadriven/transactional-event-queues/observability/exporter/index.html" title="Database Monitoring Exporter (🡒)"><i class="fa-fw fas fa-chevron-right"></i></a>
+            </div>
+            <div class="topbar-button topbar-button-more" data-content-empty="hide" data-width-s="show" data-width-m="show" data-width-l="show"><button class="topbar-control" onclick="toggleTopbarFlyout(this)" type="button" title="More"><i class="fa-fw fas fa-ellipsis-v"></i></button>
+              <div class="topbar-content">
+                <div class="topbar-content-wrapper">
+                  <div class="topbar-area topbar-area-more" data-area="more">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+      <div id="R-main-overlay"></div>
+      <main id="R-body-inner" class="highlightable observability" tabindex="-1">
+        <div class="flex-block-wrapper">
+<article class="default">
+  <header class="headline">
+  </header>
+
+<h1 id="txeventq-administrative-views">TxEventQ Administrative Views</h1>
+
+<p>Oracle Database provides administrative views for collecting metrics on TxEventQ topics and queues. In this section, you&rsquo;ll learn about each view and its use by database administrators for queue performance monitoring.</p>
+<h2 id="txeventq-views">TxEventQ Views</h2>
+<p>Find the list of TxEventQ administrative views and their column definitions in the <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/adque/aq-messaging-gateway-views.html#GUID-B86548B9-55B7-4CCE-8B85-FE902B948BE5" rel="external" target="_blank">Oracle Database TxEventQ documentation</a>. Views may be joined and grouped across queries to compose custom metrics and insights about queues and subscribers.</p>
+<h3 id="veq_cached_partitionshttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_cached_partitionshtmlrefrn-guid-8c196a4e-bde7-4e9f-81f7-cadae601ed14"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_CACHED_PARTITIONS.html#REFRN-GUID-8C196A4E-BDE7-4E9F-81F7-CADAE601ED14" rel="external" target="_blank">V$EQ_CACHED_PARTITIONS</a></h3>
+<p>Provides information about cached event stream partitions. Queries may group on identifiers like <code>QUEUE</code> id or <code>EVENT_STREAM_ID</code>.</p>
+<h3 id="veq_cross_instance_jobshttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_cross_instance_jobshtmlrefrn-guid-af791906-80cb-49fb-9873-6330f3748972"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_CROSS_INSTANCE_JOBS.html#REFRN-GUID-AF791906-80CB-49FB-9873-6330F3748972" rel="external" target="_blank">V$EQ_CROSS_INSTANCE_JOBS</a></h3>
+<p>The <code>V$EQ_CROSS_INSTANCE_JOBS</code> view provides information about TxEventQ cross-instance jobs. This view is crucial for monitoring and managing message forwarding across different instances in a database cluster. This view is crucial for monitoring and managing message forwarding across different instances in a database cluster. The view offers comprehensive data about each job, including:</p>
+<ul>
+<li>Job ID</li>
+<li>Source schema and queue name</li>
+<li>Event stream details</li>
+<li>Destination instance</li>
+<li>Job state and performance metrics</li>
+</ul>
+<h3 id="veq_dequeue_sessions">V$EQ_DEQUEUE_SESSIONS</h3>
+<p>The <code>V$EQ_DEQUEUE_SESSIONS</code> view provides information about active dequeue sessions for Transactional Event Queues. The view displays real-time data about sessions that are currently dequeuing messages. Queries may group on fields like <code>QUEUE_ID</code>, <code>SUBSCRIBER_ID</code>, <code>CLIENT_ID</code>, and more.</p>
+<h3 id="veq_inactive_partitionshttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_inactive_partitionshtmlrefrn-guid-3e8e6f0f-6cf4-4e81-b597-8142bf7aee83"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_INACTIVE_PARTITIONS.html#REFRN-GUID-3E8E6F0F-6CF4-4E81-B597-8142BF7AEE83" rel="external" target="_blank">V$EQ_INACTIVE_PARTITIONS</a></h3>
+<p>The <code>V$EQ_INACTIVE_PARTITIONS</code> view provides information about inactive TxEventQ event stream partitions. The view is useful for identifying inactive partitions by their <code>QUEUE_NAME</code> or <code>EVENT_STREAM_ID</code>.</p>
+<h3 id="veq_message_cachehttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_message_cachehtmlrefrn-guid-64d1d700-b4c5-4f53-bd3c-725b19dbb7cb"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_MESSAGE_CACHE.html#REFRN-GUID-64D1D700-B4C5-4F53-BD3C-725B19DBB7CB" rel="external" target="_blank">V$EQ_MESSAGE_CACHE</a></h3>
+<p>The <code>V$EQ_MESSAGE_CACHE</code> view provides performance statistics for the message cache associated with queues at the event stream partition level within an instance. This view is particularly useful for monitoring and diagnosing the behavior of event stream partitions in terms of message handling and memory usage.</p>
+<h3 id="veq_message_cache_advicehttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_message_cache_advicehtmlrefrn-guid-787e7ab6-13e1-4aeb-a077-7eea961fe103"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_MESSAGE_CACHE_ADVICE.html#REFRN-GUID-787E7AB6-13E1-4AEB-A077-7EEA961FE103" rel="external" target="_blank">V$EQ_MESSAGE_CACHE_ADVICE</a></h3>
+<p>The <code>V$EQ_MESSAGE_CACHE_ADVICE</code> view provides simulation metrics to assist in sizing the message cache for queues. By analyzing various potential cache sizes, this view helps determine the optimal configuration to ensure efficient message handling and system performance.</p>
+<h3 id="veq_message_cache_stathttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_message_cache_stathtmlrefrn-guid-267c40da-bca3-46c4-9115-e2cd8a676d96"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_MESSAGE_CACHE_STAT.html#REFRN-GUID-267C40DA-BCA3-46C4-9115-E2CD8A676D96" rel="external" target="_blank">V$EQ_MESSAGE_CACHE_STAT</a></h3>
+<p>The <code>V$EQ_MESSAGE_CACHE_STAT</code> view provides global statistics on memory management for queues in the Streams pool of the System Global Area (SGA). This view offers insights into the behavior and performance of event queue partitions across all TxEventQs, aiding in effective monitoring and optimization. The view shows statistics across all queues.</p>
+<h3 id="veq_nondur_subscriberhttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_nondur_subscriberhtmlrefrn-guid-6fa0c1a8-fc9a-4eb6-97df-948664a9b552"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_NONDUR_SUBSCRIBER.html#REFRN-GUID-6FA0C1A8-FC9A-4EB6-97DF-948664A9B552" rel="external" target="_blank">V$EQ_NONDUR_SUBSCRIBER</a></h3>
+<p>The <code>V$EQ_NONDUR_SUBSCRIBER</code> view provides details about non-durable subscriptions on queues. Non-durable subscribers receive messages only while actively connected; they do not retain message state after disconnection. The view is per-queue and non-durable subscriber.</p>
+<h3 id="veq_nondur_subscriber_lwmhttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_nondur_subscriber_lwmhtmlrefrn-guid-98d91cb7-5ea3-47eb-90d3-a8bf0047d3b8"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_NONDUR_SUBSCRIBER_LWM.html#REFRN-GUID-98D91CB7-5EA3-47EB-90D3-A8BF0047D3B8" rel="external" target="_blank">V$EQ_NONDUR_SUBSCRIBER_LWM</a></h3>
+<p>The V$EQ_NONDUR_SUBSCRIBER_LWM view provides information about the low watermarks (LWMs) of non-durable subscribers in a Transactional Event Queue (TxEventQ). The LWM represents the lowest point in an event stream partition that a non-durable subscriber has processed.</p>
+<h3 id="veq_partition_statshttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_partition_statshtmlrefrn-guid-4ea74e81-4664-436e-b58a-0857ddbd81f7"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_PARTITION_STATS.html#REFRN-GUID-4EA74E81-4664-436E-B58A-0857DDBD81F7" rel="external" target="_blank">V$EQ_PARTITION_STATS</a></h3>
+<p>The <code>V$EQ_PARTITION_STATS</code> view provides usage statistics for queue partition caches, specifically focusing on the queue partition cache and the dequeue log partition cache. This view is instrumental in monitoring and optimizing the performance of these caches.</p>
+<h3 id="veq_remote_dequeue_affinityhttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_remote_dequeue_affinityhtmlrefrn-guid-92daa4f3-c3e6-4fae-85ab-db4c538a633b"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_REMOTE_DEQUEUE_AFFINITY.html#REFRN-GUID-92DAA4F3-C3E6-4FAE-85AB-DB4C538A633B" rel="external" target="_blank">V$EQ_REMOTE_DEQUEUE_AFFINITY</a></h3>
+<p>The <code>V$EQ_REMOTE_DEQUEUE_AFFINITY</code> view provides information about subscribers who are dequeuing messages from queues on an instance different from the event stream&rsquo;s owner instance. In such cases, cross-instance message forwarding is employed to deliver messages to these subscribers.</p>
+<p>This view is useful for monitoring and managing cross-instance message forwarding in a Real Application Clusters (RAC) environment, ensuring that subscribers receive messages even when dequeuing from a different instance than the event stream&rsquo;s owner.</p>
+<h3 id="veq_subscriber_loadhttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_subscriber_loadhtmlrefrn-guid-65d1942e-ab78-4b1a-9aa8-e76690ea50ad"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_SUBSCRIBER_LOAD.html#REFRN-GUID-65D1942E-AB78-4B1A-9AA8-E76690EA50AD" rel="external" target="_blank">V$EQ_SUBSCRIBER_LOAD</a></h3>
+<p>The <code>V$EQ_SUBSCRIBER_LOAD</code> view provides data on the load and latency of all subscribers to queue event streams across instances in an Oracle Real Application Clusters (RAC) environment. This view helps in monitoring subscriber performance and identifying potential bottlenecks.</p>
+<h3 id="veq_subscriber_stathttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_subscriber_stathtmlrefrn-guid-229be296-bd6b-47c4-9164-4e850d1f9e1a"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_SUBSCRIBER_STAT.html#REFRN-GUID-229BE296-BD6B-47C4-9164-4E850D1F9E1A" rel="external" target="_blank">V$EQ_SUBSCRIBER_STAT</a></h3>
+<p>The <code>V$EQ_SUBSCRIBER_STAT</code> view provides statistics about subscribers of queue event streams. Each row corresponds to a specific queue, event stream and subscriber combination.</p>
+<p>This view is useful for monitoring the performance and status of subscribers, allowing administrators to identify potential bottlenecks and optimize message processing.</p>
+<h3 id="veq_uncached_partitionshttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_uncached_partitionshtmlrefrn-guid-fa912e56-cd06-4882-980b-8a92465bf086"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_UNCACHED_PARTITIONS.html#REFRN-GUID-FA912E56-CD06-4882-980B-8A92465BF086" rel="external" target="_blank">V$EQ_UNCACHED_PARTITIONS</a></h3>
+<p>The <code>V$EQ_UNCACHED_PARTITIONS</code> view provides information about uncached partitions of queue event streams. Each row represents a specific event stream partition that is not currently cached.</p>
+
+  <footer class="footline">
+  </footer>
+</article>
+        </div>
+      </main>
+    </div>
+    <aside id="R-sidebar" class="default-animation">
+      <div id="R-header-topbar" class="default-animation"></div>
+      <div id="R-header-wrapper" class="default-animation">
+        <div id="R-header" class="default-animation">
+<img src="https://oracle.github.io/microservices-datadriven/transactional-event-queues//txeventq.png" height="100px">
+        </div>
+        <script>
+          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736354172";
+        </script>
+        <search><form action="/microservices-datadriven/transactional-event-queues/search/index.html" method="get">
+          <div class="searchbox default-animation">
+            <button class="search-detail" type="submit" title="Search (CTRL+ALT+f)"><i class="fas fa-search"></i></button>
+            <label class="a11y-only" for="R-search-by">Search</label>
+            <input data-search-input id="R-search-by" name="search-by" class="search-by" type="search" placeholder="Search...">
+            <button class="search-clear" type="button" data-search-clear="" title="Clear search"><i class="fas fa-times" title="Clear search"></i></button>
+          </div>
+        </form></search>
+        <script>
+          var contentLangs=['en'];
+        </script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736354172" defer></script>
+      </div>
+      <div id="R-homelinks" class="default-animation homelinks">
+        <ul>
+          <li><a class="padding" href="/microservices-datadriven/transactional-event-queues/index.html"><i class="fa-fw fas fa-home"></i> Home</a></li>
+        </ul>
+        <hr class="padding">
+      </div>
+      <div id="R-content-wrapper" class="highlightable">
+        <div id="R-shortcutmenu-home" class="R-sidebarmenu">
+          <ul class="enlarge morespace collapsible-menu">
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/getting-started/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/getting-started/index.html">Getting Started</a><ul id="R-subsections-87c0363912f379e0725cbe1d504c985c" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/kafka/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/kafka/index.html">Kafka APIs</a><ul id="R-subsections-d52caaae11e51c78d1067d1cd66f8e2c" class="collapsible-menu"></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/spring-boot/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/spring-boot/index.html">Spring Boot Integration</a><ul id="R-subsections-bb4332c9282cf194277661b1ff0e2aba" class="collapsible-menu"></ul></li>
+            <li class="parent " data-nav-id="/microservices-datadriven/transactional-event-queues/observability/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/observability/index.html">Performance and Observability</a><ul id="R-subsections-12c019d652c4753c0102c3d7c1b1aa94" class="collapsible-menu">
+            <li class="active " data-nav-id="/microservices-datadriven/transactional-event-queues/observability/views/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/observability/views/index.html">TxEventQ Administrative Views</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/observability/exporter/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/observability/exporter/index.html">Database Monitoring Exporter</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/observability/tuning/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/observability/tuning/index.html">Performance Tuning</a></li></ul></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/aq-migration/index.html"><a class="padding" href="/microservices-datadriven/transactional-event-queues/aq-migration/index.html">Migrating From AQ</a><ul id="R-subsections-2d75d5e9d6442ae61e611785710400a6" class="collapsible-menu"></ul></li>
+          </ul>
+        </div>
+        <div id="R-shortcutmenu-shortcuts" class="R-sidebarmenu">
+          <div class="nav-title padding">More</div>
+          <ul class="space collapsible-menu">
+            <li class="" data-nav-id="https://github.com/oracle/microservices-datadriven"><a class="padding" href="https://github.com/oracle/microservices-datadriven" target="_blank"><i class='fa-fw fab fa-github'></i> GitHub repo</a></li>
+            <li class="" data-nav-id="https://bit.ly/OracleAI-microservices"><a class="padding" href="https://bit.ly/OracleAI-microservices" target="_blank"><i class='fa-fw fas fa-bookmark'></i> Oracle Backend for Microservices and AI</a></li>
+            <li class="" data-nav-id="https://github.com/oracle/spring-cloud-oracle"><a class="padding" href="https://github.com/oracle/spring-cloud-oracle" target="_blank"><i class='fa-fw fas fa-bookmark'></i> Spring Cloud Oracle</a></li>
+            <li class="" data-nav-id="/microservices-datadriven/transactional-event-queues/more/credits/"><a class="padding" href="/microservices-datadriven/transactional-event-queues/more/credits/"><i class='fa-fw fas fa-bullhorn'></i> Credits</a></li>
+          </ul>
+        </div>
+        <div class="padding footermargin footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter"></div>
+        <div id="R-menu-footer">
+          <hr class="padding default-animation footerLangSwitch footerVariantSwitch footerVisitedLinks footerFooter showFooter">
+          <div id="R-prefooter" class="footerLangSwitch footerVariantSwitch footerVisitedLinks">
+            <ul>
+              <li id="R-select-language-container" class="footerLangSwitch">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-language"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <label class="a11y-only" for="R-select-language">Language</label>
+                    <select id="R-select-language" onchange="location = this.querySelector( this.value ).dataset.url;">
+                      <option id="R-select-language-en" value="#R-select-language-en" data-url="/microservices-datadriven/transactional-event-queues/observability/views/index.html" lang="en-us" selected></option>
+                    </select>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </li>
+              <li id="R-select-variant-container" class="footerVariantSwitch">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-paint-brush"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <label class="a11y-only" for="R-select-variant">Theme</label>
+                    <select id="R-select-variant" onchange="window.relearn.changeVariant( this.value );">
+                      <option id="R-select-variant-zen-light" value="zen-light" selected>Zen Light</option>
+                    </select>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+                <script>window.relearn.markVariant();</script>
+              </li>
+              <li class="footerVisitedLinks">
+                <div class="padding menu-control">
+                  <i class="fa-fw fas fa-history"></i>
+                  <span>&nbsp;</span>
+                  <div class="control-style">
+                    <button onclick="clearHistory();">Clear History</button>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <div id="R-footer" class="footerFooter showFooter">
+	    <p>Built with <a href="https://github.com/McShelby/hugo-theme-relearn" title="love"><i class="fas fa-heart"></i></a> by <a href="https://www.oracle.com/">Oracle</a></p>
+		<p>Copyright &copy; 2022, 2024, <br>Oracle and/or its affiliates</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736354172" defer></script>
+  </body>
+</html>
