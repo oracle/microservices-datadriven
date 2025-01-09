@@ -15,8 +15,7 @@ In this section, we’ll implement a producer/consumer example using Spring JMS 
 * [Receive messages with @JMSListener](#receive-messages-with-jmslistener)
 
 ## Project Dependencies
-
-To start developing with the Spring JMS for Oracle Database Transactional Event Queues, add the [oracle-spring-boot-starter-aqjms](https://central.sonatype.com/artifact/com.oracle.database.spring/oracle-spring-boot-starter-aqjms) dependency to your Maven project, along with Spring Boot JDBC:
+To start developing with Spring JMS for Oracle Database Transactional Event Queues, add the [oracle-spring-boot-starter-aqjms](https://central.sonatype.com/artifact/com.oracle.database.spring/oracle-spring-boot-starter-aqjms) dependency to your Maven project, along with the Spring Boot JDBC starter:
 
 ```xml
 <dependency>
@@ -40,14 +39,14 @@ implementation "com.oracle.database.spring:oracle-spring-boot-starter-aqjms:${or
 
 ## Configure Permissions and Create a JMS Queue
 
-The following SQL script grants the necessary permissions to use Transactional Event Queues with JMS to a database user, and then creates a Transactional Event Queue with a [JMS Payload Type](../getting-started/core-concepts.md#dbms_aqadmjms_type) for use by that user. We’ll dynamically invoke this script in our test later on, and it is provided here for reference purposes.
+The following SQL script grants the necessary permissions to a database user for using Transactional Event Queues with JMS and creates a Transactional Event Queue with a [JMS Payload Type](../getting-started/core-concepts.md#dbms_aqadmjms_type) for the user:
 
 ```sql
 grant aq_user_role to testuser;
 grant execute on dbms_aq to testuser;
 grant execute on dbms_aqadm to testuser;
-grant execute ON dbms_aqin TO testuser;
-grant execute ON dbms_aqjms TO testuser;
+grant execute on dbms_aqin to testuser;
+grant execute on dbms_aqjms to testuser;
 grant execute on dbms_teqk to testuser;
 
 begin
@@ -70,7 +69,7 @@ end;
 
 ## Connect Spring JMS to Oracle Database
 
-Spring JMS with Oracle Database Transactional Event Queues uses a standard Oracle Database JDBC connection to produce and consume messages. To configure this with YAML-style Spring datasource properties, it'll look something like this (`src/main/resources/application.yaml`):
+Spring JMS with Oracle Database Transactional Event Queues uses a standard Oracle Database JDBC connection for message production and consumption. To configure this with YAML-style Spring datasource properties, it'll look something like this (`src/main/resources/application.yaml`):
 
 ```yaml
 spring:
@@ -89,7 +88,7 @@ spring:
       connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
 ```
 
-Additionally, you should define a JMS ConnectionFactory bean using the AQjmsFactory class. The presence of the ConnectionFactory bean ensures Spring JMS uses Oracle Database Transactional Event Queues as the JMS provider for message operations.
+Additionally, you should define a JMS ConnectionFactory bean using the AQjmsFactory class. The ConnectionFactory bean ensures Spring JMS uses Oracle Database Transactional Event Queues as the JMS provider for message operations.
 
 ```java
 @Bean

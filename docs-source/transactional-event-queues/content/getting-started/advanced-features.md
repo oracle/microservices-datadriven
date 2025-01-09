@@ -4,71 +4,17 @@ title = "Advanced Features"
 weight = 4
 +++
 
-This section explains advanced features of Transactional Event Queues, including transactional messaging, message propagation between queues and the database, and error handling.
+This section explains advanced features of Transactional Event Queues, including message propagation between queues and the database, and error handling.
 
-* [Transactional Messaging: Combine Messaging with Database Queries](#transactional-messaging-combine-messaging-with-database-queries)
-  * [SQL Example](#sql-example)
 * [Message Propagation](#message-propagation)
     * [Queue to Queue Message Propagation](#queue-to-queue-message-propagation)
     * [Stopping Queue Propagation](#stopping-queue-propagation)
     * [Using Database Links](#using-database-links)
 * [Error Handling](#error-handling)
 
-
-## Transactional Messaging: Combine Messaging with Database Queries
-
-Enqueue and dequeue operations occur within database transactions, allowing developers to combine database queries (DML) with messaging operations. This is particularly useful when the message contains data relevant to other tables or services within your schema.
-
-### SQL Example
-
-In the following example, a DML operation (an `INSERT` query) is combined with an enqueue operation in the same transaction. If the enqueue operation fails, the `INSERT` is rolled back. The orders table serves as the example.
-
-```sql
-create table orders (
-    id number generated always as identity primary key,
-    product_id number not null,
-    quantity number not null,
-    order_date date default sysdate
-);
-
-declare
-    enqueue_options dbms_aq.enqueue_options_t;
-    message_properties dbms_aq.message_properties_t;
-    msg_id raw(16);
-    message json;
-    body varchar2(200) := '{"product_id": 1, "quantity": 5}';
-    product_id number;
-    quantity number;
-begin
-    -- Convert the JSON string to a JSON object
-    message := json(body);
-
-    -- Extract product_id and quantity from the JSON object
-    product_id := json_value(message, '$.product_id' returning number);
-    quantity := json_value(message, '$.quantity' returning number);
-
-    -- Insert data into the orders table
-    insert into orders (product_id, quantity)
-        values (product_id, quantity);
-
-    -- Enqueue the message
-    dbms_aq.enqueue(
-            queue_name => 'json_queue',
-            enqueue_options => enqueue_options,
-            message_properties => message_properties,
-            payload => message,
-            msgid => msg_id
-    );
-    commit;
-end;
-/
-```
-
-> Note: The same pattern applies to the `dbms_aq.dequeue` procedure, allowing developers to perform DML operations within dequeue transactions.
-
 ## Message Propagation
 
-Messages can be propagated within the same database or across a [database link](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/CREATE-DATABASE-LINK.html) to different queues or topics. Message propagation is useful for workflows that require message processing d by different consumers or for event-driven actions that need to trigger subsequent processes.
+Messages can be propagated within the same database or across a [database link](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/CREATE-DATABASE-LINK.html) to different queues or topics. Message propagation is useful for workflows that require processing by different consumers or for event-driven actions that need to trigger subsequent processes.
 
 #### Queue to Queue Message Propagation
 
@@ -137,7 +83,7 @@ alter system set job_queue_processes=10;
 
 #### Stopping Queue Propagation
 
-You can stop propagation using the DBMS_AQADM.STOP_PROPAGATION procedures:
+You can stop propagation using the [DBMS_AQADM.UNSCHEDULE_PROPAGATION](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQADM.html#GUID-4B4E25F4-E11F-4063-B1B8-7670C2537F47) procedure:
 
 ```sql
 begin
@@ -153,14 +99,16 @@ Your can view queue subscribers and propagation schedules from the respective `D
 
 #### Using Database Links
 
-To propagate messages between databases, a [database link](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/CREATE-DATABASE-LINK.html) from the local database to the remote database must be created. The  subscribe and propagation commands must be altered to use the database link.
+To propagate messages between databases, a [database link](https://docs.oracle.com/en/database/oracle/oracle-database/23/sqlrf/CREATE-DATABASE-LINK.html) from the local database to the remote database must be created. The subscribe and propagation commands must be altered to use the database link.
 
 ```sql
 begin
     dbms_aqadm.schedule_propagation(
         queue_name => 'source',
-        destination => '<database link>.<schema name>', -- replace with your database link and schema name,
-        destination_queue => 'dest'
+        -- replace with your database link
+        destination => 'database_link',
+        -- replace with your remote schema and queue name
+        destination_queue => 'schema.queue_name' 
     );
 end;
 /
@@ -194,8 +142,8 @@ begin
     dbms_output.put_line('message: ' || message_buffer);
 exception
     when others then
+        rollback;
         dbms_output.put_line('error dequeuing message: ' || sqlerrm);
 end;
 /
 ```
-

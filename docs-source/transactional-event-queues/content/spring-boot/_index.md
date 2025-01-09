@@ -8,7 +8,7 @@ Oracle Transactional Event Queues (TxEventQ) features several Spring Boot integr
 
 ## Spring Boot Starter for AQ/JMS
 
-The Oracle Spring Boot Starter for AQ/JMS simplifies TxEventQ integration with Spring and JMS. Key features include:
+The Oracle Spring Boot Starter for AQ/JMS simplifies the integration of TxEventQ with Spring and JMS. Key features include:
 
 - Automatic configuration of JMS ConnectionFactory
 - Support for transactional message processing
@@ -16,8 +16,8 @@ The Oracle Spring Boot Starter for AQ/JMS simplifies TxEventQ integration with S
 
 ## Spring Boot Starter for Kafka Java Client for Oracle Database Transactional Event Queues
 
-The Kafka Java Client for Oracle Database Transactional Event Queues Spring Boot Starter pulls in all necessary dependencies to work with Transactional Event Queues [Kafka Java API](https://github.com/oracle/okafka) using Spring Boot.
+The Spring Boot Starter for the Kafka Java Client for Oracle Database Transactional Event Queues integrates all necessary dependencies to use TxEventQ with the [Kafka Java API](https://github.com/oracle/okafka) within a Spring Boot application.
 
 ## TxEventQ Spring Cloud Stream Binder
 
-[Spring Cloud Stream](https://spring.io/projects/spring-cloud-stream) is a Java framework designed for building event-driven microservices backed by a scalable, fault-tolerant messaging systems. The [Oracle Database Transactional Event Queues (TxEventQ) stream binder](https://github.com/oracle/spring-cloud-oracle/tree/main/database/spring-cloud-stream-binder-oracle-txeventq) implementation allows developers to leverage Oracle’s database messaging platform within the Spring Cloud Stream ecosystem, all while keeping your data within the converged database.
+[Spring Cloud Stream](https://spring.io/projects/spring-cloud-stream) is a Java framework designed for building event-driven microservices backed by scalable, fault-tolerant messaging systems. The [Oracle Database Transactional Event Queues (TxEventQ) stream binder](https://github.com/oracle/spring-cloud-oracle/tree/main/database/spring-cloud-stream-binder-oracle-txeventq)  implementation enables developers to integrate Oracle's database messaging platform with Spring Cloud Stream. This integration allows you to keep your data within the converged database while benefiting from a functional message interface.

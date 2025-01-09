@@ -10,11 +10,13 @@ This section provides a detailed walkthrough of transactional messaging using th
 
 The KafkaProducer and KafkaConsumer classes implemented by the [Kafka Java Client for Oracle Transactional Event Queues](https://github.com/oracle/okafka) provide functionality for transactional messaging, allowing developers to run database queries within a produce or consume transaction.
 
+Transactional Messaging ensures atomicity between messaging processing and the database, ensuring that if a message is produced the corresponding database operation also commits or is rolled back in case of failure.
+
 #### Transactional Produce
 
-To configure a transactional producer, configure the org.oracle.okafka.clients.producer.KafkaProducer class with the `oracle.transactional.producer=true` property.
+To configure a transactional producer, configure the `org.oracle.okafka.clients.producer.KafkaProducer` class with the `oracle.transactional.producer=true` property.
 
-Once the producer instance is created, initialize database transactions with the `producer.initTransactions()` method.
+Once the producer instance is created, initialize the producer for transactional management using the `producer.initTransactions()` method.
 
 ```java
 Properties props = new Properties();
@@ -33,9 +35,7 @@ props.put("value.serializer", "org.apache.kafka.common.serialization.StringSeria
 
 // Enable Transactional messaging with the producer
 props.put("oracle.transactional.producer", "true");
-KafkaProducer<String, String> producer = new KafkaProducer<>(
-    producerProps
-);
+KafkaProducer<String, String> producer = new KafkaProducer<>(props);
 
 // Initialize the producer for database transactions
 producer.initTransactions();
@@ -74,7 +74,7 @@ public void produce(String record) {
         producer.abortTransaction();
     }
 
-    // 5. Once complete, commit the transaction
+    // 5. Once complete, commit the transaction.
     producer.commitTransaction();
     System.out.println("Processed record");
 }
@@ -82,7 +82,7 @@ public void produce(String record) {
 
 #### Transactional Consume
 
-To configure a transactional consumer, configure a org.oracle.okafka.clients.consumer.KafkaConsumer class with `auto.commit=false`. Disabling auto-commit will allow great control of database transactions through the `commitSync()` and `commitAsync()` methods.
+To configure a transactional consumer, configure the `org.oracle.okafka.clients.consumer.KafkaConsumer` class with `auto.commit=false`. Disabling auto-commit will allow great control of database transactions through the `commitSync()` and `commitAsync()` methods.
 
 ```java
 Properties props = new Properties();

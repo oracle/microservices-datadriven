@@ -6,7 +6,7 @@ weight = 2
 
 Oracle Database Transactional Event Queues (TxEventQ) offers comprehensive integration with Apache Kafka, providing developers with a powerful and flexible messaging platform. This module explores the synergy between TxEventQ and Kafka, covering essential concepts and practical implementations. In this module, we'll refer to _queues_ as _topics_ when working with TxEventQ and Kafka.
 
-Throughout this module, we'll explore practical examples using Java code and SQLcl commands to demonstrate:
+Throughout this module, we'll explore practical examples using Java code and SQL commands to demonstrate:
 
 - Creating and managing topics using Kafka APIs with TxEventQ
 - Producing and consuming messages using Kafka client libraries
@@ -29,7 +29,7 @@ TxEventQ and Kafka share several common architectural concepts, making it easier
 
 ## Developing with Kafka APIs on TxEventQ
 
-TxEventQ supports Kafka Java APIs through the [Kafka Java Client for Oracle Database Transactional Event Queues](https://github.com/oracle/okafka), allowing developers to leverage existing Kafka knowledge developing against TxEventQ. Key operations include:
+TxEventQ supports Kafka Java APIs through the [Kafka Java Client for Oracle Database Transactional Event Queues](https://github.com/oracle/okafka), allowing developers to leverage their existing Kafka knowledge when developing with TxEventQ. Key operations include:
 
 - Authenticating to Oracle Database with Kafka APIs
 - Creating topics and partitions using Kafka Admin
@@ -38,7 +38,7 @@ TxEventQ supports Kafka Java APIs through the [Kafka Java Client for Oracle Data
 
 ## Kafka Connectors
 
-Oracle offers a Kafka connector for TxeventQ, enabling seamless integration of messages from both platforms. These connectors allow:
+Oracle offers a Kafka connector for TxEventQ, enabling seamless integration of messages from both platforms. These connectors allow:
 
 - Syncing messages from Kafka topics to TxEventQ queues
 - Sourcing messages from TxEventQ for consumption by Kafka clients

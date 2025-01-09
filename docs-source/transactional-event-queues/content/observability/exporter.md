@@ -4,7 +4,7 @@ title = "Database Monitoring Exporter"
 weight = 2
 +++
 
-[The Oracle Database Metrics Exporter](https://github.com/oracle/oracle-db-appdev-monitoring) is a standalone application that provides observability to Oracle Database instances and is designed to run on-premises or in the cloud. This section covers configuring the database exporter for Oracle Database Transactional Event Queues.
+[The Oracle Database Metrics Exporter](https://github.com/oracle/oracle-db-appdev-monitoring) is a standalone application that provides observability into Oracle Database instances and is designed to run on-premises or in the cloud. This section covers configuring the database exporter for Oracle Database Transactional Event Queues.
 
 To get started with the database exporter, see the [installation](https://github.com/oracle/oracle-db-appdev-monitoring/blob/main/README.md#installation) section.
 
@@ -29,7 +29,7 @@ To add more TxEventQ metrics, you can create a custom metrics file based on the 
 
 ## Sample Grafana Dashboard
 
-The [Sample Dashboard for TxEventQ](https://github.com/oracle/oracle-db-appdev-monitoring/blob/main/docker-compose/grafana/dashboards/txeventq.json) visualizes database queueing metrics, and requires the custom metrics definitions located in the [TxEventQ custom metrics file](https://github.com/oracle/oracle-db-appdev-monitoring/blob/main/custom-metrics-example/txeventq-metrics.toml) to be loaded into the database exporter.
+The [Sample Dashboard for TxEventQ](https://github.com/oracle/oracle-db-appdev-monitoring/blob/main/docker-compose/grafana/dashboards/txeventq.json) visualizes metrics related to database queuing, and requires the custom metrics definitions located in the [TxEventQ custom metrics file](https://github.com/oracle/oracle-db-appdev-monitoring/blob/main/custom-metrics-example/txeventq-metrics.toml) to be loaded into the database exporter.
 
 The dashboard can be loaded into a Grafana instance to visualize TxEventQ status, throughput, and subscriber information for a given queue.
 

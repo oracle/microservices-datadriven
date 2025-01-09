@@ -9,7 +9,7 @@ Performance tuning is critical for ensuring the efficiency, reliability, and res
 
 * [Partitioning/Sharding and Multiple Consumers](#partitioningsharding-and-multiple-consumers)
   * [Creating a Partitioned Kafka Topic](#creating-a-partitioned-kafka-topic)
-  * [Message Cache](#message-cache)
+  * [Message Cache Optimization](#message-cache-optimization)
 * [Tuning System Parameters](#tuning-system-parameters)
   * [DB_BLOCK_SIZE](#db_block_size)
   * [JAVA_POOL_SIZE](#java_pool_size)
@@ -23,11 +23,11 @@ Performance tuning is critical for ensuring the efficiency, reliability, and res
 
 ## Partitioning/Sharding and Multiple Consumers
 
-Oracle Database automatically manages the partitions (also known as shards) of a queue, which corresponds to a table partition. When messages are enqueued, each message is routed to a specific partition of the queue. Messages within a partition maintain a strict, session-level ordering.
+Oracle Database automatically manages the database table partitions of a queue. As queue volume fluctuates, partitions may be dynamically created as necessary, for example, when the queue table expands due to a message backlog. Once all messages are dequeued and no longer needed, the database table partition is truncated and made available for reuse.
 
-As queue volume fluctuates, partitions may be dynamically created as necessary, such as when the queue table expands due to a message backlog. Once all messages are dequeued and no longer needed, the partition is truncated and made available for reuse. A higher number of partitions per queue improves dequeue performance through consumer parallelization, but requires additional memory and database resources.
+Queue partitions (or shards) can be configured on a queue during creation. A higher number of partitions per queue improves dequeue performance through consumer parallelization, but requires additional memory and database resources. When messages are enqueued, each message is routed to a specific partition of the queue. Messages within a partition maintain a strict, session-level ordering.
 
-If you wish to manually set the number of partitions for a queue, you may do so using the [SET_QUEUE_PARAMETER](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQADM.html#GUID-E592137F-BB8E-49A2-80C2-C055358566C9) procedure. The following SQL script creates a queue, and configures it to have 5 partitions/shards and key based enqueue. Key based enqueue lets producers route messages to a specific shard by providing a message key at enqueue time.
+If you wish to manually set the number of partitions/shards for a queue, you may do so using the [SET_QUEUE_PARAMETER](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQADM.html#GUID-E592137F-BB8E-49A2-80C2-C055358566C9) procedure. The following SQL script creates a queue, and configures it to have 5 partitions/shards and key based enqueue. Key based enqueue allows message routing to a specific shard within a queue by providing a message key at enqueue time.
 
 ```sql
 begin
@@ -54,15 +54,15 @@ It is recommended to avoid creating global indexes on the partitioned table that
 
 ### Creating a Partitioned Kafka Topic
 
-The following Java snippet creates a TxEventQ topic with 5 partitions using the [Kafka Java Client for Oracle Database Transactional Event Queues](https://github.com/oracle/okafka). The `my_topic` topic may have up to 5 distinct consumer threads per consumer group, increasing parallelization.
+The following Java code snippet creates a TxEventQ topic with 5 partitions using the [Kafka Java Client for Oracle Database Transactional Event Queues](https://github.com/oracle/okafka). The `my_topic` topic may have up to 5 distinct consumer threads per consumer group, increasing parallelization.
 
 ```java
 Properties props = // Oracle Database connection properties
 NewTopic topic = new NewTopic("my_topic", 5, (short) 1);
 try (Admin admin = AdminClient.create(props)) {
     admin.createTopics(Collections.singletonList(topic))
-            .all()
-            .get();
+        .all()
+        .get();
 } catch (ExecutionException | InterruptedException e) {
     // Handle topic creation exception
 }
@@ -70,7 +70,7 @@ try (Admin admin = AdminClient.create(props)) {
 
 Note that you can use as many producers per topic as required, though it is recommended to ensure consumers are capable of consuming messages _at least_ as fast as they are produced to avoid creating a message backlog and decreasing message throughput. For additional resources and examples related to developing with Kafka APIs for TxEventQ, see the [Kafka chapter](../kafka/_index.md).
 
-### Message Cache
+### Message Cache Optimization
 
 TxEventQ includes a specialized message cache that allows administrators to balance [System Global Area (SGA)](https://docs.oracle.com/en/database/oracle/oracle-database/23/dbiad/db_sga.html) usage and queue performance. Management of TxEventQ's SGA usage benefits throughput, reduces latency, and allows greater concurrency. When paired with partitioning, message caching reduces the need for certain queries, DML operations, and indexes. The cache is most effective when consumers can keep up with producers, and when it is large enough to store the messages (including payloads) for all consumers and producers for using TxEventQ.
 
@@ -80,7 +80,7 @@ The message cache uses the Oracle Database Streams pool. You can fine-tune the m
 
 System parameters can be modified as appropriate for your database installation and event volume to improve TxEventQ performance. This section describes key parameters for optimizing TxEventQ and provides a refresher on working with system parameters.
 
-To update a system parameter, use the `ALTER SYSTEM` command. The following statement sets the SGA_TARGET parameter to 2 GB.
+To update a system parameter, use the `ALTER SYSTEM` command. The following statement sets the SGA_TARGET parameter to 2 GB on the running instance and the parameter file.
 
 ```sql
 alter system set sga_target = 2G scope = both;

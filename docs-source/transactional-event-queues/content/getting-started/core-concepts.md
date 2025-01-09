@@ -120,7 +120,7 @@ end;
 
 #### Object
 
-For structured, complex messages, you may choose to set the payload type as a custom object type that was defined using `create type`. Object types must reside in the same schema as the queue/topic, and the structure of each message must exactly match the payload type.
+For structured, complex messages, you may choose to set the payload type as a custom object type that was defined using `create type`. Object types must be accessible from the queue/topic, and the structure of each message must exactly match the payload type.
 
 The following SQL script defines a custom object type, and then creates a Transactional Event Queue using that type.
 
@@ -149,4 +149,6 @@ end;
 
 #### Kafka Message Payloads
 
-Topics created using the Kafka APIs for Transactional Event Queues use a Kafka message payload type, and so specifying the payload type is not necessary. Additionally, topics created using Kafka APIs should also be managed, produced and consumed from using the appropriate Kafka APIs.
+Topics created using the Kafka APIs for Transactional Event Queues use a Kafka message payload type, and specifying the payload type is not necessary. Additionally, topics created using Kafka APIs should also be managed and interacted with using the appropriate Kafka APIs.
+
+For more information on using Kafka APIs with TxEventQ, see the [Kafka chapter](../kafka/_index.md).

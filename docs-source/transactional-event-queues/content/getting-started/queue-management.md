@@ -4,7 +4,7 @@ title = "Queue Management"
 weight = 2
 +++
 
-This section covers the management of Transactional Event Queues, including the grants and roles required to use queues, hsteps to create, start, and stop queues across different programming languages and APIs.
+This section covers the management of Transactional Event Queues, including the grants and roles required to use queues, steps to create, start, and stop queues across different programming languages and APIs.
 
 * [Database Permissions for Transactional Event Queues](#database-permissions-for-transactional-event-queues)
   * [Permissions for SQL Packages](#permissions-for-sql-packages)
@@ -27,12 +27,13 @@ This section covers the management of Transactional Event Queues, including the 
 For management of queues using Transactional Event Queue APIs in SQL or other languages, the following permissions are recommended for users managing  queues:
 
 ```sql
-grant resource, connect, unlimited tablespace to testuser;
+-- Grant tablespace as appropriate to your TxEventQ user
+grant resource, connect to testuser;
 grant aq_user_role to testuser;
 grant execute on dbms_aq to testuser;
 grant execute on dbms_aqadm to testuser;
-grant execute ON dbms_aqin TO testuser;
-grant execute ON dbms_aqjms TO testuser;
+grant execute on dbms_aqin to testuser;
+grant execute on dbms_aqjms to testuser;
 grant execute on dbms_teqk to testuser;
 ```
 
@@ -41,7 +42,8 @@ grant execute on dbms_teqk to testuser;
 If your database user is interacting with Transactional Event Queues via Kafka APIs and the [Kafka Java Client for Oracle Database Transactional Event Queues](https://github.com/oracle/okafka), the following permissions are recommended for users managing topics and messages:
 
 ```sql
-grant resource, connect, unlimited tablespace to testuser;
+-- Grant tablespace as appropriate to your TxEventQ user
+grant resource, connect to testuser;
 grant aq_user_role to testuser;
 grant execute on dbms_aq to  testuser;
 grant execute on dbms_aqadm to testuser;
@@ -90,7 +92,7 @@ The following SQL script adds a comment to an existing queue.
 begin
     dbms_aqadm.alter_transactional_event_queue(
         queue_name => 'my_queue',
-        comment    => 'just for testing'
+        comment    => 'for testing purposes'
     );
 end;
 /
@@ -166,7 +168,7 @@ try (Admin admin = AdminClient.create(props)) {
 
 #### Java with JMS
 
-The [`oracle.jms` Java package](https://docs.oracle.com/en/database/oracle/oracle-database/23/jajms/index.html) includes several APIs for managing queues, enqueuing, and dequeuing messages using JMS. The [Oracle Spring Boot Starter for AqJms](https://mvnrepository.com/artifact/com.oracle.database.spring/oracle-spring-boot-starter-aqjms) provides a comprehensive set of dependencies to get started using the Java JMS API with Transactional Event Queues. You may also use the following guide to get started, which implements a simple [producer consumer example using AqJms for Transcational Event Queues](https://medium.com/@anders.swanson.93/use-jms-for-asynchronous-messaging-in-spring-boot-d67f8349c7c4).
+The [`oracle.jms` Java package](https://docs.oracle.com/en/database/oracle/oracle-database/23/jajms/index.html) includes several APIs for managing queues, enqueuing, and dequeuing messages using JMS. The [Oracle Spring Boot Starter for AqJms](https://mvnrepository.com/artifact/com.oracle.database.spring/oracle-spring-boot-starter-aqjms) provides a comprehensive set of dependencies to get started using the Java JMS API with Transactional Event Queues. The Spring Boot section includes a detailed [producer consumer example using Spring JMS for Transactional Event Queues](../spring-boot/jms.md).
 
 #### Python
 
@@ -178,10 +180,10 @@ Before you can use Transactional Event queues from .NET, you need to create and 
 
 #### JavaScript
 
-Using the [`node-oracledb` package](https://node-oracledb.readthedocs.io/en/latest/api_manual/aq.html), an AqQueue class can be created from a connection for enqueuing and dequeuing messages. Queue creation and management should be handled by the node-oracledb Database Driver or a SQL script run by a database administrator.
+Using the [`node-oracledb` package](https://node-oracledb.readthedocs.io/en/latest/api_manual/aq.html), an AqQueue class can be created from a connection for enqueuing and dequeuing messages. Queue creation and management should be handled by a database administrator.
 
 #### Oracle REST Data Services
 
 Oracle REST Data Services (ORDS) is a Java Enterprise Edition (Java EE) based data service that provides enhanced security, file caching features, and RESTful Web Services. Oracle REST Data Services also increases flexibility through support for deployment in standalone mode, as well as using servers like Oracle WebLogic Server and Apache Tomcat.
 
-With ORDS, [REST APIs can be used to manage Transactional Event Queues](https://docs.oracle.com/en/database/oracle/oracle-rest-data-services/24.3/orrst/api-oracle-transactional-event-queues.html), including creating queues, producing and consuming messages.
+With ORDS, [REST APIs can be used to manage Transactional Event Queues](https://docs.oracle.com/en/database/oracle/oracle-rest-data-services/24.4/orrst/api-oracle-transactional-event-queues.html), including creating queues, producing and consuming messages.

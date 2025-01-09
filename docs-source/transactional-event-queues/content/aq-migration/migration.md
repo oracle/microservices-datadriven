@@ -4,7 +4,8 @@ title = "AQ Migration"
 weight = 1
 +++
 
-This section covers the use of the [DBMS_AQMIGTOOL](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQMIGTOOL.html) package for migrating Advanced Queuing (AQ) classic queues to TxEventQ. 
+
+This section provides a detailed guide for migrating from Oracle Advanced Queuing (AQ) to Transactional Event Queues (TxEventQ). The migration process uses the [DBMS_AQMIGTOOL](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQMIGTOOL.html) package to ensure minimal disruption of existing messaging workflows.
 
 Users of AQ are recommended to migrate to TxEventQ for increased support, performance, and access to new database features. It is recommended to read through the document fully before attempting migration.
 

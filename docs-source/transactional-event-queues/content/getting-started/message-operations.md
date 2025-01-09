@@ -6,6 +6,7 @@ weight = 3
 
 This section explains message operations using queues, topics, and different programming interfaces (SQL, Java, Spring JMS, and more). You’ll learn how to enqueue, dequeue, and manage messages effectively.
 
+
 * [Enqueue and Dequeue, or Produce and Consume](#enqueue-and-dequeue-or-produce-and-consume)
   * [Queues](#queues)
   * [Topics](#topics)
@@ -19,6 +20,7 @@ This section explains message operations using queues, topics, and different pro
 * [Message Expiry and Exception Queues](#message-expiry-and-exception-queues)
 * [Message Delay](#message-delay)
 * [Message Priority](#message-priority)
+* [Transactional Messaging: Combine Messaging with Database Queries](#transactional-messaging-combine-messaging-with-database-queries)
 
 ### Enqueue and Dequeue, or Produce and Consume
 
@@ -159,7 +161,7 @@ public class SampleProducer<T> implements Runnable, AutoCloseable {
 
 The following Java snippet creates an org.oracle.okafka.clients.consumer.KafkaConsumer instance capable of records from Transactional Event Queue topics. Note the use of Oracle Database connection properties, and Kafka consumer-specific properties like `group.id` and `max.poll.records`.
 
-The org.oracle.okafka.clients.consumer.KafkaConsume class implements the org.apache.kafka.clients.consumer.Consumer interface, allowing it to be used in place of a Kafka Java client consumer.
+The org.oracle.okafka.clients.consumer.KafkaConsumer class implements the org.apache.kafka.clients.consumer.Consumer interface, allowing it to be used in place of a Kafka Java client consumer.
 
 ```java
 Properties props = new Properties();
@@ -181,7 +183,7 @@ props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDes
 Consumer<String, String> okafkaConsumer = new KafkaConsumer<>(props);
 ```
 
-The following Java class consumes messages to a topic, using the [Kafka Java Client for Oracle Database Transactional Event Queues](https://github.com/oracle/okafka). Like the producer example, the consumer only does not use any Oracle classes, only Kafka interfaces.
+The following Java class consumes messages from a topic, using the [Kafka Java Client for Oracle Database Transactional Event Queues](https://github.com/oracle/okafka). Like the producer example, the consumer only does not use any Oracle classes, only Kafka interfaces.
 
 
 ```java
@@ -253,7 +255,7 @@ ConnectionFactory cf = AQjmsFactory.getConnectionFactory(ds);
 try (Connection conn = cf.createConnection()) {
     Session session = conn.createSession();
     Queue myQueue = session.createQueue("my_queue");
-    MessageConsumer consumer = session.createConsumer(queue);
+    MessageConsumer consumer = session.createConsumer(myQueue);
     conn.start();
     Message msg = consumer.receive(10000); // Wait for 10 seconds
     if (msg != null && msg instanceof TextMessage) {
@@ -336,7 +338,7 @@ begin
     message := sys.aq$_jms_text_message.construct();
     message.set_text('this is my message');
 
-    message_properties.delay := 7*24*60*60; -- Delay for 1 week
+    message_properties.delay := 7*24*60*60; -- Delay for 7 days
     dbms_aq.enqueue(
             queue_name => 'my_queue',
             enqueue_options => enqueue_options,
@@ -377,3 +379,57 @@ begin
 end;
 /
 ```
+
+### Transactional Messaging: Combine Messaging with Database Queries
+
+Enqueue and dequeue operations occur within database transactions, allowing developers to combine database DML with messaging operations. This is particularly useful when the message contains data relevant to other tables or services within your schema.
+
+In the following example, a DML operation (an `INSERT` query) is combined with an enqueue operation in the same transaction. If the enqueue operation fails, the `INSERT` is rolled back. The orders table serves as the example.
+
+```sql
+create table orders (
+    id number generated always as identity primary key,
+    product_id number not null,
+    quantity number not null,
+    order_date date default sysdate
+);
+
+declare
+    enqueue_options dbms_aq.enqueue_options_t;
+    message_properties dbms_aq.message_properties_t;
+    msg_id raw(16);
+    message json;
+    body varchar2(200) := '{"product_id": 1, "quantity": 5}';
+    product_id number;
+    quantity number;
+begin
+    -- Convert the JSON string to a JSON object
+    message := json(body);
+
+    -- Extract product_id and quantity from the JSON object
+    product_id := json_value(message, '$.product_id' returning number);
+    quantity := json_value(message, '$.quantity' returning number);
+
+    -- Insert data into the orders table
+    insert into orders (product_id, quantity)
+        values (product_id, quantity);
+
+    -- Enqueue the message
+    dbms_aq.enqueue(
+            queue_name => 'json_queue',
+            enqueue_options => enqueue_options,
+            message_properties => message_properties,
+            payload => message,
+            msgid => msg_id
+    );
+    commit;
+exception
+    when others then
+        -- Rollback the transaction on error
+        rollback;
+        dbms_output.put_line('error dequeuing message: ' || sqlerrm);
+end;
+/
+```
+
+> Note: The same pattern applies to the `dbms_aq.dequeue` procedure, allowing developers to perform DML operations within dequeue transactions.

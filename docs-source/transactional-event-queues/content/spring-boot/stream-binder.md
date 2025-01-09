@@ -4,7 +4,7 @@ title = "Spring Cloud Stream Binder"
 weight = 3
 +++
 
-[Spring Cloud Stream](https://spring.io/projects/spring-cloud-stream) is a Java framework that is designed for building event-driven microservices backed by a scalable, fault-tolerant messaging system. The [Oracle Database Transactional Event Queues stream binder implementation](https://github.com/oracle/spring-cloud-oracle/tree/main/database/spring-cloud-stream-binder-oracle-txeventq) allows developers to leverage Oracle’s database messaging platform within the Spring Cloud Stream ecosystem.
+[Spring Cloud Stream](https://spring.io/projects/spring-cloud-stream) is a Java framework for building event-driven microservices backed by a scalable, fault-tolerant messaging system. The [Oracle Database Transactional Event Queues Stream Binder](https://github.com/oracle/spring-cloud-oracle/tree/main/database/spring-cloud-stream-binder-oracle-txeventq) allows developers to leverage Oracle’s database messaging platform within the Spring Cloud Stream ecosystem.
 
 This section covers the key features of the Spring Cloud Stream Binder for Oracle Database Transactional Event Queues and getting started examples for developers.
 
@@ -43,7 +43,7 @@ implementation "com.oracle.database.spring.cloud-stream-binder:spring-cloud-stre
 The database user producing/consuming events with the Stream Binder requires the following database permissions. Modify the username and tablespace grant as appropriate for your application:
 
 ```sql
-grant unlimited tablespace to testuser;
+-- Grant tablespace as appropriate to your TxEventQ user
 grant select_catalog_role to testuser;
 grant execute on dbms_aq to testuser;
 grant execute on dbms_aqadm to testuser;
