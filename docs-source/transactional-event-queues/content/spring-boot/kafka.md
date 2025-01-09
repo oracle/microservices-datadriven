@@ -4,7 +4,7 @@ title = "Kafka Starter"
 weight = 2
 +++
 
-This section provides information on getting started using the Kafka Java Client for Oracle Database Transactional Event Queues from a Spring Boot application.
+This section provides information on getting started with the Kafka Java Client for Oracle Database Transactional Event Queues in a Spring Boot application.
 
 You can learn more about the Kafka APIs of Oracle Database Transactional Event Queues in the [Kafka chapter](../kafka/_index.md).
 
@@ -47,8 +47,8 @@ public class OKafkaConfiguration {
     @Value("${service.name:freepdb1}")
     private String serviceName;
 
-    // We use plaintext for a containerized, local database.
-    // Use SSL for wallet connections, like Autonomous Database.
+    // Use plaintext for containerized, local, or insecure databases.
+    // Use of SSL with Oracle Wallet is otherwise recommend, such as for Autonomous Database.
     @Value("${security.protocol:PLAINTEXT}")
     private String securityProtocol;
 
@@ -65,7 +65,7 @@ public class OKafkaConfiguration {
 
 ### Configuring a Producer Bean
 
-We can now configure a sample producer bean using the org.oracle.okafka.clients.producer.KafkaProducer class:
+We can now configure a sample producer bean using the `org.oracle.okafka.clients.producer.KafkaProducer` class:
 
 ```java
 @Bean
@@ -81,11 +81,11 @@ public Producer<String, String> sampleProducer() throws IOException {
 }
 ```
 
-The Producer bean can be autowired into Spring components to write messages to Oracle Database Transactional Event Queue topics.. For a complete example of writing data to topics, see [Producing messages to Kafka Topics](../kafka/developing-with-kafka.md#producing-messages).
+The Producer bean can be autowired into Spring components to write messages to Oracle Database Transactional Event Queue topics. For a complete example of writing data to topics, see [Producing messages to Kafka Topics](../kafka/developing-with-kafka.md#producing-messages).
 
 ### Configuring a Consumer Bean
 
-Next, we'll configure a sample consumer bean using the org.oracle.okafka.clients.consumer.KafkaConsumer class:
+Next, we'll configure a sample consumer bean using the `org.oracle.okafka.clients.consumer.KafkaConsumer` class:
 
 ```java
 @Bean

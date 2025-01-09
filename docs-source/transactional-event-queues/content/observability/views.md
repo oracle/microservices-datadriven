@@ -16,7 +16,7 @@ Provides information about cached event stream partitions. Queries may group on 
 
 ### [V$EQ_CROSS_INSTANCE_JOBS](https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_CROSS_INSTANCE_JOBS.html#REFRN-GUID-AF791906-80CB-49FB-9873-6330F3748972)
 
-The `V$EQ_CROSS_INSTANCE_JOBS` view provides information about TxEventQ cross-instance jobs. This view is crucial for monitoring and managing message forwarding across different instances in a database cluster. This view is crucial for monitoring and managing message forwarding across different instances in a database cluster. The view offers comprehensive data about each job, including:
+The `V$EQ_CROSS_INSTANCE_JOBS` view provides information about TxEventQ cross-instance jobs. This view is crucial for monitoring and managing message forwarding across different instances in a database cluster. The view offers comprehensive data about each job, including:
 
 - Job ID
 - Source schema and queue name
@@ -68,7 +68,7 @@ The `V$EQ_SUBSCRIBER_LOAD` view provides data on the load and latency of all sub
 
 ### [V$EQ_SUBSCRIBER_STAT](https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_SUBSCRIBER_STAT.html#REFRN-GUID-229BE296-BD6B-47C4-9164-4E850D1F9E1A)
 
-The `V$EQ_SUBSCRIBER_STAT` view provides statistics about subscribers of queue event streams. Each row corresponds to a specific queue, event stream and subscriber combination.
+The `V$EQ_SUBSCRIBER_STAT` view provides statistics about subscribers of queue event streams. Each row corresponds to a specific combination of queue, event stream, and subscriber.
 
 This view is useful for monitoring the performance and status of subscribers, allowing administrators to identify potential bottlenecks and optimize message processing.
 

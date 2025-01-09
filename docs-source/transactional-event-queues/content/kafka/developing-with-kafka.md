@@ -4,12 +4,12 @@ title = "Developing With Kafka APIs"
 weight = 2
 +++
 
-This section provides developer-friendly examples using the [Kafka Java Client for Oracle Database Transactional Event Queues](https://github.com/oracle/okafka). The Kafka Java client implements Kafka client interfaces, allowing you to use familiar Kafka Java APIs with Oracle Database Transactional Event Queues. You'll learn how to authenticate to Oracle Database, create topics, produce messages, and consume messages using Java Kafka clients.
+This section provides developer-friendly examples using the [Kafka Java Client for Oracle Database Transactional Event Queues](https://github.com/oracle/okafka). The Kafka Java client implements Kafka client interfaces, allowing you to use familiar Kafka Java APIs with Oracle Database Transactional Event Queues. You'll learn how to authenticate to Oracle Database using SSL with Oracle Wallet or PLAINTEXT, create topics, produce messages, and consume messages using Java Kafka clients.
 
 
 ## Kafka Java Client for Oracle Database Transactional Event Queues
 
-To get started using the client, add the [Kafka Java Client for Oracle Database Transactional Event Queues dependency](https://central.sonatype.com/artifact/com.oracle.database.messaging/okafka) to your project. If you're using Maven:
+To get started using the client, add the [dependency for the Kafka Java Client for Oracle Database Transactional Event Queues](https://central.sonatype.com/artifact/com.oracle.database.messaging/okafka) to your project. If you're using Maven:
 
 ```xml
 <dependency>
@@ -31,7 +31,7 @@ The database user should  have appropriate permissions to create topics, produce
 
 To authenticate to Oracle Database with the Kafka clients, configure a Java `Properties` object with Oracle Database-specific properties for service name, wallet location, and more.
 
-The configured `Properties` objects are passed to Kafka Java Client for Oracle Database Transactional Event Queues implementations for Oracle Database authentication. We'll use these authentication samples as a base for creating Kafka Java cilents in follow up examples.
+The configured `Properties` objects are passed to Kafka Java Client for Oracle Database Transactional Event Queues implementations for Oracle Database authentication. We'll use these authentication samples as a base for creating Kafka Java clients in follow-up examples.
 
 #### Configuring Plaintext Authentication
 
@@ -76,7 +76,7 @@ props.put("oracle.net.tns_admin", "<wallet directory>");
 
 The `org.oracle.okafka.clients.admin.AdminClient` class implements the Kafka Java Client Admin interface, and should be used to create topics for Oracle Database Transactional Event Queues when using Kafka APIs. 
 
-The following Java class provides a sample implementation for topic creation. Assume the `props` parameter contains authenticating properties for Oracle Database, as defined in [Authenticating to Oracle Database](#authenticating-to-oracle-database). Note that while the number of topic partitions is configurable, the replication factor must always be set to `1`, as data replication is managed by the database server settings.
+The following Java class provides a sample implementation for topic creation. Assume the `props` parameter contains authenticating properties for Oracle Database, as defined in [Authenticating to Oracle Database](#authenticating-to-oracle-database). Note that while the number of partitions per topic is configurable, the replication factor must always be set to `1` because Oracle handles replication at the database level, ensuring the database is the point of failure recovery.
 
 ```java
 import java.util.Collections;
@@ -111,7 +111,7 @@ public class TopicCreator {
 
 ### Producing Messages
 
-Similar to standard Kafka producers, producers using the Kafka Java Client for Oracle Database Transactional Event Queues must configure key and value serializers. The following snippet adds a standard StringSerializer for both, though you can provide custom implementations as needed. You may also use standard Kafka properties like `enable.idempotence` when configuring producers for Oracle Database Transactional Event Queues.
+Similar to standard Kafka producers, producers using the Kafka Java Client for Oracle Database Transactional Event Queues must configure key and value serializers. The following snippet adds a standard StringSerializer for both, though you can provide custom implementations as needed. You may also use standard Kafka properties like `enable.idempotence` when configuring producers for Oracle Database Transactional Event Queues to ensure messages are not duplicated in the event of retries.
 
 
 ```java
@@ -122,7 +122,7 @@ props.put("value.serializer", "org.apache.kafka.common.serialization.StringSeria
 props.put("enable.idempotence", "true");
 ```
 
-The following Java snippet creates a producer using the Kafka Java Client for Oracle Database Transactional Event Queues, and sends a message. The `org.oracle.okafka.clients.producer.KafkaProducer` class implements the Kafka Java Client Producer interface.
+The following Java snippet creates a producer using the Kafka Java Client for Oracle Database Transactional Event Queues, and sends a message. The `org.oracle.okafka.clients.producer.KafkaProducer` class works like a standard Kafka producer but integrates with TxEventQ and supports [transactional messaging](transactional-messaging.md).
 
 ```java 
 // Create the producer
@@ -131,14 +131,14 @@ Producer<String, String> producer = new KafkaProducer<>(props);
 producer.send(new ProducerRecord<>("my_topic", "my first message!"));
 ```
 
-The Kafka Java Client for Oracle Database Transactional Event Queues supports all variations of `producer.send()`, allowing full control of the destination partition, and the inclusion of message headers.
+The Kafka Java Client for Oracle Database Transactional Event Queues supports all variations of `producer.send()` including partitioning logic, message keys, and headers.
 
 ### Consuming Messages
 
 Consumers created using the Kafka Java Client for Oracle Database Transactional Event Queues use standard Kafka properties, and must specify key and value serializers. The following Java snippet configures a `Properties` object for a consumer:
 
 ```java
-// Assume props is a configured Properties object for Oracle Database
+// Assume props is already configured with Oracle Database authentication properties as detailed earlier.
 props.put("group.id", "MY_CONSUMER_GROUP");
 props.put("enable.auto.commit", "false");
 props.put("max.poll.records", 2000);

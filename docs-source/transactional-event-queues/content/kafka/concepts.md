@@ -16,7 +16,7 @@ This section describes the architectural concepts of **Oracle Database Transacti
 
 ## Kafka Brokers or a Database Server?
 
-When using Oracle Database Transactional Event Queues with Kafka APIs, the database server assumes the role of the Kafka Broker, eliminating the need for an additional messaging system to produce and consume data.
+When using Oracle Database Transactional Event Queues with Kafka APIs, the database server assumes the role of the Kafka Broker, eliminating the need for additional messaging systems.
 
 Using your database as a message broker allows you to avoid separate, costly servers dedicated to event streaming. These servers typically require domain-specific knowledge to operate, maintain, and upgrade in production deployments.
 
@@ -45,7 +45,7 @@ Within a partition, each message is strictly ordered. If each consumer in a cons
 
 ### Partition Keys
 
-Partition keys are used to route messages to specific partitions, ensuring the ordering of messages is preserved in the partition. To ensure strict ordering, use a consistent piece of message data as the partition key for each producer record. For example, if you are processing user interactions, the use of the user id as a partition key will ensure each user's messages are produced to a consistent partition. The user id is implicitly hashed to produce a consistent partition key.
+Partition keys are used to route messages to specific partitions, ensuring the ordering of messages is preserved in the partition. To ensure strict ordering, use a consistent piece of message data as the partition key for each producer record. For example, if you are processing user interactions, the use of the user ID as a partition key will ensure each user's messages are produced to a consistent partition. The user ID is implicitly hashed to produce a consistent partition key.
 
 The use of partition keys is not mandatory: round-robin partition assignment is used if no partition key is provided in the producer record. Round-robin assignment is convenient when there is no specific ordering of messages, or strict ordering is not required.
 
@@ -53,7 +53,7 @@ The use of partition keys is not mandatory: round-robin partition assignment is 
 
 ### Message Offsets
 
-Offsets are used to track the progress of consumers as they consume messages from topics. An offset is an identifier for a specific position in a topic's partition. When a consumer reads a message, it commits the offset to indicate that the message is being processed.  Offsets can be used as a consumer checkpoint, as well as a way to replay messages. 
+Offsets are used to track the progress of consumers as they consume messages from topics. An offset is an identifier for a specific position in a topic's partition. When a consumer reads a message, it commits the offset to indicate that the message is being processed. Offsets serve as consumer checkpoints and can be used to replay messages. Replay is useful for debugging, reprocessing failed events, or back-filling data.
 
 For example, consumers can be started from the earliest known offset and progress to the newest message, started at the latest known offset, or have their offset moved to a specific point in the partition.
 
