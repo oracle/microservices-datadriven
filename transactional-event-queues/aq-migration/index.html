@@ -3,38 +3,34 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.140.1">
+    <meta name="generator" content="Hugo 0.138.0">
     <meta name="generator" content="Relearn 7.3.1">
     <meta name="description" content="Oracle Database 23ai includes a migration path from Advanced Queuing (AQ) to Transactional Event Queues (TxEventQ), to take advantage of enhanced performance and scalability for event-driven architectures.
-The DBMS_AQMIGTOOL package facilitates a smooth migration process, designed to be non-disruptive and allowing the parallel operation of AQ and TxEventQ during the transition, enabling a smooth cut-over with minimal downtime for your applications.
-The migration from AQ to TxEventQ is suitable for various scenarios:">
+Advanced Queuing (AQ) has been Oracle’s traditional messaging system for managing asynchronous communication in enterprise applications, allowing reliable queuing and message delivery. TxEventQ leverages Kafka-based event queuing, offering improved throughput, lower latency, and greater scalability, making it ideal for modern event-driven architectures and high-volume event processing.">
     <meta name="author" content="">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Migrating From AQ :: Transactional Event Queues">
     <meta name="twitter:description" content="Oracle Database 23ai includes a migration path from Advanced Queuing (AQ) to Transactional Event Queues (TxEventQ), to take advantage of enhanced performance and scalability for event-driven architectures.
-The DBMS_AQMIGTOOL package facilitates a smooth migration process, designed to be non-disruptive and allowing the parallel operation of AQ and TxEventQ during the transition, enabling a smooth cut-over with minimal downtime for your applications.
-The migration from AQ to TxEventQ is suitable for various scenarios:">
+Advanced Queuing (AQ) has been Oracle’s traditional messaging system for managing asynchronous communication in enterprise applications, allowing reliable queuing and message delivery. TxEventQ leverages Kafka-based event queuing, offering improved throughput, lower latency, and greater scalability, making it ideal for modern event-driven architectures and high-volume event processing.">
     <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/transactional-event-queues/aq-migration/index.html">
     <meta property="og:site_name" content="Transactional Event Queues">
     <meta property="og:title" content="Migrating From AQ :: Transactional Event Queues">
     <meta property="og:description" content="Oracle Database 23ai includes a migration path from Advanced Queuing (AQ) to Transactional Event Queues (TxEventQ), to take advantage of enhanced performance and scalability for event-driven architectures.
-The DBMS_AQMIGTOOL package facilitates a smooth migration process, designed to be non-disruptive and allowing the parallel operation of AQ and TxEventQ during the transition, enabling a smooth cut-over with minimal downtime for your applications.
-The migration from AQ to TxEventQ is suitable for various scenarios:">
+Advanced Queuing (AQ) has been Oracle’s traditional messaging system for managing asynchronous communication in enterprise applications, allowing reliable queuing and message delivery. TxEventQ leverages Kafka-based event queuing, offering improved throughput, lower latency, and greater scalability, making it ideal for modern event-driven architectures and high-volume event processing.">
     <meta property="og:locale" content="en_us">
     <meta property="og:type" content="website">
     <meta itemprop="name" content="Migrating From AQ :: Transactional Event Queues">
     <meta itemprop="description" content="Oracle Database 23ai includes a migration path from Advanced Queuing (AQ) to Transactional Event Queues (TxEventQ), to take advantage of enhanced performance and scalability for event-driven architectures.
-The DBMS_AQMIGTOOL package facilitates a smooth migration process, designed to be non-disruptive and allowing the parallel operation of AQ and TxEventQ during the transition, enabling a smooth cut-over with minimal downtime for your applications.
-The migration from AQ to TxEventQ is suitable for various scenarios:">
-    <meta itemprop="wordCount" content="87">
+Advanced Queuing (AQ) has been Oracle’s traditional messaging system for managing asynchronous communication in enterprise applications, allowing reliable queuing and message delivery. TxEventQ leverages Kafka-based event queuing, offering improved throughput, lower latency, and greater scalability, making it ideal for modern event-driven architectures and high-volume event processing.">
+    <meta itemprop="wordCount" content="133">
     <title>Migrating From AQ :: Transactional Event Queues</title>
     <link href="/microservices-datadriven/transactional-event-queues/aq-migration/index.xml" rel="alternate" type="application/rss+xml" title="Migrating From AQ :: Transactional Event Queues">
-    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736354172" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736354172" rel="stylesheet">
-    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736354172" rel="stylesheet">
-    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736354172" rel="stylesheet" id="R-format-style">
+    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736530174" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736530174" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736530174" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736530174" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736530174" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736530174" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736530174" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736530174" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..';
@@ -129,6 +125,7 @@ The migration from AQ to TxEventQ is suitable for various scenarios:">
 <h1 id="migrating-from-aq">Migrating From AQ</h1>
 
 <p>Oracle Database 23ai includes a migration path from Advanced Queuing (AQ) to Transactional Event Queues (TxEventQ), to take advantage of enhanced performance and scalability for event-driven architectures.</p>
+<p>Advanced Queuing (AQ) has been Oracle’s traditional messaging system for managing asynchronous communication in enterprise applications, allowing reliable queuing and message delivery. TxEventQ leverages Kafka-based event queuing, offering improved throughput, lower latency, and greater scalability, making it ideal for modern event-driven architectures and high-volume event processing.</p>
 <p>The <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQMIGTOOL.html" rel="external" target="_blank">DBMS_AQMIGTOOL</a> package facilitates a smooth migration process, designed to be non-disruptive and allowing the parallel operation of AQ and TxEventQ during the transition, enabling a smooth cut-over with minimal downtime for your applications.</p>
 <p>The migration from AQ to TxEventQ is suitable for various scenarios:</p>
 <ul>
@@ -150,7 +147,7 @@ The migration from AQ to TxEventQ is suitable for various scenarios:">
 <img src="https://oracle.github.io/microservices-datadriven/transactional-event-queues//txeventq.png" height="100px">
         </div>
         <script>
-          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736354172";
+          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736530174";
         </script>
         <search><form action="/microservices-datadriven/transactional-event-queues/search/index.html" method="get">
           <div class="searchbox default-animation">
@@ -163,12 +160,12 @@ The migration from AQ to TxEventQ is suitable for various scenarios:">
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736530174" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -247,8 +244,8 @@ The migration from AQ to TxEventQ is suitable for various scenarios:">
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736354172" defer></script>
-    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736354172" defer></script>
-    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736530174" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736530174" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736530174" defer></script>
   </body>
 </html>

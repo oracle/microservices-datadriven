@@ -3,38 +3,38 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.140.1">
+    <meta name="generator" content="Hugo 0.138.0">
     <meta name="generator" content="Relearn 7.3.1">
-    <meta name="description" content="This section covers the use of the DBMS_AQMIGTOOL package for migrating Advanced Queuing (AQ) classic queues to TxEventQ.
+    <meta name="description" content="This section provides a detailed guide for migrating from Oracle Advanced Queuing (AQ) to Transactional Event Queues (TxEventQ). The migration process uses the DBMS_AQMIGTOOL package to ensure minimal disruption of existing messaging workflows.
 Users of AQ are recommended to migrate to TxEventQ for increased support, performance, and access to new database features. It is recommended to read through the document fully before attempting migration.
 DBMS_AQMIGTOOL Overview Migration Workflow Checking Compatibility Initiating Migration Checking Migration Status Commit the Migration Checking and Handling Migration Errors Cancelling and Recovering Migration Limitations and Workarounds DBMS_AQMIGTOOL Overview The migration tool interface provides the following functionalities:">
     <meta name="author" content="">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="AQ Migration :: Transactional Event Queues">
-    <meta name="twitter:description" content="This section covers the use of the DBMS_AQMIGTOOL package for migrating Advanced Queuing (AQ) classic queues to TxEventQ.
+    <meta name="twitter:description" content="This section provides a detailed guide for migrating from Oracle Advanced Queuing (AQ) to Transactional Event Queues (TxEventQ). The migration process uses the DBMS_AQMIGTOOL package to ensure minimal disruption of existing messaging workflows.
 Users of AQ are recommended to migrate to TxEventQ for increased support, performance, and access to new database features. It is recommended to read through the document fully before attempting migration.
 DBMS_AQMIGTOOL Overview Migration Workflow Checking Compatibility Initiating Migration Checking Migration Status Commit the Migration Checking and Handling Migration Errors Cancelling and Recovering Migration Limitations and Workarounds DBMS_AQMIGTOOL Overview The migration tool interface provides the following functionalities:">
     <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/transactional-event-queues/aq-migration/migration/index.html">
     <meta property="og:site_name" content="Transactional Event Queues">
     <meta property="og:title" content="AQ Migration :: Transactional Event Queues">
-    <meta property="og:description" content="This section covers the use of the DBMS_AQMIGTOOL package for migrating Advanced Queuing (AQ) classic queues to TxEventQ.
+    <meta property="og:description" content="This section provides a detailed guide for migrating from Oracle Advanced Queuing (AQ) to Transactional Event Queues (TxEventQ). The migration process uses the DBMS_AQMIGTOOL package to ensure minimal disruption of existing messaging workflows.
 Users of AQ are recommended to migrate to TxEventQ for increased support, performance, and access to new database features. It is recommended to read through the document fully before attempting migration.
 DBMS_AQMIGTOOL Overview Migration Workflow Checking Compatibility Initiating Migration Checking Migration Status Commit the Migration Checking and Handling Migration Errors Cancelling and Recovering Migration Limitations and Workarounds DBMS_AQMIGTOOL Overview The migration tool interface provides the following functionalities:">
     <meta property="og:locale" content="en_us">
     <meta property="og:type" content="article">
     <meta property="article:section" content="Migrating From AQ">
     <meta itemprop="name" content="AQ Migration :: Transactional Event Queues">
-    <meta itemprop="description" content="This section covers the use of the DBMS_AQMIGTOOL package for migrating Advanced Queuing (AQ) classic queues to TxEventQ.
+    <meta itemprop="description" content="This section provides a detailed guide for migrating from Oracle Advanced Queuing (AQ) to Transactional Event Queues (TxEventQ). The migration process uses the DBMS_AQMIGTOOL package to ensure minimal disruption of existing messaging workflows.
 Users of AQ are recommended to migrate to TxEventQ for increased support, performance, and access to new database features. It is recommended to read through the document fully before attempting migration.
 DBMS_AQMIGTOOL Overview Migration Workflow Checking Compatibility Initiating Migration Checking Migration Status Commit the Migration Checking and Handling Migration Errors Cancelling and Recovering Migration Limitations and Workarounds DBMS_AQMIGTOOL Overview The migration tool interface provides the following functionalities:">
-    <meta itemprop="wordCount" content="1271">
+    <meta itemprop="wordCount" content="1286">
     <title>AQ Migration :: Transactional Event Queues</title>
-    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736354172" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736354172" rel="stylesheet">
-    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736354172" rel="stylesheet">
-    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736354172" rel="stylesheet" id="R-format-style">
+    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736530174" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736530174" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736530174" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736530174" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736530174" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736530174" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736530174" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736530174" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
@@ -145,7 +145,7 @@ DBMS_AQMIGTOOL Overview Migration Workflow Checking Compatibility Initiating Mig
 
 <h1 id="aq-migration">AQ Migration</h1>
 
-<p>This section covers the use of the <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQMIGTOOL.html" rel="external" target="_blank">DBMS_AQMIGTOOL</a> package for migrating Advanced Queuing (AQ) classic queues to TxEventQ.</p>
+<p>This section provides a detailed guide for migrating from Oracle Advanced Queuing (AQ) to Transactional Event Queues (TxEventQ). The migration process uses the <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQMIGTOOL.html" rel="external" target="_blank">DBMS_AQMIGTOOL</a> package to ensure minimal disruption of existing messaging workflows.</p>
 <p>Users of AQ are recommended to migrate to TxEventQ for increased support, performance, and access to new database features. It is recommended to read through the document fully before attempting migration.</p>
 <ul>
 <li><a href="/microservices-datadriven/transactional-event-queues/aq-migration/migration/index.html#dbms_aqmigtool-overview">DBMS_AQMIGTOOL Overview</a></li>
@@ -328,7 +328,7 @@ Migration comments: Unsupported parameter in Enqueue</code></pre></div>
 <img src="https://oracle.github.io/microservices-datadriven/transactional-event-queues//txeventq.png" height="100px">
         </div>
         <script>
-          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736354172";
+          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736530174";
         </script>
         <search><form action="/microservices-datadriven/transactional-event-queues/search/index.html" method="get">
           <div class="searchbox default-animation">
@@ -341,12 +341,12 @@ Migration comments: Unsupported parameter in Enqueue</code></pre></div>
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736530174" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -425,8 +425,8 @@ Migration comments: Unsupported parameter in Enqueue</code></pre></div>
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736354172" defer></script>
-    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736354172" defer></script>
-    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736530174" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736530174" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736530174" defer></script>
   </body>
 </html>

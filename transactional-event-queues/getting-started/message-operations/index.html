@@ -3,34 +3,34 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.140.1">
+    <meta name="generator" content="Hugo 0.138.0">
     <meta name="generator" content="Relearn 7.3.1">
     <meta name="description" content="This section explains message operations using queues, topics, and different programming interfaces (SQL, Java, Spring JMS, and more). You’ll learn how to enqueue, dequeue, and manage messages effectively.
-Enqueue and Dequeue, or Produce and Consume Queues Topics Enqueuing and Dequeuing with SQL Kafka Producers and Consumers Kafka Producer Kafka Consumer Enqueuing and Dequeuing with JMS JMS APIs Message Operations in Other Languages and APIs Message Expiry and Exception Queues Message Delay Message Priority Enqueue and Dequeue, or Produce and Consume Queues When working with queues, the preferred terms for adding and retrieving messages from Transactional Event Queues are enqueue and dequeue.">
+Enqueue and Dequeue, or Produce and Consume Queues Topics Enqueuing and Dequeuing with SQL Kafka Producers and Consumers Kafka Producer Kafka Consumer Enqueuing and Dequeuing with JMS JMS APIs Message Operations in Other Languages and APIs Message Expiry and Exception Queues Message Delay Message Priority Transactional Messaging: Combine Messaging with Database Queries Enqueue and Dequeue, or Produce and Consume Queues When working with queues, the preferred terms for adding and retrieving messages from Transactional Event Queues are enqueue and dequeue.">
     <meta name="author" content="">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Message Operations :: Transactional Event Queues">
     <meta name="twitter:description" content="This section explains message operations using queues, topics, and different programming interfaces (SQL, Java, Spring JMS, and more). You’ll learn how to enqueue, dequeue, and manage messages effectively.
-Enqueue and Dequeue, or Produce and Consume Queues Topics Enqueuing and Dequeuing with SQL Kafka Producers and Consumers Kafka Producer Kafka Consumer Enqueuing and Dequeuing with JMS JMS APIs Message Operations in Other Languages and APIs Message Expiry and Exception Queues Message Delay Message Priority Enqueue and Dequeue, or Produce and Consume Queues When working with queues, the preferred terms for adding and retrieving messages from Transactional Event Queues are enqueue and dequeue.">
+Enqueue and Dequeue, or Produce and Consume Queues Topics Enqueuing and Dequeuing with SQL Kafka Producers and Consumers Kafka Producer Kafka Consumer Enqueuing and Dequeuing with JMS JMS APIs Message Operations in Other Languages and APIs Message Expiry and Exception Queues Message Delay Message Priority Transactional Messaging: Combine Messaging with Database Queries Enqueue and Dequeue, or Produce and Consume Queues When working with queues, the preferred terms for adding and retrieving messages from Transactional Event Queues are enqueue and dequeue.">
     <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html">
     <meta property="og:site_name" content="Transactional Event Queues">
     <meta property="og:title" content="Message Operations :: Transactional Event Queues">
     <meta property="og:description" content="This section explains message operations using queues, topics, and different programming interfaces (SQL, Java, Spring JMS, and more). You’ll learn how to enqueue, dequeue, and manage messages effectively.
-Enqueue and Dequeue, or Produce and Consume Queues Topics Enqueuing and Dequeuing with SQL Kafka Producers and Consumers Kafka Producer Kafka Consumer Enqueuing and Dequeuing with JMS JMS APIs Message Operations in Other Languages and APIs Message Expiry and Exception Queues Message Delay Message Priority Enqueue and Dequeue, or Produce and Consume Queues When working with queues, the preferred terms for adding and retrieving messages from Transactional Event Queues are enqueue and dequeue.">
+Enqueue and Dequeue, or Produce and Consume Queues Topics Enqueuing and Dequeuing with SQL Kafka Producers and Consumers Kafka Producer Kafka Consumer Enqueuing and Dequeuing with JMS JMS APIs Message Operations in Other Languages and APIs Message Expiry and Exception Queues Message Delay Message Priority Transactional Messaging: Combine Messaging with Database Queries Enqueue and Dequeue, or Produce and Consume Queues When working with queues, the preferred terms for adding and retrieving messages from Transactional Event Queues are enqueue and dequeue.">
     <meta property="og:locale" content="en_us">
     <meta property="og:type" content="article">
     <meta property="article:section" content="Getting Started">
     <meta itemprop="name" content="Message Operations :: Transactional Event Queues">
     <meta itemprop="description" content="This section explains message operations using queues, topics, and different programming interfaces (SQL, Java, Spring JMS, and more). You’ll learn how to enqueue, dequeue, and manage messages effectively.
-Enqueue and Dequeue, or Produce and Consume Queues Topics Enqueuing and Dequeuing with SQL Kafka Producers and Consumers Kafka Producer Kafka Consumer Enqueuing and Dequeuing with JMS JMS APIs Message Operations in Other Languages and APIs Message Expiry and Exception Queues Message Delay Message Priority Enqueue and Dequeue, or Produce and Consume Queues When working with queues, the preferred terms for adding and retrieving messages from Transactional Event Queues are enqueue and dequeue.">
-    <meta itemprop="wordCount" content="1498">
+Enqueue and Dequeue, or Produce and Consume Queues Topics Enqueuing and Dequeuing with SQL Kafka Producers and Consumers Kafka Producer Kafka Consumer Enqueuing and Dequeuing with JMS JMS APIs Message Operations in Other Languages and APIs Message Expiry and Exception Queues Message Delay Message Priority Transactional Messaging: Combine Messaging with Database Queries Enqueue and Dequeue, or Produce and Consume Queues When working with queues, the preferred terms for adding and retrieving messages from Transactional Event Queues are enqueue and dequeue.">
+    <meta itemprop="wordCount" content="1737">
     <title>Message Operations :: Transactional Event Queues</title>
-    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736354172" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736354172" rel="stylesheet">
-    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736354172" rel="stylesheet">
-    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736354172" rel="stylesheet" id="R-format-style">
+    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736530174" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736530174" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736530174" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736530174" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736530174" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736530174" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736530174" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736530174" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
@@ -100,6 +100,7 @@ Enqueue and Dequeue, or Produce and Consume Queues Topics Enqueuing and Dequeuin
         <li><a href="#message-expiry-and-exception-queues">Message Expiry and Exception Queues</a></li>
         <li><a href="#message-delay">Message Delay</a></li>
         <li><a href="#message-priority">Message Priority</a></li>
+        <li><a href="#transactional-messaging-combine-messaging-with-database-queries">Transactional Messaging: Combine Messaging with Database Queries</a></li>
       </ul>
     </li>
   </ul>
@@ -165,6 +166,7 @@ Enqueue and Dequeue, or Produce and Consume Queues Topics Enqueuing and Dequeuin
 <li><a href="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html#message-expiry-and-exception-queues">Message Expiry and Exception Queues</a></li>
 <li><a href="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html#message-delay">Message Delay</a></li>
 <li><a href="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html#message-priority">Message Priority</a></li>
+<li><a href="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html#transactional-messaging-combine-messaging-with-database-queries">Transactional Messaging: Combine Messaging with Database Queries</a></li>
 </ul>
 <h3 id="enqueue-and-dequeue-or-produce-and-consume">Enqueue and Dequeue, or Produce and Consume</h3>
 <h4 id="queues">Queues</h4>
@@ -242,7 +244,7 @@ Enqueue and Dequeue, or Produce and Consume Queues Topics Enqueuing and Dequeuin
 </span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;key.serializer&#34;</span>, <span style="color:#e6db74">&#34;org.apache.kafka.common.serialization.StringSerializer&#34;</span>);
 </span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;value.serializer&#34;</span>, <span style="color:#e6db74">&#34;org.apache.kafka.common.serialization.StringSerializer&#34;</span>);
 </span></span><span style="display:flex;"><span>Producer<span style="color:#f92672">&lt;</span>String, String<span style="color:#f92672">&gt;</span> okafkaProducer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> KafkaProducer<span style="color:#f92672">&lt;&gt;</span>(props);</span></span></code></pre></div>
-<p>The following Java class produces a stream of messages to a topic, using the <a href="https://github.com/oracle/okafka" rel="external" target="_blank">Kafka Java Client for Oracle Database Transactional Event Queues</a>. Note that the implementation does not use any Oracle-specific classes, only Kafka interfaces. This allows developers to drop in a org.oracle.okafka.clients.producer.KafkaProducer instance without code changes.</p>
+<p>The following Java class produces a stream of messages to a topic, using the <a href="https://github.com/oracle/okafka" rel="external" target="_blank">Kafka Java Client for Oracle Database Transactional Event Queues</a>. Note that the implementation does not use any Oracle-specific classes, only Kafka interfaces. This allows developers to drop in an org.oracle.okafka.clients.producer.KafkaProducer instance without code changes.</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f92672">import</span> java.util.stream.Stream;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> org.apache.kafka.clients.producer.Producer;
@@ -276,7 +278,7 @@ Enqueue and Dequeue, or Produce and Consume Queues Topics Enqueuing and Dequeuin
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
 <h5 id="kafka-consumer">Kafka Consumer</h5>
 <p>The following Java snippet creates an org.oracle.okafka.clients.consumer.KafkaConsumer instance capable of records from Transactional Event Queue topics. Note the use of Oracle Database connection properties, and Kafka consumer-specific properties like <code>group.id</code> and <code>max.poll.records</code>.</p>
-<p>The org.oracle.okafka.clients.consumer.KafkaConsume class implements the org.apache.kafka.clients.consumer.Consumer interface, allowing it to be used in place of a Kafka Java client consumer.</p>
+<p>The org.oracle.okafka.clients.consumer.KafkaConsumer class implements the org.apache.kafka.clients.consumer.Consumer interface, allowing it to be used in place of a Kafka Java client consumer.</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>Properties props <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Properties();
 </span></span><span style="display:flex;"><span><span style="color:#75715e">// Use your database service name</span>
 </span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;oracle.service.name&#34;</span>, <span style="color:#e6db74">&#34;freepdb1&#34;</span>);
@@ -294,7 +296,7 @@ Enqueue and Dequeue, or Produce and Consume Queues Topics Enqueuing and Dequeuin
 </span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;key.deserializer&#34;</span>, <span style="color:#e6db74">&#34;org.apache.kafka.common.serialization.StringDeserializer&#34;</span>);
 </span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;value.deserializer&#34;</span>, <span style="color:#e6db74">&#34;org.apache.kafka.common.serialization.StringDeserializer&#34;</span>);
 </span></span><span style="display:flex;"><span>Consumer<span style="color:#f92672">&lt;</span>String, String<span style="color:#f92672">&gt;</span> okafkaConsumer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> KafkaConsumer<span style="color:#f92672">&lt;&gt;</span>(props);</span></span></code></pre></div>
-<p>The following Java class consumes messages to a topic, using the <a href="https://github.com/oracle/okafka" rel="external" target="_blank">Kafka Java Client for Oracle Database Transactional Event Queues</a>. Like the producer example, the consumer only does not use any Oracle classes, only Kafka interfaces.</p>
+<p>The following Java class consumes messages from a topic, using the <a href="https://github.com/oracle/okafka" rel="external" target="_blank">Kafka Java Client for Oracle Database Transactional Event Queues</a>. Like the producer example, the consumer only does not use any Oracle classes, only Kafka interfaces.</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#f92672">import</span> java.time.Duration;
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> java.util.List;
 </span></span><span style="display:flex;"><span>
@@ -352,7 +354,7 @@ Enqueue and Dequeue, or Produce and Consume Queues Topics Enqueuing and Dequeuin
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">try</span> (Connection conn <span style="color:#f92672">=</span> cf.<span style="color:#a6e22e">createConnection</span>()) {
 </span></span><span style="display:flex;"><span>    Session session <span style="color:#f92672">=</span> conn.<span style="color:#a6e22e">createSession</span>();
 </span></span><span style="display:flex;"><span>    Queue myQueue <span style="color:#f92672">=</span> session.<span style="color:#a6e22e">createQueue</span>(<span style="color:#e6db74">&#34;my_queue&#34;</span>);
-</span></span><span style="display:flex;"><span>    MessageConsumer consumer <span style="color:#f92672">=</span> session.<span style="color:#a6e22e">createConsumer</span>(queue);
+</span></span><span style="display:flex;"><span>    MessageConsumer consumer <span style="color:#f92672">=</span> session.<span style="color:#a6e22e">createConsumer</span>(myQueue);
 </span></span><span style="display:flex;"><span>    conn.<span style="color:#a6e22e">start</span>();
 </span></span><span style="display:flex;"><span>    Message msg <span style="color:#f92672">=</span> consumer.<span style="color:#a6e22e">receive</span>(10000); <span style="color:#75715e">// Wait for 10 seconds</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (msg <span style="color:#f92672">!=</span> <span style="color:#66d9ef">null</span> <span style="color:#f92672">&amp;&amp;</span> msg <span style="color:#66d9ef">instanceof</span> TextMessage) {
@@ -418,7 +420,7 @@ Messages that exceed their expiration time are automatically moved to an excepti
 </span></span><span style="display:flex;"><span>    message :<span style="color:#f92672">=</span> sys.aq$_jms_text_message.construct();
 </span></span><span style="display:flex;"><span>    message.set_text(<span style="color:#e6db74">&#39;this is my message&#39;</span>);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    message_properties.delay :<span style="color:#f92672">=</span> <span style="color:#ae81ff">7</span><span style="color:#f92672">*</span><span style="color:#ae81ff">24</span><span style="color:#f92672">*</span><span style="color:#ae81ff">60</span><span style="color:#f92672">*</span><span style="color:#ae81ff">60</span>; <span style="color:#75715e">-- Delay for 1 week
+</span></span><span style="display:flex;"><span>    message_properties.delay :<span style="color:#f92672">=</span> <span style="color:#ae81ff">7</span><span style="color:#f92672">*</span><span style="color:#ae81ff">24</span><span style="color:#f92672">*</span><span style="color:#ae81ff">60</span><span style="color:#f92672">*</span><span style="color:#ae81ff">60</span>; <span style="color:#75715e">-- Delay for 7 days
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    dbms_aq.enqueue(
 </span></span><span style="display:flex;"><span>            queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_queue&#39;</span>,
 </span></span><span style="display:flex;"><span>            enqueue_options <span style="color:#f92672">=&gt;</span> enqueue_options,
@@ -452,6 +454,55 @@ Messages that exceed their expiration time are automatically moved to an excepti
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">commit</span>;
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
 </span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<h3 id="transactional-messaging-combine-messaging-with-database-queries">Transactional Messaging: Combine Messaging with Database Queries</h3>
+<p>Enqueue and dequeue operations occur within database transactions, allowing developers to combine database DML with messaging operations. This is particularly useful when the message contains data relevant to other tables or services within your schema.</p>
+<p>In the following example, a DML operation (an <code>INSERT</code> query) is combined with an enqueue operation in the same transaction. If the enqueue operation fails, the <code>INSERT</code> is rolled back. The orders table serves as the example.</p>
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">create</span> <span style="color:#66d9ef">table</span> orders (
+</span></span><span style="display:flex;"><span>    id number <span style="color:#66d9ef">generated</span> always <span style="color:#66d9ef">as</span> <span style="color:#66d9ef">identity</span> <span style="color:#66d9ef">primary</span> <span style="color:#66d9ef">key</span>,
+</span></span><span style="display:flex;"><span>    product_id number <span style="color:#66d9ef">not</span> <span style="color:#66d9ef">null</span>,
+</span></span><span style="display:flex;"><span>    quantity number <span style="color:#66d9ef">not</span> <span style="color:#66d9ef">null</span>,
+</span></span><span style="display:flex;"><span>    order_date date <span style="color:#66d9ef">default</span> sysdate
+</span></span><span style="display:flex;"><span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">declare</span>
+</span></span><span style="display:flex;"><span>    enqueue_options dbms_aq.enqueue_options_t;
+</span></span><span style="display:flex;"><span>    message_properties dbms_aq.message_properties_t;
+</span></span><span style="display:flex;"><span>    msg_id raw(<span style="color:#ae81ff">16</span>);
+</span></span><span style="display:flex;"><span>    message json;
+</span></span><span style="display:flex;"><span>    body varchar2(<span style="color:#ae81ff">200</span>) :<span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;{&#34;product_id&#34;: 1, &#34;quantity&#34;: 5}&#39;</span>;
+</span></span><span style="display:flex;"><span>    product_id number;
+</span></span><span style="display:flex;"><span>    quantity number;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- Convert the JSON string to a JSON object
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    message :<span style="color:#f92672">=</span> json(body);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- Extract product_id and quantity from the JSON object
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    product_id :<span style="color:#f92672">=</span> json_value(message, <span style="color:#e6db74">&#39;$.product_id&#39;</span> returning number);
+</span></span><span style="display:flex;"><span>    quantity :<span style="color:#f92672">=</span> json_value(message, <span style="color:#e6db74">&#39;$.quantity&#39;</span> returning number);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- Insert data into the orders table
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">insert</span> <span style="color:#66d9ef">into</span> orders (product_id, quantity)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">values</span> (product_id, quantity);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- Enqueue the message
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    dbms_aq.enqueue(
+</span></span><span style="display:flex;"><span>            queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;json_queue&#39;</span>,
+</span></span><span style="display:flex;"><span>            enqueue_options <span style="color:#f92672">=&gt;</span> enqueue_options,
+</span></span><span style="display:flex;"><span>            message_properties <span style="color:#f92672">=&gt;</span> message_properties,
+</span></span><span style="display:flex;"><span>            payload <span style="color:#f92672">=&gt;</span> message,
+</span></span><span style="display:flex;"><span>            msgid <span style="color:#f92672">=&gt;</span> msg_id
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">commit</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">exception</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">when</span> others <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">-- Rollback the transaction on error
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">rollback</span>;
+</span></span><span style="display:flex;"><span>        dbms_output.put_line(<span style="color:#e6db74">&#39;error dequeuing message: &#39;</span> <span style="color:#f92672">||</span> sqlerrm);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
+<blockquote>
+<p>Note: The same pattern applies to the <code>dbms_aq.dequeue</code> procedure, allowing developers to perform DML operations within dequeue transactions.</p>
+</blockquote>
 
   <footer class="footline">
   </footer>
@@ -466,7 +517,7 @@ Messages that exceed their expiration time are automatically moved to an excepti
 <img src="https://oracle.github.io/microservices-datadriven/transactional-event-queues//txeventq.png" height="100px">
         </div>
         <script>
-          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736354172";
+          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736530174";
         </script>
         <search><form action="/microservices-datadriven/transactional-event-queues/search/index.html" method="get">
           <div class="searchbox default-animation">
@@ -479,12 +530,12 @@ Messages that exceed their expiration time are automatically moved to an excepti
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736530174" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -566,8 +617,8 @@ Messages that exceed their expiration time are automatically moved to an excepti
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736354172" defer></script>
-    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736354172" defer></script>
-    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736530174" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736530174" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736530174" defer></script>
   </body>
 </html>
