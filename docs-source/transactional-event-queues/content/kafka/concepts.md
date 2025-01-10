@@ -20,13 +20,13 @@ When using Oracle Database Transactional Event Queues with Kafka APIs, the datab
 
 Using your database as a message broker allows you to avoid separate, costly servers dedicated to event streaming. These servers typically require domain-specific knowledge to operate, maintain, and upgrade in production deployments.
 
-With a database message broker, your messaging data is co-located with your other data and remains queryable with SQL. This reduces network traffic and data duplication across multiple servers (and their associated costs), while benefiting applications that need access to both event streaming data and its related data.
+With a database message broker, your messaging data is co-located with your other data and remains queryable with SQL. This reduces network traffic and data duplication across multiple servers (and their associated costs), while benefiting applications that need access to both event streaming data and its table-based data.
 
 ## Topics, Producers, and Consumers
 
 A topic is a logical channel for message streams, capable of high-throughput messaging. _Producers_ write data to topics, producing messages. _Consumers_ subscribe to topics and poll message data. Each consumer is part of a consumer group, which is a logical grouping of consumers, their subscriptions, and assignments.
 
-With Oracle Database Transactional Event Queues, each topic is backed by a queue table, allowing [transactional messaging](./transactional-messaging.md) and query capabilities. For example, you can query the first five messages from a topic named `my_topic` directly with SQL:
+With Oracle Database Transactional Event Queues, each topic is backed by a queue table, allowing [transactional messaging](./transactional-messaging.md) and query capabilities. For example, you can query five messages from a topic named `my_topic` directly with SQL:
 
 ```sql
 select * from my_topic
@@ -37,7 +37,7 @@ When using Kafka APIs for Transactional Event Queues, you may also run database 
 
 ## Partitions and Ordering
 
-Topics are divided into one or more _partitions_, where each partition is backed by a Transactional Event Queue shard. A partition represents an ordered event stream within the topic. 
+Topics are divided into one or more _partitions_, where each partition is backed by a Transactional Event Queue event stream. A partition represents an ordered event stream within the topic. 
 
 Partitions enable parallel message consumption, as multiple consumers in the same consumer group can concurrently poll from the topic. Consumers are assigned one or more partitions depending on the size of the consumer group. Each partition, however, may be assigned to at most one consumer per group. For example, a topic with three partitions can have at most three active consumers per consumer group.
 
