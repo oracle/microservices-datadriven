@@ -35,7 +35,7 @@ The configured `Properties` objects are passed to Kafka Java Client for Oracle D
 
 #### Configuring Plaintext Authentication
 
-`PLAINTEXT` authentication uses a `ojdbc.properties` file to supply the database username and password to the Kafka Java client. Create a file named `ojdbc.properties` on your system, and populate it with your database username and password:
+`PLAINTEXT` authentication uses an `ojdbc.properties` file to supply the database username and password to the Kafka Java client. Create a file named `ojdbc.properties` on your system, and populate it with your database username and password:
 
 ```
 user = <database username>

@@ -50,7 +50,7 @@ producer.initTransactions();
 
 ##### Transactional Produce Example
 
-The following Java method takes in input record and processes it using a transactional producer. On error, the transaction is aborted and neither the DML nor topic produce are committed to the database. Assume the `processRecord` method does some DML operation with the record, like inserting or updating a table.
+The following Java method takes in an input record and processes it using a transactional producer. On error, the transaction is aborted and neither the DML nor topic produce are committed to the database. Assume the `processRecord` method does some DML operation with the record, like inserting or updating a table.
 
 ```java
 public void produce(String record) {
@@ -66,7 +66,7 @@ public void produce(String record) {
         );
         producer.send(pr);
 
-        // 3. Use the record in a database query
+        // 3. Use the record in database DML
         processRecord(record, conn);
     } catch (Exception e) {
         // 4. On error, abort the transaction
@@ -82,7 +82,7 @@ public void produce(String record) {
 
 #### Transactional Consume
 
-To configure a transactional consumer, configure the `org.oracle.okafka.clients.consumer.KafkaConsumer` class with `auto.commit=false`. Disabling auto-commit will allow great control of database transactions through the `commitSync()` and `commitAsync()` methods.
+To configure a transactional consumer, configure the `org.oracle.okafka.clients.consumer.KafkaConsumer` class with `auto.commit=false`. Disabling auto-commit allows control of database transactions through the `commitSync()` and `commitAsync()` methods.
 
 ```java
 Properties props = new Properties();
@@ -138,6 +138,8 @@ public void run() {
             // 5. Since auto-commit is disabled, transactions are not
             // committed when commitSync() is not called.
             System.out.println("Unexpected error processing records. Aborting transaction!");
+            // Rollback DML from (3)
+            consumer.getDBConnection().rollback();
         }
     }
 }

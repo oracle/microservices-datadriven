@@ -121,7 +121,7 @@ props.put("value.serializer", "org.apache.kafka.common.serialization.StringSeria
 Producer<String, String> okafkaProducer = new KafkaProducer<>(props);
 ```
 
-The following Java class produces a stream of messages to a topic, using the [Kafka Java Client for Oracle Database Transactional Event Queues](https://github.com/oracle/okafka). Note that the implementation does not use any Oracle-specific classes, only Kafka interfaces. This allows developers to drop in a org.oracle.okafka.clients.producer.KafkaProducer instance without code changes.
+The following Java class produces a stream of messages to a topic, using the [Kafka Java Client for Oracle Database Transactional Event Queues](https://github.com/oracle/okafka). Note that the implementation does not use any Oracle-specific classes, only Kafka interfaces. This allows developers to drop in an org.oracle.okafka.clients.producer.KafkaProducer instance without code changes.
 
 ```java
 import java.util.stream.Stream;
