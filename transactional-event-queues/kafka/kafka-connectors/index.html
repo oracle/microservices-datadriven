@@ -3,38 +3,38 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.140.1">
+    <meta name="generator" content="Hugo 0.138.0">
     <meta name="generator" content="Relearn 7.3.1">
     <meta name="description" content="This section introduces Kafka connectors to connect Oracle Database Transactional Event Queues with other data and messaging systems, like Apache Kafka topics.
 Kafka Connectors The Kafka connectors for Oracle Database Transactional Event Queues provide the capability to sync message data to/from Kafka topics.
-The Sink Connector reads from Kafka and publishes messages to Oracle Database Transactional Event Queues. The Source Connector that reads from an Oracle Database Transactional Event Queues topic and publishes messages to a Kafka topic.">
+The Sink Connector reads from Kafka and publishes messages to Oracle Database Transactional Event Queues. The Source Connector reads from an Oracle Database Transactional Event Queues topic and publishes messages to a Kafka topic.">
     <meta name="author" content="">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Kafka Connectors :: Transactional Event Queues">
     <meta name="twitter:description" content="This section introduces Kafka connectors to connect Oracle Database Transactional Event Queues with other data and messaging systems, like Apache Kafka topics.
 Kafka Connectors The Kafka connectors for Oracle Database Transactional Event Queues provide the capability to sync message data to/from Kafka topics.
-The Sink Connector reads from Kafka and publishes messages to Oracle Database Transactional Event Queues. The Source Connector that reads from an Oracle Database Transactional Event Queues topic and publishes messages to a Kafka topic.">
+The Sink Connector reads from Kafka and publishes messages to Oracle Database Transactional Event Queues. The Source Connector reads from an Oracle Database Transactional Event Queues topic and publishes messages to a Kafka topic.">
     <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/transactional-event-queues/kafka/kafka-connectors/index.html">
     <meta property="og:site_name" content="Transactional Event Queues">
     <meta property="og:title" content="Kafka Connectors :: Transactional Event Queues">
     <meta property="og:description" content="This section introduces Kafka connectors to connect Oracle Database Transactional Event Queues with other data and messaging systems, like Apache Kafka topics.
 Kafka Connectors The Kafka connectors for Oracle Database Transactional Event Queues provide the capability to sync message data to/from Kafka topics.
-The Sink Connector reads from Kafka and publishes messages to Oracle Database Transactional Event Queues. The Source Connector that reads from an Oracle Database Transactional Event Queues topic and publishes messages to a Kafka topic.">
+The Sink Connector reads from Kafka and publishes messages to Oracle Database Transactional Event Queues. The Source Connector reads from an Oracle Database Transactional Event Queues topic and publishes messages to a Kafka topic.">
     <meta property="og:locale" content="en_us">
     <meta property="og:type" content="article">
     <meta property="article:section" content="Kafka APIs">
     <meta itemprop="name" content="Kafka Connectors :: Transactional Event Queues">
     <meta itemprop="description" content="This section introduces Kafka connectors to connect Oracle Database Transactional Event Queues with other data and messaging systems, like Apache Kafka topics.
 Kafka Connectors The Kafka connectors for Oracle Database Transactional Event Queues provide the capability to sync message data to/from Kafka topics.
-The Sink Connector reads from Kafka and publishes messages to Oracle Database Transactional Event Queues. The Source Connector that reads from an Oracle Database Transactional Event Queues topic and publishes messages to a Kafka topic.">
-    <meta itemprop="wordCount" content="78">
+The Sink Connector reads from Kafka and publishes messages to Oracle Database Transactional Event Queues. The Source Connector reads from an Oracle Database Transactional Event Queues topic and publishes messages to a Kafka topic.">
+    <meta itemprop="wordCount" content="77">
     <title>Kafka Connectors :: Transactional Event Queues</title>
-    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736354172" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736354172" rel="stylesheet">
-    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736354172" rel="stylesheet">
-    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736354172" rel="stylesheet" id="R-format-style">
+    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736530174" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736530174" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736530174" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736530174" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736530174" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736530174" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736530174" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736530174" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
@@ -137,7 +137,7 @@ The Sink Connector reads from Kafka and publishes messages to Oracle Database Tr
 <p>This section introduces Kafka connectors to connect Oracle Database Transactional Event Queues with other data and messaging systems, like <a href="https://github.com/oracle/okafka/tree/master/connectors" rel="external" target="_blank">Apache Kafka</a> topics.</p>
 <h2 id="kafka-connectors">Kafka Connectors</h2>
 <p>The <a href="https://github.com/oracle/okafka/tree/master/connectors" rel="external" target="_blank">Kafka connectors for Oracle Database Transactional Event Queues</a> provide the capability to sync message data to/from Kafka topics.</p>
-<p>The Sink Connector reads from Kafka and publishes messages to Oracle Database Transactional Event Queues. The Source Connector that reads from an Oracle Database Transactional Event Queues topic and publishes messages to a Kafka topic.</p>
+<p>The Sink Connector reads from Kafka and publishes messages to Oracle Database Transactional Event Queues. The Source Connector reads from an Oracle Database Transactional Event Queues topic and publishes messages to a Kafka topic.</p>
 
   <footer class="footline">
   </footer>
@@ -152,7 +152,7 @@ The Sink Connector reads from Kafka and publishes messages to Oracle Database Tr
 <img src="https://oracle.github.io/microservices-datadriven/transactional-event-queues//txeventq.png" height="100px">
         </div>
         <script>
-          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736354172";
+          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736530174";
         </script>
         <search><form action="/microservices-datadriven/transactional-event-queues/search/index.html" method="get">
           <div class="searchbox default-animation">
@@ -165,12 +165,12 @@ The Sink Connector reads from Kafka and publishes messages to Oracle Database Tr
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736530174" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -252,8 +252,8 @@ The Sink Connector reads from Kafka and publishes messages to Oracle Database Tr
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736354172" defer></script>
-    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736354172" defer></script>
-    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736530174" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736530174" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736530174" defer></script>
   </body>
 </html>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.140.1">
+    <meta name="generator" content="Hugo 0.138.0">
     <meta name="generator" content="Relearn 7.3.1">
     <meta name="description" content="This section provides a detailed walkthrough of transactional messaging using the Kafka Java Client for Oracle Database Transactional Event Queues. You’ll learn how to run, commit, and abort database transactions while using Kafka producers and consumers for transactional messaging.
 Kafka Example The KafkaProducer and KafkaConsumer classes implemented by the Kafka Java Client for Oracle Transactional Event Queues provide functionality for transactional messaging, allowing developers to run database queries within a produce or consume transaction.">
@@ -23,14 +23,14 @@ Kafka Example The KafkaProducer and KafkaConsumer classes implemented by the Kaf
     <meta itemprop="name" content="Transactional Messaging :: Transactional Event Queues">
     <meta itemprop="description" content="This section provides a detailed walkthrough of transactional messaging using the Kafka Java Client for Oracle Database Transactional Event Queues. You’ll learn how to run, commit, and abort database transactions while using Kafka producers and consumers for transactional messaging.
 Kafka Example The KafkaProducer and KafkaConsumer classes implemented by the Kafka Java Client for Oracle Transactional Event Queues provide functionality for transactional messaging, allowing developers to run database queries within a produce or consume transaction.">
-    <meta itemprop="wordCount" content="650">
+    <meta itemprop="wordCount" content="686">
     <title>Transactional Messaging :: Transactional Event Queues</title>
-    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736354172" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736354172" rel="stylesheet">
-    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736354172" rel="stylesheet">
-    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736354172" rel="stylesheet" id="R-format-style">
+    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736530174" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736530174" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736530174" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736530174" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736530174" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736530174" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736530174" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736530174" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
@@ -137,9 +137,10 @@ Kafka Example The KafkaProducer and KafkaConsumer classes implemented by the Kaf
 <p>This section provides a detailed walkthrough of transactional messaging using the <a href="https://github.com/oracle/okafka" rel="external" target="_blank">Kafka Java Client for Oracle Database Transactional Event Queues</a>. You&rsquo;ll learn how to run, commit, and abort database transactions while using Kafka producers and consumers for transactional messaging.</p>
 <h3 id="kafka-example">Kafka Example</h3>
 <p>The KafkaProducer and KafkaConsumer classes implemented by the <a href="https://github.com/oracle/okafka" rel="external" target="_blank">Kafka Java Client for Oracle Transactional Event Queues</a> provide functionality for transactional messaging, allowing developers to run database queries within a produce or consume transaction.</p>
+<p>Transactional Messaging ensures atomicity between messaging processing and the database, ensuring that if a message is produced the corresponding database operation also commits or is rolled back in case of failure.</p>
 <h4 id="transactional-produce">Transactional Produce</h4>
-<p>To configure a transactional producer, configure the org.oracle.okafka.clients.producer.KafkaProducer class with the <code>oracle.transactional.producer=true</code> property.</p>
-<p>Once the producer instance is created, initialize database transactions with the <code>producer.initTransactions()</code> method.</p>
+<p>To configure a transactional producer, configure the <code>org.oracle.okafka.clients.producer.KafkaProducer</code> class with the <code>oracle.transactional.producer=true</code> property.</p>
+<p>Once the producer instance is created, initialize the producer for transactional management using the <code>producer.initTransactions()</code> method.</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>Properties props <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Properties();
 </span></span><span style="display:flex;"><span><span style="color:#75715e">// Use your database service name</span>
 </span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;oracle.service.name&#34;</span>, <span style="color:#e6db74">&#34;freepdb1&#34;</span>);
@@ -156,9 +157,7 @@ Kafka Example The KafkaProducer and KafkaConsumer classes implemented by the Kaf
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">// Enable Transactional messaging with the producer</span>
 </span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;oracle.transactional.producer&#34;</span>, <span style="color:#e6db74">&#34;true&#34;</span>);
-</span></span><span style="display:flex;"><span>KafkaProducer<span style="color:#f92672">&lt;</span>String, String<span style="color:#f92672">&gt;</span> producer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> KafkaProducer<span style="color:#f92672">&lt;&gt;</span>(
-</span></span><span style="display:flex;"><span>    producerProps
-</span></span><span style="display:flex;"><span>);
+</span></span><span style="display:flex;"><span>KafkaProducer<span style="color:#f92672">&lt;</span>String, String<span style="color:#f92672">&gt;</span> producer <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> KafkaProducer<span style="color:#f92672">&lt;&gt;</span>(props);
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">// Initialize the producer for database transactions</span>
 </span></span><span style="display:flex;"><span>producer.<span style="color:#a6e22e">initTransactions</span>();</span></span></code></pre></div>
@@ -170,7 +169,7 @@ Kafka Example The KafkaProducer and KafkaConsumer classes implemented by the Kaf
 <li>To abort the transaction, use the <code>producer.abortTransaction()</code> method.</li>
 </ul>
 <h5 id="transactional-produce-example">Transactional Produce Example</h5>
-<p>The following Java method takes in input record and processes it using a transactional producer. On error, the transaction is aborted and neither the DML nor topic produce are committed to the database. Assume the <code>processRecord</code> method does some DML operation with the record, like inserting or updating a table.</p>
+<p>The following Java method takes in an input record and processes it using a transactional producer. On error, the transaction is aborted and neither the DML nor topic produce are committed to the database. Assume the <code>processRecord</code> method does some DML operation with the record, like inserting or updating a table.</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">produce</span>(String record) {
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 1. Begin the current transaction</span>
 </span></span><span style="display:flex;"><span>    producer.<span style="color:#a6e22e">beginTransaction</span>();
@@ -184,7 +183,7 @@ Kafka Example The KafkaProducer and KafkaConsumer classes implemented by the Kaf
 </span></span><span style="display:flex;"><span>        <span style="color:#960050;background-color:#1e0010">);</span>
 </span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">producer</span>.<span style="color:#a6e22e">send</span>(pr);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 3. Use the record in a database query</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 3. Use the record in database DML</span>
 </span></span><span style="display:flex;"><span>        processRecord(record, conn);
 </span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">catch</span> (Exception e) {
 </span></span><span style="display:flex;"><span>        <span style="color:#75715e">// 4. On error, abort the transaction</span>
@@ -192,12 +191,12 @@ Kafka Example The KafkaProducer and KafkaConsumer classes implemented by the Kaf
 </span></span><span style="display:flex;"><span>        producer.<span style="color:#a6e22e">abortTransaction</span>();
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 5. Once complete, commit the transaction</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 5. Once complete, commit the transaction.</span>
 </span></span><span style="display:flex;"><span>    producer.<span style="color:#a6e22e">commitTransaction</span>();
 </span></span><span style="display:flex;"><span>    System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;Processed record&#34;</span>);
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
 <h4 id="transactional-consume">Transactional Consume</h4>
-<p>To configure a transactional consumer, configure a org.oracle.okafka.clients.consumer.KafkaConsumer class with <code>auto.commit=false</code>. Disabling auto-commit will allow great control of database transactions through the <code>commitSync()</code> and <code>commitAsync()</code> methods.</p>
+<p>To configure a transactional consumer, configure the <code>org.oracle.okafka.clients.consumer.KafkaConsumer</code> class with <code>auto.commit=false</code>. Disabling auto-commit allows control of database transactions through the <code>commitSync()</code> and <code>commitAsync()</code> methods.</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>Properties props <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> Properties();
 </span></span><span style="display:flex;"><span><span style="color:#75715e">// Use your database service name</span>
 </span></span><span style="display:flex;"><span>props.<span style="color:#a6e22e">put</span>(<span style="color:#e6db74">&#34;oracle.service.name&#34;</span>, <span style="color:#e6db74">&#34;freepdb1&#34;</span>);
@@ -246,6 +245,8 @@ Kafka Example The KafkaProducer and KafkaConsumer classes implemented by the Kaf
 </span></span><span style="display:flex;"><span>            <span style="color:#75715e">// 5. Since auto-commit is disabled, transactions are not</span>
 </span></span><span style="display:flex;"><span>            <span style="color:#75715e">// committed when commitSync() is not called.</span>
 </span></span><span style="display:flex;"><span>            System.<span style="color:#a6e22e">out</span>.<span style="color:#a6e22e">println</span>(<span style="color:#e6db74">&#34;Unexpected error processing records. Aborting transaction!&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e">// Rollback DML from (3)</span>
+</span></span><span style="display:flex;"><span>            consumer.<span style="color:#a6e22e">getDBConnection</span>().<span style="color:#a6e22e">rollback</span>();
 </span></span><span style="display:flex;"><span>        }
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
@@ -263,7 +264,7 @@ Kafka Example The KafkaProducer and KafkaConsumer classes implemented by the Kaf
 <img src="https://oracle.github.io/microservices-datadriven/transactional-event-queues//txeventq.png" height="100px">
         </div>
         <script>
-          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736354172";
+          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736530174";
         </script>
         <search><form action="/microservices-datadriven/transactional-event-queues/search/index.html" method="get">
           <div class="searchbox default-animation">
@@ -276,12 +277,12 @@ Kafka Example The KafkaProducer and KafkaConsumer classes implemented by the Kaf
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736530174" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -363,8 +364,8 @@ Kafka Example The KafkaProducer and KafkaConsumer classes implemented by the Kaf
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736354172" defer></script>
-    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736354172" defer></script>
-    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736530174" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736530174" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736530174" defer></script>
   </body>
 </html>

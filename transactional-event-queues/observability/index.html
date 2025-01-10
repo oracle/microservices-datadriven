@@ -3,38 +3,38 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.140.1">
+    <meta name="generator" content="Hugo 0.138.0">
     <meta name="generator" content="Relearn 7.3.1">
     <meta name="description" content="Oracle TxEventQ offers powerful performance tuning and monitoring capabilities. This module explores advanced techniques for optimizing queue performance and enhancing observability.
-TxEventQ Administrative Views TxEventQ provides administrative views for monitoring performance, including insights to message cache statistics, partition level metrics, and subscriber load. This module will dive into accessing and understanding these database views and their content.
-Oracle Database Metrics Exporter The Oracle Database Metrics Exporter can be configured to export metrics about TxEventQ, providing access to the real-time broker, producer, and consumer metrics in a Grafana dashboard that allows teams to receiving alerts for issues and understand the state of their system.">
+TxEventQ Administrative Views TxEventQ provides administrative views for monitoring performance, including insights into message cache statistics, partition level metrics, and subscriber load. This module will dive into accessing and understanding these database views and their content.
+Oracle Database Metrics Exporter The Oracle Database Metrics Exporter can be configured to export metrics about TxEventQ, providing access to the real-time broker, producer, and consumer metrics in a Grafana dashboard that allows teams to receive alerts for issues and understand the state of their system.">
     <meta name="author" content="">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Performance and Observability :: Transactional Event Queues">
     <meta name="twitter:description" content="Oracle TxEventQ offers powerful performance tuning and monitoring capabilities. This module explores advanced techniques for optimizing queue performance and enhancing observability.
-TxEventQ Administrative Views TxEventQ provides administrative views for monitoring performance, including insights to message cache statistics, partition level metrics, and subscriber load. This module will dive into accessing and understanding these database views and their content.
-Oracle Database Metrics Exporter The Oracle Database Metrics Exporter can be configured to export metrics about TxEventQ, providing access to the real-time broker, producer, and consumer metrics in a Grafana dashboard that allows teams to receiving alerts for issues and understand the state of their system.">
+TxEventQ Administrative Views TxEventQ provides administrative views for monitoring performance, including insights into message cache statistics, partition level metrics, and subscriber load. This module will dive into accessing and understanding these database views and their content.
+Oracle Database Metrics Exporter The Oracle Database Metrics Exporter can be configured to export metrics about TxEventQ, providing access to the real-time broker, producer, and consumer metrics in a Grafana dashboard that allows teams to receive alerts for issues and understand the state of their system.">
     <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/transactional-event-queues/observability/index.html">
     <meta property="og:site_name" content="Transactional Event Queues">
     <meta property="og:title" content="Performance and Observability :: Transactional Event Queues">
     <meta property="og:description" content="Oracle TxEventQ offers powerful performance tuning and monitoring capabilities. This module explores advanced techniques for optimizing queue performance and enhancing observability.
-TxEventQ Administrative Views TxEventQ provides administrative views for monitoring performance, including insights to message cache statistics, partition level metrics, and subscriber load. This module will dive into accessing and understanding these database views and their content.
-Oracle Database Metrics Exporter The Oracle Database Metrics Exporter can be configured to export metrics about TxEventQ, providing access to the real-time broker, producer, and consumer metrics in a Grafana dashboard that allows teams to receiving alerts for issues and understand the state of their system.">
+TxEventQ Administrative Views TxEventQ provides administrative views for monitoring performance, including insights into message cache statistics, partition level metrics, and subscriber load. This module will dive into accessing and understanding these database views and their content.
+Oracle Database Metrics Exporter The Oracle Database Metrics Exporter can be configured to export metrics about TxEventQ, providing access to the real-time broker, producer, and consumer metrics in a Grafana dashboard that allows teams to receive alerts for issues and understand the state of their system.">
     <meta property="og:locale" content="en_us">
     <meta property="og:type" content="website">
     <meta itemprop="name" content="Performance and Observability :: Transactional Event Queues">
     <meta itemprop="description" content="Oracle TxEventQ offers powerful performance tuning and monitoring capabilities. This module explores advanced techniques for optimizing queue performance and enhancing observability.
-TxEventQ Administrative Views TxEventQ provides administrative views for monitoring performance, including insights to message cache statistics, partition level metrics, and subscriber load. This module will dive into accessing and understanding these database views and their content.
-Oracle Database Metrics Exporter The Oracle Database Metrics Exporter can be configured to export metrics about TxEventQ, providing access to the real-time broker, producer, and consumer metrics in a Grafana dashboard that allows teams to receiving alerts for issues and understand the state of their system.">
-    <meta itemprop="wordCount" content="161">
+TxEventQ Administrative Views TxEventQ provides administrative views for monitoring performance, including insights into message cache statistics, partition level metrics, and subscriber load. This module will dive into accessing and understanding these database views and their content.
+Oracle Database Metrics Exporter The Oracle Database Metrics Exporter can be configured to export metrics about TxEventQ, providing access to the real-time broker, producer, and consumer metrics in a Grafana dashboard that allows teams to receive alerts for issues and understand the state of their system.">
+    <meta itemprop="wordCount" content="139">
     <title>Performance and Observability :: Transactional Event Queues</title>
     <link href="/microservices-datadriven/transactional-event-queues/observability/index.xml" rel="alternate" type="application/rss+xml" title="Performance and Observability :: Transactional Event Queues">
-    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736354172" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736354172" rel="stylesheet">
-    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736354172" rel="stylesheet">
-    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736354172" rel="stylesheet" id="R-format-style">
+    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736530174" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736530174" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736530174" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736530174" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736530174" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736530174" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736530174" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736530174" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..';
@@ -137,11 +137,11 @@ Oracle Database Metrics Exporter The Oracle Database Metrics Exporter can be con
 
 <p>Oracle TxEventQ offers powerful performance tuning and monitoring capabilities. This module explores advanced techniques for optimizing queue performance and enhancing observability.</p>
 <h2 id="txeventq-administrative-views">TxEventQ Administrative Views</h2>
-<p>TxEventQ provides <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/adque/aq-messaging-gateway-views.html#GUID-B86548B9-55B7-4CCE-8B85-FE902B948BE5" rel="external" target="_blank">administrative views</a> for monitoring performance, including insights to message cache statistics, partition level metrics, and subscriber load. This module will dive into accessing and understanding these database views and their content.</p>
+<p>TxEventQ provides <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/adque/aq-messaging-gateway-views.html#GUID-B86548B9-55B7-4CCE-8B85-FE902B948BE5" rel="external" target="_blank">administrative views</a> for monitoring performance, including insights into message cache statistics, partition level metrics, and subscriber load. This module will dive into accessing and understanding these database views and their content.</p>
 <h2 id="oracle-database-metrics-exporter">Oracle Database Metrics Exporter</h2>
-<p><a href="https://github.com/oracle/oracle-db-appdev-monitoring" rel="external" target="_blank">The Oracle Database Metrics Exporter</a> can be configured to export metrics about TxEventQ, providing access to the real-time broker, producer, and consumer metrics in a Grafana dashboard that allows teams to receiving alerts for issues and understand the state of their system.</p>
+<p><a href="https://github.com/oracle/oracle-db-appdev-monitoring" rel="external" target="_blank">The Oracle Database Metrics Exporter</a> can be configured to export metrics about TxEventQ, providing access to the real-time broker, producer, and consumer metrics in a Grafana dashboard that allows teams to receive alerts for issues and understand the state of their system.</p>
 <h2 id="performance-tuning">Performance Tuning</h2>
-<p>This module will cover several methods of optimizing TxEventQ performance, including the message cache, streams pool size, and more. Additionally, we&rsquo;ll look at how cross-instance message forwarding, or what happens when you enqueue and dequeue messages across multiple Oracle Database instances.</p>
+<p>This module will cover several methods of optimizing TxEventQ performance, including the message cache, streams pool size, and more.</p>
 <p>By leveraging these techniques, you can ensure optimal performance and visibility for your TxEventQ implementations.</p>
 
   <footer class="footline">
@@ -157,7 +157,7 @@ Oracle Database Metrics Exporter The Oracle Database Metrics Exporter can be con
 <img src="https://oracle.github.io/microservices-datadriven/transactional-event-queues//txeventq.png" height="100px">
         </div>
         <script>
-          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736354172";
+          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736530174";
         </script>
         <search><form action="/microservices-datadriven/transactional-event-queues/search/index.html" method="get">
           <div class="searchbox default-animation">
@@ -170,12 +170,12 @@ Oracle Database Metrics Exporter The Oracle Database Metrics Exporter can be con
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736530174" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -256,8 +256,8 @@ Oracle Database Metrics Exporter The Oracle Database Metrics Exporter can be con
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736354172" defer></script>
-    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736354172" defer></script>
-    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736530174" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736530174" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736530174" defer></script>
   </body>
 </html>

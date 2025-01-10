@@ -3,34 +3,34 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.140.1">
+    <meta name="generator" content="Hugo 0.138.0">
     <meta name="generator" content="Relearn 7.3.1">
-    <meta name="description" content="This section covers the management of Transactional Event Queues, including the grants and roles required to use queues, hsteps to create, start, and stop queues across different programming languages and APIs.
+    <meta name="description" content="This section covers the management of Transactional Event Queues, including the grants and roles required to use queues, steps to create, start, and stop queues across different programming languages and APIs.
 Database Permissions for Transactional Event Queues Permissions for SQL Packages Permissions for Users of Kafka APIs Creating, Starting, and Stopping Queues DBMS_AQADM SQL Package Kafka APIs Java with JMS Python .NET JavaScript Oracle REST Data Services Database Permissions for Transactional Event Queues Permissions for SQL Packages For management of queues using Transactional Event Queue APIs in SQL or other languages, the following permissions are recommended for users managing queues:">
     <meta name="author" content="">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Queue Management :: Transactional Event Queues">
-    <meta name="twitter:description" content="This section covers the management of Transactional Event Queues, including the grants and roles required to use queues, hsteps to create, start, and stop queues across different programming languages and APIs.
+    <meta name="twitter:description" content="This section covers the management of Transactional Event Queues, including the grants and roles required to use queues, steps to create, start, and stop queues across different programming languages and APIs.
 Database Permissions for Transactional Event Queues Permissions for SQL Packages Permissions for Users of Kafka APIs Creating, Starting, and Stopping Queues DBMS_AQADM SQL Package Kafka APIs Java with JMS Python .NET JavaScript Oracle REST Data Services Database Permissions for Transactional Event Queues Permissions for SQL Packages For management of queues using Transactional Event Queue APIs in SQL or other languages, the following permissions are recommended for users managing queues:">
     <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/transactional-event-queues/getting-started/queue-management/index.html">
     <meta property="og:site_name" content="Transactional Event Queues">
     <meta property="og:title" content="Queue Management :: Transactional Event Queues">
-    <meta property="og:description" content="This section covers the management of Transactional Event Queues, including the grants and roles required to use queues, hsteps to create, start, and stop queues across different programming languages and APIs.
+    <meta property="og:description" content="This section covers the management of Transactional Event Queues, including the grants and roles required to use queues, steps to create, start, and stop queues across different programming languages and APIs.
 Database Permissions for Transactional Event Queues Permissions for SQL Packages Permissions for Users of Kafka APIs Creating, Starting, and Stopping Queues DBMS_AQADM SQL Package Kafka APIs Java with JMS Python .NET JavaScript Oracle REST Data Services Database Permissions for Transactional Event Queues Permissions for SQL Packages For management of queues using Transactional Event Queue APIs in SQL or other languages, the following permissions are recommended for users managing queues:">
     <meta property="og:locale" content="en_us">
     <meta property="og:type" content="article">
     <meta property="article:section" content="Getting Started">
     <meta itemprop="name" content="Queue Management :: Transactional Event Queues">
-    <meta itemprop="description" content="This section covers the management of Transactional Event Queues, including the grants and roles required to use queues, hsteps to create, start, and stop queues across different programming languages and APIs.
+    <meta itemprop="description" content="This section covers the management of Transactional Event Queues, including the grants and roles required to use queues, steps to create, start, and stop queues across different programming languages and APIs.
 Database Permissions for Transactional Event Queues Permissions for SQL Packages Permissions for Users of Kafka APIs Creating, Starting, and Stopping Queues DBMS_AQADM SQL Package Kafka APIs Java with JMS Python .NET JavaScript Oracle REST Data Services Database Permissions for Transactional Event Queues Permissions for SQL Packages For management of queues using Transactional Event Queue APIs in SQL or other languages, the following permissions are recommended for users managing queues:">
-    <meta itemprop="wordCount" content="942">
+    <meta itemprop="wordCount" content="940">
     <title>Queue Management :: Transactional Event Queues</title>
-    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736354172" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736354172" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736354172" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736354172" rel="stylesheet">
-    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736354172" rel="stylesheet">
-    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736354172" rel="stylesheet" id="R-format-style">
+    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736530174" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736530174" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736530174" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736530174" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736530174" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736530174" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736530174" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736530174" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
@@ -135,7 +135,7 @@ Database Permissions for Transactional Event Queues Permissions for SQL Packages
 
 <h1 id="queue-management">Queue Management</h1>
 
-<p>This section covers the management of Transactional Event Queues, including the grants and roles required to use queues, hsteps to create, start, and stop queues across different programming languages and APIs.</p>
+<p>This section covers the management of Transactional Event Queues, including the grants and roles required to use queues, steps to create, start, and stop queues across different programming languages and APIs.</p>
 <ul>
 <li><a href="/microservices-datadriven/transactional-event-queues/getting-started/queue-management/index.html#database-permissions-for-transactional-event-queues">Database Permissions for Transactional Event Queues</a>
 <ul>
@@ -158,16 +158,18 @@ Database Permissions for Transactional Event Queues Permissions for SQL Packages
 <h3 id="database-permissions-for-transactional-event-queues">Database Permissions for Transactional Event Queues</h3>
 <h4 id="permissions-for-sql-packages">Permissions for SQL Packages</h4>
 <p>For management of queues using Transactional Event Queue APIs in SQL or other languages, the following permissions are recommended for users managing  queues:</p>
-<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> resource, <span style="color:#66d9ef">connect</span>, unlimited tablespace <span style="color:#66d9ef">to</span> testuser;
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#75715e">-- Grant tablespace as appropriate to your TxEventQ user
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">grant</span> resource, <span style="color:#66d9ef">connect</span> <span style="color:#66d9ef">to</span> testuser;
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> aq_user_role <span style="color:#66d9ef">to</span> testuser;
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">execute</span> <span style="color:#66d9ef">on</span> dbms_aq <span style="color:#66d9ef">to</span> testuser;
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">execute</span> <span style="color:#66d9ef">on</span> dbms_aqadm <span style="color:#66d9ef">to</span> testuser;
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">execute</span> <span style="color:#66d9ef">ON</span> dbms_aqin <span style="color:#66d9ef">TO</span> testuser;
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">execute</span> <span style="color:#66d9ef">ON</span> dbms_aqjms <span style="color:#66d9ef">TO</span> testuser;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">execute</span> <span style="color:#66d9ef">on</span> dbms_aqin <span style="color:#66d9ef">to</span> testuser;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">execute</span> <span style="color:#66d9ef">on</span> dbms_aqjms <span style="color:#66d9ef">to</span> testuser;
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">execute</span> <span style="color:#66d9ef">on</span> dbms_teqk <span style="color:#66d9ef">to</span> testuser;</span></span></code></pre></div>
 <h4 id="permissions-for-users-of-kafka-apis">Permissions for Users of Kafka APIs</h4>
 <p>If your database user is interacting with Transactional Event Queues via Kafka APIs and the <a href="https://github.com/oracle/okafka" rel="external" target="_blank">Kafka Java Client for Oracle Database Transactional Event Queues</a>, the following permissions are recommended for users managing topics and messages:</p>
-<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> resource, <span style="color:#66d9ef">connect</span>, unlimited tablespace <span style="color:#66d9ef">to</span> testuser;
+<div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#75715e">-- Grant tablespace as appropriate to your TxEventQ user
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">grant</span> resource, <span style="color:#66d9ef">connect</span> <span style="color:#66d9ef">to</span> testuser;
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> aq_user_role <span style="color:#66d9ef">to</span> testuser;
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">execute</span> <span style="color:#66d9ef">on</span> dbms_aq <span style="color:#66d9ef">to</span>  testuser;
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">grant</span> <span style="color:#66d9ef">execute</span> <span style="color:#66d9ef">on</span> dbms_aqadm <span style="color:#66d9ef">to</span> testuser;
@@ -203,7 +205,7 @@ Database Permissions for Transactional Event Queues Permissions for SQL Packages
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
 </span></span><span style="display:flex;"><span>    dbms_aqadm.alter_transactional_event_queue(
 </span></span><span style="display:flex;"><span>        queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_queue&#39;</span>,
-</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">comment</span>    <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;just for testing&#39;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">comment</span>    <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;for testing purposes&#39;</span>
 </span></span><span style="display:flex;"><span>    );
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
 </span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
@@ -319,16 +321,16 @@ Database Permissions for Transactional Event Queues Permissions for SQL Packages
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Handle topic creation exception</span>
 </span></span><span style="display:flex;"><span>}</span></span></code></pre></div>
 <h4 id="java-with-jms">Java with JMS</h4>
-<p>The <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/jajms/index.html" rel="external" target="_blank"><code>oracle.jms</code> Java package</a> includes several APIs for managing queues, enqueuing, and dequeuing messages using JMS. The <a href="https://mvnrepository.com/artifact/com.oracle.database.spring/oracle-spring-boot-starter-aqjms" rel="external" target="_blank">Oracle Spring Boot Starter for AqJms</a> provides a comprehensive set of dependencies to get started using the Java JMS API with Transactional Event Queues. You may also use the following guide to get started, which implements a simple <a href="https://medium.com/@anders.swanson.93/use-jms-for-asynchronous-messaging-in-spring-boot-d67f8349c7c4" rel="external" target="_blank">producer consumer example using AqJms for Transcational Event Queues</a>.</p>
+<p>The <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/jajms/index.html" rel="external" target="_blank"><code>oracle.jms</code> Java package</a> includes several APIs for managing queues, enqueuing, and dequeuing messages using JMS. The <a href="https://mvnrepository.com/artifact/com.oracle.database.spring/oracle-spring-boot-starter-aqjms" rel="external" target="_blank">Oracle Spring Boot Starter for AqJms</a> provides a comprehensive set of dependencies to get started using the Java JMS API with Transactional Event Queues. The Spring Boot section includes a detailed <a href="/microservices-datadriven/transactional-event-queues/spring-boot/jms/index.html">producer consumer example using Spring JMS for Transactional Event Queues</a>.</p>
 <h4 id="python">Python</h4>
 <p>When using Python, the <a href="https://python-oracledb.readthedocs.io/en/latest/api_manual/aq.html#aq" rel="external" target="_blank"><code>python-oracledb</code> package</a> is helpful for enqueuing and dequeuing messages. Queue creation and management should be handled by the Python Database Driver or a SQL script run by a database administrator.</p>
 <h4 id="net">.NET</h4>
 <p>Before you can use Transactional Event queues from .NET, you need to create and start queues using the appropriate PL/SQL procedures. The <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/odpnt/aq-classes.html#ODPNT-GUID-4DBB419A-BCE1-467C-BA28-3611F3E012CA" rel="external" target="_blank">OracleAQMessage class</a> can be used to enqueue and dequeue messages from queues.</p>
 <h4 id="javascript">JavaScript</h4>
-<p>Using the <a href="https://node-oracledb.readthedocs.io/en/latest/api_manual/aq.html" rel="external" target="_blank"><code>node-oracledb</code> package</a>, an AqQueue class can be created from a connection for enqueuing and dequeuing messages. Queue creation and management should be handled by the node-oracledb Database Driver or a SQL script run by a database administrator.</p>
+<p>Using the <a href="https://node-oracledb.readthedocs.io/en/latest/api_manual/aq.html" rel="external" target="_blank"><code>node-oracledb</code> package</a>, an AqQueue class can be created from a connection for enqueuing and dequeuing messages. Queue creation and management should be handled by a database administrator.</p>
 <h4 id="oracle-rest-data-services">Oracle REST Data Services</h4>
 <p>Oracle REST Data Services (ORDS) is a Java Enterprise Edition (Java EE) based data service that provides enhanced security, file caching features, and RESTful Web Services. Oracle REST Data Services also increases flexibility through support for deployment in standalone mode, as well as using servers like Oracle WebLogic Server and Apache Tomcat.</p>
-<p>With ORDS, <a href="https://docs.oracle.com/en/database/oracle/oracle-rest-data-services/24.3/orrst/api-oracle-transactional-event-queues.html" rel="external" target="_blank">REST APIs can be used to manage Transactional Event Queues</a>, including creating queues, producing and consuming messages.</p>
+<p>With ORDS, <a href="https://docs.oracle.com/en/database/oracle/oracle-rest-data-services/24.4/orrst/api-oracle-transactional-event-queues.html" rel="external" target="_blank">REST APIs can be used to manage Transactional Event Queues</a>, including creating queues, producing and consuming messages.</p>
 
   <footer class="footline">
   </footer>
@@ -343,7 +345,7 @@ Database Permissions for Transactional Event Queues Permissions for SQL Packages
 <img src="https://oracle.github.io/microservices-datadriven/transactional-event-queues//txeventq.png" height="100px">
         </div>
         <script>
-          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736354172";
+          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736530174";
         </script>
         <search><form action="/microservices-datadriven/transactional-event-queues/search/index.html" method="get">
           <div class="searchbox default-animation">
@@ -356,12 +358,12 @@ Database Permissions for Transactional Event Queues Permissions for SQL Packages
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736354172" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736354172" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736530174" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -443,8 +445,8 @@ Database Permissions for Transactional Event Queues Permissions for SQL Packages
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736354172" defer></script>
-    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736354172" defer></script>
-    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736354172" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736530174" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736530174" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736530174" defer></script>
   </body>
 </html>
