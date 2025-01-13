@@ -16,6 +16,6 @@ TxEventQ provides [administrative views](https://docs.oracle.com/en/database/ora
 
 ## Performance Tuning
 
-This module will cover several methods of optimizing TxEventQ performance, including the message cache, streams pool size, and more.
+This module will cover several methods of optimizing TxEventQ performance, including the message cache, Streams pool size, and more.
 
 By leveraging these techniques, you can ensure optimal performance and visibility for your TxEventQ implementations.

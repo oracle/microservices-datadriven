@@ -7,7 +7,7 @@ weight = 3
 Performance tuning is critical for ensuring the efficiency, reliability, and responsiveness of TxEventQ event processing. As systems scale and the volume of events increases, poor optimizations can lead to latency, bottlenecks, or even system failures. By applying the techniques described in this section, TxEventQ administrators can significantly enhance throughput, reduce latency, and improve the stability of event driven applications.
 
 
-* [Partitioning/Sharding and Multiple Consumers](#partitioningsharding-and-multiple-consumers)
+* [Event Streams and Multiple Consumers](#event-streams-and-multiple-consumers)
   * [Creating a Partitioned Kafka Topic](#creating-a-partitioned-kafka-topic)
   * [Message Cache Optimization](#message-cache-optimization)
 * [Tuning System Parameters](#tuning-system-parameters)
@@ -21,30 +21,30 @@ Performance tuning is critical for ensuring the efficiency, reliability, and res
   * [STREAMS_POOL_SIZE](#streams_pool_size)
 
 
-## Partitioning/Sharding and Multiple Consumers
+## Event Streams and Multiple Consumers
 
-Oracle Database automatically manages the database table partitions of a queue. As queue volume fluctuates, partitions may be dynamically created as necessary, for example, when the queue table expands due to a message backlog. Once all messages are dequeued and no longer needed, the database table partition is truncated and made available for reuse.
+Oracle Database automatically manages the database table partitions of a queue. As queue volume fluctuates, table partitions may be dynamically created as necessary, for example, when the queue table expands due to a message backlog. Once all messages are dequeued and no longer needed, the database table partition is truncated and made available for reuse.
 
-Queue partitions (or shards) can be configured on a queue during creation. A higher number of partitions per queue improves dequeue performance through consumer parallelization, but requires additional memory and database resources. When messages are enqueued, each message is routed to a specific partition of the queue. Messages within a partition maintain a strict, session-level ordering.
+Queue event streams can be configured on a queue during creation. A higher number of event streams per queue improves dequeue performance through consumer parallelization, but requires additional memory and database resources. When messages are enqueued, each message is routed to a specific event stream of the queue. Messages within an event stream maintain a strict, session-level ordering.
 
-If you wish to manually set the number of partitions/shards for a queue, you may do so using the [SET_QUEUE_PARAMETER](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQADM.html#GUID-E592137F-BB8E-49A2-80C2-C055358566C9) procedure. The following SQL script creates a queue, and configures it to have 5 partitions/shards and key based enqueue. Key based enqueue allows message routing to a specific shard within a queue by providing a message key at enqueue time.
+If you wish to manually set the number of event streams for a queue, you may do so using the [SET_QUEUE_PARAMETER](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQADM.html#GUID-E592137F-BB8E-49A2-80C2-C055358566C9) procedure. The following SQL script creates a queue, and configures it to have 5 event streams and key based enqueue. Key based enqueue allows message routing to a specific event stream within a queue by providing a message key at enqueue time.
 
 ```sql
 begin
     dbms_aqadm.create_transactional_event_queue(
-            queue_name         => 'partitioned_queue',
+            queue_name         => 'my_queue',
             queue_payload_type => DBMS_AQADM.JMS_TYPE,
             multiple_consumers => true
     );
 
-    -- Set the queue to have 5 partitions/shards
-    dbms_aqadm.set_queue_parameter('partitioned_queue', 'SHARD_NUM', 5);
-    -- The partition/shard for enqueued messages is determined by the message key
-    dbms_aqadm.set_queue_parameter('partitioned_queue', 'KEY_BASED_ENQUEUE', 1);
+    -- Set the queue to have 5 event streams
+    dbms_aqadm.set_queue_parameter('my_queue', 'SHARD_NUM', 5);
+    -- The event stream for enqueued messages is determined by the message key
+    dbms_aqadm.set_queue_parameter('my_queue', 'KEY_BASED_ENQUEUE', 1);
 
     -- Start the queue
     dbms_aqadm.start_queue(
-            queue_name         => 'partitioned_queue'
+            queue_name         => 'my_queue'
     );
 end;
 /
@@ -54,7 +54,7 @@ It is recommended to avoid creating global indexes on the partitioned table that
 
 ### Creating a Partitioned Kafka Topic
 
-The following Java code snippet creates a TxEventQ topic with 5 partitions using the [Kafka Java Client for Oracle Database Transactional Event Queues](https://github.com/oracle/okafka). The `my_topic` topic may have up to 5 distinct consumer threads per consumer group, increasing parallelization.
+The following Java code snippet creates a TxEventQ topic with 5 Kafka partitions (5 TxEventQ event streams) using the [Kafka Java Client for Oracle Database Transactional Event Queues](https://github.com/oracle/okafka). When working with TxEventQ, we'll refer to Kafka topic partitions as event streams. The `my_topic` topic may have up to 5 distinct consumer threads per consumer group, increasing parallelization.
 
 ```java
 Properties props = // Oracle Database connection properties
@@ -72,7 +72,7 @@ Note that you can use as many producers per topic as required, though it is reco
 
 ### Message Cache Optimization
 
-TxEventQ includes a specialized message cache that allows administrators to balance [System Global Area (SGA)](https://docs.oracle.com/en/database/oracle/oracle-database/23/dbiad/db_sga.html) usage and queue performance. Management of TxEventQ's SGA usage benefits throughput, reduces latency, and allows greater concurrency. When paired with partitioning, message caching reduces the need for certain queries, DML operations, and indexes. The cache is most effective when consumers can keep up with producers, and when it is large enough to store the messages (including payloads) for all consumers and producers for using TxEventQ.
+TxEventQ includes a specialized message cache that allows administrators to balance [System Global Area (SGA)](https://docs.oracle.com/en/database/oracle/oracle-database/23/dbiad/db_sga.html) usage and queue performance. Management of TxEventQ's SGA usage benefits throughput, reduces latency, and allows greater concurrency. When paired with event streams, message caching reduces the need for certain queries, DML operations, and indexes. The cache is most effective when consumers can keep up with producers, and when it is large enough to store the messages (including payloads) for all consumers and producers for using TxEventQ.
 
 The message cache uses the Oracle Database Streams pool. You can fine-tune the memory allocation for the Streams pool using the DBMS_AQADM [SET_MIN_STREAMS_POOL](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQADM.html#GUID-773FA544-1450-4A9E-BAA7-08ACF059D3EB) and [SET_MAX_STREAMS_POOL](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQADM.html#GUID-9375E6C8-1BC0-4E45-8045-143927DD751C) procedures.
 
@@ -103,10 +103,6 @@ where  name = 'sga_target';
 
 The default block size of 8k is recommended. The block size of a database cannot be changed after database creation.
 
-### [JAVA_POOL_SIZE](https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/JAVA_POOL_SIZE.html)
-
-The JAVA_POOL_SIZE parameter specifies the size (in bytes) of the Java pool, used by the Java memory manager for Java-related operations like method and class definitions, and Java objects during execution. If the SGA_TARGET is not set, it defaults to 24 MB. JAVA_POOL_SIZE is modifiable via ALTER SYSTEM, and its range depends on the operating system.
-
 ### [OPEN_CURSORS](https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/OPEN_CURSORS.html)
 
 The OPEN_CURSORS parameter defines the maximum number of open cursors a session can have in Oracle. The default value is 50, and it can be adjusted between 0 and 65535. If you are running a large amount of producers and consumers, it’s essential to set this value high enough to avoid running out of cursors. You can modify OPEN_CURSORS using the ALTER SYSTEM command.
@@ -127,7 +123,7 @@ The SESSIONS parameter defines the maximum number of sessions that can be create
 
 ### [SGA_TARGET](https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/SGA_TARGET.html)
 
-The SGA_TARGET parameter specifies the total size of the Shared Global Area (SGA) in Oracle, allowing automatic memory management of its components like the buffer cache, shared pool, and others. Its value can range from 64 MB to SGA_MAX_SIZE. It is modifiable via ALTER SYSTEM. If set to zero, SGA autotuning is disabled. Systems that make heavy using of message queueing should configure SGA_TARGET to an appropriately large value to get the most out of queue [message caching](#message-cache).
+The SGA_TARGET parameter specifies the total size of the System Global Area (SGA) in Oracle, allowing automatic memory management of its components like the buffer cache, shared pool, and others. Its value can range from 64 MB to SGA_MAX_SIZE. It is modifiable via ALTER SYSTEM. If set to zero, SGA autotuning is disabled. Systems that make heavy using of message queuing should configure SGA_TARGET to an appropriately large value to get the most out of queue [message caching](#message-cache-optimization).
 
 If SGA_TARGET is specified, then the following memory pools are automatically sized:
 - Buffer cache (DB_CACHE_SIZE)
@@ -141,4 +137,4 @@ If SGA_TARGET is specified, then the following memory pools are automatically si
 
 The STREAMS_POOL_SIZE parameter defines the size of the Streams pool, a shared memory area used for TxEventQ and other database features. If SGA_TARGET and STREAMS_POOL_SIZE are both nonzero, Oracle Database Automatic Shared Memory Management uses this value as a minimum for the Streams pool. 
 
-If both the STREAMS_POOL_SIZE and the SGA_TARGET parameters are set to 0, then the first request for Streams pool memory will transfer 10% of the buffer cache shared pool is transferred to the Streams pool.
+If both the STREAMS_POOL_SIZE and the SGA_TARGET parameters are set to 0, then the first request for Streams pool memory will transfer 10% of the buffer cache shared pool to the Streams pool.
