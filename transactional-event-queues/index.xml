@@ -40,7 +40,7 @@
       <link>https://oracle.github.io/microservices-datadriven/transactional-event-queues/aq-migration/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/transactional-event-queues/aq-migration/index.html</guid>
-      <description>Oracle Database 23ai includes a migration path from Advanced Queuing (AQ) to Transactional Event Queues (TxEventQ), to take advantage of enhanced performance and scalability for event-driven architectures.&#xA;Advanced Queuing (AQ) has been Oracle’s traditional messaging system for managing asynchronous communication in enterprise applications, allowing reliable queuing and message delivery. TxEventQ leverages Kafka-based event queuing, offering improved throughput, lower latency, and greater scalability, making it ideal for modern event-driven architectures and high-volume event processing.</description>
+      <description>Oracle Database 23ai includes a migration path from Advanced Queuing (AQ) to Transactional Event Queues (TxEventQ), to take advantage of enhanced performance and scalability for event-driven architectures.&#xA;Advanced Queuing (AQ) has been Oracle’s database messaging system for managing asynchronous communication in enterprise applications, allowing reliable queuing and message delivery. TxEventQ leverages Kafka-based event queuing, offering improved throughput, lower latency, and greater scalability, making it ideal for modern event-driven architectures and high-volume event processing.</description>
     </item>
   </channel>
 </rss>

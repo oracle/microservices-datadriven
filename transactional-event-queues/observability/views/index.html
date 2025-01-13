@@ -27,14 +27,14 @@ V$EQ_CACHED_PARTITIONS Provides information about cached event stream partitions
     <meta itemprop="description" content="Oracle Database provides administrative views for collecting metrics on TxEventQ topics and queues. In this section, you’ll learn about each view and its use by database administrators for queue performance monitoring.
 TxEventQ Views Find the list of TxEventQ administrative views and their column definitions in the Oracle Database TxEventQ documentation. Views may be joined and grouped across queries to compose custom metrics and insights about queues and subscribers.
 V$EQ_CACHED_PARTITIONS Provides information about cached event stream partitions. Queries may group on identifiers like QUEUE id or EVENT_STREAM_ID.">
-    <meta itemprop="wordCount" content="628">
+    <meta itemprop="wordCount" content="635">
     <title>TxEventQ Administrative Views :: Transactional Event Queues</title>
-    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736530174" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736530174" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736530174" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736530174" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736530174" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736530174" rel="stylesheet">
-    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736530174" rel="stylesheet">
-    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736530174" rel="stylesheet" id="R-format-style">
+    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736782355" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736782355" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736782355" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736782355" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736782355" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736782355" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736782355" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736782355" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
@@ -178,7 +178,7 @@ V$EQ_CACHED_PARTITIONS Provides information about cached event stream partitions
 <h3 id="veq_nondur_subscriberhttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_nondur_subscriberhtmlrefrn-guid-6fa0c1a8-fc9a-4eb6-97df-948664a9b552"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_NONDUR_SUBSCRIBER.html#REFRN-GUID-6FA0C1A8-FC9A-4EB6-97DF-948664A9B552" rel="external" target="_blank">V$EQ_NONDUR_SUBSCRIBER</a></h3>
 <p>The <code>V$EQ_NONDUR_SUBSCRIBER</code> view provides details about non-durable subscriptions on queues. Non-durable subscribers receive messages only while actively connected; they do not retain message state after disconnection. The view is per-queue and non-durable subscriber.</p>
 <h3 id="veq_nondur_subscriber_lwmhttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_nondur_subscriber_lwmhtmlrefrn-guid-98d91cb7-5ea3-47eb-90d3-a8bf0047d3b8"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_NONDUR_SUBSCRIBER_LWM.html#REFRN-GUID-98D91CB7-5EA3-47EB-90D3-A8BF0047D3B8" rel="external" target="_blank">V$EQ_NONDUR_SUBSCRIBER_LWM</a></h3>
-<p>The V$EQ_NONDUR_SUBSCRIBER_LWM view provides information about the low watermarks (LWMs) of non-durable subscribers in a Transactional Event Queue (TxEventQ). The LWM represents the lowest point in an event stream partition that a non-durable subscriber has processed.</p>
+<p>The V$EQ_NONDUR_SUBSCRIBER_LWM view provides information about the low watermarks (LWMs) of non-durable subscribers in a Transactional Event Queue (TxEventQ). The LWM of a subscriber represents a position within an event stream below which none of the messages are of interest to the subscriber.</p>
 <h3 id="veq_partition_statshttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_partition_statshtmlrefrn-guid-4ea74e81-4664-436e-b58a-0857ddbd81f7"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_PARTITION_STATS.html#REFRN-GUID-4EA74E81-4664-436E-B58A-0857DDBD81F7" rel="external" target="_blank">V$EQ_PARTITION_STATS</a></h3>
 <p>The <code>V$EQ_PARTITION_STATS</code> view provides usage statistics for queue partition caches, specifically focusing on the queue partition cache and the dequeue log partition cache. This view is instrumental in monitoring and optimizing the performance of these caches.</p>
 <h3 id="veq_remote_dequeue_affinityhttpsdocsoraclecomendatabaseoracleoracle-database23refrnv-eq_remote_dequeue_affinityhtmlrefrn-guid-92daa4f3-c3e6-4fae-85ab-db4c538a633b"><a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_REMOTE_DEQUEUE_AFFINITY.html#REFRN-GUID-92DAA4F3-C3E6-4FAE-85AB-DB4C538A633B" rel="external" target="_blank">V$EQ_REMOTE_DEQUEUE_AFFINITY</a></h3>
@@ -205,7 +205,7 @@ V$EQ_CACHED_PARTITIONS Provides information about cached event stream partitions
 <img src="https://oracle.github.io/microservices-datadriven/transactional-event-queues//txeventq.png" height="100px">
         </div>
         <script>
-          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736530174";
+          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736782355";
         </script>
         <search><form action="/microservices-datadriven/transactional-event-queues/search/index.html" method="get">
           <div class="searchbox default-animation">
@@ -218,12 +218,12 @@ V$EQ_CACHED_PARTITIONS Provides information about cached event stream partitions
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736530174" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736530174" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736530174" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736530174" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736530174" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736782355" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736782355" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736782355" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736782355" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736782355" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736782355" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -304,8 +304,8 @@ V$EQ_CACHED_PARTITIONS Provides information about cached event stream partitions
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736530174" defer></script>
-    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736530174" defer></script>
-    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736530174" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736782355" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736782355" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736782355" defer></script>
   </body>
 </html>

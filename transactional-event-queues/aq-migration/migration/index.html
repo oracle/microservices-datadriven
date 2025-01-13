@@ -27,14 +27,14 @@ DBMS_AQMIGTOOL Overview Migration Workflow Checking Compatibility Initiating Mig
     <meta itemprop="description" content="This section provides a detailed guide for migrating from Oracle Advanced Queuing (AQ) to Transactional Event Queues (TxEventQ). The migration process uses the DBMS_AQMIGTOOL package to ensure minimal disruption of existing messaging workflows.
 Users of AQ are recommended to migrate to TxEventQ for increased support, performance, and access to new database features. It is recommended to read through the document fully before attempting migration.
 DBMS_AQMIGTOOL Overview Migration Workflow Checking Compatibility Initiating Migration Checking Migration Status Commit the Migration Checking and Handling Migration Errors Cancelling and Recovering Migration Limitations and Workarounds DBMS_AQMIGTOOL Overview The migration tool interface provides the following functionalities:">
-    <meta itemprop="wordCount" content="1286">
+    <meta itemprop="wordCount" content="1314">
     <title>AQ Migration :: Transactional Event Queues</title>
-    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736530174" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736530174" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736530174" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736530174" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736530174" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736530174" rel="stylesheet">
-    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736530174" rel="stylesheet">
-    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736530174" rel="stylesheet" id="R-format-style">
+    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1736782355" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736782355" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1736782355" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736782355" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1736782355" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1736782355" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1736782355" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1736782355" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
@@ -197,7 +197,7 @@ DBMS_AQMIGTOOL Overview Migration Workflow Checking Compatibility Initiating Mig
 </ol>
 </li>
 </ol>
-<p>In the event of an error the prevents migration from continuing, AQ migration may be cancelled and the in-flight messages restored to the AQ without data loss.</p>
+<p>In the event of an error that prevents migration from continuing, AQ migration may be cancelled and the in-flight messages restored to the AQ without data loss.</p>
 <h3 id="checking-compatibility">Checking Compatibility</h3>
 <p>The <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQMIGTOOL.html#GUID-6DE10CAB-63DA-49F9-A29B-682050DAEA80" rel="external" target="_blank">CHECK_MIGRATION_TO_TXEVENTQ</a> procedure is used to verify an AQ is suitable for migration to TxEventQ and should be run before any migration is attempted.</p>
 <p>The following SQL script creates a migration report for the AQ <code>my_queue</code> and prints the count of events in the migration report. If all features are supported, the <code>migration_report</code> will be empty.</p>
@@ -211,7 +211,7 @@ DBMS_AQMIGTOOL Overview Migration Workflow Checking Compatibility Initiating Mig
 <p>If the output is similar to &ldquo;Migration report unsupported events count: 0&rdquo;, then it is safe to initiate the migration.</p>
 <h3 id="initiating-migration">Initiating Migration</h3>
 <p>The <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQMIGTOOL.html#GUID-4D2A3314-9ADF-43DE-9201-74A8F9DB03FE" rel="external" target="_blank">INIT_MIGRATION</a> procedure is used to begin AQ migration to TxEventQ. The <code>mig_mode</code> parameter is used to control the migration type and defaults to <code>DBMS_AQMIGTOOL.INTERACTIVE</code> which allows both enqueue and dequeue during migration. A full description of <code>mig_mode</code> options is available in the procedure documentation.</p>
-<p>The following SQL script starts migration for the AQ <code>my_queue</code> in the <code>testuser</code> schema. Once migration starts, an interim TxEventQ will be created named <code>my_queue_m</code> the includes a copy of the existing AQ configuration.</p>
+<p>The following SQL script starts migration for the AQ <code>my_queue</code> in the <code>testuser</code> schema. Once migration starts, an interim TxEventQ will be created named <code>my_queue_m</code> that includes a copy of the existing AQ configuration.</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">begin</span>
 </span></span><span style="display:flex;"><span>  DBMS_AQMIGTOOL.INIT_MIGRATION(
 </span></span><span style="display:flex;"><span>    cqschema <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;testuser&#39;</span>,
@@ -287,7 +287,7 @@ Migration comments: Unsupported parameter in Enqueue</code></pre></div>
 </span></span><span style="display:flex;"><span>    );
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
 </span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
-<p>The <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQMIGTOOL.html#GUID-755EEB52-BFAE-4FEA-A933-07546D72DD98" rel="external" target="_blank">RECOVER_MIGRATION</a> procedure can be used to restore a migration to the nearest safe point, either before or after the execution of DBMS_AQMIGTOOL.CANCEL_MIGRATION, DBMS_AQMIGTOOL.COMMIT_MIGRATION, or DBMS_AQMIGTOOL.INIT_MIGRATION.</p>
+<p>The <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQMIGTOOL.html#GUID-755EEB52-BFAE-4FEA-A933-07546D72DD98" rel="external" target="_blank">RECOVER_MIGRATION</a> procedure can be used to restore a migration to the nearest safe point, either before or after the execution of DBMS_AQMIGTOOL.CANCEL_MIGRATION, DBMS_AQMIGTOOL.COMMIT_MIGRATION, or DBMS_AQMIGTOOL.INIT_MIGRATION. You may wish to use the RECOVER_MIGRATION procedure if an unexpected error has occurred, or the use of an unsupported feature is detected in the <a href="https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/USER_TXEVENTQ_MIGRATION_STATUS.html#REFRN-GUID-07BAF678-A893-4616-B559-E78E90EE1972" rel="external" target="_blank">USER_TXEVENTQ_MIGRATION_STATUS</a> view.</p>
 <p>The following SQL script recovers migration to the nearest safe point, and outputs the recovery message:</p>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sql" data-lang="sql"><span style="display:flex;"><span><span style="color:#66d9ef">declare</span>
 </span></span><span style="display:flex;"><span>    recovery_message  VARCHAR2(<span style="color:#ae81ff">1024</span>);
@@ -304,11 +304,11 @@ Migration comments: Unsupported parameter in Enqueue</code></pre></div>
 <p>The following features are unsupported in TxEventQ, and should be mitigated before migration:</p>
 <ul>
 <li>Queue Retry Delay: Set <code>retry_delay</code> to zero using DBMS_AQADM.ALTER_QUEUE.</li>
-<li>Message transactions on enqueue/dequeue: Move the transformation to the application layer.</li>
+<li>Message transaction on enqueue/dequeue: Move the transformation to the application layer.</li>
 <li>Multi-queue listeners: Implement single queue listening with dequeue browse.</li>
 <li>Priority values outside the range 0-9: Adjust priority values to the range 0-9.</li>
 </ul>
-<p>The following features do support migration. Applications using these features must be modified before migration:</p>
+<p>The following features do not support migration. Applications using these features must be modified before migration:</p>
 <ul>
 <li>Message grouping.</li>
 <li>Sequence deviation and relative message id.</li>
@@ -328,7 +328,7 @@ Migration comments: Unsupported parameter in Enqueue</code></pre></div>
 <img src="https://oracle.github.io/microservices-datadriven/transactional-event-queues//txeventq.png" height="100px">
         </div>
         <script>
-          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736530174";
+          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1736782355";
         </script>
         <search><form action="/microservices-datadriven/transactional-event-queues/search/index.html" method="get">
           <div class="searchbox default-animation">
@@ -341,12 +341,12 @@ Migration comments: Unsupported parameter in Enqueue</code></pre></div>
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736530174" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736530174" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736530174" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736530174" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736530174" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736530174" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1736782355" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1736782355" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1736782355" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1736782355" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1736782355" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1736782355" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -425,8 +425,8 @@ Migration comments: Unsupported parameter in Enqueue</code></pre></div>
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736530174" defer></script>
-    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736530174" defer></script>
-    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736530174" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1736782355" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1736782355" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1736782355" defer></script>
   </body>
 </html>
