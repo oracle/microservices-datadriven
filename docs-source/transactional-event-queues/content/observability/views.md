@@ -50,7 +50,7 @@ The `V$EQ_NONDUR_SUBSCRIBER` view provides details about non-durable subscriptio
 
 ### [V$EQ_NONDUR_SUBSCRIBER_LWM](https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_NONDUR_SUBSCRIBER_LWM.html#REFRN-GUID-98D91CB7-5EA3-47EB-90D3-A8BF0047D3B8)
 
-The V$EQ_NONDUR_SUBSCRIBER_LWM view provides information about the low watermarks (LWMs) of non-durable subscribers in a Transactional Event Queue (TxEventQ). The LWM represents the lowest point in an event stream partition that a non-durable subscriber has processed.
+The V$EQ_NONDUR_SUBSCRIBER_LWM view provides information about the low watermarks (LWMs) of non-durable subscribers in a Transactional Event Queue (TxEventQ). The LWM of a subscriber represents a position within an event stream below which none of the messages are of interest to the subscriber.
 
 ### [V$EQ_PARTITION_STATS](https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/V-EQ_PARTITION_STATS.html#REFRN-GUID-4EA74E81-4664-436E-B58A-0857DDBD81F7)
 

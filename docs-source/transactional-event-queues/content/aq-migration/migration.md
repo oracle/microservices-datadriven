@@ -47,7 +47,7 @@ The migration tool interface provides the following functionalities:
 4. Once the AQ is drained or purged, the DBMS_AQMIGTOOL.COMMIT_MIGRATION procedure drops the AQ and renames the interim TxEventQ to the AQ's name, ensuring application compatibility.
    1. If using DBMS_AQMIGTOOL.AUTOMATIC migration mode, commit is not required.
 
-In the event of an error the prevents migration from continuing, AQ migration may be cancelled and the in-flight messages restored to the AQ without data loss.
+In the event of an error that prevents migration from continuing, AQ migration may be cancelled and the in-flight messages restored to the AQ without data loss.
 
 ### Checking Compatibility
 
@@ -71,7 +71,7 @@ If the output is similar to "Migration report unsupported events count: 0", then
 
 The [INIT_MIGRATION](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQMIGTOOL.html#GUID-4D2A3314-9ADF-43DE-9201-74A8F9DB03FE) procedure is used to begin AQ migration to TxEventQ. The `mig_mode` parameter is used to control the migration type and defaults to `DBMS_AQMIGTOOL.INTERACTIVE` which allows both enqueue and dequeue during migration. A full description of `mig_mode` options is available in the procedure documentation.
 
-The following SQL script starts migration for the AQ `my_queue` in the `testuser` schema. Once migration starts, an interim TxEventQ will be created named `my_queue_m` the includes a copy of the existing AQ configuration.
+The following SQL script starts migration for the AQ `my_queue` in the `testuser` schema. Once migration starts, an interim TxEventQ will be created named `my_queue_m` that includes a copy of the existing AQ configuration.
 
 ```sql
 begin
@@ -186,7 +186,7 @@ end;
 /
 ```
 
-The [RECOVER_MIGRATION](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQMIGTOOL.html#GUID-755EEB52-BFAE-4FEA-A933-07546D72DD98) procedure can be used to restore a migration to the nearest safe point, either before or after the execution of DBMS_AQMIGTOOL.CANCEL_MIGRATION, DBMS_AQMIGTOOL.COMMIT_MIGRATION, or DBMS_AQMIGTOOL.INIT_MIGRATION.
+The [RECOVER_MIGRATION](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQMIGTOOL.html#GUID-755EEB52-BFAE-4FEA-A933-07546D72DD98) procedure can be used to restore a migration to the nearest safe point, either before or after the execution of DBMS_AQMIGTOOL.CANCEL_MIGRATION, DBMS_AQMIGTOOL.COMMIT_MIGRATION, or DBMS_AQMIGTOOL.INIT_MIGRATION. You may wish to use the RECOVER_MIGRATION procedure if an unexpected error has occurred, or the use of an unsupported feature is detected in the [USER_TXEVENTQ_MIGRATION_STATUS](https://docs.oracle.com/en/database/oracle/oracle-database/23/refrn/USER_TXEVENTQ_MIGRATION_STATUS.html#REFRN-GUID-07BAF678-A893-4616-B559-E78E90EE1972) view.
 
 The following SQL script recovers migration to the nearest safe point, and outputs the recovery message:
 
@@ -209,11 +209,11 @@ end;
 The following features are unsupported in TxEventQ, and should be mitigated before migration:
 
 - Queue Retry Delay: Set `retry_delay` to zero using DBMS_AQADM.ALTER_QUEUE.
-- Message transactions on enqueue/dequeue: Move the transformation to the application layer.
+- Message transaction on enqueue/dequeue: Move the transformation to the application layer.
 - Multi-queue listeners: Implement single queue listening with dequeue browse.
 - Priority values outside the range 0-9: Adjust priority values to the range 0-9.
 
-The following features do support migration. Applications using these features must be modified before migration:
+The following features do not support migration. Applications using these features must be modified before migration:
 
 - Message grouping.
 - Sequence deviation and relative message id.
