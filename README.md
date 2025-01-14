@@ -12,7 +12,6 @@ Microservices are loosely-coupled service-oriented architectures with a bounded 
 * [Kubernetes for DBAs Live Lab](http://bit.ly/KubernetesForDBAs)
 * [Oracle Spring Boot Starters](https://oracle.github.io/microservices-datadriven/spring/starters/)
 * [Data Refactoring Advisor](./data-refactoring-advisor/README.md)
-* [Data Refactoring Advisor for Migrating a Monolith to Microservices Live Lab](https://bit.ly/datarefactoringadvisor)
 * [Read our blogs](https://oracle.github.io/microservices-datadriven/spring/blogs)
 * [Sample code for Oracle Transactional Event Queues](./code-teq)
 
@@ -31,7 +30,4 @@ Copyright (c) 2021, 2024, Oracle and/or its affiliates.
 Licensed under the Universal Permissive License v 1.0 as shown at <https://oss.oracle.com/licenses/upl>.
 
 [ATP]: https://docs.oracle.com/en/cloud/paas/autonomous-database/index.html
-[LiveLabs]: https://apexapps.oracle.com/pls/apex/f?p=133:1
-[Workshops]: https://apexapps.oracle.com/pls/apex/dbpm/r/livelabs/livelabs-workshop-cards?p100_role=12&p100_focus_area=35&me=126
-[DRC]: https://developer.oracle.com
 
