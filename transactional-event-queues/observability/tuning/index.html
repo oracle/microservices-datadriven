@@ -25,12 +25,12 @@ Event Streams and Multiple Consumers Creating a Partitioned Kafka Topic Message 
 Event Streams and Multiple Consumers Creating a Partitioned Kafka Topic Message Cache Optimization Tuning System Parameters DB_BLOCK_SIZE JAVA_POOL_SIZE OPEN_CURSORS PGA_AGGREGATE_TARGET PROCESSES SESSIONS SGA_TARGET STREAMS_POOL_SIZE Event Streams and Multiple Consumers Oracle Database automatically manages the database table partitions of a queue. As queue volume fluctuates, table partitions may be dynamically created as necessary, for example, when the queue table expands due to a message backlog. Once all messages are dequeued and no longer needed, the database table partition is truncated and made available for reuse.">
     <meta itemprop="wordCount" content="1263">
     <title>Performance Tuning :: Transactional Event Queues</title>
-    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1737135057" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1737135057" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1737135057" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1737135057" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1737135057" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1737135057" rel="stylesheet">
-    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1737135057" rel="stylesheet">
-    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1737135057" rel="stylesheet" id="R-format-style">
+    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1737140562" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1737140562" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1737140562" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1737140562" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1737140562" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1737140562" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1737140562" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1737140562" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
@@ -78,6 +78,20 @@ Event Streams and Multiple Consumers Creating a Partitioned Kafka Topic Message 
       window.T_No_results_found = `No results found for "{0}"`;
       window.T_N_results_found = `{1} results found for "{0}"`;
     </script>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-3SR3X9PXY7"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-3SR3X9PXY7');
+        }
+      </script>
   </head>
   <body class="mobile-support html" data-url="/microservices-datadriven/transactional-event-queues/observability/tuning/index.html">
     <div id="R-body" class="default-animation">
@@ -258,7 +272,7 @@ Event Streams and Multiple Consumers Creating a Partitioned Kafka Topic Message 
 <img src="https://oracle.github.io/microservices-datadriven/transactional-event-queues//txeventq.png" height="100px">
         </div>
         <script>
-          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1737135057";
+          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1737140562";
         </script>
         <search><form action="/microservices-datadriven/transactional-event-queues/search/index.html" method="get">
           <div class="searchbox default-animation">
@@ -271,12 +285,12 @@ Event Streams and Multiple Consumers Creating a Partitioned Kafka Topic Message 
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1737135057" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1737135057" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1737135057" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1737135057" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1737135057" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1737135057" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1737140562" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1737140562" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1737140562" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1737140562" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1737140562" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1737140562" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -357,8 +371,8 @@ Event Streams and Multiple Consumers Creating a Partitioned Kafka Topic Message 
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1737135057" defer></script>
-    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1737135057" defer></script>
-    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1737135057" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1737140562" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1737140562" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1737140562" defer></script>
   </body>
 </html>

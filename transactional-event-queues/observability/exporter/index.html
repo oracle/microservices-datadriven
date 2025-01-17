@@ -29,12 +29,12 @@ To get started with the database exporter, see the installation section.
 Exporting TxEventQ Metrics Sample Grafana Dashboard Exporting TxEventQ Metrics The database exporter supports custom metric definitions in the form of TOML files. The TxEventQ custom metrics file contains metrics definitions for queue information like total number of queues, enqueued messages, dequeued messages, and more. You can include the TxEventQ metrics in the database exporter by using the custom.metrics program argument and passing the file location:">
     <meta itemprop="wordCount" content="216">
     <title>Database Monitoring Exporter :: Transactional Event Queues</title>
-    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1737135057" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1737135057" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1737135057" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1737135057" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1737135057" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1737135057" rel="stylesheet">
-    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1737135057" rel="stylesheet">
-    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1737135057" rel="stylesheet" id="R-format-style">
+    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1737140562" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1737140562" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1737140562" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1737140562" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1737140562" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1737140562" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1737140562" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1737140562" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
@@ -82,6 +82,20 @@ Exporting TxEventQ Metrics Sample Grafana Dashboard Exporting TxEventQ Metrics T
       window.T_No_results_found = `No results found for "{0}"`;
       window.T_N_results_found = `{1} results found for "{0}"`;
     </script>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-3SR3X9PXY7"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-3SR3X9PXY7');
+        }
+      </script>
   </head>
   <body class="mobile-support html" data-url="/microservices-datadriven/transactional-event-queues/observability/exporter/index.html">
     <div id="R-body" class="default-animation">
@@ -150,8 +164,8 @@ Exporting TxEventQ Metrics Sample Grafana Dashboard Exporting TxEventQ Metrics T
 <h2 id="sample-grafana-dashboard">Sample Grafana Dashboard</h2>
 <p>The <a href="https://github.com/oracle/oracle-db-appdev-monitoring/blob/main/docker-compose/grafana/dashboards/txeventq.json" rel="external" target="_blank">Sample Dashboard for TxEventQ</a> visualizes metrics related to database queuing, and requires the custom metrics definitions located in the <a href="https://github.com/oracle/oracle-db-appdev-monitoring/blob/main/custom-metrics-example/txeventq-metrics.toml" rel="external" target="_blank">TxEventQ custom metrics file</a> to be loaded into the database exporter.</p>
 <p>The dashboard can be loaded into a Grafana instance to visualize TxEventQ status, throughput, and subscriber information for a given queue.</p>
-<p><a href="#R-image-680cbf6a83f5063b838bccc86c1d08d0" class="lightbox-link"><img alt="Sample Dashboard for TxEventQ" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/TxEventQGrafana.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-680cbf6a83f5063b838bccc86c1d08d0"><img alt="Sample Dashboard for TxEventQ" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/TxEventQGrafana.png" title=" "></a></p>
+<p><a href="#R-image-fc86760cccab53e7b67d8ad7d366f6ee" class="lightbox-link"><img alt="Sample Dashboard for TxEventQ" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/TxEventQGrafana.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-fc86760cccab53e7b67d8ad7d366f6ee"><img alt="Sample Dashboard for TxEventQ" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/TxEventQGrafana.png" title=" "></a></p>
 
   <footer class="footline">
   </footer>
@@ -166,7 +180,7 @@ Exporting TxEventQ Metrics Sample Grafana Dashboard Exporting TxEventQ Metrics T
 <img src="https://oracle.github.io/microservices-datadriven/transactional-event-queues//txeventq.png" height="100px">
         </div>
         <script>
-          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1737135057";
+          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1737140562";
         </script>
         <search><form action="/microservices-datadriven/transactional-event-queues/search/index.html" method="get">
           <div class="searchbox default-animation">
@@ -179,12 +193,12 @@ Exporting TxEventQ Metrics Sample Grafana Dashboard Exporting TxEventQ Metrics T
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1737135057" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1737135057" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1737135057" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1737135057" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1737135057" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1737135057" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1737140562" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1737140562" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1737140562" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1737140562" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1737140562" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1737140562" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -265,8 +279,8 @@ Exporting TxEventQ Metrics Sample Grafana Dashboard Exporting TxEventQ Metrics T
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1737135057" defer></script>
-    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1737135057" defer></script>
-    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1737135057" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1737140562" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1737140562" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1737140562" defer></script>
   </body>
 </html>

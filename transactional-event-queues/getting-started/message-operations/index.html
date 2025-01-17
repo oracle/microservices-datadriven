@@ -23,14 +23,14 @@ Enqueue and Dequeue, or Produce and Consume Queues Topics Enqueuing and Dequeuin
     <meta itemprop="name" content="Message Operations :: Transactional Event Queues">
     <meta itemprop="description" content="This section explains message operations using queues, topics, and different programming interfaces (SQL, Java, Spring JMS, and more). You’ll learn how to enqueue, dequeue, and manage messages effectively.
 Enqueue and Dequeue, or Produce and Consume Queues Topics Enqueuing and Dequeuing with SQL Kafka Producers and Consumers Kafka Producer Kafka Consumer Enqueuing and Dequeuing with JMS JMS APIs Message Operations in Other Languages and APIs Message Expiry and Exception Queues Message Delay Message Priority Transactional Messaging: Combine Messaging with Database Queries Enqueue and Dequeue, or Produce and Consume Queues When working with queues, the preferred terms for adding and retrieving messages from Transactional Event Queues are enqueue and dequeue.">
-    <meta itemprop="wordCount" content="1737">
+    <meta itemprop="wordCount" content="1738">
     <title>Message Operations :: Transactional Event Queues</title>
-    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1737135057" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1737135057" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1737135057" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1737135057" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1737135057" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1737135057" rel="stylesheet">
-    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1737135057" rel="stylesheet">
-    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1737135057" rel="stylesheet" id="R-format-style">
+    <link href="/microservices-datadriven/transactional-event-queues/images/favicon.png?1737140562" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1737140562" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/fontawesome-all.min.css?1737140562" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1737140562" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/transactional-event-queues/css/auto-complete.css?1737140562" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/transactional-event-queues/css/perfect-scrollbar.min.css?1737140562" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/theme.min.css?1737140562" rel="stylesheet">
+    <link href="/microservices-datadriven/transactional-event-queues/css/format-html.min.css?1737140562" rel="stylesheet" id="R-format-style">
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
@@ -78,6 +78,20 @@ Enqueue and Dequeue, or Produce and Consume Queues Topics Enqueuing and Dequeuin
       window.T_No_results_found = `No results found for "{0}"`;
       window.T_N_results_found = `{1} results found for "{0}"`;
     </script>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-3SR3X9PXY7"></script>
+      <script>
+        var doNotTrack = false;
+        if ( false ) {
+          var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
+          var doNotTrack = (dnt == "1" || dnt == "yes");
+        }
+        if (!doNotTrack) {
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-3SR3X9PXY7');
+        }
+      </script>
   </head>
   <body class="mobile-support html" data-url="/microservices-datadriven/transactional-event-queues/getting-started/message-operations/index.html">
     <div id="R-body" class="default-animation">
@@ -193,6 +207,7 @@ Enqueue and Dequeue, or Produce and Consume Queues Topics Enqueuing and Dequeuin
 </span></span><span style="display:flex;"><span>        payload <span style="color:#f92672">=&gt;</span> message,
 </span></span><span style="display:flex;"><span>        msgid <span style="color:#f92672">=&gt;</span> msg_id
 </span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">commit</span>;
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
 </span></span><span style="display:flex;"><span><span style="color:#f92672">/</span></span></span></code></pre></div>
 <p>Next, we&rsquo;ll dequeue the message and print it to the console:</p>
@@ -422,11 +437,11 @@ Messages that exceed their expiration time are automatically moved to an excepti
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    message_properties.delay :<span style="color:#f92672">=</span> <span style="color:#ae81ff">7</span><span style="color:#f92672">*</span><span style="color:#ae81ff">24</span><span style="color:#f92672">*</span><span style="color:#ae81ff">60</span><span style="color:#f92672">*</span><span style="color:#ae81ff">60</span>; <span style="color:#75715e">-- Delay for 7 days
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    dbms_aq.enqueue(
-</span></span><span style="display:flex;"><span>            queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_queue&#39;</span>,
-</span></span><span style="display:flex;"><span>            enqueue_options <span style="color:#f92672">=&gt;</span> enqueue_options,
-</span></span><span style="display:flex;"><span>            message_properties <span style="color:#f92672">=&gt;</span> message_properties,
-</span></span><span style="display:flex;"><span>            payload <span style="color:#f92672">=&gt;</span> message,
-</span></span><span style="display:flex;"><span>            msgid <span style="color:#f92672">=&gt;</span> message_handle
+</span></span><span style="display:flex;"><span>        queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_queue&#39;</span>,
+</span></span><span style="display:flex;"><span>        enqueue_options <span style="color:#f92672">=&gt;</span> enqueue_options,
+</span></span><span style="display:flex;"><span>        message_properties <span style="color:#f92672">=&gt;</span> message_properties,
+</span></span><span style="display:flex;"><span>        payload <span style="color:#f92672">=&gt;</span> message,
+</span></span><span style="display:flex;"><span>        msgid <span style="color:#f92672">=&gt;</span> message_handle
 </span></span><span style="display:flex;"><span>    );
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">commit</span>;
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
@@ -445,11 +460,11 @@ Messages that exceed their expiration time are automatically moved to an excepti
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    message_properties.priority :<span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; <span style="color:#75715e">-- A lower number indicates higher priority
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    dbms_aq.enqueue(
-</span></span><span style="display:flex;"><span>            queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_queue&#39;</span>,
-</span></span><span style="display:flex;"><span>            enqueue_options <span style="color:#f92672">=&gt;</span> enqueue_options,
-</span></span><span style="display:flex;"><span>            message_properties <span style="color:#f92672">=&gt;</span> message_properties,
-</span></span><span style="display:flex;"><span>            payload <span style="color:#f92672">=&gt;</span> message,
-</span></span><span style="display:flex;"><span>            msgid <span style="color:#f92672">=&gt;</span> message_handle
+</span></span><span style="display:flex;"><span>        queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;my_queue&#39;</span>,
+</span></span><span style="display:flex;"><span>        enqueue_options <span style="color:#f92672">=&gt;</span> enqueue_options,
+</span></span><span style="display:flex;"><span>        message_properties <span style="color:#f92672">=&gt;</span> message_properties,
+</span></span><span style="display:flex;"><span>        payload <span style="color:#f92672">=&gt;</span> message,
+</span></span><span style="display:flex;"><span>        msgid <span style="color:#f92672">=&gt;</span> message_handle
 </span></span><span style="display:flex;"><span>    );
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">commit</span>;
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>;
@@ -486,11 +501,11 @@ Messages that exceed their expiration time are automatically moved to an excepti
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- Enqueue the message
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    dbms_aq.enqueue(
-</span></span><span style="display:flex;"><span>            queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;json_queue&#39;</span>,
-</span></span><span style="display:flex;"><span>            enqueue_options <span style="color:#f92672">=&gt;</span> enqueue_options,
-</span></span><span style="display:flex;"><span>            message_properties <span style="color:#f92672">=&gt;</span> message_properties,
-</span></span><span style="display:flex;"><span>            payload <span style="color:#f92672">=&gt;</span> message,
-</span></span><span style="display:flex;"><span>            msgid <span style="color:#f92672">=&gt;</span> msg_id
+</span></span><span style="display:flex;"><span>        queue_name <span style="color:#f92672">=&gt;</span> <span style="color:#e6db74">&#39;json_queue&#39;</span>,
+</span></span><span style="display:flex;"><span>        enqueue_options <span style="color:#f92672">=&gt;</span> enqueue_options,
+</span></span><span style="display:flex;"><span>        message_properties <span style="color:#f92672">=&gt;</span> message_properties,
+</span></span><span style="display:flex;"><span>        payload <span style="color:#f92672">=&gt;</span> message,
+</span></span><span style="display:flex;"><span>        msgid <span style="color:#f92672">=&gt;</span> msg_id
 </span></span><span style="display:flex;"><span>    );
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">commit</span>;
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">exception</span>
@@ -517,7 +532,7 @@ Messages that exceed their expiration time are automatically moved to an excepti
 <img src="https://oracle.github.io/microservices-datadriven/transactional-event-queues//txeventq.png" height="100px">
         </div>
         <script>
-          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1737135057";
+          window.index_js_url="/microservices-datadriven/transactional-event-queues/searchindex.en.js?1737140562";
         </script>
         <search><form action="/microservices-datadriven/transactional-event-queues/search/index.html" method="get">
           <div class="searchbox default-animation">
@@ -530,12 +545,12 @@ Messages that exceed their expiration time are automatically moved to an excepti
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1737135057" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1737135057" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1737135057" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1737135057" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1737135057" defer></script>
-        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1737135057" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/auto-complete.js?1737140562" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.min.js?1737140562" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.stemmer.support.min.js?1737140562" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.multi.min.js?1737140562" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/lunr/lunr.en.min.js?1737140562" defer></script>
+        <script src="/microservices-datadriven/transactional-event-queues/js/search.js?1737140562" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -617,8 +632,8 @@ Messages that exceed their expiration time are automatically moved to an excepti
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1737135057" defer></script>
-    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1737135057" defer></script>
-    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1737135057" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/clipboard.min.js?1737140562" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/perfect-scrollbar.min.js?1737140562" defer></script>
+    <script src="/microservices-datadriven/transactional-event-queues/js/theme.js?1737140562" defer></script>
   </body>
 </html>
