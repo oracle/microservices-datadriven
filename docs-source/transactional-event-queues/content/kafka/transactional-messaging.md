@@ -61,7 +61,6 @@ public void produce(String record) {
         // 2. Create the producer record and prepare to send it to a topic
         ProducerRecord<String, String> pr = new ProducerRecord<>(
                 topic,
-                Integer.toString(idx),
                 record
         );
         producer.send(pr);
