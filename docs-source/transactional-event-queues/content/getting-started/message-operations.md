@@ -54,6 +54,7 @@ begin
         payload => message,
         msgid => msg_id
     );
+    commit;
 end;
 /
 ```
@@ -340,11 +341,11 @@ begin
 
     message_properties.delay := 7*24*60*60; -- Delay for 7 days
     dbms_aq.enqueue(
-            queue_name => 'my_queue',
-            enqueue_options => enqueue_options,
-            message_properties => message_properties,
-            payload => message,
-            msgid => message_handle
+        queue_name => 'my_queue',
+        enqueue_options => enqueue_options,
+        message_properties => message_properties,
+        payload => message,
+        msgid => message_handle
     );
     commit;
 end;
@@ -369,11 +370,11 @@ begin
 
     message_properties.priority := 1; -- A lower number indicates higher priority
     dbms_aq.enqueue(
-            queue_name => 'my_queue',
-            enqueue_options => enqueue_options,
-            message_properties => message_properties,
-            payload => message,
-            msgid => message_handle
+        queue_name => 'my_queue',
+        enqueue_options => enqueue_options,
+        message_properties => message_properties,
+        payload => message,
+        msgid => message_handle
     );
     commit;
 end;
@@ -416,11 +417,11 @@ begin
 
     -- Enqueue the message
     dbms_aq.enqueue(
-            queue_name => 'json_queue',
-            enqueue_options => enqueue_options,
-            message_properties => message_properties,
-            payload => message,
-            msgid => msg_id
+        queue_name => 'json_queue',
+        enqueue_options => enqueue_options,
+        message_properties => message_properties,
+        payload => message,
+        msgid => msg_id
     );
     commit;
 exception
