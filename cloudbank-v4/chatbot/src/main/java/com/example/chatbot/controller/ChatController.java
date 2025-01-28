@@ -1,4 +1,4 @@
-// Copyright (c) 2024, Oracle and/or its affiliates.
+// Copyright (c) 2024, 2025, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 package com.example.chatbot.controller;
@@ -35,13 +35,13 @@ public class ChatController {
         ChatResponse response = chatModel.call(
             new Prompt(question,
                 OllamaOptions.builder()
-                .withModel(OllamaModel.LLAMA3)
-                .withTemperature(0.4d)
+                .model(OllamaModel.LLAMA3)
+                .temperature(0.4d)
                 .build()
         ));
 
-        return response.getResult().getOutput().getContent();
-        
+        return response.getResult().getOutput().getText();
+       
     }
     
 }
