@@ -5,7 +5,7 @@ title = "Transactional Event Queues"
 
 [Oracle Transactional Event Queues (TxEventQ)](https://www.oracle.com/database/advanced-queuing/) is a messaging platform built into Oracle Database that combines the best features of messaging and pub/sub systems. TxEventQ was introduced as a rebranding of AQ Sharded Queues in Oracle Database 21c, evolving from the Advanced Queuing (AQ) technology that has been part of Oracle Database since version 8.0. TxEventQ continues to evolve in Oracle Database 23ai, with [Kafka Java APIs](https://github.com/oracle/okafka), Oracle REST Data Services (ORDS) integration, and many more features and integrations.
 
-TxEventQ is designed for high-throughput, reliable messaging in event-driven microservices and workflow applications. It supports multiple publishers and consumers, exactly-once delivery, and robust event streaming capabilities. On an 8-node Oracle Real Application Clusters (RAC) database, TxEventQ can handle approximately 1 million messages per second, demonstrating its scalability.
+TxEventQ is designed for high-throughput, reliable messaging in event-driven microservices and workflow applications. It supports multiple publishers and consumers, exactly-once message delivery, and robust event streaming capabilities. On an 8-node Oracle Real Application Clusters (RAC) database, TxEventQ can handle approximately 1 million messages per second, demonstrating its scalability.
 
 TxEventQ differs from traditional AQ (now referred to as AQ Classic Queues) in several ways:
 

@@ -45,9 +45,6 @@ resources:
   - name: apache-apisix-dashboard
     src: "apache-apisix-dashboard.png"
     title: "Apache APISIX Observability Dashboard"
-  - name: vault-dashboard
-    src: "vault-grafana.png"
-    title: "Apache APISIX Observability Dashboard"
 ---
 
 Oracle Backend for Microservices and AI provides built-in platform services to collect metrics from system and application workloads and pre-built Grafana dashboards to view and explore those metrics.
@@ -61,7 +58,6 @@ On this page, you will find the following topics:
   - [Oracle Database Dashboard](#oracle-database-dashboard)
   - [Kube State Metrics Dashboard](#kube-state-metrics-dashboard)
   - [Apache APISIX DashBoard](#apache-apisix-dashboard)
-  - [HashiCorp Vault Dashboard](#hashicorp-vault-dashboard)
 - [How to have metrics collected for your applications](#how-to-have-metrics-collected-for-your-applications)
 - [How to access Prometheus](#how-to-access-prometheus)
 - [How to access Grafana](#how-to-access-grafana)
@@ -173,20 +169,6 @@ Here is an example of this dashboard:
 
 <!-- spellchecker-disable -->
 {{< img name="apache-apisix-dashboard" size="medium" lazy=false >}}
-<!-- spellchecker-enable -->
-
-### HashiCorp Vault Dashboard
-
-This dashboard provides details of the HashiCorp Vault including:
-
-- Health and seal status
-- Number of secrets
-- Number of operations
-
-Here is an example of this dashboard:
-
-<!-- spellchecker-disable -->
-{{< img name="vault-dashboard" size="medium" lazy=false >}}
 <!-- spellchecker-enable -->
 
 ## How to have metrics collected for your applications

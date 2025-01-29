@@ -3,12 +3,16 @@ languageCode = 'en-us'
 title = 'Transactional Event Queues'
 theme = 'hugo-theme-relearn'
 
+googleAnalytics = 'G-3SR3X9PXY7'
+
+ignoreLogs = ['warning-goldmark-raw-html']
+
 [params]
   headingPre = 'Module'
   themeVariant = 'zen-light'
 
 [outputs]
-  home = ['html', 'rss', 'search']
+  home = ['html', 'rss']
 
 [[menu.Shortcuts]]
 name = "<i class='fa-fw fab fa-github'></i> GitHub repo"
@@ -17,8 +21,8 @@ url = "https://github.com/oracle/microservices-datadriven"
 weight = 10
 
 [[menu.Shortcuts]]
-name = "<i class='fa-fw fas fa-bookmark'></i> Oracle Backend for Spring Boot and Microservices"
-url = "https://bit.ly/oraclespringboot"
+name = "<i class='fa-fw fas fa-bookmark'></i> Oracle Backend for Microservices and AI"
+url = "https://bit.ly/OracleAI-microservices"
 weight = 11
 
 [[menu.Shortcuts]]
