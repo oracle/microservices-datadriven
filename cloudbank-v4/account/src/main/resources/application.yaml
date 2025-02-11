@@ -56,6 +56,7 @@ management:
   endpoint:
     health:
       show-details: always
+      show-components: always
   endpoints:
     web:
       exposure:
@@ -63,6 +64,16 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
+    distribution:
+      percentiles[http.server.requests]: 0.5, 0.90, 0.95, 0.99
+      percentiles-histogram[http.server.requests]: true
+      slo[http.server.requests]: 100ms, 250ms, 500ms, 1s, 2s, 5s, 10s, 30s
+      percentiles[http.client.requests]: 0.5, 0.90, 0.95, 0.99
+      percentiles-histogram[http.client.requests]: true
+      slo[http.client.requests]: 100ms, 250ms, 500ms, 1s, 2s, 5s, 10s, 30s
+  health:
+    probes:
+      enabled: true
   tracing:
     sampling:
       probability: 1.0
@@ -76,10 +87,21 @@ management:
   otlp:
     tracing:
       endpoint: ${otel.exporter.otlp.endpoint}
+  observations:
+    key-values:
+      app: ${spring.application.name}
 
 logging:
   level:
     root: INFO
-    com.example: INFO
+    com.example: DEBUG
+    org.springframework.web.servlet.DispatcherServlet: DEBUG
+
+jdbc:
+  datasource-proxy:
+    query:
+      enable-logging: true
+      log-level: INFO
+    include-parameter-values: true
 
 
