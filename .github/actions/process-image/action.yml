@@ -16,7 +16,7 @@ inputs:
   pkg_command:
     description: Package manager command to run during updates (eg microdnf)
     required: false
-    default: microdnf
+    default: dnf
 runs:
   using: "composite"
   steps:
