@@ -52,8 +52,6 @@
 			<groupId>com.example</groupId>
 			<artifactId>common</artifactId>
 			<version>${project.version}</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/../common/target/common-${project.version}.jar</systemPath>
 		</dependency>
 	</dependencies>
 
