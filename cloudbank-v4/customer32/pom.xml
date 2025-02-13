@@ -46,6 +46,13 @@
             <artifactId>datasource-micrometer-spring-boot</artifactId>
             <version>${datasource-micrometer-spring-boot.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>common</artifactId>
+            <version>${project.version}</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/../common/target/common-${project.version}.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <build>

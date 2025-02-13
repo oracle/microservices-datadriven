@@ -65,4 +65,9 @@ management:
 logging:
   level:
     root: INFO
-    com.example: DEBUG
+    com.example: INFO
+    org.springframework.web.filter.AbstractRequestLoggingFilter: INFO
+
+request:
+  logging:
+    shouldLog: true

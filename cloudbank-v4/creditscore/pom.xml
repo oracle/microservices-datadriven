@@ -15,6 +15,15 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>creditscore</name>
     <description>Creditscore Application</description>
+    <dependencies>
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>common</artifactId>
+            <version>${project.version}</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/../common/target/common-${project.version}.jar</systemPath>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>

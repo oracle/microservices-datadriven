@@ -94,8 +94,8 @@ management:
 logging:
   level:
     root: INFO
-    com.example: DEBUG
-    org.springframework.web.servlet.DispatcherServlet: DEBUG
+    com.example: INFO
+    org.springframework.web.filter.AbstractRequestLoggingFilter: INFO
 
 jdbc:
   datasource-proxy:
@@ -103,5 +103,9 @@ jdbc:
       enable-logging: true
       log-level: INFO
     include-parameter-values: true
+
+request:
+  logging:
+    shouldLog: true
 
 

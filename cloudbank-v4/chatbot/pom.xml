@@ -23,6 +23,13 @@ https://oss.oracle.com/licenses/upl/ -->
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-ollama-spring-boot-starter</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>common</artifactId>
+            <version>${project.version}</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/../common/target/common-${project.version}.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <repositories>
