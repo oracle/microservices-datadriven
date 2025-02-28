@@ -98,17 +98,6 @@ end;
 /
 ```
 
-The `DBMS_AQADM.PURGE_QUEUE` procedure is used to clear messages from a queue.
-
-```sql
-begin
-    dbms_aqadm.purge_queue(
-        queue_name => 'my_queue'
-    );
-end;
-/
-```
-
 Use the [`DBMS_AQADM.STOP_QUEUE` procedure](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQADM.html#GUID-14EADFE9-D7C3-472D-895D-861BB5570EED) to stop a queue. A queue must be stopped before it can be dropped using the [`DBMS_AQADM.DROP_TRANSACTIONAL_EVENT_QUEUE` procedure](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQADM.html#GUID-99A161DB-85C7-439A-A85C-A7BEEBD0288F).
 
 ```sql
@@ -137,12 +126,9 @@ You should see queue data similar to the following, for the queues available on 
 | CUSTOM_TYPE_QUEUE| CUSTOM_TYPE_QUEUE| 72535 | NORMAL_QUEUE   | 5           | 0           | YES             | YES             | 0         | null         | null         | TRUE    | Transactional Event Queue | SINGLE    |
 | MY_QUEUE         | MY_QUEUE         | 73283 | NORMAL_QUEUE   | 5           | 0           | YES             | YES             | 0         | null         | null         | TRUE    | Transactional Event Queue | SINGLE    |
 
-
-
-
 #### Kafka APIs
 
-You can use standard Kafka APIs to create a topic with the [Kafka Java Client for Oracle Database Transactional Event Queues](https://github.com/oracle/okafka). The following code configures connection properties for Oracle Database and creates a topic using the [`org.oracle.okafka.clients.admin.AdminClient` class](https://mvnrepository.com/artifact/com.oracle.database.messaging/okafka), which implements the `org.apache.kafka.clients.admin.Admin` interface.
+Using standard Kafka Java APIs, we can create a topic with the [Kafka Java Client for Oracle Database Transactional Event Queues](https://github.com/oracle/okafka). The following code configures connection properties for Oracle Database, and creates a topic using the [`org.oracle.okafka.clients.admin.AdminClient` class](https://mvnrepository.com/artifact/com.oracle.database.messaging/okafka). This class implements the Apache Kafka `org.apache.kafka.clients.admin.Admin` interface for API compatibility.
 
 ```java
 // Oracle Database Connection properties
