@@ -12,7 +12,7 @@
       <link>https://oracle.github.io/microservices-datadriven/transactional-event-queues/getting-started/core-concepts/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/transactional-event-queues/getting-started/core-concepts/index.html</guid>
-      <description>This section provides the basic concepts of Transactional Event Queues, including the difference between queues and topics, how to create queues using SQL, and the available message payload types.&#xA;What are queues and topics? Message Payload Types DBMS_AQADM.JMS_TYPE Raw JSON Object Kafka Message Payloads What are queues and topics? Queues and topics both provide high-throughput, asynchronous application communication, but have a few key differences that are relevant for developers and architects.</description>
+      <description>This section provides the basic concepts of Transactional Event Queues, including the difference between queues and topics, how to create queues using SQL, and the available message payload types.&#xA;What are queues and topics? Message Payload Types DBMS_AQADM.JMS_TYPE Raw JSON Object Kafka Message Payloads What are queues and topics? Queues and topics provide high-throughput, asynchronous application communication, with a few key differences that are relevant for developers and architects.&#xA;When using queues, messages follow a send/receive model that allows exactly one consumer. Once the message is consumed, it is discarded after a configurable interval. In contrast, topics may have multiple consumers for each message, and the message is persisted for as long as specified.</description>
     </item>
     <item>
       <title>Queue Management</title>
