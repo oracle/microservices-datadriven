@@ -16,25 +16,27 @@ This section provides the basic concepts of Transactional Event Queues, includin
 
 ### What are queues and topics?
 
-Queues and topics both provide high-throughput, asynchronous application communication, but have a few key differences that are relevant for developers and architects.
+Queues and topics provide high-throughput, asynchronous application communication, with a few key differences that are relevant for developers and architects.
 
 When using queues, messages follow a send/receive model that allows exactly one consumer. Once the message is consumed, it is discarded after a configurable interval. In contrast, topics may have multiple consumers for each message, and the message is persisted for as long as specified.
 
-Queues work best for applications that expect to dequeue messages to a single consumer. If you plan to broadcast messages to multiple consumers, or require message replay, you should use topics. In general, topics provide greater flexibility for event-streaming applications due to the ability of consumers to independently consume or replay messages, and the database's capability of persisting the message for a specified duration.
+Queues work best for applications that only need to dequeue messages with a single consumer. If you plan to broadcast messages to multiple consumers, require message replay, or need consumer parallelism, you should use topics. In general, topics provide greater flexibility for event-streaming applications due to the ability of consumers to independently consume or replay messages, and the database's capability of persisting the message for a specified duration.
 
-The following SQL script uses the `DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE` procedure to create a topic by setting the `multiple_consumers` parameter to `true`. You can find the full parameter definition for the [`DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE` procedure here](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQADM.html#GUID-93B0FF90-5045-4437-A9C4-B7541BEBE573).
+The following SQL script uses the [`DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE` procedure](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQADM.html#GUID-6841A667-1021-4E5C-8567-F71913AA4773) to create a topic by setting the `multiple_consumers` parameter to `true`. If the `multiple_consumers` parameter is set to `false`, the created object will have queue semantics instead.
+
+You can find the full parameter definition for the [`DBMS_AQADM.CREATE_TRANSACTIONAL_EVENT_QUEUE` procedure here](https://docs.oracle.com/en/database/oracle/oracle-database/23/arpls/DBMS_AQADM.html#GUID-93B0FF90-5045-4437-A9C4-B7541BEBE573).
 
 ```sql
 begin
     dbms_aqadm.create_transactional_event_queue(
-            queue_name         => 'my_queue',
+            queue_name         => 'my_topic',
             queue_payload_type => DBMS_AQADM.JMS_TYPE,
             multiple_consumers => true
     );
 
     -- Start the queue
     dbms_aqadm.start_queue(
-            queue_name         => 'my_queue'
+            queue_name         => 'my_topic'
     );
 end;
 /

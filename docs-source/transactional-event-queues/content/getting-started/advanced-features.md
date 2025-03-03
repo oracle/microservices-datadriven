@@ -18,7 +18,7 @@ Messages can be propagated within the same database or across a [database link](
 
 #### Queue to Queue Message Propagation
 
-Create and start two queues. `source` will be the source queue, and `dest` will be the propagated destination queue. 
+Create and start two queues. `source` will be the source queue, and `dest` will be the propagated destination queue. Note that `multiple_consumers` _must_ be `true` during queue creation to enable propagation.
 
 ```sql
 begin
@@ -63,6 +63,8 @@ declare
     message json;
     body varchar2(200) := '{"content": "this message is propagated!"}';
 begin
+    enqueue_options := dbms_aq.enqueue_options_t();
+    message_properties := dbms_aq.message_properties_t();
     select json(body) into message;
     dbms_aq.enqueue(
         queue_name => 'source',
@@ -128,6 +130,8 @@ declare
     message json;
     message_buffer varchar2(500);
 begin
+    dequeue_options := dbms_aq.dequeue_options_t();
+    message_properties := dbms_aq.message_properties_t();
     dequeue_options.navigation := dbms_aq.first_message;
     dequeue_options.wait := dbms_aq.no_wait;
 
