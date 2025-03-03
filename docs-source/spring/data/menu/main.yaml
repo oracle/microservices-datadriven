@@ -37,6 +37,8 @@ main:
         ref: "/platform/vscode-plugin"
       - name: IntelliJ plugin
         ref: "/platform/intellij-plugin"
+      - name: AI Sandbox
+        ref: "/platform/aisandbox"
   - name: Observability
     ref: "/observability"
     sub:
@@ -60,13 +62,6 @@ main:
         ref: "/development/envvars"
   - name: Spring Boot Starters
     ref: "/starters"
-    sub:
-      - name: "UCP"
-        ref: "/starters/ucp"
-      - name: "Wallet"
-        ref: "/starters/wallet"
-      - name: "AQ/JMS"
-        ref: "/starters/aqjms"
   - name: Infrastructure
     ref: "/infrastructure"
     sub:

@@ -186,7 +186,6 @@ public class AccountController {
     @PostMapping("/account/journal/{journalId}/clear")
     public ResponseEntity<Journal> clearJournalEntry(@PathVariable long journalId) {
         try {
-            boolean exists = journalRepository.existsById(journalId);
             Optional<Journal> data = journalRepository.findById(journalId);
             if (data.isPresent()) {
                 Journal newJournalEntry = data.get();

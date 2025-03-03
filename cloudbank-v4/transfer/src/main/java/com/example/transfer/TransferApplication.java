@@ -3,10 +3,13 @@
 
 package com.example.transfer;
 
+import com.example.common.filter.LoggingFilterConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Import;
 
 @SpringBootApplication
+@Import(LoggingFilterConfig.class)
 public class TransferApplication {
 
     public static void main(String[] args) {

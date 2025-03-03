@@ -48,6 +48,11 @@
 			<artifactId>datasource-micrometer-spring-boot</artifactId>
 			<version>${datasource-micrometer-spring-boot.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.example</groupId>
+			<artifactId>common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>

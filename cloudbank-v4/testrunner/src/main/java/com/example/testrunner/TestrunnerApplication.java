@@ -3,21 +3,25 @@
 
 package com.example.testrunner;
 
+import com.example.common.filter.LoggingFilterConfig;
 import jakarta.jms.ConnectionFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 
+
 // TO-DO Add Eureka
 @SpringBootApplication
 @EnableJms
 @EnableDiscoveryClient
+@Import(LoggingFilterConfig.class)
 public class TestrunnerApplication {
 
     public static void main(String[] args) {
