@@ -1,0 +1,38 @@
+datastore create --namespace application --username account --id account
+datastore create --namespace application --username customer --id customer
+
+artifact create --namespace application --workload account --imageVersion 0.0.1 --file account/target/account-0.0.1-SNAPSHOT.jar
+artifact create --namespace application --workload checks --imageVersion 0.0.1 --file checks/target/checks-0.0.1-SNAPSHOT.jar
+artifact create --namespace application --workload customer --imageVersion 0.0.1 --file customer/target/customer-0.0.1-SNAPSHOT.jar
+artifact create --namespace application --workload creditscore --imageVersion 0.0.1 --file creditscore/target/creditscore-0.0.1-SNAPSHOT.jar
+artifact create --namespace application --workload testrunner --imageVersion 0.0.1 --file testrunner/target/testrunner-0.0.1-SNAPSHOT.jar
+artifact create --namespace application --workload transfer --imageVersion 0.0.1 --file transfer/target/transfer-0.0.1-SNAPSHOT.jar
+
+image create --namespace application --workload account --imageVersion 0.0.1 --baseImage ghcr.io/oracle/openjdk-image-obaas:21
+image create --namespace application --workload checks --imageVersion 0.0.1 --baseImage ghcr.io/oracle/openjdk-image-obaas:21
+image create --namespace application --workload customer --imageVersion 0.0.1 --baseImage ghcr.io/oracle/openjdk-image-obaas:21
+image create --namespace application --workload creditscore --imageVersion 0.0.1 --baseImage ghcr.io/oracle/openjdk-image-obaas:21
+image create --namespace application --workload testrunner --imageVersion 0.0.1 --baseImage ghcr.io/oracle/openjdk-image-obaas:21
+image create --namespace application --workload transfer --imageVersion 0.0.1 --baseImage ghcr.io/oracle/openjdk-image-obaas:21
+
+binding create --namespace application --datastore account --workload account
+binding create --namespace application --datastore customer --workload customer
+binding create --namespace application --datastore account --workload checks
+binding create --namespace application --datastore account --workload testrunner
+
+workload create --namespace application --imageVersion 0.0.1 --id account --liquibaseDB admin --cpuRequest 100m
+workload create --namespace application --imageVersion 0.0.1 --id checks --cpuRequest 100m
+workload create --namespace application --imageVersion 0.0.1 --id customer --liquibaseDB admin --cpuRequest 100m
+workload create --namespace application --imageVersion 0.0.1 --id creditscore --cpuRequest 100m
+workload create --namespace application --imageVersion 0.0.1 --id testrunner --cpuRequest 100m
+workload create --namespace application --imageVersion 0.0.1 --id transfer --cpuRequest 100m
+
+serverversion
+namespace list
+datastore list --namespace application
+artifact list
+image list
+binding list --namespace application
+workload list --namespace application 
+// telemetry-consent list
+
