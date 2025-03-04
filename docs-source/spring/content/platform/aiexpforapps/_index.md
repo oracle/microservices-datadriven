@@ -1,13 +1,13 @@
 ---
-title: "Oracle AI Microservices Sandbox"
-description: "Oracle AI Microservices Sandbox"
+title: "Oracle AI Explorer for Apps"
+description: "Oracle AI Explorer for Apps"
 keywords: "support backend oracle ai sandbox microservices database"
 ---
-## Developer Preview Feature - Oracle AI Microservices Sandbox
+## Developer Preview Feature - Oracle AI Explorer for Apps
 
-Oracle Backend for Microservices and AI Version 1.4.0 introduces [Oracle AI Microservices Sandbox](https://github.com/oracle-samples/oaim-sandbox) as a *Developer Preview* feature.  
+Oracle Backend for Microservices and AI Version 1.4.0 introduces [Oracle AI Explorer for Apps](https://github.com/oracle-samples/oaim-sandbox) as a *Developer Preview* feature.  
 
-The Oracle AI Microservices Sandbox provides a streamlined environment where developers and data scientists can explore the potential of Generative Artificial Intelligence (GenAI) combined with Retrieval-Augmented Generation (RAG) capabilities. By integrating Oracle Database 23ai AI Vector Search, the Sandbox enables users to enhance existing Large Language Models (LLMs) through RAG.
+The Oracle AI Explorer for Apps provides a streamlined environment where developers and data scientists can explore the potential of Generative Artificial Intelligence (GenAI) combined with Retrieval-Augmented Generation (RAG) capabilities. By integrating Oracle Database 23ai AI Vector Search, the Sandbox enables users to enhance existing Large Language Models (LLMs) through RAG.
 
 It provides a "sandbox" for experimentation and iteration, allowing you to easily optimize a chatbot/RAG use case by exploring different models, chunking strategies, vector similarity algorithms, prompts, model parameters, memory, re-ranking, and evaluation.  
 

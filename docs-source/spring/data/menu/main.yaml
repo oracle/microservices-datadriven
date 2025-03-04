@@ -37,8 +37,8 @@ main:
         ref: "/platform/vscode-plugin"
       - name: IntelliJ plugin
         ref: "/platform/intellij-plugin"
-      - name: AI Sandbox
-        ref: "/platform/aisandbox"
+      - name: AI Explorer for Apps
+        ref: "/platform/aiexpforapps"
   - name: Observability
     ref: "/observability"
     sub:

@@ -6,7 +6,7 @@ keywords: "spring springboot microservices development oracle backend helidon"
 
 Oracle Backend for Microservices and AI allows developers to build microservices in Helidon and/or Spring Boot and provisions a "backend as a service" with Oracle Database and other infrastructure components that operate on multiple clouds. Oracle Backend for Microservices and AI vastly simplifies the task of building, testing, and operating microservices platforms for reliable, secure, and scalable enterprise applications.
 
-{{< hint type=[warning] icon=gdoc_fire title="Version 1.4.0 (production) released February 2025" >}}
+{{< hint type=[warning] icon=gdoc_fire title="Version 1.4.0 (production) released March 2025" >}}
  Oracle Backend for Microservices and AI Version 1.4.0 is now generally available and suitable for production use. This version supports and recommends Helidon 4.1.1, Spring Boot 3.3.x, 3.2.x, Spring 6.1 and Spring Cloud 2023.0.x, with limited backwards compatibility for Spring Boot 2.7.x.  
 {{< /hint >}}
 
@@ -41,6 +41,7 @@ To learn more, watch this short introductory video:
 In addition to an Oracle Autonomous Database Serverless instance, the following software components are deployed in an Oracle Cloud
 Infrastructure (OCI) Container Engine for Kubernetes cluster (OKE cluster):
 
+- [Oracle AI Explorer for Apps](platform/aiexpforapps/)
 - [Apache APISIX API Gateway and Dashboard](platform/apigw/)
 - [Apache Kafka](https://kafka.apache.org/)
 - [Grafana](observability/metrics/)
@@ -54,7 +55,7 @@ Infrastructure (OCI) Container Engine for Kubernetes cluster (OKE cluster):
 - [Oracle Backend for Microservices and AI Visual Studio Code Plugin](platform/vscode-plugin/)
 - [Oracle Coherence](https://docs.oracle.com/en/middleware/standalone/coherence/)
 - [Oracle Database Operator for Kubernetes (OraOperator or the operator)](https://github.com/oracle/oracle-database-operator)
-- Oracle Database Observability Exporter
+- [Oracle Database Observability Exporter](https://github.com/oracle/oracle-db-appdev-monitoring)
 - [Oracle Transaction Manager for Microservices (MicroTx)](platform/microtx/)
 - [Prometheus](observability/metrics/)
 - Promtail
@@ -66,20 +67,19 @@ Infrastructure (OCI) Container Engine for Kubernetes cluster (OKE cluster):
 
 Developers also have access to development or build time services and libraries including:
 
-- A command-line interface [(CLI)](development/cli/) to manage service deployment and configuration, including database schema management.
-- [Visual Studio Code (VS Code) plugin](platform/vscode-plugin/) to manage service deployment and configuration.
+- [Command-line interface (CLI)](development/cli/) to manage service deployment and configuration, including database schema management.
 - [IntelliJ plugin](platform/intellij-plugin/) to manage service deployment and configuration.
+- [OpenTelemetry Collector (including automatic instrumentation)](observability/tracing/).
 - [Spring CLI](https://spring.io/projects/spring-cli) support for project creation.
-- Spring Data (Java Persistence API (JPA) and Oracle JDBC) to access Oracle Database.
-- Oracle Java Database Connectivity (Oracle JDBC) drivers.
 - [Spring Cloud Config client](platform/config/).
 - [Spring Eureka service discovery client](platform/eureka/).
 - [Spring Cloud OpenFeign](https://spring.io/projects/spring-cloud-openfeign).
-- [OpenTelemetry Collector (including automatic instrumentation)](observability/tracing/).
 - [Spring Starters for Oracle Universal Connection Pool (UCP), Oracle Wallet, Oracle Advanced Queuing (AQ), and Transactional Event Queues (TxEventQ)](starters/).
+- [Visual Studio Code (VS Code) plugin](platform/vscode-plugin/) to manage service deployment and configuration.
 
 ## Need help?
 
-We'd love to hear from you!  You can contact us in the
-[#oracle-db-microservices](https://oracledevs.slack.com/archives/C06L9CDGR6Z) channel in the
-Oracle Developers slack workspace, or [open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).
+We'd love to hear from you!  You can contact us in the following channels:
+
+- [#oracle-db-microservices Slack channel](https://oracledevs.slack.com/archives/C06L9CDGR6Z) in the Oracle Developers slack workspace.
+- [Open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).
