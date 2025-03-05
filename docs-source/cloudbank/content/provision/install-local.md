@@ -22,7 +22,7 @@ This option allows you to run Oracle Backend for Microservices and AI in a conta
    * If you have not already done so, clone the Microservices Data-Driven GitHub repository:
 
      ```bash
-     git clone --depth 1 git@github.com:oracle/microservices-datadriven.git --tags cbv4-1.3.1 --single-branch
+     git clone --depth 1 https://github.com/oracle/microservices-datadriven.git --tags cbv4-1.3.1 --single-branch
      ```
 
    * Change into the directory with the local environment files:
