@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <meta name="generator" content="Hugo 0.140.1">
-    <meta name="generator" content="Relearn 7.2.1+f1701957c30daae7cd133bec5a7968480563ce9f">
+    <meta name="generator" content="Relearn 7.1.1+ab4197f3113afa9a7d17bed69dbef6c0e75a4921">
     <meta name="description" content="This option allows you to run Oracle Backend for Microservices and AI in a containerized environment inside a single OCI Compute Instance. This option is good if you do not have enough free capacity on your local machine to run the environment, and if you do not have or want to use the resources required for a full production-sized deployment. This option provides an environment with adequate resources for development and testing, but minimizes the resource usage and costs.">
     <meta name="author" content="">
     <meta name="twitter:card" content="summary">
@@ -21,49 +21,26 @@
     <meta itemprop="description" content="This option allows you to run Oracle Backend for Microservices and AI in a containerized environment inside a single OCI Compute Instance. This option is good if you do not have enough free capacity on your local machine to run the environment, and if you do not have or want to use the resources required for a full production-sized deployment. This option provides an environment with adequate resources for development and testing, but minimizes the resource usage and costs.">
     <meta itemprop="wordCount" content="1577">
     <title>Install in OCI Free Tier :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1735316701" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1735316701" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1735316701" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1735316701" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1735316701" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1735316701" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme.min.css?1735316701" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/format-html.min.css?1735316701" rel="stylesheet" id="R-format-style">
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1741199486" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1741199486" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1741199486" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1741199486" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1741199486" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1741199486" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1741199486" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1741199486" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1741199486" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1741199486" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1741199486" rel="stylesheet" id="R-variant-style">
+    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1741199486" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/microservices-datadriven/cloudbank/css/print.css?1741199486" rel="stylesheet" media="print">
+    <script src="/microservices-datadriven/cloudbank/js/variant.js?1741199486"></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
-      window.relearn.min = `.min`;
       window.relearn.disableAnchorCopy=false;
       window.relearn.disableAnchorScrolling=false;
       // variant stuff
-      window.relearn.themevariants = [ 'zen-light' ];
-      window.relearn.customvariantname = "my-custom-variant";
-      window.relearn.changeVariant = function(variant) {
-        var oldVariant = document.documentElement.dataset.rThemeVariant;
-        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
-        document.documentElement.dataset.rThemeVariant = variant;
-        if (oldVariant != variant) {
-          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
-        }
-      }
-      window.relearn.markVariant = function() {
-        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
-        var select = document.querySelector("#R-select-variant");
-        if (select) {
-          select.value = variant;
-        }
-      }
-      window.relearn.initVariant = function() {
-        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
-        if( variant == window.relearn.customvariantname ){
-        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
-          variant = window.relearn.themevariants[0];
-          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
-        }
-        document.documentElement.dataset.rThemeVariant = variant;
-      }
-      window.relearn.initVariant();
-      window.relearn.markVariant();
+      window.variants && variants.init( [ 'zen-light' ] );
       // translations
       window.T_Copy_to_clipboard = `Copy to clipboard`;
       window.T_Copied_to_clipboard = `Copied to clipboard!`;
@@ -166,8 +143,8 @@
 </li>
 <li>
 <p>Navigate to the <strong>Custom Instances</strong> page by opening the main menu using the &ldquo;hamburger&rdquo; icon ( <i class="fa-solid fa-bars"></i> )  in the top left corner of the console and searching for &ldquo;image&rdquo;:</p>
-<p><a href="#R-image-804f24a25bbb846e0c03f52c542199b5" class="lightbox-link"><img alt="Custom Instance import" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-3.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-804f24a25bbb846e0c03f52c542199b5"><img alt="Custom Instance import" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-3.png" title=" "></a></p>
+<p><a href="#R-image-8d41827461b81b5d2db205a1b1a6adde" class="lightbox-link"><img alt="Custom Instance import" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-3.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-8d41827461b81b5d2db205a1b1a6adde"><img alt="Custom Instance import" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-3.png" title=" "></a></p>
 </li>
 <li>
 <p>Click on the <strong>Import image</strong> button.</p>
@@ -181,8 +158,8 @@
 </li>
 <li>
 <p>Click on the <strong>Import image</strong> button to start the import.</p>
-<p><a href="#R-image-3aa2c69c7f2fdfdf0a2c392e89b837e9" class="lightbox-link"><img alt="Custom Instance import" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-7.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-3aa2c69c7f2fdfdf0a2c392e89b837e9"><img alt="Custom Instance import" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-7.png" title=" "></a></p>
+<p><a href="#R-image-42da36e607ed285522c115684b450023" class="lightbox-link"><img alt="Custom Instance import" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-7.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-42da36e607ed285522c115684b450023"><img alt="Custom Instance import" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-7.png" title=" "></a></p>
 <blockquote>
 <p><strong>Note:</strong>  that it might take approximately 10 to 15 minutes to complete the import. You can see the progress on the <strong>Custom image details</strong> page that will be displayed.</p>
 </blockquote>
@@ -201,8 +178,8 @@
 <li>
 <p>Navigate to the <strong>Compute Instances</strong> page by clicking on the link on the home page of the OCI Console or opening the main menu using the &ldquo;hamburger&rdquo; icon ( <i class="fa-solid fa-bars"></i> )  in the top left corner of the console and searching for
 &ldquo;instance&rdquo;:</p>
-<p><a href="#R-image-f512a743ad7d7815ecfda10c3c01a300" class="lightbox-link"><img alt="Instances" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-1.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-f512a743ad7d7815ecfda10c3c01a300"><img alt="Instances" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-1.png" title=" "></a></p>
+<p><a href="#R-image-35b446fb328e72d495f65de25bdebd8e" class="lightbox-link"><img alt="Instances" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-1.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-35b446fb328e72d495f65de25bdebd8e"><img alt="Instances" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-1.png" title=" "></a></p>
 </li>
 <li>
 <p>Create a Compute Instance by clicking on the <strong>Create instance</strong> button.</p>
@@ -218,14 +195,14 @@
 <blockquote>
 <p><strong>Note:</strong> The image will not show up until the import is completed.</p>
 </blockquote>
-<p><a href="#R-image-0eedb8e4e5fc7097ae3acba4ad920085" class="lightbox-link"><img alt="Custom image selected" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-4.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-0eedb8e4e5fc7097ae3acba4ad920085"><img alt="Custom image selected" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-4.png" title=" "></a></p>
+<p><a href="#R-image-70ec526c7a5b070e71b0d391eab8c681" class="lightbox-link"><img alt="Custom image selected" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-4.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-70ec526c7a5b070e71b0d391eab8c681"><img alt="Custom image selected" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-4.png" title=" "></a></p>
 <p>Click on the <strong>Select image</strong> button to confirm your choice.</p>
 </li>
 <li>
 <p>Click on the <strong>Change shape</strong> button to choose the shape of your instance.  Oracle recommends 2 OCPUs and 32 GB of memory to run this CloudBank environment.</p>
-<p><a href="#R-image-9e1151a04c9742830be495ed8b9ff7a0" class="lightbox-link"><img alt="Shape selected" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-6.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-9e1151a04c9742830be495ed8b9ff7a0"><img alt="Shape selected" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-6.png" title=" "></a></p>
+<p><a href="#R-image-2a9811c8dcf0068f611447219e67a22e" class="lightbox-link"><img alt="Shape selected" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-6.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-2a9811c8dcf0068f611447219e67a22e"><img alt="Shape selected" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-6.png" title=" "></a></p>
 <p>Click on the <strong>Select shape</strong> button to confirm your choice.</p>
 </li>
 <li>
@@ -245,8 +222,8 @@
 <li>
 <p>Note the Public IP Address of your newly created instance in the <strong>Instance access</strong> section of the <strong>Instance details</strong> page
 that is displayed.</p>
-<p><a href="#R-image-4dbdcc3a7b98715fd6359e0cda8ef771" class="lightbox-link"><img alt="Shape selected" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-8.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-4dbdcc3a7b98715fd6359e0cda8ef771"><img alt="Shape selected" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-8.png" title=" "></a></p>
+<p><a href="#R-image-7314f73361b056f53e154eaa81f2e012" class="lightbox-link"><img alt="Shape selected" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-8.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-7314f73361b056f53e154eaa81f2e012"><img alt="Shape selected" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-8.png" title=" "></a></p>
 </li>
 <li>
 <p>Log into the compute instance using SSH, for example:</p>
@@ -264,8 +241,8 @@ that is displayed.</p>
 </blockquote>
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>/home/ubuntu/obaas/k3s_data/kubeconfig/kubeconfig.yaml</span></span></code></pre></div>
 <p>When the environment is fully started, the output will appear similar to this:</p>
-<p><a href="#R-image-5e17d05870de001bb20e65cf30fc8e72" class="lightbox-link"><img alt="Completed startup" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-2.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-5e17d05870de001bb20e65cf30fc8e72"><img alt="Completed startup" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-2.png" title=" "></a></p>
+<p><a href="#R-image-c50826f881e5b55e921088888cb6f77f" class="lightbox-link"><img alt="Completed startup" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-2.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-c50826f881e5b55e921088888cb6f77f"><img alt="Completed startup" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-2.png" title=" "></a></p>
 </li>
 </ul>
 </li>
@@ -286,8 +263,8 @@ that is displayed.</p>
 </li>
 <li>
 <p>Complete the form by specifying the <strong>Source CIDR</strong>.  Make this as specific as possible, ideally just your one machine by specifying the IP address you just collected with the suffix <code>/32</code> added.  Set the <strong>Destination Port Range</strong> to <code>443</code>, and add a description if you wish.  The completed form should look like this (in this example your machine&rsquo;s IP address was <code>1.2.3.4</code>):</p>
-<p><a href="#R-image-41f69e6375da752e5862e6ff90cf44fb" class="lightbox-link"><img alt="Add Ingress Rule" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/add-ingress-rule.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-41f69e6375da752e5862e6ff90cf44fb"><img alt="Add Ingress Rule" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/add-ingress-rule.png" title=" "></a></p>
+<p><a href="#R-image-be99dd63dca1e1a59b986dcecd8fc09f" class="lightbox-link"><img alt="Add Ingress Rule" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/add-ingress-rule.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-be99dd63dca1e1a59b986dcecd8fc09f"><img alt="Add Ingress Rule" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/add-ingress-rule.png" title=" "></a></p>
 </li>
 <li>
 <p>Click the <strong>Add Ingress Rules</strong> button to save the new rule.</p>
@@ -313,8 +290,8 @@ that is displayed.</p>
 </li>
 <li>
 <p>The Spring Operations Center main dashboard will appear similar to this:</p>
-<p><a href="#R-image-5dbb720e2a0dff4a83cb95b60d2e5757" class="lightbox-link"><img alt="Spring Operations Center" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-5.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-5dbb720e2a0dff4a83cb95b60d2e5757"><img alt="Spring Operations Center" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-5.png" title=" "></a></p>
+<p><a href="#R-image-866653d26459c554c9ca798a7560a0bc" class="lightbox-link"><img alt="Spring Operations Center" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install-free-tier-5.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-866653d26459c554c9ca798a7560a0bc"><img alt="Spring Operations Center" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install-free-tier-5.png" title=" "></a></p>
 </li>
 </ul>
 </li>
@@ -392,7 +369,7 @@ In the step 5 of <a href="/microservices-datadriven/cloudbank/account/prepare-da
 <img src="https://oracle.github.io/microservices-datadriven/cloudbank//cloudbank-logo.png" height="100px">
         </div>
         <script>
-          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1735316701";
+          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1741199486";
         </script>
         <search><form action="/microservices-datadriven/cloudbank/search/index.html" method="get">
           <div class="searchbox default-animation">
@@ -405,12 +382,12 @@ In the step 5 of <a href="/microservices-datadriven/cloudbank/account/prepare-da
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1735316701" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1735316701" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1735316701" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1735316701" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1735316701" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1735316701" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1741199486" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1741199486" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1741199486" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1741199486" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1741199486" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1741199486" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -470,13 +447,13 @@ In the step 5 of <a href="/microservices-datadriven/cloudbank/account/prepare-da
                   <span>&nbsp;</span>
                   <div class="control-style">
                     <label class="a11y-only" for="R-select-variant">Theme</label>
-                    <select id="R-select-variant" onchange="window.relearn.changeVariant( this.value );">
+                    <select id="R-select-variant" onchange="window.variants && variants.changeVariant( this.value );">
                       <option id="R-select-variant-zen-light" value="zen-light" selected>Zen Light</option>
                     </select>
                   </div>
                   <div class="clear"></div>
                 </div>
-                <script>window.relearn.markVariant();</script>
+                <script>window.variants && variants.markSelectedVariant();</script>
               </li>
               <li class="footerVisitedLinks">
                 <div class="padding menu-control">
@@ -497,8 +474,8 @@ In the step 5 of <a href="/microservices-datadriven/cloudbank/account/prepare-da
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1735316701" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1735316701" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1735316701" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1741199486" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1741199486" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1741199486" defer></script>
   </body>
 </html>
