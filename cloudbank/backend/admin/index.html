@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <meta name="generator" content="Hugo 0.140.1">
-    <meta name="generator" content="Relearn 7.2.1+f1701957c30daae7cd133bec5a7968480563ce9f">
+    <meta name="generator" content="Relearn 7.1.1+ab4197f3113afa9a7d17bed69dbef6c0e75a4921">
     <meta name="description" content="Oracle Backend for Microservices and AI includes Spring Admin which provides a web user interface for managing and monitoring Spring applications.
 Connect to Spring Admin
 Oracle Backend for Microservices and AI does not expose management interfaces outside the Kubernetes cluster for improved security. Oracle recommends you access these interfaces using kubectl port forwarding, which creates an encrypted tunnel from your client machine to the cluster to access a specific service in the cluster.">
@@ -29,49 +29,26 @@ Connect to Spring Admin
 Oracle Backend for Microservices and AI does not expose management interfaces outside the Kubernetes cluster for improved security. Oracle recommends you access these interfaces using kubectl port forwarding, which creates an encrypted tunnel from your client machine to the cluster to access a specific service in the cluster.">
     <meta itemprop="wordCount" content="326">
     <title>Explore Spring Admin :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1735316701" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1735316701" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1735316701" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1735316701" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1735316701" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1735316701" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme.min.css?1735316701" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/format-html.min.css?1735316701" rel="stylesheet" id="R-format-style">
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1741199486" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1741199486" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1741199486" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1741199486" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1741199486" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1741199486" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1741199486" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1741199486" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1741199486" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1741199486" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1741199486" rel="stylesheet" id="R-variant-style">
+    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1741199486" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/microservices-datadriven/cloudbank/css/print.css?1741199486" rel="stylesheet" media="print">
+    <script src="/microservices-datadriven/cloudbank/js/variant.js?1741199486"></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
-      window.relearn.min = `.min`;
       window.relearn.disableAnchorCopy=false;
       window.relearn.disableAnchorScrolling=false;
       // variant stuff
-      window.relearn.themevariants = [ 'zen-light' ];
-      window.relearn.customvariantname = "my-custom-variant";
-      window.relearn.changeVariant = function(variant) {
-        var oldVariant = document.documentElement.dataset.rThemeVariant;
-        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
-        document.documentElement.dataset.rThemeVariant = variant;
-        if (oldVariant != variant) {
-          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
-        }
-      }
-      window.relearn.markVariant = function() {
-        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
-        var select = document.querySelector("#R-select-variant");
-        if (select) {
-          select.value = variant;
-        }
-      }
-      window.relearn.initVariant = function() {
-        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
-        if( variant == window.relearn.customvariantname ){
-        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
-          variant = window.relearn.themevariants[0];
-          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
-        }
-        document.documentElement.dataset.rThemeVariant = variant;
-      }
-      window.relearn.initVariant();
-      window.relearn.markVariant();
+      window.variants && variants.init( [ 'zen-light' ] );
       // translations
       window.T_Copy_to_clipboard = `Copy to clipboard`;
       window.T_Copied_to_clipboard = `Copied to clipboard!`;
@@ -152,22 +129,22 @@ Oracle Backend for Microservices and AI does not expose management interfaces ou
 <div class="highlight wrap-code"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>kubectl -n admin-server port-forward svc/admin-server <span style="color:#ae81ff">8989</span></span></span></code></pre></div>
 <p>Open a web browser to <a href="http://localhost:8989" rel="external" target="_blank">http://localhost:8989</a> to view the Spring Admin web user interface.</p>
 <p>Click on the <strong>Wallboard</strong> link in the top menu to view the &ldquo;wallboard&rdquo; which shows all the discovered services.  Spring Admin discovers services from the Spring Eureka Service Registry.</p>
-<p><a href="#R-image-b0bba0b48bcb5408857f456d21ac2671" class="lightbox-link"><img alt="Spring Admin Wallboard" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-admin-1.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-b0bba0b48bcb5408857f456d21ac2671"><img alt="Spring Admin Wallboard" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-admin-1.png" title=" "></a></p>
+<p><a href="#R-image-68dafa65f869a171e1fd198d5f49b301" class="lightbox-link"><img alt="Spring Admin Wallboard" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-admin-1.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-68dafa65f869a171e1fd198d5f49b301"><img alt="Spring Admin Wallboard" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-admin-1.png" title=" "></a></p>
 <p>Each hexagon represents a service.  Notice that this display gives you a quick overview of the health of your system.  Green services are healthy, grey services have reduced availability and red services are not healthy.  You can also see information about how many instances (i.e. pods) are available for each service.</p>
 </li>
 <li>
 <p>View information about a service</p>
 <p>Click on the <strong>Customer</strong> service.  You will see a detail page like this:</p>
-<p><a href="#R-image-358a212d152e2e21d062160e5d8eee82" class="lightbox-link"><img alt="Customer service details" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-admin-2.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-358a212d152e2e21d062160e5d8eee82"><img alt="Customer service details" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-admin-2.png" title=" "></a></p>
+<p><a href="#R-image-3afdf41ac79f2a811b86754da59c8830" class="lightbox-link"><img alt="Customer service details" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-admin-2.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-3afdf41ac79f2a811b86754da59c8830"><img alt="Customer service details" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-admin-2.png" title=" "></a></p>
 <p>On this page, you can see detailed information about service&rsquo;s health, and you can scroll down to see information about resource usage.  The menu on the left hand side lets you view additional information about the service including its environment variables, the Spring beans loaded, its Spring configuration properties and so on.  You can also access metrics from this interface.</p>
 </li>
 <li>
 <p>View endpoints</p>
 <p>Click on the <strong>Mappings</strong> link on the left hand side menu.  This page shows you information about the URL Path mappings (or endpoints) exposed by this service.  You will notice several endpoints exposed by Spring Actuator, which enables this management and monitoring to be possible.  And you will see your service&rsquo;s own endpoints, in this example the ones that start with <code>/api/v1/...</code>:</p>
-<p><a href="#R-image-f7f08405bb9ea7b7d08ff1d8c261833e" class="lightbox-link"><img alt="Customer service endpoint list" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-admin-3.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-f7f08405bb9ea7b7d08ff1d8c261833e"><img alt="Customer service endpoint list" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-admin-3.png" title=" "></a></p>
+<p><a href="#R-image-303fcc90c1825e84c4d70b70880439bf" class="lightbox-link"><img alt="Customer service endpoint list" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/obaas-spring-admin-3.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-303fcc90c1825e84c4d70b70880439bf"><img alt="Customer service endpoint list" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/obaas-spring-admin-3.png" title=" "></a></p>
 </li>
 </ol>
 
@@ -184,7 +161,7 @@ Oracle Backend for Microservices and AI does not expose management interfaces ou
 <img src="https://oracle.github.io/microservices-datadriven/cloudbank//cloudbank-logo.png" height="100px">
         </div>
         <script>
-          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1735316701";
+          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1741199486";
         </script>
         <search><form action="/microservices-datadriven/cloudbank/search/index.html" method="get">
           <div class="searchbox default-animation">
@@ -197,12 +174,12 @@ Oracle Backend for Microservices and AI does not expose management interfaces ou
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1735316701" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1735316701" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1735316701" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1735316701" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1735316701" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1735316701" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1741199486" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1741199486" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1741199486" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1741199486" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1741199486" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1741199486" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -267,13 +244,13 @@ Oracle Backend for Microservices and AI does not expose management interfaces ou
                   <span>&nbsp;</span>
                   <div class="control-style">
                     <label class="a11y-only" for="R-select-variant">Theme</label>
-                    <select id="R-select-variant" onchange="window.relearn.changeVariant( this.value );">
+                    <select id="R-select-variant" onchange="window.variants && variants.changeVariant( this.value );">
                       <option id="R-select-variant-zen-light" value="zen-light" selected>Zen Light</option>
                     </select>
                   </div>
                   <div class="clear"></div>
                 </div>
-                <script>window.relearn.markVariant();</script>
+                <script>window.variants && variants.markSelectedVariant();</script>
               </li>
               <li class="footerVisitedLinks">
                 <div class="padding menu-control">
@@ -294,8 +271,8 @@ Oracle Backend for Microservices and AI does not expose management interfaces ou
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1735316701" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1735316701" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1735316701" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1741199486" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1741199486" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1741199486" defer></script>
   </body>
 </html>

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <meta name="generator" content="Hugo 0.140.1">
-    <meta name="generator" content="Relearn 7.2.1+f1701957c30daae7cd133bec5a7968480563ce9f">
+    <meta name="generator" content="Relearn 7.1.1+ab4197f3113afa9a7d17bed69dbef6c0e75a4921">
     <meta name="description" content="If you have done the optional Task 11 of Lab. 2, you could proceed doing the activities from Task 3 to Task 5 using Oracle Backend for Microservices and AI VS Code plugin. If you don’t see the plugin in the left bar, with the Oracle logo, as shown here:
 click on Additional Views menu to select the Oracle Backend fo Spring Boot and Microservices.">
     <meta name="author" content="">
@@ -25,49 +25,26 @@ click on Additional Views menu to select the Oracle Backend fo Spring Boot and M
 click on Additional Views menu to select the Oracle Backend fo Spring Boot and Microservices.">
     <meta itemprop="wordCount" content="1532">
     <title>Using the VS Code plugin :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1735316701" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1735316701" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1735316701" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1735316701" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1735316701" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1735316701" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme.min.css?1735316701" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/format-html.min.css?1735316701" rel="stylesheet" id="R-format-style">
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1741199486" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1741199486" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1741199486" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1741199486" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1741199486" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1741199486" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1741199486" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1741199486" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1741199486" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1741199486" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1741199486" rel="stylesheet" id="R-variant-style">
+    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1741199486" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/microservices-datadriven/cloudbank/css/print.css?1741199486" rel="stylesheet" media="print">
+    <script src="/microservices-datadriven/cloudbank/js/variant.js?1741199486"></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
-      window.relearn.min = `.min`;
       window.relearn.disableAnchorCopy=false;
       window.relearn.disableAnchorScrolling=false;
       // variant stuff
-      window.relearn.themevariants = [ 'zen-light' ];
-      window.relearn.customvariantname = "my-custom-variant";
-      window.relearn.changeVariant = function(variant) {
-        var oldVariant = document.documentElement.dataset.rThemeVariant;
-        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
-        document.documentElement.dataset.rThemeVariant = variant;
-        if (oldVariant != variant) {
-          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
-        }
-      }
-      window.relearn.markVariant = function() {
-        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
-        var select = document.querySelector("#R-select-variant");
-        if (select) {
-          select.value = variant;
-        }
-      }
-      window.relearn.initVariant = function() {
-        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
-        if( variant == window.relearn.customvariantname ){
-        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
-          variant = window.relearn.themevariants[0];
-          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
-        }
-        document.documentElement.dataset.rThemeVariant = variant;
-      }
-      window.relearn.initVariant();
-      window.relearn.markVariant();
+      window.variants && variants.init( [ 'zen-light' ] );
       // translations
       window.T_Copy_to_clipboard = `Copy to clipboard`;
       window.T_Copied_to_clipboard = `Copied to clipboard!`;
@@ -143,25 +120,25 @@ click on Additional Views menu to select the Oracle Backend fo Spring Boot and M
 <li>
 <p>If you have done the optional <strong>Task 11</strong> of <strong>Lab. 2</strong>, you could proceed doing the activities from <strong>Task 3</strong> to <strong>Task 5</strong> using <strong>Oracle Backend for Microservices and AI VS Code plugin</strong>.
 If you don&rsquo;t see the plugin in the left bar, with the Oracle logo, as shown here:</p>
-<p><a href="#R-image-0332e82c5dfa431e032b29a9fabe6f50" class="lightbox-link"><img alt="Additional" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/additional.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-0332e82c5dfa431e032b29a9fabe6f50"><img alt="Additional" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/additional.png" title=" "></a></p>
+<p><a href="#R-image-b383514c4e08b05bf6e54965a8280101" class="lightbox-link"><img alt="Additional" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/additional.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-b383514c4e08b05bf6e54965a8280101"><img alt="Additional" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/additional.png" title=" "></a></p>
 <p>click on <strong>Additional Views</strong> menu to select the <strong>Oracle Backend fo Spring Boot and Microservices</strong>.</p>
 <p>The  Oracle Backend fo Spring Boot and Microservices VS Code plugin will ask to specify the Kubernetes config file full path as shown here:</p>
-<p><a href="#R-image-129dd351da37774ea25405d4dcb14b2c" class="lightbox-link"><img alt="kubeConfig" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/getkubeconfig.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-129dd351da37774ea25405d4dcb14b2c"><img alt="kubeConfig" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/getkubeconfig.png" title=" "></a></p>
+<p><a href="#R-image-f6456f67a770c6ab997b09ef38b31209" class="lightbox-link"><img alt="kubeConfig" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/getkubeconfig.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-f6456f67a770c6ab997b09ef38b31209"><img alt="kubeConfig" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/getkubeconfig.png" title=" "></a></p>
 <p>By default, it&rsquo;s shown the path in the user&rsquo;s Home directory <strong>.kube/config</strong> in which normally <strong>kubectl</strong> stores all the information regarding the K8S clusters configured. You could set the full path of another Kubernetes config file.
 If the file is correctly loaded, the plugin will show the list of contexts available in which select one:</p>
-<p><a href="#R-image-0bf40fb26b095f4f9e2b920ec3631988" class="lightbox-link"><img alt="kubeContextList" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/chosecontext.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-0bf40fb26b095f4f9e2b920ec3631988"><img alt="kubeContextList" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/chosecontext.png" title=" "></a></p>
+<p><a href="#R-image-79ab3f892e562cd6315af97e5fa9efa9" class="lightbox-link"><img alt="kubeContextList" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/chosecontext.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-79ab3f892e562cd6315af97e5fa9efa9"><img alt="kubeContextList" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/chosecontext.png" title=" "></a></p>
 <p>In positive case, you should see a tree view with one node and the context chosen:</p>
-<p><a href="#R-image-d60b5aa01d0db685bb2728cea321161e" class="lightbox-link"><img alt="onenode" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/onenode.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-d60b5aa01d0db685bb2728cea321161e"><img alt="onenode" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/onenode.png" title=" "></a></p>
+<p><a href="#R-image-6952bda549fe943ee457286947c96f95" class="lightbox-link"><img alt="onenode" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/onenode.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-6952bda549fe943ee457286947c96f95"><img alt="onenode" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/onenode.png" title=" "></a></p>
 <p>If the file path it hasn&rsquo;t been correctly set, it will show an error message:</p>
-<p><a href="#R-image-e4aad464620ca47258772ad140cd6176" class="lightbox-link"><img alt="kubeFileError" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/reloadwindowerror.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-e4aad464620ca47258772ad140cd6176"><img alt="kubeFileError" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/reloadwindowerror.png" title=" "></a></p>
+<p><a href="#R-image-8413f133c573986f3601db6fcedd6a71" class="lightbox-link"><img alt="kubeFileError" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/reloadwindowerror.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-8413f133c573986f3601db6fcedd6a71"><img alt="kubeFileError" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/reloadwindowerror.png" title=" "></a></p>
 <p>To restart the plugin and proceed again in Kubernetes config file setting, in command palette execute a <strong>Reload Window</strong> command:</p>
-<p><a href="#R-image-b6668e1edc41c722fc5b1a08a93b1059" class="lightbox-link"><img alt="kubeReload" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/reloadwindow.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-b6668e1edc41c722fc5b1a08a93b1059"><img alt="kubeReload" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/reloadwindow.png" title=" "></a></p>
+<p><a href="#R-image-ef16a56fbd86616a7941f3467927d9b6" class="lightbox-link"><img alt="kubeReload" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/reloadwindow.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-ef16a56fbd86616a7941f3467927d9b6"><img alt="kubeReload" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/reloadwindow.png" title=" "></a></p>
 </li>
 <li>
 <p>How to access to cluster</p>
@@ -173,53 +150,53 @@ If the file is correctly loaded, the plugin will show the list of contexts avail
 </li>
 <li>
 <p>Right-click on the cluster name and select <strong>Set UID/PWD</strong>:</p>
-<p><a href="#R-image-fcfa86fdd42d7dd61c8dcf574bada351" class="lightbox-link"><img alt="Credentials" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/credentials.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-fcfa86fdd42d7dd61c8dcf574bada351"><img alt="Credentials" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/credentials.png" title=" "></a></p>
+<p><a href="#R-image-e91f7ec3615618558c3cb9d0f4558c92" class="lightbox-link"><img alt="Credentials" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/credentials.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-e91f7ec3615618558c3cb9d0f4558c92"><img alt="Credentials" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/credentials.png" title=" "></a></p>
 </li>
 <li>
 <p>Enter the username <em>obaas-admin</em> for the Oracle Backend for Microservices and AI.</p>
-<p><a href="#R-image-9e702b8489e504e92bb04b183c9c7bed" class="lightbox-link"><img alt="Username" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/username.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-9e702b8489e504e92bb04b183c9c7bed"><img alt="Username" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/username.png" title=" "></a></p>
+<p><a href="#R-image-3101b85a60abc1f7f4ea9957f303b2c7" class="lightbox-link"><img alt="Username" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/username.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-3101b85a60abc1f7f4ea9957f303b2c7"><img alt="Username" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/username.png" title=" "></a></p>
 </li>
 <li>
 <p>Followed by the password you obtained in an earlier step:</p>
-<p><a href="#R-image-9fa8d7be2ac18d27ddaee24de9526f47" class="lightbox-link"><img alt="Credentials" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/password.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-9fa8d7be2ac18d27ddaee24de9526f47"><img alt="Credentials" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/password.png" title=" "></a></p>
+<p><a href="#R-image-2d9eff48457f50fe62bf1a0d5b601405" class="lightbox-link"><img alt="Credentials" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/password.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-2d9eff48457f50fe62bf1a0d5b601405"><img alt="Credentials" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/password.png" title=" "></a></p>
 </li>
 <li>
 <p>Two message boxes will confirm credentials have been set correctly:</p>
-<p><a href="#R-image-1cef64393f75ae2c5bc87cf15a2c922a" class="lightbox-link"><img alt="confirmCredentials" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/confirm.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-1cef64393f75ae2c5bc87cf15a2c922a"><img alt="confirmCredentials" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/confirm.png" title=" "></a></p>
+<p><a href="#R-image-f627beb79fb190bcad20f0d6dea09143" class="lightbox-link"><img alt="confirmCredentials" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/confirm.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-f627beb79fb190bcad20f0d6dea09143"><img alt="confirmCredentials" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/confirm.png" title=" "></a></p>
 <p><strong>WARNING</strong>: if you don&rsquo;t execute this steps and try to expand the kubernetes context, you will receive a message:</p>
-<p><a href="#R-image-cff1a772b94fb62216764077cde30945" class="lightbox-link"><img alt="setCredentials" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/oractlcred.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-cff1a772b94fb62216764077cde30945"><img alt="setCredentials" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/oractlcred.png" title=" "></a></p>
+<p><a href="#R-image-296adf0cac9c344984a4f0565ee0a639" class="lightbox-link"><img alt="setCredentials" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/oractlcred.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-296adf0cac9c344984a4f0565ee0a639"><img alt="setCredentials" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/oractlcred.png" title=" "></a></p>
 </li>
 <li>
 <p>Select again the cluster and click the right mouse button and choose <strong>Create Admin tunnel</strong> menu item.</p>
-<p><a href="#R-image-30d0559764fad82ddb51331b839eaeca" class="lightbox-link"><img alt="CreateAdminTunnel" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/createadmintunnel.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-30d0559764fad82ddb51331b839eaeca"><img alt="CreateAdminTunnel" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/createadmintunnel.png" title=" "></a></p>
+<p><a href="#R-image-0e045b01b133b08542ba9ef48f0f1be1" class="lightbox-link"><img alt="CreateAdminTunnel" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/createadmintunnel.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-0e045b01b133b08542ba9ef48f0f1be1"><img alt="CreateAdminTunnel" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/createadmintunnel.png" title=" "></a></p>
 <p>VS Code will open a new terminal that will try to open a tunnel to the Kubernetes cluster on a local port, starting from 8081:</p>
-<p><a href="#R-image-c14d1b9935b64f9a67d1c4994fc2108d" class="lightbox-link"><img alt="Tunnel" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/tunnel.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-c14d1b9935b64f9a67d1c4994fc2108d"><img alt="Tunnel" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/tunnel.png" title=" "></a></p>
+<p><a href="#R-image-fa2b390269a1fbb641581d017be12cfe" class="lightbox-link"><img alt="Tunnel" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/tunnel.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-fa2b390269a1fbb641581d017be12cfe"><img alt="Tunnel" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/tunnel.png" title=" "></a></p>
 </li>
 <li>
 <p>Before proceed to connection, please wait until the tunnel is established and the terminal shows a message like this:</p>
-<p><a href="#R-image-f6d3d7e55d4a405c60ad7f93d392e2b8" class="lightbox-link"><img alt="okTunnel" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/oktunnel.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-f6d3d7e55d4a405c60ad7f93d392e2b8"><img alt="okTunnel" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/oktunnel.png" title=" "></a></p>
+<p><a href="#R-image-0890e3b2305d6a8c68c0948b2b51be46" class="lightbox-link"><img alt="okTunnel" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/oktunnel.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-0890e3b2305d6a8c68c0948b2b51be46"><img alt="okTunnel" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/oktunnel.png" title=" "></a></p>
 <p><strong>NOTE</strong>: if the K8s cluster it&rsquo;s not related to an Oracle Backend for Microservices and AI deployment, the tunnel creation will fail. In this case in command palette execute a window reload too chose another cluster. If you have any problem in connection, you could start another tunnel: the plugin will try on another local port to connect to the cluster.</p>
 </li>
 <li>
 <p>Again select the cluster and by clicking the right mouse button choose <strong>Connect</strong> menu item. This will create a session with credentials set at the first step.</p>
-<p><a href="#R-image-855c96df8fdacdd23029bede293b665f" class="lightbox-link"><img alt="connect" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/connect.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-855c96df8fdacdd23029bede293b665f"><img alt="connect" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/connect.png" title=" "></a></p>
+<p><a href="#R-image-8cae3232302a6414e5f3f1008d226f15" class="lightbox-link"><img alt="connect" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/connect.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-8cae3232302a6414e5f3f1008d226f15"><img alt="connect" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/connect.png" title=" "></a></p>
 </li>
 </ul>
 </li>
 <li>
 <p>Explore resources</p>
 <p>As soon as completed the steps to create tunnel, and you get connected to the backend, it&rsquo;s possible to expand or refresh the tree related to the deployment.</p>
-<p><a href="#R-image-cb87bd3e35b7e49025de63c89fb114c2" class="lightbox-link"><img alt="Browse" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/browse.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-cb87bd3e35b7e49025de63c89fb114c2"><img alt="Browse" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/browse.png" title=" "></a></p>
+<p><a href="#R-image-bbe46aa35494c621de5980c5b3277858" class="lightbox-link"><img alt="Browse" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/browse.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-bbe46aa35494c621de5980c5b3277858"><img alt="Browse" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/browse.png" title=" "></a></p>
 <p>You&rsquo;ll see four top classes of resources that can be exploded in underlying items:</p>
 <ul>
 <li><strong>applications</strong>: the list of applications deployed and the services holding</li>
@@ -229,24 +206,24 @@ If the file is correctly loaded, the plugin will show the list of contexts avail
 </ul>
 <p>Let&rsquo;s go to show the operations you can do on each item of browse tree.</p>
 <p>Open the list clicking on the arrow at the left of <strong>applications</strong>, and then expand the application about you want to know which services includes:</p>
-<p><a href="#R-image-b485ee4fc69636ca2e4131b4800446b3" class="lightbox-link"><img alt="Application" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/application.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-b485ee4fc69636ca2e4131b4800446b3"><img alt="Application" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/application.png" title=" "></a></p>
+<p><a href="#R-image-2f170e943fbeb3dbade793879965fe81" class="lightbox-link"><img alt="Application" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/application.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-2f170e943fbeb3dbade793879965fe81"><img alt="Application" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/application.png" title=" "></a></p>
 <p>it should be empty. If not, proceed to delete the full <strong>application</strong> and re-create it through the plug-in:</p>
 <ul>
 <li>
 <p>First, select the default <strong>application</strong> and with right-click on mouse, select <strong>Delete application</strong>:</p>
-<p><a href="#R-image-89a698bf98336905eca0963f64f5176a" class="lightbox-link"><img alt="Delete application" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/deleteapplication.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-89a698bf98336905eca0963f64f5176a"><img alt="Delete application" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/deleteapplication.png" title=" "></a></p>
+<p><a href="#R-image-e52c8d948eca7516ff9babfb1ea8530e" class="lightbox-link"><img alt="Delete application" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/deleteapplication.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-e52c8d948eca7516ff9babfb1ea8530e"><img alt="Delete application" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/deleteapplication.png" title=" "></a></p>
 </li>
 <li>
 <p>Wait a moment and refresh the content of <strong>applications</strong> leaf. When empty, select <strong>applications</strong> and with right-click on mouse, select <strong>Add application</strong>:</p>
-<p><a href="#R-image-a94da472fffb47261bd4f6d5ef98bf35" class="lightbox-link"><img alt="Add application" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/addapplication.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-a94da472fffb47261bd4f6d5ef98bf35"><img alt="Add application" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/addapplication.png" title=" "></a></p>
+<p><a href="#R-image-626b4ed6169898e52068c3e2ceea155a" class="lightbox-link"><img alt="Add application" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/addapplication.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-626b4ed6169898e52068c3e2ceea155a"><img alt="Add application" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/addapplication.png" title=" "></a></p>
 </li>
 <li>
 <p>Fill in the command palette the (application name) with <strong>application</strong>:</p>
-<p><a href="#R-image-e3a763123edd6c63abfed97d34070b86" class="lightbox-link"><img alt="Create application" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/createapplication.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-e3a763123edd6c63abfed97d34070b86"><img alt="Create application" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/createapplication.png" title=" "></a></p>
+<p><a href="#R-image-2d5ab6c56d67ec3f9911b83db57a4667" class="lightbox-link"><img alt="Create application" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/createapplication.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-2d5ab6c56d67ec3f9911b83db57a4667"><img alt="Create application" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/createapplication.png" title=" "></a></p>
 </li>
 </ul>
 </li>
@@ -256,8 +233,8 @@ If the file is correctly loaded, the plugin will show the list of contexts avail
 <ul>
 <li>
 <p>Select applications leaf and with right click select <strong>Bind a service</strong> item menu:</p>
-<p><a href="#R-image-0d68d202f3650c530f4db1cab89dff93" class="lightbox-link"><img alt="bindcommand" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/bindcommand.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-0d68d202f3650c530f4db1cab89dff93"><img alt="bindcommand" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/bindcommand.png" title=" "></a></p>
+<p><a href="#R-image-24e9e6b9f808058c59b2856d517e1d81" class="lightbox-link"><img alt="bindcommand" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/bindcommand.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-24e9e6b9f808058c59b2856d517e1d81"><img alt="bindcommand" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/bindcommand.png" title=" "></a></p>
 </li>
 <li>
 <p>and the input following values:</p>
@@ -273,8 +250,8 @@ If the file is correctly loaded, the plugin will show the list of contexts avail
 <p>you&rsquo;ll get the message:</p>
 </li>
 </ul>
-<p><a href="#R-image-1505b4c3d32e4121b4fdb7664a595cb3" class="lightbox-link"><img alt="bind" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/bindsuccessful.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-1505b4c3d32e4121b4fdb7664a595cb3"><img alt="bind" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/bindsuccessful.png" title=" "></a></p>
+<p><a href="#R-image-9bb72a1d956b6a815fc925c950d5653b" class="lightbox-link"><img alt="bind" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/bindsuccessful.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-9bb72a1d956b6a815fc925c950d5653b"><img alt="bind" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/bindsuccessful.png" title=" "></a></p>
 <p>Repeat the same for:</p>
 <ul>
 <li>
@@ -311,19 +288,19 @@ If the file is correctly loaded, the plugin will show the list of contexts avail
 <p>Ensure to get the message like this for all previous binding:</p>
 </li>
 </ul>
-<p><a href="#R-image-101727e40f1aa21e385232ac9083512a" class="lightbox-link"><img alt="bind" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/bindsuccessful.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-101727e40f1aa21e385232ac9083512a"><img alt="bind" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/bindsuccessful.png" title=" "></a></p>
+<p><a href="#R-image-a4203f12df84d57711473f8b0106f9d3" class="lightbox-link"><img alt="bind" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/bindsuccessful.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-a4203f12df84d57711473f8b0106f9d3"><img alt="bind" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/bindsuccessful.png" title=" "></a></p>
 <p>Let&rsquo;s start with the first service deployment:</p>
 <ul>
 <li>
 <p>Select <strong>application</strong> under <strong>applications</strong> and Right-click on mouse to select <strong>Add service -&gt; upload .jar</strong>:</p>
-<p><a href="#R-image-50384bf96153eb91f49c6d7edfa568ea" class="lightbox-link"><img alt="add service" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/addservice.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-50384bf96153eb91f49c6d7edfa568ea"><img alt="add service" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/addservice.png" title=" "></a></p>
+<p><a href="#R-image-7162134ce3c5001a894d08da9c1c017a" class="lightbox-link"><img alt="add service" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/addservice.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-7162134ce3c5001a894d08da9c1c017a"><img alt="add service" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/addservice.png" title=" "></a></p>
 </li>
 <li>
 <p>Look for the <strong>accounts-0.0.1-SNAPSHOT.jar</strong> file built previously:</p>
-<p><a href="#R-image-3c7525b115c229117ede8f46bba894e1" class="lightbox-link"><img alt="account jar" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/accountjar.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-3c7525b115c229117ede8f46bba894e1"><img alt="account jar" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/accountjar.png" title=" "></a></p>
+<p><a href="#R-image-91f2e8009862249a12102e55ba23c5c3" class="lightbox-link"><img alt="account jar" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/accountjar.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-91f2e8009862249a12102e55ba23c5c3"><img alt="account jar" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/accountjar.png" title=" "></a></p>
 </li>
 <li>
 <p>In the command palette will be asked all the parameters needed to upload the services:</p>
@@ -357,18 +334,18 @@ If the file is correctly loaded, the plugin will show the list of contexts avail
 </li>
 <li>
 <p>You will see messages that confirm the deployment is started:</p>
-<p><a href="#R-image-ab6ae7127aa3cdad30a25e1ee2137e50" class="lightbox-link"><img alt="uploadstarted" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/upoloadstarted.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-ab6ae7127aa3cdad30a25e1ee2137e50"><img alt="uploadstarted" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/upoloadstarted.png" title=" "></a></p>
+<p><a href="#R-image-984fef312c5453d2fadeedd8d5f03514" class="lightbox-link"><img alt="uploadstarted" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/upoloadstarted.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-984fef312c5453d2fadeedd8d5f03514"><img alt="uploadstarted" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/upoloadstarted.png" title=" "></a></p>
 </li>
 <li>
 <p>Finally, you&rsquo;ll receive the message &ldquo;<strong>Service deployed successfully</strong>&rdquo;:</p>
-<p><a href="#R-image-7a0c4ae27d2e26e70d79dba5e7ef47e5" class="lightbox-link"><img alt="deploysuccess" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/deploysuccess.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-7a0c4ae27d2e26e70d79dba5e7ef47e5"><img alt="deploysuccess" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/deploysuccess.png" title=" "></a></p>
+<p><a href="#R-image-587798984fb6804e21761402d875ee31" class="lightbox-link"><img alt="deploysuccess" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/deploysuccess.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-587798984fb6804e21761402d875ee31"><img alt="deploysuccess" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/deploysuccess.png" title=" "></a></p>
 </li>
 <li>
 <p>Refreshing the <strong>application</strong> leaf, you should see now:</p>
-<p><a href="#R-image-67449c2136001c9a1ea4e751bd9fb25a" class="lightbox-link"><img alt="accountdeployed" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/accountdeployed.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-67449c2136001c9a1ea4e751bd9fb25a"><img alt="accountdeployed" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/accountdeployed.png" title=" "></a></p>
+<p><a href="#R-image-bd446b83d8ec1a6d1e51d393bd5eed48" class="lightbox-link"><img alt="accountdeployed" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/accountdeployed.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-bd446b83d8ec1a6d1e51d393bd5eed48"><img alt="accountdeployed" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/accountdeployed.png" title=" "></a></p>
 </li>
 </ul>
 <p>Repeat the same for:</p>
@@ -451,8 +428,8 @@ If the file is correctly loaded, the plugin will show the list of contexts avail
 </ul>
 <p>Be sure to receive for all the deployments a message that confirms the deployment is started and finally &ldquo;<strong>Service deployed successfully</strong>&rdquo;.</p>
 <p>Now we have the three services up &amp; running as you should see from VS Code plug-in:</p>
-<p><a href="#R-image-170d8fdb9313383ba76894c7dc3146d4" class="lightbox-link"><img alt="thesixservices" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/thesixservices.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-170d8fdb9313383ba76894c7dc3146d4"><img alt="thesixservices" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/thesixservices.png" title=" "></a></p>
+<p><a href="#R-image-509806724e26f921fbd4eeb09914f87d" class="lightbox-link"><img alt="thesixservices" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/thesixservices.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-509806724e26f921fbd4eeb09914f87d"><img alt="thesixservices" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/thesixservices.png" title=" "></a></p>
 </li>
 <li>
 <p>Verify that the services are running properly by executing this command:</p>
@@ -497,13 +474,13 @@ If the file is correctly loaded, the plugin will show the list of contexts avail
 <ul>
 <li>
 <p>Select under <strong>platformServices</strong> the leaf <strong>apisix</strong> and, with a right-click on mouse, select <strong>Open Apisix console</strong>:</p>
-<p><a href="#R-image-d36804222f5a8dd937d84b8fc004b69d" class="lightbox-link"><img alt="tunnelapisix" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/tunnelapisix.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-d36804222f5a8dd937d84b8fc004b69d"><img alt="tunnelapisix" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/tunnelapisix.png" title=" "></a></p>
+<p><a href="#R-image-a2cf226a232d2e983be01f0d032ac0f1" class="lightbox-link"><img alt="tunnelapisix" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/tunnelapisix.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-a2cf226a232d2e983be01f0d032ac0f1"><img alt="tunnelapisix" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/tunnelapisix.png" title=" "></a></p>
 </li>
 <li>
 <p>It will open a terminal window in which it will be started a tunneling to that service, that will end opening a message box with a button you can click to open the APISIX admin console in a new browser:</p>
-<p><a href="#R-image-68d001a328760e1c8170d02baa10d4c3" class="lightbox-link"><img alt="apisixbrowser" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/apisixbrowser.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-68d001a328760e1c8170d02baa10d4c3"><img alt="apisixbrowser" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/apisixbrowser.png" title=" "></a></p>
+<p><a href="#R-image-a8191a52b3707f602bc2266c4db64105" class="lightbox-link"><img alt="apisixbrowser" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/apisixbrowser.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-a8191a52b3707f602bc2266c4db64105"><img alt="apisixbrowser" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/apisixbrowser.png" title=" "></a></p>
 </li>
 </ul>
 </li>
@@ -522,7 +499,7 @@ If the file is correctly loaded, the plugin will show the list of contexts avail
 <img src="https://oracle.github.io/microservices-datadriven/cloudbank//cloudbank-logo.png" height="100px">
         </div>
         <script>
-          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1735316701";
+          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1741199486";
         </script>
         <search><form action="/microservices-datadriven/cloudbank/search/index.html" method="get">
           <div class="searchbox default-animation">
@@ -535,12 +512,12 @@ If the file is correctly loaded, the plugin will show the list of contexts avail
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1735316701" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1735316701" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1735316701" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1735316701" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1735316701" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1735316701" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1741199486" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1741199486" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1741199486" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1741199486" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1741199486" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1741199486" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -600,13 +577,13 @@ If the file is correctly loaded, the plugin will show the list of contexts avail
                   <span>&nbsp;</span>
                   <div class="control-style">
                     <label class="a11y-only" for="R-select-variant">Theme</label>
-                    <select id="R-select-variant" onchange="window.relearn.changeVariant( this.value );">
+                    <select id="R-select-variant" onchange="window.variants && variants.changeVariant( this.value );">
                       <option id="R-select-variant-zen-light" value="zen-light" selected>Zen Light</option>
                     </select>
                   </div>
                   <div class="clear"></div>
                 </div>
-                <script>window.relearn.markVariant();</script>
+                <script>window.variants && variants.markSelectedVariant();</script>
               </li>
               <li class="footerVisitedLinks">
                 <div class="padding menu-control">
@@ -627,8 +604,8 @@ If the file is correctly loaded, the plugin will show the list of contexts avail
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1735316701" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1735316701" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1735316701" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1741199486" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1741199486" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1741199486" defer></script>
   </body>
 </html>

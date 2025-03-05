@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article" data-r-output-format="html">
+<html lang="en-us" dir="ltr" itemscope itemtype="http://schema.org/Article">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <meta name="generator" content="Hugo 0.140.1">
-    <meta name="generator" content="Relearn 7.2.1+f1701957c30daae7cd133bec5a7968480563ce9f">
+    <meta name="generator" content="Relearn 7.1.1+ab4197f3113afa9a7d17bed69dbef6c0e75a4921">
     <meta name="description" content="Some modules contain optional parts which show you how to do deployments and configuration with the IDE plugins instead of using the CLI. If you plan to do those optional parts, you need to install the VS Code extension for Oracle Backend for Microservices and AI. It is an extension to browse and deploy applications on the Oracle Backend for Microservices and AI platform. This plugin allows to inspect the content of an Oracle Backend for Microservices and AI deployment, in terms of applications, services and related configurations.">
     <meta name="author" content="">
     <meta name="twitter:card" content="summary">
@@ -21,49 +21,26 @@
     <meta itemprop="description" content="Some modules contain optional parts which show you how to do deployments and configuration with the IDE plugins instead of using the CLI. If you plan to do those optional parts, you need to install the VS Code extension for Oracle Backend for Microservices and AI. It is an extension to browse and deploy applications on the Oracle Backend for Microservices and AI platform. This plugin allows to inspect the content of an Oracle Backend for Microservices and AI deployment, in terms of applications, services and related configurations.">
     <meta itemprop="wordCount" content="166">
     <title>Install IDE Plugin :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1735316701" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1735316701" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1735316701" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1735316701" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1735316701" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1735316701" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme.min.css?1735316701" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/format-html.min.css?1735316701" rel="stylesheet" id="R-format-style">
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1741199486" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1741199486" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1741199486" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1741199486" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1741199486" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1741199486" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1741199486" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1741199486" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1741199486" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1741199486" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1741199486" rel="stylesheet" id="R-variant-style">
+    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1741199486" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/microservices-datadriven/cloudbank/css/print.css?1741199486" rel="stylesheet" media="print">
+    <script src="/microservices-datadriven/cloudbank/js/variant.js?1741199486"></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
       window.relearn.relBaseUri='..\/..\/..\/..';
       window.relearn.absBaseUri='https:\/\/oracle.github.io\/microservices-datadriven\/cloudbank';
-      window.relearn.min = `.min`;
       window.relearn.disableAnchorCopy=false;
       window.relearn.disableAnchorScrolling=false;
       // variant stuff
-      window.relearn.themevariants = [ 'zen-light' ];
-      window.relearn.customvariantname = "my-custom-variant";
-      window.relearn.changeVariant = function(variant) {
-        var oldVariant = document.documentElement.dataset.rThemeVariant;
-        window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
-        document.documentElement.dataset.rThemeVariant = variant;
-        if (oldVariant != variant) {
-          document.dispatchEvent( new CustomEvent('themeVariantLoaded', { detail: { variant, oldVariant } }) );
-        }
-      }
-      window.relearn.markVariant = function() {
-        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant");
-        var select = document.querySelector("#R-select-variant");
-        if (select) {
-          select.value = variant;
-        }
-      }
-      window.relearn.initVariant = function() {
-        var variant = window.localStorage.getItem(window.relearn.absBaseUri + "/variant") ?? "";
-        if( variant == window.relearn.customvariantname ){
-        }else if( !variant || !window.relearn.themevariants.includes(variant) ){
-          variant = window.relearn.themevariants[0];
-          window.localStorage.setItem(window.relearn.absBaseUri + "/variant", variant);
-        }
-        document.documentElement.dataset.rThemeVariant = variant;
-      }
-      window.relearn.initVariant();
-      window.relearn.markVariant();
+      window.variants && variants.init( [ 'zen-light' ] );
       // translations
       window.T_Copy_to_clipboard = `Copy to clipboard`;
       window.T_Copied_to_clipboard = `Copied to clipboard!`;
@@ -142,24 +119,24 @@
 </li>
 <li>
 <p>On the VS Code right menu bar, click on <strong>Extensions</strong> item:</p>
-<p><a href="#R-image-80a0cf4abbf494d24a783a32a02b4876" class="lightbox-link"><img alt="Extensions list" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/extensions.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-80a0cf4abbf494d24a783a32a02b4876"><img alt="Extensions list" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/extensions.png" title=" "></a></p>
+<p><a href="#R-image-bec78736426bc51426063b100519791d" class="lightbox-link"><img alt="Extensions list" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/extensions.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-bec78736426bc51426063b100519791d"><img alt="Extensions list" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/extensions.png" title=" "></a></p>
 </li>
 <li>
 <p>From the up-right corner menu, choose <strong>Install from VSIX&hellip;</strong>:</p>
-<p><a href="#R-image-31c3dac7224fd59982a93154d0a520d2" class="lightbox-link"><img alt="Install" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-31c3dac7224fd59982a93154d0a520d2"><img alt="Install" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install.png" title=" "></a></p>
+<p><a href="#R-image-ef33f515be6ea930c1da08169c7c1005" class="lightbox-link"><img alt="Install" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/install.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-ef33f515be6ea930c1da08169c7c1005"><img alt="Install" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/install.png" title=" "></a></p>
 <p>and upload plug-in binaries previously downloaded.</p>
 </li>
 <li>
 <p>Re-start VS Code to make fully operative the plugin, in command palette execute a window reload:</p>
-<p><a href="#R-image-4f3e0cea0060c98d2674d954c9e176c0" class="lightbox-link"><img alt="VSReload" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/reloadWindow.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-4f3e0cea0060c98d2674d954c9e176c0"><img alt="VSReload" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/reloadWindow.png" title=" "></a></p>
+<p><a href="#R-image-2cffda1b0f5d9af6c25b7184314a724c" class="lightbox-link"><img alt="VSReload" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/reloadWindow.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-2cffda1b0f5d9af6c25b7184314a724c"><img alt="VSReload" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/reloadWindow.png" title=" "></a></p>
 </li>
 <li>
 <p>If you don&rsquo;t see the plugin in the left bar, with the Oracle logo, as shown here:</p>
-<p><a href="#R-image-aa4ee67405ee8ef739b7ae3ba3ac29a9" class="lightbox-link"><img alt="Additional" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/additional.png" style=" height: auto; width: auto;" title=" "></a>
-<a href="javascript:history.back();" class="lightbox-back" id="R-image-aa4ee67405ee8ef739b7ae3ba3ac29a9"><img alt="Additional" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/additional.png" title=" "></a></p>
+<p><a href="#R-image-74ba64a5b565307db694098b0dd8c944" class="lightbox-link"><img alt="Additional" class="noborder lazy lightbox noshadow figure-image" loading="lazy" src="../images/additional.png" style=" height: auto; width: auto;" title=" "></a>
+<a href="javascript:history.back();" class="lightbox-back" id="R-image-74ba64a5b565307db694098b0dd8c944"><img alt="Additional" class="noborder lazy lightbox noshadow lightbox-image" loading="lazy" src="../images/additional.png" title=" "></a></p>
 <p>click on <strong>Additional Views</strong> menu to select the <strong>Oracle Backend for Microservices and AI</strong>.</p>
 </li>
 </ol>
@@ -177,7 +154,7 @@
 <img src="https://oracle.github.io/microservices-datadriven/cloudbank//cloudbank-logo.png" height="100px">
         </div>
         <script>
-          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1735316701";
+          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1741199486";
         </script>
         <search><form action="/microservices-datadriven/cloudbank/search/index.html" method="get">
           <div class="searchbox default-animation">
@@ -190,12 +167,12 @@
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1735316701" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1735316701" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1735316701" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1735316701" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1735316701" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1735316701" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1741199486" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1741199486" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1741199486" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1741199486" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1741199486" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1741199486" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -261,13 +238,13 @@
                   <span>&nbsp;</span>
                   <div class="control-style">
                     <label class="a11y-only" for="R-select-variant">Theme</label>
-                    <select id="R-select-variant" onchange="window.relearn.changeVariant( this.value );">
+                    <select id="R-select-variant" onchange="window.variants && variants.changeVariant( this.value );">
                       <option id="R-select-variant-zen-light" value="zen-light" selected>Zen Light</option>
                     </select>
                   </div>
                   <div class="clear"></div>
                 </div>
-                <script>window.relearn.markVariant();</script>
+                <script>window.variants && variants.markSelectedVariant();</script>
               </li>
               <li class="footerVisitedLinks">
                 <div class="padding menu-control">
@@ -288,8 +265,8 @@
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1735316701" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1735316701" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1735316701" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1741199486" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1741199486" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1741199486" defer></script>
   </body>
 </html>

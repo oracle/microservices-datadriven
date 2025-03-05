@@ -2,7 +2,6 @@ window.relearn = window.relearn || {};
 
 var theme = true;
 var isPrint = document.querySelector('body').classList.contains('print');
-var isPrintPreview = false;
 
 var isRtl = document.querySelector('html').getAttribute('dir') == 'rtl';
 var lang = document.querySelector('html').getAttribute('lang');
@@ -286,6 +285,9 @@ function initMermaid(update, attrs) {
   if (update && !state.is_initialized) {
     return;
   }
+  if (typeof variants == 'undefined') {
+    return;
+  }
   if (typeof mermaid == 'undefined' || typeof mermaid.mermaidAPI == 'undefined') {
     return;
   }
@@ -295,23 +297,21 @@ function initMermaid(update, attrs) {
     window.addEventListener(
       'beforeprint',
       function () {
-        isPrintPreview = true;
         initMermaid(true, {
-          theme: getColorValue('PRINT-MERMAID-theme'),
+          'theme': variants.getColorValue('PRINT-MERMAID-theme'),
         });
       }.bind(this)
     );
     window.addEventListener(
       'afterprint',
       function () {
-        isPrintPreview = false;
         initMermaid(true);
       }.bind(this)
     );
   }
 
   attrs = attrs || {
-    theme: getColorValue('MERMAID-theme'),
+    'theme': variants.getColorValue('MERMAID-theme'),
   };
 
   var search;
@@ -321,7 +321,7 @@ function initMermaid(update, attrs) {
   }
   var is_initialized = update ? update_func(attrs) : init_func(attrs);
   if (is_initialized) {
-    mermaid.initialize(Object.assign({ securityLevel: 'antiscript', startOnLoad: false }, window.relearn.mermaidConfig, { theme: attrs.theme }));
+    mermaid.initialize(Object.assign({ 'securityLevel': 'antiscript', 'startOnLoad': false }, window.relearn.mermaidConfig, { theme: attrs.theme }));
     mermaid.run({
       postRenderCallback: function (id) {
         // zoom for Mermaid
@@ -375,39 +375,39 @@ function initOpenapi(update, attrs) {
   if (update && !state.is_initialized) {
     return;
   }
+  if (typeof variants == 'undefined') {
+    return;
+  }
 
   if (!state.is_initialized) {
     state.is_initialized = true;
     window.addEventListener(
       'beforeprint',
       function () {
-        isPrintPreview = true;
-        initOpenapi(true);
+        initOpenapi(true, { isPrintPreview: true });
       }.bind(this)
     );
     window.addEventListener(
       'afterprint',
       function () {
-        isPrintPreview = false;
-        initOpenapi(true);
+        initOpenapi(true, { isPrintPreview: false });
       }.bind(this)
     );
   }
 
-  attrs = attrs || {};
+  attrs = attrs || {
+    isPrintPreview: false,
+  };
 
   function addFunctionToResizeEvent() {}
   function getFirstAncestorByClass() {}
   function renderOpenAPI(oc) {
     var relBasePath = window.relearn.relBasePath;
     var assetBuster = window.themeUseOpenapi.assetsBuster;
-    var print = isPrint || isPrintPreview ? 'PRINT-' : '';
-    var format = print ? `print` : `html`;
-    var min = window.relearn.min;
-    var theme = `${relBasePath}/css/format-${format}${min}.css${assetBuster}`;
-    var variant = document.documentElement.dataset.rThemeVariant;
-    var swagger_theme = getColorValue(print + 'OPENAPI-theme');
-    var swagger_code_theme = getColorValue(print + 'OPENAPI-CODE-theme');
+    var print = isPrint || attrs.isPrintPreview ? 'PRINT-' : '';
+    var theme = print ? `${relBasePath}/css/theme-relearn-light.css${assetBuster}` : document.querySelector('#R-variant-style').attributes.href.value;
+    var swagger_theme = variants.getColorValue(print + 'OPENAPI-theme');
+    var swagger_code_theme = variants.getColorValue(print + 'OPENAPI-CODE-theme');
 
     const openapiId = 'relearn-swagger-ui';
     const openapiIframeId = openapiId + '-iframe';
@@ -423,7 +423,7 @@ function initOpenapi(update, attrs) {
     const oi = document.createElement('iframe');
     oi.id = openapiIframeId;
     oi.classList.toggle('sc-openapi-iframe', true);
-    oi.srcdoc = '<!doctype html>' + '<html lang="' + lang + '" dir="' + (isRtl ? 'rtl' : 'ltr') + '" data-r-output-format="' + format + '" data-r-theme-variant="' + variant + '">' + '<head>' + '<link rel="stylesheet" href="' + window.themeUseOpenapi.css + '">' + '<link rel="stylesheet" href="' + relBasePath + `/css/swagger${min}.css` + assetBuster + '">' + '<link rel="stylesheet" href="' + relBasePath + '/css/swagger-' + swagger_theme + '.css' + assetBuster + '">' + '<link rel="stylesheet" href="' + theme + '">' + '</head>' + '<body>' + '<a class="relearn-expander" href="" onclick="return relearn_collapse_all()">Collapse all</a>' + '<a class="relearn-expander" href="" onclick="return relearn_expand_all()">Expand all</a>' + '<div id="relearn-swagger-ui"></div>' + '<script>' + 'function relearn_expand_all(){' + 'document.querySelectorAll( ".opblock-summary-control[aria-expanded=false]" ).forEach( btn => btn.click() );' + 'document.querySelectorAll( ".model-container > .model-box > button[aria-expanded=false]" ).forEach( btn => btn.click() );' + 'return false;' + '}' + 'function relearn_collapse_all(){' + 'document.querySelectorAll( ".opblock-summary-control[aria-expanded=true]" ).forEach( btn => btn.click() );' + 'document.querySelectorAll( ".model-container > .model-box > .model-box > .model > span > button[aria-expanded=true]" ).forEach( btn => btn.click() );' + 'return false;' + '}' + '</script>' + '</body>' + '</html>';
+    oi.srcdoc = '<!doctype html>' + '<html lang="' + lang + '" dir="' + (isRtl ? 'rtl' : 'ltr') + '">' + '<head>' + '<link rel="stylesheet" href="' + window.themeUseOpenapi.css + '">' + '<link rel="stylesheet" href="' + relBasePath + '/css/swagger.css' + assetBuster + '">' + '<link rel="stylesheet" href="' + relBasePath + '/css/swagger-' + swagger_theme + '.css' + assetBuster + '">' + '<link rel="stylesheet" href="' + theme + '">' + '</head>' + '<body>' + '<a class="relearn-expander" href="" onclick="return relearn_collapse_all()">Collapse all</a>' + '<a class="relearn-expander" href="" onclick="return relearn_expand_all()">Expand all</a>' + '<div id="relearn-swagger-ui"></div>' + '<script>' + 'function relearn_expand_all(){' + 'document.querySelectorAll( ".opblock-summary-control[aria-expanded=false]" ).forEach( btn => btn.click() );' + 'document.querySelectorAll( ".model-container > .model-box > button[aria-expanded=false]" ).forEach( btn => btn.click() );' + 'return false;' + '}' + 'function relearn_collapse_all(){' + 'document.querySelectorAll( ".opblock-summary-control[aria-expanded=true]" ).forEach( btn => btn.click() );' + 'document.querySelectorAll( ".model-container > .model-box > .model-box > .model > span > button[aria-expanded=true]" ).forEach( btn => btn.click() );' + 'return false;' + '}' + '</script>' + '</body>' + '</html>';
     oi.height = '100%';
     oi.width = '100%';
     oi.onload = function () {
@@ -436,12 +436,12 @@ function initOpenapi(update, attrs) {
           var options = {
             defaultModelsExpandDepth: 2,
             defaultModelExpandDepth: 2,
-            docExpansion: isPrint || isPrintPreview ? 'full' : 'list',
+            docExpansion: isPrint || attrs.isPrintPreview ? 'full' : 'list',
             domNode: oi.contentWindow.document.getElementById(openapiId),
-            filter: !(isPrint || isPrintPreview),
+            filter: !(isPrint || attrs.isPrintPreview),
             layout: 'BaseLayout',
             onComplete: function () {
-              if (isPrint || isPrintPreview) {
+              if (isPrint || attrs.isPrintPreview) {
                 oi.contentWindow.document.querySelectorAll('.model-container > .model-box > button[aria-expanded=false]').forEach(function (btn) {
                   btn.click();
                 });
@@ -505,7 +505,7 @@ function initOpenapi(update, attrs) {
   }
   function setOpenAPIHeight(oi) {
     // add empirical offset if in print preview (GC 103)
-    oi.style.height = oi.contentWindow.document.documentElement.getBoundingClientRect().height + (isPrintPreview ? 200 : 0) + 'px';
+    oi.style.height = oi.contentWindow.document.documentElement.getBoundingClientRect().height + (attrs.isPrintPreview ? 200 : 0) + 'px';
   }
   function resizeOpenAPI() {
     let divi = document.getElementsByClassName('sc-openapi-iframe');
@@ -727,6 +727,14 @@ function initCodeClipboard() {
     };
     document.addEventListener('copy', f);
   });
+}
+
+function initChroma(update) {
+  var chroma = variants.getColorValue('CODE-theme');
+  var link = document.querySelector('#R-variant-chroma-style');
+  var old_path = link.getAttribute('href');
+  var new_path = old_path.replace(/^(.*\/chroma-).*?(\.css.*)$/, '$1' + chroma + '$2');
+  link.setAttribute('href', new_path);
 }
 
 function initArrowVerticalNav() {
@@ -1282,11 +1290,6 @@ function initHistory() {
 
 function initScrollPositionSaver() {
   function savePosition(event) {
-    // #959 if we fiddle around with the history during print preview
-    // GC will close the preview immediatley
-    if (isPrintPreview) {
-      return;
-    }
     var state = window.history.state || {};
     state = Object.assign({}, typeof state === 'object' ? state : {});
     state.contentScrollTop = +elc.scrollTop;
@@ -1624,32 +1627,38 @@ function initSearch() {
   window.relearn.runInitialSearch && window.relearn.runInitialSearch();
 }
 
-document.addEventListener('themeVariantLoaded', function (ev) {
-  updateTheme(ev);
-});
-
-function updateTheme(ev) {
-  if (window.relearn.lastVariant == ev.detail.variant) {
+function updateTheme(detail) {
+  if (window.relearn.lastVariant == detail.variant) {
     return;
   }
-  window.relearn.lastVariant = ev.detail.variant;
+  window.relearn.lastVariant = detail.variant;
 
+  initChroma(true);
   initMermaid(true);
   initOpenapi(true);
+  document.dispatchEvent(
+    new CustomEvent('themeVariantLoaded', {
+      detail: detail,
+    })
+  );
 }
 
 (function () {
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
+    initChroma(true);
     initMermaid(true);
     initOpenapi(true);
   });
 })();
 
 function useMermaid(config) {
-  delete config.theme;
   window.relearn.mermaidConfig = config;
   if (typeof mermaid != 'undefined' && typeof mermaid.mermaidAPI != 'undefined') {
-    mermaid.initialize(Object.assign({ securityLevel: 'antiscript', startOnLoad: false }, config));
+    mermaid.initialize(Object.assign({ 'securityLevel': 'antiscript', 'startOnLoad': false }, config));
+    if (config.theme && variants) {
+      var write_style = variants.findLoadedStylesheet('R-variant-style');
+      write_style.setProperty('--CONFIG-MERMAID-theme', config.theme);
+    }
   }
 }
 if (window.themeUseMermaid) {
@@ -1663,14 +1672,6 @@ function useOpenapi(config) {
 }
 if (window.themeUseOpenapi) {
   useOpenapi(window.themeUseOpenapi);
-}
-
-function ready(fn) {
-  if (document.readyState == 'complete') {
-    fn();
-  } else {
-    document.addEventListener('DOMContentLoaded', fn);
-  }
 }
 
 ready(function () {
@@ -1845,25 +1846,8 @@ ready(function () {
   function onWidthChange(setWidth, e) {
     setWidth(e);
   }
-  var width = getColorValue('MAIN-WIDTH-MAX');
+  var width = variants.getColorValue('MAIN-WIDTH-MAX');
   var mqm = window.matchMedia('screen and ( min-width: ' + width + ')');
   mqm.addEventListener('change', onWidthChange.bind(null, setWidth));
   setWidth(mqm);
 })();
-
-function getColorValue(c) {
-  return this.normalizeColor(getComputedStyle(document.documentElement).getPropertyValue('--INTERNAL-' + c));
-}
-
-function normalizeColor(c) {
-  if (!c || !c.trim) {
-    return c;
-  }
-  c = c.trim();
-  c = c.replace(/\s*\(\s*/g, '( ');
-  c = c.replace(/\s*\)\s*/g, ' )');
-  c = c.replace(/\s*,\s*/g, ', ');
-  c = c.replace(/0*\./g, '.');
-  c = c.replace(/ +/g, ' ');
-  return c;
-}
