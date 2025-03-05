@@ -12,7 +12,7 @@ Download a copy of the CloudBank sample application.
     Create a local clone of the CloudBank source repository using this command.
 
     ```shell
-    git clone https://github.com/oracle/microservices-datadriven.git
+    git clone --depth 1 git@github.com:oracle/microservices-datadriven.git --tags cbv4-1.3.1 --single-branch
     ```
 
     > **Note**: If you do not have **git** installed on your machine, you can download a zip file of the source code from [GitHub](https://github.com/oracle/microservices-datadriven) and unzip it on your machine instead.
@@ -24,4 +24,3 @@ Download a copy of the CloudBank sample application.
     ```
 
     This directory will be referred to as the `root` directory for CloudBank in this module.
-
