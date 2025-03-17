@@ -60,7 +60,7 @@ jobs:
       - name: Update Existing Image
         id: update_image
         if: env.latest_digest != '' && steps.trivy_scan.outcome == 'failure'
-        uses: ./.github/actions/process-image-open-jdk
+        uses: ./.github/actions/process-image-openjdk
         with:
           src_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ matrix.base_version }}
           dst_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ matrix.base_version }}
@@ -78,7 +78,7 @@ jobs:
 
       - name: Push Updated Image
         if: steps.get_newest_digest.outcome != 'skipped' && env.latest_digest != env.newest_digest
-        uses: ./.github/actions/process-image-open-jdk
+        uses: ./.github/actions/process-image-openjdk
         with:
           src_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ matrix.base_version }}
           dst_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ matrix.base_version }}
