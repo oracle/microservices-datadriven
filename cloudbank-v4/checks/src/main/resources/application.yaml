@@ -15,5 +15,9 @@ spring:
       initial-pool-size: 15
       min-pool-size: 10
       max-pool-size: 30
+  cloud:
+    config:
+      import-check:
+        enabled: false
   config:
     import: classpath:common.yaml

@@ -17,6 +17,10 @@ spring:
       coordinator-url: ${MP_LRA_COORDINATOR_URL}
       propagation-active: true
       headers-propagation-prefix: "{x-b3-, oracle-tmm-, authorization, refresh-}"
+  cloud:
+    config:
+      import-check:
+        enabled: false
   config:
     import: classpath:common.yaml
     

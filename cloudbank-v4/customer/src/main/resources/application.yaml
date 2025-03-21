@@ -11,6 +11,10 @@ spring:
         dialect: org.hibernate.dialect.OracleDialect
         format_sql: true
     show-sql: true
+  cloud:
+    config:
+      import-check:
+        enabled: false
     
   liquibase:
     change-log: classpath:db/changelog/controller.yaml

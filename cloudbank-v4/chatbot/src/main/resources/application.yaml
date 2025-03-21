@@ -8,5 +8,9 @@ spring:
         enabled: true
         options:
           model: llama3
+  cloud:
+    config:
+      import-check:
+        enabled: false
   config:
     import: classpath:common.yaml

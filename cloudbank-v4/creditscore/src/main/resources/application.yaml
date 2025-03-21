@@ -8,5 +8,8 @@ spring:
   cloud:
     refresh:
       enabled: false
+    config:
+      import-check:
+        enabled: false
   config:
     import: classpath:common.yaml

@@ -49,9 +49,6 @@ management:
       enabled: true
     java:
       enabled: true
-  otlp:
-    tracing:
-      endpoint: ${otel.exporter.otlp.endpoint}
   observations:
     key-values:
       app: ${spring.application.name}
