@@ -44,11 +44,6 @@ https://oss.oracle.com/licenses/upl/ -->
             <version>${liquibase.version}</version>
         </dependency>
         <dependency>
-            <groupId>net.ttddyy.observation</groupId>
-            <artifactId>datasource-micrometer-spring-boot</artifactId>
-            <version>${datasource-micrometer-spring-boot.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.example</groupId>
             <artifactId>common</artifactId>
             <version>${project.version}</version>

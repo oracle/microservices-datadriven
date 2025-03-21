@@ -3,14 +3,6 @@
 spring:
   application:
     name: customer
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.OracleDialect
-        format_sql: true
-    show-sql: true
   cloud:
     config:
       import-check:
@@ -24,9 +16,6 @@ spring:
     enabled: ${LIQUIBASE_ENABLED:true}
     
   datasource:
-    url: ${spring.datasource.url}
-    username: ${spring.datasource.username}
-    password: ${spring.datasource.password}
     driver-class-name: oracle.jdbc.OracleDriver
     type: oracle.ucp.jdbc.PoolDataSource
     oracleucp:

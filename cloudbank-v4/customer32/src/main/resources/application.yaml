@@ -4,6 +4,12 @@
 spring:
   application:
     name: customer32
+  cloud:
+    config:
+      import-check:
+        enabled: false
+  config:
+    import: classpath:common.yaml
 
   liquibase:
     change-log: classpath:db/changelog/controller.yaml
@@ -13,9 +19,6 @@ spring:
     enabled: ${LIQUIBASE_ENABLED:true}
 
   datasource:
-    url: ${spring.datasource.url}
-    username: ${spring.datasource.username}
-    password: ${spring.datasource.password}
     driver-class-name: oracle.jdbc.OracleDriver
     type: oracle.ucp.jdbc.PoolDataSource
     oracleucp:

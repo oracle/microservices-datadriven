@@ -5,6 +5,14 @@ spring:
   threads:
     virtual:
       enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.OracleDialect
+        format_sql: true
+    show-sql: true
 
 eureka:
   instance:
@@ -39,6 +47,8 @@ management:
   health:
     probes:
       enabled: true
+    jms:
+      enabled: false
   tracing:
     sampling:
       probability: 1.0
