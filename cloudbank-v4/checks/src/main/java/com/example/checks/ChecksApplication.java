@@ -1,10 +1,16 @@
-// Copyright (c) 2023, 2024, Oracle and/or its affiliates.
+// Copyright (c) 2023, 2024, 2025, Oracle and/or its affiliates.
 // Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 package com.example.checks;
 
+import java.sql.SQLException;
+import javax.sql.DataSource;
+
 import com.example.common.filter.LoggingFilterConfig;
 import jakarta.jms.ConnectionFactory;
+import jakarta.jms.JMSException;
+import lombok.extern.slf4j.Slf4j;
+import oracle.jakarta.jms.AQjmsFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
@@ -20,14 +26,19 @@ import org.springframework.jms.support.converter.MappingJackson2MessageConverter
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 
-
 @SpringBootApplication
 @EnableFeignClients
 @EnableJms
 @EnableDiscoveryClient
 @Import(LoggingFilterConfig.class)
+@Slf4j
 public class ChecksApplication {
 
+    /**
+     * Application main class.
+     * 
+     * @param args - main arguments
+     */
     public static void main(String[] args) {
         SpringApplication.run(ChecksApplication.class, args);
     }
@@ -75,6 +86,21 @@ public class ChecksApplication {
         configurer.configure(factory, connectionFactory);
         // You could still override some of Boot's default if necessary.
         return factory;
+    }
+
+    /**
+     * Initialize AQ JMS ConnectionFactory.
+     * 
+     * @param ds Oracle Datasource.
+     * @return ConnectionFactory The AQ JMS ConnectionFactory.
+     * @throws JMSException when an error is encountered while creating a JMS
+     *                      ConnectionFactory.
+     * @throws SQLException when an error is encountered while accessing backing
+     *                      Oracle DataSource.
+     */
+    @Bean
+    public ConnectionFactory aqJmsConnectionFactory(DataSource ds) throws JMSException, SQLException {
+        return AQjmsFactory.getConnectionFactory(ds.unwrap(DataSource.class));
     }
 
 }

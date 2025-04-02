@@ -47,8 +47,6 @@ management:
   health:
     probes:
       enabled: true
-    jms:
-      enabled: false
   tracing:
     sampling:
       probability: 1.0

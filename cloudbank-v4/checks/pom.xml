@@ -17,10 +17,6 @@ https://oss.oracle.com/licenses/upl. -->
     <description>Check Processing Application</description>
     <dependencies>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.oracle.database.spring</groupId>
             <artifactId>oracle-spring-boot-starter-aqjms</artifactId>
             <version>${oracle-springboot-starter.version}</version>
