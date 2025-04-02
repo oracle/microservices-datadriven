@@ -51,7 +51,7 @@ management:
       enabled: true
   otlp:
     tracing:
-      endpoint: ${otel.exporter.otlp.endpoint}
+      endpoint: http://obaas-signoz-otel-collector.platform.svc.local:4318
   observations:
     key-values:
       app: ${spring.application.name}
