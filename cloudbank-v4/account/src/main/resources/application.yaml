@@ -4,9 +4,6 @@
 spring:
   application:
     name: account
-  threads:
-    virtual:
-      enabled: true
   jpa:
     hibernate:
       ddl-auto: validate
@@ -19,7 +16,9 @@ spring:
     lra:
       coordinator-url: ${MP_LRA_COORDINATOR_URL}
       propagation-active: true
-      headers-propagation-prefix: "{x-b3-, oracle-tmm-, authorization, refresh-}"   
+      headers-propagation-prefix: "{x-b3-, oracle-tmm-, authorization, refresh-}"
+  config:
+    import: classpath:common.yaml
 
   liquibase:
     change-log: classpath:db/changelog/controller.yaml
@@ -40,46 +39,5 @@ spring:
       initial-pool-size: 15
       min-pool-size: 10
       max-pool-size: 30
-
-eureka:
-  instance:
-    hostname: ${spring.application.name}
-    preferIpAddress: true
-  client:
-    service-url:
-      defaultZone: ${eureka.service-url}
-    fetch-registry: true
-    register-with-eureka: true
-    enabled: true
-
-management:
-  endpoint:
-    health:
-      show-details: always
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-  metrics:
-    tags:
-      application: ${spring.application.name}
-  tracing:
-    sampling:
-      probability: 1.0
-  info:
-    os:
-      enabled: true
-    env:
-      enabled: true
-    java:
-      enabled: true
-  otlp:
-    tracing:
-      endpoint: ${otel.exporter.otlp.endpoint}
-
-logging:
-  level:
-    root: INFO
-    com.example: INFO
 
 

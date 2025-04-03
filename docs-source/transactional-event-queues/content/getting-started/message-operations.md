@@ -46,6 +46,8 @@ declare
     message json;
     body varchar2(200) := '{"content": "my first message"}';
 begin
+    enqueue_options := dbms_aq.enqueue_options_t();
+    message_properties := dbms_aq.message_properties_t();
     select json(body) into message;
     dbms_aq.enqueue(
         queue_name => 'json_queue',
@@ -69,6 +71,8 @@ declare
     message json;
     message_buffer varchar2(500);
 begin
+    dequeue_options := dbms_aq.dequeue_options_t();
+    message_properties := dbms_aq.message_properties_t();
     dequeue_options.navigation := dbms_aq.first_message;
     dequeue_options.wait := dbms_aq.no_wait;
     
@@ -307,6 +311,8 @@ declare
     message_handle raw(16);
     message sys.aq$_jms_text_message;
 begin
+    enqueue_options := dbms_aq.enqueue_options_t();
+    message_properties := dbms_aq.message_properties_t();
     message := sys.aq$_jms_text_message.construct();
     message.set_text('this is my message');
 
@@ -336,6 +342,8 @@ declare
     message_handle raw(16);
     message sys.aq$_jms_text_message;
 begin
+    enqueue_options := dbms_aq.enqueue_options_t();
+    message_properties := dbms_aq.message_properties_t();
     message := sys.aq$_jms_text_message.construct();
     message.set_text('this is my message');
 
@@ -365,6 +373,8 @@ declare
     message_handle raw(16);
     message sys.aq$_jms_text_message;
 begin
+    enqueue_options := dbms_aq.enqueue_options_t();
+    message_properties := dbms_aq.message_properties_t();
     message := sys.aq$_jms_text_message.construct();
     message.set_text('this is my message');
 
@@ -404,6 +414,8 @@ declare
     product_id number;
     quantity number;
 begin
+    enqueue_options := dbms_aq.enqueue_options_t();
+    message_properties := dbms_aq.message_properties_t();
     -- Convert the JSON string to a JSON object
     message := json(body);
 

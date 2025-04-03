@@ -6,28 +6,11 @@ keywords: "spring springboot microservices development oracle backend helidon"
 
 Oracle Backend for Microservices and AI allows developers to build microservices in Helidon and/or Spring Boot and provisions a "backend as a service" with Oracle Database and other infrastructure components that operate on multiple clouds. Oracle Backend for Microservices and AI vastly simplifies the task of building, testing, and operating microservices platforms for reliable, secure, and scalable enterprise applications.
 
-{{< hint type=[warning] icon=gdoc_fire title="Version 1.3.1 (production) released October, 2024" >}}
- Oracle Backend for Microservices and AI Version 1.3.0 is now generally available and suitable for production use. This version supports and recommends Helidon 4.1.1, Spring Boot 3.3.x, 3.2.x, Spring 6.1 and Spring Cloud 2023.0.x, with limited backwards compatibility for Spring Boot 2.7.x.  
+{{< hint type=[warning] icon=gdoc_fire title="Version 1.4.0 (production) released March 2025" >}}
+ Oracle Backend for Microservices and AI Version 1.4.0 is now generally available and suitable for production use. This version supports and recommends Helidon 4.1.1, Spring Boot 3.3.x, 3.2.x, Spring 6.1 and Spring Cloud 2023.0.x, with limited backwards compatibility for Spring Boot 2.7.x.  
 {{< /hint >}}
 
 If you are building Spring Boot applications with Oracle Database, you should also check out [Spring Cloud Oracle](https://github.com/oracle/spring-cloud-oracle) which is the home of a number of the components used in Oracle Backend for Microservices and AI, and which you can also use in your own applications!
-
-## New Developer Preview Feature - Oracle AI Microservices Sandbox
-
-Oracle Backend for Microservices and AI Version 1.3.1 introduces [Oracle AI Microservices Sandbox](https://github.com/oracle-samples/oaim-sandbox) as a *Developer Preview* feature.  
-
-The Oracle AI Microservices Sandbox provides a streamlined environment where developers and data scientists can explore the potential of Generative Artificial Intelligence (GenAI) combined with Retrieval-Augmented Generation (RAG) capabilities. By integrating Oracle Database 23ai AI Vector Search, the Sandbox enables users to enhance existing Large Language Models (LLMs) through RAG.
-
-It provides a "sandbox" for experimentation and iteration, allowing you to easily optimize a chatbot/RAG use case by exploring different models, chunking strategies, vector similarity algorithms, prompts, model parameters, memory, re-ranking, and evaluation.  
-
-![AI Microservices Sandbox](./ai-microservices-sandbox.png)
-
-This feature is provided as a "developer preview" meaning it is provided for developers to experiment with, without any formal support, but with the expectation that it may become a formal feature in a future release.  You may open issues in GitHub and best-effort assistance will be provided.  Please be aware that this feature is under development, and not yet considered stable.  Functionality, interfaces, etc., may change in non-backwards compatible ways.  
-
-For more information about this developer preview feature, please visit:
- - the [GitHub repo](https://github.com/oracle-samples/oaim-sandbox) 
- - the [documentation](https://oracle-samples.github.io/oaim-sandbox/)
- - this OCI Cloud Coaching session titled [Building a real chatbot with Oracle Database 23ai](https://www.youtube.com/watch?v=oG9MPCpwUlU), (video) which includes discussion of the background concepts and a demonstration of this feature
 
 ## Try it out with CloudBank AI
 
@@ -58,6 +41,7 @@ To learn more, watch this short introductory video:
 In addition to an Oracle Autonomous Database Serverless instance, the following software components are deployed in an Oracle Cloud
 Infrastructure (OCI) Container Engine for Kubernetes cluster (OKE cluster):
 
+- [Oracle AI Explorer for Apps](platform/aiexpforapps/)
 - [Apache APISIX API Gateway and Dashboard](platform/apigw/)
 - [Apache Kafka](https://kafka.apache.org/)
 - [Grafana](observability/metrics/)
@@ -71,7 +55,7 @@ Infrastructure (OCI) Container Engine for Kubernetes cluster (OKE cluster):
 - [Oracle Backend for Microservices and AI Visual Studio Code Plugin](platform/vscode-plugin/)
 - [Oracle Coherence](https://docs.oracle.com/en/middleware/standalone/coherence/)
 - [Oracle Database Operator for Kubernetes (OraOperator or the operator)](https://github.com/oracle/oracle-database-operator)
-- Oracle Database Observability Exporter
+- [Oracle Database Observability Exporter](https://github.com/oracle/oracle-db-appdev-monitoring)
 - [Oracle Transaction Manager for Microservices (MicroTx)](platform/microtx/)
 - [Prometheus](observability/metrics/)
 - Promtail
@@ -83,22 +67,19 @@ Infrastructure (OCI) Container Engine for Kubernetes cluster (OKE cluster):
 
 Developers also have access to development or build time services and libraries including:
 
-- A command-line interface [(CLI)](development/cli/) to manage service deployment and configuration, including database schema management.
-- [Visual Studio Code (VS Code) plugin](platform/vscode-plugin/) to manage service deployment and configuration.
+- [Command-line interface (CLI)](development/cli/) to manage service deployment and configuration, including database schema management.
 - [IntelliJ plugin](platform/intellij-plugin/) to manage service deployment and configuration.
+- [OpenTelemetry Collector (including automatic instrumentation)](observability/tracing/).
 - [Spring CLI](https://spring.io/projects/spring-cli) support for project creation.
-- Spring Data (Java Persistence API (JPA) and Oracle JDBC) to access Oracle Database.
-- Oracle Java Database Connectivity (Oracle JDBC) drivers.
 - [Spring Cloud Config client](platform/config/).
 - [Spring Eureka service discovery client](platform/eureka/).
 - [Spring Cloud OpenFeign](https://spring.io/projects/spring-cloud-openfeign).
-- [OpenTelemetry Collector (including automatic instrumentation)](observability/tracing/).
 - [Spring Starters for Oracle Universal Connection Pool (UCP), Oracle Wallet, Oracle Advanced Queuing (AQ), and Transactional Event Queues (TxEventQ)](starters/).
-
-
+- [Visual Studio Code (VS Code) plugin](platform/vscode-plugin/) to manage service deployment and configuration.
 
 ## Need help?
 
-We'd love to hear from you!  You can contact us in the
-[#oracle-db-microservices](https://oracledevs.slack.com/archives/C06L9CDGR6Z) channel in the
-Oracle Developers slack workspace, or [open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).
+We'd love to hear from you!  You can contact us in the following channels:
+
+- [#oracle-db-microservices Slack channel](https://oracledevs.slack.com/archives/C06L9CDGR6Z) in the Oracle Developers slack workspace.
+- [Open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).

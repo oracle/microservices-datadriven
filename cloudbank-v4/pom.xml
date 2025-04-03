@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.6</version>
+        <version>3.3.9</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -22,6 +22,7 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <modules>
+        <module>common</module>
         <module>account</module>
         <module>chatbot</module>
         <module>checks</module>
@@ -34,15 +35,15 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>21</java.version>
-        <spring-cloud.version>2023.0.4</spring-cloud.version>
+        <spring-cloud.version>2023.0.5</spring-cloud.version>
         <org.springdoc-version>2.4.0</org.springdoc-version>
 
-        <micrometer-core.version>1.14.1</micrometer-core.version>
+        <micrometer-core.version>1.14.4</micrometer-core.version>
         <lombok.version>1.18.36</lombok.version>
-        <oracle-springboot-starter.version>24.4.0</oracle-springboot-starter.version>
-		<oracle-microtx-starter.version>24.2.2</oracle-microtx-starter.version>
-		<liquibase.version>4.30.0</liquibase.version>
-		<datasource-micrometer-spring-boot.version>1.0.6</datasource-micrometer-spring-boot.version>
+        <oracle-springboot-starter.version>25.1.0</oracle-springboot-starter.version>
+	<oracle-microtx-starter.version>24.2.2</oracle-microtx-starter.version>
+	<liquibase.version>4.31.1</liquibase.version>
+	<datasource-micrometer-spring-boot.version>1.1.0</datasource-micrometer-spring-boot.version>
 
         <!-- Code quality tools -->
         <maven-checkstyle-plugin-version>3.3.1</maven-checkstyle-plugin-version>
@@ -133,6 +134,7 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <includeSystemScope>true</includeSystemScope>
                 </configuration>
             </plugin>
             <plugin>

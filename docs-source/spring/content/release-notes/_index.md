@@ -4,19 +4,36 @@ description: "Release notes for Oracle Backend for Microservices and AI includin
 keywords: "release notes additions updates deprecations removals springboot spring development microservices development oracle backend"
 ---
 
-## Version 1.4.0, TBD
+## Version 1.4.0, March XX, 2025
+
+This release adds:
+
+- Support for AWS deployment.
 
 This release removes the following components:
 
 - Prometheus Operator
 - Hashicorp Vault
 
+This release have an updated backend API and CLI. This means that the REST API and CLI calls are changed since the previous release.See the documentation.
+
+The following components were updated:
+
+| Component                                             | New Version   | Replaced Version    |
+|-------------------------------------------------------|---------------|---------------------|
+| Spring Boot 3.3.6 and Spring Cloud 2023.0.4 | | |
+
+In addition this release have:
+
+- Improved IntelliJ plugin and VSCode extension.
+- Updates to the ServiceOps Center
+
 ## Version 1.3.1, October 23rd, 2024
 
 This release includes the following changes:
 
 - Added Oracle Autonomous Database 23ai as the default option for the database on OCI deployments, 19c still available as an option
-- Added the Oracle AI Microservices Sandbox as a developer preview feature
+- Added the Oracle AI Explorer for Apps as a developer preview feature
 
 ## Version 1.3.0, September 5th, 2024
 
@@ -42,23 +59,23 @@ The following components were updated:
 | Spring Cloud Config server | 4.1.3 | 4.1.2 |
 | Spring Authorization Server | 3.3.3 | 3.3.0 |
 | Spring Eureka service registry | 4.1.3 | 4.1.2 |
-| Grafana	| 11.1.4 | 10.4.1 |
+| Grafana | 11.1.4 | 10.4.1 |
 | Apache Kafka | 3.8.0 | 3.7.0 |
-| OpenTelemetry Collector |	0.107.0 | 0.101.0 |
+| OpenTelemetry Collector | 0.107.0 | 0.101.0 |
 | Oracle Database Observability Exporter | 1.3.1 | 1.2.1 |
 | Oracle Transaction Manager for Microservices | 24.2.1 | 23.4.2 |
-| Hashicorp Vault |	1.17.2 | 1.16.1 |
-| Strimzi-Apache Kafka operator  | 0.43.0 | 0.41.0 | 
+| Hashicorp Vault | 1.17.2 | 1.16.1 |
+| Strimzi-Apache Kafka operator  | 0.43.0 | 0.41.0 |
 
 ## Version 1.2.0, June 14th, 2024
 
 This release includes:
 
-* Additional functionality to ServiceOps Center UI (SOC UI).
-* Spring Boot upgrade to 3.3.0 and Spring Cloud 2023.0.2 for internal components.
-* Oracle Backend for Microservices and AI are running Java 21 with Virtual Threads enabled.
-* oractl is compiled using Java 21 and Virtual Threads.
-* Openshift support
+- Additional functionality to ServiceOps Center UI (SOC UI).
+- Spring Boot upgrade to 3.3.0 and Spring Cloud 2023.0.2 for internal components.
+- Oracle Backend for Microservices and AI are running Java 21 with Virtual Threads enabled.
+- oractl is compiled using Java 21 and Virtual Threads.
+- Openshift support
 
 The following components were updated:
 
@@ -67,7 +84,7 @@ The following components were updated:
 | Spring Boot Admin server | 3.3.1 | 3.2.0 |
 | APISIX API Gateway | 3.9.1 | 3.8.0 |
 | Spring Authorization Server | 3.3.0 | 3.2.1 |
-| Coherence Operator	| 3.3.4 | 3.3.2 |
+| Coherence Operator | 3.3.4 | 3.3.2 |
 | Spring Cloud Config server | 4.1.2 | 2023.0.0 |
 | Spring Eureka service registry | 4.1.2 | 2023.0.0 |
 | Grafana | 10.4.1 | 9.2.5 |
@@ -77,19 +94,19 @@ The following components were updated:
 | Jaeger Tracing | 1.53.0 | 1.51.0 |
 | OpenTelemetry Collector | 0.101.0 | 0.93.0 |
 | Oracle Database Observability Exporter | 1.2.1 | 1.2.0 |
-| Oracle Transaction Manager for Microservices	 | 23.4.2 | 23.4.1 |
+| Oracle Transaction Manager for Microservices | 23.4.2 | 23.4.1 |
 | Prometheus | 2.52.0 | 2.47.1 |
 | Prometheus Operator | 0.74.0 | 0.63.0 |
 | ServiceOps Center | 1.2.0 | 1.1.3 |
 | HashiCorp Vault | 1.16.1 | 1.15.2 |
-| Strimzi-Apache Kafka operator  | 0.41.0 | 0.39.0 | 
+| Strimzi-Apache Kafka operator  | 0.41.0 | 0.39.0 |
 
 {{< hint type=[warning] icon=gdoc_fire title="Deprecation Notice" >}}
 The following components are deprecated and are removed from this release:
 
-* Oracle Database Storage Adapter for Parse
-* Parse Server
-* Parse Dashboard
+- Oracle Database Storage Adapter for Parse
+- Parse Server
+- Parse Dashboard
 {{< /hint >}}
 
 ## Version 1.1.3, March 8, 2024
@@ -98,8 +115,8 @@ This release includes small updates and/or bug fixes. No components were upgrade
 
 The following functionality was added:
 
-* HashiCorp Vault Grafana dashboard.
-* HashiCorp Vault audit logging capability.
+- HashiCorp Vault Grafana dashboard.
+- HashiCorp Vault audit logging capability.
 
 ## Version 1.1.2, March 1, 2024
 
@@ -126,19 +143,19 @@ The following components were updated:
 
 Notes:
 
-* Recommended versions for user applications updated Spring Boot 3.2.x, Java 17 or 21, Spring 6.1 and Spring Cloud 2023.0.0, with limited backwards compatibility for Spring Boot 2.7.x.
-* Platform components are updated to Spring Boot 3.2.1 versions and matching Spring Cloud versions.
-* A preview of a new "ServiceOps Center" feature is added, including a web user interface and additional Grafana dashboards.
-* User Management using the CLI and REST Endpoints.
-* Added support for auto-scaling of Spring Boot applications deployed in the platform.
-* Changes to the custom installation to allow using existing resources including database, network and Kubernetes.
-* Various platform services updated to use Database Resident Connection Pooling to improve performance.
-* Improvements to collection of trace data using Open Telemetry, including migration to agentless approach,
+- Recommended versions for user applications updated Spring Boot 3.2.x, Java 17 or 21, Spring 6.1 and Spring Cloud 2023.0.0, with limited backwards compatibility for Spring Boot 2.7.x.
+- Platform components are updated to Spring Boot 3.2.1 versions and matching Spring Cloud versions.
+- A preview of a new "ServiceOps Center" feature is added, including a web user interface and additional Grafana dashboards.
+- User Management using the CLI and REST Endpoints.
+- Added support for auto-scaling of Spring Boot applications deployed in the platform.
+- Changes to the custom installation to allow using existing resources including database, network and Kubernetes.
+- Various platform services updated to use Database Resident Connection Pooling to improve performance.
+- Improvements to collection of trace data using Open Telemetry, including migration to agentless approach,
   uptake of Micrometer, and so on.
-* Improvements for Spring Native/GraalVM native image compilation of Spring Boot services.
-* Improvements to CLI to support scripting.
-* Various components updated to newer releases.
-* Bug fixes.
+- Improvements for Spring Native/GraalVM native image compilation of Spring Boot services.
+- Improvements to CLI to support scripting.
+- Various components updated to newer releases.
+- Bug fixes.
 
 The following components were added:
 
@@ -172,7 +189,7 @@ The following components were updated:
 
 Notes:
 
-* Bug fixes
+- Bug fixes
 
 The following components were updated:
 
@@ -187,16 +204,16 @@ This is the first production release.
 
 Notes:
 
-* All Spring platform components upgraded to Spring Boot 3.x, Spring 6.x and Spring Cloud 2022.0.4 versions.
-* Spring Native (with GraalVM native image ahead of time compilation) is the default/recommended
+- All Spring platform components upgraded to Spring Boot 3.x, Spring 6.x and Spring Cloud 2022.0.4 versions.
+- Spring Native (with GraalVM native image ahead of time compilation) is the default/recommended
   deployment option for microservices. JVM continues to be available as an option.
-* Loki and Promtail added for logging, Spring Boot dashboard updated to show metrics and logs on the same dashboard.
-* Spring Authorization Server added, and preconfigured with default users (you supply passwords during installation,
+- Loki and Promtail added for logging, Spring Boot dashboard updated to show metrics and logs on the same dashboard.
+- Spring Authorization Server added, and preconfigured with default users (you supply passwords during installation,
   or they are generated).  
-* Various platform services and the CLI updated for authentication and authorization
+- Various platform services and the CLI updated for authentication and authorization
   using Spring Authorization Server.
-* Various platform services reconfigured for increased availability.
-* Various components updated.
+- Various platform services reconfigured for increased availability.
+- Various components updated.
 
 The following components were added:
 
@@ -232,7 +249,7 @@ There were no component deprecations or removals.
 
 Notes:
 
-* Continued incremental improvements to Oracle Database Adapter for Parse Server.
+- Continued incremental improvements to Oracle Database Adapter for Parse Server.
 
 The following components were added:
 
@@ -257,8 +274,8 @@ There were no component deprecations or removals.
 
 Notes:
 
-* Improvements to Oracle Cloud Infrastructure (OCI) installation process.
-* Continued incremental improvements to Oracle Database Adapter for Parse Server.
+- Improvements to Oracle Cloud Infrastructure (OCI) installation process.
+- Continued incremental improvements to Oracle Database Adapter for Parse Server.
 
 No components were added.
 
@@ -275,9 +292,9 @@ There were no component deprecations or removals.
 
 Notes:
 
-* Oracle Backend for Microservices and AI now includes the option to install in a Multicloud (OCI/Azure) environment.
-* The Oracle Database Operator for Kubernetes is bound to the existing Oracle Autonomous Database (ADB) created by infrastructure as code (IaC) in an all-OCI installation and provisions the ADB in the Multicloud installation.
-* Improvements to On-Premises and desktop installation processes.
+- Oracle Backend for Microservices and AI now includes the option to install in a Multicloud (OCI/Azure) environment.
+- The Oracle Database Operator for Kubernetes is bound to the existing Oracle Autonomous Database (ADB) created by infrastructure as code (IaC) in an all-OCI installation and provisions the ADB in the Multicloud installation.
+- Improvements to On-Premises and desktop installation processes.
 
 The following components were added:
 
@@ -297,9 +314,9 @@ There were no component deprecations or removals.
 
 Notes:
 
-* Oracle Backend for Microservices and AI now includes the option to also install Parse Platform in the same deployment.
-* Oracle Backend for Microservices and AI CLI 0.2.3 includes a number of bug fixes and adds support for custom listening ports for services.
-* Apache APISIX is now pre-configured for both Eureka and Kubernetes service discovery.
+- Oracle Backend for Microservices and AI now includes the option to also install Parse Platform in the same deployment.
+- Oracle Backend for Microservices and AI CLI 0.2.3 includes a number of bug fixes and adds support for custom listening ports for services.
+- Apache APISIX is now pre-configured for both Eureka and Kubernetes service discovery.
 
 The following components were added:
 

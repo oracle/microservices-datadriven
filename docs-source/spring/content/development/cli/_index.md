@@ -73,7 +73,7 @@ Table of Contents:
     * [workload getImage](#workload-getimage)
     * [workload update](#workload-update)
     * [workload delete](#workload-delete)
-  * [Server Version](#server-version) 
+  * [Server Version](#server-version)
 * [Logging Information](#logging)
 
 ## Installing the CLI
@@ -121,7 +121,7 @@ Oracle Backend for Microservices and AI CLI is used to configure your backend an
        ========================================================================================
        Application Name: Oracle Backend Platform :: Command Line Interface
        Application Version: (1.4.0)
-       :: Spring Boot (v3.3.6) ::
+       :: Spring Boot (v3.3.8) ::
 
        Ask for help:
        - Slack: https://oracledevs.slack.com/archives/C06L9CDGR6Z
@@ -129,8 +129,8 @@ Oracle Backend for Microservices and AI CLI is used to configure your backend an
 
        oractl:>
     ```
-       
-## Command Concepts 
+
+## Command Concepts
 
 The following describes the different resources handled by the client:
 
@@ -156,19 +156,24 @@ The following describes the different resources handled by the client:
 
 ## Workflow Example
 
-Following is a worflow example deploying the Spring services that makeup the CloudBank backend.
+Following is a workflow example deploying the Spring services that makeup the CloudBank backend.
 
 Create the namespace for the CloudBank application
-```
+
+```shell
 namespace create --namespace application
 ```
+
 Create the datastore for the Account and Customer microservices
-```
+
+```shell
 datastore create --namespace application --username account --id account
 datastore create --namespace application --username customer --id customer
 ```
+
 Upload the Spring microservice jars
-```
+
+```shell
 artifact create --namespace application --workload account --imageVersion 0.0.1 --file /Users/devusr/microservices-datadriven/cloudbank-v4/account/target/account-0.0.1-SNAPSHOT.jar
 
 artifact create --namespace application --workload checks --imageVersion 0.0.1 --file /Users/devusr/microservices-datadriven/cloudbank-v4/checks/target/checks-0.0.1-SNAPSHOT.jar
@@ -179,23 +184,20 @@ artifact create --namespace application --workload creditscore --imageVersion 0.
 
 artifact create --namespace application --workload transfer --imageVersion 0.0.1 --file /Users/devusr/microservices-datadriven/cloudbank-v4/transfer/target/transfer-0.0.1-SNAPSHOT.jar
 ```
+
 Create images from the artifacts
 
-
-```
+```shell
 image create --namespace application --workload account --imageVersion 0.0.1
-
 image create --namespace application --workload checks --imageVersion 0.0.1
-
 image create --namespace application --workload customer --imageVersion 0.0.1 
-
 image create --namespace application --workload creditscore --imageVersion 0.0.1 
-
 image create --namespace application --workload transfer --imageVersion 0.0.1 
 ```
 
 Create a workload for the images
-```
+
+```shell
 workload create --namespace application --imageVersion 0.0.1 --id account --liquibaseDB admin --cpuRequest 100m
 workload create --namespace application --imageVersion 0.0.1 --id checks --cpuRequest 100m
 workload create --namespace application --imageVersion 0.0.1 --id customer --liquibaseDB admin --cpuRequest 100m
@@ -204,14 +206,16 @@ workload create --namespace application --imageVersion 0.0.1 --id transfer --cpu
 ```
 
 Create a binding between the workload and the datastore
-```
+
+```shell
 binding create --namespace application --datastore account --workload account
 binding create --namespace application --datastore customer --workload customer
 binding create --namespace application --datastore account --workload checks
 ```
 
 Verify success
-```
+
+```shell
 serverversion
 namespace list
 datastore list --namespace application
@@ -220,7 +224,6 @@ image list
 binding list --namespace application
 workload list --namespace application
 ```
-
 
 ## Available Commands
 
@@ -282,6 +285,7 @@ Image
        image list: Lists all the images in your platform.
        image create: Creates a new image in your platform.
        image delete: Delete an image in your platform.
+       image deleteByWorkload: Delete an image in your platform by workload.
 
 Initialization
        connect: Connect to the OBaaS Admin Service.
@@ -360,8 +364,8 @@ obaas-admin -> Welcome!
 
 An artifact, for example a JAR file, that can be used to run a workload.  Artifacts are built into images.
 
-
 ### artifact create
+
 ```bash
 oractl:>help artifact create
 NAME
@@ -409,6 +413,7 @@ obaas-cli [artifact create]: Artifact [account:1.0.0] was successfully created.
    ```
 
 ### artifact list
+
 ```bash
 oractl:>help artifact list
 NAME
@@ -426,7 +431,7 @@ OPTIONS
 
    For example:
 
-   ```
+   ```shell
    oractl:>artifact list
 ╔══╤═════════╤════════╤════════╤══════╤══════════════════════════════════════════════════════╗
 ║ID│Namespace│Workload│Artifact│Native│Path                                                  ║
@@ -434,10 +439,10 @@ OPTIONS
 ╠══╪═════════╪════════╪════════╪══════╪══════════════════════════════════════════════════════╣
 ║6 │myapp    │account │1.0.0   │false │/app/upload-dir/myapp/account/target/account-1.0.0.jar║
 ╚══╧═════════╧════════╧════════╧══════╧══════════════════════════════════════════════════════╝
-
-   ```
+```
 
 ### artifact delete
+
 ```bash
 oractl:>help artifact delete
 NAME
@@ -458,12 +463,13 @@ OPTIONS
 
 For example:
 
-```
+```shell
 oractl:>artifact delete --artifactId 6
 obaas-cli [artifact delete]: Artifact [6] was successfully deleted.
 ```
 
 ### artifact deleteByWorkload
+
 ```bash
 oractl:>help artifact deleteByWorkload
 NAME
@@ -492,7 +498,8 @@ OPTIONS
 ```
 
 For example:
-```
+
+```shell
 oractl:>artifact deleteByWorkload --namespace myapp --workload account --artifactVersion 1.0.0
 obaas-cli [artifact delete]: Artifact [account:1.0.0] was successfully deleted.
 ```
@@ -502,6 +509,7 @@ obaas-cli [artifact delete]: Artifact [account:1.0.0] was successfully deleted.
 adjust pod replicas in response to workload demands
 
 ### autoscaler create
+
 ```bash
 oractl:>help autoscaler create
 NAME
@@ -535,13 +543,16 @@ OPTIONS
        help for autoscaler create
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>autoscaler create --namespace myapp --workloadID account --minimumReplicas 1 --maximumReplicas 5 --cpuPercent 65
 obaas-cli [autoscaler create]: Autoscaler [account] was successfully created.
 ```
 
 ### autoscaler list
+
 ```bash
 oractl:>help autoscaler list
 NAME
@@ -563,7 +574,9 @@ OPTIONS
        help for autoscaler list
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>autoscaler list --namespace myapp --workloadID accounts
 ╔═══════════╤═══════════╤══════════╗
@@ -575,6 +588,7 @@ oractl:>autoscaler list --namespace myapp --workloadID accounts
 ```
 
 ### autoscaler update
+
 ```bash
 oractl:>help autoscaler update
 NAME
@@ -608,13 +622,16 @@ OPTIONS
        help for autoscaler update
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>autoscaler update --namespace myapp --workloadID account --minimumReplicas 2 --maximumReplicas 3 --cpuPercent 75
 obaas-cli [autoscaler update]: Autoscaler [account] was successfully updated.
 ```
 
 ### autoscaler delete
+
 ```bash
 oractl:>help autoscaler delete
 NAME
@@ -636,7 +653,9 @@ OPTIONS
        help for autoscaler delete
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>autoscaler delete --namespace myapp --workloadID accounts
 obaas-cli [autoscaler delete]: Autoscaler [accounts] was successfully deleted.
@@ -647,6 +666,7 @@ obaas-cli [autoscaler delete]: Autoscaler [accounts] was successfully deleted.
 A binding associates a datastore with a workload.
 
 ### binding create
+
 ```bash
 oractl:>help binding create
 NAME
@@ -672,13 +692,16 @@ OPTIONS
        help for binding create
        [Optional]
 ```
+
 For example:
+
 ```bind
 oractl:>binding create --namespace myapp --workload accounts --datastore mydatastore
 obaas-cli [binding create]: Binding [accounts] was successfully created.
 ```
 
 ### binding list
+
 ```bash
 oractl:>binding create --namespace myapp --workload accounts --datastore mydatastore
 obaas-cli [binding create]: Binding [accounts] was successfully created.
@@ -698,7 +721,9 @@ OPTIONS
        help for binding list
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>binding list --namespace myapp
 ╔════════╤═══════════╗
@@ -709,6 +734,7 @@ oractl:>binding list --namespace myapp
 ```
 
 ### binding get
+
 ```bash
 oractl:>help binding get
 NAME
@@ -730,7 +756,9 @@ OPTIONS
        help for binding get
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>binding get --namespace myapp --workload account
 ╔════════╤═══════════╗
@@ -738,10 +766,10 @@ oractl:>binding get --namespace myapp --workload account
 ╠════════╪═══════════╣
 ║account │mydatastore║
 ╚════════╧═══════════╝
-
 ```
 
 ### binding update
+
 ```bash
 oractl:>help binding update
 NAME
@@ -767,13 +795,16 @@ OPTIONS
        help for binding update
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>binding update --namespace myapp --workload account --datastore newdatastore
 obaas-cli [binding update]: Binding [account] was successfully updated.
 ```
 
 ### binding delete
+
 ```bash
 oractl:>help binding delete
 NAME
@@ -795,18 +826,20 @@ OPTIONS
        help for binding delete
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>binding delete --namespace myapp --workload account
 obaas-cli [binding delete]: Binding [account] was successfully deleted.
 ```
-
 
 ## Configuration
 
 A configuration property which can be injected into a workload. Identified by name, label and profile.
 
 ### configuration create
+
 ```bash
 oractl:>help configuration create
 NAME
@@ -840,13 +873,16 @@ OPTIONS
        help for configuration create
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>configuration create --name accountconfig --profile development --label 23beta --key debuglogging --value debug
 obaas-cli [configuration create]: Configuration [accountconfig] was successfully created.
 ```
 
 ### configuration list
+
 ```bash
 oractl:>help configuration list
 NAME
@@ -860,7 +896,9 @@ OPTIONS
        help for configuration list
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>configuration list
 ╔═════════════╗
@@ -873,6 +911,7 @@ oractl:>configuration list
 ```
 
 ### configuration get
+
 ```bash
 oractl:>help configuration get
 NAME
@@ -890,7 +929,9 @@ OPTIONS
        help for configuration get
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>configuration get --name accountconfig
 ╔═════════════╤═══════════╤══════╤════════════╤═════╗
@@ -901,6 +942,7 @@ oractl:>configuration get --name accountconfig
 ```
 
 ### configuration update
+
 ```bash
 oractl:>help configuration update
 NAME
@@ -934,13 +976,16 @@ OPTIONS
        help for configuration update
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>configuration update --name accountconfig --profile development --label 23beta --key debuglogging --value info
 obaas-cli [configuration update]: Configuration [accountconfig] was successfully updated.
 ```
 
 ### configuration delete
+
 ```bash
 oractl:>help configuration delete
 NAME
@@ -974,19 +1019,20 @@ OPTIONS
        help for configuration delete
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>configuration delete --name accountconfig --profile development --label 23beta --key debuglogging --value info
 obaas-cli [configuration delete]: Configuration [accountconfig] was successfully deleted.
 ```
 
-
 ## DataStore
 
 A data store, for example a pluggable database or a schema/user in a database instance, which can be used by a workload.  Can be shared by multiple workloads, although this is only recommended for truly shared resources like queues/topics used for asynchronous communications between microservices.  In most normal cases, a datastore should only be associated with one workload, in keeping with the "database per service" pattern.
 
-
 ### datastore create
+
 ```bash
 oractl:>help datastore create
 NAME
@@ -1015,6 +1061,7 @@ OPTIONS
 ```
 
 For example:
+
 ```bash
 oractl:>datastore create --namespace myapp --username account --id account
 ? password ************
@@ -1022,6 +1069,7 @@ obaas-cli [datastore create]: Datastore [account] was successfully created.
 ```
 
 ### datatore list
+
 ```bash
 oractl:>help datastore list
 NAME
@@ -1038,11 +1086,11 @@ OPTIONS
        --help or -h 
        help for datastore list
        [Optional]
-
 ```
 
 For example:
-```
+
+```shell
 oractl:>datastore list --namespace myapp
 ╔════════════╤════════╗
 ║Datastore ID│Username║
@@ -1054,6 +1102,7 @@ oractl:>datastore list --namespace myapp
 ```
 
 ### datastore get
+
 ```bash
 oractl:>help datastore get
 NAME
@@ -1078,6 +1127,7 @@ OPTIONS
 ```
 
 For example:
+
 ```bash
 oractl:>datastore get --namespace myapp --id account
 ╔════════════╤════════╗
@@ -1088,6 +1138,7 @@ oractl:>datastore get --namespace myapp --id account
 ```
 
 ### datastore update
+
 ```bash
 oractl:>help datastore update
 NAME
@@ -1108,7 +1159,6 @@ OPTIONS
        --help or -h 
        help for datastore update
        [Optional]
-
 ```
 
 For example:
@@ -1120,6 +1170,7 @@ obaas-cli [datastore update]: Datastore [account] was successfully updated.
 ```
 
 ### datastore delete
+
 ```bash
 oractl:>help datastore delete
 NAME
@@ -1154,6 +1205,7 @@ obaas-cli [datastore delete]: Datastore [account] was successfully deleted.
 APIs related to identity (users, roles, etc.) are collected in this group.
 
 ### user create
+
 ```bash
 oractl:>help user create
 NAME
@@ -1175,7 +1227,9 @@ OPTIONS
        help for user create
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>user create --username devuser --roles ROLE_CONFIG_EDITOR,ROLE_USER
 ? password ************
@@ -1183,6 +1237,7 @@ obaas-cli [user create]: User [devuser] was successfully created.
 ```
 
 ### user list
+
 ```bash
 oractl:>help user list
 NAME
@@ -1196,7 +1251,9 @@ OPTIONS
        help for user list
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>user list
 ╔════════════╤═════════════════════════════════════════════════════╗
@@ -1213,6 +1270,7 @@ oractl:>user list
 ```
 
 ### user get
+
 ```bash
 oractl:>help user get
 NAME
@@ -1230,7 +1288,9 @@ OPTIONS
        help for user get
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>user get --username devuser
 ╔════════╤════════════════════════════╗
@@ -1241,6 +1301,7 @@ oractl:>user get --username devuser
 ```
 
 ### user change-password
+
 ```bash
 oractl:>help user change-password
 NAME
@@ -1258,7 +1319,9 @@ OPTIONS
        help for user change-password
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>user change-password --username devuser
 ? password **************
@@ -1266,6 +1329,7 @@ obaas-cli [user update]: User [devuser] was successfully updated.
 ```
 
 ### user change-roles
+
 ```bash
 oractl:>help user change-roles
 NAME
@@ -1287,13 +1351,16 @@ OPTIONS
        help for user change-roles
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>user change-roles --username devuser --roles ROLE_USER
 obaas-cli [user update]: User [devuser] was successfully updated.
 ```
 
 ### user delete
+
 ```bash
 oractl:>help user delete
 NAME
@@ -1311,7 +1378,9 @@ OPTIONS
        help for user delete
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>user delete --username devuser
 obaas-cli [user delete]: User [devuser] was successfully deleted.
@@ -1323,6 +1392,7 @@ A container image which can be used to run an workload. Built from an artifact a
 The default base image is ghcr.io/oracle/openjdk-image-obaas:21
 
 ### image create
+
 ```bash
 oractl:>help image create
 NAME
@@ -1357,13 +1427,16 @@ OPTIONS
        [Optional]
 
 ```
+
 For example:
+
 ```bash
 oractl:>image create --namespace myapp --workload account --imageVersion 1.1.0
 obaas-cli [image create]: Image [account:1.1.0] was successfully created.
 ```
 
 ### image list
+
 ```bash
 oractl:>help image list
 NAME
@@ -1377,8 +1450,10 @@ OPTIONS
        help for image list
        [Optional]
 ```
+
 For example:
-```
+
+```shell
 oractl:>image list
 ╔══╤═══════════════════════════════════════════════════╤═════════════════════════════════════╤═══════════╤════════╤═════════════════════════════╤═══════╗
 ║ID│Name                                               │BaseImage                            │Namespace  │Workload│Created                      │Status ║
@@ -1392,6 +1467,7 @@ oractl:>image list
 ```
 
 ### image get
+
 ```bash
 oractl:>help image get
 NAME
@@ -1410,7 +1486,9 @@ OPTIONS
        [Optional]
 
 ```
+
 For example:
+
 ```bash
 oractl:>image get --imageId 12
 ╔══╤═════════════════════════════════════════════╤═════════════════════════════════════╤═════════╤════════╤═════════════════════════════╤═══════╗
@@ -1421,6 +1499,7 @@ oractl:>image get --imageId 12
 ```
 
 ### image delete
+
 ```bash
 oractl:>help image delete
 NAME
@@ -1439,13 +1518,24 @@ OPTIONS
        [Optional]
 
 ```
+
 For example:
+
 ```bash
 oractl:>image delete --imageId 10
 obaas-cli [image delete]: Image [10] was successfully deleted.
 ```
 
 ### image deleteByWorkload
+
+> **_NOTE:_**  When using this command the `workload` must still exist. If not you'll get an error. The solution is to [delete the workload using the id](#image-delete).
+
+The error message is similar to this:
+
+```log
+obaas-cli [image delete]: error: deployments.apps "account" not found    Http Return Code = 404
+```
+
 ```bash
 oractl:>help image deleteByWorkload
 NAME
@@ -1467,7 +1557,9 @@ OPTIONS
        help for image deleteByWorkload
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>image deleteByWorkload --namespace myapp --workload account
 obaas-cli [image delete]: Image [account] was successfully deleted.
@@ -1478,6 +1570,7 @@ obaas-cli [image delete]: Image [account] was successfully deleted.
 A Kubernetes namespace in which workloads can be deployed.
 
 ### namespace create
+
 ```bash
 oractl:>help namespace create
 NAME
@@ -1494,16 +1587,17 @@ OPTIONS
        --help or -h 
        help for namespace create
        [Optional]
-
 ```
 
 For example:
-```
+
+```shell
 oractl:>namespace create --namespace application
 obaas-cli [namespace create]: Namespace [application] was successfully created.
 ```
 
 ### namespace list
+
 ```bash
 oractl:>help namespace list
 NAME
@@ -1520,6 +1614,7 @@ OPTIONS
 ```
 
 For example:
+
 ```bash
 oractl:>namespace list
 ╔═══════════╗
@@ -1532,6 +1627,7 @@ oractl:>namespace list
 ```  
 
 ### namespace update
+
 ```bash
 oractl:>help namespace update
 NAME
@@ -1548,16 +1644,17 @@ OPTIONS
        --help or -h 
        help for namespace update
        [Optional]
-
 ```
 
 For example:
+
 ```bash
 oractl:>namespace update --namespace application
 obaas-cli [namespace update]: Namespace [application] was successfully updated.
 ```
 
 ### namespace delete
+
 ```bash
 oractl:>help namespace delete
 NAME
@@ -1577,6 +1674,7 @@ OPTIONS
 ```
 
 For example
+
 ```bash
 oractl:>namespace delete --namespace application
 obaas-cli [namespace delete]: Namespace [application] was successfully deleted.
@@ -1587,6 +1685,7 @@ obaas-cli [namespace delete]: Namespace [application] was successfully deleted.
 APIs for managing consent (opt-in) for sending telemetry data to Oracle.
 
 ### telemetry-consent create
+
 ```bash
 oractl:>help telemetry-consent create
 NAME
@@ -1604,14 +1703,17 @@ OPTIONS
        help for telemetry-consent create
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>telemetry-consent create --consented true
 obaas-cli [telemetry-consent create]: Telemetry-consent [true] was successfully created.
 ```
 
 ### telemetry-consent list
-```
+
+```shell
 oractl:>help telemetry-consent list
 NAME
        telemetry-consent list - Lists the platforms telemetry consent status.
@@ -1624,7 +1726,9 @@ OPTIONS
        help for telemetry-consent list
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>telemetry-consent list
 ╔═════════╤═════════════════════════════╗
@@ -1635,6 +1739,7 @@ oractl:>telemetry-consent list
 ```
 
 ### telemetry-consent update
+
 ```bash
 oractl:>help telemetry-consent update
 NAME
@@ -1652,7 +1757,9 @@ OPTIONS
        help for telemetry-consent update
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>telemetry-consent update --consented false
 obaas-cli [telemetry-consent update]: Telemetry-consent [false] was successfully updated.
@@ -1663,6 +1770,7 @@ obaas-cli [telemetry-consent update]: Telemetry-consent [false] was successfully
 A Spring Boot application which can be deployed in the platform. Is associated with an artifact and an image, which have their own separate lifecycles.
 
 ### workload create
+
 ```bash
 oractl:>help workload create
 NAME
@@ -1712,13 +1820,16 @@ OPTIONS
        help for workload create
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>workload create --namespace myapp --imageVersion 1.1.0  --id account
 obaas-cli [workload create]: Workload [account] was successfully created.
 ```
 
 ### workload list
+
 ```bash
 oractl:>help workload list
 NAME
@@ -1736,7 +1847,9 @@ OPTIONS
        help for workload list
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>workload list --namespace myapp
 ╔════════╤════════╤═══════╤══════════╤════╤══════════════╤═══════════════╤═══════════╗
@@ -1748,6 +1861,7 @@ oractl:>workload list --namespace myapp
 ```
 
 ### workload get
+
 ```bash
 oractl:>help workload get
 NAME
@@ -1769,7 +1883,9 @@ OPTIONS
        help for workload get
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>workload get --namespace myapp --id account
 ╔════════╤════════╤═══════╤══════════╤════╤══════════════╤═══════════════╤═══════════╗
@@ -1781,6 +1897,7 @@ oractl:>workload get --namespace myapp --id account
 ```
 
 ### workload update
+
 ```bash
 oractl:>help workload update
 NAME
@@ -1830,13 +1947,16 @@ OPTIONS
        help for workload update
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>workload update --namespace myapp --id account --imageVersion 1.1.0 --addHealthProbe true
 obaas-cli [workload update]: Workload [account] was successfully updated.
 ```
 
 ### workload getImage
+
 ```bash
 oractl:>help workload getImage
 NAME
@@ -1858,7 +1978,9 @@ OPTIONS
        help for workload getImage
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>workload getImage --namespace myapp --id account
 ╔═════╤══════════════════════════════════════════════╤═════════════════════════════════════╤════════╤═════════╤═════════════════════════════╤═══════╗
@@ -1870,6 +1992,7 @@ oractl:>workload getImage --namespace myapp --id account
 ```
 
 ### workload delete
+
 ```bash
 oractl:>help workload delete
 NAME
@@ -1891,13 +2014,16 @@ OPTIONS
        help for workload delete
        [Optional]
 ```
+
 For example:
+
 ```bash
 oractl:>workload delete --namespace myapp --id account
 obaas-cli [workload delete]: Workload [account] was successfully deleted.
 ```
 
 ## Server Version
+
 ```bash
 oractl:>help serverversion
 NAME
@@ -1912,7 +2038,9 @@ OPTIONS
        [Optional]
 
 ```
+
 For example:
+
 ```bash
 oractl:>serverversion
 ╔═══════╗
@@ -1920,11 +2048,8 @@ oractl:>serverversion
 ╠═══════╣
 ║1.4.0  ║
 ╚═══════╝
-
 ```
-
-
 
 ## Logging
 
-The log file for `oractl` on Mac or Unix machine is stored in the `$HOME/config/orctl` directory. The file name is `oractl-cli-history.log`
+The log file for `oractl` on Mac or Unix machine is stored in the `$HOME/config/oractl` directory. The file name is `oractl-cli-history.log`
