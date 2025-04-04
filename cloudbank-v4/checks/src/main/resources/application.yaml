@@ -1,13 +1,10 @@
-# Copyright (c) 2023, 2024, Oracle and/or its affiliates.
+# Copyright (c) 2023, 2025, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 spring:
   application:
     name: checks
   datasource:
-    url: ${spring.datasource.url}
-    username: ${spring.datasource.username}
-    password: ${spring.datasource.password}
     type: oracle.ucp.jdbc.PoolDataSource
     oracleucp:
       connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
@@ -15,5 +12,9 @@ spring:
       initial-pool-size: 15
       min-pool-size: 10
       max-pool-size: 30
+  cloud:
+    config:
+      import-check:
+        enabled: false
   config:
     import: classpath:common.yaml
