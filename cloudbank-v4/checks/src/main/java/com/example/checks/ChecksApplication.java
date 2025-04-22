@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 import com.example.common.filter.LoggingFilterConfig;
+import com.example.common.ucp.UCPTelemetry;
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.JMSException;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ import org.springframework.jms.support.converter.MessageType;
 @EnableFeignClients
 @EnableJms
 @EnableDiscoveryClient
-@Import(LoggingFilterConfig.class)
+@Import({ LoggingFilterConfig.class, UCPTelemetry.class })
 @Slf4j
 public class ChecksApplication {
 
