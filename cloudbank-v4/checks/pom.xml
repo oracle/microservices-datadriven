@@ -31,11 +31,6 @@ https://oss.oracle.com/licenses/upl. -->
             <artifactId>spring-boot-starter-data-jdbc</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.oracle.database.spring</groupId>
-            <artifactId>oracle-spring-boot-starter-ucp</artifactId>
-            <version>${oracle-springboot-starter.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.example</groupId>
             <artifactId>common</artifactId>
             <version>${project.version}</version>

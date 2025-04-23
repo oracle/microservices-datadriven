@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 import com.example.common.filter.LoggingFilterConfig;
+import com.example.common.ucp.UCPTelemetry;
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.JMSException;
 import oracle.jakarta.jms.AQjmsFactory;
@@ -25,7 +26,7 @@ import org.springframework.jms.support.converter.MessageType;
 @SpringBootApplication
 @EnableJms
 @EnableDiscoveryClient
-@Import(LoggingFilterConfig.class)
+@Import({ LoggingFilterConfig.class, UCPTelemetry.class })
 public class TestrunnerApplication {
 
     public static void main(String[] args) {
