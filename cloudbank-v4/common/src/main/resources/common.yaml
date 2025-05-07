@@ -1,10 +1,18 @@
-# Copyright (c) 2024, Oracle and/or its affiliates.
+# Copyright (c) 2025, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 
 spring:
   threads:
     virtual:
       enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.OracleDialect
+        format_sql: true
+    show-sql: true
 
 eureka:
   instance:

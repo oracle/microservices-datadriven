@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright (c) 2023, 2024, Oracle and/or its affiliates. -->
+<!-- Copyright (c) 2023, 2025, Oracle and/or its affiliates. -->
 <!-- Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.9</version>
+        <version>3.4.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -22,11 +22,14 @@
     <version>0.0.1-SNAPSHOT</version>
 
     <modules>
+        <module>buildtools</module>
         <module>common</module>
         <module>account</module>
         <module>chatbot</module>
         <module>checks</module>
         <module>customer</module>
+        <module>customer32</module>
+        <module>customer32-mongo</module>
         <module>creditscore</module>
         <module>transfer</module>
         <module>testrunner</module>
@@ -35,10 +38,10 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>21</java.version>
-        <spring-cloud.version>2023.0.5</spring-cloud.version>
+        <spring-cloud.version>2024.0.0</spring-cloud.version>
         <org.springdoc-version>2.4.0</org.springdoc-version>
 
-        <micrometer-core.version>1.14.4</micrometer-core.version>
+        <micrometer-tracing.version>1.4.4</micrometer-tracing.version>
         <lombok.version>1.18.36</lombok.version>
         <oracle-springboot-starter.version>25.1.0</oracle-springboot-starter.version>
 	<oracle-microtx-starter.version>24.2.2</oracle-microtx-starter.version>
@@ -65,7 +68,6 @@
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-core</artifactId>
-            <version>${micrometer-core.version}</version>
         </dependency>
         <!-- Prometheues-->
         <dependency>
@@ -76,6 +78,12 @@
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-tracing-bridge-otel</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>io.opentelemetry.instrumentation</groupId>
+                    <artifactId>opentelemetry-instrumentation-api-incubator</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- Adds an exporter to store the traces -->
         <dependency>
@@ -93,6 +101,15 @@
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.opentelemetry.instrumentation</groupId>
+            <artifactId>opentelemetry-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.ttddyy.observation</groupId>
+            <artifactId>datasource-micrometer-spring-boot</artifactId>
+            <version>${datasource-micrometer-spring-boot.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
@@ -108,10 +125,51 @@
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${org.springdoc-version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-okhttp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.github.openfeign</groupId>
+            <artifactId>feign-micrometer</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.database.spring</groupId>
+            <artifactId>oracle-spring-boot-starter-ucp</artifactId>
+            <version>${oracle-springboot-starter.version}</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry.instrumentation</groupId>
+            <artifactId>opentelemetry-oracle-ucp-11.2</artifactId>
+            <version>2.13.1-alpha</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>io.opentelemetry.instrumentation</groupId>
+                <artifactId>opentelemetry-instrumentation-bom</artifactId>
+                <version>2.13.1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-tracing-bom</artifactId>
+                <version>${micrometer-tracing.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -141,6 +199,18 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>${maven-checkstyle-plugin-version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.example</groupId>
+                        <artifactId>buildtools</artifactId>
+                        <version>0.0.1-SNAPSHOT</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>${checkstyle-version}</version>
+                    </dependency>
+                </dependencies>
                 <executions>
                     <execution>
                         <id>checkstyle</id>
@@ -150,8 +220,8 @@
                         </goals>
                         <configuration>
                             <consoleOutput>true</consoleOutput>
-                            <configLocation>${checkstyle.config.location}</configLocation>
-                            <suppressionsLocation>${project.basedir}/checkstyle/suppressions.xml</suppressionsLocation>
+                            <configLocation>cloudbank/checkstyle/checkstyle.xml</configLocation>
+                            <suppressionsLocation>cloudbank/checkstyle/suppressions.xml</suppressionsLocation>
                             <failOnViolation>true</failOnViolation>
                             <violationSeverity>warning</violationSeverity>
                             <includeTestResources>true</includeTestResources>
@@ -159,20 +229,19 @@
                         </configuration>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.puppycrawl.tools</groupId>
-                        <artifactId>checkstyle</artifactId>
-                        <version>${checkstyle-version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
                 <version>${dependency-check-version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.example</groupId>
+                        <artifactId>buildtools</artifactId>
+                        <version>0.0.1-SNAPSHOT</version>
+                    </dependency>
+                </dependencies>
                 <configuration>
-                    <skip>${skip.dependency-check}</skip>
                     <skipTestScope>true</skipTestScope>
                     <failBuildOnCVSS>0</failBuildOnCVSS>
                     <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
@@ -182,7 +251,7 @@
                     </formats>
                     <suppressionFiles>
                         <suppressionFile>
-                            ${project.basedir}/dependency-check/dependency-check-suppression.xml</suppressionFile>
+                            cloudbank/dependency-check/suppressions.xml</suppressionFile>
                     </suppressionFiles>
                 </configuration>
             </plugin>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright (c) 2023, 2024, Oracle and/or its affiliates. -->
+<!-- Copyright (c) 2023, 2025, Oracle and/or its affiliates. -->
 <!-- Licensed under the Universal Permissive License v 1.0 as shown at
 https://oss.oracle.com/licenses/upl. -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -17,10 +17,6 @@ https://oss.oracle.com/licenses/upl. -->
     <description>Check Processing Application</description>
     <dependencies>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.oracle.database.spring</groupId>
             <artifactId>oracle-spring-boot-starter-aqjms</artifactId>
             <version>${oracle-springboot-starter.version}</version>
@@ -33,11 +29,6 @@ https://oss.oracle.com/licenses/upl. -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jdbc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.oracle.database.spring</groupId>
-            <artifactId>oracle-spring-boot-starter-ucp</artifactId>
-            <version>${oracle-springboot-starter.version}</version>
         </dependency>
         <dependency>
             <groupId>com.example</groupId>
