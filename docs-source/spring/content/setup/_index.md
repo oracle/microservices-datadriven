@@ -100,9 +100,15 @@ You must meet the following prerequisites to use Oracle Backend for Microservice
 - An Oracle Cloud Infrastructure (OCI) account in a tenancy with sufficient quota to create the following:
 
   - An OCI Container Engine for Kubernetes cluster (OKE cluster), plus a node pool with three worker nodes.
+
+    - Each node should have 2 OCPUs and 32 GB of RAM.
+    - 750GB of block volume storage with a `Balanced` performance level.
+
   - A virtual cloud network (VCN) with at least two public IP's available.
   - A public load balancer.
   - An Oracle Autonomous Database Serverless instance.
+
+    - The instance should have 2 ECPUs and 20GB storage and 20GB backup storage.
   
 - At least one free OCI auth token (note that the maximum is two per user).
 
@@ -113,6 +119,8 @@ You must meet the following prerequisites to use Oracle Backend for Microservice
   - Oracle Backend for Microservices and AI command-line interface (oractl). [Download oractl](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.4.0).
   - [OPTIONAL]Oracle Backend for Microservices and AI VS Code Extension. [Download VS Code Extension](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.4.0).
   - [OPTIONAL]Oracle Backend for Microservices and AI IntelliJ plugin. [Download VS Code Extension](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.4.0).
+
+You can use the [cost estimator for pricing](https://www.oracle.com/cloud/costestimator.html).
 
 ## OCI policies
 
