@@ -1,5 +1,4 @@
 alter session set container = freepdb1;
--- ALTER USER testuser QUOTA UNLIMITED ON USERS;
 
 -- Configure testuser with the necessary privileges to use Transactional Event Queues.
 grant aq_user_role to testuser;
@@ -7,7 +6,7 @@ grant execute on dbms_aq to testuser;
 grant execute on dbms_aqadm to testuser;
 grant execute ON dbms_aqin TO testuser;
 grant execute ON dbms_aqjms TO testuser;
--- grant execute on dbms_teqk to testuser;
+
 
 -- Create a Transactional Event Queue
 begin
