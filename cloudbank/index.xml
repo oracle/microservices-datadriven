@@ -3,7 +3,7 @@
   <channel>
     <title>CloudBank AI</title>
     <link>https://oracle.github.io/microservices-datadriven/cloudbank/index.html</link>
-    <description>Welcome to CloudBank AI - an on-demand, self-paced learning resource you can use to learn about developing microservices with Spring Boot and Spring Cloud Oracle and deploying, running and managing them with Oracle Backend for Microservices and AI.&#xA;You can follow through from beginning to end, or you can start at any module that you are interested in.&#xA;What you will need To complete the modules you will somewhere to run Oracle Backend for Microservices and AI. The instructions in the Module 1 provide three alternatives:</description>
+    <description>Welcome to CloudBank AI - an on-demand, self-paced learning resource you can use to learn about developing microservices with Spring Boot and Spring Cloud Oracle and deploying, running and managing them with Oracle Backend for Microservices and AI.&#xA;You can follow through from beginning to end, or you can start at any module that you are interested in.&#xA;What you will need To complete the modules you will somewhere to run Oracle Backend for Microservices and AI.</description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <atom:link href="https://oracle.github.io/microservices-datadriven/cloudbank/index.xml" rel="self" type="application/rss+xml" />

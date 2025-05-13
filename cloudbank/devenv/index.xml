@@ -40,14 +40,14 @@
       <link>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/oractl/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/oractl/index.html</guid>
-      <description>The Oracle Backend for Microservices and AI CLI (oractl) is used to configure your backend and to deploy your Spring Boot applications to the backend.&#xA;Download the Oracle Backend for Microservices and AI CLI&#xA;Download the CLI from here&#xA;Install the Oracle Backend for Microservices and AI CLI&#xA;To install the CLI, you just need to make sure it is executable and add it to your PATH environment variable.&#xA;chmod +x oractl export PATH=/path/to/oractl:$PATH NOTE: If environment is a Mac you need run the following command sudo xattr -r -d com.apple.quarantine &lt;downloaded-file&gt; otherwise will you get a security warning and the CLI will not work.</description>
+      <description>The Oracle Backend for Microservices and AI CLI (oractl) is used to configure your backend and to deploy your Spring Boot applications to the backend.&#xA;Download the Oracle Backend for Microservices and AI CLI&#xA;Download the CLI from here&#xA;Install the Oracle Backend for Microservices and AI CLI&#xA;To install the CLI, you just need to make sure it is executable and add it to your PATH environment variable.&#xA;chmod +x oractl export PATH=/path/to/oractl:$PATH NOTE: If environment is a Mac you need run the following command sudo xattr -r -d com.</description>
     </item>
     <item>
       <title>Install Kubectl and OCI CLI</title>
       <link>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/kubectl/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/kubectl/index.html</guid>
-      <description>In later labs, you will look various resources in the Kubernetes cluster and access some of them using port forwarding (tunneling). To do this, you will need to install kubectl on your machine, and since Oracle Container Engine for Kubernetes uses token based authentication for kubectl access, you will also need to install the OCI CLI so that kubectl can obtain the necessary token.&#xA;Install kubectl&#xA;Install kubectl from the Kubernetes website. Click on the link for your operating system and follow the instructions to complete the installation. As mentioned in the instructions, you can use this command to verify the installation, and you can ignore the warning since we are just checking the installation was successful (your output may be slightly different):</description>
+      <description>In later labs, you will look various resources in the Kubernetes cluster and access some of them using port forwarding (tunneling). To do this, you will need to install kubectl on your machine, and since Oracle Container Engine for Kubernetes uses token based authentication for kubectl access, you will also need to install the OCI CLI so that kubectl can obtain the necessary token.&#xA;Install kubectl&#xA;Install kubectl from the Kubernetes website.</description>
     </item>
     <item>
       <title>Configure Kubectl</title>
@@ -68,7 +68,7 @@
       <link>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/db-access/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/cloudbank/devenv/db-access/index.html</guid>
-      <description>The Oracle Backend for Microservices and AI includes an Oracle Database. An instance of an Oracle Autonomous Database (Shared) is created during installation.&#xA;To access the database from a local machine you need to download the wallet and configure SQLcl to use the downloaded wallet.&#xA;Download the Wallet Login into the OCI Console. Oracle Cloud&#xA;Navigate to Autonomous Transaction Processing.</description>
+      <description>The Oracle Backend for Microservices and AI includes an Oracle Database. An instance of an Oracle Autonomous Database (Shared) is created during installation.&#xA;To access the database from a local machine you need to download the wallet and configure SQLcl to use the downloaded wallet.&#xA;Download the Wallet Login into the OCI Console. Oracle Cloud&#xA;Navigate to Autonomous Transaction Processing.&#xA;Make sure that you have the right compartment selected and click on the database name.</description>
     </item>
     <item>
       <title>Install IDE Plugin</title>
