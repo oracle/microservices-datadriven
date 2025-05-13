@@ -26,7 +26,7 @@
       <link>https://oracle.github.io/microservices-datadriven/cloudbank/backend/database/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/cloudbank/backend/database/index.html</guid>
-      <description>Oracle Backend for Microservices and AI includes an Oracle Autonomous Database instance. You can manage and access the database from the OCI Console.&#xA;View details of the Oracle Autonomous Database&#xA;In the OCI Console, in the main (“hamburger”) menu navigate to the Oracle Database category and then Oracle Autonomous Database. Make sure you have the correct region selected (in the top right corner) and the compartment where you installed Oracle Backend for Microservices and AI (on the left hand side pull down list). You will a list of Oracle Autonomous Database instances (you will probably only have one):</description>
+      <description>Oracle Backend for Microservices and AI includes an Oracle Autonomous Database instance. You can manage and access the database from the OCI Console.&#xA;View details of the Oracle Autonomous Database&#xA;In the OCI Console, in the main (“hamburger”) menu navigate to the Oracle Database category and then Oracle Autonomous Database. Make sure you have the correct region selected (in the top right corner) and the compartment where you installed Oracle Backend for Microservices and AI (on the left hand side pull down list).</description>
     </item>
     <item>
       <title>Explore Spring Admin</title>
@@ -61,14 +61,14 @@
       <link>https://oracle.github.io/microservices-datadriven/cloudbank/backend/grafana/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/cloudbank/backend/grafana/index.html</guid>
-      <description>Grafana provides an easy way to access the metrics collected in the backend and to view them in dashboards. It can be used to monitor performance, as well as to identify and analyze problems and to create alerts.&#xA;Explore the pre-installed Spring Boot Dashboard&#xA;Get the password for the Grafana admin user using this command (your output will be different):&#xA;$ kubectl -n grafana get secret grafana -o jsonpath=&#39;{.data.admin-password}&#39; | base64 -d fusHDM7xdwJXyUM2bLmydmN1V6b3IyPVRUxDtqu7 Start the tunnel using this command. You can run this in the background if you prefer.</description>
+      <description>Grafana provides an easy way to access the metrics collected in the backend and to view them in dashboards. It can be used to monitor performance, as well as to identify and analyze problems and to create alerts.&#xA;Explore the pre-installed Spring Boot Dashboard&#xA;Get the password for the Grafana admin user using this command (your output will be different):&#xA;$ kubectl -n grafana get secret grafana -o jsonpath=&#39;{.data.admin-password}&#39; | base64 -d fusHDM7xdwJXyUM2bLmydmN1V6b3IyPVRUxDtqu7 Start the tunnel using this command.</description>
     </item>
     <item>
       <title>Explore Jaeger</title>
       <link>https://oracle.github.io/microservices-datadriven/cloudbank/backend/jaeger/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       <guid>https://oracle.github.io/microservices-datadriven/cloudbank/backend/jaeger/index.html</guid>
-      <description>Jaeger provides a way to view the distributed tracing information that is automatically collected by the backend. This allows you to follow requests from the entry point of the platform (the API Gateway) through any number of microservices, including database and messaging operations those services may perform.&#xA;View a trace&#xA;Start the tunnel using this command. You can run this in the background if you prefer.&#xA;$ kubectl -n observability port-forward svc/jaegertracing-query 16686 Open a web browser to http://localhost:16686 to view the Jaeger web user interface. It will appear similar to the image below.</description>
+      <description>Jaeger provides a way to view the distributed tracing information that is automatically collected by the backend. This allows you to follow requests from the entry point of the platform (the API Gateway) through any number of microservices, including database and messaging operations those services may perform.&#xA;View a trace&#xA;Start the tunnel using this command. You can run this in the background if you prefer.&#xA;$ kubectl -n observability port-forward svc/jaegertracing-query 16686 Open a web browser to http://localhost:16686 to view the Jaeger web user interface.</description>
     </item>
   </channel>
 </rss>

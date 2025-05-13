@@ -3,43 +3,43 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="height=device-height, width=device-width, initial-scale=1.0, minimum-scale=1.0">
-    <meta name="generator" content="Hugo 0.140.1">
+    <meta name="generator" content="Hugo 0.133.1">
     <meta name="generator" content="Relearn 7.1.1+ab4197f3113afa9a7d17bed69dbef6c0e75a4921">
     <meta name="description" content="Starting with the account service that you built in the previous lab, you will the JPA model and repository for the journal and some new endpoints.
 Create the Journal model
-Create a new Java file in src/main/java/com/example/accounts/model called Journal.java. In this class you can define the fields that make up the journal. Note that you created the Journal table in the previous lab. You will not use the lraId and lraState fields until a later lab. To simplify this lab, create an additional constructor that defaults those fields to suitable values. Your new class should look like this:">
+Create a new Java file in src/main/java/com/example/accounts/model called Journal.java. In this class you can define the fields that make up the journal. Note that you created the Journal table in the previous lab. You will not use the lraId and lraState fields until a later lab.">
     <meta name="author" content="">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Add Journal to the Account service :: CloudBank AI">
     <meta name="twitter:description" content="Starting with the account service that you built in the previous lab, you will the JPA model and repository for the journal and some new endpoints.
 Create the Journal model
-Create a new Java file in src/main/java/com/example/accounts/model called Journal.java. In this class you can define the fields that make up the journal. Note that you created the Journal table in the previous lab. You will not use the lraId and lraState fields until a later lab. To simplify this lab, create an additional constructor that defaults those fields to suitable values. Your new class should look like this:">
+Create a new Java file in src/main/java/com/example/accounts/model called Journal.java. In this class you can define the fields that make up the journal. Note that you created the Journal table in the previous lab. You will not use the lraId and lraState fields until a later lab.">
     <meta property="og:url" content="https://oracle.github.io/microservices-datadriven/cloudbank/check/update-account/index.html">
     <meta property="og:site_name" content="CloudBank AI">
     <meta property="og:title" content="Add Journal to the Account service :: CloudBank AI">
     <meta property="og:description" content="Starting with the account service that you built in the previous lab, you will the JPA model and repository for the journal and some new endpoints.
 Create the Journal model
-Create a new Java file in src/main/java/com/example/accounts/model called Journal.java. In this class you can define the fields that make up the journal. Note that you created the Journal table in the previous lab. You will not use the lraId and lraState fields until a later lab. To simplify this lab, create an additional constructor that defaults those fields to suitable values. Your new class should look like this:">
+Create a new Java file in src/main/java/com/example/accounts/model called Journal.java. In this class you can define the fields that make up the journal. Note that you created the Journal table in the previous lab. You will not use the lraId and lraState fields until a later lab.">
     <meta property="og:locale" content="en_us">
     <meta property="og:type" content="article">
     <meta property="article:section" content="Check Processing">
     <meta itemprop="name" content="Add Journal to the Account service :: CloudBank AI">
     <meta itemprop="description" content="Starting with the account service that you built in the previous lab, you will the JPA model and repository for the journal and some new endpoints.
 Create the Journal model
-Create a new Java file in src/main/java/com/example/accounts/model called Journal.java. In this class you can define the fields that make up the journal. Note that you created the Journal table in the previous lab. You will not use the lraId and lraState fields until a later lab. To simplify this lab, create an additional constructor that defaults those fields to suitable values. Your new class should look like this:">
+Create a new Java file in src/main/java/com/example/accounts/model called Journal.java. In this class you can define the fields that make up the journal. Note that you created the Journal table in the previous lab. You will not use the lraId and lraState fields until a later lab.">
     <meta itemprop="wordCount" content="1223">
     <title>Add Journal to the Account service :: CloudBank AI</title>
-    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1741199486" rel="icon" type="image/png">
-    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1741199486" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1741199486" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1741199486" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1741199486" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1741199486" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1741199486" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1741199486" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1741199486" rel="stylesheet"></noscript>
-    <link href="/microservices-datadriven/cloudbank/css/theme.css?1741199486" rel="stylesheet">
-    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1741199486" rel="stylesheet" id="R-variant-style">
-    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1741199486" rel="stylesheet" id="R-variant-chroma-style">
-    <link href="/microservices-datadriven/cloudbank/css/print.css?1741199486" rel="stylesheet" media="print">
-    <script src="/microservices-datadriven/cloudbank/js/variant.js?1741199486"></script>
+    <link href="/microservices-datadriven/cloudbank/images/favicon.png?1747144443" rel="icon" type="image/png">
+    <link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1747144443" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fontawesome-all.min.css?1747144443" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/nucleus.css?1747144443" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1747144443" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/auto-complete.css?1747144443" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/perfect-scrollbar.min.css?1747144443" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/fonts.css?1747144443" rel="stylesheet" media="print" onload="this.media='all';this.onload=null;"><noscript><link href="/microservices-datadriven/cloudbank/css/fonts.css?1747144443" rel="stylesheet"></noscript>
+    <link href="/microservices-datadriven/cloudbank/css/theme.css?1747144443" rel="stylesheet">
+    <link href="/microservices-datadriven/cloudbank/css/theme-zen-light.css?1747144443" rel="stylesheet" id="R-variant-style">
+    <link href="/microservices-datadriven/cloudbank/css/chroma-relearn-light.css?1747144443" rel="stylesheet" id="R-variant-chroma-style">
+    <link href="/microservices-datadriven/cloudbank/css/print.css?1747144443" rel="stylesheet" media="print">
+    <script src="/microservices-datadriven/cloudbank/js/variant.js?1747144443"></script>
     <script>
       window.relearn = window.relearn || {};
       window.relearn.relBasePath='..\/..';
@@ -59,6 +59,8 @@ Create a new Java file in src/main/java/com/example/accounts/model called Journa
       window.T_No_results_found = `No results found for "{0}"`;
       window.T_N_results_found = `{1} results found for "{0}"`;
     </script>
+  
+    
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-7HWQVTJ803"></script>
       <script>
         var doNotTrack = false;
@@ -73,6 +75,10 @@ Create a new Java file in src/main/java/com/example/accounts/model called Journa
           gtag('config', 'G-7HWQVTJ803');
         }
       </script>
+    
+  
+
+
   </head>
   <body class="mobile-support html" data-url="/microservices-datadriven/cloudbank/check/update-account/index.html">
     <div id="R-body" class="default-animation">
@@ -360,7 +366,7 @@ Create a new Java file in src/main/java/com/example/accounts/model called Journa
 <img src="https://oracle.github.io/microservices-datadriven/cloudbank//cloudbank-logo.png" height="100px">
         </div>
         <script>
-          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1741199486";
+          window.index_js_url="/microservices-datadriven/cloudbank/searchindex.en.js?1747144443";
         </script>
         <search><form action="/microservices-datadriven/cloudbank/search/index.html" method="get">
           <div class="searchbox default-animation">
@@ -373,12 +379,12 @@ Create a new Java file in src/main/java/com/example/accounts/model called Journa
         <script>
           var contentLangs=['en'];
         </script>
-        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1741199486" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1741199486" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1741199486" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1741199486" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1741199486" defer></script>
-        <script src="/microservices-datadriven/cloudbank/js/search.js?1741199486" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/auto-complete.js?1747144443" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.min.js?1747144443" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.stemmer.support.min.js?1747144443" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.multi.min.js?1747144443" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/lunr/lunr.en.min.js?1747144443" defer></script>
+        <script src="/microservices-datadriven/cloudbank/js/search.js?1747144443" defer></script>
       </div>
       <div id="R-homelinks" class="default-animation homelinks">
         <ul>
@@ -468,8 +474,8 @@ Create a new Java file in src/main/java/com/example/accounts/model called Journa
         </div>
       </div>
     </aside>
-    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1741199486" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1741199486" defer></script>
-    <script src="/microservices-datadriven/cloudbank/js/theme.js?1741199486" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/clipboard.min.js?1747144443" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/perfect-scrollbar.min.js?1747144443" defer></script>
+    <script src="/microservices-datadriven/cloudbank/js/theme.js?1747144443" defer></script>
   </body>
 </html>
