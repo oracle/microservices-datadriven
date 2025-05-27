@@ -6,7 +6,7 @@ spring:
     name: checks
   datasource:
     url: ${spring.datasource.url}
-    user: ${soring.datasource.username}
+    user: ${spring.datasource.username}
     password: ${spring.datasource.password}
     type: oracle.ucp.jdbc.PoolDataSource
     oracleucp:

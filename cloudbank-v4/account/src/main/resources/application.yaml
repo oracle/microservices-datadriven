@@ -26,7 +26,7 @@ spring:
 
   datasource:
     url: ${spring.datasource.url}
-    user: ${soring.datasource.username}
+    user: ${spring.datasource.username}
     password: ${spring.datasource.password}
     driver-class-name: oracle.jdbc.OracleDriver
     type: oracle.ucp.jdbc.PoolDataSource
