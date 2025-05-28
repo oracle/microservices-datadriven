@@ -5,6 +5,9 @@ spring:
   application:
     name: checks
   datasource:
+    url: ${spring.datasource.url}
+    user: ${spring.datasource.username}
+    password: ${spring.datasource.password}
     type: oracle.ucp.jdbc.PoolDataSource
     oracleucp:
       connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
