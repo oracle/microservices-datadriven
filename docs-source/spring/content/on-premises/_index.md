@@ -69,7 +69,7 @@ The application is defined in `ansible/vars/ebaas.yaml`. For example:
 ---
 ebaas_edition: "COMMUNITY"
 apisix_admin_password: "Correct-horse-Battery-staple-35"
-grafana_admin_password: "Correct-horse-Battery-staple-35"
+signoz_admin_password: "Correct-horse-Battery-staple-35"
 oractl_admin_password: "Correct-horse-Battery-staple-35"
 oractl_user_password: "Correct-horse-Battery-staple-35"
 ...

@@ -33,3 +33,7 @@ weight = 12
 name = "<i class='fa-fw fas fa-bullhorn'></i> Credits"
 url = "more/credits/"
 weight = 30
+
+[module]
+  [[module.imports]]
+    path = 'github.com/McShelby/hugo-theme-relearn'

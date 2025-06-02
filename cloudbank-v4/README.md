@@ -586,72 +586,40 @@ This is an example of the `customer32` application:
 
       ![Admin Server Dashboard](images/admin_server.png  " ")
 
-1. Check Jaeger dashboard
+2. Check the SigNoz Dashboard
 
-   1. Port forward
-
-      ```shell
-      kubectl -n observability port-forward svc/jaegertracing-query 16686
-      ```
-
-   1. Open [Jaeger Dashboard](http://localhost:16686) in a browser and verify that all services are registered
-
-      ![Jaeger Dashboard](images/jaeger.png  " ")
-
-   1. Choose `customer` Service and click *Find Traces*
-
-      ![Customer](images/j-traces.png  " ")
-
-1. Check the Grafana Dashboard
-
-   1, Get the *admin* password for Grafana
+   1. Get the *admin* email and password for SigNoz
 
       ```shell
-      kubectl get secret -n grafana grafana-dashboard-authn -o jsonpath='{.data.password}' | base64 -d
+      kubectl -n observability get secret signoz-authn -o jsonpath='{.data.email}' | base64 -d
+      kubectl -n observability get secret signoz-authn -o jsonpath='{.data.password}' | base64 -d
       ```
 
    1. Port forward
 
       ```shell
-      kubectl -n grafana port-forward svc/grafana 7070:80
+      kubectl -n observability port-forward svc/obaas-signoz-frontend 3301:3301
       ```
 
-   1. Open [Grafana Login](http://localhost:7070/grafana/) in a browser and login with the username *admin* and the password you have retrieved.
+   2. Open [SigNoz Login](http://localhost:3301/login) in a browser and login with the *admin* email and the password you have retrieved.
 
-      ![Grafana Login](images/grafana_login.png  " ")
+      ![SigNoz Login](images/signoz_login.png  " ")
 
-   1. Explore the pre-installed dashboards.
+   3. Explore the pre-installed dashboards.
 
-      ![Grafana](images/grafana-dashboard.png  " ")
+      ![SigNoz](images/signoz-dashboard.png  " ")
 
-1. Check Prometheus dashboard
+   4. Explore the traces view. Choose `customer` Service to view traces related to Customer microservice.
 
-   1. Port forward
+      ![Trace Explorer](images/traces.png  " ")
+      
+      Click any of the traces to expand its details.
 
-      ```shell
-      kubectl port-forward -n prometheus svc/prometheus 9090
-      ```
+      ![Customer](images/traces-expand.png  " ")
+   5. Explore the logs view. Choose `customer` Service to view logs related to Customer microservice.
 
-   1. Open [Prometheus Dashboard](http://localhost:9090)
+      ![Logs Explorer](images/logs.png  " ")
+      
+      Click any of the log lines to expand its details.
 
-      ![Prometheus Dashboard](images/prometheus.png  " ")
-
-   1. Select `application_ready_time_seconds` in the search bar and click *Execute*. You should get a table back with some data about the cloudbank application deployed.
-
-      ![Prometheus DAta](images/prom_data.png  " ")
-
-1. Check Hashicorp Vault dashboard (Development mode)
-
-   1. Port forward
-
-      ```shell
-      kubectl port-forward -n vault svc/vault 8200
-      ```
-
-   1. Open [Hashicorp Vault Login](https://localhost:8200) and login using the Token method with the `root`
-
-      ![Vault Login](images/vault_login.png  " ")
-
-   1. You should now see the Hashicorp Vault dashboard
-
-      ![Vault Dashboard](images/vault_dashboard.png  " ")
+      ![Customer](images/logs-expand.png  " ")

@@ -17,8 +17,7 @@ Oracle Backend for Microservices and AI provides the following services that app
 * Spring Cloud Config Server to serve externalized configuration information to applications. This stores the configuration data in the Oracle Autonomous Database instance associated with the backend.
 * Netflix Conductor OSS for running workflows to orchestrate your services.
 * Spring Admin for monitoring your services.
-* Prometheus and Grafana for collecting and visualizing metrics and for alerting.
-* Jaeger and Open Telemetry (OTEL) for distributed tracing. Applications deployed to the Oracle Backend for Microservices and AI may use Jaeger or OTEL for distributed tracing. See the [Environment Variables page](envvars) for variables that can be used.
+* SigNoz o for collecting and visualizing metrics, logs and traces.
 
 An integrated development environment is recommended for developing applications. Oracle recommends Visual Studio Code or IntelliJ.
 
