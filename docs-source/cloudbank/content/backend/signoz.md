@@ -8,13 +8,11 @@ SigNoz provides an easy way to access the logs, traces and metrics collected in 
 
 1. Explore the pre-installed Spring Boot Dashboard
 
-    Get the admin email and password for SigNoz using this command (your output could be different):
+    Get the admin email and password for SigNoz using this command:
 
     ```shell
     $ kubectl -n observability get secret signoz-authn -o jsonpath='{.data.email}' | base64 -d
-    admin@nodomain.com
     $ kubectl -n observability get secret signoz-authn -o jsonpath='{.data.password}' | base64 -d
-    3INgb%T63KM$HN
     ```
 
    Start the tunnel using this command.  You can run this in the background if you prefer.
