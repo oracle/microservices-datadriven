@@ -5,7 +5,7 @@ keywords: "vscode code visualstudio extension springboot spring development micr
 ---
 
 
-## GA 1.4.0 - Dec, 2024
+## GA 1.4.0 - June, 2024
 "Oracle Backend for Microservices and AI" is a VS Code extension to browse and deploy applications on the Oracle Backend for Microservices and AI platform. This plugin allows to inspect the content of an Oracle Backend for Microservices and AI deployment, in terms of applications, services and related configurations. It simplifies the access to the Platform Services installed, like Grafana, Spring, Apisix, Eureka and Jaeger creating ssh tunnels on-demand, and providing access to their respective web admin consoles. It allows to add credentials to access and bind services to the Oracle Autonomous DB included into Oracle Backend for Microservices and AI deployment. This plug-in replicates the functionalities available in [OBaas CLI](../../development/cli) and simplify the access to Oracle Backend for Microservices and AI deployments from a development IDE like VS Code.
 
 In this release has been removed the support for GraalVM compilation since a native app could be compiled externally and uploaded as possible in the past releases, and it has been added the datastore management and visualization.
@@ -69,11 +69,11 @@ services, you cannot browse resources included in the Oracle Backend for Microse
 
    ![Credentials](./images/credentials.jpg)
 
-2. Specify the **OB4MAI User ID** for the Oracle Backend for Microservices and AI user for deployment. For example:
+2. Specify the **OBaaS User ID** for the Oracle Backend for Microservices and AI user for deployment. For example:
 
    ![Credentials](./images/admin.jpg)
 
-3. On the top menu, the Oracle Backend for Microservices and AI administrator **OB4MAI User Password** is required. For example:
+3. On the top menu, the Oracle Backend for Microservices and AI administrator **OBaaS User Password** is required. For example:
 
    ![Credentials](./images/password.jpg)
 
@@ -101,6 +101,7 @@ You see four top classes of resources that can be expanded in underlying items:
 * **namespaces** : The list of namespaces deployed and holding services.
 * **platform services** : The list of Oracle Backend for Microservices and AI deployed services, like Grafana, Spring, Apache APISIX, Eureka and Jaeger.
 * **configuration** : The list of keys defined by the applications, stored in the Oracle Database, that are provisioned and available to share configurations information among services in each application.
+* **platform images**: the list of container images deployed and available.
 
 ## Namespaces
 
@@ -162,7 +163,7 @@ Choosing this item menu, selecting a single application, the parameters will be 
 
 1. **Image Version** (Default: `0.0.1`)
 
-1. **Java image** (Default: `ghcr.io/oracle/graalvm-native-image-obaas:21`)
+1. **Java image** (Default: `ghcr.io/oracle/openjdk-image-obaas:21`)
 
 1. **Add Health probe? : [True]/[False]** (Default: `True`)
 
@@ -179,6 +180,10 @@ At the end of the parameters collection, a process, that includes the .jar/nativ
 If successful, going with mouse cursor on each workload, you will get details about the workload, like shown in this snapshot:
 
 ![Workload details create](./images/datastorecreate.jpg)
+
+Hoovering over the workload you can access to its details:
+
+![Workload details](./images/servicedetails.jpg)
 
 #### Bind workload
 
@@ -289,11 +294,11 @@ The **platformServices** option can be expanded to show the services available i
 right-click on the symbol to open an `ssh` tunnel to the service, on a specific local port that is automatically chosen. A link opens in the
 default web browser for the administrator console of each platform service.
 
-   ![Apisix](./images/grafana.jpg)
+   ![Apisix](./images/signoz.jpg)
 
-For example, by right-clicking on **Grafana Console**, a tunnel will be opened with a message holding a button to open a web browser on the administrator's Grafana console. For example:
+For example, by right-clicking on **SigNoz Console**, a tunnel will be opened with a message holding a button to open a web browser on the administrator's Grafana console. For example:
 
-   ![GrafanaWeb](./images/grafana-browser.jpg)
+   ![GrafanaWeb](./images/signoz-browser.jpg)
 
 The **Apisix Console** shows one more command compared with the others, the **create tunnel to apisix engine**,  that allows you to open a tunnel to the engine, that is listening on a different port than the console. This enable the **Publish workload** command available on each service.
 
