@@ -12,7 +12,7 @@ TxEventQ provides [administrative views](https://docs.oracle.com/en/database/ora
 
 ## Oracle Database Metrics Exporter
 
-[The Oracle Database Metrics Exporter](https://github.com/oracle/oracle-db-appdev-monitoring) can be configured to export metrics about TxEventQ, providing access to the real-time broker, producer, and consumer metrics in a Grafana dashboard that allows teams to receive alerts for issues and understand the state of their system.
+[The Oracle Database Metrics Exporter](https://github.com/oracle/oracle-db-appdev-monitoring) can be configured to export metrics about TxEventQ, providing access to the real-time broker, producer, and consumer metrics in a SigNoz dashboard that allows teams to receive alerts for issues and understand the state of their system.
 
 ## Performance Tuning
 

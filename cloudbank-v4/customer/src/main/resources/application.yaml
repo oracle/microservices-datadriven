@@ -1,16 +1,12 @@
-# Copyright (c) 2023, Oracle and/or its affiliates. 
+# Copyright (c) 2023, 2025, Oracle and/or its affiliates. 
 # Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/ 
 spring:
   application:
     name: customer
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.OracleDialect
-        format_sql: true
-    show-sql: true
+  cloud:
+    config:
+      import-check:
+        enabled: false
     
   liquibase:
     change-log: classpath:db/changelog/controller.yaml
@@ -21,7 +17,7 @@ spring:
     
   datasource:
     url: ${spring.datasource.url}
-    username: ${spring.datasource.username}
+    user: ${spring.datasource.username}
     password: ${spring.datasource.password}
     driver-class-name: oracle.jdbc.OracleDriver
     type: oracle.ucp.jdbc.PoolDataSource

@@ -33,6 +33,8 @@ main:
         ref: "/platform/microtx"
       - name: Vault
         ref: "/platform/vault"
+      - name: Kafka
+        ref: "/platform/kafka"
       - name: VS Code plugin
         ref: "/platform/vscode-plugin"
       - name: IntelliJ plugin

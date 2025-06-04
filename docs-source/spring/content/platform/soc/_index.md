@@ -15,9 +15,6 @@ resources:
   - name: soc-manage-workloads
     src: "soc-manage-workloads.png"
     title: "SOC Manage Workloads screen"
-  - name: soc-grafana-link
-    src: "soc-grafana-link.png"
-    title: "Grafana Dashboard for Workload"
   - name: soc-manage-identity
     src: "soc-manage-identity.png"
     title: "SOC Manage Identity screen"
@@ -120,9 +117,7 @@ Oracle Backend for Microservices and AI includes "ServiceOps Center". The Servic
 
 - View details about the configuration and health of the environment
 - Manage and deploy workloads/microservices deployed in the environment
-- Easy one-click access to Grafana dashboards for applications
 - Manage users and roles defined in the Authorization Server included in the environment
-- Easy one-click access to Grafana dashboards for the Kubernetes cluster, the applications and the Oracle Database
 - Collect diagnostic data for support
 
 **Note:** More capabilities will be added to this feature in future releases.
@@ -265,7 +260,6 @@ The ServiceOps Center Dashboard provides information about the overall state of 
 - The version and platform the environment is running on
 - The configuration and sizing of the Kubernetes cluster
 - The configuration and sizing of the Database instance
-- Easy one-click access to Grafana dashboards to see detailed status of the Kubernetes cluster and Database instance
 - The overall system health status
 - How many applications are deployed in the environment
 
@@ -318,17 +312,6 @@ the status of each workload, and how many replicas are currently running and des
 {{< img name="soc-manage-workloads" size="medium" lazy=false >}}
 
 <!-- spellchecker-enable -->
-
-You can click on the "open" link in the Dashboard column to open the Spring Boot Statistics Grafana dashboard for any workload listed in the table. Note that you may need to authenticate to Grafana the first time.
-
-<!-- spellchecker-disable -->
-
-{{< img name="soc-grafana-link" size="medium" lazy=false >}}
-
-<!-- spellchecker-enable -->
-
-More details of this dashboard can be found [here](../../observability/metrics/#spring-boot-statistics).
-
 
 #### Create Workload
 
@@ -431,7 +414,6 @@ The Overview section on the Workload details page contains basic details of the 
 - Name of the workload
 - Image
 - Ports exposed by the workload
-- Link to the Spring Boot Statistics Grafana dashboard for the workload
 - Spring profile
 - Status of Health Probe
 - CPU Resource request

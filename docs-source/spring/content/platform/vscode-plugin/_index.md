@@ -99,7 +99,7 @@ When the steps to create the tunnel are completed and you are connected to the b
 You see four top classes of resources that can be expanded in underlying items:
 
 * **namespaces** : The list of namespaces deployed and holding services.
-* **platform services** : The list of Oracle Backend for Microservices and AI deployed services, like Grafana, Spring, Apache APISIX, Eureka and Jaeger.
+* **platform services** : The list of Oracle Backend for Microservices and AI deployed services, like SigNoz, Spring, Apache APISIX and Eureka.
 * **configuration** : The list of keys defined by the applications, stored in the Oracle Database, that are provisioned and available to share configurations information among services in each application.
 * **platform images**: the list of container images deployed and available.
 
