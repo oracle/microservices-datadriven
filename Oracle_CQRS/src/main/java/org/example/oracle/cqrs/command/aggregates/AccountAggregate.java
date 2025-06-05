@@ -37,45 +37,8 @@ public class AccountAggregate {
 
     @JmsListener(destination = "${txeventq.queue.commands.name}", id = "sampleCommand")
     void handleCommand(BaseCommand command) {
-
-        BaseEvent event;
-
-        switch (command) {
-            case CreateAccountCommand createAccountCommand -> {
-                System.out.println("Handling create: " + command);
-                if (createAccountCommand.getInitialBalance() < 0)
-                    throw new IllegalArgumentException("Initial balance is negative");
-
-                event = new AccountCreatedEvent(UUID.randomUUID().toString(), createAccountCommand.getInitialBalance(), createAccountCommand.getCurrency(), AccountStatus.CREATED, createAccountCommand.getAccountId());
-
-            }
-            case DebitAccountCommand debitAccountCommand -> {
-                System.out.println("Handling debit: " + command);
-                if (debitAccountCommand.getAmount() < 0) throw new IllegalArgumentException("Amount is negative");
-
-                event = new AccountDebitedEvent(UUID.randomUUID().toString(), debitAccountCommand.getAccountId(), debitAccountCommand.getCurrency(), debitAccountCommand.getAmount());
-
-
-            }
-            case CreditAccountCommand creditAccountCommand -> {
-                System.out.println("Handling debit: " + command);
-                if (creditAccountCommand.getAmount() < 0) throw new IllegalArgumentException("Amount is negative");
-
-                event = new AccountCreditedEvent(UUID.randomUUID().toString(), creditAccountCommand.getCurrency(), creditAccountCommand.getAmount(), creditAccountCommand.getAccountId());
-
-
-            }
-            case UpdateAccountStatusCommand updateAccountStatusCommand -> {
-                System.out.println("Handling debit: " + command);
-                event = new AccountStatusUpdatedEvent(UUID.randomUUID().toString(), updateAccountStatusCommand.getAccountStatus(), updateAccountStatusCommand.getAccountId());
-
-            }
-
-            default -> throw new IllegalStateException("Unexpected value: " + command);
-        }
-
+        BaseEvent event = command.createEvent();
         eventProducer.enqueue(event);
         eventStoreRepository.save(event);
-
     }
 }
