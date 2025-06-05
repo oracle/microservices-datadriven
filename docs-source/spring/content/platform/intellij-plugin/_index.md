@@ -168,7 +168,7 @@ To access the web console of an Oracle Backend for Microservices and AI platform
 
 Once the connection is complete, click the "Open console" link on the completion message to navigate to the service's web console.
 
-![grafana-connect](./images/grafana-connect.png)
+![service-connect](./images/service-connect.png)
 
 ## Configuration Properties
 
