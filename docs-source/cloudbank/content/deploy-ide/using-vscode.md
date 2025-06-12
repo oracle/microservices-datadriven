@@ -89,7 +89,7 @@ weight = 3
     You'll see four top classes of resources that can be exploded in underlying items:
     * **applications**: the list of applications deployed and the services holding
     * **Oracle DB**: in this release we have one Database in which are stored configuration and schema related to services deployed
-    * **platformServices**: the list of Oracle Backend for Microservices and AI deployed services, like Grafana, Spring, Apisix, Eureka and Jaeger.
+    * **platformServices**: the list of Oracle Backend for Microservices and AI deployed services, like SigNoz, Spring, Apisix and Eureka.
     * **oBaasConf**: the list of keys defined by application, stored in the ADB provisioned and available to share configuration information among services in each application.
 
     Let's go to show the operations you can do on each item of browse tree.

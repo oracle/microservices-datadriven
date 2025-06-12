@@ -12,7 +12,7 @@ General updates.
 
 Oracle Backend for Microservices and AI (OBaaS) is an IntelliJ plugin to browse, deploy, and modify workloads on the Oracle Backend for Microservices and AI platform.This plug-in implements the functionalities available in the [Oracle Backend for Microservices and AI CLI](../../development/cli), simplifying  access to Oracle Backend for Microservices and AI deployments from an IntelliJ IDE. 
 
-The plug-in allows access to the Oracle Backend for Microservices and AI platform services, including the Grafana, Spring, APISIX, Eureka and Jaeger web admin consoles. Additionally, you may create and bind workloads to your  Oracle Backend for Microservices and AI database deployment. Users may inspect Oracle Backend for Microservices and AI deployment namespaces, workloads, and related configuration.
+The plug-in allows access to the Oracle Backend for Microservices and AI platform services, including the SigNoz, Spring, APISIX and Eureka web admin consoles. Additionally, you may create and bind workloads to your  Oracle Backend for Microservices and AI database deployment. Users may inspect Oracle Backend for Microservices and AI deployment namespaces, workloads, and related configuration.
 
 See the Oracle Free Use Terms and Conditions [License](https://oss.oracle.com/licenses/upl/)
 
@@ -162,13 +162,13 @@ A workload can be published on an APISIX route by right-clicking the workload, p
 
 ## Accessing Oracle Backend for Microservices and AI Platform Services
 
-To access the web console of an Oracle Backend for Microservices and AI platform service (Grafana, Spring Admin, APISIX, Eureka, or Jaeger), right-click on the service's name under the "platform services" section and click "Connect".
+To access the web console of an Oracle Backend for Microservices and AI platform service (SigNoz, Spring Admin, APISIX, or Eureka), right-click on the service's name under the "platform services" section and click "Connect".
 
 ![platform-services](./images/platform-services.png)
 
 Once the connection is complete, click the "Open console" link on the completion message to navigate to the service's web console.
 
-![grafana-connect](./images/grafana-connect.png)
+![service-connect](./images/service-connect.png)
 
 ## Configuration Properties
 

@@ -44,10 +44,8 @@ Infrastructure (OCI) Container Engine for Kubernetes cluster (OKE cluster):
 - [Oracle AI Explorer for Apps](platform/aiexpforapps/)
 - [Apache APISIX API Gateway and Dashboard](platform/apigw/)
 - [Apache Kafka](https://kafka.apache.org/)
-- [Grafana](observability/metrics/)
-- [Jaeger](observability/tracing/)
+- [SigNoz](observability/signoz/)
 - [Apache Kafka](https://kafka.apache.org)
-- Loki
 - [Netflix Conductor](platform/conductor/)
 - [OpenTelemetry Collector](observability/tracing/)
 - [Oracle Autonomous Database Serverless](database/)
@@ -57,8 +55,6 @@ Infrastructure (OCI) Container Engine for Kubernetes cluster (OKE cluster):
 - [Oracle Database Operator for Kubernetes (OraOperator or the operator)](https://github.com/oracle/oracle-database-operator)
 - [Oracle Database Observability Exporter](https://github.com/oracle/oracle-db-appdev-monitoring)
 - [Oracle Transaction Manager for Microservices (MicroTx)](platform/microtx/)
-- [Prometheus](observability/metrics/)
-- Promtail
 - [Spring Boot Admin dashboard](platform/spring-admin/)
 - [Spring Cloud Config server](platform/config/)
 - [Spring Cloud Eureka service registry](platform/eureka/)
