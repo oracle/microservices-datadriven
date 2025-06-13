@@ -4,7 +4,10 @@ package org.example.oracle.cqrs.query.controller;
 import org.example.oracle.cqrs.query.entities.Account;
 import org.example.oracle.cqrs.query.repositories.AccountRepository;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
