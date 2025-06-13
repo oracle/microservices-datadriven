@@ -1,6 +1,7 @@
 package org.example.oracle.cqrs.command.commands;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.example.oracle.cqrs.common.events.AccountDebitedEvent;
 import org.example.oracle.cqrs.common.events.BaseEvent;
 

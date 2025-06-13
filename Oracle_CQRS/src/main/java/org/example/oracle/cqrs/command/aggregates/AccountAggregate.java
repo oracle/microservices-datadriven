@@ -1,8 +1,8 @@
 package org.example.oracle.cqrs.command.aggregates;
 
 import jakarta.transaction.Transactional;
-import lombok.*;
 
+import lombok.Getter;
 import org.example.oracle.cqrs.command.commands.*;
 import org.example.oracle.cqrs.common.events.*;
 import org.example.oracle.cqrs.command.producers.EventProducer;

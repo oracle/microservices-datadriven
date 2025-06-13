@@ -1,13 +1,15 @@
 package org.example.oracle.cqrs.command.commands;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.example.oracle.cqrs.common.enums.AccountStatus;
 import org.example.oracle.cqrs.common.events.AccountCreatedEvent;
 import org.example.oracle.cqrs.common.events.BaseEvent;
 
 import java.util.UUID;
 
-@Getter @NoArgsConstructor
+@Getter
+@NoArgsConstructor
 public class CreateAccountCommand extends BaseCommand<String> {
     private double initialBalance;
     private String currency;
