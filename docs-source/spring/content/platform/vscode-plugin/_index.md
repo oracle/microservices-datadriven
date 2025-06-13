@@ -6,7 +6,7 @@ keywords: "vscode code visualstudio extension springboot spring development micr
 
 
 ## GA 1.4.0 - Dec, 2024
-"Oracle Backend for Microservices and AI" is a VS Code extension to browse and deploy applications on the Oracle Backend for Microservices and AI platform. This plugin allows to inspect the content of an Oracle Backend for Microservices and AI deployment, in terms of applications, services and related configurations. It simplifies the access to the Platform Services installed, like Grafana, Spring, Apisix, Eureka and Jaeger creating ssh tunnels on-demand, and providing access to their respective web admin consoles. It allows to add credentials to access and bind services to the Oracle Autonomous DB included into Oracle Backend for Microservices and AI deployment. This plug-in replicates the functionalities available in [OBaas CLI](../../development/cli) and simplify the access to Oracle Backend for Microservices and AI deployments from a development IDE like VS Code.
+"Oracle Backend for Microservices and AI" is a VS Code extension to browse and deploy applications on the Oracle Backend for Microservices and AI platform. This plugin allows to inspect the content of an Oracle Backend for Microservices and AI deployment, in terms of applications, services and related configurations. It simplifies the access to the Platform Services installed, like SigNoz, Spring, Apisix and Eureka creating ssh tunnels on-demand, and providing access to their respective web admin consoles. It allows to add credentials to access and bind services to the Oracle Autonomous DB included into Oracle Backend for Microservices and AI deployment. This plug-in replicates the functionalities available in [OBaas CLI](../../development/cli) and simplify the access to Oracle Backend for Microservices and AI deployments from a development IDE like VS Code.
 
 In this release has been removed the support for GraalVM compilation since a native app could be compiled externally and uploaded as possible in the past releases, and it has been added the datastore management and visualization.
 
@@ -99,7 +99,7 @@ When the steps to create the tunnel are completed and you are connected to the b
 You see four top classes of resources that can be expanded in underlying items:
 
 * **namespaces** : The list of namespaces deployed and holding services.
-* **platform services** : The list of Oracle Backend for Microservices and AI deployed services, like Grafana, Spring, Apache APISIX, Eureka and Jaeger.
+* **platform services** : The list of Oracle Backend for Microservices and AI deployed services, like SigNoz, Spring, Apache APISIX and Eureka.
 * **configuration** : The list of keys defined by the applications, stored in the Oracle Database, that are provisioned and available to share configurations information among services in each application.
 
 ## Namespaces

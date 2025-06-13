@@ -87,6 +87,15 @@ resources:
 Oracle Backend for Microservices and AI is available in the [OCI Marketplace](https://cloudmarketplace.oracle.com/marketplace/en_US/listing/138899911).
 
 - [Prerequisites](#prerequisites)
+- [OCI policies](#oci-policies)
+  - [Oracle Container Engine for Kubernetes](#oracle-container-engine-for-kubernetes)
+  - [VCN](#vcn)
+  - [Container Registry](#container-registry)
+  - [Object Storage](#object-storage)
+  - [Autonomous Database](#autonomous-database)
+  - [Vault](#vault)
+    - [Additional Vault](#additional-vault)
+  - [Oracle Resource Manager](#oracle-resource-manager)
 - [Summary of Components](#summary-of-components)
 - [Overview of the Setup Process](#overview-of-the-setup-process)
 - [Set Up the OCI Environment](#set-up-the-oci-environment)
@@ -100,9 +109,15 @@ You must meet the following prerequisites to use Oracle Backend for Microservice
 - An Oracle Cloud Infrastructure (OCI) account in a tenancy with sufficient quota to create the following:
 
   - An OCI Container Engine for Kubernetes cluster (OKE cluster), plus a node pool with three worker nodes.
+
+    - Each node should have 2 OCPUs and 32 GB of RAM.
+    - 750GB of block volume storage with a `Balanced` performance level.
+
   - A virtual cloud network (VCN) with at least two public IP's available.
   - A public load balancer.
   - An Oracle Autonomous Database Serverless instance.
+
+    - The instance should have 2 ECPUs and 20GB storage and 20GB backup storage.
   
 - At least one free OCI auth token (note that the maximum is two per user).
 
@@ -113,6 +128,8 @@ You must meet the following prerequisites to use Oracle Backend for Microservice
   - Oracle Backend for Microservices and AI command-line interface (oractl). [Download oractl](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.4.0).
   - [OPTIONAL]Oracle Backend for Microservices and AI VS Code Extension. [Download VS Code Extension](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.4.0).
   - [OPTIONAL]Oracle Backend for Microservices and AI IntelliJ plugin. [Download VS Code Extension](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.4.0).
+
+You can use the [cost estimator for pricing](https://www.oracle.com/cloud/costestimator.html).
 
 ## OCI policies
 
@@ -213,19 +230,14 @@ Oracle Backend for Microservices and AI setup installs the following components.
 | cert-manager                 | 1.12.3        | Automates the management of certificates.                                                   |
 | Coherence Operator           | 3.3.5        | Provides in-memory data grid.                                                               |
 | Conductor Server             | 3.13.8        | Provides a Microservice orchestration platform.                                             |
-| Grafana                      | 11.1.4         | Provides the tool to examine, analyze, and monitor metrics.                                 |
-| Jaeger Tracing               | 1.53.0        | Provides distributed tracing system for monitoring and troubleshooting distributed systems. |
 | Kube State Metrics | 2.10.1 | Collects metrics for the Kubernetes cluster     |
-| Loki                         | 2.6.1     | Provides log aggregation and search. |
 | Metrics server | 0.7.0  | Source of container resource metrics for Kubernetes built-in autoscaling pipeline |
 | NGINX Ingress Controller     | 1.10.1         | Provides traffic management solution for cloud‑native applications in Kubernetes.           |
 | OpenTelemetry Collector      | 0.107.0        | Collects process and export telemetry data.                                                 |
 | Oracle Database Observability Exporter | 1.3.1 | Exposes Oracle Database metrics in standard Prometheus format.                            |
 | Oracle Database Operator     | 1.1.0          | Helps reduce the time and complexity of deploying and managing Oracle databases.            |
 | Oracle Transaction Manager for Microservices | 24.2.1 | Manages distributed transactions to ensure consistency across Microservices.       |
-| Prometheus                   | 2.52.0        | Provides event monitoring and alerts.                                                       |
-| Prometheus Operator          | 0.74.0        | Provides management for Prometheus monitoring tools.                                        |
-| Promtail                     | 2.8.2     | Collects logs.                       |
+| SigNoz                     | 0.73.0     | Observability stack and Dashboards for logs, metrics and tracing.                       |
 | Spring Authorization Server  | 3.3.3  | Provides authentication and authorization for applications. |
 | Spring Boot Admin server     | 3.3.3         | Manages and monitors Spring Cloud applications.                                             |
 | Spring Cloud Config server   | 4.1.3      | Provides server-side support for an externalized configuration.                             |
@@ -283,7 +295,7 @@ To set up the OCI environment, process these steps:
 1. If you check the checkbox *Set Administrator Passwords* in the **Administrator Passwords** section you have the option to fill in the following passwords (if not they are autogenerated):
 
    - `APISIX Administrator Password` (optional) : Leave blank to auto-generate.
-   - `Grafana Administrator Password` (optional) : Leave blank to auto-generate.
+   - `SigNoz Administrator Password` (optional) : Leave blank to auto-generate.
    - `ORACTL Administrator Password` optional) : Leave blank to auto-generate. This is the password for the `obaas-admin` user.
    - `ORACTL User Password` (optional) : Leave blank to auto-generate. This is the password for the `obaas-user` user.
    - `Alertmanager Administrator Password` (optional) : Leave blank to auto-generate. This is the admin password for the alertmanager.
