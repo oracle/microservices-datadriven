@@ -1,6 +1,11 @@
 package org.example.oracle.cqrs.command.commands;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.example.oracle.cqrs.common.events.AccountDebitedEvent;
+import org.example.oracle.cqrs.common.events.BaseEvent;
+
+import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
@@ -16,4 +21,11 @@ public class DebitAccountCommand extends BaseCommand<String> {
         this.currency = currency;
     }
 
+    @Override
+    public BaseEvent createEvent() {
+        System.out.println("Handling debit: " + this);
+        if (amount < 0) throw new IllegalArgumentException("Amount is negative");
+        return new AccountDebitedEvent(UUID.randomUUID().toString(), accountId, currency, amount);
+
+    }
 }
