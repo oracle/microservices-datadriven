@@ -45,6 +45,8 @@ main:
         ref: "/platform/dbexporter"
       - name: Database Operator
         ref: "/platform/dboperator"
+      - name: Secrets Operator
+        ref: "/platform/extsecrets"
   - name: Observability
     ref: "/observability"
     sub:
