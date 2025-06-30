@@ -39,7 +39,7 @@ main:
         ref: "/platform/vscode-plugin"
       - name: IntelliJ plugin
         ref: "/platform/intellij-plugin"
-      - name: AI Explorer for Apps
+      - name: Oracle AI Optimizer and Toolkit
         ref: "/platform/aiexpforapps"
       - name: Database Exporter
         ref: "/platform/dbexporter"
