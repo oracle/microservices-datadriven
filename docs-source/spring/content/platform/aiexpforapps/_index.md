@@ -7,11 +7,11 @@ keywords: "support backend oracle ai toolkit microservices oracle vector databas
 
 Oracle Backend for Microservices and AI Version 1.4.0 introduces [Oracle AI Optimizer and Toolkit](https://github.com/oracle-samples/ai-optimizer).  
 
-The Oracle AI Optimizer and Toolkit provides a streamlined environment where developers and data scientists can explore the potential of Generative Artificial Intelligence (GenAI) combined with Retrieval-Augmented Generation (RAG) capabilities. By integrating Oracle Database 23ai AI Vector Search, the Sandbox enables users to enhance existing Large Language Models (LLMs) through RAG.
+The Oracle AI Optimizer and Toolkit provides a streamlined environment where developers and data scientists can explore the potential of Generative Artificial Intelligence (GenAI) combined with Retrieval-Augmented Generation (RAG) capabilities. By integrating Oracle Database 23ai AI Vector Search, the Oracle AI Optimizer and Toolkit enables users to enhance existing Large Language Models (LLMs) through RAG.
 
 It provides a n environment for experimentation and iteration, allowing you to easily optimize a chatbot/RAG use case by exploring different models, chunking strategies, vector similarity algorithms, prompts, model parameters, memory, re-ranking, and evaluation.  
 
-![AI Microservices Sandbox](./ai-microservices-sandbox.png)
+![Oracle AI Optimizer and Toolkit](./ai-microservices-sandbox.png)
 
 For more information please visit:
 
