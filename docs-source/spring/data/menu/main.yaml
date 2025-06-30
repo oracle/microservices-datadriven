@@ -41,6 +41,8 @@ main:
         ref: "/platform/intellij-plugin"
       - name: AI Explorer for Apps
         ref: "/platform/aiexpforapps"
+      - name: Database Exporter
+        ref: "/platform/dbexporter"
   - name: Observability
     ref: "/observability"
     sub:
