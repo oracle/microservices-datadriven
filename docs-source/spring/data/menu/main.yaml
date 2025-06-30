@@ -43,6 +43,8 @@ main:
         ref: "/platform/aiexpforapps"
       - name: Database Exporter
         ref: "/platform/dbexporter"
+      - name: Database Operator
+        ref: "/platform/dboperator"
   - name: Observability
     ref: "/observability"
     sub:
