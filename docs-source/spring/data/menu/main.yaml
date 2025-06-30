@@ -44,10 +44,8 @@ main:
   - name: Observability
     ref: "/observability"
     sub:
-      - name: Metrics
-        ref: "/observability/metrics"
-      - name: Tracing
-        ref: "/observability/tracing"
+      - name: Signoz
+        ref: "/observability/signoz"
   - name: Security
     ref: "/security"
     sub:
