@@ -39,15 +39,19 @@ main:
         ref: "/platform/vscode-plugin"
       - name: IntelliJ plugin
         ref: "/platform/intellij-plugin"
-      - name: AI Explorer for Apps
+      - name: Oracle AI Optimizer and Toolkit
         ref: "/platform/aiexpforapps"
+      - name: Database Exporter
+        ref: "/platform/dbexporter"
+      - name: Database Operator
+        ref: "/platform/dboperator"
+      - name: Secrets Operator
+        ref: "/platform/extsecrets"
   - name: Observability
     ref: "/observability"
     sub:
-      - name: Metrics
-        ref: "/observability/metrics"
-      - name: Tracing
-        ref: "/observability/tracing"
+      - name: Signoz
+        ref: "/observability/signoz"
   - name: Security
     ref: "/security"
     sub:

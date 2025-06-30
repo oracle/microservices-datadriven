@@ -4,29 +4,9 @@ description: "Release notes for Oracle Backend for Microservices and AI includin
 keywords: "release notes additions updates deprecations removals springboot spring development microservices development oracle backend"
 ---
 
-## Version 1.4.0, March XX, 2025
+## Version 1.4.0, July, 2025
 
-This release adds:
-
-- Support for AWS deployment.
-
-This release removes the following components:
-
-- Prometheus Operator
-- Hashicorp Vault
-
-This release have an updated backend API and CLI. This means that the REST API and CLI calls are changed since the previous release.See the documentation.
-
-The following components were updated:
-
-| Component                                             | New Version   | Replaced Version    |
-|-------------------------------------------------------|---------------|---------------------|
-| Spring Boot 3.3.6 and Spring Cloud 2023.0.4 | | |
-
-In addition this release have:
-
-- Improved IntelliJ plugin and VSCode extension.
-- Updates to the ServiceOps Center
+TBD
 
 ## Version 1.3.1, October 23rd, 2024
 
