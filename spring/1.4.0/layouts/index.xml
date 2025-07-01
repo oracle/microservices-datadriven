@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Layouts on Oracle Backend for Microservices and AI</title>
+    <link>http://localhost:1313/microservices-datadriven/spring/layouts/</link>
+    <description>Recent content in Layouts on Oracle Backend for Microservices and AI</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="http://localhost:1313/microservices-datadriven/spring/layouts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title></title>
+      <link>http://localhost:1313/microservices-datadriven/spring/layouts/partial/menu/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/microservices-datadriven/spring/layouts/partial/menu/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>
