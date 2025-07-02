@@ -4,29 +4,45 @@ description: "Release notes for Oracle Backend for Microservices and AI includin
 keywords: "release notes additions updates deprecations removals springboot spring development microservices development oracle backend"
 ---
 
-## Version 1.4.0, March XX, 2025
+## Version 1.4.0, July, 2025
 
-This release adds:
+This release includes the following changes:
 
-- Support for AWS deployment.
+- Helidon 4.2.x is added as a first-class citizen for applications, alongside Spring Boot.
+- SigNoz replaces the Grafana observability stack.  SigNoz is OpenTelemetry native and has an enterprise-friendly open-source license.  It provides observability capabilities including metrics, logs, tracing, dashboards, and alerts.
+- Spring Boot upgraded to 3.4.x and Spring Cloud x.x.x for internal components.
 
-This release removes the following components:
+The following components were added:
 
-- Prometheus Operator
-- Hashicorp Vault
-
-This release have an updated backend API and CLI. This means that the REST API and CLI calls are changed since the previous release.See the documentation.
+| Component                                             |  Version   |  Description |
+|-------------------------------------------------------|------------|--------------|
+| SigNoz | 0.75.0 | Provides OpenTelemetry native observability. |
+| External Secrets Operator | x | x |
 
 The following components were updated:
 
 | Component                                             | New Version   | Replaced Version    |
 |-------------------------------------------------------|---------------|---------------------|
-| Spring Boot 3.3.6 and Spring Cloud 2023.0.4 | | |
+| TBA | x | x |
 
-In addition this release have:
+{{< hint type=[warning] icon=gdoc_fire title="Deprecation Notice" >}}
+The following components are deprecated and were removed in this release:
 
-- Improved IntelliJ plugin and VSCode extension.
-- Updates to the ServiceOps Center
+- Grafana
+- Prometheus
+- Prometheus Operator
+- Loki
+- Promtail
+- Alert Manager
+- Jaeger Tracing
+- Hashicorp Vault
+
+The following components are deprecated and will be removed in a future this release:
+
+- ServiceOps Center UI (SOC UI)
+- Oracle Backend for Microservices and AI Visual Studio Code extension
+- Oracle Backend for Microservices and AI IntelliJ plugin
+{{< /hint >}}
 
 ## Version 1.3.1, October 23rd, 2024
 

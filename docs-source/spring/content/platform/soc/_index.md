@@ -120,7 +120,9 @@ Oracle Backend for Microservices and AI includes "ServiceOps Center". The Servic
 - Manage users and roles defined in the Authorization Server included in the environment
 - Collect diagnostic data for support
 
-**Note:** More capabilities will be added to this feature in future releases.
+{{< hint type=[warning] icon=gdoc_fire title="Deprecation Notice" >}}
+This component is deprecated in the 1.4.0 release and will be removed in a future release.
+{{< /hint >}}
 
 - [Accessing ServiceOps Center](#accessing-serviceops-center)
 - [Login Screen](#login-screen)
