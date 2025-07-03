@@ -6,7 +6,43 @@ keywords: "release notes additions updates deprecations removals springboot spri
 
 ## Version 1.4.0, July, 2025
 
-TBD
+This release includes the following changes:
+
+- Helidon 4.2.x is added as a first-class citizen for applications, alongside Spring Boot.
+- SigNoz replaces the Grafana observability stack.  SigNoz is OpenTelemetry native and has an enterprise-friendly open-source license.  It provides observability capabilities including metrics, logs, tracing, dashboards, and alerts.
+- Spring Boot upgraded to 3.4.x and Spring Cloud x.x.x for internal components.
+
+The following components were added:
+
+| Component                                             |  Version   |  Description |
+|-------------------------------------------------------|------------|--------------|
+| SigNoz | 0.75.0 | Provides OpenTelemetry native observability. |
+| External Secrets Operator | x | x |
+
+The following components were updated:
+
+| Component                                             | New Version   | Replaced Version    |
+|-------------------------------------------------------|---------------|---------------------|
+| TBA | x | x |
+
+{{< hint type=[warning] icon=gdoc_fire title="Deprecation Notice" >}}
+The following components are deprecated and were removed in this release:
+
+- Grafana
+- Prometheus
+- Prometheus Operator
+- Loki
+- Promtail
+- Alert Manager
+- Jaeger Tracing
+- Hashicorp Vault
+
+The following components are deprecated and will be removed in a future this release:
+
+- ServiceOps Center UI (SOC UI)
+- Oracle Backend for Microservices and AI Visual Studio Code extension
+- Oracle Backend for Microservices and AI IntelliJ plugin
+{{< /hint >}}
 
 ## Version 1.3.1, October 23rd, 2024
 

@@ -1,0 +1,6 @@
+#Helidon Project Configuration
+#Wed Jun 18 10:11:56 EDT 2025
+schema.version=1.1.0
+helidon.version=4.2.3
+project.flavor=mp
+project.archetype=quickstart
