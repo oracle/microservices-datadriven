@@ -44,6 +44,11 @@
             <!-- <scope>provided</scope>  -->
         </dependency>
         <dependency>
+            <groupId>io.helidon.integrations.eureka</groupId>
+            <artifactId>helidon-integrations-eureka</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
             <groupId>io.helidon.integrations.cdi</groupId>
             <artifactId>helidon-integrations-cdi-jpa</artifactId>
             <scope>runtime</scope> 
