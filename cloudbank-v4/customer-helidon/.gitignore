@@ -34,3 +34,5 @@ nb-configuration.xml
 .classpath
 .factorypath
 
+# OCA
+.oca/*
