@@ -4,8 +4,7 @@ description: "Command Line Interface for Oracle Backend for Microservices and AI
 keywords: "cli tool deployment spring springboot microservices development oracle backend"
 ---
 
-The Oracle Backend for Microservices and AI offers a command-line interface (CLI), `oractl`. The CLI commands simplify the deployment of
-microservices applications as well as bindings with the resources that they use. Download the CLI [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.3.1). The platform-specific binary can be renamed to `oractl` for convenience.
+The Oracle Backend for Microservices and AI offers a command-line interface (CLI), `oractl`. The CLI commands simplify the deployment of microservices applications as well as bindings with the resources that they use.Download the CLI [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.4.0). The platform-specific binary can be renamed to `oractl` for convenience.
 
 Table of Contents:
 
@@ -115,14 +114,14 @@ Oracle Backend for Microservices and AI CLI is used to configure your backend an
     As a result, the `oractl` prompt is displayed as follows:
 
     ```text
-       _   _           __    _    ___
+        _   _           __    _    ___
        / \ |_)  _.  _. (_    /  |   |
        \_/ |_) (_| (_| __)   \_ |_ _|_
        ========================================================================================
        Application Name: Oracle Backend Platform :: Command Line Interface
        Application Version: (1.4.0)
-       :: Spring Boot (v3.3.8) ::
-
+       :: Spring Boot (v3.5.4) :: 
+       
        Ask for help:
        - Slack: https://oracledevs.slack.com/archives/C06L9CDGR6Z
        - email: obaas_ww@oracle.com
@@ -198,19 +197,19 @@ image create --namespace application --workload transfer --imageVersion 0.0.1
 Create a workload for the images
 
 ```shell
-workload create --namespace application --imageVersion 0.0.1 --id account --liquibaseDB admin --cpuRequest 100m
+workload create --namespace application --imageVersion 0.0.1 --id account --liquibaseDB admin --cpuRequest 100m --framework SPRING_BOOT
 workload create --namespace application --imageVersion 0.0.1 --id checks --cpuRequest 100m
-workload create --namespace application --imageVersion 0.0.1 --id customer --liquibaseDB admin --cpuRequest 100m
-workload create --namespace application --imageVersion 0.0.1 --id creditscore --cpuRequest 100m
-workload create --namespace application --imageVersion 0.0.1 --id transfer --cpuRequest 100m
+workload create --namespace application --imageVersion 0.0.1 --id customer --liquibaseDB admin --cpuRequest 100m --framework SPRING_BOOT
+workload create --namespace application --imageVersion 0.0.1 --id creditscore --cpuRequest 100m --framework SPRING_BOOT
+workload create --namespace application --imageVersion 0.0.1 --id transfer --cpuRequest 100m --framework SPRING_BOOT
 ```
 
 Create a binding between the workload and the datastore
 
 ```shell
-binding create --namespace application --datastore account --workload account
-binding create --namespace application --datastore customer --workload customer
-binding create --namespace application --datastore account --workload checks
+binding create --namespace application --datastore account --workload account --framework SPRING_BOOT
+binding create --namespace application --datastore customer --workload customer --framework SPRING_BOOT
+binding create --namespace application --datastore account --workload checks --framework SPRING_BOOT
 ```
 
 Verify success
@@ -673,7 +672,7 @@ NAME
        binding create - Create a binding in a given namespace.
 
 SYNOPSIS
-       binding create [--namespace String] [--workload String] [--datastore String] --help 
+       binding create [--namespace String] [--workload String] [--datastore String] [--framework String]--help 
 
 OPTIONS
        --namespace String
@@ -688,6 +687,10 @@ OPTIONS
        The datastore id.
        [Mandatory]
 
+       --framework String
+       The workload framework. Must be SPRING_BOOT or HELIDON
+       [Mandatory]
+
        --help or -h 
        help for binding create
        [Optional]
@@ -696,15 +699,13 @@ OPTIONS
 For example:
 
 ```bind
-oractl:>binding create --namespace myapp --workload accounts --datastore mydatastore
+oractl:>binding create --namespace myapp --workload accounts --datastore mydatastore --framework SPRING_BOOT
 obaas-cli [binding create]: Binding [accounts] was successfully created.
 ```
 
 ### binding list
 
 ```bash
-oractl:>binding create --namespace myapp --workload accounts --datastore mydatastore
-obaas-cli [binding create]: Binding [accounts] was successfully created.
 oractl:>help binding list
 NAME
        binding list - Lists bindings for a given namespace.
@@ -726,11 +727,19 @@ For example:
 
 ```bash
 oractl:>binding list --namespace myapp
-╔════════╤═══════════╗
-║Workload│Datastore  ║
-╠════════╪═══════════╣
-║accounts│mydatastore║
-╚════════╧═══════════╝
+╔════════════════╤═════════╤═══════════╗
+║Workload        │Datastore│Framework  ║
+╠════════════════╪═════════╪═══════════╣
+║account         │account  │SPRING_BOOT║
+╟────────────────┼─────────┼───────────╢
+║checks          │account  │SPRING_BOOT║
+╟────────────────┼─────────┼───────────╢
+║customer        │customer │SPRING_BOOT║
+╟────────────────┼─────────┼───────────╢
+║testrunner      │account  │SPRING_BOOT║
+╟────────────────┼─────────┼───────────╢
+║customer-helidon│customer │HELIDON.   ║
+╚════════════════╧═════════╧═══════════╝
 ```
 
 ### binding get
@@ -761,11 +770,11 @@ For example:
 
 ```bash
 oractl:>binding get --namespace myapp --workload account
-╔════════╤═══════════╗
-║Workload│Datastore  ║
-╠════════╪═══════════╣
-║account │mydatastore║
-╚════════╧═══════════╝
+╔════════╤═════════╤═══════════╗
+║Workload│Datastore│Framework  ║
+╠════════╪═════════╪═══════════╣
+║account │account  │SPRING_BOOT║
+╚════════╧═════════╧═══════════╝
 ```
 
 ### binding update
@@ -776,7 +785,7 @@ NAME
        binding update - Update a specific binding for a given namespace.
 
 SYNOPSIS
-       binding update [--namespace String] [--workload String] [--datastore String] --help 
+       binding update [--namespace String] [--workload String] [--datastore String] [--framework String] --help 
 
 OPTIONS
        --namespace String
@@ -791,6 +800,10 @@ OPTIONS
        The datastore id.
        [Mandatory]
 
+       --framework String
+       The workload framework. Must be SPRING_BOOT or HELIDON
+       [Mandatory]
+
        --help or -h 
        help for binding update
        [Optional]
@@ -799,7 +812,7 @@ OPTIONS
 For example:
 
 ```bash
-oractl:>binding update --namespace myapp --workload account --datastore newdatastore
+oractl:>binding update --namespace myapp --workload account --datastore newdatastore --framework SPRING_BOOT
 obaas-cli [binding update]: Binding [account] was successfully updated.
 ```
 
@@ -1777,7 +1790,7 @@ NAME
        workload create - Create a workload in a given namespace.
 
 SYNOPSIS
-       workload create [--namespace String] [--id String] --profile String [--imageVersion String] --cpuRequest String --port int --addHealthProbe boolean --liquibaseDB String --initialReplicas int --help 
+       workload create [--namespace String] [--id String] --profile String [--imageVersion String] --cpuRequest String --port int --addHealthProbe boolean --liquibaseDB String --initialReplicas int --help --framework
 
 OPTIONS
        --namespace String
@@ -1816,6 +1829,10 @@ OPTIONS
        Initial workload replicas.
        [Optional, default = 1]
 
+       --framework String
+       The workload framework. Must be SPRING_BOOT or HELIDON
+       [Mandatory]
+
        --help or -h 
        help for workload create
        [Optional]
@@ -1852,12 +1869,22 @@ For example:
 
 ```bash
 oractl:>workload list --namespace myapp
-╔════════╤════════╤═══════╤══════════╤════╤══════════════╤═══════════════╤═══════════╗
-║Workload│Workload│Profile│CPURequest│Port│addHealthProbe│initialReplicas│liquibaseDB║
-║ID      │Version │       │          │    │              │               │           ║
-╠════════╪════════╪═══════╪══════════╪════╪══════════════╪═══════════════╪═══════════╣
-║account │1.1.0   │obaas  │500m      │8080│false         │1              │           ║
-╚════════╧════════╧═══════╧══════════╧════╧══════════════╧═══════════════╧═══════════╝
+╔═══════════╤════════╤═══════╤══════════╤════╤══════════════╤═══════════════╤═══════════╤═══════════╗
+║Workload ID│Workload│Profile│CPURequest│Port│addHealthProbe│initialReplicas│liquibaseDB│Framework  ║
+║           │Version │       │          │    │              │               │           │           ║
+╠═══════════╪════════╪═══════╪══════════╪════╪══════════════╪═══════════════╪═══════════╪═══════════╣
+║account    │0.0.1   │obaas  │100m      │8080│false         │1              │admin      │SPRING_BOOT║
+╟───────────┼────────┼───────┼──────────┼────┼──────────────┼───────────────┼───────────┼───────────╢
+║checks     │0.0.1   │obaas  │100m      │8080│false         │1              │           │SPRING_BOOT║
+╟───────────┼────────┼───────┼──────────┼────┼──────────────┼───────────────┼───────────┼───────────╢
+║creditscore│0.0.1   │obaas  │100m      │8080│false         │1              │           │SPRING_BOOT║
+╟───────────┼────────┼───────┼──────────┼────┼──────────────┼───────────────┼───────────┼───────────╢
+║customer   │0.0.1   │obaas  │100m      │8080│false         │1              │admin      │SPRING_BOOT║
+╟───────────┼────────┼───────┼──────────┼────┼──────────────┼───────────────┼───────────┼───────────╢
+║testrunner │0.0.1   │obaas  │100m      │8080│false         │1              │           │SPRING_BOOT║
+╟───────────┼────────┼───────┼──────────┼────┼──────────────┼───────────────┼───────────┼───────────╢
+║transfer   │0.0.1   │obaas  │100m      │8080│false         │1              │           │SPRING_BOOT║
+╚═══════════╧════════╧═══════╧══════════╧════╧══════════════╧═══════════════╧═══════════╧═══════════╝
 ```
 
 ### workload get
@@ -1888,12 +1915,12 @@ For example:
 
 ```bash
 oractl:>workload get --namespace myapp --id account
-╔════════╤════════╤═══════╤══════════╤════╤══════════════╤═══════════════╤═══════════╗
-║Workload│Workload│Profile│CPURequest│Port│addHealthProbe│initialReplicas│liquibaseDB║
-║ID      │Version │       │          │    │              │               │           ║
-╠════════╪════════╪═══════╪══════════╪════╪══════════════╪═══════════════╪═══════════╣
-║account │1.1.0   │obaas  │500m      │8080│false         │1              │           ║
-╚════════╧════════╧═══════╧══════════╧════╧══════════════╧═══════════════╧═══════════╝
+╔════════╤════════╤═══════╤══════════╤════╤══════════════╤═══════════════╤═══════════╤═══════════╗
+║Workload│Workload│Profile│CPURequest│Port│addHealthProbe│initialReplicas│liquibaseDB│Framework  ║
+║ID      │Version │       │          │    │              │               │           │           ║
+╠════════╪════════╪═══════╪══════════╪════╪══════════════╪═══════════════╪═══════════╪═══════════╣
+║account │0.0.1   │obaas  │100m      │8080│false         │1              │admin      │SPRING_BOOT║
+╚════════╧════════╧═══════╧══════════╧════╧══════════════╧═══════════════╧═══════════╧═══════════╝
 ```
 
 ### workload update
@@ -1943,6 +1970,10 @@ OPTIONS
        Initial workload replicas.
        [Optional]
 
+       --framework String
+       The workload framework. Must be SPRING_BOOT or HELIDON
+       [Mandatory]
+
        --help or -h 
        help for workload update
        [Optional]
@@ -1951,7 +1982,7 @@ OPTIONS
 For example:
 
 ```bash
-oractl:>workload update --namespace myapp --id account --imageVersion 1.1.0 --addHealthProbe true
+oractl:>workload update --namespace myapp --id account --imageVersion 1.1.0 --addHealthProbe true --framework SPRING_BOOT
 obaas-cli [workload update]: Workload [account] was successfully updated.
 ```
 
