@@ -15,17 +15,17 @@ image create --namespace application --workload creditscore --imageVersion 0.0.1
 image create --namespace application --workload testrunner --imageVersion 0.0.1 --baseImage ghcr.io/oracle/openjdk-image-obaas:21
 image create --namespace application --workload transfer --imageVersion 0.0.1 --baseImage ghcr.io/oracle/openjdk-image-obaas:21
 
-binding create --namespace application --datastore account --workload account
-binding create --namespace application --datastore customer --workload customer
-binding create --namespace application --datastore account --workload checks
-binding create --namespace application --datastore account --workload testrunner
+binding create --namespace application --datastore account --workload account --framework SPRING_BOOT
+binding create --namespace application --datastore customer --workload customer --framework SPRING_BOOT
+binding create --namespace application --datastore account --workload checks --framework SPRING_BOOT
+binding create --namespace application --datastore account --workload testrunner --framework SPRING_BOOT
 
-workload create --namespace application --imageVersion 0.0.1 --id account --liquibaseDB admin --cpuRequest 100m
-workload create --namespace application --imageVersion 0.0.1 --id checks --cpuRequest 100m
-workload create --namespace application --imageVersion 0.0.1 --id customer --liquibaseDB admin --cpuRequest 100m
-workload create --namespace application --imageVersion 0.0.1 --id creditscore --cpuRequest 100m
-workload create --namespace application --imageVersion 0.0.1 --id testrunner --cpuRequest 100m
-workload create --namespace application --imageVersion 0.0.1 --id transfer --cpuRequest 100m
+workload create --namespace application --imageVersion 0.0.1 --id account --liquibaseDB admin --cpuRequest 100m --framework SPRING_BOOT
+workload create --namespace application --imageVersion 0.0.1 --id checks --cpuRequest 100m --framework SPRING_BOOT
+workload create --namespace application --imageVersion 0.0.1 --id customer --liquibaseDB admin --cpuRequest 100m --framework SPRING_BOOT
+workload create --namespace application --imageVersion 0.0.1 --id creditscore --cpuRequest 100m --framework SPRING_BOOT
+workload create --namespace application --imageVersion 0.0.1 --id testrunner --cpuRequest 100m --framework SPRING_BOOT
+workload create --namespace application --imageVersion 0.0.1 --id transfer --cpuRequest 100m --framework SPRING_BOOT
 
 serverversion
 namespace list
