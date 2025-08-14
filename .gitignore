@@ -520,3 +520,7 @@ package*
 # GraalVM stuff
 *.nib
 docs-source/**/public
+
+# OCA
+.oca/
+.oca/*

@@ -224,7 +224,6 @@ Oracle Backend for Microservices and AI setup installs the following components.
 
 | Component                    | Version       | Description                                                                                 |
 |------------------------------|---------------|---------------------------------------------------------------------------------------------|
-| Alertmanager | v0.067.1 | Alertmanager |
 | Apache APISIX                | 3.9.1         | Provides full lifecycle API management.                                                     |
 | Apache Kafka                 | 3.8.0 | Provides distributed event streaming.                                                       |
 | cert-manager                 | 1.12.3        | Automates the management of certificates.                                                   |
@@ -237,7 +236,7 @@ Oracle Backend for Microservices and AI setup installs the following components.
 | Oracle Database Observability Exporter | 1.3.1 | Exposes Oracle Database metrics in standard Prometheus format.                            |
 | Oracle Database Operator     | 1.1.0          | Helps reduce the time and complexity of deploying and managing Oracle databases.            |
 | Oracle Transaction Manager for Microservices | 24.2.1 | Manages distributed transactions to ensure consistency across Microservices.       |
-| SigNoz                     | 0.73.0     | Observability stack and Dashboards for logs, metrics and tracing.                       |
+| SigNoz                     | 0.75.0     | Observability stack and Dashboards for logs, metrics and tracing.                       |
 | Spring Authorization Server  | 3.3.3  | Provides authentication and authorization for applications. |
 | Spring Boot Admin server     | 3.3.3         | Manages and monitors Spring Cloud applications.                                             |
 | Spring Cloud Config server   | 4.1.3      | Provides server-side support for an externalized configuration.                             |
@@ -298,8 +297,7 @@ To set up the OCI environment, process these steps:
    - `SigNoz Administrator Password` (optional) : Leave blank to auto-generate.
    - `ORACTL Administrator Password` optional) : Leave blank to auto-generate. This is the password for the `obaas-admin` user.
    - `ORACTL User Password` (optional) : Leave blank to auto-generate. This is the password for the `obaas-user` user.
-   - `Alertmanager Administrator Password` (optional) : Leave blank to auto-generate. This is the admin password for the alertmanager.
-
+   
       <!-- spellchecker-disable -->
       {{< img name="oci-stack-passwords" size="large" lazy=false >}}
       <!-- spellchecker-enable -->
@@ -370,22 +368,6 @@ To set up the OCI environment, process these steps:
       <!-- spellchecker-enable -->
 
     > For more information on the *Bring Your Own Database* option for the Oracle Backend for Microservices and AI including the required values, please review the [Database](../infrastructure/database) documentation.
-
-1. (*Standard Edition Only*) If you check the checkbox *Enable Vault in Production Mode* in the section **Vault Options** you will be installing HashiCorp in **Production** mode otherwise the HashiCorp Vault be installed in **Development** mode.
-
-    Fill in the following Vault options. You have the option of creating a new OCI Vault or using an existing OCI Vault. The OCI Vault is only used in **Production** mode to auto-unseal the HashiCorp Vault (see documentation ...) Fill in the following information if you want to use an existing OCI Vault:
-
-   - `Vault Compartment (Optional)` : Select a compartment for the OCI Vault.
-   - `Existing Vault (Optional)` : Select an existing OCI Vault. If not selected a new OCI Vault be created.
-   - `Existing Vault Key (Optional)` : Select an existing OCI Vault key. If not selected a new OCI Vault Key will be created.
-
-      <!-- spellchecker-disable -->
-      {{< img name="oci-stack-vault-options" size="large" lazy=false >}}
-      <!-- spellchecker-enable -->
-
-   {{< hint type=[warning] icon=gdoc_check title=Warning >}}
-   **Never** run a **Development** mode HashiCorp Vault Server in a production environment. It is insecure and will lose data on every restart (since it stores data in-memory). It is only intended for development or experimentation.
-   {{< /hint >}}
 
 1. (*Standard Edition Only*) If you check the checkbox *Enable Container Registry Vulnerability Scanning* in the section **Additional Options** you will enable the automatic Vulnerability Scanning on images stored in the Oracle Container Registry.
 
@@ -472,7 +454,7 @@ To set up the local machine, process these steps:
 
 1. Install the Oracle Backend for Microservices and AI command-line.
 
-   The Oracle Backend for Microservices and AI command-line interface, `oractl`, is available for Linux and Mac systems. Download the binary that you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.3.1) page and add it to your PATH environment variable. You can rename the binary to remove the suffix.
+   The Oracle Backend for Microservices and AI command-line interface, `oractl`, is available for Linux and Mac systems. Download the binary that you want from the [Releases](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.4.0) page and add it to your PATH environment variable. You can rename the binary to remove the suffix.
 
    If your environment is a Linux or Mac machine, run `chmod +x` on the downloaded binary. Also, if your environment is a Mac, run the following command. Otherwise, you get a security warning and the CLI does not work:
 

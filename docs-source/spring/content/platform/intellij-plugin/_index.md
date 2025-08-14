@@ -4,6 +4,10 @@ description: "IntelliJ Plugin for Oracle Backend for Microservices and AI"
 keywords: "intellij plugin ide springboot spring development microservices development oracle backend"
 ---
 
+{{< hint type=[warning] icon=gdoc_fire title="Deprecation Notice" >}}
+This component is deprecated in the 1.4.0 release and will be removed in a future release.
+{{< /hint >}}
+
 ## GA 1.4.0 - July, 2025
 
 General Updates.
@@ -31,7 +35,7 @@ See the Oracle Free Use Terms and Conditions [License](https://oss.oracle.com/li
 
 ## Installation
 
-1. Download the IntelliJ plugin ZIP file from [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.3.1).
+1. Download the IntelliJ plugin ZIP file from [here](https://github.com/oracle/microservices-datadriven/releases/tag/OBAAS-1.4.0).
 
 2. On the IntelliJ Settings plugins page, click the "gear" icon and select **Install Plugin from Disk...**. Browse your filesystem for the IntelliJ plugin ZIP file, and select it.
 

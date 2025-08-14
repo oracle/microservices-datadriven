@@ -27,3 +27,52 @@ To access the Eureka web user interface, process these steps:
     <!-- spellchecker-enable -->
 
     On the dashboard you will see all the internal services registered with Eureka. If you have deployed the sample application [CloudBank](https://github.com/oracle/microservices-datadriven/tree/main/cloudbank-v4) or done the [LiveLab for Oracle Backend for Microservices and AI](https://bit.ly/cloudbankAI) you will see those services.
+
+## Enable a Spring boot application for Eureka
+
+To Spring boot application you need to add the following dependency
+
+```xml
+<dependency>
+    <groupId>org.springframework.cloud</groupId>
+    <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+</dependency>
+```
+
+And to configure the application to register with Eureka add the following to the `application.yaml` file:
+
+```yaml
+eureka:
+  instance:
+    hostname: ${spring.application.name}
+    preferIpAddress: true
+  client:
+    service-url:
+      defaultZone: ${eureka.service-url}
+    fetch-registry: true
+    register-with-eureka: true
+    enabled: true
+```
+
+## Enable a Helidon application for Eureka
+
+To Spring boot application you need to add the following dependency
+
+```xml
+<dependency>
+    <groupId>io.helidon.integrations.eureka</groupId>
+    <artifactId>helidon-integrations-eureka</artifactId>
+    <scope>runtime</scope>
+</dependency>
+```
+
+And to configure the application to register with Eureka add the following to the `aaplication.yaml` file:
+
+```properties
+server.features.eureka.enabled=true
+server.features.eureka.instance.name=${eureka.instance.hostname}
+server.features.eureka.client.base-uri=${eureka.client.service-url.defaultZone}
+server.features.eureka.client.register-with-eureka=true
+server.features.eureka.client.fetch-registry=true
+server.features.eureka.instance.preferIpAddress=true
+```

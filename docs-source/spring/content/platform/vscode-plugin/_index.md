@@ -4,9 +4,13 @@ description: "Visual Studio Code extension for Oracle Backend for Microservices 
 keywords: "vscode code visualstudio extension springboot spring development microservices development oracle backend"
 ---
 
-
 ## GA 1.4.0 - Dec, 2024
+
 "Oracle Backend for Microservices and AI" is a VS Code extension to browse and deploy applications on the Oracle Backend for Microservices and AI platform. This plugin allows to inspect the content of an Oracle Backend for Microservices and AI deployment, in terms of applications, services and related configurations. It simplifies the access to the Platform Services installed, like SigNoz, Spring, Apisix and Eureka creating ssh tunnels on-demand, and providing access to their respective web admin consoles. It allows to add credentials to access and bind services to the Oracle Autonomous DB included into Oracle Backend for Microservices and AI deployment. This plug-in replicates the functionalities available in [OBaas CLI](../../development/cli) and simplify the access to Oracle Backend for Microservices and AI deployments from a development IDE like VS Code.
+
+{{< hint type=[warning] icon=gdoc_fire title="Deprecation Notice" >}}
+This component is deprecated in the 1.4.0 release and will be removed in a future release.
+{{< /hint >}}
 
 In this release has been removed the support for GraalVM compilation since a native app could be compiled externally and uploaded as possible in the past releases, and it has been added the datastore management and visualization.
 
@@ -333,7 +337,6 @@ You can process the following operations:
 
 * **Delete key** : Right-click on a selected key to delete it.
 
-
 ## GA 1.3.1 - October, 2024
 
 General updates.
@@ -342,4 +345,4 @@ General updates.
 
 General updates.
 
-**(C) 2023,2024, Oracle and/or its affiliates**
+**(C) 2023, 2024, 2025 Oracle and/or its affiliates**
