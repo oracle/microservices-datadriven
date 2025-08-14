@@ -8,6 +8,14 @@ keywords: "intellij plugin ide springboot spring development microservices devel
 This component is deprecated in the 1.4.0 release and will be removed in a future release.
 {{< /hint >}}
 
+## GA 1.4.0 - July, 2025
+
+General Updates.
+
+{{< hint type=[warning] icon=gdoc_fire title="IntelliJ Version" >}}
+The IntelliJ plugin is supported with IntelliJ version IntelliJ IDEA 2024.3.6 and earlier versions. Version 2025.x will not work.
+{{< /hint >}}
+
 ## GA 1.3.1 - October, 2024
 
 General updates.
