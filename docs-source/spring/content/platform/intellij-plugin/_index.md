@@ -4,10 +4,6 @@ description: "IntelliJ Plugin for Oracle Backend for Microservices and AI"
 keywords: "intellij plugin ide springboot spring development microservices development oracle backend"
 ---
 
-{{< hint type=[warning] icon=gdoc_fire title="Deprecation Notice" >}}
-This component is deprecated in the 1.4.0 release and will be removed in a future release.
-{{< /hint >}}
-
 ## GA 1.3.1 - October, 2024
 
 General updates.
