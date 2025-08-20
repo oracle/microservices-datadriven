@@ -1,3 +1,4 @@
+#pwd: Welcome1234##
 bind --service-name account
 bind --service-name checks --username account
 bind --service-name customer
