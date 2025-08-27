@@ -31,7 +31,7 @@ The following components were updated:
 | Spring Eureka Service Registry | 4.3.0 | 4.1.3 |
 | Oracle Database Observability Exporter | 2.0.2| 1.3.1 |
 | Oracle Transaction Manager for Microservices | 23.4.2 | 24.4.1 |
-| Strimzi-Apache Kafka operator	| 0.45.1 | 0.43.0 |
+| Strimzi-Apache Kafka operator | 0.45.1 | 0.43.0 |
 
 {{< hint type=[warning] icon=gdoc_fire title="Deprecation Notice" >}}
 The following components are deprecated and were removed in this release:
