@@ -2,9 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://oracle.github.io/microservices-datadriven/spring/observability/tracing/</loc>
-  </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/platform/apigw/</loc>
+  </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/platform/kafka/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/security/azn-server/</loc>
   </url><url>
@@ -26,19 +26,17 @@
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/platform/eureka/</loc>
   </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/platform/extsecrets/</loc>
+  </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/get-help/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/getting-started/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/infrastructure/gpu/</loc>
   </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/spring/platform/vault/</loc>
-  </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/infrastructure/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/infrastructure/kubernetes/</loc>
-  </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/spring/observability/metrics/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/platform/microtx/</loc>
   </url><url>
@@ -48,17 +46,15 @@
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/observability/</loc>
   </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/platform/aiexpforapps/</loc>
+  </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/platform/intellij-plugin/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/platform/vscode-plugin/</loc>
   </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/spring/starters/aqjms/</loc>
-  </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/spring/starters/ucp/</loc>
-  </url><url>
-    <loc>https://oracle.github.io/microservices-datadriven/spring/starters/wallet/</loc>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/platform/dboperator/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/starters/</loc>
   </url><url>
@@ -80,6 +76,8 @@
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/setup/</loc>
   </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/observability/signoz/</loc>
+  </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/platform/spring-admin/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/platform/config/</loc>
@@ -87,6 +85,8 @@
     <loc>https://oracle.github.io/microservices-datadriven/spring/tags/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/get-help/troubleshooting/</loc>
+  </url><url>
+    <loc>https://oracle.github.io/microservices-datadriven/spring/platform/dbexporter/</loc>
   </url><url>
     <loc>https://oracle.github.io/microservices-datadriven/spring/uninstall/</loc>
   </url><url>
