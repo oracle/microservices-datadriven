@@ -4,26 +4,34 @@ description: "Release notes for Oracle Backend for Microservices and AI includin
 keywords: "release notes additions updates deprecations removals springboot spring development microservices development oracle backend"
 ---
 
-## Version 1.4.0, July, 2025
+## Version 1.4.0, August, 2025
 
 This release includes the following changes:
 
 - Helidon 4.2.x is added as a first-class citizen for applications, alongside Spring Boot.
-- SigNoz replaces the Grafana observability stack.  SigNoz is OpenTelemetry native and has an enterprise-friendly open-source license.  It provides observability capabilities including metrics, logs, tracing, dashboards, and alerts.
-- Spring Boot upgraded to 3.4.x and Spring Cloud x.x.x for internal components.
+- SigNoz replaces the Grafana observability stack. SigNoz is OpenTelemetry native and has an enterprise-friendly open-source license. It provides observability capabilities including metrics, logs, tracing, dashboards, and alerts.
+- Spring Boot upgraded to 3.5.4 and Spring Cloud 2025.0.0 for internal components.
 
 The following components were added:
 
 | Component                                             |  Version   |  Description |
 |-------------------------------------------------------|------------|--------------|
 | SigNoz | 0.75.0 | Provides OpenTelemetry native observability. |
-| External Secrets Operator | x | x |
+| External Secrets Operator | v0.18.0 | Kubernetes operator that integrates external secret management |
 
 The following components were updated:
 
 | Component                                             | New Version   | Replaced Version    |
 |-------------------------------------------------------|---------------|---------------------|
-| TBA | x | x |
+| Spring Boot Admin Server | 3.5.1 | 3.3.3 |
+| Alertmanager | v0.67.1 | 0.23.7 |
+| Coherence Operator | 3.3.5 | 3.5.2 |
+| Spring Cloud Config Server | 4.3.0 | 4.1.3 |
+| Spring Cloud Authorization Server | 3.5.5 | 3.3.3 |
+| Spring Eureka Service Registry | 4.3.0 | 4.1.3 |
+| Oracle Database Observability Exporter | 2.0.2| 1.3.1 |
+| Oracle Transaction Manager for Microservices | 23.4.2 | 24.4.1 |
+| Strimzi-Apache Kafka operator	| 0.45.1 | 0.43.0 |
 
 {{< hint type=[warning] icon=gdoc_fire title="Deprecation Notice" >}}
 The following components are deprecated and were removed in this release:
@@ -36,10 +44,12 @@ The following components are deprecated and were removed in this release:
 - Alert Manager
 - Jaeger Tracing
 - Hashicorp Vault
+- Opentelemetry Collector
 
 The following components are deprecated and will be removed in a future this release:
 
 - ServiceOps Center UI (SOC UI)
+- Oracle Backend for Microservices and AI CLI with backend services.
 - Oracle Backend for Microservices and AI Visual Studio Code extension
 - Oracle Backend for Microservices and AI IntelliJ plugin
 {{< /hint >}}
