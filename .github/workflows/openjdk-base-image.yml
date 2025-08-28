@@ -62,7 +62,7 @@ jobs:
         if: env.latest_digest != ''
         env:
           TRIVY_DEFAULT: "--format table --ignore-unfixed --exit-code 1"
-          TRIVY_SCAN: "--severity CRITICAL,HIGH --vuln-type os,library"
+          TRIVY_SCAN: "--severity CRITICAL,HIGH --pkg-types os,library"
         run: >
           docker run --rm ghcr.io/aquasecurity/trivy:latest image $TRIVY_DEFAULT $TRIVY_SCAN
           --username ${{ github.actor }}
