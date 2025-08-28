@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       base_version:
-        description: "Select the OpenJDK version to build (leave empty to build all versions)"
+        description: "OpenJDK version to build (leave empty to build all)"
         required: false
         default: ""
 
@@ -18,7 +18,7 @@ jobs:
   obaas-image:
     strategy:
       matrix:
-        base_version: [17, 21, 24]
+        base_version: ${{ github.event.inputs.base_version != '' && [ github.event.inputs.base_version ] || [17,21,24] }}
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -35,20 +35,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Determine OpenJDK version
-        id: version
-        run: |
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ] && [ -n "${{ github.event.inputs.base_version }}" ]; then
-            echo "Using manual version ${{ github.event.inputs.base_version }}"
-            echo "VERSION=${{ github.event.inputs.base_version }}" >> $GITHUB_ENV
-          else
-            echo "Using matrix version ${{ matrix.base_version }}"
-            echo "VERSION=${{ matrix.base_version }}" >> $GITHUB_ENV
-          fi
-
       - name: Get latest Image Software Digest
         run: |
-          latest_digest=$(docker run --rm --entrypoint cat ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ env.VERSION }} /image_digest || true)
+          latest_digest=$(docker run --rm --entrypoint cat ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ matrix.base_version }} /image_digest || true)
           echo "Current Digest: $latest_digest"
           echo "latest_digest=$latest_digest" >> $GITHUB_ENV
         continue-on-error: true
@@ -57,8 +46,8 @@ jobs:
         if: github.event_name == 'workflow_dispatch' || env.latest_digest == ''
         uses: ./.github/actions/process-image-openjdk
         with:
-          src_image: container-registry.oracle.com/java/openjdk:${{ env.VERSION }}
-          dst_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ env.VERSION }}
+          src_image: container-registry.oracle.com/java/openjdk:${{ matrix.base_version }}
+          dst_image: ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ matrix.base_version }}
           description: ${{ env.description }}
           push: true
           pkg_command: dnf
