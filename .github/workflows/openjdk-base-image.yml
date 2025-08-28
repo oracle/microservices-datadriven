@@ -1,16 +1,30 @@
 name: "Build OBaaS OpenJDK Base Image"
+
 on:
   schedule:
     - cron: "0 0 * * *"
   workflow_dispatch:
+    inputs:
+      base_version:
+        description: "Select the OpenJDK version to build (leave empty to build all versions)"
+        required: false
+        default: ""
+        type: choice
+        options:
+          - ""
+          - "17"
+          - "21"
+          - "24"
+
 env:
   dst_img: openjdk-image-obaas
   description: "OpenJDK OBaaS Image."
+
 jobs:
   obaas-image:
     strategy:
       matrix:
-        base_version: [17, 21, 24]
+        base_version: ${{ github.event.inputs.base_version != '' && [github.event.inputs.base_version] || [17, 21, 24] }}
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -43,7 +57,6 @@ jobs:
           description: ${{ env.description }}
           push: true
           pkg_command: dnf
-
       - name: Run Trivy Vulnerability Scanner
         id: trivy_scan
         if: env.latest_digest != ''
