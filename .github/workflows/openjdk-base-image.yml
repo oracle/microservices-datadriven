@@ -1,24 +1,16 @@
 name: "Build OBaaS OpenJDK Base Image"
-
 on:
   schedule:
     - cron: "0 0 * * *"
   workflow_dispatch:
-    inputs:
-      base_version:
-        description: "OpenJDK version to build (leave empty to build all)"
-        required: false
-        default: ""
-
 env:
   dst_img: openjdk-image-obaas
   description: "OpenJDK OBaaS Image."
-
 jobs:
   obaas-image:
     strategy:
       matrix:
-        base_version: ${{ github.event.inputs.base_version != '' && [ github.event.inputs.base_version ] || [17,21,24] }}
+        base_version: [17, 21, 24]
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -37,7 +29,7 @@ jobs:
 
       - name: Get latest Image Software Digest
         run: |
-          latest_digest=$(docker run --rm --entrypoint cat ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ matrix.base_version }} /image_digest || true)
+          latest_digest=$(docker run --rm --entrypoint cat ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ matrix.base_version }} /image_digest)
           echo "Current Digest: $latest_digest"
           echo "latest_digest=$latest_digest" >> $GITHUB_ENV
         continue-on-error: true
