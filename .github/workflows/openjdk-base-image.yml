@@ -24,7 +24,7 @@ jobs:
   obaas-image:
     strategy:
       matrix:
-        base_version: ${{ github.event.inputs.base_version != '' && fromJSON('["' + github.event.inputs.base_version + '"]') || fromJSON('["17","21","24"]') }}
+        base_version: ${{ fromJSON(github.event.inputs.base_version != '' && format('["{0}"]', github.event.inputs.base_version) || '["17","21","24"]') }}
     runs-on: ubuntu-latest
     permissions:
       packages: write
