@@ -1,30 +1,16 @@
 name: "Build OBaaS OpenJDK Base Image"
-
 on:
   schedule:
     - cron: "0 0 * * *"
   workflow_dispatch:
-    inputs:
-      base_version:
-        description: "Select the OpenJDK version to build (leave empty to build all versions)"
-        required: false
-        default: ""
-        type: choice
-        options:
-          - ""
-          - "17"
-          - "21"
-          - "24"
-
 env:
   dst_img: openjdk-image-obaas
   description: "OpenJDK OBaaS Image."
-
 jobs:
   obaas-image:
     strategy:
       matrix:
-        base_version: ${{ github.event.inputs.base_version != '' && [github.event.inputs.base_version] || [17, 21, 24] }}
+        base_version: [17, 21, 24]
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -40,14 +26,12 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Get latest Image Software Digest
         run: |
           latest_digest=$(docker run --rm --entrypoint cat ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ matrix.base_version }} /image_digest)
           echo "Current Digest: $latest_digest"
           echo "latest_digest=$latest_digest" >> $GITHUB_ENV
         continue-on-error: true
-
       - name: Create New Image
         if: github.event_name == 'workflow_dispatch' || env.latest_digest == ''
         uses: ./.github/actions/process-image-openjdk
@@ -69,7 +53,6 @@ jobs:
           --password ${{ secrets.GITHUB_TOKEN }}
           ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ matrix.base_version }}
         continue-on-error: true
-
       - name: Update Existing Image
         id: update_image
         if: env.latest_digest != '' && steps.trivy_scan.outcome == 'failure'
@@ -80,7 +63,6 @@ jobs:
           description: ${{ env.description }}
           push: false
           pkg_command: dnf
-
       - name: Get newest Image Software Digest
         id: get_newest_digest
         if: steps.update_image.outcome != 'skipped'
@@ -88,7 +70,6 @@ jobs:
           newest_digest=$(docker run --rm --entrypoint cat ghcr.io/${{ github.repository_owner }}/${{ env.dst_img }}:${{ matrix.base_version }} /image_digest)
           echo "New Digest: $newest_digest"
           echo "newest_digest=$newest_digest" >> $GITHUB_ENV
-
       - name: Push Updated Image
         if: steps.get_newest_digest.outcome != 'skipped' && env.latest_digest != env.newest_digest
         uses: ./.github/actions/process-image-openjdk
