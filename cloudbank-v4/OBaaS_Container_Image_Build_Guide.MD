@@ -18,7 +18,7 @@ All services use these common properties:
 
 ```xml
 <properties>
-    <obaas.registry>us-phoenix-1.ocir.io/maacloud</obaas.registry>
+    <obaas.registry>us-phoenix-1.ocir.io/tenancy</obaas.registry>
     <obaas.image.version>0.0.1</obaas.image.version>
 </properties>
 ```
@@ -53,7 +53,7 @@ All services use these common properties:
 mvn clean package spring-boot:build-image
 
 # Push to Oracle Cloud Registry
-docker push us-phoenix-1.ocir.io/maacloud/account:0.0.1
+docker push us-phoenix-1.ocir.io/tenancy/account:0.0.1
 ```
 
 ### Output
@@ -109,7 +109,7 @@ mvn clean package
 mvn k8s:build
 
 # Push to Oracle Cloud Registry
-docker push us-phoenix-1.ocir.io/maacloud/customer-helidon:1.0-SNAPSHOT
+docker push us-phoenix-1.ocir.io/tenancy/customer-helidon:1.0-SNAPSHOT
 ```
 
 ### Output
@@ -192,11 +192,11 @@ export DOCKER_HOST=unix:///Users/$USER/.rd/docker.sock
 ```bash
 # Spring Boot
 mvn clean package spring-boot:build-image
-docker push us-phoenix-1.ocir.io/maacloud/account:0.0.1
+docker push us-phoenix-1.ocir.io/tenancy/account:0.0.1
 
 # Helidon
 mvn clean package k8s:build
-docker push us-phoenix-1.ocir.io/maacloud/customer-helidon:1.0-SNAPSHOT
+docker push us-phoenix-1.ocir.io/tenancy/customer-helidon:1.0-SNAPSHOT
 ```
 
 ### Phase 2: Server-Side (Deploy)
