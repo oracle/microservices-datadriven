@@ -1,5 +1,5 @@
 ---
-title: Installing OBaaS
+title: Deploy Applications to OBaaS
 sidebar_position: 1
 ---
 

@@ -5,7 +5,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'Oracle Backend for Microservices and AI',
+  title: 'Oracle Backend for Microservices and AI -- Draft documentation',
   tagline: 'Deploy AI microservices using a “backend as a service” with Oracle Database and other infrastructure components',
   favicon: 'img/favicon-32x32.png',
 
@@ -18,7 +18,7 @@ const config: Config = {
   url: 'https://oracle.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/microservices-datadriven/',
+  baseUrl: '/microservices-datadriven/obaas',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
