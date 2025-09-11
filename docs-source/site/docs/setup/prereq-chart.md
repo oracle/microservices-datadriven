@@ -75,4 +75,4 @@ And you should see the following pods running (note that they may take a few min
 kubectl get pods --A
 ```
 
-![](media/image2.png)
+![Get all pods](media/image2.png)

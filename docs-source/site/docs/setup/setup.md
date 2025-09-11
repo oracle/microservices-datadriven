@@ -2,36 +2,28 @@
 title: Introduction and Installation Flow
 sidebar_position: 1
 ---
-## Introduction
+## Introduction and Installation flow
 
-Oracle Backend for Microservices and AI 2.0.0-M3 is an **internal-only**
-milestone release. It is not available externally. This release
-represents a milestone on the path to 2.0.0 -- it is not intended to be
-a "finished product" so you may encounter some minor issues, and this is
-expected. Please give feedback to the development team if you find
+Oracle Backend for Microservices and AI 2.0.0-M3 is an **internal-only** milestone release. It is not available externally. This release represents a milestone on the path to 2.0.0 -- it is not intended to be a "finished product" so you may encounter some minor issues, and this is expected. Please give feedback to the development team if you find
 issues.
 
 The 2.0.0-M3 release has the following key differences from the previous production release (1.4.0):
 
 - Installation is performed with Helm instead of Ansible
-
 - You may select which components you wish to install
-
 - You may customize which namespaces you wish to install components into
-
 - You may only install more than one OBaaS instance in a cluster with this release, but see the restrictions below
 
 Please note the following known issues in M3:
 
 - Instance principal authentication for OKE worker nodes, which allows the Oracle Database Operator to manage Autonomous Database instances, may not work in this release
-
 - This release has been tested on OKE, it has not been tested on OCNE.
 
 The next release, 2.0.0-M4 is intended to be available approximately two weeks after M3 and to address some, if not all, of these limitations.
 
 **Important note:** Make sure that you have the correct kubectl config set. You can do this by exporting the KUBECONFIG variable and pointing to the correct config file.
 
-## High Level Installation Flow
+### High Level Installation Flow
 
 To install OBaaS, you will follow this high-level flow:
 

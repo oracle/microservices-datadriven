@@ -18,7 +18,7 @@ You must edit the **values.yaml** file as follows:
 
 - You must update the values in the **database.oci_config** section as follows:
 
-  - The **oke** setting must be **false**. Setting this to true is not supported in M12.0.0-M3.
+  - The **oke** setting must be **false**. Setting this to true is not supported in 2.0.0-M3.
 
   - Supply your **tenancy**, **user** ocid, **fingerprint** and **region**. These must match the details you provided when you created the OCI configuration secret earlier. This information can be found in the OCI configuration file.
 
