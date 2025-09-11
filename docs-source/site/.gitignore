@@ -1,6 +1,8 @@
 # Dependencies
 /node_modules
 
+!package.json
+!package-lock.json
 # Production
 /build
 
