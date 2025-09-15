@@ -4,7 +4,7 @@ sidebar_position: 3
 ---
 ## Obtaining the Installation Package
 
-The installation package is in the [helm](./helm) directory which  contains the following directories:
+The installation package is in the [helm](http://tbd) directory which  contains the following directories:
 
 ```text
 .
