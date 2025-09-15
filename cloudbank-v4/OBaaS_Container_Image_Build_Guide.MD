@@ -72,23 +72,15 @@ docker push us-phoenix-1.ocir.io/tenancy/account:0.0.1
 
 ```xml
 <properties>
-    <jkube.version>1.14.0</jkube.version>
+    <helidon-maven-plugin.version>4.0.14</helidon-maven-plugin.version>
+    <jkube.version>1.16.2</jkube.version>
+    <jkube.generator.name>us-phoenix-1.ocir.io/maacloud/${project.artifactId}:${project.version}</jkube.generator.name>
 </properties>
 
 <plugin>
     <groupId>org.eclipse.jkube</groupId>
     <artifactId>kubernetes-maven-plugin</artifactId>
     <version>${jkube.version}</version>
-    <configuration>
-        <images>
-            <image>
-                <name>${obaas.registry}/${project.artifactId}:${obaas.image.version}</name>
-                <build>
-                    <from>quay.io/jkube/jkube-java:0.0.19</from>
-                </build>
-            </image>
-        </images>
-    </configuration>
 </plugin>
 ```
 
