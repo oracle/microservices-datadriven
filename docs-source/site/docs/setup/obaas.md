@@ -33,8 +33,7 @@ You must edit the **values.yaml** file as follows:
 Install the Helm chart using the following command:
 
 ```bash
-helm install obaas --set global.obaasName="obaas-dev" --set
-global.targetNamespace="obaas-dev" ./
+helm --debug install obaas --set global.obaasName="obaas-dev" --set global.targetNamespace="obaas-dev" ./
 I0817 13:21:41.363368 5981 warnings.go:110\] "Warning: unknown field
 "spec.serviceName""
 I0817 13:21:41.439521 5981 warnings.go:110\] "Warning: unknown field
@@ -86,8 +85,6 @@ And many new pods. Note that these will take about 5 minutes for them all to get
 ```bash
 kubectl get pod -A
 ```
-
-![All pods](./media/image7.png)
 
 **Note**: If you are installing multiple OBaaS instances in your cluster, each one MUST have a different release name, `obaasName` and `targetNamespace`. For example:
 

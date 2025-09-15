@@ -4,6 +4,12 @@ sidebar_position: 1
 ---
 ## Introduction and Installation flow
 
+:::important
+
+The installation flow is **VERY** important, you should follow the steps thoroughly. Do not move on to the next step if you have issues.
+
+:::
+
 Oracle Backend for Microservices and AI 2.0.0-M3 is an **internal-only** milestone release. It is not available externally. This release represents a milestone on the path to 2.0.0 -- it is not intended to be a "finished product" so you may encounter some minor issues, and this is expected. Please give feedback to the development team if you find
 issues.
 

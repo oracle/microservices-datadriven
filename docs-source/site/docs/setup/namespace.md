@@ -1,5 +1,5 @@
 ---
-title: Create Required Secrets
+title: Create Namespace(s) for OBaaS
 sidebar_position: 6
 ---
 ## Create the namespace(s) for the OBaaS installation(s)

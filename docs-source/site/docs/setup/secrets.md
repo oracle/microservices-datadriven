@@ -18,7 +18,11 @@ kubectl create secret generic ocir
   --from-literal=email=bob.smith@oracle.com
 ```
 
-**Important note**: Your OCI-R password must be an Authentication Token, not the password you use to log into the OCI web console. You can validate the token by performing a docker login using this command (with your own username and token):
+:::important
+Your OCI-R password must be an Authentication Token, not the password you use to log into the OCI web console. 
+:::
+
+You can validate the token by performing a docker login using this command (with your own username and token):
 
 ```bash
 docker login phx.ocir.io 
@@ -75,7 +79,9 @@ obaas-registry-pull-auth  kubernetes.io/dockerconfigjson  1      8s
 ocir                      Opaque                          4     13m
 ```
 
-**Note**:  If you are planning to install multiple OBaaS instances, AND you want to use different private repositories, you need to create a set of these secrets for EACH instance, and they must have different names.
+:::note
+If you are planning to install multiple OBaaS instances, AND you want to use different private repositories, you need to create a set of these secrets for EACH instance, and they must have different names.
+:::
 
 ### OBaaS Password Secrets
 
@@ -105,7 +111,9 @@ kubectl create secret generic signoz
   --from-literal=password=\$(openssl rand -base64 16)
 ```
 
-**Note**:  If you are planning to install multiple OBaaS instances, AND you want to use different passwords, you need to create a set of these secrets for EACH instance, and they must have different names.
+:::note
+If you are planning to install multiple OBaaS instances, AND you want to use different passwords, you need to create a set of these secrets for EACH instance, and they must have different names.
+:::
 
 ### Database Credentials Secret
 
@@ -141,7 +149,9 @@ metadata:
   type: Opaque
 ```
 
-**Note**:  If you are planning to install multiple OBaaS instances, AND you want to use different databases, you need to create one of these secrets for EACH instance, and they must have different names.
+:::note
+If you are planning to install multiple OBaaS instances, AND you want to use different databases, you need to create one of these secrets for EACH instance, and they must have different names.
+:::
 
 ### OCI Credentials Secret
 
@@ -161,9 +171,13 @@ data:
 ' \| kubectl apply -f -
 ```
 
-**Important note:** The Python script reads the OCI config file and looks for the DEFAULT entry to determine the private key file.
+:::important
 
-**Important note**: This script requires your key file to be named **oci_api_key.pem** - if your key file has a different name, this script will produce an incorrect secret. In that case you would need to edit the name of the second key to make it **oci_api_key.pem** and update the value of the first key (config) to include that name. To update that value, you need to base64 decode it, update the plaintext, then base64 encode that.
+- The Python script reads the OCI config file and looks for the `DEFAULT` entry to determine the private key file.
+- The OCI config file can not have more than one profile and needs to be named `DEFAULT`.
+- This script requires your key file to be named **oci_api_key.pem** - if your key file has a different name, this script will produce an incorrect secret. In that case you would need to edit the name of the second key to make it **oci_api_key.pem** and update the value of the first key (config) to include that name. To update that value, you need to base64 decode it, update the plaintext, then base64 encode that.
+
+:::
 
 Once you have the correct command, run that command to create the secret. Then check your secret looks correct using this command:
 

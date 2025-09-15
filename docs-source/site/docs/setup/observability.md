@@ -45,15 +45,18 @@ When the installation has completed, you can use this command to view the instal
 helm ls
 ```
 
-![helm](media/image3.png)
+```text
+NAME               	NAMESPACE	REVISION	UPDATED                             	STATUS  	CHART                    	APP VERSION
+obaas              	default  	1       	2025-09-12 13:57:55.859836 -0500 CDT	deployed	OBaaS-0.0.1              	2.0.0-M3   
+obaas-db           	default  	1       	2025-09-12 13:51:23.751199 -0500 CDT	deployed	OBaaS-db-0.1.0           	2.0.0-M3   
+obaas-observability	default  	1       	2025-09-12 13:45:43.113298 -0500 CDT	deployed	OBaaS-observability-0.1.0	2.0.0-M3 
+```
 
-If you overrode the namespace, you will see a new namespce, e.g., **observability**, and the following pods. Otherwise these pods will be in the **obaas-dev** namespace (of whatever name you chose). Note that it will take 5 to 10 minutes for all of these to reach ready/running status:
+If you overrode the namespace, you will see a new namespace, e.g., **observability**, and the following pods. Otherwise these pods will be in the **obaas-dev** namespace (of whatever name you chose). Note that it will take 5 to 10 minutes for all of these to reach ready/running status:
 
 ```bash
 kubectl get pods --n observability # or whatever namespace name you chose
 ```
-
-![Observability Pods](media/image4.png)
 
 Please wait for all of the pods to be ready before continuing to the next step.
 
@@ -61,10 +64,10 @@ Please wait for all of the pods to be ready before continuing to the next step.
 
 ```bash
 # for obaas-dev:
-helm install obaas-observability --set global.obaasName="obaas-dev"
+helm --debug install obaas-observability --set global.obaasName="obaas-dev"
 --set global.targetNamespace="obaas-dev" ./
 
 # for obaas-prod
-helm install obaas-prod-observability --set global.obaasName="obaas-prod"
+helm --debug install obaas-prod-observability --set global.obaasName="obaas-prod"
 --set global.targetNamespace="obaas-prod" ./
 ```
