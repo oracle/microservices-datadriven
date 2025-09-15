@@ -47,6 +47,9 @@ const config: Config = {
           editUrl:
             'https://github.com/oracle/microservices-datadriven/tree/main/docs-source/site/',
         },
+        gtag: {
+          trackingID: 'G-2EVY167E00',
+          anonymizeIP: true,},
         theme: {
           customCss: './src/css/custom.css',
         },

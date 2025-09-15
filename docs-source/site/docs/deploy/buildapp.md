@@ -11,5 +11,5 @@ This content is TBD
 These are the steps to deploy the application to ak8s cluster using Helm.
 
 - Obtain the deployment Helm chart from [here](hhtp://where)
-- Edit `Values.yaml` to refelct your application
+- Edit `Values.yaml` to reflect your application
 - Install the Helm chart.

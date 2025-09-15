@@ -34,6 +34,9 @@ You can verify your secret using this command:
 
 ```bash
 kubectl get secret ocir -o yaml
+```
+
+```yaml
 apiVersion: v1
 data:
   email: bWF...
@@ -59,7 +62,9 @@ kubectl create secret generic obaas-registry-login
   --from-literal=registry.username="maacloud/oracleidentitycloudservice/mark.x.nelson@oracle.com"
   --from-literal=registry.password="xyz123xyz"
   --from-literal=registry.push_url="phx.ocir.io/maacloud/obaas-dev"
+```
 
+```bash
 kubectl create secret docker-registry obaas-registry-pull-auth
   --docker-server="phx.ocir.io/maacloud"
   --docker-username="maacloud/oracleidentitycloudservice/mark.x.nelson@oracle.com"
@@ -73,6 +78,9 @@ Confirm you have the following secrets before moving on:
 
 ```bash
 kubectl get secrets
+```
+
+```log
 NAME                      TYPE                            DATA  AGE
 obaas-registry-login      Opaque                          3     29s
 obaas-registry-pull-auth  kubernetes.io/dockerconfigjson  1      8s
@@ -93,11 +101,15 @@ Create the secrets using these commands:
 kubectl create secret generic signoz
   --from-literal=email="admin@nodomain.com"
   --from-literal=password=Welcome-12345
+```
 
+```bash
 kubectl create secret generic clickhouse
   --from-literal=username="clickhouse_operator"
   --from-literal=password=Welcome-12345
+```
 
+```bash
 kubectl create secret generic alertmanager
   --from-literal=username="admin"
   --from-literal=password="Welcome-12345"
@@ -133,6 +145,9 @@ Verify your secret looks like this:
 
 ```bash
 kubectl get secret admin-user-authn -o yaml
+```
+
+```yaml
 apiVersion: v1
 data:
   dbname: ZGV\...
@@ -159,6 +174,9 @@ Run the provided script to generate the appropriate command for you from your OC
 
 ```bash
 python3 ./obaas-db/scripts/oci_config.py
+```
+
+```text
 echo 'apiVersion: v1
 kind: Secret
 metadata:
@@ -183,6 +201,9 @@ Once you have the correct command, run that command to create the secret. Then c
 
 ```bash
 kubectl get secret oci-config-file -o yaml
+```
+
+```yaml
 apiVersion: v1
 data:
   config: W0R\...
@@ -195,6 +216,9 @@ You should also base64 decode the values to check that they are correct. For exa
 
 ```bash
 echo -n "W0R\... " \| base64 -d
+```
+
+```log
 [DEFAULT]
 user=ocid1.user.oc1..aaaaaaaaxyzxyzxyz
 fingerprint=d0:b5:60:bd:27:2b:...

@@ -30,6 +30,9 @@ Install the Helm chart using the following command:
 
 ```bash
 helm install obaas-observability --set global.obaasName="obaas-dev"
+```
+
+```log
 --set global.targetNamespace="obaas-dev" ./
 NAME: obaas-observability
 LAST DEPLOYED: Sun Aug 17 13:00:00 2025
@@ -63,11 +66,10 @@ Please wait for all of the pods to be ready before continuing to the next step.
 **Note**: If you are installing multiple OBaaS instances in your cluster, each one MUST have a different release name, `obaasName` and `targetNamespace`.  For example:
 
 ```bash
-# for obaas-dev:
-helm --debug install obaas-observability --set global.obaasName="obaas-dev"
---set global.targetNamespace="obaas-dev" ./
+helm install obaas --set global.obaasName="obaas-dev" --set global.targetNamespace="obaas-dev" ./
 
-# for obaas-prod
-helm --debug install obaas-prod-observability --set global.obaasName="obaas-prod"
---set global.targetNamespace="obaas-prod" ./
+For obaas-prod:
+
+```bash
+helm install obaas-prod --set global.obaasName="obaas-prod" --set global.targetNamespace="obaas-prod" ./
 ```
