@@ -58,7 +58,6 @@ The versions in the below pom.xml might be outdated.
     <dependency>
         <groupId>io.opentelemetry.instrumentation</groupId>
         <artifactId>opentelemetry-oracle-ucp-11.2</artifactId>
-        <version>2.13.1-alpha</version>
     </dependency>
 </dependencies>
 
@@ -67,7 +66,6 @@ The versions in the below pom.xml might be outdated.
         <dependency>
             <groupId>io.opentelemetry.instrumentation</groupId>
             <artifactId>opentelemetry-instrumentation-bom</artifactId>
-            <version>2.13.1</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -99,7 +97,6 @@ The versions in the below pom.xml might be outdated.
     <dependency>
         <groupId>io.opentelemetry.instrumentation</groupId>
         <artifactId>opentelemetry-oracle-ucp-11.2</artifactId>
-        <version>2.13.1-alpha</version>
     </dependency>
 </dependencies>
 ```
