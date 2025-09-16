@@ -35,6 +35,9 @@ Install the Helm chart using the following command:
 
 ```bash
 helm --debug install obaas-prereqs ./
+```
+
+```log
 NAME: obaas-prereqs
 LAST DEPLOYED: Sun Aug 17 12:47:51 2025
 NAMESPACE: default
@@ -60,6 +63,9 @@ If you overrode the individual component namespaces, you should now see the requ
 
 ```bash
 kubectl get ns
+```
+
+```log
 NAME                STATUS AGE
 cert-manager        Active 3m37s
 default             Active 77m

@@ -12,6 +12,9 @@ To create the namespace(s), use the following command(s).  For example, to creat
 
 ```bash
 kubectl create ns obaas-dev
+```
+
+```bash
 kubectl create ns obaas-prod
 ```
 

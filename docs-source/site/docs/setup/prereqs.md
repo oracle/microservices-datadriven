@@ -16,6 +16,9 @@ If you use the recommended OKE cluster, your cluster should contain the followin
 
 ```bash
 kubectl get ns
+```
+
+```log
 NAME            STATUS  AGE
 default         Active  4m52s
 kube-node-lease Active  4m52s

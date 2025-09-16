@@ -34,6 +34,9 @@ Install the Helm chart using the following command:
 
 ```bash
 helm --debug install obaas --set global.obaasName="obaas-dev" --set global.targetNamespace="obaas-dev" ./
+```
+
+```log
 I0817 13:21:41.363368 5981 warnings.go:110\] "Warning: unknown field
 "spec.serviceName""
 I0817 13:21:41.439521 5981 warnings.go:110\] "Warning: unknown field
@@ -54,6 +57,9 @@ If you overrode the component namespaces, you will now see several new namespace
 
 ```bash
 kubectl get ns
+```
+
+```log
 NAME                               STATUS AGE
 admin-server                       Active 32s
 apisix                             Active 32s
@@ -88,14 +94,15 @@ kubectl get pod -A
 
 **Note**: If you are installing multiple OBaaS instances in your cluster, each one MUST have a different release name, `obaasName` and `targetNamespace`. For example:
 
-```bash
-# for obaas-dev:
-helm install obaas --set global.obaasName="obaas-dev"
---set global.targetNamespace="obaas-dev" ./
+For obaas-dev:
 
-# for obaas-prod
-helm install obaas-prod --set global.obaasName="obaas-prod"
---set global.targetNamespace="obaas-prod" ./
+```bash
+helm install obaas --set global.obaasName="obaas-dev" --set global.targetNamespace="obaas-dev" ./
+
+For obaas-prod:
+
+```bash
+helm install obaas-prod --set global.obaasName="obaas-prod" --set global.targetNamespace="obaas-prod" ./
 ```
 
 **Note**: You MUST set different host names and/or ports for the APISIX ingress if you choose to install APISIX in both instances.

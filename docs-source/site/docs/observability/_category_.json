@@ -1,0 +1,8 @@
+{
+  "label": "Observability",
+  "position": 4,
+  "link": {
+    "type": "generated-index",
+    "description": "Oracle Backend for Microservices and AI provides built-in platform services to collect and visualize metrics, logs and traces from system and application workloads."
+  }
+}

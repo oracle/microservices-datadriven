@@ -30,6 +30,9 @@ Install the Helm chart using the following command:
 
 ```bash
 helm --debug install obaas-db --set global.obaasName="obaas-dev" --set global.targetNamespace="obaas-dev" ./
+```
+
+```text
 NAME: obaas-db
 LAST DEPLOYED: Sun Aug 17 13:09:20 2025
 NAMESPACE: default
@@ -53,12 +56,14 @@ If you overrode the namespace for this component, you will see a new namespace c
 
 **Note**: If you are installing multiple OBaaS instances in your cluster, each one MUST have a different release name, `obaasName` and `targetNamespace`.  For example:
 
-```bash
-# for obaas-dev:
-helm install obaas-db --set global.obaasName="obaas-dev"
---set global.targetNamespace="obaas-dev" ./
+For obaas-dev:
 
-# for obaas-prod
-helm install obaas-prod-db --set global.obaasName="obaas-prod"
---set global.targetNamespace="obaas-prod" ./
+```bash
+helm install obaas-db --set global.obaasName="obaas-dev" --set global.targetNamespace="obaas-dev" ./
+```
+
+For obaas-prod:
+
+```bash
+helm install obaas-prod-db --set global.obaasName="obaas-prod" --set global.targetNamespace="obaas-prod" ./
 ```
