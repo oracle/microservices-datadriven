@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://www.googletagmanager.com">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-2EVY167E00"></script>
 <script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-2EVY167E00",{anonymize_ip:!0})</script><link rel="stylesheet" href="/microservices-datadriven/obaas/assets/css/styles.d329a656.css">
-<script src="/microservices-datadriven/obaas/assets/js/runtime~main.0304dcc4.js" defer="defer"></script>
+<script src="/microservices-datadriven/obaas/assets/js/runtime~main.33cfa6bb.js" defer="defer"></script>
 <script src="/microservices-datadriven/obaas/assets/js/main.0ce76037.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -42,7 +42,7 @@ Autoscaling feature.</p>
 </li>
 </ul>
 <p>Choose a name for this OBaaS installation. In this document, we use <strong>obaas-dev</strong> as the name. Please note that the <strong>targetNamespace</strong> should match the namespace you created in the previous step, and that this namespace must already exist.</p>
-<p>Install the Helm chart using the following command:</p>
+<p>Install the Helm chart using the following command (The <code>--debug</code> flag is optional and enables verbose output from Helm):</p>
 <div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">helm --debug install obaas-prereqs ./</span><br></span></code></pre></div></div>
 <div class="language-log codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-log codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">NAME: obaas-prereqs</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">LAST DEPLOYED: Sun Aug 17 12:47:51 2025</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">NAMESPACE: default</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">STATUS: deployed</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">REVISION: 1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">TEST SUITE: None</span><br></span></code></pre></div></div>
 <p>In this command, note that <strong>obaas-prereqs</strong> is the name of the Helm release.  Note that obaas-prereqs is shared across all instances in the cluster, so we recommend that you do NOT set the <code>obaasName</code> and <code>targetNamespace</code> for this chart/release.</p>
