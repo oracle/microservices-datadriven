@@ -27,7 +27,7 @@ You must edit the **values.yaml** file as follows:
 
 **Important note**: Please pause to double check all of the values are correct. If there are any errors here, the OBaaS provisioning will fail.
 
-Install the Helm chart using the following command:
+Install the Helm chart using the following command (The `--debug` flag is optional and enables verbose output from Helm):
 
 ```bash
 helm --debug install obaas --set global.obaasName="obaas-dev" --set global.targetNamespace="obaas-dev" ./
@@ -89,7 +89,7 @@ And many new pods. Note that these will take about 5 minutes for them all to get
 kubectl get pod -A
 ```
 
-**Note**: If you are installing multiple OBaaS instances in your cluster, each one MUST have a different release name, `obaasName` and `targetNamespace`. For example:
+**Note**: If you are installing multiple OBaaS instances in your cluster, each one MUST have a different release name, `obaasName` and `targetNamespace`. For example (The `--debug` flag is optional and enables verbose output from Helm):
 
 For obaas-dev:
 

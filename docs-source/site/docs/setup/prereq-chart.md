@@ -31,7 +31,7 @@ You must edit the **values.yaml** file as follows:
 
 Choose a name for this OBaaS installation. In this document, we use **obaas-dev** as the name. Please note that the **targetNamespace** should match the namespace you created in the previous step, and that this namespace must already exist.
 
-Install the Helm chart using the following command:
+Install the Helm chart using the following command (The `--debug` flag is optional and enables verbose output from Helm):
 
 ```bash
 helm --debug install obaas-prereqs ./
