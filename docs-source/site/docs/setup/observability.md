@@ -29,7 +29,7 @@ You must edit the **values.yaml** file as follows:
 Install the Helm chart using the following command:
 
 ```bash
-helm install obaas-observability --set global.obaasName="obaas-dev"
+helm --debug install obaas-observability --set global.obaasName="obaas-dev"
 ```
 
 ```log
@@ -63,13 +63,16 @@ kubectl get pods --n observability # or whatever namespace name you chose
 
 Please wait for all of the pods to be ready before continuing to the next step.
 
-**Note**: If you are installing multiple OBaaS instances in your cluster, each one MUST have a different release name, `obaasName` and `targetNamespace`.  For example:
+**Note**: If you are installing multiple OBaaS instances in your cluster, each one MUST have a different release name, `obaasName` and `targetNamespace`. For example:
+
+For obaas-dev:
 
 ```bash
-helm install obaas --set global.obaasName="obaas-dev" --set global.targetNamespace="obaas-dev" ./
+helm --debug install obaas-observability --set global.obaasName="obaas-dev" --set global.targetNamespace="obaas-dev" ./ 
+```
 
 For obaas-prod:
 
 ```bash
-helm install obaas-prod --set global.obaasName="obaas-prod" --set global.targetNamespace="obaas-prod" ./
+helm --debug install obaas-observability --set global.obaasName="obaas-prod" --set global.targetNamespace="obaas-prod" ./ 
 ```
