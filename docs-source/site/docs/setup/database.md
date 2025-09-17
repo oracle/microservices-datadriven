@@ -16,17 +16,11 @@ You must edit the **values.yaml** file as follows:
 
 - If you are using a private repository, you must update each **image** entry to point to your private repository instead of the public repositories.
 
-- You must update the values in the **database.oci_config** section as follows:
-
-  - The **oke** setting must be **false**. Setting this to true is not supported in 2.0.0-M3.
-
-  - Supply your **tenancy**, **user** ocid, **fingerprint** and **region**. These must match the details you provided when you created the OCI configuration secret earlier. This information can be found in the OCI configuration file.
-
 - (Optional) If you want to install any components in this chart into their own separate namespace, you can override the global namespace by setting a value in the **namespace** property inside the section for that component.
 
 **Important note**: Please pause to double check all of the values are correct. If there are any errors here, the database provisioning will fail.
 
-Install the Helm chart using the following command:
+Install the Helm chart using the following command (The `--debug` flag is optional and enables verbose output from Helm):
 
 ```bash
 helm --debug install obaas-db --set global.obaasName="obaas-dev" --set global.targetNamespace="obaas-dev" ./
@@ -54,16 +48,16 @@ If you overrode the namespace for this component, you will see a new namespace c
 
 ![DB Operator pods](media/image6.png)
 
-**Note**: If you are installing multiple OBaaS instances in your cluster, each one MUST have a different release name, `obaasName` and `targetNamespace`.  For example:
+**Note**: If you are installing multiple OBaaS instances in your cluster, each one MUST have a different release name, `obaasName` and `targetNamespace`.  For example (The `--debug` flag is optional and enables verbose output from Helm):
 
 For obaas-dev:
 
 ```bash
-helm install obaas-db --set global.obaasName="obaas-dev" --set global.targetNamespace="obaas-dev" ./
+helm --debug install obaas-db --set global.obaasName="obaas-dev" --set global.targetNamespace="obaas-dev" ./
 ```
 
 For obaas-prod:
 
 ```bash
-helm install obaas-prod-db --set global.obaasName="obaas-prod" --set global.targetNamespace="obaas-prod" ./
+helm --debug install obaas-prod-db --set global.obaasName="obaas-prod" --set global.targetNamespace="obaas-prod" ./
 ```
