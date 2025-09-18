@@ -27,7 +27,7 @@ Please note the following known issues in M3:
 
 The next release, 2.0.0-M4 is intended to be available approximately two weeks after M3 and to address some, if not all, of these limitations.
 
-**Important note:** Make sure that you have the correct kubectl config set. You can do this by exporting the KUBECONFIG variable and pointing to the correct config file.
+**Important note:** Make sure that you have the correct kubectl config set. You can do this by exporting the `KUBECONFIG` variable and pointing to the correct config file.
 
 ### High Level Installation Flow
 
