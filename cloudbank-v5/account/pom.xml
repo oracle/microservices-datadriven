@@ -66,7 +66,7 @@
 				<configuration>
 					<images>
 						<image>
-							<name>sjc.ocir.io/maacloud/cloudbank-v5/account:${project.version}</name>
+							<name>phx.ocir.io/maacloud/mark-cloudbank5/account:${project.version}</name>
 							<build>
 								<from>ghcr.io/oracle/openjdk-image-obaas:21</from>
 								<assembly>

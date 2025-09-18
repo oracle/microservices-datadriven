@@ -1,18 +1,5 @@
 -- liquibase formatted sql
 
---changeset account:1
-grant execute on dbms_aq to account;
-grant execute on dbms_aqadm to account;
-grant execute on dbms_aqin to account;
-grant execute on dbms_aqjms TO account;
-grant execute on dbms_aqjms_internal to account;
-
---rollback revoke dbms_aq from ACCOUNT;
---rollback revoke dbms_aqadm from ACCOUNT;
---rollback revoke dbms_aqin from ACCOUNT;
---rollback revoke dbms_aqjms from ACCOUNT;
---rollback revoke dbms_aqjms_internal from ACCOUNT;
-
 --changeset account:2 endDelimiter:/
 begin
     -- deposits

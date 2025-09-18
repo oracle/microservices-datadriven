@@ -42,7 +42,7 @@ https://oss.oracle.com/licenses/upl/ -->
                 <configuration>
                     <images>
                         <image>
-                            <name>sjc.ocir.io/maacloud/cloudbank-v5/creditscore:${project.version}</name>
+                            <name>phx.ocir.io/maacloud/mark-cloudbank5/creditscore:${project.version}</name>
                             <build>
                                 <from>ghcr.io/oracle/openjdk-image-obaas:21</from>
                                 <assembly>

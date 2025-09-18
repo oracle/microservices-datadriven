@@ -22,13 +22,20 @@ spec:
           SET SERVEROUTPUT ON;
           WHENEVER SQLERROR EXIT SQL.SQLCODE;
           
-          create user customer identified by Welcome-12345;
-          grant db_developer_role to customer;
+          drop user if exists customer cascade;
+          create user customer identified by Welcome12345;
+          grant connect, resource, db_developer_role to customer;
           grant unlimited tablespace to customer;
 
-          create user account identified by Welcome-12345;
-          grant db_developer_role to customer;
+          drop user if exists account cascade;
+          create user account identified by Welcome12345;
+          grant connect, resource, db_developer_role to customer;
           grant unlimited tablespace to customer;
+          grant execute on dbms_aq to account;
+          grant execute on dbms_aqadm to account;
+          grant execute on dbms_aqin to account;
+          grant execute on dbms_aqjms TO account;
+          grant execute on dbms_aqjms_internal to account;
           commit;
 
           /

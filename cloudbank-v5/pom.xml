@@ -190,7 +190,7 @@
                 <configuration>
                     <images>
                         <image>
-                            <name>sjc.ocir.io/maacloud/cloudbank-v5/${project.artifactId}:${project.version}</name>
+                            <name>phx.ocir.io/maacloud/mark-cloudbank5/${project.artifactId}:${project.version}</name>
                         </image>
                     </images>
                 </configuration>
