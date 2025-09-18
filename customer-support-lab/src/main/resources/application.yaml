@@ -1,0 +1,33 @@
+okafka:
+  topic:
+    tickets: ticket_event
+  walletDir: ${WALLET_DIR}
+  tnsAdmin: ${TNS_ALIAS}
+
+oci:
+  embeddingModelID: ${OCI_EMBEDDING_MODEL_ID:cohere.embed-english-v3.0}
+  compartment: ${OCI_COMPARTMENT_ID}
+
+spring:
+  profiles:
+    active: events, ai, json
+  application:
+    name: Everything You Never Knew About Oracle
+  datasource:
+    username: ${USERNAME:testuser}
+    password: ${PASSWORD:testPWD12345}
+    url: ${JDBC_URL:jdbc:oracle:thin:@localhost:1521/freepdb1}
+
+    driver-class-name: oracle.jdbc.OracleDriver
+    type: oracle.ucp.jdbc.PoolDataSource
+    oracleucp:
+      initial-pool-size: 1
+      min-pool-size: 1
+      max-pool-size: 30
+      connection-pool-name: DemoConnectionPool
+      connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+
