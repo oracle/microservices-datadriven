@@ -8,6 +8,7 @@ The installation package is in the [helm](http://tbd) directory which  contains 
 
 ```text
 .
+├── private_repo_helper.sh
 ├── obaas
 ├── obaas-db
 ├── obaas-observability
