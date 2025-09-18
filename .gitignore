@@ -17,6 +17,9 @@ grabdish/inventory-micronaut/build/
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
+# OCA
+.oca/
+
 #intellij and maven
 .idea/
 *.iml
