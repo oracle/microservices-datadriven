@@ -25,7 +25,7 @@ Please note the following known issues in M3:
 - Instance principal authentication for OKE worker nodes, which allows the Oracle Database Operator to manage Autonomous Database instances, may not work in this release
 - This release has been tested on OKE, it has not been tested on OCNE.
 
-The next release, 2.0.0-M4 is intended to be available approximately two weeks after M3 and to address some, if not all, of these limitations.
+The next release, 2.0.0-M3 is intended to be available approximately two weeks after M3 and to address some, if not all, of these limitations.
 
 **Important note:** Make sure that you have the correct kubectl config set. You can do this by exporting the `KUBECONFIG` variable and pointing to the correct config file.
 
