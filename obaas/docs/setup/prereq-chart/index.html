@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://www.googletagmanager.com">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-2EVY167E00"></script>
 <script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-2EVY167E00",{anonymize_ip:!0})</script><link rel="stylesheet" href="/microservices-datadriven/obaas/assets/css/styles.d329a656.css">
-<script src="/microservices-datadriven/obaas/assets/js/runtime~main.3056da06.js" defer="defer"></script>
-<script src="/microservices-datadriven/obaas/assets/js/main.0ce76037.js" defer="defer"></script>
+<script src="/microservices-datadriven/obaas/assets/js/runtime~main.3657de69.js" defer="defer"></script>
+<script src="/microservices-datadriven/obaas/assets/js/main.9c52c61d.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><defs>
@@ -19,27 +19,10 @@
 <div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cd obaas-prereqs/</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">ls</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Chart.yaml LICENSE README.md templates values.yaml</span><br></span></code></pre></div></div>
 <p>You must edit the <strong>values.yaml</strong> file as follows:</p>
 <ul>
-<li>
-<p>If you are using a private repository, you must update each
-<strong>image</strong> entry to point to your private repository instead of the
-public repositories.</p>
-</li>
-<li>
-<p>Optional. Each component listed in the file (e.g.,
-kube-state-metrics, metrics-server, cert-manager, etc.) has an
-<strong>enabled: true</strong> entry. If you want to omit a component, you must
-change the setting to <strong>false</strong>. Please note the following
-limitations:</p>
-<ul>
-<li>
-<p>Metrics-server is required if you wish to use the Horizontal Pod
-Autoscaling feature.</p>
-</li>
-<li>
-<p>Cert-manager is required.</p>
-</li>
-</ul>
-</li>
+<li>If you are using a private repository, you must update each <strong>image</strong> entry to point to your private repository instead of the public repositories.</li>
+<li>Optional. Each component listed in the file (e.g., kube-state-metrics, metrics-server, cert-manager, etc.) has an <strong>enabled: true</strong> entry. If you want to omit a component, you must change the setting to <strong>false</strong>. Please note the following limitations:</li>
+<li>Metrics-server is required if you wish to use the Horizontal Pod Autoscaling feature.</li>
+<li>Cert-manager is required.</li>
 </ul>
 <p>Choose a name for this OBaaS installation. In this document, we use <strong>obaas-dev</strong> as the name. Please note that the <strong>targetNamespace</strong> should match the namespace you created in the previous step, and that this namespace must already exist.</p>
 <p>Install the Helm chart using the following command (The <code>--debug</code> flag is optional and enables verbose output from Helm):</p>
