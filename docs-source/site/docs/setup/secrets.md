@@ -11,15 +11,15 @@ You must create a few secrets before starting the installation of Helm charts. T
 Create an image pull secret to allow pull access to your container repository. This is the repository where application images will be stored. If you are using the recommended OKE, this should be an OCI-R repository in the same compartment and region. This example assumes your tenancy is called **maacloud**, the region **phx.ocir.io** and that your tenancy uses IDCS authentication. Adjust the command to match your tenancy:
 
 ```bash
-kubectl create secret generic ocir
-  --from-literal=host=phx.ocir.io/maacloud
-  --from-literal=username=maacloud/oracleidentitycloudservice/bob.smith@oracle.com
-  --from-literal=password="xyz123xyz"
+kubectl create secret generic ocir \
+  --from-literal=host=phx.ocir.io/maacloud \
+  --from-literal=username=maacloud/oracleidentitycloudservice/bob.smith@oracle.com \
+  --from-literal=password="xyz123xyz" \
   --from-literal=email=bob.smith@oracle.com
 ```
 
 :::important
-Your OCI-R password must be an Authentication Token, not the password you use to log into the OCI web console. 
+Your OCI-R password must be an Authentication Token, not the password you use to log into the OCI web console.
 :::
 
 You can validate the token by performing a docker login using this command (with your own username and token):
@@ -58,17 +58,17 @@ Note that the values are base64 encoded.
 Create two additional secrets as shown below:
 
 ```bash
-kubectl create secret generic obaas-registry-login
-  --from-literal=registry.username="maacloud/oracleidentitycloudservice/mark.x.nelson@oracle.com"
-  --from-literal=registry.password="xyz123xyz"
+kubectl create secret generic obaas-registry-login \
+  --from-literal=registry.username="maacloud/oracleidentitycloudservice/mark.x.nelson@oracle.com" \
+  --from-literal=registry.password="xyz123xyz" \
   --from-literal=registry.push_url="phx.ocir.io/maacloud/obaas-dev"
 ```
 
 ```bash
-kubectl create secret docker-registry obaas-registry-pull-auth
-  --docker-server="phx.ocir.io/maacloud"
-  --docker-username="maacloud/oracleidentitycloudservice/mark.x.nelson@oracle.com"
-  --docker-password="xyz123xyz"
+kubectl create secret docker-registry obaas-registry-pull-auth \
+  --docker-server="phx.ocir.io/maacloud" \
+  --docker-username="maacloud/oracleidentitycloudservice/mark.x.nelson@oracle.com" \
+  --docker-password="xyz123xyz" \
   --docker-email="mark.x.nelson@oracle.com"
 ```
 
@@ -98,28 +98,28 @@ These secrets are used to set the passwords for various OBaaS components. Note t
 Create the secrets using these commands:
 
 ```bash
-kubectl create secret generic signoz
-  --from-literal=email="admin@nodomain.com"
+kubectl create secret generic signoz \
+  --from-literal=email="admin@nodomain.com" \
   --from-literal=password=Welcome-12345
 ```
 
 ```bash
-kubectl create secret generic clickhouse
-  --from-literal=username="clickhouse_operator"
+kubectl create secret generic clickhouse \
+  --from-literal=username="clickhouse_operator" \
   --from-literal=password=Welcome-12345
 ```
 
 ```bash
-kubectl create secret generic alertmanager
-  --from-literal=username="admin"
+kubectl create secret generic alertmanager \
+  --from-literal=username="admin" \
   --from-literal=password="Welcome-12345"
 ```
 
 To use random passwords, instead of specifying a password as shown above, use this form of the command instead:
 
 ```bash
-kubectl create secret generic signoz
-  --from-literal=email="admin@nodomain.com"
+kubectl create secret generic signoz \
+  --from-literal=email="admin@nodomain.com" \
   --from-literal=password=\$(openssl rand -base64 16)
 ```
 
@@ -132,10 +132,10 @@ If you are planning to install multiple OBaaS instances, AND you want to use dif
 Create a secret to provide OBaaS with the credentials for your database. This example assumes your database is called **demo1**:
 
 ```bash
-kubectl create secret generic admin-user-authn
-  --from-literal=username=ADMIN
-  --from-literal=password="Welcome-12345"
-  --from-literal=service="demo1_tp" 
+kubectl create secret generic admin-user-authn \
+  --from-literal=username=ADMIN \
+  --from-literal=password="Welcome-12345" \
+  --from-literal=service="demo1_tp" \
   --from-literal=dbname="demo1"
 ```  
 

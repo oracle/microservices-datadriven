@@ -17,23 +17,21 @@ Chart.yaml LICENSE README.md admin dashboards templates values.yaml
 
 You must edit the **values.yaml** file as follows:
 
-- If you are using a private repository, you must update each
-    **image** entry to point to your private repository instead of the
-    public repositories.
+- If you are using a private repository, you must update each **image** entry to point to your private repository instead of the  public repositories.
+- (Optional) If you want to install any components in this chart into their own separate namespace, you can override the global namespace by setting a value in the **namespace** property inside the section for that component.
 
-- (Optional) If you want to install any components in this chart into
-    their own separate namespace, you can override the global namespace
-    by setting a value in the **namespace** property inside the section
-    for that component.
+Install the Helm chart using the following command (The `--debug` flag is optional and enables verbose output from Helm).
 
-Install the Helm chart using the following command (The `--debug` flag is optional and enables verbose output from Helm):
+- global.obaasName="obaas-dev" - Sets the OBaaS instance name.
+- global.targetNamespace="obaas-dev" - Specifies the target namespace (*OPTIONAL*, only needed if you want to override the default namespace).
+
+**Note**: If you are installing multiple OBaaS instances in your cluster, each one MUST have a different release name, `obaasName` and `targetNamespace`.
 
 ```bash
-helm --debug install obaas-observability --set global.obaasName="obaas-dev"
+helm --debug install obaas-observability --set global.obaasName="obaas-dev" --set global.targetNamespace="obaas-dev" ./
 ```
 
 ```log
---set global.targetNamespace="obaas-dev" ./
 NAME: obaas-observability
 LAST DEPLOYED: Sun Aug 17 13:00:00 2025
 NAMESPACE: default

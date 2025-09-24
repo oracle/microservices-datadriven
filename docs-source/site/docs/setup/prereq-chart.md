@@ -14,20 +14,10 @@ Chart.yaml LICENSE README.md templates values.yaml
 
 You must edit the **values.yaml** file as follows:
 
-- If you are using a private repository, you must update each
-    **image** entry to point to your private repository instead of the
-    public repositories.
-
-- Optional. Each component listed in the file (e.g.,
-    kube-state-metrics, metrics-server, cert-manager, etc.) has an
-    **enabled: true** entry. If you want to omit a component, you must
-    change the setting to **false**. Please note the following
-    limitations:
-
-  - Metrics-server is required if you wish to use the Horizontal Pod
-        Autoscaling feature.
-
-  - Cert-manager is required.
+- If you are using a private repository, you must update each **image** entry to point to your private repository instead of the public repositories.
+- Optional. Each component listed in the file (e.g., kube-state-metrics, metrics-server, cert-manager, etc.) has an **enabled: true** entry. If you want to omit a component, you must change the setting to **false**. Please note the following limitations:
+- Metrics-server is required if you wish to use the Horizontal Pod Autoscaling feature.
+- Cert-manager is required.
 
 Choose a name for this OBaaS installation. In this document, we use **obaas-dev** as the name. Please note that the **targetNamespace** should match the namespace you created in the previous step, and that this namespace must already exist.
 
