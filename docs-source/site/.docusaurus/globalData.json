@@ -1,0 +1,162 @@
+{
+  "docusaurus-plugin-content-docs": {
+    "default": {
+      "path": "/microservices-datadriven/obaas/docs",
+      "versions": [
+        {
+          "name": "current",
+          "label": "Next",
+          "isLast": true,
+          "path": "/microservices-datadriven/obaas/docs",
+          "mainDocId": "intro",
+          "docs": [
+            {
+              "id": "deploy/buildpushapp",
+              "path": "/microservices-datadriven/obaas/docs/deploy/buildpushapp",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "deploy/dbaccess",
+              "path": "/microservices-datadriven/obaas/docs/deploy/dbaccess",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "deploy/deployapp",
+              "path": "/microservices-datadriven/obaas/docs/deploy/deployapp",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "deploy/introflow",
+              "path": "/microservices-datadriven/obaas/docs/deploy/introflow",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "intro",
+              "path": "/microservices-datadriven/obaas/docs/intro",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "observability/acces",
+              "path": "/microservices-datadriven/obaas/docs/observability/acces",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "observability/configure",
+              "path": "/microservices-datadriven/obaas/docs/observability/configure",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "observability/dashboards",
+              "path": "/microservices-datadriven/obaas/docs/observability/dashboards",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "observability/dbexporter",
+              "path": "/microservices-datadriven/obaas/docs/observability/dbexporter",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "observability/metricslogstraces",
+              "path": "/microservices-datadriven/obaas/docs/observability/metricslogstraces",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "observability/overview",
+              "path": "/microservices-datadriven/obaas/docs/observability/overview",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "platform/platform",
+              "path": "/microservices-datadriven/obaas/docs/platform/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "setup/database",
+              "path": "/microservices-datadriven/obaas/docs/setup/database",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "setup/namespace",
+              "path": "/microservices-datadriven/obaas/docs/setup/namespace",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "setup/obaas",
+              "path": "/microservices-datadriven/obaas/docs/setup/obaas",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "setup/observability",
+              "path": "/microservices-datadriven/obaas/docs/setup/observability",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "setup/obtaining",
+              "path": "/microservices-datadriven/obaas/docs/setup/obtaining",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "setup/prereq-chart",
+              "path": "/microservices-datadriven/obaas/docs/setup/prereq-chart",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "setup/prereqs",
+              "path": "/microservices-datadriven/obaas/docs/setup/prereqs",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "setup/secrets",
+              "path": "/microservices-datadriven/obaas/docs/setup/secrets",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "setup/setup",
+              "path": "/microservices-datadriven/obaas/docs/setup/",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "/category/setup",
+              "path": "/microservices-datadriven/obaas/docs/category/setup",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "/category/deploy",
+              "path": "/microservices-datadriven/obaas/docs/category/deploy",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "/category/platform-services",
+              "path": "/microservices-datadriven/obaas/docs/category/platform-services",
+              "sidebar": "tutorialSidebar"
+            },
+            {
+              "id": "/category/observability",
+              "path": "/microservices-datadriven/obaas/docs/category/observability",
+              "sidebar": "tutorialSidebar"
+            }
+          ],
+          "draftIds": [],
+          "sidebars": {
+            "tutorialSidebar": {
+              "link": {
+                "path": "/microservices-datadriven/obaas/docs/intro",
+                "label": "intro"
+              }
+            }
+          }
+        }
+      ],
+      "breadcrumbs": true
+    }
+  },
+  "docusaurus-plugin-google-gtag": {
+    "default": {
+      "trackingID": [
+        "G-2EVY167E00"
+      ],
+      "anonymizeIP": true,
+      "id": "default"
+    }
+  }
+}

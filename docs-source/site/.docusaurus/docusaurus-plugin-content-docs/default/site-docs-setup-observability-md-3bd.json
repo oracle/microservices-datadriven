@@ -1,0 +1,28 @@
+{
+  "id": "setup/observability",
+  "title": "Prepare and Install the OBaaS Observability Helm Chart",
+  "description": "Prepare and Install the OBaaS Observability Helm Chart",
+  "source": "@site/docs/setup/observability.md",
+  "sourceDirName": "setup",
+  "slug": "/setup/observability",
+  "permalink": "/microservices-datadriven/obaas/docs/setup/observability",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/oracle/microservices-datadriven/tree/main/docs-source/site/docs/setup/observability.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 8,
+  "frontMatter": {
+    "title": "Prepare and Install the OBaaS Observability Helm Chart",
+    "sidebar_position": 8
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Prepare then install OBaaS Prerequisites Helm chart",
+    "permalink": "/microservices-datadriven/obaas/docs/setup/prereq-chart"
+  },
+  "next": {
+    "title": "Prepare and Install the OBaaS Database Helm chart",
+    "permalink": "/microservices-datadriven/obaas/docs/setup/database"
+  }
+}

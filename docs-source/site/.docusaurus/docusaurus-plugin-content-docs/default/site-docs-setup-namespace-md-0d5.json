@@ -1,0 +1,28 @@
+{
+  "id": "setup/namespace",
+  "title": "Create Namespace(s) for OBaaS",
+  "description": "Create the namespace(s) for the OBaaS installation(s)",
+  "source": "@site/docs/setup/namespace.md",
+  "sourceDirName": "setup",
+  "slug": "/setup/namespace",
+  "permalink": "/microservices-datadriven/obaas/docs/setup/namespace",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/oracle/microservices-datadriven/tree/main/docs-source/site/docs/setup/namespace.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 6,
+  "frontMatter": {
+    "title": "Create Namespace(s) for OBaaS",
+    "sidebar_position": 6
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Create Required Secrets",
+    "permalink": "/microservices-datadriven/obaas/docs/setup/secrets"
+  },
+  "next": {
+    "title": "Prepare then install OBaaS Prerequisites Helm chart",
+    "permalink": "/microservices-datadriven/obaas/docs/setup/prereq-chart"
+  }
+}

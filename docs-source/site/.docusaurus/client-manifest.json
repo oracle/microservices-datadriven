@@ -1,0 +1,523 @@
+{
+  "entrypoints": [
+    "main"
+  ],
+  "origins": {
+    "237": [
+      237
+    ],
+    "668": [
+      61,
+      401,
+      869,
+      668
+    ],
+    "17896441": [
+      668,
+      869,
+      401
+    ],
+    "main": [
+      354,
+      869,
+      792
+    ],
+    "runtime~main": [
+      792,
+      869,
+      354
+    ],
+    "0d502caa": [
+      583
+    ],
+    "0e384e19": [
+      976
+    ],
+    "0fcb4221": [
+      771
+    ],
+    "14eb3368": [
+      869,
+      969
+    ],
+    "1933a263": [
+      679
+    ],
+    "1d5c927d": [
+      52
+    ],
+    "1df93b7f": [
+      869,
+      964
+    ],
+    "1f391b9e": [
+      668,
+      869,
+      61
+    ],
+    "23bbaa4d": [
+      628
+    ],
+    "2779c114": [
+      381
+    ],
+    "393be207": [
+      134
+    ],
+    "3bdcc6ea": [
+      138
+    ],
+    "4da0cc27": [
+      247
+    ],
+    "5014eec9": [
+      501
+    ],
+    "5e95c892": [
+      647
+    ],
+    "6245a28e": [
+      994
+    ],
+    "642eca8e": [
+      491
+    ],
+    "74f6f9f9": [
+      818
+    ],
+    "7694d7e1": [
+      610
+    ],
+    "84a15b3e": [
+      748
+    ],
+    "90ad4253": [
+      5
+    ],
+    "a2ba2a64": [
+      732
+    ],
+    "a3208752": [
+      443
+    ],
+    "a35772e5": [
+      646
+    ],
+    "a7456010": [
+      235
+    ],
+    "a7bd4aaa": [
+      98
+    ],
+    "a94703ab": [
+      869,
+      48
+    ],
+    "aba21aa0": [
+      742
+    ],
+    "b2b450a7": [
+      250
+    ],
+    "b420b19e": [
+      806
+    ],
+    "c2a49136": [
+      882
+    ],
+    "c6f57b75": [
+      624
+    ],
+    "c85a4240": [
+      490
+    ],
+    "f6310cba": [
+      775
+    ],
+    "fdcb31b2": [
+      262
+    ],
+    "styles": [
+      48,
+      61,
+      354,
+      401,
+      668,
+      792,
+      964,
+      969,
+      869
+    ]
+  },
+  "assets": {
+    "5": {
+      "js": [
+        {
+          "file": "assets/js/90ad4253.9450ff5b.js",
+          "hash": "7f753288d2ac4789",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/90ad4253.9450ff5b.js"
+        }
+      ]
+    },
+    "48": {
+      "js": [
+        {
+          "file": "assets/js/a94703ab.643e6934.js",
+          "hash": "ed43cf5dbee3b96b",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/a94703ab.643e6934.js"
+        }
+      ]
+    },
+    "52": {
+      "js": [
+        {
+          "file": "assets/js/1d5c927d.394acc87.js",
+          "hash": "7d593b0005df34bc",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/1d5c927d.394acc87.js"
+        }
+      ]
+    },
+    "61": {
+      "js": [
+        {
+          "file": "assets/js/1f391b9e.d091afa4.js",
+          "hash": "254ae588f7687eb2",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/1f391b9e.d091afa4.js"
+        }
+      ]
+    },
+    "98": {
+      "js": [
+        {
+          "file": "assets/js/a7bd4aaa.2ca06876.js",
+          "hash": "b797d883e17b5ce4",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/a7bd4aaa.2ca06876.js"
+        }
+      ]
+    },
+    "134": {
+      "js": [
+        {
+          "file": "assets/js/393be207.80eb0ba2.js",
+          "hash": "de1f1f52f51e8c3f",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/393be207.80eb0ba2.js"
+        }
+      ]
+    },
+    "138": {
+      "js": [
+        {
+          "file": "assets/js/3bdcc6ea.5ca06a77.js",
+          "hash": "41ccdd10ab13e362",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/3bdcc6ea.5ca06a77.js"
+        }
+      ]
+    },
+    "235": {
+      "js": [
+        {
+          "file": "assets/js/a7456010.25370a92.js",
+          "hash": "d98d2a144d4dad96",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/a7456010.25370a92.js"
+        }
+      ]
+    },
+    "237": {
+      "js": [
+        {
+          "file": "assets/js/237.d496122d.js",
+          "hash": "9f9fb4e85a62952f",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/237.d496122d.js"
+        }
+      ]
+    },
+    "247": {
+      "js": [
+        {
+          "file": "assets/js/4da0cc27.a3f803ed.js",
+          "hash": "dda818f98775313a",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/4da0cc27.a3f803ed.js"
+        }
+      ]
+    },
+    "250": {
+      "js": [
+        {
+          "file": "assets/js/b2b450a7.5a3ddb45.js",
+          "hash": "128be988d3589495",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/b2b450a7.5a3ddb45.js"
+        }
+      ]
+    },
+    "262": {
+      "js": [
+        {
+          "file": "assets/js/fdcb31b2.5e12b74e.js",
+          "hash": "7a3a926e40791d2c",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/fdcb31b2.5e12b74e.js"
+        }
+      ]
+    },
+    "354": {
+      "js": [
+        {
+          "file": "assets/js/runtime~main.3657de69.js",
+          "hash": "f4582bab4556e43d",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/runtime~main.3657de69.js"
+        }
+      ]
+    },
+    "381": {
+      "js": [
+        {
+          "file": "assets/js/2779c114.50714be8.js",
+          "hash": "d1b776962261bee8",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/2779c114.50714be8.js"
+        }
+      ]
+    },
+    "401": {
+      "js": [
+        {
+          "file": "assets/js/17896441.951229dd.js",
+          "hash": "6174d2d812d1bb69",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/17896441.951229dd.js"
+        }
+      ]
+    },
+    "443": {
+      "js": [
+        {
+          "file": "assets/js/a3208752.957d7cbc.js",
+          "hash": "1ead2ebd0ceed4ac",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/a3208752.957d7cbc.js"
+        }
+      ]
+    },
+    "490": {
+      "js": [
+        {
+          "file": "assets/js/c85a4240.df5e8c16.js",
+          "hash": "3680f66fbd438eb1",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/c85a4240.df5e8c16.js"
+        }
+      ]
+    },
+    "491": {
+      "js": [
+        {
+          "file": "assets/js/642eca8e.241745b8.js",
+          "hash": "f791312407aa7cde",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/642eca8e.241745b8.js"
+        }
+      ]
+    },
+    "501": {
+      "js": [
+        {
+          "file": "assets/js/5014eec9.c6570f3d.js",
+          "hash": "349274e7224675d4",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/5014eec9.c6570f3d.js"
+        }
+      ]
+    },
+    "583": {
+      "js": [
+        {
+          "file": "assets/js/0d502caa.5c8cb6c4.js",
+          "hash": "ed40fc705c4bd2f9",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/0d502caa.5c8cb6c4.js"
+        }
+      ]
+    },
+    "610": {
+      "js": [
+        {
+          "file": "assets/js/7694d7e1.d7178cbd.js",
+          "hash": "8253503ec80c3d07",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/7694d7e1.d7178cbd.js"
+        }
+      ]
+    },
+    "624": {
+      "js": [
+        {
+          "file": "assets/js/c6f57b75.260f5ce3.js",
+          "hash": "7ca6fd7b913c97cf",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/c6f57b75.260f5ce3.js"
+        }
+      ]
+    },
+    "628": {
+      "js": [
+        {
+          "file": "assets/js/23bbaa4d.a8ff134e.js",
+          "hash": "fe7dec469323231f",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/23bbaa4d.a8ff134e.js"
+        }
+      ]
+    },
+    "646": {
+      "js": [
+        {
+          "file": "assets/js/a35772e5.9cd9fea1.js",
+          "hash": "d3bf4df99c6d77b1",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/a35772e5.9cd9fea1.js"
+        }
+      ]
+    },
+    "647": {
+      "js": [
+        {
+          "file": "assets/js/5e95c892.0955054f.js",
+          "hash": "701bd0f454e315c5",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/5e95c892.0955054f.js"
+        }
+      ]
+    },
+    "668": {
+      "js": [
+        {
+          "file": "assets/js/668.a919aaa7.js",
+          "hash": "004c1ba1a46199f1",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/668.a919aaa7.js"
+        }
+      ]
+    },
+    "679": {
+      "js": [
+        {
+          "file": "assets/js/1933a263.87f51f69.js",
+          "hash": "2e37d0140369e2d5",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/1933a263.87f51f69.js"
+        }
+      ]
+    },
+    "732": {
+      "js": [
+        {
+          "file": "assets/js/a2ba2a64.ed4ba3f0.js",
+          "hash": "2f52399bf932dd17",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/a2ba2a64.ed4ba3f0.js"
+        }
+      ]
+    },
+    "742": {
+      "js": [
+        {
+          "file": "assets/js/aba21aa0.ef5bd9e3.js",
+          "hash": "975d0fce928d38d1",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/aba21aa0.ef5bd9e3.js"
+        }
+      ]
+    },
+    "748": {
+      "js": [
+        {
+          "file": "assets/js/84a15b3e.beb3a144.js",
+          "hash": "2fe0db3752f81538",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/84a15b3e.beb3a144.js"
+        }
+      ]
+    },
+    "771": {
+      "js": [
+        {
+          "file": "assets/js/0fcb4221.88514d07.js",
+          "hash": "291af61e8bdbf749",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/0fcb4221.88514d07.js"
+        }
+      ]
+    },
+    "775": {
+      "js": [
+        {
+          "file": "assets/js/f6310cba.6f8b5236.js",
+          "hash": "8ffca1223763772f",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/f6310cba.6f8b5236.js"
+        }
+      ]
+    },
+    "792": {
+      "js": [
+        {
+          "file": "assets/js/main.9c52c61d.js",
+          "hash": "3e6b46c32034c432",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/main.9c52c61d.js"
+        }
+      ]
+    },
+    "806": {
+      "js": [
+        {
+          "file": "assets/js/b420b19e.184c115c.js",
+          "hash": "0d54f0ac6a9c4b73",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/b420b19e.184c115c.js"
+        }
+      ]
+    },
+    "818": {
+      "js": [
+        {
+          "file": "assets/js/74f6f9f9.6d00c7b0.js",
+          "hash": "2feb6ccc425fb7da",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/74f6f9f9.6d00c7b0.js"
+        }
+      ]
+    },
+    "869": {
+      "css": [
+        {
+          "file": "assets/css/styles.d329a656.css",
+          "hash": "82a2f98d7201e05f",
+          "publicPath": "/microservices-datadriven/obaas/assets/css/styles.d329a656.css"
+        }
+      ]
+    },
+    "882": {
+      "js": [
+        {
+          "file": "assets/js/c2a49136.e39a9f89.js",
+          "hash": "a52af24a64bcf7b3",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/c2a49136.e39a9f89.js"
+        }
+      ]
+    },
+    "964": {
+      "js": [
+        {
+          "file": "assets/js/1df93b7f.83d023b6.js",
+          "hash": "23714a02b483ee1c",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/1df93b7f.83d023b6.js"
+        }
+      ]
+    },
+    "969": {
+      "js": [
+        {
+          "file": "assets/js/14eb3368.d64fc15c.js",
+          "hash": "44bdadfeb38a1f65",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/14eb3368.d64fc15c.js"
+        }
+      ]
+    },
+    "976": {
+      "js": [
+        {
+          "file": "assets/js/0e384e19.4c9f6f28.js",
+          "hash": "daf262e425662491",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/0e384e19.4c9f6f28.js"
+        }
+      ]
+    },
+    "994": {
+      "js": [
+        {
+          "file": "assets/js/6245a28e.6e4b7cb2.js",
+          "hash": "169cb22735307ce1",
+          "publicPath": "/microservices-datadriven/obaas/assets/js/6245a28e.6e4b7cb2.js"
+        }
+      ]
+    }
+  }
+}

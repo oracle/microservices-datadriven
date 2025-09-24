@@ -7,8 +7,8 @@
 <link rel="preconnect" href="https://www.googletagmanager.com">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-2EVY167E00"></script>
 <script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-2EVY167E00",{anonymize_ip:!0})</script><link rel="stylesheet" href="/microservices-datadriven/obaas/assets/css/styles.d329a656.css">
-<script src="/microservices-datadriven/obaas/assets/js/runtime~main.3056da06.js" defer="defer"></script>
-<script src="/microservices-datadriven/obaas/assets/js/main.0ce76037.js" defer="defer"></script>
+<script src="/microservices-datadriven/obaas/assets/js/runtime~main.3657de69.js" defer="defer"></script>
+<script src="/microservices-datadriven/obaas/assets/js/main.9c52c61d.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;"><defs>
@@ -21,21 +21,17 @@ which you will see the following files:</p>
 <div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">cd obaas-observability/</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">ls</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Chart.yaml LICENSE README.md admin dashboards templates values.yaml</span><br></span></code></pre></div></div>
 <p>You must edit the <strong>values.yaml</strong> file as follows:</p>
 <ul>
-<li>
-<p>If you are using a private repository, you must update each
-<strong>image</strong> entry to point to your private repository instead of the
-public repositories.</p>
-</li>
-<li>
-<p>(Optional) If you want to install any components in this chart into
-their own separate namespace, you can override the global namespace
-by setting a value in the <strong>namespace</strong> property inside the section
-for that component.</p>
-</li>
+<li>If you are using a private repository, you must update each <strong>image</strong> entry to point to your private repository instead of the  public repositories.</li>
+<li>(Optional) If you want to install any components in this chart into their own separate namespace, you can override the global namespace by setting a value in the <strong>namespace</strong> property inside the section for that component.</li>
 </ul>
-<p>Install the Helm chart using the following command (The <code>--debug</code> flag is optional and enables verbose output from Helm):</p>
-<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">helm --debug install obaas-observability --set global.obaasName=&quot;obaas-dev&quot;</span><br></span></code></pre></div></div>
-<div class="language-log codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-log codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">--set global.targetNamespace=&quot;obaas-dev&quot; ./</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">NAME: obaas-observability</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">LAST DEPLOYED: Sun Aug 17 13:00:00 2025</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">NAMESPACE: default</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">STATUS: deployed</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">REVISION: 1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">TEST SUITE: None</span><br></span></code></pre></div></div>
+<p>Install the Helm chart using the following command (The <code>--debug</code> flag is optional and enables verbose output from Helm).</p>
+<ul>
+<li>global.obaasName=&quot;obaas-dev&quot; - Sets the OBaaS instance name.</li>
+<li>global.targetNamespace=&quot;obaas-dev&quot; - Specifies the target namespace (<em>OPTIONAL</em>, only needed if you want to override the default namespace).</li>
+</ul>
+<p><strong>Note</strong>: If you are installing multiple OBaaS instances in your cluster, each one MUST have a different release name, <code>obaasName</code> and <code>targetNamespace</code>.</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">helm --debug install obaas-observability --set global.obaasName=&quot;obaas-dev&quot; --set global.targetNamespace=&quot;obaas-dev&quot; ./</span><br></span></code></pre></div></div>
+<div class="language-log codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-log codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">NAME: obaas-observability</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">LAST DEPLOYED: Sun Aug 17 13:00:00 2025</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">NAMESPACE: default</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">STATUS: deployed</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">REVISION: 1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">TEST SUITE: None</span><br></span></code></pre></div></div>
 <p>When the installation has completed, you can use this command to view the installed charts:</p>
 <div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">helm ls</span><br></span></code></pre></div></div>
 <div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">NAME               	NAMESPACE	REVISION	UPDATED                             	STATUS  	CHART                    	APP VERSION</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">obaas              	default  	1       	2025-09-12 13:57:55.859836 -0500 CDT	deployed	OBaaS-0.0.1              	2.0.0-M3   </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">obaas-db           	default  	1       	2025-09-12 13:51:23.751199 -0500 CDT	deployed	OBaaS-db-0.1.0           	2.0.0-M3   </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">obaas-observability	default  	1       	2025-09-12 13:45:43.113298 -0500 CDT	deployed	OBaaS-observability-0.1.0	2.0.0-M3 </span><br></span></code></pre></div></div>

@@ -1,0 +1,5 @@
+{
+  "blogBasePath": "/microservices-datadriven/obaas/blog",
+  "blogTitle": "Blog",
+  "authorsListPath": "/microservices-datadriven/obaas/blog/authors"
+}

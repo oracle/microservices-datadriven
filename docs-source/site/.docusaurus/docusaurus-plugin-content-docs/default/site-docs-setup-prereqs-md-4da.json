@@ -1,0 +1,28 @@
+{
+  "id": "setup/prereqs",
+  "title": "Prerequisites",
+  "description": "Prerequisites for Oracle Backend for Microservices and AI",
+  "source": "@site/docs/setup/prereqs.md",
+  "sourceDirName": "setup",
+  "slug": "/setup/prereqs",
+  "permalink": "/microservices-datadriven/obaas/docs/setup/prereqs",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/oracle/microservices-datadriven/tree/main/docs-source/site/docs/setup/prereqs.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "Prerequisites",
+    "sidebar_position": 2
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Introduction and Installation Flow",
+    "permalink": "/microservices-datadriven/obaas/docs/setup/"
+  },
+  "next": {
+    "title": "Obtaining installation package",
+    "permalink": "/microservices-datadriven/obaas/docs/setup/obtaining"
+  }
+}

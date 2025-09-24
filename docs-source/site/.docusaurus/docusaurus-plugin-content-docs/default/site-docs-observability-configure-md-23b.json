@@ -1,0 +1,28 @@
+{
+  "id": "observability/configure",
+  "title": "Configure Applications for SigNoz",
+  "description": "Configure applications for SigNoz Observability",
+  "source": "@site/docs/observability/configure.md",
+  "sourceDirName": "observability",
+  "slug": "/observability/configure",
+  "permalink": "/microservices-datadriven/obaas/docs/observability/configure",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/oracle/microservices-datadriven/tree/main/docs-source/site/docs/observability/configure.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 5,
+  "frontMatter": {
+    "title": "Configure Applications for SigNoz",
+    "sidebar_position": 5
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Pre-installed dashboards",
+    "permalink": "/microservices-datadriven/obaas/docs/observability/dashboards"
+  },
+  "next": {
+    "title": "Oracle Database Metrics Exporter",
+    "permalink": "/microservices-datadriven/obaas/docs/observability/dbexporter"
+  }
+}
