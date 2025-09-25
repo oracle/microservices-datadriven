@@ -20,7 +20,7 @@ You must edit the **values.yaml** file as follows:
 
 **Important note**: Please pause to double check all of the values are correct. If there are any errors here, the database provisioning will fail.
 
-Install the Helm chart using the following command (The `--debug` flag is optional and enables verbose output from Helm). 
+Install the Helm chart using the following command (The `--debug` flag is optional and enables verbose output from Helm).
 
 - global.obaasName="obaas-dev" - Sets the OBaaS instance name.
 - global.targetNamespace="obaas-dev" - Specifies the target namespace (*OPTIONAL*, only needed if you want to override the default namespace).

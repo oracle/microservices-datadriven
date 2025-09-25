@@ -16,19 +16,23 @@ Create a secret with database access information. This secret is used by the app
 
 For example if you have the following information:
 
-- name: `Your database name`. For example `helmdb`
-- username: `Your database user name`. For example `phonebook`
-- password: `Your database user password`. For example `Welcome-12345`
-- service: `Your servicename`. For example `helmdb_tp`
+- `db.name:` Your database name. For example `helmdb`
+- `db.username:` Your database user name. For example `phonebook`
+- `db.password:` Your database user password. For example `Welcome-12345`
+- `db.service:` Your servicename. For example `helmdb_tp`
+- `db.lb_username` Your Liquibase username.
+- `db.lb_password` Your Liquibase user password.
 
 Create a Kubernetes secret (in this example, `phonebook-db-secrets` in the `obaas-dev` namespace):
 
 ```bash
 kubectl -n obaas-dev create secret generic phonebook-db-secrets \
-  --from-literal=name=helmdb \
-  --from-literal=username=phonebook \
-  --from-literal=password=Welcome-12345 \
-  --from-literal=service=helmdb_tp
+  --from-literal=db.name=helmdb \
+  --from-literal=db.username=phonebook \
+  --from-literal=db.password=Welcome-12345 \
+  --from-literal=db.service=helmdb_tp \
+  --from-literal=db.lb_username=phonebook \
+  --from-literal=db.lb_password=Welcome-12345
 ```
 
 You can verify the values by running the following command (this is for the `username` value):
@@ -70,7 +74,7 @@ args:
   sql $(DB_USER)/$(DB_PASSWORD)@$(TNS_ALIAS) @/tmp/run.sql
 ```
 
-Update the `env:` section to reference the correct secret and keys (here using `obaas-db-secrets`):
+Update the `env:` section to reference the correct secret and keys (here using `obaas-db-secrets`, this is not the same secret as been created above.):
 
 ```yaml
 env:
