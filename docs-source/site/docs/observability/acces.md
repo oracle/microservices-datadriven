@@ -4,14 +4,14 @@ sidebar_position: 2
 ---
 ## How to access SigNoz
 
-1. Get the _admin_ email and password for SigNoz
+1. Get the _admin_ email and password for SigNoz. Replace the example namespace `observability` with the namespace where SigNoz is deployed.
 
    ```shell
    kubectl -n observability get secret signoz-authn -o jsonpath='{.data.email}' | base64 -d
    kubectl -n observability get secret signoz-authn -o jsonpath='{.data.password}' | base64 -d
    ```
 
-1. Expose the SigNoz user interface (UI) using this command:
+1. Expose the SigNoz user interface (UI) using this command. Replace the example namespace `observability` with the namespace where SigNoz is deployed:
 
    ```shell
    kubectl -n observability port-forward svc/obaas-signoz-frontend 3301:3301
