@@ -33,7 +33,7 @@ To Spring boot application you need to add the following dependency
 </dependency>
 ```
 
-And to configure the application to register with Eureka add the following to the `application.yaml` file:
+And to configure the application to register with Eureka add the following to the `application.yaml` file. The variables in this configuration are automatically injected to your deployment and pods you deploy applications to Oracle Backend for Microservices and AI using the OBaaS deployment Helm chart.
 
 ```yaml
 eureka:
