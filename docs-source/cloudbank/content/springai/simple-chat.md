@@ -10,7 +10,7 @@ In this module, you will learn how to build a simple chatbot using Spring AI and
 
 Oracle Backend for Microservices and AI provides an option during installation to provision a set of Kubernetes nodes with NVIDIA A10 GPUs that are suitable for running AI workloads. If you choose that option during installation, you may also specify how many nodes are provisioned. The GPU nodes will be in a separate Node Pool to the normal CPU nodes, which allows you to scale it independently of the CPU nodes. They are also labeled so that you can target appropriate workloads to them using node selectors and/or affinity rules.
 
-To view a list of nodes in your cluster with a GPU, you can use this command: 
+To view a list of nodes in your cluster with a GPU, you can use this command:
 
 ```bash
 $ kubectl get nodes -l 'node.kubernetes.io/instance-type=VM.GPU.A10.1'
@@ -40,34 +40,35 @@ To install Ollama on your GPU nodes, you can use the following commands:
     helm repo update
     ```
 
-1. Create a `ollama-values.yaml` file to configure how Ollama should be installed, including
-   which node(s) to run it on.  Here is an example that will run Ollama on a GPU node
-   and will pull the `llama3` model.
+1. Create a `ollama-values.yaml` file to configure how Ollama should be installed, including which node(s) to run it on.  Here is an example that will run Ollama on a GPU node and will pull the `llama3` model.
 
     ```yaml
     ollama:
-      gpu:
+    gpu:
         enabled: true
-        type: 'nvidia'
+        type: nvidia
         number: 1
-      models:
+    models:
+        pull:
         - llama3
     nodeSelector:
-      node.kubernetes.io/instance-type: VM.GPU.A10.1
+    node.kubernetes.io/instance-type: VM.GPU.A10.1
     ```
 
-   For more information on how to configure Ollama using the helm chart, refer to
-   [its documentation](https://artifacthub.io/packages/helm/ollama-helm/ollama).
+   For more information on how to configure Ollama using the helm chart, refer to [its documentation](https://artifacthub.io/packages/helm/ollama-helm/ollama).
 
-   > **Note:** If you are using an environment where no GPU is available, you can run this on a CPU by changing the `values.yaml` file to the following:
+   > **Note:** If you are using an environment where no GPU is available, you can run this on a CPU by changing the `ollama-values.yaml` file to the following:
 
    ```yaml
-   ollama:
-     gpu:
-       enabled: false
-     models:
-       - llama3
-   ``` 
+    ollama:
+    gpu:
+        enabled: false
+        type: amd
+        number: 1
+    models:
+        pull:
+        - llama3
+   ```
 
 1. Create a namespace to deploy Ollama in:
 
@@ -80,23 +81,23 @@ To install Ollama on your GPU nodes, you can use the following commands:
     ```bash
     helm install ollama ollama-helm/ollama --namespace ollama  --values ollama-values.yaml
     ```
+
 1. You can verify the deployment with the following command:
 
    ```bash
    kubectl get pods -n ollama -w
    ```
-   
+
    When the pod has the status `Running` the deployment is completed.
 
    ```text
    NAME                      READY   STATUS    RESTARTS   AGE
    ollama-659c88c6b8-kmdb9   0/1     Running   0          84s
    ```
-   
+
 ### Test your Ollama deployment
 
-You can interact with Ollama using the provided command line tool, called `ollama`.
-For example, to list the available models, use the `ollama ls` command:
+You can interact with Ollama using the provided command line tool, called `ollama`. For example, to list the available models, use the `ollama ls` command:
 
 ```bash
 kubectl -n ollama exec svc/ollama -- ollama ls
@@ -117,11 +118,9 @@ which provides a comprehensive platform for building enterprise-level applicatio
 
 ### Using LLMs hosted by Ollama in your Spring application
 
-A Kubernetes service named 'ollama' with port 11434 will be created so that your
-applications can talk to models hosted by Ollama.
+A Kubernetes service named 'ollama' with port 11434 will be created so that your applications can talk to models hosted by Ollama.
 
-Now, you will create a simple Spring AI application that uses Llama3 to
-create a simple chatbot.
+Now, you will create a simple Spring AI application that uses Llama3 to create a simple chatbot.
 
 > **Note:** The sample code used in this module is available [here](https://github.com/oracle/microservices-datadriven/tree/main/cloudbank-v4/chatbot).
 
@@ -204,11 +203,11 @@ create a simple chatbot.
     </project>
    ```
 
-   Note that this is very similar to the Maven POM files you have created in previous modules.  [Spring AI](https://github.com/spring-projects/spring-ai) is currently approaching its 1.0.0 release, so you need to enable access to the milestone and snapshot repositories to use it.  You will see the `repositories` section in the POM file above does that. 
+   Note that this is very similar to the Maven POM files you have created in previous modules.  [Spring AI](https://github.com/spring-projects/spring-ai) is currently approaching its 1.0.0 release, so you need to enable access to the milestone and snapshot repositories to use it.  You will see the `repositories` section in the POM file above does that.
 
    The `spring-ai-bom` was added in the `dependencyManagement` section to make it easy to select the correct versions of various dependencies.
 
-   Finally, a dependency for `spring-ai-ollama-spring-boot-starter` was added. This provides access to the Spring AI Ollama functionality and autoconfiguration. 
+   Finally, a dependency for `spring-ai-ollama-spring-boot-starter` was added. This provides access to the Spring AI Ollama functionality and autoconfiguration.
 
 1. Configure access to your Ollama deployment
 
@@ -228,9 +227,7 @@ create a simple chatbot.
               model: llama3
     ```
 
-   Note that you are providing the URL to access the Ollama instance that you just
-   deployed in your cluster.  You also need to tell Spring AI to enable chat and
-   which model to use.
+   Note that you are providing the URL to access the Ollama instance that you just deployed in your cluster.  You also need to tell Spring AI to enable chat and which model to use.
 
 1. Create the main Spring application class
 
@@ -315,7 +312,7 @@ create a simple chatbot.
 
 1. Build a JAR file for deployment
 
-    Run the following command to build the JAR file (it will also remove any earlier builds). 
+    Run the following command to build the JAR file (it will also remove any earlier builds).
 
     ```shell
     $ mvn clean package
@@ -394,9 +391,9 @@ create a simple chatbot.
 
 The simplest way to verify the application is to use a kubectl tunnel to access it.
 
-1. Create a tunnel to access the application 
+1. Create a tunnel to access the application:
 
-   Start a tunnel using this command: 
+   Start a tunnel using this command:
 
     ```bash
     kubectl -n application port-forward svc/chatbot 8080 &
@@ -414,3 +411,4 @@ The simplest way to verify the application is to use a kubectl tunnel to access 
     ...
     ...
     ```
+    
