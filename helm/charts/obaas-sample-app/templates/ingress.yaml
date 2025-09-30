@@ -3,6 +3,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "obaas-app.fullname" . }}
+  namespace: {{ .Values.obaas.namespace }} 
   labels:
     {{- include "obaas-app.labels" . | nindent 4 }}
   {{- with .Values.ingress.annotations }}

@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "obaas-app.fullname" . }}
+  namespace: {{ .Values.obaas.namespace }} 
   labels:
     {{- include "obaas-app.labels" . | nindent 4 }}
     obaas.framework: SPRING_BOOT
@@ -50,9 +51,7 @@ spec:
           {{- $obaasObs := (lookup "v1" "ConfigMap" .Values.obaas.namespace "obaas-observability-config") }}
           {{- if $.Values.obaas.mp_lra.enabled }}
             - name: MP_LRA_COORDINATOR_URL
-              value: {{ $obaas.data.MP_LRA_COORDINATOR_URL | quote }}
-            - name: MP_LRA_PARTICIPANT_URL
-              value: {{ $obaas.data.MP_LRA_PARTICIPANT_URL | quote }}
+              value: {{ $obaas.data.otmm | quote }}
           {{- end }}
           {{- if $.Values.obaas.eureka.enabled }}
             - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
@@ -68,7 +67,7 @@ spec:
           {{- end }}
           {{- if $.Values.obaas.otel.enabled }}
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: {{ $obaasObs.data.signoz-otel-colletor | quote }}
+              value: {{ (index $obaasObs.data "signoz-otel-collector") | quote }}
           {{- end }}
           {{- if $.Values.obaas.springboot.enabled }}
             - name: SPRING_PROFILES_ACTIVE
@@ -96,6 +95,8 @@ spec:
                 secretKeyRef:
                   name: {{ $.Values.obaas.database.credentialsSecret }}
                   key: db.lb_password
+            - name: LIQUIBASE_DATASOURCE_URL
+              value: "jdbc:oracle:thin:@${SPRING_DB_SERVICE}?TNS_ADMIN=/oracle/tnsadmin"
             - name: SPRING_DB_SERVICE
               valueFrom:
                 secretKeyRef:
