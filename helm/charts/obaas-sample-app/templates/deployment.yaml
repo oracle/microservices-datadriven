@@ -95,6 +95,8 @@ spec:
                 secretKeyRef:
                   name: {{ $.Values.obaas.database.credentialsSecret }}
                   key: db.lb_password
+            - name: LIQUIBASE_DATASOURCE_URL
+              value: "jdbc:oracle:thin:@${SPRING_DB_SERVICE}?TNS_ADMIN=/oracle/tnsadmin"
             - name: SPRING_DB_SERVICE
               valueFrom:
                 secretKeyRef:
