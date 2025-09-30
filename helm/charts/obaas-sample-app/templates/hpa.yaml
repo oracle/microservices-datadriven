@@ -3,6 +3,7 @@ apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "obaas-app.fullname" . }}
+  namespace: {{ .Values.obaas.namespace }} 
   labels:
     {{- include "obaas-app.labels" . | nindent 4 }}
 spec:

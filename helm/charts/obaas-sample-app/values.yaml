@@ -136,20 +136,20 @@ tolerations: []
 
 affinity: {}
 
+# Oracle Backend for Microservices and AI Settings.
 obaas:
-  namespace: application
+  namespace: application                    # Replace with your namespace 
   database:
-    enabled: true
-    credentialsSecret: obaas-app-db-secrets
-    walletSecret: obaas-adb-tns-admin-1
+    enabled: true                           # If true variables with DB secret content will be created
+    credentialsSecret: obaas-app-db-secrets # Replace with your secret name
+    walletSecret: obaas-adb-tns-admin-1     # Replace with your wallet secret name
   otel:
-    enabled: true
+    enabled: true                           # Enable OpenTelemetry
   # MicroProfile LRA
   mp_lra:
-    enabled: false
+    enabled: false                          # Enable OTMM
   # Spring Boot applications
   springboot:
-    enabled: true
+    enabled: true                           # Enable Spring Boot specific variables
   eureka:
-    enabled: true
-
+    enabled: true                           # Enable Eureka client
