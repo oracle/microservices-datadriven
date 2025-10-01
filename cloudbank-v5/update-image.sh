@@ -5,7 +5,7 @@
 
 if [ "$#" -ne 2 ]; then
     echo "Usage: $0 <repository> <tag>"
-    echo "Example: $0 sjc.ocir.io/maacloud/cloudbank-v5/account 0.0.1-SNAPSHOT"
+    echo "Example: $0 my-repository/account 0.0.1-SNAPSHOT"
     exit 1
 fi
 
