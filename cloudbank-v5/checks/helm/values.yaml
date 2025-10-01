@@ -7,11 +7,11 @@ replicaCount: 1
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository: ""
+  repository: "sjc.ocir.io/maacloud/cloudbank-v5/checks"
   # This sets the pull policy for images.
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+  tag: "0.0.1-SNAPSHOT"
 
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
 imagePullSecrets: []
@@ -136,22 +136,20 @@ tolerations: []
 
 affinity: {}
 
+# Oracle Backend for Microservices and AI Settings.
 obaas:
-  namespace: application
+  namespace: obaas-dev                    # Replace with your namespace 
   database:
-    credentialsSecret: obaas-app-db-secrets
-    walletSecret: obaas-adb-tns-admin-1
-    runsqljob: false
-
+    enabled: true                           # If true variables with DB secret content will be created
+    credentialsSecret: account-db-secrets # Replace with your secret name
+    walletSecret: obaas-adb-tns-admin-1     # Replace with your wallet secret name
   otel:
-    enabled: true
+    enabled: true                           # Enable OpenTelemetry
   # MicroProfile LRA
   mp_lra:
-    enabled: false
+    enabled: true                          # Enable OTMM
   # Spring Boot applications
   springboot:
-    enabled: true
+    enabled: true                           # Enable Spring Boot specific variables
   eureka:
-    enabled: true
-  configServer:
-    enabled: false
+    enabled: true                           # Enable Eureka client
