@@ -14,7 +14,7 @@ A script called `acc_cust_secrets.sh` is provided that could be used to change t
 
 A script called `update_image.sh` is provided that could be used to change the repository and tag to your environment (`./update-image.sh <repository> <tag>`).
 
-Verify and change credentialSecreat and walletSecret values in the `values.yaml` if needed. Names can be found be looking at the secrets in the `obaas-dev` namespace.
+Verify and change credentialSecret and walletSecret values in the `values.yaml` if needed. Names can be found be looking at the secrets in the `obaas-dev` namespace.
 
 ## Install CBv5
 
