@@ -20,7 +20,12 @@ You must edit the **values.yaml** file as follows:
 
 **Important note**: Please pause to double check all of the values are correct. If there are any errors here, the database provisioning will fail.
 
-Install the Helm chart using the following command (The `--debug` flag is optional and enables verbose output from Helm):
+Install the Helm chart using the following command (The `--debug` flag is optional and enables verbose output from Helm).
+
+- global.obaasName="obaas-dev" - Sets the OBaaS instance name.
+- global.targetNamespace="obaas-dev" - Specifies the target namespace (*OPTIONAL*, only needed if you want to override the default namespace).
+
+**Note**: If you are installing multiple OBaaS instances in your cluster, each one MUST have a different release name, `obaasName` and `targetNamespace`.
 
 ```bash
 helm --debug install obaas-db --set global.obaasName="obaas-dev" --set global.targetNamespace="obaas-dev" ./
