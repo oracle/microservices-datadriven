@@ -2,6 +2,14 @@
 
 This repo contains a almost ready deployment of cloudbank v5. There are minimal changes to make this work in your environment. **NOTE:** this example assumes that OBaaS is installed in a namespace called `obaas-dev` and that CBv5 will be installed in the same namespace called `obaas-dev`.
 
+## Dependencies for Cloudbank
+
+Build dependencies and install  -- `mvn clean install -pl common,buildtools`
+
+## Build cloudbank
+
+A script called `update-jkube-image.sh` is provided to update the `pom.xml` file for JKube to point to the repository that will be used (update-jkube-image.sh <new-image-prefix>).
+
 ## Create account and customer DB users
 
 Update the sqljob.yaml file to reflect your environment. Run the job and **VERIFY** that the job finished successfully before proceeding.
