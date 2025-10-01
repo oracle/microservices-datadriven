@@ -27,3 +27,21 @@ Verify and change credentialSecret and walletSecret values in the `values.yaml` 
 ## Install CBv5
 
 A script call `deploy-all-services.sh` is provided that can be used to deploy all the Cloudbank services.
+
+## Create APISIX routes.
+
+1. Retrieve the API KEY (requires `yq`) by running this command:
+
+```bash
+kubectl -n obaas-dev get configmap apisix -o yaml | yq '.data."config.yaml"' | yq '.deployment.admin.admin_key[] | select(.name == "admin") | .key'
+```
+
+1. Create the routes by running this command:
+
+```bash
+    (cd apisix-routes; source ./create-all-routes.sh <YOUR-API-KEY>)
+```
+
+## Test the servics
+
+Follow the [README](README.md) section `Test CloudBank Services`.
