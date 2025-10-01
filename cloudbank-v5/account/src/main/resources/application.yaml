@@ -16,18 +16,17 @@ spring:
   config:
     import: classpath:common.yaml
   
-
   liquibase:
     change-log: classpath:db/changelog/controller.yaml
-    url: ${spring.datasource.url}
-    user: ${liquibase.datasource.username}
-    password: ${liquibase.datasource.password}
+    url: ${LIQUIBASE_DATASOURCE_URL}
+    user: ${LIQUIBASE_DATASOURCE_USERNAME}
+    password: ${LIQUIBASE_DATASOURCE_PASSWORD:}
     enabled: ${LIQUIBASE_ENABLED:true}
 
   datasource:
-    url: ${spring.datasource.url}
-    user: ${spring.datasource.username}
-    password: ${spring.datasource.password}
+    url: ${SPRING_DATASOURCE_URL}
+    user: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: oracle.jdbc.OracleDriver
     type: oracle.ucp.jdbc.PoolDataSource
     oracleucp:
@@ -36,5 +35,3 @@ spring:
       initial-pool-size: 15
       min-pool-size: 10
       max-pool-size: 30
-
-

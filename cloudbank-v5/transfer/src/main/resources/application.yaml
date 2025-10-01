@@ -26,15 +26,15 @@ spring:
     
 account:
   deposit:
-    url: http://account.application:8080/deposit
+    url: http://account.obaas-dev:8080/deposit
   withdraw:
-    url: http://account.application:8080/withdraw
+    url: http://account.obaas-dev:8080/withdraw
 transfer:
   cancel:
-    url: http://transfer.application:8080/cancel
+    url: http://transfer.obaas-dev:8080/cancel
     process:
-      url: http://transfer.application:8080/processcancel
+      url: http://transfer.obaas-dev:8080/processcancel
   confirm:
-    url: http://transfer.application:8080/confirm
+    url: http://transfer.obaas-dev:8080/confirm
     process:
-      url: http://transfer.application:8080/processconfirm
+      url: http://transfer.obaas-dev:8080/processconfirm
