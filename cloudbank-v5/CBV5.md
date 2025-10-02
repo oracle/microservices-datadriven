@@ -36,14 +36,13 @@ A script called `acc_cust_secrets.sh` is provided that could be used create the 
 
 A script called `update_image.sh` is provided that could be used to change the repository and tag to your environment (`./update-image.sh <repository> <tag>`) in the `values.yaml` file. For example `update-image.sh sjc.ocir.io/maacloud/cloudbank-v5 0.0.1-SNAPSHOT`.
 
-Verify and change credentialSecret and walletSecret values in the `values.yaml` 
-if needed. Names can be found be looking at the secrets in the `obaas-dev` namespace.
+Verify and change credentialSecret and walletSecret values in the `values.yaml` if needed. Names can be found be looking at the secrets in the `obaas-dev` namespace.
 
 ## Install CBv5
 
-A script call `deploy-all-services.sh` is provided that can be used to deploy all the Cloudbank services (account,customer,transfer,checks,creditscore,testrunner). For ecample `./deploy-all-services.sh obaas-dev`. 
+A script call `deploy-all-services.sh` is provided that can be used to deploy all the Cloudbank services (account,customer,transfer,checks,creditscore,testrunner). For ecample `./deploy-all-services.sh obaas-dev`.
 
-## Create APISIX routes.
+## Create APISIX routes
 
 1. Retrieve the API KEY (requires `yq`) for APISIX by running this command:
 
@@ -57,6 +56,6 @@ kubectl -n obaas-dev get configmap apisix -o yaml | yq '.data."config.yaml"' | y
 (cd apisix-routes; source ./create-all-routes.sh <YOUR-API-KEY>)
 ```
 
-## Test the servics
+## Test the services
 
 Follow the [README](README.md) section `Test CloudBank Services`.
