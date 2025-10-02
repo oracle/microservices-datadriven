@@ -8,7 +8,7 @@ if [ "$#" -ne 1 ]; then
     echo "Example: $0 myregistry.io/myorg/cloudbank-v5"
     echo ""
     echo "This will update the image name to: <new-image-prefix>/<service>:\${project.version}"
-    exit 1
+    return 1 2>/dev/null || exit 1
 fi
 
 NEW_IMAGE_PREFIX="$1"
