@@ -40,7 +40,7 @@ Verify and change credentialSecret and walletSecret values in the `values.yaml` 
 
 ## Install CBv5
 
-A script call `deploy-all-services.sh` is provided that can be used to deploy all the Cloudbank services (account,customer,transfer,checks,creditscore,testrunner). For ecample `./deploy-all-services.sh obaas-dev`.
+A script call `deploy-all-services.sh` is provided that can be used to deploy all the Cloudbank services (account,customer,transfer,checks,creditscore,testrunner). For example `./deploy-all-services.sh obaas-dev`.
 
 ## Create APISIX routes
 
