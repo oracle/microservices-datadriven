@@ -1,7 +1,15 @@
 #!/bin/bash
 
 # Script to deploy all CloudBank v5 services using Helm
-# Usage: ./deploy-all-services.sh
+# Usage: ./deploy-all-services.sh <namespace>
+
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 <namespace>"
+    echo "Example: $0 obaas-dev"
+    return 1 2>/dev/null || exit 1
+fi
+
+NAMESPACE="$1"
 
 # Array of services to deploy
 SERVICES=(
@@ -22,13 +30,13 @@ for service in "${SERVICES[@]}"; do
     echo "Deploying $service..."
 
     if [ -d "$service/helm" ]; then
-        helm upgrade --install "$service" "./$service/helm" --wait
+        helm upgrade --install "$service" "./$service/helm" --namespace "$NAMESPACE" --wait --debug
 
         if [ $? -eq 0 ]; then
             echo "✓ $service deployed successfully"
         else
             echo "✗ Failed to deploy $service"
-            exit 1
+            return 1 2>/dev/null || exit 1
         fi
     else
         echo "⚠ Warning: Helm chart not found for $service at $service/helm"

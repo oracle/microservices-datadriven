@@ -6,6 +6,8 @@ Cluudbank v5 has only been tested on Java 21.
 
 You must set the DOCKER_HOST variable to be able to build CLoudbank v5, for example if you're using Rancher Desktop on a Mac `export DOCKER_HOST=unix:///Users/atael/.rd/docker.sock`.
 
+**NOTE** the repositories must by public. Needs to investigate why private repos aren't working (authentication error). You can use the script `create-oci-repos.sh` to create the necessary repositories. For example `source create-oci-repos.sh andytael sjc.ocir.io/maacloud/cloudbank`.
+
 ## Dependencies for Cloudbank
 
 Build dependencies and install  -- `mvn clean install -pl common,buildtools`
@@ -34,11 +36,12 @@ A script called `acc_cust_secrets.sh` is provided that could be used create the 
 
 A script called `update_image.sh` is provided that could be used to change the repository and tag to your environment (`./update-image.sh <repository> <tag>`) in the `values.yaml` file. For example `update-image.sh sjc.ocir.io/maacloud/cloudbank-v5 0.0.1-SNAPSHOT`.
 
-Verify and change credentialSecret and walletSecret values in the `values.yaml` if needed. Names can be found be looking at the secrets in the `obaas-dev` namespace.
+Verify and change credentialSecret and walletSecret values in the `values.yaml` 
+if needed. Names can be found be looking at the secrets in the `obaas-dev` namespace.
 
 ## Install CBv5
 
-A script call `deploy-all-services.sh` is provided that can be used to deploy all the Cloudbank services (account,customer,transfer,checks,creditscore,testrunner).
+A script call `deploy-all-services.sh` is provided that can be used to deploy all the Cloudbank services (account,customer,transfer,checks,creditscore,testrunner). For ecample `./deploy-all-services.sh obaas-dev`. 
 
 ## Create APISIX routes.
 
