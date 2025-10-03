@@ -1,0 +1,37 @@
+# Copyright (c) 2023, 2025, Oracle and/or its affiliates. 
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/ 
+
+spring:
+  application:
+    name: account
+  microtx:
+    lra:
+      coordinator-url: ${MP_LRA_COORDINATOR_URL}
+      propagation-active: true
+      headers-propagation-prefix: "{x-b3-, oracle-tmm-, authorization, refresh-}"
+  cloud:
+    config:
+      import-check:
+        enabled: false
+  config:
+    import: classpath:common.yaml
+  
+  liquibase:
+    change-log: classpath:db/changelog/controller.yaml
+    url: ${LIQUIBASE_DATASOURCE_URL}
+    user: ${LIQUIBASE_DATASOURCE_USERNAME}
+    password: ${LIQUIBASE_DATASOURCE_PASSWORD:}
+    enabled: ${LIQUIBASE_ENABLED:true}
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    user: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: oracle.jdbc.OracleDriver
+    type: oracle.ucp.jdbc.PoolDataSource
+    oracleucp:
+      connection-factory-class-name: oracle.jdbc.pool.OracleDataSource
+      connection-pool-name: AccountConnectionPool
+      initial-pool-size: 15
+      min-pool-size: 10
+      max-pool-size: 30
