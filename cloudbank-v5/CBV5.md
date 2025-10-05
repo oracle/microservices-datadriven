@@ -14,7 +14,7 @@ Build dependencies and install  -- `mvn clean install -pl common,buildtools`
 
 ## Build cloudbank
 
-A script called `update-jkube-image.sh` is provided to update the `pom.xml` file for JKube to point to the repository that will be used (update-jkube-image.sh <new-image-prefix> (sjc.ocir.io/maacloud/cloudbank-v5 for example)). Execute the following command to build and push the images:
+A script called `update-jkube-image.sh` is provided to update the `pom.xml` file for JKube to point to the repository that will be used (update-jkube-image.sh <new-image-prefix> (sjc.ocir.io/maacloud/cloudbank-v5 for example)). When that change is made you can execute the following command to build and push the images:
 
 ```bash
 mvn clean package k8s:build k8s:push -pl account,customer,transfer,checks,creditscore,testrunner
@@ -50,6 +50,15 @@ A script call `deploy-all-services.sh` is provided that can be used to deploy al
 kubectl -n obaas-dev get configmap apisix -o yaml | yq '.data."config.yaml"' | yq '.deployment.admin.admin_key[] | select(.name == "admin") | .key'
 ```
 
+If the command doesn't work you can get the API key by looking into the ConfigMap 
+...... 
+
+1. Create tunnel to APISIX
+
+```shell
+kubectl port-forward -n obaas-dev svc/apisix-admin 9180
+```
+   
 1. Create the routes by running this command:
 
 ```bash

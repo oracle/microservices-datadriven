@@ -16,4 +16,4 @@ kubectl -n obaas-dev create secret generic customer-db-secrets \
   --from-literal=db.password=YOUR_PASSWORD \
   --from-literal=db.service=helmdb_tp \
   --from-literal=db.lb_username=admin \
-  --from-literal=db.lb_password=YPUR_PASSWORD
+  --from-literal=db.lb_password=YOUR_PASSWORD
