@@ -47,7 +47,6 @@ obaas:
 - When `otel.enabled` is true, the `OTEL_EXPORTER_OTLP_ENDPOINT` environment variable is set to the appropriate value and injected into the deployment for application use. This is the URL of the OpenTelemetry (OTLP protocol) collector which can be used by your application to send observability data to the SigNoz platform.
 - When `mp_lra.enabled` is true, the following environment variables are set to the appropriate value and injected into the deployment for application use:
   - `MP_LRA_COORDINATOR_URL` This is the URL for the *transaction manager* which is required when using Eclipse Microprofile Long Running Actions in your application.
-  - `MP_LRA_PARTICIPANT_URL` This is the *participant* URL which is required when using Eclipse Microprofile Long Running Actions in your application.
 - When `springboot.enabled` is true, the following environment variables are set to the appropriate value and injected into the deployment for application use:
   - `SPRING_PROFILES_ACTIVE` This sets the Spring profiles that will be active in the application. The default value is `default`.
   - `SPRING_DATASOURCE_URL` This sets the data source URL for your application to use to connect to the database, for example `jdbc:oracle:thin:@$(DB_SERVICE)?TNS_ADMIN=/oracle/tnsadmin`.
