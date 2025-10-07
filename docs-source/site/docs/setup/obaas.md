@@ -21,9 +21,9 @@ You must edit the **values.yaml** file as follows:
 - (Optional) If you want to install any components in this chart into their own separate namespace, you can override the global namespace by setting a value in the **namespace** property inside the section for that component.
 
 - You must provide the OCID of your ADB-S instance in the setting **database.oci_db.ocid**
-- You must update the values in the **database.oci_config** the section as follows:
-  - The **oke** setting must be **false**. Setting this to true is not supported in 2.0.0-M3.
-  - Supply your **tenancy**, **user** **ocid**, **fingerprint** and **region**. These must match the details you provided when you created the OCI configuration secret earlier.
+- You must update the values in the **database.oci_config** section as follows:
+  - The **oke** setting must be **false**. Setting this to true is not supported in 2.0.0-M4.
+  - Supply your **tenancy**, **user ocid**, **fingerprint**, and **region**. These must match the details you provided when you created the OCI configuration secret earlier.
 
 **Important note**: Please pause to double check all of the values are correct. If there are any errors here, the OBaaS provisioning will fail.
 
@@ -53,7 +53,7 @@ REVISION: 1
 TEST SUITE: None
 ```
 
-You may see some warnings, as shown above, and they can be ignored in 2.0.0-M3.
+You may see some warnings, as shown above, and they can be ignored in 2.0.0-M4.
 
 If you overrode the component namespaces, you will now see several new namespaces as requested (see example below). Otherwise all of the pods will be in the **obaas-dev** namespace (or whatever name you chose):
 
@@ -88,7 +88,7 @@ oracle-database-operator-system    Active 12m
 otmm                               Active 32s
 ```
 
-And many new pods. Note that these will take about 5 minutes for them all to get to ready/running status:
+And many new pods. Note that it will take about 5 minutes for all of them to reach ready/running status:
 
 ```bash
 kubectl get pod -A
@@ -105,7 +105,7 @@ helm --debug install obaas --set global.obaasName="obaas-dev" --set global.targe
 For obaas-prod:
 
 ```bash
-helm --debug install obaas --set global.obaasName="obaas-prod" --set global targetNamespace="obaas-prod" ./
+helm --debug install obaas --set global.obaasName="obaas-prod" --set global.targetNamespace="obaas-prod" ./
 ```
 
 **Note**: You MUST set different host names and/or ports for the APISIX ingress if you choose to install APISIX in both instances.

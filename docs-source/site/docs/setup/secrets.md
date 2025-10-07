@@ -4,7 +4,7 @@ sidebar_position: 5
 ---
 ## Create Required Secrets
 
-You must create a few secrets before starting the installation of Helm charts. These secrets contain authentication information that will be needed by the Helm charts.
+You must create a few secrets before starting the installation of Helm charts. These secrets contain authentication information that will be needed by the Helm charts. If you're planning to use the External Secrets Operator it must be deployed and configured as part of the pre-requisites for installation.
 
 ### Image Pull Secrets
 

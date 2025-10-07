@@ -80,13 +80,13 @@ WORKFLOW_ID=$(curl -s -X POST 'http://localhost:8080/api/workflow/first_sample_w
 -d '{}' | tr -d '"')
 ```
 
-Check the Workflow IS, should return a string similar to this `46cbbaef-7133-451b-9334-2ccfc4e270c5`
+Check the Workflow ID; it should return a string similar to this: `46cbbaef-7133-451b-9334-2ccfc4e270c5`
 
 ```shell
 echo "Workflow ID: $WORKFLOW_ID"
 ```
 
-Check status of the Workflow, will return the data from https://restcountries.com/v3.1/name/united%20states?fields=name,population.
+Check the status of the workflow. This will return the data from https://restcountries.com/v3.1/name/united%20states?fields=name,population.
 
 ```shell
 curl -s -X GET "http://localhost:8080/api/workflow/$WORKFLOW_ID" | jq
