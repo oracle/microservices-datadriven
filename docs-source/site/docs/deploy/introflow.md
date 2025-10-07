@@ -8,15 +8,15 @@ sidebar_position: 1
 This content is TBD
 :::
 
-This guide explains how to deploy an application to OBaaS using Eclipse [Eclipse JKube](https://eclipse.dev/jkube/) to build and push a container image, and using Helm to install and configure the application on a Kubernetes cluster.
+This guide explains how to deploy an application to OBaaS using [Eclipse JKube](https://eclipse.dev/jkube/) to build and push a container image, and using Helm to install and configure the application on a Kubernetes cluster.
 
 ### Prerequisites
 
-- Access to a container image repository (e.g., OCIR or another approved registry).
+- Access to a container image repository (e.g., OCIR or another approved registry)
 - Docker running locally (and authenticated to your registry)
-- Kubernetes cluster access with the correct context set.
-- Helm installed locally.
-- Maven build configured for your project.
+- Kubernetes cluster access with the correct context set
+- Helm installed locally
+- Maven build configured for your project
 
 ### High Level Installation Flow
 

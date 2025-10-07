@@ -5,7 +5,7 @@ sidebar_position: 5
 ## External Secrets Operator
 
 :::important
-The External Secrets Operator is a pre-requisite for Oracle Backend for Microservices and AI
+The External Secrets Operator is an optional prerequisite for Oracle Backend for Microservices and AI
 :::
 
 External Secrets Operator is a Kubernetes operator that integrates external secret management systems like OCI Vault, AWS Secrets Manager,

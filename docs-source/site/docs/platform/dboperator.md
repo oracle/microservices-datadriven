@@ -12,4 +12,4 @@ Learn about using the OraOperator in the Livelab [Microservices and Kubernetes f
 
 ### Installing the Oracle Database Operator for Kubernetes
 
-Oracle Database Operator for Kubernetes will be installed if the `oracle-database-operator.enabled` is set to `true` in the `values.yaml` file. The default namespace for Conductor is `oracle-database-exporter-system`.
+Oracle Database Operator for Kubernetes will be installed if the `oracle-database-operator.enabled` is set to `true` in the `values.yaml` file. The default namespace for Oracle Database Operator is `oracle-database-operator-system`.

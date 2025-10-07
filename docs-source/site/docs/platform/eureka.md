@@ -22,9 +22,9 @@ Open the [Eureka web user interface](http://localhost:8761)
 
 ![Eureka Web User Interface](images/eureka-web.png)
 
-### Enable a Spring boot application for Eureka
+### Enable a Spring Boot application for Eureka
 
-To Spring boot application you need to add the following dependency
+To enable a Spring Boot application, you need to add the following dependency
 
 ```xml
 <dependency>
@@ -33,7 +33,7 @@ To Spring boot application you need to add the following dependency
 </dependency>
 ```
 
-And to configure the application to register with Eureka add the following to the `application.yaml` file. The variables in this configuration are automatically injected to your deployment and pods you deploy applications to Oracle Backend for Microservices and AI using the OBaaS deployment Helm chart.
+And to configure the application to register with Eureka, add the following to the `application.yaml` file. The variables in this configuration are automatically injected into your deployment and pods when you deploy applications to Oracle Backend for Microservices and AI using the OBaaS deployment Helm chart.
 
 ```yaml
 eureka:
@@ -50,7 +50,7 @@ eureka:
 
 ### Enable a Helidon application for Eureka
 
-To Spring boot application you need to add the following dependency
+To enable a Helidon application, you need to add the following dependency
 
 ```xml
 <dependency>
@@ -60,7 +60,7 @@ To Spring boot application you need to add the following dependency
 </dependency>
 ```
 
-And to configure the application to register with Eureka add the following to the `aaplication.yaml` file:
+And to configure the application to register with Eureka, add the following to the `application.yaml` file:
 
 ```properties
 server.features.eureka.enabled=true

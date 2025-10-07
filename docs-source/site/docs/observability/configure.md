@@ -4,7 +4,7 @@ sidebar_position: 5
 ---
 ## Configure applications for SigNoz Observability
 
-In order for SigNoz to be able to collect logs, metrics and traces from applications, some configurations are required to be added.
+In order for SigNoz to collect logs, metrics, and traces from applications, some configurations must be added.
 
 ### Configure OpenTelemetry and Micrometer
 
@@ -199,7 +199,7 @@ signoz.io/port: "8080"
 signoz.io/scrape: "true"
 ```
 
-It also adds the `OTEL_EXPORTER_OTLP_ENDPOINT` to pod environment variables for the OpenTelemetry instrumentation libraries to access the the OpenTelemtry collector of SigNoz.
+It also adds the `OTEL_EXPORTER_OTLP_ENDPOINT` to pod environment variables for the OpenTelemetry instrumentation libraries to access the OpenTelemetry collector of SigNoz.
 
 ```yaml
 - name: OTEL_EXPORTER_OTLP_ENDPOINT

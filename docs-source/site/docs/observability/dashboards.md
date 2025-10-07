@@ -11,7 +11,6 @@ More details can be found in the [SigNoz Documentation](https://signoz.io/docs/i
 The following dashboards are pre-installed in SigNoz:
 
 - [Spring Boot Observability](#spring-boot-observability)
-- [Spring Boot Observability](#spring-boot-observability)
 - [Spring Boot Statistics](#spring-boot-statistics)
 - [Oracle Database Dashboard](#oracle-database-dashboard)
 - [Kube State Metrics Dashboard](#kube-state-metrics-dashboard)
@@ -39,7 +38,7 @@ Here is an example of this dashboard displaying data for a simple application:
 
 This dashboard provides more in-depth information about services including the following:
 
-- JVM statistic like heap and non-heap memory usage, and details of garbage collection
+- JVM statistics like heap and non-heap memory usage, and details of garbage collection
 - Load average and open files
 - Database connection pool statistics (for HikariCP)
 - HTTP request statistics
