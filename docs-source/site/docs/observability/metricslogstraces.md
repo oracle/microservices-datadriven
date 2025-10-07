@@ -12,7 +12,7 @@ To access metrics in SigNoz, click on _Services_ in the menu to see the list of 
 
 ![Service List](images/service-list.png)
 
-Click on any of the services, to see its metrics in a dashboard.
+Click on any of the services to see its metrics in a dashboard.
 
 ![Service Metrics](images/service-metrics.png)
 

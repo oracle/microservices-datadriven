@@ -14,12 +14,12 @@ If your application needs database access, first obtain the database user creden
 
 Create a secret with database access information. This secret is used by the application configuration and is injected during deployment.
 
-For example if you have the following information:
+For example, if you have the following information:
 
-- `db.name:` Your database name. For example `helmdb`
-- `db.username:` Your database user name. For example `phonebook`
-- `db.password:` Your database user password. For example `Welcome-12345`
-- `db.service:` Your servicename. For example `helmdb_tp`
+- `db.name:` Your database name. For example, `helmdb`
+- `db.username:` Your database user name. For example, `phonebook`
+- `db.password:` Your database user password. For example, `Welcome-12345`
+- `db.service:` Your service name. For example, `helmdb_tp`
 - `db.lb_username` Your Liquibase username.
 - `db.lb_password` Your Liquibase user password.
 
@@ -74,7 +74,7 @@ args:
   sql $(DB_USER)/$(DB_PASSWORD)@$(TNS_ALIAS) @/tmp/run.sql
 ```
 
-Update the `env:` section to reference the correct secret and keys (here using `obaas-db-secrets`, this is not the same secret as been created above.):
+Update the `env:` section to reference the correct secret and keys (here using `obaas-db-secrets`; this is not the same secret as was created above):
 
 ```yaml
 env:

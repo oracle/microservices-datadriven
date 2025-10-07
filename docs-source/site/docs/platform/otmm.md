@@ -27,7 +27,7 @@ To use MicroTx in your Spring Boot applications, include the following dependenc
 </dependency>
 ```
 
-Add the following configuration to your Spring application configuration. The variables in this configuration are automatically injected to your deployment and pods you deploy applications to Oracle Backend for Microservices and AI using the OBaaS deployment Helm chart.
+Add the following configuration to your Spring application configuration. The variables in this configuration are automatically injected into your deployment and pods when you deploy applications to Oracle Backend for Microservices and AI using the OBaaS deployment Helm chart.
 
 ```yaml
 spring:

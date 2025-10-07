@@ -16,10 +16,8 @@ You must edit the **values.yaml** file as follows:
 
 - If you are using a private repository, you must update each **image** entry to point to your private repository instead of the public repositories.
 - Optional. Each component listed in the file (e.g., kube-state-metrics, metrics-server, cert-manager, etc.) has an **enabled: true** entry. If you want to omit a component, you must change the setting to **false**. Please note the following limitations:
-- Metrics-server is required if you wish to use the Horizontal Pod Autoscaling feature.
-- Cert-manager is required.
-
-Choose a name for this OBaaS installation. In this document, we use **obaas-dev** as the name. Please note that the **targetNamespace** should match the namespace you created in the previous step, and that this namespace must already exist.
+  - The metrics-server is required if you wish to use the Horizontal Pod Autoscaling feature.
+  - The cert-manager is required.
 
 Install the Helm chart using the following command (The `--debug` flag is optional and enables verbose output from Helm):
 
@@ -36,7 +34,7 @@ REVISION: 1
 TEST SUITE: None
 ```
 
-In this command, note that **obaas-prereqs** is the name of the Helm release.  Note that obaas-prereqs is shared across all instances in the cluster, so we recommend that you do NOT set the `obaasName` and `targetNamespace` for this chart/release.
+In this command, note that **obaas-prereqs** is the name of the Helm release. Note that obaas-prereqs is shared across all instances in the cluster, so we recommend that you do NOT set the `obaasName` and `targetNamespace` for this chart/release.
 
 When the installation has completed, you can use this command to view the installed charts:
 
@@ -46,7 +44,7 @@ helm ls
 
 ```text
 NAME         	NAMESPACE	REVISION	UPDATED                             	STATUS  	CHART                    	APP VERSION
-obaas-prereqs	default  	1       	2025-09-12 13:37:16.026781 -0500 CDT	deployed	OBaaS-Prerequisites-0.0.1	2.0.0-M3  
+obaas-prereqs	default  	1       	2025-09-12 13:37:16.026781 -0500 CDT	deployed	OBaaS-Prerequisites-0.0.1	2.0.0-M4  
 ```
 
 If you overrode the individual component namespaces, you should now see the requested namespaces have been added (for example see below). Otherwise, all of the pods will be in the **obaas-dev** namespace (or whatever name you chose).

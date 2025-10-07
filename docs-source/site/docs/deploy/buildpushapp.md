@@ -19,10 +19,10 @@ The image will be built using JKube and Maven. Add the following plugin into the
 
 The following needs to be updated to reflect your environment:
 
-- Image configuration, a mandatory, unique docker repository name. This can include registry and tag parts, but also placeholder parameters. example below has the following value `region/tenancy/repository/phonebook:${project.version}`
-- The base image which should be used for this image. In this example `ghcr.io/oracle/openjdk-image-obaas:21` is used.
-- assembly, mode how the assembled files should be collected. In this example files are simple copied, `dir`
-- cmd, A command to execute by default. in the example below `java -jar /deployments/${project.artifactId}-${project.version}.jar` will be executed.
+- Image configuration: a mandatory, unique Docker repository name. This can include registry and tag parts, but also placeholder parameters. The example below has the following value: `region/tenancy/repository/phonebook:${project.version}`
+- The base image which should be used for this image. In this example, `ghcr.io/oracle/openjdk-image-obaas:21` is used.
+- Assembly mode: how the assembled files should be collected. In this example, files are simply copied (`dir`).
+- Command: A command to execute by default. In the example below, `java -jar /deployments/${project.artifactId}-${project.version}.jar` will be executed.
 
 Refer to the [documentation for JKube](https://eclipse.dev/jkube/docs/kubernetes-maven-plugin/) for more configuration options.
 
@@ -57,7 +57,7 @@ To build and push the application execute the following command:
 mvn clean package k8s:build k8s:push
 ```
 
-If the build and push is successful then you shuould get a message similar to this:
+If the build and push is successful, you should get a message similar to this:
 
 ```log
 [INFO] k8s: Pushed sjc.ocir.io/maacloud/phonebook/phonebook:0.0.1-SNAPSHOT in 4 minutes and 2 seconds 

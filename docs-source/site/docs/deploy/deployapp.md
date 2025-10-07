@@ -24,38 +24,29 @@ Modify the `values.yaml` file to match your application’s requirements—for e
 The `obaas` section is unique for Oracle Backed for Microservices and AI. It has the following settings:
 
 ```yaml
+# Oracle Backend for Microservices and AI Settings.
 obaas:
-
-  # Framework selection: SPRING_BOOT or HELIDON
-  framework: SPRING_BOOT
-
-  namespace: obaas-dev
+  namespace: obaas-dev                      # Replace with your namespace 
   database:
-    credentialsSecret: phonebook-db-secrets
-    walletSecret: obaas-adb-tns-admin-1
-
-  # Opentelemetry monitoring
+    enabled: true                           # If true variables with DB secret content will be created
+    credentialsSecret: account-db-secrets   # Replace with your secret name
+    walletSecret: obaas-adb-tns-admin-1     # Replace with your wallet secret name
   otel:
-    enabled: true
-
+    enabled: true                           # Enable OpenTelemetry
   # MicroProfile LRA
   mp_lra:
-    enabled: false
-
+    enabled: true                          # Enable OTMM
   # Spring Boot applications
   springboot:
-    enabled: true
-
-  # Eureka discovery
+    enabled: true                           # Enable Spring Boot specific variables
   eureka:
-    enabled: true
+    enabled: true                           # Enable Eureka client
 ```
 
-- OBaaS supports both `SPRING_BOOT` or `HELIDON`. This is set via the `obaas.framework` parameter.
-- When `otel.enabled` is true, the `OTEL_EXPORTER_OTLP_ENDPOINT` environment variable is set to the appropriate value and injected into the deployment for application use. This is the URL of the OpenTelemetry (OTLP protocol) collector which can be used by your application to send observability data to the the SigNoz platform.
-- When `mp_lra.enabled` is true, the following environment variables are set to the appropriate value and injected into the deployment for application usee:
+- OBaaS supports both `SPRING_BOOT` and `HELIDON`. This is set via the `obaas.framework` parameter.
+- When `otel.enabled` is true, the `OTEL_EXPORTER_OTLP_ENDPOINT` environment variable is set to the appropriate value and injected into the deployment for application use. This is the URL of the OpenTelemetry (OTLP protocol) collector which can be used by your application to send observability data to the SigNoz platform.
+- When `mp_lra.enabled` is true, the following environment variables are set to the appropriate value and injected into the deployment for application use:
   - `MP_LRA_COORDINATOR_URL` This is the URL for the *transaction manager* which is required when using Eclipse Microprofile Long Running Actions in your application.
-  - `MP_LRA_PARTICIPANT_URL` This is the *participant* URL which is required when using Eclipse Microprofile Long Running Actions in your application.
 - When `springboot.enabled` is true, the following environment variables are set to the appropriate value and injected into the deployment for application use:
   - `SPRING_PROFILES_ACTIVE` This sets the Spring profiles that will be active in the application. The default value is `default`.
   - `SPRING_DATASOURCE_URL` This sets the data source URL for your application to use to connect to the database, for example `jdbc:oracle:thin:@$(DB_SERVICE)?TNS_ADMIN=/oracle/tnsadmin`.

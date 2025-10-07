@@ -4,7 +4,7 @@ sidebar_position: 3
 ---
 ## Obtaining the Installation Package
 
-The installation package is in the [helm](http://tbd) directory which  contains the following directories:
+The installation package is in the [helm](http://tbd) directory which contains the following directories:
 
 ```text
 .
@@ -21,6 +21,6 @@ Each of these directories contains a helm chart. In this milestone release, ther
 
 - **OBaaS Database**. This chart contains components that manage the OBaaS Database.
 
-- **OBaaS Observability**. This chart contains components for the option OBaaS observability stack (based on SigNoz).
+- **OBaaS Observability**. This chart contains components for the optional OBaaS observability stack (based on SigNoz).
 
-- **OBaaS**. This chart contains the remaining components of OBaaS, most notably the OBaaS Platform Services (like Eureka, Spring Config Server, Admin Server, etc.)
+- **OBaaS**. This chart contains the remaining components of OBaaS, most notably the OBaaS Platform Services (like Eureka, Admin Server, etc.)

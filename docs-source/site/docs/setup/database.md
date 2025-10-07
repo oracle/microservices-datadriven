@@ -44,9 +44,9 @@ When the installation has completed, you can use `helm ls` command to view the i
 
 ```text
 NAME               	NAMESPACE	REVISION	UPDATED                             	STATUS  	CHART                    	APP VERSION
-obaas-db           	default  	1       	2025-09-12 13:51:23.751199 -0500 CDT	deployed	OBaaS-db-0.1.0           	2.0.0-M3   
-obaas-observability	default  	1       	2025-09-12 13:45:43.113298 -0500 CDT	deployed	OBaaS-observability-0.1.0	2.0.0-M3   
-obaas-prereqs      	default  	1       	2025-09-12 13:37:16.026781 -0500 CDT	deployed	OBaaS-Prerequisites-0.0.1	2.0.0-M3  
+obaas-db           	default  	1       	2025-09-12 13:51:23.751199 -0500 CDT	deployed	OBaaS-db-0.1.0           	2.0.0-M4   
+obaas-observability	default  	1       	2025-09-12 13:45:43.113298 -0500 CDT	deployed	OBaaS-observability-0.1.0	2.0.0-M4   
+obaas-prereqs      	default  	1       	2025-09-12 13:37:16.026781 -0500 CDT	deployed	OBaaS-Prerequisites-0.0.1	2.0.0-M4  
 ```
 
 If you overrode the namespace for this component, you will see a new namespace called **oracle-database-operator-system** (for example) and the following pods. Otherwise the pods will be in the **obaas-dev** namespace (or whatever name you chose). 
