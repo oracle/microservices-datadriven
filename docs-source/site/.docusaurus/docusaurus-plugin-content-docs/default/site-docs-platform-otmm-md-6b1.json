@@ -1,0 +1,28 @@
+{
+  "id": "platform/otmm",
+  "title": "Oracle Transaction Manager for Microservices",
+  "description": "Oracle Transaction Manager for Microservices",
+  "source": "@site/docs/platform/otmm.md",
+  "sourceDirName": "platform",
+  "slug": "/platform/otmm",
+  "permalink": "/microservices-datadriven/obaas/docs/platform/otmm",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/oracle/microservices-datadriven/tree/main/docs-source/site/docs/platform/otmm.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 8,
+  "frontMatter": {
+    "title": "Oracle Transaction Manager for Microservices",
+    "sidebar_position": 8
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Apache Kafka",
+    "permalink": "/microservices-datadriven/obaas/docs/platform/kafka"
+  },
+  "next": {
+    "title": "Spring Boot Admin",
+    "permalink": "/microservices-datadriven/obaas/docs/platform/adminserver"
+  }
+}

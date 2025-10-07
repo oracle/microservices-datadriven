@@ -1,0 +1,28 @@
+{
+  "id": "platform/esooperator",
+  "title": "External Secrets Operator",
+  "description": "External Secrets Operator",
+  "source": "@site/docs/platform/esooperator.md",
+  "sourceDirName": "platform",
+  "slug": "/platform/esooperator",
+  "permalink": "/microservices-datadriven/obaas/docs/platform/esooperator",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/oracle/microservices-datadriven/tree/main/docs-source/site/docs/platform/esooperator.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 5,
+  "frontMatter": {
+    "title": "External Secrets Operator",
+    "sidebar_position": 5
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Oracle Database Operator for Kubernetes",
+    "permalink": "/microservices-datadriven/obaas/docs/platform/dboperator"
+  },
+  "next": {
+    "title": "Spring Boot Eureka Server",
+    "permalink": "/microservices-datadriven/obaas/docs/platform/eureka"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "deploy/buildpushapp",
+  "title": "Build and Push the application",
+  "description": "Build and Push the application",
+  "source": "@site/docs/deploy/buildpushapp.md",
+  "sourceDirName": "deploy",
+  "slug": "/deploy/buildpushapp",
+  "permalink": "/microservices-datadriven/obaas/docs/deploy/buildpushapp",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/oracle/microservices-datadriven/tree/main/docs-source/site/docs/deploy/buildpushapp.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 3,
+  "frontMatter": {
+    "title": "Build and Push the application",
+    "sidebar_position": 3
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Application Database Access",
+    "permalink": "/microservices-datadriven/obaas/docs/deploy/dbaccess"
+  },
+  "next": {
+    "title": "Deploy the Application",
+    "permalink": "/microservices-datadriven/obaas/docs/deploy/deployapp"
+  }
+}

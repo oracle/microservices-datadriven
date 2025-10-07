@@ -1,0 +1,28 @@
+{
+  "id": "setup/setup",
+  "title": "Introduction and Installation Flow",
+  "description": "Introduction and Installation flow",
+  "source": "@site/docs/setup/setup.md",
+  "sourceDirName": "setup",
+  "slug": "/setup/",
+  "permalink": "/microservices-datadriven/obaas/docs/setup/",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/oracle/microservices-datadriven/tree/main/docs-source/site/docs/setup/setup.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 1,
+  "frontMatter": {
+    "title": "Introduction and Installation Flow",
+    "sidebar_position": 1
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Setup",
+    "permalink": "/microservices-datadriven/obaas/docs/category/setup"
+  },
+  "next": {
+    "title": "Prerequisites",
+    "permalink": "/microservices-datadriven/obaas/docs/setup/prereqs"
+  }
+}

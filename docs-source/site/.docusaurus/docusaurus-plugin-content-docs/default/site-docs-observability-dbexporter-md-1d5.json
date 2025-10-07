@@ -1,0 +1,24 @@
+{
+  "id": "observability/dbexporter",
+  "title": "Oracle Database Metrics Exporter",
+  "description": "Oracle Database Metrics Exporter",
+  "source": "@site/docs/observability/dbexporter.md",
+  "sourceDirName": "observability",
+  "slug": "/observability/dbexporter",
+  "permalink": "/microservices-datadriven/obaas/docs/observability/dbexporter",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/oracle/microservices-datadriven/tree/main/docs-source/site/docs/observability/dbexporter.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 6,
+  "frontMatter": {
+    "title": "Oracle Database Metrics Exporter",
+    "sidebar_position": 6
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Configure Applications for SigNoz",
+    "permalink": "/microservices-datadriven/obaas/docs/observability/configure"
+  }
+}

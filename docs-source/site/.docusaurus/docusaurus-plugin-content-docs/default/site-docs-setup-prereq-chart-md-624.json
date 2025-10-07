@@ -1,0 +1,28 @@
+{
+  "id": "setup/prereq-chart",
+  "title": "Prepare then install OBaaS Prerequisites Helm chart",
+  "description": "Prepare then install OBaaS Prerequisites Helm chart",
+  "source": "@site/docs/setup/prereq-chart.md",
+  "sourceDirName": "setup",
+  "slug": "/setup/prereq-chart",
+  "permalink": "/microservices-datadriven/obaas/docs/setup/prereq-chart",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/oracle/microservices-datadriven/tree/main/docs-source/site/docs/setup/prereq-chart.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 7,
+  "frontMatter": {
+    "title": "Prepare then install OBaaS Prerequisites Helm chart",
+    "sidebar_position": 7
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Create Namespace(s) for OBaaS",
+    "permalink": "/microservices-datadriven/obaas/docs/setup/namespace"
+  },
+  "next": {
+    "title": "Prepare and Install the OBaaS Observability Helm Chart",
+    "permalink": "/microservices-datadriven/obaas/docs/setup/observability"
+  }
+}

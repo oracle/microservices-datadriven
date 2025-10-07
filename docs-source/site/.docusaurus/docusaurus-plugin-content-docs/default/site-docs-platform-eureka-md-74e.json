@@ -1,0 +1,28 @@
+{
+  "id": "platform/eureka",
+  "title": "Spring Boot Eureka Server",
+  "description": "Spring Boot Eureka Server",
+  "source": "@site/docs/platform/eureka.md",
+  "sourceDirName": "platform",
+  "slug": "/platform/eureka",
+  "permalink": "/microservices-datadriven/obaas/docs/platform/eureka",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/oracle/microservices-datadriven/tree/main/docs-source/site/docs/platform/eureka.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 6,
+  "frontMatter": {
+    "title": "Spring Boot Eureka Server",
+    "sidebar_position": 6
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "External Secrets Operator",
+    "permalink": "/microservices-datadriven/obaas/docs/platform/esooperator"
+  },
+  "next": {
+    "title": "Apache Kafka",
+    "permalink": "/microservices-datadriven/obaas/docs/platform/kafka"
+  }
+}

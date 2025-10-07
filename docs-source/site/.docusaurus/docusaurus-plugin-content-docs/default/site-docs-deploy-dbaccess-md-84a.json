@@ -1,0 +1,28 @@
+{
+  "id": "deploy/dbaccess",
+  "title": "Application Database Access",
+  "description": "Application Database Access",
+  "source": "@site/docs/deploy/dbaccess.md",
+  "sourceDirName": "deploy",
+  "slug": "/deploy/dbaccess",
+  "permalink": "/microservices-datadriven/obaas/docs/deploy/dbaccess",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/oracle/microservices-datadriven/tree/main/docs-source/site/docs/deploy/dbaccess.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 2,
+  "frontMatter": {
+    "title": "Application Database Access",
+    "sidebar_position": 2
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Introduction and Installation Flow",
+    "permalink": "/microservices-datadriven/obaas/docs/deploy/introflow"
+  },
+  "next": {
+    "title": "Build and Push the application",
+    "permalink": "/microservices-datadriven/obaas/docs/deploy/buildpushapp"
+  }
+}

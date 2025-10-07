@@ -1,0 +1,28 @@
+{
+  "id": "platform/adminserver",
+  "title": "Spring Boot Admin",
+  "description": "Spring Boot Admin",
+  "source": "@site/docs/platform/adminserver.md",
+  "sourceDirName": "platform",
+  "slug": "/platform/adminserver",
+  "permalink": "/microservices-datadriven/obaas/docs/platform/adminserver",
+  "draft": false,
+  "unlisted": false,
+  "editUrl": "https://github.com/oracle/microservices-datadriven/tree/main/docs-source/site/docs/platform/adminserver.md",
+  "tags": [],
+  "version": "current",
+  "sidebarPosition": 9,
+  "frontMatter": {
+    "title": "Spring Boot Admin",
+    "sidebar_position": 9
+  },
+  "sidebar": "tutorialSidebar",
+  "previous": {
+    "title": "Oracle Transaction Manager for Microservices",
+    "permalink": "/microservices-datadriven/obaas/docs/platform/otmm"
+  },
+  "next": {
+    "title": "Observability",
+    "permalink": "/microservices-datadriven/obaas/docs/category/observability"
+  }
+}
