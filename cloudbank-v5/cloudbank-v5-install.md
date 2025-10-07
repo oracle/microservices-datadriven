@@ -108,6 +108,7 @@ Edit the `sqljob.yaml` file and update these values for your environment:
 - Database connection details
 - Admin credentials
 - Namespace (if different from `obaas-dev`)
+- SQL Statement (the default is for an Oracle Database 23ai and will not work with 19c)
 
 ### 4.2 Create Database Users
 
