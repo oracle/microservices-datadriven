@@ -16,7 +16,7 @@
     <properties>
         <helidon-maven-plugin.version>4.0.14</helidon-maven-plugin.version>
         <jkube.version>1.16.2</jkube.version>
-        <jkube.generator.name>us-ashburn-1.ocir.io/maacloud/${project.artifactId}:${project.version}</jkube.generator.name>
+        <jkube.generator.name>us-ashburn-1.ocir.io/tenancy/${project.artifactId}:${project.version}</jkube.generator.name>
     </properties>
 
     <dependencies>
