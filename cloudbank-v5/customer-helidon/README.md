@@ -25,6 +25,34 @@ This creates:
     libs/                       (all dependency JARs)
   ```
 
+### Building and Pushing Container Image
+
+#### Environment Setup (macOS with Rancher Desktop)
+
+```bash
+# Set Docker host for JKube compatibility
+export DOCKER_HOST=unix:///Users/$USER/.rd/docker.sock
+```
+
+#### Commands
+
+```bash
+# Build thin JAR and libs
+mvn clean package
+
+# Build container image
+mvn k8s:build
+
+# Push to Oracle Cloud Registry
+docker push us-ashburn-1.ocir.io/tenancy/customer-helidon:5.0-SNAPSHOT
+```
+
+#### Output
+- **JAR**: `target/customer-helidon.jar` (thin JAR)
+- **Dependencies**: `target/libs/` (all dependencies)
+- **Deployment**: `target/customer-helidon-deployment.zip`
+- **Image**: Uses JKube Java base image with automatic Helidon configuration
+
 ### Running the Application
 
 **Option 1: Using the thin JAR (requires dependencies in classpath):**
@@ -119,9 +147,19 @@ The generation of the executable binary may take a few minutes to complete depen
 
 ## Docker Support
 
-### Building the Docker Image
+### Building the Docker Image Locally
+
+**Note:** The `Dockerfile.manual` must be renamed to `Dockerfile` before building locally, as JKube uses the Dockerfile when present.
+
 ```bash
+# Rename Dockerfile for local build
+git mv Dockerfile.manual Dockerfile
+
+# Build the Docker image
 docker build -t customer-helidon .
+
+# Rename back to avoid conflicts with JKube builds
+git mv Dockerfile Dockerfile.manual
 ```
 
 ### Running the Docker Image

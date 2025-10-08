@@ -11,7 +11,13 @@
     </parent>
     <groupId>com.example</groupId>
     <artifactId>customer-helidon</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>5.0-SNAPSHOT</version>
+
+    <properties>
+        <helidon-maven-plugin.version>4.0.14</helidon-maven-plugin.version>
+        <jkube.version>1.16.2</jkube.version>
+        <jkube.generator.name>us-ashburn-1.ocir.io/tenancy/${project.artifactId}:${project.version}</jkube.generator.name>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -46,6 +52,7 @@
         <dependency>
             <groupId>io.helidon.integrations.eureka</groupId>
             <artifactId>helidon-integrations-eureka</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>io.helidon.integrations.cdi</groupId>
@@ -214,6 +221,18 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <!-- Helidon Maven Plugin for native image support -->
+            <plugin>
+                <groupId>io.helidon.build-tools</groupId>
+                <artifactId>helidon-maven-plugin</artifactId>
+                <version>${helidon-maven-plugin.version}</version>
+            </plugin>
+            <!-- Eclipse JKube for container image building -->
+            <plugin>
+                <groupId>org.eclipse.jkube</groupId>
+                <artifactId>kubernetes-maven-plugin</artifactId>
+                <version>${jkube.version}</version>
             </plugin>
         </plugins>
 
