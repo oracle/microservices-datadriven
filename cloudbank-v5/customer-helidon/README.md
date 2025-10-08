@@ -44,7 +44,7 @@ mvn clean package
 mvn k8s:build
 
 # Push to Oracle Cloud Registry
-docker push us-ashburn-1.ocir.io/maacloud/customer-helidon:5.0-SNAPSHOT
+docker push us-ashburn-1.ocir.io/tenancy/customer-helidon:5.0-SNAPSHOT
 ```
 
 #### Output
