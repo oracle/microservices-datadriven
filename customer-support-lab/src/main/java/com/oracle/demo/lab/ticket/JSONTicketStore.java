@@ -2,7 +2,7 @@ package com.oracle.demo.lab.ticket;
 
 import com.oracle.spring.json.jsonb.JSONB;
 import com.oracle.spring.json.jsonb.JSONBRowMapper;
-import oracle.jdbc.internal.OracleTypes;
+import oracle.jdbc.OracleTypes;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
@@ -38,7 +38,7 @@ public class JSONTicketStore implements TicketStore {
         byte[] oson = jsonb.toOSON(ticket);
         try (PreparedStatement ps = conn.prepareStatement(UPDATE_SQL)) {
             ps.setObject(1, oson, OracleTypes.JSON);
-            ps.setObject(2, ticket.getId(), OracleTypes.VARCHAR);
+            ps.setLong(2, ticket.getId());
             ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
