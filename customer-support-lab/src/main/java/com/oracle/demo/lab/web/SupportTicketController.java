@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@Profile({"rest"})
+@Profile("rest")
 public class SupportTicketController {
     private final TicketStore ticketStore;
 
