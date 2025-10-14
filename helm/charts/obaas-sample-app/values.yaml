@@ -189,6 +189,3 @@ obaas:
 
   eureka:
     enabled: true  # Enable Eureka service discovery
-
-  configServer:
-    enabled: false  # Enable Spring Cloud Config integration

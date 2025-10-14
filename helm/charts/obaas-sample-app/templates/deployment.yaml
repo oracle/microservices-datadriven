@@ -86,8 +86,6 @@ spec:
           {{- if $.Values.obaas.springboot.enabled }}
             - name: SPRING_PROFILES_ACTIVE
               value: {{ $obaas.data.SPRING_PROFILES_ACTIVE | quote }}
-            - name: SPRING_CONFIG_LABEL
-              value: {{ $obaas.data.SPRING_CONFIG_LABEL | quote }}
           {{- if $.Values.obaas.database.enabled }}
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:oracle:thin:@${DB_SERVICE}?TNS_ADMIN=/oracle/tnsadmin"
