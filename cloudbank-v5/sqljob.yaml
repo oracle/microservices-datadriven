@@ -1,0 +1,70 @@
+# The Job to run the SQLcl container with embedded SQL
+# Make sure to replace the namespace and secrets as needed below
+apiVersion: batch/v1
+kind: Job
+metadata:
+  generateName: sqlcl-runner-job-
+  namespace: obaas-dev
+spec:
+  backoffLimit: 2
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: sqlcl-container
+        image: container-registry.oracle.com/database/sqlcl:25.2.2
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          export TNS_ADMIN=/etc/oracle/wallet
+          
+          # Create the SQL script inline
+          cat > /tmp/run.sql << 'EOF'
+          SET SERVEROUTPUT ON;
+          WHENEVER SQLERROR EXIT SQL.SQLCODE;
+          
+          create user customer identified by "Welcome-12345";
+          grant db_developer_role to customer;
+          grant unlimited tablespace to customer;
+          
+
+          create user account identified by "Welcome-12345";
+          grant db_developer_role to account;
+          grant unlimited tablespace to account;
+          grant execute on dbms_aq to account;
+          grant execute on dbms_aqadm to account;
+          grant execute on dbms_aqin to account;
+          grant execute on dbms_aqjms to account;
+          grant execute on dbms_aqjms_internal to account;
+          commit;
+
+          /
+          EXIT;
+          EOF
+          
+          # Execute the SQL script
+          sql $(DB_USER)/$(DB_PASSWORD)@$(TNS_ALIAS) @/tmp/run.sql
+        env:
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: obaas-db-secret
+              key: db.username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: obaas-db-secret
+              key: db.password
+        - name: TNS_ALIAS
+          valueFrom:
+            secretKeyRef:
+              name: obaas-db-secret
+              key: db.service
+        volumeMounts:
+        - name: db-wallet-volume
+          mountPath: /etc/oracle/wallet
+          readOnly: true
+      volumes:
+      - name: db-wallet-volume
+        secret:
+          secretName: obaas-adb-tns-admin-1

@@ -1,0 +1,19 @@
+# Copyright (c) 2025, Oracle and/or its affiliates.
+# Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
+
+spring:
+  application:
+    name: chatbot
+  ai:
+    ollama:
+      base-url: http://ollama.ollama.svc.cluster.local:11434
+      chat:
+        enabled: true
+        options:
+          model: llama3
+  cloud:
+    config:
+      import-check:
+        enabled: false
+  config:
+    import: classpath:common.yaml
