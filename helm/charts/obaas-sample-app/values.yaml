@@ -155,6 +155,7 @@ obaas:
   framework: REPLACE_WITH_FRAMEWORK  # Options: SPRING_BOOT or HELIDON
 
   database:
+    enabled: true  # If true, database configuration will be injected
     # TODO: Set the name of your database credentials secret
     credentialsSecret: REPLACE_WITH_DB_CREDENTIALS_SECRET  # e.g., my-app-db-secrets
     # TODO: Set the name of your ADB wallet secret
@@ -178,10 +179,6 @@ obaas:
     datasource:
       # TODO: CRITICAL - Must match the datasource name in your Helidon application.yaml
       name: "REPLACE_WITH_DATASOURCE_NAME"  # e.g., "customer", "order", "inventory"
-    hibernate:
-      hbm2ddl_auto: create  # Options: create, update, validate, none
-      show_sql: true        # Set to false in production
-      format_sql: true
     server:
       host: "0.0.0.0"
     metrics:
