@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.5</version>
+		<version>3.5.6</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.oracle.demo</groupId>
@@ -16,10 +16,12 @@
 
 	<properties>
 		<oracle.starters.version>25.3.0</oracle.starters.version>
-		<oci.sdk.version>3.68.1</oci.sdk.version>
+		<oci.sdk.version>3.74.2</oci.sdk.version>
 		<java.version>21</java.version>
 	</properties>
+
 	<dependencies>
+<!--		Spring Boot starters-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
@@ -32,6 +34,20 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+
+<!--		Oracle Spring Boot starters-->
+		<dependency>
+			<groupId>com.oracle.database.spring</groupId>
+			<artifactId>oracle-spring-boot-starter-json-collections</artifactId>
+			<version>${oracle.starters.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.database.spring</groupId>
+			<artifactId>oracle-spring-boot-starter-okafka</artifactId>
+			<version>${oracle.starters.version}</version>
+		</dependency>
+
+<!--		OCI SDK configuration-->
 		<dependency>
 			<groupId>com.oracle.oci.sdk</groupId>
 			<artifactId>oci-java-sdk-generativeaiinference</artifactId>
@@ -47,34 +63,11 @@
 			<artifactId>oci-java-sdk-common-httpclient-jersey3</artifactId>
 			<version>${oci.sdk.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.oracle.database.spring</groupId>
-			<artifactId>oracle-spring-boot-starter-json-collections</artifactId>
-			<version>${oracle.starters.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.oracle.database.spring</groupId>
-			<artifactId>oracle-spring-boot-starter-okafka</artifactId>
-			<version>${oracle.starters.version}</version>
-		</dependency>
+
+<!--		Test dependencies-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-testcontainers</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.testcontainers</groupId>
-			<artifactId>oracle-free</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.testcontainers</groupId>
-			<artifactId>junit-jupiter</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

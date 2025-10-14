@@ -3,10 +3,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "obaas-app.fullname" . }}
-  namespace: {{ .Values.obaas.namespace }} 
   labels:
     {{- include "obaas-app.labels" . | nindent 4 }}
-    obaas.framework: SPRING_BOOT
+    obaas.framework: {{ .Values.obaas.framework | upper }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
@@ -16,10 +15,15 @@ spec:
       {{- include "obaas-app.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+        {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
+        {{- if eq (.Values.obaas.framework | upper) "SPRING_BOOT" }}
+        signoz.io/path: /actuator/prometheus
+        {{- else if eq (.Values.obaas.framework | upper) "HELIDON" }}
+        signoz.io/path: /metrics
+        {{- end }}
       labels:
         {{- include "obaas-app.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}
@@ -44,37 +48,49 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+          {{- if $.Values.obaas.database.enabled }}
             - name: CONNECT_STRING
-              value: jdbc:oracle:thin:@$(SPRING_DB_SERVICE)?TNS_ADMIN=/oracle/tnsadmin
+              value: jdbc:oracle:thin:@$(DB_SERVICE)?TNS_ADMIN=/oracle/tnsadmin
+            - name: DB_SERVICE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Values.obaas.database.credentialsSecret }}
+                  key: db.service
+          {{- end }}
           # Lookup ObaaS configuration
           {{- $obaas := (lookup "v1" "ConfigMap" .Values.obaas.namespace "obaas-config") }}
-          {{- $obaasObs := (lookup "v1" "ConfigMap" .Values.obaas.namespace "obaas-observability-config") }}
+          {{- $observability := (lookup "v1" "ConfigMap" .Values.obaas.namespace "obaas-observability-config") }}
           {{- if $.Values.obaas.mp_lra.enabled }}
             - name: MP_LRA_COORDINATOR_URL
               value: {{ $obaas.data.otmm | quote }}
+            - name: MP_LRA_PARTICIPANT_URL
+              value: {{ $obaas.data.otmm | quote }}
           {{- end }}
+          {{- if eq (.Values.obaas.framework | upper) "SPRING_BOOT" }}
           {{- if $.Values.obaas.eureka.enabled }}
             - name: EUREKA_INSTANCE_PREFER_IP_ADDRESS
-              value: "true" 
+              value: "true"
             - name: EUREKA_CLIENT_REGISTER_WITH_EUREKA
-              value: "true" 
+              value: "true"
             - name: EUREKA_CLIENT_FETCH_REGISTRY
-              value: "true" 
+              value: "true"
             - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
               value: {{ $obaas.data.eureka | quote }}
             - name: EUREKA_INSTANCE_HOSTNAME
-              value: {{ include "obaas-app.fullname" . }}-{{ $.Release.Namespace }}
+              value: {{ include "obaas-app.fullname" . }}
           {{- end }}
           {{- if $.Values.obaas.otel.enabled }}
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: {{ (index $obaasObs.data "signoz-otel-collector") | quote }}
+              value: {{ (index $observability.data "signoz-otel-collector") | quote }}
           {{- end }}
           {{- if $.Values.obaas.springboot.enabled }}
             - name: SPRING_PROFILES_ACTIVE
               value: {{ $obaas.data.SPRING_PROFILES_ACTIVE | quote }}
+            - name: SPRING_CONFIG_LABEL
+              value: {{ $obaas.data.SPRING_CONFIG_LABEL | quote }}
           {{- if $.Values.obaas.database.enabled }}
             - name: SPRING_DATASOURCE_URL
-              value: "jdbc:oracle:thin:@${SPRING_DB_SERVICE}?TNS_ADMIN=/oracle/tnsadmin"
+              value: "jdbc:oracle:thin:@${DB_SERVICE}?TNS_ADMIN=/oracle/tnsadmin"
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -85,6 +101,9 @@ spec:
                 secretKeyRef:
                   name: {{ $.Values.obaas.database.credentialsSecret }}
                   key: db.password
+            # Liquibase configuration (uses separate admin credentials for migrations)
+            - name: LIQUIBASE_DATASOURCE_URL
+              value: "jdbc:oracle:thin:@${DB_SERVICE}?TNS_ADMIN=/oracle/tnsadmin"
             - name: LIQUIBASE_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -95,41 +114,113 @@ spec:
                 secretKeyRef:
                   name: {{ $.Values.obaas.database.credentialsSecret }}
                   key: db.lb_password
-            - name: LIQUIBASE_DATASOURCE_URL
-              value: "jdbc:oracle:thin:@${SPRING_DB_SERVICE}?TNS_ADMIN=/oracle/tnsadmin"
-            - name: SPRING_DB_SERVICE
+          {{- end }}
+          {{- end }}
+          {{- else if eq (.Values.obaas.framework | upper) "HELIDON" }}
+          {{- if $.Values.obaas.otel.enabled }}
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: {{ (index $observability.data "signoz-otel-collector") | quote }}
+            - name: OTEL_EXPORTER_OTLP_PROTOCOL
+              value: "http/protobuf"
+            - name: OTEL_SERVICE_NAME
+              value: {{ $.Values.obaas.helidon.otel.serviceName | quote }}
+            - name: OTEL_SDK_DISABLED
+              value: "false"
+            - name: OTEL_METRICS_EXPORTER
+              value: "otlp"
+            - name: JAVA_TOOL_OPTIONS
+              value: "-Dotel.java.global-autoconfigure.enabled=true"
+          {{- end }}
+          {{- if $.Values.obaas.eureka.enabled }}
+            - name: eureka.client.service-url.defaultZone
+              value: "http://eureka-0.eureka.{{ .Values.obaas.namespace }}.svc.cluster.local:8761/eureka"
+            - name: eureka.instance.hostname
+              value: {{ include "obaas-app.fullname" . }}
+            - name: eureka.instance.preferIpAddress
+              value: "true"
+          {{- end }}
+          {{- if $.Values.obaas.database.enabled }}
+            - name: javax.sql.DataSource.{{ $.Values.obaas.helidon.datasource.name }}.connectionFactoryClassName
+              value: oracle.jdbc.pool.OracleDataSource
+            - name: javax.sql.DataSource.{{ $.Values.obaas.helidon.datasource.name }}.URL
+              value: "jdbc:oracle:thin:@${DB_SERVICE}?TNS_ADMIN=/oracle/tnsadmin"
+            - name: javax.sql.DataSource.{{ $.Values.obaas.helidon.datasource.name }}.user
               valueFrom:
                 secretKeyRef:
                   name: {{ $.Values.obaas.database.credentialsSecret }}
-                  key: db.service
+                  key: db.username
+            - name: javax.sql.DataSource.{{ $.Values.obaas.helidon.datasource.name }}.password
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $.Values.obaas.database.credentialsSecret }}
+                  key: db.password
           {{- end }}
+            - name: server.port
+              value: "{{ $.Values.service.port }}"
+            - name: server.host
+              value: {{ $.Values.obaas.helidon.server.host | quote }}
+            - name: metrics.rest-request.enabled
+              value: {{ $.Values.obaas.helidon.metrics.rest_request_enabled | quote }}
+            # Example: Add your application-specific properties here
+            # - name: app.greeting
+            #   value: {{ $.Values.obaas.helidon.app.greeting | quote }}
           {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-          {{- with .Values.livenessProbe }}
+          {{- if .Values.livenessProbe }}
           livenessProbe:
-            {{- toYaml . | nindent 12 }}
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+          {{- else }}
+          livenessProbe:
+            httpGet:
+              {{- if eq (.Values.obaas.framework | upper) "HELIDON" }}
+              path: /health/live
+              {{- else }}
+              path: /actuator/health/liveness
+              {{- end }}
+              port: {{ .Values.service.port }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
           {{- end }}
-          {{- with .Values.readinessProbe }}
+          {{- if .Values.readinessProbe }}
           readinessProbe:
-            {{- toYaml . | nindent 12 }}
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+          {{- else }}
+          readinessProbe:
+            httpGet:
+              {{- if eq (.Values.obaas.framework | upper) "HELIDON" }}
+              path: /health/ready
+              {{- else }}
+              path: /actuator/health/readiness
+              {{- end }}
+              port: {{ .Values.service.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
           {{- end }}
           {{- with .Values.resources }}
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           volumeMounts:
+          {{- if $.Values.obaas.database.enabled }}
             - name: {{ $.Values.obaas.database.walletSecret }}
               mountPath: /oracle/tnsadmin
+          {{- end }}
           {{- with .Values.volumeMounts }}
             {{- toYaml . | nindent 12 }}
           {{- end }}
       volumes:
+      {{- if $.Values.obaas.database.enabled }}
         - name: {{ $.Values.obaas.database.walletSecret }}
           secret:
             secretName: {{ $.Values.obaas.database.walletSecret }}
+      {{- end }}
       {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}
       {{- end }}

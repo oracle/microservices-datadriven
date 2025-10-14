@@ -10,7 +10,7 @@ oci:
 
 spring:
   profiles:
-    active: events, ai, json
+    active: rest
   application:
     name: Everything You Never Knew About Oracle
   datasource:
