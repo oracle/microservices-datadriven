@@ -168,6 +168,19 @@ metadata:
 If you are planning to install multiple OBaaS instances, AND you want to use different databases, you need to create one of these secrets for EACH instance, and they must have different names.
 :::
 
+:::note
+If you want to use an existing Oracle Database in your applications which is not deployed as an Oracle Autonomous Database in OCI or you do not want Oracle Database Operator to create/sync the **tns** secret containing the connection information for the database, provide the **dbhost** and **dbport** for the database instance while creating the secret as follows:.
+```bash
+kubectl create secret generic admin-user-authn \
+  --from-literal=username=ADMIN \
+  --from-literal=password="Welcome-12345" \
+  --from-literal=service="demo1_tp" \
+  --from-literal=dbname="demo1" \
+  --from-literal=dbhost="demodb.demohost" \
+  --from-literal=dbport="1522"
+```  
+:::
+
 ### OCI Credentials Secret
 
 Run the provided script to generate the appropriate command for you from your OCI configuration. Note: You must have a working OCI CLI configured with access to your tenancy and the region where you want to install, on the machine where you run this command. The python script generated a command that you need to execute. to create the key.
