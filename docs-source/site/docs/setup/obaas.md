@@ -20,10 +20,16 @@ You must edit the **values.yaml** file as follows:
 
 - (Optional) If you want to install any components in this chart into their own separate namespace, you can override the global namespace by setting a value in the **namespace** property inside the section for that component.
 
-- You must provide the OCID of your ADB-S instance in the setting **database.oci_db.ocid**
-- You must update the values in the **database.oci_config** section as follows:
-  - The **oke** setting must be **false**. Setting this to true is not supported in 2.0.0-M4.
-  - Supply your **tenancy**, **user ocid**, **fingerprint**, and **region**. These must match the details you provided when you created the OCI configuration secret earlier.
+- (Optional) To use an existing Oracle database in your applications, set **database.enabled** to **true** and provide following configurations:
+  - If the database is an Oracle Autonomous Database in OCI and you want Oracle Database Operator to access and create **tns** and **wallet** secrets containing the connection information for the database:
+    - Provide **database.type** as **"ADB-S"**.
+    - You must provide the OCID of your ADB-S instance in the setting **database.oci_db.ocid**
+    - You must update the values in the **database.oci_config** section as follows:
+      - The **oke** setting must be **false**. Setting this to true is not supported in 2.0.0-M4.
+      - Supply your **tenancy**, **user ocid**, **fingerprint**, and **region**. These must match the details you provided when you created the OCI configuration secret earlier.
+  - If the database is not an Oracle Autonomous Database in OCI or you do not want Oracle Database Operator to create the **tns** secret containing the connection information for the database:
+    - Modify/Create the [Database Credentials Secret](./secrets.md#database-credentials-secret) to include the **dbhost** and **dbport** for the database instance.
+    - Leave **database.type** as blank.
 
 **Important note**: Please pause to double check all of the values are correct. If there are any errors here, the OBaaS provisioning will fail.
 
