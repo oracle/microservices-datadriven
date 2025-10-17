@@ -169,7 +169,9 @@ If you are planning to install multiple OBaaS instances, AND you want to use dif
 :::
 
 :::note
-If you want to use an existing Oracle Database in your applications which is not deployed as an Oracle Autonomous Database in OCI or you do not want Oracle Database Operator to create/sync the **tns** secret containing the connection information for the database, provide the **dbhost** and **dbport** for the database instance while creating the secret as follows:.
+If you want to use an existing Oracle Database in your applications which is not deployed as an Oracle Autonomous Database in OCI or you do not want Oracle Database Operator to create/sync the **tns** secret containing the connection information for the database, provide the **dbhost** and **dbport** for the database instance while creating the secret as follows:
+:::
+
 ```bash
 kubectl create secret generic admin-user-authn \
   --from-literal=username=ADMIN \
@@ -178,8 +180,7 @@ kubectl create secret generic admin-user-authn \
   --from-literal=dbname="demo1" \
   --from-literal=dbhost="demodb.demohost" \
   --from-literal=dbport="1522"
-```  
-:::
+```
 
 ### OCI Credentials Secret
 
