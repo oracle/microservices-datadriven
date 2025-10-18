@@ -1,35 +1,66 @@
 ---
-title: Prepare and Install the OBaaS Database Helm chart
+title: Prepare and Install the OBaaS Database Helm Chart
 sidebar_position: 9
 ---
-## Prepare and Install the OBaaS Database Helm chart
+## Prepare and Install the OBaaS Database Helm Chart
 
-For this step, you will need the **obaas-db** directory in which you will see the following files:
+## Overview
+
+This guide provides instructions for preparing and installing the OBaaS Database Helm chart in your Kubernetes cluster.
+
+## Prerequisites
+
+Navigate to the `obaas-db` directory containing the Helm chart files:
 
 ```bash
 cd obaas-db/
 ls
-Chart.yaml scripts templates values.yaml
 ```
 
-You must edit the **values.yaml** file as follows:
+Expected output:
 
-- If you are using a private repository, you must update each **image** entry to point to your private repository instead of the public repositories.
+```text
+Chart.yaml  scripts  templates  values.yaml
+```
 
-- (Optional) If you want to install any components in this chart into their own separate namespace, you can override the global namespace by setting a value in the **namespace** property inside the section for that component.
+## Configuration
 
-**Important note**: Please pause to double check all of the values are correct. If there are any errors here, the database provisioning will fail.
+### Editing values.yaml
 
-Install the Helm chart using the following command (The `--debug` flag is optional and enables verbose output from Helm).
+Before installation, edit the `values.yaml` file according to your environment requirements.
 
-- global.obaasName="obaas-dev" - Sets the OBaaS instance name.
-- global.targetNamespace="obaas-dev" - Specifies the target namespace (*OPTIONAL*, only needed if you want to override the default namespace).
+#### Private Repository Configuration
 
-**Note**: If you are installing multiple OBaaS instances in your cluster, each one MUST have a different release name, `obaasName` and `targetNamespace`.
+If you are using a private repository, update each `image` entry to point to your private repository instead of the public repositories.
+
+#### Namespace Configuration (Optional)
+
+To install components into separate namespaces, override the global namespace by setting a value in the `namespace` property inside the component's section.
+
+:::warning Important
+Double-check all values before proceeding. Incorrect values will cause the database provisioning to fail.
+:::
+
+## Installation
+
+### Single Instance Installation
+
+Install the Helm chart using the following command:
 
 ```bash
-helm --debug install obaas-db --set global.obaasName="obaas-dev" --set global.targetNamespace="obaas-dev" ./
+helm --debug install obaas-db \
+  --set global.obaasName="obaas-dev" \
+  --set global.targetNamespace="obaas-dev" \
+  ./
 ```
+
+**Parameters:**
+
+- `global.obaasName`: Sets the OBaaS instance name
+- `global.targetNamespace`: Specifies the target namespace (optional, only needed to override the default namespace)
+- `--debug`: Optional flag that enables verbose output from Helm
+
+**Expected output:**
 
 ```text
 NAME: obaas-db
@@ -40,7 +71,43 @@ REVISION: 1
 TEST SUITE: None
 ```
 
-When the installation has completed, you can use `helm ls` command to view the installed charts:
+### Multiple Instance Installation
+
+When installing multiple OBaaS instances in your cluster, each instance must have unique values for:
+
+- Release name
+- `obaasName`
+- `targetNamespace`
+
+**Example for development instance:**
+
+```bash
+helm --debug install obaas-db \
+  --set global.obaasName="obaas-dev" \
+  --set global.targetNamespace="obaas-dev" \
+  ./
+```
+
+**Example for production instance:**
+
+```bash
+helm --debug install obaas-prod-db \
+  --set global.obaasName="obaas-prod" \
+  --set global.targetNamespace="obaas-prod" \
+  ./
+```
+
+## Verification
+
+### View Installed Charts
+
+After installation completes, view the installed Helm charts:
+
+```bash
+helm ls
+```
+
+**Expected output:**
 
 ```text
 NAME               	NAMESPACE	REVISION	UPDATED                             	STATUS  	CHART                    	APP VERSION
@@ -49,20 +116,12 @@ obaas-observability	default  	1       	2025-09-12 13:45:43.113298 -0500 CDT	depl
 obaas-prereqs      	default  	1       	2025-09-12 13:37:16.026781 -0500 CDT	deployed	OBaaS-Prerequisites-0.0.1	2.0.0-M4  
 ```
 
-If you overrode the namespace for this component, you will see a new namespace called **oracle-database-operator-system** (for example) and the following pods. Otherwise the pods will be in the **obaas-dev** namespace (or whatever name you chose). 
+### Verify Pods and Namespaces
+
+If you overrode the namespace for this component, you will see a new namespace (e.g., `oracle-database-operator-system`) with the following pods. Otherwise, the pods will be in your target namespace (e.g., `obaas-dev`).
+
+```bash
+kubectl get pods -n oracle-database-operator-system
+```
 
 ![DB Operator pods](media/image6.png)
-
-**Note**: If you are installing multiple OBaaS instances in your cluster, each one MUST have a different release name, `obaasName` and `targetNamespace`.  For example (The `--debug` flag is optional and enables verbose output from Helm):
-
-For obaas-dev:
-
-```bash
-helm --debug install obaas-db --set global.obaasName="obaas-dev" --set global.targetNamespace="obaas-dev" ./
-```
-
-For obaas-prod:
-
-```bash
-helm --debug install obaas-prod-db --set global.obaasName="obaas-prod" --set global.targetNamespace="obaas-prod" ./
-```
