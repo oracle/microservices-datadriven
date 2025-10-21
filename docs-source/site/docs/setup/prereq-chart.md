@@ -56,7 +56,7 @@ helm --debug install obaas-prereqs ./
 
 **Installation notes:**
 
-- `obaas-prereqs` is the Helm release name
+- `obaas-prereqs` is the Helm `Release name`
 - The `--debug` flag is optional and enables verbose output from Helm
 - This chart is shared across all OBaaS instances in the cluster
 - Do NOT set `obaasName` or `targetNamespace` for this chart
@@ -89,8 +89,8 @@ helm ls
 **Expected output:**
 
 ```text
-NAME         	NAMESPACE	REVISION	UPDATED                             	STATUS  	CHART                    	APP VERSION
-obaas-prereqs	default  	1       	2025-09-12 13:37:16.026781 -0500 CDT	deployed	OBaaS-Prerequisites-0.0.1	2.0.0-M4  
+NAME            NAMESPACE   REVISION    UPDATED                                 STATUS      CHART                       APP VERSION
+obaas-prereqs   default     1           2025-09-12 13:37:16.026781 -0500 CDT    deployed    OBaaS-Prerequisites-0.0.1.  2.0.0-M4  
 ```
 
 ### Verify Namespaces
@@ -204,6 +204,7 @@ Synchronizes secrets from external secret management systems.
 Provides ingress controller for routing external traffic to services.
 
 **Pods:**
+
 - `ingress-nginx-controller`: One pod per worker node (DaemonSet)
 
 ### Metrics Server
