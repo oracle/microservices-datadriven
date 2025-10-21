@@ -106,7 +106,8 @@ TEST SUITE: None
 ### Multiple Instance Installation
 
 When installing multiple OBaaS instances in your cluster, each instance must have unique values for:
-- Release name
+
+- `Release name`
 - `obaasName`
 - `targetNamespace`
 
@@ -188,5 +189,5 @@ If the installation fails, verify the following:
 1. All values in `values.yaml` are correct
 1. Database credentials and connection information are accurate
 1. OCI configuration (if using ADB-S) matches the secret created earlier
-1. For multiple instances, ensure unique release names, `obaasName`, and `targetNamespace` values
+1. For multiple instances, ensure unique `Release name`s, `obaasName`, and `targetNamespace` values
 1. For multiple APISIX instances, verify different host names and/or ports are configured

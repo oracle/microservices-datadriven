@@ -75,7 +75,7 @@ TEST SUITE: None
 
 When installing multiple OBaaS instances in your cluster, each instance must have unique values for:
 
-- Release name
+- `Release name`
 - `obaasName`
 - `targetNamespace`
 
@@ -110,10 +110,10 @@ helm ls
 **Expected output:**
 
 ```text
-NAME               	NAMESPACE	REVISION	UPDATED                             	STATUS  	CHART                    	APP VERSION
-obaas-db           	default  	1       	2025-09-12 13:51:23.751199 -0500 CDT	deployed	OBaaS-db-0.1.0           	2.0.0-M4   
-obaas-observability	default  	1       	2025-09-12 13:45:43.113298 -0500 CDT	deployed	OBaaS-observability-0.1.0	2.0.0-M4   
-obaas-prereqs      	default  	1       	2025-09-12 13:37:16.026781 -0500 CDT	deployed	OBaaS-Prerequisites-0.0.1	2.0.0-M4  
+NAME                NAMESPACE REVISION  UPDATED                               STATUS    CHART                     APP VERSION
+obaas-db            default   1         2025-09-12 13:51:23.751199 -0500 CDT  deployed  OBaaS-db-0.1.0            2.0.0-M4   
+obaas-observability default   1         2025-09-12 13:45:43.113298 -0500 CDT. deployed  OBaaS-observability-0.1.0 2.0.0-M4   
+obaas-prereqs       default   1         2025-09-12 13:37:16.026781 -0500 CDT. deployed  OBaaS-Prerequisites-0.0.1 2.0.0-M4  
 ```
 
 ### Verify Pods and Namespaces
