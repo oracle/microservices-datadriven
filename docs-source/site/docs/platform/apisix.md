@@ -24,9 +24,19 @@ kubectl port-forward -n obaas-dev svc/apisix-admin 9180
 
 To access the APISIX APIs, you need the admin key. Retrieve it with the following command (replace the example namespace `obaas-dev` with the namespace where APISIX is deployed):
 
-```shell
-export admin_key=$(kubectl -n obaas-dev get configmap apisix -o yaml | yq '.data."config.yaml"' | yq '.deployment.admin.admin_key[] | select(.name == "admin") | .key')
+**Option 1 - Using yq:**
+
+```bash
+kubectl -n obaas-dev get configmap apisix -o yaml | yq '.data."config.yaml"' | yq '.deployment.admin.admin_key[] | select(.name == "admin") | .key'
 ```
+
+**Option 2 - Manual retrieval:**
+
+If the command above doesn't work:
+
+1. Run: `kubectl get configmap apisix -n obaas-dev -o yaml`
+1. Look for the `config.yaml` section
+1. Find `deployment.admin.admin_key` and copy the key value
 
 Test the admin key by running a simple curl command; it should return the list of configured routes.
 
