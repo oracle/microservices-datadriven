@@ -43,3 +43,17 @@ Test the admin key by running a simple curl command; it should return the list o
 ```shell
 curl http://127.0.0.1:9180/apisix/admin/routes -H "X-API-key: $admin_key" -X GET
 ```
+
+### Accessing APISIX Dashboard
+
+:::note
+ Note that all functionality is not available in the dashboard. You might need to use the REST APIs
+:::
+
+APISIX has an embedded dashboard that can be accessed after a tunnel is established to the `apisix-admin` service. The dashboard is available on this [URL](http://localhost:8190/ui). **NOTE:** you need the Admin key to be able to access the dashboard.
+
+![APISIX Dashboard](images/apisix-dashboard.png)
+
+### Configuring APISIX using REST APIs
+
+You can configure and update the APISIX gateway using the provided APIs. [API Documentation](https://apisix.apache.org/docs/apisix/getting-started/README/)
