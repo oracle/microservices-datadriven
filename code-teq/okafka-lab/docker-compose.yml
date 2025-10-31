@@ -1,0 +1,16 @@
+services:
+  okafkadb:
+    image: gvenzl/oracle-free:23.9-slim-faststart
+    container_name: okafkadb
+    ports:
+      - 9092:1521
+    environment:
+      - ORACLE_PASSWORD=Welcome12345
+    volumes:
+      - ./oraclefree:/container-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "lsnrctl status | grep READY"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
