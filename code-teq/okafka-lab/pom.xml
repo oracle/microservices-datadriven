@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>oracle-database-kafka-apis</artifactId>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>9</source>
+                    <target>9</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <groupId>com.example.okafka</groupId>
+    <name>oracle-kafka-apis</name>
+    <description>Oracle Kafka API Example</description>
+    <version>1.0.0</version>
+
+    <properties>
+        <java.version>21</java.version>
+    </properties>
+
+    <dependencies>
+        <!-- OKafka All-in-one -->
+        <dependency>
+            <groupId>com.oracle.database.messaging</groupId>
+            <artifactId>okafka</artifactId>
+            <version>23.6.1.0</version>
+        </dependency>
+
+    </dependencies>
+
+
+</project>
