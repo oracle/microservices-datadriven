@@ -1,7 +1,7 @@
 services:
-  okafkadb:
+  okafka:
     image: gvenzl/oracle-free:23.9-slim-faststart
-    container_name: okafkadb
+    container_name: okafka
     ports:
       - 9092:1521
     environment:

@@ -33,6 +33,8 @@ public class OKafkaConsumer {
             for (ConsumerRecord<String, String> record : records) {
                 System.out.println("Consumed record: " + record.value());
             }
+
+            consumer.commitSync();
         }
     }
 }
