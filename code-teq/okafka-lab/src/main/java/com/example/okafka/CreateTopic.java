@@ -10,6 +10,7 @@ import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
 import static com.example.okafka.OKafka.TOPIC_NAME;
+import static com.example.okafka.OKafka.TRANSACTIONAL_TOPIC_NAME;
 import static com.example.okafka.OKafkaAuthentication.getAuthenticationProperties;
 
 public class CreateTopic {
@@ -19,7 +20,8 @@ public class CreateTopic {
 
         try (Admin admin = AdminClient.create(props)) {
             NewTopic testTopic = new NewTopic(TOPIC_NAME, 1, (short) 1);
-            admin.createTopics(List.of(testTopic))
+            NewTopic transactionalTestTopic = new NewTopic(TRANSACTIONAL_TOPIC_NAME, 1, (short) 1);
+            admin.createTopics(List.of(testTopic, transactionalTestTopic))
                     .all()
                     .get();
             System.out.println("[ADMIN] Created topic: " + testTopic.name());
