@@ -25,6 +25,7 @@ public class CreateTopic {
                     .all()
                     .get();
             System.out.println("[ADMIN] Created topic: " + testTopic.name());
+            System.out.println("[ADMIN] Created transactional topic: " + transactionalTestTopic.name());
         } catch (ExecutionException | InterruptedException e) {
             if (e.getCause() instanceof TopicExistsException) {
                 System.out.println("[ADMIN] Topic already exists");

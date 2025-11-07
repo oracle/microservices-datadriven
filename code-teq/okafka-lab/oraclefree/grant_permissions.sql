@@ -1,15 +1,19 @@
 -- Set as appropriate for your database.
 alter session set container = freepdb1;
 
--- user for okafka
+-- user for okafka.  You may modify tablespace grants as appropriate.
 create user TESTUSER identified by testpwd;
 grant create session to TESTUSER;
 grant resource, connect, unlimited tablespace to TESTUSER;
 
 -- okafka permissions
+-- AQ User role to be able to use AQ
 grant aq_user_role to TESTUSER;
+-- To be able to invoke operations from AQ-JMS
 grant execute on dbms_aq to  TESTUSER;
+-- To be able to create transactional event queue and subscriber
 grant execute on dbms_aqadm to TESTUSER;
+-- To be able to discover other RAC nodes of the database
 grant select on gv_$session to TESTUSER;
 grant select on v_$session to TESTUSER;
 grant select on gv_$instance to TESTUSER;
