@@ -1,6 +1,6 @@
 ---
 title: Oracle Database Metrics Exporter
-sidebar_position: 3
+sidebar_position: 5
 ---
 ## Oracle Database Metrics Exporter
 

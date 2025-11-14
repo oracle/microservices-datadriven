@@ -1,6 +1,6 @@
 ---
 title: Spring Boot Eureka Server
-sidebar_position: 6
+sidebar_position: 8
 ---
 ## Spring Boot Eureka Server
 

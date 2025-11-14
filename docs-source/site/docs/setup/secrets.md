@@ -8,13 +8,13 @@ You must create a few secrets before starting the installation of Helm charts. T
 
 ### Image Pull Secrets
 
-Create an image pull secret to allow pull access to your container repository. This is the repository where application images will be stored. If you are using the recommended OKE, this should be an OCI-R repository in the same compartment and region. This example assumes your tenancy is called **maacloud**, the region **phx.ocir.io** and that your tenancy uses IDCS authentication. Adjust the command to match your tenancy:
+Create an image pull secret to allow pull access to your container repository. This is the repository where application images will be stored. If you are using the recommended OKE, this should be an OCI-R repository in the same compartment and region. This example assumes your tenancy is called **tenancy**, the region **phx.ocir.io** and that your tenancy uses IDCS authentication. Adjust the command to match your tenancy:
 
 ```bash
 kubectl create secret generic ocir \
-  --from-literal=host=phx.ocir.io/maacloud \
-  --from-literal=username=maacloud/oracleidentitycloudservice/bob.smith@oracle.com \
-  --from-literal=password="xyz123xyz" \
+  --from-literal=host=phx.ocir.io/tenancy \
+  --from-literal=username=tenancy/oracleidentitycloudservice/bob.smith@oracle.com \
+  --from-literal=password="SuperSecretPassword" \
   --from-literal=email=bob.smith@oracle.com
 ```
 
@@ -26,8 +26,8 @@ You can validate the token by performing a docker login using this command (with
 
 ```bash
 docker login phx.ocir.io 
-  -u maacloud/oracleidentitycloudservice/bob.smith@company.com 
-  -p 'xyz123xyz'
+  -u tenancy/oracleidentitycloudservice/bob.smith@company.com 
+  -p 'SuperSecretPassword'
 ```
 
 You can verify your secret using this command:
@@ -59,16 +59,16 @@ Create two additional secrets as shown below:
 
 ```bash
 kubectl create secret generic obaas-registry-login \
-  --from-literal=registry.username="maacloud/oracleidentitycloudservice/mark.x.nelson@oracle.com" \
-  --from-literal=registry.password="xyz123xyz" \
-  --from-literal=registry.push_url="phx.ocir.io/maacloud/obaas-dev"
+  --from-literal=registry.username="tenancy/oracleidentitycloudservice/mark.x.nelson@oracle.com" \
+  --from-literal=registry.password="SuperSecretPassword" \
+  --from-literal=registry.push_url="phx.ocir.io/tenancy/obaas-dev"
 ```
 
 ```bash
 kubectl create secret docker-registry obaas-registry-pull-auth \
-  --docker-server="phx.ocir.io/maacloud" \
-  --docker-username="maacloud/oracleidentitycloudservice/mark.x.nelson@oracle.com" \
-  --docker-password="xyz123xyz" \
+  --docker-server="phx.ocir.io/tenancy" \
+  --docker-username="tenancy/oracleidentitycloudservice/mark.x.nelson@oracle.com" \
+  --docker-password="SuperSecretPassword" \
   --docker-email="mark.x.nelson@oracle.com"
 ```
 
@@ -100,19 +100,19 @@ Create the secrets using these commands:
 ```bash
 kubectl create secret generic signoz \
   --from-literal=email="admin@nodomain.com" \
-  --from-literal=password=Welcome-12345
+  --from-literal=password=SuperSecretPassword
 ```
 
 ```bash
 kubectl create secret generic clickhouse \
   --from-literal=username="clickhouse_operator" \
-  --from-literal=password=Welcome-12345
+  --from-literal=password=SuperSecretPassword
 ```
 
 ```bash
 kubectl create secret generic alertmanager \
   --from-literal=username="admin" \
-  --from-literal=password="Welcome-12345"
+  --from-literal=password="SuperSecretPassword"
 ```
 
 To use random passwords, instead of specifying a password as shown above, use this form of the command instead:
@@ -134,7 +134,7 @@ Create a secret to provide OBaaS with the credentials for your database. This ex
 ```bash
 kubectl create secret generic admin-user-authn \
   --from-literal=username=ADMIN \
-  --from-literal=password="Welcome-12345" \
+  --from-literal=password="SuperSecretPassword" \
   --from-literal=service="demo1_tp" \
   --from-literal=dbname="demo1"
 ```  
@@ -175,7 +175,7 @@ If you want to use an existing Oracle Database in your applications which is not
 ```bash
 kubectl create secret generic admin-user-authn \
   --from-literal=username=ADMIN \
-  --from-literal=password="Welcome-12345" \
+  --from-literal=password="SuperSecretPassword" \
   --from-literal=service="demo1_tp" \
   --from-literal=dbname="demo1" \
   --from-literal=dbhost="demodb.demohost" \
