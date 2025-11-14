@@ -1,6 +1,6 @@
 ---
 title: Oracle Transaction Manager for Microservices
-sidebar_position: 8
+sidebar_position: 9
 ---
 ## Oracle Transaction Manager for Microservices
 

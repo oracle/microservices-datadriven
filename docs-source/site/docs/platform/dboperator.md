@@ -1,6 +1,6 @@
 ---
 title: Oracle Database Operator for Kubernetes
-sidebar_position: 4
+sidebar_position: 6
 ---
 ## Oracle Database Operator for Kubernetes
 

@@ -1,8 +1,8 @@
 ---
-title: Spring Boot Admin
-sidebar_position: 9
+title: Spring Boot Admin Server
+sidebar_position: 10
 ---
-## Spring Boot Admin
+## Spring Boot Admin Server
 
 Spring Boot Admin works by registering Spring Boot applications that expose Actuator endpoints. Each application's health and metrics data is polled by Spring Boot Admin Server, which aggregates and displays this information in a web dashboard. The registered applications can either self-register or be discovered using service discovery tools like Eureka or Consul. Through the dashboard, users can monitor the health, memory usage, logs, and more for each application, and even interact with them via management endpoints for tasks like restarting or updating configurations.
 

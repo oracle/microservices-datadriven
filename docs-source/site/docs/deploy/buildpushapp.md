@@ -34,7 +34,7 @@ Refer to the [documentation for JKube](https://eclipse.dev/jkube/docs/kubernetes
   <configuration>
     <images>
       <image>
-        <name>sjc.ocir.io/maacloud/repository/phonebook:${project.version}</name>
+        <name>sjc.ocir.io/tenancy/repository/phonebook:${project.version}</name>
         <build>
           <from>ghcr.io/oracle/openjdk-image-obaas:21</from>
           <assembly>
@@ -60,7 +60,7 @@ mvn clean package k8s:build k8s:push
 If the build and push is successful, you should get a message similar to this:
 
 ```log
-[INFO] k8s: Pushed sjc.ocir.io/maacloud/phonebook/phonebook:0.0.1-SNAPSHOT in 4 minutes and 2 seconds 
+[INFO] k8s: Pushed sjc.ocir.io/tenancy/phonebook/phonebook:0.0.1-SNAPSHOT in 4 minutes and 2 seconds 
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------

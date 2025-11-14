@@ -18,7 +18,7 @@ For example, if you have the following information:
 
 - `db.name:` Your database name. For example, `helmdb`
 - `db.username:` Your database user name. For example, `phonebook`
-- `db.password:` Your database user password. For example, `Welcome-12345`
+- `db.password:` Your database user password. For example, `SuperSecretPassword`
 - `db.service:` Your service name. For example, `helmdb_tp`
 - `db.lb_username` Your Liquibase username.
 - `db.lb_password` Your Liquibase user password.
@@ -29,10 +29,10 @@ Create a Kubernetes secret (in this example, `phonebook-db-secrets` in the `obaa
 kubectl -n obaas-dev create secret generic phonebook-db-secrets \
   --from-literal=db.name=helmdb \
   --from-literal=db.username=phonebook \
-  --from-literal=db.password=Welcome-12345 \
+  --from-literal=db.password=SuperSecretPassword \
   --from-literal=db.service=helmdb_tp \
   --from-literal=db.lb_username=phonebook \
-  --from-literal=db.lb_password=Welcome-12345
+  --from-literal=db.lb_password=SuperSecretPassword
 ```
 
 You can verify the values by running the following command (this is for the `username` value):
@@ -141,7 +141,7 @@ spec:
           SET SERVEROUTPUT ON;
           WHENEVER SQLERROR EXIT SQL.SQLCODE;
           
-          create user if not exists phonebook identified by "Welcome-12345";
+          create user if not exists phonebook identified by "SuperSecretPassword";
           grant db_developer_role to phonebook;
           grant unlimited tablespace to phonebook;
           commit;
