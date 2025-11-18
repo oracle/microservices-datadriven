@@ -5,7 +5,7 @@ metadata:
   name: {{ include "obaas-app.fullname" . }}
   labels:
     {{- include "obaas-app.labels" . | nindent 4 }}
-    obaas.framework: SPRING_BOOT
+    obaas.framework: {{ .Values.obaas.framework | upper }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}

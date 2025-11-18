@@ -159,10 +159,11 @@ obaas:
     # TODO: Set the name of your database credentials secret
     credentialsSecret: REPLACE_WITH_DB_CREDENTIALS_SECRET  # e.g., my-app-db-secrets
     # TODO: Set the name of your ADB wallet secret
-    walletSecret: REPLACE_WITH_DB_WALLET_SECRET  # e.g., my-app-adb-wallet
+    walletSecret: REPLACE_WITH_DB_WALLET_SECRET  # e.g., my-app-tns-admin
 
+  # Enable OpenTelemetry tracing and metrics
   otel:
-    enabled: true  # Enable OpenTelemetry tracing and metrics
+    enabled: true
 
   # MicroProfile LRA (Long Running Actions)
   mp_lra:
@@ -170,7 +171,7 @@ obaas:
 
   # Spring Boot applications (only applies when framework=SPRING_BOOT)
   springboot:
-    enabled: false  # Set to true when using SPRING_BOOT framework
+    enabled: true  # Set to true when using SPRING_BOOT framework
 
   # Helidon applications (only applies when framework=HELIDON)
   helidon:
@@ -187,5 +188,6 @@ obaas:
     app:
       greeting: "Hello"  # Example property - replace with your own
 
+  # Enable Eureka service discovery
   eureka:
-    enabled: true  # Enable Eureka service discovery
+    enabled: true

@@ -1,6 +1,10 @@
 # Temporary Builds
 grabdish/inventory-micronaut/build/
 
+# Claude and Gemini
+CLAUDE.md
+GEMINI.md
+
 # Deployment artifacts
 .deployed/
 .deployed/*.yaml
