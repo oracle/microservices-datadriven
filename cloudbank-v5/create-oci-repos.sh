@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Script to create OCI container repositories for CloudBank v5 services
-# Usage: ./create-oci-repos.sh <compartment-name> <repository-prefix>
+# Usage: ./create-oci-repos.sh COMPARTMENT_NAME REPOSITORY_PREFIX
 
 if [ "$#" -ne 2 ]; then
-    echo "Usage: $0 <compartment-name> <repository-prefix>"
-    echo "Example: $0 my-compartment sjc.ocir.io/maacloud/cloudbank-v5"
+    echo "Usage: $0 COMPARTMENT_NAME REPOSITORY_PREFIX"
+    echo "Example: $0 my-compartment YOUR_REGION.ocir.io/YOUR_TENANCY/cloudbank-v5"
     return 1 2>/dev/null || exit 1
 fi
 
