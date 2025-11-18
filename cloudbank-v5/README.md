@@ -8,17 +8,16 @@ For complete installation instructions, see **[cloudbank-v5-install.md](cloudban
 
 This guide covers:
 - Building and containerizing the services
-- Database setup with Oracle ADB
+- Database setup with Oracle AI Autonomous Database
 - Kubernetes deployment with Helm
 - APISIX API gateway configuration
-- Observability dashboard setup
 
 ### 🧪 Testing Guide
 
 For comprehensive testing procedures, see **[cloudbank-test-doc.md](cloudbank-test-doc.md)**
 
 This guide covers:
-- Testing individual microservices (account, customer, creditscore)
+- Testing individual microservices (account, customer, creditscore etc.)
 - Check deposit and clearance workflow
 - LRA distributed transaction testing (transfer service)
 - Observability and tracing verification
@@ -36,9 +35,3 @@ cloudbank-v5/
 ├── common/            # Shared configuration and utilities
 └── buildtools/        # Code quality tools (checkstyle, dependency-check)
 ```
-
-## License
-
-Copyright (c) 2023, 2025, Oracle and/or its affiliates.
-
-Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl.
