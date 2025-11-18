@@ -1668,7 +1668,6 @@ kubectl logs -n obaas-dev -l app.kubernetes.io/name=cloudbank --tail=50
 
 ### Next Steps
 
-- **Explore the codebase:** See [CLAUDE.md](CLAUDE.md) for development guidance
 - **Modify services:** Make code changes and redeploy using `mvn clean package k8s:build k8s:push` and `helm upgrade`
 - **Scale services:** Modify `replicaCount` in values.yaml
 - **Configure autoscaling:** Enable HPA in values.yaml
@@ -2017,7 +2016,6 @@ If you need to completely start over:
 ## Additional Resources
 
 - **[CloudBank README](README.md)** - Application overview and detailed testing guide
-- **[CLAUDE.md](CLAUDE.md)** - Development guide for working with the codebase
 - **[Oracle Backend as a Service documentation](https://oracle.github.io/microservices-datadriven/obaas/)** - OBaaS platform documentation
 - **[Report Issues](https://github.com/oracle/microservices-datadriven/issues)** - GitHub Issues for this repository
 - **[Spring Boot Documentation](https://spring.io/projects/spring-boot)** - Spring Boot reference
