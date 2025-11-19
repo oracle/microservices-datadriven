@@ -7,14 +7,20 @@ replicaCount: 1
 
 # This sets the container image more information can be found here: https://kubernetes.io/docs/concepts/containers/images/
 image:
-  repository: "my-repository/customer"
+  # TODO: Set your container image repository (e.g., us-phoenix-1.ocir.io/mytenancy/my-app)
+  repository: "REPLACE_WITH_YOUR_IMAGE_REPOSITORY"
   # This sets the pull policy for images.
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "0.0.1-SNAPSHOT"
+  # TODO: Set your image tag/version
+  tag: "REPLACE_WITH_YOUR_IMAGE_TAG"
 
 # This is for the secrets for pulling an image from a private repository more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+# TODO: Configure image pull secrets if using a private registry (uncomment and set secret name)
 imagePullSecrets: []
+#  - name: ocir  # For OCI Registry
+#  - name: dockerhub  # For Docker Hub
+#  - name: ghcr  # For GitHub Container Registry
 # This is to override the chart name.
 nameOverride: ""
 fullnameOverride: ""
@@ -33,8 +39,8 @@ serviceAccount:
 
 # This is for setting Kubernetes Annotations to a Pod.
 # For more information checkout: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-podAnnotations: 
-  signoz.io/path: /actuator/prometheus
+# Note: metrics path will be set automatically based on framework type
+podAnnotations:
   signoz.io/port: "8080"
   signoz.io/scrape: "true"
 # This is for setting Kubernetes Labels to a Pod.
@@ -76,37 +82,41 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
-resources: 
+resources:
   requests:
     cpu: 100m
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # Framework-specific resource recommendations:
+  # Spring Boot: lighter resource usage, minimal requirements
+  # Helidon: more explicit resource management recommended
   # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
+  #   cpu: 500m
+  #   memory: 512Mi
   # requests:
   #   cpu: 100m
-  #   memory: 128Mi
+  #   memory: 256Mi
 
-# This is to setup the liveness and readiness probes more information can be found here: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/
-livenessProbe:
-  httpGet:
-    path: /actuator/health/liveness
-    port: 8080
-  initialDelaySeconds: 30
-  periodSeconds: 10
-  timeoutSeconds: 2
-  failureThreshold: 3
-readinessProbe:
-  httpGet:
-    path: /actuator/health/readiness
-    port: 8080
-  initialDelaySeconds: 10
-  periodSeconds: 10
-  timeoutSeconds: 2
-  failureThreshold: 3
+# Health probes - automatically configured based on framework type
+# Leave empty to use framework defaults, or override with custom configuration
+livenessProbe: {}
+readinessProbe: {}
+
+# Example custom probe configuration (uncomment to override defaults):
+# livenessProbe:
+#   httpGet:
+#     path: /custom/health/live
+#     port: 8080
+#   initialDelaySeconds: 30
+#   periodSeconds: 10
+#   timeoutSeconds: 2
+#   failureThreshold: 3
+# readinessProbe:
+#   httpGet:
+#     path: /custom/health/ready
+#     port: 8080
+#   initialDelaySeconds: 10
+#   periodSeconds: 10
+#   timeoutSeconds: 2
+#   failureThreshold: 3
         
 
 # This section is for setting up autoscaling more information can be found here: https://kubernetes.io/docs/concepts/workloads/autoscaling/
@@ -136,20 +146,48 @@ tolerations: []
 
 affinity: {}
 
-# Oracle Backend for Microservices and AI Settings.
 obaas:
-  namespace: obaas-dev                    # Replace with your namespace 
+  # TODO: Set to your OBaaS installation namespace
+  namespace: REPLACE_WITH_OBAAS_NAMESPACE  # e.g., obaas-cdd, obaas-prod, etc.
+
+  # Framework selection: SPRING_BOOT or HELIDON
+  # TODO: Choose your framework (SPRING_BOOT or HELIDON)
+  framework: REPLACE_WITH_FRAMEWORK  # Options: SPRING_BOOT or HELIDON
+
   database:
-    enabled: true                           # If true variables with DB secret content will be created
-    credentialsSecret: customer-db-secrets # Replace with your secret name
-    walletSecret: obaas-adb-tns-admin-1     # Replace with your wallet secret name
+    enabled: true  # If true, database configuration will be injected
+    # TODO: Set the name of your database credentials secret
+    credentialsSecret: REPLACE_WITH_DB_CREDENTIALS_SECRET   # e.g., my-app-db-secrets
+    # TODO: Set the name of your ADB wallet secret
+    walletSecret: REPLACE_WITH_DB_WALLET_SECRET  # e.g., my-app-adb-wallet
+
+  # Enable OpenTelemetry tracing and metrics
   otel:
-    enabled: true                           # Enable OpenTelemetry
-  # MicroProfile LRA
+    enabled: true  
+
+  # MicroProfile LRA (Long Running Actions)
   mp_lra:
-    enabled: false                          # Enable OTMM
-  # Spring Boot applications
+    enabled: false
+
+  # Spring Boot applications (only applies when framework=SPRING_BOOT)
   springboot:
-    enabled: true                           # Enable Spring Boot specific variables
+    enabled: true  # Set to true when using SPRING_BOOT framework
+
+  # Helidon applications (only applies when framework=HELIDON)
+  helidon:
+    enabled: false  # Set to true when using HELIDON framework
+    # Helidon-specific configurations
+    datasource:
+      # TODO: CRITICAL - Must match the datasource name in your Helidon application.yaml
+      name: "REPLACE_WITH_DATASOURCE_NAME"  # e.g., "customer", "order", "inventory"
+    server:
+      host: "0.0.0.0"
+    metrics:
+      rest_request_enabled: false
+    # Application-specific properties (customize for your app)
+    app:
+      greeting: "Hello"  # Example property - replace with your own
+
+  # Enable Eureka service discovery
   eureka:
-    enabled: true                           # Enable Eureka client
+    enabled: true  

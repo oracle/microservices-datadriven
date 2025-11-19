@@ -25,7 +25,6 @@
         <module>buildtools</module>
         <module>common</module>
         <module>account</module>
-        <!-- <module>chatbot</module> -->
         <module>checks</module>
         <module>customer</module>
         <module>creditscore</module>
@@ -38,15 +37,21 @@
         <java.version>21</java.version>
         <spring-cloud.version>2024.0.1</spring-cloud.version>
         <org.springdoc-version>2.4.0</org.springdoc-version>
-        <micrometer-tracing.version>1.4.4</micrometer-tracing.version>
-        <lombok.version>1.18.38</lombok.version>
-        <oracle-springboot-starter.version>25.2.0</oracle-springboot-starter.version>
-	    <oracle-microtx-starter.version>24.2.2</oracle-microtx-starter.version>
+        <micrometer-tracing.version>1.6.0</micrometer-tracing.version>
+        <lombok.version>1.18.42</lombok.version>
+        <oracle-springboot-starter.version>26.0.0</oracle-springboot-starter.version>
+	    <oracle-microtx-starter.version>24.4.1</oracle-microtx-starter.version>
 	    <liquibase.version>4.31.1</liquibase.version>
 	    <datasource-micrometer-spring-boot.version>1.1.0</datasource-micrometer-spring-boot.version>
 
         <!-- JKube -->
-        <jkube.version>1.18.1</jkube.version>
+        <jkube.version>1.18.2</jkube.version>
+
+        <!-- Opentelemetry BOM -->
+        <otel-bom.version>2.21.0</otel-bom.version>
+
+        <!-- Opentelemetry UCP -->
+        <otel-ucp.version>2.21.0-alpha</otel-ucp.version>
 
         <!-- Code quality tools -->
         <maven-checkstyle-plugin-version>3.3.1</maven-checkstyle-plugin-version>
@@ -151,7 +156,7 @@
         <dependency>
             <groupId>io.opentelemetry.instrumentation</groupId>
             <artifactId>opentelemetry-oracle-ucp-11.2</artifactId>
-            <version>2.13.1-alpha</version>
+            <version>${otel-ucp.version}</version>
         </dependency>
     </dependencies>
 
@@ -160,7 +165,7 @@
             <dependency>
                 <groupId>io.opentelemetry.instrumentation</groupId>
                 <artifactId>opentelemetry-instrumentation-bom</artifactId>
-                <version>2.13.1</version>
+                <version>${otel-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -186,7 +191,7 @@
             <plugin>
                 <groupId>org.eclipse.jkube</groupId>
                 <artifactId>kubernetes-maven-plugin</artifactId>
-                <version>1.18.1</version>
+                <version>${jkube.version}</version>
                 <configuration>
                     <images>
                         <image>
