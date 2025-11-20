@@ -1,0 +1,8 @@
+{
+  "label": "Release Notes",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "description": "Release Notes for Oracle Backend as a Service and AI (OBaaS)"
+  }
+}

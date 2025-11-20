@@ -6,6 +6,23 @@ sidebar_position: 3
 
 The Oracle Coherence Operator is an open-source Kubernetes operator that enables the deployment and management of Oracle Coherence clusters in Kubernetes environments. It provides features to assist with deploying, scaling, and managing Coherence data grid clusters using cloud-native technologies. [Full Documentation can be found here](https://oracle.github.io/coherence-operator/)
 
+---
+
+## Table of Contents
+
+- [Installing the Coherence Operator](#installing-the-coherence-operator)
+- [Creating a Coherence Cluster](#creating-a-coherence-cluster)
+  - [Prerequisites](#prerequisites)
+  - [Step 1: Create the Coherence Cluster YAML](#step-1-create-the-coherence-cluster-yaml)
+    - [YAML Configuration Files](#yaml-configuration-files)
+  - [Step 2: Deploy the Cluster](#step-2-deploy-the-cluster)
+  - [Step 3: Verify the Deployment](#step-3-verify-the-deployment)
+- [Using Coherence with Spring Boot](#using-coherence-with-spring-boot)
+  - [Dependencies](#dependencies)
+  - [Spring Boot Configuration](#spring-boot-configuration)
+
+---
+
 ### Installing the Coherence Operator
 
 Oracle Database Operator for Kubernetes will be installed if the `coherence.enabled` is set to `true` in the `values.yaml` file. The default namespace for Oracle Database Operator is `coherence`.

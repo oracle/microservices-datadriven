@@ -48,7 +48,7 @@ Double-check all values before proceeding. Incorrect values will cause the datab
 Install the Helm chart using the following command:
 
 ```bash
-helm --debug install obaas-db \
+helm upgrade --install --debug obaas-db \
   --set global.obaasName="obaas-dev" \
   --set global.targetNamespace="obaas-dev" \
   ./
@@ -82,7 +82,7 @@ When installing multiple OBaaS instances in your cluster, each instance must hav
 **Example for development instance:**
 
 ```bash
-helm --debug install obaas-db \
+helm upgrade --install --debug obaas-db \
   --set global.obaasName="obaas-dev" \
   --set global.targetNamespace="obaas-dev" \
   ./
@@ -91,7 +91,7 @@ helm --debug install obaas-db \
 **Example for production instance:**
 
 ```bash
-helm --debug install obaas-prod-db \
+helm upgrade --install --debug obaas-prod-db \
   --set global.obaasName="obaas-prod" \
   --set global.targetNamespace="obaas-prod" \
   ./

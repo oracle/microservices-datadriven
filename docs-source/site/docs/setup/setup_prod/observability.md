@@ -48,7 +48,7 @@ To install components into separate namespaces, override the global namespace by
 Install the Helm chart using the following command:
 
 ```bash
-helm --debug install obaas-observability \
+helm upgrade --install --debug obaas-observability \
   --set global.obaasName="obaas-dev" \
   --set global.targetNamespace="obaas-dev" \
   ./
@@ -82,7 +82,7 @@ When installing multiple OBaaS instances in your cluster, each instance must hav
 **Example for development instance:**
 
 ```bash
-helm --debug install obaas-observability \
+helm upgrade --install --debug obaas-observability \
   --set global.obaasName="obaas-dev" \
   --set global.targetNamespace="obaas-dev" \
   ./
@@ -91,7 +91,7 @@ helm --debug install obaas-observability \
 **Example for production instance:**
 
 ```bash
-helm --debug install obaas-prod-observability \
+helm upgrade --install --debug obaas-prod-observability \
   --set global.obaasName="obaas-prod" \
   --set global.targetNamespace="obaas-prod" \
   ./

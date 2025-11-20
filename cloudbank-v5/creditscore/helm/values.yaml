@@ -148,18 +148,18 @@ affinity: {}
 
 obaas:
   # TODO: Set to your OBaaS installation namespace
-  namespace: REPLACE_WITH_OBAAS_NAMESPACE  # e.g., obaas-cdd, obaas-prod, etc.
+  namespace: obaas-dev  # e.g., obaas-cdd, obaas-prod, etc.
 
   # Framework selection: SPRING_BOOT or HELIDON
   # TODO: Choose your framework (SPRING_BOOT or HELIDON)
-  framework: REPLACE_WITH_FRAMEWORK  # Options: SPRING_BOOT or HELIDON
+  framework: SPRING_BOOT  # Options: SPRING_BOOT or HELIDON
 
   database:
     enabled: false  # If true, database configuration will be injected
     # TODO: Set the name of your database credentials secret
-    credentialsSecret: REPLACE_WITH_DB_CREDENTIALS_SECRET   # e.g., my-app-db-secrets
+    credentialsSecret: account-db-secrets   # e.g., my-app-db-secrets
     # TODO: Set the name of your ADB wallet secret
-    walletSecret: REPLACE_WITH_DB_WALLET_SECRET  # e.g., my-app-tns-admin
+    walletSecret: obaas-adb-tns-admin-1  # e.g., my-app-tns-admin
 
   # Enable OpenTelemetry tracing and metrics
   otel:

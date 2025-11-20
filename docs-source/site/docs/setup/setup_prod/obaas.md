@@ -75,7 +75,7 @@ Configure the following settings:
 Install the Helm chart using the following command:
 
 ```bash
-helm --debug install obaas \
+helm upgrade --install --debug obaas \
   --set global.obaasName="obaas-dev" \
   --set global.targetNamespace="obaas-dev" \
   ./
@@ -114,7 +114,7 @@ When installing multiple OBaaS instances in your cluster, each instance must hav
 **Example for development instance:**
 
 ```bash
-helm --debug install obaas \
+helm upgrade --install --debug \
   --set global.obaasName="obaas-dev" \
   --set global.targetNamespace="obaas-dev" \
   ./
@@ -123,7 +123,7 @@ helm --debug install obaas \
 **Example for production instance:**
 
 ```bash
-helm --debug install obaas-prod \
+helm upgrade --install --debug obaas-prod \
   --set global.obaasName="obaas-prod" \
   --set global.targetNamespace="obaas-prod" \
   ./

@@ -51,7 +51,7 @@ Note the following required components:
 Install the Helm chart using the following command:
 
 ```bash
-helm --debug install obaas-prereqs ./
+helm upgrade --install --debug obaas-prereqs ./
 ```
 
 **Installation notes:**
