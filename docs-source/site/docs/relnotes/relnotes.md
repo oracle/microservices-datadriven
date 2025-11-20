@@ -25,7 +25,6 @@ This document provides comprehensive information about the container images used
   - [Detailed Comparison](#detailed-comparison)
     - [Additional Images in Required Set](#additional-images-in-required-set)
     - [Registry Path Differences](#registry-path-differences)
-- [Key Takeaways](#key-takeaways)
 
 ---
 

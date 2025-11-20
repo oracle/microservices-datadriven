@@ -6,7 +6,7 @@ sidebar_position: 9
 
 [Oracle Transaction Manager for Microservices](https://www.oracle.com/database/transaction-manager-for-microservices/), also known as "MicroTx", simplifies application development and operations by enabling distributed transactions to ensure consistency across microservices deployed in Kubernetes.
 
-Oracle Backend for Microservices and AI includes the free version of MicroTx, which has all of the functionality of the commercial version, but limits the number of transactions and only persists data in memory.  It is recommended for evaluations and application development purposes.
+Oracle Backend for Microservices and AI includes the free version of MicroTx, which has all the functionality of the commercial version, but limits the number of transactions and only persists data in memory.  It is recommended for evaluations and application development purposes.
 
 MicroTx supports the following consistency models:
 
