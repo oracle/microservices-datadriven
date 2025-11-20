@@ -208,7 +208,7 @@ First, create the admin password secret:
 
 ```shell
 kubectl create secret generic sidb-admin-secret \
-  --from-literal=password='MyTestPassword123#' \
+  --from-literal=password='MySuperSecretPassword' \
   -n default
 ```
 
