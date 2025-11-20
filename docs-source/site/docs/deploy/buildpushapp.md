@@ -68,3 +68,8 @@ If the build and push is successful, you should get a message similar to this:
 [INFO] Finished at: 2025-09-24T12:18:53-05:00
 [INFO] ------------------------------------------------------------------------
 ```
+
+## Getting Help
+
+- [#oracle-db-microservices Slack channel](https://oracledevs.slack.com/archives/C06L9CDGR6Z) in the Oracle Developers slack workspace.
+- [Open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).

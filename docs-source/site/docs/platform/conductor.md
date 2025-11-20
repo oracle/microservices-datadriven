@@ -22,10 +22,19 @@ Conductor will be installed if the `conductor-server.enabled` is set to `true` i
 
 ### Accessing Conductor APIs
 
-To access the Conductor APIs, use kubectl port-forward to create a secure channel to `service/conductor-server`. Run the following command to establish the secure tunnel (replace the example namespace `obaas-dev` with the namespace where the Conductor Server is deployed):
+:::note Namespace Configuration
+All `kubectl` commands in this guide use `-n conductor-server` as the default namespace. If Conductor is installed in a different namespace, replace `conductor-server` with your actual namespace name in all commands.
+
+To find your namespace, run:
+```bash
+kubectl get pods -A | grep conductor
+```
+:::
+
+To access the Conductor APIs, use kubectl port-forward to create a secure channel to `service/conductor-server`. Run the following command to establish the secure tunnel:
 
 ```shell
-kubectl port-forward -n obaas-dev svc/conductor-server 8080
+kubectl port-forward -n conductor-server svc/conductor-server 8080
 ```
 
 ### Testing the Conductor service
@@ -91,3 +100,8 @@ Check the status of the workflow. This will return the data from https://restcou
 ```shell
 curl -s -X GET "http://localhost:8080/api/workflow/$WORKFLOW_ID" | jq
 ```
+
+## Getting Help
+
+- [#oracle-db-microservices Slack channel](https://oracledevs.slack.com/archives/C06L9CDGR6Z) in the Oracle Developers slack workspace.
+- [Open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).

@@ -48,7 +48,7 @@ Double-check all values before proceeding. Incorrect values will cause the datab
 Install the Helm chart using the following command:
 
 ```bash
-helm --debug install obaas-db \
+helm upgrade --install --debug obaas-db \
   --set global.obaasName="obaas-dev" \
   --set global.targetNamespace="obaas-dev" \
   ./
@@ -82,7 +82,7 @@ When installing multiple OBaaS instances in your cluster, each instance must hav
 **Example for development instance:**
 
 ```bash
-helm --debug install obaas-db \
+helm upgrade --install --debug obaas-db \
   --set global.obaasName="obaas-dev" \
   --set global.targetNamespace="obaas-dev" \
   ./
@@ -91,13 +91,22 @@ helm --debug install obaas-db \
 **Example for production instance:**
 
 ```bash
-helm --debug install obaas-prod-db \
+helm upgrade --install --debug obaas-prod-db \
   --set global.obaasName="obaas-prod" \
   --set global.targetNamespace="obaas-prod" \
   ./
 ```
 
 ## Verification
+
+:::note Namespace Configuration
+Commands in this guide use `-n oracle-database-operator-system` as the default namespace for the Oracle Database Operator. If you overrode the namespace during installation, replace `oracle-database-operator-system` with your actual namespace name in all commands.
+
+To find your namespace, run:
+```bash
+kubectl get pods -A | grep oracle-database-operator
+```
+:::
 
 ### View Installed Charts
 
@@ -125,3 +134,8 @@ kubectl get pods -n oracle-database-operator-system
 ```
 
 ![DB Operator pods](media/image6.png)
+
+## Getting Help
+
+- [#oracle-db-microservices Slack channel](https://oracledevs.slack.com/archives/C06L9CDGR6Z) in the Oracle Developers slack workspace.
+- [Open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).
