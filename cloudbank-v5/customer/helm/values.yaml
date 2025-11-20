@@ -157,7 +157,7 @@ obaas:
   database:
     enabled: true  # If true, database configuration will be injected
     # TODO: Set the name of your database credentials secret
-    credentialsSecret: account-db-secrets   # e.g., my-app-db-secrets
+    credentialsSecret: customer-db-secrets   # e.g., my-app-db-secrets
     # TODO: Set the name of your ADB wallet secret
     walletSecret: obaas-adb-tns-admin-1  # e.g., my-app-adb-wallet
 
