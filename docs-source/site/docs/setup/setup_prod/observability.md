@@ -99,6 +99,15 @@ helm upgrade --install --debug obaas-prod-observability \
 
 ## Verification
 
+:::note Namespace Configuration
+Commands in this guide use `-n observability` as the default namespace for the observability components. If you overrode the namespace during installation, replace `observability` with your actual namespace name in all commands.
+
+To find your namespace, run:
+```bash
+kubectl get pods -A | grep signoz
+```
+:::
+
 ### View Installed Charts
 
 After installation completes, view the installed Helm charts:
@@ -146,3 +155,8 @@ If pods fail to start or remain in a pending state:
 2. Review pod logs your observability namespace: `kubectl logs <pod-name> -n observability`
 3. Verify resource availability: `kubectl top nodes`
 4. Ensure all prerequisite charts are installed and healthy
+
+## Getting Help
+
+- [#oracle-db-microservices Slack channel](https://oracledevs.slack.com/archives/C06L9CDGR6Z) in the Oracle Developers slack workspace.
+- [Open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).

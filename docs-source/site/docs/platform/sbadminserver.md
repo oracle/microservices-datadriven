@@ -14,12 +14,26 @@ Spring Boot Admin will be installed if the `admin-server.enabled` is set to `tru
 
 ### Access Spring Boot Admin Web Interface
 
-To access the Spring Boot Admin Web Interface, use kubectl port-forward to create a secure channel to `service/admin-server`. Run the following command to establish the secure tunnel (replace the example namespace `obaas-dev` with the namespace where the Spring Boot Admin Server is deployed):
+:::note Namespace Configuration
+All `kubectl` commands in this guide use `-n admin-server` as the default namespace. If the Spring Boot Admin Server is installed in a different namespace, replace `admin-server` with your actual namespace name in all commands.
+
+To find your namespace, run:
+```bash
+kubectl get pods -A | grep admin-server
+```
+:::
+
+To access the Spring Boot Admin Web Interface, use kubectl port-forward to create a secure channel to `service/admin-server`. Run the following command to establish the secure tunnel:
 
 ```shell
-kubectl port-forward -n obaas-dev svc/admin-server 8989
+kubectl port-forward -n admin-server svc/admin-server 8989
 ```
 
 Open the [Spring Boot Admin dashboard](http://localhost:8989)
 
 ![Spring Boot Admin Server](images/admin-server.png)
+
+## Getting Help
+
+- [#oracle-db-microservices Slack channel](https://oracledevs.slack.com/archives/C06L9CDGR6Z) in the Oracle Developers slack workspace.
+- [Open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).

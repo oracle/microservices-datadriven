@@ -37,3 +37,8 @@ Traces can be filtered based on Service, HTTP Routes etc. Click on a trace to se
 ![SigNoz Traces Details](images/signoz-traces-details.png)
 
 Logs for a trace event can directly be accessed using the _Go to related logs_ link.
+
+## Getting Help
+
+- [#oracle-db-microservices Slack channel](https://oracledevs.slack.com/archives/C06L9CDGR6Z) in the Oracle Developers slack workspace.
+- [Open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).

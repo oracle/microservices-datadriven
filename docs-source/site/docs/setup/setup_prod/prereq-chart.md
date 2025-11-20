@@ -78,6 +78,22 @@ The prerequisites chart creates cluster-level resources shared by all OBaaS inst
 
 ## Verification
 
+:::note Namespace Configuration
+The prerequisite components are installed in multiple namespaces by default:
+- `cert-manager` - Certificate management
+- `external-secrets` - External secrets operator
+- `ingress-nginx` - Ingress controller
+- `metrics-server` - Metrics collection
+- `kube-state-metrics` - Kubernetes state metrics
+
+If you overrode component namespaces during installation, replace the default namespace names with your actual namespaces in all commands below.
+
+To find your component namespaces, run:
+```bash
+kubectl get pods -A | grep -E "cert-manager|external-secrets|ingress-nginx|metrics-server|kube-state-metrics"
+```
+:::
+
 ### View Installed Charts
 
 After installation completes, verify the chart was installed successfully:
@@ -255,3 +271,8 @@ kubectl top nodes
 ```
 
 Scale your cluster if needed to provide additional capacity.
+
+## Getting Help
+
+- [#oracle-db-microservices Slack channel](https://oracledevs.slack.com/archives/C06L9CDGR6Z) in the Oracle Developers slack workspace.
+- [Open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).

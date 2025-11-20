@@ -205,3 +205,8 @@ It also adds the `OTEL_EXPORTER_OTLP_ENDPOINT` to pod environment variables for 
 - name: OTEL_EXPORTER_OTLP_ENDPOINT
   value: http://obaas-signoz-otel-collector.observability:4318
 ```
+
+## Getting Help
+
+- [#oracle-db-microservices Slack channel](https://oracledevs.slack.com/archives/C06L9CDGR6Z) in the Oracle Developers slack workspace.
+- [Open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).

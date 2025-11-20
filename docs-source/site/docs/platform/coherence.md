@@ -35,7 +35,15 @@ Follow these steps to create a basic Coherence cluster named `mysample-cluster`:
 
 - Coherence Operator is installed and running
 - `kubectl` is configured to access your Kubernetes cluster
-- You have a namespace where you want to deploy the cluster (e.g., `coherence`)
+
+:::note Namespace Configuration
+All `kubectl` commands in this guide use `-n coherence` as the default namespace. If the Coherence Operator is installed in a different namespace, replace `coherence` with your actual namespace name in all commands.
+
+To find your namespace, run:
+```bash
+kubectl get pods -A | grep coherence
+```
+:::
 
 ##### Step 1: Create the Coherence Cluster YAML
 
@@ -192,3 +200,8 @@ coherence:
   server:
     startup-timeout: 60s
 ```
+
+## Getting Help
+
+- [#oracle-db-microservices Slack channel](https://oracledevs.slack.com/archives/C06L9CDGR6Z) in the Oracle Developers slack workspace.
+- [Open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).

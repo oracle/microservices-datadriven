@@ -99,6 +99,15 @@ helm upgrade --install --debug obaas-prod-db \
 
 ## Verification
 
+:::note Namespace Configuration
+Commands in this guide use `-n oracle-database-operator-system` as the default namespace for the Oracle Database Operator. If you overrode the namespace during installation, replace `oracle-database-operator-system` with your actual namespace name in all commands.
+
+To find your namespace, run:
+```bash
+kubectl get pods -A | grep oracle-database-operator
+```
+:::
+
 ### View Installed Charts
 
 After installation completes, view the installed Helm charts:
@@ -125,3 +134,8 @@ kubectl get pods -n oracle-database-operator-system
 ```
 
 ![DB Operator pods](media/image6.png)
+
+## Getting Help
+
+- [#oracle-db-microservices Slack channel](https://oracledevs.slack.com/archives/C06L9CDGR6Z) in the Oracle Developers slack workspace.
+- [Open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).

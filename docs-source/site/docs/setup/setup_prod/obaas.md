@@ -191,3 +191,8 @@ If the installation fails, verify the following:
 1. OCI configuration (if using ADB-S) matches the secret created earlier
 1. For multiple instances, ensure unique `Release name`s, `obaasName`, and `targetNamespace` values
 1. For multiple APISIX instances, verify different host names and/or ports are configured
+
+## Getting Help
+
+- [#oracle-db-microservices Slack channel](https://oracledevs.slack.com/archives/C06L9CDGR6Z) in the Oracle Developers slack workspace.
+- [Open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).

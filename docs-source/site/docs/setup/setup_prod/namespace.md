@@ -147,3 +147,8 @@ Check for resources preventing deletion:
 kubectl api-resources --verbs=list --namespaced -o name | \
   xargs -n 1 kubectl get --show-kind --ignore-not-found -n obaas-dev
 ```
+
+## Getting Help
+
+- [#oracle-db-microservices Slack channel](https://oracledevs.slack.com/archives/C06L9CDGR6Z) in the Oracle Developers slack workspace.
+- [Open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).

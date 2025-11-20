@@ -12,10 +12,19 @@ Spring Boot Eureka Server will be installed if the `eureka.enabled` is set to `t
 
 ### Access Eureka Web User Interface
 
-To access the Eureka Web User Interface, use kubectl port-forward to create a secure channel to `service/eureka`. Run the following command to establish the secure tunnel (replace the example namespace `obaas-dev` with the namespace where the Spring Boot Eureka Server is deployed):
+:::note Namespace Configuration
+All `kubectl` commands in this guide use `-n eureka` as the default namespace. If the Spring Boot Eureka Server is installed in a different namespace, replace `eureka` with your actual namespace name in all commands.
+
+To find your namespace, run:
+```bash
+kubectl get pods -A | grep eureka
+```
+:::
+
+To access the Eureka Web User Interface, use kubectl port-forward to create a secure channel to `service/eureka`. Run the following command to establish the secure tunnel:
 
 ```shell
-kubectl port-forward -n obaas-dev svc/eureka 8761
+kubectl port-forward -n eureka svc/eureka 8761
 ```
 
 Open the [Eureka web user interface](http://localhost:8761)
@@ -70,3 +79,8 @@ server.features.eureka.client.register-with-eureka=true
 server.features.eureka.client.fetch-registry=true
 server.features.eureka.instance.preferIpAddress=true
 ```
+
+## Getting Help
+
+- [#oracle-db-microservices Slack channel](https://oracledevs.slack.com/archives/C06L9CDGR6Z) in the Oracle Developers slack workspace.
+- [Open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).

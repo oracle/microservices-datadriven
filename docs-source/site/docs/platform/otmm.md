@@ -45,3 +45,8 @@ lra:
 ## Upgrading to the commercial version
 
 If you have licensed Oracle Transaction Manager for Microservices Enterprise Edition, please see the [documentation](https://docs.oracle.com/en/database/oracle/transaction-manager-for-microservices/23.4.1/index.html) for details of how to install and configure MicroTx.  Oracle recommends that you perform a new installation rather than attempting to upgrade the provided MicroTx Free installation to the commercial version.
+
+## Getting Help
+
+- [#oracle-db-microservices Slack channel](https://oracledevs.slack.com/archives/C06L9CDGR6Z) in the Oracle Developers slack workspace.
+- [Open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).

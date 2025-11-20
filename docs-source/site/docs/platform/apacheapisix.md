@@ -26,7 +26,7 @@ Apache APISIX offers:
 - [Accessing Apache APISIX](#accessing-apache-apisix)
   - [Port Forwarding to Admin API](#port-forwarding-to-admin-api)
   - [Retrieving the Admin Key](#retrieving-the-admin-key)
-  - [Retrieving the Gateway IP](#retrieving-the-gateway-ip)
+  - [Retrieving the APISIX IP](#retrieving-the-apisix-ip)
 - [Working with APISIX REST API](#working-with-apisix-rest-api)
   - [Creating an Upstream](#creating-an-upstream)
   - [Creating a Route](#creating-a-route)
@@ -54,7 +54,7 @@ Apache APISIX offers:
 Apache APISIX will be installed if the `apisix.enabled` is set to `true` in the `values.yaml` file. The default namespace for Apache APISIX is `apisix`.
 
 **Key Components Installed:**
-- **Apache APISIX Gateway**: The main Apache APISIX gateway that handles incoming traffic
+- **Apache APISIX**: The main Apache APISIX that handles incoming traffic
 - **APISIX Dashboard**: Web UI for managing routes, upstreams, and plugins
 - **etcd**: Distributed key-value store used by APISIX for configuration storage
 
@@ -62,11 +62,6 @@ Apache APISIX will be installed if the `apisix.enabled` is set to `true` in the 
 
 This guide makes the following assumptions:
 
-- **Namespace**: All examples use `YOUR-NAMESPACE` as a placeholder. Replace this with your actual target namespace (e.g., `obaas-dev`, `production`, `my-app`, etc.).
-- **APISIX Namespace**: All APISIX-related commands in this guide use `apisix` as the namespace where Apache APISIX is deployed. **If you installed APISIX into a different namespace**, replace `apisix` with your actual APISIX namespace in all commands (e.g., `-n apisix` becomes `-n your-apisix-namespace`). You can verify your APISIX namespace with:
-  ```bash
-  kubectl get pods -A | grep apisix
-  ```
 - **Kubectl Access**: You have kubectl configured and authenticated to your Kubernetes cluster with appropriate permissions.
 - **Command-line Tools**: The following tools are installed and available:
   - `kubectl` - Kubernetes command-line tool
@@ -75,9 +70,20 @@ This guide makes the following assumptions:
   - `yq` - YAML processor (optional, for retrieving admin key)
 - **Port Forwarding**: Examples assume you have an active port-forward to the APISIX admin service.
 
+:::note Namespace Configuration
+This guide uses two types of namespaces:
+- **APISIX namespace** (`-n apisix`): Where Apache APISIX is deployed. All APISIX-related commands use this namespace. If you installed APISIX in a different namespace, replace `apisix` with your actual namespace in all commands.
+- **Application namespace** (`YOUR-NAMESPACE` in examples): Where your backend services are deployed. Replace `YOUR-NAMESPACE` with your actual application namespace (e.g., `obaas-dev`, `production`, `my-app`, etc.).
+
+To find the APISIX namespace, run:
+```bash
+kubectl get pods -A | grep apisix
+```
+:::
+
 ### Accessing Apache APISIX
 
-Oracle Backend for Microservices and AI deploys the Apache APISIX Gateway and Dashboard in the configured namespace (default: `apisix`). Apache APISIX is exposed via an external load balancer and an ingress controller for production traffic, while the admin API is accessed through port forwarding for management operations.
+Oracle Backend for Microservices and AI deploy Apache APISIX and Dashboard in the configured namespace (default: `apisix`). Apache APISIX is exposed via an external load balancer and an ingress controller for production traffic, while the admin API is accessed through port forwarding for management operations.
 
 #### Port Forwarding to Admin API
 
@@ -151,24 +157,24 @@ Expected response if successful (shows available plugins):
 
 This confirms the admin key is valid and shows the plugins available in your APISIX installation.
 
-#### Retrieving the Gateway IP
+#### Retrieving the APISIX IP
 
-To test routes through the APISIX gateway, you need the external IP address of the ingress controller. The following command will retrieve the IP, store it in the `GATEWAY_IP` environment variable, and display it:
+To test routes through the APISIX, you need the external IP address of the ingress controller. The following command will retrieve the IP, store it in the `APISIX_IP` environment variable, and display it:
 
 ```bash
-export GATEWAY_IP=$(kubectl get svc ingress-nginx-controller -n ingress-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}') && echo "Gateway IP: $GATEWAY_IP"
+export APISIX_IP=$(kubectl get svc ingress-nginx-controller -n ingress-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}') && echo "APISIX IP: $APISIX_IP"
 ```
 
 **Note:** If your load balancer uses a hostname instead of an IP address (common in AWS), use this command instead:
 
 ```bash
-export GATEWAY_IP=$(kubectl get svc ingress-nginx-controller -n ingress-nginx -o jsonpath='{.status.loadBalancer.ingress[0].hostname}') && echo "Gateway Hostname: $GATEWAY_IP"
+export APISIX_IP=$(kubectl get svc ingress-nginx-controller -n ingress-nginx -o jsonpath='{.status.loadBalancer.ingress[0].hostname}') && echo "APISIX Hostname: $APISIX_IP"
 ```
 
 **Verify Apache APISIX is accessible:**
 
 ```bash
-curl -sS http://$GATEWAY_IP
+curl -sS http://$APISIX_IP
 ```
 
 You should receive a response (possibly a 404 if no routes are configured yet), confirming Apache APISIX is reachable.
@@ -199,33 +205,33 @@ APISIX uses three key concepts to route traffic from clients to backend services
        │ HTTP/HTTPS
        ↓
 ┌──────────────────────────────────────────────────────────────┐
-│                    APISIX Gateway                            │
+│                    APISIX                                    │
 │                                                              │
-│  ┌────────────────────────────────────────────────────────┐ │
-│  │  Route: /api/users/*                                   │ │
-│  │  ├─ Matches: URI, method, host, headers                │ │
-│  │  ├─ Route-specific plugins (optional)                  │ │
-│  │  └─ Points to: Service OR Upstream                     │ │
-│  └────────────┬───────────────────────────────────────────┘ │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │  Route: /api/users/*                                   │  │
+│  │  ├─ Matches: URI, method, host, headers                │  │
+│  │  ├─ Route-specific plugins (optional)                  │  │
+│  │  └─ Points to: Service OR Upstream                     │  │
+│  └────────────┬───────────────────────────────────────────┘  │
 │               │                                              │
 │               ↓                                              │
-│  ┌────────────────────────────┐                             │
-│  │  Service (Optional)        │  ← Multiple routes can      │
-│  │  ├─ Shared plugins         │    share one service        │
-│  │  ├─ Common configuration   │                             │
-│  │  └─ Points to: Upstream    │                             │
-│  └────────────┬───────────────┘                             │
+│  ┌────────────────────────────┐                              │
+│  │  Service (Optional)        │  ← Multiple routes can       │
+│  │  ├─ Shared plugins         │    share one service         │
+│  │  ├─ Common configuration   │                              │
+│  │  └─ Points to: Upstream    │                              │
+│  └────────────┬───────────────┘                              │
 │               │                                              │
 │               ↓                                              │
-│  ┌────────────────────────────┐                             │
-│  │  Upstream                  │  ← Multiple routes/services │
-│  │  ├─ Load balancing         │    can share one upstream   │
-│  │  ├─ Health checks          │                             │
-│  │  └─ Backend nodes:         │                             │
-│  │     • Pod 1 (weight: 3)    │                             │
-│  │     • Pod 2 (weight: 2)    │                             │
-│  │     • Pod 3 (weight: 1)    │                             │
-│  └────────────┬───────────────┘                             │
+│  ┌────────────────────────────┐                              │
+│  │  Upstream                  │  ← Multiple routes/services  │
+│  │  ├─ Load balancing         │    can share one upstream    │
+│  │  ├─ Health checks          │                              │
+│  │  └─ Backend nodes:         │                              │
+│  │     • Pod 1 (weight: 3)    │                              │
+│  │     • Pod 2 (weight: 2)    │                              │
+│  │     • Pod 3 (weight: 1)    │                              │
+│  └────────────┬───────────────┘                              │
 │               │                                              │
 └───────────────┼──────────────────────────────────────────────┘
                 │
@@ -416,17 +422,17 @@ curl -sS http://127.0.0.1:9180/apisix/admin/routes/3 \
 
 #### Testing the Route
 
-After creating a route, test it to ensure it's working correctly. Make sure you have retrieved the [Gateway IP](#retrieving-the-gateway-ip) and stored it in the `GATEWAY_IP` environment variable.
+After creating a route, test it to ensure it's working correctly. Make sure you have retrieved the [APISIX IP](#retrieving-the-apisix-ip) and stored it in the `APISIX_IP` environment variable.
 
 **Test the route through Apache APISIX:**
 
 ```bash
-# Using the Apache APISIX gateway IP/hostname
-curl -sS http://$GATEWAY_IP/api/v1/users | jq
+# Using the Apache APISIX IP/hostname
+curl -sS http://$APISIX_IP/api/v1/users | jq
 
-# Or port-forward to the Apache APISIX gateway for local testing
-kubectl port-forward -n apisix svc/apisix-gateway 9080
-curl -sS http://127.0.0.1:9080/api/v1/users | jq
+# Or port-forward to the Apache APISIX for local testing
+kubectl port-forward -n apisix svc/apisix-admin 9180
+curl -sS http://127.0.0.1:9180/api/v1/users | jq
 ```
 
 **Verify the route exists:**
@@ -674,10 +680,10 @@ curl -sS http://127.0.0.1:9180/apisix/admin/consumers \
 
 ```bash
 # Without API key (should fail with 401 error)
-curl -sS http://$GATEWAY_IP/api/v1/users | jq
+curl -sS http://$APISIX_IP/api/v1/users | jq
 
 # With API key (should succeed)
-curl -sS http://$GATEWAY_IP/api/v1/users -H "apikey: my-secret-api-key-12345" | jq
+curl -sS http://$APISIX_IP/api/v1/users -H "apikey: my-secret-api-key-12345" | jq
 ```
 
 #### Enable Rate Limiting
@@ -955,7 +961,7 @@ curl -sS http://127.0.0.1:9180/apisix/admin/routes/1 \
   }' | jq
 ```
 
-**Note:** HTTPS routes automatically use the SSL certificate that matches the route's `host` SNI. Ensure your Apache APISIX gateway is listening on port 9443 (or your configured HTTPS port).
+**Note:** HTTPS routes automatically use the SSL certificate that matches the route's `host` SNI. Ensure your Apache APISIX is listening on port 9443 (or your configured HTTPS port).
 
 **List all SSL certificates:**
 
@@ -983,7 +989,7 @@ curl -sS http://127.0.0.1:9180/apisix/admin/ssls/1 \
 Note that all functionality is not available in the dashboard. You might need to use the REST APIs for advanced configurations.
 :::
 
-The APISIX Dashboard provides a web-based interface for visual management of routes, upstreams, consumers, and plugins. It offers an alternative to the Admin REST API for users who prefer graphical configuration over command-line operations, making it easier to visualize and manage your Apache APISIX gateway setup at a glance.
+The APISIX Dashboard provides a web-based interface for visual management of routes, upstreams, consumers, and plugins. It offers an alternative to the Admin REST API for users who prefer graphical configuration over command-line operations, making it easier to visualize and manage your Apache APISIX setup at a glance.
 
 **Prerequisites:**
 
@@ -1125,16 +1131,10 @@ curl -sS http://127.0.0.1:9180/apisix/admin/routes/999 \
 Then test:
 
 ```bash
-curl -sS http://$GATEWAY_IP/debug/test
+curl -sS http://$APISIX_IP/debug/test
 ```
 
-This will return "matched debug route" confirming the route mat
-
-
-
-
-
-hed.
+This will return "matched debug route" confirming the route mathced.
 
 **Check upstream health status:**
 
@@ -1149,6 +1149,54 @@ curl -sS http://127.0.0.1:9180/apisix/admin/upstreams/1 \
 **Enable verbose logging for debugging:**
 
 Temporarily increase APISIX logging to debug level by editing the APISIX ConfigMap and restarting the pods (use with caution in production).
+
+**Step 1: Edit the APISIX ConfigMap to enable debug logging**
+
+```bash
+kubectl edit configmap apisix -n apisix
+```
+
+In the editor that opens, find the `nginx_config` section and modify the `error_log_level` to `debug`:
+
+```yaml
+nginx_config:
+  error_log_level: "debug"  # Change from "warn" or "error" to "debug"
+```
+
+Save and exit the editor (`:wq` in vi/vim, or `Ctrl+O` then `Ctrl+X` in nano).
+
+**Step 2: Restart APISIX pods to apply changes**
+
+```bash
+kubectl rollout restart deployment/apisix -n apisix
+```
+
+**Step 3: Monitor the logs**
+
+```bash
+kubectl logs -n apisix -l app.kubernetes.io/name=apisix --tail=100 -f
+```
+
+**Step 4: Revert to normal logging when done**
+
+After debugging, restore the original log level to reduce log volume:
+
+```bash
+kubectl edit configmap apisix -n apisix
+```
+
+Change `error_log_level` back to `warn` or `error`:
+
+```yaml
+nginx_config:
+  error_log_level: "warn"  # Back to normal level
+```
+
+Then restart the pods again:
+
+```bash
+kubectl rollout restart deployment/apisix -n apisix
+```
 
 ---
 
@@ -1167,4 +1215,9 @@ Temporarily increase APISIX logging to debug level by editing the APISIX ConfigM
 - [Community Slack Channel](https://join.slack.com/t/the-asf/shared_invite/zt-vlfbf7ch-HkbNHiU_uDlcH_RvaHv9gQ)
 
 **Oracle Resources:**
-- [Oracle Backend for Microservices and AI Documentation](https://oracle.github.io/microservices-datadriven/)
+- [Oracle Backend for Microservices and AI Documentation](https://oracle.github.io/microservices-datadriven/obaas/)
+
+## Getting Help
+
+- [#oracle-db-microservices Slack channel](https://oracledevs.slack.com/archives/C06L9CDGR6Z) in the Oracle Developers slack workspace.
+- [Open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).

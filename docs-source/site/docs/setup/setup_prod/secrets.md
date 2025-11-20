@@ -244,3 +244,8 @@ key_file=/app/runtime/.oci/oci_api_key.pem
 **Important note**: We recommend taking extra care to ensure these are all correct before moving on to the next step. If there are any errors here, the injection of the Database configuration will fail.
 
 **Note**:  If you are planning to install multiple OBaaS instances, AND you want to use different OCI credentials, you need to create one of these secrets for EACH instance, and they must have different names.
+
+## Getting Help
+
+- [#oracle-db-microservices Slack channel](https://oracledevs.slack.com/archives/C06L9CDGR6Z) in the Oracle Developers slack workspace.
+- [Open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).

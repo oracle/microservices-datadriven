@@ -133,3 +133,8 @@ This script helps you:
 - Configure image pull secrets
 - Update chart values to point to private repositories
 - Set up registry authentication
+
+## Getting Help
+
+- [#oracle-db-microservices Slack channel](https://oracledevs.slack.com/archives/C06L9CDGR6Z) in the Oracle Developers slack workspace.
+- [Open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).

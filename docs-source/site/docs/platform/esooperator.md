@@ -41,8 +41,6 @@ Full [documentation](https://external-secrets.io/latest/)
 
 This guide makes the following assumptions:
 
-- **Namespace**: All examples use the `obaas-dev` namespace. Replace with your target namespace as needed.
-- **External Secrets Operator Namespace**: The External Secrets Operator is installed in the `external-secrets` namespace (the default).
 - **Kubectl Access**: You have kubectl configured and authenticated to your Kubernetes cluster with appropriate permissions to:
   - Create and manage SecretStores and ExternalSecrets
   - View secrets in your namespace
@@ -51,6 +49,17 @@ This guide makes the following assumptions:
   - `kubectl` - Kubernetes command-line tool
   - `jq` - JSON processor (used for secret verification examples)
 - **File References**: Examples reference `eso-test.yaml` and `eso-cleanup.yaml` files. You'll need to create these files with the YAML content provided in the examples.
+
+:::note Namespace Configuration
+This guide uses two types of namespaces:
+- **Operator namespace** (`-n external-secrets`): Where the External Secrets Operator is installed. Used when viewing operator logs or troubleshooting the operator itself.
+- **Application namespace** (`-n obaas-dev` in examples): Where your SecretStores, ExternalSecrets, and application secrets are created. Replace `obaas-dev` with your actual application namespace.
+
+To find the operator namespace, run:
+```bash
+kubectl get pods -A | grep external-secrets
+```
+:::
 
 ### Installing External Secrets Operator
 
@@ -467,3 +476,8 @@ Monitor Kubernetes events for your ExternalSecrets:
 ```shell
 kubectl get events -n obaas-dev --field-selector involvedObject.name=test-external-secret
 ```
+
+## Getting Help
+
+- [#oracle-db-microservices Slack channel](https://oracledevs.slack.com/archives/C06L9CDGR6Z) in the Oracle Developers slack workspace.
+- [Open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).
