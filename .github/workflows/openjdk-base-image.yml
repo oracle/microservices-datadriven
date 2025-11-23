@@ -10,7 +10,7 @@ jobs:
   obaas-image:
     strategy:
       matrix:
-        base_version: [17, 21, 24]
+        base_version: [17, 21, 24, 25]
     runs-on: ubuntu-latest
     permissions:
       packages: write
