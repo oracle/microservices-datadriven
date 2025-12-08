@@ -23,3 +23,8 @@ More details can be found in the [SigNoz Documentation](https://signoz.io/docs/i
 ### Oracle Database Monitoring Explorer
 
 With Oracle Backend for Microservices and AI, you can choose to install [Oracle Database Monitoring Explorer](https://oracle.github.io/oracle-db-appdev-monitoring/). The tool provides observability for Oracle Database so that users can understand performance and diagnose issues easily across applications and the database. The project also provides dashboards for SigNoz.
+
+## Getting Help
+
+- [#oracle-db-microservices Slack channel](https://oracledevs.slack.com/archives/C06L9CDGR6Z) in the Oracle Developers slack workspace.
+- [Open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).

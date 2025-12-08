@@ -153,3 +153,8 @@ If you encounter issues:
 3. **Review configuration** - verify values.yaml settings
 4. **Consult documentation** - refer to component-specific guides
 5. **Seek assistance** - contact the development team with details
+
+## Getting Help
+
+- [#oracle-db-microservices Slack channel](https://oracledevs.slack.com/archives/C06L9CDGR6Z) in the Oracle Developers slack workspace.
+- [Open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).

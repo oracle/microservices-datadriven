@@ -10,6 +10,15 @@ This step is only necessary if your application is connecting to a database.
 
 If your application needs database access, first obtain the database user credentials. Then create a Kubernetes secret containing those credentials. The secret is referenced in your application deployment.
 
+:::note Namespace Configuration
+All `kubectl` commands in this guide use `-n obaas-dev` as an example namespace. Replace `obaas-dev` with your actual application namespace in all commands.
+
+To verify your namespaces, run:
+```bash
+kubectl get namespaces
+```
+:::
+
 ### Create the secret for the application
 
 Create a secret with database access information. This secret is used by the application configuration and is injected during deployment.
@@ -177,3 +186,8 @@ spec:
         secret:
           secretName: obaas-adb-tns-admin-1
 ```
+
+## Getting Help
+
+- [#oracle-db-microservices Slack channel](https://oracledevs.slack.com/archives/C06L9CDGR6Z) in the Oracle Developers slack workspace.
+- [Open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).

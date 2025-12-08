@@ -75,7 +75,7 @@ Configure the following settings:
 Install the Helm chart using the following command:
 
 ```bash
-helm --debug install obaas \
+helm upgrade --install --debug obaas \
   --set global.obaasName="obaas-dev" \
   --set global.targetNamespace="obaas-dev" \
   ./
@@ -114,7 +114,7 @@ When installing multiple OBaaS instances in your cluster, each instance must hav
 **Example for development instance:**
 
 ```bash
-helm --debug install obaas \
+helm upgrade --install --debug \
   --set global.obaasName="obaas-dev" \
   --set global.targetNamespace="obaas-dev" \
   ./
@@ -123,7 +123,7 @@ helm --debug install obaas \
 **Example for production instance:**
 
 ```bash
-helm --debug install obaas-prod \
+helm upgrade --install --debug obaas-prod \
   --set global.obaasName="obaas-prod" \
   --set global.targetNamespace="obaas-prod" \
   ./
@@ -191,3 +191,8 @@ If the installation fails, verify the following:
 1. OCI configuration (if using ADB-S) matches the secret created earlier
 1. For multiple instances, ensure unique `Release name`s, `obaasName`, and `targetNamespace` values
 1. For multiple APISIX instances, verify different host names and/or ports are configured
+
+## Getting Help
+
+- [#oracle-db-microservices Slack channel](https://oracledevs.slack.com/archives/C06L9CDGR6Z) in the Oracle Developers slack workspace.
+- [Open an issue in GitHub](https://github.com/oracle/microservices-datadriven/issues/new).
