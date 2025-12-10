@@ -219,8 +219,8 @@ Cluster
 
 See individual chart directories for detailed configuration options:
 
-- [obaas-prereqs/README.md](obaas-prereqs/README.md)
-- [obaas/examples/](obaas/examples/) - Example configurations
+- [obaas-prereqs/README.md](http://TBD)
+- [obaas/examples/](http://TBD) - Example configurations
 
 ### Uninstallation
 
