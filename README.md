@@ -1,6 +1,6 @@
-# Simplify microservices architecture with Converged Oracle Database
+# Simplify microservices architecture with Oracle AI Database
 
-This repository contains sample code for simplifying microservices architectures by building solution examples for data-driven microservices that walk you through the creation of an open platform technology stack with the converged [Oracle Autonomous Database][ATP] including relational, JSON, text, spatial and graph data and using polyglot languages including Java and the Helidon MP and SE frameworks, Python and JavaScript via Node.js
+This repository contains sample code for simplifying microservices architectures by building solution examples for data-driven microservices that walk you through the creation of an open platform technology stack with the converged [Oracle Autonomous AI Database][ATP] including relational, JSON, text, spatial and graph data and using polyglot languages including Java and the Helidon MP and SE frameworks, Python and JavaScript via Node.js
 
 Microservices are loosely-coupled service-oriented architectures with a bounded context. Microservices are increasingly used for application modernization to deliver agile application development practices. However, the data-driven nature of enterprise applications has made building, deploying, and maintaining microservices complex.
 
@@ -8,7 +8,7 @@ Microservices are loosely-coupled service-oriented architectures with a bounded 
 
 * [Oracle Backend for Microservices and AI](https://bit.ly/OracleAI-microservices)
 * [CloudBank AI](https://bit.ly/cloudbankAI) - Building an Application with Spring Boot
-  and Spring Cloud Oracle with Oracle Database and Kubernetes
+  and Spring Cloud Oracle with Oracle AI Database and Kubernetes
 * [Kubernetes for DBAs Live Lab](http://bit.ly/KubernetesForDBAs)
 * [Oracle Spring Boot Starters](https://oracle.github.io/microservices-datadriven/spring/starters/)
 * [Data Refactoring Advisor](./data-refactoring-advisor/README.md)
@@ -25,9 +25,8 @@ Please consult the [security guide](./SECURITY.md) for our responsible security 
 
 ## License
 
-Copyright (c) 2021, 2024, Oracle and/or its affiliates.
+Copyright (c) 2021, 2025, Oracle and/or its affiliates.
 
 Licensed under the Universal Permissive License v 1.0 as shown at <https://oss.oracle.com/licenses/upl>.
 
 [ATP]: https://docs.oracle.com/en/cloud/paas/autonomous-database/index.html
-

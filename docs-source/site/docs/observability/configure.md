@@ -201,7 +201,15 @@ signoz.io/scrape: "true"
 
 It also adds the `OTEL_EXPORTER_OTLP_ENDPOINT` to pod environment variables for the OpenTelemetry instrumentation libraries to access the OpenTelemetry collector of SigNoz.
 
+:::note About the Service Name
+`obaas` is the default Helm release name used when installing the SigNoz chart. The service name follows the pattern `<release-name>-signoz-otel-collector`. If you used a different release name during installation replace `<release-name>` with your release name:
+
+:::tip Finding Your Namespace
+If you deployed with Terraform, your namespace is typically your `label_prefix` value.
+If you deployed with Helm, it's the namespace you specified during installation (e.g., `obaas-prod`, `tenant1`, etc.), referred to as `<namespace>` in the example below.
+:::
+
 ```yaml
 - name: OTEL_EXPORTER_OTLP_ENDPOINT
-  value: http://obaas-signoz-otel-collector.observability:4318
+  value: http://<release-name>-signoz-otel-collector.<namespace>:4318
 ```

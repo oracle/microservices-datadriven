@@ -1,8 +1,8 @@
 {
-  "label": "Setup",
+  "label": "Setup Terraform & Helm",
   "position": 1,
   "link": {
-    "type": "generated-index",
-    "description": "Oracle Backend for Microservices and AI (OBaaS) setup and installation."
+    "type": "doc",
+    "id": "setup/index"
   }
 }
