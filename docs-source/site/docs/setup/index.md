@@ -35,7 +35,7 @@ This content is TBD - Instructions for downloading the OBaaS installation packag
 - OCI CLI configured
 - OCI tenancy with appropriate quotas
 
-**[Get started with Terraform →](./cli.md)**
+**[Get started with Terraform →](./tf_cli.md)**
 
 ---
 
