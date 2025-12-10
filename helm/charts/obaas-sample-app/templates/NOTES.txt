@@ -1,22 +1,42 @@
-1. Get the application URL by running these commands:
+{{/*
+Copyright (c) 2024, 2025, Oracle and/or its affiliates.
+Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+*/}}
+Application {{ include "obaas-app.fullname" . }} deployed successfully!
+
+Framework: {{ .Values.obaas.framework | upper }}
+OBaaS Platform: {{ include "obaas.releaseName" . }}
+
 {{- if .Values.ingress.enabled }}
+
+Access your application via ingress:
 {{- range $host := .Values.ingress.hosts }}
-  {{- range .paths }}
-  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}{{ .path }}
-  {{- end }}
+  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.host }}
 {{- end }}
+
 {{- else if contains "NodePort" .Values.service.type }}
+
+Get the application URL:
   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "obaas-app.fullname" . }})
   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
   echo http://$NODE_IP:$NODE_PORT
+
 {{- else if contains "LoadBalancer" .Values.service.type }}
-     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
-           You can watch its status by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "obaas-app.fullname" . }}'
-  export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "obaas-app.fullname" . }} --template "{{"{{ range (index .status.loadBalancer.ingress 0) }}{{.}}{{ end }}"}}")
-  echo http://$SERVICE_IP:{{ .Values.service.port }}
+
+Get the application URL:
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+  kubectl get --namespace {{ .Release.Namespace }} svc {{ include "obaas-app.fullname" . }} -w
+
 {{- else if contains "ClusterIP" .Values.service.type }}
-  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "obaas-app.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
-  export CONTAINER_PORT=$(kubectl get pod --namespace {{ .Release.Namespace }} $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
-  echo "Visit http://127.0.0.1:8080 to use your application"
-  kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT
+
+Access your application via port-forward:
+  kubectl --namespace {{ .Release.Namespace }} port-forward svc/{{ include "obaas-app.fullname" . }} {{ .Values.service.port }}:{{ .Values.service.port }}
+  echo "Visit http://127.0.0.1:{{ .Values.service.port }}"
+
 {{- end }}
+
+Configuration:
+  - Database: {{ if .Values.database.enabled }}enabled{{ else }}disabled{{ end }}
+  - Eureka: {{ if .Values.eureka.enabled }}enabled{{ else }}disabled{{ end }}
+  - OTEL: {{ if .Values.otel.enabled }}enabled{{ else }}disabled{{ end }}
+  - OTMM: {{ if .Values.otmm.enabled }}enabled{{ else }}disabled{{ end }}
