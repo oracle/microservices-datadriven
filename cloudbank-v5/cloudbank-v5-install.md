@@ -23,7 +23,7 @@ The installation process consists of five main steps:
 
 | Step | Script | Description |
 |------|--------|-------------|
-| 1 | `1-create_oci_repos.sh` | Create container repositories in OCI Registry |
+| 1 | `1-oci_repos.sh` | Create container repositories in OCI Registry |
 | 2 | `2-images_build_push.sh` | Build and push microservice container images |
 | 3 | `3-k8s_db_secrets.sh` | Create Kubernetes secrets for database credentials |
 | 4 | `4-deploy_all_services.sh` | Deploy all services using Helm |
@@ -81,7 +81,7 @@ CloudBank must be installed in the **same namespace** as OBaaS. Services require
 
 ```bash
 # Step 1: Create OCI container repositories
-./1-create_oci_repos.sh -c <compartment_name> -p <prefix>
+./1-oci_repos.sh -c <compartment_name> -p <prefix>
 
 # Step 2: Build and push images
 export DOCKER_HOST=unix:///Users/$USER/.rd/docker.sock  # Rancher Desktop
@@ -124,15 +124,16 @@ kubectl get pods -n <namespace>
 - Retrieves the tenancy namespace from OCI
 - Creates 6 container repositories (account, customer, transfer, checks, creditscore, testrunner)
 - Repositories are public by default (use `--private` for private repos)
+- Use `--delete` to remove repositories during cleanup
 
 **Command:**
 ```bash
-./1-create_oci_repos.sh -c <compartment_name> -p <prefix>
+./1-oci_repos.sh -c <compartment_name> -p <prefix>
 ```
 
 **Example:**
 ```bash
-./1-create_oci_repos.sh -c obaas-compartment -p cloudbank-v5
+./1-oci_repos.sh -c obaas-compartment -p cloudbank-v5
 ```
 
 **Verify:**
@@ -454,6 +455,11 @@ export APISIX_KEY=$(kubectl -n <namespace> get configmap <obaas-release>-apisix 
 for id in 1000 1001 1002 1003 1004; do
   curl -X DELETE "http://localhost:9180/apisix/admin/routes/$id" -H "X-API-KEY: $APISIX_KEY"
 done
+```
+
+### Delete OCI Repositories
+```bash
+./1-oci_repos.sh -c <compartment_name> -p <prefix> --delete
 ```
 
 ---

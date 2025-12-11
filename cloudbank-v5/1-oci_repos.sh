@@ -2,18 +2,20 @@
 # Copyright (c) 2024, 2025, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
 
-# CloudBank v5 OCI Container Repository Creation Script
-# Creates container repositories in OCI for all CloudBank microservices.
+# CloudBank v5 OCI Container Repository Script
+# Creates or deletes container repositories in OCI for all CloudBank microservices.
 #
 # Usage:
-#   ./1-create_oci_repos.sh [options]
+#   ./1-oci_repos.sh [options]
 #
 # Options:
 #   -c, --compartment COMPARTMENT  OCI compartment name (required)
 #   -p, --prefix PREFIX            Repository prefix (required, e.g., cloudbank-v5)
+#   --create                       Create repositories (default)
+#   --delete                       Delete repositories
 #   --public                       Create public repositories (default)
 #   --private                      Create private repositories
-#   --dry-run                      Show what would be created without creating
+#   --dry-run                      Show what would be done without doing it
 #   -h, --help                     Show this help message
 #
 # Prerequisites:
@@ -23,7 +25,8 @@
 # Note: The registry URL is determined from your OCI CLI configuration (region and namespace).
 #
 # Example:
-#   ./1-create_oci_repos.sh -c my-compartment -p cloudbank-v5
+#   ./1-oci_repos.sh -c my-compartment -p cloudbank-v5
+#   ./1-oci_repos.sh -c my-compartment -p cloudbank-v5 --delete
 
 set -e
 
@@ -43,6 +46,7 @@ COMPARTMENT=""
 REPO_PREFIX=""
 IS_PUBLIC=true
 DRY_RUN=false
+DELETE_MODE=false
 OCI_NAMESPACE=""
 OCI_REGION=""
 REGISTRY=""
@@ -84,6 +88,14 @@ parse_args() {
                 DRY_RUN=true
                 shift
                 ;;
+            --create)
+                DELETE_MODE=false
+                shift
+                ;;
+            --delete)
+                DELETE_MODE=true
+                shift
+                ;;
             -h|--help)
                 show_help
                 exit 0
@@ -99,19 +111,21 @@ parse_args() {
 
 show_help() {
     cat << 'EOF'
-CloudBank v5 OCI Container Repository Creation Script
+CloudBank v5 OCI Container Repository Script
 
-Creates container repositories in OCI for all CloudBank microservices.
+Creates or deletes container repositories in OCI for all CloudBank microservices.
 
 Usage:
-  ./1-create_oci_repos.sh [options]
+  ./1-oci_repos.sh [options]
 
 Options:
   -c, --compartment COMPARTMENT  OCI compartment name (required)
   -p, --prefix PREFIX            Repository prefix (required, e.g., cloudbank-v5)
+  --create                       Create repositories (default)
+  --delete                       Delete repositories
   --public                       Create public repositories (default)
   --private                      Create private repositories
-  --dry-run                      Show what would be created without creating
+  --dry-run                      Show what would be done without doing it
   -h, --help                     Show this help message
 
 Prerequisites:
@@ -126,9 +140,10 @@ Services:
   account, customer, transfer, checks, creditscore, testrunner
 
 Example:
-  ./1-create_oci_repos.sh -c my-compartment -p cloudbank-v5
-  ./1-create_oci_repos.sh -c my-compartment -p cloudbank-v5 --private
-  ./1-create_oci_repos.sh -c my-compartment -p cloudbank-v5 --dry-run
+  ./1-oci_repos.sh -c my-compartment -p cloudbank-v5
+  ./1-oci_repos.sh -c my-compartment -p cloudbank-v5 --private
+  ./1-oci_repos.sh -c my-compartment -p cloudbank-v5 --delete
+  ./1-oci_repos.sh -c my-compartment -p cloudbank-v5 --delete --dry-run
 EOF
 }
 
@@ -267,6 +282,66 @@ create_repositories() {
 }
 
 # =============================================================================
+# Repository Deletion
+# =============================================================================
+delete_repositories() {
+    print_header "Deleting Container Repositories"
+
+    local deleted=0
+    local skipped=0
+    local failed=0
+
+    for service in "${SERVICES[@]}"; do
+        local display_name="${REPO_PREFIX}/${service}"
+
+        if [[ "$DRY_RUN" == true ]]; then
+            print_info "[DRY-RUN] Would delete repository: $display_name"
+            continue
+        fi
+
+        print_step "Looking up repository: $display_name"
+
+        # Find the repository OCID by display name
+        local repo_ocid
+        repo_ocid=$(oci artifacts container repository list \
+            --compartment-id "$COMPARTMENT_OCID" \
+            --display-name "$display_name" \
+            --query 'data.items[0].id' \
+            --raw-output 2>/dev/null)
+
+        if [[ -z "$repo_ocid" || "$repo_ocid" == "null" ]]; then
+            print_warning "$display_name not found (skipped)"
+            ((skipped++))
+            continue
+        fi
+
+        print_step "Deleting repository: $display_name"
+
+        local result
+        local exit_code
+        result=$(oci artifacts container repository delete \
+            --repository-id "$repo_ocid" \
+            --force 2>&1) || exit_code=$?
+
+        if [[ ${exit_code:-0} -eq 0 ]]; then
+            print_success "$display_name deleted"
+            ((deleted++))
+        else
+            print_error "Failed to delete $display_name"
+            print_info "$result"
+            ((failed++))
+        fi
+    done
+
+    echo ""
+    if [[ "$DRY_RUN" == true ]]; then
+        print_info "Dry run complete. No repositories were deleted."
+    else
+        print_info "Deleted: $deleted | Skipped: $skipped | Failed: $failed"
+    fi
+}
+
+# =============================================================================
 # Main
 # =============================================================================
 main() {
@@ -316,41 +391,61 @@ main() {
     echo "  Namespace:    $OCI_NAMESPACE"
     echo "  Prefix:       $REPO_PREFIX"
     echo "  Registry:     $full_registry"
-    echo "  Visibility:   $visibility"
+    if [[ "$DELETE_MODE" != true ]]; then
+        echo "  Visibility:   $visibility"
+    fi
+    echo "  Mode:         $(if [[ "$DELETE_MODE" == true ]]; then echo "DELETE"; else echo "CREATE"; fi)"
     echo "  Dry Run:      $DRY_RUN"
     echo ""
     echo "  Services:     ${SERVICES[*]}"
     echo ""
 
     if [[ "$DRY_RUN" != true ]]; then
-        read -p "Continue with repository creation? [y/N]: " confirm
+        local action="creation"
+        if [[ "$DELETE_MODE" == true ]]; then
+            action="deletion"
+            print_warning "This will permanently delete the repositories and all images!"
+        fi
+        read -p "Continue with repository $action? [y/N]: " confirm
         if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
-            echo "Repository creation cancelled."
+            echo "Repository $action cancelled."
             exit 0
         fi
     fi
 
-    # Create repositories
-    create_repositories
+    # Create or delete repositories
+    if [[ "$DELETE_MODE" == true ]]; then
+        delete_repositories
+    else
+        create_repositories
+    fi
 
     # Summary
     print_header "Summary"
-    if [[ "$DRY_RUN" == true ]]; then
-        print_info "Dry run complete. Run without --dry-run to create repositories."
+    if [[ "$DELETE_MODE" == true ]]; then
+        if [[ "$DRY_RUN" == true ]]; then
+            print_info "Dry run complete. Run without --dry-run to delete repositories."
+        else
+            print_success "Repository deletion complete!"
+        fi
     else
-        print_success "Repository creation complete!"
-        echo ""
-        echo "Repositories:"
-        for service in "${SERVICES[@]}"; do
-            echo "  ${full_registry}/${service}"
-        done
-        echo ""
-        echo "To list repositories:"
-        echo "  oci artifacts container repository list --compartment-id $COMPARTMENT_OCID --query 'data.items[*].{\"name\":\"display-name\",\"is-public\":\"is-public\"}' --output table"
-        echo ""
-        echo "Next steps:"
-        echo "  1. Login to registry: docker login ${OCI_REGION}.ocir.io"
-        echo "  2. Build images: ./2-images_build_push.sh -p $REPO_PREFIX"
+        if [[ "$DRY_RUN" == true ]]; then
+            print_info "Dry run complete. Run without --dry-run to create repositories."
+        else
+            print_success "Repository creation complete!"
+            echo ""
+            echo "Repositories:"
+            for service in "${SERVICES[@]}"; do
+                echo "  ${full_registry}/${service}"
+            done
+            echo ""
+            echo "To list repositories:"
+            echo "  oci artifacts container repository list --compartment-id $COMPARTMENT_OCID --query 'data.items[*].{\"name\":\"display-name\",\"is-public\":\"is-public\"}' --output table"
+            echo ""
+            echo "Next steps:"
+            echo "  1. Login to registry: docker login ${OCI_REGION}.ocir.io"
+            echo "  2. Build images: ./2-images_build_push.sh -p $REPO_PREFIX"
+        fi
     fi
 }
 
