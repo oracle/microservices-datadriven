@@ -4,10 +4,11 @@ Licensed under the Universal Permissive License v1.0 as shown at http://oss.orac
 */}}
 
 {{/*
-Expand the name of the chart.
+Expand the name of the application.
+For this shared chart, defaults to the release name (e.g., account, customer)
 */}}
 {{- define "obaas-app.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- default .Release.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -90,22 +91,19 @@ OBaaS platform Helm release revision (looked up dynamically)
 {{- end }}
 
 {{/*
-Database name (required when database.enabled, lowercased for K8s compatibility)
-*/}}
-{{- define "obaas.database.name" -}}
-{{- required "database.name is required when database.enabled=true" .Values.database.name | lower }}
-{{- end }}
-
-{{/*
-Database auth secret name: {{ dbname }}-obaas-db-authn
+Database auth secret name
+If not provided, defaults to: {{ database.name }}-{{ Release.Name }}-db-authn
+Pattern: {{ dbname }}-{{ schema }}-db-authn (e.g., mydb-account-db-authn)
 */}}
 {{- define "obaas.database.authN.secretName" -}}
 {{- $authN := .Values.database.authN | default dict }}
 {{- $secretName := $authN.secretName | default "" }}
 {{- if $secretName }}
 {{- $secretName }}
+{{- else if .Values.database.name }}
+{{- printf "%s-%s-db-authn" (.Values.database.name | lower) .Release.Name }}
 {{- else }}
-{{- printf "%s-obaas-db-authn" (include "obaas.database.name" .) }}
+{{- required "database.authN.secretName is required (or set database.name)" "" }}
 {{- end }}
 {{- end }}
 
@@ -128,15 +126,16 @@ Database auth secret keys
 {{- end }}
 
 {{/*
-Database privileged auth secret name: {{ dbname }}-db-priv-authn (for Liquibase)
+Database privileged auth secret name: {{ database.name }}-db-priv-authn (for Liquibase)
+Derived from database.name when provided
 */}}
 {{- define "obaas.database.privAuthN.secretName" -}}
 {{- $privAuthN := .Values.database.privAuthN | default dict }}
 {{- $secretName := $privAuthN.secretName | default "" }}
 {{- if $secretName }}
 {{- $secretName }}
-{{- else if .Values.database.privAuthN.enabled }}
-{{- printf "%s-db-priv-authn" (include "obaas.database.name" .) }}
+{{- else if .Values.database.name }}
+{{- printf "%s-db-priv-authn" (.Values.database.name | lower) }}
 {{- else }}
 {{- "" }}
 {{- end }}
@@ -150,6 +149,11 @@ Database privileged auth secret name: {{ dbname }}-db-priv-authn (for Liquibase)
 {{- define "obaas.database.privAuthN.passwordKey" -}}
 {{- $privAuthN := .Values.database.privAuthN | default dict }}
 {{- $privAuthN.passwordKey | default "password" }}
+{{- end }}
+
+{{- define "obaas.database.privAuthN.serviceKey" -}}
+{{- $privAuthN := .Values.database.privAuthN | default dict }}
+{{- $privAuthN.serviceKey | default "service" }}
 {{- end }}
 
 {{/*

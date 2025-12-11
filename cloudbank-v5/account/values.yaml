@@ -1,22 +1,23 @@
 ## Copyright (c) 2024, 2025, Oracle and/or its affiliates.
 ## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
 
-# CloudBank Customer Service - Helm Values
+# CloudBank Account Service - Helm Values
 #
 # Install with (from this directory):
-#   helm install customer ../../../helm/charts/obaas-sample-app -f values.yaml -n <namespace>
+#   helm install account ../../../helm/charts/obaas-sample-app -f values.yaml -n <namespace>
 #
 # Upgrade with:
-#   helm upgrade customer ../../../helm/charts/obaas-sample-app -f values.yaml -n <namespace>
+#   helm upgrade account ../../../helm/charts/obaas-sample-app -f values.yaml -n <namespace>
 #
 # Uninstall with:
-#   helm uninstall customer -n <namespace>
+#   helm uninstall account -n <namespace>
 
 # -----------------------
 # -- Required Configuration
-fullnameOverride: "customer"
+fullnameOverride: "account"
+
 image:
-  repository: ""  # e.g., us-phoenix-1.ocir.io/mytenancy/cloudbank-v5/customer
+  repository: ""  # e.g., us-phoenix-1.ocir.io/mytenancy/cloudbank-v5/account
   tag: ""         # e.g., 0.0.1-SNAPSHOT
 
 obaas:
@@ -24,7 +25,9 @@ obaas:
   framework: "SPRING_BOOT"
 
 database:
-  name: ""         # e.g., mydb (derives priv-authn and walletName)
+  aq:
+    enabled: true  # Account uses AQ for messaging
+
 
 # -----------------------
 # -- Feature Toggles
@@ -36,10 +39,7 @@ otel:
   enabled: true
 
 otmm:
-  enabled: false
-
-# -----------------------
-# -- Optional Overrides
+  enabled: true   # LRA participant
 
 # imagePullSecrets:
 #   - name: ocir

@@ -56,11 +56,12 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
           {{- /* ==================== Database Configuration ==================== */}}
-          {{- if .Values.database.enabled }}
+          {{- $dbAuthNSecret := include "obaas.database.authN.secretName" . }}
+          {{- if $dbAuthNSecret }}
             - name: DB_SERVICE
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "obaas.database.authN.secretName" . }}
+                  name: {{ $dbAuthNSecret }}
                   key: {{ include "obaas.database.authN.serviceKey" . }}
             - name: CONNECT_STRING
               value: jdbc:oracle:thin:@$(DB_SERVICE)?TNS_ADMIN=/oracle/tnsadmin
@@ -106,18 +107,18 @@ spec:
               value: {{ include "obaas.springboot.profilesActive" . | quote }}
 
           {{- /* Database */}}
-          {{- if .Values.database.enabled }}
+          {{- if $dbAuthNSecret }}
             - name: SPRING_DATASOURCE_URL
               value: "jdbc:oracle:thin:@${DB_SERVICE}?TNS_ADMIN=/oracle/tnsadmin"
             - name: SPRING_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "obaas.database.authN.secretName" . }}
+                  name: {{ $dbAuthNSecret }}
                   key: {{ include "obaas.database.authN.usernameKey" . }}
             - name: SPRING_DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "obaas.database.authN.secretName" . }}
+                  name: {{ $dbAuthNSecret }}
                   key: {{ include "obaas.database.authN.passwordKey" . }}
 
           {{- /* Liquibase (privileged auth) */}}
@@ -168,7 +169,7 @@ spec:
           {{- end }}
 
           {{- /* Database */}}
-          {{- if .Values.database.enabled }}
+          {{- if $dbAuthNSecret }}
             - name: javax.sql.DataSource.{{ .Values.helidon.datasource.name }}.connectionFactoryClassName
               value: oracle.jdbc.pool.OracleDataSource
             - name: javax.sql.DataSource.{{ .Values.helidon.datasource.name }}.URL
@@ -176,12 +177,12 @@ spec:
             - name: javax.sql.DataSource.{{ .Values.helidon.datasource.name }}.user
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "obaas.database.authN.secretName" . }}
+                  name: {{ $dbAuthNSecret }}
                   key: {{ include "obaas.database.authN.usernameKey" . }}
             - name: javax.sql.DataSource.{{ .Values.helidon.datasource.name }}.password
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "obaas.database.authN.secretName" . }}
+                  name: {{ $dbAuthNSecret }}
                   key: {{ include "obaas.database.authN.passwordKey" . }}
           {{- end }}
 
@@ -244,7 +245,8 @@ spec:
           {{- end }}
 
           volumeMounts:
-          {{- if .Values.database.enabled }}
+          {{- $walletSecret := include "obaas.database.walletSecret" . }}
+          {{- if $walletSecret }}
             - name: tns-admin
               mountPath: /oracle/tnsadmin
               readOnly: true
@@ -254,10 +256,10 @@ spec:
           {{- end }}
 
       volumes:
-      {{- if .Values.database.enabled }}
+      {{- if $walletSecret }}
         - name: tns-admin
           secret:
-            secretName: {{ include "obaas.database.walletSecret" . }}
+            secretName: {{ $walletSecret }}
       {{- end }}
       {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}

@@ -49,14 +49,18 @@ resources:
 # -- Database Configuration
 
 database:
-  # -- Enable database configuration injection
-  enabled: true
-  # -- (Required if enabled) Database name used for secret naming
-  # Secrets will be: {{ name }}-obaas-db-authn and {{ name }}-db-priv-authn
-  name: ""
-  # -- Enable privileged auth (for Liquibase migrations)
-  privAuthN:
+  name: ""         # e.g., mydb (derives priv-authn, walletName, and authN.secretName)
+  authN:
+    secretName: ""  # default: {{ database.name }}-{{ Release.Name }}-db-authn
+  # Advanced Queuing (AQ) permissions for messaging (e.g., JMS)
+  aq:
     enabled: false
+  # SQLcl image for db-init job (only used when database.name is set)
+  sqlcl:
+    image:
+      repository: container-registry.oracle.com/database/sqlcl
+      tag: latest
+
 
 eureka:
   enabled: true
@@ -73,13 +77,11 @@ otmm:
 
 # database:
 #   authN:
-#     secretName: ""      # default: {{ database.name }}-obaas-db-authn
 #     usernameKey: ""     # default: username
 #     passwordKey: ""     # default: password
 #     serviceKey: ""      # default: service
 #   privAuthN:
-#     enabled: false      # set to true to enable Liquibase privileged auth
-#     secretName: ""      # default: {{ database.name }}-db-priv-authn
+#     secretName: ""      # override derived: {{ database.name }}-db-priv-authn
 #   walletSecret: ""      # default: {{ obaas.releaseName }}-adb-tns-admin-{{ revision }}
 
 # eureka:

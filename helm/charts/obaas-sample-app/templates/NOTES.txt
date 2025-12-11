@@ -36,7 +36,6 @@ Access your application via port-forward:
 {{- end }}
 
 Configuration:
-  - Database: {{ if .Values.database.enabled }}enabled{{ else }}disabled{{ end }}
   - Eureka: {{ if .Values.eureka.enabled }}enabled{{ else }}disabled{{ end }}
   - OTEL: {{ if .Values.otel.enabled }}enabled{{ else }}disabled{{ end }}
   - OTMM: {{ if .Values.otmm.enabled }}enabled{{ else }}disabled{{ end }}
