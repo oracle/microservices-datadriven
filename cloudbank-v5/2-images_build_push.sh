@@ -422,9 +422,8 @@ main() {
         echo "  $final_registry/$service:$IMAGE_TAG"
     done
     echo ""
-    echo "Next steps:"
-    echo "  1. Update values.yaml files with image repository and tags"
-    echo "  2. Deploy services: ./4-deploy_all_services.sh <namespace>"
+    echo "Next step:"
+    echo "  Create database secrets: ./3-k8s_db_secrets.sh -n <namespace> -d <dbname>"
 }
 
 # Run main function

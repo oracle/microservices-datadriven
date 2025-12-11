@@ -197,6 +197,10 @@
                     <images>
                         <image>
                             <name>${image.registry}/${project.artifactId}:${project.version}</name>
+                            <build>
+                                <!-- Skip cleanup to avoid Rancher Desktop/containerd compatibility issues -->
+                                <cleanup>none</cleanup>
+                            </build>
                         </image>
                     </images>
                 </configuration>
