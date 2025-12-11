@@ -267,7 +267,7 @@ byo_private_subnet_ocid = "ocid1.subnet.oc1..."
 
 ### Examples
 
-See the [examples/](examples/) directory for complete configuration examples:
+See the `examples` directory for complete configuration examples:
 
 | File | Description |
 |------|-------------|
