@@ -251,10 +251,27 @@ build_dependencies() {
 }
 
 
+pull_base_image() {
+    # CloudBank services use Oracle's OBaaS OpenJDK image as base
+    local base_image="ghcr.io/oracle/openjdk-image-obaas:${PREREQ_REQUIRED_JAVA_VERSION}"
+
+    print_step "Pre-pulling base image: $base_image"
+    if docker pull "$base_image"; then
+        print_success "Base image ready"
+    else
+        print_warning "Could not pre-pull base image (will be pulled during build)"
+    fi
+}
+
 build_and_push() {
     local registry="$1"
 
     print_header "Building and Pushing Images"
+
+    # Pre-pull base image to avoid parallel pull conflicts
+    if [[ "$PARALLEL_THREADS" != "1" ]]; then
+        pull_base_image
+    fi
 
     local services_list
     services_list=$(IFS=,; echo "${SERVICES[*]}")
