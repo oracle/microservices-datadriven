@@ -1,6 +1,6 @@
 {
   "label": "Platform Services",
-  "position": 3,
+  "position": 4,
   "link": {
     "type": "generated-index",
     "description": "Oracle Backend for Microservices and AI includes a number of Spring platform components that provide services to applications deployed to the platform."
