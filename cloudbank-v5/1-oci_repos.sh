@@ -232,9 +232,9 @@ lookup_compartment() {
 create_repositories() {
     print_header "Creating Container Repositories"
 
-    local visibility="public"
+    local repo_visibility="public"
     if [[ "$IS_PUBLIC" != true ]]; then
-        visibility="private"
+        repo_visibility="private"
     fi
 
     local created=0
@@ -245,32 +245,32 @@ create_repositories() {
         local display_name="${REPO_PREFIX}/${service}"
 
         if [[ "$DRY_RUN" == true ]]; then
-            print_info "[DRY-RUN] Would create $visibility repository: $display_name"
+            print_info "[DRY-RUN] Would create $repo_visibility repository: $display_name"
             continue
         fi
 
         print_step "Creating repository: $display_name"
 
-        local result
-        local exit_code
-        result=$(oci artifacts container repository create \
-            --compartment-id "$COMPARTMENT_OCID" \
-            --display-name "$display_name" \
-            --is-public "$IS_PUBLIC" 2>&1) || exit_code=$?
+    local command_result
+    local command_exit_code
+    command_result=$(oci artifacts container repository create \
+        --compartment-id "$COMPARTMENT_OCID" \
+        --display-name "$display_name" \
+        --is-public "$IS_PUBLIC" 2>&1) || command_exit_code=$?
 
-        if [[ ${exit_code:-0} -eq 0 ]]; then
-            print_success "$display_name created"
-            ((created++))
+    if [[ ${command_exit_code:-0} -eq 0 ]]; then
+        print_success "$display_name created"
+        ((created++))
+    else
+        if echo "$command_result" | grep -q "already exists"; then
+            print_warning "$display_name already exists (skipped)"
+            ((skipped++))
         else
-            if echo "$result" | grep -q "already exists"; then
-                print_warning "$display_name already exists (skipped)"
-                ((skipped++))
-            else
-                print_error "Failed to create $display_name"
-                print_info "$result"
-                ((failed++))
-            fi
+            print_error "Failed to create $display_name"
+            print_info "$command_result"
+            ((failed++))
         fi
+    fi
     done
 
     echo ""
@@ -317,18 +317,18 @@ delete_repositories() {
 
         print_step "Deleting repository: $display_name"
 
-        local result
-        local exit_code
-        result=$(oci artifacts container repository delete \
+        local command_result
+        local command_exit_code
+        command_result=$(oci artifacts container repository delete \
             --repository-id "$repo_ocid" \
-            --force 2>&1) || exit_code=$?
+            --force 2>&1) || command_exit_code=$?
 
-        if [[ ${exit_code:-0} -eq 0 ]]; then
+        if [[ ${command_exit_code:-0} -eq 0 ]]; then
             print_success "$display_name deleted"
             ((deleted++))
         else
             print_error "Failed to delete $display_name"
-            print_info "$result"
+            print_info "$command_result"
             ((failed++))
         fi
     done
@@ -381,9 +381,9 @@ main() {
 
     # Show configuration
     print_header "Configuration"
-    local visibility="public"
+    local repo_visibility="public"
     if [[ "$IS_PUBLIC" != true ]]; then
-        visibility="private"
+        repo_visibility="private"
     fi
     echo "  Compartment:  $COMPARTMENT"
     echo "  OCID:         $COMPARTMENT_OCID"
@@ -392,7 +392,7 @@ main() {
     echo "  Prefix:       $REPO_PREFIX"
     echo "  Registry:     $full_registry"
     if [[ "$DELETE_MODE" != true ]]; then
-        echo "  Visibility:   $visibility"
+        echo "  Visibility:   $repo_visibility"
     fi
     echo "  Mode:         $(if [[ "$DELETE_MODE" == true ]]; then echo "DELETE"; else echo "CREATE"; fi)"
     echo "  Dry Run:      $DRY_RUN"
@@ -401,16 +401,16 @@ main() {
     echo ""
 
     if [[ "$DRY_RUN" != true ]]; then
-        local action="creation"
-        if [[ "$DELETE_MODE" == true ]]; then
-            action="deletion"
-            print_warning "This will permanently delete the repositories and all images!"
-        fi
-        read -p "Continue with repository $action? [y/N]: " confirm
-        if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
-            echo "Repository $action cancelled."
-            exit 0
-        fi
+    local repo_action="creation"
+    if [[ "$DELETE_MODE" == true ]]; then
+        repo_action="deletion"
+        print_warning "This will permanently delete the repositories and all images!"
+    fi
+    read -p "Continue with repository $repo_action? [y/N]: " confirm
+    if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+        echo "Repository $repo_action cancelled."
+        exit 0
+    fi
     fi
 
     # Create or delete repositories

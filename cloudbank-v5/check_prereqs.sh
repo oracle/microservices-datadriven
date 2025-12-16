@@ -86,7 +86,7 @@ fi
 # =============================================================================
 # Constants
 # =============================================================================
-PREREQ_REQUIRED_JAVA_VERSION="21"
+REQUIRED_JAVA_VERSION="21"
 
 # =============================================================================
 # Generic Command Check
@@ -98,43 +98,43 @@ PREREQ_REQUIRED_JAVA_VERSION="21"
 #   $3 - "required" or "optional"
 # Returns: 0 if found (or optional), 1 if required and not found
 prereq_check_command() {
-    local cmd="$1"
-    local name="$2"
-    local required="$3"
+    local command_name="$1"
+    local display_name="$2"
+    local is_required="$3"
 
-    if command -v "$cmd" &> /dev/null; then
-        local version
-        case "$cmd" in
+    if command -v "$command_name" &> /dev/null; then
+        local tool_version
+        case "$command_name" in
             java)
-                version=$(java --version 2>&1 | head -1)
+                tool_version=$(java --version 2>&1 | head -1)
                 ;;
             mvn)
-                version=$(mvn --version 2>&1 | head -1)
+                tool_version=$(mvn --version 2>&1 | head -1)
                 ;;
             kubectl)
-                version=$(kubectl version --client -o yaml 2>/dev/null | grep gitVersion | head -1 | awk '{print $2}')
+                tool_version=$(kubectl version --client -o yaml 2>/dev/null | grep gitVersion | head -1 | awk '{print $2}')
                 ;;
             docker)
-                version=$(docker --version 2>&1)
+                tool_version=$(docker --version 2>&1)
                 ;;
             helm)
-                version=$(helm version --short 2>&1)
+                tool_version=$(helm version --short 2>&1)
                 ;;
             oci)
-                version=$(oci --version 2>&1)
+                tool_version=$(oci --version 2>&1)
                 ;;
             *)
-                version="installed"
+                tool_version="installed"
                 ;;
         esac
-        print_success "$name: $version"
+        print_success "$display_name: $tool_version"
         return 0
     else
-        if [[ "$required" == "required" ]]; then
-            print_error "$name: NOT FOUND (required)"
+        if [[ "$is_required" == "required" ]]; then
+            print_error "$display_name: NOT FOUND (required)"
             return 1
         else
-            print_warning "$name: NOT FOUND (optional)"
+            print_warning "$display_name: NOT FOUND (optional)"
             return 0
         fi
     fi
@@ -162,9 +162,9 @@ prereq_check_docker() {
 #   $1 - registry path (e.g., us-phoenix-1.ocir.io/mytenancy/cloudbank-v5)
 # Returns: 0 if authenticated (or user chooses to continue), 1 if not and user declines
 prereq_check_registry_connectivity() {
-    local registry="$1"
+    local registry_path="$1"
 
-    if [[ -z "$registry" ]]; then
+    if [[ -z "$registry_path" ]]; then
         print_error "Registry path is required"
         return 1
     fi
@@ -173,14 +173,14 @@ prereq_check_registry_connectivity() {
 
     # Extract registry host from full path
     local registry_host
-    registry_host=$(echo "$registry" | cut -d'/' -f1)
+    registry_host=$(echo "$registry_path" | cut -d'/' -f1)
 
     # Try to pull a non-existent image to verify credentials
     local pull_output
-    pull_output=$(docker pull "$registry/auth-check-nonexistent-image" 2>&1)
+    pull_output=$(docker pull "$registry_path/auth-check-nonexistent-image" 2>&1)
 
     if echo "$pull_output" | grep -qi "not authorized or not found"; then
-        print_error "Registry path appears invalid: $registry"
+        print_error "Registry path appears invalid: $registry_path"
         print_info "Check your tenancy namespace and repository path"
         echo ""
         read -p "Continue anyway? [y/N]: " confirm
@@ -213,36 +213,36 @@ prereq_check_java() {
         return 1
     fi
 
-    local java_version
-    java_version=$(java -version 2>&1 | head -1 | sed -E 's/.*"([0-9]+).*/\1/')
+    local detected_java_version
+    detected_java_version=$(java -version 2>&1 | head -1 | sed -E 's/.*"([0-9]+).*/\1/')
 
-    if [[ "$java_version" != "$PREREQ_REQUIRED_JAVA_VERSION" ]]; then
-        print_error "Java $PREREQ_REQUIRED_JAVA_VERSION is required, but found Java $java_version"
-        print_info "Set JAVA_HOME to a Java $PREREQ_REQUIRED_JAVA_VERSION installation:"
-        print_info "  export JAVA_HOME=/opt/homebrew/opt/openjdk@$PREREQ_REQUIRED_JAVA_VERSION"
+    if [[ "$detected_java_version" != "$REQUIRED_JAVA_VERSION" ]]; then
+        print_error "Java $REQUIRED_JAVA_VERSION is required, but found Java $detected_java_version"
+        print_info "Set JAVA_HOME to a Java $REQUIRED_JAVA_VERSION installation:"
+        print_info "  export JAVA_HOME=/opt/homebrew/opt/openjdk@$REQUIRED_JAVA_VERSION"
         print_info "  export PATH=\$JAVA_HOME/bin:\$PATH"
         return 1
     fi
 
     # Verify JAVA_HOME is set (Maven requires it)
     if [[ -z "$JAVA_HOME" ]]; then
-        print_warning "Java $PREREQ_REQUIRED_JAVA_VERSION found, but JAVA_HOME is not set"
+        print_warning "Java $REQUIRED_JAVA_VERSION found, but JAVA_HOME is not set"
         print_info "Maven requires JAVA_HOME. Set it with:"
-        print_info "  export JAVA_HOME=/opt/homebrew/opt/openjdk@$PREREQ_REQUIRED_JAVA_VERSION"
+        print_info "  export JAVA_HOME=/opt/homebrew/opt/openjdk@$REQUIRED_JAVA_VERSION"
         return 1
     fi
 
     # Verify JAVA_HOME points to correct version
     local java_home_version
     java_home_version=$("$JAVA_HOME/bin/java" -version 2>&1 | head -1 | sed -E 's/.*"([0-9]+).*/\1/')
-    if [[ "$java_home_version" != "$PREREQ_REQUIRED_JAVA_VERSION" ]]; then
-        print_error "JAVA_HOME points to Java $java_home_version, but Java $PREREQ_REQUIRED_JAVA_VERSION is required"
-        print_info "Set JAVA_HOME to a Java $PREREQ_REQUIRED_JAVA_VERSION installation:"
-        print_info "  export JAVA_HOME=/opt/homebrew/opt/openjdk@$PREREQ_REQUIRED_JAVA_VERSION"
+    if [[ "$java_home_version" != "$REQUIRED_JAVA_VERSION" ]]; then
+        print_error "JAVA_HOME points to Java $java_home_version, but Java $REQUIRED_JAVA_VERSION is required"
+        print_info "Set JAVA_HOME to a Java $REQUIRED_JAVA_VERSION installation:"
+        print_info "  export JAVA_HOME=/opt/homebrew/opt/openjdk@$REQUIRED_JAVA_VERSION"
         return 1
     fi
 
-    print_success "Java $PREREQ_REQUIRED_JAVA_VERSION is available (JAVA_HOME=$JAVA_HOME)"
+    print_success "Java $REQUIRED_JAVA_VERSION is available (JAVA_HOME=$JAVA_HOME)"
     return 0
 }
 
@@ -267,10 +267,10 @@ prereq_check_maven() {
 #   $1 - directory path (optional, defaults to script directory)
 # Returns: 0 if found, 1 if not
 prereq_check_pom() {
-    local dir="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
+    local project_dir="${1:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)}"
 
-    if [[ ! -f "$dir/pom.xml" ]]; then
-        print_error "pom.xml not found in $dir"
+    if [[ ! -f "$project_dir/pom.xml" ]]; then
+        print_error "pom.xml not found in $project_dir"
         print_info "Run this script from the cloudbank-v5 directory"
         return 1
     fi
@@ -291,9 +291,9 @@ prereq_check_kubectl() {
     fi
 
     if kubectl cluster-info &> /dev/null; then
-        local context
-        context=$(kubectl config current-context 2>/dev/null)
-        print_success "kubectl connected to cluster: $context"
+        local current_context
+        current_context=$(kubectl config current-context 2>/dev/null)
+        print_success "kubectl connected to cluster: $current_context"
         return 0
     else
         print_error "kubectl cannot connect to cluster"
@@ -595,10 +595,11 @@ prereq_check_oci_auth() {
     print_success "OCI authentication successful (namespace: $PREREQ_OCI_NAMESPACE)"
 
     print_step "Getting configured region..."
-    PREREQ_OCI_REGION=$(oci iam region-subscription list --query 'data[?"is-home-region"].{region:"region-name"}|[0].region' --raw-output 2>/dev/null | grep -v "^DEBUG:")
-    if [[ $? -ne 0 ]] || [[ -z "$PREREQ_OCI_REGION" ]] || [[ "$PREREQ_OCI_REGION" == "null" ]]; then
-        # Fallback: try to get region from config file
-        PREREQ_OCI_REGION=$(grep -E "^\s*region\s*=" "$HOME/.oci/config" | head -1 | cut -d'=' -f2 | tr -d ' ')
+    # First try to get region from config file
+    PREREQ_OCI_REGION=$(grep -E "^\s*region\s*=" "$HOME/.oci/config" | head -1 | cut -d'=' -f2 | tr -d ' ')
+    if [[ -z "$PREREQ_OCI_REGION" ]]; then
+        # Fallback: try to get home region from OCI API
+        PREREQ_OCI_REGION=$(oci iam region-subscription list --query 'data[?"is-home-region"].{region:"region-name"}|[0].region' --raw-output 2>/dev/null | grep -v "^DEBUG:")
     fi
     if [[ -z "$PREREQ_OCI_REGION" ]]; then
         print_error "Could not determine OCI region"
@@ -852,6 +853,12 @@ check_prereqs_main() {
                 print_error "Namespace is required"
                 exit 1
             fi
+        fi
+
+        # Validate namespace before proceeding
+        if ! prereq_check_namespace "$namespace"; then
+            print_error "Cannot proceed with invalid namespace"
+            exit 1
         fi
 
         # Try to auto-detect OBaaS release from namespace

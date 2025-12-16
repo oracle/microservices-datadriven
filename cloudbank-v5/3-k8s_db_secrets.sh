@@ -50,7 +50,7 @@ DRY_RUN=false
 
 # Service accounts to create
 # Format: "name:description"
-declare -a SERVICE_ACCOUNTS=(
+declare -a SERVICE_ACCOUNT_LIST=(
     "account:account, checks, testrunner"
     "customer:customer"
     "transfer:transfer"
@@ -70,56 +70,56 @@ generate_oracle_password() {
     # - Cannot start with a digit or special character
     # - Cannot contain the username
 
-    local length=20
-    local password=""
+    local password_length=20
+    local generated_password=""
 
     # Character sets
-    local upper="ABCDEFGHJKLMNPQRSTUVWXYZ"      # Excluded I, O (look like 1, 0)
-    local lower="abcdefghjkmnpqrstuvwxyz"       # Excluded i, l, o (look like 1, 0)
-    local digits="23456789"                     # Excluded 0, 1 (look like O, l)
-    local special="#_"                          # Oracle-safe special chars ($ can cause shell issues)
-    local all="${upper}${lower}${digits}${special}"
+    local upper_chars="ABCDEFGHJKLMNPQRSTUVWXYZ"      # Excluded I, O (look like 1, 0)
+    local lower_chars="abcdefghjkmnpqrstuvwxyz"       # Excluded i, l, o (look like 1, 0)
+    local digit_chars="23456789"                     # Excluded 0, 1 (look like O, l)
+    local special_chars="#_"                          # Oracle-safe special chars ($ can cause shell issues)
+    local all_chars="${upper_chars}${lower_chars}${digit_chars}${special_chars}"
 
     # Start with an uppercase letter (Oracle requirement: can't start with digit/special)
-    password+="${upper:RANDOM % ${#upper}:1}"
+    generated_password+="${upper_chars:RANDOM % ${#upper_chars}:1}"
 
     # Ensure we have at least one of each required type in positions 2-4
-    password+="${lower:RANDOM % ${#lower}:1}"
-    password+="${digits:RANDOM % ${#digits}:1}"
-    password+="${special:RANDOM % ${#special}:1}"
+    generated_password+="${lower_chars:RANDOM % ${#lower_chars}:1}"
+    generated_password+="${digit_chars:RANDOM % ${#digit_chars}:1}"
+    generated_password+="${special_chars:RANDOM % ${#special_chars}:1}"
 
     # Fill remaining length with random characters from all sets
-    for ((i=4; i<length; i++)); do
-        password+="${all:RANDOM % ${#all}:1}"
+    for ((index=4; index<password_length; index++)); do
+        generated_password+="${all_chars:RANDOM % ${#all_chars}:1}"
     done
 
     # Shuffle positions 2-end using Fisher-Yates (keep first char as uppercase)
-    local first="${password:0:1}"
-    local rest="${password:1}"
-    local shuffled=""
-    local rest_len=${#rest}
+    local first_char="${generated_password:0:1}"
+    local rest_chars="${generated_password:1}"
+    local shuffled_password=""
+    local rest_length=${#rest_chars}
 
     # Convert rest to array for shuffling
-    local -a chars=()
-    for ((i=0; i<rest_len; i++)); do
-        chars+=("${rest:i:1}")
+    local -a char_array=()
+    for ((index=0; index<rest_length; index++)); do
+        char_array+=("${rest_chars:index:1}")
     done
 
     # Fisher-Yates shuffle
-    for ((i=rest_len-1; i>0; i--)); do
-        local j=$((RANDOM % (i + 1)))
-        local tmp="${chars[i]}"
-        chars[i]="${chars[j]}"
-        chars[j]="$tmp"
+    for ((index=rest_length-1; index>0; index--)); do
+        local random_index=$((RANDOM % (index + 1)))
+        local temp_char="${char_array[index]}"
+        char_array[index]="${char_array[random_index]}"
+        char_array[random_index]="$temp_char"
     done
 
     # Reconstruct password
-    shuffled="${first}"
-    for char in "${chars[@]}"; do
-        shuffled+="$char"
+    shuffled_password="${first_char}"
+    for char in "${char_array[@]}"; do
+        shuffled_password+="$char"
     done
 
-    echo "$shuffled"
+    echo "$shuffled_password"
 }
 
 # =============================================================================
@@ -375,19 +375,19 @@ main() {
     print_step "Generating Oracle-compatible passwords..."
 
     # Store passwords in parallel arrays (Bash 3 compatible)
-    local -a pw_names=()
-    local -a pw_values=()
-    local -a pw_descriptions=()
+    local -a password_names=()
+    local -a password_values=()
+    local -a password_descriptions=()
 
-    for account_info in "${SERVICE_ACCOUNTS[@]}"; do
-        local name="${account_info%%:*}"
-        local description="${account_info#*:}"
-        local password
-        password=$(generate_oracle_password)
-        pw_names+=("$name")
-        pw_values+=("$password")
-        pw_descriptions+=("$description")
-        print_success "Generated password for: $name"
+    for account_info in "${SERVICE_ACCOUNT_LIST[@]}"; do
+        local account_name="${account_info%%:*}"
+        local account_description="${account_info#*:}"
+        local generated_password
+        generated_password=$(generate_oracle_password)
+        password_names+=("$account_name")
+        password_values+=("$generated_password")
+        password_descriptions+=("$account_description")
+        print_success "Generated password for: $account_name"
     done
 
     # Create secrets
@@ -399,11 +399,11 @@ main() {
     fi
 
     # Create service account secrets
-    local i
-    for ((i=0; i<${#pw_names[@]}; i++)); do
-        local name="${pw_names[$i]}"
-        local password="${pw_values[$i]}"
-        local description="${pw_descriptions[$i]}"
+    local index
+    for ((index=0; index<${#password_names[@]}; index++)); do
+        local name="${password_names[$index]}"
+        local password="${password_values[$index]}"
+        local description="${password_descriptions[$index]}"
         local secret_name="${DB_NAME}-${name}-db-authn"
         create_secret "$secret_name" "$name" "$password" "$description"
     done
@@ -431,9 +431,9 @@ main() {
     echo ""
     printf "  %-35s %-15s %s\n" "SECRET" "USERNAME" "PASSWORD"
     printf "  %-35s %-15s %s\n" "-----------------------------------" "---------------" "--------------------"
-    for ((i=0; i<${#pw_names[@]}; i++)); do
-        local name="${pw_names[$i]}"
-        local password="${pw_values[$i]}"
+    for ((index=0; index<${#password_names[@]}; index++)); do
+        local name="${password_names[$index]}"
+        local password="${password_values[$index]}"
         printf "  %-35s %-15s %s\n" "${DB_NAME}-${name}-db-authn" "$name" "$password"
     done
     echo ""

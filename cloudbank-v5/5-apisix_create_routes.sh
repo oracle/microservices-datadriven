@@ -34,7 +34,7 @@ source "${SCRIPT_DIR}/check_prereqs.sh"
 NAMESPACE=""
 OBAAS_RELEASE=""
 DRY_RUN=false
-PORT_FORWARD_PID=""
+port_forward_pid=""
 
 # =============================================================================
 # Parse Arguments
@@ -121,10 +121,10 @@ prompt_value() {
 # Cleanup
 # =============================================================================
 cleanup() {
-    if [[ -n "$PORT_FORWARD_PID" ]]; then
+    if [[ -n "$port_forward_pid" ]]; then
         print_step "Stopping port-forward..."
-        kill "$PORT_FORWARD_PID" 2>/dev/null || true
-        wait "$PORT_FORWARD_PID" 2>/dev/null || true
+        kill "$port_forward_pid" 2>/dev/null || true
+        wait "$port_forward_pid" 2>/dev/null || true
         print_success "Port-forward stopped"
     fi
 }
@@ -180,20 +180,20 @@ start_port_forward() {
     print_step "Starting port-forward to $service_name:9180..."
 
     kubectl port-forward -n "$NAMESPACE" "svc/$service_name" 9180:9180 &>/dev/null &
-    PORT_FORWARD_PID=$!
+    port_forward_pid=$!
 
     # Wait for port-forward to be ready
-    local attempts=0
+    local attempt_count=0
     while ! curl -s http://localhost:9180 &>/dev/null; do
         sleep 1
-        ((attempts++))
-        if [[ $attempts -ge 30 ]]; then
+        ((attempt_count++))
+        if [[ $attempt_count -ge 30 ]]; then
             print_error "Port-forward failed to start after 30 seconds"
             return 1
         fi
     done
 
-    print_success "Port-forward started (PID: $PORT_FORWARD_PID)"
+    print_success "Port-forward started (PID: $port_forward_pid)"
     return 0
 }
 
@@ -209,11 +209,11 @@ create_route() {
         return 0
     fi
 
-    local response_file
-    response_file=$(mktemp)
+    local temp_response_file
+    temp_response_file=$(mktemp)
 
-    local http_code
-    http_code=$(curl -s -w "%{http_code}" -o "$response_file" "http://localhost:9180/apisix/admin/routes/$route_id" \
+    local response_code
+    response_code=$(curl -s -w "%{http_code}" -o "$temp_response_file" "http://localhost:9180/apisix/admin/routes/$route_id" \
         -H "X-API-KEY: $APISIX_ADMIN_KEY" \
         -H "Content-Type: application/json" \
         -X PUT \
@@ -249,14 +249,14 @@ create_route() {
     }
 }")
 
-    if [[ "$http_code" == "200" || "$http_code" == "201" ]]; then
+    if [[ "$response_code" == "200" || "$response_code" == "201" ]]; then
         print_success "Created route: $route_name"
-        rm -f "$response_file"
+        rm -f "$temp_response_file"
         return 0
     else
-        print_error "Failed to create route: $route_name (HTTP $http_code)"
-        print_error "Response: $(cat "$response_file")"
-        rm -f "$response_file"
+        print_error "Failed to create route: $route_name (HTTP $response_code)"
+        print_error "Response: $(cat "$temp_response_file")"
+        rm -f "$temp_response_file"
         return 1
     fi
 }

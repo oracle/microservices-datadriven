@@ -52,10 +52,10 @@ IMAGE_TAG="0.0.1-SNAPSHOT"
 DRY_RUN=false
 
 # Helm chart path (relative to script directory)
-CHART_PATH="${SCRIPT_DIR}/../helm/charts/obaas-sample-app"
+HELM_CHART_PATH="${SCRIPT_DIR}/../helm/charts/obaas-sample-app"
 
 # Services to deploy
-SERVICES=(
+SERVICE_LIST=(
     "account"
     "customer"
     "creditscore"
@@ -216,9 +216,9 @@ check_prerequisites() {
 # Deployment
 # =============================================================================
 get_db_user_for_service() {
-    local service="$1"
+    local service_name="$1"
     # Map services to their database user (matches 3-k8s_db_secrets.sh SERVICE_ACCOUNTS)
-    case "$service" in
+    case "$service_name" in
         account|checks|testrunner)
             echo "account"
             ;;
@@ -232,78 +232,78 @@ get_db_user_for_service() {
             echo "creditscore"
             ;;
         *)
-            echo "$service"
+            echo "$service_name"
             ;;
     esac
 }
 
 deploy_service() {
-    local service="$1"
+    local service_name="$1"
     local final_registry="$2"
-    local is_last="$3"
+    local is_last_service="$3"
 
-    local values_file="${SCRIPT_DIR}/${service}/values.yaml"
+    local values_file_path="${SCRIPT_DIR}/${service_name}/values.yaml"
 
-    if [[ ! -f "$values_file" ]]; then
-        print_warning "Values file not found: $values_file (skipping)"
+    if [[ ! -f "$values_file_path" ]]; then
+        print_warning "Values file not found: $values_file_path (skipping)"
         return 0
     fi
 
     # Build image repository path
-    local image_repo="${final_registry}/${service}"
+    local image_repository="${final_registry}/${service_name}"
 
     # Determine the database user/secret for this service
     local db_user
-    db_user=$(get_db_user_for_service "$service")
-    local db_secret="${DB_NAME}-${db_user}-db-authn"
+    db_user=$(get_db_user_for_service "$service_name")
+    local db_secret_name="${DB_NAME}-${db_user}-db-authn"
 
     # Build helm command
-    local helm_cmd="helm upgrade --install $service $CHART_PATH"
-    helm_cmd+=" -f $values_file"
-    helm_cmd+=" --namespace $NAMESPACE"
-    helm_cmd+=" --set image.repository=$image_repo"
-    helm_cmd+=" --set image.tag=$IMAGE_TAG"
-    helm_cmd+=" --set obaas.releaseName=$OBAAS_RELEASE"
-    helm_cmd+=" --set database.name=$DB_NAME"
-    helm_cmd+=" --set database.authN.secretName=$db_secret"
+    local helm_command="helm upgrade --install $service_name $HELM_CHART_PATH"
+    helm_command+=" -f $values_file_path"
+    helm_command+=" --namespace $NAMESPACE"
+    helm_command+=" --set image.repository=$image_repository"
+    helm_command+=" --set image.tag=$IMAGE_TAG"
+    helm_command+=" --set obaas.releaseName=$OBAAS_RELEASE"
+    helm_command+=" --set database.name=$DB_NAME"
+    helm_command+=" --set database.authN.secretName=$db_secret_name"
 
     if [[ "$DRY_RUN" == true ]]; then
-        print_info "[DRY-RUN] Would run: $helm_cmd"
+        print_info "[DRY-RUN] Would run: $helm_command"
         return 0
     fi
 
-    print_step "Deploying $service..."
-    print_info "Image: $image_repo:$IMAGE_TAG"
+    print_step "Deploying $service_name..."
+    print_info "Image: $image_repository:$IMAGE_TAG"
 
     # Verify image exists before deploying
-    if ! docker manifest inspect "$image_repo:$IMAGE_TAG" &>/dev/null; then
-        print_error "Image not found: $image_repo:$IMAGE_TAG"
+    if ! docker manifest inspect "$image_repository:$IMAGE_TAG" &>/dev/null; then
+        print_error "Image not found: $image_repository:$IMAGE_TAG"
         print_info "Build and push images first: ./2-images_build_push.sh"
         return 1
     fi
     print_success "Image verified"
 
-    print_info "Running: $helm_cmd --wait --timeout 5m"
+    print_info "Running: $helm_command --wait --timeout 5m"
 
     # Suppress NOTES.txt output unless this is the last service
-    if [[ "$is_last" == true ]]; then
-        if $helm_cmd --wait --timeout 5m; then
-            print_success "$service deployed successfully"
+    if [[ "$is_last_service" == true ]]; then
+        if $helm_command --wait --timeout 5m; then
+            print_success "$service_name deployed successfully"
             return 0
         else
-            print_error "Failed to deploy $service"
-            print_info "Check pod status: kubectl get pods -n $NAMESPACE -l app.kubernetes.io/name=$service"
-            print_info "Check pod logs:   kubectl logs -n $NAMESPACE -l app.kubernetes.io/name=$service"
+            print_error "Failed to deploy $service_name"
+            print_info "Check pod status: kubectl get pods -n $NAMESPACE -l app.kubernetes.io/name=$service_name"
+            print_info "Check pod logs:   kubectl logs -n $NAMESPACE -l app.kubernetes.io/name=$service_name"
             return 1
         fi
     else
-        if $helm_cmd --wait --timeout 5m > /dev/null; then
-            print_success "$service deployed successfully"
+        if $helm_command --wait --timeout 5m > /dev/null; then
+            print_success "$service_name deployed successfully"
             return 0
         else
-            print_error "Failed to deploy $service"
-            print_info "Check pod status: kubectl get pods -n $NAMESPACE -l app.kubernetes.io/name=$service"
-            print_info "Check pod logs:   kubectl logs -n $NAMESPACE -l app.kubernetes.io/name=$service"
+            print_error "Failed to deploy $service_name"
+            print_info "Check pod status: kubectl get pods -n $NAMESPACE -l app.kubernetes.io/name=$service_name"
+            print_info "Check pod logs:   kubectl logs -n $NAMESPACE -l app.kubernetes.io/name=$service_name"
             return 1
         fi
     fi
@@ -319,25 +319,25 @@ deploy_all_services() {
         echo ""
     fi
 
-    local deployed=0
-    local failed=0
-    local skipped=0
-    local total=${#SERVICES[@]}
-    local count=0
+    local deployed_count=0
+    local failed_count=0
+    local skipped_count=0
+    local total_services=${#SERVICE_LIST[@]}
+    local service_index=0
 
-    for service in "${SERVICES[@]}"; do
-        ((count++))
-        local is_last=false
-        if [[ $count -eq $total ]]; then
-            is_last=true
+    for service in "${SERVICE_LIST[@]}"; do
+        ((service_index++))
+        local is_last_service=false
+        if [[ $service_index -eq $total_services ]]; then
+            is_last_service=true
         fi
 
-        if deploy_service "$service" "$final_registry" "$is_last"; then
+        if deploy_service "$service" "$final_registry" "$is_last_service"; then
             if [[ "$DRY_RUN" != true ]]; then
-                ((deployed++))
+                ((deployed_count++))
             fi
         else
-            ((failed++))
+            ((failed_count++))
             # Stop on first failure
             print_error "Stopping deployment due to failure"
             break
@@ -348,10 +348,10 @@ deploy_all_services() {
     if [[ "$DRY_RUN" == true ]]; then
         print_info "Dry run complete. No services were deployed."
     else
-        print_info "Deployed: $deployed | Failed: $failed"
+        print_info "Deployed: $deployed_count | Failed: $failed_count"
     fi
 
-    if [[ $failed -gt 0 ]]; then
+    if [[ $failed_count -gt 0 ]]; then
         return 1
     fi
     return 0

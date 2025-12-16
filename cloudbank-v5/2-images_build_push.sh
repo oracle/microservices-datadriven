@@ -203,18 +203,18 @@ validate_inputs() {
 clean_artifacts() {
     print_header "Cleaning Build Artifacts"
 
-    local modules=("cloudbank-apps" "common" "buildtools" "${SERVICES[@]}")
+    local module_list=("cloudbank-apps" "common" "buildtools" "${SERVICES[@]}")
 
     # Clean local Maven repository artifacts for this project
     print_step "Removing cached Maven artifacts..."
-    for module in "${modules[@]}"; do
+    for module in "${module_list[@]}"; do
         rm -rf ~/.m2/repository/com/example/"$module"
     done
     print_success "Maven cache cleared"
 
     # Clean target directories
     print_step "Removing target directories..."
-    for module in "${modules[@]}"; do
+    for module in "${module_list[@]}"; do
         rm -rf "$SCRIPT_DIR/$module/target" 2>/dev/null
     done
     rm -rf "$SCRIPT_DIR/target" 2>/dev/null
@@ -253,10 +253,10 @@ build_dependencies() {
 
 pull_base_image() {
     # CloudBank services use Oracle's OBaaS OpenJDK image as base
-    local base_image="ghcr.io/oracle/openjdk-image-obaas:${PREREQ_REQUIRED_JAVA_VERSION}"
+    local base_image_name="ghcr.io/oracle/openjdk-image-obaas:${PREREQ_REQUIRED_JAVA_VERSION}"
 
-    print_step "Pre-pulling base image: $base_image"
-    if docker pull "$base_image"; then
+    print_step "Pre-pulling base image: $base_image_name"
+    if docker pull "$base_image_name"; then
         print_success "Base image ready"
     else
         print_warning "Could not pre-pull base image (will be pulled during build)"
@@ -268,53 +268,57 @@ build_and_push() {
 
     print_header "Building and Pushing Images"
 
-    # Pre-pull base image to avoid parallel pull conflicts
-    if [[ "$PARALLEL_THREADS" != "1" ]]; then
-        pull_base_image
-    fi
+    # Pre-pull base image first
+    pull_base_image
 
-    local services_list
-    services_list=$(IFS=,; echo "${SERVICES[*]}")
+    local service_list
+    service_list=$(IFS=,; echo "${SERVICES[*]}")
 
-    # Build Maven command with parallel threads
-    # -T 1C means 1 thread per CPU core; can also use -T 4 for 4 threads
-    local mvn_cmd="mvn -T $PARALLEL_THREADS clean package k8s:build"
-
-    if [[ "$SKIP_PUSH" != true ]]; then
-        mvn_cmd="$mvn_cmd k8s:push"
-    fi
-
-    mvn_cmd="$mvn_cmd -pl $services_list"
-
-    # Override registry via Maven property (default is localhost in pom.xml)
+    # Common Maven options
+    local maven_options=""
     if [[ -n "$registry" ]]; then
-        mvn_cmd="$mvn_cmd -Dimage.registry=$registry"
+        maven_options="$maven_options -Dimage.registry=$registry"
     fi
-
     if [[ "$SKIP_TESTS" == true ]]; then
-        mvn_cmd="$mvn_cmd -DskipTests"
-    else
-        print_info "Running tests (use default to skip)"
+        maven_options="$maven_options -DskipTests"
     fi
 
-    echo ""
-    print_step "Running: $mvn_cmd"
-    if [[ "$PARALLEL_THREADS" == "1" ]]; then
-        print_info "Building sequentially (use -j to enable parallel builds)..."
-    else
+    # Step 1: Build JARs in parallel (benefits from -T flag)
+    print_step "Building JAR files..."
+    if [[ "$PARALLEL_THREADS" != "1" ]]; then
         print_info "Building in parallel with $PARALLEL_THREADS threads..."
     fi
-    print_info "This will take 5-10 minutes depending on network speed..."
+    local maven_build_command="mvn -T $PARALLEL_THREADS clean package -pl $service_list $maven_options"
+    print_info "Running: $maven_build_command"
     echo ""
-
-    if ! $mvn_cmd; then
-        print_error "Troubleshooting:"
-        print_info "  - Check Docker is running: docker ps"
-        print_info "  - Check registry login: docker login $registry"
+    if ! $maven_build_command; then
+        print_error "Failed to build JARs"
         return 1
     fi
+    print_success "JAR files built"
+    echo ""
 
-    print_success "Build completed successfully"
+    # Step 2: Build and push Docker images sequentially
+    # Docker daemon and registry pushes don't parallelize well
+    print_step "Building and pushing container images..."
+
+    local jkube_goals="k8s:build"
+    if [[ "$SKIP_PUSH" != true ]]; then
+        jkube_goals="$jkube_goals k8s:push"
+    fi
+
+    for service in "${SERVICES[@]}"; do
+        print_step "  $service..."
+        if ! mvn $jkube_goals -pl "$service" $maven_options -q; then
+            print_error "Failed to build/push $service"
+            print_info "  - Check Docker is running: docker ps"
+            print_info "  - Check registry login: docker login $registry"
+            return 1
+        fi
+        print_success "  $service done"
+    done
+
+    print_success "All images built and pushed successfully"
 }
 
 verify_images() {
@@ -325,22 +329,22 @@ verify_images() {
     print_step "Checking local images..."
     echo ""
 
-    local found=0
+    local image_count=0
     for service in "${SERVICES[@]}"; do
-        local image="$registry/$service:$IMAGE_TAG"
+        local image_name="$registry/$service:$IMAGE_TAG"
         if docker images --format "{{.Repository}}:{{.Tag}}" | grep -q "$registry/$service"; then
             print_success "$service image found"
-            ((found++))
+            ((image_count++))
         else
             print_warning "$service image not found locally"
         fi
     done
 
     echo ""
-    if [[ $found -eq ${#SERVICES[@]} ]]; then
+    if [[ $image_count -eq ${#SERVICES[@]} ]]; then
         print_success "All ${#SERVICES[@]} images built successfully"
     else
-        print_warning "Only $found of ${#SERVICES[@]} images found"
+        print_warning "Only $image_count of ${#SERVICES[@]} images found"
     fi
 }
 
