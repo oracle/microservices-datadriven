@@ -188,9 +188,18 @@ prereq_check_registry_connectivity() {
             return 1
         fi
     elif echo "$pull_output" | grep -qiE "unauthorized|authentication required|403|forbidden"; then
-        print_warning "Not authenticated to $registry_host"
-        print_info "Run: docker login $registry_host"
+        print_error "Not authenticated to $registry_host"
         echo ""
+        print_info "Maven/jkube will push using: $registry_host"
+        print_info "You must login to this EXACT hostname:"
+        print_info "  docker login $registry_host"
+        echo ""
+        if [[ "$registry_host" =~ ocir\.io ]]; then
+            print_warning "NOTE: OCIR hostname aliases are NOT interchangeable for authentication!"
+            print_info "Example: docker login sjc.ocir.io does NOT work for us-sanjose-1.ocir.io"
+            print_info "         (Docker/Maven treat these as different registries)"
+            echo ""
+        fi
         read -p "Continue anyway? [y/N]: " confirm
         if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
             return 1

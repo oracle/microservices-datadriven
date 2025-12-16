@@ -201,7 +201,7 @@ check_prerequisites() {
     fi
 
     # Check helm chart exists
-    if ! prereq_check_helm_chart "$CHART_PATH"; then
+    if ! prereq_check_helm_chart "$HELM_CHART_PATH"; then
         ((errors++))
     fi
 
@@ -434,7 +434,7 @@ main() {
     echo "  Image Tag:     $IMAGE_TAG"
     echo "  Dry Run:       $DRY_RUN"
     echo ""
-    echo "  Services:      ${SERVICES[*]}"
+    echo "  Services:      ${SERVICE_LIST[*]}"
     echo ""
 
     if [[ "$DRY_RUN" != true ]]; then
