@@ -16,6 +16,12 @@
 	<name>account</name>
 	<description>Account Application</description>
 
+	 <properties>
+        <obaas.registry>us-phoenix-1.ocir.io/maacloud</obaas.registry>
+		<!-- obaas.namespace>account</obaas.namespace -->
+        <obaas.image.version>0.0.2</obaas.image.version>
+	 </properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -49,6 +55,15 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <image>
+					    <name>${obaas.registry}/${project.artifactId}:${obaas.image.version}</name>
+						<publish>false</publish>
+						<env>
+						    <BP_JVM_VERSION>21</BP_JVM_VERSION>
+                        </env>
+                    </image>
+                </configuration>
 			</plugin>
 			<plugin>
                 <groupId>org.graalvm.buildtools</groupId>
