@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright (c) 2024, 2025, Oracle and/or its affiliates.
+# Copyright (c) 2024, 2026, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
 
 # CloudBank v5 Database Secrets Script
@@ -437,6 +437,8 @@ main() {
         printf "  %-35s %-15s %s\n" "${DB_NAME}-${name}-db-authn" "$name" "$password"
     done
     echo ""
+    echo "Next step:"
+    echo "  Deploys all CloudBank microservices: ./4-deploy_all_services.sh -n <namespace> -d <dbname> -p <prefix>"
 }
 
 # Run main function

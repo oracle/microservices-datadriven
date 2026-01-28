@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright (c) 2024, 2025, Oracle and/or its affiliates.
+# Copyright (c) 2024, 2026, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
 
 # CloudBank v5 Build and Push Images Script
@@ -45,6 +45,7 @@ source "${SCRIPT_DIR}/check_prereqs.sh"
 
 REGISTRY=""
 REPO_PREFIX="cloudbank-v5"
+JKUBE_VERSION=$(grep '<jkube.version>' "${SCRIPT_DIR}/pom.xml" | sed 's/.*<jkube.version>\(.*\)<\/jkube.version>.*/\1/')
 IMAGE_TAG="0.0.1-SNAPSHOT"
 SKIP_TESTS=true
 SKIP_PUSH=false
@@ -302,9 +303,9 @@ build_and_push() {
     # Docker daemon and registry pushes don't parallelize well
     print_step "Building and pushing container images..."
 
-    local jkube_goals="k8s:build"
+    local jkube_goals="org.eclipse.jkube:kubernetes-maven-plugin:${JKUBE_VERSION}:build"
     if [[ "$SKIP_PUSH" != true ]]; then
-        jkube_goals="$jkube_goals k8s:push"
+        jkube_goals="$jkube_goals org.eclipse.jkube:kubernetes-maven-plugin:${JKUBE_VERSION}:push"
     fi
 
     for service in "${SERVICES[@]}"; do

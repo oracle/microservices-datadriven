@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright (c) 2024, 2025, Oracle and/or its affiliates.
+# Copyright (c) 2024, 2026, Oracle and/or its affiliates.
 # Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
 
 # CloudBank v5 Deploy All Services Script
@@ -460,6 +460,9 @@ main() {
         echo "Verify with:"
         echo "  kubectl get pods -n $NAMESPACE"
         echo "  kubectl get svc -n $NAMESPACE"
+        echo ""
+        echo "Next step:"
+        echo "  Creates APISIX routes for all CloudBank microservices: ./5-apisix_create_routes.sh -n <namespace>"
     fi
 }
 

@@ -22,10 +22,12 @@ First, you need to obtain the external IP address of your ingress controller. Th
 
 **1.1.1 Get the ingress controller information:**
 
+**NOTE:** This is only for OCI installations.
+
 Run the following command:
 
    ```shell
-   kubectl -n ingress-nginx get service ingress-nginx-controller
+   kubectl get ingress -n <namespace where OBaaS is installed>
    ```
 
 **1.1.2 Review the output:**
@@ -33,16 +35,18 @@ Run the following command:
 You should see output similar to this:
 
    ```text
-   NAME                       TYPE           CLUSTER-IP      EXTERNAL-IP       PORT(S)                      AGE
-   ingress-nginx-controller   LoadBalancer   10.96.172.148   146.235.207.230   80:31393/TCP,443:30506/TCP   158m
+  NAME           CLASS    HOSTS   ADDRESS           PORTS   AGE
+  obaas-apisix   <none>   *       167.234.211.216   80      19h
    ```
 
 **1.1.3 Create an environment variable:**
 
+**NOTE:** This is only for OCI installations.
+
 Use the following command to automatically extract and set the external IP address:
 
    ```shell
-   export IP=$(kubectl -n ingress-nginx get service ingress-nginx-controller -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+   export IP=$(kubectl get ingress obaas-apisix -n <namespace where OBaaS is installed> -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
    ```
 
 You can verify the IP was set correctly by running:
