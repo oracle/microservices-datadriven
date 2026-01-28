@@ -1,0 +1,45 @@
+## Copyright (c) 2024, 2025, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+
+# CloudBank Customer Service - Helm Values
+#
+# Install with (from this directory):
+#   helm install customer ../../../helm/charts/obaas-sample-app -f values.yaml -n <namespace>
+#
+# Upgrade with:
+#   helm upgrade customer ../../../helm/charts/obaas-sample-app -f values.yaml -n <namespace>
+#
+# Uninstall with:
+#   helm uninstall customer -n <namespace>
+
+# -----------------------
+# -- Required Configuration
+fullnameOverride: "customer"
+image:
+  repository: ""  # e.g., us-phoenix-1.ocir.io/mytenancy/cloudbank-v5/customer
+  tag: ""         # e.g., 0.0.1-SNAPSHOT
+
+obaas:
+  releaseName: "" # OBaaS platform release name (run: helm list -n <obaas-namespace>)
+  framework: "SPRING_BOOT"
+
+database:
+  name: ""         # e.g., mydb (derives priv-authn and walletName)
+
+# -----------------------
+# -- Feature Toggles
+
+eureka:
+  enabled: true
+
+otel:
+  enabled: true
+
+otmm:
+  enabled: false
+
+# -----------------------
+# -- Optional Overrides
+
+# imagePullSecrets:
+#   - name: ocir

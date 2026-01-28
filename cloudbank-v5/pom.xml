@@ -46,6 +46,7 @@
 
         <!-- JKube -->
         <jkube.version>1.18.2</jkube.version>
+        <image.registry>localhost</image.registry>
 
         <!-- Opentelemetry BOM -->
         <otel-bom.version>2.21.0</otel-bom.version>
@@ -195,7 +196,11 @@
                 <configuration>
                     <images>
                         <image>
-                            <name>my-repository/${project.artifactId}:${project.version}</name>
+                            <name>${image.registry}/${project.artifactId}:${project.version}</name>
+                            <build>
+                                <!-- Skip cleanup to avoid Rancher Desktop/containerd compatibility issues -->
+                                <cleanup>none</cleanup>
+                            </build>
                         </image>
                     </images>
                 </configuration>
