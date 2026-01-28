@@ -5,8 +5,8 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'Oracle Backend for Microservices and AI -- Draft documentation',
-  tagline: 'Deploy AI microservices using a “backend as a service” with Oracle Database and other infrastructure components',
+  title: 'Oracle Backend for Microservices and AI',
+  tagline: 'A comprehensive microservices platform for AI microservices with Oracle AI Database',
   favicon: 'img/favicon-32x32.png',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
