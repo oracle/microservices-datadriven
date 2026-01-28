@@ -51,8 +51,14 @@ REPO_PREFIX="cloudbank-v5"
 IMAGE_TAG="0.0.1-SNAPSHOT"
 DRY_RUN=false
 
-# Helm chart path (relative to script directory)
-HELM_CHART_PATH="${SCRIPT_DIR}/../helm/charts/obaas-sample-app"
+# Add Helm repo if not already added
+print_step "Checking obaas Helm repo..."
+if ! helm repo list | grep -q "^obaas"; then
+    print_info "Adding obaas Helm repo..."
+    helm repo add obaas https://oracle.github.io/microservices-datadriven/helm
+else
+    print_info "obaas Helm repo already exists, skipping add"
+fi
 
 # Services to deploy
 SERVICE_LIST=(
@@ -201,7 +207,7 @@ check_prerequisites() {
     fi
 
     # Check helm chart exists
-    if ! prereq_check_helm_chart "$HELM_CHART_PATH"; then
+    if ! prereq_check_helm_chart; then
         ((errors++))
     fi
 
@@ -258,7 +264,7 @@ deploy_service() {
     local db_secret_name="${DB_NAME}-${db_user}-db-authn"
 
     # Build helm command
-    local helm_command="helm upgrade --install $service_name $HELM_CHART_PATH"
+    local helm_command="helm upgrade --install $service_name obaas/obaas-sample-app"
     helm_command+=" -f $values_file_path"
     helm_command+=" --namespace $NAMESPACE"
     helm_command+=" --set image.repository=$image_repository"

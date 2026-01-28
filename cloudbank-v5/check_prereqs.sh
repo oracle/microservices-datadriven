@@ -349,18 +349,14 @@ prereq_check_helm() {
 #   $1 - chart path
 # Returns: 0 if exists, 1 if not
 prereq_check_helm_chart() {
-    local chart_path="$1"
+    local chart_name="obaas/obaas-sample-app"
 
-    if [[ -z "$chart_path" ]]; then
-        print_error "Chart path is required"
-        return 1
-    fi
-
-    if [[ -d "$chart_path" ]]; then
-        print_success "Helm chart found at: $chart_path"
+    if helm search repo "$chart_name" --fail-on-no-result &>/dev/null; then
+        print_success "Helm chart found: $chart_name"
         return 0
     else
-        print_error "Helm chart not found at: $chart_path"
+        print_error "Helm chart not found: $chart_name"
+        print_error "Add the repo with: helm repo add obaas <repo-url>"
         return 1
     fi
 }
