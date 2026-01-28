@@ -13,7 +13,7 @@ CloudBank v5 is a reference application demonstrating cloud-native microservices
 | **creditscore** | Provides credit scoring (stateless REST) |
 | **testrunner** | Test harness for workflows (AQ producer) |
 
-**Technology Stack:** Java 21, Spring Boot 3.4, Oracle ADB, MicroTx, Oracle AQ, OpenTelemetry
+**Technology Stack:** Spring Boot 3.4, Oracle ADB, MicroTx, Oracle AQ, OpenTelemetry
 
 ---
 
