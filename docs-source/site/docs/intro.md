@@ -15,7 +15,7 @@ Whether you're building with Helidon, Spring Boot, or integrating AI capabilitie
 
 ### Developer Experience First
 
-Write code in your preferred framework—Helidon or Spring Boot—while OBaaS handles service discovery, configuration management, API gateways, and data persistence. Spend less time configuring infrastructure and more time building features that matter to your business.
+Write code in your preferred framework - Helidon or Spring Boot - while OBaaS handles service discovery, configuration management, API gateways, and data persistence. Spend less time configuring infrastructure and more time building features that matter to your business.
 
 ### Enterprise-Grade Infrastructure
 
@@ -28,7 +28,7 @@ Built on Oracle Database and designed for mission-critical workloads, OBaaS prov
 
 ### AI-Ready Platform
 
-Leverage the power of Oracle Database 23ai to integrate artificial intelligence and machine learning directly into your applications. Build intelligent services that learn and adapt without the complexity of managing separate AI infrastructure.
+Leverage the power of Oracle AI Database 26ai to integrate artificial intelligence and machine learning directly into your applications. Build intelligent services that learn and adapt without the complexity of managing separate AI infrastructure.
 
 ### Multi-Cloud Flexibility
 
