@@ -22,7 +22,6 @@ The OBaaS Helm charts deploy a complete microservices platform including:
 
 - **ingress-nginx** - Namespace-specific ingress controller
 - **Apache APISIX** - API Gateway
-- **Kafka** - Event streaming (via Strimzi CRs)
 - **Oracle Coherence** - Distributed caching
 - **Eureka** - Service discovery
 - **Signoz** - Observability stack with ClickHouse
@@ -74,7 +73,7 @@ You must have access to an Oracle Database (19c or later):
 ### Directory Structure
 
 ```tree
-helm_v2/
+helm/
 ├── obaas-prereqs/     # Cluster-singleton prerequisites (install once per cluster)
 └── obaas/             # OBaaS application chart (install N times in different namespaces)
 ```
@@ -96,6 +95,7 @@ Only install prerequisites once per cluster. Installing multiple times will caus
 - **metrics-server** - Provides container resource metrics for autoscaling
 - **kube-state-metrics** - Exposes Kubernetes object metrics for monitoring
 - **strimzi-kafka-operator** - Manages Kafka clusters via custom resources
+- **oraoperator** - Oracle Database Operator for Kubernetes
 
 **Install prerequisites:**
 
@@ -103,7 +103,7 @@ Only install prerequisites once per cluster. Installing multiple times will caus
 cd obaas-prereqs
 
 # Install with default
-helm upgrade --install obaas-prereqs . -n obaas-system --create-namespace [--values <path_to_custom_values>]
+helm upgrade --install obaas-prereqs . -n obaas-system --create-namespace [--debug] [--values <path_to_custom_values>]
 ```
 
 **Verify installation:**
@@ -121,38 +121,32 @@ Wait until all prerequisite pods are running before proceeding to install OBaaS.
 
 #### Step 2: Install OBaaS (Multiple Times)
 
+If you're installing OBaaS using an ADB-S and not using **workload identity**, you need to create the namespace for OBaas and the secret containing the API key. You also need to change `values.yaml` file. There is a helper script called `tools/oci_config` that generates the `kubectl` command needed to create the secret. The secret name will be `oci-config-file`.
+
+```bash
+python3 tools/oci-config.py --namespace [namespace] 
+```
+
 After prerequisites are installed, you can install the OBaaS chart multiple times in different namespaces for multi-tenancy:
 
 ```bash
 cd obaas
 
 # Install for tenant 1
-helm upgrade --install obaas-tenant1 . -n tenant1 --create-namespace --force-conflicts --values examples/values-tenant1.yaml
+helm upgrade --install obaas-tenant1 . -n tenant1 --create-namespace [--debug] --values examples/values-tenant1.yaml
 
 # Install for tenant 2
-helm upgrade --install obaas-tenant2 . -n tenant2 --create-namespace --force-conflicts --values examples/values-tenant2.yaml
+helm upgrade --install obaas-tenant2 . -n tenant2 --create-namespace [--debug] --values examples/values-tenant2.yaml
 
 # Install for tenant N...
-helm upgrade --install obaas-tenantN . -n tenantN --create-namespace --force-conflicts --values examples/values-tenantN.yaml
+helm upgrade --install obaas-tenantN . -n tenantN --create-namespace [--debug] --values examples/values-tenantN.yaml
 ```
 
 :::tip Example Configurations
 See `obaas/examples/` directory for complete example values files for different scenarios.
 :::
 
-#### Step 3: Install OBaaS
-
-After prerequisites are installed and your values file is ready, install OBaaS.
-
 ```bash
-cd obaas
-
-# Install for tenant 1
-helm upgrade --install obaas-tenant1 . -n tenant1 --create-namespace --force-conflicts --values examples/values-tenant1.yaml
-
-# Install for tenant 2
-helm upgrade --install obaas-tenant2 . -n tenant2 --create-namespace --force-conflicts --values examples/values-tenant2.yaml
-
 # Monitor the installation
 kubectl get pods -n obaas-tenant1 -w
 ```
@@ -161,7 +155,7 @@ kubectl get pods -n obaas-tenant1 -w
 It may take 5-10 additional minutes for all pods to reach Running state.
 :::
 
-#### Step 5: Verify OBaaS Installation
+#### Step 3: Verify OBaaS Installation
 
 After installation completes, verify all components are running:
 
