@@ -54,7 +54,7 @@ https://oss.oracle.com/licenses/upl. -->
                 <configuration>
                     <images>
                         <image>
-                            <name>my-repository/checks:${project.version}</name>
+                            <name>${image.registry}/checks:${project.version}</name>
                             <build>
                                 <from>ghcr.io/oracle/openjdk-image-obaas:21</from>
                                 <assembly>

@@ -1,0 +1,89 @@
+{{/*
+Copyright (c) 2024, 2025, Oracle and/or its affiliates.
+Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+*/}}
+
+{{- $privAuthNSecret := include "obaas.database.privAuthN.secretName" . }}
+{{- $dbAuthNSecret := include "obaas.database.authN.secretName" . }}
+{{- $walletSecret := include "obaas.database.walletSecret" . }}
+{{- if and $privAuthNSecret $dbAuthNSecret }}
+---
+# Database Initialization Job - creates the application database user if it doesn't exist
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "obaas-app.fullname" . }}-db-init-{{ .Release.Revision }}
+  labels:
+    app.kubernetes.io/component: database
+    {{- include "obaas-app.labels" . | nindent 4 }}
+spec:
+  ttlSecondsAfterFinished: 300  # 5 minutes
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: sqlcl-runner
+        image: {{ .Values.database.sqlcl.image.repository | default "container-registry.oracle.com/database/sqlcl" }}:{{ .Values.database.sqlcl.image.tag | default "latest" }}
+        env:
+        - name: TNS_ADMIN
+          value: /app/tns_admin
+        # Privileged credentials (for creating users)
+        - name: PRIV_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ $privAuthNSecret }}
+              key: {{ include "obaas.database.privAuthN.usernameKey" . }}
+        - name: PRIV_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ $privAuthNSecret }}
+              key: {{ include "obaas.database.privAuthN.passwordKey" . }}
+        - name: PRIV_SERVICE
+          valueFrom:
+            secretKeyRef:
+              name: {{ $privAuthNSecret }}
+              key: {{ include "obaas.database.privAuthN.serviceKey" . }}
+        # Application user credentials (user to create)
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ $dbAuthNSecret }}
+              key: {{ include "obaas.database.authN.usernameKey" . }}
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ $dbAuthNSecret }}
+              key: {{ include "obaas.database.authN.passwordKey" . }}
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            attempt=1
+            while [ "$attempt" -lt 60 ]; do
+                sh /opt/oracle/scripts/startup/init.sh
+                if [ $? -eq 0 ]; then
+                  echo "Database user initialization completed successfully"
+                  exit 0
+                fi
+                echo "Waiting for database connectivity ($attempt/60)"
+                sleep 10
+                attempt=$((attempt + 1))
+            done
+            echo "Failed to initialize database user after 60 attempts"
+            exit 1
+        volumeMounts:
+        - name: db-init-scripts
+          mountPath: /opt/oracle/scripts/startup
+        {{- if $walletSecret }}
+        - name: tns-admin
+          mountPath: /app/tns_admin
+        {{- end }}
+      volumes:
+      - name: db-init-scripts
+        configMap:
+          name: {{ include "obaas-app.fullname" . }}-db-init
+      {{- if $walletSecret }}
+      - name: tns-admin
+        secret:
+          secretName: {{ $walletSecret }}
+      {{- end }}
+{{- end }}
