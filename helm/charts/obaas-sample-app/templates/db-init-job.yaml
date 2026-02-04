@@ -85,5 +85,6 @@ spec:
       - name: tns-admin
         secret:
           secretName: {{ $walletSecret }}
+          optional: true
       {{- end }}
 {{- end }}
