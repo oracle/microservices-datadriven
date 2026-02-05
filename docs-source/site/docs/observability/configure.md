@@ -103,7 +103,7 @@ The versions in the below pom.xml might be outdated.
 
 ### Configure Spring Boot Actuator
 
-When you deploy an application with Oracle Backend for Microservices and AI CLI or Visual Code Extension, provided you included the Spring Actuator in your application, SigNoz will automatically find your application (using the annotations) and start collecting metrics. These metrics will be included in both the Spring Boot Observability dashboard and the Spring Boot Statistic dashboard automatically.
+When you deploy an application with Oracle Backend for Microservices and AI CLI or Visual Code Extension, provided you included the Spring Actuator in your application, SigNoz will automatically find your application (using the annotations) and start collecting metrics. These metrics will be included in both the Spring Boot Observability dashboard and the Spring Boot Statistics dashboard automatically.
 
 To include the Actuator in your application, add the following dependencies to your Maven POM or equivalent:
 
@@ -191,7 +191,7 @@ jdbc:
     include-parameter-values: true
 ```
 
-The Oracle Backend for Microservices and AI platform adds following annotations to your application pods for SigNoz to start scraping the actuator endpoint for metrics.
+The Oracle Backend for Microservices and AI platform adds the following annotations to your application pods for SigNoz to start scraping the actuator endpoint for metrics.
 
 ```yaml
 signoz.io/path: /actuator/prometheus
