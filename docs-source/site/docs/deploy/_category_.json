@@ -2,7 +2,7 @@
   "label": "Deploy",
   "position": 3,
   "link": {
-    "type": "generated-index",
-    "description": "Deploy applications to OBaaS."
+    "type": "doc",
+    "id": "deploy/overview"
   }
 }

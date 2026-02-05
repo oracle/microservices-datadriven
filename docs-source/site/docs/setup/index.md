@@ -1,5 +1,5 @@
 ---
-title: Setup with Terraform and Helm
+title: Setup with Helm or Marketplace
 sidebar_position: 0
 ---
 
@@ -7,37 +7,7 @@ sidebar_position: 0
 
 Choose your preferred deployment method for OBaaS based on your requirements and existing infrastructure.
 
-### Download the Installation Package
-
-:::important
-This content is TBD - Instructions for downloading the OBaaS installation package will be provided here.
-:::
-
-**Download locations:** TBD
-
 ### Deployment Methods
-
-#### Terraform for OCI
-
-**Best for**: Complete infrastructure provisioning on Oracle Cloud Infrastructure
-
-**What you get**:
-
-- **Automated OKE cluster** creation and configuration
-- **Autonomous Database** provisioning (or BYO database support)
-- **Network infrastructure** (VCN, subnets, load balancers, security lists)
-- **Complete OBaaS platform** deployed and configured
-- **One-command deployment** from scratch to running OBaaS platform
-
-**Prerequisites**:
-
-- Terraform CLI installed
-- OCI CLI configured
-- OCI tenancy with appropriate quotas
-
-**[Get started with Terraform →](./tf_cli.md)**
-
----
 
 #### Helm Charts
 
@@ -57,4 +27,21 @@ This content is TBD - Instructions for downloading the OBaaS installation packag
 - kubectl configured
 - Access to Oracle Database (19c+)
 
-**[Get started with Helm Charts →](./helm.md)**
+**[Get started with Helm Charts →](./helm/install.md)**
+
+#### OCI Marketplace
+
+**Best for:** Complete infrastructure provisioning on Oracle Cloud Infrastructure
+
+**What you get**:
+
+- Automated OKE cluster creation and configuration
+- Autonomous Database provisioning (or BYO database support)
+- Network infrastructure (VCN, subnets, load balancers, security lists)
+- Complete OBaaS platform deployed and configured
+
+**Prerequisites:**
+
+- OCI tenancy with appropriate quotas and permissions
+
+**[Get started with OCI Marketplace →](./oci_mp.md)**

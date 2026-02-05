@@ -1,0 +1,375 @@
+---
+title: Helm Chart installation
+sidebar_position: 2
+---
+## Oracle Backend for Microservices and AI (OBaaS) Helm Charts
+
+This document describes how to deploy OBaaS to an existing Kubernetes cluster using Helm charts.
+
+- [Architecture](#architecture) — Two-chart design, components, and cluster layout
+- [Prerequisites](#prerequisites) — Required tools and cluster access
+- [Installation Guide](#installation-guide) — Step-by-step deployment process
+- [Example Configurations](#example-configurations) — Common deployment scenarios:
+  - [Default](#default-configuration-values-defaultyaml) — Quick start with no overrides
+  - [SIDB-FREE Database](#sidb-free-database-values-sidb-freeyaml) — In-cluster Oracle Database Free container
+  - [Existing ADB](#existing-adb-configuration-values-existing-adbyaml) — Connect to a pre-provisioned Autonomous Database
+  - [Multi-Tenant](#multi-tenant-setup-values-tenant1yaml-values-tenant2yaml) — Run multiple OBaaS instances in one cluster
+  - [Namespace and Scope](#namespace-and-scope-configuration-values-namespace-overrideyaml) — Control which namespaces components watch
+  - [SigNoz Existing Secret](#signoz-existing-secret-values-signoz-existing-secretyaml) — Pre-provisioned SigNoz credentials
+  - [Private Registry](#private-registry-configuration-values-private-registryyaml) — Air-gapped and corporate registry setups
+  - [Combining Examples](#combining-examples) — Layer multiple values files together
+- [Uninstallation](#uninstallation) — Teardown instructions
+- [Next Steps](#next-steps) — Deploy applications and configure observability
+
+### Architecture
+
+The deployment uses a two-chart architecture. The charts are separated because the prerequisites install cluster-wide CRDs and operators that must only exist once, while the OBaaS chart contains namespace-scoped resources that can be safely installed multiple times.
+
+**obaas-prereqs** (cluster-scoped, install once):
+
+- **cert-manager** - Automatic TLS certificate management
+- **external-secrets** - Integration with external secret stores
+- **metrics-server** - Container resource metrics
+- **kube-state-metrics** - Kubernetes object metrics
+- **strimzi-kafka-operator** - Kafka cluster operator
+- **oraoperator** - Oracle Database Operator for Kubernetes
+
+Installing this chart multiple times will cause CRD version conflicts, duplicate operator controllers, and resource contention.
+
+**obaas** (namespace-scoped, install per tenant):
+
+- **ingress-nginx** - Namespace-specific ingress controller
+- **Apache APISIX** - API Gateway
+- **Eureka** - Service discovery
+- **Signoz** - Observability stack with ClickHouse
+- **Spring Boot Admin** - Application monitoring
+- **Conductor** - Workflow orchestration
+- **OTMM** - Transaction manager for microservices
+
+Each instance operates independently in its own namespace with its own ingress controller and observability stack.
+
+```tree
+Cluster
+├── obaas-system namespace (prerequisites - install once)
+│   ├── cert-manager
+│   ├── external-secrets
+│   ├── metrics-server
+│   ├── kube-state-metrics
+│   └── strimzi-kafka-operator (manages Kafka CRs across all namespaces)
+├── tenant1 namespace (OBaaS instance 1)
+│   ├── ingress-nginx
+│   ├── APISIX, Eureka, Coherence, etc.
+│   ├── Kafka cluster (CR managed by Strimzi)
+│   └── Signoz + ClickHouse
+└── tenant2 namespace (OBaaS instance 2)
+    ├── ingress-nginx
+    ├── APISIX, Eureka, Coherence, etc.
+    ├── Kafka cluster (CR managed by Strimzi)
+    └── Signoz + ClickHouse
+```
+
+**Namespace behavior:** All OBaaS chart components deploy to the release namespace (specified with the `-n` flag during install). By default, ingress-nginx watches only its own release namespace (`scope.enabled: true`).
+
+**Directory structure:**
+
+```tree
+helm/
+├── obaas-prereqs/         # Cluster-singleton prerequisites (install once per cluster)
+└── obaas/                 # OBaaS application chart (install N times in different namespaces)
+    └── examples/          # Example values files for different scenarios
+```
+
+### Prerequisites
+
+:::warning Important
+Ensure all [prerequisites](./prereqs.md) are met before starting the deployment.
+:::
+
+Verify that you have the required tools installed:
+
+```bash
+# Verify Helm installation
+helm version
+
+# Verify kubectl and cluster access
+kubectl get nodes
+```
+
+### Installation Guide
+
+#### Step 1: Install Prerequisites (Once Per Cluster)
+
+:::warning Cluster-Scoped Installation
+Only install prerequisites once per cluster. Installing multiple times will cause CRD conflicts and duplicate operator controllers.
+:::
+
+```bash
+cd obaas-prereqs
+
+helm upgrade --install obaas-prereqs . -n obaas-system --create-namespace [--debug] [--values <path_to_custom_values>]
+```
+
+Verify all prerequisite pods are running before proceeding:
+
+```bash
+kubectl get pods -n obaas-system
+```
+
+All pods should reach `Running` status within 2-3 minutes.
+
+#### Step 2: Install OBaaS
+
+Choose an example configuration that matches your deployment scenario and install:
+
+```bash
+cd obaas
+
+helm upgrade --install obaas . -f examples/<values-file>.yaml -n <namespace> --create-namespace [--debug]
+```
+
+See [Example Configurations](#example-configurations) below for the full list of available examples.
+
+Monitor the installation:
+
+```bash
+kubectl get pods -n <namespace> -w
+```
+
+:::tip First Deployment
+It may take 5-10 additional minutes for all pods to reach Running state.
+:::
+
+#### Step 3: Verify Installation
+
+After installation completes, verify all components are running:
+
+```bash
+kubectl get pods -A
+```
+
+**Expected results:**
+
+- All pods in `Running` state
+- Services with ClusterIP or LoadBalancer IPs assigned
+- Ingress configured with your hostname
+
+### Example Configurations
+
+#### Default Configuration (`values-default.yaml`)
+
+Minimal configuration with no overrides. All subcharts use their default settings.
+
+**Use case:** Quick start, development, testing
+
+```bash
+helm upgrade --install obaas . -f examples/values-default.yaml -n obaas --create-namespace [--debug]
+```
+
+#### SIDB-FREE Database (`values-sidb-free.yaml`)
+
+Uses Oracle Database Free as an in-cluster container. This is the default database type.
+
+**Use case:** Development, testing, standalone deployments
+
+```bash
+helm upgrade --install obaas . -f examples/values-sidb-free.yaml -n obaas --create-namespace [--debug]
+```
+
+#### Existing ADB Configuration (`values-existing-adb.yaml`)
+
+Connects to an existing OCI Autonomous Database (ADB-S) instead of deploying a database container.
+
+**Use case:** Production deployments using a pre-provisioned OCI Autonomous Database
+
+<details>
+<summary>Prerequisites: Create required secrets before installing</summary>
+
+1. Create the OCI API key secret:
+
+   ```bash
+   python3 tools/oci_config.py --namespace NAMESPACE [--config CONFIG] [--profile PROFILE]
+   ```
+
+2. Create the privileged authentication secret for the ADMIN user:
+
+   ```bash
+   kubectl -n NAMESPACE create secret generic db-priv-authn \
+     --from-literal=username=ADMIN \
+     --from-literal=password=<ADMIN PASSWORD> \
+     --from-literal=service=<DBNAME>_TP
+   ```
+
+</details>
+
+**Installation:**
+
+```bash
+helm upgrade --install obaas . \
+  -n NAMESPACE \
+  -f examples/values-existing-adb.yaml \
+  --set database.oci.ocid=<ADB_OCID> \
+  [--debug]
+```
+
+#### Multi-Tenant Setup (`values-tenant1.yaml`, `values-tenant2.yaml`)
+
+Configures unique IngressClass and credentials for each tenant to allow multiple OBaaS instances in the same cluster.
+
+**Use case:** Multi-tenant deployments, namespace isolation
+
+Each tenant **must** have unique values for the following to avoid conflicts:
+
+- `controller.ingressClass`
+- `controller.ingressClassResource.name`
+- `controller.ingressClassResource.controllerValue`
+- `controller.electionID`
+
+```bash
+# Install first tenant
+helm upgrade --install obaas-tenant1 . -n tenant1 -f examples/values-tenant1.yaml --create-namespace [--debug]
+
+# Install second tenant
+helm upgrade --install obaas-tenant2 . -n tenant2 -f examples/values-tenant2.yaml --create-namespace [--debug]
+```
+
+#### Namespace and Scope Configuration (`values-namespace-override.yaml`)
+
+Demonstrates how to configure the ingress-nginx watching scope. All OBaaS components deploy to the release namespace (specified with the `-n` flag).
+
+**Use case:** Controlling which namespaces components watch
+
+```bash
+helm upgrade --install obaas . -f examples/values-namespace-override.yaml -n obaas-platform --create-namespace [--debug]
+```
+
+#### SigNoz Existing Secret (`values-signoz-existing-secret.yaml`)
+
+Uses a pre-existing Kubernetes secret for SigNoz admin authentication instead of auto-generating one.
+
+**Use case:** GitOps workflows, pre-provisioned credentials
+
+```bash
+# Create the secret first
+kubectl create secret generic my-signoz-secret \
+  --from-literal=email=admin@mydomain.com \
+  --from-literal=password=my-secure-password \
+  -n obaas
+
+# Install with the example
+helm upgrade --install obaas . -f examples/values-signoz-existing-secret.yaml -n obaas [--debug]
+```
+
+#### Private Registry Configuration (`values-private-registry.yaml`)
+
+Uses a private container registry for all images with authentication.
+
+**Use case:** Air-gapped environments, corporate registries, security compliance
+
+**Prerequisites:**
+
+1. Mirror all required images to your private registry.
+2. Create an image pull secret:
+
+   ```bash
+   kubectl create secret docker-registry myregistry-secret \
+     --docker-server=myregistry.example.com \
+     --docker-username=<username> \
+     --docker-password=<password> \
+     --docker-email=<email>
+   ```
+
+```bash
+helm upgrade --install obaas . -f examples/values-private-registry.yaml [--debug]
+```
+
+<details>
+<summary>Image registry override details</summary>
+
+Each subchart has its own image configuration that must be set explicitly.
+
+**Subcharts with a dedicated registry field** (set to your registry URL):
+
+- **ingress-nginx**: `controller.image.registry`
+- **signoz**: `global.imageRegistry`
+- **apisix etcd**: `apisix.etcd.image.registry`
+
+**OBaaS components requiring the full repository path** (include registry in `image.repository`):
+
+- **eureka**, **admin-server**, **conductor-server**, **otmm**, **oracle-database-exporter**
+- **database** (for SIDB-FREE/ADB-FREE)
+- **apisix**: `apisix.image.repository`, `apisix.initContainer.image`
+
+Image pull secrets are propagated to subcharts via `global.imagePullSecrets`. See `values-private-registry.yaml` for a complete example.
+
+:::note
+Cluster-singleton prerequisites (cert-manager, external-secrets, metrics-server, kube-state-metrics, strimzi-kafka-operator) have their own image configuration in the `obaas-prereqs` chart.
+:::
+
+</details>
+
+#### Combining Examples
+
+You can layer multiple values files to combine configurations:
+
+```bash
+# Combine multi-tenant and private registry configurations
+helm upgrade --install obaas-tenant1 . \
+  -f examples/values-tenant1.yaml \
+  -f examples/values-private-registry.yaml \
+  -n tenant1 --create-namespace [--debug]
+```
+
+Or create a custom values file:
+
+```yaml
+# my-custom-values.yaml
+global:
+  imagePullSecrets:
+    - name: myregistry-secret
+
+# Disable components you don't need
+ai-optimizer:
+  enabled: false
+
+signoz:
+  enabled: false
+```
+
+### Uninstallation
+
+To remove OBaaS from your cluster:
+
+:::warning Data Loss
+Uninstalling will delete all resources. Ensure you have backups of any important data before proceeding.
+:::
+
+**Step 1: Uninstall OBaaS instances first:**
+
+```bash
+helm uninstall obaas -n obaas-prod
+helm uninstall obaas-tenant1 -n tenant1
+helm uninstall obaas-tenant2 -n tenant2
+```
+
+**Step 2: Delete namespaces (optional):**
+
+```bash
+kubectl delete namespace obaas-prod tenant1 tenant2
+```
+
+**Step 3: Uninstall prerequisites (only if removing entirely):**
+
+```bash
+helm uninstall obaas-prereqs -n obaas-system
+```
+
+:::danger Warning
+Uninstalling prerequisites will affect **all** OBaaS instances in the cluster. Only do this if you're removing OBaaS completely.
+:::
+
+### Next Steps
+
+Once OBaaS is running, you can:
+
+- [Deploy your application](../../deploy/deploy.md) using the OBaaS platform
+- [Configure observability](../../observability/configure.md) for metrics, logs, and traces

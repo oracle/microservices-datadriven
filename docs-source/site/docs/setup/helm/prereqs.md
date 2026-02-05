@@ -1,19 +1,20 @@
 ---
 title: Prerequisites
-sidebar_position: 2
+sidebar_position: 1
 ---
-
-# Prerequisites for Oracle Backend for Microservices and AI
-
 ## Overview
 
-Before installing OBaaS 2.0.0-M4, ensure your environment meets all prerequisites. Installing without meeting these requirements will result in deployment failures.
+Before installing Oracle Backend for Microservices and AI (OBaaS), ensure your environment meets all prerequisites. Installing without meeting these requirements will result in deployment failures.
 
 :::danger Critical
 If your environment does not meet the prerequisites, the installation will fail. Do not proceed with installation until you have confirmed your environment meets all requirements.
 :::
 
 ## System Requirements
+
+### Oracle OCI
+
+If you are installing into Oracle OCI you need the right [OCI policies →](../oci_policies.md) in place.
 
 ### Kubernetes Cluster
 
@@ -28,7 +29,6 @@ A CNCF-compliant Kubernetes cluster with the following specifications:
 - Minimum 3 worker nodes
 - At least 2 OCPU and 32GB memory per worker node
 - Working storage provider with storage class for RWX (ReadWriteMany) PVs
-- Functioning ingress controller
 
 **Capacity planning:**
 
@@ -42,23 +42,32 @@ Oracle Kubernetes Engine (OKE) "Quick Create/Enhanced" cluster is the recommende
 
 ### Oracle Database
 
-An Oracle Database instance with the following requirements:
+You must have access to an Oracle Database instance (19c or later). The following database types are supported:
 
-**Database version:**
+- Oracle Autonomous Database (ADB-S or ADB-D)
+- Oracle Database on-premise or in the cloud
 
-- Oracle Database 19c or later (minimum)
-- Oracle Database 23ai (required for AI features)
+**Version requirements:**
+
+| Minimum | Recommended |
+|---------|-------------|
+| Oracle Database 19c | Oracle Autonomous Database 26ai ATP |
+
+:::info AI Features
+To use OBaaS AI capabilities, you must use Oracle Database 23ai or later. Earlier versions do not support AI features.
+:::
 
 **Recommended configuration:**
 
-- Oracle Autonomous Database (ADB) 23ai ATP
 - 2 ECPU
-- 1TB storage
+- 1 TB storage
 - Secure access from anywhere enabled
 
-:::info AI Features
-To use OBaaS AI capabilities, you must use Oracle Database 23ai. Earlier versions do not support AI features.
-:::
+**Access requirements:**
+
+- ADMIN or SYSTEM credentials (required for schema creation)
+- Connection details: host, port, and service name
+
 
 ### Private Image Repository (Optional)
 
@@ -72,10 +81,10 @@ If using a private container image repository:
 
 **Helper script:**
 
-OBaaS provides the `private_repo_helper.sh` script to assist with copying images to your private repository.
+OBaaS provides the `mirror-images.sh` script to assist with copying images to your private repository.
 
 ```bash
-./private_repo_helper.sh
+helm/tools/mirror-images.sh
 ```
 
 ## Verification
@@ -103,12 +112,6 @@ kubectl get storageclass
 
 Ensure you have a storage class that supports RWX (ReadWriteMany) access mode.
 
-Verify ingress controller:
-
-```bash
-kubectl get ingressclass
-```
-
 ### Verify Default Namespaces
 
 For a fresh OKE cluster, verify the default namespaces are present:
@@ -119,7 +122,7 @@ kubectl get ns
 
 Expected output:
 
-```
+```text
 NAME            STATUS   AGE
 default         Active   4m52s
 kube-node-lease Active   4m52s
