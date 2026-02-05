@@ -63,10 +63,10 @@ declare -a SERVICE_ACCOUNT_LIST=(
 generate_oracle_password() {
     # Oracle password requirements:
     # - 12-30 characters (we'll use 20)
-    # - At least one uppercase letter
-    # - At least one lowercase letter
-    # - At least one digit
-    # - At least one special character from: # _ $
+    # - At least two uppercase letters
+    # - At least two lowercase letters
+    # - At least two digits
+    # - At least two special characters from: # _
     # - Cannot start with a digit or special character
     # - Cannot contain the username
 
@@ -83,13 +83,17 @@ generate_oracle_password() {
     # Start with an uppercase letter (Oracle requirement: can't start with digit/special)
     generated_password+="${upper_chars:RANDOM % ${#upper_chars}:1}"
 
-    # Ensure we have at least one of each required type in positions 2-4
+    # Ensure we have at least 2 of each required type
+    generated_password+="${upper_chars:RANDOM % ${#upper_chars}:1}"
+    generated_password+="${lower_chars:RANDOM % ${#lower_chars}:1}"
     generated_password+="${lower_chars:RANDOM % ${#lower_chars}:1}"
     generated_password+="${digit_chars:RANDOM % ${#digit_chars}:1}"
+    generated_password+="${digit_chars:RANDOM % ${#digit_chars}:1}"
+    generated_password+="${special_chars:RANDOM % ${#special_chars}:1}"
     generated_password+="${special_chars:RANDOM % ${#special_chars}:1}"
 
     # Fill remaining length with random characters from all sets
-    for ((index=4; index<password_length; index++)); do
+    for ((index=8; index<password_length; index++)); do
         generated_password+="${all_chars:RANDOM % ${#all_chars}:1}"
     done
 
