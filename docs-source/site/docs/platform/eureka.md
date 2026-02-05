@@ -24,7 +24,7 @@ Open the [Eureka web user interface](http://localhost:8761)
 
 ### Enable a Spring Boot application for Eureka
 
-To enable a Spring Boot application, you need to add the following dependency
+To enable a Spring Boot application, you need to add the following dependency.
 
 ```xml
 <dependency>
@@ -50,7 +50,7 @@ eureka:
 
 ### Enable a Helidon application for Eureka
 
-To enable a Helidon application, you need to add the following dependency
+To enable a Helidon application, you need to add the following dependency.
 
 ```xml
 <dependency>

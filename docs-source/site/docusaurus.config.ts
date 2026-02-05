@@ -14,7 +14,6 @@ const config: Config = {
     v4: true, // Improve compatibility with the upcoming Docusaurus v4
   },
 
-  // TODO: Set the production url of your site here
   url: 'https://oracle.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
@@ -79,7 +78,7 @@ const config: Config = {
         },
         {
           type: 'docsVersionDropdown',
-          versions: ['current' ]
+          versions: ['current']
         },
         {
           href: 'https://github.com/oracle/microservices-datadriven',
