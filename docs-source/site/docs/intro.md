@@ -37,3 +37,10 @@ Deploy on Oracle Cloud Infrastructure, other cloud providers, or hybrid environm
 ### Simplified Operations
 
 OBaaS vastly simplifies the task of building, testing, and operating microservices platforms. From development through production, automated workflows and integrated tooling streamline every phase of the application lifecycle.
+
+## Get Started
+
+Ready to try OBaaS? Choose your path:
+
+- **[Setup with Helm or OCI Marketplace →](./setup/index.md)** — Install the platform on your Kubernetes cluster
+- **[Deploy an Application →](./deploy/overview.md)** — Deploy your microservices to an existing OBaaS installation

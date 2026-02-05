@@ -22,7 +22,7 @@ Choose your preferred deployment method for OBaaS based on your requirements and
 
 **Prerequisites**:
 
-- Existing Kubernetes cluster (1.24+)
+- Existing Kubernetes cluster (1.33+)
 - Helm 3.8+ installed
 - kubectl configured
 - Access to Oracle Database (19c+)

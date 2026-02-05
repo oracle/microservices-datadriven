@@ -22,7 +22,7 @@ A CNCF-compliant Kubernetes cluster with the following specifications:
 
 **Cluster version:**
 
-- Kubernetes 1.33.1 or compatible version
+- Kubernetes 1.33+
 
 **Infrastructure requirements:**
 

@@ -95,8 +95,20 @@ const config: Config = {
           title: 'Docs',
           items: [
             {
-              label: 'Tutorial',
+              label: 'Introduction',
               to: '/docs/intro',
+            },
+            {
+              label: 'Setup',
+              to: '/docs/setup',
+            },
+            {
+              label: 'Deploy',
+              to: '/docs/deploy/overview',
+            },
+            {
+              label: 'Observability',
+              to: '/docs/observability',
             },
           ],
         },
@@ -114,11 +126,11 @@ const config: Config = {
           items: [
             {
               label: 'Oracle Blogs',
-              to: 'https://blogs.oracle.com/',
+              href: 'https://blogs.oracle.com/',
             },
             {
               label: 'Oracle LiveLabs',
-              to: 'https://livelabs.oracle.com/pls/apex/r/dbpm/livelabs/home'
+              href: 'https://livelabs.oracle.com/pls/apex/r/dbpm/livelabs/home'
             },
             {
               label: 'GitHub',

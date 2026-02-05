@@ -14,8 +14,6 @@ MicroTx supports the following consistency models:
 - Long Running Actions (LRA)
 - Try-Confirm/Cancel (TCC)
 
-### Installing Oracle Transaction Manager for Microservices
-
 ### Use Oracle Transaction Manager for Microservices with Spring Boot
 
 To use MicroTx in your Spring Boot applications, include the following dependency in your `pom.xml` or equivalent:
