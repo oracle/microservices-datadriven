@@ -17,12 +17,12 @@ The OBaaS Helm charts deploy a complete microservices platform including:
 - **metrics-server** - Container resource metrics
 - **kube-state-metrics** - Kubernetes object metrics
 - **strimzi-kafka-operator** - Kafka cluster operator
+- **coherence-operator** - Distributed caching
 
 **OBaaS Chart** (namespace-scoped, install per tenant):
 
 - **ingress-nginx** - Namespace-specific ingress controller
 - **Apache APISIX** - API Gateway
-- **Oracle Coherence** - Distributed caching
 - **Eureka** - Service discovery
 - **Signoz** - Observability stack with ClickHouse
 - **Spring Boot Admin** - Application monitoring
