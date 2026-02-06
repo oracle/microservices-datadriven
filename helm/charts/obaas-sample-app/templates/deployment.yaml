@@ -260,6 +260,7 @@ spec:
         - name: tns-admin
           secret:
             secretName: {{ $walletSecret }}
+            optional: true
       {{- end }}
       {{- with .Values.volumes }}
         {{- toYaml . | nindent 8 }}

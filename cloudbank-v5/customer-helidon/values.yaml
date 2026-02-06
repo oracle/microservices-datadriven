@@ -1,0 +1,39 @@
+# customer-helidon Helm Configuration
+fullnameOverride: "customer-helidon"
+
+image:
+  # Registry provided by user
+  repository: "REGION.ocir.io/TENANCY/cloudbank-v5/customer-helidon"
+  # Version from pom.xml
+  tag: "5.0-SNAPSHOT"
+
+obaas:
+  # Release name confirmed via 'helm list'
+  releaseName: "obaas-tenant1"  
+  framework: "HELIDON"
+
+helidon:
+  datasource:
+    name: "customer"
+  otel:
+    serviceName: "customer-helidon"
+
+database:
+  # OMITTING name to prevent db-init job from running (since we don't have admin creds)
+  # name: "obaasclient" 
+  
+  # Explicitly using the verified wallet secret
+  walletSecret: "obaas-tenant1-adb-tns-admin-5"
+  
+  # Explicitly using the existing tenant db secret found in the cluster
+  authN:
+    secretName: "obaas-tenant1-db-authn"
+  privAuthN:
+    secretName: "obaas-tenant1-db-authn"
+
+# Eureka configuration is largely handled by the chart templates, 
+# but we can explicitly set the app name if needed.
+eureka:
+  enabled: true
+  instance:
+    appname: "helidon-customer-service"
