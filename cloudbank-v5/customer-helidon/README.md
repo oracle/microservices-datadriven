@@ -252,3 +252,53 @@ COPY --from=build /helidon/target/*.jar app.jar
 CMD ["java", "-jar", "app.jar"]
 EXPOSE 8080
 ```
+
+## Deploying to OBaaS (Oracle Backend for Spring Boot)
+
+This service is designed to be deployed as part of the CloudBank application in an OBaaS environment.
+
+### 1. Prerequisites
+- **OBaaS Installed**: Ensure the OBaaS platform is running in your Kubernetes cluster.
+- **Database Secrets**: The service relies on existing secrets for database credentials (e.g., `obaas-tenant1-db-authn`, `obaas-tenant1-adb-tns-admin`).
+- **Helm**: Ensure Helm is installed.
+
+### 2. Configuration (`values.yaml`)
+A `values.yaml` file is provided to configure the service. You **must** verify/update the following parameters before deployment:
+
+| Parameter | Description | Value in `values.yaml` |
+| :--- | :--- | :--- |
+| `image.repository` | OCI Registry path for the image | e.g., `us-phoenix-1.ocir.io/mytenancy/customer-helidon` |
+| `image.tag` | Image version tag | `5.0-SNAPSHOT` |
+| `database.walletSecret` | Secret containing the Autonomous Database wallet | `obaas-tenant1-adb-tns-admin` |
+| `database.authN.secretName` | Secret containing DB credentials for the app | `obaas-tenant1-db-authn` |
+| `database.privAuthN.secretName` | Secret containing DB credentials for Liquibase | `obaas-tenant1-db-authn` |
+| `obaas.framework` | Framework type (Required for correct startup) | `HELIDON` |
+
+### 3. Build and Push
+Use the following command to build the container image and push it to your OCI registry:
+
+```bash
+export REGISTRY="<your-registry-region>.ocir.io/<your-tenancy>/<your-repo>"
+mvn clean package k8s:build k8s:push -Dimage.registry=$REGISTRY -Dimage.tag=5.0-SNAPSHOT
+```
+
+### 4. Deploy using Helm
+Deploy the service using the shared `obaas-sample-app` chart:
+
+```bash
+helm upgrade --install customer-helidon ../../helm/charts/obaas-sample-app \
+  -f values.yaml \
+  -n tenant1
+```
+
+### 5. Verification
+After deployment, verify the service using the provided test script:
+
+```bash
+# 1. Port forward the service
+kubectl port-forward svc/customer-helidon 8080:8080 -n tenant1
+
+# 2. Run the test script (in a separate terminal)
+./test-endpoints.sh
+```
+
