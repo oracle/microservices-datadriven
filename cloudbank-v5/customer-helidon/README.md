@@ -269,10 +269,12 @@ A `values.yaml` file is provided to configure the service. You **must** verify/u
 | :--- | :--- | :--- |
 | `image.repository` | OCI Registry path for the image | e.g., `us-phoenix-1.ocir.io/mytenancy/customer-helidon` |
 | `image.tag` | Image version tag | `5.0-SNAPSHOT` |
-| `database.walletSecret` | Secret containing the Autonomous Database wallet | `obaas-tenant1-adb-tns-admin` |
-| `database.authN.secretName` | Secret containing DB credentials for the app | `obaas-tenant1-db-authn` |
-| `database.privAuthN.secretName` | Secret containing DB credentials for Liquibase | `obaas-tenant1-db-authn` |
+| `database.walletSecret` | Secret containing the Autonomous Database wallet | `<release>-adb-tns-admin` |
+| `database.authN.secretName` | Secret containing DB credentials for the app | `<release>-db-authn` |
+| `database.privAuthN.secretName` | Secret containing DB credentials for Liquibase | `adb-admin-creds` |
 | `obaas.framework` | Framework type (Required for correct startup) | `HELIDON` |
+
+> **Note:** The secrets `adb-admin-creds` and `<release>-db-authn` are typically created by the `3-k8s_db_secrets.sh` script during the installation process. Ensure these exist in your namespace before deployment.
 
 ### 3. Build and Push
 Use the following command to build the container image and push it to your OCI registry:
