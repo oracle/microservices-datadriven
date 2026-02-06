@@ -13,6 +13,7 @@ This document describes how to deploy OBaaS to an existing Kubernetes cluster us
   - [Default](#default-configuration-values-defaultyaml) — Quick start with no overrides
   - [SIDB-FREE Database](#sidb-free-database-values-sidb-freeyaml) — In-cluster Oracle Database Free container
   - [Existing ADB](#existing-adb-configuration-values-existing-adbyaml) — Connect to a pre-provisioned Autonomous Database
+  - [Other Existing Database](#other-existing-database-values-byodbyaml) - Connect to another type of pre-existing Oracle AI Database, for example an Oracle Base DB, or an on-premises Oracle Database
   - [Multi-Tenant](#multi-tenant-setup-values-tenant1yaml-values-tenant2yaml) — Run multiple OBaaS instances in one cluster
   - [Namespace and Scope](#namespace-and-scope-configuration-values-namespace-overrideyaml) — Control which namespaces components watch
   - [SigNoz Existing Secret](#signoz-existing-secret-values-signoz-existing-secretyaml) — Pre-provisioned SigNoz credentials
@@ -208,6 +209,59 @@ helm upgrade --install obaas . \
   -n NAMESPACE \
   -f examples/values-existing-adb.yaml \
   --set database.oci.ocid=<ADB_OCID> \
+  [--debug]
+```
+
+#### Other Existing Database (`values-byodb.yaml`)
+
+Connects to an existing Oracle AI Database using a connect string and user credentials.
+Do not use this option for an Oracle Autonomous Database.  This is a good option for
+an Oracle Base DB or an on-premises Oracle AI Database.
+
+**Use case:** Production deployments using a pre-existing Oracle AI Database (non-Autonomous)
+
+<details>
+<summary>Prerequisites: Create required secrets before installing</summary>
+
+1. Create the privileged authentication secret for an appropriate admin user:
+
+   ```bash
+   kubectl -n NAMESPACE create secret generic obaas-db-priv-authn \
+     --from-literal=username=SYSTEM \
+     --from-literal=password=<SYSTEM PASSWORD> \
+     --from-literal=service=your.service.name
+   ```
+
+  The admin user should be a user with DBA privileges that can be used to
+  create application users and grant them appropriate privileges.  For example,
+  the SYSTEM user is a good choice.  This user should not require the 
+  SYSDBA role.
+
+  This user should have the following permissions:
+
+  ```
+  SELECT WITH ADMIN OPTION on:
+    DBA_TABLESPACE_USAGE_METRICS, DBA_TABLESPACES,
+    GV_$SYSTEM_WAIT_CLASS, GV_$ASM_DISKGROUP_STAT, GV_$DATAFILE,
+    GV_$SYSSTAT, GV_$PROCESS, GV_$WAITCLASSMETRIC, GV_$SESSION,
+    GV_$RESOURCE_LIMIT, GV_$PARAMETER, GV_$DATABASE,
+    GV_$SQLSTATS, GV_$SYSMETRIC, V_$DIAG_ALERT_EXT
+
+  EXECUTE WITH GRANT OPTION on:
+    SYS.DBMS_AQ, SYS.DBMS_AQADM, SYS.DBMS_AQIN,
+    SYS.DBMS_AQIN, SYS.DBMS_AQJMS_INTERNAL
+  ```
+
+  2. Review and update the database connection details in `examples/values-byodb.yaml`
+
+</details>
+
+**Installation:**
+
+```bash
+helm upgrade --install obaas . \
+  -n NAMESPACE \
+  -f examples/values-byodb.yaml 
   [--debug]
 ```
 
