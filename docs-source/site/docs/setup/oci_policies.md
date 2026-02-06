@@ -5,7 +5,7 @@ sidebar_position: 3
 
 ## Overview
 
-The following policies needs to be in place to be able to install Oracle Backend for Microservices and AI. Top level and their dependencies listed.
+The following policies need to be in place to install Oracle Backend for Microservices and AI.
 
 ### Oracle Container Engine for Kubernetes
 
@@ -27,18 +27,12 @@ Allow group `<group-name>` to manage cluster-family in `<location>`
 ```text
 Allow group `<group-name>` to manage vcns in `<location>`
 ├── Allow group `<group-name>` to manage route-tables in `<location>`
-├── Allow group `<group-name>` to manage-security-lists in `<location>`
-├── Allow group `<group-name>` to manage-dhcp-options in `<location>`
-
-
-Allow group `<group-name>` to manage vcns in `<location>`
-Allow group `<group-name>` to manage route-tables in `<location>`
-Allow group `<group-name>` to manage security-lists in `<location>`
-Allow group `<group-name>` to manage dhcp-options in `<location>`
-Allow group `<group-name>` to manage nat-gateways in `<location>`
-Allow group `<group-name>` to manage service-gateways in `<location>`
-Allow group `<group-name>` to manage network-security-groups in `<location>`
-Allow group `<group-name>` to manage subnets in `<location>`
+├── Allow group `<group-name>` to manage security-lists in `<location>`
+├── Allow group `<group-name>` to manage dhcp-options in `<location>`
+├── Allow group `<group-name>` to manage nat-gateways in `<location>`
+├── Allow group `<group-name>` to manage service-gateways in `<location>`
+├── Allow group `<group-name>` to manage network-security-groups in `<location>`
+└── Allow group `<group-name>` to manage subnets in `<location>`
 ```
 
 ### Container Registry
