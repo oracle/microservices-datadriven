@@ -3,7 +3,7 @@ fullnameOverride: "customer-helidon"
 
 image:
   # Registry provided by user
-  repository: "us-phoenix-1.ocir.io/maacloud/cloudbank-v5/customer-helidon"
+  repository: "REGION.ocir.io/TENANCY/cloudbank-v5/customer-helidon"
   # Version from pom.xml
   tag: "5.0-SNAPSHOT"
 
