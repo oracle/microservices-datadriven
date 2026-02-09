@@ -191,6 +191,10 @@ Connects to an existing OCI Autonomous Database (ADB-S) instead of deploying a d
    python3 tools/oci_config.py --namespace NAMESPACE [--config CONFIG] [--profile PROFILE]
    ```
 
+   :::note
+   Python 3.12 or later is required to run the `oci_config.py` script.
+   :::
+
 2. Create the privileged authentication secret for the ADMIN user:
 
    ```bash
