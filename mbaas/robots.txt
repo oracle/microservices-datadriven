@@ -1,4 +1,0 @@
-User-agent: *
-Disallow: /tags/*
-
-Sitemap: https://oracle.github.io/microservices-datadriven/mbaas/sitemap.xml
