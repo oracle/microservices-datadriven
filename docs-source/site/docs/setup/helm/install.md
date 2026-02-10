@@ -195,13 +195,13 @@ Connects to an existing OCI Autonomous Database (ADB-S) instead of deploying a d
    Python 3.12 or later is required to run the `oci_config.py` script.
    :::
 
-2. Create the privileged authentication secret for the ADMIN user:
+2. Create the privileged authentication secret for the ADMIN user, replace DBNAME with the name of your database:
 
    ```bash
-   kubectl -n NAMESPACE create secret generic db-priv-authn \
-     --from-literal=username=ADMIN \
-     --from-literal=password=<ADMIN PASSWORD> \
-     --from-literal=service=<DBNAME>_TP
+    kubectl -n NAMESPACE create secret generic DBNAME-db-priv-authn \
+      --from-literal=username=ADMIN \
+      --from-literal=password=YOUR_ADMIN_PASSWORD \
+      --from-literal=service=DBNAME_tp
    ```
 
 </details>
