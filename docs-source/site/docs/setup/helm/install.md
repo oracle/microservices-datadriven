@@ -212,7 +212,8 @@ Connects to an existing OCI Autonomous Database (ADB-S) instead of deploying a d
 helm upgrade --install obaas . \
   -n NAMESPACE \
   -f examples/values-existing-adb.yaml \
-  --set database.oci.ocid=<ADB_OCID> \
+  --set database.oci.ocid=ADB_OCID \
+  --set database.privAuthN.secretName=NAME_OF_SECRET
   [--debug]
 ```
 
