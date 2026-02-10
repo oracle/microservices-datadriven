@@ -38,7 +38,7 @@ public class OpenTelemetryJULHandler extends Handler {
         Context currentContext = Context.current();
 
         var logBuilder = otelLogger.logRecordBuilder()
-            .setContext(currentContext) // <--- THIS IS THE KEY
+            .setContext(currentContext)
             .setBody(formatMessage(record))
             .setSeverity(mapLevel(record.getLevel()))
             .setSeverityText(record.getLevel().getName())
