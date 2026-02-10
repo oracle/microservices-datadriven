@@ -50,8 +50,18 @@ resources:
 
 database:
   name: ""         # e.g., mydb (derives priv-authn, walletName, and authN.secretName)
-  authN:
-    secretName: ""  # default: {{ database.name }}-{{ Release.Name }}-db-authn
+  # -- If authN/privAuthN is not specified this helm will try to use {{ database.name }}-{{ Release.Name }}...
+  # authN:
+  #   secretName: ""
+  #   usernameKey: "username"
+  #   passwordKey: "password"
+  #   serviceKey: "service"
+  #-- Specify privAuthN when you have pre-created this secret.
+  # privAuthN:
+  #   secretName: ""
+  #   usernameKey: "username"
+  #   passwordKey: "password"
+  #   serviceKey: "service"
   # Advanced Queuing (AQ) permissions for messaging (e.g., JMS)
   aq:
     enabled: false
