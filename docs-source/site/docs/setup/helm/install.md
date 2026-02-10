@@ -80,6 +80,48 @@ helm/
     └── examples/          # Example values files for different scenarios
 ```
 
+### Database Use Lifecycle
+
+During installation, the Helm chart sets up two database users with different privilege levels:
+
+| User | Purpose | Created by |
+|------|---------|------------|
+| **SYSTEM** (non-ADB) or **ADMIN** (ADB) | Privileged user for one-time database initialization | Pre-exists (external DBs) or auto-generated (container DBs) |
+| **OBAAS_USER** | Application-level user for runtime platform operations | Created by the init script during first install |
+
+**OBAAS_USER** is the unprivileged database identity used by OBaaS components at runtime. The privileged user is only used once — to create OBAAS_USER and grant it the
+minimum permissions the platform needs.
+
+<details>
+
+<summary>What OBAAS_USER is granted</summary>
+
+The init script grants the following permissions:
+
+- **DB_DEVELOPER_ROLE** (Oracle 21c+). On Oracle 19c or earlier, falls back to `CREATE SESSION`.
+- **SELECT on monitoring views** Required by the Oracle Database Exporter for Prometheus metrics.
+- **Unlimited quota** on its default tablespace.
+- **ADB only:** `EXECUTE ON DBMS_CLOUD_AI` and `EXECUTE ON DBMS_CLOUD_PIPELINE` for the AI Optimizer feature.
+
+</details>
+
+<details>
+
+<summary>Which components use OBAAS_USER</summary>
+
+Two components read the `<release>-db-authn` Secret at runtime:
+
+- **Oracle Database Exporter** — connects as OBAAS_USER to query the monitoring views for Prometheus metrics.
+- **Database init container** — uses the credentials during initialization to create the user and verify connectivity.
+
+Other platform components (Eureka, Admin Server, Conductor) connect to the database through their own Spring Boot datasource configuration and do not use OBAAS_USER.
+
+</details>
+
+:::tip Bring Your Own Application User
+To use a pre-existing database user instead of the auto-generated OBAAS_USER, create a Secret with your credentials and reference it via `database.authN.secretName`. The init script will skip user creation if the named user already exists in `DBA_USERS`.
+:::
+
 ### Prerequisites
 
 :::warning Important
