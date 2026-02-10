@@ -154,6 +154,8 @@ spec:
               value: "false"
             - name: OTEL_METRICS_EXPORTER
               value: "otlp"
+            - name: OTEL_LOGS_EXPORTER
+              value: "otlp"
             - name: JAVA_TOOL_OPTIONS
               value: "-Dotel.java.global-autoconfigure.enabled=true"
           {{- end }}
