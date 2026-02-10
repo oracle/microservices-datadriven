@@ -197,6 +197,8 @@ spec:
               value: {{ $helidonServer.host | default "0.0.0.0" | quote }}
             - name: metrics.rest-request.enabled
               value: {{ $helidonMetrics.rest_request_enabled | default false | quote }}
+            - name: metrics.virtual-threads.enabled
+              value: {{ $helidonMetrics.virtual_threads_enabled | default false | quote }}
             - name: metrics.app-name
               value: {{ .Values.helidon.otel.serviceName | default "" | quote }}
           {{- end }}
