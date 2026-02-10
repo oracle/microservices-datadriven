@@ -50,7 +50,7 @@ curl http://127.0.0.1:9180/apisix/admin/routes -H "X-API-key: $admin_key" -X GET
  Note that all functionality is not available in the dashboard. You might need to use the REST APIs
 :::
 
-APISIX has an embedded dashboard that can be accessed after a tunnel is established to the `apisix-admin` service. The dashboard is available on this [URL](http://localhost:8190/ui). **NOTE:** you need the Admin key to be able to access the dashboard.
+APISIX has an embedded dashboard that can be accessed after a tunnel is established to the `apisix-admin` service. The dashboard is available on [http://localhost:8190/ui](http://localhost:8190/ui). **NOTE:** you need the Admin key to be able to access the dashboard.
 
 ![APISIX Dashboard](images/apisix-dashboard.png)
 

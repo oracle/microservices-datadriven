@@ -195,7 +195,7 @@ Connects to an existing OCI Autonomous Database (ADB-S) instead of deploying a d
    Python 3.12 or later is required to run the `oci_config.py` script.
    :::
 
-2. Create the privileged authentication secret for the ADMIN user, replace DBNAME with the name of your database:
+1. Create the privileged authentication secret for the ADMIN user, replace DBNAME with the name of your database:
 
    ```bash
     kubectl -n NAMESPACE create secret generic DBNAME-db-priv-authn \
@@ -204,16 +204,28 @@ Connects to an existing OCI Autonomous Database (ADB-S) instead of deploying a d
       --from-literal=service=DBNAME_tp
    ```
 
+1. **OPTIONAL**: Create the application user secret for the OBAAS_USER user, replace DBNAME with the name of your database:
+
+   ```bash
+    kubectl -n NAMESPACE create secret generic DBNAME-db-authn \
+      --from-literal=username=OBAAS_USER \
+      --from-literal=password=YOUR_ADMIN_PASSWORD \
+      --from-literal=service=DBNAME_tp
+   ```
+
 </details>
 
 **Installation:**
+
+The name `obaas` in the command below should reflect your environment, the `obaas` value is just an example. The `--set database.authN.secretName=NAME_OF_APPUSER_SECRET` is optional.
 
 ```bash
 helm upgrade --install obaas . \
   -n NAMESPACE \
   -f examples/values-existing-adb.yaml \
   --set database.oci.ocid=ADB_OCID \
-  --set database.privAuthN.secretName=NAME_OF_SECRET
+  --set database.privAuthN.secretName=NAME_OF_ADMINUSER_SECRET
+  --set database.authN.secretName=NAME_OF_APPUSER_SECRET
   [--debug]
 ```
 

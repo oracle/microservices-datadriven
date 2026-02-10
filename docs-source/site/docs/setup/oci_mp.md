@@ -63,3 +63,17 @@ IMAGE
 You will presented with a screen with the access information and passwords. NOTE: The passwords can also be accessed from the k8s secrets.
 
 IMAGE
+
+Add to documentation, can happen! Rerun Apply job
+
+```log
+module.kubernetes["managed"].oci_identity_policy.workers_policies: Creating...
+module.kubernetes["managed"].oci_identity_policy.workers_policies: Creation complete after 0s [id=ocid1.policy.oc1..aaaaaaaasaxvpssa2h2qgzacgc5az6s477gn3o4sdhwwh3fo7jxyxmu2k24a]
+╷
+│ Error: During creation, Terraform expected the resource to reach state(s): ACTIVE,NEEDS_ATTENTION, but the service reported unexpected state: DELETING.
+│ 
+│   with module.kubernetes["managed"].oci_containerengine_addon.ingress_addon[0],
+│   on modules/kubernetes/main.tf line 125, in resource "oci_containerengine_addon" "ingress_addon":
+│  125: resource "oci_containerengine_addon" "ingress_addon" {
+│ 
+```
