@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.helidon.applications</groupId>
         <artifactId>helidon-mp</artifactId>
-        <version>4.2.3</version>
+        <version>4.3.4</version>
         <relativePath/>
     </parent>
     <groupId>com.example</groupId>
@@ -16,7 +16,8 @@
     <properties>
         <helidon-maven-plugin.version>4.0.14</helidon-maven-plugin.version>
         <jkube.version>1.16.2</jkube.version>
-        <jkube.generator.name>us-ashburn-1.ocir.io/tenancy/${project.artifactId}:${project.version}</jkube.generator.name>
+        <image.registry>localhost</image.registry>
+        <jkube.generator.name>${image.registry}/${project.artifactId}:${project.version}</jkube.generator.name>
     </properties>
 
     <dependencies>
