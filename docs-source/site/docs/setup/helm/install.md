@@ -80,7 +80,7 @@ helm/
     └── examples/          # Example values files for different scenarios
 ```
 
-### Database Use Lifecycle
+### Application & Privileged Database User
 
 During installation, the Helm chart sets up two database users with different privilege levels:
 
