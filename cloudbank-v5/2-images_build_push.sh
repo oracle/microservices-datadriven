@@ -254,7 +254,7 @@ build_dependencies() {
 
 pull_base_image() {
     # CloudBank services use Oracle's OBaaS OpenJDK image as base
-    local base_image_name="ghcr.io/oracle/openjdk-image-obaas:${PREREQ_REQUIRED_JAVA_VERSION}"
+    local base_image_name="ghcr.io/oracle/openjdk-image-obaas:21"
 
     print_step "Pre-pulling base image: $base_image_name"
     if docker pull "$base_image_name"; then
@@ -276,7 +276,8 @@ build_and_push() {
     service_list=$(IFS=,; echo "${SERVICES[*]}")
 
     # Common Maven options
-    local maven_options=""
+    # Ensure bytecode compatibility with the Java 21 base image
+    local maven_options="-Dmaven.compiler.release=$MIN_JAVA_VERSION"
     if [[ -n "$registry" ]]; then
         maven_options="$maven_options -Dimage.registry=$registry"
     fi
