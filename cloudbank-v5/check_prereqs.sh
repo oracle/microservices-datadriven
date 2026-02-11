@@ -16,15 +16,17 @@
 #   --build               Run build prerequisites (Java, Maven, Docker)
 #   --deploy              Run deployment prerequisites (kubectl, Helm, yq)
 #   --oci                 Run OCI CLI prerequisites
-#   --namespace NS        Check namespace exists
-#   --obaas-release REL   Check OBaaS release exists (requires --namespace)
-#   --db-name NAME        Check database secrets exist (requires --namespace)
+#   -n, --namespace NS    Kubernetes namespace (prompted if not provided)
+#   -o, --obaas-release REL  OBaaS release name (prompted if not provided)
+#   -d, --db-name NAME    Database name (prompted if not provided)
+#   -s, --priv-secret SECRET  Privileged secret name (default: {dbname}-db-priv-authn)
 #   -h, --help            Show this help message
 #
 # Example:
 #   ./check_prereqs.sh --build
 #   ./check_prereqs.sh --deploy --namespace obaas-dev
 #   ./check_prereqs.sh --all --namespace obaas-dev --obaas-release obaas --db-name mydb
+#   ./check_prereqs.sh --all -n obaas-dev -d mydb -s my-custom-secret
 
 # =============================================================================
 # Disable OCI CLI Debug Output
@@ -462,17 +464,19 @@ prereq_check_wallet_secret() {
 # Arguments:
 #   $1 - namespace
 #   $2 - database name
+#   $3 - secret name override (optional, defaults to {dbname}-db-priv-authn)
 # Returns: 0 if found, 1 if not
 prereq_check_db_priv_secret() {
     local namespace="$1"
     local db_name="$2"
+    local secret_override="$3"
 
     if [[ -z "$namespace" || -z "$db_name" ]]; then
         print_error "Namespace and database name are required"
         return 1
     fi
 
-    local secret_name="${db_name}-db-priv-authn"
+    local secret_name="${secret_override:-${db_name}-db-priv-authn}"
 
     if kubectl get secret "$secret_name" -n "$namespace" &> /dev/null; then
         print_success "Secret '$secret_name' exists"
@@ -480,6 +484,7 @@ prereq_check_db_priv_secret() {
     else
         print_error "Secret '$secret_name' not found (required for db-init job and Liquibase)"
         print_info "Verify the database name and ensure the secret exists."
+        print_info "Use -s to specify a custom secret name."
         return 1
     fi
 }
@@ -527,17 +532,19 @@ prereq_check_db_app_secrets() {
 # Arguments:
 #   $1 - namespace
 #   $2 - database name
+#   $3 - secret name override (optional, defaults to {dbname}-db-priv-authn)
 # Returns: 0 and sets PREREQ_DB_SERVICE, 1 on error
 prereq_get_db_service() {
     local namespace="$1"
     local db_name="$2"
+    local secret_override="$3"
 
     if [[ -z "$namespace" || -z "$db_name" ]]; then
         print_error "Namespace and database name are required"
         return 1
     fi
 
-    local secret_name="${db_name}-db-priv-authn"
+    local secret_name="${secret_override:-${db_name}-db-priv-authn}"
 
     if kubectl get secret "$secret_name" -n "$namespace" &> /dev/null; then
         local service
@@ -709,11 +716,13 @@ prereq_check_oci() {
 #   $1 - namespace (optional)
 #   $2 - OBaaS release name (optional)
 #   $3 - database name (optional)
+#   $4 - privileged secret name override (optional)
 # Returns: 0 if all pass, 1 if any fail
 prereq_check_all() {
     local namespace="$1"
     local obaas_release="$2"
     local db_name="$3"
+    local priv_secret="$4"
 
     local errors=0
 
@@ -741,7 +750,7 @@ prereq_check_all() {
         fi
 
         if [[ -n "$db_name" ]]; then
-            prereq_check_db_priv_secret "$namespace" "$db_name" || ((errors++))
+            prereq_check_db_priv_secret "$namespace" "$db_name" "$priv_secret" || ((errors++))
         fi
     fi
 
@@ -775,11 +784,13 @@ Options:
   -n, --namespace NS    Kubernetes namespace (prompted if not provided)
   -o, --obaas-release REL  OBaaS release name (prompted if not provided)
   -d, --db-name NAME    Database name (prompted if not provided)
+  -s, --priv-secret SECRET  Privileged secret name (default: {dbname}-db-priv-authn)
   -h, --help            Show this help message
 
 Examples:
   ./check_prereqs.sh                                    # Run all checks, prompt for values
   ./check_prereqs.sh -n obaas-dev -o obaas -d mydb      # Run all checks with values
+  ./check_prereqs.sh -n obaas-dev -d mydb -s my-secret  # Custom privileged secret name
   ./check_prereqs.sh --build                            # Only build prerequisites
   ./check_prereqs.sh --deploy                           # Only deployment prerequisites
   ./check_prereqs.sh --oci                              # Only OCI prerequisites
@@ -800,6 +811,7 @@ check_prereqs_main() {
     local namespace=""
     local obaas_release=""
     local db_name=""
+    local priv_secret=""
 
     while [[ $# -gt 0 ]]; do
         case $1 in
@@ -829,6 +841,10 @@ check_prereqs_main() {
                 ;;
             -d|--db-name)
                 db_name="$2"
+                shift 2
+                ;;
+            -s|--priv-secret)
+                priv_secret="$2"
                 shift 2
                 ;;
             -h|--help)
@@ -911,7 +927,7 @@ check_prereqs_main() {
             fi
         fi
 
-        prereq_check_all "$namespace" "$obaas_release" "$db_name" || ((errors++))
+        prereq_check_all "$namespace" "$obaas_release" "$db_name" "$priv_secret" || ((errors++))
     else
         if [[ "$check_build" == true ]]; then
             print_header "Build Prerequisites"

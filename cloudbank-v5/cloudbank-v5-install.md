@@ -212,7 +212,7 @@ Use `-j 4` for parallel builds on multi-core machines.
 - Creates Kubernetes secrets with username, password, and service keys
 - Usernames are uppercase (Oracle requirement)
 
-**Prerequisite:** The privileged secret `<dbname>-db-priv-authn` must exist (created during OBaaS setup).
+**Prerequisite:** The privileged secret `<dbname>-db-priv-authn` must exist (created during OBaaS setup). If your secret has a different name, use the `-s` flag to specify it.
 
 **Verify it exists:**
 ```bash
@@ -222,11 +222,14 @@ kubectl get secret <dbname>-db-priv-authn -n <namespace>
 **Command:**
 ```bash
 ./3-k8s_db_secrets.sh -n <namespace> -d <dbname>
+# Or with a custom privileged secret name:
+./3-k8s_db_secrets.sh -n <namespace> -d <dbname> -s <secret-name>
 ```
 
 **Example:**
 ```bash
 ./3-k8s_db_secrets.sh -n obaas-dev -d cbankdb
+./3-k8s_db_secrets.sh -n obaas-dev -d cbankdb -s my-custom-db-secret
 ```
 
 **Secrets created:**
