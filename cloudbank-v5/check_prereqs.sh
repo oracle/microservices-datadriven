@@ -88,7 +88,7 @@ fi
 # =============================================================================
 # Constants
 # =============================================================================
-REQUIRED_JAVA_VERSION="21"
+MIN_JAVA_VERSION="21"
 
 # =============================================================================
 # Generic Command Check
@@ -227,33 +227,38 @@ prereq_check_java() {
     local detected_java_version
     detected_java_version=$(java -version 2>&1 | head -1 | sed -E 's/.*"([0-9]+).*/\1/')
 
-    if [[ "$detected_java_version" != "$REQUIRED_JAVA_VERSION" ]]; then
-        print_error "Java $REQUIRED_JAVA_VERSION is required, but found Java $detected_java_version"
-        print_info "Set JAVA_HOME to a Java $REQUIRED_JAVA_VERSION installation:"
-        print_info "  export JAVA_HOME=/opt/homebrew/opt/openjdk@$REQUIRED_JAVA_VERSION"
+    if [[ ! "$detected_java_version" =~ ^[0-9]+$ ]]; then
+        print_error "Could not detect Java version"
+        return 1
+    fi
+
+    if (( detected_java_version < MIN_JAVA_VERSION )); then
+        print_error "Minimum Java $MIN_JAVA_VERSION is required, but found Java $detected_java_version"
+        print_info "Set JAVA_HOME to a Java $MIN_JAVA_VERSION installation:"
+        print_info "  export JAVA_HOME=/opt/homebrew/opt/openjdk@$MIN_JAVA_VERSION"
         print_info "  export PATH=\$JAVA_HOME/bin:\$PATH"
         return 1
     fi
 
     # Verify JAVA_HOME is set (Maven requires it)
     if [[ -z "$JAVA_HOME" ]]; then
-        print_warning "Java $REQUIRED_JAVA_VERSION found, but JAVA_HOME is not set"
+        print_warning "Java $detected_java_version found, but JAVA_HOME is not set"
         print_info "Maven requires JAVA_HOME. Set it with:"
-        print_info "  export JAVA_HOME=/opt/homebrew/opt/openjdk@$REQUIRED_JAVA_VERSION"
+        print_info "  export JAVA_HOME=/opt/homebrew/opt/openjdk@$detected_java_version"
         return 1
     fi
 
     # Verify JAVA_HOME points to correct version
     local java_home_version
     java_home_version=$("$JAVA_HOME/bin/java" -version 2>&1 | head -1 | sed -E 's/.*"([0-9]+).*/\1/')
-    if [[ "$java_home_version" != "$REQUIRED_JAVA_VERSION" ]]; then
-        print_error "JAVA_HOME points to Java $java_home_version, but Java $REQUIRED_JAVA_VERSION is required"
-        print_info "Set JAVA_HOME to a Java $REQUIRED_JAVA_VERSION installation:"
-        print_info "  export JAVA_HOME=/opt/homebrew/opt/openjdk@$REQUIRED_JAVA_VERSION"
+    if (( java_home_version != detected_java_version )); then
+        print_error "JAVA_HOME points to Java $java_home_version, but PATH java is Java $detected_java_version"
+        print_info "Set JAVA_HOME to match your PATH java:"
+        print_info "  export JAVA_HOME=/opt/homebrew/opt/openjdk@$detected_java_version"
         return 1
     fi
 
-    print_success "Java $REQUIRED_JAVA_VERSION is available (JAVA_HOME=$JAVA_HOME)"
+    print_success "Java $java_home_version is available (JAVA_HOME=$JAVA_HOME)"
     return 0
 }
 
