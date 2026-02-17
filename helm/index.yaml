@@ -1,12 +1,93 @@
 apiVersion: v1
 entries:
+  obaas:
+  - apiVersion: v2
+    appVersion: 2.0.0
+    created: "2026-02-17T13:16:00.789235816-05:00"
+    dependencies:
+    - condition: ingress-nginx.enabled
+      name: ingress-nginx
+      repository: https://kubernetes.github.io/ingress-nginx
+      version: 4.13.2
+    - condition: signoz.enabled
+      name: k8s-infra
+      repository: https://charts.signoz.io
+      version: 0.15.0
+    - condition: signoz.enabled
+      name: signoz
+      repository: https://charts.signoz.io
+      version: 0.102.1
+    - condition: apisix.enabled
+      name: apisix
+      repository: https://apache.github.io/apisix-helm-chart
+      version: 2.12.3
+    - condition: ai-optimizer.enabled
+      name: ai-optimizer
+      repository: https://oracle.github.io/ai-optimizer/helm
+      version: '>=2.0.0 <3.0.0'
+    description: A Helm chart for Oracle Backend as a Service
+    digest: 3d8d207b2aae0e40bdb1d374e50f8c20d0608ea42c0156cf3ecf6629dce8b6ce
+    home: https://oracle.github.io/microservices-datadriven
+    kubeVersion: '>= 1.32.1'
+    maintainers:
+    - email: obaas_ww@oracle.com
+      name: Oracle and/or its affiliates
+      url: https://oracle.github.io/microservices-datadriven
+    name: obaas
+    type: application
+    urls:
+    - obaas-0.0.1.tgz
+    version: 0.0.1
+  obaas-prereqs:
+  - apiVersion: v2
+    appVersion: 2.0.0
+    created: "2026-02-17T13:16:00.822363683-05:00"
+    dependencies:
+    - condition: external-secrets.enabled
+      name: external-secrets
+      repository: https://charts.external-secrets.io
+      version: 1.1.0
+    - condition: metrics-server.enabled
+      name: metrics-server
+      repository: https://kubernetes-sigs.github.io/metrics-server/
+      version: 3.13.0
+    - condition: kube-state-metrics.enabled
+      name: kube-state-metrics
+      repository: https://prometheus-community.github.io/helm-charts
+      version: 6.4.1
+    - condition: strimzi-kafka-operator.enabled
+      name: strimzi-kafka-operator
+      repository: https://strimzi.io/charts/
+      version: 0.45.1
+    - condition: oracle-database-operator.enabled
+      name: oracle-database-operator
+      repository: file://charts
+      version: 0.1.0
+    - condition: coherence-operator.enabled
+      name: coherence-operator
+      repository: https://oracle.github.io/coherence-operator/charts
+      version: 3.5.6
+    description: Prerequisites and cluster-singleton infrastructure for Oracle Backend
+      as a Service
+    digest: 63cb1e2d06877dae0992dddf07c15b007615395b2e96803333707801b7954106
+    home: https://oracle.github.io/microservices-datadriven
+    kubeVersion: '>= 1.32.1'
+    maintainers:
+    - email: obaas_ww@oracle.com
+      name: Oracle and/or its affiliates
+      url: https://oracle.github.io/microservices-datadriven
+    name: obaas-prereqs
+    type: application
+    urls:
+    - obaas-prereqs-0.0.1.tgz
+    version: 0.0.1
   obaas-sample-app:
   - apiVersion: v2
     appVersion: 0.0.1
-    created: "2026-01-28T12:01:07.890929932-05:00"
+    created: "2026-02-17T13:16:00.836777756-05:00"
     description: A Helm chart for deploying applications to the Oracle Backend for
       Microservices and AI (OBaaS) Platform
-    digest: ca145aa72cb75171944e02ae4db5b1ba2464a86813fb2c05d8ec334227eb0fda
+    digest: ab41b372cfdc687813a70a037b342fc8e7f7d008dbcca30b33d753b71de60b81
     home: https://oracle.github.io/microservices-datadriven
     maintainers:
     - email: obaas_ww@oracle.com
@@ -15,6 +96,6 @@ entries:
     name: obaas-sample-app
     type: application
     urls:
-    - https://oracle.github.io/microservices-datadriven/helm/obaas-sample-app-0.0.1.tgz
+    - obaas-sample-app-0.0.1.tgz
     version: 0.0.1
-generated: "2026-01-28T12:01:07.889921682-05:00"
+generated: "2026-02-17T13:16:00.729363701-05:00"
