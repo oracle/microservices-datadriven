@@ -81,15 +81,32 @@ OBaaS platform Helm release revision (looked up dynamically)
 */}}
 {{- define "obaas.releaseRevision" -}}
 {{- $releaseName := include "obaas.releaseName" . }}
-{{- $helmSecretName := printf "sh.helm.release.v1.%s.v1" $releaseName }}
-{{- $helmSecret := (lookup "v1" "Secret" .Release.Namespace $helmSecretName) }}
-{{- if $helmSecret }}
-{{- $helmSecret.metadata.labels.version | default "1" }}
+{{- $prefix := printf "sh.helm.release.v1.%s.v" $releaseName }}
+{{- $secretList := (lookup "v1" "Secret" .Release.Namespace "") }}
+{{- $maxVersion := dict "value" 0 }}
+{{- if $secretList.items }}
+  {{- range $secret := $secretList.items }}
+    {{- $name := $secret.metadata.name | default "" }}
+    {{- if (and $name (hasPrefix $prefix $name)) }}
+      {{- $version := $secret.metadata.labels.version | default "" }}
+      {{- if not $version }}
+        {{- $version = regexFind "[0-9]+$" $name }}
+      {{- end }}
+      {{- if $version }}
+        {{- $ver := atoi $version }}
+        {{- if gt $ver (index $maxVersion "value") }}
+          {{- $_ := set $maxVersion "value" $ver }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- if gt (index $maxVersion "value") 0 }}
+  {{- printf "%d" (index $maxVersion "value") }}
 {{- else }}
-{{- "1" }}
+  1
 {{- end }}
 {{- end }}
-
 {{/*
 Database auth secret name
 If not provided, defaults to: {{ database.name }}-{{ Release.Name }}-db-authn
