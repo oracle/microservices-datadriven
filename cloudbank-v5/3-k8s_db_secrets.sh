@@ -11,12 +11,13 @@
 # Options:
 #   -n, --namespace NAMESPACE    Kubernetes namespace (e.g., obaas-dev)
 #   -d, --db-name DB_NAME        Database name (e.g., mydb)
+#   -s, --priv-secret SECRET     Privileged secret name (default: {dbname}-db-priv-authn)
 #   --delete                     Delete existing secrets before creating
 #   --dry-run                    Show what would be created without creating
 #   -h, --help                   Show this help message
 #
 # Prerequisites:
-#   The privileged secret {dbname}-db-priv-authn must exist with keys:
+#   The privileged secret {dbname}-db-priv-authn (or custom name via -s) must exist with keys:
 #     - username: Admin username (e.g., admin)
 #     - password: Admin password
 #     - service:  TNS service name (e.g., mydb_tp)
@@ -45,6 +46,7 @@ source "${SCRIPT_DIR}/check_prereqs.sh"
 NAMESPACE=""
 DB_NAME=""
 DB_SERVICE=""
+PRIV_SECRET=""
 DELETE_EXISTING=false
 DRY_RUN=false
 
@@ -140,6 +142,10 @@ parse_args() {
                 DB_NAME="$2"
                 shift 2
                 ;;
+            -s|--priv-secret)
+                PRIV_SECRET="$2"
+                shift 2
+                ;;
             --delete)
                 DELETE_EXISTING=true
                 shift
@@ -174,12 +180,13 @@ Usage:
 Options:
   -n, --namespace NAMESPACE    Kubernetes namespace (required, e.g., obaas-dev)
   -d, --db-name DB_NAME        Database name (required, e.g., mydb)
+  -s, --priv-secret SECRET     Privileged secret name (default: {dbname}-db-priv-authn)
   --delete                     Delete existing secrets before creating
   --dry-run                    Show what would be created without creating
   -h, --help                   Show this help message
 
 Prerequisites:
-  The privileged secret {dbname}-db-priv-authn must already exist with keys:
+  The privileged secret {dbname}-db-priv-authn (or custom name via -s) must already exist with keys:
     - username: Admin username (e.g., admin)
     - password: Admin password
     - service:  TNS service name (e.g., mydb_tp)
@@ -198,6 +205,7 @@ Secrets created:
 
 Example:
   ./3-k8s_db_secrets.sh -n obaas-dev -d mydb
+  ./3-k8s_db_secrets.sh -n obaas-dev -d mydb -s my-custom-secret
   ./3-k8s_db_secrets.sh -n obaas-dev -d mydb --delete
   ./3-k8s_db_secrets.sh -n obaas-dev -d mydb --dry-run
 EOF
@@ -250,12 +258,12 @@ check_prerequisites() {
     fi
 
     # Check privileged secret exists
-    if ! prereq_check_db_priv_secret "$NAMESPACE" "$DB_NAME"; then
+    if ! prereq_check_db_priv_secret "$NAMESPACE" "$DB_NAME" "$PRIV_SECRET"; then
         return 1
     fi
 
     # Get DB_SERVICE from the secret
-    if ! prereq_get_db_service "$NAMESPACE" "$DB_NAME"; then
+    if ! prereq_get_db_service "$NAMESPACE" "$DB_NAME" "$PRIV_SECRET"; then
         return 1
     fi
     DB_SERVICE="$PREREQ_DB_SERVICE"
@@ -370,6 +378,7 @@ main() {
     print_header "Configuration"
     echo "  Namespace:    $NAMESPACE"
     echo "  Database:     $DB_NAME"
+    echo "  Priv Secret:  ${PRIV_SECRET:-${DB_NAME}-db-priv-authn}"
     echo "  TNS Service:  $DB_SERVICE"
     echo "  Dry Run:      $DRY_RUN"
     echo "  Delete First: $DELETE_EXISTING"

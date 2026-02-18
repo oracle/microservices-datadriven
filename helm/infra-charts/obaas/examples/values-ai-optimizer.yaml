@@ -1,0 +1,78 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+# Example: AI Optimizer Enabled
+# Enables the ai-optimizer subchart
+#
+# Prerequisites:
+#   1. Install obaas-prereqs chart once per cluster before installing this chart.
+#   2. Create the following Kubernetes secrets in the release namespace:
+#      - `ai-optimizer-api`   : contains the API key used by the ai-optimizer server and client
+#        (key: apiKey)
+#      - `db-priv-authn`      : contains privileged database credentials for user provisioning
+#      - `ai-optimizer-openai`: contains an OpenAI API key for third-party model access (key: apiKey) [optional]
+#   3. Ensure an Oracle Autonomous Database (ADB-S) is available and accessible from the cluster.
+#
+# Usage:
+#   helm upgrade --install obaas . \
+#     -n obaas-ai \
+#     -f examples/values-ai-optimizer.yaml \
+#     --set database.oci.ocid="ocid1.autonomousdatabase.oc1..."
+
+database:
+  enabled: true
+  type: "ADB-S"
+  sqlcl:
+    image:
+      repository: container-registry.oracle.com/database/sqlcl
+      tag: "25.3.0"
+
+  privAuthN:
+    secretName: "db-priv-authn"
+
+  oci:
+    ocid: "" # Provide on helm command line as per example
+
+  oci_config:
+    keySecretName: "oci-privatekey"
+    configMapName: "oci-config"
+
+# -----------------------
+# -- AI Optimizer Configuration
+ai-optimizer:
+  enabled: true
+
+  global:
+    # Use a pre-created secret for the AI Optimizer API key
+    api:
+      secretName: "ai-optimizer-api"
+      secretKey: "apiKey"
+
+    # Deploy the AI Optimizer UI and API under a path mounted off the OBaaS gateway
+    baseUrlPath: "/ai-optimizer"
+
+  server:
+    replicaCount: 1
+
+    # Reference the secret containing database credentials for the application user
+    database:
+      type: "ADB-S"
+      adb:
+        useExisting: true
+      privAuthN:
+        secretName: "db-priv-authn"
+
+    # Enable OpenAI integration via an existing secret (optional)
+    # models:
+    #   openAI:
+    #     secretName: "ai-optimizer-openai"
+    #     secretKey: "apiKey"
+
+  client:
+    replicaCount: 1
+
+  # Optionally deploy Ollama for on-cluster inference with preloaded models (GPU highly recommended)
+  # ollama:
+  #   enabled: true
+  #   replicaCount: 1
+  #   models:
+  #     enabled: true

@@ -1,0 +1,26 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+# Example: SIDB-FREE Database Configuration
+# This is the default database configuration - an Oracle Database Free container
+# runs as a StatefulSet within the Kubernetes cluster.
+#
+# Usage:
+#   helm upgrade --install obaas . -f examples/values-sidb-free.yaml -n obaas --create-namespace
+
+# -----------------------
+# -- Database Configuration
+database:
+  enabled: true
+  # SIDB-FREE: Oracle Database Free running as a container in the cluster
+  type: "SIDB-FREE"
+
+  # Container image for the database
+  # image:
+  #   repository: "container-registry.oracle.com/database/free"
+  #   tag: "latest"
+
+  # Privileged user credentials (SYSTEM) - auto-generated if not provided
+  # privAuthN:
+
+  # Application user credentials - auto-generated if not provided
+  # authN:

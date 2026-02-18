@@ -1,0 +1,153 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+{{- if (index .Values "conductor-server").enabled }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-conductor-server
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}-conductor-server
+    app.kubernetes.io/component: workflow-orchestration
+    app.kubernetes.io/part-of: {{ .Release.Name }}
+    {{- include "obaas.labels" . | nindent 4 }}
+spec:
+  replicas: {{ (index .Values "conductor-server").replicas }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Release.Name }}-conductor-server
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Release.Name }}-conductor-server
+        app.kubernetes.io/component: workflow-orchestration
+      {{- if .Values.signoz.enabled }}
+      annotations:
+        signoz.io/scrape: "true"
+        signoz.io/port: "8080"
+        signoz.io/path: "/actuator/prometheus"
+      {{- end }}
+    spec:
+      {{- include "obaas.imagePullSecrets" (dict "local" (index .Values "conductor-server").imagePullSecrets "global" .Values.global.imagePullSecrets) | nindent 6 }}
+      restartPolicy: Always
+      containers:
+      - name: conductor-server
+        image: "{{ (index .Values "conductor-server").image.repository }}:{{ (index .Values "conductor-server").image.tag }}"
+        imagePullPolicy: {{ (index .Values "conductor-server").image.pullPolicy | default "IfNotPresent" }}
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        - name: ui
+          containerPort: 5000
+          protocol: TCP
+        env:
+        - name: CONFIG_PROP
+          value: "conductor.properties"
+        - name: JAVA_OPTS
+          value: "-Dpolyglot.engine.WarnInterpreterOnly=false"
+        volumeMounts:
+        - name: config
+          mountPath: /app/config/conductor.properties
+          subPath: conductor.properties
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        resources:
+          {{- if (index .Values "conductor-server").resources }}
+          {{- toYaml (index .Values "conductor-server").resources | nindent 10 }}
+          {{- else }}
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+          {{- end }}
+      volumes:
+      - name: config
+        configMap:
+          name: {{ .Release.Name }}-conductor-config        
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-conductor-redis
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}-conductor-redis
+    app.kubernetes.io/component: workflow-orchestration
+    app.kubernetes.io/part-of: {{ .Release.Name }}
+    {{- include "obaas.labels" . | nindent 4 }}
+spec:
+  replicas: {{ (index .Values "conductor-server").replicas }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Release.Name }}-conductor-redis
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Release.Name }}-conductor-redis
+        app.kubernetes.io/component: workflow-orchestration
+      {{- if .Values.signoz.enabled }}
+      annotations:
+        signoz.io/scrape: "true"
+        signoz.io/port: "8080"
+        signoz.io/path: "/actuator/prometheus"
+      {{- end }}
+    spec:
+      {{- include "obaas.imagePullSecrets" (dict "local" (index .Values "conductor-server").imagePullSecrets "global" .Values.global.imagePullSecrets) | nindent 6 }}
+      restartPolicy: Always
+      containers:
+      - name: conductor-server
+        image: "{{ (index .Values "conductor-server").redisImage.repository }}:{{ (index .Values "conductor-server").redisImage.tag }}"
+        imagePullPolicy: {{ (index .Values "conductor-server").image.pullPolicy | default "IfNotPresent" }}
+        ports:
+        - name: redis
+          containerPort: 6379
+          protocol: TCP
+        livenessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 15
+          periodSeconds: 5
+        readinessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 15
+          periodSeconds: 5
+
+        volumeMounts:
+        - name: redis-config
+          mountPath: /usr/local/etc/redis/redis.conf
+          subPath: redis.conf
+        resources:
+          {{- if (index .Values "conductor-server").resources }}
+          {{- toYaml (index .Values "conductor-server").resources | nindent 10 }}
+          {{- else }}
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+          {{- end }}
+      volumes:
+      - name: redis-config
+        configMap:
+          name: {{ .Release.Name }}-redis-config             
+{{- end }}

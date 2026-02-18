@@ -1,0 +1,185 @@
+Thank you for installing {{ .Chart.Name }}.
+
+Your OBaaS release is named {{ .Release.Name }} and installed in namespace {{ .Release.Namespace }}.
+
+================================================================================
+INSTALLED COMPONENTS
+================================================================================
+
+Core Services:
+{{- if .Values.eureka.enabled }}
+  ✓ Eureka (Service Discovery) - {{ .Values.eureka.replicas }} replicas
+{{- end }}
+{{- if (index .Values "admin-server").enabled }}
+  ✓ Admin Server (Management API) - {{ (index .Values "admin-server").replicas }} replica(s)
+{{- end }}
+{{- if (index .Values "otmm").enabled }}
+  ✓ OTMM (Transaction Manager) - {{ (index .Values "otmm").replicas }} replica(s)
+{{- end }}
+
+API Gateway & Ingress:
+{{- if (index .Values "apisix").enabled }}
+  ✓ APISIX (API Gateway)
+{{- end }}
+{{- if (index .Values "ingress-nginx").enabled }}
+  ✓ Ingress NGINX (Ingress Controller)
+{{- end }}
+
+Data & State:
+{{- if .Values.database.enabled }}
+  ✓ Database Configuration ({{ .Values.database.type }})
+{{- end }}
+
+Observability:
+{{- if .Values.signoz.enabled }}
+  ✓ SigNoz (Observability Platform)
+{{- end }}
+{{- if and (index .Values "oracle-database-exporter").enabled .Values.database.enabled }}
+  ✓ Oracle Database Exporter (Database Metrics)
+{{- end }}
+
+Optional Services:
+{{- if and (index .Values "conductor-server").enabled .Values.database.enabled }}
+  ✓ Conductor Server (Workflow Orchestration) - {{ (index .Values "conductor-server").replicas }} replica(s)
+{{- end }}
+
+================================================================================
+GETTING STARTED
+================================================================================
+
+1. Check the status of all pods:
+   kubectl get pods -n {{ .Release.Namespace }}
+
+2. View the release status:
+   helm status {{ .Release.Name }} -n {{ .Release.Namespace }}
+
+3. Get the values used for this installation:
+   helm get values {{ .Release.Name }} -n {{ .Release.Namespace }}
+
+================================================================================
+SERVICE ENDPOINTS
+================================================================================
+{{- if .Values.eureka.enabled }}
+
+Eureka Service Discovery:
+  Service: {{ .Release.Name }}-eureka.{{ .Release.Namespace }}.svc.cluster.local:8761
+  Dashboard: http://{{ .Release.Name }}-eureka-0.{{ .Release.Name }}-eureka.{{ .Release.Namespace }}.svc.cluster.local:8761
+{{- end }}
+{{- if (index .Values "admin-server").enabled }}
+
+Admin Server:
+  Service: {{ .Release.Name }}-admin-server.{{ .Release.Namespace }}.svc.cluster.local:8989
+{{- end }}
+{{- if (index .Values "otmm").enabled }}
+
+Transaction Manager (OTMM):
+  Service: {{ .Release.Name }}-otmm-tcs.{{ .Release.Namespace }}.svc.cluster.local:9000
+  Metrics: http://{{ .Release.Name }}-otmm-tcs.{{ .Release.Namespace }}.svc.cluster.local:9000/metrics
+{{- end }}
+{{- if (index .Values "apisix").enabled }}
+
+APISIX API Gateway:
+  Admin API: {{ .Release.Name }}-apisix-admin.{{ .Release.Namespace }}.svc.cluster.local:9180
+  Gateway: {{ .Release.Name }}-apisix-gateway.{{ .Release.Namespace }}.svc.cluster.local:80
+{{- end }}
+{{- if .Values.signoz.enabled }}
+
+SigNoz Observability:
+  Frontend: {{ .Release.Name }}-signoz.{{ .Release.Namespace }}.svc.cluster.local:3301
+  OTEL Collector: {{ .Release.Name }}-signoz-otel-collector.{{ .Release.Namespace }}.svc.cluster.local:4318
+{{- if .Values.signoz.auth.existingSecret }}
+  Credentials: Check secret '{{ .Values.signoz.auth.existingSecret }}'
+{{- else }}
+  Credentials: Check secret 'signoz-authn' for email and password
+{{- end }}
+{{- end }}
+{{- if and (index .Values "oracle-database-exporter").enabled .Values.database.enabled }}
+
+Oracle Database Exporter:
+  Metrics: http://{{ .Release.Name }}-metrics-exporter.{{ .Release.Namespace }}.svc.cluster.local:9161/metrics
+{{- end }}
+{{- if and (index .Values "conductor-server").enabled .Values.database.enabled }}
+
+Conductor Server:
+  API: http://{{ .Release.Name }}-conductor-server.{{ .Release.Namespace }}.svc.cluster.local:8080
+{{- end }}
+
+================================================================================
+DATABASE CONFIGURATION
+================================================================================
+{{- if .Values.database.enabled }}
+
+Database Type: {{ .Values.database.type }}
+{{- if eq .Values.database.type "ADB-S" }}
+Database OCID: {{ .Values.database.oci.ocid }}
+{{- if and .Values.database.oci_config .Values.database.oci_config.oke }}
+Authentication: OKE Workload Identity
+{{- else if and .Values.database.oci_config .Values.database.oci_config.keySecretName }}
+Authentication: API Key (secret: {{ .Values.database.oci_config.keySecretName }})
+{{- end }}
+{{- else if eq .Values.database.type "OTHER" }}
+{{- if and .Values.database.other.dsn (ne (.Values.database.other.dsn | trim) "") }}
+Connection: {{ .Values.database.other.dsn }}
+{{- else }}
+Connection: {{ .Values.database.other.host }}:{{ .Values.database.other.port }}/{{ .Values.database.other.service_name }}
+{{- end }}
+{{- end }}
+
+Database Credentials Secret: {{ include "obaas.databaseSecret" . }}
+{{- if and .Values.database.authN .Values.database.authN.secretName }}
+  (Using existing secret: {{ .Values.database.authN.secretName }})
+{{- else }}
+  (Auto-generated with random password)
+{{- end }}
+{{- else }}
+
+⚠ Database is not enabled. Some components may not function correctly.
+{{- end }}
+
+================================================================================
+IMPORTANT NOTES
+================================================================================
+
+{{- if not .Values.database.enabled }}
+⚠ WARNING: Database is disabled. Services requiring database will not start:
+   - Conductor Server
+   - Oracle Database Exporter
+{{- end }}
+
+{{- if and (index .Values "conductor-server").enabled (not .Values.database.enabled) }}
+⚠ WARNING: Conductor Server is enabled but database is disabled.
+   Enable database configuration to use Conductor Server.
+{{- end }}
+
+{{- if and (index .Values "oracle-database-exporter").enabled (not .Values.database.enabled) }}
+⚠ WARNING: Oracle Database Exporter is enabled but database is disabled.
+   Enable database configuration to use the exporter.
+{{- end }}
+
+{{- if and .Values.database.enabled (eq .Values.database.type "ADB-S") }}
+{{- if not .Values.database.oci_config }}
+⚠ WARNING: ADB-S database type requires database.oci_config to be set.
+{{- else if and (not .Values.database.oci_config.keySecretName) (not .Values.database.oci_config.oke) }}
+⚠ WARNING: ADB-S requires either:
+   - database.oci_config.keySecretName (for API key authentication)
+   - database.oci_config.oke=true (for Workload Identity)
+{{- end }}
+{{- end }}
+
+For more information:
+  Documentation: https://oracle.github.io/microservices-datadriven
+  Issues: https://github.com/oracle/microservices-datadriven/issues
+
+To upgrade this release:
+  helm upgrade {{ .Release.Name }} obaas/obaas -n {{ .Release.Namespace }}
+
+To uninstall this release:
+  helm uninstall {{ .Release.Name }} -n {{ .Release.Namespace }}
+{{- if and .Values.database.enabled (eq (include "obaas.database.isContainerDB" .) "true") }}
+
+⚠ WARNING: Uninstalling will PERMANENTLY DELETE the {{ .Values.database.type }} database
+  container and ALL its data.
+  
+  This action is IRREVERSIBLE. Ensure you have backed up any important data
+  before running helm uninstall.
+{{- end }}

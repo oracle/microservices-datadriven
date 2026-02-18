@@ -1,0 +1,61 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+
+# =============================================================================
+# Example: Existing ADB Configuration
+# =============================================================================
+#
+# This example shows how to configure against an existing ADB
+#
+# !! NOTE: Change "NAMESPACE" to the namespace where the obaas chart will be installed !!
+#
+# Prerequisites:
+#   1. Obtain an OCI API Key and store locally.
+#      Run the following to create a k8s configmap/secret with the API Key.
+#        python3 tools/oci_config.py --namespace NAMESPACE [-h] [--config CONFIG] [--profile PROFILE]
+#
+#      Without specifying --config, --profile, it will look for ~/.oci/config and use the DEFAULT profile
+#
+#   2. Create the Privileged AuthN secret for the ADMIN user (provide password/service):
+#        kubectl -n NAMESPACE create secret generic db-priv-authn \
+#          --from-literal=username=ADMIN \
+#          --from-literal=password=<ADMIN PASSWORD> \
+#          --from-literal=service=<DBNAME>_TP
+#
+#
+# Usage:
+#   helm upgrade --install obaas . \
+#     -n NAMESPACE \
+#     -f examples/values-existing-adb.yaml \
+#     --set database.oci.ocid=<ADB_OCID>
+#
+# =============================================================================
+database:
+  enabled: true
+  # Database type: SIDB-FREE, ADB-FREE, ADB-S, or OTHER
+  type: "ADB-S"
+  # SQLcl image for database initialization jobs
+  sqlcl:
+    image:
+      repository: container-registry.oracle.com/database/sqlcl
+      tag: "25.3.0"
+
+  # For SIDB-FREE/ADB-FREE: container image configuration (exclude for ADB-S)
+  image:
+    repository: ""
+    tag: ""
+
+  privAuthN:
+    # Name of Secret containing privileged user credentials
+    secretName: "db-priv-authn"
+
+  # For ADB-S: OCI Autonomous Database OCID (exclude for SIDB-FREE/ADB-FREE/OTHER)
+  oci:
+    ocid: "" # Provide on helm command line as per example
+
+  oci_config:
+    # For API key authentication:
+    # Name of secret containing oci_api_key.pem
+    keySecretName: "oci-privatekey"
+    # Configmap Name of remaining configuration
+    configMapName: "oci-config"

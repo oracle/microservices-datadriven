@@ -1,0 +1,165 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+
+# =============================================================================
+# Example: Private Registry Configuration for OBaaS Prerequisites Chart
+# =============================================================================
+#
+# This example shows how to configure all images to pull from a private
+# container registry (e.g., for air-gapped installations).
+#
+# IMPORTANT: This file is for the 'obaas-prereqs' chart only (cluster singletons).
+# For the 'obaas' chart, see the corresponding example in ../obaas/examples/
+#
+# Prerequisites:
+#   1. Create the image pull secret before installing:
+#      kubectl create secret docker-registry myregistry-secret \
+#        --docker-server=myregistry.example.com \
+#        --docker-username=<username> \
+#        --docker-password=<password> \
+#        --docker-email=<email> \
+#        -n <namespace>
+#
+#   2. Mirror the required images to your private registry
+#
+# Usage:
+#   helm install obaas-prereqs ./obaas-prereqs -n <namespace> -f examples/values-private-registry.yaml
+#
+# =============================================================================
+
+# -----------------------
+# -- Global Configuration
+# -----------------------
+global:
+  # Image pull secret for private registry authentication
+  # This is automatically propagated to all subcharts via YAML anchors
+  imagePullSecrets:
+    - name: myregistry-secret
+
+# =============================================================================
+# cert-manager
+# =============================================================================
+# Default registry: quay.io
+# Has multiple components, each needs registry override
+
+oracle-database-operator:
+  enabled: true
+  image:
+    registry: myregistry.example.com
+    repository: database/operator
+    tag: "2.0"
+    pullPolicy: IfNotPresent
+  cert-manager:
+    installCRDs: true
+    # Main controller
+    image:
+      registry: myregistry.example.com
+      repository: jetstack/cert-manager-controller
+      # tag: ""  # Uses chart default
+    # Webhook
+    webhook:
+      image:
+        registry: myregistry.example.com
+        repository: jetstack/cert-manager-webhook
+        # tag: ""  # Uses chart default
+    # CA Injector
+    cainjector:
+      image:
+        registry: myregistry.example.com
+        repository: jetstack/cert-manager-cainjector
+        # tag: ""  # Uses chart default
+    # ACME Solver
+    acmesolver:
+      image:
+        registry: myregistry.example.com
+        repository: jetstack/cert-manager-acmesolver
+        # tag: ""  # Uses chart default
+    # Startup API Check
+    startupapicheck:
+      image:
+        registry: myregistry.example.com
+        repository: jetstack/cert-manager-startupapicheck
+        # tag: ""  # Uses chart default
+  certManagerWaitJob:
+    # Waits for cert-manager webhook before creating Issuer/Certificate resources
+    enabled: true
+    image:
+      repository: registry.k8s.io/kubectl
+      tag: "v1.28.0"
+      pullPolicy: IfNotPresent
+
+# =============================================================================
+# external-secrets
+# =============================================================================
+# Default registry: ghcr.io
+# Uses full repository path
+
+external-secrets:
+  enabled: true
+  installCRDs: true
+  image:
+    repository: myregistry.example.com/external-secrets/external-secrets
+    # tag: ""  # Uses chart default
+  webhook:
+    image:
+      repository: myregistry.example.com/external-secrets/external-secrets
+      # tag: ""  # Uses chart default
+  certController:
+    image:
+      repository: myregistry.example.com/external-secrets/external-secrets
+      # tag: ""  # Uses chart default
+
+# =============================================================================
+# metrics-server
+# =============================================================================
+# Default registry: registry.k8s.io
+# Uses full repository path
+
+metrics-server:
+  enabled: true
+  image:
+    repository: myregistry.example.com/metrics-server/metrics-server
+    # tag: ""  # Uses chart default
+
+# =============================================================================
+# kube-state-metrics
+# =============================================================================
+# Default registry: registry.k8s.io
+
+kube-state-metrics:
+  enabled: true
+  image:
+    registry: myregistry.example.com
+    repository: kube-state-metrics/kube-state-metrics
+    # tag: ""  # Uses chart default
+
+# =============================================================================
+# strimzi-kafka-operator
+# =============================================================================
+# Default registry: quay.io
+# Uses defaultImageRegistry for operator and Kafka images
+
+strimzi-kafka-operator:
+  enabled: true
+  # This sets the registry for both the operator and Kafka images it creates
+  defaultImageRegistry: myregistry.example.com
+  # Default repository prefix (images are under strimzi/)
+  defaultImageRepository: strimzi
+
+# =============================================================================
+# coherence-operator
+# =============================================================================
+# Default registry: container-registry.oracle.com/middleware
+
+coherence-operator:
+  enabled: true
+  # Operator image
+  image:
+    registry: myregistry.example.com/middleware
+    name: coherence-operator
+    tag: "3.5.6"
+  # Default Coherence image for applications
+  defaultCoherenceImage:
+    registry: myregistry.example.com/middleware
+    name: coherence-ce
+    tag: "25.03.2"

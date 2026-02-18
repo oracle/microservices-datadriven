@@ -1,0 +1,77 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+# spell-checker: ignore nindent freepdb1 oserror selectai sidb spfile sqlplus
+# spell-checker: ignore sqlcode sqlerror varchar nolog ptype sysdba tablespace tblspace
+
+{{- if .Values.database }}
+---
+# Database Initialization Scripts ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "obaas.fullname" . }}-db-init
+  labels:
+    app.kubernetes.io/component: database
+    {{- include "obaas.labels" . | nindent 4 }}
+data:
+  init.sh: |
+    {{ if eq (include "obaas.database.isSIDB" .) "true" }}sqlplus{{ else }}sql{{ end }} /nolog <<- EOF
+    WHENEVER SQLERROR EXIT 1
+    WHENEVER OSERROR EXIT 1
+    SET SERVEROUTPUT ON
+    {{- if eq (include "obaas.database.needsPrivAuth" .) "true" }}
+    connect $PRIV_USERNAME/$PRIV_PASSWORD@$DB_DSN
+    {{- else }}
+    connect / as sysdba
+    ALTER SYSTEM SET VECTOR_MEMORY_SIZE=512M SCOPE=SPFILE;
+    ALTER SESSION SET CONTAINER=FREEPDB1;
+    {{- end }}
+    DECLARE
+      l_conn_user VARCHAR2(255);
+      l_user      VARCHAR2(255);
+      l_tblspace  VARCHAR2(255);
+      l_views     SYS.ODCIVARCHAR2LIST := SYS.ODCIVARCHAR2LIST(
+        'DBA_TABLESPACE_USAGE_METRICS' ,'DBA_TABLESPACES' ,'DBA_TEMP_FREE_SPACE'
+        ,'GV_\$SYSTEM_WAIT_CLASS' ,'GV_\$ASM_DISKGROUP_STAT' ,'GV_\$DATAFILE'
+        ,'GV_\$SYSSTAT' ,'GV_\$PROCESS' ,'GV_\$WAITCLASSMETRIC' ,'GV_\$SESSION'
+        ,'GV_\$RESOURCE_LIMIT' ,'GV_\$PARAMETER' ,'GV_\$DATABASE',
+        'GV_\$SQLSTATS' ,'GV_\$SYSMETRIC' ,'GV_\$INSTANCE' ,'V_\$DIAG_ALERT_EXT');
+    BEGIN
+      BEGIN
+          SELECT user INTO l_conn_user FROM DUAL;
+          SELECT username INTO l_user FROM DBA_USERS WHERE USERNAME='$DB_USERNAME';
+      EXCEPTION WHEN no_data_found THEN
+          EXECUTE IMMEDIATE 'CREATE USER "$DB_USERNAME" IDENTIFIED BY "$DB_PASSWORD"';
+      END;
+      FOR i IN 1 .. l_views.COUNT LOOP
+        BEGIN
+          EXECUTE IMMEDIATE 'GRANT SELECT ON SYS.' || l_views(i) || ' TO "$DB_USERNAME"';
+          DBMS_OUTPUT.PUT_LINE('Granted SELECT on ' || l_views(i));
+        EXCEPTION WHEN OTHERS THEN
+          DBMS_OUTPUT.PUT_LINE('Failed to grant SELECT on ' || l_views(i) || ': ' || SQLERRM);
+        END;
+      END LOOP;
+      SELECT default_tablespace INTO l_tblspace FROM dba_users WHERE username = '$DB_USERNAME';
+      EXECUTE IMMEDIATE 'ALTER USER "$DB_USERNAME" QUOTA UNLIMITED ON ' || l_tblspace;
+      BEGIN
+        -- 21+
+        EXECUTE IMMEDIATE 'GRANT DB_DEVELOPER_ROLE TO "$DB_USERNAME"';
+      EXCEPTION WHEN OTHERS THEN
+        -- 19-
+        EXECUTE IMMEDIATE 'GRANT CREATE SESSION TO "$DB_USERNAME"';
+      END;    
+      {{- if eq (include "obaas.database.isADB" .) "true" }}
+      EXECUTE IMMEDIATE 'GRANT EXECUTE ON DBMS_CLOUD_AI TO "$DB_USERNAME"';
+      EXECUTE IMMEDIATE 'GRANT EXECUTE ON DBMS_CLOUD_PIPELINE TO "$DB_USERNAME"';
+      {{- end }}
+      EXECUTE IMMEDIATE 'ALTER USER "$DB_USERNAME" DEFAULT ROLE ALL';
+    END;
+    /
+
+    {{- if eq (include "obaas.database.isSIDB" .) "true" }}
+    STARTUP FORCE;
+    ALTER SYSTEM REGISTER;
+    {{- end }}
+    EOF
+{{- end }}
+    

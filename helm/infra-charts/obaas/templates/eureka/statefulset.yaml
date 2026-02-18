@@ -1,0 +1,88 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+{{- if .Values.eureka.enabled }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Release.Name }}-eureka
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}-eureka
+    app.kubernetes.io/component: service-discovery
+    app.kubernetes.io/part-of: {{ .Release.Name }}
+    {{- include "obaas.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.eureka.replicas }}
+  serviceName: {{ .Release.Name }}-eureka
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Release.Name }}-eureka
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Release.Name }}-eureka
+        app.kubernetes.io/component: service-discovery
+      {{- if .Values.signoz.enabled }}
+      annotations:
+        signoz.io/scrape: "true"
+        signoz.io/port: "8761"
+        signoz.io/path: "/actuator/prometheus"
+      {{- end }}
+    spec:
+      {{- include "obaas.imagePullSecrets" (dict "local" .Values.eureka.imagePullSecrets "global" .Values.global.imagePullSecrets) | nindent 6 }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                  - {{ .Release.Name }}-eureka
+              topologyKey: kubernetes.io/hostname
+      containers:
+      - name: eureka
+        image: "{{ .Values.eureka.image.repository }}:{{ .Values.eureka.image.tag }}"
+        imagePullPolicy: {{ .Values.eureka.image.pullPolicy | default "IfNotPresent" }}
+        ports:
+        - name: http
+          containerPort: 8761
+          protocol: TCP
+        env:
+        - name: EUREKA_SERVER_ADDRESS
+          valueFrom:
+            configMapKeyRef:
+              name: {{ .Release.Name }}-eureka-server
+              key: url
+        {{- if .Values.signoz.enabled }}
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://{{ .Release.Name }}-signoz-otel-collector.{{ .Release.Namespace }}:4318"
+        {{- end }}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+        resources:
+          {{- if .Values.eureka.resources }}
+          {{- toYaml .Values.eureka.resources | nindent 10 }}
+          {{- else }}
+          limits:
+            cpu: 500m
+            memory: 1200Mi
+          requests:
+            cpu: 250m
+            memory: 1Gi
+          {{- end }}
+{{- end }}

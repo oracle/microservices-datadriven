@@ -1,0 +1,18 @@
+dependencies:
+- name: ingress-nginx
+  repository: https://kubernetes.github.io/ingress-nginx
+  version: 4.13.2
+- name: k8s-infra
+  repository: https://charts.signoz.io
+  version: 0.15.0
+- name: signoz
+  repository: https://charts.signoz.io
+  version: 0.102.1
+- name: apisix
+  repository: https://apache.github.io/apisix-helm-chart
+  version: 2.12.3
+- name: ai-optimizer
+  repository: https://oracle.github.io/ai-optimizer/helm
+  version: 2.0.3
+digest: sha256:ad31dd76dfeab2c7ebd9aff83e1519dcfcd5bb83a53b8f340705af637ebe8861
+generated: "2026-02-12T20:18:19.24183Z"
