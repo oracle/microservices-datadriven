@@ -30,7 +30,7 @@ kubectl port-forward -n obaas-dev svc/conductor-server 8080
 
 ### Testing the Conductor service
 
-You can test the Conductor service by running the sample workflow provided. Save the content into a file called `first_simple_workflow.json` and then execute the following command:
+You can test the Conductor service by running the sample workflow provided. Save the content into a file called `first_sample_workflow.json` and then execute the following command:
 
 ```shell
 curl -X POST 'http://localhost:8080/api/metadata/workflow' \

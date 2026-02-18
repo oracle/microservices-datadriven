@@ -1,5 +1,5 @@
 ---
-title: Setup with Terraform and Helm
+title: Setup
 sidebar_position: 0
 ---
 
@@ -7,41 +7,9 @@ sidebar_position: 0
 
 Choose your preferred deployment method for OBaaS based on your requirements and existing infrastructure.
 
-### Download the Installation Package
+### Deploy with Helm
 
-:::important
-This content is TBD - Instructions for downloading the OBaaS installation package will be provided here.
-:::
-
-**Download locations:** TBD
-
-### Deployment Methods
-
-#### Terraform for OCI
-
-**Best for**: Complete infrastructure provisioning on Oracle Cloud Infrastructure
-
-**What you get**:
-
-- **Automated OKE cluster** creation and configuration
-- **Autonomous Database** provisioning (or BYO database support)
-- **Network infrastructure** (VCN, subnets, load balancers, security lists)
-- **Complete OBaaS platform** deployed and configured
-- **One-command deployment** from scratch to running OBaaS platform
-
-**Prerequisites**:
-
-- Terraform CLI installed
-- OCI CLI configured
-- OCI tenancy with appropriate quotas
-
-**[Get started with Terraform →](./tf_cli.md)**
-
----
-
-#### Helm Charts
-
-**Best for**: Deploying to existing Kubernetes clusters
+**Best for**: Deploying to existing Kubernetes clusters.
 
 **What you get**:
 
@@ -52,9 +20,49 @@ This content is TBD - Instructions for downloading the OBaaS installation packag
 
 **Prerequisites**:
 
-- Existing Kubernetes cluster (1.24+)
+- Existing Kubernetes cluster (1.34+)
 - Helm 3.8+ installed
 - kubectl configured
-- Access to Oracle Database (19c+)
+- Access to Oracle Database (19c or later)
 
-**[Get started with Helm Charts →](./helm.md)**
+**[Get started with Helm Charts →](./helm/install.md)**
+
+### Deploy using OCI "Magic Button"
+
+Complete infrastructure provisioning on Oracle Cloud Infrastructure.
+
+**What you get**:
+
+- Automated OKE cluster creation and configuration
+- Autonomous Database provisioning (or BYO database support)
+- Network infrastructure (VCN, subnets, load balancers, security lists)
+- Complete OBaaS platform deployed and configured
+
+**Prerequisites:**
+
+- OCI tenancy with appropriate quotas and permissions
+
+
+To use this approach, click on this button to get started:
+
+[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/oracle/microservices-datadriven/releases/latest/download/obaas_iac.zip)
+
+
+{/*
+#### OCI Marketplace
+
+**Best for:** Complete infrastructure provisioning on Oracle Cloud Infrastructure
+
+**What you get**:
+
+- Automated OKE cluster creation and configuration
+- Autonomous Database provisioning (or BYO database support)
+- Network infrastructure (VCN, subnets, load balancers, security lists)
+- Complete OBaaS platform deployed and configured
+
+**Prerequisites:**
+
+- OCI tenancy with appropriate quotas and permissions
+
+**[Get started with OCI Marketplace →](./oci_mp.md)**
+*/}

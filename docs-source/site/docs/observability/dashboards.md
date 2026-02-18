@@ -8,7 +8,7 @@ More details can be found in the [SigNoz Documentation](https://signoz.io/docs/i
 
 ## Pre-installed dashboards
 
-There are several dashboards that are pre-installed in SigNoz, For example:
+There are several dashboards that are pre-installed in SigNoz, for example:
 
 - [Pre-installed dashboards](#pre-installed-dashboards)
   - [Spring Boot Observability](#spring-boot-observability)
@@ -46,7 +46,7 @@ This dashboard provides details of one or more Spring Boot applications includin
 - The request rate per second over time, by path
 - Log messages from the service
 
-You may adjust the time period and to drill down into issues, and search the logs for particular messages. This dashboard is designed for Spring Boot 3.x applications. Some features may work for Spring Boot 2.x applications.
+You may adjust the time period and drill down into issues, and search the logs for particular messages. This dashboard is designed for Spring Boot 3.x applications. Some features may work for Spring Boot 2.x applications.
 
 Here is an example of this dashboard displaying data for a simple application:
 
@@ -62,7 +62,7 @@ This dashboard provides more in-depth information about services including the f
 - HTTP request statistics
 - Logging (logback) statistics
 
-You may adjust the time period and to drill down into issues, and search the logs for particular messages. This dashboard is designed for Spring Boot 3.x applications. Some features may work for Spring Boot 2.x applications.
+You may adjust the time period and drill down into issues, and search the logs for particular messages. This dashboard is designed for Spring Boot 3.x applications. Some features may work for Spring Boot 2.x applications.
 
 Here is an example of this dashboard displaying data for a simple application:
 
@@ -110,11 +110,11 @@ Here is an example of this dashboard:
 
 ![Apache APISIX Dashboard](images/apache-apisix-dashboard.png)
 
-In addition, following dashboards are also pre-installed:
+In addition, the following dashboards are also pre-installed:
 
 ### Helidon Main Dashboard
 
-Combined dashboard for Heap memory usage statistics about all [Helidon SE](https://helidon.io/docs/v3/about/introduction) and [Helidon MP](https://helidon.io/docs/v4/mp/introduction) applications deployed in cluster.
+Combined dashboard for Heap memory usage statistics about all [Helidon SE](https://helidon.io/docs/v3/about/introduction) and [Helidon MP](https://helidon.io/docs/v4/mp/introduction) applications deployed in the cluster.
 
 ![Helidon Main Dashboard](images/helidon-main-dashboard.png)
 
@@ -132,7 +132,7 @@ Details about Memory usage of [Helidon SE](https://helidon.io/docs/v3/about/intr
 
 ### Helidon JVM Details
 
-JVM level details about Helidon applications, including statistics about [Virtual Threads](https://docs.oracle.com/en/java/javase/24/core/virtual-threads.html), CPU and Memory usage and HTTP requests
+JVM level details about Helidon applications, including statistics about [Virtual Threads](https://docs.oracle.com/en/java/javase/24/core/virtual-threads.html), CPU and Memory usage and HTTP requests.
 
 ![Helidon JVM Dashboard](images/helidon-jvm-dashboard.png)
 
@@ -144,7 +144,7 @@ Application Performance overview for all deployed services in terms of request e
 
 ### Kafka Server Monitoring Dashboard
 
-Details about Kafka brokers, partitions, consumers, topics and partitions etc.
+Details about Kafka brokers, topics, partitions, and consumers.
 
 ![Kafka Dashboard](images/kafka-dashboard.png)
 
@@ -186,7 +186,7 @@ Details about [DB attributes from opentelemetry](https://opentelemetry.io/docs/s
 
 ### Host Metrics (k8s)
 
-This dashboard uses the system metrics collected from the [hostmetrics receiver](https://uptrace.dev/opentelemetry/collector/host-metrics) to show CPU, Memory, Disk, Network and Filesystem usage
+This dashboard uses the system metrics collected from the [hostmetrics receiver](https://uptrace.dev/opentelemetry/collector/host-metrics) to show CPU, Memory, Disk, Network and Filesystem usage.
 
 ![Host Metrics Dashboard](images/host-metrics-dashboard.png)
 
@@ -198,13 +198,13 @@ This dashboard is built on top of available [HTTP attributes from opentelemetry]
 
 ### JVM Metrics
 
-JVM Runtime metrics for all services deployed in cluster in terms of CPU/Memory usage, Garbage collection events, threads and class loading/unloading.
+JVM Runtime metrics for all services deployed in the cluster in terms of CPU/Memory usage, Garbage collection events, threads and class loading/unloading.
 
 ![JVM Metrics Dashboard](images/jvm-metrics-dashboard.png)
 
 ### NGINX (OTEL)
 
-Details about connections/requests being handled by the the [NGINX Ingress controller](https://github.com/kubernetes/ingress-nginx).
+Details about connections/requests being handled by the [NGINX Ingress controller](https://github.com/kubernetes/ingress-nginx).
 
 ![Nginx Dashboard](images/nginx-dashboard.png)
 
