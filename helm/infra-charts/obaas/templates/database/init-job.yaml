@@ -1,0 +1,67 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+# spell-checker: ignore nindent sqlcl sqlplus
+
+# Database Initialization Job
+# For container database types the same init steps run inside the database pod;
+# skip this external job to avoid redundant execution.
+{{- if and .Values.database.enabled (ne (include "obaas.database.isContainerDB" .) "true") }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "obaas.fullname" . }}-run-sql-{{ .Release.Revision }}
+  labels:
+    app.kubernetes.io/component: database
+    {{- include "obaas.labels" . | nindent 4 }}
+spec:
+  ttlSecondsAfterFinished: 300  # 5 minutes
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: oracle-sqlcl-runner
+        image: {{ .Values.database.sqlcl.image.repository }}:{{ .Values.database.sqlcl.image.tag }}
+        env:
+        - name: TNS_ADMIN
+          value: /app/tns_admin
+        - name: PRIV_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "obaas.databasePrivSecret" . }}
+              key: {{ if .Values.database.privAuthN }}{{ default "username" .Values.database.privAuthN.usernameKey }}{{ else }}username{{ end }}
+        - name: PRIV_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "obaas.databasePrivSecret" . }}
+              key: {{ if .Values.database.privAuthN }}{{ default "password" .Values.database.privAuthN.passwordKey }}{{ else }}password{{ end }}
+        {{- include "obaas.database.authN" . | nindent 8 }}
+        command: ["/bin/sh", "-c"]
+        args:
+          - |
+            attempt=1
+            while [ "$attempt" -lt 360 ]; do
+                sh /opt/oracle/scripts/startup/init.sh
+                if [ $? -eq 0 ]; then
+                exit 0
+                fi
+                echo "Waiting for connectivity to ${DB_DSN} ($attempt/360)"
+                sleep 10
+                attempt=$((attempt + 1))
+            done
+        volumeMounts:
+        - name: db-init-scripts
+          mountPath: /opt/oracle/scripts/startup
+        {{- if eq (include "obaas.database.isADBS" .) "true" }}
+        - name: tns-admin
+          mountPath: /app/tns_admin
+        {{- end }}
+      volumes:
+      - name: db-init-scripts
+        configMap:
+          name: {{ include "obaas.fullname" . }}-db-init
+      {{- if eq (include "obaas.database.isADBS" .) "true" }}
+      - name: tns-admin
+        secret:
+          secretName: {{ .Release.Name }}-adb-tns-admin-{{ .Release.Revision }}
+      {{- end }}
+{{- end }}

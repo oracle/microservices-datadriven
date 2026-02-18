@@ -1,0 +1,24 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+{{- if and (index .Values "oracle-database-exporter").enabled (and $.Values.database $.Values.database.enabled) }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-metrics-exporter
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}-oracle-database-exporter
+    app.kubernetes.io/component: metrics-exporter
+    app.kubernetes.io/part-of: {{ .Release.Name }}
+    {{- include "obaas.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+  - name: metrics
+    port: 9161
+    targetPort: 9161
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: {{ .Release.Name }}-metrics-exporter
+{{- end }}

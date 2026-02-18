@@ -1,0 +1,42 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+apiVersion: v2
+type: application
+name: "obaas"
+kubeVersion: ">= 1.32.1"
+description: A Helm chart for Oracle Backend as a Service
+home: https://oracle.github.io/microservices-datadriven
+maintainers:
+  - name: Oracle and/or its affiliates
+    email: obaas_ww@oracle.com
+    url: https://oracle.github.io/microservices-datadriven
+# This is the chart version.
+version: 0.0.1
+# This is the version number of the application being deployed.
+appVersion: "2.0.0"
+
+# SubCharts
+# Note: Cluster-singleton prerequisites (oracle-database-operator, external-secrets, metrics-server,
+# kube-state-metrics, strimzi-kafka-operator, coherence-operator) are in the obaas-prereqs chart.
+# Install obaas-prereqs once per cluster before installing this chart.
+dependencies:
+  - name: ingress-nginx
+    version: "4.13.2"
+    repository: https://kubernetes.github.io/ingress-nginx
+    condition: ingress-nginx.enabled
+  - name: k8s-infra
+    version: "0.15.0"
+    repository: https://charts.signoz.io
+    condition: signoz.enabled
+  - name: signoz
+    version: "0.102.1"
+    repository: https://charts.signoz.io
+    condition: signoz.enabled
+  - name: apisix
+    version: "2.12.3"
+    repository: https://apache.github.io/apisix-helm-chart
+    condition: apisix.enabled
+  - name: ai-optimizer
+    version: ">=2.0.0 <3.0.0"
+    repository: https://oracle.github.io/ai-optimizer/helm
+    condition: ai-optimizer.enabled

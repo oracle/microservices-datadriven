@@ -1,0 +1,130 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+{{- if .Values.signoz.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-signoz-setup
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}
+    app.kubernetes.io/component: observability
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+spec:
+  backoffLimit: 6
+  completions: 1
+  parallelism: 1
+  suspend: false
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Release.Name }}
+        app.kubernetes.io/component: signoz-setup
+    spec:
+      {{- include "obaas.imagePullSecrets" (dict "local" .Values.signoz.global.imagePullSecrets "global" .Values.global.imagePullSecrets) | nindent 6 }}
+      containers:
+      - args:
+        - |
+          set -e
+          SIGNOZ_URL="http://{{ .Release.Name }}-signoz:8080"
+          email=$(cat /signoz-authn/email)
+          secret=$(cat /signoz-authn/password)
+
+          # Register admin user (ignore error if already exists)
+          echo "Registering admin user..."
+          curl -sf -H 'Content-Type: application/json' \
+            -d "{\"email\": \"${email}\", \"name\": \"Admin\", \"orgName\": \"OBaaS\", \"password\": \"${secret}\", \"isAnonymous\": true, \"hasOptedUpdates\": false}" \
+            "${SIGNOZ_URL}/api/v1/register" || echo "User may already exist, continuing..."
+
+          # Login and extract JWT token
+          echo "Logging in..."
+          login_response=$(curl -sf -H 'Content-Type: application/json' \
+            -d "{\"email\": \"${email}\", \"password\": \"${secret}\"}" \
+            "${SIGNOZ_URL}/api/v1/login")
+          TOKEN=$(echo "$login_response" | sed 's/.*"accessJwt":"\([^"]*\)".*/\1/')
+
+          if [ -z "$TOKEN" ] || [ "$TOKEN" = "$login_response" ]; then
+            echo "ERROR: Failed to extract JWT token"
+            exit 1
+          fi
+          echo "Login successful"
+
+          # Function to extract title from dashboard JSON file
+          get_title() {
+            grep -o '"title"[[:space:]]*:[[:space:]]*"[^"]*"' "$1" | head -1 | sed 's/.*:[[:space:]]*"\([^"]*\)".*/\1/'
+          }
+
+          # Function to find dashboard UUID by title from API response
+          find_dashboard_uuid() {
+            local search_title="$1"
+            local response="$2"
+            # Extract id that appears before matching title in the response
+            echo "$response" | tr '{}' '\n' | grep -B1 "\"title\":\"${search_title}\"" | grep '"id"' | sed 's/.*"id":"\([^"]*\)".*/\1/' | head -1
+          }
+
+          # Get existing dashboards
+          echo "Fetching existing dashboards..."
+          dashboards_response=$(curl -sf -H "Authorization: Bearer $TOKEN" "${SIGNOZ_URL}/api/v1/dashboards")
+
+          # Process dashboards from both directories
+          for dir in /signoz-dashboards-1 /signoz-dashboards-2; do
+            [ -d "$dir" ] || continue
+            for f in $(find -L "$dir" -maxdepth 1 -type f 2>/dev/null); do
+              title=$(get_title "$f")
+              [ -z "$title" ] && continue
+              echo "Reconciling dashboard: $title"
+
+              # Find and delete existing dashboard with same title
+              uuid=$(find_dashboard_uuid "$title" "$dashboards_response")
+              if [ -n "$uuid" ]; then
+                echo "  Deleting existing dashboard: $uuid"
+                curl -sf -H "Authorization: Bearer $TOKEN" -X DELETE "${SIGNOZ_URL}/api/v1/dashboards/$uuid" || true
+              fi
+
+              # Create new dashboard
+              echo "  Creating dashboard..."
+              curl -sf -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
+                -d @"${f}" "${SIGNOZ_URL}/api/v1/dashboards" && echo "  Done" || echo "  Failed"
+            done
+          done
+
+          echo "SigNoz setup complete"
+        command:
+        - /bin/sh
+        - -c
+        image: {{ .Values.signoz.utilities.curlJq.image.registry }}/{{ .Values.signoz.utilities.curlJq.image.repository }}:{{ .Values.signoz.utilities.curlJq.image.tag }}
+        name: signoz-setup
+        volumeMounts:
+        - mountPath: /signoz-dashboards-1
+          name: signoz-dashboards-1
+          readOnly: true
+        - mountPath: /signoz-authn
+          name: signoz-authn
+          readOnly: true
+        - mountPath: /signoz-dashboards-2
+          name: signoz-dashboards-2
+          readOnly: true
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - until wget --spider -q {{ .Release.Name }}-signoz:8080/api/v1/health?live=1; do echo -e "waiting
+          for query-service"; sleep 5; done; echo -e "query-service ready, starting
+          setup now";
+        image: {{ .Values.signoz.utilities.busybox.image.registry }}/{{ .Values.signoz.utilities.busybox.image.repository }}:{{ .Values.signoz.utilities.busybox.image.tag }}
+        imagePullPolicy: IfNotPresent
+        name: signoz-setup-init
+      restartPolicy: OnFailure
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: {{ .Release.Name }}-signoz-dashboards
+        name: signoz-dashboards-1
+      - name: signoz-authn
+        secret:
+          secretName: {{ include "obaas.signoz.secretName" . }}
+      - configMap:
+          defaultMode: 420
+          name: {{ .Release.Name }}-signoz-dashboards-2
+        name: signoz-dashboards-2
+{{- end }}

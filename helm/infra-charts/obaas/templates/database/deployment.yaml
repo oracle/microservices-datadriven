@@ -1,0 +1,76 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+# spell-checker: ignore nindent freepdb1
+
+# Database Deployment (SIDB-FREE or ADB-FREE)
+{{- if .Values.database }}
+{{- if eq (include "obaas.database.isContainerDB" .) "true" }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "obaas.fullname" . }}-{{ include "obaas.database.dbName" . }}
+  labels:
+    app.kubernetes.io/component: database
+    {{- include "obaas.labels" . | nindent 4}}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: database
+      {{- include "obaas.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: database
+        {{- include "obaas.labels" . | nindent 8 }}
+    spec:
+      securityContext:
+        fsGroup: 54321
+        runAsGroup: 54321
+        runAsUser: 54321
+      containers:
+        - name: db-container
+          image: {{ .Values.database.image.repository }}:{{ .Values.database.image.tag }}
+          imagePullPolicy: {{ .Values.database.image.pullPolicy | default "IfNotPresent" }}
+          ports:
+            - containerPort: 1521
+          readinessProbe:
+            tcpSocket:
+              port: 1521
+            initialDelaySeconds: 60
+            periodSeconds: 10
+          env:
+            {{- include "obaas.database.authN" . | nindent 12 }}
+          {{- if eq (include "obaas.database.isSIDB" .) "true" }}
+            - name: ORACLE_PWD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "obaas.databasePrivSecret" . }}
+                  key: {{ if .Values.database.privAuthN }}{{ default "password" .Values.database.privAuthN.passwordKey }}{{ else }}password{{ end }}
+          volumeMounts:
+            - name: db-init-scripts
+              mountPath: "/opt/oracle/scripts/startup"
+          {{- else }}
+            - name: DATABASE_NAME
+              value: FREEPDB1
+            - name: ENABLE_ARCHIVE_LOG
+              value: "False"
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "obaas.databasePrivSecret" . }}
+                  key: {{ if .Values.database.privAuthN }}{{ default "password" .Values.database.privAuthN.passwordKey }}{{ else }}password{{ end }}
+            - name: WALLET_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "obaas.databasePrivSecret" . }}
+                  key: {{ if .Values.database.privAuthN }}{{ default "password" .Values.database.privAuthN.passwordKey }}{{ else }}password{{ end }}
+          {{- end }}
+      {{- if eq (include "obaas.database.isSIDB" .) "true" }}
+      volumes:
+        - name: db-init-scripts
+          configMap:
+            name: {{ include "obaas.fullname" . }}-db-init
+      {{- end }}
+{{- end }}
+{{- end }}

@@ -1,0 +1,88 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+
+# =============================================================================
+# Example: Existing "Bring your own" Database Configuration
+# =============================================================================
+#
+# !! NOTE: If you have an ADB, see vvalues-existing-adb.yaml instead.
+#
+# This example shows how to configure against an existing database.
+#
+# !! NOTE: Change "NAMESPACE" to the namespace where the obaas chart will be installed !!
+#
+# Prerequisites:
+#   1. Create the Privileged AuthN secret for the appropriate admin user (provide password/service):
+#        kubectl -n NAMESPACE create secret generic db-priv-authn \
+#          --from-literal=username=SYSTEM \
+#          --from-literal=password=<SYSTEM PASSWORD> \
+#          --from-literal=service=<DBNAME>_TP
+#
+#   The admin user should be a user with DBA privileges that can be used to
+#   create application users and grant them appropriate privileges.  For example,
+#   the SYSTEM user is a good choice.  This user should not require the
+#   SYSDBA role.
+#
+#   This user should have the following permissions:
+#
+#   SELECT WITH ADMIN OPTION on:
+#         DBA_TABLESPACE_USAGE_METRICS, DBA_TABLESPACES,
+#         GV_$SYSTEM_WAIT_CLASS, GV_$ASM_DISKGROUP_STAT, GV_$DATAFILE,
+#         GV_$SYSSTAT, GV_$PROCESS, GV_$WAITCLASSMETRIC, GV_$SESSION,
+#         GV_$RESOURCE_LIMIT, GV_$PARAMETER, GV_$DATABASE,
+#         GV_$SQLSTATS, GV_$SYSMETRIC, V_$DIAG_ALERT_EXT
+#
+#   EXECUTE WITH GRANT OPTION on:
+#         SYS.DBMS_AQ, SYS.DBMS_AQADM, SYS.DBMS_AQIN,
+#         SYS.DBMS_AQIN, SYS.DBMS_AQJMS_INTERNAL
+#
+#
+# Usage:
+#   helm upgrade --install obaas . \
+#     -n NAMESPACE \
+#     -f examples/values-byodb.yaml
+#
+# =============================================================================
+database:
+  enabled: true
+  # Database type: SIDB-FREE, ADB-FREE, ADB-S, or OTHER
+  type: "OTHER"
+  # SQLcl image for database initialization jobs
+  sqlcl:
+    image:
+      repository: container-registry.oracle.com/database/sqlcl
+      tag: "25.3.0"
+
+  # For SIDB-FREE/ADB-FREE: container image configuration (exclude for ADB-S)
+  image:
+    repository: "container-registry.oracle.com/database/free"
+    tag: "latest"
+
+  # For OTHER: External database connectivity
+  # Either provide 'dsn' OR all of (host, port, service_name)
+  other:
+    # Full DSN string (e.g: mydbhost.com:1521/mydb_service)
+    # If provided, supersedes host/port/service_name
+    dsn: ""
+    # Database host (e.g: mydbhost.com)
+    # Required if dsn is not provided
+    host: "mydb.somewhere.oraclevcn.com"
+    # Database port (e.g: 1521)
+    # Required if dsn is not provided
+    port: "1521"
+    # Database service name (e.g: mydb_service)
+    # Required if dsn is not provided
+    service_name: "mydb_pdb1.somewhere.oraclevcn.com"
+
+  # Privileged User Authentication (for database initialization)
+  # Required for SIDB-FREE, ADB-FREE, ADB-S, OTHER when database initialization is needed
+  # This is the ADMIN (ADB) or SYSTEM (SIDB) user that creates the application user
+  privAuthN:
+    # Name of Secret containing privileged user credentials
+    # If not provided, a secret will be auto-generated with random password
+    secretName: "obaas-db-priv-authn"
+    # Namespace of the privileged user secret
+    secretNamespace: "obaas-dev"
+    # Override default key names in the secret (defaults: username, password)
+    # usernameKey: "username"
+    # passwordKey: "password"

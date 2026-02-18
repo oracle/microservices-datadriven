@@ -1,0 +1,48 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+{{- if (index .Values "conductor-server").enabled }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-conductor-server
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}-conductor-server
+    app.kubernetes.io/component: workflow-orchestration
+    app.kubernetes.io/part-of: {{ .Release.Name }}
+    {{- include "obaas.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 8080
+    targetPort: http
+    protocol: TCP
+  - name: ui
+    port: 8127
+    targetPort: ui
+    protocol: TCP  
+  selector:
+    app.kubernetes.io/name: {{ .Release.Name }}-conductor-server
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-conductor-redis
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}-conductor-redis
+    app.kubernetes.io/component: workflow-orchestration
+    app.kubernetes.io/part-of: {{ .Release.Name }}
+    {{- include "obaas.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+  - name: redis
+    port: 6379
+    targetPort: redis
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: {{ .Release.Name }}-conductor-redis    
+{{- end }}

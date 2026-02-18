@@ -1,0 +1,32 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+# Example values for tenant1 installation
+# This shows how to configure unique IngressClass for multi-tenant deployments
+#
+# Install with:
+#   helm upgrade --install obaas-tenant1 . -n tenant1 -f examples/values-tenant1.yaml --create-namespace
+
+# Configure unique ingress controller for this tenant
+ingress-nginx:
+  enabled: true
+  controller:
+    # Unique IngressClass name for this tenant
+    ingressClass: nginx-tenant1
+    ingressClassResource:
+      # Must be unique across all tenants
+      name: nginx-tenant1
+      enabled: true
+      default: false
+      # Unique controller value - prevents conflicts with other tenants
+      controllerValue: "k8s.io/ingress-nginx-tenant1"
+    # Unique election ID for leader election
+    electionID: "ingress-controller-leader-tenant1"
+    # Scope to watch only this tenant's namespace
+    scope:
+      enabled: true
+
+# Configure SigNoz admin credentials for this tenant
+signoz:
+  enabled: true
+  auth:
+    email: "admin-tenant1@example.com"

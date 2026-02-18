@@ -1,0 +1,22 @@
+## Copyright (c) 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+# spell-checker: ignore nindent freepdb1 oserror selectai sidb spfile sqlplus
+# spell-checker: ignore sqlcode sqlerror varchar nolog ptype sysdba tablespace tblspace
+
+{{- if and (index .Values "oracle-database-exporter").enabled (and $.Values.database $.Values.database.enabled) }}
+# Database wait-for-connect init scriptConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "obaas.fullname" . }}-wait-script
+  labels:
+    app.kubernetes.io/component: database
+    {{- include "obaas.labels" . | nindent 4 }}
+data:
+  init.sh: |
+    {{ if eq (include "obaas.database.isSIDB" .) "true" }}sqlplus{{ else }}sql{{ end }} /nolog <<- EOF
+      WHENEVER SQLERROR EXIT 1
+      WHENEVER OSERROR EXIT 1
+      connect $DB_USERNAME/$DB_PASSWORD@$DB_DSN
+    EOF
+{{- end }}

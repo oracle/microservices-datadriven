@@ -1,0 +1,18 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+{{- if and .Values.eureka.enabled .Values.apisix.enabled }}
+# Alias service to allow APISIX to reach Eureka using a fixed name
+# APISIX config uses "eureka" which maps to the release-prefixed service
+apiVersion: v1
+kind: Service
+metadata:
+  name: eureka
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}
+    app.kubernetes.io/component: service-discovery
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+spec:
+  type: ExternalName
+  externalName: {{ .Release.Name }}-eureka.{{ .Release.Namespace }}.svc.cluster.local
+{{- end }}

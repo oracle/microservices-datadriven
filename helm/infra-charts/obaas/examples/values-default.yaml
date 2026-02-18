@@ -1,0 +1,57 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+# Example: Default Configuration
+# This is a minimal configuration with no overrides.
+# All components use their default settings and deploy to the release namespace.
+#
+# Prerequisites:
+#   Install obaas-prereqs chart once per cluster before installing this chart.
+#
+# Usage:
+#   helm upgrade --install obaas . -f examples/values-default.yaml -n obaas --create-namespace
+
+# -----------------------
+# -- Global Configuration
+global:
+  # No private registry credentials needed
+  imagePullSecrets: []
+
+# -----------------------
+# -- OBaaS Components
+# All components enabled with default settings
+
+# Service Discovery
+eureka:
+  enabled: true
+
+# API Gateway
+apisix:
+  enabled: true
+
+ingress-nginx:
+  enabled: true
+
+# Platform Services
+admin-server:
+  enabled: true
+
+conductor-server:
+  enabled: true
+
+otmm:
+  enabled: true
+
+# Database (SIDB-FREE by default)
+database:
+  enabled: true
+
+oracle-database-exporter:
+  enabled: true
+
+# Observability
+signoz:
+  enabled: true
+
+# AI Optimizer (disabled by default)
+ai-optimizer:
+  enabled: false

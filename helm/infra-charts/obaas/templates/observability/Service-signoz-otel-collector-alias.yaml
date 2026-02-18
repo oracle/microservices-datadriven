@@ -1,0 +1,18 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+{{- if and .Values.signoz.enabled .Values.apisix.enabled }}
+# Alias service to allow APISIX to reach SigNoz OTel collector using a fixed name
+# APISIX config uses "signoz-otel-collector" which maps to the release-prefixed service
+apiVersion: v1
+kind: Service
+metadata:
+  name: signoz-otel-collector
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}
+    app.kubernetes.io/component: observability
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+spec:
+  type: ExternalName
+  externalName: {{ .Release.Name }}-signoz-otel-collector.{{ .Release.Namespace }}.svc.cluster.local
+{{- end }}

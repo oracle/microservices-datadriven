@@ -1,0 +1,152 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+{{- if and (index .Values "oracle-database-exporter").enabled (and $.Values.database $.Values.database.enabled) }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-metrics-exporter
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}-oracle-database-exporter
+    app.kubernetes.io/component: metrics-exporter
+    app.kubernetes.io/part-of: {{ .Release.Name }}
+    {{- include "obaas.labels" . | nindent 4 }}
+spec:
+  replicas: {{ (index .Values "oracle-database-exporter").replicas }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Release.Name }}-metrics-exporter
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Release.Name }}-metrics-exporter
+        app.kubernetes.io/component: metrics-exporter
+      {{- if .Values.signoz.enabled }}
+      annotations:
+        signoz.io/scrape: "true"
+        signoz.io/port: "9161"
+        signoz.io/path: "/metrics"
+      {{- end }}
+    spec:
+      {{- include "obaas.imagePullSecrets" (dict "local" (index .Values "oracle-database-exporter").imagePullSecrets "global" .Values.global.imagePullSecrets) | nindent 6 }}
+      restartPolicy: Always
+      containers:
+      - name: metrics-exporter
+        image: "{{ (index .Values "oracle-database-exporter").image.repository }}:{{ (index .Values "oracle-database-exporter").image.tag }}"
+        imagePullPolicy: {{ (index .Values "oracle-database-exporter").image.pullPolicy | default "IfNotPresent" }}
+        command:
+        - /oracledb_exporter
+        args:
+        - --config.file=/config/exporter-config.yaml
+        ports:
+        - name: metrics
+          containerPort: 9161
+          protocol: TCP
+        env:
+        - name: ORACLE_HOME
+          value: /lib/oracle/21/client64/lib
+        - name: TNS_ADMIN
+          value: /lib/oracle/21/client64/lib/network/admin
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "obaas.databaseSecret" $ }}
+              key: {{ if $.Values.database.authN }}{{ default "username" $.Values.database.authN.usernameKey }}{{ else }}username{{ end }}
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "obaas.databaseSecret" $ }}
+              key: {{ if $.Values.database.authN }}{{ default "password" $.Values.database.authN.passwordKey }}{{ else }}password{{ end }}
+        - name: DB_CONNECT_STRING
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "obaas.databaseSecret" $ }}
+              key: {{ if $.Values.database.authN }}{{ default "service" $.Values.database.authN.serviceKey }}{{ else }}service{{ end }}
+        livenessProbe:
+          httpGet:
+            path: /
+            port: metrics
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: metrics
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+        volumeMounts:
+        - name: exporter-config
+          mountPath: /config
+        - name: tns-admin
+          mountPath: /lib/oracle/21/client64/lib/network/admin
+        - name: alert-log
+          mountPath: /log
+        resources:
+          {{- if (index .Values "oracle-database-exporter").resources }}
+          {{- toYaml (index .Values "oracle-database-exporter").resources | nindent 10 }}
+          {{- else }}
+          limits:
+            cpu: 500m
+            memory: 128Mi
+          requests:
+            cpu: 250m
+            memory: 64Mi
+          {{- end }}
+      - name: alertlog
+        image: "{{ (index .Values "oracle-database-exporter").busybox.repository }}:{{ (index .Values "oracle-database-exporter").busybox.tag }}"
+        imagePullPolicy: IfNotPresent
+        command:
+          - sh
+          - -c
+          - |
+            while [ ! -f /log/alert.log ]; do sleep 1; done && tail -f /log/alert.log
+        volumeMounts:
+        - name: alert-log
+          mountPath: /log
+{{- if .Values.database.privAuthN }}
+      initContainers:
+        - name: wait-for-connect
+          image: {{ .Values.database.sqlcl.image.repository }}:{{ .Values.database.sqlcl.image.tag }}
+          env:
+          - name: TNS_ADMIN
+            value: /app/tns_admin
+          {{- include "obaas.database.authN" . | nindent 10 }}
+          command: [ "/bin/sh", "-c" ]
+          args:
+            - |
+              attempt=1
+              while [ "$attempt" -lt 360 ]; do
+                  sh /opt/oracle/scripts/startup/init.sh
+                  if [ $? -eq 0 ]; then
+                  exit 0
+                  fi
+                  echo "Waiting for connectivity to ${DB_DSN} ($attempt/360)"
+                  sleep 10
+                  attempt=$((attempt + 1))
+              done
+          volumeMounts:
+          - name: wait-for-connect-script
+            mountPath: /opt/oracle/scripts/startup
+          {{- if eq (include "obaas.database.isADBS" .) "true" }}
+          - name: tns-admin
+            mountPath: /app/tns_admin
+          {{- end }}
+      {{- end }}
+      volumes:
+      - name: wait-for-connect-script
+        configMap:
+          name: {{ include "obaas.fullname" . }}-wait-script
+      - name: exporter-config
+        configMap:
+          name: {{ .Release.Name }}-db-exporter-config
+      - name: alert-log
+        emptyDir:
+          sizeLimit: 500Mi
+      - name: tns-admin
+        secret:
+          secretName: {{ ternary (include "obaas.databaseAdbTnsAdminSecret" $) (include "obaas.databaseTnsAdminSecret" $) (eq (include "obaas.database.isADB" $) "true") }}
+          optional: true
+{{- end }}

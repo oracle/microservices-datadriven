@@ -1,0 +1,140 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+{{- if .Values.signoz.enabled }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Release.Name }}-clickhouse-pre-delete
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ .Release.Name }}-clickhouse-pre-delete
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+rules:
+- apiGroups: ["clickhouse.altinity.com"]
+  resources: ["clickhouseinstallations"]
+  verbs: ["get", "list", "delete", "patch"]
+- apiGroups: [""]
+  resources: ["pods", "services"]
+  verbs: ["get", "list", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ .Release.Name }}-clickhouse-pre-delete
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ .Release.Name }}-clickhouse-pre-delete
+subjects:
+- kind: ServiceAccount
+  name: {{ .Release.Name }}-clickhouse-pre-delete
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-clickhouse-pre-delete
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-delete
+    "helm.sh/hook-weight": "-4"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+spec:
+  backoffLimit: 3
+  template:
+    metadata:
+      name: {{ .Release.Name }}-clickhouse-pre-delete
+    spec:
+      serviceAccountName: {{ .Release.Name }}-clickhouse-pre-delete
+      restartPolicy: Never
+      containers:
+      - name: pre-delete-cleanup
+        image: {{ .Values.global.utilities.kubectl.image.registry }}/{{ .Values.global.utilities.kubectl.image.repository }}:{{ .Values.global.utilities.kubectl.image.tag }}
+        command:
+        - sh
+        - -c
+        - |
+          set -e
+          echo "=== ClickHouse Pre-Delete Hook ==="
+          echo "Removing ClickHouseInstallation finalizers to allow clean uninstall..."
+
+          # Find all ClickHouseInstallation resources in this namespace
+          CHI_LIST=$(kubectl get clickhouseinstallations -n {{ .Release.Namespace }} -o name 2>/dev/null || echo "")
+
+          if [ -z "$CHI_LIST" ]; then
+            echo "No ClickHouseInstallation resources found. Nothing to clean up."
+            exit 0
+          fi
+
+          echo "Found ClickHouseInstallation resources:"
+          echo "$CHI_LIST"
+
+          # Remove finalizers and delete each ClickHouseInstallation
+          for chi in $CHI_LIST; do
+            echo "Processing $chi..."
+            # Remove finalizers first
+            kubectl patch $chi -n {{ .Release.Namespace }} -p '{"metadata":{"finalizers":null}}' --type=merge
+            echo "Removed finalizers from $chi"
+            # Delete and wait for it to be gone
+            kubectl delete $chi -n {{ .Release.Namespace }} --wait=true --timeout=60s || true
+            echo "Deleted $chi"
+          done
+
+          # Verify all ClickHouseInstallation resources are fully removed
+          echo "Verifying ClickHouseInstallation resources are fully deleted..."
+          TIMEOUT=60
+          ELAPSED=0
+          while [ $ELAPSED -lt $TIMEOUT ]; do
+            REMAINING=$(kubectl get clickhouseinstallations -n {{ .Release.Namespace }} --no-headers 2>/dev/null | wc -l || echo "0")
+            REMAINING=$(echo "$REMAINING" | tr -d ' ')
+            if [ "$REMAINING" -eq 0 ]; then
+              echo "All ClickHouseInstallation resources successfully removed"
+              break
+            fi
+            echo "Waiting for $REMAINING resource(s) to be deleted... ($ELAPSED/$TIMEOUT seconds)"
+            # Re-patch finalizers in case operator re-added them
+            for chi in $(kubectl get clickhouseinstallations -n {{ .Release.Namespace }} -o name 2>/dev/null); do
+              kubectl patch $chi -n {{ .Release.Namespace }} -p '{"metadata":{"finalizers":null}}' --type=merge 2>/dev/null || true
+            done
+            sleep 5
+            ELAPSED=$((ELAPSED + 5))
+          done
+
+          if [ $ELAPSED -ge $TIMEOUT ]; then
+            echo "Warning: Timeout waiting for ClickHouseInstallation deletion"
+            kubectl get clickhouseinstallations -n {{ .Release.Namespace }} 2>/dev/null || true
+          fi
+
+          # Clean up any orphaned ClickHouse services
+          echo "Cleaning up ClickHouse services..."
+          SVC_LIST=$(kubectl get svc -n {{ .Release.Namespace }} -l clickhouse.altinity.com/chi -o name 2>/dev/null || echo "")
+          if [ -n "$SVC_LIST" ]; then
+            echo "Found ClickHouse services:"
+            echo "$SVC_LIST"
+            for svc in $SVC_LIST; do
+              kubectl delete $svc -n {{ .Release.Namespace }} --wait=false
+              echo "Deleted $svc"
+            done
+          else
+            echo "No ClickHouse services found"
+          fi
+
+          echo "=== Pre-delete cleanup complete ==="
+{{- end }}

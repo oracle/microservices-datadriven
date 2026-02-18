@@ -1,0 +1,51 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+{{- if (index .Values "otmm").enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-otmm-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}-otmm-tcs
+    app.kubernetes.io/component: transaction-coordinator
+    app.kubernetes.io/part-of: {{ .Release.Name }}
+    {{- include "obaas.labels" . | nindent 4 }}
+data:
+  APPLICATION_NAMESPACE: ""
+  AUTHORIZATION_ENABLED: "false"
+  AUTHORIZATION_TOKEN_PROPAGATION_ENABLED: "false"
+  COMPLETED_TX_TTL: "60"
+  ENCRYPTION_SECRET_KEY_VERSION: "1"
+  ENCRYPTION_SECRET_KEYS: '{"secretKeys":[{"secretKeyName":"encryption-secret-key","version":"1"}]}'
+  EXTERNAL_ADDR: {{ printf "http://%s-otmm-tcs.%s.svc.cluster.local:9000" .Release.Name .Release.Namespace }}
+  HTTP_TRACE_ENABLED: "true"
+  ID: TCS01
+  IDENTITY_PROVIDER_CLIENT_ID: ""
+  IDENTITY_PROVIDER_NAME: ""
+  IDENTITY_PROVIDER_URL: ""
+  INTERNAL_ADDR: {{ printf "http://%s-otmm-tcs:9000" .Release.Name }}
+  ISTIO_INGRESS_GATEWAY: ingressgateway
+  ISTIO_SYSTEM_NAMESPACE: ""
+  LISTEN_ADDR: "0.0.0.0:9000"
+  LOGGING_LEVEL: info
+  LRA_COORDINATOR_ENABLED: "true"
+  MAX_RETRY_COUNT: "10"
+  MAX_RETRY_INTERVAL: "10000"
+  MIN_RETRY_INTERVAL: "1000"
+  NARAYANA_LRA_COMPATIBILITY_MODE: "false"
+  PORT: "9000"
+  REQUEST_WITH_NO_JWT: ALLOW
+  STORAGE_ETCD_ENDPOINTS: ""
+  STORAGE_ETCD_SKIP_HOSTNAME_VERIFICATION: "false"
+  STORAGE_TYPE: memory
+  TCC_COORDINATOR_ENABLED: "true"
+  TMM_APPNAME: {{ .Release.Name }}-otmm-tcs
+  TMM_IMAGE: "{{ (index .Values "otmm").image.repository }}:{{ (index .Values "otmm").image.tag }}"
+  TMM_IMAGE_PULLPOLICY: {{ (index .Values "otmm").image.pullPolicy | default "IfNotPresent" }}
+  TMM_IMAGE_PULLSECRET: {{ include "obaas.imagePullSecretName" (dict "local" (index .Values "otmm").imagePullSecrets "global" .Values.global.imagePullSecrets) }}
+  TMM_REPLICA_COUNT: "{{ (index .Values "otmm").replicas }}"
+  TRANSACTION_TOKEN_ENABLED: "false"
+  XA_COORDINATOR_ENABLED: "true"
+  XA_COORDINATOR_TX_MAX_TIMEOUT: "600000"
+{{- end }}

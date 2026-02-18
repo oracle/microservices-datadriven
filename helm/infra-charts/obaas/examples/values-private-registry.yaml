@@ -1,0 +1,270 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+
+# =============================================================================
+# Example: Private Registry Configuration for OBaaS Chart
+# =============================================================================
+#
+# This example shows how to configure all images to pull from a private
+# container registry (e.g., for air-gapped installations).
+#
+# IMPORTANT: This file is for the 'obaas' chart only. For the 'obaas-prereqs'
+# chart, see the corresponding example in ../obaas-prereqs/examples/
+#
+# Prerequisites:
+#   1. Create the image pull secret before installing:
+#      kubectl create secret docker-registry myregistry-secret \
+#        --docker-server=myregistry.example.com \
+#        --docker-username=<username> \
+#        --docker-password=<password> \
+#        --docker-email=<email> \
+#        -n <namespace>
+#
+#   2. Mirror the required images to your private registry
+#
+# Usage:
+#   helm upgrade --install obaas . -n <namespace> -f examples/values-private-registry.yaml
+#
+# =============================================================================
+
+# -----------------------
+# -- Global Configuration
+# -----------------------
+global:
+  # Image pull secret for private registry authentication
+  # This is automatically propagated to all subcharts via YAML anchors
+  imagePullSecrets:
+    - name: myregistry-secret
+
+  # Utility images used by global hooks (e.g., PVC cleanup on uninstall)
+  utilities:
+    kubectl:
+      image:
+        registry: myregistry.example.com
+        repository: alpine/k8s
+        tag: "1.28.13"
+
+# =============================================================================
+# OBaaS Custom Components
+# =============================================================================
+# These components use full repository paths. Replace the registry prefix.
+
+# Eureka Service Discovery
+eureka:
+  enabled: true
+  image:
+    repository: myregistry.example.com/orgname/service-registry
+    tag: "2.0.0"
+
+# Admin Server
+admin-server:
+  enabled: true
+  image:
+    repository: myregistry.example.com/orgname/admin-server
+    tag: "2.0.0"
+
+# Conductor Server (Netflix Conductor - Workflow Orchestration)
+conductor-server:
+  enabled: true
+  image:
+    repository: myregistry.example.com/orgname/conductor
+    tag: "server-2.0.0"
+  redisImage:
+    repository: myregistry.example.com/orgname/conductor
+    tag: "cache-2.0.0"
+
+# Oracle Transaction Manager for Microservices (OTMM)
+otmm:
+  enabled: true
+  image:
+    repository: myregistry.example.com/database/otmm
+    tag: "24.4.1"
+
+# Oracle Database Exporter (Prometheus metrics)
+oracle-database-exporter:
+  enabled: true
+  image:
+    repository: myregistry.example.com/database/observability-exporter
+    tag: "2.2.0"
+  # Busybox sidecar for tailing alert.log
+  busybox:
+    repository: myregistry.example.com/busybox
+    tag: "1.36"
+
+# =============================================================================
+# Database Configuration
+# =============================================================================
+# Configure database images for SIDB-FREE or ADB-FREE deployments
+
+database:
+  enabled: true
+  # Database type: SIDB-FREE, ADB-FREE, ADB-S, or OTHER
+  type: "SIDB-FREE"
+  # Container image for SIDB-FREE or ADB-FREE (not needed for ADB-S or OTHER)
+  image:
+    repository: myregistry.example.com/database/free
+    tag: "latest"
+  # SQLcl image for database initialization jobs
+  sqlcl:
+    image:
+      repository: myregistry.example.com/database/sqlcl
+      tag: "25.3.0"
+
+# =============================================================================
+# Subcharts - Ingress NGINX
+# =============================================================================
+# Default registry: registry.k8s.io
+
+ingress-nginx:
+  enabled: true
+  controller:
+    image:
+      registry: myregistry.example.com
+      image: ingress-nginx/controller
+      # tag: ""  # Uses chart default
+    admissionWebhooks:
+      patch:
+        image:
+          registry: myregistry.example.com
+          image: ingress-nginx/kube-webhook-certgen
+          # tag: ""  # Uses chart default
+
+# =============================================================================
+# Subcharts - APISIX
+# =============================================================================
+# Default registry: docker.io
+
+apisix:
+  enabled: true
+  # Main APISIX image
+  image:
+    repository: myregistry.example.com/apache/apisix
+    tag: "3.14.1-ubuntu"
+  # Init container
+  initContainer:
+    image: myregistry.example.com/busybox
+    tag: "1.36"
+  # etcd subchart
+  etcd:
+    image:
+      registry: myregistry.example.com
+      repository: bitnamilegacy/etcd
+      # tag: ""  # Uses chart default
+  # APISIX Ingress Controller (if enabled)
+  ingress-controller:
+    enabled: false
+    image:
+      repository: myregistry.example.com/apache/apisix-ingress-controller
+      # tag: ""  # Uses chart default
+
+# =============================================================================
+# Subcharts - SigNoz (Observability)
+# =============================================================================
+# SigNoz has many components. The global.imageRegistry covers most,
+# but some components need explicit configuration.
+
+signoz:
+  enabled: true
+  global:
+    # Global registry for most SigNoz components
+    imageRegistry: myregistry.example.com
+
+  # Utility images used by setup jobs and hooks
+  utilities:
+    curlJq:
+      image:
+        registry: myregistry.example.com
+        repository: curlimages/curl
+        tag: "8.17.0"
+    busybox:
+      image:
+        registry: myregistry.example.com
+        repository: busybox
+        tag: "1.36"
+
+  # SigNoz core components (using global.imageRegistry)
+  signoz:
+    image:
+      registry: myregistry.example.com
+      repository: signoz/signoz
+    initContainers:
+      init:
+        image:
+          registry: myregistry.example.com
+          repository: busybox
+          tag: "1.36"
+
+  # Schema Migrator
+  schemaMigrator:
+    image:
+      registry: myregistry.example.com
+      repository: signoz/signoz-schema-migrator
+    initContainers:
+      init:
+        image:
+          registry: myregistry.example.com
+          repository: busybox
+          tag: "1.36"
+      chReady:
+        image:
+          registry: myregistry.example.com
+          repository: clickhouse/clickhouse-server
+      wait:
+        image:
+          registry: myregistry.example.com
+          repository: groundnuty/k8s-wait-for
+
+  # OpenTelemetry Collector
+  otelCollector:
+    image:
+      registry: myregistry.example.com
+      repository: signoz/signoz-otel-collector
+
+  # ClickHouse (SigNoz storage backend)
+  clickhouse:
+    image:
+      registry: myregistry.example.com
+      repository: clickhouse/clickhouse-server
+    zookeeper:
+      image:
+        registry: myregistry.example.com
+        repository: signoz/zookeeper
+    initContainers:
+      udf:
+        image:
+          registry: myregistry.example.com
+          repository: library/alpine
+    clickhouseOperator:
+      image:
+        registry: myregistry.example.com
+        repository: altinity/clickhouse-operator
+      metricsExporter:
+        image:
+          registry: myregistry.example.com
+          repository: altinity/metrics-exporter
+
+# =============================================================================
+# Image Reference Summary
+# =============================================================================
+#
+# This table shows all images and their default registries:
+#
+# Component                          | Default Registry                      | Config Path
+# -----------------------------------|---------------------------------------|------------------------------------------
+# global kubectl (PVC cleanup hook)  | docker.io                     | global.utilities.kubectl.image.registry
+# eureka                             | container-registry.oracle.com | eureka.image.repository
+# admin-server                       | container-registry.oracle.com | admin-server.image.repository
+# conductor-server                   | container-registry.oracle.com | conductor-server.image.repository
+# otmm                               | container-registry.oracle.com | otmm.image.repository
+# oracle-database-exporter           | container-registry.oracle.com | oracle-database-exporter.image.repository
+# oracle-database-exporter (busybox) | docker.io                     | oracle-database-exporter.busybox.repository
+# database                           | (varies by type)              | database.image.repository
+# sqlcl                              | container-registry.oracle.com | database.sqlcl.image.repository
+# ingress-nginx controller           | registry.k8s.io               | ingress-nginx.controller.image.registry
+# ingress-nginx webhook              | registry.k8s.io               | ingress-nginx...admissionWebhooks...
+# apisix                             | docker.io                     | apisix.image.repository
+# apisix initContainer               | docker.io                     | apisix.initContainer.image
+# apisix etcd                        | docker.io                     | apisix.etcd.image.registry
+# signoz (all components)            | docker.io                     | signoz.global.imageRegistry + overrides
+#
+# =============================================================================
