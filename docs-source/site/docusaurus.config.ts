@@ -47,8 +47,8 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/oracle/microservices-datadriven/tree/main/docs-source/site/',
+          // editUrl:
+          //   'https://github.com/oracle/microservices-datadriven/tree/main/docs-source/site/',
         },
         gtag: {
           trackingID: 'G-2EVY167E00',

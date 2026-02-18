@@ -1,6 +1,7 @@
 ---
 title: OCI Marketplace Installation
 sidebar_position: 1
+draft: true
 ---
 ## Overview
 

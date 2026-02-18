@@ -1,5 +1,5 @@
 ---
-title: Setup with Helm or Marketplace
+title: Setup
 sidebar_position: 0
 ---
 
@@ -7,11 +7,9 @@ sidebar_position: 0
 
 Choose your preferred deployment method for OBaaS based on your requirements and existing infrastructure.
 
-### Deployment Methods
+### Deploy with Helm
 
-#### Helm Charts
-
-**Best for**: Deploying to existing Kubernetes clusters
+**Best for**: Deploying to existing Kubernetes clusters.
 
 **What you get**:
 
@@ -22,13 +20,35 @@ Choose your preferred deployment method for OBaaS based on your requirements and
 
 **Prerequisites**:
 
-- Existing Kubernetes cluster (1.33+)
+- Existing Kubernetes cluster (1.34+)
 - Helm 3.8+ installed
 - kubectl configured
-- Access to Oracle Database (19c+)
+- Access to Oracle Database (19c or later)
 
 **[Get started with Helm Charts →](./helm/install.md)**
 
+### Deploy using OCI "Magic Button"
+
+Complete infrastructure provisioning on Oracle Cloud Infrastructure.
+
+**What you get**:
+
+- Automated OKE cluster creation and configuration
+- Autonomous Database provisioning (or BYO database support)
+- Network infrastructure (VCN, subnets, load balancers, security lists)
+- Complete OBaaS platform deployed and configured
+
+**Prerequisites:**
+
+- OCI tenancy with appropriate quotas and permissions
+
+
+To use this approach, click on this button to get started:
+
+[![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/oracle/microservices-datadriven/releases/latest/download/oci_build.zip)
+
+
+{/*
 #### OCI Marketplace
 
 **Best for:** Complete infrastructure provisioning on Oracle Cloud Infrastructure
@@ -45,3 +65,4 @@ Choose your preferred deployment method for OBaaS based on your requirements and
 - OCI tenancy with appropriate quotas and permissions
 
 **[Get started with OCI Marketplace →](./oci_mp.md)**
+*/}
