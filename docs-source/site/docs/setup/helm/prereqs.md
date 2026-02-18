@@ -6,15 +6,15 @@ sidebar_position: 1
 
 Before installing Oracle Backend for Microservices and AI (OBaaS), ensure your environment meets all prerequisites. Installing without meeting these requirements will result in deployment failures.
 
-:::danger Critical
-If your environment does not meet the prerequisites, the installation will fail. Do not proceed with installation until you have confirmed your environment meets all requirements.
+:::danger Warning
+If your environment does not meet the prerequisites, the installation may not succeed. Do not proceed with installation until you have confirmed your environment meets all requirements.
 :::
 
 ## System Requirements
 
 ### Oracle OCI
 
-If you are installing into Oracle OCI you need the right [OCI policies →](../oci_policies.md) in place.
+If you are installing into Oracle OCI you need the right [OCI IAM policies](../oci_policies.md) in place.  Plwase review and ensure you have the required policies and permissions before installing.
 
 ### Kubernetes Cluster
 
@@ -22,7 +22,7 @@ A CNCF-compliant Kubernetes cluster with the following specifications:
 
 **Cluster version:**
 
-- Kubernetes 1.33+
+- Kubernetes 1.34+
 
 **Infrastructure requirements:**
 
@@ -54,7 +54,7 @@ You must have access to an Oracle Database instance (19c or later). The followin
 | Oracle Database 19c | Oracle Autonomous Database 26ai ATP |
 
 :::info AI Features
-To use OBaaS AI capabilities, you must use Oracle Database 23ai or later. Earlier versions do not support AI features.
+To use OBaaS AI capabilities, you must use Oracle Database 26ai or later. Earlier versions do not support AI features.
 :::
 
 **Recommended configuration:**

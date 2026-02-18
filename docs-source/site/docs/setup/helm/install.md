@@ -24,7 +24,7 @@ This document describes how to deploy OBaaS to an existing Kubernetes cluster us
 
 ### Architecture
 
-The deployment uses a two-chart architecture. The charts are separated because the prerequisites install cluster-wide CRDs and operators that must only exist once, while the OBaaS chart contains namespace-scoped resources that can be safely installed multiple times.
+The deployment uses a two-chart architecture. The charts are separated because the OBaaS Prerequisites cahrt installs cluster-wide CRDs and operators that may only exist once in a cluster, while the OBaaS chart contains namespace-scoped resources that can be safely installed multiple times.
 
 **obaas-prereqs** (cluster-scoped, install once):
 
@@ -35,7 +35,9 @@ The deployment uses a two-chart architecture. The charts are separated because t
 - **strimzi-kafka-operator** - Kafka cluster operator
 - **oraoperator** - Oracle Database Operator for Kubernetes
 
-Installing this chart multiple times will cause CRD version conflicts, duplicate operator controllers, and resource contention.
+:::danger Warning
+Attempting to install the obaas-prereqs chart multiple times will cause CRD version conflicts, duplicate operator controllers, and resource contention.
+:::
 
 **obaas** (namespace-scoped, install per tenant):
 
@@ -74,7 +76,7 @@ Cluster
 **Directory structure:**
 
 ```tree
-helm/
+helm/infra-charts/
 ├── obaas-prereqs/         # Cluster-singleton prerequisites (install once per cluster)
 └── obaas/                 # OBaaS application chart (install N times in different namespaces)
     └── examples/          # Example values files for different scenarios
@@ -140,6 +142,15 @@ kubectl get nodes
 
 ### Installation Guide
 
+#### Step 0: Configure Helm Repository
+
+Add the Helm repository to your local Helm installation using the following commands:
+
+```bash
+helm repo add obaas https://oracle.github.io/microservices-datadriven/helm
+helm repo update
+```
+
 #### Step 1: Install Prerequisites (Once Per Cluster)
 
 :::warning Cluster-Scoped Installation
@@ -147,9 +158,7 @@ Only install prerequisites once per cluster. Installing multiple times will caus
 :::
 
 ```bash
-cd obaas-prereqs
-
-helm upgrade --install obaas-prereqs . -n obaas-system --create-namespace [--debug] [--values <path_to_custom_values>]
+helm upgrade --install obaas-prereqs obaas/obaas-prereqs -n obaas-system --create-namespace [--debug] [--values <path_to_custom_values>]
 ```
 
 Verify all prerequisite pods are running before proceeding:
@@ -165,9 +174,7 @@ All pods should reach `Running` status within 2-3 minutes.
 Choose an example configuration that matches your deployment scenario and install:
 
 ```bash
-cd obaas
-
-helm upgrade --install obaas . -f examples/<values-file>.yaml -n <namespace> --create-namespace [--debug]
+helm upgrade --install obaas obaas/obaas -f examples/<values-file>.yaml -n <namespace> --create-namespace [--debug]
 ```
 
 See [Example Configurations](#example-configurations) below for the full list of available examples.
@@ -205,7 +212,7 @@ Minimal configuration with no overrides. All subcharts use their default setting
 **Use case:** Quick start, development, testing
 
 ```bash
-helm upgrade --install obaas . -f examples/values-default.yaml -n obaas --create-namespace [--debug]
+helm upgrade --install obaas obaas/obaas -f examples/values-default.yaml -n obaas --create-namespace [--debug]
 ```
 
 #### SIDB-FREE Database (`values-sidb-free.yaml`)
@@ -215,7 +222,7 @@ Uses Oracle Database Free as an in-cluster container. This is the default databa
 **Use case:** Development, testing, standalone deployments
 
 ```bash
-helm upgrade --install obaas . -f examples/values-sidb-free.yaml -n obaas --create-namespace [--debug]
+helm upgrade --install obaas obaas/obaas -f examples/values-sidb-free.yaml -n obaas --create-namespace [--debug]
 ```
 
 #### Existing ADB Configuration (`values-existing-adb.yaml`)
@@ -262,7 +269,7 @@ Connects to an existing OCI Autonomous Database (ADB-S) instead of deploying a d
 The name `obaas` in the command below should reflect your environment, the `obaas` value is just an example. The `--set database.authN.secretName=NAME_OF_APPUSER_SECRET` is optional.
 
 ```bash
-helm upgrade --install obaas . \
+helm upgrade --install obaas obaas/obaas \
   -n NAMESPACE \
   -f examples/values-existing-adb.yaml \
   --set database.oci.ocid=ADB_OCID \
@@ -318,7 +325,7 @@ an Oracle Base DB or an on-premises Oracle AI Database.
 **Installation:**
 
 ```bash
-helm upgrade --install obaas . \
+helm upgrade --install obaas obaas/obaas \
   -n NAMESPACE \
   -f examples/values-byodb.yaml 
   [--debug]
@@ -339,10 +346,10 @@ Each tenant **must** have unique values for the following to avoid conflicts:
 
 ```bash
 # Install first tenant
-helm upgrade --install obaas-tenant1 . -n tenant1 -f examples/values-tenant1.yaml --create-namespace [--debug]
+helm upgrade --install obaas-tenant1 obaas/obaas -n tenant1 -f examples/values-tenant1.yaml --create-namespace [--debug]
 
 # Install second tenant
-helm upgrade --install obaas-tenant2 . -n tenant2 -f examples/values-tenant2.yaml --create-namespace [--debug]
+helm upgrade --install obaas-tenant2 obaas/obaas -n tenant2 -f examples/values-tenant2.yaml --create-namespace [--debug]
 ```
 
 #### Namespace and Scope Configuration (`values-namespace-override.yaml`)
@@ -352,7 +359,7 @@ Demonstrates how to configure the ingress-nginx watching scope. All OBaaS compon
 **Use case:** Controlling which namespaces components watch
 
 ```bash
-helm upgrade --install obaas . -f examples/values-namespace-override.yaml -n obaas-platform --create-namespace [--debug]
+helm upgrade --install obaas obaas/obaas -f examples/values-namespace-override.yaml -n obaas-platform --create-namespace [--debug]
 ```
 
 #### SigNoz Existing Secret (`values-signoz-existing-secret.yaml`)
@@ -369,7 +376,7 @@ kubectl create secret generic my-signoz-secret \
   -n obaas
 
 # Install with the example
-helm upgrade --install obaas . -f examples/values-signoz-existing-secret.yaml -n obaas [--debug]
+helm upgrade --install obaas obaas/obaas -f examples/values-signoz-existing-secret.yaml -n obaas [--debug]
 ```
 
 #### Private Registry Configuration (`values-private-registry.yaml`)
@@ -392,7 +399,7 @@ Uses a private container registry for all images with authentication.
    ```
 
 ```bash
-helm upgrade --install obaas . -f examples/values-private-registry.yaml [--debug]
+helm upgrade --install obaas obaas/obaas -f examples/values-private-registry.yaml [--debug]
 ```
 
 <details>
@@ -426,7 +433,7 @@ You can layer multiple values files to combine configurations:
 
 ```bash
 # Combine multi-tenant and private registry configurations
-helm upgrade --install obaas-tenant1 . \
+helm upgrade --install obaas-tenant1 obaas/obaas \
   -f examples/values-tenant1.yaml \
   -f examples/values-private-registry.yaml \
   -n tenant1 --create-namespace [--debug]
