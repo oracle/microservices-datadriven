@@ -1,0 +1,24 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+{{- if (index .Values "conductor-server").enabled }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-conductor-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}-conductor-server
+    app.kubernetes.io/component: workflow-orchestration
+    app.kubernetes.io/part-of: {{ .Release.Name }}
+    {{- include "obaas.labels" . | nindent 4 }}
+data:
+  conductor.properties: |
+    conductor.db.type=redis_standalone
+    conductor.redis.hosts={{ .Release.Name }}-conductor-redis:6379:nodepool1
+    conductor.queue.type=redis_standalone
+    conductor.indexing.enabled=false
+    conductor.app.workflowExecutionLockEnabled=true
+    conductor.workflow-execution-lock.type=redis
+    conductor.redis-lock.serverAddress=redis://{{ .Release.Name }}-conductor-redis:6379 
+{{- end }}

@@ -1,0 +1,41 @@
+#
+# ============================================================================
+# Generated for private registry mirroring
+# Generated on: 2025-12-04T16:45:46Z
+# OBaaS Helm Charts - Complete Image List
+container-registry.oracle.com/database/observability-exporter:2.2.0
+container-registry.oracle.com/database/otmm:24.4.1
+container-registry.oracle.com/database/sqlcl:25.3.0
+container-registry.oracle.com/middleware/coherence-operator:3.5.6
+docker.io/altinity/clickhouse-operator:0.21.2
+docker.io/altinity/metrics-exporter:0.21.2
+docker.io/apache/apisix:3.14.1-ubuntu
+docker.io/bitnamilegacy/etcd:3.6.1
+docker.io/busybox:1.36
+docker.io/clickhouse/clickhouse-server:25.5.6
+docker.io/curlimages/curl:8.17.0
+docker.io/groundnuty/k8s-wait-for:v2.0
+docker.io/library/alpine:3.18.2
+docker.io/signoz/signoz-otel-collector:v0.129.11
+docker.io/signoz/signoz-schema-migrator:v0.129.11
+docker.io/signoz/signoz:v0.102.1
+docker.io/signoz/zookeeper:3.7.1
+ghcr.io/external-secrets/external-secrets:v1.1.0
+phx.ocir.io/axoxdievda5j/oke-public-cloud-provider-oci:v1.34-8f0fbf7e71e-9-csi@sha256:2eca76b52bc3198f86b839c199f67476100bc614e401dec25ac0a2310f609c28
+phx.ocir.io/axoxdievda5j/oke-public-proxymux-cli:8d4509c1e518fcb4e1a95191a4b6dff29a283dee-115@sha256:866d637f98a0e5451816d6992f90571e95d638d49636dbb7d9eaee873fb122f0
+phx.ocir.io/id9y6mi8tcky/oke-public-cert-manager-cainjector@sha256:ba1ed70b4ca3ecd09b49316fe7a47f7389479762c210e9b041df8d425b19988e
+phx.ocir.io/id9y6mi8tcky/oke-public-cert-manager-controller@sha256:9209cc085a1c40a2fa4e3f0baa049de4ee921a01e0c5278a8a3f451c52ad3d98
+phx.ocir.io/id9y6mi8tcky/oke-public-cert-manager-webhook@sha256:f14649fea45d044b5cb83969a074326a80ba63da623f5dea69944c8f11d76950
+phx.ocir.io/id9y6mi8tcky/oke-public-cluster-proportional-autoscaler-amd64@sha256:1908914e0c9055edd754a633de2a37fd6811a64565317f2f44bf4adea85f0654
+phx.ocir.io/id9y6mi8tcky/oke-public-coredns@sha256:e32e8482ef16dbfd86896ece95e81111d5cb110811a65c3ce85df0ce2b69ca17
+phx.ocir.io/id9y6mi8tcky/oke-public-flannel@sha256:1d40a538acef1404c92dca16e297265eeedbb517e69c91b1b66d0e5f0a2d0805
+phx.ocir.io/id9y6mi8tcky/oke-public-kube-proxy@sha256:0c20d2732b207c84ff7b37df120bc484b16ec253ccf76086837f6fd6de7120dc
+phx.ocir.io/id9y6mi8tcky/oke-public-oci-native-ingress-controller@sha256:a15ea6b23c2eac97a6e4bdeb0de1b49ef62a8cdf7727931b9cbe2afc10f548f2
+phx.ocir.io/id9y6mi8tcky/oke-public-oracle-database-operator@sha256:d9fb9bf8b94fb6b25c26011096573794bf44b94f5d60104e10f90a7d1df29d65docker.io/alpine:3.18.2
+container-registry.oracle.com/obaas/admin-server:2.0.0
+container-registry.oracle.com/obaas/conductor:server-2.0.0
+container-registry.oracle.com/obaas/conductor:cache-2.0.0
+container-registry.oracle.com/obaas/service-registry:2.0.0
+quay.io/strimzi/operator:0.45.1
+registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.17.0
+registry.k8s.io/metrics-server/metrics-server:v0.8.0

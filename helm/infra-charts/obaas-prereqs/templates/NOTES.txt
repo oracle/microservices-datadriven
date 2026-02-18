@@ -1,0 +1,32 @@
+Thank you for installing {{ .Chart.Name }}.
+
+Your OBaaS Prerequisites release is named {{ .Release.Name }}.
+
+The following cluster-singleton components have been installed:
+{{- if index .Values "external-secrets" "enabled" }}
+  - external-secrets (external secrets management)
+{{- end }}
+{{- if index .Values "metrics-server" "enabled" }}
+  - metrics-server (resource metrics)
+{{- end }}
+{{- if index .Values "kube-state-metrics" "enabled" }}
+  - kube-state-metrics (cluster state metrics)
+{{- end }}
+{{- if index .Values "strimzi-kafka-operator" "enabled" }}
+  - strimzi-kafka-operator (Kafka management)
+{{- end }}
+{{- if index .Values "oracle-database-operator" "enabled" }}
+  - oracle-database-operator (Oracle Database lifecycle management)
+{{- end }}
+{{- if index .Values "coherence-operator" "enabled" }}
+  - coherence-operator (Distributed cache operator)
+{{- end }}
+
+These components are cluster-scoped and should only be installed once per cluster.
+You can now install the OBaaS chart in multiple namespaces.
+
+To check the status of the release:
+  helm status {{ .Release.Name }} -n {{ .Release.Namespace }}
+
+To get the values used:
+  helm get values {{ .Release.Name }} -n {{ .Release.Namespace }}

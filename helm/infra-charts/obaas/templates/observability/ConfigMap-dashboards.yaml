@@ -1,0 +1,27 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+{{- if .Values.signoz.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-signoz-dashboards
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}
+    app.kubernetes.io/component: observability
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+data:
+{{ (.Files.Glob "dashboards/1/*").AsConfig | indent 2 }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-signoz-dashboards-2
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}
+    app.kubernetes.io/component: observability
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+data:
+{{ (.Files.Glob "dashboards/2/*").AsConfig | indent 2 }}
+{{- end }}

@@ -1,0 +1,32 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+# spell-checker: ignore nindent ocid
+
+# AutonomousDatabase Operator Resource (ADB-S)
+{{- if .Values.database }}
+{{- if eq (include "obaas.database.isADBS" .) "true" }}
+apiVersion: database.oracle.com/v4
+kind: AutonomousDatabase
+metadata:
+  name: {{ .Release.Name }}-adb-s
+  labels:
+    app.kubernetes.io/component: database
+    {{- include "obaas.labels" . | nindent 4 }}
+spec:
+  action: "Sync"
+  details:
+    id: {{ .Values.database.oci.ocid }}
+  wallet:
+    name: {{ .Release.Name }}-adb-tns-admin-{{ .Release.Revision }}
+    password:
+      k8sSecret:
+        name: {{ .Release.Name }}-adb-wallet-pass-{{ .Release.Revision }}
+  {{- if .Values.database.oci_config }}
+  ociConfig:
+    configMapName: {{ .Values.database.oci_config.configMapName | default (printf "%s-oci-config" .Release.Name) }}
+    {{- if .Values.database.oci_config.keySecretName }}
+    secretName: {{ .Values.database.oci_config.keySecretName }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+{{- end }}

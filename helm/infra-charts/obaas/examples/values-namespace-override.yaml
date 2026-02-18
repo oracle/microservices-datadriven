@@ -1,0 +1,42 @@
+## Copyright (c) 2024, 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+# Example: Namespace Configuration
+#
+# The obaas chart deploys all components to the release namespace specified
+# with the -n flag. There is no global.namespace override - components use
+# the namespace you provide during install.
+#
+# Prerequisites:
+#   Install obaas-prereqs chart once per cluster before installing this chart.
+#
+# Usage:
+#   # Option 1: Let Helm create the namespace
+#   helm upgrade --install obaas . -n obaas-platform --create-namespace
+#
+#   # Option 2: Create the namespace first
+#   kubectl create namespace obaas-platform
+#   helm upgrade --install obaas . -n obaas-platform
+
+# -----------------------
+# -- Global Configuration
+global:
+  imagePullSecrets: []
+
+# -----------------------
+# -- Ingress Controller Scope
+# By default, the ingress-nginx controller watches only the release namespace.
+# This can be changed if needed.
+
+ingress-nginx:
+  enabled: true
+  controller:
+    # Scope to release namespace only (default: true)
+    scope:
+      enabled: true
+    # To watch a specific namespace instead:
+    # scope:
+    #   enabled: true
+    #   namespace: "my-apps-namespace"
+    # To watch all namespaces:
+    # scope:
+    #   enabled: false
