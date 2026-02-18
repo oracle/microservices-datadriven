@@ -3,7 +3,7 @@ title: Release Notes
 sidebar_position: 0
 ---
 
-export const OBAAS_VERSION = '2.0.0-M5';
+export const OBAAS_VERSION = '2.0.0';
 
 ## Release Notes for Oracle Backend for Microservices and AI (OBaaS)
 
@@ -26,11 +26,11 @@ The following table lists all container images used in OBaaS {OBAAS_VERSION} (so
 | ClickHouse Server | `docker.io/clickhouse/clickhouse-server` | 25.5.6 |
 | Cluster Proportional Autoscaler | `phx.ocir.io/id9y6mi8tcky/oke-public-cluster-proportional-autoscaler-amd64` | |
 | Coherence Operator | `container-registry.oracle.com/middleware/coherence-operator` | 3.5.6 |
-| Conductor Server | `phx.ocir.io/maacloud/mark-artifactory/conductor-server` | {OBAAS_VERSION} |
+| Conductor Server | `container-registry.oracle.com/obaas/conductor` | server-{OBAAS_VERSION}, cache-{OBAAS_VERSION} |
 | CoreDNS | `phx.ocir.io/id9y6mi8tcky/oke-public-coredns` | |
 | Curl | `docker.io/curlimages/curl` | 8.17.0 |
 | etcd | `docker.io/bitnamilegacy/etcd` | 3.6.1 |
-| Eureka | `phx.ocir.io/maacloud/mark-artifactory/eureka` | {OBAAS_VERSION} |
+| Eureka | `container-registry.oracle.com/obaas/service-registry` | {OBAAS_VERSION} |
 | External Secrets | `ghcr.io/external-secrets/external-secrets` | v1.1.0 |
 | Flannel | `phx.ocir.io/id9y6mi8tcky/oke-public-flannel` | |
 | k8s-wait-for | `docker.io/groundnuty/k8s-wait-for` | v2.0 |
@@ -46,7 +46,7 @@ The following table lists all container images used in OBaaS {OBAAS_VERSION} (so
 | Signoz | `docker.io/signoz/signoz` | v0.102.1 |
 | Signoz OpenTelemetry Collector | `docker.io/signoz/signoz-otel-collector` | v0.129.11 |
 | Signoz Schema Migrator | `docker.io/signoz/signoz-schema-migrator` | v0.129.11 |
-| Spring Boot Admin | `phx.ocir.io/maacloud/mark-artifactory/admin-server` | {OBAAS_VERSION} |
+| Spring Boot Admin | `container-registry.oracle.com/obaas/admin-server` | {OBAAS_VERSION} |
 | SQLcl | `container-registry.oracle.com/database/sqlcl` | 25.3.0 |
 | Strimzi Operator | `quay.io/strimzi/operator` | 0.45.1 |
 | Zookeeper | `docker.io/signoz/zookeeper` | 3.7.1 |
