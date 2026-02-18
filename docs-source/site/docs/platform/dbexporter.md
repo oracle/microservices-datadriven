@@ -18,4 +18,4 @@ Oracle Database Metrics Exporter will be installed if the `oracle-database-expor
 
 ### Transactional Event Queue Grafana Dashboard
 
-![Oracle Database Dashboard](images/txeventq-dashboard-v2.png)
+![Transactional Event Queue Dashboard](images/txeventq-dashboard-v2.png)

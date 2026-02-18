@@ -15,7 +15,7 @@ Whether you're building with Helidon, Spring Boot, or integrating AI capabilitie
 
 ### Developer Experience First
 
-Write code in your preferred framework—Helidon or Spring Boot—while OBaaS handles service discovery, configuration management, API gateways, and data persistence. Spend less time configuring infrastructure and more time building features that matter to your business.
+Write code in your preferred framework - Helidon or Spring Boot - while OBaaS handles service discovery, configuration management, API gateways, and data persistence. Spend less time configuring infrastructure and more time building features that matter to your business.
 
 ### Enterprise-Grade Infrastructure
 
@@ -28,7 +28,7 @@ Built on Oracle Database and designed for mission-critical workloads, OBaaS prov
 
 ### AI-Ready Platform
 
-Leverage the power of Oracle Database 23ai to integrate artificial intelligence and machine learning directly into your applications. Build intelligent services that learn and adapt without the complexity of managing separate AI infrastructure.
+Leverage the power of Oracle AI Database 26ai to integrate artificial intelligence and machine learning directly into your applications. Build intelligent services that learn and adapt without the complexity of managing separate AI infrastructure.
 
 ### Multi-Cloud Flexibility
 
@@ -37,3 +37,10 @@ Deploy on Oracle Cloud Infrastructure, other cloud providers, or hybrid environm
 ### Simplified Operations
 
 OBaaS vastly simplifies the task of building, testing, and operating microservices platforms. From development through production, automated workflows and integrated tooling streamline every phase of the application lifecycle.
+
+## Get Started
+
+Ready to try OBaaS? Choose your path:
+
+- **[Setup with Helm or OCI Marketplace →](./setup/index.md)** — Install the platform on your Kubernetes cluster
+- **[Deploy an Application →](./deploy/overview.md)** — Deploy your microservices to an existing OBaaS installation

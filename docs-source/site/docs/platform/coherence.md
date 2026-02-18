@@ -8,7 +8,7 @@ The Oracle Coherence Operator is an open-source Kubernetes operator that enables
 
 ### Installing the Coherence Operator
 
-Oracle Database Operator for Kubernetes will be installed if the `coherence.enabled` is set to `true` in the `values.yaml` file. The default namespace for Oracle Database Operator is `coherence`.
+The Coherence Operator will be installed if `coherence.enabled` is set to `true` in the `values.yaml` file. The default namespace for the Coherence Operator is `coherence`.
 
 ### Creating a Coherence Cluster
 

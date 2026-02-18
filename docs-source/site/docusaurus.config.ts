@@ -5,8 +5,8 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'Oracle Backend for Microservices and AI -- Draft documentation',
-  tagline: 'Deploy AI microservices using a “backend as a service” with Oracle Database and other infrastructure components',
+  title: 'Oracle Backend for Microservices and AI',
+  tagline: 'A comprehensive microservices platform for AI microservices with Oracle AI Database',
   favicon: 'img/favicon-32x32.png',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -14,7 +14,6 @@ const config: Config = {
     v4: true, // Improve compatibility with the upcoming Docusaurus v4
   },
 
-  // TODO: Set the production url of your site here
   url: 'https://oracle.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
@@ -48,8 +47,8 @@ const config: Config = {
           sidebarPath: './sidebars.ts',
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
-          editUrl:
-            'https://github.com/oracle/microservices-datadriven/tree/main/docs-source/site/',
+          // editUrl:
+          //   'https://github.com/oracle/microservices-datadriven/tree/main/docs-source/site/',
         },
         gtag: {
           trackingID: 'G-2EVY167E00',
@@ -79,7 +78,7 @@ const config: Config = {
         },
         {
           type: 'docsVersionDropdown',
-          versions: ['current' ]
+          versions: ['current']
         },
         {
           href: 'https://github.com/oracle/microservices-datadriven',
@@ -95,8 +94,20 @@ const config: Config = {
           title: 'Docs',
           items: [
             {
-              label: 'Tutorial',
+              label: 'Introduction',
               to: '/docs/intro',
+            },
+            {
+              label: 'Setup',
+              to: '/docs/setup',
+            },
+            {
+              label: 'Deploy',
+              to: '/docs/deploy/overview',
+            },
+            {
+              label: 'Observability',
+              to: '/docs/observability',
             },
           ],
         },
@@ -114,11 +125,11 @@ const config: Config = {
           items: [
             {
               label: 'Oracle Blogs',
-              to: 'https://blogs.oracle.com/',
+              href: 'https://blogs.oracle.com/',
             },
             {
               label: 'Oracle LiveLabs',
-              to: 'https://livelabs.oracle.com/pls/apex/r/dbpm/livelabs/home'
+              href: 'https://livelabs.oracle.com/pls/apex/r/dbpm/livelabs/home'
             },
             {
               label: 'GitHub',
