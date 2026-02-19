@@ -25,6 +25,7 @@ Built on Oracle Database and designed for mission-critical workloads, OBaaS prov
 - **Security**: Enterprise-grade security controls and compliance
 - **Scalability**: Elastic scaling to meet demand automatically
 - **Performance**: Optimized for low latency and high throughput
+- **Support**: Supported for Oracle AI Database customers, see KB181357 in Oracle Support for details
 
 ### AI-Ready Platform
 
