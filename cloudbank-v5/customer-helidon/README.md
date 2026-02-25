@@ -358,7 +358,7 @@ mvn clean package k8s:build k8s:push -Dimage.registry=$REGISTRY -Dimage.tag=5.0-
 Deploy the service using the shared `obaas-sample-app` chart:
 
 ```bash
-helm upgrade --install customer-helidon ../../helm/charts/obaas-sample-app \
+helm upgrade --install customer-helidon ../../helm/app-charts/obaas-sample-app \
   -f values.yaml \
   -n tenant1
 ```
