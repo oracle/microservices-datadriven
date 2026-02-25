@@ -289,7 +289,7 @@ an Oracle Base DB or an on-premises Oracle AI Database.
 <details>
 <summary>Prerequisites: Create required secrets before installing</summary>
 
-1. Create the privileged authentication secret for an appropriate admin user:
+Create the privileged authentication secret for an appropriate admin user:
 
    ```bash
    kubectl -n NAMESPACE create secret generic obaas-db-priv-authn \
@@ -298,14 +298,11 @@ an Oracle Base DB or an on-premises Oracle AI Database.
      --from-literal=service=your.service.name
    ```
 
-  The admin user should be a user with DBA privileges that can be used to
-  create application users and grant them appropriate privileges.  For example,
-  the SYSTEM user is a good choice.  This user should not require the 
-  SYSDBA role.
+  The admin user should be a user with DBA privileges that can be used to create application users and grant them appropriate privileges For example, the SYSTEM user is a good choice.  This user should not require the SYSDBA role.
 
   This user should have the following permissions:
 
-  ```
+  ```sql
   SELECT WITH ADMIN OPTION on:
     DBA_TABLESPACE_USAGE_METRICS, DBA_TABLESPACES,
     GV_$SYSTEM_WAIT_CLASS, GV_$ASM_DISKGROUP_STAT, GV_$DATAFILE,
@@ -318,7 +315,7 @@ an Oracle Base DB or an on-premises Oracle AI Database.
     SYS.DBMS_AQIN, SYS.DBMS_AQJMS_INTERNAL
   ```
 
-  2. Review and update the database connection details in `examples/values-byodb.yaml`
+Review and update the database connection details in `examples/values-byodb.yaml`
 
 </details>
 
