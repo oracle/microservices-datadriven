@@ -16,6 +16,7 @@ docker.io/clickhouse/clickhouse-server:25.5.6
 docker.io/curlimages/curl:8.17.0
 docker.io/groundnuty/k8s-wait-for:v2.0
 docker.io/library/alpine:3.18.2
+docker.io/library/alpine/k8s:1.28.13
 docker.io/signoz/signoz-otel-collector:v0.129.11
 docker.io/signoz/signoz-schema-migrator:v0.129.11
 docker.io/signoz/signoz:v0.102.1
@@ -31,7 +32,7 @@ phx.ocir.io/id9y6mi8tcky/oke-public-coredns@sha256:e32e8482ef16dbfd86896ece95e81
 phx.ocir.io/id9y6mi8tcky/oke-public-flannel@sha256:1d40a538acef1404c92dca16e297265eeedbb517e69c91b1b66d0e5f0a2d0805
 phx.ocir.io/id9y6mi8tcky/oke-public-kube-proxy@sha256:0c20d2732b207c84ff7b37df120bc484b16ec253ccf76086837f6fd6de7120dc
 phx.ocir.io/id9y6mi8tcky/oke-public-oci-native-ingress-controller@sha256:a15ea6b23c2eac97a6e4bdeb0de1b49ef62a8cdf7727931b9cbe2afc10f548f2
-phx.ocir.io/id9y6mi8tcky/oke-public-oracle-database-operator@sha256:d9fb9bf8b94fb6b25c26011096573794bf44b94f5d60104e10f90a7d1df29d65docker.io/alpine:3.18.2
+phx.ocir.io/id9y6mi8tcky/oke-public-oracle-database-operator@sha256:d9fb9bf8b94fb6b25c26011096573794bf44b94f5d60104e10f90a7d1df29d65
 container-registry.oracle.com/obaas/admin-server:2.0.0
 container-registry.oracle.com/obaas/conductor:server-2.0.0
 container-registry.oracle.com/obaas/conductor:cache-2.0.0
