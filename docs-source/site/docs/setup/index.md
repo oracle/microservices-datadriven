@@ -42,27 +42,20 @@ Complete infrastructure provisioning on Oracle Cloud Infrastructure.
 
 - OCI tenancy with appropriate quotas and permissions
 
-
 To use this approach, click on this button to get started:
 
 [![Deploy to Oracle Cloud](https://oci-resourcemanager-plugin.plugins.oci.oraclecloud.com/latest/deploy-to-oracle-cloud.svg)](https://cloud.oracle.com/resourcemanager/stacks/create?zipUrl=https://github.com/oracle/microservices-datadriven/releases/latest/download/obaas-iac.zip)
 
+When deploying using this method you may see the following error, the resolution is to run the `Apply` job again:
 
-{/*
-#### OCI Marketplace
-
-**Best for:** Complete infrastructure provisioning on Oracle Cloud Infrastructure
-
-**What you get**:
-
-- Automated OKE cluster creation and configuration
-- Autonomous Database provisioning (or BYO database support)
-- Network infrastructure (VCN, subnets, load balancers, security lists)
-- Complete OBaaS platform deployed and configured
-
-**Prerequisites:**
-
-- OCI tenancy with appropriate quotas and permissions
-
-**[Get started with OCI Marketplace →](./oci_mp.md)**
-*/}
+```log
+module.kubernetes["managed"].oci_identity_policy.workers_policies: Creating...
+module.kubernetes["managed"].oci_identity_policy.workers_policies: Creation complete after 0s [id=ocid1.policy.oc1..aaaaaaaasaxvpssa2h2qgzacgc5az6s477gn3o4sdhwwh3fo7jxyxmu2k24a]
+╷
+│ Error: During creation, Terraform expected the resource to reach state(s): ACTIVE,NEEDS_ATTENTION, but the service reported unexpected state: DELETING.
+│ 
+│   with module.kubernetes["managed"].oci_containerengine_addon.ingress_addon[0],
+│   on modules/kubernetes/main.tf line 125, in resource "oci_containerengine_addon" "ingress_addon":
+│  125: resource "oci_containerengine_addon" "ingress_addon" {
+│ 
+```

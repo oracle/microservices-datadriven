@@ -43,5 +43,5 @@ OBaaS vastly simplifies the task of building, testing, and operating microservic
 
 Ready to try OBaaS? Choose your path:
 
-- **[Setup with Helm or OCI Marketplace →](./setup/index.md)** — Install the platform on your Kubernetes cluster
+- **[Setup →](./setup/index.md)** — Install the platform on your Kubernetes cluster
 - **[Deploy an Application →](./deploy/overview.md)** — Deploy your microservices to an existing OBaaS installation
