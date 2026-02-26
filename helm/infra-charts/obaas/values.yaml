@@ -527,6 +527,12 @@ signoz:
                     target_label: app
       service:
         pipelines:
+          logs:
+            receivers:
+              - k8s_events
+              - otlp
+              - httplogreceiver/heroku
+              - httplogreceiver/json
           metrics:
             receivers:
               - otlp
