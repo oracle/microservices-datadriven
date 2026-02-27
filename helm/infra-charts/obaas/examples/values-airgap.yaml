@@ -16,24 +16,26 @@ global:
 
   # When true, creates resources needed for air-gapped (disconnected) environments
   # including a self-signed TLS certificate for accounts.google.com
-  airGapped: false
+  airGapped: true
 
   # This overrides all secrets for pulling an image from a private repository
   # When set, automatically applied to all subcharts via YAML anchors
-  imagePullSecrets: &imagePullSecrets []
+  imagePullSecrets: &imagePullSecrets 
+    - name: myregistry-secret
 
   # Utility image used by hooks and jobs
   utilities:
     kubectl:
       image:
-        registry: docker.io
+        registry: private.registry.com
         repository: alpine/k8s
         tag: "1.28.13"
     nginx:
       image:
-        registry: docker.io
+        registry: private.registry.com
         repository: nginx
-        tag: "alpine"        
+        tag: "alpine"
+
 
 # -----------------------
 # -- OBaaS Configuration
@@ -76,7 +78,7 @@ eureka:
   enabled: true
   replicas: 3
   image:
-    repository: container-registry.oracle.com/obaas/service-registry
+    repository: private.registry.com/obaas/service-registry
     tag: "2.0.0"
   # Override default resources if needed (defaults: cpu 250m-500m, memory 1Gi-1200Mi)
   resources: {}
@@ -95,15 +97,26 @@ ingress-nginx:
     scope:
       enabled: true
     # Uncomment to override the default image registry
-    # image:
-    #   registry: "myregistry.example.com"  # Default: registry.k8s.io
-    #   image: ingress-nginx/controller
+    image:
+      registry: private.registry.com  # Default: registry.k8s.io
+      image: ingress-nginx/controller
+      tag: "v1.11.5"
+      digest: "sha256:a1cbad75b0a7098bf9325132794dddf9eef917e8a7fe246749a4cea7ff6f01eb"
+    admissionWebhooks:
+      patch:
+        image:
+          registry: private.registry.com
+          image: ingress-nginx/kube-webhook-certgen
+          tag: "v1.5.2"
+          digest: "sha256:e8825994b7a2c7497375a9b945f386506ca6a3eda80b89b74ef2db743f66a5ea"
 
 apisix:
   enabled: true
   # Uses global.imagePullSecrets
   global:
     imagePullSecrets: *imagePullSecrets
+    security: 
+      allowInsecureImages: true
 
   # RBAC required for Kubernetes service discovery
   rbac:
@@ -255,19 +268,19 @@ apisix:
     preUpgradeHook:
       enabled: false
     image:
-      registry: docker.io
+      registry: private.registry.com
       repository: bitnamilegacy/etcd
       tag: "3.6.1"
 
   # APISIX image configuration
   # Full registry path required for clusters with short name mode enforcing
   image:
-    repository: "docker.io/apache/apisix"
+    repository: "private.registry.com/apache/apisix"
     tag: "3.14.1-ubuntu"
 
   # Init container image
   initContainer:
-    image: "docker.io/busybox"
+    image: "private.registry.com/busybox"
     tag: "1.36"
 
 # Admin Server
@@ -275,7 +288,7 @@ admin-server:
   enabled: true
   replicas: 1
   image:
-    repository: container-registry.oracle.com/obaas/admin-server
+    repository: private.registry.com/obaas/admin-server
     tag: "2.0.0"
   # Override default resources if needed (defaults: cpu 250m-500m, memory 256Mi-512Mi)
   # resources: {}
@@ -285,7 +298,7 @@ otmm:
   enabled: true
   replicas: 1
   image:
-    repository: container-registry.oracle.com/database/otmm
+    repository: private.registry.com/database/otmm
     tag: "24.4.1"
   # Override default resources if needed (defaults: cpu 250m, memory 1Gi)
   # resources: {}
@@ -295,11 +308,11 @@ oracle-database-exporter:
   enabled: true
   replicas: 1
   image:
-    repository: container-registry.oracle.com/database/observability-exporter
+    repository: private.registry.com/database/observability-exporter
     tag: "2.2.0"
   # Busybox sidecar for tailing alert.log
   busybox:
-    repository: docker.io/busybox
+    repository: private.registry.com/busybox
     tag: "1.36"
   # Override default resources if needed (defaults: cpu 250m-500m, memory 64Mi-128Mi)
   # resources: {}
@@ -309,10 +322,10 @@ conductor-server:
   enabled: true
   replicas: 1
   image:
-    repository: container-registry.oracle.com/obaas/conductor
+    repository: private.registry.com/obaas/conductor
     tag: "server-2.0.0"
   redisImage:
-    repository: container-registry.oracle.com/obaas/conductor
+    repository: private.registry.com/obaas/conductor
     tag: "cache-2.0.0"
   # Override default resources if needed (defaults: cpu 500m-1000m, memory 512Mi-1Gi)
   # resources: {}
@@ -326,12 +339,12 @@ database:
   # SQLcl image for database initialization jobs
   sqlcl:
     image:
-      repository: container-registry.oracle.com/database/sqlcl
+      repository: private.registry.com/database/sqlcl
       tag: "25.3.0"
 
   # For SIDB-FREE/ADB-FREE: container image configuration (exclude for ADB-S)
   image:
-    repository: "container-registry.oracle.com/database/free"
+    repository: "private.registry.com/database/free"
     tag: "latest"
 
   # For ADB-S: OCI Autonomous Database OCID (exclude for SIDB-FREE/ADB-FREE/OTHER)
@@ -410,16 +423,17 @@ signoz:
   global:
     # Uses global.imagePullSecrets
     imagePullSecrets: *imagePullSecrets
+    imageRegistry: private.registry.com
   # Utility images for setup jobs
   utilities:
     curlJq:
       image:
-        registry: docker.io
+        registry: private.registry.com
         repository: curlimages/curl
         tag: "8.17.0"
     busybox:
       image:
-        registry: docker.io
+        registry: private.registry.com
         repository: busybox
         tag: 1.36
   # Authentication configuration for SigNoz admin user
@@ -434,35 +448,37 @@ signoz:
   # Change to override individual component images
   signoz:
     image:
-      registry: docker.io
+      registry: private.registry.com
       repository: signoz/signoz
+    imagePullSecrets: 
+     - myregistry-secret
     initContainers:
       init:
         image:
-          registry: docker.io
+          registry: private.registry.com
           repository: busybox
           tag: "1.36"
   schemaMigrator:
     image:
-      registry: docker.io
+      registry: private.registry.com
       repository: signoz/signoz-schema-migrator
     initContainers:
       init:
         image:
-          registry: docker.io
+          registry: private.registry.com
           repository: busybox
           tag: "1.36"
       chReady:
         image:
-          registry: docker.io
+          registry: private.registry.com
           repository: clickhouse/clickhouse-server
       wait:
         image:
-          registry: docker.io
+          registry: private.registry.com
           repository: groundnuty/k8s-wait-for
   otelCollector:
     image:
-      registry: docker.io
+      registry: private.registry.com
       repository: signoz/signoz-otel-collector
     # ClusterRole rules for Kubernetes service discovery (prometheus receiver)
     clusterRole:
@@ -533,7 +549,7 @@ signoz:
                     target_label: kubernetes_pod_name
                   - source_labels: [__meta_kubernetes_pod_label_app_kubernetes_io_instance]
                     action: replace
-                    target_label: app
+                    target_label: app                    
       service:
         pipelines:
           logs:
@@ -549,16 +565,16 @@ signoz:
   clickhouse:
     zookeeper:
       image:
-        registry: docker.io
+        registry: private.registry.com
         repository: signoz/zookeeper
     image:
-      registry: docker.io
+      registry: private.registry.com
       repository: clickhouse/clickhouse-server
     imagePullSecrets: []
     initContainers:
       udf:
         image:
-          registry: container-registry.oracle.com
+          registry: private.registry.com
           repository: obaas/dashboards
           tag: "2.0.0"
         command:
@@ -576,11 +592,11 @@ signoz:
             echo "histogram-quantile installed successfully"
     clickhouseOperator:
       image:
-        registry: docker.io
+        registry: private.registry.com
         repository: altinity/clickhouse-operator
       metricsExporter:
         image:
-          registry: docker.io
+          registry: private.registry.com
           repository: altinity/metrics-exporter
 
 k8s-infra:
@@ -588,8 +604,22 @@ k8s-infra:
     cloud: others
     clusterName: obaas
     deploymentEnvironment: obaas
+    imageRegistry: private.registry.com
+    imagePullSecrets: *imagePullSecrets
   otelCollectorEndpoint: signoz-otel-collector:4317
   otelInsecure: true
+  otelAgent:
+    image:
+      registry: private.registry.com
+      repository: otel/opentelemetry-collector-contrib
+      tag: 0.139.0
+    imagePullSecrets: *imagePullSecrets
+  otelDeployment:
+    image:
+      registry: private.registry.com
+      repository: otel/opentelemetry-collector-contrib
+      tag: 0.139.0
+    imagePullSecrets: *imagePullSecrets    
   presets:
     otlpExporter:
       enabled: true
