@@ -225,7 +225,7 @@ kubectl get secret <dbname>-<service>-db-authn -n <namespace> \
 The `obaas-sample-app` Helm chart is published in the OBaaS Helm repository:
 
 ```bash
-helm repo add obaas https://oracle.github.io/microservices-datadriven/helm
+helm repo add obaas https://oracle.github.io/microservices-backend/helm
 helm repo update
 ```
 

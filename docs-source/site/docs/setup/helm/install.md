@@ -147,7 +147,7 @@ kubectl get nodes
 Add the Helm repository to your local Helm installation using the following commands:
 
 ```bash
-helm repo add obaas https://oracle.github.io/microservices-datadriven/helm
+helm repo add obaas https://oracle.github.io/microservices-backend/helm
 helm repo update
 ```
 
