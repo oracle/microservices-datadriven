@@ -43,6 +43,9 @@ container-registry.oracle.com/obaas/conductor:cache-2.0.0
 container-registry.oracle.com/obaas/dashboards:2.0.0
 container-registry.oracle.com/obaas/service-registry:2.0.0
 quay.io/strimzi/operator:0.45.1
+quay.io/jetstack/cert-manager-cainjector:v1.19.1
+quay.io/jetstack/cert-manager-controller:v1.19.1
+quay.io/jetstack/cert-manager-webhook:v1.19.1
 registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.17.0
 registry.k8s.io/metrics-server/metrics-server:v0.8.0
 registry.k8s.io/ingress-nginx/controller:v1.11.5
