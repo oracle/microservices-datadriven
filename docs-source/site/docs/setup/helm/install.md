@@ -385,6 +385,15 @@ Uses a private container registry for all images with authentication.
 **Prerequisites:**
 
 1. Mirror all required images to your private registry.
+
+    A utility is provided to mirror the images to your registry.  Provide the name of your target registry.
+    Note that you must be authenticated to the target registry before running this script.
+
+    ```bash
+    cd helm/infra-charts/tools
+    ./mirror-images.sh myregistry.example.com
+    ```
+
 2. Create an image pull secret:
 
    ```bash
@@ -395,8 +404,11 @@ Uses a private container registry for all images with authentication.
      --docker-email=<email>
    ```
 
+3. Install both the obaas-prereqs and obaas charts using a values file with your registry details:
+
 ```bash
-helm upgrade --install obaas obaas/obaas -f examples/values-private-registry.yaml [--debug]
+helm upgrade --install obaas-prereqs obaas/obaas-prereqs -f obaas-prereqs/examples/values-private-registry.yaml [--debug]
+helm upgrade --install obaas obaas/obaas -f obaas/examples/values-private-registry.yaml [--debug]
 ```
 
 <details>
