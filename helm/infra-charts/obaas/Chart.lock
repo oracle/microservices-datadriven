@@ -9,8 +9,8 @@ dependencies:
   repository: https://charts.signoz.io
   version: 0.15.0
 - name: signoz
-  repository: file://charts/signoz
-  version: 0.102.1
+  repository: https://charts.signoz.io
+  version: 0.113.0
 - name: apisix
   repository: https://apache.github.io/apisix-helm-chart
   version: 2.12.3

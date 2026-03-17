@@ -16,14 +16,12 @@ docker.io/bitnamilegacy/etcd:3.6.1
 docker.io/busybox:1.36
 docker.io/clickhouse/clickhouse-server:25.5.6
 docker.io/curlimages/curl:8.17.0
-docker.io/groundnuty/k8s-wait-for:v2.0
 docker.io/library/alpine:3.18.2
 docker.io/library/alpine/k8s:1.28.13
 docker.io/library/nginx:alpine
 docker.io/otel/opentelemetry-collector-contrib:0.139.0
-docker.io/signoz/signoz-otel-collector:v0.129.11
-docker.io/signoz/signoz-schema-migrator:v0.129.11
-docker.io/signoz/signoz:v0.102.1
+docker.io/signoz/signoz-otel-collector:v0.144.1
+docker.io/signoz/signoz:v0.113.0
 docker.io/signoz/zookeeper:3.7.1
 ghcr.io/external-secrets/external-secrets:v1.1.0
 phx.ocir.io/axoxdievda5j/oke-public-cloud-provider-oci:v1.34-8f0fbf7e71e-9-csi@sha256:2eca76b52bc3198f86b839c199f67476100bc614e401dec25ac0a2310f609c28

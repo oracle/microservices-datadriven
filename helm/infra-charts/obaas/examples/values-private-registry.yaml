@@ -576,6 +576,8 @@ signoz:
         image:
           registry: myregistry.example.com
           repository: groundnuty/k8s-wait-for
+  telemetryStoreMigrator:
+    enabled: true
   otelCollector:
     image:
       registry: myregistry.example.com

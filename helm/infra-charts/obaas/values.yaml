@@ -542,24 +542,8 @@ signoz:
           registry: docker.io
           repository: busybox
           tag: "1.37"
-  schemaMigrator:
-    image:
-      registry: docker.io
-      repository: signoz/signoz-schema-migrator
-    initContainers:
-      init:
-        image:
-          registry: docker.io
-          repository: busybox
-          tag: "1.37"
-      chReady:
-        image:
-          registry: docker.io
-          repository: clickhouse/clickhouse-server
-      wait:
-        image:
-          registry: docker.io
-          repository: groundnuty/k8s-wait-for
+  telemetryStoreMigrator:
+    enabled: true
   otelCollector:
     image:
       registry: docker.io
