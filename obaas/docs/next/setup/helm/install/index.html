@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://www.googletagmanager.com">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-2EVY167E00"></script>
 <script>function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag("js",new Date),gtag("config","G-2EVY167E00",{anonymize_ip:!0})</script><link rel="stylesheet" href="/microservices-backend/obaas/assets/css/styles.6cefc2ab.css">
-<script src="/microservices-backend/obaas/assets/js/runtime~main.95ea9692.js" defer="defer"></script>
+<script src="/microservices-backend/obaas/assets/js/runtime~main.392e9fa3.js" defer="defer"></script>
 <script src="/microservices-backend/obaas/assets/js/main.4ff3f217.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -158,10 +158,12 @@ minimum permissions the platform needs.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="existing-adb-configuration-values-existing-adbyaml">Existing ADB Configuration (<code>values-existing-adb.yaml</code>)<a href="#existing-adb-configuration-values-existing-adbyaml" class="hash-link" aria-label="Direct link to existing-adb-configuration-values-existing-adbyaml" title="Direct link to existing-adb-configuration-values-existing-adbyaml" translate="no">​</a></h4>
 <p>Connects to an existing OCI Autonomous Database (ADB-S) instead of deploying a database container.</p>
 <p><strong>Use case:</strong> Production deployments using a pre-provisioned OCI Autonomous Database</p>
-<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>Prerequisites: Create required secrets before installing</summary><div><div class="collapsibleContent_i85q"><ol>
+<details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Prerequisites: Create required secrets before installing</summary><div><div class="collapsibleContent_i85q"><ol>
 <li class="">
 <p>Create the OCI API key secret.</p>
 <div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">python3 tools/oci_config.py --namespace &lt;application-namespace&gt; [--config &lt;config-file&gt;] [--profile &lt;profile-name&gt;]</span><br></span></code></pre></div></div>
+<p><code>&lt;config-file&gt;</code> is the location of your OCI configuration file, e.g., <code>/home/user/.oci/config</code></p>
+<p><code>&lt;profile&gt;</code> is the profile in your config file to use, if not <code>DEFAULT</code></p>
 <div class="theme-admonition theme-admonition-note admonition_xJq3 alert alert--secondary"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>note</div><div class="admonitionContent_BuS1"><p>Python 3.12 or later is required to run the <code>oci_config.py</code> script.</p></div></div>
 </li>
 <li class="">
@@ -181,7 +183,7 @@ minimum permissions the platform needs.</p>
 Do not use this option for an Oracle Autonomous Database.  This is a good option for
 an Oracle Base DB or an on-premises Oracle AI Database.</p>
 <p><strong>Use case:</strong> Production deployments using a pre-existing Oracle AI Database (non-Autonomous)</p>
-<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>Prerequisites: Create required secrets before installing</summary><div><div class="collapsibleContent_i85q"><ol>
+<details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Prerequisites: Create required secrets before installing</summary><div><div class="collapsibleContent_i85q"><ol>
 <li class="">
 <p>Create the privileged authentication secret for an appropriate admin user.</p>
 <div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">kubectl -n &lt;application-namespace&gt; create secret generic &lt;db-name&gt;-db-priv-authn \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  --from-literal=username=SYSTEM \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  --from-literal=password=&lt;system-password&gt; \</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  --from-literal=service=&lt;service-name&gt;</span><br></span></code></pre></div></div>
@@ -227,7 +229,7 @@ an Oracle Base DB or an on-premises Oracle AI Database.</p>
 <p>Configures SigNoz ClickHouse cold storage so recent telemetry stays on local persistent disk and older data is offloaded to S3-compatible object storage.</p>
 <p>This example can be used with Oracle Cloud Infrastructure Object Storage or with an on-premises S3-compatible object store such as MinIO.</p>
 <p><strong>Use case:</strong> Longer telemetry retention, reduced local disk pressure, and support for both cloud and on-premises object storage backends</p>
-<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>Prerequisites: Prepare object storage settings before installing</summary><div><div class="collapsibleContent_i85q"><ol>
+<details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Prerequisites: Prepare object storage settings before installing</summary><div><div class="collapsibleContent_i85q"><ol>
 <li class="">
 <p>Create or identify an S3-compatible bucket for SigNoz cold storage.</p>
 </li>
@@ -249,7 +251,7 @@ an Oracle Base DB or an on-premises Oracle AI Database.</p>
 <h4 class="anchor anchorTargetStickyNavbar_Vzrq" id="private-registry-configuration-values-private-registryyaml">Private Registry Configuration (<code>values-private-registry.yaml</code>)<a href="#private-registry-configuration-values-private-registryyaml" class="hash-link" aria-label="Direct link to private-registry-configuration-values-private-registryyaml" title="Direct link to private-registry-configuration-values-private-registryyaml" translate="no">​</a></h4>
 <p>Uses a private container registry for all images with authentication.</p>
 <p><strong>Use case:</strong> Air-gapped environments, corporate registries, security compliance</p>
-<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>Prerequisites</summary><div><div class="collapsibleContent_i85q"><ol>
+<details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Prerequisites</summary><div><div class="collapsibleContent_i85q"><ol>
 <li class="">
 <p>Mirror all required images to your private registry.</p>
 <p>A utility is provided to mirror the images to your registry. Provide the name of your target registry. You must be authenticated to the target registry before running this script.</p>
@@ -265,7 +267,7 @@ an Oracle Base DB or an on-premises Oracle AI Database.</p>
 </ol></div></div></details>
 <p><strong>Installation:</strong></p>
 <div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">helm upgrade --install &lt;prereqs-release&gt; obaas/obaas-prereqs -n &lt;platform-system-namespace&gt; -f obaas-prereqs/examples/values-private-registry.yaml --create-namespace [--debug]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">helm upgrade --install &lt;app-release&gt; obaas/obaas -n &lt;application-namespace&gt; -f obaas/examples/values-private-registry.yaml --create-namespace [--debug]</span><br></span></code></pre></div></div>
-<details class="details_lb9f alert alert--info details_b_Ee" data-collapsed="true"><summary>Image registry override details</summary><div><div class="collapsibleContent_i85q"><p>Each subchart has its own image configuration that must be set explicitly.</p><p><strong>Subcharts with a dedicated registry field</strong> (set to your registry URL):</p><ul>
+<details open="" class="details_lb9f alert alert--info details_b_Ee" data-collapsed="false"><summary>Image registry override details</summary><div><div class="collapsibleContent_i85q"><p>Each subchart has its own image configuration that must be set explicitly.</p><p><strong>Subcharts with a dedicated registry field</strong> (set to your registry URL):</p><ul>
 <li class=""><strong>ingress-nginx</strong>: <code>controller.image.registry</code></li>
 <li class=""><strong>signoz</strong>: <code>global.imageRegistry</code></li>
 <li class=""><strong>apisix etcd</strong>: <code>apisix.etcd.image.registry</code></li>
