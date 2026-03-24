@@ -24,3 +24,4 @@ Oracle Backend for Microservices and AI ships with a fully integrated observabil
 | [Pre-installed Dashboards](./dashboards.md) | Catalog of 20+ ready-to-use dashboards (Spring Boot, Kafka, Kubernetes, Oracle DB, and more) |
 | [Configure Applications for SigNoz](./configure.md) | Add OpenTelemetry and Micrometer dependencies to your application |
 | [Oracle Database Metrics Exporter](./dbexporter.md) | Database-level metrics collection and Grafana integration |
+| [Customization](./customizations.md) | Configure Online and Cold Storage |

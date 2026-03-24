@@ -17,4 +17,42 @@ signoz:
 
 ## Configure Cold Storage
 
-TODO write me
+### Use Case
+
+Use this configuration when you want recent telemetry data to remain on local persistent storage while older data is offloaded to object storage for long-term retention. For on-premises deployments, you can use an S3-compatible object store such as [MinIO](https://www.min io/). For additional information, see the [SigNoz Administrator Guide] (https://signoz.io/docs/manage/administrator-guide/).
+
+### Storage Hierarchy
+
+SigNoz stores recent ClickHouse data on the local persistent volume as hot storage. After the configured retention threshold is reached, older data is moved to OCI Object Storage or another S3-compatible object store, such as MinIO for on-premises deployments. When needed, ClickHouse retrieves older data from cold storage to satisfy queries.
+
+```text
+  Hot Storage (Local Disk)
+  ↓ [after retention threshold]
+  Cold Storage (OCI Object Storage / S3-compatible / MinIO)
+  ↓ [query hits cold data]
+```
+
+### Configuration Summary
+
+| Key | Value | Description |
+|---|---|---|
+| `signoz.enabled` | `true` | Enables the SigNoz deployment. |
+| `signoz.clickhouse.coldStorage.enabled` | `true` | Enables ClickHouse cold storage. |
+| `signoz.clickhouse.coldStorage.defaultKeepFreeSpaceBytes` | `"10485760"` | Keeps at least 10 MiB of local disk space free before moving older data to cold storage. Set value to reflect your environment |
+| `signoz.clickhouse.coldStorage.type` | `s3` | Uses an S3-compatible object storage API. |
+| `signoz.clickhouse.coldStorage.endpoint` | `<END-POINT>` | Object storage endpoint URL. |
+| `signoz.clickhouse.coldStorage.accessKey` | `<YOUR-ACCESS-KEY>` | Access key for the object storage service. |
+| `signoz.clickhouse.coldStorage.secretAccess` | `<YOUR-SECRET-ACCESS-KEY>` | Secret key for the object storage service. |
+| `signoz.clickhouse.persistence.enabled` | `true` | Enables persistent local storage for ClickHouse hot data. |
+| `signoz.clickhouse.persistence.size` | `100Gi` | Size of the local persistent volume used for hot storage. Set value to reflect your environment |
+
+### Installation
+
+Before installation modify the `values-signoz-cold-storage.yaml` file with values that reflects your environment.
+
+```bash
+  helm upgrade --install <app-release> . \
+    -f examples/values-signoz-cold-storage.yaml \
+    -n <application-namespace> \
+    --create-namespace [--debug]
+```
