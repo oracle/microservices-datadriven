@@ -51,7 +51,7 @@ SigNoz stores recent ClickHouse data on the local persistent volume as hot stora
 Before installation modify the `values-signoz-cold-storage.yaml` file with values that reflects your environment.
 
 ```bash
-  helm upgrade --install <app-release> . \
+  helm upgrade --install <app-release> obaas/obaas \
     -f examples/values-signoz-cold-storage.yaml \
     -n <application-namespace> \
     --create-namespace [--debug]
