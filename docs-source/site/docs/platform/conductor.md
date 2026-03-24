@@ -2,7 +2,6 @@
 title: Conductor Workflow Orchestration
 sidebar_position: 4
 ---
-## Conductor
 
 :::important
 Conductor will be replaced with Oracle Transaction Manager for Microservices, which will include the Conductor Server as a component of the product
@@ -12,15 +11,15 @@ Conductor is a workflow orchestration platform, originally developed at Netflix,
 
 [Conductor OSS Documentation](https://docs.conductor-oss.org)
 
-### Installing Conductor
+## Installing Conductor
 
 Conductor will be installed if the `conductor-server.enabled` is set to `true` in the `values.yaml` file. The default namespace for Conductor is `conductor-server`.
 
-### API Specification
+## API Specification
 
 [API Specification](https://docs.conductor-oss.org/documentation/api/index.html)
 
-### Accessing Conductor APIs
+## Accessing Conductor APIs
 
 To access the Conductor APIs, use kubectl port-forward to create a secure channel to `service/conductor-server`. Run the following command to establish the secure tunnel (replace the example namespace `obaas-dev` with the namespace where the Conductor Server is deployed):
 
@@ -28,7 +27,7 @@ To access the Conductor APIs, use kubectl port-forward to create a secure channe
 kubectl port-forward -n obaas-dev svc/conductor-server 8080
 ```
 
-### Testing the Conductor service
+## Testing the Conductor service
 
 You can test the Conductor service by running the sample workflow provided. Save the content into a file called `first_sample_workflow.json` and then execute the following command:
 

@@ -2,7 +2,6 @@
 title: External Secrets Operator
 sidebar_position: 8
 ---
-## External Secrets Operator
 
 :::important
 The External Secrets Operator is an optional prerequisite for Oracle Backend for Microservices and AI
@@ -15,6 +14,6 @@ Full [documentation](https://external-secrets.io/latest/)
 
 ![External Secrets Operator](images/diagrams-high-level-simple.png)
 
-### Installing External Secrets Operator
+## Installing External Secrets Operator
 
 External Secrets Operator will be installed if the `external-secrets.enabled` is set to `true` in the `values.yaml` file. The default namespace for External Secrets Operator is `external-secrets`.

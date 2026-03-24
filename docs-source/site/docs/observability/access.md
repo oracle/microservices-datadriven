@@ -2,7 +2,6 @@
 title: Access SigNoz
 sidebar_position: 3
 ---
-## Accessing SigNoz Observability Platform
 
 SigNoz is the observability platform included with OBaaS that provides metrics, traces, and logs visualization. This guide shows you how to access the SigNoz UI and retrieve your admin credentials.
 

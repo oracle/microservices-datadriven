@@ -3,24 +3,23 @@ title: Platform Services Overview
 sidebar_position: 0
 ---
 
-## Platform Services
-
 Oracle Backend for Microservices and AI includes a set of pre-integrated platform services that handle common infrastructure concerns — API routing, service discovery, messaging, distributed transactions, secrets management, and more. These services are deployed and managed via Helm and can be enabled or disabled individually in your `values.yaml`.
 
-### API Gateway & Networking
+## API Gateway & Networking
 
 | Service | Description |
 |---------|-------------|
 | [Apache APISIX](./apacheapisix.md) | Cloud-native API gateway for routing, traffic management, and rate limiting |
 | [Spring Boot Eureka Server](./eureka.md) | Service registry for automatic discovery between microservices |
+| [Envoy Gateway](./envoygateway.md) | CNCF graduated implementation of the [Kubernetes Gateway API |
 
-### Messaging & Event Streaming
+## Messaging & Event Streaming
 
 | Service | Description |
 |---------|-------------|
 | [Strimzi Kafka Operator](./strimzi_operator.md) | Kubernetes operator for deploying and managing Apache Kafka clusters |
 
-### Data & Transactions
+## Data & Transactions
 
 | Service | Description |
 |---------|-------------|
@@ -28,7 +27,7 @@ Oracle Backend for Microservices and AI includes a set of pre-integrated platfor
 | [Oracle Database Operator](./dboperator.md) | Kubernetes operator for provisioning and managing Oracle Database instances |
 | [Coherence Operator](./coherence.md) | In-memory data grid for caching, data distribution, and compute |
 
-### Operations & Security
+## Operations & Security
 
 | Service | Description |
 |---------|-------------|

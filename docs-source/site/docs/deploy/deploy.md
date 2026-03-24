@@ -3,8 +3,6 @@ title: Deploying an Application to OBaaS
 sidebar_position: 5
 ---
 
-# Deploying an Application to OBaaS
-
 This guide walks through deploying an application to Oracle Backend for Microservices and AI (OBaaS). It covers each step from creating container repositories through exposing services via the API gateway.
 
 The steps below are generic — replace placeholder values like `my-app`, `my-service`, and `mydb` with values appropriate to your application.

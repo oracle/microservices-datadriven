@@ -2,7 +2,6 @@
 title: Spring Boot Eureka Server
 sidebar_position: 9
 ---
-## Spring Boot Eureka Server
 
 Oracle Backend for Microservices and AI includes the Spring Boot Eureka service registry, which stores information about client services. Typically, each microservice registers with Eureka at startup. Eureka maintains a list of all active service instances, including their IP addresses and ports. Other services can look up this information using a well-known key, enabling service-to-service communication without hardcoding addresses at development or deployment time.
 
@@ -10,11 +9,11 @@ Oracle Backend for Microservices and AI includes the Spring Boot Eureka service 
  Want to use Eureka in your Helidon applications - see [below](#enable-a-helidon-application-for-eureka)
 :::
 
-### Installing Spring Boot Eureka Server
+## Installing Spring Boot Eureka Server
 
 Spring Boot Eureka Server will be installed if the `eureka.enabled` is set to `true` in the `values.yaml` file. The default namespace for Spring Boot Eureka Server is `eureka`.
 
-### Access Eureka Web User Interface
+## Access Eureka Web User Interface
 
 To access the Eureka Web User Interface, use kubectl port-forward to create a secure channel to `service/eureka`. Run the following command to establish the secure tunnel (replace the example namespace `obaas-dev` with the namespace where the Spring Boot Eureka Server is deployed):
 
@@ -26,7 +25,7 @@ Open the [Eureka web user interface](http://localhost:8761)
 
 ![Eureka Web User Interface](images/eureka-web.png)
 
-### Enable a Spring Boot application for Eureka
+## Enable a Spring Boot application for Eureka
 
 To enable a Spring Boot application, you need to add the following dependency.
 
@@ -52,7 +51,7 @@ eureka:
     enabled: true
 ```
 
-### Enable a Helidon application for Eureka
+## Enable a Helidon application for Eureka
 
 To enable a Helidon application, you need to add the following dependency.
 
@@ -76,7 +75,7 @@ server.features.eureka.instance.preferIpAddress=true
 ```
 
 
-### Enable a Helidon application for Eureka
+## Enable a Helidon application for Eureka
 
 To enable a Helidon application, you need to add the following dependency to your `pom.xml`:
 

@@ -2,7 +2,6 @@
 title: Introduction and Overview
 sidebar_position: 1
 ---
-## Overview
 
 Oracle Backend for Microservices and AI includes SigNoz, which is an observability platform to collect and provide access to logs, metrics, and traces for the platform itself and for your applications.
 

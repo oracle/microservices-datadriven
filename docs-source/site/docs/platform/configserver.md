@@ -27,7 +27,7 @@ UPDATED_ON                 TIMESTAMP(6)
 UPDATED_BY                 VARCHAR2(100)
 ```
 
-### Managing configuration properties in the database
+## Managing configuration properties in the database
 
 If you have direct access to the database, you can log in and create, update, delete configuration properties in this table as needed.
 
@@ -84,7 +84,7 @@ Remember to remove your pod when you are finished, using a command like this:
 kubectl -n obaas delete pod sqlcl
 ```
 
-### Using Spring Cloud Config Server in your applications
+## Using Spring Cloud Config Server in your applications
 
 When you deploy your application into your OBaaS environment using the OBaaS Application Helm Chart, make sure
 you include the Spring Cloud Config Client in your application dependencies,

@@ -2,13 +2,12 @@
 title: Strimzi Kafka Operator
 sidebar_position: 2
 ---
-## Strimzi Kafka Operator
 
 [Strimzi](https://strimzi.io/) is an open-source operator that simplifies running Apache Kafka on Kubernetes. It extends Kubernetes with Custom Resources (CRDs) to declaratively manage Kafka clusters, topics, and users. [Full documentation can be found here](https://strimzi.io/docs/operators/latest/overview)
 
 Oracle Backend for Microservices and AI deploys the operator as a cluster-scoped component via the `obaas-prereqs` Helm chart. Once installed, you can create Kafka clusters in any namespace by applying Strimzi custom resources.
 
-### Installing the Strimzi Kafka Operator
+## Installing the Strimzi Kafka Operator
 
 The Strimzi Kafka Operator is installed if `strimzi.enabled` is set to `true` in the `values.yaml` file. The operator is deployed cluster-wide and manages Kafka custom resources across all namespaces.
 
@@ -16,13 +15,13 @@ The Strimzi Kafka Operator is installed if `strimzi.enabled` is set to `true` in
 
 Follow these steps to create a single-node Kafka cluster named `my-cluster` in a given namespace.
 
-#### Prerequisites
+### Prerequisites
 
 - Strimzi Kafka Operator is installed and running
 - `kubectl` is configured to access your Kubernetes cluster
 - A namespace where you want to deploy the cluster (examples below use `my-namespace`)
 
-#### Step 1: Create the Kafka Cluster YAML
+### Step 1: Create the Kafka Cluster YAML
 
 Create a file named `kafka-cluster.yaml`. This defines a single-node KRaft-based cluster suitable for development and testing:
 
@@ -86,7 +85,7 @@ spec:
 - Two listeners are configured: `plain` (port 9092, no TLS) and `tls` (port 9093, encrypted)
 - The `entityOperator` enables the Topic Operator and User Operator for declarative topic and user management
 
-#### Step 2: Deploy the Cluster
+### Step 2: Deploy the Cluster
 
 Apply the YAML to your namespace:
 
@@ -100,7 +99,7 @@ Wait for the cluster to be ready:
 kubectl wait kafka/my-cluster --for=condition=Ready --timeout=300s -n my-namespace
 ```
 
-#### Step 3: Verify the Deployment
+### Step 3: Verify the Deployment
 
 ```bash
 # Check the Kafka resource status
@@ -113,7 +112,7 @@ kubectl get pods -n my-namespace
 kubectl describe kafka my-cluster -n my-namespace
 ```
 
-### Creating a Kafka Topic
+## Creating a Kafka Topic
 
 Once your cluster is running, create topics declaratively using the `KafkaTopic` resource.
 
@@ -146,7 +145,7 @@ Verify the topic was created:
 kubectl get kafkatopic -n my-namespace
 ```
 
-### Testing with a Producer and Consumer
+## Testing with a Producer and Consumer
 
 You can quickly test your cluster using the Kafka console tools:
 
@@ -173,7 +172,7 @@ kubectl -n my-namespace run kafka-consumer -ti \
     --from-beginning
 ```
 
-### Strimzi Custom Resources Reference
+## Strimzi Custom Resources Reference
 
 | Resource | Purpose |
 |----------|---------|

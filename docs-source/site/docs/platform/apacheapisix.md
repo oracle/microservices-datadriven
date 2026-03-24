@@ -2,15 +2,14 @@
 title: Apache APISIX
 sidebar_position: 1
 ---
-## Apache APISIX
 
 [Apache APISIX](https://apisix.apache.org) is an open source cloud native API platform that supports the full lifecycle of API management including publishing, traffic management, deployment strategies, and circuit breakers.
 
-### Installing APISIX
+## Installing APISIX
 
 Apache APISIX will be installed if the `apisix.enabled` is set to `true` in the `values.yaml` file. The default namespace for Apache APISIX is `apisix`.
 
-### Accessing Apache APISIX
+## Accessing Apache APISIX
 
 Oracle Backend for Microservices and AI deploys the Apache APISIX Gateway and Dashboard in the `apisix` namespace by default. The gateway is exposed via an external load balancer and an ingress controller.
 
@@ -20,7 +19,7 @@ To access the Apache APISIX APIs, use kubectl port-forward to create a secure ch
 kubectl port-forward -n obaas-dev svc/apisix-admin 9180
 ```
 
-### Retrieving admin key
+## Retrieving admin key
 
 To access the APISIX APIs, you need the admin key. Retrieve it with the following command (replace the example namespace `obaas-dev` with the namespace where APISIX is deployed):
 
@@ -44,7 +43,7 @@ Test the admin key by running a simple curl command; it should return the list o
 curl http://127.0.0.1:9180/apisix/admin/routes -H "X-API-key: $admin_key" -X GET
 ```
 
-### Accessing APISIX Dashboard
+## Accessing APISIX Dashboard
 
 :::note
  Note that all functionality is not available in the dashboard. You might need to use the REST APIs
@@ -54,11 +53,11 @@ APISIX has an embedded dashboard that can be accessed after a tunnel is establis
 
 ![APISIX Dashboard](images/apisix-dashboard.png)
 
-### Configuring APISIX using REST APIs
+## Configuring APISIX using REST APIs
 
 You can configure and update the APISIX gateway using the provided APIs.  Pleas refer to the [API Documentation](https://apisix.apache.org/docs/apisix/getting-started/README/) for detailed information.
 
-### Using custom plugins
+## Using custom plugins
 
 You can install custom plugins in APISIS using the Helm charts.
 

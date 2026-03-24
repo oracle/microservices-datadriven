@@ -2,7 +2,6 @@
 title: Oracle Transaction Manager for Microservices
 sidebar_position: 10
 ---
-## Oracle Transaction Manager for Microservices
 
 [Oracle Transaction Manager for Microservices](https://www.oracle.com/database/transaction-manager-for-microservices/), also known as "MicroTx", simplifies application development and operations by enabling distributed transactions to ensure consistency across microservices deployed in Kubernetes.
 
@@ -14,7 +13,7 @@ MicroTx supports the following consistency models:
 - Long Running Actions (LRA)
 - Try-Confirm/Cancel (TCC)
 
-### Use Oracle Transaction Manager for Microservices with Spring Boot
+## Use Oracle Transaction Manager for Microservices with Spring Boot
 
 To use MicroTx in your Spring Boot applications, include the following dependency in your `pom.xml` or equivalent:
 

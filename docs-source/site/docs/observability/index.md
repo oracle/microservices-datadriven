@@ -3,8 +3,6 @@ title: Observability Overview
 sidebar_position: 0
 ---
 
-## Observability
-
 Oracle Backend for Microservices and AI ships with a fully integrated observability stack powered by [SigNoz](https://signoz.io/), providing metrics, logs, and distributed traces out of the box. Applications deployed to the platform automatically export telemetry data via OpenTelemetry — no additional infrastructure setup required.
 
 ### What's Included
