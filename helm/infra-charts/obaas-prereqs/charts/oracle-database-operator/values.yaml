@@ -13,7 +13,7 @@ imagePullSecrets: &imagePullSecrets []
 image:
   repository: container-registry.oracle.com/database/operator
   # Specify a version tag for reproducible deployments
-  tag: "2.0"
+  tag: "2.1.0"
   pullPolicy: IfNotPresent
 
 # Deployment scope configuration
