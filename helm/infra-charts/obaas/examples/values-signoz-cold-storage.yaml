@@ -18,7 +18,6 @@ signoz:
   # persistence.size → "How big is my local disk?"
   # defaultKeepFreeSpaceBytes → "How much of that disk should always remain free before offloading to cold storage?"
   #
-  # The endpoint in this example is using Oracle OCI Storage Bucket
   clickhouse:
     coldStorage:
       enabled: true
