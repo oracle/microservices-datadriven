@@ -1,0 +1,174 @@
+## Copyright (c) 2026, Oracle and/or its affiliates.
+## Licensed under the Universal Permissive License v1.0 as shown at http://oss.oracle.com/licenses/upl.
+
+{{- if .Values.otmm.console.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-otmm-console
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}-otmm-console
+    app.kubernetes.io/component: transaction-coordinator
+    app.kubernetes.io/part-of: {{ .Release.Name }}
+    {{- include "obaas.labels" . | nindent 4 }}
+spec:
+  ports:
+    - name: http-stock
+      port: 5001
+      targetPort: 5001
+      protocol: TCP
+    - name: http-console
+      port: 5002
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: {{ .Release.Name }}-otmm-console
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Release.Name }}-otmm-console
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}-otmm-console
+    app.kubernetes.io/component: transaction-coordinator
+    app.kubernetes.io/part-of: {{ .Release.Name }}
+    {{- include "obaas.labels" . | nindent 4 }}
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ .Release.Name }}-otmm-console
+subjects:
+  - kind: ServiceAccount
+    name: {{ .Release.Name }}-otmm-console
+    namespace: {{ .Release.Namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: view
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-otmm-console
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Release.Name }}-otmm-console
+    app.kubernetes.io/component: transaction-coordinator
+    app.kubernetes.io/part-of: {{ .Release.Name }}
+    {{- include "obaas.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.otmm.console.replicas | default 1 }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Release.Name }}-otmm-console
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ .Release.Name }}-otmm-console
+        app.kubernetes.io/component: transaction-coordinator
+        app.kubernetes.io/part-of: {{ .Release.Name }}
+        {{- include "obaas.labels" . | nindent 4 }}
+    spec:
+      {{- include "obaas.imagePullSecrets" (dict "local" (index .Values "otmm").imagePullSecrets "global" .Values.global.imagePullSecrets "secretName" .Values.global.imagePullSecretName) | nindent 6 }}
+      serviceAccountName: {{ .Release.Name }}-otmm-console
+      containers:
+        - name: console
+          image: {{ .Values.otmm.console.image.repository }}:{{ .Values.otmm.console.image.tag }}
+          imagePullPolicy: {{ (index .Values "otmm").image.pullPolicy | default "IfNotPresent" }}
+          ports:
+            - name: http-stock
+              containerPort: 5001
+              protocol: TCP
+            - name: http-console
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            {{- with .Values.otmm.console.resources }}
+            {{ toYaml . | nindent 6 }}
+            {{- else }}
+            limits:
+              cpu: "2"
+              memory: "4Gi"
+            requests:
+              cpu: "1"
+              memory: "2Gi"
+          {{- end }}
+          env:
+            - name: CONSOLE_APP_NAME
+              value: {{ .Release.Name }}-otmm-console
+            - name: TMM_NAMESPACE
+              value: {{ .Release.Namespace }}
+            - name: TMM_APP_NAME
+              value: {{ .Release.Name }}-otmm-tcs
+            - name: TMM_TCS_URL
+              value: "http://{{ .Release.Name }}-otmm-tcs:9000"
+            {{- if eq .Values.otmm.commonConfiguration.security.enabled true }}
+            - name: TMM_ADMIN_USER_ROLE_NAMES
+              value: {{ .Values.otmm.commonConfiguration.security.identityProvider.adminUserRoles }}
+            - name: TMM_ROLES_PATH
+              value: {{ .Values.otmm.commonConfiguration.security.identityProvider.adminUserRolesPath }}
+            - name: SECURITY_PROPERTIES_OIDC_IDENTITY_URI
+              value: {{ .Values.otmm.commonConfiguration.security.identityProvider.identityProviderUrl }}
+            - name: SECURITY_PROPERTIES_COOKIE_ENCRYPTION_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.otmm.console.cookieEncryptionPasswordSecretName }}
+                  key: secret
+            - name: SECURITY_PROPERTIES_OIDC_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.otmm.commonConfiguration.security.clientSecretName }}
+                  key: clientId
+            - name: SECURITY_PROPERTIES_OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.otmm.commonConfiguration.security.clientSecretName }}
+                  key: clientPassword
+            - name: SECURITY_PROPERTIES_OIDC_ISSUER
+              value: {{ .Values.otmm.commonConfiguration.security.identityProvider.issuer }}
+            - name: SECURITY_PROPERTIES_OIDC_AUDIENCE
+              value: {{ .Values.otmm.commonConfiguration.security.identityProvider.audience }}
+            - name: SECURITY_PROPERTIES_OIDC_BASE_SCOPES
+            {{- if or (eq (.Values.otmm.commonConfiguration.security.identityProvider.scopes | toString) "") (not (.Values.commonConfiguration.security.identityProvider.scopes)) }}
+              {{- if (eq (.Values.otmm.commonConfiguration.security.identityProvider.serverType | toString) "idcs") }}
+              value: "openid groups"
+              {{- else }}
+              value: "openid"
+              {{- end }}
+            {{- else }}
+              value: {{ .Values.otmm.commonConfiguration.security.identityProvider.scopes }}
+            {{- end }}
+            - name: SECURITY_PROPERTIES_FRONTEND_URI
+            {{- if .Values.otmm.commonConfiguration.externalURL.port }}
+              value: "{{ .Values.otmm.commonConfiguration.externalURL.protocol }}://{{ .Values.otmm.commonConfiguration.externalURL.host }}:{{ .Values.otmm.commonConfiguration.externalURL.port }}/console"
+            {{- else }}
+              value: "{{ .Values.commonConfiguration.externalURL.protocol }}://{{ .Values.otmm.commonConfiguration.externalURL.host }}/console"
+            {{- end }}
+            - name: SECURITY_ENABLED
+              value: "true"
+            {{- else }}
+            - name: SECURITY_ENABLED
+              value: "false"
+            {{- end }}
+            # WorkflowServer URL configuration
+            - name: WF_SERVER
+              value: "http://{{ .Release.Name }}-otmm-workflow-server:9010"
+            - name: CONDUCTOR_BACKEND_ENDPOINT
+              value: "http://{{ .Release.Name }}-otmm-workflow-server:9010"
+            - name: CONDUCTOR_FRONTEND_ENDPOINT
+            {{- if .Values.otmm.commonConfiguration.externalURL.port }}
+              value: "{{ .Values.otmm.commonConfiguration.externalURL.protocol }}://{{ .Values.otmm.commonConfiguration.externalURL.host }}:{{ .Values.otmm.commonConfiguration.externalURL.port }}"
+            {{- else }}
+              value: "{{ .Values.otmm.commonConfiguration.externalURL.protocol | default "http" }}://{{ .Values.otmm.commonConfiguration.externalURL.host | default (printf "%s-otmm-console" .Release.Name) }}"
+            {{- end }}
+            # temporary
+            - name: SECURITY_PROPERTIES_COOKIE_ENCRYPTION_ENABLED
+              value: "false"
+            - name: FAST_REFRESH
+              value: "false"
+        # securityContext:
+        # runAsUser: 1000
+{{- end }}
