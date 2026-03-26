@@ -26,55 +26,42 @@ Follow these steps to create a single-node Kafka cluster named `my-cluster` in a
 Create a file named `kafka-cluster.yaml`. This defines a single-node KRaft-based cluster suitable for development and testing:
 
 ```yaml
-apiVersion: kafka.strimzi.io/v1beta2
-kind: KafkaNodePool
-metadata:
-  name: dual-role
-  labels:
-    strimzi.io/cluster: my-cluster
-spec:
-  replicas: 1
-  roles:
-    - controller
-    - broker
-  storage:
-    type: jbod
-    volumes:
-      - id: 0
-        type: persistent-claim
-        size: 100Gi
-        deleteClaim: false
-        kraftMetadata: shared
----
-apiVersion: kafka.strimzi.io/v1beta2
+apiVersion: kafka.strimzi.io/v1
 kind: Kafka
 metadata:
-  name: my-cluster
-  annotations:
-    strimzi.io/node-pools: enabled
-    strimzi.io/kraft: enabled
+  name: basic-kafka
 spec:
   kafka:
-    version: 3.9.0
-    metadataVersion: 3.9-IV0
+    version: 4.2.0
+    metadataVersion: "4.2"
     listeners:
       - name: plain
         port: 9092
         type: internal
         tls: false
-      - name: tls
-        port: 9093
-        type: internal
-        tls: true
     config:
-      offsets.topic.replication.factor: 1
-      transaction.state.log.replication.factor: 1
-      transaction.state.log.min.isr: 1
-      default.replication.factor: 1
-      min.insync.replicas: 1
+      offsets.topic.replication.factor: 3
+      transaction.state.log.replication.factor: 3
+      transaction.state.log.min.isr: 2
+      default.replication.factor: 3
+      min.insync.replicas: 2
   entityOperator:
     topicOperator: {}
     userOperator: {}
+---
+apiVersion: kafka.strimzi.io/v1
+kind: KafkaNodePool
+metadata:
+  name: pool-a
+  labels:
+    strimzi.io/cluster: basic-kafka
+spec:
+  replicas: 3
+  roles:
+    - controller
+    - broker
+  storage:
+    type: ephemeral
 ```
 
 **Notes:**
