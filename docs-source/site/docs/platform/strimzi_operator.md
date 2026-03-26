@@ -29,6 +29,7 @@ Create a file named `kafka-cluster.yaml`. This defines a single-node KRaft-based
 apiVersion: kafka.strimzi.io/v1
 kind: Kafka
 metadata:
+  namespace: my-kafka-namespace
   name: basic-kafka
 spec:
   kafka:
@@ -53,6 +54,7 @@ apiVersion: kafka.strimzi.io/v1
 kind: KafkaNodePool
 metadata:
   name: pool-a
+  namespace: my-kafka-namespace
   labels:
     strimzi.io/cluster: basic-kafka
 spec:
