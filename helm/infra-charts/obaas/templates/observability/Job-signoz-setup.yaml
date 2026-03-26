@@ -21,6 +21,21 @@ spec:
         app.kubernetes.io/name: {{ .Release.Name }}
         app.kubernetes.io/component: signoz-setup
     spec:
+      {{- if .Values.signoz.podAffinity }}
+      affinity:
+        {{- toYaml .Values.signoz.podAffinity | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/component
+                operator: In
+                values:
+                - signoz
+            topologyKey: "kubernetes.io/hostname"
+      {{- end }}
       {{- include "obaas.imagePullSecrets" (dict "local" .Values.signoz.global.imagePullSecrets "global" .Values.global.imagePullSecrets "secretName" .Values.global.imagePullSecretName) | nindent 6 }}
       containers:
       - args:
@@ -28,26 +43,37 @@ spec:
           set -e
           SIGNOZ_URL="http://{{ .Release.Name }}-signoz:8080"
           email=$(cat /signoz-authn/email)
-          secret=$(cat /signoz-authn/password)
+          password=$(cat /signoz-authn/password)
+          
+          # Prioritize discovered Org ID, fallback to secret
+          if [ -f /shared/orgID ]; then
+            org_id=$(cat /shared/orgID)
+            echo "Using discovered Org ID: ${org_id}"
+          elif [ -f /signoz-authn/orgID ]; then
+            org_id=$(cat /signoz-authn/orgID)
+            echo "Using Org ID from secret: ${org_id}"
+          else
+            echo "ERROR: No Org ID found in shared volume or secret. Dynamic discovery failed."
+            exit 1
+          fi
 
-          # Register admin user (ignore error if already exists)
-          echo "Registering admin user..."
-          curl -sf -H 'Content-Type: application/json' \
-            -d "{\"email\": \"${email}\", \"name\": \"Admin\", \"orgName\": \"OBaaS\", \"password\": \"${secret}\", \"isAnonymous\": true, \"hasOptedUpdates\": false}" \
-            "${SIGNOZ_URL}/api/v1/register" || echo "User may already exist, continuing..."
-
-          # Login and extract JWT token
+          # Login and extract JWT token using v2 API
           echo "Logging in..."
           login_response=$(curl -sf -H 'Content-Type: application/json' \
-            -d "{\"email\": \"${email}\", \"password\": \"${secret}\"}" \
-            "${SIGNOZ_URL}/api/v1/login")
-          TOKEN=$(echo "$login_response" | sed 's/.*"accessJwt":"\([^"]*\)".*/\1/')
+            -d "{\"email\": \"${email}\", \"password\": \"${password}\", \"orgID\": \"${org_id}\"}" \
+            "${SIGNOZ_URL}/api/v2/sessions/email_password")
+          
+          TOKEN=$(echo "$login_response" | sed 's/.*"accessToken":"\([^"]*\)".*/\1/')
 
-          if [ -z "$TOKEN" ] || [ "$TOKEN" = "$login_response" ]; then
-            echo "ERROR: Failed to extract JWT token"
+          if [ -z "$TOKEN" ] || [ "$TOKEN" = "null" ]; then
+            echo "ERROR: Failed to extract Access Token from v2 login response"
+            echo "Response: $login_response"
             exit 1
           fi
           echo "Login successful"
+
+          # Use JWT token for all subsequent requests
+          AUTH_HEADER="Authorization: Bearer ${TOKEN}"
 
           # Function to extract title from dashboard JSON file
           get_title() {
@@ -64,7 +90,7 @@ spec:
 
           # Get existing dashboards
           echo "Fetching existing dashboards..."
-          dashboards_response=$(curl -sf -H "Authorization: Bearer $TOKEN" "${SIGNOZ_URL}/api/v1/dashboards")
+          dashboards_response=$(curl -sf -H "${AUTH_HEADER}" "${SIGNOZ_URL}/api/v1/dashboards")
 
           # Process dashboards from both directories
           for dir in /signoz-dashboards-1 /signoz-dashboards-2; do
@@ -78,12 +104,12 @@ spec:
               uuid=$(find_dashboard_uuid "$title" "$dashboards_response")
               if [ -n "$uuid" ]; then
                 echo "  Deleting existing dashboard: $uuid"
-                curl -sf -H "Authorization: Bearer $TOKEN" -X DELETE "${SIGNOZ_URL}/api/v1/dashboards/$uuid" || true
+                curl -sf -H "${AUTH_HEADER}" -X DELETE "${SIGNOZ_URL}/api/v1/dashboards/$uuid" || true
               fi
 
               # Create new dashboard
               echo "  Creating dashboard..."
-              curl -sf -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
+              curl -sf -H "${AUTH_HEADER}" -H 'Content-Type: application/json' \
                 -d @"${f}" "${SIGNOZ_URL}/api/v1/dashboards" && echo "  Done" || echo "  Failed"
             done
           done
@@ -95,6 +121,8 @@ spec:
         image: {{ .Values.signoz.utilities.curlJq.image.registry }}/{{ .Values.signoz.utilities.curlJq.image.repository }}:{{ .Values.signoz.utilities.curlJq.image.tag }}
         name: signoz-setup
         volumeMounts:
+        - mountPath: /shared
+          name: shared-data
         - mountPath: /signoz-dashboards-1
           name: signoz-dashboards-1
           readOnly: true
@@ -108,14 +136,38 @@ spec:
       - command:
         - sh
         - -c
-        - until wget --spider -q {{ .Release.Name }}-signoz:8080/api/v1/health?live=1; do echo -e "waiting
-          for query-service"; sleep 5; done; echo -e "query-service ready, starting
-          setup now";
-        image: {{ .Values.signoz.utilities.busybox.image.registry }}/{{ .Values.signoz.utilities.busybox.image.repository }}:{{ .Values.signoz.utilities.busybox.image.tag }}
-        imagePullPolicy: IfNotPresent
-        name: signoz-setup-init
+        - |
+          until wget --spider -q {{ .Release.Name }}-signoz:8080/api/v1/health?live=1; do 
+            echo "Waiting for query-service..."; sleep 5; 
+          done
+          echo "query-service ready, extracting Org ID from database..."
+          
+          # Extract Org ID directly from the mounted SQLite DB using binary-safe grep
+          ORG_ID=$(grep -oaE "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" /signoz-db/signoz.db | grep -v "00000000" | head -n 1)
+          
+          if [ -n "$ORG_ID" ]; then
+            echo "$ORG_ID" > /shared/orgID
+            echo "Found Org ID: $ORG_ID"
+          else
+            echo "ERROR: Could not find Org ID in DB file"
+            exit 1
+          fi
+        image: {{ .Values.signoz.utilities.curlJq.image.registry }}/{{ .Values.signoz.utilities.curlJq.image.repository }}:{{ .Values.signoz.utilities.curlJq.image.tag }}
+        name: signoz-id-discovery
+        volumeMounts:
+        - mountPath: /shared
+          name: shared-data
+        - mountPath: /signoz-db
+          name: signoz-db
+          readOnly: true
       restartPolicy: OnFailure
       volumes:
+      - name: shared-data
+        emptyDir: {}
+      - name: signoz-db
+        persistentVolumeClaim:
+          claimName: signoz-db-{{ .Release.Name }}-signoz-0
+          readOnly: true
       - configMap:
           defaultMode: 420
           name: {{ .Release.Name }}-signoz-dashboards

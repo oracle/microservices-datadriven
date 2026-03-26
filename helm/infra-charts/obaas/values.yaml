@@ -531,8 +531,29 @@ signoz:
       type: "parentbased_traceidratio"
       # Only applies if using a ratio sampler. 1.0 = 100%, 0.1 = 10%
       argument: "1.0"
+  
   # Change to override individual component images
   signoz:
+    # Auto-provision root user in SigNoz backend
+    env:
+      SIGNOZ_USER_ROOT_ENABLED: "true"
+      SIGNOZ_USER_ROOT_ORG_NAME: "OBaaS"
+      SIGNOZ_USER_ROOT_EMAIL: "admin@example.com"
+      SIGNOZ_USER_ROOT_PASSWORD:
+        valueFrom:
+          secretKeyRef:
+            name: signoz-authn
+            key: password
+      SIGNOZ_API_KEY:
+        valueFrom:
+          secretKeyRef:
+            name: signoz-authn
+            key: password
+      SIGNOZ_TOKENIZER_JWT_SECRET:
+        valueFrom:
+          secretKeyRef:
+            name: signoz-authn
+            key: password
     image:
       registry: docker.io
       repository: signoz/signoz
