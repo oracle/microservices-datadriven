@@ -744,9 +744,9 @@ k8s-infra:
       enabled: false
 
 kafka:
-  enabled: false 
-  version: 3.9.1
-  metadataVersion: 3.9-IV0
+  enabled: false
+  version: 4.2.0
+  metadataVersion: 4.2-IV0
 
 # =============================================================================
 # Image Reference Summary

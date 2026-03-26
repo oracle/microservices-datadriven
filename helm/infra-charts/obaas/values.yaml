@@ -743,8 +743,8 @@ k8s-infra:
 
 kafka:
   enabled: false
-  version: 3.9.1
-  metadataVersion: 3.9-IV0
+  version: 4.2.0
+  metadataVersion: 4.2-IV0
 
 ## Example for APISIX custom plugins:
 # extraConfigMaps:
