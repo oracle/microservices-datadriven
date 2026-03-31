@@ -35,3 +35,7 @@ Oracle Backend for Microservices and AI includes a set of pre-integrated platfor
 | [External Secrets Operator](./esooperator.md) | Syncs secrets from external stores (OCI Vault, AWS, HashiCorp Vault) into Kubernetes |
 | [Spring Boot Admin Server](./sbadminserver.md) | Web dashboard for monitoring and managing Spring Boot applications |
 | [Conductor Workflow Orchestration](./conductor.md) | Workflow orchestration engine for multi-step service choreography |
+
+## Architecture
+
+![Architecture](../OBaaS-Architecture.png "Oracle Backend for Microservices and AI Architecture")

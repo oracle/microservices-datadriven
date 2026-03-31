@@ -40,6 +40,10 @@ Deploy on Oracle Cloud Infrastructure, other cloud providers, or hybrid environm
 
 OBaaS vastly simplifies the task of building, testing, and operating microservices platforms. From development through production, automated workflows and integrated tooling streamline every phase of the application lifecycle.
 
+### Architecture
+
+![Architecture](OBaaS-Architecture.png "Oracle Backend for Microservices and AI Architecture")
+
 ## Get Started
 
 Ready to try OBaaS? Choose your path:
