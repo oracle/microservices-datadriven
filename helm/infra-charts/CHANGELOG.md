@@ -24,7 +24,7 @@ AppVersion: 2.1.0-build.1
 
 AppVersion: 2.1.0-build.2
 
-- Adds the ability to create a Kafaka cluster as part of the obaas chart installation
+- Adds the ability to create a Kafka cluster as part of the obaas chart installation
 
 # 0.0.4 - Mar 1, 2026
 
@@ -51,8 +51,30 @@ AppVersion: 2.1.0-build.5
 - Add ability to create extra arbitrary config maps, e.g., to hold code for custom APISIX plugins
 - Add example of custom APISIX plugin configuration
 
-# 0.0.7 - Mar XX, 2026
+# 0.0.7 - Mar 12, 2026
 
 AppVersion: 2.1.0-build.6
 
-- Add OpenTelemetre Operator to enable auto-instrumentation via custom resources
+- Add OpenTelemetry Operator to enable auto-instrumentation via custom resources
+- Fixes for private registry installation
+- OTMM is updated
+- Custom APISIX plugins are supported
+- SigNoz cold storage is supported
+- Config server is installed
+
+# 0.0.8 - Mar 18, 2026
+
+AppVersion: 2.1.0-build.7
+
+- Strimzi operator updated to 0.51.0 and supports Kafka 4.2.0 deployment
+
+# 0.0.9 - Mar 26, 2026
+
+AppVersion: 2.1.0-build.8
+
+- Fixes for Strimzi operator and Kafka
+
+
+# 0.0.10 - TBA
+
+AppVersion: 2.1.0-build.9
