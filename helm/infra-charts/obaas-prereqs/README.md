@@ -86,6 +86,15 @@ oracle-database-operator:
   # watchNamespace: "tenant1"
 ```
 
+**AKS-specific note for metrics-server:**
+
+AKS clusters can already have `metrics-server` installed through the AKS addon path. If that addon is present, disable the chart-managed `metrics-server` to avoid installing a duplicate copy:
+
+```yaml
+metrics-server:
+  enabled: false
+```
+
 ## Uninstallation
 
 **Warning:** Uninstalling this chart will remove cluster-wide operators and may affect all OBaaS instances.
