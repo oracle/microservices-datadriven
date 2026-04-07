@@ -36,6 +36,9 @@ data:
         ,'GV_\$SYSSTAT' ,'GV_\$PROCESS' ,'GV_\$WAITCLASSMETRIC' ,'GV_\$SESSION'
         ,'GV_\$RESOURCE_LIMIT' ,'GV_\$PARAMETER' ,'GV_\$DATABASE',
         'GV_\$SQLSTATS' ,'GV_\$SYSMETRIC' ,'GV_\$INSTANCE' ,'V_\$DIAG_ALERT_EXT');
+      l_aq_packages SYS.ODCIVARCHAR2LIST := SYS.ODCIVARCHAR2LIST(
+        'DBMS_AQ' ,'DBMS_AQADM' ,'DBMS_AQIN'
+        ,'DBMS_AQJMS' ,'DBMS_AQJMS_INTERNAL');
     BEGIN
       BEGIN
           SELECT user INTO l_conn_user FROM DUAL;
@@ -59,7 +62,17 @@ data:
       EXCEPTION WHEN OTHERS THEN
         -- 19-
         EXECUTE IMMEDIATE 'GRANT CREATE SESSION TO "$DB_USERNAME"';
-      END;    
+      END;
+      {{- if eq (include "obaas.database.isSIDB" .) "true" }}
+      FOR i IN 1 .. l_aq_packages.COUNT LOOP
+        BEGIN
+          EXECUTE IMMEDIATE 'GRANT EXECUTE ON ' || l_aq_packages(i) || ' TO SYSTEM';
+          DBMS_OUTPUT.PUT_LINE('Granted EXECUTE on ' || l_aq_packages(i) || ' to SYSTEM');
+        EXCEPTION WHEN OTHERS THEN
+          DBMS_OUTPUT.PUT_LINE('Failed to grant EXECUTE on ' || l_aq_packages(i) || ' to SYSTEM: ' || SQLERRM);
+        END;
+      END LOOP;
+      {{- end }}
       {{- if eq (include "obaas.database.isADB" .) "true" }}
       EXECUTE IMMEDIATE 'GRANT EXECUTE ON DBMS_CLOUD_AI TO "$DB_USERNAME"';
       EXECUTE IMMEDIATE 'GRANT EXECUTE ON DBMS_CLOUD_PIPELINE TO "$DB_USERNAME"';

@@ -1,9 +1,10 @@
 # Temporary Builds
 grabdish/inventory-micronaut/build/
 
-# Claude and Gemini
-CLAUDE.md
-GEMINI.md
+# Local agent instruction files used by Agents
+**/AGENTS.md
+**/CLAUDE.md
+**/GEMINI.md
 
 # Deployment artifacts
 .deployed/
