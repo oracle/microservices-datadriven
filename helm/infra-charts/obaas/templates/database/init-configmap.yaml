@@ -66,8 +66,8 @@ data:
       {{- if eq (include "obaas.database.isSIDB" .) "true" }}
       FOR i IN 1 .. l_aq_packages.COUNT LOOP
         BEGIN
-          EXECUTE IMMEDIATE 'GRANT EXECUTE ON ' || l_aq_packages(i) || ' TO SYSTEM';
-          DBMS_OUTPUT.PUT_LINE('Granted EXECUTE on ' || l_aq_packages(i) || ' to SYSTEM');
+          EXECUTE IMMEDIATE 'GRANT EXECUTE ON ' || l_aq_packages(i) || ' TO SYSTEM WITH GRANT OPTION';
+          DBMS_OUTPUT.PUT_LINE('Granted EXECUTE on ' || l_aq_packages(i) || ' to SYSTEM WITH GRANT OPTION');
         EXCEPTION WHEN OTHERS THEN
           DBMS_OUTPUT.PUT_LINE('Failed to grant EXECUTE on ' || l_aq_packages(i) || ' to SYSTEM: ' || SQLERRM);
         END;
