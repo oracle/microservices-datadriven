@@ -73,9 +73,10 @@ AppVersion: 2.1.0-build.7
 AppVersion: 2.1.0-build.8
 
 - Fixes for Strimzi operator and Kafka
+- Allow OpenTelemetry operator image to be installed from a private registry
 
-# 0.0.10 - April 7, 2026
+# 0.0.10 - TBA
 
 AppVersion: 2.1.0-build.9
 
-- Allow OpenTelemetry operator image to be installed from a private registry
+
