@@ -74,7 +74,7 @@ AppVersion: 2.1.0-build.8
 
 - Fixes for Strimzi operator and Kafka
 
-# 0.0.10 - April 2, 2026
+# 0.0.10 - April 7, 2026
 
 AppVersion: 2.1.0-build.9
 
