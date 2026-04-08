@@ -38,6 +38,11 @@ Observability:
   ✓ Oracle Database Exporter (Database Metrics)
 {{- end }}
 
+Config Server:
+{{- if (index .Values "config-server").enabled }}
+  ✓ Spring Config Server
+{{- end }}
+
 Optional Services:
 {{- if and (index .Values "conductor-server").enabled .Values.database.enabled }}
   ✓ Conductor Server (Workflow Orchestration) - {{ (index .Values "conductor-server").replicas }} replica(s)
@@ -102,6 +107,12 @@ Oracle Database Exporter:
 
 Conductor Server:
   API: http://{{ .Release.Name }}-conductor-server.{{ .Release.Namespace }}.svc.cluster.local:8080
+{{- end }}
+
+{{- if (index .Values "config-server").enabled }}
+
+Config Server:
+  API: http://{{ .Release.Name }}-config-server.{{ .Release.Namespace }}.svc.cluster.local:8080
 {{- end }}
 
 ================================================================================
