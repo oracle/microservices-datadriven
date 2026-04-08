@@ -9,9 +9,15 @@ const config: Config = {
   tagline: 'A comprehensive microservices platform for AI microservices with Oracle AI Database',
   favicon: 'img/favicon-32x32.png',
 
+  storage: {
+    type: 'localStorage',
+    namespace: true,
+  },
+
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
     v4: true, // Improve compatibility with the upcoming Docusaurus v4
+    faster: true,
   },
 
   url: 'https://oracle.github.io',
