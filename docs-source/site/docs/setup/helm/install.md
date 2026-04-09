@@ -65,8 +65,7 @@ Attempting to install the obaas-prereqs chart multiple times will cause CRD vers
 - **Eureka** - Service discovery
 - **Signoz** - Observability stack with ClickHouse
 - **Spring Boot Admin** - Application monitoring
-- **Conductor** - Workflow orchestration
-- **OTMM** - Transaction manager for microservices
+- **OTMM** - Transaction manager for microservices, including MicroTX Workflow for service orchestration
 
 Each instance operates independently in its own namespace with its own ingress controller and observability stack.
 
@@ -135,7 +134,7 @@ Two components read the `<release>-db-authn` Secret at runtime:
 - **Oracle Database Exporter** — connects as OBAAS_USER to query the monitoring views for Prometheus metrics.
 - **Database init container** — uses the credentials during initialization to create the user and verify connectivity.
 
-Other platform components (Eureka, Admin Server, Conductor) connect to the database through their own Spring Boot datasource configuration and do not use OBAAS_USER.
+Other platform components (Eureka, Admin Server, MicroTx Workflow) connect to the database through their own Spring Boot datasource configuration and do not use OBAAS_USER.
 
 </details>
 
@@ -550,7 +549,7 @@ Each subchart has its own image configuration that must be set explicitly.
 
 **OBaaS components requiring the full repository path** (include registry in `image.repository`):
 
-- **eureka**, **admin-server**, **conductor-server**, **otmm**, **oracle-database-exporter**
+- **eureka**, **admin-server**, **otmm**, **oracle-database-exporter**
 - **database** (for SIDB-FREE/ADB-FREE)
 - **apisix**: `apisix.image.repository`, `apisix.initContainer.image`
 
